@@ -1,6 +1,6 @@
 # Evidence pack: fix/tome-use (for the user's go / no-go)
 
-> status: current (agent TOMEPR, 2026-10-31; first pack DECOMPTOME). One page. Detail: [pr-tome-proof.md](pr-tome-proof.md); body: [pr-tome-draft.md](pr-tome-draft.md); trace: [town-portal-trace.md](town-portal-trace.md); standard: docs/process/upstream-pr-standard.md. posted: nothing.
+> status: current (agent TOMEPR, 2026-10-31; first pack DECOMPTOME). One page. Detail: [pr-tome-proof.md](pr-tome-proof.md); body: [pr-tome-draft.md](pr-tome-draft.md); trace: [town-portal-trace.md](town-portal-trace.md); standard: docs/process/upstream-pr-standard.md. posted: see the dated posted: lines below (PR #149 opened 2026-10-31).
 
 **Claim.** A Town Portal scroll or a charged tome used from the pack opens the portal on the click tick in any live mode (no SC), closes the old pair first and spends the charge only if the portal opened; an item in hand refuses it (game.exe `FUN_0055e170` -> `FUN_005be290`). d2d cast SC, dropped the use while busy, spent the charge at the click and had no item-in-hand test.
 
@@ -43,3 +43,8 @@ git -C <pr checkout>/tome push origin fix/tome-use
 gh pr create -R psi29a/d2decomped --head shatteredeagle:fix/tome-use --base main \
   --title "A Town Portal read from the pack opens at once, as game.exe does" --body-file <the body in pr-tome-draft.md>
 ```
+
+posted: 2026-10-31 UTC upstream moved 5 commits since 03f42254 (#147 merge 0dc4c62a, f4c61afe); replayed the three commits locally onto upstream/main 0dc4c62a (rebase, branch not yet pushed, no force): one textual conflict in tools/emu/README.md (our oracle row next to #147's belt row, kept both); new hashes fd2dc256 (oracle and test mode), 64a84587 (claim A), a6d6fe51 (claim B), authored shatteredeagle, body 'Agent: Claude Code'; test_game keeps `--belt-pickup` and `--tome-use` side by side; pr_guard against upstream/main 0 FAIL 0 WARN, presubmit --quick 0 FAIL, test_game / test_combat / test_rules rc 0 (gcc 16 with -Wno-error=maybe-uninitialized and array-bounds), ctest 58 tests: not green and unrelated (same set as the #147 pack): test_mpq, smoke_d2d, quests_act1, quests_act4; oracle seed 7 (108,000): before 29,551, after 0; seed 31 (208,000): before 56,616, after 0; PR diff 8 files go: user 'Open the pr when 147 merges' 2026-10-31
+posted: 2026-10-31 UTC pushed branch fix/tome-use-opens-portal-at-once to our fork (plain push), head a6d6fe51; the commit hashes quoted in the body were updated to the replayed ones go: user 'Open the pr when 147 merges' 2026-10-31
+posted: 2026-10-31 UTC opened PR #149 https://github.com/psi29a/d2decomped/pull/149 against psi29a/d2decomped main, title and body from pr-tome-draft.md, 3 commits, 8 files, no other comment go: user 'Open the pr when 147 merges' 2026-10-31
+posted: 2026-10-31 UTC review trigger not needed: CodeRabbit started its review on its own within a minute (no comment posted) go: user 'Open the pr when 147 merges' 2026-10-31
