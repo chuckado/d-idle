@@ -2,7 +2,7 @@
 
 ```yaml
 change: forkcheats2
-status: in-progress
+status: archived
 agent: forkcheats2
 branch: agent/forkcheats2
 worktree: ~/code/d2lod-wt/forkcheats2
@@ -16,7 +16,7 @@ gates:
   - "each new verb exercised live on one hidden slot with before/after state and a negative case (docs/forkcheats.md)"
   - "cmd/d2drill D0 + D1 + one D2 drill against the new binary: no regression"
   - "changecheck -cli has 0 warnings; leakcheck -mode fail finds 0; openspec validate --all --strict passes"
-merge:
+merge: 6f860df
 result: "lab binary d2d.lab-cheats2 (private fork branch lab-cheats2): debug spawn, merc hurt, quest list|set|bit|join, give quality + unid, pin on|off|status, help, all verified live on a hidden slot with negative cases (docs/forkcheats.md); harness D0, D1, D2.a unchanged. README missing-cheats rows and primitives.md notes edited under the coordinator brief (the m1-liveproof card owns those paths). Drills not rerun."
 ```
 
