@@ -64,14 +64,24 @@ type Outcome struct {
 	Reason   string // one line: why this verdict
 	Intended string // the end state the pass condition asks for
 	Observed string // the end state read from the StateReader
+	// Sig is what the determinism check compares between repeats; empty means Observed. Set it when Observed carries
+	// numbers that legitimately vary (regeneration between two reads).
+	Sig string `json:"sig,omitempty"`
+}
+
+func (o Outcome) sig() string {
+	if o.Sig != "" {
+		return o.Sig
+	}
+	return o.Observed
 }
 
 // Pass, Fail and Blocked build an Outcome.
 func Passed(reason, intended, observed string) Outcome {
-	return Outcome{Pass, reason, intended, observed}
+	return Outcome{Verdict: Pass, Reason: reason, Intended: intended, Observed: observed}
 }
 func Failed(reason, intended, observed string) Outcome {
-	return Outcome{Fail, reason, intended, observed}
+	return Outcome{Verdict: Fail, Reason: reason, Intended: intended, Observed: observed}
 }
 func Blocks(reason string) Outcome { return Outcome{Verdict: Blocked, Reason: reason} }
 

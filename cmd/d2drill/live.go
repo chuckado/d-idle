@@ -198,12 +198,18 @@ func (l *lab) ClearPack(ctx context.Context, r *drill.Run) error {
 
 func (l *lab) SetLife(ctx context.Context, r *drill.Run, points int) error {
 	_, err := r.Cheat(ctx, fmt.Sprintf("debug stat 6 %d", points*256), fmt.Sprintf("set current life to %d (24.8 fixed point) so the drink has something to heal", points))
-	return err
+	if err != nil {
+		return err
+	}
+	return l.Tick(ctx, 5) // the stat reaches the reader one tick later (V)
 }
 
 func (l *lab) SetMana(ctx context.Context, r *drill.Run, points int) error {
 	_, err := r.Cheat(ctx, fmt.Sprintf("debug stat 8 %d", points*256), fmt.Sprintf("set current mana to %d (24.8 fixed point) so the drink has something to refill", points))
-	return err
+	if err != nil {
+		return err
+	}
+	return l.Tick(ctx, 5)
 }
 
 func (l *lab) EquipBelt(ctx context.Context, r *drill.Run, code string) error {

@@ -448,7 +448,7 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed("setup did not put 2 hp1 and 2 mp1 in the belt", "2 hp1 and 2 mp1 in the belt", start)
 	}
 	intended := "every belt potion can be drunk by kind: each drink removes exactly one potion of the asked kind, life or mana rises within 2 s, the other kind is untouched; with none of the kind left the drink reports an error"
-	var steps []string
+	var steps, sigs []string
 	var fails []string
 	drink := func(k Kind) {
 		before, err := l.View(ctx)
@@ -479,6 +479,7 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 			rise = after.Mana - low.Mana
 		}
 		steps = append(steps, fmt.Sprintf("drink %s: err=%v removed box %v, belt now [%s], life %d->%d mana %d->%d", k, derr, gone, after.BeltString(), low.Life, after.Life, low.Mana, after.Mana))
+		sigs = append(sigs, fmt.Sprintf("%s err=%v removed %v rose=%v", k, derr != nil, gone, rise > 0))
 		have := countKindIn(before.Belt, k)
 		if have == 0 {
 			if derr == nil {
@@ -503,10 +504,15 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if len(end.Belt) != 0 {
 		fails = append(fails, "belt not empty at the end: "+end.BeltString())
 	}
+	sig := start + " | " + strings.Join(sigs, " | ") + " | end " + end.BeltString() // life and mana regenerate between reads: not compared
 	if len(fails) > 0 {
-		return Failed(strings.Join(fails, "; "), intended, observed)
+		o := Failed(strings.Join(fails, "; "), intended, observed)
+		o.Sig = sig
+		return o
 	}
-	return Passed("every potion drunk once from its own column by kind, none left reported an error", intended, observed)
+	o := Passed("every potion drunk once from its own column by kind, none left reported an error", intended, observed)
+	o.Sig = sig
+	return o
 }
 
 func countKindIn(belt map[int]string, k Kind) int {

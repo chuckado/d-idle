@@ -3,6 +3,7 @@ package drill
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -193,5 +194,19 @@ func TestWriteFiles(t *testing.T) {
 	g := Group{Results: []Result{{ID: "D", Primitive: "P1", Verdict: Pass, Reason: "r", Deterministic: true}}}
 	if err := g.Write(dir, "2026-10-31-d1"); err != nil {
 		t.Fatal(err)
+	}
+}
+
+func TestSigIgnoresVaryingNumbers(t *testing.T) {
+	n := 0
+	r := &Runner{W: &fakeWorld{}, Repeat: 2}
+	g := r.RunGroup(context.Background(), []Drill{{ID: "D", Primitive: "P", Do: func(context.Context, *Run) Outcome {
+		n++
+		o := Passed("ok", "x", fmt.Sprintf("life 10->%d", 18+n))
+		o.Sig = "drank once"
+		return o
+	}}})
+	if !g.Results[0].Deterministic || g.Results[0].Verdict != Pass {
+		t.Fatalf("%+v", g.Results[0])
 	}
 }

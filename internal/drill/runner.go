@@ -205,7 +205,7 @@ func summarise(res *Result) {
 	res.Deterministic = true
 	verdict := Pass
 	for _, rr := range res.Runs {
-		if rr.Verdict != first.Verdict || rr.Observed != first.Observed {
+		if rr.Verdict != first.Verdict || rr.sig() != first.sig() {
 			res.Deterministic = false
 		}
 		switch {
@@ -220,7 +220,7 @@ func summarise(res *Result) {
 	res.Cheats = first.Cheats
 	if !res.Deterministic {
 		for i, rr := range res.Runs[1:] {
-			if rr.Verdict != first.Verdict || rr.Observed != first.Observed {
+			if rr.Verdict != first.Verdict || rr.sig() != first.sig() {
 				res.Observed = fmt.Sprintf("run1: %s; run%d (%s): %s", first.Observed, i+2, rr.Verdict, rr.Observed)
 				if verdict == Pass {
 					verdict, res.Verdict = Fail, Fail
