@@ -145,3 +145,4 @@ upstream: #147 (belt scrolls) brought up to date after #148 by merging upstream/
 
 - fixmisc: F4 live proof pending (Fighter.Clear right after `debug goto`, no warm-up walk; recipe in docs/fixmisc.md). F3 closed as intended.
 fixstall (card [fixstall](../openspec/changes/fixstall/proposal.md), offline): NPC approach detects a stall in 1.2 s and sizes its game-time budget from the distance (DRILLS5 F1); a plain GoTo stalled in a pocket escapes by town portal (F2); live proof pending = rerun H.pause and D6.d (docs/fixstall.md); UNVERIFIED which camp object blocks (25.5,22.5)
+fixstall2 (card [fixstall2](../openspec/changes/fixstall2/proposal.md), offline): NPC approach routes over `debug grid 5` after a stall (DRILLS6 F7), portal entry skips the pre-walk when Interact walks (F8); live proof pending = H.pause x3 and D6.d x3 (docs/fixstall2.md); UNVERIFIED that the grid holds the camp objects
