@@ -64,3 +64,24 @@ Same method as above: one hidden slot (lockstep, fresh throwaway Sorceress, `--n
 - Quest word layout: 48 records of 16 bits; act 1 words 0..6 (1 Den, 2 Blood Raven, 3 tools, 4 Cain, 5 tower, 6 Andariel), act 2 words 7..14, act 3 15..22, act 4 23..25, act 5 26 on; bit 0 done, bit 1 reward pending. Setting a record re-runs that act's join, which resets the act's other quest machines from their flags.
 - A spawned monster is the plain `make_monster` unit (no pack, no corpse loot rules beyond a normal kill); spawn on a level the player stands on only.
 - `debug pin` blocks the walk grid only; a teleport or `debug warp` still leaves the pocket.
+
+# FORKCHEATS3: `debug missiles` (card forkcheats3, 2026-10-31)
+
+> status: current. `debug missiles` exists in the lab d2d binary as of 2026-10-31 (private fork, never in this repo, never in an upstream pull request without the user's go). The d2dctl parser for it is in fix-missile (`d2dctl.ParseMissile`: 10 leading fields, extra trailing fields are ignored). Format and negative cases: docs/cheats.md section "d2d debug verbs".
+
+Read only: it lists `Fight::missiles` (the same list `state missiles=` counts). Same method as above: one hidden slot (lockstep, fresh throwaway Sorceress, `--no-save`), Blood Moor (`debug goto 2`), through `d2drill -probe`.
+
+| Case | Verdict | Observed live |
+|---|---|---|
+| no missiles | DONE | `debug missiles` prints just `ok` (no rows); `state` `missiles=0`. |
+| own bolt | DONE | `debug points 36 1`, `cmd skill 36 <x> <y>` (Fire Bolt, east): one row, missile id 58 `firebolt`, owner type 0, owner unit 1 (the player), dx 1.000 dy 0.002, speed 4.688 cells/s, friendly 1. x advanced 0.75 cells per 4 ticks (speed x 0.04 x 4), ttl 50, 46, 42 ... 2 falling one per tick; the row is gone after the range ends and `state missiles=` is 1 while listed, 0 after, at every sample. |
+| hostile missile | DONE | `debug spawn fallenshaman1 4` and `quillrat1 6` beside the player: `shafire1` (id 22) rows with owner type 1, owner unit = the shaman's `#id` from `monsters` (26, 27), friendly 0, dx/dy pointing at the player (a unit vector), speed 1.875, ttl 40 falling; its hit effect `shamanexp` is listed too (speed 0, owner -1, ttl 10 falling). Player life fell from 40 to 3 in the run (the quill rats bite too). |
+| negative | DONE | `debug missiles extra` answers `err usage: debug missiles`. 200 ticks with missiles in the air (steps of 2 with a listing each) kept the loop answering; the lockstep clock never stalled. |
+
+## Regression of the harness on the new binary
+`d2drill` from main (repeat 1, one slot): D0 gives the expected P35 FAIL + recovery; D1 P7a P7 P1 P1s P2 P3 PASS and P3m BLOCKED (as before: the drill still lacks a merc step); D2.a PASS. Nothing regressed.
+
+## Notes for the bot
+- dx dy are a unit vector (zero for a missile that does not move: a hit effect), speed is cells per second, x y are cells like `monsters`. unit is only the place in the list (a missile has no unit id in d2d): do not track a missile across calls by it.
+- A monster missile's owner unit is the `#id` column of `monsters`; the player's own missile has owner type 0, owner unit the player's id (1 on a single game). Filter on `friendly` or owner type to drop the bot's own bolts, and on speed > 0 to drop hit effects.
+- Live proof of the dodge: drill D5 with `debug spawn` of a ranged monster (`fallenshaman1`, `quillrat1`).
