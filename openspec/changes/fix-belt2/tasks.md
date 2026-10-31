@@ -19,7 +19,7 @@ gates:
   - "go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof is a drill rerun (docs/fixbelt2.md), not run here"
 result: ""
-live: "not verified live: drill P1 variants with mixed hp/mp potions on a caster belt (docs/fixbelt2.md)"
+live: "verified live 2026-10-31 DRILLS5 (docs/probes/drills/2026-10-31-drills5-d1.txt, each twice, identical): D1.P1b PASS (Sorceress sash, pack of 6 healing + 4 mana, empty belt: the belt holds 4 healing and 4 mana, every kind in its planned column, 2 healing stay in the pack, 0 failed moves, no belt: marked full line), D1.P1 PASS unchanged"
 ```
 
 ## 1. Work

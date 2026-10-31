@@ -22,7 +22,7 @@ gates:
   - "live proof is a drill after merge: DW variants in docs/fixnav.md"
 merge:
 result: "offline only; mouth bounce turn, touched-waypoint drain, towns 75/103/109 level-relative positions; not verified live. m2-tripwp (deferred) released internal/bot/waypoints.go to this card."
-live: ""
+live: "verified live 2026-10-31 DRILLS5 (docs/probes/drills/2026-10-31-drills5-fnav.txt, docs/probes/drills/2026-10-31-drills5-dw-a9.txt, -a10, -a11): DW.m1 PASS (standing in the Cave Level 1 mouth trigger of Cold Plains, waypoint to town: 1 bounce into the cave, the next step-away went the other way, town in 497 ticks), DW.m2 PASS (0 bounces, 554 ticks), DW.a12 PASS (Cold Plains waypoint touched in passing, DrainActivated [3], a later trip to 3 works), DW.a9/a10/a11 PASS run alone in a fresh process (towns 75, 103, 109 never visited: no none-on-level error); each twice, identical"
 ```
 
 - [x] 1.1 mouth step turns after a bounce

@@ -1,0 +1,145 @@
+{
+ "results": [
+  {
+   "id": "D3.r",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold enough: repair restores durability, price logged",
+   "verdict": "PASS",
+   "reason": "repaired for 19 gold at knob 100; the estimate before the visit was 19",
+   "intended": "durability back to max, gold down by the price",
+   "observed": "knob repairBelowPct 100; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "repaired for 19 gold at knob 100; the estimate before the visit was 19",
+     "Intended": "durability back to max, gold down by the price",
+     "Observed": "knob repairBelowPct 100; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err \"\"",
+     "sig": "dur=1/20-\u003e20/20 paid=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 450879298,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "repaired for 19 gold at knob 100; the estimate before the visit was 19",
+     "Intended": "durability back to max, gold down by the price",
+     "Observed": "knob repairBelowPct 100; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err \"\"",
+     "sig": "dur=1/20-\u003e20/20 paid=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 16152102,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 500",
+    "debug durability all 1"
+   ]
+  },
+  {
+   "id": "D3.r0",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold 0: no repair progress, no loop, no gold lost",
+   "verdict": "PASS",
+   "reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+   "intended": "no repair at gold 0, gold still 0, UI clean",
+   "observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair skipped] err \"\" ticks 0; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+     "Intended": "no repair at gold 0, gold still 0, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair skipped] err \"\" ticks 0; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "dur=1/20-\u003e1/20 gold=0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 0",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 9798447,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+     "Intended": "no repair at gold 0, gold still 0, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair skipped] err \"\" ticks 0; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "dur=1/20-\u003e1/20 gold=0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 0",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 7090336,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 0",
+    "debug durability all 1"
+   ]
+  },
+  {
+   "id": "D3.r1",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold 5 (below the price): the smith refuses, gold unchanged, UI clean",
+   "verdict": "PASS",
+   "reason": "the chore skipped the visit",
+   "intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+   "observed": "durability 1/20 -\u003e 1/20; gold 5 -\u003e 5; steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "the chore skipped the visit",
+     "Intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 5 -\u003e 5; steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "unchanged=true gold=5 ran=false",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 5",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 5512393,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "the chore skipped the visit",
+     "Intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+     "Observed": "durability 2/20 -\u003e 2/20; gold 5 -\u003e 5; steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "unchanged=true gold=5 ran=false",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 5",
+      "debug durability all 2"
+     ],
+     "elapsed_ns": 5842577,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 5",
+    "debug durability all 1"
+   ]
+  }
+ ]
+}

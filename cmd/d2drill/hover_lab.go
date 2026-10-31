@@ -37,24 +37,16 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 		ai.Err = "no Kashya in npcs"
 		return ai
 	}
-	saved := d2dctl.Pause
-	if wall { // the bot's Pause: wall time, nothing steps the lockstep game
-		d2dctl.Pause = func(ctx context.Context, d time.Duration) error {
-			t := time.NewTimer(d)
-			defer t.Stop()
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case <-t.C:
-				return nil
-			}
-		}
+	savedP, savedN := d2dctl.Pause, d2dctl.Now
+	if wall { // the bot's own wiring (fix-obj): Backend.Start / LateClock.Install put the game-time Pause and Now into d2dctl
+		l.be.Clock.Install(ctx)
+		l.be.Clock.Sleep(40 * time.Millisecond) // the bot's Pacer is warm (it steps all day); Install made a cold one, whose first step jumps its clock to game time and would expire a deadline taken before it
 	}
-	defer func() { d2dctl.Pause = saved }()
+	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	t0, w0 := l.tick(), time.Now()
 	cctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
-	err = l.be.Client.ApproachNPC(cctx, idx, 6*time.Second)
+	err = l.be.Client.ApproachNPC(cctx, idx, 15*time.Second)
 	ai.Ticks, ai.WallMs = l.tick()-t0, int(time.Since(w0).Milliseconds())
 	if err != nil {
 		ai.Err = err.Error()
@@ -66,7 +58,7 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 			}
 		}
 	}
-	d2dctl.Pause = saved
+	d2dctl.Pause, d2dctl.Now = savedP, savedN
 	_ = l.CloseAll(ctx)
 	return ai
 }
@@ -106,16 +98,18 @@ func (l *lab) ClickObjectLikeBot(ctx context.Context, r *drill.Run) drill.Object
 	}
 	t0 := l.tick()
 	// objectAdapter.click: an object that is not an npcs row has an id below d2dsrc.NPCIDBase (and type object)
-	tg := input.Target{Type: 2, ID: 1, Pos: input.Point{X: wp.X, Y: wp.Y}}
+	tg := input.Target{Type: 2, ID: wp.ID, Pos: input.Point{X: wp.X, Y: wp.Y}}
 	if err := l.be.Ctl.Interact(tg); err != nil {
 		oc.InteractErr = err.Error()
 		if err := l.be.Ctl.ClickWorld(tg.Pos); err != nil {
 			oc.InteractErr += "; ClickWorld: " + err.Error()
 		}
 	}
-	_, _ = l.be.Client.Step(ctx, 150)
-	if f, err := l.be.Client.UI(ctx); err == nil {
-		oc.OpenedByBot = f.Waypoint
+	for i := 0; i < 8 && !oc.OpenedByBot; i++ { // the walk to the object takes up to ~300 ticks
+		_, _ = l.be.Client.Step(ctx, 50)
+		if f, err := l.be.Client.UI(ctx); err == nil {
+			oc.OpenedByBot = f.Waypoint
+		}
 	}
 	_ = l.CloseAll(ctx)
 	// control: the npcs row of the same object through cmd interact (what d2dinput does for NPCIDBase ids)

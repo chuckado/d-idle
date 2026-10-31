@@ -69,6 +69,7 @@ type PickInfo struct {
 	Skipped []string // "name: reason"
 	Failed  []string
 	Seen    int
+	Log     []string // the bot's log lines of the call (warnings and info), for the signature checks
 }
 
 func (p PickInfo) String() string {
@@ -79,6 +80,7 @@ func (p PickInfo) String() string {
 type FillInfo struct {
 	Moved, Failed int
 	Err           error
+	Log           []string // the bot's log lines of the call
 }
 
 // BeltLab is the instance as the D1 drills use it. Setup helpers are game actions or logged cheats; FillBelt, Pickit
@@ -117,6 +119,8 @@ func D1(l BeltLab, belts []string) []Drill {
 		{ID: "D1.P7a", Primitive: "P7", Title: "engine destination of a ground potion (empty belt)", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p7a(ctx, r, l) }},
 		{ID: "D1.P7", Primitive: "P7", Title: "pickit takes a ground potion while the belt is empty and the pack holds 3", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p7(ctx, r, l) }},
 		{ID: "D1.P1", Primitive: "P1", Title: "belt fill from the pack, right columns", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p1(ctx, r, l) }},
+		{ID: "D1.P1b", Primitive: "P1", Title: "fix-belt2: sash, pack of 6 healing + 4 mana, empty belt: every planned kind keeps a column, no 'marked full' line", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p1b(ctx, r, l) }},
+		{ID: "D1.P7b", Primitive: "P7", Title: "fix-belt2/fix-pickup: healing in 3 columns, healing on the ground: the potion does not take the mana column", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p7b(ctx, r, l) }},
 		{ID: "D1.P1s", Primitive: "P1", Title: "shift-click pack to belt (click modifier verb, driven directly: the bot does not use it on d2d)", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p1s(ctx, r, l) }},
 		{ID: "D1.P2", Primitive: "P2", Title: "belt rows by belt type, overflow stays in the pack", Limit: 12 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p2(ctx, r, l, belts) }},
 		{ID: "D1.P3", Primitive: "P3", Title: "drink by belt column", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p3(ctx, r, l) }},
@@ -564,4 +568,142 @@ func removed(before, after map[int]string) []int {
 	}
 	sort.Ints(out)
 	return out
+}
+
+// beltGiver is the optional cheat "debug give <code> belt <box>" (a potion straight into a belt box).
+type beltGiver interface {
+	GiveBelt(ctx context.Context, r *Run, code string, box int) error
+}
+
+func logHas(lines []string, sub string) []string {
+	var out []string
+	for _, l := range lines {
+		if strings.Contains(l, sub) {
+			out = append(out, l)
+		}
+	}
+	return out
+}
+
+// p1b is the fix-belt2 live proof: a Sorceress sash, 6 healing and 4 mana potions in the pack, an empty belt. The plan
+// is hp hp mp mp: after the fill the belt must hold a mana column, no healing potion sits in a mana column, no
+// "marked full" line is logged and nothing fails.
+func p1b(ctx context.Context, r *Run, l BeltLab) Outcome {
+	plan, err := l.PlanCols(ctx)
+	if err != nil {
+		return Failed("plan: "+err.Error(), "", "")
+	}
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := stagePack(ctx, r, l, 6, 4); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	pre, _ := l.View(ctx)
+	intended := fmt.Sprintf("plan [%s]: the belt gets healing in the hp columns and mana in the mp columns (each planned kind keeps a column), no 'marked full' log line, no failed move", planString(plan))
+	fi, ferr := l.FillBelt(ctx)
+	if err := l.Tick(ctx, 25); err != nil {
+		return Failed("tick: "+err.Error(), intended, "")
+	}
+	v, err := l.View(ctx)
+	if err != nil {
+		return Failed("read: "+err.Error(), intended, "")
+	}
+	marked := logHas(fi.Log, "marked full")
+	observed := fmt.Sprintf("before pack [%s]; fill moved %d failed %d err %v; after belt [%s] pack [%s]; 'marked full' lines %d", pre.PackString(), fi.Moved, fi.Failed, ferr, v.BeltString(), v.PackString(), len(marked))
+	var bad []string
+	hp, mp := 0, 0
+	for box, code := range v.Belt {
+		k := PotionKind(code)
+		if plan[box%4] != k {
+			bad = append(bad, fmt.Sprintf("%s in column %d (plan %s)", code, box%4, plan[box%4]))
+		}
+		switch k {
+		case "hp":
+			hp++
+		case "mp":
+			mp++
+		}
+	}
+	sort.Strings(bad)
+	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("hp=%d mp=%d bad=%d marked=%d failed=%d", hp, mp, len(bad), len(marked), fi.Failed)}
+	switch {
+	case ferr != nil:
+		o.Verdict, o.Reason = Fail, "fill error: "+ferr.Error()
+	case len(marked) > 0:
+		o.Verdict, o.Reason = Fail, "the fill still logs a 'marked full' line: "+marked[0]
+	case mp == 0:
+		o.Verdict, o.Reason = Fail, "no mana potion in the belt: the mana column was lost"
+	case len(bad) > 0:
+		o.Verdict, o.Reason = Fail, "potions in the wrong columns: "+strings.Join(bad, ", ")
+	case fi.Failed > 0:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("%d failed moves", fi.Failed)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("belt holds %d healing and %d mana, every kind in its planned column, no 'marked full' line", hp, mp)
+	}
+	return o
+}
+
+// p7b is the fix-pickup live proof: healing already fills the three healing-or-spare columns of the sash (both rows),
+// a healing potion lies on the ground and the fourth column is the empty mana column. The engine would put it there; the
+// pickit must leave it (or send it to the pack), never belt it into the mana column.
+func p7b(ctx context.Context, r *Run, l BeltLab) Outcome {
+	bg, ok := l.(beltGiver)
+	if !ok {
+		return Blocks("the lab has no `debug give <code> belt <box>` step")
+	}
+	if err := l.ClearPack(ctx, r); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := l.DrainBelt(ctx); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := l.DrainBelt(ctx); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	for _, box := range []int{0, 1, 2, 4, 5, 6} {
+		if err := bg.GiveBelt(ctx, r, "hp1", box); err != nil {
+			return Failed("setup: "+err.Error(), "", "")
+		}
+	}
+	if err := l.GiveGround(ctx, r, "hp1"); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := l.Tick(ctx, 25); err != nil {
+		return Failed("tick: "+err.Error(), "", "")
+	}
+	pre, _ := l.View(ctx)
+	info, perr := l.Pickit(ctx)
+	if err := l.Tick(ctx, 50); err != nil {
+		return Failed("tick: "+err.Error(), "", "")
+	}
+	v, err := l.View(ctx)
+	if err != nil {
+		return Failed("read: "+err.Error(), "", "")
+	}
+	intended := "healing in columns 0 to 2 (both rows), a healing potion on the ground, column 3 empty: no healing potion ends in column 3 (left on the ground or in the pack)"
+	observed := fmt.Sprintf("before belt [%s] ground %d; pickit: %s; after belt [%s] pack [%s] ground %d", pre.BeltString(), len(pre.Ground), info, v.BeltString(), v.PackString(), len(v.Ground))
+	if perr != nil {
+		observed += "; pickit error: " + perr.Error()
+	}
+	mana := 0
+	for box, code := range v.Belt {
+		if box%4 == 3 && PotionKind(code) == "hp" {
+			mana++
+		}
+	}
+	where := "left on the ground"
+	if len(v.Ground) == 0 {
+		where = "taken (pack " + v.PackString() + ")"
+	}
+	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("col3hp=%d", mana)}
+	if mana > 0 {
+		o.Verdict, o.Reason = Fail, "the ground healing potion went into the mana column (column 3)"
+	} else {
+		o.Verdict, o.Reason = Pass, "column 3 stays free of healing: the potion was "+where
+	}
+	return o
 }

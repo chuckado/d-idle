@@ -162,7 +162,7 @@ func D6(l GameLab) []Drill {
 		{ID: "D6.a", Primitive: "P22", Title: "10 navigator walks in the Rogue Encampment: arrive within 1.5 cells, 9 of 10", Limit: lim, Do: do(func(ctx context.Context, r *Run, l GameLab) Outcome { return d6walk(ctx, r, l, 1) })},
 		{ID: "D6.b", Primitive: "P22", Title: "10 navigator walks in Blood Moor: arrive within 1.5 cells, 9 of 10", Limit: lim, Do: do(func(ctx context.Context, r *Run, l GameLab) Outcome { return d6walk(ctx, r, l, 2) })},
 		{ID: "D6.c", Primitive: "P24", Title: "5 level transitions by ToArea (Blood Moor, Cold Plains, camp): the area id changes each time", Limit: lim, Do: do(d6exit)},
-		{ID: "D6.d", Primitive: "P25", Title: "pinned in a pocket: out within 60 s", Needs: []string{"a way to pin the character: no verb builds a wall or reports a pocket cell (`debug blocked <x> <y>` only answers collision, `debug warp` places the player but no natural pocket coordinates are known)"}},
+		d6pin(l, lim),
 	}
 }
 
@@ -293,9 +293,9 @@ func D8(l GameLab) []Drill {
 	return []Drill{
 		{ID: "D8.a", Primitive: "P18", Title: "merc hired and killed by cheat: the bot's revive through Kashya brings it back for gold", Limit: lim, Do: do(d8revive)},
 		{ID: "D8.m", Primitive: "P3", Title: "merc at low life: the bot's belt verb with the merc flag heals it and spends one potion", Limit: lim, Do: do(d8drink)},
-		{ID: "D8.c", Primitive: "P18", Title: "Kashya's free Rogue after Blood Raven", Needs: []string{"a cheat that sets the Blood Raven record to killed (state 4): `debug quest 1` only sets bit 0 and moves the record from 0 to 1 (V, `debug quest 1 show` states=1,1,0,0,0,0), and the claim needs state 4 (d2dtown/claim.go)"}},
-		{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward: one skill point, flag set, dialog closed", Needs: []string{"a cheat that completes the Den of Evil record with the reward unclaimed: `debug quest 0` sets bit 0 only (V: `den=1` stays 1), so Akara never offers the reward"}},
-		{ID: "D8.w", Primitive: "P21", Title: "Warriv takes the character to Act 2", Needs: []string{"two pieces: the act hop is cmd/d2bot talk nodes (package main, task.go:285, not importable into the harness), and no cheat sets the Andariel record (`debug quest 5` sets bit 0 only)"}},
+		d8quest(l, lim),
+		d8akara(l, lim),
+		d8warriv(l, lim),
 		{ID: "D8.g", Primitive: "P19", Title: "gamble never opens the tab when poor", Needs: []string{"the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario"}},
 	}
 }
@@ -348,6 +348,21 @@ func d8drink(ctx context.Context, r *Run, l GameLab) Outcome {
 		return setupFail(err)
 	}
 	m0, _ := l.MercState(ctx)
+	if bg, ok := l.(beltGiver); ok { // a fresh healing potion in column 0 (a repeat finds it drunk)
+		if _, err := r.Cheat(ctx, "debug belt clear", "empty the belt so column 0 holds exactly the healing potion the drill gives (a repeat drinks the same one)"); err != nil {
+			return setupFail(err)
+		}
+		if err := bg.GiveBelt(ctx, r, "hp1", 0); err != nil {
+			return setupFail(err)
+		}
+	}
+	if err := l.MercCheat(ctx, r, "debug merc hurt 20"); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Tick(ctx, 10); err != nil {
+		return setupFail(err)
+	}
+	m0, _ = l.MercState(ctx)
 	b0, _ := l.TView(ctx)
 	derr := l.DrinkMerc(ctx, 0)
 	if err := l.Tick(ctx, 80); err != nil {
@@ -360,9 +375,15 @@ func d8drink(ctx context.Context, r *Run, l GameLab) Outcome {
 	switch {
 	case derr != nil:
 		o.Verdict, o.Reason = Fail, "merc drink: "+derr.Error()
-	default:
-		o = Blocks(fmt.Sprintf("no cheat lowers the merc's life (`debug hit` hits the player only; a hired merc stands at full life): the heal cannot be observed. Missing: `debug merc hurt <dmg>`. The verb itself ran without error and used a potion: %v", b0.Belt-b1.Belt == 1))
+	case m0.Life >= 40:
+		o = Blocks(fmt.Sprintf("`debug merc hurt 20` left the merc at %s", m0))
 		o.Observed, o.Intended = obs, "merc life up, one belt potion used"
+	case m1.Life <= m0.Life:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("the belt verb with the merc flag did not raise the merc's life (%d -> %d)", m0.Life, m1.Life)
+	case b0.Belt-b1.Belt != 1:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("merc life rose but %d belt potions were used (wanted 1)", b0.Belt-b1.Belt)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("merc life %d -> %d with one belt potion", m0.Life, m1.Life)
 	}
 	return o
 }
@@ -428,4 +449,117 @@ func d9cycle(ctx context.Context, r *Run, l GameLab) Outcome {
 	}
 	o.Verdict, o.Reason = Pass, "10 leave and enter cycles"
 	return o
+}
+
+// QuestLab is the optional part of the lab that drives the quest records (`debug quest set`) through the bot's NPC code.
+type QuestLab interface {
+	// Claim sets Blood Raven's record to "reward pending" (0x0002) and runs d2dtown.ClaimRogue with the bot's own Pause.
+	Claim(ctx context.Context, r *Run) (granted bool, merc string, before, after int, err error)
+	// AkaraReward sets the Den of Evil record to "reward pending" and opens Akara's menu: skill points and record after.
+	AkaraReward(ctx context.Context, r *Run) (skBefore, skAfter int, rec string, err error)
+	// Warriv sets Andariel's record done (`debug quest set 6 0x0001`), opens Warriv's menu with d2dctl and picks "Go East".
+	Warriv(ctx context.Context, r *Run) (area int, menu string, err error)
+}
+
+func d8quest(l GameLab, lim time.Duration) Drill {
+	ql, ok := l.(QuestLab)
+	if !ok {
+		return Drill{ID: "D8.c", Primitive: "P18", Title: "Kashya's free Rogue after Blood Raven", Needs: []string{"the lab has no quest step"}}
+	}
+	return Drill{ID: "D8.c", Primitive: "P18", Title: "Kashya's free Rogue after Blood Raven (record by `debug quest set`, the bot's ClaimRogue)", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		g, merc, b, a, err := ql.Claim(ctx, r)
+		intended := "a fresh character with the Blood Raven reward pending: ClaimRogue opens Kashya's menu and a Rogue appears, the dialog is closed"
+		obs := fmt.Sprintf("granted=%v merc=%q record states %d -> %d err %v", g, merc, b, a, err)
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("granted=%v err=%v", g, err != nil)}
+		switch {
+		case err != nil:
+			o.Verdict, o.Reason = Fail, "claim: "+err.Error()
+		case !g:
+			o.Verdict, o.Reason = Fail, "no merc appeared after the claim (a merc already owned forfeits the reward: run D8.c before D8.a)"
+		default:
+			o.Verdict, o.Reason = Pass, "the free Rogue was granted by the claim ("+merc+")"
+		}
+		return o
+	}}
+}
+
+func d8akara(l GameLab, lim time.Duration) Drill {
+	ql, ok := l.(QuestLab)
+	if !ok {
+		return Drill{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward", Needs: []string{"the lab has no quest step"}}
+	}
+	return Drill{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward (record by `debug quest set`): one skill point, dialog closed", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		b, a, rec, err := ql.AkaraReward(ctx, r)
+		intended := "Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed"
+		obs := fmt.Sprintf("skill points %d -> %d; quest list: %s; err %v", b, a, rec, err)
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("gain=%d err=%v", a-b, err != nil)}
+		switch {
+		case err != nil:
+			o.Verdict, o.Reason = Fail, "akara: "+err.Error()
+		case a != b+1:
+			o.Verdict, o.Reason = Fail, fmt.Sprintf("skill points %d -> %d, wanted +1", b, a)
+		default:
+			o.Verdict, o.Reason = Pass, "PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)"
+		}
+		return o
+	}}
+}
+
+// PinInfo is one walk out of a pocket made by `debug pin on`.
+type PinInfo struct {
+	Err           string
+	Moved         float64 // cells between the start and the end position
+	Ticks         int
+	Area          int // area after the walk (1: the ladder ended in town)
+	Rungs         []string
+	Pinned, Freed bool // the pocket was built / the cheat took it down again
+}
+
+// PinLab is the optional part of the lab for the stuck drill.
+type PinLab interface {
+	Pin(ctx context.Context, r *Run, level int, within time.Duration) PinInfo
+}
+
+func d6pin(l GameLab, lim time.Duration) Drill {
+	pl, ok := l.(PinLab)
+	if !ok {
+		return Drill{ID: "D6.d", Primitive: "P25", Title: "pinned in a pocket: out within 60 s", Needs: []string{"the lab has no pin step"}}
+	}
+	return Drill{ID: "D6.d", Primitive: "P25", Title: "pinned in a pocket by `debug pin on`: the bot's stall ladder gets the character out within 60 s", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		pi := pl.Pin(ctx, r, 2, 60*time.Second)
+		intended := "a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time"
+		obs := fmt.Sprintf("pinned=%v freed=%v moved %.1f cells in %d ticks (%.0f s), area %d, err %q; ladder lines: %s", pi.Pinned, pi.Freed, pi.Moved, pi.Ticks, float64(pi.Ticks)*0.04, pi.Area, pi.Err, strings.Join(firstN(pi.Rungs, 8), " / "))
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("out=%v", pi.Moved > 6 || pi.Area == 1)}
+		switch {
+		case !pi.Pinned:
+			o.Verdict, o.Reason = Blocked, "the pin cheat did not build the pocket: "+pi.Err
+		case pi.Moved > 6 || pi.Area == 1:
+			o.Verdict, o.Reason = Pass, fmt.Sprintf("out of the pocket after %.0f s of game time (area %d)", float64(pi.Ticks)*0.04, pi.Area)
+		default:
+			o.Verdict, o.Reason = Fail, fmt.Sprintf("still in the pocket after %.0f s of game time: the stall ladder did not leave it (err %q)", float64(pi.Ticks)*0.04, pi.Err)
+		}
+		return o
+	}}
+}
+
+func d8warriv(l GameLab, lim time.Duration) Drill {
+	ql, ok := l.(QuestLab)
+	if !ok {
+		return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv takes the character to Act 2", Needs: []string{"the lab has no quest step"}}
+	}
+	return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv to Act 2 (Andariel record by `debug quest set`): the menu row \"Go East\" moves the character to Lut Gholein", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		area, menu, err := ql.Warriv(ctx, r)
+		intended := "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)"
+		obs := fmt.Sprintf("menu [%s]; area after %d; err %v", menu, area, err)
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("area=%d err=%v", area, err != nil)}
+		switch {
+		case err != nil:
+			o.Verdict, o.Reason = Fail, "warriv: "+err.Error()
+		case area != 40:
+			o.Verdict, o.Reason = Fail, fmt.Sprintf("arrived in area %d, wanted 40", area)
+		default:
+			o.Verdict, o.Reason = Pass, "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path"
+		}
+		return o
+	}}
 }

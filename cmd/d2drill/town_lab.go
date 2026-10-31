@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/town"
 )
@@ -263,4 +264,15 @@ func (l *lab) quantities(ctx context.Context) string {
 		}
 	}
 	return strings.Join(q, ",")
+}
+
+func (l *lab) RepairEstimate(ctx context.Context) (int, error) { return l.tw.RepairEstimateForTest() }
+
+// SellExpect is the vendor price of a normal item of this code by the verified formula (Act 1, Normal).
+func (l *lab) SellExpect(code string) int {
+	b := l.db.ItemByCode(code)
+	if b == nil {
+		return 0
+	}
+	return b.SellPrice(l.db.PriceFactsOf(b), data.MaxBuy(1, 0))
 }

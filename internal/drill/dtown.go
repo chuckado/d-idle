@@ -108,6 +108,7 @@ func D3(l TownLab) []Drill {
 		{ID: "D3.r0", Primitive: "P16", Title: "worn items at durability 1, gold 0: no repair progress, no loop, no gold lost", Limit: lim, Do: do(d3r0)},
 		{ID: "D3.s", Primitive: "P5", Title: "stash opens, an item goes in and out, gold deposit and withdraw keep purse + stash constant", Limit: lim, Do: do(d3s)},
 		{ID: "D3.s2", Primitive: "P5", Title: "partial gold deposit (the amount is typed): the bot's own deposit of 1000 of 1500", Limit: lim, Do: do(d3s2)},
+		{ID: "D3.u", Primitive: "P13", Title: "unidentified magic item: the vendor's price against the price formula (docs/research/price-trace.md)", Limit: lim, Do: do(d3u)},
 		{ID: "D3.i", Primitive: "P13", Title: "identify: an unidentified pack item and an ID scroll, the identify chore", Limit: lim, Do: do(d3i)},
 	}
 }
@@ -277,8 +278,10 @@ func d3b2(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("sell: err %v, gold delta %d vs gained %d", serr, g1.Gold-g0.Gold, gained)
 	case g1.Pack["isc"] != g0.Pack["isc"]-1:
 		o.Verdict, o.Reason = Fail, "the scroll is still in the pack"
+	case sellExpect(l, "isc") > 0 && sellExpect(l, "isc") != gained:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("sold for %d, the price formula (docs/research/price-trace.md) says %d", gained, sellExpect(l, "isc"))
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("sold an identify scroll for %d", gained)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("sold an identify scroll for %d (the price formula says %d)", gained, sellExpect(l, "isc"))
 	}
 	return o
 }
@@ -335,13 +338,19 @@ func d3r(ctx context.Context, r *Run, l TownLab) Outcome {
 		return Blocks(fmt.Sprintf("no worn item with reduced durability after `debug durability all 1` (dur %d/%d)", v0.DurCur, v0.DurMax))
 	}
 	knob := l.RepairKnob()
+	est := -1
+	if re, ok := l.(repairEstimator); ok {
+		if e, err := re.RepairEstimate(ctx); err == nil {
+			est = e
+		}
+	}
 	ci := l.Chores(ctx, "repair")
 	v1, err := l.TView(ctx)
 	if err != nil {
 		return setupFail(err)
 	}
-	obs := fmt.Sprintf("knob repairBelowPct %d; durability %d/%d (%d%%) -> %d/%d; gold %d -> %d (spent per report %d); repaired=%v steps [%s] err %q",
-		knob, v0.DurCur, v0.DurMax, 100*v0.DurCur/v0.DurMax, v1.DurCur, v1.DurMax, v0.Gold, v1.Gold, ci.Spent, ci.Repaired, strings.Join(ci.Steps, "; "), ci.Err)
+	obs := fmt.Sprintf("knob repairBelowPct %d; durability %d/%d (%d%%) -> %d/%d; gold %d -> %d (spent per report %d); estimate before the visit %d; repaired=%v steps [%s] err %q",
+		knob, v0.DurCur, v0.DurMax, 100*v0.DurCur/v0.DurMax, v1.DurCur, v1.DurMax, v0.Gold, v1.Gold, ci.Spent, est, ci.Repaired, strings.Join(ci.Steps, "; "), ci.Err)
 	if 100*v0.DurCur/v0.DurMax >= knob { // the chore is right to skip: record it, the repair path needs a lower item
 		skipped := v1.DurCur == v0.DurCur && v0.Gold == v1.Gold
 		o := Blocks(fmt.Sprintf("the gear is not below the repair knob %d: the repair path is not reached. The chore skipped correctly: %v", knob, skipped))
@@ -354,10 +363,22 @@ func d3r(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Fail, "durability not restored"
 	case v0.Gold <= v1.Gold:
 		o.Verdict, o.Reason = Fail, "durability restored but no gold taken (price unreadable?)"
+	case est >= 0 && est != v0.Gold-v1.Gold:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("repair estimate %d differs from the %d gold paid", est, v0.Gold-v1.Gold)
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("repaired for %d gold at knob %d", v0.Gold-v1.Gold, knob)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("repaired for %d gold at knob %d; the estimate before the visit was %d", v0.Gold-v1.Gold, knob, est)
 	}
 	return o
+}
+
+// repairEstimator is town.Town.RepairEstimateForTest (the price the chore checks the purse against).
+type repairEstimator interface {
+	RepairEstimate(ctx context.Context) (int, error)
+}
+
+// sellExpecter is the price formula of internal/data for a normal item of this code at the Act 1 vendors.
+type sellExpecter interface {
+	SellExpect(code string) int
 }
 
 func d3r0(ctx context.Context, r *Run, l TownLab) Outcome {
@@ -521,7 +542,15 @@ func d3i(ctx context.Context, r *Run, l TownLab) Outcome {
 	if err := l.SetGold(ctx, r, 500); err != nil {
 		return setupFail(err)
 	}
+	if ug, ok := l.(unidGiver); ok { // a magic ring that is unidentified from the start (`give pack q4 unid`)
+		if err := ug.GivePackUnid(ctx, r, "rin", 4); err != nil {
+			return setupFail(err)
+		}
+	}
 	for _, code := range []string{"rin", "isc"} {
+		if _, ok := l.(unidGiver); ok && code == "rin" {
+			continue
+		}
 		if err := l.GiveGround(ctx, r, code); err != nil {
 			return setupFail(err)
 		}
@@ -564,6 +593,61 @@ func d3i(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Fail, "ring identified but the scroll was not spent"
 	default:
 		o.Verdict, o.Reason = Pass, "identified with a scroll"
+	}
+	return o
+}
+
+func sellExpect(l TownLab, code string) int {
+	if e, ok := l.(sellExpecter); ok {
+		return e.SellExpect(code)
+	}
+	return 0
+}
+
+// unidGiver is `debug give <code> pack q<quality> unid`: a magic or better item that is unidentified (forkcheats2).
+type unidGiver interface {
+	GivePackUnid(ctx context.Context, r *Run, code string, quality int) error
+}
+
+// d3u measures what Charsi pays for an unidentified magic cap and compares it with the price formula.
+func d3u(ctx context.Context, r *Run, l TownLab) Outcome {
+	ug, ok := l.(unidGiver)
+	if !ok {
+		return Blocks("the lab has no `give pack q4 unid` step")
+	}
+	if err := l.ClearPack(ctx, r); err != nil {
+		return setupFail(err)
+	}
+	if err := l.SetGold(ctx, r, 100); err != nil {
+		return setupFail(err)
+	}
+	if err := ug.GivePackUnid(ctx, r, "cap", 4); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Tick(ctx, 10); err != nil {
+		return setupFail(err)
+	}
+	g0, _ := l.TView(ctx)
+	if g0.Pack["cap"] == 0 {
+		return setupFail(fmt.Errorf("no cap in the pack (%s)", g0.PackString()))
+	}
+	if err := l.OpenVendor(ctx, classCharsi); err != nil {
+		_ = l.CloseAll(ctx)
+		return Failed("open vendor: "+err.Error(), "sell the cap", "")
+	}
+	gained, serr := l.SellPack(ctx, "cap")
+	g1, _ := l.TView(ctx)
+	_ = l.CloseAll(ctx)
+	want := sellExpect(l, "cap")
+	obs := fmt.Sprintf("unidentified magic Cap (unid %d) sold to Charsi: gained %d err %v; gold %d -> %d; formula for a normal cap %d", g0.Unid, gained, serr, g0.Gold, g1.Gold, want)
+	o := Outcome{Intended: "an unidentified magic item sells for its base price (cost/2, the identified extras do not count)", Observed: obs, Sig: fmt.Sprintf("gained=%d want=%d err=%v", gained, want, serr != nil)}
+	switch {
+	case serr != nil || gained <= 0 || g1.Gold-g0.Gold != gained:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("sell: err %v, gold delta %d vs gained %d", serr, g1.Gold-g0.Gold, gained)
+	case want > 0 && gained != want:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("paid %d, the formula for the base says %d", gained, want)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("unidentified magic cap sold for %d = the base formula", gained)
 	}
 	return o
 }

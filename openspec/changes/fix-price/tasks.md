@@ -30,7 +30,7 @@ gates:
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
 # note: owns of internal/loot/loot.go released to fix-belt2 (FIXBELT2, code already merged).
-live: "not verified live: rerun drill D3.r (docs/fixprice.md)"
+live: "verified live 2026-10-31 DRILLS5 (docs/probes/drills/2026-10-31-drills5-repair.txt, docs/probes/drills/2026-10-31-drills5-d3.txt): D3.r repair estimate before the visit 19 = 19 gold paid (Staff 19 of 20 lost; before the fix the estimate was 39), D3.b2 sold an identify scroll for 40 = the price formula 40, D3.u an unidentified magic Cap sold for 32 = the formula for the base (cost/2), each twice, identical"
 ```
 
 - [x] B1 repairEstimate, B2 SellValue, B3 estimatePrice and vendor mult, B4 PricesAt, B5 stash cap tag
