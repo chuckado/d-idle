@@ -33,6 +33,7 @@ type FightSpec struct {
 	SampleMissiles bool     // before the fight, sample debug missiles and Snapshot.Missiles with the character idle
 	Kill           bool     // debug kill after the arrival: the level's natural monsters are gone (they give experience)
 	Potions        bool     // belt holds healing and mana potions
+	Cold           bool     // no warm-up walk after the arrival and one Clear only: the first Clear on a map the navigator has not walked (fixmisc)
 	Clear          time.Duration
 	// LifeAt, when set, lowers the life to this value as soon as the first spawned monster is within reach (P29 retreat)
 	LifeAt int
@@ -103,7 +104,12 @@ func F(l FieldLab) []Drill {
 	fight := func(id, prim, title string, f func(context.Context, *Run, FieldLab) Outcome) Drill {
 		return Drill{ID: id, Primitive: prim, Title: title, Limit: 10 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return f(ctx, r, l) }}
 	}
-	return []Drill{
+	var run []Drill
+	if rl, ok := l.(RunLab); ok {
+		run = append(run, DRun(rl))
+	}
+	return append(run, []Drill{
+		fight("D-sync", "P27", "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)", fSync),
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
 		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: standing in the Cave Level 1 mouth trigger (south side) in Cold Plains, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
@@ -118,7 +124,7 @@ func F(l FieldLab) []Drill {
 		fight("D5.p29", "P29", "retreat: a pack at low life, the bot's chicken and heal decision", fP29),
 		fight("D5.p28", "P28", "mana potion in a fight, P26 hit effect on a target", fP28),
 		obj("H.obj.cage", "Cain's gibbet in Tristram: listed (class 26), operated by the bot's Interact", "38", "gibbet"),
-	}
+	}...)
 }
 
 func fObj(ctx context.Context, r *Run, l FieldLab, level int, want string) Outcome {
@@ -425,6 +431,24 @@ func fTouch(ctx context.Context, r *Run, l FieldLab) Outcome {
 		o.Verdict, o.Reason = Fail, "the later trip to Cold Plains failed: "+c.Err
 	default:
 		o.Verdict, o.Reason = Pass, "touched in passing, handed over, and used as a travel target"
+	}
+	return o
+}
+
+// fSync is the fixmisc proof: DRILLS5 F4 saw the first Clear after a position jump call every monster unreachable.
+func fSync(ctx context.Context, r *Run, l FieldLab) Outcome {
+	f := l.Fight(ctx, r, FightSpec{Level: 2, Cold: true, Kill: true, Spawns: []string{"zombie1 3 near"}, Life: 400, Clear: 60 * time.Second})
+	unreach := countLines(f.Log, "no path and no firing position")
+	o := Outcome{Intended: "the first Clear after `debug goto` attacks the spawned zombies (kills > 0, no unreachable lines)",
+		Observed: fmt.Sprintf("kills %d, cast commands %d, unreachable lines %d, avoided %d, skipped %d, ignored %d, %v, err %q; log head: %s", f.Kills, f.CmdSkill, unreach, f.Avoided, f.Skipped, f.Ignored, f.Elapsed.Round(time.Second), f.Err, strings.Join(firstN(f.LogHead, 5), " / ")),
+		Sig:      fmt.Sprintf("kills>0 %v unreach>0 %v", f.Kills > 0, unreach > 0)}
+	switch {
+	case f.Spawned == 0:
+		o.Verdict, o.Reason = Blocked, "no monster was spawned: "+f.Err
+	case unreach > 0 || f.Kills == 0:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("the first Clear on a cold arrival did not attack: kills %d, unreachable lines %d", f.Kills, unreach)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("the first Clear on a cold arrival attacked and killed %d of %d", f.Kills, f.Spawned)
 	}
 	return o
 }

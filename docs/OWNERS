@@ -61,3 +61,4 @@ internal/nav/sync.go  fixmisc  fixmisc
 internal/d2dctl/fixstall_test.go  fixstall  fixstall
 internal/nav/pinned_test.go  fixstall  fixstall
 docs/fixstall.md  fixstall  fixstall
+openspec/changes/drills6/**  drills6  drills6

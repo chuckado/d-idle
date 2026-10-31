@@ -529,11 +529,13 @@ func d6pin(l GameLab, lim time.Duration) Drill {
 		pi := pl.Pin(ctx, r, 2, 60*time.Second)
 		intended := "a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time"
 		obs := fmt.Sprintf("pinned=%v freed=%v moved %.1f cells in %d ticks (%.0f s), area %d, err %q; ladder lines: %s", pi.Pinned, pi.Freed, pi.Moved, pi.Ticks, float64(pi.Ticks)*0.04, pi.Area, pi.Err, strings.Join(firstN(pi.Rungs, 8), " / "))
-		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("out=%v", pi.Moved > 6 || pi.Area == 1)}
+		// fixstall: a pinned GoTo now ends with ErrLevelChanged after the town portal escape (area 1)
+		escaped := strings.Contains(pi.Err, "level changed")
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("out=%v", pi.Moved > 6 || pi.Area == 1 || escaped)}
 		switch {
 		case !pi.Pinned:
 			o.Verdict, o.Reason = Blocked, "the pin cheat did not build the pocket: "+pi.Err
-		case pi.Moved > 6 || pi.Area == 1:
+		case pi.Moved > 6 || pi.Area == 1 || escaped:
 			o.Verdict, o.Reason = Pass, fmt.Sprintf("out of the pocket after %.0f s of game time (area %d)", float64(pi.Ticks)*0.04, pi.Area)
 		default:
 			o.Verdict, o.Reason = Fail, fmt.Sprintf("still in the pocket after %.0f s of game time: the stall ladder did not leave it (err %q)", float64(pi.Ticks)*0.04, pi.Err)

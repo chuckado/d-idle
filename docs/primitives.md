@@ -134,3 +134,13 @@ D0 harness + P35 gate, then D1 belt (P1 P2 P3 P7), D2 portals and town entry (P1
 
 DRILLS5 follow-up (fixmisc, docs/fixmisc.md): P28 poor-character mana rule is intended (pinned by a test); P27 first Clear after a position jump now syncs the navigator map (`Navigator.Sync`), live proof pending.
 fixstall (2026-10-31, offline, not live): H.pause F1 (NPC approach stall: early stall detection, distance-sized game-time budget) and D6.d F2 (a plain GoTo stalled in a pocket escapes by town portal, P25) fixed in code; proof = rerun H.pause and D6.d; docs/fixstall.md.
+
+DRILLS6 rows (2026-10-31, lab build cheats3, throwaway Sorceress, each drill twice; files `2026-10-31-drills6*.txt/.json`, README section DRILLS6). These supersede the DRILLS5 rows of the same drill ids:
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| AUDIT | H.pause | PARTIAL (finding F7) | bot's own Pause: 1 of 2 tries opens Kashya in 136 ticks, the other fails at 718 ticks (28.4 s budget, stalled near 25.9,20.5); identical in both invocations (lockstep is deterministic) |
+| P25 | D6.d | PARTIAL (finding F8) | the escape fires (`nav: stalled in a pocket, escaping by town portal`) and run 1 ends in ErrLevelChanged, town in 493 ticks; run 2 (another pin position) opens the portal but cannot walk to it: stuck 62 s |
+| P27 | D-sync | PASS | first `Fighter.Clear` after `debug goto`, no warm-up walk: 3 of 3 zombies killed, 0 unreachable lines, 9 s |
+| P22 | D-run | PASS | run toggle: 0.556 to 0.563 subtiles per tick (running) in a fresh game, in the same game again and after a restart (runKeys 1 then 2, runResets 1 to 3), stamina drains; the baseline without the run key walks at 0.375 (ratio 0.67), no drain |
+| P10 | D2.* | PASS alone, order-dependent in the full group | D2.a, t, a2, b, c, g, d, d3, e, h, f PASS when run as subsets; the full group run has D2.a2 (stale portal), D2.d3 (DIFF) and then D2.e, h, f (setup: the `debug hit` left the character dead) FAIL |
+| P26 | D-skill | NOT RUN | docs/research/skill-bind-trace.md is not on main and its branch worktree is gone |

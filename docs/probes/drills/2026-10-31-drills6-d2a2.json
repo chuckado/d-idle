@@ -1,0 +1,55 @@
+{
+ "results": [
+  {
+   "id": "D2.a2",
+   "primitive": "P10",
+   "title": "ticks from the right click to portal object 59 (raw cast, 3 casts)",
+   "verdict": "PASS",
+   "reason": "observed [8 8 8] ticks vs the trace's about 7",
+   "intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+   "observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "observed [8 8 8] ticks vs the trace's about 7",
+     "Intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+     "Observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 680797265,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "observed [8 8 8] ticks vs the trace's about 7",
+     "Intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+     "Observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 88687225,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  }
+ ]
+}

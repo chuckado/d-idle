@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/d2dcombat"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2denv"
+	"d2lod-bot/internal/d2dinput"
 	"d2lod-bot/internal/d2dloot"
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
@@ -55,6 +56,9 @@ type lab struct {
 	wpNav  *nav.Navigator // DW: the bot's navigator with the spy in front (wp_lab.go)
 	wpTabs string         // wp_tabs rects seen at the last tab click (DW)
 	wpSpy  *spy
+
+	runPol *d2dinput.RunPolicy // D-run: the controller's policy while it is switched off
+	runDir int                 // D-run: the direction of the measured leg (-1 not found yet; set by Leg)
 }
 
 func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst string, log *slog.Logger) *lab {
@@ -80,7 +84,7 @@ func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst strin
 	lt := loot.New(rig.Env, nv)
 	tw.SetJudge(lt)
 	d2dloot.Attach(lt, be.Source, db)
-	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst, nv: nv, navr: nv}
+	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst, nv: nv, navr: nv, runDir: -1}
 }
 
 // ---- drill.World ----
