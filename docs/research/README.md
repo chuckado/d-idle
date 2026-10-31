@@ -55,7 +55,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 - [pr-belt-proof.md](pr-belt-proof.md), [pr-belt-draft.md](pr-belt-draft.md), [pr-belt-evidence-pack.md](pr-belt-evidence-pack.md) upstream PR candidate for belt scrolls: ready, local branch only, pending the user's go. current.
 - [town-portal-trace.md](town-portal-trace.md) Tome of Town Portal use traced in game.exe vs d2d vs the bot. current.
 - [waypoint-trace.md](waypoint-trace.md) Waypoint panel and 0x49 travel traced in game.exe vs d2d vs the bot; PR candidate [pr-wp-proof.md](pr-wp-proof.md) ([draft](pr-wp-draft.md), [evidence](pr-wp-evidence-pack.md)). current.
-- [pr-tome-proof.md](pr-tome-proof.md), [pr-tome-draft.md](pr-tome-draft.md), [pr-tome-evidence-pack.md](pr-tome-evidence-pack.md) upstream PR candidate for inventory tome use: not ready (needs patch, after-run, verifier). draft.
+- [pr-tome-proof.md](pr-tome-proof.md), [pr-tome-draft.md](pr-tome-draft.md), [pr-tome-evidence-pack.md](pr-tome-evidence-pack.md) upstream PR for inventory tome use: OPEN #149 (2026-10-31).
 
 ## Process, review and public prep
 - [code-review-2026-10-30.md](code-review-2026-10-30.md) review of the day's merges; section 9 lists the bug-fix cards. current (open items: [../BACKLOG.md](../BACKLOG.md)).

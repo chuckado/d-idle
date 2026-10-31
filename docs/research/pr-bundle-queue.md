@@ -12,8 +12,8 @@
 ## Queue (in order)
 | Candidate | State | Commits | Notes |
 |---|---|---|---|
-| #147 belt scrolls | OPEN, up to date with the restructured upstream (merge pushed), mergeable, review pending; CodeRabbit follow-up commit 4d1572ee already in | 3 + merge | waits for the maintainer |
-| tome (inventory Town Portal opens at the click tick) | READY, local, queued by the user: open when #147 merges | 3 | branch fix/tome-use on the worker host; docs/research/pr-tome-*.md |
+| #147 belt scrolls | MERGED upstream 2026-10-31T17:45Z (0dc4c62a) | 3 + merge | done |
+| tome (inventory Town Portal opens at the click tick) | OPEN #149 https://github.com/psi29a/d2decomped/pull/149 (2026-10-31, user go), 8 files, CodeRabbit started by itself | 3 | branch fix/tome-use-opens-portal-at-once; docs/research/pr-tome-*.md; the one open bundle until it merges |
 | shift-click belt (decomp-queue item 9, docs/research/pr-click-*.md) | local, proof run (390,000 cases 129,283 -> 0); verifier holds with limits; PROOF complete | 2 commits, 13 files | branch trace/click on upstream/main 0dc4c62a on the worker host; low priority, bundle filler. ctrl-click sell and inventory-open pickup: client-only, no PR (docs/research/click-handlers-trace.md) |
 | waypoint (decomp-queue item 3, docs/research/pr-wp-*.md) | local, proof incomplete, needs the independent verifier | 6 files, 1 commit | branch fix/waypoint-hostile-window on the worker host |
 | portal entry (ENTERPORTAL) | investigation running | ? | only if a d2d deviation is proven |
