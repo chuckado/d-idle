@@ -104,3 +104,10 @@ With a hostile in range, pack danger 1 or more (champion, unique or boss), a rej
 #### Scenario: Flee with every point in a mouth
 - **WHEN** a fight runs with life low, no portal, no potion and a Mover whose NearMouth is true everywhere
 - **THEN** no point inside a mouth is offered to move and the no-progress watchdog does not fire (TestFleeIntoCaveMouthDoesNotSpin)
+
+### Requirement: The cast gap covers the cast animation
+The default of the `combat.castGapMs` knob SHALL be at least the cast time of the early Sorceress bolts (560 ms), so the fighter does not re-issue a cast the game is still animating. Source: card fix-missile; docs/d2d-casts-real.md (V-d2d: 1.6 to 1.75 commands per cast at 450 ms, 1.02 to 1.04 at 650 ms); internal/env/tuning_combat.go; test TestCastGapCoversEarlyCast.
+
+#### Scenario: Default tuning
+- **WHEN** the default combat tuning is read
+- **THEN** CastGapMs is at least 560

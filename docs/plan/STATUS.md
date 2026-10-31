@@ -41,25 +41,17 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
-| [fix-belt2](../../openspec/changes/fix-belt2/) | in-progress | fixbelt2 | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/beltfix_test.go`<br>`internal/loot/loot.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixbelt2.md` | - |
-| [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/verbs.go`<br>`internal/d2denv/reader.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`docs/knobs.md` | - |
-| [fix-missile2](../../openspec/changes/fix-missile2/) | in-progress | fixmissile2 | `internal/d2dctl/parse.go`<br>`internal/d2dsrc/missiles.go`<br>`internal/d2dsrc/missiles_test.go`<br>`internal/combat/dodge_test.go`<br>`docs/fixmissile.md` | - |
-| [fix-nav](../../openspec/changes/fix-nav/) | in-progress | fixnav | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/act2hints.go`<br>`internal/nav/fixnav_test.go`<br>`internal/bot/waypoints.go`<br>`internal/bot/task.go`<br>`internal/bot/fixnav_test.go`<br>`docs/fixnav.md` | - |
 | [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`docs/fixobj.md` | - |
-| [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/sim/sim.go`<br>`internal/loot/export_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
-| [fix-price](../../openspec/changes/fix-price/) | in-progress | fixprice | `internal/data/price.go`<br>`internal/data/price_test.go`<br>`internal/town/chores.go`<br>`internal/town/stashfull.go`<br>`internal/town/shop.go`<br>`internal/town/fixprice_test.go`<br>`internal/loot/pickup.go`<br>`internal/loot/valuables.go`<br>`internal/loot/fixprice_test.go`<br>`internal/leveler/score.go`<br>`internal/leveler/shop.go`<br>`internal/leveler/shopkit_test.go`<br>`internal/leveler/fixprice_test.go`<br>`internal/resource/potion.go`<br>`internal/resource/fixprice_test.go`<br>`internal/town/stash.go`<br>`docs/fixprice.md` | - |
-| [fix-restart](../../openspec/changes/fix-restart/) | in-progress | fixrestart | `internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/fixrestart_test.go`<br>`internal/bot/botsmall_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/savedexp.go`<br>`cmd/d2bot/savedexp_test.go`<br>`docs/fixrestart.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
 
 ### Gates
-- spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 31 requirements
+- spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
 - spec [bot-loop](../../openspec/specs/bot-loop/spec.md): 6 requirements
-- spec [combat-loop](../../openspec/specs/combat-loop/spec.md): 8 requirements
+- spec [combat-loop](../../openspec/specs/combat-loop/spec.md): 9 requirements
 - spec [d2d-farm](../../openspec/specs/d2d-farm/spec.md): 8 requirements
 - spec [dashboard-pub](../../openspec/specs/dashboard-pub/spec.md): 3 requirements
 - spec [death-rule](../../openspec/specs/death-rule/spec.md): 8 requirements
@@ -71,8 +63,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [process-hygiene](../../openspec/specs/process-hygiene/spec.md): 9 requirements
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
-- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 17 requirements
-- spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
+- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
+- spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -80,26 +72,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change fix-bank: go test -p 1 ./internal/town ./internal/d2dtown passes including TestFixBank*
-- change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fix-belt2: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fix-belt2: live proof is a drill rerun (docs/fixbelt2.md), not run here
-- change fix-missile: go test -p 1 ./internal/d2dsrc ./internal/d2dctl ./internal/combat ./internal/env passes including TestMissiles*, TestCastGapCoversEarlyCast, TestHostileMissilesD2dShape
-- change fix-missile: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fix-missile2: go test -p 1 ./internal/d2dsrc ./internal/d2dctl ./internal/combat passes including TestMissilesRealVerb, TestParseMissileReal, TestSidestepRealRows
-- change fix-missile2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fix-nav: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/nav ./internal/bot ./internal/d2dworld pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fix-nav: live proof is a drill after merge: DW variants in docs/fixnav.md
 - change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-obj: live proof is a drill rerun after merge: H.obj, H.pause, D8, D3.n (docs/fixobj.md)
-- change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fix-pickup: live proof is drill D1/P7 (not run here)
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fix-price: go test -short -count=1 ./... passes including the FixPrice tests on the worker host
-- change fix-price: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fix-restart: go test -short ./internal/bot ./cmd/d2bot passes including TestGameLostRestartCountsOnceWithoutMenus, TestXPRiskIsSinceLastSaveAcrossAKill, TestD2DSavedExp*
-- change fix-restart: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -113,6 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 92cfb21 10-31 17:46 `Merge agent/drills5: live drill results for open fix cards` (drills5)
 - 0e592a6 10-31 17:44 `Merge agent/wpopen: upstream #153 open, posted lines` (wpopen)
 - 80df3a6 10-31 17:36 `Merge agent/fix152win: PR #152 MSVC C4456 fix noted` (fix152win)
 - 0eb828e 10-31 17:35 `Merge agent/readmelink: Discord invite in README` (readmelink)
@@ -122,5 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - cebe506 10-31 17:16 `Merge agent/discordhooks: Discord webhook loader` (discordhooks)
 - 88e2cf6 10-31 17:07 `Merge agent/discordtoken: long-lived Discord ops bot token loader` (discordtoken)
 - e68fd9d 10-31 17:05 `Merge agent/cr152: CodeRabbit round 1 follow-up on PR #152` (cr152)
-- ff19642 10-31 16:51 `Merge agent/mapitem: contiguous map (item 13)` (mapitem)
 <!-- statusgen:end -->

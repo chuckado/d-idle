@@ -124,3 +124,70 @@ The kit gate SHALL treat a healing or rejuvenation potion in the pack as present
 #### Scenario: Open portal never leads
 - **WHEN** the open portal in reach never takes the player and the pack holds 2 scrolls
 - **THEN** no scroll is read and ToTown walks back from Blood Moor to the camp
+
+### Requirement: Gold deposit works on d2d
+The town stash chore SHALL deposit gold, a partial amount or the whole purse, through the controller's gold-move capability when it has one, because the d2d amount prompt starts empty and the d2d town controller cannot type. A controller without the capability SHALL keep the typed path. The deposit SHALL still be clamped to the room left under the stash gold cap and confirmed by the stash gold rising in memory.
+
+#### Scenario: Partial deposit on a controller that cannot type
+- **WHEN** the purse holds 2000 gold above a keep line of 550 and the controller only offers the gold-move capability
+- **THEN** 1450 gold reaches the stash with one move and the chore reports no error
+
+#### Scenario: Whole purse
+- **WHEN** the whole purse of 1500 gold is deposited on such a controller
+- **THEN** the purse is 0 and the stash holds 1500
+
+#### Scenario: Stash nearly full
+- **WHEN** the stash has room for 100 gold
+- **THEN** the move is for 100
+
+### Requirement: Repair is not attempted without gold
+The repair chore SHALL NOT be needed when the character holds less gold than a lower-bound estimate of the repair price, so a character that cannot pay never opens the smith.
+
+#### Scenario: Gold 0 with worn gear
+- **WHEN** the character has 0 gold and badly damaged gear
+- **THEN** no repair step runs and no error is reported, and with 500 gold the next visit repairs
+
+### Requirement: Prices follow game.exe's formulas
+The bot's repair, sell and buy price helpers SHALL follow the vendor price function of game.exe 1.14d (docs/research/price-trace.md): repair at cost x missing durability / 8 (armor scaled by defence), none for unidentified or ethereal items; sell at cost / 2, a quarter more off for ethereal and class items, capped at the NPC max buy; buy at cost x the vendor multiplier. Terms the bot cannot read SHALL stay unmodelled, making the result a lower bound.
+
+#### Scenario: Live repair price
+- **WHEN** a Short Staff of base cost 168 with 1 of 20 durability is estimated for repair
+- **THEN** the price is 19 gold, the amount drill D3.r paid at Charsi
+
+#### Scenario: Sell value
+- **WHEN** a normal weapon of base cost 1000 is valued, and again as an ethereal copy
+- **THEN** the values are 500 and 125, and never above the NPC max buy
+
+#### Scenario: Vendor multiplier
+- **WHEN** an item of base cost 100 is priced at Charsi, Gheed and an Act 5 vendor
+- **THEN** the prices are 93, 106 and 200
+
+### Requirement: Ground potion goes where the game puts it
+A clicked ground potion (inventory panel closed) SHALL be treated as landing on the belt when a same-kind column has a free box or a column is empty, else in the pack, and the pickit, the pickup arrival check and the belt fill MUST all follow that rule. Source: docs/fixpickup.md.
+
+#### Scenario: Matching column has room, one in the pack
+- **WHEN** a healing potion lies on the ground, the belt has a healing column with a free box and the pack holds one healing potion
+- **THEN** the potion is wanted
+
+#### Scenario: Belt full for the kind
+- **WHEN** no column can take the kind and the pack already holds the buffer
+- **THEN** the potion is skipped by the buffer rule
+
+#### Scenario: Other kind full, empty column free
+- **WHEN** the healing column is full and another column is empty
+- **THEN** the potion is wanted (the empty column takes it)
+
+#### Scenario: Potion lands on the belt
+- **WHEN** the ground unit disappears and the belt holds one more potion of its class
+- **THEN** the pickup counts as arrived
+
+### Requirement: A kind without room is not a full belt
+A belt fill SHALL treat "no column can take this potion kind" as no room for that kind: the potion stays in the pack, the other kinds are still moved, and the belt MUST NOT be marked full. A potion MUST NOT open an empty belt column when that leaves a planned kind with no column, in the belt fill and for ground potions. Source: docs/fixbelt2.md.
+
+#### Scenario: Mana potion, no free box in a mana column
+- **WHEN** a sash holds healing in three columns and a full mana column, and the pack holds mana potions
+- **THEN** no fill candidate exists, nothing is clicked and the belt is not marked full
+
+#### Scenario: Healing would take the last mana column
+- **WHEN** healing fills three columns of a Sorceress belt and a healing potion lies on the ground
+- **THEN** it is not wanted, and a mana potion is
