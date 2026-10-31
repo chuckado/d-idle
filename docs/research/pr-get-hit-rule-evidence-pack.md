@@ -84,3 +84,38 @@ Agent: Claude Code
 - posted: 2026-10-31 merge of upstream main (6fc9451e) and the poison-mark fix (5466cd17) pushed to PR #134, plain push, no force (PR head 5466cd17, 4 commits, 7 files; mergeable state dirty -> blocked) https://github.com/psi29a/d2decomped/pull/134/commits/5466cd17 go: user 'push 134' (2026-10-31)
 - posted: 2026-10-31 reply to the maintainer on PR #134 https://github.com/psi29a/d2decomped/pull/134#issuecomment-6544969659 go: user 'push 134' (2026-10-31)
 - Verified 2026-10-31 by read-only `gh api` GET (pulls/134, pulls/134/commits, pulls/134/comments).
+
+## CodeRabbit round 2 (F1, F2) (agent CR134, 2026-10-31)
+
+CodeRabbit's review of 2026-10-31T14:56:47Z (head 5466cd17): two Major "heavy lift" findings, both VALID, both fixed LOCALLY in the clone on the worker host (two new commits on `fix/get-hit-rule`, author the user, no trailer, `Agent: Claude Code`; nothing pushed or posted). Full evidence: docs/research/pr-get-hit-rule-proof.md, section "CodeRabbit round 2 (F1, F2)". Human comments on the PR: only the maintainer's 13:58Z conflict request (already answered); none newer.
+
+| Finding | Verdict | Evidence | Change (local) |
+|---|---|---|---|
+| F2 fight.cpp:4876-4878: absorb cut off the first blow | valid | game.exe raises state event 0xb per record in `FUN_0057c1e0` (0x57c2fc) before the total; Bone Armor `FUN_005c6370` takes the record's physical, Cyclone Armor `FUN_005c87a0` its fire / cold / lightning. `tools/emu/hit_absorb.py` (game.exe's own dispatcher + handlers + `FUN_0057cee0`) vs `hit_absorb_harness.cpp`: 50,180 frames, **322 differ before, 0 after** (pool and life 0 differ both) | **309ba7af** `rules::absorb_blows` / `rules::struck_big`, blows carry their parts |
+| F1 ai.cpp:2973: pets and monster foes on the frame sum | valid (outside the original player + merc scope, now extended) | fight.cpp:4742 / :4695 at 5466cd17 passed `foe.damage` once, class 0, unmarked; `FUN_0057cee0` has one monster branch for every type-1 unit (pets, hirelings), the one the decision differential runs (monster frames 0 differ) | **f28eeb1a** one `hurt` per blow (class, mark, its own soak) for monster foes, `pet_hurt` per blow for pets |
+
+Checks after both: test_combat ok, test_game rc 0 (27 OK), decision differential 0 of 73,694 frames (md5 `4fdb5ced` unchanged), mark differential 0 of 111,200, pr_guard 0 / 0, presubmit --quick 0 FAIL 3 WARN. Ponytails kept / added: game.exe absorbs before resistances and DR (d2d after); Energy Shield's share in landing order, not per record; thorns / blasts / Crushing Blows on pets and monsters still class 0 (the same divisor 16 as game.exe's plain record).
+
+Push command NOT RUN (needs the user's go; plain, no force):
+
+```sh
+ssh worker.example 'cd ~/d2d-lab/pr/hitrec && git push origin fix/get-hit-rule'
+```
+
+Draft reply, thread F1 (ai.cpp:2973, not posted):
+
+```text
+@coderabbitai valid: game.exe runs the same per-record test for every type-1 unit (pets, hirelings, monsters), so pets and monster foes now take one hurt per blow with its own class, mark and soak (f28eeb1a).
+Thorns, blasts and Crushing Blows still pass class 0, which is game.exe's plain-record divisor (16) too.
+
+Agent: Claude Code
+```
+
+Draft reply, thread F2 (fight.cpp:4876-4878, not posted):
+
+```text
+@coderabbitai valid: game.exe's Bone Armor / Cyclone Armor handlers run per damage record (state event 0xb in FUN_0057c1e0) and take only that record's physical / fire-cold-lightning part.
+309ba7af keeps the parts per blow (rules::absorb_blows); checked against game.exe's own handlers: 322 of 50,180 frames differed before, 0 after.
+
+Agent: Claude Code
+```
