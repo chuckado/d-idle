@@ -113,6 +113,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- ff19642 10-31 16:51 `Merge agent/mapitem: contiguous map (item 13)` (mapitem)
 - 7d960f0 10-31 16:44 `Merge agent/openprice: log upstream price PR #152` (openprice)
 - 43d5b0c 10-31 16:42 `Merge agent/pricepr: price PR proof, draft, evidence pack` (pricepr)
 - 4d53842 10-31 16:38 `Merge agent/rolesdoc: sourced Discord roles and safety guideline` (rolesdoc)
@@ -122,5 +123,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 89bbc39 10-31 16:16 `Merge agent/fixbelt2: no belt column is no room; PlaceFor/WillBeltFor keep planned kinds a column` (fix-belt2)
 - cc68b7a 10-31 16:13 `Merge agent/readme: README rewrite, d.idle name restyle` (readme)
 - 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
-- d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
 <!-- statusgen:end -->
