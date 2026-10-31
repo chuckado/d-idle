@@ -57,6 +57,13 @@ type Source struct {
 	cmu    sync.Mutex // cursor tracking (cursor.go)
 	prev   []d2.Unit  // carried items of the previous read
 	cur    *d2.Unit   // the unit believed to be on the cursor
+	pmu    sync.Mutex // pset: the cached "debug presets" rows (items.go fieldObjects)
+	pset   struct {
+		rows []d2dctl.Preset
+		area int
+		x, y int
+		ok   bool
+	}
 	wmu    sync.Mutex // warned is touched by every reader goroutine (runner, quest source, merc, town)
 	warned map[string]bool
 }

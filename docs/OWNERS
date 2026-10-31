@@ -42,3 +42,11 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+internal/d2dsrc/items.go  fixobj  fix-obj
+internal/d2dsrc/source.go  fixobj  fix-obj
+internal/d2dsrc/source_test.go  fixobj  fix-obj
+internal/d2dinput/controller.go  fixobj  fix-obj
+internal/d2dinput/controller_test.go  fixobj  fix-obj
+internal/d2denv/env.go  fixobj  fix-obj
+internal/d2denv/fixobj_test.go  fixobj  fix-obj
+docs/fixobj.md  fixobj  fix-obj

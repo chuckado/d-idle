@@ -120,6 +120,7 @@ func (b *Backend) Start(ctx context.Context, timeout time.Duration) error {
 		return err
 	}
 	b.Clock.Detect(ctx)
+	d2dctl.Pause = b.Clock.Pause
 	b.checkVerbs(ctx)
 	return nil
 }
@@ -219,6 +220,28 @@ func (l *LateClock) Watch(every time.Duration, fn func()) (stop func()) {
 		return p.Watch(every, fn)
 	}
 	return nil
+}
+
+// Pause is the d2dctl.Pause of a bot run: the waits between hover, click and menu steps (merc claim and revive, the NPC
+// approach). Under lockstep the game moves only when stepped, so a wall sleep leaves it frozen (V drill H.pause: the
+// approach to Kashya timed out after 8 s wall with 0 ticks, and opens in 147 ticks when the pause steps); here it
+// steps d of game time. On a free-running d2d it stays a wall sleep that ends with the context.
+func (l *LateClock) Pause(ctx context.Context, d time.Duration) error {
+	if err := ctx.Err(); err != nil {
+		return err
+	}
+	if p := l.p.Load(); p != nil {
+		p.Sleep(d)
+		return ctx.Err()
+	}
+	t := time.NewTimer(d)
+	defer t.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-t.C:
+		return nil
+	}
 }
 
 func (l *LateClock) Sleep(d time.Duration) {

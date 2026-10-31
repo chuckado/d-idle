@@ -285,7 +285,9 @@ func (c *Controller) Cast(skill int, w input.Point, unit uint32) error {
 
 // Interact maps a Target by the synthetic ids of d2dsrc: NPC -> "cmd interact <index>", ground item (type 4) ->
 // "cmd pickup", a monster -> "cmd skill 0 x y <unit> left" (normal attack; U), portal rows -> UsePortal.
-// Objects (chest, waypoint, stash) have no verb: ErrUnsupported, as is the merc.
+// Field objects ride the NPC range: d2dsrc lists the level's placed objects (chests, shrines, the cage, the Tristram
+// portal) with id NPCIDBase + preset index, the index space of "cmd interact" (V drill H.obj), so they take the same
+// verb. An object with a raw unit id (Game.exe's) and the merc stay ErrUnsupported.
 func (c *Controller) Interact(t input.Target) error {
 	id := t.ID
 	switch {
@@ -303,7 +305,7 @@ func (c *Controller) Interact(t input.Target) error {
 		x, y := c.cell(t.Pos)
 		return c.C.CmdSkill(c.ctx(), 0, x, y, d2dctl.SkillOpts{Unit: int(id), Left: true})
 	}
-	return unsupported(fmt.Sprintf("interact with unit type %d (objects have no cmd verb)", t.Type))
+	return unsupported(fmt.Sprintf("interact with unit type %d (a field object listed by d2dsrc has an id in the NPC range)", t.Type))
 }
 
 func (c *Controller) InteractNPC(index int) error {
