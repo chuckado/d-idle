@@ -42,3 +42,8 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+docs/research/click-handlers-trace.md  decompclick  decompclick
+docs/research/pr-click-proof.md  decompclick  decompclick
+docs/research/pr-click-draft.md  decompclick  decompclick
+docs/research/pr-click-evidence-pack.md  decompclick  decompclick
+tools/emu/click_*  decompclick  decompclick

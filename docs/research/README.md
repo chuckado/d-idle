@@ -51,6 +51,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 
 ## Decomp lane (game.exe traces; queue: [../decomp-queue.md](../decomp-queue.md))
 - [belt-pickup-trace.md](belt-pickup-trace.md) belt and ground-potion pickup traced in game.exe vs d2d vs the bot (findings B1-B5, d2d deviation D1). current.
+- [click-handlers-trace.md](click-handlers-trace.md) shift-click to the belt, ctrl-click sell, inventory-open pickup in game.exe vs d2d (D3 proven gap, PR candidate [pr-click-proof.md](pr-click-proof.md) / [draft](pr-click-draft.md) / [evidence](pr-click-evidence-pack.md); D2, D4 client-only). current.
 - [pr-belt-proof.md](pr-belt-proof.md), [pr-belt-draft.md](pr-belt-draft.md), [pr-belt-evidence-pack.md](pr-belt-evidence-pack.md) upstream PR candidate for belt scrolls: ready, local branch only, pending the user's go. current.
 - [town-portal-trace.md](town-portal-trace.md) Tome of Town Portal use traced in game.exe vs d2d vs the bot. current.
 - [waypoint-trace.md](waypoint-trace.md) Waypoint panel and 0x49 travel traced in game.exe vs d2d vs the bot; PR candidate [pr-wp-proof.md](pr-wp-proof.md) ([draft](pr-wp-draft.md), [evidence](pr-wp-evidence-pack.md)). current.
