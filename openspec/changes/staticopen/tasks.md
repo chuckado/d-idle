@@ -24,4 +24,4 @@ result: ""
 
 - [x] 1.1 Replay fix/static-field onto upstream main as fix/static-field-v2 (already on upstream 72132b99; identity correct)
 - [x] 1.2 CI-class checks, push to the fork, open the PR (#155)
-- [ ] 1.3 Poll CI, evidence-pack posted lines, bundle-queue row, BACKLOG line
+- [x] 1.3 Poll CI, evidence-pack posted lines, bundle-queue row, BACKLOG line
