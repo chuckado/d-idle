@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/env"
 )
 
 // plannedTown is a fakeTown that also answers the trip floor's PlannedSpend.
@@ -23,6 +24,7 @@ func TestTripFloor(t *testing.T) {
 		g.r.d.Town = &plannedTown{fakeTown: g.r.d.Town.(*fakeTown), spend: spend}
 		g.w.set(func(w *world) { w.level = 6; w.area = 2; w.gold0 = 100 })
 		g.w.belt(belt...)
+		g.r.e.Tune.Town.TripMinSpend = 60 // lever A on (off by default)
 		if mutate != nil {
 			mutate(g)
 		}
@@ -41,6 +43,9 @@ func TestTripFloor(t *testing.T) {
 	}
 	if ok, _ := due([]uint32{101}, 30, func(g *rig) { g.r.e.Tune.Town.TripMinSpend = 0 }); !ok {
 		t.Fatal("tripMinSpend 0 must restore the old trip")
+	}
+	if ok, _ := due([]uint32{101}, 30, func(g *rig) { g.r.e.Tune.Town.TripMinSpend = env.DefaultTownTuning().TripMinSpend }); !ok {
+		t.Fatal("the default tripMinSpend must keep the old trip")
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/town"
 )
 
@@ -22,6 +23,7 @@ func boughtLike(rep town.ChoreReport, sub string) int {
 // goldfloor: gold 209 and 1 healing potion buys potions and no portal scroll.
 func TestNoTPRebuyWhenPoor(t *testing.T) {
 	r := audit(t, 209, 8, false)
+	r.Env.Tune.Town.TripMinSpend = 60 // lever A on (off by default since the failed A/B of 2026-10-31)
 	r.W.Add("hp1", d2.ContBelt, 0, 0)
 	rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Scrolls: true})
 	if err != nil {
@@ -32,9 +34,28 @@ func TestNoTPRebuyWhenPoor(t *testing.T) {
 	}
 }
 
+// The defaults are the old behaviour: tripMinSpend 0 puts no poor-scroll rule in force, so the same visit may buy the scroll.
+func TestGoldfloorOffByDefault(t *testing.T) {
+	d := env.DefaultTownTuning()
+	if d.TripMinSpend != 0 || d.MPCapEarly != 0 || d.MPCapLevel != 0 {
+		t.Fatalf("goldfloor levers must be off by default: %+v", d)
+	}
+	r := audit(t, 600, 6, false)
+	r.W.Add("hp1", d2.ContBelt, 0, 0)
+	r.W.Add("hp1", d2.ContBelt, 1, 0)
+	s, _ := r.W.Snapshot()
+	if n := r.T.PlannedSpend(s); n == 0 {
+		t.Fatal("planned spend 0 at defaults")
+	}
+	if rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true}); err != nil || boughtLike(rep, "Mana") < 2 {
+		t.Fatalf("default visit bought %v (err %v), want the old mana fill", rep.Bought, err)
+	}
+}
+
 // goldfloor: below clvl 10 one mana potion per visit and no mana trip; clvl 12 and the knob at 0 are unchanged.
 func TestManaCapBelowClvl10(t *testing.T) {
 	r := audit(t, 600, 6, false)
+	r.Env.Tune.Town.MPCapLevel, r.Env.Tune.Town.MPCapEarly = 10, 1 // lever B on
 	r.W.Add("hp1", d2.ContBelt, 0, 0)
 	r.W.Add("hp1", d2.ContBelt, 1, 0)
 	r.W.Add("tsc", d2.ContInventory, 9, 3)
@@ -50,7 +71,7 @@ func TestManaCapBelowClvl10(t *testing.T) {
 		t.Fatalf("clvl 6 bought %d mana potions (%v), want 1", n, rep.Bought)
 	}
 	r = audit(t, 600, 6, false)
-	r.Env.Tune.Town.MPCapLevel = 0
+	r.Env.Tune.Town.MPCapLevel = 0 // the default
 	r.W.Add("hp1", d2.ContBelt, 0, 0)
 	r.W.Add("hp1", d2.ContBelt, 1, 0)
 	if rep, _ = r.T.Chores(context.Background(), town.ChorePlan{Potions: true}); boughtLike(rep, "Mana") < 2 {
@@ -61,6 +82,7 @@ func TestManaCapBelowClvl10(t *testing.T) {
 // PlannedSpend never exceeds the gold: the trip floor sees a 25-gold purse as a 25-gold plan.
 func TestPlannedSpendCappedByGold(t *testing.T) {
 	r := audit(t, 25, 6, false)
+	r.Env.Tune.Town.MPCapLevel, r.Env.Tune.Town.MPCapEarly = 10, 1
 	s, _ := r.W.Snapshot()
 	if n := r.T.PlannedSpend(s); n > 25 || n == 0 {
 		t.Fatalf("planned %d with 25 gold", n)

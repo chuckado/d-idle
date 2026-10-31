@@ -1,3 +1,5 @@
+> status: deferred (2026-10-31). Levers A and B are off by default after the failed paired A/B (docs/goldfloor.md); lever C NO-GO; the delta spec is not applied. Redesign needed: poverty sell trips.
+
 ## Why
 
 docs/goldfloor.md: the bot is under 100 gold in 31 to 90 percent of minutes while earning 430 to 1270 gold/h (sales 80 to 85 percent, piles 15 to 20 percent): the shop spends everything. TP scrolls are 48 to 55 percent of spend, mana potions 22 to 34 percent, healing potions about 20 percent, and 83 percent of NAVSOAK trips bought under 30 gold, each burning a scroll that the next visit rebuys.

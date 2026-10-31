@@ -19,6 +19,7 @@ func TestScenario_PovertyLoop(t *testing.T) {
 	visit := func(t *testing.T, gold int, potionsFirst int) (bought map[string]int, hp, after int) {
 		r := audit(t, gold, 4, false)
 		r.Env.Tune.Town.PotionsFirst = potionsFirst
+		r.Env.Tune.Town.TripMinSpend = 60 // the poor-scroll rule rides on lever A (off by default)
 		rep := run(t, r)
 		for k, n := range rep.Bought {
 			if strings.Contains(k, "Healing") {
