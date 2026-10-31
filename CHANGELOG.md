@@ -9,6 +9,8 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- fixrun (offline, live proof pending): the d2d run-toggle belief is reset on every game start in both lifecycle paths (the d2denv path already was), the bot `minute` line logs `runBelieved`, `stam`, `stamMax`, `runKeys`, `runResets`, `walkingRaw`; the 400 ms MoveTo stall wait is unchanged; recipe in `docs/fixrun.md` (agent/fixrun).
+
 - Discord server built (docs only, **research**): `docs/community/discord/` plan, server, roles and feeds now record the live state of 2026-10-31 (hidden STAFF category, Announcement channel, AutoMod, feeds, the bot keeps Administrator as the user's accepted risk) and the remaining user steps; `server.json` gains STAFF/`discord-updates` and `"type": "news"`, `apply_server.py` accepts it (agent/discorddocs).
 - Discord feed webhooks from private files: `common.load_webhook_url()` (env, then `~/.local/share/d2idle/discord-webhook-<channel>` mode 600, then keyring; same fail-closed rules as the bot token, URL shape and channel name checked); `notify.py` uses it; `D2IDLE_DISCORD_HOME` overrides the directory so tests never read real files; headless recipe in `feeds.md` and `server.md` (agent/discordhooks).
 - Discord ops bot (offline): long-lived bot model with least privilege (`d.idle-ops` role, allowed and always-ask lists in `roles.md`); `tools/discord/common.py` `load_bot_token()` reads env, then a private file (`~/.local/share/d2idle/discord-bot-token`, mode 600, no symlink, own user, private parent, fail-closed), then the keyring; `apply_server.py` uses it; setup and rotate/revoke in `server.md` (agent/discordtoken).

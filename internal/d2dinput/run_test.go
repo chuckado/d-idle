@@ -1,8 +1,10 @@
 package d2dinput
 
 import (
+	"errors"
 	"reflect"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/d2dctl/fake"
 	"d2lod-bot/internal/input"
@@ -117,5 +119,19 @@ func TestRunLogKV(t *testing.T) {
 	}
 	if got["runBelieved"] != true || got["runKeys"] != 1 || got["stam"] != 15360 || got["stamMax"] != 15360 {
 		t.Fatalf("log kv %v", got)
+	}
+}
+
+// B3: the 400 ms stall wait is virtual time on the controller's clock (never a wall sleep). A player that never moves
+// costs three stall windows (kick after the first, give up at the third), each 400 ms plus at most one poll.
+func TestMoveToStallWaitIsClockTime(t *testing.T) {
+	c, _ := rig(t, fake.Sample())
+	clk := c.Clock.(*fclock)
+	start := clk.t
+	if err := c.MoveTo(input.Point{X: 253, Y: 68}, input.MoveOpts{Timeout: time.Minute}); !errors.Is(err, input.ErrMoveFailed) {
+		t.Fatalf("%v", err)
+	}
+	if got := clk.t.Sub(start); got < 3*400*time.Millisecond || got > 3*(400*time.Millisecond+c.poll()) {
+		t.Fatalf("stall cost %v of clock time", got)
 	}
 }
