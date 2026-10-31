@@ -251,7 +251,15 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	nv := be.Navigator()
 	ref := &runnerRef{}
 	seams := d2dSeams // tests may preset single seams; the real stack fills the rest
-	deps := bot.Deps{Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
+	charName := o.char
+	if charName == "" {
+		charName = "D2dbot"
+	}
+	var savedExp func() (uint32, bool)
+	if o.managed {
+		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
+	}
+	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
 		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.

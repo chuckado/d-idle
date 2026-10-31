@@ -115,6 +115,7 @@ type observer struct {
 	plannedGames int       // newGames entries that were planned save points (not restarts)
 	newGames     int       // incremented whenever the menus were left for a game
 	recycles     int       // unplanned games the bot started itself (newGameRun, Recycle): counted even when no menu poll sees them (d2d)
+	lostRestarts int       // games the bot restarted after losing the process (gameLost), counted at success; a d2d kill shows no menus
 	alive        aliveInfo
 	curve        []lifeStamp
 	trail        []trailStamp // one sample per second for the last minute (autopsy.go)
@@ -232,14 +233,25 @@ func (r *Runner) newGameRun(f func(context.Context) error) func(context.Context)
 func (r *Runner) noteRecycle() {
 	r.obMu.Lock()
 	r.ob.recycles++
+	r.ob.savedNew = true // see noteGameLost
+	r.obMu.Unlock()
+}
+
+// noteGameLost counts a successful game-lost restart (loop.gameLost) as a restart. It is a separate counter from
+// recycles: gameLost calls Deps.Restart directly, never newGameRun or Recycle, so no event is counted twice.
+func (r *Runner) noteGameLost() {
+	r.obMu.Lock()
+	r.ob.lostRestarts++
+	r.ob.savedNew = true // no menu poll on d2d: take the fallback saved exp at the next in-game snapshot
 	r.obMu.Unlock()
 }
 
 // restartCount is the minute line's restarts: game entries after the first that were not planned save points, as the
-// menu observer saw them (Game.exe: also catches crash re-entries), or the games the bot started itself, whichever is
-// larger (d2d never shows the menus, so only the second is non-zero there).
-func restartCount(newGames, planned, recycles int) int {
-	return max(0, newGames-1-planned, recycles)
+// menu observer saw them (Game.exe: also catches crash re-entries), or the games the bot started itself (unplanned new
+// games: recycles; and restarts after a lost game process: lost), whichever is larger. d2d never shows the menus, so
+// only the second is non-zero there; on Game.exe the menu count already includes a game-lost restart and wins or ties.
+func restartCount(newGames, planned, recycles, lost int) int {
+	return max(0, newGames-1-planned, recycles+lost)
 }
 
 func (r *Runner) expectGameExit(on bool) {
@@ -944,7 +956,7 @@ func (r *Runner) minuteLine(s *d2.Snapshot, p *d2.Player, now time.Time) {
 	packHP, packMP, beltBoxes := r.potionDiag(s)
 	r.e.Log.Info("minute", "area", p.Area, "clvl", p.Level, "xp", p.Exp, "kills", r.lifetimeKills(p.Name), "killsGame", o.kills, "deaths", o.deaths,
 		"potions", kit.BeltHP, "mana", kit.BeltMP, "packHP", packHP, "packMP", packMP, "beltBoxes", beltBoxes, "potionsUsed", int(r.drank.Load()),
-		"gold", p.Gold, "restarts", restartCount(o.newGames, o.plannedGames, o.recycles), "xpRisk", o.xpAtRiskLocked(r.d.SavedExp), "xpLost", o.xpLost, "rung", rung, "goal", goal, "step", step,
+		"gold", p.Gold, "restarts", restartCount(o.newGames, o.plannedGames, o.recycles, o.lostRestarts), "xpRisk", o.xpAtRiskLocked(r.d.SavedExp), "xpLost", o.xpLost, "rung", rung, "goal", goal, "step", step,
 		"state", group, "rstate", rstate, "invPct", invPct, "dmgTaken", o.hp.dmg, "hpMinPct", o.takeHPMin())
 	r.noteGoldNextMinute(p.Gold, now)
 }

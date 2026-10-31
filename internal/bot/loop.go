@@ -484,6 +484,7 @@ func (r *Runner) gameLost(ctx context.Context, c control, ev launch.Event) {
 		return
 	}
 	if err == nil {
+		r.noteGameLost()
 		r.noteReentry()
 	}
 }

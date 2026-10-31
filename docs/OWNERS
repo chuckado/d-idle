@@ -15,7 +15,15 @@ docs/decisions.md     main  -
 .claude/agents/**     main  -
 
 # active changes
-cmd/d2bot/d2dbackend.go              d2d-default-backend   d2d-default-backend
+internal/bot/loop.go                 fixrestart            fix-restart
+internal/bot/observe.go              fixrestart            fix-restart
+internal/bot/fixrestart_test.go      fixrestart            fix-restart
+internal/bot/botsmall_test.go        fixrestart            fix-restart
+cmd/d2bot/d2dbackend.go              fixrestart            fix-restart
+cmd/d2bot/d2dbackend_default_test.go d2d-default-backend d2d-default-backend
+cmd/d2bot/savedexp.go                fixrestart            fix-restart
+cmd/d2bot/savedexp_test.go           fixrestart            fix-restart
+docs/fixrestart.md                   fixrestart            fix-restart
 docs/d2d-replicated-soak.md          d2d-replicated-soak   d2d-replicated-soak
 docs/d2d-container-soak.md           d2d-container-soak    d2d-container-soak
 internal/merc/**  m3-merc  m3-merc

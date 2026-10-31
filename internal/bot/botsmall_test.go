@@ -9,18 +9,21 @@ import (
 
 func TestRestartCount(t *testing.T) {
 	for _, c := range []struct {
-		name                        string
-		games, planned, recycles, w int
+		name                              string
+		games, planned, recycles, lost, w int
 	}{
-		{"first entry only", 1, 0, 0, 0},
-		{"menu observer sees recycles", 18, 0, 17, 17},
-		{"d2d: no menu poll, 17 recycles", 1, 0, 17, 17},
-		{"planned save points are not restarts", 5, 4, 0, 0},
-		{"crash re-entries count on Game.exe", 6, 1, 2, 4},
-		{"never negative", 0, 3, 0, 0},
+		{"first entry only", 1, 0, 0, 0, 0},
+		{"menu observer sees recycles", 18, 0, 17, 0, 17},
+		{"d2d: no menu poll, 17 recycles", 1, 0, 17, 0, 17},
+		{"planned save points are not restarts", 5, 4, 0, 0, 0},
+		{"crash re-entries count on Game.exe", 6, 1, 2, 0, 4},
+		{"never negative", 0, 3, 0, 0, 0},
+		{"d2d: one game lost, no menu poll", 1, 0, 0, 1, 1},
+		{"d2d: recycles and a lost game add up", 1, 0, 2, 1, 3},
+		{"Game.exe: the lost restart is also a menu entry, not counted twice", 3, 0, 1, 1, 2},
 	} {
-		if got := restartCount(c.games, c.planned, c.recycles); got != c.w {
-			t.Errorf("%s: restartCount(%d,%d,%d) = %d, want %d", c.name, c.games, c.planned, c.recycles, got, c.w)
+		if got := restartCount(c.games, c.planned, c.recycles, c.lost); got != c.w {
+			t.Errorf("%s: restartCount(%d,%d,%d,%d) = %d, want %d", c.name, c.games, c.planned, c.recycles, c.lost, got, c.w)
 		}
 	}
 }
@@ -43,8 +46,8 @@ func TestFreshGameCountsRecycleWithoutObserver(t *testing.T) {
 	g.r.obMu.Lock()
 	n, rec, planned := g.r.ob.newGames, g.r.ob.recycles, g.r.ob.plannedGames
 	g.r.obMu.Unlock()
-	if rec != 3 || restartCount(n, planned, rec) < 3 {
-		t.Fatalf("recycles %d newGames %d: restarts %d, want >= 3", rec, n, restartCount(n, planned, rec))
+	if rec != 3 || restartCount(n, planned, rec, 0) < 3 {
+		t.Fatalf("recycles %d newGames %d: restarts %d, want >= 3", rec, n, restartCount(n, planned, rec, 0))
 	}
 }
 
