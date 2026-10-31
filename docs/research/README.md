@@ -53,6 +53,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 - [belt-pickup-trace.md](belt-pickup-trace.md) belt and ground-potion pickup traced in game.exe vs d2d vs the bot (findings B1-B5, d2d deviation D1). current.
 - [click-handlers-trace.md](click-handlers-trace.md) shift-click to the belt, ctrl-click sell, inventory-open pickup in game.exe vs d2d (D3 proven gap, PR candidate [pr-click-proof.md](pr-click-proof.md) / [draft](pr-click-draft.md) / [evidence](pr-click-evidence-pack.md); D2, D4 client-only). current.
 - [pr-belt-proof.md](pr-belt-proof.md), [pr-belt-draft.md](pr-belt-draft.md), [pr-belt-evidence-pack.md](pr-belt-evidence-pack.md) upstream PR candidate for belt scrolls: ready, local branch only, pending the user's go. current.
+- [price-trace.md](price-trace.md) vendor repair / sell / buy prices and gold caps traced in game.exe vs d2d vs the bot (d2d D1-D7, bot B1-B6); proof [pr-price-proof.md](pr-price-proof.md). current.
 - [town-portal-trace.md](town-portal-trace.md) Tome of Town Portal use traced in game.exe vs d2d vs the bot. current.
 - [waypoint-trace.md](waypoint-trace.md) Waypoint panel and 0x49 travel traced in game.exe vs d2d vs the bot; PR candidate [pr-wp-proof.md](pr-wp-proof.md) ([draft](pr-wp-draft.md), [evidence](pr-wp-evidence-pack.md)). current.
 - [pr-tome-proof.md](pr-tome-proof.md), [pr-tome-draft.md](pr-tome-draft.md), [pr-tome-evidence-pack.md](pr-tome-evidence-pack.md) upstream PR for inventory tome use: OPEN #149 (2026-10-31).

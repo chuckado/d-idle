@@ -89,6 +89,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
+- 70639f8 10-31 14:36 `Merge agent/fixobj: d2d field objects listed and operable, Pause steps game under lockstep` (fix-obj)
 - 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
@@ -97,6 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 3eba209 10-31 13:40 `Merge agent/fixwp: waypoint verb fix (W1 class, W2 rows, W5 origin)` (fix-wp)
 - 2ba74e4 10-31 13:37 `Merge agent/forkport: fork port; archive forkport; OWNERS; STATUS; BACKLOG` (forkport)
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
-- 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
-- c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 <!-- statusgen:end -->
