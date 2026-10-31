@@ -21,11 +21,11 @@ gates:
   - "paired A/B 8 seeds x 2 virtual h per arm, same binary: trips under 30 gold at most 35 percent (was 65 to 83), TP spend at most 250 gold/h in bands 5-10 (was 156 to 760), healing belt empty share not above baseline, deaths not above baseline"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 merge:
-result: "1.1 and 1.2 implemented offline (d2d-only: trip floor, shop and mana cap are the town module used by the d2d backend); unit and scenario tests pass; the paired 8-seed A/B gate (1.3) is NOT run, the loot bar trial (lever C) waits for it; extra files touched outside owns: internal/town/chores.go (mana trip gate), internal/town/basicsfix.go (poor scroll rule)"
+result: "task 1.3 verified live on d2d (8 seeds x 2 h, paired, main 6bd5b6c, docs/goldfloor.md Paired A/B): trips under 30 gold A 37.5 pct (pooled 48) vs B 31.8 FAIL; TP spend clvl 5-10 154 vs 532 gold/h pass (thin band); deaths per 1000 kills 0.32 vs 1.25 pass; empty belt 27 vs 19 pct not met; spend -23 pct (claimed), income and XP/h no effect shown; invariants PASS both arms. LEVER C NO-GO." "1.1 and 1.2 implemented offline (d2d-only: trip floor, shop and mana cap are the town module used by the d2d backend); unit and scenario tests pass; the paired 8-seed A/B gate (1.3) is NOT run, the loot bar trial (lever C) waits for it; extra files touched outside owns: internal/town/chores.go (mana trip gate), internal/town/basicsfix.go (poor scroll rule)"
 ```
 
 ## 1. Work
 
 - [x] 1.1 Trip floor and no TP rebuy when poor in the trip trigger and the shop plan; the three tests; knobs `town.tripMinSpend` (60) in docs/knobs.md; planned spend = `Town.PlannedSpend` (belt plan shortfall, mana capped, first scroll, at most the gold); the floor skips survival trips (free heal), sell, pack, merc and non-restock reasons
 - [x] 1.2 Mana cap below clvl 10 (knob `town.mpCapEarly`, 1) and drop the mana-belt trip trigger below clvl 10; test
-- [ ] 1.3 A/B on the worker host per gates; if trips and TP spend fall without more deaths, then trial `loot.minValuePerCell` 20 as a second arm; fill result
+- [x] 1.3 A/B on the worker host per gates; if trips and TP spend fall without more deaths, then trial `loot.minValuePerCell` 20 as a second arm; fill result

@@ -45,3 +45,24 @@ Agrees: skip early TP buys (walk), sorceress buys few mana potions, gate Blood R
 - B: `town.mpCapLevel` 10 and `town.mpCapEarly` 1: below clvl 10 a visit buys at most 1 mana potion and a low mana belt raises no trip (0 level = old).
 - C (loot bar) is not changed: it waits for the A/B.
 - Tests: `TestTripFloor`, `TestScenario_TripFloorPoorLoop` (bot), `TestNoTPRebuyWhenPoor`, `TestManaCapBelowClvl10`, `TestPlannedSpendCappedByGold` (town; need the extracted tables).
+
+## Paired A/B (task 1.3, agent GOLDAB, 2026-10-31; V = tools/ab/paired.py on docs/probes/goldab/)
+Build: main 6bd5b6c, one binary, seeds 1-8 x 2 virtual h, fresh uncheated Sorceress, 3 slots, arms interleaved. A = defaults (levers on). B = overrides `town.tripMinSpend 0` (also ends the poor-scroll rule), `town.mpCapLevel 0` (the cap and the mana-trip drop; `mpCapEarly 0` alone would buy no mana), `town.mpCapEarly 0`. Metrics from `an_gold.py` (minute, `shop: bought`, `town trip` lines), each fed to `paired.py --base off(B) --arm on(A)`; `paired_out.txt`, `metrics.txt`, `invariants.txt`. Excluded seeds: none. Flag: seed 8 is the same run in both arms (281 kills, 3306 XP/h; poverty sell trips, levers rarely fire), kept; clvl ends at 4-5 so band 5-10 holds only 156 (A) and 141 (B) minutes in all.
+
+| metric (n=8) | A mean | B mean | paired A-B (95 % interval) | verdict |
+|---|---|---|---|---|
+| trips under 30 gold, % of trips | 37.5 (pooled 48) | 31.8 (pooled 38) | +5.7 (-4.6 .. +15.9) | GATE FAIL: A above 35, not lower than B |
+| TP spend gold/h, clvl 5-10 (pooled minutes) | 154 | 532 | n=6 pairs, no claim | gate met on the point value, thin (2.6 h in band) |
+| TP spend gold/h, all | 209 | 328 | -119 (-258 .. +20) | no effect shown |
+| deaths per 1000 kills (pooled) | 0.32 (1) | 1.25 (4) | -0.8 (-1.8 .. +0.2) | gate met (not higher), no effect shown |
+| empty healing belt, % of minutes | 27.2 | 18.8 | +8.4 (-3.1 .. +19.9) | GATE NOT MET: point +45 %, not significant |
+| gold spent /h | 502 | 651 | -149 (-282 .. -17) | effect claimed (exit 0): spends 23 % less |
+| gold income /h (piles + sales) | 562 | 673 | -110 (-273 .. +52) | no effect shown |
+| mean gold in pocket | 100 | 85 | +15 (-32 .. +62) | no effect shown |
+| XP/h | 4547 | 4692 | -145 (-652 .. +362) | no effect shown (16 seeds for 10 %) |
+| kills/h | 195 | 200 | -5 (-36 .. +26) | no effect shown |
+| town trips/h | 7.9 | 7.0 | +0.9 (-1.2 .. +3.1) | no effect shown |
+| healing potions bought (8 runs) | 80 | 76 | +0.5 per run (-1.8 .. +2.8) | no effect shown |
+
+Invariants (d2dsoak extract, 8 logs per arm): A PASS (15.9 virtual h, 1 death, 0 hang, 0 stall, wedge max 1 min), B PASS (4 deaths). Restarts 27 (A) vs 32 (B), fresh games 19 vs 18, no crash, all exit 0. Reading: the levers cut spend by a quarter but the effect on the number of low-spend trips is the opposite of the target (A seeds 3 and 8 are poverty-sell trips the floor does not cover, "poverty: N items to sell"), the belt is empty more often, and income is not up. Lever C (loot.minValuePerCell 20): NO-GO, A+B fail the trip and belt gates; the ledger (sales 80 to 85 % of income) still says sales are the lever, so look at the poverty sell trips (seeds 3, 8) first.
+

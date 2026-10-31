@@ -1,0 +1,16 @@
+logs/bot-on1.log x kills=381 (190.5/h) xp/h=190.500
+logs/bot-off1.log x kills=459 (229.5/h) xp/h=229.500
+logs/bot-on2.log x kills=404 (202.0/h) xp/h=202.000
+logs/bot-off2.log x kills=462 (232.9/h) xp/h=232.941
+logs/bot-on3.log x kills=265 (132.5/h) xp/h=132.500
+logs/bot-off3.log x kills=387 (193.5/h) xp/h=193.500
+logs/bot-on4.log x kills=526 (263.0/h) xp/h=263.000
+logs/bot-off4.log x kills=424 (212.0/h) xp/h=212.000
+logs/bot-on5.log x kills=433 (216.5/h) xp/h=216.500
+logs/bot-off5.log x kills=443 (221.5/h) xp/h=221.500
+logs/bot-on6.log x kills=386 (193.0/h) xp/h=193.000
+logs/bot-off6.log x kills=343 (171.5/h) xp/h=171.500
+logs/bot-on7.log x kills=440 (220.0/h) xp/h=220.000
+logs/bot-off7.log x kills=393 (196.5/h) xp/h=196.500
+logs/bot-on8.log x kills=283 (141.5/h) xp/h=141.500
+logs/bot-off8.log x kills=283 (141.5/h) xp/h=141.500

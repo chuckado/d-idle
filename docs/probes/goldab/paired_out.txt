@@ -1,0 +1,112 @@
+== xp_h
+  seed 8   off    3306.0  on    3306.0  diff      +0.0
+paired mean -145.0 (-3.1 % of the base mean 4692.6), SD of differences 606.1, SE 214.3
+95 % interval -651.7 .. +361.7
+per-run SD 824.2, seed correlation between arms 0.75
+seeds per arm for a 10 % effect (469): paired 16, unpaired 50
+verdict: no effect shown (the interval includes 0)
+exit=1
+== kills_h
+  seed 8   off     141.5  on     141.5  diff      +0.0
+paired mean -5.0 (-2.5 % of the base mean 199.9), SD of differences 37.1, SE 13.1
+95 % interval -36.0 .. +26.0
+per-run SD 37.2, seed correlation between arms 0.53
+seeds per arm for a 10 % effect (20): paired 30, unpaired 56
+verdict: no effect shown (the interval includes 0)
+exit=1
+== trips_h
+  seed 8   off      12.0  on      12.0  diff      +0.0
+paired mean +0.9 (+13.3 % of the base mean 7.0), SD of differences 2.6, SE 0.9
+95 % interval -1.2 .. +3.1
+per-run SD 2.9, seed correlation between arms 0.66
+seeds per arm for a 10 % effect (1): paired 110, unpaired 273
+verdict: no effect shown (the interval includes 0)
+exit=1
+== trips_lt30_pct
+  seed 8   off      95.8  on      95.8  diff      +0.0
+paired mean +5.7 (+17.8 % of the base mean 31.9), SD of differences 12.3, SE 4.3
+95 % interval -4.6 .. +15.9
+per-run SD 30.1, seed correlation between arms 0.92
+seeds per arm for a 10 % effect (3): paired 119, unpaired 1407
+verdict: no effect shown (the interval includes 0)
+exit=1
+== spend_h
+  seed 8   off     140.0  on     110.0  diff     -30.0
+paired mean -149.3 (-22.9 % of the base mean 651.2), SD of differences 158.7, SE 56.1
+95 % interval -282.0 .. -16.7
+per-run SD 234.2, seed correlation between arms 0.81
+seeds per arm for a 10 % effect (65): paired 50, unpaired 205
+verdict: regression of about 23 % (interval excludes 0)
+exit=0
+== income_h
+  seed 8   off     175.0  on     175.0  diff      +0.0
+paired mean -110.4 (-16.4 % of the base mean 672.6), SD of differences 194.4, SE 68.7
+95 % interval -272.9 .. +52.2
+per-run SD 228.0, seed correlation between arms 0.67
+seeds per arm for a 10 % effect (67): paired 68, unpaired 182
+verdict: no effect shown (the interval includes 0)
+exit=1
+== gold_mean
+  seed 8   off      54.2  on      54.4  diff      +0.2
+paired mean +14.9 (+17.6 % of the base mean 84.7), SD of differences 56.3, SE 19.9
+95 % interval -32.2 .. +62.0
+per-run SD 36.6, seed correlation between arms -0.21
+seeds per arm for a 10 % effect (8): paired 350, unpaired 295
+verdict: no effect shown (the interval includes 0)
+exit=1
+== tp_h
+  seed 8   off      50.0  on      50.0  diff      +0.0
+paired mean -119.0 (-36.2 % of the base mean 328.4), SD of differences 166.1, SE 58.7
+95 % interval -257.9 .. +19.9
+per-run SD 134.7, seed correlation between arms 0.27
+seeds per arm for a 10 % effect (33): paired 204, unpaired 266
+verdict: no effect shown (the interval includes 0)
+exit=1
+== tp_band_h
+  seed 7   off     375.0  on       0.0  diff    -375.0
+paired mean -383.2 (-69.5 % of the base mean 551.1), SD of differences 912.1, SE 372.4
+95 % interval -1340.4 .. +574.0
+per-run SD 568.2, seed correlation between arms -0.59
+seeds per arm for a 10 % effect (55): paired 2153, unpaired 1671
+verdict: no effect shown (6 seeds per arm, the protocol needs at least 8)
+exit=1
+== hp_h
+  seed 8   off      30.0  on      30.0  diff      +0.0
+paired mean +7.3 (+5.1 % of the base mean 142.7), SD of differences 41.4, SE 14.6
+95 % interval -27.3 .. +41.9
+per-run SD 64.5, seed correlation between arms 0.79
+seeds per arm for a 10 % effect (14): paired 69, unpaired 322
+verdict: no effect shown (the interval includes 0)
+exit=1
+== mp_h
+  seed 8   off      60.0  on      30.0  diff     -30.0
+paired mean -37.6 (-20.9 % of the base mean 180.1), SD of differences 87.4, SE 30.9
+95 % interval -110.7 .. +35.4
+per-run SD 87.6, seed correlation between arms 0.54
+seeds per arm for a 10 % effect (18): paired 188, unpaired 373
+verdict: no effect shown (the interval includes 0)
+exit=1
+== potions_bought
+  seed 8   off       2.0  on       2.0  diff      +0.0
+paired mean +0.5 (+5.3 % of the base mean 9.5), SD of differences 2.7, SE 1.0
+95 % interval -1.8 .. +2.8
+per-run SD 4.3, seed correlation between arms 0.80
+seeds per arm for a 10 % effect (1): paired 68, unpaired 322
+verdict: no effect shown (the interval includes 0)
+exit=1
+== deaths_1000k
+  seed 8   off       0.0  on       0.0  diff      +0.0
+paired mean -0.8 (-63.2 % of the base mean 1.3), SD of differences 1.2, SE 0.4
+95 % interval -1.8 .. +0.2
+per-run SD 1.7, seed correlation between arms 0.80
+seeds per arm for a 10 % effect (0): paired 679, unpaired 2682
+verdict: no effect shown (the interval includes 0)
+exit=1
+== belt_empty_pct
+  seed 8   off      49.2  on      49.2  diff      +0.0
+paired mean +8.4 (+44.8 % of the base mean 18.8), SD of differences 13.8, SE 4.9
+95 % interval -3.1 .. +19.9
+per-run SD 13.7, seed correlation between arms 0.50
+seeds per arm for a 10 % effect (2): paired 426, unpaired 840
+verdict: no effect shown (the interval includes 0)
+exit=1
