@@ -43,6 +43,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
+| [fix153author](../../openspec/changes/fix153author/) | in-progress | fix153author | `docs/research/pr-wp-evidence-pack.md` | - |
 | [fixstall](../../openspec/changes/fixstall/) | in-progress | fixstall | `internal/d2dctl/fixstall_test.go`<br>`internal/nav/pinned_test.go`<br>`docs/fixstall.md` | - |
 | [fixstall2](../../openspec/changes/fixstall2/) | in-progress | fixstall2 | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/approach_path.go`<br>`internal/d2dctl/approach_path_test.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/trip.go`<br>`internal/town/enterportal_test.go`<br>`docs/fixstall2.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -76,6 +77,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix153author: changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change fixstall: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixstall: live proof after merge: rerun H.pause and D6.d (docs/fixstall.md)
 - change fixstall2: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -91,6 +93,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- ea07758 10-31 18:33 `Merge agent/fixstall2: Kashya walk stall routing, town-portal walking interactor` (fixstall2)
 - 618295f 10-31 18:33 `Merge agent/fix153lint: record #153 clang-tidy fixup; archive card` (fix153lint)
 - 8bc55e2 10-31 18:27 `Merge agent/drills6: live drill rerun, findings F7-F9` (drills6)
 - f0c9f25 10-31 18:18 `Merge agent/decompstatic: Static Field and chill decomp, PR candidate docs` (decompstatic)
@@ -100,5 +103,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - be5e7d0 10-31 18:00 `Merge agent/fixmisc: poor-melee rest pin test, Navigator.Sync after position jump` (fixmisc)
 - b0f8314 10-31 17:56 `Merge agent/fixrun: run-reset in WaitInGame, run/stamina in minute log; correct B1 premise; archive fix-obj and waits-audit` (fixrun)
 - 497107f 10-31 17:48 `Merge agent/drills5: live drill results for open fix cards` (m1-liveproof)
-- 0e592a6 10-31 17:44 `Merge agent/wpopen: upstream #153 open, posted lines` (wpopen)
 <!-- statusgen:end -->

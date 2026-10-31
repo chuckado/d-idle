@@ -54,3 +54,4 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
+docs/research/pr-wp-evidence-pack.md  fix153author  fix153author
