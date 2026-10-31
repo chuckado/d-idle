@@ -107,3 +107,19 @@ func TestFightTelemetry(t *testing.T) {
 		t.Fatalf("\n got %s\nwant %s", got, want)
 	}
 }
+
+// A d2d snapshot lists a monster's missile (OwnerType 1) and the player's own (OwnerType 0, same id value as a
+// monster may have): only the first is hostile; with no missiles nothing is.
+func TestHostileMissilesD2dShape(t *testing.T) {
+	snap := &d2.Snapshot{Player: &d2.Player{ID: 1, X: 100, Y: 100}}
+	if got := hostileMissiles(snap); len(got) != 0 {
+		t.Fatalf("no missiles: %v", got)
+	}
+	snap.Missiles = []d2.Unit{
+		{ID: 5, Class: 41, OwnerType: 1, OwnerID: 752, X: 103, Y: 100},
+		{ID: 6, Class: 7, OwnerType: 0, OwnerID: 1, X: 101, Y: 100},
+	}
+	if got := hostileMissiles(snap); len(got) != 1 || got[0].X != 103 {
+		t.Fatalf("hostile %v", got)
+	}
+}

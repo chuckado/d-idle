@@ -69,3 +69,16 @@ internal/town/chores.go  fixprice  fix-price
 internal/town/stash.go  fixprice  fix-price
 internal/loot/loot.go  fixprice  fix-price
 internal/loot/pickup.go  fixprice  fix-price
+internal/d2dctl/parse.go  fixmissile  fix-missile
+internal/d2dctl/verbs.go  fixmissile  fix-missile
+internal/d2dsrc/missiles.go  fixmissile  fix-missile
+internal/d2denv/reader.go  fixmissile  fix-missile
+internal/d2dsrc/missiles_test.go  fixmissile  fix-missile
+internal/env/tuning_combat.go  fixmissile  fix-missile
+internal/env/tuning_combat_test.go  fixmissile  fix-missile
+internal/combat/sim_test.go  fixmissile  fix-missile
+internal/combat/reach_test.go  fixmissile  fix-missile
+internal/combat/castfirst_test.go  fixmissile  fix-missile
+internal/combat/dodge_test.go  fixmissile  fix-missile
+docs/knobs.md  fixmissile  fix-missile
+docs/fixmissile.md  fixmissile  fix-missile

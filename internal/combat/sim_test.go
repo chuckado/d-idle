@@ -267,6 +267,10 @@ type harness struct {
 	cancel context.CancelFunc
 }
 
+// oldCastGap pins the 450 ms cast gap the simulator's timing fixtures were written against (the default is 650 since
+// FIXMISSILE, above the 560 ms early cast); the scenarios that pin it test other logic than the gap.
+func oldCastGap(tu *env.Tuning) { tu.Combat.CastGapMs = 450 }
+
 func newHarness(t testing.TB, mods ...func(*env.Tuning)) *harness {
 	if t != nil {
 		t.Helper()
@@ -357,7 +361,7 @@ func TestClearRadiusLeavesFarMonsters(t *testing.T) {
 }
 
 func TestPotionsAndEvents(t *testing.T) {
-	h := newHarness(t)
+	h := newHarness(t, oldCastGap)
 	h.s.stock(itHP1, 0, 3)
 	h.s.stock(itMP1, 2, 2)
 	h.s.mana = 4

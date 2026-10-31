@@ -353,6 +353,13 @@ func (c *Client) Warps(ctx context.Context) (List[Warp], error) {
 	r, err := c.Debug(ctx, "warps")
 	return parseList(r, err, ParseWarp)
 }
+
+// Missiles lists the missiles in flight ("debug missiles", requested of the fork: docs/fixmissile.md). A stock d2d
+// answers err, which callers treat as "no listing".
+func (c *Client) Missiles(ctx context.Context) (List[Missile], error) {
+	r, err := c.Debug(ctx, "missiles")
+	return parseList(r, err, ParseMissile)
+}
 func (c *Client) Enter(ctx context.Context, i int) error {
 	err := c.dbg(ctx, "enter %d", i)
 	if err == nil {

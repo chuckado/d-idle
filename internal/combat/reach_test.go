@@ -94,7 +94,7 @@ func TestUnreachableIsIgnoredOnceAndRemembered(t *testing.T) {
 }
 
 func TestIgnoreReasons(t *testing.T) {
-	h := newHarness(t)
+	h := newHarness(t, oldCastGap)
 	h.s.addMon(10, clsAllImmun, 115, 100, 50, 0, 0)
 	h.s.addMon(11, clsFallen, 120, 100, 500, 0, 0).immune = true
 	h.f.SetDeathWeights(DeathWeights{Monster: map[string]float64{"archer": 5}})

@@ -565,3 +565,39 @@ func parseQuest(rest string) (QuestInfo, error) {
 	}
 	return q, nil
 }
+
+// Missile is one line of "debug missiles" (a REQUESTED verb, docs/fixmissile.md; the stock and lab d2d do not have it
+// yet, U live): <unit> <missile id> <x> <y> <dx> <dy> <speed> <owner type> <owner unit> <ttl>. Cells are level-relative
+// like "monsters"; dx dy is the unit direction of flight, speed is cells per second, ttl the ticks left (-1 unknown).
+type Missile struct {
+	Raw       string
+	Unit      int
+	Class     int // missiles.txt id
+	X, Y      float64
+	DX, DY    float64
+	Speed     float64
+	OwnerType int // d2 unit type of the shooter: 0 player, 1 monster
+	OwnerID   int
+	TTL       int
+}
+
+// ParseMissile parses one "debug missiles" row.
+func ParseMissile(line string) (Missile, error) {
+	m := Missile{Raw: line}
+	f := fields(line)
+	if len(f) < 10 {
+		return m, fmt.Errorf("missile: want 10 fields")
+	}
+	var e [10]error
+	m.Unit, e[0] = atoi(f[0])
+	m.Class, e[1] = atoi(f[1])
+	m.X, e[2] = atof(f[2])
+	m.Y, e[3] = atof(f[3])
+	m.DX, e[4] = atof(f[4])
+	m.DY, e[5] = atof(f[5])
+	m.Speed, e[6] = atof(f[6])
+	m.OwnerType, e[7] = atoi(f[7])
+	m.OwnerID, e[8] = atoi(f[8])
+	m.TTL, e[9] = atoi(f[9])
+	return m, firstErr(e[:]...)
+}

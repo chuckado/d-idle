@@ -27,14 +27,18 @@ type CombatTuning struct {
 	PollMs      int // loop tick: how often the fight loop re-reads the game
 
 	// Targeting and aim.
-	TargetQuality   int // 100 = always the best target; lower = more often the nearest one, and occasional lost ticks
-	RangeMargin     int // stay this many subtiles inside the skill's range before casting
-	ClearRadius     int // default Clear radius when the caller gives none
-	FightRadius     int // a hostile monster this close counts as a fight (no town trips, tighter potion rules)
-	MaxTargetSec    int // give up on one target after this many seconds (docs/plan danger rules: 45)
-	NoProgressSec   int // give up on a target whose life did not drop for this many seconds
-	ClearMaxSec     int // upper bound of one Clear call when the caller gives no deadline
-	CastGapMs       int // minimum gap between two casts (cast animation)
+	TargetQuality int // 100 = always the best target; lower = more often the nearest one, and occasional lost ticks
+	RangeMargin   int // stay this many subtiles inside the skill's range before casting
+	ClearRadius   int // default Clear radius when the caller gives none
+	FightRadius   int // a hostile monster this close counts as a fight (no town trips, tighter potion rules)
+	MaxTargetSec  int // give up on one target after this many seconds (docs/plan danger rules: 45)
+	NoProgressSec int // give up on a target whose life did not drop for this many seconds
+	ClearMaxSec   int // upper bound of one Clear call when the caller gives no deadline
+	// CastGapMs: minimum gap between two casts. It MUST stay above the cast animation: the early Sorceress casts
+	// Fire Bolt / Charged Bolt in 560 ms (V-d2d, docs/d2d-casts-real.md), and at the old 450 the fighter issued 1.6 to
+	// 1.75 commands per real cast (the rest dropped mid-cast; 5.4 commands per kill vs 1.1 on Game.exe), at 650 1.02 to
+	// 1.04. See docs/fixmissile.md.
+	CastGapMs       int
 	LowManaWaitMs   int // wait this long when out of mana and no potion is worth drinking
 	StaticCasts     int // Static Field casts opening an elite / boss fight
 	StaticCastsBR   int // the same for Blood Raven (0: her 50 percent resists make it a waste of mana, U)
@@ -70,7 +74,7 @@ func DefaultCombatTuning() CombatTuning {
 		CrowdN: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
 		PotionGapMs: 1000, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
-		CastGapMs: 450, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
+		CastGapMs: 650, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
 		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 70, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
 		BuffRecastSec: 150, AuraCheckMs: 1500, LeftFailSec: 60,
 	}
