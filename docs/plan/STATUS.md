@@ -55,6 +55,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
+| [wpopen](../../openspec/changes/wpopen/) | in-progress | wpopen | `docs/research/pr-wp-evidence-pack.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/wpopen/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 31 requirements
@@ -111,6 +112,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
+- change wpopen: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0
 
 ### Recent merges
 - 0eb828e 10-31 17:35 `Merge agent/readmelink: Discord invite in README` (readmelink)
