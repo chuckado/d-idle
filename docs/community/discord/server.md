@@ -1,6 +1,6 @@
 # d.idle Discord: server layout
 
-> status: DRAFT. The same layout as data is [server.json](server.json); `tools/discord/apply_server.py` can create it. Doing it by hand
+> status: LIVE since 2026-10-31 (built through the API; see "Live state" in [plan.md](plan.md#live-state-2026-10-31)). The same layout as data is [server.json](server.json); `tools/discord/apply_server.py` can create it. Doing it by hand
 > in the Discord UI is equally fine and takes about 20 minutes; the tool is only a convenience.
 
 ## Channels
@@ -19,11 +19,13 @@ Topic text is the Discord channel topic (each at most 100 characters). Read-only
 | COMMUNITY | `#general` | Chat about d.idle and idle or bot-played Diablo II. Offline single-player only. | 5 | open |
 | COMMUNITY | `#show-your-runs` | Share a run: class, build, hours, deaths, how measured. | 60 | open |
 | STREAM | `#stream` | Stream notices and chat about the d.idle stream. | 5 | open |
+| STAFF | `#discord-updates` | Community updates and AutoMod alerts. Hidden from members. | off | hidden (`@everyone` denied View Channel) |
 
-Descriptions: `#welcome` start page; `#rules` the rules; `#announcements` releases and news (after enabling Community, convert it to an
-Announcement channel by hand); `#progress` the automated feed ([feeds.md](feeds.md)); `#dev` contributor talk; `#d2d-upstream` our
+Descriptions: `#welcome` start page; `#rules` the rules; `#announcements` releases and news (live: an Announcement channel, type 5; `server.json` marks it `"type": "news"`); `#progress` the automated feed ([feeds.md](feeds.md)); `#dev` contributor talk; `#d2d-upstream` our
 work around the engine we run on; `#help` and `#bug-reports` support with pinned templates; `#general` chat; `#show-your-runs` shared
-runs; `#stream` stream notices and chat (the stream is not live yet).
+runs; `#stream` stream notices and chat (the stream is not live yet). `#discord-updates` (category STAFF, both hidden from
+`@everyone`) is the Community "public updates" channel and the AutoMod alert target. Discord requires that channel to be a plain
+text channel, so `#announcements` could not serve both and became the Announcement (news) channel instead.
 
 ## Roles
 - `owner`: Administrator, hoisted. The user. Keep 2FA on.
@@ -44,10 +46,16 @@ Raid switch: remove send permissions from `@everyone` so only `member` and above
 Implemented as one overwrite per read-only channel: `@everyone` denied Send Messages, Send in Threads and Create Public Threads; `#show-your-runs` and `#bug-reports` additionally allow Attach Files for `@everyone`.
 
 ## Server settings
+Live state (2026-10-31): verification 2 (Medium), explicit filter 2 (all members), notifications 1 (mentions only); Community enabled with
+rules channel `#rules` and updates channel `#discord-updates`. Rules Screening and Onboarding are NOT set (UI only, see below).
 - Verification level: Medium (registered over 5 minutes); High if arrivals spike. Explicit media content filter: scan all members.
 - Default notification setting: only mentions. Enable Community (needed for Rules Screening, Announcement channels, Onboarding).
 - Rules Screening: on, with the text of `rules.md`. Onboarding: default channels `#welcome`, `#rules`, `#help`, `#general`.
-- AutoMod: block mass mentions and invite links; flag new-account links. Safety alerts channel: none at first (use the audit log).
+- AutoMod (live, all block plus alert to `#discord-updates`): `d.idle: slurs, profanity, sexual content (Discord preset)` (presets 1, 2, 3);
+  `d.idle: mention spam` (5 mentions); `d.idle: spam content`; `d.idle: invite links` (keywords `*discord.gg/*`, `*discord.com/invite/*`,
+  `*discordapp.com/invite/*`; the `owner` role is exempt). Created through the API, not by `apply_server.py`.
+- Rules Screening: the API refuses it (HTTP 405 on the membership screening endpoint), so it is a UI step: Server Settings, Community,
+  Rules Screening, text from [rules.md](rules.md). Onboarding is a UI step too: default channels only, no role questions.
 - Invites: no permanent unlimited invite. Public invite: no expiry but a member cap (start 100), temporary membership off; revoke
   and recreate to rotate. Only the owner has Create Invite.
 - Slowmode: values in the table; raise them during a raid.
@@ -68,7 +76,11 @@ role and limits are in [roles.md](roles.md#ops-bot-least-privilege). The token l
    `python3 tools/discord/apply_server.py --guild <id>`  then `... --apply` (and `--settings` once, to set verification, the filter and the @everyone permissions)
 5. Rotate: Reset Token in the portal, rewrite the file as in step 2. Revoke: kick the bot, or Reset Token, or delete the file (any one is enough; do all three if the token may have leaked).
 It matches roles and channels by name and only creates missing ones; it never deletes or renames; existing channels are left as is.
-New channels are created at the bottom. The `owner` role must be assigned to the user by hand. Do the Community, Rules Screening,
+New channels are created at the bottom. The `owner` role must be assigned to the user by hand (cosmetic: the user is the server owner).
+Channel `"type"` is `"text"` (default) or `"news"` (Announcement, type 5; Community must be enabled). The STAFF category, the hidden
+`#discord-updates` channel (deny View Channel for `@everyone` is in server.json) are created by the tool, but category-level overwrites,
+the Community toggle, AutoMod rules and webhooks are not: those were done directly through the API. Roles all start at position 1: Discord
+forbids a bot to reorder roles at or above its own, so the user reorders by hand (owner, then the `d.idle` bot role, then contributor, member). Do the Community, Rules Screening,
 Onboarding and invite steps in the UI: the tool does not touch them.
 
 ## server.json schema (schema 1)
@@ -78,7 +90,7 @@ Onboarding and invite steps in the UI: the tool does not touch them.
                 "everyone_permissions": [permission names] },          (applied only with --settings)
   "optional_roles": [ same shape as roles, plus "enabled": false and "note" ]   (documentation only, ignored by the tool)
   "roles": [ { "name", "color": "#RRGGBB", "hoist": bool, "mentionable": bool, "permissions": [names] } ],
-  "categories": [ { "name", "channels": [ { "name", "type": "text", "topic", "slowmode": seconds,
+  "categories": [ { "name", "channels": [ { "name", "type": "text" | "news", "topic", "slowmode": seconds,
         "overwrites": [ { "role": "@everyone" | role name, "allow": [names], "deny": [names] } ] } ] } ] }
 ```
 Permission names: administrator, view_channel, read_message_history, send_messages, send_messages_in_threads, embed_links, attach_files,
