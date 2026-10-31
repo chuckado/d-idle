@@ -154,3 +154,5 @@ DRILLS7 rows (2026-10-31, lab build cheats3, code at ea07758 with fixstall2; fil
 | P27 | D-sync.wp | FAIL 1 of 2 (finding F12) | first Clear after a waypoint arrival: run 1 3 of 3, run 2 0 of 3 (ignored: 12 approaches without closing in), no unreachable lines |
 | P10 | D2.* | PASS x2 in the full group | 11 of 11 in one process, twice (harness reset: ensureAlive, longer stale-portal walk-away, D2.h signature) |
 | P26 | D-skill probe | PARTIAL | `debug skill right 54` (0 points) `err not usable`, `right 36` ok; the `cmd select` effect (D1) not observed without a step |
+
+Note (fixstall4, 2026-10-31): DRILLS8 F13 (H.pause, NPC approach) cause found offline: the grid route's 12-step waypoints cut the camp block corner (each leg is a straight `cmd move`), and stalls spent the budget; fixed with line-of-sight legs, routing at every stall and a route-sized budget, live proof pending ([fixstall4.md](fixstall4.md)).
