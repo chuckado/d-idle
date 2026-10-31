@@ -2,7 +2,8 @@
 
 ```yaml
 change: fixrun
-status: in-progress
+status: archived
+merge: b0f8314
 agent: fixrun
 branch: agent/fixrun
 worktree: ~/code/d2lod-wt/fixrun
@@ -20,8 +21,7 @@ exclusive: []
 gates:
   - "go test -p 1 for internal/d2dinput, internal/d2denv, internal/bot passes; whole-repo vet and test -short on the worker host"
   - "live proof (DRILLS lane): restart a d2d game, move a fixed leg, compare ticks per subtile before and after (docs/fixrun.md)"
-merge:
-result: "offline only: not verified live; the card stays open at merge until the live proof ran"
+result: "verified live (DRILLS6 D-run): running 0.556-0.563 subtiles per tick in a fresh game and after a restart (ratio 1.01), run key pressed once per game; the run toggle is not the cause of the soak walking share"
 ```
 
 ## 1. Work

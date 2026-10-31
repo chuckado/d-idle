@@ -2,7 +2,8 @@
 
 ```yaml
 change: fixmisc
-status: in-progress
+status: archived
+merge: be5e7d0
 agent: fixmisc
 branch: agent/fixmisc
 worktree: ~/code/d2lod-wt/fixmisc
@@ -20,7 +21,7 @@ gates:
   - "go test per package (nav, combat, resource) and whole-repo vet/test -short on the worker host pass; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof: debug goto then Fighter.Clear without a warm-up walk (docs/fixmisc.md)"
 merge:
-result: ""
+result: "verified live (DRILLS6 D-sync x3): first Clear after debug goto killed 3 of 3 zombies, 0 unreachable lines; town portal and waypoint arrival variants not run"
 live: "DRILLS6 2026-10-31: D-sync PASS x3 (first Fighter.Clear after debug goto, no warm-up walk: 3 of 3 zombies killed, 0 unreachable lines); town portal and waypoint arrivals not run"
 ```
 
