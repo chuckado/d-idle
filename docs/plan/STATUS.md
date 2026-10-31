@@ -83,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
 - 6c8e548 10-31 14:08 `Merge agent/forkcheats: fork cheats documented` (forkcheats)
 - 3eba209 10-31 13:40 `Merge agent/fixwp: waypoint verb fix (W1 class, W2 rows, W5 origin)` (fix-wp)
@@ -92,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 - 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
 - b044d7a 10-31 13:07 `Merge agent/tomepr: tome PR candidate proof, draft, evidence pack` (tomepr)
-- 9f6109b 10-31 12:56 `Merge agent/drills2: drills D1 rerun + D2 live` (m1-liveproof)
 <!-- statusgen:end -->
