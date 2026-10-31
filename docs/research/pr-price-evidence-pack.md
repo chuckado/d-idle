@@ -37,10 +37,16 @@ cd tools/emu && uv run python price_oracle.py gen 100000 7 > cases.tsv && uv run
 
 **PROOF: complete.** Recommendation: go, when #149 has merged (or on the user's 'bundle' into it, 8 files fits), with the user's go per step. Re-fetch upstream first and re-run the oracle, pr_guard and tests.
 
-Push and PR commands (not run; each needs the user's go):
+Push and PR commands (as run 2026-10-31, see the posted lines below):
 
 ```sh
 git -C <PR checkout>/price2 fetch upstream && git -C <PR checkout>/price2 rebase upstream/main   # only if upstream moved; re-run the oracle, pr_guard, tests
 git -C <PR checkout>/price2 push origin fix/vendor-prices
 gh pr create -R psi29a/d2decomped --head shatteredeagle:fix/vendor-prices --title "Vendor prices as game.exe prices them" --body-file <body from pr-price-draft.md>
 ```
+
+posted: 2026-10-31 go: user "push the price PR" (exception to one open bundle: #149 stays open and untouched).
+posted: 2026-10-31 fetch upstream: main still d0ea14b7, no replay; pr_guard upstream/main HEAD 0 FAIL / 0 WARN, 8 files, head 1bfff15c (proof as above unchanged).
+posted: 2026-10-31 push fix/vendor-prices to the fork, plain push: 1bfff15c (commits d8dae7b6 fcfcd82f 3566b42d 95557754 02e77e74 1bfff15c).
+posted: 2026-10-31 PR opened: https://github.com/psi29a/d2decomped/pull/152 (title and body as drafted, ends "Agent: Claude Code").
+posted: 2026-10-31 review trigger: not posted; CodeRabbit had commented on its own at once.
