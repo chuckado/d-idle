@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+	"time"
 )
 
 func TestSavedExpReaderCachesByMtime(t *testing.T) {
@@ -36,5 +37,35 @@ func TestSavedExpReaderCachesByMtime(t *testing.T) {
 	os.WriteFile(p, []byte("ccc"), 0o644)
 	if v, ok := f(); !ok || v != 250 {
 		t.Fatalf("torn read must keep last good: %d %v", v, ok)
+	}
+}
+
+// d2d: the save file sits somewhere under the slot's d2d home; the dir is found once, kept, and a miss is retried only
+// after the retry delay.
+func TestD2DSavedExpFindsTheFileUnderHome(t *testing.T) {
+	home := t.TempDir()
+	now := time.Unix(0, 0)
+	exp := uint32(0)
+	dir := d2dSaveDir(home, func() string { return "Dbot" }, 10*time.Second, func() time.Time { return now })
+	if dir() != "" {
+		t.Fatal("no file yet must give no dir")
+	}
+	sub := filepath.Join(home, "data", "d2", "save")
+	os.MkdirAll(sub, 0o755)
+	os.WriteFile(filepath.Join(sub, "Dbot.d2s"), []byte("a"), 0o644)
+	if dir() != "" {
+		t.Fatal("a miss must not be re-walked inside the retry delay")
+	}
+	now = now.Add(11 * time.Second)
+	if dir() != sub {
+		t.Fatalf("dir %q, want %q", dir(), sub)
+	}
+	exp = 777
+	f := savedExpReader(dir, func() string { return "Dbot" }, func(string) (int, uint32, error) { return 5, exp, nil })
+	if v, ok := f(); !ok || v != 777 {
+		t.Fatalf("saved exp %d %v, want 777", v, ok)
+	}
+	if d2dSavedExp("", func() string { return "Dbot" }) != nil {
+		t.Fatal("no home (attached d2d) must leave SavedExp nil")
 	}
 }

@@ -7,7 +7,8 @@ agent: d2d-default-backend
 branch: agent/d2d-default-backend
 worktree: ~/code/d2lod-wt/d2d-default-backend
 owns:
-  - cmd/d2bot/d2dbackend.go
+  - cmd/d2bot/d2dbackend_default_test.go
+# owns released to fix-restart for the SavedExp wiring in d2dbackend.go; re-claim it before editing the file again
 exclusive: []
 gates:
   - "go test ./cmd/d2bot -run Backend passes"

@@ -39,7 +39,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
-| [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
+| [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
 | [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/parse.go`<br>`internal/d2dctl/verbs.go`<br>`internal/d2dsrc/missiles.go`<br>`internal/d2denv/reader.go`<br>`internal/d2dsrc/missiles_test.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`internal/combat/dodge_test.go`<br>`docs/knobs.md`<br>`docs/fixmissile.md` | - |
@@ -47,6 +47,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [fix-price](../../openspec/changes/fix-price/) | in-progress | fixprice | `internal/data/price.go`<br>`internal/data/price_test.go`<br>`internal/town/chores.go`<br>`internal/town/stashfull.go`<br>`internal/town/shop.go`<br>`internal/town/fixprice_test.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/valuables.go`<br>`internal/loot/fixprice_test.go`<br>`internal/leveler/score.go`<br>`internal/leveler/shop.go`<br>`internal/leveler/shopkit_test.go`<br>`internal/leveler/fixprice_test.go`<br>`internal/resource/potion.go`<br>`internal/resource/fixprice_test.go`<br>`internal/town/stash.go`<br>`docs/fixprice.md` | - |
+| [fix-restart](../../openspec/changes/fix-restart/) | in-progress | fixrestart | `internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/fixrestart_test.go`<br>`internal/bot/botsmall_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/savedexp.go`<br>`cmd/d2bot/savedexp_test.go`<br>`docs/fixrestart.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
@@ -87,6 +88,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-price: go test -short -count=1 ./... passes including the FixPrice tests on the worker host
 - change fix-price: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix-restart: go test -short ./internal/bot ./cmd/d2bot passes including TestGameLostRestartCountsOnceWithoutMenus, TestXPRiskIsSinceLastSaveAcrossAKill, TestD2DSavedExp*
+- change fix-restart: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -98,6 +101,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 - 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
@@ -107,5 +111,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
 - c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
 - 89b28fe 10-31 14:56 `Merge agent/decomprepair: sync origin/main into fixprice` (decomprepair)
-- 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
 <!-- statusgen:end -->
