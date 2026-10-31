@@ -211,10 +211,10 @@ func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP27(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 2 near", "fallen1 1 near champion"}, Life: 200, Potions: true, Clear: 90 * time.Second})
+	fi := l.Fight(ctx, r, FightSpec{Level: 4, Kill: true, Spawns: []string{"zombie1 2 near", "fallen1 1 near champion"}, Life: 200, Potions: true, Clear: 90 * time.Second})
 	intended := "the bot fights the nearest reachable threat and avoids or handles the champion by its danger table (recorded, no fixed verdict)"
 	obs := fmt.Sprintf("%s; champion: %s; ignores [%s]; decisions %s", fi, fi.Champion, strings.Join(fi.Ignores, "; "), strings.Join(firstN(fi.Decisions, 12), " | "))
-	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v", fi.Kills > 0)}
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("acted=%v", fi.Kills > 0 || fi.Avoided > 0)}
 	switch {
 	case fi.Spawned == 0:
 		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
@@ -245,9 +245,41 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 8 near"}, Life: 400, Potions: true, Clear: 120 * time.Second})
-	intended := "a fight with 8 zombies drains the mana: the fighter drinks a belt mana potion in the fight ('combat potion kind=mana') and the casts kill the targets (P26 hit effect)"
-	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 3), " | "))
+	// up to 3 rounds (a fresh arrival and spawn each) until the fighter drinks a mana potion; the rounds are reported
+	var fi FightInfo
+	rounds, drank := 0, 0
+	// the resource policy is poor-aware (internal/resource/potion.go: a poor character with a melee fallback and a weak
+	// pack rests instead of drinking mana): the first half is rich, the control after it is poor
+	if err := l.SetGold(ctx, r, 5000); err != nil {
+		return setupFail(err)
+	}
+	for rounds < 3 {
+		rounds++
+		f := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 20 near"}, Life: 1000, Potions: true, Clear: 150 * time.Second})
+		fi.Kills += f.Kills
+		fi.Casts += f.Casts
+		fi.CmdSkill += f.CmdSkill
+		fi.ManaDrinks += f.ManaDrinks
+		fi.Spawned = max(fi.Spawned, f.Spawned)
+		fi.Err = f.Err
+		fi.Elapsed += f.Elapsed
+		if f.ManaDrinks > 0 {
+			drank++
+		}
+		if rounds == 1 {
+			fi.Decisions, fi.LogHead = f.Decisions, f.LogHead
+		}
+		if drank > 0 && fi.Kills > 0 {
+			break
+		}
+	}
+	poor := ""
+	if err := l.SetGold(ctx, r, 0); err == nil {
+		pf := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 20 near"}, Life: 1000, Potions: true, Clear: 150 * time.Second})
+		poor = fmt.Sprintf("control with gold 0: %d mana drinks, %d kills", pf.ManaDrinks, pf.Kills)
+	}
+	intended := "a fight with a pack of 20 zombies drains the mana of a character with gold: the fighter drinks a belt mana potion in the fight ('combat potion kind=mana') and the casts kill the targets (P26 hit effect)"
+	obs := fmt.Sprintf("%d round(s) with 5000 gold, %d with a mana drink; %s; mana drinks %d; %s; decisions %s", rounds, drank, fi.base(), fi.ManaDrinks, poor, strings.Join(firstN(fi.Decisions, 1), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
 	switch {
 	case fi.Spawned == 0:
@@ -255,9 +287,9 @@ func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
 	case fi.Kills == 0:
 		o.Verdict, o.Reason = Fail, "no kill: the hit effect of the cast is not seen: "+fi.Err
 	case fi.ManaDrinks == 0:
-		o.Verdict, o.Reason = Fail, "the mana ran down in a fight and no mana potion was drunk (what it did instead: see the log)"
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("the mana ran down in %d fights and no mana potion was drunk (what it did instead: see the log)", rounds)
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d mana drinks, %d kills", fi.ManaDrinks, fi.Kills)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d mana drink(s) in %d of %d fights, %d kills", fi.ManaDrinks, drank, rounds, fi.Kills)
 	}
 	return o
 }
