@@ -15,6 +15,12 @@ docs/decisions.md     main  -
 .claude/agents/**     main  -
 
 # active changes
+docs/research/belt-pickup-trace.md  decompbelt  decompbelt
+docs/research/pr-belt-proof.md  decompbelt  decompbelt
+docs/research/pr-belt-draft.md  decompbelt  decompbelt
+docs/research/pr-belt-evidence-pack.md  decompbelt  decompbelt
+docs/decomp-queue.md  decompbelt  decompbelt
+tools/emu/belt_*  decompbelt  decompbelt
 cmd/d2bot/d2dbackend.go              d2d-default-backend   d2d-default-backend
 docs/d2d-replicated-soak.md          d2d-replicated-soak   d2d-replicated-soak
 docs/d2d-container-soak.md           d2d-container-soak    d2d-container-soak
