@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [decompprice2](../../openspec/changes/decompprice2/) | in-progress | decompprice2 | `docs/research/pr-price2-*.md`<br>`tools/emu/price_edge.py`<br>`tools/emu/price_claims.py`<br>`openspec/changes/decompprice2/**`<br>`docs/decomp-queue.md`<br>`docs/research/README.md`<br>`docs/INDEX.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixstall3](../../openspec/changes/fixstall3/) | in-progress | fixstall3 | `docs/fixstall3.md`<br>`internal/d2dctl/testdata/camp-grid.txt`<br>`internal/d2dtown/wiring_test.go`<br>`internal/combat/fight.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -72,9 +71,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change decompprice2: every rule is tagged V, D, S, I or U with an address
-- change decompprice2: per claim: >= 100,000 cases on real d2d builds, mismatches before > 0, after 0
-- change decompprice2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixstall3: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixstall3: live proof after merge: H.pause x3 (6 of 6 open), D6.d x3, D-sync waypoint x3 (docs/fixstall3.md)
@@ -89,6 +85,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- b8e56a9 10-31 19:41 `Merge agent/decompprice2: price proof, draft, evidence pack` (decompprice2)
 - ae161cd 10-31 19:41 `Merge agent/staticopen: open upstream PR #155 (Static Field)` (staticopen)
 - 31064d7 10-31 19:36 `Merge agent/cr153: CodeRabbit round on upstream PR 153 posted lines` (cr153)
 - ed3836f 10-31 19:18 `Merge agent/decomppets: pets and merc decomp trace` (decomppets)
@@ -98,5 +95,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2848c18 10-31 18:55 `Merge agent/fix153author: PR 153 author-fix force-push posted line` (fix153author)
 - 97173e0 10-31 18:45 `Merge agent/verifyprs: PR verifier scripts and docs` (verifyprs)
 - ea07758 10-31 18:33 `Merge agent/fixstall2: Kashya walk stall routing, town-portal walking interactor` (fixstall2)
-- 618295f 10-31 18:33 `Merge agent/fix153lint: record #153 clang-tidy fixup; archive card` (fix153lint)
 <!-- statusgen:end -->
