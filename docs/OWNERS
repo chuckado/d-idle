@@ -42,3 +42,10 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+docs/research/waypoint-trace.md  decompwp  decompwp
+docs/research/pr-wp-*.md  decompwp  decompwp
+tools/emu/wp_*.py  decompwp  decompwp
+openspec/changes/decompwp/**  decompwp  decompwp
+docs/decomp-queue.md  decompwp  decompwp
+docs/research/README.md  decompwp  decompwp
+docs/INDEX.md  decompwp  decompwp
