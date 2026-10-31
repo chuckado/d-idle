@@ -42,10 +42,21 @@ button.on{background:#1f4d3a;border-color:#2f7d5c}
 <script>
 const $=id=>document.getElementById(id);
 const cv=$('map'),cx=cv.getContext('2d');
-let S=null,mapImg=new Image(),mapVer=-1,mapLevel=-1,trail=[],trailLevel=-1,follow=true,mapReady=false;
+let S=null,mapImg=null,mapRect=[0,0,0,0],mapAsked=-1,mapSeq=0,trail=[],trailStitch=-1,follow=true,mapReady=false;
+// The map is one image per stitched layer (act-absolute subtiles, its box in X-Map-Rect). A new one is fetched aside and
+// swapped in with its box when it has loaded, so a border crossing never blanks the pane; the old one stays drawn meanwhile.
+function loadMap(v,qs){
+ if(v===mapAsked)return;mapAsked=v;const my=++mapSeq;
+ fetch('/map.png?v='+v+qs,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;const h=(r.headers.get('X-Map-Rect')||'').split(',').map(Number);return r.blob().then(b=>createImageBitmap(b)).then(bm=>({bm,h}))})
+ .then(({bm,h})=>{if(my!==mapSeq||h.length!==4||!h.every(isFinite))return;mapImg=bm;mapRect=h;mapReady=true;draw()}).catch(()=>{if(my===mapSeq)mapAsked=-1})}
+// the trail follows the player across a stitched border and breaks at a jump (town portal) or when the layer changes
+function pushTrail(st,x,y,max){
+ if(st!==trailStitch){trail=[];trailStitch=st}
+ const l=trail[trail.length-1];if(l&&Math.hypot(l[0]-x,l[1]-y)>30)trail=[];
+ if(!l||l[0]!==x||l[1]!==y){trail.push([x,y]);if(trail.length>max)trail.shift()}}
+
 const q=location.search.match(/[?&]t=([^&]*)/);const tq=q?'?t='+q[1]:'';
 $('shot').src='/stream.mjpg'+tq;
-mapImg.onload=()=>{mapReady=true};
 function bar(el,p){const w=p[1]>0?Math.max(0,Math.min(1,p[0]/p[1])):0;el.querySelector('i').style.width=(w*100)+'%';el.querySelector('span').textContent=p[0]+'/'+p[1]}
 function fmtT(ms){let s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60);s%=60;return h+'h'+String(m).padStart(2,'0')+'m'+String(s).padStart(2,'0')+'s'}
 function upd(s){
@@ -62,15 +73,14 @@ function upd(s){
  const md=s.mode||{};
  $('bfast').className=md.Watch?'':'on';$('bwatch').className=md.Watch?'on':'';
  $('ftag').textContent=md.Watch?'WATCH: every stepped frame rendered, paced to '+(md.Speed||'max')+'x':(s.frameTicks?'SAMPLED 1 frame per '+s.frameTicks+' virtual ticks':'SAMPLED');
- if(s.level!==trailLevel){trail=[];trailLevel=s.level}
- if(s.ok){const l=trail[trail.length-1];if(!l||l[0]!==s.x||l[1]!==s.y){trail.push([s.x,s.y]);if(trail.length>900)trail.shift()}}
- if(s.mapVer!==mapVer||s.level!==mapLevel){mapVer=s.mapVer;mapLevel=s.level;mapReady=false;mapImg.src='/map.png?v='+s.mapVer+'&l='+s.level+(tq?'&t='+q[1]:'')}
+ if(s.ok)pushTrail(s.stitch,s.x,s.y,900);
+ if(s.mapVer)loadMap(s.mapVer,tq?'&t='+q[1]:'');
  draw();
 }
 function draw(){
  const W=cv.width,H=cv.height;cx.fillStyle='#0a0d13';cx.fillRect(0,0,W,H);
  if(!S||!S.ok)return;
- const r=S.mapRect;let sc,ox,oy; // sc px per subtile; world subtile -> screen
+ const r=mapRect;let sc,ox,oy; // sc px per subtile; world subtile -> screen
  const px=S.x*5,py=S.y*5;
  if(follow){sc=3;ox=W/2-px*sc;oy=H/2-py*sc}
  else{sc=Math.min(W/r[2],H/r[3]);ox=(W-r[2]*sc)/2-r[0]*sc;oy=(H-r[3]*sc)/2-r[1]*sc}

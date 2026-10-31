@@ -195,7 +195,7 @@ func (s *server) events(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *server) mapPNG(w http.ResponseWriter, r *http.Request) {
-	b, v := s.feed.PNG()
+	b, v, mr := s.feed.Map()
 	if b == nil {
 		http.NotFound(w, r)
 		return
@@ -203,6 +203,7 @@ func (s *server) mapPNG(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "image/png")
 	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("X-Map-Version", strconv.FormatUint(v, 10))
+	w.Header().Set("X-Map-Rect", fmt.Sprintf("%d,%d,%d,%d", mr[0], mr[1], mr[2], mr[3])) // x0,y0,w,h act-absolute subtiles: the page pairs it with this image
 	w.Write(b)
 }
 

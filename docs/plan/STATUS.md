@@ -53,6 +53,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-restart](../../openspec/changes/fix-restart/) | in-progress | fixrestart | `internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/fixrestart_test.go`<br>`internal/bot/botsmall_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/savedexp.go`<br>`cmd/d2bot/savedexp_test.go`<br>`docs/fixrestart.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
+| [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
 
 ### Gates
@@ -106,6 +107,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
+- change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
+- change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 

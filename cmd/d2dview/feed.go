@@ -1,12 +1,9 @@
 package main
 
 import (
-	"bytes"
 	"context"
+	"d2lod-bot/internal/d2map"
 	"encoding/json"
-	"image"
-	"image/color"
-	"image/png"
 	"io"
 	"net/http"
 	"sync"
@@ -14,10 +11,9 @@ import (
 
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2dworld"
-	"d2lod-bot/internal/d2map"
 )
 
-// Mon is one monster on the map (cell coordinates, level relative).
+// Mon is one monster on the map (tile coordinates in the act frame, like Snap.X and Y).
 type Mon struct {
 	X, Y   float64
 	Name   string
@@ -35,8 +31,9 @@ type Snap struct {
 	Level      int             `json:"level"`
 	Area       string          `json:"area"`
 	MapVer     uint64          `json:"mapVer"`
-	MapRect    [4]int          `json:"mapRect"` // x0, y0, w, h in subtiles of the PNG
-	X          float64         `json:"x"`
+	MapRect    [4]int          `json:"mapRect"` // x0, y0, w, h in act-absolute subtiles of the PNG
+	Stitch     int             `json:"stitch"`  // layer group of the level: the map and the trail persist while it is unchanged
+	X          float64         `json:"x"`       // player tile in the act frame (level origin added: continuous across a stitched border)
 	Y          float64         `json:"y"`
 	Name       string          `json:"name"`
 	Class      string          `json:"class"`
@@ -51,7 +48,7 @@ type Snap struct {
 	Tick       int             `json:"tick"`
 	Speed      float64         `json:"speed"` // virtual s per wall s, smoothed over about 2 s
 	Lockstep   bool            `json:"lockstep"`
-	Exits      [][3]int        `json:"exits"` // dest, x, y (cells)
+	Exits      [][3]int        `json:"exits"` // dest, x, y (tiles, act frame)
 	Bot        json.RawMessage `json:"bot,omitempty"`
 	Mode       Mode            `json:"mode"`
 	FrameTicks int64           `json:"frameTicks"` // ticks between the last two sampled frames
@@ -77,8 +74,9 @@ type Feed struct {
 	mu   sync.RWMutex
 	snap Snap
 	png  []byte
-	mapV uint64
-	mapL int
+	mapV uint64 // counts composites: bumps when the stitched map changes
+	mapK string // stitchKey of the composite drawn
+	mapR [4]int
 	seen map[int]bool
 	// speed estimate
 	lastMS   int
@@ -146,9 +144,15 @@ func (f *Feed) Snap() Snap {
 }
 
 func (f *Feed) PNG() ([]byte, uint64) {
+	b, v, _ := f.Map()
+	return b, v
+}
+
+// Map is the stitched map PNG with its version and its box (x0, y0, w, h in act-absolute subtiles), read together.
+func (f *Feed) Map() ([]byte, uint64, [4]int) {
 	f.mu.RLock()
 	defer f.mu.RUnlock()
-	return f.png, f.mapV
+	return f.png, f.mapV, f.mapR
 }
 
 func (f *Feed) poll(ctx context.Context) {
@@ -159,6 +163,9 @@ func (f *Feed) poll(ctx context.Context) {
 	defer f.c.DropPrefetch()
 	s := Snap{Seq: f.seq + 1, Mode: f.mux.Mode()}
 	f.seq++
+	f.mu.RLock()
+	s.MapVer, s.MapRect, s.Stitch = f.snap.MapVer, f.snap.MapRect, f.snap.Stitch // kept over a loading screen: the pane keeps its map
+	f.mu.RUnlock()
 	s.Tap = TapInfo{f.mux.steps.Load(), f.mux.ticks.Load(), f.mux.viewOps.Load(), f.mux.botLines.Load()}
 	st, _, err := f.c.State(cctx)
 	if err != nil {
@@ -200,30 +207,40 @@ func (f *Feed) poll(ctx context.Context) {
 	prev := f.snap.Dead
 	f.mu.RUnlock()
 	s.Dead += prev
-	var pngb []byte
 	if werr == nil {
-		lm := f.w.Current()
-		for _, e := range lm.Exits {
-			s.Exits = append(s.Exits, [3]int{e.Dest, e.Pos.X / 5, e.Pos.Y / 5})
-		}
-		if lm.Grid.Version() != f.mapV || lm.No != f.mapL {
-			pngb = renderGrid(lm.Grid)
-			b := lm.Grid.Bounds()
-			s.MapRect = [4]int{b.X, b.Y, b.W, b.H}
-			f.mapV, f.mapL = lm.Grid.Version(), lm.No
-		} else {
-			f.mu.RLock()
-			s.MapRect = f.snap.MapRect
-			f.mu.RUnlock()
-		}
-		s.MapVer = f.mapV
+		f.stitch(&s, f.w.Current(), f.w.Level)
 	}
 	s.Bot = f.botStatus()
 	if f.fr != nil {
 		fr := f.fr.Current()
 		s.FrameTicks, s.FrameMS, s.Frames = fr.Ticks, fr.WallMS, fr.Seq
 	}
-	f.put(s, pngb)
+	f.put(s, nil)
+}
+
+// stitch moves the snapshot into the act frame and refreshes the stitched map. One frame for the pane: the act's tiles
+// (level origin added), so a crossing into a level the game draws on the same layer moves nothing on screen and the
+// map keeps every explored level of the layer; a level of its own layer (a cave) is a map of its own.
+func (f *Feed) stitch(s *Snap, lm *d2map.LevelMap, lookup func(int) *d2map.LevelMap) {
+	ox, oy := float64(lm.Origin.X)/5, float64(lm.Origin.Y)/5
+	s.X, s.Y = s.X+ox, s.Y+oy
+	for i := range s.Mons {
+		s.Mons[i].X, s.Mons[i].Y = s.Mons[i].X+ox, s.Mons[i].Y+oy
+	}
+	for _, e := range lm.Exits {
+		s.Exits = append(s.Exits, [3]int{e.Dest, (e.Pos.X + lm.Origin.X) / 5, (e.Pos.Y + lm.Origin.Y) / 5})
+	}
+	s.Stitch = stitchID(lm.No)
+	parts := stitchParts(lm.No, lookup)
+	if k := stitchKey(parts); k != f.mapK {
+		b, r := renderStitch(parts)
+		f.mu.Lock()
+		f.png, f.mapK, f.mapV, f.mapR = b, k, f.mapV+1, [4]int{r.X, r.Y, r.W, r.H}
+		f.mu.Unlock()
+	}
+	f.mu.RLock()
+	s.MapVer, s.MapRect = f.mapV, f.mapR
+	f.mu.RUnlock()
 }
 
 func (f *Feed) put(s Snap, p []byte) {
@@ -276,31 +293,6 @@ func (f *Feed) botStatus() json.RawMessage {
 		f.botJSON = b
 	}
 	return f.botJSON
-}
-
-// renderGrid draws the known cells: walkable dark grey, blocked light, unknown transparent. One pixel per subtile.
-func renderGrid(g *d2map.Grid) []byte {
-	b := g.Bounds()
-	if b.W <= 0 || b.H <= 0 {
-		return nil
-	}
-	pal := color.Palette{color.NRGBA{}, color.NRGBA{28, 32, 40, 255}, color.NRGBA{120, 130, 150, 255}}
-	img := image.NewPaletted(image.Rect(0, 0, b.W, b.H), pal)
-	for y := 0; y < b.H; y++ {
-		for x := 0; x < b.W; x++ {
-			fl, ok := g.Flags(b.X+x, b.Y+y)
-			switch {
-			case !ok:
-			case fl&d2map.BlockWalk != 0:
-				img.SetColorIndex(x, y, 2)
-			default:
-				img.SetColorIndex(x, y, 1)
-			}
-		}
-	}
-	var buf bytes.Buffer
-	_ = png.Encode(&buf, img)
-	return buf.Bytes()
 }
 
 func abs(x float64) float64 {

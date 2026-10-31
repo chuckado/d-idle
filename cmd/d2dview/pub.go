@@ -33,9 +33,10 @@ type Pub struct {
 	Goal    string  `json:"goal"`
 	MapVer  uint64  `json:"mapVer"`
 	Level   int     `json:"level"`
-	// the map pane draws these (cells, not names)
+	// the map pane draws these (tiles in the act frame, not names)
 	X, Y    float64
 	MapRect [4]int
+	Stitch  int      `json:"stitch"` // layer group: the trail restarts when it changes
 	Mons    []PubMon `json:"mons"`
 }
 
@@ -83,7 +84,7 @@ func safeText(s string, max int) string {
 func pubOf(s Snap) Pub {
 	p := Pub{Backend: badge, Engine: Engine, Live: s.OK, Speed: s.Speed, Area: safeText(s.Area, 40), Name: safeText(s.Name, 20),
 		Class: safeText(s.Class, 20), CLvl: s.CLvl, XP: s.XP, Kills: int64(s.Dead), MapVer: s.MapVer, Level: s.Level,
-		X: s.X, Y: s.Y, MapRect: s.MapRect}
+		X: s.X, Y: s.Y, MapRect: s.MapRect, Stitch: s.Stitch}
 	if len(s.Bot) > 0 {
 		var b struct {
 			Totals struct{ Kills, Deaths int64 }

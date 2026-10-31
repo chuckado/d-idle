@@ -107,3 +107,12 @@ internal/bot/waypoints.go  fixnav  fix-nav
 internal/bot/task.go  fixnav  fix-nav
 internal/bot/fixnav_test.go  fixnav  fix-nav
 docs/fixnav.md  fixnav  fix-nav
+docs/stream/map-contiguity.md       mapitem               mapitem
+cmd/d2dview/stitch.go               mapitem               mapitem
+cmd/d2dview/stitch_test.go          mapitem               mapitem
+cmd/d2dview/feed.go                 mapitem               mapitem
+cmd/d2dview/pub.go                  mapitem               mapitem
+cmd/d2dview/main.go                 mapitem               mapitem
+cmd/d2dview/view_test.go            mapitem               mapitem
+cmd/d2dview/web/stream.html         mapitem               mapitem
+cmd/d2dview/web/index.html          mapitem               mapitem

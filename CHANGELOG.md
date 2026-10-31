@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- Stream map contiguity (offline): the d2dview map pane draws one stitched map across levels the game puts on one automap layer (town and wilderness, Act 2 desert, Kurast, Harrogath fields), caves and dungeons stay alone; act-frame positions, swap-in map image, trail rule; rule and live check in `docs/stream/map-contiguity.md`. Live check pending (agent/mapitem).
 - 2026-10-31 README refreshed (status on d2d, how we check it, layout, retired Game.exe gates) and the project name styled **d.idle** (lowercase d) in public prose, the setup wizard and the container templates. Docs and UI text only (agent/readme).
 - Discord roles guideline (research, docs only): `docs/community/discord/roles.md` (principles, role set with optional `mod`, permission table, safety settings, raid runbook, sources); server.md, server.json and plan.md aligned (attach files only in two channels, `member` raid-fallback permissions, `optional_roles`). Support pages were not re-readable (403): official claims marked unconfirmed (agent/rolesdoc).
 - Discord drafts (research plus tooling, nothing created or posted): `docs/community/discord/` (plan, layout and `server.json`, rules, welcome, FAQ, templates, feeds, public-page proposal, maintainer message draft) and `tools/discord/` (`notify.py` webhook notifier with a fail-closed sanitizer, `apply_server.py` dry-run-by-default server setup). Offline-tested against local mock servers (agent/discord).
