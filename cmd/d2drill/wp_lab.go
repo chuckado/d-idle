@@ -55,6 +55,9 @@ func (l *lab) WView(ctx context.Context) (drill.WPView, error) {
 }
 
 func (l *lab) Goto(ctx context.Context, r *drill.Run, level int) error {
+	if err := l.ensureAlive(ctx, r); err != nil {
+		return err
+	}
 	// `debug goto` is an arrival for d2d (its 10 s window restarts) even into the same level, which a navigator that
 	// watches the area id cannot see: a fresh one counts the window from its first look, as after a real level change.
 	l.wpNav = nil

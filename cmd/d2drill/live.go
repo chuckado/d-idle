@@ -220,6 +220,9 @@ func (l *lab) GiveGround(ctx context.Context, r *drill.Run, code string) error {
 }
 
 func (l *lab) ClearPack(ctx context.Context, r *drill.Run) error {
+	if err := l.ensureAlive(ctx, r); err != nil {
+		return err
+	}
 	if _, err := r.Cheat(ctx, "debug clearinv", "empty the pack grid so the drill's potion counts are exact"); err != nil {
 		return err
 	}
@@ -384,4 +387,31 @@ func (l *lab) GiveBelt(ctx context.Context, r *drill.Run, code string, box int) 
 		return err
 	}
 	return l.Tick(ctx, 5)
+}
+
+// ensureAlive is the per-case setup guard of the drills7 harness fix (DRILLS6 F9): a drill that leaves the character dead
+// (a `debug hit` with low life) or hurt must not break the next one. A dead character takes the game's own Esc respawn
+// (the Fighter's, not a cheat: `debug revive` does not exist in the lab build); life is then topped up by the logged
+// cheat. Nothing happens to a healthy character.
+func (l *lab) ensureAlive(ctx context.Context, r *drill.Run) error {
+	s, err := l.be.Env.Snapshot()
+	if err != nil || s == nil || s.Player == nil {
+		return nil
+	}
+	if combat.IsDead(s.Player) {
+		if err := l.rig.Fighter.Respawn(ctx, 40*time.Second); err != nil {
+			return fmt.Errorf("harness: respawn after a lethal hit: %w", err)
+		}
+		_, _ = l.be.Client.Step(ctx, 40)
+		if s, err = l.be.Env.Snapshot(); err != nil || s == nil || s.Player == nil {
+			return nil
+		}
+	}
+	if mx := s.Player.MaxLife; mx > 0 && s.Player.Life < mx {
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug stat 6 %d", mx*256), "top up life before a drill's setup: an earlier drill's hit or death must not decide this one (drills7 harness)"); err != nil {
+			return err
+		}
+		_, _ = l.be.Client.Step(ctx, 5)
+	}
+	return nil
 }

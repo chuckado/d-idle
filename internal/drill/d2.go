@@ -98,17 +98,22 @@ func goField(ctx context.Context, r *Run, l PortalLab) error {
 	return clearSpot(ctx, l)
 }
 
+// clearSpot walks away from a portal an earlier case left (the town portal object stays on the level): each direction is
+// walked up to 4 times while a portal is within 25 subtiles, so a stale portal at the arrival cell is left behind
+// whatever the previous case did (drills7: the full D2 group failed D2.a2 on one 8-cell step per direction).
 func clearSpot(ctx context.Context, l PortalLab) error {
 	for _, d := range [][2]float64{{8, 0}, {-8, 0}, {0, 8}, {0, -8}} {
-		v, err := l.PView(ctx)
-		if err != nil {
-			return err
-		}
-		if v.Near == 0 {
-			return nil
-		}
-		if err := l.Walk(ctx, d[0], d[1]); err != nil {
-			continue
+		for i := 0; i < 4; i++ {
+			v, err := l.PView(ctx)
+			if err != nil {
+				return err
+			}
+			if v.Near == 0 {
+				return nil
+			}
+			if err := l.Walk(ctx, d[0], d[1]); err != nil {
+				break
+			}
 		}
 	}
 	v, err := l.PView(ctx)
