@@ -119,3 +119,6 @@ cmd/d2dview/web/index.html          mapitem               mapitem
 docs/research/skill-bind-trace.md   decompskillbind       decompskillbind
 tools/emu/skill_bind*               decompskillbind       decompskillbind
 openspec/changes/decompskillbind/** decompskillbind       decompskillbind
+docs/decomp-queue.md                decompskillbind       decompskillbind
+docs/research/README.md             decompskillbind       decompskillbind
+docs/INDEX.md                       decompskillbind       decompskillbind
