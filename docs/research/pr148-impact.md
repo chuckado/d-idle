@@ -41,3 +41,4 @@ Click-modifier branch: about 1.5 h (script the net-diff apply 0.5 h, 3 debug hun
 4. Nothing to tell the maintainer: the split costs the fork about 3 hours and gives merge-conflict relief upstream. If #148 is still open when the fork next needs a rebase, port onto its head instead (same script).
 
 update 2026-10-31: #148 merged 16:41Z; riskmap dependencies updated; fork port pending the user go
+update 2026-10-31: the lab patch set is ported to the restructured upstream (branch lab-port-148), builds and passes the smoke checks
