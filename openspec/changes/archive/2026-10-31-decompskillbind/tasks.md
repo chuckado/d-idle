@@ -2,7 +2,7 @@
 
 ```yaml
 change: decompskillbind
-status: done
+status: archived
 agent: decompskillbind
 branch: agent/decompskillbind
 worktree: ~/code/d2lod-wt/decompskillbind
