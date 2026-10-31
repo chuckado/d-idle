@@ -2,7 +2,7 @@
 
 ```yaml
 change: discordhooks
-status: in-progress
+status: archived
 skip_specs: true
 agent: discordhooks
 branch: agent/discordhooks
@@ -19,6 +19,7 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests passes"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
+merge: cebe506
 result: "offline tests pass (54); three owner-only test posts succeeded (progress, announcements, stream); files stay mode 600"
 ```
 

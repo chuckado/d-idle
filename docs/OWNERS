@@ -116,10 +116,3 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
-tools/discord/common.py              discordhooks           discordhooks
-tools/discord/notify.py              discordhooks           discordhooks
-tools/discord/tests/test_notify.py   discordhooks           discordhooks
-tools/discord/tests/test_webhook.py  discordhooks           discordhooks
-docs/community/discord/feeds.md      discordhooks           discordhooks
-docs/community/discord/server.md     discordhooks           discordhooks
-openspec/changes/discordhooks/**     discordhooks           discordhooks
