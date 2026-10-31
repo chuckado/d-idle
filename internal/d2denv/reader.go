@@ -43,6 +43,8 @@ func (r *Reader) Snapshot() (*d2.Snapshot, error) {
 	if err != nil {
 		return nil, err
 	}
+	// A transport error here only costs this tick's missiles; the next read finds out again.
+	_ = r.Source.FillMissiles(ctx, res)
 	addrFromID(res.Snap)
 	r.mu.Lock()
 	r.last = res

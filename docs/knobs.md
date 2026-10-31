@@ -78,7 +78,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.maxTargetSec | 45 | 20..90 | s | 90 | 1 | Give up on one target after this long. |
 | combat.noProgressSec | 12 | 5..30 | s | 30 | 1 | Give up on a target whose life did not drop for this long. |
 | combat.clearMaxSec | 180 | 30..600 | s | 30 | 2 | Upper bound of one Clear call. |
-| combat.castGapMs | 450 | 250..1200 | ms | 1200 | 10 | Minimum time between two casts. |
+| combat.castGapMs | 650 | 250..1200 | ms | 1200 | 10 | Minimum time between two casts. |
 | combat.lowManaWaitMs | 700 | 300..3000 | ms | 3000 | 1 | Pause when out of mana. |
 | combat.staticCasts | 4 | 0..8 | count | 0 | 1 | Static Field casts that open an elite or boss fight. |
 | combat.staticCastsBR | 0 | 0..8 | count | 8 | 1 | Static Field casts that open the Blood Raven fight; 0 keeps the mana for the attack skill (Charged Bolt for the Sorceress). |

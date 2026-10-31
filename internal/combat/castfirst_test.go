@@ -10,13 +10,14 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/env"
 )
 
 const idFrostNova = 44
 
 // novaHarness is the Sorceress of the fallback build with Charged Bolt on f4 and Frost Nova on f6.
-func novaHarness(t testing.TB) *harness {
-	h := newHarness(t)
+func novaHarness(t testing.TB, mods ...func(*env.Tuning)) *harness {
+	h := newHarness(t, mods...)
 	c := testCatalog()
 	c.Skills[idFrostNova] = &data.Skill{ID: idFrostNova, Key: "Frost Nova", Name: "Frost Nova", EType: "cold", Mana: 9, MinMana: 1, ManaShift: 8}
 	h.f.SetCatalog(c)
@@ -35,7 +36,7 @@ func logTo(h *harness) *bytes.Buffer {
 // INVARIANT: a pack of 15 melee hostiles with life at 60% is fought: casts happen, no walking. With a portal scroll the
 // crowd rule (crowd.go, SME decision EXP) now leaves at 70% instead; the invariant holds when there is no scroll.
 func TestCastFirstPackAt60(t *testing.T) {
-	h := novaHarness(t)
+	h := novaHarness(t, oldCastGap)
 	h.s.noTP = true
 	h.s.life = 60
 	h.s.stock(itHP1, 0, 4)
