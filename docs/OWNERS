@@ -116,3 +116,11 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+docs/research/walk-speed-trace.md   decompwalk            decompwalk
+docs/research/pr-walk-*.md          decompwalk            decompwalk
+tools/emu/walk_*                    decompwalk            decompwalk
+openspec/changes/decompwalk/**      decompwalk            decompwalk
+docs/decomp-queue.md                decompwalk            decompwalk
+docs/research/README.md             decompwalk            decompwalk
+docs/INDEX.md                       decompwalk            decompwalk
+docs/research/pr-bundle-queue.md    decompwalk            decompwalk
