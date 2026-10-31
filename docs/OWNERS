@@ -42,16 +42,3 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
-internal/d2dctl/verbs.go  enterportal  enterportal
-internal/d2dctl/town_verbs.go  enterportal  enterportal
-internal/d2dctl/town_verbs_test.go  enterportal  enterportal
-internal/d2dinput/controller.go  enterportal  enterportal
-internal/d2dinput/controller_test.go  enterportal  enterportal
-internal/d2dsrc/items.go  enterportal  enterportal
-internal/d2dsrc/source.go  enterportal  enterportal
-internal/input/semantic.go  enterportal  enterportal
-internal/town/trip.go  enterportal  enterportal
-internal/town/enterportal_test.go  enterportal  enterportal
-docs/d2d-portal-entry.md  enterportal  enterportal
-docs/d2d-town.md  enterportal  enterportal
-docs/probes/enterportal/**  enterportal  enterportal

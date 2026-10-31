@@ -14,7 +14,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [d2d-bot.md](d2d-bot.md) how `d2bot --backend d2d` runs (attach/managed, flags, knobs); [d2d-wire.md](d2d-wire.md) the whole behaviour stack over d2d seams; [d2d-backend.md](d2d-backend.md) (banner) the original adapter design.
 - [d2d-fork.md](d2d-fork.md) the private fork: lockstep clock, `dump`, lab verbs, branches (`<owner>/d2d-fork` on the forge); [d2d-lab.md](d2d-lab.md) (banner) lab binaries; [d2dctl.md](d2dctl.md) the Go control client and verb grammar.
 - [d2d-pace.md](d2d-pace.md) virtual time, Pacer, Prefetch, speed factor; [d2d-loop.md](d2d-loop.md) hours of a fresh Sorceress, replicated seeds, determinism; [d2d-economy.md](d2d-economy.md) gold, poverty loop, link-wait fix.
-- Layers: [d2d-combat.md](d2d-combat.md), [d2d-town.md](d2d-town.md), [d2d-loot.md](d2d-loot.md), [d2d-walk.md](d2d-walk.md), [d2d-exit.md](d2d-exit.md), [merc-wire.md](merc-wire.md) (merc behind `merc.enabled`).
+- Layers: [d2d-combat.md](d2d-combat.md), [d2d-town.md](d2d-town.md), [d2d-portal-entry.md](d2d-portal-entry.md) (why portal clicks walked and `cmd interact`), [d2d-loot.md](d2d-loot.md), [d2d-walk.md](d2d-walk.md), [d2d-exit.md](d2d-exit.md), [merc-wire.md](merc-wire.md) (merc behind `merc.enabled`).
 - [d2d-view.md](d2d-view.md) the tap viewer (`cmd/d2dview`, `/stream`, `/api/pub`); [d2d-probes.md](d2d-probes.md) the probe batch (gold, corpse, quests on d2d); [d2d-spike.md](d2d-spike.md) (banner) the feasibility spike.
 - Container: [d2d-container/README.md](d2d-container/README.md) design, Dockerfile and compose drafts, [d2d-container/gpl.md](d2d-container/gpl.md) licence notes; [process/d2d-worker-host.md](process/d2d-worker-host.md) d2d on a Windows worker (WSL2).
 

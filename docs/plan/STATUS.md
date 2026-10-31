@@ -41,14 +41,13 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [enterportal](../../openspec/changes/enterportal/) | in-progress | enterportal | `internal/d2dctl/verbs.go`<br>`internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/town_verbs_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/input/semantic.go`<br>`internal/town/trip.go`<br>`internal/town/enterportal_test.go`<br>`docs/d2d-portal-entry.md`<br>`docs/d2d-town.md`<br>`docs/probes/enterportal/**` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 
 ### Gates
-- spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 28 requirements
+- spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 29 requirements
 - spec [bot-loop](../../openspec/specs/bot-loop/spec.md): 6 requirements
 - spec [combat-loop](../../openspec/specs/combat-loop/spec.md): 8 requirements
 - spec [d2d-farm](../../openspec/specs/d2d-farm/spec.md): 8 requirements
@@ -63,7 +62,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 14 requirements
-- spec [town-basics](../../openspec/specs/town-basics/spec.md): 11 requirements
+- spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -71,9 +70,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change enterportal: go test ./internal/town (on the worker host, game tables) passes TestScenario_OpenPortalBesideThePlayer; go test ./internal/d2dctl ./internal/d2dinput pass TestEnterPortalSendsInteract and TestUsePortal
-- change enterportal: drills D2.t, D2.g, D2.f PASS live on a lockstep lab slot (docs/probes/enterportal/)
-- change enterportal: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-pickup: live proof is drill D1/P7 (not run here)
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
@@ -87,6 +83,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
+- 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
 - b044d7a 10-31 13:07 `Merge agent/tomepr: tome PR candidate proof, draft, evidence pack` (tomepr)
 - 9f6109b 10-31 12:56 `Merge agent/drills2: drills D1 rerun + D2 live` (m1-liveproof)
 - 705d984 10-31 12:45 `Merge agent/forkimpact: PR #148 impact research` (pr148impact)
@@ -95,6 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
 - e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
 - 146f748 10-31 12:18 `Merge agent/openbelt: belt scroll PR opened upstream (#147)` (openbelt)
-- 5f32779 10-31 12:10 `Merge agent/fixportal2: portal verb guards (dead ctx, idle wait, object 59)` (fix-portal2)
-- 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
 <!-- statusgen:end -->
