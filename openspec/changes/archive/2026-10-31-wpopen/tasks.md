@@ -2,11 +2,12 @@
 
 ```yaml
 change: wpopen
-status: in-progress
+status: archived
 agent: wpopen
 branch: agent/wpopen
 worktree: ~/code/d2lod-wt/wpopen
 skip_specs: true
+merge: 0e592a6
 owns:
   - docs/research/pr-wp-evidence-pack.md
   - docs/research/pr-bundle-queue.md

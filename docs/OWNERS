@@ -116,7 +116,3 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
-docs/research/pr-wp-evidence-pack.md  wpopen  wpopen
-docs/research/pr-bundle-queue.md      wpopen  wpopen
-docs/BACKLOG.md                       wpopen  wpopen
-openspec/changes/wpopen/**  wpopen  wpopen
