@@ -15,6 +15,7 @@ gates:
   - "go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
+live: "drill D2 2026-10-31 (docs/probes/drills/2026-10-31-d2.txt): D2.a verb PASS (1 click, 1 portal, 1 source, 32 ticks), D2.b empty tome PASS (0 clicks, 0 keys, ErrNoPortal at tick 0), D2.c PASS, D2.e busy PASS (waits: click +37 vs +22 idle), D2.h one pair PASS; D2.d cut cast BLOCKED (needs debug hit); the walk-in after the verb FAILS (D2.t, D2.g: town.ToTown never enters the portal, finding W1), so no fix-portal2 defect, a new fix card is needed"
 ```
 
 - [x] ctx.Err() guard in every try and wait

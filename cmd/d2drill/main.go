@@ -10,6 +10,7 @@
 package main
 
 import (
+	"cmp"
 	"context"
 	"flag"
 	"fmt"
@@ -33,7 +34,7 @@ func main() { os.Exit(run()) }
 func run() int {
 	home := os.Getenv("HOME")
 	slotDir := os.Getenv("D2D_SLOT_DIR")
-	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt)")
+	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry)")
 	only := flag.String("only", "", "comma list of drill ids to run (default: the whole group)")
 	repeat := flag.Int("repeat", 2, "runs per drill (determinism check)")
 	bin := flag.String("bin", envOr("D2D_BIN", filepath.Join(home, "d2d-lab/fork/bin/d2d.lab6")), "d2d binary (the lab build)")
@@ -49,6 +50,8 @@ func run() int {
 	ledger := flag.String("ledger", "", "cheat ledger (default: $D2CHEAT_LEDGER or ~/.local/share/d2bot/ledger/cheats.jsonl)")
 	belts := flag.String("belts", "lbl,vbl,mbl,tbl,hbl", "belt item codes P2 equips")
 	verbose := flag.Bool("v", false, "debug log of the bot code paths on stderr")
+	probe := flag.String("probe", "", "semicolon list of verbs to run and print (debug verbs go through the cheat ledger), then exit; for finding out what a verb does")
+	label := flag.String("label", "", "result file label after the date (default: the group, lower case)")
 	limit := flag.Duration("limit", 0, "override the per-run hard time limit")
 	flag.Parse()
 	if *sock == "" || slotDir == "" {
@@ -61,7 +64,9 @@ func run() int {
 	if *verbose {
 		lvl = slog.LevelDebug
 	}
-	log := slog.New(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: lvl}))
+	// the lab keeps every record in memory too (the drills quote the bot's failure lines); stderr only shows lvl and up
+	rec := newRecorder(slog.NewTextHandler(os.Stderr, &slog.HandlerOptions{Level: lvl}))
+	log := slog.New(rec)
 
 	db, err := data.Open(*gamedir, *cache)
 	if err != nil {
@@ -96,11 +101,17 @@ func run() int {
 		return 1
 	}
 	l := newLab(be, db, led, *name, "slot"+os.Getenv("D2D_SLOT"), log)
+	l.rec = rec
+	if *probe != "" {
+		return l.runProbe(ctx, *probe)
+	}
 
 	var drills []drill.Drill
 	switch strings.ToUpper(*group) {
 	case "D1":
 		drills = drill.D1(l, strings.Split(*belts, ","))
+	case "D2":
+		drills = drill.D2(l)
 	case "D0": // harness self-test of the P35 gate: the drill leaves the pack open on purpose
 		drills = []drill.Drill{{ID: "D0.gate", Primitive: "P35", Title: "selftest: the drill leaves the inventory open, the gate must flag and recover it", Limit: time.Minute,
 			Do: func(ctx context.Context, r *drill.Run) drill.Outcome {
@@ -135,13 +146,19 @@ func run() int {
 	r := &drill.Runner{W: l, Repeat: *repeat, Logf: func(f string, a ...any) { fmt.Printf(f+"\n", a...) }}
 	g := r.RunGroup(ctx, drills)
 
+	if strings.ToUpper(*group) == "D2" { // the portal drills end in the field: put the character back in town (logged cheat)
+		if _, err := l.Cheat(ctx, "drills:cleanup", "debug goto 1", "return the throwaway character to the Rogue Encampment after the portal drills"); err != nil {
+			fmt.Fprintln(os.Stderr, "d2drill: cleanup goto:", err)
+		}
+		_ = l.Tick(ctx, 25)
+	}
 	// The character stays alive and in town.
 	if s, err := be.Env.Snapshot(); err == nil && s.Player != nil {
 		fmt.Printf("END character %s life %d/%d in town: %v\n", *name, s.Player.Life, s.Player.MaxLife, s.Player.InTown())
 	}
 	fmt.Printf("\n%s", g.Table())
 	fmt.Printf("cheat ledger: %s (actor drills:<drill id>, kind d2d-debug)\n", lp)
-	if err := g.Write(*out, *date+"-"+strings.ToLower(*group)); err != nil {
+	if err := g.Write(*out, *date+"-"+cmp.Or(*label, strings.ToLower(*group))); err != nil {
 		fmt.Fprintln(os.Stderr, "d2drill: write results:", err)
 		return 1
 	}

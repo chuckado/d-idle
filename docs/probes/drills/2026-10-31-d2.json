@@ -1,0 +1,467 @@
+{
+ "results": [
+  {
+   "id": "D2.a",
+   "primitive": "P10",
+   "title": "tome with charges and a scroll: portal verb from the field, arrive in town, one source spent, one portal",
+   "verdict": "PASS",
+   "reason": "verb returned after 32 ticks with one portal pair and one source spent (tome 2-\u003e2, scrolls 1-\u003e0)",
+   "intended": "from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source",
+   "observed": "area 2; verb ok: 1 right click, 32 ticks (click at tick +22), field portal objects near 1 any 1 (a stale one from the previous drill stands elsewhere: 0 before), tome 2-\u003e2, scrolls 1-\u003e0, debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]; verb lines: none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "verb returned after 32 ticks with one portal pair and one source spent (tome 2-\u003e2, scrolls 1-\u003e0)",
+     "Intended": "from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source",
+     "Observed": "area 2; verb ok: 1 right click, 32 ticks (click at tick +22), field portal objects near 1 any 1 (a stale one from the previous drill stands elsewhere: 0 before), tome 2-\u003e2, scrolls 1-\u003e0, debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]; verb lines: none",
+     "sig": "area 2 verb ok rights 1 ticks 32 click+22 near 1 any 1 spent 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 941355140,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "verb returned after 32 ticks with one portal pair and one source spent (tome 2-\u003e2, scrolls 1-\u003e0)",
+     "Intended": "from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source",
+     "Observed": "area 2; verb ok: 1 right click, 32 ticks (click at tick +22), field portal objects near 1 any 1 (a stale one from the previous drill stands elsewhere: 1 before), tome 2-\u003e2, scrolls 1-\u003e0, debug portals [0,2,35.6,48.7 / 1,1,16.7,25.7]; verb lines: none",
+     "sig": "area 2 verb ok rights 1 ticks 32 click+22 near 1 any 1 spent 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 95246354,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tbk",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.t",
+   "primitive": "P10",
+   "title": "bot ToTown with a portal open next to the player enters it (arrive in town, no second scroll)",
+   "verdict": "FAIL",
+   "reason": "ToTown did not arrive in town: err \"town: area -1 not reached within 15s\", area 2, scrolls 0 of 3 left (the verb used 1)",
+   "intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+   "observed": "scrolls 3 -\u003e 0; ToTown town: area -1 not reached within 15s after 1584 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 2, debug portals [0,2,27.1,47.3 / 1,1,16.7,25.7]; lines: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown // nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "ToTown did not arrive in town: err \"town: area -1 not reached within 15s\", area 2, scrolls 0 of 3 left (the verb used 1)",
+     "Intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+     "Observed": "scrolls 3 -\u003e 0; ToTown town: area -1 not reached within 15s after 1584 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 2, debug portals [0,2,27.1,47.3 / 1,1,16.7,25.7]; lines: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown // nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown",
+     "sig": "town: area -1 not reached within 15s|2|0",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 829002539,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "ToTown did not arrive in town: err \"town: area -1 not reached within 15s\", area 2, scrolls 0 of 3 left (the verb used 1)",
+     "Intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+     "Observed": "scrolls 3 -\u003e 0; ToTown town: area -1 not reached within 15s after 1584 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 2, debug portals [0,2,35.3,47.3 / 1,1,16.7,25.7]; lines: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown // nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/town.(*Town).enterPortal \u003c d2lod-bot/internal/town.(*Town).ToTown \u003c main.townAdapter.ToTown",
+     "sig": "town: area -1 not reached within 15s|2|0",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 789411596,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.a2",
+   "primitive": "P10",
+   "title": "ticks from the right click to portal object 59 (raw cast, 3 casts)",
+   "verdict": "PASS",
+   "reason": "observed [8 8 8] ticks vs the trace's about 7",
+   "intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+   "observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "observed [8 8 8] ticks vs the trace's about 7",
+     "Intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+     "Observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 152703033,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "observed [8 8 8] ticks vs the trace's about 7",
+     "Intended": "d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0",
+     "Observed": "ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 171315041,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.b",
+   "primitive": "P10",
+   "title": "empty tome, no scroll: no portal source, nothing clicked, no-portal error at once",
+   "verdict": "PASS",
+   "reason": "no portal source: no click, no key, error at tick 0",
+   "intended": "tome at 0 charges and no scroll: the verb finds no source, sends no click and no key, returns the no-portal error with no ticks spent (fix-portal F4)",
+   "observed": "tome 0, scrolls 0; verb error \"combat: no town portal scroll or tome\" (no-portal true), clicks 0, keys 0, ticks 0; tome after 0; lines: d2d town portal: no portal source (empty) try=1",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "no portal source: no click, no key, error at tick 0",
+     "Intended": "tome at 0 charges and no scroll: the verb finds no source, sends no click and no key, returns the no-portal error with no ticks spent (fix-portal F4)",
+     "Observed": "tome 0, scrolls 0; verb error \"combat: no town portal scroll or tome\" (no-portal true), clicks 0, keys 0, ticks 0; tome after 0; lines: d2d town portal: no portal source (empty) try=1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 123022453,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "no portal source: no click, no key, error at tick 0",
+     "Intended": "tome at 0 charges and no scroll: the verb finds no source, sends no click and no key, returns the no-portal error with no ticks spent (fix-portal F4)",
+     "Observed": "tome 0, scrolls 0; verb error \"combat: no town portal scroll or tome\" (no-portal true), clicks 0, keys 0, ticks 0; tome after 0; lines: d2d town portal: no portal source (empty) try=1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 40597068,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tbk",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.c",
+   "primitive": "P10",
+   "title": "empty tome and a loose scroll: the scroll is used",
+   "verdict": "PASS",
+   "reason": "scroll used, empty tome never clicked",
+   "intended": "tome at 0 plus one scroll: the verb skips the tome, casts the scroll once, portal object near the player, tome untouched",
+   "observed": "before: tome 0, scrolls 1; verb ok, 1 right click, 27 ticks; after: tome 0, scrolls 0, portal objects near 1 any 1; lines: none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "scroll used, empty tome never clicked",
+     "Intended": "tome at 0 plus one scroll: the verb skips the tome, casts the scroll once, portal object near the player, tome untouched",
+     "Observed": "before: tome 0, scrolls 1; verb ok, 1 right click, 27 ticks; after: tome 0, scrolls 0, portal objects near 1 any 1; lines: none",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 70468080,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "scroll used, empty tome never clicked",
+     "Intended": "tome at 0 plus one scroll: the verb skips the tome, casts the scroll once, portal object near the player, tome untouched",
+     "Observed": "before: tome 0, scrolls 1; verb ok, 1 right click, 27 ticks; after: tome 0, scrolls 0, portal objects near 1 any 1; lines: none",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tbk",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 139724882,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tbk",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.g",
+   "primitive": "P10",
+   "title": "control: d2dctl EnterPortal takes the open portal (separates a bad bot walk-in from a bad portal)",
+   "verdict": "FAIL",
+   "reason": "the verified walk-in did not arrive: err d2dctl: portal click did not change the level (still 2), area 2",
+   "intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+   "observed": "area 2 -\u003e 2, verb error d2dctl: portal click did not change the level (still 2), portal objects in town 1",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "the verified walk-in did not arrive: err d2dctl: portal click did not change the level (still 2), area 2",
+     "Intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+     "Observed": "area 2 -\u003e 2, verb error d2dctl: portal click did not change the level (still 2), portal objects in town 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 122515496,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "the verified walk-in did not arrive: err d2dctl: portal click did not change the level (still 2), area 2",
+     "Intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+     "Observed": "area 2 -\u003e 2, verb error d2dctl: portal click did not change the level (still 2), portal objects in town 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 118492843,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.d",
+   "primitive": "P10",
+   "title": "cast cut by a hit: scroll spent, no portal, the retry takes the next source",
+   "verdict": "BLOCKED",
+   "reason": "missing: cheat `debug hit \u003cdmg\u003e` (or `debug hurt`): a monster-style hit on the player, so d2d sets get-hit over the cast (fight.cpp:4973). No debug verb hits the player, and no verb places a monster to hit on a chosen tick (V: control_channel.md verb table)",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  },
+  {
+   "id": "D2.e",
+   "primitive": "P10",
+   "title": "busy player: the verb waits for idle, then clicks",
+   "verdict": "PASS",
+   "reason": "waited: click at +37 vs idle +22 ticks, one click, portal open",
+   "intended": "player in cast mode when the verb is called: it waits until idle, then clicks once and the portal opens (fix-portal2); the click tick is later than the idle baseline",
+   "observed": "player mode at call 10 (SC=10); idle baseline: ok, click at tick +22; busy call: ok, 1 right clicks, click at tick +37, 42 ticks total; scrolls left 0, portal objects near 1 any 1; lines: none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "waited: click at +37 vs idle +22 ticks, one click, portal open",
+     "Intended": "player in cast mode when the verb is called: it waits until idle, then clicks once and the portal opens (fix-portal2); the click tick is later than the idle baseline",
+     "Observed": "player mode at call 10 (SC=10); idle baseline: ok, click at tick +22; busy call: ok, 1 right clicks, click at tick +37, 42 ticks total; scrolls left 0, portal objects near 1 any 1; lines: none",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 67080608,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "waited: click at +37 vs idle +22 ticks, one click, portal open",
+     "Intended": "player in cast mode when the verb is called: it waits until idle, then clicks once and the portal opens (fix-portal2); the click tick is later than the idle baseline",
+     "Observed": "player mode at call 10 (SC=10); idle baseline: ok, click at tick +22; busy call: ok, 1 right clicks, click at tick +37, 42 ticks total; scrolls left 0, portal objects near 1 any 1; lines: none",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 86321466,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.h",
+   "primitive": "P10",
+   "title": "one-pair rule: a second cast closes the first portal",
+   "verdict": "PASS",
+   "reason": "second cast closed the first: one object, 60 subtiles away",
+   "intended": "cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll",
+   "observed": "cast1 ok, objects near 1 any 1 at [[140 243]]; walked to (190,240) (\u003cnil\u003e), 50 subtiles; cast2 ok, objects near 1 any 1 at [[200 243]], 60 subtiles from the first; scrolls 3 -\u003e 1; debug portals [0,2,40.1,48.7 / 1,1,16.7,25.7]; lines: none / none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "second cast closed the first: one object, 60 subtiles away",
+     "Intended": "cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll",
+     "Observed": "cast1 ok, objects near 1 any 1 at [[140 243]]; walked to (190,240) (\u003cnil\u003e), 50 subtiles; cast2 ok, objects near 1 any 1 at [[200 243]], 60 subtiles from the first; scrolls 3 -\u003e 1; debug portals [0,2,40.1,48.7 / 1,1,16.7,25.7]; lines: none / none",
+     "sig": "  1 1 1 1 60 1 0,2,40.1,48.7 / 1,1,16.7,25.7",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 106629650,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "second cast closed the first: one object, 60 subtiles away",
+     "Intended": "cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll",
+     "Observed": "cast1 ok, objects near 1 any 1 at [[140 243]]; walked to (190,240) (\u003cnil\u003e), 50 subtiles; cast2 ok, objects near 1 any 1 at [[200 243]], 60 subtiles from the first; scrolls 3 -\u003e 1; debug portals [0,2,40.1,48.7 / 1,1,16.7,25.7]; lines: none / none",
+     "sig": "  1 1 1 1 60 1 0,2,40.1,48.7 / 1,1,16.7,25.7",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 106749622,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.f",
+   "primitive": "P11",
+   "title": "round trip town and back, arrival near the origin, one portal pair",
+   "verdict": "BLOCKED",
+   "reason": "missing: a portal walk-in that works in the lab: the bot's ToTown (D2.t) and d2dctl EnterPortal (D2.g) both fail to take an open portal under lockstep; needs the proposed `cmd use \u003cportal\u003e` verb (docs/d2d-town.md) or a verified click point (bot ToTown: town: area -1 not reached within 15s; EnterPortal: d2dctl: portal click did not change the level (still 2))",
+   "intended": "",
+   "observed": "",
+   "runs": [
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "missing: a portal walk-in that works in the lab: the bot's ToTown (D2.t) and d2dctl EnterPortal (D2.g) both fail to take an open portal under lockstep; needs the proposed `cmd use \u003cportal\u003e` verb (docs/d2d-town.md) or a verified click point (bot ToTown: town: area -1 not reached within 15s; EnterPortal: d2dctl: portal click did not change the level (still 2))",
+     "Intended": "",
+     "Observed": "",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 905252035,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "missing: a portal walk-in that works in the lab: the bot's ToTown (D2.t) and d2dctl EnterPortal (D2.g) both fail to take an open portal under lockstep; needs the proposed `cmd use \u003cportal\u003e` verb (docs/d2d-town.md) or a verified click point (bot ToTown: town: area -1 not reached within 15s; EnterPortal: d2dctl: portal click did not change the level (still 2))",
+     "Intended": "",
+     "Observed": "",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 917184947,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  }
+ ]
+}
