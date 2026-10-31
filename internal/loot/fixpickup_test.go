@@ -97,3 +97,27 @@ func TestArrivalByClassWhenIDChanges(t *testing.T) {
 		t.Fatal("no gain in held count but counted as arrived")
 	}
 }
+
+// FIXBELT2: a Sorceress sash (hp, hp, mp, mp columns) holding healing in columns 0 to 2: a ground healing potion would open
+// the last empty column, which the plan keeps for mana, so it is left; a mana potion is wanted.
+func TestHealingNotWantedWhenItWouldTakeTheLastManaColumn(t *testing.T) {
+	l, w := potionRig(t)
+	w.Player.Class = d2.Sorceress
+	w.Player.Level = 5
+	w.Add("lbl", d2.ContEquipment, 0, 0)
+	for i := range w.Items {
+		if w.Items[i].Item.Where == d2.ContEquipment {
+			w.Items[i].Item.Body = d2.BodyBelt
+		}
+	}
+	for _, b := range []int{0, 4, 1, 5, 2, 6} {
+		w.Add("hp1", d2.ContBelt, b, 0)
+	}
+	w.Add("hp1", d2.ContInventory, 0, 0)
+	if wanted(l, w.NewItem("hp1", 2)) {
+		t.Fatal("healing potion wanted although it would take the last empty column, kept for mana")
+	}
+	if !wanted(l, w.NewItem("mp1", 2)) {
+		t.Fatal("mana potion with the empty column free was skipped")
+	}
+}

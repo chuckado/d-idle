@@ -35,7 +35,27 @@ func (t *Town) beltFillCandidates(s *d2.Snapshot) []d2.Unit {
 	st := belt.Read(t.e.Data, s.Inventory)
 	free := t.beltRoom(s.Inventory, st)
 	var out []d2.Unit
-	for _, k := range []belt.Kind{belt.HP, belt.MP, belt.RV} {
+	// Each candidate is placed on a copy of the belt with belt.PlaceFor, so a kind with no room (every free box sits in a column
+	// of another kind) yields no candidate instead of a failed move, and kinds without a column go first.
+	placed := belt.PlacedItems(t.e.Data, s.Inventory)
+	hasCol := map[belt.Kind]bool{}
+	for _, p := range placed {
+		if p.Box < belt.Columns {
+			hasCol[p.Kind] = true
+		}
+	}
+	kinds := []belt.Kind{belt.HP, belt.MP, belt.RV}
+	sort.SliceStable(kinds, func(i, j int) bool { return !hasCol[kinds[i]] && hasCol[kinds[j]] })
+	try := func(u d2.Unit, k belt.Kind) bool {
+		box, ok := belt.PlaceFor(st.Slots, placed, k, band)
+		if ok {
+			placed = append(placed, belt.Placed{Box: box, Kind: k})
+			out = append(out, u)
+			free--
+		}
+		return ok
+	}
+	for _, k := range kinds {
 		room := band.Capacity(k, st.Slots) - st.Count[k]
 		var pack []d2.Unit
 		for _, u := range s.Inventory.Container(d2.ContInventory) {
@@ -45,12 +65,10 @@ func (t *Town) beltFillCandidates(s *d2.Snapshot) []d2.Unit {
 		}
 		sort.SliceStable(pack, func(i, j int) bool { return belt.Tier(t.base(pack[i])) > belt.Tier(t.base(pack[j])) })
 		for _, u := range pack {
-			if room <= 0 || free <= 0 {
+			if room <= 0 || free <= 0 || !try(u, k) {
 				break
 			}
-			out = append(out, u)
 			room--
-			free--
 		}
 	}
 	// REJUVUSE: pack rejuvenation potions beyond the plan's RV column (none below clvl 31) still go to a free slot, last,
@@ -63,11 +81,9 @@ func (t *Town) beltFillCandidates(s *d2.Snapshot) []d2.Unit {
 	}
 	sort.SliceStable(extra, func(i, j int) bool { return belt.Tier(t.base(extra[i])) > belt.Tier(t.base(extra[j])) })
 	for _, u := range extra {
-		if free <= 0 {
+		if free <= 0 || !try(u, belt.RV) {
 			break
 		}
-		out = append(out, u)
-		free--
 	}
 	return out
 }
@@ -122,6 +138,11 @@ func (t *Town) FillBelt(ctx context.Context) (BeltFillReport, error) {
 				}
 				continue
 			}
+			// FIXBELT2: no column for this kind means no room for it, not a full belt: leave it in the pack, try the others.
+			if errors.Is(err, errNoBeltColumn) {
+				t.e.Log.Info("belt: no room for this kind, left in the pack", "item", t.nameOf(u), "err", err)
+				continue
+			}
 			rep.Failed++
 			last = err
 			t.e.Log.Warn("belt: move failed", "item", t.nameOf(u), "err", err)
@@ -149,6 +170,8 @@ func (t *Town) FillBelt(ctx context.Context) (BeltFillReport, error) {
 		"rv", rep.After.Count[belt.RV], "dragged", rep.Dragged, "failed", rep.Failed)
 	return rep, last
 }
+
+var errNoBeltColumn = errors.New("town: no belt column")
 
 // beltPutter is an input that can move a pack item into a belt box directly (d2d: "cmd belt put").
 type beltPutter interface {
@@ -189,7 +212,7 @@ func (t *Town) moveToBelt(ctx context.Context, lay *panel.Layout, u d2.Unit, rep
 			box, free := t.pickBeltBox(cur.Inventory, belt.Slots(t.e.Data, cur.Inventory), kind, t.plan(cur.Player))
 			if !free {
 				// F8: the free boxes sit in columns of another kind; do not put it there and do not drag it either
-				return false, fmt.Errorf("town: no belt column for %s (kind %s)", t.nameOf(u), kind)
+				return false, fmt.Errorf("%w for %s (kind %s)", errNoBeltColumn, t.nameOf(u), kind)
 			}
 			perr := bp.BeltPut(u.ID, box)
 			var landed bool

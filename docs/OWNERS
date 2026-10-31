@@ -33,12 +33,8 @@ docs/probes/basics/**  drills  m1-liveproof
 cmd/d2bot/d2dwire.go  fixportal2  fix-portal2
 cmd/d2bot/d2dportal_test.go  fixportal2  fix-portal2
 docs/fixportal.md  fixportal2  fix-portal2
-internal/town/belt/belt.go  fixpickup  fix-pickup
-internal/town/belt/belt_test.go  fixpickup  fix-pickup
-internal/town/beltfill.go  fixpickup  fix-pickup
 internal/town/sim/sim.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
-internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
 internal/d2dtown/adapter.go  fixbank  fix-bank
 internal/town/fixbank_test.go  fixbank  fix-bank
@@ -65,7 +61,6 @@ internal/resource/fixprice_test.go  fixprice  fix-price
 docs/fixprice.md  fixprice  fix-price
 internal/town/chores.go  fixprice  fix-price
 internal/town/stash.go  fixprice  fix-price
-internal/loot/loot.go  fixprice  fix-price
 internal/loot/pickup.go  fixprice  fix-price
 internal/d2dctl/town_verbs.go  waitsaudit  waits-audit
 internal/d2dctl/waits_test.go  waitsaudit  waits-audit
@@ -87,3 +82,11 @@ internal/combat/castfirst_test.go  fixmissile  fix-missile
 internal/combat/dodge_test.go  fixmissile2  fix-missile2
 docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile2  fix-missile2
+
+internal/town/belt/belt.go  fixbelt2  fix-belt2
+internal/town/belt/belt_test.go  fixbelt2  fix-belt2
+internal/town/beltfill.go  fixbelt2  fix-belt2
+internal/town/beltfix_test.go  fixbelt2  fix-belt2
+internal/loot/loot.go  fixbelt2  fix-belt2
+internal/loot/fixpickup_test.go  fixbelt2  fix-belt2
+docs/fixbelt2.md  fixbelt2  fix-belt2

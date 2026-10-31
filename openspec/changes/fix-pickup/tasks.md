@@ -7,12 +7,8 @@ agent: fixpickup
 branch: agent/fixpickup
 worktree: ~/code/d2lod-wt/fixpickup
 owns:
-  - internal/town/belt/belt.go
-  - internal/town/belt/belt_test.go
-  - internal/town/beltfill.go
   - internal/town/sim/sim.go
   - internal/loot/export_test.go
-  - internal/loot/fixpickup_test.go
   - docs/fixpickup.md
 exclusive: []
 gates:
@@ -20,6 +16,7 @@ gates:
   - "live proof is drill D1/P7 (not run here)"
 merge:
 result:
+# note: owns of internal/town/belt/belt.go, internal/town/belt/belt_test.go, internal/town/beltfill.go, internal/loot/fixpickup_test.go released to fix-belt2 (code already merged)
 live: "drill D1 rerun 2026-10-31 (docs/probes/drills/2026-10-31-d1rerun.txt): P7 PASS (pickit reports picked 2, belt holds both, no left-the-ground-without-arriving), P7a PASS, P1 PASS (hp columns hold hp, mp columns mp, fill moved 8 of 8), P1s PASS, P2 PASS, P3 PASS; each run twice, identical"
 ```
 
