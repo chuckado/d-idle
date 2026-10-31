@@ -83,7 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
-- 047eae2 10-31 12:26 `Merge agent/forkmod: click-modifier row in drills README` (forkmod)
+- eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
 - e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
 - 146f748 10-31 12:18 `Merge agent/openbelt: belt scroll PR opened upstream (#147)` (openbelt)
 - 5f32779 10-31 12:10 `Merge agent/fixportal2: portal verb guards (dead ctx, idle wait, object 59)` (fix-portal2)
