@@ -53,7 +53,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-restart](../../openspec/changes/fix-restart/) | in-progress | fixrestart | `internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/fixrestart_test.go`<br>`internal/bot/botsmall_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/savedexp.go`<br>`cmd/d2bot/savedexp_test.go`<br>`docs/fixrestart.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
-| [rolesdoc](../../openspec/changes/rolesdoc/) | in-progress | rolesdoc | `docs/community/discord/roles.md`<br>`docs/community/discord/server.md`<br>`docs/community/discord/server.json`<br>`docs/community/discord/plan.md` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
 
 ### Gates
@@ -107,12 +106,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
-- change rolesdoc: python3 -m unittest discover -s tools/discord/tests passes (no network)
-- change rolesdoc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 4d53842 10-31 16:38 `Merge agent/rolesdoc: sourced Discord roles and safety guideline` (rolesdoc)
 - bd533e0 10-31 16:38 `Merge agent/discord: d.idle Discord drafts and notify tooling` (discord)
 - 7c4a102 10-31 16:29 `Merge agent/fixrestart: d2d game-lost restarts counted, d2d SavedExp` (fix-restart)
 - 7261d23 10-31 16:24 `Merge agent/fixnav: cave-mouth bounce turn, navigator-touched waypoints handed off, known town waypoints` (fix-nav)
@@ -122,5 +120,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
 - 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
-- 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
 <!-- statusgen:end -->
