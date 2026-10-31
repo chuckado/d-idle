@@ -278,3 +278,80 @@ func PlanForBuild(class d2.Class, clvl int, diff d2.Difficulty, build string) Ba
 	}
 	return b
 }
+
+// Placed is one item sitting in a belt box (box = row*Columns + column, row 0 at the bottom). Kind is None for a
+// non-potion item (antidote, stamina), which still occupies its box.
+type Placed struct {
+	Box  int
+	Kind Kind
+}
+
+// PlacedItems lists what sits in the belt of inv.
+func PlacedItems(db *data.DB, inv *d2.Inventory) []Placed {
+	if inv == nil {
+		return nil
+	}
+	var out []Placed
+	for _, u := range inv.Container(d2.ContBelt) {
+		if u.Item == nil {
+			continue
+		}
+		var base *data.ItemBase
+		if u.Class >= 0 && u.Class < len(db.Items) {
+			base = db.Items[u.Class]
+		}
+		out = append(out, Placed{Box: u.Item.GY*Columns + u.Item.GX, Kind: PotionKind(base)})
+	}
+	return out
+}
+
+// Place is the belt box game.exe gives a potion of kind k that is picked up or shift-clicked into the belt (V by the
+// emulator, docs/research/belt-pickup-trace.md): the lowest free box of the first column whose bottom item is of kind k
+// (hp1-5 mix, mp1-5 mix, rvs/rvl mix); else the bottom box of the first EMPTY column; else it does not fit (the potion
+// goes to the pack). A column's kind is its bottom (lowest-row) item, so a column holding a non-potion item never
+// matches. slots is the belt's box count (4, 8, 12 or 16). Pure: shared by the pickit and the belt fill.
+func Place(slots int, items []Placed, k Kind) (int, bool) {
+	if k == None || slots < Columns {
+		return 0, false
+	}
+	used := map[int]bool{}
+	bottom := [Columns]int{-1, -1, -1, -1}
+	var colKind [Columns]Kind
+	for _, p := range items {
+		if p.Box < 0 || p.Box >= slots {
+			continue
+		}
+		used[p.Box] = true
+		if c := p.Box % Columns; bottom[c] < 0 || p.Box < bottom[c] {
+			bottom[c], colKind[c] = p.Box, p.Kind
+		}
+	}
+	lowest := func(c int) (int, bool) {
+		for b := c; b < slots; b += Columns {
+			if !used[b] {
+				return b, true
+			}
+		}
+		return 0, false
+	}
+	for c := 0; c < Columns; c++ {
+		if bottom[c] >= 0 && colKind[c] == k {
+			if b, ok := lowest(c); ok {
+				return b, true
+			}
+		}
+	}
+	for c := 0; c < Columns; c++ {
+		if bottom[c] < 0 {
+			return c, true
+		}
+	}
+	return 0, false
+}
+
+// WillBelt reports whether a potion of kind k picked up from the ground now lands on the belt of inv (a same-kind column
+// with room, or an empty column) instead of the pack.
+func WillBelt(db *data.DB, inv *d2.Inventory, k Kind) bool {
+	_, ok := Place(Slots(db, inv), PlacedItems(db, inv), k)
+	return ok
+}

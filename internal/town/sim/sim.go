@@ -139,6 +139,7 @@ func (w *World) NewItem(code string, quality int) d2.Unit {
 func (w *World) Add(code string, where d2.Container, x, y int) d2.Unit {
 	u := w.NewItem(code, 2)
 	u.Item.Where, u.X, u.Y = where, x, y
+	u.Item.GX, u.Item.GY = x, y // the real reader copies the cell here
 	if where == d2.ContBelt {
 		u.Mode = d2.ItemModeBelt
 	}
@@ -152,6 +153,7 @@ func (w *World) Add(code string, where d2.Container, x, y int) d2.Unit {
 // Put places an already-built unit.
 func (w *World) Put(u d2.Unit, where d2.Container, x, y int) d2.Unit {
 	u.Item.Where, u.X, u.Y = where, x, y
+	u.Item.GX, u.Item.GY = x, y // the real reader copies the cell here
 	w.Items = append(w.Items, u)
 	return u
 }

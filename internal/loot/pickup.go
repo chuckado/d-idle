@@ -66,6 +66,7 @@ type cand struct {
 	dist  float64
 	name  string
 	gold0 int // player gold when the candidate list was built
+	held0 int // items of the same class in the pack and belt when the list was built
 }
 
 var errGone = errors.New("loot: item left the ground without arriving in the pack")
@@ -281,7 +282,6 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		occ = o
 		spot = func(w, h int) bool { _, _, ok := o.FindSpot(w, h); return ok }
 	}
-	beltSt := belt.Read(l.e.Data, s.Inventory)
 	lowGold := s.Player.Gold < t.LowGoldBelow
 	for _, u := range s.Ground {
 		if u.Item == nil || u.Mode != d2.ItemModeGround {
@@ -338,12 +338,12 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				skip("small gold pile")
 				continue
 			}
-			out = append(out, cand{u, v, d, name, s.Player.Gold})
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
 			continue
 		}
-		// Potions the belt can take do not need pack space.
-		if k := belt.PotionKind(b); k != belt.None && beltSt.Free() > 0 {
-			out = append(out, cand{u, v, d, name, s.Player.Gold})
+		// Potions the belt will take (a same-kind column with room or an empty column, B2) do not need pack space.
+		if k := belt.PotionKind(b); k != belt.None && belt.WillBelt(l.e.Data, s.Inventory, k) {
+			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
 			continue
 		}
 		w, h := 1, 1
@@ -363,7 +363,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				continue
 			}
 		}
-		out = append(out, cand{u, v, d, name, s.Player.Gold})
+		out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
 	}
 	sort.SliceStable(out, func(i, j int) bool {
 		if out[i].v.Prio != out[j].v.Prio {
@@ -496,6 +496,11 @@ func (l *Looter) arrived(s *d2.Snapshot, c cand) (bool, string) {
 	if _, ok := hand.Find(s.Inventory, c.u.ID); ok {
 		return true, ""
 	}
+	// The unit id may not survive the pickup (a belt or pack copy is a new unit): a potion that landed on the belt or in
+	// the pack counts by the held-count of its class going up.
+	if l.heldOf(s.Inventory, c.u.Class) > c.held0 {
+		return true, ""
+	}
 	b := l.base(c.u.Class)
 	if b != nil && b.Type == "gold" {
 		return s.Player.Gold > c.gold0, "gold did not increase"
@@ -504,6 +509,19 @@ func (l *Looter) arrived(s *d2.Snapshot, c cand) (bool, string) {
 		return true, ""
 	}
 	return false, "gone from the ground but not in the pack"
+}
+
+// heldOf counts the items of one class in the pack and the belt.
+func (l *Looter) heldOf(inv *d2.Inventory, class int) int {
+	n := 0
+	for _, w := range []d2.Container{d2.ContInventory, d2.ContBelt} {
+		for _, u := range inv.Container(w) {
+			if u.Class == class {
+				n++
+			}
+		}
+	}
+	return n
 }
 
 // LeftBehindMinPrio is the pickit priority from which an item left on the ground for lack of room counts as worth a

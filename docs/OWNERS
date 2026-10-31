@@ -23,3 +23,12 @@ internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+internal/town/belt/belt.go  fixpickup  fix-pickup
+internal/town/belt/belt_test.go  fixpickup  fix-pickup
+internal/town/beltfill.go  fixpickup  fix-pickup
+internal/town/sim/sim.go  fixpickup  fix-pickup
+internal/loot/loot.go  fixpickup  fix-pickup
+internal/loot/pickup.go  fixpickup  fix-pickup
+internal/loot/export_test.go  fixpickup  fix-pickup
+internal/loot/fixpickup_test.go  fixpickup  fix-pickup
+docs/fixpickup.md  fixpickup  fix-pickup
