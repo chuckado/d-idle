@@ -4,7 +4,7 @@
 // `character.panel = panel_stats(...)` in a throwaway worktree only (VERIFY_VP in the after build).
 //   test_game --verify-walk CASES  -> `id pct` per case (pct to 3 decimals) or `id skip why`
 // kind 0, a monster: one frame of the real monster_update (components/game/ai.cpp) on a monster in
-//   WL or RN with a far spot to walk to in an empty level; its walk % is the distance it moved
+//   WL or RN with a far spot to walk to in the Blood Moor's bounds with every subtile open; its walk % is the distance it moved
 //   over MonStats Velocity's (cells_per_sec x 0.04 s). MonStats Velocity and coldeffect of the row
 //   are overridden by the case (the loaded row, restored after).
 // kind 1, a player: the real World::walk_percent(Player, now) with faster run/walk and
@@ -14,6 +14,8 @@ if (argc > 2 && std::string_view(argv[1]) == "--verify-walk") {
     World world(&*data, -1, -1);
     world.enter(character);
     const World::Player start = *world.actor;
+    Level open = *data->level(d2d::rules::level_ids::kBloodMoor);   // its size, every subtile open
+    std::ranges::fill(open.walk, std::uint16_t(0));
     std::ifstream cases(argv[2]);
     std::string line;
     while (std::getline(cases, line)) {
@@ -31,9 +33,7 @@ if (argc > 2 && std::string_view(argv[1]) == "--verify-walk") {
             type_info.velocity = velocity;
             type_info.diff[std::size_t(difficulty)].cold_effect = cold;
             d2d::rules::Rng rng{ std::uint32_t(id + 1) };
-            Level open{};
-            open.id = d2d::rules::level_ids::kBloodMoor;
-            std::vector<Monster> pack{ make_monster(*data, int(row->second), 40.f, 40.f, rng, difficulty) };
+            std::vector<Monster> pack{ make_monster(*data, int(row->second), 10.f, 10.f, rng, difficulty) };
             auto& monster = pack[0];
             monster.difficulty = difficulty;
             const std::uint32_t now = 1000 * 40;
@@ -42,7 +42,7 @@ if (argc > 2 && std::string_view(argv[1]) == "--verify-walk") {
             monster.laid_until = laid ? now + 100000 : 0;
             monster.chill_until = chilled ? now + 100000 : 0;
             monster.wandering = true; monster.aware = false; monster.chase = -1;
-            monster.steps = { { int(std::floor(monster.unit.x * 5)) + 600, int(std::floor(monster.unit.y * 5)) } };
+            monster.steps = { { int(std::floor(monster.unit.x * 5)) + 250, int(std::floor(monster.unit.y * 5)) } };
             monster.step = 0; monster.budget = 0x14; monster.end_x = monster.steps[0].first; monster.end_y = monster.steps[0].second;
             monster.next_act = now + 100000; monster.mode_until = 0;
             const std::string mode_before(monster.mode);

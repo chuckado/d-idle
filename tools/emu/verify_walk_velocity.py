@@ -15,6 +15,8 @@ The velocity it hands the path (FUN_00648690, hooked: recorded) and the walk % a
 Hooked (not the claim): FUN_00645270 (shape / class remap: identity), FUN_00620f00,
 FUN_006216e0 (no special mode), FUN_006214a0 (moving mode: yes), FUN_006213d0 (animation
 rate), FUN_00625480 / FUN_00625500 (stat 0x43 velocitypercent and stat 96 faster run/walk).
+Velocity is kept to 1..60 (MonStats has far less): game.exe's 32-bit Velocity x 256 x pct wraps
+from 2^31 on (seen at Velocity 32767), d2d's float does not; no 1.14d row comes near.
 Modelled, not traced (the inputs of stat 0x43, d2d's own split of it): a monster's 100 +
 d2d speed_pct + boss_speed + its think's pace (move_pct) - 100 laid + coldeffect chilled;
 a player's 100 (running: RunVelocity x 100 / WalkVelocity) + velocitypercent - 50 chilled.
@@ -77,7 +79,7 @@ def gen(n, seed):
                             move = target_sum - 100 - (ce if chilled else 0) + (100 if laid else 0)
                             rows.append((0, name, mode, diff, vel, ce, 0, 0, move, laid, chilled))
                 for ce in (-100, -90, -50, -33, -1, 0, 1, 50):
-                    for v in (1, 2, 3, 7, 13, 255, 32767):
+                    for v in (1, 2, 3, 7, 13, 25, 60):
                         rows.append((0, name, mode, rng.randrange(3), v, ce, rng.choice((0, 20, 50)), rng.choice((0, 20)), rng.choice((0, 30, 120, -100)), 0, 1))
     for cls in range(7):
         for run in (0, 1):
@@ -91,7 +93,7 @@ def gen(n, seed):
             name = rng.choice(rows_ok)
             idx, vel, run, cold = mon[name]
             diff = rng.randrange(3)
-            v = vel if rng.random() < 0.6 else rng.choice((rng.randint(1, 20), rng.randint(1, 32767)))
+            v = vel if rng.random() < 0.6 else rng.choice((rng.randint(1, 20), rng.randint(1, 60)))
             ce = cold[diff] if rng.random() < 0.6 else rng.randint(-100, 100)
             rows.append((0, name, rng.choice((2, 15)), diff, v, ce, rng.choice((0, 0, rng.randint(-100, 200))),
                          rng.choice((0, 0, 20, rng.randint(0, 100))), rng.choice((0, 0, rng.randint(-150, 150), rng.randint(0, 120))),
