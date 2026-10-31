@@ -9,9 +9,6 @@ worktree: ~/code/d2lod-wt/drills7
 skip_specs: true
 owns:
   - openspec/changes/drills7/**
-  - docs/probes/drills/*drills7*
-  - cmd/d2drill/**
-  - internal/drill/**
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host"
