@@ -107,8 +107,3 @@ internal/bot/waypoints.go  fixnav  fix-nav
 internal/bot/task.go  fixnav  fix-nav
 internal/bot/fixnav_test.go  fixnav  fix-nav
 docs/fixnav.md  fixnav  fix-nav
-docs/research/pr-price-evidence-pack.md  openprice  openprice
-docs/decomp-queue.md  openprice  openprice
-docs/research/pr-bundle-queue.md  openprice  openprice
-docs/BACKLOG.md  openprice  openprice
-openspec/changes/openprice/**  openprice  openprice

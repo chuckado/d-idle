@@ -2,7 +2,8 @@
 
 ```yaml
 change: openprice
-status: in-progress
+status: archived
+merge: 7d960f0
 skip_specs: true
 agent: openprice
 branch: agent/openprice
