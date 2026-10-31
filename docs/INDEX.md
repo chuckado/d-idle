@@ -58,3 +58,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [probes/navsoak3-summary.md](probes/navsoak3-summary.md) navsoak3 final numbers vs navsoak/navsoak2 (pre-primitive-fix baseline).
 - [probes/waits-audit.md](probes/waits-audit.md) audit of every wall-clock wait vs lockstep game time (card waits-audit): 16 OK, 2 BROKEN fixed.
 - [probes/postfix-soak1.md](probes/postfix-soak1.md) first post-fix 2 h soak with one injected d2d kill, vs navsoak3 per virtual hour, Gate 1 verdict.
+
+## 9. Community
+- [community/discord/plan.md](community/discord/plan.md) the d.idle Discord plan (DRAFT, nothing created): [server.md](community/discord/server.md) + `server.json` layout and permissions, [welcome](community/discord/welcome.md), [rules](community/discord/rules.md), [faq](community/discord/faq.md), [templates](community/discord/templates.md), [feeds](community/discord/feeds.md), [public-page](community/discord/public-page.md), [maintainer-message](community/discord/maintainer-message.md) (draft, not sent).
+- `tools/discord/`: `notify.py` (webhook posts, sanitizer, keyring secrets) and `apply_server.py` (server layout from `server.json`, dry run by default); tests in `tools/discord/tests`.

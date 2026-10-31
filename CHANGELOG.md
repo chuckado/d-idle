@@ -10,6 +10,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 ## Unreleased / known issues
 
 - 2026-10-31 README refreshed (status on d2d, how we check it, layout, retired Game.exe gates) and the project name styled **d.idle** (lowercase d) in public prose, the setup wizard and the container templates. Docs and UI text only (agent/readme).
+- Discord drafts (research plus tooling, nothing created or posted): `docs/community/discord/` (plan, layout and `server.json`, rules, welcome, FAQ, templates, feeds, public-page proposal, maintainer message draft) and `tools/discord/` (`notify.py` webhook notifier with a fail-closed sanitizer, `apply_server.py` dry-run-by-default server setup). Offline-tested against local mock servers (agent/discord).
 
 - Container dashboard: fleet slots are server instances (fixes 'No Instances' on the NAS), per-slot reverse proxy to the current d2bot address, real fleet status from the bots, per-slot view-only game video (`/api/v1/instances/{id}/viewport/stream`, `xwd` capture, no new package) and a Game view card with reconnect. Offline-tested (agent/fleetview).
 

@@ -110,6 +110,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 7c4a102 10-31 16:29 `Merge agent/fixrestart: d2d game-lost restarts counted, d2d SavedExp` (fix-restart)
 - 7261d23 10-31 16:24 `Merge agent/fixnav: cave-mouth bounce turn, navigator-touched waypoints handed off, known town waypoints` (fix-nav)
 - 89bbc39 10-31 16:16 `Merge agent/fixbelt2: no belt column is no room; PlaceFor/WillBeltFor keep planned kinds a column` (fix-belt2)
 - cc68b7a 10-31 16:13 `Merge agent/readme: README rewrite, d.idle name restyle` (readme)
@@ -119,5 +120,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 - 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
-- 1430083 10-31 15:23 `Merge agent/waitsaudit: waits audit, game-time ApproachNPC deadline, LateClock` (waits-audit)
 <!-- statusgen:end -->
