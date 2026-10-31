@@ -1,0 +1,24 @@
+### arm A
+./bot-A1.log               tuning    119    0     0   0m/0         6m    0.0 (0/371k) fresh3/chk15/bot0 limit     0       PASS
+./bot-A2.log               tuning    119    0     0   0m/0         5m    0.0 (0/401k) fresh3/chk14/bot0 limit     0       PASS
+./bot-A3.log               tuning    119    0     0   0m/10        5m    3.8 (1/261k) fresh1/chk9/bot0 limit     0       PASS
+./bot-A4.log               tuning    119    0     0   0m/0         3m    0.0 (0/522k) fresh3/chk11/bot0 limit     0       PASS
+./bot-A5.log               tuning    119    0     0   1m/15        3m    0.0 (0/430k) fresh3/chk13/bot0 limit     0       PASS
+./bot-A6.log               tuning    119    0     0   0m/0         3m    0.0 (0/386k) fresh3/chk12/bot0 limit     0       PASS
+./bot-A7.log               tuning    119    0     0   0m/10        4m    0.0 (0/437k) fresh4/chk11/bot0 limit     0       PASS
+./bot-A8.log               tuning    119    0     0   1m/62        5m    0.0 (0/279k) fresh7/chk22/bot0 limit     0       PASS
+group tuning   seeds none: 15.9 virtual h, 3087 kills, 1 deaths, 4544 XP/h, hang 0, stall rungs 0, wedge max 1 min, no-progress max 6 min, bot restarts 0, fresh games 27, chickens 107: PASS
+COVERAGE (proven on): seeds none (tuning), none (holdout); class unknown; act 1; difficulty unknown; engine d2d; clvl 1-5; 15.9 virtual h. Outside these axes the claim is UNPROVEN.
+INVARIANTS: PASS
+### arm B
+./bot-B1.log               tuning    119    0     0   0m/0         3m    0.0 (0/449k) fresh6/chk12/bot0 limit     0       PASS
+./bot-B2.log               tuning    118    0     0   1m/30        4m    2.2 (1/459k) fresh2/chk16/bot0 limit     0       PASS
+./bot-B3.log               tuning    119    0     0   1m/51        3m    5.2 (2/383k) fresh6/chk12/bot0 limit     0       PASS
+./bot-B4.log               tuning    119    0     0   0m/0         4m    0.0 (0/420k) fresh3/chk13/bot0 limit     0       PASS
+./bot-B5.log               tuning    119    0     0   0m/0         5m    0.0 (0/440k) fresh2/chk8/bot0 limit     0       PASS
+./bot-B6.log               tuning    119    0     0   0m/0         4m    2.9 (1/343k) fresh3/chk8/bot0 limit     0       PASS
+./bot-B7.log               tuning    119    0     0   0m/10        4m    0.0 (0/390k) fresh3/chk8/bot0 limit     0       PASS
+./bot-B8.log               tuning    119    0     0   1m/62        5m    0.0 (0/279k) fresh7/chk22/bot0 limit     0       PASS
+group tuning   seeds none: 15.9 virtual h, 3163 kills, 4 deaths, 4690 XP/h, hang 0, stall rungs 0, wedge max 1 min, no-progress max 5 min, bot restarts 0, fresh games 32, chickens 99: PASS
+COVERAGE (proven on): seeds none (tuning), none (holdout); class unknown; act 1; difficulty unknown; engine d2d; clvl 1-5; 15.9 virtual h. Outside these axes the claim is UNPROVEN.
+INVARIANTS: PASS
