@@ -277,8 +277,10 @@ func d3b2(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("sell: err %v, gold delta %d vs gained %d", serr, g1.Gold-g0.Gold, gained)
 	case g1.Pack["isc"] != g0.Pack["isc"]-1:
 		o.Verdict, o.Reason = Fail, "the scroll is still in the pack"
+	case sellExpect(l, "isc") > 0 && sellExpect(l, "isc") != gained:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("sold for %d, the price formula (docs/research/price-trace.md) says %d", gained, sellExpect(l, "isc"))
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("sold an identify scroll for %d", gained)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("sold an identify scroll for %d (the price formula says %d)", gained, sellExpect(l, "isc"))
 	}
 	return o
 }
@@ -335,13 +337,19 @@ func d3r(ctx context.Context, r *Run, l TownLab) Outcome {
 		return Blocks(fmt.Sprintf("no worn item with reduced durability after `debug durability all 1` (dur %d/%d)", v0.DurCur, v0.DurMax))
 	}
 	knob := l.RepairKnob()
+	est := -1
+	if re, ok := l.(repairEstimator); ok {
+		if e, err := re.RepairEstimate(ctx); err == nil {
+			est = e
+		}
+	}
 	ci := l.Chores(ctx, "repair")
 	v1, err := l.TView(ctx)
 	if err != nil {
 		return setupFail(err)
 	}
-	obs := fmt.Sprintf("knob repairBelowPct %d; durability %d/%d (%d%%) -> %d/%d; gold %d -> %d (spent per report %d); repaired=%v steps [%s] err %q",
-		knob, v0.DurCur, v0.DurMax, 100*v0.DurCur/v0.DurMax, v1.DurCur, v1.DurMax, v0.Gold, v1.Gold, ci.Spent, ci.Repaired, strings.Join(ci.Steps, "; "), ci.Err)
+	obs := fmt.Sprintf("knob repairBelowPct %d; durability %d/%d (%d%%) -> %d/%d; gold %d -> %d (spent per report %d); estimate before the visit %d; repaired=%v steps [%s] err %q",
+		knob, v0.DurCur, v0.DurMax, 100*v0.DurCur/v0.DurMax, v1.DurCur, v1.DurMax, v0.Gold, v1.Gold, ci.Spent, est, ci.Repaired, strings.Join(ci.Steps, "; "), ci.Err)
 	if 100*v0.DurCur/v0.DurMax >= knob { // the chore is right to skip: record it, the repair path needs a lower item
 		skipped := v1.DurCur == v0.DurCur && v0.Gold == v1.Gold
 		o := Blocks(fmt.Sprintf("the gear is not below the repair knob %d: the repair path is not reached. The chore skipped correctly: %v", knob, skipped))
@@ -354,10 +362,22 @@ func d3r(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Fail, "durability not restored"
 	case v0.Gold <= v1.Gold:
 		o.Verdict, o.Reason = Fail, "durability restored but no gold taken (price unreadable?)"
+	case est >= 0 && est != v0.Gold-v1.Gold:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("repair estimate %d differs from the %d gold paid", est, v0.Gold-v1.Gold)
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("repaired for %d gold at knob %d", v0.Gold-v1.Gold, knob)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("repaired for %d gold at knob %d; the estimate before the visit was %d", v0.Gold-v1.Gold, knob, est)
 	}
 	return o
+}
+
+// repairEstimator is town.Town.RepairEstimateForTest (the price the chore checks the purse against).
+type repairEstimator interface {
+	RepairEstimate(ctx context.Context) (int, error)
+}
+
+// sellExpecter is the price formula of internal/data for a normal item of this code at the Act 1 vendors.
+type sellExpecter interface {
+	SellExpect(code string) int
 }
 
 func d3r0(ctx context.Context, r *Run, l TownLab) Outcome {
@@ -566,4 +586,11 @@ func d3i(ctx context.Context, r *Run, l TownLab) Outcome {
 		o.Verdict, o.Reason = Pass, "identified with a scroll"
 	}
 	return o
+}
+
+func sellExpect(l TownLab, code string) int {
+	if e, ok := l.(sellExpecter); ok {
+		return e.SellExpect(code)
+	}
+	return 0
 }

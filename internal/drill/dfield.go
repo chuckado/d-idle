@@ -1,0 +1,211 @@
+package drill
+
+import (
+	"context"
+	"fmt"
+	"strings"
+	"time"
+)
+
+// ObjOp is one field object operated the way the bot does it (snapshot object, Interact, the mode read back).
+type ObjOp struct {
+	Level       int
+	Want        string // the preset name searched for
+	Found       string // the preset name matched ("" none)
+	Names       string // the preset names seen on the level (when nothing matched)
+	Class       int    // objects.txt id of the row
+	Listed      bool   // the bot's snapshot has the object (Snapshot.Objects, id = NPCIDBase + index)
+	InteractErr string
+	Before      string // `debug objects` mode column before and after ("NU" untouched, "ON" operated)
+	After       string
+	Ticks       int
+}
+
+// FightSpec is one scripted fight: a level, a spawn list, the character's life and mana set, the fight's time limit.
+type FightSpec struct {
+	Level   int
+	Spawns  []string // arguments of `debug spawn`, e.g. "fallenshaman1 2 near"
+	Life    int      // maximum and current life by cheat (0: leave the character as is)
+	Mana    int      // current mana by cheat (0: leave)
+	Potions bool     // belt holds healing and mana potions
+	Clear   time.Duration
+	// LifeAt, when set, lowers the life to this value as soon as the first spawned monster is within reach (P29 retreat)
+	LifeAt int
+}
+
+// FightInfo is what Fighter.Clear and the log of the call report.
+type FightInfo struct {
+	Err                                       string
+	Kills, Avoided, Skipped, Ignored, Potions int
+	Casts, Dodges, Kites, Approaches          int
+	CmdSkill                                  int // `cmd skill` verbs sent during the call
+	LifeMin, LifeEnd, ManaStart, ManaEnd      int
+	Spawned, Alive                            int // monsters listed after the spawn / still alive after the call
+	Elapsed                                   time.Duration
+	Missiles                                  int // missiles of other owners seen listed (debug missiles) at the start of the fight, sampled once per 10 ticks before the call
+	Log                                       []string
+	Decisions                                 []string // "act: why" of the combat decision lines, in order
+	Champion                                  string   // what the combat layer did with the champion (log), "" none
+	InTown, Dead                              bool
+	Bound                                     int
+	PotionLines                               []string
+	ManaDrinks                                int
+	Ignores                                   []string
+	Mons                                      string
+}
+
+func (f FightInfo) String() string {
+	return fmt.Sprintf("kills %d avoided %d skipped %d ignored %d potions %d; casts %d cmd-skill %d dodges %d kites %d approaches %d; life min %d end %d mana %d->%d; spawned %d alive %d in %v err %q town=%v dead=%v",
+		f.Kills, f.Avoided, f.Skipped, f.Ignored, f.Potions, f.Casts, f.CmdSkill, f.Dodges, f.Kites, f.Approaches, f.LifeMin, f.LifeEnd, f.ManaStart, f.ManaEnd, f.Spawned, f.Alive, f.Elapsed.Round(time.Second), f.Err, f.InTown, f.Dead)
+}
+
+// FieldLab is the instance as the field drills (objects and fights) use it.
+type FieldLab interface {
+	HoverLab
+	// OperateObject runs the bot's object path on the first level preset whose name contains want.
+	OperateObject(ctx context.Context, r *Run, level int, want string) ObjOp
+	// Fight spawns the monsters, binds skills and runs Fighter.Clear with the bot's own decisions.
+	Fight(ctx context.Context, r *Run, s FightSpec) FightInfo
+	// Quest steps for the D8 records (debug quest) are driven by QuestLab when the lab has them.
+}
+
+// F returns the field drills of DRILLS5: operating field objects and fighting with `debug spawn`.
+func F(l FieldLab) []Drill {
+	lim := 8 * time.Minute
+	obj := func(id, title, level, want string) Drill {
+		lv := 2
+		fmt.Sscanf(level, "%d", &lv)
+		return Drill{ID: id, Primitive: "AUDIT", Title: title, Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fObj(ctx, r, l, lv, want) }}
+	}
+	fight := func(id, prim, title string, f func(context.Context, *Run, FieldLab) Outcome) Drill {
+		return Drill{ID: id, Primitive: prim, Title: title, Limit: 10 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return f(ctx, r, l) }}
+	}
+	return []Drill{
+		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
+		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
+		obj("H.obj.cage", "Cain's gibbet in Tristram: listed (class 26), operated by the bot's Interact", "38", "gibbet"),
+		fight("D5.dodge", "P27", "fix-missile: a ranged monster fires at the character: the fight loop dodges, one cast command per cast", fDodge),
+		fight("D5.p27", "P27", "target selection: a pack with a champion at clvl 1, the bot's choice", fP27),
+		fight("D5.p29", "P29", "retreat: a pack at low life, the bot's chicken and heal decision", fP29),
+		fight("D5.p28", "P28", "mana potion in a fight, P26 hit effect on a target", fP28),
+	}
+}
+
+func fObj(ctx context.Context, r *Run, l FieldLab, level int, want string) Outcome {
+	op := l.OperateObject(ctx, r, level, want)
+	intended := fmt.Sprintf("a %q of level %d is listed in Snapshot.Objects and Interact operates it (mode NU -> ON)", want, level)
+	obs := fmt.Sprintf("preset %q class %d listed=%v; Interact err %q; mode %s -> %s; %d ticks", op.Found, op.Class, op.Listed, op.InteractErr, op.Before, op.After, op.Ticks)
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("found=%v listed=%v err=%v %s>%s", op.Found != "", op.Listed, op.InteractErr != "", op.Before, op.After)}
+	switch {
+	case op.Found == "":
+		o.Verdict, o.Reason = Blocked, "no preset named "+want+" on the level; names seen: "+op.Names
+	case !op.Listed:
+		o.Verdict, o.Reason = Fail, "the object is not in the bot's snapshot (d2dsrc fieldObjects)"
+	case op.InteractErr != "":
+		o.Verdict, o.Reason = Fail, "Interact failed: "+op.InteractErr
+	case op.After == op.Before:
+		o.Verdict, o.Reason = Fail, "Interact returned but the object's mode did not change ("+op.After+")"
+	default:
+		o.Verdict, o.Reason = Pass, "listed and operated by the bot's own Interact"
+	}
+	return o
+}
+
+func countLines(lines []string, subs ...string) int {
+	n := 0
+	for _, l := range lines {
+		ok := true
+		for _, s := range subs {
+			if !strings.Contains(l, s) {
+				ok = false
+			}
+		}
+		if ok {
+			n++
+		}
+	}
+	return n
+}
+
+// fDodge is the fix-missile and fix-missile2 live proof (D5 dodge): Fallen Shamans (firebolt-like shafire missiles) beside
+// a character with plenty of life; the fight loop must dodge at least once and send about one cast command per cast.
+func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
+	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"fallenshaman1 3 near"}, Life: 400, Mana: 0, Potions: true, Clear: 90 * time.Second})
+	per := 0.0
+	if fi.Casts > 0 {
+		per = float64(fi.CmdSkill) / float64(fi.Casts)
+	}
+	intended := "dodges > 0 with the d2d missile listing, cast commands per cast about 1.0 (CastGapMs 650)"
+	obs := fmt.Sprintf("%s; cmd skill per cast %.2f; dodging lines %d", fi, per, countLines(fi.Log, "dodging"))
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("dodge>0=%v perCast<=1.3=%v", fi.Dodges > 0, per > 0 && per <= 1.3)}
+	switch {
+	case fi.Spawned == 0:
+		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
+	case fi.Casts == 0:
+		o.Verdict, o.Reason = Fail, "the fighter cast nothing"
+	case fi.Dodges == 0:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("no dodge in the fight (casts %d)", fi.Casts)
+	case per > 1.3 || per < 0.7:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("cast commands per cast %.2f (wanted about 1.0)", per)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d dodges, %.2f cast commands per cast over %d casts", fi.Dodges, per, fi.Casts)
+	}
+	return o
+}
+
+func fP27(ctx context.Context, r *Run, l FieldLab) Outcome {
+	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 2 near", "fallen1 1 near champion"}, Life: 200, Potions: true, Clear: 90 * time.Second})
+	intended := "the bot fights the nearest reachable threat and avoids or handles the champion by its danger table (recorded, no fixed verdict)"
+	obs := fmt.Sprintf("%s; champion: %s; ignores [%s]; decisions %s", fi, fi.Champion, strings.Join(fi.Ignores, "; "), strings.Join(firstN(fi.Decisions, 12), " | "))
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v", fi.Kills > 0)}
+	switch {
+	case fi.Spawned == 0:
+		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
+	case fi.Kills == 0 && fi.Avoided == 0:
+		o.Verdict, o.Reason = Fail, "the fight neither killed nor avoided anything: "+fi.Err
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("kills %d avoided %d ignored %d (champion: %s)", fi.Kills, fi.Avoided, fi.Ignored, fi.Champion)
+	}
+	return o
+}
+
+func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
+	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 6 near"}, Life: 40, LifeAt: 9, Potions: false, Clear: 60 * time.Second})
+	intended := "life at 9 of 40 with a pack in reach and an empty belt: Fighter.Safety decides a retreat (town portal or chicken) instead of fighting on"
+	obs := fmt.Sprintf("%s; decisions %s", fi, strings.Join(firstN(fi.Decisions, 12), " | "))
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("err=%s town=%v", fi.Err, fi.InTown)}
+	switch {
+	case fi.Spawned == 0:
+		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
+	case strings.Contains(fi.Err, "town-portal") || strings.Contains(fi.Err, "chicken") || strings.Contains(fi.Err, "crowd") || fi.InTown:
+		o.Verdict, o.Reason = Pass, "the bot decided to retreat: "+fi.Err
+	default:
+		o.Verdict, o.Reason = Fail, "no retreat at 9 of 40 life: "+fi.Err
+	}
+	return o
+}
+
+func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
+	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 2 near"}, Life: 200, Mana: 7, Potions: true, Clear: 60 * time.Second})
+	intended := "low mana in a fight: the fighter drinks a mana potion (belt mana -1) and the cast effect kills the target"
+	obs := fmt.Sprintf("%s; mana drinks %d; potion lines [%s]", fi, fi.ManaDrinks, strings.Join(fi.PotionLines, "; "))
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
+	switch {
+	case fi.Spawned == 0:
+		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
+	case fi.Kills == 0:
+		o.Verdict, o.Reason = Fail, "no kill: the hit effect of the cast is not seen: "+fi.Err
+	case fi.ManaDrinks == 0:
+		o.Verdict, o.Reason = Fail, "mana 7 in a fight and no mana potion drunk"
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d mana drinks, %d kills", fi.ManaDrinks, fi.Kills)
+	}
+	return o
+}
+
+func firstN(s []string, n int) []string {
+	if len(s) > n {
+		return s[:n]
+	}
+	return s
+}

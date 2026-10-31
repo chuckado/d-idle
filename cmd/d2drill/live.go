@@ -298,13 +298,15 @@ func (l *lab) DrainBelt(ctx context.Context) error {
 }
 
 func (l *lab) FillBelt(ctx context.Context) (drill.FillInfo, error) {
+	mark := l.rec.Mark()
 	rep, err := l.tw.FillBelt(ctx)
-	return drill.FillInfo{Moved: rep.Moved, Failed: rep.Failed, Err: err}, err
+	return drill.FillInfo{Moved: rep.Moved, Failed: rep.Failed, Err: err, Log: l.rec.Since(mark)}, err
 }
 
 func (l *lab) Pickit(ctx context.Context) (drill.PickInfo, error) {
+	mark := l.rec.Mark()
 	rep, err := l.lt.PickUp(ctx, loot.PickOpts{Radius: 60})
-	info := drill.PickInfo{Seen: rep.Seen}
+	info := drill.PickInfo{Seen: rep.Seen, Log: l.rec.Since(mark)}
 	for _, p := range rep.Picked {
 		info.Picked = append(info.Picked, fmt.Sprintf("%s (%s)", p.Name, p.Verdict))
 	}
@@ -369,4 +371,13 @@ func (l *lab) ShiftClickPack(ctx context.Context, code string) error {
 	}
 	_, err = c.Step(ctx, 6)
 	return err
+}
+
+// GiveBelt is the cheat `debug give <code> belt <box>`: a potion straight into a belt box (the drill's way to fill columns).
+func (l *lab) GiveBelt(ctx context.Context, r *drill.Run, code string, box int) error {
+	_, err := r.Cheat(ctx, fmt.Sprintf("debug give %s belt %d", code, box), "put a "+code+" in belt box "+fmt.Sprint(box)+": the drill needs healing in chosen columns and no other way fills one box")
+	if err != nil {
+		return err
+	}
+	return l.Tick(ctx, 5)
 }

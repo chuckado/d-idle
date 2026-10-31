@@ -37,20 +37,11 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 		ai.Err = "no Kashya in npcs"
 		return ai
 	}
-	saved := d2dctl.Pause
-	if wall { // the bot's Pause: wall time, nothing steps the lockstep game
-		d2dctl.Pause = func(ctx context.Context, d time.Duration) error {
-			t := time.NewTimer(d)
-			defer t.Stop()
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case <-t.C:
-				return nil
-			}
-		}
+	savedP, savedN := d2dctl.Pause, d2dctl.Now
+	if wall { // the bot's own wiring (fix-obj): Backend.Start / LateClock.Install put the game-time Pause and Now into d2dctl
+		l.be.Clock.Install(ctx)
 	}
-	defer func() { d2dctl.Pause = saved }()
+	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	t0, w0 := l.tick(), time.Now()
 	cctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
@@ -66,7 +57,7 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 			}
 		}
 	}
-	d2dctl.Pause = saved
+	d2dctl.Pause, d2dctl.Now = savedP, savedN
 	_ = l.CloseAll(ctx)
 	return ai
 }
@@ -106,7 +97,7 @@ func (l *lab) ClickObjectLikeBot(ctx context.Context, r *drill.Run) drill.Object
 	}
 	t0 := l.tick()
 	// objectAdapter.click: an object that is not an npcs row has an id below d2dsrc.NPCIDBase (and type object)
-	tg := input.Target{Type: 2, ID: 1, Pos: input.Point{X: wp.X, Y: wp.Y}}
+	tg := input.Target{Type: 2, ID: wp.ID, Pos: input.Point{X: wp.X, Y: wp.Y}}
 	if err := l.be.Ctl.Interact(tg); err != nil {
 		oc.InteractErr = err.Error()
 		if err := l.be.Ctl.ClickWorld(tg.Pos); err != nil {

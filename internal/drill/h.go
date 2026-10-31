@@ -66,9 +66,9 @@ func hPause(ctx context.Context, r *Run, l HoverLab) Outcome {
 	case !virt.Opened:
 		o.Verdict, o.Reason = Fail, "control failed: the approach does not open Kashya even with the lab's stepping Pause"
 	case !wall.Opened:
-		o.Verdict, o.Reason = Fail, "RISK PROVEN: with d2dctl.Pause on wall time (cmd/d2bot has no override) the approach never opens the menu under lockstep; d2dmerc.Revive and d2dtown.Claimer call it"
+		o.Verdict, o.Reason = Fail, "the bot's own Pause (LateClock.Install, game time) does not open Kashya's menu under lockstep: fix-obj did not hold"
 	default:
-		o.Verdict, o.Reason = Pass, "the wall-time Pause also works (no lockstep risk)"
+		o.Verdict, o.Reason = Pass, "the approach opens Kashya's menu with the bot's own Pause (a game-time deadline under lockstep), as with the lab's stepping Pause"
 	}
 	return o
 }
