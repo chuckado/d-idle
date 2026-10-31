@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- fixstatus (offline, board update verified): `tools/agentstatus/agentstatus.py` was a shell script under a `.py` name and died with a SyntaxError; it is now a Python stub that execs `ops.sh`; test `tools/agentstatus/stub-test.sh`, notes `docs/fixstatus.md` (agent/fixstatus).
 
 - fixrun (offline, live proof pending): the d2d run-toggle belief is reset on every game start in both lifecycle paths (the d2denv path already was), the bot `minute` line logs `runBelieved`, `stam`, `stamMax`, `runKeys`, `runResets`, `walkingRaw`; the 400 ms MoveTo stall wait is unchanged; recipe in `docs/fixrun.md` (agent/fixrun).
 

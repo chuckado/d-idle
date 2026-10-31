@@ -9,6 +9,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [plan/STATUS.md](plan/STATUS.md) where we are (one page, generated block at the bottom); [decisions.md](decisions.md) + [adr/](adr/README.md) why; [BACKLOG.md](BACKLOG.md) the idea queue; [needs-you.md](needs-you.md) what waits on the user.
 - [plan/plan-v2.md](plan/plan-v2.md) (banner) the plan with the user's decisions in sections 10-11; [../PLAN.md](../PLAN.md) (banner) founding plan, Wine era.
 - [g1-log.md](g1-log.md) the live soak history (G1 attempts, G2, Fresha), append-only.
+- [fixstatus.md](fixstatus.md) the agentstatus stub SyntaxError (cause, fix, check).
 
 ## 1. d2d: the primary backend (lockstep fork of psi29a/d2decomped)
 - [d2d-bot.md](d2d-bot.md) how `d2bot --backend d2d` runs (attach/managed, flags, knobs); [d2d-wire.md](d2d-wire.md) the whole behaviour stack over d2d seams; [d2d-backend.md](d2d-backend.md) (banner) the original adapter design.
