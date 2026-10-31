@@ -98,6 +98,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 - 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
@@ -107,5 +108,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
 - c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
 - 89b28fe 10-31 14:56 `Merge agent/decomprepair: sync origin/main into fixprice` (decomprepair)
-- 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
 <!-- statusgen:end -->

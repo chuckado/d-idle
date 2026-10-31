@@ -34,7 +34,7 @@ func main() { os.Exit(run()) }
 func run() int {
 	home := os.Getenv("HOME")
 	slotDir := os.Getenv("D2D_SLOT_DIR")
-	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, D3 town, D4 pack, D5 combat, D6 movement, D7 build, D9 lifecycle, DW waypoints, H hover audit)")
+	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, D3 town, D4 pack, D5 combat, D6 movement, D7 build, D9 lifecycle, DW waypoints, DR repair, D10 fault recovery, H hover audit)")
 	only := flag.String("only", "", "comma list of drill ids to run (default: the whole group)")
 	repeat := flag.Int("repeat", 2, "runs per drill (determinism check)")
 	bin := flag.String("bin", envOr("D2D_BIN", filepath.Join(home, "d2d-lab/fork/bin/d2d.lab6")), "d2d binary (the lab build)")
@@ -53,6 +53,10 @@ func run() int {
 	probe := flag.String("probe", "", "semicolon list of verbs to run and print (debug verbs go through the cheat ledger), then exit; for finding out what a verb does")
 	label := flag.String("label", "", "result file label after the date (default: the group, lower case)")
 	repairBelow := flag.Int("repair-below", 0, "override the bot's repairBelowPct knob (default 30; `debug durability all 1` leaves 5 percent, so the default reaches the repair path)")
+	botBin := flag.String("bot", envOr("D2BOT_BIN", filepath.Join(home, "d2d-lab/drills4/d2bot")), "D10: the d2bot binary the fault drill runs managed")
+	killAfter := flag.Duration("d10-kill-after", 4*time.Minute, "D10: wall time from the bot start to the kill -9 of the slot's d2d")
+	observe := flag.Duration("d10-observe", 8*time.Minute, "D10: wall time observed after the kill")
+	reapScript := flag.String("reap", "tools/agentreap.sh", "D10: the process registry tool")
 	limit := flag.Duration("limit", 0, "override the per-run hard time limit")
 	flag.Parse()
 	if *sock == "" || slotDir == "" {
@@ -81,6 +85,11 @@ func run() int {
 	if err := os.MkdirAll(*hdir, 0o700); err != nil {
 		fmt.Fprintln(os.Stderr, "d2drill:", err)
 		return 1
+	}
+	if strings.EqualFold(*group, "D10") { // fault recovery: the managed bot runs the loop, no harness d2d during the run
+		return runD10(ctx, d10Cfg{Bot: *botBin, D2D: *bin, GameDir: *gamedir, Slot: os.Getenv("D2D_SLOT"), Sock: *sock, BotAddr: os.Getenv("D2D_BOT_ADDR"),
+			SlotDir: slotDir, Name: *name, Class: *class, Seed: *seed, Instance: "drills4d10", KillAfter: *killAfter, Observe: *observe,
+			ReapScript: *reapScript, Agent: envOr("D2D_AGENT", "drills4"), Out: *out, Date: *date, Label: cmp.Or(*label, "d10"), Log: log, Tune: &tune, DB: db}, *repeat)
 	}
 	be, err := d2denv.Build(ctx, d2denv.Config{ID: "drills", Log: log, Tune: &tune, Data: db, Sock: *sock, LinkWait: 30 * time.Second,
 		Bin: *bin, DataDir: *gamedir, Home: *hdir, Nice: 10, LogFile: filepath.Join(*hdir, "d2d.out"),
@@ -135,6 +144,8 @@ func run() int {
 		drills = drill.H(l)
 	case "DW":
 		drills = drill.DW(l)
+	case "DR": // repair group of DRILLS4: D3.r, D3.r0, D3.r1 and the price table D3.rt (run with -repair-below 100)
+		drills = drill.DR(l)
 	case "D0": // harness self-test of the P35 gate: the drill leaves the pack open on purpose
 		drills = []drill.Drill{{ID: "D0.gate", Primitive: "P35", Title: "selftest: the drill leaves the inventory open, the gate must flag and recover it", Limit: time.Minute,
 			Do: func(ctx context.Context, r *drill.Run) drill.Outcome {
