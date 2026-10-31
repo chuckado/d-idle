@@ -61,5 +61,3 @@ internal/nav/sync.go  fixmisc  fixmisc
 internal/d2dctl/fixstall_test.go  fixstall  fixstall
 internal/nav/pinned_test.go  fixstall  fixstall
 docs/fixstall.md  fixstall  fixstall
-docs/research/pr-price-evidence-pack.md  rebase152  rebase152
-openspec/changes/rebase152/**  rebase152  rebase152

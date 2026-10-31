@@ -2,11 +2,12 @@
 
 ```yaml
 change: rebase152
-status: in-progress
+status: done
 agent: rebase152
 branch: agent/rebase152
 worktree: ~/code/d2lod-wt/rebase152
 skip_specs: true
+merge: 1382b0a
 owns:
   - docs/research/pr-price-evidence-pack.md
   - openspec/changes/rebase152/**
