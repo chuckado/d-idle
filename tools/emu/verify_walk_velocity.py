@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""Independent verifier for upstream candidate fix/walk-velocity (d2lod-bot card verifyprs).
+
+Written without reading the author's oracle (tools/emu/walk_speed.py / walk_speed_harness.cpp):
+the game.exe side was re-derived from disasm.py reads of FUN_00623f50 (a unit's mode speed),
+FUN_00621740 (the diminished stats table at 0x6e8e24, 12 bytes a row: row 4 = stat 96 faster
+run/walk, 150), FUN_00621360 (the path velocity's base: MonStats +0x32 << 8 for a monster in
+ANY mode, CharStats +0x40 WalkVelocity << 8 for a player) and FUN_0057af80 (chill: coldeffect,
+a player's -50, on stats 0x43 / 0x44 / 0x45 as a stat list, then FUN_00623f50).
+
+game side: game.exe's own FUN_00623f50 runs under unicorn (upstream tools/emu/emu.py) on a fake
+unit in a moving mode with a path; FUN_00621740 and FUN_00621360 run natively against a fake
+data-table block at [0x744304] (+0xa78 MonStats rows of 0x1a8, +0xbc4 CharStats rows of 0xc4).
+The velocity it hands the path (FUN_00648690, hooked: recorded) and the walk % are printed.
+Hooked (not the claim): FUN_00645270 (shape / class remap: identity), FUN_00620f00,
+FUN_006216e0 (no special mode), FUN_006214a0 (moving mode: yes), FUN_006213d0 (animation
+rate), FUN_00625480 / FUN_00625500 (stat 0x43 velocitypercent and stat 96 faster run/walk).
+Modelled, not traced (the inputs of stat 0x43, d2d's own split of it): a monster's 100 +
+d2d speed_pct + boss_speed + its think's pace (move_pct) - 100 laid + coldeffect chilled;
+a player's 100 (running: RunVelocity x 100 / WalkVelocity) + velocitypercent - 50 chilled.
+
+d2d side: the REAL monster_update / World::walk_percent of the build under test
+(`test_game --verify-walk`, verify_walk_velocity_mode.inc pasted into a throwaway worktree).
+
+    python verify_walk_velocity.py gen N SEED > cases.tsv
+    python verify_walk_velocity.py game cases.tsv > game.tsv
+    build/tests/test_game --verify-walk cases.tsv | grep -E '^[0-9]+ ' > d2d.tsv
+    python verify_walk_velocity.py compare cases.tsv game.tsv d2d.tsv
+
+cases.tsv kind 0: id 0 monstats-id mode(2 WL / 15 RN) difficulty velocity coldeffect speed_pct boss_speed move_pct laid chilled
+          kind 1: id 1 class run frw vp chilled
+game.tsv: id pct velocity (velocity = what FUN_00648690 gets; pct = the walk %).
+"""
+import random
+import struct
+import sys
+
+# a spread of MonStats rows with traced AIs (d2d rules::traced_ai) and real Velocity / Run
+MON_ROWS = ["zombie1", "fallen1", "skeleton1", "quillrat1", "goatman1", "brute1", "bighead1", "wraith1", "sandraider1",
+            "baboon1", "fetish1", "vampire1", "arach1", "mummy1", "sandleaper1", "pantherwoman1", "scarab1", "vilemother1",
+            "succubus1", "overseer1", "minion1", "imp1", "deathmauler1", "frozenhorror1", "bloodlord1", "doomknight1"]
+
+
+def tables():
+    sys.path.insert(0, ".")
+    from emu import mpq_cache
+
+    def tab(name):
+        t = mpq_cache().read(name).decode("latin1").split("\r\n")
+        h = t[0].split("\t")
+        return h, [r.split("\t") for r in t[1:] if r]
+    h, rows = tab("data\\global\\excel\\monstats.txt")
+    mon = {}
+    for idx, r in enumerate(rows):
+        g = lambda k: int(r[h.index(k)] or 0)
+        mon[r[0]] = (idx, g("Velocity"), g("Run"), (g("coldeffect"), g("coldeffect(N)"), g("coldeffect(H)")))
+    h, rows = tab("data\\global\\excel\\charstats.txt")
+    chars = [(int(r[h.index("WalkVelocity")]), int(r[h.index("RunVelocity")])) for r in rows if r[0] != "Expansion"][:7]
+    return mon, chars
+
+
+def gen(n, seed):
+    mon, chars = tables()
+    rng = random.Random(seed)
+    rows = []
+    rows_ok = [m for m in MON_ROWS if m in mon]
+    # boundaries: around the floor (sum 24/25/26 and 9/10/11 where the old floor was), both modes,
+    # every difficulty, data coldeffect and synthetic ones, laid, Velocity 1 and big
+    for name in rows_ok:
+        idx, vel, run, cold = mon[name]
+        for mode in (2, 15):
+            for diff in range(3):
+                for chilled in (0, 1):
+                    for laid in (0, 1):
+                        for target_sum in (-200, 0, 9, 10, 11, 24, 25, 26, 50, 100, 101, 150, 400):
+                            ce = cold[diff]
+                            move = target_sum - 100 - (ce if chilled else 0) + (100 if laid else 0)
+                            rows.append((0, name, mode, diff, vel, ce, 0, 0, move, laid, chilled))
+                for ce in (-100, -90, -50, -33, -1, 0, 1, 50):
+                    for v in (1, 2, 3, 7, 13, 255, 32767):
+                        rows.append((0, name, mode, rng.randrange(3), v, ce, rng.choice((0, 20, 50)), rng.choice((0, 20)), rng.choice((0, 30, 120, -100)), 0, 1))
+    for cls in range(7):
+        for run in (0, 1):
+            for chilled in (0, 1):
+                for frw in (-300, -151, -149, -100, -1, 0, 1, 20, 40, 150, 200, 1000, 30000):
+                    for vp in (-200, -100, -75, -50, -1, 0, 1, 13, 25, 50, 100, 300):
+                        rows.append((1, cls, run, frw, vp, chilled))
+    n += len(rows)
+    while len(rows) < n:
+        if rng.random() < 0.7:
+            name = rng.choice(rows_ok)
+            idx, vel, run, cold = mon[name]
+            diff = rng.randrange(3)
+            v = vel if rng.random() < 0.6 else rng.choice((rng.randint(1, 20), rng.randint(1, 32767)))
+            ce = cold[diff] if rng.random() < 0.6 else rng.randint(-100, 100)
+            rows.append((0, name, rng.choice((2, 15)), diff, v, ce, rng.choice((0, 0, rng.randint(-100, 200))),
+                         rng.choice((0, 0, 20, rng.randint(0, 100))), rng.choice((0, 0, rng.randint(-150, 150), rng.randint(0, 120))),
+                         int(rng.random() < 0.1), int(rng.random() < 0.4)))
+        else:
+            frw = rng.choice((0, rng.randint(0, 200), rng.randint(-400, 400), rng.randint(-2000, 5000)))
+            if frw == -150:
+                frw = -149
+            rows.append((1, rng.randrange(7), rng.choice((0, 1)), frw, rng.choice((0, 0, rng.randint(-100, 150), rng.randint(-400, 400))), int(rng.random() < 0.3)))
+    for i, r in enumerate(rows):
+        print(i, *r, sep="\t")
+
+
+def tdiv(a, b):
+    """C / (x86 idiv): truncates toward zero."""
+    q = abs(a) // abs(b)
+    return q if (a >= 0) == (b > 0) else -q
+
+
+def game(path):
+    mon, chars = tables()
+    from emu import Emu
+    emu = Emu()
+    nmon = max(v[0] for v in mon.values()) + 1
+    dt = emu.alloc(0x1000)
+    monstats = emu.alloc(0x1a8 * nmon)
+    charstats = emu.alloc(0xc4 * 7)
+    emu.w32(0x744304, dt)
+    emu.w32(dt + 0xa78, monstats)
+    emu.w32(dt + 0xa80, nmon)
+    emu.w32(dt + 0xbc4, charstats)
+    emu.w32(dt + 0xbc8, 7)
+    for c, (walk, run) in enumerate(chars):
+        emu.mu.mem_write(charstats + c * 0xc4 + 0x40, bytes([walk & 0xFF]))
+    unit = emu.alloc(0x200)
+    path_ = emu.alloc(0x100)
+    st = {}
+    got = {}
+    emu.hook(0x645270, lambda e: 0, 6)
+    emu.hook(0x620f00, lambda e: 0, 4)
+    emu.hook(0x6216e0, lambda e: 0, 0)
+    emu.hook(0x6214a0, lambda e: 1, 1)
+    emu.hook(0x6213d0, lambda e: 256, 0)
+    emu.hook(0x625480, lambda e: st.get(e.arg(1), 0) & 0xFFFFFFFF, 3)
+    emu.hook(0x625500, lambda e: st.get(e.arg(1), 0) & 0xFFFFFFFF, 3)
+
+    def setvel(e):
+        got["vel"] = struct.unpack("<i", struct.pack("<I", e.arg(1)))[0]
+        return 0
+
+    emu.hook(0x648690, setvel, 4)
+    for line in open(path):
+        f = line.split()
+        if not f:
+            continue
+        cid, kind = int(f[0]), int(f[1])
+        st.clear()
+        if kind == 0:
+            name, mode, diff, vel, ce, speed, boss, move, laid, chilled = f[2], *map(int, f[3:])
+            idx = mon[name][0]
+            emu.mu.mem_write(monstats + idx * 0x1a8 + 0x32, struct.pack("<h", vel))
+            emu.w32(unit, 1)
+            emu.w32(unit + 4, idx)
+            emu.w32(unit + 0x10, mode)
+            st[0x43] = 100 + speed + boss + move - (100 if laid else 0) + (ce if chilled else 0)
+            st[96] = 0
+        else:
+            cls, run, frw, vp, chilled = map(int, f[2:])
+            walk, runv = chars[cls]
+            emu.w32(unit, 0)
+            emu.w32(unit + 4, cls)
+            emu.w32(unit + 0x10, 3 if run else 2)
+            st[0x43] = (runv * 100 // walk if run else 100) + vp + (-50 if chilled else 0)
+            st[96] = frw
+        emu.w32(unit + 0x2c, path_)
+        got.clear()
+        emu.call(0x623f50, unit, 0, 0)
+        vel = got.get("vel")
+        base = (struct.unpack("<h", struct.pack("<h", int(f[5])))[0] if kind == 0 else chars[int(f[2])][0]) << 8
+        # self-check of the derivation: the walk % as read from the disassembly (FUN_00621740's
+        # 150 v / (150 + v) for v != 0, idiv truncating, + stat 0x43, at least 25) must give the
+        # velocity game.exe set (base x pct / 100, truncated toward zero)
+        frw_eff = tdiv(150 * st[96], 150 + st[96]) if st[96] else 0
+        pct = max(frw_eff + st[0x43], 25)
+        print(cid, pct, vel, "" if vel == tdiv(base * pct, 100) else "VELFAIL")
+
+
+def compare(cases, a, b):
+    rows = {l.split()[0]: l.split() for l in open(cases) if l.strip()}
+    ga = {l.split()[0]: l.split() for l in open(a) if l.strip()}
+    gb = {l.split()[0]: l.split() for l in open(b) if l.strip()}
+    velfail = sum(1 for v in ga.values() if "VELFAIL" in v)
+    skipped = [k for k, v in gb.items() if v[1] == "skip"]
+    bad, per, trunc = [], {}, 0
+    compared = 0
+    for k, r in rows.items():
+        if k not in gb or gb[k][1] == "skip" or k not in ga:
+            continue
+        compared += 1
+        g_pct, d_pct = int(ga[k][1]), float(gb[k][1])
+        if abs(g_pct - d_pct) > 0.01:
+            bad.append(k)
+            key = ("monster " + ("RN" if r[3] == "15" else "WL")) if r[1] == "0" else "player"
+            per[key] = per.get(key, 0) + 1
+        vel = int(ga[k][2])
+        base = (int(r[5]) if r[1] == "0" else 0) << 8
+        if r[1] == "0" and base * g_pct % 100 != 0:
+            trunc += 1
+    print(f"cases {len(rows)} compared {compared} skipped {len(skipped)} mismatches {len(bad)} {per} velfail {velfail} "
+          f"monster-velocity-truncated {trunc} (game.exe's velocity x pct / 100 truncates; d2d's float step does not)")
+    for k in bad[:12]:
+        print("  ", " ".join(rows[k]), "game", ga[k][1], "d2d", gb[k][1])
+    from collections import Counter
+    print("  skip reasons", Counter(" ".join(gb[k][1:]) for k in skipped).most_common(5))
+
+
+if __name__ == "__main__":
+    cmd = sys.argv[1] if len(sys.argv) > 1 else ""
+    if cmd == "gen":
+        gen(int(sys.argv[2]), int(sys.argv[3]))
+    elif cmd == "game":
+        game(sys.argv[2])
+    elif cmd == "compare":
+        compare(*sys.argv[2:5])
+    else:
+        sys.exit(__doc__)
