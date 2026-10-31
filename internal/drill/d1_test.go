@@ -158,6 +158,16 @@ func (s *simLab) Pickit(context.Context) (PickInfo, error) {
 	s.PickupRaw(context.Background())
 	return PickInfo{Seen: n, Picked: []string{"hp1 (keep)"}}, nil
 }
+func (s *simLab) ShiftClickPack(_ context.Context, code string) error {
+	if s.pack[code] == 0 {
+		return errors.New("no such pack item")
+	}
+	if b, ok := s.engineBox(code); ok {
+		s.belt[b] = code
+		s.pack[code]--
+	}
+	return nil
+}
 func (s *simLab) Drink(_ context.Context, k Kind) error {
 	var box []int
 	for b := range s.belt {
@@ -204,7 +214,10 @@ func TestD1UnfixedBehaviourFails(t *testing.T) {
 	if r := res["D1.P3"]; r.Verdict != Pass {
 		t.Errorf("P3: %+v", r)
 	}
-	for _, id := range []string{"D1.P1s", "D1.P3m"} {
+	if r := res["D1.P1s"]; r.Verdict != Pass {
+		t.Errorf("P1s: %+v", r)
+	}
+	for _, id := range []string{"D1.P3m"} {
 		if r := res[id]; r.Verdict != Blocked || r.Reason == "" {
 			t.Errorf("%s: %+v", id, r)
 		}

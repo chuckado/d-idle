@@ -13,6 +13,7 @@ import (
 	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dcombat"
+	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2denv"
 	"d2lod-bot/internal/d2dloot"
 	"d2lod-bot/internal/d2dsrc"
@@ -28,12 +29,16 @@ import (
 // buildD2DStack: town.Town over d2dtown with the hover-then-click input, the stack's Looter attached to d2d's ground
 // reads, combat's Fighter over d2dcombat). Drills call the same exported functions the bot calls.
 type lab struct {
-	be   *d2denv.Backend
-	db   *data.DB
-	tw   *town.Town
-	lt   *loot.Looter
-	rig  *d2dcombat.Rig
-	log  *slog.Logger
+	be  *d2denv.Backend
+	db  *data.DB
+	tw  *town.Town
+	lt  *loot.Looter
+	rig *d2dcombat.Rig
+	log *slog.Logger
+	rec *recorder
+	nv  interface {
+		GoToUnitOf(ctx context.Context, typ int, id uint32) error
+	}
 	led  *cheat.Ledger
 	char string
 	inst string
@@ -43,6 +48,15 @@ type lab struct {
 }
 
 func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst string, log *slog.Logger) *lab {
+	// d2dctl.Pause waits wall time, which does nothing under lockstep (the game only moves when stepped): EnterPortal,
+	// HoverClick and the NPC walks would act on a frozen world. The lab pauses in virtual ticks instead.
+	d2dctl.Pause = func(ctx context.Context, d time.Duration) error {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		_, err := be.Client.Step(ctx, max(int(d/(40*time.Millisecond)), 1))
+		return err
+	}
 	e := be.Env
 	nv := be.Navigator()
 	rig := d2dcombat.Attach(context.Background(), e, nv, be.Ctl)
@@ -56,7 +70,7 @@ func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst strin
 	lt := loot.New(rig.Env, nv)
 	tw.SetJudge(lt)
 	d2dloot.Attach(lt, be.Source, db)
-	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst}
+	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst, nv: nv}
 }
 
 // ---- drill.World ----
@@ -301,3 +315,46 @@ func (l *lab) Drink(ctx context.Context, k drill.Kind) error {
 
 var _ drill.BeltLab = (*lab)(nil)
 var _ drill.World = (*lab)(nil)
+
+// ShiftClickPack sends the lab binary's click modifier verb ("click x y shift", fork branch with the click modifier) on
+// the first pack item with this code: open the pack, "debug itemat" for the pixel, shift-click, close the pack. The bot
+// does not call this on d2d (its belt fill uses "cmd belt put"), so the drill drives the verb directly.
+func (l *lab) ShiftClickPack(ctx context.Context, code string) error {
+	s, err := l.be.Env.Snapshot()
+	if err != nil || s.Inventory == nil {
+		return fmt.Errorf("no inventory: %v", err)
+	}
+	id := -1
+	for _, u := range s.Inventory.Container(d2.ContInventory) {
+		if l.code(u.Class) == code {
+			id = int(u.ID)
+			break
+		}
+	}
+	if id < 0 {
+		return fmt.Errorf("no %s in the pack", code)
+	}
+	c := l.be.Client
+	if err := c.Key(ctx, "i"); err != nil {
+		return err
+	}
+	defer func() { _ = c.Key(ctx, "i"); _, _ = c.Step(ctx, 5) }()
+	if _, err := c.Step(ctx, 18); err != nil {
+		return err
+	}
+	x, y, err := c.ItemAt(ctx, id)
+	if err != nil {
+		return err
+	}
+	if err := c.Hover(ctx, x, y); err != nil {
+		return err
+	}
+	if _, err := c.Step(ctx, 4); err != nil {
+		return err
+	}
+	if _, err := c.Do(ctx, fmt.Sprintf("click %d %d shift", x, y)); err != nil {
+		return fmt.Errorf("click with shift: %w", err)
+	}
+	_, err = c.Step(ctx, 6)
+	return err
+}

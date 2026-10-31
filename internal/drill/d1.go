@@ -97,14 +97,17 @@ type BeltLab interface {
 	PickupRaw(ctx context.Context) (int, error)                // the engine's own "cmd pickup" on every ground item, in order
 	DrainBelt(ctx context.Context) error                       // drink every belt potion with "cmd belt" until the belt is empty
 
+	// ShiftClickPack is a game action with the click modifier verb: shift-left-click on the first pack item with this code.
+	// The bot has no such verb on d2d (it uses "cmd belt put", D1.P1 covers that), so the drill drives the click itself.
+	ShiftClickPack(ctx context.Context, code string) error
+
 	FillBelt(ctx context.Context) (FillInfo, error)
 	Pickit(ctx context.Context) (PickInfo, error)
 	Drink(ctx context.Context, k Kind) error
 }
 
 const (
-	missingModifier = "fork verb `click <x> <y> shift|ctrl` (click modifiers): d2d has no shift/ctrl-click behaviour at all"
-	missingMerc     = "cheat/verb to hire or revive a mercenary on a fresh character (Kashya's reward needs the Blood Raven quest chain)"
+	missingMerc = "cheat/verb to hire or revive a mercenary on a fresh character (Kashya's reward needs the Blood Raven quest chain)"
 )
 
 // D1 returns the belt drill group: P1 belt fill, P2 belt rows by belt type, P3 drink by column, P7 ground potions.
@@ -114,7 +117,7 @@ func D1(l BeltLab, belts []string) []Drill {
 		{ID: "D1.P7a", Primitive: "P7", Title: "engine destination of a ground potion (empty belt)", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p7a(ctx, r, l) }},
 		{ID: "D1.P7", Primitive: "P7", Title: "pickit takes a ground potion while the belt is empty and the pack holds 3", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p7(ctx, r, l) }},
 		{ID: "D1.P1", Primitive: "P1", Title: "belt fill from the pack, right columns", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p1(ctx, r, l) }},
-		{ID: "D1.P1s", Primitive: "P1", Title: "shift-click pack to belt", Needs: []string{missingModifier}},
+		{ID: "D1.P1s", Primitive: "P1", Title: "shift-click pack to belt (click modifier verb, driven directly: the bot does not use it on d2d)", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p1s(ctx, r, l) }},
 		{ID: "D1.P2", Primitive: "P2", Title: "belt rows by belt type, overflow stays in the pack", Limit: 12 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p2(ctx, r, l, belts) }},
 		{ID: "D1.P3", Primitive: "P3", Title: "drink by belt column", Limit: 4 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return p3(ctx, r, l) }},
 		{ID: "D1.P3m", Primitive: "P3", Title: "merc drink by belt column", Needs: []string{missingMerc}},
@@ -249,7 +252,7 @@ func p7(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err != nil {
 		return Failed("read: "+err.Error(), "", "")
 	}
-	intended := "belt empty, pack hp1x3, 2 hp1 on the ground -> both end in the belt (directly or after a fill), ground empty"
+	intended := "belt empty, pack hp1x3, 2 hp1 on the ground -> both end in the belt (directly or after a fill), ground empty, and the pickit report counts them (picked > 0)"
 	observed := fmt.Sprintf("belt [%s], pack [%s], ground %d; pickit: %s", v.BeltString(), v.PackString(), len(v.Ground), info)
 	if perr != nil {
 		observed += "; pickit error: " + perr.Error()
@@ -261,12 +264,10 @@ func p7(ctx context.Context, r *Run, l BeltLab) Outcome {
 		}
 	}
 	switch {
+	case inBelt == 2 && len(v.Ground) == 0 && len(info.Picked) == 0:
+		return Failed("the potions are in the belt but the pickit report says picked 0 (arrival bookkeeping: debug log 'item left the ground without arriving in the pack')", intended, observed)
 	case inBelt == 2 && len(v.Ground) == 0:
-		why := "pickit took both potions and they are in the belt"
-		if len(info.Picked) == 0 {
-			why += "; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)"
-		}
-		return Passed(why, intended, observed)
+		return Passed(fmt.Sprintf("pickit took both potions, reports picked %d, and they are in the belt", len(info.Picked)), intended, observed)
 	case len(v.Ground) > 0:
 		return Failed("ground potions left behind with the belt empty: "+skipWhy(info), intended, observed)
 	default:
@@ -355,6 +356,34 @@ func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed(fmt.Sprintf("belt holds %d of %d potions", len(v.Belt), nHP+nMP), intended, observed)
 	}
 	return Passed("every potion belted in its plan column, pack empty of potions", intended, observed)
+}
+
+func p1s(ctx context.Context, r *Run, l BeltLab) Outcome {
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	if err := stagePack(ctx, r, l, 2, 0); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	intended := "empty belt, pack hp1x2: each shift-click on a pack hp1 moves exactly one to the belt (the pickup's box rule), the pack loses one each time; both end in the belt"
+	var steps []string
+	for i := 1; i <= 2; i++ {
+		if err := l.ShiftClickPack(ctx, "hp1"); err != nil {
+			return Failed(fmt.Sprintf("shift-click %d: %v", i, err), intended, strings.Join(steps, "; "))
+		}
+		if err := l.Tick(ctx, 10); err != nil {
+			return Failed("tick: "+err.Error(), intended, "")
+		}
+		v, err := l.View(ctx)
+		if err != nil {
+			return Failed("read: "+err.Error(), intended, "")
+		}
+		steps = append(steps, fmt.Sprintf("after click %d: belt [%s], pack [%s]", i, v.BeltString(), v.PackString()))
+		if len(v.Belt) != i || v.Pack["hp1"] != 2-i {
+			return Failed(fmt.Sprintf("click %d did not move exactly one potion", i), intended, strings.Join(steps, "; "))
+		}
+	}
+	return Passed("the click modifier verb belts one pack potion per shift-click", intended, strings.Join(steps, "; "))
 }
 
 func firstErr(a, b error) error {

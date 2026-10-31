@@ -22,6 +22,7 @@ gates:
   - "live proof is drill D1/P7 (not run here)"
 merge:
 result:
+live: "drill D1 rerun 2026-10-31 (docs/probes/drills/2026-10-31-d1rerun.txt): P7 PASS (pickit reports picked 2, belt holds both, no left-the-ground-without-arriving), P7a PASS, P1 PASS (hp columns hold hp, mp columns mp, fill moved 8 of 8), P1s PASS, P2 PASS, P3 PASS; each run twice, identical"
 ```
 
 ## 1. Work
