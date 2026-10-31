@@ -19,7 +19,7 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests passes"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-result: ""
+result: "offline tests pass (54); three owner-only test posts succeeded (progress, announcements, stream); files stay mode 600"
 ```
 
 ## 1. Work
@@ -27,4 +27,4 @@ result: ""
 - [x] 1.1 load_webhook_url (env, file, keyring; fail-closed; shape check; channel validation; D2IDLE_DISCORD_HOME)
 - [x] 1.2 notify.py uses it; tests isolated from the real home
 - [x] 1.3 feeds.md, server.md, INDEX, CHANGELOG
-- [ ] 1.4 feed test posts to the three channels
+- [x] 1.4 feed test posts to the three channels (all three posted)
