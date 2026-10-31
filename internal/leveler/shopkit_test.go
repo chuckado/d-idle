@@ -12,11 +12,11 @@ import (
 // The Javelin of the soak (stack priced 240 at the vendor, base cost 5, max stack 60 on the real tables).
 func TestEstimatePriceStackable(t *testing.T) {
 	b := &data.ItemBase{Cost: 5, Stackable: true, MaxStack: 60}
-	got := estimatePrice(b, &d2.Item{Quality: d2.QualityNormal})
+	got := estimatePrice(b, &d2.Item{Quality: d2.QualityNormal}, nil)
 	if got < 240 {
 		t.Fatalf("estimate %d for a 240 gold javelin stack", got)
 	}
-	if got := estimatePrice(&data.ItemBase{Cost: 168}, &d2.Item{Quality: d2.QualityNormal}); got != 168 {
+	if got := estimatePrice(&data.ItemBase{Cost: 168}, &d2.Item{Quality: d2.QualityNormal}, nil); got != 168 {
 		t.Fatalf("plain item estimate %d", got)
 	}
 }

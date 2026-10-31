@@ -283,6 +283,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		spot = func(w, h int) bool { _, _, ok := o.FindSpot(w, h); return ok }
 	}
 	lowGold := s.Player.Gold < t.LowGoldBelow
+	maxBuy := MaxBuyOf(s.Player)
 	for _, u := range s.Ground {
 		if u.Item == nil || u.Mode != d2.ItemModeGround {
 			continue
@@ -323,11 +324,11 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 			}
 			// recovering: anything worth the PoorMinSell line is gold, the per-cell bar is for a character that can afford to wait
 			if l.recovering.Load() {
-				if strict == 1 && v.Rule != poorRule && SellValue(b, u.Item.Quality) < t.PoorMinSell {
+				if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy) < t.PoorMinSell {
 					skip("not worth selling")
 					continue
 				}
-			} else if strict == 1 && v.Rule != poorRule && SellValue(b, u.Item.Quality)/cells < t.MinValuePerCell {
+			} else if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy)/cells < t.MinValuePerCell {
 				skip("not worth selling")
 				continue
 			}

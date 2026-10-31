@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/gear"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/loot"
@@ -180,21 +181,30 @@ func (t *Town) needRepair(s *d2.Snapshot) bool {
 	return ok && pct < t.tune().RepairBelowPct && !t.repairLatched(s, pct) && s.Player.Gold >= t.repairEstimate(s)
 }
 
-// repairEstimate is a lower bound of what Repair All charges: a quarter of each worn item's base cost times its
-// missing durability, at least 1 gold when anything is damaged. UNVERIFIED as a price (the drill D3.r paid 19 gold
-// for 95 percent on starter gear); it only has to be low enough that a character who can pay is never turned away,
-// and high enough that gold 0 opens no smith (drill D3.r0: 101 ticks and a failed repair).
+// repairEstimate is what Repair All charges for the worn items, by game.exe's formula (VERIFIED, docs/research/
+// price-trace.md): cost x (max - dur) / max / 8 at every smith, armor cost scaled by defence / max defence;
+// unidentified and ethereal items are not repaired; undamaged ones are skipped. Stat costs of magic items, sockets and
+// charges are not modelled, so for those it stays a lower bound: low enough that a character who can pay is never
+// turned away, at least 1 gold when anything is damaged (gold 0 opens no smith: drill D3.r0).
 func (t *Town) repairEstimate(s *d2.Snapshot) int {
 	sum, damaged := 0, false
 	for _, u := range s.Inventory.Container(d2.ContEquipment) {
 		pct, ok := t.durabilityPct(u)
-		if !ok || pct >= 100 {
+		if !ok || pct >= 100 || u.Item == nil {
 			continue
 		}
 		damaged = true
-		if b := t.base(u); b != nil {
-			sum += b.Cost * (100 - pct) / 100 / 4
+		b := t.base(u)
+		st, err := t.unitStats(u.Addr)
+		if b == nil || err != nil {
+			continue
 		}
+		f := data.PriceFacts{Identified: u.Item.Identified(), Ethereal: u.Item.Ethereal(),
+			Low: u.Item.Quality == d2.QualityLow, Dur: int(st.Get(statDurability)), MaxDur: int(st.Get(statMaxDurability))}
+		if st.Has(statDefence) {
+			f.Defence = int(st.Get(statDefence))
+		}
+		sum += b.RepairPrice(f)
 	}
 	if damaged {
 		return max(sum, 1)
@@ -579,4 +589,13 @@ func (t *Town) noteFutile(s *d2.Snapshot) {
 func (t *Town) tpTooPoor(s *d2.Snapshot) bool {
 	m := t.tune().TPMinGold
 	return m > 0 && s.Player.Gold < m
+}
+
+// RepairEstimateForTest exposes repairEstimate for the price tests.
+func (t *Town) RepairEstimateForTest() (int, error) {
+	s, err := t.current()
+	if err != nil {
+		return 0, err
+	}
+	return t.repairEstimate(s), nil
 }

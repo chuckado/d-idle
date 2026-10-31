@@ -22,6 +22,7 @@ const (
 	statQuantity      = 70
 	statDurability    = 72
 	statMaxDurability = 73
+	statDefence       = 31
 )
 
 // RepairAll is the pixel of the "repair all" button in the open vendor panel: the fourth of the four icons under

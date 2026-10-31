@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/resource"
 	"d2lod-bot/internal/town/hand"
@@ -171,6 +172,7 @@ func (l *Leveler) shopAt(ctx context.Context, h *hand.Hand, v Vendor, class int,
 		var stock []Cand
 		for _, u := range items {
 			if c := l.cand(s.Player, u); c.Slots != nil && !l.badEverywhere(u.ID, c.Slots, s.Player.Level) {
+				c.Price = c.Price * data.VendorBuyMult(class) / 1024 // Charsi 0.9375, Gheed 1.0625, Act 5 x2
 				stock = append(stock, c)
 			}
 		}
