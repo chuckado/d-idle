@@ -242,12 +242,12 @@ func (b *builder) world(ctx context.Context) error {
 		ps, err := c.Portals(ctx)
 		switch {
 		case err == nil:
-			for i, p := range ps.Items {
+			for _, p := range ps.Items {
 				if p.Level != b.snap.Player.Area {
 					continue
 				}
 				x, y := b.pos(p.X, p.Y)
-				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: townPortalObj, ID: uint32(PortalIDBase + i), Mode: 1, X: x, Y: y})
+				b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: townPortalObj, ID: uint32(PortalIDBase + p.Which), Mode: 1, X: x, Y: y})
 			}
 			rp.derived("objects.portals", "debug portals rows on this level, class 59 (objects.txt Town Portal, S)")
 		case isCmdErr(err):

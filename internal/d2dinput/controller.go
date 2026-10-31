@@ -327,26 +327,25 @@ func (c *Controller) ChooseMenu(text string) error {
 	return fmt.Errorf("d2dinput: menu has no line %q", text)
 }
 
-// UsePortal walks to the portal (row of "debug portals", the end that is in the current level) and clicks it.
-// U: the click point is computed with the uncalibrated transform and "debug portals" has no screen position.
-func (c *Controller) UsePortal(row int) error {
+// UsePortal takes town portal which ("debug portals" first column, the id d2dsrc gives its object) with the command
+// a click on it sends: d2d walks the player there and through (d2dctl.TakePortal); it returns once the command is
+// sent, the caller waits for the area. It used to click a screen point from the uncalibrated transform, which a
+// lockstep d2d reads as a walk: it draws no frame, so nothing is under the cursor (drill D2.t,
+// docs/d2d-portal-entry.md).
+func (c *Controller) UsePortal(which int) error {
 	ps, err := c.C.Portals(c.ctx())
 	if err != nil {
 		return err
 	}
-	if row < 0 || row >= len(ps.Items) {
-		return fmt.Errorf("d2dinput: no portal row %d (%d listed)", row, len(ps.Items))
+	for _, p := range ps.Items {
+		if p.Which == which {
+			if err := c.prime(); err != nil {
+				return err
+			}
+			return c.C.TakePortal(c.ctx(), which)
+		}
 	}
-	p := ps.Items[row]
-	w := input.Point{X: d2dctl.SubTile(p.X) + c.Origin.X, Y: d2dctl.SubTile(p.Y) + c.Origin.Y}
-	if err := c.MoveTo(w, input.MoveOpts{Tolerance: 8}); err != nil {
-		return err
-	}
-	s, err := c.screenOf(w)
-	if err != nil {
-		return err
-	}
-	return c.C.Click(c.ctx(), s.X, s.Y)
+	return fmt.Errorf("d2dinput: no portal %d (%d listed)", which, len(ps.Items))
 }
 
 // CloseAll closes what d2d lets us close: an NPC menu through its "cancel" line (not Escape: V, a second

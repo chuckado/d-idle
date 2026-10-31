@@ -25,7 +25,7 @@ import (
 const (
 	NPCIDBase    = 0x10000000 // + "npcs" index (what "cmd interact" takes)
 	MercID       = 0x20000000 // the dump has no merc unit id
-	PortalIDBase = 0x30000000 // + "debug portals" row
+	PortalIDBase = 0x30000000 // + the portal's which ("debug portals" first column, the World's portal index)
 )
 
 // Options tune a Source.
