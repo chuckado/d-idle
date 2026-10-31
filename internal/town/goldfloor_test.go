@@ -43,12 +43,12 @@ func TestGoldfloorOffByDefault(t *testing.T) {
 	r := audit(t, 600, 6, false)
 	r.W.Add("hp1", d2.ContBelt, 0, 0)
 	r.W.Add("hp1", d2.ContBelt, 1, 0)
-	if rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true}); err != nil || boughtLike(rep, "Mana") < 2 {
-		t.Fatalf("default visit bought %v (err %v), want the old mana fill", rep.Bought, err)
-	}
 	s, _ := r.W.Snapshot()
 	if n := r.T.PlannedSpend(s); n == 0 {
 		t.Fatal("planned spend 0 at defaults")
+	}
+	if rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true}); err != nil || boughtLike(rep, "Mana") < 2 {
+		t.Fatalf("default visit bought %v (err %v), want the old mana fill", rep.Bought, err)
 	}
 }
 
