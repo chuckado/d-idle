@@ -2,7 +2,7 @@
 
 ```yaml
 change: pricepr
-status: in-progress
+status: archived
 skip_specs: true
 agent: pricepr
 branch: agent/pricepr
@@ -24,7 +24,7 @@ gates:
   - "independent adversarial verifier report attached verbatim in the proof doc"
   - "nothing pushed, posted or filed on GitHub; our repo not pushed"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-merge: pending (agent/pricepr)
+merge: 43d5b0c
 result: "PROOF complete, NOT verified live (oracle + d2d test binary only). Local upstream branch fix/vendor-prices on d0ea14b7: d8dae7b6 tooling, fcfcd82f D1, 3566b42d D2, 95557754 D3, 02e77e74 D4, 1bfff15c D7; clean subset 24,084/32,472/21,248 -> 0/0/0 of 100k; test_rules/combat/game/protocol green, ctest failures identical to upstream; pr_guard 0/0, presubmit --quick 0 FAIL; Opus verifier: all five hold. Nothing pushed or posted."
 ```
 

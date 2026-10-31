@@ -110,6 +110,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 43d5b0c 10-31 16:42 `Merge agent/pricepr: price PR proof, draft, evidence pack` (pricepr)
 - 4d53842 10-31 16:38 `Merge agent/rolesdoc: sourced Discord roles and safety guideline` (rolesdoc)
 - bd533e0 10-31 16:38 `Merge agent/discord: d.idle Discord drafts and notify tooling` (discord)
 - 7c4a102 10-31 16:29 `Merge agent/fixrestart: d2d game-lost restarts counted, d2d SavedExp` (fix-restart)
@@ -119,5 +120,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
 - d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
 - 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
-- f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 <!-- statusgen:end -->
