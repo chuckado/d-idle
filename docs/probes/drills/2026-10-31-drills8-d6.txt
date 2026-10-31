@@ -1,0 +1,20 @@
+labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D6 -label drills8-d6'
+d2dslot: got slot 0
+time=2026-10-31T19:23:54.035-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1161480 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+DRILL D6.a P22 PASS 10 of 10 walks arrived | intended: 9 of 10 walks end within 1.5 cells of the target | observed: 10 of 10 arrived: 1:(155,111)->(151,109) 0.9 cells 46 ticks | 2:(143,122)->(144,122) 0.2 cells 27 ticks | 3:(129,124)->(131,124) 0.4 cells 27 ticks | 4:(115,119)->(115,119) 0.0 cells 30 ticks | 5:(104,107)->(104,107) 0.0 cells 33 ticks | 6:(102,93)->(102,94) 0.2 cells 24 ticks | 7:(107,79)->(106,80) 0.3 cells 27 ticks | 8:(119,68)->(118,67) 0.3 cells 39 ticks | 9:(133,66)->(133,66) 0.0 cells 51 ticks | 10:(147,71)->(147,71) 0.0 cells 27 ticks | runs: 2, identical
+DRILL D6.b P22 PASS 10 of 10 walks arrived | intended: 9 of 10 walks end within 1.5 cells of the target | observed: 10 of 10 arrived: 1:(164,256)->(163,253) 0.6 cells 57 ticks | 2:(138,269)->(133,268) 1.0 cells 78 ticks | 3:(124,264)->(125,265) 0.3 cells 15 ticks | 4:(113,252)->(115,252) 0.4 cells 129 ticks | 5:(111,238)->(111,239) 0.2 cells 24 ticks | 6:(116,224)->(116,224) 0.0 cells 27 ticks | 7:(128,213)->(127,212) 0.3 cells 135 ticks | 8:(142,211)->(140,211) 0.4 cells 24 ticks | 9:(156,216)->(154,216) 0.4 cells 27 ticks | 10:(167,228)->(167,228) 0.0 cells 54 ticks | runs: 2, identical
+DRILL D6.c P24 PASS 5 of 5 level transitions | intended: 5 of 5 transitions change the area id to the wanted one | observed: 5 of 5: 2->3 (wanted 3) 671 ticks | 3->2 (wanted 2) 36 ticks | 2->1 (wanted 1) 909 ticks | 1->2 (wanted 2) 36 ticks | 2->3 (wanted 3) 882 ticks | runs: 2, identical
+time=2026-10-31T19:23:59.329-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:151 Y:237}" rung=6
+time=2026-10-31T19:23:59.398-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:152 Y:238}" rung=3
+DRILL D6.d P25 PASS out of the pocket after 16 s of game time (area 1) | intended: a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time | observed: pinned=true freed=false moved 25.3 cells in 405 ticks (16 s), area 1, err "nav: the level changed during the walk: escaped from level 2 to 1 after a stall in a pocket"; ladder lines: nav stuck pos={151 240} wp={160 240} rung=0 / nav: stuck again at the same spot pos={151 240} hits=4 lastMethod=spiral / nav stuck pos={151 237} wp={151 233} rung=1 / nav stuck pos={149 237} wp={149 232} rung=2 / nav stuck pos={151 237} wp={152 230} rung=3 / nav stuck pos={151 237} wp={152 230} rung=4 / nav stuck pos={151 237} wp={152 230} rung=5 / nav: stuck recovered at={151 240} method=hop rung=6 repeat=true | runs: 2, identical
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D6.a      P22   PASS     same 10 of 10 walks arrived
+D6.b      P22   PASS     same 10 of 10 walks arrived
+D6.c      P24   PASS     same 5 of 5 level transitions
+D6.d      P25   PASS     same out of the pocket after 16 s of game time (area 1)
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug pin off, debug pin on, debug stat 6 512000, debug stat 7 512000
+cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T19:23:59.402-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 7s
