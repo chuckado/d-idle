@@ -38,7 +38,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [cr147](../../openspec/changes/cr147/) | in-progress | cr147 | `docs/research/pr-belt-evidence-pack.md`<br>`openspec/changes/cr147/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -65,7 +64,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 14 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 11 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change cr147: changecheck status -cli 0 warnings; leakcheck -mode fail 0
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -85,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- d3e2207 10-31 12:31 `Merge agent/cr147: PR #147 test-only commit posted lines` (cr147)
 - 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
 - eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
 - e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
@@ -94,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - eae3b82 10-31 12:04 `Merge agent/decomptome: town portal tome decomp trace` (decomptome)
 - ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
 - 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
-- 9630246 10-31 11:52 `Merge agent/fixportal: portal source and HasTP fixes` (fix-portal)
 <!-- statusgen:end -->

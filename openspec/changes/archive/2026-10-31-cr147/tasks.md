@@ -2,7 +2,7 @@
 
 ```yaml
 change: cr147
-status: in-progress
+status: archived
 agent: cr147
 branch: agent/cr147
 worktree: ~/code/d2lod-wt/cr147
@@ -13,6 +13,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck status -cli 0 warnings; leakcheck -mode fail 0"
+merge: d3e2207
 result: "not run on Game.exe; upstream tests green on the worker host"
 ```
 
