@@ -1,15 +1,15 @@
 DRILL D1.P7a P7 PASS observed destination: belt (engine fills the lowest free box, not the plan column: mp1 landed in box 1, the plan puts mana in column 2) | intended: a ground potion picked up with an empty belt goes to the belt (SME) or to the pack: the destination is recorded | observed: picked hp1, mp1, hp1 in that order: belt [0:hp1 1:mp1 2:hp1], pack [none], ground 0 | runs: 2, identical
-DRILL D1.P7 P7 PASS pickit took both potions and they are in the belt | intended: belt empty, pack hp1x3, 2 hp1 on the ground -> both end in the belt (directly or after a fill), ground empty | observed: belt [0:hp1 1:hp1], pack [hp1x3], ground 0; pickit: seen 2, picked [], skipped [], failed [] | runs: 2, identical
-DRILL D1.P1 P1 FAIL 1 potions are still in the pack | intended: plan columns [hp hp mp hp]: belt 0:hp1 1:hp1 2:mp1 3:hp1 (hp in hp columns, mp in the mp column), pack holds none of them | observed: before: pack [hp1x3 mp1x1]; fill moved 3 failed 0 err <nil>; after: belt [0:hp1 1:hp1 2:mp1], pack [hp1x1] | runs: 2, identical
+DRILL D1.P7 P7 PASS pickit took both potions and they are in the belt; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it) | intended: belt empty, pack hp1x3, 2 hp1 on the ground -> both end in the belt (directly or after a fill), ground empty | observed: belt [0:hp1 1:hp1], pack [hp1x3], ground 0; pickit: seen 2, picked [], skipped [], failed [] | runs: 2, identical
+DRILL D1.P1 P1 PASS every potion belted in its plan column, pack empty of potions | intended: plan columns [0:hp 1:hp 2:mp 3:mp]: the 2 hp1 and 2 mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them | observed: before: pack [hp1x2 mp1x2]; fill moved 4 failed 0 err <nil>; after: belt [0:hp1 1:hp1 2:mp1 3:mp1], pack [none] | runs: 2, identical
 DRILL D1.P1s P1 BLOCKED missing: fork verb `click <x> <y> shift|ctrl` (click modifiers): d2d has no shift/ctrl-click behaviour at all
 DRILL D1.P2 P2 PASS 5 belt types: reader boxes equal the engine's capacity, overflow kept, none lost | intended: per belt type: potions fill exactly the boxes the reader reports, the 6 extra stay (pack), none lost | observed: lbl: reader 8 boxes (2 rows), engine belt took 8, pack 6, ground 0; vbl: reader 8 boxes (2 rows), engine belt took 8, pack 6, ground 0; mbl: reader 12 boxes (3 rows), engine belt took 12, pack 6, ground 0; tbl: reader 12 boxes (3 rows), engine belt took 12, pack 6, ground 0; hbl: reader 16 boxes (4 rows), engine belt took 16, pack 6, ground 0 | runs: 2, identical
-DRILL D1.P3 P3 FAIL setup did not give the plan layout | intended: belt 0:hp1 1:hp1 2:mp1 3:hp1 | observed: 0:hp1 1:mp1 4:hp1 8:hp1 | runs: 2, identical
+DRILL D1.P3 P3 FAIL setup did not give the plan layout | intended: 0:hp1 1:hp1 2:mp1 3:mp1 | observed: 0:hp1 1:mp1 4:hp1 5:mp1 | runs: 2, identical
 DRILL D1.P3m P3 BLOCKED missing: cheat/verb to hire or revive a mercenary on a fresh character (Kashya's reward needs the Blood Raven quest chain)
 
 drill     prim  verdict  det  reason
 D1.P7a    P7    PASS     same observed destination: belt (engine fills the lowest free box, not the plan column: mp1 landed in box 1, the plan puts mana in column 2)
-D1.P7     P7    PASS     same pickit took both potions and they are in the belt
-D1.P1     P1    FAIL     same 1 potions are still in the pack
+D1.P7     P7    PASS     same pickit took both potions and they are in the belt; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)
+D1.P1     P1    PASS     same every potion belted in its plan column, pack empty of potions
 D1.P1s    P1    BLOCKED  -    missing: fork verb `click <x> <y> shift|ctrl` (click modifiers): d2d has no shift/ctrl-click behaviour at all
 D1.P2     P2    PASS     same 5 belt types: reader boxes equal the engine's capacity, overflow kept, none lost
 D1.P3     P3    FAIL     same setup did not give the plan layout

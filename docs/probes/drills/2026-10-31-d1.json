@@ -20,7 +20,7 @@
       "debug give mp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 461339094,
+     "elapsed_ns": 440344689,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -35,7 +35,7 @@
       "debug give mp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 18319381,
+     "elapsed_ns": 14418261,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -53,13 +53,13 @@
    "primitive": "P7",
    "title": "pickit takes a ground potion while the belt is empty and the pack holds 3",
    "verdict": "PASS",
-   "reason": "pickit took both potions and they are in the belt",
+   "reason": "pickit took both potions and they are in the belt; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)",
    "intended": "belt empty, pack hp1x3, 2 hp1 on the ground -\u003e both end in the belt (directly or after a fill), ground empty",
    "observed": "belt [0:hp1 1:hp1], pack [hp1x3], ground 0; pickit: seen 2, picked [], skipped [], failed []",
    "runs": [
     {
      "Verdict": "PASS",
-     "Reason": "pickit took both potions and they are in the belt",
+     "Reason": "pickit took both potions and they are in the belt; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)",
      "Intended": "belt empty, pack hp1x3, 2 hp1 on the ground -\u003e both end in the belt (directly or after a fill), ground empty",
      "Observed": "belt [0:hp1 1:hp1], pack [hp1x3], ground 0; pickit: seen 2, picked [], skipped [], failed []",
      "cheats": [
@@ -74,13 +74,13 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 41915616,
+     "elapsed_ns": 38266813,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
     {
      "Verdict": "PASS",
-     "Reason": "pickit took both potions and they are in the belt",
+     "Reason": "pickit took both potions and they are in the belt; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)",
      "Intended": "belt empty, pack hp1x3, 2 hp1 on the ground -\u003e both end in the belt (directly or after a fill), ground empty",
      "Observed": "belt [0:hp1 1:hp1], pack [hp1x3], ground 0; pickit: seen 2, picked [], skipped [], failed []",
      "cheats": [
@@ -95,7 +95,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 44240123,
+     "elapsed_ns": 35769753,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -118,16 +118,16 @@
    "id": "D1.P1",
    "primitive": "P1",
    "title": "belt fill from the pack, right columns",
-   "verdict": "FAIL",
-   "reason": "1 potions are still in the pack",
-   "intended": "plan columns [hp hp mp hp]: belt 0:hp1 1:hp1 2:mp1 3:hp1 (hp in hp columns, mp in the mp column), pack holds none of them",
-   "observed": "before: pack [hp1x3 mp1x1]; fill moved 3 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1], pack [hp1x1]",
+   "verdict": "PASS",
+   "reason": "every potion belted in its plan column, pack empty of potions",
+   "intended": "plan columns [0:hp 1:hp 2:mp 3:mp]: the 2 hp1 and 2 mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them",
+   "observed": "before: pack [hp1x2 mp1x2]; fill moved 4 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1 3:mp1], pack [none]",
    "runs": [
     {
-     "Verdict": "FAIL",
-     "Reason": "1 potions are still in the pack",
-     "Intended": "plan columns [hp hp mp hp]: belt 0:hp1 1:hp1 2:mp1 3:hp1 (hp in hp columns, mp in the mp column), pack holds none of them",
-     "Observed": "before: pack [hp1x3 mp1x1]; fill moved 3 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1], pack [hp1x1]",
+     "Verdict": "PASS",
+     "Reason": "every potion belted in its plan column, pack empty of potions",
+     "Intended": "plan columns [0:hp 1:hp 2:mp 3:mp]: the 2 hp1 and 2 mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them",
+     "Observed": "before: pack [hp1x2 mp1x2]; fill moved 4 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1 3:mp1], pack [none]",
      "cheats": [
       "debug clearinv",
       "debug give hp1",
@@ -136,18 +136,18 @@
       "debug give hp1",
       "debug give hp1",
       "debug give hp1",
-      "debug give hp1",
+      "debug give mp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 44468386,
+     "elapsed_ns": 45951881,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
     {
-     "Verdict": "FAIL",
-     "Reason": "1 potions are still in the pack",
-     "Intended": "plan columns [hp hp mp hp]: belt 0:hp1 1:hp1 2:mp1 3:hp1 (hp in hp columns, mp in the mp column), pack holds none of them",
-     "Observed": "before: pack [hp1x3 mp1x1]; fill moved 3 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1], pack [hp1x1]",
+     "Verdict": "PASS",
+     "Reason": "every potion belted in its plan column, pack empty of potions",
+     "Intended": "plan columns [0:hp 1:hp 2:mp 3:mp]: the 2 hp1 and 2 mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them",
+     "Observed": "before: pack [hp1x2 mp1x2]; fill moved 4 failed 0 err \u003cnil\u003e; after: belt [0:hp1 1:hp1 2:mp1 3:mp1], pack [none]",
      "cheats": [
       "debug clearinv",
       "debug give hp1",
@@ -156,10 +156,10 @@
       "debug give hp1",
       "debug give hp1",
       "debug give hp1",
-      "debug give hp1",
+      "debug give mp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 48636262,
+     "elapsed_ns": 44194668,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -173,7 +173,7 @@
     "debug give hp1",
     "debug give hp1",
     "debug give hp1",
-    "debug give hp1",
+    "debug give mp1",
     "debug give mp1"
    ]
   },
@@ -299,7 +299,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 349715252,
+     "elapsed_ns": 348411568,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -406,7 +406,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 335479916,
+     "elapsed_ns": 333890968,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -517,42 +517,42 @@
    "title": "drink by belt column",
    "verdict": "FAIL",
    "reason": "setup did not give the plan layout",
-   "intended": "belt 0:hp1 1:hp1 2:mp1 3:hp1",
-   "observed": "0:hp1 1:mp1 4:hp1 8:hp1",
+   "intended": "0:hp1 1:hp1 2:mp1 3:mp1",
+   "observed": "0:hp1 1:mp1 4:hp1 5:mp1",
    "runs": [
     {
      "Verdict": "FAIL",
      "Reason": "setup did not give the plan layout",
-     "Intended": "belt 0:hp1 1:hp1 2:mp1 3:hp1",
-     "Observed": "0:hp1 1:mp1 4:hp1 8:hp1",
+     "Intended": "0:hp1 1:hp1 2:mp1 3:mp1",
+     "Observed": "0:hp1 1:mp1 4:hp1 5:mp1",
      "cheats": [
       "debug clearinv",
       "debug give hp1",
       "debug give hp1",
       "debug give mp1",
-      "debug give hp1",
+      "debug give mp1",
       "debug stat 6 10240",
       "debug stat 8 8960"
      ],
-     "elapsed_ns": 26988338,
+     "elapsed_ns": 28054925,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
     {
      "Verdict": "FAIL",
      "Reason": "setup did not give the plan layout",
-     "Intended": "belt 0:hp1 1:hp1 2:mp1 3:hp1",
-     "Observed": "0:hp1 1:mp1 4:hp1 8:hp1",
+     "Intended": "0:hp1 1:hp1 2:mp1 3:mp1",
+     "Observed": "0:hp1 1:mp1 4:hp1 5:mp1",
      "cheats": [
       "debug clearinv",
       "debug give hp1",
       "debug give hp1",
       "debug give mp1",
-      "debug give hp1",
+      "debug give mp1",
       "debug stat 6 10240",
       "debug stat 8 8960"
      ],
-     "elapsed_ns": 21992349,
+     "elapsed_ns": 18652973,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -563,7 +563,7 @@
     "debug give hp1",
     "debug give hp1",
     "debug give mp1",
-    "debug give hp1",
+    "debug give mp1",
     "debug stat 6 10240",
     "debug stat 8 8960"
    ]

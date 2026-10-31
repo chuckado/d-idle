@@ -44,10 +44,8 @@ func (s *simLab) View(context.Context) (View, error) {
 	}
 	return v, nil
 }
-func (s *simLab) Tick(context.Context, int) error { return nil }
-func (s *simLab) PlanCols(context.Context) ([4]Kind, error) {
-	return sPlan, nil
-}
+func (s *simLab) Tick(context.Context, int) error           { return nil }
+func (s *simLab) PlanCols(context.Context) ([4]Kind, error) { return sPlan, nil }
 func (s *simLab) GiveGround(_ context.Context, r *Run, code string) error {
 	_, err := r.Cheat(context.Background(), "debug give "+code, "potion for the drill")
 	s.ground = append(s.ground, code)
@@ -81,10 +79,39 @@ func (s *simLab) free() (int, bool) {
 	}
 	return 0, false
 }
+
+// engineBox is the engine's own auto-belt rule seen live: a potion of the kind a column already holds goes above it,
+// a new kind takes the lowest free column.
+func (s *simLab) engineBox(code string) (int, bool) {
+	for b := 0; b < s.cap(); b++ {
+		if s.belt[b] == code {
+			for up := b % 4; up < s.cap(); up += 4 {
+				if _, used := s.belt[up]; !used {
+					return up, true
+				}
+			}
+		}
+	}
+	for col := 0; col < 4 && col < s.cap(); col++ {
+		if _, used := s.belt[col]; !used {
+			empty := true
+			for up := col; up < s.cap(); up += 4 {
+				if _, u := s.belt[up]; u {
+					empty = false
+				}
+			}
+			if empty {
+				return col, true
+			}
+		}
+	}
+	return s.free()
+}
+
 func (s *simLab) PickupRaw(context.Context) (int, error) {
 	n := len(s.ground)
 	for _, c := range s.ground {
-		if b, ok := s.free(); ok {
+		if b, ok := s.engineBox(c); ok {
 			s.belt[b] = c
 		} else {
 			s.pack[c]++
@@ -95,7 +122,7 @@ func (s *simLab) PickupRaw(context.Context) (int, error) {
 }
 func (s *simLab) DrainBelt(context.Context) error { s.belt = map[int]string{}; return nil }
 
-var sPlan = [4]Kind{"hp", "hp", "mp", "hp"}
+var sPlan = [4]Kind{"hp", "hp", "mp", "mp"}
 
 func (s *simLab) FillBelt(context.Context) (FillInfo, error) {
 	moved := 0

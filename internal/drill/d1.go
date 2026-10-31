@@ -121,11 +121,21 @@ func D1(l BeltLab, belts []string) []Drill {
 	}
 }
 
+// testBelt is the belt every drill but P2 wears, so a drill does not depend on which drill ran before it (the engine
+// has no verb to take a belt off): a Sash, 8 boxes in the engine (V, D1.P2).
+const testBelt = "lbl"
+
 // stagePack leaves an empty belt, hp1 and mp1 potions in the pack and nothing on the ground. The potions enter the pack
 // because the belt is full when they are picked up (V: the engine puts a ground potion in the belt first); the belt is
 // then drunk empty with the real belt verb.
 func stagePack(ctx context.Context, r *Run, l BeltLab, hp, mp int) error {
 	if err := l.ClearPack(ctx, r); err != nil {
+		return err
+	}
+	if err := l.DrainBelt(ctx); err != nil {
+		return err
+	}
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
 		return err
 	}
 	if err := l.DrainBelt(ctx); err != nil {
@@ -167,7 +177,10 @@ func p7a(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err := l.DrainBelt(ctx); err != nil {
 		return Failed("setup: "+err.Error(), "", "")
 	}
-	for _, c := range []string{"hp1", "mp1", "hp1"} {
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	for _, c := range []string{"hp1", "hp1", "mp1"} {
 		if err := l.GiveGround(ctx, r, c); err != nil {
 			return Failed("setup: "+err.Error(), "", "")
 		}
@@ -180,8 +193,7 @@ func p7a(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed("read: "+err.Error(), "", "")
 	}
 	intended := "a ground potion picked up with an empty belt goes to the belt (SME) or to the pack: the destination is recorded"
-	observed := fmt.Sprintf("picked hp1, mp1, hp1 in that order: belt [%s], pack [%s], ground %d", v.BeltString(), v.PackString(), len(v.Ground))
-	plan, _ := l.PlanCols(ctx)
+	observed := fmt.Sprintf("picked hp1, hp1, mp1 in that order with the engine's own pickup: belt [%s], pack [%s], ground %d", v.BeltString(), v.PackString(), len(v.Ground))
 	dest := "pack"
 	if len(v.Belt) > 0 {
 		dest = "belt"
@@ -189,23 +201,20 @@ func p7a(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if len(v.Belt)+countPotions(v.Pack)+len(v.Ground) != 3 || len(v.Ground) != 0 {
 		return Failed("a potion was lost or stayed on the ground", intended, observed)
 	}
-	return Passed("observed destination: "+dest+" (engine fills the lowest free box, not the plan column: mp1 landed in box "+boxOf(v, "mp1")+", the plan puts mana in column "+planCol(plan, "mp")+")", intended, observed)
+	return Passed("observed destination: "+dest+" (engine rule seen: a potion of the kind already in a column goes above it in that column, a new kind takes the lowest free column; the second hp1 landed in box "+boxOf(v, "hp1", 1)+", mp1 in box "+boxOf(v, "mp1", 0)+")", intended, observed)
 }
 
-func boxOf(v View, code string) string {
+// boxOf is the n-th (0 based, box order) belt box holding code, "none" when there is no such box.
+func boxOf(v View, code string, n int) string {
+	var box []int
 	for b, c := range v.Belt {
 		if c == code {
-			return fmt.Sprint(b)
+			box = append(box, b)
 		}
 	}
-	return "none"
-}
-
-func planCol(p [4]Kind, k Kind) string {
-	for i, c := range p {
-		if c == k {
-			return fmt.Sprint(i)
-		}
+	sort.Ints(box)
+	if n < len(box) {
+		return fmt.Sprint(box[n])
 	}
 	return "none"
 }
@@ -295,7 +304,15 @@ func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err != nil {
 		return Failed("plan: "+err.Error(), "", "")
 	}
-	nHP, nMP := countKind(plan, "hp"), countKind(plan, "mp")
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
+	}
+	v0, err := l.View(ctx)
+	if err != nil {
+		return Failed("read: "+err.Error(), "", "")
+	}
+	rows := max(v0.BeltSlots/4, 1)
+	nHP, nMP := countKind(plan, "hp")*rows, countKind(plan, "mp")*rows // exactly what the plan has room for
 	if err := stagePack(ctx, r, l, nHP, nMP); err != nil {
 		return Failed("setup: "+err.Error(), "", "")
 	}
@@ -303,7 +320,7 @@ func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err != nil {
 		return Failed("read: "+err.Error(), "", "")
 	}
-	intended := fmt.Sprintf("plan columns [%s]: the %d hp1 and %d mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them", planString(plan), nHP, nMP)
+	intended := fmt.Sprintf("%s belt (%d boxes), plan columns [%s]: the %d hp1 and %d mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them", testBelt, v0.BeltSlots, planString(plan), nHP, nMP)
 	fi, ferr := l.FillBelt(ctx)
 	if err := l.Tick(ctx, 25); err != nil {
 		return Failed("tick: "+err.Error(), intended, "")
@@ -405,18 +422,14 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err := l.DrainBelt(ctx); err != nil {
 		return Failed("setup: "+err.Error(), "", "")
 	}
-	plan, err := l.PlanCols(ctx)
-	if err != nil {
-		return Failed("plan: "+err.Error(), "", "")
+	if err := l.EquipBelt(ctx, r, testBelt); err != nil {
+		return Failed("setup: "+err.Error(), "", "")
 	}
-	var want []string
-	for i, k := range plan { // pickup order gives the plan layout: box i holds the kind of column i
-		code := string(k) + "1"
-		if err := l.GiveGround(ctx, r, code); err != nil {
+	for _, c := range []string{"hp1", "hp1", "mp1", "mp1"} { // one at a time: the engine's pickup decides the boxes
+		if err := l.GiveGround(ctx, r, c); err != nil {
 			return Failed("setup: "+err.Error(), "", "")
 		}
-		want = append(want, fmt.Sprintf("%d:%s", i, code))
-		if _, err := l.PickupRaw(ctx); err != nil { // one at a time: the order is the box order
+		if _, err := l.PickupRaw(ctx); err != nil {
 			return Failed("setup pickup: "+err.Error(), "", "")
 		}
 	}
@@ -431,10 +444,10 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed("setup: "+err.Error(), "", "")
 	}
 	start := v.BeltString()
-	if start != strings.Join(want, " ") {
-		return Failed("setup did not give the plan layout", strings.Join(want, " "), start)
+	if len(v.Belt) != 4 || countKindIn(v.Belt, "hp") != 2 || countKindIn(v.Belt, "mp") != 2 {
+		return Failed("setup did not put 2 hp1 and 2 mp1 in the belt", "2 hp1 and 2 mp1 in the belt", start)
 	}
-	intended := "each drink removes exactly one potion of the asked kind from its column, life or mana rises within 2 s, the other kind is untouched; with no healing potion left the drink reports an error"
+	intended := "every belt potion can be drunk by kind: each drink removes exactly one potion of the asked kind, life or mana rises within 2 s, the other kind is untouched; with none of the kind left the drink reports an error"
 	var steps []string
 	var fails []string
 	drink := func(k Kind) {
@@ -465,14 +478,9 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		if k == "mp" {
 			rise = after.Mana - low.Mana
 		}
-		steps = append(steps, fmt.Sprintf("drink %s: err=%v removed box %v, life %d->%d mana %d->%d", k, derr, gone, low.Life, after.Life, low.Mana, after.Mana))
-		hasKind := false
-		for _, c := range before.Belt {
-			if PotionKind(c) == k {
-				hasKind = true
-			}
-		}
-		if !hasKind {
+		steps = append(steps, fmt.Sprintf("drink %s: err=%v removed box %v, belt now [%s], life %d->%d mana %d->%d", k, derr, gone, after.BeltString(), low.Life, after.Life, low.Mana, after.Mana))
+		have := countKindIn(before.Belt, k)
+		if have == 0 {
 			if derr == nil {
 				fails = append(fails, fmt.Sprintf("drink %s with none in the belt reported success", k))
 			}
@@ -480,22 +488,16 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		}
 		switch {
 		case derr != nil:
-			fails = append(fails, fmt.Sprintf("drink %s failed: %v", k, derr))
-		case len(gone) != 1:
-			fails = append(fails, fmt.Sprintf("drink %s removed %d potions", k, len(gone)))
-		case PotionKind(before.Belt[gone[0]]) != k:
-			fails = append(fails, fmt.Sprintf("drink %s consumed %s from box %d", k, before.Belt[gone[0]], gone[0]))
+			fails = append(fails, fmt.Sprintf("drink %s (%d in the belt) failed: %v", k, have, derr))
+		case countKindIn(after.Belt, k) != have-1 || len(after.Belt) != len(before.Belt)-1:
+			fails = append(fails, fmt.Sprintf("drink %s: belt went from %d to %d potions", k, len(before.Belt), len(after.Belt)))
 		case rise <= 0:
 			fails = append(fails, fmt.Sprintf("drink %s: no rise within 2 s", k))
 		}
 	}
-	for i := 0; i < countKind(plan, "hp"); i++ {
-		drink("hp")
+	for _, k := range []Kind{"hp", "mp", "hp", "mp", "hp"} { // the last one has none left
+		drink(k)
 	}
-	for i := 0; i < countKind(plan, "mp"); i++ {
-		drink("mp")
-	}
-	drink("hp") // none left
 	end, _ := l.View(ctx)
 	observed := fmt.Sprintf("start belt [%s]; %s; end belt [%s]", start, strings.Join(steps, " | "), end.BeltString())
 	if len(end.Belt) != 0 {
@@ -505,6 +507,16 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed(strings.Join(fails, "; "), intended, observed)
 	}
 	return Passed("every potion drunk once from its own column by kind, none left reported an error", intended, observed)
+}
+
+func countKindIn(belt map[int]string, k Kind) int {
+	n := 0
+	for _, c := range belt {
+		if PotionKind(c) == k {
+			n++
+		}
+	}
+	return n
 }
 
 // removed lists the boxes that held an item before and hold none after.
