@@ -1,26 +1,45 @@
-# Evidence pack: PR candidate "Town Portal from the pack opens at once" (agent DECOMPTOME, 2026-10-31)
+# Evidence pack: fix/tome-use (for the user's go / no-go)
 
-> status: candidate, not ready. Proof: [pr-tome-proof.md](pr-tome-proof.md); body: [pr-tome-draft.md](pr-tome-draft.md); trace: [town-portal-trace.md](town-portal-trace.md). Nothing pushed, posted or filed.
+> status: current (agent TOMEPR, 2026-10-31; first pack DECOMPTOME). One page. Detail: [pr-tome-proof.md](pr-tome-proof.md); body: [pr-tome-draft.md](pr-tome-draft.md); trace: [town-portal-trace.md](town-portal-trace.md); standard: docs/process/upstream-pr-standard.md. posted: nothing.
 
-## PROOF: incomplete
+**Claim.** A Town Portal scroll or a charged tome used from the pack opens the portal on the click tick in any live mode (no SC), closes the old pair first and spends the charge only if the portal opened; an item in hand refuses it (game.exe `FUN_0055e170` -> `FUN_005be290`). d2d cast SC, dropped the use while busy, spent the charge at the click and had no item-in-hand test.
 
-Reason: the game.exe side is proven by a native run, but there is no d2d patch, no after-run, no upstream test run and no independent verifier yet.
+**Proof summary.** game.exe's own `FUN_0054d750` chain (dispatcher, `FUN_0057eec0`, `FUN_0054b1e0`, `FUN_0055e170`, `FUN_005bf240`, `FUN_005be290`) runs in upstream's emulator (`tools/emu/tome_use.py`, in the branch; hooks listed in its docstring) against d2d's real `World::apply(cmd::UseItem)` (`test_game --tome-use`), same cases, joined by `diff`. Every link V (read with disasm.py and run).
 
-The claim in one sentence: a Town Portal scroll or a charged tome used from the inventory opens the portal on that tick in any live mode and spends the charge only on success; d2d casts SC instead, drops the use while busy and spends the charge at the click.
+**Numbers.**
 
-| Gate (upstream-pr-standard.md section 7) | Status |
-|---|---|
-| 1 Differential | game.exe native (`FUN_0054d750` and its chain), 108,000 cases (exhaustive grid + 100,000 random, seed 7); before 22,395 differ; after not run |
-| 2 Addresses | every link V (disasm.py read and run); pr_guard not run (no commit) |
-| 3 Statistics | soak lines only as motivation (town-portal-trace.md section 3), not proof |
-| 4 Scope | one claim; their tests, presubmit, d2ddet not run |
-| 5 Verifier | not done |
-| 6 Limits | listed in the proof, section 4.5 |
-| 7 Their rules | the draft follows them; no commit exists |
-| 8 Spacing | waits behind the open candidates (README "Upstream PRs") |
+| Scenario | Cases | before (d72b97a7) | claim A (112f5de0) | claim B (c56670b9) |
+|---|---|---|---|---|
+| Grid (tbk / tsc x 25 charges x town x in hand x modes 0..19 x spot) + 100,000 random, seed 7 | 108,000 | 29,551 | 23,127 | 0 (md5 equal) |
+| 200,000 random + grid, seed 31 | 208,000 | 56,616 | 44,392 | 0 |
 
-## Recommendation
+Seed 7 classes before: busy + spot (game opens now, d2d nothing) 8,360; busy, no spot (game closes the old pair, d2d nothing) 8,337; idle + spot (game now, d2d at tick 9) 3,194; idle, no spot (game keeps the charge and closes the old pair, d2d spends it and keeps the pair) 3,236; item in hand (game nothing, d2d casts) 6,424.
 
-No-go as it stands; worth finishing: it changes how often a d2d town portal works under attack, which moves trips and deaths in our soaks. Next card: write the patch on `fix/tome-use`, add `test_game --tome-use`, run the after-differential to 0, then the verifier. The bot fix (FIXPORTAL) must not wait for it: it should handle d2d's current rule (click when idle, success = object 59).
+Their checks on c56670b9: `test_game` rc 0 (29 OK, two new blocks), `test_combat` rc 0, `test_rules` rc 0 (Release, `D2D_WERROR` on), `pr_guard.py upstream/main` 0 FAIL 0 WARN, `presubmit.py --quick` 0 FAIL 4 WARN (ruff absent; build by hand; two sibling questions answered in the body). Three commits authored by the user, body one line `Agent: Claude Code`, no trailer.
 
-Push and PR commands: none yet (no branch with commits).
+**Commands (reviewer re-runs on their copy).**
+
+```sh
+python3 tools/pr_guard.py && cmake --build build && ctest --test-dir build --output-on-failure
+cd tools/emu && uv run python tome_use.py gen 100000 7 > cases.tsv && uv run python tome_use.py game cases.tsv > g.txt
+../../build/tests/test_game --tome-use cases.tsv | grep -E '^[0-9]+ ' | diff g.txt -     # empty
+```
+
+**What the bot gains.** On d2d a portal read under attack works as in game.exe (no dropped click while in get-hit, no charge lost to a cut cast): fewer failed trips and deaths in soaks (town-portal-trace.md section 3: 119 "tome still charged" failures fit the busy drop or a cut cast). Not measured; the bot fix (FIXPORTAL) must still handle today's d2d.
+
+**Residual risks.**
+- State 0x36 and level 0x88 not compared (ponytail); belt / stash items and the game.exe client side outside the generator; `FUN_00628c20` and the spot search hooked.
+- `tools/d2ddet` hashes not run.
+- Branch on upstream/main 27113a31; fetch again right before a push.
+
+**Verifier.** PENDING.
+
+**PROOF: PENDING.**
+
+**Push and PR commands (NOT run; each needs the user's go).**
+
+```sh
+git -C <pr checkout>/tome push origin fix/tome-use
+gh pr create -R psi29a/d2decomped --head shatteredeagle:fix/tome-use --base main \
+  --title "A Town Portal read from the pack opens at once, as game.exe does" --body-file <the body in pr-tome-draft.md>
+```
