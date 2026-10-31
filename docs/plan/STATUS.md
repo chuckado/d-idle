@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [cr149](../../openspec/changes/cr149/) | in-progress | CR149 | `docs/research/pr-tome-evidence-pack.md` | `upstream-pr:tome` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -66,6 +67,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 17 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change cr149: pr_guard 0 FAIL 0 WARN, upstream tests, both oracles unchanged before the push
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -89,6 +91,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 70639f8 10-31 14:36 `Merge agent/fixobj: d2d field objects listed and operable, Pause steps game under lockstep` (fix-obj)
 - 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
@@ -98,5 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2ba74e4 10-31 13:37 `Merge agent/forkport: fork port; archive forkport; OWNERS; STATUS; BACKLOG` (forkport)
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
-- c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 <!-- statusgen:end -->
