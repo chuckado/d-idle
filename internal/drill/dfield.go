@@ -23,12 +23,16 @@ type ObjOp struct {
 
 // FightSpec is one scripted fight: a level, a spawn list, the character's life and mana set, the fight's time limit.
 type FightSpec struct {
-	Level   int
-	Spawns  []string // arguments of `debug spawn`, e.g. "fallenshaman1 2 near"
-	Life    int      // maximum and current life by cheat (0: leave the character as is)
-	Mana    int      // current mana by cheat (0: leave)
-	Potions bool     // belt holds healing and mana potions
-	Clear   time.Duration
+	Level          int
+	Spawns         []string // arguments of `debug spawn`, e.g. "fallenshaman1 2 near"
+	Life           int      // maximum and current life by cheat (0: leave the character as is)
+	Mana           int      // current mana by cheat (0: leave)
+	ManaAt         int      // like LifeAt for mana
+	ThenClear      bool     // after the decision, run Clear too (hit effect and kills)
+	SampleMissiles bool     // before the fight, sample debug missiles and Snapshot.Missiles with the character idle
+	Kill           bool     // debug kill after the arrival: the level's natural monsters are gone (they give experience)
+	Potions        bool     // belt holds healing and mana potions
+	Clear          time.Duration
 	// LifeAt, when set, lowers the life to this value as soon as the first spawned monster is within reach (P29 retreat)
 	LifeAt int
 }
@@ -52,9 +56,14 @@ type FightInfo struct {
 	ManaDrinks                                int
 	Ignores                                   []string
 	Mons                                      string
+	LogHead                                   []string // the first non-decision log lines of the call
 }
 
 func (f FightInfo) String() string {
+	return f.base() + "; log: " + strings.Join(f.LogHead, " / ")
+}
+
+func (f FightInfo) base() string {
 	return fmt.Sprintf("kills %d avoided %d skipped %d ignored %d potions %d; casts %d cmd-skill %d dodges %d kites %d approaches %d; life min %d end %d mana %d->%d; spawned %d alive %d in %v err %q town=%v dead=%v",
 		f.Kills, f.Avoided, f.Skipped, f.Ignored, f.Potions, f.Casts, f.CmdSkill, f.Dodges, f.Kites, f.Approaches, f.LifeMin, f.LifeEnd, f.ManaStart, f.ManaEnd, f.Spawned, f.Alive, f.Elapsed.Round(time.Second), f.Err, f.InTown, f.Dead)
 }
@@ -89,7 +98,6 @@ func F(l FieldLab) []Drill {
 	return []Drill{
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
-		obj("H.obj.cage", "Cain's gibbet in Tristram: listed (class 26), operated by the bot's Interact", "38", "gibbet"),
 		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: arrive in Black Marsh from the Forgotten Tower mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			return fMouth(ctx, r, l, 20, 6, "Forgotten Tower to Black Marsh")
 		}},
@@ -101,6 +109,7 @@ func F(l FieldLab) []Drill {
 		fight("D5.p27", "P27", "target selection: a pack with a champion at clvl 1, the bot's choice", fP27),
 		fight("D5.p29", "P29", "retreat: a pack at low life, the bot's chicken and heal decision", fP29),
 		fight("D5.p28", "P28", "mana potion in a fight, P26 hit effect on a target", fP28),
+		obj("H.obj.cage", "Cain's gibbet in Tristram: listed (class 26), operated by the bot's Interact", "38", "gibbet"),
 	}
 }
 
@@ -147,13 +156,13 @@ func countLines(lines []string, subs ...string) int {
 // fDodge is the fix-missile and fix-missile2 live proof (D5 dodge): Fallen Shamans (firebolt-like shafire missiles) beside
 // a character with plenty of life; the fight loop must dodge at least once and send about one cast command per cast.
 func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"fallenshaman1 3 near"}, Life: 400, Mana: 0, Potions: true, Clear: 90 * time.Second})
+	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"fallenshaman1 3 near"}, SampleMissiles: true, Life: 400, Mana: 0, Potions: true, Clear: 90 * time.Second})
 	per := 0.0
 	if fi.Casts > 0 {
 		per = float64(fi.CmdSkill) / float64(fi.Casts)
 	}
 	intended := "dodges > 0 with the d2d missile listing, cast commands per cast about 1.0 (CastGapMs 650)"
-	obs := fmt.Sprintf("%s; cmd skill per cast %.2f; dodging lines %d", fi, per, countLines(fi.Log, "dodging"))
+	obs := fmt.Sprintf("%s; cmd skill per cast %.2f; dodging lines %d; %s", fi, per, countLines(fi.Log, "dodging"), strings.Join(firstN(fi.Decisions, 3), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("dodge>0=%v perCast<=1.3=%v", fi.Dodges > 0, per > 0 && per <= 1.3)}
 	switch {
 	case fi.Spawned == 0:
@@ -171,7 +180,7 @@ func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP27(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 2 near", "fallen1 1 near champion"}, Life: 200, Potions: true, Clear: 90 * time.Second})
+	fi := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 2 near", "fallen1 1 near champion"}, Life: 200, Potions: true, Clear: 90 * time.Second})
 	intended := "the bot fights the nearest reachable threat and avoids or handles the champion by its danger table (recorded, no fixed verdict)"
 	obs := fmt.Sprintf("%s; champion: %s; ignores [%s]; decisions %s", fi, fi.Champion, strings.Join(fi.Ignores, "; "), strings.Join(firstN(fi.Decisions, 12), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v", fi.Kills > 0)}
@@ -205,9 +214,9 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 2 near"}, Life: 200, Mana: 7, Potions: true, Clear: 60 * time.Second})
-	intended := "low mana in a fight: the fighter drinks a mana potion (belt mana -1) and the cast effect kills the target"
-	obs := fmt.Sprintf("%s; mana drinks %d; potion lines [%s]", fi, fi.ManaDrinks, strings.Join(fi.PotionLines, "; "))
+	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"zombie1 2 near"}, Life: 200, ManaAt: 7, ThenClear: true, Potions: true, Clear: 60 * time.Second})
+	intended := "mana 7 with monsters listed: Safety decides drink-mana, the belt mana potion is drunk (belt mana -1, mana up); then the casts kill the target (P26 hit effect)"
+	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 4), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
 	switch {
 	case fi.Spawned == 0:

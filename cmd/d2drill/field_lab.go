@@ -68,6 +68,9 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 			op.Names = strconv.Itoa(p.Index) // the index, replaced below by the names when nothing matched
 		}
 	}
+	if level >= 30 { // Tristram has monsters: the throwaway must survive the walk to the cage
+		_ = l.Invincible(ctx, r)
+	}
 	if op.Found == "" { // presets only list the rooms near the player: find the object in `debug objects`, stand beside it, read the presets again
 		out, _ := r.Cheat(ctx, "debug objects", "read-only listing: where an object of this kind stands on the level")
 		for _, ln := range strings.Split(out, "\n") {
@@ -144,9 +147,25 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		fi.Err = msg + ": " + err.Error()
 		return fi
 	}
+	if sn, err := l.be.Env.Snapshot(); err == nil && sn.Player != nil && combat.IsDead(sn.Player) {
+		if err := l.rig.Fighter.Respawn(ctx, 40*time.Second); err != nil { // Esc: the bot's own respawn, back in town
+			return fail("respawn", err)
+		}
+		_ = l.Tick(ctx, 25)
+	}
 	if err := l.Goto(ctx, r, s.Level); err != nil {
 		return fail("goto", err)
 	}
+	if s.Kill {
+		if _, err := r.Cheat(ctx, "debug kill", "clear the level's natural monsters (their experience is a side effect): the spawned ones are the fight under test, a crowd would trigger the chicken"); err != nil {
+			return fail("kill", err)
+		}
+		_ = l.Tick(ctx, 60)
+	}
+	defer func() { // leave the field: monsters left behind would kill the next drill's character
+		_, _ = r.Cheat(ctx, "debug goto 1", "back to the Rogue Encampment after the fight: the spawned monsters stay in the field")
+		_ = l.Tick(ctx, 25)
+	}()
 	if s.Life > 0 {
 		for _, v := range []string{fmt.Sprintf("debug stat 7 %d", s.Life*256), fmt.Sprintf("debug stat 6 %d", s.Life*256)} {
 			if _, err := r.Cheat(ctx, v, fmt.Sprintf("life %d: the fight must not kill the throwaway (or, at 40, be the stock life of a fresh Sorceress)", s.Life)); err != nil {
@@ -180,9 +199,16 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	}
 	_ = l.Tick(ctx, 5)
 	fi.Spawned, fi.Mons = l.monstersAlive(ctx)
-	if s.LifeAt > 0 { // retreat decision: no Clear (a chicken would leave the game), the Fighter's own Safety on the snapshot
-		if err := l.SetLife(ctx, r, s.LifeAt); err != nil {
-			return fail("life", err)
+	if s.LifeAt > 0 || s.ManaAt > 0 { // a decision with monsters in the snapshot: no Clear (a chicken would leave the game), the Fighter's own Safety
+		if s.LifeAt > 0 {
+			if err := l.SetLife(ctx, r, s.LifeAt); err != nil {
+				return fail("life", err)
+			}
+		}
+		if s.ManaAt > 0 {
+			if err := l.SetMana(ctx, r, s.ManaAt); err != nil {
+				return fail("mana", err)
+			}
 		}
 		l.be.Env.Clock.Sleep(1500 * time.Millisecond)
 		_ = l.Tick(ctx, 30)
@@ -190,9 +216,10 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		if err != nil {
 			return fail("snapshot", err)
 		}
+		_, mp0 := l.beltKinds(snap)
+		fi.ManaStart, fi.LifeEnd = snap.Player.Mana, snap.Player.Life
 		act := l.rig.Fighter.Safety(snap)
-		fi.Decisions = append(fi.Decisions, "safety at life "+strconv.Itoa(snap.Player.Life)+": "+act.String())
-		fi.LifeEnd = snap.Player.Life
+		fi.Decisions = append(fi.Decisions, fmt.Sprintf("safety at life %d mana %d with %d hostile monsters listed: %s", snap.Player.Life, snap.Player.Mana, fi.Spawned, act.String()))
 		switch act {
 		case combat.Chicken:
 			fi.Err = "chicken decided (not run: it would leave the game)"
@@ -207,24 +234,71 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 			_ = l.Tick(ctx, 60)
 			if s2, e2 := l.be.Env.Snapshot(); e2 == nil && s2.Player != nil {
 				fi.InTown = s2.Player.InTown()
-				fi.LifeEnd = s2.Player.Life
+				fi.LifeEnd, fi.ManaEnd = s2.Player.Life, s2.Player.Mana
+				_, mp1 := l.beltKinds(s2)
+				fi.Decisions = append(fi.Decisions, fmt.Sprintf("belt mana potions %d -> %d, mana %d -> %d", mp0, mp1, fi.ManaStart, s2.Player.Mana))
+				if act == combat.DrinkMana && mp1 == mp0-1 && s2.Player.Mana > fi.ManaStart {
+					fi.ManaDrinks++
+				}
 			}
 		}
 		fi.Alive, _ = l.monstersAlive(ctx)
-		return fi
+		if !s.ThenClear {
+			return fi
+		}
+	}
+	if s.SampleMissiles { // does the bot's snapshot list the shamans' missiles at all? (idle character, 24 samples of 5 ticks)
+		raw, snapMax := 0, 0
+		for i := 0; i < 24; i++ {
+			_ = l.Tick(ctx, 5)
+			if ml, err := l.be.Client.Missiles(ctx); err == nil {
+				n := 0
+				for _, m := range ml.Items {
+					if m.Speed > 0 && m.OwnerType == 1 {
+						n++
+					}
+				}
+				raw = max(raw, n)
+			}
+			if sn, err := l.be.Env.Snapshot(); err == nil {
+				snapMax = max(snapMax, len(sn.Missiles))
+			}
+		}
+		fi.Missiles = snapMax
+		fi.Decisions = append(fi.Decisions, fmt.Sprintf("idle sampling: debug missiles hostile moving rows max %d, Snapshot.Missiles max %d", raw, snapMax))
 	}
 	sn0, err := l.be.Env.Snapshot()
 	if err != nil || sn0.Player == nil {
 		return fail("snapshot", errors.New("no player"))
 	}
 	fi.ManaStart, fi.LifeMin = sn0.Player.Mana, sn0.Player.Life
+	fi.Decisions = append(fi.Decisions, fmt.Sprintf("pre-clear player mode %d area %d", sn0.Player.Mode, sn0.Player.Area))
+	if rr, e := l.be.Client.Do(ctx, "dump player"); e == nil && rr != nil {
+		fi.Decisions = append(fi.Decisions, "dump player: "+strings.Join(rr.Lines, " ")+rr.Rest)
+	}
 	cmd0 := l.skillCmds()
 	mark := l.rec.Mark()
 	to := s.Clear
 	if to == 0 {
 		to = 60 * time.Second
 	}
-	res, cerr := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: to})
+	var res combat.ClearResult
+	var cerr error
+	for round := 0; round < 3; round++ { // the first call can run before the level map is built (everything "unreachable"): ask again
+		var r1 combat.ClearResult
+		r1, cerr = l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: to})
+		res.Kills += r1.Kills
+		res.Avoided = max(res.Avoided, r1.Avoided)
+		res.Skipped = max(res.Skipped, r1.Skipped)
+		res.Ignored = r1.Ignored
+		res.Potions += r1.Potions
+		res.Elapsed += r1.Elapsed
+		if cerr != nil || res.Kills > 0 || r1.TimedOut {
+			break
+		}
+		_ = l.Tick(ctx, 100)
+		l.rig.Fighter.ForgetIgnored()
+	}
 	fi.Log = l.rec.Since(mark)
 	fi.CmdSkill = l.skillCmds() - cmd0
 	fi.Kills, fi.Avoided, fi.Skipped, fi.Ignored, fi.Potions, fi.Elapsed = res.Kills, res.Avoided, res.Skipped, len(res.Ignored), res.Potions, res.Elapsed
@@ -237,19 +311,25 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 			fi.Err += fmt.Sprintf(" (player mode %d life %d/%d state %v)", sn.Player.Mode, sn.Player.Life, sn.Player.MaxLife, sn.State)
 		}
 	}
+	telem := false
 	for _, ln := range fi.Log {
+		if !strings.HasPrefix(ln, "combat decision") && len(fi.LogHead) < 14 {
+			fi.LogHead = append(fi.LogHead, ln)
+		}
 		switch {
-		case strings.HasPrefix(ln, "fight area="):
-			fi.Casts, _ = kv(ln, "casts")
-			fi.Dodges, _ = kv(ln, "dodges")
-			fi.Kites, _ = kv(ln, "kites")
-			fi.Approaches, _ = kv(ln, "approaches")
+		case strings.HasPrefix(ln, "combat fight area=") || strings.HasPrefix(ln, "fight area="):
+			c, _ := kv(ln, "casts")
+			d, _ := kv(ln, "dodges")
+			k, _ := kv(ln, "kites")
+			a, _ := kv(ln, "approaches")
+			fi.Casts, fi.Dodges, fi.Kites, fi.Approaches = fi.Casts+c, fi.Dodges+d, fi.Kites+k, fi.Approaches+a
+			telem = true
 			if m, ok := kv(ln, "minlife"); ok {
 				fi.LifeMin = m // percent
 			}
 		case strings.HasPrefix(ln, "combat decision"):
 			fi.Decisions = append(fi.Decisions, strings.TrimPrefix(ln, "combat decision "))
-		case strings.HasPrefix(ln, "potion "):
+		case strings.HasPrefix(ln, "combat potion "):
 			fi.PotionLines = append(fi.PotionLines, ln)
 			if strings.Contains(ln, "kind=mana") {
 				fi.ManaDrinks++
@@ -258,6 +338,12 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		if strings.Contains(strings.ToLower(ln), "champion") {
 			fi.Champion = ln
 		}
+	}
+	if !telem {
+		fi.Casts = countLog(fi.Decisions, "act=cast ")
+	}
+	if d := countLog(fi.Log, "combat dodging"); d > fi.Dodges {
+		fi.Dodges = d
 	}
 	if fi.Champion == "" {
 		fi.Champion = "no log line names it"
@@ -302,4 +388,14 @@ func (l *lab) TouchWaypoint(ctx context.Context, reach float64) (bool, []int, st
 		msg = err.Error()
 	}
 	return t, n.DrainActivated(), msg
+}
+
+func countLog(lines []string, sub string) int {
+	n := 0
+	for _, l := range lines {
+		if strings.Contains(l, sub) {
+			n++
+		}
+	}
+	return n
 }
