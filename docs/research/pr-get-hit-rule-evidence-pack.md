@@ -119,3 +119,5 @@ Draft reply, thread F2 (fight.cpp:4876-4878, not posted):
 
 Agent: Claude Code
 ```
+- posted: 2026-10-31 round 2 commits 309ba7af (F2 armor absorption per record) and f28eeb1a (F1 pets and monster foes per blow) pushed to PR #134, plain push, no force (PR head f28eeb1a, 6 commits, 8 files) https://github.com/psi29a/d2decomped/pull/134/commits/f28eeb1a go: user 'push 134 round 2' (2026-10-31)
+- posted: 2026-10-31 replies to CodeRabbit round 2 (F1, F2) https://github.com/psi29a/d2decomped/pull/134#discussion_r4432266268 , https://github.com/psi29a/d2decomped/pull/134#discussion_r4432266342 go: user 'push 134 round 2' (2026-10-31)
