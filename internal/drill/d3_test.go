@@ -37,11 +37,11 @@ func (s *simWP) TakeWaypoint(_ context.Context, level int) WPCall {
 	return WPCall{Ticks: 300, Clicks: 3}
 }
 
-func TestD3(t *testing.T) {
+func TestDW(t *testing.T) {
 	run := func(s *simWP) map[string]Verdict {
 		s.w = &fakeWorld{}
 		out := map[string]Verdict{}
-		for _, d := range D3(s) {
+		for _, d := range DW(s) {
 			if d.Do == nil {
 				out[d.ID] = Blocked
 				continue
@@ -53,19 +53,19 @@ func TestD3(t *testing.T) {
 	}
 	got := run(&simWP{area: 1})
 	for id, v := range got {
-		if v != Pass && id != "D3.a3" {
+		if v != Pass && id != "DW.a3" {
 			t.Errorf("%s = %s", id, v)
 		}
 	}
 	// the log signature: the verb finds no unit, nothing travels
 	bad := run(&simWP{area: 1, broken: true})
-	if bad["D3.a1"] != Fail || bad["D3.c"] != Fail {
+	if bad["DW.a1"] != Fail || bad["DW.c"] != Fail {
 		t.Errorf("broken verb: %v", bad)
 	}
-	if bad["D3.b"] != Pass {
+	if bad["DW.b"] != Pass {
 		t.Errorf("inactive drill with a failing verb should pass: %v", bad)
 	}
-	if !strings.Contains(D3(&simWP{})[1].Title, "Cold Plains") {
+	if !strings.Contains(DW(&simWP{})[1].Title, "Cold Plains") {
 		t.Error("drill order")
 	}
 }

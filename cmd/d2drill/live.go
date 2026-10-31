@@ -47,7 +47,7 @@ type lab struct {
 	mu  sync.Mutex
 	seq int
 
-	wpNav *nav.Navigator // D3: the bot's navigator with the spy in front (wp_lab.go)
+	wpNav *nav.Navigator // DW: the bot's navigator with the spy in front (wp_lab.go)
 	wpSpy *spy
 }
 

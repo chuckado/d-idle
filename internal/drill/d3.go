@@ -24,7 +24,7 @@ type WPCall struct {
 	Log    []string
 }
 
-// WPLab is the instance as the D3 drills use it. The verb is shared code (internal/nav), called as the bot calls it.
+// WPLab is the instance as the DW drills use it. The verb is shared code (internal/nav), called as the bot calls it.
 type WPLab interface {
 	WView(ctx context.Context) (WPView, error)
 	Tick(ctx context.Context, n int) error
@@ -38,23 +38,23 @@ const missingAct = "act 2 unlocked on the throwaway character (cheat `debug act 
 // Arrival is "x+3, y+3" of the waypoint (trace), about 4 subtiles away; 10 leaves room for the walk-off.
 const wpArrivalMax = 10
 
-// D3 returns the waypoint group (P23). Order matters: D3.b runs before anything activates a waypoint (the character
+// DW returns the waypoint group (P23). Order matters: DW.b runs before anything activates a waypoint (the character
 // is fresh per process).
-func D3(l WPLab) []Drill {
+func DW(l WPLab) []Drill {
 	lim := 10 * time.Minute
 	t := func(from, to int, id, title string) Drill {
 		return Drill{ID: id, Primitive: "P23", Title: title, Limit: lim,
 			Do: func(ctx context.Context, r *Run) Outcome { return d3travel(ctx, r, l, from, to) }}
 	}
 	return []Drill{
-		{ID: "D3.b", Primitive: "P23", Title: "waypoint not activated: the verb fails gracefully (error, area unchanged, panel closed)", Limit: lim,
+		{ID: "DW.b", Primitive: "P23", Title: "waypoint not activated: the verb fails gracefully (error, area unchanged, panel closed)", Limit: lim,
 			Do: func(ctx context.Context, r *Run) Outcome { return d3inactive(ctx, r, l) }},
-		t(1, 3, "D3.a1", "Rogue Encampment to Cold Plains (act 1 row 1)"),
-		t(1, 35, "D3.a2", "Rogue Encampment to Catacombs level 2 (act 1 row 8)"),
-		{ID: "D3.a3", Primitive: "P23", Title: "Rogue Encampment to Lut Gholein (cross act: tab 2 row 0)", Needs: []string{missingAct}},
-		t(40, 46, "D3.a4", "Lut Gholein to Canyon of the Magi (act 2 row 8)"),
-		t(40, 52, "D3.a5", "Lut Gholein to Palace Cellar level 1 (act 2 row 6)"),
-		{ID: "D3.c", Primitive: "P23", Title: "second use right after an arrival: d2d refuses inside 10 s, the verb waits and succeeds", Limit: lim,
+		t(1, 3, "DW.a1", "Rogue Encampment to Cold Plains (act 1 row 1)"),
+		t(1, 35, "DW.a2", "Rogue Encampment to Catacombs level 2 (act 1 row 8)"),
+		{ID: "DW.a3", Primitive: "P23", Title: "Rogue Encampment to Lut Gholein (cross act: tab 2 row 0)", Needs: []string{missingAct}},
+		t(40, 46, "DW.a4", "Lut Gholein to Canyon of the Magi (act 2 row 8)"),
+		t(40, 52, "DW.a5", "Lut Gholein to Palace Cellar level 1 (act 2 row 6)"),
+		{ID: "DW.c", Primitive: "P23", Title: "second use right after an arrival: d2d refuses inside 10 s, the verb waits and succeeds", Limit: lim,
 			Do: func(ctx context.Context, r *Run) Outcome { return d3second(ctx, r, l) }},
 	}
 }

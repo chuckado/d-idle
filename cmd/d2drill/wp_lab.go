@@ -13,7 +13,7 @@ import (
 // wpNavigator is the bot's navigator (d2denv.Backend.Navigator, what cmd/d2bot hands the goals as Mover) with the spy in
 // front of the input. It lives as long as the lab: the arrival clock of the waypoint cooldown is part of its state.
 // TakeWaypoint is shared code (internal/nav), called here exactly as internal/bot and internal/town call it, so no
-// copy of bot code is needed for the D3 drills.
+// copy of bot code is needed for the DW drills.
 func (l *lab) wpNavigator() (*nav.Navigator, *spy) {
 	if l.wpNav == nil {
 		e := *l.be.Env
