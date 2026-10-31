@@ -2,7 +2,7 @@
 
 ```yaml
 change: fix-wp
-status: in-progress
+status: archived
 agent: fixwp
 branch: agent/fixwp
 worktree: ~/code/d2lod-wt/fixwp
@@ -19,6 +19,7 @@ exclusive: []
 gates:
   - "go test -short ./internal/nav ./internal/d2dsrc ./internal/drill ./cmd/d2drill passes including TestNearestWaypointUnit, TestWaypointRowCentresHitBoxes, TestWaypointClicksEveryLevel, TestWaypointRowHasWaypointClass, TestDW"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
+merge: 3eba209
 result: "W1, W2, W5 fixed with scenario tests; verified live (drill group DW, each twice identical): a1 a2 a4 a5 b c PASS, a3 BLOCKED (act unlock cheat); see docs/fixwp.md"
 live: "docs/probes/drills/2026-10-31-dw.txt"
 ```
