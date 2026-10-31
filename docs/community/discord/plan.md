@@ -17,9 +17,9 @@ The user moderates alone at first, so the design favours few channels, read-only
 6. Put the invite on the README and the public status page only when happy ([public-page.md](public-page.md)).
 
 ## What the user does vs what is automated
-- User only: create the server, accept the bot invite (if used), Community and Onboarding toggles, invites, role assignment, moderation.
-- Automated (optional): channels, categories, roles ([apply_server.py](../../../tools/discord/apply_server.py)); GitHub feed (webhook setting in the repo); soak and release posts ([notify.py](../../../tools/discord/notify.py)).
-- Never automated: reading members' messages (no moderation bots at the start), DMs, announcements about people.
+- User only: create the server, invite the long-lived ops bot with its least-privilege role ([roles.md](roles.md#ops-bot-least-privilege)), Community and Onboarding toggles, invites, role assignment, moderation.
+- Automated (ops bot, optional): channels, categories, roles ([apply_server.py](../../../tools/discord/apply_server.py)); GitHub feed (webhook setting in the repo); soak and release posts ([notify.py](../../../tools/discord/notify.py)).
+- Never automated: reading members' messages (no moderation bots at the start, no message-content intent), DMs, kicks/bans/deletions (ask first), announcements about people.
 
 ## Day-one readiness checklist (public arrivals soon after setup)
 - [ ] Verification level Medium (account older than 5 min) at least; High if arrivals spike. Explicit media filter: all members.

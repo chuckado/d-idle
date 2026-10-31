@@ -10,9 +10,13 @@ can be kept outside the repo, one case-insensitive word per line, in D2IDLE_DISC
 """
 import os
 import re
+import stat
 import subprocess
 
 SERVICE = "d2idle"
+BOT_TOKEN_ENV = "D2IDLE_DISCORD_BOT_TOKEN"
+BOT_TOKEN_FILE_ENV = "D2IDLE_DISCORD_BOT_TOKEN_FILE"
+DEFAULT_BOT_TOKEN_FILE = "~/.local/share/d2idle/discord-bot-token"
 _SECRETS = set()
 
 
@@ -58,6 +62,61 @@ class MemoryStore:
         v = self.data.get(account)
         register_secret(v)
         return v
+
+
+def read_secret_file(path):
+    """Read a one-line secret file, fail closed. Returns the stripped value; raises DiscordError (never with the value).
+
+    Rules: regular file (no symlink), owned by this user, mode exactly 0600, parent directory not group/world-writable,
+    non-empty after stripping, no embedded whitespace.
+    """
+    path = os.path.expanduser(path)
+    fix = "chmod 600 %s" % path
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NONBLOCK | getattr(os, "O_NOFOLLOW", 0))
+    except OSError as e:
+        raise DiscordError("secret file %s cannot be opened safely (%s); it must be a regular file, not a symlink" % (path, e.strerror))
+    try:
+        st = os.fstat(fd)
+        if not stat.S_ISREG(st.st_mode):
+            raise DiscordError("secret file %s is not a regular file" % path)
+        if st.st_uid != os.geteuid():
+            raise DiscordError("secret file %s is not owned by the current user" % path)
+        if stat.S_IMODE(st.st_mode) != 0o600:
+            raise DiscordError("secret file %s has mode %o, it must be exactly 600 (group/other must not read it); fix: %s"
+                               % (path, stat.S_IMODE(st.st_mode), fix))
+        parent = os.path.dirname(os.path.abspath(path))
+        if os.stat(parent).st_mode & 0o022:
+            raise DiscordError("directory %s is group/world-writable; fix: chmod go-w %s" % (parent, parent))
+        with os.fdopen(fd, "r", closefd=False) as f:
+            raw = f.read(4096)
+    finally:
+        os.close(fd)
+    value = raw.strip()
+    if not value:
+        raise DiscordError("secret file %s is empty" % path)
+    if re.search(r"\s", value):
+        raise DiscordError("secret file %s must hold one value without spaces or line breaks" % path)
+    register_secret(value)
+    return value
+
+
+def load_bot_token(env=None, store=None):
+    """Bot token: env D2IDLE_DISCORD_BOT_TOKEN > file (D2IDLE_DISCORD_BOT_TOKEN_FILE, else the default private file)
+    > desktop keyring. None when nothing is set. A file that exists but is unsafe raises (no fall-through)."""
+    env = os.environ if env is None else env
+    tok = env.get(BOT_TOKEN_ENV)
+    if tok and tok.strip():
+        tok = tok.strip()
+        register_secret(tok)
+        return tok
+    explicit = env.get(BOT_TOKEN_FILE_ENV)
+    path = os.path.expanduser(explicit or DEFAULT_BOT_TOKEN_FILE)
+    if os.path.lexists(path):
+        return read_secret_file(path)
+    if explicit:
+        raise DiscordError("%s points at %s, which does not exist" % (BOT_TOKEN_FILE_ENV, path))
+    return (store or SecretToolStore()).get("discord-bot-token")
 
 
 def _j(*parts):

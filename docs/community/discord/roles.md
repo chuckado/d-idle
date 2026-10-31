@@ -26,7 +26,7 @@
 
 `muted`/`restricted` role: reject. Use Discord's built-in Timeout (Moderate Members permission): it needs no role, no per-channel overwrites to maintain (a muted role breaks every time a channel is added and can leak through a forgotten overwrite), expires on its own, is logged in the audit log with a reason, and cannot be applied to Administrators. Max timeout is 28 days [official*]. The action ladder in [plan.md](plan.md) already says 1-day timeout.
 
-Webhooks and bots: webhooks have no role and post regardless of channel permissions; Manage Webhooks stays with `owner`. If a bot is ever added (for example `apply_server.py` once), give it its own role with only the permissions it needs, placed below `mod` and `owner`, and remove it after use.
+Webhooks and bots: webhooks have no role and post regardless of channel permissions; Manage Webhooks stays with `owner`. The one bot is the long-lived ops bot, with its own role `d.idle-ops` (see [Ops bot: least privilege](#ops-bot-least-privilege)), placed below `mod` and `owner`.
 
 ## 3. Permission table
 Y allowed, - not granted, ro = denied in the read-only channels by overwrite. Server-level base permissions.
@@ -75,6 +75,35 @@ Y allowed, - not granted, ro = denied in the read-only channels by overwrite. Se
 - Post a test via each webhook into `#progress`; it must work although `@everyone` cannot send there.
 - Flip the raid switch on a throwaway test and back; confirm `member` can still talk.
 - Audit log shows the setup actions and nothing unexpected.
+
+
+## Ops bot: least privilege
+
+The ops bot (token in a private file, see [server.md](server.md)) has one role, `d.idle-ops`, placed below `owner` and `mod`. Manage Roles only reaches roles below it, so it can never touch `owner` or `mod`. Settings: "Public Bot" OFF, no privileged intents (no message-content intent: it never reads message text), never DMs members.
+
+Permissions, only these:
+- View Channels, Send Messages, Embed Links, Read Message History
+- Manage Channels (create/edit channels, topics, overwrites)
+- Manage Roles (create roles and set their permissions from `server.json`)
+- Manage Messages (pin/unpin the welcome, rules, faq and template texts; tidy its own posts)
+- Manage Webhooks, only while creating feed webhooks; remove it afterwards
+- View Audit Log, optional, read only
+- Manage Server: only temporarily for one `apply_server.py --settings` run, then remove
+
+Never granted: Administrator, Kick Members, Ban Members, Moderate Members, Mention Everyone, Create Invite (unless the owner decides otherwise).
+
+Allowed operations (no further question needed):
+- create and edit channels, categories and topics from `server.json`
+- pin the welcome, rules, faq and templates texts; post feed test messages
+- create roles and set their permissions from `server.json`
+- read the audit log (if granted)
+
+Always ask first:
+- deleting channels or roles
+- kicking, banning or timing out anyone
+- changing verification level or `@everyone` permissions after launch
+- creating or revoking the public invite
+- anything touching members or DMs
 
 ## 7. Sources (retrieved 2026-10-31; support pages returned 403 to the fetch tool, content via coordinator)
 - Verification Levels, official: https://support.discord.com/hc/en-us/articles/216679607-Verification-Levels
