@@ -116,10 +116,3 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
-tools/discord/common.py             discordtoken          discordtoken
-tools/discord/apply_server.py       discordtoken          discordtoken
-tools/discord/tests/test_token.py   discordtoken          discordtoken
-docs/community/discord/server.md    discordtoken          discordtoken
-docs/community/discord/plan.md      discordtoken          discordtoken
-docs/community/discord/roles.md     discordtoken          discordtoken
-openspec/changes/discordtoken/**    discordtoken          discordtoken

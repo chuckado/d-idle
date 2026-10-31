@@ -2,7 +2,7 @@
 
 ```yaml
 change: discordtoken
-status: in-progress
+status: archived
 skip_specs: true
 agent: discordtoken
 branch: agent/discordtoken
@@ -19,7 +19,8 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests passes"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-result: ""
+merge: 88e2cf68
+result: "806ff4e merged; 40 offline unit tests pass (fake values only); not verified live (no network, no real token touched)"
 ```
 
 ## 1. Work
