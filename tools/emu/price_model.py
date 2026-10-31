@@ -78,6 +78,8 @@ class Model:
         k = self.kind(code)
         cost, count, div = k["cost"], max(qty, 1), 1
         hasdur = not k["nodur"] and k["durcol"] > 0 and maxdur != 0
+        if "nodur" in self.off:   # d2d: the saved max durability alone, any ItemTypes
+            hasdur = maxdur > 0
         b = s = r = cost
         if k["quiver"]:
             b = s = cdiv(cost * count, 1024)
@@ -116,8 +118,10 @@ class Model:
         b2 = mul(b, bm)
         s2 = 0 if s_zero else (cdiv(s, 1024) * sm if s > 0xffff and bm else cdiv(sm * s, 1024))
         r2 = mul(r, rm)
+        if "bigmul" in self.off:   # d2d: x mult / 1024 without dividing first above 0xffff
+            b2, s2, r2 = cdiv(bm * b, 1024), 0 if s_zero else cdiv(sm * s, 1024), cdiv(rm * r, 1024)
         b, s, r = b2, s2, r2
-        repairable = (ident or "unidrep" in self.off) and not eth and k["repair"] and ((k["throw"] and k["stack"]) or hasdur)
+        repairable = (ident or "unidrep" in self.off) and not eth and (k["repair"] or "nodur" in self.off) and ((k["throw"] and k["stack"]) or hasdur)
         if not k["book"] and not k["quiver"]:
             b *= count
             if k["stack"] and repairable and "stack" not in self.off:

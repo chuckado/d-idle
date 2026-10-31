@@ -90,3 +90,11 @@ internal/town/beltfix_test.go  fixbelt2  fix-belt2
 internal/loot/loot.go  fixbelt2  fix-belt2
 internal/loot/fixpickup_test.go  fixbelt2  fix-belt2
 docs/fixbelt2.md  fixbelt2  fix-belt2
+docs/research/pr-price-proof.md  pricepr  pricepr
+docs/research/pr-price-draft.md  pricepr  pricepr
+docs/research/pr-price-evidence-pack.md  pricepr  pricepr
+docs/research/price-trace.md  pricepr  pricepr
+docs/research/pr-bundle-queue.md  pricepr  pricepr
+docs/decomp-queue.md  pricepr  pricepr
+tools/emu/price_*  pricepr  pricepr
+openspec/changes/pricepr/**  pricepr  pricepr

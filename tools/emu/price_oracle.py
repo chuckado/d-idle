@@ -26,7 +26,6 @@ import random
 import struct
 import sys
 
-import emu
 import skill_tips
 
 STAT_QTY, STAT_DUR, STAT_MAXDUR, STAT_AC, STAT_CLVL, STAT_REDUCED = 0x46, 0x48, 0x49, 0x1f, 0xc, 0x57
@@ -93,7 +92,7 @@ class Oracle:
         self.istats = {STAT_DUR: dur, STAT_MAXDUR: maxdur, STAT_QTY: qty, STAT_AC: ac}
         self.pstats = {STAT_CLVL: 1, STAT_REDUCED: 0}
         r = e.call(0x62efb0, diff, self.quests, self.hc[npc.lower()], mode, ecx=self.player, edx=self.item)
-        return struct.unpack("<i", struct.pack("<I", r))[0]
+        return r - (1 << 32) if r & 0x80000000 else r   # signed
 
     def gen(self, n, seed):
         rnd = random.Random(seed)
