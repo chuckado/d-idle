@@ -290,12 +290,64 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 		}
 		if early || math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
 			stalls++
+			if stalls%2 == 1 && c.routeAround(ctx, cur, l.Items, npc) {
+				prev = cur
+				continue
+			}
 			if _, err := c.sidestep(ctx, cur, npc.CellX, npc.CellY, stalls); err != nil {
 				return err
 			}
 		}
 		prev = cur
 	}
+}
+
+// routeAround walks a route over the level's collision grid toward the NPC (planAround) and reports whether it moved
+// the player. No grid, no route or no movement: false, and the caller side-steps blindly as before.
+func (c *Client) routeAround(ctx context.Context, from LevelInfo, npcs []NPC, npc *NPC) bool {
+	rows, err := c.Grid(ctx, 5)
+	if err != nil || len(rows) == 0 {
+		return false
+	}
+	var others [][2]float64
+	for _, n := range npcs {
+		if n.Index != npc.Index {
+			others = append(others, [2]float64{n.CellX, n.CellY})
+		}
+	}
+	wps := planAround(rows, from.X, from.Y, npc.CellX, npc.CellY, others)
+	if len(wps) == 0 {
+		return false
+	}
+	cur := from
+	for _, wp := range wps {
+		if c.CmdMove(ctx, wp[0], wp[1]) != nil {
+			return false
+		}
+		still := 0
+		for i := 0; i < 20 && still < 4; i++ { // up to 6 s per leg; 4 polls without progress ends the leg
+			if Pause(ctx, 300*time.Millisecond) != nil {
+				return false
+			}
+			l, err := c.Level(ctx)
+			if err != nil {
+				return false
+			}
+			if math.Hypot(l.X-cur.X, l.Y-cur.Y) < 0.1 {
+				still++
+			} else {
+				still = 0
+			}
+			cur = l
+			if math.Hypot(cur.X-wp[0], cur.Y-wp[1]) < 0.4 {
+				break
+			}
+		}
+		if still >= 4 {
+			break
+		}
+	}
+	return math.Hypot(cur.X-from.X, cur.Y-from.Y) > 1
 }
 
 // stallCheck is the poll (of 300 ms) after which a player that has not moved at all is treated as stalled.

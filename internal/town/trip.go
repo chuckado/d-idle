@@ -224,8 +224,17 @@ func (t *Town) openPortal(ctx context.Context) (d2.Unit, error) {
 // OpenPortalForTest opens a portal without entering it.
 func (t *Town) OpenPortalForTest(ctx context.Context) error { _, err := t.openPortal(ctx); return err }
 
+// WalkingInteractor is implemented by an input whose Interact walks to the target itself (d2d: the verb a click on
+// a portal sends). The caller must not GoTo the target first: from a collision pocket the walker cannot reach it,
+// while the verb moves the player to the portal twin (DRILLS6 F8, D6.d run 2: 62 s pinned next to an open portal).
+type WalkingInteractor interface{ InteractWalks(input.Target) bool }
+
 func (t *Town) enterPortal(ctx context.Context, portal d2.Unit) error {
-	if s, err := t.current(); err == nil && dist(portal.X, portal.Y, s.Player.X, s.Player.Y) > float64(t.tune().NPCStopDist) {
+	walks := false
+	if w, ok := t.e.In.(WalkingInteractor); ok {
+		walks = w.InteractWalks(input.Target{Type: TypeObject, ID: portal.ID, Pos: input.Point{X: portal.X, Y: portal.Y}})
+	}
+	if s, err := t.current(); err == nil && !walks && dist(portal.X, portal.Y, s.Player.X, s.Player.Y) > float64(t.tune().NPCStopDist) {
 		if err := t.mv.GoTo(ctx, input.Point{X: portal.X, Y: portal.Y}); err != nil {
 			return err
 		}

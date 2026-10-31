@@ -323,6 +323,11 @@ func (t townInput) BeltPut(id uint32, box int) error {
 
 func (t townInput) MoveGold(n int, deposit bool) error { return moveGold(t.c, n, deposit) }
 
+// InteractWalks: the portal and NPC verbs walk to the target themselves (town.WalkingInteractor).
+func (t townInput) InteractWalks(tg input.Target) bool {
+	return tg.ID >= d2dsrc.PortalIDBase || (tg.ID >= d2dsrc.NPCIDBase && tg.ID != d2dsrc.MercID)
+}
+
 func (t townInput) Interact(tg input.Target) error {
 	// the NPC approach sizes its own game-time budget from the distance (15 s base): the call's wall limit is wider
 	ctx, cancel := context.WithTimeout(context.Background(), 90*time.Second)

@@ -3,6 +3,7 @@ package town_test
 import (
 	"context"
 	"errors"
+	"strings"
 	"testing"
 
 	"d2lod-bot/internal/d2"
@@ -88,4 +89,25 @@ func TestScenario_OpenPortalBesideThePlayer(t *testing.T) {
 			t.Fatalf("Blood Moor borders the camp: the walk fallback should arrive (area %d, err %v, calls %v)", r.W.Player.Area, err, r.Mv.Calls)
 		}
 	})
+}
+
+// walkingIn is an input whose Interact walks to the portal itself (d2d townInput).
+type walkingIn struct{ input.Controller }
+
+func (walkingIn) InteractWalks(input.Target) bool { return true }
+
+// DRILLS6 F8: the pinned character cannot GoTo the portal; with a walking Interact the town layer must not try.
+func TestEnterPortalDoesNotWalkWhenInteractWalks(t *testing.T) {
+	r := newRig(t)
+	r.W.Player.Area, r.W.PortalLevel = 2, 1
+	r.Env.In = walkingIn{r.Env.In}
+	r.W.AddObject(59, r.W.Player.X+10, r.W.Player.Y)
+	if err := r.T.ToTown(context.Background()); err != nil || r.W.Player.Area != 1 {
+		t.Fatalf("err %v area %d", err, r.W.Player.Area)
+	}
+	for _, c := range r.Mv.Calls {
+		if strings.HasPrefix(c, "goto") {
+			t.Fatalf("walked to the portal: %v", r.Mv.Calls)
+		}
+	}
 }
