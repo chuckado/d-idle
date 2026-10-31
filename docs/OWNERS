@@ -116,3 +116,11 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+docs/community/discord/plan.md  discorddocs  discorddocs
+docs/community/discord/server.md  discorddocs  discorddocs
+docs/community/discord/roles.md  discorddocs  discorddocs
+docs/community/discord/feeds.md  discorddocs  discorddocs
+docs/community/discord/server.json  discorddocs  discorddocs
+tools/discord/apply_server.py  discorddocs  discorddocs
+tools/discord/tests/test_apply.py  discorddocs  discorddocs
+openspec/changes/discorddocs/**  discorddocs  discorddocs

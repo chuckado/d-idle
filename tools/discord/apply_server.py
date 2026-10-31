@@ -31,7 +31,8 @@ PERMS = {
     "use_external_emojis": 1 << 18, "manage_threads": 1 << 34, "create_public_threads": 1 << 35,
     "send_messages_in_threads": 1 << 38,
 }
-TEXT, CATEGORY = 0, 4
+TEXT, CATEGORY, NEWS = 0, 4, 5
+KINDS = {"text": TEXT, "news": NEWS}  # news (announcement) channels need Community enabled
 AUTH = "Author" + "ization"  # header name, split so the repo's leak scanner does not read it as a credential
 
 
@@ -130,10 +131,10 @@ def plan_and_apply(api, guild, spec, apply=False, settings=False, out=print):
                        lambda cat=cat: api.call("POST", "/guilds/%s/channels" % guild, {"name": cat["name"], "type": CATEGORY}))
             pid = made["id"] if made else "<new:%s>" % cat["name"]
         for c in cat.get("channels", []):
-            if (TEXT, c["name"]) in by:
+            if (TEXT, c["name"]) in by or (NEWS, c["name"]) in by:
                 out("OK   channel exists: #%s (left as is)" % c["name"])
                 continue
-            body = {"name": c["name"], "type": TEXT, "topic": c.get("topic", "")[:1024], "parent_id": pid,
+            body = {"name": c["name"], "type": KINDS.get(c.get("type", "text"), TEXT), "topic": c.get("topic", "")[:1024], "parent_id": pid,
                     "rate_limit_per_user": int(c.get("slowmode", 0)), "permission_overwrites": overwrites(c.get("overwrites"))}
             act("create channel #%s in %s" % (c["name"], cat["name"]),
                 lambda body=body: api.call("POST", "/guilds/%s/channels" % guild, body))

@@ -84,7 +84,7 @@ class ApplyTests(unittest.TestCase):
     def test_spec_valid(self):
         names = [c["name"] for cat in self.spec["categories"] for c in cat["channels"]]
         self.assertEqual(names, ["welcome", "rules", "announcements", "progress", "dev", "d2d-upstream", "help",
-                                 "bug-reports", "general", "show-your-runs", "stream"])
+                                 "bug-reports", "general", "show-your-runs", "stream", "discord-updates"])
         for cat in self.spec["categories"]:
             for c in cat["channels"]:
                 self.assertLessEqual(len(c["topic"]), 100, c["name"])
@@ -92,9 +92,17 @@ class ApplyTests(unittest.TestCase):
             ap.perm_bits(r["permissions"])
         self.assertEqual([r["name"] for r in self.spec["roles"]], ["owner", "contributor", "member"])
 
+    def test_news_kind_and_existing_news_channel(self):
+        ann = [c for cat in self.spec["categories"] for c in cat["channels"] if c["name"] == "announcements"][0]
+        self.assertEqual(ann["type"], "news")
+        self.assertEqual(ap.KINDS["news"], 5)
+        self.m.channels.append({"id": "1", "name": "announcements", "type": 5})
+        _, lines = self.run_plan()
+        self.assertIn("OK   channel exists: #announcements (left as is)", lines)
+
     def test_dry_run_changes_nothing(self):
         acts, _ = self.run_plan()
-        self.assertEqual(len(acts), 3 + 5 + 11)
+        self.assertEqual(len(acts), 3 + 6 + 12)
         self.assertEqual(self.m.writes(), [])
 
     def test_apply_creates_then_idempotent(self):

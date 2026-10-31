@@ -90,7 +90,7 @@
     },
     {
      "name": "announcements",
-     "type": "text",
+     "type": "news",
      "topic": "Releases and project news. Read-only.",
      "slowmode": 0,
      "overwrites": [
@@ -202,6 +202,25 @@
      "topic": "Stream notices and chat about the d.idle stream.",
      "slowmode": 5,
      "overwrites": []
+    }
+   ]
+  },
+  {
+   "name": "STAFF",
+   "channels": [
+    {
+     "name": "discord-updates",
+     "type": "text",
+     "topic": "Community updates and AutoMod alerts. Hidden from members.",
+     "slowmode": 0,
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "deny": [
+        "view_channel"
+       ]
+      }
+     ]
     }
    ]
   }

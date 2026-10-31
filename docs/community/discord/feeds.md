@@ -1,7 +1,13 @@
 # Feeds into the server
 
-> status: DRAFT. Nothing is connected until the user creates the webhooks. Webhook URLs are secrets: private 0600 file, keyring or environment only, never
+> status: LIVE since 2026-10-31 (see below). Webhook URLs are secrets: private 0600 file, keyring or environment only, never
 > in chat, issues, the repo or screenshots. If one leaks, delete the webhook in Discord and create a new one.
+
+## Live state (2026-10-31)
+- Three webhooks named `d.idle feed` exist on `#progress`, `#announcements` and `#stream`; the URLs are only in private 0600 files (never in the repo). Test posts succeeded.
+- The GitHub repo webhook (id 705756116) delivers `release`, `pull_request` and `workflow_run` events to `#progress` (ping delivered, 204). The
+  user asked for workflow runs. `workflow_run` posts on every CI run: if `#progress` gets noisy, remove the event or keep only failures. Edit the events in
+  GitHub (repo Settings, Webhooks), or from a shell: `gh api -X PATCH repos/shatteredeagle/d-idle/hooks/705756116 -f events[]=release -f events[]=pull_request`.
 
 Order of value:
 

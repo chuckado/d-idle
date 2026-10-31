@@ -79,6 +79,12 @@ Y allowed, - not granted, ro = denied in the read-only channels by overwrite. Se
 
 ## Ops bot: least privilege
 
+> Live decision (user, 2026-10-31, after being advised to use least privilege): the `d.idle` bot keeps the Administrator permission ON. This is the
+> user's accepted-risk choice, not the design below. Consequence: a leaked token is a full takeover of the server. Mitigation and response: rotate
+> with Reset Token in the developer portal and rewrite the private token file (see [server.md](server.md)); delete the file and kick the bot if
+> in doubt. The always-ask list below still applies to the bot's operation: members, DMs, bans/kicks/timeouts, invites, post-launch
+> verification level and `@everyone` changes. The least-privilege list stays as the target if the user ever reverts.
+
 The ops bot (token in a private file, see [server.md](server.md)) has one role, `d.idle-ops`, placed below `owner` and `mod`. Manage Roles only reaches roles below it, so it can never touch `owner` or `mod`. Settings: "Public Bot" OFF, no privileged intents (no message-content intent: it never reads message text), never DMs members.
 
 Permissions, only these:
