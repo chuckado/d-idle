@@ -51,6 +51,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-price](../../openspec/changes/fix-price/) | in-progress | fixprice | `internal/data/price.go`<br>`internal/data/price_test.go`<br>`internal/town/chores.go`<br>`internal/town/stashfull.go`<br>`internal/town/shop.go`<br>`internal/town/fixprice_test.go`<br>`internal/loot/pickup.go`<br>`internal/loot/valuables.go`<br>`internal/loot/fixprice_test.go`<br>`internal/leveler/score.go`<br>`internal/leveler/shop.go`<br>`internal/leveler/shopkit_test.go`<br>`internal/leveler/fixprice_test.go`<br>`internal/resource/potion.go`<br>`internal/resource/fixprice_test.go`<br>`internal/town/stash.go`<br>`docs/fixprice.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
+| [pricepr](../../openspec/changes/pricepr/) | in-progress | pricepr | `docs/research/pr-price-proof.md`<br>`docs/research/pr-price-draft.md`<br>`docs/research/pr-price-evidence-pack.md`<br>`docs/research/price-trace.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/decomp-queue.md`<br>`tools/emu/price_*`<br>`openspec/changes/pricepr/**` | `fork-branch:fix/vendor-prices` |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
 
 ### Gates
@@ -100,10 +101,16 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
+- change pricepr: differential against game.exe's own code per claim: mismatches before > 0, after = 0 for the claim's term, over >= 100k cases (tools/emu/price_oracle.py vs test_game --price)
+- change pricepr: upstream test_rules, test_combat, test_game, test_protocol green; pr_guard.py 0 FAIL 0 WARN; presubmit --quick 0 FAIL
+- change pricepr: independent adversarial verifier report attached verbatim in the proof doc
+- change pricepr: nothing pushed, posted or filed on GitHub; our repo not pushed
+- change pricepr: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 89bbc39 10-31 16:16 `Merge agent/fixbelt2: no belt column is no room; PlaceFor/WillBeltFor keep planned kinds a column` (fix-belt2)
 - cc68b7a 10-31 16:13 `Merge agent/readme: README rewrite, d.idle name restyle` (readme)
 - 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
 - d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
@@ -113,5 +120,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
 - 1430083 10-31 15:23 `Merge agent/waitsaudit: waits audit, game-time ApproachNPC deadline, LateClock` (waits-audit)
 - c0ae733 10-31 15:21 `Merge agent/cr149: PR #149 CodeRabbit follow-ups posted` (cr149)
-- 6f860df 10-31 15:06 `Merge agent/forkcheats2: fork cheats round 2 docs` (forkcheats2)
 <!-- statusgen:end -->
