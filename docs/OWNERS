@@ -30,3 +30,9 @@ docs/basics-audit.md  drills  m1-liveproof
 docs/basics-live.md  drills  m1-liveproof
 docs/primitives.md  drills  m1-liveproof
 docs/probes/basics/**  drills  m1-liveproof
+docs/research/pr-tome-proof.md  tomepr  tomepr
+docs/research/pr-tome-draft.md  tomepr  tomepr
+docs/research/pr-tome-evidence-pack.md  tomepr  tomepr
+docs/decomp-queue.md  tomepr  tomepr
+tools/emu/tome_*  tomepr  tomepr
+openspec/changes/tomepr/**  tomepr  tomepr
