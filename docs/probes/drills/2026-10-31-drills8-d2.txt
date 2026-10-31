@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D2 -label drills8-d2'
 d2dslot: got slot 0
-time=2026-10-31T19:23:41.724-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1160264 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:23:41.724-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1160264 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 DRILL D2.a P10 PASS verb returned after 32 ticks with one portal pair and one source spent (tome 2->2, scrolls 1->0) | intended: from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source | observed: area 2; verb ok: 1 right click, 32 ticks (click at tick +22), field portal objects near 1 any 1 (a stale one from the previous drill stands elsewhere: 0 before), tome 2->2, scrolls 1->0, debug portals [0,2,27.7,48.1 / 1,1,16.7,25.7]; verb lines: none | runs: 2, identical
 DRILL D2.t P10 PASS entered the open portal, arrived in town, no second scroll | intended: d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent | observed: scrolls 3 -> 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,27.7,48.1 / 1,1,16.7,25.7]; lines: none | runs: 2, identical
 DRILL D2.a2 P10 PASS observed [8 8 8] ticks vs the trace's about 7 | intended: d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0 | observed: ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair) | runs: 2, identical
@@ -27,6 +26,5 @@ D2.e      P10   PASS     same waited: click at +37 vs idle +22 ticks, one click,
 D2.h      P10   PASS     same second cast closed the first: one object, 59 subtiles away
 D2.f      P11   PASS     same round trip through the portals, arrival 4 subtiles from the origin
 cheat verbs used (each ledgered with a reason): debug clearinv, debug give tbk, debug give tsc, debug goto 2, debug hit 5, debug stat 6 10240
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:23:44.540-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 4s

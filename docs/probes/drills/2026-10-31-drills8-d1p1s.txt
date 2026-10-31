@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D1 -only D1.P1s -label drills8-d1p1s -v'
 d2dslot: got slot 0
-time=2026-10-31T19:25:52.103-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1172129 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:25:52.103-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1172129 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T19:25:53.465-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 DRILL D1.P1s P1 PASS the click modifier verb belts one pack potion per shift-click | intended: empty belt, pack hp1x2: each shift-click on a pack hp1 moves exactly one to the belt (the pickup's box rule), the pack loses one each time; both end in the belt | observed: after click 1: belt [0:hp1], pack [hp1x1]; after click 2: belt [0:hp1 4:hp1], pack [none] | runs: 2, identical
 END character Drilly life 40/40 in town: true
@@ -8,6 +7,5 @@ END character Drilly life 40/40 in town: true
 drill     prim  verdict  det  reason
 D1.P1s    P1    PASS     same the click modifier verb belts one pack potion per shift-click
 cheat verbs used (each ledgered with a reason): debug clearinv, debug equip lbl 8, debug give hp1
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:25:53.562-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 3s

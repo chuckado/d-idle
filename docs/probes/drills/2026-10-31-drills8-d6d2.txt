@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D6 -only D6.d -label drills8-d6d2 -v'
 d2dslot: got slot 0
-time=2026-10-31T19:21:26.649-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1151657 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:21:26.649-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1151657 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T19:21:27.722-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 time=2026-10-31T19:21:28.333-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
 time=2026-10-31T19:21:28.345-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
@@ -64,6 +63,5 @@ END character Drilly life 2000/2000 in town: true
 drill     prim  verdict  det  reason
 D6.d      P25   PASS     same out of the pocket after 9 s of game time (area 1)
 cheat verbs used (each ledgered with a reason): debug goto 2, debug pin off, debug pin on, debug stat 6 512000, debug stat 7 512000
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:21:28.435-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 3s

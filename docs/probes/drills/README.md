@@ -206,7 +206,7 @@ Result files `2026-10-31-drills8-<label>.txt` (stdout of each d2drill invocation
 
 | Card | Drill | Verdict | Numbers |
 |---|---|---|---|
-| fixstall3 | H.pause x3 | PARTIAL (finding F13) | per invocation run 1: 1 of 2 bot tries opens Kashya (144 ticks), the other fails at 796 ticks (`not reached in 28.4s`); 3 of 6 first-run tries fail again (DRILLS7: 3 of 6 at 718); run 2 of every invocation: 4 of 4 open (144). The stall is now left (see F13), the budget runs out 3 cells short |
+| fixstall3 | H.pause x3 | PARTIAL (finding F13) | per invocation run 1: 1 of 2 bot tries opens Kashya (144 ticks), the other fails at 796 ticks (`not reached in 28.4s`); 3 of 6 first-run tries fail again (DRILLS7: 3 of 6 at 718); run 2 of every invocation: 2 of 2 bot tries open (144). The stall is now left (see F13), the budget runs out 3 cells short |
 | fixstall3 | D6.d x3 | PASS x3 | `ErrLevelChanged` (escaped from level 2 to 1 after a stall in a pocket), 225 ticks = 9 s, character in town, both repeats identical, all three invocations identical (DRILLS7 run 2: stuck 62 s) |
 | fixstall3 | D-sync.wp x3 | FAIL 1 of 2, cause isolated: the drill (F12 closed) | run 1 kills 3 of 3 (11 casts, 15 s); run 2 kills 0, 3 ignores, in all three invocations. `clear-diag` of the failing try: mana 1/35 (run 1 spent it, the lab does not refill mana), melee `Attack` fallback, open floor around the player (no obstacle in `debug grid 5`). With `Mana: 35` in the drill spec: 3 invocations x 2 repeats, 3 of 3 killed, 11 casts, 15 s |
 | fixstall3 | D3 and D8 smoke (NPCs through the bot's `d2dtown.Input`) | PASS | D3: g0, n (5 NPCs open and close clean), h, b, b2, tp, r (19 gold), r0, s, s2, u, i all PASS; D8: a, m, q, w PASS; D8.c FAIL in the group (the Rogue was claimed by D8.a first: harness order) and run alone: run 1 granted, run 2 FAIL (the reward can be claimed once per character, so a repeat 2 cannot pass) |
@@ -228,7 +228,7 @@ Result files `2026-10-31-drills8-<label>.txt` (stdout of each d2drill invocation
 | DR | r, r0, r1 PASS; rt FAIL at the default repair knob (the half-worn rows are not repaired at knob 30 by design: 13 of 26), PASS with `-repair-below 60` (26 rows measured, restored, paid) |
 | H | pause FAIL (F13), obj, ground PASS, monster BLOCKED (stale text, as D5.c) |
 | F | H.obj.shrine, H.obj.cage (partial), D-run, D-sync.tp, D-sync.wp (mana fixed), DW.m1, m2, a12, D5.dodge, p27, p29, p28 PASS; D-sync 2 of 3 (one ignore, repeats identical) in the group and 3 of 3 alone; H.obj.chest FAIL in the group (class 144 chosen, mode stays NU), PASS alone (class 139) |
-| D10 | D10_RESULT |
+| D10 | run 1 PASS (d2d killed and restarted by the bot, counters and saves as required, the bot built from this tree with the d2dtown.Input wiring); run 2 cut by the 1200 s TTL I gave (the group needs about 2 x 12 min), no table line |
 
 ### Harness changes (cmd/d2drill and internal/drill)
 - `D-sync.tp` and `D-sync.wp` and `D-sync` now start with 35 mana (`Mana: 35` in `fSyncArrive`): the second repeat started with the mana the first spent (1 of 35) and fought with the melee fallback. Closes F12 as a drill artefact.

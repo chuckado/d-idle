@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group F -only D-sync.wp -label drills8-dsyncwp-diag -v'
 d2dslot: got slot 0
-time=2026-10-31T19:22:50.814-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1156539 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:22:50.814-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1156539 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T19:22:51.782-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 time=2026-10-31T19:22:52.181-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
 time=2026-10-31T19:22:52.181-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < d2lod-bot/internal/nav.(*Navigator).ToArea"
@@ -779,6 +778,5 @@ END character Drilly life 400/400 in town: true
 drill     prim  verdict  det  reason
 D-sync.wp P27   FAIL     DIFF the first Clear on a cold waypoint arrival attacked and killed 3 of 3
 cheat verbs used (each ledgered with a reason): debug goto 1, debug kill, debug points 36 1, debug points 38 1, debug spawn zombie1 3 near, debug stat 6 102400, debug stat 7 102400, debug wp all
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:22:53.083-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 4s

@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D8 -label drills8-d8'
 d2dslot: got slot 0
-time=2026-10-31T19:23:34.277-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1159559 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:23:34.277-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1159559 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 DRILL D8.a P18 PASS revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap) | intended: merc alive again, gold down by the reported price | observed: merc present=false dead=true code= life=[0,0] -> present=true dead=false code=RG life=[40,1]; gold 3000 -> 3000 (revive reports 0); err <nil>; panels none | runs: 2, identical
 DRILL D8.m P3 PASS merc life 20 -> 32 with one belt potion | intended: merc life up, one belt potion used | observed: merc present=true dead=false code=RG life=[20,1] -> present=true dead=false code=RG life=[32,1]; belt potions 1 -> 0; err <nil> | runs: 2, identical
 DRILL D8.c P18 FAIL no merc appeared after the claim (a merc already owned forfeits the reward: run D8.c before D8.a) | intended: a fresh character with the Blood Raven reward pending: ClaimRogue opens Kashya's menu and a Rogue appears, the dialog is closed | observed: granted=false merc="21.7,18.7:RG" record states 0 -> 0 err <nil> | runs: 2, identical
@@ -17,6 +16,5 @@ D8.q      P20   PASS     same PARTIAL: the game grants the reward at the menu (t
 D8.w      P21   PASS     same PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path
 D8.g      P19   BLOCKED  -    missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario
 cheat verbs used (each ledgered with a reason): debug belt clear, debug give hp1 belt 0, debug goto 1, debug merc hire 0, debug merc hurt 20, debug merc kill, debug quest list, debug quest set 1 0x0002, debug quest set 2 0x0002, debug quest set 6 0x0001, debug stat 14 3000
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:23:36.330-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 4s

@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group H -label drills8-h'
 d2dslot: got slot 0
-time=2026-10-31T19:24:49.830-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1166413 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:24:49.830-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1166413 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 H.pause-diag: approach of npc 5 failed
 H.pause-diag: verb cmd interact +9
 H.pause-diag: verb cmd move +7
@@ -233,6 +232,5 @@ H.obj     AUDIT PASS     same the bot's object click opens the waypoint
 H.ground  AUDIT PASS     same blind spot confirmed for pointer clicks (picked=false without a frame, true after a rendered frame); the bot uses cmd pickup, so it is not affected
 H.monster AUDIT BLOCKED  -    missing: a monster to fight: no debug verb spawns or places one (debug help lists none); the bot attacks with `cmd skill ... <unit> left`, which carries the unit id and needs no pointer pick (code), soaks kill under lockstep
 cheat verbs used (each ledgered with a reason): debug clearinv, debug give rin, debug goto 1
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:24:51.871-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 4s

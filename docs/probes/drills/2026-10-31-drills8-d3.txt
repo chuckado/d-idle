@@ -1,6 +1,5 @@
-labrun: synced code/d2lod-wt/drills8 → orion:~/labrun/herdr/code/d2lod-wt/drills8 in 0s; running: sh -c 'cd ~/labrun/herdr/code/d2lod-wt/drills8 && D2D_AGENT=drills8 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills8/d2drill -group D3 -label drills8-d3'
 d2dslot: got slot 0
-time=2026-10-31T19:23:30.538-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1159199 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:23:30.538-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1159199 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 DRILL D3.g0 U1 PASS recorded | intended: the fresh character's gold read (no cheat before this drill) | observed: class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1 | runs: 2, identical
 DRILL D3.n P14 PASS all 5 opened and closed clean | intended: 5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean | observed: Akara: open true window [npc-dialog] 205 ticks clean after close true | Charsi: open true window [npc-dialog] 184 ticks clean after close true | Gheed: open true window [npc-dialog] 115 ticks clean after close true | Kashya: open true window [npc-dialog] 112 ticks clean after close true | Warriv: open true window [npc-dialog] 25 ticks clean after close true | runs: 2, identical
 DRILL D3.h P17 PASS life restored at the healer | intended: life = max after the visit, pack potions unchanged | observed: life 12/40 -> 40/40; gold 300 -> 300; pack none -> none; healed=true steps [equip skipped; heal ran] err "" | runs: 2, identical
@@ -31,6 +30,5 @@ D3.s2     P5    PASS     same partial deposit exact
 D3.u      P13   PASS     same unidentified magic cap sold for 32 = the base formula
 D3.i      P13   PASS     same identified with a scroll
 cheat verbs used (each ledgered with a reason): debug clearinv, debug durability all 1, debug give cap pack q4 unid, debug give hp1, debug give isc, debug give rin, debug give rin pack q4 unid, debug stat 14 0, debug stat 14 100, debug stat 14 1000, debug stat 14 1500, debug stat 14 300, debug stat 14 500, debug stat 15 0, debug stat 6 3072
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T19:23:32.829-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 4s
