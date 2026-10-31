@@ -83,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 - 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
@@ -92,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d3e2207 10-31 12:31 `Merge agent/cr147: PR #147 test-only commit posted lines` (cr147)
 - 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
 - eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
-- e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
 <!-- statusgen:end -->

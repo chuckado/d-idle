@@ -43,3 +43,5 @@ Click-modifier branch: about 1.5 h (script the net-diff apply 0.5 h, 3 debug hun
 update 2026-10-31: #148 merged 16:41Z; riskmap dependencies updated; fork port pending the user go
 
 Note 2026-10-31 (UPSYNC147): the belt PR #147 was brought up to date by merging upstream/main into its branch; git followed the `tests/test_game.cpp` move to `tests/game/` with no conflict and #147 shows mergeable. Detail: docs/research/pr-belt-evidence-pack.md.
+
+update 2026-10-31: the lab patch set is ported to the restructured upstream, builds and passes the smoke checks
