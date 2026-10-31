@@ -88,6 +88,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- f795c60 10-31 19:48 `Merge agent/fixmeter: combat Meter derived in d2dcombat.Attach` (fixmeter)
 - 2c92b29 10-31 19:46 `Merge agent/fixstatus: agentstatus.py stub as real Python` (fixstatus)
 - b8e56a9 10-31 19:41 `Merge agent/decompprice2: price proof, draft, evidence pack` (decompprice2)
 - ae161cd 10-31 19:41 `Merge agent/staticopen: open upstream PR #155 (Static Field)` (staticopen)
@@ -97,5 +98,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 3e39c98 10-31 19:10 `Merge agent/drills7: drills7 findings F10-F12, harness fixes; archive drills7 and fix-portal2; backlog line` (drills7)
 - cb9d24a 10-31 19:07 `Merge agent/walkfix: walk-velocity v2 candidate docs and tooling` (walkfix)
 - 2848c18 10-31 18:55 `Merge agent/fix153author: PR 153 author-fix force-push posted line` (fix153author)
-- 97173e0 10-31 18:45 `Merge agent/verifyprs: PR verifier scripts and docs` (verifyprs)
 <!-- statusgen:end -->
