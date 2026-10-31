@@ -181,6 +181,17 @@ var (
 	_ bot.Townsman = townAdapter{}
 	_ bot.Looter   = looterAdapter{}
 	_ bot.Cycler   = cycler{}
+	// The optional Looter interfaces the runner asserts on (bot.recoveryLooter, bot.leftBehinder, bot.UnitEvaluator):
+	// a type assertion on a wrapper silently turns a missing method into "feature off" (primitives-review F2).
+	_ interface {
+		SetRecovering(on bool)
+		RecoveryTotals() (picked, gold, full int)
+	} = looterAdapter{}
+	_ interface {
+		LeftBehind() int
+		ClearLeftBehind()
+	} = looterAdapter{}
+	_ bot.UnitEvaluator = looterAdapter{}
 )
 
 // packYield is nav's pack-stall hook: a bounded clear of the pack that blocks the walk (never in town, never
