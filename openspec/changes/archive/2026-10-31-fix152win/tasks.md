@@ -2,7 +2,7 @@
 
 ```yaml
 change: fix152win
-status: in-progress
+status: archived
 agent: fix152win
 branch: agent/fix152win
 worktree: ~/code/d2lod-wt/fix152win
@@ -13,6 +13,7 @@ exclusive:
   - upstream-pr:price
 gates:
   - "test_rules green on the worker host, pr_guard 0 FAIL 0 WARN against upstream/main"
+merge: 80df3a6
 result: "not verified on MSVC (no Windows build here); test_rules ok on the worker host; price oracle not re-run (needs the game install, not mounted) but no price code changed"
 ```
 

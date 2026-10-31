@@ -113,6 +113,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 80df3a6 10-31 17:36 `Merge agent/fix152win: PR #152 MSVC C4456 fix noted` (fix152win)
 - 0eb828e 10-31 17:35 `Merge agent/readmelink: Discord invite in README` (readmelink)
 - 84ee1c4 10-31 17:33 `Merge agent/decompwalk: walk speed and movement trace` (decompwalk)
 - 7421c4e 10-31 17:22 `Merge agent/discorddocs: Discord docs match the live state` (discorddocs)
@@ -122,5 +123,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e68fd9d 10-31 17:05 `Merge agent/cr152: CodeRabbit round 1 follow-up on PR #152` (cr152)
 - ff19642 10-31 16:51 `Merge agent/mapitem: contiguous map (item 13)` (mapitem)
 - 7d960f0 10-31 16:44 `Merge agent/openprice: log upstream price PR #152` (openprice)
-- 43d5b0c 10-31 16:42 `Merge agent/pricepr: price PR proof, draft, evidence pack` (pricepr)
 <!-- statusgen:end -->
