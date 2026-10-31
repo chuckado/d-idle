@@ -112,3 +112,19 @@ func TestKitGateNavAvoid(t *testing.T) {
 		t.Errorf("kit complete: the avoid set must clear, got %v", spy.set)
 	}
 }
+
+// BELTFIX F6: a healing potion in the pack counts as the kit (the belt fill moves it), so the gate stays off; with
+// neither belt nor pack potion the kit is missing.
+func TestKitCountsPackPotions(t *testing.T) {
+	g, s := kitRig(t, 7, false, true, 1)
+	if !g.r.kitMissing(s) {
+		t.Fatal("no potion anywhere: kit missing")
+	}
+	g.w.set(func(w *world) {
+		w.items = append(w.items, d2.Unit{ID: 901, Type: d2.TypeItem, Class: 1, Item: &d2.Item{Where: d2.ContInventory}})
+	})
+	s, _ = g.w.snapshot()
+	if g.r.kitMissing(s) {
+		t.Fatal("a healing potion in the pack is the kit: the belt fill will place it")
+	}
+}

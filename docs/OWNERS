@@ -23,3 +23,14 @@ internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+internal/town/beltfill.go  fixbelt  fix-belt
+internal/town/beltfix_test.go  fixbelt  fix-belt
+internal/town/chores.go  fixbelt  fix-belt
+internal/town/sim/sim.go  fixbelt  fix-belt
+internal/bot/goal.go  fixbelt  fix-belt
+internal/bot/kitgate.go  fixbelt  fix-belt
+internal/bot/kitgate_test.go  fixbelt  fix-belt
+internal/bot/observe.go  fixbelt  fix-belt
+internal/combat/safety.go  fixbelt  fix-belt
+internal/combat/beltbox_test.go  fixbelt  fix-belt
+internal/loot/loot.go  fixbelt  fix-belt

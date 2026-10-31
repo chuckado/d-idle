@@ -139,6 +139,10 @@ func (r *Runner) forgetGame() {
 	l.needBuff = true
 	l.stepArea = 0
 	l.waitNote = false
+	// F1: a belt refusal from the last game (sticky belt-full mark) does not hold in the new one
+	if bf, ok := r.d.Town.(interface{ ForgetBelt() }); ok {
+		bf.ForgetBelt()
+	}
 }
 
 // ---- town trips ----------------------------------------------------------------------------------

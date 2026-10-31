@@ -7,7 +7,9 @@ import (
 	"fmt"
 	"path"
 	"strings"
+	"sync"
 	"sync/atomic"
+	"time"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
@@ -72,6 +74,9 @@ type Ctx struct {
 
 // Looter is the loot behaviour. Create with New; safe for one goroutine.
 type Looter struct {
+	potionSkipMu sync.Mutex
+	potionSkipAt map[string]time.Time // logPotionSkip rate limit
+
 	e    *env.Env
 	mv   Mover
 	pk   *Pickit
@@ -484,7 +489,12 @@ func (n needsOf) Want(kind string, b *data.ItemBase) bool {
 		if k == belt.RV {
 			return n.wantRejuv(b, st)
 		}
-		return belt.PackCount(db, inv, k) < n.l.e.Tune.Loot.PotionBuffer
+		have := belt.PackCount(db, inv, k)
+		want := have < n.l.e.Tune.Loot.PotionBuffer
+		if !want {
+			n.l.logPotionSkip(b, have, st.Free())
+		}
+		return want
 	case "scroll":
 		if b == nil {
 			return false
@@ -564,4 +574,21 @@ func (l *Looter) UseSource(snap func() (*d2.Snapshot, error), stats func(addr ui
 	if stats != nil {
 		l.stats = stats
 	}
+}
+
+// logPotionSkip is the diagnostic line of a potion left on the ground because the pack already holds the buffer
+// (primitives-review "what to log" 5). One line per potion code every 30 virtual seconds, so a long walk past the same
+// potion does not flood the log.
+func (l *Looter) logPotionSkip(b *data.ItemBase, packHave, beltFree int) {
+	l.potionSkipMu.Lock()
+	defer l.potionSkipMu.Unlock()
+	now := l.e.Clock.Now()
+	if last, ok := l.potionSkipAt[b.Code]; ok && now.Sub(last) < 30*time.Second {
+		return
+	}
+	if l.potionSkipAt == nil {
+		l.potionSkipAt = map[string]time.Time{}
+	}
+	l.potionSkipAt[b.Code] = now
+	l.e.Log.Info(fmt.Sprintf("loot: potion skip code=%s beltWant=0 packHave=%d buffer=%d beltFree=%d", b.Code, packHave, l.e.Tune.Loot.PotionBuffer, beltFree))
 }
