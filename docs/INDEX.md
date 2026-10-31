@@ -54,3 +54,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 ## 8. Archive
 - [archive/README.md](archive/README.md): the four merge-risk reviews, milestones scoreboard, wave 2 contracts, goals catalog, idle-game prior art, Kolbot/Koolo prior art, old runbooks.
 - [probes/drills/README.md](probes/drills/README.md) the live drill suite D0+D1 results (`cmd/d2drill`, card m1-liveproof).
+- [probes/navsoak3-summary.md](probes/navsoak3-summary.md) navsoak3 final numbers vs navsoak/navsoak2 (pre-primitive-fix baseline).
