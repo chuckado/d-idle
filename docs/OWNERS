@@ -62,6 +62,3 @@ internal/d2dctl/fixstall_test.go  fixstall  fixstall
 internal/nav/pinned_test.go  fixstall  fixstall
 docs/fixstall.md  fixstall  fixstall
 openspec/changes/drills6/**  drills6  drills6
-docs/probes/drills/2026-10-31-drills6*  drills6  drills6
-internal/drill/drun.go  drills6  drills6
-cmd/d2drill/run_lab.go  drills6  drills6

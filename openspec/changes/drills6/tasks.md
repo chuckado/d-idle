@@ -9,11 +9,7 @@ worktree: ~/code/d2lod-wt/drills6
 skip_specs: true
 owns:
   - openspec/changes/drills6/**
-  - docs/probes/drills/2026-10-31-drills6*
-  - internal/drill/drun.go
-  - cmd/d2drill/run_lab.go
-exclusive:
-  - instance:slot0
+exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host"
 merge:
