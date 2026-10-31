@@ -45,6 +45,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [fixstall](../../openspec/changes/fixstall/) | in-progress | fixstall | `internal/d2dctl/fixstall_test.go`<br>`internal/nav/pinned_test.go`<br>`docs/fixstall.md` | - |
 | [fixstall2](../../openspec/changes/fixstall2/) | in-progress | fixstall2 | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/approach_path.go`<br>`internal/d2dctl/approach_path_test.go`<br>`internal/d2dtown/adapter.go`<br>`internal/town/trip.go`<br>`internal/town/enterportal_test.go`<br>`docs/fixstall2.md` | - |
+| [fixstall3](../../openspec/changes/fixstall3/) | in-progress | fixstall3 | `docs/fixstall3.md`<br>`internal/d2dctl/testdata/camp-grid.txt`<br>`internal/d2dtown/wiring_test.go`<br>`internal/combat/fight.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -80,6 +81,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixstall: live proof after merge: rerun H.pause and D6.d (docs/fixstall.md)
 - change fixstall2: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixstall2: live proof after merge: H.pause x3 tries and D6.d x3 (docs/fixstall2.md)
+- change fixstall3: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixstall3: live proof after merge: H.pause x3 (6 of 6 open), D6.d x3, D-sync waypoint x3 (docs/fixstall3.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -91,6 +94,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 2848c18 10-31 18:55 `Merge agent/fix153author: PR 153 author-fix force-push posted line` (fix153author)
 - 97173e0 10-31 18:45 `Merge agent/verifyprs: PR verifier scripts and docs` (verifyprs)
 - ea07758 10-31 18:33 `Merge agent/fixstall2: Kashya walk stall routing, town-portal walking interactor` (fixstall2)
 - 618295f 10-31 18:33 `Merge agent/fix153lint: record #153 clang-tidy fixup; archive card` (fix153lint)
@@ -100,5 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 1382b0a 10-31 18:08 `Merge agent/rebase152: record PR #152 force-push` (rebase152)
 - 7f17048 10-31 18:04 `Merge agent/fixstall: Kashya walk stall and pinned GoTo escape` (fixstall)
 - be5e7d0 10-31 18:00 `Merge agent/fixmisc: poor-melee rest pin test, Navigator.Sync after position jump` (fixmisc)
-- b0f8314 10-31 17:56 `Merge agent/fixrun: run-reset in WaitInGame, run/stamina in minute log; correct B1 premise; archive fix-obj and waits-audit` (fixrun)
 <!-- statusgen:end -->
