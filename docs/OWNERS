@@ -45,3 +45,12 @@ docs/fixstall3.md  fixstall3  fixstall3
 internal/d2dctl/testdata/camp-grid.txt  fixstall3  fixstall3
 internal/d2dtown/wiring_test.go  fixstall3  fixstall3
 internal/combat/fight.go  fixstall3  fixstall3
+tools/emu/verify_walk_mercpet.py  verifyprs2  verifyprs2
+tools/emu/verify_walk_mercpet_mode.inc  verifyprs2  verifyprs2
+tools/emu/verify_price_followon.py  verifyprs2  verifyprs2
+tools/emu/verify_price_followon_mode.inc  verifyprs2  verifyprs2
+docs/research/pr-walk-proof.md  verifyprs2  verifyprs2
+docs/research/verify-price2.md  verifyprs2  verifyprs2
+docs/research/pr-bundle-queue.md  verifyprs2  verifyprs2
+docs/BACKLOG.md  verifyprs2  verifyprs2
+openspec/changes/verifyprs2/**  verifyprs2  verifyprs2
