@@ -2,7 +2,8 @@
 
 ```yaml
 change: readmelink
-status: in-progress
+status: archived
+merge: 0eb828e
 agent: readmelink
 branch: agent/readmelink
 worktree: ~/code/d2lod-wt/readmelink
@@ -14,7 +15,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; go build ./..."
-result: ""
+result: "README Chat and help line with the public invite; docs updated; leakcheck 0 hits"
 live: "not applicable (docs only)"
 ```
 
