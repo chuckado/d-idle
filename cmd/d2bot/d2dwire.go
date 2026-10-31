@@ -207,17 +207,13 @@ func d2dHealthWith(p *d2denv.Proc, beat *d2denv.Beat, lockstep func() bool, last
 // leaving the pack, as in combat.
 func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.Context) error {
 	const townPortalObject = 59
+	// the same pick as combat's (combat.PortalSource): a scroll or a tome WITH charges, never an empty tome (F4)
 	pick := func(s *d2.Snapshot) *d2.Unit {
-		if s.Inventory == nil {
-			return nil
+		var st combat.Stats
+		if e.Read != nil {
+			st = e.Read.UnitStats
 		}
-		for i := range s.Inventory.Items {
-			u := &s.Inventory.Items[i]
-			if u.Item != nil && u.Item.Where == d2.ContInventory && cat.Item(u.Class).Portal {
-				return u
-			}
-		}
-		return nil
+		return combat.PortalSource(s, cat, st)
 	}
 	return func(ctx context.Context) error {
 		var last error
@@ -228,6 +224,7 @@ func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.
 			}
 			it := pick(s)
 			if it == nil {
+				e.Log.Info("d2d town portal: no portal source", "try", try+1)
 				return combat.ErrNoPortal
 			}
 			last = func() error {
@@ -268,6 +265,19 @@ func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.
 						}
 					}
 				}
+				// diagnostic for the unexplained failures (docs/fixportal.md): what was clicked and what the world showed
+				near, any := 0, 0
+				if ns, nerr := e.Snapshot(); nerr == nil && ns.Player != nil {
+					for _, o := range ns.Objects {
+						if o.Class == townPortalObject {
+							any++
+							if math.Hypot(float64(o.X-ns.Player.X), float64(o.Y-ns.Player.Y)) < 25 {
+								near++
+							}
+						}
+					}
+				}
+				e.Log.Info("d2d portal: click without a portal", "item", it.ID, "class", it.Class, "portalObjNear", near, "portalObjAny", any)
 				return errors.New("d2d portal: no portal after the click")
 			}()
 			if last == nil {

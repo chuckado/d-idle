@@ -6,6 +6,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/resource"
@@ -29,6 +30,7 @@ func (r *Runner) resInput(s *d2.Snapshot) resource.Input {
 	in.TripsRecent = r.tripsRecentLocked(r.e.Clock.Now())
 	r.obMu.Unlock()
 	in.Sellable = r.sellable(s)
+	in.HasTP = r.hasPortalSource(s)
 	mc := d2.FindMerc(s)
 	in.SetMerc(mc, r.merc.observe(mc, p.InTown(), r.e.Clock.Now()))
 	if r.d.Catalog == nil || s.Inventory == nil {
@@ -54,9 +56,6 @@ func (r *Runner) resInput(s *d2.Snapshot) resource.Input {
 				in.Belt.RV++
 			}
 		case d2.ContInventory:
-			if strings.Contains(m.Name, "Town Portal") {
-				in.HasTP = true
-			}
 			switch m.Potion {
 			case PotionHealing:
 				in.Belt.PackHP++
@@ -287,4 +286,29 @@ func (r *Runner) buildName(p *d2.Player) string {
 		return b
 	}
 	return "-"
+}
+
+// portalClasses adapts the bot's catalog for combat.PortalSource: a Town Portal item is a portal, the tome is the one
+// named "Tome". combat's own picker and this kit check then agree on what is a usable portal.
+type portalClasses struct{ Catalog }
+
+func (c portalClasses) Item(class int) combat.ItemClass {
+	m, ok := c.Catalog.Item(class)
+	if !ok || !strings.Contains(m.Name, "Town Portal") {
+		return combat.ItemClass{}
+	}
+	return combat.ItemClass{Portal: true, Tome: strings.Contains(m.Name, "Tome")}
+}
+
+// hasPortalSource is true when the pack holds a scroll or a tome with charges. An empty tome is not a portal source
+// (F5: it used to count, so the kit gate and trip logic believed a portal existed).
+func (r *Runner) hasPortalSource(s *d2.Snapshot) bool {
+	if r.d.Catalog == nil {
+		return false
+	}
+	var st combat.Stats
+	if r.e.Read != nil {
+		st = r.e.Read.UnitStats
+	}
+	return combat.PortalSource(s, portalClasses{r.d.Catalog}, st) != nil
 }

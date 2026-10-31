@@ -102,6 +102,14 @@ func (g *bossGame) logUniques(s *d2.Snapshot, v boss.View) {
 	}
 }
 
+// stats is the reader's stat source (nil without a reader: a tome then counts as usable).
+func (g *bossGame) stats() combat.Stats {
+	if g.e == nil || g.e.Read == nil {
+		return nil
+	}
+	return g.e.Read.UnitStats
+}
+
 func (g *bossGame) viewOf(s *d2.Snapshot) boss.View {
 	p := s.Player
 	belt := combat.BeltOf(s.Inventory, g.cat)
@@ -114,14 +122,7 @@ func (g *bossGame) viewOf(s *d2.Snapshot) boss.View {
 	if g.e != nil {
 		v.BeltSlots = combat.BeltCapacity(s.Inventory, g.e.Data)
 	}
-	if s.Inventory != nil {
-		for _, u := range s.Inventory.Items {
-			if u.Item != nil && g.cat.Item(u.Class).Portal {
-				v.HasTP = true
-				break
-			}
-		}
-	}
+	v.HasTP = combat.PortalSource(s, g.cat, g.stats()) != nil
 	hostile := map[uint32]bool{}
 	for _, t := range combat.Hostiles(s, combat.HostileCtx{Cat: g.cat, Diff: p.Difficulty, ClassLvl: p.Level}) {
 		hostile[t.Unit.ID] = true

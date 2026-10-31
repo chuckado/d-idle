@@ -454,27 +454,18 @@ func (f *Fighter) portalScrolls() int {
 	return n
 }
 
-// portalQty is the casts left in one portal item. A scroll is one cast. A tome's count is its quantity stat, and
-// an EMPTY tome has no stat list at all (V live on i4 per internal/town/shop.go qty; Fresha i5 2026-10-30 clicked an
-// empty tome 159 times). Without a stats source the tome counts as usable, like the town code.
-func (f *Fighter) portalQty(u *d2.Unit) int {
-	if !f.cat.Item(u.Class).Tome {
-		return 1
-	}
-	var st d2.Stats
-	var err error
+// portalQty is the casts left in one portal item (PortalQty with the fighter's stats source).
+func (f *Fighter) portalQty(u *d2.Unit) int { return PortalQty(u, f.cat, f.stats()) }
+
+// stats is the fighter's stat source: the test seam, else the reader, else none.
+func (f *Fighter) stats() Stats {
 	switch {
 	case f.statsFn != nil:
-		st, err = f.statsFn(u.Addr)
+		return f.statsFn
 	case f.e.Read != nil:
-		st, err = f.e.Read.UnitStats(u.Addr)
-	default:
-		return 1
+		return f.e.Read.UnitStats
 	}
-	if err != nil || !st.Has(statQuantity) {
-		return 0
-	}
-	return int(st.Get(statQuantity))
+	return nil
 }
 
 func (f *Fighter) portalAttempt(ctx context.Context) (bool, error) {
@@ -527,19 +518,7 @@ func (f *Fighter) portalAttempt(ctx context.Context) (bool, error) {
 }
 
 // portalItem is the first scroll or non-empty tome in the main pack.
-func (f *Fighter) portalItem(snap *d2.Snapshot) *d2.Unit {
-	if snap.Inventory == nil {
-		return nil
-	}
-	for i := range snap.Inventory.Items {
-		u := &snap.Inventory.Items[i]
-		if u.Item == nil || u.Item.Where != d2.ContInventory || !f.cat.Item(u.Class).Portal || f.portalQty(u) <= 0 {
-			continue
-		}
-		return u
-	}
-	return nil
-}
+func (f *Fighter) portalItem(snap *d2.Snapshot) *d2.Unit { return PortalSource(snap, f.cat, f.stats()) }
 
 // portalCast is true when the cast is visible: a portal object within 25 subtiles of the player, or the scroll's
 // unit no longer in the pack. A tome only shows through the object (its quantity is not read here).

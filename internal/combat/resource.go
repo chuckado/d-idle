@@ -91,14 +91,7 @@ func (f *Fighter) resInput(snap *d2.Snapshot, hs []Target, pack int, skills []re
 	if !f.lastCast.IsZero() {
 		in.SinceFight = f.now().Sub(f.lastCast).Seconds()
 	}
-	if snap.Inventory != nil {
-		for _, u := range snap.Inventory.Items {
-			if u.Item != nil && f.cat.Item(u.Class).Portal {
-				in.HasTP = true
-				break
-			}
-		}
-	}
+	in.HasTP = f.portalItem(snap) != nil
 	fr := float64(f.tune().FightRadius)
 	for _, h := range hs {
 		if h.Dist <= fr {

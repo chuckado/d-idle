@@ -20,7 +20,17 @@ docs/d2d-replicated-soak.md          d2d-replicated-soak   d2d-replicated-soak
 docs/d2d-container-soak.md           d2d-container-soak    d2d-container-soak
 internal/merc/**  m3-merc  m3-merc
 internal/bot/resource.go  m3-merc  m3-merc
+internal/bot/resource.go  fixportal  fix-portal
 internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+cmd/d2bot/d2dwire.go  fixportal  fix-portal
+cmd/d2bot/d2dportal_test.go  fixportal  fix-portal
+cmd/d2bot/boss.go  fixportal  fix-portal
+internal/bot/resource_portal_test.go  fixportal  fix-portal
+internal/combat/portal.go  fixportal  fix-portal
+internal/combat/portalpick_test.go  fixportal  fix-portal
+internal/combat/fighter.go  fixportal  fix-portal
+internal/combat/resource.go  fixportal  fix-portal
+docs/fixportal.md  fixportal  fix-portal
