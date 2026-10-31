@@ -90,3 +90,12 @@ internal/town/beltfix_test.go  fixbelt2  fix-belt2
 internal/loot/loot.go  fixbelt2  fix-belt2
 internal/loot/fixpickup_test.go  fixbelt2  fix-belt2
 docs/fixbelt2.md  fixbelt2  fix-belt2
+internal/nav/walk.go  fixnav  fix-nav
+internal/nav/nav.go  fixnav  fix-nav
+internal/nav/waypoint.go  fixnav  fix-nav
+internal/nav/act2hints.go  fixnav  fix-nav
+internal/nav/fixnav_test.go  fixnav  fix-nav
+internal/bot/waypoints.go  fixnav  fix-nav
+internal/bot/task.go  fixnav  fix-nav
+internal/bot/fixnav_test.go  fixnav  fix-nav
+docs/fixnav.md  fixnav  fix-nav

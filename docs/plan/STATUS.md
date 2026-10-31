@@ -45,6 +45,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-belt2](../../openspec/changes/fix-belt2/) | in-progress | fixbelt2 | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/beltfix_test.go`<br>`internal/loot/loot.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixbelt2.md` | - |
 | [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/verbs.go`<br>`internal/d2denv/reader.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`docs/knobs.md` | - |
 | [fix-missile2](../../openspec/changes/fix-missile2/) | in-progress | fixmissile2 | `internal/d2dctl/parse.go`<br>`internal/d2dsrc/missiles.go`<br>`internal/d2dsrc/missiles_test.go`<br>`internal/combat/dodge_test.go`<br>`docs/fixmissile.md` | - |
+| [fix-nav](../../openspec/changes/fix-nav/) | in-progress | fixnav | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/waypoint.go`<br>`internal/nav/act2hints.go`<br>`internal/nav/fixnav_test.go`<br>`internal/bot/waypoints.go`<br>`internal/bot/task.go`<br>`internal/bot/fixnav_test.go`<br>`docs/fixnav.md` | - |
 | [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`docs/fixobj.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/sim/sim.go`<br>`internal/loot/export_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
@@ -85,6 +86,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fix-missile: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-missile2: go test -p 1 ./internal/d2dsrc ./internal/d2dctl ./internal/combat passes including TestMissilesRealVerb, TestParseMissileReal, TestSidestepRealRows
 - change fix-missile2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix-nav: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/nav ./internal/bot ./internal/d2dworld pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fix-nav: live proof is a drill after merge: DW variants in docs/fixnav.md
 - change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-obj: live proof is a drill rerun after merge: H.obj, H.pause, D8, D3.n (docs/fixobj.md)
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -104,6 +107,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 89bbc39 10-31 16:16 `Merge agent/fixbelt2: no belt column is no room; PlaceFor/WillBeltFor keep planned kinds a column` (fix-belt2)
 - cc68b7a 10-31 16:13 `Merge agent/readme: README rewrite, d.idle name restyle` (readme)
 - 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
 - d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
@@ -113,5 +117,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
 - 1430083 10-31 15:23 `Merge agent/waitsaudit: waits audit, game-time ApproachNPC deadline, LateClock` (waits-audit)
 - c0ae733 10-31 15:21 `Merge agent/cr149: PR #149 CodeRabbit follow-ups posted` (cr149)
-- 6f860df 10-31 15:06 `Merge agent/forkcheats2: fork cheats round 2 docs` (forkcheats2)
 <!-- statusgen:end -->

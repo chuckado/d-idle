@@ -75,12 +75,17 @@ type Navigator struct {
 	Escape func(ctx context.Context) error
 
 	// Hint biases informed exploration toward a point (zero value: none). Set with ExploreToward.
-	hint     *input.Point
-	caution  float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
-	wantExit int     // level whose exit tiles ExitTo is deliberately walking onto (0: none)
-	wpLevel  int     // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
-	wpSince  time.Time
-	wpClicks int // interactions and row clicks of the current TakeWaypoint
+	hint        *input.Point
+	caution     float64 // multiplier on monster avoidance (1, or 2 during CorpseApproach)
+	wpMu        sync.Mutex
+	wpNew       []int
+	mouthFails  map[mouthKey]mouthFail
+	mouthLast   mouthKey
+	mouthLastOK bool
+	wantExit    int // level whose exit tiles ExitTo is deliberately walking onto (0: none)
+	wpLevel     int // level of the last observation and when it was first seen: the waypoint cooldown (waypoint.go)
+	wpSince     time.Time
+	wpClicks    int // interactions and row clicks of the current TakeWaypoint
 
 	e          *env.Env
 	w          worldSource

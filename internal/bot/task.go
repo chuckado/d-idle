@@ -351,6 +351,7 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 		w.WPs[task.Area(a)] = w.WPs[task.Area(a)] || on
 	}
 	l.wp.init()
+	r.drainTouched(s)
 	for k := range l.wp.touched {
 		if k.diff == int(p.Difficulty) {
 			w.WPs[task.Area(k.area)] = true

@@ -25,3 +25,12 @@ var act2Hints = [][2]int{
 var knownWaypointPos = map[int]input.Point{
 	40: {X: 5069, Y: 5084},
 }
+
+// knownWaypointRel: level-relative waypoint positions of the act 3 to 5 towns, seen on arrival by d2d (V live DRILLS4,
+// docs/probes/drills/README.md DW cross-act rows). Used only where the level map has an Origin (d2d); Game.exe never
+// reads it. Other levels are UNVERIFIED and left out.
+var knownWaypointRel = map[int]input.Point{
+	75:  {X: 159, Y: 49},
+	103: {X: 44, Y: 19},
+	109: {X: 114, Y: 69},
+}

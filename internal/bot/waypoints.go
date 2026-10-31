@@ -16,6 +16,19 @@ type WaypointToucher interface {
 	ActivateWaypointNear(ctx context.Context, maxDist float64) (bool, error)
 }
 
+// WaypointDrainer is the optional Mover capability that reports waypoints the navigator touched on its own
+// (the town's waypoint-to-town trip, nav.DrainActivated).
+type WaypointDrainer interface{ DrainActivated() []int }
+
+// drainTouched moves what the navigator touched into the runner's memory.
+func (r *Runner) drainTouched(s *d2.Snapshot) {
+	if dr, ok := r.d.Mover.(WaypointDrainer); ok && s != nil && s.Player != nil {
+		if a := dr.DrainActivated(); len(a) > 0 {
+			r.markTouched(s, a...)
+		}
+	}
+}
+
 const (
 	wpTouchMaxDist = 70               // subtiles: only a waypoint this close is worth a detour
 	wpTouchGap     = 20 * time.Second // between two looks at the same area
@@ -50,6 +63,7 @@ func diffOf(s *d2.Snapshot) int {
 func (r *Runner) activeWaypoints(s *d2.Snapshot) (map[int]bool, bool) {
 	out := map[int]bool{}
 	known := false
+	r.drainTouched(s)
 	if td := r.d.Task; td != nil && td.Quests != nil {
 		if v, ok := td.Quests.Read(diffOf(s)); ok {
 			known = true
