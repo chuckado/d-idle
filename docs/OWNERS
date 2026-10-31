@@ -51,3 +51,7 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
+docs/fixstall3.md  fixstall3  fixstall3
+internal/d2dctl/testdata/camp-grid.txt  fixstall3  fixstall3
+internal/d2dtown/wiring_test.go  fixstall3  fixstall3
+internal/combat/fight.go  fixstall3  fixstall3

@@ -75,7 +75,7 @@ func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst strin
 	nv := be.Navigator()
 	rig := d2dcombat.Attach(context.Background(), e, nv, be.Ctl)
 	te := *e
-	te.In = d2dtown.HoverFirstBelt(be.Ctl, be.Client)
+	te.In = d2dtown.Input(be.Ctl, be.Client)
 	tw := town.New(&te, nv)
 	ad := d2dtown.New(be.Client, be.Source, d2dsrc.NewDBTables(db))
 	tw.UseSource(ad.Source())

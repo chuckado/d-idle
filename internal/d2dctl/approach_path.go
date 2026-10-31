@@ -24,7 +24,19 @@ type subPt struct{ x, y int }
 
 // planAround returns waypoints (in cells) from (fx,fy) to the free cell near (tx,ty), or nil when no route exists.
 // rows is the `debug grid 5` reply, others the cells of NPCs to keep clear of (the target excluded).
+//
+// Clearance is adaptive (fixstall3, DRILLS7 F10): clearance 1 (every route cell has free neighbours) keeps clear of
+// wall edges and is tried first; when the player stands in a gap 1 to 2 subtiles wide (the H.pause stall cells beside
+// the camp block) no clearance-1 route exists, and clearance 0 (cell centres only, diagonal steps still need both
+// side cells) is the fallback.
 func planAround(rows []string, fx, fy, tx, ty float64, others [][2]float64) []([2]float64) {
+	if wps := planAroundClear(rows, fx, fy, tx, ty, others, 1); wps != nil {
+		return wps
+	}
+	return planAroundClear(rows, fx, fy, tx, ty, others, 0)
+}
+
+func planAroundClear(rows []string, fx, fy, tx, ty float64, others [][2]float64, clear int) []([2]float64) {
 	h := len(rows)
 	if h == 0 {
 		return nil
@@ -49,8 +61,8 @@ func planAround(rows []string, fx, fy, tx, ty float64, others [][2]float64) []([
 		if blockedNPC(x, y) {
 			return false
 		}
-		for dy := -1; dy <= 1; dy++ {
-			for dx := -1; dx <= 1; dx++ {
+		for dy := -clear; dy <= clear; dy++ {
+			for dx := -clear; dx <= clear; dx++ {
 				if !free(x+dx, y+dy) {
 					return false
 				}

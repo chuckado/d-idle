@@ -657,7 +657,8 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 			return nil
 		}
 		if tr.approaches >= t.MaxApproaches {
-			f.ignore(st, tg, IgnoreApproaches, fmt.Sprintf("%d approaches, %.0f subtiles away", tr.approaches, tg.Dist))
+			f.ignore(st, tg, IgnoreApproaches, fmt.Sprintf("%d approaches, %.0f subtiles away, player (%d,%d) target (%d,%d) inReach=%t onScreen=%t los=%t", // geometry for the next probe (fixstall3 F12)
+				tr.approaches, tg.Dist, me.X, me.Y, target.X, target.Y, inReach, onScreen(snap, target), f.los(me, target)))
 			return nil
 		}
 		tr.approaches++
