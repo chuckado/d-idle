@@ -42,3 +42,9 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+openspec/changes/d2d-gate-ladder/**  gateladder  d2d-gate-ladder
+docs/review-strategy.md  gateladder  d2d-gate-ladder
+docs/adr/0013-retire-game-exe-gates.md  gateladder  d2d-gate-ladder
+docs/decisions.md  gateladder  d2d-gate-ladder
+docs/g1-log.md  gateladder  d2d-gate-ladder
+docs/process/dispatcher-brief.md  gateladder  d2d-gate-ladder

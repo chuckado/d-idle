@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
+| [d2d-gate-ladder](../../openspec/changes/d2d-gate-ladder/) | in-progress | gateladder | `openspec/changes/d2d-gate-ladder/**`<br>`docs/review-strategy.md`<br>`docs/adr/0013-retire-game-exe-gates.md`<br>`docs/decisions.md`<br>`docs/g1-log.md`<br>`docs/process/dispatcher-brief.md` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
@@ -68,6 +69,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
 - change d2d-default-backend: bot started with no flag uses d2d
+- change d2d-gate-ladder: tools/openspec.sh validate --all --strict passes with this delta
+- change d2d-gate-ladder: go run ./cmd/leakcheck -mode fail has 0 hits; changecheck -cli 0 warnings
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -83,6 +86,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
 - b044d7a 10-31 13:07 `Merge agent/tomepr: tome PR candidate proof, draft, evidence pack` (tomepr)
 - 9f6109b 10-31 12:56 `Merge agent/drills2: drills D1 rerun + D2 live` (m1-liveproof)
 - 705d984 10-31 12:45 `Merge agent/forkimpact: PR #148 impact research` (pr148impact)
@@ -92,5 +96,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
 - 146f748 10-31 12:18 `Merge agent/openbelt: belt scroll PR opened upstream (#147)` (openbelt)
 - 5f32779 10-31 12:10 `Merge agent/fixportal2: portal verb guards (dead ctx, idle wait, object 59)` (fix-portal2)
-- 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
 <!-- statusgen:end -->
