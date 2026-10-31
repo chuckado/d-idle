@@ -2,7 +2,7 @@
 
 ```yaml
 change: primreview
-status: in-progress
+status: archived
 agent: primreview
 branch: agent/primreview
 worktree: ~/code/d2lod-wt/primreview
@@ -12,7 +12,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
+merge: 1bab0ac
 result: "docs only, not verified live (read-only review of soak logs on the worker host and code at 571224d); hypothesis PARTIAL: belt put works, sticky beltFullAt after re-entry ErrNoItem and no post-shop fill leave potions in the pack; looterAdapter drops recovery mode"
 ```
 

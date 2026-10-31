@@ -42,7 +42,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/resource.go`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
-| [primreview](../../openspec/changes/primreview/) | in-progress | primreview | `docs/primitives-review.md`<br>`openspec/changes/primreview/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 26 requirements
@@ -71,9 +70,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
-- change primreview: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 
 ### Recent merges
+- 1bab0ac 10-31 11:39 `Merge agent/primreview: primitives review` (primreview)
 - c75c9c6 10-31 11:33 `Merge agent/goldoff: goldfloor levers off by default` (goldfloor)
 - 880485a 10-31 11:29 `Merge agent/primlist: docs/primitives.md and m1-liveproof widened to the live drill suite` (m1-liveproof)
 - 86a9c2b 10-31 11:17 `Merge agent/cr134: PR #134 CodeRabbit round 2 (F1, F2)` (upstream-bundle)
@@ -83,5 +82,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ea13c89 10-31 10:18 `Merge agent/decompwake: monster wake trace (clean negative)` (decompwake)
 - a403585 10-31 10:07 `Merge agent/goldfloor-impl: goldfloor levers A and B` (goldfloor)
 - db3a462 10-31 10:00 `Merge agent/routeguard-impl: route guard floors` (m3-routeguard)
-- 4d26ed1 10-31 09:53 `Merge agent/stashcap-impl: m1-stashcap stash gold cap` (m1-stashcap)
 <!-- statusgen:end -->
