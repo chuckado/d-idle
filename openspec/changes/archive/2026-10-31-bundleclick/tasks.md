@@ -16,7 +16,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings; leakcheck fail mode exit 0"
-merge: MERGEPLACEHOLDER
+merge: 47ee3cc
 result: "PR #149 now holds both claims (5 commits, 19 files, head ecb267db, plain push); click oracle 129,283 -> 0 of 390,000 and tome oracle 29,551 -> 0 of 108,000 re-proved on the combined branch; verified live: not applicable (no game)"
 ```
 

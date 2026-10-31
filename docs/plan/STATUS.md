@@ -92,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
 - c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
 - 89b28fe 10-31 14:56 `Merge agent/decomprepair: sync origin/main into fixprice` (decomprepair)
 - 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
@@ -101,5 +102,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
 - 6c8e548 10-31 14:08 `Merge agent/forkcheats: fork cheats documented` (forkcheats)
-- 3eba209 10-31 13:40 `Merge agent/fixwp: waypoint verb fix (W1 class, W2 rows, W5 origin)` (fix-wp)
 <!-- statusgen:end -->
