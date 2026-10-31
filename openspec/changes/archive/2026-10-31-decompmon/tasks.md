@@ -2,7 +2,8 @@
 
 ```yaml
 change: decompmon
-status: in-progress
+status: archived
+merge: 288ade1
 agent: decompmon
 branch: agent/decompmon
 worktree: ~/code/d2lod-wt/decompmon
