@@ -42,7 +42,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
-| [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/parse.go`<br>`internal/d2dctl/verbs.go`<br>`internal/d2dsrc/missiles.go`<br>`internal/d2denv/reader.go`<br>`internal/d2dsrc/missiles_test.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`internal/combat/dodge_test.go`<br>`docs/knobs.md`<br>`docs/fixmissile.md` | - |
+| [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/verbs.go`<br>`internal/d2denv/reader.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`docs/knobs.md` | - |
+| [fix-missile2](../../openspec/changes/fix-missile2/) | in-progress | fixmissile2 | `internal/d2dctl/parse.go`<br>`internal/d2dsrc/missiles.go`<br>`internal/d2dsrc/missiles_test.go`<br>`internal/combat/dodge_test.go`<br>`docs/fixmissile.md` | - |
 | [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`docs/fixobj.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
@@ -79,6 +80,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-missile: go test -p 1 ./internal/d2dsrc ./internal/d2dctl ./internal/combat ./internal/env passes including TestMissiles*, TestCastGapCoversEarlyCast, TestHostileMissilesD2dShape
 - change fix-missile: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix-missile2: go test -p 1 ./internal/d2dsrc ./internal/d2dctl ./internal/combat passes including TestMissilesRealVerb, TestParseMissileReal, TestSidestepRealRows
+- change fix-missile2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-obj: live proof is a drill rerun after merge: H.obj, H.pause, D8, D3.n (docs/fixobj.md)
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -98,6 +101,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
 - 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 - 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
@@ -107,5 +111,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6f860df 10-31 15:06 `Merge agent/forkcheats2: fork cheats round 2 docs` (forkcheats2)
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
 - c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
-- 89b28fe 10-31 14:56 `Merge agent/decomprepair: sync origin/main into fixprice` (decomprepair)
 <!-- statusgen:end -->

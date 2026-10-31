@@ -566,9 +566,11 @@ func parseQuest(rest string) (QuestInfo, error) {
 	return q, nil
 }
 
-// Missile is one line of "debug missiles" (a REQUESTED verb, docs/fixmissile.md; the stock and lab d2d do not have it
-// yet, U live): <unit> <missile id> <x> <y> <dx> <dy> <speed> <owner type> <owner unit> <ttl>. Cells are level-relative
-// like "monsters"; dx dy is the unit direction of flight, speed is cells per second, ttl the ticks left (-1 unknown).
+// Missile is one line of the lab fork's "debug missiles" (docs/forkcheats.md, vetted live there; docs/fixmissile.md):
+// <unit> <missile id> <x> <y> <dx> <dy> <speed> <owner type> <owner unit> <ttl> then the extras <friendly> <name>.
+// Cells are level-relative like "monsters"; dx dy is the unit direction of flight, speed is cells per second, ttl the
+// 40 ms ticks left (-1 unlimited), Unit only the place in the list (not stable). Owner type 0 player, 1 monster or
+// merc, -1 none (a hit effect such as shamanexp: speed 0, owner -1, friendly 0). The two extras are optional.
 type Missile struct {
 	Raw       string
 	Unit      int
@@ -579,6 +581,8 @@ type Missile struct {
 	OwnerType int // d2 unit type of the shooter: 0 player, 1 monster
 	OwnerID   int
 	TTL       int
+	Friendly  bool   // extra column; false when absent
+	Name      string // extra column; "" when absent
 }
 
 // ParseMissile parses one "debug missiles" row.
@@ -599,5 +603,11 @@ func ParseMissile(line string) (Missile, error) {
 	m.OwnerType, e[7] = atoi(f[7])
 	m.OwnerID, e[8] = atoi(f[8])
 	m.TTL, e[9] = atoi(f[9])
+	if len(f) > 10 {
+		m.Friendly = strings.TrimSpace(f[10]) == "1"
+	}
+	if len(f) > 11 {
+		m.Name = strings.TrimSpace(f[11])
+	}
 	return m, firstErr(e[:]...)
 }

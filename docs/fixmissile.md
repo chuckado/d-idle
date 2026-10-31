@@ -13,6 +13,8 @@ Bot side: `d2dctl.Client.Missiles` / `ParseMissile`, `d2dsrc.Source.FillMissiles
 
 Note: the sidestep (`MissileDodge`) stays off by default (existing knob, policy); the radius dodge in the fight loop is on. Turning the sidestep on is held for the live pass.
 
+Update: the real verb exists (lab fork, docs/forkcheats.md; vetted live there). Columns: `unit, missile id, x, y, dx, dy, speed, owner type, owner unit, ttl` plus the extras `friendly, name`; owner type 0 player, 1 monster or merc, -1 none; ttl in 40 ms ticks (-1 unlimited); `unit` is only the list place. A monster's hit effect (shamanexp) is also listed with speed 0 and owner -1: `FillMissiles` drops every row with speed 0 (the parser stays raw), so only moving missiles reach `Snapshot.Missiles`. Hostile = owner type 1 and not a friend (merc); the player's own bolts are not. Card fix-missile2.
+
 ## B3 CastGapMs below the cast (shared default change)
 Evidence: the early Sorceress casts Fire Bolt / Charged Bolt in 560 ms; docs/d2d-casts-real.md (V-d2d) measured 1.6 to 1.75 commands per real cast at `CastGapMs` 450 (dropped mid-cast) and 1.02 to 1.04 at 650; the trace counts 5.4 cast commands per kill vs 1.1 on Game.exe. New default 650, knob range unchanged (250..1200), a constant not computed from FCR (the knob is the single place; faster casters can lower it). It applies to every class (shared); other classes add their own waits on top. Three simulator tests whose fixtures were tuned to 450 pin it (`oldCastGap`). docs/d2d-combat.md still says 450 (not owned here).
 

@@ -123,3 +123,40 @@ func TestHostileMissilesD2dShape(t *testing.T) {
 		t.Fatalf("hostile %v", got)
 	}
 }
+
+// The real rows after the d2d source's speed filter: the hostile shaman bolt (monster 26) is dodged, the player's own
+// Fire Bolt is not (the hit effect never got here).
+func TestHostileMissilesRealRows(t *testing.T) {
+	snap := &d2.Snapshot{Player: &d2.Player{ID: 1, X: 100, Y: 100}, Missiles: []d2.Unit{
+		{Class: 58, OwnerType: 0, OwnerID: 1, X: 102, Y: 100},
+		{Class: 22, OwnerType: 1, OwnerID: 26, X: 104, Y: 100},
+	}}
+	if got := hostileMissiles(snap); len(got) != 1 || got[0].X != 104 {
+		t.Fatalf("hostile %v", got)
+	}
+}
+
+// Combat sim with the real hostile row: the shaman bolt (id 22) next to us makes the sidestep fire, our own Fire Bolt
+// (id 58) alone does not.
+func TestSidestepRealRows(t *testing.T) {
+	missileKinds = func(c int) d2.MissileKind {
+		if c == 22 || c == 58 {
+			return d2.MissileFireWall
+		}
+		return d2.MissileOther
+	}
+	defer func() { missileKinds = nil }()
+	pl := &d2.Player{ID: 1, X: 100, Y: 100, Life: 100, MaxLife: 100}
+	own := d2.Unit{Class: 58, OwnerType: 0, OwnerID: 1, X: 102, Y: 100}
+	hostile := d2.Unit{Class: 22, OwnerType: 1, OwnerID: 26, X: 102, Y: 100}
+	f, _ := newDodgeFighter(1)
+	n := 0
+	if m, _ := f.sidestepMissiles(t.Context(), &d2.Snapshot{Player: pl, Missiles: []d2.Unit{own}}, &n); m {
+		t.Fatal("dodged our own bolt")
+	}
+	f, s := newDodgeFighter(1)
+	m, err := f.sidestepMissiles(t.Context(), &d2.Snapshot{Player: pl, Missiles: []d2.Unit{own, hostile}}, &n)
+	if err != nil || !m || len(s.moves) != 1 {
+		t.Fatalf("hostile bolt not dodged: %v %v %v", m, err, s.moves)
+	}
+}
