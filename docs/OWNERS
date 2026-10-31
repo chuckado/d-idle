@@ -56,3 +56,11 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+docs/research/static-field-chill-trace.md decompstatic          decompstatic
+docs/research/pr-static-*.md         decompstatic          decompstatic
+tools/emu/static_field.py            decompstatic          decompstatic
+tools/emu/cold_length.py             decompstatic          decompstatic
+openspec/changes/decompstatic/**     decompstatic          decompstatic
+docs/decomp-queue.md                 decompstatic          decompstatic
+docs/research/README.md              decompstatic          decompstatic
+docs/INDEX.md                        decompstatic          decompstatic
