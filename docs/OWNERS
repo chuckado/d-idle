@@ -87,3 +87,17 @@ internal/combat/castfirst_test.go  fixmissile  fix-missile
 internal/combat/dodge_test.go  fixmissile2  fix-missile2
 docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile2  fix-missile2
+README.md  readme  readme
+docs/README.md  readme  readme
+GLOSSARY.md  readme  readme
+CHANGELOG.md  readme  readme
+deploy/nas/my-d2idle.xml  readme  readme
+docs/d2d-container/README.md  readme  readme
+docs/d2d-container/my-d2dbot.xml.draft  readme  readme
+docs/d2d-container/gpl.md  readme  readme
+docs/quickstart.md  readme  readme
+docs/troubleshooting.md  readme  readme
+docs/research/README-public-draft.md  readme  readme
+docs/stream/kick-api.md  readme  readme
+docs/stream/kick-title.md  readme  readme
+web/setup.js  readme  readme

@@ -39,7 +39,7 @@ NOT LEGAL ADVICE. This is a factual summary by an AI agent for the user to take 
 ## Questions for a lawyer or the user
 1. Does a socket-connected, separately built Go bot stay outside the GPL when shipped in the same image as the GPL binary?
 2. Is a source offer by pointing to a public Git tag of the fork enough, and for how long must it stay up?
-3. Which licence do you want for D.idle itself, and may the bot code stay private while the fork is published?
+3. Which licence do you want for d.idle itself, and may the bot code stay private while the fork is published?
 4. Is an image shared with a few friends "distribution" for you (yes under the GPL), and are you comfortable publishing the fork and patches then?
 5. Any exposure from automating Diablo II (a Blizzard title) with a bot, even offline against d2d, if the project is ever public? (Personal use is the current scope.)
 6. Do we offer P1/P2 upstream (drafts exist, V d2d-fork.md section 9)? That would shrink the fork and the GPL surface to nothing of ours.

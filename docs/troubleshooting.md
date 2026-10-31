@@ -1,4 +1,4 @@
-# Troubleshooting D.idle (agent USERDOC, 2026-10-29)
+# Troubleshooting d.idle (agent USERDOC, 2026-10-29)
 
 > status: STALE for the Wine path: same caveat as quickstart.md. Wine container work is PAUSED (docs/decisions.md, ADR 0002); d2d is the likely primary backend, see docs/d2d-container/ and docs/d2d-backend.md.
 

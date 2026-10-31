@@ -9,6 +9,8 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- 2026-10-31 README refreshed (status on d2d, how we check it, layout, retired Game.exe gates) and the project name styled **d.idle** (lowercase d) in public prose, the setup wizard and the container templates. Docs and UI text only (agent/readme).
+
 - Container dashboard: fleet slots are server instances (fixes 'No Instances' on the NAS), per-slot reverse proxy to the current d2bot address, real fleet status from the bots, per-slot view-only game video (`/api/v1/instances/{id}/viewport/stream`, `xwd` capture, no new package) and a Game view card with reconnect. Offline-tested (agent/fleetview).
 
 - Container soak: `d2soak sidecar` (D2FLEET_SOAK=1) judges each fleet slot inside the d2idle container; `tools/soak/contsoak.sh`, docs/nas-container.md. Offline-tested.

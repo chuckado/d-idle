@@ -101,6 +101,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
 - d1bd0d4 10-31 16:05 `Merge agent/drills4: drill groups DW, DR, D10` (m1-liveproof)
 - 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
@@ -110,5 +111,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c0ae733 10-31 15:21 `Merge agent/cr149: PR #149 CodeRabbit follow-ups posted` (cr149)
 - 6f860df 10-31 15:06 `Merge agent/forkcheats2: fork cheats round 2 docs` (forkcheats2)
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
-- c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
 <!-- statusgen:end -->
