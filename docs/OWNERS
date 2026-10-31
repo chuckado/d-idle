@@ -61,3 +61,11 @@ internal/nav/sync.go  fixmisc  fixmisc
 internal/d2dctl/fixstall_test.go  fixstall  fixstall
 internal/nav/pinned_test.go  fixstall  fixstall
 docs/fixstall.md  fixstall  fixstall
+docs/research/static-field-chill-trace.md decompstatic          decompstatic
+docs/research/pr-static-*.md         decompstatic          decompstatic
+tools/emu/static_field.py            decompstatic          decompstatic
+tools/emu/cold_length.py             decompstatic          decompstatic
+openspec/changes/decompstatic/**     decompstatic          decompstatic
+docs/decomp-queue.md                 decompstatic          decompstatic
+docs/research/README.md              decompstatic          decompstatic
+docs/INDEX.md                        decompstatic          decompstatic
