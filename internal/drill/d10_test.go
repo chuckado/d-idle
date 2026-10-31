@@ -12,7 +12,7 @@ func min(t time.Time, restarts int, xp, kills int64, area int) Minute {
 
 func facts() D10Facts {
 	k := time.Date(2026, 10, 31, 14, 0, 0, 0, time.UTC)
-	return D10Facts{KillAt: k, KilledPID: 42, SavedPre: 100, SavedEnd: 300, StagePre: "clean", StagePost: "clean", NewD2DAt: k.Add(20 * time.Second), NewD2DPID: 43,
+	return D10Facts{KillAt: k, Events: []Event{{k.Add(time.Second), "lost"}, {k.Add(time.Second), "leave"}}, KilledPID: 42, SavedPre: 100, SavedEnd: 300, StagePre: "clean", StagePost: "clean", NewD2DAt: k.Add(20 * time.Second), NewD2DPID: 43,
 		Minutes: []Minute{min(k.Add(-10*time.Second), 2, 500, 20, 2), min(k.Add(40*time.Second), 3, 150, 20, 2), min(k.Add(60*time.Second), 3, 400, 25, 2)}}
 }
 
@@ -21,8 +21,8 @@ func TestEvalD10(t *testing.T) {
 		t.Fatalf("good run: %s %s", o.Verdict, o.Reason)
 	}
 	cases := map[string]func(*D10Facts){
-		"restarts counter": func(f *D10Facts) { f.Minutes[2].Restarts = 4 },
-		"no restart":       func(f *D10Facts) { f.Minutes[1].Restarts, f.Minutes[2].Restarts = 2, 2 },
+		"within 10s": func(f *D10Facts) { f.Minutes[1].Restarts = 4 },
+		"rose by 0":  func(f *D10Facts) { f.Minutes[1].Restarts, f.Minutes[2].Restarts = 2, 2 },
 		"back in game after": func(f *D10Facts) {
 			f.Minutes[1].Time = f.KillAt.Add(4 * time.Minute)
 			f.Minutes[2].Time = f.KillAt.Add(5 * time.Minute)
@@ -43,6 +43,11 @@ func TestEvalD10(t *testing.T) {
 		}
 	}
 	f := facts()
+	f.Events = append(f.Events, Event{f.KillAt.Add(10 * time.Second), "leave"}) // an unrelated new game raised the counter
+	if o := EvalD10(f); o.Verdict != Fail || !strings.Contains(o.Reason, "other new game") {
+		t.Errorf("unrelated new game: %s %s", o.Verdict, o.Reason)
+	}
+	f = facts()
 	f.Minutes = f.Minutes[1:]
 	if o := EvalD10(f); o.Verdict != Blocked {
 		t.Errorf("no pre-kill line: %s", o.Verdict)

@@ -220,6 +220,7 @@ func d10Once(ctx context.Context, c d10Cfg, dataDir, home string, run int) drill
 	defer lf.Close()
 	total := c.KillAfter + c.Observe + 2*time.Minute
 	var mins []drill.Minute
+	var evs []drill.Event
 	var cur *botProc
 	launch := func(n int) error {
 		args := []string{"--backend", "d2d", "--managed", "--d2d-class", "-1", "--char", c.Name, "--seed", strconv.FormatInt(c.Seed, 10),
@@ -245,6 +246,10 @@ func d10Once(ctx context.Context, c d10Cfg, dataDir, home string, run int) drill
 				if m, ok := drill.ParseMinute(sc.Text()); ok {
 					minMu.Lock()
 					mins = append(mins, m)
+					minMu.Unlock()
+				} else if e, ok := drill.ParseEvent(sc.Text()); ok {
+					minMu.Lock()
+					evs = append(evs, e)
 					minMu.Unlock()
 				}
 			}
@@ -321,6 +326,9 @@ func d10Once(ctx context.Context, c d10Cfg, dataDir, home string, run int) drill
 	// graceful stop of the bot we started (SIGTERM: walk home, save, stop the game), then the leftovers
 	cur.stop()
 	f.Minutes = snap()
+	minMu.Lock()
+	f.Events = append([]drill.Event(nil), evs...)
+	minMu.Unlock()
 	f.StillThere = zombieOrAlive(victim)
 	var left []string
 	for _, arg := range []string{"--list", "--orphans"} {

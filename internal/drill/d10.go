@@ -46,11 +46,40 @@ func ParseMinute(line string) (Minute, bool) {
 	return Minute{raw.Time, raw.Area, raw.Clvl, raw.XP, raw.Kills, raw.Restarts, raw.XPRisk, raw.XPLost}, true
 }
 
+// Event is a bot log line that tells which game restarts happened and why.
+type Event struct {
+	Time time.Time
+	Kind string // "leave" (a Save and Exit of the game, any cause), "savepoint" (planned), "lost" (the failsafe for a vanished d2d)
+}
+
+// ParseEvent classifies a line of the bot's JSON log; ok is false for lines that are no restart event.
+func ParseEvent(line string) (Event, bool) {
+	var kind string
+	switch {
+	case strings.Contains(line, "Save and Exit requested (chicken / leave game)"):
+		kind = "leave"
+	case strings.Contains(line, `"msg":"save point: saving and re-entering the game"`):
+		kind = "savepoint"
+	case strings.Contains(line, `"msg":"game lost, restarting it"`):
+		kind = "lost"
+	default:
+		return Event{}, false
+	}
+	var raw struct {
+		Time time.Time `json:"time"`
+	}
+	if json.Unmarshal([]byte(line), &raw) != nil {
+		return Event{}, false
+	}
+	return Event{raw.Time, kind}, true
+}
+
 // D10Facts is everything the live side observed.
 type D10Facts struct {
 	KillAt    time.Time
 	KilledPID int
 	Minutes   []Minute // every minute line of the bot, in order, over all bot processes
+	Events    []Event  // the restart events of the bot log, in order
 
 	NewD2DAt   time.Time // first moment a d2d with another pid answered on the slot's socket (zero: never seen)
 	NewD2DPID  int
@@ -68,6 +97,10 @@ type D10Facts struct {
 const (
 	D10BackWithin = 3 * time.Minute
 	D10LoopWithin = 5 * time.Minute
+	// D10CountSettle is how long after the first minute line back in game the restarts counter is read: later rises are
+	// other restarts (a save point is followed by a fresh game every few minutes, V live D10 pilot runs), not the
+	// recovery of the kill, which re-entered the game within 2 s.
+	D10CountSettle = 10 * time.Second
 )
 
 // EvalD10 applies the pass condition: the bot is back in game within 3 min (a minute line, which exists only in
@@ -102,10 +135,41 @@ func EvalD10(f D10Facts) Outcome {
 			bad = append(bad, fmt.Sprintf("back in game after %s, limit %s", back.Round(time.Second), D10BackWithin))
 		}
 		end := post[len(post)-1]
-		delta := end.Restarts - last.Restarts
-		obs = append(obs, fmt.Sprintf("last minute line +%s: restarts %d (delta %d)", end.Time.Sub(f.KillAt).Round(time.Second), end.Restarts, delta))
-		if delta != 1 {
-			bad = append(bad, fmt.Sprintf("restarts counter rose by %d, want exactly 1", delta))
+		inWin := first
+		for _, m := range post {
+			if m.Time.Sub(first.Time) <= D10CountSettle {
+				inWin = m
+			}
+		}
+		delta := inWin.Restarts - last.Restarts
+		// Attribution: the recovery of the kill is one leave (kind "lost"); every other unplanned leave in the window
+		// (a fresh game after a save point, V live) raises the counter by itself.
+		var lost, leaves, saves int
+		for _, e := range f.Events {
+			if e.Time.Before(f.KillAt) || e.Time.After(inWin.Time) {
+				continue
+			}
+			switch e.Kind {
+			case "lost":
+				lost++
+			case "leave":
+				leaves++
+			case "savepoint":
+				saves++
+			}
+		}
+		other := max(leaves-lost-saves, 0) // leaves that are neither the recovery nor a planned save point
+		obs = append(obs, fmt.Sprintf("restart events up to then: %d game-lost recoveries, %d planned save points, %d other new games (%d leaves in all)", lost, saves, other, leaves))
+		obs = append(obs, fmt.Sprintf("restarts counter of the minute line: %d before, %d at +%s (delta %d), %d on the last line +%s (rises after that are other restarts)",
+			last.Restarts, inWin.Restarts, inWin.Time.Sub(f.KillAt).Round(time.Second), delta, end.Restarts, end.Time.Sub(f.KillAt).Round(time.Second)))
+		switch {
+		case delta != 1:
+			bad = append(bad, fmt.Sprintf("restarts counter rose by %d within %s of the first minute line back in game, want exactly 1 (the game-lost recovery of d2d is not counted: internal/bot/loop.go gameLost calls noteReentry, not noteRecycle)", delta, D10CountSettle))
+		case other > 0:
+			bad = append(bad, fmt.Sprintf("restarts counter rose by 1 but %d other new game(s) happened in the window: the rise is theirs, the recovery itself is not counted", other))
+		}
+		if lost != 1 {
+			bad = append(bad, fmt.Sprintf("%d game-lost recoveries logged, want exactly 1", lost))
 		}
 		if first.XP < f.SavedPre && f.SavedPre >= 0 {
 			bad = append(bad, fmt.Sprintf("xp after the restart %d is below the saved xp %d before the kill", first.XP, f.SavedPre))
