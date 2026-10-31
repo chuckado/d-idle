@@ -53,6 +53,9 @@ func (l *lab) WView(ctx context.Context) (drill.WPView, error) {
 }
 
 func (l *lab) Goto(ctx context.Context, r *drill.Run, level int) error {
+	// `debug goto` is an arrival for d2d (its 10 s window restarts) even into the same level, which a navigator that
+	// watches the area id cannot see: a fresh one counts the window from its first look, as after a real level change.
+	l.wpNav = nil
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug goto %d", level), fmt.Sprintf("arrive on level %d at a free cell: the start of the portal and waypoint drills", level)); err != nil {
 		return err
 	}

@@ -139,7 +139,7 @@ func (l *lab) Cheat(ctx context.Context, actor, verb, reason string) (string, er
 	r, err := l.be.Client.Do(ctx, verb)
 	out := ""
 	if r != nil {
-		out = strings.TrimSpace(r.Rest)
+		out = strings.TrimSpace(strings.Join(append(append([]string{}, r.Lines...), r.Rest), "\n"))
 	}
 	e.Time, e.Success, e.After = time.Now().UTC(), err == nil, map[string]any{"reply": out}
 	if err != nil {

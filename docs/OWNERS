@@ -42,3 +42,15 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+internal/nav/waypoint.go  fixwp  fix-wp
+internal/nav/wpclick_test.go  fixwp  fix-wp
+internal/nav/exit_test.go  fixwp  fix-wp
+internal/d2dsrc/items.go  fixwp  fix-wp
+internal/d2dsrc/source_test.go  fixwp  fix-wp
+internal/drill/d3.go  fixwp  fix-wp
+internal/drill/d3_test.go  fixwp  fix-wp
+cmd/d2drill/wp_lab.go  fixwp  fix-wp
+cmd/d2drill/main.go  fixwp  fix-wp
+cmd/d2drill/live.go  fixwp  fix-wp
+cmd/d2drill/portal_lab.go  fixwp  fix-wp
+docs/fixwp.md  fixwp  fix-wp

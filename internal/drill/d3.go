@@ -33,6 +33,8 @@ type WPLab interface {
 	TakeWaypoint(ctx context.Context, level int) WPCall
 }
 
+const missingAct = "act 2 unlocked on the throwaway character (cheat `debug act 2` or the Andariel quest word): d2d lists only the current act's tab until then (V live: `dump ui` wp_tabs has one rect after `debug wp all`, clicks at the tab 2 and 3 positions change nothing), so a cross-act row cannot be chosen"
+
 // Arrival is "x+3, y+3" of the waypoint (trace), about 4 subtiles away; 10 leaves room for the walk-off.
 const wpArrivalMax = 10
 
@@ -49,7 +51,7 @@ func D3(l WPLab) []Drill {
 			Do: func(ctx context.Context, r *Run) Outcome { return d3inactive(ctx, r, l) }},
 		t(1, 3, "D3.a1", "Rogue Encampment to Cold Plains (act 1 row 1)"),
 		t(1, 35, "D3.a2", "Rogue Encampment to Catacombs level 2 (act 1 row 8)"),
-		t(1, 40, "D3.a3", "Rogue Encampment to Lut Gholein (cross act: tab 2 row 0)"),
+		{ID: "D3.a3", Primitive: "P23", Title: "Rogue Encampment to Lut Gholein (cross act: tab 2 row 0)", Needs: []string{missingAct}},
 		t(40, 46, "D3.a4", "Lut Gholein to Canyon of the Magi (act 2 row 8)"),
 		t(40, 52, "D3.a5", "Lut Gholein to Palace Cellar level 1 (act 2 row 6)"),
 		{ID: "D3.c", Primitive: "P23", Title: "second use right after an arrival: d2d refuses inside 10 s, the verb waits and succeeds", Limit: lim,

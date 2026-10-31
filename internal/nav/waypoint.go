@@ -233,9 +233,11 @@ func (n *Navigator) openWaypoint(ctx context.Context) error {
 				// The preset is missing until its room has streamed in (V live: Lut Gholein, "none on level 40" right
 				// after loading, fine after a walk across the town): walk to the known position, then look again.
 				kp, ok := knownWaypointPos[o.level]
-				if !ok || attempt > 0 && dist(o.pos, kp) < unitTolerance+2 {
+				if !ok || attempt > 0 && dist(o.pos, input.Point{X: kp.X - o.lm.Origin.X, Y: kp.Y - o.lm.Origin.Y}) < unitTolerance+2 {
 					return fmt.Errorf("%w: none on level %d", ErrNoWaypoint, o.level)
 				}
+				// the table is act-absolute; a level-relative backend (d2d) subtracts the level's origin (fixwp)
+				kp.X, kp.Y = kp.X-o.lm.Origin.X, kp.Y-o.lm.Origin.Y
 				pre = []d2map.Preset{{Kind: d2map.PresetObject, Pos: d2map.Point{X: kp.X, Y: kp.Y}}}
 			}
 			p := nearestPreset(o.pos, pre)
