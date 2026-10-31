@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyprs
-status: in-progress
+status: archived
 agent: verifyprs
 branch: agent/verifyprs
 worktree: ~/code/d2lod-wt/verifyprs
@@ -20,7 +20,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
+merge: 97173e0
 result: "offline verification (no live game): fix/static-field HOLDS WITH LIMITS, 232,152 own cases, 100,624 -> 0 through the real Fight::spot (upstream 72132b99 before, the branch after), READY; fix/walk-velocity HOLDS WITH LIMITS, 121,216 cases, 70,171 -> 0 on the real builds (replayed on 72132b99), NOT READY (mercs and pets still run at Run, no reviewer-runnable d2d mode, rebase); pr_guard 0/0, upstream test binaries green, sweeps clean for both"
 ```
 
