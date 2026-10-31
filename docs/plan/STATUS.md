@@ -44,6 +44,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m2-earlybase](../../openspec/changes/m2-earlybase/) | proposed | m2-earlybase | `tools/d2dsoak/baselines-early.json`<br>`docs/d2d-baselines-early.md` | - |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/resource.go`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [m3-routeguard](../../openspec/changes/m3-routeguard/) | proposed | m3-routeguard | `internal/env/tuning_route.go`<br>`internal/env/tuning_boss.go`<br>`internal/bot/routeguard.go`<br>`internal/bot/routeguard_test.go`<br>`docs/knobs.md` | - |
+| [navsoak3](../../openspec/changes/navsoak3/) | in-progress | navsoak3 | `docs/probes/navsoak3/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 26 requirements
@@ -79,6 +80,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-routeguard: go test -p 1 ./internal/bot ./internal/task passes including TestPickNeverEmptyInAct1 and the route guard tests at the new floors
 - change m3-routeguard: merc-policy MODIFIED blocks for Route guard and Andariel floor are complete (all scenarios) and validate --strict passes
 - change m3-routeguard: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change navsoak3: the soak is registered (tools/agentreap.sh --list shows navsoak3) and its logs advance
+- change navsoak3: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
 - 5be7cc7 10-31 08:13 `Merge agent/townwedge: bad-edge TTL and pocket unstick` (townwedge)
