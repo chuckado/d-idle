@@ -348,6 +348,14 @@ func d8drink(ctx context.Context, r *Run, l GameLab) Outcome {
 		return setupFail(err)
 	}
 	m0, _ := l.MercState(ctx)
+	if bg, ok := l.(beltGiver); ok { // a fresh healing potion in column 0 (a repeat finds it drunk)
+		if _, err := r.Cheat(ctx, "debug belt clear", "empty the belt so column 0 holds exactly the healing potion the drill gives (a repeat drinks the same one)"); err != nil {
+			return setupFail(err)
+		}
+		if err := bg.GiveBelt(ctx, r, "hp1", 0); err != nil {
+			return setupFail(err)
+		}
+	}
 	if err := l.MercCheat(ctx, r, "debug merc hurt 20"); err != nil {
 		return setupFail(err)
 	}

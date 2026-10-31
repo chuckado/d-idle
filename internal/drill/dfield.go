@@ -76,6 +76,9 @@ type FieldLab interface {
 	// ToArea is the bot's navigator ToArea (an exit walk); the area the character stands in afterwards.
 	// Survive respawns a dead character (the bot's Respawn) and gives a big life: the walks cross monster levels without combat.
 	Survive(ctx context.Context, r *Run) error
+	// PlaceAtMouth puts the character (logged `debug warp`) just outside the trigger of the level's exit to cave, on the
+	// side-th side, and describes where it stands; err is empty when it stands in the outer level within 1.8 cells of the exit.
+	PlaceAtMouth(ctx context.Context, r *Run, outer, cave, side int) (desc, err string)
 	ToArea(ctx context.Context, level int) (area int, err string)
 	// TouchWaypoint is nav.ActivateWaypointNear on the current level with the given reach in subtiles; drained is what
 	// the navigator hands the runner (DrainActivated).
@@ -101,11 +104,11 @@ func F(l FieldLab) []Drill {
 	return []Drill{
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
-		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: arrive in Cold Plains from the Burial Grounds mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
-			return fMouth(ctx, r, l, 17, 3, "Burial Grounds to Cold Plains")
+		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: standing in the Cave Level 1 mouth trigger (south side) in Cold Plains, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+			return fMouth(ctx, r, l, 3, 9, 0, "Cold Plains, mouth of Cave Level 1, south side")
 		}},
-		{ID: "DW.m2", Primitive: "P23", Title: "fix-nav: arrive in Cold Plains from the Cave Level 1 mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
-			return fMouth(ctx, r, l, 9, 3, "Cave Level 1 to Cold Plains")
+		{ID: "DW.m2", Primitive: "P23", Title: "fix-nav: standing in the Cave Level 1 mouth trigger (east side) in Cold Plains, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+			return fMouth(ctx, r, l, 3, 9, 1, "Cold Plains, mouth of Cave Level 1, east side")
 		}},
 		{ID: "DW.a12", Primitive: "P23", Title: "fix-nav: an unactivated waypoint touched in passing is handed to the runner and works as a travel target", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fTouch(ctx, r, l) }},
 		fight("D5.dodge", "P27", "fix-missile: a ranged monster fires at the character: the fight loop dodges, one cast command per cast", fDodge),
@@ -267,21 +270,24 @@ func firstN(s []string, n int) []string {
 // fMouth is DW.m1 and DW.m2: the character walks out of a cave into the level (the bot's own ToArea, so it arrives
 // where d2d puts it, inside the exit's trigger), then takes the waypoint to town. The bounces are the log's "level
 // changed during the walk" errors; the pass condition is town within the call and at most 2 of them.
-func fMouth(ctx context.Context, r *Run, l FieldLab, cave, field int, what string) Outcome {
-	if err := l.Goto(ctx, r, cave); err != nil {
+func fMouth(ctx context.Context, r *Run, l FieldLab, outer, cave int, side int, what string) Outcome {
+	if err := l.Survive(ctx, r); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Goto(ctx, r, outer); err != nil {
 		return setupFail(err)
 	}
 	if err := l.ActivateAll(ctx, r); err != nil {
 		return setupFail(err)
 	}
-	if err := l.Survive(ctx, r); err != nil {
+	if err := l.Tick(ctx, 40); err != nil {
 		return setupFail(err)
 	}
-	area, err := l.ToArea(ctx, field)
-	if err != "" || area != field {
-		return Blocks(fmt.Sprintf("%s: the exit walk ended in area %d (%q): the mouth arrival was not reached", what, area, err))
+	desc, perr := l.PlaceAtMouth(ctx, r, outer, cave, side)
+	if perr != "" {
+		return Blocks(what + ": the character could not be put in the mouth's trigger area: " + perr)
 	}
-	if err := l.Tick(ctx, 50); err != nil {
+	if err := l.Tick(ctx, 30); err != nil {
 		return setupFail(err)
 	}
 	c := l.TakeWaypoint(ctx, 1)
@@ -294,8 +300,8 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, cave, field int, what strin
 	}
 	bounces := countLines(c.Log, "level changed during the walk")
 	steps := countLines(c.Log, "stepping away from a cave mouth")
-	intended := "waypoint to town from the mouth: arrives in area 1, at most 2 bounces back into the cave"
-	obs := fmt.Sprintf("%s: arrived in %d, verb %s, %d ticks, %d bounces (level changed during the walk), %d step-aways; log: %s", what, v.Area, errOrOK(c.Err), c.Ticks, bounces, steps, strings.Join(firstN(c.Log, 8), " / "))
+	intended := "waypoint to town from inside the mouth's trigger area: arrives in area 1, at most 2 bounces back into the cave"
+	obs := fmt.Sprintf("%s: %s; arrived in %d, verb %s, %d ticks, %d bounces (level changed during the walk), %d step-aways; log: %s", what, desc, v.Area, errOrOK(c.Err), c.Ticks, bounces, steps, strings.Join(firstN(c.Log, 8), " / "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("area=%d err=%v bounces<=2=%v", v.Area, c.Err != "", bounces <= 2)}
 	switch {
 	case v.Area != 1 || c.Err != "":

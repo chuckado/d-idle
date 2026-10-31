@@ -488,6 +488,14 @@ func (l *lab) Pin(ctx context.Context, r *drill.Run, level int, within time.Dura
 		pi.Err = "no player"
 		return pi
 	}
+	// the navigator loads the level's collision map at its first walk: take that walk before the pocket exists, so the
+	// map does not know the wall and only the stall ladder can find out (a map that knows it answers "no path" at once)
+	wctx0, cancel0 := context.WithTimeout(ctx, 40*time.Second)
+	_ = l.navr.GoTo(wctx0, input.Point{X: s0.Player.X + 10, Y: s0.Player.Y})
+	cancel0()
+	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil {
+		s0 = sw
+	}
 	if _, err := r.Cheat(ctx, "debug pin on", "wall the throwaway into a collision pocket: the stall ladder drill (P25)"); err != nil {
 		pi.Err = err.Error()
 		return pi
@@ -537,4 +545,51 @@ func (l *lab) Survive(ctx context.Context, r *drill.Run) error {
 		_ = l.Tick(ctx, 25)
 	}
 	return l.Invincible(ctx, r)
+}
+
+func (l *lab) PlaceAtMouth(ctx context.Context, r *drill.Run, outer, cave, side int) (string, string) {
+	rep, err := l.be.Client.Do(ctx, "debug warps")
+	if err != nil || rep == nil {
+		return "", "debug warps: " + fmt.Sprint(err)
+	}
+	var ex, ey float64
+	found := false
+	for _, ln := range rep.Lines {
+		f := strings.Fields(ln)
+		if len(f) >= 4 && f[3] == strconv.Itoa(cave) {
+			ex, _ = strconv.ParseFloat(f[1], 64)
+			ey, _ = strconv.ParseFloat(f[2], 64)
+			found = true
+		}
+	}
+	if !found {
+		return "", fmt.Sprintf("no exit to level %d listed by debug warps (%s)", cave, strings.Join(rep.Lines, "; "))
+	}
+	// offsets in cells from the exit position, tried in this order for the asked side first
+	all := [][2]float64{{0, 1.5}, {1.5, 0}, {0, -1.5}, {-1.5, 0}, {1, 1}, {-1, 1}}
+	order := append([][2]float64{all[side%len(all)]}, all...)
+	for _, o := range order {
+		x, y := ex+o[0], ey+o[1]
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(x), int(y)), "stand beside a cave mouth inside its trigger area: the arrival the mouth bounce fix is about; the bot's own walk then leaves"); err != nil {
+			return "", err.Error()
+		}
+		_ = l.Tick(ctx, 15)
+		s, err := l.be.Env.Snapshot()
+		if err != nil || s.Player == nil {
+			continue
+		}
+		if s.Player.Area != outer {
+			// the warp tile fired: back out and try another offset
+			if _, err := r.Cheat(ctx, fmt.Sprintf("debug goto %d", outer), "the placement entered the cave: arrive in the outer level again"); err != nil {
+				return "", err.Error()
+			}
+			_ = l.Tick(ctx, 25)
+			continue
+		}
+		d := math.Hypot(float64(s.Player.X)/5-ex, float64(s.Player.Y)/5-ey)
+		if d <= 1.8 {
+			return fmt.Sprintf("exit to %d at (%.1f,%.1f), standing %.1f cells from it (offset %.1f,%.1f)", cave, ex, ey, d, o[0], o[1]), ""
+		}
+	}
+	return "", "no offset left the character in the outer level inside the trigger range"
 }

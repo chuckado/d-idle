@@ -699,7 +699,7 @@ func p7b(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if len(v.Ground) == 0 {
 		where = "taken (pack " + v.PackString() + ")"
 	}
-	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("col3hp=%d ground=%d", mana, len(v.Ground))}
+	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("col3hp=%d", mana)}
 	if mana > 0 {
 		o.Verdict, o.Reason = Fail, "the ground healing potion went into the mana column (column 3)"
 	} else {
