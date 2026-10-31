@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"math"
+	"os"
 	"strings"
 	"time"
 
@@ -43,13 +46,30 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 		l.be.Clock.Sleep(40 * time.Millisecond) // the bot's Pacer is warm (it steps all day); Install made a cold one, whose first step jumps its clock to game time and would expire a deadline taken before it
 	}
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
+	// drills7 diagnosis: position timeline (one sample per 6 polls and at every change of more than 0.5 cells) and the
+	// verbs the approach sent, printed to stderr when the approach fails (DRILLS6 F7 had only start and end)
+	var trace []string
+	polls, lastX, lastY := 0, -99.0, -99.0
+	inner := d2dctl.Pause
+	d2dctl.Pause = func(c context.Context, d time.Duration) error {
+		err := inner(c, d)
+		polls++
+		if lv, e := l.be.Client.Level(c); e == nil && (polls%6 == 1 || math.Hypot(lv.X-lastX, lv.Y-lastY) > 0.5) && len(trace) < 160 {
+			trace = append(trace, fmt.Sprintf("t%d(%.1f,%.1f)", l.tick(), lv.X, lv.Y))
+			lastX, lastY = lv.X, lv.Y
+		}
+		return err
+	}
+	verbs0 := verbCounts(l.be.Client.Trace())
 	t0, w0 := l.tick(), time.Now()
 	cctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
 	err = l.be.Client.ApproachNPC(cctx, idx, 15*time.Second)
 	ai.Ticks, ai.WallMs = l.tick()-t0, int(time.Since(w0).Milliseconds())
+	d2dctl.Pause = inner
 	if err != nil {
 		ai.Err = err.Error()
+		l.approachDiag(ctx, idx, trace, verbs0)
 	}
 	if u, uerr := l.UI(ctx); uerr == nil {
 		for _, p := range u.Panels {
@@ -175,3 +195,38 @@ func (l *lab) TakeGround(ctx context.Context, r *drill.Run, mode string) drill.G
 }
 
 var _ drill.HoverLab = (*lab)(nil)
+
+func verbCounts(vs []d2dctl.VerbStat) map[string]int {
+	m := map[string]int{}
+	for _, v := range vs {
+		m[v.Verb] = int(v.N)
+	}
+	return m
+}
+
+// approachDiag prints what a failed Kashya approach needs for a diagnosis: the verbs it sent, the position timeline,
+// the NPC list and `debug grid 5` (the level's collision rows round the player, d2d-backend.md).
+func (l *lab) approachDiag(ctx context.Context, idx int, trace []string, verbs0 map[string]int) {
+	w := os.Stderr
+	fmt.Fprintf(w, "H.pause-diag: approach of npc %d failed\n", idx)
+	now := verbCounts(l.be.Client.Trace())
+	for _, v := range []string{"cmd interact", "cmd move", "debug grid", "debug level", "npcs"} {
+		fmt.Fprintf(w, "H.pause-diag: verb %s +%d\n", v, now[v]-verbs0[v])
+	}
+	fmt.Fprintf(w, "H.pause-diag: timeline %s\n", strings.Join(trace, " "))
+	if lv, err := l.be.Client.Level(ctx); err == nil {
+		fmt.Fprintf(w, "H.pause-diag: player (%.2f,%.2f)\n", lv.X, lv.Y)
+	}
+	if npcs, err := l.be.Client.NPCs(ctx); err == nil {
+		for _, n := range npcs.Items {
+			fmt.Fprintf(w, "H.pause-diag: npc %d %s cell (%.2f,%.2f)\n", n.Index, n.Name, n.CellX, n.CellY)
+		}
+	}
+	if rows, err := l.be.Client.Grid(ctx, 5); err == nil {
+		for _, r := range rows {
+			fmt.Fprintf(w, "H.pause-diag: grid %s\n", r)
+		}
+	} else {
+		fmt.Fprintf(w, "H.pause-diag: grid err %v\n", err)
+	}
+}
