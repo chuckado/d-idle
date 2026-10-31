@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Ground potion goes where the game puts it
-With the inventory panel closed, a clicked ground potion SHALL be treated as landing on the belt when a belt column whose bottom potion is of the same kind has a free box, or a column is empty; otherwise in the pack. The pickit MUST want a potion that will land on the belt even when the pack already holds one, MUST apply the pack buffer only to potions that would land in the pack, and MUST count a potion that arrives on the belt or in the pack (by the held count of its class, not the unit id) as picked up. The belt fill SHALL choose its box by the same rule. Source: docs/research/belt-pickup-trace.md, docs/fixpickup.md.
+A clicked ground potion (inventory panel closed) SHALL be treated as landing on the belt when a same-kind column has a free box or a column is empty, else in the pack, and the pickit, the pickup arrival check and the belt fill MUST all follow that rule. Source: docs/fixpickup.md.
 
 #### Scenario: Matching column has room, one in the pack
 - **WHEN** a healing potion lies on the ground, the belt has a healing column with a free box and the pack holds one healing potion
