@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
+| [fixmisc](../../openspec/changes/fixmisc/) | in-progress | fixmisc | `internal/nav/sync.go`<br>`internal/nav/fixmisc_test.go`<br>`internal/combat/types.go`<br>`internal/combat/fight.go`<br>`internal/combat/fixmisc_test.go`<br>`internal/resource/policy_test.go`<br>`docs/fixmisc.md` | - |
 | [fixrun](../../openspec/changes/fixrun/) | in-progress | fixrun | `internal/d2dinput/run.go`<br>`internal/d2dinput/run_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/lifecycle.go`<br>`internal/d2denv/runreset_test.go`<br>`internal/bot/observe.go`<br>`docs/fixrun.md`<br>`openspec/changes/fixrun/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -73,6 +74,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fixmisc: go test per package (nav, combat, resource) and whole-repo vet/test -short on the worker host pass; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixmisc: live proof: debug goto then Fighter.Clear without a warm-up walk (docs/fixmisc.md)
 - change fixrun: go test -p 1 for internal/d2dinput, internal/d2denv, internal/bot passes; whole-repo vet and test -short on the worker host
 - change fixrun: live proof (DRILLS lane): restart a d2d game, move a fixed leg, compare ticks per subtile before and after (docs/fixrun.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
@@ -86,6 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- b0f8314 10-31 17:56 `Merge agent/fixrun: run-reset in WaitInGame, run/stamina in minute log; correct B1 premise; archive fix-obj and waits-audit` (fixrun)
 - 497107f 10-31 17:48 `Merge agent/drills5: live drill results for open fix cards` (m1-liveproof)
 - 0e592a6 10-31 17:44 `Merge agent/wpopen: upstream #153 open, posted lines` (wpopen)
 - 80df3a6 10-31 17:36 `Merge agent/fix152win: PR #152 MSVC C4456 fix noted` (fix152win)
@@ -95,5 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - aa94721 10-31 17:20 `Merge agent/wppr: waypoint PR candidate docs and tooling` (wppr)
 - cebe506 10-31 17:16 `Merge agent/discordhooks: Discord webhook loader` (discordhooks)
 - 88e2cf6 10-31 17:07 `Merge agent/discordtoken: long-lived Discord ops bot token loader` (discordtoken)
-- e68fd9d 10-31 17:05 `Merge agent/cr152: CodeRabbit round 1 follow-up on PR #152` (cr152)
 <!-- statusgen:end -->

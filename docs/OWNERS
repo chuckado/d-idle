@@ -51,3 +51,10 @@ internal/d2denv/runreset_test.go  fixrun  fixrun
 internal/bot/observe.go  fixrun  fixrun
 docs/fixrun.md  fixrun  fixrun
 openspec/changes/fixrun/**  fixrun  fixrun
+internal/nav/fixmisc_test.go  fixmisc  fixmisc
+internal/combat/types.go  fixmisc  fixmisc
+internal/combat/fight.go  fixmisc  fixmisc
+internal/combat/fixmisc_test.go  fixmisc  fixmisc
+internal/resource/policy_test.go  fixmisc  fixmisc
+docs/fixmisc.md  fixmisc  fixmisc
+internal/nav/sync.go  fixmisc  fixmisc

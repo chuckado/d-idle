@@ -484,3 +484,22 @@ func TestChampionEarlyTightensDrinkLines(t *testing.T) {
 		t.Fatalf("knob 0 = off: %v", got)
 	}
 }
+
+// DRILLS5 F3 (D5.p28): a broke character (gold 0) with a melee fallback rests and fights on instead of drinking a mana
+// potion against a weak pack; with gold it drinks. This is the economy rule of PotionPolicy, not a bug: a melee fallback
+// does not need mana and healing potions are what keeps a poor character alive. A dangerous pack (danger 2) overrides.
+func TestPoorMeleeRestsRichDrinksMana(t *testing.T) {
+	tu := DefaultTuning()
+	fight := func(gold, danger int) PotionDecision {
+		return PotionPolicy(with(func(i *Input) { i.Hostiles = 3; i.Mana = 2; i.Gold = gold; i.PackDanger = danger }), tu)
+	}
+	if d := fight(0, 0); d.Drink != PotionNone {
+		t.Fatalf("gold 0, weak pack: %+v", d)
+	}
+	if d := fight(5000, 0); d.Drink != PotionMana {
+		t.Fatalf("rich, weak pack: %+v", d)
+	}
+	if d := fight(0, 2); d.Drink != PotionMana {
+		t.Fatalf("gold 0, dangerous pack: %+v", d)
+	}
+}

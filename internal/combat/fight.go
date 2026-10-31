@@ -102,6 +102,7 @@ func newFightState() *fightState {
 // ErrChicken (the game was left) or ErrDead are returned with the partial result.
 func (f *Fighter) Clear(ctx context.Context, o ClearOpts) (ClearResult, error) {
 	t := f.tune()
+	f.syncMap()
 	snap, err := f.read(ctx)
 	if err != nil {
 		return ClearResult{}, err
@@ -126,10 +127,19 @@ func (f *Fighter) Clear(ctx context.Context, o ClearOpts) (ClearResult, error) {
 	return res, err
 }
 
+// syncMap refreshes the mover's map once per call (best effort: a loading screen or an error leaves the old state, the
+// fight loop then behaves as before).
+func (f *Fighter) syncMap() {
+	if s, ok := f.mv.(Syncer); ok {
+		_ = s.Sync()
+	}
+}
+
 // Kill fights one unit (a boss or a named monster) until it dies. The unit must be on the map within a couple of
 // seconds, else ErrTargetGone. The time limit is the Clear limit, not the per-target limit.
 func (f *Fighter) Kill(ctx context.Context, unitID uint32) error {
 	t := f.tune()
+	f.syncMap()
 	snap, err := f.read(ctx)
 	if err != nil {
 		return err
