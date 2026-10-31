@@ -528,7 +528,7 @@ func d2h(ctx context.Context, r *Run, l PortalLab) Outcome {
 	intended := "cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll"
 	observed := fmt.Sprintf("cast1 %s, objects near %d any %d at %v; walked to %s (%v), %.0f subtiles; cast2 %s, objects near %d any %d at %v, %.0f subtiles from the first; scrolls %d -> %d; debug portals [%s]; lines: %s / %s",
 		errText(c1), v1.Near, v1.Any, v1.PortalPos, vw.pos(), walkErr, dist(vw, v1), errText(c2), v2.Near, v2.Any, v2.PortalPos, moved, v0.Scrolls, v2.Scrolls, list, portalLines(c1), portalLines(c2))
-	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("%v %v %d %d %d %d %.0f %d %s", c1.Err, c2.Err, v1.Near, v1.Any, v2.Near, v2.Any, moved, v2.Scrolls, list)}
+	o := Outcome{Intended: intended, Observed: observed, Sig: fmt.Sprintf("%v %v %d %d %d %d %v %d %d", c1.Err, c2.Err, v1.Near, v1.Any, v2.Near, v2.Any, moved >= 20, v2.Scrolls, strings.Count(list, " / ")+1)} // not the list text: its coordinates drift with the walk (drills7: one subtile between runs)
 	switch {
 	case c1.Err != "" || c2.Err != "" || walkErr != nil:
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("cast1 %q, walk %v, cast2 %q", c1.Err, walkErr, c2.Err)
