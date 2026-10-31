@@ -100,6 +100,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
   - XPGAP result 2026-10-31: gap not closed; none of the three knobs beats noise (see [d2d-xp-gap.md](d2d-xp-gap.md)); next suspects: shorten the town trip (waypoint out of town, LEVELWP), leave emptied Blood Moor sooner, chicken restarts, border ping-pong.
 - **d2d container**: card `d2d-container-soak` (the 24 h retirement soak); build and bot cards are archived. Blocked on the licence/GPL review (STATUS decision 1). Remaining from the archived cards: 1 h one-slot bot gate in the container, realtime mode, read-only root filesystem, d2fleet wizard for d2d, viewer source via the screenshot verb, soak driver sidecar.
 - **Default backend flip**: card `d2d-default-backend` (small; after the container bot runs once).
+- **Upstream PR #153 review** (card [cr153](../openspec/changes/cr153/proposal.md)): CodeRabbit findings fixed and answered 2026-10-31 (fixup 5315e66a); watch for a CodeRabbit re-review and the maintainer.
 - **Mesh and stream**: cards `d2dmesh`, `stream-grid` (in progress).
 - **Original-game work (deferred)**: cards `gameexe-retire-soak`, `orig-decision-probes` (Mephisto quit-safety: d2d says the Act 4 gate reopens after a reload, the user says a fresh kill is needed).
 - **d2d LAN oracle demo**: archived card `d2d-lan-oracle-demo`; idea doc [research/d2d-whisper-lan-oracle.md](research/d2d-whisper-lan-oracle.md).
