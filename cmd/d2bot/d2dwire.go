@@ -58,8 +58,9 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	cb.Portal = d2dPortal(e, be, combat.NewCatalog(db))
 
 	// Town clicks need the hover-then-click step (every dialog and vendor click, docs/d2d-town.md break 4).
+	// fixstall3 F11: d2dtown.Input (not HoverFirstBelt) so the town sees WalkingInteractor and BeltPut/MoveGold too.
 	te := *e
-	te.In = d2dtown.HoverFirstBelt(be.Ctl, be.Client)
+	te.In = d2dtown.Input(be.Ctl, be.Client)
 	tw := town.New(&te, nv)
 	ad := d2dtown.New(be.Client, be.Source, d2dsrc.NewDBTables(db))
 	tw.UseSource(ad.Source())

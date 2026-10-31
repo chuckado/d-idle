@@ -2,6 +2,8 @@ package d2dctl
 
 import (
 	"context"
+	"math"
+	"os"
 	"strconv"
 	"strings"
 	"testing"
@@ -95,5 +97,60 @@ func TestApproachNPCRoutesAroundTheWall(t *testing.T) {
 	}
 	if moves < 2 {
 		t.Fatalf("expected several route legs, got %d moves", moves)
+	}
+}
+
+// campGrid loads the REAL `debug grid 5` crop of the Rogue Encampment (DRILLS7, V live), x 60..160, y 60..120, into a
+// full-size grid (everything outside the crop blocked).
+func campGrid(t *testing.T) []string {
+	t.Helper()
+	b, err := os.ReadFile("testdata/camp-grid.txt")
+	if err != nil {
+		t.Fatal(err)
+	}
+	const x0, y0 = 60, 60
+	rows := make([][]byte, 121)
+	for y := range rows {
+		rows[y] = []byte(strings.Repeat("#", 161))
+	}
+	for _, ln := range strings.Split(string(b), "\n") {
+		if ln == "" || ln[0] == '#' {
+			continue
+		}
+		f := strings.SplitN(strings.TrimLeft(ln, " "), " ", 2)
+		y, err := strconv.Atoi(f[0])
+		if err != nil || len(f) < 2 {
+			continue
+		}
+		copy(rows[y][x0:], strings.NewReplacer("P", ".", "K", ".", "A", ".").Replace(f[1])) // the markers sit on free cells
+	}
+	out := make([]string, len(rows))
+	for i, r := range rows {
+		out[i] = string(r)
+	}
+	return out
+}
+
+// F10 (DRILLS7): the three H.pause stall cells have no clearance-1 route; the adaptive planner finds one that ends
+// within the standoff of Kashya (85,91 subtiles) on standable cells.
+func TestPlanAroundRealCampStallCells(t *testing.T) {
+	rows := campGrid(t)
+	kx, ky := 85/5.0, 91/5.0
+	for _, c := range [][2]float64{{25.9, 20.5}, {25.5, 22.5}, {26.4, 20.5}, {27.7, 20.6}} {
+		wps := planAround(rows, c[0], c[1], kx, ky, nil)
+		if len(wps) == 0 {
+			t.Fatalf("no route from stall cell %v", c)
+		}
+		last := wps[len(wps)-1]
+		if d := math.Hypot(5*last[0]-85, 5*last[1]-91); d > approachStandOff+1 {
+			t.Errorf("from %v the route ends %.1f subtiles from Kashya", c, d)
+		}
+		if rows[int(5*last[1])][int(5*last[0])] != '.' {
+			t.Errorf("from %v the route ends on a blocked cell", c)
+		}
+	}
+	// clearance 1 still wins where it exists (the arrival cell)
+	if planAroundClear(rows, 27.7, 20.6, kx, ky, nil, 1) == nil {
+		t.Error("arrival cell lost its clearance-1 route")
 	}
 }
