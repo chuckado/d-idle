@@ -15,7 +15,7 @@
 | #147 belt scrolls | OPEN, being brought up to date with the new layout (UPSYNC147) | 3 + merge | waits for the maintainer |
 | tome (inventory Town Portal opens at the click tick) | READY, local, queued by the user: open when #147 merges | 3 | branch fix/tome-use on the worker host; docs/research/pr-tome-*.md |
 | shift-click belt / ctrl-click sell / inventory-open pickup | NOT STARTED (decomp-queue item 9) | ? | lab fork implements it; needs a differential proof against game.exe handlers |
-| waypoint (decomp-queue item 3) | trace running (DECOMPWP) | ? | only if a deviation is proven |
+| waypoint (decomp-queue item 3, docs/research/pr-wp-*.md) | local, proof incomplete, needs the independent verifier | 6 files, 1 commit | branch fix/waypoint-hostile-window on the worker host |
 | portal entry (ENTERPORTAL) | investigation running | ? | only if a d2d deviation is proven |
 
 When the tome PR opens, add any other READY candidate to the same bundle only if the file count stays under the margin above.
