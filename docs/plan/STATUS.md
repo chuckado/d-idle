@@ -83,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 9f6109b 10-31 12:56 `Merge agent/drills2: drills D1 rerun + D2 live` (m1-liveproof)
 - 705d984 10-31 12:45 `Merge agent/forkimpact: PR #148 impact research` (pr148impact)
 - d3e2207 10-31 12:31 `Merge agent/cr147: PR #147 test-only commit posted lines` (cr147)
 - 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
@@ -92,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5f32779 10-31 12:10 `Merge agent/fixportal2: portal verb guards (dead ctx, idle wait, object 59)` (fix-portal2)
 - 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
 - eae3b82 10-31 12:04 `Merge agent/decomptome: town portal tome decomp trace` (decomptome)
-- ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
 <!-- statusgen:end -->
