@@ -142,3 +142,4 @@ upstream: #147 (belt scrolls) brought up to date after #148 by merging upstream/
 - d.idle Discord server built 2026-10-31 (layout, roles, settings, pinned texts, feed webhooks stored in private files, feed test posts OK); the user finishes roles order, Community, Rules Screening, Onboarding, AutoMod and turns the temporary bot Administrator off; GitHub feed not wired yet (needs the user go); README and public-page link wait for the invite
 
 - fixmisc: F4 live proof pending (Fighter.Clear right after `debug goto`, no warm-up walk; recipe in docs/fixmisc.md). F3 closed as intended.
+fixstall (card [fixstall](../openspec/changes/fixstall/proposal.md), offline): NPC approach detects a stall in 1.2 s and sizes its game-time budget from the distance (DRILLS5 F1); a plain GoTo stalled in a pocket escapes by town portal (F2); live proof pending = rerun H.pause and D6.d (docs/fixstall.md); UNVERIFIED which camp object blocks (25.5,22.5)

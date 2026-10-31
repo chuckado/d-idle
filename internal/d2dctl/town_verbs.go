@@ -247,15 +247,25 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			npc = &l.Items[i]
 		}
 	}
-	deadline := Now().Add(timeout)
 	prev, perr := c.Level(ctx) // no "debug level" (stock d2d?): walk by repeating the verb only
 	if npc == nil {            // not listed (yet): still try the verb, side steps then have no direction
 		npc = &NPC{Index: index, Name: "?", CellX: prev.X, CellY: prev.Y}
 	}
+	// The budget is sized from the walk: timeout is the base, and every cell of the straight line to the NPC adds a
+	// second of game time (DRILLS5 H.pause: the camp walk needed 16 to 38 s, most of it stalls and side steps, from a
+	// cell about the same distance away). Now is the game clock under lockstep.
+	budget := timeout
+	if perr == nil {
+		budget += time.Duration(math.Hypot(npc.CellX-prev.X, npc.CellY-prev.Y) * float64(time.Second))
+	}
+	deadline := Now().Add(budget)
 	for stalls := 0; ; {
 		if err := c.CmdInteract(ctx, index); err != nil {
 			return err
 		}
+		// A walking player has moved well within stallCheck polls; one that has not stopped at an object (V, see
+		// above) and waiting out the rest of the round only wastes game time before the side step.
+		early := false
 		for i := 0; i < 10; i++ {
 			if err := Pause(ctx, 300*time.Millisecond); err != nil {
 				return err
@@ -263,16 +273,22 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			if ok, err := c.opened(ctx); err != nil || ok {
 				return err
 			}
+			if i == stallCheck && perr == nil {
+				if cur, err := c.Level(ctx); err == nil && math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
+					early = true
+					break
+				}
+			}
 		}
 		if Now().After(deadline) {
-			return fmt.Errorf("d2dctl: npc %d (%s): not reached in %v (player at %.1f,%.1f)", index, npc.Name, timeout, prev.X, prev.Y)
+			return fmt.Errorf("d2dctl: npc %d (%s): not reached in %v (player at %.1f,%.1f)", index, npc.Name, budget, prev.X, prev.Y)
 		}
 		cur, err := c.Level(ctx)
 		if err != nil || perr != nil {
 			perr, prev = err, cur
 			continue
 		}
-		if math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
+		if early || math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
 			stalls++
 			if _, err := c.sidestep(ctx, cur, npc.CellX, npc.CellY, stalls); err != nil {
 				return err
@@ -281,6 +297,9 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 		prev = cur
 	}
 }
+
+// stallCheck is the poll (of 300 ms) after which a player that has not moved at all is treated as stalled.
+const stallCheck = 3
 
 // sidestep moves to a free cell 3.5 away from from (the 8 compass points, nearest to the target first, rotated by
 // try so a repeated stall picks another) and reports whether the player moved.

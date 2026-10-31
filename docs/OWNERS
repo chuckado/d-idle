@@ -58,3 +58,6 @@ internal/combat/fixmisc_test.go  fixmisc  fixmisc
 internal/resource/policy_test.go  fixmisc  fixmisc
 docs/fixmisc.md  fixmisc  fixmisc
 internal/nav/sync.go  fixmisc  fixmisc
+internal/d2dctl/fixstall_test.go  fixstall  fixstall
+internal/nav/pinned_test.go  fixstall  fixstall
+docs/fixstall.md  fixstall  fixstall

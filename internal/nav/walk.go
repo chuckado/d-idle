@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 )
 
@@ -19,6 +20,7 @@ type walkOpts struct {
 	stopWhen   func(*obs) bool  // walk ends successfully when true (checked every tick)
 	timeout    time.Duration    // 0: tuning WalkTimeout
 	onPlan     func(planResult) // test and debug hook
+	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
 }
 
 type walkState struct {
@@ -44,6 +46,7 @@ type walkState struct {
 	spot       *stuckSpot // memory of this stall (stuckmem.go)
 	repeat     bool       // an earlier walk stalled at this spot too: use the alternative ladder
 	method     string     // the last recovery tried; reported once the character moves again
+	escTried   bool       // the Escape hook ran (or was refused) during this walk
 }
 
 // walk is the executor loop. tgt is evaluated every tick, so a moving target (GoToUnit) is followed.
@@ -225,8 +228,19 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 				}
 				w.method = ""
 			}
-		} else if now.Sub(w.anchorTime) >= t.Stuck() {
+		} else if now.Sub(w.anchorTime) >= n.stuckAfter(t, &w, o.pos) {
+			// a pocket (a pinned character, a sealed corner): the ladder moved us nowhere, leave by portal now
+			if wo.escape && !w.escTried && w.rung >= pinnedRungs && dist(o.pos, w.stuckAt) < pinnedRadius {
+				if err := n.walkEscape(ctx, o, &w); err != nil {
+					return err
+				}
+			}
 			if w.rung >= t.MaxRecoveries {
+				if wo.escape && !w.escTried && dist(o.pos, goal) > tol*1.5 {
+					if err := n.walkEscape(ctx, o, &w); err != nil {
+						return err
+					}
+				}
 				if dist(o.pos, goal) <= tol*1.5 {
 					return nil // pushing against the target's own footprint: close enough
 				}
@@ -259,6 +273,48 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 		}
 		n.clk.Sleep(t.Poll())
 	}
+}
+
+// pinnedRungs and pinnedRadius: after this many rungs of the ladder with the character still within pinnedRadius
+// (subtiles) of where it first stalled, it is in a pocket and the Escape hook runs before the remaining rungs.
+const (
+	pinnedRungs  = 3
+	pinnedRadius = 3.0
+)
+
+// stuckAfter is how long the character may stand still before the next rung. Once the ladder has moved it nowhere
+// (the rungs after the first, still within pinnedRadius of the first stall) the wait is halved: more rungs of the
+// same ladder do not need the full wait to show that nothing moves. Game time (the navigator's clock).
+func (n *Navigator) stuckAfter(t env.NavTuning, w *walkState, pos input.Point) time.Duration {
+	d := t.Stuck()
+	if w.rung >= 1 && dist(pos, w.stuckAt) < pinnedRadius {
+		d /= 2
+	}
+	return d
+}
+
+// walkEscape runs the Escape hook once per walk. A new level ends the walk with ErrLevelChanged (the caller re-plans
+// from there); a refused or failed escape (no portal, in town) is logged and the ladder carries on.
+func (n *Navigator) walkEscape(ctx context.Context, o *obs, w *walkState) error {
+	w.escTried = true
+	if n.Escape == nil || n.escaping {
+		return nil
+	}
+	n.escaping = true
+	defer func() { n.escaping = false }()
+	n.log.Warn("nav: stalled in a pocket, escaping by town portal", "level", o.level, "pos", o.pos, "rung", w.rung)
+	if err := n.Escape(ctx); err != nil {
+		if ctx.Err() != nil {
+			return ctx.Err()
+		}
+		n.log.Warn("nav: escape failed, going on with the ladder", "err", err)
+		return nil
+	}
+	n.invalidate()
+	if no := n.levelNow(); no != 0 && no != o.level {
+		return fmt.Errorf("%w: escaped from level %d to %d after a stall in a pocket", ErrLevelChanged, o.level, no)
+	}
+	return nil
 }
 
 // deviation is the distance from p to the nearest waypoint segment point (waypoints only; cheap and conservative).

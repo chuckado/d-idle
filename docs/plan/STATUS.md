@@ -44,6 +44,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [fixmisc](../../openspec/changes/fixmisc/) | in-progress | fixmisc | `internal/nav/sync.go`<br>`internal/nav/fixmisc_test.go`<br>`internal/combat/types.go`<br>`internal/combat/fight.go`<br>`internal/combat/fixmisc_test.go`<br>`internal/resource/policy_test.go`<br>`docs/fixmisc.md` | - |
 | [fixrun](../../openspec/changes/fixrun/) | in-progress | fixrun | `internal/d2dinput/run.go`<br>`internal/d2dinput/run_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/lifecycle.go`<br>`internal/d2denv/runreset_test.go`<br>`internal/bot/observe.go`<br>`docs/fixrun.md`<br>`openspec/changes/fixrun/**` | - |
+| [fixstall](../../openspec/changes/fixstall/) | in-progress | fixstall | `internal/d2dctl/fixstall_test.go`<br>`internal/nav/pinned_test.go`<br>`docs/fixstall.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -78,6 +79,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixmisc: live proof: debug goto then Fighter.Clear without a warm-up walk (docs/fixmisc.md)
 - change fixrun: go test -p 1 for internal/d2dinput, internal/d2denv, internal/bot passes; whole-repo vet and test -short on the worker host
 - change fixrun: live proof (DRILLS lane): restart a d2d game, move a fixed leg, compare ticks per subtile before and after (docs/fixrun.md)
+- change fixstall: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixstall: live proof after merge: rerun H.pause and D6.d (docs/fixstall.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -89,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- be5e7d0 10-31 18:00 `Merge agent/fixmisc: poor-melee rest pin test, Navigator.Sync after position jump` (fixmisc)
 - b0f8314 10-31 17:56 `Merge agent/fixrun: run-reset in WaitInGame, run/stamina in minute log; correct B1 premise; archive fix-obj and waits-audit` (fixrun)
 - 497107f 10-31 17:48 `Merge agent/drills5: live drill results for open fix cards` (m1-liveproof)
 - 0e592a6 10-31 17:44 `Merge agent/wpopen: upstream #153 open, posted lines` (wpopen)
@@ -98,5 +102,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7421c4e 10-31 17:22 `Merge agent/discorddocs: Discord docs match the live state` (discorddocs)
 - aa94721 10-31 17:20 `Merge agent/wppr: waypoint PR candidate docs and tooling` (wppr)
 - cebe506 10-31 17:16 `Merge agent/discordhooks: Discord webhook loader` (discordhooks)
-- 88e2cf6 10-31 17:07 `Merge agent/discordtoken: long-lived Discord ops bot token loader` (discordtoken)
 <!-- statusgen:end -->

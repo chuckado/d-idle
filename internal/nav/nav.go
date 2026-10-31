@@ -420,7 +420,7 @@ func (n *Navigator) PathTo(p input.Point) ([]input.Point, error) {
 // GoTo walks to p on the current level.
 func (n *Navigator) GoTo(ctx context.Context, p input.Point) error {
 	t := n.tune()
-	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{})
+	return n.walk(ctx, func(*obs) (input.Point, float64, error) { return p, t.ArriveTolerance, nil }, walkOpts{escape: true})
 }
 
 // unitTolerance is how close GoToUnit gets: inside interact range of NPCs and objects.
@@ -472,7 +472,7 @@ func (n *Navigator) GoToUnitOf(ctx context.Context, typ int, unitID uint32) erro
 		missingSince = time.Time{}
 		return input.Point{X: u.X, Y: u.Y}, unitTolerance, nil
 	}
-	return n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID})
+	return n.walk(ctx, tgt, walkOpts{ignoreUnit: unitID, escape: true})
 }
 
 // exitAvoidR and exitAvoidPeak shape the penalty around a level-exit tile that is not the destination. V live (D2DLOOP,
