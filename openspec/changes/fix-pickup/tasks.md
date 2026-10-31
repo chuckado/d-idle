@@ -11,8 +11,6 @@ owns:
   - internal/town/belt/belt_test.go
   - internal/town/beltfill.go
   - internal/town/sim/sim.go
-  - internal/loot/loot.go
-  - internal/loot/pickup.go
   - internal/loot/export_test.go
   - internal/loot/fixpickup_test.go
   - docs/fixpickup.md

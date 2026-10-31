@@ -8,3 +8,5 @@ Live drills D3.s and D3.s2 (docs/probes/drills/2026-10-31-d3.txt) showed the bot
 - Shared: `needRepair` also requires gold >= `repairEstimate`.
 - D3.tp (tome ends with 5 charges): not a bug; policy (docs/fixbank.md). No change.
 - Delta: town-basics ADDED requirements.
+
+code merged 2e3de60; owns released so later cards can edit; live proof pending.

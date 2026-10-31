@@ -10,3 +10,5 @@ The live drill D1 and the soak logs show the ground-potion pickup disagreeing wi
 - internal/town/beltfill.go: `pickBeltBox` is `belt.Place` (the plan column no longer steers).
 - internal/town/sim/sim.go: Add sets the item cell like the real reader.
 - Delta: town-basics ADDED `Ground potion goes where the game puts it`.
+
+code merged e4bb88d; owns released so later cards can edit; live proof pending.

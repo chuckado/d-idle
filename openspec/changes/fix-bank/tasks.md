@@ -8,8 +8,6 @@ branch: agent/fixbank
 worktree: ~/code/d2lod-wt/fixbank
 owns:
   - internal/d2dtown/adapter.go
-  - internal/town/stash.go
-  - internal/town/chores.go
   - internal/town/fixbank_test.go
   - docs/fixbank.md
 exclusive: []
