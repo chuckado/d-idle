@@ -17,7 +17,7 @@ gates:
   - "live proof after merge: rerun H.pause and D6.d (docs/fixstall.md)"
 merge:
 result: "offline only; early stall detection and distance-sized budget for the NPC approach, pocket escape in plain walks; not verified live (awaits H.pause and D6.d reruns, so the card stays open at merge)"
-live: "DRILLS6 2026-10-31 (docs/probes/drills/README.md DRILLS6): H.pause PARTIAL (1 of 2 bot tries opens Kashya in 136 ticks, the other fails at 718 ticks, stall near 25.9,20.5; identical in two invocations), D6.d PARTIAL (escape log line seen both runs, run 1 ends ErrLevelChanged in 493 ticks, run 2 cannot walk into the portal: 62 s stuck)"
+live: "DRILLS7 2026-10-31 (README DRILLS7): H.pause FAIL (3 of 6 bot tries open, 3 fail at 718 ticks: planAround has no clearance-1 route from the stall cell, F10), D6.d FAIL x3 identical to DRILLS6 (F11, walking entry not wired). DRILLS6 2026-10-31 (docs/probes/drills/README.md DRILLS6): H.pause PARTIAL (1 of 2 bot tries opens Kashya in 136 ticks, the other fails at 718 ticks, stall near 25.9,20.5; identical in two invocations), D6.d PARTIAL (escape log line seen both runs, run 1 ends ErrLevelChanged in 493 ticks, run 2 cannot walk into the portal: 62 s stuck)"
 ```
 
 - [x] 1.1 ApproachNPC: early stall detection, distance-sized game-time budget

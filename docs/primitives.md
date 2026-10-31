@@ -144,3 +144,13 @@ DRILLS6 rows (2026-10-31, lab build cheats3, throwaway Sorceress, each drill twi
 | P22 | D-run | PASS | run toggle: 0.556 to 0.563 subtiles per tick (running) in a fresh game, in the same game again and after a restart (runKeys 1 then 2, runResets 1 to 3), stamina drains; the baseline without the run key walks at 0.375 (ratio 0.67), no drain |
 | P10 | D2.* | PASS alone, order-dependent in the full group | D2.a, t, a2, b, c, g, d, d3, e, h, f PASS when run as subsets; the full group run has D2.a2 (stale portal), D2.d3 (DIFF) and then D2.e, h, f (setup: the `debug hit` left the character dead) FAIL |
 | P26 | D-skill | NOT RUN | docs/research/skill-bind-trace.md is not on main and its branch worktree is gone |
+
+DRILLS7 rows (2026-10-31, lab build cheats3, code at ea07758 with fixstall2; files `2026-10-31-drills7*.txt`, README section DRILLS7). These supersede the DRILLS6 rows of the same drill ids:
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| AUDIT | H.pause | FAIL (finding F10) | fixstall2: 3 invocations, 6 bot tries, 3 open Kashya (136 ticks), 3 fail at 718 ticks at (25.9,20.5), identical to DRILLS6: `planAround` has no route from the stall cell (clearance 1), clearance 0 would |
+| P25 | D6.d | FAIL (finding F11) | 3 invocations identical to DRILLS6 (run 1 escapes in 493 ticks, run 2 stuck 62 s): the walking portal entry is not wired (`hoverBelt` has no `InteractWalks`) |
+| P27 | D-sync.tp | PASS | first Clear after a town portal arrival, no warm-up walk: 3 of 3, 0 unreachable lines |
+| P27 | D-sync.wp | FAIL 1 of 2 (finding F12) | first Clear after a waypoint arrival: run 1 3 of 3, run 2 0 of 3 (ignored: 12 approaches without closing in), no unreachable lines |
+| P10 | D2.* | PASS x2 in the full group | 11 of 11 in one process, twice (harness reset: ensureAlive, longer stale-portal walk-away, D2.h signature) |
+| P26 | D-skill probe | PARTIAL | `debug skill right 54` (0 points) `err not usable`, `right 36` ok; the `cmd select` effect (D1) not observed without a step |

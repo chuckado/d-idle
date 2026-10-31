@@ -30,9 +30,6 @@ docs/basics-audit.md  drills  m1-liveproof
 docs/basics-live.md  drills  m1-liveproof
 docs/primitives.md  drills  m1-liveproof
 docs/probes/basics/**  drills  m1-liveproof
-cmd/d2bot/d2dwire.go  fixportal2  fix-portal2
-cmd/d2bot/d2dportal_test.go  fixportal2  fix-portal2
-docs/fixportal.md  fixportal2  fix-portal2
 
 docs/stream/map-contiguity.md       mapitem               mapitem
 cmd/d2dview/stitch.go               mapitem               mapitem
