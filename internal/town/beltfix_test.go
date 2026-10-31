@@ -170,3 +170,52 @@ func TestShopPurchaseIsBelted(t *testing.T) {
 		t.Fatalf("bought %v but the belt is empty: %+v", rep.Bought, rep.Steps)
 	}
 }
+
+// LOG SIGNATURE (FIXBELT2, post-fix soak 1): a sash whose four columns hold healing potions except a full mana column
+// ("no belt column for Minor Mana Potion (kind mp)", belt marked full). A mana potion in the pack has no room: that is no
+// failure, nothing is marked full, nothing is clicked, and a healing potion for the open healing box still moves.
+func TestNoBeltColumnIsNoRoomNotFull(t *testing.T) {
+	r, pi := d2dRig(t)
+	r.W.Add("lbl", d2.ContEquipment, 0, 0).Item.Body = d2.BodyBelt
+	for _, b := range []int{0, 4, 1, 5, 3, 7, 2} {
+		code := "hp1"
+		if b%4 == 3 {
+			code = "mp1"
+		}
+		r.W.Add(code, d2.ContBelt, b, 0)
+	}
+	addPack(r, "mp1", 2)
+	if r.T.NeedsBeltFill(mustSnap(t, r)) {
+		t.Fatal("a mana potion with no box is a candidate")
+	}
+	rep, err := r.T.FillBelt(context.Background())
+	if err != nil || rep.Failed != 0 || rep.Moved != 0 || len(pi.boxes) != 0 {
+		t.Fatalf("no-room fill: %+v err %v boxes %v", rep, err, pi.boxes)
+	}
+	addPack(r, "hp1", 1)
+	rep, err = r.T.FillBelt(context.Background())
+	if err != nil || rep.Moved != 1 || rep.Failed != 0 || len(pi.boxes) != 1 || pi.boxes[0] != 6 {
+		t.Fatalf("healing potion for the open healing box: %+v err %v boxes %v", rep, err, pi.boxes)
+	}
+}
+
+// FIXBELT2: healing potions must not take the empty columns the plan keeps for mana: an empty sash and a pack of both
+// kinds ends with a mana column on the belt.
+func TestHealingDoesNotTakeTheManaColumns(t *testing.T) {
+	r, _ := d2dRig(t)
+	r.W.Add("lbl", d2.ContEquipment, 0, 0).Item.Body = d2.BodyBelt
+	addPack(r, "hp1", 6)
+	addPack(r, "mp1", 4)
+	if _, err := r.T.FillBelt(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	mp := 0
+	for _, u := range r.W.Items {
+		if u.Item.Where == d2.ContBelt && r.Env.Data.Items[u.Class].Code == "mp1" {
+			mp++
+		}
+	}
+	if mp < 2 {
+		t.Fatalf("belt holds %d mana potions of 4 in the pack", mp)
+	}
+}

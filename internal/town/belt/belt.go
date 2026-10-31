@@ -355,3 +355,52 @@ func WillBelt(db *data.DB, inv *d2.Inventory, k Kind) bool {
 	_, ok := Place(Slots(db, inv), PlacedItems(db, inv), k)
 	return ok
 }
+
+// PlaceFor is Place that keeps one empty column back for every planned kind that has no column on the belt yet. The game
+// puts a potion into the first empty column whatever the plan says, so a third healing column opened early leaves the
+// mana potions no box for good (post-fix soak 1: 42 of 47 failed fills were mana potions on an 8-box belt whose planned mana
+// column had been taken by healing potions). A kind with no column of its own may always open one. Report: docs/fixbelt2.md.
+func PlaceFor(slots int, items []Placed, k Kind, b Band) (int, bool) {
+	box, ok := Place(slots, items, k)
+	if !ok {
+		return 0, false
+	}
+	var colKind [Columns]Kind
+	var bottom [Columns]int
+	for c := range bottom {
+		bottom[c] = -1
+	}
+	for _, p := range items {
+		if p.Box < 0 || p.Box >= slots {
+			continue
+		}
+		if c := p.Box % Columns; bottom[c] < 0 || p.Box < bottom[c] {
+			bottom[c], colKind[c] = p.Box, p.Kind
+		}
+	}
+	if bottom[box%Columns] >= 0 {
+		return box, true // joins a column that already exists
+	}
+	has := map[Kind]bool{}
+	empty := 0
+	for c := range bottom {
+		if bottom[c] < 0 {
+			empty++
+		} else {
+			has[colKind[c]] = true
+		}
+	}
+	if !has[k] {
+		return box, true
+	}
+	missing := 0
+	for _, j := range []Kind{HP, MP, RV} {
+		if j != k && !has[j] && b.Capacity(j, slots) > 0 {
+			missing++
+		}
+	}
+	if empty > missing {
+		return box, true
+	}
+	return 0, false
+}
