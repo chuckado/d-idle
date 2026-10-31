@@ -2,7 +2,7 @@
 
 ```yaml
 change: rebase152
-status: done
+status: archived
 agent: rebase152
 branch: agent/rebase152
 worktree: ~/code/d2lod-wt/rebase152
