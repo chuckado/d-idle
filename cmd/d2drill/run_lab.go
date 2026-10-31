@@ -61,6 +61,11 @@ func (l *lab) Leg(ctx context.Context, r *drill.Run, name string) drill.RunLeg {
 				break
 			}
 			leg.Ticks++
+			if leg.Ticks == 20 { // while moving: the raw `walking=` field of a state read (its meaning is UNVERIFIED)
+				if st, _, err := c.State(ctx); err == nil {
+					leg.WalkingMid, _ = st.Get("walking")
+				}
+			}
 			cx, cy, err := fpos()
 			if err != nil {
 				leg.Err = "pos: " + err.Error()

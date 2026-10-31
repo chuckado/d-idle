@@ -23,6 +23,7 @@ type RunLeg struct {
 	Keys       int      // run-key presses so far
 	Resets     int      // belief resets so far
 	WalkingRaw string   // the raw `walking=` field of the state, last read
+	WalkingMid string   // `walking=` of a state read at tick 20 of the leg, while moving
 	Moves      []string // the first per-tick deltas (subtiles), for the record
 }
 
@@ -38,8 +39,8 @@ type RunLab interface {
 }
 
 func (l RunLeg) String() string {
-	return fmt.Sprintf("%s: dir %d, %.1f subtiles in %d moving ticks (%d total, first move at tick %d) = %.4f per tick, net %.1f; stamina %s -> %s; runBelieved=%v runKeys=%d runResets=%d walkingRaw=%q; first deltas %s; err %q",
-		l.Name, l.Dir, l.Path, l.Moving, l.Ticks, l.Lag, l.PerTick, l.Net, l.StamStart, l.StamEnd, l.Believed, l.Keys, l.Resets, l.WalkingRaw, strings.Join(l.Moves, ","), l.Err)
+	return fmt.Sprintf("%s: dir %d, %.1f subtiles in %d moving ticks (%d total, first move at tick %d) = %.4f per tick, net %.1f; stamina %s -> %s; runBelieved=%v runKeys=%d runResets=%d walkingRaw=%q, walking while moving %q; first deltas %s; err %q",
+		l.Name, l.Dir, l.Path, l.Moving, l.Ticks, l.Lag, l.PerTick, l.Net, l.StamStart, l.StamEnd, l.Believed, l.Keys, l.Resets, l.WalkingRaw, l.WalkingMid, strings.Join(l.Moves, ","), l.Err)
 }
 
 // DRun is the fixrun live proof: the same leg in a fresh game, again in the same game, after a restart, again.
