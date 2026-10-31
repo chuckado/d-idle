@@ -59,7 +59,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 14 requirements
-- spec [town-basics](../../openspec/specs/town-basics/spec.md): 7 requirements
+- spec [town-basics](../../openspec/specs/town-basics/spec.md): 11 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -72,6 +72,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
 - 9630246 10-31 11:52 `Merge agent/fixportal: portal source and HasTP fixes` (fix-portal)
 - 3fb22f1 10-31 11:48 `Merge agent/fixloot: looter adapter forwards recovery` (fix-loot)
 - 1bab0ac 10-31 11:39 `Merge agent/primreview: primitives review` (primreview)
@@ -81,5 +82,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 02ec208 10-31 11:14 `Merge agent/goldab: goldfloor paired A/B result (gates did not hold, lever C no-go)` (goldfloor)
 - 172454d 10-31 10:36 `Merge agent/markproof: get-hit mark derivation checked against game.exe` (upstream-bundle)
 - b3e9d71 10-31 10:33 `Merge agent/decompskill: skill damage trace` (decompskill)
-- ea13c89 10-31 10:18 `Merge agent/decompwake: monster wake trace (clean negative)` (decompwake)
 <!-- statusgen:end -->

@@ -22,8 +22,8 @@ exclusive: []
 gates:
   - "go test ./internal/town ./internal/combat ./internal/bot passes including TestBeltPutItemNotFoundDoesNotStick, TestBeltPutRespectsColumnKind, TestShopPurchaseIsBelted, TestBeltOfSeesEveryBox, TestKitCountsPackPotions"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-merge:
-result:
+merge: 5b1fbce
+result: "offline only, NOT verified live. F1 F3 F6 F7 F8 F9 implemented and unit-tested; drills D1 decide."
 ```
 
 ## 1. Work
