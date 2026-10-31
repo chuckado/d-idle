@@ -2,7 +2,7 @@
 
 ```yaml
 change: fix-loot
-status: in-progress
+status: archived
 agent: fixloot
 branch: agent/fixloot
 worktree: ~/code/d2lod-wt/fixloot
