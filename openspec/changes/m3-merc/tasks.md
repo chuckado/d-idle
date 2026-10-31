@@ -8,7 +8,6 @@ branch: agent/m3-merc
 worktree: ~/code/d2lod-wt/m3-merc
 owns:
   - internal/merc/**
-  - internal/bot/resource.go
   - internal/bot/merc_test.go
   - docs/merc-d2d.md
   - docs/probes/merc/**

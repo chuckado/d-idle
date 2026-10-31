@@ -5,7 +5,7 @@ The free Rogue is coded (merc-policy spec, docs/merc-wire.md) behind `merc.enabl
 ## What Changes
 
 - internal/merc: revive per the revive rule (merc-policy), stop rule, potions to the merc below the knob; the claim once after Blood Raven; log lines with price and gold delta.
-- internal/bot/resource.go: `merc.enabled` default 1 on the d2d backend (Game.exe default unchanged, frozen).
+- (resource.go: sequenced after fix-portal (HasTP now counts a portal source); re-add when m3-merc starts.) Wanted change in internal/bot/resource.go: `merc.enabled` default 1 on the d2d backend (Game.exe default unchanged, frozen).
 - docs/merc-d2d.md: 2 seeds x 4 virtual hours from clvl 9 (cheat-levelled, ledgered) after Blood Raven: uptime, revives, gold, what killed her.
 - Blood Raven bailout: after 3 failed attempts or at clvl 12 without the kill she counts as skipped for good (`BloodRavenSkipped`) and the paid Rogue fallback applies.
 - Revive only when gold minus the kit reserve >= `merc.reviveGoldMult` (2) x price; `merc.reviveMaxPerHour` (2), `merc.stopGoldMult` (5), `merc.stopDeathsPerHour` (3) unchanged.

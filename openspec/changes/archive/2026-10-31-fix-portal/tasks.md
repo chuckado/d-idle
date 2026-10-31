@@ -2,7 +2,7 @@
 
 ```yaml
 change: fix-portal
-status: in-progress
+status: archived
 agent: fixportal
 branch: agent/fixportal
 worktree: ~/code/d2lod-wt/fixportal
@@ -21,8 +21,8 @@ exclusive: []
 gates:
   - "go test -p 1 ./internal/combat ./internal/bot ./cmd/d2bot pass including TestPortalSourceSkipsEmptyTome, TestPortalSourceNoneForEmptyTomeAlone, TestHasTPCountsCharges, TestD2DPortalEmptyTomeNoSourceNoClick"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-merge:
-result:
+merge: 9630246
+result: "offline only, NOT verified live. combat.PortalSource/PortalQty, d2dPortal and HasTP fixes: an empty tome is no longer clicked or counted. Open: context-canceled portal failures and charged clicks that end in no portal; drills D2 and DECOMPTOME decide."
 ```
 
 - [x] shared PortalSource/PortalQty, used by combat, d2dPortal, bot resInput, boss view
