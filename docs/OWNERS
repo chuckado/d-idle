@@ -47,3 +47,11 @@ internal/town/stash.go  fixbank  fix-bank
 internal/town/chores.go  fixbank  fix-bank
 internal/town/fixbank_test.go  fixbank  fix-bank
 docs/fixbank.md  fixbank  fix-bank
+internal/d2dsrc/items.go  fixobj  fix-obj
+internal/d2dsrc/source.go  fixobj  fix-obj
+internal/d2dsrc/source_test.go  fixobj  fix-obj
+internal/d2dinput/controller.go  fixobj  fix-obj
+internal/d2dinput/controller_test.go  fixobj  fix-obj
+internal/d2denv/env.go  fixobj  fix-obj
+internal/d2denv/fixobj_test.go  fixobj  fix-obj
+docs/fixobj.md  fixobj  fix-obj

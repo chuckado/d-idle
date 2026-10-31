@@ -227,6 +227,7 @@ func (b *builder) world(ctx context.Context) error {
 	default:
 		return err
 	}
+	b.fieldObjects(ctx, npcs.Items)
 	g, err := c.Ground(ctx)
 	switch {
 	case err == nil:
@@ -257,8 +258,68 @@ func (b *builder) world(ctx context.Context) error {
 			return err
 		}
 	}
-	rp.unknown("objects.other", "waypoints/chests/shrines: npcs lists named ones only; debug presets/objects are static level data")
 	return nil
+}
+
+// FieldObjectRadius is how far from the player, in d2d cells, a placed object is listed.
+const FieldObjectRadius = 40
+
+// presetRefetch is how far the player walks (subtiles) before the preset list is read again.
+const presetRefetch = 50
+
+// fieldObjects lists the level's placed objects near the player (chests, shrines, altars, Cain's cage, the Tristram
+// portal, a field waypoint) from "debug presets", the index space of "cmd interact" that "npcs" rows share (V drill
+// H.obj: "cmd interact <index>" opens a field object). The unit id is NPCIDBase + index, so the controller sends the
+// verb it sends for an NPC row; Class is the objects.txt id of the row. Rows "npcs" already lists (named NPCs, the
+// waypoint) and hidden rows are skipped. Presets change only when rooms are built, so the list is cached per level
+// and read again after the player moved presetRefetch subtiles.
+func (b *builder) fieldObjects(ctx context.Context, listed []d2dctl.NPC) {
+	rp, pl := b.rp, b.snap.Player
+	if pl == nil {
+		return
+	}
+	ps, err := b.s.presets(ctx, pl.Area, pl.X, pl.Y)
+	if err != nil {
+		rp.unknown("objects.field", "debug presets failed: "+err.Error())
+		return
+	}
+	seen := map[int]bool{}
+	for _, n := range listed {
+		seen[n.Index] = true
+	}
+	lim := 5 * FieldObjectRadius
+	for _, p := range ps {
+		if p.Hidden || seen[p.Index] {
+			continue
+		}
+		x, y := b.pos(p.X, p.Y)
+		if dx, dy := x-pl.X, y-pl.Y; dx*dx+dy*dy > lim*lim {
+			continue
+		}
+		id := uint32(NPCIDBase + p.Index)
+		b.res.Extras.Names[id] = p.Name
+		b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: p.ObjectID, ID: id, Mode: -1, X: x, Y: y})
+	}
+	rp.derived("objects.field", "debug presets within the radius, class = objects.txt id of the row, id = NPCIDBase + preset index (V: the index space of cmd interact)")
+	rp.unknown("object.mode", "open/closed state not in presets (debug objects has it for chests and shrines under another index)")
+}
+
+// presets returns the cached "debug presets" rows of area, reading them again when the area changed or the player
+// moved presetRefetch subtiles since the last read. A failed read is not cached.
+func (s *Source) presets(ctx context.Context, area, x, y int) ([]d2dctl.Preset, error) {
+	s.pmu.Lock()
+	defer s.pmu.Unlock()
+	if s.pset.ok && s.pset.area == area {
+		if dx, dy := x-s.pset.x, y-s.pset.y; dx*dx+dy*dy < presetRefetch*presetRefetch {
+			return s.pset.rows, nil
+		}
+	}
+	l, err := s.c.Presets(ctx)
+	if err != nil {
+		return nil, err
+	}
+	s.pset.rows, s.pset.area, s.pset.x, s.pset.y, s.pset.ok = l.Items, area, x, y, true
+	return l.Items, nil
 }
 
 // townPortalObj is the objects.txt id of the town portal (S: D2BS Constants.h, 59; U on 1.14d tables).

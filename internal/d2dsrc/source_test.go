@@ -457,3 +457,52 @@ func TestWaypointRowHasWaypointClass(t *testing.T) {
 		}
 	}
 }
+
+// fixobj (drill H.obj): placed objects near the player are Objects with the objects.txt id of the preset row and the id
+// NPCIDBase + preset index (the index space of "cmd interact"); hidden rows, rows "npcs" already lists and far rows
+// are not listed; the preset list is read once per level while the player stands still.
+func TestFieldObjectsListed(t *testing.T) {
+	r := lateReplies(t)
+	r["npcs"] = "Waypoint\t300\t200\t0\t4\t30.0\t10.0\nok\n"
+	r["debug presets"] = "4\t119\t30.0\t10.0\t0\tWaypoint\n" + // listed by npcs: skipped
+		"7\t580\t33.0\t12.0\t0\tChest\n" +
+		"8\t17\t34.0\t12.0\t1\tHidden Chest\n" +
+		"9\t26\t35.0\t12.0\t0\tCain's Gibbet\n" +
+		"10\t580\t300.0\t300.0\t0\tFar Chest\nok\n"
+	sc, c := startScript(t, r)
+	src := New(c, Options{Logf: quiet})
+	for i := 0; i < 2; i++ {
+		res, err := src.Read(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		got := map[uint32]int{}
+		for _, u := range res.Snap.Objects {
+			got[u.ID] = u.Class
+		}
+		if got[NPCIDBase+7] != 580 || got[NPCIDBase+9] != 26 {
+			t.Fatalf("chest and cage not listed with their classes: %+v", res.Snap.Objects)
+		}
+		if _, ok := got[NPCIDBase+8]; ok {
+			t.Error("hidden preset listed")
+		}
+		if _, ok := got[NPCIDBase+10]; ok {
+			t.Error("preset beyond the radius listed")
+		}
+		if got[NPCIDBase+4] != WaypointClass {
+			t.Errorf("the npcs waypoint row was replaced: %+v", res.Snap.Objects)
+		}
+		if res.Extras.Names[NPCIDBase+7] != "Chest" {
+			t.Errorf("chest name %q", res.Extras.Names[NPCIDBase+7])
+		}
+	}
+	n := 0
+	for _, l := range sc.seen {
+		if l == "debug presets" {
+			n++
+		}
+	}
+	if n != 1 {
+		t.Errorf("debug presets read %d times for two snapshots on one spot (want 1)", n)
+	}
+}

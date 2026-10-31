@@ -237,3 +237,16 @@ func TestKeyNameTable(t *testing.T) {
 		}
 	}
 }
+
+// fixobj (drill H.obj): a field object listed by d2dsrc (id NPCIDBase + preset index) is operated with "cmd interact
+// <index>", the verb the drill's control group used; an object with a raw unit id stays unsupported.
+func TestInteractFieldObject(t *testing.T) {
+	c, srv := rig(t, fake.Sample())
+	if err := c.Interact(input.Target{Type: 2, ID: d2dsrc.NPCIDBase + 7}); err != nil {
+		t.Fatal(err)
+	}
+	ls := srv.Lines()
+	if ls[len(ls)-1] != "cmd interact 7" {
+		t.Fatalf("%q", ls)
+	}
+}

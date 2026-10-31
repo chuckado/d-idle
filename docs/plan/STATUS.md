@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/stash.go`<br>`internal/town/chores.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
+| [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/fixobj_test.go`<br>`docs/fixobj.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -73,6 +74,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change fix-bank: go test -p 1 ./internal/town ./internal/d2dtown passes including TestFixBank*
 - change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fix-obj: live proof is a drill rerun after merge: H.obj, H.pause, D8, D3.n (docs/fixobj.md)
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-pickup: live proof is drill D1/P7 (not run here)
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
@@ -86,6 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
@@ -95,5 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
-- 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
 <!-- statusgen:end -->
