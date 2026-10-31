@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- Discord ops bot (offline): long-lived bot model with least privilege (`d.idle-ops` role, allowed and always-ask lists in `roles.md`); `tools/discord/common.py` `load_bot_token()` reads env, then a private file (`~/.local/share/d2idle/discord-bot-token`, mode 600, no symlink, own user, private parent, fail-closed), then the keyring; `apply_server.py` uses it; setup and rotate/revoke in `server.md` (agent/discordtoken).
 - Stream map contiguity (offline): the d2dview map pane draws one stitched map across levels the game puts on one automap layer (town and wilderness, Act 2 desert, Kurast, Harrogath fields), caves and dungeons stay alone; act-frame positions, swap-in map image, trail rule; rule and live check in `docs/stream/map-contiguity.md`. Live check pending (agent/mapitem).
 - 2026-10-31 README refreshed (status on d2d, how we check it, layout, retired Game.exe gates) and the project name styled **d.idle** (lowercase d) in public prose, the setup wizard and the container templates. Docs and UI text only (agent/readme).
 - Discord roles guideline (research, docs only): `docs/community/discord/roles.md` (principles, role set with optional `mod`, permission table, safety settings, raid runbook, sources); server.md, server.json and plan.md aligned (attach files only in two channels, `member` raid-fallback permissions, `optional_roles`). Support pages were not re-readable (403): official claims marked unconfirmed (agent/rolesdoc).

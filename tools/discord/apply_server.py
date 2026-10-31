@@ -7,7 +7,8 @@ Guild-wide settings and the @everyone permissions are only touched with --settin
 
   apply_server.py --guild GUILD_ID [--file server.json] [--apply] [--settings]
 
-The bot token comes from the keyring (service d2idle, account discord-bot-token) or D2IDLE_DISCORD_BOT_TOKEN.
+The bot token comes from D2IDLE_DISCORD_BOT_TOKEN, else the private file ~/.local/share/d2idle/discord-bot-token (mode 600),
+else the keyring (service d2idle, account discord-bot-token); see dc.load_bot_token.
 Setup and the schema: docs/community/discord/server.md.
 """
 import argparse
@@ -155,9 +156,9 @@ def main(argv=None, api=None):
         with open(a.file) as f:
             spec = json.load(f)
         if api is None:
-            tok = os.environ.get("D2IDLE_DISCORD_BOT_TOKEN") or dc.SecretToolStore().get("discord-bot-token")
+            tok = dc.load_bot_token()
             if not tok:
-                print("no bot token: store it with `secret-tool store --label=\"d.idle Discord bot token\" service d2idle account discord-bot-token`", file=sys.stderr)
+                print("no bot token: see docs/community/discord/server.md, One-time bot setup (private file or keyring)", file=sys.stderr)
                 return 2
             api = Api(tok)
         plan_and_apply(api, a.guild, spec, apply=a.apply, settings=a.settings)

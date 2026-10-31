@@ -52,14 +52,21 @@ Implemented as one overwrite per read-only channel: `@everyone` denied Send Mess
   and recreate to rotate. Only the owner has Create Invite.
 - Slowmode: values in the table; raise them during a raid.
 
-## One-time bot setup for apply_server.py (optional)
-1. Developer portal: New Application, Bot tab, Reset Token; store it in the keyring (paste at the prompt, never in chat):
-   `secret-tool store --label="d.idle Discord bot token" service d2idle account discord-bot-token`
-2. Invite it to the EMPTY server with only Manage Channels and Manage Roles (OAuth2 URL generator, scope `bot`; add Manage Server
-   only if you use `--settings`). Do not enable privileged intents.
-3. Get the server id (Developer Mode, right-click the server, Copy Server ID), then dry run, read, apply:
+## Ops bot setup (long-lived, least privilege)
+The bot is a long-lived ops bot: it stays in the server so the assistant can maintain channels, roles and pinned texts. Its
+role and limits are in [roles.md](roles.md#ops-bot-least-privilege). The token lives in a private file, never in chat, the repo or a synced folder.
+1. Developer portal: New Application, Bot tab, Reset Token. Turn "Public Bot" OFF; enable no privileged intents.
+2. Store the token without echo (the directory must be private; the file mode must be exactly 600 or the tools refuse it):
+   `install -d -m 700 ~/.local/share/d2idle && (umask 077; read -rs T; printf %s "$T" > ~/.local/share/d2idle/discord-bot-token; unset T)`
+   From an exported variable instead: `(umask 077; printf %s "$D2IDLE_DISCORD_BOT_TOKEN" > ~/.local/share/d2idle/discord-bot-token)`, then unset the variable.
+   Lookup order: env `D2IDLE_DISCORD_BOT_TOKEN`, then that file (or the path in `D2IDLE_DISCORD_BOT_TOKEN_FILE`), then the desktop keyring
+   (`secret-tool store --label="d.idle Discord bot token" service d2idle account discord-bot-token`). A file that is a symlink, not
+   yours, group/other readable, in a group/world-writable directory, empty or with spaces is refused. Webhook URLs stay on env/keyring.
+3. Invite it (OAuth2 URL generator, scope `bot`) with the permissions of the `d.idle-ops` role only; give Manage Server only for the
+   one `--settings` run, then remove it.
+4. Get the server id (Developer Mode, right-click the server, Copy Server ID), then dry run, read, apply:
    `python3 tools/discord/apply_server.py --guild <id>`  then `... --apply` (and `--settings` once, to set verification, the filter and the @everyone permissions)
-4. Afterwards kick the bot or strip its permissions, and Reset Token in the portal; `secret-tool clear service d2idle account discord-bot-token`.
+5. Rotate: Reset Token in the portal, rewrite the file as in step 2. Revoke: kick the bot, or Reset Token, or delete the file (any one is enough; do all three if the token may have leaked).
 It matches roles and channels by name and only creates missing ones; it never deletes or renames; existing channels are left as is.
 New channels are created at the bottom. The `owner` role must be assigned to the user by hand. Do the Community, Rules Screening,
 Onboarding and invite steps in the UI: the tool does not touch them.
