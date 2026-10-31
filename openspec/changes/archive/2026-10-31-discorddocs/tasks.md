@@ -2,7 +2,7 @@
 
 ```yaml
 change: discorddocs
-status: in-progress
+status: archived
 agent: discorddocs
 branch: agent/discorddocs
 worktree: ~/code/d2lod-wt/discorddocs
@@ -18,7 +18,7 @@ owns:
 exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
+merge: 7421c4e
 result: "docs and layout file updated to the live state; no live Discord call made; tool tests green"
 live: "not applicable (docs only; facts were verified live by the coordinator)"
 ```
