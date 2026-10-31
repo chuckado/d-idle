@@ -1,6 +1,6 @@
 # Evidence pack: waypoint refusal window (agents DECOMPWP, WPPR, 2026-10-31)
 
-> status: for the user's go / no-go; nothing pushed or posted.
+> status: POSTED 2026-10-31 as psi29a/d2decomped#153 (user go); see the posted lines at the end.
 
 **Claim.** game.exe refuses a waypoint travel for 10 s only after the player's last hostile declaration (never in single player); d2d refused it for 10 s after every arrival. The patch drops d2d's test and its `arrived_at` stamp.
 
@@ -24,3 +24,6 @@
 
     git -C <upstream checkout> push <fork remote> fix/waypoint-hostile-window
     gh pr create -R psi29a/d2decomped --head <fork>:fix/waypoint-hostile-window --title "world: the waypoint refusal counts from hostility, not the level change" --body-file pr-wp-draft-body.md
+
+posted: 2026-10-31 branch fix/waypoint-hostile-window pushed to the user's fork; replayed onto upstream main 72132b99 (tooling 890adf1d, claim 44353293; the claim's unit test renames `camp` to `encampment` so it no longer hides main's `camp`, an MSVC C4456 error).
+posted: 2026-10-31 PR opened: https://github.com/psi29a/d2decomped/pull/153 (9 files, 2 commits; user go 'push the next pr'; no review-request comment, as #147/#149/#152).
