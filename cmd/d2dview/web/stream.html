@@ -41,8 +41,18 @@ const $=id=>document.getElementById(id);
 if(/[?&]tile=1/.test(location.search))document.body.classList.add('tile');
 const q=location.search.match(/[?&]t=([^&]*)/);const tq=q?'?t='+q[1]:'';
 const cv=$('map'),cx=cv.getContext('2d');
-let P=null,mapImg=new Image(),mapKey='',mapReady=false,trail=[],trailLevel=-1;
-mapImg.onload=()=>{mapReady=true};
+let P=null,mapImg=null,mapRect=[0,0,0,0],mapAsked=-1,mapSeq=0,mapReady=false,trail=[],trailStitch=-1;
+// The map is one image per stitched layer (act-absolute subtiles, its box in X-Map-Rect). A new one is fetched aside and
+// swapped in with its box when it has loaded, so a border crossing never blanks the pane; the old one stays drawn meanwhile.
+function loadMap(v,qs){
+ if(v===mapAsked)return;mapAsked=v;const my=++mapSeq;
+ fetch('/map.png?v='+v+qs,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;const h=(r.headers.get('X-Map-Rect')||'').split(',').map(Number);return r.blob().then(b=>createImageBitmap(b)).then(bm=>({bm,h}))})
+ .then(({bm,h})=>{if(my!==mapSeq||h.length!==4||!h.every(isFinite))return;mapImg=bm;mapRect=h;mapReady=true;draw()}).catch(()=>{if(my===mapSeq)mapAsked=-1})}
+// the trail follows the player across a stitched border and breaks at a jump (town portal) or when the layer changes
+function pushTrail(st,x,y,max){
+ if(st!==trailStitch){trail=[];trailStitch=st}
+ const l=trail[trail.length-1];if(l&&Math.hypot(l[0]-x,l[1]-y)>30)trail=[];
+ if(!l||l[0]!==x||l[1]!==y){trail.push([x,y]);if(trail.length>max)trail.shift()}}
 // The multipart image never fires a per-frame event and a browser cancels it in a background tab or when the first
 // request lands before a frame exists (503): reconnect on error, on a stuck (never loaded) image, and when the tab returns.
 let shotGen=0,shotTimer=0;
@@ -72,16 +82,14 @@ function upd(p){
  $('stats').innerHTML=p.live?'<span class="dim">'+(p.name?p.name+' ':'')+'</span>lvl <b>'+p.clvl+'</b> &nbsp;xp <b>'+p.xp+'</b> &nbsp;kills <b>'+p.kills+'</b> &nbsp;deaths <b>'+p.deaths+'</b>':'';
  $('goal').textContent=p.goal||'';
  $('wait').style.display=p.live?'none':'flex';
- if(p.level!==trailLevel){trail=[];trailLevel=p.level}
- if(p.live){const l=trail[trail.length-1];if(!l||l[0]!==p.X||l[1]!==p.Y){trail.push([p.X,p.Y]);if(trail.length>600)trail.shift()}}
- const k=p.mapVer+':'+p.level;
- if(k!==mapKey){mapKey=k;mapReady=false;mapImg.src='/map.png?v='+p.mapVer+'&l='+p.level+(q?'&t='+q[1]:'')}
+ if(p.live)pushTrail(p.stitch,p.X,p.Y,600);
+ if(p.mapVer)loadMap(p.mapVer,q?'&t='+q[1]:'');
  draw();
 }
 function draw(){
  const W=cv.width,H=cv.height;cx.fillStyle='#0a0d13';cx.fillRect(0,0,W,H);
  if(!P||!P.live)return;
- const r=P.MapRect,sc=H/130; // about 26 cells of height visible, follows the player
+ const r=mapRect,sc=H/130; // about 26 cells of height visible, follows the player
  const ox=W/2-P.X*5*sc,oy=H/2-P.Y*5*sc,X=c=>ox+c*5*sc,Y=c=>oy+c*5*sc;
  if(mapReady){cx.imageSmoothingEnabled=false;cx.drawImage(mapImg,ox+r[0]*sc,oy+r[1]*sc,r[2]*sc,r[3]*sc)}
  const u=Math.max(1,H/220);

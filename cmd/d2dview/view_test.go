@@ -109,7 +109,8 @@ func TestFeedSnap(t *testing.T) {
 	if !s.OK || s.Level != 1 || s.Area != "Rogue Encampment" || s.Name != "Spike" || s.Life != [2]int{45, 45} {
 		t.Fatalf("%+v", s)
 	}
-	if len(s.Mons) != 2 || s.X < 30 || s.X > 31 || !s.Lockstep {
+	// the sample level sits at tile origin 864,912: positions are in the act frame
+	if len(s.Mons) != 2 || s.X < 864+30 || s.X > 864+31 || !s.Lockstep || s.MapVer != 1 || s.MapRect[0] != 864*5 {
 		t.Fatalf("%+v", s)
 	}
 	f.poll(context.Background())
