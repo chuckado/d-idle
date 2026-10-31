@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/d2dcombat"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2denv"
+	"d2lod-bot/internal/d2dinput"
 	"d2lod-bot/internal/d2dloot"
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
@@ -56,7 +57,8 @@ type lab struct {
 	wpTabs string         // wp_tabs rects seen at the last tab click (DW)
 	wpSpy  *spy
 
-	runDir int // D-run: the direction of the measured leg (-1 not found yet; set by Leg)
+	runPol *d2dinput.RunPolicy // D-run: the controller's policy while it is switched off
+	runDir int                 // D-run: the direction of the measured leg (-1 not found yet; set by Leg)
 }
 
 func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst string, log *slog.Logger) *lab {

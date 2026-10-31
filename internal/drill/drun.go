@@ -32,6 +32,8 @@ type RunLab interface {
 	Leg(ctx context.Context, r *Run, name string) RunLeg
 	// Restart leaves and enters the game through the backend's cycler (the drill restart path, OnInGame included).
 	Restart(ctx context.Context) error
+	// SetRunPolicy switches the controller's run policy (off: the bot never presses the run key: the walking baseline).
+	SetRunPolicy(on bool)
 }
 
 func (l RunLeg) String() string {
@@ -45,10 +47,17 @@ func DRun(l RunLab) Drill {
 		a := l.Leg(ctx, r, "fresh game")
 		a2 := l.Leg(ctx, r, "same game again")
 		rerr := l.Restart(ctx)
-		var b, b2 RunLeg
+		var b, b2, w RunLeg
 		if rerr == nil {
 			b = l.Leg(ctx, r, "after restart")
 			b2 = l.Leg(ctx, r, "after restart, again")
+			// the baseline: a fresh game and a controller that never presses the run key = the game's own start state
+			if werr := l.Restart(ctx); werr == nil {
+				l.SetRunPolicy(false)
+				w = l.Leg(ctx, r, "baseline: fresh game, no run key")
+				l.SetRunPolicy(true)
+				_ = l.Restart(ctx) // leave a fresh game with the policy on and the belief reset
+			}
 		}
 		kind := func(v float64) string {
 			switch {
@@ -59,7 +68,7 @@ func DRun(l RunLab) Drill {
 			}
 			return "unclear"
 		}
-		obs := fmt.Sprintf("%s | %s | restart err %v | %s | %s", a, a2, rerr, b, b2)
+		obs := fmt.Sprintf("%s | %s | restart err %v | %s | %s | %s | walking baseline / running ratio %.2f", a, a2, rerr, b, b2, w, w.PerTick/a.PerTick)
 		o := Outcome{Intended: "the same leg moves at the same speed in a fresh game and after a restart, and runs (stamina drains, about 0.5625 subtiles per tick)", Observed: obs,
 			Sig: fmt.Sprintf("%s %s %s %s", kind(a.PerTick), kind(a2.PerTick), kind(b.PerTick), kind(b2.PerTick))}
 		switch {

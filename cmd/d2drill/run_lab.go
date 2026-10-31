@@ -88,12 +88,25 @@ func (l *lab) Leg(ctx context.Context, r *drill.Run, name string) drill.RunLeg {
 			return leg
 		}
 	}
+	_, _ = r.Cheat(ctx, "debug goto 1", "back to town after the timed leg")
+	_ = l.Tick(ctx, 25)
 	if leg.Moving > 0 {
 		leg.PerTick = leg.Path / float64(leg.Moving)
 	}
 	ri := ctl.RunInfo()
 	leg.Believed, leg.Keys, leg.Resets, leg.WalkingRaw = ri.Believed, ri.Presses, ri.Resets, ri.Walking
 	return leg
+}
+
+func (l *lab) SetRunPolicy(on bool) {
+	if on {
+		l.be.Ctl.Run = l.runPol
+		return
+	}
+	if l.be.Ctl.Run != nil {
+		l.runPol = l.be.Ctl.Run
+	}
+	l.be.Ctl.Run = nil
 }
 
 func (l *lab) stam(ctx context.Context) string {
