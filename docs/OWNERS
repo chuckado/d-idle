@@ -16,6 +16,9 @@ docs/decisions.md     main  -
 
 # active changes
 cmd/d2bot/d2dbackend.go              d2d-default-backend   d2d-default-backend
+cmd/d2bot/adapters.go                fixloot   fix-loot
+cmd/d2bot/behaviors.go               fixloot   fix-loot
+cmd/d2bot/looteradapter_test.go      fixloot   fix-loot
 docs/d2d-replicated-soak.md          d2d-replicated-soak   d2d-replicated-soak
 docs/d2d-container-soak.md           d2d-container-soak    d2d-container-soak
 internal/merc/**  m3-merc  m3-merc

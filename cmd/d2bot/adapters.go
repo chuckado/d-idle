@@ -201,8 +201,15 @@ func (a looterAdapter) PickUp(ctx context.Context, o bot.PickOpts) (bot.PickRepo
 }
 
 // LeftBehind and ClearLeftBehind feed the runner's "loot: pack full" trip reason.
-func (a looterAdapter) LeftBehind() int                 { return a.l.LeftBehind() }
-func (a looterAdapter) ClearLeftBehind()                { a.l.ClearLeftBehind() }
+func (a looterAdapter) LeftBehind() int  { return a.l.LeftBehind() }
+func (a looterAdapter) ClearLeftBehind() { a.l.ClearLeftBehind() }
+
+// SetRecovering and RecoveryTotals are the optional recovery interface the runner asserts on (bot.recoveryLooter): without
+// them the recovery pickup rules never switch on and the "recovery: loot" line stays at +0 (primitives-review F2).
+func (a looterAdapter) SetRecovering(on bool) { a.l.SetRecovering(on) }
+func (a looterAdapter) RecoveryTotals() (picked, gold, full int) {
+	return a.l.RecoveryTotals()
+}
 func (a looterAdapter) Evaluate(it d2.Item) bot.Verdict { return verdictOf(a.l.Evaluate(it)) }
 
 func (a looterAdapter) EvaluateUnit(u d2.Unit, clvl, gold int) bot.Verdict {
