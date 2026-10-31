@@ -13,7 +13,6 @@ owns:
   - internal/town/stashfull.go
   - internal/town/shop.go
   - internal/town/fixprice_test.go
-  - internal/loot/loot.go
   - internal/loot/pickup.go
   - internal/loot/valuables.go
   - internal/loot/fixprice_test.go
@@ -30,6 +29,7 @@ gates:
   - "go test -short -count=1 ./... passes including the FixPrice tests on the worker host"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
+# note: owns of internal/loot/loot.go released to fix-belt2 (FIXBELT2, code already merged).
 live: "not verified live: rerun drill D3.r (docs/fixprice.md)"
 ```
 
