@@ -45,7 +45,9 @@ func (s *simLab) View(context.Context) (View, error) {
 	return v, nil
 }
 func (s *simLab) Tick(context.Context, int) error { return nil }
-func (s *simLab) PlanCols(int) [4]Kind            { return [4]Kind{"hp", "hp", "mp", "hp"} }
+func (s *simLab) PlanCols(context.Context) ([4]Kind, error) {
+	return sPlan, nil
+}
 func (s *simLab) GiveGround(_ context.Context, r *Run, code string) error {
 	_, err := r.Cheat(context.Background(), "debug give "+code, "potion for the drill")
 	s.ground = append(s.ground, code)
@@ -92,6 +94,9 @@ func (s *simLab) PickupRaw(context.Context) (int, error) {
 	return n, nil
 }
 func (s *simLab) DrainBelt(context.Context) error { s.belt = map[int]string{}; return nil }
+
+var sPlan = [4]Kind{"hp", "hp", "mp", "hp"}
+
 func (s *simLab) FillBelt(context.Context) (FillInfo, error) {
 	moved := 0
 	for _, c := range []string{"hp1", "mp1"} {
@@ -100,7 +105,7 @@ func (s *simLab) FillBelt(context.Context) (FillInfo, error) {
 			var ok bool
 			if s.byColumn {
 				for b := 0; b < s.cap(); b++ {
-					if _, used := s.belt[b]; !used && s.PlanCols(1)[b%4] == PotionKind(c) {
+					if _, used := s.belt[b]; !used && sPlan[b%4] == PotionKind(c) {
 						box, ok = b, true
 						break
 					}

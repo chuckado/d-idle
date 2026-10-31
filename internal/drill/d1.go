@@ -86,7 +86,8 @@ type FillInfo struct {
 type BeltLab interface {
 	View(ctx context.Context) (View, error)
 	Tick(ctx context.Context, n int) error
-	PlanCols(level int) [4]Kind
+	// PlanCols is the belt plan the town fill and the pickit use for the character (class, level, difficulty).
+	PlanCols(ctx context.Context) ([4]Kind, error)
 
 	GiveGround(ctx context.Context, r *Run, code string) error // cheat "debug give": an item at the player's feet
 	ClearPack(ctx context.Context, r *Run) error               // cheat "debug clearinv"
@@ -180,6 +181,7 @@ func p7a(ctx context.Context, r *Run, l BeltLab) Outcome {
 	}
 	intended := "a ground potion picked up with an empty belt goes to the belt (SME) or to the pack: the destination is recorded"
 	observed := fmt.Sprintf("picked hp1, mp1, hp1 in that order: belt [%s], pack [%s], ground %d", v.BeltString(), v.PackString(), len(v.Ground))
+	plan, _ := l.PlanCols(ctx)
 	dest := "pack"
 	if len(v.Belt) > 0 {
 		dest = "belt"
@@ -187,7 +189,7 @@ func p7a(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if len(v.Belt)+countPotions(v.Pack)+len(v.Ground) != 3 || len(v.Ground) != 0 {
 		return Failed("a potion was lost or stayed on the ground", intended, observed)
 	}
-	return Passed("observed destination: "+dest+" (engine fills the lowest free box, not the plan column: mp1 landed in box "+boxOf(v, "mp1")+", the plan puts mana in column "+planCol(l.PlanCols(v.Level), "mp")+")", intended, observed)
+	return Passed("observed destination: "+dest+" (engine fills the lowest free box, not the plan column: mp1 landed in box "+boxOf(v, "mp1")+", the plan puts mana in column "+planCol(plan, "mp")+")", intended, observed)
 }
 
 func boxOf(v View, code string) string {
@@ -251,7 +253,11 @@ func p7(ctx context.Context, r *Run, l BeltLab) Outcome {
 	}
 	switch {
 	case inBelt == 2 && len(v.Ground) == 0:
-		return Passed("pickit took both potions and they are in the belt", intended, observed)
+		why := "pickit took both potions and they are in the belt"
+		if len(info.Picked) == 0 {
+			why += "; BUT its own report says picked 0 (debug log: 'item left the ground without arriving in the pack', cause UNVERIFIED: the unit id of a picked item changes on d2d so loot.arrived cannot match it)"
+		}
+		return Passed(why, intended, observed)
 	case len(v.Ground) > 0:
 		return Failed("ground potions left behind with the belt empty: "+skipWhy(info), intended, observed)
 	default:
@@ -266,16 +272,38 @@ func skipWhy(i PickInfo) string {
 	return strings.Join(i.Skipped, "; ")
 }
 
+func countKind(p [4]Kind, k Kind) int {
+	n := 0
+	for _, c := range p {
+		if c == k {
+			n++
+		}
+	}
+	return n
+}
+
+func planString(p [4]Kind) string {
+	var s []string
+	for i, k := range p {
+		s = append(s, fmt.Sprintf("%d:%s", i, k))
+	}
+	return strings.Join(s, " ")
+}
+
 func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
-	if err := stagePack(ctx, r, l, 3, 1); err != nil {
+	plan, err := l.PlanCols(ctx)
+	if err != nil {
+		return Failed("plan: "+err.Error(), "", "")
+	}
+	nHP, nMP := countKind(plan, "hp"), countKind(plan, "mp")
+	if err := stagePack(ctx, r, l, nHP, nMP); err != nil {
 		return Failed("setup: "+err.Error(), "", "")
 	}
 	pre, err := l.View(ctx)
 	if err != nil {
 		return Failed("read: "+err.Error(), "", "")
 	}
-	plan := l.PlanCols(pre.Level)
-	intended := fmt.Sprintf("plan columns %v: belt 0:hp1 1:hp1 2:mp1 3:hp1 (hp in hp columns, mp in the mp column), pack holds none of them", plan)
+	intended := fmt.Sprintf("plan columns [%s]: the %d hp1 and %d mp1 of the pack end in the belt, hp in hp columns and mp in mp columns, pack holds none of them", planString(plan), nHP, nMP)
 	fi, ferr := l.FillBelt(ctx)
 	if err := l.Tick(ctx, 25); err != nil {
 		return Failed("tick: "+err.Error(), intended, "")
@@ -288,9 +316,6 @@ func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if ferr != nil || fi.Err != nil {
 		return Failed(fmt.Sprintf("fill reported an error: %v", firstErr(ferr, fi.Err)), intended, observed)
 	}
-	if left := countPotions(v.Pack); left != 0 {
-		return Failed(fmt.Sprintf("%d potions are still in the pack", left), intended, observed)
-	}
 	var bad []string
 	for box, code := range v.Belt {
 		col := box % 4
@@ -299,11 +324,18 @@ func p1(ctx context.Context, r *Run, l BeltLab) Outcome {
 		}
 	}
 	sort.Strings(bad)
+	if left := countPotions(v.Pack); left != 0 {
+		why := fmt.Sprintf("%d potions are still in the pack with %d free belt boxes", left, v.BeltSlots-len(v.Belt))
+		if len(bad) > 0 {
+			why += "; potions in the wrong columns: " + strings.Join(bad, ", ")
+		}
+		return Failed(why, intended, observed)
+	}
 	if len(bad) > 0 {
 		return Failed("potions in the wrong columns: "+strings.Join(bad, ", "), intended, observed)
 	}
-	if len(v.Belt) != 4 {
-		return Failed(fmt.Sprintf("belt holds %d of 4 potions", len(v.Belt)), intended, observed)
+	if len(v.Belt) != nHP+nMP {
+		return Failed(fmt.Sprintf("belt holds %d of %d potions", len(v.Belt), nHP+nMP), intended, observed)
 	}
 	return Passed("every potion belted in its plan column, pack empty of potions", intended, observed)
 }
@@ -373,13 +405,20 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if err := l.DrainBelt(ctx); err != nil {
 		return Failed("setup: "+err.Error(), "", "")
 	}
-	for _, c := range []string{"hp1", "hp1", "mp1", "hp1"} { // pickup order gives the plan layout: boxes 0..3 = hp hp mp hp
-		if err := l.GiveGround(ctx, r, c); err != nil {
+	plan, err := l.PlanCols(ctx)
+	if err != nil {
+		return Failed("plan: "+err.Error(), "", "")
+	}
+	var want []string
+	for i, k := range plan { // pickup order gives the plan layout: box i holds the kind of column i
+		code := string(k) + "1"
+		if err := l.GiveGround(ctx, r, code); err != nil {
 			return Failed("setup: "+err.Error(), "", "")
 		}
-	}
-	if _, err := l.PickupRaw(ctx); err != nil {
-		return Failed("setup pickup: "+err.Error(), "", "")
+		want = append(want, fmt.Sprintf("%d:%s", i, code))
+		if _, err := l.PickupRaw(ctx); err != nil { // one at a time: the order is the box order
+			return Failed("setup pickup: "+err.Error(), "", "")
+		}
 	}
 	v, err := l.View(ctx)
 	if err != nil {
@@ -392,8 +431,8 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 		return Failed("setup: "+err.Error(), "", "")
 	}
 	start := v.BeltString()
-	if start != "0:hp1 1:hp1 2:mp1 3:hp1" {
-		return Failed("setup did not give the plan layout", "belt 0:hp1 1:hp1 2:mp1 3:hp1", start)
+	if start != strings.Join(want, " ") {
+		return Failed("setup did not give the plan layout", strings.Join(want, " "), start)
 	}
 	intended := "each drink removes exactly one potion of the asked kind from its column, life or mana rises within 2 s, the other kind is untouched; with no healing potion left the drink reports an error"
 	var steps []string
@@ -450,10 +489,12 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 			fails = append(fails, fmt.Sprintf("drink %s: no rise within 2 s", k))
 		}
 	}
-	for i := 0; i < 3; i++ {
+	for i := 0; i < countKind(plan, "hp"); i++ {
 		drink("hp")
 	}
-	drink("mp")
+	for i := 0; i < countKind(plan, "mp"); i++ {
+		drink("mp")
+	}
 	drink("hp") // none left
 	end, _ := l.View(ctx)
 	observed := fmt.Sprintf("start belt [%s]; %s; end belt [%s]", start, strings.Join(steps, " | "), end.BeltString())
@@ -463,7 +504,7 @@ func p3(ctx context.Context, r *Run, l BeltLab) Outcome {
 	if len(fails) > 0 {
 		return Failed(strings.Join(fails, "; "), intended, observed)
 	}
-	return Passed("3 healing columns and the mana column each drunk once from the right box, none left reported an error", intended, observed)
+	return Passed("every potion drunk once from its own column by kind, none left reported an error", intended, observed)
 }
 
 // removed lists the boxes that held an item before and hold none after.
