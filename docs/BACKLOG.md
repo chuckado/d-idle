@@ -97,3 +97,4 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - m1-stashcap merged: stash gold cap (2,500,000, unverified until m1-liveproof), partial deposits, learned from a refused deposit; no knob
 - m3-routeguard merged: interim floors per ADR 0011 (road and Forgotten Tower 16 / 14 with a merc, Andariel 17 / 15) with knobs restoring the old numbers; unattended Andariel is HELD (boss.andarielHold 1) until m3-andariel has won once; not verified live
 - fix-loot: looterAdapter now forwards SetRecovering/RecoveryTotals, so recovery pickup (all gold piles, sellables) is really on for the first time; expect more gold in recovery; verify `recovery: loot` lines are non-zero in the next soak (card fix-loot)
+upstream: #147 (belt scrolls) brought up to date after #148 by merging upstream/main into its branch (no rebase, no force; card upsync147)
