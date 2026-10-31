@@ -1,0 +1,493 @@
+{
+ "results": [
+  {
+   "id": "D3.g0",
+   "primitive": "U1",
+   "title": "starting gold and stash of the fresh character (no cheat)",
+   "verdict": "PASS",
+   "reason": "recorded",
+   "intended": "the fresh character's gold read (no cheat before this drill)",
+   "observed": "class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "recorded",
+     "Intended": "the fresh character's gold read (no cheat before this drill)",
+     "Observed": "class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1",
+     "elapsed_ns": 1643042,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "recorded",
+     "Intended": "the fresh character's gold read (no cheat before this drill)",
+     "Observed": "class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1",
+     "elapsed_ns": 1202946,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true
+  },
+  {
+   "id": "D3.n",
+   "primitive": "P14",
+   "title": "approach and open each Act 1 NPC from the start point, window up, close leaves the UI clean",
+   "verdict": "PASS",
+   "reason": "all 5 opened and closed clean",
+   "intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+   "observed": "Akara: open true window [npc-dialog] 258 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 109 ticks clean after close true | Warriv: open true window [npc-dialog] 22 ticks clean after close true",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "all 5 opened and closed clean",
+     "Intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+     "Observed": "Akara: open true window [npc-dialog] 258 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 109 ticks clean after close true | Warriv: open true window [npc-dialog] 22 ticks clean after close true",
+     "sig": "Akara:true:npc-dialog:true;Charsi:true:npc-dialog:true;Gheed:true:npc-dialog:true;Kashya:true:npc-dialog:true;Warriv:true:npc-dialog:true",
+     "elapsed_ns": 584851153,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "all 5 opened and closed clean",
+     "Intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+     "Observed": "Akara: open true window [npc-dialog] 121 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 118 ticks clean after close true | Warriv: open true window [npc-dialog] 40 ticks clean after close true",
+     "sig": "Akara:true:npc-dialog:true;Charsi:true:npc-dialog:true;Gheed:true:npc-dialog:true;Kashya:true:npc-dialog:true;Warriv:true:npc-dialog:true",
+     "elapsed_ns": 149993361,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true
+  },
+  {
+   "id": "D3.h",
+   "primitive": "P17",
+   "title": "hurt in town: the healer visit restores life to max, potions unchanged",
+   "verdict": "PASS",
+   "reason": "life restored at the healer",
+   "intended": "life = max after the visit, pack potions unchanged",
+   "observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "life restored at the healer",
+     "Intended": "life = max after the visit, pack potions unchanged",
+     "Observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+     "sig": "full=true pack=none-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 300",
+      "debug stat 6 3072"
+     ],
+     "elapsed_ns": 37201586,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "life restored at the healer",
+     "Intended": "life = max after the visit, pack potions unchanged",
+     "Observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+     "sig": "full=true pack=none-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 300",
+      "debug stat 6 3072"
+     ],
+     "elapsed_ns": 9458244,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 300",
+    "debug stat 6 3072"
+   ]
+  },
+  {
+   "id": "D3.b",
+   "primitive": "P15",
+   "title": "belt emptied, gold given: the shop chore buys potions, gold delta = spent, belt gains",
+   "verdict": "PASS",
+   "reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+   "intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+   "observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+     "Intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+     "Observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+     "sig": "delta=280 spent=280 belt=0-\u003e4 bought=Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 65828490,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+     "Intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+     "Observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+     "sig": "delta=280 spent=280 belt=0-\u003e4 bought=Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 58807439,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1000"
+   ]
+  },
+  {
+   "id": "D3.b2",
+   "primitive": "P15",
+   "title": "sell a pack item to the vendor: gold up by the gain, item gone",
+   "verdict": "PASS",
+   "reason": "sold an identify scroll for 40",
+   "intended": "gold up by the gain, the scroll gone, nothing else sold",
+   "observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "sold an identify scroll for 40",
+     "Intended": "gold up by the gain, the scroll gone, nothing else sold",
+     "Observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+     "sig": "gained=40 delta=40 pack=iscx1-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug give hp1",
+      "debug give isc",
+      "debug stat 14 100"
+     ],
+     "elapsed_ns": 22330292,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "sold an identify scroll for 40",
+     "Intended": "gold up by the gain, the scroll gone, nothing else sold",
+     "Observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+     "sig": "gained=40 delta=40 pack=iscx1-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug give hp1",
+      "debug give isc",
+      "debug stat 14 100"
+     ],
+     "elapsed_ns": 21193397,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give hp1",
+    "debug give isc",
+    "debug stat 14 100"
+   ]
+  },
+  {
+   "id": "D3.tp",
+   "primitive": "P12",
+   "title": "scrolls chore with a tome and scrolls missing: tome bought and filled, gold delta = spent",
+   "verdict": "PASS",
+   "reason": "tome or scrolls bought, gold delta equals the report",
+   "intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+   "observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "tome or scrolls bought, gold delta equals the report",
+     "Intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+     "Observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+     "sig": "pack=tbkx1 tscx1 delta=800 spent=800",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 42313094,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "tome or scrolls bought, gold delta equals the report",
+     "Intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+     "Observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+     "sig": "pack=tbkx1 tscx1 delta=800 spent=800",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 40643881,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1000"
+   ]
+  },
+  {
+   "id": "D3.r",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold enough: repair restores durability, price logged",
+   "verdict": "PASS",
+   "reason": "repaired for 19 gold at knob 30",
+   "intended": "durability back to max, gold down by the price",
+   "observed": "knob repairBelowPct 30; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); repaired=true steps [equip skipped; repair ran] err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "repaired for 19 gold at knob 30",
+     "Intended": "durability back to max, gold down by the price",
+     "Observed": "knob repairBelowPct 30; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); repaired=true steps [equip skipped; repair ran] err \"\"",
+     "sig": "dur=1/20-\u003e20/20 paid=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 42406905,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "repaired for 19 gold at knob 30",
+     "Intended": "durability back to max, gold down by the price",
+     "Observed": "knob repairBelowPct 30; durability 1/20 (5%) -\u003e 20/20; gold 500 -\u003e 481 (spent per report 19); repaired=true steps [equip skipped; repair ran] err \"\"",
+     "sig": "dur=1/20-\u003e20/20 paid=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 16421794,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 500",
+    "debug durability all 1"
+   ]
+  },
+  {
+   "id": "D3.r0",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold 0: no repair progress, no loop, no gold lost",
+   "verdict": "PASS",
+   "reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+   "intended": "no repair at gold 0, gold still 0, UI clean",
+   "observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair ran err town: repair not confirmed (durability 5% unchanged)] err \"\" ticks 101; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+     "Intended": "no repair at gold 0, gold still 0, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair ran err town: repair not confirmed (durability 5% unchanged)] err \"\" ticks 101; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "dur=1/20-\u003e1/20 gold=0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 0",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 28580824,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips",
+     "Intended": "no repair at gold 0, gold still 0, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 0 -\u003e 0; call1 steps [equip skipped; repair skipped] err \"\" ticks 0; call2 steps [equip skipped; repair skipped] err \"\" ticks 0; panels none",
+     "sig": "dur=1/20-\u003e1/20 gold=0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 0",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 6647647,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 0",
+    "debug durability all 1"
+   ]
+  },
+  {
+   "id": "D3.s",
+   "primitive": "P5",
+   "title": "stash opens, an item goes in and out, gold deposit and withdraw keep purse + stash constant",
+   "verdict": "FAIL",
+   "reason": "deposit all: town: gold deposit of 1500 not confirmed (gold 1500, bank 0)",
+   "intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+   "observed": "stash open; item round trip ok, pack rinx1; bot deposit of the whole purse: town: gold deposit of 1500 not confirmed (gold 1500, bank 0); control, d2dctl MoveGold deposit 1500 (types the digits): err \u003cnil\u003e, purse 0 stash 1500",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "deposit all: town: gold deposit of 1500 not confirmed (gold 1500, bank 0)",
+     "Intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+     "Observed": "stash open; item round trip ok, pack rinx1; bot deposit of the whole purse: town: gold deposit of 1500 not confirmed (gold 1500, bank 0); control, d2dctl MoveGold deposit 1500 (types the digits): err \u003cnil\u003e, purse 0 stash 1500",
+     "sig": "deposit all: town: gold deposit of 1500 not confirmed (gold 1500, bank 0)",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0",
+      "debug give rin"
+     ],
+     "elapsed_ns": 45321632,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "deposit all: town: gold deposit of 1500 not confirmed (gold 1500, bank 0)",
+     "Intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+     "Observed": "stash open; item round trip ok, pack rinx1; bot deposit of the whole purse: town: gold deposit of 1500 not confirmed (gold 1500, bank 0); control, d2dctl MoveGold deposit 1500 (types the digits): err \u003cnil\u003e, purse 0 stash 1500",
+     "sig": "deposit all: town: gold deposit of 1500 not confirmed (gold 1500, bank 0)",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0",
+      "debug give rin"
+     ],
+     "elapsed_ns": 28010976,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1500",
+    "debug stat 15 0",
+    "debug give rin"
+   ]
+  },
+  {
+   "id": "D3.s2",
+   "primitive": "P5",
+   "title": "partial gold deposit (the amount is typed): the bot's own deposit of 1000 of 1500",
+   "verdict": "FAIL",
+   "reason": "partial deposit failed: town: partial gold deposit needs a controller that can type",
+   "intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+   "observed": "deposit 1000 err town: partial gold deposit needs a controller that can type; purse 1500 -\u003e 1500 stash 0 -\u003e 0; control, d2dctl MoveGold deposit 1000: err \u003cnil\u003e, purse 500 stash 1000",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "partial deposit failed: town: partial gold deposit needs a controller that can type",
+     "Intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+     "Observed": "deposit 1000 err town: partial gold deposit needs a controller that can type; purse 1500 -\u003e 1500 stash 0 -\u003e 0; control, d2dctl MoveGold deposit 1000: err \u003cnil\u003e, purse 500 stash 1000",
+     "sig": "err=true 1500/0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0"
+     ],
+     "elapsed_ns": 10122163,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "partial deposit failed: town: partial gold deposit needs a controller that can type",
+     "Intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+     "Observed": "deposit 1000 err town: partial gold deposit needs a controller that can type; purse 1500 -\u003e 1500 stash 0 -\u003e 0; control, d2dctl MoveGold deposit 1000: err \u003cnil\u003e, purse 500 stash 1000",
+     "sig": "err=true 1500/0",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0"
+     ],
+     "elapsed_ns": 9791008,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1500",
+    "debug stat 15 0"
+   ]
+  },
+  {
+   "id": "D3.i",
+   "primitive": "P13",
+   "title": "identify: an unidentified pack item and an ID scroll, the identify chore",
+   "verdict": "BLOCKED",
+   "reason": "the identify chore never selects what `debug unid` can make: it clears the flag of plain base items (a normal ring), the bot's judge sets NeedID only for magic or better; missing: a cheat that gives an unidentified magic or rare item (`debug give \u003ccode\u003e \u003cquality\u003e` with the flag cleared). Observed: unidentified [rin], chore steps [identify skipped; equip skipped]",
+   "intended": "",
+   "observed": "",
+   "runs": [
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "the identify chore never selects what `debug unid` can make: it clears the flag of plain base items (a normal ring), the bot's judge sets NeedID only for magic or better; missing: a cheat that gives an unidentified magic or rare item (`debug give \u003ccode\u003e \u003cquality\u003e` with the flag cleared). Observed: unidentified [rin], chore steps [identify skipped; equip skipped]",
+     "Intended": "",
+     "Observed": "",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug give rin",
+      "debug unid",
+      "debug give isc"
+     ],
+     "elapsed_ns": 13296734,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "the identify chore never selects what `debug unid` can make: it clears the flag of plain base items (a normal ring), the bot's judge sets NeedID only for magic or better; missing: a cheat that gives an unidentified magic or rare item (`debug give \u003ccode\u003e \u003cquality\u003e` with the flag cleared). Observed: unidentified [rin], chore steps [identify skipped; equip skipped]",
+     "Intended": "",
+     "Observed": "",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug give rin",
+      "debug unid",
+      "debug give isc"
+     ],
+     "elapsed_ns": 14309338,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 500",
+    "debug give rin",
+    "debug unid",
+    "debug give isc"
+   ]
+  }
+ ]
+}

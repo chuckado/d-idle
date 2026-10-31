@@ -92,6 +92,21 @@ func (s *simPortal) cast(tome bool) {
 	x := s.x
 	s.portal = &x
 }
+
+// RunPortalHit models the hit: the first scroll is spent without a portal, the retry opens one.
+func (s *simPortal) RunPortalHit(ctx context.Context, r *Run, delay int) BotCall {
+	_, _ = r.Cheat(ctx, "debug hit 5", "cut the cast")
+	if s.scrolls > 1 {
+		if delay > 0 { // a cut cast spends its scroll
+			s.scrolls--
+		}
+		c := s.RunPortal(ctx)
+		c.Rights, c.Clicks = 2, 2
+		return c
+	}
+	return s.RunPortal(ctx)
+}
+
 func (s *simPortal) RunPortal(context.Context) BotCall {
 	c := BotCall{ClickTick: -1}
 	switch {
@@ -152,13 +167,10 @@ func runD2(s *simPortal) map[string]Result {
 
 func TestD2Passes(t *testing.T) {
 	res := runD2(newSimPortal())
-	for _, id := range []string{"D2.a", "D2.t", "D2.a2", "D2.b", "D2.c", "D2.e", "D2.h", "D2.f"} {
+	for _, id := range []string{"D2.a", "D2.t", "D2.a2", "D2.b", "D2.c", "D2.e", "D2.h", "D2.f", "D2.d", "D2.d3"} {
 		if r := res[id]; r.Verdict != Pass || !r.Deterministic {
 			t.Errorf("%s: %s", id, r.Line())
 		}
-	}
-	if r := res["D2.d"]; r.Verdict != Blocked || !strings.Contains(r.Reason, "debug hit") {
-		t.Errorf("D2.d: %s", r.Line())
 	}
 }
 

@@ -20,6 +20,8 @@ import (
 	"d2lod-bot/internal/d2dtown"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/drill"
+	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/town"
@@ -43,6 +45,9 @@ type lab struct {
 	led  *cheat.Ledger
 	char string
 	inst string
+	tune *env.Tuning
+	navr *nav.Navigator
+	lv   *leveler.Leveler
 
 	mu  sync.Mutex
 	seq int
@@ -74,7 +79,7 @@ func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst strin
 	lt := loot.New(rig.Env, nv)
 	tw.SetJudge(lt)
 	d2dloot.Attach(lt, be.Source, db)
-	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst, nv: nv}
+	return &lab{be: be, db: db, tw: tw, lt: lt, rig: rig, log: log, led: led, char: char, inst: inst, nv: nv, navr: nv}
 }
 
 // ---- drill.World ----
@@ -210,8 +215,10 @@ func (l *lab) GiveGround(ctx context.Context, r *drill.Run, code string) error {
 }
 
 func (l *lab) ClearPack(ctx context.Context, r *drill.Run) error {
-	_, err := r.Cheat(ctx, "debug clearinv", "empty the pack grid so the drill's potion counts are exact")
-	return err
+	if _, err := r.Cheat(ctx, "debug clearinv", "empty the pack grid so the drill's potion counts are exact"); err != nil {
+		return err
+	}
+	return l.Tick(ctx, 5) // the grid reaches the reader one tick later (V: D4.b run 2 saw the old, full pack)
 }
 
 func (l *lab) SetLife(ctx context.Context, r *drill.Run, points int) error {

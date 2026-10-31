@@ -63,11 +63,40 @@ P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act
 | P10 | D2.c | PASS | empty tome + loose scroll: the scroll is cast, the tome untouched (a scroll picked up while a tome is in the pack goes INTO the tome: engine rule, V) |
 | P10 | D2.e | PASS | busy player (mode SC): the verb clicks at tick +37 vs +22 idle, one click, portal opens (fix-portal2 idle wait) |
 | P10 | D2.h | PASS | one-pair rule: second cast 12 cells away closes the first, one portal object |
-| P10 | D2.t | FAIL | bot ToTown with the portal open next to the player never arrives in town: `town: area -1 not reached within 15s`, 1584 ticks, all 3 scrolls spent by the town package's own re-casts (see docs/probes/drills/README.md, finding W1) |
-| P10 | D2.g | FAIL | control: d2dctl `EnterPortal` (the V click-on-sprite walk-in) also does not change the level in the lockstep lab: `portal click did not change the level (still 2)` |
-| P10 | D2.d | BLOCKED | cut cast needs a cheat that hits the player (`debug hit <dmg>` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: unblocked, rerun pending) |
-| P11 | D2.f | BLOCKED | return trip needs a working walk-in (D2.t, D2.g) |
-P12 to P14, P23 are not covered yet (D2 follow-up).
+| P10 | D2.t | PASS (was FAIL) | bot ToTown with the portal open next to the player arrives in town in 5 ticks, no scroll spent (enterportal: `cmd interact -2000-k`, docs/d2d-portal-entry.md); the first run's FAIL was W1 (docs/probes/drills/README.md) |
+| P10 | D2.g | PASS (was FAIL) | control: d2dctl `EnterPortal` now sends `cmd interact -2000-k` (enterportal); the sprite click it used walked in the lockstep lab |
+| P10 | D2.d, D2.d3 | PASS | `debug hit 5` in the same tick as the verb's click: the click is dropped, source unchanged, the retry opens the portal (2 clicks, 1 scroll left); 3 ticks into the cast: the cast is cut with the scroll spent (`the cast was cut (source spent)`), the retry takes the next scroll (2 clicks, 0 left); each twice, identical (2026-10-31-d2d.txt, DRILLS3) |
+| P11 | D2.f | PASS (was BLOCKED) | round trip with the working walk-in, arrival 6 subtiles from the origin (enterportal, docs/d2d-portal-entry.md) |
+DRILLS3 rows (2026-10-31, lab binary with the test cheats, throwaway Sorceress, each drill twice, identical; files `2026-10-31-<group>.txt/.json` in docs/probes/drills, audit in hover-audit.md):
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P12 | D3.tp | PASS | scrolls chore at gold 1000 with no tome: tome and 5 scrolls bought (the tome ends with 5 charges, not 20: the bot's fill target), gold 1000 -> 200 = the report's 800 |
+| P14 | D3.n | PASS | Akara, Charsi, Gheed, Kashya, Warriv each open a dialog from the start point (22 to 258 ticks), close leaves the UI clean; Cain and the stash/waypoint rows are not in this drill (stash: D3.s) |
+| P15 | D3.b, D3.b2 | PASS | shop chore with an empty belt: 2 hp1 + 2 mp1 + 1 scroll for 280 gold = the report, belt 0 -> 4; sell an identify scroll to Akara: +40 gold, scroll gone (a potion sells for 15 = half of 30) |
+| P16 | D3.r, D3.r0 | PASS | `debug durability all 1`: repair at 5 percent restores 20/20 for 19 gold; at gold 0 one failed attempt (`repair not confirmed`, 101 ticks: needRepair does not check gold, chores.go:178) then the latch skips |
+| P17 | D3.h | PASS | life 12/40 -> 40/40 at Akara, pack and gold unchanged |
+| P5 | D3.s, D3.s2 | FAIL | stash opens and an item goes in and out, but BOTH gold deposits fail: the whole purse (`gold deposit of 1500 not confirmed`) and a partial one (`partial gold deposit needs a controller that can type`); the control `d2dctl MoveGold` deposits exactly. Cause: d2dtown/adapter.go:253 `hoverFirst` hides `TypeChar`, and the d2d prompt starts empty so even a full deposit needs digits (town/stash.go:196-215) |
+| P13 | D3.i | BLOCKED | `debug unid` unidentifies plain pack items; the judge selects only magic or better: needs an unidentified magic item cheat |
+| U1 | D3.g0 | PASS | starting gold and stash 0/0 on a fresh character (classes in 2026-10-31-d3g0*.txt); unidentified sell prices not measurable (no cheat) |
+| P9 | D4.a | PASS | cap (equip rule), chipped amethyst (sell rule) picked, ring (plain) and the potion (already in the pack) left; report = end state, a rerun picks nothing |
+| P4 | D4.b, D4.c | PASS | pack full of rings: a gem is left once per call (no loop); MakeRoom at Gheed sold 12 rings (10000 gold) and freed a 2x2 hole |
+| P8 | D4.g, D4.cap | PASS | gold pile into a full pack taken; the purse caps at 10000 at clvl 1 (a pile at 9990 leaves the pile): the SME's 10000 x clvl is V for level 1 |
+| P6 | D4.x | PASS | cube: 3 chipped amethysts -> 1 flawed, cube kept |
+| P26 | D5.a | PASS | `debug points` learns 2 skills, BindSkills binds 2, a Fire Bolt cast costs 3 mana (hit effect not checked: no target) |
+| P28 | D5.b | PASS | combat.Fighter.Safety at 100, 60 percent none; 50, 35, 22 percent drink-life; no mana drink without a fight; mana in a fight and Meter totals BLOCKED (no monster) |
+| P27, P29 | D5.c, D5.d | BLOCKED | need a monster (`debug spawn`, not built) |
+| P22 | D6.a, D6.b | PASS | 10 of 10 navigator walks arrive within 1.5 cells in the camp and in Blood Moor (0 to 1.0 cells) |
+| P24 | D6.c | PASS | 5 of 5 transitions Blood Moor, Cold Plains, camp by ToArea |
+| P25 | D6.d | BLOCKED | no way to pin the character in a pocket |
+| P30, P31 | D7.a, D7.b | PASS | level 12 by cheat with 55 stat and 11 skill points: the leveler spends all (66 actions), 0 unspent |
+| P32 | D7.c | PASS | a cap in the pack is worn by the leveler, cursor empty |
+| P18 | D8.a | PASS | merc hired and killed by cheat: the bot's Reviver through Kashya's menu brings it back; no gold was taken (U whether free revive is a rule at merc level 1) |
+| P3 (merc) | D8.m | BLOCKED | a hired merc stands at full life and nothing hurts it: missing `debug merc hurt` |
+| P18 (claim), P20, P21, P19 | D8.c, D8.q, D8.w, D8.g | BLOCKED | `debug quest` sets bit 0 only (Blood Raven stays at 1, Den at 1, Andariel 0); the act hop is package main; no gamble code |
+| P34 | D9.a | PASS | `debug die` in Blood Moor, the bot's Respawn lands in town with nothing worn, back in the field `cmd interact -3000` returns the staff and the corpse is gone |
+| P33 | D9.b | PASS | 10 leave and enter cycles by the bot's lifecycle, in town with a clean UI each time (about 3 s each) |
+| P36 | D9.c | BLOCKED | a soak, not a drill |
+| audit | H.pause, H.obj, H.ground, H.monster | FAIL, FAIL, PASS, BLOCKED | hover blind-spot audit: field objects and the merc claim and revive path are at risk (hover-audit.md) |
 
 ## Top live failure messages (normalised; navsoak, navsoak2, navsoak3)
 `area gate refused the walk` 171k; `leveling target not reachable` 114k; `recovery: loot +0 items` 18.5k (every recovery line); `combat move failed` 9.8k; `nav stuck` 5.7k; `chicken` 5.3k; `no healing potion in the belt` (drink skipped) 4.4k; `town portal attempt failed` 2.7k; `potion already in the pack` 939; `no portal opened` 710; `town trip abandoned` 376; `pack full, item left on the ground` 360; `action failed` 798 (127+ "to town: no waypoint on level"); `repair not confirmed` 36. Area gate and wedge lines are nav-soak artefacts (banned areas), not primitives.

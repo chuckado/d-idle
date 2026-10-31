@@ -107,7 +107,7 @@ type BeltLab interface {
 }
 
 const (
-	missingMerc = "cheat/verb to hire or revive a mercenary on a fresh character (Kashya's reward needs the Blood Raven quest chain)"
+	missingMerc = "a cheat that lowers the merc's life: `debug merc hire|kill|revive` exist (D8.a), but a hired merc stands at full life and `debug hit` hits the player only, so a merc heal cannot be seen (missing: `debug merc hurt <dmg>`)"
 )
 
 // D1 returns the belt drill group: P1 belt fill, P2 belt rows by belt type, P3 drink by column, P7 ground potions.

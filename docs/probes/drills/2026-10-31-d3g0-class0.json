@@ -1,0 +1,34 @@
+{
+ "results": [
+  {
+   "id": "D3.g0",
+   "primitive": "U1",
+   "title": "starting gold and stash of the fresh character (no cheat)",
+   "verdict": "PASS",
+   "reason": "recorded",
+   "intended": "the fresh character's gold read (no cheat before this drill)",
+   "observed": "class Barbarian: purse 0 stash 0 life 55/55 pack iscx1 tscx1",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "recorded",
+     "Intended": "the fresh character's gold read (no cheat before this drill)",
+     "Observed": "class Barbarian: purse 0 stash 0 life 55/55 pack iscx1 tscx1",
+     "elapsed_ns": 1614631,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "recorded",
+     "Intended": "the fresh character's gold read (no cheat before this drill)",
+     "Observed": "class Barbarian: purse 0 stash 0 life 55/55 pack iscx1 tscx1",
+     "elapsed_ns": 965002,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true
+  }
+ ]
+}

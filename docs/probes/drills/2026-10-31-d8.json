@@ -1,0 +1,130 @@
+{
+ "results": [
+  {
+   "id": "D8.a",
+   "primitive": "P18",
+   "title": "merc hired and killed by cheat: the bot's revive through Kashya brings it back for gold",
+   "verdict": "PASS",
+   "reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+   "intended": "merc alive again, gold down by the reported price",
+   "observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+     "Intended": "merc alive again, gold down by the reported price",
+     "Observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+     "sig": "dead=true-\u003efalse paid\u003e0=false err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug merc kill",
+      "debug stat 14 3000"
+     ],
+     "elapsed_ns": 630957578,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+     "Intended": "merc alive again, gold down by the reported price",
+     "Observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+     "sig": "dead=true-\u003efalse paid\u003e0=false err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug merc kill",
+      "debug stat 14 3000"
+     ],
+     "elapsed_ns": 23643724,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug merc hire 0",
+    "debug merc kill",
+    "debug stat 14 3000"
+   ]
+  },
+  {
+   "id": "D8.m",
+   "primitive": "P3",
+   "title": "merc at low life: the bot's belt verb with the merc flag heals it and spends one potion",
+   "verdict": "BLOCKED",
+   "reason": "no cheat lowers the merc's life (`debug hit` hits the player only; a hired merc stands at full life): the heal cannot be observed. Missing: `debug merc hurt \u003cdmg\u003e`. The verb itself ran without error and used a potion: true",
+   "intended": "merc life up, one belt potion used",
+   "observed": "run1: merc present=true dead=false code=RG life=[40,1] -\u003e present=true dead=false code=RG life=[40,1]; belt potions 4 -\u003e 3; err \u003cnil\u003e; run2 (BLOCKED): merc present=true dead=false code=RG life=[40,1] -\u003e present=true dead=false code=RG life=[40,1]; belt potions 3 -\u003e 3; err \u003cnil\u003e",
+   "runs": [
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "no cheat lowers the merc's life (`debug hit` hits the player only; a hired merc stands at full life): the heal cannot be observed. Missing: `debug merc hurt \u003cdmg\u003e`. The verb itself ran without error and used a potion: true",
+     "Intended": "merc life up, one belt potion used",
+     "Observed": "merc present=true dead=false code=RG life=[40,1] -\u003e present=true dead=false code=RG life=[40,1]; belt potions 4 -\u003e 3; err \u003cnil\u003e",
+     "cheats": [
+      "debug merc hire 0"
+     ],
+     "elapsed_ns": 10732883,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "BLOCKED",
+     "Reason": "no cheat lowers the merc's life (`debug hit` hits the player only; a hired merc stands at full life): the heal cannot be observed. Missing: `debug merc hurt \u003cdmg\u003e`. The verb itself ran without error and used a potion: false",
+     "Intended": "merc life up, one belt potion used",
+     "Observed": "merc present=true dead=false code=RG life=[40,1] -\u003e present=true dead=false code=RG life=[40,1]; belt potions 3 -\u003e 3; err \u003cnil\u003e",
+     "cheats": [
+      "debug merc hire 0"
+     ],
+     "elapsed_ns": 9945083,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": false,
+   "cheats": [
+    "debug merc hire 0"
+   ]
+  },
+  {
+   "id": "D8.c",
+   "primitive": "P18",
+   "title": "Kashya's free Rogue after Blood Raven",
+   "verdict": "BLOCKED",
+   "reason": "missing: a cheat that sets the Blood Raven record to killed (state 4): `debug quest 1` only sets bit 0 and moves the record from 0 to 1 (V, `debug quest 1 show` states=1,1,0,0,0,0), and the claim needs state 4 (d2dtown/claim.go)",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  },
+  {
+   "id": "D8.q",
+   "primitive": "P20",
+   "title": "Akara's Den of Evil reward: one skill point, flag set, dialog closed",
+   "verdict": "BLOCKED",
+   "reason": "missing: a cheat that completes the Den of Evil record with the reward unclaimed: `debug quest 0` sets bit 0 only (V: `den=1` stays 1), so Akara never offers the reward",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  },
+  {
+   "id": "D8.w",
+   "primitive": "P21",
+   "title": "Warriv takes the character to Act 2",
+   "verdict": "BLOCKED",
+   "reason": "missing: two pieces: the act hop is cmd/d2bot talk nodes (package main, task.go:285, not importable into the harness), and no cheat sets the Andariel record (`debug quest 5` sets bit 0 only)",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  },
+  {
+   "id": "D8.g",
+   "primitive": "P19",
+   "title": "gamble never opens the tab when poor",
+   "verdict": "BLOCKED",
+   "reason": "missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  }
+ ]
+}

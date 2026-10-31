@@ -1,0 +1,9 @@
+DRILL D7.a P30 PASS all points spent | intended: no unspent points after the leveler ran | observed: stat points 55 -> 0, skill points 11 -> 0, planned 66 done 66 refused [] err ""; str 12 dex 25 vit 63 ene 35; skills 36:1,38:8,40:1,43:1,44:1 | runs: 2, identical
+DRILL D7.b P31 PASS all points spent | intended: no unspent points after the leveler ran | observed: stat points 55 -> 0, skill points 11 -> 0, planned 66 done 66 refused [] err ""; str 33 dex 25 vit 152 ene 35; skills 36:1,38:20,40:2,43:1,44:1,49:9 | runs: 2, identical
+DRILL D7.c P32 PASS equipped | intended: the cap is worn, the cursor empty (P35 gate), old items kept | observed: worn after: cap,sst; worn before the equip call sst (pack 1 items), swaps [Cap 4.0 -> head (was empty)] failed [] err <nil> | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D7.a      P30   PASS     same all points spent
+D7.b      P31   PASS     same all points spent
+D7.c      P32   PASS     same equipped
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give cap, debug skillpts 11, debug stat 12 12, debug statpts 55

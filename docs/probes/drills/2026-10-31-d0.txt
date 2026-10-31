@@ -1,0 +1,6 @@
+DRILL P35.post.D0.gate P35 FAIL dirty UI post drill D0.gate | intended: cursor empty, no panel, no dialog | observed: open: inventory; recovered with one Escape/close
+DRILL D0.gate P35 FAIL opened the inventory and returned without closing it (drill left a dirty UI: open: inventory) | intended: gate reports a dirty UI after the drill | observed: inventory open
+
+drill     prim  verdict  det  reason
+P35.post.D0.gate P35   FAIL     -    dirty UI post drill D0.gate
+D0.gate   P35   FAIL     -    opened the inventory and returned without closing it (drill left a dirty UI: open: inventory)
