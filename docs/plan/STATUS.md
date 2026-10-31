@@ -92,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 0815238 10-31 18:10 `Merge agent/decompskillbind: decomp item 4, skill bind and cast trace` (decompskillbind)
 - 1382b0a 10-31 18:08 `Merge agent/rebase152: record PR #152 force-push` (rebase152)
 - 7f17048 10-31 18:04 `Merge agent/fixstall: Kashya walk stall and pinned GoTo escape` (fixstall)
 - be5e7d0 10-31 18:00 `Merge agent/fixmisc: poor-melee rest pin test, Navigator.Sync after position jump` (fixmisc)
@@ -101,5 +102,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 80df3a6 10-31 17:36 `Merge agent/fix152win: PR #152 MSVC C4456 fix noted` (fix152win)
 - 0eb828e 10-31 17:35 `Merge agent/readmelink: Discord invite in README` (readmelink)
 - 84ee1c4 10-31 17:33 `Merge agent/decompwalk: walk speed and movement trace` (decompwalk)
-- 7421c4e 10-31 17:22 `Merge agent/discorddocs: Discord docs match the live state` (discorddocs)
 <!-- statusgen:end -->

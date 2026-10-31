@@ -7,7 +7,7 @@ agent: decompskillbind
 branch: agent/decompskillbind
 worktree: ~/code/d2lod-wt/decompskillbind
 skip_specs: true
-merge: MERGEID
+merge: 0815238
 owns:
   - docs/research/skill-bind-trace.md
   - tools/emu/skill_bind*
