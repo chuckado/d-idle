@@ -49,6 +49,12 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 - [redivivus-sister-project.md](redivivus-sister-project.md) the Redivivus project. historical.
 - [web-damage-calc-sources.md](web-damage-calc-sources.md) web sources for 1.14d damage maths. current.
 
+## Decomp lane (game.exe traces; queue: [../decomp-queue.md](../decomp-queue.md))
+- [belt-pickup-trace.md](belt-pickup-trace.md) belt and ground-potion pickup traced in game.exe vs d2d vs the bot (findings B1-B5, d2d deviation D1). current.
+- [pr-belt-proof.md](pr-belt-proof.md), [pr-belt-draft.md](pr-belt-draft.md), [pr-belt-evidence-pack.md](pr-belt-evidence-pack.md) upstream PR candidate for belt scrolls: ready, local branch only, pending the user's go. current.
+- [town-portal-trace.md](town-portal-trace.md) Tome of Town Portal use traced in game.exe vs d2d vs the bot. current.
+- [pr-tome-proof.md](pr-tome-proof.md), [pr-tome-draft.md](pr-tome-draft.md), [pr-tome-evidence-pack.md](pr-tome-evidence-pack.md) upstream PR candidate for inventory tome use: not ready (needs patch, after-run, verifier). draft.
+
 ## Process, review and public prep
 - [code-review-2026-10-30.md](code-review-2026-10-30.md) review of the day's merges; section 9 lists the bug-fix cards. current (open items: [../BACKLOG.md](../BACKLOG.md)).
 - [proposed-glossary-terms.md](proposed-glossary-terms.md) terms proposed for the user's grill session (GLOSSARY.md is a guard file). open until the grill.
