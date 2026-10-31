@@ -1,174 +1,133 @@
-#!/usr/bin/env python3
-"""game.exe 1.14d's town portal item use as the oracle (d2lod-bot, card decomptome).
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""game.exe's Town Portal read from the pack (C->S 0x20) as the oracle.
 
-The server's C->S 0x20 path runs natively: the dispatcher FUN_0054d750 (its busy
-test FUN_0057eec0: dead, mode 0 / 0x11, or state 0x36 refuses), the handler
-FUN_0054b1e0 (FUN_00549150 owner, FUN_00548ef0 range), FUN_0055e170 (use an
-inventory item), all under unicorn through upstream's harness
-(psi29a/d2decomped tools/emu/emu.py) with FUN_005678a0, FUN_005bf240 (the pSpell
-dispatch, table 0x741790), FUN_005be290 (pSpell 2: town portal), FUN_0055e050 and
-FUN_005be1c0 native too. Hooked to the case: the item lookup (FUN_00552f60), the
-cursor item (FUN_0063c1e0), the item type (FUN_0062b400 / FUN_00629bb0: 0x12 book,
-0x16 scroll), the quantity stat 0x46 (FUN_00625480), the town test (FUN_0061ab00),
-the portal object's free spot (FUN_0056d130's result). Recorded: the old pair closed
-(FUN_00535430), the portal opened (FUN_0056d130), the stat change (FUN_006272b0),
-the scroll removed (FUN_0055e000), the voice events (FUN_00553380).
+The server's path runs natively: the dispatcher FUN_0054d750 (its test
+FUN_0057eec0 refuses a dead player, mode 0 / 0x11), the handler FUN_0054b1e0,
+FUN_0055e170 (use an inventory item: no item in hand, a tome's charges
+stat 0x46 > 0, the charge or the scroll spent after a use that worked),
+FUN_005678a0, FUN_005bf240 (books.txt pSpell, the table at 0x741790),
+FUN_005be290 (pSpell 2: not in town, the old pair closed, the portal made),
+FUN_0055e050 and FUN_005be1c0. The player's mode word (+0x10) is set per case.
 
-d2d's rule is a Python copy of components/game/world.cpp `World::read_portal` +
-fight.cpp `Fight::cast_scroll` + `World::open_portal_at` (upstream main f8aab0e8)
-and apps/d2d/town.cpp:1596 (a right-click with a held item sends nothing).
+Hooked (not the claim): the trace line (0x55bf50), the player's states
+(0x639df0: none), the item's owner (0x63ad50) and the player's x, y (0x6488c0,
+0x648900) for the range test, the item lookup (0x552f60), the item in hand
+(0x63c1e0, per case), the item's requirements (0x628c20: met), its type
+(0x62b400, 0x629bb0: 0x12 tome, 0x16 scroll), its stat 0x46 (0x625480, per
+case), no trade partner (0x554100), its class and rows (0x627f80, 0x6374b0
+books.txt pSpell 2, 0x6335f0), item flags (0x6280a0, 0x6280d0), the room and
+level (0x620bb0, 0x61a1b0 Blood Moor, 0x6427f0, 0x61ab70), the town test
+(0x61ab00, per case), the portal's coordinates (0x45ae20, 0x45adf0), packets
+and voice (0x5353b0, 0x552af0, 0x58cf00, 0x553720, 0x5531c0, 0x53b3d0,
+0x53d130, 0x53c520, 0x553380, 0x55e0d0, 0x6439b0, 0x63b2c0, 0x543520).
+Recorded: the old pair closed (FUN_00535430), the portal made (FUN_0056d130:
+its free-spot search is hooked and returns the portal or 0, per case), the
+stat change (FUN_006272b0), the scroll removed (FUN_0055e000).
 
-    cd <d2decomped>/tools/emu && source /tmp/casttrace-venv/bin/activate
-    python tome_use.py --exe game.exe [random N] [seed]
+    uv run python tome_use.py gen 100000 7 > cases.tsv
+    uv run python tome_use.py game cases.tsv > game.tsv
+    ../../build/tests/test_game --tome-use cases.tsv | grep -E '^[0-9]+ ' > d2d.tsv
+    diff game.tsv d2d.tsv
 
-Outcome per case: (now, later, spent, closed): a portal opened at the click, a
-portal due at the SC action frame, the charge (book) or the scroll (scroll) spent
-at the click, the old pair closed. Prints one line per class of case.
+A case is `id item charges town held mode spot`: tbk or tsc, the tome's
+stat 0x46, in town, an item in hand, the player's mode (0..19), a free spot
+for the portal. `game` prints `id opened spent kept`: the tick after the use
+the new pair stood (0: the use's own, -1: none), the charge or the scroll
+spent, the player's old pair still there.
 """
 import random
 import sys
-from collections import Counter
 
 import emu
 from unicorn.x86_const import UC_X86_REG_EDX
 
-BOOK, SCROLL = 0x12, 0x16
-WALK_MODES = (1, 2, 3, 5, 6)                    # NU WL RN TN TW: d2d's pmode < 0 (no attack, cast, GH, BL, KB, SQ)
-MODES = list(range(20))                         # player modes 0 DT .. 0x11 DD .. 0x13
+KIND = {"tbk": 0x12, "tsc": 0x16}
+CHARGES = list(range(-2, 21)) + [255, 1 << 20]
 
 
-def d2d_use(kind, qty, town, cursor, mode, spot, state54=0):
-    """apps/d2d/town.cpp:1596 `!held`; world.cpp read_portal: in_town / dead / pmode >= 0 -> nothing;
-    tbk with quantity <= 0 -> nothing; cast_scroll (SC); --quantity or erase at once; the portal at
-    the SC action frame (open_portal_at: no free spot -> nothing, the old pair kept)."""
-    if cursor or town or mode not in WALK_MODES: return (0, 0, 0, 0)  # dead (DT, DD) included: fight.dead()
-    if kind == BOOK and qty <= 0: return (0, 0, 0, 0)
-    return (0, 1 if spot else 0, 1, 1 if spot else 0)
-
-
-def run(exe, n_random, seed):
-    e = emu.Emu(exe) if exe else emu.Emu()
-    cur, out = {}, {}
-
-    game = e.alloc(0x1000)
-    player = e.alloc(0x200)
-    inv = e.alloc(0x100)
-    item = e.alloc(0x200)
-    books = e.alloc(0x40)
-    items_row = e.alloc(0x200)
-    room = e.alloc(0x100)
-    portal = e.alloc(0x100)
-    client = e.alloc(0x100)
-    packet = e.alloc(16)
-    path = e.alloc(0x100)
-    e.mu.mem_write(packet, bytes([0x20]) + (77).to_bytes(4, "little") + (100).to_bytes(4, "little") + (200).to_bytes(4, "little"))
-    e.w32(player + 0x2c, path)
-    e.w32(player, 0); e.w32(player + 0xc, 1); e.w32(player + 0x60, inv)
-    e.w32(item, 4); e.w32(item + 4, 0x200); e.w32(item + 0xc, 77); e.w32(item + 0x10, 0)
-    e.w32(books + 4, 2); e.w32(books + 8, 219); e.w32(books + 0xc, 220)   # books.txt: pSpell 2, ScrollSkill, BookSkill
-    e.w32(items_row + 0x94, 2)
-    e.w32(portal, 2); e.w32(portal + 4, 0x3b); e.w32(portal + 0xc, 900)
-
-    def ev(name):
-        return lambda e_: out.__setitem__(name, out.get(name, 0) + 1) or 0
-
-    e.hook(0x55bf50, lambda e_: 0, 1)                                    # trace line
-    e.hook(0x639df0, lambda e_: cur["state54"] if e_.arg(1) == 0x36 else 0, 2)   # the player's states
-    e.hook(0x63ad50, lambda e_: 1, 2)                                    # the item is in the player's inventory
-    e.hook(0x6488c0, lambda e_: 100, 1)                                  # the player's x, y (the packet's)
-    e.hook(0x648900, lambda e_: 200, 1)
-    e.hook(0x552f60, lambda e_: item if e_.mu.reg_read(UC_X86_REG_EDX) == 4 and e_.arg(0) == 77 else 0, 1)
-    e.hook(0x63c1e0, lambda e_: cur["cursor"], 1)                        # the item on the cursor
-    e.hook(0x628c20, lambda e_: 1, 1)                                    # usable (requirements)
-    e.hook(0x62b400, lambda e_: cur["kind"], 1)                          # the item's type
-    e.hook(0x629bb0, lambda e_: 1 if e_.arg(1) == cur["kind"] else 0, 2)
-    e.hook(0x625480, lambda e_: cur["qty"] & 0xffffffff if e_.arg(1) == 0x46 else 0, 3)
-    e.hook(0x554100, lambda e_: 0, 3)                                    # no trade / interact partner
-    e.hook(0x627f80, lambda e_: 0x200, 2)                                # the item's class
-    e.hook(0x6374b0, lambda e_: books, 1)
-    e.hook(0x6335f0, lambda e_: items_row, 1)
-    e.hook(0x6280a0, lambda e_: 0, 4)                                    # item flag 4 clear
-    e.hook(0x6280d0, lambda e_: 0, 3)
-    e.hook(0x620bb0, lambda e_: room, 1)
-    e.hook(0x61a1b0, lambda e_: 2, 1)                                    # level id (Blood Moor; 0x88 refused)
-    e.hook(0x6427f0, lambda e_: 0, 1)
-    e.hook(0x61ab70, lambda e_: 1, 1)
-    e.hook(0x61ab00, lambda e_: cur["town"], 1)
-    e.hook(0x535430, ev("closed"), 0)
-    e.hook(0x45ae20, lambda e_: 100, 4)
-    e.hook(0x45adf0, lambda e_: 200, 1)
-
-    def open_(e_):
-        out["opened"] = out.get("opened", 0) + 1
-        return portal if cur["spot"] else 0
-    e.hook(0x56d130, open_, 7)
-    e.hook(0x553380, lambda e_: out.setdefault("voice", []).append(e_.mu.reg_read(UC_X86_REG_EDX)) or 0, 1)
-    for a in (0x5353b0, 0x552af0, 0x58cf00): e.hook(a, lambda e_: 0, 0)
-    e.hook(0x553720, lambda e_: 0, 0)
-    e.hook(0x5531c0, lambda e_: client, 1)
-    e.hook(0x53b3d0, lambda e_: 0, 2)
-    e.hook(0x53d130, lambda e_: 0, 3)
-    e.hook(0x53c520, lambda e_: 0, 3)
-
-    def stat(e_):
-        if e_.arg(1) == 0x46: out["delta"] = out.get("delta", 0) + (e_.arg(2) ^ 0x80000000) - 0x80000000
-        return 0
-    e.hook(0x6272b0, stat, 4)
-    e.hook(0x55e0d0, lambda e_: 0, 1)
-    e.hook(0x6439b0, lambda e_: 0, 1)                                    # no scroll skill entry (belt count path skipped)
-    e.hook(0x55e000, ev("removed"), 1)
-    e.hook(0x63b2c0, lambda e_: 0, 1)                                    # FUN_005be1c0's inventory walk: empty
-    e.hook(0x543520, lambda e_: 0, 0)
-
-    def case(kind, qty, town, cursor, mode, spot, state54=0):
-        cur.update(kind=kind, qty=qty, town=town, cursor=cursor, spot=spot, state54=state54)
-        out.clear()
-        e.w32(player + 0x10, mode)                                       # the player's mode: the dispatcher's dead test only
-        e.w32(player + 0xc4, 0)
-        e.w32(game + 0x1dc4, 0)
-        e.call(0x54d750, packet, 13, ecx=game, edx=player)
-        now = 1 if out.get("opened") and spot and "closed" in out else 0
-        spent = 1 if (kind == BOOK and out.get("delta") == -1) or (kind == SCROLL and out.get("removed")) else 0
-        return (now, 0, spent, 1 if out.get("closed") else 0)
-
+def gen(n_random, seed):
     rng = random.Random(seed)
-    cases = [(k, q, t, c, m, s) for k in (BOOK, SCROLL) for q in list(range(-2, 21)) + [255, 1 << 20]
-             for t in (0, 1) for c in (0, 1) for m in MODES for s in (0, 1)]
-    cases += [(rng.choice((BOOK, SCROLL)), rng.randrange(-5, 1 << 24) if rng.random() < 0.2 else rng.randrange(-2, 21),
-               rng.randrange(2), rng.randrange(2), rng.choice(MODES), rng.randrange(2), int(rng.random() < 0.05)) for _ in range(n_random)]
-    classes = Counter()
-    shown = set()
-    for args in cases:
-        kind, qty = args[0], args[1]
-        got, want = case(*args), d2d_use(*args)
-        if len(args) > 6 and args[6] and got == (0, 0, 0, 0) and want != got: cls = "differ: state 0x36: game.exe drops the packet, d2d has no such test"
-        elif got == (0, 0, 0, 0) and want == got: cls = "same: nothing"
-        elif got == want: cls = "same"
-        elif got[0] and want[1]: cls = "differ: game.exe now, d2d at the SC action frame"
-        elif got[0] and want == (0, 0, 0, 0): cls = "differ: game.exe now, d2d nothing (player busy)"
-        elif got == (0, 0, 0, 1) and want == (0, 0, 0, 0): cls = "differ: player busy, no free spot: game.exe closes the old pair only, d2d nothing"
-        elif not got[0] and not got[2] and want[2]: cls = "differ: no free spot: game.exe keeps the charge, closes the old pair; d2d spends it, keeps the old pair"
-        else: cls = f"differ: other game={got} d2d={want}"
-        classes[cls] += 1
-        empty = kind == BOOK and qty <= 0
-        classes[("empty tome", "same" if got == want else "differ")] += empty
-        if cls.startswith("differ: other") and cls not in shown:
-            shown.add(cls); print(args, cls)
-    for name, args in (("empty tome", (BOOK, 0, 0, 0, 1, 1)), ("tome 5, idle", (BOOK, 5, 0, 0, 1, 1)),
-                       ("tome 5, in GH", (BOOK, 5, 0, 0, 4, 1)), ("tome 5, in town", (BOOK, 5, 1, 0, 1, 1)),
-                       ("tome 5, cursor item", (BOOK, 5, 0, 1, 1, 1)), ("scroll, idle", (SCROLL, 1, 0, 0, 1, 1))):
-        got = case(*args)
-        print(f"{name}: game.exe {got} {dict(out)}; d2d {d2d_use(*args)}")
-    for k, v in sorted(classes.items(), key=str):
-        if v: print(v, k)
-    print(f"{len(cases)} cases")
+    cases = [(k, q, t, h, m, s) for k in KIND for q in CHARGES for t in (0, 1) for h in (0, 1) for m in range(20) for s in (0, 1)]
+    for _ in range(n_random):
+        charges = rng.randrange(-5, 1 << 24) if rng.random() < 0.2 else rng.randrange(-2, 21)
+        cases.append((rng.choice(list(KIND)), charges, rng.randrange(2), rng.randrange(2), rng.randrange(20), rng.randrange(2)))
+    for i, case in enumerate(cases):
+        print(i, *case)
 
 
-def main():
-    argv, exe = sys.argv[1:], None
-    if "--exe" in argv:
-        at = argv.index("--exe"); exe = argv[at + 1]; del argv[at:at + 2]
-    run(exe, int(argv[0]) if argv else 100000, int(argv[1]) if len(argv) > 1 else 7)
+class Oracle:
+    def __init__(self):
+        self.e = e = emu.Emu()
+        self.cur, self.out = {}, {}
+        cur, out = self.cur, self.out
+        self.game = game = e.alloc(0x1000)
+        self.player = player = e.alloc(0x200)
+        inv, item, books, items_row = e.alloc(0x100), e.alloc(0x200), e.alloc(0x40), e.alloc(0x200)
+        room, portal, client, path = e.alloc(0x100), e.alloc(0x100), e.alloc(0x100), e.alloc(0x100)
+        self.packet = packet = e.alloc(16)
+        e.mu.mem_write(packet, bytes([0x20]) + (77).to_bytes(4, "little") + (100).to_bytes(4, "little") + (200).to_bytes(4, "little"))
+        e.w32(player + 0x2c, path)
+        e.w32(player, 0); e.w32(player + 0xc, 1); e.w32(player + 0x60, inv)
+        e.w32(item, 4); e.w32(item + 4, 0x200); e.w32(item + 0xc, 77); e.w32(item + 0x10, 0)
+        e.w32(books + 4, 2); e.w32(books + 8, 219); e.w32(books + 0xc, 220)   # pSpell 2, ScrollSkill, BookSkill
+        e.w32(items_row + 0x94, 2)
+        e.w32(portal, 2); e.w32(portal + 4, 0x3b); e.w32(portal + 0xc, 900)
+
+        def count(name):
+            return lambda e_: out.__setitem__(name, out.get(name, 0) + 1) or 0
+
+        def stat(e_):
+            if e_.arg(1) == 0x46: out["delta"] = out.get("delta", 0) + (e_.arg(2) ^ 0x80000000) - 0x80000000
+            return 0
+
+        def made(e_):
+            out["made"] = out.get("made", 0) + 1
+            return portal if cur["spot"] else 0
+
+        for at, fn, args in (
+                (0x55bf50, lambda e_: 0, 1), (0x639df0, lambda e_: 0, 2), (0x63ad50, lambda e_: 1, 2),
+                (0x6488c0, lambda e_: 100, 1), (0x648900, lambda e_: 200, 1),
+                (0x552f60, lambda e_: item if e_.mu.reg_read(UC_X86_REG_EDX) == 4 and e_.arg(0) == 77 else 0, 1),
+                (0x63c1e0, lambda e_: cur["held"], 1), (0x628c20, lambda e_: 1, 1), (0x62b400, lambda e_: cur["kind"], 1),
+                (0x629bb0, lambda e_: 1 if e_.arg(1) == cur["kind"] else 0, 2),
+                (0x625480, lambda e_: cur["charges"] & 0xffffffff if e_.arg(1) == 0x46 else 0, 3),
+                (0x554100, lambda e_: 0, 3), (0x627f80, lambda e_: 0x200, 2), (0x6374b0, lambda e_: books, 1),
+                (0x6335f0, lambda e_: items_row, 1), (0x6280a0, lambda e_: 0, 4), (0x6280d0, lambda e_: 0, 3),
+                (0x620bb0, lambda e_: room, 1), (0x61a1b0, lambda e_: 2, 1), (0x6427f0, lambda e_: 0, 1),
+                (0x61ab70, lambda e_: 1, 1), (0x61ab00, lambda e_: cur["town"], 1), (0x535430, count("closed"), 0),
+                (0x45ae20, lambda e_: 100, 4), (0x45adf0, lambda e_: 200, 1), (0x56d130, made, 7),
+                (0x553380, lambda e_: 0, 1), (0x5353b0, lambda e_: 0, 0), (0x552af0, lambda e_: 0, 0),
+                (0x58cf00, lambda e_: 0, 0), (0x553720, lambda e_: 0, 0), (0x5531c0, lambda e_: client, 1),
+                (0x53b3d0, lambda e_: 0, 2), (0x53d130, lambda e_: 0, 3), (0x53c520, lambda e_: 0, 3),
+                (0x6272b0, stat, 4), (0x55e0d0, lambda e_: 0, 1), (0x6439b0, lambda e_: 0, 1),
+                (0x55e000, count("removed"), 1), (0x63b2c0, lambda e_: 0, 1), (0x543520, lambda e_: 0, 0)):
+            e.hook(at, fn, args)
+
+    def use(self, kind, charges, town, held, mode, spot):
+        e, out = self.e, self.out
+        self.cur.update(kind=KIND[kind], charges=charges, town=town, held=held, spot=spot)
+        out.clear()
+        e.w32(self.player + 0x10, mode)
+        e.w32(self.player + 0xc4, 0)
+        e.w32(self.game + 0x1dc4, 0)
+        e.call(0x54d750, self.packet, 13, ecx=self.game, edx=self.player)
+        opened = 0 if out.get("made") and spot else -1
+        spent = int(out.get("delta") == -1) if kind == "tbk" else int(bool(out.get("removed")))
+        return opened, spent, int(not out.get("closed"))
 
 
-if __name__ == "__main__": main()
+def game(path):
+    oracle = Oracle()
+    with open(path) as cases:
+        for line in cases:
+            f = line.split()
+            print(f[0], *oracle.use(f[1], *map(int, f[2:7])))
+
+
+if __name__ == "__main__":
+    if sys.argv[1:2] == ["gen"]:
+        gen(int(sys.argv[2]) if len(sys.argv) > 2 else 100000, int(sys.argv[3]) if len(sys.argv) > 3 else 7)
+    elif sys.argv[1:2] == ["game"]:
+        game(sys.argv[2])
+    else:
+        sys.exit(__doc__)
