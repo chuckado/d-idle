@@ -1,125 +1,114 @@
-#!/usr/bin/env python3
-"""game.exe 1.14d's waypoint refusal window as the oracle (d2lod-bot, card decompwp).
+# SPDX-License-Identifier: GPL-3.0-or-later
+"""game.exe's waypoint refusal window (C->S 0x49) as the oracle.
 
-The server's C->S 0x49 path runs natively under unicorn through upstream's harness
-(psi29a/d2decomped tools/emu/emu.py): the dispatcher FUN_0054d750 (its busy test
-FUN_0057eec0), the 0x49 handler FUN_0054c5d0 with its timer read FUN_0055b6c0
-(player data +0x160 + 10000 ms > GetTickCount -> refuse: voice event 0x13,
-FUN_00554190 ends the interaction) and FUN_00554190. A hostile declaration runs
-game.exe's own setter FUN_0055b720 natively (the only writer of player data
-+0x160 in .text: a whole-image scan, see docs/research/waypoint-trace.md).
-Hooked: GetTickCount (the case's clock), FUN_006221a0 (the player data), the
-validation FUN_00549570 (0 = object in range, same act, target active; 2 = not
-active), FUN_00584f60 (recorded: the travel), FUN_00553380 (recorded: voice).
+The server's 0x49 path runs natively: the dispatcher FUN_0054d750 (its busy
+test FUN_0057eec0), the handler FUN_0054c5d0, its timer read FUN_0055b6c0
+(player data +0x160; refused while that + 10000 > GetTickCount: voice event
+0x13 and FUN_00554190 ends the interaction) and FUN_00554190. A hostile
+declaration runs game.exe's own setter FUN_0055b720, as FUN_005a5e50 calls
+it; it is the only code that writes player data +0x160. A level change runs
+nothing: no code on that path writes the field.
 
-d2d's rule is a Python copy of components/game/world/commands.cpp:267
-(upstream main 03f42254): refuse when now - arrived_at < 10000, arrived_at being
-set by World::swap_npcs on every arrival (setup.cpp:363), the game entry included.
-`--after` checks the proposed fix (a hostile timestamp that is set only by a
-hostile declaration, compared the way game.exe does).
+Hooked (not the claim): GetTickCount (the case's clock); FUN_006221a0 (the
+player data: a zeroed block); FUN_00549570 (the target check: 0 = in range,
+same act, waypoint active; 2 = not active); FUN_00584f60 (the travel:
+recorded); FUN_00553380 (the voice: recorded); FUN_00554d00 / FUN_00552f60
+(the error path's unit lookups: 0, so it only returns); FUN_00410a80 (the
+dispatcher's timing log, off with game +0x1dc4 = 0).
 
-    cd <d2decomped>/tools/emu && source <venv>/bin/activate
-    PYTHONPATH=. python <this repo>/tools/emu/wp_refuse.py --exe game.exe [random N] [seed] [--after]
+    uv run python wp_refuse.py gen 100000 7 > cases.txt          # --solo: no hostile declarations
+    uv run python wp_refuse.py game cases.txt > g.txt
+    ../../build/tests/test_game --waypoint-refuse cases.txt | grep -E '^[0-9]+ ' | diff g.txt -
+
+A case is `id now active L l1 .. H h1 ..`: the GetTickCount of the 0x49,
+whether the target waypoint is active, then the count and times of the
+level changes and of the player's hostile declarations before it. `game`
+prints `id refused` (1: no travel). GetTickCount stays in 70,000 .. 2^31:
+past the first 10 s of uptime (zeroed player data refuses there) and the
+wrap.
 """
 import random
 import sys
-from collections import Counter
 
 import emu
-from unicorn.x86_const import UC_X86_REG_EDX
 
-T_MIN, T_MAX = 10_000, 1 << 31      # GetTickCount at the packet: past the first 10 s of uptime, before the wrap
-
-
-def d2d_refuses(now, levels, hostiles, active):
-    """commands.cpp:267: the 10 s test on the last arrival, then the active-waypoint test."""
-    arrived = max(levels)
-    return (now - arrived) < 10000 or not active
+T_MIN, T_MAX = 70_000, 1 << 31
 
 
-def fix_refuses(now, levels, hostiles, active):
-    """Proposed: the window counts from the last hostile declaration only (never set in a single-player game)."""
-    last = max(hostiles) if hostiles else 0
-    return (last + 10000) & 0xffffffff > now or not active
-
-
-def run(exe, n_random, seed, after):
-    cur = {"now": 0}
-    emu.Emu.w_GetTickCount = lambda self: (cur["now"], 0)
-    e = emu.Emu(exe) if exe else emu.Emu()
-    out = {}
-    game = e.alloc(0x2000)
-    player = e.alloc(0x200)
-    other = e.alloc(0x200)
-    pcdata = e.alloc(0x400)
-    packet = e.alloc(16)
-    e.w32(player, 0); e.w32(player + 0xc, 1); e.w32(player + 0x10, 1)    # a player, id 1, mode NU (walk modes pass the busy test)
-    e.w32(other, 0); e.w32(other + 0xc, 2)
-
-    e.hook(0x6221a0, lambda e_: pcdata, 1)
-    e.hook(0x549570, lambda e_: 0 if cur["active"] else 2, 2)
-    e.hook(0x554d00, lambda e_: 0, 0)
-    e.hook(0x552f60, lambda e_: 0, 1)
-    e.hook(0x584f60, lambda e_: out.__setitem__("travel", 1) or 0, 2)
-    e.hook(0x553380, lambda e_: out.setdefault("voice", []).append(e_.mu.reg_read(UC_X86_REG_EDX)) or 0, 1)
-    e.hook(0x410a80, lambda e_: 0, 0)
-    e.w32(game + 0x1dc4, 0)
-
-    def case(now, levels, hostiles, active):
-        """levels, hostiles: the GetTickCount of each level change and hostile declaration before the packet."""
-        cur["active"] = active
-        out.clear()
-        e.mu.mem_write(pcdata, b"\0" * 0x400)                            # fresh player data (I: the allocator zeroes it)
-        for t in sorted(hostiles):
-            cur["now"] = t
-            e.call(0x55b720, (t + 60000) & 0xffffffff, ecx=player, edx=other)   # the hostile setter, as FUN_005a5e50 calls it
-        # level changes: nothing in game.exe writes player data +0x160 (scan), so nothing runs here
-        cur["now"] = now
-        e.mu.mem_write(packet, bytes([0x49]) + (900).to_bytes(4, "little") + (3).to_bytes(2, "little") + b"\0\0")
-        e.w32(player + 0x64, 0); e.w32(player + 0x68, 0)
-        e.call(0x54d750, packet, 9, ecx=game, edx=player)
-        return not out.get("travel")
-
+def gen(n_random, seed, solo):
     rng = random.Random(seed)
     cases = []
-    for dl in range(0, 20001, 100):                                     # exhaustive grid: ms since the last level change
-        for dh in [None] + list(range(0, 20001, 250)):                  # ms since the last hostile declaration (None: never)
+    now = 1_000_000
+    hostile_grid = [None] if solo else [None] + list(range(0, 20001, 250))
+    level_grid = range(0, 20001, 1 if solo else 100)
+    for dl in level_grid:                    # ms since the last level change
+        for dh in hostile_grid:              # ms since the last hostile declaration (None: never)
             for active in (1, 0):
-                now = 1_000_000
-                cases.append((now, [now - dl], [] if dh is None else [now - dh], active))
+                cases.append((now, active, [now - dl], [] if dh is None else [now - dh]))
     for _ in range(n_random):
-        now = rng.randrange(T_MIN + 60000, T_MAX)
+        now = rng.randrange(T_MIN, T_MAX)
         levels = [now - rng.choice((rng.randrange(0, 12000), rng.randrange(0, 600000))) for _ in range(rng.randrange(1, 4))]
-        hostiles = [now - rng.choice((rng.randrange(0, 12000), rng.randrange(0, 60000))) for _ in range(rng.choice((0, 0, 0, 1, 2)))]
-        cases.append((now, levels, hostiles, int(rng.random() < 0.9)))
-    model = fix_refuses if after else d2d_refuses
-    classes = Counter()
-    for c in cases:
-        got, want = case(*c), model(*c)
-        now, levels, hostiles, active = c
-        near_level = now - max(levels) < 10000
-        near_host = bool(hostiles) and now - max(hostiles) < 10000
-        if got == want: cls = f"same: {'refused' if got else 'travel'}"
-        elif want and not got: cls = "differ: d2d refuses, game.exe travels" + (" (within 10 s of a level change)" if near_level else "")
-        else: cls = "differ: game.exe refuses, d2d travels" + (" (within 10 s of a hostile declaration)" if near_host else "")
-        classes[cls] += 1
-    for name, c in (("2 s after a level change", (1_000_000, [998_000], [], 1)),
-                    ("2 s after a hostile declaration", (1_000_000, [500_000], [998_000], 1)),
-                    ("10.0 s after a hostile declaration", (1_000_000, [500_000], [990_000], 1)),
-                    ("inactive target", (1_000_000, [500_000], [], 0))):
-        print(f"{name}: game.exe refuses={case(*c)} voice={out.get('voice')}; {'fix' if after else 'd2d'} refuses={model(*c)}")
-    for k, v in sorted(classes.items()):
-        print(v, k)
-    print(f"{len(cases)} cases, {sum(v for k, v in classes.items() if k.startswith('differ'))} differ ({'after the fix' if after else 'd2d today'})")
+        hostiles = [] if solo else [now - rng.choice((rng.randrange(0, 12000), rng.randrange(0, 60000))) for _ in range(rng.choice((0, 0, 0, 1, 2)))]
+        cases.append((now, int(rng.random() < 0.9), sorted(levels), sorted(hostiles)))
+    for i, (now, active, levels, hostiles) in enumerate(cases):
+        print(i, now, active, len(levels), *levels, len(hostiles), *hostiles)
+
+
+class Oracle:
+    def __init__(self):
+        self.cur = {"now": 0, "active": 1}
+        emu.Emu.w_GetTickCount = lambda _self: (self.cur["now"], 0)
+        self.e = e = emu.Emu()
+        self.out = {}
+        self.game, self.player, self.other = e.alloc(0x2000), e.alloc(0x200), e.alloc(0x200)
+        self.pcdata, self.packet = e.alloc(0x400), e.alloc(16)
+        e.w32(self.player, 0); e.w32(self.player + 0xc, 1); e.w32(self.player + 0x10, 1)   # a player, id 1, mode NU
+        e.w32(self.other, 0); e.w32(self.other + 0xc, 2)
+        e.w32(self.game + 0x1dc4, 0)
+        e.hook(0x6221a0, lambda _e: self.pcdata, 1)
+        e.hook(0x549570, lambda _e: 0 if self.cur["active"] else 2, 2)
+        e.hook(0x554d00, lambda _e: 0, 0)
+        e.hook(0x552f60, lambda _e: 0, 1)
+        e.hook(0x584f60, lambda _e: self.out.__setitem__("travel", 1) or 0, 2)
+        e.hook(0x553380, lambda _e: 0, 1)
+        e.hook(0x410a80, lambda _e: 0, 0)
+
+    def refused(self, now, active, hostiles):
+        e = self.e
+        self.cur["active"] = active
+        self.out.clear()
+        e.mu.mem_write(self.pcdata, b"\0" * 0x400)
+        for t in hostiles:
+            self.cur["now"] = t
+            e.call(0x55b720, (t + 60000) & 0xffffffff, ecx=self.player, edx=self.other)
+        self.cur["now"] = now
+        e.mu.mem_write(self.packet, bytes([0x49]) + (900).to_bytes(4, "little") + (3).to_bytes(2, "little") + b"\0\0")
+        e.w32(self.player + 0x64, 0); e.w32(self.player + 0x68, 0)
+        e.call(0x54d750, self.packet, 9, ecx=self.game, edx=self.player)
+        return 0 if self.out.get("travel") else 1
+
+
+def parse(line):
+    p = [int(x) for x in line.split()]
+    nl = p[3]
+    levels = p[4:4 + nl]
+    nh = p[4 + nl]
+    return p[0], p[1], p[2], levels, p[5 + nl:5 + nl + nh]
 
 
 def main():
-    argv, exe = sys.argv[1:], None
-    after = "--after" in argv
-    if after: argv.remove("--after")
-    if "--exe" in argv:
-        at = argv.index("--exe"); exe = argv[at + 1]; del argv[at:at + 2]
-    run(exe, int(argv[0]) if argv else 100000, int(argv[1]) if len(argv) > 1 else 7, after)
+    if len(sys.argv) > 3 and sys.argv[1] == "gen":
+        gen(int(sys.argv[2]), int(sys.argv[3]), "--solo" in sys.argv[4:])
+    elif len(sys.argv) > 2 and sys.argv[1] == "game":
+        o = Oracle()
+        with open(sys.argv[2]) as f:
+            for line in f:
+                if line.strip():
+                    i, now, active, _levels, hostiles = parse(line)
+                    print(i, o.refused(now, active, hostiles))
+    else:
+        raise SystemExit(__doc__)
 
 
-if __name__ == "__main__": main()
+if __name__ == "__main__":
+    main()

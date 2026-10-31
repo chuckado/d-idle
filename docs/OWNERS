@@ -116,3 +116,9 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+docs/research/pr-wp-*.md            wppr                  wppr
+tools/emu/wp_*.py                   wppr                  wppr
+openspec/changes/wppr/**            wppr                  wppr
+docs/decomp-queue.md                wppr                  wppr
+docs/research/pr-bundle-queue.md    wppr                  wppr
+docs/BACKLOG.md                     wppr                  wppr
