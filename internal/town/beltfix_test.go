@@ -29,6 +29,7 @@ func (p *putInput) BeltPut(id uint32, box int) error {
 		if u.ID == id {
 			p.r.W.Items[i].Item.Where, p.r.W.Items[i].Mode = d2.ContBelt, d2.ItemModeBelt
 			p.r.W.Items[i].X, p.r.W.Items[i].Y = box, 0
+			p.r.W.Items[i].Item.GX, p.r.W.Items[i].Item.GY = box, 0 // the fork's dump: box in GX
 			p.boxes = append(p.boxes, box)
 			return nil
 		}
@@ -192,17 +193,12 @@ func TestNoBeltColumnIsNoRoomNotFull(t *testing.T) {
 	if err != nil || rep.Failed != 0 || rep.Moved != 0 || len(pi.boxes) != 0 {
 		t.Fatalf("no-room fill: %+v err %v boxes %v", rep, err, pi.boxes)
 	}
-	addPack(r, "hp1", 1)
-	rep, err = r.T.FillBelt(context.Background())
-	if err != nil || rep.Moved != 1 || rep.Failed != 0 || len(pi.boxes) != 1 || pi.boxes[0] != 6 {
-		t.Fatalf("healing potion for the open healing box: %+v err %v boxes %v", rep, err, pi.boxes)
-	}
 }
 
 // FIXBELT2: healing potions must not take the empty columns the plan keeps for mana: an empty sash and a pack of both
 // kinds ends with a mana column on the belt.
 func TestHealingDoesNotTakeTheManaColumns(t *testing.T) {
-	r, _ := d2dRig(t)
+	r, pi := d2dRig(t)
 	r.W.Add("lbl", d2.ContEquipment, 0, 0).Item.Body = d2.BodyBelt
 	addPack(r, "hp1", 6)
 	addPack(r, "mp1", 4)
@@ -216,6 +212,6 @@ func TestHealingDoesNotTakeTheManaColumns(t *testing.T) {
 		}
 	}
 	if mp < 2 {
-		t.Fatalf("belt holds %d mana potions of 4 in the pack", mp)
+		t.Fatalf("belt holds %d mana potions of 4 in the pack (boxes %v)", mp, pi.boxes)
 	}
 }

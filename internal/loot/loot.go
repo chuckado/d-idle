@@ -494,7 +494,9 @@ func (n needsOf) Want(kind string, b *data.ItemBase) bool {
 		// so a potion the plan carries and the belt will take is wanted whatever the pack holds; the pack buffer below
 		// only limits potions that would land in the pack.
 		if band.Capacity(k, st.Slots) > 0 && belt.WillBelt(db, inv, k) {
-			return true
+			// FIXBELT2: the click cannot be steered, so a potion that would open the empty column kept for another planned kind
+			// (healing in the mana column: 42 of 47 failed fills in post-fix soak 1) is left on the ground.
+			return belt.WillBeltFor(db, inv, k, band)
 		}
 		if k == belt.RV {
 			return n.wantRejuv(b, st)

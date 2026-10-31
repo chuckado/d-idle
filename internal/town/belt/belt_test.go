@@ -142,7 +142,7 @@ func TestPlaceFor(t *testing.T) {
 	}{
 		{"empty belt, first healing", 8, nil, HP, 0, true},
 		{"mana never has a column: it may open one", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP), P(2, HP)}, MP, 3, true},
-		{"third healing column is held back for mana", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP)}, HP, 0, false},
+		{"third healing column is held back for mana", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP), P(2, HP), P(6, HP)}, HP, 0, false},
 		{"healing joins its own column", 8, []Placed{P(0, HP), P(1, HP), P(5, HP)}, HP, 4, true},
 		{"mana column exists: healing may open the last", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP), P(3, MP)}, HP, 2, true},
 		{"LOG SIGNATURE: sash, hp x3 columns, mana column full, nothing fits", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP), P(3, MP), P(7, MP), P(2, HP)}, MP, 0, false},

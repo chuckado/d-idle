@@ -404,3 +404,10 @@ func PlaceFor(slots int, items []Placed, k Kind, b Band) (int, bool) {
 	}
 	return 0, false
 }
+
+// WillBeltFor is WillBelt with PlaceFor's reserve: a ground potion the game would put in a column the plan keeps for
+// another kind is not welcome (clicking it cannot be steered, so it is left on the ground).
+func WillBeltFor(db *data.DB, inv *d2.Inventory, k Kind, b Band) bool {
+	_, ok := PlaceFor(Slots(db, inv), PlacedItems(db, inv), k, b)
+	return ok
+}
