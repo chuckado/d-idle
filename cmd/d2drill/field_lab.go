@@ -593,3 +593,50 @@ func (l *lab) PlaceAtMouth(ctx context.Context, r *drill.Run, outer, cave, side 
 	}
 	return "", "no offset left the character in the outer level inside the trigger range"
 }
+
+func (l *lab) Warriv(ctx context.Context, r *drill.Run) (int, string, error) {
+	if err := l.Goto(ctx, r, 1); err != nil {
+		return 0, "", err
+	}
+	if _, err := r.Cheat(ctx, "debug quest set 6 0x0001", "Andariel's record done: the Warriv travel drill needs the state the quest would leave"); err != nil {
+		return 0, "", err
+	}
+	_ = l.Tick(ctx, 10)
+	_ = l.be.Ctl.CloseAll()
+	npcs, err := l.be.Client.NPCs(ctx)
+	if err != nil {
+		return 0, "", err
+	}
+	idx := -1
+	for _, n := range npcs.Items {
+		if strings.EqualFold(n.Name, "Warriv") {
+			idx = n.Index
+		}
+	}
+	if idx < 0 {
+		return 0, "", errors.New("no Warriv in npcs")
+	}
+	savedP, savedN := d2dctl.Pause, d2dctl.Now
+	l.be.Clock.Install(ctx)
+	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
+	lines, err := l.be.Client.OpenNPCMenu(ctx, idx, 40*time.Second)
+	var parts []string
+	for _, ml := range lines {
+		parts = append(parts, ml.Text)
+	}
+	menu := strings.Join(parts, " | ")
+	if err != nil {
+		return 0, menu, err
+	}
+	if err := l.be.Client.PickMenuLine(ctx, "go east"); err != nil {
+		_ = l.CloseAll(ctx)
+		return 0, menu, err
+	}
+	_ = l.Tick(ctx, 200)
+	area := 0
+	if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil {
+		area = s.Player.Area
+	}
+	_ = l.CloseAll(ctx)
+	return area, menu, nil
+}

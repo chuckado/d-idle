@@ -295,7 +295,7 @@ func D8(l GameLab) []Drill {
 		{ID: "D8.m", Primitive: "P3", Title: "merc at low life: the bot's belt verb with the merc flag heals it and spends one potion", Limit: lim, Do: do(d8drink)},
 		d8quest(l, lim),
 		d8akara(l, lim),
-		{ID: "D8.w", Primitive: "P21", Title: "Warriv takes the character to Act 2", Needs: []string{"two pieces: the act hop is cmd/d2bot talk nodes (package main, task.go:285, not importable into the harness), and no cheat sets the Andariel record (`debug quest 5` sets bit 0 only)"}},
+		d8warriv(l, lim),
 		{ID: "D8.g", Primitive: "P19", Title: "gamble never opens the tab when poor", Needs: []string{"the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario"}},
 	}
 }
@@ -457,6 +457,8 @@ type QuestLab interface {
 	Claim(ctx context.Context, r *Run) (granted bool, merc string, before, after int, err error)
 	// AkaraReward sets the Den of Evil record to "reward pending" and opens Akara's menu: skill points and record after.
 	AkaraReward(ctx context.Context, r *Run) (skBefore, skAfter int, rec string, err error)
+	// Warriv sets Andariel's record done (`debug quest set 6 0x0001`), opens Warriv's menu with d2dctl and picks "Go East".
+	Warriv(ctx context.Context, r *Run) (area int, menu string, err error)
 }
 
 func d8quest(l GameLab, lim time.Duration) Drill {
@@ -535,6 +537,28 @@ func d6pin(l GameLab, lim time.Duration) Drill {
 			o.Verdict, o.Reason = Pass, fmt.Sprintf("out of the pocket after %.0f s of game time (area %d)", float64(pi.Ticks)*0.04, pi.Area)
 		default:
 			o.Verdict, o.Reason = Fail, fmt.Sprintf("still in the pocket after %.0f s of game time: the stall ladder did not leave it (err %q)", float64(pi.Ticks)*0.04, pi.Err)
+		}
+		return o
+	}}
+}
+
+func d8warriv(l GameLab, lim time.Duration) Drill {
+	ql, ok := l.(QuestLab)
+	if !ok {
+		return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv takes the character to Act 2", Needs: []string{"the lab has no quest step"}}
+	}
+	return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv to Act 2 (Andariel record by `debug quest set`): the menu row \"Go East\" moves the character to Lut Gholein", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		area, menu, err := ql.Warriv(ctx, r)
+		intended := "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)"
+		obs := fmt.Sprintf("menu [%s]; area after %d; err %v", menu, area, err)
+		o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("area=%d err=%v", area, err != nil)}
+		switch {
+		case err != nil:
+			o.Verdict, o.Reason = Fail, "warriv: "+err.Error()
+		case area != 40:
+			o.Verdict, o.Reason = Fail, fmt.Sprintf("arrived in area %d, wanted 40", area)
+		default:
+			o.Verdict, o.Reason = Pass, "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path"
 		}
 		return o
 	}}
