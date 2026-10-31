@@ -1,0 +1,5 @@
+DRILL D-sync P27 PASS the first Clear on a cold arrival attacked and killed 3 of 3 | intended: the first Clear after `debug goto` attacks the spawned zombies (kills > 0, no unreachable lines) | observed: kills 3, cast commands 9, unreachable lines 0, avoided 0, skipped 0, ignored 0, 9s, err ""; log head: d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={135 233} to={144 233} wps=2 partial=false cells=9 / nav click pos={135 233} wp={144 233} cur=1 of=2 / combat kill monster=Zombie boss=false xp=33 | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D-sync    P27   PASS     same the first Clear on a cold arrival attacked and killed 3 of 3
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug kill, debug points 36 1, debug points 38 1, debug spawn zombie1 3 near, debug stat 6 102400, debug stat 7 102400

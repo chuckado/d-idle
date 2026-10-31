@@ -1,0 +1,66 @@
+{
+ "results": [
+  {
+   "id": "D-sync",
+   "primitive": "P27",
+   "title": "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)",
+   "verdict": "PASS",
+   "reason": "the first Clear on a cold arrival attacked and killed 3 of 3",
+   "intended": "the first Clear after `debug goto` attacks the spawned zombies (kills \u003e 0, no unreachable lines)",
+   "observed": "kills 3, cast commands 9, unreachable lines 0, avoided 0, skipped 0, ignored 0, 9s, err \"\"; log head: d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/combat.(*Fighter).move \u003c d2lod-bot/internal/combat.(*Fighter).engage \u003c d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={135 233} to={144 233} wps=2 partial=false cells=9 / nav click pos={135 233} wp={144 233} cur=1 of=2 / combat kill monster=Zombie boss=false xp=33",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "the first Clear on a cold arrival attacked and killed 3 of 3",
+     "Intended": "the first Clear after `debug goto` attacks the spawned zombies (kills \u003e 0, no unreachable lines)",
+     "Observed": "kills 3, cast commands 9, unreachable lines 0, avoided 0, skipped 0, ignored 0, 9s, err \"\"; log head: d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/combat.(*Fighter).move \u003c d2lod-bot/internal/combat.(*Fighter).engage \u003c d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={135 233} to={144 233} wps=2 partial=false cells=9 / nav click pos={135 233} wp={144 233} cur=1 of=2 / combat kill monster=Zombie boss=false xp=33",
+     "sig": "kills\u003e0 true unreach\u003e0 false",
+     "cheats": [
+      "debug goto 2",
+      "debug kill",
+      "debug stat 7 102400",
+      "debug stat 6 102400",
+      "debug points 36 1",
+      "debug points 38 1",
+      "debug spawn zombie1 3 near",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 726896009,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "the first Clear on a cold arrival attacked and killed 1 of 3",
+     "Intended": "the first Clear after `debug goto` attacks the spawned zombies (kills \u003e 0, no unreachable lines)",
+     "Observed": "kills 1, cast commands 6, unreachable lines 0, avoided 0, skipped 2, ignored 2, 20s, err \"\"; log head: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo \u003c d2lod-bot/internal/combat.(*Fighter).move \u003c d2lod-bot/internal/combat.(*Fighter).engage \u003c d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={140 240} to={148 240} wps=1 partial=false cells=8 / nav click pos={140 240} wp={148 240} cur=0 of=1 / nav click pos={141 240} wp={148 240} cur=0 of=1 / nav stuck pos={141 240} wp={148 240} rung=0",
+     "sig": "kills\u003e0 true unreach\u003e0 false",
+     "cheats": [
+      "debug goto 2",
+      "debug kill",
+      "debug stat 7 102400",
+      "debug stat 6 102400",
+      "debug points 36 1",
+      "debug points 38 1",
+      "debug spawn zombie1 3 near",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 144801936,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 2",
+    "debug kill",
+    "debug stat 7 102400",
+    "debug stat 6 102400",
+    "debug points 36 1",
+    "debug points 38 1",
+    "debug spawn zombie1 3 near",
+    "debug goto 1"
+   ]
+  }
+ ]
+}

@@ -104,7 +104,11 @@ func F(l FieldLab) []Drill {
 	fight := func(id, prim, title string, f func(context.Context, *Run, FieldLab) Outcome) Drill {
 		return Drill{ID: id, Primitive: prim, Title: title, Limit: 10 * time.Minute, Do: func(ctx context.Context, r *Run) Outcome { return f(ctx, r, l) }}
 	}
-	return []Drill{
+	var run []Drill
+	if rl, ok := l.(RunLab); ok {
+		run = append(run, DRun(rl))
+	}
+	return append(run, []Drill{
 		fight("D-sync", "P27", "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)", fSync),
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
@@ -120,7 +124,7 @@ func F(l FieldLab) []Drill {
 		fight("D5.p29", "P29", "retreat: a pack at low life, the bot's chicken and heal decision", fP29),
 		fight("D5.p28", "P28", "mana potion in a fight, P26 hit effect on a target", fP28),
 		obj("H.obj.cage", "Cain's gibbet in Tristram: listed (class 26), operated by the bot's Interact", "38", "gibbet"),
-	}
+	}...)
 }
 
 func fObj(ctx context.Context, r *Run, l FieldLab, level int, want string) Outcome {
