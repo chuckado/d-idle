@@ -2,7 +2,7 @@
 
 ```yaml
 change: decompstatic
-status: in-progress
+status: archived
 agent: decompstatic
 branch: agent/decompstatic
 worktree: ~/code/d2lod-wt/decompstatic
@@ -21,6 +21,7 @@ gates:
   - "every rule in the trace doc is tagged V, D, S, I or U with an address or file:line"
   - "tools/emu/static_field.py runs game.exe's code on >= 100,000 cases: mismatches before > 0, after the candidate 0"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
+merge: f0c9f25
 result: "Static Field = MulDiv(life >> 8, calc1 25, 100) whole points of current life, at most life - 1, none at or under StaticFieldMin 0/33/50 % (expansion), negative lightning resistance cancelled, then 256ths with pierce; hits monsters and hostile players in 5 + (lvl-1) subtiles with line of sight. d2d deviates (S1-S6): 309,664 oracle cases, 115,103 differ before, 0 after the local candidate fix/static-field (2 commits on upstream 72132b99, pr_guard 0/0, upstream tests rc 0, no verifier yet, not posted). Cold length: zeroed by stat 0x99, halved by 0x76, resisted like damage, chill applied whatever the damage; d2d needs a whole resisted point and ignores the stats: 28,739 of 101,170 cases (12,804 of 81,559 with neither stat); no patch. Bot: no damage or chill model; Normal floor 25 % is tuning; drill recipe in the trace. Not verified live."
 ```
 
