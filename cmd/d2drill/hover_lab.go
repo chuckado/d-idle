@@ -230,3 +230,23 @@ func (l *lab) approachDiag(ctx context.Context, idx int, trace []string, verbs0 
 		fmt.Fprintf(w, "H.pause-diag: grid err %v\n", err)
 	}
 }
+
+// clearDiag prints, after a cold first Clear that killed nothing (D-sync, finding F12), the player (life, mana),
+// the hostile monsters with their distance and `debug grid 5` to stderr: the geometry the next diagnosis needs.
+func (l *lab) clearDiag(ctx context.Context) {
+	w := os.Stderr
+	sn, err := l.be.Env.Snapshot()
+	if err != nil || sn.Player == nil {
+		fmt.Fprintf(w, "clear-diag: no snapshot: %v\n", err)
+		return
+	}
+	fmt.Fprintf(w, "clear-diag: player (%d,%d) life %d/%d mana %d/%d mode %d\n", sn.Player.X, sn.Player.Y, sn.Player.Life, sn.Player.MaxLife, sn.Player.Mana, sn.Player.MaxMana, sn.Player.Mode)
+	for _, m := range sn.Monsters {
+		fmt.Fprintf(w, "clear-diag: monster %d class %d (%d,%d) mode %d\n", m.ID, m.Class, m.X, m.Y, m.Mode)
+	}
+	if rows, err := l.be.Client.Grid(ctx, 5); err == nil {
+		for _, r := range rows {
+			fmt.Fprintf(w, "clear-diag: grid %s\n", r)
+		}
+	}
+}

@@ -154,3 +154,11 @@ DRILLS7 rows (2026-10-31, lab build cheats3, code at ea07758 with fixstall2; fil
 | P27 | D-sync.wp | FAIL 1 of 2 (finding F12) | first Clear after a waypoint arrival: run 1 3 of 3, run 2 0 of 3 (ignored: 12 approaches without closing in), no unreachable lines |
 | P10 | D2.* | PASS x2 in the full group | 11 of 11 in one process, twice (harness reset: ensureAlive, longer stale-portal walk-away, D2.h signature) |
 | P26 | D-skill probe | PARTIAL | `debug skill right 54` (0 points) `err not usable`, `right 36` ok; the `cmd select` effect (D1) not observed without a step |
+
+DRILLS8 rows (2026-10-31, lab build cheats3, code at 1628eeb with fixstall3; files `2026-10-31-drills8*.txt`, README section DRILLS8). These supersede the DRILLS7 rows of the same drill ids:
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| AUDIT | H.pause | PARTIAL (finding F13) | 3 invocations: first-run bot tries 3 of 6 open (144 ticks), 3 fail at 796 ticks with the player 3 cells from Kashya (the clearance-0 route frees the stall, but late); second runs 6 of 6 open |
+| P25 | D6.d | PASS x3 | `ErrLevelChanged` after the pocket escape, 225 ticks (9 s), in town, identical repeats (DRILLS7 run 2: stuck 62 s) |
+| P27 | D-sync.wp | PASS x3 (after the harness mana fix) | before: 1 of 2 (repeat 2 started with 1 of 35 mana, melee fallback, no obstacle in the grid); after: 3 of 3 killed in every repeat |
+| P14, P15, P16, P5, P13, P18, P3 | D3, D8 NPC smoke through `d2dtown.Input` | PASS | D3 12 of 12, D8 a, m, q, w PASS (D8.c is once per character) |

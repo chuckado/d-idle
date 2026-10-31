@@ -1,0 +1,12 @@
+d2dslot: got slot 0
+time=2026-10-31T19:25:54.823-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1172410 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:25:55.877-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T19:25:56.536-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+DRILL H.obj.chest AUDIT PASS listed and operated by the bot's own Interact | intended: a "chest" of level 2 is listed in Snapshot.Objects and Interact operates it (mode NU -> ON) | observed: preset "Chest" class 139 listed=true; Interact err ""; mode NU -> ON; 251 ticks | runs: 2, identical
+END character Drilly life 40/40 in town: false
+
+drill     prim  verdict  det  reason
+H.obj.chest AUDIT PASS     same listed and operated by the bot's own Interact
+cheat verbs used (each ledgered with a reason): debug goto 2, debug objects, debug warp 14 45, debug warp 17 41, debug warp 22 58
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T19:25:56.570-04:00 level=WARN msg="d2d: stopped by the bot (kill)"

@@ -1,0 +1,10 @@
+d2dslot: got slot 0
+time=2026-10-31T19:26:22.018-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1175692 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:26:24.183-04:00 level=WARN msg="d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away"
+time=2026-10-31T19:38:30.827-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1233136 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:38:32.561-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+run 1: PASS d2d killed and restarted by the bot, counters and saves as required
+time=2026-10-31T19:38:32.600-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1233307 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:38:33.972-04:00 level=WARN msg="d2d: Save and Exit requested (chicken / leave game): the process quits and its socket goes away"
+agentrun: ttl 1200s exceeded, stopping group 1175649 (drills8)
+agentrun: ttl 1200s exceeded, stopping group 1175620 (drills8)

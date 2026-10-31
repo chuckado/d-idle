@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
+| [drills8](../../openspec/changes/drills8/) | in-progress | drills8 | `openspec/changes/drills8/**` | `instance:i0` |
 | [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
 | [fixstall3](../../openspec/changes/fixstall3/) | in-progress | fixstall3 | `docs/fixstall3.md`<br>`internal/d2dctl/testdata/camp-grid.txt`<br>`internal/d2dtown/wiring_test.go`<br>`internal/combat/fight.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -73,6 +74,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
+- change drills8: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixmeter: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixmeter: live proof after merge: spawn a pack, fight, compare the Meter totals with the monsters' life deltas and the kill count (docs/fixmeter.md)
 - change fixstall3: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict

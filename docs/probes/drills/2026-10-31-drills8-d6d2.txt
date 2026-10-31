@@ -1,0 +1,67 @@
+d2dslot: got slot 0
+time=2026-10-31T19:21:26.649-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1151657 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:21:27.722-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T19:21:28.333-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T19:21:28.345-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T19:21:28.346-04:00 level=DEBUG msg="nav plan" from="{X:135 Y:233}" to="{X:145 Y:233}" wps=2 partial=false cells=10
+time=2026-10-31T19:21:28.347-04:00 level=DEBUG msg="nav click" pos="{X:135 Y:233}" wp="{X:145 Y:233}" cur=1 of=2
+time=2026-10-31T19:21:28.352-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T19:21:28.353-04:00 level=DEBUG msg="nav plan" from="{X:145 Y:233}" to="{X:203 Y:233}" wps=10 partial=false cells=58
+time=2026-10-31T19:21:28.353-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:233}" wp="{X:154 Y:236}" cur=1 of=10
+time=2026-10-31T19:21:28.356-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:154 Y:236}" cur=1 of=10
+time=2026-10-31T19:21:28.358-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:154 Y:236}" cur=1 of=10
+time=2026-10-31T19:21:28.360-04:00 level=INFO msg="nav stuck" pos="{X:145 Y:235}" wp="{X:154 Y:236}" rung=0
+time=2026-10-31T19:21:28.363-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:154 Y:236}" cur=1 of=10
+time=2026-10-31T19:21:28.366-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:154 Y:236}" cur=1 of=10
+time=2026-10-31T19:21:28.367-04:00 level=INFO msg="nav stuck" pos="{X:145 Y:235}" wp="{X:154 Y:236}" rung=1
+time=2026-10-31T19:21:28.368-04:00 level=DEBUG msg="nav plan" from="{X:144 Y:235}" to="{X:203 Y:233}" wps=11 partial=false cells=60
+time=2026-10-31T19:21:28.368-04:00 level=DEBUG msg="nav click" pos="{X:144 Y:235}" wp="{X:154 Y:239}" cur=2 of=11
+time=2026-10-31T19:21:28.371-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:154 Y:239}" cur=2 of=11
+time=2026-10-31T19:21:28.372-04:00 level=INFO msg="nav stuck" pos="{X:145 Y:235}" wp="{X:154 Y:239}" rung=2
+time=2026-10-31T19:21:28.374-04:00 level=DEBUG msg="nav plan" from="{X:145 Y:235}" to="{X:203 Y:233}" wps=13 partial=false cells=61
+time=2026-10-31T19:21:28.374-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:146 Y:239}" cur=2 of=13
+time=2026-10-31T19:21:28.376-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:235}" wp="{X:146 Y:239}" cur=2 of=13
+time=2026-10-31T19:21:28.377-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:145 Y:235}" rung=3
+time=2026-10-31T19:21:28.395-04:00 level=INFO msg="arrived in town" area=1
+time=2026-10-31T19:21:28.400-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T19:21:28.401-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:150 Y:240}" wps=2 partial=false cells=10
+time=2026-10-31T19:21:28.401-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:148 Y:240}" cur=0 of=2
+time=2026-10-31T19:21:28.402-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:240}" wp="{X:148 Y:240}" cur=0 of=2
+time=2026-10-31T19:21:28.402-04:00 level=INFO msg="nav stuck" pos="{X:141 Y:240}" wp="{X:148 Y:240}" rung=0
+time=2026-10-31T19:21:28.402-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:141 Y:240}" hits=2 lastMethod=""
+time=2026-10-31T19:21:28.402-04:00 level=INFO msg="nav: blacklisted cell" at="{X:145 Y:240}" radius=5.5 ttlSec=180
+time=2026-10-31T19:21:28.404-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:244}" to="{X:150 Y:240}" wps=1 partial=false cells=9
+time=2026-10-31T19:21:28.404-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:244}" wp="{X:150 Y:240}" cur=0 of=1
+time=2026-10-31T19:21:28.404-04:00 level=INFO msg="nav: stuck recovered" at="{X:141 Y:240}" method=spiral rung=1 repeat=true
+time=2026-10-31T19:21:28.409-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T19:21:28.409-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:240}" to="{X:209 Y:241}" wps=8 partial=false cells=58
+time=2026-10-31T19:21:28.409-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:240}" wp="{X:159 Y:240}" cur=0 of=8
+time=2026-10-31T19:21:28.411-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:159 Y:240}" cur=0 of=8
+time=2026-10-31T19:21:28.414-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:159 Y:240}" cur=0 of=8
+time=2026-10-31T19:21:28.414-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:240}" wp="{X:159 Y:240}" rung=0
+time=2026-10-31T19:21:28.414-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:151 Y:240}" hits=3 lastMethod=spiral
+time=2026-10-31T19:21:28.414-04:00 level=INFO msg="nav: blacklisted cell" at="{X:155 Y:240}" radius=7 ttlSec=180
+time=2026-10-31T19:21:28.416-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:239}" to="{X:209 Y:241}" wps=12 partial=false cells=61
+time=2026-10-31T19:21:28.417-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:239}" wp="{X:150 Y:234}" cur=0 of=12
+time=2026-10-31T19:21:28.419-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:239}" to="{X:209 Y:241}" wps=11 partial=false cells=61
+time=2026-10-31T19:21:28.419-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:239}" wp="{X:150 Y:234}" cur=0 of=11
+time=2026-10-31T19:21:28.420-04:00 level=INFO msg="nav stuck" pos="{X:150 Y:239}" wp="{X:150 Y:234}" rung=1
+time=2026-10-31T19:21:28.422-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:239}" to="{X:209 Y:241}" wps=11 partial=false cells=63
+time=2026-10-31T19:21:28.422-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:239}" wp="{X:149 Y:233}" cur=0 of=11
+time=2026-10-31T19:21:28.425-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:239}" to="{X:209 Y:241}" wps=11 partial=false cells=63
+time=2026-10-31T19:21:28.425-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:239}" wp="{X:149 Y:233}" cur=0 of=11
+time=2026-10-31T19:21:28.425-04:00 level=INFO msg="nav stuck" pos="{X:149 Y:239}" wp="{X:149 Y:233}" rung=2
+time=2026-10-31T19:21:28.427-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:239}" to="{X:209 Y:241}" wps=11 partial=false cells=61
+time=2026-10-31T19:21:28.427-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:239}" wp="{X:150 Y:234}" cur=0 of=11
+time=2026-10-31T19:21:28.430-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:239}" to="{X:209 Y:241}" wps=11 partial=false cells=61
+time=2026-10-31T19:21:28.430-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:239}" wp="{X:150 Y:234}" cur=0 of=11
+time=2026-10-31T19:21:28.431-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:150 Y:239}" rung=3
+time=2026-10-31T19:21:28.434-04:00 level=INFO msg="arrived in town through an open portal" area=1
+DRILL D6.d P25 PASS out of the pocket after 9 s of game time (area 1) | intended: a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time | observed: pinned=true freed=false moved 23.7 cells in 225 ticks (9 s), area 1, err "nav: the level changed during the walk: escaped from level 2 to 1 after a stall in a pocket"; ladder lines: nav stuck pos={145 235} wp={154 236} rung=0 / nav stuck pos={145 235} wp={154 236} rung=1 / nav stuck pos={145 235} wp={154 239} rung=2 / nav: stalled in a pocket, escaping by town portal level=2 pos={145 235} rung=3 | runs: 2, identical
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D6.d      P25   PASS     same out of the pocket after 9 s of game time (area 1)
+cheat verbs used (each ledgered with a reason): debug goto 2, debug pin off, debug pin on, debug stat 6 512000, debug stat 7 512000
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T19:21:28.435-04:00 level=WARN msg="d2d: stopped by the bot (kill)"

@@ -343,6 +343,9 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		_ = l.Tick(ctx, 100)
 		l.rig.Fighter.ForgetIgnored()
 	}
+	if s.Cold && res.Kills == 0 {
+		l.clearDiag(ctx)
+	}
 	fi.Log = l.rec.Since(mark)
 	fi.CmdSkill = l.skillCmds() - cmd0
 	fi.Kills, fi.Avoided, fi.Skipped, fi.Ignored, fi.Potions, fi.Elapsed = res.Kills, res.Avoided, res.Skipped, len(res.Ignored), res.Potions, res.Elapsed

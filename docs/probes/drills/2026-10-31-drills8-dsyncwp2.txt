@@ -1,0 +1,366 @@
+d2dslot: got slot 0
+time=2026-10-31T19:21:41.293-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1152876 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:21:42.297-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T19:21:42.696-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T19:21:42.696-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < d2lod-bot/internal/nav.(*Navigator).ToArea"
+time=2026-10-31T19:21:42.697-04:00 level=DEBUG msg="nav plan" from="{X:134 Y:97}" to="{X:84 Y:69}" wps=8 partial=false cells=49
+time=2026-10-31T19:21:42.698-04:00 level=DEBUG msg="nav click" pos="{X:134 Y:97}" wp="{X:128 Y:92}" cur=0 of=8
+time=2026-10-31T19:21:42.699-04:00 level=DEBUG msg="nav click" pos="{X:130 Y:94}" wp="{X:126 Y:90}" cur=1 of=8
+time=2026-10-31T19:21:42.700-04:00 level=DEBUG msg="nav click" pos="{X:128 Y:92}" wp="{X:118 Y:90}" cur=2 of=8
+time=2026-10-31T19:21:42.703-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:91}" wp="{X:110 Y:90}" cur=3 of=8
+time=2026-10-31T19:21:42.705-04:00 level=DEBUG msg="nav click" pos="{X:113 Y:90}" wp="{X:105 Y:90}" cur=4 of=8
+time=2026-10-31T19:21:42.706-04:00 level=DEBUG msg="nav click" pos="{X:108 Y:90}" wp="{X:99 Y:84}" cur=5 of=8
+time=2026-10-31T19:21:42.707-04:00 level=DEBUG msg="nav click" pos="{X:106 Y:88}" wp="{X:105 Y:90}" cur=4 of=8
+time=2026-10-31T19:21:42.708-04:00 level=DEBUG msg="nav click" pos="{X:105 Y:90}" wp="{X:99 Y:84}" cur=5 of=8
+time=2026-10-31T19:21:42.709-04:00 level=DEBUG msg="nav click" pos="{X:101 Y:86}" wp="{X:94 Y:79}" cur=6 of=8
+time=2026-10-31T19:21:42.712-04:00 level=DEBUG msg="nav click" pos="{X:95 Y:80}" wp="{X:86 Y:71}" cur=7 of=8
+time=2026-10-31T19:21:43.261-04:00 level=INFO msg="wp: used 1 -> 3 (2 clicks, waited 6600 ms)"
+time=2026-10-31T19:21:43.267-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+time=2026-10-31T19:21:43.281-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T19:21:43.285-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=14 plan=0
+time=2026-10-31T19:21:43.286-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.286-04:00 level=DEBUG msg="nav plan" from="{X:113 Y:343}" to="{X:121 Y:343}" wps=1 partial=false cells=8
+time=2026-10-31T19:21:43.286-04:00 level=DEBUG msg="nav click" pos="{X:113 Y:343}" wp="{X:121 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.287-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:342}" wp="{X:121 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.287-04:00 level=INFO msg="nav stuck" pos="{X:114 Y:342}" wp="{X:121 Y:343}" rung=0
+time=2026-10-31T19:21:43.297-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=6 hostiles=10
+time=2026-10-31T19:21:43.298-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.298-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.299-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.299-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.300-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.301-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.302-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.302-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.303-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.304-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.305-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.305-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.306-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.307-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.307-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.308-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.308-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.309-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.310-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.310-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.311-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.312-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.312-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.313-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.314-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.315-04:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-10-31T19:21:43.315-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=19 plan=0
+time=2026-10-31T19:21:43.315-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.316-04:00 level=DEBUG msg="nav plan" from="{X:121 Y:343}" to="{X:109 Y:336}" wps=2 partial=false cells=12
+time=2026-10-31T19:21:43.316-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:343}" wp="{X:114 Y:339}" cur=0 of=2
+time=2026-10-31T19:21:43.319-04:00 level=DEBUG msg="nav click" pos="{X:117 Y:341}" wp="{X:109 Y:336}" cur=1 of=2
+time=2026-10-31T19:21:43.323-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=4 hostiles=10
+time=2026-10-31T19:21:43.324-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.324-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.325-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.326-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.327-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.327-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.328-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.329-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.329-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.330-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.331-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.331-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.332-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.333-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.333-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.334-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.334-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.335-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.336-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.337-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.337-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.338-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.338-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.339-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.339-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.340-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.341-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=3 hostiles=10
+time=2026-10-31T19:21:43.341-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.342-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.343-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.343-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.344-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.344-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.345-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.345-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.346-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=3 hostiles=10
+time=2026-10-31T19:21:43.347-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.348-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.348-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.349-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.350-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.351-04:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-10-31T19:21:43.351-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=22 plan=0
+time=2026-10-31T19:21:43.351-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.352-04:00 level=DEBUG msg="nav plan" from="{X:109 Y:336}" to="{X:108 Y:352}" wps=2 partial=false cells=16
+time=2026-10-31T19:21:43.352-04:00 level=DEBUG msg="nav click" pos="{X:109 Y:336}" wp="{X:109 Y:344}" cur=0 of=2
+time=2026-10-31T19:21:43.354-04:00 level=DEBUG msg="nav click" pos="{X:109 Y:336}" wp="{X:109 Y:344}" cur=0 of=2
+time=2026-10-31T19:21:43.356-04:00 level=DEBUG msg="nav click" pos="{X:109 Y:341}" wp="{X:108 Y:352}" cur=1 of=2
+time=2026-10-31T19:21:43.361-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.361-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.362-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.362-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.363-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.364-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.365-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.365-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.366-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.367-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.367-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.368-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.369-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.369-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.370-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.370-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.371-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.372-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.372-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=10
+time=2026-10-31T19:21:43.373-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.374-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.374-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.375-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.376-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.376-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.377-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.377-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.379-04:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-10-31T19:21:43.379-04:00 level=INFO msg="combat fight area=3 diff=0 danger=0 kills=3 damage=0 minlife=100 potions=0 dodges=0 sec=14 casts=11 kites=0 approaches=3 novas=0 forced=0 castsPerSec=0.74"
+time=2026-10-31T19:21:43.389-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T19:21:43.390-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < d2lod-bot/internal/nav.(*Navigator).ToArea"
+time=2026-10-31T19:21:43.391-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:84 Y:69}" wps=11 partial=false cells=58
+time=2026-10-31T19:21:43.391-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:138 Y:103}" cur=1 of=11
+time=2026-10-31T19:21:43.392-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:133 Y:97}" cur=2 of=11
+time=2026-10-31T19:21:43.392-04:00 level=INFO msg="nav stuck" pos="{X:139 Y:103}" wp="{X:133 Y:97}" rung=0
+time=2026-10-31T19:21:43.394-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:97}" wp="{X:124 Y:90}" cur=4 of=11
+time=2026-10-31T19:21:43.394-04:00 level=INFO msg="nav: stuck recovered" at="{X:139 Y:103}" method=reclick rung=1 repeat=false
+time=2026-10-31T19:21:43.396-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:92}" wp="{X:116 Y:90}" cur=5 of=11
+time=2026-10-31T19:21:43.400-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:90}" wp="{X:108 Y:90}" cur=6 of=11
+time=2026-10-31T19:21:43.403-04:00 level=DEBUG msg="nav click" pos="{X:111 Y:90}" wp="{X:105 Y:90}" cur=7 of=11
+time=2026-10-31T19:21:43.404-04:00 level=DEBUG msg="nav click" pos="{X:108 Y:90}" wp="{X:99 Y:84}" cur=8 of=11
+time=2026-10-31T19:21:43.407-04:00 level=DEBUG msg="nav click" pos="{X:102 Y:86}" wp="{X:94 Y:79}" cur=9 of=11
+time=2026-10-31T19:21:43.410-04:00 level=DEBUG msg="nav click" pos="{X:96 Y:81}" wp="{X:86 Y:71}" cur=10 of=11
+time=2026-10-31T19:21:43.432-04:00 level=INFO msg="wp: used 1 -> 3 (2 clicks, waited 3920 ms)"
+time=2026-10-31T19:21:43.455-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T19:21:43.458-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=14 plan=0
+time=2026-10-31T19:21:43.458-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.459-04:00 level=DEBUG msg="nav plan" from="{X:113 Y:343}" to="{X:121 Y:343}" wps=1 partial=false cells=8
+time=2026-10-31T19:21:43.459-04:00 level=DEBUG msg="nav click" pos="{X:113 Y:343}" wp="{X:121 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.460-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:342}" wp="{X:121 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.460-04:00 level=INFO msg="nav stuck" pos="{X:114 Y:342}" wp="{X:121 Y:343}" rung=0
+time=2026-10-31T19:21:43.460-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:114 Y:342}" hits=2 lastMethod=""
+time=2026-10-31T19:21:43.460-04:00 level=INFO msg="nav: blacklisted cell" at="{X:118 Y:343}" radius=5.5 ttlSec=180
+time=2026-10-31T19:21:43.462-04:00 level=DEBUG msg="nav plan" from="{X:113 Y:346}" to="{X:121 Y:343}" wps=1 partial=false cells=8
+time=2026-10-31T19:21:43.462-04:00 level=DEBUG msg="nav click" pos="{X:113 Y:346}" wp="{X:121 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.462-04:00 level=INFO msg="nav: stuck recovered" at="{X:114 Y:342}" method=spiral rung=1 repeat=true
+time=2026-10-31T19:21:43.466-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=6 hostiles=13
+time=2026-10-31T19:21:43.466-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.467-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.468-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.468-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.469-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.470-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.471-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.471-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.472-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.473-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.473-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.474-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.475-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.476-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.476-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.477-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.478-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.478-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.479-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.480-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.480-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.481-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.481-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.481-04:00 level=DEBUG msg="nav plan" from="{X:120 Y:340}" to="{X:122 Y:342}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.482-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:340}" wp="{X:122 Y:342}" cur=0 of=1
+time=2026-10-31T19:21:43.483-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.484-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.484-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.485-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.485-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.486-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.486-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.488-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.488-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.489-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.489-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.489-04:00 level=DEBUG msg="nav plan" from="{X:121 Y:338}" to="{X:122 Y:340}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.489-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:338}" wp="{X:122 Y:340}" cur=0 of=1
+time=2026-10-31T19:21:43.490-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.491-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.492-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=4 hostiles=13
+time=2026-10-31T19:21:43.492-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.493-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.494-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.494-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.494-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.496-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.496-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.496-04:00 level=DEBUG msg="nav plan" from="{X:120 Y:335}" to="{X:121 Y:337}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.496-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:335}" wp="{X:121 Y:337}" cur=0 of=1
+time=2026-10-31T19:21:43.497-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.498-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=4 hostiles=13
+time=2026-10-31T19:21:43.498-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.499-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.500-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.500-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.501-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.501-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.501-04:00 level=DEBUG msg="nav plan" from="{X:119 Y:333}" to="{X:120 Y:335}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.501-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:333}" wp="{X:120 Y:335}" cur=0 of=1
+time=2026-10-31T19:21:43.503-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.503-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.504-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.504-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.505-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.505-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.505-04:00 level=DEBUG msg="nav plan" from="{X:119 Y:333}" to="{X:120 Y:335}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.505-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:333}" wp="{X:120 Y:335}" cur=0 of=1
+time=2026-10-31T19:21:43.507-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.507-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.508-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.509-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.509-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.510-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.511-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.511-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.512-04:00 level=INFO msg="combat ignoring target" monster=Zombie id=11 why=approaches detail="12 approaches, 8 subtiles away, player (119,332) target (123,339) inReach=false onScreen=true los=true" dist=8
+time=2026-10-31T19:21:43.513-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=12 plan=0
+time=2026-10-31T19:21:43.513-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.514-04:00 level=DEBUG msg="nav plan" from="{X:119 Y:331}" to="{X:113 Y:330}" wps=1 partial=false cells=6
+time=2026-10-31T19:21:43.514-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:331}" wp="{X:113 Y:330}" cur=0 of=1
+time=2026-10-31T19:21:43.516-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.516-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.517-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=6 hostiles=13
+time=2026-10-31T19:21:43.518-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.520-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.521-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.522-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.523-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.523-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.523-04:00 level=DEBUG msg="nav plan" from="{X:111 Y:325}" to="{X:110 Y:327}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.523-04:00 level=DEBUG msg="nav click" pos="{X:111 Y:325}" wp="{X:110 Y:327}" cur=0 of=1
+time=2026-10-31T19:21:43.525-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.525-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.526-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.527-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.527-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.528-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.528-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.528-04:00 level=DEBUG msg="nav plan" from="{X:109 Y:324}" to="{X:108 Y:326}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.528-04:00 level=DEBUG msg="nav click" pos="{X:109 Y:324}" wp="{X:108 Y:326}" cur=0 of=1
+time=2026-10-31T19:21:43.529-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.529-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.531-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.531-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.532-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.532-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.532-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.533-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.534-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.534-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.535-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.535-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.536-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.536-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.537-04:00 level=INFO msg="combat ignoring target" monster=Zombie id=13 why=approaches detail="12 approaches, 7 subtiles away, player (108,326) target (107,333) inReach=false onScreen=true los=true" dist=7
+time=2026-10-31T19:21:43.538-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=32 plan=0
+time=2026-10-31T19:21:43.538-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.539-04:00 level=DEBUG msg="nav plan" from="{X:108 Y:326}" to="{X:107 Y:352}" wps=6 partial=false cells=29
+time=2026-10-31T19:21:43.539-04:00 level=DEBUG msg="nav click" pos="{X:108 Y:326}" wp="{X:115 Y:330}" cur=1 of=6
+time=2026-10-31T19:21:43.541-04:00 level=DEBUG msg="nav click" pos="{X:112 Y:329}" wp="{X:115 Y:336}" cur=2 of=6
+time=2026-10-31T19:21:43.543-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:333}" wp="{X:108 Y:347}" cur=4 of=6
+time=2026-10-31T19:21:43.547-04:00 level=DEBUG msg="nav plan" from="{X:109 Y:344}" to="{X:107 Y:352}" wps=1 partial=false cells=8
+time=2026-10-31T19:21:43.548-04:00 level=DEBUG msg="nav click" pos="{X:109 Y:344}" wp="{X:107 Y:352}" cur=0 of=1
+time=2026-10-31T19:21:43.551-04:00 level=DEBUG msg="combat decision" act=cast skill="Charged Bolt" target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.552-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.553-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.553-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.554-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.555-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.555-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.556-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.557-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.557-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=6 hostiles=13
+time=2026-10-31T19:21:43.558-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.558-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.559-04:00 level=DEBUG msg="nav plan" from="{X:107 Y:351}" to="{X:108 Y:353}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.559-04:00 level=DEBUG msg="nav click" pos="{X:107 Y:351}" wp="{X:108 Y:353}" cur=0 of=1
+time=2026-10-31T19:21:43.560-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.561-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.561-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.563-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.563-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.564-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.564-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.565-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.565-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.565-04:00 level=DEBUG msg="nav plan" from="{X:107 Y:351}" to="{X:108 Y:353}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.565-04:00 level=DEBUG msg="nav click" pos="{X:107 Y:351}" wp="{X:108 Y:353}" cur=0 of=1
+time=2026-10-31T19:21:43.567-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.567-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.568-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.568-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.569-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=4 hostiles=13
+time=2026-10-31T19:21:43.569-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.570-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.571-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.571-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.571-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.572-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.572-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.573-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.573-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.573-04:00 level=DEBUG msg="nav plan" from="{X:106 Y:347}" to="{X:107 Y:349}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.574-04:00 level=DEBUG msg="nav click" pos="{X:106 Y:347}" wp="{X:107 Y:349}" cur=0 of=1
+time=2026-10-31T19:21:43.575-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.575-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.576-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.577-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.577-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.578-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.578-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.579-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.579-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.579-04:00 level=DEBUG msg="nav plan" from="{X:105 Y:344}" to="{X:106 Y:346}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.579-04:00 level=DEBUG msg="nav click" pos="{X:105 Y:344}" wp="{X:106 Y:346}" cur=0 of=1
+time=2026-10-31T19:21:43.581-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.581-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.582-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.583-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.583-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=7 plan=0
+time=2026-10-31T19:21:43.583-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.585-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.585-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.586-04:00 level=DEBUG msg="combat decision" act=approach why="no shot" dist=8 plan=0
+time=2026-10-31T19:21:43.586-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-10-31T19:21:43.586-04:00 level=DEBUG msg="nav plan" from="{X:104 Y:341}" to="{X:105 Y:343}" wps=1 partial=false cells=2
+time=2026-10-31T19:21:43.586-04:00 level=DEBUG msg="nav click" pos="{X:104 Y:341}" wp="{X:105 Y:343}" cur=0 of=1
+time=2026-10-31T19:21:43.587-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.588-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Zombie dist=5 hostiles=13
+time=2026-10-31T19:21:43.589-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.590-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T19:21:43.591-04:00 level=INFO msg="combat ignoring target" monster=Zombie id=12 why=approaches detail="12 approaches, 7 subtiles away, player (104,340) target (106,347) inReach=false onScreen=true los=true" dist=7
+time=2026-10-31T19:21:43.591-04:00 level=INFO msg="combat no target in scope" near=2 avoid=0 blacklisted=2 ignoredEarlier=0 yield=false
+time=2026-10-31T19:21:43.592-04:00 level=INFO msg="combat fight area=3 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=18 casts=17 kites=0 approaches=36 novas=0 forced=0 castsPerSec=0.90"
+DRILL D-sync.wp P27 FAIL the first Clear on a cold waypoint arrival attacked and killed 3 of 3 | intended: the first Clear after the waypoint arrival attacks the spawned zombies (kills > 0, no unreachable lines) | observed: run1: kills 3, cast commands 11, unreachable lines 0, avoided 0, skipped 0, ignored 0, 15s, err ""; log head: d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={113 343} to={121 343} wps=1 partial=false cells=8 / nav click pos={113 343} wp={121 343} cur=0 of=1 / nav click pos={114 342} wp={121 343} cur=0 of=1; run2 (FAIL): kills 0, cast commands 3, unreachable lines 0, avoided 0, skipped 3, ignored 3, 19s, err ""; log head: d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight / nav plan from={113 343} to={121 343} wps=1 partial=false cells=8 / nav click pos={113 343} wp={121 343} cur=0 of=1 / nav click pos={114 342} wp={121 343} cur=0 of=1 | runs: 2, DIFFER
+END character Drilly life 400/400 in town: true
+
+drill     prim  verdict  det  reason
+D-sync.wp P27   FAIL     DIFF the first Clear on a cold waypoint arrival attacked and killed 3 of 3
+cheat verbs used (each ledgered with a reason): debug goto 1, debug kill, debug points 36 1, debug points 38 1, debug spawn zombie1 3 near, debug stat 6 102400, debug stat 7 102400, debug wp all
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T19:21:43.610-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
