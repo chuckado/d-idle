@@ -89,3 +89,7 @@ docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile2  fix-missile2
 docs/community/discord/**  discord  discord
 tools/discord/**  discord  discord
+docs/community/discord/roles.md  rolesdoc  rolesdoc
+docs/community/discord/server.md  rolesdoc  rolesdoc
+docs/community/discord/server.json  rolesdoc  rolesdoc
+docs/community/discord/plan.md  rolesdoc  rolesdoc

@@ -25,11 +25,12 @@ The user moderates alone at first, so the design favours few channels, read-only
 - [ ] Verification level Medium (account older than 5 min) at least; High if arrivals spike. Explicit media filter: all members.
 - [ ] Rules Screening on; `#rules` and `#welcome` content (with the FAQ) posted and pinned; `#announcements` and `#progress` read-only.
 - [ ] Default notifications: mentions only. `@everyone` mention not granted to anyone but the owner.
+- [ ] Roles and permissions checked as in [roles.md](roles.md) section 6 (View Server As Role, test as a plain account); `@everyone` has no Create Invite.
 - [ ] Slowmode set per channel; AutoMod keyword filter for invites, mass mentions and links from new accounts.
 - [ ] Invite: one link, no expiry, member cap (start 100, raise on purpose), temporary membership OFF. It will be public, so assume
       it leaks. Rotate or revoke: Server Settings, Invites, delete the link, create a new one, update README and page (one commit).
 - [ ] Moderator contact path stated in `#rules`; Developer Mode on (copy ids for reports); audit log checked after the first day.
-- [ ] Raid switch known: Server Settings, Safety Setup, pause invites; raise verification to Highest.
+- [ ] Raid switch known: the runbook in [roles.md](roles.md) (verification up, pause invites, `@everyone` send to `member`, audit log, restore).
 
 ## Risks
 - Blizzard IP: no game files, keys, cracks, piracy talk, no extracted tables. Rules say so; delete and warn on sight.
@@ -39,7 +40,7 @@ The user moderates alone at first, so the design favours few channels, read-only
 - Unverified claims: members and we tag verified or unverified; do not repeat a number that has an owner (README, STATUS).
 - Spam and raids: verification level, AutoMod, slowmode, invite cap, read-only feeds; webhooks are the only bots.
 - Privacy: ask for logs scrubbed of paths and names; no hostnames, tokens or webhook URLs in the server (the notify tool refuses them).
-- Single point of failure: one moderator; add a trusted second owner or moderator before the server grows.
+- Single point of failure: one moderator; add a trusted helper with the optional `mod` role ([roles.md](roles.md)) before the server grows; use Timeout, not a muted role.
 
 ## Moderation checklist (solo moderator)
 - Daily (5 min): scan `#help`, `#bug-reports`, new members; check the audit log and AutoMod alerts.

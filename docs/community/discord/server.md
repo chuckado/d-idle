@@ -29,9 +29,10 @@ runs; `#stream` stream notices and chat (the stream is not live yet).
 - `owner`: Administrator, hoisted. The user. Keep 2FA on.
 - `contributor`: people with merged work or real review help; hoisted; may create and manage threads. Assigned by hand.
 - `member`: the trusted tier, assigned by hand to people the moderator has seen behave; may create public threads and use external emoji.
-- `@everyone`: view, read history, send, embed links, attach files, react, send in threads. No mentions of everyone, no thread creation.
+- `mod` (OPTIONAL, disabled by default: listed under `optional_roles` in server.json, not created by the tool): helper with Manage Messages, Timeout, Kick, View Audit Log; below `owner`. See [roles.md](roles.md).
+- `@everyone`: view, read history, send, embed links, react, send in threads; attach files only in `#show-your-runs` and `#bug-reports`. No mentions of everyone, no thread creation, no Create Invite.
 - Bots and webhooks: only webhooks at the start (GitHub feed, `notify.py`). They post regardless of channel permissions. No role needed.
-Raid switch: remove send permissions from `@everyone` so only `member` and above can talk (grant them on `member` first).
+Raid switch: remove send permissions from `@everyone` so only `member` and above can talk (`member` already holds them). Full guideline, permission table and runbook: [roles.md](roles.md).
 
 ## Permission matrix
 | channel | @everyone | member | contributor | owner |
@@ -40,7 +41,7 @@ Raid switch: remove send permissions from `@everyone` so only `member` and above
 | `#progress` | read | read | read | post (feed via webhooks) |
 | `#dev`, `#d2d-upstream`, `#help`, `#bug-reports`, `#general`, `#show-your-runs`, `#stream` | read, post | read, post | read, post | post |
 
-Implemented as one overwrite per read-only channel: `@everyone` denied Send Messages, Send in Threads and Create Public Threads.
+Implemented as one overwrite per read-only channel: `@everyone` denied Send Messages, Send in Threads and Create Public Threads; `#show-your-runs` and `#bug-reports` additionally allow Attach Files for `@everyone`.
 
 ## Server settings
 - Verification level: Medium (registered over 5 minutes); High if arrivals spike. Explicit media content filter: scan all members.
@@ -68,6 +69,7 @@ Onboarding and invite steps in the UI: the tool does not touch them.
 { "schema": 1, "name": "d.idle",
   "settings": { "verification_level": 0-4, "explicit_content_filter": 0-2, "default_message_notifications": 0-1,
                 "everyone_permissions": [permission names] },          (applied only with --settings)
+  "optional_roles": [ same shape as roles, plus "enabled": false and "note" ]   (documentation only, ignored by the tool)
   "roles": [ { "name", "color": "#RRGGBB", "hoist": bool, "mentionable": bool, "permissions": [names] } ],
   "categories": [ { "name", "channels": [ { "name", "type": "text", "topic", "slowmode": seconds,
         "overwrites": [ { "role": "@everyone" | role name, "allow": [names], "deny": [names] } ] } ] } ] }
