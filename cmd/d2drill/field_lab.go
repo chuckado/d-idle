@@ -168,7 +168,7 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	if err := l.Goto(ctx, r, s.Level); err != nil {
 		return fail("goto", err)
 	}
-	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil { // the navigator builds the level's map at its first walk: take it before the monsters come (a Clear on a map-less arrival calls everything unreachable)
+	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil && !s.Cold { // the navigator builds the level's map at its first walk: take it before the monsters come (a Clear on a map-less arrival calls everything unreachable)
 		wctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 		_ = l.navr.GoTo(wctx, input.Point{X: sw.Player.X + 8, Y: sw.Player.Y})
 		cancel()
@@ -321,7 +321,10 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		}
 		fi.ManaStart = s.ManaMid
 	}
-	for round := 0; round < 3; round++ { // the first call can run before the level map is built (everything "unreachable"): ask again
+	for round := 0; round < 3; round++ {
+		if s.Cold && round > 0 {
+			break
+		} // the first call can run before the level map is built (everything "unreachable"): ask again
 		var r1 combat.ClearResult
 		r1, cerr = l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: to})
 		res.Kills += r1.Kills
