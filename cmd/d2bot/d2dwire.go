@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"fmt"
 	"log/slog"
 	"math"
 	"sync"
@@ -203,37 +204,104 @@ func d2dHealthWith(p *d2denv.Proc, beat *d2denv.Beat, lockstep func() bool, last
 // d2dPortal opens a town portal from the pack: combat's default waits for the inventory panel flag, which d2d does not
 // report (the live runs said "inventory panel did not open" three times and then chickened out of the game). The panel is
 // opened with "i" and given a fixed time, the scroll's pixel comes from "debug itemat" (V verb, docs/d2d-town.md) and
-// the right click casts it. U that "i" opens the panel on d2d; success is judged by the portal object or the scroll
-// leaving the pack, as in combat.
+// the right click casts it. U that "i" opens the panel on d2d. d2d-only behaviour (docs/fixportal.md, FIXPORTAL2):
+// the click is a cast that is dropped while the player is busy and spends the charge at the click, so the verb never
+// clicks with a dead context or a busy player, and succeeds only when portal object 59 shows up near the player.
 func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.Context) error {
-	const townPortalObject = 59
-	// the same pick as combat's (combat.PortalSource): a scroll or a tome WITH charges, never an empty tome (F4)
-	pick := func(s *d2.Snapshot) *d2.Unit {
-		var st combat.Stats
+	return d2dPortalWith(e, func(ctx context.Context, id int) (int, int, error) { return be.Client.ItemAt(ctx, id) }, cat)
+}
+
+const (
+	townPortalObject = 59
+	portalIdleWait   = 2 * time.Second // how long a busy player is waited for before the click
+	portalIdlePoll   = 100 * time.Millisecond
+)
+
+var errPortalBusy = errors.New("d2d portal: player busy (hit recovery, attack, cast or block), the click would be dropped")
+
+// busyPMode says whether d2d drops a right click in this player mode (world.cpp pmode >= 0 outside walk and run, V-d2d
+// per docs/research/town-portal-trace.md): get hit, attacks, block, cast, throw, kick, skills, sequence, knockback.
+// Modes use PlrMode.txt order (d2dsrc plrModes); -1 (unknown) counts as idle.
+func busyPMode(m int) bool {
+	switch m {
+	case 4, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19:
+		return true
+	}
+	return false
+}
+
+func portalDead(ctx context.Context) error {
+	return fmt.Errorf("d2d portal: cancelled, nothing clicked (%v)", context.Cause(ctx))
+}
+
+func d2dPortalWith(e *env.Env, itemAt func(context.Context, int) (int, int, error), cat combat.Catalog) func(context.Context) error {
+	stats := func() combat.Stats {
 		if e.Read != nil {
-			st = e.Read.UnitStats
+			return e.Read.UnitStats
 		}
-		return combat.PortalSource(s, cat, st)
+		return nil
+	}
+	// the same pick as combat's (combat.PortalSource): a scroll or a tome WITH charges, never an empty tome (F4)
+	pick := func(s *d2.Snapshot) *d2.Unit { return combat.PortalSource(s, cat, stats()) }
+	portals := func(ns *d2.Snapshot) (near, any int) {
+		for _, o := range ns.Objects {
+			if o.Class == townPortalObject {
+				any++
+				if math.Hypot(float64(o.X-ns.Player.X), float64(o.Y-ns.Player.Y)) < 25 {
+					near++
+				}
+			}
+		}
+		return
+	}
+	// idle waits (bounded) until the player is out of every mode that drops the click: nil, errPortalBusy or the dead ctx.
+	idle := func(ctx context.Context) error {
+		for waited := time.Duration(0); ; waited += portalIdlePoll {
+			if ctx.Err() != nil {
+				return portalDead(ctx)
+			}
+			if s, err := e.Snapshot(); err == nil && s.Player != nil && !busyPMode(s.Player.Mode) {
+				return nil
+			}
+			if waited >= portalIdleWait {
+				return errPortalBusy
+			}
+			e.Clock.Sleep(portalIdlePoll)
+		}
 	}
 	return func(ctx context.Context) error {
 		var last error
 		for try := 0; try < 3; try++ {
+			if ctx.Err() != nil { // the action's context died (guard, step deadline, stop): the tries cannot work
+				e.Log.Info("d2d portal: context dead, not clicking", "try", try+1, "cause", context.Cause(ctx))
+				return portalDead(ctx)
+			}
 			s, err := e.Snapshot()
 			if err != nil || s.Player == nil {
 				return errors.New("d2d portal: no snapshot")
 			}
-			it := pick(s)
+			it := pick(s) // re-read every try: a cut cast spent a charge, an empty source is never retried
 			if it == nil {
-				e.Log.Info("d2d town portal: no portal source", "try", try+1)
+				e.Log.Info("d2d town portal: no portal source (empty)", "try", try+1)
+				if try > 0 {
+					return fmt.Errorf("%w (empty after the last cast)", combat.ErrNoPortal)
+				}
 				return combat.ErrNoPortal
 			}
+			before := combat.PortalQty(it, cat, stats())
 			last = func() error {
+				if err := idle(ctx); err != nil {
+					return err
+				}
 				if err := e.In.Key("i"); err != nil {
 					return err
 				}
 				defer e.In.Key("i")
 				e.Clock.Sleep(700 * time.Millisecond)
-				x, y, err := be.Client.ItemAt(ctx, int(it.ID))
+				if ctx.Err() != nil {
+					return portalDead(ctx)
+				}
+				x, y, err := itemAt(ctx, int(it.ID))
 				if err != nil {
 					return err
 				}
@@ -241,6 +309,9 @@ func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.
 					return err
 				}
 				e.Clock.Sleep(150 * time.Millisecond)
+				if err := idle(ctx); err != nil { // hit while the panel opened: the click would be dropped
+					return err
+				}
 				if err := e.In.Click(input.Right, x, y); err != nil {
 					return err
 				}
@@ -250,40 +321,39 @@ func d2dPortal(e *env.Env, be *d2denv.Backend, cat combat.Catalog) func(context.
 					if err != nil || ns.Player == nil {
 						continue
 					}
-					for _, o := range ns.Objects {
-						if o.Class == townPortalObject && math.Hypot(float64(o.X-ns.Player.X), float64(o.Y-ns.Player.Y)) < 25 {
-							return nil
-						}
+					if n, _ := portals(ns); n > 0 {
+						return nil // only the object counts: a scroll that left the pack may be a cut cast
 					}
-					if ns.Inventory != nil {
-						gone := true
-						for _, u := range ns.Inventory.Items {
-							gone = gone && u.ID != it.ID
-						}
-						if gone {
-							return nil
-						}
+					if ctx.Err() != nil {
+						return portalDead(ctx)
 					}
 				}
 				// diagnostic for the unexplained failures (docs/fixportal.md): what was clicked and what the world showed
-				near, any := 0, 0
+				nearN, anyN, spent := 0, 0, false
 				if ns, nerr := e.Snapshot(); nerr == nil && ns.Player != nil {
-					for _, o := range ns.Objects {
-						if o.Class == townPortalObject {
-							any++
-							if math.Hypot(float64(o.X-ns.Player.X), float64(o.Y-ns.Player.Y)) < 25 {
-								near++
+					nearN, anyN = portals(ns)
+					spent = true // gone from the pack, unless it is still there with as many casts as before
+					if ns.Inventory != nil {
+						for i := range ns.Inventory.Items {
+							if u := &ns.Inventory.Items[i]; u.ID == it.ID {
+								spent = combat.PortalQty(u, cat, stats()) < before
 							}
 						}
 					}
 				}
-				e.Log.Info("d2d portal: click without a portal", "item", it.ID, "class", it.Class, "portalObjNear", near, "portalObjAny", any)
-				return errors.New("d2d portal: no portal after the click")
+				e.Log.Info("d2d portal: click without a portal", "item", it.ID, "class", it.Class, "portalObjNear", nearN, "portalObjAny", anyN, "sourceSpent", spent)
+				if spent {
+					return errors.New("d2d portal: no object after the click, the cast was cut (source spent)")
+				}
+				return errors.New("d2d portal: no object after the click, the click was dropped (source unchanged)")
 			}()
 			if last == nil {
 				return nil
 			}
 			e.Log.Info("d2d town portal attempt failed", "try", try+1, "err", last)
+			if ctx.Err() != nil {
+				return last
+			}
 			e.Clock.Sleep(300 * time.Millisecond)
 		}
 		return last

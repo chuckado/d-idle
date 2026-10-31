@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 
@@ -68,6 +69,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
+- change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -77,6 +80,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
 - eae3b82 10-31 12:04 `Merge agent/decomptome: town portal tome decomp trace` (decomptome)
 - ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
 - 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
@@ -86,5 +90,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c75c9c6 10-31 11:33 `Merge agent/goldoff: goldfloor levers off by default` (goldfloor)
 - 880485a 10-31 11:29 `Merge agent/primlist: docs/primitives.md and m1-liveproof widened to the live drill suite` (m1-liveproof)
 - 86a9c2b 10-31 11:17 `Merge agent/cr134: PR #134 CodeRabbit round 2 (F1, F2)` (upstream-bundle)
-- 02ec208 10-31 11:14 `Merge agent/goldab: goldfloor paired A/B result (gates did not hold, lever C no-go)` (goldfloor)
 <!-- statusgen:end -->
