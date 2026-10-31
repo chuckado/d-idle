@@ -33,6 +33,7 @@ type FightSpec struct {
 	SampleMissiles bool     // before the fight, sample debug missiles and Snapshot.Missiles with the character idle
 	Kill           bool     // debug kill after the arrival: the level's natural monsters are gone (they give experience)
 	Potions        bool     // belt holds healing and mana potions
+	Arrive         string   // "" the cheat goto; "tp" a town portal round trip (the bot's portal verb, ToTown, BackToField); "wp" the navigator's waypoint trip from town (drills7)
 	Cold           bool     // no warm-up walk after the arrival and one Clear only: the first Clear on a map the navigator has not walked (fixmisc)
 	Clear          time.Duration
 	// LifeAt, when set, lowers the life to this value as soon as the first spawned monster is within reach (P29 retreat)
@@ -110,6 +111,12 @@ func F(l FieldLab) []Drill {
 	}
 	return append(run, []Drill{
 		fight("D-sync", "P27", "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)", fSync),
+		fight("D-sync.tp", "P27", "fixmisc: the first Clear right after a town portal arrival (the bot's BackToField), no warm-up walk: it attacks", func(ctx context.Context, r *Run, l FieldLab) Outcome {
+			return fSyncArrive(ctx, r, l, 2, "tp", "town portal")
+		}),
+		fight("D-sync.wp", "P27", "fixmisc: the first Clear right after a waypoint arrival (the navigator's trip from town to Cold Plains), no warm-up walk: it attacks", func(ctx context.Context, r *Run, l FieldLab) Outcome {
+			return fSyncArrive(ctx, r, l, 3, "wp", "waypoint")
+		}),
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
 		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: standing in the Cave Level 1 mouth trigger (south side) in Cold Plains, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
@@ -437,18 +444,23 @@ func fTouch(ctx context.Context, r *Run, l FieldLab) Outcome {
 
 // fSync is the fixmisc proof: DRILLS5 F4 saw the first Clear after a position jump call every monster unreachable.
 func fSync(ctx context.Context, r *Run, l FieldLab) Outcome {
-	f := l.Fight(ctx, r, FightSpec{Level: 2, Cold: true, Kill: true, Spawns: []string{"zombie1 3 near"}, Life: 400, Clear: 60 * time.Second})
+	return fSyncArrive(ctx, r, l, 2, "", "`debug goto`")
+}
+
+// fSyncArrive: the first Clear after the arrival named by arrive (see FightSpec.Arrive), against 3 zombies.
+func fSyncArrive(ctx context.Context, r *Run, l FieldLab, level int, arrive, what string) Outcome {
+	f := l.Fight(ctx, r, FightSpec{Level: level, Arrive: arrive, Cold: true, Kill: true, Spawns: []string{"zombie1 3 near"}, Life: 400, Clear: 60 * time.Second})
 	unreach := countLines(f.Log, "no path and no firing position")
-	o := Outcome{Intended: "the first Clear after `debug goto` attacks the spawned zombies (kills > 0, no unreachable lines)",
+	o := Outcome{Intended: "the first Clear after the " + what + " arrival attacks the spawned zombies (kills > 0, no unreachable lines)",
 		Observed: fmt.Sprintf("kills %d, cast commands %d, unreachable lines %d, avoided %d, skipped %d, ignored %d, %v, err %q; log head: %s", f.Kills, f.CmdSkill, unreach, f.Avoided, f.Skipped, f.Ignored, f.Elapsed.Round(time.Second), f.Err, strings.Join(firstN(f.LogHead, 5), " / ")),
 		Sig:      fmt.Sprintf("kills>0 %v unreach>0 %v", f.Kills > 0, unreach > 0)}
 	switch {
 	case f.Spawned == 0:
 		o.Verdict, o.Reason = Blocked, "no monster was spawned: "+f.Err
 	case unreach > 0 || f.Kills == 0:
-		o.Verdict, o.Reason = Fail, fmt.Sprintf("the first Clear on a cold arrival did not attack: kills %d, unreachable lines %d", f.Kills, unreach)
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("the first Clear on a cold %s arrival did not attack: kills %d, unreachable lines %d", what, f.Kills, unreach)
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("the first Clear on a cold arrival attacked and killed %d of %d", f.Kills, f.Spawned)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("the first Clear on a cold %s arrival attacked and killed %d of %d", what, f.Kills, f.Spawned)
 	}
 	return o
 }

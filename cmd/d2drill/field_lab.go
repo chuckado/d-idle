@@ -165,7 +165,11 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		}
 		_ = l.Tick(ctx, 25)
 	}
-	if err := l.Goto(ctx, r, s.Level); err != nil {
+	if s.Arrive != "" {
+		if err := l.arrive(ctx, r, s.Level, s.Arrive); err != nil {
+			return fail("arrive "+s.Arrive, err)
+		}
+	} else if err := l.Goto(ctx, r, s.Level); err != nil {
 		return fail("goto", err)
 	}
 	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil && !s.Cold { // the navigator builds the level's map at its first walk: take it before the monsters come (a Clear on a map-less arrival calls everything unreachable)
@@ -664,4 +668,59 @@ func (l *lab) Warriv(ctx context.Context, r *drill.Run) (int, string, error) {
 func (l *lab) Warp(ctx context.Context, r *drill.Run, x, y int) error {
 	_, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", x, y), "put the character at a known cell of the level: the walk the bot would have made to get there is not under test")
 	return err
+}
+
+// arrive reaches level the way the bot does, so the first Clear after it runs on a real arrival (drills7, DRILLS6 skipped
+// these): "tp" opens a town portal in Blood Moor with the bot's portal verb, enters it (ToTown) and comes back with the
+// bot's BackToField; "wp" goes to town and lets the navigator take the waypoint to Cold Plains. The only cheats are the
+// setup ones (scroll, `debug wp all`, `debug goto`).
+func (l *lab) arrive(ctx context.Context, r *drill.Run, level int, how string) error {
+	switch how {
+	case "tp":
+		if err := l.Goto(ctx, r, level); err != nil {
+			return err
+		}
+		if err := l.ClearPack(ctx, r); err != nil {
+			return err
+		}
+		for i := 0; i < 2; i++ {
+			if err := l.GiveGround(ctx, r, "tsc"); err != nil {
+				return err
+			}
+		}
+		_ = l.Tick(ctx, 30)
+		if _, err := l.PickupRaw(ctx); err != nil {
+			return err
+		}
+		if c := l.RunPortal(ctx); c.Err != "" {
+			return fmt.Errorf("portal verb: %s", c.Err)
+		}
+		_ = l.Tick(ctx, 5)
+		if c := l.RunToTown(ctx); c.Err != "" {
+			if err := l.EnterViaVerb(ctx); err != nil {
+				return fmt.Errorf("ToTown: %s, EnterPortal: %v", c.Err, err)
+			}
+		}
+		_ = l.Tick(ctx, 10)
+		if c := l.RunBack(ctx, level); c.Err != "" {
+			return fmt.Errorf("BackToField: %s", c.Err)
+		}
+	case "wp":
+		if err := l.Goto(ctx, r, 1); err != nil {
+			return err
+		}
+		if err := l.ActivateAll(ctx, r); err != nil {
+			return err
+		}
+		if area, msg := l.ToArea(ctx, level); area != level {
+			return fmt.Errorf("ToArea %d ended in area %d: %s", level, area, msg)
+		}
+	default:
+		return fmt.Errorf("unknown arrival %q", how)
+	}
+	_ = l.Tick(ctx, 5)
+	if sn, err := l.be.Env.Snapshot(); err != nil || sn.Player == nil || sn.Player.Area != level {
+		return fmt.Errorf("not in area %d after the %s arrival", level, how)
+	}
+	return nil
 }
