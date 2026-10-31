@@ -270,6 +270,8 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		{"shop", plan.Potions || plan.Scrolls || plan.Antidotes > 0, func(s *d2.Snapshot) bool {
 			return plan.Potions && t.needPotions(s) || plan.Scrolls && t.needScrolls(s) || t.needAntidotes(plan, s)
 		}, func() error { return t.shopVisit(ctx, a, plan, &rep) }},
+		// F3 (BELTFIX): d2d purchases land in the pack, so the potions just bought go to the belt before the visit ends
+		{"beltafter", plan.Potions, t.NeedsBeltFill, func() error { _, err := t.FillBelt(ctx); return err }},
 		// last of the NPC chores: a healer opened for the shop has healed already, so this normally finds nothing to do
 		{"heal", plan.Heal, t.needHeal, func() error { return t.heal(ctx, a, &rep) }},
 		{"cube", plan.Cube, func(s *d2.Snapshot) bool { return t.needCube(s, plan) }, func() error { return t.cubeJobs(ctx, a, plan, &rep) }},

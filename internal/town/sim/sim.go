@@ -23,6 +23,8 @@ type World struct {
 	DB  *data.DB
 	Lay *panel.Layout
 
+	NoAutoBelt bool // d2d: a bought or picked potion lands in the pack, never in the belt
+
 	Player  d2.Player
 	Items   []d2.Unit // player inventory lists: backpack, belt, stash, equipment
 	Cursor  *d2.Unit
@@ -309,7 +311,7 @@ func fits(occ []bool, g panel.Grid, c, r, ww, hh int) bool {
 // autoPlace puts a bought or picked item into the belt (potions, if there is room) or the first free pack cell.
 func (w *World) autoPlace(u d2.Unit) bool {
 	b := w.base(u)
-	if b.AutoBelt && w.UI.Open(d2.UIInventory) || b.AutoBelt {
+	if b.AutoBelt && !w.NoAutoBelt {
 		slots := 4
 		if belt := w.beltItems(); len(belt) < slots {
 			for s := 0; s < slots; s++ {

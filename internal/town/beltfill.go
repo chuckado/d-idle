@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"slices"
 	"sort"
+	"strings"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/input"
@@ -98,19 +99,36 @@ func (t *Town) FillBelt(ctx context.Context) (BeltFillReport, error) {
 	if err != nil {
 		return rep, err
 	}
+	// F9 (BELTFIX): the candidate ids come from the snapshot read with the pack open, not the one from before the open: right
+	// after a re-entry the first read can carry ids the game no longer lists.
+	cand = t.beltFillCandidates(s)
 	var last error
-	for _, u := range cand {
+	refreshed := 0
+	for i := 0; i < len(cand); i++ {
+		u := cand[i]
 		if err := ctx.Err(); err != nil {
 			return rep, err
 		}
 		dragged, err := t.moveToBelt(ctx, lay, u, &rep)
 		if err != nil {
+			// F1 (BELTFIX): a vanished item id is a stale read, not a full belt: re-read the pack and try the rest again, and
+			// never mark the belt full for it.
+			if errors.Is(err, hand.ErrNoItem) && refreshed < 2 {
+				refreshed++
+				t.e.Log.Info("belt: item id gone, re-reading the pack", "item", t.nameOf(u), "id", u.ID, "pass", refreshed)
+				if cur, e := t.current(); e == nil {
+					cand = t.beltFillCandidates(cur)
+					i = -1
+				}
+				continue
+			}
 			rep.Failed++
 			last = err
 			t.e.Log.Warn("belt: move failed", "item", t.nameOf(u), "err", err)
-			if cur, e := t.current(); e == nil {
-				sig := beltSig(belt.Read(t.e.Data, cur.Inventory))
-				t.beltFullAt = &sig // no more drags until a potion enters or leaves the belt
+			if !errors.Is(err, hand.ErrNoItem) && ctx.Err() == nil {
+				if cur, e := t.current(); e == nil {
+					t.markBeltFull(cur.Inventory, err)
+				}
 			}
 			if rep.Failed >= 2 { // the belt is full or the clicks do not land: stop clicking
 				break
@@ -118,7 +136,7 @@ func (t *Town) FillBelt(ctx context.Context) (BeltFillReport, error) {
 			continue
 		}
 		rep.Moved++
-		t.beltFullAt = nil
+		t.clearBeltFull("a potion moved")
 		if dragged {
 			rep.Dragged++
 		}
@@ -137,20 +155,61 @@ type beltPutter interface {
 	BeltPut(id uint32, box int) error
 }
 
-// freeBeltBox is the lowest belt box (row*4+column) that holds no item, within the slots the belt has.
-func freeBeltBox(inv *d2.Inventory, slots int) (int, bool) {
+// pickBeltBox is the belt box a potion of kind k goes to (F8). A belt column holds one kind of potion: the first one placed
+// decides (SME, UNVERIFIED in this repo), so k goes into a column that already holds k, else an empty column the plan gives
+// to k, else any empty column; never above another kind. A box is row*4+column; the lowest free box of the column is used
+// so the front stays filled first. Reports false when no column can take k.
+func (t *Town) pickBeltBox(inv *d2.Inventory, slots int, k belt.Kind, band belt.Band) (int, bool) {
 	used := map[int]bool{}
+	var colKind [belt.Columns]belt.Kind
 	for _, u := range inv.Container(d2.ContBelt) {
-		if u.Item != nil {
-			used[u.Item.GY*belt.Columns+u.Item.GX] = true
+		if u.Item == nil {
+			continue
+		}
+		box := u.Item.GY*belt.Columns + u.Item.GX
+		used[box] = true
+		if c := box % belt.Columns; box >= 0 && colKind[c] == belt.None {
+			colKind[c] = belt.PotionKind(t.base(u))
 		}
 	}
-	for b := 0; b < slots; b++ {
-		if !used[b] {
-			return b, true
+	lowest := func(col int) (int, bool) {
+		for b := col; b < slots; b += belt.Columns {
+			if !used[b] {
+				return b, true
+			}
+		}
+		return 0, false
+	}
+	for pass := 0; pass < 3; pass++ {
+		for c := 0; c < belt.Columns; c++ {
+			var ok bool
+			switch pass {
+			case 0:
+				ok = colKind[c] == k
+			case 1:
+				ok = colKind[c] == belt.None && !colUsed(used, c, slots) && band.Cols[c] == k
+			default:
+				ok = colKind[c] == belt.None && !colUsed(used, c, slots)
+			}
+			if !ok {
+				continue
+			}
+			if b, free := lowest(c); free {
+				return b, true
+			}
 		}
 	}
 	return 0, false
+}
+
+// colUsed reports whether any box of the column holds an item (a non-potion item makes the column unusable for a kind).
+func colUsed(used map[int]bool, col, slots int) bool {
+	for b := col; b < slots; b += belt.Columns {
+		if used[b] {
+			return true
+		}
+	}
+	return false
 }
 
 func inBelt(s *d2.Snapshot, id uint32) bool {
@@ -175,17 +234,25 @@ func (t *Town) moveToBelt(ctx context.Context, lay *panel.Layout, u d2.Unit, rep
 			return false, nil
 		}
 		if bp, ok := t.h.E.In.(beltPutter); ok {
-			if box, free := freeBeltBox(cur.Inventory, belt.Slots(t.e.Data, cur.Inventory)); free {
-				if err := bp.BeltPut(u.ID, box); err != nil {
-					return false, err
-				}
-				if _, ok, err := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool { return inBelt(s, u.ID) }); err != nil {
-					return false, err
-				} else if ok {
-					return false, nil
-				}
-				continue
+			kind := belt.PotionKind(t.base(it))
+			box, free := t.pickBeltBox(cur.Inventory, belt.Slots(t.e.Data, cur.Inventory), kind, t.plan(cur.Player))
+			if !free {
+				// F8: the free boxes sit in columns of another kind; do not put it there and do not drag it either
+				return false, fmt.Errorf("town: no belt column for %s (kind %s)", t.nameOf(u), kind)
 			}
+			perr := bp.BeltPut(u.ID, box)
+			var landed bool
+			if perr == nil {
+				_, landed, perr = t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool { return inBelt(s, u.ID) })
+			}
+			t.logBeltPut(u, box, kind, try, landed, perr)
+			if perr != nil {
+				return false, perr
+			}
+			if landed {
+				return false, nil
+			}
+			continue
 		}
 		if err := t.h.ShiftClick(it, lay.Inventory); err != nil {
 			if errors.Is(err, input.ErrUnsupported) { // d2d has no click modifiers: go straight to the drag
@@ -236,6 +303,30 @@ func (t *Town) moveToBelt(ctx context.Context, lay *panel.Layout, u d2.Unit, rep
 	return true, nil
 }
 
+// logBeltPut is the diagnostic line of one put attempt (primitives-review F9): the id, the box and kind chosen, whether it
+// landed, the cursor and the belt boxes and pack potion ids of a fresh read, so the next soak shows a stale id, an id that
+// changed on the move or an item left on the cursor.
+func (t *Town) logBeltPut(u d2.Unit, box int, kind belt.Kind, try int, landed bool, err error) {
+	cursor, boxes, ids := "-", "", ""
+	if cur, e := t.current(); e == nil && cur.Inventory != nil {
+		if c := cur.Inventory.Cursor; c != nil {
+			cursor = fmt.Sprint(c.ID)
+		}
+		for _, b := range cur.Inventory.Container(d2.ContBelt) {
+			if b.Item != nil {
+				boxes += fmt.Sprintf(" %d:%s", b.Item.GY*belt.Columns+b.Item.GX, t.nameOf(b))
+			}
+		}
+		for _, p := range cur.Inventory.Container(d2.ContInventory) {
+			if belt.PotionKind(t.base(p)) != belt.None {
+				ids += fmt.Sprintf(" %d", p.ID)
+			}
+		}
+	}
+	t.e.Log.Info(fmt.Sprintf("belt: put id=%d box=%d kind=%s try=%d -> inBelt=%v cursor=%s beltBoxes=[%s] packIDs=[%s] err=%v at=%s",
+		u.ID, box, kind, try, landed, cursor, strings.TrimSpace(boxes), strings.TrimSpace(ids), err, t.e.Clock.Now().Format("15:04:05")))
+}
+
 // beltRoom is the number of empty belt cells. Free() counts slots minus potions, which overstates the room when the
 // belt is smaller than the equipped belt's table row says (live Fresha 2026-10-30: a full 4-slot belt, Free() > 0, twelve
 // drags that did not land). The occupied cells are read from the item positions when they are all inside the belt grid, and
@@ -245,24 +336,65 @@ func (t *Town) beltRoom(inv *d2.Inventory, st belt.State) int {
 	cells := map[[2]int]bool{}
 	valid := true
 	for _, u := range inv.Container(d2.ContBelt) {
-		if u.Item == nil || u.Item.GX < 0 || u.Item.GX >= belt.Columns || u.Item.GY < 0 || u.Item.GY >= st.Rows() {
+		// box = row*4+column covers both backends: Game.exe reports (column,row), d2d reports the box in GX with GY 0 (F7)
+		if u.Item == nil || u.Item.GX < 0 || u.Item.GY < 0 || u.Item.GY*belt.Columns+u.Item.GX >= st.Slots {
 			valid = false
 			break
 		}
-		cells[[2]int{u.Item.GX, u.Item.GY}] = true
+		cells[[2]int{u.Item.GY*belt.Columns + u.Item.GX, 0}] = true
 	}
 	if valid && len(cells) > 0 {
 		free = min(free, st.Slots-len(cells))
 	}
-	if t.beltFullAt != nil && *t.beltFullAt == beltSig(st) {
-		return 0
+	if t.beltFullAt != nil {
+		if *t.beltFullAt == t.beltSig(inv, st) {
+			return 0
+		}
+		t.clearBeltFull("belt or pack potions changed")
 	}
 	return max(free, 0)
 }
 
-type beltSignature struct{ slots, total int }
+// beltSignature is what the sticky "belt refused" mark compares: the belt's contents and the pack's potion set. A change
+// of either means the refusal may no longer hold (F1: it used to watch the belt alone).
+type beltSignature struct {
+	slots, total int
+	packN        int
+	packSum      uint64
+}
 
-func beltSig(st belt.State) beltSignature { return beltSignature{st.Slots, st.Total()} }
+func (t *Town) beltSig(inv *d2.Inventory, st belt.State) beltSignature {
+	sig := beltSignature{slots: st.Slots, total: st.Total()}
+	if inv == nil {
+		return sig
+	}
+	for _, u := range inv.Container(d2.ContInventory) {
+		if belt.PotionKind(t.base(u)) != belt.None {
+			sig.packN++
+			sig.packSum += uint64(u.ID)
+		}
+	}
+	return sig
+}
+
+// markBeltFull sets the sticky flag: no more moves until the belt or the pack's potions change, a new game starts
+// (ForgetBelt) or a move succeeds.
+func (t *Town) markBeltFull(inv *d2.Inventory, why error) {
+	sig := t.beltSig(inv, belt.Read(t.e.Data, inv))
+	t.beltFullAt = &sig
+	t.e.Log.Info(fmt.Sprintf("belt: marked full sig=%d,%d pack=%d reason=%v", sig.slots, sig.total, sig.packN, why))
+}
+
+func (t *Town) clearBeltFull(why string) {
+	if t.beltFullAt != nil {
+		t.beltFullAt = nil
+		t.e.Log.Info("belt: full mark cleared (" + why + ")")
+	}
+}
+
+// ForgetBelt drops the sticky belt-full mark. The runner calls it when a new game starts: a refusal from the last game
+// says nothing about this one (F1: the mark survived every save-and-exit).
+func (t *Town) ForgetBelt() { t.clearBeltFull("new game") }
 
 // beltCellPoint is the centre of the first empty belt cell inside the belt slot rectangle: columns left to right, row 0
 // at the bottom (U: the geometry of the belt box is not verified live; the whole-box centre used before hit an occupied

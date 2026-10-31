@@ -18,7 +18,7 @@ var kitSafeTier = map[int]bool{2: true, 3: true}
 // 1 and 2, Burial Grounds (Blood Raven), the Crypt and the Mausoleum.
 var dungeonMouths = map[int]bool{areaDenOfEvil: true, 9: true, 13: true, 17: true, 18: true, 19: true}
 
-// kitMissing reports a belt without a healing (or rejuvenation) potion or a pack without a town portal scroll. An
+// kitMissing reports a character with no healing (or rejuvenation) potion in the belt or the pack, or a pack without a town portal scroll. An
 // unknown belt (no catalog or inventory yet) is not missing: the old behaviour stands until the kit can be read.
 func (r *Runner) kitMissing(s *d2.Snapshot) bool {
 	_, _, known := r.beltAndInv(s)
@@ -26,7 +26,8 @@ func (r *Runner) kitMissing(s *d2.Snapshot) bool {
 		return false
 	}
 	in := r.resInput(s)
-	return in.Belt.HP+in.Belt.RV < 1 || !in.HasTP
+	// F6: healing potions waiting in the pack count; the belt fill (town chores and the field step) belts them
+	return in.Belt.HP+in.Belt.RV+in.Belt.PackHP+in.Belt.PackRV < 1 || !in.HasTP
 }
 
 // kitGateActive is the gate: knob on, recovery running, kit missing, Normal act 1 (where the tables above apply).

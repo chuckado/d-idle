@@ -29,18 +29,25 @@ func BeltOf(inv *d2.Inventory, cat Catalog) Belt {
 	if inv == nil {
 		return b
 	}
+	var front [beltCols]int
 	for _, u := range inv.Container(d2.ContBelt) {
 		c := cat.Item(u.Class)
-		col := u.Item.GX
-		if c.Potion == PotionNone || col < 0 || col >= beltCols {
+		// box = row*4+column. Game.exe reports (column,row); d2d reports the box 0..15 in GX with GY 0 (F7, fork
+		// put_in_belt/pick_up). One formula serves both; the column is box%4 and the lowest box of a column is its front.
+		box := u.Item.GY*beltCols + u.Item.GX
+		if c.Potion == PotionNone || box < 0 || box >= 4*beltCols {
 			continue
 		}
+		col := box % beltCols
 		bc := &b.Cols[col]
-		if bc.Kind != PotionNone && bc.Kind != c.Potion {
+		if bc.Count > 0 && bc.Kind != c.Potion {
 			bc.Mixed = true
 		}
-		if bc.Kind == PotionNone || c.Tier > bc.Tier {
-			bc.Kind, bc.Tier = c.Potion, c.Tier
+		if bc.Count == 0 || box < front[col] {
+			bc.Kind, front[col] = c.Potion, box
+		}
+		if c.Tier > bc.Tier {
+			bc.Tier = c.Tier
 		}
 		bc.Count++
 	}
