@@ -83,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
 - eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
 - e4bb88d 10-31 12:20 `Merge agent/fixpickup: belt.Place/WillBelt shared helper, pickit and pickup fixes` (fix-pickup)
 - 146f748 10-31 12:18 `Merge agent/openbelt: belt scroll PR opened upstream (#147)` (openbelt)
@@ -92,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
 - 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
 - 9630246 10-31 11:52 `Merge agent/fixportal: portal source and HasTP fixes` (fix-portal)
-- 3fb22f1 10-31 11:48 `Merge agent/fixloot: looter adapter forwards recovery` (fix-loot)
 <!-- statusgen:end -->

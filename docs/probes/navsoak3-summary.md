@@ -5,7 +5,7 @@
 **Pre-fix caveat.** navsoak3 ran a bot built from main 35ce4c2, BEFORE the primitive fixes (fix-belt, fix-pickup, fix-portal, fix-portal2, fix-loot). It is the pre-fix baseline for the primitives; the drill suite (docs/probes/drills) and the next soak are the post-fix measures. It does include TOWNWEDGE and NOWALL, so it is the first soak that ran the whole 240 minutes.
 
 ## Final state (V)
-clvl 13, XP 131798, 9406 kills, 0 deaths, 4 h wall (14340 s at the last pace line) = 45.3 virtual h (ratio 11.4), 15 in-process restarts, furthest area id 19 (minute-line area ids: 4 Stony Field 690, Rogue Encampment 663, Cold Plains 550, Blood Moor 391, then 9, 17, 18, 8, 5, 19, 10, 13, 6). Final gold 247, median 131, max 1041, under 100 gold in 39% of minutes. 1075 potions used. Quests: Den of Evil and Sisters' Burial Grounds progress; route guard kept monastery and tower blocked (no merc, clvl < 20).
+clvl 13, XP 131798, 9406 kills, 0 deaths, 4 h wall (14340 s at the last pace line) = 45.3 virtual h (ratio 11.4), 15 in-process restarts, furthest area id 19 (minute-line area ids: 4 Stony Field 690, Rogue Encampment 663, Cold Plains 550, Blood Moor 391, then 9, 17, 18, 8, 5, 19, 10, 13, 6). Final gold 247, median 131, max 1041, under 100 gold in 39% of minutes. 1075 potions used. Quests: Den of Evil and Sisters' Burial Grounds progress; route guard kept the monastery and the Forgotten Tw. blocked (no merc, clvl < 20).
 
 ## Against the earlier soaks (V, same greps on each log)
 | | navsoak | navsoak2 | navsoak3 |
