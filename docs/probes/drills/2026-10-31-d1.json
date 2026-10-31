@@ -21,7 +21,7 @@
       "debug give hp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 441379009,
+     "elapsed_ns": 478111580,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -37,7 +37,7 @@
       "debug give hp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 15075204,
+     "elapsed_ns": 18853245,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -82,7 +82,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 57272464,
+     "elapsed_ns": 61638939,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -108,7 +108,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 56839974,
+     "elapsed_ns": 64201501,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -167,7 +167,7 @@
       "debug give mp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 89362109,
+     "elapsed_ns": 100211860,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -197,7 +197,7 @@
       "debug give mp1",
       "debug give mp1"
      ],
-     "elapsed_ns": 90157828,
+     "elapsed_ns": 96661398,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -347,7 +347,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 327295468,
+     "elapsed_ns": 352094983,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
@@ -454,7 +454,7 @@
       "debug give hp1",
       "debug give hp1"
      ],
-     "elapsed_ns": 327379732,
+     "elapsed_ns": 373971538,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
@@ -563,16 +563,17 @@
    "id": "D1.P3",
    "primitive": "P3",
    "title": "drink by belt column",
-   "verdict": "FAIL",
-   "reason": "drink hp: no rise within 2 s; drink mp: no rise within 2 s; drink hp: no rise within 2 s; drink mp: no rise within 2 s",
+   "verdict": "PASS",
+   "reason": "every potion drunk once from its own column by kind, none left reported an error",
    "intended": "every belt potion can be drunk by kind: each drink removes exactly one potion of the asked kind, life or mana rises within 2 s, the other kind is untouched; with none of the kind left the drink reports an error",
-   "observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 40-\u003e17 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 25-\u003e17 mana 26-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 25-\u003e17 mana 26-\u003e35; end belt [empty]",
+   "observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 10-\u003e18 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 19-\u003e27 mana 10-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 10-\u003e18 mana 27-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 19-\u003e27 mana 11-\u003e27 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 10-\u003e18 mana 29-\u003e35; end belt [empty]",
    "runs": [
     {
-     "Verdict": "FAIL",
-     "Reason": "drink hp: no rise within 2 s; drink mp: no rise within 2 s; drink hp: no rise within 2 s; drink mp: no rise within 2 s",
+     "Verdict": "PASS",
+     "Reason": "every potion drunk once from its own column by kind, none left reported an error",
      "Intended": "every belt potion can be drunk by kind: each drink removes exactly one potion of the asked kind, life or mana rises within 2 s, the other kind is untouched; with none of the kind left the drink reports an error",
-     "Observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 40-\u003e17 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 25-\u003e17 mana 26-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 25-\u003e17 mana 26-\u003e35; end belt [empty]",
+     "Observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 10-\u003e18 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 19-\u003e27 mana 10-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 10-\u003e18 mana 27-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 19-\u003e27 mana 11-\u003e27 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 10-\u003e18 mana 29-\u003e35; end belt [empty]",
+     "sig": "0:hp1 1:mp1 4:hp1 5:mp1 | hp err=false removed [4] rose=true | mp err=false removed [5] rose=true | hp err=false removed [0] rose=true | mp err=false removed [1] rose=true | hp err=true removed [] rose=true | end empty",
      "cheats": [
       "debug clearinv",
       "debug equip lbl 8",
@@ -588,15 +589,16 @@
       "debug stat 8 2560",
       "debug stat 6 2560"
      ],
-     "elapsed_ns": 44826756,
+     "elapsed_ns": 59933620,
      "ui_pre": "clean",
      "ui_post": "clean"
     },
     {
-     "Verdict": "FAIL",
-     "Reason": "drink hp: no rise within 2 s; drink mp: no rise within 2 s; drink hp: no rise within 2 s; drink mp: no rise within 2 s",
+     "Verdict": "PASS",
+     "Reason": "every potion drunk once from its own column by kind, none left reported an error",
      "Intended": "every belt potion can be drunk by kind: each drink removes exactly one potion of the asked kind, life or mana rises within 2 s, the other kind is untouched; with none of the kind left the drink reports an error",
-     "Observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 40-\u003e17 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 25-\u003e17 mana 26-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 17-\u003e25 mana 35-\u003e26 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 25-\u003e17 mana 26-\u003e35; end belt [empty]",
+     "Observed": "start belt [0:hp1 1:mp1 4:hp1 5:mp1]; drink hp: err=\u003cnil\u003e removed box [4], belt now [0:hp1 1:mp1 5:mp1], life 10-\u003e18 mana 35-\u003e35 | drink mp: err=\u003cnil\u003e removed box [5], belt now [0:hp1 1:mp1], life 19-\u003e27 mana 10-\u003e26 | drink hp: err=\u003cnil\u003e removed box [0], belt now [1:mp1], life 10-\u003e18 mana 27-\u003e35 | drink mp: err=\u003cnil\u003e removed box [1], belt now [empty], life 19-\u003e27 mana 11-\u003e27 | drink hp: err=combat: no potion of that kind in the belt removed box [], belt now [empty], life 10-\u003e18 mana 29-\u003e35; end belt [empty]",
+     "sig": "0:hp1 1:mp1 4:hp1 5:mp1 | hp err=false removed [4] rose=true | mp err=false removed [5] rose=true | hp err=false removed [0] rose=true | mp err=false removed [1] rose=true | hp err=true removed [] rose=true | end empty",
      "cheats": [
       "debug clearinv",
       "debug equip lbl 8",
@@ -612,7 +614,7 @@
       "debug stat 8 2560",
       "debug stat 6 2560"
      ],
-     "elapsed_ns": 32540786,
+     "elapsed_ns": 35323669,
      "ui_pre": "clean",
      "ui_post": "clean"
     }
