@@ -119,8 +119,7 @@ func (b *Backend) Start(ctx context.Context, timeout time.Duration) error {
 	if err := b.Cycler.EnterGame(ctx, ""); err != nil {
 		return err
 	}
-	b.Clock.Detect(ctx)
-	d2dctl.Pause = b.Clock.Pause
+	b.Clock.Install(ctx)
 	b.checkVerbs(ctx)
 	return nil
 }

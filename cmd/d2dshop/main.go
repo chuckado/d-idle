@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/d2denv"
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
 	"d2lod-bot/internal/data"
@@ -42,6 +43,10 @@ func main() {
 	if err := c.Ping(ctx); err != nil {
 		fmt.Fprintln(os.Stderr, "ping:", err)
 		os.Exit(1)
+	}
+	// Under a lockstep d2d a wall pause leaves the game frozen between hover and click (docs/probes/waits-audit.md).
+	if d2denv.NewLateClock(ctx, c).Install(ctx) {
+		say("info", "lockstep d2d: pauses step the game")
 	}
 	want := map[string]bool{}
 	for _, s := range strings.Split(*steps, ",") {

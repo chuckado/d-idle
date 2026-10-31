@@ -48,8 +48,6 @@ internal/d2dsrc/source.go  fixobj  fix-obj
 internal/d2dsrc/source_test.go  fixobj  fix-obj
 internal/d2dinput/controller.go  fixobj  fix-obj
 internal/d2dinput/controller_test.go  fixobj  fix-obj
-internal/d2denv/env.go  fixobj  fix-obj
-internal/d2denv/fixobj_test.go  fixobj  fix-obj
 docs/fixobj.md  fixobj  fix-obj
 internal/data/price.go  fixprice  fix-price
 internal/data/price_test.go  fixprice  fix-price
@@ -69,3 +67,10 @@ internal/town/chores.go  fixprice  fix-price
 internal/town/stash.go  fixprice  fix-price
 internal/loot/loot.go  fixprice  fix-price
 internal/loot/pickup.go  fixprice  fix-price
+internal/d2dctl/town_verbs.go  waitsaudit  waits-audit
+internal/d2dctl/waits_test.go  waitsaudit  waits-audit
+internal/d2denv/env.go  waitsaudit  waits-audit
+internal/d2denv/waits.go  waitsaudit  waits-audit
+internal/d2denv/waits_test.go  waitsaudit  waits-audit
+cmd/d2dshop/main.go  waitsaudit  waits-audit
+docs/probes/waits-audit.md  waitsaudit  waits-audit
