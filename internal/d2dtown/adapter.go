@@ -263,6 +263,16 @@ type hoverBelt struct {
 	c *d2dctl.Client
 }
 
+// MoveGold is the d2d gold move (town.goldMover): the amount prompt starts empty on d2d, so the digits are typed by
+// the control verb instead of the town package.
+func (h hoverBelt) MoveGold(n int, deposit bool) error { return moveGold(h.c, n, deposit) }
+
+func moveGold(c *d2dctl.Client, n int, deposit bool) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	return c.MoveGold(ctx, n, deposit)
+}
+
 func (h hoverBelt) BeltPut(id uint32, box int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)
 	defer cancel()
@@ -310,6 +320,8 @@ func (t townInput) BeltPut(id uint32, box int) error {
 	defer cancel()
 	return t.c.BeltPut(ctx, int(id), box)
 }
+
+func (t townInput) MoveGold(n int, deposit bool) error { return moveGold(t.c, n, deposit) }
 
 func (t townInput) Interact(tg input.Target) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 20*time.Second)

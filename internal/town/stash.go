@@ -24,6 +24,13 @@ var StashGoldButton = panel.Pt{X: 487, Y: 453}
 // typer is the optional part of an input.Controller that posts WM_CHAR (the gold amount edit box).
 type typer interface{ TypeChar(ch rune) error }
 
+// goldMover is the optional part of an input.Controller that moves gold through the game's own command (d2d's
+// d2dctl.MoveGold: coin click, digits, Return). On d2d the amount prompt starts EMPTY and the town controller hides
+// TypeChar, so the typed path cannot work there (drills D3.s and D3.s2). deposit false is a withdrawal.
+type goldMover interface {
+	MoveGold(n int, deposit bool) error
+}
+
 // openStash walks to the stash chest, clicks it with hover confirmation and waits for the stash flag.
 // Opening the stash also shows the backpack; the backpack is opened by key if it did not appear.
 func (t *Town) openStash(ctx context.Context, a *Act) error {
@@ -194,6 +201,13 @@ func (t *Town) depositGold(ctx context.Context, amount int) error {
 	if amount > g0 {
 		amount = g0
 	}
+	if gm, ok := t.e.In.(goldMover); ok {
+		if err := gm.MoveGold(amount, true); err != nil {
+			_ = t.e.In.Key("esc")
+			return fmt.Errorf("town: gold deposit of %d: %w", amount, err)
+		}
+		return t.confirmDeposit(ctx, amount, g0, bank0)
+	}
 	if err := t.e.In.Click(input.Left, StashGoldButton.X, StashGoldButton.Y); err != nil {
 		return err
 	}
@@ -220,6 +234,11 @@ func (t *Town) depositGold(ctx context.Context, amount int) error {
 	if err := t.e.In.Key("enter"); err != nil {
 		return err
 	}
+	return t.confirmDeposit(ctx, amount, g0, bank0)
+}
+
+// confirmDeposit waits for memory to show amount moved from the pack to the stash.
+func (t *Town) confirmDeposit(ctx context.Context, amount, g0, bank0 int) error {
 	_, ok, err := t.h.Wait(ctx, t.uiTimeout(), func(s *d2.Snapshot) bool { return s.Player.StashGold >= bank0+amount && s.Player.Gold <= g0-amount })
 	if err != nil {
 		return err

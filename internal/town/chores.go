@@ -177,7 +177,29 @@ func (t *Town) needScrolls(s *d2.Snapshot) bool {
 
 func (t *Town) needRepair(s *d2.Snapshot) bool {
 	pct, ok := t.lowestDurability(s)
-	return ok && pct < t.tune().RepairBelowPct && !t.repairLatched(s, pct)
+	return ok && pct < t.tune().RepairBelowPct && !t.repairLatched(s, pct) && s.Player.Gold >= t.repairEstimate(s)
+}
+
+// repairEstimate is a lower bound of what Repair All charges: a quarter of each worn item's base cost times its
+// missing durability, at least 1 gold when anything is damaged. UNVERIFIED as a price (the drill D3.r paid 19 gold
+// for 95 percent on starter gear); it only has to be low enough that a character who can pay is never turned away,
+// and high enough that gold 0 opens no smith (drill D3.r0: 101 ticks and a failed repair).
+func (t *Town) repairEstimate(s *d2.Snapshot) int {
+	sum, damaged := 0, false
+	for _, u := range s.Inventory.Container(d2.ContEquipment) {
+		pct, ok := t.durabilityPct(u)
+		if !ok || pct >= 100 {
+			continue
+		}
+		damaged = true
+		if b := t.base(u); b != nil {
+			sum += b.Cost * (100 - pct) / 100 / 4
+		}
+	}
+	if damaged {
+		return max(sum, 1)
+	}
+	return 0
 }
 
 // vendorStep names the chores that work inside a vendor's trade window. One window serves consecutive chores of the
