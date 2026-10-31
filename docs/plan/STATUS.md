@@ -95,6 +95,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 1430083 10-31 15:23 `Merge agent/waitsaudit: waits audit, game-time ApproachNPC deadline, LateClock` (waits-audit)
 - c0ae733 10-31 15:21 `Merge agent/cr149: PR #149 CodeRabbit follow-ups posted` (cr149)
 - 6f860df 10-31 15:06 `Merge agent/forkcheats2: fork cheats round 2 docs` (forkcheats2)
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
@@ -104,5 +105,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 70639f8 10-31 14:36 `Merge agent/fixobj: d2d field objects listed and operable, Pause steps game under lockstep` (fix-obj)
 - 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
-- 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 <!-- statusgen:end -->
