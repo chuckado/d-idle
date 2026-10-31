@@ -14,7 +14,7 @@
 |---|---|---|---|
 | #147 belt scrolls | OPEN, up to date with the restructured upstream (merge pushed), mergeable, review pending; CodeRabbit follow-up commit 4d1572ee already in | 3 + merge | waits for the maintainer |
 | tome (inventory Town Portal opens at the click tick) | READY, local, queued by the user: open when #147 merges | 3 | branch fix/tome-use on the worker host; docs/research/pr-tome-*.md |
-| shift-click belt / ctrl-click sell / inventory-open pickup | NOT STARTED (decomp-queue item 9) | ? | lab fork implements it; needs a differential proof against game.exe handlers |
+| shift-click belt (decomp-queue item 9, docs/research/pr-click-*.md) | local, proof run (390,000 cases 129,283 -> 0); verifier holds with limits; PROOF complete | 2 commits, 13 files | branch trace/click on upstream/main 0dc4c62a on the worker host; low priority, bundle filler. ctrl-click sell and inventory-open pickup: client-only, no PR (docs/research/click-handlers-trace.md) |
 | waypoint (decomp-queue item 3, docs/research/pr-wp-*.md) | local, proof incomplete, needs the independent verifier | 6 files, 1 commit | branch fix/waypoint-hostile-window on the worker host |
 | portal entry (ENTERPORTAL) | investigation running | ? | only if a d2d deviation is proven |
 
