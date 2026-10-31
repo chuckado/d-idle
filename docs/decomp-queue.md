@@ -25,6 +25,7 @@ The decomp lane answers one kind of question: **"is d2d (or our bot's assumption
 | 6 | Static Field (floor, life - 1, negative resistance) and cold length / chill on the hit | DECOMPSKILL follow-ons (read, not run) | skill-damage-trace.md "Not covered" | S-M | queued |
 | 7 | monster ranged / melee / specials / walk speed | risk map ranks 6, 9, 7, 10 (deaths, kill time) | monster-attack-trace.md (partial) | L | queued |
 | 8 | pets and monster foes beyond PR #134 (summons, merc targeting) | merc policy, deaths near pets | pr-get-hit-rule-proof.md (#134 scope) | M | queued |
+| 9 | client gaps found by the click-modifier work: shift-click a pack item to the belt, ctrl-click sell with a store open, and pickup with the inventory open (game.exe puts it on the cursor, d2d auto-places) were missing in d2d; the private lab fork now implements shift/ctrl (rules::belt_slot shared with pickups); an upstream PR needs a differential proof against game.exe handlers 0x63 / 0x33 (FUN_0054d520) | DECOMPBELT D2-D4 | docs/research/belt-pickup-trace.md | M | queued, not started |
 
 ## Result log (one line each)
 
