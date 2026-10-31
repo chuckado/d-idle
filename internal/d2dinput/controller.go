@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"math"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/d2dctl"
@@ -37,9 +38,15 @@ type Controller struct {
 	// Run, when set, manages the run toggle by stamina before every move (run.go). nil: always walk, as before.
 	Run *RunPolicy
 
-	lastLevel int
-	primed    bool
-	running   bool // our belief of d2d's run toggle
+	lastLevel  int
+	primed     bool
+	runMu      sync.Mutex // guards the run belief and its observables (RunInfo is read from the bot's minute loop)
+	running    bool       // our belief of d2d's run toggle
+	stCur      int
+	stMax      int
+	runPresses int
+	runResets  int
+	walkRaw    string
 }
 
 // New returns a Controller with default transform and polling.

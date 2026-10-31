@@ -195,6 +195,9 @@ func (p *Process) WaitInGame(ctx context.Context, timeout time.Duration) error {
 	for {
 		st, _, err := c.State(ctx)
 		if err == nil && st.Screen == "ingame" {
+			if ctl := p.Controller(); ctl != nil {
+				ctl.ResetRun() // a fresh d2d process starts walking
+			}
 			return c.Kick(ctx)
 		}
 		select {

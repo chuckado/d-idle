@@ -62,10 +62,48 @@ func stamina(s d2dctl.State) (cur, max int, ok bool) {
 	return p.Cur, p.Max, ok
 }
 
-// ResetRun forgets the belief about the toggle (a new game process starts walking).
-func (c *Controller) ResetRun() { c.running = false }
+// ResetRun forgets the belief about the toggle (a new game process starts walking: UNVERIFIED live for the
+// first move after a restart, the proof recipe is in docs/fixrun.md). Callers: d2denv.Proc.WaitInGame (OnInGame,
+// the backend's every fresh game / chicken re-entry / restart) and d2dinput.Process.WaitInGame.
+func (c *Controller) ResetRun() {
+	c.runMu.Lock()
+	c.running = false
+	c.runResets++
+	c.runMu.Unlock()
+}
+
+// RunInfo is the observable run state for the minute log line (change fixrun). Believed is OUR belief of the
+// toggle; the true toggle is not readable on d2d (V live per docs/d2d-run.md: pmode -1 both ways, `state` has no
+// run field). Walking is the raw `walking=` value of the last state read, logged only so a live proof can
+// correlate it with Believed (meaning UNVERIFIED). Cur/Max are the raw stamina pair of the last read (0/0 before
+// the first move). Presses and Resets count run-key presses and belief resets since the controller was built.
+type RunInfo struct {
+	Believed        bool
+	Cur, Max        int
+	Presses, Resets int
+	Walking         string
+}
+
+// RunInfo returns the run observables; safe to call from another goroutine.
+func (c *Controller) RunInfo() RunInfo {
+	c.runMu.Lock()
+	defer c.runMu.Unlock()
+	return RunInfo{Believed: c.running, Cur: c.stCur, Max: c.stMax, Presses: c.runPresses, Resets: c.runResets, Walking: c.walkRaw}
+}
+
+// LogKV is RunInfo as slog key/value pairs for the bot's minute line (the bot asks its input for this through an
+// optional interface, so it need not import d2dinput). runShare is not here: d2dsoak derives it from
+// runBelieved over the minute lines.
+func (c *Controller) LogKV() []any {
+	i := c.RunInfo()
+	return []any{"runBelieved", i.Believed, "stam", i.Cur, "stamMax", i.Max, "runKeys", i.Presses, "runResets", i.Resets, "walkingRaw", i.Walking}
+}
 
 // manageRun is called before every move command. Errors are not fatal: a failed read leaves the run as it is.
+//
+// No self-heal by keypress: a wrong press while the character really runs would switch the run OFF, and the
+// stamina signal cannot tell "walking" from "running in town" (no drain in town, docs/d2d-run.md), so the
+// belief is corrected only by ResetRun at a game start and the divergence is made observable (RunInfo).
 func (c *Controller) manageRun() {
 	p := c.Run
 	if p == nil {
@@ -79,9 +117,17 @@ func (c *Controller) manageRun() {
 	if !ok {
 		return
 	}
-	if want := p.want(cur, max, c.running); want != c.running {
+	c.runMu.Lock()
+	c.stCur, c.stMax = cur, max
+	c.walkRaw, _ = st.Get("walking")
+	running := c.running
+	c.runMu.Unlock()
+	if want := p.want(cur, max, running); want != running {
 		if c.C.Key(c.ctx(), "r") == nil {
+			c.runMu.Lock()
 			c.running = want
+			c.runPresses++
+			c.runMu.Unlock()
 		}
 	}
 }
