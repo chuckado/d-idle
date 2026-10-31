@@ -200,8 +200,18 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	}
 	fi.Bound = n
 	if s.Potions {
-		if _, err := l.ArmBelt(ctx, r); err != nil {
+		// a known belt for every repeat: two healing, two mana potions (the earlier fight drank some)
+		if _, err := r.Cheat(ctx, "debug belt clear", "the fight starts with the same belt every time: two healing and two mana potions"); err != nil {
 			return fail("belt", err)
+		}
+		for box, code := range []string{"hp1", "hp1", "mp1", "mp1"} {
+			if err := l.GiveBelt(ctx, r, code, box); err != nil {
+				return fail("belt", err)
+			}
+		}
+		if sn, err := l.be.Env.Snapshot(); err == nil {
+			hp, mp := l.beltKinds(sn)
+			fi.Decisions = append(fi.Decisions, fmt.Sprintf("belt before the fight: hp %d mp %d", hp, mp))
 		}
 	}
 	if s.Mana > 0 {

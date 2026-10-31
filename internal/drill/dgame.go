@@ -375,7 +375,7 @@ func d8drink(ctx context.Context, r *Run, l GameLab) Outcome {
 	switch {
 	case derr != nil:
 		o.Verdict, o.Reason = Fail, "merc drink: "+derr.Error()
-	case m0.Life >= m0.Max:
+	case m0.Life >= 40:
 		o = Blocks(fmt.Sprintf("`debug merc hurt 20` left the merc at %s", m0))
 		o.Observed, o.Intended = obs, "merc life up, one belt potion used"
 	case m1.Life <= m0.Life:

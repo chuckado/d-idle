@@ -247,7 +247,7 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
 	fi := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 8 near"}, Life: 400, Potions: true, Clear: 120 * time.Second})
 	intended := "a fight with 8 zombies drains the mana: the fighter drinks a belt mana potion in the fight ('combat potion kind=mana') and the casts kill the targets (P26 hit effect)"
-	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 4), " | "))
+	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 3), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
 	switch {
 	case fi.Spawned == 0:
