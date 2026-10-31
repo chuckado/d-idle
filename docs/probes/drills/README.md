@@ -200,3 +200,42 @@ Result files `2026-10-31-drills7-<label>.txt` (stdout of each d2drill invocation
 
 ### P26 observables (record only, lab verbs of the fork, recipe in docs/research/skill-bind-trace.md)
 `debug skill` and `debug skillpts` exist (`debug help`). Fresh clvl 1 Sorceress in town: `debug skill right 54` (Teleport, 0 points) replies `err d2d: not usable` and `debug skill right 9999` too, `debug skill right 36` (Fire Bolt) is accepted: the lab verb follows the picker rule (V live, step 3 of the recipe). Step 1, `cmd select 54 0` then `dump`: the dump read at tick 0 without a step shows rskill 0 (the select is queued, not yet applied: D1 stays UNVERIFIED, would need a step between). Steps 2, 4 and 5 (cast mana costs in the field and in town) not run.
+
+## DRILLS8 (2026-10-31): live proof of fixstall3, the regression pass of the whole suite
+Result files `2026-10-31-drills8-<label>.txt` (stdout of each d2drill invocation; no json, the labrun sync does not bring it back): `h1`..`h3` (H.pause), `d6d1`..`d6d3` (D6.d), `dsyncwp1`..`dsyncwp3` (D-sync.wp before the harness fix), `dsyncwp-diag` (with the new `clear-diag` geometry dump), `dsyncwpmana1`..`3` (after it), `d3`, `d8`, `d1`, `d2`, `d4`, `d5`, `d6`, `d7`, `d9`, `dw`, `dr`, `dr60`, `h`, `f`, `d10` (one invocation per group, in that order), and the single reruns `d8c`, `d1p1s`, `hobjchest`, `dsync1`. Run as in DRILLS7 (build `d2drill` on the worker host, lab build cheats3, code of origin/main at 1628eeb with fixstall3): `D2D_AGENT=drills8 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills8 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group H -only H.pause -label drills8-h1 -v`. The harness has no `-group all`: one invocation per group (D0 is the gate self-test and leaves the pack open on purpose: not run).
+
+| Card | Drill | Verdict | Numbers |
+|---|---|---|---|
+| fixstall3 | H.pause x3 | PARTIAL (finding F13) | per invocation run 1: 1 of 2 bot tries opens Kashya (144 ticks), the other fails at 796 ticks (`not reached in 28.4s`); 3 of 6 first-run tries fail again (DRILLS7: 3 of 6 at 718); run 2 of every invocation: 4 of 4 open (144). The stall is now left (see F13), the budget runs out 3 cells short |
+| fixstall3 | D6.d x3 | PASS x3 | `ErrLevelChanged` (escaped from level 2 to 1 after a stall in a pocket), 225 ticks = 9 s, character in town, both repeats identical, all three invocations identical (DRILLS7 run 2: stuck 62 s) |
+| fixstall3 | D-sync.wp x3 | FAIL 1 of 2, cause isolated: the drill (F12 closed) | run 1 kills 3 of 3 (11 casts, 15 s); run 2 kills 0, 3 ignores, in all three invocations. `clear-diag` of the failing try: mana 1/35 (run 1 spent it, the lab does not refill mana), melee `Attack` fallback, open floor around the player (no obstacle in `debug grid 5`). With `Mana: 35` in the drill spec: 3 invocations x 2 repeats, 3 of 3 killed, 11 casts, 15 s |
+| fixstall3 | D3 and D8 smoke (NPCs through the bot's `d2dtown.Input`) | PASS | D3: g0, n (5 NPCs open and close clean), h, b, b2, tp, r (19 gold), r0, s, s2, u, i all PASS; D8: a, m, q, w PASS; D8.c FAIL in the group (the Rogue was claimed by D8.a first: harness order) and run alone: run 1 granted, run 2 FAIL (the reward can be claimed once per character, so a repeat 2 cannot pass) |
+| regression | the suite | see the table below | |
+
+### Regression table (one invocation per group)
+| Group | Verdicts |
+|---|---|
+| D1 | P7a P7 P1 P1b P7b P2 P3 PASS; P1s FAIL in the group (setup: pack hp1x4, a leftover of the previous drill), PASS alone x2 identical; P3m BLOCKED (unchanged) |
+| D2 | 11 of 11 PASS identical (the full group, as DRILLS7) |
+| D3 | 12 of 12 PASS |
+| D4 | a b c g cap x PASS (6 of 6) |
+| D5 | a, b PASS; c, d BLOCKED with the stale text "no debug verb spawns a monster" (the fork cheat exists, the F-group fight drills cover it: PASS below) |
+| D6 | a, b, c PASS; d PASS (16 s in the group, 9 s alone) |
+| D7 | a, b, c PASS |
+| D8 | a, m, q, w PASS; c see above; g BLOCKED (no gamble code) |
+| D9 | a, b PASS; c BLOCKED (a soak) |
+| DW | 14 of 14 PASS (a1..a11, b, c, a3b) |
+| DR | r, r0, r1 PASS; rt FAIL at the default repair knob (the half-worn rows are not repaired at knob 30 by design: 13 of 26), PASS with `-repair-below 60` (26 rows measured, restored, paid) |
+| H | pause FAIL (F13), obj, ground PASS, monster BLOCKED (stale text, as D5.c) |
+| F | H.obj.shrine, H.obj.cage (partial), D-run, D-sync.tp, D-sync.wp (mana fixed), DW.m1, m2, a12, D5.dodge, p27, p29, p28 PASS; D-sync 2 of 3 (one ignore, repeats identical) in the group and 3 of 3 alone; H.obj.chest FAIL in the group (class 144 chosen, mode stays NU), PASS alone (class 139) |
+| D10 | D10_RESULT |
+
+### Harness changes (cmd/d2drill and internal/drill)
+- `D-sync.tp` and `D-sync.wp` and `D-sync` now start with 35 mana (`Mana: 35` in `fSyncArrive`): the second repeat started with the mana the first spent (1 of 35) and fought with the melee fallback. Closes F12 as a drill artefact.
+- `lab.clearDiag` (cmd/d2drill/hover_lab.go): after a cold first Clear that killed nothing, prints the player (life, mana), the monsters and `debug grid 5` to stderr (`clear-diag:` lines).
+
+### Findings (not fixed here)
+- F13 (H.pause, fixstall3 clearance fallback works but not fast enough): the failing try now leaves the stall: the timeline shows (25.9,20.5) at t855, then a walk along row 18.6 at t933 to t1013 ((26.1,18.8) to (20.1,18.4)) with 3 cells to Kashya (17.1,18.3) when the 28.4 s budget ends (796 ticks). So `routeAround` with clearance 0 reaches the NPC, but only after about 700 ticks of earlier stalls and sidesteps (7 `cmd move`, 2 `debug grid`: two routes were planned, the first did not free the player; why is UNVERIFIED). The error text still reports the position of the previous poll (25.9,20.5), not the final one (20.1,18.4). Possible fixes for a card: plan the clearance-0 route at the FIRST stall (not stall 1 after a full round of interacts), or extend the budget while the player makes progress.
+- F14 (note, drill order): in a whole-group process D1.P1s, D8.c and H.obj.chest (group F) differ from their alone runs (leftover pack potions, the Rogue already claimed, another chest preset chosen); D8.c cannot pass at repeat 2 even alone. The groups are not independent; for verdicts read the alone runs.
+- F15 (note, UNVERIFIED): with 1 mana the Sorceress's melee `Attack` fallback did not kill three zombies in 60 s on open floor (12 approaches without closing, three ignores, DRILLS8 `dsyncwp-diag`). The product question is whether a mana-less Sorceress should be able to melee a weak pack.
+- F16 (harness text): D5.c, D5.d and H.monster still say BLOCKED "no debug verb spawns a monster"; the spawn verb exists and the F group covers them. The texts should be removed (not done here, only the BLOCKED lines are stale).
