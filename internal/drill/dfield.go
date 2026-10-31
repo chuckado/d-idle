@@ -449,7 +449,7 @@ func fSync(ctx context.Context, r *Run, l FieldLab) Outcome {
 
 // fSyncArrive: the first Clear after the arrival named by arrive (see FightSpec.Arrive), against 3 zombies.
 func fSyncArrive(ctx context.Context, r *Run, l FieldLab, level int, arrive, what string) Outcome {
-	f := l.Fight(ctx, r, FightSpec{Level: level, Arrive: arrive, Cold: true, Kill: true, Spawns: []string{"zombie1 3 near"}, Life: 400, Clear: 60 * time.Second})
+	f := l.Fight(ctx, r, FightSpec{Level: level, Arrive: arrive, Cold: true, Kill: true, Spawns: []string{"zombie1 3 near"}, Life: 400, Mana: 35, Clear: 60 * time.Second})
 	unreach := countLines(f.Log, "no path and no firing position")
 	o := Outcome{Intended: "the first Clear after the " + what + " arrival attacks the spawned zombies (kills > 0, no unreachable lines)",
 		Observed: fmt.Sprintf("kills %d, cast commands %d, unreachable lines %d, avoided %d, skipped %d, ignored %d, %v, err %q; log head: %s", f.Kills, f.CmdSkill, unreach, f.Avoided, f.Skipped, f.Ignored, f.Elapsed.Round(time.Second), f.Err, strings.Join(firstN(f.LogHead, 5), " / ")),
