@@ -2,7 +2,7 @@
 
 ```yaml
 change: decomprepair
-status: in-progress
+status: archived
 agent: decomprepair
 branch: agent/decomprepair
 worktree: ~/code/d2lod-wt/decomprepair
@@ -17,7 +17,7 @@ exclusive:
   - "fork-branch:trace/price"
 gates:
   - "price_model.py equals game.exe on 100,000 oracle cases; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
+merge: 90101b4
 result: "Formula V (emulator, model 100000/100000); d2d deviations D1-D7 proven by differential; bot findings B1-B6; PR candidate not built (time box). Not verified live on the original game; drill D3.r (d2d) price agrees."
 live: ""
 ```

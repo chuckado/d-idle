@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [decomprepair](../../openspec/changes/decomprepair/) | in-progress | decomprepair | `docs/research/price-trace.md`<br>`docs/research/pr-price-proof.md`<br>`tools/emu/price_oracle.py`<br>`tools/emu/price_model.py`<br>`tools/emu/price_terms.py` | `fork-branch:trace/price` |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/stash.go`<br>`internal/town/chores.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
 | [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/fixobj_test.go`<br>`docs/fixobj.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
@@ -73,7 +72,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change decomprepair: price_model.py equals game.exe on 100,000 oracle cases; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-bank: go test -p 1 ./internal/town ./internal/d2dtown passes including TestFixBank*
 - change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -91,6 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
 - 70639f8 10-31 14:36 `Merge agent/fixobj: d2d field objects listed and operable, Pause steps game under lockstep` (fix-obj)
 - 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
@@ -100,5 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 3eba209 10-31 13:40 `Merge agent/fixwp: waypoint verb fix (W1 class, W2 rows, W5 origin)` (fix-wp)
 - 2ba74e4 10-31 13:37 `Merge agent/forkport: fork port; archive forkport; OWNERS; STATUS; BACKLOG` (forkport)
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
-- 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 <!-- statusgen:end -->
