@@ -39,3 +39,5 @@ Click-modifier branch: about 1.5 h (script the net-diff apply 0.5 h, 3 debug hun
 2. Order: refresh the base, apply the net diff of the click-modifier branch with the path rewrite (`devctl_verbs.hpp` to `devctl/verbs.hpp`), hand-port the 3 debug hunks, fix the include, compile; then the tome branch; then riskmap paths.
 3. Keep patch-set changes in few, small hunks; a new fork verb goes in its own file (as #148's layout intends), which removes the problem for good.
 4. Nothing to tell the maintainer: the split costs the fork about 3 hours and gives merge-conflict relief upstream. If #148 is still open when the fork next needs a rebase, port onto its head instead (same script).
+
+update 2026-10-31: #148 merged 16:41Z; riskmap dependencies updated; fork port pending the user go
