@@ -21,6 +21,7 @@ import (
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/loot"
+	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/town"
 	"d2lod-bot/internal/town/belt"
 )
@@ -45,6 +46,9 @@ type lab struct {
 
 	mu  sync.Mutex
 	seq int
+
+	wpNav *nav.Navigator // D3: the bot's navigator with the spy in front (wp_lab.go)
+	wpSpy *spy
 }
 
 func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst string, log *slog.Logger) *lab {

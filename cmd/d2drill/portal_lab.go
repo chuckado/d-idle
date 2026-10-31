@@ -93,13 +93,6 @@ func (l *lab) PView(ctx context.Context) (drill.PortalView, error) {
 	return v, nil
 }
 
-func (l *lab) Goto(ctx context.Context, r *drill.Run, level int) error {
-	if _, err := r.Cheat(ctx, fmt.Sprintf("debug goto %d", level), fmt.Sprintf("arrive on level %d at a free cell: the field the portal drill casts in", level)); err != nil {
-		return err
-	}
-	return l.Tick(ctx, 25)
-}
-
 func (l *lab) PortalList(ctx context.Context) (string, error) {
 	r, err := l.be.Client.Debug(ctx, "portals")
 	if err != nil {
