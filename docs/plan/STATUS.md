@@ -55,6 +55,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
+| [wppr](../../openspec/changes/wppr/) | in-progress | wppr | `docs/research/pr-wp-*.md`<br>`tools/emu/wp_*.py`<br>`openspec/changes/wppr/**`<br>`docs/decomp-queue.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 31 requirements
@@ -111,6 +112,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
+- change wppr: the C++ differential (test_game --waypoint-refuse against tools/emu/wp_refuse.py game) has mismatches before > 0 and 0 after over >= 100,000 random cases plus the exhaustive grid
+- change wppr: upstream test_rules, test_combat, test_game, test_protocol pass; ctest failures equal to an unmodified upstream build; pr_guard 0 FAIL 0 WARN; presubmit --quick 0 FAIL
+- change wppr: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
 - ff19642 10-31 16:51 `Merge agent/mapitem: contiguous map (item 13)` (mapitem)
