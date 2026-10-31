@@ -72,6 +72,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- c75c9c6 10-31 11:33 `Merge agent/goldoff: goldfloor levers off by default` (goldfloor)
 - 880485a 10-31 11:29 `Merge agent/primlist: docs/primitives.md and m1-liveproof widened to the live drill suite` (m1-liveproof)
 - 86a9c2b 10-31 11:17 `Merge agent/cr134: PR #134 CodeRabbit round 2 (F1, F2)` (upstream-bundle)
 - 02ec208 10-31 11:14 `Merge agent/goldab: goldfloor paired A/B result (gates did not hold, lever C no-go)` (goldfloor)
@@ -81,5 +82,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - a403585 10-31 10:07 `Merge agent/goldfloor-impl: goldfloor levers A and B` (goldfloor)
 - db3a462 10-31 10:00 `Merge agent/routeguard-impl: route guard floors` (m3-routeguard)
 - 4d26ed1 10-31 09:53 `Merge agent/stashcap-impl: m1-stashcap stash gold cap` (m1-stashcap)
-- 9720f1b 10-31 09:46 `Merge agent/cardboard: card board doc and decisions stub` (cardboard)
 <!-- statusgen:end -->
