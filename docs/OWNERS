@@ -41,7 +41,6 @@ cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
 openspec/changes/drills6/**  drills6  drills6
-openspec/changes/drills8/**  drills8  drills8
 docs/fixstall3.md  fixstall3  fixstall3
 internal/d2dctl/testdata/camp-grid.txt  fixstall3  fixstall3
 internal/d2dtown/wiring_test.go  fixstall3  fixstall3

@@ -2,7 +2,7 @@
 
 ```yaml
 change: drills8
-status: done
+status: archived
 agent: drills8
 branch: agent/drills8
 worktree: ~/code/d2lod-wt/drills8
