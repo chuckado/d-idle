@@ -62,7 +62,7 @@ D9 and D10 are new gaps found on the way (separable; candidates, not part of thi
 ## Their checks (worker host, gcc 16, Release, `-Wno-error=maybe-uninitialized -Wno-error=array-bounds`)
 
 - `test_rules` ok (new cases for each claim: armor 750 / 187 and repair 281, class 1000 / 62 and ethereal class 15, unidentified 1000 and low quality 250, unidentified repair 0, broken ethereal 1 vs 62), `test_combat` ok, `test_game` rc 0, `test_protocol` ok.
-- Full build rc 0; ctest: CTEST_RESULT
+- Full build rc 0; ctest 53 of 58 pass, 2 skipped (test_exe_tables, test_iso9660); fails test_mpq, smoke_d2d, pad_use_d2d, quests_act1, quests_act4, and upstream d0ea14b7 built the same way fails exactly these five (environment: data dir, audio, `debug equip tsc`; no price code on their paths): unchanged.
 - `pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN. `presubmit.py --quick`: 0 FAIL, 1 WARN (build skipped by --quick; built and tested by hand above). Ruff findings in the oracle fixed (unused import; the signed return now plain arithmetic).
 
 ## Callers (what each now does differently)

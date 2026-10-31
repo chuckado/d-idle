@@ -19,7 +19,7 @@
 
 The rest of "all" is the unclaimed terms: whole-item repair (D5) 10,841, stacks (D6), divide-first NPC mult above 0xffff (D9, new) 9,232 / 138 / 1,608, repair gate's durability-column check (D10, new) 4,238.
 
-Their checks: `test_rules`, `test_combat`, `test_game`, `test_protocol` green; full build rc 0, ctest CTEST_SHORT; `pr_guard.py` 0 FAIL 0 WARN; `presubmit.py --quick` 0 FAIL (1 WARN: build skipped by --quick, done by hand). 6 commits authored by the user, body `Agent: Claude Code`, no trailer; 8 files.
+Their checks: `test_rules`, `test_combat`, `test_game`, `test_protocol` green; full build rc 0, ctest's five failures (test_mpq, smoke_d2d, pad_use_d2d, quests_act1/4) identical on upstream d0ea14b7: unchanged; `pr_guard.py` 0 FAIL 0 WARN; `presubmit.py --quick` 0 FAIL (1 WARN: build skipped by --quick, done by hand). 6 commits authored by the user, body `Agent: Claude Code`, no trailer; 8 files.
 
 **Commands (reviewer re-runs on their copy).**
 
