@@ -21,10 +21,10 @@ gates:
   - "live proof: debug goto then Fighter.Clear without a warm-up walk (docs/fixmisc.md)"
 merge:
 result: ""
-live: ""
+live: "DRILLS6 2026-10-31: D-sync PASS x3 (first Fighter.Clear after debug goto, no warm-up walk: 3 of 3 zombies killed, 0 unreachable lines); town portal and waypoint arrivals not run"
 ```
 
 - [x] 1.1 F3 decided from code: intended (potion.go doc comment, existing policy tests), pinned by a test
 - [x] 1.2 F4 root cause: PathTo is pure planning, the tracker was never updated after the jump; Navigator.Sync plus Syncer in Clear/Kill
 - [x] 1.3 tests for same-level jump, level-change jump (portal/waypoint arrival), loading then ready (restart)
-- [ ] 1.4 live proof: drill rerun after merge (not run here)
+- [x] 1.4 live proof: D-sync PASS x3 (DRILLS6)

@@ -1,0 +1,7 @@
+DRILL D2.d P10 PASS 2 clicks, 1 scrolls left, one portal | intended: the click is dropped (source unchanged), the retry opens the portal with the same scroll | observed: verb: ok, 2 right clicks, 102 ticks; scrolls left 1, portal objects near 1 any 1; lines: d2d portal: click without a portal item=6 class=529 portalObjNear=0 portalObjAny=0 sourceSpent=false // d2d town portal attempt failed try=1 err=d2d portal: no object after the click, the click was dropped (source unchanged) | runs: 2, identical
+DRILL D2.d3 P10 PASS 2 clicks, 0 scrolls left, one portal | intended: the hit cuts the cast (scroll spent, no portal), the retry opens the portal with the next scroll | observed: verb: ok, 2 right clicks, 105 ticks; scrolls left 0, portal objects near 1 any 1; lines: d2d portal: click without a portal item=10 class=529 portalObjNear=0 portalObjAny=1 sourceSpent=true // d2d town portal attempt failed try=1 err=d2d portal: no object after the click, the cast was cut (source spent) | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D2.d      P10   PASS     same 2 clicks, 1 scrolls left, one portal
+D2.d3     P10   PASS     same 2 clicks, 0 scrolls left, one portal
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give tsc, debug goto 2, debug hit 5

@@ -30,4 +30,4 @@ result: "offline only: not verified live; the card stays open at merge until the
 - [x] 1.2 B2: run observables in the minute line (RunInfo, LogKV)
 - [x] 1.3 B3: stall wait analysed, left unchanged, test pins it
 - [x] 1.4 docs/fixrun.md, primitives row note, BACKLOG, INDEX, CHANGELOG
-- [ ] 1.5 live proof (DRILLS lane)
+- [x] 1.5 live proof: D-run PASS x3 (DRILLS6)

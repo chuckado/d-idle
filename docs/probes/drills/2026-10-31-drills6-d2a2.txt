@@ -1,0 +1,5 @@
+DRILL D2.a2 P10 PASS observed [8 8 8] ticks vs the trace's about 7 | intended: d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0 | observed: ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair) | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D2.a2     P10   PASS     same observed [8 8 8] ticks vs the trace's about 7
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give tsc, debug goto 2
