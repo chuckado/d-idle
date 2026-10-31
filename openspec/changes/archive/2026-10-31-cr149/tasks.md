@@ -13,7 +13,7 @@ exclusive:
   - upstream-pr:tome
 gates:
   - "pr_guard 0 FAIL 0 WARN, upstream tests, both oracles unchanged before the push"
-merge: PENDING
+merge: c0ae733
 result: pushed c8a9dca8, 6a98903a, 0dc3e0d3 to the fork branch, two thread replies posted; pr_guard 0/0, presubmit --quick 0 FAIL, oracles 0 mismatches; verified on the worker host, no game
 ```
 
