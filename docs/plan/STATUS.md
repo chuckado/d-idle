@@ -38,7 +38,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [cr152](../../openspec/changes/cr152/) | in-progress | cr152 | `docs/research/pr-price-evidence-pack.md` | `upstream-pr:price` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -75,7 +74,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 17 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change cr152: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -115,6 +113,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- e68fd9d 10-31 17:05 `Merge agent/cr152: CodeRabbit round 1 follow-up on PR #152` (cr152)
 - ff19642 10-31 16:51 `Merge agent/mapitem: contiguous map (item 13)` (mapitem)
 - 7d960f0 10-31 16:44 `Merge agent/openprice: log upstream price PR #152` (openprice)
 - 43d5b0c 10-31 16:42 `Merge agent/pricepr: price PR proof, draft, evidence pack` (pricepr)
@@ -124,5 +123,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7261d23 10-31 16:24 `Merge agent/fixnav: cave-mouth bounce turn, navigator-touched waypoints handed off, known town waypoints` (fix-nav)
 - 89bbc39 10-31 16:16 `Merge agent/fixbelt2: no belt column is no room; PlaceFor/WillBeltFor keep planned kinds a column` (fix-belt2)
 - cc68b7a 10-31 16:13 `Merge agent/readme: README rewrite, d.idle name restyle` (readme)
-- 8a1cf68 10-31 16:08 `Merge agent/fixmissile2: d2d missile state source matches the real debug missiles verb` (fix-missile2)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: cr152
-status: in-progress
+status: archived
 agent: cr152
 branch: agent/cr152
 worktree: ~/code/d2lod-wt/cr152
@@ -12,7 +12,7 @@ exclusive:
   - upstream-pr:price
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-merge:
+merge: e68fd9d0
 result: "70e54f57 pushed to PR #152 branch; two threads answered; not verified live (no game involved)"
 live: ""
 ```
