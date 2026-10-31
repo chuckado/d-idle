@@ -1,4 +1,4 @@
-# d2lod-bot (D.idle)
+# d2lod-bot (d.idle)
 
 > DRAFT public README (agent PUBLICPREP, 2026-10-30). Lives under docs/research/ until the user approves it for the repo root.
 > Nothing below names private machines; the public URL placeholders are marked `<...>`.
@@ -6,7 +6,7 @@
 A bot that plays one character of classic **Diablo II: Lord of Destruction 1.14d**, offline single player, on a game you own
 and run yourself. Written in Go (standard library only). It reads the game's memory, decides what to do (level, quest, farm,
 shop, survive), and sends ordinary mouse and keyboard input. The idle-game layer on top of it (upgrades, prestige, a public
-status page and stream) is called **D.idle**; it is parked until the bot plays well.
+status page and stream) is called **d.idle**; it is parked until the bot plays well.
 
 ## Status
 

@@ -1,4 +1,4 @@
-# Quickstart: run D.idle on your own machine (agent USERDOC, 2026-10-29)
+# Quickstart: run d.idle on your own machine (agent USERDOC, 2026-10-29)
 
 > status: STALE for the Wine path: user docs written before the container/d2d decision; steps unproven on a stranger machine. Wine container work is PAUSED (docs/decisions.md); d2d is the primary backend (ADR 0009, 2026-10-30), see docs/d2d-container/ and docs/d2d-backend.md.
 

@@ -11,7 +11,7 @@
   <Support/>
   <Project/>
   <ReadMe/>
-  <Overview>D.idle: idle bot for classic Diablo II LoD 1.14d under Wine (offline, single player). Web UI = setup wizard and fleet dashboard; the token is in /data/token.</Overview>
+  <Overview>d.idle: idle bot for classic Diablo II LoD 1.14d under Wine (offline, single player). Web UI = setup wizard and fleet dashboard; the token is in /data/token.</Overview>
   <Category>Other:</Category>
   <WebUI>http://[IP]:[PORT:8431]/</WebUI>
   <TemplateURL/>

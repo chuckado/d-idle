@@ -1,6 +1,6 @@
 # docs/: where to start
 
-d2lod-bot (D.idle) is a Go bot for Diablo II LoD 1.14d. d2d (a lockstep fork of psi29a/d2decomped) is the primary backend ([ADR 0009](adr/0009-d2d-primary-backend.md)); the Game.exe path is frozen and stays the acceptance reference.
+d2lod-bot (d.idle) is a Go bot for Diablo II LoD 1.14d. d2d (a lockstep fork of psi29a/d2decomped) is the primary backend ([ADR 0009](adr/0009-d2d-primary-backend.md)); the Game.exe path is frozen and stays the acceptance reference.
 
 ## Reading order (same as [../AGENTS.md](../AGENTS.md))
 1. [../openspec/README.md](../openspec/README.md): how jobs (change cards) and contracts (specs) are written.

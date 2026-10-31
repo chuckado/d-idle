@@ -20,7 +20,7 @@ function h(tag, props, ...kids) {
 const clear = (el) => { while (el.firstChild) el.removeChild(el.firstChild); };
 
 const FRIENDLY = {
-  'data-dir': 'Pick a folder for D.idle',
+  'data-dir': 'Pick a folder for d.idle',
   'sources': 'Find your game files',
   'prefix': 'Prepare the game environment',
   'install-d2': 'Install Diablo II',
@@ -44,7 +44,7 @@ const WORKING = {
 const MODES = [
   { id: 'installer-dirs', title: 'I have the Diablo II installer folders', sub: 'Folders you downloaded or copied from your discs, one for the base game and one for Lord of Destruction.' },
   { id: 'stubs', title: 'I have the Blizzard downloader programs', sub: 'The small setup programs from your Blizzard account. They run in the game environment and download from Blizzard.' },
-  { id: 'game-dir', title: 'Diablo II is already installed on this computer', sub: 'D.idle copies your existing install into its own folder. Your original is not changed.' },
+  { id: 'game-dir', title: 'Diablo II is already installed on this computer', sub: 'd.idle copies your existing install into its own folder. Your original is not changed.' },
 ];
 const CLASSES = ['sorceress', 'paladin', 'necromancer', 'amazon', 'barbarian', 'druid', 'assassin'];
 
@@ -57,7 +57,7 @@ let form = { mode: '', dataDir: '', installerD2Dir: '', installerLoDDir: '', stu
 // Goal presets, sent as "goals" (fleet.Spec.GoalsArg translates kind:value into the d2bot --goals syntax).
 // Handicap names are bot.Profiles() and go in "profile" (fleet.Spec.Profile).
 const HANDICAPS = [['', 'Optimal (default)'], ['relaxed', 'Relaxed'], ['casual', 'Casual'], ['sloppy', 'Sloppy'], ['rookie', 'Rookie']];
-const GOAL_PRESETS = [['', 'Let D.idle decide (default)'], ['campaign:normal_act1', 'Campaign: Normal, Act 1'], ['campaign:normal_act2', 'Campaign: Normal, Act 2 only'], ['campaign:normal_all', 'Campaign: every Normal act'], ['levelto', 'Level up to a level'], ['farm', 'Farm an area']];
+const GOAL_PRESETS = [['', 'Let d.idle decide (default)'], ['campaign:normal_act1', 'Campaign: Normal, Act 1'], ['campaign:normal_act2', 'Campaign: Normal, Act 2 only'], ['campaign:normal_all', 'Campaign: every Normal act'], ['levelto', 'Level up to a level'], ['farm', 'Farm an area']];
 function goalsValue(f) {
   if (f.pKind === 'levelto') { const n = parseInt(f.pLevel, 10); return n >= 2 && n <= 99 ? 'levelto:' + n : null; }
   if (f.pKind === 'farm') { const a = (f.pFarm || '').trim(); return /^[A-Za-z0-9_.-]{1,40}$/.test(a) ? 'farm:' + a : null; }
@@ -77,7 +77,7 @@ async function api(method, path, body) {
     return { ok: r.ok, status: r.status, data };
   } catch (e) {
     offline = true;
-    return { ok: false, status: 0, data: { error: 'Cannot reach D.idle. Is it still running? This page will keep trying.' } };
+    return { ok: false, status: 0, data: { error: 'Cannot reach d.idle. Is it still running? This page will keep trying.' } };
   }
 }
 
@@ -178,7 +178,7 @@ async function submitSources(ev) {
   ev.preventDefault();
   const f = form, e = {};
   const m = f.mode;
-  e.dataDir = pathProblem(f.dataDir, 'a folder for D.idle to keep its files', true);
+  e.dataDir = pathProblem(f.dataDir, 'a folder for d.idle to keep its files', true);
   if (m === 'installer-dirs') { e.installerD2Dir = pathProblem(f.installerD2Dir, 'the Diablo II installer folder', true); e.installerLoDDir = pathProblem(f.installerLoDDir, 'the Lord of Destruction installer folder', true); }
   if (m === 'stubs') { e.stubD2 = pathProblem(f.stubD2, 'the Diablo II downloader program', true); e.stubLoD = pathProblem(f.stubLoD, 'the Lord of Destruction downloader program', true); }
   if (m === 'game-dir') e.gameDirSrc = pathProblem(f.gameDirSrc, 'your Diablo II folder', true);
@@ -299,11 +299,11 @@ function topErr() { return formErr._top ? h('div', { class: 'wz-note bad', role:
 
 function screenWelcome() {
   return h('section', { class: 'wz-card', 'aria-labelledby': 'wz-h' },
-    h('h2', { id: 'wz-h' }, 'Let\u2019s get D.idle ready'),
-    h('p', { class: 'wz-lead' }, 'D.idle plays your own copy of Diablo II while you do something else. Setup takes about 20 minutes, and most of that is waiting. You make a few choices and the rest happens by itself.'),
+    h('h2', { id: 'wz-h' }, 'Let\u2019s get d.idle ready'),
+    h('p', { class: 'wz-lead' }, 'd.idle plays your own copy of Diablo II while you do something else. Setup takes about 20 minutes, and most of that is waiting. You make a few choices and the rest happens by itself.'),
     h('div', { class: 'wz-note' }, h('strong', null, 'What you need'),
       'Your own Diablo II and Lord of Destruction files (an installer folder, or an existing install), the 1.14d patch file, and your CD keys on hand for the game\u2019s installer.'),
-    h('div', { class: 'wz-note' }, h('strong', null, 'About your CD key'), NOKEY + ' D.idle does not download or include any game files.'),
+    h('div', { class: 'wz-note' }, h('strong', null, 'About your CD key'), NOKEY + ' d.idle does not download or include any game files.'),
     h('p', null, 'First, a quick look at this computer to catch problems early.'),
     h('div', { class: 'wz-actions' },
       h('button', { class: 'btn primary big', type: 'button', onclick: () => go('checks') }, 'Check my computer'),
@@ -349,17 +349,17 @@ function screenSources() {
   if (m === 'stubs') paths.push(
     fieldPath('stubD2', 'Diablo II downloader program', 'The small setup program you got from Blizzard for the base game.', '/home/you/Downloads/Diablo-II-Setup.exe'),
     fieldPath('stubLoD', 'Lord of Destruction downloader program', 'The one for the expansion.', '/home/you/Downloads/Diablo-II-LoD-Setup.exe'));
-  if (m === 'game-dir') paths.push(fieldPath('gameDirSrc', 'Your Diablo II folder', 'The folder that contains Game.exe. D.idle copies it and leaves yours alone.', '/home/you/Games/Diablo II'));
+  if (m === 'game-dir') paths.push(fieldPath('gameDirSrc', 'Your Diablo II folder', 'The folder that contains Game.exe. d.idle copies it and leaves yours alone.', '/home/you/Games/Diablo II'));
   paths.push(fieldPath('patchFile', m === 'game-dir' ? 'The 1.14d patch file (optional)' : 'The 1.14d patch file',
-    m === 'game-dir' ? 'Only needed if your install is not already version 1.14d. Usually named LODPatch_114d.exe.' : 'Usually named LODPatch_114d.exe. You supply it. D.idle never downloads it.', '/home/you/Downloads/LODPatch_114d.exe'));
+    m === 'game-dir' ? 'Only needed if your install is not already version 1.14d. Usually named LODPatch_114d.exe.' : 'Usually named LODPatch_114d.exe. You supply it. d.idle never downloads it.', '/home/you/Downloads/LODPatch_114d.exe'));
   const slotErr = formErr.slots;
   return h('section', { class: 'wz-card', 'aria-labelledby': 'wz-h' },
-    h('h2', { id: 'wz-h' }, 'Point D.idle at your game files'),
-    h('p', null, 'Type the full path of each folder, or paste it from your file manager. D.idle checks everything before it changes anything.'),
+    h('h2', { id: 'wz-h' }, 'Point d.idle at your game files'),
+    h('p', null, 'Type the full path of each folder, or paste it from your file manager. d.idle checks everything before it changes anything.'),
     topErr(),
-    failed ? h('div', { class: 'wz-note bad', role: 'alert' }, h('strong', null, 'D.idle could not use those files'), failed.error || 'Check the paths below and try again.') : null,
+    failed ? h('div', { class: 'wz-note bad', role: 'alert' }, h('strong', null, 'd.idle could not use those files'), failed.error || 'Check the paths below and try again.') : null,
     h('form', { id: 'wz-form', novalidate: true, onsubmit: submitSources, style: 'display:grid;gap:18px' },
-      fieldPath('dataDir', 'Where should D.idle keep its files?', 'A folder on a local disk with at least 10 GB free. It is created if it does not exist.', '/home/you/d2idle'),
+      fieldPath('dataDir', 'Where should d.idle keep its files?', 'A folder on a local disk with at least 10 GB free. It is created if it does not exist.', '/home/you/d2idle'),
       modeBox,
       h('div', { class: 'wz-paths' }, paths),
       h('div', { class: 'wz-note' }, h('strong', null, 'No CD key here'), NOKEY),
@@ -376,8 +376,8 @@ function screenSources() {
 
 function instructions(id) {
   const first = id === 'install-d2' ? 'Diablo II' : id === 'install-lod' ? 'Lord of Destruction' : '';
-  if (id === 'patch') return ['Open the patcher window (see below).', 'Click the patch button and wait until it says it is finished.', 'Close the patcher if it stays open. D.idle notices on its own and moves on.'];
-  return ['Open the installer window (see below).', 'Click through the ' + first + ' installer as you normally would.', 'When the installer asks for a CD key, type it there. It is the game\u2019s own screen, and D.idle never sees it.', 'When the installer finishes, come back here. This page continues by itself.'];
+  if (id === 'patch') return ['Open the patcher window (see below).', 'Click the patch button and wait until it says it is finished.', 'Close the patcher if it stays open. d.idle notices on its own and moves on.'];
+  return ['Open the installer window (see below).', 'Click through the ' + first + ' installer as you normally would.', 'When the installer asks for a CD key, type it there. It is the game\u2019s own screen, and d.idle never sees it.', 'When the installer finishes, come back here. This page continues by itself.'];
 }
 function displayHint() {
   const d = S && S.display;
@@ -431,7 +431,7 @@ function logBox() {
 function resetBox() {
   if (S.running) return null;
   return confirmReset
-    ? h('div', { class: 'wz-note warn' }, h('strong', null, 'Start over from the beginning?'), 'D.idle forgets which steps are done. Your game files are not deleted.',
+    ? h('div', { class: 'wz-note warn' }, h('strong', null, 'Start over from the beginning?'), 'd.idle forgets which steps are done. Your game files are not deleted.',
         h('div', { class: 'wz-actions' }, h('button', { class: 'btn danger', type: 'button', onclick: startOver }, 'Yes, start over'), h('button', { class: 'btn', type: 'button', onclick: () => { confirmReset = false; render(true); } }, 'Keep my progress')))
     : h('div', null, h('button', { class: 'btn ghost small', type: 'button', onclick: () => { confirmReset = true; render(true); } }, 'Start over'));
 }
@@ -441,7 +441,7 @@ function screenCharacter() {
   const e = formErr.charName;
   return h('section', { class: 'wz-card', 'aria-labelledby': 'wz-h' },
     h('h2', { id: 'wz-h' }, 'Create your first test character'),
-    h('p', { class: 'wz-lead' }, 'Everything is installed. The last step makes a throwaway character so D.idle can prove that it can play your game.'),
+    h('p', { class: 'wz-lead' }, 'Everything is installed. The last step makes a throwaway character so d.idle can prove that it can play your game.'),
     h('p', null, 'It is a normal softcore Expansion character on Normal difficulty. The game opens in a hidden window for about a minute and closes again. You can delete this character later.'),
     topErr(),
     h('form', { id: 'wz-char', novalidate: true, onsubmit: submitCharacter, style: 'display:grid;gap:16px;max-width:26rem' },
@@ -474,7 +474,7 @@ function screenDone() {
     h('div', { class: 'wz-done-mark', 'aria-hidden': 'true' }, '\u2713'),
     h('h2', { id: 'wz-h' }, 'You are all set'),
     h('p', { class: 'wz-lead' }, 'Diablo II is installed and updated to 1.14d, the game data is read, and your test character ' + (i.charName ? i.charName + ' ' : '') + 'is ready.'),
-    h('p', null, 'Open the dashboard to give D.idle its first goal.'),
+    h('p', null, 'Open the dashboard to give d.idle its first goal.'),
     h('div', { class: 'wz-actions' }, h('a', { class: 'btn primary big', href: 'index.html' }, 'Open the dashboard'),
       h('button', { class: 'btn ghost', type: 'button', onclick: () => { checks = null; go('checks'); } }, 'Check my computer again')),
     logBox());
@@ -485,7 +485,7 @@ function render(force) {
   const main = $('wz-main');
   if (!S) {
     if (!main.firstChild) main.append(h('section', { class: 'wz-card' }, h('div', { class: 'wz-run', role: 'status' }, h('span', { class: 'spin', 'aria-hidden': 'true' }), h('span', null, 'Loading setup\u2026'))));
-    if (offline) { clear(main); main.append(h('section', { class: 'wz-card' }, h('div', { class: 'wz-note bad', role: 'alert' }, h('strong', null, 'Cannot reach D.idle'), 'The setup server is not answering. Make sure D.idle is running. This page keeps trying.'))); }
+    if (offline) { clear(main); main.append(h('section', { class: 'wz-card' }, h('div', { class: 'wz-note bad', role: 'alert' }, h('strong', null, 'Cannot reach d.idle'), 'The setup server is not answering. Make sure d.idle is running. This page keeps trying.'))); }
     return;
   }
   const next = pickScreen();
@@ -504,7 +504,7 @@ function render(force) {
   const active = document.activeElement && document.activeElement.id;
   const view = { welcome: screenWelcome, checks: screenChecks, sources: screenSources, progress: screenProgress, character: screenCharacter, done: screenDone }[screen]();
   clear(main);
-  if (offline) main.append(h('div', { class: 'wz-note warn', role: 'alert' }, h('strong', null, 'Lost contact with D.idle'), 'Trying again every few seconds. What you see may be out of date.'));
+  if (offline) main.append(h('div', { class: 'wz-note warn', role: 'alert' }, h('strong', null, 'Lost contact with d.idle'), 'Trying again every few seconds. What you see may be out of date.'));
   main.append(view);
   const lg = $('wz-log'); if (lg) lg.scrollTop = lg.scrollHeight;
   if (changedScreen) { if (!['sources', 'character'].includes(screen) || !formErr._top) main.focus({ preventScroll: false }); window.scrollTo(0, 0); }

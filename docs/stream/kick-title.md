@@ -28,7 +28,7 @@ in kick-api.md; first real run may need small adjustments, e.g. whether the cate
    ```
 6. Test with a real title, then enable:
    ```
-   python3 tools/kick/kick_title.py set "D.idle: test title"
+   python3 tools/kick/kick_title.py set "d.idle: test title"
    ```
    Edit `~/.config/d2idle/kick.json`: `"enabled": true`.
 
@@ -42,7 +42,7 @@ use the Developer tab.
 | enabled | false | `set_title` returns `skipped` until true (the CLI `set` ignores it) |
 | category_name | "Diablo II" | searched by exact case-insensitive name; ambiguous or no match fails with the candidate list |
 | category_id | null | if set, used directly (no search); `kick_title.py choose` writes it |
-| title_template | `D.idle: {name}, {class} {lvl}, {goal}` | fields: name, class, level, lvl (`lvl 12`), goal; empty fields vanish cleanly |
+| title_template | `d.idle: {name}, {class} {lvl}, {goal}` | fields: name, class, level, lvl (`lvl 12`), goal; empty fields vanish cleanly |
 | max_title | 100 | U: Kick publishes no limit |
 | port | 8765 | login callback port |
 | api_base / id_base | Kick hosts | only for tests |
@@ -77,7 +77,7 @@ attempts) and must never gate going live. Re-send on level/act change at most ev
   `error` code are used. The authorize URL printed at login contains the public client id, state and PKCE challenge only.
 - Public safety: `build_title` accepts only a letters-only name, a known class, level 1..99, a goal of plain words (ids like `i3`,
   paths, hostnames, tokens dropped) and runs the result through `tools/publish/sanitize.py`; on any hit it falls back to
-  `D.idle: playing Diablo II`. `set_title` re-checks and refuses titles the sanitizer flags.
+  `d.idle: playing Diablo II`. `set_title` re-checks and refuses titles the sanitizer flags.
 
 ## Tests
 

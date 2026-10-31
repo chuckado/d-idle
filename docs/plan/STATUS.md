@@ -49,6 +49,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-price](../../openspec/changes/fix-price/) | in-progress | fixprice | `internal/data/price.go`<br>`internal/data/price_test.go`<br>`internal/town/chores.go`<br>`internal/town/stashfull.go`<br>`internal/town/shop.go`<br>`internal/town/fixprice_test.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/valuables.go`<br>`internal/loot/fixprice_test.go`<br>`internal/leveler/score.go`<br>`internal/leveler/shop.go`<br>`internal/leveler/shopkit_test.go`<br>`internal/leveler/fixprice_test.go`<br>`internal/resource/potion.go`<br>`internal/resource/fixprice_test.go`<br>`internal/town/stash.go`<br>`docs/fixprice.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
+| [readme](../../openspec/changes/readme/) | in-progress | readme | `README.md`<br>`docs/README.md`<br>`GLOSSARY.md`<br>`CHANGELOG.md`<br>`deploy/nas/my-d2idle.xml`<br>`docs/d2d-container/README.md`<br>`docs/d2d-container/my-d2dbot.xml.draft`<br>`docs/d2d-container/gpl.md`<br>`docs/quickstart.md`<br>`docs/troubleshooting.md`<br>`docs/research/README-public-draft.md`<br>`docs/stream/kick-api.md`<br>`docs/stream/kick-title.md`<br>`web/setup.js`<br>`openspec/changes/readme/**` | - |
 | [waits-audit](../../openspec/changes/waits-audit/) | in-progress | waitsaudit | `internal/d2dctl/town_verbs.go`<br>`internal/d2dctl/waits_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/waits.go`<br>`internal/d2denv/waits_test.go`<br>`cmd/d2dshop/main.go`<br>`docs/probes/waits-audit.md` | - |
 
 ### Gates
@@ -94,10 +95,12 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
+- change readme: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change waits-audit: go vet ./... and go test -short -count=1 ./... plus go test -race on d2dctl, d2denv, cmd/d2dshop pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 8e3c8d6 10-31 16:04 `Merge agent/soakpost: post-fix soak 1 report; archive postfixsoak1` (postfixsoak1)
 - f183b68 10-31 16:00 `Merge agent/forkcheats3: debug missiles documented` (forkcheats3)
 - 77188c0 10-31 15:32 `Merge agent/fixmissile: d2d missile listing, CastGapMs 650` (fix-missile)
 - 288ade1 10-31 15:26 `Merge agent/decompmon: monster attack trace` (decompmon)
@@ -107,5 +110,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 47ee3cc 10-31 15:05 `Merge agent/bundleclick: shift-click claim bundled into upstream PR 149` (bundleclick)
 - c43dd3b 10-31 15:00 `Merge agent/fixprice: bot prices follow game.exe` (fix-price)
 - 89b28fe 10-31 14:56 `Merge agent/decomprepair: sync origin/main into fixprice` (decomprepair)
-- 90101b4 10-31 14:51 `Merge agent/decomprepair: price trace (repair, sell, buy, gold caps)` (decomprepair)
 <!-- statusgen:end -->

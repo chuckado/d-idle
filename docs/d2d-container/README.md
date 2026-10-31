@@ -49,7 +49,7 @@ Follows `deploy/nas/my-d2idle.xml`; apply later through `tpl-apply.sh` so the co
   <Repository>d2dbot:dev</Repository>
   <Network>bridge</Network>
   <Privileged>false</Privileged>
-  <Overview>D.idle on d2d: idle bot for classic Diablo II LoD 1.14d, headless and offline. Needs your own game MPQs in /game.</Overview>
+  <Overview>d.idle on d2d: idle bot for classic Diablo II LoD 1.14d, headless and offline. Needs your own game MPQs in /game.</Overview>
   <ExtraParams>--memory=3g --cpus=2 --stop-timeout 45 --cap-drop=ALL --security-opt=no-new-privileges:true --init</ExtraParams>
   <Config Name="Data" Target="/data" Default="/mnt/user/appdata/d2dbot/data" Mode="rw" Type="Path" Display="always">/mnt/user/appdata/d2dbot/data</Config>
   <Config Name="Game data (read-only)" Target="/game" Default="/mnt/user/appdata/d2dbot/game" Mode="ro" Type="Path" Display="always">/mnt/user/appdata/d2dbot/game</Config>

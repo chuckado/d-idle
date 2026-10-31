@@ -13,7 +13,7 @@
   <Support/>
   <Project/>
   <ReadMe/>
-  <Overview>D.idle on d2d: idle bot for classic Diablo II LoD 1.14d on the open-source d2d engine (headless, offline, single player). Web UI = dashboard and setup; the token is in /data/token. Needs your own game MPQs in /game.</Overview>
+  <Overview>d.idle on d2d: idle bot for classic Diablo II LoD 1.14d on the open-source d2d engine (headless, offline, single player). Web UI = dashboard and setup; the token is in /data/token. Needs your own game MPQs in /game.</Overview>
   <Category>Other:</Category>
   <WebUI>http://[IP]:[PORT:8431]/</WebUI>
   <TemplateURL/>
