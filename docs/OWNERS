@@ -87,3 +87,5 @@ internal/combat/castfirst_test.go  fixmissile  fix-missile
 internal/combat/dodge_test.go  fixmissile2  fix-missile2
 docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile2  fix-missile2
+docs/community/discord/**  discord  discord
+tools/discord/**  discord  discord

@@ -9,6 +9,8 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- Discord drafts (research plus tooling, nothing created or posted): `docs/community/discord/` (plan, layout and `server.json`, rules, welcome, FAQ, templates, feeds, public-page proposal, maintainer message draft) and `tools/discord/` (`notify.py` webhook notifier with a fail-closed sanitizer, `apply_server.py` dry-run-by-default server setup). Offline-tested against local mock servers (agent/discord).
+
 - Container dashboard: fleet slots are server instances (fixes 'No Instances' on the NAS), per-slot reverse proxy to the current d2bot address, real fleet status from the bots, per-slot view-only game video (`/api/v1/instances/{id}/viewport/stream`, `xwd` capture, no new package) and a Game view card with reconnect. Offline-tested (agent/fleetview).
 
 - Container soak: `d2soak sidecar` (D2FLEET_SOAK=1) judges each fleet slot inside the d2idle container; `tools/soak/contsoak.sh`, docs/nas-container.md. Offline-tested.

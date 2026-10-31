@@ -1,0 +1,190 @@
+{
+ "schema": 1,
+ "name": "d.idle",
+ "settings": {
+  "verification_level": 2,
+  "explicit_content_filter": 2,
+  "default_message_notifications": 1,
+  "everyone_permissions": [
+   "view_channel",
+   "read_message_history",
+   "send_messages",
+   "send_messages_in_threads",
+   "embed_links",
+   "attach_files",
+   "add_reactions"
+  ]
+ },
+ "roles": [
+  {
+   "name": "owner",
+   "color": "#8B1A1A",
+   "hoist": true,
+   "mentionable": false,
+   "permissions": [
+    "administrator"
+   ]
+  },
+  {
+   "name": "contributor",
+   "color": "#C8943A",
+   "hoist": true,
+   "mentionable": true,
+   "permissions": [
+    "create_public_threads",
+    "use_external_emojis",
+    "manage_threads"
+   ]
+  },
+  {
+   "name": "member",
+   "color": "#6B7280",
+   "hoist": false,
+   "mentionable": false,
+   "permissions": [
+    "create_public_threads",
+    "use_external_emojis"
+   ]
+  }
+ ],
+ "categories": [
+  {
+   "name": "WELCOME",
+   "channels": [
+    {
+     "name": "welcome",
+     "type": "text",
+     "topic": "What d.idle is and where to start. Read-only.",
+     "slowmode": 0,
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "deny": [
+        "send_messages",
+        "send_messages_in_threads",
+        "create_public_threads"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "rules",
+     "type": "text",
+     "topic": "Server rules. Read before posting.",
+     "slowmode": 0,
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "deny": [
+        "send_messages",
+        "send_messages_in_threads",
+        "create_public_threads"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "announcements",
+     "type": "text",
+     "topic": "Releases and project news. Read-only.",
+     "slowmode": 0,
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "deny": [
+        "send_messages",
+        "send_messages_in_threads",
+        "create_public_threads"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "name": "PROJECT",
+   "channels": [
+    {
+     "name": "progress",
+     "type": "text",
+     "topic": "Automated feed: releases, merged PRs, CI, soak summaries. Read-only.",
+     "slowmode": 0,
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "deny": [
+        "send_messages",
+        "send_messages_in_threads",
+        "create_public_threads"
+       ]
+      }
+     ]
+    },
+    {
+     "name": "dev",
+     "type": "text",
+     "topic": "Code, specs, design and contributor chat. Tag claims verified or unverified.",
+     "slowmode": 0,
+     "overwrites": []
+    },
+    {
+     "name": "d2d-upstream",
+     "type": "text",
+     "topic": "Our work around d2d, the open-source engine we run on. Be kind to its maintainer.",
+     "slowmode": 10,
+     "overwrites": []
+    }
+   ]
+  },
+  {
+   "name": "HELP",
+   "channels": [
+    {
+     "name": "help",
+     "type": "text",
+     "topic": "Running the bot yourself? Ask here. Pinned template, scrub paths and names.",
+     "slowmode": 10,
+     "overwrites": []
+    },
+    {
+     "name": "bug-reports",
+     "type": "text",
+     "topic": "One bug per thread. Use the pinned template.",
+     "slowmode": 60,
+     "overwrites": []
+    }
+   ]
+  },
+  {
+   "name": "COMMUNITY",
+   "channels": [
+    {
+     "name": "general",
+     "type": "text",
+     "topic": "Chat about d.idle and idle or bot-played Diablo II. Offline single-player only.",
+     "slowmode": 5,
+     "overwrites": []
+    },
+    {
+     "name": "show-your-runs",
+     "type": "text",
+     "topic": "Share a run: class, build, hours, deaths, how measured.",
+     "slowmode": 60,
+     "overwrites": []
+    }
+   ]
+  },
+  {
+   "name": "STREAM",
+   "channels": [
+    {
+     "name": "stream",
+     "type": "text",
+     "topic": "Stream notices and chat about the d.idle stream.",
+     "slowmode": 5,
+     "overwrites": []
+    }
+   ]
+  }
+ ]
+}
