@@ -111,3 +111,5 @@ Disagreement or correction (SME vs us or code): (1) SME says the game auto-belts
 
 ## Proposed drill order (m1-liveproof)
 D0 harness + P35 gate, then D1 belt (P1 P2 P3 P7), D2 portals and town entry (P10 P11 P12 P14 P23), D3 vendor and gold (P15 P16 P17 P13 P5 P8), D4 pack (P4 P9 P6), D5 combat (P26 P27 P28 P29), D6 movement (P22 P24 P25), D7 build (P30 P31 P32), D8 NPC (P18 P20 P21 P19), D9 lifecycle (P33 P34 P36 re-gate).
+
+fixstall (2026-10-31, offline, not live): H.pause F1 (NPC approach stall: early stall detection, distance-sized game-time budget) and D6.d F2 (a plain GoTo stalled in a pocket escapes by town portal, P25) fixed in code; proof = rerun H.pause and D6.d; docs/fixstall.md.

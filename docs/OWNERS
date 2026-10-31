@@ -116,3 +116,6 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+internal/d2dctl/fixstall_test.go  fixstall  fixstall
+internal/nav/pinned_test.go  fixstall  fixstall
+docs/fixstall.md  fixstall  fixstall
