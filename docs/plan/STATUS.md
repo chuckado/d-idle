@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [cr153](../../openspec/changes/cr153/) | in-progress | cr153 | `openspec/changes/cr153/**`<br>`docs/research/pr-wp-evidence-pack.md` | `upstream-pr:waypoint` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -65,6 +66,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change cr153: go run ./cmd/changecheck status -cli: 0 warnings
+- change cr153: leakcheck -mode fail: 0 hits
+- change cr153: tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -85,6 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- ed3836f 10-31 19:18 `Merge agent/decomppets: pets and merc decomp trace` (decomppets)
 - 2e04c06 10-31 19:13 `Merge agent/fixstall3: planAround clearance fallback, d2dtown.Input walking town, F12 log fields` (fixstall3)
 - 3e39c98 10-31 19:10 `Merge agent/drills7: drills7 findings F10-F12, harness fixes; archive drills7 and fix-portal2; backlog line` (drills7)
 - cb9d24a 10-31 19:07 `Merge agent/walkfix: walk-velocity v2 candidate docs and tooling` (walkfix)
@@ -94,5 +99,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 618295f 10-31 18:33 `Merge agent/fix153lint: record #153 clang-tidy fixup; archive card` (fix153lint)
 - 8bc55e2 10-31 18:27 `Merge agent/drills6: live drill rerun, findings F7-F9` (drills6)
 - f0c9f25 10-31 18:18 `Merge agent/decompstatic: Static Field and chill decomp, PR candidate docs` (decompstatic)
-- 0815238 10-31 18:10 `Merge agent/decompskillbind: decomp item 4, skill bind and cast trace` (decompskillbind)
 <!-- statusgen:end -->
