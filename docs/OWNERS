@@ -116,3 +116,7 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+openspec/changes/readmelink/**  readmelink  readmelink
+README.md  readmelink  readmelink
+docs/community/discord/plan.md  readmelink  readmelink
+docs/community/discord/public-page.md  readmelink  readmelink

@@ -1,6 +1,6 @@
 # d.idle Discord: plan
 
-> status: server BUILT 2026-10-31 (see Live state below); the invite, README line and public-page link are NOT done yet. Layout: [server.md](server.md); feeds: [feeds.md](feeds.md).
+> status: server BUILT 2026-10-31 (see Live state below); invite created and README line done (2026-10-31); the public-page link is NOT done yet. Layout: [server.md](server.md); feeds: [feeds.md](feeds.md).
 
 ## Purpose and audience
 A small, separate server named exactly `d.idle` (the project is styled d.idle everywhere; repo and directory names stay). Three audiences:
@@ -23,8 +23,8 @@ Remaining steps for the user, in order:
 2. Rules Screening (Server Settings, Community; text from [rules.md](rules.md)): the API gives HTTP 405.
 3. Onboarding (default channels only, no role questions).
 4. Give yourself the `owner` role (cosmetic: you are the server owner).
-5. Create the capped invite (no expiry, cap 100, temporary membership off).
-6. README line (below), then the public-page link ([public-page.md](public-page.md)).
+5. [x] Invite created: https://discord.gg/U2v9q4h5UH (public; capped at 100 uses, no expiry).
+6. [x] README line done; the public-page link still to do ([public-page.md](public-page.md)).
 
 ## Launch order
 1. Create the empty server by hand (name `d.idle`), enable Community, set verification and filter ([server.md](server.md)).
@@ -46,7 +46,7 @@ Done items are ticked (2026-10-31); the rest are the user's steps above or still
 - [x] Default notifications: mentions only. `@everyone` mention not granted to anyone but the owner.
 - [ ] Roles created (done); still to do: reorder, then check as in [roles.md](roles.md) section 6 (View Server As Role, test as a plain account); `@everyone` has no Create Invite.
 - [x] Slowmode set per channel; AutoMod rules for invites, mass mentions, spam and the Discord presets (links from new accounts: not a separate rule).
-- [ ] Invite: one link, no expiry, member cap (start 100, raise on purpose), temporary membership OFF. It will be public, so assume
+- [x] Invite (created 2026-10-31, cap 100 uses, no expiry; README line added): one link, no expiry, member cap (start 100, raise on purpose), temporary membership OFF. It will be public, so assume
       it leaks. Rotate or revoke: Server Settings, Invites, delete the link, create a new one, update README and page (one commit).
 - [ ] Moderator contact path stated in `#rules`; Developer Mode on (copy ids for reports); audit log checked after the first day.
 - [ ] Raid switch known: the runbook in [roles.md](roles.md) (verification up, pause invites, `@everyone` send to `member`, audit log, restore).
