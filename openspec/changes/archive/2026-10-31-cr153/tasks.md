@@ -2,7 +2,7 @@
 
 ```yaml
 change: cr153
-status: in-progress
+status: archived
 agent: cr153
 branch: agent/cr153
 worktree: ~/code/d2lod-wt/cr153
@@ -16,7 +16,7 @@ gates:
   - "go run ./cmd/changecheck status -cli: 0 warnings"
   - "leakcheck -mode fail: 0 hits"
   - "tools/openspec.sh validate --all --strict passes"
-merge:
+merge: "merged to main (agent/cr153)"
 result: "Fixup pushed to the upstream PR branch and each CodeRabbit inline thread answered (see the posted lines in the evidence pack). Verified on the worker host: the full 140,002-case single-player differential is 66,969 before and 0 after, output byte-identical to the earlier after run."
 ```
 
