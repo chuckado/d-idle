@@ -17,7 +17,7 @@ User go 2026-10-31: add whatever is needed for testing. Each verb below was exer
 | `debug belt clear` | DONE | 4 belt potions removed (`removed=4`), belt boxes empty in `dump items`. |
 | `debug unequip <slot\|belt>` | DONE | belt worn then removed, the second call errors; the item is gone (belt boxes stay: `belt clear` first). |
 | gold (`debug stat 14 N`) | exists already | confirmed in the README table (V live). |
-| `debug spawn` (a monster near the player) | NOT BUILT | no drill is blocked on it; `debug hit` covers the busy/hit-recovery drills. |
+| `debug spawn` (a monster near the player) | built in the second set (below) | |
 
 ## Regression of the harness on the new binary
 `d2drill` from main (repeat 1, same slot): D0 gives the expected P35 FAIL + recovery; D1 P7a P7 P1 P1s P2 P3 PASS and P3m BLOCKED (the drill still lacks a merc step); D2.a PASS (verb 32 ticks, one source spent). Nothing regressed.
@@ -33,3 +33,34 @@ User go 2026-10-31: add whatever is needed for testing. Each verb below was exer
 - `debug give <code> pack` skips the tome merge: a scroll given while a tome is in the pack stays a scroll.
 - `debug hit` also wears armour like a monster blow does (a roll), and always flinches unless it kills.
 - The merc verbs act on the lead player's merc; `merc hire` uses name 0 and experience 0 and replaces any merc present.
+
+# FORKCHEATS2: the second set (card forkcheats2, 2026-10-31)
+
+> status: current. User standing approval 2026-10-31: cheats or functionality may be added to the private fork when documented and vetted, and never reach an upstream pull request without the user's approval. Argument forms, rules and negative cases: docs/cheats.md section "d2d debug verbs".
+
+Same method as above: one hidden slot (lockstep, fresh throwaway Sorceress, `--no-save`), every call a ledgered `d2d-debug` cheat through `d2drill -probe`. Monsters are checked on Blood Moor (`debug goto 2`). State is read after `step 2`.
+
+| Verb | Verdict | Observed live |
+|---|---|---|
+| `debug spawn <monster> [n] [near] [champion\|unique [mods]]` | DONE | `spawn zombie1 2`: ids #17,#18 on a ring 3 cells from the player, both listed by `monsters` (mode WL, hp 11/11, level 1). `spawn fallen1 1 champion`: "Champion Fallen", boss column `champion`, mod 16, 15 hp; `spawn fallen1 1 unique 5 6`: a named unique with mods 5,6, 36 hp. After `step 200` the lockstep clock answered (tick 297) and the zombies had walked toward the player; `debug kill` then `step 60` left every spawned monster in DD with hp 0 (killable). In town: `err no monster level here`. Negative: unknown name and row 99999 `err no such monster`, `n 0` and `n 99` `err n 1..20`, a stray token `err unknown token bogus`. Not shown: a spawned monster hurting the player (zombies are slow; 200 ticks did not reach). |
+| `debug merc hurt <dmg>` | DONE (real path) | merc hired (`dump merc` life 40): `merc hurt 5` gave life 35, `dump merc` 35; `merc hurt 9999` gave mode DT, after 120 steps `dump merc` is `present:false, dead:true`. Negative: `0` and `abc` `err damage > 0`, no live merc (none hired, or already dead) `err no live merc`. |
+| `debug quest list\|set\|bit\|join` | DONE | fresh character: `list` empty. `set 2 0x0002` (Blood Raven record, bit 1 = reward pending): `list` prints `2 0x0002 act1 bits=1`, `dump quests` byte 2 = 2; `bit 6 1 on` then `off` toggled the Andariel record; `set 8 0x0001` writes an act 2 record. With record 2 at 0x0002 the player talked to Kashya (`cmd interact`): the record became 0x0001 (reward taken, done), so the quest machine reads the written bits as the game's own. Negative: record 99 `err quest 0..47`, flags 0x1ffff `err flags 0..0xffff`, bit 16 `err bit 0..15`, `join 9` `err act 1..5`, a missing or non numeric argument the usage line. Not shown live: the Den record 1 reward path through Akara (same code path, record 1 set to 0x0002 and listed). |
+| `debug give <code> <quality> [unid]` and `give pack\|belt ... q<n> [unid]` | DONE | `give cap pack q4 unid` into the pack: tooltip "Cap, Defense 4, Unidentified" (quality 4 in `items`); `q4` alone gives "Cap of Charged Bolt" identified; `give lea pack q6 unid`: an unidentified rare "Leather Armor"; `q4 l1` a magic cap at item level 1. On the ground `give cap 4` is already unidentified (the game's rule), `give cap 4 unid` the same, `give cap 0` a "Superior Cap" (quality by item level, identified), `give hp1 unid` an unidentified plain potion. Negative: `give cap 9` `err quality 0..8`, `pack q9` `err quality 1..8`, `pack bogus` `err unknown token bogus`, `belt` without a belt `err no belt box`. `debug unid` itself was not changed: it already unidentifies every pack item whatever its quality; what was missing was a magic or better item in the pack. |
+| `debug pin on [r]\|off\|status` | DONE | at 28,48 in Blood Moor: before, `blocked 28.9 48.1` 0; `pin on` (r 4): 32 collision cells, the same cell 1, `blocked 27.1 48.1` and `28 49` 1. A walk to x=40 (`cmd move`, 150 steps) ended at 28.5, a walk to x=15 at 27.7, so the character stays in the pocket whichever way it goes. `pin off`: 32 cells freed, the cell 0, the walk to x=40 reaches 40.1. Negative: `pin on 2` and `9` `err radius 3..8 subtiles`, a second `pin on` `err already pinned (pin off first)`, `pin off` unpinned `err not pinned`. The pin stays on the level it was set on if the player leaves it (`pin off` still frees it). |
+| `debug help` | DONE | prints one line per registered sub-verb (usage for the lab verbs, the verb name for the rest). |
+
+## Regression of the harness on the new binary
+`d2drill` from main (repeat 1, one slot): D0 gives the expected P35 FAIL + recovery; D1 P7a P7 P1 P1s P2 P3 PASS and P3m BLOCKED (the drill itself still lacks the merc step); D2.a PASS (verb 32 ticks, one source spent). The same as with the first set: nothing regressed.
+
+## Drills unblocked (not rerun here)
+- D5.c, D5.d (P27, P29), H.monster, the fight half of D5.b (mana drink and Meter totals) and the hit effect of D5.a (P26): `debug spawn`.
+- D8.m and D1.P3m (merc drink): `debug merc hurt`.
+- D8.c (Blood Raven claim), D8.q (Akara reward), D8.w (Andariel record): `debug quest set` (the act hop to Act 2 is still package main code, not a cheat).
+- D3.i (P13 identify) and the unidentified sell prices of D3.g0: `debug give <code> pack q4 unid`.
+- D6.d (P25 pocket): `debug pin on`.
+- Still not a cheat gap: the gamble drill (D8.g) is a bot gap; D9.c is a soak.
+
+## Notes for the next drills
+- Quest word layout: 48 records of 16 bits; act 1 words 0..6 (1 Den, 2 Blood Raven, 3 tools, 4 Cain, 5 tower, 6 Andariel), act 2 words 7..14, act 3 15..22, act 4 23..25, act 5 26 on; bit 0 done, bit 1 reward pending. Setting a record re-runs that act's join, which resets the act's other quest machines from their flags.
+- A spawned monster is the plain `make_monster` unit (no pack, no corpse loot rules beyond a normal kill); spawn on a level the player stands on only.
+- `debug pin` blocks the walk grid only; a teleport or `debug warp` still leaves the pocket.

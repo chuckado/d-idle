@@ -58,9 +58,9 @@ binary as of 2026-10-31 (the patches live in the private fork, never in this rep
 | Verb | Changes | Notes |
 |---|---|---|
 | `debug stat <id> <v>` | a character stat (6 life, 8 mana: 24.8 fixed point; 12 level; 14 purse gold; 15 stash gold) | read one tick later |
-| `debug give <code> [quality]` | a new item on the ground at the feet | pickup rules then apply (belt first) |
-| `debug give <code> pack` | a new item straight into the pack's first free spot | reply `ok pack <col> <row>`; `err no room` |
-| `debug give <code> belt [box]` | a new item into the box `rules::belt_slot` would pick (the pickup's choice), or the box asked for | reply `ok belt box <n>`; `err no belt box` when none fits or the box is taken |
+| `debug give <code> [quality] [unid]` | a new item on the ground at the feet; quality 0 (by item level), 1 low, 2 normal (default), 3 superior, 4 magic, 6 rare, 7 unique; `unid` leaves it unidentified whatever the quality (a magic or better ground item is unidentified already) | pickup rules then apply (belt first); `err quality 0..8` |
+| `debug give <code> pack [q<quality>] [l<ilvl>] [unid]` | a new item straight into the pack's first free spot; `q4` makes it magic (item level 30 unless `l<n>`), `unid` clears its identified flag | reply `ok pack <col> <row> quality=<q> identified=<0/1>`; `err no room`; `err quality 1..8`; `err unknown token` |
+| `debug give <code> belt [box] [q<quality>] [l<ilvl>] [unid]` | a new item into the box `rules::belt_slot` would pick (the pickup's choice), or the box asked for | reply `ok belt box <n> ...`; `err no belt box` when none fits or the box is taken |
 | `debug equip <code> <slot>` | a normal item worn in body slot (8 = belt) | replaces what is worn |
 | `debug clearinv` | the pack grid emptied | belt and worn items stay |
 | `debug belt clear` | every belt box emptied | the belt itself stays worn |
@@ -71,6 +71,15 @@ binary as of 2026-10-31 (the patches live in the private fork, never in this rep
 | `debug merc hire <type>` | the character's merc becomes a hireling.txt Id `<type>` (no gold), spawned beside the player | `err no such type; known: ...` |
 | `debug merc kill` | a blow that kills the live merc, its death plays out, then it counts as dead | |
 | `debug merc revive` | the dead merc is alive again beside the player (no gold) | `err no dead merc` |
+| `debug merc hurt <dmg>` | one blow of `<dmg>` points on the live merc through the game's own hurt path (life, death at 0: it dies and plays its death) | reply `ok merc life=<n> mode=<m>`; `err damage > 0`; `err no live merc` (none hired, dying or dead) |
+| `debug spawn <monster> [n] [near] [champion\|unique [mod ids]]` | `n` (1..20, default 1) monsters of a MonStats Id (`zombie1`, `fallen1`) or row number, made by the level population's own constructor (`make_monster`, then `make_boss` for the variants) and added to the level's monster list on a ring 3 cells round the player; `champion` (mod 16 unless mods are given) and `unique` (mods optional, e.g. `unique 5 6`) make the boss variants; `near` is accepted and is the only placement | field levels only (the monster list of the level the player stands in; not town); reply `ok spawned=<n> ids=#a,#b <name> hp=<h> lvl=<l>`; `err no such monster`, `err n 1..20`, `err unknown token <t>`, `err no monster level here` |
+| `debug quest list` | prints every non-zero quest record of the active difficulty: `<record>\t<flags>\tact<n>\tbits=<set bits>` | read only |
+| `debug quest set <record> <flags>` | the 16 flag bits of quest record 0..47 written whole (`0x0002` = bit 1; decimal or hex), then the act's join re-runs so the quest machines (Den, Blood Raven, Andariel, ...) take the state; the quest NPCs' hidden flags are refreshed | `err quest 0..47`, `err flags 0..0xffff`, usage line on a missing or non numeric argument |
+| `debug quest bit <record> <bit> on\|off` | one flag bit of a record, then the same re-join | `err bit 0..15` |
+| `debug quest join <act 1-5>` | re-runs one act's join from the current flags (what a new game does) | `err act 1..5` |
+| `debug pin on [r]` | a ring of blocked collision subtiles (the walk grid's 0x01 bit) at Chebyshev distance `r` subtiles (3..8, default 4) round the player: a pocket nothing walks out of (units, click walks, the unstick) | `err radius 3..8 subtiles`, `err already pinned (pin off first)`, `err too near the level edge`; reply `ok pinned cells=<n>` |
+| `debug pin off` / `debug pin status` | the ring's cells put back to their values; status prints `pinned=<0/1> cells=<n>` | `err not pinned` |
+| `debug help` | one line per sub-verb: the lab verbs with their usage, the others by name | read only |
 | `debug wp <i>\|all\|level <id>` | waypoint bits | |
 | `debug goto <level>`, `debug quest <q>`, `debug die`, `debug difficulty`, `debug warp` | position, quest bits, death, difficulty | as the fork's usage line says |
 

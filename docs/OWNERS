@@ -69,3 +69,6 @@ internal/town/chores.go  fixprice  fix-price
 internal/town/stash.go  fixprice  fix-price
 internal/loot/loot.go  fixprice  fix-price
 internal/loot/pickup.go  fixprice  fix-price
+docs/cheats.md  forkcheats2  forkcheats2
+docs/forkcheats.md  forkcheats2  forkcheats2
+openspec/changes/forkcheats2/**  forkcheats2  forkcheats2
