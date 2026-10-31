@@ -1,0 +1,10 @@
+> cmd select 54 0
+ err=<nil>
+> dump
+ err=<nil>
+> debug skill right 54
+ err=d2d: not usable
+> debug skill right 36
+ err=<nil>
+> debug skill right 9999
+ err=d2d: not usable

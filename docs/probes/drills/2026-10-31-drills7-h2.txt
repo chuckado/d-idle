@@ -1,0 +1,34 @@
+H.pause-diag: approach of npc 5 failed
+H.pause-diag: verb cmd interact +9
+H.pause-diag: verb cmd move +5
+H.pause-diag: verb debug grid +2
+H.pause-diag: verb debug level +94
+H.pause-diag: verb npcs +1
+H.pause-diag: timeline t225(27.7,20.6) t233(27.1,20.6) t241(26.5,20.6) t273(26.4,20.5) t321(26.4,20.5) t443(25.5,22.9) t459(25.5,22.5) t507(25.5,22.5) t555(25.5,22.5) t593(26.6,20.2) t633(26.1,20.1) t681(26.1,20.1) t743(25.9,21.9) t751(25.9,21.4) t759(25.9,20.9) t807(25.9,20.9) t855(25.9,20.5) t903(25.9,20.5)
+H.pause-diag: player (25.90,20.50)
+H.pause-diag: npc 0 Warriv cell (12.50,21.70)
+H.pause-diag: npc 5 Kashya cell (17.10,18.30)
+H.pause-diag: npc 9 Akara cell (24.70,14.40)
+H.pause-diag: npc 11 Charsi cell (4.90,16.90)
+H.pause-diag: npc 12 Gheed cell (5.10,29.30)
+H.pause-diag: npc 14 Your Private Stash cell (11.30,18.90)
+H.pause-diag: npc 35 Waypoint cell (16.90,13.90)
+H.pause-diag: approach of npc 5 failed
+H.pause-diag: verb cmd interact +9
+H.pause-diag: verb cmd move +4
+H.pause-diag: verb debug grid +2
+H.pause-diag: verb debug level +92
+H.pause-diag: verb npcs +1
+H.pause-diag: timeline t4078(27.7,20.7) t4086(27.1,20.7) t4094(26.5,20.7) t4102(25.9,20.7) t4126(25.9,20.5) t4174(25.9,20.5) t4220(25.6,19.1) t4252(25.6,19.1) t4300(25.6,19.1) t4370(25.9,21.1) t4378(25.9,20.5) t4426(25.9,20.5) t4474(25.9,20.5) t4520(25.6,19.1) t4528(25.1,18.9) t4552(25.1,18.9) t4600(25.1,18.9) t4670(26.7,20.7) t4678(26.1,20.7) t4726(25.9,20.5)
+H.pause-diag: player (25.90,20.50)
+H.pause-diag: npc 0 Warriv cell (12.80,20.20)
+H.pause-diag: npc 5 Kashya cell (17.90,19.50)
+H.pause-diag: npc 9 Akara cell (25.50,13.90)
+H.pause-diag: npc 11 Charsi cell (4.90,16.90)
+H.pause-diag: npc 12 Gheed cell (6.30,29.10)
+H.pause-diag: npc 14 Your Private Stash cell (11.30,18.90)
+H.pause-diag: npc 35 Waypoint cell (16.90,13.90)
+DRILL H.pause AUDIT PASS the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks > 0): flaky, the other try stalled like the failing lab tries (NPC wander) | intended: the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks > 0 even when it fails), as it does with the lab's stepping Pause | observed: lab stepping Pause: [opened=true ticks=147 wall=12ms err=""] and [opened=true ticks=1229 wall=88ms err=""] | the bot's own Pause (game time under lockstep): [opened=false ticks=718 wall=46ms err="d2dctl: npc 5 (Kashya): not reached in 28.437261625s (player at 25.9,20.5)"] and [opened=true ticks=136 wall=11ms err=""] | runs: 2, identical
+END character Drilly life 40/40 in town: true
+drill     prim  verdict  det  reason
+H.pause   AUDIT PASS     same the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks > 0): flaky, the other try stalled like the failing lab tries (NPC wander)
