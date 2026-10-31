@@ -42,3 +42,8 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+docs/research/pr-click-evidence-pack.md  bundleclick  bundleclick
+docs/research/pr-tome-evidence-pack.md  bundleclick  bundleclick
+docs/research/pr-bundle-queue.md  bundleclick  bundleclick
+docs/decomp-queue.md  bundleclick  bundleclick
+docs/BACKLOG.md  bundleclick  bundleclick

@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [bundleclick](../../openspec/changes/bundleclick/) | in-progress | bundleclick | `docs/research/pr-click-evidence-pack.md`<br>`docs/research/pr-tome-evidence-pack.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -64,6 +65,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 17 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change bundleclick: changecheck 0 warnings; leakcheck fail mode exit 0
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -83,6 +85,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
 - 6c8e548 10-31 14:08 `Merge agent/forkcheats: fork cheats documented` (forkcheats)
@@ -92,5 +95,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 - 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
-- b044d7a 10-31 13:07 `Merge agent/tomepr: tome PR candidate proof, draft, evidence pack` (tomepr)
 <!-- statusgen:end -->
