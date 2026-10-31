@@ -2,8 +2,10 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
+	"strings"
 
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/drill"
@@ -67,8 +69,41 @@ func (l *lab) ActivateAll(ctx context.Context, r *drill.Run) error {
 	return err
 }
 
+func (l *lab) UnlockAct(ctx context.Context, r *drill.Run, act int) error {
+	_, err := r.Cheat(ctx, fmt.Sprintf("debug act %d", act), fmt.Sprintf("unlock the waypoint panel tabs 1..%d of the throwaway character: the cross-act drills (DW.a3) check the bot's tab and row choice, not the quest flags", act))
+	return err
+}
+
+func (l *lab) Tabs() string { return l.wpTabs }
+
+// captureTabs reads the panel's wp_tabs rects from `dump ui` (the panel is open when the verb clicks a tab).
+func (l *lab) captureTabs() {
+	r, err := l.be.Client.Do(context.Background(), "dump ui")
+	if err != nil || r == nil {
+		return
+	}
+	line := r.Rest
+	for _, x := range r.Lines {
+		if strings.TrimSpace(x) != "" {
+			line = x
+			break
+		}
+	}
+	var raw struct {
+		UI struct {
+			Rects map[string]json.RawMessage `json:"rects"`
+		} `json:"ui"`
+	}
+	if json.Unmarshal([]byte(strings.TrimSpace(line)), &raw) == nil {
+		if t, ok := raw.UI.Rects["wp_tabs"]; ok {
+			l.wpTabs = string(t)
+		}
+	}
+}
+
 func (l *lab) TakeWaypoint(ctx context.Context, level int) drill.WPCall {
 	n, sp := l.wpNavigator()
+	l.wpTabs = ""
 	c0, mark, t0 := sp.clicks, l.rec.Mark(), l.tick()
 	err := n.TakeWaypoint(ctx, level)
 	c := drill.WPCall{Ticks: l.tick() - t0, Clicks: sp.clicks - c0, Log: l.rec.Since(mark)}

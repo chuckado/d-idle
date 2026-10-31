@@ -29,6 +29,11 @@ func (s *simWP) ActivateAll(_ context.Context, r *Run) error {
 	s.active = true
 	return err
 }
+func (s *simWP) UnlockAct(_ context.Context, r *Run, act int) error {
+	_, err := r.Cheat(context.Background(), "debug act", "unlock")
+	return err
+}
+func (s *simWP) Tabs() string { return "[2 rects]" }
 func (s *simWP) TakeWaypoint(_ context.Context, level int) WPCall {
 	if !s.active || s.broken {
 		return WPCall{Err: "waypoint unavailable: unit not found", Ticks: 10}
@@ -53,7 +58,7 @@ func TestDW(t *testing.T) {
 	}
 	got := run(&simWP{area: 1})
 	for id, v := range got {
-		if v != Pass && id != "DW.a3" {
+		if v != Pass {
 			t.Errorf("%s = %s", id, v)
 		}
 	}

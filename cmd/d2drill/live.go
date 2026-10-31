@@ -52,8 +52,9 @@ type lab struct {
 	mu  sync.Mutex
 	seq int
 
-	wpNav *nav.Navigator // DW: the bot's navigator with the spy in front (wp_lab.go)
-	wpSpy *spy
+	wpNav  *nav.Navigator // DW: the bot's navigator with the spy in front (wp_lab.go)
+	wpTabs string         // wp_tabs rects seen at the last tab click (DW)
+	wpSpy  *spy
 }
 
 func newLab(be *d2denv.Backend, db *data.DB, led *cheat.Ledger, char, inst string, log *slog.Logger) *lab {

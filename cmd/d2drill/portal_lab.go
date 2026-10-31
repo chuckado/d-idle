@@ -26,6 +26,9 @@ type spy struct {
 
 func (s *spy) Click(b input.Button, x, y int, mods ...input.Mod) error {
 	s.clicks++
+	if b == input.Left && y == 77 && s.l.wpTabs == "" { // the waypoint panel's tab row: record the tab rects it shows
+		s.l.captureTabs()
+	}
 	if b == input.Right {
 		s.rights++
 		s.last = s.l.tick()
