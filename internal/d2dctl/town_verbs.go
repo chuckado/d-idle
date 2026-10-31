@@ -627,9 +627,10 @@ func (c *Client) CastTP(ctx context.Context, id int) error {
 	return errors.New("d2dctl: town portal did not open")
 }
 
-// EnterPortal walks to the portal that stands in the current level and clicks it. V: a portal is not an npc or a
-// unit, walking onto it does nothing, a left click on its sprite takes it (Blood Moor to the camp, then back is
-// the same click in the camp). Verified by the level id changing.
+// EnterPortal takes the portal that stands in the current level with the command a click on it sends (TakePortal):
+// d2d walks the player there and moves it to the twin. Walking onto it does nothing (V). The old way, a left click
+// on its sprite, works only after a drawn frame put the portal under the cursor, and a lockstep d2d draws no frame
+// (drill D2.g failed so; docs/d2d-portal-entry.md). Verified by the level id changing.
 func (c *Client) EnterPortal(ctx context.Context) error {
 	here, err := c.Level(ctx)
 	if err != nil {
@@ -649,23 +650,7 @@ func (c *Client) EnterPortal(ctx context.Context) error {
 		return fmt.Errorf("d2dctl: no portal in level %d", here.ID)
 	}
 	for try := 0; try < 3; try++ {
-		cur, err := c.Level(ctx)
-		if err != nil {
-			return err
-		}
-		if math.Hypot(cur.X-p.X, cur.Y-p.Y) > 1.5 {
-			if err := c.CmdMove(ctx, p.X, p.Y); err != nil {
-				return err
-			}
-			if err := Pause(ctx, 2*time.Second); err != nil {
-				return err
-			}
-			if cur, err = c.Level(ctx); err != nil {
-				return err
-			}
-		}
-		x, y := ScreenOfCell(cur.X, cur.Y, p.X, p.Y, 50)
-		if err := c.HoverClick(ctx, x, y, false); err != nil {
+		if err := c.TakePortal(ctx, p.Which); err != nil {
 			return err
 		}
 		for i := 0; i < 10; i++ {

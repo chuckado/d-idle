@@ -204,17 +204,19 @@ func TestChooseMenuMissing(t *testing.T) {
 	}
 }
 
+// UsePortal sends the client's portal command (Interact -2000-which), no click: a lockstep d2d draws no frame, so a
+// click on the sprite is a walk (drill D2.t).
 func TestUsePortal(t *testing.T) {
 	c, srv := rig(t, fake.Sample())
 	if err := c.UsePortal(1); err != nil {
-		t.Fatal(err) // fake player at 153,68, portal 1 at 30.7,14.3 -> (153,71): within tolerance
+		t.Fatal(err)
 	}
 	ls := srv.Lines()
-	if !strings.HasPrefix(ls[len(ls)-1], "click ") {
+	if ls[len(ls)-1] != "cmd interact -2001" {
 		t.Fatalf("%q", ls)
 	}
 	if err := c.UsePortal(7); err == nil {
-		t.Fatal("bad row accepted")
+		t.Fatal("unknown portal accepted")
 	}
 }
 

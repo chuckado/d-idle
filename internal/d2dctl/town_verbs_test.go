@@ -277,21 +277,27 @@ func TestApproachNPCSidestepsWhenStalled(t *testing.T) {
 	}
 }
 
-func TestEnterPortalClicksSprite(t *testing.T) {
+// EnterPortal sends the client's own portal command for the end in this level (Interact -2000-which), never a sprite
+// click: a lockstep d2d draws no frame, so a click there is a walk (drill D2.g).
+func TestEnterPortalSendsInteract(t *testing.T) {
 	noPause(t)
-	level := 2
-	s, c := startStub(t, map[string]string{"debug portals": "0\t2\t44.2\t24.8\n1\t1\t34.7\t20.7\nok\n"}, func(line string, s *stub) {
-		if strings.HasPrefix(line, "click ") {
-			level = 1
+	for _, tc := range []struct {
+		here int
+		want string
+	}{{2, "cmd interact -2000"}, {1, "cmd interact -2001"}} {
+		level := tc.here
+		s, c := startStub(t, map[string]string{"debug portals": "0\t2\t44.2\t24.8\n1\t1\t34.7\t20.7\nok\n"}, func(line string, s *stub) {
+			if line == tc.want {
+				level = 3 - tc.here
+			}
+			s.rep["debug level"] = "ok " + itoa(level) + " 44.3 24.9 96 56 0 0\n"
+		})
+		if err := c.EnterPortal(context.Background()); err != nil {
+			t.Fatalf("level %d: %v (%v)", tc.here, err, s.seen)
 		}
-		s.rep["debug level"] = "ok " + itoa(level) + " 44.3 24.9 96 56 0 0\n"
-	})
-	if err := c.EnterPortal(context.Background()); err != nil {
-		t.Fatal(err)
-	}
-	// player 44.3,24.9 portal 44.2,24.8: sprite near the screen middle, above the feet
-	if !strings.Contains(strings.Join(s.seen, "|"), "click 400 234") {
-		t.Fatalf("click not on the sprite: %v", s.seen)
+		if seen := strings.Join(s.seen, "|"); !strings.Contains(seen, tc.want) || strings.Contains(seen, "click ") {
+			t.Fatalf("level %d: want %q and no click: %v", tc.here, tc.want, s.seen)
+		}
 	}
 }
 

@@ -20,8 +20,8 @@ type SemanticInput interface {
 	Pickup(unit uint32) error
 	// ChooseMenu clicks the NPC menu line whose text matches (case-insensitive).
 	ChooseMenu(text string) error
-	// UsePortal walks to town portal number row and enters it.
-	UsePortal(row int) error
+	// UsePortal walks to town portal which (the backend's portal index) and enters it.
+	UsePortal(which int) error
 	// Belt drinks the potion of belt column slot; merc gives it to the mercenary (the shift-click).
 	Belt(slot int, merc bool) error
 }

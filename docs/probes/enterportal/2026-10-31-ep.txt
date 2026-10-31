@@ -1,0 +1,12 @@
+DRILL EP.walk P10 PASS entered false as expected, -1 ticks | intended: enters: false | observed: player cell (28.0,48.0), portal 0 at (28.0,48.6) 0.6 cells away; cmd move onto the portal cell; level 2 -> 2 after -1 ticks (-1: not within 150); player now (28.1,48.7); debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]
+DRILL EP.click P10 PASS entered false as expected, -1 ticks | intended: enters: false | observed: player cell (35.6,48.1), portal 0 at (35.6,48.7) 0.6 cells away; hover+click at (347,284), 15 unrendered ticks between; level 2 -> 2 after -1 ticks (-1: not within 150); player now (35.1,47.7); debug portals [0,2,35.6,48.7 / 1,1,16.7,25.7]
+DRILL EP.render P10 PASS entered true as expected, 1 ticks | intended: enters: true | observed: player cell (28.0,48.0), portal 0 at (28.0,48.6) 0.6 cells away; hover+click at (352,286), 3 rendered ticks between; level 2 -> 1 after 1 ticks (-1: not within 150); player now (16.7,26.3); debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]
+DRILL EP.interact P10 PASS entered true as expected, 1 ticks | intended: enters: true | observed: player cell (35.6,48.1), portal 0 at (35.6,48.7) 0.6 cells away; cmd interact -2000; level 2 -> 1 after 1 ticks (-1: not within 150); player now (16.7,26.3); debug portals [0,2,35.6,48.7 / 1,1,16.7,25.7]
+DRILL EP.interactfar P10 PASS entered true as expected, 34 ticks | intended: enters: true | observed: player cell (28.0,48.0), portal 0 at (28.0,48.6) 0.6 cells away; walked to (32.5,48.1), 4.5 cells; cmd interact -2000; level 2 -> 1 after 34 ticks (-1: not within 150); player now (16.7,26.3); debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]
+drill     prim  verdict  det  reason
+EP.walk   P10   PASS     -    entered false as expected, -1 ticks
+EP.click  P10   PASS     -    entered false as expected, -1 ticks
+EP.render P10   PASS     -    entered true as expected, 1 ticks
+EP.interact P10   PASS     -    entered true as expected, 1 ticks
+EP.interactfar P10   PASS     -    entered true as expected, 34 ticks
+drill     prim  verdict  det  reason

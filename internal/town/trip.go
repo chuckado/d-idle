@@ -63,24 +63,22 @@ func (t *Town) ToTown(ctx context.Context) error {
 		return nil
 	}
 	var last error = ErrNoPortal
-	// A portal that is already open nearby (the one we came out of) is free: use it before spending a scroll.
-	if portal, ok := findObject(s, ObjPortal); ok && dist(portal.X, portal.Y, s.Player.X, s.Player.Y) <= float64(t.tune().PortalReuseDist) {
-		if err := t.enterPortal(ctx, portal); err == nil {
-			if cur, werr := t.waitArea(ctx, -1, 15*time.Second); werr == nil {
-				t.arrived = t.e.Clock.Now()
-				t.e.Log.Info("arrived in town through an open portal", "area", cur.Player.Area)
-				return nil
+	cast := false
+	// A portal that is already open nearby (the one we came out of, or the last try's) is free: enter it instead of
+	// reading a scroll. A new cast only replaces it with the same kind of portal (one pair per player), so a failed
+	// entry is retried on it and never paid for with another scroll (drill D2.t: all 3 scrolls were spent so).
+	for try := 0; try < 3; try++ {
+		portal, open := t.openNear(ctx)
+		if !open {
+			var err error
+			if portal, err = t.openPortal(ctx); err != nil {
+				if errors.Is(err, ErrNoPortal) {
+					return t.walkToTown(ctx, s, err)
+				}
+				last = err
+				continue
 			}
-		}
-	}
-	for try := 0; try < 2; try++ {
-		portal, err := t.openPortal(ctx)
-		if err != nil {
-			if errors.Is(err, ErrNoPortal) {
-				return t.walkToTown(ctx, s, err)
-			}
-			last = err
-			continue
+			cast = true
 		}
 		if err := t.enterPortal(ctx, portal); err != nil {
 			last = err
@@ -92,10 +90,32 @@ func (t *Town) ToTown(ctx context.Context) error {
 			continue
 		}
 		t.arrived = t.e.Clock.Now()
-		t.e.Log.Info("arrived in town", "area", cur.Player.Area)
+		if open {
+			t.e.Log.Info("arrived in town through an open portal", "area", cur.Player.Area)
+		} else {
+			t.e.Log.Info("arrived in town", "area", cur.Player.Area)
+		}
 		return nil
 	}
+	if !cast {
+		// Only an open portal was tried and it never took us: walk or take the waypoint as with no scroll.
+		t.e.Log.Warn("open portal did not lead to town", "err", last)
+		return t.walkToTown(ctx, s, fmt.Errorf("%w (open portal: %v)", ErrNoPortal, last))
+	}
 	return last
+}
+
+// openNear returns a town portal object within PortalReuseDist of the player.
+func (t *Town) openNear(ctx context.Context) (d2.Unit, bool) {
+	if err := ctx.Err(); err != nil {
+		return d2.Unit{}, false
+	}
+	s, err := t.current()
+	if err != nil || s.Player == nil {
+		return d2.Unit{}, false
+	}
+	p, ok := findObject(s, ObjPortal)
+	return p, ok && dist(p.X, p.Y, s.Player.X, s.Player.Y) <= float64(t.tune().PortalReuseDist)
 }
 
 // townNeighbour maps the first field area of an act to its town: a character there with no scroll can simply walk

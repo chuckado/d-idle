@@ -138,6 +138,18 @@ func (c *Client) CmdInteract(ctx context.Context, index int) error {
 	return c.ok(ctx, "cmd interact %d", index)
 }
 
+// PortalNPC is the Interact id d2d's client sends for a left click on town portal which (the first column of "debug
+// portals"): -2000 - which (V-d2d: apps/d2d/town/input.cpp sends Interact{hovered} for a hovered portal; the world's
+// Interact walks to it and use_portal moves the player to the twin once within 2 cells, world/travel.cpp).
+func PortalNPC(which int) int { return -2000 - which }
+
+// TakePortal sends the command a click on portal which sends: the player walks to it and goes through. It needs no
+// screen position and no hover, so it also works under lockstep, where d2d draws no frame and its hover pick
+// (computed in the draw) stays stale (docs/d2d-portal-entry.md).
+func (c *Client) TakePortal(ctx context.Context, which int) error {
+	return c.CmdInteract(ctx, PortalNPC(which))
+}
+
 // CorpseInteract takes the player's own corpse number i (V: index -3000-i, "cmd interact -3000").
 func (c *Client) CorpseInteract(ctx context.Context, i int) error {
 	return c.CmdInteract(ctx, -3000-i)
@@ -450,6 +462,16 @@ func parseClock(r *Reply) ClockInfo {
 // Stock d2d answers "err unknown verb".
 func (c *Client) Step(ctx context.Context, n int) (ClockInfo, error) {
 	r, err := c.Do(ctx, fmt.Sprintf("step %d", n))
+	if err != nil {
+		return ClockInfo{}, err
+	}
+	return parseClock(r), nil
+}
+
+// StepRender is Step with "render": every stepped frame is drawn, so d2d's hover pick (computed in the draw) follows
+// the mouse. Lockstep fork only; a full frame draw per tick.
+func (c *Client) StepRender(ctx context.Context, n int) (ClockInfo, error) {
+	r, err := c.Do(ctx, fmt.Sprintf("step %d render", n))
 	if err != nil {
 		return ClockInfo{}, err
 	}

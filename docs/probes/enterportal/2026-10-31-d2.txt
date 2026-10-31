@@ -1,0 +1,9 @@
+DRILL D2.t P10 PASS entered the open portal, arrived in town, no second scroll | intended: d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent | observed: scrolls 3 -> 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]; lines: none | runs: 2, identical
+DRILL D2.g P10 PASS EnterPortal arrives in town | intended: the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1 | observed: area 2 -> 1, verb error <nil>, portal objects in town 1 | runs: 2, identical
+DRILL D2.f P11 PASS round trip through the portals, arrival 6 subtiles from the origin | intended: after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin | observed: origin (140,240); ToTown ok -> area 1; BackToField ok -> area 2 at (140,246), 6 subtiles from the origin, via portal true, debug portals []; lines: back to field: portal in town id=805306369 x=83 y=128 player_x=83 player_y=131 | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D2.t      P10   PASS     same entered the open portal, arrived in town, no second scroll
+D2.g      P10   PASS     same EnterPortal arrives in town
+D2.f      P11   PASS     same round trip through the portals, arrival 6 subtiles from the origin
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give tsc, debug goto 2
