@@ -85,7 +85,7 @@ func New(cfg Config) (*Rig, error) {
 // Attach builds the combat side over an existing backend (d2denv.Backend) instead of a second reader and pacer: e is
 // the backend env, nv its navigator (nv.Yield is set here), ctl the shared input controller (its Skills map is
 // created). The Rig's Env is a copy of e with the viewport reader and the combat input; the clock is e.Clock, so under
-// lockstep every combat sleep steps the game. Src, Pace and Meter stay nil.
+// lockstep every combat sleep steps the game. Src and Pace stay nil; Meter is built but off (see Meter).
 func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Controller) *Rig {
 	if ctx == nil {
 		ctx = context.Background()
@@ -95,6 +95,12 @@ func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Co
 	ce := *e
 	ce.Read, ce.In = viewReader{e.Read}, in
 	r := &Rig{Ctl: ctl.C, In: in, Env: &ce, Nav: nv}
+	// The Meter wraps the backend clock and stays off until Meter.Enable (a drill or probe turns it on); the bot's
+	// per-sleep cost is unchanged. Monsters come from the backend reader, friends are filtered as combat does.
+	cat := combat.NewCatalog(e.Data)
+	r.Meter = &Meter{C: ctl.C, Ctx: ctx, Clk: e.Clock, Off: true, Mons: e.Snapshot,
+		Hostile: func(s *d2.Snapshot, u d2.Unit) bool { return !combat.IsFriendly(s, u, cat) }}
+	ce.Clock = r.Meter
 	r.Fighter = combat.New(r.Env, nv)
 	nv.Yield = r.yield()
 	return r

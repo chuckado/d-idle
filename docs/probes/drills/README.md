@@ -141,7 +141,7 @@ Result files `2026-10-31-drills5-<label>.txt/.json` (each drill twice, P35 gate 
 - F6 (D8.a, unchanged): revive is free at merc level 1 (price 0).
 
 ### Still BLOCKED (exact missing piece)
-- P28 Meter totals: `d2dcombat.Attach` leaves `Rig.Meter` nil (internal/d2dcombat/rig.go, only `New` builds it): a drill that wants damage and mana totals needs `New` or an `Attach` that builds the Meter; a code change in an area the drill group does not own.
+- P28 Meter totals: `d2dcombat.Attach` leaves `Rig.Meter` nil (internal/d2dcombat/rig.go, only `New` builds it): a drill that wants damage and mana totals needs `New` or an `Attach` that builds the Meter; a code change in an area the drill group does not own. Fixed offline by fixmeter ([fixmeter.md](../../fixmeter.md)): `Attach` builds the Meter (off until `Meter.Enable()`), live recipe there.
 - D8.q and D8.w as the bot's own code path: the talk nodes live in package main (cmd/d2bot task.go, acts.go) and cannot be imported; they need a testable extraction.
 - D8.g (P19 gamble): the bot has no gamble code. D9.c (P36): a soak, not a drill.
 - H.obj.cage effect: the Cain quest state (portal opened by the Tree of Inifuss scroll chain) is not set by `debug quest set` alone in a way the cage honours (U).
