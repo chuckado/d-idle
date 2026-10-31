@@ -73,8 +73,50 @@ D9 and D10 are new gaps found on the way (separable; candidates, not part of thi
 
 - The oracle's item has no stat list: magic stat costs, staff mods, charges and sockets are not in the differential (d2d's socket and charge terms are untouched by the patch). No quests, no reduced prices in the cases.
 - Body parts and tomes are outside the generator; the generator gives random durability to items without a durability column (that feeds D10, not the claims).
+- From the verifier: starter items (item flag 0x20000) price 1 in every mode in game.exe (`0x62f00b`), d2d prices them normally (now armor-scaled); repair with replenish (stat 252) is (max - 1) / max of the base; the cube's kUseItem keeps the old defence when the code changes, which now feeds the armor price. Not claimed, not in the oracle (no stat list, no flags beyond identified / ethereal).
 - Nothing verified live on the original game; the D3.r drill price (19 for a Short Staff at Charsi) agrees with both sides and is unchanged.
 
 ## Independent verifier
 
-VERIFIER_REPORT
+Independent Opus agent (read-only, fresh brief, 2026-10-31). Report verbatim:
+
+```
+INDEPENDENT VERIFIER REPORT: fix/vendor-prices (price2, HEAD 1bfff15c on d0ea14b7)
+
+VERDICT
+- D1 armor price = cost x defence / maxac: HOLDS. Seen in game.exe at 0x62f0f2. FUN_00629bb0(item, 0x32) checks the type: ItemTypes row 0x32 is "armo" (read from the loaded table), and the test uses a precomputed Equiv bitmask over type and type2. The guard (maxac-minac+1 != 0, maxac != 0) and the 32-bit imul/idiv match d2d. One result covers buy, sell and repair (ebp-0x10, -4, -8). FUN_006253b0 reads the stat list's base layer (FUN_00624ed0 reads [statlist+0x24]; the total getter FUN_00624f60 reads +0x48), so enhanced defence in props is correctly left out.
+- D2 class item sell /4 after the ethereal /4: HOLDS. The ethereal quarter is at 0x62f888 and FUN_0062c060 at 0x62f99d (sell only). That function checks ItemTypes+0x21 (Class) < 7 on the item's own type (FUN_0062b400), with no Equiv walk. Both quarters truncate toward zero.
+- D3 quality extras only when identified: HOLDS. 0x62f146 tests item flag 0x10, then 0x62f182 jumps to 0x62f85e, skipping the quality jump table and the 0x62f822 adds. Quality 0 and 9 also match.
+- D4 unidentified item cannot be repaired: HOLDS. For mode 3, 0x62efee calls FUN_0062e660, which returns 0 unless flag 0x10 is set and flag 0x400000 is clear. This happens before charges and durability are looked at, so an unidentified wand with missing charges also costs 0 in game.exe. d2d's new early return matches.
+- D7 broken ethereal sells for 0, then the minimum 1: HOLDS. 0x62fa60 checks FUN_0062a8d0 (flag 0x400000), then FUN_00629930 (ItemsTxt +0x113 == 0, +0x112 > 0, max durability != 0, stat 152 <= 0), then max durability != 0 and stat 72 <= 0, then `xor edi,edi`. This comes after both quarters and before the NPC mults; the final minimum 1 is at 0x62fd75. Small difference: d2d's indestructible() counts any non-zero stat-152 prop, while game.exe needs the total to be > 0. Negative or cancelling values are not realistic.
+
+WHAT I RAN (all on the worker, my files in the verifier's own scratch dir)
+1. Disassembly of FUN_0062efb0 (whole), 62c060, 62e660, 629930, 62a8d0, 629bb0, 6253b0/625480, 624ed0/624f60, 6292f0, 62a840.
+2. vtypes.py: for all 659 item codes, game.exe's own FUN_00629bb0(0x32) and FUN_0062c060 compared with d2d's logic (type_is Equiv walk, ItemTypes Class non-empty). 0 mismatches. 111 class items in types abow ajav ashd aspe h2h h2h2 head orb pelt phlm, including 60 armor-file class items (pelts, barbarian helms, paladin shields, necromancer heads), which are both armor-scaled and class-quartered. Only gems have a type2, and none of them is armor.
+3. edge.py: 13,920 hand-made cases. 22 codes (cap lea buc pa1 dr1 ba1 ne1 ob1 am1 ktr hax wnd tkf jav aqv key 7cr ci0 uap xpk 9ja am5) x quality 0..9 x identified x ethereal x durability {0/M, M/2, M/M, 0/0, 5/0, 1/M} x defence {0, maxac, 2*maxac+7, -1} x quantity {1, 3} for stacks. Vendor cycles through all 17 VENDORS, difficulty 0..2. Both sides were run. Raw mismatches buy/sell/repair: 1608/1219/926. price_terms.py puts all of them in stack, bigmul, whole or nodur. Outside those: buy 0/10812, sell 0/11000, repair 0/10022.
+4. Rebuilt test_game and test_rules from a fresh HEAD worktree with the same cmake flags. test_game --price on c100k.tsv reproduces dH.tsv byte for byte, so the author's binary is not stale.
+5. Unit tests, HEAD tests built against rules.hpp of each commit: d0ea14b7 and the 4 intermediate commits abort; HEAD prints "test_rules: ok".
+6. Mutation test (HEAD with one claim reverted at a time). D1, D2, D3, D4 and D7 each make their own assertion fail, so every claim has a test that catches its removal.
+
+COUNTEREXAMPLES: none found against D1-D7. Mismatches remain only in the declared unclaimed terms, e.g. "8290 tkf 7 0 0 0 0 0 0 4 1 0 1 4 1 0 halbu 1": game 37 2244 636, d2d 5006 2503 621 (stack, D6).
+
+LIMITS AND WRONG ASSUMPTIONS TO KNOW
+- Stacks and quivers (tkf, jav, am5 class javelins, aqv) are set aside wholesale by price_terms. The claims run before the stack branch in game.exe, but stacks did not test them in isolation.
+- Unclaimed terms that price_terms does not list:
+  - Item flag 0x20000 (starter item) returns 1 for every mode (0x62f00b). d2d starter bucklers are now armor-scaled.
+  - Repair with stat 252 (replenish durability) prices (max-1)/max of the base whatever the current durability (0x62fa22-0x62fa3c).
+  - The oracle answers 0 for both. So "0 left outside unclaimed terms" holds only for items with no stat list.
+- Sockets: checked by reading the disassembly only (the oracle's inventory is 0). FUN_006292f0 adds socketed cost/2 after the extras (on the unidentified path too), before the quarters and the D7 zero. d2d's item_price order matches. Repair: game.exe adds sockets to the repair base, d2d does not (an existing, documented ponytail).
+- d2d Item.defense defaults to -1. Every armor path I found sets it: generate_item (both seed paths), the d2s/net parser, and starter items through generate_item. Gamble stock has -1 but is priced by gamble_price. Not traced: cube kUseItem keeps the old defence when the code changes (cube.hpp:341), which now feeds into the price.
+- Callers whose behaviour changes:
+  - store_buy, store_sell, ingame sell hover, store hover, net.cpp buy/sell cost: new prices.
+  - store_repair: returns false for unidentified items.
+  - repair_all_cost and store_repair_all (commands.cpp): add 0 for unidentified items.
+  - No other users of item_price or repair_cost in components/ or apps/.
+- The author's ctest run has 5 failures: test_mpq (damaged MPQ assert), smoke_d2d, pad_use_d2d, quests_act1, quests_act4 (no voice MPQ, quake timeouts). They look like environment problems, but I did not check whether upstream fails the same way.
+- No live game, so whether base stat 31 equals the saved defence is inferred from the disassembly and the save format, not observed.
+
+CLEANUP: the price2 checkout is untouched (status clean, HEAD 1bfff15c). My worktree was removed with git worktree remove and pruned, and my build dir was deleted. Nothing of mine is running (ps check). Case and output files stay in the verifier's scratch dir.
+```
+
+Author's answers: the ctest baseline was checked after the report (upstream d0ea14b7 fails the same five, see "Their checks"). The starter-item flag (0x20000: price 1 in every mode), the replenish stat 252 repair term and the cube's kept defence are new limits, listed under Limits; none is in a claim (starter items were already mispriced by d2d before the patch: game.exe gives 1 whatever the item).

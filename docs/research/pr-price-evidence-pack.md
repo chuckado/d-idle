@@ -33,9 +33,9 @@ cd tools/emu && uv run python price_oracle.py gen 100000 7 > cases.tsv && uv run
 
 **Residual risks.** No stat list in the oracle (magic stat costs, staff mods, charges, sockets not compared); no quests or reduced prices; nothing checked live on the original for these terms; base upstream/main d0ea14b7: fetch again right before a push. Bundle rule: #149 is the open bundle; this waits for it to merge or for the user's "bundle".
 
-**Verifier.** VERIFIER_SHORT
+**Verifier.** Independent Opus agent (read-only): **all five claims HOLD**, no counterexample. It re-read every address, compared game.exe's own armo and Class tests with d2d's on all 659 item codes (0 differ), ran 13,920 hand-made edge cases (quality 0..9 x identified x ethereal x 6 durability states x 4 defences x all 17 vendors x 3 difficulties): 0 mismatches outside the unclaimed terms, reproduced the HEAD output byte for byte, and showed each claim's unit test fails when that claim alone is reverted. Limits: stacks not tested in isolation; starter items (flag 0x20000, price 1) and replenish (stat 252) repair are further unclaimed terms; sockets read, not run; base stat 31 = saved defence inferred, not observed. Full report in the proof doc.
 
-**PROOF: PROOF_STATE.** Recommendation: RECOMMENDATION
+**PROOF: complete.** Recommendation: go, when #149 has merged (or on the user's 'bundle' into it, 8 files fits), with the user's go per step. Re-fetch upstream first and re-run the oracle, pr_guard and tests.
 
 Push and PR commands (not run; each needs the user's go):
 
