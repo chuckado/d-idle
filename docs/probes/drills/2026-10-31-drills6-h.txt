@@ -1,0 +1,5 @@
+DRILL H.pause AUDIT PASS the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks > 0): flaky, the other try stalled like the failing lab tries (NPC wander) | intended: the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks > 0 even when it fails), as it does with the lab's stepping Pause | observed: lab stepping Pause: [opened=true ticks=147 wall=11ms err=""] and [opened=true ticks=1229 wall=71ms err=""] | the bot's own Pause (game time under lockstep): [opened=false ticks=718 wall=39ms err="d2dctl: npc 5 (Kashya): not reached in 28.437261625s (player at 25.9,20.5)"] and [opened=true ticks=136 wall=9ms err=""] | runs: 2, identical
+
+drill     prim  verdict  det  reason
+H.pause   AUDIT PASS     same the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks > 0): flaky, the other try stalled like the failing lab tries (NPC wander)
+cheat verbs used (each ledgered with a reason): debug goto 1

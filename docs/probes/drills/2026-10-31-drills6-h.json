@@ -1,0 +1,54 @@
+{
+ "results": [
+  {
+   "id": "H.pause",
+   "primitive": "AUDIT",
+   "title": "NPC approach as the merc claim and revive code call it: d2dctl.Pause on wall time vs virtual ticks",
+   "verdict": "PASS",
+   "reason": "the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks \u003e 0): flaky, the other try stalled like the failing lab tries (NPC wander)",
+   "intended": "the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks \u003e 0 even when it fails), as it does with the lab's stepping Pause",
+   "observed": "lab stepping Pause: [opened=true ticks=147 wall=11ms err=\"\"] and [opened=true ticks=1229 wall=71ms err=\"\"] | the bot's own Pause (game time under lockstep): [opened=false ticks=718 wall=39ms err=\"d2dctl: npc 5 (Kashya): not reached in 28.437261625s (player at 25.9,20.5)\"] and [opened=true ticks=136 wall=9ms err=\"\"]",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks \u003e 0): flaky, the other try stalled like the failing lab tries (NPC wander)",
+     "Intended": "the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks \u003e 0 even when it fails), as it does with the lab's stepping Pause",
+     "Observed": "lab stepping Pause: [opened=true ticks=147 wall=11ms err=\"\"] and [opened=true ticks=1229 wall=71ms err=\"\"] | the bot's own Pause (game time under lockstep): [opened=false ticks=718 wall=39ms err=\"d2dctl: npc 5 (Kashya): not reached in 28.437261625s (player at 25.9,20.5)\"] and [opened=true ticks=136 wall=9ms err=\"\"]",
+     "sig": "bot opened 1 of 2; ticks\u003e0 true",
+     "cheats": [
+      "debug goto 1",
+      "debug goto 1",
+      "debug goto 1",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 539999263,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "the bot's own Pause opened Kashya's menu in 1 of 2 tries (game-time deadline: ticks \u003e 0): flaky, the other try stalled like the failing lab tries (NPC wander)",
+     "Intended": "the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks \u003e 0 even when it fails), as it does with the lab's stepping Pause",
+     "Observed": "lab stepping Pause: [opened=true ticks=1476 wall=89ms err=\"\"] and [opened=true ticks=319 wall=19ms err=\"\"] | the bot's own Pause (game time under lockstep): [opened=true ticks=348 wall=21ms err=\"\"] and [opened=false ticks=680 wall=38ms err=\"d2dctl: npc 5 (Kashya): not reached in 25.801851693s (player at 25.6,19.1)\"]",
+     "sig": "bot opened 1 of 2; ticks\u003e0 true",
+     "cheats": [
+      "debug goto 1",
+      "debug goto 1",
+      "debug goto 1",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 179254501,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1",
+    "debug goto 1",
+    "debug goto 1",
+    "debug goto 1"
+   ]
+  }
+ ]
+}
