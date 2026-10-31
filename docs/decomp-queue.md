@@ -17,7 +17,7 @@ The decomp lane answers one kind of question: **"is d2d (or our bot's assumption
 
 | id | question | why the bot needs it (trigger) | evidence | size | status |
 |---|---|---|---|---|---|
-| 1 | belt and ground-potion pickup: where a picked potion goes, belt layout and column kind, shift/ctrl clicks | P7 (939 "potion already in the pack" skips), P1-P3; review F7/F8; SME said the game auto-belts | docs/research/belt-pickup-trace.md; PR candidate pr-belt-*.md | M | done 2026-10-31: findings B1-B5 (pickit and belt model); d2d D1 (isc/tsc) proven 3,111 -> 0, branch `trace/belt` local; D2-D4 client gaps |
+| 1 | belt and ground-potion pickup: where a picked potion goes, belt layout and column kind, shift/ctrl clicks | P7 (939 "potion already in the pack" skips), P1-P3; review F7/F8; SME said the game auto-belts | docs/research/belt-pickup-trace.md; PR candidate pr-belt-*.md | M | done 2026-10-31: findings B1-B5 (pickit and belt model); d2d D1 (isc/tsc) proven 3,111 -> 0, PR opened #147 (branch fix/belt-scroll-columns); D2-D4 client gaps |
 | 2 | Tome of Town Portal: empty-tome click, cast requirements, where the portal opens | P10 (2,683 failed TP attempts, 710 "no portal opened") | docs/research/town-portal-trace.md; PR candidate pr-tome-*.md | M | done 2026-10-31 |
 | 3 | waypoint menu: row choice, act tabs, the 10 s refusal after use | P23 (220 + 198 waypoint failures; SME unsure on the refusal) | - | M | queued |
 | 4 | skill bind and cast: hotkey binding semantics (left/right, the bound skill vs the selected), cast with the cursor on a unit | P26 (O, UNVERIFIED) | - | M | queued |
@@ -28,6 +28,6 @@ The decomp lane answers one kind of question: **"is d2d (or our bot's assumption
 
 ## Result log (one line each)
 
-- 1 belt/pickup (DECOMPBELT, 2026-10-31): ground potion -> belt first (matching column, else empty column for hp/mp/rv), inventory open -> cursor; bot findings B1-B5; d2d D1 PR candidate READY (verifier holds), pending the user's go.
-- 1 belt/pickup: done 2026-10-31 (decompbelt): potion goes to the belt first (no modifier, inventory closed); d2d matches for potions (0 of 390,000); proven deviation D1 scrolls (ID/TP) with no tome room go into a same-scroll belt column in game.exe, not the pack (3,111 mismatches before, 0 after); PR candidate READY pending the user go (branch trace/belt on the worker host, local only); bot findings B1..B5 to the fix queue
+- 1 belt/pickup (DECOMPBELT, 2026-10-31): ground potion -> belt first (matching column, else empty column for hp/mp/rv), inventory open -> cursor; bot findings B1-B5; d2d D1 PR opened #147 (verifier holds).
+- 1 belt/pickup: done 2026-10-31 (decompbelt): potion goes to the belt first (no modifier, inventory closed); d2d matches for potions (0 of 390,000); proven deviation D1 scrolls (ID/TP) with no tome room go into a same-scroll belt column in game.exe, not the pack (3,111 mismatches before, 0 after); PR opened #147 https://github.com/psi29a/d2decomped/pull/147 (2026-10-31, user go); bot findings B1..B5 to the fix queue
 - 2 Tome: done 2026-10-31 (decomptome): empty tome no-op in both; d2d inventory TP use deviates (cast delay ~7 ticks, click dropped while busy, charge spent at the click; 22,395 of 108,000 oracle cases differ); PR not ready (needs patch, after-run, verifier); bot causes to FIXPORTAL2

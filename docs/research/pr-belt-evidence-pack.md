@@ -2,6 +2,10 @@
 
 > status: current (agent DECOMPBELT, 2026-10-31). One page. Detail: docs/research/pr-belt-proof.md; body: docs/research/pr-belt-draft.md; trace: docs/research/belt-pickup-trace.md; standard: docs/process/upstream-pr-standard.md. posted: nothing.
 
+posted: 2026-10-31 UTC rebased locally onto upstream/main 27113a31 (upstream moved 27 commits; two textual conflicts, resolved by keeping both sides) and pushed branch fix/belt-scroll-columns to our fork, commits 89fc48b4 (tooling) and 3963222d (fix), head 3963222d; re-ran pr_guard 0/0, test_rules, test_combat, test_game rc 0, belt oracle 390,000 cases 0 mismatches user: 'open the belt PR' 2026-10-31
+posted: 2026-10-31T16:11Z opened PR #147 https://github.com/psi29a/d2decomped/pull/147 head 3963222d user: 'open the belt PR' 2026-10-31
+posted: 2026-10-31 UTC review trigger not needed: CodeRabbit started its review on its own within a minute (no comment posted) user: 'open the belt PR' 2026-10-31
+
 **Claim.** On a ground pickup, an `isc` / `tsc` with no tome room goes into a belt column whose bottom is the same scroll (game.exe FUN_00628ba0's isc/tsc test via FUN_0063c560 never refuses; FUN_0063c600 picks the box). d2d sent them to the inventory.
 
 **Proof summary.** game.exe's own FUN_0062bad0 / FUN_00628ba0 / FUN_0063c600 run in upstream's emulator on the loaded 1.14d tables with NO hooks (`tools/emu/belt_pickup.py`, in the branch) against d2d's real `rules::pick_up` (`test_game --belt-pickup`), same cases, joined by `diff`. Every link V (read and run), the data D.

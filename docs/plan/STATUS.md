@@ -44,6 +44,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
+| [openbelt](../../openspec/changes/openbelt/) | in-progress | openbelt | `docs/research/pr-belt-evidence-pack.md`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/openbelt/**` | `upstream-pr:belt` |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 28 requirements
@@ -78,6 +79,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
+- change openbelt: pr_guard 0/0 and the belt oracle 0 mismatches after the local rebase
 
 ### Recent merges
 - 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
