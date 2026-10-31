@@ -23,3 +23,10 @@ internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+cmd/d2drill/**  drills  m1-liveproof
+internal/drill/**  drills  m1-liveproof
+docs/probes/drills/**  drills  m1-liveproof
+docs/basics-audit.md  drills  m1-liveproof
+docs/basics-live.md  drills  m1-liveproof
+docs/primitives.md  drills  m1-liveproof
+docs/probes/basics/**  drills  m1-liveproof
