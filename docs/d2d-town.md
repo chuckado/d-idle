@@ -61,7 +61,7 @@ Code: `internal/d2dctl/town_verbs.go`, `internal/d2dtown` (adapter, `ClaimRogue`
 ## Fork verb requests (do NOT patch from the town side; a later agent implements them in the fork)
 
 - **Click modifiers** (pack -> belt shift-click, `hand.ShiftClick`): `click <x> <y> [shift|ctrl|alt]` and `rclick` likewise; the SDL event gets the modifier state (`SDL_KMOD_SHIFT`) for the frame the click is handled. Until then `ErrUnsupported` stays; a `cmd belt put <item id> <slot>` verb (move a pack potion into a belt slot) would also do and is simpler.
-- **Object interaction**: `cmd interact` takes only `npcs` indices (that includes the stash and waypoint, V), so chests, shrines and portals have none. Proposed `cmd use <unit-or-preset id>` for `debug presets`/portal rows, walking adjacent and activating, so the town portal walk-in needs no pixel projection.
+- **Object interaction**: `cmd interact` takes `npcs` indices (that includes the stash and waypoint, V), the player's corpses (-3000-i, V) and the town portals (-2000-which, the first column of `debug portals`: the command the client's portal click sends; `Client.TakePortal`, docs/d2d-portal-entry.md). Chests and shrines have none yet; a `cmd use <preset id>` would cover them.
 - **Panel geometry dump**: `dump ui` could add `rects` for the open panel's buttons (repair, gold coins, tabs, waypoint rows) instead of our screenshot-measured constants.
 - **Waypoint activation** for tests: `debug wp <area> [on]` (no verb activates waypoints, so choosing a row could not be exercised).
 

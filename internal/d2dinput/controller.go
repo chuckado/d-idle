@@ -159,6 +159,10 @@ func (c *Controller) prime() error {
 	if err := c.C.Kick(c.ctx()); err != nil {
 		return err
 	}
+	// The kick is a click: d2d turns it into a fresh walk on its next frame, which drops an interaction queued in the
+	// same frame (V live, drill D2.f under lockstep: a portal command sent right after the kick in town was lost).
+	// One tick lets the walk land first.
+	c.Wait(TickDur)
 	c.primed, c.lastLevel = true, l.ID
 	return nil
 }

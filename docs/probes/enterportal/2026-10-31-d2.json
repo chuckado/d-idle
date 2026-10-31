@@ -1,0 +1,164 @@
+{
+ "results": [
+  {
+   "id": "D2.t",
+   "primitive": "P10",
+   "title": "bot ToTown with a portal open next to the player enters it (arrive in town, no second scroll)",
+   "verdict": "PASS",
+   "reason": "entered the open portal, arrived in town, no second scroll",
+   "intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+   "observed": "scrolls 3 -\u003e 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]; lines: none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "entered the open portal, arrived in town, no second scroll",
+     "Intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+     "Observed": "scrolls 3 -\u003e 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,28.0,48.6 / 1,1,16.7,25.7]; lines: none",
+     "sig": "ok|1|2",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 638191704,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "entered the open portal, arrived in town, no second scroll",
+     "Intended": "d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent",
+     "Observed": "scrolls 3 -\u003e 2; ToTown ok after 4 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,35.6,48.7 / 1,1,16.7,25.7]; lines: none",
+     "sig": "ok|1|2",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 42848192,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.g",
+   "primitive": "P10",
+   "title": "control: d2dctl EnterPortal takes the open portal (separates a bad bot walk-in from a bad portal)",
+   "verdict": "PASS",
+   "reason": "EnterPortal arrives in town",
+   "intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+   "observed": "area 2 -\u003e 1, verb error \u003cnil\u003e, portal objects in town 1",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "EnterPortal arrives in town",
+     "Intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+     "Observed": "area 2 -\u003e 1, verb error \u003cnil\u003e, portal objects in town 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 26930871,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "EnterPortal arrives in town",
+     "Intended": "the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1",
+     "Observed": "area 2 -\u003e 1, verb error \u003cnil\u003e, portal objects in town 1",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 39750597,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  },
+  {
+   "id": "D2.f",
+   "primitive": "P11",
+   "title": "round trip town and back, arrival near the origin, one portal pair",
+   "verdict": "PASS",
+   "reason": "round trip through the portals, arrival 6 subtiles from the origin",
+   "intended": "after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin",
+   "observed": "origin (140,240); ToTown ok -\u003e area 1; BackToField ok -\u003e area 2 at (140,246), 6 subtiles from the origin, via portal true, debug portals []; lines: back to field: portal in town id=805306369 x=83 y=128 player_x=83 player_y=131",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "round trip through the portals, arrival 6 subtiles from the origin",
+     "Intended": "after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin",
+     "Observed": "origin (140,240); ToTown ok -\u003e area 1; BackToField ok -\u003e area 2 at (140,246), 6 subtiles from the origin, via portal true, debug portals []; lines: back to field: portal in town id=805306369 x=83 y=128 player_x=83 player_y=131",
+     "sig": "ok|ok|2|6|true",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 37298792,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "round trip through the portals, arrival 6 subtiles from the origin",
+     "Intended": "after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin",
+     "Observed": "origin (140,240); ToTown ok -\u003e area 1; BackToField ok -\u003e area 2 at (140,246), 6 subtiles from the origin, via portal true, debug portals []; lines: back to field: portal in town id=805306369 x=83 y=128 player_x=83 player_y=131",
+     "sig": "ok|ok|2|6|true",
+     "cheats": [
+      "debug clearinv",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug give tsc",
+      "debug goto 2"
+     ],
+     "elapsed_ns": 56134835,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug give tsc",
+    "debug goto 2"
+   ]
+  }
+ ]
+}
