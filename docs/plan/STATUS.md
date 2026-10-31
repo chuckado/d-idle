@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [decompclick](../../openspec/changes/decompclick/) | in-progress | decompclick | `docs/research/click-handlers-trace.md`<br>`docs/research/pr-click-proof.md`<br>`docs/research/pr-click-draft.md`<br>`docs/research/pr-click-evidence-pack.md`<br>`tools/emu/click_*` | `fork-branch:trace/click` |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -70,6 +71,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change decompclick: every address cited is read in game.exe 1.14d or run in the oracle (V) or tagged D/S/I/U; no U in a claim's causal chain
+- change decompclick: a claimed deviation has a differential against game.exe's own code: mismatches before > 0, after = 0, over >= 100k cases
+- change decompclick: independent adversarial verifier report attached verbatim before the user is asked
+- change decompclick: nothing pushed, posted or filed on GitHub; our repo not pushed
 - change fix-pickup: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fix-pickup: live proof is drill D1/P7 (not run here)
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
@@ -83,6 +88,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 2ba74e4 10-31 13:37 `Merge agent/forkport: fork port; archive forkport; OWNERS; STATUS; BACKLOG` (forkport)
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
@@ -92,5 +98,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 705d984 10-31 12:45 `Merge agent/forkimpact: PR #148 impact research` (pr148impact)
 - d3e2207 10-31 12:31 `Merge agent/cr147: PR #147 test-only commit posted lines` (cr147)
 - 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
-- eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
 <!-- statusgen:end -->
