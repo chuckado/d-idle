@@ -138,3 +138,5 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - fix-loot: looterAdapter now forwards SetRecovering/RecoveryTotals, so recovery pickup (all gold piles, sellables) is really on for the first time; expect more gold in recovery; verify `recovery: loot` lines are non-zero in the next soak (card fix-loot)
 upstream: #147 (belt scrolls) brought up to date after #148 by merging upstream/main into its branch (no rebase, no force; card upsync147)
 - d.idle Discord server built 2026-10-31 (layout, roles, settings, pinned texts, feed webhooks stored in private files, feed test posts OK); the user finishes roles order, Community, Rules Screening, Onboarding, AutoMod and turns the temporary bot Administrator off; GitHub feed not wired yet (needs the user go); README and public-page link wait for the invite
+
+- fixmisc: F4 live proof pending (Fighter.Clear right after `debug goto`, no warm-up walk; recipe in docs/fixmisc.md). F3 closed as intended.

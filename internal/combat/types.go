@@ -19,6 +19,13 @@ type Mover interface {
 	PathTo(p input.Point) ([]input.Point, error)
 }
 
+// Syncer is an optional extension of Mover: bring the map up to the player's current position without walking.
+// Clear and Kill call it first, so the first reachability check after a position jump (debug goto, portal or waypoint
+// arrival, restart) does not run on the previous level's grid and call every monster unreachable (DRILLS5 F4).
+type Syncer interface {
+	Sync() error
+}
+
 // SafetyAction is the survival decision for one snapshot.
 type SafetyAction int
 

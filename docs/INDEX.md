@@ -58,6 +58,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [probes/drills/README.md](probes/drills/README.md) the live drill suite D0+D1 results (`cmd/d2drill`, card m1-liveproof).
 - [probes/navsoak3-summary.md](probes/navsoak3-summary.md) navsoak3 final numbers vs navsoak/navsoak2 (pre-primitive-fix baseline).
 - [probes/waits-audit.md](probes/waits-audit.md) audit of every wall-clock wait vs lockstep game time (card waits-audit): 16 OK, 2 BROKEN fixed.
+- [fixmisc.md](fixmisc.md) DRILLS5 F3 (poor melee rests: intended, pinned) and F4 (first Clear after a position jump: Navigator.Sync); card fixmisc, live proof pending.
 - [probes/postfix-soak1.md](probes/postfix-soak1.md) first post-fix 2 h soak with one injected d2d kill, vs navsoak3 per virtual hour, Gate 1 verdict.
 
 ## 9. Community
