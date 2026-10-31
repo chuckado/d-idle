@@ -80,4 +80,7 @@ Agent: Claude Code
 - posted: 2026-10-31 PR #134 opened (head d55973e1 at 00:10Z, opened 00:16Z) https://github.com/psi29a/d2decomped/pull/134 go: user, ref not recorded
 - posted: 2026-10-31 follow-up commit e3c1e535 pushed to PR #134 (00:43Z) https://github.com/psi29a/d2decomped/pull/134/commits/e3c1e535b9fa371b4327905035b27f78ca4afc9e go: user, ref not recorded
 - posted: 2026-10-31 review replies on PR #134 (00:45Z, 02:08Z) https://github.com/psi29a/d2decomped/pull/134#discussion_r4429655638 , https://github.com/psi29a/d2decomped/pull/134#discussion_r4429655757 , https://github.com/psi29a/d2decomped/pull/134#discussion_r4429926697 go: user, ref not recorded
+- posted: 2026-10-31 maintainer's request to resolve conflicts (merged: his comment, 13:58Z) https://github.com/psi29a/d2decomped/pull/134#issuecomment-6544321745 (a human comment: not ours)
+- posted: 2026-10-31 merge of upstream main (6fc9451e) and the poison-mark fix (5466cd17) pushed to PR #134, plain push, no force (PR head 5466cd17, 4 commits, 7 files; mergeable state dirty -> blocked) https://github.com/psi29a/d2decomped/pull/134/commits/5466cd17 go: user 'push 134' (2026-10-31)
+- posted: 2026-10-31 reply to the maintainer on PR #134 https://github.com/psi29a/d2decomped/pull/134#issuecomment-6544969659 go: user 'push 134' (2026-10-31)
 - Verified 2026-10-31 by read-only `gh api` GET (pulls/134, pulls/134/commits, pulls/134/comments).
