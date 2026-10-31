@@ -41,3 +41,5 @@ Click-modifier branch: about 1.5 h (script the net-diff apply 0.5 h, 3 debug hun
 4. Nothing to tell the maintainer: the split costs the fork about 3 hours and gives merge-conflict relief upstream. If #148 is still open when the fork next needs a rebase, port onto its head instead (same script).
 
 update 2026-10-31: #148 merged 16:41Z; riskmap dependencies updated; fork port pending the user go
+
+Note 2026-10-31 (UPSYNC147): the belt PR #147 was brought up to date by merging upstream/main into its branch; git followed the `tests/test_game.cpp` move to `tests/game/` with no conflict and #147 shows mergeable. Detail: docs/research/pr-belt-evidence-pack.md.
