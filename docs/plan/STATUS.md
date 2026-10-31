@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [decompwalk](../../openspec/changes/decompwalk/) | in-progress | decompwalk | `docs/research/walk-speed-trace.md`<br>`docs/research/pr-walk-*.md`<br>`tools/emu/walk_*`<br>`openspec/changes/decompwalk/**`<br>`docs/decomp-queue.md`<br>`docs/research/README.md`<br>`docs/INDEX.md`<br>`docs/research/pr-bundle-queue.md` | - |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
 | [fix-belt2](../../openspec/changes/fix-belt2/) | in-progress | fixbelt2 | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/beltfix_test.go`<br>`internal/loot/loot.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixbelt2.md` | - |
 | [fix-missile](../../openspec/changes/fix-missile/) | in-progress | fixmissile | `internal/d2dctl/verbs.go`<br>`internal/d2denv/reader.go`<br>`internal/env/tuning_combat.go`<br>`internal/env/tuning_combat_test.go`<br>`internal/combat/sim_test.go`<br>`internal/combat/reach_test.go`<br>`internal/combat/castfirst_test.go`<br>`docs/knobs.md` | - |
@@ -81,9 +80,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change decompwalk: every rule in the trace doc is tagged V, V-d2d, D, S, I or U with an address or file:line
-- change decompwalk: tools/emu/walk_speed.py runs game.exe's code on >= 100,000 cases: mismatches before > 0, after the candidate 0
-- change decompwalk: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-bank: go test -p 1 ./internal/town ./internal/d2dtown passes including TestFixBank*
 - change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-belt2: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/loot ./internal/town ./internal/bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -117,6 +113,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
+- 84ee1c4 10-31 17:33 `Merge agent/decompwalk: walk speed and movement trace` (decompwalk)
 - 7421c4e 10-31 17:22 `Merge agent/discorddocs: Discord docs match the live state` (discorddocs)
 - aa94721 10-31 17:20 `Merge agent/wppr: waypoint PR candidate docs and tooling` (wppr)
 - cebe506 10-31 17:16 `Merge agent/discordhooks: Discord webhook loader` (discordhooks)
@@ -126,5 +123,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7d960f0 10-31 16:44 `Merge agent/openprice: log upstream price PR #152` (openprice)
 - 43d5b0c 10-31 16:42 `Merge agent/pricepr: price PR proof, draft, evidence pack` (pricepr)
 - 4d53842 10-31 16:38 `Merge agent/rolesdoc: sourced Discord roles and safety guideline` (rolesdoc)
-- bd533e0 10-31 16:38 `Merge agent/discord: d.idle Discord drafts and notify tooling` (discord)
 <!-- statusgen:end -->

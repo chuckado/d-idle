@@ -2,7 +2,7 @@
 
 ```yaml
 change: decompwalk
-status: in-progress
+status: archived
 agent: decompwalk
 branch: agent/decompwalk
 worktree: ~/code/d2lod-wt/decompwalk
@@ -21,7 +21,7 @@ gates:
   - "every rule in the trace doc is tagged V, V-d2d, D, S, I or U with an address or file:line"
   - "tools/emu/walk_speed.py runs game.exe's code on >= 100,000 cases: mismatches before > 0, after the candidate 0"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-merge:
+merge: 84ee1c4
 result: "Player walk/run rules equal for the bot's case (walk 6 / run 9 every class, 0.375 / 0.5625 subtiles a tick, FRW 150v/(150+v) for v != 0, velocitypercent raw, >= 25). d2d deviates on monsters (RN moves by MonStats Run instead of Velocity; chill multiplies instead of adding coldeffect; floor 10 instead of 25) and on player velocitypercent (diminished with FRW): 712,362 exhaustive oracle cases, 425,665 differ before, 0 after; local PR candidate fix/walk-velocity (3 commits on upstream d0ea14b7), not posted, no verifier yet. Walking is 68 % of each kill in the post-fix soak at well under the rule speed: bot-side (B1 ResetRun has no caller, so after a fresh game the bot likely walks; B2 run state unlogged). Not verified live; nothing pushed or posted."
 ```
 
