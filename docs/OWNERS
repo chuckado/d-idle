@@ -54,3 +54,11 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
+docs/research/pets-merc-trace.md  decomppets  decomppets
+docs/research/pr-pets-*.md  decomppets  decomppets
+tools/emu/pets_merc*  decomppets  decomppets
+openspec/changes/decomppets/**  decomppets  decomppets
+docs/decomp-queue.md  decomppets  decomppets
+docs/research/README.md  decomppets  decomppets
+docs/INDEX.md  decomppets  decomppets
+docs/research/pr-bundle-queue.md  decomppets  decomppets
