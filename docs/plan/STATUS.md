@@ -92,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 7f17048 10-31 18:04 `Merge agent/fixstall: Kashya walk stall and pinned GoTo escape` (fixstall)
 - be5e7d0 10-31 18:00 `Merge agent/fixmisc: poor-melee rest pin test, Navigator.Sync after position jump` (fixmisc)
 - b0f8314 10-31 17:56 `Merge agent/fixrun: run-reset in WaitInGame, run/stamina in minute log; correct B1 premise; archive fix-obj and waits-audit` (fixrun)
 - 497107f 10-31 17:48 `Merge agent/drills5: live drill results for open fix cards` (m1-liveproof)
@@ -101,5 +102,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 84ee1c4 10-31 17:33 `Merge agent/decompwalk: walk speed and movement trace` (decompwalk)
 - 7421c4e 10-31 17:22 `Merge agent/discorddocs: Discord docs match the live state` (discorddocs)
 - aa94721 10-31 17:20 `Merge agent/wppr: waypoint PR candidate docs and tooling` (wppr)
-- cebe506 10-31 17:16 `Merge agent/discordhooks: Discord webhook loader` (discordhooks)
 <!-- statusgen:end -->
