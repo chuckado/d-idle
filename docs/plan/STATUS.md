@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [fix-loot](../../openspec/changes/fix-loot/) | in-progress | fixloot | `cmd/d2bot/adapters.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/looteradapter_test.go` | - |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/resource.go`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 
 ### Gates
@@ -60,7 +59,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 14 requirements
-- spec [town-basics](../../openspec/specs/town-basics/spec.md): 6 requirements
+- spec [town-basics](../../openspec/specs/town-basics/spec.md): 7 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -68,13 +67,12 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change fix-loot: go test -p 1 ./cmd/d2bot passes including TestRecoveryPickupThroughTheAdapter (pile and sword picked only while recovering, totals non-zero); the build fails if looterAdapter drops SetRecovering, RecoveryTotals, LeftBehind, ClearLeftBehind or EvaluateUnit
-- change fix-loot: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 3fb22f1 10-31 11:48 `Merge agent/fixloot: looter adapter forwards recovery` (fix-loot)
 - 1bab0ac 10-31 11:39 `Merge agent/primreview: primitives review` (primreview)
 - c75c9c6 10-31 11:33 `Merge agent/goldoff: goldfloor levers off by default` (goldfloor)
 - 880485a 10-31 11:29 `Merge agent/primlist: docs/primitives.md and m1-liveproof widened to the live drill suite` (m1-liveproof)
@@ -84,5 +82,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b3e9d71 10-31 10:33 `Merge agent/decompskill: skill damage trace` (decompskill)
 - ea13c89 10-31 10:18 `Merge agent/decompwake: monster wake trace (clean negative)` (decompwake)
 - a403585 10-31 10:07 `Merge agent/goldfloor-impl: goldfloor levers A and B` (goldfloor)
-- db3a462 10-31 10:00 `Merge agent/routeguard-impl: route guard floors` (m3-routeguard)
 <!-- statusgen:end -->
