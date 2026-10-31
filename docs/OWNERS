@@ -43,3 +43,4 @@ internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
 docs/research/pr-belt-evidence-pack.md  cr147  cr147
+openspec/changes/cr147/**  cr147  cr147
