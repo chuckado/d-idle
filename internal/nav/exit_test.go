@@ -128,7 +128,7 @@ func TestTakeWaypointClicksTabAndRow(t *testing.T) {
 	var gotX, gotY []int
 	s.onClick = func(s *sim, x, y int) {
 		gotX, gotY = append(gotX, x), append(gotY, y)
-		if y == wpPanel.RowY0+wpPanel.RowDY { // row 1 = Cold Plains (level 3)
+		if y == wpPanel.RowY[1] { // row 1 = Cold Plains (level 3)
 			s.px, s.py = 1300.5, 1050.5
 			s.ui[0x14] = 0
 		}
@@ -266,7 +266,7 @@ func TestTakeWaypointWalksToKnownPositionWhenNotStreamed(t *testing.T) {
 	}
 	s.onInteract = func(s *sim, t input.Target) error { s.ui[0x14] = 1; return nil }
 	s.onClick = func(s *sim, x, y int) {
-		if y == wpPanel.RowY0+wpPanel.RowDY {
+		if y == wpPanel.RowY[1] {
 			s.px, s.py = 1300.5, 1050.5
 			s.ui[0x14] = 0
 		}
@@ -308,45 +308,6 @@ func TestExitToFruitlessExploreGivesUp(t *testing.T) {
 	}
 }
 
-// V live (act2live5): Act 2 rows 7 and 8 ignore clicks on the text and only react to the icon column; the other
-// rows react to the text. Either way TakeWaypoint must end up in the level, trying the other column as fallback.
-func TestTakeWaypointIconColumn(t *testing.T) {
-	for _, c := range []struct {
-		name         string
-		level        int
-		travelAtIcon bool
-		wantLast     int // x of the click that travelled
-	}{
-		{"canyon icon", 46, true, wpPanel.IconX},
-		{"palace text", 52, false, wpPanel.RowX},
-		{"row 1 icon only (fallback)", 42, true, wpPanel.IconX},
-	} {
-		t.Run(c.name, func(t *testing.T) {
-			g := openField(1000, 1000, 400, 100)
-			l40 := &simLevel{no: 40, rect: d2map.Rect{X: 1000, Y: 1000, W: 200, H: 100}}
-			lt := &simLevel{no: c.level, rect: d2map.Rect{X: 1200, Y: 1000, W: 200, H: 100}}
-			s := newSim(g, input.Point{X: 1020, Y: 1050}, l40, lt)
-			s.objects, s.units = nil, nil
-			s.objects = append(s.objects, d2Unit(11, 156, 1060, 1050))
-			s.onInteract = func(s *sim, t input.Target) error { s.ui[0x14] = 1; return nil }
-			var xs []int
-			s.onClick = func(s *sim, x, y int) {
-				xs = append(xs, x)
-				if (x == wpPanel.IconX) == c.travelAtIcon && y > wpPanel.RowY0-10 {
-					s.px, s.py = 1300.5, 1050.5
-					s.ui[0x14] = 0
-				}
-			}
-			if err := s.navigator().TakeWaypoint(ctxT(t), c.level); err != nil {
-				t.Fatal(err)
-			}
-			if got := xs[len(xs)-1]; got != c.wantLast {
-				t.Fatalf("last click x=%d want %d (all %v)", got, c.wantLast, xs)
-			}
-		})
-	}
-}
-
 // Interact keeps failing the hover check: plain world clicks on the object open the panel.
 func TestOpenWaypointPlainClickFallback(t *testing.T) {
 	g := openField(1000, 1000, 400, 100)
@@ -358,7 +319,7 @@ func TestOpenWaypointPlainClickFallback(t *testing.T) {
 	s.onInteract = func(s *sim, t input.Target) error { return input.ErrNotHovered }
 	s.onClickWorld = func(s *sim, p input.Point) { s.ui[0x14] = 1 }
 	s.onClick = func(s *sim, x, y int) {
-		if y == wpPanel.RowY0+wpPanel.RowDY {
+		if y == wpPanel.RowY[1] {
 			s.px, s.py = 1300.5, 1050.5
 			s.ui[0x14] = 0
 		}
@@ -424,7 +385,7 @@ func TestTakeWaypointWaitsThroughLongLoad(t *testing.T) {
 	s.objects = append(s.objects, d2Unit(11, 119, 1060, 1050))
 	s.onInteract = func(s *sim, t input.Target) error { s.ui[0x14] = 1; return nil }
 	s.onClick = func(s *sim, x, y int) {
-		if x == wpPanel.IconX && y == wpPanel.RowY0+8*wpPanel.RowDY+wpPanel.IconDY {
+		if x == wpPanel.RowX && y == wpPanel.RowY[8] {
 			s.px, s.py = 1300.5, 1050.5
 			s.loadTicks = 40 // longer than the 3 s first wait at the poll rate
 			s.ui[0x14] = 0

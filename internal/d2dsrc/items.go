@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
@@ -340,10 +341,22 @@ func (b *builder) npc(n d2dctl.NPC) {
 		rp.derived("npc.mode", "assumed stand (npcs carries no mode)")
 		return
 	}
+	if isWaypointName(n.Name) {
+		// W1 (fixwp): every act's waypoint object is an npcs row named "Waypoint"; without a class nav never finds it.
+		b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: WaypointClass, ID: id, Mode: -1, X: x, Y: y})
+		rp.derived("object.class", "waypoint name mapped to a waypoint object class (the exact objects.txt id is not in npcs)")
+		return
+	}
 	b.snap.Objects = append(b.snap.Objects, d2.Unit{Type: d2.TypeObject, Class: -1, ID: id, Mode: -1, X: x, Y: y})
 	rp.unknown("object.class", "npcs gives a name, not an objects.txt id (Class = -1; Extras.Names has the name)")
 	rp.unknown("object.mode", "open/closed state not in npcs")
 }
+
+// WaypointClass stands for every waypoint object of every act: npcs names the object "Waypoint" but not its
+// objects.txt id (119 is the Rogue Encampment's; all sixteen ids pass d2map.IsWaypointObject, which is all nav asks).
+const WaypointClass = 119
+
+func isWaypointName(name string) bool { return strings.Contains(strings.ToLower(name), "waypoint") }
 
 func (b *builder) ground(g d2dctl.GroundItem) {
 	rp := b.rp
