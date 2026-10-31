@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [decompmon](../../openspec/changes/decompmon/) | in-progress | decompmon | `docs/research/monster-attack-trace.md`<br>`docs/archive/monster-attack-trace-2026-10-30.md`<br>`tools/emu/mon_*.py`<br>`tools/emu/monster_hit.py`<br>`openspec/changes/decompmon/**` | - |
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
 | [fix-obj](../../openspec/changes/fix-obj/) | in-progress | fixobj | `internal/d2dsrc/items.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/controller_test.go`<br>`internal/d2denv/env.go`<br>`internal/d2denv/fixobj_test.go`<br>`docs/fixobj.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
@@ -73,6 +74,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change decompmon: every rule in the trace doc is tagged V, V-d2d, D, S, I or U with an address or file:line
+- change decompmon: the oracles run from upstream's tools/emu: melee 0 differ on 300,672 cases; the missile block gate and damage roll 0 differ from the reading on 100,000 cases each
 - change fix-bank: go test -p 1 ./internal/town ./internal/d2dtown passes including TestFixBank*
 - change fix-bank: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fix-obj: go vet ./... and go test -short -count=1 ./... plus go test -race ./internal/d2dinput ./internal/d2dsrc ./internal/d2dctl ./internal/d2denv ./cmd/d2bot pass on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict

@@ -18,5 +18,6 @@
 | waypoint (decomp-queue item 3, docs/research/pr-wp-*.md) | local, proof incomplete, needs the independent verifier | 6 files, 1 commit | branch fix/waypoint-hostile-window on the worker host |
 | vendor prices (decomp-queue item 5, docs/research/pr-price-proof.md) | deviations proven (100k: buy 39,626 / sell 38,939 / repair 42,705 differ; model = game.exe 100k/100k); fix commits, tests, verifier not done | ? | branch trace/price (tooling f38cb9af) on upstream/main 0dc4c62a on the worker host |
 | portal entry (ENTERPORTAL) | investigation running | ? | only if a d2d deviation is proven |
+| monster missile gates (decomp-queue item 7, docs/research/monster-attack-trace.md) | deviations proven (MissA ToHit gate: 94 of 142 rows; can-block = physical: 10,503 of 100,000 oracle cases); no branch, no fix, no verifier | 2 claims planned | no early-game effect; low priority bundle filler |
 
 When the tome PR opens, add any other READY candidate to the same bundle only if the file count stays under the margin above.
