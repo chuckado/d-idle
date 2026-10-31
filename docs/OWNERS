@@ -23,3 +23,6 @@ internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+cmd/d2bot/d2dwire.go  fixportal2  fix-portal2
+cmd/d2bot/d2dportal_test.go  fixportal2  fix-portal2
+docs/fixportal.md  fixportal2  fix-portal2
