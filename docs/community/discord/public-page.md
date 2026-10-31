@@ -1,9 +1,9 @@
 # Linking the server from the README and the public status page
 
-> status: PROPOSAL. Nothing is linked or published until the user supplies the invite and says so. No URL is in the repo.
+> status: PROPOSAL for the status page only. The README line is done (2026-10-31, invite in the README); the user's ops tooling has the invite configured, the page link is not yet implemented here.
 
 ## README
-One line (exact), under Contributing; the user adds it:
+One line (exact), under Contributing (done):
 `Chat and help: the d.idle Discord, <INVITE URL>. Rules and FAQ are pinned there.`
 
 ## Public status page (generator is in the private ops repo)
