@@ -30,3 +30,7 @@ docs/basics-audit.md  drills  m1-liveproof
 docs/basics-live.md  drills  m1-liveproof
 docs/primitives.md  drills  m1-liveproof
 docs/probes/basics/**  drills  m1-liveproof
+docs/research/pr-belt-evidence-pack.md  openbelt  openbelt
+docs/decomp-queue.md  openbelt  openbelt
+docs/BACKLOG.md  openbelt  openbelt
+openspec/changes/openbelt/**  openbelt  openbelt
