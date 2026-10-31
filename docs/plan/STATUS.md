@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [decompbelt](../../openspec/changes/decompbelt/) | in-progress | decompbelt | `docs/research/belt-pickup-trace.md`<br>`docs/research/pr-belt-proof.md`<br>`docs/research/pr-belt-draft.md`<br>`docs/research/pr-belt-evidence-pack.md`<br>`docs/decomp-queue.md`<br>`tools/emu/belt_*` | `fork-branch:trace/belt` |
+| [decomptome](../../openspec/changes/decomptome/) | in-progress | decomptome | `docs/research/town-portal-trace.md`<br>`docs/research/pr-tome-*.md`<br>`tools/emu/tome_*.py`<br>`openspec/changes/decomptome/**` | - |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 
 ### Gates
@@ -72,11 +73,15 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change decompbelt: the deviation claimed has a differential against game.exe's own code: mismatches before > 0, after = 0, over >= 100k cases
 - change decompbelt: independent adversarial verifier report attached verbatim before the user is asked
 - change decompbelt: nothing pushed, posted or filed on GitHub; our repo not pushed
+- change decomptome: every rule in the trace doc is tagged V, V-d2d, D, S, U or I with an address or file:line
+- change decomptome: tools/emu/tome_use.py runs from upstream's tools/emu over >= 100,000 cases and the empty-tome class has 0 differ
+- change decomptome: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
 - 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
 - 9630246 10-31 11:52 `Merge agent/fixportal: portal source and HasTP fixes` (fix-portal)
 - 3fb22f1 10-31 11:48 `Merge agent/fixloot: looter adapter forwards recovery` (fix-loot)
@@ -86,5 +91,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 86a9c2b 10-31 11:17 `Merge agent/cr134: PR #134 CodeRabbit round 2 (F1, F2)` (upstream-bundle)
 - 02ec208 10-31 11:14 `Merge agent/goldab: goldfloor paired A/B result (gates did not hold, lever C no-go)` (goldfloor)
 - 172454d 10-31 10:36 `Merge agent/markproof: get-hit mark derivation checked against game.exe` (upstream-bundle)
-- b3e9d71 10-31 10:33 `Merge agent/decompskill: skill damage trace` (decompskill)
 <!-- statusgen:end -->
