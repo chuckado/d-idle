@@ -65,4 +65,4 @@ Table the bot should use (gold, 1.14d, Normal, before quests): repair = cost x m
 
 ## PR candidate state
 
-Deviations D1-D7 proven (100k differential, model equal to game.exe 100,000 / 100,000); local tooling commit `f38cb9af` on branch `trace/price` (upstream 0dc4c62a) in the worker host's PR checkout. Fix commits, upstream tests, pr_guard and the independent verifier: NOT done (time box). Next: one claim per commit, D1 first (largest), then D2 + D7 (sell), D3 + D4 (identified gate).
+Built by PRICEPR (2026-10-31): local branch `fix/vendor-prices` on upstream/main d0ea14b7, tooling plus five claim commits D1, D2, D3, D4, D7; on the cases no unclaimed term touches, 0 mismatches after (proof, numbers and verifier: [pr-price-proof.md](pr-price-proof.md)). Left out: D5 (d2d's 0 is its "nothing to repair" sentinel), D6, D8, and two gaps found on the way: D9 the NPC mult divides by 1024 first above 0xffff (buy 9,232 / sell 138 / repair 1,608 of 100,000), D10 the repair gate's ItemTypes / durability-column check (repair 4,238, partly generator-made durability).
