@@ -17,7 +17,7 @@ ledger on the worker host, `$D2CHEAT_LEDGER`). Used: `debug give <code>`, `debug
 ## Missing cheats and verbs (lab6 build, read-only check of the fork 2026-10-31)
 | Need | State | How to add (fork change, needs the user's go) |
 |---|---|---|
-| click modifier (shift/ctrl-click) | MISSING: `click x y shift` is accepted and ignored (V live); d2d has no shift-click behaviour (docs/d2d-fork.md section 11) | `click|rclick <x> <y> [shift\|ctrl\|alt]` feeding SDL_KMOD to the hit tests, plus the pack-to-belt shift rule |
+| click modifier (shift/ctrl-click) | EXISTS in the lab binary as of 2026-10-31: `click|rclick <x> <y> [shift\|ctrl\|alt]`; shift (pack potion to the belt box a pickup would use) and ctrl (sell with a store open) verified live on a hidden slot; alt is parsed only (no game rule), shift with a full belt (no box, no move) is by code reading only | none (D1.P1s can be unblocked in a later change) |
 | waypoint activation (`debug wp`) | EXISTS: `debug wp <i>`, `all`, `level <id>` (V live: mask 2^39-1) | none |
 | item into pack or belt directly | MISSING: `debug give <code> [q]` only drops on the ground at the feet (V); pickup then goes belt first, pack when the belt is full | `debug give <code> pack\|belt [box]` |
 | gold | EXISTS: `debug stat 14 N` (purse), `15` (stash) (V live) | none |
