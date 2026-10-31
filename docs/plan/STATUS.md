@@ -89,7 +89,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change waits-audit: live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)
 
 ### Recent merges
-- 92cfb21 10-31 17:46 `Merge agent/drills5: live drill results for open fix cards` (drills5)
+- 497107f 10-31 17:48 `Merge agent/drills5: live drill results for open fix cards` (m1-liveproof)
 - 0e592a6 10-31 17:44 `Merge agent/wpopen: upstream #153 open, posted lines` (wpopen)
 - 80df3a6 10-31 17:36 `Merge agent/fix152win: PR #152 MSVC C4456 fix noted` (fix152win)
 - 0eb828e 10-31 17:35 `Merge agent/readmelink: Discord invite in README` (readmelink)
