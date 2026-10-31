@@ -46,9 +46,9 @@ type rated struct {
 	prot bool
 }
 
-func (t *Town) rate(u d2.Unit) rated {
+func (t *Town) rate(u d2.Unit, maxBuy int) rated {
 	v := t.judge.EvaluateUnit(u)
-	return rated{u, v.Prio, loot.SellValue(t.h.Base(u), u.Item.Quality), t.sellProtected(u, v)}
+	return rated{u, v.Prio, loot.SellValue(t.e.Data, t.h.Base(u), u.Item, maxBuy), t.sellProtected(u, v)}
 }
 
 func lowestFirst(l []rated) {
@@ -73,14 +73,14 @@ func (t *Town) relieveStash(ctx context.Context, a *Act, rep *ChoreReport) error
 	}
 	var sell, prot, pool []rated
 	for _, u := range left {
-		if r := t.rate(u); r.prot {
+		if r := t.rate(u, loot.MaxBuyOf(s.Player)); r.prot {
 			prot = append(prot, r)
 		} else {
 			sell = append(sell, r)
 		}
 	}
 	for _, u := range s.Inventory.Container(d2.ContStash) {
-		if r := t.rate(u); !r.prot {
+		if r := t.rate(u, loot.MaxBuyOf(s.Player)); !r.prot {
 			pool = append(pool, r)
 		}
 	}

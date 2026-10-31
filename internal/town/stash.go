@@ -130,8 +130,8 @@ func (t *Town) goldKeep(level int) int {
 	return keep
 }
 
-// StashGoldCap is the most gold the stash holds (classic LoD 1.14d: 2,500,000). UNVERIFIED on the lab: the value
-// is from game knowledge and card m1-liveproof measures it. A refused deposit into a stash holding at least
+// StashGoldCap is the most gold the stash holds: 2,500,000 whatever the level or difficulty (VERIFIED by disassembly,
+// game.exe FUN_00623460 returns the constant: docs/research/price-trace.md Q4). A refused deposit into a stash holding at least
 // stashCapFloor gold lowers the cap the bot assumes to the stash gold seen then (stashCapSeen), so a wrong constant
 // costs one failed deposit, not one per visit.
 const (

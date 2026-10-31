@@ -28,7 +28,7 @@ func (l *Looter) Valuables(s *d2.Snapshot) ValuablesReport {
 			continue
 		}
 		v := l.EvaluateWith(u, c)
-		val := SellValue(l.base(u.Class), u.Item.Quality)
+		val := SellValue(l.e.Data, l.base(u.Class), u.Item, MaxBuyOf(s.Player))
 		if v.Action == Keep || v.Action == Drop && val < t.ValuableMinGold {
 			continue
 		}

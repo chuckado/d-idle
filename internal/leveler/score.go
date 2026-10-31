@@ -78,7 +78,7 @@ type Cand struct {
 	// OffClass: a weapon type the class's preference table gives no bonus (a Spear for a caster). It may still be
 	// equipped when found, but the shop never spends gold on it.
 	OffClass bool
-	Price    int // vendor items: base cost x quality factor (rough), 0 for owned items
+	Price    int // vendor items: estimatePrice times the vendor multiplier, 0 for owned items
 }
 
 // slotsFor maps a base item to the body locations it can be worn at; nil for non-equipment.
@@ -195,7 +195,7 @@ func Candidate(db *data.DB, p *d2.Player, u d2.Unit, st d2.Stats) Cand {
 		}
 	}
 	c.Score = scoreOf(db, pref, b, it, st, ctxFor(p, it, st))
-	c.Price = estimatePrice(b, it)
+	c.Price = estimatePrice(b, it, st)
 	return c
 }
 
@@ -324,24 +324,33 @@ func statValueCtx(st d2.Stats, ctx scoreCtx) float64 {
 	return v
 }
 
-// estimatePrice is a rough vendor price: base cost times a quality factor (superior x1.5, magic x2.5, rare x5).
-// A stackable item is priced per unit, so it is taken at a full stack (an upper bound).
-func estimatePrice(b *data.ItemBase, it *d2.Item) int {
+// estimatePrice is the vendor's asking price before the vendor multiplier (shopAt applies data.VendorBuyMult): base
+// cost, armor scaled by defence / max defence (the game's rule, VERIFIED docs/research/price-trace.md), quality
+// extras only for identified items. The extras (superior x1.5, magic x2.5, rare x5, set and unique x8) are the old
+// UNVERIFIED budget heuristic: the game adds stat costs the bot cannot read. A stackable item is priced per unit at a
+// full stack (an upper bound).
+func estimatePrice(b *data.ItemBase, it *d2.Item, st d2.Stats) int {
 	f := 1.0
-	switch it.Quality {
-	case d2.QualitySuperior:
-		f = 1.5
-	case d2.QualityMagic:
-		f = 2.5
-	case d2.QualityRare, d2.QualityCrafted:
-		f = 5
-	case d2.QualitySet, d2.QualityUnique:
-		f = 8
+	if it.Identified() {
+		switch it.Quality {
+		case d2.QualitySuperior:
+			f = 1.5
+		case d2.QualityMagic:
+			f = 2.5
+		case d2.QualityRare, d2.QualityCrafted:
+			f = 5
+		case d2.QualitySet, d2.QualityUnique:
+			f = 8
+		}
 	}
 	if b.Stackable && b.MaxStack > 1 {
 		f *= float64(b.MaxStack)
 	}
-	return int(float64(b.Cost) * f)
+	cost := b.Cost
+	if b.Kind == data.KindArmor && b.MaxAC > 0 && st != nil && st.Has(stDefence) && st.Get(stDefence) > 0 {
+		cost = cost * int(st.Get(stDefence)) / b.MaxAC
+	}
+	return int(float64(cost) * f)
 }
 
 // Swap is one equip decision: put Item into body location Slot.

@@ -1,6 +1,9 @@
 package resource
 
-import "d2lod-bot/internal/d2"
+import (
+	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
+)
 
 // Potion kinds the policy talks about.
 type Potion int
@@ -167,11 +170,29 @@ func PlanFor(c d2.Class, level int) BeltPlan {
 	return p
 }
 
-// Prices are vendor prices per tier (index 0 = tier 1). U: defaults are placeholders; callers pass the stock prices.
+// Prices are vendor prices per tier (index 0 = tier 1).
 type Prices struct{ HP, MP, RV [5]int }
 
+// DefaultPrices are the potion prices at a vendor with multiplier 1.0 (Akara, Lysander and the other Act 2-4
+// vendors); the base costs are the stock tier prices (U for tiers 3 to 5 of mana and healing: UNVERIFIED rows).
 func DefaultPrices() Prices {
 	return Prices{HP: [5]int{30, 60, 150, 300, 600}, MP: [5]int{30, 60, 120, 240, 480}, RV: [5]int{150, 450, 0, 0, 0}}
+}
+
+// PricesAt scales DefaultPrices by the vendor's multiplier (data.VendorBuyMult: Charsi 0.9375, Gheed 1.0625, Act 5
+// vendors x2, VERIFIED price-trace.md) and, with questA, by the 922/1024 discount of the act quest.
+func PricesAt(npcClass int, questA bool) Prices {
+	m := data.VendorBuyMult(npcClass)
+	sc := func(a [5]int) (o [5]int) {
+		for i, c := range a {
+			if c > 0 { // 0 = not sold
+				o[i] = data.ScalePrice(c, m, questA)
+			}
+		}
+		return o
+	}
+	d := DefaultPrices()
+	return Prices{HP: sc(d.HP), MP: sc(d.MP), RV: sc(d.RV)}
 }
 
 // Buys is the shopping list.

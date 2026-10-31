@@ -251,7 +251,7 @@ func (l *Looter) poorSellable(b *data.ItemBase, it *d2.Item) bool {
 	if !l.isAny(b, []string{"weap", "armo", "tors", "helm", "shld", "boot", "glov", "belt"}) {
 		return false
 	}
-	return SellValue(b, it.Quality) >= l.e.Tune.Loot.PoorMinSell
+	return SellValue(l.e.Data, b, it, 0) >= l.e.Tune.Loot.PoorMinSell
 }
 
 func (l *Looter) evaluate(b *data.ItemBase, it *d2.Item, c Ctx, u *d2.Unit) Verdict {
@@ -368,18 +368,25 @@ func (l *Looter) isAny(b *data.ItemBase, types []string) bool {
 	return false
 }
 
-// SellValue estimates what a vendor pays for an item: a quarter of the base price times a quality factor.
-// UNVERIFIED approximation, only used to rank sellable pickups in low-gold mode.
-func SellValue(b *data.ItemBase, quality int) int {
-	if b == nil {
+// SellValue is what a vendor pays for the item, by game.exe's formula (VERIFIED, docs/research/price-trace.md): cost / 2,
+// an ethereal item and a class item a quarter each, quality extras only when identified, capped at maxBuy (0: no
+// cap), at least 1. Armor uses its base maximum defence (the item's own defence is not read here: an upper bound).
+// The stat cost of identified magic, rare, set and unique items is not modelled, so for those it is a lower bound.
+func SellValue(db *data.DB, b *data.ItemBase, it *d2.Item, maxBuy int) int {
+	if b == nil || it == nil {
 		return 0
 	}
-	mult := [...]int{0, 5, 10, 13, 30, 60, 60, 80, 50} // tenths of base/4, indexed by quality
-	q := quality
-	if q < 0 || q >= len(mult) {
-		q = 2
+	f := db.PriceFactsOf(b)
+	f.Identified, f.Ethereal, f.Low = it.Identified(), it.Ethereal(), it.Quality == d2.QualityLow
+	return b.SellPrice(f, maxBuy)
+}
+
+// MaxBuyOf is the most the vendors of the player's current act pay for one item (npc.txt max buy).
+func MaxBuyOf(p *d2.Player) int {
+	if p == nil {
+		return 0
 	}
-	return b.Cost / 4 * mult[q] / 10
+	return data.MaxBuy(data.ActOfArea(p.Area), int(p.Difficulty))
 }
 
 // ctxFrom builds a rule context (level, gold, needs) from a snapshot.
