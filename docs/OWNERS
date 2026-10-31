@@ -40,17 +40,7 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
-internal/d2dctl/fixstall_test.go  fixstall  fixstall
-internal/nav/pinned_test.go  fixstall  fixstall
-docs/fixstall.md  fixstall  fixstall
 openspec/changes/drills6/**  drills6  drills6
-internal/d2dctl/town_verbs.go  fixstall2  fixstall2
-internal/d2dctl/approach_path.go  fixstall2  fixstall2
-internal/d2dctl/approach_path_test.go  fixstall2  fixstall2
-internal/d2dtown/adapter.go  fixstall2  fixstall2
-internal/town/trip.go  fixstall2  fixstall2
-internal/town/enterportal_test.go  fixstall2  fixstall2
-docs/fixstall2.md  fixstall2  fixstall2
 docs/fixstall3.md  fixstall3  fixstall3
 internal/d2dctl/testdata/camp-grid.txt  fixstall3  fixstall3
 internal/d2dtown/wiring_test.go  fixstall3  fixstall3
