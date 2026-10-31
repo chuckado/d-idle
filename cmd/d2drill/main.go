@@ -34,7 +34,7 @@ func main() { os.Exit(run()) }
 func run() int {
 	home := os.Getenv("HOME")
 	slotDir := os.Getenv("D2D_SLOT_DIR")
-	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, DW waypoints)")
+	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, D3 town, D4 pack, D5 combat, D6 movement, D7 build, D9 lifecycle, DW waypoints, H hover audit)")
 	only := flag.String("only", "", "comma list of drill ids to run (default: the whole group)")
 	repeat := flag.Int("repeat", 2, "runs per drill (determinism check)")
 	bin := flag.String("bin", envOr("D2D_BIN", filepath.Join(home, "d2d-lab/fork/bin/d2d.lab6")), "d2d binary (the lab build)")
@@ -52,6 +52,7 @@ func run() int {
 	verbose := flag.Bool("v", false, "debug log of the bot code paths on stderr")
 	probe := flag.String("probe", "", "semicolon list of verbs to run and print (debug verbs go through the cheat ledger), then exit; for finding out what a verb does")
 	label := flag.String("label", "", "result file label after the date (default: the group, lower case)")
+	repairBelow := flag.Int("repair-below", 0, "override the bot's repairBelowPct knob (default 30; `debug durability all 1` leaves 5 percent, so the default reaches the repair path)")
 	limit := flag.Duration("limit", 0, "override the per-run hard time limit")
 	flag.Parse()
 	if *sock == "" || slotDir == "" {
@@ -74,6 +75,9 @@ func run() int {
 		return 1
 	}
 	tune := env.DefaultTuning()
+	if *repairBelow > 0 {
+		tune.Town.RepairBelowPct = *repairBelow
+	}
 	if err := os.MkdirAll(*hdir, 0o700); err != nil {
 		fmt.Fprintln(os.Stderr, "d2drill:", err)
 		return 1
@@ -102,6 +106,7 @@ func run() int {
 	}
 	l := newLab(be, db, led, *name, "slot"+os.Getenv("D2D_SLOT"), log)
 	l.rec = rec
+	l.tune = &tune
 	if *probe != "" {
 		return l.runProbe(ctx, *probe)
 	}
@@ -112,6 +117,22 @@ func run() int {
 		drills = drill.D1(l, strings.Split(*belts, ","))
 	case "D2":
 		drills = drill.D2(l)
+	case "D3":
+		drills = drill.D3(l)
+	case "D4":
+		drills = drill.D4(l)
+	case "D5":
+		drills = drill.D5(l)
+	case "D6":
+		drills = drill.D6(l)
+	case "D7":
+		drills = drill.D7(l)
+	case "D8":
+		drills = drill.D8(l)
+	case "D9":
+		drills = drill.D9(l)
+	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
+		drills = drill.H(l)
 	case "DW":
 		drills = drill.DW(l)
 	case "D0": // harness self-test of the P35 gate: the drill leaves the pack open on purpose

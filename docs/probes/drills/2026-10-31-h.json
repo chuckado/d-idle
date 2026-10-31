@@ -1,0 +1,164 @@
+{
+ "results": [
+  {
+   "id": "H.pause",
+   "primitive": "AUDIT",
+   "title": "NPC approach as the merc claim and revive code call it: d2dctl.Pause on wall time vs virtual ticks",
+   "verdict": "FAIL",
+   "reason": "RISK PROVEN: with d2dctl.Pause on wall time (cmd/d2bot has no override) the approach never opens the menu under lockstep; d2dmerc.Revive and d2dtown.Claimer call it",
+   "intended": "the approach opens Kashya's menu with either Pause",
+   "observed": "virtual-tick Pause: opened=true err=\"\" ticks=147 wall=18ms | wall-time Pause (as cmd/d2bot): opened=false err=\"context deadline exceeded\" ticks=0 wall=8000ms",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "RISK PROVEN: with d2dctl.Pause on wall time (cmd/d2bot has no override) the approach never opens the menu under lockstep; d2dmerc.Revive and d2dtown.Claimer call it",
+     "Intended": "the approach opens Kashya's menu with either Pause",
+     "Observed": "virtual-tick Pause: opened=true err=\"\" ticks=147 wall=18ms | wall-time Pause (as cmd/d2bot): opened=false err=\"context deadline exceeded\" ticks=0 wall=8000ms",
+     "sig": "virt=true wall=false",
+     "cheats": [
+      "debug goto 1",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 8659611238,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "RISK PROVEN: with d2dctl.Pause on wall time (cmd/d2bot has no override) the approach never opens the menu under lockstep; d2dmerc.Revive and d2dtown.Claimer call it",
+     "Intended": "the approach opens Kashya's menu with either Pause",
+     "Observed": "virtual-tick Pause: opened=true err=\"\" ticks=754 wall=85ms | wall-time Pause (as cmd/d2bot): opened=false err=\"context deadline exceeded\" ticks=0 wall=8000ms",
+     "sig": "virt=true wall=false",
+     "cheats": [
+      "debug goto 1",
+      "debug goto 1"
+     ],
+     "elapsed_ns": 8095771495,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1",
+    "debug goto 1"
+   ]
+  },
+  {
+   "id": "H.obj",
+   "primitive": "AUDIT",
+   "title": "object click as the bot does it (Interact, then ClickWorld): does a waypoint open",
+   "verdict": "FAIL",
+   "reason": "RISK PROVEN: the bot's object click (Interact unsupported, then cmd move onto the object) does not operate it; only `cmd interact \u003cindex\u003e` does",
+   "intended": "the bot's object click opens the waypoint",
+   "observed": "Interact(object) err \"input: not supported by this backend: interact with unit type 2 (objects have no cmd verb)\"; waypoint open after the ClickWorld fallback (cmd move onto it): false; after `cmd interact \u003cindex\u003e`: true; 366 ticks",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "RISK PROVEN: the bot's object click (Interact unsupported, then cmd move onto the object) does not operate it; only `cmd interact \u003cindex\u003e` does",
+     "Intended": "the bot's object click opens the waypoint",
+     "Observed": "Interact(object) err \"input: not supported by this backend: interact with unit type 2 (objects have no cmd verb)\"; waypoint open after the ClickWorld fallback (cmd move onto it): false; after `cmd interact \u003cindex\u003e`: true; 366 ticks",
+     "sig": "err=true bot=false cmd=true",
+     "cheats": [
+      "debug goto 1"
+     ],
+     "elapsed_ns": 28992777,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "RISK PROVEN: the bot's object click (Interact unsupported, then cmd move onto the object) does not operate it; only `cmd interact \u003cindex\u003e` does",
+     "Intended": "the bot's object click opens the waypoint",
+     "Observed": "Interact(object) err \"input: not supported by this backend: interact with unit type 2 (objects have no cmd verb)\"; waypoint open after the ClickWorld fallback (cmd move onto it): false; after `cmd interact \u003cindex\u003e`: true; 365 ticks",
+     "sig": "err=true bot=false cmd=true",
+     "cheats": [
+      "debug goto 1"
+     ],
+     "elapsed_ns": 24030644,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1"
+   ]
+  },
+  {
+   "id": "H.ground",
+   "primitive": "AUDIT",
+   "title": "ground item by pointer (hover+click, with and without a rendered frame) vs cmd pickup",
+   "verdict": "PASS",
+   "reason": "blind spot confirmed for pointer clicks (picked=false without a frame, true after a rendered frame); the bot uses cmd pickup, so it is not affected",
+   "intended": "cmd pickup takes the item; a pointer click does only after a rendered frame",
+   "observed": "pointer: picked=false walked=true (138 ticks) | pointer-render: picked=true walked=false (124 ticks) | pickup: picked=true walked=false (120 ticks)",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "blind spot confirmed for pointer clicks (picked=false without a frame, true after a rendered frame); the bot uses cmd pickup, so it is not affected",
+     "Intended": "cmd pickup takes the item; a pointer click does only after a rendered frame",
+     "Observed": "pointer: picked=false walked=true (138 ticks) | pointer-render: picked=true walked=false (124 ticks) | pickup: picked=true walked=false (120 ticks)",
+     "sig": "pointer:false;pointer-render:true;pickup:true",
+     "cheats": [
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin",
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin",
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin"
+     ],
+     "elapsed_ns": 142077357,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "blind spot confirmed for pointer clicks (picked=false without a frame, true after a rendered frame); the bot uses cmd pickup, so it is not affected",
+     "Intended": "cmd pickup takes the item; a pointer click does only after a rendered frame",
+     "Observed": "pointer: picked=false walked=true (138 ticks) | pointer-render: picked=true walked=false (124 ticks) | pickup: picked=true walked=false (120 ticks)",
+     "sig": "pointer:false;pointer-render:true;pickup:true",
+     "cheats": [
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin",
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin",
+      "debug goto 1",
+      "debug clearinv",
+      "debug give rin"
+     ],
+     "elapsed_ns": 148944144,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1",
+    "debug clearinv",
+    "debug give rin",
+    "debug goto 1",
+    "debug clearinv",
+    "debug give rin",
+    "debug goto 1",
+    "debug clearinv",
+    "debug give rin"
+   ]
+  },
+  {
+   "id": "H.monster",
+   "primitive": "AUDIT",
+   "title": "attack by pointer vs cmd skill with a unit id",
+   "verdict": "BLOCKED",
+   "reason": "missing: a monster to fight: no debug verb spawns or places one (debug help lists none); the bot attacks with `cmd skill ... \u003cunit\u003e left`, which carries the unit id and needs no pointer pick (code), soaks kill under lockstep",
+   "intended": "",
+   "observed": "",
+   "deterministic": true
+  }
+ ]
+}

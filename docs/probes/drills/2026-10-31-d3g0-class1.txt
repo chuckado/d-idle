@@ -1,0 +1,4 @@
+DRILL D3.g0 U1 PASS recorded | intended: the fresh character's gold read (no cheat before this drill) | observed: class Necromancer: purse 0 stash 0 life 45/45 pack iscx1 tscx1 | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D3.g0     U1    PASS     same recorded

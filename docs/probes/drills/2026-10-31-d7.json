@@ -1,0 +1,142 @@
+{
+ "results": [
+  {
+   "id": "D7.a",
+   "primitive": "P30",
+   "title": "level 12 by cheat with 55 stat points: the leveler spends them all",
+   "verdict": "PASS",
+   "reason": "all points spent",
+   "intended": "no unspent points after the leveler ran",
+   "observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 12 dex 25 vit 63 ene 35; skills 36:1,38:8,40:1,43:1,44:1",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "all points spent",
+     "Intended": "no unspent points after the leveler ran",
+     "Observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 12 dex 25 vit 63 ene 35; skills 36:1,38:8,40:1,43:1,44:1",
+     "sig": "stat 55-\u003e0 skill 11-\u003e0 err=false",
+     "cheats": [
+      "debug stat 12 12",
+      "debug statpts 55",
+      "debug skillpts 11"
+     ],
+     "elapsed_ns": 963139933,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "all points spent",
+     "Intended": "no unspent points after the leveler ran",
+     "Observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 12 dex 25 vit 118 ene 35; skills 36:1,38:18,40:2,43:1,44:1",
+     "sig": "stat 55-\u003e0 skill 11-\u003e0 err=false",
+     "cheats": [
+      "debug stat 12 12",
+      "debug statpts 55",
+      "debug skillpts 11"
+     ],
+     "elapsed_ns": 281364813,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug stat 12 12",
+    "debug statpts 55",
+    "debug skillpts 11"
+   ]
+  },
+  {
+   "id": "D7.b",
+   "primitive": "P31",
+   "title": "level 12 by cheat with 11 skill points: the leveler spends them all per the build order",
+   "verdict": "PASS",
+   "reason": "all points spent",
+   "intended": "no unspent points after the leveler ran",
+   "observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 33 dex 25 vit 152 ene 35; skills 36:1,38:20,40:2,43:1,44:1,49:9",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "all points spent",
+     "Intended": "no unspent points after the leveler ran",
+     "Observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 33 dex 25 vit 152 ene 35; skills 36:1,38:20,40:2,43:1,44:1,49:9",
+     "sig": "stat 55-\u003e0 skill 11-\u003e0 err=false",
+     "cheats": [
+      "debug stat 12 12",
+      "debug statpts 55",
+      "debug skillpts 11"
+     ],
+     "elapsed_ns": 326368691,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "all points spent",
+     "Intended": "no unspent points after the leveler ran",
+     "Observed": "stat points 55 -\u003e 0, skill points 11 -\u003e 0, planned 66 done 66 refused [] err \"\"; str 48 dex 25 vit 192 ene 35; skills 36:1,38:20,40:2,43:1,44:1,49:20",
+     "sig": "stat 55-\u003e0 skill 11-\u003e0 err=false",
+     "cheats": [
+      "debug stat 12 12",
+      "debug statpts 55",
+      "debug skillpts 11"
+     ],
+     "elapsed_ns": 286171942,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug stat 12 12",
+    "debug statpts 55",
+    "debug skillpts 11"
+   ]
+  },
+  {
+   "id": "D7.c",
+   "primitive": "P32",
+   "title": "a cap in the pack, body slot empty: the leveler wears it, cursor empty",
+   "verdict": "PASS",
+   "reason": "equipped",
+   "intended": "the cap is worn, the cursor empty (P35 gate), old items kept",
+   "observed": "worn after: cap,sst; worn before the equip call sst (pack 1 items), swaps [Cap 4.0 -\u003e head (was empty)] failed [] err \u003cnil\u003e",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "equipped",
+     "Intended": "the cap is worn, the cursor empty (P35 gate), old items kept",
+     "Observed": "worn after: cap,sst; worn before the equip call sst (pack 1 items), swaps [Cap 4.0 -\u003e head (was empty)] failed [] err \u003cnil\u003e",
+     "sig": "worn=true",
+     "cheats": [
+      "debug clearinv",
+      "debug give cap"
+     ],
+     "elapsed_ns": 25067862,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "equipped",
+     "Intended": "the cap is worn, the cursor empty (P35 gate), old items kept",
+     "Observed": "worn after: cap,sst; worn before the equip call cap,sst (pack 1 items), swaps [] failed [] err \u003cnil\u003e",
+     "sig": "worn=true",
+     "cheats": [
+      "debug clearinv",
+      "debug give cap"
+     ],
+     "elapsed_ns": 13519348,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give cap"
+   ]
+  }
+ ]
+}

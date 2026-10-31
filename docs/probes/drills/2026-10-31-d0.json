@@ -1,0 +1,34 @@
+{
+ "results": [
+  {
+   "id": "P35.post.D0.gate",
+   "primitive": "P35",
+   "verdict": "FAIL",
+   "reason": "dirty UI post drill D0.gate",
+   "intended": "cursor empty, no panel, no dialog",
+   "observed": "open: inventory; recovered with one Escape/close",
+   "deterministic": true
+  },
+  {
+   "id": "D0.gate",
+   "primitive": "P35",
+   "title": "selftest: the drill leaves the inventory open, the gate must flag and recover it",
+   "verdict": "FAIL",
+   "reason": "opened the inventory and returned without closing it (drill left a dirty UI: open: inventory)",
+   "intended": "gate reports a dirty UI after the drill",
+   "observed": "inventory open",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "opened the inventory and returned without closing it (drill left a dirty UI: open: inventory)",
+     "Intended": "gate reports a dirty UI after the drill",
+     "Observed": "inventory open",
+     "elapsed_ns": 442362873,
+     "ui_pre": "clean",
+     "ui_post": "open: inventory"
+    }
+   ],
+   "deterministic": true
+  }
+ ]
+}

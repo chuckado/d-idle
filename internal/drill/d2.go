@@ -46,6 +46,8 @@ type PortalLab interface {
 	PortalList(ctx context.Context) (string, error)
 
 	RunPortal(ctx context.Context) BotCall
+	// RunPortalHit runs the portal verb and sends `debug hit 5` (a logged cheat) delay ticks after its first right click.
+	RunPortalHit(ctx context.Context, r *Run, delay int) BotCall
 	RunToTown(ctx context.Context) BotCall
 	RunBack(ctx context.Context, level int) BotCall
 	// EnterViaVerb takes the open portal next to the player with d2dctl's EnterPortal (the verified walk and click on
@@ -66,8 +68,6 @@ const (
 	traceTicks = 7  // docs/research/town-portal-trace.md: d2d casts about 7 ticks (sorceress, FCR 0)
 )
 
-const missingHit = "cheat `debug hit <dmg>` (or `debug hurt`): a monster-style hit on the player, so d2d sets get-hit over the cast (fight.cpp:4973). No debug verb hits the player, and no verb places a monster to hit on a chosen tick (V: control_channel.md verb table)"
-
 // D2 returns the portal and town entry group: P10 (cast and enter), P11 (return), with the failure modes of fix-portal F4 and fix-portal2.
 func D2(l PortalLab) []Drill {
 	lim := 8 * time.Minute
@@ -81,7 +81,8 @@ func D2(l PortalLab) []Drill {
 		{ID: "D2.b", Primitive: "P10", Title: "empty tome, no scroll: no portal source, nothing clicked, no-portal error at once", Limit: lim, Do: do(d2b)},
 		{ID: "D2.c", Primitive: "P10", Title: "empty tome and a loose scroll: the scroll is used", Limit: lim, Do: do(d2c)},
 		{ID: "D2.g", Primitive: "P10", Title: "control: d2dctl EnterPortal takes the open portal (separates a bad bot walk-in from a bad portal)", Limit: lim, Do: do(d2g)},
-		{ID: "D2.d", Primitive: "P10", Title: "cast cut by a hit: scroll spent, no portal, the retry takes the next source", Needs: []string{missingHit}},
+		{ID: "D2.d", Primitive: "P10", Title: "hit in the same tick as the click: the click is dropped, source unchanged, the retry takes it", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return d2d(ctx, r, l, 0) }},
+		{ID: "D2.d3", Primitive: "P10", Title: "hit 3 ticks into the cast: the cast is cut with the scroll spent, the retry takes the next source", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return d2d(ctx, r, l, 3) }},
 		{ID: "D2.e", Primitive: "P10", Title: "busy player: the verb waits for idle, then clicks", Limit: lim, Do: do(d2e)},
 		{ID: "D2.h", Primitive: "P10", Title: "one-pair rule: a second cast closes the first portal", Limit: lim, Do: do(d2h)},
 		{ID: "D2.f", Primitive: "P11", Title: "round trip town and back, arrival near the origin, one portal pair", Limit: 12 * time.Minute, Do: do(d2f)},
@@ -590,5 +591,45 @@ func d2f(ctx context.Context, r *Run, l PortalLab) Outcome {
 		return o
 	}
 	o.Verdict, o.Reason = Pass, fmt.Sprintf("round trip through the portals, arrival %.0f subtiles from the origin", arrival)
+	return o
+}
+
+// d2d: two scrolls and a hit delay ticks after the verb's click. A click without a portal is a dropped or cut cast: with
+// delay 0 the hit is handled before the click (dropped, source unchanged), with delay 3 the cast has begun (cut, source
+// spent, fix-portal F1/F4); either way d2dPortalWith tries again with the next source.
+func d2d(ctx context.Context, r *Run, l PortalLab, delay int) Outcome {
+	if _, err := stage(ctx, r, l, false, 2); err != nil {
+		return setupFail(err)
+	}
+	if err := goField(ctx, r, l); err != nil {
+		return setupFail(err)
+	}
+	c := l.RunPortalHit(ctx, r, delay)
+	if err := l.Tick(ctx, 40); err != nil {
+		return setupFail(err)
+	}
+	v, err := l.PView(ctx)
+	if err != nil {
+		return setupFail(err)
+	}
+	wantLeft := 1 // dropped click: the first scroll was not spent
+	what := "the click is dropped (source unchanged), the retry opens the portal with the same scroll"
+	if delay > 0 {
+		wantLeft, what = 0, "the hit cuts the cast (scroll spent, no portal), the retry opens the portal with the next scroll"
+	}
+	observed := fmt.Sprintf("verb: %s, %d right clicks, %d ticks; scrolls left %d, portal objects near %d any %d; lines: %s", errText(c), c.Rights, c.Ticks, v.Scrolls, v.Near, v.Any, portalLines(c))
+	o := Outcome{Intended: what, Observed: observed, Sig: fmt.Sprintf("err=%v rights=%d scrolls=%d near=%d", c.Err != "", c.Rights, v.Scrolls, v.Near)}
+	switch {
+	case c.Rights < 2 && v.Near == 0:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("one click, no portal and the verb stopped (%s): the failed cast was not retried", errText(c))
+	case c.Rights < 2:
+		o.Verdict, o.Reason = Blocked, "the hit did not disturb the cast (one click, a portal opened)"
+	case c.Err != "" || v.Near != 1:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("retried (%d clicks) but ended with err %q and %d portals near", c.Rights, c.Err, v.Near)
+	case v.Scrolls != wantLeft:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("%d scrolls left, want %d: the source accounting differs from the %s case", v.Scrolls, wantLeft, map[bool]string{true: "cut cast", false: "dropped click"}[delay > 0])
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d clicks, %d scrolls left, one portal", c.Rights, v.Scrolls)
+	}
 	return o
 }

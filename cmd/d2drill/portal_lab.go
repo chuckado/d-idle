@@ -20,7 +20,8 @@ type spy struct {
 	rights int // right clicks
 	clicks int // all clicks
 	keys   int
-	last   int // tick of the last right click, -1 none
+	last   int    // tick of the last right click, -1 none
+	after  func() // runs once, right after the first right click returns (D2.d: a hit that cuts the cast)
 }
 
 func (s *spy) Click(b input.Button, x, y int, mods ...input.Mod) error {
@@ -29,7 +30,13 @@ func (s *spy) Click(b input.Button, x, y int, mods ...input.Mod) error {
 		s.rights++
 		s.last = s.l.tick()
 	}
-	return s.Controller.Click(b, x, y, mods...)
+	err := s.Controller.Click(b, x, y, mods...)
+	if b == input.Right && s.after != nil {
+		f := s.after
+		s.after = nil
+		f()
+	}
+	return err
 }
 
 func (s *spy) Key(name string) error { s.keys++; return s.Controller.Key(name) }
@@ -110,6 +117,18 @@ func (l *lab) PortalList(ctx context.Context) (string, error) {
 // RunPortal calls the bot's portal verb once and reports what it sent and said.
 func (l *lab) RunPortal(ctx context.Context) drill.BotCall {
 	sp, portal, _ := l.bot()
+	return l.call(ctx, sp, portal)
+}
+
+// RunPortalHit is RunPortal with a `debug hit` cheat sent delay ticks after the first right click.
+func (l *lab) RunPortalHit(ctx context.Context, r *drill.Run, delay int) drill.BotCall {
+	sp, portal, _ := l.bot()
+	sp.after = func() {
+		if delay > 0 {
+			_, _ = l.be.Client.Step(ctx, delay)
+		}
+		_, _ = r.Cheat(ctx, "debug hit 5", "hit the player right after the portal right click: a monster blow cuts the cast (the cut-cast drill D2.d)")
+	}
 	return l.call(ctx, sp, portal)
 }
 
