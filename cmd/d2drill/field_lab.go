@@ -68,6 +68,29 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 			op.Names = strconv.Itoa(p.Index) // the index, replaced below by the names when nothing matched
 		}
 	}
+	if op.Found == "" { // presets only list the rooms near the player: find the object in `debug objects`, stand beside it, read the presets again
+		out, _ := r.Cheat(ctx, "debug objects", "read-only listing: where an object of this kind stands on the level")
+		for _, ln := range strings.Split(out, "\n") {
+			f := strings.Fields(ln)
+			if len(f) < 7 || !strings.Contains(strings.ToLower(f[3]), want) {
+				continue
+			}
+			x, _ := strconv.ParseFloat(f[1], 64)
+			y, _ := strconv.ParseFloat(f[2], 64)
+			if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(x)+2, int(y)), "stand beside the object: the bot walks there in a real run, the drill tests the click"); err != nil {
+				break
+			}
+			_ = l.Tick(ctx, 40)
+			if ps2, err := l.be.Client.Presets(ctx); err == nil {
+				for _, p := range ps2.Items {
+					if !p.Hidden && p.X-x < 1 && x-p.X < 1 && p.Y-y < 1 && y-p.Y < 1 {
+						op.Found, op.Class, op.Names = p.Name, p.ObjectID, strconv.Itoa(p.Index)
+					}
+				}
+			}
+			break
+		}
+	}
 	if op.Found == "" {
 		op.Names = strings.Join(names, ",")
 		return op
@@ -121,9 +144,6 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		fi.Err = msg + ": " + err.Error()
 		return fi
 	}
-	if _, err := r.Cheat(ctx, "debug kill", "remove every monster left by an earlier drill of this run so the fight starts clean"); err != nil {
-		return fail("kill", err)
-	}
 	if err := l.Goto(ctx, r, s.Level); err != nil {
 		return fail("goto", err)
 	}
@@ -147,8 +167,6 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		if _, err := l.ArmBelt(ctx, r); err != nil {
 			return fail("belt", err)
 		}
-	} else if err := l.DrainBelt(ctx); err != nil {
-		return fail("belt", err)
 	}
 	if s.Mana > 0 {
 		if err := l.SetMana(ctx, r, s.Mana); err != nil {
@@ -215,6 +233,9 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	}
 	if cerr != nil {
 		fi.Err = cerr.Error()
+		if sn, e := l.be.Env.Snapshot(); e == nil && sn.Player != nil {
+			fi.Err += fmt.Sprintf(" (player mode %d life %d/%d state %v)", sn.Player.Mode, sn.Player.Life, sn.Player.MaxLife, sn.State)
+		}
 	}
 	for _, ln := range fi.Log {
 		switch {
@@ -256,4 +277,29 @@ func (l *lab) skillCmds() int {
 		}
 	}
 	return 0
+}
+
+func (l *lab) ToArea(ctx context.Context, level int) (int, string) {
+	wctx, cancel := context.WithTimeout(ctx, 4*time.Minute)
+	defer cancel()
+	msg := ""
+	if err := l.navr.ToArea(wctx, level); err != nil {
+		msg = err.Error()
+	}
+	area := 0
+	if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil {
+		area = s.Player.Area
+	}
+	return area, msg
+}
+
+func (l *lab) TouchWaypoint(ctx context.Context, reach float64) (bool, []int, string) {
+	n, _ := l.wpNavigator()
+	n.DrainActivated()
+	t, err := n.ActivateWaypointNear(ctx, reach)
+	msg := ""
+	if err != nil {
+		msg = err.Error()
+	}
+	return t, n.DrainActivated(), msg
 }

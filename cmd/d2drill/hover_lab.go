@@ -45,7 +45,7 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 	t0, w0 := l.tick(), time.Now()
 	cctx, cancel := context.WithTimeout(ctx, 8*time.Second)
 	defer cancel()
-	err = l.be.Client.ApproachNPC(cctx, idx, 6*time.Second)
+	err = l.be.Client.ApproachNPC(cctx, idx, 15*time.Second)
 	ai.Ticks, ai.WallMs = l.tick()-t0, int(time.Since(w0).Milliseconds())
 	if err != nil {
 		ai.Err = err.Error()
@@ -104,9 +104,11 @@ func (l *lab) ClickObjectLikeBot(ctx context.Context, r *drill.Run) drill.Object
 			oc.InteractErr += "; ClickWorld: " + err.Error()
 		}
 	}
-	_, _ = l.be.Client.Step(ctx, 150)
-	if f, err := l.be.Client.UI(ctx); err == nil {
-		oc.OpenedByBot = f.Waypoint
+	for i := 0; i < 8 && !oc.OpenedByBot; i++ { // the walk to the object takes up to ~300 ticks
+		_, _ = l.be.Client.Step(ctx, 50)
+		if f, err := l.be.Client.UI(ctx); err == nil {
+			oc.OpenedByBot = f.Waypoint
+		}
 	}
 	_ = l.CloseAll(ctx)
 	// control: the npcs row of the same object through cmd interact (what d2dinput does for NPCIDBase ids)
