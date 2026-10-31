@@ -3,6 +3,7 @@ import io
 import json
 import os
 import sys
+import tempfile
 import threading
 import unittest
 from contextlib import redirect_stderr, redirect_stdout
@@ -10,6 +11,10 @@ from contextlib import redirect_stderr, redirect_stdout
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 import common as dc
 import notify
+
+# No test may read the real ~/.local/share/d2idle: point the data dir at an empty temp dir for this process.
+_HOME = tempfile.TemporaryDirectory()
+os.environ[dc.HOME_ENV] = _HOME.name
 
 TOKEN = "tok" + "En-Abc123xyz789"
 

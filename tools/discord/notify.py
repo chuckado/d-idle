@@ -4,7 +4,8 @@
   notify.py init                                   print the one-time setup steps
   notify.py post --channel progress --title T --text TEXT [--url U] [--dry-run]
 
-The webhook URL comes from the env var D2IDLE_DISCORD_WEBHOOK_<CHANNEL> or the desktop keyring
+The webhook URL comes from the env var D2IDLE_DISCORD_WEBHOOK_<CHANNEL>, else a private 0600 file
+(~/.local/share/d2idle/discord-webhook-<channel>, see common.load_webhook_url), else the desktop keyring
 (service d2idle, account discord-webhook-<channel>). It is never printed, logged or put in an error.
 Text that looks private (home paths, lab hostnames, IPs, tokens) is refused before anything is sent.
 post() never raises: it returns a Result.
@@ -28,7 +29,7 @@ LIMITS = {"title": 256, "description": 4096, "content": 2000}
 MAX_RETRIES = 3
 MAX_RETRY_AFTER = 30.0
 COLOR = 0x8B1A1A
-WEBHOOK_PREFIXES = ("https://discord.com/api/webhooks/", "https://discordapp.com/api/webhooks/")
+WEBHOOK_PREFIXES = dc.WEBHOOK_PREFIXES
 CHANNEL_RE = re.compile(r"[a-z][a-z0-9-]{0,31}")
 
 
@@ -49,13 +50,8 @@ def env_name(channel):
     return "D2IDLE_DISCORD_WEBHOOK_" + channel.upper().replace("-", "_")
 
 
-def get_webhook(channel, store=None, env=None):
-    env = os.environ if env is None else env
-    url = env.get(env_name(channel)) or (store or dc.SecretToolStore()).get(account_for(channel))
-    if url:
-        dc.register_secret(url)
-        dc.register_secret(urllib.parse.urlsplit(url).path.rstrip("/").rsplit("/", 1)[-1])
-    return url or None
+def get_webhook(channel, store=None, env=None, prefixes=WEBHOOK_PREFIXES):
+    return dc.load_webhook_url(channel, env=env, store=store, prefixes=prefixes)
 
 
 def trunc(text, limit):
@@ -104,11 +100,12 @@ def post(channel, title="", text="", url="", *, store=None, env=None, sleep=_sle
         hits = check_text(title, text, url)
         if hits:
             return Result(False, "refused: text looks private (%s); nothing was sent" % ", ".join(hits), refused=True)
-        hook = get_webhook(channel, store, env)
+        try:
+            hook = get_webhook(channel, store, env, tuple(base_ok))
+        except DiscordError as e:
+            return Result(False, str(e))
         if not hook:
             return Result(False, "no webhook for channel %s: run `notify.py init`" % channel)
-        if not hook.startswith(tuple(base_ok)):
-            return Result(False, "stored webhook is not a Discord webhook URL")
         body = json.dumps(build_payload(title, text, url)).encode()
         last = ""
         for attempt in range(1, MAX_RETRIES + 1):
@@ -146,7 +143,8 @@ def post(channel, title="", text="", url="", *, store=None, env=None, sleep=_sle
 INIT_TEXT = """One-time setup (never paste a webhook URL into chat, an issue or the repo):
 
 1. In Discord: channel settings -> Integrations -> Webhooks -> New Webhook, pick the channel, Copy Webhook URL.
-2. Store it in the desktop keyring (paste at the prompt; the value is not echoed to a file):
+2. Headless box: install -d -m 700 ~/.local/share/d2idle ; (umask 077; printf %s 'URL' > ~/.local/share/d2idle/discord-webhook-{ch})
+   Desktop: store it in the keyring (paste at the prompt; the value is not echoed to a file):
      secret-tool store --label="d.idle Discord {ch} webhook" service d2idle account discord-webhook-{ch}
    Or, for one shell only:  export {env}=...   (do not put it in a file in the repo)
 3. Dry run (prints the payload, sends nothing):

@@ -17,6 +17,11 @@ SERVICE = "d2idle"
 BOT_TOKEN_ENV = "D2IDLE_DISCORD_BOT_TOKEN"
 BOT_TOKEN_FILE_ENV = "D2IDLE_DISCORD_BOT_TOKEN_FILE"
 DEFAULT_BOT_TOKEN_FILE = "~/.local/share/d2idle/discord-bot-token"
+HOME_ENV = "D2IDLE_DISCORD_HOME"  # overrides the data dir (default ~/.local/share/d2idle); tests point it at a temp dir
+DEFAULT_HOME = "~/.local/share/d2idle"
+WEBHOOK_PREFIXES = ("https://discord.com/api/webhooks/", "https://discordapp.com/api/webhooks/")
+_WEBHOOK_TAIL = re.compile(r"\d+/[A-Za-z0-9._-]+")
+_CHANNEL_RE = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
 _SECRETS = set()
 
 
@@ -111,12 +116,62 @@ def load_bot_token(env=None, store=None):
         register_secret(tok)
         return tok
     explicit = env.get(BOT_TOKEN_FILE_ENV)
-    path = os.path.expanduser(explicit or DEFAULT_BOT_TOKEN_FILE)
+    path = os.path.expanduser(explicit or os.path.join(data_dir(env), "discord-bot-token"))
     if os.path.lexists(path):
         return read_secret_file(path)
     if explicit:
         raise DiscordError("%s points at %s, which does not exist" % (BOT_TOKEN_FILE_ENV, path))
     return (store or SecretToolStore()).get("discord-bot-token")
+
+
+def data_dir(env=None):
+    """Directory of the private secret files: env D2IDLE_DISCORD_HOME (also read from the process env, so a test that
+    sets it once covers every call) else ~/.local/share/d2idle."""
+    env = os.environ if env is None else env
+    return os.path.expanduser(env.get(HOME_ENV) or os.environ.get(HOME_ENV) or DEFAULT_HOME)
+
+
+def webhook_env_name(channel):
+    return "D2IDLE_DISCORD_WEBHOOK_" + check_channel(channel).upper().replace("-", "_")
+
+
+def check_channel(channel):
+    c = str(channel or "")
+    if len(c) > 32 or not _CHANNEL_RE.fullmatch(c):
+        raise DiscordError("bad channel name: use lowercase letters, digits and single hyphens only")
+    return c
+
+
+def valid_webhook(url, prefixes=WEBHOOK_PREFIXES):
+    return any(url.startswith(p) and _WEBHOOK_TAIL.fullmatch(url[len(p):]) for p in prefixes)
+
+
+def load_webhook_url(channel, env=None, store=None, prefixes=WEBHOOK_PREFIXES):
+    """Webhook URL of a feed channel: env D2IDLE_DISCORD_WEBHOOK_<CHANNEL> > file (D2IDLE_DISCORD_WEBHOOK_<CHANNEL>_FILE,
+    else <data dir>/discord-webhook-<channel>) > desktop keyring. None when nothing is set. Same fail-closed file rules
+    as the bot token; the value must be exactly https://discord.com/api/webhooks/<digits>/<token> (never echoed).
+    `prefixes` lets tests accept a local mock server."""
+    channel = check_channel(channel)
+    env = os.environ if env is None else env
+    name = webhook_env_name(channel)
+    url = (env.get(name) or "").strip()
+    if not url:
+        explicit = env.get(name + "_FILE")
+        path = os.path.expanduser(explicit or os.path.join(data_dir(env), "discord-webhook-" + channel))
+        if os.path.lexists(path):
+            url = read_secret_file(path)
+        elif explicit:
+            raise DiscordError("%s points at %s, which does not exist" % (name + "_FILE", path))
+        else:
+            url = (store or SecretToolStore()).get("discord-webhook-" + channel) or ""
+    if not url:
+        return None
+    register_secret(url)
+    register_secret(url.rstrip("/").rsplit("/", 1)[-1])
+    if not valid_webhook(url, prefixes):
+        raise DiscordError("the webhook for channel %s is not a Discord webhook URL of the form "
+                           "https://discord.com/api/webhooks/<id>/<token>; store it again" % channel)
+    return url
 
 
 def _j(*parts):

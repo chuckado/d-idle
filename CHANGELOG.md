@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 
+- Discord feed webhooks from private files: `common.load_webhook_url()` (env, then `~/.local/share/d2idle/discord-webhook-<channel>` mode 600, then keyring; same fail-closed rules as the bot token, URL shape and channel name checked); `notify.py` uses it; `D2IDLE_DISCORD_HOME` overrides the directory so tests never read real files; headless recipe in `feeds.md` and `server.md` (agent/discordhooks).
 - Discord ops bot (offline): long-lived bot model with least privilege (`d.idle-ops` role, allowed and always-ask lists in `roles.md`); `tools/discord/common.py` `load_bot_token()` reads env, then a private file (`~/.local/share/d2idle/discord-bot-token`, mode 600, no symlink, own user, private parent, fail-closed), then the keyring; `apply_server.py` uses it; setup and rotate/revoke in `server.md` (agent/discordtoken).
 - Stream map contiguity (offline): the d2dview map pane draws one stitched map across levels the game puts on one automap layer (town and wilderness, Act 2 desert, Kurast, Harrogath fields), caves and dungeons stay alone; act-frame positions, swap-in map image, trail rule; rule and live check in `docs/stream/map-contiguity.md`. Live check pending (agent/mapitem).
 - 2026-10-31 README refreshed (status on d2d, how we check it, layout, retired Game.exe gates) and the project name styled **d.idle** (lowercase d) in public prose, the setup wizard and the container templates. Docs and UI text only (agent/readme).
