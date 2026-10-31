@@ -32,23 +32,20 @@ func waypointSlot(levelNo int) (act, row int, ok bool) {
 	return 0, 0, false
 }
 
-// Waypoint panel geometry at 800x600 (client pixels). Measured from a screenshot of the opened panel in the
-// Rogue Encampment (VERIFIED LIVE for act 1, incl. clicking a row to travel: tab "I" at (115,77), area names at x 160..300 and y 135 + 34*row,
-// nine fixed rows, inactive ones grey). Tabs of acts 2-5 only appear once a waypoint there is activated, so their x positions are an
-// extrapolation at the same pitch (UNVERIFIED).
+// Waypoint panel geometry at 800x600 (client pixels). Rows and tabs are game.exe's own hit boxes, shared by d2d
+// (docs/research/waypoint-trace.md, V game.exe FUN_0049c510 / FUN_0049c490 + panel origin 80,60): tab i spans screen x
+// 80+64i..144+64i and y <= 90 (expansion), a row i spans y top+60..top+90 for the tops 60 96 132 168 205 241 277 313 349
+// and x 97..377 (exclusive). RowY are the box centres. The older pitch of 34 px from 135 missed rows 7 and 8 (W2: the
+// "rows 7-8 only react to the icon" note was that error). Tab 0 at 116 and rows 0..6 at x=230 are VERIFIED LIVE; the
+// centres of the rest follow the trace (VERIFIED LIVE by drill D-wp, docs/fixwp.md).
 var wpPanel = struct {
-	TabX        [5]int // centre of each act tab
-	TabY        int
-	RowX, RowY0 int // text of row 0
-	RowDY       int // row pitch
-	IconX       int // the row icon column; IconDY is its y offset from the text line
-	IconDY      int
-	IconFrom    int // rows from this one on ignore clicks on the text and only react to the icon
+	TabX [5]int // centre of each act tab
+	TabY int
+	RowX int    // click column of a row (inside 97..377)
+	RowY [9]int // click row centres, Levels.txt Waypoint order within the act
 }{
-	TabX: [5]int{116, 173, 230, 287, 344}, TabY: 77, RowX: 230, RowY0: 135, RowDY: 34,
-	// V live (act2live5, Act 2): rows 0..6 respond at x=230, rows 7 (Arcane) and 8 (Canyon) do nothing at x=230 or
-	// x=350 and travel when the icon is clicked at x=112, y=376 / 410. Icons of rows 0..6 are U.
-	IconX: 112, IconDY: 2, IconFrom: 7,
+	TabX: [5]int{112, 176, 240, 304, 368}, TabY: 77, RowX: 230,
+	RowY: [9]int{135, 171, 207, 243, 280, 316, 352, 388, 424},
 }
 
 // ErrCursorItem: an item is on the cursor and could not be put away; game.exe does not open the waypoint panel then
@@ -66,8 +63,10 @@ func (n *Navigator) noteLevel(s *d2.Snapshot) {
 	}
 }
 
-// waitCooldown sleeps until game.exe will accept a waypoint travel again (10 s since the last level change, D2D-V
-// FUN_0054c5d0, silently ignored otherwise). It returns how long it waited.
+// waitCooldown sleeps until d2d will accept a waypoint travel again (10 s since the last level change, silently
+// ignored otherwise). This is d2d's rule, not game.exe's: game.exe only refuses inside a PvP hostility window, never
+// in single player (docs/research/waypoint-trace.md, W3). Kept on purpose while d2d refuses; the d2d patch candidate
+// may make it unnecessary. It returns how long it waited.
 func (n *Navigator) waitCooldown(ctx context.Context) (time.Duration, error) {
 	cool := time.Duration(n.tune().WpCooldownSec*float64(time.Second)) + time.Second
 	start := n.clk.Now()
@@ -121,14 +120,9 @@ func (n *Navigator) TakeWaypoint(ctx context.Context, levelNo int) error {
 		return err
 	}
 	n.clk.Sleep(250 * time.Millisecond)
-	// Which column works depends on the row (wpPanel); try the likelier one first and fall back to the other while
-	// the panel is still open. A click on a dead row does nothing, so the area change is the verdict. A second round
-	// follows for a character that just arrived: the game eats a row click inside its cooldown.
-	y := wpPanel.RowY0 + row*wpPanel.RowDY
-	cols := [2][2]int{{wpPanel.RowX, y}, {wpPanel.IconX, y + wpPanel.IconDY}}
-	if row >= wpPanel.IconFrom {
-		cols[0], cols[1] = cols[1], cols[0]
-	}
+	// A click on a dead row does nothing, so the area change is the verdict. A second round follows for a character
+	// that just arrived: d2d eats a row click inside its 10 s window.
+	cols := [1][2]int{{wpPanel.RowX, wpPanel.RowY[row]}}
 	age0 := n.clk.Now().Sub(n.wpSince) // how long the character has stood here when the first row is clicked
 	for round := 0; round < 2; round++ {
 		if round > 0 {
@@ -239,9 +233,11 @@ func (n *Navigator) openWaypoint(ctx context.Context) error {
 				// The preset is missing until its room has streamed in (V live: Lut Gholein, "none on level 40" right
 				// after loading, fine after a walk across the town): walk to the known position, then look again.
 				kp, ok := knownWaypointPos[o.level]
-				if !ok || attempt > 0 && dist(o.pos, kp) < unitTolerance+2 {
+				if !ok || attempt > 0 && dist(o.pos, input.Point{X: kp.X - o.lm.Origin.X, Y: kp.Y - o.lm.Origin.Y}) < unitTolerance+2 {
 					return fmt.Errorf("%w: none on level %d", ErrNoWaypoint, o.level)
 				}
+				// the table is act-absolute; a level-relative backend (d2d) subtracts the level's origin (fixwp)
+				kp.X, kp.Y = kp.X-o.lm.Origin.X, kp.Y-o.lm.Origin.Y
 				pre = []d2map.Preset{{Kind: d2map.PresetObject, Pos: d2map.Point{X: kp.X, Y: kp.Y}}}
 			}
 			p := nearestPreset(o.pos, pre)

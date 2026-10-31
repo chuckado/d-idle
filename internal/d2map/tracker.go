@@ -14,6 +14,10 @@ type LevelMap struct {
 	No   int
 	Rect Rect  // level rectangle from the Level struct (the Grid fills in as rooms load)
 	Grid *Grid // merged collision of every room of this level seen so far
+	// Origin is the act-absolute subtile origin of the level when this map's coordinates are level-relative (the d2d
+	// backend without AddOrigin); zero when coordinates are absolute (Game.exe). Static absolute tables (nav's
+	// knownWaypointPos) subtract it.
+	Origin Point
 
 	Presets  []Preset // all preset units of all Room2s, sorted
 	Exits    []Exit

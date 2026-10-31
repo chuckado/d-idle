@@ -34,7 +34,7 @@ func main() { os.Exit(run()) }
 func run() int {
 	home := os.Getenv("HOME")
 	slotDir := os.Getenv("D2D_SLOT_DIR")
-	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry)")
+	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, DW waypoints)")
 	only := flag.String("only", "", "comma list of drill ids to run (default: the whole group)")
 	repeat := flag.Int("repeat", 2, "runs per drill (determinism check)")
 	bin := flag.String("bin", envOr("D2D_BIN", filepath.Join(home, "d2d-lab/fork/bin/d2d.lab6")), "d2d binary (the lab build)")
@@ -112,6 +112,8 @@ func run() int {
 		drills = drill.D1(l, strings.Split(*belts, ","))
 	case "D2":
 		drills = drill.D2(l)
+	case "DW":
+		drills = drill.DW(l)
 	case "D0": // harness self-test of the P35 gate: the drill leaves the pack open on purpose
 		drills = []drill.Drill{{ID: "D0.gate", Primitive: "P35", Title: "selftest: the drill leaves the inventory open, the gate must flag and recover it", Limit: time.Minute,
 			Do: func(ctx context.Context, r *drill.Run) drill.Outcome {
@@ -146,7 +148,7 @@ func run() int {
 	r := &drill.Runner{W: l, Repeat: *repeat, Logf: func(f string, a ...any) { fmt.Printf(f+"\n", a...) }}
 	g := r.RunGroup(ctx, drills)
 
-	if strings.ToUpper(*group) == "D2" { // the portal drills end in the field: put the character back in town (logged cheat)
+	if g := strings.ToUpper(*group); g == "D2" || g == "DW" { // the portal drills end in the field: put the character back in town (logged cheat)
 		if _, err := l.Cheat(ctx, "drills:cleanup", "debug goto 1", "return the throwaway character to the Rogue Encampment after the portal drills"); err != nil {
 			fmt.Fprintln(os.Stderr, "d2drill: cleanup goto:", err)
 		}

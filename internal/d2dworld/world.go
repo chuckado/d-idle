@@ -212,6 +212,10 @@ func (w *World) update(ctx context.Context, force bool) (d2map.State, error) {
 		w.levs[li.ID] = l
 	}
 	l.m.Rect, l.ox, l.oy = rect, ox, oy
+	l.m.Origin = d2map.Point{} // coordinates are level-relative unless an origin mode adds the origin
+	if w.o.Origin == OriginNone {
+		l.m.Origin = d2map.Point{X: 5 * li.OriginX, Y: 5 * li.OriginY} // V live (fixwp): debug level 40 gives 1000 1000, known waypoint 5069,5084
+	}
 	if w.cur != l {
 		// Level change: the rooms of a level are laid when the player arrives, so whatever was fetched on an earlier
 		// visit may be stale; fetch again at once.

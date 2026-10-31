@@ -8,6 +8,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/d2map"
 )
 
 func quiet(string, ...any) {}
@@ -427,4 +428,32 @@ func TestInventoryFlag(t *testing.T) {
 			t.Fatal("closed after Escape")
 		}
 	})
+}
+
+// W1 (fixwp): the "Waypoint" npcs row of every act becomes an object nav's nearestWaypointUnit accepts, with and
+// without Tables; other named objects keep class -1.
+func TestWaypointRowHasWaypointClass(t *testing.T) {
+	for _, tb := range []Tables{nil, fakeTables{}} {
+		r := lateReplies(t)
+		r["npcs"] = "Waypoint\t300\t200\t0\t4\t30.0\t10.0\nWaypoint\t300\t200\t0\t5\t31.0\t10.0\nDeckard Cain\t300\t200\t0\t3\t28.0\t10.0\nok\n"
+		_, c := startScript(t, r)
+		res, err := New(c, Options{Tables: tb, Logf: quiet}).Read(context.Background())
+		if err != nil {
+			t.Fatal(err)
+		}
+		wps, other := 0, 0
+		for _, u := range res.Snap.Objects {
+			if d2map.IsWaypointObject(u.Class) {
+				wps++
+				if n := res.Extras.Names[u.ID]; !strings.Contains(n, "Waypoint") {
+					t.Errorf("waypoint unit named %q", n)
+				}
+			} else if u.Class == -1 {
+				other++
+			}
+		}
+		if wps != 2 || other != 1 {
+			t.Errorf("tables=%v: %d waypoint objects, %d class -1 (want 2 and 1): %+v", tb != nil, wps, other, res.Snap.Objects)
+		}
+	}
 }

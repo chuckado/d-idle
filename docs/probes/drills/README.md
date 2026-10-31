@@ -53,3 +53,6 @@ Observed failure-line texts: `combat: no town portal scroll or tome` (error), `d
 - W2 (harness, fixed): `d2dctl.Pause` waits wall time, which does nothing under lockstep; the lab now pauses in virtual ticks. Without it EnterPortal, HoverClick and the NPC walks act on a frozen world.
 - W3 (note): the verb's success test is any portal object within 25 subtiles, so a stale portal from an earlier cast makes it return success without a cast; the drills walk off stale portals first (`clearSpot`). In the field the bot casts again only after the old pair closed or moved, so this is only a risk when the player stands near its own old portal.
 - Timings: verb 32 ticks (click +22), raw cast 8 ticks to object (trace ~7), busy player +15 ticks later click, empty tome 0 ticks.
+
+## DW waypoints (card fix-wp, `-group DW`, result `2026-10-31-dw.txt`)
+Shared nav code, no bot copy needed: the drills call `nav.Navigator.TakeWaypoint` (internal/nav) on the lab's navigator. Cheats (ledgered): `debug goto 1|40`, `debug wp all`. Verdicts and findings: docs/fixwp.md.

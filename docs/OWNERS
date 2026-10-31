@@ -42,3 +42,11 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+internal/nav/waypoint.go  fixwp  fix-wp
+internal/nav/wpclick_test.go  fixwp  fix-wp
+internal/nav/exit_test.go  fixwp  fix-wp
+internal/d2dsrc/items.go  fixwp  fix-wp
+internal/d2dsrc/source_test.go  fixwp  fix-wp
+docs/fixwp.md  fixwp  fix-wp
+internal/d2map/tracker.go  fixwp  fix-wp
+internal/d2dworld/world.go  fixwp  fix-wp
