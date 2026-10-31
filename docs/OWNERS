@@ -107,3 +107,9 @@ internal/bot/waypoints.go  fixnav  fix-nav
 internal/bot/task.go  fixnav  fix-nav
 internal/bot/fixnav_test.go  fixnav  fix-nav
 docs/fixnav.md  fixnav  fix-nav
+docs/community/discord/**  discord  discord
+tools/discord/**  discord  discord
+docs/community/discord/roles.md  rolesdoc  rolesdoc
+docs/community/discord/server.md  rolesdoc  rolesdoc
+docs/community/discord/server.json  rolesdoc  rolesdoc
+docs/community/discord/plan.md  rolesdoc  rolesdoc

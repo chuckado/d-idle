@@ -11,7 +11,6 @@
    "send_messages",
    "send_messages_in_threads",
    "embed_links",
-   "attach_files",
    "add_reactions"
   ]
  },
@@ -42,6 +41,12 @@
    "hoist": false,
    "mentionable": false,
    "permissions": [
+    "view_channel",
+    "read_message_history",
+    "send_messages",
+    "send_messages_in_threads",
+    "embed_links",
+    "add_reactions",
     "create_public_threads",
     "use_external_emojis"
    ]
@@ -151,7 +156,14 @@
      "type": "text",
      "topic": "One bug per thread. Use the pinned template.",
      "slowmode": 60,
-     "overwrites": []
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "allow": [
+        "attach_files"
+       ]
+      }
+     ]
     }
    ]
   },
@@ -170,7 +182,14 @@
      "type": "text",
      "topic": "Share a run: class, build, hours, deaths, how measured.",
      "slowmode": 60,
-     "overwrites": []
+     "overwrites": [
+      {
+       "role": "@everyone",
+       "allow": [
+        "attach_files"
+       ]
+      }
+     ]
     }
    ]
   },
@@ -184,6 +203,32 @@
      "slowmode": 5,
      "overwrites": []
     }
+   ]
+  }
+ ],
+ "optional_roles": [
+  {
+   "name": "mod",
+   "enabled": false,
+   "color": "#2E6F9E",
+   "hoist": true,
+   "mentionable": true,
+   "note": "create only when a trusted helper exists; sits between owner and contributor; see roles.md",
+   "permissions": [
+    "view_channel",
+    "read_message_history",
+    "send_messages",
+    "send_messages_in_threads",
+    "embed_links",
+    "attach_files",
+    "add_reactions",
+    "create_public_threads",
+    "use_external_emojis",
+    "manage_threads",
+    "manage_messages",
+    "kick_members",
+    "moderate_members",
+    "view_audit_log"
    ]
   }
  ]
