@@ -90,6 +90,8 @@ Acts 3 to 5, Nightmare/Hell rules, farm runs (`runs:NAME:N`), endgame builds, cu
 - Dead state flagged by reviews (night M7 `Goal.HeldAt`, if GOALHOLD did not already remove it: check).
 - Docs: move to `docs/archive/` the stale planning layers: `docs/milestones/*` (rescored 2026-10-28, "stale" per INDEX), `docs/review/*` (design review 10-28), `docs/wave2.md`, `docs/goals/catalog.md` (127 objectives, research), `docs/archive/prior-art/meta/*`. Merge the four `review-*.md` open findings into ONE table of open findings (id, severity, state, fixing commit, live check) and archive the bodies. INDEX, CHANGELOG, BACKLOG, liveruns and milestones restate the same state five times and disagree within hours (e.g. CHANGELOG says review-night.md "is not in this tree" while it is, V): keep INDEX s1/s2 as the one status source and generate BACKLOG from it.
 
+> status: RETIRED 2026-10-31 as Game.exe gates: see ADR 0013 and the d2d gate ladder in openspec/changes/d2d-gate-ladder / soak-gates spec; Game.exe baselines remain historical. The G1 and G2 text below is kept unchanged.
+
 ### Next 24 h
 | step | what | gate / pass criteria |
 |---|---|---|
@@ -109,6 +111,16 @@ Acts 3 to 5, Nightmare/Hell rules, farm runs (`runs:NAME:N`), endgame builds, cu
 6. The injected Game.exe kill is detected and the bot is back in game within 3 min, with one restart counted, not more.
 7. wineserver/winedevice: no orphaned winedevice after the injected restart.
 If any fails: fix only that, rerun G1. No feature work in parallel.
+
+### d2d gate ladder (2026-10-31, replaces G1 and G2; ADR 0013)
+Run on a hidden d2d slot, same build for the whole ladder, one rung after the other. Criteria: spec soak-gates (change `d2d-gate-ladder`); numbers stay in the specs and baseline files.
+| gate | what | pass criteria |
+|---|---|---|
+| 0 | live drill suite (`cmd/d2drill`, docs/probes/drills/README.md) | every S and A primitive of docs/primitives.md PASS, no FAIL or BLOCKED |
+| 1 | 2 h unattended hidden-d2d soak, one injected fault at about 60 min | soak-gates: Gate 1 stability, deaths and progression, belt and portal, route guard, injected fault recovery |
+| 2 | 8 h soak, profile m24 | Gate 1 criteria over the length, m24 limits, `INVARIANTS: PASS` |
+| 3 | 24 h soak, profile m24 ("Next week" table day 2) | as Gate 2, plus the d2d memory curve and restart interval |
+Fault-injection procedure (Gate 1): at about 60 min kill the d2d process of that slot only, with the process registry (`tools/agentreap.sh <agent>` for the processes the run started through `tools/agentrun.sh` or `tools/d2dslot.sh`; never `pkill`, never a pid the run did not start). Expect: the supervisor restarts d2d within 3 min, `restarts` rises by exactly 1, saved XP is not lower than before the kill, and `tools/agentreap.sh --list` and `--orphans` show nothing of the slot afterwards. If any criterion fails: fix only that, rerun the rung. No feature work in parallel.
 
 ### Next week (gated, S)
 | day | goal | gate to the next |

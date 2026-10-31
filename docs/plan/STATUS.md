@@ -61,7 +61,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [process-hygiene](../../openspec/specs/process-hygiene/spec.md): 9 requirements
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
-- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 14 requirements
+- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 17 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 12 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0

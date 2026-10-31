@@ -1,5 +1,7 @@
 # G1 log (2 h real gate, STRATEGY review)
 
+> status: retired 2026-10-31 (ADR 0013): G1 on Game.exe is no longer a release gate; this log is historical. The gate now runs on d2d (docs/review-strategy.md, d2d gate ladder).
+
 - Start: 2026-10-29 12:32 (soak24.sh start i4 --gate --char Soaky), master 3ebe106 (stamped), run i4-20261029-123237, job soak24/20261029-123216-d2bot.
 - Knobs set at 12:34 via PUT /api/v1/instances/i4/knobs: resource.retreatBelt=1, resource.minFieldBeltPct=50. Defaults: bot.savePointMin=20.
 - Fault to inject at ~13:32: kill -9 only i4's Game.exe; expect restart within 3 min, one restart counted.
