@@ -2,7 +2,8 @@
 
 ```yaml
 change: openbelt
-status: in-progress
+status: archived
+merge: 146f748
 agent: openbelt
 branch: agent/openbelt
 worktree: ~/code/d2lod-wt/openbelt

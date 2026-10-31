@@ -48,3 +48,4 @@ cd tools/emu && uv run python skill_damage.py gen 100000 1 > cases.tsv && uv run
 - posted: 2026-10-31 PR #146 opened (head c6be9247, 3 commits, 5 files) https://github.com/psi29a/d2decomped/pull/146 go: user 'open skill damage' (2026-10-31)
 - posted: 2026-10-31 review trigger comment on PR #146 (no CodeRabbit response 18 minutes after open; earlier PRs got one within 20 s) go: standing go for CodeRabbit follow-ups (user, 2026-10-31)
 - posted: 2026-10-31 re-trigger '@coderabbitai review' on PR #146 after the review limit reset (first trigger 15:28Z hit the limit) go: standing CodeRabbit go (2026-10-31)
+- outcome: merged upstream 2026-10-31 ~15:58Z (maintainer approval 'lgtm! thanks' on #146 at 15:52:57Z), merge commit 5475650e28fe47aacf5eee336982a0a3056a1af5 (the CodeRabbit comment at 15:58Z is post-merge)

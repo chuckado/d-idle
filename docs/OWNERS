@@ -33,7 +33,3 @@ docs/probes/basics/**  drills  m1-liveproof
 cmd/d2bot/d2dwire.go  fixportal2  fix-portal2
 cmd/d2bot/d2dportal_test.go  fixportal2  fix-portal2
 docs/fixportal.md  fixportal2  fix-portal2
-docs/research/pr-belt-evidence-pack.md  openbelt  openbelt
-docs/decomp-queue.md  openbelt  openbelt
-docs/BACKLOG.md  openbelt  openbelt
-openspec/changes/openbelt/**  openbelt  openbelt
