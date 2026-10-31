@@ -33,19 +33,6 @@ docs/probes/basics/**  drills  m1-liveproof
 cmd/d2bot/d2dwire.go  fixportal2  fix-portal2
 cmd/d2bot/d2dportal_test.go  fixportal2  fix-portal2
 docs/fixportal.md  fixportal2  fix-portal2
-internal/d2dsrc/items.go  fixobj  fix-obj
-internal/d2dsrc/source.go  fixobj  fix-obj
-internal/d2dsrc/source_test.go  fixobj  fix-obj
-internal/d2dinput/controller.go  fixobj  fix-obj
-internal/d2dinput/controller_test.go  fixobj  fix-obj
-docs/fixobj.md  fixobj  fix-obj
-internal/d2dctl/town_verbs.go  waitsaudit  waits-audit
-internal/d2dctl/waits_test.go  waitsaudit  waits-audit
-internal/d2denv/env.go  waitsaudit  waits-audit
-internal/d2denv/waits.go  waitsaudit  waits-audit
-internal/d2denv/waits_test.go  waitsaudit  waits-audit
-cmd/d2dshop/main.go  waitsaudit  waits-audit
-docs/probes/waits-audit.md  waitsaudit  waits-audit
 
 docs/stream/map-contiguity.md       mapitem               mapitem
 cmd/d2dview/stitch.go               mapitem               mapitem
@@ -56,3 +43,11 @@ cmd/d2dview/main.go                 mapitem               mapitem
 cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
+internal/d2dinput/run.go  fixrun  fixrun
+internal/d2dinput/run_test.go  fixrun  fixrun
+internal/d2dinput/controller.go  fixrun  fixrun
+internal/d2dinput/lifecycle.go  fixrun  fixrun
+internal/d2denv/runreset_test.go  fixrun  fixrun
+internal/bot/observe.go  fixrun  fixrun
+docs/fixrun.md  fixrun  fixrun
+openspec/changes/fixrun/**  fixrun  fixrun

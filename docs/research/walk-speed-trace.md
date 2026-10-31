@@ -52,6 +52,8 @@ Soak `postfix1` (bot f8c1b7f, run policy on, 1,253 virtual minutes, read-only gr
 | B3 | `MoveTo` re-issues `cmd move` after 400 ms without 1 subtile of progress and kicks once; costs no d2d ticks, but each stall waits 400 ms of virtual time | internal/d2dinput/controller.go:185..238 | V-read, cost I |
 | B4 | no travel-time model in nav (no speed constant found); a model would need 9.375 / 14.06 subtiles/s | internal/nav (grep) | V (grep) |
 
+> correction 2026-10-31: the B1 premise is WRONG: `ResetRun` is wired (`d2denv.Build` sets `Proc.OnInGame = ctl.ResetRun`, a method value the grep missed); the walking share is still unexplained and the live proof recipe of docs/fixrun.md decides.
+
 What the gap must come from: B1 (up to 1.5x on every leg after the first restart, I), then route length and stalls. A live check is needed for B1's real share: one d2d game with a restart, logging stamina.
 
 ## PR candidate (local only)
