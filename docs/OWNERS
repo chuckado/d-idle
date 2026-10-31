@@ -51,3 +51,8 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
+docs/research/pr-static-evidence-pack.md  staticopen  staticopen
+docs/research/pr-wp-evidence-pack.md  staticopen  staticopen
+docs/research/pr-bundle-queue.md  staticopen  staticopen
+docs/BACKLOG.md  staticopen  staticopen
+openspec/changes/staticopen/**  staticopen  staticopen

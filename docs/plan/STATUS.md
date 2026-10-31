@@ -47,6 +47,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
+| [staticopen](../../openspec/changes/staticopen/) | in-progress | staticopen | `docs/research/pr-static-evidence-pack.md`<br>`docs/research/pr-wp-evidence-pack.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/staticopen/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -86,8 +87,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change staticopen: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 
 ### Recent merges
+- 3e39c98 10-31 19:10 `Merge agent/drills7: drills7 findings F10-F12, harness fixes; archive drills7 and fix-portal2; backlog line` (drills7)
 - cb9d24a 10-31 19:07 `Merge agent/walkfix: walk-velocity v2 candidate docs and tooling` (walkfix)
 - 2848c18 10-31 18:55 `Merge agent/fix153author: PR 153 author-fix force-push posted line` (fix153author)
 - 97173e0 10-31 18:45 `Merge agent/verifyprs: PR verifier scripts and docs` (verifyprs)
@@ -97,5 +100,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f0c9f25 10-31 18:18 `Merge agent/decompstatic: Static Field and chill decomp, PR candidate docs` (decompstatic)
 - 0815238 10-31 18:10 `Merge agent/decompskillbind: decomp item 4, skill bind and cast trace` (decompskillbind)
 - 1382b0a 10-31 18:08 `Merge agent/rebase152: record PR #152 force-push` (rebase152)
-- 7f17048 10-31 18:04 `Merge agent/fixstall: Kashya walk stall and pinned GoTo escape` (fixstall)
 <!-- statusgen:end -->
