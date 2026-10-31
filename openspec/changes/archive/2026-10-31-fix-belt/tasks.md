@@ -2,7 +2,7 @@
 
 ```yaml
 change: fix-belt
-status: in-progress
+status: archived
 agent: fixbelt
 branch: agent/fixbelt
 worktree: ~/code/d2lod-wt/fixbelt
