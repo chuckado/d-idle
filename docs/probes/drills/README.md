@@ -20,14 +20,16 @@ ledger on the worker host, `$D2CHEAT_LEDGER`). Used: `debug give <code>`, `debug
 |---|---|---|
 | click modifier (shift/ctrl-click) | EXISTS in the lab binary as of 2026-10-31: `click|rclick <x> <y> [shift\|ctrl\|alt]`; shift (pack potion to the belt box a pickup would use) and ctrl (sell with a store open) verified live on a hidden slot; alt is parsed only (no game rule), shift with a full belt (no box, no move) is by code reading only | none (D1.P1s can be unblocked in a later change) |
 | waypoint activation (`debug wp`) | EXISTS: `debug wp <i>`, `all`, `level <id>` (V live: mask 2^39-1) | none |
-| item into pack or belt directly | MISSING: `debug give <code> [q]` only drops on the ground at the feet (V); pickup then goes belt first, pack when the belt is full | `debug give <code> pack\|belt [box]` |
+| item into pack or belt directly | EXISTS in the lab binary as of 2026-10-31: `debug give <code> pack` (first free cell by the player's search) and `debug give <code> belt [box]` (the pickup's box, or the box asked for); `debug give <code> [q]` still drops on the ground (V live) | none |
 | gold | EXISTS: `debug stat 14 N` (purse), `15` (stash) (V live) | none |
 | level, life, mana | EXISTS: `debug stat 12\|6\|8` (6 and 8 take 24.8 fixed point, read one tick later) (V live) | none |
-| durability | PARTIAL: `debug wear` halves every worn item (S, source); no arbitrary value, a live read after it was not conclusive | `debug dur <slot> <cur>` |
-| kill, hire or revive the merc | MISSING: no `debug merc`/`hire` (V: unknown verb); `debug die` kills the player only | `debug merc hire\|kill\|revive` |
-| belt removal | MISSING: no verb takes a belt off; drills wear a Sash (`lbl`) and drain with `cmd belt` | `debug equip none 8` |
+| durability | EXISTS in the lab binary as of 2026-10-31: `debug durability <slot\|all> <value>` (capped at the item's maximum; V live); `debug wear` still halves | none |
+| kill, hire or revive the merc | EXISTS in the lab binary as of 2026-10-31: `debug merc hire <type>\|kill\|revive` (no gold; V live: hire, death to `dead:true`, revive) | none (D1.P3m can be unblocked in a later change) |
+| belt removal | EXISTS in the lab binary as of 2026-10-31: `debug belt clear` (empties the boxes) and `debug unequip belt` (takes the worn belt off) (V live) | none |
+| act unlock | EXISTS in the lab binary as of 2026-10-31: `debug act <1-5>` (waypoint panel tabs 1..n; V live: `wp_tabs` 1, 2, 5, 1 rects) | none (DW.a3 can be unblocked in a later change) |
+| hit the player | EXISTS in the lab binary as of 2026-10-31: `debug hit <dmg>` (the game's own hurt path, then the get-hit mode; V live: life 40 to 35, mode GH) | none (D2.d can be unblocked in a later change) |
 
-BLOCKED drills: D1.P3m (merc drink, needs merc hire/kill/revive), D2.d (cut cast, needs `debug hit`), D2.f (round trip, needs a working portal walk-in).
+BLOCKED drills in the last runs: D1.P3m, D2.d and DW.a3 were blocked on the cheats now in the lab binary (see the table; docs/forkcheats.md; rerun pending), D2.f (round trip) still needs a working portal walk-in.
 
 ## D1 rerun (after fix-belt F1/F3/F6/F7/F8, fix-pickup B1/B2/B4 and the arrival fix)
 `2026-10-31-d1rerun.txt`: P7a PASS, P7 PASS (pickit reports picked 2, no "left the ground without arriving"), P1 PASS (hp columns hold hp, mp columns mp: the F8 FAIL of the first run is gone), P1s PASS (new), P2 PASS, P3 PASS, P3m BLOCKED. Each twice, identical. The first run's file stays as the "before".

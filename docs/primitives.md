@@ -34,7 +34,7 @@ Tags. Criticality: **S** death or lethal state, **A** lost items or gold, **B** 
 | P22 | Walk to a point (move) | reachable target -> within 1.5 cells before timeout | clicks on walls; no progress check; run off | C | nav/, d2dinput controller, d2dctl CmdMove | L (soaks run) | 9778 "combat move failed" | 10 targets across Blood Moor -> arrive within 1.5 cells, 9/10 |
 | P23 | Waypoint: activate and choose row (travel) | adjacent to waypoint -> panel, act tab and row, new area id = target | wrong tab; not activated; click mid-animation; 10 s refusal after level change | S | bot/waypoints.go, d2dctl OpenWaypoint ChooseWaypoint | L~ (panel opens V; row choice U) | 220 "nav waypoint failed", 127+71 "waypoint unavailable" in no-portal trips | cheat-activate 3 waypoints, go to each -> area id correct, 3/3 |
 
-P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act 2 rows 6 and 8, the inactive case and the 10 s second use (docs/fixwp.md, drills DW.*); cross-act rows BLOCKED (act unlock cheat). The 295 `unit not found` failures were W1 (class -1), fixed in d2dsrc.
+P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act 2 rows 6 and 8, the inactive case and the 10 s second use (docs/fixwp.md, drills DW.*); cross-act rows BLOCKED (act unlock cheat; `debug act <1-5>` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: DW.a3 unblocked, rerun pending). The 295 `unit not found` failures were W1 (class -1), fixed in d2dsrc.
 | P24 | Level transition (move) | exit/stairs/door -> new area id, position on the arrival side | tile offset; re-entering same area; link wait | C | nav/, d2dworld, d2dexit | L (docs/d2d-exit.md Blood Moor in 32 s) | 5746 "nav stuck" | take 5 exits in Act 1 outdoors -> area id changes, no ErrNoExit |
 | P25 | Stuck recovery (move) | no progress N s -> different click, then waypoint or TP, position moves | endless retry of the same click; marks good edge bad | C | nav/ failsafe ladder | L~ (corpus WedgePocket offline) | 5746 stuck, 69 "failsafe ladder", 113934 "target not reachable" | pin bot in a pocket (portal wedge) -> out within 60 s |
 | P26 | Skill bind and cast (combat) | skills allocated -> BindSkills count, cast at cell/unit changes mana and spawns effect | popup clicks; wrong active skill; no mana | S | d2dcombat/rig.go BindSkills, d2dctl CastUnit CastCell SetSkill | O (BindSkills UNVERIFIED, backend-contract) | - | clvl 6 Sorc with 2 attack skills -> bind 2, cast each at a target, mana delta > 0, hit logged |
@@ -55,7 +55,7 @@ P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act
 | P1 | D1.P1 | PASS | 4 hp1 + 4 mp1 in the pack, Sash: fill moved 8, hp in hp columns, mp in mp columns, pack empty (fix-belt F1/F3/F6/F7/F8) |
 | P1 | D1.P1s | PASS | `click x y shift` on a pack hp1 belts exactly one per click (box 0, then box 4 above it); the bot does not use this verb on d2d (it uses `cmd belt put`), the drill drives it |
 | P2 | D1.P2 | PASS | reader boxes = engine boxes for 5 belt types (8/8/12/12/16), overflow stays in the pack |
-| P3 | D1.P3 | PASS | each drink removes one potion of the asked kind from the right column; empty kind returns the error; D1.P3m (merc) BLOCKED: no merc cheat |
+| P3 | D1.P3 | PASS | each drink removes one potion of the asked kind from the right column; empty kind returns the error; D1.P3m (merc) BLOCKED: no merc cheat (`debug merc hire\|kill\|revive` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: unblocked, rerun pending) |
 | P7 | D1.P7a, D1.P7 | PASS | engine auto-belts a ground potion; pickit takes both and reports picked 2 (arrival by held count works) |
 | P10 | D2.a | PASS | portal verb from the field: 1 right click, 32 virtual ticks from the call (click at +22, the fixed panel sleeps), one portal object, one source spent |
 | P10 | D2.a2 | PASS | raw cast: portal object 8 ticks after the right click, 3 casts, identical (trace: about 7) |
@@ -65,7 +65,7 @@ P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act
 | P10 | D2.h | PASS | one-pair rule: second cast 12 cells away closes the first, one portal object |
 | P10 | D2.t | FAIL | bot ToTown with the portal open next to the player never arrives in town: `town: area -1 not reached within 15s`, 1584 ticks, all 3 scrolls spent by the town package's own re-casts (see docs/probes/drills/README.md, finding W1) |
 | P10 | D2.g | FAIL | control: d2dctl `EnterPortal` (the V click-on-sprite walk-in) also does not change the level in the lockstep lab: `portal click did not change the level (still 2)` |
-| P10 | D2.d | BLOCKED | cut cast needs a cheat that hits the player (`debug hit <dmg>`) |
+| P10 | D2.d | BLOCKED | cut cast needs a cheat that hits the player (`debug hit <dmg>` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: unblocked, rerun pending) |
 | P11 | D2.f | BLOCKED | return trip needs a working walk-in (D2.t, D2.g) |
 P12 to P14, P23 are not covered yet (D2 follow-up).
 

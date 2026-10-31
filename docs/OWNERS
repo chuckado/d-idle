@@ -42,3 +42,6 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+docs/cheats.md  forkcheats  forkcheats
+docs/forkcheats.md  forkcheats  forkcheats
+openspec/changes/forkcheats/**  forkcheats  forkcheats
