@@ -2,7 +2,7 @@
 
 ```yaml
 change: decompbelt
-status: in-progress
+status: archived
 skip_specs: true
 agent: decompbelt
 branch: agent/decompbelt
@@ -21,7 +21,7 @@ gates:
   - "the deviation claimed has a differential against game.exe's own code: mismatches before > 0, after = 0, over >= 100k cases"
   - "independent adversarial verifier report attached verbatim before the user is asked"
   - "nothing pushed, posted or filed on GitHub; our repo not pushed"
-merge:
+merge: ce2aac7
 result: "Q1 ground potion -> belt first (matching column, else empty column for hp/mp/rv autobelt), pack after; inventory open -> cursor. d2d equal for potions (390,000 cases); D1 isc/tsc proven 3,111 -> 0, branch trace/belt 6c2c7347 + 41bd5a88 local, verifier holds; bot findings B1-B5 for the fix queue; verified offline only (no game, no d2d slot)"
 ```
 

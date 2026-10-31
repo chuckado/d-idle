@@ -2,7 +2,7 @@
 
 ```yaml
 change: decomptome
-status: in-progress
+status: archived
 agent: decomptome
 branch: agent/decomptome
 worktree: ~/code/d2lod-wt/decomptome
@@ -16,7 +16,7 @@ gates:
   - "every rule in the trace doc is tagged V, V-d2d, D, S, U or I with an address or file:line"
   - "tools/emu/tome_use.py runs from upstream's tools/emu over >= 100,000 cases and the empty-tome class has 0 differ"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-merge:
+merge: eae3b82
 result: "game.exe: an empty tome is a silent no-op (same in d2d, 5,743 oracle cases 0 differ); a pack TP opens at the click with no cast in any live mode (refused dead, state 54, cursor, town); one pair per player (old closed first). d2d deviates: SC cast, use dropped while pmode >= 0, charge spent at the click (108,000 cases, 22,395 differ). Soak lines: 778 no-portal-opened = 525 empty tome, 134 dead context, 119 charged (busy drop or cut cast, I); not timing. PR candidate not ready (no patch). Not verified live; nothing pushed or posted."
 ```
 
