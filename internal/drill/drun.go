@@ -12,6 +12,7 @@ type RunLeg struct {
 	Dir        int // the direction index tried (the same start cell and direction in every leg)
 	Err        string
 	Ticks      int      // ticks from the move command to the end of the leg
+	Lag        int      // ticks before the first movement
 	Moving     int      // ticks in which the character moved
 	Path       float64  // summed subtiles
 	Net        float64  // straight-line subtiles start to end
@@ -37,8 +38,8 @@ type RunLab interface {
 }
 
 func (l RunLeg) String() string {
-	return fmt.Sprintf("%s: dir %d, %.1f subtiles in %d moving ticks (%d total) = %.4f per tick, net %.1f; stamina %s -> %s; runBelieved=%v runKeys=%d runResets=%d walkingRaw=%q; first deltas %s; err %q",
-		l.Name, l.Dir, l.Path, l.Moving, l.Ticks, l.PerTick, l.Net, l.StamStart, l.StamEnd, l.Believed, l.Keys, l.Resets, l.WalkingRaw, strings.Join(l.Moves, ","), l.Err)
+	return fmt.Sprintf("%s: dir %d, %.1f subtiles in %d moving ticks (%d total, first move at tick %d) = %.4f per tick, net %.1f; stamina %s -> %s; runBelieved=%v runKeys=%d runResets=%d walkingRaw=%q; first deltas %s; err %q",
+		l.Name, l.Dir, l.Path, l.Moving, l.Ticks, l.Lag, l.PerTick, l.Net, l.StamStart, l.StamEnd, l.Believed, l.Keys, l.Resets, l.WalkingRaw, strings.Join(l.Moves, ","), l.Err)
 }
 
 // DRun is the fixrun live proof: the same leg in a fresh game, again in the same game, after a restart, again.
@@ -61,7 +62,7 @@ func DRun(l RunLab) Drill {
 		}
 		kind := func(v float64) string {
 			switch {
-			case v >= 0.5:
+			case v >= 0.5 && v < 0.65:
 				return "running"
 			case v >= 0.3 && v < 0.45:
 				return "walking"

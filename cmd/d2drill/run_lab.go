@@ -31,7 +31,16 @@ func (l *lab) Leg(ctx context.Context, r *drill.Run, name string) drill.RunLeg {
 	if l.runDir >= 0 {
 		dirs = []int{l.runDir}
 	}
+	fpos := func() (x, y float64, err error) {
+		li, err := c.Level(ctx)
+		return li.X * 5, li.Y * 5, err
+	}
 	for _, d := range dirs {
+		sx, sy, err := fpos()
+		if err != nil {
+			leg.Err = "pos: " + err.Error()
+			return leg
+		}
 		start, err := ctl.Pos()
 		if err != nil {
 			leg.Err = "pos: " + err.Error()
@@ -45,35 +54,38 @@ func (l *lab) Leg(ctx context.Context, r *drill.Run, name string) drill.RunLeg {
 			leg.Err = "move: " + err.Error()
 			continue
 		}
-		prev, idle := start, 0
+		px, py, idle := sx, sy, 0
 		for t := 0; t < 160; t++ {
 			if _, err := c.Step(ctx, 1); err != nil {
 				leg.Err = "step: " + err.Error()
 				break
 			}
 			leg.Ticks++
-			cur, err := ctl.Pos()
+			cx, cy, err := fpos()
 			if err != nil {
 				leg.Err = "pos: " + err.Error()
 				break
 			}
-			dl := math.Hypot(float64(cur.X-prev.X), float64(cur.Y-prev.Y))
-			if dl > 0 {
+			dl := math.Hypot(cx-px, cy-py)
+			if dl > 0.01 {
+				if leg.Moving == 0 {
+					leg.Lag = leg.Ticks
+				}
 				leg.Path += dl
 				leg.Moving++
 				idle = 0
 				if len(leg.Moves) < 12 {
-					leg.Moves = append(leg.Moves, fmt.Sprintf("%.2f", dl))
+					leg.Moves = append(leg.Moves, fmt.Sprintf("%.3f", dl))
 				}
 			} else if idle++; idle > 12 && leg.Moving > 0 {
 				break
 			}
-			prev = cur
-			if math.Hypot(float64(cur.X-tgt.X), float64(cur.Y-tgt.Y)) <= 2 {
+			px, py = cx, cy
+			if math.Hypot(float64(tgt.X)-cx, float64(tgt.Y)-cy) <= 2 {
 				break
 			}
 		}
-		leg.Net = math.Hypot(float64(prev.X-start.X), float64(prev.Y-start.Y))
+		leg.Net = math.Hypot(px-sx, py-sy)
 		leg.StamEnd = l.stam(ctx)
 		if leg.Net >= 30 {
 			l.runDir = d
