@@ -28,3 +28,22 @@ Hooks (not the claim): stat getter / setter, max life, unit-kind predicates, dif
 ## Limits
 
 Not in the claim (ponytail in fight.hpp): the area walk (players as targets, line of sight 0x200, integer squared distance); pierce through immunity (the life_apply domain); co-op replication of life_frac. Verifier: not run.
+
+## Independent verifier (card verifyprs, 2026-10-31)
+
+Verdict: **HOLDS WITH LIMITS** (limits below; none is a counter-example inside the claim).
+
+What was done, without reading the author's oracle first:
+
+- Rule re-derived from disasm.py reads: FUN_005c9800 builds the block {+0 calc2 (skill +0x13c), +4 calc1 (+0x138), +8 game +0x70 ? DifficultyLevels +0x40 : 0, +0xc FUN_00644f20 length, +0x10 EType (+0x1dc)}; FUN_005c96a0: life = stat 6 sar 8, none under 1; with a floor, none at or under FUN_00483360(max life sar 8, floor, 100); dmg = MulDiv(life, calc1, 100), life - 1 if that leaves under 1; dmg shl 8, at least calc2; FUN_0056c8e0 (jump table 0x56ca0c: EType 2 -> record +0x1c, resist stat 0x29); a negative stat 0x29 gives MulDiv(dmg, 100, 100 - res); the record goes to FUN_0057c6c0 (flags 0x4d, hit flags 0x4001). In FUN_0057c1e0 / FUN_0057be00 the defender flag is "a monster that is not a hireling" (FUN_0063ee90 returns the hireling act, so the flag is 1 when it returns 0): pierce (stat 0x14e, table 0x732980 row 2) comes off only when res < 100, no difficulty penalty, clamp at -100; FUN_0057bf80 then takes MulDiv(v, 100 - min(res, 100), 100). Same rule as the author's (V, disassembly read).
+- Own differential (`tools/emu/verify_static_field.py`, seed 4242): game side = game.exe's own FUN_005c96a0 then FUN_0057c1e0 natively under the emulator (hooks listed in the script docstring); d2d side = the REAL `Fight::spot` (a World, one monster, the player's pierce in psum) via `test_game --verify-static` (`verify_static_field_mode.inc`), not a copy of the call site. 232,152 cases: 132,152 boundary (every life in 256ths for max life 1..4 at 5 resistances x 3 difficulties x 2 game types; floor edges +-1 point and +0/1/255 256ths for max life 100..65,535; 13 resistances x 6 pierces; synthetic calc1 0..1000, calc2 0..0x10000, floors 0..100) and 100,000 random (max life to 2,000,000, res -300..300, pierce to 300, slvl 1..60). Before (upstream 72132b99 built): **100,624 differ** (94,243 with real data, 6,381 synthetic). After (fix/static-field built): **0**. game.tsv md5 prefix bd1714639a1b.
+- Sweep: d2d has one Static Field path (`kStaticField` in strike.cpp); StaticFieldMin is read in game.exe only at 0x5c988b (the 23 FUN_00611d30 callers checked); FUN_005c96a0 is referenced only from 0x5c98d0, FUN_005c9800 only from the srvdo table.
+- CI class: pr_guard 0 FAIL 0 WARN; test_game / test_rules / test_combat / test_protocol rc 0 (built with -Wno-error=maybe-uninitialized -Wno-error=array-bounds); presubmit --quick 0 FAIL, 3 WARN (siblings: players / mercs / pets as targets; docs-sync; build skipped); gcc -Wshadow -Wunused -Wsign-compare on strike.cpp, gamedata_load.cpp, test_game.cpp: 0 warnings on added lines; clang-tidy (LLVM 23, upstream .clang-tidy) on the same TUs: nothing on the touched files (only pre-existing outdoor.hpp structured-binding names, which CI's older clang-tidy does not flag). Commits: one claim (d9d64d53) plus tooling (6270d162); ponytails in fight.hpp and combat.hpp present and accurate.
+
+Limits (what the claim does not cover):
+
+1. The author's own after side (`test_game --static-field`) re-states the call site's arithmetic; the real `Fight::spot` is covered by this verifier's run only. The PR body should cite a reviewer command that drives `spot` (or say the mode is a restatement).
+2. Real 1.14d data gives calc1 25 and calc2 0 at every level, so the life - 1 cap and the calc2 floor are reached only with synthetic Skills.txt values (checked, 0 mismatches).
+3. Not modelled on either side of the claim: a monster's magic damage reduction (FUN_0057bf80 subtracts table row 2's flat reduction, MDR, for lightning) and lightning absorb (FUN_0057bf10); FUN_0057c060's damage percent (100 for a player hitting a monster; other attacker kinds not run); players, mercs and pets as targets (the aurafilter walk, line of sight).
+4. Hooked in the game side: stat getters, max life, the difficulty row, events and the get-hit event; the life step of FUN_0057c6c0 (0x57c852..0x57c874) is applied in Python.
+5. Det state hashes: no scripted scenario casts Static Field; not run.

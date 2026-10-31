@@ -54,3 +54,12 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
+tools/emu/verify_static_field.py  verifyprs  verifyprs
+tools/emu/verify_static_field_mode.inc  verifyprs  verifyprs
+tools/emu/verify_walk_velocity.py  verifyprs  verifyprs
+tools/emu/verify_walk_velocity_mode.inc  verifyprs  verifyprs
+docs/research/pr-static-proof.md  verifyprs  verifyprs
+docs/research/pr-walk-proof.md  verifyprs  verifyprs
+docs/research/pr-bundle-queue.md  verifyprs  verifyprs
+docs/BACKLOG.md  verifyprs  verifyprs
+openspec/changes/verifyprs/**  verifyprs  verifyprs
