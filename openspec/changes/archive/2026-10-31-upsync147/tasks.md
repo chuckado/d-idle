@@ -2,7 +2,7 @@
 
 ```yaml
 change: upsync147
-status: in-progress
+status: archived
 agent: UPSYNC147
 branch: agent/upsync147
 worktree: ~/code/d2lod-wt/upsync147
@@ -13,7 +13,7 @@ exclusive:
   - upstream-pr:belt
 gates:
   - "pr_guard 0 FAIL, upstream tests green, belt oracle 0 mismatches before the push"
-merge:
+merge: 83244e7
 result: merged and pushed f4c61afe to the fork (fast-forward), PR mergeable; pr_guard 0/0, oracle 390,000 0 mismatches, 3,111 without fix; verified on the worker host, no game
 ```
 

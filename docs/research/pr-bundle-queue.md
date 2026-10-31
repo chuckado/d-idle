@@ -12,7 +12,7 @@
 ## Queue (in order)
 | Candidate | State | Commits | Notes |
 |---|---|---|---|
-| #147 belt scrolls | OPEN, being brought up to date with the new layout (UPSYNC147) | 3 + merge | waits for the maintainer |
+| #147 belt scrolls | OPEN, up to date with the restructured upstream (merge pushed), mergeable, review pending; CodeRabbit follow-up commit 4d1572ee already in | 3 + merge | waits for the maintainer |
 | tome (inventory Town Portal opens at the click tick) | READY, local, queued by the user: open when #147 merges | 3 | branch fix/tome-use on the worker host; docs/research/pr-tome-*.md |
 | shift-click belt / ctrl-click sell / inventory-open pickup | NOT STARTED (decomp-queue item 9) | ? | lab fork implements it; needs a differential proof against game.exe handlers |
 | waypoint (decomp-queue item 3, docs/research/pr-wp-*.md) | local, proof incomplete, needs the independent verifier | 6 files, 1 commit | branch fix/waypoint-hostile-window on the worker host |
