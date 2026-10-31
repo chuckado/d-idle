@@ -8,14 +8,14 @@
 
 **Numbers.**
 
-| Scenario | Cases | before (d72b97a7) | claim A (112f5de0) | claim B (c56670b9) |
+| Scenario | Cases | before (29e75c76) | claim A (c5e2a0b1) | claim B (e35ab5ca) |
 |---|---|---|---|---|
 | Grid (tbk / tsc x 25 charges x town x in hand x modes 0..19 x spot) + 100,000 random, seed 7 | 108,000 | 29,551 | 23,127 | 0 (md5 equal) |
 | 200,000 random + grid, seed 31 | 208,000 | 56,616 | 44,392 | 0 |
 
 Seed 7 classes before: busy + spot (game opens now, d2d nothing) 8,360; busy, no spot (game closes the old pair, d2d nothing) 8,337; idle + spot (game now, d2d at tick 9) 3,194; idle, no spot (game keeps the charge and closes the old pair, d2d spends it and keeps the pair) 3,236; item in hand (game nothing, d2d casts) 6,424.
 
-Their checks on c56670b9: `test_game` rc 0 (29 OK, two new blocks), `test_combat` rc 0, `test_rules` rc 0 (Release, `D2D_WERROR` on), `pr_guard.py upstream/main` 0 FAIL 0 WARN, `presubmit.py --quick` 0 FAIL 4 WARN (ruff absent; build by hand; two sibling questions answered in the body). Three commits authored by the user, body one line `Agent: Claude Code`, no trailer.
+Same numbers on the pre-split run (d72b97a7 / 112f5de0 / c56670b9 on 27113a31). Their checks on e35ab5ca (upstream/main 03f42254): `test_game` rc 0 (two new OK blocks), `test_combat` rc 0, `test_rules` rc 0 (Release, `D2D_WERROR` on), `pr_guard.py upstream/main` 0 FAIL 0 WARN, `presubmit.py --quick` 0 FAIL 4 WARN (ruff absent; build by hand; two sibling questions answered in the body). Three commits authored by the user, body one line `Agent: Claude Code`, no trailer.
 
 **Commands (reviewer re-runs on their copy).**
 
@@ -28,13 +28,13 @@ cd tools/emu && uv run python tome_use.py gen 100000 7 > cases.tsv && uv run pyt
 **What the bot gains.** On d2d a portal read under attack works as in game.exe (no dropped click while in get-hit, no charge lost to a cut cast): fewer failed trips and deaths in soaks (town-portal-trace.md section 3: 119 "tome still charged" failures fit the busy drop or a cut cast). Not measured; the bot fix (FIXPORTAL) must still handle today's d2d.
 
 **Residual risks.**
-- State 0x36 and level 0x88 not compared (ponytail); belt / stash items and the game.exe client side outside the generator; `FUN_00628c20` and the spot search hooked.
+- State 0x36 and level 0x88 not compared (ponytail); item mode, requirements, range, belt items and the game.exe client side outside the generator; `FUN_00628c20` and the spot search hooked; sounds not compared.
 - `tools/d2ddet` hashes not run.
-- Branch on upstream/main 27113a31; fetch again right before a push.
+- Branch on upstream/main 03f42254 (rebased over the file split); fetch again right before a push.
 
-**Verifier.** PENDING.
+**Verifier.** Independent Opus agent (own worktree): **VERDICT: holds with limits.** Re-read the gate (`FUN_0057eec0`: only state 0x36, mode 0 / 0x11 refuse), `FUN_0055e170` (no mode test, no SC, spend only after success) and `FUN_005be290` (close before make); reproduced 29,551 / 23,127 / 0, seed 31 0, fresh seed 1234 0; its own driver: 1 -> 0 charges, two reads in a row, walled spot, modes 0..19, a read during a skill-bar SC, co-op pairs: all as claimed. Limits: portal position not compared, sounds not compared, state 0x36 / level 0x88 / item mode / requirements / range not modelled, joined game not run; it flagged upstream's file split, since rebased (proof doc). Full report in the proof doc.
 
-**PROOF: PENDING.**
+**PROOF: complete.** Recommendation: go, with the user's go per step (push `fix/tome-use`, open the PR with the draft body; or join a bundle as its own commits, per the maintainer's preference). Fetch upstream again right before a push.
 
 **Push and PR commands (NOT run; each needs the user's go).**
 
