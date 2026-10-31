@@ -16,6 +16,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 - [upstream-pr-candidates-spawn.md](upstream-pr-candidates-spawn.md) spawn candidate list. historical.
 - [gap-casts-per-kill.md](gap-casts-per-kill.md) why the original needs fewer casts per kill (a probe artifact). current.
 - [cast-trace-gameexe.md](cast-trace-gameexe.md) cast timing traced in game.exe; basis of PR #128 (merged). current.
+- [skill-bind-trace.md](skill-bind-trace.md) skill bind (C->S 0x3c) and cast packets/gates, game.exe vs d2d vs the bot (oracle, decomp-queue item 4). current; result: server refuses non-row / missing / level-0 selects, no leftskill check; d2d World stores any id (D1, 81,756 of 127,032 -> 0 under the rule, PR not built); on d2d BindSkills binds nothing in the game (B1); P26 drill recipe inside.
 
 ## Get-hit and recovery
 - [movement-and-recovery-trace.md](movement-and-recovery-trace.md) walk/run speed and hit recovery traced in game.exe. current.
