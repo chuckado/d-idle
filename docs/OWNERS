@@ -47,3 +47,6 @@ internal/town/stash.go  fixbank  fix-bank
 internal/town/chores.go  fixbank  fix-bank
 internal/town/fixbank_test.go  fixbank  fix-bank
 docs/fixbank.md  fixbank  fix-bank
+docs/cheats.md  forkcheats2  forkcheats2
+docs/forkcheats.md  forkcheats2  forkcheats2
+openspec/changes/forkcheats2/**  forkcheats2  forkcheats2

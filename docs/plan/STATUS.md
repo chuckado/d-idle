@@ -44,6 +44,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-bank](../../openspec/changes/fix-bank/) | in-progress | fixbank | `internal/d2dtown/adapter.go`<br>`internal/town/stash.go`<br>`internal/town/chores.go`<br>`internal/town/fixbank_test.go`<br>`docs/fixbank.md` | - |
 | [fix-pickup](../../openspec/changes/fix-pickup/) | in-progress | fixpickup | `internal/town/belt/belt.go`<br>`internal/town/belt/belt_test.go`<br>`internal/town/beltfill.go`<br>`internal/town/sim/sim.go`<br>`internal/loot/loot.go`<br>`internal/loot/pickup.go`<br>`internal/loot/export_test.go`<br>`internal/loot/fixpickup_test.go`<br>`docs/fixpickup.md` | - |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
+| [forkcheats2](../../openspec/changes/forkcheats2/) | in-progress | forkcheats2 | `docs/cheats.md`<br>`docs/forkcheats.md`<br>`openspec/changes/forkcheats2/**` | `fork-branch:lab-cheats2` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 
@@ -77,6 +78,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fix-pickup: live proof is drill D1/P7 (not run here)
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change forkcheats2: each new verb exercised live on one hidden slot with before/after state and a negative case (docs/forkcheats.md)
+- change forkcheats2: cmd/d2drill D0 + D1 + one D2 drill against the new binary: no regression
+- change forkcheats2: changecheck -cli has 0 warnings; leakcheck -mode fail finds 0; openspec validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -86,6 +90,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 2e3de60 10-31 14:29 `Merge agent/fixbank: gold deposit via MoveGold on d2d, no repair without gold` (fix-bank)
 - 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
@@ -95,5 +100,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8f6bcff 10-31 13:35 `Merge agent/gateladder: retire G1/G2 Game.exe gates, d2d gate ladder` (d2d-gate-ladder)
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
-- 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
 <!-- statusgen:end -->
