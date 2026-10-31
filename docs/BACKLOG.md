@@ -10,6 +10,7 @@
 Trimmed 2026-10-31 (doctrim); each item was checked against the code and `git log` that day. The full old list, with the items that have since merged, is [archive/BACKLOG-2026-10-30.md](archive/BACKLOG-2026-10-30.md). Where we are: [plan/STATUS.md](plan/STATUS.md). Live items need a free instance or d2d slot (`tools/d2dslot.sh status`) and a non-NO `tools/capacity.sh --add <cores>` ([process/worker-capacity.md](process/worker-capacity.md)). When a report says "not done", add a line here; when an item gets a card, replace the line with the card id.
 
 ## 0. Next milestone: solid bot basics, then the fidelity gate (user, 2026-10-31)
+REFOCUS (user, 2026-10-31): the primitives first: docs/primitives.md (36 primitives, SME list + code inventory); the live drill suite is card m1-liveproof; policy cards are paused until the high-criticality primitives have a live PASS or a fix card
 The next milestone is making the bot itself better: the town and inventory basics must be rock solid on d2d, not progression through the game. The d2-sme's 15-scenario checklist (2026-10-31) is the acceptance list; each scenario needs an offline test or a live proof, tracked in a coverage table (first step: the offline basics audit, awaiting the user's go).
 1. Gold 50, belt empty, in town: buys 1 healing potion, no scroll or tome, leaves.
 2. Gold 120, 1 scroll, belt full: buys no scroll, keeps the gold, no shop visit.
