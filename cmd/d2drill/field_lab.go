@@ -4,13 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
 
 	"d2lod-bot/internal/combat"
+	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/d2dsrc"
+	"d2lod-bot/internal/d2dtown"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/input"
 )
@@ -71,27 +74,36 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 	if level >= 30 { // Tristram has monsters: the throwaway must survive the walk to the cage
 		_ = l.Invincible(ctx, r)
 	}
-	if op.Found == "" { // presets only list the rooms near the player: find the object in `debug objects`, stand beside it, read the presets again
-		out, _ := r.Cheat(ctx, "debug objects", "read-only listing: where an object of this kind stands on the level")
-		for _, ln := range strings.Split(out, "\n") {
-			f := strings.Fields(ln)
-			if len(f) < 7 || !strings.Contains(strings.ToLower(f[3]), want) {
-				continue
+	if op.Found == "" { // presets and `debug objects` only list the rooms near the player: look around the level from a few cells
+		for _, at := range [][2]int{{22, 58}, {14, 45}, {10, 60}, {30, 60}, {40, 45}} {
+			if op.Found != "" {
+				break
 			}
-			x, _ := strconv.ParseFloat(f[1], 64)
-			y, _ := strconv.ParseFloat(f[2], 64)
-			if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(x)+2, int(y)), "stand beside the object: the bot walks there in a real run, the drill tests the click"); err != nil {
+			if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", at[0], at[1]), "stand at a spot of the level so the rooms around it stream in: the bot would have walked there; the drill tests the click"); err != nil {
 				break
 			}
 			_ = l.Tick(ctx, 40)
-			if ps2, err := l.be.Client.Presets(ctx); err == nil {
-				for _, p := range ps2.Items {
-					if !p.Hidden && p.X-x < 1 && x-p.X < 1 && p.Y-y < 1 && y-p.Y < 1 {
-						op.Found, op.Class, op.Names = p.Name, p.ObjectID, strconv.Itoa(p.Index)
+			out, _ := r.Cheat(ctx, "debug objects", "read-only listing: where an object of this kind stands on the level")
+			for _, ln := range strings.Split(out, "\n") {
+				f := strings.Fields(ln)
+				if len(f) < 7 || !strings.Contains(strings.ToLower(f[3]), want) {
+					continue
+				}
+				x, _ := strconv.ParseFloat(f[1], 64)
+				y, _ := strconv.ParseFloat(f[2], 64)
+				if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(x)+2, int(y)), "stand beside the object: the bot walks there in a real run, the drill tests the click"); err != nil {
+					break
+				}
+				_ = l.Tick(ctx, 40)
+				if ps2, err := l.be.Client.Presets(ctx); err == nil {
+					for _, p := range ps2.Items {
+						if !p.Hidden && p.X-x < 1 && x-p.X < 1 && p.Y-y < 1 && y-p.Y < 1 {
+							op.Found, op.Class, op.Names = p.Name, p.ObjectID, strconv.Itoa(p.Index)
+						}
 					}
 				}
+				break
 			}
-			break
 		}
 	}
 	if op.Found == "" {
@@ -272,6 +284,7 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		return fail("snapshot", errors.New("no player"))
 	}
 	fi.ManaStart, fi.LifeMin = sn0.Player.Mana, sn0.Player.Life
+	_ = sn0
 	fi.Decisions = append(fi.Decisions, fmt.Sprintf("pre-clear player mode %d area %d", sn0.Player.Mode, sn0.Player.Area))
 	if rr, e := l.be.Client.Do(ctx, "dump player"); e == nil && rr != nil {
 		fi.Decisions = append(fi.Decisions, "dump player: "+strings.Join(rr.Lines, " ")+rr.Rest)
@@ -284,6 +297,15 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	}
 	var res combat.ClearResult
 	var cerr error
+	if s.ManaMid > 0 { // engage first with full mana, then drop the mana by cheat in the middle of the fight
+		r0, e0 := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 8 * time.Second})
+		res.Kills += r0.Kills
+		fi.Decisions = append(fi.Decisions, fmt.Sprintf("engaged: first Clear %v kills %d err %v", r0.Elapsed.Round(time.Second), r0.Kills, e0))
+		if err := l.SetMana(ctx, r, s.ManaMid); err != nil {
+			return fail("mana", err)
+		}
+		fi.ManaStart = s.ManaMid
+	}
 	for round := 0; round < 3; round++ { // the first call can run before the level map is built (everything "unreachable"): ask again
 		var r1 combat.ClearResult
 		r1, cerr = l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: to})
@@ -398,4 +420,121 @@ func countLog(lines []string, sub string) int {
 		}
 	}
 	return n
+}
+
+func (l *lab) GivePackUnid(ctx context.Context, r *drill.Run, code string, quality int) error {
+	_, err := r.Cheat(ctx, fmt.Sprintf("debug give %s pack q%d unid", code, quality), "an unidentified magic "+code+" in the pack: the identify and sell-price drills need one and the game has no other way to make it")
+	if err != nil {
+		return err
+	}
+	return l.Tick(ctx, 10)
+}
+
+func (l *lab) Claim(ctx context.Context, r *drill.Run) (bool, string, int, int, error) {
+	if err := l.Goto(ctx, r, 1); err != nil {
+		return false, "", 0, 0, err
+	}
+	if _, err := r.Cheat(ctx, "debug quest set 2 0x0002", "Blood Raven's record with the reward pending: the claim drill needs the state the quest would leave"); err != nil {
+		return false, "", 0, 0, err
+	}
+	_ = l.Tick(ctx, 10)
+	_ = l.be.Ctl.CloseAll()
+	savedP, savedN := d2dctl.Pause, d2dctl.Now
+	l.be.Clock.Install(ctx) // the bot's own wiring: a game-time Pause under lockstep
+	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
+	res, err := d2dtown.ClaimRogue(ctx, l.be.Client)
+	_ = l.CloseAll(ctx)
+	return res.Granted, res.Merc, res.BurialBefore, res.BurialAfter, err
+}
+
+func (l *lab) AkaraReward(ctx context.Context, r *drill.Run) (int, int, string, error) {
+	if err := l.Goto(ctx, r, 1); err != nil {
+		return 0, 0, "", err
+	}
+	if _, err := r.Cheat(ctx, "debug quest set 1 0x0002", "the Den of Evil record with the reward pending: the Akara reward drill needs the state the quest would leave"); err != nil {
+		return 0, 0, "", err
+	}
+	_ = l.Tick(ctx, 10)
+	sk := func() int {
+		if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil {
+			return s.Player.SkillPoints
+		}
+		return -1
+	}
+	b := sk()
+	if oi := l.OpenNPC(ctx, 148); oi.Err != "" {
+		_ = l.CloseAll(ctx)
+		return b, sk(), "", fmt.Errorf("open Akara: %s", oi.Err)
+	}
+	_ = l.Tick(ctx, 40)
+	_ = l.CloseAll(ctx)
+	_ = l.Tick(ctx, 20)
+	out, _ := r.Cheat(ctx, "debug quest list", "read-only: the quest records after the talk")
+	return b, sk(), strings.ReplaceAll(strings.TrimSpace(out), "\n", "; "), nil
+}
+
+func (l *lab) Pin(ctx context.Context, r *drill.Run, level int, within time.Duration) drill.PinInfo {
+	var pi drill.PinInfo
+	if err := l.Goto(ctx, r, level); err != nil {
+		pi.Err = err.Error()
+		return pi
+	}
+	if err := l.Invincible(ctx, r); err != nil {
+		pi.Err = err.Error()
+		return pi
+	}
+	s0, err := l.be.Env.Snapshot()
+	if err != nil || s0.Player == nil {
+		pi.Err = "no player"
+		return pi
+	}
+	if _, err := r.Cheat(ctx, "debug pin on", "wall the throwaway into a collision pocket: the stall ladder drill (P25)"); err != nil {
+		pi.Err = err.Error()
+		return pi
+	}
+	pi.Pinned = true
+	defer func() {
+		if _, err := r.Cheat(ctx, "debug pin off", "take the pocket down again"); err == nil {
+			pi.Freed = true
+		}
+	}()
+	_ = l.Tick(ctx, 10)
+	mark, t0 := l.rec.Mark(), l.tick()
+	wctx, cancel := context.WithTimeout(ctx, 3*time.Minute)
+	defer cancel()
+	target := input.Point{X: s0.Player.X + 60, Y: s0.Player.Y}
+	var werr error
+	for l.tick()-t0 < int(within/(40*time.Millisecond)) { // game time: the ladder gets 60 s, tried in short walks
+		werr = l.navr.GoTo(wctx, target)
+		if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil && (s.Player.Area != level || math.Hypot(float64(s.Player.X-s0.Player.X), float64(s.Player.Y-s0.Player.Y)) > 30) {
+			break
+		}
+		if wctx.Err() != nil {
+			break
+		}
+	}
+	pi.Ticks = l.tick() - t0
+	if werr != nil {
+		pi.Err = werr.Error()
+	}
+	if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil {
+		pi.Area = s.Player.Area
+		pi.Moved = math.Hypot(float64(s.Player.X-s0.Player.X), float64(s.Player.Y-s0.Player.Y)) / 5
+	}
+	for _, ln := range l.rec.Since(mark) {
+		if strings.Contains(ln, "stuck") || strings.Contains(ln, "failsafe") || strings.Contains(ln, "ladder") || strings.Contains(ln, "portal") || strings.Contains(ln, "waypoint") {
+			pi.Rungs = append(pi.Rungs, ln)
+		}
+	}
+	return pi
+}
+
+func (l *lab) Survive(ctx context.Context, r *drill.Run) error {
+	if sn, err := l.be.Env.Snapshot(); err == nil && sn.Player != nil && combat.IsDead(sn.Player) {
+		if err := l.rig.Fighter.Respawn(ctx, 40*time.Second); err != nil {
+			return err
+		}
+		_ = l.Tick(ctx, 25)
+	}
+	return l.Invincible(ctx, r)
 }

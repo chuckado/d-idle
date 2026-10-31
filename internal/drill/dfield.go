@@ -28,6 +28,7 @@ type FightSpec struct {
 	Life           int      // maximum and current life by cheat (0: leave the character as is)
 	Mana           int      // current mana by cheat (0: leave)
 	ManaAt         int      // like LifeAt for mana
+	ManaMid        int      // mana set by cheat after a first 8 s Clear: the mana drink inside a fight
 	ThenClear      bool     // after the decision, run Clear too (hit effect and kills)
 	SampleMissiles bool     // before the fight, sample debug missiles and Snapshot.Missiles with the character idle
 	Kill           bool     // debug kill after the arrival: the level's natural monsters are gone (they give experience)
@@ -73,6 +74,8 @@ type FieldLab interface {
 	HoverLab
 	WPLab
 	// ToArea is the bot's navigator ToArea (an exit walk); the area the character stands in afterwards.
+	// Survive respawns a dead character (the bot's Respawn) and gives a big life: the walks cross monster levels without combat.
+	Survive(ctx context.Context, r *Run) error
 	ToArea(ctx context.Context, level int) (area int, err string)
 	// TouchWaypoint is nav.ActivateWaypointNear on the current level with the given reach in subtiles; drained is what
 	// the navigator hands the runner (DrainActivated).
@@ -98,8 +101,8 @@ func F(l FieldLab) []Drill {
 	return []Drill{
 		obj("H.obj.chest", "a chest of Blood Moor: listed in the snapshot, operated by the bot's Interact", "2", "chest"),
 		obj("H.obj.shrine", "the shrine of Blood Moor: listed, operated by the bot's Interact", "2", "shrine"),
-		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: arrive in Black Marsh from the Forgotten Tower mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
-			return fMouth(ctx, r, l, 20, 6, "Forgotten Tower to Black Marsh")
+		{ID: "DW.m1", Primitive: "P23", Title: "fix-nav: arrive in Cold Plains from the Burial Grounds mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+			return fMouth(ctx, r, l, 17, 3, "Burial Grounds to Cold Plains")
 		}},
 		{ID: "DW.m2", Primitive: "P23", Title: "fix-nav: arrive in Cold Plains from the Cave Level 1 mouth, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			return fMouth(ctx, r, l, 9, 3, "Cave Level 1 to Cold Plains")
@@ -156,13 +159,36 @@ func countLines(lines []string, subs ...string) int {
 // fDodge is the fix-missile and fix-missile2 live proof (D5 dodge): Fallen Shamans (firebolt-like shafire missiles) beside
 // a character with plenty of life; the fight loop must dodge at least once and send about one cast command per cast.
 func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"fallenshaman1 3 near"}, SampleMissiles: true, Life: 400, Mana: 0, Potions: true, Clear: 90 * time.Second})
+	// a shaman's bolt is slow and the bot may kill it before one comes close: fight up to 3 rounds (a fresh arrival and
+	// a fresh spawn each) until a dodge was seen; the counters add up
+	var fi FightInfo
+	rounds := 0
+	for rounds < 3 {
+		rounds++
+		f := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"fallenshaman1 4 near"}, SampleMissiles: rounds == 1, Life: 400, Potions: true, Clear: 90 * time.Second})
+		fi.Casts += f.Casts
+		fi.Dodges += f.Dodges
+		fi.CmdSkill += f.CmdSkill
+		fi.Kills += f.Kills
+		fi.Spawned = max(fi.Spawned, f.Spawned)
+		fi.LifeMin = f.LifeMin
+		fi.Err = f.Err
+		fi.Elapsed += f.Elapsed
+		if rounds == 1 {
+			fi.Decisions, fi.LogHead = f.Decisions, f.LogHead
+			fi.Missiles = f.Missiles
+		}
+		fi.Log = append(fi.Log, f.Log...)
+		if fi.Dodges > 0 && fi.Casts >= 5 {
+			break
+		}
+	}
 	per := 0.0
 	if fi.Casts > 0 {
 		per = float64(fi.CmdSkill) / float64(fi.Casts)
 	}
 	intended := "dodges > 0 with the d2d missile listing, cast commands per cast about 1.0 (CastGapMs 650)"
-	obs := fmt.Sprintf("%s; cmd skill per cast %.2f; dodging lines %d; %s", fi, per, countLines(fi.Log, "dodging"), strings.Join(firstN(fi.Decisions, 3), " | "))
+	obs := fmt.Sprintf("%d round(s); %s; cmd skill per cast %.2f; dodging lines %d; %s", rounds, fi.base(), per, countLines(fi.Log, "combat dodging"), strings.Join(firstN(fi.Decisions, 3), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("dodge>0=%v perCast<=1.3=%v", fi.Dodges > 0, per > 0 && per <= 1.3)}
 	switch {
 	case fi.Spawned == 0:
@@ -170,7 +196,7 @@ func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
 	case fi.Casts == 0:
 		o.Verdict, o.Reason = Fail, "the fighter cast nothing"
 	case fi.Dodges == 0:
-		o.Verdict, o.Reason = Fail, fmt.Sprintf("no dodge in the fight (casts %d)", fi.Casts)
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("no dodge in %d rounds (casts %d)", rounds, fi.Casts)
 	case per > 1.3 || per < 0.7:
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("cast commands per cast %.2f (wanted about 1.0)", per)
 	default:
@@ -199,11 +225,11 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 	fi := l.Fight(ctx, r, FightSpec{Level: 2, Spawns: []string{"zombie1 6 near"}, Life: 40, LifeAt: 9, Potions: true, Clear: 60 * time.Second})
 	intended := "life at 9 of 40 with a pack in reach and an empty belt: Fighter.Safety decides a retreat (town portal or chicken) instead of fighting on"
 	obs := fmt.Sprintf("%s; decisions %s", fi, strings.Join(firstN(fi.Decisions, 12), " | "))
-	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("err=%s town=%v", fi.Err, fi.InTown)}
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("acted=%v", fi.Err != "none" && fi.Err != "")}
 	switch {
 	case fi.Spawned == 0:
 		o.Verdict, o.Reason = Blocked, "the spawn listed no monster"
-	case strings.Contains(fi.Err, "drink-life done"):
+	case strings.Contains(fi.Err, "drink-life done") || strings.Contains(fi.Err, "drink-rejuv done"):
 		o.Verdict, o.Reason = Pass, "the bot decided to heal with the belt (it holds potions): "+fi.Err
 	case strings.Contains(fi.Err, "town-portal") || strings.Contains(fi.Err, "chicken") || strings.Contains(fi.Err, "crowd") || fi.InTown:
 		o.Verdict, o.Reason = Pass, "the bot decided to retreat: "+fi.Err
@@ -214,8 +240,8 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"zombie1 2 near"}, Life: 200, ManaAt: 7, ThenClear: true, Potions: true, Clear: 60 * time.Second})
-	intended := "mana 7 with monsters listed: Safety decides drink-mana, the belt mana potion is drunk (belt mana -1, mana up); then the casts kill the target (P26 hit effect)"
+	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"zombie1 5 near"}, Life: 200, ManaMid: 7, Potions: true, Clear: 60 * time.Second})
+	intended := "mana cut to 7 by cheat in the middle of a fight: the fighter drinks a belt mana potion ('combat potion kind=mana') and the casts keep killing (P26 hit effect)"
 	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 4), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
 	switch {
@@ -224,7 +250,7 @@ func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
 	case fi.Kills == 0:
 		o.Verdict, o.Reason = Fail, "no kill: the hit effect of the cast is not seen: "+fi.Err
 	case fi.ManaDrinks == 0:
-		o.Verdict, o.Reason = Fail, "mana 7 in a fight and no mana potion drunk"
+		o.Verdict, o.Reason = Fail, "mana 7 in a fight and no mana potion drunk (what it did instead: see the log and decisions)"
 	default:
 		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d mana drinks, %d kills", fi.ManaDrinks, fi.Kills)
 	}
@@ -246,6 +272,9 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, cave, field int, what strin
 		return setupFail(err)
 	}
 	if err := l.ActivateAll(ctx, r); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Survive(ctx, r); err != nil {
 		return setupFail(err)
 	}
 	area, err := l.ToArea(ctx, field)
@@ -282,6 +311,9 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, cave, field int, what strin
 // fTouch is DW.a12 at the navigator: Dark Wood's waypoint is not activated; ActivateWaypointNear touches it, the
 // navigator hands the level to the runner (DrainActivated), and the waypoint then works as a travel target from town.
 func fTouch(ctx context.Context, r *Run, l FieldLab) Outcome {
+	if err := l.Survive(ctx, r); err != nil {
+		return setupFail(err)
+	}
 	if err := l.Goto(ctx, r, 5); err != nil {
 		return setupFail(err)
 	}

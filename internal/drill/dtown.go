@@ -108,6 +108,7 @@ func D3(l TownLab) []Drill {
 		{ID: "D3.r0", Primitive: "P16", Title: "worn items at durability 1, gold 0: no repair progress, no loop, no gold lost", Limit: lim, Do: do(d3r0)},
 		{ID: "D3.s", Primitive: "P5", Title: "stash opens, an item goes in and out, gold deposit and withdraw keep purse + stash constant", Limit: lim, Do: do(d3s)},
 		{ID: "D3.s2", Primitive: "P5", Title: "partial gold deposit (the amount is typed): the bot's own deposit of 1000 of 1500", Limit: lim, Do: do(d3s2)},
+		{ID: "D3.u", Primitive: "P13", Title: "unidentified magic item: the vendor's price against the price formula (docs/research/price-trace.md)", Limit: lim, Do: do(d3u)},
 		{ID: "D3.i", Primitive: "P13", Title: "identify: an unidentified pack item and an ID scroll, the identify chore", Limit: lim, Do: do(d3i)},
 	}
 }
@@ -541,7 +542,15 @@ func d3i(ctx context.Context, r *Run, l TownLab) Outcome {
 	if err := l.SetGold(ctx, r, 500); err != nil {
 		return setupFail(err)
 	}
+	if ug, ok := l.(unidGiver); ok { // a magic ring that is unidentified from the start (`give pack q4 unid`)
+		if err := ug.GivePackUnid(ctx, r, "rin", 4); err != nil {
+			return setupFail(err)
+		}
+	}
 	for _, code := range []string{"rin", "isc"} {
+		if _, ok := l.(unidGiver); ok && code == "rin" {
+			continue
+		}
 		if err := l.GiveGround(ctx, r, code); err != nil {
 			return setupFail(err)
 		}
@@ -593,4 +602,52 @@ func sellExpect(l TownLab, code string) int {
 		return e.SellExpect(code)
 	}
 	return 0
+}
+
+// unidGiver is `debug give <code> pack q<quality> unid`: a magic or better item that is unidentified (forkcheats2).
+type unidGiver interface {
+	GivePackUnid(ctx context.Context, r *Run, code string, quality int) error
+}
+
+// d3u measures what Charsi pays for an unidentified magic cap and compares it with the price formula.
+func d3u(ctx context.Context, r *Run, l TownLab) Outcome {
+	ug, ok := l.(unidGiver)
+	if !ok {
+		return Blocks("the lab has no `give pack q4 unid` step")
+	}
+	if err := l.ClearPack(ctx, r); err != nil {
+		return setupFail(err)
+	}
+	if err := l.SetGold(ctx, r, 100); err != nil {
+		return setupFail(err)
+	}
+	if err := ug.GivePackUnid(ctx, r, "cap", 4); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Tick(ctx, 10); err != nil {
+		return setupFail(err)
+	}
+	g0, _ := l.TView(ctx)
+	if g0.Pack["cap"] == 0 {
+		return setupFail(fmt.Errorf("no cap in the pack (%s)", g0.PackString()))
+	}
+	if err := l.OpenVendor(ctx, classCharsi); err != nil {
+		_ = l.CloseAll(ctx)
+		return Failed("open vendor: "+err.Error(), "sell the cap", "")
+	}
+	gained, serr := l.SellPack(ctx, "cap")
+	g1, _ := l.TView(ctx)
+	_ = l.CloseAll(ctx)
+	want := sellExpect(l, "cap")
+	obs := fmt.Sprintf("unidentified magic Cap (unid %d) sold to Charsi: gained %d err %v; gold %d -> %d; formula for a normal cap %d", g0.Unid, gained, serr, g0.Gold, g1.Gold, want)
+	o := Outcome{Intended: "an unidentified magic item sells for its base price (cost/2, the identified extras do not count)", Observed: obs, Sig: fmt.Sprintf("gained=%d want=%d err=%v", gained, want, serr != nil)}
+	switch {
+	case serr != nil || gained <= 0 || g1.Gold-g0.Gold != gained:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("sell: err %v, gold delta %d vs gained %d", serr, g1.Gold-g0.Gold, gained)
+	case want > 0 && gained != want:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("paid %d, the formula for the base says %d", gained, want)
+	default:
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("unidentified magic cap sold for %d = the base formula", gained)
+	}
+	return o
 }
