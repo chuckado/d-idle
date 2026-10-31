@@ -2,7 +2,8 @@
 
 ```yaml
 change: wppr
-status: in-progress
+status: archived
+merge: aa94721
 agent: wppr
 branch: agent/wppr
 worktree: ~/code/d2lod-wt/wppr
