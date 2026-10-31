@@ -87,3 +87,12 @@ internal/combat/castfirst_test.go  fixmissile  fix-missile
 internal/combat/dodge_test.go  fixmissile  fix-missile
 docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile  fix-missile
+internal/nav/walk.go  fixnav  fix-nav
+internal/nav/nav.go  fixnav  fix-nav
+internal/nav/waypoint.go  fixnav  fix-nav
+internal/nav/act2hints.go  fixnav  fix-nav
+internal/nav/fixnav_test.go  fixnav  fix-nav
+internal/bot/waypoints.go  fixnav  fix-nav
+internal/bot/task.go  fixnav  fix-nav
+internal/bot/fixnav_test.go  fixnav  fix-nav
+docs/fixnav.md  fixnav  fix-nav

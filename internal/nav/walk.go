@@ -101,6 +101,9 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 				n.inMouth = true
 				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return away, 3, nil }, walkOpts{timeout: 10 * time.Second})
 				n.inMouth = false
+				if errors.Is(err, ErrLevelChanged) {
+					n.noteMouthBounce() // the same step again would fire the same trigger (FIXNAV)
+				}
 				if errors.Is(err, ErrLevelChanged) || ctx.Err() != nil {
 					return err
 				}
@@ -566,9 +569,20 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 		if d > mouthR || d < 0.5 {
 			continue
 		}
-		tx, ty := o.pos.X+int(math.Round(dx/d*mouthAway)), o.pos.Y+int(math.Round(dy/d*mouthAway))
+		// FIXNAV: after a bounce (the step fired a trigger) the next attempt from this exit turns the direction: the
+		// trigger area is seed-dependent (docs/d2d-loop.md), the same step repeated 12 times in the post-fix soak.
+		key := mouthKey{o.level, e.Pos.X, e.Pos.Y}
+		k := n.mouthBounces(key)
+		ang := mouthTurns[k%len(mouthTurns)] * math.Pi / 180
+		ux, uy := dx/d, dy/d
+		ux, uy = ux*math.Cos(ang)-uy*math.Sin(ang), ux*math.Sin(ang)+uy*math.Cos(ang)
+		n.mouthLast, n.mouthLastOK = key, true
+		tx, ty := o.pos.X+int(math.Round(ux*mouthAway)), o.pos.Y+int(math.Round(uy*mouthAway))
 		f := n.fieldFor(o.lm)
 		x, y, ok := f.nearestWalkable(tx, ty, 6)
+		if k > 0 && ok {
+			return input.Point{X: x, Y: y}, true
+		}
 		if !ok || math.Hypot(float64(x-e.Pos.X), float64(y-e.Pos.Y)) < d+8 {
 			// Walls in the straight line (cave corridors): the nearest reachable cell that is at least 8 subtiles
 			// farther from the warp. Without it the walk went on toward the warp and the cave shuttle began (KILLFIX).
@@ -609,3 +623,33 @@ func (n *Navigator) mouthStepFlood(f *Field, pos input.Point, exX, exY int, d fl
 }
 
 const mouthFlood = 40
+
+// mouthTurns are the rotations (degrees) of the step-away direction, tried in order after each bounce.
+var mouthTurns = []float64{0, 90, -90, 45, -45, 135, -135, 180}
+
+type mouthKey struct{ level, x, y int }
+
+type mouthFail struct {
+	n  int
+	at time.Time
+}
+
+const mouthFailTTL = 10 * time.Minute
+
+func (n *Navigator) mouthBounces(k mouthKey) int {
+	if f, ok := n.mouthFails[k]; ok && n.clk.Now().Sub(f.at) < mouthFailTTL {
+		return f.n
+	}
+	return 0
+}
+
+// noteMouthBounce counts a step-away that ended in another level against the exit it fled from.
+func (n *Navigator) noteMouthBounce() {
+	if !n.mouthLastOK {
+		return
+	}
+	if n.mouthFails == nil {
+		n.mouthFails = map[mouthKey]mouthFail{}
+	}
+	n.mouthFails[n.mouthLast] = mouthFail{n.mouthBounces(n.mouthLast) + 1, n.clk.Now()}
+}

@@ -150,6 +150,7 @@ func (n *Navigator) TakeWaypoint(ctx context.Context, levelNo int) error {
 			}
 			if err := n.waitArea(ctx, wait, levelNo); err == nil {
 				n.log.Info(fmt.Sprintf("wp: used %d -> %d (%d clicks, waited %d ms)", from, levelNo, n.wpClicks, waited.Milliseconds()))
+				n.noteActivated(levelNo)
 				return nil
 			} else if !errors.Is(err, ErrNoWaypoint) {
 				return err
@@ -233,6 +234,10 @@ func (n *Navigator) openWaypoint(ctx context.Context) error {
 				// The preset is missing until its room has streamed in (V live: Lut Gholein, "none on level 40" right
 				// after loading, fine after a walk across the town): walk to the known position, then look again.
 				kp, ok := knownWaypointPos[o.level]
+				if rel, isRel := knownWaypointRel[o.level]; isRel && (o.lm.Origin != d2map.Point{}) {
+					// d2d: the level-relative position was measured on arrival (docs/fixnav.md), no origin to subtract
+					kp, ok = input.Point{X: rel.X + o.lm.Origin.X, Y: rel.Y + o.lm.Origin.Y}, true
+				}
 				if !ok || attempt > 0 && dist(o.pos, input.Point{X: kp.X - o.lm.Origin.X, Y: kp.Y - o.lm.Origin.Y}) < unitTolerance+2 {
 					return fmt.Errorf("%w: none on level %d", ErrNoWaypoint, o.level)
 				}
@@ -297,7 +302,25 @@ func (n *Navigator) openWaypoint(ctx context.Context) error {
 		_ = n.in.CloseAll()
 		return fmt.Errorf("%w: panel did not open", ErrNoWaypoint)
 	}
+	n.noteActivated(o.level) // touching the waypoint is what activates it
 	return nil
+}
+
+// noteActivated records a level whose waypoint this navigator touched or travelled to; the bot drains the list into
+// its own waypoint memory (FIXNAV: the town's waypoint-to-town path used to leave the picker blind to what it touched).
+func (n *Navigator) noteActivated(level int) {
+	n.wpMu.Lock()
+	n.wpNew = append(n.wpNew, level)
+	n.wpMu.Unlock()
+}
+
+// DrainActivated returns the levels whose waypoint was touched since the last call.
+func (n *Navigator) DrainActivated() []int {
+	n.wpMu.Lock()
+	defer n.wpMu.Unlock()
+	out := n.wpNew
+	n.wpNew = nil
+	return out
 }
 
 func (n *Navigator) panelOpens(wait time.Duration) bool {

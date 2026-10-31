@@ -9,7 +9,6 @@ worktree: ~/code/d2lod-wt/m2-tripwp
 owns:
   - internal/town/trip.go
   - internal/town/trip_test.go
-  - internal/bot/waypoints.go
   - internal/bot/waypoints_test.go
   - docs/tripwp.md
   - docs/probes/tripwp/**
