@@ -79,7 +79,7 @@ func TestApproachNPCRoutesAroundTheWall(t *testing.T) {
 	Now = func() time.Time { return virt }
 	x, y := 6.0, 6.0
 	moves := 0
-	grid := "ok\n" + strings.Join(wallGrid(), "\n") + "\n"
+	grid := strings.Join(wallGrid(), "\n") + "\nok\n" // rows first, then the ok line (fixstall4: it was ok first, an empty grid)
 	_, c := startStub(t, map[string]string{"npcs": "Kashya\t64\t-148\t1\t7\t14.0\t6.0\nok\n", "debug grid 5": grid}, func(line string, s *stub) {
 		if strings.HasPrefix(line, "cmd move") {
 			moves++

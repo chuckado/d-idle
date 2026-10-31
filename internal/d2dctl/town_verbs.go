@@ -259,13 +259,18 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 		budget += time.Duration(math.Hypot(npc.CellX-prev.X, npc.CellY-prev.Y) * float64(time.Second))
 	}
 	deadline := Now().Add(budget)
+	last := prev // the latest known position, for the error text
 	for stalls := 0; ; {
 		if err := c.CmdInteract(ctx, index); err != nil {
 			return err
 		}
 		// A walking player has moved well within stallCheck polls; one that has not stopped at an object (V, see
-		// above) and waiting out the rest of the round only wastes game time before the side step.
+		// above) and waiting out the rest of the round only wastes game time before the side step. A player that
+		// walked and then stopped mid-round (the usual arrival at an object) is caught too: stallPolls polls in a
+		// row without movement end the round (fixstall4, DRILLS8 F13: the old check only compared with the round's
+		// start, so a stop after the first second waited out the round).
 		early := false
+		still, at := 0, prev
 		for i := 0; i < 10; i++ {
 			if err := Pause(ctx, 300*time.Millisecond); err != nil {
 				return err
@@ -273,29 +278,61 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			if ok, err := c.opened(ctx); err != nil || ok {
 				return err
 			}
-			if i == stallCheck && perr == nil {
-				if cur, err := c.Level(ctx); err == nil && math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
+			if i >= 1 && perr == nil {
+				cur, err := c.Level(ctx)
+				if err != nil {
+					continue
+				}
+				last = cur
+				if math.Hypot(cur.X-at.X, cur.Y-at.Y) < 0.1 {
+					still++
+				} else {
+					still, at = 0, cur
+				}
+				if (i == stallCheck && math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3) || still >= stallPolls {
 					early = true
 					break
 				}
 			}
 		}
 		if Now().After(deadline) {
-			return fmt.Errorf("d2dctl: npc %d (%s): not reached in %v (player at %.1f,%.1f)", index, npc.Name, budget, prev.X, prev.Y)
+			if cur, err := c.Level(ctx); err == nil {
+				last = cur
+			}
+			return fmt.Errorf("d2dctl: npc %d (%s): not reached in %v (player at %.1f,%.1f)", index, npc.Name, budget, last.X, last.Y)
 		}
 		cur, err := c.Level(ctx)
 		if err != nil || perr != nil {
 			perr, prev = err, cur
 			continue
 		}
+		last = cur
 		if early || math.Hypot(cur.X-prev.X, cur.Y-prev.Y) < 0.3 {
 			stalls++
-			if stalls%2 == 1 && c.routeAround(ctx, cur, l.Items, npc) {
+			// The route is planned at every stall, the blind side step is only the fallback when there is no grid or
+			// no route (fixstall4: the old code routed on odd stalls only and spent a sidestep of up to 4.5 s in
+			// between, which in DRILLS8 F13 walked the player away from the route).
+			moved, cells := c.routeAround(ctx, cur, l.Items, npc)
+			if cells > 0 {
+				// the budget covers the planned walk: a second per cell (the walk is about 2 cells/s, V DRILLS8
+				// timeline 0.6 cells per 8 ticks of 40 ms) plus the margin of one more round
+				if d := Now().Add(time.Duration(cells*float64(time.Second)) + 4*time.Second); d.After(deadline) {
+					budget += d.Sub(deadline)
+					deadline = d
+				}
+			}
+			if moved {
+				if l2, err := c.Level(ctx); err == nil {
+					cur, last = l2, l2
+				}
 				prev = cur
 				continue
 			}
 			if _, err := c.sidestep(ctx, cur, npc.CellX, npc.CellY, stalls); err != nil {
 				return err
+			}
+			if l2, err := c.Level(ctx); err == nil {
+				last = l2
 			}
 		}
 		prev = cur
@@ -303,11 +340,12 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 }
 
 // routeAround walks a route over the level's collision grid toward the NPC (planAround) and reports whether it moved
-// the player. No grid, no route or no movement: false, and the caller side-steps blindly as before.
-func (c *Client) routeAround(ctx context.Context, from LevelInfo, npcs []NPC, npc *NPC) bool {
+// the player and how many cells the planned route is (0: none planned). No grid, no route or no movement: false, and
+// the caller side-steps blindly as before.
+func (c *Client) routeAround(ctx context.Context, from LevelInfo, npcs []NPC, npc *NPC) (bool, float64) {
 	rows, err := c.Grid(ctx, 5)
 	if err != nil || len(rows) == 0 {
-		return false
+		return false, 0
 	}
 	var others [][2]float64
 	for _, n := range npcs {
@@ -317,21 +355,22 @@ func (c *Client) routeAround(ctx context.Context, from LevelInfo, npcs []NPC, np
 	}
 	wps := planAround(rows, from.X, from.Y, npc.CellX, npc.CellY, others)
 	if len(wps) == 0 {
-		return false
+		return false, 0
 	}
+	cells := routeCells(from.X, from.Y, wps)
 	cur := from
 	for _, wp := range wps {
 		if c.CmdMove(ctx, wp[0], wp[1]) != nil {
-			return false
+			return false, cells
 		}
 		still := 0
 		for i := 0; i < 20 && still < 4; i++ { // up to 6 s per leg; 4 polls without progress ends the leg
 			if Pause(ctx, 300*time.Millisecond) != nil {
-				return false
+				return false, cells
 			}
 			l, err := c.Level(ctx)
 			if err != nil {
-				return false
+				return false, cells
 			}
 			if math.Hypot(l.X-cur.X, l.Y-cur.Y) < 0.1 {
 				still++
@@ -347,11 +386,15 @@ func (c *Client) routeAround(ctx context.Context, from LevelInfo, npcs []NPC, np
 			break
 		}
 	}
-	return math.Hypot(cur.X-from.X, cur.Y-from.Y) > 1
+	return math.Hypot(cur.X-from.X, cur.Y-from.Y) > 1, cells
 }
 
-// stallCheck is the poll (of 300 ms) after which a player that has not moved at all is treated as stalled.
-const stallCheck = 3
+// stallCheck is the poll (of 300 ms) after which a player that has not moved at all is treated as stalled;
+// stallPolls polls in a row without movement are a stall at any point of the round.
+const (
+	stallCheck = 3
+	stallPolls = 4
+)
 
 // sidestep moves to a free cell 3.5 away from from (the 8 compass points, nearest to the target first, rotated by
 // try so a repeated stall picks another) and reports whether the player moved.
