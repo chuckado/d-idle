@@ -29,9 +29,9 @@ cd tools/emu && uv run python auto_belt.py gen 100000 1 > cases.tsv && uv run py
 
 **Residual risks.** `FUN_00535610` (trade / NPC check) not modelled; the click sound not played; the client input path is read, not run (a reviewer clicks it by hand); the oracle composes the three rule calls rather than running `FUN_0054d520` whole (its unit lookups, owner test and cursor test are d2d's `held` / own-items lookup).
 
-**Verifier.** VERIFIER_PACK
+**Verifier.** Independent Opus verifier: holds with limits, no counterexample. 150,000 adversarial cases (seed 4242) 0 mismatches, seed 7 390,000 cases 0, pickups seed 9 390,000 cases 0; `FUN_00535610` re-derived (trade / NPC states, not modelled); joined-game optimistic apply noted. Report verbatim in pr-click-proof.md.
 
-**PROOF:** PROOF_STATE
+**PROOF:** complete (limits stated)
 
 **Recommendation.** Low priority. Bundle it into the next open bundle with room (2 commits, 13 files); not a reason to open a bundle by itself. D2 (inventory-open pickup) and D4 (ctrl-click sell) stay notes: client behaviour, no rules oracle.
 

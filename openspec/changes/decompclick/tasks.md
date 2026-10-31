@@ -20,7 +20,7 @@ gates:
   - "a claimed deviation has a differential against game.exe's own code: mismatches before > 0, after = 0, over >= 100k cases"
   - "independent adversarial verifier report attached verbatim before the user is asked"
   - "nothing pushed, posted or filed on GitHub; our repo not pushed"
-result: ""
+result: "D3 shift-click: proven world-level gap (game.exe 0x63 FUN_0054d520 -> FUN_0063c600; d2d no command); PR candidate trace/click c4038d15 + ff0d8b2f on upstream 0dc4c62a, 13 files, 390,000 cases 129,283 -> 0, verifier holds with limits, PROOF complete, local only. D4 ctrl-click sell and D2 inventory-open pickup: client-only, no PR. Verified offline only (no game, no slot)"
 ```
 
 ## 1. Work
@@ -29,6 +29,6 @@ result: ""
 - [x] 1.2 Q4 d2d upstream main: which layer each gap is in
 - [x] 1.3 Q5 bot relevance and recommendation
 - [x] 1.4 D3 candidate: branch trace/click (claim + tooling commits), oracle differential, upstream tests, pr_guard
-- [ ] 1.5 independent verifier (Opus) report attached to pr-click-proof.md
+- [x] 1.5 independent verifier (Opus) report attached to pr-click-proof.md
 - [x] 1.6 trace doc, queue item 9, bundle row, index lines, OWNERS
-- [ ] 1.7 changecheck, leakcheck, openspec validate; commit
+- [x] 1.7 changecheck, leakcheck, openspec validate; commit

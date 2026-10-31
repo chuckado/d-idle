@@ -24,7 +24,7 @@ Not changed: pickups; the cursor -> belt drop (0x23); belt hotkeys; ctrl-click s
 | `FUN_0063c600` | 1x1; the first column whose bottom matches (same code, or the hp / mp / rv groups of `FUN_00628a40`), its lowest free box below the belt's boxes; else, autobelt, the first empty bottom box |
 
 ## Proof
-`tools/emu/auto_belt.py` runs game.exe's `FUN_0062bad0`, `FUN_00628250` and `FUN_0063c600` in `FUN_0054d520`'s order (no hooks); `test_game --auto-belt` runs `rules::auto_belt` on the same cases; `diff`. 390,000 cases (every belt x bottom row over {-, hp1, mp1, rvs, isc} x {bottom only, full} x 29 items, plus 100,000 random stacked belts, a tenth on the stash / cube page, seed 1): game.exe moves 129,283; before this PR d2d moved none (129,283 mismatches), after 0. Independent re-derivation: VERIFIER_LINE
+`tools/emu/auto_belt.py` runs game.exe's `FUN_0062bad0`, `FUN_00628250` and `FUN_0063c600` in `FUN_0054d520`'s order (no hooks); `test_game --auto-belt` runs `rules::auto_belt` on the same cases; `diff`. 390,000 cases (every belt x bottom row over {-, hp1, mp1, rvs, isc} x {bottom only, full} x 29 items, plus 100,000 random stacked belts, a tenth on the stash / cube page, seed 1): game.exe moves 129,283; before this PR d2d moved none (129,283 mismatches), after 0. Independent re-derivation (a second agent): holds with limits; 150,000 adversarial cases (column gaps, rows above the belt, more kinds, 20 % stash / cube) and a second seed of 390,000: 0 mismatches; pickups re-checked on another seed: 0.
 
 ```sh
 cd tools/emu && uv run python auto_belt.py gen 100000 1 > cases.tsv && uv run python auto_belt.py game cases.tsv > g.txt
@@ -34,7 +34,8 @@ uv run python belt_pickup.py gen 100000 1 > p.tsv && uv run python belt_pickup.p
 ```
 
 ## Limits (ponytails)
-- `FUN_00535610`'s check while trading or talking is not modelled.
+- `FUN_00535610`'s refusal during a player trade or some NPC interaction states is not modelled.
+- A joined d2d applies the move locally before the host confirms.
 - The click sound (`FUN_004b9a00` 0xeb) is not played.
 - Presubmit "net roles": the rule lives in the host's World; d2d's own client sends `cmd::AutoBelt`, a joined d2d sends game.exe's 0x63.
 

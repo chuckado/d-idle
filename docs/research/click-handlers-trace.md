@@ -12,7 +12,7 @@
 | client gate | 0x4902a3 `FUN_0062bad0` (the item's OWN ItemTypes Beltable) and 0x4902ae `FUN_00628250` == 0 (item data +0x45 = page 0: the inventory; stash 4 / cube 3 / belt 0xff refused) | pass: C->S **0x63** (u32 item id) + sound 0xeb (`FUN_004b9a00`); fail: the plain click, item to the cursor (0x19, 0x4902e8) |
 | server | `FUN_0054d520` | size 5 else 3; `FUN_00549150` (the item is the player's, mode 0 stored, in its inventory) else 1; item in hand (`FUN_0063c1e0`) -> resync, nothing; `FUN_0062bad0` again; `FUN_00628250` != 0 -> 3 |
 | box | 0x54d5bf `FUN_0063c600(inv, item, &box)` | the SAME function as the pickup's belt step: 1x1, matching bottom column's lowest free box within the belt's rows, else (autobelt) the first empty bottom box. **No box: return 0, nothing moves** (the item stays in the pack; nothing on the cursor) |
-| move | `FUN_00535610` (trade / NPC check: I), `FUN_0063ad90` out of the inventory, `FUN_0063c4f0(inv, item, box)` into the belt, update packets | |
+| move | `FUN_00535610` (refuses during a player trade or some NPC interaction states: V by the verifier), `FUN_0063ad90` out of the inventory, `FUN_0063c4f0(inv, item, box)` into the belt, update packets | |
 
 Kinds: every 1x1 item whose own type is Beltable (D, see belt-pickup-trace Q1): hp1-5, mp1-5, rvs, rvl, hpo, hpf (autobelt: also into an empty column) and vps, yps, wms, elx, mpo, mpf, rps, rpl, bps, bpl, isc, tsc, 0sc (only into a column whose bottom is the same code or group). Unlike a pickup there is **no stacking step** first (a scroll does not go into a tome) and no `FUN_00628ba0` (it returns 1 anyway). Non-Beltable items (keys, tomes, gems, charms) with shift are a plain click: to the cursor.
 
@@ -48,4 +48,4 @@ Branch `trace/click` in the click worktree of the PR checkout on the worker host
 
 ## Verified vs not
 
-V: every address above (read with disasm.py on game.exe 1.14d); `FUN_0062bad0`, `FUN_00628250`, `FUN_0063c600` run in the oracle. I: MK_SHIFT = bit 4 of the click flags; flag 0x1000 = no-sell; the sell cost field unused; `FUN_00535610`'s trade gate. U: what sound 0xeb is; whether the 1.14d client greys out anything on a refused shift-click. Not run live (no game).
+V: every address above (read with disasm.py on game.exe 1.14d); `FUN_0062bad0`, `FUN_00628250`, `FUN_0063c600` run in the oracle. I: MK_SHIFT = bit 4 of the click flags; flag 0x1000 = no-sell; the sell cost field unused; the client's pending-item flag (`FUN_004c2240`). U: what sound 0xeb is; whether the 1.14d client greys out anything on a refused shift-click. Not run live (no game).

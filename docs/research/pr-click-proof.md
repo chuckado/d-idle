@@ -32,7 +32,9 @@ Pickups unchanged by the `belt_box` move: `belt_pickup.py` (from #147) against `
 ## Not exercised (limits)
 
 - `FUN_0054d520`'s unit lookup, `FUN_00549150`'s owner / mode test and the cursor test are not run; d2d's World finds the item by id among the player's own items (stored only) and the handler tests `held`.
-- `FUN_00535610` (a trade / NPC interaction check before the move: I) is not modelled: `// ponytail:` on `auto_belt`.
+- `FUN_00535610` (V, verifier) refuses during a player trade (playerdata +0x4c / +0x50 > 4) and with some per-player NPC interaction states (`FUN_00573140`); not modelled (`// ponytail:` on `auto_belt`).
+- The client's pending-item flag (`FUN_004c2240` / `FUN_004c21f0`: I) is not modelled.
+- A joined d2d applies the move locally before the host confirms; whether the host's item packets reconcile a refusal is U.
 - The client's sound 0xeb on the click (`FUN_004b9a00`) is not played (U what it is).
 - The client path is read, not run; the shift-click input is a UI path a reviewer checks by hand.
 
@@ -42,4 +44,34 @@ On the worker host, `/tmp/click-build` (Release, FETCHCONTENT from the lab's dep
 
 ## Verifier
 
-PENDING_VERIFIER
+Independent Opus verifier (read-only, 2026-10-31), report verbatim:
+
+> VERDICT: the claim holds, with limits. I found no counterexample to the rule. The proof doc's limits text needs tightening (below).
+>
+> **What I ran** (worker host, branch trace/click ff0d8b2f, tree clean, build current; all scratch files are /tmp/click-verify-*)
+> - Adversarial generator (/tmp/click-verify-gen.py, seed 4242): each box filled at random, so there are gaps in columns, bottom boxes empty under filled ones, and rows above the belt. Kinds the author's generator lacks: hpf, mpf, rpl, bps. Non-belt picks: tbk, ibk, box, cm1, r01, gpw. 20% on page 3/4. Result: 150,000 cases, 53,199 moves, 0 mismatches (md5 56a51794 on both sides).
+> - Author's generator, seed 7: 390,000 cases, 129,218 moves, 0 mismatches (md5 89ec58ec).
+> - belt_pickup.py seed 9 against test_game --belt-pickup: 390,000 cases, 0 mismatches (md5 6b32703c). The refactor is also equivalent by reading: same info_of, type and types lookup.
+> - test_rules and test_protocol: rc 0. agentreap: nothing of mine left, the list is empty.
+>
+> **Re-derived (V, disasm)**
+> - Server 54d520:
+>   - `549150` refuses (returns 1) unless the item unit exists, has mode 0 ([+0x10]) and `63ad50` finds it in the player's inventory. A belt item (mode not 0) is refused there.
+>   - `63c1e0` reads inv+0x20, the cursor item.
+>   - Mode 0 and the page are checked again at 0x54d60e/0x54d61c.
+>   - `63c600` failing or giving box < 0 goes to 0x54d731 and returns 0.
+>   - `63c600` refuses anything that is not Beltable or not 1x1 (`6286c0`). The belt size comes from body slot 8. The autobelt fallback has no column < boxes test, which is harmless because there are always at least 4 boxes. d2d matches all of this.
+>   - `63c4f0` failing after `63ad90` would leave the item out of the inventory, but it repeats only the Beltable and 1x1 tests, so it cannot fail after `63c600` succeeded.
+> - `535610` is now V, no longer I. It refuses during a player trade (playerdata +0x4c != 0 or +0x50 > 4). During an NPC interaction it refuses only if a per-player NPC list entry is >= 1 (`573140`). It returns 0 if the interaction unit is missing.
+> - Client: ctrl is tested before shift. Before both, `4c2240(item)` != 0 eats the click (a pending-item flag: I), and `486b30` / `486d10` must pass. The owner test is at 0x4901b6. After sending 0x63 the client calls `4c21f0`, which sets the pending flag: I.
+>
+> **d2d side**
+> - Only update.cpp:433 passes shift. The IdentifyWith, Imbue, right-click and pad callers default to false, so they still get ToCursor.
+> - In a joined game, net_items sends 0x63 and then the local World applies the move optimistically. Whether the host's item packets reconcile a refusal is U.
+>
+> **Suggested limits text**
+> "`FUN_00535610` (V) refuses during a player trade (playerdata +0x4c / +0x50 > 4) and with some per-player NPC interaction states; d2d has no such states. The client's pending-item flag (`4c2240` / `4c21f0`) is not modelled. The joined-game path applies locally before the host confirms."
+>
+> Nothing committed (read-only brief).
+
+PROOF: complete. The limits below take the verifier's text.
