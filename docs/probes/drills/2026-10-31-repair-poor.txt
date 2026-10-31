@@ -1,0 +1,5 @@
+DRILL D3.r1 P16 FAIL the chore walked to the smith although the purse (5) cannot pay: the repair step does not check gold (finding F4 of DRILLS3; fix-bank pending). Gold and durability are unchanged and the UI is clean | intended: gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean | observed: durability 1/20 -> 1/20; gold 5 -> 5; steps [equip skipped; repair ran err town: repair not confirmed (durability 5% unchanged)] err "" ticks 168; panels none | runs: 2, identical
+
+drill     prim  verdict  det  reason
+D3.r1     P16   FAIL     same the chore walked to the smith although the purse (5) cannot pay: the repair step does not check gold (finding F4 of DRILLS3; fix-bank pending). Gold and durability are unchanged and the UI is clean
+cheat verbs used (each ledgered with a reason): debug clearinv, debug durability all 1, debug stat 14 5

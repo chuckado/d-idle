@@ -1,0 +1,51 @@
+{
+ "results": [
+  {
+   "id": "D3.r1",
+   "primitive": "P16",
+   "title": "worn items at durability 1, gold 5 (below the price): the smith refuses, gold unchanged, UI clean",
+   "verdict": "FAIL",
+   "reason": "the chore walked to the smith although the purse (5) cannot pay: the repair step does not check gold (finding F4 of DRILLS3; fix-bank pending). Gold and durability are unchanged and the UI is clean",
+   "intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+   "observed": "durability 1/20 -\u003e 1/20; gold 5 -\u003e 5; steps [equip skipped; repair ran err town: repair not confirmed (durability 5% unchanged)] err \"\" ticks 168; panels none",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "the chore walked to the smith although the purse (5) cannot pay: the repair step does not check gold (finding F4 of DRILLS3; fix-bank pending). Gold and durability are unchanged and the UI is clean",
+     "Intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+     "Observed": "durability 1/20 -\u003e 1/20; gold 5 -\u003e 5; steps [equip skipped; repair ran err town: repair not confirmed (durability 5% unchanged)] err \"\" ticks 168; panels none",
+     "sig": "unchanged=true gold=5 ran=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 5",
+      "debug durability all 1"
+     ],
+     "elapsed_ns": 446212398,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "the chore walked to the smith although the purse (5) cannot pay: the repair step does not check gold (finding F4 of DRILLS3; fix-bank pending). Gold and durability are unchanged and the UI is clean",
+     "Intended": "gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean",
+     "Observed": "durability 2/20 -\u003e 2/20; gold 5 -\u003e 5; steps [equip skipped; repair ran err town: repair not confirmed (durability 10% unchanged)] err \"\" ticks 101; panels none",
+     "sig": "unchanged=true gold=5 ran=true",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 5",
+      "debug durability all 2"
+     ],
+     "elapsed_ns": 25624062,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 5",
+    "debug durability all 1"
+   ]
+  }
+ ]
+}

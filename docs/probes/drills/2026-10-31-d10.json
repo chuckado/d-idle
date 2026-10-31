@@ -1,0 +1,36 @@
+{
+ "results": [
+  {
+   "id": "D10",
+   "primitive": "P36",
+   "title": "d2d killed with SIGKILL under the managed bot: the bot restarts it",
+   "verdict": "FAIL",
+   "reason": "restarts counter rose by 0 within 10s of the first minute line back in game, want exactly 1 (the game-lost recovery of d2d is not counted: internal/bot/loop.go gameLost calls noteReentry, not noteRecycle)",
+   "intended": "d2d killed with SIGKILL: back in game within 3 min, restarts +1, saved XP not lower, loop resumes within 5 min, no process of the kill left, P35 clean before and after",
+   "observed": "run1: kill pid 4058910 at 15:39:45 (pid 4058910 is in the process group 4041186 registered to drills4 (tools/agentreap.sh --list)) | pre-kill minute: area 2 clvl 4 xp 4995 kills 218 restarts 1 | first minute line after the kill +6s: area 2 xp 3534 kills 223 restarts 1 xpLost 1566 | restart events up to then: 1 game-lost recoveries, 1 planned save points, 0 other new games (2 leaves in all) | restarts counter of the minute line: 1 before, 1 at +13s (delta 0), 3 on the last line +7m59s (rises after that are other restarts) | loop resumed: kills 223 -\u003e 233 | new d2d pid 4063557 seen +2s | saved xp (save file) before the kill 3429, after the graceful stop 19989; bot process exits 0 | P35 before clean, after clean | leftovers: none | bot log d10-bot-1.log || run2: kill pid 4123923 at 15:51:55 (pid 4123923 is in the process group 4041186 registered to drills4 (tools/agentreap.sh --list)) | pre-kill minute: area 2 clvl 4 xp 5403 kills 236 restarts 1 | first minute line after the kill +7s: area 2 xp 3513 kills 240 restarts 1 xpLost 1974 | restart events up to then: 1 game-lost recoveries, 1 planned save points, 0 other new games (2 leaves in all) | restarts counter of the minute line: 1 before, 1 at +16s (delta 0), 3 on the last line +7m59s (rises after that are other restarts) | loop resumed: kills 240 -\u003e 251 | new d2d pid 4130920 seen +2s | saved xp (save file) before the kill 3429, after the graceful stop 18194; bot process exits 0 | P35 before clean, after clean | leftovers: none | bot log d10-bot-2.log",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "restarts counter rose by 0 within 10s of the first minute line back in game, want exactly 1 (the game-lost recovery of d2d is not counted: internal/bot/loop.go gameLost calls noteReentry, not noteRecycle)",
+     "Intended": "d2d killed with SIGKILL: back in game within 3 min, restarts +1, saved XP not lower, loop resumes within 5 min, no process of the kill left, P35 clean before and after",
+     "Observed": "kill pid 4058910 at 15:39:45 (pid 4058910 is in the process group 4041186 registered to drills4 (tools/agentreap.sh --list)) | pre-kill minute: area 2 clvl 4 xp 4995 kills 218 restarts 1 | first minute line after the kill +6s: area 2 xp 3534 kills 223 restarts 1 xpLost 1566 | restart events up to then: 1 game-lost recoveries, 1 planned save points, 0 other new games (2 leaves in all) | restarts counter of the minute line: 1 before, 1 at +13s (delta 0), 3 on the last line +7m59s (rises after that are other restarts) | loop resumed: kills 223 -\u003e 233 | new d2d pid 4063557 seen +2s | saved xp (save file) before the kill 3429, after the graceful stop 19989; bot process exits 0 | P35 before clean, after clean | leftovers: none | bot log d10-bot-1.log",
+     "sig": "bad=1",
+     "elapsed_ns": 0,
+     "ui_pre": "",
+     "ui_post": ""
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "restarts counter rose by 0 within 10s of the first minute line back in game, want exactly 1 (the game-lost recovery of d2d is not counted: internal/bot/loop.go gameLost calls noteReentry, not noteRecycle)",
+     "Intended": "d2d killed with SIGKILL: back in game within 3 min, restarts +1, saved XP not lower, loop resumes within 5 min, no process of the kill left, P35 clean before and after",
+     "Observed": "kill pid 4123923 at 15:51:55 (pid 4123923 is in the process group 4041186 registered to drills4 (tools/agentreap.sh --list)) | pre-kill minute: area 2 clvl 4 xp 5403 kills 236 restarts 1 | first minute line after the kill +7s: area 2 xp 3513 kills 240 restarts 1 xpLost 1974 | restart events up to then: 1 game-lost recoveries, 1 planned save points, 0 other new games (2 leaves in all) | restarts counter of the minute line: 1 before, 1 at +16s (delta 0), 3 on the last line +7m59s (rises after that are other restarts) | loop resumed: kills 240 -\u003e 251 | new d2d pid 4130920 seen +2s | saved xp (save file) before the kill 3429, after the graceful stop 18194; bot process exits 0 | P35 before clean, after clean | leftovers: none | bot log d10-bot-2.log",
+     "sig": "bad=1",
+     "elapsed_ns": 0,
+     "ui_pre": "",
+     "ui_post": ""
+    }
+   ],
+   "deterministic": true
+  }
+ ]
+}

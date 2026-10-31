@@ -83,6 +83,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 
 ### Recent merges
+- 4c8307d 10-31 14:26 `Merge agent/opentome: tome PR #149 posted; archive opentome` (opentome)
 - 8cacafd 10-31 14:22 `Merge agent/drills3: live drills D3-D9, hover audit` (m1-liveproof)
 - fa1f30e 10-31 14:16 `Merge agent/decompclick: click handlers trace, shift-click belt proof` (decompclick)
 - 6c8e548 10-31 14:08 `Merge agent/forkcheats: fork cheats documented` (forkcheats)
@@ -92,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 83244e7 10-31 13:32 `Merge agent/upsync147: PR #147 upstream sync posted lines` (upsync147)
 - c3ef097 10-31 13:20 `Merge agent/enterportal: enter town portals on d2d` (enterportal)
 - 68a403b 10-31 13:19 `Merge agent/decompwp: waypoint trace and PR candidate docs` (decompwp)
-- b044d7a 10-31 13:07 `Merge agent/tomepr: tome PR candidate proof, draft, evidence pack` (tomepr)
 <!-- statusgen:end -->
