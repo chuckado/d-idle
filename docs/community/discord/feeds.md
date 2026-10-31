@@ -1,6 +1,6 @@
 # Feeds into the server
 
-> status: DRAFT. Nothing is connected until the user creates the webhooks. Webhook URLs are secrets: keyring or environment only, never
+> status: DRAFT. Nothing is connected until the user creates the webhooks. Webhook URLs are secrets: private 0600 file, keyring or environment only, never
 > in chat, issues, the repo or screenshots. If one leaks, delete the webhook in Discord and create a new one.
 
 Order of value:
@@ -14,8 +14,14 @@ Order of value:
 4. Redeliver one recent delivery from the webhook page to test; check the embed, then remove the test noise if any.
 
 ## (b) Soak, drill and release summaries via the tool
-`python3 tools/discord/notify.py init --channel progress` prints the steps; in short store the URL with
-`secret-tool store --label="d.idle Discord progress webhook" service d2idle account discord-webhook-progress`, then
+`python3 tools/discord/notify.py init --channel progress` prints the steps. Store each URL one of two ways (never in chat):
+- Headless box (no keyring): `install -d -m 700 ~/.local/share/d2idle`, then per channel `(umask 077; printf %s 'URL' > ~/.local/share/d2idle/discord-webhook-progress)`
+  (same for `-announcements`, `-stream`). The tool refuses a file that is a symlink, not yours, not exactly mode 600, in a
+  group/world-writable directory, empty, with spaces, or not of the form `https://discord.com/api/webhooks/<id>/<token>`.
+  `D2IDLE_DISCORD_WEBHOOK_<CHANNEL>_FILE` names another path; `D2IDLE_DISCORD_HOME` moves the whole directory (tests use it).
+- Desktop: `secret-tool store --label="d.idle Discord progress webhook" service d2idle account discord-webhook-progress`.
+
+Lookup order: env `D2IDLE_DISCORD_WEBHOOK_<CHANNEL>`, then the file, then the keyring. Then
 `python3 tools/discord/notify.py post --channel progress --title "Soak" --text "2 h, 0 deaths (verified, d2dsoak)" --dry-run`.
 The tool refuses text with home paths, private hostnames or addresses, tokens, webhook URLs, emails or lab names, sends no
 mentions, honours Discord rate limits (3 tries) and never raises, so release scripts may call it without guarding. It is

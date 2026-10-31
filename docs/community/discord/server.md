@@ -31,7 +31,7 @@ runs; `#stream` stream notices and chat (the stream is not live yet).
 - `member`: the trusted tier, assigned by hand to people the moderator has seen behave; may create public threads and use external emoji.
 - `mod` (OPTIONAL, disabled by default: listed under `optional_roles` in server.json, not created by the tool): helper with Manage Messages, Timeout, Kick, View Audit Log; below `owner`. See [roles.md](roles.md).
 - `@everyone`: view, read history, send, embed links, react, send in threads; attach files only in `#show-your-runs` and `#bug-reports`. No mentions of everyone, no thread creation, no Create Invite.
-- Bots and webhooks: only webhooks at the start (GitHub feed, `notify.py`). They post regardless of channel permissions. No role needed.
+- Bots and webhooks: only webhooks at the start (GitHub feed, `notify.py`; URLs in private 0600 files on a headless box, keyring on a desktop). They post regardless of channel permissions. No role needed.
 Raid switch: remove send permissions from `@everyone` so only `member` and above can talk (`member` already holds them). Full guideline, permission table and runbook: [roles.md](roles.md).
 
 ## Permission matrix
@@ -61,7 +61,7 @@ role and limits are in [roles.md](roles.md#ops-bot-least-privilege). The token l
    From an exported variable instead: `(umask 077; printf %s "$D2IDLE_DISCORD_BOT_TOKEN" > ~/.local/share/d2idle/discord-bot-token)`, then unset the variable.
    Lookup order: env `D2IDLE_DISCORD_BOT_TOKEN`, then that file (or the path in `D2IDLE_DISCORD_BOT_TOKEN_FILE`), then the desktop keyring
    (`secret-tool store --label="d.idle Discord bot token" service d2idle account discord-bot-token`). A file that is a symlink, not
-   yours, group/other readable, in a group/world-writable directory, empty or with spaces is refused. Webhook URLs stay on env/keyring.
+   yours, group/other readable, in a group/world-writable directory, empty or with spaces is refused. Webhook URLs use the same private-file rules (`discord-webhook-<channel>` in the same directory, then env, then keyring; see [feeds.md](feeds.md)).
 3. Invite it (OAuth2 URL generator, scope `bot`) with the permissions of the `d.idle-ops` role only; give Manage Server only for the
    one `--settings` run, then remove it.
 4. Get the server id (Developer Mode, right-click the server, Copy Server ID), then dry run, read, apply:
