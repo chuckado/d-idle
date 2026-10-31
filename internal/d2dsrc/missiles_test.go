@@ -79,3 +79,76 @@ func TestParseMissile(t *testing.T) {
 		t.Fatal("short row accepted")
 	}
 }
+
+// Real rows of the lab fork's verb (live observations, docs/forkcheats.md): own Fire Bolt, a Fallen Shaman bolt, and the
+// shaman's hit effect (speed 0, owner -1), which never reaches the snapshot.
+const realMissiles = "0\t58\t40.0\t22.0\t1.0\t0.0\t4.688\t0\t1\t20\t1\tfirebolt\n" +
+	"1\t22\t44.0\t22.0\t-1.0\t0.0\t1.875\t1\t26\t30\t0\tshafire1\n" +
+	"2\t23\t41.0\t22.0\t0.0\t0.0\t0.0\t-1\t-1\t5\t0\tshamanexp\n" +
+	"ok\n"
+
+func TestMissilesRealVerb(t *testing.T) {
+	r := lateReplies(t)
+	r["debug missiles"] = realMissiles
+	_, c := startScript(t, r)
+	src := New(c, Options{Tables: fakeTables{}, Logf: quiet})
+	res, err := src.Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := src.FillMissiles(context.Background(), res); err != nil {
+		t.Fatal(err)
+	}
+	ms := res.Snap.Missiles
+	if len(ms) != 2 {
+		t.Fatalf("hit effect not dropped: %+v", ms)
+	}
+	if ms[0].Class != 58 || ms[0].OwnerType != 0 || ms[0].OwnerID != 1 {
+		t.Fatalf("own bolt %+v", ms[0])
+	}
+	if ms[1].Class != 22 || ms[1].OwnerType != 1 || ms[1].OwnerID != 26 {
+		t.Fatalf("hostile bolt %+v", ms[1])
+	}
+}
+
+// The raw parse stays faithful: extras kept, hit effect parsed with speed 0 and owner -1.
+func TestParseMissileReal(t *testing.T) {
+	m, err := d2dctl.ParseMissile("1\t22\t44.0\t22.0\t-1.0\t0.0\t1.875\t1\t26\t30\t0\tshafire1")
+	if err != nil || m.Class != 22 || m.DX != -1 || m.Speed != 1.875 || m.OwnerType != 1 || m.OwnerID != 26 || m.Friendly || m.Name != "shafire1" {
+		t.Fatalf("%+v %v", m, err)
+	}
+	m, err = d2dctl.ParseMissile("0\t58\t40\t22\t1\t0\t4.688\t0\t1\t20\t1\tfirebolt")
+	if err != nil || !m.Friendly || m.Name != "firebolt" {
+		t.Fatalf("%+v %v", m, err)
+	}
+	m, err = d2dctl.ParseMissile("2\t23\t41\t22\t0\t0\t0\t-1\t-1\t5\t0\tshamanexp")
+	if err != nil || m.Speed != 0 || m.OwnerType != -1 || m.OwnerID != -1 {
+		t.Fatalf("%+v %v", m, err)
+	}
+}
+
+// The real err answer ("err usage: debug missiles" style): asked once, never again.
+func TestMissilesErrAnswerAskedOnce(t *testing.T) {
+	r := lateReplies(t)
+	r["debug missiles"] = "err usage: debug missiles\n"
+	s, c := startScript(t, r)
+	src := New(c, Options{Tables: fakeTables{}, Logf: quiet})
+	for i := 0; i < 3; i++ {
+		res, err := src.Read(context.Background())
+		if err == nil {
+			err = src.FillMissiles(context.Background(), res)
+		}
+		if err != nil || len(res.Snap.Missiles) != 0 {
+			t.Fatalf("read %d: %v %+v", i, err, res.Snap.Missiles)
+		}
+	}
+	n := 0
+	for _, l := range s.seen {
+		if l == "debug missiles" {
+			n++
+		}
+	}
+	if n != 1 {
+		t.Fatalf("asked %d times", n)
+	}
+}
