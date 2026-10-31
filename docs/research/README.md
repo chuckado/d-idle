@@ -27,7 +27,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 ## Missile damage
 - [pr-missile-damage-fine-proof.md](pr-missile-damage-fine-proof.md) a missile's element damage keeps its 256ths. current. PR #135 (merged by the maintainer 2026-10-31, upstream 62282965); evidence: [pr-missile-damage-fine-evidence-pack.md](pr-missile-damage-fine-evidence-pack.md). Bodies: archived ([v2](../archive/research/pr-missile-damage-fine-draft-v2.md), [v1](../archive/research/pr-missile-damage-fine-draft.md)).
 - [pr-missile-damage-fine-measured.md](pr-missile-damage-fine-measured.md) measured effect of the fix on casts per kill. current.
-- [monster-attack-trace.md](monster-attack-trace.md) monster damage to the player, game.exe vs d2d. current. Candidates: [upstream-pr-candidates-monster.md](upstream-pr-candidates-monster.md).
+- [monster-attack-trace.md](monster-attack-trace.md) monster melee and missile attacks on the player, game.exe vs d2d (oracle). current; result: melee clean, two narrow missile gate deviations (none early), monster rules explain ~0 of the XP/h gap; bot findings B1-B4; first pass archived. Candidates: [upstream-pr-candidates-monster.md](upstream-pr-candidates-monster.md).
 
 ## Lut Gholein and level generation (DRGL)
 - [lutgholein-trace.md](lutgholein-trace.md) why whisper `town` and d2d `drlg-dump` disagree. historical (the cause is in the proof).

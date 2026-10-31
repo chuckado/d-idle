@@ -15,6 +15,11 @@ docs/decisions.md     main  -
 .claude/agents/**     main  -
 
 # active changes
+docs/research/monster-attack-trace.md           decompmon  decompmon
+docs/archive/monster-attack-trace-2026-10-30.md decompmon  decompmon
+tools/emu/mon_*.py                              decompmon  decompmon
+tools/emu/monster_hit.py                        decompmon  decompmon
+openspec/changes/decompmon/**                   decompmon  decompmon
 cmd/d2bot/d2dbackend.go              d2d-default-backend   d2d-default-backend
 docs/d2d-replicated-soak.md          d2d-replicated-soak   d2d-replicated-soak
 docs/d2d-container-soak.md           d2d-container-soak    d2d-container-soak

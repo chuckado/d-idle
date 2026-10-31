@@ -69,9 +69,14 @@ def gh_port(maxlife, damage, hitclass, seed):
     return True
 
 
-def gh_d2d(maxlife, damage):
-    """d2d fight.cpp: `foe.damage * 12 >= max life`, damage in whole points."""
-    return damage > 0 and (damage >> 8) * 12 >= (maxlife >> 8)
+def gh_d2d(maxlife, damage, hitclass, seed):
+    """d2d rules::get_hit (combat.hpp, upstream main 0dc4c62a: the tiers, unmarked blow). Was the
+    twelfth (`damage x 12 >= max life`) at 32768ddb, 18,502 of 100,000 cases apart."""
+    div = {2: 8, 6: 8, 10: 8, 11: 8, 4: 32, 8: 32, 5: 64}.get(hitclass, 16)
+    if damage < 256 or damage < maxlife // div: return False
+    if damage < maxlife // (div // 2) and rand(seed, 2) == 0: return False
+    if damage < maxlife // (div // 4) and rand(seed, 4) == 0: return False
+    return True
 
 
 def main():
@@ -167,8 +172,8 @@ def main():
         if got != want:
             bad += 1
             print(f"gh case {case}: maxlife {maxlife >> 8} dmg {damage / 256:.2f} class {hitclass}: game {got}, port {want}")
-        if (got == 0) != gh_d2d(maxlife, damage): d2d_diff += 1
-    print(f"gh: {len(edges)} boundary + {cases} random cases, {bad} differ from the tiered port; {d2d_diff} differ from d2d's deterministic twelfth")
+        if (got == 0) != gh_d2d(maxlife, damage, hitclass, list(seed)): d2d_diff += 1
+    print(f"gh: {len(edges)} boundary + {cases} random cases, {bad} differ from the tiered port; {d2d_diff} differ from d2d's rules::get_hit")
 
 
 if __name__ == "__main__": main()
