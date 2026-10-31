@@ -69,4 +69,3 @@ internal/town/chores.go  fixprice  fix-price
 internal/town/stash.go  fixprice  fix-price
 internal/loot/loot.go  fixprice  fix-price
 internal/loot/pickup.go  fixprice  fix-price
-docs/research/pr-tome-evidence-pack.md  CR149  cr149
