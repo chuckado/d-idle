@@ -47,3 +47,4 @@ cd tools/emu && uv run python skill_damage.py gen 100000 1 > cases.tsv && uv run
 - posted: 2026-10-31 branch fix/skill-damage pushed to the fork (3 commits 20441196, d72ee7f3, c6be9247 on upstream main f8aab0e8), plain push, no force go: user 'open skill damage' (2026-10-31)
 - posted: 2026-10-31 PR #146 opened (head c6be9247, 3 commits, 5 files) https://github.com/psi29a/d2decomped/pull/146 go: user 'open skill damage' (2026-10-31)
 - posted: 2026-10-31 review trigger comment on PR #146 (no CodeRabbit response 18 minutes after open; earlier PRs got one within 20 s) go: standing go for CodeRabbit follow-ups (user, 2026-10-31)
+- posted: 2026-10-31 re-trigger '@coderabbitai review' on PR #146 after the review limit reset (first trigger 15:28Z hit the limit) go: standing CodeRabbit go (2026-10-31)
