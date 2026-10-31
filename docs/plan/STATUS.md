@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
+| [fix153lint](../../openspec/changes/fix153lint/) | in-progress | fix153lint | `openspec/changes/fix153lint/**`<br>`docs/research/pr-wp-evidence-pack.md`<br>`docs/BACKLOG.md` | - |
 | [fixmisc](../../openspec/changes/fixmisc/) | in-progress | fixmisc | `internal/nav/sync.go`<br>`internal/nav/fixmisc_test.go`<br>`internal/combat/types.go`<br>`internal/combat/fight.go`<br>`internal/combat/fixmisc_test.go`<br>`internal/resource/policy_test.go`<br>`docs/fixmisc.md` | - |
 | [fixrun](../../openspec/changes/fixrun/) | in-progress | fixrun | `internal/d2dinput/run.go`<br>`internal/d2dinput/run_test.go`<br>`internal/d2dinput/controller.go`<br>`internal/d2dinput/lifecycle.go`<br>`internal/d2denv/runreset_test.go`<br>`internal/bot/observe.go`<br>`docs/fixrun.md`<br>`openspec/changes/fixrun/**` | - |
 | [fixstall](../../openspec/changes/fixstall/) | in-progress | fixstall | `internal/d2dctl/fixstall_test.go`<br>`internal/nav/pinned_test.go`<br>`docs/fixstall.md` | - |
@@ -75,6 +76,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change fix-portal2: go test -p 1 ./cmd/d2bot passes including TestD2DPortalDeadContextNoClick, TestD2DPortalBusyWaitsForIdle, TestD2DPortalStaysBusyNoClick, TestD2DPortalCutCastRetriesNextSource, TestD2DPortalEmptyAfterRereadNoRetry
 - change fix-portal2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fix153lint: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0
 - change fixmisc: go test per package (nav, combat, resource) and whole-repo vet/test -short on the worker host pass; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixmisc: live proof: debug goto then Fighter.Clear without a warm-up walk (docs/fixmisc.md)
 - change fixrun: go test -p 1 for internal/d2dinput, internal/d2denv, internal/bot passes; whole-repo vet and test -short on the worker host

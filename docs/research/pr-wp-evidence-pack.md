@@ -27,3 +27,4 @@
 
 posted: 2026-10-31 branch fix/waypoint-hostile-window pushed to the user's fork; replayed onto upstream main 72132b99 (tooling 890adf1d, claim 44353293; the claim's unit test renames `camp` to `encampment` so it no longer hides main's `camp`, an MSVC C4456 error).
 posted: 2026-10-31 PR opened: https://github.com/psi29a/d2decomped/pull/153 (9 files, 2 commits; user go 'push the next pr'; no review-request comment, as #147/#149/#152).
+posted: 2026-10-31 fixup pushed to the PR branch as a fast-forward (old head 44353293, new head 51c960e5, no force-push, nothing posted on the PR): the Linux job's "Names and includes" step (clang-tidy readability-identifier-length) flagged `at` in tests/game/test_game.cpp (tooling commit 890adf1d); renamed to `when`, no behaviour change.
