@@ -12,8 +12,6 @@ owns:
   - internal/d2dsrc/source_test.go
   - internal/d2dinput/controller.go
   - internal/d2dinput/controller_test.go
-  - internal/d2denv/env.go
-  - internal/d2denv/fixobj_test.go
   - docs/fixobj.md
 exclusive: []
 gates:

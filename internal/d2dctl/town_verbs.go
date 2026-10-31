@@ -162,6 +162,11 @@ var Pause = func(ctx context.Context, d time.Duration) error {
 	}
 }
 
+// Now is the clock the verbs' own deadlines read (ApproachNPC): the wall clock by default; a lockstep run installs the
+// Pacer's virtual time (d2denv LateClock.Install) so "wait up to 15 s for the menu" is 15 game seconds, not 15 wall
+// seconds that the stepping Pause crosses about 11 times over (docs/probes/waits-audit.md).
+var Now = time.Now
+
 // HoverClick moves the pointer to (x,y) from 3 px away, waits and clicks. V (2026-10-30, Akara's menu): a click
 // without a preceding hover is ignored, the same as on Game.exe; two moves (the first 3 px off) were enough.
 func (c *Client) HoverClick(ctx context.Context, x, y int, right bool) error {
@@ -242,7 +247,7 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 			npc = &l.Items[i]
 		}
 	}
-	deadline := time.Now().Add(timeout)
+	deadline := Now().Add(timeout)
 	prev, perr := c.Level(ctx) // no "debug level" (stock d2d?): walk by repeating the verb only
 	if npc == nil {            // not listed (yet): still try the verb, side steps then have no direction
 		npc = &NPC{Index: index, Name: "?", CellX: prev.X, CellY: prev.Y}
@@ -259,7 +264,7 @@ func (c *Client) ApproachNPC(ctx context.Context, index int, timeout time.Durati
 				return err
 			}
 		}
-		if time.Now().After(deadline) {
+		if Now().After(deadline) {
 			return fmt.Errorf("d2dctl: npc %d (%s): not reached in %v (player at %.1f,%.1f)", index, npc.Name, timeout, prev.X, prev.Y)
 		}
 		cur, err := c.Level(ctx)
