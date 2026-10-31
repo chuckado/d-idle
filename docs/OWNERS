@@ -42,3 +42,8 @@ internal/loot/pickup.go  fixpickup  fix-pickup
 internal/loot/export_test.go  fixpickup  fix-pickup
 internal/loot/fixpickup_test.go  fixpickup  fix-pickup
 docs/fixpickup.md  fixpickup  fix-pickup
+internal/d2dtown/adapter.go  fixbank  fix-bank
+internal/town/stash.go  fixbank  fix-bank
+internal/town/chores.go  fixbank  fix-bank
+internal/town/fixbank_test.go  fixbank  fix-bank
+docs/fixbank.md  fixbank  fix-bank
