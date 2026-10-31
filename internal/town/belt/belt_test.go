@@ -96,3 +96,34 @@ func TestPlanForBuildHellFollowsResource(t *testing.T) {
 		}
 	}
 }
+
+func TestPlace(t *testing.T) {
+	P := func(box int, k Kind) Placed { return Placed{box, k} }
+	cases := []struct {
+		name  string
+		slots int
+		items []Placed
+		k     Kind
+		box   int
+		ok    bool
+	}{
+		{"empty belt takes first column", 4, nil, HP, 0, true},
+		{"none-belt full", 4, []Placed{P(0, HP), P(1, HP), P(2, HP), P(3, MP)}, HP, 0, false},
+		{"matching column lowest free box", 8, []Placed{P(0, MP), P(1, HP)}, HP, 5, true},
+		{"matching column full goes to empty column", 8, []Placed{P(0, MP), P(1, HP), P(5, HP)}, HP, 2, true},
+		{"mixed column full, empty column used", 4, []Placed{P(0, HP)}, HP, 1, true},
+		{"mixed column full, no empty column", 4, []Placed{P(0, HP), P(1, MP), P(2, MP), P(3, MP)}, HP, 0, false},
+		{"first matching column wins", 12, []Placed{P(0, MP), P(1, HP), P(2, HP), P(6, HP)}, HP, 5, true},
+		{"rejuvenation column", 8, []Placed{P(0, HP), P(1, RV)}, RV, 5, true},
+		{"column kind is its bottom item", 8, []Placed{P(0, None), P(1, HP)}, HP, 5, true},
+		{"sash 8 boxes full for kind", 8, []Placed{P(0, HP), P(4, HP), P(1, HP), P(5, HP), P(2, HP), P(6, HP), P(3, HP), P(7, HP)}, HP, 0, false},
+		{"plated 16 boxes, fourth row", 16, []Placed{P(0, HP), P(4, HP), P(8, HP)}, HP, 12, true},
+		{"not a potion", 16, nil, None, 0, false},
+	}
+	for _, c := range cases {
+		box, ok := Place(c.slots, c.items, c.k)
+		if ok != c.ok || ok && box != c.box {
+			t.Errorf("%s: got (%d,%v) want (%d,%v)", c.name, box, ok, c.box, c.ok)
+		}
+	}
+}

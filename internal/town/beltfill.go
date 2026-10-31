@@ -155,61 +155,12 @@ type beltPutter interface {
 	BeltPut(id uint32, box int) error
 }
 
-// pickBeltBox is the belt box a potion of kind k goes to (F8). A belt column holds one kind of potion: the first one placed
-// decides (SME, UNVERIFIED in this repo), so k goes into a column that already holds k, else an empty column the plan gives
-// to k, else any empty column; never above another kind. A box is row*4+column; the lowest free box of the column is used
-// so the front stays filled first. Reports false when no column can take k.
-func (t *Town) pickBeltBox(inv *d2.Inventory, slots int, k belt.Kind, band belt.Band) (int, bool) {
-	used := map[int]bool{}
-	var colKind [belt.Columns]belt.Kind
-	for _, u := range inv.Container(d2.ContBelt) {
-		if u.Item == nil {
-			continue
-		}
-		box := u.Item.GY*belt.Columns + u.Item.GX
-		used[box] = true
-		if c := box % belt.Columns; box >= 0 && colKind[c] == belt.None {
-			colKind[c] = belt.PotionKind(t.base(u))
-		}
-	}
-	lowest := func(col int) (int, bool) {
-		for b := col; b < slots; b += belt.Columns {
-			if !used[b] {
-				return b, true
-			}
-		}
-		return 0, false
-	}
-	for pass := 0; pass < 3; pass++ {
-		for c := 0; c < belt.Columns; c++ {
-			var ok bool
-			switch pass {
-			case 0:
-				ok = colKind[c] == k
-			case 1:
-				ok = colKind[c] == belt.None && !colUsed(used, c, slots) && band.Cols[c] == k
-			default:
-				ok = colKind[c] == belt.None && !colUsed(used, c, slots)
-			}
-			if !ok {
-				continue
-			}
-			if b, free := lowest(c); free {
-				return b, true
-			}
-		}
-	}
-	return 0, false
-}
-
-// colUsed reports whether any box of the column holds an item (a non-potion item makes the column unusable for a kind).
-func colUsed(used map[int]bool, col, slots int) bool {
-	for b := col; b < slots; b += belt.Columns {
-		if used[b] {
-			return true
-		}
-	}
-	return false
+// pickBeltBox is the belt box a potion of kind k goes to (F8): belt.Place, the rule game.exe applies itself (B4: the
+// first same-kind column with room at its lowest free box, else the first empty column; never above another kind). The
+// plan band no longer steers the choice, because a shift-click on Game.exe lands where the game puts it, so choosing
+// another column would make the bot's picture of the belt wrong. Reports false when no column can take k.
+func (t *Town) pickBeltBox(inv *d2.Inventory, slots int, k belt.Kind, _ belt.Band) (int, bool) {
+	return belt.Place(slots, belt.PlacedItems(t.e.Data, inv), k)
 }
 
 func inBelt(s *d2.Snapshot, id uint32) bool {
