@@ -87,6 +87,3 @@ internal/combat/castfirst_test.go  fixmissile  fix-missile
 internal/combat/dodge_test.go  fixmissile  fix-missile
 docs/knobs.md  fixmissile  fix-missile
 docs/fixmissile.md  fixmissile  fix-missile
-docs/cheats.md  forkcheats3  forkcheats3
-docs/forkcheats.md  forkcheats3  forkcheats3
-openspec/changes/forkcheats3/**  forkcheats3  forkcheats3
