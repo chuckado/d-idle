@@ -2,7 +2,7 @@
 
 ```yaml
 change: walkfix
-status: in-progress
+status: archived
 agent: walkfix
 branch: agent/walkfix
 worktree: ~/code/d2lod-wt/walkfix
@@ -18,7 +18,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
+merge: agent/walkfix (merge commit cb9d24a)
 result: "offline (no live game, nothing pushed): branch fix/walk-velocity-v2 head 10338345 on upstream 72132b99; merc and pet claims added; real-d2d differential 122,646 cases, 69,437 -> 0 (monster 38,543, player 15,146, merc 8,287, pet 7,461); CI-class checks clean; READY after the det state-hash run (not run, needs a d2d slot)"
 ```
 

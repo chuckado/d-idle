@@ -54,10 +54,3 @@ internal/d2dtown/adapter.go  fixstall2  fixstall2
 internal/town/trip.go  fixstall2  fixstall2
 internal/town/enterportal_test.go  fixstall2  fixstall2
 docs/fixstall2.md  fixstall2  fixstall2
-docs/research/pr-walk-proof.md          walkfix  walkfix
-docs/research/pr-walk-draft.md          walkfix  walkfix
-docs/research/pr-walk-evidence-pack.md  walkfix  walkfix
-docs/research/pr-bundle-queue.md        walkfix  walkfix
-tools/emu/walk_velocity.py              walkfix  walkfix
-tools/emu/walk_velocity_mode.inc        walkfix  walkfix
-openspec/changes/walkfix/**            walkfix  walkfix
