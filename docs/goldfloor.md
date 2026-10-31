@@ -46,6 +46,8 @@ Agrees: skip early TP buys (walk), sorceress buys few mana potions, gate Blood R
 - C (loot bar) is not changed: it waits for the A/B.
 - Tests: `TestTripFloor`, `TestScenario_TripFloorPoorLoop` (bot), `TestNoTPRebuyWhenPoor`, `TestManaCapBelowClvl10`, `TestPlannedSpendCappedByGold` (town; need the extracted tables).
 
+Levers A and B are off by default after the failed A/B on 2026-10-31 (town.tripMinSpend 0, town.mpCapEarly 0, town.mpCapLevel 0); the code stays behind the knobs for a redesigned lever aimed at poverty sell trips. The roadmap rule "no off-by-default knobs" is waived here because the gate failed.
+
 ## Paired A/B (task 1.3, agent GOLDAB, 2026-10-31; V = tools/ab/paired.py on docs/probes/goldab/)
 Build: main 6bd5b6c, one binary, seeds 1-8 x 2 virtual h, fresh uncheated Sorceress, 3 slots, arms interleaved. A = defaults (levers on). B = overrides `town.tripMinSpend 0` (also ends the poor-scroll rule), `town.mpCapLevel 0` (the cap and the mana-trip drop; `mpCapEarly 0` alone would buy no mana), `town.mpCapEarly 0`. Metrics from `an_gold.py` (minute, `shop: bought`, `town trip` lines), each fed to `paired.py --base off(B) --arm on(A)`; `paired_out.txt`, `metrics.txt`, `invariants.txt`. Excluded seeds: none. Flag: seed 8 is the same run in both arms (281 kills, 3306 XP/h; poverty sell trips, levers rarely fire), kept; clvl ends at 4-5 so band 5-10 holds only 156 (A) and 141 (B) minutes in all.
 

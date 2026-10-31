@@ -147,9 +147,9 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.idScrollNeed | 1 | 0..1 | bool | 0 | 2 | 1 buys identify scrolls only while an unidentified set, rare, unique or crafted item is in the pack; 0 = always idScrollTarget (old). |
 | town.bankFirst | 1 | 0..1 | bool | 0 | 2 | 1 deposits gold above the keep line (never below the minimal kit) before the shop; 0 = the shop spends first (old). |
 | town.repairLatch | 1 | 0..1 | bool | 0 | 1 | 1 retries a repair that changed nothing only after durability changed or gold grew by futileGoldStep; 0 = every visit (old). |
-| town.tripMinSpend | 60 | 0..500 | gold | 500 | 2 | A pure restock trip (healing potions below the resupply line, mana, belt columns, portal scroll) with a healing potion still in the belt starts only when the planned purchase is worth this much; a character with gold under the kit line and under 2 healing potions also buys no portal scroll (potions first). docs/goldfloor.md: 83% of NAVSOAK trips bought under 30 gold. 0 = off (old). |
-| town.mpCapEarly | 1 | 0..8 | count | 0 | 2 | Mana potions one visit buys below mpCapLevel (docs/goldfloor.md finding 3: mana was 74 to 305 gold/h at clvl 1-10). |
-| town.mpCapLevel | 10 | 0..40 | clvl | 40 | 1 | Below this level mpCapEarly caps the mana purchase and a low mana belt raises no town trip. 0 = off (old). |
+| town.tripMinSpend | 0 | 0..500 | gold | 500 | 2 | A pure restock trip (healing potions below the resupply line, mana, belt columns, portal scroll) with a healing potion still in the belt starts only when the planned purchase is worth this much; a character with gold under the kit line and under 2 healing potions also buys no portal scroll (potions first). docs/goldfloor.md: 83% of NAVSOAK trips bought under 30 gold. 0 = off (old), the default: levers A and B are off after the failed A/B of 2026-10-31. |
+| town.mpCapEarly | 0 | 0..8 | count | 0 | 2 | Mana potions one visit buys below mpCapLevel; only used while mpCapLevel > 0, so set mpCapEarly 1 together with mpCapLevel 10 for the goldfloor lever (OFF by default after the failed A/B, docs/goldfloor.md finding 3: mana was 74 to 305 gold/h at clvl 1-10). |
+| town.mpCapLevel | 0 | 0..40 | clvl | 40 | 1 | Below this level mpCapEarly caps the mana purchase and a low mana belt raises no town trip. 0 = off (old). |
 | town.choreBudgetS | 150 | 30..600 | s | 30 | 1 | Time one Chores call may take before it gives up. |
 
 ### loot.*
