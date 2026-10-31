@@ -455,7 +455,7 @@ func (l *lab) Claim(ctx context.Context, r *drill.Run) (bool, string, int, int, 
 	_ = l.Tick(ctx, 10)
 	_ = l.be.Ctl.CloseAll()
 	savedP, savedN := d2dctl.Pause, d2dctl.Now
-	l.be.Clock.Install(ctx) // the bot's own wiring: a game-time Pause under lockstep
+	l.be.Clock.Install(ctx)                 // the bot's own wiring: a game-time Pause under lockstep
 	l.be.Clock.Sleep(40 * time.Millisecond) // warm the new Pacer (see ApproachKashya)
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	res, err := d2dtown.ClaimRogue(ctx, l.be.Client)

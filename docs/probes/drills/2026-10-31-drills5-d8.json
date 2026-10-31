@@ -1,0 +1,192 @@
+{
+ "results": [
+  {
+   "id": "D8.a",
+   "primitive": "P18",
+   "title": "merc hired and killed by cheat: the bot's revive through Kashya brings it back for gold",
+   "verdict": "PASS",
+   "reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+   "intended": "merc alive again, gold down by the reported price",
+   "observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+     "Intended": "merc alive again, gold down by the reported price",
+     "Observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+     "sig": "dead=true-\u003efalse paid\u003e0=false err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug merc kill",
+      "debug stat 14 3000"
+     ],
+     "elapsed_ns": 627189231,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)",
+     "Intended": "merc alive again, gold down by the reported price",
+     "Observed": "merc present=false dead=true code= life=[0,0] -\u003e present=true dead=false code=RG life=[40,1]; gold 3000 -\u003e 3000 (revive reports 0); err \u003cnil\u003e; panels none",
+     "sig": "dead=true-\u003efalse paid\u003e0=false err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug merc kill",
+      "debug stat 14 3000"
+     ],
+     "elapsed_ns": 23659964,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug merc hire 0",
+    "debug merc kill",
+    "debug stat 14 3000"
+   ]
+  },
+  {
+   "id": "D8.m",
+   "primitive": "P3",
+   "title": "merc at low life: the bot's belt verb with the merc flag heals it and spends one potion",
+   "verdict": "PASS",
+   "reason": "merc life 20 -\u003e 32 with one belt potion",
+   "intended": "merc life up, one belt potion used",
+   "observed": "merc present=true dead=false code=RG life=[20,1] -\u003e present=true dead=false code=RG life=[32,1]; belt potions 1 -\u003e 0; err \u003cnil\u003e",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "merc life 20 -\u003e 32 with one belt potion",
+     "Intended": "merc life up, one belt potion used",
+     "Observed": "merc present=true dead=false code=RG life=[20,1] -\u003e present=true dead=false code=RG life=[32,1]; belt potions 1 -\u003e 0; err \u003cnil\u003e",
+     "sig": "up=true err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug belt clear",
+      "debug give hp1 belt 0",
+      "debug merc hurt 20"
+     ],
+     "elapsed_ns": 11490302,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "merc life 20 -\u003e 32 with one belt potion",
+     "Intended": "merc life up, one belt potion used",
+     "Observed": "merc present=true dead=false code=RG life=[20,1] -\u003e present=true dead=false code=RG life=[32,1]; belt potions 1 -\u003e 0; err \u003cnil\u003e",
+     "sig": "up=true err=false",
+     "cheats": [
+      "debug merc hire 0",
+      "debug belt clear",
+      "debug give hp1 belt 0",
+      "debug merc hurt 20"
+     ],
+     "elapsed_ns": 11991440,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug merc hire 0",
+    "debug belt clear",
+    "debug give hp1 belt 0",
+    "debug merc hurt 20"
+   ]
+  },
+  {
+   "id": "D8.q",
+   "primitive": "P20",
+   "title": "Akara's Den of Evil reward (record by `debug quest set`): one skill point, dialog closed",
+   "verdict": "PASS",
+   "reason": "PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)",
+   "intended": "Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed",
+   "observed": "skill points 0 -\u003e 1; quest list: 1\t0x0001\tact1\tbits=0; 41\t0x2002\tact5\tbits=1,13; err \u003cnil\u003e",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)",
+     "Intended": "Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed",
+     "Observed": "skill points 0 -\u003e 1; quest list: 1\t0x0001\tact1\tbits=0; 41\t0x2002\tact5\tbits=1,13; err \u003cnil\u003e",
+     "sig": "gain=1 err=false",
+     "cheats": [
+      "debug goto 1",
+      "debug quest set 1 0x0002",
+      "debug quest list"
+     ],
+     "elapsed_ns": 72551678,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)",
+     "Intended": "Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed",
+     "Observed": "skill points 1 -\u003e 2; quest list: 1\t0x0001\tact1\tbits=0; 41\t0x2002\tact5\tbits=1,13; err \u003cnil\u003e",
+     "sig": "gain=1 err=false",
+     "cheats": [
+      "debug goto 1",
+      "debug quest set 1 0x0002",
+      "debug quest list"
+     ],
+     "elapsed_ns": 66551758,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1",
+    "debug quest set 1 0x0002",
+    "debug quest list"
+   ]
+  },
+  {
+   "id": "D8.w",
+   "primitive": "P21",
+   "title": "Warriv to Act 2 (Andariel record by `debug quest set`): the menu row \"Go East\" moves the character to Lut Gholein",
+   "verdict": "PASS",
+   "reason": "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path",
+   "intended": "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)",
+   "observed": "menu [Warriv | talk | go east | cancel]; area after 40; err \u003cnil\u003e",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path",
+     "Intended": "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)",
+     "Observed": "menu [Warriv | talk | go east | cancel]; area after 40; err \u003cnil\u003e",
+     "sig": "area=40 err=false",
+     "cheats": [
+      "debug goto 1",
+      "debug quest set 6 0x0001"
+     ],
+     "elapsed_ns": 567357295,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path",
+     "Intended": "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)",
+     "Observed": "menu [Warriv | talk | go east | cancel]; area after 40; err \u003cnil\u003e",
+     "sig": "area=40 err=false",
+     "cheats": [
+      "debug goto 1",
+      "debug quest set 6 0x0001"
+     ],
+     "elapsed_ns": 76482297,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 1",
+    "debug quest set 6 0x0001"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,415 @@
+{
+ "results": [
+  {
+   "id": "D3.n",
+   "primitive": "P14",
+   "title": "approach and open each Act 1 NPC from the start point, window up, close leaves the UI clean",
+   "verdict": "PASS",
+   "reason": "all 5 opened and closed clean",
+   "intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+   "observed": "Akara: open true window [npc-dialog] 258 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 109 ticks clean after close true | Warriv: open true window [npc-dialog] 22 ticks clean after close true",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "all 5 opened and closed clean",
+     "Intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+     "Observed": "Akara: open true window [npc-dialog] 258 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 109 ticks clean after close true | Warriv: open true window [npc-dialog] 22 ticks clean after close true",
+     "sig": "Akara:true:npc-dialog:true;Charsi:true:npc-dialog:true;Gheed:true:npc-dialog:true;Kashya:true:npc-dialog:true;Warriv:true:npc-dialog:true",
+     "elapsed_ns": 582240037,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "all 5 opened and closed clean",
+     "Intended": "5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean",
+     "Observed": "Akara: open true window [npc-dialog] 121 ticks clean after close true | Charsi: open true window [npc-dialog] 178 ticks clean after close true | Gheed: open true window [npc-dialog] 112 ticks clean after close true | Kashya: open true window [npc-dialog] 118 ticks clean after close true | Warriv: open true window [npc-dialog] 40 ticks clean after close true",
+     "sig": "Akara:true:npc-dialog:true;Charsi:true:npc-dialog:true;Gheed:true:npc-dialog:true;Kashya:true:npc-dialog:true;Warriv:true:npc-dialog:true",
+     "elapsed_ns": 149361569,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true
+  },
+  {
+   "id": "D3.h",
+   "primitive": "P17",
+   "title": "hurt in town: the healer visit restores life to max, potions unchanged",
+   "verdict": "PASS",
+   "reason": "life restored at the healer",
+   "intended": "life = max after the visit, pack potions unchanged",
+   "observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "life restored at the healer",
+     "Intended": "life = max after the visit, pack potions unchanged",
+     "Observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+     "sig": "full=true pack=none-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 300",
+      "debug stat 6 3072"
+     ],
+     "elapsed_ns": 47726316,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "life restored at the healer",
+     "Intended": "life = max after the visit, pack potions unchanged",
+     "Observed": "life 12/40 -\u003e 40/40; gold 300 -\u003e 300; pack none -\u003e none; healed=true steps [equip skipped; heal ran] err \"\"",
+     "sig": "full=true pack=none-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 300",
+      "debug stat 6 3072"
+     ],
+     "elapsed_ns": 8499807,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 300",
+    "debug stat 6 3072"
+   ]
+  },
+  {
+   "id": "D3.b",
+   "primitive": "P15",
+   "title": "belt emptied, gold given: the shop chore buys potions, gold delta = spent, belt gains",
+   "verdict": "PASS",
+   "reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+   "intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+   "observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+     "Intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+     "Observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+     "sig": "delta=280 spent=280 belt=0-\u003e4 bought=Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 58020280,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -\u003e 4",
+     "Intended": "potions bought through the shop chore, gold delta = price, potions in the belt",
+     "Observed": "gold 1000 -\u003e 720 (spent per report 280); belt potions 0 -\u003e 4; pack none -\u003e tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err \"\"",
+     "sig": "delta=280 spent=280 belt=0-\u003e4 bought=Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 61032565,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1000"
+   ]
+  },
+  {
+   "id": "D3.b2",
+   "primitive": "P15",
+   "title": "sell a pack item to the vendor: gold up by the gain, item gone",
+   "verdict": "PASS",
+   "reason": "sold an identify scroll for 40 (the price formula says 40)",
+   "intended": "gold up by the gain, the scroll gone, nothing else sold",
+   "observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "sold an identify scroll for 40 (the price formula says 40)",
+     "Intended": "gold up by the gain, the scroll gone, nothing else sold",
+     "Observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+     "sig": "gained=40 delta=40 pack=iscx1-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug give hp1",
+      "debug give isc",
+      "debug stat 14 100"
+     ],
+     "elapsed_ns": 22700690,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "sold an identify scroll for 40 (the price formula says 40)",
+     "Intended": "gold up by the gain, the scroll gone, nothing else sold",
+     "Observed": "sell isc to Akara: gained 40 err \u003cnil\u003e; gold 100 -\u003e 140; pack iscx1 -\u003e none",
+     "sig": "gained=40 delta=40 pack=iscx1-\u003enone",
+     "cheats": [
+      "debug clearinv",
+      "debug give hp1",
+      "debug give isc",
+      "debug stat 14 100"
+     ],
+     "elapsed_ns": 22298294,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug give hp1",
+    "debug give isc",
+    "debug stat 14 100"
+   ]
+  },
+  {
+   "id": "D3.tp",
+   "primitive": "P12",
+   "title": "scrolls chore with a tome and scrolls missing: tome bought and filled, gold delta = spent",
+   "verdict": "PASS",
+   "reason": "tome or scrolls bought, gold delta equals the report",
+   "intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+   "observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "tome or scrolls bought, gold delta equals the report",
+     "Intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+     "Observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+     "sig": "pack=tbkx1 tscx1 delta=800 spent=800",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 43155927,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "tome or scrolls bought, gold delta equals the report",
+     "Intended": "a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent",
+     "Observed": "gold 1000 -\u003e 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err \"\"",
+     "sig": "pack=tbkx1 tscx1 delta=800 spent=800",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1000"
+     ],
+     "elapsed_ns": 50273303,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1000"
+   ]
+  },
+  {
+   "id": "D3.s",
+   "primitive": "P5",
+   "title": "stash opens, an item goes in and out, gold deposit and withdraw keep purse + stash constant",
+   "verdict": "PASS",
+   "reason": "stash item and full-purse gold moves exact",
+   "intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+   "observed": "stash open; item round trip ok, pack rinx1; deposit 1500: purse 0 stash 1500; withdraw 300: purse 300 stash 1200",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "stash item and full-purse gold moves exact",
+     "Intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+     "Observed": "stash open; item round trip ok, pack rinx1; deposit 1500: purse 0 stash 1500; withdraw 300: purse 300 stash 1200",
+     "sig": "1500/0 0/1500 300/1200 pack=rinx1-\u003erinx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0",
+      "debug give rin"
+     ],
+     "elapsed_ns": 61584923,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "stash item and full-purse gold moves exact",
+     "Intended": "stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200",
+     "Observed": "stash open; item round trip ok, pack rinx1; deposit 1500: purse 0 stash 1500; withdraw 300: purse 300 stash 1200",
+     "sig": "1500/0 0/1500 300/1200 pack=rinx1-\u003erinx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0",
+      "debug give rin"
+     ],
+     "elapsed_ns": 22988855,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1500",
+    "debug stat 15 0",
+    "debug give rin"
+   ]
+  },
+  {
+   "id": "D3.s2",
+   "primitive": "P5",
+   "title": "partial gold deposit (the amount is typed): the bot's own deposit of 1000 of 1500",
+   "verdict": "PASS",
+   "reason": "partial deposit exact",
+   "intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+   "observed": "deposit 1000 err \u003cnil\u003e; purse 1500 -\u003e 500 stash 0 -\u003e 1000",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "partial deposit exact",
+     "Intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+     "Observed": "deposit 1000 err \u003cnil\u003e; purse 1500 -\u003e 500 stash 0 -\u003e 1000",
+     "sig": "err=false 500/1000",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0"
+     ],
+     "elapsed_ns": 7791457,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "partial deposit exact",
+     "Intended": "deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000",
+     "Observed": "deposit 1000 err \u003cnil\u003e; purse 1500 -\u003e 500 stash 0 -\u003e 1000",
+     "sig": "err=false 500/1000",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 1500",
+      "debug stat 15 0"
+     ],
+     "elapsed_ns": 7528833,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 1500",
+    "debug stat 15 0"
+   ]
+  },
+  {
+   "id": "D3.u",
+   "primitive": "P13",
+   "title": "unidentified magic item: the vendor's price against the price formula (docs/research/price-trace.md)",
+   "verdict": "PASS",
+   "reason": "unidentified magic cap sold for 32 = the base formula",
+   "intended": "an unidentified magic item sells for its base price (cost/2, the identified extras do not count)",
+   "observed": "unidentified magic Cap (unid 1) sold to Charsi: gained 32 err \u003cnil\u003e; gold 100 -\u003e 132; formula for a normal cap 32",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "unidentified magic cap sold for 32 = the base formula",
+     "Intended": "an unidentified magic item sells for its base price (cost/2, the identified extras do not count)",
+     "Observed": "unidentified magic Cap (unid 1) sold to Charsi: gained 32 err \u003cnil\u003e; gold 100 -\u003e 132; formula for a normal cap 32",
+     "sig": "gained=32 want=32 err=false",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 100",
+      "debug give cap pack q4 unid"
+     ],
+     "elapsed_ns": 27856777,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "unidentified magic cap sold for 32 = the base formula",
+     "Intended": "an unidentified magic item sells for its base price (cost/2, the identified extras do not count)",
+     "Observed": "unidentified magic Cap (unid 1) sold to Charsi: gained 32 err \u003cnil\u003e; gold 100 -\u003e 132; formula for a normal cap 32",
+     "sig": "gained=32 want=32 err=false",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 100",
+      "debug give cap pack q4 unid"
+     ],
+     "elapsed_ns": 12351545,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 100",
+    "debug give cap pack q4 unid"
+   ]
+  },
+  {
+   "id": "D3.i",
+   "primitive": "P13",
+   "title": "identify: an unidentified pack item and an ID scroll, the identify chore",
+   "verdict": "PASS",
+   "reason": "identified with a scroll",
+   "intended": "ring identified, ID scroll count -1, UI clean",
+   "observed": "unidentified [rin] -\u003e []; pack iscx1 rinx1 -\u003e rinx1; gold 500 -\u003e 500; steps [identify ran; equip skipped]; err \"\"",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "identified with a scroll",
+     "Intended": "ring identified, ID scroll count -1, UI clean",
+     "Observed": "unidentified [rin] -\u003e []; pack iscx1 rinx1 -\u003e rinx1; gold 500 -\u003e 500; steps [identify ran; equip skipped]; err \"\"",
+     "sig": "unid=rin-\u003e pack=iscx1 rinx1-\u003erinx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug give rin pack q4 unid",
+      "debug give isc"
+     ],
+     "elapsed_ns": 15646325,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "identified with a scroll",
+     "Intended": "ring identified, ID scroll count -1, UI clean",
+     "Observed": "unidentified [rin] -\u003e []; pack iscx1 rinx1 -\u003e rinx1; gold 500 -\u003e 500; steps [identify ran; equip skipped]; err \"\"",
+     "sig": "unid=rin-\u003e pack=iscx1 rinx1-\u003erinx1",
+     "cheats": [
+      "debug clearinv",
+      "debug stat 14 500",
+      "debug give rin pack q4 unid",
+      "debug give isc"
+     ],
+     "elapsed_ns": 15080226,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug clearinv",
+    "debug stat 14 500",
+    "debug give rin pack q4 unid",
+    "debug give isc"
+   ]
+  }
+ ]
+}

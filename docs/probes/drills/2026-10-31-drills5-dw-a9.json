@@ -1,0 +1,51 @@
+{
+ "results": [
+  {
+   "id": "DW.a9",
+   "primitive": "P23",
+   "title": "Kurast Docks to the Rogue Encampment (act 3 area to act 1 row 0)",
+   "verdict": "PASS",
+   "reason": "verb travelled 75 -\u003e 1 in 349 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+   "intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+   "observed": "from area 75: area 1, 349 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31]]; lines: d2dworld: arrived in level 75: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint \u003c d2lod-bot/internal/drill.d3travel / nav plan from={171 131} to={159 49} wps=31 partial=false cells=177 / nav click pos={171 131} wp={172 135} cur=1 of=31 / nav click pos={171 132} wp={173 136} cur=2 of=31 / nav click pos={173 136} wp={180 137} cur=3 of=31 / nav click pos={176 137} wp={188 137} cur=4 of=31 / nav click pos={185 137} wp={196 137} cur=5 of=31 / nav click pos={192 137} wp={204 137} cur=6 of=31 / nav click pos={200 137} wp={206 137} cur=7 of=31 / nav click pos={203 137} wp={212 131} cur=8 of=31 / nav click pos={209 133} wp={213 130} cur=9 of=31 / nav click pos={210 132} wp={213 122} cur=10 of=31 / nav click pos={212 124} wp={213 114} cur=11 of=31 / nav click pos={213 117} wp={213 106} cur=12 of=31 / nav plan from={213 116} to={159 49} wps=19 partial=false cells=118 / nav click pos={213 116} wp={213 108} cur=0 of=19 / nav click pos={213 112} wp={213 105} cur=1 of=19 / nav click pos={213 109} wp={218 100} cur=2 of=19 / nav click pos={216 103} wp={219 94} cur=3 of=19 / nav plan from={219 95} to={159 49} wps=15 partial=false cells=97 / nav click pos={219 95} wp={211 89} cur=1 of=15 / nav click pos={213 91} wp={209 88} cur=2 of=15 / nav click pos={212 90} wp={201 87} cur=3 of=15 / nav click pos={204 88} wp={198 87} cur=4 of=15 / nav click pos={200 87} wp={190 87} cur=5 of=15 / d2dsrc msg=d2dsrc: 1 new unknown fields: object.class / nav click pos={194 87} wp={182 87} cur=6 of=15 / nav click pos={185 87} wp={174 87} cur=7 of=15 / nav click pos={177 87} wp={166 87} cur=8 of=15 / nav click pos={170 87} wp={158 87} cur=9 of=15 / nav click pos={162 87} wp={156 84} cur=10 of=15 / nav click pos={157 85} wp={156 79} cur=11 of=15 / nav click pos={157 81} wp={157 71} cur=12 of=15 / nav click pos={157 75} wp={158 63} cur=13 of=15 / nav click pos={158 66} wp={159 53} cur=14 of=15 / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={159 54} to={159 49} wps=1 partial=false cells=3 / nav click pos={159 54} wp={159 52} cur=0 of=1 / wp: used 75 -\u003e 1 (2 clicks, waited 0 ms)",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "verb travelled 75 -\u003e 1 in 349 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+     "Intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+     "Observed": "from area 75: area 1, 349 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31]]; lines: d2dworld: arrived in level 75: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint \u003c d2lod-bot/internal/drill.d3travel / nav plan from={171 131} to={159 49} wps=31 partial=false cells=177 / nav click pos={171 131} wp={172 135} cur=1 of=31 / nav click pos={171 132} wp={173 136} cur=2 of=31 / nav click pos={173 136} wp={180 137} cur=3 of=31 / nav click pos={176 137} wp={188 137} cur=4 of=31 / nav click pos={185 137} wp={196 137} cur=5 of=31 / nav click pos={192 137} wp={204 137} cur=6 of=31 / nav click pos={200 137} wp={206 137} cur=7 of=31 / nav click pos={203 137} wp={212 131} cur=8 of=31 / nav click pos={209 133} wp={213 130} cur=9 of=31 / nav click pos={210 132} wp={213 122} cur=10 of=31 / nav click pos={212 124} wp={213 114} cur=11 of=31 / nav click pos={213 117} wp={213 106} cur=12 of=31 / nav plan from={213 116} to={159 49} wps=19 partial=false cells=118 / nav click pos={213 116} wp={213 108} cur=0 of=19 / nav click pos={213 112} wp={213 105} cur=1 of=19 / nav click pos={213 109} wp={218 100} cur=2 of=19 / nav click pos={216 103} wp={219 94} cur=3 of=19 / nav plan from={219 95} to={159 49} wps=15 partial=false cells=97 / nav click pos={219 95} wp={211 89} cur=1 of=15 / nav click pos={213 91} wp={209 88} cur=2 of=15 / nav click pos={212 90} wp={201 87} cur=3 of=15 / nav click pos={204 88} wp={198 87} cur=4 of=15 / nav click pos={200 87} wp={190 87} cur=5 of=15 / d2dsrc msg=d2dsrc: 1 new unknown fields: object.class / nav click pos={194 87} wp={182 87} cur=6 of=15 / nav click pos={185 87} wp={174 87} cur=7 of=15 / nav click pos={177 87} wp={166 87} cur=8 of=15 / nav click pos={170 87} wp={158 87} cur=9 of=15 / nav click pos={162 87} wp={156 84} cur=10 of=15 / nav click pos={157 85} wp={156 79} cur=11 of=15 / nav click pos={157 81} wp={157 71} cur=12 of=15 / nav click pos={157 75} wp={158 63} cur=13 of=15 / nav click pos={158 66} wp={159 53} cur=14 of=15 / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={159 54} to={159 49} wps=1 partial=false cells=3 / nav click pos={159 54} wp={159 52} cur=0 of=1 / wp: used 75 -\u003e 1 (2 clicks, waited 0 ms)",
+     "sig": "from 75 area 1 verb ok near false panel false",
+     "cheats": [
+      "debug goto 75",
+      "debug wp all",
+      "debug act 3"
+     ],
+     "elapsed_ns": 787616764,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "verb travelled 75 -\u003e 1 in 353 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+     "Intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+     "Observed": "from area 75: area 1, 353 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31]]; lines: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={171 131} to={159 49} wps=31 partial=false cells=178 / nav click pos={171 131} wp={172 135} cur=1 of=31 / nav click pos={171 132} wp={173 136} cur=2 of=31 / nav stuck pos={171 132} wp={173 136} rung=0 / nav click pos={173 136} wp={180 137} cur=3 of=31 / nav: stuck recovered at={171 132} method=reclick rung=1 repeat=false / nav click pos={176 137} wp={188 137} cur=4 of=31 / nav click pos={185 137} wp={196 137} cur=5 of=31 / nav click pos={192 137} wp={204 137} cur=6 of=31 / nav click pos={200 137} wp={206 137} cur=7 of=31 / nav click pos={203 137} wp={212 131} cur=8 of=31 / nav click pos={209 133} wp={213 130} cur=9 of=31 / nav click pos={210 132} wp={213 122} cur=10 of=31 / nav click pos={212 124} wp={213 114} cur=11 of=31 / nav click pos={213 117} wp={213 106} cur=12 of=31 / nav plan from={213 116} to={159 49} wps=19 partial=false cells=119 / nav click pos={213 116} wp={213 108} cur=0 of=19 / nav click pos={213 112} wp={213 105} cur=1 of=19 / nav click pos={213 109} wp={218 100} cur=2 of=19 / nav click pos={216 103} wp={219 94} cur=3 of=19 / nav plan from={219 95} to={159 49} wps=15 partial=false cells=98 / nav click pos={219 95} wp={211 89} cur=1 of=15 / nav click pos={213 91} wp={209 88} cur=2 of=15 / nav click pos={212 90} wp={201 87} cur=3 of=15 / nav click pos={204 88} wp={198 87} cur=4 of=15 / nav click pos={200 87} wp={190 87} cur=5 of=15 / nav click pos={194 87} wp={182 87} cur=6 of=15 / nav click pos={185 87} wp={174 87} cur=7 of=15 / nav click pos={177 87} wp={166 87} cur=8 of=15 / nav click pos={170 87} wp={158 87} cur=9 of=15 / nav click pos={162 87} wp={156 84} cur=10 of=15 / nav click pos={157 85} wp={156 79} cur=11 of=15 / nav click pos={157 81} wp={157 71} cur=12 of=15 / nav click pos={157 75} wp={158 63} cur=13 of=15 / nav click pos={158 66} wp={159 52} cur=14 of=15 / wp: used 75 -\u003e 1 (2 clicks, waited 0 ms)",
+     "sig": "from 75 area 1 verb ok near false panel false",
+     "cheats": [
+      "debug goto 75",
+      "debug wp all",
+      "debug act 3"
+     ],
+     "elapsed_ns": 99387789,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 75",
+    "debug wp all",
+    "debug act 3"
+   ]
+  }
+ ]
+}

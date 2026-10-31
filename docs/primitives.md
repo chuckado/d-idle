@@ -99,6 +99,26 @@ DRILLS3 rows (2026-10-31, lab binary with the test cheats, throwaway Sorceress, 
 | P36/Gate 1 fault | D10 | FAIL on the restarts counter only (restart 1.5 s, loop resumed, saved XP not lower, no leftovers, P35 clean; counter +0, finding F-D10-1) | d2d killed with SIGKILL under the managed bot (docs/probes/drills/README.md DRILLS4, 2026-10-31-d10.txt) |
 | audit | H.pause, H.obj, H.ground, H.monster | FAIL, FAIL, PASS, BLOCKED | hover blind-spot audit: field objects and the merc claim and revive path are at risk (hover-audit.md); H.monster needs a monster: `debug spawn` exists as of 2026-10-31 (docs/forkcheats.md), rerun pending |
 
+DRILLS5 rows (2026-10-31, newest cheats build, throwaway Sorceress, each drill twice; files `2026-10-31-drills5-*.txt/.json`, README section DRILLS5). These supersede the BLOCKED and FAIL rows above for the same drill ids:
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P5 | D3.s, D3.s2 | PASS (was FAIL) | full deposit 1500, withdraw 300: purse 300 stash 1200; partial 1000 of 1500: purse 500 stash 1000 (fix-bank) |
+| P16 | D3.r, D3.r0, D3.r1 | PASS | estimate 19 = paid 19; gold 0 and 5: `repair skipped`, 0 ticks, no smith opened (fix-bank, fix-price) |
+| P15 | D3.b2 | PASS | sell price 40 = the price formula 40 |
+| P13 | D3.i, D3.u | PASS (was BLOCKED) | `give rin pack q4 unid`: identified by the chore (scroll -1); unidentified magic Cap sells for 32 = cost/2 of the base |
+| P1, P7 | D1.P1b, D1.P7b | PASS | 6 healing + 4 mana in a sash: 4 + 4 belted in the planned columns, no `marked full`; healing in 3 columns and one on the ground: column 3 free, pickit leaves it (fix-belt2, fix-pickup) |
+| P23 | DW.m1, DW.m2, DW.a12, DW.a9 to a11 alone | PASS | mouth trigger: 1 and 0 bounces, town in 497 and 554 ticks; waypoint touched in passing handed over; towns 75, 103, 109 unvisited: no `none on level N` (fix-nav) |
+| P36/Gate 1 | D10 | PASS (was FAIL on restarts) | restarts delta exactly 1 in both runs, back in game within 8 s, xpRisk after the kill 108 = unsaved XP only (fix-restart) |
+| P27 | D5.dodge | PASS | Fallen Shamans: 8 dodges, 1.00 cast commands per cast over 17 casts; other runs 4 to 17 dodges (fix-missile, fix-missile2) |
+| P27, P29 | D5.p27, D5.p29 | PASS (recorded; was BLOCKED) | pack with a champion at clvl 1: kills and ignores recorded; life 9 of 40: Safety decides chicken (not run), with potions drink-rejuv |
+| P26, P28 | D5.p28 | PASS (was BLOCKED) | rich character, 20 zombies: 2 mana drinks, 12 kills; the poor control drinks none (poor rule, finding F3); Meter totals still BLOCKED (`Attach` builds no Meter) |
+| P3 (merc) | D8.m | PASS (was BLOCKED) | `debug merc hurt 20`, the merc belt verb: life 20 to 32, one potion |
+| P18 | D8.c | PASS (was BLOCKED) | `debug quest set 2 0x0002`, the bot's ClaimRogue under the game-time Pause: Rogue granted (one run per character) |
+| P20, P21 | D8.q, D8.w | PARTIAL PASS (was BLOCKED) | quest records by `debug quest set`: Akara +1 skill point, Warriv `go east` to area 40; the bot's own talk nodes are package main (UNVERIFIED as the bot's path) |
+| P25 | D6.d | FAIL (was BLOCKED) | pinned: 6 ladder rungs in 66 s, 0.4 cells moved, `ErrStuck`; Escape (town portal) only on the exit path (finding F2) |
+| audit | H.obj, H.obj.chest, H.obj.shrine, H.obj.cage | PASS, PASS, PASS, PARTIAL | the bot's Interact operates the waypoint, a chest (class 139) and a shrine (class 81); the cage (class 26) is listed and accepted, effect needs the Cain quest state |
+| audit | H.pause | FAIL (finding F1) | game-time deadline works; the approach to Kashya from the camp arrival cell stalls and takes 16 to 38 s against 15 to 20 s timeouts |
+
 ## Top live failure messages (normalised; navsoak, navsoak2, navsoak3)
 `area gate refused the walk` 171k; `leveling target not reachable` 114k; `recovery: loot +0 items` 18.5k (every recovery line); `combat move failed` 9.8k; `nav stuck` 5.7k; `chicken` 5.3k; `no healing potion in the belt` (drink skipped) 4.4k; `town portal attempt failed` 2.7k; `potion already in the pack` 939; `no portal opened` 710; `town trip abandoned` 376; `pack full, item left on the ground` 360; `action failed` 798 (127+ "to town: no waypoint on level"); `repair not confirmed` 36. Area gate and wedge lines are nav-soak artefacts (banned areas), not primitives.
 

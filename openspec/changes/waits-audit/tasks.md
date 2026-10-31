@@ -20,7 +20,7 @@ gates:
   - "live proof is a drill rerun after merge: H.pause, D8, D3.n (docs/probes/waits-audit.md)"
 merge:
 result: ""
-live: ""
+live: "verified live 2026-10-31 DRILLS5 (docs/probes/drills/2026-10-31-drills5-d8c.txt, docs/probes/drills/2026-10-31-drills5-d8.txt, docs/probes/drills/2026-10-31-drills5-h.txt): the bot game-time Pause and Now (LateClock.Install) drive ClaimRogue (D8.c PASS), the Akara and Warriv menus (D8.q, D8.w PARTIAL PASS) and the approach deadline (H.pause: the failures carry game ticks, 0 wall); H.pause FAIL only because the approach to Kashya from the camp arrival cell needs 16 to 38 s (finding F1 in the README DRILLS5 section)"
 ```
 
 - [x] 1.1 audit of every wall wait: docs/probes/waits-audit.md

@@ -1,0 +1,57 @@
+{
+ "results": [
+  {
+   "id": "D6.d",
+   "primitive": "P25",
+   "title": "pinned in a pocket by `debug pin on`: the bot's stall ladder gets the character out within 60 s",
+   "verdict": "FAIL",
+   "reason": "still in the pocket after 66 s of game time: the stall ladder did not leave it (err \"nav: stuck at {145 232} going to {203 233} (after 6 recoveries)\")",
+   "intended": "a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time",
+   "observed": "pinned=true freed=false moved 0.4 cells in 1650 ticks (66 s), area 2, err \"nav: stuck at {145 232} going to {203 233} (after 6 recoveries)\"; ladder lines: nav stuck pos={145 235} wp={154 236} rung=0 / nav stuck pos={145 235} wp={154 236} rung=1 / nav stuck pos={145 235} wp={154 239} rung=2 / nav stuck pos={145 235} wp={146 239} rung=3 / nav stuck pos={143 235} wp={143 240} rung=4 / nav stuck pos={145 233} wp={154 233} rung=5 / nav: stuck recovered at={145 235} method=hop rung=6 repeat=false / nav stuck pos={141 235} wp={140 240} rung=0",
+   "runs": [
+    {
+     "Verdict": "FAIL",
+     "Reason": "still in the pocket after 66 s of game time: the stall ladder did not leave it (err \"nav: stuck at {145 232} going to {203 233} (after 6 recoveries)\")",
+     "Intended": "a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time",
+     "Observed": "pinned=true freed=false moved 0.4 cells in 1650 ticks (66 s), area 2, err \"nav: stuck at {145 232} going to {203 233} (after 6 recoveries)\"; ladder lines: nav stuck pos={145 235} wp={154 236} rung=0 / nav stuck pos={145 235} wp={154 236} rung=1 / nav stuck pos={145 235} wp={154 239} rung=2 / nav stuck pos={145 235} wp={146 239} rung=3 / nav stuck pos={143 235} wp={143 240} rung=4 / nav stuck pos={145 233} wp={154 233} rung=5 / nav: stuck recovered at={145 235} method=hop rung=6 repeat=false / nav stuck pos={141 235} wp={140 240} rung=0",
+     "sig": "out=false",
+     "cheats": [
+      "debug goto 2",
+      "debug stat 7 512000",
+      "debug stat 6 512000",
+      "debug pin on",
+      "debug pin off"
+     ],
+     "elapsed_ns": 1078094319,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "FAIL",
+     "Reason": "still in the pocket after 68 s of game time: the stall ladder did not leave it (err \"nav: stuck at {157 222} going to {216 224} (after 6 recoveries)\")",
+     "Intended": "a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time",
+     "Observed": "pinned=true freed=false moved 0.4 cells in 1708 ticks (68 s), area 2, err \"nav: stuck at {157 222} going to {216 224} (after 6 recoveries)\"; ladder lines: nav stuck pos={158 224} wp={165 224} rung=0 / nav: stuck again at the same spot pos={158 224} hits=2 lastMethod= / nav stuck pos={156 226} wp={156 233} rung=1 / nav stuck pos={158 222} wp={164 220} rung=0 / nav stuck pos={158 222} wp={164 220} rung=0 / nav stuck pos={158 222} wp={164 220} rung=0 / nav stuck pos={158 222} wp={164 220} rung=0 / nav stuck pos={158 222} wp={164 220} rung=0",
+     "sig": "out=false",
+     "cheats": [
+      "debug goto 2",
+      "debug stat 7 512000",
+      "debug stat 6 512000",
+      "debug pin on",
+      "debug pin off"
+     ],
+     "elapsed_ns": 628852675,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 2",
+    "debug stat 7 512000",
+    "debug stat 6 512000",
+    "debug pin on",
+    "debug pin off"
+   ]
+  }
+ ]
+}

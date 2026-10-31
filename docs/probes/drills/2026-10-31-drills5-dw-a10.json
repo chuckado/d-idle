@@ -1,0 +1,51 @@
+{
+ "results": [
+  {
+   "id": "DW.a10",
+   "primitive": "P23",
+   "title": "Pandemonium Fortress to the Rogue Encampment (act 4 area to act 1 row 0)",
+   "verdict": "PASS",
+   "reason": "verb travelled 103 -\u003e 1 in 298 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+   "intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+   "observed": "from area 103: area 1, 298 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31],[272,60,64,31]]; lines: d2dworld: arrived in level 103: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={80 57} to={44 19} wps=11 partial=false cells=53 / nav click pos={80 57} wp={82 56} cur=0 of=11 / nav click pos={82 56} wp={80 48} cur=3 of=11 / nav plan from={81 56} to={44 19} wps=10 partial=false cells=52 / nav click pos={81 56} wp={83 55} cur=0 of=10 / nav click pos={83 55} wp={80 48} cur=2 of=10 / nav click pos={81 50} wp={78 46} cur=3 of=10 / d2dsrc msg=d2dsrc: 1 new unknown fields: object.class / nav click pos={79 48} wp={72 46} cur=4 of=10 / nav click pos={74 46} wp={65 42} cur=5 of=10 / nav plan from={68 44} to={44 19} wps=5 partial=false cells=31 / nav click pos={68 44} wp={61 40} cur=0 of=5 / nav click pos={64 41} wp={54 37} cur=1 of=5 / nav click pos={57 39} wp={52 36} cur=2 of=5 / nav click pos={54 37} wp={48 29} cur=3 of=5 / nav click pos={50 32} wp={44 22} cur=4 of=5 / wp: used 103 -\u003e 1 (2 clicks, waited 6480 ms)",
+   "runs": [
+    {
+     "Verdict": "PASS",
+     "Reason": "verb travelled 103 -\u003e 1 in 298 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+     "Intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+     "Observed": "from area 103: area 1, 298 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31],[272,60,64,31]]; lines: d2dworld: arrived in level 103: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={80 57} to={44 19} wps=11 partial=false cells=53 / nav click pos={80 57} wp={82 56} cur=0 of=11 / nav click pos={82 56} wp={80 48} cur=3 of=11 / nav plan from={81 56} to={44 19} wps=10 partial=false cells=52 / nav click pos={81 56} wp={83 55} cur=0 of=10 / nav click pos={83 55} wp={80 48} cur=2 of=10 / nav click pos={81 50} wp={78 46} cur=3 of=10 / d2dsrc msg=d2dsrc: 1 new unknown fields: object.class / nav click pos={79 48} wp={72 46} cur=4 of=10 / nav click pos={74 46} wp={65 42} cur=5 of=10 / nav plan from={68 44} to={44 19} wps=5 partial=false cells=31 / nav click pos={68 44} wp={61 40} cur=0 of=5 / nav click pos={64 41} wp={54 37} cur=1 of=5 / nav click pos={57 39} wp={52 36} cur=2 of=5 / nav click pos={54 37} wp={48 29} cur=3 of=5 / nav click pos={50 32} wp={44 22} cur=4 of=5 / wp: used 103 -\u003e 1 (2 clicks, waited 6480 ms)",
+     "sig": "from 103 area 1 verb ok near false panel false",
+     "cheats": [
+      "debug goto 103",
+      "debug wp all",
+      "debug act 4"
+     ],
+     "elapsed_ns": 582395968,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    },
+    {
+     "Verdict": "PASS",
+     "Reason": "verb travelled 103 -\u003e 1 in 193 ticks; arrival at the town start, 66 subtiles from the waypoint (not required for target 1)",
+     "Intended": "area 1 within the verb's call, the character beside the target waypoint (\u003c= 10 subtiles), the verb returns nil, no panel left open",
+     "Observed": "from area 103: area 1, 193 ticks, 2 clicks, verb ok, nearest waypoint object 66 subtiles (found true; player 141,103, waypoint objects [[84 69]]), panel open false, wp_tabs at the tab click [[80,60,64,31],[144,60,64,31],[208,60,64,31],[272,60,64,31]]; lines: nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf \u003c d2lod-bot/internal/nav.(*Navigator).openWaypoint \u003c d2lod-bot/internal/nav.(*Navigator).TakeWaypoint \u003c main.(*lab).TakeWaypoint / nav plan from={80 60} to={44 19} wps=10 partial=false cells=55 / nav click pos={80 60} wp={84 56} cur=0 of=10 / nav click pos={81 58} wp={84 54} cur=1 of=10 / nav stuck pos={81 58} wp={84 54} rung=0 / nav plan from={84 54} to={44 19} wps=8 partial=false cells=49 / nav click pos={84 54} wp={80 48} cur=0 of=8 / nav: stuck recovered at={81 58} method=reclick rung=1 repeat=false / nav click pos={82 51} wp={78 46} cur=1 of=8 / nav click pos={79 47} wp={72 46} cur=2 of=8 / nav click pos={74 46} wp={65 42} cur=3 of=8 / nav click pos={68 43} wp={58 39} cur=4 of=8 / nav plan from={66 43} to={44 19} wps=4 partial=false cells=29 / nav click pos={66 43} wp={59 39} cur=0 of=4 / nav click pos={62 41} wp={52 36} cur=1 of=4 / nav click pos={54 37} wp={48 29} cur=2 of=4 / nav click pos={50 32} wp={44 22} cur=3 of=4 / wp: used 103 -\u003e 1 (2 clicks, waited 2000 ms)",
+     "sig": "from 103 area 1 verb ok near false panel false",
+     "cheats": [
+      "debug goto 103",
+      "debug wp all",
+      "debug act 4"
+     ],
+     "elapsed_ns": 43827897,
+     "ui_pre": "clean",
+     "ui_post": "clean"
+    }
+   ],
+   "deterministic": true,
+   "cheats": [
+    "debug goto 103",
+    "debug wp all",
+    "debug act 4"
+   ]
+  }
+ ]
+}
