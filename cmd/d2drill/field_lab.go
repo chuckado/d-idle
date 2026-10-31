@@ -168,6 +168,11 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	if err := l.Goto(ctx, r, s.Level); err != nil {
 		return fail("goto", err)
 	}
+	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil { // the navigator builds the level's map at its first walk: take it before the monsters come (a Clear on a map-less arrival calls everything unreachable)
+		wctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+		_ = l.navr.GoTo(wctx, input.Point{X: sw.Player.X + 8, Y: sw.Player.Y})
+		cancel()
+	}
 	if s.Kill {
 		if _, err := r.Cheat(ctx, "debug kill", "clear the level's natural monsters (their experience is a side effect): the spawned ones are the fight under test, a crowd would trigger the chicken"); err != nil {
 			return fail("kill", err)
@@ -441,6 +446,7 @@ func (l *lab) Claim(ctx context.Context, r *drill.Run) (bool, string, int, int, 
 	_ = l.be.Ctl.CloseAll()
 	savedP, savedN := d2dctl.Pause, d2dctl.Now
 	l.be.Clock.Install(ctx) // the bot's own wiring: a game-time Pause under lockstep
+	l.be.Clock.Sleep(40 * time.Millisecond) // warm the new Pacer (see ApproachKashya)
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	res, err := d2dtown.ClaimRogue(ctx, l.be.Client)
 	_ = l.CloseAll(ctx)
@@ -618,6 +624,7 @@ func (l *lab) Warriv(ctx context.Context, r *drill.Run) (int, string, error) {
 	}
 	savedP, savedN := d2dctl.Pause, d2dctl.Now
 	l.be.Clock.Install(ctx)
+	l.be.Clock.Sleep(40 * time.Millisecond)
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	lines, err := l.be.Client.OpenNPCMenu(ctx, idx, 40*time.Second)
 	var parts []string
@@ -639,4 +646,9 @@ func (l *lab) Warriv(ctx context.Context, r *drill.Run) (int, string, error) {
 	}
 	_ = l.CloseAll(ctx)
 	return area, menu, nil
+}
+
+func (l *lab) Warp(ctx context.Context, r *drill.Run, x, y int) error {
+	_, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", x, y), "put the character at a known cell of the level: the walk the bot would have made to get there is not under test")
+	return err
 }

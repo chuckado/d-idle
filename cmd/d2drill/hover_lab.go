@@ -40,6 +40,7 @@ func (l *lab) ApproachKashya(ctx context.Context, r *drill.Run, wall bool) drill
 	savedP, savedN := d2dctl.Pause, d2dctl.Now
 	if wall { // the bot's own wiring (fix-obj): Backend.Start / LateClock.Install put the game-time Pause and Now into d2dctl
 		l.be.Clock.Install(ctx)
+		l.be.Clock.Sleep(40 * time.Millisecond) // the bot's Pacer is warm (it steps all day); Install made a cold one, whose first step jumps its clock to game time and would expire a deadline taken before it
 	}
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	t0, w0 := l.tick(), time.Now()

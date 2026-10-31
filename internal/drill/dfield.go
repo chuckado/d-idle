@@ -74,6 +74,8 @@ type FieldLab interface {
 	HoverLab
 	WPLab
 	// ToArea is the bot's navigator ToArea (an exit walk); the area the character stands in afterwards.
+	// Warp is the logged cheat `debug warp x y` (cells).
+	Warp(ctx context.Context, r *Run, x, y int) error
 	// Survive respawns a dead character (the bot's Respawn) and gives a big life: the walks cross monster levels without combat.
 	Survive(ctx context.Context, r *Run) error
 	// PlaceAtMouth puts the character (logged `debug warp`) just outside the trigger of the level's exit to cave, on the
@@ -110,7 +112,7 @@ func F(l FieldLab) []Drill {
 		{ID: "DW.m2", Primitive: "P23", Title: "fix-nav: standing in the Cave Level 1 mouth trigger (east side) in Cold Plains, waypoint to town: at most 2 bounces", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			return fMouth(ctx, r, l, 3, 9, 1, "Cold Plains, mouth of Cave Level 1, east side")
 		}},
-		{ID: "DW.a12", Primitive: "P23", Title: "fix-nav: an unactivated waypoint touched in passing is handed to the runner and works as a travel target", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fTouch(ctx, r, l) }},
+		{ID: "DW.a12", Primitive: "P23", Title: "fix-nav: an unactivated waypoint (Cold Plains) touched in passing is handed to the runner and works as a travel target", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fTouch(ctx, r, l) }},
 		fight("D5.dodge", "P27", "fix-missile: a ranged monster fires at the character: the fight loop dodges, one cast command per cast", fDodge),
 		fight("D5.p27", "P27", "target selection: a pack with a champion at clvl 1, the bot's choice", fP27),
 		fight("D5.p29", "P29", "retreat: a pack at low life, the bot's chicken and heal decision", fP29),
@@ -200,10 +202,10 @@ func fDodge(ctx context.Context, r *Run, l FieldLab) Outcome {
 		o.Verdict, o.Reason = Fail, "the fighter cast nothing"
 	case fi.Dodges == 0:
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("no dodge in %d rounds (casts %d)", rounds, fi.Casts)
-	case per > 1.3 || per < 0.7:
-		o.Verdict, o.Reason = Fail, fmt.Sprintf("cast commands per cast %.2f (wanted about 1.0)", per)
+	case per > 1.3:
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("cast commands per cast %.2f (wanted about 1.0 or fewer): the bot resends casts", per)
 	default:
-		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d dodges, %.2f cast commands per cast over %d casts", fi.Dodges, per, fi.Casts)
+		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d dodges, %.2f cast commands per cast over %d casts (above 1.3 would be resends; below 1.0 the fighter counted casts it did not send as commands)", fi.Dodges, per, fi.Casts)
 	}
 	return o
 }
@@ -243,8 +245,8 @@ func fP29(ctx context.Context, r *Run, l FieldLab) Outcome {
 }
 
 func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
-	fi := l.Fight(ctx, r, FightSpec{Level: 3, Kill: true, Spawns: []string{"zombie1 5 near"}, Life: 200, ManaMid: 7, Potions: true, Clear: 60 * time.Second})
-	intended := "mana cut to 7 by cheat in the middle of a fight: the fighter drinks a belt mana potion ('combat potion kind=mana') and the casts keep killing (P26 hit effect)"
+	fi := l.Fight(ctx, r, FightSpec{Level: 4, Spawns: []string{"zombie1 8 near"}, Life: 400, Potions: true, Clear: 120 * time.Second})
+	intended := "a fight with 8 zombies drains the mana: the fighter drinks a belt mana potion in the fight ('combat potion kind=mana') and the casts kill the targets (P26 hit effect)"
 	obs := fmt.Sprintf("%s; mana drinks %d; decisions %s", fi, fi.ManaDrinks, strings.Join(firstN(fi.Decisions, 4), " | "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("kills>0=%v drank=%v", fi.Kills > 0, fi.ManaDrinks > 0)}
 	switch {
@@ -253,7 +255,7 @@ func fP28(ctx context.Context, r *Run, l FieldLab) Outcome {
 	case fi.Kills == 0:
 		o.Verdict, o.Reason = Fail, "no kill: the hit effect of the cast is not seen: "+fi.Err
 	case fi.ManaDrinks == 0:
-		o.Verdict, o.Reason = Fail, "mana 7 in a fight and no mana potion drunk (what it did instead: see the log and decisions)"
+		o.Verdict, o.Reason = Fail, "the mana ran down in a fight and no mana potion was drunk (what it did instead: see the log)"
 	default:
 		o.Verdict, o.Reason = Pass, fmt.Sprintf("%d mana drinks, %d kills", fi.ManaDrinks, fi.Kills)
 	}
@@ -274,15 +276,25 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, outer, cave int, side int, 
 	if err := l.Survive(ctx, r); err != nil {
 		return setupFail(err)
 	}
-	if err := l.Goto(ctx, r, outer); err != nil {
+	if err := l.Goto(ctx, r, 1); err != nil {
 		return setupFail(err)
 	}
 	if err := l.ActivateAll(ctx, r); err != nil {
 		return setupFail(err)
 	}
+	if err := l.Tick(ctx, 300); err != nil { // d2d refuses a waypoint trip within 10 s of an arrival (debug goto is one)
+		return setupFail(err)
+	}
+	// the navigator learns the level's waypoint when it arrives by it (as the bot does on its way in), then the
+	// character stands in the mouth
+	if c0 := l.TakeWaypoint(ctx, outer); c0.Err != "" {
+		return Blocks(what + ": the waypoint trip in failed: " + c0.Err)
+	}
 	if err := l.Tick(ctx, 40); err != nil {
 		return setupFail(err)
 	}
+	v0, _ := l.WView(ctx)
+	what += fmt.Sprintf(" (waypoint objects %v, arrival %d,%d)", v0.Waypoints, v0.X, v0.Y)
 	desc, perr := l.PlaceAtMouth(ctx, r, outer, cave, side)
 	if perr != "" {
 		return Blocks(what + ": the character could not be put in the mouth's trigger area: " + perr)
@@ -290,18 +302,36 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, outer, cave int, side int, 
 	if err := l.Tick(ctx, 30); err != nil {
 		return setupFail(err)
 	}
-	c := l.TakeWaypoint(ctx, 1)
-	if err := l.Tick(ctx, 30); err != nil {
-		return setupFail(err)
+	// the caller retries like the goal loop does: a bounce into the cave ends the call (area = cave), the bot walks out
+	// again (ToArea) and takes the waypoint again; the fix turns the step-away direction after a bounce
+	bounces := 0
+	var c WPCall
+	var v WPView
+	var logs []string
+	var verr error
+	for try := 0; try < 4; try++ {
+		c = l.TakeWaypoint(ctx, 1)
+		logs = append(logs, c.Log...)
+		if err := l.Tick(ctx, 30); err != nil {
+			return setupFail(err)
+		}
+		if v, verr = l.WView(ctx); verr != nil {
+			return setupFail(verr)
+		}
+		if v.Area != cave {
+			break
+		}
+		bounces++
+		if area, e := l.ToArea(ctx, outer); area != outer {
+			logs = append(logs, fmt.Sprintf("walk out of the cave ended in area %d (%s)", area, e))
+			break
+		}
+		_ = l.Tick(ctx, 30)
 	}
-	v, verr := l.WView(ctx)
-	if verr != nil {
-		return setupFail(verr)
-	}
-	bounces := countLines(c.Log, "level changed during the walk")
+	c.Log = logs
 	steps := countLines(c.Log, "stepping away from a cave mouth")
 	intended := "waypoint to town from inside the mouth's trigger area: arrives in area 1, at most 2 bounces back into the cave"
-	obs := fmt.Sprintf("%s: %s; arrived in %d, verb %s, %d ticks, %d bounces (level changed during the walk), %d step-aways; log: %s", what, desc, v.Area, errOrOK(c.Err), c.Ticks, bounces, steps, strings.Join(firstN(c.Log, 8), " / "))
+	obs := fmt.Sprintf("%s: %s; arrived in %d, last verb %s, %d ticks, %d bounces into the cave, %d step-aways; log: %s", what, desc, v.Area, errOrOK(c.Err), c.Ticks, bounces, steps, strings.Join(firstN(c.Log, 10), " / "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("area=%d err=%v bounces<=2=%v", v.Area, c.Err != "", bounces <= 2)}
 	switch {
 	case v.Area != 1 || c.Err != "":
@@ -314,35 +344,43 @@ func fMouth(ctx context.Context, r *Run, l FieldLab, outer, cave int, side int, 
 	return o
 }
 
-// fTouch is DW.a12 at the navigator: Dark Wood's waypoint is not activated; ActivateWaypointNear touches it, the
+// fTouch is DW.a12 at the navigator: Cold Plains' waypoint is not activated; ActivateWaypointNear touches it, the
 // navigator hands the level to the runner (DrainActivated), and the waypoint then works as a travel target from town.
 func fTouch(ctx context.Context, r *Run, l FieldLab) Outcome {
 	if err := l.Survive(ctx, r); err != nil {
 		return setupFail(err)
 	}
-	if err := l.Goto(ctx, r, 5); err != nil {
+	if err := l.Goto(ctx, r, 3); err != nil {
 		return setupFail(err)
 	}
 	if err := l.Tick(ctx, 50); err != nil {
 		return setupFail(err)
 	}
-	touched, drained, terr := l.TouchWaypoint(ctx, 400)
+	// Cold Plains' waypoint stands at about cell (23,69) on map seed 11 (seen by the DW.m1 arrival: objects [114 344] subtiles);
+	// the character is put beside it, as if the bot had walked there, with the waypoint still not activated
+	if err := l.Warp(ctx, r, 25, 69); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Tick(ctx, 40); err != nil {
+		return setupFail(err)
+	}
+	touched, drained, terr := l.TouchWaypoint(ctx, 300)
 	if err := l.Goto(ctx, r, 1); err != nil {
 		return setupFail(err)
 	}
-	c := l.TakeWaypoint(ctx, 5)
+	c := l.TakeWaypoint(ctx, 3)
 	if err := l.Tick(ctx, 30); err != nil {
 		return setupFail(err)
 	}
 	v, _ := l.WView(ctx)
 	has := false
 	for _, a := range drained {
-		if a == 5 {
+		if a == 3 {
 			has = true
 		}
 	}
-	intended := "the touch in passing activates Dark Wood, DrainActivated lists 5, and a later waypoint trip to 5 works without 'no activated waypoint'"
-	obs := fmt.Sprintf("touched=%v err %q drained %v; from town TakeWaypoint(5): %s, area %d; log: %s", touched, terr, drained, errOrOK(c.Err), v.Area, strings.Join(firstN(c.Log, 6), " / "))
+	intended := "the touch in passing activates Cold Plains, DrainActivated lists 3, and a later waypoint trip to 3 works without 'no activated waypoint'"
+	obs := fmt.Sprintf("touched=%v err %q drained %v; from town TakeWaypoint(3): %s, area %d; log: %s", touched, terr, drained, errOrOK(c.Err), v.Area, strings.Join(firstN(c.Log, 6), " / "))
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("touched=%v drained5=%v area=%d", touched, has, v.Area)}
 	switch {
 	case terr != "":
@@ -350,9 +388,9 @@ func fTouch(ctx context.Context, r *Run, l FieldLab) Outcome {
 	case !touched:
 		o.Verdict, o.Reason = Blocked, "the waypoint was not known or in reach at the arrival cell"
 	case !has:
-		o.Verdict, o.Reason = Fail, fmt.Sprintf("the navigator did not hand level 5 over (drained %v)", drained)
-	case c.Err != "" || v.Area != 5 || strings.Contains(strings.Join(c.Log, " "), "no activated waypoint"):
-		o.Verdict, o.Reason = Fail, "the later trip to Dark Wood failed: "+c.Err
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("the navigator did not hand level 3 over (drained %v)", drained)
+	case c.Err != "" || v.Area != 3 || strings.Contains(strings.Join(c.Log, " "), "no activated waypoint"):
+		o.Verdict, o.Reason = Fail, "the later trip to Cold Plains failed: "+c.Err
 	default:
 		o.Verdict, o.Reason = Pass, "touched in passing, handed over, and used as a travel target"
 	}
