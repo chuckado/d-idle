@@ -2,7 +2,7 @@
 
 ```yaml
 change: pr148impact
-status: in-progress
+status: archived
 agent: forkimpact
 branch: agent/forkimpact
 worktree: ~/code/d2lod-wt/forkimpact
@@ -11,7 +11,7 @@ owns:
 exclusive:
 gates:
   - "doc under 60 lines, no hashes, hosts or private paths (leakcheck 0)"
-merge:
+merge: 705d984
 result: measured read-only in a scratch clone: click-modifier branch 14 split-file hunks (11 clean by script, 3 by hand), about 3 h total; verified by dry run and compile of touched files, not live.
 ```
 

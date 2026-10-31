@@ -45,7 +45,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fix-portal2](../../openspec/changes/fix-portal2/) | in-progress | fixportal2 | `cmd/d2bot/d2dwire.go`<br>`cmd/d2bot/d2dportal_test.go`<br>`docs/fixportal.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
-| [pr148impact](../../openspec/changes/pr148impact/) | in-progress | forkimpact | `docs/research/pr148-impact.md` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 28 requirements
@@ -82,9 +81,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
-- change pr148impact: doc under 60 lines, no hashes, hosts or private paths (leakcheck 0)
 
 ### Recent merges
+- 705d984 10-31 12:45 `Merge agent/forkimpact: PR #148 impact research` (pr148impact)
 - d3e2207 10-31 12:31 `Merge agent/cr147: PR #147 test-only commit posted lines` (cr147)
 - 64e6be9 10-31 12:29 `Merge agent/navsoak3: third hidden soak handoff, final numbers (navsoak3-summary), archive card` (navsoak3)
 - eb4e172 10-31 12:26 `Merge README-only docs branch: click-modifier row in drills README` (decompbelt)
@@ -94,5 +93,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 18b5c63 10-31 12:06 `Merge agent/drills: drill suite D0+D1 (cmd/d2drill, internal/drill)` (m1-liveproof)
 - eae3b82 10-31 12:04 `Merge agent/decomptome: town portal tome decomp trace` (decomptome)
 - ce2aac7 10-31 12:03 `Merge agent/decompbelt: belt/pickup decomp trace` (decompbelt)
-- 5b1fbce 10-31 11:55 `Merge agent/fixbelt: belt fixes F1 F3 F6 F7 F8 F9` (fix-belt)
 <!-- statusgen:end -->
