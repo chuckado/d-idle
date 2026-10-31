@@ -24,3 +24,7 @@ internal/bot/merc_test.go  m3-merc  m3-merc
 docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
+docs/research/town-portal-trace.md           decomptome  decomptome
+docs/research/pr-tome-*.md                   decomptome  decomptome
+tools/emu/tome_*.py                          decomptome  decomptome
+openspec/changes/decomptome/**               decomptome  decomptome
