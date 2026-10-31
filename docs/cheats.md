@@ -48,6 +48,32 @@ Instance, Character, Kind, OnlySuccess})`, `Summarize(entries)`, `Ledger.Cheated
 telemetry/dashboard call these with a run's start time to flag or exclude cheated sessions. CLI: `d2cheat ledger [--since 2h|RFC3339]
 [--char N] [--kind K] [--actor A] [--json]`. The ledger is on the worker host: a dashboard elsewhere must read it over ssh or have it synced.
 
+## d2d debug verbs (lab binary, ledger kind `d2d-debug`)
+The d2d lab build has its own test verbs: `debug <sub-verb> ...` on the control socket (not game memory). They are cheats: allowed only on the
+throwaway characters, offline (the d2d lab is always offline, `--no-save`), and every call is ledgered BEFORE it runs (kind `d2d-debug`,
+params `verb` and `id`, an actor, a REQUIRED reason, then a second line with the reply) by the harness wrapper `lab.Cheat` (cmd/d2drill). Nothing
+else may send a `debug` verb. A character that appears in the ledger never counts toward a gate (rules above). Which verbs exist in the lab
+binary as of 2026-10-31 (the patches live in the private fork, never in this repo; results and drills they unblock: docs/forkcheats.md):
+
+| Verb | Changes | Notes |
+|---|---|---|
+| `debug stat <id> <v>` | a character stat (6 life, 8 mana: 24.8 fixed point; 12 level; 14 purse gold; 15 stash gold) | read one tick later |
+| `debug give <code> [quality]` | a new item on the ground at the feet | pickup rules then apply (belt first) |
+| `debug give <code> pack` | a new item straight into the pack's first free spot | reply `ok pack <col> <row>`; `err no room` |
+| `debug give <code> belt [box]` | a new item into the box `rules::belt_slot` would pick (the pickup's choice), or the box asked for | reply `ok belt box <n>`; `err no belt box` when none fits or the box is taken |
+| `debug equip <code> <slot>` | a normal item worn in body slot (8 = belt) | replaces what is worn |
+| `debug clearinv` | the pack grid emptied | belt and worn items stay |
+| `debug belt clear` | every belt box emptied | the belt itself stays worn |
+| `debug unequip <slot\|belt>` | what is worn there is removed (gone) | belt boxes stay: clear them first |
+| `debug durability <slot\|all> <v>` | worn items' durability set to v, capped at the item's maximum | `debug wear` halves instead |
+| `debug act <1-5>` | the quest flags the waypoint panel reads: tabs for acts 1..n shown, the others hidden | no other quest state or level gating changes; reply `ok tabs=12` |
+| `debug hit <dmg>` | one monster-style blow of `<dmg>` points on the player through the game's own hurt path (life, armour wear, death at 0) | always enters the get-hit mode unless it kills; works in town |
+| `debug merc hire <type>` | the character's merc becomes a hireling.txt Id `<type>` (no gold), spawned beside the player | `err no such type; known: ...` |
+| `debug merc kill` | a blow that kills the live merc, its death plays out, then it counts as dead | |
+| `debug merc revive` | the dead merc is alive again beside the player (no gold) | `err no dead merc` |
+| `debug wp <i>\|all\|level <id>` | waypoint bits | |
+| `debug goto <level>`, `debug quest <q>`, `debug die`, `debug difficulty`, `debug warp` | position, quest bits, death, difficulty | as the fork's usage line says |
+
 ## What works, memory cheats (VERIFIED LIVE unless noted)
 Mechanism: `/proc/pid/mem` write (needs the ptrace right `tools/live.sh` grants). In single player the process holds TWO copies of
 the player UnitAny: the client's (global `PlayerUnit`, RVA 0x3A6A70, also in the "server table" 0x3A5E70 that internal/d2 reads;
