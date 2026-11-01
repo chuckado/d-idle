@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added a generated rule-coverage table (docs/coverage) that counts, per data-table subsystem, which rows were differentially tested against game.exe 1.14d, with a CI freshness check.
 - palskill: docs/research/pal-skill-trace.md and tools/emu/pal_* (Paladin skill decomposition; undead / demon flags, element damage and aura calcs equal d2d on 734 / 8,640 / 21,760 cases)
 - SKABRECHECK: docs/research/skabrecheck.md settles two SKRESIST A/B claims against game.exe (Fire / Lightning Mastery are not pierce; d2d truncates a missile's physical roll to whole points, 84,271 of 101,626 cases)
 - Added docs/agents/claude-tracing-guide.md, a guide for Claude users on tracing claims and the agent setup.
