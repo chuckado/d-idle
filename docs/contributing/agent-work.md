@@ -31,7 +31,7 @@
 - Licence: contributions are under the repo's licence (GPL-3.0-or-later, see `LICENSE`). Do not paste code from a project with another licence.
 
 ## 5. Pick, claim, deliver
-1. **Pick** an item on [../community/work-board.md](../community/work-board.md). `ready` items can be claimed now; `proposed` ones may still change, so ask in the issue first. Each row links its brief in [../community/open-work.md](../community/open-work.md) and, once the maintainer has opened it, its GitHub issue.
+1. **Pick** an item on [../community/work-board.md](../community/work-board.md). `ready` items can be claimed now; `proposed` ones may still change, so ask in the issue first. Each row links its brief in [../community/open-work.md](../community/open-work.md) and its GitHub issue (opened, label `work-item`; the id-to-issue map is [../community/issues.tsv](../community/issues.tsv), read by `board.py`).
 2. **Claim**: comment `claiming` on the issue. The maintainer assigns it to you (one person or agent per item at a time). If you stop, say so in a comment.
 3. **Work offline** with your own `game.exe`. Keep a short log of dead ends; they go in the document too.
 4. **Deliver** one Markdown document per item, named by the item: `docs/research/<topic>-trace.md` (examples: `sk-melee-trace.md`, `pal-aura-trace.md`; verification: `verify-<topic>.md`), plus oracle scripts under `tools/emu/` only if the issue asks for them (changes under `tools/` need the maintainer's CODEOWNERS review). Use the trace sections: question, rules with address tags, d2d's version, the bot's model, deviations D.., bot findings B.., limits, the answer the drills should expect.

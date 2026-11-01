@@ -15,7 +15,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import anthropic_http  # noqa: E402
 
 MODEL = "claude-haiku-5-5"
-MAX_TOKENS = 600
+# Haiku 5.5 thinks by default and thinking tokens count against max_tokens (measured: 222 of 263 output tokens on a
+# tiny tick), which cut real ticks off at 600. A tick needs no reasoning: thinking is disabled and the cap is generous.
+THINKING = {"type": "disabled"}
+MAX_TOKENS = 1200
 FIELDS = ("running", "merged", "launched", "upstream", "blocked", "waiting")
 SYSTEM = ("You write a short status tick for a project feed from JSON facts. Plain English, no emoji, no markdown. "
           "Output only lines of the form '<field>: <text>' using these fields in order: running, merged, launched, "
@@ -29,7 +32,8 @@ def build_user(facts):
 
 
 def tick(facts, key, http=anthropic_http.post_json):
-    return anthropic_http.message(key, MODEL, SYSTEM, build_user(facts), MAX_TOKENS, http=http)
+    return anthropic_http.message(key, MODEL, SYSTEM, build_user(facts), MAX_TOKENS, http=http,
+                                   thinking=THINKING)
 
 
 def read_key():
