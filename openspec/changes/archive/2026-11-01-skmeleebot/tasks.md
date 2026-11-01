@@ -2,7 +2,8 @@
 
 ```yaml
 change: skmeleebot
-status: in-progress
+status: archived
+merge: 015f4c1
 agent: skmeleebot
 branch: agent/skmeleebot
 worktree: ~/code/d2lod-wt/skmeleebot
@@ -19,7 +20,7 @@ exclusive: []
 gates:
   - "go test -p 1 ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Offline, no live proof owed. B1 to B3 of docs/research/sk-melee-trace.md in internal/resource, table-driven tests with values from the oracle's reading functions; the stock simulator scenario now rolls to-hit and damage (95 % of a mean 3.30 vs a flat 3). Build-specific data: the Blow and Foe values come from the caller (class to-hit factor, weapon stats, ItemTypes chain); the stock scenario's numbers are its own. Production wiring of Input.Blow is open."
+result: "melee model in the simulator matches the SKMELEE traces (unit-level; production not yet fed: SKMELEEWIRE); not verified live"
 live: "offline only, nothing run live"
 ```
 
