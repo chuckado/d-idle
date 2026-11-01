@@ -169,6 +169,8 @@ docs/research/README.md, add:
 
 `- sk-lightning-trace.md (SKLIGHT, 2026-11-01): Chain Lightning hop rule and NextHit as unit state justhit; Lightning one unit a frame; no PR candidate`
 
+docs/OWNERS, add (card sklight): `docs/research/sk-lightning-trace.md`, `tools/emu/sk_light_rehit.py`, `openspec/changes/sklight/**`; then `changecheck status -write`.
+
 CHANGELOG.md: none (docs and a model script only).
 
 Glossary: `justhit` (state 0x56, the NextHit unit state) and "hop" (one Chain Lightning missile after the first) are not in GLOSSARY.md; proposed for the coordinator, not added.
