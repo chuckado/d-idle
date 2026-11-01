@@ -40,3 +40,4 @@ Index of the decision records in [adr/](adr/README.md) (the dated entries below 
 - Wine container work is PAUSED (the d2idle container on the NAS is not redeployed or extended until the d2d decision; keep it running as is).
 - 2026-10-30 (user): any ports the d2d container needs may be used (no per-port approval). Still: UI-visible only (NAS template), nothing deployed until the d2d primary decision and the container work resumes.
 - LAN/networked play allowed (local original host <-> d2d client; no official Battle.net) - user, 2026-10-30
+- 2026-11-01 (user, popup, no ADR): the user approved the SME's proposed FRESH skill rows as table fallback-lightning-v3 (Lightning at clvl 12, Chain Lightning from 19, Lightning Mastery from 30, Charged Bolt to about 13, no second Frozen Armor point, no Warmth/Energy Shield); the default stays v2 until a live soak of clvl 19-30 passes; see [buildv3.md](buildv3.md)
