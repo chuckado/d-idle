@@ -45,11 +45,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
-| [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
-| [fixmouth2](../../openspec/changes/fixmouth2/) | in-progress | fixmouth2 | `internal/combat/fight.go`<br>`internal/combat/fighter.go`<br>`internal/combat/fixmouth2_test.go`<br>`docs/fixmouth2.md` | - |
-| [fixmouth3](../../openspec/changes/fixmouth3/) | in-progress | fixmouth3 | `internal/nav/roam.go`<br>`internal/nav/fixmouth3_test.go`<br>`internal/combat/fixmouth3_test.go`<br>`docs/fixmouth3.md` | - |
-| [fixmouth4](../../openspec/changes/fixmouth4/) | in-progress | fixmouth4 | `internal/nav/mouthgate.go`<br>`internal/nav/fixmouth4_test.go`<br>`internal/combat/fixmouth4_test.go`<br>`docs/fixmouth4.md`<br>`openspec/changes/fixmouth4/**` | - |
-| [fixmouthloop](../../openspec/changes/fixmouthloop/) | in-progress | fixmouthloop | `internal/combat/mouthhold.go`<br>`internal/combat/fixmouthloop_test.go`<br>`docs/fixmouthloop.md`<br>`openspec/changes/fixmouthloop/**` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -88,11 +83,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmanamodel: go test -p 1 ./internal/resource ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change fixmouth: live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)
-- change fixmouth2: live: DW.m3 x3 and DW.m4 rerun, no bounce, Clear finishes (docs/fixmouth2.md)
-- change fixmouth3: live: DW.m3 x3 and DW.m4 rerun, zero level-change errors in Clear and Explore (docs/fixmouth3.md)
-- change fixmouth4: live: DW.m3 x3 and DW.m4 rerun, zero mouth-bounce level-change errors and zero Entered cycles within 1 s (docs/fixmouth4.md)
-- change fixmouthloop: live: DW.m3 with the gate: step-aways per Den cycle drop from 117 to a handful, the cycle does not burn the phase limit (docs/fixmouthloop.md)
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -111,6 +101,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- d8e48e0 11-01 02:22 `Merge agent/nexthitfix: nexthit v2 end-frame fix addendum, fork lab-nexthit2` (nexthitfix)
+- 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
 - db32c75 11-01 01:54 `Merge agent/drills18: fixmouth3 (stayLevel) proven live as a partial; DRILLS18 probes` (drills18)
 - 0674406 11-01 01:50 `Merge agent/verifynexthit: independent verifier of the NextHit candidate (NOT READY, off by one frame)` (verifynexthit)
 - e07cf9f 11-01 01:43 `Merge origin/main into drills18 (STATUS regenerated later)` (drills18)
@@ -119,6 +111,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 34559ca 11-01 01:36 `readmedocs: coordinator review fixes, merge origin/main` (readmedocs)
 - 2527484 11-01 01:31 `Merge agent/forknext: private fork carries the NextHit fix (lab-nexthit), docs only` (forknext)
 - 97f2fc3 11-01 01:24 `Merge agent/apireview: advisory PR review workflow (owner PRs only) and Anthropic HTTP helper` (apireview)
-- b2c88b8 11-01 01:20 `Merge agent/fixmouth2: arrival hold across walks, mouthApproachR 12, capped evade inside a cave mouth` (fixmouth2)
-- 0101ebe 11-01 01:16 `Merge agent/fixmanamodel: accurate mana model (ManaPerFrame256, ManaBook)` (fixmanamodel)
 <!-- statusgen:end -->

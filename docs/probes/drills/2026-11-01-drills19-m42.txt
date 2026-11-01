@@ -1,0 +1,300 @@
+level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+level=DEBUG msg="nav mouth check" pos="{X:200 Y:200}" level=3 exits=1 wantExit=9 arrival=false stay=false r=9
+level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="combat fight area=9 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+level=INFO msg="roam: coverage points" level=9 points=551 exits=2
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:260 Y:155}" level=9 exits=2 wantExit=0 arrival=true stay=false r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.2 skip=false
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:260 Y:155}" to="{X:269 Y:173}"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+level=DEBUG msg="nav mouth check" pos="{X:268 Y:171}" level=9 exits=2 wantExit=0 arrival=true stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=29.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.3 skip=true
+level=INFO msg="nav stuck" pos="{X:268 Y:171}" wp="{X:262 Y:165}" rung=0
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:262 Y:165}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=21.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=208.2 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:262 Y:167}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=23.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=206.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:259 Y:165}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=20.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=206.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:258 Y:166}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=21.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=205 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:264 Y:160}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=17.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=213.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:270 Y:168}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=210.9 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:272 Y:167}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.8 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=212.9 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:275 Y:164}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=217.2 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:276 Y:162}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=219.3 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:278 Y:160}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=222.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:277 Y:155}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=24.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=225.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:278 Y:154}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=24.7 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.8 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:286 Y:151}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=31.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=234.2 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:287 Y:152}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=32.8 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=234.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:292 Y:151}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=37.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=238.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:293 Y:152}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=38.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=238 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:296 Y:148}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=41.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=243 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:299 Y:146}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=246.5 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:299 Y:142}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=249.5 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:307 Y:140}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=52.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=256.3 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:310 Y:146}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=55 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=253.9 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:314 Y:142}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=59.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=259.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:316 Y:145}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=61 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=258.8 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:303 Y:142}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=48.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=252.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:302 Y:142}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=251.5 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:299 Y:141}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=250.2 skip=true
+level=INFO msg="combat fight area=9 diff=0 danger=2 kills=0 damage=1 minlife=99 potions=0 dodges=0 sec=6 casts=9 kites=0 approaches=3 novas=0 forced=0 castsPerSec=1.48"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:298 Y:138}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=43.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=251.9 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:302 Y:152}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:306 Y:156}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=52.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:305 Y:159}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.9 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=241.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:307 Y:160}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=54.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=241.8 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:313 Y:158}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=59.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.5 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:314 Y:159}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=60.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:320 Y:162}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=67.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=249.9 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:309 Y:166}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=57.9 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=239.1 skip=true
+level=INFO msg="nav stuck" pos="{X:308 Y:167}" wp="{X:308 Y:167}" rung=0
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:308 Y:169}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=58.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=236.3 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:306 Y:173}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=58.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=232.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:305 Y:180}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=61 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.7 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:307 Y:181}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=63.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=227.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:317 Y:178}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=70.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=237.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:320 Y:176}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=72 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.7 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:323 Y:180}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=76.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.5 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:328 Y:180}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=81 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:326 Y:186}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=82 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=239.2 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:327 Y:187}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=83.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=239.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:334 Y:182}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=87.2 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=248 skip=true
+level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+level=DEBUG msg="nav mouth check" pos="{X:336 Y:185}" level=9 exits=2 wantExit=3 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.8 skip=true
+level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+level=DEBUG msg="nav mouth check" pos="{X:220 Y:140}" level=3 exits=1 wantExit=9 arrival=true stay=false r=16
+level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:260 Y:155}" level=9 exits=2 wantExit=0 arrival=true stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.2 skip=false
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:260 Y:155}" to="{X:269 Y:173}"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+level=DEBUG msg="nav mouth check" pos="{X:268 Y:171}" level=9 exits=2 wantExit=0 arrival=true stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=29.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.3 skip=true
+level=INFO msg="nav stuck" pos="{X:268 Y:171}" wp="{X:266 Y:163}" rung=0
+level=INFO msg="nav: stuck again at the same spot" pos="{X:268 Y:171}" hits=2 lastMethod=""
+level=INFO msg="nav: stuck recovered" at="{X:268 Y:171}" method=spiral rung=1 repeat=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:279 Y:155}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=26 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:278 Y:154}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=24.7 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.8 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:277 Y:154}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=23.8 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:276 Y:153}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=22.5 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.3 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:274 Y:153}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=20.6 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=225.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:273 Y:153}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=19.7 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=224.4 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+level=DEBUG msg="nav mouth check" pos="{X:275 Y:155}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=22.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=224.1 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+level=DEBUG msg="nav mouth check" pos="{X:267 Y:155}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=15.6 skip=false
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:267 Y:155}" to="{X:276 Y:166}"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+level=DEBUG msg="nav mouth check" pos="{X:274 Y:168}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=29.8 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=213.5 skip=true
+level=INFO msg="nav stuck" pos="{X:274 Y:168}" wp="{X:273 Y:172}" rung=0
+level=INFO msg="nav stalled by monsters, yielding" pos="{X:274 Y:168}" near=3
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+level=DEBUG msg="nav mouth check" pos="{X:263 Y:161}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=17.9 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=212 skip=true
+level=INFO msg="combat fight area=9 diff=0 danger=2 kills=0 damage=9 minlife=98 potions=0 dodges=1 sec=4 casts=5 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.20"
+level=DEBUG msg="nav mouth check" pos="{X:255 Y:161}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=16 skip=false
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:255 Y:161}" to="{X:255 Y:181}"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+level=DEBUG msg="nav mouth check" pos="{X:255 Y:178}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=33 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=193.7 skip=true
+level=INFO msg="nav mouth gate: click rewritten" from="{X:258 Y:162}" to="{X:264 Y:156}" as="{X:261 Y:159}" how=clip rewrites=1
+level=INFO msg="combat fight area=9 diff=0 danger=2 kills=0 damage=5 minlife=99 potions=0 dodges=1 sec=16 casts=2 kites=0 approaches=8 novas=0 forced=0 castsPerSec=0.12"
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:270 Y:155}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=18 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=221 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:256 Y:173}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=28 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=198.2 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:257 Y:175}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=30.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=197.3 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:252 Y:177}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=32.1 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=192.6 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:250 Y:180}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=35.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=189 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:245 Y:179}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16
+level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=35.4 skip=true
+level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=186.8 skip=true
+level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+level=DEBUG msg="nav mouth check" pos="{X:244 Y:180}" level=9 exits=2 wantExit=0 arrival=false stay=true r=16

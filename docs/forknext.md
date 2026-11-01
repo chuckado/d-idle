@@ -1,5 +1,7 @@
 # FORKNEXT: the private fork carries the NextHit fix (card forknext, 2026-11-01)
 
+> update: the fork's current NextHit commit is 2c6c4a1a... and the binary is bin/d2d.lab-nexthit2 (end-frame fix)
+
 > status: current. Branch `lab-nexthit` of the private d2d fork, lab binary `bin/d2d.lab-nexthit` on the worker host. Patches never live in this repo (GPL, docs/decisions.md). Standing user approval 2026-10-31: functionality in the private fork when documented and vetted; never part of an upstream pull request without the user's go (the upstream candidate is the separate `fix/nexthit`, docs/research/pr-nexthit-proof.md on branch agent/nexthit).
 
 Tags: **V run** measured on a real build in this card; **S** source or earlier doc; **I** inferred.
