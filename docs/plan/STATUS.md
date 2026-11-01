@@ -44,7 +44,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [drills26](../../openspec/changes/drills26/) | in-progress | drills26 | `openspec/changes/drills26/**` | `instance:drills26-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -85,7 +84,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change drills26: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -111,6 +109,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 6a2c69c 11-01 11:34 `Merge agent/drills26: DRILLS26 drill D26-A Frozen Armor recast proof (harness only)` (drills26)
 - f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
 - bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
 - fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
@@ -120,5 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 194e1ab 11-01 11:02 `Merge agent/drills24: Teleport key wired from the bound skill, hops tuned (36 subtiles / 40 percent), live drills` (drills24)
 - b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)
 - 8ff5841 11-01 10:48 `Merge origin/main into drills24` (drills24)
-- 7a408e6 11-01 10:54 `Merge agent/boardlinks: link the 8 opened work-item issues on the board` (boardlinks)
 <!-- statusgen:end -->

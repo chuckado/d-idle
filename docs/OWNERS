@@ -99,4 +99,3 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
-openspec/changes/drills26/**  drills26  drills26

@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills26
-status: in-progress
+status: archived
+merge: 6a2c69c
 agent: drills26
 branch: agent/drills26
 worktree: ~/code/d2lod-wt/drills26
@@ -13,7 +14,7 @@ exclusive:
   - instance:drills26-slot-0
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "D26-A live on lab-armorhit and lab-nexthit2: identical bot behaviour (plain zombies are frozen on both); one recast inside the second expiry did not refresh the armor (3.5 s absent); no boss drill exists, skipped"
+result: "recast works (fixrecast/fixbuff live), but a recast cut at 232.4 s left the armor down about 3.5 s: ARMORCUT; verified live (DRILLS26), champion pack and boss check not run"
 live: "group U D26-A FAIL (armor absent 3480 ms of 300 s, both binaries)"
 ```
 
