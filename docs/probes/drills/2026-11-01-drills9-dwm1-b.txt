@@ -1,0 +1,173 @@
+labrun: synced code/d2lod-wt/drills9 → orion:~/labrun/herdr/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group F -only H.obj.shrine,DW.m1 -label drills9-dwm1-b -v'
+d2dslot: got slot 0
+time=2026-10-31T20:41:09.897-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1589610 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:41:10.883-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+DRILL H.obj.shrine AUDIT PASS listed and operated by the bot's own Interact | intended: a "shrine" of level 2 is listed in Snapshot.Objects and Interact operates it (mode NU -> ON) | observed: preset "Shrine" class 81 listed=true; Interact err ""; mode NU -> ON; 251 ticks | runs: 2, identical
+time=2026-10-31T20:41:11.637-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:11.638-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:11.639-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:84 Y:69}" wps=11 partial=false cells=58
+time=2026-10-31T20:41:11.639-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:138 Y:103}" cur=1 of=11
+time=2026-10-31T20:41:11.640-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:133 Y:97}" cur=2 of=11
+time=2026-10-31T20:41:11.640-04:00 level=INFO msg="nav stuck" pos="{X:139 Y:103}" wp="{X:133 Y:97}" rung=0
+time=2026-10-31T20:41:11.642-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:97}" wp="{X:124 Y:90}" cur=4 of=11
+time=2026-10-31T20:41:11.642-04:00 level=INFO msg="nav: stuck recovered" at="{X:139 Y:103}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:11.645-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:92}" wp="{X:116 Y:90}" cur=5 of=11
+time=2026-10-31T20:41:11.648-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:90}" wp="{X:108 Y:90}" cur=6 of=11
+time=2026-10-31T20:41:11.651-04:00 level=DEBUG msg="nav click" pos="{X:111 Y:90}" wp="{X:105 Y:90}" cur=7 of=11
+time=2026-10-31T20:41:11.652-04:00 level=DEBUG msg="nav click" pos="{X:108 Y:90}" wp="{X:99 Y:84}" cur=8 of=11
+time=2026-10-31T20:41:11.655-04:00 level=DEBUG msg="nav click" pos="{X:102 Y:86}" wp="{X:94 Y:79}" cur=9 of=11
+time=2026-10-31T20:41:11.658-04:00 level=DEBUG msg="nav click" pos="{X:96 Y:81}" wp="{X:86 Y:71}" cur=10 of=11
+time=2026-10-31T20:41:12.036-04:00 level=INFO msg="wp: used 1 -> 3 (2 clicks, waited 0 ms)"
+time=2026-10-31T20:41:12.072-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.073-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:12.075-04:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:215 Y:145}" to="{X:215 Y:165}"
+time=2026-10-31T20:41:12.075-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint"
+time=2026-10-31T20:41:12.076-04:00 level=DEBUG msg="nav plan" from="{X:215 Y:145}" to="{X:215 Y:165}" wps=6 partial=false cells=25
+time=2026-10-31T20:41:12.076-04:00 level=DEBUG msg="nav click" pos="{X:215 Y:145}" wp="{X:218 Y:143}" cur=0 of=6
+time=2026-10-31T20:41:12.114-04:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.120-04:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-10-31T20:41:12.120-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fMouth"
+time=2026-10-31T20:41:12.120-04:00 level=DEBUG msg="nav plan" from="{X:260 Y:155}" to="{X:255 Y:145}" wps=2 partial=false cells=8
+time=2026-10-31T20:41:12.120-04:00 level=DEBUG msg="nav click" pos="{X:260 Y:155}" wp="{X:257 Y:150}" cur=0 of=2
+time=2026-10-31T20:41:12.135-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.144-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:12.145-04:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:220 Y:140}" to="{X:220 Y:160}"
+time=2026-10-31T20:41:12.145-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint"
+time=2026-10-31T20:41:12.146-04:00 level=DEBUG msg="nav plan" from="{X:220 Y:140}" to="{X:220 Y:160}" wps=5 partial=false cells=28
+time=2026-10-31T20:41:12.146-04:00 level=DEBUG msg="nav click" pos="{X:220 Y:140}" wp="{X:228 Y:140}" cur=0 of=5
+time=2026-10-31T20:41:12.148-04:00 level=INFO msg="nav stuck" pos="{X:221 Y:140}" wp="{X:228 Y:140}" rung=0
+time=2026-10-31T20:41:12.153-04:00 level=DEBUG msg="nav click" pos="{X:228 Y:140}" wp="{X:228 Y:147}" cur=2 of=5
+time=2026-10-31T20:41:12.153-04:00 level=INFO msg="nav: stuck recovered" at="{X:221 Y:140}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:12.155-04:00 level=DEBUG msg="nav click" pos="{X:228 Y:143}" wp="{X:224 Y:154}" cur=3 of=5
+time=2026-10-31T20:41:12.159-04:00 level=DEBUG msg="nav click" pos="{X:225 Y:151}" wp="{X:221 Y:159}" cur=4 of=5
+time=2026-10-31T20:41:12.165-04:00 level=DEBUG msg="nav plan" from="{X:221 Y:159}" to="{X:114 Y:344}" wps=30 partial=false cells=195
+time=2026-10-31T20:41:12.166-04:00 level=DEBUG msg="nav click" pos="{X:221 Y:159}" wp="{X:218 Y:162}" cur=0 of=30
+time=2026-10-31T20:41:12.166-04:00 level=INFO msg="nav stuck" pos="{X:221 Y:159}" wp="{X:218 Y:162}" rung=0
+time=2026-10-31T20:41:12.177-04:00 level=DEBUG msg="nav click" pos="{X:218 Y:162}" wp="{X:210 Y:164}" cur=1 of=30
+time=2026-10-31T20:41:12.177-04:00 level=INFO msg="nav: stuck recovered" at="{X:221 Y:159}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:12.180-04:00 level=DEBUG msg="nav click" pos="{X:213 Y:163}" wp="{X:208 Y:164}" cur=2 of=30
+time=2026-10-31T20:41:12.181-04:00 level=DEBUG msg="nav click" pos="{X:211 Y:164}" wp="{X:202 Y:169}" cur=3 of=30
+time=2026-10-31T20:41:12.186-04:00 level=DEBUG msg="nav click" pos="{X:204 Y:168}" wp="{X:196 Y:174}" cur=4 of=30
+time=2026-10-31T20:41:12.190-04:00 level=DEBUG msg="nav plan" from="{X:200 Y:171}" to="{X:114 Y:344}" wps=27 partial=false cells=174
+time=2026-10-31T20:41:12.190-04:00 level=DEBUG msg="nav click" pos="{X:200 Y:171}" wp="{X:194 Y:176}" cur=0 of=27
+time=2026-10-31T20:41:12.202-04:00 level=DEBUG msg="nav click" pos="{X:196 Y:174}" wp="{X:188 Y:181}" cur=1 of=27
+time=2026-10-31T20:41:12.207-04:00 level=DEBUG msg="nav click" pos="{X:190 Y:180}" wp="{X:182 Y:187}" cur=2 of=27
+time=2026-10-31T20:41:12.212-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:185}" wp="{X:180 Y:188}" cur=3 of=27
+time=2026-10-31T20:41:12.214-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:186}" wp="{X:175 Y:194}" cur=4 of=27
+time=2026-10-31T20:41:12.236-04:00 level=DEBUG msg="nav plan" from="{X:177 Y:192}" to="{X:114 Y:344}" wps=22 partial=false cells=150
+time=2026-10-31T20:41:12.236-04:00 level=DEBUG msg="nav click" pos="{X:177 Y:192}" wp="{X:172 Y:198}" cur=0 of=22
+time=2026-10-31T20:41:12.238-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:195}" wp="{X:167 Y:204}" cur=1 of=22
+time=2026-10-31T20:41:12.251-04:00 level=DEBUG msg="nav click" pos="{X:169 Y:202}" wp="{X:162 Y:211}" cur=2 of=22
+time=2026-10-31T20:41:12.255-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:208}" wp="{X:157 Y:217}" cur=3 of=22
+time=2026-10-31T20:41:12.268-04:00 level=DEBUG msg="nav click" pos="{X:159 Y:215}" wp="{X:152 Y:223}" cur=4 of=22
+time=2026-10-31T20:41:12.272-04:00 level=DEBUG msg="nav click" pos="{X:154 Y:220}" wp="{X:147 Y:229}" cur=5 of=22
+time=2026-10-31T20:41:12.276-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:227}" wp="{X:142 Y:236}" cur=6 of=22
+time=2026-10-31T20:41:12.280-04:00 level=DEBUG msg="nav click" pos="{X:144 Y:233}" wp="{X:137 Y:242}" cur=7 of=22
+time=2026-10-31T20:41:12.312-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:240}" wp="{X:132 Y:248}" cur=8 of=22
+time=2026-10-31T20:41:12.315-04:00 level=DEBUG msg="nav click" pos="{X:134 Y:245}" wp="{X:127 Y:254}" cur=9 of=22
+time=2026-10-31T20:41:12.320-04:00 level=DEBUG msg="nav click" pos="{X:129 Y:252}" wp="{X:122 Y:260}" cur=10 of=22
+time=2026-10-31T20:41:12.324-04:00 level=DEBUG msg="nav click" pos="{X:124 Y:258}" wp="{X:117 Y:267}" cur=11 of=22
+time=2026-10-31T20:41:12.336-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:265}" wp="{X:114 Y:270}" cur=12 of=22
+time=2026-10-31T20:41:12.338-04:00 level=DEBUG msg="nav click" pos="{X:116 Y:267}" wp="{X:114 Y:278}" cur=13 of=22
+time=2026-10-31T20:41:12.343-04:00 level=DEBUG msg="nav click" pos="{X:115 Y:276}" wp="{X:114 Y:286}" cur=14 of=22
+time=2026-10-31T20:41:12.346-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:282}" wp="{X:114 Y:294}" cur=15 of=22
+time=2026-10-31T20:41:12.368-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:291}" wp="{X:114 Y:302}" cur=16 of=22
+time=2026-10-31T20:41:12.371-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:298}" wp="{X:114 Y:310}" cur=17 of=22
+time=2026-10-31T20:41:12.374-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:306}" wp="{X:114 Y:318}" cur=18 of=22
+time=2026-10-31T20:41:12.378-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:314}" wp="{X:114 Y:326}" cur=19 of=22
+time=2026-10-31T20:41:12.382-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:323}" wp="{X:114 Y:334}" cur=20 of=22
+time=2026-10-31T20:41:12.385-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:330}" wp="{X:114 Y:341}" cur=21 of=22
+time=2026-10-31T20:41:12.393-04:00 level=INFO msg="wp: used 3 -> 1 (2 clicks, waited 0 ms)"
+time=2026-10-31T20:41:12.416-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.416-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:12.417-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:84 Y:69}" wps=11 partial=false cells=58
+time=2026-10-31T20:41:12.417-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:138 Y:103}" cur=1 of=11
+time=2026-10-31T20:41:12.418-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:133 Y:97}" cur=2 of=11
+time=2026-10-31T20:41:12.418-04:00 level=INFO msg="nav stuck" pos="{X:139 Y:103}" wp="{X:133 Y:97}" rung=0
+time=2026-10-31T20:41:12.420-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:97}" wp="{X:124 Y:90}" cur=4 of=11
+time=2026-10-31T20:41:12.420-04:00 level=INFO msg="nav: stuck recovered" at="{X:139 Y:103}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:12.424-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:92}" wp="{X:116 Y:90}" cur=5 of=11
+time=2026-10-31T20:41:12.427-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:90}" wp="{X:108 Y:90}" cur=6 of=11
+time=2026-10-31T20:41:12.430-04:00 level=DEBUG msg="nav click" pos="{X:111 Y:90}" wp="{X:105 Y:90}" cur=7 of=11
+time=2026-10-31T20:41:12.431-04:00 level=DEBUG msg="nav click" pos="{X:108 Y:90}" wp="{X:99 Y:84}" cur=8 of=11
+time=2026-10-31T20:41:12.434-04:00 level=DEBUG msg="nav click" pos="{X:102 Y:86}" wp="{X:94 Y:79}" cur=9 of=11
+time=2026-10-31T20:41:12.437-04:00 level=DEBUG msg="nav click" pos="{X:96 Y:81}" wp="{X:86 Y:71}" cur=10 of=11
+time=2026-10-31T20:41:12.451-04:00 level=INFO msg="wp: used 1 -> 3 (2 clicks, waited 0 ms)"
+time=2026-10-31T20:41:12.480-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.481-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:12.483-04:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:215 Y:145}" to="{X:215 Y:165}"
+time=2026-10-31T20:41:12.483-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint"
+time=2026-10-31T20:41:12.484-04:00 level=DEBUG msg="nav plan" from="{X:215 Y:145}" to="{X:215 Y:165}" wps=6 partial=false cells=25
+time=2026-10-31T20:41:12.485-04:00 level=DEBUG msg="nav click" pos="{X:215 Y:145}" wp="{X:218 Y:143}" cur=0 of=6
+time=2026-10-31T20:41:12.499-04:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.503-04:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-10-31T20:41:12.503-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fMouth"
+time=2026-10-31T20:41:12.503-04:00 level=DEBUG msg="nav plan" from="{X:260 Y:155}" to="{X:255 Y:145}" wps=2 partial=false cells=8
+time=2026-10-31T20:41:12.504-04:00 level=DEBUG msg="nav click" pos="{X:260 Y:155}" wp="{X:257 Y:150}" cur=0 of=2
+time=2026-10-31T20:41:12.522-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:12.529-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint"
+time=2026-10-31T20:41:12.529-04:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:220 Y:140}" to="{X:220 Y:160}"
+time=2026-10-31T20:41:12.529-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint"
+time=2026-10-31T20:41:12.530-04:00 level=DEBUG msg="nav plan" from="{X:220 Y:140}" to="{X:220 Y:160}" wps=5 partial=false cells=28
+time=2026-10-31T20:41:12.530-04:00 level=DEBUG msg="nav click" pos="{X:220 Y:140}" wp="{X:228 Y:140}" cur=0 of=5
+time=2026-10-31T20:41:12.531-04:00 level=INFO msg="nav stuck" pos="{X:221 Y:140}" wp="{X:228 Y:140}" rung=0
+time=2026-10-31T20:41:12.535-04:00 level=DEBUG msg="nav click" pos="{X:228 Y:140}" wp="{X:228 Y:147}" cur=2 of=5
+time=2026-10-31T20:41:12.535-04:00 level=INFO msg="nav: stuck recovered" at="{X:221 Y:140}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:12.537-04:00 level=DEBUG msg="nav click" pos="{X:228 Y:143}" wp="{X:224 Y:154}" cur=3 of=5
+time=2026-10-31T20:41:12.541-04:00 level=DEBUG msg="nav click" pos="{X:225 Y:151}" wp="{X:221 Y:159}" cur=4 of=5
+time=2026-10-31T20:41:12.548-04:00 level=DEBUG msg="nav plan" from="{X:221 Y:159}" to="{X:114 Y:344}" wps=32 partial=false cells=196
+time=2026-10-31T20:41:12.548-04:00 level=DEBUG msg="nav click" pos="{X:221 Y:159}" wp="{X:218 Y:162}" cur=0 of=32
+time=2026-10-31T20:41:12.548-04:00 level=INFO msg="nav stuck" pos="{X:221 Y:159}" wp="{X:218 Y:162}" rung=0
+time=2026-10-31T20:41:12.551-04:00 level=DEBUG msg="nav click" pos="{X:218 Y:162}" wp="{X:210 Y:164}" cur=1 of=32
+time=2026-10-31T20:41:12.551-04:00 level=INFO msg="nav: stuck recovered" at="{X:221 Y:159}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:12.554-04:00 level=DEBUG msg="nav click" pos="{X:213 Y:163}" wp="{X:208 Y:164}" cur=2 of=32
+time=2026-10-31T20:41:12.555-04:00 level=DEBUG msg="nav click" pos="{X:211 Y:164}" wp="{X:203 Y:170}" cur=3 of=32
+time=2026-10-31T20:41:12.556-04:00 level=DEBUG msg="nav click" pos="{X:209 Y:166}" wp="{X:208 Y:164}" cur=2 of=32
+time=2026-10-31T20:41:12.557-04:00 level=DEBUG msg="nav click" pos="{X:208 Y:164}" wp="{X:203 Y:170}" cur=3 of=32
+time=2026-10-31T20:41:12.560-04:00 level=DEBUG msg="nav click" pos="{X:205 Y:168}" wp="{X:197 Y:176}" cur=4 of=32
+time=2026-10-31T20:41:12.565-04:00 level=DEBUG msg="nav click" pos="{X:199 Y:174}" wp="{X:192 Y:182}" cur=5 of=32
+time=2026-10-31T20:41:12.570-04:00 level=DEBUG msg="nav click" pos="{X:193 Y:180}" wp="{X:187 Y:188}" cur=6 of=32
+time=2026-10-31T20:41:12.573-04:00 level=DEBUG msg="nav click" pos="{X:189 Y:186}" wp="{X:181 Y:194}" cur=7 of=32
+time=2026-10-31T20:41:12.594-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:192}" wp="{X:176 Y:200}" cur=8 of=32
+time=2026-10-31T20:41:12.598-04:00 level=DEBUG msg="nav plan" from="{X:178 Y:198}" to="{X:114 Y:344}" wps=23 partial=false cells=149
+time=2026-10-31T20:41:12.598-04:00 level=DEBUG msg="nav click" pos="{X:178 Y:198}" wp="{X:172 Y:204}" cur=0 of=23
+time=2026-10-31T20:41:12.601-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:202}" wp="{X:167 Y:210}" cur=1 of=23
+time=2026-10-31T20:41:12.606-04:00 level=DEBUG msg="nav click" pos="{X:169 Y:208}" wp="{X:161 Y:215}" cur=2 of=23
+time=2026-10-31T20:41:12.609-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:213}" wp="{X:156 Y:221}" cur=3 of=23
+time=2026-10-31T20:41:12.611-04:00 level=DEBUG msg="nav plan" from="{X:163 Y:214}" to="{X:114 Y:344}" wps=20 partial=false cells=133
+time=2026-10-31T20:41:12.611-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:214}" wp="{X:159 Y:221}" cur=0 of=20
+time=2026-10-31T20:41:12.614-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:218}" wp="{X:154 Y:227}" cur=1 of=20
+time=2026-10-31T20:41:12.618-04:00 level=DEBUG msg="nav click" pos="{X:156 Y:224}" wp="{X:150 Y:234}" cur=2 of=20
+time=2026-10-31T20:41:12.622-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:231}" wp="{X:144 Y:239}" cur=3 of=20
+time=2026-10-31T20:41:12.623-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:232}" to="{X:114 Y:344}" wps=17 partial=false cells=114
+time=2026-10-31T20:41:12.623-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:232}" wp="{X:145 Y:237}" cur=0 of=17
+time=2026-10-31T20:41:12.626-04:00 level=DEBUG msg="nav click" pos="{X:147 Y:235}" wp="{X:140 Y:241}" cur=1 of=17
+time=2026-10-31T20:41:12.646-04:00 level=DEBUG msg="nav click" pos="{X:143 Y:239}" wp="{X:136 Y:243}" cur=2 of=17
+time=2026-10-31T20:41:12.649-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:241}" wp="{X:131 Y:249}" cur=3 of=17
+time=2026-10-31T20:41:12.653-04:00 level=DEBUG msg="nav plan" from="{X:134 Y:246}" to="{X:114 Y:344}" wps=13 partial=false cells=96
+time=2026-10-31T20:41:12.653-04:00 level=DEBUG msg="nav click" pos="{X:134 Y:246}" wp="{X:129 Y:252}" cur=0 of=13
+time=2026-10-31T20:41:12.656-04:00 level=DEBUG msg="nav click" pos="{X:131 Y:250}" wp="{X:124 Y:258}" cur=1 of=13
+time=2026-10-31T20:41:12.660-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:255}" wp="{X:119 Y:264}" cur=2 of=13
+time=2026-10-31T20:41:12.665-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:262}" wp="{X:114 Y:270}" cur=3 of=13
+time=2026-10-31T20:41:12.666-04:00 level=DEBUG msg="nav plan" from="{X:120 Y:263}" to="{X:114 Y:344}" wps=10 partial=false cells=79
+time=2026-10-31T20:41:12.666-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:263}" wp="{X:119 Y:271}" cur=0 of=10
+time=2026-10-31T20:41:12.668-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:268}" wp="{X:119 Y:279}" cur=1 of=10
+time=2026-10-31T20:41:12.672-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:275}" wp="{X:118 Y:287}" cur=2 of=10
+time=2026-10-31T20:41:12.677-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:283}" wp="{X:118 Y:295}" cur=3 of=10
+time=2026-10-31T20:41:12.681-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:292}" wp="{X:117 Y:303}" cur=4 of=10
+time=2026-10-31T20:41:12.701-04:00 level=DEBUG msg="nav click" pos="{X:117 Y:300}" wp="{X:116 Y:311}" cur=5 of=10
+time=2026-10-31T20:41:12.705-04:00 level=DEBUG msg="nav click" pos="{X:116 Y:308}" wp="{X:116 Y:319}" cur=6 of=10
+time=2026-10-31T20:41:12.708-04:00 level=DEBUG msg="nav click" pos="{X:116 Y:315}" wp="{X:115 Y:327}" cur=7 of=10
+time=2026-10-31T20:41:12.712-04:00 level=DEBUG msg="nav click" pos="{X:115 Y:324}" wp="{X:114 Y:335}" cur=8 of=10
+time=2026-10-31T20:41:12.716-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:332}" wp="{X:114 Y:341}" cur=9 of=10
+time=2026-10-31T20:41:12.723-04:00 level=INFO msg="wp: used 3 -> 1 (2 clicks, waited 0 ms)"
+DRILL DW.m1 P23 PASS town in 494 ticks with 1 bounces and 2 step-aways | intended: waypoint to town from inside the mouth's trigger area: arrives in area 1, at most 2 bounces back into the cave | observed: Cold Plains, mouth of Cave Level 1, south side (waypoint objects [[114 344]], arrival 113,343): exit to 9 at (43.0,28.0), standing 1.0 cells from it (offset 0.0,1.5); arrived in 1, last verb ok, 494 ticks, 1 bounces into the cave, 2 step-aways; log: d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint / nav: stepping away from a cave mouth from={215 145} to={215 165} / nav walk callers=d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint / nav plan from={215 145} to={215 165} wps=6 partial=false cells=25 / nav click pos={215 145} wp={218 143} cur=0 of=6 / d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint < main.(*lab).TakeWaypoint / nav: stepping away from a cave mouth from={220 140} to={220 160} / nav walk callers=d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).openWaypoint < d2lod-bot/internal/nav.(*Navigator).TakeWaypoint | runs: 2, identical
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+H.obj.shrine AUDIT PASS     same listed and operated by the bot's own Interact
+DW.m1     P23   PASS     same town in 494 ticks with 1 bounces and 2 step-aways
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug objects, debug stat 6 512000, debug stat 7 512000, debug warp 43 29, debug wp all
+cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T20:41:12.725-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 5s

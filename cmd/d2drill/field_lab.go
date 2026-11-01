@@ -84,6 +84,11 @@ func (l *lab) operateObject(ctx context.Context, r *drill.Run, level int, want s
 		return op, 0
 	}
 	_ = l.be.Ctl.CloseAll()
+	// monsters an earlier fight drill left in this level (a pack the fight did not finish) interrupt the walk to the
+	// object and the interact (DRILLS9: H.obj.shrine NU -> NU after D-sync.wp)
+	if _, err := r.Cheat(ctx, "debug kill", "clear the level's monsters left by an earlier drill: the object click is the test, a leftover pack would interrupt it"); err == nil {
+		_ = l.Tick(ctx, 30)
+	}
 	ps, err := l.be.Client.Presets(ctx)
 	if err != nil {
 		op.InteractErr = "presets: " + err.Error()

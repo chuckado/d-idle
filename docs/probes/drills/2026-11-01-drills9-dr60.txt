@@ -1,0 +1,527 @@
+labrun: synced code/d2lod-wt/drills9 → orion:~/labrun/herdr/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group DR -repair-below 60 -label drills9-dr60 -v'
+d2dslot: got slot 0
+time=2026-10-31T20:41:02.286-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1588799 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:41:03.333-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T20:41:03.722-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.728-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:03.729-04:00 level=DEBUG msg="nav plan" from="{X:59 Y:87}" to="{X:24 Y:82}" wps=7 partial=false cells=39
+time=2026-10-31T20:41:03.729-04:00 level=DEBUG msg="nav click" pos="{X:59 Y:87}" wp="{X:60 Y:83}" cur=1 of=7
+time=2026-10-31T20:41:03.730-04:00 level=DEBUG msg="nav click" pos="{X:59 Y:84}" wp="{X:57 Y:81}" cur=2 of=7
+time=2026-10-31T20:41:03.731-04:00 level=DEBUG msg="nav click" pos="{X:58 Y:83}" wp="{X:49 Y:81}" cur=3 of=7
+time=2026-10-31T20:41:03.733-04:00 level=DEBUG msg="nav click" pos="{X:51 Y:81}" wp="{X:44 Y:81}" cur=4 of=7
+time=2026-10-31T20:41:03.734-04:00 level=DEBUG msg="nav click" pos="{X:48 Y:81}" wp="{X:36 Y:81}" cur=5 of=7
+time=2026-10-31T20:41:03.736-04:00 level=DEBUG msg="nav plan" from="{X:41 Y:81}" to="{X:24 Y:84}" wps=2 partial=false cells=15
+time=2026-10-31T20:41:03.736-04:00 level=DEBUG msg="nav click" pos="{X:41 Y:81}" wp="{X:33 Y:83}" cur=0 of=2
+time=2026-10-31T20:41:03.740-04:00 level=DEBUG msg="nav click" pos="{X:36 Y:82}" wp="{X:27 Y:84}" cur=1 of=2
+time=2026-10-31T20:41:03.743-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.745-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.745-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=2560
+time=2026-10-31T20:41:03.745-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.747-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=920
+time=2026-10-31T20:41:03.747-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=3480
+time=2026-10-31T20:41:03.756-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.756-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.762-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.762-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.763-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.763-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.764-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.765-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1720
+time=2026-10-31T20:41:03.765-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1720
+time=2026-10-31T20:41:03.772-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.772-04:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r P16 PASS repaired for 19 gold at knob 60; the estimate before the visit was 19 | intended: durability back to max, gold down by the price | observed: knob repairBelowPct 60; durability 1/20 (5%) -> 20/20; gold 500 -> 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err "" | runs: 2, identical
+time=2026-10-31T20:41:03.778-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.778-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.781-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.781-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.787-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.787-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.790-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.790-04:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r0 P16 PASS gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips | intended: no repair at gold 0, gold still 0, UI clean | observed: durability 1/20 -> 1/20; gold 0 -> 0; call1 steps [equip skipped; repair skipped] err "" ticks 0; call2 steps [equip skipped; repair skipped] err "" ticks 0; panels none | runs: 2, identical
+time=2026-10-31T20:41:03.796-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.796-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.803-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.803-04:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r1 P16 PASS the chore skipped the visit | intended: gold below the price: the visit is skipped or refused, gold unchanged, durability unchanged, UI clean | observed: durability 1/20 -> 1/20; gold 5 -> 5; steps [equip skipped; repair skipped] err "" ticks 0; panels none | runs: 2, identical
+time=2026-10-31T20:41:03.814-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.815-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.816-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.816-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.816-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.818-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=8520
+time=2026-10-31T20:41:03.818-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=8520
+time=2026-10-31T20:41:03.826-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.826-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.830-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.830-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.832-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.832-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.832-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.833-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:03.833-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:03.841-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.841-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.849-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.850-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.852-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.852-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.852-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.854-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:03.854-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:03.862-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.862-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.866-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.867-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.868-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.868-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.868-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.870-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:03.870-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:03.878-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.879-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.887-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.887-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.889-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.889-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.889-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.891-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:03.891-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:03.898-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.898-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.904-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.904-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.905-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.905-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.906-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.908-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:03.908-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:03.916-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.916-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.924-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.924-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.926-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.926-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.926-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.928-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:03.928-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:03.935-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.935-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.940-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.940-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.941-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.941-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.942-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.944-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:03.944-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:03.952-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.952-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.964-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.965-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.966-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.966-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.966-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.968-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=3520
+time=2026-10-31T20:41:03.968-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=3520
+time=2026-10-31T20:41:03.976-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.976-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:03.981-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:03.981-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:03.986-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:03.986-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:03.986-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:03.988-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:03.988-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:03.996-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:03.996-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.004-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.005-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.006-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.006-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.006-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.008-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.008-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.015-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.015-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.020-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.020-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.021-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.021-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.022-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.023-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.023-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.032-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.032-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.040-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.040-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.041-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.041-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.042-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.043-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.043-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.051-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.051-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.056-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.057-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.058-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.058-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.059-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.061-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.061-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.069-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.069-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.077-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.078-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.079-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.079-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.079-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.081-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.081-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.089-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.089-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.094-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.095-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.096-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.096-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.096-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.098-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.098-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.106-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.106-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.114-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.115-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.116-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.116-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.116-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.118-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.118-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.126-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.126-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.131-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.132-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.133-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.133-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.134-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.136-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.136-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.148-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.148-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.158-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.159-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.160-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.160-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.161-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.163-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.163-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.172-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.172-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.178-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.179-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.180-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.180-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.180-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.182-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.182-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.192-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.192-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.201-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.201-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.203-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.203-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.203-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.205-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.205-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.213-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.213-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.219-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.220-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.221-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.221-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.221-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.223-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.223-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.232-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.232-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.240-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.241-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.243-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.243-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.243-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.245-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.245-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.253-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.253-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.260-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.260-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.262-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.262-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.262-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.265-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.265-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.273-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.273-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.286-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.287-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.289-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.289-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.289-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.291-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=3520
+time=2026-10-31T20:41:04.291-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=3520
+time=2026-10-31T20:41:04.300-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.300-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.306-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.307-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.308-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.308-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.309-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.311-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.311-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.319-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.319-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.329-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.330-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.332-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.332-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.332-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.334-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2760
+time=2026-10-31T20:41:04.334-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2760
+time=2026-10-31T20:41:04.343-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.343-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.349-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.350-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.351-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.351-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.351-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.354-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.354-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.362-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.362-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.372-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.373-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.374-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.374-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.375-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.377-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.377-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.385-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.385-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.390-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.391-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.392-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.392-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.393-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.395-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.395-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.403-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.403-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.412-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.413-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.414-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.414-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.414-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.416-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.416-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.425-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.425-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.431-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.432-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.433-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.433-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.433-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.435-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.435-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.444-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.444-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.453-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.454-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.455-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.455-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.456-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.458-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.458-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.466-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.466-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.471-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.472-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.473-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.473-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.474-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.476-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.476-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.484-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.484-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.494-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.494-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.496-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.496-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.496-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.498-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.498-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.507-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.507-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.513-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.513-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.515-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.515-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.515-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.517-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.517-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.525-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.525-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.535-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.535-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.537-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.537-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.537-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.539-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.539-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.549-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.549-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.556-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.557-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.558-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.558-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.558-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.560-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.560-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.569-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.569-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.579-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.580-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.582-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.582-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.582-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.584-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.584-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.592-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.592-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.598-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.598-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.600-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.600-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.600-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.602-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.602-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.611-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.611-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.621-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.621-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.623-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.623-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.623-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.625-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.625-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.633-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.633-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.639-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.640-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.641-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.641-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.642-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.644-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.644-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.653-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.653-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.663-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.664-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.665-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.665-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.665-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.667-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.667-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.676-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.676-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.683-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.684-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.685-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.685-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.685-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.688-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.688-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.696-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.696-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.706-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.707-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.708-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.708-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.709-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.711-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.711-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.720-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.720-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.726-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.727-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.728-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.728-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.728-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.730-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.730-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.740-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.740-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.750-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.751-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.753-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.753-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.753-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.755-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.755-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.765-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.765-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.772-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.773-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.774-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.774-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.774-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.777-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.777-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.786-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.786-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.796-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.797-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.799-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.799-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.799-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.801-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.801-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.810-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.810-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.816-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.817-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.818-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.818-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.819-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.821-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.821-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.829-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.829-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.838-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.839-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.841-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.841-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.842-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.844-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=2560
+time=2026-10-31T20:41:04.844-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=2560
+time=2026-10-31T20:41:04.852-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.852-04:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-10-31T20:41:04.858-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:04.859-04:00 level=INFO msg="npc: interact" class=154 try=1 dist=4 npc="[24 84]"
+time=2026-10-31T20:41:04.860-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-10-31T20:41:04.860-04:00 level=INFO msg="npc: menu open" class=154 try=1 ms=0
+time=2026-10-31T20:41:04.861-04:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[332 128]" npc="[24 84]" try=1 slow=false
+time=2026-10-31T20:41:04.863-04:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=1400
+time=2026-10-31T20:41:04.863-04:00 level=INFO msg="npc visit: vendor window open" class=154 ms=1400
+time=2026-10-31T20:41:04.871-04:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-10-31T20:41:04.871-04:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.rt P16 PASS 26 rows measured, all restored and paid | intended: per base: durability restored to max, gold paid > 0 (the price is the measurement) | observed: cap slot 1 dur 1/12 lost 11 paid 7; cap slot 1 dur 6/12 lost 6 paid 4; lea slot 3 dur 1/24 lost 23 paid 57; lea slot 3 dur 12/24 lost 12 paid 30; qui slot 3 dur 1/20 lost 19 paid 16; qui slot 3 dur 10/20 lost 10 paid 8; spl slot 3 dur 1/30 lost 29 paid 1871; spl slot 3 dur 15/30 lost 15 paid 968; ful slot 3 dur 1/70 lost 69 paid 5814; ful slot 3 dur 35/70 lost 35 paid 2949; hax slot 4 dur 1/28 lost 27 paid 20; hax slot 4 dur 14/28 lost 14 paid 10; ssd slot 4 dur 1/24 lost 23 paid 8; ssd slot 4 dur 12/24 lost 12 paid 4; lsd slot 4 dur 1/44 lost 43 paid 185; lsd slot 4 dur 22/44 lost 22 paid 95; sst slot 4 dur 1/20 lost 19 paid 19; sst slot 4 dur 10/20 lost 10 paid 10; buc slot 5 dur 1/12 lost 11 paid 7; buc slot 5 dur 6/12 lost 6 paid 4; kit slot 5 dur 1/30 lost 29 paid 257; kit slot 5 dur 15/30 lost 15 paid 133; lbt slot 9 dur 1/12 lost 11 paid 9; lbt slot 9 dur 6/12 lost 6 paid 5; lgl slot 10 dur 1/12 lost 11 paid 9; lgl slot 10 dur 6/12 lost 6 paid 5 | runs: 2, identical
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D3.r      P16   PASS     same repaired for 19 gold at knob 60; the estimate before the visit was 19
+D3.r0     P16   PASS     same gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips
+D3.r1     P16   PASS     same the chore skipped the visit
+D3.rt     P16   PASS     same 26 rows measured, all restored and paid
+cheat verbs used (each ledgered with a reason): debug clearinv, debug durability 1 1, debug durability 1 6, debug durability 10 1, debug durability 10 6, debug durability 3 1, debug durability 3 10, debug durability 3 12, debug durability 3 15, debug durability 3 35, debug durability 4 1, debug durability 4 10, debug durability 4 12, debug durability 4 14, debug durability 4 22, debug durability 5 1, debug durability 5 15, debug durability 5 6, debug durability 9 1, debug durability 9 6, debug durability all 1, debug durability all 9999, debug equip buc 5, debug equip cap 1, debug equip ful 3, debug equip hax 4, debug equip kit 5, debug equip lbt 9, debug equip lea 3, debug equip lgl 10, debug equip lsd 4, debug equip qui 3, debug equip spl 3, debug equip ssd 4, debug equip sst 4, debug stat 14 0, debug stat 14 10000, debug stat 14 5, debug stat 14 500, debug unequip 1, debug unequip 10, debug unequip 3, debug unequip 4, debug unequip 5, debug unequip 9
+cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T20:41:04.874-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 4s
