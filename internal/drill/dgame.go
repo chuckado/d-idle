@@ -455,9 +455,9 @@ func d9cycle(ctx context.Context, r *Run, l GameLab) Outcome {
 type QuestLab interface {
 	// Claim sets Blood Raven's record to "reward pending" (0x0002) and runs d2dtown.ClaimRogue with the bot's own Pause.
 	Claim(ctx context.Context, r *Run) (granted bool, merc string, before, after int, err error)
-	// AkaraReward sets the Den of Evil record to "reward pending" and opens Akara's menu: skill points and record after.
+	// AkaraReward sets the Den of Evil record to "reward pending" and runs the bot's talk path (internal/talk, pick "reward"): skill points and record after.
 	AkaraReward(ctx context.Context, r *Run) (skBefore, skAfter int, rec string, err error)
-	// Warriv sets Andariel's record done (`debug quest set 6 0x0001`), opens Warriv's menu with d2dctl and picks "Go East".
+	// Warriv sets Andariel's record done (`debug quest set 6 0x0001`), runs the bot's talk path (internal/talk, pick "go east"): area after (the menu string is the row path).
 	Warriv(ctx context.Context, r *Run) (area int, menu string, err error)
 }
 
@@ -493,7 +493,7 @@ func d8akara(l GameLab, lim time.Duration) Drill {
 	if !ok {
 		return Drill{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward", Needs: []string{"the lab has no quest step"}}
 	}
-	return Drill{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward (record by `debug quest set`): one skill point, dialog closed", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+	return Drill{ID: "D8.q", Primitive: "P20", Title: "Akara's Den of Evil reward (record by `debug quest set`, the bot's talk path internal/talk): one skill point, dialog closed", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 		b, a, rec, err := ql.AkaraReward(ctx, r)
 		intended := "Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed"
 		obs := fmt.Sprintf("skill points %d -> %d; quest list: %s; err %v", b, a, rec, err)
@@ -504,7 +504,7 @@ func d8akara(l GameLab, lim time.Duration) Drill {
 		case a != b+1:
 			o.Verdict, o.Reason = Fail, fmt.Sprintf("skill points %d -> %d, wanted +1", b, a)
 		default:
-			o.Verdict, o.Reason = Pass, "PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)"
+			o.Verdict, o.Reason = Pass, "the bot's own talk path (internal/talk, the code cmd/d2bot runs) claimed the reward: one skill point (built by fixtalk, awaiting live proof: a Pass here is the first)"
 		}
 		return o
 	}}
@@ -554,7 +554,7 @@ func d8warriv(l GameLab, lim time.Duration) Drill {
 	if !ok {
 		return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv takes the character to Act 2", Needs: []string{"the lab has no quest step"}}
 	}
-	return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv to Act 2 (Andariel record by `debug quest set`): the menu row \"Go East\" moves the character to Lut Gholein", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+	return Drill{ID: "D8.w", Primitive: "P21", Title: "Warriv to Act 2 (Andariel record by `debug quest set`, the bot's talk path internal/talk): the menu row \"Go East\" moves the character to Lut Gholein", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 		area, menu, err := ql.Warriv(ctx, r)
 		intended := "Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40)"
 		obs := fmt.Sprintf("menu [%s]; area after %d; err %v", menu, area, err)
@@ -565,7 +565,7 @@ func d8warriv(l GameLab, lim time.Duration) Drill {
 		case area != 40:
 			o.Verdict, o.Reason = Fail, fmt.Sprintf("arrived in area %d, wanted 40", area)
 		default:
-			o.Verdict, o.Reason = Pass, "PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path"
+			o.Verdict, o.Reason = Pass, "the bot's own act hop talk (internal/talk, the code cmd/d2bot runs) took the character to Lut Gholein (built by fixtalk, awaiting live proof: a Pass here is the first)"
 		}
 		return o
 	}}

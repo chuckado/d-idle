@@ -16,6 +16,9 @@ import (
 	"d2lod-bot/internal/d2dtown"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/quest"
+	"d2lod-bot/internal/talk"
+	"d2lod-bot/internal/task"
 )
 
 var _ drill.FieldLab = (*lab)(nil)
@@ -524,15 +527,35 @@ func (l *lab) AkaraReward(ctx context.Context, r *drill.Run) (int, int, string, 
 		return -1
 	}
 	b := sk()
-	if oi := l.OpenNPC(ctx, 148); oi.Err != "" {
+	// the bot's own talk path (internal/talk, the code cmd/d2bot runs for the Den reward claim), not a bare menu open
+	savedP, savedN := d2dctl.Pause, d2dctl.Now
+	l.be.Clock.Install(ctx)
+	l.be.Clock.Sleep(40 * time.Millisecond)
+	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
+	if err := l.talker(drillQuestStatus).Talk(ctx, task.NPCAkara, "reward"); err != nil {
 		_ = l.CloseAll(ctx)
-		return b, sk(), "", fmt.Errorf("open Akara: %s", oi.Err)
+		return b, sk(), "", fmt.Errorf("bot talk: %w", err)
 	}
 	_ = l.Tick(ctx, 40)
 	_ = l.CloseAll(ctx)
 	_ = l.Tick(ctx, 20)
 	out, _ := r.Cheat(ctx, "debug quest list", "read-only: the quest records after the talk")
 	return b, sk(), strings.ReplaceAll(strings.TrimSpace(out), "\n", "; "), nil
+}
+
+// drillQuestStatus is the quest state the drills set with `debug quest set`: the Den pending (the reward pick ignores
+// it), Andariel and Act 1 done (Warriv's travel row shown), nothing else started (the bottom-anchored line count).
+func drillQuestStatus(q string) quest.Status {
+	switch q {
+	case "den_of_evil", "sisters_to_the_slaughter", "act1_done":
+		return quest.Done
+	}
+	return quest.Needed
+}
+
+// talker is the bot's dialog adapter (internal/talk) over this lab's town and env.
+func (l *lab) talker(status func(string) quest.Status) talk.Adapter {
+	return talk.Adapter{T: l.tw, E: l.be.Env, Status: status}
 }
 
 func (l *lab) Pin(ctx context.Context, r *drill.Run, level int, within time.Duration) drill.PinInfo {
@@ -665,33 +688,14 @@ func (l *lab) Warriv(ctx context.Context, r *drill.Run) (int, string, error) {
 	}
 	_ = l.Tick(ctx, 10)
 	_ = l.be.Ctl.CloseAll()
-	npcs, err := l.be.Client.NPCs(ctx)
-	if err != nil {
-		return 0, "", err
-	}
-	idx := -1
-	for _, n := range npcs.Items {
-		if strings.EqualFold(n.Name, "Warriv") {
-			idx = n.Index
-		}
-	}
-	if idx < 0 {
-		return 0, "", errors.New("no Warriv in npcs")
-	}
 	savedP, savedN := d2dctl.Pause, d2dctl.Now
 	l.be.Clock.Install(ctx)
 	l.be.Clock.Sleep(40 * time.Millisecond)
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
-	lines, err := l.be.Client.OpenNPCMenu(ctx, idx, 40*time.Second)
-	var parts []string
-	for _, ml := range lines {
-		parts = append(parts, ml.Text)
-	}
-	menu := strings.Join(parts, " | ")
-	if err != nil {
-		return 0, menu, err
-	}
-	if err := l.be.Client.PickMenuLine(ctx, "go east"); err != nil {
+	// the bot's own act hop talk (internal/talk: the row "Go East" of Warriv's menu with the Act 1 row set, the code
+	// the task node "warriv" of cmd/d2bot runs), not a bare menu pick
+	menu := "bot path " + strings.Join(talk.Paths[[2]string{task.NPCWarriv, "go east"}], " > ")
+	if err := l.talker(drillQuestStatus).Talk(ctx, task.NPCWarriv, "go east"); err != nil {
 		_ = l.CloseAll(ctx)
 		return 0, menu, err
 	}
