@@ -107,6 +107,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change verifynexthit: verify_nexthit.py vs test_verify_nexthit on >= 100k cases: base > 0, head 0 or classified, per claim slice
 
 ### Recent merges
+- 0674406 11-01 01:50 `Merge agent/verifynexthit: independent verifier of the NextHit candidate (NOT READY, off by one frame)` (verifynexthit)
 - 4ca38ec 11-01 01:40 `Merge agent/readmedocs: honest README capabilities and running docs` (readmedocs)
 - e64c13a 11-01 01:36 `Merge agent/drills17: DRILLS17 live result for fixmouth2 (FAIL, bounces remain)` (drills17)
 - 34559ca 11-01 01:36 `readmedocs: coordinator review fixes, merge origin/main` (readmedocs)
@@ -116,5 +117,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0101ebe 11-01 01:16 `Merge agent/fixmanamodel: accurate mana model (ManaPerFrame256, ManaBook)` (fixmanamodel)
 - 458ecd4 11-01 01:14 `Merge agent/nexthit: D-NEXTHIT evidence pack, PR draft, oracle copies (PR NOT READY)` (nexthit)
 - 96be00f 11-01 01:08 `Merge agent/drills16: DRILLS16 live results (fixmouth FAIL, fixbuff PASS)` (drills16)
-- 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
 <!-- statusgen:end -->
