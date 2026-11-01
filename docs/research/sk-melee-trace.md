@@ -1,6 +1,7 @@
 # The player's plain Attack (melee blow): game.exe 1.14d vs d2d vs the bot (decomp row 20, SKMELEE)
 
 > status: current (2026-11-01, agent SKMELEE). Offline: no game, no d2d slot, nothing pushed or posted. Tags: **V read** = read in game.exe's disassembly (`disasm.py`) or in d2d's code at file:line; **V run** = game.exe's own function run under unicorn by `tools/emu/sk_melee.py`; **D** = 1.14d patched tables (ItemStatCost, ItemTypes); **S** = an upstream doc or an earlier trace; **I** = inference; **U** = unverified. d2d = upstream main 72132b99 (read worktree on the worker host). No game code is pasted here: function tags and short formulas only.
+> status: deviations re-proven on the real d2d build, D7 narrowed, D8 added: docs/research/sk-melee2-trace.md (SKMELEE2).
 
 ## Summary
 
