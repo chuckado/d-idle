@@ -19,10 +19,10 @@ gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test on the worker host"
 merge:
 result: ""
-live: ""
+live: "D29-C PASS on lab-armorhit and lab-nexthit2 (1 cut, 1 retry, armor never absent); D26-A PASS (spacing met) on lab-armorhit; D2 11/11, D3 12/12"
 ```
 
 - [x] 1.1 D29-C drill and offline verdict test
 - [x] 1.2 D26-A dead zone fix
-- [ ] 1.3 Live runs (D29-C, D26-A, nexthit2 comparison, D2 and D3 regression)
-- [ ] 1.4 Docs: README DRILLS29, primitives row, armorcut live line
+- [x] 1.3 Live runs (D29-C, D26-A, nexthit2 comparison, D2 and D3 regression)
+- [x] 1.4 Docs: README DRILLS29, primitives row, armorcut live line

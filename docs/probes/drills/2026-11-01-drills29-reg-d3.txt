@@ -1,0 +1,116 @@
+d2dslot: got slot 0
+time=2026-11-01T12:14:18.122-05:00 level=WARN msg="d2d channel not answering: d2d process pid 2085999 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+DRILL D3.g0 U1 PASS recorded | intended: the fresh character's gold read (no cheat before this drill) | observed: class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1
+time=2026-11-01T12:14:19.905-05:00 level=INFO msg="d2dworld: arrived in level 1: 0 adjacent entries, 1 levels not linked yet (pending 1, linkwait 30s)"
+time=2026-11-01T12:14:20.711-05:00 level=INFO msg="d2dworld: link wait over after 806ms, 1 polls: 1 adjacent entries, 0 levels not linked yet (pending 0, linked [2])"
+time=2026-11-01T12:14:20.771-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=3 npc="[120 72]"
+time=2026-11-01T12:14:20.787-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T12:14:20.787-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=5040
+time=2026-11-01T12:14:20.922-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=3 npc="[25 76]"
+time=2026-11-01T12:14:20.929-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T12:14:20.929-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=7800
+time=2026-11-01T12:14:21.015-05:00 level=INFO msg="npc: interact" class=147 try=1 dist=2 npc="[30 140]"
+time=2026-11-01T12:14:21.019-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=147
+time=2026-11-01T12:14:21.019-05:00 level=INFO msg="npc: menu open" class=147 try=1 ms=4920
+time=2026-11-01T12:14:21.085-05:00 level=INFO msg="npc: interact" class=150 try=1 dist=3 npc="[77 103]"
+time=2026-11-01T12:14:21.088-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=150
+time=2026-11-01T12:14:21.088-05:00 level=INFO msg="npc: menu open" class=150 try=1 ms=4800
+time=2026-11-01T12:14:21.112-05:00 level=INFO msg="npc: interact" class=155 try=1 dist=4 npc="[65 100]"
+time=2026-11-01T12:14:21.115-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=155
+time=2026-11-01T12:14:21.115-05:00 level=INFO msg="npc: menu open" class=155 try=1 ms=1320
+DRILL D3.n P14 PASS all 5 opened and closed clean | intended: 5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean | observed: Akara: open true window [npc-dialog] 212 ticks clean after close true | Charsi: open true window [npc-dialog] 187 ticks clean after close true | Gheed: open true window [npc-dialog] 115 ticks clean after close true | Kashya: open true window [npc-dialog] 112 ticks clean after close true | Warriv: open true window [npc-dialog] 25 ticks clean after close true
+time=2026-11-01T12:14:21.218-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T12:14:21.221-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T12:14:21.221-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=4560
+time=2026-11-01T12:14:21.229-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.229-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.h P17 PASS life restored at the healer | intended: life = max after the visit, pack potions unchanged | observed: life 12/40 -> 40/40; gold 300 -> 300; pack none -> none; healed=true steps [equip skipped; heal ran] err ""
+time=2026-11-01T12:14:21.253-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T12:14:21.256-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T12:14:21.256-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T12:14:21.256-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T12:14:21.260-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T12:14:21.260-05:00 level=INFO msg="npc visit: vendor window open" class=148 ms=920
+time=2026-11-01T12:14:21.286-05:00 level=INFO msg="shop: potion plan" wantHP=2 wantMP=2 wantRV=0 beltHP=0 beltMP=0 packHP=0 packMP=0 beltOther=0 slots=4 gold=1000
+time=2026-11-01T12:14:21.299-05:00 level=INFO msg="shop: bought" item="Minor Healing Potion" price=30 "gold left"=970
+time=2026-11-01T12:14:21.304-05:00 level=INFO msg="shop: bought" item="Minor Healing Potion" price=30 "gold left"=940
+time=2026-11-01T12:14:21.310-05:00 level=INFO msg="shop: bought" item="Minor Mana Potion" price=60 "gold left"=880
+time=2026-11-01T12:14:21.319-05:00 level=INFO msg="shop: bought" item="Minor Mana Potion" price=60 "gold left"=820
+time=2026-11-01T12:14:21.339-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=720
+time=2026-11-01T12:14:21.351-05:00 level=INFO msg="shop: potion plan" wantHP=0 wantMP=0 wantRV=0 beltHP=0 beltMP=0 packHP=2 packMP=2 beltOther=0 slots=4 gold=720
+time=2026-11-01T12:14:21.352-05:00 level=INFO msg="shop: visit" bought="map[Minor Healing Potion:2 Minor Mana Potion:2 Scroll of Town Portal:1]" spent=280 broke=false err=<nil> gold=720 beltHP=0 beltMP=0 beltRV=0 beltSlots=4 tp=1 tome=false
+time=2026-11-01T12:14:21.362-05:00 level=INFO msg="belt: put id=8 box=0 kind=hp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion] packIDs=[9 10 11] err=<nil> at=19:00:43"
+time=2026-11-01T12:14:21.366-05:00 level=INFO msg="belt: put id=9 box=1 kind=hp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion] packIDs=[10 11] err=<nil> at=19:00:43"
+time=2026-11-01T12:14:21.370-05:00 level=INFO msg="belt: put id=10 box=2 kind=mp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion 2:Minor Mana Potion] packIDs=[11] err=<nil> at=19:00:43"
+time=2026-11-01T12:14:21.373-05:00 level=INFO msg="belt: put id=11 box=3 kind=mp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion 2:Minor Mana Potion 3:Minor Mana Potion] packIDs=[] err=<nil> at=19:00:44"
+time=2026-11-01T12:14:21.374-05:00 level=INFO msg="belt: moved 4 potions from pack (hp 0->2 mp 0->2 rv 0->0)" rv=0 dragged=0 failed=0
+time=2026-11-01T12:14:21.379-05:00 level=INFO msg=inventory pct=2 cells=1/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.379-05:00 level=INFO msg="inventory contents" pack="tsc x1" stash=""
+DRILL D3.b P15 PASS bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -> 4 | intended: potions bought through the shop chore, gold delta = price, potions in the belt | observed: gold 1000 -> 720 (spent per report 280); belt potions 0 -> 4; pack none -> tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err ""
+time=2026-11-01T12:14:21.406-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T12:14:21.408-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T12:14:21.408-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T12:14:21.409-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T12:14:21.412-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+DRILL D3.b2 P15 PASS sold an identify scroll for 40 (the price formula says 40) | intended: gold up by the gain, the scroll gone, nothing else sold | observed: sell isc to Akara: gained 40 err <nil>; gold 100 -> 140; pack iscx1 -> none
+time=2026-11-01T12:14:21.434-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T12:14:21.437-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T12:14:21.437-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T12:14:21.438-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T12:14:21.441-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T12:14:21.441-05:00 level=INFO msg="npc visit: vendor window open" class=148 ms=920
+time=2026-11-01T12:14:21.475-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=900
+time=2026-11-01T12:14:21.492-05:00 level=INFO msg="shop: bought" item="Tome of Town Portal" price=300 "gold left"=600
+time=2026-11-01T12:14:21.497-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=500
+time=2026-11-01T12:14:21.501-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=400
+time=2026-11-01T12:14:21.505-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=300
+time=2026-11-01T12:14:21.510-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=200
+time=2026-11-01T12:14:21.511-05:00 level=INFO msg="shop: visit" bought="map[Scroll of Town Portal:5 Tome of Town Portal:1]" spent=800 broke=false err=<nil> gold=200 beltHP=1 beltMP=0 beltRV=0 beltSlots=4 tp=6 tome=true
+time=2026-11-01T12:14:21.514-05:00 level=INFO msg=inventory pct=7 cells=3/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.514-05:00 level=INFO msg="inventory contents" pack="tbk x1, tsc x1" stash=""
+DRILL D3.tp P12 PASS tome or scrolls bought, gold delta equals the report | intended: a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent | observed: gold 1000 -> 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err ""
+time=2026-11-01T12:14:21.602-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=3 npc="[24 84]"
+time=2026-11-01T12:14:21.609-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T12:14:21.609-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=7200
+time=2026-11-01T12:14:21.610-05:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[352 135]" npc="[24 84]" try=1 slow=false
+time=2026-11-01T12:14:21.613-05:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T12:14:21.613-05:00 level=INFO msg="npc visit: vendor window open" class=154 ms=8120
+time=2026-11-01T12:14:21.636-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.636-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r P16 PASS repaired for 19 gold at knob 30; the estimate before the visit was 19 | intended: durability back to max, gold down by the price | observed: knob repairBelowPct 30; durability 1/20 (5%) -> 20/20; gold 500 -> 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err ""
+time=2026-11-01T12:14:21.654-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.654-05:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-11-01T12:14:21.661-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.661-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r0 P16 PASS gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips | intended: no repair at gold 0, gold still 0, UI clean | observed: durability 1/20 -> 1/20; gold 0 -> 0; call1 steps [equip skipped; repair skipped] err "" ticks 0; call2 steps [equip skipped; repair skipped] err "" ticks 0; panels none
+time=2026-11-01T12:14:21.694-05:00 level=INFO msg="nav: stuck recovered" at="{X:28 Y:85}" method=reclick rung=1 repeat=false
+in stash: 1 stash items
+DRILL D3.s P5 PASS stash item and full-purse gold moves exact | intended: stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200 | observed: stash open; item round trip ok, pack rinx1; deposit 1500: purse 0 stash 1500; withdraw 300: purse 300 stash 1200
+DRILL D3.s2 P5 PASS partial deposit exact | intended: deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000 | observed: deposit 1000 err <nil>; purse 1500 -> 500 stash 0 -> 1000
+time=2026-11-01T12:14:21.797-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=2 npc="[28 85]"
+time=2026-11-01T12:14:21.800-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T12:14:21.800-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=2040
+time=2026-11-01T12:14:21.801-05:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[400 122]" npc="[28 85]" try=1 slow=false
+time=2026-11-01T12:14:21.804-05:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=920
+DRILL D3.u P13 PASS unidentified magic cap sold for 32 = the base formula | intended: an unidentified magic item sells for its base price (cost/2, the identified extras do not count) | observed: unidentified magic Cap (unid 1) sold to Charsi: gained 32 err <nil>; gold 100 -> 132; formula for a normal cap 32
+time=2026-11-01T12:14:21.847-05:00 level=INFO msg=inventory pct=2 cells=1/40 stashPct=0 stashCells=0/48
+time=2026-11-01T12:14:21.848-05:00 level=INFO msg="inventory contents" pack="rin x1" stash=""
+DRILL D3.i P13 PASS identified with a scroll | intended: ring identified, ID scroll count -1, UI clean | observed: unidentified [rin] -> []; pack iscx1 rinx1 -> rinx1; gold 500 -> 500; steps [identify ran; equip skipped]; err ""
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D3.g0     U1    PASS     -    recorded
+D3.n      P14   PASS     -    all 5 opened and closed clean
+D3.h      P17   PASS     -    life restored at the healer
+D3.b      P15   PASS     -    bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -> 4
+D3.b2     P15   PASS     -    sold an identify scroll for 40 (the price formula says 40)
+D3.tp     P12   PASS     -    tome or scrolls bought, gold delta equals the report
+D3.r      P16   PASS     -    repaired for 19 gold at knob 30; the estimate before the visit was 19
+D3.r0     P16   PASS     -    gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips
+D3.s      P5    PASS     -    stash item and full-purse gold moves exact
+D3.s2     P5    PASS     -    partial deposit exact
+D3.u      P13   PASS     -    unidentified magic cap sold for 32 = the base formula
+D3.i      P13   PASS     -    identified with a scroll
+cheat verbs used (each ledgered with a reason): debug clearinv, debug durability all 1, debug give cap pack q4 unid, debug give hp1, debug give isc, debug give rin, debug give rin pack q4 unid, debug stat 14 0, debug stat 14 100, debug stat 14 1000, debug stat 14 1500, debug stat 14 300, debug stat 14 500, debug stat 15 0, debug stat 6 3072
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T12:14:21.851-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
