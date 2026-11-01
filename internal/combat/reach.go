@@ -1,6 +1,7 @@
 package combat
 
 import (
+	"errors"
 	"fmt"
 	"math"
 	"time"
@@ -207,11 +208,11 @@ func (f *Fighter) assess(tr *track, me input.Point, tg Target, reach int) (reach
 	if f.mv == nil {
 		return tr.plan, tr.firePos
 	}
-	if _, err := f.mv.PathTo(target); err == nil || !f.known(target) || tg.Dist > assessMaxDist {
+	if _, err := f.mv.PathTo(target); err == nil || errors.Is(err, input.ErrAlreadyThere) || !f.known(target) || tg.Dist > assessMaxDist {
 		return tr.plan, tr.firePos // a path, or the map is not loaded there yet: walk and see
 	}
 	// No path to the monster itself. Shoot across the gap if a point on our side of it works.
-	if p, ok := FiringPosition(me, target, reach, f.valid, f.los); ok {
+	if p, ok := FiringPosition(me, target, reach, f.validApproach, f.los); ok {
 		tr.plan, tr.firePos = planFire, p
 	} else {
 		tr.plan = planNone

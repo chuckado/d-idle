@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"math"
 	"sort"
-	"strings"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -114,7 +113,7 @@ func (n *Navigator) ExitTo(ctx context.Context, levelNo int) error {
 		// Standing next to a tile exit (the return tile of the level we arrived by) the planner has nothing to walk: that
 		// is "arrived", the push and step-off below take it from here (D2DLOOP r4, V live: Den of Evil, "no path: empty
 		// path" five times in a row, then the failsafe ladder).
-		if errors.Is(err, ErrNoPath) && !g.border && dist(o.pos, g.at) <= 6 && strings.Contains(err.Error(), "empty path") {
+		if errors.Is(err, ErrAlreadyThere) && !g.border && dist(o.pos, g.at) <= 6 {
 			err = nil
 		}
 		if err != nil {

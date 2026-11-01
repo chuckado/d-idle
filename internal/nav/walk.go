@@ -186,7 +186,7 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 			w.cur++
 		}
 		if len(w.res.wps) == 0 {
-			return fmt.Errorf("%w: empty path", ErrNoPath)
+			return emptyPathErr()
 		}
 		wp := w.res.wps[w.cur]
 		if !sees(o.pos, wp) {
