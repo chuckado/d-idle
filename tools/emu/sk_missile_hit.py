@@ -3,11 +3,12 @@
 
     uv run python missile_hit.py gen N SEED > cases.tsv
     uv run python missile_hit.py game cases.tsv > game.tsv
-    ../../build/tests/test_missile_hit --missile-hit cases.tsv > d2d.tsv
-    diff game.tsv d2d.tsv                      # empty after the fix
+    ../../build/tests/test_missile_hit --missile-hit cases.tsv | grep -E '^[0-9]+ ' > d2d.tsv
+    diff game.tsv d2d.tsv                      # empty with the fix
 
-(In this repo the file is tools/emu/sk_missile_hit.py; it runs next to
-upstream's tools/emu, which holds skill_damage.py and life_apply.py.)
+(Our copy of upstream candidate tools/emu/missile_hit.py; it runs next to
+upstream's tools/emu, which holds skill_damage.py and life_apply.py. The
+d2d side is sk_missile_hit_test.cpp, upstream tests/game/test_missile_hit.cpp.)
 
 A case is `id skill lvl clvl m329 m330 m331 m332 res pierce life lo32 hi32 n
 (skill level)*n`: the skill and its level, the player's level, the four mastery
