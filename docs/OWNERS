@@ -108,3 +108,13 @@ openspec/changes/chunker/**  chunker  chunker
 docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
 docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
 openspec/changes/skresistfix/**  skresistfix  skresistfix
+internal/combat/melee.go  skmeleewire  skmeleewire
+internal/combat/melee_test.go  skmeleewire  skmeleewire
+internal/combat/resource.go  skmeleewire  skmeleewire
+internal/data/items.go  skmeleewire  skmeleewire
+internal/data/schema.go  skmeleewire  skmeleewire
+internal/data/data_test.go  skmeleewire  skmeleewire
+internal/resource/sim.go  skmeleewire  skmeleewire
+internal/resource/wire_test.go  skmeleewire  skmeleewire
+docs/skmeleewire.md  skmeleewire  skmeleewire
+openspec/changes/skmeleewire/**  skmeleewire  skmeleewire
