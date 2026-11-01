@@ -2,7 +2,8 @@
 
 ```yaml
 change: skresistbot
-status: in-progress
+status: archived
+merge: 22b20eb
 agent: skresistbot
 branch: agent/skresistbot
 worktree: ~/code/d2lod-wt/skresistbot
@@ -16,7 +17,7 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/combat passes; whole-repo vet and test on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; tools/ci/check.sh"
-result: "B1 floor, B2 pierce, B4 comment done with table tests from the trace rules; B3 left (S); not live-verified, none owed"
+result: "bot resistance handling matches the SKRESIST trace (floor -100, pierce only below 100, comments fixed): unit-tested; not verified live"
 ```
 
 - [x] B1 floor -100

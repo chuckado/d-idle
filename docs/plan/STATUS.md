@@ -39,7 +39,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
-| [armorcut](../../openspec/changes/armorcut/) | in-progress | armorcut | `openspec/changes/armorcut/**`<br>`docs/armorcut.md`<br>`internal/combat/fighter.go`<br>`internal/combat/armorcut_test.go` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [chunker](../../openspec/changes/chunker/) | in-progress | chunker | `tools/contrib/chunker.py`<br>`tools/contrib/tests/test_chunker.py`<br>`docs/process/chunker.md`<br>`docs/community/groom-proposal.md`<br>`docs/community/withdrawn.tsv`<br>`openspec/changes/chunker/**` | - |
@@ -56,7 +55,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
-| [skresistbot](../../openspec/changes/skresistbot/) | in-progress | skresistbot | `openspec/changes/skresistbot/**`<br>`docs/skresistbot.md`<br>`internal/combat/rules.go`<br>`internal/combat/target.go`<br>`internal/combat/skresist_test.go` | - |
+| [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 
 ### Gates
@@ -78,7 +77,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change armorcut: go test -p 1 ./internal/combat passes; go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -111,11 +109,15 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change skresistbot: go test -p 1 ./internal/combat passes; whole-repo vet and test on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; tools/ci/check.sh
+- change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
+- change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 22b20eb 11-01 12:30 `Merge agent/skresistbot: SKRESISTBOT bot resist floor -100 and pierce below 100` (skresistbot)
+- 69192f1 11-01 12:26 `Merge agent/skresistfix: SKRESISTFIX curse-immune draft and proof docs (local d2d candidate, unverified)` (skresistfix)
+- 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
 - 44ff859 11-01 12:08 `Merge agent/skresist: SKRESIST resistance and immunity trace, oracle, d2d curse-on-immune deviation` (skresist)
 - aab77a1 11-01 12:02 `Merge agent/chunker: chunker.py sync/groom for the community work board` (chunker)
 - 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
@@ -123,7 +125,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f85fcc3 11-01 11:48 `Merge agent/drills28: armorcut buff retry after a hit-cut cast, drill D28-0 and D26-A rerun` (drills28)
 - 600490f 11-01 11:43 `Merge origin/main into drills28` (drills28)
 - 022546b 11-01 11:38 `Merge agent/drills27: teletune3 stall-memory reset, D22-BL/D22-S drills, stall escape proven live` (drills27)
-- 6a2c69c 11-01 11:34 `Merge agent/drills26: DRILLS26 drill D26-A Frozen Armor recast proof (harness only)` (drills26)
-- f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
-- bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
 <!-- statusgen:end -->

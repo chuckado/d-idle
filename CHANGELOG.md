@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- skresistbot (offline): bot resist handling per the SKRESIST trace: expFactor floors at -100 (Res -250: factor 3.5 -> 2.0), new Target.Pierce / EffRes subtract pierce only while the total is under 100 (cold 75 with pierce 20: 0.25 -> 0.45; 100 or more stays immune); B3 left as a pinned fallback; not verified live (docs/skresistbot.md).
 - chunker (offline, `sync --apply` against GitHub not yet run): `tools/contrib/chunker.py` keeps the work-item issues in step with the board (sync, dry run by default, 10 writes a run cap) and proposes new items (groom, one Sonnet call, proposals only); 35 contrib tests; 3 real groom calls, last proposal empty (docs/process/chunker.md).
 - skresistfix (research, docs only): local upstream candidate fix/curse-immune for curses and auras on immune monsters (differential 88,101 -> 0 of 147,628; docs/research/pr-curseimmune-proof.md, draft marked DRAFT); not independently verified, nothing pushed or opened upstream.
 - Decomp row 21 (SKRESIST, research and tooling): monster resistances, immunities, curse 1/5 rule and pierce in game.exe 1.14d vs d2d (real build) vs the bot (docs/research/sk-resist-trace.md, tools/emu/sk_resist.py); d2d curse-on-immune deviation proven, fix is the follow-up SKRESISTFIX.
