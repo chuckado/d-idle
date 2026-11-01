@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [dethash2](../../openspec/changes/dethash2/) | in-progress | dethash2 | `docs/research/det-hashes-2026-11-01b.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`tools/emu/det_scenarios_lab.py`<br>`tools/emu/det_scenarios_run.py`<br>`openspec/changes/dethash2/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -72,6 +73,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change dethash2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -88,6 +90,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 8ac245e 10-31 23:30 `Merge agent/fixportalmelee: no town portal cast with 3+ adjacent hostiles` (fixportalmelee)
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
@@ -97,5 +100,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
 - 2adbd6b 10-31 22:47 `Merge agent/decompfreeze: freeze rules trace, proof, PR draft` (decompfreeze)
-- 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
 <!-- statusgen:end -->
