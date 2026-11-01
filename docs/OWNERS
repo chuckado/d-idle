@@ -119,3 +119,5 @@ internal/resource/sim.go  skmeleewire  skmeleewire
 internal/resource/wire_test.go  skmeleewire  skmeleewire
 docs/skmeleewire.md  skmeleewire  skmeleewire
 openspec/changes/skmeleewire/**  skmeleewire  skmeleewire
+docs/research/openpr-log.md  crfollow159  crfollow159
+openspec/changes/crfollow159/**  crfollow159  crfollow159
