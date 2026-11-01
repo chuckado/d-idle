@@ -58,7 +58,17 @@ func run() int {
 	observe := flag.Duration("d10-observe", 8*time.Minute, "D10: wall time observed after the kill")
 	reapScript := flag.String("reap", "tools/agentreap.sh", "D10: the process registry tool")
 	limit := flag.Duration("limit", 0, "override the per-run hard time limit")
+	capFile := flag.String("cap", "", "cap this saved run log in place (head, tail, verdict and error lines; default max 400 KB) before committing it under docs/probes, then exit")
 	flag.Parse()
+	if *capFile != "" {
+		before, after, err := drill.CapFile(*capFile, drill.DefaultCap)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "d2drill:", err)
+			return 1
+		}
+		fmt.Printf("%s: %d -> %d bytes\n", *capFile, before, after)
+		return 0
+	}
 	if *sock == "" || slotDir == "" {
 		fmt.Fprintln(os.Stderr, "d2drill: run inside tools/d2dslot.sh (needs D2D_SOCK and D2D_SLOT_DIR)")
 		return 2

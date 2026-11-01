@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 - fixstall4 (offline, not verified live): the NPC approach route walks legs along line of sight (the old 12-step waypoints cut the camp block corner; reproduced on the real grid), routes at every stall instead of odd ones with a blind side step between, detects a stop mid-round after 1.2 s, grows the budget from the planned route length and reports the final position (DRILLS8 F13, H.pause); `docs/fixstall4.md` (agent/fixstall4).
+- fixbigfiles (offline): five DRILLS9 run logs (1.0 to 1.1 MB) broke the public CI size gate; capped to about 218 KB in place, `d2drill -cap FILE` added, check.sh now fails probe results over 512 KB (docs/fixbigfiles.md).
 - fixstatus (offline, board update verified): `tools/agentstatus/agentstatus.py` was a shell script under a `.py` name and died with a SyntaxError; it is now a Python stub that execs `ops.sh`; test `tools/agentstatus/stub-test.sh`, notes `docs/fixstatus.md` (agent/fixstatus).
 
 - fixrun (offline, live proof pending): the d2d run-toggle belief is reset on every game start in both lifecycle paths (the d2denv path already was), the bot `minute` line logs `runBelieved`, `stam`, `stamMax`, `runKeys`, `runResets`, `walkingRaw`; the 400 ms MoveTo stall wait is unchanged; recipe in `docs/fixrun.md` (agent/fixrun).
