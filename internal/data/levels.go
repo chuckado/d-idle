@@ -10,7 +10,7 @@ type Level struct {
 	Act       int    // 0-based act index (0..4)
 	Layer     int
 	Depend    int  // parent area id
-	Teleport  int  // 0 no, 1 yes, 2 forbidden... raw column value
+	Teleport  int  // raw Levels.txt Teleport column: 0 refused, 1 allowed, 2 allowed on a clear line (see TeleportRule)
 	Outdoor   bool // !IsInside
 	DrlgType  int  // 1 maze, 2 preset, 3 outdoor (raw)
 	LevelType int
@@ -89,4 +89,33 @@ func loadLevels(t *Table) []*Level {
 		out = append(out, l)
 	}
 	return out
+}
+
+// TeleportRule is what a level's Levels.txt Teleport value means to game.exe's Teleport handler (do-function
+// FUN_005ca360), VERIFIED by the read in docs/research/sk-teleport-trace.md (SKTELE, V read).
+type TeleportRule int
+
+const (
+	TeleportRefused   TeleportRule = iota // value 0: every Teleport is refused
+	TeleportAllowed                       // value 1: allowed
+	TeleportClearLine                     // value 2: allowed when the line caster -> clicked point is not blocked (mask 0x804: doors, missile barriers)
+)
+
+// TeleportRule maps the raw column. Unknown values are treated as refused (the safe reading). The town ban is separate:
+// the skill start (FUN_0056f640) refuses Teleport in any town room whatever this column says, so use CanTeleportIn.
+func (l *Level) TeleportRule() TeleportRule {
+	switch l.Teleport {
+	case 1:
+		return TeleportAllowed
+	case 2:
+		return TeleportClearLine
+	}
+	return TeleportRefused
+}
+
+// CanTeleportIn reports whether Teleport may work in the area at all (towns refuse, V read FUN_0056f640; a level whose
+// column is 0 refuses; a clear-line level still needs an unblocked line to the target, the caller checks that). Duriel's
+// Lair (73) is the only row with value 2 (D, SKTELE): there Teleport is allowed along a clear line.
+func CanTeleportIn(l *Level) bool {
+	return l != nil && !IsTown(l.ID) && l.TeleportRule() != TeleportRefused
 }

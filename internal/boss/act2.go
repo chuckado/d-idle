@@ -93,8 +93,10 @@ func summoner() *Script {
 }
 
 // Duriel: Duriel's Lair (area 73). The lair is entered through the tomb after the Staff is placed, so the script
-// starts inside it; RunWithEntry brings the character in. Teleport into the lair is forbidden by levels.txt (V,
-// Teleport column 2), a town portal out is fine. Duriel is melee only, slow-ish (V velocity 10) and carries Holy Freeze
+// starts inside it; RunWithEntry brings the character in. levels.txt gives the lair Teleport = 2, which game.exe
+// reads as "allowed along a clear line" (V read, docs/research/sk-teleport-trace.md B6), not forbidden. This script still
+// never teleports in the lair (Anchor.Teleport is false, kiting walks): a deliberate choice, see docs/fixlair.md. A town
+// portal out is fine. Duriel is melee only, slow-ish (V velocity 10) and carries Holy Freeze
 // (S): cold damage and slow while close, so the script steps away when hurt and kites between two relative points.
 // Normal stats V: 4757 life, cold resist 50, level 22; floor 24 from runs.json.
 func duriel() *Script {
