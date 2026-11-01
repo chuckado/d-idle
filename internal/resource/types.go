@@ -152,17 +152,7 @@ func ManaNeed(c d2.Class) int {
 	return 1
 }
 
-// manaFullSecs: seconds to refill an empty mana pool from natural regeneration. U: D2 gives a flat fraction of the
-// pool per frame, so the time to refill does not depend on pool size; 100 s is the usual quoted figure, class
-// charstats ManaRegen differences are ignored. Calibrate with a live measurement (docs/resource.md checklist).
-const manaFullSecs = 100.0
-
-// ManaPerSec is the natural regeneration rate.
-func ManaPerSec(maxMana, bonusPct int) float64 {
-	return float64(maxMana) / manaFullSecs * (1 + float64(bonusPct)/100)
-}
-
-// RestSecs estimates the seconds to regenerate from Mana to target (U, see manaFullSecs).
+// RestSecs estimates the seconds to regenerate from Mana to target (see ManaPerSec).
 func (in Input) RestSecs(target int) float64 {
 	if target <= in.Mana {
 		return 0

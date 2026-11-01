@@ -88,9 +88,9 @@ type fightState struct {
 	fleeLast  time.Time
 
 	// Nightmare/Hell (hard.go)
-	mb    resource.ManaBurnTracker
-	spent int // mana spent by our own casts since the last mana-burn sample
-	t0    time.Time
+	mb   resource.ManaBurnTracker
+	book resource.ManaBook // our own casts, booked when the mana leaves the pool (resource/manamodel.go)
+	t0   time.Time
 }
 
 func newFightState() *fightState {
@@ -182,6 +182,7 @@ func (f *Fighter) fight(ctx context.Context, sp fightSpec, snap *d2.Snapshot) (r
 	defer func() { res.Elapsed = f.now().Sub(start) }()
 	st = newFightState()
 	st.t0, st.lastCastAt = start, start
+	st.book.Model = f.manaBooking()
 	t := f.tune()
 	var lastTick time.Time
 	still := 0
@@ -715,7 +716,7 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 	tr.casts++
 	st.noteCast(now)
 	tr.noDrop += tr.dt
-	st.spent += spec.Cost
+	st.book.Add(f.now().Sub(st.t0).Seconds(), spec.Cost)
 	f.log().Debug("combat decision", "act", "cast", "skill", spec.Name, "target", tg.Name, "dist", int(tg.Dist), "hostiles", len(snap.Monsters))
 	return f.cast(snap, spec, target)
 }

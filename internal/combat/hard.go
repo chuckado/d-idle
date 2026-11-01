@@ -99,11 +99,14 @@ func (f *Fighter) hardTick(ctx context.Context, snap *d2.Snapshot, hs []Target, 
 	}
 	if !f.manaBurnClose(p, hs) {
 		st.mb.Reset()
-		st.spent = 0
+		st.book.Reset()
 		return nil
 	}
-	act := st.mb.Observe(f.now().Sub(st.t0).Seconds(), p.Mana, p.MaxMana, st.spent)
-	st.spent = 0
+	at := f.now().Sub(st.t0).Seconds()
+	if p.Mode == modeGetHit {
+		st.book.Cut()
+	}
+	act := st.mb.Observe(at, p.Mana, p.MaxMana, st.book.Take(at))
 	switch act {
 	case resource.ManaChicken:
 		if at := f.manaChickenAt; !at.IsZero() && f.now().Sub(at) < manaChickenCooldown {
@@ -138,4 +141,15 @@ func (f *Fighter) hardTick(ctx context.Context, snap *d2.Snapshot, hs []Target, 
 		}
 	}
 	return nil
+}
+
+// modeGetHit is the player mode of hit recovery (S: D2 PlayerMode GETHIT; V-d2d DRILLS15 M2 reads pmode 4).
+const modeGetHit = 4
+
+// manaBooking picks the mana payment timing of the backend (resource.BookD2D / BookGameExe).
+func (f *Fighter) manaBooking() resource.ManaBooking {
+	if f.D2D {
+		return resource.BookD2D
+	}
+	return resource.BookGameExe
 }

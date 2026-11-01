@@ -124,6 +124,8 @@ type world struct {
 	t          Tuning
 	now        float64
 	life, mana float64
+	potLeft    float64 // mana potion points still to arrive
+	potRate    float64 // points per second of the running potion
 	gold       int
 	belt       Belt
 	hasTP      bool
@@ -152,6 +154,11 @@ func (w *world) input(hostiles, seen int) Input {
 func (w *world) advance(dt float64, contact int) {
 	w.now += dt
 	w.mana += w.regen * dt
+	if w.potLeft > 0 {
+		g := min(w.potLeft, w.potRate*dt)
+		w.potLeft -= g
+		w.mana += g
+	}
 	if w.mana > float64(w.sc.MaxMana) {
 		w.mana = float64(w.sc.MaxMana)
 	}
@@ -163,6 +170,7 @@ func (w *world) advance(dt float64, contact int) {
 		w.rep.Deaths++
 		w.life, w.mana = float64(w.sc.MaxLife), float64(w.sc.MaxMana)
 		w.mHP = nil
+		w.potLeft = 0
 		w.now += w.sc.TripSec
 	}
 }
@@ -176,7 +184,7 @@ func (w *world) drink(p Potion) {
 	case PotionMana:
 		w.belt.MP--
 		w.rep.ManaPots++
-		w.mana += 40
+		w.addManaPot(40)
 	case PotionRejuv:
 		w.belt.RV--
 		w.life += float64(w.sc.MaxLife) * 0.6
@@ -189,6 +197,13 @@ func (w *world) drink(p Potion) {
 		w.mana = float64(w.sc.MaxMana)
 	}
 	w.advance(0.1, len(w.mHP))
+}
+
+// addManaPot starts a mana potion: the points arrive over ManaPotSecs, not at once (V read, sk-mana-trace B3). A
+// second potion inside the first joins what is left of it (the join rule is U).
+func (w *world) addManaPot(points float64) {
+	w.potLeft += points
+	w.potRate = w.potLeft / ManaPotSecs
 }
 
 func (w *world) townTrip() {
@@ -204,16 +219,17 @@ func (w *world) townTrip() {
 	w.mHP = nil
 	w.advance(w.sc.TripSec, 0)
 	w.mana = float64(w.sc.MaxMana)
+	w.potLeft = 0
 }
 
 // Replay runs the scenario under a policy. Deterministic for a given Seed.
 func Replay(sc Scenario, pol Policy, t Tuning) Report {
-	secs := manaFullSecs
+	regen := ManaPerSec(sc.MaxMana, 0)
 	if sc.ManaFullSecs > 0 {
-		secs = sc.ManaFullSecs
+		regen = float64(sc.MaxMana) / sc.ManaFullSecs
 	}
 	w := &world{sc: sc, pol: pol, t: t, life: float64(sc.MaxLife), mana: float64(sc.StartMana), gold: sc.Gold, hasTP: true, lastTrip: -1,
-		r: rng(sc.Seed), regen: float64(sc.MaxMana) / secs}
+		r: rng(sc.Seed), regen: regen}
 	w.belt = Belt{HP: sc.HP, MP: sc.MP, HPTier: 1, MPTier: 1}
 	w.rep = Report{Policy: pol.Name, MinMana: sc.StartMana}
 	kind := 0

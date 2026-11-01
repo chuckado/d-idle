@@ -28,10 +28,10 @@ func TestPreEngage(t *testing.T) {
 	}{
 		{"full", sorc(), Proceed},
 		{"hostiles on top", with(func(i *Input) { i.Hostiles = 2; i.Mana = 0 }), Proceed},
-		{"low mana rests, no fallback", with(func(i *Input) { i.Mana = 12; i.PackSeen = 2; i.Skills = []Skill{bolt} }), RestHere},
-		{"long rest skipped with staff", with(func(i *Input) { i.Mana = 12; i.PackSeen = 2 }), Proceed},
-		{"long rest skipped with cheaper spell", with(func(i *Input) { i.Mana = 12; i.PackSeen = 2; i.Skills = []Skill{ice, bolt} }), Proceed},
-		{"dangerous pack retreats", with(func(i *Input) { i.Mana = 12; i.PackSeen = 2; i.PackDanger = 2 }), RetreatRest},
+		{"low mana rests, no fallback", with(func(i *Input) { i.Mana = 17; i.PackSeen = 2; i.Skills = []Skill{bolt} }), RestHere},
+		{"long rest skipped with staff", with(func(i *Input) { i.Mana = 17; i.PackSeen = 2 }), Proceed},
+		{"long rest skipped with cheaper spell", with(func(i *Input) { i.Mana = 17; i.PackSeen = 2; i.Skills = []Skill{ice, bolt} }), Proceed},
+		{"dangerous pack retreats", with(func(i *Input) { i.Mana = 17; i.PackSeen = 2; i.PackDanger = 2 }), RetreatRest},
 		{"rest too long but melee fallback", with(func(i *Input) { i.Mana = 0; i.MaxMana = 400; i.PackSeen = 3 }), Proceed},
 		{"rest too long, mana potion, no fallback", with(func(i *Input) {
 			i.Mana = 2
@@ -58,7 +58,7 @@ func TestPreEngage(t *testing.T) {
 			t.Errorf("%s: got %v (%s), want %v", c.name, got.Action, got.Reason, c.want)
 		}
 	}
-	d := PreEngage(with(func(i *Input) { i.Mana = 12; i.PackSeen = 2; i.Skills = []Skill{bolt} }), tu)
+	d := PreEngage(with(func(i *Input) { i.Mana = 17; i.PackSeen = 2; i.Skills = []Skill{bolt} }), tu)
 	if d.WaitSec <= 0 || d.WaitSec > tu.RestMaxSec || d.TargetMana < 27 {
 		t.Errorf("rest decision %+v", d)
 	}
@@ -294,11 +294,12 @@ func TestKnobs(t *testing.T) {
 
 func TestRegenModel(t *testing.T) {
 	in := Input{Mana: 0, MaxMana: 100}
-	if s := in.RestSecs(50); s < 49 || s > 51 {
+	// 100 max mana: 8 256ths a frame = 0.78 points a second, 50 points in 64 s
+	if s := in.RestSecs(50); s < 63 || s > 65 {
 		t.Errorf("rest 50%%: %.1fs", s)
 	}
 	in.ManaRegenB = 100
-	if s := in.RestSecs(50); s < 24 || s > 26 {
+	if s := in.RestSecs(50); s < 31 || s > 33 {
 		t.Errorf("rest 50%% with +100%%: %.1fs", s)
 	}
 	if (Input{}).LifeRestSecs(10) < 1e8 {

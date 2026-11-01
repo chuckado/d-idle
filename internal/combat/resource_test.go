@@ -14,7 +14,7 @@ import (
 // A far pack is not engaged on an empty pool: the fighter rests until the cast budget is there (PreEngage).
 func TestRestsBeforeAFarPack(t *testing.T) {
 	h := newHarness(t)
-	h.s.mana, h.s.manaRegen = 15, 1.0
+	h.s.mana, h.s.manaRegen = 22, 1.0
 	// three of them: one or two trash monsters only need the cast budget (resource.PreEngage), a pack rests to the floor
 	for i := 0; i < 3; i++ {
 		h.s.addMon(uint32(10+i), clsFallen, float64(100+30+i), 100, 12, 0, 0) // 30 away: in clear radius, outside the fight radius
