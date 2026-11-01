@@ -152,6 +152,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - **Mesh and stream**: cards `d2dmesh`, `stream-grid` (in progress).
 - **Original-game work (deferred)**: cards `gameexe-retire-soak`, `orig-decision-probes` (Mephisto quit-safety: d2d says the Act 4 gate reopens after a reload, the user says a fresh kill is needed).
 - **d2d LAN oracle demo**: archived card `d2d-lan-oracle-demo`; idea doc [research/d2d-whisper-lan-oracle.md](research/d2d-whisper-lan-oracle.md).
+- FORKREBASE: the private fork stack is rebuilt on upstream main 52362d52 as lab2-debug-skills < lab2-armorhit < lab2-freezeresume (docs/forkrebase.md); soaks and drills use bin/d2d.lab2-freezeresume and name it; the hit-once commits are redundant (merged as #158); next: drop armor and freeze commits when upstream merges them
+- FORK RULE: use bin/d2d.lab2-freezeresume and name it; old lab-* are history
 
 ## 2. Open, no card yet
 1. **detloopchunk** (M): `Pacer.Watch` runs once per step chunk; step in chunks of at most `WatchMs` while a watcher is registered, add a nested-Watch guard, re-baseline deaths/h ([d2d-determinism.md](d2d-determinism.md) section 3.1; review: [research/code-review-2026-10-30.md](research/code-review-2026-10-30.md) section 9).

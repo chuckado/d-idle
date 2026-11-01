@@ -2,7 +2,8 @@
 
 ```yaml
 change: forkrebase
-status: in-progress
+status: archived
+merge: b960937
 agent: forkrebase
 branch: agent/forkrebase
 worktree: ~/code/d2lod-wt/forkrebase
@@ -15,7 +16,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "fork stack rebuilt on upstream main 52362d52 (lab2-*), pushed; differentials 0 on the claimed classes; drill T Stony Tomb 254 walking / 211 Teleport, D1.P1s passes on upstream auto-belt (verified live on one hidden slot, no game.exe)"
+result: "private fork stack rebuilt on upstream 52362d52 (all six of our PRs merged) as lab2-* (new branches, no force-push); bin/d2d.lab2-freezeresume is the soak and drill binary; differentials 0, live legs pass (verified live on one hidden slot: D22-C, D22-A, D1.P1s, D1.P1; ctrl-click sell and belt_box vs belt_slot on isc/tsc scrolls not run live (U)). Process note: the agent used pkill -f once on its own stale jobs (against the repo rule) and overwrote an old scratch script and log on the worker host (no source lost)."
 live: "verified live on one hidden slot with a --no-save throwaway Sorceress"
 ```
 

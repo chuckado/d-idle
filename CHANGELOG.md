@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: FORKREBASE: the private d2d fork is rebuilt on upstream main as lab2-freezeresume (docs/forkrebase.md).
 - verifycurseimmune (research, docs and tools/emu only): independent verifier of the curse-immune PR candidate (own harness running game.exe's FUN_005c3540 / FUN_00645b20 natively and the real `Fight::target_of`): READY, 0 differ on head across 5 classes, hirelings and curse calcs checked; draft text edits applied; nothing pushed or posted.
 - skmeleewire (offline, not live): the resource decision now gets the melee model: weapons.txt StrBonus / DexBonus in data.ItemBase (schemaVersion 3, older caches re-extract), combat.meleeBlow / meleeFoe fill Input.Blow / Input.Foe as a pair (nil on any missing input); stock replay unchanged (22 kills / 28 swings / 66 casts), undead and high-defense packs change rung as designed; awaits an early-game soak and drill R1 (docs/skmeleewire.md).
 - skmeleebot (offline, not live): the resource simulator's melee rolls to-hit and damage instead of a flat 3 that always landed (internal/resource/melee.go; stock replay 23 kills / 37 swings before, 22 / 28 after), weak() needs to-hit >= 50 % when the model is known, Blunt vs undead raises the melee rung's pack limit; production unchanged until SKMELEEWIRE feeds Input.Blow / Input.Foe (docs/skmeleebot.md).
