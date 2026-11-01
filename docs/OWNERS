@@ -75,3 +75,6 @@ tools/emu/next_hit.py  nexthit  nexthit
 tools/emu/next_hit_mode.inc  nexthit  nexthit
 tools/emu/next_hit_summary.py  nexthit  nexthit
 openspec/changes/nexthit/**  nexthit  nexthit
+docs/fixmanamodel.md  fixmanamodel  fixmanamodel
+internal/resource/manamodel.go  fixmanamodel  fixmanamodel
+internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel

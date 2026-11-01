@@ -84,3 +84,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - DRILLS13 (live results): Frozen Armor recast proof (D-fro1/D-fro2) and the M1 mana timing drill, logs and findings F1-F3: [probes/drills/README.md](probes/drills/README.md)
 - DRILLS14 (live result): the den bounce named (nav mouthStep radius, roam first walk, Clear approach in Cave Level 1), drills DW.m3 and DW.m4: [probes/drills/README.md](probes/drills/README.md)
 - DRILLS15 (live result): first live skill-smoke drills (group R): Teleport, mana, missile and armor traces compared with d2d, deviations confirmed: [probes/drills/README.md](probes/drills/README.md)
+- fixmanamodel: [fixmanamodel.md](fixmanamodel.md) regen per-frame whole 256ths, backend mana booking, potion over time (offline; live drill pending).

@@ -163,7 +163,7 @@ func (f *Fighter) forceCast(snap *d2.Snapshot, cand []Target, st *fightState, id
 		}
 		st.forced++
 		st.noteCast(now)
-		st.spent += sp.Cost
+		st.book.Add(f.now().Sub(st.t0).Seconds(), sp.Cost)
 		f.log().Info(fmt.Sprintf("combat: forced cast (no cast for %ds, %s)", int(idle.Seconds()), why),
 			"skill", sp.Name, "target", tg.Name, "dist", int(tg.Dist))
 		return true, f.cast(snap, sp, input.Point{X: tg.Unit.X, Y: tg.Unit.Y})

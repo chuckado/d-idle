@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- fixmanamodel (offline, not verified live): the bot's mana model follows game.exe/d2d: early pools regen 1.2x-1.8x slower than the old 100 s line (one `ManaPerFrame256`), casts are booked when paid (`ManaBook`, per backend), mana potions arrive over 5 s; `restMaxSec`, `restStartManaPct`, `castsPerMonster` and the Hell `ManaBurn*` constants are not retuned (soak review pending).
 - actgate (research): draft per-act Sorceress skill gate (verdict rows from the traces and DRILLS11 to 15, gate rule, ordered cards); proposed soak-gates delta is text only, nothing applied to a spec.
 - fixcastgap (offline): the bot waits one cast length per skill between casts: Lightning and Chain Lightning 890 ms on game.exe (650 ms on d2d) instead of the flat 650 ms (new knobs combat.castPerSkill, castMarginMs, castFCR); live proof still open.
 - drills15 (live): first live skill-smoke drills (group R, 13 drills on d2d, game.exe not run): Teleport, mana, missile and armor traces compared with d2d; deviations of the traces confirmed with numbers (no room limit, blocked target pays, lands on monsters, merc not warped, cut cast keeps mana, no skill delay, Energy Shield absorbs 1.0); drill harness only, no product change.
