@@ -12,6 +12,7 @@ func hopRun(t *testing.T, set func(n *Navigator)) *sim {
 	s := newSim(g, input.Point{X: 2010, Y: 2050})
 	n := s.navigator()
 	set(n)
+	oldHopRules(n)
 	tuningOf(n).Nav.ExploreTimeoutSec = 2000
 	done := func() bool { return s.pos().X > 2200 }
 	if err := n.ExploreToward(ctxT(t), input.Point{X: 2390, Y: 2050}, done); err != nil {

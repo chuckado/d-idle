@@ -33,6 +33,8 @@ type NavTuning struct {
 	WpMinDistance     float64 // a waypoint hop must skip at least this many levels, otherwise the bot walks
 	WpCooldownSec     float64 // game.exe refuses a waypoint travel this long after a level change (D2D-V: 10 s)
 	BadEdgeTTLSec     float64 // a nav edge or gate marked bad is forgotten after this long (0: never, the old behaviour; also switches the cut-off-pocket unstick off)
+	TeleReservePct    float64 // a Teleport hop is declined (the walk goes on) when mana after it would fall below this % of max mana
+	TeleMinLeg        float64 // a hop is declined when the walk to its landing cell is shorter than this (subtiles)
 	CautionRadius     float64 // CorpseApproach stops when a living monster is this close (subtiles); its paths avoid monsters at twice the usual radius
 }
 
@@ -41,7 +43,7 @@ func DefaultNavTuning() NavTuning {
 		PathQuality: 1, Sloppiness: 8, WaypointSpacing: 8, ArriveTolerance: 2, PollMs: 100, ReplanMs: 1500,
 		StuckMs: 1200, MaxRecoveries: 6, WallClearance: 3, WallWeight: 0.75, MonsterRadius: 8, MonsterPenalty: 6,
 		ExploreInformed: true, ExploreBucket: 10, WalkTimeoutSec: 120, ExploreTimeoutSec: 300, ExitPush: 8,
-		LoadWaitSec: 20, PanelWaitMs: 2500, CautionRadius: 20,
+		LoadWaitSec: 20, PanelWaitMs: 2500, CautionRadius: 20, TeleReservePct: 40, TeleMinLeg: 36,
 		UseWaypoints: true, WpMinDistance: 2, WpCooldownSec: 10, BadEdgeTTLSec: 300,
 	}
 }
@@ -122,5 +124,9 @@ func navKnobs() []Knob {
 			Desc: "A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge)."},
 		{Key: "nav.cautionRadius", Label: "Corpse approach caution", Unit: "subtiles", Default: d.CautionRadius, Min: 8, Max: 40, HigherIsBetter: true,
 			Desc: "A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius."},
+		{Key: "nav.teleReservePct", Label: "Teleport mana reserve", Unit: "%", Default: d.TeleReservePct, Min: 0, Max: 90, HigherIsBetter: true, NoHandicap: true,
+			Desc: "A Teleport hop is skipped (the walk goes on, no waiting for mana) when the mana after it would be below this share of max mana, so fights are not starved. Default: about eight casts of a 5 to 8 mana attack on a 150 mana pool (UNSURE, docs/teletune.md)."},
+		{Key: "nav.teleMinLeg", Label: "Teleport minimum leg", Unit: "subtiles", Default: d.TeleMinLeg, Min: 0, Max: 120, HigherIsBetter: false, NoHandicap: true,
+			Desc: "A hop is skipped when the walk to its landing cell is shorter than this: running speed times the measured time of a hop (0.5625 x 64 ticks). 0 hops whenever mana allows."},
 	}
 }

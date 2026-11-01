@@ -105,8 +105,13 @@ func (n *Navigator) hop(ctx context.Context, o *obs, target input.Point) (moved 
 	if !n.teleAllowed(o.level) {
 		return false, false, nil
 	}
+	n.teleDeclined = false
 	cell, found := n.hopCell(o, target)
 	if !found {
+		return false, false, nil
+	}
+	if n.hopDeclined(o, cell) {
+		n.teleDeclined = true
 		return false, false, nil
 	}
 	return n.hopAt(ctx, o, cell)
@@ -220,6 +225,9 @@ func (n *Navigator) teleLeg(ctx context.Context, o *obs, hint *input.Point) (han
 	moved, ok, err := n.hop(ctx, o, pick.pos)
 	if err != nil {
 		return false, err
+	}
+	if !ok && n.teleDeclined {
+		return false, nil // the break-even rules say walk (teletune.go); not a dead end, not an island
 	}
 	if !ok {
 		// No greedy hop: islands separated by void need a planned route or a bounded blind cast.

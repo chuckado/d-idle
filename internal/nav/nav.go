@@ -70,6 +70,9 @@ type Navigator struct {
 	TeleportOK    func(level int) bool
 	TeleportRange float64 // subtiles per cast, 0: 18
 	TeleportMana  int     // mana one cast needs, 0: 24
+	// TeleportCost, if set, gives the mana of one cast from the skill data at the player's learned level (the bot
+	// wires data.Skill.ManaCost); TeleportMana is the fallback.
+	TeleportCost func(p *d2.Player) int
 	// Refill, if set, is called while a cast waits for mana (drink a potion, rest); without it nav sleeps.
 	Refill func(ctx context.Context, mana, need int) error
 
@@ -120,6 +123,8 @@ type Navigator struct {
 	escaping     bool
 	teleBad      map[[2]int]int  // hop cells where nothing happened
 	teleFails    int             // consecutive explore hops that did not move
+	teleWhy      string          // last reason a hop was declined (log once per change)
+	teleDeclined bool            // the last hop call declined on the break-even rules: the caller walks
 	visited      map[[2]int]bool // exploration buckets the player has stood in
 	failed       map[[2]int]int  // frontier buckets that did not pan out
 	badGates     []badGate
