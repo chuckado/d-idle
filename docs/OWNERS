@@ -82,3 +82,9 @@ internal/combat/fight.go  fixmouth2  fixmouth2
 internal/combat/fighter.go  fixmouth2  fixmouth2
 internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
 docs/fixmouth2.md  fixmouth2  fixmouth2
+.github/workflows/pr-review.yml apireview apireview
+tools/ci/pr_review.py apireview apireview
+tools/ci/haiku_tick.py apireview apireview
+tools/ci/anthropic_http.py apireview apireview
+tools/ci/tests/** apireview apireview
+docs/process/api-credits.md apireview apireview
