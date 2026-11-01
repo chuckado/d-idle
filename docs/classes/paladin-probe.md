@@ -2,7 +2,7 @@
 
 > status: current. Card `palprobe` (user go 2026-11-01). Offline only: nothing here ran on the game or on d2d. Builds on `docs/research/paladin-act1-recon.md` and `docs/research/build-flexibility-audit.md` (rows cited as "row n").
 
-Tags: **V** verified by a test in this change (name given) or by reading the file (named); **I** inferred; **U** unverified or a model input. Test runs: `go test -p 1 -count=1 -v -run PalProbe ./internal/leveler ./internal/combat ./internal/resource` on the herdr box; the town and install-backed tests (`internal/town`, `TestPalProbeRulesMatchInstall`) skip there and ran on the worker host (`labrun orion -- go test -p 4 -count=1 -run PalProbe ./internal/town ./internal/leveler`).
+Tags: **V** verified by a test in this change (name given) or by reading the file (named); **I** inferred; **U** unverified or a model input. Test runs: `go test -p 1 -count=1 -v -run PalProbe ./internal/leveler ./internal/combat ./internal/resource` on the small dev box; the town and install-backed tests (`internal/town`, `TestPalProbeRulesMatchInstall`) skip there and ran on the worker host (same command, `-p 4`, package list `./internal/town ./internal/leveler`).
 
 ## 1. Part A: the seams (Sorceress behaviour unchanged)
 
@@ -43,7 +43,7 @@ Existing tests: all pass untouched except two edits, both forced by the change: 
 | f2 | early-game survival clvl 1 to 8 | WORKING in the model, thin at clvl 1 and 2 | `TestPalProbeEarlyLifeCurve`: closed-form life lost per pack against the 40 percent retreat line: pack of 1 costs 9 percent at clvl 1; a pack of 4 costs 157 percent at clvl 1, 80 at clvl 2, 54 at clvl 3, 42 at clvl 4, 26 at clvl 8. The replay had 0 deaths at clvl 1, 4, 8 | inputs U (foe level 3 gives 42 percent to-hit at clvl 1; level 1 would give about 58) |
 | g | Zealot-lite table as data | NOT DONE, ready card | `leveler.buildFiles` is a Go map (S4 seam absent); no data file added, no glue written | V file read |
 
-Counts: WORKING 20, BROKEN 5 (a2 legacy, a5, b2, e2, plus F3 below), UNVERIFIED 2 probes (b7 and the d2d side of b3, b5) plus the live-only list in section 5.
+Counts (22 rows): WORKING 16, BROKEN 4 (a2 for the legacy table, a5, b2, e2), UNVERIFIED 1 (b7) with the d2d side of b3, b5 and c3 also open, NOT DONE 1 (g, ready card). F3 and F4 are findings on the legacy table, counted under a2.
 
 Model note for f1: the resource policy's melee fallback only stands against packs of 3 or fewer, a rung written for a Sorceress out of mana (the replay shows 14 to 25 retreats for the Paladin). The production Paladin does not use it: the melee ladder always ends in the free Attack, so `AttackChoice` is never asked (V `TestPaladinFallsBackToAttackWithoutMana`; I for the code path in `combat/resource.go:289`).
 
