@@ -156,6 +156,8 @@ func run() int {
 		drills = drill.M(l)
 	case "P": // DRILLS11: fixemptyplan and fixportalmelee live proofs, the cut-cast record
 		drills = drill.D11(l)
+	case "Q": // DRILLS13: fixrecast Frozen Armor proof, M1 mana timing
+		drills = drill.D13(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
