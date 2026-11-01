@@ -1,6 +1,6 @@
-labrun: synced code/d2lod-wt/drills9 → orion:~/labrun/herdr/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group H -only H.pause -label drills9-h2 -v'
+labrun: synced code/d2lod-wt/drills9 → the-worker-host:~/labrun/the-head-host/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group H -only H.pause -label drills9-h2 -v'
 d2dslot: got slot 0
-time=2026-10-31T20:11:32.753-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1403172 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:11:32.753-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1403172 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T20:11:33.860-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 DRILL H.pause AUDIT PASS the approach opens Kashya's menu with the bot's own Pause (a game-time deadline under lockstep) in 2 of 2 tries | intended: the approach opens Kashya's menu with the bot's own Pause, with a game-time deadline (ticks > 0 even when it fails), as it does with the lab's stepping Pause | observed: lab stepping Pause: [opened=true ticks=147 wall=13ms err=""] and [opened=true ticks=238 wall=23ms err=""] | the bot's own Pause (game time under lockstep): [opened=true ticks=248 wall=22ms err=""] and [opened=true ticks=248 wall=22ms err=""] | runs: 2, identical
 END character Drilly life 40/40 in town: true
@@ -8,6 +8,6 @@ END character Drilly life 40/40 in town: true
 drill     prim  verdict  det  reason
 H.pause   AUDIT PASS     same the approach opens Kashya's menu with the bot's own Pause (a game-time deadline under lockstep) in 2 of 2 tries
 cheat verbs used (each ledgered with a reason): debug goto 1
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T20:11:34.467-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 3s
+labrun: the-worker-host exited 0 after 3s

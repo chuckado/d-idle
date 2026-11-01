@@ -1,6 +1,6 @@
-labrun: synced code/d2lod-wt/drills9 → orion:~/labrun/herdr/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group D4 -label drills9-d4 -v'
+labrun: synced code/d2lod-wt/drills9 → the-worker-host:~/labrun/the-head-host/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group D4 -label drills9-d4 -v'
 d2dslot: got slot 0
-time=2026-10-31T20:38:20.213-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1562577 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:38:20.213-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1562577 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T20:38:21.295-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 time=2026-10-31T20:38:21.690-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
 time=2026-10-31T20:38:21.691-04:00 level=INFO msg="loot: potion skip code=hp1 beltWant=0 packHave=0 buffer=0 beltFree=0"
@@ -93,6 +93,6 @@ D4.g      P8    PASS     same gold pile taken into a full pack, purse 156
 D4.cap    P8    PASS     same recorded: the purse after taking a pile at 9990 gold, clvl 1, is 10000 (piles left: 1)
 D4.x      P6    PASS     same chipped x3 became flawed x1, cube kept
 cheat verbs used (each ledgered with a reason): debug clearinv, debug give box, debug give cap, debug give gcv, debug give gcy, debug give gld, debug give hp1, debug give rin, debug stat 14 0, debug stat 14 9990
-cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
 time=2026-10-31T20:38:24.885-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
-labrun: orion exited 0 after 6s
+labrun: the-worker-host exited 0 after 6s
