@@ -7,7 +7,9 @@
 #include <gamedata_load.hpp>
 #include <skills.hpp>
 
+#include <algorithm>
 #include <array>
+#include <cctype>
 #include <cstdio>
 #include <cstdlib>
 #include <exception>
@@ -46,10 +48,18 @@ int main(int argc, char** argv) try {
         if (mode == "--none") {
         } else if (mode == "--calc") {
             const auto value = [&](const d2d::rules::Calc& calc) { return d2d::rules::eval_calc(data->skills, calc, env, skill_id, lvl); };
+            // Fight::skill_named: the name as written, else ignoring case (FireGolem's "holy fire")
+            const auto named = [&](const std::string& name) {
+                if (name.empty()) return false;
+                if (data->skills.by_name.contains(name)) return true;
+                for (const auto& [skill_name, row] : data->skills.by_name)
+                    if (std::ranges::equal(skill_name, name, [](char left, char right) { return std::tolower(static_cast<unsigned char>(left)) == std::tolower(static_cast<unsigned char>(right)); })) return true;
+                return false;
+            };
             std::printf("%d", id);
             for (std::size_t k = 0; k < 4; ++k) std::printf(" %d", value(skill->calc[k]));
             std::printf(" %d", value(skill->petmax));
-            for (std::size_t k = 0; k < 5; ++k) { if (!skill->sumskill[k].empty() && data->skills.by_name.contains(skill->sumskill[k])) std::printf(" %d", value(skill->sumsk_calc[k])); else std::printf(" x"); }
+            for (std::size_t k = 0; k < 5; ++k) { if (named(skill->sumskill[k])) std::printf(" %d", value(skill->sumsk_calc[k])); else std::printf(" x"); }
             std::printf(" %d %d %d %d", value(skill->delay), value(skill->aurarange), value(skill->auralen), value(skill->perdelay_calc));
             for (std::size_t k = 0; k < 6; ++k) { if (skill->aurastat[k] >= 0) std::printf(" %d", value(skill->aura_calc[k])); else std::printf(" x"); }
             for (std::size_t k = 0; k < 5; ++k) { if (skill->passive_stat[k] >= 0) std::printf(" %d", value(skill->passive_calc[k])); else std::printf(" x"); }
