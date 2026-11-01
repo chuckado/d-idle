@@ -259,6 +259,12 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 		ei.Err = err.Error()
 		return
 	}
+	if where, err := l.d11WallBack(ctx, r); err != nil {
+		ei.Err = "wall: " + err.Error()
+		return
+	} else {
+		ei.Where += ", " + where
+	}
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn zombie1 %d near", n), "a pack of more than 8 near the throwaway (not a weak pack, so the out-of-mana ladder reaches the retreat step): the fight under test (docs/forkcheats.md)"); err != nil {
 		ei.Err = err.Error()
 		return
@@ -322,4 +328,55 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 		}
 	}
 	return
+}
+
+// d11WallBack puts the character (logged `debug warp`) on the nearest cell with a wall 3 subtiles behind it and 15 free
+// subtiles in front, so a back-off of 12 subtiles away from a pack in front aims into the wall (the goal then snaps).
+// The grid rows are level-relative subtiles, row = y, column = x (docs/d2d-backend.md); warp takes whole cells.
+func (l *lab) d11WallBack(ctx context.Context, r *drill.Run) (string, error) {
+	rows, err := l.be.Client.Grid(ctx, 5)
+	if err != nil || len(rows) == 0 {
+		return "", fmt.Errorf("no grid: %v", err)
+	}
+	lv, err := l.be.Client.Level(ctx)
+	if err != nil {
+		return "", err
+	}
+	at := func(x, y int) byte {
+		if y < 0 || y >= len(rows) || x < 0 || x >= len(rows[y]) {
+			return '#'
+		}
+		return rows[y][x]
+	}
+	px, py := int(5*lv.X), int(5*lv.Y)
+	best, bd := [3]int{}, 1<<30
+	dirs := [][2]int{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+	for cy := py/5 - 12; cy <= py/5+12; cy++ {
+		for cx := px/5 - 12; cx <= px/5+12; cx++ {
+			x, y := 5*cx+2, 5*cy+2
+			if at(x, y) != '.' {
+				continue
+			}
+			for di, d := range dirs {
+				ok := at(x-3*d[0], y-3*d[1]) == '#' && at(x-d[0], y-d[1]) == '.'
+				for k := 1; ok && k <= 15; k++ {
+					ok = at(x+k*d[0], y+k*d[1]) == '.'
+				}
+				if ok {
+					if dd := (x-px)*(x-px) + (y-py)*(y-py); dd < bd {
+						bd, best = dd, [3]int{cx, cy, di}
+					}
+				}
+			}
+		}
+	}
+	if bd == 1<<30 {
+		return "", fmt.Errorf("no wall-backed cell within 12 cells of (%d,%d)", px, py)
+	}
+	if err := l.Warp(ctx, r, best[0], best[1]); err != nil {
+		return "", err
+	}
+	_ = l.Tick(ctx, 10)
+	d := dirs[best[2]]
+	return fmt.Sprintf("warped to cell (%d,%d), wall 3 subtiles behind toward (%d,%d), open ahead", best[0], best[1], -d[0], -d[1]), nil
 }
