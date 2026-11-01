@@ -62,6 +62,7 @@ func run() int {
 	limit := flag.Duration("limit", 0, "override the per-run hard time limit")
 	capFile := flag.String("cap", "", "cap this saved run log in place (head, tail, verdict and error lines; default max 400 KB) before committing it under docs/probes, then exit")
 	flag.Parse()
+	binName = *bin
 	if *capFile != "" {
 		before, after, err := drill.CapFile(*capFile, drill.DefaultCap)
 		if err != nil {
@@ -169,6 +170,8 @@ func run() int {
 		drills = drill.D13(l)
 	case "R": // DRILLS15 (skill-smoke traces) and DRILLS16 (fixbuff live proof): one group, drill names R-bs* / D15-* tell them apart
 		drills = append(drill.D15(l), drill.D16(l)...)
+	case "U": // DRILLS26: Frozen Armor recast in a real fight, binary named
+		drills = drill.D26(l)
 	case "T": // DRILLS22: live proof of fixtelekey (Teleport capability in Act 2 legs)
 		drills = drill.D22(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
