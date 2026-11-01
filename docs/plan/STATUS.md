@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [cr155](../../openspec/changes/cr155/) | in-progress | CR155 | `docs/research/pr-static-evidence-pack.md`<br>`docs/research/pr-static-chill-proof.md`<br>`docs/BACKLOG.md`<br>`docs/plan/STATUS.md`<br>`openspec/changes/cr155/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -65,6 +66,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change cr155: changecheck status -write then -cli: 0 warnings; leakcheck -mode fail: 0 hits; tools/ci/check.sh --hygiene-only: no FAIL; tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -85,6 +87,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
 - 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
 - 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
 - b617048 10-31 21:03 `Merge agent/fixbigfiles: cap oversized drills9 logs (CI size gate)` (fixbigfiles)
@@ -94,5 +97,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 33d7d1f 10-31 20:26 `Merge agent/chillpatch: static-field chill proof and draft` (chillpatch)
 - 544d89f 10-31 20:24 `Merge agent/verifyprs2: verifier harnesses for walk and price follow-on` (verifyprs2)
 - 912086a 10-31 20:02 `Merge agent/fixstall4: town verbs follow line of sight, route at every stall` (fixstall4)
-- 75b2469 10-31 19:51 `Merge agent/drills8: drill results, harness edits` (drills8)
 <!-- statusgen:end -->

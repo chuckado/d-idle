@@ -172,3 +172,5 @@ feeds merged (docs/community/discord/feeds.md section e, card feeds): `tools/dis
 
 feeds2 merged (feeds.md sections f and g): CI failures post to `#progress` from the CI job `notify-failure` (secret `DISCORD_PROGRESS_WEBHOOK`, test with `gh workflow run ci -f feed_test=true`); the repo webhook dropped `workflow_run`; `#d2d-upstream` has its own webhook file; open: rotate both by hand if either leaks
 dethash (2026-11-01, card dethash): det state hashes run on upstream main + lab set vs #155, chill, walk3 (docs/research/det-hashes-2026-11-01.md): #155 and chill DET-CLEAN (chill has a coverage gap: no cold missile visibly hit), walk3 DET-CHANGES-EXPLAINED (only walking zombies; merc/pet/player-walk not covered); next: a det scenario with a cold-vulnerable monster and a merc or pet.
+
+- #155 CodeRabbit nitpick open (docs/research/pr-static-evidence-pack.md): the --static-field mode does not call Fight::spot, so a wrong input in the production kStaticField block (pierce index, res index, floor lookup) would not change its diff; driving spot with a caster and monsters in aurarange would close it but widens the claim. Coordinator decides.

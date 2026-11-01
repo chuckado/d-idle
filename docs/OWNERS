@@ -45,3 +45,8 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/research/pr-static-evidence-pack.md  CR155  cr155
+docs/research/pr-static-chill-proof.md  CR155  cr155
+docs/BACKLOG.md  CR155  cr155
+docs/plan/STATUS.md  CR155  cr155
+openspec/changes/cr155/**  CR155  cr155
