@@ -776,3 +776,30 @@ func (l *lab) arrive(ctx context.Context, r *drill.Run, level int, how string) e
 	}
 	return nil
 }
+
+// DenPhase is drill.DenLab: one phase of Runner.sweepPass run by itself (idle, Fighter.Clear, Navigator.Explore).
+func (l *lab) DenPhase(ctx context.Context, phase string, ticks int) (int, []string, string) {
+	mark, t0 := l.rec.Mark(), l.tick()
+	msg := ""
+	switch phase {
+	case "idle":
+		if err := l.Tick(ctx, ticks); err != nil {
+			msg = err.Error()
+		}
+	case "clear":
+		if _, err := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: time.Duration(ticks) * 40 * time.Millisecond}); err != nil {
+			msg = err.Error()
+		}
+	case "explore":
+		if err := l.navr.Explore(ctx, func() bool { return l.tick()-t0 >= ticks }); err != nil {
+			msg = err.Error()
+		}
+	default:
+		msg = "unknown phase " + phase
+	}
+	area := 0
+	if s, err := l.be.Env.Snapshot(); err == nil && s.Player != nil {
+		area = s.Player.Area
+	}
+	return area, l.rec.Since(mark), msg
+}

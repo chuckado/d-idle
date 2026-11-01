@@ -1,0 +1,136 @@
+d2dslot: got slot 0
+time=2026-11-01T01:15:00.412-04:00 level=WARN msg="d2d channel not answering: d2d process pid 3255502 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T01:15:01.376-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-11-01T01:15:02.004-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.007-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.008-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.008-04:00 level=DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.008-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:105 Y:140}" wps=16 partial=false cells=100
+time=2026-11-01T01:15:02.015-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:140 Y:232}" cur=0 of=16
+time=2026-11-01T01:15:02.017-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:236}" wp="{X:140 Y:224}" cur=1 of=16
+time=2026-11-01T01:15:02.021-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:227}" wp="{X:140 Y:221}" cur=2 of=16
+time=2026-11-01T01:15:02.022-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:224}" wp="{X:138 Y:213}" cur=3 of=16
+time=2026-11-01T01:15:02.026-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:216}" wp="{X:133 Y:208}" cur=4 of=16
+time=2026-11-01T01:15:02.029-04:00 level=DEBUG msg="nav click" pos="{X:135 Y:210}" wp="{X:127 Y:202}" cur=5 of=16
+time=2026-11-01T01:15:02.034-04:00 level=DEBUG msg="nav click" pos="{X:129 Y:204}" wp="{X:121 Y:196}" cur=6 of=16
+time=2026-11-01T01:15:02.043-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:198}" wp="{X:120 Y:195}" cur=7 of=16
+time=2026-11-01T01:15:02.044-04:00 level=DEBUG msg="nav click" pos="{X:122 Y:197}" wp="{X:120 Y:187}" cur=8 of=16
+time=2026-11-01T01:15:02.047-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:190}" wp="{X:120 Y:179}" cur=9 of=16
+time=2026-11-01T01:15:02.066-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:183}" wp="{X:120 Y:171}" cur=10 of=16
+time=2026-11-01T01:15:02.070-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:175}" wp="{X:120 Y:167}" cur=11 of=16
+time=2026-11-01T01:15:02.072-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:170}" wp="{X:116 Y:160}" cur=12 of=16
+time=2026-11-01T01:15:02.082-04:00 level=DEBUG msg="nav click" pos="{X:117 Y:162}" wp="{X:112 Y:153}" cur=13 of=16
+time=2026-11-01T01:15:02.092-04:00 level=DEBUG msg="nav click" pos="{X:114 Y:156}" wp="{X:109 Y:146}" cur=14 of=16
+time=2026-11-01T01:15:02.101-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.108-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.110-04:00 level=INFO msg="roam: coverage points" level=8 points=431 exits=1
+time=2026-11-01T01:15:02.110-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.111-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.111-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.111-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.111-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.125-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.130-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.130-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.130-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.139-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.139-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.142-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.142-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.142-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.142-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.142-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.159-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.164-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.164-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.164-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.174-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.174-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.176-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.177-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.177-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.177-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.177-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.189-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.193-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.193-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.194-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.204-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.205-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.207-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.207-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.207-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.208-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.208-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.223-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.269-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.269-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.270-04:00 level=DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.270-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:105 Y:140}" wps=16 partial=false cells=100
+time=2026-11-01T01:15:02.270-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:140 Y:232}" cur=0 of=16
+time=2026-11-01T01:15:02.272-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:236}" wp="{X:140 Y:224}" cur=1 of=16
+time=2026-11-01T01:15:02.276-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:227}" wp="{X:140 Y:221}" cur=2 of=16
+time=2026-11-01T01:15:02.277-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:224}" wp="{X:138 Y:213}" cur=3 of=16
+time=2026-11-01T01:15:02.282-04:00 level=DEBUG msg="nav click" pos="{X:138 Y:216}" wp="{X:133 Y:208}" cur=4 of=16
+time=2026-11-01T01:15:02.285-04:00 level=DEBUG msg="nav click" pos="{X:135 Y:210}" wp="{X:127 Y:202}" cur=5 of=16
+time=2026-11-01T01:15:02.289-04:00 level=DEBUG msg="nav click" pos="{X:129 Y:204}" wp="{X:121 Y:196}" cur=6 of=16
+time=2026-11-01T01:15:02.294-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:198}" wp="{X:120 Y:195}" cur=7 of=16
+time=2026-11-01T01:15:02.294-04:00 level=DEBUG msg="nav click" pos="{X:122 Y:197}" wp="{X:120 Y:187}" cur=8 of=16
+time=2026-11-01T01:15:02.297-04:00 level=DEBUG msg="nav plan" from="{X:121 Y:190}" to="{X:105 Y:140}" wps=7 partial=false cells=50
+time=2026-11-01T01:15:02.298-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:190}" wp="{X:121 Y:182}" cur=0 of=7
+time=2026-11-01T01:15:02.300-04:00 level=DEBUG msg="nav click" pos="{X:121 Y:185}" wp="{X:120 Y:174}" cur=1 of=7
+time=2026-11-01T01:15:02.318-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:178}" wp="{X:120 Y:167}" cur=2 of=7
+time=2026-11-01T01:15:02.322-04:00 level=DEBUG msg="nav click" pos="{X:120 Y:170}" wp="{X:116 Y:160}" cur=3 of=7
+time=2026-11-01T01:15:02.322-04:00 level=DEBUG msg="nav plan" from="{X:119 Y:168}" to="{X:105 Y:140}" wps=5 partial=false cells=28
+time=2026-11-01T01:15:02.323-04:00 level=DEBUG msg="nav click" pos="{X:119 Y:168}" wp="{X:115 Y:159}" cur=1 of=5
+time=2026-11-01T01:15:02.326-04:00 level=DEBUG msg="nav click" pos="{X:117 Y:162}" wp="{X:112 Y:152}" cur=2 of=5
+time=2026-11-01T01:15:02.330-04:00 level=DEBUG msg="nav click" pos="{X:113 Y:154}" wp="{X:108 Y:145}" cur=3 of=5
+time=2026-11-01T01:15:02.337-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.342-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.344-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.344-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.344-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.344-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.344-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.360-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.364-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.364-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.364-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.373-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.374-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.376-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.377-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.377-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.377-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.377-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.393-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.397-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.397-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.398-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.408-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.409-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.411-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.412-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.412-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.412-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.412-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.426-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.430-04:00 level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+time=2026-11-01T01:15:02.430-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:15:02.431-04:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:141}" level=2 exits=1 wantExit=8
+time=2026-11-01T01:15:02.439-04:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:15:02.440-04:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T01:15:02.442-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:15:02.442-04:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0
+time=2026-11-01T01:15:02.442-04:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=true
+time=2026-11-01T01:15:02.442-04:00 level=DEBUG msg="nav plan" from="{X:40 Y:145}" to="{X:34 Y:146}" wps=1 partial=false cells=5
+time=2026-11-01T01:15:02.442-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:145}" wp="{X:36 Y:146}" cur=0 of=1
+time=2026-11-01T01:15:02.456-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+DRILL DW.m3 P23 FAIL 4 bounce(s) out of the cave, first in explore | intended: after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired) | observed: 4 entries, 4 bounces (first in "explore"); trace: c0 enter: area 8 ok | c0 idle: area 8 ok | c0 clear: area 8 ok | c0 explore: area 2 error: nav: the level changed during the walk: 8 -> 2 | c1 enter: area 8 ok | c1 idle: area 8 ok | c1 clear: area 8 ok | c1 explore: area 2 error: nav: the level changed during the walk: 8 -> 2 | c2 enter: area 8 ok | c2 idle: area 8 ok | c2 clear: area 8 ok | c2 explore: area 2 error: nav: the level changed during the walk: 8 -> 2 | c3 enter: area 8 ok | c3 idle: area 8 ok | c3 clear: area 8 ok | c3 explore: area 2 error: nav: the level changed during the walk: 8 -> 2; callers at the bounce: --- cycle 0 phase explore: / roam: coverage points level=8 points=431 exits=1 / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={40 145} level=8 exits=1 wantExit=0 / nav mouth exit dest=2 exit={35 135} dist=11.2 skip=true / nav plan from={40 145} to={34 146} wps=1 partial=false cells=5 / nav click pos={40 145} wp={36 146} cur=0 of=1 / d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / --- cycle 1 phase explore: / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={40 145} level=8 exits=1 wantExit=0 / nav mouth exit dest=2 exit={35 135} dist=11.2 skip=true / nav plan from={40 145} to={34 146} wps=1 partial=false cells=5 / nav click pos={40 145} wp={36 146} cur=0 of=1 / d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / --- cycle 2 phase explore: / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={40 145} level=8 exits=1 wantExit=0 / nav mouth exit dest=2 exit={35 135} dist=11.2 skip=true / nav plan from={40 145} to={34 146} wps=1 partial=false cells=5 / nav click pos={40 145} wp={36 146} cur=0 of=1 / d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / --- cycle 3 phase explore: / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={40 145} level=8 exits=1 wantExit=0 / nav mouth exit dest=2 exit={35 135} dist=11.2 skip=true / nav plan from={40 145} to={34 146} wps=1 partial=false cells=5 / nav click pos={40 145} wp={36 146} cur=0 of=1 / d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) | runs: 2, identical
+END character Drilly life 2000/2000 in town: false
+
+drill     prim  verdict  det  reason
+DW.m3     P23   FAIL     same 4 bounce(s) out of the cave, first in explore
+cheat verbs used (each ledgered with a reason): debug goto 2, debug stat 6 512000, debug stat 7 512000
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T01:15:02.458-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
