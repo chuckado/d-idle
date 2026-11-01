@@ -22,6 +22,7 @@ gates:
   - "live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)"
 merge:
 result:
+live: "D-emptyplan live (DRILLS11): 0 empty path in 58 back-offs per invocation x3; the pre-fix binary 6 empty path of 47 back-offs in 3 of 3; README DRILLS11"
 ```
 
 ## 1. Work

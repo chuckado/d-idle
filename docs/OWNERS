@@ -68,3 +68,4 @@ internal/combat/fight.go  fixemptyplan  fixemptyplan
 internal/combat/reach.go  fixemptyplan  fixemptyplan
 internal/combat/fixemptyplan_test.go  fixemptyplan  fixemptyplan
 docs/fixemptyplan.md  fixemptyplan  fixemptyplan
+openspec/changes/drills11/**  drills11  drills11
