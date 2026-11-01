@@ -98,6 +98,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
 - d837d1c 11-01 01:57 `Merge agent/sknova: Frost Nova ring trace (SKNOVA)` (sknova)
 - 4b86423 11-01 01:52 `Merge agent/fixcastgap: per-skill cast gap (Lightning 890 ms on game.exe, 650 ms on d2d)` (fixcastgap)
 - c53dc1d 11-01 01:48 `Merge agent/drills15: DRILLS15 live drill results (13 drills on d2d vs game.exe traces)` (drills15)
@@ -107,5 +108,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
 - 0c88fdc 11-01 01:16 `Merge agent/crfix157: CodeRabbit follow-up records for upstream PR 157 (docs only)` (crfix157)
 - 89d6a22 11-01 01:13 `Merge agent/drills13: DRILLS13 live results (Frozen Armor recast pass, mana timing M1)` (drills13)
-- 3f62842 11-01 01:11 `Merge agent/fixdenbounce: soak 2 den bounce evidence record (docs only)` (fixdenbounce)
 <!-- statusgen:end -->
