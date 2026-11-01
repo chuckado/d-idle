@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2 D4: which subtile offsets a standing Blizzard shard hits, by game.exe's own code.
 
-    python sk_ground_hit.py [SPAN] [CLASSES]    # prints `H size class a b hit frame` per case + a grid
+    python sk_ground_hit.py [SPAN [ROW [FRAMES]]]    # ROW blizzard1 (default) or firewall; prints `H size class a b hit first count` per case
 
 Runs next to upstream's tools/emu (missiles.py's Game: a Blood Moor game,
 every room up). Per case: a monster unit of a class (size 1..3) stands at a
@@ -22,11 +22,15 @@ import sys
 
 import missiles
 
+ROWS = {"blizzard1": 159, "firewall": 69}
 SHARD = 159
 
 
 def main():
+    global SHARD
     span = int(sys.argv[1]) if len(sys.argv) > 1 else 7
+    SHARD = ROWS[sys.argv[2]] if len(sys.argv) > 2 else 159
+    nframes = int(sys.argv[3]) if len(sys.argv) > 3 else 9
     game = missiles.Game()
     e = game.e
     rng = random.Random(1)
@@ -77,12 +81,14 @@ def main():
                     fn = e.r32(0x73c768 + 4 * game.row(SHARD, 0xc, 2))
                     game.hit.clear()
                     first = -1
-                    for frame in range(1, 10):
+                    total = 0
+                    for frame in range(1, nframes + 1):
                         n = len(game.hit)
                         e.call(fn, ecx=game.g, edx=m)
-                        if len(game.hit) > n and first < 0 and any(h[0] == fu or h[1] == fu for h in game.hit[n:]): first = frame
-                        if game.hit and first < 0 and any(h[0] == fu or h[1] == fu for h in game.hit): first = frame
-                    print(f"H {size} {cls} {a} {b} {1 if first >= 0 else 0} {first}")
+                        got = sum(1 for h in game.hit[n:] if h[0] == fu or h[1] == fu)
+                        if got and first < 0: first = frame
+                        total += got
+                    print(f"H {size} {cls} {a} {b} {1 if first >= 0 else 0} {first} {total}")
                     # undo the shard's own mark in the room's collision
                     for rr in game.rooms:
                         pass
