@@ -172,6 +172,8 @@ func run() int {
 		drills = append(drill.D15(l), drill.D16(l)...)
 	case "U": // DRILLS26: Frozen Armor recast in a real fight, binary named
 		drills = drill.D26(l)
+	case "V": // DRILLS28: D28-0 Frozen Armor refresh with no monsters (armorcut step 0)
+		drills = drill.D28(l)
 	case "T": // DRILLS22: live proof of fixtelekey (Teleport capability in Act 2 legs)
 		drills = drill.D22(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)

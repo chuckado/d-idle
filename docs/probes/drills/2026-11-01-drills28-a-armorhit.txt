@@ -1,0 +1,125 @@
+d2dslot: got slot 0
+time=2026-11-01T11:39:03.611-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1887446 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:39:05.329-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T11:39:05.408-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T11:39:05.432-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.439-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.445-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=100 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.17"
+time=2026-11-01T11:39:05.457-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.465-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=100 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.91"
+time=2026-11-01T11:39:05.479-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.480-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=100 potions=0 dodges=0 sec=1 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.88"
+time=2026-11-01T11:39:05.629-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.630-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=96 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:05.637-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.655-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=96 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:05.659-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.674-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=96 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:05.685-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.685-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=96 potions=0 dodges=0 sec=1 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:05.825-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.834-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=94 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:05.834-05:00 level=INFO msg="combat health killsPerMin=7.2 castsPerMin=16.8 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=75"
+time=2026-11-01T11:39:05.841-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.856-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=94 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:05.862-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.876-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=94 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:05.896-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.896-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=94 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.50"
+time=2026-11-01T11:39:05.984-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:05.991-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.003-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=93 potions=0 dodges=0 sec=3 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.94"
+time=2026-11-01T11:39:06.023-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.028-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=93 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.23"
+time=2026-11-01T11:39:06.052-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=93 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.058-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.059-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=93 potions=0 dodges=0 sec=0 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=2.08"
+time=2026-11-01T11:39:06.133-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T11:39:06.151-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=88 potions=0 dodges=0 sec=2 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.49"
+time=2026-11-01T11:39:06.160-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.170-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.170-05:00 level=INFO msg="combat resting before the pack" action=rest mana=16 target=22 waitSec=21 why="rest to cast budget"
+time=2026-11-01T11:39:06.175-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=88 potions=0 dodges=0 sec=3 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:06.177-05:00 level=INFO msg="combat resting before the pack" action=rest mana=17 target=22 waitSec=18 why="rest to cast budget"
+time=2026-11-01T11:39:06.185-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=88 potions=0 dodges=0 sec=3 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T11:39:06.187-05:00 level=INFO msg="combat resting before the pack" action=rest mana=17 target=22 waitSec=18 why="rest to cast budget"
+time=2026-11-01T11:39:06.196-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=88 potions=0 dodges=0 sec=2 casts=1 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.49"
+time=2026-11-01T11:39:06.214-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.221-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=88 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.83"
+time=2026-11-01T11:39:06.244-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=88 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.244-05:00 level=INFO msg="combat health killsPerMin=9.8 castsPerMin=26.5 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=61"
+time=2026-11-01T11:39:06.267-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=88 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.47"
+time=2026-11-01T11:39:06.274-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.274-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=88 potions=0 dodges=0 sec=0 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=2.08"
+time=2026-11-01T11:39:06.335-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.342-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.347-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=85 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.17"
+time=2026-11-01T11:39:06.368-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.374-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=85 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.23"
+time=2026-11-01T11:39:06.387-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.388-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=85 potions=0 dodges=0 sec=0 casts=2 kites=0 approaches=0 novas=0 forced=0 castsPerSec=2.08"
+time=2026-11-01T11:39:06.461-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.468-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.472-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.23"
+time=2026-11-01T11:39:06.491-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.497-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.32"
+time=2026-11-01T11:39:06.516-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.517-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=1 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.79"
+time=2026-11-01T11:39:06.578-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.594-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=82 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.597-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.616-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.625-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=100 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.06"
+time=2026-11-01T11:39:06.642-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.642-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=100 potions=0 dodges=0 sec=1 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.88"
+time=2026-11-01T11:39:06.668-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.677-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.683-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=97 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.98"
+time=2026-11-01T11:39:06.701-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.711-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=97 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.07"
+time=2026-11-01T11:39:06.711-05:00 level=INFO msg="combat health killsPerMin=15.7 castsPerMin=34.4 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=61"
+time=2026-11-01T11:39:06.736-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=97 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.750-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.751-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=97 potions=0 dodges=0 sec=1 casts=2 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.67"
+time=2026-11-01T11:39:06.876-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.878-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.886-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.901-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.908-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.926-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.930-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.930-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T11:39:06.960-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.970-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:06.978-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=2 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:06.992-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.002-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:07.004-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T11:39:07.024-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=91 potions=0 dodges=0 sec=2 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.49"
+time=2026-11-01T11:39:07.039-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.040-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=91 potions=0 dodges=0 sec=1 casts=2 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.79"
+time=2026-11-01T11:39:07.281-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.290-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:07.290-05:00 level=INFO msg="combat health killsPerMin=7.1 castsPerMin=17.7 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=84"
+time=2026-11-01T11:39:07.299-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.317-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:07.341-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.341-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:07.363-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=1 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.48"
+time=2026-11-01T11:39:07.389-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=0 minlife=83 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:07.398-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.398-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=83 potions=0 dodges=0 sec=0 casts=1 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.56"
+time=2026-11-01T11:39:07.435-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.445-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=82 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.44"
+time=2026-11-01T11:39:07.453-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.468-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=82 potions=0 dodges=0 sec=2 casts=2 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.96"
+time=2026-11-01T11:39:07.474-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T11:39:07.492-05:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=1 damage=0 minlife=82 potions=0 dodges=0 sec=2 casts=3 kites=0 approaches=1 novas=0 forced=0 castsPerSec=1.44"
+DRILL D26-A P10 FAIL armor absent: 0 ms sampled, 4720 ms by cast spacing | intended: the bot recasts Frozen Armor from the fight loop before each expiry (limit 114 s at level 1) while a pack keeps attacking; record recasts, minimum life, armor-up time, kills | observed: binary d2d.lab-armorhit | 300 s in 53 Clear rounds; casts at game s [0.0 125.0 239.2] (inside a round: [125.0 239.2]); 53 samples (longest gap 43000 ms), armor up 299920 ms of 300000, absent 0 ms (sampled), at least 4720 ms off by the cast spacing; life min 166 of max 201, refills 0, deaths 0; kills 51 of 52 spawned, potions 0 | log: opening: combat buff skill=Frozen Armor ; t=40640 ms: sample gap 32880 ms (previous round: spawn true, Clear 2080 ms, reported 2.08s) ; t=76520 ms: sample gap 30680 ms (previous round: spawn true, Clear 2080 ms, reported 2.08s) ; t=101720 ms: sample gap 19040 ms (previous round: spawn true, Clear 3200 ms, reported 3.2s) ; t=125040 ms: combat buff skill=Frozen Armor (read at the end of the round: buffs="40:1," mana=23 mode=-1) ; t=125040 ms: sample gap 18320 ms (previous round: spawn true, Clear 2040 ms, reported 2.04s) ; t=224760 ms: sample gap 22760 ms (previous round: spawn true, Clear 2080 ms, reported 2.08s) ; t=239160 ms: combat buff skill=Frozen Armor (read at the end of the round: buffs="40:1," mana=30 mode=-1) ; t=283280 ms: sample gap 43000 ms (previous round: spawn true, Clear 2080 ms, reported 2.08s)
+END character Drilly life 166/201 in town: true
+
+drill     prim  verdict  det  reason
+D26-A     P10   FAIL     -    armor absent: 0 ms sampled, 4720 ms by cast spacing
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug kill, debug points 36 3, debug points 40 1, debug spawn zombie1 4 near, debug stat 6 51200, debug stat 7 51200
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:39:07.495-05:00 level=WARN msg="d2d: stopped by the bot (kill)"

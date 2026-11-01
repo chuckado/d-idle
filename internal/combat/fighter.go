@@ -56,6 +56,7 @@ type Fighter struct {
 	lastCastName  string // skill of lastCast: the gap before the next cast covers ITS cast length
 	lastCastSkill map[int]time.Time
 	buffAt        map[int]time.Time
+	buffTries     map[int]int // consecutive casts cut by a hit, per skill (card armorcut)
 	lastDodge     time.Time
 	diagMu        sync.Mutex // guards portalCast and casts (read from the bot's autopsy)
 	portalCast    PortalCast
@@ -105,6 +106,7 @@ func New(e *env.Env, mover Mover) *Fighter {
 		lastDrink:     map[PotionKind]time.Time{},
 		lastCastSkill: map[int]time.Time{},
 		buffAt:        map[int]time.Time{},
+		buffTries:     map[int]int{},
 		leftCell:      map[int]input.Screen{},
 		leftFail:      map[int]time.Time{},
 		auraDirty:     true,
@@ -601,9 +603,24 @@ func (f *Fighter) Buff(ctx context.Context) error {
 	return err
 }
 
-// buffPass casts what buffDue says is missing, one cast per group, and reports whether it cast. It reads nothing.
+// modeGetHit is declared in hard.go (V-d2d DRILLS15 M2). modeCast is the stock D2 cast mode (S, U live: the
+// armorcut recipe records it).
+const (
+	modeCast = 10
+	// buffTriesMax bounds the immediate retries of a buff cut by hit recovery; the state check (absent = recast) and
+	// the clock take over after that.
+	buffTriesMax = 3
+)
+
+// buffPass casts what buffDue says is missing, one cast per group, and reports whether it cast. A cast during which
+// the player was in hit recovery is treated as cut (card armorcut, DRILLS26 D26-A: the 232.4 s recast left the old
+// armor to end): the cast time is not recorded, so the next pass retries at once, at most buffTriesMax times and only
+// while the mana covers the cost. Nothing is cast while the player is in hit recovery or still casting.
 func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, err error) {
 	p := snap.Player
+	if p.Mode == modeGetHit || p.Mode == modeCast {
+		return false, nil
+	}
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
 	for _, group := range f.profileFor(p).Buffs {
@@ -618,6 +635,7 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 			if sp.Cost > mana {
 				break
 			}
+			prev, hadPrev := f.buffAt[sp.ID]
 			if err := f.cast(snap, sp, input.Point{X: p.X, Y: p.Y}); err != nil {
 				return cast, err
 			}
@@ -625,13 +643,42 @@ func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, e
 			f.buffAt[sp.ID] = f.now()
 			mana -= sp.Cost
 			f.info("buff", "skill", sp.Name)
-			if err := f.sleep(ctx, ms(f.tune().CastGapMs)+ms(400)); err != nil {
-				return cast, err
+			cut, serr := f.watchCast(ctx, ms(f.tune().CastGapMs)+ms(400))
+			if serr != nil {
+				return cast, serr
+			}
+			if cut && f.buffTries[sp.ID] < buffTriesMax {
+				f.buffTries[sp.ID]++
+				if hadPrev {
+					f.buffAt[sp.ID] = prev
+				} else {
+					delete(f.buffAt, sp.ID)
+				}
+				f.info("buff cut by a hit, will retry", "skill", sp.Name, "try", f.buffTries[sp.ID])
+			} else {
+				f.buffTries[sp.ID] = 0
 			}
 			break
 		}
 	}
 	return cast, nil
+}
+
+// watchCast sleeps d in poll steps and reports whether the player was in hit recovery meanwhile (the cast is cut).
+func (f *Fighter) watchCast(ctx context.Context, d time.Duration) (cut bool, err error) {
+	step := max(ms(f.tune().PollMs), 50*time.Millisecond)
+	for left := d; left > 0; left -= step {
+		if err := f.sleep(ctx, min(step, left)); err != nil {
+			return cut, err
+		}
+		if f.snapFn == nil {
+			continue
+		}
+		if s, e := f.snapFn(); e == nil && s != nil && s.Player != nil && s.Player.Mode == modeGetHit {
+			cut = true
+		}
+	}
+	return cut, nil
 }
 
 // fightBuff is the buff check of the fight loop (SKARMOR B1, card fixbuff): Buff otherwise runs only on need-buff

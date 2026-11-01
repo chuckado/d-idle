@@ -1,0 +1,11 @@
+d2dslot: got slot 0
+time=2026-11-01T11:37:38.833-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1877443 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:37:40.467-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+DRILL D28-0 P10 PASS RECORD: the state is present through 121-125 s after the second cast | intended: a second cast 54 s into a 120 s armor extends it: the state is present at 121-125 s (so d2d refreshes a set state) | observed: binary d2d.lab-armorhit | casts at game s [60.3 114.0] | window samples 4, all on: true | t=60.9 buffs="40:1," mode=-1 after first cast ; t=61.4 buffs="40:1," mode=-1 after first cast ; t=62.0 buffs="40:1," mode=-1 after first cast ; t=114.0 buffs="40:1," mode=-1 before second cast ; t=115.0 buffs="40:1," mode=-1  ; t=116.1 buffs="40:1," mode=-1  ; t=117.1 buffs="40:1," mode=-1  ; t=118.2 buffs="40:1," mode=-1  ; t=119.2 buffs="40:1," mode=-1  ; t=120.2 buffs="40:1," mode=-1  ; t=121.3 buffs="40:1," mode=-1  ; t=122.3 buffs="40:1," mode=-1  ; t=123.4 buffs="40:1," mode=-1  ; t=124.4 buffs="40:1," mode=-1  ; t=125.4 buffs="40:1," mode=-1  ; t=126.5 buffs="40:1," mode=-1  ; t=127.5 buffs="40:1," mode=-1  ; t=128.6 buffs="40:1," mode=-1  ; t=129.6 buffs="40:1," mode=-1  ; t=130.6 buffs="40:1," mode=-1  ; t=131.7 buffs="40:1," mode=-1 
+END character Drilly life 200/200 in town: true
+
+drill     prim  verdict  det  reason
+D28-0     P10   PASS     -    RECORD: the state is present through 121-125 s after the second cast
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug kill, debug points 40 1, debug stat 6 51200, debug stat 7 51200
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:37:40.706-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
