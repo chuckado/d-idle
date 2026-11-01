@@ -12,7 +12,7 @@
 > fixrecast (offline, card in progress): armors are recast by their real duration and the Frozen Armor state (120 s at level 1, was 150 s); live check open: docs/fixrecast.md
 
 > fixportalmelee (offline, card in progress): a town portal cast with 3+ adjacent attackers becomes a potion or a chicken (soak 2 death); live check: DRILLS11 1-adjacent PASS x3, 3-adjacent FAIL x3 = product finding F18 (crowdAdjacent=3 too small for live melee reach; fix on card fixcrowd, branch agent/fixcrowd); card stays open: docs/fixportalmelee.md
-> fixcrowd (offline, card in progress): DRILLS11 F18 fixed offline (melee reach knob combat.crowdAdjacent, default 8); live proof pending: docs/fixcrowd.md
+> fixcrowd (done, verified live): DRILLS11 F18 fixed (melee reach knob combat.crowdAdjacent, default 8); DRILLS12: D-portalmelee PASS x3, control PASS x3; drill wait fixed (item 1.5): docs/fixcrowd.md
 
 > fixportalmelee (offline, card in progress): a town portal cast with 3+ adjacent attackers becomes a potion or a chicken (soak 2 death); live check open: docs/fixportalmelee.md
 

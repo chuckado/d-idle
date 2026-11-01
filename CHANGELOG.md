@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- drills12 (live): live proof of fixcrowd: the 3-adjacent portal drill passes at crowdAdjacent 8 (Safety chicken, scroll kept); the control still casts; the drill measures in the bot's own unit (agent/drills12).
 - fixlair (offline): Level data models Teleport 0/1/2 (lair = allowed on a clear line, towns refuse); comments corrected; no behaviour change, the Duriel script still walks (docs/fixlair.md, agent/fixlair).
 - Teleport decomposition (SKTELE, research): game.exe's destination rule traced and run under the emulator; d2d deviations and bot findings listed (docs/research/sk-teleport-trace.md).
 - feedtick2 (offline, not posted): the whole tick report is posted (cap 3800 chars, was 900); over the cap it is cut at a line with a final "(cut: N chars)" line (tools/discord/feed.py, agent/feedtick2).

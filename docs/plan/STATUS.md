@@ -99,6 +99,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 6b922b1 11-01 01:02 `Merge agent/drills12: DRILLS12 live proof of fixcrowd (crowdAdjacent knob), drill harness` (drills12)
 - 19ca7c4 11-01 00:57 `Merge agent/fixlair: Level.TeleportRule and CanTeleportIn, stale teleport comments corrected` (fixlair)
 - ba90992 11-01 00:52 `Merge agent/auditfix: gamecode guard, fixtures provenance, lab-path scrub of docs/probes` (auditfix)
 - 6a6eabe 11-01 00:50 `Merge agent/sktele: Teleport trace (decomp row 16), sk_tele_spot.py` (sktele)
@@ -108,5 +109,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 42238fc 11-01 00:40 `Merge agent/openmods: boss-stats upstream PR records; archive card` (openmods)
 - 84dd214 11-01 00:29 `Merge agent/fixcrowd: combat.crowdAdjacent knob` (fixcrowd)
 - 6ba15b7 11-01 00:29 `Merge agent/dethash2: det-hash scenarios; archive card` (dethash2)
-- 4bcbd36 11-01 00:25 `Merge agent/modsprep` (modsprep)
 <!-- statusgen:end -->
