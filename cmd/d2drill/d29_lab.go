@@ -172,7 +172,8 @@ func (l *lab) ArmorHold(ctx context.Context, r *drill.Run, simMS int) (o drill.A
 		}
 	}
 	spawnHook = func(context.Context) {
-		if el := now(); el >= lastCast+holdDueMS-holdLeadMS-2000 {
+		from := lastCast + holdDueMS - holdLeadMS - 2000
+		if now() >= from {
 			holdBuff()
 			sample()
 		}

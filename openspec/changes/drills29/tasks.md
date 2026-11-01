@@ -9,10 +9,6 @@ worktree: ~/code/d2lod-wt/drills29
 skip_specs: true
 owns:
   - openspec/changes/drills29/**
-  - internal/drill/d29.go
-  - internal/drill/d29_test.go
-  - cmd/d2drill/d29_lab.go
-  - docs/probes/drills/2026-11-01-drills29-*
 exclusive:
   - instance:drills29-slot-0
 gates:
