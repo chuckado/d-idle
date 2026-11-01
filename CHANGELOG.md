@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- agentprompt (research, docs only): a paste-in hands-off prompt for contributors' own AI agents (docs/contributing/agent-prompt.md), linked from the guide and the work board.
 - fixtelekey, teletune (live, DRILLS22 and DRILLS24): the Act 2 Teleport hop now fires in production (the key comes from the bound Teleport skill; towns and levels without Teleport refuse; no key for builds without it); hops only when the walk to the landing cell exceeds 36 subtiles and mana after the hop stays above 40 percent, no idle waits for mana. Near walking speed with the defaults, 18 ticks per hop; pockets and path-aware hops are the next card (TELETUNE2).
 - tickfix (offline, two real dry runs): The Haiku dispatcher tick no longer falls back every time: thinking is disabled and the fact check tolerates rewording (tools/discord/tick_post.py).
 - roamleg (live, DRILLS23): a mouth-gate hold ends the roam episode in one leg instead of failing ten targets; DW.m3 x3: failed legs 50 to 0, step-aways 62 to 11, bounces stay 0, plan lines 559-664 to 425. Sweep completeness unverified (the drill character kills nothing).

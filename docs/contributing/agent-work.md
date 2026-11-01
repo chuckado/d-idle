@@ -2,6 +2,8 @@
 
 > status: DRAFT for the maintainer's approval, 2026-11-01 (card communitywork). Nothing here is announced yet; the GitHub issues and the Discord channels it mentions are proposals until the maintainer opens them. The open items are on [../community/work-board.md](../community/work-board.md).
 
+Want your own AI agent to pick and do an item by itself? Paste the [hands-off prompt](agent-prompt.md).
+
 ## 1. What the project is
 - d.idle is a Go bot that plays one character of classic Diablo II Lord of Destruction 1.14d, offline, on a game its user owns.
 - To test it without a human, the maintainer runs it against d2d, an open-source reimplementation of the game server (upstream `psi29a/d2decomped`).
