@@ -10,6 +10,7 @@ skip_specs: true
 owns:
   - docs/fixbuff.md
   - internal/combat/fight.go
+  - internal/data/extract.go
   - internal/combat/fixbuff_test.go
   - internal/d2/states.go
   - internal/d2dctl/verbs.go
@@ -30,5 +31,6 @@ live: "not verified live: see the live proof recipe in docs/fixbuff.md"
 - [x] B2 armor state ids and buffStates
 - [x] B3 Player.States from bare `debug states` (parser unverified live)
 - [x] tests (600 s fights, levels 1 and 2, clock and state, surrounded, refused verb)
+- [x] F1 stale cache: CacheCurrent / Load check required columns
 - [x] docs/fixbuff.md
 - [ ] live proof (rerun the DRILLS13 armor recast proof as a long fight)

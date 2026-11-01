@@ -7,10 +7,11 @@ SKARMOR (docs/research/sk-armor-trace.md, findings B1-B3) found that the armor r
 - internal/combat: `fightBuff` in the fight loop (after survival, hard rules and the lost-fight check, before the target logic) runs the same `buffDue` check on the snapshot the loop already has; skipped with `crowdAdjacentMax` or more attackers in reach. `Buff` is split into read + aura + `buffPass`.
 - internal/d2: state ids 20, 30, 88 and `buffStates` entries for Chilling Armor, Energy Shield, Shiver Armor.
 - internal/d2dctl `Client.Buffs` (bare read-only `debug states`) and internal/d2dsrc `Options.BuffStates` (on in d2denv.Build) fill `Player.States` for the tracked armors.
+- internal/data: a cache lacking `skills.auralencalc` is re-extracted by `CacheCurrent`/`Open`, refused by `Load` with the column named (DRILLS13 F1: a stale lab cache silently disabled fixrecast).
 - docs/fixbuff.md with the live proof recipe.
 
 ## Impact
 
 Offline only. No spec names buff timing (grep openspec/specs): no delta. Live proof pending.
 
-Overlap (declared, as fixcrowd does): internal/combat/necro.go is owned by the open card fixrecast and internal/combat/fighter.go by the open card fixportalmelee (both code-merged, open for their live proofs). This card edits them (buffStates; Buff split and fightBuff) and does not list them in owns.
+Overlap (declared, as fixcrowd does): internal/data/data_test.go (fixture column and one test) is owned by fixrecast; internal/combat/necro.go is owned by the open card fixrecast and internal/combat/fighter.go by the open card fixportalmelee (both code-merged, open for their live proofs). This card edits them (buffStates; Buff split and fightBuff) and does not list them in owns.
