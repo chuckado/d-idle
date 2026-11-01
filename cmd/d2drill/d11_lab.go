@@ -301,6 +301,10 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync
 		return
 	}
 	defer l.d11Leave(ctx, r)
+	if err := l.d11Spot(ctx, r, trial); err != nil {
+		ci.Err = "spot: " + err.Error()
+		return
+	}
 	if err := l.d11OneScroll(ctx, r); err != nil {
 		ci.Err = "scroll: " + err.Error()
 		return
@@ -576,4 +580,56 @@ func (l *lab) gameMS() int {
 		return -1
 	}
 	return c.GameMS
+}
+
+// d11Spot warps the character (logged `debug warp`) to the trial-th open spot of the level (a cell with 12 free
+// subtiles all round, at least 8 cells from the arrival and from every earlier spot of this level), so an earlier
+// trial's portal never stands at the same cell as this trial's (a new portal replaces the owner's old one, same id).
+func (l *lab) d11Spot(ctx context.Context, r *drill.Run, trial int) error {
+	rows, err := l.be.Client.Grid(ctx, 5)
+	if err != nil || len(rows) == 0 {
+		return fmt.Errorf("no grid: %v", err)
+	}
+	at := func(x, y int) bool { return y >= 0 && y < len(rows) && x >= 0 && x < len(rows[y]) && rows[y][x] == '.' }
+	lv, err := l.be.Client.Level(ctx)
+	if err != nil {
+		return err
+	}
+	open := func(cx, cy int) bool {
+		for dy := -12; dy <= 12; dy += 3 {
+			for dx := -12; dx <= 12; dx += 3 {
+				if !at(5*cx+2+dx, 5*cy+2+dy) {
+					return false
+				}
+			}
+		}
+		return true
+	}
+	var used [][2]int
+	used = append(used, [2]int{int(lv.X), int(lv.Y)})
+	for t := 0; t <= trial; t++ {
+		found := false
+		for cy := 0; cy < len(rows)/5 && !found; cy++ {
+			for cx := 0; cx < len(rows[0])/5 && !found; cx++ {
+				ok := open(cx, cy)
+				for _, u := range used {
+					if ok && math.Hypot(float64(cx-u[0]), float64(cy-u[1])) < 8 {
+						ok = false
+					}
+				}
+				if ok {
+					used = append(used, [2]int{cx, cy})
+					found = true
+				}
+			}
+		}
+		if !found {
+			return fmt.Errorf("no open spot number %d", t+1)
+		}
+	}
+	u := used[len(used)-1]
+	if err := l.Warp(ctx, r, u[0], u[1]); err != nil {
+		return err
+	}
+	return l.Tick(ctx, 10)
 }
