@@ -22,7 +22,7 @@ gates:
   - "go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
-live: "not verified live: see the live recipe in docs/fixportalmelee.md"
+live: "control PASS x3 (one adjacent: portal cast); D-portalmelee FAIL x3: 3 zombies within 8 subtiles never 3 within the rule's 3, Safety stays town-portal (F18); a monster hit does not cut a cast in 14 of 14 trials, a debug hit does; README DRILLS11"
 ```
 
 - [x] escape logic found (Safety Decide, resource.AbortFight)
