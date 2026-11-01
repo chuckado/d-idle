@@ -78,3 +78,10 @@ openspec/changes/nexthit/**  nexthit  nexthit
 docs/fixmanamodel.md  fixmanamodel  fixmanamodel
 internal/resource/manamodel.go  fixmanamodel  fixmanamodel
 internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel
+
+.github/workflows/pr-review.yml apireview apireview
+tools/ci/pr_review.py apireview apireview
+tools/ci/haiku_tick.py apireview apireview
+tools/ci/anthropic_http.py apireview apireview
+tools/ci/tests/** apireview apireview
+docs/process/api-credits.md apireview apireview
