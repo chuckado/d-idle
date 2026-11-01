@@ -134,3 +134,6 @@ internal/town/fixprogress_test.go  fixprogress  fixprogress
 openspec/changes/fixprogress/**  fixprogress  fixprogress
 internal/town/chores.go  fixprogress  fixprogress
 internal/town/town.go  fixprogress  fixprogress
+docs/research/pal-skill-trace.md  palskill  palskill
+tools/emu/pal_*  palskill  palskill
+openspec/changes/palskill/**  palskill  palskill
