@@ -779,7 +779,7 @@ func (f *Fighter) skillReady(sp SkillSpec) bool {
 	return !ok || f.now().Sub(at) >= sp.Delay
 }
 
-// refineResists replaces the monstats resistances of a target with the live stat list (curses, difficulty).
+// refineResists replaces the monstats resistances of a target with the live stat list (curses; no monster difficulty penalty, Q10).
 func (f *Fighter) refineResists(t *Target, diff d2.Difficulty) {
 	now := f.now()
 	if c, ok := f.resCache[t.Unit.ID]; ok && now.Sub(c.at) < 1500*time.Millisecond {
