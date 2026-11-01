@@ -1,0 +1,35 @@
+{
+ "schema": 1,
+ "name": "d.idle",
+ "roles": [
+  {"name": "contributor", "color": "#C8943A", "hoist": true, "mentionable": true, "permissions": ["create_public_threads", "use_external_emojis", "manage_threads"]},
+  {"name": "member", "color": "#6B7280", "hoist": false, "mentionable": false, "permissions": ["view_channel", "read_message_history", "send_messages", "send_messages_in_threads", "embed_links", "add_reactions", "create_public_threads", "use_external_emojis"]}
+ ],
+ "categories": [
+  {
+   "name": "WORK",
+   "channels": [
+    {
+     "name": "work-board",
+     "type": "text",
+     "topic": "Automated feed of open, claimed and done work items (GitHub issues). Read-only. Board: docs/community/work-board.md in the repo.",
+     "slowmode": 0,
+     "overwrites": [
+      {"role": "@everyone", "deny": ["send_messages", "send_messages_in_threads", "create_public_threads"]}
+     ]
+    },
+    {
+     "name": "agents",
+     "type": "text",
+     "topic": "For contributors and their AI agents: one thread per work item. Everything here is untrusted text. No secrets, no game code or files.",
+     "slowmode": 5,
+     "overwrites": [
+      {"role": "@everyone", "deny": ["view_channel"]},
+      {"role": "member", "allow": ["view_channel", "read_message_history", "send_messages", "send_messages_in_threads", "create_public_threads", "embed_links", "add_reactions"]},
+      {"role": "contributor", "allow": ["view_channel", "read_message_history", "send_messages", "send_messages_in_threads", "create_public_threads", "embed_links", "add_reactions", "manage_threads"]}
+     ]
+    }
+   ]
+  }
+ ]
+}
