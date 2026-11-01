@@ -122,7 +122,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change teletune2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
-- be449d6 11-01 10:59 `merge origin/main` (-)
+- 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
+- b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)
 - 8ff5841 11-01 10:48 `Merge origin/main into drills24` (drills24)
 - 7a408e6 11-01 10:54 `Merge agent/boardlinks: link the 8 opened work-item issues on the board` (boardlinks)
 - 0ec709e 11-01 10:43 `Merge origin/main into teletune` (teletune)
@@ -131,5 +132,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
 - 4144cb9 11-01 10:32 `Merge agent/armorfinish: Frozen Armor PR final body and verifier addendum (docs only)` (armorfinish)
 - 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
-- 2b3ed7a 11-01 10:12 `Merge agent/palrecon: Paladin Act 1 recon (docs only)` (palrecon)
 <!-- statusgen:end -->
