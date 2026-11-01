@@ -1,6 +1,6 @@
 ## Why
 
-The user asked (2026-11-01) for the Forgejo workers to help. The worker host is busy with soaks and drills, while the second machine (an idle arm64 Mac) can build d2d and run the portable parts of PR-candidate vetting: the differentials, the Python checks, clang-tidy and the textual merge check.
+The user asked (2026-11-01) for the CI runners to help. The worker host is busy with soaks and drills, while the second machine (an idle arm64 Mac) can build d2d and run the portable parts of PR-candidate vetting: the differentials, the Python checks, clang-tidy and the textual merge check.
 
 ## What Changes
 
