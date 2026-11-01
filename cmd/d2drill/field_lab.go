@@ -128,7 +128,9 @@ func (l *lab) operateObject(ctx context.Context, r *drill.Run, level int, want s
 						}
 					}
 				}
-				break
+				if op.Found != "" {
+					break
+				}
 			}
 		}
 	}
