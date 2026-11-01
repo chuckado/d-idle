@@ -112,11 +112,11 @@ func D11(l D11Lab) []Drill {
 			var rows []string
 			cut, done, blocked := 0, 0, 0
 			for i, tr := range []struct {
-				sync  bool
-				delay int
-			}{{false, 0}, {true, 0}, {true, 1}, {true, 2}, {true, 3}, {true, 2}} {
-				c := l.CastTrace(ctx, r, 300, i, tr.sync, tr.delay)
-				rows = append(rows, fmt.Sprintf("trial %d: %s", i+1, c.String()))
+				life, delay int
+				sync        bool
+			}{{300, 0, false}, {300, 0, true}, {300, 1, true}, {300, 2, true}, {300, 3, true}, {300, 2, true}, {40, 3, true}, {40, 3, true}, {40, 2, true}, {40, 2, true}} {
+				c := l.CastTrace(ctx, r, tr.life, i, tr.sync, tr.delay)
+				rows = append(rows, fmt.Sprintf("trial %d (max life %d): %s", i+1, tr.life, c.String()))
 				switch {
 				case c.Err != "" || c.Adjacent < 1:
 					blocked++
