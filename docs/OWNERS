@@ -65,3 +65,8 @@ docs/decomp-queue.md  skmiss  skmiss
 docs/BACKLOG.md  skmiss  skmiss
 docs/INDEX.md  skmiss  skmiss
 openspec/changes/skmiss/**  skmiss  skmiss
+internal/nav/walk.go  fixmouth  fixmouth
+internal/nav/nav.go  fixmouth  fixmouth
+internal/nav/fixmouth_test.go  fixmouth  fixmouth
+internal/combat/combatspin_test.go  fixmouth  fixmouth
+docs/fixmouth.md  fixmouth  fixmouth
