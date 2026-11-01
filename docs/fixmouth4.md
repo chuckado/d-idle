@@ -32,7 +32,7 @@ Active when (`n.gateActive`): the current level is not a town and either the sta
 
 The check (`mouthClickOK(from, to, exit)`), with `from` the character's current position read at the moment of the click (`Pos()`, falling back to the last observation):
 
-- always: the click TARGET lies at least `mouthTriggerR` from the exit. Every logged fired click had its target inside the bound, outward ones included: from 3.2 the click at 5.4 fired (DRILLS18), from 3.2 the second step-away waypoint at 12.1 fired (DRILLS17 DW.m4, (260,156) vs exit (255,145)); long step-away clicks to targets 20 and more away never fired (19 of 19 in DRILLS18). So "moving outward" alone is not safe.
+- always: the click TARGET lies at least `mouthTriggerR` from the exit. Every logged fired click had its target inside the bound, outward ones included: from 3.2 the click at 5.4 fired (DRILLS18), from 3.2 the second step-away waypoint at 12.1 fired (DRILLS17 DW.m4, (260,156) vs exit (255,145)); long step-away clicks to targets 20 and more away never fired (every uninterrupted one of the 19 step-aways in DRILLS18). So "moving outward" alone is not safe.
 - `from` outside `mouthTriggerR`: the straight segment from `from` to `to` also stays at least `mouthTriggerR` from the exit.
 - `from` inside `mouthTriggerR` (arrival offset, after a swing, after knockback): the segment never gets nearer to the exit than `from` is (`leavesExit`, half a subtile of slack). Moving outward to a target outside the bound is the only allowed motion.
 
