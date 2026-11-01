@@ -57,7 +57,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifycurseimmune](../../openspec/changes/verifycurseimmune/) | in-progress | verifycurseimmune | `openspec/changes/verifycurseimmune/**`<br>`tools/emu/verify_curse_immune.py`<br>`tools/emu/test_verify_curse_immune.cpp`<br>`docs/research/pr-curseimmune-verifier.md` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -114,9 +113,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifycurseimmune: verify_curse_immune.py vs test_verify_curse_immune on >= 100k cases per class: base > 0, head 0 or classified
 
 ### Recent merges
+- 024c03e 11-01 12:58 `Merge agent/verifycurseimmune: independent verifier of the curse-immune PR candidate (READY)` (verifycurseimmune)
 - 015f4c1 11-01 12:51 `Merge agent/skmeleebot: melee model (to-hit, damage, Blunt vs undead) in the resource simulator; production not yet fed` (skmeleebot)
 - 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
 - 19c1daf 11-01 12:44 `Merge agent/upstreamsync: upstream merges recorded, mergeability table, fork rebase plan` (upstreamsync)
@@ -126,5 +125,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 22b20eb 11-01 12:30 `Merge agent/skresistbot: SKRESISTBOT bot resist floor -100 and pierce below 100` (skresistbot)
 - 69192f1 11-01 12:26 `Merge agent/skresistfix: SKRESISTFIX curse-immune draft and proof docs (local d2d candidate, unverified)` (skresistfix)
 - 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
-- 44ff859 11-01 12:08 `Merge agent/skresist: SKRESIST resistance and immunity trace, oracle, d2d curse-on-immune deviation` (skresist)
 <!-- statusgen:end -->

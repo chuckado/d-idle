@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifycurseimmune
-status: in-progress
+status: archived
 agent: verifycurseimmune
 branch: agent/verifycurseimmune
 worktree: ~/code/d2lod-wt/verifycurseimmune
@@ -15,7 +15,8 @@ owns:
 exclusive: []
 gates:
   - "verify_curse_immune.py vs test_verify_curse_immune on >= 100k cases per class: base > 0, head 0 or classified"
-result: "READY after draft text edits: own oracle + harness with real curse / aura skills and levels, 616,160 compared cases on 2 seeds, base 219,741 + 225,522 rows differ, claim alone = head 0; hirelings full value; calcs equal; D2 untouched and unreachable; merges clean both orders; offline, not verified live"
+merge: 024c03e
+result: "independent verifier: READY (own harness, 0 differ on head across 5 classes, hirelings and curse calcs checked); offline, not verified live"
 ```
 
 - [x] read FUN_005c3540, FUN_005c35c0, FUN_005cedc0, FUN_005a1370's setter, FUN_00645b20
