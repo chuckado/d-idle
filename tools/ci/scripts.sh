@@ -15,6 +15,7 @@ bash packaging/release.sh --dry-run ci || { echo "FAIL: release.sh --dry-run"; f
 python3 -m unittest discover -s tools/ci/tests -t tools/ci || { echo "FAIL: tools/ci python tests"; fail=1; }
 python3 -m unittest discover -s tools/discord/tests -t tools/discord -p "test_tick_post.py" || { echo "FAIL: tick_post tests"; fail=1; }
 python3 -m unittest discover -s tools/discord/tests -t tools/discord -p "test_board_feed.py" || { echo "FAIL: board_feed tests"; fail=1; }
+python3 -m unittest discover -s tools/discord/tests -t tools/discord -p "test_work_channels.py" || { echo "FAIL: work_channels tests"; fail=1; }
 python3 -m unittest discover -s tools/contrib/tests -t tools/contrib || { echo "FAIL: tools/contrib python tests"; fail=1; }
 python3 tools/contrib/board.py --check || { echo "FAIL: work-board.md is stale or open-work.md is malformed"; fail=1; }
 exit $fail
