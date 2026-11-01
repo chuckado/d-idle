@@ -62,6 +62,7 @@ type Input struct {
 	PackSeen     int  // monsters of a not-yet-engaged pack in view (asleep or far)
 	ChampionPack bool // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
 	WeakPack     bool // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not
+	Adjacent     int  // awake hostiles in melee reach (within 3 subtiles); with CastAdjacentMax a portal cast is cut
 	PackDanger   int  // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
 	SinceFight   float64
 	MercKnown    bool // a merc was hired this run
@@ -72,6 +73,11 @@ type Input struct {
 	ManaRegenB   int     // +% mana regeneration from gear
 	LifeRegen    float64 // life per second from gear/skills; 0 for an ordinary character (U: no natural life regen)
 }
+
+// CastAdjacentMax is the number of adjacent attackers from which a town portal cast (scroll, or tome with its delay)
+// is taken to be interrupted (U, the crowd rule's judgment; card fixportalmelee). Not a knob: it is the crowd rule's
+// existing constant.
+const CastAdjacentMax = 3
 
 func pct(v, max int) int {
 	if max <= 0 {

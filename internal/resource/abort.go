@@ -38,7 +38,7 @@ func AbortFight(in Input, t Tuning) AbortDecision {
 	chicken := t.Chicken(in.Diff)
 	noHeal := b.HP == 0 && b.RV == 0
 	if lp <= chicken && noHeal {
-		if in.HasTP && lp > chicken-8 {
+		if in.HasTP && lp > chicken-8 && !castCut(in) {
 			return AbortDecision{Kind: PortalOut, Reason: "life at chicken line, no potion, portal still fast enough"}
 		}
 		return AbortDecision{Kind: LeaveGame, Reason: "life at chicken line, no potion"}
@@ -66,6 +66,8 @@ func AbortFight(in Input, t Tuning) AbortDecision {
 
 func escape(in Input, why string) AbortDecision {
 	switch {
+	case in.HasTP && castCut(in):
+		return AbortDecision{Kind: LeaveGame, Reason: why + ": portal cast would be cut by melee, leave"}
 	case in.HasTP:
 		return AbortDecision{Kind: PortalOut, Reason: why + ": portal"}
 	case in.NearTown:
@@ -73,3 +75,7 @@ func escape(in Input, why string) AbortDecision {
 	}
 	return AbortDecision{Kind: LeaveGame, Reason: why + ": leave"}
 }
+
+// castCut reports a town portal cast that melee would interrupt (fixportalmelee): CastAdjacentMax or more adjacent
+// hostiles. Adjacent 0 (unknown) keeps today's behaviour.
+func castCut(in Input) bool { return in.Adjacent >= CastAdjacentMax }
