@@ -124,27 +124,28 @@ def cmp(cases, gpath, dpath):
     g = {int(l.split()[0]): l.split()[1:] for l in open(gpath) if l.strip()}
     d = {int(l.split()[0]): l.split()[1:] for l in open(dpath) if l.strip()}
     n = 0
-    tot = {"A": 0, "B": 0}
-    cat = {}
-    loss = {"A": 0, "B": 0}
+    rows = {}
     for cid, (_, lo, hi, res, elo, ehi, eres, sl, sh) in cs.items():
         if cid not in g or cid not in d:
             continue
         n += 1
-        gl = int(g[cid][2])
-        for i, k in enumerate(("A", "B")):
-            dl = int(d[cid][i])
-            if dl == gl:
-                continue
-            tot[k] += 1
-            loss[k] += gl - dl
-            kind = ("min<=0" if lo <= 0 else "fire" if elo > 0 else "phys")
-            why = "neg res" if res < 0 else "res>=100" if res >= 100 else "res 0..99"
-            cat[(k, kind, why)] = cat.get((k, kind, why), 0) + 1
-    print(f"cases {n}: A (same seed) differ {tot['A']}, B (game's roll) differ {tot['B']}")
-    print(f"mean 256ths game minus d2d over all cases: A {loss['A'] / max(n, 1):.3f}, B {loss['B'] / max(n, 1):.3f}")
-    for k in sorted(cat):
-        print("  %s %-7s %-10s %d" % (*k, cat[k]))
+        rp, re_, gl = (int(x) for x in g[cid])
+        a, b = int(d[cid][0]), int(d[cid][1])
+        kind = "zero-min" if lo <= 0 or hi <= 0 else ("phys+fire" if elo > 0 else "phys")
+        rb = ("res<-100" if res < -100 else "res -100..-1" if res < 0 else "res 0" if res == 0 else "res 1..99" if res < 100 else "res>=100")
+        r = rows.setdefault((kind, rb), [0, 0, 0, 0, 0])
+        r[0] += 1
+        r[1] += a != gl
+        r[2] += b != gl
+        r[3] += gl - b
+        r[4] += gl - a
+    print(f"cases {n}; per class: n, A (same seed) differ, B (game's roll) differ, mean game-minus-d2d in points: B, A")
+    tn = ta = tb = 0
+    for k in sorted(rows):
+        r = rows[k]
+        print("  %-9s %-13s %7d %7d %7d  B %+8.3f  A %+8.3f" % (*k, r[0], r[1], r[2], r[3] / r[0] / 256, r[4] / r[0] / 256))
+        tn += r[0]; ta += r[1]; tb += r[2]
+    print(f"total {tn}: A differ {ta}, B differ {tb}")
 
 
 def main():
