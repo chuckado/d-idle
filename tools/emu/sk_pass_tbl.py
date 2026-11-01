@@ -8,6 +8,7 @@ passive stats, for the Sorceress rows, as game.exe's MPQ stack serves them
     python sk_pass_tbl.py stats NAME...   # ItemStatCost rows by stat name
     python sk_pass_tbl.py states N...     # States.txt names by row
     python sk_pass_tbl.py func ST DO      # srvstfunc ST / srvdofunc DO addresses
+    python sk_pass_tbl.py record ID OFF[:1|2]...  # a loaded Skills record field (game.exe load)
     python sk_pass_tbl.py res             # the hit element descriptors at 0x732980
 """
 import os
@@ -86,5 +87,21 @@ def functab():
         print(hex(base), idx, hex(e.r32(base + 4 * idx)))
 
 
+def record():
+    """Read loaded Skills records after game.exe's own table load (skill_tips.boot):
+    `record ID OFF[:size]...` e.g. record 43 0x14c 0x1dc:1."""
+    import skill_tips
+    e = skill_tips.boot()
+    tables = e.r32(0x744304)
+    base = e.r32(tables + 0xb98)
+    sid = int(sys.argv[2])
+    for spec in sys.argv[3:]:
+        off, _, size = spec.partition(":")
+        a = base + sid * 0x23c + int(off, 16)
+        v = e.r32(a)
+        v = v & 0xff if size == "1" else v & 0xffff if size == "2" else v
+        print(sid, spec, v)
+
+
 if __name__ == "__main__":
-    {"res": restable, "func": functab}.get(sys.argv[1] if len(sys.argv) > 1 else "", main)()
+    {"res": restable, "func": functab, "record": record}.get(sys.argv[1] if len(sys.argv) > 1 else "", main)()
