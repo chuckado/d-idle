@@ -54,3 +54,9 @@ internal/d2dctl/approach_path.go  fixstall4  fixstall4
 internal/d2dctl/approach_path_test.go  fixstall4  fixstall4
 internal/d2dctl/town_verbs.go  fixstall4  fixstall4
 internal/d2dctl/fixstall4_test.go  fixstall4  fixstall4
+openspec/changes/verifychill/**  verifychill  verifychill
+tools/emu/verify_chill.py  verifychill  verifychill
+tools/emu/verify_chill_mode.inc  verifychill  verifychill
+docs/research/pr-static-chill-proof.md  verifychill  verifychill
+docs/research/pr-bundle-queue.md  verifychill  verifychill
+docs/BACKLOG.md  verifychill  verifychill
