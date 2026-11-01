@@ -27,5 +27,8 @@ func D22(l D22Lab) []Drill {
 		mk("D22-B", "the Teleport bind: Fighter.TeleportKey, the player's skill list and the hop through it"),
 		mk("D22-T", "town: the wired navigator never hops; Duriel's Lair and the Summoner level by rule"),
 		mk("D22-R", "refused hops bounded: the unwired navigator in a town (the game refuses every cast)"),
+		// teletune3: run these alone (-only D22-S, -only D22-BL); D22-BL needs the character unlearned at its start
+		mk("D22-S", "stall escape on one level: strict leg rule declines, the pocket walk stalls, the next call hops (teletune3)"),
+		mk("D22-BL", "border leg three times without and three times with the Teleport key: spread against gap (teletune3)"),
 	}
 }

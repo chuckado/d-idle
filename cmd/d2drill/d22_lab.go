@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"slices"
 	"strings"
 	"time"
 
@@ -211,7 +212,14 @@ func (l *lab) d22dump(g d22leg, tag string) string {
 
 func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome) {
 	var err error
+	// TELETUNE3: the navigator keeps stall and search memory between drills; one process running D22-PC then D22-P
+	// roamed 7560 ticks with 0 hops (DRILLS25). Every drill starts from a clean memory.
+	l.navr.ResetStallMemory()
 	switch id {
+	case "D22-BL":
+		o, err = l.d22border(ctx, r)
+	case "D22-S":
+		o, err = l.d22stall(ctx, r)
 	case "D22-C":
 		o, err = l.d22C(ctx, r)
 	case "D22-PC":
@@ -427,5 +435,109 @@ func (l *lab) d22pocket(ctx context.Context, r *drill.Run, learn bool) (drill.Ou
 	l.d22dump(g, tag)
 	o := drill.Outcome{Intended: "pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport", Observed: g.String(), Sig: fmt.Sprintf("hops=%d", g.Hops)}
 	o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("measurement: %d hops, %d ticks, reached level %d, err=%v", g.Hops, g.Ticks, g.EndLvl, g.Err)
+	return o, nil
+}
+
+// d22plans lists the "nav plan" lines of a leg as "tick+N from->to wps/why", so two walks can be compared at the
+// replan where they split (TELETUNE3: the border leg of DRILLS25 split at (315,193), the plan reason was not logged).
+func (l *lab) d22plans(g d22leg, t0 int, mark int) []string {
+	lt := l.rec.Ticks(mark)
+	var out []string
+	for i, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav plan") && i < len(lt) {
+			out = append(out, fmt.Sprintf("+%d %s", lt[i]-t0, strings.TrimPrefix(ln, "nav plan ")))
+		}
+	}
+	return out
+}
+
+// d22border is the TELETUNE3 border-leg probe: the border leg Rocky Waste to Dry Hills walked N times without Teleport
+// and N times with it learned and bound, in this order (the character starts unlearned), each from a fresh prep. A
+// border exit never reaches hop code (S exit.go, unit test TestBorderLegIsTheSameWithAKeyBound), so if the spread
+// between repeats of ONE arm is as big as the gap between arms the 9 ticks of DRILLS25 are walking variance, not the key.
+// Each repeat prints its plan lines with tick stamps and the replan reason (map, monsters, deviation, goal, partial).
+func (l *lab) d22border(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	const reps = 3
+	arms := []struct {
+		name  string
+		learn bool
+	}{{"nokey", false}, {"key", true}}
+	res := map[string][]int{}
+	var parts []string
+	for _, a := range arms {
+		for i := 0; i < reps; i++ {
+			if err := l.d22prep(ctx, r, d22Rocky, a.learn, false); err != nil {
+				return drill.Outcome{}, err
+			}
+			l.d22wire(l.navr, true)
+			if !a.learn && l.rig.Fighter.TeleportKey() != "" {
+				return drill.Outcome{}, errors.New("D22-BL: the character already has a Teleport key; run D22-BL alone on a fresh character")
+			}
+			mark := l.rec.Mark()
+			t0 := l.tick()
+			g := l.d22run(ctx, l.navr, d22Dry, 150*time.Second)
+			tag := fmt.Sprintf("border-%s-%d", a.name, i+1)
+			l.d22dump(g, tag)
+			for _, p := range l.d22plans(g, t0, mark) {
+				fmt.Printf("D22 %s plan: %s\n", tag, p)
+			}
+			res[a.name] = append(res[a.name], g.Ticks)
+			parts = append(parts, fmt.Sprintf("%s: hops=%d ticks=%d", tag, g.Hops, g.Ticks))
+		}
+	}
+	spread := func(v []int) int { return slices.Max(v) - slices.Min(v) }
+	obs := strings.Join(parts, " || ")
+	o := drill.Outcome{Intended: "border leg ticks without and with the Teleport key bound, three repeats each", Observed: obs,
+		Sig: fmt.Sprintf("nokey=%v key=%v", res["nokey"], res["key"])}
+	o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("measurement: spread nokey %d, key %d ticks; arms nokey=%v key=%v", spread(res["nokey"]), spread(res["key"]), res["nokey"], res["key"])
+	return o, nil
+}
+
+// d22stall is the TELETUNE3 proof of the stall escape on ONE level. Teleport is learned and the leg rule is made
+// strict (nav.teleMinLeg 200 subtiles, no hop passes it), the town portal escape is switched off for the drill, and the
+// character starts in the Rocky Waste pocket where the walk stalls in place (DRILLS22/25: (165,220), 304 ticks of
+// stall ladder). Call 1: the leg rule declines every hop (why=leg), the walk stalls, ExitTo returns the stall (the
+// stall is remembered at the spot). After 130 s of game time (the stalled-gate mark of 2 minutes expires, the 10 minute
+// stall memory does not) call 2 from the same cell must log "nav teleport after a stall, leg rule off" and hop out.
+func (l *lab) d22stall(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	if err := l.d22prep(ctx, r, d22Rocky, true, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	if _, err := r.Cheat(ctx, "debug warp 33 44", "TELETUNE3: start in the Rocky Waste pocket, where the walk stalls in place"); err != nil {
+		return drill.Outcome{}, err
+	}
+	_ = l.Tick(ctx, 20)
+	l.d22wire(l.navr, true)
+	oldLeg, oldEsc := l.tune.Nav.TeleMinLeg, l.navr.Escape
+	l.tune.Nav.TeleMinLeg, l.navr.Escape = 200, nil
+	defer func() { l.tune.Nav.TeleMinLeg, l.navr.Escape = oldLeg, oldEsc }()
+
+	g1 := l.d22run(ctx, l.navr, 55, 80*time.Second)
+	l.d22dump(g1, "stall-1")
+	declined1 := slices.ContainsFunc(g1.Lines, func(s string) bool {
+		return strings.HasPrefix(s, "nav teleport declined") && strings.Contains(s, "why=leg")
+	})
+	stalled1 := slices.ContainsFunc(g1.Lines, func(s string) bool { return strings.HasPrefix(s, "nav stuck") })
+
+	_ = l.Tick(ctx, 3300) // 132 s at 25 ticks per second
+	g2 := l.d22run(ctx, l.navr, 55, 80*time.Second)
+	l.d22dump(g2, "stall-2")
+	escape2 := slices.ContainsFunc(g2.Lines, func(s string) bool { return strings.HasPrefix(s, "nav teleport after a stall") })
+
+	obs := fmt.Sprintf("call 1: %s declinedLeg=%v stuck=%v || call 2: %s escapeLine=%v", g1, declined1, stalled1, g2, escape2)
+	o := drill.Outcome{Intended: "a stall at the spot turns the leg rule off: the strict leg rule declines the hops, the walk stalls, the next call hops out", Observed: obs,
+		Sig: fmt.Sprintf("hops1=%d hops2=%d", g1.Hops, g2.Hops)}
+	switch {
+	case g1.Hops > 0:
+		o.Verdict, o.Reason = drill.Fail, "call 1 hopped although the leg rule is 200: the setup does not discriminate"
+	case !stalled1:
+		o.Verdict, o.Reason = drill.Fail, "call 1 did not stall (no 'nav stuck' line): the pocket is not a trap on this map"
+	case !declined1:
+		o.Verdict, o.Reason = drill.Fail, "call 1 never logged a leg decline"
+	case g2.Hops == 0 || !escape2:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("call 2: hops=%d escapeLine=%v: stalledHere did not fire (memory or window)", g2.Hops, escape2)
+	default:
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("leg rule declined, walk stalled, then %d hops after the stall, level %d, %d ticks", g2.Hops, g2.EndLvl, g2.Ticks)
+	}
 	return o, nil
 }
