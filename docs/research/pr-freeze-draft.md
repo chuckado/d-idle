@@ -47,5 +47,6 @@ Det state hashes: (to fill).
 - A freeze is still d2d's stand (`stun_until`).
 - `half_freeze` keeps its name and now only marks the state-118 call.
 - The hireling branch has no d2d caller, because skill missiles don't strike mercs.
+- Siblings: a player's freeze is already a chill in d2d (FUN_0057b230's player branch). Pets and a co-op partner as freeze targets are not traced.
 
 Agent: Claude Code

@@ -100,7 +100,7 @@ def gen(n, seed):
 def diff_levels(e):
     text = e.mpq_file("data\\global\\excel\\DifficultyLevels.txt").decode("latin-1").splitlines()
     head = text[0].split("\t")
-    rows = [dict(zip(head, line.split("\t"))) for line in text[1:4]]
+    rows = [dict(zip(head, line.split("\t"), strict=False)) for line in text[1:4]]
     return [(int(r["ResistPenalty"]), int(r["MonsterFreezeDivisor"]), int(r["MonsterColdDivisor"])) for r in rows]
 
 

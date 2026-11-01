@@ -46,6 +46,7 @@ int main(int argc, char** argv) try {
 
     auto data = load_game_data(data_dir, patch ? fs::path(patch) : fs::path{}, 0x1234);
     assert(data && data->town.id == 1 && !data->town.walk.empty());
+    if (!data->patched) { std::printf("SKIP: the oracle is 1.14d's game.exe: set D2_PATCH_INSTALLER\n"); return D2D_TEST_SKIPPED; }
     d2d::rules::Rng rng(7);
     constexpr int kSorceress = 1;
     auto made = new_character(*data, kSorceress, "Headless", false, true, rng);

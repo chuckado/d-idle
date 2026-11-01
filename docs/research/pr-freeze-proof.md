@@ -9,11 +9,11 @@ Branch `fix/freeze-rules` in the worker host's PR checkout (worktree `freeze`), 
 | commit | claim | files |
 |---|---|---|
 | 9ec91600 | C5: the freeze length is resisted like the chill length, a plain monster is frozen only at coldeffect < 0 for length / MonsterFreezeDivisor, no chill | combat.hpp (`Freeze`, `monster_freeze`), missiles.cpp (`Fight::strike`), gamedata.hpp / gamedata_load.cpp (`freeze_divisor`) |
-| e1409e7f | C3: a MonStats boss, champion, unique or superunique is chilled for the resisted length instead | combat.hpp, missiles.cpp |
-| 9c3b8019 | C4: Blood Raven's and the Countess's freezes are not halved (their 0x76 call is state 118) | missiles.cpp (one line out), comments in ai.cpp, ai.hpp, uniques.hpp, docs/research/re/superuniques.md, tools/emu/monsters.py docstring |
-| 51906167 | tooling: `tools/emu/freeze_rules.py`, `tests/game/test_freeze_rules.cpp` (`--freeze-rules CASES`) | 2 new files |
+| 39ef104e | C3: a MonStats boss, champion, unique or superunique is chilled for the resisted length instead | combat.hpp, missiles.cpp |
+| 61620d08 | C4: Blood Raven's and the Countess's freezes are not halved (their 0x76 call is state 118) | missiles.cpp (one line out), comments in ai.cpp, ai.hpp, uniques.hpp, docs/research/re/superuniques.md, tools/emu/monsters.py docstring |
+| bbf506c6 | tooling: `tools/emu/freeze_rules.py`, `tests/game/test_freeze_rules.cpp` (`--freeze-rules CASES`) | 2 new files |
 
-Diff against ddc8281d: 11 files, +474 / -9. With #155's 8 files: 17 files (under 100). Longest touched file: missiles.cpp 838 lines (under 1,500). Copies of the two tooling files in this repo: `tools/emu/freeze_rules.py`, `tools/emu/freeze_rules_test.cpp`.
+Diff against ddc8281d: 11 files, +476 / -9 (C3 carries the `#include <uniques.hpp>` that clang-tidy's include cleaner asked for; it was added after the per-commit run below, by rebuilding C3 and replaying C4 and the tooling commit: 39ef104e / 61620d08 / bbf506c6; the code of each is otherwise the same as the run's e1409e7f / 9c3b8019 / 51906167). With #155's 8 files: 17 files (under 100). Longest touched file: missiles.cpp 838 lines (under 1,500). Copies of the two tooling files in this repo: `tools/emu/freeze_rules.py`, `tools/emu/freeze_rules_test.cpp`.
 
 ## Causal chain (no U link)
 
@@ -31,15 +31,15 @@ Game side: game.exe's FUN_0057c6c0 under the emulator with FUN_0057c1e0, c140, c
 |---|---|---|---|---|
 | ddc8281d (before) | **185,746** | 48,946 | 78,501 | 58,299 |
 | 9ec91600 (C5) | 85,040 | **0** | 50,393 | 34,647 |
-| e1409e7f (C3) | 32,379 | 0 | **0** | 32,379 |
-| 9c3b8019 / 51906167 (C4, head) | **0** | 0 | 0 | **0** |
+| 39ef104e (C3) | 32,379 | 0 | **0** | 32,379 |
+| 61620d08 / bbf506c6 (C4, head; re-run on bbf506c6 itself) | **0** | 0 | 0 | **0** |
 
 Every claim: before > 0, after 0; each commit removes its own slice and leaves the others; no residual. Game side alone, `freeze_rules.py flags` (every monster-data flag byte 0..0xff x boss column x hireling class, Normal, coldeffect -50, length 50): the 896 with flag 8, the boss column or a hireling class all give chill 50 / no freeze; the other 128 give freeze 50 / no chill.
 
 ## Commands for the independent verifier (on the worker host)
 
 ```sh
-cd <PR checkout>/freeze                       # fix/freeze-rules, head 51906167
+cd <PR checkout>/freeze                       # fix/freeze-rules, head bbf506c6
 # build test_freeze_rules as for the other PRs (CMAKE_CXX_FLAGS -Wno-error=maybe-uninitialized -Wno-error=array-bounds)
 cd tools/emu
 uv run python freeze_rules.py gen 100000 20261101 > cases.tsv
@@ -47,14 +47,20 @@ D2_MPQ_DIR=<dir with bin/game.exe> uv run python freeze_rules.py game cases.tsv 
 D2_MPQ_DIR=<MPQ dir> <build>/tests/test_freeze_rules --freeze-rules cases.tsv > d2d.tsv
 uv run python freeze_rules.py compare cases.tsv game.tsv d2d.tsv   # mismatches 0
 uv run python freeze_rules.py flags; uv run python freeze_rules.py state
-# before: a detached worktree at ddc8281d plus tests/game/test_freeze_rules.cpp from 51906167, same commands: 185,746
+# before: a detached worktree at ddc8281d plus tests/game/test_freeze_rules.cpp from bbf506c6, same commands: 185,746
 ```
 
 A verifier should write their own generator and seed and re-derive FUN_0057b230 before reading this doc (standard section 5).
 
-## CI-class checks (head 51906167)
+## CI-class checks (head bbf506c6)
 
-Filled in below by the run on the worker host (`freeze-ci.sh`, the prfixes recipe plus test_freeze_rules).
+- pr_guard against upstream/main (72132b99, fetched today): range 0 FAIL / 0 WARN; per commit (#155's six and these four) 0 / 0 each.
+- presubmit --quick: 0 FAIL, 4 WARN: siblings (monster only: a player's freeze is already a chill in d2d, as FUN_0057b230's player branch; hirelings are chilled in game.exe but d2d's skill missiles don't strike mercs; pets and a co-op partner as freeze targets: not traced, U; say so in the body), data-gating on #155's test_cold_length / test_static_field (not this PR; test_freeze_rules gates on `data->patched` since the first presubmit flagged it), build skipped (--quick). ruff (upstream's rule set): clean after `zip(..., strict=False)` (B905 found by the first run, fixed in the tooling commit).
+- clang-tidy 23.1.4 with the repo .clang-tidy (Names and includes: identifier length, misc-include-cleaner) over missiles.cpp, test_freeze_rules.cpp, gamedata_load.cpp, ai.cpp, test_combat.cpp, test_monsters.cpp: nothing in touched lines (found and fixed: `d2d::rules::Boss` without `<uniques.hpp>` in missiles.cpp); only the pre-existing outdoor.hpp structured-binding names (also on upstream main). The first full selection (138 TUs) showed the same plus pre-existing apps/ names and the launcher's missing main.moc.
+- gcc -Wshadow -Wunused -Wsign-compare full build of the tree: 0 warnings on added lines; rebuild of test_freeze_rules / test_game on bbf506c6: 0 warnings.
+- test_game (MPQ dir), test_rules, test_combat, test_protocol: rc 0; test_freeze_rules without arguments: SKIP, rc 0.
+- Seeds: the Python generator masks the seed to 32 bits; the C++ mode reads the generated cases and has no generator of its own.
+- File length: missiles.cpp 839, combat.hpp 765, freeze_rules.py 312, test_freeze_rules.cpp 118 (all under 1,500). PR size: 11 files (17 with #155).
 
 ## Limits (for the body)
 
