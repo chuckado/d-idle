@@ -100,3 +100,7 @@ cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
 
+openspec/changes/verifyfreezeresume/**  verifyfreezeresume  verifyfreezeresume
+tools/emu/verify_freeze_resume.py  verifyfreezeresume  verifyfreezeresume
+tools/emu/test_verify_freeze_resume.cpp  verifyfreezeresume  verifyfreezeresume
+docs/research/pr-freezeresume-verifier.md  verifyfreezeresume  verifyfreezeresume
