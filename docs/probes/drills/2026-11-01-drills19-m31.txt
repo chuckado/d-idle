@@ -1,0 +1,631 @@
+level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="roam: coverage points" level=8 points=425 exits=1
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+level=INFO msg="nav: stuck recovered" at="{X:48 Y:161}" method=reclick rung=1 repeat=false
+level=INFO msg="nav exit" to=2 gate="{X:35 Y:135}" push="{X:35 Y:135}" border=false
+level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+  (x1 similar lines)
+level=INFO msg="nav exit" to=2 gate="{X:35 Y:135}" push="{X:35 Y:135}" border=false
+level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+  (x1 similar lines)
+level=INFO msg="nav: stuck again at the same spot" pos="{X:55 Y:162}" hits=2 lastMethod=reclick
+level=INFO msg="nav: stuck recovered" at="{X:55 Y:162}" method=spiral rung=1 repeat=true
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:150}" to="{X:47 Y:169}"
+  (x1 similar lines)
+level=INFO msg="nav: stuck recovered" at="{X:39 Y:168}" method=reclick rung=1 repeat=false
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:148}" to="{X:40 Y:168}"
+level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:148}"
+  (x6 similar lines)
+level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:144}"
+  (x15 similar lines)
+level=INFO msg="nav: step-away replan heads to the mouth, new goal" pos="{X:36 Y:138}" wp="{X:37 Y:140}" old="{X:40 Y:168}" new="{X:42 Y:157}" dist=3.2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:138}" to="{X:37 Y:140}" as="{X:42 Y:157}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+level=INFO msg="nav exit" to=2 gate="{X:35 Y:135}" push="{X:35 Y:135}" border=false
+level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:144}" to="{X:50 Y:161}"
+level=INFO msg="nav: stuck again at the same spot" pos="{X:49 Y:159}" hits=3 lastMethod=spiral
+level=INFO msg="nav: stuck recovered" at="{X:49 Y:159}" method=spiral rung=1 repeat=true
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:150}" to="{X:40 Y:170}"
+  (x2 similar lines)
+level=INFO msg="nav exit" to=2 gate="{X:35 Y:135}" push="{X:35 Y:135}" border=false
+level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav exit" to=8 gate="{X:105 Y:140}" push="{X:105 Y:140}" border=false
+level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:43 Y:162}"
+level=INFO msg="nav exit" to=2 gate="{X:35 Y:135}" push="{X:35 Y:135}" border=false
+  (x3 similar lines)
+DRILL DW.m3 P23 PASS no bounce in 4 entries | intended: after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired) | observed: 4 entries, 0 bounces (first in ""); trace: c0 enter: area 8 ok | c0 idle: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c1 enter: area 8 ok | c1 idle: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c2 enter: area 8 ok | c2 idle: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c3 enter: area 8 ok | c3 idle: area 8 ok | c3 clear: area 8 ok | c3 explore: area 8 ok | c3 clear: area 8 ok | c3 explore: area 8 ok; callers at the bounce:  | runs: 2, identical
+END character Drilly life 731/2000 in town: false

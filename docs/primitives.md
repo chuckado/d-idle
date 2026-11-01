@@ -227,4 +227,7 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 |---|---|---|---|
 | P23 | DW.m3 x4 (m3a..m3d) | FAIL (product, DENBOUNCE) | the bot's exit walk Blood Moor to Den of Evil lands at (40,145); the first Navigator.Explore walk (roam, 1 click to (36,146)) fires the return trigger: 4 of 4 entries, identical in 4 invocations; nav mouthStep skipped the exit at 11.2 subtiles (mouthR is 9) |
 | P23 | DW.m4 (m4a) | FAIL (product) | Cave Level 1: Fighter.Clear approach (engage, move, GoTo) to a monster beside the mouth: step-away from 7.3 subtiles fires the trigger in 2 of 4 entries; Explore in a third |
+| P23 | DW.m3 x3 (fixmouth4) | PASS | drills19: zero level-change errors and zero bounces in 4 entries, x3 identical (drills18: 1 real bounce per run); the DRILLS18 chain recurred (step-away blocked, fight pulled the character to (36,138), replan from 3.2) and the gate caught it: 3 `away` rewrites then 117 holds; Clear and Explore finish; live defect: the holds loop (117 step-aways at (36,140)) until the phase limit |
+| P23 | DW.m4 x3 (fixmouth4) | PASS | drills19: 0 bounces, 0 level-change errors, 1 gate rewrite (clip), 4 step-aways; the drill's character dies in cave level 1 cycle 1 from a 23-monster crowd (also in drills18), so entries 3 and 4 are on a dead character; dirty UI inventory as in drills18 |
+| P23 | D2 (11), D3 (12) regression | PASS | drills19: 11 of 11 and 12 of 12 on the fixmouth4 build |
 

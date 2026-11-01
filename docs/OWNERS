@@ -88,3 +88,9 @@ internal/nav/roam.go  fixmouth3  fixmouth3
 internal/nav/fixmouth3_test.go  fixmouth3  fixmouth3
 internal/combat/fixmouth3_test.go  fixmouth3  fixmouth3
 docs/fixmouth3.md  fixmouth3  fixmouth3
+internal/nav/mouthgate.go  fixmouth4  fixmouth4
+internal/nav/fixmouth4_test.go  fixmouth4  fixmouth4
+internal/combat/fixmouth4_test.go  fixmouth4  fixmouth4
+docs/fixmouth4.md  fixmouth4  fixmouth4
+openspec/changes/fixmouth4/**  fixmouth4  fixmouth4
+openspec/changes/drills19/**  drills19  drills19
