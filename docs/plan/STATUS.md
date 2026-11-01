@@ -44,7 +44,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [drills25](../../openspec/changes/drills25/) | in-progress | drills25 | `openspec/changes/drills25/**` | `instance:drills25-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -56,7 +55,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [teletune2](../../openspec/changes/teletune2/) | in-progress | teletune2 | `docs/teletune2.md`<br>`internal/nav/teletune2_test.go`<br>`openspec/changes/teletune2/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -86,7 +84,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change drills25: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -110,10 +107,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change teletune2: go test -p 1 ./internal/nav ./internal/env ./cmd/d2bot ./tools/knobdump passes
-- change teletune2: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- ff279c7 11-01 11:12 `Merge agent/drills25: teletune2 path-aware Teleport hops, DRILLS25 live drills` (drills25)
+- 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
 - 194e1ab 11-01 11:02 `Merge agent/drills24: Teleport key wired from the bound skill, hops tuned (36 subtiles / 40 percent), live drills` (drills24)
 - b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)
 - 8ff5841 11-01 10:48 `Merge origin/main into drills24` (drills24)
@@ -122,6 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
 - 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
 - 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
-- 4144cb9 11-01 10:32 `Merge agent/armorfinish: Frozen Armor PR final body and verifier addendum (docs only)` (armorfinish)
-- 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
 <!-- statusgen:end -->
