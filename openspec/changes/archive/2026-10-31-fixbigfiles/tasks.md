@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixbigfiles
-status: in-progress
+status: archived
 agent: fixbigfiles
 branch: agent/fixbigfiles
 worktree: ~/code/d2lod-wt/fixbigfiles
@@ -13,7 +13,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host"
-merge:
+merge: b617048
 result: "offline; five logs 1.0-1.1 MB -> about 218 KB; hygiene 0 FAIL"
 ```
 
