@@ -115,6 +115,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 63a8fbb 11-01 12:34 `Merge agent/bundledet: two-commit squash, determinism doc, body update` (bundledet)
+- 8be58bb 11-01 12:34 `Merge agent/bundlearmor: combined armor+resume upstream PR body (held)` (bundlearmor)
 - 22b20eb 11-01 12:30 `Merge agent/skresistbot: SKRESISTBOT bot resist floor -100 and pierce below 100` (skresistbot)
 - 69192f1 11-01 12:26 `Merge agent/skresistfix: SKRESISTFIX curse-immune draft and proof docs (local d2d candidate, unverified)` (skresistfix)
 - 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
@@ -123,6 +125,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
 - 792145a 11-01 11:53 `Merge agent/skmelee: player melee blow traced in game.exe, emulator oracle, deviations vs a d2d port` (skmelee)
 - f85fcc3 11-01 11:48 `Merge agent/drills28: armorcut buff retry after a hit-cut cast, drill D28-0 and D26-A rerun` (drills28)
-- 600490f 11-01 11:43 `Merge origin/main into drills28` (drills28)
-- 022546b 11-01 11:38 `Merge agent/drills27: teletune3 stall-memory reset, D22-BL/D22-S drills, stall escape proven live` (drills27)
 <!-- statusgen:end -->
