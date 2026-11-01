@@ -214,6 +214,10 @@ func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome
 	switch id {
 	case "D22-C":
 		o, err = l.d22C(ctx, r)
+	case "D22-PC":
+		o, err = l.d22pocket(ctx, r, false)
+	case "D22-P":
+		o, err = l.d22pocket(ctx, r, true)
 	case "D22-A":
 		o, err = l.d22A(ctx, r)
 	case "D22-B":
@@ -297,6 +301,8 @@ func (l *lab) d22A(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	switch {
 	case gs[0].Key == "":
 		o.Verdict, o.Reason = drill.Fail, "no Teleport key after learning and BindSkills"
+	case tileHops == 0 && l.tune.Nav.TeleMinLeg > 0:
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("teletune: 0 hops on the tile-exit legs (the leg rule declined them), %d ticks, mana net %.1f", ticks, paid)
 	case tileHops == 0:
 		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("no hop on the tile-exit legs (border leg hops %d)", gs[2].Hops)
 	case errs > 0:
@@ -398,5 +404,28 @@ func (l *lab) d22R(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	} else {
 		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d refused hops (bound 6), err=%v", g.Refused, g.Err)
 	}
+	return o, nil
+}
+
+// d22pocket starts a leg in the Rocky Waste pocket DRILLS22 found (arrival (165,220): a walk trap) and asks for the
+// Stony Tomb exit. Without Teleport the leg walks (or times out: the walk to the exit is unreachable or long); with
+// it the hops should cross the wall (the island rule of teleStep and the leg rule). Both report ticks and the end.
+func (l *lab) d22pocket(ctx context.Context, r *drill.Run, learn bool) (drill.Outcome, error) {
+	if err := l.d22prep(ctx, r, d22Rocky, learn, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	if _, err := r.Cheat(ctx, "debug warp 165 220", "DRILLS24: start in the Rocky Waste pocket (a walk trap, DRILLS22 finding 4) to test what Teleport is for"); err != nil {
+		return drill.Outcome{}, err
+	}
+	_ = l.Tick(ctx, 20)
+	l.d22wire(l.navr, true)
+	g := l.d22run(ctx, l.navr, 55, 80*time.Second)
+	tag := "pocket-control"
+	if learn {
+		tag = "pocket-teleport"
+	}
+	l.d22dump(g, tag)
+	o := drill.Outcome{Intended: "pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport", Observed: g.String(), Sig: fmt.Sprintf("hops=%d", g.Hops)}
+	o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("measurement: %d hops, %d ticks, reached level %d, err=%v", g.Hops, g.Ticks, g.EndLvl, g.Err)
 	return o, nil
 }
