@@ -2,6 +2,7 @@
 # Bridge to the private ops repo (d2lod-ops): lab scripts, board, agent overlay. See docs/process/public-split.md.
 #   ops.sh path              print the ops checkout (D2_OPS_DIR, default ~/code/d2lod-ops)
 #   ops.sh run TOOL [ARGS]   run <ops>/tools/TOOL with D2_BOT_DIR set to this checkout
+#   ops.sh merge|tickstatus  run <ops>/tools/merge.sh or tickstatus.sh with D2_BOT_DIR set
 #   ops.sh link              in this worktree: CLAUDE.local.md (imports AGENTS.private.md), local.env, .claude/agents, .claude/settings.json, docs/needs-you.md
 #   ops.sh env               print the ops local.env (host values)
 #   ops.sh status            check the ops checkout and the links
@@ -37,5 +38,6 @@ status)
 	for f in CLAUDE.local.md local.env .claude/agents .claude/settings.json docs/needs-you.md; do
 		[ -e "$here/$f" ] && echo "ok      $f" || echo "missing $f (ops.sh link)"
 	done ;;
-*) echo "usage: ops.sh path|run TOOL|link|env|status" >&2; exit 2 ;;
+merge|tickstatus) need; D2_BOT_DIR=$here exec "$ops/tools/$cmd.sh" "$@" ;;
+*) echo "usage: ops.sh path|run TOOL|merge|tickstatus|link|env|status" >&2; exit 2 ;;
 esac
