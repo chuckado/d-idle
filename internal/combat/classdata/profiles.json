@@ -98,7 +98,7 @@
    "class": "paladin",
    "bands": [
     {
-     "minLevel": 24,
+     "minLevel": 18,
      "requires": "Blessed Hammer",
      "attack": [
       "Blessed Hammer",

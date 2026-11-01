@@ -70,17 +70,18 @@ func TestPalProbeLadderAlongBothTables(t *testing.T) {
 	}
 }
 
-// The profile's Blessed Hammer band starts at clvl 24 although both tables train the hammer at 20 to 22: the
-// hammer is idle for 2 to 4 levels (build-flexibility audit row 10, for the Paladin). Kept as a finding.
+// PALBAND (probe F2): the profile's Blessed Hammer band minimum is the skill's own required level (18), so the band
+// is open the moment any table has trained the hammer; before the fix it started at 24 and the points sat idle.
+// Every Paladin plan table is checked, the endgame ones too.
 func TestPalProbeHammerBandStartsAtTraining(t *testing.T) {
 	pr, _ := combat.LookupProfile(d2.Paladin, "")
-	for _, table := range []string{"paladin-normal30", "paladin-normal30-v2"} {
+	for _, table := range []string{"paladin-normal30", "paladin-normal30-v2", "paladin_hammerdin_endgame90", "paladin_hammerdin_zeal_endgame90"} {
 		sk := skillsAt(t, table)
 		for L := 1; L <= 30; L++ {
 			if sk[L]["Blessed Hammer"] > 0 {
 				has := func(n string) bool { return sk[L][n] > 0 }
 				if n := pr.AttackNames(L, has)[0]; n != "Blessed Hammer" {
-					t.Skipf("PALPROBE finding F2: %s trains Blessed Hammer at clvl %d but the profile band starts at 24 (first attack at %d is %s); the points sit idle until then (classdata/profiles.json, audit row 10)", table, L, L, n)
+					t.Errorf("%s trains Blessed Hammer at clvl %d but the first attack there is %s", table, L, n)
 				}
 				break
 			}
