@@ -109,5 +109,4 @@ Not covered: swing speed, the defender's block, leech, crushing blow, open wound
 - docs/research/README.md: `- sk-melee2-trace.md: the plain Attack on the real d2d build (per-part differences, D7 and the shield, off-weapon ED); oracle tools/emu/sk_melee2.py, d2d test mode tools/emu/sk_melee2_test.cpp.`
 - docs/research/sk-melee-trace.md, a banner under the status line: `> status: deviations re-proven on the real d2d build, D7 narrowed, D8 added: docs/research/sk-melee2-trace.md (SKMELEE2).`
 - docs/research/sorc-skill-matrix.md: the cell in the section above.
-- docs/OWNERS: `docs/research/sk-melee2-trace.md skmelee2`, `tools/emu/sk_melee2.py skmelee2`, `tools/emu/sk_melee2_test.cpp skmelee2` (format as the existing lines).
 - Proposed glossary term (not written): **off-weapon ED** = enhanced damage (stats 17 / 18) on gear other than the weapon in use; game.exe adds it to the damage percentage (FUN_0057b420), d2d ignores it.

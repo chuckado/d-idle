@@ -109,3 +109,7 @@ docs/process/chunker.md  chunker  chunker
 docs/community/groom-proposal.md  chunker  chunker
 docs/community/withdrawn.tsv  chunker  chunker
 openspec/changes/chunker/**  chunker  chunker
+docs/research/sk-melee2-trace.md  skmelee2  skmelee2
+tools/emu/sk_melee2.py  skmelee2  skmelee2
+tools/emu/sk_melee2_test.cpp  skmelee2  skmelee2
+openspec/changes/skmelee2/**  skmelee2  skmelee2
