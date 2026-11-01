@@ -43,16 +43,19 @@ type CastTick struct {
 	Portal        bool
 }
 
-// CastInfo is one D-castcut trial: a town portal scroll cast with one melee monster adjacent.
+// CastInfo is one D-castcut trial: a town portal scroll cast with one melee monster near.
 type CastInfo struct {
 	Err                         string
-	Adjacent                    int
+	Adjacent                    int     // monsters within 8 subtiles at the click
+	Dist                        float64 // the nearest monster's distance in subtiles at the click
+	Synced                      bool    // the click came when the monster's blow animation began
 	LifeStart, LifeEnd          int
-	Hits                        int // ticks on which the life dropped during the trace
-	PortalTick, PortalMS        int // ticks and game milliseconds from the click to the portal object, -1 none within the trace
+	Hits                        int   // ticks on which the life dropped after the click
+	HitTicks                    []int // those ticks, counted from the click
+	PortalTick, PortalMS        int   // ticks and game milliseconds from the click to the portal object, -1 none within the trace
+	ScrollTick                  int   // tick on which the scroll left the pack, -1 never
 	ScrollsBefore, ScrollsAfter int
-	ModeSeq                     string // player mode, run length encoded "mode x ticks"
-	MonSeq                      string // mode of the nearest living monster, run length encoded
+	Timeline                    string // the events, tick offsets from the click
 	AttackDists                 string
 	Rights                      int
 }
@@ -62,7 +65,7 @@ type D11Lab interface {
 	FieldLab
 	EmptyPlan(ctx context.Context, r *Run, level, n int, total time.Duration) EmptyPlanInfo
 	PortalMelee(ctx context.Context, r *Run, adj int, act bool) PMInfo
-	CastTrace(ctx context.Context, r *Run, life int) CastInfo
+	CastTrace(ctx context.Context, r *Run, life, trial int, sync bool) CastInfo
 }
 
 // D11 returns the DRILLS11 group (letter P).
@@ -107,8 +110,8 @@ func D11(l D11Lab) []Drill {
 		{ID: "D-castcut", Primitive: "P10", Title: "D2.d unknown: does a monster hit cut a town portal cast, and how many ticks does a cast take (record)", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			var rows []string
 			cut, done, blocked := 0, 0, 0
-			for i := 0; i < 4; i++ {
-				c := l.CastTrace(ctx, r, 300)
+			for i := 0; i < 5; i++ {
+				c := l.CastTrace(ctx, r, 300, i, i >= 1)
 				rows = append(rows, fmt.Sprintf("trial %d: %s", i+1, c.String()))
 				switch {
 				case c.Err != "" || c.Adjacent < 1:
@@ -143,8 +146,8 @@ func (i PMInfo) String() string {
 }
 
 func (c CastInfo) String() string {
-	return fmt.Sprintf("adjacent %d, life %d -> %d, hit ticks %d, portal after %d ticks = %d game ms (-1 none), scrolls %d -> %d, rights %d, player modes [%s], monster modes [%s], attack-mode distances [%s], err %q",
-		c.Adjacent, c.LifeStart, c.LifeEnd, c.Hits, c.PortalTick, c.PortalMS, c.ScrollsBefore, c.ScrollsAfter, c.Rights, c.ModeSeq, c.MonSeq, c.AttackDists, c.Err)
+	return fmt.Sprintf("monsters within 8: %d, nearest %.1f subtiles, click synced to a blow %v, life %d -> %d, hits after the click %d at ticks %v, portal object after %d ticks = %d game ms (-1 none), scroll left the pack at tick %d (-1 never), scrolls %d -> %d, timeline [%s], err %q",
+		c.Adjacent, c.Dist, c.Synced, c.LifeStart, c.LifeEnd, c.Hits, c.HitTicks, c.PortalTick, c.PortalMS, c.ScrollTick, c.ScrollsBefore, c.ScrollsAfter, c.Timeline, c.Err)
 }
 
 // dEmptyPlan: PASS when the log has no "empty path" and there were back-offs; BLOCKED when none ran.

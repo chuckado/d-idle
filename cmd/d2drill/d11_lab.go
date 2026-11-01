@@ -15,13 +15,13 @@ import (
 
 // d11Setup is the common start of the DRILLS11 fights: alive, in the field level, the navigator's map built, the level's
 // natural monsters gone, a known life. The caller defers d11Leave.
-func (l *lab) d11Setup(ctx context.Context, r *drill.Run, level, maxLife int) error {
+func (l *lab) d11Setup(ctx context.Context, r *drill.Run, level, maxLife, walk int) error {
 	if err := l.Goto(ctx, r, level); err != nil {
 		return fmt.Errorf("goto: %w", err)
 	}
 	if sw, err := l.be.Env.Snapshot(); err == nil && sw.Player != nil {
 		wctx, cancel := context.WithTimeout(ctx, 20*time.Second)
-		_ = l.navr.GoTo(wctx, input.Point{X: sw.Player.X + 8, Y: sw.Player.Y})
+		_ = l.navr.GoTo(wctx, input.Point{X: sw.Player.X + walk, Y: sw.Player.Y})
 		cancel()
 	}
 	if _, err := r.Cheat(ctx, "debug kill", "clear the level's natural monsters: the spawned ones are the fight under test"); err != nil {
@@ -233,7 +233,7 @@ func (l *lab) d11Lure(ctx context.Context) {
 
 func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) (pi drill.PMInfo) {
 	pi.Where = fmt.Sprintf("Blood Moor, zombies spawned (waiting for %d within 3 subtiles; the crowd rule starts at 8 within 8)", adj)
-	if err := l.d11Setup(ctx, r, 2, 300); err != nil {
+	if err := l.d11Setup(ctx, r, 2, 300, 8); err != nil {
 		pi.Err = err.Error()
 		return
 	}
@@ -288,9 +288,14 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 	return
 }
 
-func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.CastInfo) {
-	ci.PortalTick = -1
-	if err := l.d11Setup(ctx, r, 2, life); err != nil {
+// CastTrace casts one town portal scroll with a monster in melee range, stepping one tick at a time from the click and
+// writing the timeline of events (tick offsets from the click): player mode changes, life drops (hits), the nearest
+// monster's mode changes, the scroll leaving the pack, the portal object. trial moves the standing place east so an
+// earlier trial's portal does not hide this one; sync clicks when the monster's attack animation (A1 or A2) starts, so
+// its blow lands inside the cast window.
+func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync bool) (ci drill.CastInfo) {
+	ci.PortalTick, ci.ScrollTick = -1, -1
+	if err := l.d11Setup(ctx, r, 2, life, 8*(trial+1)); err != nil {
 		ci.Err = err.Error()
 		return
 	}
@@ -323,11 +328,42 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 	}
 	_ = c.Hover(ctx, x, y)
 	_ = l.Tick(ctx, 4)
+	nearest := func() (string, float64) { // the nearest living monster's mode and distance in subtiles
+		ms, e := c.Monsters(ctx)
+		lv, e2 := c.Level(ctx)
+		if e != nil || e2 != nil {
+			return "-", -1
+		}
+		best, bm := 1e9, "-"
+		for _, m := range ms.Items {
+			if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" {
+				if d := 5 * math.Hypot(m.CellX-lv.X, m.CellY-lv.Y); d < best {
+					best, bm = d, m.Mode
+				}
+			}
+		}
+		return bm, best
+	}
+	if sync { // wait for the start of a blow (the mode turns to an attack mode), at most 80 ticks
+		pm, _ := nearest()
+		for i := 0; i < 80; i++ {
+			_ = l.Tick(ctx, 1)
+			m, _ := nearest()
+			if strings.HasPrefix(m, "A") && !strings.HasPrefix(pm, "A") {
+				ci.Synced = true
+				break
+			}
+			pm = m
+		}
+	}
+	_, d0 := nearest()
 	ci.Adjacent, _, ci.LifeStart, _ = l.d11Within(ctx, 8)
-	old := map[int]bool{} // portal objects by id: an earlier trial's portal can stand on the same cell
+	ci.Dist = d0
+	oldID, oldPos := map[int]bool{}, map[[2]int]bool{} // an earlier portal can stand on the same cell or reuse the id
 	if pv, err := l.PView(ctx); err == nil {
-		for _, id := range pv.PortalIDs {
-			old[id] = true
+		for k, id := range pv.PortalIDs {
+			oldID[id] = true
+			oldPos[pv.PortalPos[k]] = true
 		}
 	}
 	t0, ms0 := l.tick(), l.gameMS()
@@ -336,69 +372,50 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 		return
 	}
 	ci.Rights = 1
-	last, run, prev := ci.LifeStart, 0, -1
-	var seq, mseq []string
-	mprev, mrun := "", 0
-	flushM := func() {
-		if mrun > 0 {
-			mseq = append(mseq, fmt.Sprintf("%s x%d", mprev, mrun))
-		}
-	}
-	flush := func() {
-		if run > 0 {
-			seq = append(seq, fmt.Sprintf("%d x%d", prev, run))
-		}
-	}
-	for i := 1; i <= 70; i++ {
+	last, prevMode, prevMon := ci.LifeStart, -99, ""
+	var ev []string
+	add := func(i int, f string, a ...any) { ev = append(ev, fmt.Sprintf("+%d "+f, append([]any{i}, a...)...)) }
+	for i := 1; i <= 60; i++ {
 		_ = l.Tick(ctx, 1)
 		sn, err := l.be.Env.Snapshot()
 		if err != nil || sn.Player == nil {
 			continue
 		}
-		if ms, e := l.be.Client.Monsters(ctx); e == nil { // the nearest living monster's mode, run length encoded
-			best, bm := 1e9, "-"
-			lv, _ := l.be.Client.Level(ctx)
-			for _, m := range ms.Items {
-				if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" {
-					if d := math.Hypot(m.CellX-lv.X, m.CellY-lv.Y); d < best {
-						best, bm = d, m.Mode
-					}
-				}
-			}
-			if bm != mprev {
-				flushM()
-				mprev, mrun = bm, 0
-			}
-			mrun++
+		if m, _ := nearest(); m != prevMon {
+			add(i, "monster %s", m)
+			prevMon = m
 		}
 		if sn.Player.Life < last {
 			ci.Hits++
+			ci.HitTicks = append(ci.HitTicks, i)
+			add(i, "HIT life %d->%d", last, sn.Player.Life)
 		}
 		last = sn.Player.Life
-		if sn.Player.Mode != prev {
-			flush()
-			prev, run = sn.Player.Mode, 0
+		if sn.Player.Mode != prevMode {
+			add(i, "player mode %d", sn.Player.Mode)
+			prevMode = sn.Player.Mode
 		}
-		run++
+		pv, err := l.PView(ctx)
+		if err != nil {
+			continue
+		}
+		if ci.ScrollTick < 0 && pv.Scrolls < ci.ScrollsBefore {
+			ci.ScrollTick = i
+			add(i, "scroll left the pack")
+		}
 		if ci.PortalTick < 0 {
-			if pv, err := l.PView(ctx); err == nil {
-				for _, id := range pv.PortalIDs {
-					if !old[id] {
-						ci.PortalTick = l.tick() - t0
-						ci.PortalMS = l.gameMS() - ms0
-					}
+			for k, id := range pv.PortalIDs {
+				if !oldID[id] || !oldPos[pv.PortalPos[k]] {
+					ci.PortalTick, ci.PortalMS = l.tick()-t0, l.gameMS()-ms0
+					add(i, "PORTAL object")
 				}
 			}
 		}
-		if ci.PortalTick >= 0 && i > 45 {
+		if ci.PortalTick >= 0 && i > 30 {
 			break
 		}
 	}
-	flush()
-	flushM()
-	ci.ModeSeq = strings.Join(seq, ", ")
-	ci.AttackDists = d11AttStr()
-	ci.MonSeq = strings.Join(mseq, ", ")
+	ci.Timeline = strings.Join(ev, "; ")
 	ci.LifeEnd = last
 	pv, _ := l.PView(ctx)
 	ci.ScrollsAfter = pv.Scrolls
@@ -409,7 +426,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 // back-offs and the failed walks in the log.
 func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total time.Duration) (ei drill.EmptyPlanInfo) {
 	ei.Where = fmt.Sprintf("area %d, %d zombies", level, n)
-	if err := l.d11Setup(ctx, r, level, 1000); err != nil {
+	if err := l.d11Setup(ctx, r, level, 1000, 8); err != nil {
 		ei.Err = err.Error()
 		return
 	}
