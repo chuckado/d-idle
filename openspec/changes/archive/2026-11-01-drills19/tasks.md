@@ -2,7 +2,7 @@
 
 ```yaml
 change: drills19
-status: in-progress
+status: archived
 agent: drills19
 branch: agent/drills19
 worktree: ~/code/d2lod-wt/drills19
@@ -12,8 +12,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test on the worker host"
-merge:
-result: "fixmouth4 PASS live: DW.m3 x3 and DW.m4 x3 zero bounces; finding: gate hold loop in Den cycle 2"
+merge: 1787725
+result: "fixmouth4 PASS live: DW.m4 x3 and DW.m3 x3 zero bounces (verified live); finding: gate hold loop in Den cycle 2, card fixmouthloop"
 live: "verified live (hidden slot 0, lab build cheats3, build of fixmouth4 tip 80bf381): DW.m3 x3 PASS, DW.m4 x3 PASS (0 bounces), D2 11/11, D3 12/12"
 ```
 

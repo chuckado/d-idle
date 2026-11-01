@@ -91,3 +91,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - FORKNEXT: [forknext.md](forknext.md) the private fork carries the NextHit fix (lab-nexthit), vetting, binary naming rule.
 - DRILLS17 (live result): fixmouth2 live proof FAIL (Clear finishes, spin gone, bounces remain; town D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md)
 - DRILLS18 (live result): fixmouth3 live proof PARTIAL (DW.m4 PASS, DW.m3 one bounce per run left; D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md); [fixmouth3.md](fixmouth3.md) (stay guard held until the level changes, one-click step-away, roam targets filtered at 17)
+- DRILLS19 (live result): fixmouth4 live proof PASS (DW.m3 x3 and DW.m4 x3 zero mouth bounces; D2/D3 PASS; defect: gate hold loop in Den cycle 2): [probes/drills/README.md](probes/drills/README.md); [fixmouth4.md](fixmouth4.md) (one exit gate on every nav click and movement swing)
