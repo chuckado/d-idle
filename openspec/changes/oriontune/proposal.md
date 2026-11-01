@@ -4,7 +4,7 @@ The user asked (2026-11-01) to tune the worker host: builds and checks were susp
 
 ## What Changes
 
-- Measurement of where the load comes from (private ops doc `orion-tuning.md`), user-level tools only: a build wrapper with nice and a CPU quota, a user-level ccache and a cached fork build script, a bounded capacity check with one verdict line (all in the private ops repo).
+- Measurement of where the load comes from (private ops tuning doc), user-level tools only: a build wrapper with nice and a CPU quota, a user-level ccache and a cached fork build script, a bounded capacity check with one verdict line (all in the private ops repo).
 - Public: three lines in docs/process/worker-capacity.md pointing to the new check and saying that sustained I/O wait counts only when a local disk is really busy.
 
 ## Impact

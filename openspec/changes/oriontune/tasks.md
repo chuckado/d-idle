@@ -22,4 +22,4 @@ live: "worker host measurements only, no game"
 - [x] d2nice wrapper with CPU quota, tested
 - [x] ccache and cached fork build script, cold vs warm measured
 - [x] capacity2 with one verdict line, bounded, tested offline and live
-- [x] Private doc orion-tuning.md and public worker-capacity.md note
+- [x] Private tuning doc and public worker-capacity.md note
