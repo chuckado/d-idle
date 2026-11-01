@@ -99,3 +99,6 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
+docs/research/pr-armorhit-addendum.md  armorfinish  armorfinish
+docs/research/pr-armorhit-body-final.md  armorfinish  armorfinish
+openspec/changes/armorfinish/**  armorfinish  armorfinish
