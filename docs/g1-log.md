@@ -160,3 +160,6 @@ Planned: fresh Sorceress Fresha on i5, 4 h, profile m24, no cheats. The start FA
 - BUG autopsy tags (2, same pattern: healing potions in the belt, none drunk in the last minute): 12:55:33 and 14:12:17.
 - Failsafe ladder: 14:54 and 15:19, steps 1-3 each (task step err `town: no town portal available`), recovered without a restart; no heapguard lines.
 - Supervisor: no failure; the supervise child ended with code 0 at 16:26:42 ("not restarting") after the full 8 h. Bot ran 5 min over, as planned. Verified from the log (V); the d2soak profile verdict was not re-run.
+
+## Gate 1 rerun on d2d (2026-11-01, bot f4ca264, d2d.lab2-freezeresume ee5e06d8): NOT PASSED
+- Slot 0, fresh Gate1a, 120 wall min = 22.6 virtual h, one d2d kill at 60 min (back in game in about 3 s, restarts +1, saved XP held). FAIL: no kill and no XP 43 vmin (limit 10), belt window 6 (limit 5); XP/h 7517 vs 9172 indicative. Full table: docs/soaks/gate1-rerun.md.

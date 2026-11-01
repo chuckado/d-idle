@@ -15,8 +15,8 @@ owns:
 exclusive:
   - instance:gate1-slot-0
 gates:
-result: pending
+result: Gate 1 NOT PASSED (docs/soaks/gate1-rerun.md); verified live on a hidden d2d slot
 ```
 
-- [ ] 1. Soak run on a hidden d2d slot with one injected fault
-- [ ] 2. Judge against the Gate 1 criteria, write the entry
+- [x] 1. Soak run on a hidden d2d slot with one injected fault
+- [x] 2. Judge against the Gate 1 criteria, write the entry
