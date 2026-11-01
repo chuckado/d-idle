@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills24
-status: in-progress
+status: archived
+merge: 194e1ab
 agent: drills24
 branch: agent/drills24
 worktree: ~/code/d2lod-wt/drills24
@@ -13,7 +14,7 @@ exclusive:
   - instance:drills24-slot-0
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "teletune proven live: default knobs 0 hops (265 and 605 ticks against walking 254 and 578), teleMinLeg 0 stops at the mana reserve, 18 ticks per hop; pocket leg shows what Teleport is for and that the leg rule blocks it"
+result: "Teleport key wired from the bound skill (production never had it); hops tuned to pay (defaults 36 subtiles/40 percent reserve): live: near walking speed with the defaults, 18 ticks per hop; pockets/escapes and path-aware hops are the next card (TELETUNE2)"
 live: "group T PASS, D2 11 of 11, D3 12 of 12 (DRILLS24)"
 ```
 
