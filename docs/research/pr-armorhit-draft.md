@@ -1,6 +1,6 @@
 # PR draft: Frozen Armor freezes a striker by the freeze rule (ARMORHIT)
 
-> status: DRAFT, not posted; NOT READY (independent verifier and det state hashes pending; the user's go). Evidence: [pr-armorhit-proof.md](pr-armorhit-proof.md). Branch `fix/armor-hit` on the worker host (head d5bd19c1, base upstream main 72132b99).
+> status: superseded by [pr-armorhit-addendum.md](pr-armorhit-addendum.md) (limits, merge line and not-run list corrected after the verifier) and [pr-armorhit-body-final.md](pr-armorhit-body-final.md) (the body to post); fix/armor-hit is READY, not open. Original text: DRAFT, not posted; NOT READY (independent verifier and det state hashes pending; the user's go). Evidence: [pr-armorhit-proof.md](pr-armorhit-proof.md). Branch `fix/armor-hit` on the worker host (head d5bd19c1, base upstream main 72132b99).
 
 Title: `Frozen Armor: freeze or chill a melee striker by the freeze rule`
 
