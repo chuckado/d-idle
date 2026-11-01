@@ -28,5 +28,5 @@ result: "Pushed 6270d162 -> 79c9a496 to #155, title and body edited; gates clean
 - [x] 1.1 Verify preconditions
 - [x] 1.2 Re-run gates on the head
 - [x] 1.3 Push and edit the PR
-- [ ] 1.4 CodeRabbit state, CI states
+- [x] 1.4 CodeRabbit state, CI states
 - [x] 1.5 Repo-side records
