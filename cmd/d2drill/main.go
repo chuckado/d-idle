@@ -160,6 +160,8 @@ func run() int {
 		drills = drill.D13(l)
 	case "R": // DRILLS15 (skill-smoke traces) and DRILLS16 (fixbuff live proof): one group, drill names R-bs* / D15-* tell them apart
 		drills = append(drill.D15(l), drill.D16(l)...)
+	case "T": // DRILLS22: live proof of fixtelekey (Teleport capability in Act 2 legs)
+		drills = drill.D22(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
@@ -200,7 +202,7 @@ func run() int {
 	r := &drill.Runner{W: l, Repeat: *repeat, Logf: func(f string, a ...any) { fmt.Printf(f+"\n", a...) }}
 	g := r.RunGroup(ctx, drills)
 
-	if g := strings.ToUpper(*group); g == "D2" || g == "DW" || g == "Q" || g == "R" { // the portal drills end in the field: put the character back in town (logged cheat)
+	if g := strings.ToUpper(*group); g == "D2" || g == "DW" || g == "Q" || g == "R" || g == "T" { // the portal drills end in the field: put the character back in town (logged cheat)
 		if _, err := l.Cheat(ctx, "drills:cleanup", "debug goto 1", "return the throwaway character to the Rogue Encampment after the portal drills"); err != nil {
 			fmt.Fprintln(os.Stderr, "d2drill: cleanup goto:", err)
 		}
