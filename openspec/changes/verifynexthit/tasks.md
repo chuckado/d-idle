@@ -8,7 +8,7 @@ branch: agent/verifynexthit
 worktree: ~/code/d2lod-wt/verifynexthit
 skip_specs: true
 owns:
-  - openspec/changes/verifynexthit/
+  - openspec/changes/verifynexthit/**
   - tools/emu/verify_nexthit.py
   - tools/emu/test_verify_nexthit.cpp
   - tools/emu/verify_nexthit_compare.py
