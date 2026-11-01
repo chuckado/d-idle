@@ -99,7 +99,3 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
-docs/teletune3.md  teletune3  teletune3
-internal/nav/teletune3_test.go  teletune3  teletune3
-openspec/changes/teletune3/**  teletune3  teletune3
-openspec/changes/drills27/**  drills27  drills27

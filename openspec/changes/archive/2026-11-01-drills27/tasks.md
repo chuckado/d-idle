@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills27
-status: in-progress
+status: archived
+merge: 022546b
 agent: drills27
 branch: agent/drills27
 worktree: ~/code/d2lod-wt/drills27
@@ -13,7 +14,7 @@ exclusive:
   - instance:drills27-slot-0
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "teletune3 verified live: border-leg replans are why=monsters (not the key), D22-S proves stalledHere, pocket leaves by hop with the stall memory reset, regression unchanged"
+result: "stall memory reset, stall escape proven live, border-leg gap is replan spread not the key: verified live (DRILLS27)"
 live: "slot 1, groups T, D2, D3 (DRILLS27)"
 ```
 
