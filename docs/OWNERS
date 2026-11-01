@@ -45,7 +45,6 @@ openspec/changes/soak-minutes-virtual/**  specmin  soak-minutes-virtual
 internal/d2dsoakstat/invariants.go  specmin  soak-minutes-virtual
 internal/d2dsoakstat/invariants_test.go  specmin  soak-minutes-virtual
 internal/d2dsoakstat/invreport.go  specmin  soak-minutes-virtual
-internal/d2dsoakstat/minute.go  specmin  soak-minutes-virtual
 internal/d2dsoakstat/testdata/invreport.golden  specmin  soak-minutes-virtual
 docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
 docs/review-strategy.md  specmin  soak-minutes-virtual
@@ -68,6 +67,16 @@ internal/combat/fight.go  fixemptyplan  fixemptyplan
 internal/combat/reach.go  fixemptyplan  fixemptyplan
 internal/combat/fixemptyplan_test.go  fixemptyplan  fixemptyplan
 docs/fixemptyplan.md  fixemptyplan  fixemptyplan
-internal/d2dsoakstat/minute.go  fixstatic  fixstatic
 internal/d2dsoakstat/metrics.go  fixstatic  fixstatic
 docs/fixstatic.md  fixstatic  fixstatic
+internal/bot/observe.go  fixstatic  fixstatic
+internal/bot/m0logs_test.go  fixstatic  fixstatic
+internal/combat/sim_test.go  fixstatic  fixstatic
+internal/boss/script.go  fixstatic  fixstatic
+internal/boss/andariel_floor_test.go  fixstatic  fixstatic
+internal/d2dsoakstat/stat_test.go  fixstatic  fixstatic
+cmd/d2dsoak/main.go  fixstatic  fixstatic
+docs/combat.md  fixstatic  fixstatic
+internal/d2dsoakstat/table.go  fixstatic  fixstatic
+cmd/d2dsoak/run.go  fixstatic  fixstatic
+internal/d2dsoakstat/minute.go  specmin  soak-minutes-virtual

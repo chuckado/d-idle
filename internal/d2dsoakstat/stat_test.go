@@ -3,6 +3,7 @@ package d2dsoakstat
 import (
 	"math"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -89,9 +90,6 @@ time=x msg=minute area=bad
 	ms, err := ParseMinutes(strings.NewReader(in))
 	if err != nil || len(ms) != 2 {
 		t.Fatalf("got %d minutes, err %v", len(ms), err)
-	}
-	if ms[0].Table != "" {
-		t.Errorf("table %q without the key", ms[0].Table)
 	}
 	if ms[0].Step != "Quest: x y" || ms[0].PotionsUsed != 1 || ms[1].XP != 119175 || ms[1].PotionsUsed != 4 {
 		t.Errorf("parsed %+v", ms)
@@ -220,15 +218,18 @@ func TestCommittedBaselines(t *testing.T) {
 	}
 }
 
-func TestMinuteTableReachesRun(t *testing.T) {
-	in := `time=2026-10-30T03:00:00-04:00 level=INFO msg=minute area=3 clvl=5 xp=1000 kills=10 deaths=0 potions=1 gold=7 restarts=0 table=sorceress_v2
-time=2026-10-30T03:01:00-04:00 level=INFO msg=minute area=3 clvl=5 xp=1100 kills=11 deaths=0 potions=1 gold=7 restarts=0 table=sorceress_v2
+func TestLogTable(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "bot.log")
+	in := `time=2026-10-30T03:00:00-04:00 level=INFO msg=minute area=3 clvl=5 xp=1000 table=sorceress_v2 kills=10
+{"time":"2026-10-30T03:01:00-04:00","msg":"minute","table":"sorceress_v2"}
 `
-	ms, err := ParseMinutes(strings.NewReader(in))
-	if err != nil || len(ms) != 2 {
-		t.Fatalf("got %d, err %v", len(ms), err)
+	if err := os.WriteFile(p, []byte(in), 0o600); err != nil {
+		t.Fatal(err)
 	}
-	if r := Extract("x", ms, Options{}); r.Table != "sorceress_v2" {
-		t.Fatalf("table %q", r.Table)
+	if got := LogTable(p); got != "sorceress_v2" {
+		t.Fatalf("table %q", got)
+	}
+	if got := LogTable(p + ".missing"); got != "" {
+		t.Fatalf("missing file: %q", got)
 	}
 }

@@ -8,9 +8,18 @@ branch: agent/fixstatic
 worktree: ~/code/d2lod-wt/fixstatic
 skip_specs: true
 owns:
-  - internal/d2dsoakstat/minute.go
   - internal/d2dsoakstat/metrics.go
   - docs/fixstatic.md
+  - cmd/d2dsoak/run.go
+  - internal/d2dsoakstat/table.go
+  - docs/combat.md
+  - cmd/d2dsoak/main.go
+  - internal/d2dsoakstat/stat_test.go
+  - internal/boss/andariel_floor_test.go
+  - internal/boss/script.go
+  - internal/combat/sim_test.go
+  - internal/bot/m0logs_test.go
+  - internal/bot/observe.go
 exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"

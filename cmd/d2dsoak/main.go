@@ -335,6 +335,7 @@ func loadRuns(paths []string, hours float64) ([]d2dsoakstat.Run, error) {
 		}
 		r := d2dsoakstat.Extract(filepath.Base(filepath.Dir(p))+"/"+filepath.Base(p), ms, d2dsoakstat.Options{Hours: hours})
 		r.NoteDropped(dropped)
+		r.Table = d2dsoakstat.LogTable(p)
 		if inv, err := scanInvariants(p, d2dsoakstat.ExitInfo{WantHours: hours}); err == nil {
 			r.Inv = inv
 		}

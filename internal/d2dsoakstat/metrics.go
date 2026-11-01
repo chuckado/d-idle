@@ -30,7 +30,7 @@ type Run struct {
 	Kills   int                `json:"kills"`
 	XP      int64              `json:"xp"`
 	Metrics map[string]float64 `json:"metrics"`
-	// Table is the leveler skill table the bot reported on its minute lines (last non-empty value); "" in older logs.
+	// Table is the leveler skill table the bot reported on its minute lines (last non-empty value); "" in older logs. Set by the caller (LogTable).
 	Table string `json:"table,omitempty"`
 	// States is the minute-count share per bot activity group (state field); empty in old logs.
 	States map[string]float64 `json:"states,omitempty"`
@@ -100,11 +100,6 @@ func Extract(name string, ms []Minute, o Options) Run {
 		return r
 	}
 	first, last := ms[0], ms[len(ms)-1]
-	for _, m := range ms {
-		if m.Table != "" {
-			r.Table = m.Table
-		}
-	}
 	elapsed := make([]float64, len(ms)) // hours since the first line
 	switch {
 	case o.Hours > 0:
