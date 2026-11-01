@@ -476,10 +476,10 @@ func (l *lab) d15T5(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if !ok {
 		return drill.Outcome{}, fmt.Errorf("no merc in dump after the hire")
 	}
-	hop := 3.0
+	hop := 6.0
 	tx, ty := s.X+dx*hop, s.Y+dy*hop
 	b, _ := l.d15read(ctx)
-	if _, err = l.skillDebug(r).CastAt(ctx, skTeleport, tx, ty, "T5: a 3-cell (15 subtile) hop with the merc beside the player"); err != nil {
+	if _, err = l.skillDebug(r).CastAt(ctx, skTeleport, tx, ty, "T5: a 6-cell (30 subtile) hop with the merc beside the player"); err != nil {
 		return drill.Outcome{}, err
 	}
 	var rows []string
@@ -487,7 +487,9 @@ func (l *lab) d15T5(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	prev := cdist(mx0, my0, b.X, b.Y)
 	rows = append(rows, fmt.Sprintf("+0 merc-player %.2f", prev))
 	mx, my := mx0, my0
+	var jumped float64
 	for i := 1; i <= 45; i++ {
+		pmx, pmy := mx, my
 		if _, err := l.be.Client.Step(ctx, 1); err != nil {
 			return drill.Outcome{}, err
 		}
@@ -496,7 +498,8 @@ func (l *lab) d15T5(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 		d := cdist(mx, my, p.X, p.Y)
 		if landTick < 0 && cdist(p.X, p.Y, b.X, b.Y) > 1 {
 			landTick = i
-			jump = d < 2.0 && prev > 2.0
+			jumped = cdist(mx, my, pmx, pmy) // how far the merc moved in the tick of the landing (its own walk is 0.1 cells per tick)
+			jump = jumped > 2.0
 		}
 		if i <= 12 || i%6 == 0 {
 			rows = append(rows, fmt.Sprintf("+%d player (%.2f,%.2f) merc (%.2f,%.2f) gap %.2f", i, p.X, p.Y, mx, my, d))
@@ -505,15 +508,16 @@ func (l *lab) d15T5(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	}
 	moves := cdist(mx, my, mx0, my0)
 	_, _ = r.Cheat(ctx, "debug merc kill", "T5: end of the merc test, the character is left without a merc")
-	o := drill.Outcome{Intended: "game.exe: the merc (warp pets) is moved to the landing spot with the owner at once (read of FUN_00650be0; not confirmed by play)", Observed: fmt.Sprintf("merc start (%.2f,%.2f), player landed at tick +%d; gap player-merc at the sample before the landing %.2f; merc moved %.2f cells in 45 ticks || %s", mx0, my0, landTick, cdist(mx0, my0, b.X, b.Y), moves, strings.Join(rows, " | "))}
+	_ = jumped
+	o := drill.Outcome{Intended: "game.exe: the merc (warp pets) is moved to the landing spot with the owner at once (read of FUN_00650be0; not confirmed by play)", Observed: fmt.Sprintf("merc start (%.2f,%.2f), player landed at tick +%d; gap player-merc before the hop %.2f; merc displacement in the landing tick %.2f cells; merc moved %.2f cells in 45 ticks || %s", mx0, my0, landTick, cdist(mx0, my0, b.X, b.Y), jumped, moves, strings.Join(rows, " | "))}
 	o.Sig = fmt.Sprintf("land=%d jump=%v", landTick, jump)
 	switch {
 	case landTick < 0:
 		return drill.Blocks("the character did not hop (no landing seen)"), nil
 	case jump:
-		o.Verdict, o.Reason = drill.Pass, "the merc stood next to the player on the first sample after the landing: d2d moved it with her"
+		o.Verdict, o.Reason = drill.Pass, "the merc jumped with the owner on the landing tick: d2d moved it with her"
 	default:
-		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("the merc did not jump with the owner (the gap on the landing tick was larger than 2 cells): d2d does not warp the merc (trace D7); it ran %.2f cells afterwards", moves)
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("the merc did not jump with the owner (it moved %.2f cells on the landing tick, its own walk step): d2d does not warp the merc (trace D7); it moved %.2f cells in 45 ticks by its own walk", jumped, moves)
 	}
 	return o, nil
 }

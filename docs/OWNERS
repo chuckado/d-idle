@@ -61,3 +61,4 @@ openspec/changes/skmiss/**  skmiss  skmiss
 openspec/changes/drills14/**  drills14  drills14
 internal/nav/walk.go  drills14  drills14
 internal/nav/roam_test.go  drills14  drills14
+openspec/changes/drills15/**  drills15  drills15
