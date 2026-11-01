@@ -112,6 +112,7 @@ internal/nav/teletune.go  teletune  teletune
 docs/teletune.md  teletune  teletune
 openspec/changes/teletune/**  teletune  teletune
 openspec/changes/drills24/**  drills24  drills24
+openspec/changes/drills25/**  drills25  drills25
 docs/teletune2.md  teletune2  teletune2
 internal/nav/teletune2_test.go  teletune2  teletune2
 openspec/changes/teletune2/**  teletune2  teletune2

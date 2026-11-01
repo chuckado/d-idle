@@ -1,0 +1,38 @@
+rc=0
+d2dslot: got slot 0
+time=2026-11-01T11:08:57.727-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1691403 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:08:58.944-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+DRILL D2.a P10 PASS verb returned after 32 ticks with one portal pair and one source spent (tome 2->2, scrolls 1->0) | intended: from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source | observed: area 2; verb ok: 1 right click, 32 ticks (click at tick +22), field portal objects near 1 any 1 (a stale one from the previous drill stands elsewhere: 0 before), tome 2->2, scrolls 1->0, debug portals [0,2,27.7,48.1 / 1,1,16.7,25.7]; verb lines: none
+DRILL D2.t P10 PASS entered the open portal, arrived in town, no second scroll | intended: d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent | observed: scrolls 3 -> 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town package's own casts are not spied), area 1, debug portals [0,2,35.7,48.1 / 1,1,16.7,25.7]; lines: none
+DRILL D2.a2 P10 PASS observed [8 8 8] ticks vs the trace's about 7 | intended: d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0 | observed: ticks from click to object, 3 casts: [8 8 8]; scrolls left 0; objects near 1 any 1 (one pair)
+time=2026-11-01T11:08:59.891-05:00 level=INFO msg="d2d town portal: no portal source (empty)" try=1
+DRILL D2.b P10 PASS no portal source: no click, no key, error at tick 0 | intended: tome at 0 charges and no scroll: the verb finds no source, sends no click and no key, returns the no-portal error with no ticks spent (fix-portal F4) | observed: tome 0, scrolls 0; verb error "combat: no town portal scroll or tome" (no-portal true), clicks 0, keys 0, ticks 0; tome after 0; lines: d2d town portal: no portal source (empty) try=1
+DRILL D2.c P10 PASS scroll used, empty tome never clicked | intended: tome at 0 plus one scroll: the verb skips the tome, casts the scroll once, portal object near the player, tome untouched | observed: before: tome 0, scrolls 1; verb ok, 1 right click, 27 ticks; after: tome 0, scrolls 0, portal objects near 1 any 1; lines: none
+DRILL D2.g P10 PASS EnterPortal arrives in town | intended: the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1 | observed: area 2 -> 1, verb error <nil>, portal objects in town 1
+time=2026-11-01T11:09:00.134-05:00 level=INFO msg="d2d portal: click without a portal" item=18 class=529 portalObjNear=0 portalObjAny=1 sourceSpent=false
+time=2026-11-01T11:09:00.134-05:00 level=INFO msg="d2d town portal attempt failed" try=1 err="d2d portal: no object after the click, the click was dropped (source unchanged)"
+DRILL D2.d P10 PASS 2 clicks, 1 scrolls left, one portal | intended: the click is dropped (source unchanged), the retry opens the portal with the same scroll | observed: verb: ok, 2 right clicks, 102 ticks; scrolls left 1, portal objects near 1 any 1; lines: d2d portal: click without a portal item=18 class=529 portalObjNear=0 portalObjAny=1 sourceSpent=false // d2d town portal attempt failed try=1 err=d2d portal: no object after the click, the click was dropped (source unchanged)
+time=2026-11-01T11:09:00.200-05:00 level=INFO msg="d2d portal: click without a portal" item=20 class=529 portalObjNear=0 portalObjAny=1 sourceSpent=true
+time=2026-11-01T11:09:00.200-05:00 level=INFO msg="d2d town portal attempt failed" try=1 err="d2d portal: no object after the click, the cast was cut (source spent)"
+DRILL D2.d3 P10 PASS 2 clicks, 0 scrolls left, one portal | intended: the hit cuts the cast (scroll spent, no portal), the retry opens the portal with the next scroll | observed: verb: ok, 2 right clicks, 105 ticks; scrolls left 0, portal objects near 1 any 1; lines: d2d portal: click without a portal item=20 class=529 portalObjNear=0 portalObjAny=1 sourceSpent=true // d2d town portal attempt failed try=1 err=d2d portal: no object after the click, the cast was cut (source spent)
+DRILL D2.e P10 PASS waited: click at +34 vs idle +22 ticks, one click, portal open | intended: player in cast mode when the verb is called: it waits until idle, then clicks once and the portal opens (fix-portal2); the click tick is later than the idle baseline | observed: player mode at call 10 (SC=10); idle baseline: ok, click at tick +22; busy call: ok, 1 right clicks, click at tick +34, 39 ticks total; scrolls left 0, portal objects near 1 any 1; lines: none
+DRILL D2.h P10 PASS second cast closed the first: one object, 60 subtiles away | intended: cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll | observed: cast1 ok, objects near 1 any 1 at [[138 240]]; walked to (193,239) (<nil>), 53 subtiles; cast2 ok, objects near 1 any 1 at [[198 240]], 60 subtiles from the first; scrolls 3 -> 1; debug portals [0,2,39.7,48.1 / 1,1,16.7,25.7]; lines: none / none
+time=2026-11-01T11:09:00.525-05:00 level=INFO msg="back to field: portal in town" id=805306369 x=83 y=128 player_x=83 player_y=131
+DRILL D2.f P11 PASS round trip through the portals, arrival 4 subtiles from the origin | intended: after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin | observed: origin (140,240); ToTown ok -> area 1; BackToField ok -> area 2 at (138,243), 4 subtiles from the origin, via portal true, debug portals []; lines: back to field: portal in town id=805306369 x=83 y=128 player_x=83 player_y=131
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D2.a      P10   PASS     -    verb returned after 32 ticks with one portal pair and one source spent (tome 2->2, scrolls 1->0)
+D2.t      P10   PASS     -    entered the open portal, arrived in town, no second scroll
+D2.a2     P10   PASS     -    observed [8 8 8] ticks vs the trace's about 7
+D2.b      P10   PASS     -    no portal source: no click, no key, error at tick 0
+D2.c      P10   PASS     -    scroll used, empty tome never clicked
+D2.g      P10   PASS     -    EnterPortal arrives in town
+D2.d      P10   PASS     -    2 clicks, 1 scrolls left, one portal
+D2.d3     P10   PASS     -    2 clicks, 0 scrolls left, one portal
+D2.e      P10   PASS     -    waited: click at +34 vs idle +22 ticks, one click, portal open
+D2.h      P10   PASS     -    second cast closed the first: one object, 60 subtiles away
+D2.f      P11   PASS     -    round trip through the portals, arrival 4 subtiles from the origin
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give tbk, debug give tsc, debug goto 2, debug hit 5, debug stat 6 10240
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:09:00.534-05:00 level=WARN msg="d2d: stopped by the bot (kill)"

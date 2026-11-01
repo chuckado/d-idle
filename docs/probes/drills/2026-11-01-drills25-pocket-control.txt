@@ -1,0 +1,59 @@
+rc=0
+d2dslot: got slot 0
+time=2026-11-01T11:08:17.281-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1688401 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:08:18.709-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-11-01T11:08:20.344-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+time=2026-11-01T11:08:20.371-05:00 level=INFO msg="d2dworld: arrived in level 41: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T11:08:20.376-05:00 level=INFO msg="nav exit" to=55 gate="{X:295 Y:270}" push="{X:295 Y:270}" border=false
+time=2026-11-01T11:08:20.376-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22pocket < main.(*lab).D22"
+time=2026-11-01T11:08:20.377-05:00 level=DEBUG msg="nav mouth check" pos="{X:165 Y:220}" level=41 exits=1 wantExit=55 arrival=false stay=false r=9
+time=2026-11-01T11:08:20.378-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.378-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.380-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.383-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.383-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.388-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.388-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.393-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.394-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.395-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:162 Y:221}" rung=0
+time=2026-11-01T11:08:20.398-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.399-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.403-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.404-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:221}" cur=0 of=22
+time=2026-11-01T11:08:20.405-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:162 Y:221}" rung=1
+time=2026-11-01T11:08:20.409-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=25 partial=false cells=147
+time=2026-11-01T11:08:20.409-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:218}" cur=0 of=25
+time=2026-11-01T11:08:20.414-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=25 partial=false cells=147
+time=2026-11-01T11:08:20.414-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:218}" cur=0 of=25
+time=2026-11-01T11:08:20.415-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:162 Y:218}" rung=2
+time=2026-11-01T11:08:20.418-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.418-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:164 Y:225}" cur=0 of=22
+time=2026-11-01T11:08:20.422-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=141
+time=2026-11-01T11:08:20.423-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:164 Y:225}" cur=0 of=22
+time=2026-11-01T11:08:20.424-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:164 Y:225}" rung=3
+time=2026-11-01T11:08:20.427-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=24 partial=false cells=149
+time=2026-11-01T11:08:20.427-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:219}" cur=0 of=24
+time=2026-11-01T11:08:20.432-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=24 partial=false cells=149
+time=2026-11-01T11:08:20.432-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:162 Y:219}" cur=0 of=24
+time=2026-11-01T11:08:20.433-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:162 Y:219}" rung=4
+time=2026-11-01T11:08:20.436-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=21 partial=false cells=141
+time=2026-11-01T11:08:20.436-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:161 Y:225}" cur=0 of=21
+time=2026-11-01T11:08:20.440-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=21 partial=false cells=141
+time=2026-11-01T11:08:20.441-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:161 Y:225}" cur=0 of=21
+time=2026-11-01T11:08:20.442-05:00 level=INFO msg="nav stuck" pos="{X:165 Y:220}" wp="{X:161 Y:225}" rung=5
+time=2026-11-01T11:08:20.445-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=142
+time=2026-11-01T11:08:20.445-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:163 Y:222}" cur=0 of=22
+time=2026-11-01T11:08:20.450-05:00 level=DEBUG msg="nav plan" from="{X:165 Y:220}" to="{X:295 Y:270}" wps=22 partial=false cells=142
+time=2026-11-01T11:08:20.450-05:00 level=DEBUG msg="nav click" pos="{X:165 Y:220}" wp="{X:163 Y:222}" cur=0 of=22
+time=2026-11-01T11:08:20.451-05:00 level=WARN msg="nav: stuck at the exit twice, escaping by town portal" level=41 to=55
+time=2026-11-01T11:08:20.500-05:00 level=INFO msg="arrived in town" area=40
+D22 pocket-control: key="" level 41->40 (165,220)->(178,56) hops=0 refused=0 mana 150.0->150.0 ticks=304 wall=152ms err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall declined=0 hopticks=[]
+DRILL D22-PC P26 PASS measurement: 0 hops, 304 ticks, reached level 40, err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall | intended: pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport | observed: key="" level 41->40 (165,220)->(178,56) hops=0 refused=0 mana 150.0->150.0 ticks=304 wall=152ms err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D22-PC    P26   PASS     -    measurement: 0 hops, 304 ticks, reached level 40, err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall
+cheat verbs used (each ledgered with a reason): debug goto 40, debug goto 41, debug kill, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400, debug warp 33 44
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:08:20.512-05:00 level=WARN msg="d2d: stopped by the bot (kill)"

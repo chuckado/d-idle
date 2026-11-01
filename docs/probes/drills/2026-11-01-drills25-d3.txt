@@ -1,0 +1,254 @@
+rc=0
+d2dslot: got slot 0
+time=2026-11-01T11:09:01.670-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1691973 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:09:02.834-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+DRILL D3.g0 U1 PASS recorded | intended: the fresh character's gold read (no cheat before this drill) | observed: class Sorceress: purse 0 stash 0 life 40/40 pack iscx1 tscx1
+time=2026-11-01T11:09:02.836-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:02.842-05:00 level=INFO msg="d2dworld: arrived in level 1: 0 adjacent entries, 1 levels not linked yet (pending 1, linkwait 30s)"
+time=2026-11-01T11:09:03.265-05:00 level=INFO msg="d2dworld: link wait over after 422ms, 1 polls: 1 adjacent entries, 0 levels not linked yet (pending 0, linked [2])"
+time=2026-11-01T11:09:03.265-05:00 level=DEBUG msg="nav mouth check" pos="{X:63 Y:93}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.266-05:00 level=DEBUG msg="nav plan" from="{X:63 Y:93}" to="{X:122 Y:71}" wps=10 partial=false cells=61
+time=2026-11-01T11:09:03.267-05:00 level=DEBUG msg="nav click" pos="{X:63 Y:93}" wp="{X:70 Y:97}" cur=0 of=10
+time=2026-11-01T11:09:03.270-05:00 level=DEBUG msg="nav click" pos="{X:67 Y:95}" wp="{X:76 Y:101}" cur=1 of=10
+time=2026-11-01T11:09:03.275-05:00 level=DEBUG msg="nav click" pos="{X:74 Y:99}" wp="{X:83 Y:101}" cur=2 of=10
+time=2026-11-01T11:09:03.278-05:00 level=DEBUG msg="nav plan" from="{X:80 Y:101}" to="{X:122 Y:71}" wps=8 partial=false cells=44
+time=2026-11-01T11:09:03.278-05:00 level=DEBUG msg="nav click" pos="{X:80 Y:101}" wp="{X:89 Y:96}" cur=1 of=8
+time=2026-11-01T11:09:03.282-05:00 level=DEBUG msg="nav click" pos="{X:86 Y:97}" wp="{X:95 Y:90}" cur=2 of=8
+time=2026-11-01T11:09:03.286-05:00 level=DEBUG msg="nav click" pos="{X:93 Y:92}" wp="{X:101 Y:85}" cur=3 of=8
+time=2026-11-01T11:09:03.290-05:00 level=DEBUG msg="nav plan" from="{X:98 Y:88}" to="{X:121 Y:71}" wps=5 partial=false cells=26
+time=2026-11-01T11:09:03.290-05:00 level=DEBUG msg="nav click" pos="{X:98 Y:88}" wp="{X:104 Y:82}" cur=0 of=5
+time=2026-11-01T11:09:03.292-05:00 level=DEBUG msg="nav click" pos="{X:102 Y:84}" wp="{X:106 Y:80}" cur=1 of=5
+time=2026-11-01T11:09:03.294-05:00 level=DEBUG msg="nav click" pos="{X:104 Y:82}" wp="{X:114 Y:80}" cur=2 of=5
+time=2026-11-01T11:09:03.297-05:00 level=DEBUG msg="nav click" pos="{X:111 Y:81}" wp="{X:117 Y:80}" cur=3 of=5
+time=2026-11-01T11:09:03.300-05:00 level=DEBUG msg="nav click" pos="{X:116 Y:80}" wp="{X:121 Y:74}" cur=4 of=5
+time=2026-11-01T11:09:03.304-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=3 npc="[120 72]"
+time=2026-11-01T11:09:03.312-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T11:09:03.312-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=5040
+time=2026-11-01T11:09:03.317-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.323-05:00 level=DEBUG msg="nav mouth check" pos="{X:118 Y:62}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.323-05:00 level=DEBUG msg="nav plan" from="{X:118 Y:62}" to="{X:24 Y:84}" wps=14 partial=false cells=92
+time=2026-11-01T11:09:03.323-05:00 level=DEBUG msg="nav click" pos="{X:118 Y:62}" wp="{X:112 Y:68}" cur=0 of=14
+time=2026-11-01T11:09:03.326-05:00 level=DEBUG msg="nav click" pos="{X:114 Y:66}" wp="{X:107 Y:73}" cur=1 of=14
+time=2026-11-01T11:09:03.329-05:00 level=DEBUG msg="nav click" pos="{X:108 Y:72}" wp="{X:102 Y:78}" cur=2 of=14
+time=2026-11-01T11:09:03.331-05:00 level=DEBUG msg="nav plan" from="{X:106 Y:74}" to="{X:25 Y:80}" wps=11 partial=false cells=80
+time=2026-11-01T11:09:03.331-05:00 level=DEBUG msg="nav click" pos="{X:106 Y:74}" wp="{X:102 Y:78}" cur=0 of=11
+time=2026-11-01T11:09:03.333-05:00 level=DEBUG msg="nav click" pos="{X:104 Y:76}" wp="{X:94 Y:77}" cur=1 of=11
+time=2026-11-01T11:09:03.337-05:00 level=DEBUG msg="nav click" pos="{X:97 Y:77}" wp="{X:86 Y:77}" cur=2 of=11
+time=2026-11-01T11:09:03.340-05:00 level=DEBUG msg="nav click" pos="{X:90 Y:77}" wp="{X:78 Y:76}" cur=3 of=11
+time=2026-11-01T11:09:03.344-05:00 level=DEBUG msg="nav click" pos="{X:82 Y:76}" wp="{X:77 Y:76}" cur=4 of=11
+time=2026-11-01T11:09:03.345-05:00 level=DEBUG msg="nav click" pos="{X:80 Y:76}" wp="{X:69 Y:76}" cur=5 of=11
+time=2026-11-01T11:09:03.346-05:00 level=DEBUG msg="nav plan" from="{X:78 Y:76}" to="{X:25 Y:76}" wps=8 partial=false cells=56
+time=2026-11-01T11:09:03.346-05:00 level=DEBUG msg="nav click" pos="{X:78 Y:76}" wp="{X:70 Y:76}" cur=0 of=8
+time=2026-11-01T11:09:03.349-05:00 level=DEBUG msg="nav click" pos="{X:73 Y:76}" wp="{X:62 Y:77}" cur=1 of=8
+time=2026-11-01T11:09:03.353-05:00 level=DEBUG msg="nav click" pos="{X:65 Y:77}" wp="{X:54 Y:77}" cur=2 of=8
+time=2026-11-01T11:09:03.362-05:00 level=DEBUG msg="nav click" pos="{X:58 Y:77}" wp="{X:50 Y:77}" cur=3 of=8
+time=2026-11-01T11:09:03.363-05:00 level=DEBUG msg="nav plan" from="{X:56 Y:77}" to="{X:25 Y:76}" wps=5 partial=false cells=34
+time=2026-11-01T11:09:03.364-05:00 level=DEBUG msg="nav click" pos="{X:56 Y:77}" wp="{X:48 Y:78}" cur=0 of=5
+time=2026-11-01T11:09:03.366-05:00 level=DEBUG msg="nav click" pos="{X:51 Y:78}" wp="{X:40 Y:80}" cur=1 of=5
+time=2026-11-01T11:09:03.371-05:00 level=DEBUG msg="nav click" pos="{X:43 Y:79}" wp="{X:32 Y:81}" cur=2 of=5
+time=2026-11-01T11:09:03.377-05:00 level=DEBUG msg="nav click" pos="{X:35 Y:81}" wp="{X:26 Y:82}" cur=3 of=5
+time=2026-11-01T11:09:03.380-05:00 level=DEBUG msg="nav click" pos="{X:28 Y:82}" wp="{X:25 Y:79}" cur=4 of=5
+time=2026-11-01T11:09:03.386-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=3 npc="[25 76]"
+time=2026-11-01T11:09:03.388-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T11:09:03.388-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=7800
+time=2026-11-01T11:09:03.391-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.391-05:00 level=DEBUG msg="nav mouth check" pos="{X:25 Y:79}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.392-05:00 level=DEBUG msg="nav plan" from="{X:25 Y:79}" to="{X:30 Y:140}" wps=9 partial=false cells=61
+time=2026-11-01T11:09:03.392-05:00 level=DEBUG msg="nav click" pos="{X:25 Y:79}" wp="{X:26 Y:84}" cur=0 of=9
+time=2026-11-01T11:09:03.393-05:00 level=DEBUG msg="nav click" pos="{X:25 Y:81}" wp="{X:28 Y:92}" cur=1 of=9
+time=2026-11-01T11:09:03.396-05:00 level=DEBUG msg="nav click" pos="{X:27 Y:89}" wp="{X:29 Y:100}" cur=2 of=9
+time=2026-11-01T11:09:03.398-05:00 level=DEBUG msg="nav plan" from="{X:28 Y:92}" to="{X:30 Y:140}" wps=7 partial=false cells=48
+time=2026-11-01T11:09:03.399-05:00 level=DEBUG msg="nav click" pos="{X:28 Y:92}" wp="{X:29 Y:100}" cur=0 of=7
+time=2026-11-01T11:09:03.402-05:00 level=DEBUG msg="nav click" pos="{X:29 Y:97}" wp="{X:31 Y:108}" cur=1 of=7
+time=2026-11-01T11:09:03.407-05:00 level=DEBUG msg="nav click" pos="{X:30 Y:105}" wp="{X:32 Y:116}" cur=2 of=7
+time=2026-11-01T11:09:03.412-05:00 level=DEBUG msg="nav click" pos="{X:32 Y:114}" wp="{X:34 Y:123}" cur=3 of=7
+time=2026-11-01T11:09:03.421-05:00 level=DEBUG msg="nav click" pos="{X:33 Y:120}" wp="{X:35 Y:129}" cur=4 of=7
+time=2026-11-01T11:09:03.424-05:00 level=DEBUG msg="nav click" pos="{X:35 Y:127}" wp="{X:35 Y:136}" cur=5 of=7
+time=2026-11-01T11:09:03.427-05:00 level=DEBUG msg="nav click" pos="{X:35 Y:132}" wp="{X:32 Y:139}" cur=6 of=7
+time=2026-11-01T11:09:03.435-05:00 level=INFO msg="npc: interact" class=147 try=1 dist=2 npc="[30 140]"
+time=2026-11-01T11:09:03.437-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=147
+time=2026-11-01T11:09:03.437-05:00 level=INFO msg="npc: menu open" class=147 try=1 ms=4920
+time=2026-11-01T11:09:03.441-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.442-05:00 level=DEBUG msg="nav mouth check" pos="{X:32 Y:138}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.442-05:00 level=DEBUG msg="nav plan" from="{X:32 Y:138}" to="{X:82 Y:101}" wps=10 partial=false cells=55
+time=2026-11-01T11:09:03.443-05:00 level=DEBUG msg="nav click" pos="{X:32 Y:138}" wp="{X:38 Y:132}" cur=0 of=10
+time=2026-11-01T11:09:03.446-05:00 level=DEBUG msg="nav click" pos="{X:36 Y:135}" wp="{X:43 Y:127}" cur=1 of=10
+time=2026-11-01T11:09:03.451-05:00 level=DEBUG msg="nav plan" from="{X:42 Y:128}" to="{X:78 Y:103}" wps=8 partial=false cells=42
+time=2026-11-01T11:09:03.451-05:00 level=DEBUG msg="nav click" pos="{X:42 Y:128}" wp="{X:48 Y:122}" cur=0 of=8
+time=2026-11-01T11:09:03.456-05:00 level=DEBUG msg="nav click" pos="{X:46 Y:124}" wp="{X:49 Y:121}" cur=1 of=8
+time=2026-11-01T11:09:03.457-05:00 level=DEBUG msg="nav click" pos="{X:48 Y:123}" wp="{X:57 Y:121}" cur=2 of=8
+time=2026-11-01T11:09:03.461-05:00 level=DEBUG msg="nav click" pos="{X:54 Y:121}" wp="{X:65 Y:121}" cur=3 of=8
+time=2026-11-01T11:09:03.465-05:00 level=DEBUG msg="nav plan" from="{X:61 Y:121}" to="{X:77 Y:103}" wps=4 partial=false cells=23
+time=2026-11-01T11:09:03.465-05:00 level=DEBUG msg="nav click" pos="{X:61 Y:121}" wp="{X:68 Y:121}" cur=0 of=4
+time=2026-11-01T11:09:03.467-05:00 level=DEBUG msg="nav click" pos="{X:64 Y:121}" wp="{X:71 Y:118}" cur=1 of=4
+time=2026-11-01T11:09:03.470-05:00 level=DEBUG msg="nav click" pos="{X:69 Y:119}" wp="{X:71 Y:114}" cur=2 of=4
+time=2026-11-01T11:09:03.470-05:00 level=DEBUG msg="nav click" pos="{X:70 Y:117}" wp="{X:77 Y:106}" cur=3 of=4
+time=2026-11-01T11:09:03.477-05:00 level=INFO msg="npc: interact" class=150 try=1 dist=3 npc="[77 103]"
+time=2026-11-01T11:09:03.479-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=150
+time=2026-11-01T11:09:03.479-05:00 level=INFO msg="npc: menu open" class=150 try=1 ms=4800
+time=2026-11-01T11:09:03.482-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.483-05:00 level=DEBUG msg="nav mouth check" pos="{X:77 Y:106}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.483-05:00 level=DEBUG msg="nav plan" from="{X:77 Y:106}" to="{X:65 Y:100}" wps=2 partial=false cells=10
+time=2026-11-01T11:09:03.483-05:00 level=DEBUG msg="nav click" pos="{X:77 Y:106}" wp="{X:68 Y:100}" cur=1 of=2
+time=2026-11-01T11:09:03.488-05:00 level=INFO msg="npc: interact" class=155 try=1 dist=4 npc="[65 100]"
+time=2026-11-01T11:09:03.490-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=155
+time=2026-11-01T11:09:03.490-05:00 level=INFO msg="npc: menu open" class=155 try=1 ms=1320
+DRILL D3.n P14 PASS all 5 opened and closed clean | intended: 5 Act 1 NPCs open a window (vendor or dialog) within the bot's own wait; close leaves the UI clean | observed: Akara: open true window [npc-dialog] 212 ticks clean after close true | Charsi: open true window [npc-dialog] 187 ticks clean after close true | Gheed: open true window [npc-dialog] 115 ticks clean after close true | Kashya: open true window [npc-dialog] 112 ticks clean after close true | Warriv: open true window [npc-dialog] 25 ticks clean after close true
+time=2026-11-01T11:09:03.499-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.500-05:00 level=DEBUG msg="nav mouth check" pos="{X:69 Y:100}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.500-05:00 level=DEBUG msg="nav plan" from="{X:69 Y:100}" to="{X:127 Y:69}" wps=11 partial=false cells=58
+time=2026-11-01T11:09:03.500-05:00 level=DEBUG msg="nav click" pos="{X:69 Y:100}" wp="{X:75 Y:94}" cur=0 of=11
+time=2026-11-01T11:09:03.503-05:00 level=DEBUG msg="nav click" pos="{X:73 Y:96}" wp="{X:76 Y:93}" cur=1 of=11
+time=2026-11-01T11:09:03.504-05:00 level=DEBUG msg="nav click" pos="{X:75 Y:94}" wp="{X:83 Y:90}" cur=2 of=11
+time=2026-11-01T11:09:03.513-05:00 level=DEBUG msg="nav click" pos="{X:81 Y:91}" wp="{X:91 Y:87}" cur=3 of=11
+time=2026-11-01T11:09:03.516-05:00 level=DEBUG msg="nav plan" from="{X:87 Y:89}" to="{X:127 Y:69}" wps=6 partial=false cells=40
+time=2026-11-01T11:09:03.516-05:00 level=DEBUG msg="nav click" pos="{X:87 Y:89}" wp="{X:94 Y:86}" cur=0 of=6
+time=2026-11-01T11:09:03.519-05:00 level=DEBUG msg="nav click" pos="{X:92 Y:87}" wp="{X:102 Y:83}" cur=1 of=6
+time=2026-11-01T11:09:03.522-05:00 level=DEBUG msg="nav click" pos="{X:99 Y:84}" wp="{X:109 Y:80}" cur=2 of=6
+time=2026-11-01T11:09:03.525-05:00 level=DEBUG msg="nav click" pos="{X:106 Y:81}" wp="{X:117 Y:80}" cur=3 of=6
+time=2026-11-01T11:09:03.529-05:00 level=DEBUG msg="nav click" pos="{X:114 Y:80}" wp="{X:123 Y:74}" cur=4 of=6
+time=2026-11-01T11:09:03.532-05:00 level=DEBUG msg="nav click" pos="{X:120 Y:76}" wp="{X:126 Y:71}" cur=5 of=6
+time=2026-11-01T11:09:03.535-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T11:09:03.537-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T11:09:03.537-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=4560
+time=2026-11-01T11:09:03.542-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.542-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.h P17 PASS life restored at the healer | intended: life = max after the visit, pack potions unchanged | observed: life 12/40 -> 40/40; gold 300 -> 300; pack none -> none; healed=true steps [equip skipped; heal ran] err ""
+time=2026-11-01T11:09:03.554-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.554-05:00 level=DEBUG msg="nav mouth check" pos="{X:125 Y:72}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.555-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T11:09:03.556-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T11:09:03.556-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T11:09:03.556-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T11:09:03.559-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T11:09:03.559-05:00 level=INFO msg="npc visit: vendor window open" class=148 ms=920
+time=2026-11-01T11:09:03.574-05:00 level=INFO msg="shop: potion plan" wantHP=2 wantMP=2 wantRV=0 beltHP=0 beltMP=0 packHP=0 packMP=0 beltOther=0 slots=4 gold=1000
+time=2026-11-01T11:09:03.580-05:00 level=INFO msg="shop: bought" item="Minor Healing Potion" price=30 "gold left"=970
+time=2026-11-01T11:09:03.582-05:00 level=INFO msg="shop: bought" item="Minor Healing Potion" price=30 "gold left"=940
+time=2026-11-01T11:09:03.585-05:00 level=INFO msg="shop: bought" item="Minor Mana Potion" price=60 "gold left"=880
+time=2026-11-01T11:09:03.588-05:00 level=INFO msg="shop: bought" item="Minor Mana Potion" price=60 "gold left"=820
+time=2026-11-01T11:09:03.600-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=720
+time=2026-11-01T11:09:03.608-05:00 level=INFO msg="shop: potion plan" wantHP=0 wantMP=0 wantRV=0 beltHP=0 beltMP=0 packHP=2 packMP=2 beltOther=0 slots=4 gold=720
+time=2026-11-01T11:09:03.608-05:00 level=INFO msg="shop: visit" bought="map[Minor Healing Potion:2 Minor Mana Potion:2 Scroll of Town Portal:1]" spent=280 broke=false err=<nil> gold=720 beltHP=0 beltMP=0 beltRV=0 beltSlots=4 tp=1 tome=false
+time=2026-11-01T11:09:03.615-05:00 level=INFO msg="belt: put id=8 box=0 kind=hp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion] packIDs=[9 10 11] err=<nil> at=19:00:43"
+time=2026-11-01T11:09:03.619-05:00 level=INFO msg="belt: put id=9 box=1 kind=hp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion] packIDs=[10 11] err=<nil> at=19:00:43"
+time=2026-11-01T11:09:03.622-05:00 level=INFO msg="belt: put id=10 box=2 kind=mp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion 2:Minor Mana Potion] packIDs=[11] err=<nil> at=19:00:43"
+time=2026-11-01T11:09:03.624-05:00 level=INFO msg="belt: put id=11 box=3 kind=mp try=0 -> inBelt=true cursor=- beltBoxes=[0:Minor Healing Potion 1:Minor Healing Potion 2:Minor Mana Potion 3:Minor Mana Potion] packIDs=[] err=<nil> at=19:00:44"
+time=2026-11-01T11:09:03.625-05:00 level=INFO msg="belt: moved 4 potions from pack (hp 0->2 mp 0->2 rv 0->0)" rv=0 dragged=0 failed=0
+time=2026-11-01T11:09:03.628-05:00 level=INFO msg=inventory pct=2 cells=1/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.628-05:00 level=INFO msg="inventory contents" pack="tsc x1" stash=""
+DRILL D3.b P15 PASS bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -> 4 | intended: potions bought through the shop chore, gold delta = price, potions in the belt | observed: gold 1000 -> 720 (spent per report 280); belt potions 0 -> 4; pack none -> tscx1; bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1; steps [equip skipped; beltbuy skipped; belt skipped; shop ran; beltafter ran]; err ""
+time=2026-11-01T11:09:03.650-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.650-05:00 level=DEBUG msg="nav mouth check" pos="{X:125 Y:72}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.651-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T11:09:03.652-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T11:09:03.652-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T11:09:03.653-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T11:09:03.654-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+DRILL D3.b2 P15 PASS sold an identify scroll for 40 (the price formula says 40) | intended: gold up by the gain, the scroll gone, nothing else sold | observed: sell isc to Akara: gained 40 err <nil>; gold 100 -> 140; pack iscx1 -> none
+time=2026-11-01T11:09:03.668-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.668-05:00 level=DEBUG msg="nav mouth check" pos="{X:125 Y:72}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.668-05:00 level=INFO msg="npc: interact" class=148 try=1 dist=2 npc="[126 70]"
+time=2026-11-01T11:09:03.670-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-11-01T11:09:03.670-05:00 level=INFO msg="npc: menu open" class=148 try=1 ms=0
+time=2026-11-01T11:09:03.670-05:00 level=INFO msg="npc: menu click" class=148 entry=trade line=1 lines=3 adj=0 at="[467 148]" npc="[126 70]" try=1 slow=false
+time=2026-11-01T11:09:03.672-05:00 level=INFO msg="npc: window open" class=148 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T11:09:03.672-05:00 level=INFO msg="npc visit: vendor window open" class=148 ms=920
+time=2026-11-01T11:09:03.694-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=900
+time=2026-11-01T11:09:03.707-05:00 level=INFO msg="shop: bought" item="Tome of Town Portal" price=300 "gold left"=600
+time=2026-11-01T11:09:03.711-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=500
+time=2026-11-01T11:09:03.715-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=400
+time=2026-11-01T11:09:03.719-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=300
+time=2026-11-01T11:09:03.723-05:00 level=INFO msg="shop: bought" item="Scroll of Town Portal" price=100 "gold left"=200
+time=2026-11-01T11:09:03.724-05:00 level=INFO msg="shop: visit" bought="map[Scroll of Town Portal:5 Tome of Town Portal:1]" spent=800 broke=false err=<nil> gold=200 beltHP=1 beltMP=0 beltRV=0 beltSlots=4 tp=6 tome=true
+time=2026-11-01T11:09:03.726-05:00 level=INFO msg=inventory pct=7 cells=3/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.727-05:00 level=INFO msg="inventory contents" pack="tbk x1, tsc x1" stash=""
+DRILL D3.tp P12 PASS tome or scrolls bought, gold delta equals the report | intended: a tome (tbk) or scrolls (tsc) in the pack, gold delta = spent | observed: gold 1000 -> 200 (spent per report 800); pack tbkx1 tscx1; charges [tbk=5]; bought Scroll of Town Portalx5 Tome of Town Portalx1; steps [equip skipped; shop ran]; err ""
+time=2026-11-01T11:09:03.734-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.735-05:00 level=DEBUG msg="nav mouth check" pos="{X:125 Y:72}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.735-05:00 level=DEBUG msg="nav plan" from="{X:125 Y:72}" to="{X:25 Y:78}" wps=16 partial=false cells=101
+time=2026-11-01T11:09:03.735-05:00 level=DEBUG msg="nav click" pos="{X:125 Y:72}" wp="{X:119 Y:78}" cur=0 of=16
+time=2026-11-01T11:09:03.737-05:00 level=DEBUG msg="nav click" pos="{X:121 Y:76}" wp="{X:117 Y:80}" cur=1 of=16
+time=2026-11-01T11:09:03.739-05:00 level=DEBUG msg="nav click" pos="{X:119 Y:78}" wp="{X:115 Y:80}" cur=2 of=16
+time=2026-11-01T11:09:03.740-05:00 level=DEBUG msg="nav plan" from="{X:117 Y:79}" to="{X:24 Y:83}" wps=13 partial=false cells=91
+time=2026-11-01T11:09:03.740-05:00 level=DEBUG msg="nav click" pos="{X:117 Y:79}" wp="{X:108 Y:79}" cur=1 of=13
+time=2026-11-01T11:09:03.742-05:00 level=DEBUG msg="nav click" pos="{X:112 Y:79}" wp="{X:100 Y:78}" cur=2 of=13
+time=2026-11-01T11:09:03.745-05:00 level=DEBUG msg="nav click" pos="{X:104 Y:78}" wp="{X:92 Y:77}" cur=3 of=13
+time=2026-11-01T11:09:03.749-05:00 level=DEBUG msg="nav click" pos="{X:95 Y:77}" wp="{X:84 Y:77}" cur=4 of=13
+time=2026-11-01T11:09:03.753-05:00 level=DEBUG msg="nav click" pos="{X:87 Y:77}" wp="{X:79 Y:76}" cur=5 of=13
+time=2026-11-01T11:09:03.755-05:00 level=DEBUG msg="nav click" pos="{X:82 Y:76}" wp="{X:71 Y:76}" cur=6 of=13
+time=2026-11-01T11:09:03.758-05:00 level=DEBUG msg="nav click" pos="{X:75 Y:76}" wp="{X:69 Y:76}" cur=7 of=13
+time=2026-11-01T11:09:03.759-05:00 level=DEBUG msg="nav plan" from="{X:74 Y:76}" to="{X:24 Y:84}" wps=7 partial=false cells=48
+time=2026-11-01T11:09:03.759-05:00 level=DEBUG msg="nav click" pos="{X:74 Y:76}" wp="{X:69 Y:76}" cur=0 of=7
+time=2026-11-01T11:09:03.760-05:00 level=DEBUG msg="nav click" pos="{X:72 Y:76}" wp="{X:61 Y:78}" cur=1 of=7
+time=2026-11-01T11:09:03.764-05:00 level=DEBUG msg="nav click" pos="{X:64 Y:78}" wp="{X:53 Y:79}" cur=2 of=7
+time=2026-11-01T11:09:03.769-05:00 level=DEBUG msg="nav click" pos="{X:55 Y:79}" wp="{X:45 Y:81}" cur=3 of=7
+time=2026-11-01T11:09:03.770-05:00 level=DEBUG msg="nav plan" from="{X:52 Y:79}" to="{X:24 Y:84}" wps=3 partial=false cells=26
+time=2026-11-01T11:09:03.770-05:00 level=DEBUG msg="nav click" pos="{X:52 Y:79}" wp="{X:44 Y:81}" cur=0 of=3
+time=2026-11-01T11:09:03.773-05:00 level=DEBUG msg="nav click" pos="{X:47 Y:81}" wp="{X:36 Y:82}" cur=1 of=3
+time=2026-11-01T11:09:03.777-05:00 level=DEBUG msg="nav click" pos="{X:39 Y:82}" wp="{X:27 Y:84}" cur=2 of=3
+time=2026-11-01T11:09:03.783-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=3 npc="[24 84]"
+time=2026-11-01T11:09:03.785-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T11:09:03.785-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=7200
+time=2026-11-01T11:09:03.785-05:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[352 135]" npc="[24 84]" try=1 slow=false
+time=2026-11-01T11:09:03.788-05:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=920
+time=2026-11-01T11:09:03.788-05:00 level=INFO msg="npc visit: vendor window open" class=154 ms=8120
+time=2026-11-01T11:09:03.804-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.804-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r P16 PASS repaired for 19 gold at knob 30; the estimate before the visit was 19 | intended: durability back to max, gold down by the price | observed: knob repairBelowPct 30; durability 1/20 (5%) -> 20/20; gold 500 -> 481 (spent per report 19); estimate before the visit 19; repaired=true steps [equip skipped; repair ran] err ""
+time=2026-11-01T11:09:03.814-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.814-05:00 level=INFO msg="inventory contents" pack="" stash=""
+time=2026-11-01T11:09:03.818-05:00 level=INFO msg=inventory pct=0 cells=0/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.818-05:00 level=INFO msg="inventory contents" pack="" stash=""
+DRILL D3.r0 P16 PASS gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips | intended: no repair at gold 0, gold still 0, UI clean | observed: durability 1/20 -> 1/20; gold 0 -> 0; call1 steps [equip skipped; repair skipped] err "" ticks 0; call2 steps [equip skipped; repair skipped] err "" ticks 0; panels none
+time=2026-11-01T11:09:03.831-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openStash"
+time=2026-11-01T11:09:03.832-05:00 level=DEBUG msg="nav mouth check" pos="{X:27 Y:84}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.837-05:00 level=DEBUG msg="nav plan" from="{X:27 Y:84}" to="{X:56 Y:94}" wps=6 partial=true cells=30
+time=2026-11-01T11:09:03.837-05:00 level=DEBUG msg="nav click" pos="{X:27 Y:84}" wp="{X:33 Y:90}" cur=0 of=6
+time=2026-11-01T11:09:03.838-05:00 level=INFO msg="nav stuck" pos="{X:28 Y:85}" wp="{X:33 Y:90}" rung=0
+time=2026-11-01T11:09:03.845-05:00 level=DEBUG msg="nav plan" from="{X:33 Y:90}" to="{X:56 Y:94}" wps=5 partial=true cells=24
+time=2026-11-01T11:09:03.845-05:00 level=DEBUG msg="nav click" pos="{X:33 Y:90}" wp="{X:39 Y:96}" cur=0 of=5
+time=2026-11-01T11:09:03.845-05:00 level=INFO msg="nav: stuck recovered" at="{X:28 Y:85}" method=reclick rung=1 repeat=false
+time=2026-11-01T11:09:03.848-05:00 level=DEBUG msg="nav click" pos="{X:37 Y:94}" wp="{X:44 Y:101}" cur=1 of=5
+time=2026-11-01T11:09:03.852-05:00 level=DEBUG msg="nav click" pos="{X:43 Y:100}" wp="{X:47 Y:101}" cur=2 of=5
+time=2026-11-01T11:09:03.853-05:00 level=DEBUG msg="nav click" pos="{X:44 Y:100}" wp="{X:53 Y:96}" cur=3 of=5
+in stash: 1 stash items
+DRILL D3.s P5 PASS stash item and full-purse gold moves exact | intended: stash opens; ring round trip; deposit all 1500 then withdraw 300: purse 300 stash 1200 | observed: stash open; item round trip ok, pack rinx1; deposit 1500: purse 0 stash 1500; withdraw 300: purse 300 stash 1200
+time=2026-11-01T11:09:03.890-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openStash"
+time=2026-11-01T11:09:03.890-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:96}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+DRILL D3.s2 P5 PASS partial deposit exact | intended: deposit 1000 of 1500 (amount typed into the prompt): purse 500 stash 1000 | observed: deposit 1000 err <nil>; purse 1500 -> 500 stash 0 -> 1000
+time=2026-11-01T11:09:03.906-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-11-01T11:09:03.906-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:96}" level=1 exits=0 wantExit=0 arrival=false stay=false r=9
+time=2026-11-01T11:09:03.906-05:00 level=DEBUG msg="nav plan" from="{X:53 Y:96}" to="{X:28 Y:85}" wps=5 partial=false cells=24
+time=2026-11-01T11:09:03.907-05:00 level=DEBUG msg="nav click" pos="{X:53 Y:96}" wp="{X:46 Y:101}" cur=0 of=5
+time=2026-11-01T11:09:03.910-05:00 level=DEBUG msg="nav click" pos="{X:49 Y:99}" wp="{X:44 Y:101}" cur=1 of=5
+time=2026-11-01T11:09:03.912-05:00 level=DEBUG msg="nav click" pos="{X:46 Y:100}" wp="{X:38 Y:95}" cur=2 of=5
+time=2026-11-01T11:09:03.915-05:00 level=DEBUG msg="nav click" pos="{X:40 Y:96}" wp="{X:33 Y:90}" cur=3 of=5
+time=2026-11-01T11:09:03.918-05:00 level=DEBUG msg="nav click" pos="{X:35 Y:92}" wp="{X:30 Y:87}" cur=4 of=5
+time=2026-11-01T11:09:03.922-05:00 level=INFO msg="npc: interact" class=154 try=1 dist=2 npc="[28 85]"
+time=2026-11-01T11:09:03.923-05:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=154
+time=2026-11-01T11:09:03.923-05:00 level=INFO msg="npc: menu open" class=154 try=1 ms=2040
+time=2026-11-01T11:09:03.924-05:00 level=INFO msg="npc: menu click" class=154 entry=trade line=1 lines=3 adj=0 at="[400 122]" npc="[28 85]" try=1 slow=false
+time=2026-11-01T11:09:03.926-05:00 level=INFO msg="npc: window open" class=154 entry=trade adj=0 tries=1 ms=920
+DRILL D3.u P13 PASS unidentified magic cap sold for 32 = the base formula | intended: an unidentified magic item sells for its base price (cost/2, the identified extras do not count) | observed: unidentified magic Cap (unid 1) sold to Charsi: gained 32 err <nil>; gold 100 -> 132; formula for a normal cap 32
+time=2026-11-01T11:09:03.959-05:00 level=INFO msg=inventory pct=2 cells=1/40 stashPct=0 stashCells=0/48
+time=2026-11-01T11:09:03.959-05:00 level=INFO msg="inventory contents" pack="rin x1" stash=""
+DRILL D3.i P13 PASS identified with a scroll | intended: ring identified, ID scroll count -1, UI clean | observed: unidentified [rin] -> []; pack iscx1 rinx1 -> rinx1; gold 500 -> 500; steps [identify ran; equip skipped]; err ""
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D3.g0     U1    PASS     -    recorded
+D3.n      P14   PASS     -    all 5 opened and closed clean
+D3.h      P17   PASS     -    life restored at the healer
+D3.b      P15   PASS     -    bought Minor Healing Potionx2 Minor Mana Potionx2 Scroll of Town Portalx1 for 280, belt 0 -> 4
+D3.b2     P15   PASS     -    sold an identify scroll for 40 (the price formula says 40)
+D3.tp     P12   PASS     -    tome or scrolls bought, gold delta equals the report
+D3.r      P16   PASS     -    repaired for 19 gold at knob 30; the estimate before the visit was 19
+D3.r0     P16   PASS     -    gold 0: one failed repair attempt (logged as an error, the price is not checked before the visit), then latched: the second call skips
+D3.s      P5    PASS     -    stash item and full-purse gold moves exact
+D3.s2     P5    PASS     -    partial deposit exact
+D3.u      P13   PASS     -    unidentified magic cap sold for 32 = the base formula
+D3.i      P13   PASS     -    identified with a scroll
+cheat verbs used (each ledgered with a reason): debug clearinv, debug durability all 1, debug give cap pack q4 unid, debug give hp1, debug give isc, debug give rin, debug give rin pack q4 unid, debug stat 14 0, debug stat 14 100, debug stat 14 1000, debug stat 14 1500, debug stat 14 300, debug stat 14 500, debug stat 15 0, debug stat 6 3072
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:09:03.961-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
