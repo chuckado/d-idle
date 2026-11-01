@@ -180,4 +180,12 @@ CHANGELOG.md (unreleased, docs):
 - docs: SKARMOR trace of the Sorceress armors and Energy Shield (docs/research/sk-armor-trace.md, tools/emu/sk_armor.py): Frozen Armor's striker effect follows the freeze rule in game.exe (V run), d2d stuns and chills every striker (D1); bot finding B1 (buffs only recast on needBuff edges).
 ```
 
+docs/OWNERS (changecheck warns until these are in; the merger drops them at archive time as for skmana):
+
+```
+docs/research/sk-armor-trace.md  skarmor  skarmor
+tools/emu/sk_armor.py  skarmor  skarmor
+openspec/changes/skarmor/**  skarmor  skarmor
+```
+
 Glossary: no new term needed ("aura event", "state group" are used in their Skills.txt / States.txt column sense).
