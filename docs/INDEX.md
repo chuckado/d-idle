@@ -136,3 +136,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/classes/paladin-probe.md: second-class probe, Paladin offline results (see the table), findings F1 to F7, Sorceress-fitted pieces, live probes owed (PALPROBE)
 - docs/palfix.md: Paladin fix cards, offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, legacy table rows, plandata seam, Zealot-lite)
 - docs/palsme.md: Zealot-lite table per the SME review (Prayer 1, Might, Holy Fire, no Vigor path) and the ready Paladin cards PALRETREAT, PALBELT, PALBRGATE, PALMERC1, SMEDOCS
+- docs/wpcooldown.md: waypoint arrival cooldown removed (default 0), live drill recipe

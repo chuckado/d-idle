@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Waypoint trips no longer wait 10 s after arriving (nav.wpCooldownSec default 0, deprecated).
 - capdocs: capabilities.md, README, running.md and the sorc skill matrix refreshed (Teleport hops and the Frozen Armor retry proven live, #159 and #160 open, melee, resist and Paladin offline-verified).
 - tickpolish: the Discord tick wrapper repairs privacy-guard runs by changing separators only, and renders an empty waiting list without asking the model.
 - palfix (offline): Paladin fixes: mana-heavy flag in the build table (hammerdin included), Blessed Hammer band from clvl 18, simulator takes the class's attack names, legacy Paladin table trains Zeal 4 and Prayer, data tables can name themselves and `--build paladin-zealot-lite` exists (docs/palfix.md); not verified live.
