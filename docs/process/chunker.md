@@ -1,6 +1,6 @@
 # Roadmap chunker
 
-> status: current, 2026-11-01 (card chunker). One tool, `tools/contrib/chunker.py`, keeps the contributor board in step with the roadmap and the GitHub issues, and proposes new or retired items. It extends the board of [../community/open-work.md](../community/open-work.md) (read by `tools/contrib/board.py`); contributor rules are in [../process/outside-prs.md](outside-prs.md) and [../contributing/agent-work.md](../contributing/agent-work.md).
+> status: current, APPROVED by the maintainer 2026-11-01 (card chunker). One tool, `tools/contrib/chunker.py`, keeps the contributor board in step with the roadmap and the GitHub issues, and proposes new or retired items. It extends the board of [../community/open-work.md](../community/open-work.md) (read by `tools/contrib/board.py`); contributor rules are in [../process/outside-prs.md](outside-prs.md) and [../contributing/agent-work.md](../contributing/agent-work.md).
 
 ## Modes
 

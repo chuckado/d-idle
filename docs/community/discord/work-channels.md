@@ -1,6 +1,6 @@
-# Discord: work channels (DRAFT for the user's approval)
+# Discord: work channels (approved and applied)
 
-> status: DRAFT, 2026-11-01 (card communitywork). Nothing is created: no channel, no webhook, no post. The user decides; the commands below are for after the go. Related: [server.md](server.md), [roles.md](roles.md), [feeds.md](feeds.md), the guide [../../contributing/agent-work.md](../../contributing/agent-work.md). Tags: V = verified here (how), S = secondary, U = unverified.
+> status: current, APPROVED and APPLIED 2026-11-01 (card communitywork): the WORK category with #work-board and #agents exists, rules are pinned, the work-board webhook exists. The commands below are the record of what was applied. Related: [server.md](server.md), [roles.md](roles.md), [feeds.md](feeds.md), the guide [../../contributing/agent-work.md](../../contributing/agent-work.md). Tags: V = verified here (how), S = secondary, U = unverified.
 
 ## 1. Proposed channels (new category `WORK`)
 | channel | who reads | who posts | purpose |
