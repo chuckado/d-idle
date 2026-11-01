@@ -2,7 +2,7 @@
 
 ```yaml
 change: monstermissile
-status: in-progress
+status: archived
 agent: monstermissile
 branch: agent/monstermissile
 worktree: ~/code/d2lod-wt/monstermissile
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict; coverage.py --check"
-result: "Docs and emulator scripts only: docs/research/monster-missile-trace.md (Q1-Q6, D1-D6, B1-B6, no PR candidate), 213 game.exe launches under the emulator (V run on the game side; the d2d side is a read and a port), one READ-ONLY ledger line for 48 missile rows. Nothing run live, no game, no d2d slot."
+result: "docs only; game side V run, d2d side read plus port (not a real-build differential); no PR candidate yet"
 live: "docs only, nothing run live"
+merge: 38f6e36
 ```
 
 - [x] tables dumped, Act 1 / 2 launch rows listed
