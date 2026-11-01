@@ -18,13 +18,13 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
 merge: db2091b
-result: CI job, secret and webhook file done; live feed_test and #d2d-upstream post verified after the merge (see the follow-up commit)
+result: verified live: feed_test dispatch ran notify-failure (success), repo webhook now release+pull_request, one #d2d-upstream pr-status post succeeded; CI of the merge green with notify-failure skipped
 ```
 
 ## 1. Work
 
-- [ ] 1.1 CI job notify-failure and feed_test dispatch
-- [ ] 1.2 repo webhook without workflow_run (after the feed test succeeded)
-- [ ] 1.3 #d2d-upstream webhook (private file) and feed.py generic fail-closed text
-- [ ] 1.4 one real #d2d-upstream pr-status post (verified live: posted)
-- [ ] 1.5 docs, CHANGELOG, BACKLOG
+- [x] 1.1 CI job notify-failure and feed_test dispatch
+- [x] 1.2 repo webhook without workflow_run (after the feed test succeeded)
+- [x] 1.3 #d2d-upstream webhook (private file) and feed.py generic fail-closed text
+- [x] 1.4 one real #d2d-upstream pr-status post (verified live: posted)
+- [x] 1.5 docs, CHANGELOG, BACKLOG
