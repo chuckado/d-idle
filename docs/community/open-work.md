@@ -6,26 +6,6 @@ Only items that need nothing but the game binary of your own legitimate Diablo I
 
 Format (read by the board script): one `## ID: title` section per item, then `- key: value` lines. Keys: `size` (S, M, L), `status` (`ready` = open for a claim now, `proposed` = open but the maintainer may still reshape it, so ask in the issue first; `claimed` and `done` are shown but get no issue; this is the contributor status, not the queue row's), `kind` (decomp, verify), `source` (`queue:N` = row N of docs/decomp-queue.md, `backlog:NAME` = a line in docs/BACKLOG.md), `question`, `start`, `deliverable`, `needs`. Function addresses are tags only (`FUN_xxxxxxxx` as in the repo's trace docs); never paste code.
 
-## SKMELEE: the player's own blow (staff or weapon swing)
-- size: M
-- status: done
-- kind: decomp
-- source: queue:20
-- question: In game.exe 1.14d, how does the player's plain Attack roll to-hit and physical damage (weapon share, Strength bonus, shield carrier), and does d2d's `player_blow` / `attack_line` give the same numbers? The first levels of every melee class and the Sorceress staff rung run on this.
-- start: FUN_00647bc0 (the player's blow, S: docs/research/paladin-act1-recon.md section 6 row 4); docs/research/sorc-skill-matrix.md section 5 row 7; the monster-side twin docs/research/monster-attack-trace.md for the style; tools/emu/hit_rule.py as the oracle template.
-- deliverable: docs/research/sk-melee-trace.md in the trace style (rules with address tags, V read / V run / D / S / I / U, deviations D1.., bot findings B1..), plus an oracle script under tools/emu/ if you ran game.exe code; 100,000 cases or exhaustive boundaries for any number you call V.
-- needs: your own game.exe 1.14d, Python 3 with unicorn, a checkout of upstream d2decomped for its emulator harness.
-
-## SKRESIST: monster resistance and immunity by difficulty
-- size: M
-- status: done
-- kind: decomp
-- source: queue:21
-- question: How does game.exe build a monster's resistances per difficulty (Normal, Nightmare, Hell penalties), when is an element immune, what does an immune hit still do (flinch, chill), and how does Cold Mastery style pierce interact? Compare with d2d's resist build and with the bot's immune threshold.
-- start: docs/research/sorc-skill-matrix.md section 5 row 8; docs/research/static-field-chill-trace.md and docs/research/freeze-rules-trace.md (resist handling already traced for chill and freeze, reuse their function tags); docs/data.md for how monster rows are read.
-- deliverable: docs/research/sk-resist-trace.md (tags, deviations, bot findings, what the drills should expect) and any oracle script under tools/emu/.
-- needs: your own game.exe 1.14d and its MPQ data directory (read only), Python 3 with unicorn, upstream d2decomped checkout.
-
 ## PALSKILL: Smite, Zeal and Sacrifice dispatch in game.exe
 - size: M
 - status: proposed
