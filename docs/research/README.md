@@ -75,3 +75,4 @@ Every doc here tags claims V (run or read by the author), D (data table read), S
 
 ## Generality / architecture
 - [bot-generality.md](bot-generality.md) framework vs stencil: what is fitted to class, act, clvl, difficulty and engine, a vocabulary for generality, target layers, ranked experiments and a card plan. current.
+- sk-armor-trace.md: armors and Energy Shield (SKARMOR, decomp row 15); oracle tools/emu/sk_armor.py
