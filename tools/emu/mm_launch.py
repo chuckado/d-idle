@@ -102,7 +102,14 @@ def main():
             if m.get(c) in mis: todo.append((mid, mode, c, m[c]))
         for k in range(1, 9):
             s = sk.get(m.get(f"Skill{k}", ""))
-            if s and s.get("srvmissilea") in mis: todo.append((mid, "A1", f"Skill{k}:{s['skill']}", s["srvmissilea"]))
+            if not s or s.get("srvmissilea") not in mis: continue
+            mn = s["srvmissilea"]
+            if s.get("srvdofunc") == "85":     # FUN_005cb0c0 (ShamanFire, UnHolyBolt): the row's name stem + (its number + TransLvl) at the target
+                stem = mn.rstrip("0123456789")
+                first = int(mn[len(stem):] or 1)
+                mn = f"{stem}{first + num(m.get('TransLvl', ''))}"
+                if mn not in mis: print(f"no row {mn} for {mid}"); continue
+            todo.append((mid, "A1", f"Skill{k}:{s['skill']}", mn))
     print(f"launches per difficulty: {len(todo)}")
     bad = {"game_vs_read": 0, "owner_vs_table": 0, "d2d_vs_game": 0}
     total = 0
