@@ -94,6 +94,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 3f62842 11-01 01:11 `Merge agent/fixdenbounce: soak 2 den bounce evidence record (docs only)` (fixdenbounce)
 - 598d80e 11-01 01:06 `Merge agent/skarmor: sk-armor trace (decomp row 15), game-side oracle sk_armor.py` (skarmor)
 - 6b922b1 11-01 01:02 `Merge agent/drills12: DRILLS12 live proof of fixcrowd (crowdAdjacent knob), drill harness` (drills12)
 - 19ca7c4 11-01 00:57 `Merge agent/fixlair: Level.TeleportRule and CanTeleportIn, stale teleport comments corrected` (fixlair)
@@ -103,5 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - eafb8a1 11-01 00:45 `Merge agent/skmana: SK mana trace` (skmana)
 - 1842cce 11-01 00:42 `Merge agent/forkdbg: d2dctl SkillDebug client, debug verbs doc` (forkdbg)
 - 42238fc 11-01 00:40 `Merge agent/openmods: boss-stats upstream PR records; archive card` (openmods)
-- 84dd214 11-01 00:29 `Merge agent/fixcrowd: combat.crowdAdjacent knob` (fixcrowd)
 <!-- statusgen:end -->
