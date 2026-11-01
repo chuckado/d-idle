@@ -69,3 +69,8 @@ internal/d2dsrc/source.go  fixbuff  fixbuff
 internal/d2dsrc/source_test.go  fixbuff  fixbuff
 internal/d2denv/env.go  fixbuff  fixbuff
 internal/data/extract.go  fixbuff  fixbuff
+internal/nav/walk.go  fixmouth  fixmouth
+internal/nav/nav.go  fixmouth  fixmouth
+internal/nav/fixmouth_test.go  fixmouth  fixmouth
+internal/combat/combatspin_test.go  fixmouth  fixmouth
+docs/fixmouth.md  fixmouth  fixmouth
