@@ -134,3 +134,8 @@ internal/town/fixprogress_test.go  fixprogress  fixprogress
 openspec/changes/fixprogress/**  fixprogress  fixprogress
 internal/town/chores.go  fixprogress  fixprogress
 internal/town/town.go  fixprogress  fixprogress
+docs/soakstall.md  soakstall  soakstall
+internal/bot/goal.go  soakstall  soakstall
+internal/bot/runner.go  soakstall  soakstall
+internal/bot/emptyarea_test.go  soakstall  soakstall
+openspec/changes/soakstall/**  soakstall  soakstall

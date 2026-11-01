@@ -211,13 +211,15 @@ type loopState struct {
 	emptyArea  int
 	emptyKills int
 	emptySince time.Time
-	stallStage int       // campaign stall ladder (stall.go): 0 quiet, 1 warned and fresh game tried
-	stallAt    time.Time // when stage 1 was reached
-	emptyLast  time.Time // last call: a longer pause (town trip, new game) restarts the count
-	task       taskState
-	wp         wpState
-	prepared   bool
-	prepTries  int
+	// failed explores per area since the last kill (exploreGaveUp)
+	exploreFails map[int]exploreFail
+	stallStage   int       // campaign stall ladder (stall.go): 0 quiet, 1 warned and fresh game tried
+	stallAt      time.Time // when stage 1 was reached
+	emptyLast    time.Time // last call: a longer pause (town trip, new game) restarts the count
+	task         taskState
+	wp           wpState
+	prepared     bool
+	prepTries    int
 }
 
 // New builds a Runner. It installs e.Emit (if unset) so behaviors publishing through the Env feed the same event channel.
@@ -631,3 +633,5 @@ func (r *Runner) LastStep() time.Time {
 	}
 	return time.Unix(0, n)
 }
+
+type exploreFail struct{ n, kills int }
