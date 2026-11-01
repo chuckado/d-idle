@@ -94,6 +94,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
 - 12c11b9 10-31 23:16 `Merge agent/specmin: soak Gate 1 virtual minutes (BELT, NOKILL)` (soak-minutes-virtual)
 - 65b117a 10-31 23:11 `Merge agent/decompmods: monster mods decomp trace` (decompmods)
@@ -103,5 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2adbd6b 10-31 22:47 `Merge agent/decompfreeze: freeze rules trace, proof, PR draft` (decompfreeze)
 - 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
 - 40bc78f 10-31 22:22 `Merge agent/cr155: CodeRabbit round on upstream PR 155 recorded` (cr155)
-- fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 <!-- statusgen:end -->

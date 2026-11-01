@@ -7,6 +7,7 @@ agent: verifyfreeze
 branch: agent/verifyfreeze
 worktree: ~/code/d2lod-wt/verifyfreeze
 skip_specs: true
+merge: c0ff783
 owns:
   - openspec/changes/verifyfreeze/**
   - tools/emu/verify_freeze.py
