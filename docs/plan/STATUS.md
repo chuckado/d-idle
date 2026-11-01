@@ -95,6 +95,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 3ae26fb 11-01 00:00 `Merge brandfinal docs update into brandapply` (brandapply)
 - 770dc5a 10-31 23:55 `Merge origin/main into brandfinal` (brandfinal)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
 - 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
@@ -104,5 +105,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8ac245e 10-31 23:30 `Merge agent/fixportalmelee: no town portal cast with 3+ adjacent hostiles` (fixportalmelee)
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
-- fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
 <!-- statusgen:end -->
