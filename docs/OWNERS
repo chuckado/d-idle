@@ -80,3 +80,9 @@ internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
+internal/nav/walk.go  fixmouth2  fixmouth2
+internal/nav/fixmouth_test.go  fixmouth2  fixmouth2
+internal/combat/fight.go  fixmouth2  fixmouth2
+internal/combat/fighter.go  fixmouth2  fixmouth2
+internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
+docs/fixmouth2.md  fixmouth2  fixmouth2

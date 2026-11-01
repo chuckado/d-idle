@@ -3,6 +3,7 @@ package combat
 import (
 	"context"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/input"
 )
@@ -60,5 +61,38 @@ func TestEvadeInsideMouthIsCapped(t *testing.T) {
 	}
 	if h.s.Now().Sub(t0) <= 0 {
 		t.Fatal("no time passed")
+	}
+}
+
+type circleMouth struct {
+	Mover
+	cx, cy int
+	walks  int
+}
+
+func (m *circleMouth) NearMouth(p input.Point) bool {
+	dx, dy := p.X-m.cx, p.Y-m.cy
+	return dx*dx+dy*dy <= 144
+}
+func (m *circleMouth) GoTo(ctx context.Context, p input.Point) error {
+	m.walks++
+	return m.Mover.GoTo(ctx, p)
+}
+
+// FIXMOUTH2 sim: a Clear with a pack beside the mouth returns before its timeout and never walks into the guard.
+func TestClearWithPackNearMouthFinishes(t *testing.T) {
+	h := newHarness(t)
+	for i := 0; i < 3; i++ {
+		h.s.addMon(uint32(10+i), clsFallen, 102+float64(i), 98+float64(i), 400, 0, 0)
+	}
+	mv := &circleMouth{Mover: h.s, cx: 102, cy: 98}
+	h.f.mv = mv
+	t0 := h.s.Now()
+	_, _ = h.f.Clear(context.Background(), ClearOpts{Timeout: 30 * time.Second})
+	if got := h.s.Now().Sub(t0); got > 40*time.Second {
+		t.Fatalf("Clear ran %v past its 30 s timeout", got)
+	}
+	if mv.walks > 20 {
+		t.Fatalf("%d walks: an unbounded step loop", mv.walks)
 	}
 }
