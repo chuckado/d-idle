@@ -41,11 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [drills10](../../openspec/changes/drills10/) | in-progress | drills10 | `openspec/changes/drills10/**` | `instance:slot0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
-| [fixf17](../../openspec/changes/fixf17/) | in-progress | fixf17 | `docs/fixf17.md` | - |
-| [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
-| [fixtalk](../../openspec/changes/fixtalk/) | in-progress | fixtalk | `internal/talk/**`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts.go`<br>`cmd/d2bot/acts_test.go`<br>`cmd/d2bot/cain_test.go`<br>`docs/fixtalk.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -75,14 +71,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change drills10: changecheck -cli 0 warnings; leakcheck -mode fail 0; hygiene-only no FAIL; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
-- change fixf17: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fixf17: live proof after merge: the full F group x3 passes DW.m1 in run 1 and no `the Pacer lagged` line above 100 s (docs/fixf17.md)
-- change fixmeter: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fixmeter: live proof after merge: spawn a pack, fight, compare the Meter totals with the monsters' life deltas and the kill count (docs/fixmeter.md)
-- change fixtalk: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fixtalk: live proof after merge: D8.q and D8.w PASS with the bot's talk path (recipe in docs/fixtalk.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -96,6 +85,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
 - 12c11b9 10-31 23:16 `Merge agent/specmin: soak Gate 1 virtual minutes (BELT, NOKILL)` (soak-minutes-virtual)
@@ -105,5 +95,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
 - 2adbd6b 10-31 22:47 `Merge agent/decompfreeze: freeze rules trace, proof, PR draft` (decompfreeze)
 - 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
-- 40bc78f 10-31 22:22 `Merge agent/cr155: CodeRabbit round on upstream PR 155 recorded` (cr155)
 <!-- statusgen:end -->

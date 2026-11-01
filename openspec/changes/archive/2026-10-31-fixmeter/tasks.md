@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixmeter
-status: in-progress
+status: archived
 agent: fixmeter
 branch: agent/fixmeter
 worktree: ~/code/d2lod-wt/fixmeter
@@ -16,9 +16,9 @@ exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: spawn a pack, fight, compare the Meter totals with the monsters' life deltas and the kill count (docs/fixmeter.md)"
-merge:
+merge: f795c60
 live: "DRILLS10: D-meter PASS, kills 13 = 13, dealt 121 = 121, taken 106 = 106, hits and misses n/a"
-result:
+result: "live PASS (DRILLS10)"
 ```
 
 ## 1. Work

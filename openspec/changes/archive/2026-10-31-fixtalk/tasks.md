@@ -2,7 +2,8 @@
 
 ```yaml
 change: fixtalk
-status: in-progress
+status: archived
+merge: 5f67ea3
 agent: fixtalk
 branch: agent/fixtalk
 worktree: ~/code/d2lod-wt/fixtalk
@@ -19,7 +20,7 @@ gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: D8.q and D8.w PASS with the bot's talk path (recipe in docs/fixtalk.md)"
 live: "DRILLS10: D8.q PASS (skill points 0 to 1), D8.w PASS (area 40)"
-result: "offline: talk logic moved to internal/talk with tests, identical behaviour; D8.q/D8.w built on the bot's path, not verified live"
+result: "live PASS (DRILLS10)"
 ```
 
 ## 1. Work

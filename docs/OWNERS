@@ -24,7 +24,6 @@ docs/merc-d2d.md  m3-merc  m3-merc
 docs/probes/merc/**  m3-merc  m3-merc
 docs/research/andariel-chain-needs.md  andychain  -
 cmd/d2drill/**  drills  m1-liveproof
-docs/fixf17.md  fixf17  fixf17
 internal/drill/**  drills  m1-liveproof
 docs/probes/drills/**  drills  m1-liveproof
 docs/basics-audit.md  drills  m1-liveproof
@@ -42,17 +41,6 @@ cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
 openspec/changes/drills6/**  drills6  drills6
-openspec/changes/drills10/**  drills10  drills10
-internal/d2dcombat/meter.go  fixmeter  fixmeter
-internal/d2dcombat/meter_test.go  fixmeter  fixmeter
-internal/d2dcombat/rig.go  fixmeter  fixmeter
-docs/fixmeter.md  fixmeter  fixmeter
-internal/talk/**  fixtalk  fixtalk
-cmd/d2bot/task.go  fixtalk  fixtalk
-cmd/d2bot/acts.go  fixtalk  fixtalk
-cmd/d2bot/acts_test.go  fixtalk  fixtalk
-cmd/d2bot/cain_test.go  fixtalk  fixtalk
-docs/fixtalk.md  fixtalk  fixtalk
 openspec/changes/soak-minutes-virtual/**  specmin  soak-minutes-virtual
 internal/d2dsoakstat/invariants.go  specmin  soak-minutes-virtual
 internal/d2dsoakstat/invariants_test.go  specmin  soak-minutes-virtual

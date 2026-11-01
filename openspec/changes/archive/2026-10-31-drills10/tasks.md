@@ -2,7 +2,7 @@
 
 ```yaml
 change: drills10
-status: in-progress
+status: archived
 agent: drills10
 branch: agent/drills10
 worktree: ~/code/d2lod-wt/drills10
@@ -13,8 +13,8 @@ exclusive:
   - instance:slot0
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; hygiene-only no FAIL; openspec validate --all --strict; whole-repo vet and test -short on the worker host"
-merge:
-result: ""
+merge: 6a08f08
+result: "live PASS (DRILLS10)"
 live: "F x3 PASS, D8.q D8.w PASS, D-meter PASS, P26 recorded, regression PASS"
 ```
 
