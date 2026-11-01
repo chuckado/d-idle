@@ -62,7 +62,12 @@ type Navigator struct {
 	// walk. Without it nav retreats from the pack and plans around it.
 	Yield func(ctx context.Context, near []d2.Unit) error
 	// TeleportKey, if set, is the hotkey of Teleport: Explore and ExitTo then hop with CastAt (teleport.go).
-	TeleportKey   string
+	TeleportKey string
+	// TeleportKeyFn, if set, supplies the key when TeleportKey is empty. The bot installs the Fighter's verified bind of
+	// the Teleport skill, so the capability follows what the character knows and has bound (telecap.go).
+	TeleportKeyFn func() string
+	// TeleportOK, if set, says whether Teleport may be cast on a level (data.CanTeleportIn); nil allows every level.
+	TeleportOK    func(level int) bool
 	TeleportRange float64 // subtiles per cast, 0: 18
 	TeleportMana  int     // mana one cast needs, 0: 24
 	// Refill, if set, is called while a cast waits for mana (drink a potion, rest); without it nav sleeps.

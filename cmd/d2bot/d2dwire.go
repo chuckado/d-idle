@@ -66,6 +66,7 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	tw.UseSource(ad.Source())
 	nv.Escape = tw.ToTown
 	nv.ClearCursor = tw.ClearCursor
+	wireTeleport(nv, cb, db)
 	lt := loot.New(rig.Env, nv)
 	tw.SetJudge(lt)
 
