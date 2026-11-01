@@ -49,3 +49,8 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/fixstall4.md  fixstall4  fixstall4
+internal/d2dctl/approach_path.go  fixstall4  fixstall4
+internal/d2dctl/approach_path_test.go  fixstall4  fixstall4
+internal/d2dctl/town_verbs.go  fixstall4  fixstall4
+internal/d2dctl/fixstall4_test.go  fixstall4  fixstall4

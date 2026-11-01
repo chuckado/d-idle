@@ -162,3 +162,4 @@ DRILLS8 rows (2026-10-31, lab build cheats3, code at 1628eeb with fixstall3; fil
 | P25 | D6.d | PASS x3 | `ErrLevelChanged` after the pocket escape, 225 ticks (9 s), in town, identical repeats (DRILLS7 run 2: stuck 62 s) |
 | P27 | D-sync.wp | PASS x3 (after the harness mana fix) | before: 1 of 2 (repeat 2 started with 1 of 35 mana, melee fallback, no obstacle in the grid); after: 3 of 3 killed in every repeat |
 | P14, P15, P16, P5, P13, P18, P3 | D3, D8 NPC smoke through `d2dtown.Input` | PASS | D3 12 of 12, D8 a, m, q, w PASS (D8.c is once per character) |
+Note (fixstall4, 2026-10-31): DRILLS8 F13 (H.pause, NPC approach) cause found offline: the grid route's 12-step waypoints cut the camp block corner (each leg is a straight `cmd move`), and stalls spent the budget; fixed with line-of-sight legs, routing at every stall and a route-sized budget, live proof pending ([fixstall4.md](fixstall4.md)).

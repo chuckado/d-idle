@@ -2,6 +2,7 @@ package d2dctl
 
 import (
 	"math"
+	"sort"
 )
 
 // The map route of ApproachNPC (fixstall2, DRILLS6 F7). A blind side step of 3.5 cells does not get around a camp
@@ -33,8 +34,34 @@ func planAround(rows []string, fx, fy, tx, ty float64, others [][2]float64) []([
 	if wps := planAroundClear(rows, fx, fy, tx, ty, others, 1); wps != nil {
 		return wps
 	}
-	return planAroundClear(rows, fx, fy, tx, ty, others, 0)
+	if wps := planAroundClear(rows, fx, fy, tx, ty, others, 0); wps != nil {
+		return wps
+	}
+	// The player stands in a pocket of the grid (an isolated free subtile beside an object, DRILLS8 stall cell
+	// 26.1,20.1): plan from the nearest free subtile that has a route and step there first (UNVERIFIED live).
+	var cands []subPt
+	cx, cy := int(5*fx), int(5*fy)
+	for dy := -pocketRadius; dy <= pocketRadius; dy++ {
+		for dx := -pocketRadius; dx <= pocketRadius; dx++ {
+			if (dx != 0 || dy != 0) && cy+dy >= 0 && cy+dy < len(rows) && cx+dx >= 0 && cx+dx < len(rows[cy+dy]) && rows[cy+dy][cx+dx] == '.' {
+				cands = append(cands, subPt{cx + dx, cy + dy})
+			}
+		}
+	}
+	sort.Slice(cands, func(i, j int) bool {
+		return math.Hypot(float64(cands[i].x-cx), float64(cands[i].y-cy)) < math.Hypot(float64(cands[j].x-cx), float64(cands[j].y-cy))
+	})
+	for _, c := range cands {
+		x, y := float64(c.x)/5+0.1, float64(c.y)/5+0.1
+		if wps := planAroundClear(rows, x, y, tx, ty, others, 0); wps != nil {
+			return append([][2]float64{{x, y}}, wps...)
+		}
+	}
+	return nil
 }
+
+// pocketRadius is how far (subtiles) planAround looks for a free subtile when the player's own is boxed in.
+const pocketRadius = 4
 
 func planAroundClear(rows []string, fx, fy, tx, ty float64, others [][2]float64, clear int) []([2]float64) {
 	h := len(rows)
@@ -104,15 +131,87 @@ func planAroundClear(rows []string, fx, fy, tx, ty float64, others [][2]float64,
 	if best == start {
 		return nil
 	}
-	var path []subPt
+	var path []subPt // start excluded, in walking order
 	for p := best; p != start; p = prev[p] {
 		path = append(path, p)
 	}
+	for i, j := 0, len(path)-1; i < j; i, j = i+1, j-1 {
+		path[i], path[j] = path[j], path[i]
+	}
+	return legWaypoints(free, [2]float64{5 * fx, 5 * fy}, path, clear)
+}
+
+// legWaypoints thins the step-by-step path into "cmd move" waypoints. A leg is walked as a STRAIGHT line (the verb
+// stops at the first object), so a waypoint may only be as far as the line from the previous one stays on free
+// cells (with the route's clearance); a bend of the route always gets a waypoint of its own. fixstall4 (DRILLS8 F13):
+// the old fixed 12-step spacing let the first chord of the H.pause route cut across the corner of the camp block
+// (VERIFIED offline on the real grid fixture: the chord from the stall cell to the first waypoint crossed blocked
+// subtiles; that the live leg stopped there is UNVERIFIED, no live log of the leg itself).
+func legWaypoints(free func(x, y int) bool, start [2]float64, path []subPt, clear int) [][2]float64 {
 	var wps [][2]float64
-	for i := len(path) - 1; i >= 0; i-- {
-		if n := len(path) - 1 - i; n%legLen == legLen-1 || i == 0 {
-			wps = append(wps, [2]float64{float64(path[i].x)/5 + 0.1, float64(path[i].y)/5 + 0.1})
+	anchor, anchorIdx := start, -1
+	emit := func(i int) {
+		wps = append(wps, [2]float64{float64(path[i].x)/5 + 0.1, float64(path[i].y)/5 + 0.1})
+		anchor, anchorIdx = centre(path[i]), i
+	}
+	for i := 0; i < len(path); i++ {
+		if i == len(path)-1 {
+			emit(i)
+			break
+		}
+		if i+1-anchorIdx > legLen || !lineFree(free, anchor, centre(path[i+1]), clear) {
+			emit(i)
 		}
 	}
 	return wps
+}
+
+// lineMargin is the half width (subtiles) a straight leg keeps free around its line.
+const lineMargin = 0.25
+
+// centre is the continuous position (subtile units) of the middle of a subtile.
+func centre(p subPt) [2]float64 { return [2]float64{float64(p.x) + 0.5, float64(p.y) + 0.5} }
+
+// lineFree reports whether the straight segment a to b (continuous subtile positions) touches only free cells, each
+// with `clear` free neighbours around it (sampled every quarter subtile).
+func lineFree(free func(x, y int) bool, a, b [2]float64, clear int) bool {
+	n := max(int(4*math.Max(math.Abs(b[0]-a[0]), math.Abs(b[1]-a[1]))), 1)
+	for k := 0; k <= n; k++ {
+		px := a[0] + (b[0]-a[0])*float64(k)/float64(n)
+		py := a[1] + (b[1]-a[1])*float64(k)/float64(n)
+		m := lineMargin // the walker is not a point: a quarter subtile each side, except at the start (it may touch a wall)
+		if math.Hypot(px-a[0], py-a[1]) < 1 {
+			m = 0
+		}
+		for _, ox := range []float64{-m, m} {
+			for _, oy := range []float64{-m, m} {
+				cx, cy := int(math.Floor(px+ox)), int(math.Floor(py+oy))
+				for dy := -clear; dy <= clear; dy++ {
+					for dx := -clear; dx <= clear; dx++ {
+						if !free(cx+dx, cy+dy) {
+							return false
+						}
+					}
+				}
+			}
+		}
+	}
+	return true
+}
+
+func abs(v int) int {
+	if v < 0 {
+		return -v
+	}
+	return v
+}
+
+// routeCells is the length (cells) of the polyline from (fx,fy) through the waypoints.
+func routeCells(fx, fy float64, wps [][2]float64) float64 {
+	d := 0.0
+	for _, w := range wps {
+		d += math.Hypot(w[0]-fx, w[1]-fy)
+		fx, fy = w[0], w[1]
+	}
+	return d
 }
