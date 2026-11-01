@@ -134,5 +134,3 @@ internal/town/fixprogress_test.go  fixprogress  fixprogress
 openspec/changes/fixprogress/**  fixprogress  fixprogress
 internal/town/chores.go  fixprogress  fixprogress
 internal/town/town.go  fixprogress  fixprogress
-docs/agents/claude-tracing-guide.md  claudeguide  claudeguide
-openspec/changes/claudeguide/**  claudeguide  claudeguide

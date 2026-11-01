@@ -2,7 +2,7 @@
 
 ```yaml
 change: claudeguide
-status: in-progress
+status: archived
 agent: claudeguide
 branch: agent/claudeguide
 worktree: ~/code/d2lod-wt/claudeguide
@@ -12,7 +12,8 @@ owns:
   - docs/agents/claude-tracing-guide.md
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "Docs only, not verified live (no game). Guide written from the repo docs and the maintainer's role decisions; model advice rests on one blind item."
+result: "public guide for Claude users added (docs/agents/claude-tracing-guide.md): evidence tags, independent verifier standard, model per role (Claude only, other models untested), sanitized briefs; pointer lines in agent-work.md and AGENTS.md"
+merge: f933d0f
 ```
 
 ## 1. Work
