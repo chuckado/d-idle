@@ -75,3 +75,6 @@ internal/resource/manamodel.go  fixmanamodel  fixmanamodel
 internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+tools/discord/tick_post.py  tickwire  tickwire
+tools/discord/tests/test_tick_post.py  tickwire  tickwire
+openspec/changes/tickwire/**  tickwire  tickwire
