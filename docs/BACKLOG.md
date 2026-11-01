@@ -2,6 +2,10 @@
 
 > Milestones, launch order and the operating rhythm: [roadmap.md](roadmap.md) (proposal, 2026-10-31); the cards are `openspec/changes/m1-*`, `m2-*`, `m3-*`.
 
+> ROAMLEG (merged, live proof passed in DRILLS23): a roam leg held by the mouth gate ends the episode with ErrRoamHeld (wraps ErrExplored) and no longer marks its target failed; DW.m3 x3: 0 bounces, `roam leg failed` 50 to 0, step-aways 62 to 11, plan lines 559-664 to 425, D3 12/12, D2 11/11. Sweep completeness unverified (the drill character kills nothing).
+
+> MONSTALL (card idea, unproven): `walk did not finish in 2m0s` is back in DW.m3, 50 lines in the last cycle at (98,189) far from the mouth, with `nav stalled by monsters (near=6)` and `combat: left the game to survive` at 29 percent life; the drill character has no attack skill. Investigate only if a real character stalls the same way.
+
 > Bot generality study merged (docs/research/bot-generality.md): proposed first card gen-invariants (holdout seeds 16-23 + invariant counters in the M2 gate run); awaiting the user's approval to launch.
 > gen-invariants merged: d2dsoak reports per-seed invariants (HANG STALL WEDGE PROGRESS DEATHS RESTARTS EXIT) and a holdout group (seeds 16-23); exit codes unchanged (read INVARIANTS: or -json). Offline validation: navsoak and navsoak2 VIOLATED(WEDGE,PROGRESS), navsoak3 PASS so far; m2early seed 2 VIOLATED(HANG): one real combat no-progress watchdog firing (investigating)
 > combatspin merged: the one watchdog firing (baseline seed 2) was abortFight Flee picking a point in a cave mouth; move skipped it without sleeping; fixed (move costs a poll tick, valid rejects mouth points); not verified live; the next gate run will show it via the HANG invariant

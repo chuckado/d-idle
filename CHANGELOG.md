@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- roamleg (live, DRILLS23): a mouth-gate hold ends the roam episode in one leg instead of failing ten targets; DW.m3 x3: failed legs 50 to 0, step-aways 62 to 11, bounces stay 0, plan lines 559-664 to 425. Sweep completeness unverified (the drill character kills nothing).
 - communitywork (offline, docs and stdlib scripts; nothing switched on): Contributor guide, work board, issue and PR templates, outside-PR review gate proposal and a Discord work-channels draft (nothing switched on).
 - armorhit (research, docs only): Frozen Armor's answer to a melee striker on d2d differs from game.exe on every damaging case (95,920 of 108,506); local upstream candidate fix/armor-hit brings it to 0 (docs/research/pr-armorhit-proof.md).
 - buildv3 (offline, UNVERIFIED live): Added the opt-in Sorceress table `fallback-lightning-v3` (Chain Lightning from clvl 19) and a Chain Lightning attack band gated by the learned skill; default stays v2 until a live soak; see docs/buildv3.md.
