@@ -28,6 +28,8 @@ const (
 	InvDeaths   = "DEATHS"
 	InvRestarts = "RESTARTS"
 	InvExit     = "EXIT"
+	InvBelt     = "BELT"   // Gate 1 belt window (soak-gates, virtual minutes)
+	InvNoKillXP = "NOKILL" // Gate 1 no kill and no XP stretch (soak-gates, virtual minutes)
 )
 
 // Verdict words of the invariants (not the fidelity verdict: that stays PASS/FAIL/INCONCLUSIVE/NO-DATA).
@@ -50,12 +52,17 @@ type InvLimits struct {
 	StreakAnyMinutes int
 	RecoverMin       float64 // J: a death must be followed by progress (kill, area, quest, spend) within this many virtual minutes
 	EarlyFrac        float64 // D: soakfix: a run under 95 % of the requested length ended early
+	// Gate 1 criteria of the soak-gates spec. A "minute" is a VIRTUAL minute: one minute line (user decision 2026-11-01,
+	// change soak-minutes-virtual); the d2d lockstep clock runs about 10 times faster than the wall clock.
+	BeltMin   int // D: no more than 5 consecutive minute lines outside town without a healing potion (pack or belt)
+	NoKillMin int // D: no more than 10 consecutive minute lines with neither a new kill nor new XP
 }
 
 // DefaultInvLimits is the committed threshold set.
 func DefaultInvLimits() InvLimits {
 	return InvLimits{StallWarnMin: 30, ProgressMin: 30, WedgeMin: 15, DeathsPer1000: 15, DeathsMinKills: 150,
-		StreakDeaths: 3, StreakMinutes: 30, StreakAny: 5, StreakAnyMinutes: 60, RecoverMin: 10, EarlyFrac: 0.95}
+		StreakDeaths: 3, StreakMinutes: 30, StreakAny: 5, StreakAnyMinutes: 60, RecoverMin: 10, EarlyFrac: 0.95,
+		BeltMin: 5, NoKillMin: 10}
 }
 
 // ExitInfo is what the caller knows about how the run ended, beyond the log (run.json of d2dsoak run, supervisor.log).
@@ -93,6 +100,11 @@ type Invariants struct {
 
 	NoProgressMin float64 `json:"noProgressMin"` // PROGRESS: longest stretch without kill/xp, non-town area, quest step, gold spent, clvl
 
+	// Gate 1 stretches in consecutive minute lines = virtual minutes (the lines with no new kill and no new XP; the lines
+	// outside town with no healing potion in pack or belt). BeltWindowMin is 0 for logs without packHP/beltBoxes.
+	NoKillXPMin   int `json:"noKillXpMin"`
+	BeltWindowMin int `json:"beltWindowMin"`
+
 	Deaths        int     `json:"deaths"`
 	Kills         int     `json:"kills"`
 	DeathsPer1000 float64 `json:"deathsPer1000"`
@@ -109,6 +121,14 @@ type Invariants struct {
 
 	Violated []string `json:"violated,omitempty"`
 	Verdict  string   `json:"verdict"`
+}
+
+// townAreaIDs are the level ids of the five towns; townAreas holds their names.
+var townAreaIDs = map[int]bool{1: true, 40: true, 75: true, 103: true, 109: true}
+
+// hasHealing reports a usable healing potion in the pack or in a belt column.
+func hasHealing(m Minute) bool {
+	return m.PackHP > 0 || strings.Contains(m.BeltBoxes, "Healing")
 }
 
 // townAreas are the town names of the five acts (an Entered of one is not campaign progress).
@@ -271,6 +291,7 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 	acts := map[int]bool{}
 	var progress []float64 // virtual minutes of progress events, sorted below
 	var deaths []deathAt
+	noKill, belt := 0, 0
 	for i, m := range mins {
 		inv.ClvlMin, inv.ClvlMax = min(inv.ClvlMin, m.Clvl), max(inv.ClvlMax, m.Clvl)
 		if a := ActOfArea(m.Area); a > 0 {
@@ -280,6 +301,18 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 			continue
 		}
 		p := mins[i-1]
+		if m.Kills > p.Kills || m.XP > p.XP {
+			noKill = 0
+		} else {
+			noKill++
+			inv.NoKillXPMin = max(inv.NoKillXPMin, noKill)
+		}
+		if m.HasBelt && !hasHealing(m) && !townAreaIDs[m.Area] {
+			belt++
+			inv.BeltWindowMin = max(inv.BeltWindowMin, belt)
+		} else {
+			belt = 0
+		}
 		if d := m.Kills - p.Kills; d > 0 {
 			inv.Kills += d
 		}
@@ -429,6 +462,8 @@ func violations(inv *Invariants, lim InvLimits) {
 	add(inv.StallWarns > 0 || inv.StallExits > 0, InvStall)
 	add(inv.WedgeMin > lim.WedgeMin, InvWedge)
 	add(inv.NoProgressMin > lim.ProgressMin, InvProgress)
+	add(inv.BeltWindowMin > lim.BeltMin, InvBelt)
+	add(inv.NoKillXPMin > lim.NoKillMin, InvNoKillXP)
 	add(inv.DeathStreak || inv.Unrecovered > 0 || (inv.Kills >= lim.DeathsMinKills && inv.DeathsPer1000 > lim.DeathsPer1000), InvDeaths)
 	add(inv.BotRestarts > 0, InvRestarts)
 	add(inv.Exit == "early" || inv.Exit == "crash" || inv.Panics > 0, InvExit)

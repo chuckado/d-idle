@@ -98,6 +98,9 @@ A run is **invalid** (field `invalid` in run.json, reason printed as a WARNING) 
 
 Every report (`run`, `extract`, `compare`; text, `-json`, `verdict.txt`) carries a block before `OVERALL`: per seed HANG, STALL, WEDGE, PROGRESS, DEATHS, RESTARTS, EXIT counters and a verdict `PASS` / `VIOLATED(list)` / `NO-DATA`, a group line each for `tuning` and `holdout` seeds (`-holdout`, default 16-23), a `COVERAGE (proven on)` line and `INVARIANTS: ...`. The invariants verdict never changes the exit code (section 3c stays the only exit rule). `run.json` stores the counters (`invariants`) and the setup (`cover`); an older run.json is rescanned from the `bot.log` next to it, and a `supervisor.log` next to a log adds launches and the bot's exit. Definitions, thresholds and provenance: docs/geninv.md; contract: soak-gates delta of the card.
 
+## 3e. Gate 1 stretches are virtual minutes (change soak-minutes-virtual)
+Minutes in the soak-gates Gate 1 criteria are virtual (game) minutes (user decision 2026-11-01): one `minute` line is one virtual minute, whatever the wall time. Per seed `d2dsoak` counts `beltWindowMin` (consecutive minute lines outside town with no healing potion in pack or belt boxes; BELT when over 5; logs without `packHP`/`beltBoxes` count 0) and `noKillXpMin` (consecutive lines with no new kill and no new XP; NOKILL when over 10) and prints both with their limits under each seed. The PROGRESS invariant (30, wider events) is a different, looser check and stays.
+
 ## 4. What d2d cannot validate
 
 - Wine, input injection (SendInput/mouse), `/proc/pid/mem` reads, Game.exe crash/hang, the failsafe ladder and recycle paths, window focus, the 20-minute save point (d2d runs with `--no-save`), OOM/heap guards of the real process mix: all stay original-game soak topics (G1/G2).

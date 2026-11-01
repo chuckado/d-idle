@@ -27,6 +27,11 @@ type Minute struct {
 	// V (by unit test, not live): the bot minute line emits both since change minutefields; HasHP is false for older logs that lack both keys.
 	DmgTaken, HPMinPct int
 	HasHP              bool
+	// PackHP is the healing potions in the pack, BeltBoxes the belt column contents ("0:Minor_Healing_Potion ...");
+	// HasBelt is false for logs that carry neither key (Game.exe era), which then have no belt window.
+	PackHP    int
+	BeltBoxes string
+	HasBelt   bool
 }
 
 // ParseMinutes reads slog JSON or text lines and returns the minute summaries in file order; other and
@@ -89,6 +94,13 @@ func minuteFromKV(kv map[string]string) (Minute, bool) {
 			m.DmgTaken, _ = strconv.Atoi(a)
 			m.HPMinPct, _ = strconv.Atoi(b)
 			m.HasHP = true
+		}
+	}
+	if a, ok1 := kv["packHP"]; ok1 {
+		if b, ok2 := kv["beltBoxes"]; ok2 {
+			m.PackHP, _ = strconv.Atoi(a)
+			m.BeltBoxes = b
+			m.HasBelt = true
 		}
 	}
 	if x, has := kv["xp"]; has {

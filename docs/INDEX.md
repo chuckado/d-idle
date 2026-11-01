@@ -67,6 +67,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [probes/waits-audit.md](probes/waits-audit.md) audit of every wall-clock wait vs lockstep game time (card waits-audit): 16 OK, 2 BROKEN fixed.
 - [fixmisc.md](fixmisc.md) DRILLS5 F3 (poor melee rests: intended, pinned) and F4 (first Clear after a position jump: Navigator.Sync); card fixmisc, live proof pending.
 - [probes/postfix-soak1.md](probes/postfix-soak1.md) first post-fix 2 h soak with one injected d2d kill, vs navsoak3 per virtual hour, Gate 1 verdict.
+- [probes/postfix-soak2.md](probes/postfix-soak2.md) second post-fix Gate 1 soak (NOT PASSED) and the 2026-11-01 decision: soak-gate minutes are virtual minutes.
 
 ## 9. Community
 - [community/discord/plan.md](community/discord/plan.md) the d.idle Discord plan (server built 2026-10-31, invite and links pending; live state and user steps inside): [roles](community/discord/roles.md) (sourced role and safety guideline), [server.md](community/discord/server.md) + `server.json` layout and permissions, [welcome](community/discord/welcome.md), [rules](community/discord/rules.md), [faq](community/discord/faq.md), [templates](community/discord/templates.md), [feeds](community/discord/feeds.md), [public-page](community/discord/public-page.md), [maintainer-message](community/discord/maintainer-message.md) (draft, not sent).
