@@ -35,6 +35,7 @@ type coverage struct {
 	pts    []input.Point
 	seen   []bool
 	failed []bool
+	held   int // legs the mouth gate held on this level (ROAMLEG); not a target problem, see docs/roamleg.md
 	legs   int
 }
 
@@ -153,6 +154,18 @@ func (c *coverage) mark(p input.Point) {
 	}
 }
 
+// ErrRoamHeld ends a roam episode because the mouth gate held a leg. It matches ErrExplored, the result the old code
+// reached after failing every target, so callers behave as before; Is(err, ErrRoamHeld) tells the two apart.
+var ErrRoamHeld = fmt.Errorf("%w: roam leg held by the mouth gate", ErrExplored)
+
+// RoamHeld reports the legs held by the mouth gate on the current level (0 when roaming is not in use).
+func (n *Navigator) RoamHeld() int {
+	if n.cov == nil {
+		return 0
+	}
+	return n.cov.held
+}
+
 // roam visits the coverage points of the level nearest-first until done() reports true (nil), every point was
 // visited or given up (ErrExplored), or the leg or time cap is hit.
 func (n *Navigator) roam(ctx context.Context, done func() bool) error {
@@ -219,6 +232,12 @@ func (n *Navigator) roam(ctx context.Context, done func() bool) error {
 			if !done() {
 				c.seen[pick] = true
 			}
+		case errors.Is(err, ErrMouthGate):
+			// ROAMLEG: the gate refuses to move the character nearer the exit from where it stands. Every other target
+			// would fail the same way, so end the episode and keep the target.
+			c.held++
+			n.log.Debug("roam: held by the mouth gate, ending the episode", "to", target, "held", c.held, "legs", c.legs)
+			return fmt.Errorf("%w: roam held by the mouth gate at %v", ErrRoamHeld, o.pos)
 		case errors.Is(err, ErrStuck), errors.Is(err, ErrNoPath), errors.Is(err, ErrTimeout):
 			c.failed[pick] = true
 			n.log.Info("roam leg failed", "to", target, "err", err)
