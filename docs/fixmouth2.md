@@ -26,7 +26,7 @@ N = 1, 2, 3, then `-only DW.m4 -label fixmouth2-m4`. PASS: Clear finishes before
 
 ## Overlap (declared)
 
-Card fixmouth is still open on internal/nav/walk.go and internal/nav/fixmouth_test.go (its constants, `walk`, `NearMouth`, `mouthStep`). This change edits the same functions (arrival consumption, `NearMouth` radius, end of `mouthStep`) and one fixmouth test assertion. It also touches internal/combat/fight.go (`evade`) and fighter.go (two fields). Merge fixmouth first; the conflict is textual.
+Cards fixmouth and fixbuff (fight.go, its buff recast lines) are still open: fixmouth is open on internal/nav/walk.go and internal/nav/fixmouth_test.go (its constants, `walk`, `NearMouth`, `mouthStep`). This change edits the same functions (arrival consumption, `NearMouth` radius, end of `mouthStep`) and one fixmouth test assertion. It also touches internal/combat/fight.go (`evade`) and fighter.go (two fields). Merge fixmouth first; the conflict is textual.
 
 ## Shared-file lines for the merger
 

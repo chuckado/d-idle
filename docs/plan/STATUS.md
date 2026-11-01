@@ -46,6 +46,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixbuff](../../openspec/changes/fixbuff/) | in-progress | fixbuff | `docs/fixbuff.md`<br>`internal/combat/fight.go`<br>`internal/data/extract.go`<br>`internal/combat/fixbuff_test.go`<br>`internal/d2/states.go`<br>`internal/d2dctl/verbs.go`<br>`internal/d2dctl/parse.go`<br>`internal/d2dctl/parse_test.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2denv/env.go` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
+| [fixmouth2](../../openspec/changes/fixmouth2/) | in-progress | fixmouth2 | `internal/nav/walk.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/fight.go`<br>`internal/combat/fighter.go`<br>`internal/combat/fixmouth2_test.go`<br>`docs/fixmouth2.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -83,6 +84,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmouth: live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)
+- change fixmouth2: live: DW.m3 x3 and DW.m4 rerun, no bounce, Clear finishes (docs/fixmouth2.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
