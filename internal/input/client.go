@@ -31,6 +31,10 @@ var (
 	ErrAmbiguous = errors.New("input: several Diablo II windows, no target")
 	// ErrBind means a window could not be tied to a game process (posted move not seen in its memory).
 	ErrBind = errors.New("input: window not bound to game process")
+	// ErrAlreadyThere is the navigator's "arrived" result: the planner snapped a blocked goal onto the player's own
+	// cell, so there is nothing to walk (docs/fixemptyplan.md). It lives here so nav and combat share it without
+	// importing each other.
+	ErrAlreadyThere = errors.New("already there")
 )
 
 // HwndEnv names the window handle a client should target (as printed by the helper's list, 0x.. or decimal).

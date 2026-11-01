@@ -769,8 +769,19 @@ func anyElite(ts []Target) bool {
 	return false
 }
 
-// valid asks the mover whether a point is reachable.
+// valid asks the mover whether a point is a usable walk target for a BACK-OFF (kite, flee, dodge, retreat): reachable
+// and somewhere else. A blocked point that snaps onto the player's own cell is "already there": the character cannot
+// retreat to it, so it is not valid and awayPoint tries its next candidate (docs/fixemptyplan.md).
 func (f *Fighter) valid(p input.Point) bool {
+	return f.reachable(p, false)
+}
+
+// validApproach is valid for an approach goal (a firing position): snapping onto the player's own cell is an arrival.
+func (f *Fighter) validApproach(p input.Point) bool {
+	return f.reachable(p, true)
+}
+
+func (f *Fighter) reachable(p input.Point, arrivalOK bool) bool {
 	if f.mv == nil {
 		return true
 	}
@@ -778,6 +789,9 @@ func (f *Fighter) valid(p input.Point) bool {
 		return false // a step-away/flee point there would be skipped by move; pick another
 	}
 	_, err := f.mv.PathTo(p)
+	if errors.Is(err, input.ErrAlreadyThere) {
+		return arrivalOK
+	}
 	return err == nil
 }
 
@@ -806,6 +820,11 @@ func (f *Fighter) move(ctx context.Context, p input.Point) error {
 		return f.sleep(ctx, ms(f.tune().PollMs))
 	}
 	err := f.mv.GoTo(ctx, p)
+	if errors.Is(err, input.ErrAlreadyThere) && ctx.Err() == nil {
+		// arrived (the goal snapped onto our own cell): not a failed walk. It still costs a tick, see below.
+		f.log().Debug("combat move: already there", "to", p)
+		return f.sleep(ctx, ms(f.tune().PollMs))
+	}
 	if err != nil && ctx.Err() == nil {
 		f.info("move failed", "to", p, "err", err)
 		// a failed walk must still cost a tick: under a lockstep clock time only moves on sleeps and steps, and

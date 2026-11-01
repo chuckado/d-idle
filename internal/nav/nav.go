@@ -23,6 +23,7 @@ import (
 var (
 	ErrStuck        = errors.New("nav: stuck")
 	ErrNoPath       = errors.New("nav: no path")
+	ErrAlreadyThere = input.ErrAlreadyThere // the goal snapped onto the start cell; also matches ErrNoPath (older callers)
 	ErrUnitGone     = errors.New("nav: unit not found")
 	ErrTimeout      = errors.New("nav: timeout")
 	ErrNoExit       = errors.New("nav: no exit to that level")
@@ -393,7 +394,8 @@ func (n *Navigator) planHard(lm *d2map.LevelMap, start, goal input.Point, tol fl
 
 // PathTo plans waypoints from the player's position to p on the current grid without moving or advancing the
 // map tracker. The path ends at p, or at the nearest walkable cell when p itself is blocked; ErrNoPath if p
-// cannot be reached (an unreachable or unknown p yields ErrNoPath too: use GoTo to approach it).
+// cannot be reached (an unreachable or unknown p yields ErrNoPath too: use GoTo to approach it). A blocked p that
+// snaps onto the player's own cell yields ErrAlreadyThere (never an empty path with a nil error).
 func (n *Navigator) PathTo(p input.Point) ([]input.Point, error) {
 	lm := n.w.Current()
 	if lm == nil {
@@ -414,7 +416,17 @@ func (n *Navigator) PathTo(p input.Point) ([]input.Point, error) {
 	if res.partial || res.optimistic {
 		return nil, fmt.Errorf("%w: %v from %v on the known map", ErrNoPath, p, pos)
 	}
+	if len(res.wps) == 0 {
+		return nil, emptyPathErr()
+	}
 	return res.wps, nil
+}
+
+// emptyPathErr is the error for a plan with no waypoints: the planner snapped the goal onto the start cell, so the
+// player is already as close as it can get. It matches both ErrAlreadyThere (the typed result) and ErrNoPath (what
+// callers saw before), and keeps the "empty path" text exit.go looks for.
+func emptyPathErr() error {
+	return fmt.Errorf("%w: %w: empty path", ErrNoPath, ErrAlreadyThere)
 }
 
 // GoTo walks to p on the current level.

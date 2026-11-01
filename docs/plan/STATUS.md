@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
+| [fixemptyplan](../../openspec/changes/fixemptyplan/) | in-progress | fixemptyplan | `internal/input/client.go`<br>`internal/nav/nav.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixemptyplan_test.go`<br>`internal/combat/fight.go`<br>`internal/combat/reach.go`<br>`internal/combat/fixemptyplan_test.go`<br>`docs/fixemptyplan.md` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -73,6 +74,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
+- change fixemptyplan: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixemptyplan: live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
@@ -88,6 +91,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 8ac245e 10-31 23:30 `Merge agent/fixportalmelee: no town portal cast with 3+ adjacent hostiles` (fixportalmelee)
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
@@ -97,5 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
 - 2adbd6b 10-31 22:47 `Merge agent/decompfreeze: freeze rules trace, proof, PR draft` (decompfreeze)
-- 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
 <!-- statusgen:end -->
