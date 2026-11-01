@@ -706,3 +706,36 @@ Drilly (throwaway Sorceress, `--no-save`, a fresh one per invocation): the cheat
 - docs/BACKLOG.md: TELETUNE (optional, from DRILLS22): fixtelekey proven live (hops fire at clvl 18 in Act 2 on tile exits, key sk54, no hop in town, refused hops bounded at 3, no-Teleport control walks) but Teleport is slower than walking at level 1 (448 against 254 and 851 against 578 ticks): 18 subtile hops cost about 21 to 24 mana each and the navigator waits for regeneration; consider a mana budget (hop only when the walk is longer than N hops or mana is above a floor), a larger range on d2d, and note border exits never hop.
 - docs/INDEX.md: DRILLS22 section in docs/probes/drills/README.md.
 - CHANGELOG: nothing (harness and docs only); fixtelekey verified live (see its card).
+
+## DRILLS23 (2026-11-01): live proof of roamleg (PASS, with a finding on the Explore end)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from branch agent/drills23 (agent/roamleg tip 9859164 plus origin/main merged). Capacity before: idle 48 plus nice 0.1 percent (iowait 49). Files `2026-11-01-drills23-<label>.txt`: `m31`..`m33` (DW.m3, three invocations; filtered: first 500 matching lines, then the roam, held, DRILL and END lines; raw logs were 5,635 lines each), `m41` (DW.m4), `d3`, `d2` (DRILL lines). Command as DRILLS21 (`-group F -only DW.m3 -label drills23-m3N -v`, `-only DW.m4`; groups D3 and D2 without `-only`). Each invocation took 1 to 7 s of wall time. The three DW.m3 invocations agree on every count below (m31, m32, m33).
+
+### Result: PASS
+| Item | DRILLS21 | DRILLS23 (roamleg) |
+|---|---|---|
+| Mouth bounces | 0 | 0 (V): every `arrived in level` line is a planned entry of a cycle (2 or 8) |
+| `level changed during the walk` | 22 (one pocket-stall escape) | 0 (V); no `stalled in a pocket` escape in these runs, both drill runs PASS and are identical (verdict `same`) |
+| `roam leg failed` | 50 (16 in the filtered file) | 0 (V) |
+| `roam: held by the mouth gate, ending the episode` | not present | 1 per invocation (V), at (36,140) after 83 legs, `held=1` |
+| `stepping away from a cave mouth` | 62 | 11 per invocation (V; target about 20 or fewer, met) |
+| `click rewritten` / `click held` | 154 / 51 | 6 / 2 |
+| `combat move held by the mouth gate` | 1 | 1 |
+| `nav plan` lines | 559 to 664 | 425 per invocation |
+| Clear and Explore finish | yes, every phase `ok` | yes: 15 of 16 phases `ok`; the 16th (cycle 2 explore) ends with the new result, `nav: nothing left to explore: roam leg held by the mouth gate`, which the drill records as `error:` text but does not count as a bounce |
+| DW.m4 | 0 bounces, 4 step-aways, 341 dead lines | 0 bounces, 4 step-aways, 0 roam lines, 341 `character is dead` lines, 30 walk timeouts after the death, dirty-UI verdict (`open: inventory`): unchanged from DRILLS21 |
+| Regression | D3 12/12, D2 11/11 | D3 12/12 (ends 40/40 in town), D2 11/11 (ends 34/40 in town) (V) |
+
+### Sweep completeness (U)
+The first hold ends the episode after 83 legs (the first roam in cycle 2) instead of after about 10 failed targets: the sweep is not shortened by the old 10-target rule, but the hold now stops the episode at the first leg that the gate refuses, so targets beyond that point are not visited in that episode (the next episode retries them). The throwaway has no attack skill and kills nothing (`kills=0` in every fight line), so the drill cannot show whether the Den is cleared; visited coverage is not printed by the logs. U: whether the Den is cleared with a real character. Plan lines fell from 559 to 664 down to 425.
+
+### Finding: `walk did not finish in 2m0s` returned (50 in m31, 30 in m41)
+DRILLS21 had 0 of these in DW.m3. Here 50 `combat move failed ... walk did not finish in 2m0s` lines (m31 lines 5367 to 5490, the last cycle, after the roam hold) at (98,189), 83 from the exit, far from the mouth. Chain: `nav stalled by monsters, yielding` (near=6), `nav stuck`, a fight at 29 percent life with `combat: left the game to survive`; no mouth gate line is involved (V from the log). It looks like a stalled walk among six monsters with a throwaway that cannot kill (the DRILLS19 clock was lockstep, so the 2 minutes are game time), not a roamleg effect, but it was absent in DRILLS21, so U: whether the shorter episode leaves the character in that fight more often. The run ends with life 591 of 2000, not in town (`END ... in town: false`; the harness's final goto town is not reached when the phase ends this way); D3 and D2 afterwards were fresh characters.
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`): drill cheats only (`debug goto 2`, `debug stat`), as DRILLS21. Last run (D2) ends in the Rogue Encampment, alive (34/40), panels closed. Cleanup: `tools/agentreap.sh drills23` and `--list` run at the end.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: ROAMLEG live proof PASSED (DRILLS23): DW.m3 x3 0 bounces, 0 `roam leg failed` (was 50), 1 `roam: held by the mouth gate` per run, step-aways 62 to 11, plan lines 559-664 to 425, D3 12/12, D2 11/11. Open: 50 `walk did not finish` in the last Den cycle (monsters stall, character at 29 percent) absent in DRILLS21; Den clear completeness needs a real character.
+- docs/INDEX.md: DRILLS23 section in docs/probes/drills/README.md.
+- CHANGELOG: roamleg verified live: a mouth-gate hold ends the roam episode in one leg, no failed targets, step-aways 62 to 11.

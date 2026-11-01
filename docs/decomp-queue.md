@@ -41,6 +41,8 @@ The decomp lane answers one kind of question: **"is d2d (or our bot's assumption
 | 22 | SKGROUND: Blizzard, Meteor, Hydra, Fire Wall, Thunder Storm, Frozen Orb (area, ticks, skill delay) | sorc-skill-matrix rank 9; only if the Blizzard (END) table is the build | docs/research/sorc-skill-matrix.md section 5 | L | proposed (SKILLINV 2026-11-01; Opus needed) |
 | 23 | SKPASS: masteries, Warmth, Telekinesis, +skills (blvl vs lvl) | sorc-skill-matrix rank 10 | docs/research/sorc-skill-matrix.md section 5 | S | done 2026-11-01 (SKPASS, Opus): passives FUN_00646d60 (set at learn, refreshed FUN_00646f20, level with +skills); Lightning Mastery stat 330 = 50 + 12 (L-1) % damage, once at creation; Cold Mastery stat 335 = pierce, only under 100 resistance, floor -100 (FUN_0057be00, V read); Warmth stat 27 MulDiv on the truncated regen base (0 under 47 max mana); +skills FUN_00644180 (127 / 83 / 188 / 97 cap 3 / 126 / 107 / shrine +2) feed lvl, synergies read blvl; synergy table from the patched Skills.txt; d2d D1 Telekinesis knockback always (game.exe 35 %), D2 no item / object branch, D3 entry +0x2c; no PR candidate; bot B1 (leveler spends the clvl 40 Lightning row at 25-27, LM from 30), B2 (Effective() = base + 107 only); docs/research/sk-passives-trace.md; tools/emu/sk_pass_tbl.py, sk_pass_plan.py |
 
+Rows 19-22 also appear in docs/community/open-work.md for outside contributors; keep the two in step (python3 tools/contrib/board.py --check fails when a queue row is done and the item is not).
+
 ## Result log (one line each)
 
 - 1 belt/pickup (DECOMPBELT, 2026-10-31): ground potion -> belt first (matching column, else empty column for hp/mp/rv), inventory open -> cursor; bot findings B1-B5; d2d D1 PR opened #147 (verifier holds).

@@ -239,3 +239,6 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P26 | D22-C, D22-A (fixtelekey) | PASS | drills22: Act 2 tile-exit legs at clvl 18 with Teleport: 12 hops landed, 0 refused, mana 150 to 3.0 and 69.9; slower than the walking control (448 against 254 and 851 against 578 ticks); border exits never hop |
 | P26 | D22-B (fixtelekey) | PASS | `Fighter.TeleportKey()` is `sk54` after BindSkills; the cast through it hops 11.9 cells and pays 23.3 mana |
 | P26 | D22-T, D22-R (fixtelekey) | PASS | town leg 0 hops; Lair level refused by rule; unwired navigator in a town: 3 refused hops, no mana, then walks |
+| P23 | DW.m3 x3 (roamleg) | PASS | drills23: 0 mouth bounces, 0 level-change errors, 0 `roam leg failed` (drills21: 50), 1 `roam: held by the mouth gate` per run, 11 step-aways (was 62), 425 plan lines (was 559-664); 50 `walk did not finish` in the last cycle (finding, mid-fight stall away from the mouth) |
+| P23 | DW.m4 (roamleg) | PASS | drills23: 0 bounces, 4 step-aways; death and dirty-UI verdict as before |
+| P23 | D2 (11), D3 (12) regression | PASS | drills23: 11 of 11 and 12 of 12 on the roamleg build; ends in town |
