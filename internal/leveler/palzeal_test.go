@@ -85,7 +85,7 @@ func TestZealotLiteLegal(t *testing.T) {
 		if len(r.illegal) != 0 {
 			t.Errorf("den %d: illegal picks %v", den, r.illegal)
 		}
-		if r.skills["Zeal"] != 4 || r.skills["Sacrifice"] != 1 || r.skills["Smite"] != 1 || r.skills["Prayer"] < 2 {
+		if r.skills["Zeal"] != 4 || r.skills["Sacrifice"] != 1 || r.skills["Smite"] != 1 || r.skills["Prayer"] != 1 || r.skills["Might"] < 9 || r.skills["Holy Fire"] != 2 || r.skills["Defiance"] != 1 || r.skills["Vigor"] != 0 {
 			t.Errorf("den %d: skills %v", den, r.skills)
 		}
 		if z := r.firstAt["Zeal"]; z < 12 || z > 13-den/5 || r.firstAt["Sacrifice"] >= r.firstAt["Zeal"] {
@@ -94,7 +94,7 @@ func TestZealotLiteLegal(t *testing.T) {
 		t.Logf("den %d: spent %d points, skills %v, stuck %v", den, r.spent, r.skills, r.stuck)
 	}
 	sk := skillsAt(t, "paladin-zealot-lite")
-	if sk[30]["Vigor"] == 0 || sk[30]["Blessed Hammer"] == 0 {
+	if sk[30]["Holy Fire"] == 0 || sk[30]["Blessed Hammer"] == 0 {
 		t.Errorf("clvl 30 skills %v", sk[30])
 	}
 }
