@@ -830,7 +830,9 @@ func (f *Fighter) swingIntoMouth(sp SkillSpec, from, to input.Point) bool {
 	if !(sp.Hand == HandLeft || sp.ID == meleeSpec().ID) || pdist(from, to) <= swingNoWalk {
 		return false
 	}
-	g, ok := f.mv.(interface{ MouthClickOK(from, to input.Point) bool })
+	g, ok := f.mv.(interface {
+		MouthClickOK(from, to input.Point) bool
+	})
 	return ok && !g.MouthClickOK(from, to)
 }
 
