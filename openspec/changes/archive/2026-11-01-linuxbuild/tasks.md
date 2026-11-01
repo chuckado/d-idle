@@ -2,7 +2,7 @@
 
 ```yaml
 change: linuxbuild
-status: in-progress
+status: archived
 agent: linuxbuild
 branch: agent/linuxbuild
 worktree: ~/code/d2lod-wt/linuxbuild
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Builder container, runner (online, a test workflow ran on it) and the private wrapper done. lab2-freezeresume made: d2d 304 s cold, tests 46 s; the test binaries gave armor 0 of 108,506, hit-once 0 of 100,198, freeze-resume 0 of 12,548 and 0 of 12,516, identical to worker-made outputs. NAS memory low point 7.4 GB. A drill leg with the builder-made d2d was not run. Verified on the real hosts, not live in the game."
+result: "builder container up (limits set, runner registered); lab2-freezeresume build parity with the game host builds verified (armor, hit-once, freeze-resume counts equal); drill leg with a builder-built binary not run"
 live: "no game used; the build container ran on the NAS, test binaries ran on the worker host offline"
+merge: a8c49d9
 ```
 
 - [x] build container and runner

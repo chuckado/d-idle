@@ -49,7 +49,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
-| [linuxbuild](../../openspec/changes/linuxbuild/) | in-progress | linuxbuild | `docs/builder.md`<br>`openspec/changes/linuxbuild/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -97,7 +96,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change linuxbuild: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -121,6 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- a8c49d9 11-01 14:56 `Merge agent/linuxbuild: Linux builder container docs: fork and test binaries built off the game host` (linuxbuild)
 - 189f251 11-01 14:53 `Merge agent/oriontune: capacity rule treats phantom I/O wait as OK; worker-capacity doc` (oriontune)
 - ccc7ec7 11-01 14:41 `Merge agent/skground: SKGROUND: Blizzard and Meteor traced, d2d deviations, bot delay-timer findings` (skground)
 - 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
@@ -130,5 +129,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c7178a3 11-01 14:07 `Merge agent/docsapprove: record approval of the contributor docs` (docsapprove)
 - f0e7163 11-01 13:51 `Merge agent/palsme: Zealot-lite table: Prayer 1, Might and Holy Fire, no Vigor path; legality incl. install check passes; ready cards PALRETREAT PALBELT PALBRGATE PALMERC1 SMEDOCS` (palsme)
 - 7739d9d 11-01 13:49 `Merge agent/crfollow159: CodeRabbit follow-up on #159 logged` (crfollow159)
-- db9b20e 11-01 13:32 `Merge agent/palfix: Paladin findings fixed offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, table rows, plandata seam, Zealot-lite)` (palfix)
 <!-- statusgen:end -->
