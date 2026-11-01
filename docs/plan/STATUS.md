@@ -94,6 +94,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 12c11b9 10-31 23:16 `Merge agent/specmin: soak Gate 1 virtual minutes (BELT, NOKILL)` (soak-minutes-virtual)
+- 65b117a 10-31 23:11 `Merge agent/decompmods: monster mods decomp trace` (decompmods)
 - 7534522 10-31 23:06 `Merge agent/soakg1d2d: Gate 1 soak 2 report (not passed, 1 seed)` (soakg1d2d)
 - 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
@@ -102,6 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 40bc78f 10-31 22:22 `Merge agent/cr155: CodeRabbit round on upstream PR 155 recorded` (cr155)
 - fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
-- 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
-- 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
 <!-- statusgen:end -->
