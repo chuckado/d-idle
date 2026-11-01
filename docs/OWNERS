@@ -108,3 +108,6 @@ openspec/changes/chunker/**  chunker  chunker
 docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
 docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
 openspec/changes/skresistfix/**  skresistfix  skresistfix
+docs/soaks/gate1-rerun.md  gate1  gate1
+docs/probes/soak-logs/gate1-*  gate1  gate1
+openspec/changes/gate1/**  gate1  gate1
