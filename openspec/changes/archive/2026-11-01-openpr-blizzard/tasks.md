@@ -2,7 +2,7 @@
 
 ```yaml
 change: openpr-blizzard
-status: in-progress
+status: archived
 agent: openpr-blizzard
 branch: agent/openpr-blizzard
 worktree: ~/code/d2lod-wt/openpr-blizzard
@@ -14,7 +14,8 @@ exclusive:
   - "upstream-pr:blizzard-shard-offsets"
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Opened upstream #163 (Blizzard and Eruption shard offsets; 5 files, 2 commits) from the fork branch fix/blizzard-shard-offsets-v2, plain push, nothing else posted. Checks re-run on the worker host (pr_guard, Release build, test_game, test_rules, both differentials, ruff, presubmit --quick, merge-tree). Verified offline, not live."
+result: "PR 163 opened 2026-11-01 under the user's go; checks recorded; no force-push"
+merge: 63ba464
 ```
 
 ## 1. Work
