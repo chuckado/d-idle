@@ -75,6 +75,7 @@ func New(cfg Config) (*Rig, error) {
 	r.Nav = nav.New(r.Env)
 	r.Nav.UseWorld(r.World)
 	r.Fighter = combat.New(r.Env, r.Nav)
+	r.Fighter.D2D = true
 	if cfg.Seed != 0 {
 		r.Fighter.SetSeed(cfg.Seed)
 	}
@@ -102,6 +103,7 @@ func Attach(ctx context.Context, e *env.Env, nv *nav.Navigator, ctl *d2dinput.Co
 		Hostile: func(s *d2.Snapshot, u d2.Unit) bool { return !combat.IsFriendly(s, u, cat) }}
 	ce.Clock = r.Meter
 	r.Fighter = combat.New(r.Env, nv)
+	r.Fighter.D2D = true
 	nv.Yield = r.yield()
 	return r
 }

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- fixcastgap (offline): the bot waits one cast length per skill between casts: Lightning and Chain Lightning 890 ms on game.exe (650 ms on d2d) instead of the flat 650 ms (new knobs combat.castPerSkill, castMarginMs, castFCR); live proof still open.
 - drills15 (live): first live skill-smoke drills (group R, 13 drills on d2d, game.exe not run): Teleport, mana, missile and armor traces compared with d2d; deviations of the traces confirmed with numbers (no room limit, blocked target pays, lands on monsters, merc not warped, cut cast keeps mana, no skill delay, Energy Shield absorbs 1.0); drill harness only, no product change.
 - fixbuff (offline): the bot recasts Frozen Armor and the other armors during a long fight (before: only after a town trip or new game), reads the armor state on d2d, and a stale skills cache is re-extracted; live proof open (agent/fixbuff).
 - drills13 (live): live proof of fixrecast (Frozen Armor recast at 114 s / 126 s, real duration 120 s / 132 s, a recast refreshes the state) and the M1 mana trace (d2d pays 1 tick after the command, 7 ticks before the action frame, a cut cast is not refunded); finds a stale tables cache disables the fix and that Buff is only called on needBuff (agent/drills13).

@@ -39,7 +39,12 @@ type CombatTuning struct {
 	// Fire Bolt / Charged Bolt in 560 ms (V-d2d, docs/d2d-casts-real.md), and at the old 450 the fighter issued 1.6 to
 	// 1.75 commands per real cast (the rest dropped mid-cast; 5.4 commands per kill vs 1.1 on Game.exe), at 650 1.02 to
 	// 1.04. See docs/fixmissile.md.
-	CastGapMs       int
+	CastGapMs int
+	// CastPerSkill 1: the gap after a cast is the larger of CastGapMs and that skill's cast length at CastFCR plus
+	// CastMarginMs (internal/combat/castgap.go); 0: CastGapMs alone for every skill (the override).
+	CastPerSkill    int
+	CastMarginMs    int
+	CastFCR         int // faster cast rate the gap assumes (0 is the safe worst case: more FCR only shortens a cast)
 	LowManaWaitMs   int // wait this long when out of mana and no potion is worth drinking
 	StaticCasts     int // Static Field casts opening an elite / boss fight
 	StaticCastsBR   int // the same for Blood Raven (0: her 50 percent resists make it a waste of mana, U)
@@ -76,7 +81,7 @@ func DefaultCombatTuning() CombatTuning {
 		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
 		PotionGapMs: 1000, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
-		CastGapMs: 650, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
+		CastGapMs: 650, CastPerSkill: 1, CastMarginMs: 90, CastFCR: 0, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
 		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 70, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
 		BuffRecastSec: 150, BuffMarginSec: 6, AuraCheckMs: 1500, LeftFailSec: 60,
 	}
@@ -113,6 +118,9 @@ func combatKnobs() []Knob {
 		k("noProgressSec", "No-damage timeout", "s", "Give up on a target whose life did not drop for this long.", float64(d.NoProgressSec), 5, 30, false),
 		k("clearMaxSec", "Clear time limit", "s", "Upper bound of one Clear call.", float64(d.ClearMaxSec), 30, 600, true),
 		k("castGapMs", "Cast gap", "ms", "Minimum time between two casts.", float64(d.CastGapMs), 250, 1200, false),
+		k("castPerSkill", "Per-skill cast gap", "bool", "1 = the gap after a cast is at least that skill's cast length (Lightning and Chain Lightning take 760 ms in Game.exe, longer than the flat gap; d2d casts them as plain SC and keeps 650); 0 = the flat cast gap for every skill.", float64(d.CastPerSkill), 0, 1, true),
+		k("castMarginMs", "Cast gap margin", "ms", "Added to the cast length (in 40 ms ticks, plus one dispatch tick) for the per-skill gap; 90 ms keeps the early Sorceress bolts at the old 650.", float64(d.CastMarginMs), 0, 400, false),
+		k("castFCR", "Assumed faster cast rate", "%", "Faster cast rate the per-skill gap assumes; 0 is safe for any gear, a real value shortens the gap of the slow skills.", float64(d.CastFCR), 0, 200, true),
 		k("lowManaWaitMs", "Out-of-mana wait", "ms", "Pause when out of mana.", float64(d.LowManaWaitMs), 300, 3000, false),
 		k("staticCasts", "Static Field casts", "count", "Static Field casts that open an elite or boss fight.", float64(d.StaticCasts), 0, 8, true),
 		k("staticCastsBR", "Static Field casts (Blood Raven)", "count", "Static Field casts that open the Blood Raven fight; 0 keeps the mana for the attack skill (Charged Bolt for the Sorceress).", float64(d.StaticCastsBR), 0, 8, false),

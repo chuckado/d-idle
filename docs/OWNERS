@@ -74,3 +74,7 @@ internal/nav/nav.go  fixmouth  fixmouth
 internal/nav/fixmouth_test.go  fixmouth  fixmouth
 internal/combat/combatspin_test.go  fixmouth  fixmouth
 docs/fixmouth.md  fixmouth  fixmouth
+docs/fixcastgap.md  fixcastgap  fixcastgap
+internal/combat/castgap.go  fixcastgap  fixcastgap
+internal/combat/castgap_test.go  fixcastgap  fixcastgap
+docs/knobs.md  fixcastgap  fixcastgap

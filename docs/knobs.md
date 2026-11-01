@@ -66,7 +66,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.crowdN | 8 | 0..20 | count | 20 | 6 | Hostiles within 8 subtiles that make a crowd: below it the normal drink and chicken rules apply alone. 0 turns the crowd rule off. |
 | combat.crowdPortalPct | 70 | 40..90 | % | 40 | 3 | In a crowd, open a town portal at or below this life percent when a scroll exists and fewer than 3 monsters are adjacent (a 2 s cast fails when surrounded). |
 | combat.crowdDrinkPct | 65 | 40..85 | % | 40 | 2 | In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55. |
-| combat.crowdAdjacent | 8 | 3..12 | subtiles | 12 | 2 | A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters. |
+| combat.crowdAdjacent | 8 | 3..12 | subtiles | 12 | 5 | A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters. |
 | combat.crowdAbandonN | 15 | 0..30 | count | 30 | 2 | Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off. |
 | combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 4 | Minimum time between healing or mana potions. |
 | combat.rejuvGapMs | 300 | 250..1500 | ms | 1500 | 1 | Minimum time between rejuvenation potions. |
@@ -75,11 +75,14 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.targetQuality | 100 | 20..100 | % | 20 | 3 | 100 picks the best target; lower picks the nearest more often and loses ticks. |
 | combat.rangeMargin | 3 | 0..8 | subtiles | 0 | 1 | Distance kept inside a skill's maximum range. |
 | combat.clearRadius | 40 | 15..80 | subtiles | 15 | 1 | Radius around the start point cleared when the caller gives none. |
-| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 11 | A hostile monster this close counts as a fight. |
+| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 12 | A hostile monster this close counts as a fight. |
 | combat.maxTargetSec | 45 | 20..90 | s | 90 | 1 | Give up on one target after this long. |
 | combat.noProgressSec | 12 | 5..30 | s | 30 | 1 | Give up on a target whose life did not drop for this long. |
 | combat.clearMaxSec | 180 | 30..600 | s | 30 | 2 | Upper bound of one Clear call. |
 | combat.castGapMs | 650 | 250..1200 | ms | 1200 | 10 | Minimum time between two casts. |
+| combat.castPerSkill | 1 | 0..1 | bool | 0 | 1 | 1 = the gap after a cast is at least that skill's cast length (Lightning and Chain Lightning take 760 ms in Game.exe, longer than the flat gap; d2d casts them as plain SC and keeps 650); 0 = the flat cast gap for every skill. |
+| combat.castMarginMs | 90 | 0..400 | ms | 400 | 1 | Added to the cast length (in 40 ms ticks, plus one dispatch tick) for the per-skill gap; 90 ms keeps the early Sorceress bolts at the old 650. |
+| combat.castFCR | 0 | 0..200 | % | 0 | 1 | Faster cast rate the per-skill gap assumes; 0 is safe for any gear, a real value shortens the gap of the slow skills. |
 | combat.lowManaWaitMs | 700 | 300..3000 | ms | 3000 | 1 | Pause when out of mana. |
 | combat.staticCasts | 4 | 0..8 | count | 0 | 1 | Static Field casts that open an elite or boss fight. |
 | combat.staticCastsBR | 0 | 0..8 | count | 8 | 1 | Static Field casts that open the Blood Raven fight; 0 keeps the mana for the attack skill (Charged Bolt for the Sorceress). |
