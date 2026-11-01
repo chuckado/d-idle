@@ -45,7 +45,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills22](../../openspec/changes/drills22/) | in-progress | drills22 | `openspec/changes/drills22/**` | `instance:drills-slot-0` |
-| [drills24](../../openspec/changes/drills24/) | in-progress | drills24 | `openspec/changes/drills24/**` | `instance:drills-slot-0` |
+| [drills24](../../openspec/changes/drills24/) | in-progress | drills24 | `openspec/changes/drills24/**` | `instance:drills24-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -119,7 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change teletune: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
-- 7a58adc 11-01 10:48 `Merge origin/main into drills24` (-)
+- 8ff5841 11-01 10:48 `Merge origin/main into drills24` (drills24)
 - 0ec709e 11-01 10:43 `Merge origin/main into teletune` (teletune)
 - e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
 - 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
