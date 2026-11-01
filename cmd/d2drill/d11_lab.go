@@ -50,17 +50,24 @@ func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife in
 // d11att counts the distances (whole subtiles) at which living monsters stood while in an attack mode (A1, A2), over a drill.
 var d11att = map[int]int{}
 
+// d11all is the same for every living monster in any mode; d11each the distance of each, sorted, at the last read.
+var d11all = map[int]int{}
+var d11each string
+
 func d11AttStr() string {
-	var k []int
-	for d := range d11att {
-		k = append(k, d)
+	hist := func(m map[int]int) string {
+		var k []int
+		for d := range m {
+			k = append(k, d)
+		}
+		sort.Ints(k)
+		var b []string
+		for _, d := range k {
+			b = append(b, fmt.Sprintf("%d:%d", d, m[d]))
+		}
+		return strings.Join(b, " ")
 	}
-	sort.Ints(k)
-	var b []string
-	for _, d := range k {
-		b = append(b, fmt.Sprintf("%d:%d", d, d11att[d]))
-	}
-	return strings.Join(b, " ")
+	return hist(d11att) + "] [all living monsters " + hist(d11all) + "] [last read " + d11each
 }
 
 // d11Within is d11Adjacent with a radius in subtiles.
@@ -75,12 +82,19 @@ func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, li
 	if err != nil || lerr != nil {
 		return
 	}
+	var ds []int
+	defer func() {
+		sort.Ints(ds)
+		d11each = fmt.Sprint(ds)
+	}()
 	for _, m := range ms.Items {
 		if m.HP.Cur <= 0 || m.Mode == "DD" || m.Mode == "DT" {
 			continue
 		}
 		alive++
 		d := math.Hypot(5*(m.CellX-lv.X), 5*(m.CellY-lv.Y))
+		d11all[int(d+0.5)]++
+		ds = append(ds, int(d+0.5))
 		if strings.HasPrefix(m.Mode, "A") {
 			d11att[int(d+0.5)]++
 		}
@@ -168,6 +182,7 @@ const d11Mon = "zombie1"
 // d11Spawn spawns n zombies and steps until at least want of them are adjacent (1200 ticks at most).
 func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius float64) (adj int) {
 	clear(d11att)
+	clear(d11all)
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn %s %d near", d11Mon, n), "melee monsters near the throwaway: the fight under test (docs/forkcheats.md)"); err != nil {
 		return -1
 	}
