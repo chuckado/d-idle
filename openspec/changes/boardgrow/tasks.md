@@ -21,21 +21,21 @@ gates:
   - "python3 -m unittest discover -s tools/contrib/tests passes; python3 tools/contrib/board.py --check"
   - "go run ./cmd/changecheck -cli reports 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits"
 merge: ""
-result: ""
+result: "Offline: 42 contrib tests, board --check, leakcheck 0, check.sh ok; sync dry run lists 12 creates (docs/process/chunker.md). No gh writes, no live runs."
 ```
 
 Overlap (declared): the open card `chunker` owns tools/contrib/chunker.py, tools/contrib/tests/test_chunker.py and docs/process/chunker.md. This card makes small edits there (sync and groom read the archive through `board.load_all`; one test; the archive rule in the doc). They are not in `owns:` here; the merger applies them on top of the chunker card.
 
 ## 1. Archive
-- [ ] 1.1 board.py: archive file, --archive, --check, render only non-done on the board
-- [ ] 1.2 chunker.py reads the archive; tests (archive keeps issue closed, nothing re-created, done closes once)
-- [ ] 1.3 SKMELEE and SKRESIST moved
+- [x] 1.1 board.py: archive file, --archive, --check, render only non-done on the board
+- [x] 1.2 chunker.py reads the archive; tests (archive keeps issue closed, nothing re-created, done closes once)
+- [x] 1.3 SKMELEE and SKRESIST moved
 
 ## 2. New items
-- [ ] 2.1 12 items in open-work.md; sync dry run lists a create for each
+- [x] 2.1 12 items in open-work.md; sync dry run lists a create for each
 
 ## 3. Docs
-- [ ] 3.1 docs/process/chunker.md, docs/contributing/agent-work.md
+- [x] 3.1 docs/process/chunker.md, docs/contributing/agent-work.md
 
 ## Shared-file lines for the merger
 - none for BACKLOG, INDEX or CHANGELOG (no edits there). OWNERS lines are in this branch.

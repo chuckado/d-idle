@@ -54,4 +54,9 @@ Dead end: using the Discord board-feed title cleaner for issue titles dropped th
 
 `sync` (dry run, read-only gh, from a scratch extraction of the branch) plans one `create` for each of the 12 new items and nothing for the archived two or the six existing items; with the write cap of 10 per run the last two creates are deferred to the next tick:
 
-DRYRUN_PLACEHOLDER
+```
+sync (dry run): 12 action(s) planned, 0 write(s) done
+  create  VERIFY-FREEZE-KINDS, VERIFY-TELEPORT-ROOM, VERIFY-AIDEL, VERIFY-SKMELEE2, VERIFY-SKRESIST
+  create  SKGEARAR, SKSHIELD, SKCURSEVAL, SKDEFENDERS, SKIAS, SKZEROHIT, SKSTATEEV
+  (no edit, close or withdraw actions; no todos)
+```
