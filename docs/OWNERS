@@ -79,3 +79,6 @@ internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
 internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+docs/research/pr-nexthit-posted.md  opennexthit  opennexthit
+docs/research/pr-bundle-queue.md  opennexthit  opennexthit
+openspec/changes/opennexthit/**  opennexthit  opennexthit
