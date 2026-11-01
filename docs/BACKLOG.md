@@ -324,3 +324,4 @@ dethash2 (2026-11-01, card dethash2): second det run, 14 scenarios on 5 builds (
 - skmelee B4 (ready fix line, record only): early d2d melee soaks (paladin-act1-recon.md row 4, clvl 1-11) carry D1 and D2: d2d kills slower than game.exe in the first levels.
 - skmelee glossary proposal (coordinator only, not written): see the closing "Shared-file lines" section of docs/research/sk-melee-trace.md (plain Attack = skill 0, do 1; Blunt = ItemTypes 57).
 - FORKFREEZE: lab-freezeresume (efe7bc368b36, bin/d2d.lab-freezeresume) carries FREEZERESUME on top of lab-armorhit: cold-skill soaks should prefer it and name the binary (docs/forkfreeze.md)
+- CHUNKER-LIVE (ready line): run `tools/contrib/chunker.py sync --apply` once after MERGE202 marks SKMELEE done (expect: close issue #5 with one comment), then keep sync in every dispatcher tick and groom weekly (docs/process/chunker.md; card chunker stays open until that first live apply)
