@@ -82,9 +82,5 @@ internal/combat/fight.go  fixmouth2  fixmouth2
 internal/combat/fighter.go  fixmouth2  fixmouth2
 internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
 docs/fixmouth2.md  fixmouth2  fixmouth2
-README.md  readmedocs  readmedocs
-docs/capabilities.md  readmedocs  readmedocs
-docs/running.md  readmedocs  readmedocs
-openspec/changes/readmedocs/**  readmedocs  readmedocs
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
