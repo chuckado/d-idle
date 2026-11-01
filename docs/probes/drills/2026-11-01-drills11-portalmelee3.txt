@@ -1,0 +1,11 @@
+d2dslot: got slot 0
+time=2026-11-01T00:11:42.135-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2873396 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+DRILL D-portalmelee P10 FAIL PRODUCT: 3 monsters in melee reach (within 8 subtiles) but only 2 within the rule's 3: Safety is town-portal at life 102/300, the rule does not fire (the live geometry never put 3 within 3 subtiles) | intended: adjacent >= 3, no potion, one scroll: Safety is Chicken (not TownPortal), scroll count unchanged | observed: Blood Moor, zombies spawned (waiting for 3 within 3 subtiles; the crowd rule starts at 8 within 8): adjacent 2 (within 8: 3) of 6 hostiles, life 102/300, belt potions 0, scrolls 1 -> 1, decision town-portal, acted false (err ""), portal open false, life after 102, attack-mode distances (subtile:samples) [1:14 2:15 3:6 4:5 5:7 6:4 7:5 9:1] [over 133 reads the 1st, 2nd and 3rd nearest monster were at best 1.0, 2.4, 7.4 subtiles away] [all living monsters 1:42 2:48 3:24 4:27 5:21 6:25 7:35 8:28 9:16 10:19 11:19 12:16 13:22 14:25 15:34 16:28 17:27 18:35 19:32 20:22 21:31 22:37 23:31 24:23 25:27 26:24 27:26 28:24 29:13 30:7 31:6 32:3 33:1] [last read [1 2 7 13 18 31]], err "" | runs: 2, identical
+END character Drilly life 102/300 in town: true
+
+drill     prim  verdict  det  reason
+D-portalmelee P10   FAIL     same PRODUCT: 3 monsters in melee reach (within 8 subtiles) but only 2 within the rule's 3: Safety is town-portal at life 102/300, the rule does not fire (the live geometry never put 3 within 3 subtiles)
+cheat verbs used (each ledgered with a reason): debug belt clear, debug clearinv, debug give tsc, debug goto 1, debug goto 2, debug kill, debug spawn zombie1 6 near, debug stat 6 26112, debug stat 6 76800, debug stat 7 76800
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T00:11:44.633-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+exit 0

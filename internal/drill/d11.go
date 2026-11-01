@@ -188,7 +188,7 @@ func dEmptyPlan(ctx context.Context, r *Run, l D11Lab) Outcome {
 		ki += i.Kills
 		errs += i.Err
 	}
-	o.Sig = fmt.Sprintf("empty=%d", ep)
+	o.Sig = o.Observed // the whole observation: both repeats must agree, so a run-2 difference shows in the report
 	switch {
 	case ep > 0:
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("%d 'empty path' lines (back-offs %d, move failed %d)", ep, bo, mf)
