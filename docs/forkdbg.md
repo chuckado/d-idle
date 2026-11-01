@@ -53,3 +53,22 @@ Use one hidden slot, a throwaway Sorceress, `debug goto 2` (a field level), the 
 - M4 (roll): `debug mon set <id> life 6 res light 0` (add `maxlife 6`), Charged Bolt 1, many single casts after `debug mana full`; refill life with `debug mon set` again each round. Statistical only.
 - M5 (Lightning pass-through, Chain Lightning hops): `debug spawn` two monsters in a line, `debug mon set` each to a large `life`, `debug cast <skill> unit <id>`, `debug missiles` and `monsters` life before and after.
 - Armor recast and buff reads: `debug states set 40` (Frozen Armor) then `debug states`, a recast cast, `debug states clear 40`.
+
+## dump stats gear and weapons (lab2-stats, 2026-11-01)
+
+> Card forkstats. Read only; no new verb. Patches never live in this repo (GPL).
+
+- Branch `lab2-stats` on the private remote, from `lab2-freezeresume` (ee5e06d8). Pushed commit `d68ff0389df00b4a833c84e203471f9cb15d58ce` (first commit 474161de did not compile: a name clash, fixed in d68ff038). New files `components/game/character/gear_stats.hpp`, `tests/game/test_gear_stats.cpp`; `apps/d2d/devctl_dump.hpp` +13 lines.
+- Binary on the worker host: `~/d2d-lab/fork/bin/d2d.lab2-stats-d68ff038-linuxbuild` (NAS builder, Release, sha256 prefix f74a1191eeaaf613, built from a git archive so the version stamp has no hash). Not a replacement for the lab2-freezeresume binary.
+- RULE: a soak or drill that needs these fields uses this binary and names it (`D2D_BIN`) in its result. Other binaries print only the old keys.
+- `dump stats` now ends with two more keys after `raw`:
+  - `"gear":[{"stat":S,"param":P,"sum":N,"n":K},...]` sorted by stat then param: the sum of the item props, over everything the char panel counts as worn (slots 1..10 in the weapon set in use, inventory charms, not broken), their socketed items, set bonuses and set-list props, for stats 16..25 (16 enhanced defense, 17 max damage percent, 18 min damage percent, 19 to hit, 20 block, 21/22 min/max damage, 23/24 secondary min/max, 25 damage percent), 83 (+class skills, param class), 107 (+single skill, param skill id), 127 (+all skills), 188 (+tree skills, param tab). K is the number of props summed. Empty `[]` with nothing worn.
+  - `"weapons":[{"code":"sst","slot":4,"mindam":1,"maxdam":5}]`: each worn weapon's base damage from weapons.txt (the two-hand range for two-handers), not the item props.
+- What it does NOT show (V by code reading, `Stats::values` is 16 entries, ids 0..15): d2d has no player stat 17/18/21/22 as a unit stat; the fight code adds the item props itself. So these fields answer "what do the worn items carry", not "what would game.exe's unit stats hold". SKMELEE2 D7/D8 (do stats 17/18/21/22 of the PLAYER hold them) and SKMELEEWIRE's stats 21/22 are game.exe questions: d2d's `gear` is the item-side input to compare against, nothing more. The bot's memory reads of the lab d2d are not changed by this branch.
+- Verified (V): NAS builder `tools/build-fork.sh lab2-stats --tests`: d2d 319 s, tests 45 s rc 0 (test_rules, test_game, test_combat, test_monsters, test_protocol, test_next_hit, test_armor_hit, test_freeze_resume). `test_gear_stats` (synthetic worn, stored and charm items, sums per stat and param) is not in the wrapper's list: built by hand on the worker host with g++ against the headers and StormLib, prints OK, rc 0.
+- Live read (V, one hidden slot, slot 1, `d2drill -probe 'dump stats'`, fresh Sorceress `--no-save`, lockstep, 5 s, idle+nice 31 percent beforehand): `"gear":[]` (no props on the starting kit) and `"weapons":[{"code":"sst","slot":4,"mindam":1,"maxdam":5}]` (the starting staff, weapons.txt 1-5). So a clvl 1 Sorceress has no stats 21/22 on d2d unless a weapon prop adds them. Not read: any gear with props (no equip verb; `give` is out of scope).
+- Command: `D2D_AGENT=forkstats D2D_BIN=~/d2d-lab/fork/bin/d2d.lab2-stats-d68ff038-linuxbuild tools/agentrun.sh forkstats --ttl 300 -- tools/d2dslot.sh run -n 1 -t 240 -- <built>/d2drill -group Q -only NONE -probe 'dump stats'`. Reaped: `agentreap.sh forkstats` nothing registered, slot 1 free.
+
+### Shared-file lines for the merger
+- docs/OWNERS: `docs/forkdbg.md  forkstats  forkstats` and `openspec/changes/forkstats/**  forkstats  forkstats`
+- docs/BACKLOG.md, docs/INDEX.md, CHANGELOG.md, docs/decomp-queue.md, docs/research/README.md: none.
