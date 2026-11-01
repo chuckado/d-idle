@@ -97,6 +97,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 015b95c 11-01 00:48 `Merge agent/feedtick2: feed tick cap 3800 with cut line` (feedtick2)
 - eafb8a1 11-01 00:45 `Merge agent/skmana: SK mana trace` (skmana)
 - 1842cce 11-01 00:42 `Merge agent/forkdbg: d2dctl SkillDebug client, debug verbs doc` (forkdbg)
 - 42238fc 11-01 00:40 `Merge agent/openmods: boss-stats upstream PR records; archive card` (openmods)
@@ -106,5 +107,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 071008f 11-01 00:25 `Merge agent/crfix156` (crfix156)
 - 77e5bca 11-01 00:25 `Merge agent/verifymods` (verifymods)
 - 2295f2b 11-01 00:20 `Merge agent/drills11: drills11 harness and live results` (drills11)
-- 7f52c58 11-01 00:15 `Merge agent/skmiss: sk missile trace` (skmiss)
 <!-- statusgen:end -->
