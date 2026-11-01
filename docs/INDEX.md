@@ -99,3 +99,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-nexthit-v2-addendum.md: NextHit v2: end-frame fix (f+NextDelay+1), re-run of both harnesses, det hashes, fork lab-nexthit2, the verifier's five edits
 - docs/research/pr-nexthit-posted.md: NextHit v2 posted log (PR #158, final gates, differentials)
 - docs/research/sk-passives-trace.md: Sorceress passives (masteries, Warmth, Telekinesis), the 1.14d synergy table, +skills base vs level; decomp row 23 (SKPASS)
+- docs/research/build-flexibility-audit.md: what is hard-coded to the one Sorceress build (39 findings by layer and severity), what already works as data, seams, phased roadmap to several builds, guardrail text for briefs (BUILDFLEX)
