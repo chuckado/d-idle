@@ -74,6 +74,3 @@ internal/nav/nav.go  fixmouth  fixmouth
 internal/nav/fixmouth_test.go  fixmouth  fixmouth
 internal/combat/combatspin_test.go  fixmouth  fixmouth
 docs/fixmouth.md  fixmouth  fixmouth
-docs/research/sk-lightning-trace.md  sklight  sklight
-tools/emu/sk_light_rehit.py  sklight  sklight
-openspec/changes/sklight/**  sklight  sklight

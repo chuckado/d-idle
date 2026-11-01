@@ -2,7 +2,8 @@
 
 ```yaml
 change: sklight
-status: in-progress
+status: archived
+merge: ea3e136
 agent: sklight
 branch: agent/sklight
 worktree: ~/code/d2lod-wt/sklight
@@ -16,7 +17,7 @@ gates:
   - "every claim in the trace tagged V read / V run / D / S / I / U; dead ends written down"
   - "PR candidate only with the existing differential harness (mismatches before > 0, after 0), local only"
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Offline, nothing verified live, no V run. game.exe read: Chain Lightning do 26 / hit 12 / hop search, per-frame collision, NextHit as unit state justhit; D1 (justhit missing in d2d) and D2 (one unit a frame) read on both sides, magnitude by a model (sk_light_rehit.py, I); D3 existing held candidate; bot B1-B5; no PR candidate (no flight harness)."
+result: "Offline, not verified live (docs and a Monte Carlo model only), no V run. game.exe read: Chain Lightning do 26 / hit 12 / hop search, per-frame collision, NextHit as unit state justhit; D1 (justhit missing in d2d) and D2 (one unit a frame) read on both sides, magnitude by a model (sk_light_rehit.py, I); D3 existing held candidate; bot B1-B5; no PR candidate (no flight harness)."
 ```
 
 ## 1. Work

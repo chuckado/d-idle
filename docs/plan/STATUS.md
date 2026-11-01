@@ -93,6 +93,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- ea3e136 11-01 01:41 `Merge agent/sklight: SKLIGHT trace of Lightning/Chain Lightning and piercing re-hit` (sklight)
 - d83ceb0 11-01 01:36 `Merge agent/fixmouth: mouthArrivalR for the first walk after a warp arrival (den bounce fix A)` (fixmouth)
 - 27049dd 11-01 01:27 `Merge agent/fixbuff: re-cast buffs in long fights, buff states, stale skills cache check` (fixbuff)
 - 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
@@ -102,5 +103,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 598d80e 11-01 01:06 `Merge agent/skarmor: sk-armor trace (decomp row 15), game-side oracle sk_armor.py` (skarmor)
 - 6b922b1 11-01 01:02 `Merge agent/drills12: DRILLS12 live proof of fixcrowd (crowdAdjacent knob), drill harness` (drills12)
 - 19ca7c4 11-01 00:57 `Merge agent/fixlair: Level.TeleportRule and CanTeleportIn, stale teleport comments corrected` (fixlair)
-- ba90992 11-01 00:52 `Merge agent/auditfix: gamecode guard, fixtures provenance, lab-path scrub of docs/probes` (auditfix)
 <!-- statusgen:end -->
