@@ -68,7 +68,10 @@ func TestSorceressProfileKeepsOldBehaviour(t *testing.T) {
 	if o := attackOrder(BuildBlizzard, 30, has()); o[0] != "Blizzard" || len(o) != 6 {
 		t.Fatalf("%v", o)
 	}
-	if o := attackOrder(BuildLightning, 25, has()); o[0] != "Charged Bolt" {
+	// BUILDV3: the Chain Lightning band is gated by the learned skill, so "knows everything" at clvl 25 now attacks with
+	// it; the old behaviour (Charged Bolt below clvl 26) holds for a character that has not learned Chain Lightning.
+	notCL := func(n string) bool { return n != "Chain Lightning" }
+	if o := attackOrder(BuildLightning, 25, notCL); o[0] != "Charged Bolt" {
 		t.Fatalf("%v", o)
 	}
 	if l := Layout(BuildBlizzard); l["Teleport"] != "f2" || l["Blizzard"] != "f5" {
