@@ -7,6 +7,8 @@
 > combatspin merged: the one watchdog firing (baseline seed 2) was abortFight Flee picking a point in a cave mouth; move skipped it without sleeping; fixed (move costs a poll tick, valid rejects mouth points); not verified live; the next gate run will show it via the HANG invariant
 > gen-corpus merged: 6 scenarios (wedge pocket, kit-less clvl-7, poverty loop, campaign stall, combat pin, champion group) as TestScenario_* tests with knob-off proofs for 4 (docs/scenarios.md); the town scenarios need the extracted game tables (skip without)
 
+> modsprep (docs, card in progress): boss-stat candidate prepared: draft v2 with the verifier's four edits (champion life range 1.1-2.1x, follow-on callers, area-level limit, siblings answer) and det state hashes on a patched d2d (equal in 10 of 14 scenarios, 4 differ only by the claimed life / minion level, 0 unexplained): READY, needs the user's go: docs/research/pr-mods-evidence-addendum.md
+
 > fixrecast (offline, card in progress): armors are recast by their real duration and the Frozen Armor state (120 s at level 1, was 150 s); live check open: docs/fixrecast.md
 
 > fixportalmelee (offline, card in progress): a town portal cast with 3+ adjacent attackers becomes a potion or a chicken (soak 2 death); live check: DRILLS11 1-adjacent PASS x3, 3-adjacent FAIL x3 = product finding F18 (crowdAdjacent=3 too small for live melee reach; fix on card fixcrowd, branch agent/fixcrowd); card stays open: docs/fixportalmelee.md
