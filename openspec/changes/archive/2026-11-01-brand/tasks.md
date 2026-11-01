@@ -2,7 +2,7 @@
 
 ```yaml
 change: brand
-status: in-progress
+status: archived
 agent: brand
 branch: agent/brand
 worktree: ~/code/d2lod-wt/brand
@@ -13,8 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict"
-merge:
-result:
+merge: brandfinal
+result: concepts delivered; continued and finished by card brandfinal (contains every brand commit); on this branch the card is done and its OWNERS lines moved to brandfinal
 ```
 
 ## 1. Work

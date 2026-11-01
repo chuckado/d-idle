@@ -592,4 +592,6 @@ if __name__ == "__main__":
                 r = cr(c[q], c[bg])
                 print(k, q, bg, "%.2f" % r, "" if r >= 3 else "<3 FAIL")
                 bad += r < 3
+    import final_gen
+    final_gen.main()
     sys.exit(1 if bad else 0)

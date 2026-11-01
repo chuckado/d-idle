@@ -68,5 +68,5 @@ internal/combat/fight.go  fixemptyplan  fixemptyplan
 internal/combat/reach.go  fixemptyplan  fixemptyplan
 internal/combat/fixemptyplan_test.go  fixemptyplan  fixemptyplan
 docs/fixemptyplan.md  fixemptyplan  fixemptyplan
-assets/branding/**  brand  brand
-docs/branding.md  brand  brand
+assets/branding/**  brandfinal  brandfinal
+docs/branding.md  brandfinal  brandfinal
