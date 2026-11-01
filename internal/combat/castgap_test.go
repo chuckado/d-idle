@@ -11,22 +11,22 @@ import (
 )
 
 // castMs is the length of one cast in ms on the slower backend: ticks * 40 ms.
-func castMs(name string, fcr int) int { return castTicks(name, fcr) * tickMs }
+func castMs(name string, fcr int) int { return castTicks(name, fcr, false) * tickMs }
 
 // The oracle values of docs/research/cast-trace-gameexe.md (V, cast_rates.py): the Sorceress plain SC cast at FCR 0 /
 // 9 / 20 / 37 / 63 / 105 / 200 and the Lightning sequence at FCR 0, 7 and 194.
 func TestCastTicksMatchOracle(t *testing.T) {
 	for fcr, want := range map[int]int{0: 13, 9: 12, 20: 11, 37: 10, 63: 9, 105: 8, 200: 7} {
-		if g := castTicks("Fire Bolt", fcr); g != want {
+		if g := castTicks("Fire Bolt", fcr, false); g != want {
 			t.Errorf("Fire Bolt at FCR %d: %d ticks, want %d", fcr, g, want)
 		}
 	}
 	for fcr, want := range map[int]int{0: 19, 7: 18, 194: 11} {
-		if g := castTicks("Lightning", fcr); g != want {
+		if g := castTicks("Lightning", fcr, false); g != want {
 			t.Errorf("Lightning at FCR %d: %d ticks, want %d", fcr, g, want)
 		}
 	}
-	if castTicks("Hydra", 0) != 0 {
+	if castTicks("Hydra", 0, false) != 0 {
 		t.Error("an unknown skill must have no table entry")
 	}
 }
@@ -37,32 +37,32 @@ func TestCastGapCoversEveryPlanSkill(t *testing.T) {
 	d := env.DefaultCombatTuning()
 	for _, name := range []string{"Fire Bolt", "Charged Bolt", "Ice Bolt", "Frost Nova", "Lightning", "Chain Lightning", "Teleport", "Frozen Armor"} {
 		for _, fcr := range []int{0, 9, 20, 37, 63, 105, 200} {
-			g := castGapFor(name, d.CastGapMs, d.CastMarginMs, fcr, true)
+			g := castGapFor(name, d.CastGapMs, d.CastMarginMs, fcr, true, false)
 			if g < time.Duration(castMs(name, fcr)+tickMs)*time.Millisecond {
 				t.Errorf("%s at FCR %d: gap %v below the cast %d ms", name, fcr, g, castMs(name, fcr))
 			}
 		}
 	}
-	g := castGapFor("Chain Lightning", d.CastGapMs, d.CastMarginMs, 0, true)
+	g := castGapFor("Chain Lightning", d.CastGapMs, d.CastMarginMs, 0, true, false)
 	if g != 890*time.Millisecond {
 		t.Errorf("Chain Lightning at FCR 0: %v, want 890ms", g)
 	}
-	if g := castGapFor("Fire Bolt", d.CastGapMs, d.CastMarginMs, 0, true); g != 650*time.Millisecond {
+	if g := castGapFor("Fire Bolt", d.CastGapMs, d.CastMarginMs, 0, true, false); g != 650*time.Millisecond {
 		t.Errorf("Fire Bolt at FCR 0: %v, want the old 650ms", g)
 	}
 }
 
 func TestCastGapFallbackAndOverride(t *testing.T) {
-	if g := castGapFor("Hydra", 650, 90, 0, true); g != 650*time.Millisecond {
+	if g := castGapFor("Hydra", 650, 90, 0, true, false); g != 650*time.Millisecond {
 		t.Errorf("unknown skill: %v, want CastGapMs", g)
 	}
-	if g := castGapFor("Lightning", 650, 90, 0, false); g != 650*time.Millisecond {
+	if g := castGapFor("Lightning", 650, 90, 0, false, false); g != 650*time.Millisecond {
 		t.Errorf("per-skill off: %v, want CastGapMs", g)
 	}
-	if g := castGapFor("Fire Bolt", 1200, 90, 0, true); g != 1200*time.Millisecond {
+	if g := castGapFor("Fire Bolt", 1200, 90, 0, true, false); g != 1200*time.Millisecond {
 		t.Errorf("a raised CastGapMs is a floor: %v", g)
 	}
-	if g := castGapFor("Lightning", 650, 90, 200, true); g != 650*time.Millisecond {
+	if g := castGapFor("Lightning", 650, 90, 200, true, false); g != 650*time.Millisecond {
 		t.Errorf("a fast caster is floored at CastGapMs: %v", g)
 	}
 }
@@ -109,5 +109,25 @@ func TestFightLoopLightningNeverReissuedEarly(t *testing.T) {
 	early, n := earlyReissues(t)
 	if n < 5 || early != 0 {
 		t.Fatalf("per-skill gap: %d early of %d commands", early, n)
+	}
+}
+
+// The Lightning gap per backend: 890 ms for the 19-tick game.exe sequence, 650 ms on d2d where it is a plain SC cast
+// of 14 ticks (V-d2d for the SC length).
+func TestLightningGapPerBackend(t *testing.T) {
+	d := env.DefaultCombatTuning()
+	for _, name := range []string{"Lightning", "Chain Lightning"} {
+		if g := castGapFor(name, d.CastGapMs, d.CastMarginMs, 0, true, false); g != 890*time.Millisecond {
+			t.Errorf("%s game.exe: %v, want 890ms", name, g)
+		}
+		if g := castGapFor(name, d.CastGapMs, d.CastMarginMs, 0, true, true); g != 650*time.Millisecond {
+			t.Errorf("%s d2d: %v, want 650ms", name, g)
+		}
+	}
+	h := lightningHarness(t)
+	h.f.D2D = true
+	h.f.lastCastName = "Lightning"
+	if g := h.f.castGap(); g != 650*time.Millisecond {
+		t.Errorf("fighter on d2d: %v", g)
 	}
 }

@@ -27,6 +27,8 @@ type Fighter struct {
 	Build Build
 	// GearBuild is the leveler build name (gear.Builds); with an Amazon its main_attack picks the first skill.
 	GearBuild string
+	// D2D is set by the d2d backend's constructors: the cast lengths of castgap.go then follow d2d, not game.exe.
+	D2D bool
 	// Leave exits the game (Save and Exit). The default presses Esc and clicks the placeholder button; the bot
 	// should install launch.Flow.LeaveGame here.
 	Leave func(ctx context.Context) error

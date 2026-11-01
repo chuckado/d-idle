@@ -118,7 +118,7 @@ func combatKnobs() []Knob {
 		k("noProgressSec", "No-damage timeout", "s", "Give up on a target whose life did not drop for this long.", float64(d.NoProgressSec), 5, 30, false),
 		k("clearMaxSec", "Clear time limit", "s", "Upper bound of one Clear call.", float64(d.ClearMaxSec), 30, 600, true),
 		k("castGapMs", "Cast gap", "ms", "Minimum time between two casts.", float64(d.CastGapMs), 250, 1200, false),
-		k("castPerSkill", "Per-skill cast gap", "bool", "1 = the gap after a cast is at least that skill's cast length (Lightning and Chain Lightning take 760 ms in Game.exe, longer than the flat gap); 0 = the flat cast gap for every skill.", float64(d.CastPerSkill), 0, 1, true),
+		k("castPerSkill", "Per-skill cast gap", "bool", "1 = the gap after a cast is at least that skill's cast length (Lightning and Chain Lightning take 760 ms in Game.exe, longer than the flat gap; d2d casts them as plain SC and keeps 650); 0 = the flat cast gap for every skill.", float64(d.CastPerSkill), 0, 1, true),
 		k("castMarginMs", "Cast gap margin", "ms", "Added to the cast length (in 40 ms ticks, plus one dispatch tick) for the per-skill gap; 90 ms keeps the early Sorceress bolts at the old 650.", float64(d.CastMarginMs), 0, 400, false),
 		k("castFCR", "Assumed faster cast rate", "%", "Faster cast rate the per-skill gap assumes; 0 is safe for any gear, a real value shortens the gap of the slow skills.", float64(d.CastFCR), 0, 200, true),
 		k("lowManaWaitMs", "Out-of-mana wait", "ms", "Pause when out of mana.", float64(d.LowManaWaitMs), 300, 3000, false),
