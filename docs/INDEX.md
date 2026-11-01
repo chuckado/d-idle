@@ -6,6 +6,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 
 ## 0. Start here
 - [../AGENTS.md](../AGENTS.md) rules for every agent; [../openspec/README.md](../openspec/README.md) cards and specs; [../GLOSSARY.md](../GLOSSARY.md) terms (guard file).
+- [capabilities.md](capabilities.md) what the current build can and cannot do (table with evidence links); [running.md](running.md) how to run d.idle (examples marked run or not run).
 - [plan/STATUS.md](plan/STATUS.md) where we are (one page, generated block at the bottom); [decisions.md](decisions.md) + [adr/](adr/README.md) why; [BACKLOG.md](BACKLOG.md) the idea queue; [needs-you.md](needs-you.md) what waits on the user.
 - [plan/plan-v2.md](plan/plan-v2.md) (banner) the plan with the user's decisions in sections 10-11; [../PLAN.md](../PLAN.md) (banner) founding plan, Wine era.
 - [g1-log.md](g1-log.md) the live soak history (G1 attempts, G2, Fresha), append-only.

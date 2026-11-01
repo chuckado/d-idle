@@ -23,6 +23,27 @@ and classes other than the Sorceress (short smoke runs). The fidelity gap betwee
 claimed closed (`docs/d2d-baselines-early.md`). The current state is always in `docs/plan/STATUS.md` (generated), the
 day-by-day notes in `CHANGELOG.md`, and the entry point for everything else is `docs/INDEX.md`.
 
+## What it can do today (honestly)
+
+- Plays a Sorceress through early Normal Act 1 (level 1 to about 13) unattended on d2d; it has not played Andariel, Act 2 or later.
+- The second two-hour d2d soak did NOT pass Gate 1 (one seed); fixes merged since have not been re-soaked.
+- Basic actions (potions, portals, waypoints, shopping, repair, stash, save and rejoin) pass most live drills; some fail or are blocked.
+- Frost Nova and Chain Lightning numbers measured on d2d are not trustworthy yet; other classes only had short smoke runs.
+- Offline single player only: no Battle.net, no multiplayer, no game files in this repo.
+
+Details, with a link to the evidence for every row: [docs/capabilities.md](docs/capabilities.md).
+
+## Running it
+
+```sh
+go build -o bin/ ./cmd/d2bot ./cmd/d2dsoak      # standard library only
+bin/d2bot -h                                    # every flag, with its environment twin
+gunzip -c docs/probes/soak-logs/postfix2-minutes.jsonl.gz > bin/postfix2.log && bin/d2dsoak compare -hours 21.25 -baselines tools/d2dsoak/baselines-early.json bin/postfix2.log
+```
+
+The last line replays a recorded soak into a verdict (no game needed). Playing against a game needs your own Diablo II
+install and a d2d binary; steps, flags and troubleshooting: [docs/running.md](docs/running.md).
+
 ## How it runs: two backends
 
 - **d2d (primary).** [d2decomped](https://github.com/psi29a/d2decomped) is an open-source, native reimplementation of the

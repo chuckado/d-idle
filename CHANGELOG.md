@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 - forknext (research): the private fork gets lab-nexthit: Nova and Frost Nova strike a monster once per cast like game.exe (differential 84,779 -> 0 of 100,198).
+- readmedocs (research): README sections "What it can do today (honestly)" and "Running it", docs/capabilities.md (capability table with evidence links), docs/running.md.
 - apireview (offline): automatic advisory PR review (owner PRs from this repo only, needs the ANTHROPIC_API_KEY secret) and an optional Haiku tick helper; see docs/process/api-credits.md.
 - fixmanamodel (offline, not verified live): the bot's mana model follows game.exe/d2d: early pools regen 1.2x-1.8x slower than the old 100 s line (one `ManaPerFrame256`), casts are booked when paid (`ManaBook`, per backend), mana potions arrive over 5 s; `restMaxSec`, `restStartManaPct`, `castsPerMonster` and the Hell `ManaBurn*` constants are not retuned (soak review pending).
 - actgate (research): draft per-act Sorceress skill gate (verdict rows from the traces and DRILLS11 to 15, gate rule, ordered cards); proposed soak-gates delta is text only, nothing applied to a spec.
