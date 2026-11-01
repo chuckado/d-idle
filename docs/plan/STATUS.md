@@ -44,6 +44,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixf17](../../openspec/changes/fixf17/) | in-progress | fixf17 | `docs/fixf17.md` | - |
 | [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
+| [fixtalk](../../openspec/changes/fixtalk/) | in-progress | fixtalk | `internal/talk/**`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts.go`<br>`cmd/d2bot/acts_test.go`<br>`cmd/d2bot/cain_test.go`<br>`docs/fixtalk.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -77,6 +78,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixf17: live proof after merge: the full F group x3 passes DW.m1 in run 1 and no `the Pacer lagged` line above 100 s (docs/fixf17.md)
 - change fixmeter: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixmeter: live proof after merge: spawn a pack, fight, compare the Meter totals with the monsters' life deltas and the kill count (docs/fixmeter.md)
+- change fixtalk: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixtalk: live proof after merge: D8.q and D8.w PASS with the bot's talk path (recipe in docs/fixtalk.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
