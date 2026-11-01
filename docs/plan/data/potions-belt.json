@@ -74,12 +74,13 @@
  },
  "restock_rule": "after each run or when any belt column < 50%: go to town, refill all columns; never start a run with <2 hp and <1 mp potion per column",
  "mana_heavy_builds": {
-  "tags": "U design (W7 of docs/builds-endgame.md): the single mp column runs dry in War Cry/Blizzard packs; needs a live Hell check. V: unchanged rows above stay the default for every other build.",
+  "tags": "The builds list mirrors the build tables flagged mana_heavy:true (code reads the flag, a test compares). U design (W7 of docs/builds-endgame.md): the single mp column runs dry in War Cry/Blizzard packs; needs a live Hell check. V: unchanged rows above stay the default for every other build.",
   "builds": [
    "barbarian_warcry_endgame90",
    "sorceress_blizzard_endgame90",
    "druid_tornado_endgame90",
-   "necromancer_summoner_endgame90"
+   "necromancer_summoner_endgame90",
+   "paladin_hammerdin_endgame90"
   ],
   "by_clvl": [
    {

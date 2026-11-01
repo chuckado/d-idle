@@ -21,7 +21,7 @@ func TestPlanForBuildManaHeavy(t *testing.T) {
 		{d2.Nightmare, 20, b, [4]Potion{hp, mp, mp, hp}},
 		{d2.Nightmare, 40, b, [4]Potion{hp, mp, mp, rv}},
 		{d2.Hell, 70, b, [4]Potion{rv, mp, mp, rv}},
-		{d2.Hell, 70, "paladin_hammerdin_endgame90", PlanForDiff(d2.Barbarian, 70, d2.Hell).Cols},
+		{d2.Hell, 70, "paladin_hammerdin_zeal_endgame90", PlanForDiff(d2.Barbarian, 70, d2.Hell).Cols},
 	}
 	for _, c := range cases {
 		if got := PlanForBuild(d2.Barbarian, c.lvl, c.d, c.build).Cols; got != c.want {
@@ -61,8 +61,8 @@ func TestManaHeavyMatchesJSON(t *testing.T) {
 	if err := json.Unmarshal(raw, &f); err != nil {
 		t.Fatal(err)
 	}
-	if len(f.M.Builds) != len(manaHeavyBuilds) {
-		t.Errorf("builds %v vs %v", f.M.Builds, manaHeavyBuilds)
+	if len(f.M.Builds) != len(loadManaHeavy()) {
+		t.Errorf("builds %v vs %v", f.M.Builds, loadManaHeavy())
 	}
 	for _, b := range f.M.Builds {
 		if !ManaHeavyBuild(b) {
@@ -79,5 +79,24 @@ func TestManaHeavyMatchesJSON(t *testing.T) {
 				}
 			}
 		}
+	}
+}
+
+// PALMANA: the flag in the table JSON is the source; the four former Go names are still mana-heavy and the Paladin
+// hammerdin table now is (probe F5).
+func TestManaHeavyFromTableFlag(t *testing.T) {
+	for _, b := range []string{"barbarian_warcry_endgame90", "sorceress_blizzard_endgame90", "druid_tornado_endgame90",
+		"necromancer_summoner_endgame90", "paladin_hammerdin_endgame90"} {
+		if !ManaHeavyBuild(b) {
+			t.Errorf("%s should be mana-heavy", b)
+		}
+	}
+	for _, b := range []string{"", "paladin_hammerdin_zeal_endgame90", "paladin_normal30_v2", "amazon_multishot_endgame90", "lightning_chain_v3"} {
+		if ManaHeavyBuild(b) {
+			t.Errorf("%q must not be mana-heavy", b)
+		}
+	}
+	if n := len(loadManaHeavy()); n != 5 {
+		t.Errorf("%d mana-heavy builds, want 5", n)
 	}
 }
