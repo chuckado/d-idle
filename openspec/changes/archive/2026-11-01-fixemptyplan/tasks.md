@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixemptyplan
-status: in-progress
+status: archived
 agent: fixemptyplan
 branch: agent/fixemptyplan
 worktree: ~/code/d2lod-wt/fixemptyplan
@@ -20,8 +20,8 @@ exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)"
-merge:
-result:
+merge: "ea5e2ae"
+result: "verified live (DRILLS11): D-emptyplan PASS x3, 0 empty path of 58 back-offs; pre-fix control 6 of 47"
 live: "D-emptyplan live (DRILLS11): 0 empty path in 58 back-offs per invocation x3; the pre-fix binary 6 empty path of 47 back-offs in 3 of 3; README DRILLS11"
 ```
 
@@ -31,4 +31,4 @@ live: "D-emptyplan live (DRILLS11): 0 empty path in 58 back-offs per invocation 
 - [x] 1.2 ErrAlreadyThere; PathTo/walk typed; valid vs validApproach; move quiet tick
 - [x] 1.3 tests (reproduction, approach vs back-off table, snapped-start edge cases, bounded candidates)
 - [x] 1.4 docs/fixemptyplan.md, primitives note, INDEX, CHANGELOG, BACKLOG
-- [ ] 1.5 live proof (not run: offline card)
+- [x] 1.5 live proof (DRILLS11: PASS x3, pre-fix control failed as expected)

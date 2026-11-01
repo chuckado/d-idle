@@ -42,7 +42,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
-| [fixemptyplan](../../openspec/changes/fixemptyplan/) | in-progress | fixemptyplan | `internal/input/client.go`<br>`internal/nav/nav.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixemptyplan_test.go`<br>`internal/combat/fight.go`<br>`internal/combat/reach.go`<br>`internal/combat/fixemptyplan_test.go`<br>`docs/fixemptyplan.md` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -76,8 +75,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
-- change fixemptyplan: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change fixemptyplan: live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixrecast: go test -p 1 ./internal/combat ./internal/data ./internal/env ./tools/knobdump passes including TestFrozenArmorTimerLeavesGap, TestFrozenArmorRecastBeforeExpiryByClock, TestFrozenArmorRecastBeforeExpiryByState, TestAuraFrames
@@ -97,6 +94,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 2295f2b 11-01 00:20 `Merge agent/drills11: drills11 harness and live results` (drills11)
+- 7f52c58 11-01 00:15 `Merge agent/skmiss: sk missile trace` (skmiss)
 - 50af070 11-01 00:12 `Merge agent/feedtick: feed.py tick subcommand` (feedtick)
 - 599c0fc 11-01 00:08 `Merge agent/brandapply: apply brand to README, d2dview, d2bot banner` (brandapply)
 - bbf46c8 11-01 00:08 `Merge agent/brandfinal: final brand assets` (brandfinal)
@@ -105,6 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 770dc5a 10-31 23:55 `Merge origin/main into brandfinal` (brandfinal)
 - 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
-- 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
-- 1a47b45 10-31 23:43 `Merge agent/walkopen: open upstream PR #156 (walk velocity)` (walkopen)
 <!-- statusgen:end -->

@@ -2,17 +2,17 @@
 
 ```yaml
 change: drills11
-status: in-progress
+status: archived
 agent: drills11
 branch: agent/drills11
 worktree: ~/code/d2lod-wt/drills11
 skip_specs: true
 owns:
-  - openspec/changes/drills11/**
+  - openspec/changes/archive/2026-11-01-drills11/**
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host"
-merge:
+merge: "2295f2b"
 result: "verified live: fixemptyplan PASS x3 with a failing pre-fix control (6 empty path of 47 back-offs); fixportalmelee control PASS, the 3-adjacent drill FAIL as a product finding F18 (rule unreachable at live distances); cut-cast data recorded (hits do not cut, debug hit does); regression pass"
 live: "D-emptyplan PASS x3 (0 empty path of 58 back-offs; control 6 of 47), D-portalmelee FAIL x3 (F18), D-portalmelee.ctl PASS x3, D-castcut recorded, D2 D5 D6 DW F pass"
 ```
