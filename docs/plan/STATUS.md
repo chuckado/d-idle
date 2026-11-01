@@ -56,7 +56,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
-| [skresist](../../openspec/changes/skresist/) | in-progress | skresist | `docs/research/sk-resist-trace.md`<br>`tools/emu/sk_resist.py`<br>`tools/emu/sk_resist_test.cpp`<br>`openspec/changes/skresist/**` | - |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 
 ### Gates
@@ -111,12 +110,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
-- change skresist: every claim tagged V read / V run / D / S / I / U; numbers reproducible (>= 100,000 cases or exhaustive boundaries, 32-bit masked seeds)
-- change skresist: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; tools/ci/check.sh
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 44ff859 11-01 12:08 `Merge agent/skresist: SKRESIST resistance and immunity trace, oracle, d2d curse-on-immune deviation` (skresist)
 - aab77a1 11-01 12:02 `Merge agent/chunker: chunker.py sync/groom for the community work board` (chunker)
 - 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
 - 792145a 11-01 11:53 `Merge agent/skmelee: player melee blow traced in game.exe, emulator oracle, deviations vs a d2d port` (skmelee)
@@ -126,5 +124,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6a2c69c 11-01 11:34 `Merge agent/drills26: DRILLS26 drill D26-A Frozen Armor recast proof (harness only)` (drills26)
 - f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
 - bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
-- fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
 <!-- statusgen:end -->

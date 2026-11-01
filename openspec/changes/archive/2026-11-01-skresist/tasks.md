@@ -2,7 +2,8 @@
 
 ```yaml
 change: skresist
-status: in-progress
+status: archived
+merge: 44ff859
 agent: skresist
 branch: agent/skresist
 worktree: ~/code/d2lod-wt/skresist
@@ -16,7 +17,7 @@ exclusive: []
 gates:
   - "every claim tagged V read / V run / D / S / I / U; numbers reproducible (>= 100,000 cases or exhaustive boundaries, 32-bit masked seeds)"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; tools/ci/check.sh"
-result: "Offline, nothing verified live. Monster resist build traced (docs/research/sk-resist-trace.md): base = MonStats column of the difficulty, no penalty / cap for monsters, immune at total >= 100, pierce only under 100, floor -100; curses / auras on an immune / 5 (FUN_005c3540). D1 d2d applies the full value: real build upstream 72132b99, 147,628 cases, 88,101 adj / 14,355 dealt differ (seed 7: 88,224 / 14,289), 0 outside the rule; D2 (unreachable), D3 melee (read), D4 Sanctuary; bot B1-B5; no PR built."
+result: "resistance and immunity rules traced and oracle-verified; d2d curse-on-immune deviation proven on a real build (88,101 of 147,628): a local PR candidate card SKRESISTFIX is the next step; not verified live"
 ```
 
 ## 1. Work

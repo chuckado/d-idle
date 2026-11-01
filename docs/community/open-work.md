@@ -18,7 +18,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 
 ## SKRESIST: monster resistance and immunity by difficulty
 - size: M
-- status: ready
+- status: done
 - kind: decomp
 - source: queue:21
 - question: How does game.exe build a monster's resistances per difficulty (Normal, Nightmare, Hell penalties), when is an element immune, what does an immune hit still do (flinch, chill), and how does Cold Mastery style pierce interact? Compare with d2d's resist build and with the bot's immune threshold.

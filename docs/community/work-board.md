@@ -5,7 +5,7 @@
 | id | title | size | kind | status | brief | issue |
 |---|---|---|---|---|---|---|
 | SKMELEE | the player's own blow (staff or weapon swing) | M | decomp | done | [brief](open-work.md#skmelee-the-players-own-blow-staff-or-weapon-swing) | [issue](https://github.com/shatteredeagle/d-idle/issues/5) |
-| SKRESIST | monster resistance and immunity by difficulty | M | decomp | ready | [brief](open-work.md#skresist-monster-resistance-and-immunity-by-difficulty) | [issue](https://github.com/shatteredeagle/d-idle/issues/6) |
+| SKRESIST | monster resistance and immunity by difficulty | M | decomp | done | [brief](open-work.md#skresist-monster-resistance-and-immunity-by-difficulty) | [issue](https://github.com/shatteredeagle/d-idle/issues/6) |
 | PALSKILL | Smite, Zeal and Sacrifice dispatch in game.exe | M | decomp | proposed | [brief](open-work.md#palskill-smite-zeal-and-sacrifice-dispatch-in-gameexe) | [issue](https://github.com/shatteredeagle/d-idle/issues/3) |
 | PALAURA | how an aura applies in game.exe | M | decomp | proposed | [brief](open-work.md#palaura-how-an-aura-applies-in-gameexe) | [issue](https://github.com/shatteredeagle/d-idle/issues/1) |
 | PALDUR | durability loss per hit and per block | S | decomp | proposed | [brief](open-work.md#paldur-durability-loss-per-hit-and-per-block) | [issue](https://github.com/shatteredeagle/d-idle/issues/2) |
@@ -13,4 +13,4 @@
 | VERIFY-SKMANA | independent re-check of the mana trace | S | verify | ready | [brief](open-work.md#verify-skmana-independent-re-check-of-the-mana-trace) | [issue](https://github.com/shatteredeagle/d-idle/issues/7) |
 | VERIFY-WAYPOINT | independent re-check of the waypoint refusal claim | S | verify | ready | [brief](open-work.md#verify-waypoint-independent-re-check-of-the-waypoint-refusal-claim) | [issue](https://github.com/shatteredeagle/d-idle/issues/8) |
 
-7 of 8 items are open.
+6 of 8 items are open.
