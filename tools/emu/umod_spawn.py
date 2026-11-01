@@ -66,7 +66,7 @@ def trace(e, seed, lid, difficulty):
         mods = [b for b in e.read(data + 0x1c, 9) if b]
         w = writes.get(unit, {})
         g = lambda s: w.get(s, 0)
-        out.append(f"{e.r32(unit + 4)} f{flags:x} mods {'.'.join(map(str, mods)) or '-'} statlvl {statlvl.get(unit)} -> lvl {g(0xc)} exp {g(0xd)}"
+        out.append(f"{e.r32(unit + 4)} f{flags:x} mods {'.'.join(map(str, mods)) or '-'} statlvl {statlvl.get(unit)} -> lvl {g(0xc)} exp {w.get(('first', 0xd), 0)}->{g(0xd)}"
                    f" maxhp {g(7) / 256:.2f} hpcreate {w.get(('first', 7), 0) / 256:.2f} dmg% {g(0x19)} th% {g(0x77)} vel% {g(0x43)}"
                    f" dr {g(0x24)} mr {g(0x25)} fr/lr/cr/pr {g(0x27)}/{g(0x29)}/{g(0x2b)}/{g(0x2d)} armor% {g(0x10)} regen {g(0x4a)}"
                    f" cold {g(0x36)}-{g(0x37)} fire {g(0x30)}-{g(0x31)} ltng {g(0x32)}-{g(0x33)} mana {g(0x3e)}-{g(0x3f)} def {g(0x1f)}")
