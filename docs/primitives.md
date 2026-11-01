@@ -177,3 +177,12 @@ DRILLS9 rows (2026-11-01, lab build cheats3, code at 912086a with fixstall4; fil
 | AUDIT | H.obj.chest, H.obj.shrine | PASS in group F x4 | harness: tries further objects of the kind, clears leftover monsters first (F14) |
 | P18 | D8.c | PASS run 1, BLOCKED run 2 | runs first; BLOCKED when a merc is already owned (the reward is once per character) |
 | P23 | DW.m1 | PASS alone, BLOCKED run 1 in the full F group | finding F17 (README DRILLS9) |
+
+DRILLS10 rows (2026-11-01, lab build cheats3, code at a7f5bc6; files `2026-11-01-drills10*.txt`, README section DRILLS10):
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P23 | DW.m1 (F17) | PASS in 4 of 4 full F groups, run 1 and 2 | fixf17 live: 483 ticks, 1 bounce; no `the Pacer lagged` line (threshold 1 s) |
+| P20 | D8.q | PASS | fixtalk live: the bot's `talk.Adapter` Akara reward, skill points 0 to 1, record 0x0001 |
+| P21 | D8.w | PASS | fixtalk live: Warriv `go east`, area 40 |
+| P28 | D-meter | PASS | fixmeter live: kills 13 = 13, dealt 121 = 121 (spawn hp sum 222), taken 106 = 106, hits and misses `n/a`; totals are cumulative across `Enable` (a reader needs deltas) |
+| P26 | probe | RECORDED | Fire Bolt mana 35 to 32 and zombie hp 11 to 8 (GH); `cmd skill` in town and a 0-point skill do not spend mana; `cmd select 54 0` leaves rskill 0 (UNVERIFIED) |

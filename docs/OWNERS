@@ -42,6 +42,7 @@ cmd/d2dview/view_test.go            mapitem               mapitem
 cmd/d2dview/web/stream.html         mapitem               mapitem
 cmd/d2dview/web/index.html          mapitem               mapitem
 openspec/changes/drills6/**  drills6  drills6
+openspec/changes/drills10/**  drills10  drills10
 internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
