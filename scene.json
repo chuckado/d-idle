@@ -70,24 +70,24 @@
   "live": false
  },
  "tagline": "say it: die dull",
- "ts": 1793545215,
- "updated": "2026-11-01T15:00Z",
+ "ts": 1793545819,
+ "updated": "2026-11-01T15:10Z",
  "work": [
-  {
-   "state": "working",
-   "task": "Long unattended test runs"
-  },
   {
    "state": "working",
    "task": "Working on the bot"
   },
   {
    "state": "working",
-   "task": "Playing in a party of bots"
+   "task": "Long unattended test runs"
   },
   {
    "state": "working",
-   "task": "Fighting and staying alive"
+   "task": "Playing in a party of bots"
+  },
+  {
+   "state": "blocked",
+   "task": "Running the bot on the d2d engine"
   }
  ]
 }
