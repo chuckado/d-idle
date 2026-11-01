@@ -99,3 +99,6 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
+docs/research/sk-melee-trace.md  skmelee  skmelee
+tools/emu/sk_melee.py  skmelee  skmelee
+openspec/changes/skmelee/**  skmelee  skmelee

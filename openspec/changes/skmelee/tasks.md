@@ -15,17 +15,17 @@ exclusive: []
 gates:
   - "emulator oracle: 0 differences from the reading on 100,000 cases a part, two seeds"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: ""
+result: "Offline, nothing verified live. Plain Attack traced (docs/research/sk-melee-trace.md): to-hit and whole-point weapon damage equal a port of d2d on 100,000 cases x 2 seeds (0 differ from the reading); d2d floors the physical (D1, +0.50 a hit in game.exe), lacks Blunt +50 % vs undead (D2, V run) and the barehanded rule (D4); D3 gear AR terms; Q3 / D7 weapon ED at the player U (drill R1); bot B1-B4; no PR candidate."
 ```
 
 Overlaps (not edited here, lines for the merger in the trace's last section): docs/decomp-queue.md, docs/BACKLOG.md, docs/INDEX.md, CHANGELOG.md, docs/research/README.md, docs/OWNERS, docs/research/sorc-skill-matrix.md.
 
 ## 1. Work
 
-- [ ] 1.1 Trace the plain Attack in game.exe 1.14d (to-hit, damage build, weapon share, Str bonus, shield, undead / demon terms)
-- [ ] 1.2 Read d2d's `make_fighter` / `player_blow` / `hit_chance`; the bot's melee model
-- [ ] 1.3 Emulator oracle vs the reading and vs d2d (100,000 cases, two seeds)
-- [ ] 1.4 Trace doc: deviations, bot findings, drill recipe, matrix cells, shared-file lines
+- [x] 1.1 Trace the plain Attack in game.exe 1.14d (to-hit, damage build, weapon share, Str bonus, shield, undead / demon terms)
+- [x] 1.2 Read d2d's `make_fighter` / `player_blow` / `hit_chance`; the bot's melee model
+- [x] 1.3 Emulator oracle vs the reading and vs d2d (100,000 cases, two seeds)
+- [x] 1.4 Trace doc: deviations, bot findings, drill recipe, matrix cells, shared-file lines
 
 ## 2. Open
 
