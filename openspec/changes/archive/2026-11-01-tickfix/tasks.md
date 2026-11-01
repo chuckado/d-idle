@@ -2,7 +2,8 @@
 
 ```yaml
 change: tickfix
-status: in-progress
+status: archived
+merge: b051a79
 agent: tickfix
 branch: agent/tickfix
 worktree: ~/code/d2lod-wt/tickfix
