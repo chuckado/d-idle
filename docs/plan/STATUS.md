@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [drills15](../../openspec/changes/drills15/) | in-progress | drills15 | `openspec/changes/drills15/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixbuff](../../openspec/changes/fixbuff/) | in-progress | fixbuff | `docs/fixbuff.md`<br>`internal/combat/fight.go`<br>`internal/data/extract.go`<br>`internal/combat/fixbuff_test.go`<br>`internal/d2/states.go`<br>`internal/d2dctl/verbs.go`<br>`internal/d2dctl/parse.go`<br>`internal/d2dctl/parse_test.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2denv/env.go` | - |
 | [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
@@ -74,6 +75,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change drills15: gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixbuff: go test -p 1 ./internal/combat ./internal/d2 ./internal/d2dctl ./internal/d2dsrc ./internal/d2denv passes including TestFightBuffRecastsInLongFight and TestBuffStates
 - change fixbuff: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes

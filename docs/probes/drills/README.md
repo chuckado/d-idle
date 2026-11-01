@@ -444,3 +444,41 @@ Smallest: make `mouthStep` measure from where d2d puts the character, not only f
 - docs/BACKLOG.md: FIXDENBOUNCE: cause named by drills14 (nav mouthStep mouthR 9 vs arrival at 11.2 subtiles; Explore/roam first walk fires the trigger; Fighter.Clear approach in Cave Level 1); fix proposed in the DRILLS14 section, not implemented.
 - docs/INDEX.md: DRILLS14 section in docs/probes/drills/README.md.
 - CHANGELOG: none (no product change).
+
+## DRILLS15 (2026-11-01): first live skill-smoke drills (teleport, mana, missile, armor traces)
+Result file `2026-11-01-drills15-full.txt` (stdout of the one d2drill invocation, scrubbed, 15 KB; earlier partial runs while the drills were being fixed were not kept). New group `R` (internal/drill/d15.go, cmd/d2drill/d15_lab.go, d15b_lab.go; overlap declared: the group switch and the end-of-run goto town in cmd/d2drill/main.go). Run on the worker host, hidden slot 0, `lab-debug-skills` binary, lockstep, throwaway Sorceress `--no-save`: `D2D_AGENT=drills15 D2D_BIN=<fork>/bin/d2d.lab-debug-skills tools/agentrun.sh drills15 --ttl 600 -- tools/d2dslot.sh run -n 0 -t 580 -- <built>/d2drill -group R -repeat 1 -label drills15-full`. Capacity: idle 45 percent (44 percent iowait) on the worker host before the first run. A whole invocation takes under 10 s. All state changes go through `r.Cheat` and the ledgered `d2dctl.SkillDebug` (`debug cast`, `mana full`, `states clear`); reads are `dump`, `debug players`, `monsters`, `debug missiles`, `debug blocked`. PASS means d2d equals the trace's game.exe expectation (a read of game.exe, V; game.exe itself was NOT run); FAIL means d2d differs (a deviation, not a harness error).
+
+| Trace item | Drill | Verdict | Numbers (V: read from the log) |
+|---|---|---|---|
+| sk-teleport T1 / T7-town | D15-T1 | PASS | in town two casts (3 and 5 cells): no hop (the character walks 1.1 cells toward the target in 14 ticks), mana 35.0 before and after |
+| T2 room limit | D15-T2 | FAIL | hops of 3, 6, 9, 12, 15, 18, 24 cells (15 to 120 subtiles) along one clear line: all 7 land on the target (y drifts 0.1), each costs 23.8 points (level 1 cost 24, regen included). game.exe refuses outside the room list: d2d has no room limit (trace D1). Which of the near hops game.exe allows depends on the caster's place in its room (U: the drill cannot say) |
+| T3 blocked target | D15-T3 | FAIL | 3 blocked cells at 2.7, 3.2, 4.3 cells: the character does not move (0.00 cells) and 23.8 points of mana are spent each time. game.exe snaps to the nearest free spot and pays at the action frame (trace D2); d2d refuses AND pays (also part of D4) |
+| T4 monster | D15-T4 | FAIL | zombie 3 cells away: a point target and a unit target both put the character 0.20 cells from the monster, on it (trace D3). game.exe lands beside it |
+| T5 merc | D15-T5 | FAIL | merc hired with `debug merc hire 0`, readable in `dump` (merc x y). A 6 cell hop: the merc moved 0.09 cells in the landing tick (its own walk step) and stayed 4.5 to 5 cells behind; it walked 3.06 cells in 45 ticks. d2d does NOT move the merc with the hop (game.exe: moved with the owner, a read of FUN_00650be0, UNVERIFIED by play). Pets: a Sorceress has none, `pets` lists nothing |
+| T7 mana on a refused hop | D15-T7 | FAIL (not reachable) | exactly 24 points, 25 cells: the hop is not refused on d2d (moves 25.30 cells), mana 24.06 -> 0.23. There is no refusal to price at that distance; the priced refusal is T3 (23.8 paid) |
+| T6 Duriel's lair | not run | | unreachable |
+| sk-mana M1 | done by DRILLS13 | | |
+| M2 interrupted cast | D15-M2 | FAIL | a real Fallen blow (`debug mon set dmg 20 20`, life 5000, the cast started 0 to 7 ticks after its A1 begins), 48 casts: 7 cast cut by the blow before the missile (blow at +1, +4, +5): 7 of 7 had the mana paid and no missile (game.exe pays nothing, trace D3); 1 blow after the missile; 3 casts started in hit recovery. The castcut result of DRILLS11 (weak zombie blows of 2 to 3 do not cut a cast) did not repeat for a 20 damage blow: a big blow cuts it |
+| M3 Teleport floor | D15-M3 | FAIL | level 25 (`debug points 54 25`, cost formula 0): mana 0.55 point and 0.05 point: no hop (0.00 cells), mana only regenerates; mana 1.04 point: hops 4.3 cells and pays 1 point. d2d needs a whole point (trace D2); game.exe casts at any mana |
+| M4 regen | D15-M4 | PASS | max mana 45 (`debug stat 9`), mana 0.04 -> 8.8 points over 750 ticks: +2250/256, exactly game.exe's 3 per frame; Warmth 1 (`debug points 37 1`) the same 2250. The bot's model of 13.5 points over 30 s is 4.7 points too high (trace B2) |
+| M5 potions | not run | | no mana potion in the lab pack and no item-give verb |
+| M6 skill delay | D15-M6 | FAIL | Blizzard (level 1, 23.0 points): first and second cast 25, 40, 60 and 100 ticks apart (1 to 4 s) all enter cast mode, pay 23.0 points and make 4 missiles (the 100 tick one 1). `debug states` shows no delay state. game.exe refuses the early ones (trace D6): d2d has no skill delay |
+| sk-missile K1 reach | D15-K1 | PASS | level 1 at a point 12 cells away on a clear line: Fire Bolt farthest 46.5 subtiles (trace 46.9), 50 ticks of flight, first row at +8 ticks; Ice Bolt 28.1 (28.1), 50 ticks; Lightning 34.3 (35.2), 25 ticks. Sampled per tick, so the figure is the last seen position (0.4 to 0.9 under the trace) |
+| K2 Charged Bolt count | D15-K2 | PASS | levels 1, 5, 20 (`debug points 38 n`): 3, 7, 22 distinct bolts, all alive at once from +8 ticks, all starting on the caster's cell (0.0 subtiles), last alive 77 frames after the first |
+| M4 roll, M5 Lightning pass-through / Chain Lightning | not run | | statistical (thousands of hits) / not scripted |
+| sk-armor E1 | D15-E1 | FAIL | Energy Shield (`58:1` after the cast), 3.02 points of mana, `debug hit 50` on 100 life: life lost 49.00 (absorbed 1.0), mana 3.02 -> 1.05, state `58:1` stays (game.exe: 48.5 lost, mana 0, state removed, trace D3). After `debug mana full` a second 50 blow: 40.0 life lost, mana 35.0 -> 15.0, shield still on (game.exe: no shield until recast). The numbers of d2d match the trace's description of d2d |
+| armor A2 to A5 | not run | | time |
+
+### Findings
+- All thirteen are d2d observations; the PASS or FAIL against game.exe is the comparison to the traces, no game.exe run (a game.exe read on a hidden instance is the open step). Trace deviations D1 (room limit), D2 (blocked target, minmana floor), D3 (lands on monsters, cut cast keeps mana, shield state), D4 (mana on a refusal), D6 (skill delay), D7 (merc not moved) are all CONFIRMED live on d2d. Deviations that were open now have numbers; none is a bot bug.
+- For the bot: Teleport hops of 18 cells and shorter all land on d2d, so the bot's nav hops work there; a cast at a blocked cell costs a full 24 points on d2d for nothing (trace B2), and the bot's 13.5 point regen model is 4.7 points high (M4).
+- The reach numbers (K1) match the trace within 1 subtile for all three, so the bot's cast ranges can be checked against 46.5 / 28.1 / 34.3 subtiles (the bot's own cast ranges were not read here).
+
+### Harness notes
+- `dump stats` raw[] shows a cheat's new life or mana only after the next tick (V: the `debug hit` reply said life 51 while raw[6] still read 100 on the same tick): drills step one tick after every set. The first versions of D15-M6 and D15-E1 read stale values and gave wrong numbers; the final log is after the fix.
+- A cast the engine refuses can still start a walk toward the target (town, T1: 1.1 cells in 14 ticks): classify a hop by the distance covered (at least 80 percent of the way), not by "moved".
+- `debug blocked x y` takes level-relative cells and returns 1 for blocked; the long clear lines are found by scanning it at half-cell steps, the start moved to the far end of the line.
+
+### Shared-file lines for the merger
+- BACKLOG: SKTELE/SKMANA/SKMISS/SKARMOR first live runs done on d2d (drills15): teleport D1 to D4, D7, mana D2, D3, D6, armor D3 confirmed with numbers; missile reach and Charged Bolt count equal the trace; not run: T6, M5, M4-roll, missile M5, armor A2 to A5 and every game.exe-side read.
+- INDEX / CHANGELOG: "drills15: first live skill-smoke drills (group R): Teleport, mana, missile and armor traces compared with d2d; deviations of the traces confirmed live".
