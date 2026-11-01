@@ -49,7 +49,8 @@ func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife in
 	}
 	life, maxLife = sn.Player.Life, sn.Player.MaxLife
 	ms, err := l.be.Client.Monsters(ctx)
-	if err != nil {
+	lv, lerr := l.be.Client.Level(ctx) // the monsters verb gives level-relative cells, the snapshot act subtiles: compare in cells
+	if err != nil || lerr != nil {
 		return
 	}
 	for _, m := range ms.Items {
@@ -57,7 +58,7 @@ func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife in
 			continue
 		}
 		alive++
-		if math.Hypot(5*m.CellX-float64(sn.Player.X), 5*m.CellY-float64(sn.Player.Y)) <= 3 {
+		if math.Hypot(5*(m.CellX-lv.X), 5*(m.CellY-lv.Y)) <= 3 {
 			adj++
 		}
 	}
@@ -197,10 +198,10 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 	_ = c.Hover(ctx, x, y)
 	_ = l.Tick(ctx, 4)
 	ci.Adjacent, _, ci.LifeStart, _ = l.d11Adjacent(ctx)
-	old := map[[2]int]bool{}
+	old := map[int]bool{} // portal objects by id: an earlier trial's portal can stand on the same cell
 	if pv, err := l.PView(ctx); err == nil {
-		for _, p := range pv.PortalPos {
-			old[p] = true
+		for _, id := range pv.PortalIDs {
+			old[id] = true
 		}
 	}
 	t0, ms0 := l.tick(), l.gameMS()
@@ -233,8 +234,8 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 		run++
 		if ci.PortalTick < 0 {
 			if pv, err := l.PView(ctx); err == nil {
-				for _, p := range pv.PortalPos {
-					if !old[p] {
+				for _, id := range pv.PortalIDs {
+					if !old[id] {
 						ci.PortalTick = l.tick() - t0
 						ci.PortalMS = l.gameMS() - ms0
 					}
