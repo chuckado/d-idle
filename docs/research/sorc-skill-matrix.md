@@ -2,6 +2,8 @@
 
 > status: research, 2026-11-01, agent SKILLINV (card skillinv; user go 2026-11-01 "verify the sorc skills"). Steps 1 and 2 are DONE here (inventory and coverage matrix); steps 3 and 4 are PROPOSALS only (nothing run, no game, no d2d slot, no product code, nothing posted or pushed). Tags: **V** verified (an oracle, a disassembly read in an earlier trace of ours, or a live drill we ran; the cite says which), **S** read in source or docs (our code, d2d's code, a doc), **I** inference (computed or concluded by this agent from V/S inputs, not run through an oracle), **U** unknown. A cell may carry several tags, one per statement. Skills.txt values are from the PATCHED 1.14d tables extracted for the chill trace on the worker host (D = data read, counted as S unless a trace verified the use). d2d file:line cites are the lab fork checkout on the worker host at the time of this read (upstream plus our local patch set); lines drift.
 
+> status: cells (d) live and (b) d2d status of sections 3.3, 3.4, 3.7, 3.8, 3.9, 3.10, 3.12 and 3.13 (Cold Mastery) were updated 2026-11-01 by card capdocs from the later traces (sk-armor, sk-nova, sk-teleport, sk-lightning, sk-passives, sk-resist, sk-melee, sk-melee2) and the live drills DRILLS24 to 29. Each cell says which; the older text beside it is the state when the matrix was written. The counts in section 4 were NOT re-run.
+
 ## Answer
 
 - **Skills the plan uses on the default build, cumulative by act: A1 5, A2 6, A3 8, A4-A5 and NM 9** (Fire Bolt, Charged Bolt, Frozen Armor, Frost Nova, Telekinesis as a prerequisite point only; Act 2 adds Teleport; clvl 26+ adds Lightning Mastery and Chain Lightning; clvl 40 adds Lightning); plus Static Field on characters that still carry the legacy table and the plain staff swing, which make it 7 / 8 / 10 / 11. The Blizzard endgame table (opt-in, never a default) adds Ice Bolt, Ice Blast, Glacial Spike, Blizzard, Cold Mastery, Warmth. Per-act counts are in section 1.
@@ -125,7 +127,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) hit effect | event 2 `damagedinmelee` (FUN_005cac50): d2d cites it; whether the striker is frozen or only chilled, the boss / champion / hireling exceptions of FUN_0057b230 (`freeze-rules-trace.md` C3 / C5 apply to FREEZE sources; Frozen Armor's route was listed as "next candidate" there) and cold immunity / cold resist on it: UNTRACED [U] |
 | (b) d2d status | implemented: armor %, state timer, and in `buff_events` (`fight.cpp:~1374`) `stun_until` and `chill_until` for `calc1` frames on any melee striker that did damage [S]; this bypasses the freeze rules (plain monsters frozen only at coldeffect < 0, specials chilled) that C3 / C5 prove for Ice Bolt-style hits, so a deviation is likely [I]; no ponytail note on it |
 | (c) bot use | `Fighter.Buff` casts the first known armor of the group at the F3 key when `buffDue`: not cast within `BuffRecastSec` 150 s (the state is not readable: UNVERIFIED offset) [S `fighter.go:582`, `tuning_combat.go:79`]; F2: the armor is down about 20 % of every cycle at L1-2 (120 / 132 s vs 150 s) [I]; also cast in town [S] |
-| (d) live | none with an oracle [U]; the bot's buff recast is exercised in soaks without a state read [S] |
+| (d) live | Update 2026-11-01: recast timer live (DRILLS13, 16: casts at 114 s, armor never absent) and the cut-cast retry live (DRILLS29, D29-C: cut at 114.0 s, retried 1.6 s later, absent 0 ms over 544 samples) [V live]; a cut at normal monster damage [U]. Game rule (sk-armor-trace): the striker effect is the freeze rule, a recast restarts the full duration, one armor of the group at a time [V run]. d2d deviates (stuns and chills every striker, armors stack); the fix is in the private fork and proposed upstream as PR #159 (open) [S]. The bot-side recast gap inside one long clear (B1 of the trace) is covered by the fixrecast and armorcut cards, whose live proof is above [S] |
 
 ### 3.4 Frost Nova (44) used A1 (crowd rule)
 
@@ -137,7 +139,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) cast time | SC 13 ticks [V K1] |
 | (b) d2d status | implemented: 64 missiles on a circle, a shared "struck" set so a monster is hit once, range `missile range + calc1` (`fight.cpp:2633`) [S]; chill / freeze application equals game.exe only on the local branch fix/freeze-rules (#155's head), not in the lab default [V `freeze-rules-trace.md`, PR candidate, not posted]; the 64-ray ring vs game.exe's ring is U |
 | (c) bot use | `novaTick` (`castfirst.go:95`): at least 3 non-immune hostiles within 4 subtiles, mana >= `NovaManaFloor` 25, gap 2.5 s; F8; assumes the nova hits everything inside 4 subtiles and chills it (no chill model, finding B4 of `static-field-chill-trace.md`) [S] |
-| (d) live | none [U] |
+| (d) live | none [U]. Update 2026-11-01: game rule read and run (64 missiles, reach about 11 to 12 subtiles, a monster hit once) [V run, sk-nova-trace]; d2d hit 6.2 times per monster per cast on the same flights [V run, model I]; the hit-once fix is merged upstream as PR #158 [S]; the bot's 4 subtile crowd rule is still narrower than the real ring [S] |
 
 ### 3.5 Static Field (42) used on LEG characters (A1 elite / boss opener); dead on FRESH characters (F1)
 
@@ -166,7 +168,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) rules in game.exe | works only where Levels.txt `Teleport` allows (0 none, 2 clear line only, Duriel's lair 2) [V Levels.txt for the lair, `act2.md`]; refused in town (Game.exe live: hops "just print and the character stays", `act2.md` X3) [V]; landing spot nearest free (FUN_00554ea0) [S d2d comment]; range limit, click-to-destination rule, line-of-sight, `Range none` handling and the client-side range clamp: not traced [U] |
 | (b) d2d status | implemented in `spot()` (`fight.cpp:1134`): in town no, Levels.txt Teleport 0 / 2 + clear line (sampled every fifth of a cell), blocked cell no, the player is set at the exact clicked spot at any distance [S]; ponytail: the line test sampling and the fallback spots [S]; no distance clamp, no mana clamp on arrival [S]; never compared with game.exe for the player [U] |
 | (c) bot use | `nav` hops with `CastAt(F2, cell)`, `defaultTeleportRange` 18 subtiles per hop (UNVERIFIED), waits up to 40 s for 24 mana, counts a hop successful only if the position moved, three bad hops end it [S `nav/teleport.go`]; the d2d backend's `cmd skill` for a ground target is an open question (`d2d-backend.md:416`) [U] |
-| (d) live | Game.exe: chain tool `act2live` hops, exits, contact crossing (nav3), town refusal (X3) [V `act2.md`]; d2d: none [U] |
+| (d) live | Game.exe: chain tool `act2live` hops, exits, contact crossing (nav3), town refusal (X3) [V `act2.md`]; d2d: Update 2026-11-01: the hop wiring, break-even (18 ticks a hop), path-aware cell, stall escape and pockets are proven live on the lab build (DRILLS24, 25, 27; Stony Tomb 211 vs walking 254, Halls of the Dead 1 533 vs 578) [V live]. The game's own rules (room-based range, landing snap, refused cast is free, Duriel's Lair allows a clear line) were read and run in sk-teleport-trace [V read, V run]; d2d deviates (any distance, mana charged for a refusal) [S]. The hops are wired from the bound skill by the teletune cards (stated by the maintainers of those cards; the older text in (c) above is the pre-wiring state) [S] |
 
 ### 3.8 Lightning Mastery (63) used A3+ (passive)
 
@@ -175,7 +177,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) rules | stat `passive_ltng_mastery` = `ln12` = par1 + par2 (L-1) percent added to lightning damage once at missile creation (stat 0x14a on the unit; not on the missile) [V K3 mastery mapping, `skill-damage-trace.md`]; reqlvl 30 [S] |
 | (b) d2d status | `passive_stats` + `elem_damage(.., mastery = true)` applied once [S, V mapping by K3 cases with masteries 0..600] |
 | (c) bot use | points per table only; no read of the stat [S] |
-| (d) live | none [U] |
+| (d) live | none [U]. Update 2026-11-01: magnitude 50 + 12 (L-1) percent read once at missile creation [V read, sk-passives-trace]; 1.14d has synergies (base points of other skills) and the table plan was replayed against them [D, I]; not live [U] |
 
 ### 3.9 Chain Lightning (53) used A3+ (first in the clvl >= 26 order)
 
@@ -187,7 +189,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) hops | `calc1 = ln34 / 5` (hops per cast) [S Skills.txt]; chain target choice, range per hop, repeat hits, hit function: not traced [U] |
 | (b) d2d status | implemented as `send(...).hops = calc1` (`fight.cpp:2677`) [S]; cast time 14 vs 19 before the fix/lightning-sequence candidate [V `d2d-fidelity.md` 7a, `cast-trace-gameexe.md`]; the min gate candidate [V]; hop selection never compared [U] |
 | (c) bot use | first of the clvl >= 26 order, key F5 / F6 (lightning layout); same gap, cost and low-mana ladder as Charged Bolt [S] |
-| (d) live | none [U] |
+| (d) live | none [U]. Update 2026-11-01: hops are at most calc1 per cast, next target within 20 subtiles, never a monster in `justhit` [V read, sk-lightning-trace]; d2d re-hits the struck monster on about 73 percent of hops [I, model]; to-hit never misses (equal) [V read]; the hit-once fix is merged upstream as #158, its coverage of the hop path is U; the bot's 650 ms cast gap is shorter than the 760 ms cast (B1) [S]. Not live |
 
 ### 3.10 Lightning (49) used A5+ (clvl 40 and on)
 
@@ -197,7 +199,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) behaviour | `lightningbolt` missile that pierces along its line (pierce, length, hit function) [U] |
 | (b) d2d status | plain missile path [S]; cast time / min gate as 3.9 [V]; pierce rule [U] |
 | (c) bot use | second in the clvl >= 26 order; table gives it from clvl 40 [S] |
-| (d) live | none [U] |
+| (d) live | none [U]. Update 2026-11-01: Lightning pierces one unit a frame and skips only the last one hit (D2, V read); about 10 percent more hits per cast in game.exe in packs [I, model]; not live [U] |
 
 ### 3.11 Energy Shield (58) in the buff order, never learned by the table
 
@@ -215,7 +217,7 @@ Cell format: statement [tag]. "Live" is the strongest drill or run, with the doc
 | (a) rules | do 1 FUN_0056f070: to-hit FUN_0057ec10 -> FUN_0057d9b0 (AR FUN_00622560 + MulDiv by mastery, 119, stat 325, 179), damage FUN_0057b7d0 -> FUN_0057b420 (stats 21 / 22 << 8 + 111, p = 25 + Str / Dex bonus + mastery + ED, + stats 17 / 18, roll in 256ths), Blunt +50 % vs undead (FUN_0057b660) [V run, sk-melee-trace.md]; a staff is Blunt by ItemTypes equivalence [D; the equivalence walk I]. Speed / IAS not traced [U]. |
 | (b) d2d status | same to-hit and whole-point range (100,000 cases, sk-melee-trace.md); floors the physical to whole points (D1, about -0.5 a hit), no undead / demon term (D2), barehanded rule differs (D4) [V run against a port]. |
 | (c) bot use | the last rung of the low-mana ladder (life >= `meleeMinLife`), early clvl 1-3 "Fire Bolt on the right hand and a staff swing as the mana-out fallback" [S `resource.md`] |
-| (d) live | Game.exe early soaks (melee hits counted, `resource.md` table) [S]; d2d: none with an oracle [U] |
+| (d) live | Game.exe early soaks (melee hits counted, `resource.md` table) [S]; d2d: none with an oracle [U]. Update 2026-11-01: d2d's real build differs from the game (D1 floors damage, D2 no Blunt vs undead, D4 barehanded, D5, D6, D8 off-weapon enhanced damage lost; see the trace) [V run on the real build, sk-melee2-trace]; the bot's resource simulator now rolls to-hit and damage by the game's formula and is fed from the live snapshot (skmeleebot.md, skmeleewire.md) [offline-verified, not live] |
 
 ### 3.13 Next band (END table, opt-in; "likely next" for the Blizzard line)
 

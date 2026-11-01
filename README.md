@@ -28,7 +28,9 @@ day-by-day notes in `CHANGELOG.md`, and the entry point for everything else is `
 - Plays a Sorceress through early Normal Act 1 (level 1 to about 13) unattended on d2d; it has not played Andariel, Act 2 or later.
 - The second two-hour d2d soak did NOT pass Gate 1 (one seed); fixes merged since have not been re-soaked.
 - Basic actions (potions, portals, waypoints, shopping, repair, stash, save and rejoin) pass most live drills; some fail or are blocked.
-- Frost Nova and Chain Lightning numbers measured on d2d are not trustworthy yet; other classes only had short smoke runs.
+- Teleport hops in navigation are proven live on the lab build (DRILLS24, 25, 27: for example Stony Tomb 211 ticks against 254 walking); the Frozen Armor recast retry after a cut cast is proven live in one scenario (DRILLS29).
+- Frost Nova and Chain Lightning numbers measured on d2d are not trustworthy yet (the hit-once fix is merged upstream, not re-soaked). Melee, resistance and Paladin handling are offline-verified only; other classes only had short smoke runs.
+- Six of our d2d fixes are merged upstream; two more (#159, #160) are open. The freeze fixes live in the private fork until then.
 - Offline single player only: no Battle.net, no multiplayer, no game files in this repo.
 
 Details, with a link to the evidence for every row: [docs/capabilities.md](docs/capabilities.md).

@@ -1,6 +1,6 @@
 # How to run d.idle
 
-> status: current as of 2026-11-01 (card readmedocs). Every example says whether the author ran it. "Ran in this doc's worktree" means a real run on a Linux machine with Go and NO game install. Everything that needs a game says "not run by the author". Older user guides for the Wine path ([quickstart.md](quickstart.md), [troubleshooting.md](troubleshooting.md)) are marked stale in their own banners; this page is the current entry point. What the build can do: [capabilities.md](capabilities.md).
+> status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every example says whether the author ran it. "Ran in this doc's worktree" means a real run on a Linux machine with Go and NO game install. Everything that needs a game says "not run by the author". Older user guides for the Wine path ([quickstart.md](quickstart.md), [troubleshooting.md](troubleshooting.md)) are marked stale in their own banners; this page is the current entry point. What the build can do: [capabilities.md](capabilities.md).
 
 ## What this will NOT do
 
@@ -119,6 +119,8 @@ D2D_RUN=on bin/d2bot --backend d2d --managed --d2d-bin <d2d-binary> --d2d-data <
 
 `--d2d-class 4` is a new Sorceress (d2d's list order); `-1` loads a saved `--char`. `--no-save` makes a throwaway character that is
 never written. Add `--supervise` to restart the bot after a crash. More: [d2d-bot.md](d2d-bot.md), knob defaults in [knobs.md](knobs.md).
+
+Teleport hops need no flag: they are used when the character has Teleport bound to a key (proven live on the lab build, DRILLS24, 25, 27). A build table other than the class default is chosen with `--build <name>` (for example `--build paladin-zealot-lite`, offline-verified only: nothing Paladin has run on d2d, [classes/paladin-probe.md](classes/paladin-probe.md)).
 
 Goals are `;`-separated (`campaign:normal_act1`, `reach:30`, `farm:Blood Moor`, `idle`; see [quickstart.md](quickstart.md) section 5, which was checked
 against the code). Only early Normal Act 1 has ever run unattended ([capabilities.md](capabilities.md)).
