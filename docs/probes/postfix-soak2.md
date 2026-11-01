@@ -5,6 +5,12 @@
 ## Verdict
 Gate 1 is NOT PASSED on this build (one seed). Of the soak-gates Gate 1 criteria: stability, route guard, portal and fault recovery pass; deaths pass the death rule (1 death, early); XP per hour is below the d2d baseline (indicative fail, INCONCLUSIVE at one seed); the belt window and the 10 minute no-progress rule fail when read in virtual minutes (the reading postfix-soak1 used) and pass in wall minutes. `d2dsoak compare` says `INVARIANTS: PASS`, OVERALL INCONCLUSIVE (exit 2, one seed).
 
+## Decision 2026-11-01
+User decision (reply "virtual minutes"): in the d2d gate ladder every minute of the soak-gates criteria is a virtual (game) minute, because the d2d clock runs about 10 times faster than the wall clock and the rules protect in-game behaviour (potion supply, progress). Card `soak-minutes-virtual` (spec delta, numbers unchanged: belt window 5, no kill and no XP 10).
+- Gate 1 verdict: NOT PASSED. Failing criteria: belt window (27 virtual minutes at the start, limit 5) and no kill and no XP (26 virtual minutes, limit 10). XP per hour (5437 vs 9172) stays INCONCLUSIVE at one seed.
+- A soak log "line" is one `minute` line = one virtual minute (1275 lines for 21.25 virtual h). The two no-progress numbers above differ by definition, not by clock: 26 is the longest run of lines with no new kill and no new XP (the Gate 1 criterion, counter NOKILL); 16 is the longest stretch without any progress event of d2dsoak's wider PROGRESS invariant (also kills, XP, non-town area entered, quest done, gold spent, clvl; limit 30). The 30 was never the Gate 1 number (it matches the stall ladder), so INVARIANTS PASS did not contradict the spec.
+- d2dsoak now computes both Gate 1 stretches in virtual minutes (codes BELT and NOKILL) and prints them with the limits; on this log it reports belt 27 and no kill/XP 26 and VIOLATED(BELT,NOKILL) (test `TestInvariantsGate1PostfixSoak2`). The sections below keep the original wording ("FAIL in virtual minutes, PASS in wall minutes"): the wall reading no longer counts.
+
 ## Setup (V)
 - Bot: origin/main 0b0bdb2 (all fixes merged: fixrun, fixmisc, fixstall3/4, fixmeter, fixbank, fixobj, fixprice, fixmissile and the earlier fix-belt/pickup/loot/portal/wp), built on the worker host, sha256 prefix 387cae79cb81. `d2dsoak` built from the same tree.
 - Lab d2d: `d2d.lab-cheats3` (fork build with the click modifier and the test cheats; same binary as the drills), sha256 prefix 5e2e6fe8b204. No debug verb, no cheat of any kind was used in the soak. Soak 1 ran `d2d.lab-port148` (click modifier, no test cheats), so the d2d side differs slightly; treat the comparison as indicative.
@@ -51,7 +57,7 @@ INVARIANTS: PASS     OVERALL: INCONCLUSIVE (exit 2)
 | Injected fault recovery | PASS | 2 s, restarts +1, saved XP not lower, no orphan |
 | No single state over 10 min without progress (Gate 1 deaths and progression) | FAIL in virtual minutes, PASS in wall minutes | d2dsoak no-progress max 16 virtual min (progress includes area changes; the invariant limit is 30, so INVARIANTS stays PASS); by kills/XP alone 26 virtual lines (21:36:30 to 21:39:01, 2.5 wall min, `recovery: farming gold` then `Quest: fighting` in area 4) |
 
-Because the spec says Gate 1 passes only if every criterion passes, the verdict is not PASS. The unit of "minute" in the belt and progress criteria is not defined in the spec (virtual lines versus wall): it decides two of the three FAILs and needs a decision (report, not edited here).
+Because the spec says Gate 1 passes only if every criterion passes, the verdict is not PASS. The unit question is settled by the decision above: virtual minutes.
 
 ## Comparison with postfix-soak1
 | | soak 1 (f8c1b7f, port148) | soak 2 (0b0bdb2, cheats3) |

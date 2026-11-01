@@ -14,6 +14,7 @@ Index of the decision records in [adr/](adr/README.md) (the dated entries below 
 - [ADR 0011](adr/0011-readiness-power-vs-danger.md) (2026-10-31, accepted, grill 0003): Readiness is character power against zone danger; interim floors Monastery/Tower 16 (14 with merc), Andariel 17 (15 with merc); revive above the kit reserve; Blood Raven bailout; keeper mercs always revived
 - [ADR 0012](adr/0012-milestones-and-wip-limit.md) (2026-10-31, accepted): Work is organised by milestones M1 to M6 with a WIP limit of 3 implementation agents; every job maps to a milestone card or a bug fix with a finding; d2dmesh and stream-grid parked until M3
 - [ADR 0013](adr/0013-retire-game-exe-gates.md) (2026-10-31, accepted, user): G1 and G2 (Game.exe soaks) are retired as release gates; the same gates run on d2d as a ladder (Gate 0 drills, Gate 1 2 h with one injected fault, Gate 2 8 h, Gate 3 24 h); ADR 0009 and the frozen path stand
+- 2026-11-01 (user, no ADR): in the d2d soak gates every minute is a virtual (game) minute (belt window 5, no kill and no XP 10); card [soak-minutes-virtual](../openspec/changes/soak-minutes-virtual/specs/soak-gates/spec.md), docs/probes/postfix-soak2.md.
 - Licence: GPL (same as d2d, GPL-3.0-or-later) - user, 2026-10-30 ([ADR 0010](adr/0010-licence-same-as-d2d.md))
 - Repo going public soon; lockstep patches stay in the downstream fork until upstream wants them - user, 2026-10-30 ([ADR 0010 addendum](adr/0010-licence-same-as-d2d.md))
 

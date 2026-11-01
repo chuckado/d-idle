@@ -52,3 +52,13 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+openspec/changes/soak-minutes-virtual/**  specmin  soak-minutes-virtual
+internal/d2dsoakstat/invariants.go  specmin  soak-minutes-virtual
+internal/d2dsoakstat/invariants_test.go  specmin  soak-minutes-virtual
+internal/d2dsoakstat/invreport.go  specmin  soak-minutes-virtual
+internal/d2dsoakstat/minute.go  specmin  soak-minutes-virtual
+internal/d2dsoakstat/testdata/invreport.golden  specmin  soak-minutes-virtual
+docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
+docs/review-strategy.md  specmin  soak-minutes-virtual
+docs/d2d-soak.md  specmin  soak-minutes-virtual
+docs/geninv.md  specmin  soak-minutes-virtual

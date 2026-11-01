@@ -1,6 +1,7 @@
 package d2dsoakstat
 
 import (
+	"compress/gzip"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -17,6 +18,8 @@ type logB struct {
 	kills, xp, gold, deaths, lvl int
 	area                         int
 	restarts                     int
+	belt                         string // beltBoxes of the minute lines; "" = the log has no belt fields
+	packHP                       int
 }
 
 func newLog() *logB {
@@ -52,8 +55,12 @@ func (b *logB) minute(kill bool) {
 		b.kills++
 		b.xp += 40
 	}
-	b.raw("minute", map[string]any{"area": b.area, "clvl": b.lvl, "xp": b.xp, "kills": b.kills, "deaths": b.deaths, "potions": 3,
-		"potionsUsed": 0, "gold": b.gold, "restarts": b.restarts, "rung": 0, "goal": "campaign", "step": "x", "state": "farming", "rstate": "clearing"})
+	kv := map[string]any{"area": b.area, "clvl": b.lvl, "xp": b.xp, "kills": b.kills, "deaths": b.deaths, "potions": 3,
+		"potionsUsed": 0, "gold": b.gold, "restarts": b.restarts, "rung": 0, "goal": "campaign", "step": "x", "state": "farming", "rstate": "clearing"}
+	if b.belt != "" {
+		kv["beltBoxes"], kv["packHP"] = b.belt, b.packHP
+	}
+	b.raw("minute", kv)
 }
 
 func (b *logB) run(n int, kill bool) {
@@ -144,7 +151,7 @@ func TestInvariantsWedge(t *testing.T) { // the navsoak signature: storms in tow
 		b.minute(false)
 	}
 	inv := scan(t, b.text(), ExitInfo{})
-	want(t, inv, InvViolated, InvWedge, InvProgress)
+	want(t, inv, InvViolated, InvWedge, InvProgress, InvNoKillXP)
 	if inv.WedgeMin < 55 || inv.NoProgressMin < 55 || inv.WedgeLines != 61 {
 		t.Errorf("wedge %+v", inv)
 	}
@@ -403,5 +410,93 @@ func TestInvReportGolden(t *testing.T) {
 	}
 	if string(b) != got {
 		t.Errorf("golden mismatch (UPDATE_GOLDEN=1 to refresh):\n%s", got)
+	}
+}
+
+// Gate 1 criteria are in virtual minutes (soak-gates, change soak-minutes-virtual): one minute line is one virtual minute,
+// whatever the wall time (the synthetic log is 3 wall seconds per line).
+func TestInvariantsGate1NoKillXPVirtual(t *testing.T) {
+	for _, tc := range []struct {
+		idle int
+		bad  bool
+	}{{10, false}, {11, true}, {26, true}} {
+		b := newLog()
+		b.line("Entered Blood Moor")
+		b.run(5, true)
+		b.run(tc.idle, false)
+		b.run(5, true)
+		inv := scan(t, b.text(), ExitInfo{})
+		if inv.NoKillXPMin != tc.idle || (inv.NoKillXPMin > DefaultInvLimits().NoKillMin) != tc.bad {
+			t.Errorf("idle %d: stretch %d", tc.idle, inv.NoKillXPMin)
+		}
+		if got := strings.Contains(strings.Join(inv.Violated, ","), InvNoKillXP); got != tc.bad {
+			t.Errorf("idle %d (about %d wall s): violated %v", tc.idle, tc.idle*3, inv.Violated)
+		}
+	}
+}
+
+func TestInvariantsGate1BeltVirtual(t *testing.T) {
+	for _, tc := range []struct {
+		empty int
+		town  bool
+		bad   bool
+	}{{5, false, false}, {6, false, true}, {27, false, true}, {27, true, false}} {
+		b := newLog()
+		b.belt = "0:Minor_Healing_Potion"
+		b.run(5, true)
+		b.belt, b.packHP = "", 0
+		b.belt = "0:Minor_Mana_Potion"
+		if tc.town {
+			b.area = 1
+		}
+		b.run(tc.empty, true)
+		b.area = 2
+		b.belt = "1:Light_Healing_Potion"
+		b.run(5, true)
+		inv := scan(t, b.text(), ExitInfo{})
+		wantWin := tc.empty
+		if tc.town {
+			wantWin = 0
+		}
+		if inv.BeltWindowMin != wantWin {
+			t.Errorf("empty %d town %v: window %d", tc.empty, tc.town, inv.BeltWindowMin)
+		}
+		if got := strings.Contains(strings.Join(inv.Violated, ","), InvBelt); got != tc.bad {
+			t.Errorf("empty %d town %v: violated %v", tc.empty, tc.town, inv.Violated)
+		}
+	}
+	b := newLog() // a healing potion in the pack alone is enough
+	b.belt, b.packHP = "0:Minor_Mana_Potion", 2
+	b.run(30, true)
+	if inv := scan(t, b.text(), ExitInfo{}); inv.BeltWindowMin != 0 {
+		t.Errorf("pack potions: window %d", inv.BeltWindowMin)
+	}
+}
+
+// postfix-soak2 (docs/probes/postfix-soak2.md): 120 wall minutes, 1275 minute lines (21.25 virtual h). The belt was empty
+// outside town for 27 virtual minutes at the start (87 s wall) and 26 minute lines in a row had no kill and no XP (2.5
+// wall min): both fail the spec limits (5 and 10 virtual minutes) although d2dsoak's own PROGRESS limit (30) holds.
+func TestInvariantsGate1PostfixSoak2(t *testing.T) {
+	f, err := os.Open("../../docs/probes/soak-logs/postfix2-minutes.jsonl.gz")
+	if err != nil {
+		t.Skip("fixture not present: ", err)
+	}
+	defer f.Close()
+	zr, err := gzip.NewReader(f)
+	if err != nil {
+		t.Fatal(err)
+	}
+	inv, err := ScanInvariants(zr, ExitInfo{WantHours: 21.25}, DefaultInvLimits())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if inv.Minutes != 1275 || inv.BeltWindowMin != 27 || inv.NoKillXPMin != 26 {
+		t.Errorf("counters %+v", inv)
+	}
+	if !strings.Contains(strings.Join(inv.Violated, ","), InvBelt) || !strings.Contains(strings.Join(inv.Violated, ","), InvNoKillXP) {
+		t.Errorf("violated %v, want BELT and NOKILL", inv.Violated)
+	}
+	if strings.Contains(strings.Join(inv.Violated, ","), InvProgress) {
+		t.Errorf("the 30 minute PROGRESS invariant must still hold: %v", inv.Violated)
 	}
 }

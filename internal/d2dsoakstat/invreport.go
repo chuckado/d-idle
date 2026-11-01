@@ -294,6 +294,9 @@ func (rep InvReport) Text() string {
 		fmt.Fprintf(&b, "%-26s %-7s %5.0f %4d %5d %3.0fm/%-4d %6.0fm   %4.1f (%d/%dk) fresh%d/chk%d/bot%d %-9s %-7d %s\n",
 			r.Run, r.Group, r.VirtMin, r.PaceFrozen+r.CombatHolding, r.StallWarns+r.StallExits, r.WedgeMin, min(r.WedgeLines, 9999),
 			r.NoProgressMin, r.DeathsPer1000, r.Deaths, r.Kills, r.FreshGames, r.Chickens, r.BotRestarts, r.Exit, r.Unrecovered, verdictText(r.Verdict, r.Violated))
+		lim := DefaultInvLimits()
+		fmt.Fprintf(&b, "    gate 1 (virtual minutes): longest no kill and no xp %d (limit %d), longest belt window without healing outside town %d (limit %d)\n",
+			r.NoKillXPMin, lim.NoKillMin, r.BeltWindowMin, lim.BeltMin)
 		if r.ExitNote != "" && (r.Exit == "early" || r.Exit == "crash") {
 			fmt.Fprintf(&b, "    exit: %s\n", r.ExitNote)
 		}
