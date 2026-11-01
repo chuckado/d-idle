@@ -2,7 +2,7 @@
 
 ```yaml
 change: soak2study
-status: in-progress
+status: archived
 agent: soak2study
 branch: agent/soak2study
 worktree: ~/code/d2lod-wt/soak2study
@@ -12,8 +12,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; ci check --hygiene-only no FAIL"
-merge:
-result:
+merge: merged into main (see git log, Change: soak2study)
+result: "analysis only, not verified live (offline from the full soak logs); corrections added to postfix-soak2.md"
 ```
 
 ## 1. Work
