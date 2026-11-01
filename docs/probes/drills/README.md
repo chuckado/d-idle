@@ -571,3 +571,48 @@ Drilly (throwaway Sorceress, `--no-save`): `debug goto 1/2/3`, `debug stat 6/7` 
 - docs/BACKLOG.md: FIXMOUTH4: fixmouth3 live proof FAILED narrowly (DRILLS18): DW.m3 x3 down to 1 mouth bounce per run, DW.m4 0 bounces. The remaining bounce is a step-away replan after a fight inside it (monster stall) pulled the character to 3.2 from the exit; the replan's first click (37,140) fired. Also a Fighter.move target 15.1 from the exit (just outside mouthApproachR 15) and a pocket-stall town portal escape. Fix proposed in DRILLS18, not implemented: re-run `leavesExit`/mouthStep on every step-away replan and refuse fight swings toward a mouth during the step-away.
 - docs/INDEX.md: DRILLS18 section in docs/probes/drills/README.md.
 - CHANGELOG: none.
+
+## DRILLS19 (2026-11-01): live proof of fixmouth4 (PASS, with a hold-loop finding)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from branch agent/fixmouth4 (tip 80bf381, nothing else changed; origin/main merged as a no-op). Capacity before: idle 52 plus nice 0.4 percent. Files `2026-11-01-drills19-<label>.txt`: `m31`..`m33` (DW.m3 x3; m31 and m41 are filtered to the gate, step-away, arrival, exit, stuck, portal and DRILL lines with similar repeats collapsed, 1500 lines at most; m32/m33/m42/m43 the first 300 to 400 lines of a wider filter), `m41`..`m43` (DW.m4 x3), `d3`, `d2` (regression). Command as DRILLS17/18 (`-group F -only DW.m3 -label drills19-m31 -v`, `-only DW.m4`; groups D3 and D2 without `-only`; build `~/d2d-lab/drills19bin/d2drill` on the worker through `labrun`). Each run took 6 to 7 s of wall time. The three DW.m3 runs have the same shape (same line count 8,741 and same counts); so do the DW.m4 runs (3,722 or 3,723 lines).
+
+### Result: PASS
+| Drill | DRILLS18 | DRILLS19 (fixmouth4) |
+|---|---|---|
+| DW.m3 x3 | 1 real bounce per run plus 1 pocket-stall town-portal escape; 18 level-change errors | `DW.m3 P23 PASS no bounce in 4 entries` x3: 0 `level changed during the walk` errors, 0 extra `arrived in level` lines (5 of level 8 and 5 of level 2 = the first entry plus 4 exits and 4 re-entries as the drill drives them), no `Entered` cycle within 1 s, no town-portal escape |
+| DW.m4 x3 | 0 bounces in 4 entries | 0 bounces, 0 level-change errors in all 3 runs; verdict FAIL only on the dirty-UI check (`open: inventory`), the same harness issue as DRILLS18 (P35) |
+
+Clear and Explore both FINISH in every cycle (every trace phase `ok` in DW.m3). Coverage: `roam: coverage points` 425 (Den), 551 (Cave Level 1); `nav plan` lines 559 in m31 (DRILLS18: 664) and 188 in m41 (DRILLS18: 519, but the DW.m4 character dies earlier here, see below); no per-point visited count exists in the logs: U.
+
+### Gate activity per run (V, counted in the raw logs)
+| Line | m31..m33 (each) | m41..m43 |
+|---|---|---|
+| `nav mouth gate: click rewritten` (all `how=away`) | 351 | 1 (`how=clip`, from (258,162) to (264,156) as (261,159)) |
+| `nav mouth gate: click held` (`why=rewrite cap`, cap 3) | 117 | 0 |
+| `ErrMouthGate` text | 0 (returned 117 times, no caller logs it) | 0 |
+| `nav: stepping away from a cave mouth` | 129 (DRILLS18: 11) | 4 |
+| `combat swing held: the click would walk into a cave mouth` | 16 | 0 |
+| `combat move skipped: the point is in a cave mouth` | 7 | 0 |
+
+### The DRILLS18 chain recurred and the gate caught it (V, m31 lines 1380 to 1450)
+Den cycle 2 (the third entry): Fighter.engage approaches a Fallen, the step-away is blocked by monsters, 7 `approach` decisions are skipped by the Fighter filter, 16 basic-attack swings toward (37,141) are held (`swing held`, from (36,138)), then the step-away replan starts at 3.2 from the exit (35,135): `step-away replan heads to the mouth, new goal` (old (40,168), new (42,157)) and the first click wp (37,140) is rewritten `how=away` to (42,157). No `arrived in level 2` follows: DRILLS18 fired exactly here. The proof therefore covers the real failing case, not only an easy one.
+
+### Finding: hold loop (V) - a defect, not a bounce
+After the 3rd rewrite in the walk the gate holds (`click held ... cap=3`), the walk fails, and the caller (Fighter.engage via move, then the nav step-away) starts a new walk that is rewritten the same way and held again: 117 hold lines and 117 `stepping away` lines at the same spot (36,140), 5.1 from the exit, over roughly 0.9 s of wall time, until the drill's phase ended the cycle (`nav: timeout: walk did not finish in 2m0s` 173 times in m31). The character does not move because monsters block the away route (`nav stalled by monsters, yielding` in the same window), so the walk fails over and over. The brief's expected outcome (the walk fails with `ErrMouthGate`, hold) happens, but nothing ends the stay at the mouth: the caller retries instead of fighting in place or giving up. Cost: one Den cycle burned its time budget (the other three cycles were clean); the step-away count per run rose from 11 to 129. The spec of fixmouth4 says "at most twice" re-checks on replan; the 117 repeats are fresh walks by the caller, not replans. Proposal (not implemented): when the gate holds, let the caller fight in place (swing gate already holds the swing) or treat ErrMouthGate as a reason to ignore the target for this engage; and log the error once where it surfaces.
+
+### Real trigger bound (U)
+No click fired from beyond 15 in these runs (no bounce at all), so the trigger bound is unconfirmed by a firing; every unwanted-exit click the gate allowed was at least 15 away or outward. m41 shows one `clip` of an Explore click at 6.5 from (255,145) (the cut point (261,159)). What would show it: a drill that clicks at 15 to 17 on purpose; not done.
+
+### The pocket stall (V): a fight, not a nav defect
+This time there was no town-portal escape in DW.m3 (the character passes (90,171) with a single click, `nav click pos (90,171)`, and goes on). The long stall is at (108,178), cycle 3, after the cleared cycles: 993 `nav click` lines at one position and a 288 s fight summary with `kills=0 casts=1` against 28 hostiles (mostly Fallen and Fallen Shamans), `combat pinned: evasive moves go nowhere, fighting in place`, `nav stalled by monsters, yielding near=6`, then `combat: left the game to survive` (36 times, no town portal scroll in the pack of a fresh character). The character has no bound attack skill (`swinging the basic attack`), so the swarm cannot be killed and nothing frees the path: an unfinished fight against 6 adjacent monsters, which matches the author's reading. In DW.m4 the character died in cave level 1 cycle 1 (23 monsters, life 70 to 0 over about 2 simulated minutes, one town portal cast that had nothing to carry it, `crowd-abandon unavailable: no town portal scroll or tome`), so cycles 2 and 3 of DW.m4 ran on a dead character (`nav: character is dead`); DRILLS18 m4 also logged a death. Only the first two DW.m4 entries are live evidence (0 bounces). The next drill should give the character a bound attack skill or cheat in a full belt.
+
+### Regression (V)
+D3 12 of 12 PASS (`d3`), D2 11 of 11 PASS (`d2`). Final `END character Drilly ... in town: true` in both (D3 life 40/40, D2 34/40).
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`, fresh in every invocation): `debug goto 1/2/3`, `debug stat 6/7` life in DW.m3/DW.m4 (ledgered cheats `drills:<drill id>`), portal and town drills of D2/D3. It died inside DW.m4 (each invocation starts a new throwaway); the last run (D2) ends in Rogue Encampment, alive, panels closed.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: FIXMOUTH5 (optional): fixmouth4 live proof PASSED (DRILLS19): DW.m3 x3 and DW.m4 x3 zero mouth bounces and zero level-change errors, including the DRILLS18 chain (replan from 3.2 caught, 351 rewrites and 117 holds per DW.m3 run). Defect: after the 3-rewrite cap the held walk fails and the Fighter restarts a step-away at once, 117 times at (36,140) in one Den cycle (monsters block the away route); make ErrMouthGate end the engage or fight in place, and log it. DW.m4 drill character dies in cave level 1 (no attack skill, no scrolls): fix the drill setup.
+- docs/INDEX.md: DRILLS19 section in docs/probes/drills/README.md.
+- CHANGELOG: fixmouth4 (cave-mouth click gate) verified live; nothing else.
