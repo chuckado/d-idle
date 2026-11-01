@@ -188,3 +188,11 @@ DRILLS10 rows (2026-11-01, lab build cheats3, code at a7f5bc6; files `2026-11-01
 | P21 | D8.w | PASS | fixtalk live: Warriv `go east`, area 40 |
 | P28 | D-meter | PASS | fixmeter live: kills 13 = 13, dealt 121 = 121 (spawn hp sum 222), taken 106 = 106, hits and misses `n/a`; totals are cumulative across `Enable` (a reader needs deltas) |
 | P26 | probe | RECORDED | Fire Bolt mana 35 to 32 and zombie hp 11 to 8 (GH); `cmd skill` in town and a 0-point skill do not spend mana; `cmd select 54 0` leaves rskill 0 (UNVERIFIED) |
+
+DRILLS11 rows (2026-11-01, lab build cheats3, code at 1a47b45; files `2026-11-01-drills11*.txt`, README section DRILLS11):
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P22 | D-emptyplan x3 | PASS | fixemptyplan live: 58 back-offs per invocation, `empty path` 0; the pre-fix binary on the same geometry: 47 back-offs, 6 `empty path` (13 percent), FAIL in 3 of 3 (the drill can fail) |
+| P10 | D-portalmelee x3 | FAIL (product, F18) | 3 zombies within 8 subtiles but never 3 within 3: Safety is `town-portal` at 34 percent life with no potion; the fixportalmelee rule does not fire at the live distances |
+| P10 | D-portalmelee.ctl x3 | PASS | one adjacent monster: the bot casts the portal (scroll 1 to 0, portal object listed) |
+| P10 | D-castcut | RECORDED | cast to portal object 320 ms (4 steps), player mode 10 for 6 steps; 5 zombie hits landed inside the cast (steps 2 and 3): 0 cuts, mode stayed 10; the `debug hit` cheat does cut (D2.d3) |

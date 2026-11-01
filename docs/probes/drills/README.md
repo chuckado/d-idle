@@ -319,3 +319,43 @@ Result files `2026-11-01-drills10-<label>.txt` (stdout of each d2drill invocatio
 ### Findings
 - F17 closed: not seen in 4 of 4 full F group invocations after fixf17 (DRILLS9: run 1 failed in 4 of 4).
 - F16 stays open (H.monster stale BLOCKED text).
+
+## DRILLS11 (2026-11-01): live proof of fixemptyplan and fixportalmelee; the cut-cast data; regression pass
+Result files `2026-11-01-drills11-<label>.txt` (stdout of each d2drill invocation, capped with `d2drill -cap`, scrubbed): `emptyplan-new1`..`3` (code of origin/main at 1a47b45 with both fixes), `emptyplan-old1`..`3` (control: the parent of the fixemptyplan merge, ea5e2ae^1 = 8ac245e, plus the same harness), `portalmelee1`..`3`, `portalctl1`..`3`, `castcut`, regression `d2`, `d5`, `d6`, `dw`, `f`. New group `P` (cmd/d2drill and internal/drill only): D-emptyplan, D-portalmelee, D-portalmelee.ctl, D-castcut. Run as in DRILLS10 (build on the worker host through `labrun`, lab build cheats3): `D2D_AGENT=drills11 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills11 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group P -only D-emptyplan -label drills11-emptyplan-new1`. Without `-v` the log is a few lines (with `-v` one invocation is 270,000 lines). The control binary is built from a second worktree at the pre-fix commit with `internal/drill` and `cmd/d2drill` copied over it (the harness does not use the new `input.ErrAlreadyThere`).
+
+| Card | Drill | Verdict | Numbers |
+|---|---|---|---|
+| fixemptyplan | D-emptyplan x3 | PASS | per invocation (2 repeats, 2 levels each): 58 out-of-mana back-offs, `empty path` lines 0, in 3 of 3 invocations (identical). The Fighter fell through to melee 29 times (back-off cap). 10 failed walks, all "the level changed during the walk: escaped from level 9 to 1 after a stall in a pocket" (nav's pocket escape in Cave Level 1, repeat 2): not the planner's empty plan |
+| fixemptyplan | control, the pre-fix binary x3 | FAIL as intended (the drill can fail) | per invocation: 47 back-offs, 6 failed walks, all 6 `no path: empty path` (5 of 8 at the wall-backed cell (29,50) of Blood Moor, 1 of 14 in Cave Level 1): 13 percent of the back-offs, in 3 of 3 invocations. Soak 2 had 28 percent. The same geometry with the fix: 0 |
+| fixportalmelee | D-portalmelee x3 | FAIL (PRODUCT, see below) | 3 zombies in melee reach (within 8 subtiles), 2 within 3 subtiles at the read, life 102 of 300 (34 percent), belt empty, one scroll: Safety is `town-portal`, not `chicken` (the scroll stays only because the harness does not run the action). The rule's adjacency (3 subtiles) is never reached by 3 monsters at once |
+| fixportalmelee | D-portalmelee.ctl x3 | PASS | ONE zombie adjacent, same life and pack: Safety `town-portal`, the bot's Act casts: scroll 1 to 0, portal object listed |
+| fixportalmelee | D-castcut | RECORDED | see below |
+| regression | D2, D5, D6, DW, F | see table | |
+
+### Findings (product)
+- F18 (fixportalmelee, rule unreachable live): measured in Blood Moor with 6 spawned zombies lured to the character, 142 reads of the monster list: the nearest, second and third nearest monster were at best 1.0, 2.4 and 5.7 subtiles away (centre to centre); never 3 within 3 subtiles. Monsters in an attack mode (A1, A2) stood 1 to 9 subtiles away (histogram in the log, 1 to 3: 37 of 59 samples). `crowdAdjacent = 3` (internal/combat/crowd.go, marked U there) is smaller than the melee reach of the monsters met, so with 3 attackers at 34 percent life and no potion `meleeCastGuard` does not fire and the bot still casts the portal, the case the card meant to stop. Diagnosis only (product code is not touched here): the adjacency radius needs a measured value (the data says at least 8 subtiles for a Zombie; other monsters not measured); 3 monsters within 8 subtiles WAS reached in all three runs. UNVERIFIED: the soak death had 3 to 5 adjacent by the analyst's count, not by this radius.
+- D2.d3 stays as it was (PASS, the `debug hit 5` cheat cuts the cast): that is a forced hit, see the next point.
+
+### D-castcut: does a hit cut a town portal cast on d2d (the D2.d unknown)
+Setup: one Zombie in melee reach, scroll in the pack, cast by the harness's own right click, one `Step 1` at a time from the click, 14 trials (life 300 and 40, a distinct open cell each so the previous portal never hides the new one; some clicks timed to the start of the zombie's blow animation, so its hit lands inside the cast), identical in both repeats. Units: one Step call is 2 world ticks of 40 ms (a measured 320 ms from the click to the portal object after 4 steps).
+- Cast timeline, every trial: the scroll leaves the pack at step 1, the player is in mode 10 (cast) from step 1 to step 6, the portal object is listed at step 4 (8 ticks, 320 ms; D2.a2 saw about 7 to 8 ticks), the player is back at rest at step 7.
+- Cut by a monster hit: NO in 14 of 14. Five trials took a zombie hit at step 2 or 3, before the portal object appeared (damage 2 to 3, at life 300 and at life 40, 5 to 8 percent); the cast still completed, the player mode stayed 10 (never 4, hit recovery), the scroll was spent once, one portal. A hit outside a cast (step 18) does put the player in mode 4 for 8 steps, so these hits do stagger a player who is not casting.
+- The `debug hit 5` cheat (D2.d3, hit 3 ticks after the click) DOES cut the cast (2 clicks, both scrolls spent, one portal; passes again in `d2` of this run). So a forced hit and a real zombie blow differ on d2d: the cheat is not evidence for the rule.
+- What the data decides: for weak hits (2 to 3 damage) a cast under melee is NOT interrupted and takes 320 ms, so for zombies the premise of fixportalmelee (the cast is cut, the scroll lost) is not supported; the soak death (cast 1.3 s by the analyst, hits cut it) does not match 320 ms. Not tested: harder hits (the only way to deal them is a stronger monster; a Zombie hit 2 to 5), other monster kinds, a cast at low life where the same hit is larger. UNVERIFIED either way for a big blow. Until that is measured the rule is cheap insurance at best, and per F18 it does not fire at the live distances anyway.
+
+### Regression table (code of origin/main at 1a47b45 plus the group P harness)
+| Group | Verdicts |
+|---|---|
+| D2 | 11 of 11 PASS (D2.d and D2.d3 included) |
+| D5 | a, b PASS; c, d BLOCKED (stale text "no debug verb spawns a monster", superseded by D5.p27 and D5.p29 in F) |
+| D6 | a, b, c, d PASS |
+| DW | 14 of 14 PASS |
+| F | 14 of 14 PASS (DW.m1 PASS) |
+
+### Harness notes
+- D-emptyplan places the character with `debug warp` on the nearest cell with a wall 3 subtiles behind and 15 free subtiles in front (grid rows are level-relative subtiles, row = y), spawns 12 plain zombies (a pack over 8 is not a weak pack, so the out-of-mana ladder reaches Retreat; a champion pack is avoided and returns at once), sets mana to 0 before each 6 s `Fighter.Clear` round and life to 1000. Zombies never died in these runs (0 kills at mana 0): the drill measures the back-off, not the kill.
+- A first try with 8 plain zombies never backed off (melee fallback applies to a weak pack); a first try with champions never fought (`combat ignoring target ... avoid`, a loop that returned at once: a spin guard was added).
+- The runner prints run 1's reason when the repeats differ; D-emptyplan therefore also prints one `D-emptyplan call N` line per repeat.
+- Monster positions from `monsters` are level-relative cells, the snapshot's are act subtiles: compare in cells (an early version compared screen coordinates).
+- A spawned Zombie idles until the character comes close (most stayed 14 to 20 subtiles away for 1,200 ticks): the drills walk toward the nearest one to wake it.
+- Scroll setup picks up only the `tsc` item (PickupRaw picked up potions dropped by earlier kills, so the belt was not empty).
