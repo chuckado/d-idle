@@ -57,6 +57,7 @@ P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act
 | P2 | D1.P2 | PASS | reader boxes = engine boxes for 5 belt types (8/8/12/12/16), overflow stays in the pack |
 | P3 | D1.P3 | PASS | each drink removes one potion of the asked kind from the right column; empty kind returns the error; D1.P3m (merc) BLOCKED: no merc cheat (`debug merc hire\|kill\|revive` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: unblocked, rerun pending) |
 | P7 | D1.P7a, D1.P7 | PASS | engine auto-belts a ground potion; pickit takes both and reports picked 2 (arrival by held count works) |
+| P10 | fixrecast | OFFLINE | armors (buff upkeep) are recast by Skills.txt duration minus a margin and the Frozen Armor state, not a flat 150 s; live recipe in [fixrecast.md](fixrecast.md) |
 | P10 | fixportalmelee | OFFLINE | a cast under 3+ adjacent attackers is cut (soak 2 death): Decide/AbortFight choose potion or chicken instead; live recipe in [fixportalmelee.md](fixportalmelee.md) |
 | P10 | D2.a | PASS | portal verb from the field: 1 right click, 32 virtual ticks from the call (click at +22, the fixed panel sleeps), one portal object, one source spent |
 | P10 | D2.a2 | PASS | raw cast: portal object 8 ticks after the right click, 3 casts, identical (trace: about 7) |
