@@ -47,7 +47,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
 | [fixmouth2](../../openspec/changes/fixmouth2/) | in-progress | fixmouth2 | `internal/combat/fight.go`<br>`internal/combat/fighter.go`<br>`internal/combat/fixmouth2_test.go`<br>`docs/fixmouth2.md` | - |
-| [fixmouth3](../../openspec/changes/fixmouth3/) | in-progress | fixmouth3 | `internal/nav/roam.go`<br>`internal/nav/fixmouth3_test.go`<br>`internal/combat/fixmouth3_test.go`<br>`docs/fixmouth3.md` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -88,7 +87,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmouth: live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)
 - change fixmouth2: live: DW.m3 x3 and DW.m4 rerun, no bounce, Clear finishes (docs/fixmouth2.md)
-- change fixmouth3: live: DW.m3 x3 and DW.m4 rerun, zero level-change errors in Clear and Explore (docs/fixmouth3.md)
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -107,6 +105,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- e64c13a 11-01 01:36 `Merge agent/drills17: DRILLS17 live result for fixmouth2 (FAIL, bounces remain)` (drills17)
 - 2527484 11-01 01:31 `Merge agent/forknext: private fork carries the NextHit fix (lab-nexthit), docs only` (forknext)
 - 97f2fc3 11-01 01:24 `Merge agent/apireview: advisory PR review workflow (owner PRs only) and Anthropic HTTP helper` (apireview)
 - b2c88b8 11-01 01:20 `Merge agent/fixmouth2: arrival hold across walks, mouthApproachR 12, capped evade inside a cave mouth` (fixmouth2)
@@ -116,5 +115,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
 - d837d1c 11-01 01:57 `Merge agent/sknova: Frost Nova ring trace (SKNOVA)` (sknova)
 - 4b86423 11-01 01:52 `Merge agent/fixcastgap: per-skill cast gap (Lightning 890 ms on game.exe, 650 ms on d2d)` (fixcastgap)
-- c53dc1d 11-01 01:48 `Merge agent/drills15: DRILLS15 live drill results (13 drills on d2d vs game.exe traces)` (drills15)
 <!-- statusgen:end -->
