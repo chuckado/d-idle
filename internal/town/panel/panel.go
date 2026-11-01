@@ -10,6 +10,7 @@ package panel
 import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
+	"fmt"
 )
 
 // Pt is a client-area pixel.
@@ -66,25 +67,26 @@ type Rect struct{ L, T, R, B int }
 
 func (r Rect) Contains(p Pt) bool { return p.X >= r.L && p.X < r.R && p.Y >= r.T && p.Y < r.B }
 
-// Class names used by inventory.txt for the character rows.
-func classRow(c d2.Class) string {
+// classRow is the name of the inventory.txt character row. An unknown class is an error: the Sorceress row would
+// put every slot rectangle in the wrong place without a sign (build-flexibility audit row 29).
+func classRow(c d2.Class) (string, error) {
 	switch c {
 	case d2.Amazon:
-		return "Amazon"
+		return "Amazon", nil
 	case d2.Sorceress:
-		return "Sorceress"
+		return "Sorceress", nil
 	case d2.Necromancer:
-		return "Necromancer"
+		return "Necromancer", nil
 	case d2.Paladin:
-		return "Paladin"
+		return "Paladin", nil
 	case d2.Barbarian:
-		return "Barbarian"
+		return "Barbarian", nil
 	case d2.Druid:
-		return "Druid"
+		return "Druid", nil
 	case d2.Assassin:
-		return "Assassin"
+		return "Assassin", nil
 	}
-	return "Sorceress"
+	return "", fmt.Errorf("panel: no inventory row for class %d", int(c))
 }
 
 // NewLayout builds the layout from the data tables for a window of the given size.
@@ -102,7 +104,11 @@ func NewLayout(db *data.DB, class d2.Class, screen Pt, bigStash bool) (*Layout, 
 	var l Layout
 	var err error
 	var ip, lp data.Rect
-	if l.Inventory, ip, err = grid("inventory", classRow(class)); err != nil {
+	row, err := classRow(class)
+	if err != nil {
+		return nil, err
+	}
+	if l.Inventory, ip, err = grid("inventory", row); err != nil {
 		return nil, err
 	}
 	stash := "Bank Page 1"
@@ -124,7 +130,7 @@ func NewLayout(db *data.DB, class d2.Class, screen Pt, bigStash bool) (*Layout, 
 	l.LeftPanel = Rect{lp.Left + off.X, ip.Top + off.Y, lp.Right + off.X, ip.Bottom + off.Y}
 	l.Screen, l.Offset = screen, off
 	l.Slots = map[string]Rect{}
-	if v := db.InventoryLayout(classRow(class)); v != nil {
+	if v := db.InventoryLayout(row); v != nil {
 		for n, r := range v.Slots {
 			l.Slots[n] = Rect{r.Left + off.X, r.Top + off.Y, r.Right + off.X, r.Bottom + off.Y}
 		}
