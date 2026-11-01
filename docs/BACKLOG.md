@@ -239,3 +239,5 @@ dethash2 (2026-11-01, card dethash2): second det run, 14 scenarios on 5 builds (
 > drills13 (live): sk-mana-trace D1 and D3 confirmed live on d2d (mana paid 1 tick after the command, action frame +8, a cut cast stays paid): PR candidate "pay at the action frame" has its live evidence; new items F1 (cache column stamp in data.Open / CacheCurrent), F2 (re-arm needBuff by the armor's recast time), F3 (Player.States empty on d2d): docs/probes/drills/README.md DRILLS13
 
 > crfix157 (done): CodeRabbit on upstream PR 157, finding 1 valid (fixed cf85634a, fast-forward), finding 2 not changed (classified residuals); records in docs/research/pr-mods-evidence-addendum.md and pr-bundle-queue.md.
+
+> FIXMOUTH: mouthStep arrival radius 16 for the first walk after a warp (Den bounce, DRILLS14); offline tests pass, live DW.m3 x3 + DW.m4 proof pending (docs/fixmouth.md).

@@ -93,6 +93,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- d83ceb0 11-01 01:36 `Merge agent/fixmouth: mouthArrivalR for the first walk after a warp arrival (den bounce fix A)` (fixmouth)
 - 27049dd 11-01 01:27 `Merge agent/fixbuff: re-cast buffs in long fights, buff states, stale skills cache check` (fixbuff)
 - 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
 - 0c88fdc 11-01 01:16 `Merge agent/crfix157: CodeRabbit follow-up records for upstream PR 157 (docs only)` (crfix157)
@@ -102,5 +103,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6b922b1 11-01 01:02 `Merge agent/drills12: DRILLS12 live proof of fixcrowd (crowdAdjacent knob), drill harness` (drills12)
 - 19ca7c4 11-01 00:57 `Merge agent/fixlair: Level.TeleportRule and CanTeleportIn, stale teleport comments corrected` (fixlair)
 - ba90992 11-01 00:52 `Merge agent/auditfix: gamecode guard, fixtures provenance, lab-path scrub of docs/probes` (auditfix)
-- 6a6eabe 11-01 00:50 `Merge agent/sktele: Teleport trace (decomp row 16), sk_tele_spot.py` (sktele)
 <!-- statusgen:end -->
