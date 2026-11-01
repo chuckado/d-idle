@@ -77,3 +77,13 @@ openspec/changes/skmiss/**  skmiss  skmiss
 docs/fixcrowd.md  fixcrowd  fixcrowd
 internal/combat/crowd_test.go  fixcrowd  fixcrowd
 internal/combat/fixcrowd_test.go  fixcrowd  fixcrowd
+docs/fixbuff.md  fixbuff  fixbuff
+internal/combat/fight.go  fixbuff  fixbuff
+internal/combat/fixbuff_test.go  fixbuff  fixbuff
+internal/d2/states.go  fixbuff  fixbuff
+internal/d2dctl/verbs.go  fixbuff  fixbuff
+internal/d2dctl/parse.go  fixbuff  fixbuff
+internal/d2dctl/parse_test.go  fixbuff  fixbuff
+internal/d2dsrc/source.go  fixbuff  fixbuff
+internal/d2dsrc/source_test.go  fixbuff  fixbuff
+internal/d2denv/env.go  fixbuff  fixbuff
