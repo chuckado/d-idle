@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"sort"
 	"time"
 
@@ -116,9 +117,12 @@ func floodHops(f *Field, sx, sy int) []int32 {
 	return dist
 }
 
-// roamExitClear keeps coverage points away from tile exits (caves, stairs): walking to a point next to the Den of Evil
+// dropNearExits keeps coverage points away from tile exits (caves, stairs): walking to a point next to the Den of Evil
 // entrance entered the Den, the guard walked back, and the roam started over in a loop (D2DLOOP r2, V live).
-const roamExitClear = 7
+//
+// FIXMOUTH3: the filter radius is mouthApproachR (Euclidean), not 7 Chebyshev: the roam position 13 from the Cave Level 1
+// exit (V DRILLS17) was kept and its first click fired the trigger. The target is filtered rather than every walk guarded
+// out to 15, so a coverage point near the mouth is simply not visited (monsters there wake up and come anyway).
 
 func dropNearExits(pts []input.Point, exits []d2map.Exit) []input.Point {
 	if len(exits) == 0 {
@@ -128,7 +132,7 @@ func dropNearExits(pts []input.Point, exits []d2map.Exit) []input.Point {
 next:
 	for _, p := range pts {
 		for _, e := range exits {
-			if max(abs(p.X-e.Pos.X), abs(p.Y-e.Pos.Y)) <= roamExitClear {
+			if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthApproachR {
 				continue next
 			}
 		}
