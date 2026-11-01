@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills13
-status: in-progress
+status: archived
+merge: 0c88fdc
 agent: drills13
 branch: agent/drills13
 worktree: ~/code/d2lod-wt/drills13
@@ -12,7 +13,7 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits"
-result: "A and B run live on a hidden slot (lab-debug-skills binary); see the DRILLS13 section of docs/probes/drills/README.md"
+result: "verified live: D-fro1, D-fro2 PASS (fresh tables cache), D-m1 recorded twice identically; see DRILLS13 in docs/probes/drills/README.md"
 live: "verified live: D-fro1, D-fro2 PASS (with a fresh tables cache), D-m1 recorded twice identically"
 ```
 
