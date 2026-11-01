@@ -69,3 +69,8 @@ internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
+openspec/changes/verifynexthit/**  verifynexthit  verifynexthit
+tools/emu/verify_nexthit.py  verifynexthit  verifynexthit
+tools/emu/test_verify_nexthit.cpp  verifynexthit  verifynexthit
+docs/research/pr-nexthit-verifier.md  verifynexthit  verifynexthit
+docs/research/pr-bundle-queue.md  verifynexthit  verifynexthit
