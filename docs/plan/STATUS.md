@@ -123,6 +123,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e3e8fc7 11-01 16:13 `Merge agent/fixprogress: town trip loop fix: an empty portal source marks the tome empty for the next visit (Gate 1 progress failure)` (fixprogress)
 - 3cc11d1 11-01 16:06 `Merge agent/verifyblizzard: independent verifier of the Blizzard shard-offset candidate (READY WITH CHANGES)` (verifyblizzard)
 - 825cc2c 11-01 15:54 `Merge agent/fixbelt: low potion kit bypasses the recovery cooldown (Gate 1 belt window)` (fixbelt)
 - 6e7b133 11-01 15:23 `Merge agent/skground2: SKGROUND2: Fire Wall, Hydra, Blizzard hit area and offsets on the real d2d build; PR candidate awaiting verifier` (skground2)
@@ -132,5 +133,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - a8c49d9 11-01 14:56 `Merge agent/linuxbuild: Linux builder container docs: fork and test binaries built off the game host` (linuxbuild)
 - 189f251 11-01 14:53 `Merge agent/oriontune: capacity rule treats phantom I/O wait as OK; worker-capacity doc` (oriontune)
 - ccc7ec7 11-01 14:41 `Merge agent/skground: SKGROUND: Blizzard and Meteor traced, d2d deviations, bot delay-timer findings` (skground)
-- 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
 <!-- statusgen:end -->
