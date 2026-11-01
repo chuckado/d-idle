@@ -79,3 +79,11 @@ internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
 internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+docs/fixtelekey.md  fixtelekey  fixtelekey
+internal/nav/telecap.go  fixtelekey  fixtelekey
+internal/nav/telecap_test.go  fixtelekey  fixtelekey
+internal/combat/telekey.go  fixtelekey  fixtelekey
+internal/combat/telekey_test.go  fixtelekey  fixtelekey
+cmd/d2bot/telewire.go  fixtelekey  fixtelekey
+cmd/d2bot/telewire_test.go  fixtelekey  fixtelekey
+internal/boss/boss_opts_test.go  fixtelekey  fixtelekey
