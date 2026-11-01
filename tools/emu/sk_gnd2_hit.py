@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2 D4: which subtile offsets a standing Blizzard shard hits, by game.exe's own code.
 
-    python sk_ground_hit.py [SPAN [ROW [FRAMES]]]    # ROW blizzard1 (default) or firewall; prints `H size class a b hit first count` per case
+    python sk_gnd2_hit.py [SPAN [ROW [FRAMES]]]    # ROW blizzard1 (default) or firewall; prints `H size class a b hit first count` per case
 
 Runs next to upstream's tools/emu (missiles.py's Game: a Blood Moor game,
 every room up). Per case: a monster unit of a class (size 1..3) stands at a
@@ -15,7 +15,7 @@ hooked, as in missiles.py). The 0x40 the standing shard marks in the room's
 collision is cleared after each case.
 
 `hit` is 1 when FUN_005adf10 was called with the monster at any of the frames,
-`frame` the first one. The d2d side: tools/emu/sk_ground_test.cpp --hit.
+`frame` the first one. The d2d side: tools/emu/sk_gnd2_test.cpp --hit.
 """
 import random
 import sys

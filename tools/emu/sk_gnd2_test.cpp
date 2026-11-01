@@ -9,14 +9,14 @@
 //     -6..5 at radius 7 (tools/emu/sk_ground_blizz.py, V run).
 //   `--fw CASES`: Fire Wall (a real Fight::fire at a point, the two makers
 //     stepped by Fight::missile_tick): for each `C case lvl tx ty cx cy` line of
-//     tools/emu/sk_ground_fw.py (target T, caster C, subtiles) one line per
+//     tools/emu/sk_gnd2_fw.py (target T, caster C, subtiles) one line per
 //     `firewall` made: `D <case> <frame> <dx> <dy>` (subtile minus T; frame 0
 //     is the one at T itself).
 //   `--hit [ROW]`: one standing `blizzard1` shard (Size 2) and one hostile monster
 //     of each size 1..3 at every offset -7..7 subtiles; the monster has a
 //     million life and the shard deals a fixed 10 points, so the monster's
 //     life lost / 10 over the shard's frames is its hits. One line
-//     `H <size> <class> <dx> <dy> <hits>` (game.exe's: tools/emu/sk_ground_hit.py).
+//     `H <size> <class> <dx> <dy> <hits>` (game.exe's: tools/emu/sk_gnd2_hit.py).
 
 #include <ai.hpp>
 #include <character.hpp>
@@ -51,7 +51,7 @@ using namespace d2d::game;
 
 int main(int argc, char** argv) try {
     const std::string_view mode = argc > 1 ? argv[1] : "";
-    if (mode != "--blizz" && mode != "--hit" && mode != "--fw") { std::printf("SKIP: needs --blizz SEED N, --fw CASES or --hit (see tools/emu/sk_ground_blizz.py, sk_ground_hit.py)\n"); return D2D_TEST_SKIPPED; }
+    if (mode != "--blizz" && mode != "--hit" && mode != "--fw") { std::printf("SKIP: needs --blizz SEED N, --fw CASES or --hit (see tools/emu/sk_ground_blizz.py, sk_gnd2_hit.py)\n"); return D2D_TEST_SKIPPED; }
     const char* mpq_dir = std::getenv("D2_MPQ_DIR");
     const char* home = std::getenv("HOME");
     const fs::path data_dir = mpq_dir ? fs::path(mpq_dir) : fs::path(home ? home : "") / "Workspace/private/diablo2";

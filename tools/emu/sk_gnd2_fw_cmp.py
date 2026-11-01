@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""SKGROUND2: Fire Wall's `firewall` placements, game.exe (sk_ground_fw.py) vs a real d2d build.
-    python sk_ground_fw_cmp.py game.txt d2d.txt [SHIFT [trim]]
+"""SKGROUND2: Fire Wall's `firewall` placements, game.exe (sk_gnd2_fw.py) vs a real d2d build.
+    python sk_gnd2_fw_cmp.py game.txt d2d.txt [SHIFT [trim]]
 SHIFT (default 0) is added to game.exe's frames (the harness counts the maker's first do as frame 1;
 d2d's first tick of a new missile is one frame after the cast: SHIFT 1 lines the two clocks up).
 Per case: the set of subtiles (relative to the target) that get a firewall, the frame each

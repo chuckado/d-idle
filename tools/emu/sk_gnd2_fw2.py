@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2: do two Fire Wall missiles on one monster both hit it every frame (game.exe)?
-    python sk_ground_fw2.py     # prints `K <n missiles> <class> <frame> <hits that frame>`
+    python sk_gnd2_fw2.py     # prints `K <n missiles> <class> <frame> <hits that frame>`
 A size-2 monster (class 19) with 1, 2 or 3 `firewall` missiles (row 69) in the subtiles whose
 Size-1 footprints cover it (the monster's subtile and its left / right neighbours); every
 missile is stepped each frame by its own do (FUN_005ae520); FUN_005adf10 hooked to count

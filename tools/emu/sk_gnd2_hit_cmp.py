@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2 D4: where a standing missile hits a monster, game.exe vs a real d2d build.
-    python sk_ground_hit_cmp.py game.txt d2d.txt
-game.txt = `sk_ground_hit.py SPAN ROW FRAMES` (`H size class a b hit first count`),
+    python sk_gnd2_hit_cmp.py game.txt d2d.txt
+game.txt = `sk_gnd2_hit.py SPAN ROW FRAMES` (`H size class a b hit first count`),
 d2d.txt = `test_sk_ground --hit ROW FRAMES` (`H size class dx dy hits`). Compared per
 monster class that both ran (same MonStats row), offsets -SPAN..SPAN subtiles."""
 import sys

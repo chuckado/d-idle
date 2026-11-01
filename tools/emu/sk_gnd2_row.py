@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2: dump a Missiles.txt row's record (0x1a4 bytes) as game.exe holds it.
-    python sk_ground_row.py ID [ID...]   # prints the non-zero bytes/words by offset
+    python sk_gnd2_row.py ID [ID...]   # prints the non-zero bytes/words by offset
 """
 import os
 import sys

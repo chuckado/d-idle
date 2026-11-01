@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """SKGROUND2: Fire Wall's two makers and what they drop, by game.exe's own code.
 
-    python sk_ground_fw.py [CASES] [SEED]     # prints `G <case> <lvl> <frame> <dx> <dy>` per sub-missile
+    python sk_gnd2_fw.py [CASES] [SEED]     # prints `G <case> <lvl> <frame> <dx> <dy>` per sub-missile
 
 Runs next to upstream's tools/emu (missiles.py's Game: a Blood Moor game, every
 room up). The cast (do 24, FUN_005c9ea0, read) puts two `firewallmaker` rows
@@ -13,7 +13,7 @@ FUN_005ae680: it drops SubMissile1 `firewall` at its own subtile each frame
 through FUN_0059fa30, which is hooked after the maker exists to record the
 params: row, start subtile, level) for the maker's Range 7 + 2 lvl frames.
 `dx dy` are the sub-missile's subtile minus T; `frame` counts from 1.
-The d2d side: tools/emu/sk_ground_test.cpp --fw (the same cases).
+The d2d side: tools/emu/sk_gnd2_test.cpp --fw (the same cases).
 """
 import random
 import sys

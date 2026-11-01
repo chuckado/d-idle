@@ -14,7 +14,7 @@ The fix is `reach = radius - 1; rng(2 reach) - reach` (and a comment, a header c
 
 ## Proof
 
-`tests/game/test_sk_ground.cpp` (`--blizz SEED N`) casts Blizzard through the real `Fight::fire` on an open level and steps the centre 100 frames with the real `Fight::missile_tick`; it prints each shard's subtile offset from the centre. `tools/emu/sk_ground_blizz.py game` runs game.exe's FUN_005a9820 natively under the emulator on the same kind of cases (seed, age, frequency, radius); `d2d` compares the two: how many of d2d's shards have an offset game.exe never makes at radius 7.
+`tests/game/test_sk_ground.cpp` (`--blizz SEED N`) casts Blizzard through the real `Fight::fire` on an open level and steps the centre 100 frames with the real `Fight::missile_tick`; it prints each shard's subtile offset from the centre. `tools/emu/sk_ground_blizz.py game` runs game.exe's FUN_005a9820 natively under the emulator on the same kind of cases (seed, age, frequency, radius); `d2d` compares the two (in our repo that mode is tools/emu/sk_gnd2_blizz_d2d.py): how many of d2d's shards have an offset game.exe never makes at radius 7.
 
 | build | casts | shards | shards outside game.exe's -6..5 | game.exe's offsets | d2d's offsets |
 |---|---|---|---|---|---|
