@@ -2,7 +2,8 @@
 
 ```yaml
 change: readmedocs
-status: in-progress
+status: archived
+merge: 4ca38ec
 agent: readmedocs
 branch: agent/readmedocs
 worktree: ~/code/d2lod-wt/readmedocs
@@ -15,7 +16,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict; relative links resolve"
-result: "Docs only. Offline examples (build, -h, d2dsoak compare on the committed soak log, d2dash status, d2bot --sim stopping on missing tables) were run; nothing that needs a game was run."
+result: "Docs only; not verified live (nothing needs a game). Offline examples (build, -h, d2dsoak compare on the committed soak log, d2dash status, d2bot --sim stopping on missing tables) were run; nothing that needs a game was run."
 live: "docs only, nothing run live"
 ```
 
