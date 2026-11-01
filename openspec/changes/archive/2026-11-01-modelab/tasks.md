@@ -2,7 +2,7 @@
 
 ```yaml
 change: modelab
-status: in-progress
+status: archived
 agent: modelab
 branch: agent/modelab
 worktree: ~/code/d2lod-wt/modelab
@@ -13,7 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "Docs only, nothing verified live and no emulator run repeated: every count is quoted from the arm documents, the Opus trace, the independent verifier and the usage ledger. Verdict: Opus and Sonnet found the curse 1/5 rule (the real bug), Haiku missed it and had only a port of d2d; Sonnet has one doubtful claim (Fire / Lightning Mastery as pierce) and one extra (physical whole points) to re-check."
+result: "three blind arms compared against the Opus trace: Sonnet found the decisive curse rule and the real d2d bug, Haiku missed it; docs only"
+merge: 058ec1c
 ```
 
 ## 1. Work

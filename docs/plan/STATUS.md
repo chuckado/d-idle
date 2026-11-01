@@ -54,7 +54,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
-| [modelab](../../openspec/changes/modelab/) | in-progress | modelab | `docs/research/model-ab-skresist.md`<br>`openspec/changes/modelab/**` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
@@ -110,7 +109,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change modelab: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -125,6 +123,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 058ec1c 11-01 16:32 `Merge agent/modelab: model A/B on SKRESIST: Opus vs Sonnet vs Haiku comparison` (modelab)
 - d7e739d 11-01 16:29 `Merge agent/crfollow163: log of the CodeRabbit follow-up on PR 163 (stale tool range fixed)` (crfollow163)
 - 63ba464 11-01 16:25 `Merge agent/openpr-blizzard: log of upstream PR 163 (Blizzard shard offsets)` (openpr-blizzard)
 - acb7daf 11-01 16:22 `Merge agent/blizzardfix: Blizzard candidate v2: verifier's three changes applied (names, Eruption in the message, ruff)` (blizzardfix)
@@ -134,5 +133,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6e7b133 11-01 15:23 `Merge agent/skground2: SKGROUND2: Fire Wall, Hydra, Blizzard hit area and offsets on the real d2d build; PR candidate awaiting verifier` (skground2)
 - 0764a88 11-01 15:15 `Merge agent/gate1: Gate 1 rerun entry: not passed on one seed (progress, belt window)` (gate1)
 - 120e534 11-01 15:08 `Merge agent/forkstats: forkstats docs: read-only gear stats and weapon base damage in the fork dump; d2d has no player stats 17/18/21/22` (forkstats)
-- 7c4fd4b 11-01 15:01 `Merge agent/macvet: PR vetting on a second machine: portable differentials and checks, parity checked` (macvet)
 <!-- statusgen:end -->
