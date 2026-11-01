@@ -66,8 +66,8 @@ func D26(l D26Lab) []Drill {
 }
 
 func min12(n int) int {
-	if n > 12 {
-		return 12
+	if n > 40 {
+		return 40
 	}
 	return n
 }
