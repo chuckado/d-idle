@@ -1,0 +1,400 @@
+d2dslot: got slot 1
+time=2026-11-01T11:22:45.434-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1776502 still running; socket file is gone (stat <home>/d2d-lab/slots/1/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/1/d2d.sock: dial unix <home>/d2d-lab/slots/1/d2d.sock: connect: no such file or directory"
+time=2026-11-01T11:22:46.605-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-11-01T11:22:47.740-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+time=2026-11-01T11:22:47.754-05:00 level=INFO msg="d2dworld: arrived in level 41: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T11:22:47.761-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:47.761-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:47.761-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:47.761-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:47.766-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=51 partial=false cells=299 why=first
+time=2026-11-01T11:22:47.766-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=51
+time=2026-11-01T11:22:47.767-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=51
+time=2026-11-01T11:22:47.768-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:231}" wp="{X:169 Y:233}" cur=1 of=51
+time=2026-11-01T11:22:47.769-05:00 level=DEBUG msg="nav click" pos="{X:169 Y:233}" wp="{X:174 Y:238}" cur=2 of=51
+time=2026-11-01T11:22:47.771-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=51
+time=2026-11-01T11:22:47.778-05:00 level=DEBUG msg="nav click" pos="{X:180 Y:238}" wp="{X:188 Y:240}" cur=4 of=51
+time=2026-11-01T11:22:47.789-05:00 level=DEBUG msg="nav click" pos="{X:186 Y:240}" wp="{X:195 Y:239}" cur=5 of=51
+time=2026-11-01T11:22:47.792-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=51
+time=2026-11-01T11:22:47.804-05:00 level=DEBUG msg="nav click" pos="{X:200 Y:238}" wp="{X:211 Y:238}" cur=7 of=51
+time=2026-11-01T11:22:47.808-05:00 level=DEBUG msg="nav click" pos="{X:208 Y:238}" wp="{X:219 Y:237}" cur=8 of=51
+time=2026-11-01T11:22:47.811-05:00 level=DEBUG msg="nav click" pos="{X:215 Y:237}" wp="{X:227 Y:236}" cur=9 of=51
+time=2026-11-01T11:22:47.815-05:00 level=DEBUG msg="nav click" pos="{X:223 Y:236}" wp="{X:229 Y:236}" cur=10 of=51
+time=2026-11-01T11:22:47.816-05:00 level=DEBUG msg="nav click" pos="{X:225 Y:236}" wp="{X:235 Y:234}" cur=11 of=51
+time=2026-11-01T11:22:47.819-05:00 level=DEBUG msg="nav plan" from="{X:226 Y:236}" to="{X:399 Y:77}" wps=41 partial=false cells=238 why=monsters
+time=2026-11-01T11:22:47.819-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=1 of=41
+time=2026-11-01T11:22:47.839-05:00 level=DEBUG msg="nav click" pos="{X:233 Y:234}" wp="{X:241 Y:229}" cur=2 of=41
+time=2026-11-01T11:22:47.843-05:00 level=DEBUG msg="nav click" pos="{X:239 Y:231}" wp="{X:247 Y:224}" cur=3 of=41
+time=2026-11-01T11:22:47.858-05:00 level=DEBUG msg="nav plan" from="{X:245 Y:225}" to="{X:399 Y:77}" wps=36 partial=false cells=219 why=monsters
+time=2026-11-01T11:22:47.858-05:00 level=DEBUG msg="nav click" pos="{X:245 Y:225}" wp="{X:250 Y:222}" cur=0 of=36
+time=2026-11-01T11:22:47.859-05:00 level=DEBUG msg="nav click" pos="{X:247 Y:224}" wp="{X:258 Y:222}" cur=1 of=36
+time=2026-11-01T11:22:47.864-05:00 level=DEBUG msg="nav click" pos="{X:255 Y:223}" wp="{X:266 Y:221}" cur=2 of=36
+time=2026-11-01T11:22:47.868-05:00 level=DEBUG msg="nav click" pos="{X:263 Y:221}" wp="{X:272 Y:221}" cur=3 of=36
+time=2026-11-01T11:22:47.872-05:00 level=DEBUG msg="nav plan" from="{X:267 Y:221}" to="{X:399 Y:77}" wps=33 partial=false cells=197 why=monsters
+time=2026-11-01T11:22:47.873-05:00 level=DEBUG msg="nav click" pos="{X:267 Y:221}" wp="{X:272 Y:221}" cur=0 of=33
+time=2026-11-01T11:22:47.875-05:00 level=DEBUG msg="nav click" pos="{X:268 Y:221}" wp="{X:278 Y:216}" cur=1 of=33
+time=2026-11-01T11:22:47.880-05:00 level=DEBUG msg="nav click" pos="{X:276 Y:217}" wp="{X:284 Y:211}" cur=2 of=33
+time=2026-11-01T11:22:47.893-05:00 level=DEBUG msg="nav click" pos="{X:281 Y:213}" wp="{X:291 Y:206}" cur=3 of=33
+time=2026-11-01T11:22:47.913-05:00 level=DEBUG msg="nav plan" from="{X:287 Y:209}" to="{X:399 Y:77}" wps=30 partial=false cells=179 why=monsters
+time=2026-11-01T11:22:47.913-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:209}" wp="{X:289 Y:205}" cur=0 of=30
+time=2026-11-01T11:22:47.914-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:208}" wp="{X:296 Y:202}" cur=1 of=30
+time=2026-11-01T11:22:47.919-05:00 level=DEBUG msg="nav click" pos="{X:293 Y:204}" wp="{X:304 Y:199}" cur=2 of=30
+time=2026-11-01T11:22:47.924-05:00 level=DEBUG msg="nav click" pos="{X:301 Y:201}" wp="{X:311 Y:196}" cur=3 of=30
+time=2026-11-01T11:22:47.940-05:00 level=DEBUG msg="nav plan" from="{X:305 Y:199}" to="{X:399 Y:77}" wps=26 partial=false cells=159 why=monsters
+time=2026-11-01T11:22:47.940-05:00 level=DEBUG msg="nav click" pos="{X:305 Y:199}" wp="{X:312 Y:195}" cur=0 of=26
+time=2026-11-01T11:22:47.943-05:00 level=DEBUG msg="nav click" pos="{X:310 Y:196}" wp="{X:316 Y:193}" cur=1 of=26
+time=2026-11-01T11:22:47.946-05:00 level=DEBUG msg="nav click" pos="{X:313 Y:195}" wp="{X:320 Y:186}" cur=2 of=26
+time=2026-11-01T11:22:47.952-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:188}" wp="{X:323 Y:179}" cur=3 of=26
+time=2026-11-01T11:22:47.970-05:00 level=DEBUG msg="nav plan" from="{X:321 Y:184}" to="{X:399 Y:77}" wps=23 partial=false cells=139 why=monsters
+time=2026-11-01T11:22:47.970-05:00 level=DEBUG msg="nav click" pos="{X:321 Y:184}" wp="{X:324 Y:177}" cur=0 of=23
+time=2026-11-01T11:22:47.974-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:179}" wp="{X:327 Y:169}" cur=1 of=23
+time=2026-11-01T11:22:47.979-05:00 level=DEBUG msg="nav click" pos="{X:326 Y:171}" wp="{X:330 Y:162}" cur=2 of=23
+time=2026-11-01T11:22:48.001-05:00 level=DEBUG msg="nav click" pos="{X:329 Y:165}" wp="{X:333 Y:154}" cur=3 of=23
+time=2026-11-01T11:22:48.003-05:00 level=DEBUG msg="nav plan" from="{X:329 Y:164}" to="{X:399 Y:77}" wps=20 partial=false cells=119 why=monsters
+time=2026-11-01T11:22:48.004-05:00 level=DEBUG msg="nav click" pos="{X:329 Y:164}" wp="{X:332 Y:157}" cur=0 of=20
+time=2026-11-01T11:22:48.015-05:00 level=DEBUG msg="nav click" pos="{X:331 Y:159}" wp="{X:335 Y:149}" cur=1 of=20
+time=2026-11-01T11:22:48.021-05:00 level=DEBUG msg="nav click" pos="{X:334 Y:151}" wp="{X:338 Y:142}" cur=2 of=20
+time=2026-11-01T11:22:48.025-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:145}" wp="{X:341 Y:134}" cur=3 of=20
+time=2026-11-01T11:22:48.027-05:00 level=DEBUG msg="nav plan" from="{X:337 Y:143}" to="{X:399 Y:77}" wps=17 partial=false cells=98 why=monsters
+time=2026-11-01T11:22:48.027-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:143}" wp="{X:340 Y:136}" cur=0 of=17
+time=2026-11-01T11:22:48.030-05:00 level=DEBUG msg="nav click" pos="{X:339 Y:139}" wp="{X:343 Y:128}" cur=1 of=17
+time=2026-11-01T11:22:48.038-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:131}" wp="{X:346 Y:121}" cur=2 of=17
+time=2026-11-01T11:22:48.044-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:124}" wp="{X:349 Y:113}" cur=3 of=17
+time=2026-11-01T11:22:48.045-05:00 level=DEBUG msg="nav plan" from="{X:345 Y:123}" to="{X:399 Y:77}" wps=14 partial=false cells=78 why=monsters
+time=2026-11-01T11:22:48.045-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:123}" wp="{X:348 Y:116}" cur=0 of=14
+time=2026-11-01T11:22:48.058-05:00 level=DEBUG msg="nav click" pos="{X:347 Y:118}" wp="{X:351 Y:108}" cur=1 of=14
+time=2026-11-01T11:22:48.066-05:00 level=DEBUG msg="nav click" pos="{X:350 Y:111}" wp="{X:354 Y:101}" cur=2 of=14
+time=2026-11-01T11:22:48.088-05:00 level=DEBUG msg="nav plan" from="{X:351 Y:108}" to="{X:399 Y:77}" wps=12 partial=false cells=63 why=monsters
+time=2026-11-01T11:22:48.088-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:108}" wp="{X:354 Y:101}" cur=0 of=12
+time=2026-11-01T11:22:48.093-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:103}" wp="{X:357 Y:93}" cur=1 of=12
+time=2026-11-01T11:22:48.102-05:00 level=DEBUG msg="nav click" pos="{X:356 Y:96}" wp="{X:360 Y:86}" cur=2 of=12
+time=2026-11-01T11:22:48.104-05:00 level=DEBUG msg="nav plan" from="{X:357 Y:94}" to="{X:399 Y:77}" wps=10 partial=false cells=49 why=monsters
+time=2026-11-01T11:22:48.104-05:00 level=DEBUG msg="nav click" pos="{X:357 Y:94}" wp="{X:360 Y:91}" cur=0 of=10
+time=2026-11-01T11:22:48.105-05:00 level=DEBUG msg="nav click" pos="{X:358 Y:93}" wp="{X:362 Y:83}" cur=1 of=10
+time=2026-11-01T11:22:48.119-05:00 level=DEBUG msg="nav click" pos="{X:361 Y:86}" wp="{X:362 Y:82}" cur=2 of=10
+time=2026-11-01T11:22:48.120-05:00 level=DEBUG msg="nav click" pos="{X:361 Y:85}" wp="{X:368 Y:77}" cur=3 of=10
+time=2026-11-01T11:22:48.139-05:00 level=DEBUG msg="nav plan" from="{X:366 Y:79}" to="{X:399 Y:77}" wps=7 partial=false cells=33 why=monsters
+time=2026-11-01T11:22:48.139-05:00 level=DEBUG msg="nav click" pos="{X:366 Y:79}" wp="{X:374 Y:77}" cur=1 of=7
+time=2026-11-01T11:22:48.142-05:00 level=DEBUG msg="nav click" pos="{X:371 Y:78}" wp="{X:377 Y:78}" cur=2 of=7
+time=2026-11-01T11:22:48.144-05:00 level=DEBUG msg="nav click" pos="{X:374 Y:78}" wp="{X:385 Y:78}" cur=3 of=7
+time=2026-11-01T11:22:48.148-05:00 level=DEBUG msg="nav click" pos="{X:381 Y:78}" wp="{X:393 Y:78}" cur=4 of=7
+time=2026-11-01T11:22:48.152-05:00 level=DEBUG msg="nav plan" from="{X:388 Y:78}" to="{X:399 Y:77}" wps=2 partial=false cells=11 why=monsters
+time=2026-11-01T11:22:48.152-05:00 level=DEBUG msg="nav click" pos="{X:388 Y:78}" wp="{X:396 Y:78}" cur=0 of=2
+time=2026-11-01T11:22:48.155-05:00 level=DEBUG msg="nav click" pos="{X:393 Y:78}" wp="{X:399 Y:77}" cur=1 of=2
+D22 border-nokey-1: key="" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=630 wall=735ms err=<nil> declined=0 hopticks=[]
+D22 border-nokey-1 plan: +0 from={171 229} to={399 77} wps=51 partial=false cells=299 why=first
+D22 border-nokey-1 plan: +115 from={226 236} to={399 77} wps=41 partial=false cells=238 why=monsters
+D22 border-nokey-1 plan: +154 from={245 225} to={399 77} wps=36 partial=false cells=219 why=monsters
+D22 border-nokey-1 plan: +193 from={267 221} to={399 77} wps=33 partial=false cells=197 why=monsters
+D22 border-nokey-1 plan: +235 from={287 209} to={399 77} wps=30 partial=false cells=179 why=monsters
+D22 border-nokey-1 plan: +274 from={305 199} to={399 77} wps=26 partial=false cells=159 why=monsters
+D22 border-nokey-1 plan: +313 from={321 184} to={399 77} wps=23 partial=false cells=139 why=monsters
+D22 border-nokey-1 plan: +352 from={329 164} to={399 77} wps=20 partial=false cells=119 why=monsters
+D22 border-nokey-1 plan: +391 from={337 143} to={399 77} wps=17 partial=false cells=98 why=monsters
+D22 border-nokey-1 plan: +430 from={345 123} to={399 77} wps=14 partial=false cells=78 why=monsters
+D22 border-nokey-1 plan: +469 from={351 108} to={399 77} wps=12 partial=false cells=63 why=monsters
+D22 border-nokey-1 plan: +508 from={357 94} to={399 77} wps=10 partial=false cells=49 why=monsters
+D22 border-nokey-1 plan: +547 from={366 79} to={399 77} wps=7 partial=false cells=33 why=monsters
+D22 border-nokey-1 plan: +586 from={388 78} to={399 77} wps=2 partial=false cells=11 why=monsters
+time=2026-11-01T11:22:48.510-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:48.510-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:48.510-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:48.511-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:48.515-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:48.516-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=52
+time=2026-11-01T11:22:48.517-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:48.520-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:48.521-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:235}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:48.522-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:237}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:48.524-05:00 level=DEBUG msg="nav click" pos="{X:179 Y:238}" wp="{X:188 Y:240}" cur=4 of=52
+time=2026-11-01T11:22:48.528-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:195 Y:239}" cur=5 of=52
+time=2026-11-01T11:22:48.531-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=52
+time=2026-11-01T11:22:48.536-05:00 level=DEBUG msg="nav click" pos="{X:199 Y:238}" wp="{X:211 Y:238}" cur=7 of=52
+time=2026-11-01T11:22:48.539-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:238}" wp="{X:219 Y:237}" cur=8 of=52
+time=2026-11-01T11:22:48.544-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:237}" wp="{X:227 Y:236}" cur=9 of=52
+time=2026-11-01T11:22:48.549-05:00 level=DEBUG msg="nav click" pos="{X:224 Y:236}" wp="{X:229 Y:236}" cur=10 of=52
+time=2026-11-01T11:22:48.551-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=11 of=52
+time=2026-11-01T11:22:48.577-05:00 level=DEBUG msg="nav click" pos="{X:232 Y:235}" wp="{X:241 Y:229}" cur=12 of=52
+time=2026-11-01T11:22:48.581-05:00 level=DEBUG msg="nav click" pos="{X:238 Y:231}" wp="{X:247 Y:223}" cur=13 of=52
+time=2026-11-01T11:22:48.586-05:00 level=DEBUG msg="nav click" pos="{X:244 Y:225}" wp="{X:253 Y:218}" cur=14 of=52
+time=2026-11-01T11:22:48.592-05:00 level=DEBUG msg="nav click" pos="{X:251 Y:220}" wp="{X:258 Y:212}" cur=15 of=52
+time=2026-11-01T11:22:48.598-05:00 level=DEBUG msg="nav click" pos="{X:256 Y:214}" wp="{X:264 Y:207}" cur=16 of=52
+time=2026-11-01T11:22:48.603-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:209}" wp="{X:265 Y:206}" cur=17 of=52
+time=2026-11-01T11:22:48.604-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:208}" wp="{X:273 Y:206}" cur=18 of=52
+time=2026-11-01T11:22:48.611-05:00 level=DEBUG msg="nav click" pos="{X:270 Y:207}" wp="{X:281 Y:206}" cur=19 of=52
+time=2026-11-01T11:22:48.618-05:00 level=DEBUG msg="nav click" pos="{X:277 Y:206}" wp="{X:282 Y:206}" cur=20 of=52
+time=2026-11-01T11:22:48.619-05:00 level=DEBUG msg="nav click" pos="{X:278 Y:206}" wp="{X:290 Y:203}" cur=21 of=52
+time=2026-11-01T11:22:48.643-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:204}" wp="{X:297 Y:201}" cur=22 of=52
+time=2026-11-01T11:22:48.649-05:00 level=DEBUG msg="nav click" pos="{X:294 Y:202}" wp="{X:305 Y:198}" cur=23 of=52
+time=2026-11-01T11:22:48.653-05:00 level=DEBUG msg="nav click" pos="{X:302 Y:199}" wp="{X:312 Y:195}" cur=24 of=52
+time=2026-11-01T11:22:48.657-05:00 level=DEBUG msg="nav click" pos="{X:310 Y:196}" wp="{X:315 Y:194}" cur=25 of=52
+time=2026-11-01T11:22:48.658-05:00 level=DEBUG msg="nav click" pos="{X:312 Y:195}" wp="{X:320 Y:188}" cur=26 of=52
+time=2026-11-01T11:22:48.663-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:190}" wp="{X:325 Y:181}" cur=27 of=52
+time=2026-11-01T11:22:48.667-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:183}" wp="{X:330 Y:175}" cur=28 of=52
+time=2026-11-01T11:22:48.671-05:00 level=DEBUG msg="nav click" pos="{X:328 Y:178}" wp="{X:334 Y:169}" cur=29 of=52
+time=2026-11-01T11:22:48.675-05:00 level=DEBUG msg="nav click" pos="{X:332 Y:171}" wp="{X:339 Y:162}" cur=30 of=52
+time=2026-11-01T11:22:48.697-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:164}" wp="{X:344 Y:156}" cur=31 of=52
+time=2026-11-01T11:22:48.702-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:159}" wp="{X:347 Y:152}" cur=32 of=52
+time=2026-11-01T11:22:48.707-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:155}" wp="{X:347 Y:144}" cur=33 of=52
+time=2026-11-01T11:22:48.713-05:00 level=DEBUG msg="nav click" pos="{X:347 Y:147}" wp="{X:348 Y:136}" cur=34 of=52
+time=2026-11-01T11:22:48.720-05:00 level=DEBUG msg="nav click" pos="{X:348 Y:139}" wp="{X:350 Y:128}" cur=35 of=52
+time=2026-11-01T11:22:48.727-05:00 level=DEBUG msg="nav click" pos="{X:349 Y:131}" wp="{X:351 Y:120}" cur=36 of=52
+time=2026-11-01T11:22:48.733-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:122}" wp="{X:353 Y:112}" cur=37 of=52
+time=2026-11-01T11:22:48.737-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:114}" wp="{X:355 Y:102}" cur=39 of=52
+time=2026-11-01T11:22:48.762-05:00 level=DEBUG msg="nav click" pos="{X:355 Y:104}" wp="{X:357 Y:94}" cur=40 of=52
+time=2026-11-01T11:22:48.767-05:00 level=DEBUG msg="nav click" pos="{X:357 Y:96}" wp="{X:360 Y:86}" cur=42 of=52
+time=2026-11-01T11:22:48.771-05:00 level=DEBUG msg="nav click" pos="{X:359 Y:88}" wp="{X:361 Y:83}" cur=43 of=52
+time=2026-11-01T11:22:48.774-05:00 level=DEBUG msg="nav click" pos="{X:360 Y:85}" wp="{X:367 Y:78}" cur=44 of=52
+time=2026-11-01T11:22:48.777-05:00 level=DEBUG msg="nav click" pos="{X:365 Y:80}" wp="{X:368 Y:77}" cur=45 of=52
+time=2026-11-01T11:22:48.778-05:00 level=DEBUG msg="nav click" pos="{X:366 Y:79}" wp="{X:374 Y:77}" cur=46 of=52
+time=2026-11-01T11:22:48.781-05:00 level=DEBUG msg="nav click" pos="{X:371 Y:78}" wp="{X:377 Y:78}" cur=47 of=52
+time=2026-11-01T11:22:48.783-05:00 level=DEBUG msg="nav click" pos="{X:373 Y:78}" wp="{X:385 Y:78}" cur=48 of=52
+time=2026-11-01T11:22:48.787-05:00 level=DEBUG msg="nav click" pos="{X:381 Y:78}" wp="{X:393 Y:78}" cur=49 of=52
+time=2026-11-01T11:22:48.793-05:00 level=DEBUG msg="nav click" pos="{X:389 Y:78}" wp="{X:396 Y:78}" cur=50 of=52
+time=2026-11-01T11:22:48.796-05:00 level=DEBUG msg="nav click" pos="{X:393 Y:78}" wp="{X:399 Y:77}" cur=51 of=52
+D22 border-nokey-2: key="" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=692 wall=317ms err=<nil> declined=0 hopticks=[]
+D22 border-nokey-2 plan: +0 from={171 229} to={399 77} wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:48.836-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:48.836-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:48.837-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:48.837-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:48.842-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:48.842-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=52
+time=2026-11-01T11:22:48.843-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:48.846-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:48.846-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:235}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:48.847-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:237}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:48.850-05:00 level=DEBUG msg="nav click" pos="{X:179 Y:238}" wp="{X:188 Y:240}" cur=4 of=52
+time=2026-11-01T11:22:48.854-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:195 Y:239}" cur=5 of=52
+time=2026-11-01T11:22:48.857-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=52
+time=2026-11-01T11:22:48.861-05:00 level=DEBUG msg="nav click" pos="{X:199 Y:238}" wp="{X:211 Y:238}" cur=7 of=52
+time=2026-11-01T11:22:48.865-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:238}" wp="{X:219 Y:237}" cur=8 of=52
+time=2026-11-01T11:22:48.870-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:237}" wp="{X:227 Y:236}" cur=9 of=52
+time=2026-11-01T11:22:48.876-05:00 level=DEBUG msg="nav click" pos="{X:224 Y:236}" wp="{X:229 Y:236}" cur=10 of=52
+time=2026-11-01T11:22:48.877-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=11 of=52
+time=2026-11-01T11:22:48.898-05:00 level=DEBUG msg="nav click" pos="{X:232 Y:235}" wp="{X:241 Y:229}" cur=12 of=52
+time=2026-11-01T11:22:48.902-05:00 level=DEBUG msg="nav click" pos="{X:238 Y:231}" wp="{X:247 Y:223}" cur=13 of=52
+time=2026-11-01T11:22:48.906-05:00 level=DEBUG msg="nav click" pos="{X:244 Y:225}" wp="{X:253 Y:218}" cur=14 of=52
+time=2026-11-01T11:22:48.910-05:00 level=DEBUG msg="nav click" pos="{X:251 Y:220}" wp="{X:258 Y:212}" cur=15 of=52
+time=2026-11-01T11:22:48.914-05:00 level=DEBUG msg="nav click" pos="{X:256 Y:214}" wp="{X:264 Y:207}" cur=16 of=52
+time=2026-11-01T11:22:48.918-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:209}" wp="{X:265 Y:206}" cur=17 of=52
+time=2026-11-01T11:22:48.919-05:00 level=DEBUG msg="nav click" pos="{X:263 Y:208}" wp="{X:273 Y:206}" cur=18 of=52
+time=2026-11-01T11:22:48.923-05:00 level=DEBUG msg="nav click" pos="{X:271 Y:206}" wp="{X:281 Y:206}" cur=19 of=52
+time=2026-11-01T11:22:48.927-05:00 level=DEBUG msg="nav click" pos="{X:278 Y:206}" wp="{X:290 Y:203}" cur=21 of=52
+time=2026-11-01T11:22:48.951-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:204}" wp="{X:297 Y:201}" cur=22 of=52
+time=2026-11-01T11:22:48.958-05:00 level=DEBUG msg="nav click" pos="{X:294 Y:202}" wp="{X:305 Y:198}" cur=23 of=52
+time=2026-11-01T11:22:48.965-05:00 level=DEBUG msg="nav click" pos="{X:302 Y:199}" wp="{X:312 Y:195}" cur=24 of=52
+time=2026-11-01T11:22:48.972-05:00 level=DEBUG msg="nav click" pos="{X:309 Y:196}" wp="{X:315 Y:194}" cur=25 of=52
+time=2026-11-01T11:22:48.975-05:00 level=DEBUG msg="nav click" pos="{X:312 Y:195}" wp="{X:320 Y:188}" cur=26 of=52
+time=2026-11-01T11:22:48.981-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:190}" wp="{X:325 Y:181}" cur=27 of=52
+time=2026-11-01T11:22:48.986-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:183}" wp="{X:330 Y:175}" cur=28 of=52
+time=2026-11-01T11:22:48.989-05:00 level=DEBUG msg="nav click" pos="{X:329 Y:177}" wp="{X:334 Y:169}" cur=29 of=52
+time=2026-11-01T11:22:48.993-05:00 level=DEBUG msg="nav click" pos="{X:332 Y:171}" wp="{X:339 Y:162}" cur=30 of=52
+time=2026-11-01T11:22:49.015-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:164}" wp="{X:344 Y:156}" cur=31 of=52
+time=2026-11-01T11:22:49.019-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:159}" wp="{X:347 Y:152}" cur=32 of=52
+time=2026-11-01T11:22:49.022-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:155}" wp="{X:347 Y:144}" cur=33 of=52
+time=2026-11-01T11:22:49.028-05:00 level=DEBUG msg="nav click" pos="{X:346 Y:147}" wp="{X:348 Y:136}" cur=34 of=52
+time=2026-11-01T11:22:49.032-05:00 level=DEBUG msg="nav click" pos="{X:348 Y:139}" wp="{X:350 Y:128}" cur=35 of=52
+time=2026-11-01T11:22:49.038-05:00 level=DEBUG msg="nav click" pos="{X:349 Y:131}" wp="{X:351 Y:120}" cur=36 of=52
+time=2026-11-01T11:22:49.043-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:123}" wp="{X:353 Y:112}" cur=37 of=52
+time=2026-11-01T11:22:49.050-05:00 level=DEBUG msg="nav click" pos="{X:352 Y:115}" wp="{X:353 Y:110}" cur=38 of=52
+time=2026-11-01T11:22:49.067-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:113}" wp="{X:355 Y:102}" cur=39 of=52
+time=2026-11-01T11:22:49.074-05:00 level=DEBUG msg="nav click" pos="{X:354 Y:105}" wp="{X:357 Y:94}" cur=40 of=52
+time=2026-11-01T11:22:49.081-05:00 level=DEBUG msg="nav click" pos="{X:356 Y:97}" wp="{X:357 Y:93}" cur=41 of=52
+time=2026-11-01T11:22:49.082-05:00 level=DEBUG msg="nav click" pos="{X:357 Y:95}" wp="{X:360 Y:86}" cur=42 of=52
+time=2026-11-01T11:22:49.086-05:00 level=DEBUG msg="nav click" pos="{X:359 Y:89}" wp="{X:361 Y:83}" cur=43 of=52
+time=2026-11-01T11:22:49.087-05:00 level=DEBUG msg="nav click" pos="{X:360 Y:86}" wp="{X:367 Y:78}" cur=44 of=52
+time=2026-11-01T11:22:49.091-05:00 level=DEBUG msg="nav click" pos="{X:365 Y:81}" wp="{X:368 Y:77}" cur=45 of=52
+time=2026-11-01T11:22:49.092-05:00 level=DEBUG msg="nav click" pos="{X:366 Y:79}" wp="{X:374 Y:77}" cur=46 of=52
+time=2026-11-01T11:22:49.094-05:00 level=DEBUG msg="nav click" pos="{X:371 Y:78}" wp="{X:377 Y:78}" cur=47 of=52
+time=2026-11-01T11:22:49.096-05:00 level=DEBUG msg="nav click" pos="{X:374 Y:78}" wp="{X:385 Y:78}" cur=48 of=52
+time=2026-11-01T11:22:49.099-05:00 level=DEBUG msg="nav click" pos="{X:381 Y:78}" wp="{X:393 Y:78}" cur=49 of=52
+time=2026-11-01T11:22:49.103-05:00 level=DEBUG msg="nav click" pos="{X:389 Y:78}" wp="{X:396 Y:78}" cur=50 of=52
+time=2026-11-01T11:22:49.104-05:00 level=DEBUG msg="nav click" pos="{X:393 Y:78}" wp="{X:399 Y:77}" cur=51 of=52
+D22 border-nokey-3: key="" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=680 wall=298ms err=<nil> declined=0 hopticks=[]
+D22 border-nokey-3 plan: +0 from={171 229} to={399 77} wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.140-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:49.140-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:49.140-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:49.140-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:49.145-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.145-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=52
+time=2026-11-01T11:22:49.147-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.149-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.150-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:235}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.151-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:237}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.154-05:00 level=DEBUG msg="nav click" pos="{X:179 Y:238}" wp="{X:188 Y:240}" cur=4 of=52
+time=2026-11-01T11:22:49.157-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:195 Y:239}" cur=5 of=52
+time=2026-11-01T11:22:49.161-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=52
+time=2026-11-01T11:22:49.166-05:00 level=DEBUG msg="nav click" pos="{X:199 Y:238}" wp="{X:211 Y:238}" cur=7 of=52
+time=2026-11-01T11:22:49.170-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:238}" wp="{X:219 Y:237}" cur=8 of=52
+time=2026-11-01T11:22:49.175-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:237}" wp="{X:227 Y:236}" cur=9 of=52
+time=2026-11-01T11:22:49.180-05:00 level=DEBUG msg="nav click" pos="{X:224 Y:236}" wp="{X:229 Y:236}" cur=10 of=52
+time=2026-11-01T11:22:49.181-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=11 of=52
+time=2026-11-01T11:22:49.204-05:00 level=DEBUG msg="nav click" pos="{X:232 Y:235}" wp="{X:241 Y:229}" cur=12 of=52
+time=2026-11-01T11:22:49.208-05:00 level=DEBUG msg="nav click" pos="{X:238 Y:231}" wp="{X:247 Y:223}" cur=13 of=52
+time=2026-11-01T11:22:49.213-05:00 level=DEBUG msg="nav click" pos="{X:244 Y:225}" wp="{X:253 Y:218}" cur=14 of=52
+time=2026-11-01T11:22:49.219-05:00 level=DEBUG msg="nav click" pos="{X:251 Y:220}" wp="{X:258 Y:212}" cur=15 of=52
+time=2026-11-01T11:22:49.227-05:00 level=DEBUG msg="nav click" pos="{X:256 Y:214}" wp="{X:264 Y:207}" cur=16 of=52
+time=2026-11-01T11:22:49.233-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:209}" wp="{X:265 Y:206}" cur=17 of=52
+time=2026-11-01T11:22:49.234-05:00 level=DEBUG msg="nav click" pos="{X:263 Y:208}" wp="{X:273 Y:206}" cur=18 of=52
+time=2026-11-01T11:22:49.241-05:00 level=DEBUG msg="nav click" pos="{X:271 Y:207}" wp="{X:281 Y:206}" cur=19 of=52
+time=2026-11-01T11:22:49.248-05:00 level=DEBUG msg="nav click" pos="{X:277 Y:206}" wp="{X:282 Y:206}" cur=20 of=52
+time=2026-11-01T11:22:49.250-05:00 level=DEBUG msg="nav click" pos="{X:278 Y:206}" wp="{X:290 Y:203}" cur=21 of=52
+time=2026-11-01T11:22:49.277-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:204}" wp="{X:297 Y:201}" cur=22 of=52
+time=2026-11-01T11:22:49.281-05:00 level=DEBUG msg="nav click" pos="{X:294 Y:202}" wp="{X:305 Y:198}" cur=23 of=52
+time=2026-11-01T11:22:49.286-05:00 level=DEBUG msg="nav click" pos="{X:302 Y:199}" wp="{X:312 Y:195}" cur=24 of=52
+time=2026-11-01T11:22:49.290-05:00 level=DEBUG msg="nav click" pos="{X:309 Y:196}" wp="{X:315 Y:194}" cur=25 of=52
+time=2026-11-01T11:22:49.293-05:00 level=DEBUG msg="nav click" pos="{X:313 Y:195}" wp="{X:320 Y:188}" cur=26 of=52
+time=2026-11-01T11:22:49.298-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:190}" wp="{X:325 Y:181}" cur=27 of=52
+time=2026-11-01T11:22:49.303-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:184}" wp="{X:330 Y:175}" cur=28 of=52
+time=2026-11-01T11:22:49.307-05:00 level=DEBUG msg="nav click" pos="{X:328 Y:177}" wp="{X:334 Y:169}" cur=29 of=52
+time=2026-11-01T11:22:49.311-05:00 level=DEBUG msg="nav click" pos="{X:332 Y:172}" wp="{X:339 Y:162}" cur=30 of=52
+time=2026-11-01T11:22:49.340-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:165}" wp="{X:344 Y:156}" cur=31 of=52
+time=2026-11-01T11:22:49.346-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:159}" wp="{X:347 Y:152}" cur=32 of=52
+time=2026-11-01T11:22:49.351-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:155}" wp="{X:347 Y:144}" cur=33 of=52
+time=2026-11-01T11:22:49.357-05:00 level=DEBUG msg="nav click" pos="{X:346 Y:147}" wp="{X:348 Y:136}" cur=34 of=52
+time=2026-11-01T11:22:49.363-05:00 level=DEBUG msg="nav click" pos="{X:348 Y:139}" wp="{X:350 Y:128}" cur=35 of=52
+time=2026-11-01T11:22:49.368-05:00 level=DEBUG msg="nav click" pos="{X:349 Y:131}" wp="{X:351 Y:120}" cur=36 of=52
+time=2026-11-01T11:22:49.373-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:123}" wp="{X:353 Y:112}" cur=37 of=52
+time=2026-11-01T11:22:49.396-05:00 level=DEBUG msg="nav click" pos="{X:352 Y:114}" wp="{X:353 Y:110}" cur=38 of=52
+time=2026-11-01T11:22:49.398-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:113}" wp="{X:355 Y:102}" cur=39 of=52
+time=2026-11-01T11:22:49.402-05:00 level=DEBUG msg="nav click" pos="{X:354 Y:104}" wp="{X:357 Y:94}" cur=40 of=52
+time=2026-11-01T11:22:49.407-05:00 level=DEBUG msg="nav click" pos="{X:356 Y:96}" wp="{X:360 Y:86}" cur=42 of=52
+time=2026-11-01T11:22:49.413-05:00 level=DEBUG msg="nav click" pos="{X:359 Y:88}" wp="{X:361 Y:83}" cur=43 of=52
+time=2026-11-01T11:22:49.415-05:00 level=DEBUG msg="nav click" pos="{X:360 Y:86}" wp="{X:367 Y:78}" cur=44 of=52
+time=2026-11-01T11:22:49.422-05:00 level=DEBUG msg="nav click" pos="{X:365 Y:80}" wp="{X:368 Y:77}" cur=45 of=52
+time=2026-11-01T11:22:49.423-05:00 level=DEBUG msg="nav click" pos="{X:366 Y:79}" wp="{X:374 Y:77}" cur=46 of=52
+time=2026-11-01T11:22:49.427-05:00 level=DEBUG msg="nav click" pos="{X:371 Y:78}" wp="{X:377 Y:78}" cur=47 of=52
+time=2026-11-01T11:22:49.429-05:00 level=DEBUG msg="nav click" pos="{X:374 Y:78}" wp="{X:385 Y:78}" cur=48 of=52
+time=2026-11-01T11:22:49.436-05:00 level=DEBUG msg="nav click" pos="{X:381 Y:78}" wp="{X:393 Y:78}" cur=49 of=52
+time=2026-11-01T11:22:49.443-05:00 level=DEBUG msg="nav click" pos="{X:389 Y:78}" wp="{X:396 Y:78}" cur=50 of=52
+time=2026-11-01T11:22:49.445-05:00 level=DEBUG msg="nav click" pos="{X:392 Y:78}" wp="{X:399 Y:77}" cur=51 of=52
+D22 border-key-1: key="sk54" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=704 wall=331ms err=<nil> declined=0 hopticks=[]
+D22 border-key-1 plan: +0 from={171 229} to={399 77} wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.484-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:49.484-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:49.485-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:49.485-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:49.489-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.490-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=52
+time=2026-11-01T11:22:49.491-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.494-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.495-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:235}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.496-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:237}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.499-05:00 level=DEBUG msg="nav click" pos="{X:179 Y:238}" wp="{X:188 Y:240}" cur=4 of=52
+time=2026-11-01T11:22:49.502-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:195 Y:239}" cur=5 of=52
+time=2026-11-01T11:22:49.505-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=52
+time=2026-11-01T11:22:49.509-05:00 level=DEBUG msg="nav click" pos="{X:199 Y:238}" wp="{X:211 Y:238}" cur=7 of=52
+time=2026-11-01T11:22:49.513-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:238}" wp="{X:219 Y:237}" cur=8 of=52
+time=2026-11-01T11:22:49.517-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:237}" wp="{X:227 Y:236}" cur=9 of=52
+time=2026-11-01T11:22:49.521-05:00 level=DEBUG msg="nav click" pos="{X:224 Y:236}" wp="{X:229 Y:236}" cur=10 of=52
+time=2026-11-01T11:22:49.523-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=11 of=52
+time=2026-11-01T11:22:49.544-05:00 level=DEBUG msg="nav click" pos="{X:232 Y:235}" wp="{X:241 Y:229}" cur=12 of=52
+time=2026-11-01T11:22:49.549-05:00 level=DEBUG msg="nav click" pos="{X:238 Y:231}" wp="{X:247 Y:223}" cur=13 of=52
+time=2026-11-01T11:22:49.554-05:00 level=DEBUG msg="nav click" pos="{X:244 Y:225}" wp="{X:253 Y:218}" cur=14 of=52
+time=2026-11-01T11:22:49.559-05:00 level=DEBUG msg="nav click" pos="{X:251 Y:220}" wp="{X:258 Y:212}" cur=15 of=52
+time=2026-11-01T11:22:49.564-05:00 level=DEBUG msg="nav click" pos="{X:256 Y:214}" wp="{X:264 Y:207}" cur=16 of=52
+time=2026-11-01T11:22:49.568-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:209}" wp="{X:265 Y:206}" cur=17 of=52
+time=2026-11-01T11:22:49.569-05:00 level=DEBUG msg="nav click" pos="{X:263 Y:208}" wp="{X:273 Y:206}" cur=18 of=52
+time=2026-11-01T11:22:49.574-05:00 level=DEBUG msg="nav click" pos="{X:271 Y:206}" wp="{X:281 Y:206}" cur=19 of=52
+time=2026-11-01T11:22:49.577-05:00 level=DEBUG msg="nav click" pos="{X:278 Y:206}" wp="{X:290 Y:203}" cur=21 of=52
+time=2026-11-01T11:22:49.599-05:00 level=DEBUG msg="nav click" pos="{X:288 Y:204}" wp="{X:297 Y:201}" cur=22 of=52
+time=2026-11-01T11:22:49.604-05:00 level=DEBUG msg="nav click" pos="{X:294 Y:202}" wp="{X:305 Y:198}" cur=23 of=52
+time=2026-11-01T11:22:49.609-05:00 level=DEBUG msg="nav click" pos="{X:302 Y:199}" wp="{X:312 Y:195}" cur=24 of=52
+time=2026-11-01T11:22:49.616-05:00 level=DEBUG msg="nav click" pos="{X:309 Y:196}" wp="{X:315 Y:194}" cur=25 of=52
+time=2026-11-01T11:22:49.618-05:00 level=DEBUG msg="nav click" pos="{X:312 Y:195}" wp="{X:320 Y:188}" cur=26 of=52
+time=2026-11-01T11:22:49.624-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:190}" wp="{X:325 Y:181}" cur=27 of=52
+time=2026-11-01T11:22:49.630-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:184}" wp="{X:330 Y:175}" cur=28 of=52
+time=2026-11-01T11:22:49.635-05:00 level=DEBUG msg="nav click" pos="{X:328 Y:177}" wp="{X:334 Y:169}" cur=29 of=52
+time=2026-11-01T11:22:49.638-05:00 level=DEBUG msg="nav click" pos="{X:332 Y:172}" wp="{X:339 Y:162}" cur=30 of=52
+time=2026-11-01T11:22:49.660-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:165}" wp="{X:344 Y:156}" cur=31 of=52
+time=2026-11-01T11:22:49.665-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:158}" wp="{X:347 Y:152}" cur=32 of=52
+time=2026-11-01T11:22:49.667-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:154}" wp="{X:347 Y:144}" cur=33 of=52
+time=2026-11-01T11:22:49.672-05:00 level=DEBUG msg="nav click" pos="{X:347 Y:146}" wp="{X:348 Y:136}" cur=34 of=52
+time=2026-11-01T11:22:49.676-05:00 level=DEBUG msg="nav click" pos="{X:348 Y:139}" wp="{X:350 Y:128}" cur=35 of=52
+time=2026-11-01T11:22:49.684-05:00 level=DEBUG msg="nav click" pos="{X:350 Y:130}" wp="{X:351 Y:120}" cur=36 of=52
+time=2026-11-01T11:22:49.692-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:123}" wp="{X:353 Y:112}" cur=37 of=52
+time=2026-11-01T11:22:49.699-05:00 level=DEBUG msg="nav click" pos="{X:352 Y:115}" wp="{X:353 Y:110}" cur=38 of=52
+time=2026-11-01T11:22:49.700-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:114}" wp="{X:355 Y:102}" cur=39 of=52
+time=2026-11-01T11:22:49.721-05:00 level=DEBUG msg="nav click" pos="{X:354 Y:105}" wp="{X:357 Y:94}" cur=40 of=52
+time=2026-11-01T11:22:49.727-05:00 level=DEBUG msg="nav click" pos="{X:356 Y:97}" wp="{X:357 Y:93}" cur=41 of=52
+time=2026-11-01T11:22:49.728-05:00 level=DEBUG msg="nav click" pos="{X:357 Y:96}" wp="{X:360 Y:86}" cur=42 of=52
+time=2026-11-01T11:22:49.732-05:00 level=DEBUG msg="nav click" pos="{X:359 Y:89}" wp="{X:361 Y:83}" cur=43 of=52
+time=2026-11-01T11:22:49.734-05:00 level=DEBUG msg="nav click" pos="{X:360 Y:86}" wp="{X:367 Y:78}" cur=44 of=52
+time=2026-11-01T11:22:49.739-05:00 level=DEBUG msg="nav click" pos="{X:365 Y:80}" wp="{X:368 Y:77}" cur=45 of=52
+time=2026-11-01T11:22:49.740-05:00 level=DEBUG msg="nav click" pos="{X:367 Y:79}" wp="{X:374 Y:77}" cur=46 of=52
+time=2026-11-01T11:22:49.743-05:00 level=DEBUG msg="nav click" pos="{X:372 Y:78}" wp="{X:377 Y:78}" cur=47 of=52
+time=2026-11-01T11:22:49.744-05:00 level=DEBUG msg="nav click" pos="{X:373 Y:78}" wp="{X:385 Y:78}" cur=48 of=52
+time=2026-11-01T11:22:49.748-05:00 level=DEBUG msg="nav click" pos="{X:382 Y:78}" wp="{X:393 Y:78}" cur=49 of=52
+time=2026-11-01T11:22:49.754-05:00 level=DEBUG msg="nav click" pos="{X:390 Y:78}" wp="{X:396 Y:78}" cur=50 of=52
+time=2026-11-01T11:22:49.755-05:00 level=DEBUG msg="nav click" pos="{X:392 Y:78}" wp="{X:399 Y:77}" cur=51 of=52
+D22 border-key-2: key="sk54" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=677 wall=300ms err=<nil> declined=0 hopticks=[]
+D22 border-key-2 plan: +0 from={171 229} to={399 77} wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.789-05:00 level=INFO msg="nav exit" to=42 gate="{X:399 Y:77}" push="{X:407 Y:77}" border=true
+time=2026-11-01T11:22:49.789-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22border < main.(*lab).D22"
+time=2026-11-01T11:22:49.790-05:00 level=DEBUG msg="nav mouth check" pos="{X:171 Y:229}" level=41 exits=1 wantExit=42 arrival=false stay=false r=9
+time=2026-11-01T11:22:49.790-05:00 level=DEBUG msg="nav mouth exit" dest=55 exit="{X:295 Y:270}" dist=130.6 skip=true
+time=2026-11-01T11:22:49.796-05:00 level=DEBUG msg="nav plan" from="{X:171 Y:229}" to="{X:399 Y:77}" wps=52 partial=false cells=299 why=first
+time=2026-11-01T11:22:49.796-05:00 level=DEBUG msg="nav click" pos="{X:171 Y:229}" wp="{X:169 Y:233}" cur=1 of=52
+time=2026-11-01T11:22:49.798-05:00 level=DEBUG msg="nav click" pos="{X:170 Y:230}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.801-05:00 level=DEBUG msg="nav click" pos="{X:172 Y:235}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.802-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:235}" wp="{X:174 Y:238}" cur=2 of=52
+time=2026-11-01T11:22:49.803-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:237}" wp="{X:182 Y:239}" cur=3 of=52
+time=2026-11-01T11:22:49.805-05:00 level=DEBUG msg="nav click" pos="{X:179 Y:238}" wp="{X:188 Y:240}" cur=4 of=52
+time=2026-11-01T11:22:49.809-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:195 Y:239}" cur=5 of=52
+time=2026-11-01T11:22:49.812-05:00 level=DEBUG msg="nav click" pos="{X:191 Y:239}" wp="{X:203 Y:238}" cur=6 of=52
+time=2026-11-01T11:22:49.817-05:00 level=DEBUG msg="nav click" pos="{X:199 Y:238}" wp="{X:211 Y:238}" cur=7 of=52
+time=2026-11-01T11:22:49.823-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:238}" wp="{X:219 Y:237}" cur=8 of=52
+time=2026-11-01T11:22:49.828-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:237}" wp="{X:227 Y:236}" cur=9 of=52
+time=2026-11-01T11:22:49.833-05:00 level=DEBUG msg="nav click" pos="{X:224 Y:236}" wp="{X:229 Y:236}" cur=10 of=52
+time=2026-11-01T11:22:49.835-05:00 level=DEBUG msg="nav click" pos="{X:226 Y:236}" wp="{X:235 Y:234}" cur=11 of=52
+time=2026-11-01T11:22:49.855-05:00 level=DEBUG msg="nav click" pos="{X:232 Y:235}" wp="{X:241 Y:229}" cur=12 of=52
+time=2026-11-01T11:22:49.859-05:00 level=DEBUG msg="nav click" pos="{X:238 Y:231}" wp="{X:247 Y:223}" cur=13 of=52
+time=2026-11-01T11:22:49.864-05:00 level=DEBUG msg="nav click" pos="{X:244 Y:225}" wp="{X:253 Y:218}" cur=14 of=52
+time=2026-11-01T11:22:49.869-05:00 level=DEBUG msg="nav click" pos="{X:251 Y:220}" wp="{X:258 Y:212}" cur=15 of=52
+time=2026-11-01T11:22:49.875-05:00 level=DEBUG msg="nav click" pos="{X:256 Y:214}" wp="{X:264 Y:207}" cur=16 of=52
+time=2026-11-01T11:22:49.881-05:00 level=DEBUG msg="nav click" pos="{X:262 Y:209}" wp="{X:265 Y:206}" cur=17 of=52
+time=2026-11-01T11:22:49.882-05:00 level=DEBUG msg="nav click" pos="{X:263 Y:208}" wp="{X:273 Y:206}" cur=18 of=52
+time=2026-11-01T11:22:49.889-05:00 level=DEBUG msg="nav click" pos="{X:271 Y:207}" wp="{X:281 Y:206}" cur=19 of=52
+time=2026-11-01T11:22:49.895-05:00 level=DEBUG msg="nav click" pos="{X:277 Y:206}" wp="{X:282 Y:206}" cur=20 of=52
+time=2026-11-01T11:22:49.896-05:00 level=DEBUG msg="nav click" pos="{X:278 Y:206}" wp="{X:290 Y:203}" cur=21 of=52
+time=2026-11-01T11:22:49.920-05:00 level=DEBUG msg="nav click" pos="{X:287 Y:204}" wp="{X:297 Y:201}" cur=22 of=52
+time=2026-11-01T11:22:49.924-05:00 level=DEBUG msg="nav click" pos="{X:294 Y:202}" wp="{X:305 Y:198}" cur=23 of=52
+time=2026-11-01T11:22:49.929-05:00 level=DEBUG msg="nav click" pos="{X:302 Y:199}" wp="{X:312 Y:195}" cur=24 of=52
+time=2026-11-01T11:22:49.934-05:00 level=DEBUG msg="nav click" pos="{X:309 Y:196}" wp="{X:315 Y:194}" cur=25 of=52
+time=2026-11-01T11:22:49.936-05:00 level=DEBUG msg="nav click" pos="{X:313 Y:195}" wp="{X:320 Y:188}" cur=26 of=52
+time=2026-11-01T11:22:49.940-05:00 level=DEBUG msg="nav click" pos="{X:318 Y:190}" wp="{X:325 Y:181}" cur=27 of=52
+time=2026-11-01T11:22:49.944-05:00 level=DEBUG msg="nav click" pos="{X:323 Y:184}" wp="{X:330 Y:175}" cur=28 of=52
+time=2026-11-01T11:22:49.949-05:00 level=DEBUG msg="nav click" pos="{X:328 Y:177}" wp="{X:334 Y:169}" cur=29 of=52
+time=2026-11-01T11:22:49.953-05:00 level=DEBUG msg="nav click" pos="{X:332 Y:172}" wp="{X:339 Y:162}" cur=30 of=52
+time=2026-11-01T11:22:49.977-05:00 level=DEBUG msg="nav click" pos="{X:337 Y:165}" wp="{X:344 Y:156}" cur=31 of=52
+time=2026-11-01T11:22:49.985-05:00 level=DEBUG msg="nav click" pos="{X:342 Y:159}" wp="{X:347 Y:152}" cur=32 of=52
+time=2026-11-01T11:22:49.990-05:00 level=DEBUG msg="nav click" pos="{X:345 Y:155}" wp="{X:347 Y:144}" cur=33 of=52
+time=2026-11-01T11:22:49.996-05:00 level=DEBUG msg="nav click" pos="{X:346 Y:147}" wp="{X:348 Y:136}" cur=34 of=52
+time=2026-11-01T11:22:50.002-05:00 level=DEBUG msg="nav click" pos="{X:348 Y:139}" wp="{X:350 Y:128}" cur=35 of=52
+time=2026-11-01T11:22:50.006-05:00 level=DEBUG msg="nav click" pos="{X:349 Y:131}" wp="{X:351 Y:120}" cur=36 of=52
+time=2026-11-01T11:22:50.011-05:00 level=DEBUG msg="nav click" pos="{X:351 Y:123}" wp="{X:353 Y:112}" cur=37 of=52
+time=2026-11-01T11:22:50.033-05:00 level=DEBUG msg="nav click" pos="{X:352 Y:114}" wp="{X:353 Y:110}" cur=38 of=52
+time=2026-11-01T11:22:50.035-05:00 level=DEBUG msg="nav click" pos="{X:353 Y:113}" wp="{X:355 Y:102}" cur=39 of=52
+time=2026-11-01T11:22:50.040-05:00 level=DEBUG msg="nav click" pos="{X:354 Y:104}" wp="{X:357 Y:94}" cur=40 of=52
+time=2026-11-01T11:22:50.044-05:00 level=DEBUG msg="nav click" pos="{X:356 Y:96}" wp="{X:360 Y:86}" cur=42 of=52
+time=2026-11-01T11:22:50.049-05:00 level=DEBUG msg="nav click" pos="{X:359 Y:88}" wp="{X:361 Y:83}" cur=43 of=52
+time=2026-11-01T11:22:50.051-05:00 level=DEBUG msg="nav click" pos="{X:360 Y:86}" wp="{X:367 Y:78}" cur=44 of=52
+time=2026-11-01T11:22:50.058-05:00 level=DEBUG msg="nav click" pos="{X:365 Y:80}" wp="{X:368 Y:77}" cur=45 of=52
+time=2026-11-01T11:22:50.059-05:00 level=DEBUG msg="nav click" pos="{X:366 Y:79}" wp="{X:374 Y:77}" cur=46 of=52
+time=2026-11-01T11:22:50.064-05:00 level=DEBUG msg="nav click" pos="{X:371 Y:78}" wp="{X:377 Y:78}" cur=47 of=52
+time=2026-11-01T11:22:50.066-05:00 level=DEBUG msg="nav click" pos="{X:374 Y:78}" wp="{X:385 Y:78}" cur=48 of=52
+time=2026-11-01T11:22:50.072-05:00 level=DEBUG msg="nav click" pos="{X:381 Y:78}" wp="{X:393 Y:78}" cur=49 of=52
+time=2026-11-01T11:22:50.078-05:00 level=DEBUG msg="nav click" pos="{X:389 Y:78}" wp="{X:396 Y:78}" cur=50 of=52
+time=2026-11-01T11:22:50.080-05:00 level=DEBUG msg="nav click" pos="{X:392 Y:78}" wp="{X:399 Y:77}" cur=51 of=52
+D22 border-key-3: key="sk54" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=704 wall=316ms err=<nil> declined=0 hopticks=[]
+D22 border-key-3 plan: +0 from={171 229} to={399 77} wps=52 partial=false cells=299 why=first
+DRILL D22-BL P26 PASS measurement: spread nokey 62, key 27 ticks; arms nokey=[630 692 680] key=[704 677 704] | intended: border leg ticks without and with the Teleport key bound, three repeats each | observed: border-nokey-1: hops=0 ticks=630 || border-nokey-2: hops=0 ticks=692 || border-nokey-3: hops=0 ticks=680 || border-key-1: hops=0 ticks=704 || border-key-2: hops=0 ticks=677 || border-key-3: hops=0 ticks=704
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D22-BL    P26   PASS     -    measurement: spread nokey 62, key 27 ticks; arms nokey=[630 692 680] key=[704 677 704]
+cheat verbs used (each ledgered with a reason): debug goto 40, debug goto 41, debug kill, debug points 54 1, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T11:22:50.096-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
