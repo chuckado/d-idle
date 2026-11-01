@@ -45,7 +45,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixcrowd](../../openspec/changes/fixcrowd/) | in-progress | fixcrowd | `docs/fixcrowd.md`<br>`internal/combat/crowd_test.go`<br>`internal/combat/fixcrowd_test.go` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
-| [forkdbg](../../openspec/changes/forkdbg/) | in-progress | forkdbg | `internal/d2dctl/debug_skills.go`<br>`internal/d2dctl/debug_skills_test.go`<br>`docs/forkdbg.md` | `d2d-lab-binary`<br>`fork-branch:lab-debug-skills` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -83,7 +82,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixrecast: go test -p 1 ./internal/combat ./internal/data ./internal/env ./tools/knobdump passes including TestFrozenArmorTimerLeavesGap, TestFrozenArmorRecastBeforeExpiryByClock, TestFrozenArmorRecastBeforeExpiryByState, TestAuraFrames
 - change fixrecast: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change forkdbg: gofmt, go vet and go test -p 1 for internal/d2dctl; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh --hygiene-only; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -99,6 +97,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 1842cce 11-01 00:42 `Merge agent/forkdbg: d2dctl SkillDebug client, debug verbs doc` (forkdbg)
+- 42238fc 11-01 00:40 `Merge agent/openmods: boss-stats upstream PR records; archive card` (openmods)
 - 84dd214 11-01 00:29 `Merge agent/fixcrowd: combat.crowdAdjacent knob` (fixcrowd)
 - 6ba15b7 11-01 00:29 `Merge agent/dethash2: det-hash scenarios; archive card` (dethash2)
 - 4bcbd36 11-01 00:25 `Merge agent/modsprep` (modsprep)
@@ -107,6 +107,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2295f2b 11-01 00:20 `Merge agent/drills11: drills11 harness and live results` (drills11)
 - 7f52c58 11-01 00:15 `Merge agent/skmiss: sk missile trace` (skmiss)
 - 50af070 11-01 00:12 `Merge agent/feedtick: feed.py tick subcommand` (feedtick)
-- 599c0fc 11-01 00:08 `Merge agent/brandapply: apply brand to README, d2dview, d2bot banner` (brandapply)
-- bbf46c8 11-01 00:08 `Merge agent/brandfinal: final brand assets` (brandfinal)
 <!-- statusgen:end -->

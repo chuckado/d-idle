@@ -2,10 +2,11 @@
 
 ```yaml
 change: forkdbg
-status: in-progress
+status: archived
 agent: forkdbg
 branch: agent/forkdbg
 worktree: ~/code/d2lod-wt/forkdbg
+merge: 1842cce
 skip_specs: true
 owns:
   - internal/d2dctl/debug_skills.go
@@ -16,7 +17,7 @@ exclusive:
   - fork-branch:lab-debug-skills
 gates:
   - "gofmt, go vet and go test -p 1 for internal/d2dctl; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh --hygiene-only; openspec validate --all --strict"
-result: verified live on one hidden slot (each verb once, before/after through dump and monsters; docs/forkdbg.md); the skill drills were not run; fork commit d9b96c2b on the private remote branch lab-debug-skills
+result: "verbs proven once live on a hidden slot (each before/after through dump and monsters; docs/forkdbg.md); the M1-M5 drills not run yet; fork commit d9b96c2b on the private remote branch lab-debug-skills"
 ```
 
 ## 1. Work

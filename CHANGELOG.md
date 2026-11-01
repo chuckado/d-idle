@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- forkdbg (live, lab only): four lab debug verbs (`debug mana full`, `debug states set|clear`, `debug mon set`, `debug cast`) in the private fork branch `lab-debug-skills`, and `internal/d2dctl` `SkillDebug` client that writes the cheat ledger first (an unwritable ledger sends nothing); each verb proven once on a hidden slot, the M1-M5 skill drills not run yet (docs/forkdbg.md).
 - openmods (research, upstream PR): boss and minion spawn stats opened as psi29a/d2decomped PR #157 (user go 2026-11-01); gates and differential re-run before opening; posted log in `docs/research/pr-mods-evidence-addendum.md`.
 - brandfinal (offline): d.idle brand = cursor concept (user decision 2026-11-01); final asset set (SVG, PNG renders, favicon.ico, banners) in `assets/branding/final/` with a stdlib-only PNG renderer (`assets/branding/render.py`); nothing applied to the README, web pages, GitHub or Discord yet (docs/branding.md).
 - feedtick (offline, not posted): `tools/discord/feed.py tick` builds the dispatcher tick report (running, merged, launched, upstream, blocked, waiting) as one `#progress` post, dry run by default, refuses an idle tick; docs/process/feed-after-events.md, feeds.md (e).
