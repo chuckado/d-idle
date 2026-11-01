@@ -2,7 +2,7 @@
 
 ```yaml
 change: brandfinal
-status: in-progress
+status: archived
 agent: brandfinal
 branch: agent/brandfinal
 worktree: ~/code/d2lod-wt/brandfinal
@@ -13,8 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict"
-merge:
-result:
+merge: bbf46c8
+result: final brand assets (SVG masters, PNGs, favicon, banners, docs/branding.md); offline, public assets only
 ```
 
 ## 1. Work

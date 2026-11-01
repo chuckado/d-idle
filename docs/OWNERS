@@ -75,13 +75,3 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
-assets/branding/**  brandfinal  brandfinal
-docs/branding.md  brandfinal  brandfinal
-README.md  brandapply  brandapply
-cmd/d2bot/banner.go  brandapply  brandapply
-cmd/d2bot/banner_test.go  brandapply  brandapply
-cmd/d2bot/main.go  brandapply  brandapply
-cmd/d2dview/web/icon.svg  brandapply  brandapply
-cmd/d2dview/web/favicon.ico  brandapply  brandapply
-cmd/d2dview/web/apple-touch-icon.png  brandapply  brandapply
-cmd/d2dview/brand_test.go  brandapply  brandapply
