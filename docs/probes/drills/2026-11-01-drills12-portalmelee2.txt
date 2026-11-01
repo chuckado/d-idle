@@ -1,0 +1,10 @@
+d2dslot: got slot 0
+time=2026-11-01T00:51:46.325-04:00 level=WARN msg="d2d channel not answering: d2d process pid 3117111 still running; socket file is gone (stat <path> no such file or directory); ping: d2dctl: dial <path> dial unix <path> connect: no such file or directory"
+DRILL D-portalmelee P10 PASS 3 within 8 subtiles at life 102/300: Chicken, scroll kept (1) | intended: adjacent >= 3, no potion, one scroll: Safety is Chicken (not TownPortal), scroll count unchanged | observed: Blood Moor, zombies spawned (waiting for 3 within 8 subtiles): adjacent 3 (within 8: 3) of 6 hostiles, life 102/300, belt potions 0, scrolls 1 -> 1, decision chicken, acted false (err ""), portal open false, life after 102, attack-mode distances (subtile:samples) [1:4 2:10 3:13 4:6 5:8 6:3 7:4 9:1] [over 158 reads the 1st, 2nd and 3rd nearest monster were at best 1.0, 2.9, 7.2 subtiles away] [all living monsters 1:18 2:27 3:34 4:34 5:52 6:67 7:45 8:23 9:11 10:23 11:31 12:38 13:10 14:16 15:29 16:25 17:31 18:46 19:53 20:26 21:41 22:55 23:41 24:33 25:30 26:29 27:33 28:15 29:9 30:4 31:8 32:4 33:3 34:4] [last read [5 6 7 19 24 34]], bot view [snapshot monsters 29, distances [5 6.4 6.4 18.4 24.4 34.1], fightRadius 22, crowdAdjacent 8], err "" | runs: 2, identical
+END character Drilly life 81/300 in town: true
+
+drill     prim  verdict  det  reason
+D-portalmelee P10   PASS     same 3 within 8 subtiles at life 102/300: Chicken, scroll kept (1)
+cheat verbs used (each ledgered with a reason): debug belt clear, debug clearinv, debug give tsc, debug goto 1, debug goto 2, debug kill, debug spawn zombie1 6 near, debug stat 6 26112, debug stat 6 76800, debug stat 7 76800
+cheat ledger: <path> (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T00:51:48.411-04:00 level=WARN msg="d2d: stopped by the bot (kill)"

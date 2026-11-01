@@ -359,3 +359,26 @@ Setup: one Zombie in melee reach, scroll in the pack, cast by the harness's own 
 - Monster positions from `monsters` are level-relative cells, the snapshot's are act subtiles: compare in cells (an early version compared screen coordinates).
 - A spawned Zombie idles until the character comes close (most stayed 14 to 20 subtiles away for 1,200 ticks): the drills walk toward the nearest one to wake it.
 - Scroll setup picks up only the `tsc` item (PickupRaw picked up potions dropped by earlier kills, so the belt was not empty).
+
+## DRILLS12 (2026-11-01): live proof of fixcrowd (F18)
+Result files `2026-11-01-drills12-<label>.txt` (stdout of each d2drill invocation, scrubbed; one DRILL line plus the table): `portalmelee1`..`3` and `portalctl1`..`3` (the proof), `blocked-verbcells`, `fail-verbcells`, `fail-botview` (the harness iterations, kept as the record). Run as in DRILLS11 (build `d2drill` on the worker host, slot 0, lab build cheats3, code of origin/main at 2f34d65 plus the harness changes below): `D2D_AGENT=drills12 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills12 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group P -only D-portalmelee -label drills12-portalmelee1`; the control with `-only D-portalmelee.ctl`. Capacity: worker host idle+nice 62 percent before the first run. Each invocation takes about 4 s of wall time (lockstep).
+
+| Card | Drill | Verdict | Numbers |
+|---|---|---|---|
+| fixcrowd | D-portalmelee x3 (after: crowdAdjacent 8) | PASS | 3 zombies within 8 subtiles (the knob) at the read, life 102 of 300, belt empty, one scroll: Safety `chicken`, scroll count 1 to 1. Both repeats of each invocation identical; the bot's snapshot distances at the read were 5, 6.4, 6.4 (then 18.4, 24.4, 34.1) |
+| fixcrowd | before (DRILLS11, crowdAdjacent 3) | FAIL x3 | `town-portal` at the same life, same pack, the rule never fired |
+| fixportalmelee | D-portalmelee.ctl x3 | PASS | one zombie in reach: Safety `town-portal`, the Act casts, scroll 1 to 0, portal object listed (unchanged) |
+
+### What the harness could observe (honesty point)
+- The decision (`Fighter.Safety` on the live snapshot) and the scroll count: observed. The chicken ACTION is not observed: `Chicken` leaves the game, and a drill must not close the game it runs in (AGENTS.md), so `acted` stays false for the chicken case. The proof is that the pure decision on a live snapshot with live monsters is `chicken` instead of `town-portal`, with the scroll still in the pack; "the scroll is not spent on a cut cast" holds in the sense that no cast is started. UNVERIFIED live: the leave-game itself (covered by the offline chicken tests) and any hit cutting a cast (no hard-hit verb on main).
+
+### Harness findings and changes (cmd/d2drill and internal/drill only)
+- The wait is now "3 within combat.crowdAdjacent", read from the tuning handed to the bot (`l.tune.Combat.CrowdAdjacent`); the control keeps "1 within 3".
+- The first run (`blocked-verbcells`) did not reach the setup: the drill measured with the `monsters` verb (level cells, rounded) and found 1 within 8 at the read. The loop returned as soon as 3 were within 8, but the pack had spread by the read after the life cheat.
+- `fail-verbcells`: the pack was re-waited at low life, 3 within 8 by the verb, and the decision was still `town-portal`: not a product bug. `fail-botview` (new bot-view print) shows why: the same monsters in the snapshot's act subtiles (the bot's measure, `combat.Hostiles`) were 4.5, 5.8 and 8.1 away; the verb's cell distance put the third at 7. The 8.1 monster is outside the knob's 8. So the harness now counts reach with the snapshot coordinates (what the guard sees); the verb stays for the attack-mode histogram only. Lesson: a cell-based distance is 1 to 3 subtiles coarser than the bot's; compare in the bot's unit.
+- Product note (no change): the margin is thin: the third monster was 6.4 (PASS runs) and 8.1 (the earlier read) away. With the default 8 a pack that stands 8.1 away is not counted; the knob range is 3 to 12.
+
+### Shared-file lines for the merger
+- BACKLOG: close fixcrowd item 1.5 (drill wait fixed) and its live proof (task 1.4): verified live (D-portalmelee PASS x3, control PASS x3).
+- INDEX / CHANGELOG: "drills12: live proof of fixcrowd: the 3-adjacent portal drill passes at crowdAdjacent 8 (Safety chicken, scroll kept); the control still casts; the drill measures in the bot's own unit".
+

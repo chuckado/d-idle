@@ -23,7 +23,9 @@ type EmptyPlanInfo struct {
 // belt and exactly one scroll, then the bot's Safety decision.
 type PMInfo struct {
 	Err                         string
-	Adjacent, Within8, Hostiles int // monsters within 3 subtiles (the rule's adjacency) / within 8 (melee reach, measured) / listed alive
+	Adjacent, Within8, Hostiles int    // monsters within Reach subtiles (the guard's adjacency, knob combat.crowdAdjacent; 3 in the control) / within 8 / listed alive
+	Reach                       int    // the radius used for Adjacent
+	BotView                     string // distances as the bot's snapshot sees them (not the monsters verb)
 	Life, MaxLife               int
 	BeltPotions                 int
 	ScrollsBefore, ScrollsAfter int
@@ -82,14 +84,14 @@ func D11(l D11Lab) []Drill {
 			switch {
 			case i.Err != "":
 				o.Verdict, o.Reason = Blocked, i.Err
-			case i.BeltPotions != 0 || i.ScrollsBefore != 1 || i.Within8 < 3:
+			case i.BeltPotions != 0 || i.ScrollsBefore != 1 || i.Within8 < 3 && i.Adjacent < 3:
 				o.Verdict, o.Reason = Blocked, "setup not reached: "+i.String()
-			case i.Adjacent < 3 && i.Decision == "town-portal" && i.ScrollsAfter == 1:
-				o.Verdict, o.Reason = Fail, fmt.Sprintf("PRODUCT: %d monsters in melee reach (within 8 subtiles) but only %d within the rule's 3: Safety is town-portal at life %d/%d, the rule does not fire (the live geometry never put 3 within 3 subtiles)", i.Within8, i.Adjacent, i.Life, i.MaxLife)
+			case i.Adjacent < 3:
+				o.Verdict, o.Reason = Blocked, fmt.Sprintf("setup not reached: only %d monsters within the guard's reach (%d subtiles): %s", i.Adjacent, i.Reach, i.String())
 			case i.Decision != "chicken" || i.ScrollsAfter != 1:
 				o.Verdict, o.Reason = Fail, "decision "+i.Decision+", scrolls "+fmt.Sprint(i.ScrollsBefore, "->", i.ScrollsAfter)
 			default:
-				o.Verdict, o.Reason = Pass, fmt.Sprintf("%d adjacent at life %d/%d: Chicken, scroll kept (1)", i.Adjacent, i.Life, i.MaxLife)
+				o.Verdict, o.Reason = Pass, fmt.Sprintf("%d within %d subtiles at life %d/%d: Chicken, scroll kept (1)", i.Adjacent, i.Reach, i.Life, i.MaxLife)
 			}
 			return o
 		}},
@@ -159,8 +161,8 @@ func (i EmptyPlanInfo) String() string {
 }
 
 func (i PMInfo) String() string {
-	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, attack-mode distances (subtile:samples) [%s], err %q",
-		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.AttackDists, i.Err)
+	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, attack-mode distances (subtile:samples) [%s], bot view [%s], err %q",
+		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.AttackDists, i.BotView, i.Err)
 }
 
 func (c CastInfo) String() string {

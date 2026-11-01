@@ -42,11 +42,6 @@ func (l *lab) d11Leave(ctx context.Context, r *drill.Run) {
 	_ = l.Tick(ctx, 25)
 }
 
-// d11Adjacent counts living monsters within 3 subtiles of the player (the crowd rule's adjacency) and all listed alive.
-func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife int) {
-	return l.d11Within(ctx, 3)
-}
-
 // d11att counts the distances (whole subtiles) at which living monsters stood while in an attack mode (A1, A2), over a drill.
 var d11att = map[int]int{}
 
@@ -74,7 +69,7 @@ func d11AttStr() string {
 	return fmt.Sprintf("%s] [over %d reads the 1st, 2nd and 3rd nearest monster were at best %.1f, %.1f, %.1f subtiles away] [all living monsters ", hist(d11att), d11reads, d11min[0], d11min[1], d11min[2]) + "" + hist(d11all) + "] [last read " + d11each
 }
 
-// d11Within is d11Adjacent with a radius in subtiles.
+// d11Within counts living monsters within radius subtiles of the player (snapshot coordinates, the bot's measure), and all listed alive by the monsters verb.
 func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, life, maxLife int) {
 	sn, err := l.be.Env.Snapshot()
 	if err != nil || sn.Player == nil {
@@ -109,7 +104,9 @@ func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, li
 		if strings.HasPrefix(m.Mode, "A") {
 			d11att[int(d+0.5)]++
 		}
-		if d <= radius {
+	}
+	for _, u := range sn.Monsters { // the count is the bot's own measure (snapshot act subtiles, as combat.Hostiles): the verb's cells are 1 to 3 subtiles coarser, which put a 8.1 away monster at 7
+		if u.Alive() && u.ID != sn.Player.ID && math.Hypot(float64(sn.Player.X-u.X), float64(sn.Player.Y-u.Y)) <= radius {
 			adj++
 		}
 	}
@@ -204,7 +201,12 @@ func (l *lab) d11Lure(ctx context.Context) {
 }
 
 func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) (pi drill.PMInfo) {
-	pi.Where = fmt.Sprintf("Blood Moor, zombies spawned (waiting for %d within 3 subtiles; the crowd rule starts at 8 within 8)", adj)
+	reach := 3.0 // the control: one monster close by
+	if adj >= 3 {
+		reach = float64(l.tune.Combat.CrowdAdjacent) // the knob the bot's guard uses (combat.crowdAdjacent), never a copy of its value
+	}
+	pi.Reach = int(reach)
+	pi.Where = fmt.Sprintf("Blood Moor, zombies spawned (waiting for %d within %d subtiles)", adj, pi.Reach)
 	if err := l.d11Setup(ctx, r, 2, 300, 8); err != nil {
 		pi.Err = err.Error()
 		return
@@ -218,7 +220,7 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 	if adj >= 3 {
 		n = 2 * adj // more monsters, more chance that 3 are within 3 subtiles at one read
 	}
-	if got := l.d11Spawn(ctx, r, n, adj, 3); got < 0 {
+	if got := l.d11Spawn(ctx, r, n, adj, reach); got < 0 {
 		pi.Err = "spawn failed"
 		return
 	}
@@ -226,16 +228,30 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 		pi.Err = "life: " + err.Error()
 		return
 	}
-	_ = l.Tick(ctx, 1)
+	for i := 0; i < 150; i++ { // the pack is only briefly together: look again until the wanted number is in reach with the low life set (bounded)
+		if a, _, _, _ := l.d11Within(ctx, reach); a >= adj {
+			break
+		}
+		_ = l.Tick(ctx, 2)
+		l.d11Lure(ctx)
+	}
 	sn, err := l.be.Env.Snapshot()
 	if err != nil || sn.Player == nil {
 		pi.Err = "snapshot"
 		return
 	}
-	pi.Adjacent, pi.Hostiles, pi.Life, pi.MaxLife = l.d11Adjacent(ctx)
+	pi.Adjacent, pi.Hostiles, pi.Life, pi.MaxLife = l.d11Within(ctx, reach)
 	pi.Within8, _, _, _ = l.d11Within(ctx, 8)
 	pi.AttackDists = d11AttStr()
 	pi.Life = sn.Player.Life
+	var bd []float64 // the bot's own view: act-subtile distances of the snapshot's living monsters, as combat.Hostiles measures them
+	for _, u := range sn.Monsters {
+		if u.Alive() && u.ID != sn.Player.ID {
+			bd = append(bd, math.Round(math.Hypot(float64(sn.Player.X-u.X), float64(sn.Player.Y-u.Y))*10)/10)
+		}
+	}
+	sort.Float64s(bd)
+	pi.BotView = fmt.Sprintf("snapshot monsters %d, distances %v, fightRadius %d, crowdAdjacent %d", len(sn.Monsters), bd, l.tune.Combat.FightRadius, l.tune.Combat.CrowdAdjacent)
 	hp, mp := l.beltKinds(sn)
 	pi.BeltPotions = hp + mp
 	v, _ := l.PView(ctx)
@@ -436,7 +452,7 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 	ei.Spawned, _ = l.monstersAlive(ctx)
 	mark := l.rec.Mark()
 	for ei.Elapsed < total {
-		if a, _, _, _ := l.d11Adjacent(ctx); a < 0 {
+		if a, _, _, _ := l.d11Within(ctx, 3); a < 0 {
 			break
 		}
 		if alive, _ := l.monstersAlive(ctx); alive == 0 {

@@ -196,3 +196,10 @@ DRILLS11 rows (2026-11-01, lab build cheats3, code at 1a47b45; files `2026-11-01
 | P10 | D-portalmelee x3 | FAIL (product, F18) | 3 zombies within 8 subtiles but never 3 within 3: Safety is `town-portal` at 34 percent life with no potion; the fixportalmelee rule does not fire at the live distances |
 | P10 | D-portalmelee.ctl x3 | PASS | one adjacent monster: the bot casts the portal (scroll 1 to 0, portal object listed) |
 | P10 | D-castcut | RECORDED | cast to portal object 320 ms (4 steps), player mode 10 for 6 steps; 5 zombie hits landed inside the cast (steps 2 and 3): 0 cuts, mode stayed 10; the `debug hit` cheat does cut (D2.d3) |
+
+DRILLS12 rows (2026-11-01, lab build cheats3, code at 2f34d65 plus the harness; files `2026-11-01-drills12*.txt`, README section DRILLS12):
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P10 | D-portalmelee x3 | PASS (was FAIL, F18) | fixcrowd live: 3 zombies within combat.crowdAdjacent (8) at 102/300 life, empty belt, one scroll: Safety `chicken`, scroll 1 to 1; the chicken action itself is not run by the harness |
+| P10 | D-portalmelee.ctl x3 | PASS | one zombie: `town-portal`, scroll 1 to 0, portal object listed |
+
