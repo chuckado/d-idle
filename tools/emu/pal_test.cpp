@@ -31,8 +31,8 @@ int main(int argc, char** argv) try {
     auto data = load_game_data(fs::path(mpq_dir), patch ? fs::path(patch) : fs::path{}, 0x1234);
     if (!data || !data->patched) { std::printf("FAIL: no patched data\n"); return 1; }
     if (mode == "--undead") {
-        for (std::size_t id = 0; id < data->monsters.mon_bin.size(); ++id) {
-            const auto row = data->monsters.mon_bin[id];
+        for (std::size_t id = 0; id < data->mon_bin.size(); ++id) {
+            const auto row = data->mon_bin[id];
             if (row >= data->monsters.types.size()) continue;
             const auto& type = data->monsters.types[row];
             std::printf("%zu %d %d\n", id, int(type.undead), int(type.demon));
