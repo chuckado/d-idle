@@ -11,7 +11,7 @@ Tags: **V read** read in the disassembly (upstream `tools/emu/disasm.py`) or in 
 | Claim | Verdict | One line |
 |---|---|---|
 | 1a. Fire / Lightning Mastery grant the pierce stats 333 / 334 (Sonnet B2) | **REFUTED** (D, V run of the loader path) | Fire Mastery writes stat 329 only, Lightning Mastery 330 only, Cold Mastery 335 only; 333 / 334 are written by no Sorceress mastery. |
-| 1b. game.exe applies stats 333 / 334 differently from d2d | **REFUTED on the missile path** (V run: 0 differences, 73,622 pierce cases); **UNCOVERED on the melee path** (V read: d2d's `player_blow` has no pierce input; no run) | Same gate, same floor, same 100 line, for fire, lightning and cold. |
+| 1b. game.exe applies stats 333 / 334 differently from d2d | **REFUTED on the missile path** (V run: 0 differences on 26,935 non-immune-cut pierce cases of 73,622); **UNCOVERED on the melee path** (V read: d2d's `player_blow` has no pierce input; no run) | Same gate, same floor, same 100 line, for fire, lightning and cold. |
 | 2. missile PHYSICAL damage: d2d cuts the roll to whole points before the resist (Sonnet D3) | **CONFIRMED** (V run, 101,626 cases: 84,271 differ on game.exe's own roll; 0 after a 6-line fix for res of -100 or more) | Local PR candidate `local/skabrecheck-phys` in the fork checkout, not pushed. |
 
 ## Claim 1: pierce
@@ -31,7 +31,7 @@ FUN_0057c1e0 -> FUN_0057bf80 -> FUN_0057be00 on the descriptor rows at 0x732980 
 
 ### Q3 Differential (V run)
 
-`tools/emu/skab_run.sh resist 7`: `sk_resist.py gen 100000 7` (32,604-style boundary grid plus 100,000 random: **147,628 cases**; own resist -150..1000, pierce 0 / 15 / 60 / 115 on the grid and 0..200 random, curse delta 0..-300), game.exe side `sk_resist.py game` (FUN_005c3540, FUN_0057be00, FUN_0057c6c0 natively), d2d side `test_skab_resist` (= `sk_resist_test.cpp`: `adj` and `effres` copy d2d's lines, `dealt` is the REAL `missile_blow`). The totals reproduce the Opus run of the earlier card exactly (seed 7: 88,224 `adj`, 92,149 `effres`, 14,289 `dealt` differ), now on the lab binary's source.
+`tools/emu/skab_run.sh resist 7`: `sk_resist.py gen 100000 7` (a 47,628-case boundary grid plus 100,000 random: **147,628 cases**; own resist -150..1000, pierce 0 / 15 / 60 / 115 on the grid and 0..200 random, curse delta 0..-300), game.exe side `sk_resist.py game` (FUN_005c3540, FUN_0057be00, FUN_0057c6c0 natively), d2d side `test_skab_resist` (= `sk_resist_test.cpp`: `adj` and `effres` copy d2d's lines, `dealt` is the REAL `missile_blow`). The totals reproduce the Opus run of the earlier card exactly (seed 7: 88,224 `adj`, 92,149 `effres`, 14,289 `dealt` differ), now on the lab binary's source.
 
 Split by `tools/emu/skab_pierce.py` (cases with a pierce stat above 0, per element; `pure` = no curse):
 
@@ -45,7 +45,7 @@ Split by `tools/emu/skab_pierce.py` (cases with a pierce stat above 0, per eleme
 | all three | a curse on an own resist under 100 (the cut does not apply) | 6,260 + 6,252 + 6,313 = 18,825 | 0 | 0 |
 | all three | a curse on an own resist of 100 or more (**D1 of the SKRESIST card, the one-fifth cut, not this claim**) | 46,687 | 8,847 | 43,933 |
 
-Reading (V run): for fire and lightning exactly as for cold, with or without a plain curse, d2d's pierce gate, floor and 100 line equal game.exe on **26,935 pierce cases (8,110 pure + 18,825 curse) with 0 differences**; every difference in the whole file sits in the already-known D1 (curse on an immune base) or D2 (magic / physical under -100) classes. The arm's Fire / Lightning Mastery text has no rule difference behind it either.
+Reading (V run): for fire and lightning exactly as for cold, with or without a plain curse, d2d's pierce gate, floor and 100 line equal game.exe on **26,935 pierce cases (8,110 pure + 18,825 curse) with 0 differences, of which fire and lightning alone are 17,866 (5,354 pure + 12,512 curse)**; every difference in the whole file sits in the already-known D1 (curse on an immune base) or D2 (magic / physical under -100) classes. The arm's Fire / Lightning Mastery text has no rule difference behind it either.
 
 ### Q4 The melee path (V read, not run)
 
@@ -105,10 +105,10 @@ PR status: **candidate, NOT ready**. Before it can go anywhere: (a) an independe
 |---|---|---|---|---|
 | D1 | missile physical rolled in 256ths, resisted in 256ths, life takes the fraction (Q5) | rolled, shifted to whole points, then resisted; `frac` never set for the physical (Q6) | **V run, CONFIRMED**: 84,271 of 101,626 differ on game.exe's roll; 0 after the fix at res >= -100 | yes, built and run: `skab_phys.py` + `test_skab_phys` + `skab_fix.sh` |
 | D2 | pierce on melee records (the same FUN_0057be00, every record element) | `player_blow` has no pierce input; weapon elements, Vengeance, conversion use the raw resist | V read both sides; **no run** | buildable: extend `sk_melee2.py` (game: FUN_0057b420 / FUN_0057b7d0 then FUN_0057c6c0 with stat 333 / 334 / 335 on the attacker unit, a weapon with an element, resist 0..99) and `sk_melee2_test.cpp` (`player_blow` with `Fighter::elem`); oracle = the record's life lost; expected: every case with pierce > 0 and resist under 100 differs |
-| D3 | a physical min or max of 0 means no physical roll (Q5) | `phys_hi > 0` rolls `range(0, hi)` (Q6) | V run (the zero-min class: 99 cases, d2d deals damage game.exe does not; mean up to 12 points) | yes (same harness); **reach U**: no Skills.txt row has base MinDam 0 with MaxDam above 0 (D, `skab_tbl.py phys`); the level columns were not scanned |
+| D3 | a physical min or max of 0 means no physical roll (Q5) | `phys_hi > 0` rolls `range(0, hi)` (Q6) | V run (the zero-min class: 33 of 136 cases differ on the same seed, d2d deals damage game.exe does not; mean up to 12 points) | yes (same harness); **reach U**: no Skills.txt row has base MinDam 0 with MaxDam above 0 (D, `skab_tbl.py phys`); the level columns were not scanned |
 | D4 | -100 floor on every resist, the physical included | `resisted(.., res)` / `resisted_fine` without a floor on the physical and magic paths | V run (16,526 left after the fix, all res < -100); latent (`sk-resist-trace.md` D2) | yes (same harness) |
 | D5 | physical and fire rolls on one seed: physical first, then the fire pair, `min + rand(max - min)` | the same order, `range` inclusive of max (SKMISS D1, known) | V run: A differs 88,398 after the fix | yes (same harness, column A) |
-| equal | pierce on missiles (fire 333, lightning 334, cold 335): gate under 100, floor -100, the 100 line, with or without a plain curse | the same | V run: 73,622 pierce cases, differences only in the curse-on-immune class (D1 of SKRESIST) | done |
+| equal | pierce on missiles (fire 333, lightning 334, cold 335): gate under 100, floor -100, the 100 line, with or without a plain curse | the same | V run: 73,622 pierce cases (fire, lightning, cold), differences only in the curse-on-immune class (D1 of SKRESIST) | done |
 
 ## Bot findings (described, not changed; main at the time of the card)
 
@@ -122,7 +122,7 @@ PR status: **candidate, NOT ready**. Before it can go anywhere: (a) an independe
 - The lab binary cannot run an oracle; the differential links the fork's rules and game libraries built from its source instead (U for "binary equals source").
 - A first standalone attempt was unnecessary for `before` (the built test ran); the standalone compile is used only to prove the `after` header without rebuilding the game library (its `before` numbers equal the built test's, 84,271).
 - Not covered: absorb stats (142..149) and the flat reduction on the physical path (stats 34 / 35 assumed 0 on monsters); Hydra's missile carrying the caster's pierce in d2d (I only); the soak (Bone Armor) interaction with a nonzero physical `frac`; the whole-point physical in `player_blow` (the melee2 D1, 80,250 of 80,632, S).
-- The physical test is a two-seed-free single run (seed 7); the arithmetic is deterministic, a second seed adds nothing to the B column but was not run (U).
+- Both differentials ran with one seed (7); the B column is deterministic arithmetic on game.exe's roll, so a second seed adds little, but it was not run (U).
 
 ## Drill recipe (fork verbs, docs/forkdbg.md and docs/forkcheats.md; the lab binary `d2d.lab2-freezeresume`, NOT run here)
 
