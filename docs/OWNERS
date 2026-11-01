@@ -75,3 +75,6 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
+docs/research/pr-walk-evidence-pack.md  CRFIX156  crfix156
+docs/research/pr-bundle-queue.md  CRFIX156  crfix156
+openspec/changes/crfix156/**  CRFIX156  crfix156

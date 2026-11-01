@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [crfix156](../../openspec/changes/crfix156/) | in-progress | CRFIX156 | `docs/research/pr-walk-evidence-pack.md`<br>`docs/research/pr-bundle-queue.md`<br>`openspec/changes/crfix156/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -68,6 +69,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change crfix156: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -94,6 +96,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
 - 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
 - 1a47b45 10-31 23:43 `Merge agent/walkopen: open upstream PR #156 (walk velocity)` (walkopen)
@@ -103,5 +106,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
-- 12c11b9 10-31 23:16 `Merge agent/specmin: soak Gate 1 virtual minutes (BELT, NOKILL)` (soak-minutes-virtual)
 <!-- statusgen:end -->
