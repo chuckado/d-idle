@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -17,12 +18,19 @@ import (
 // holdMon and holdPack: the monster of the pack (D29_MON overrides it: a fast attacker lands more hits than the plain
 // zombie, which hit the character about once in 20 s in the first runs) and the number spawned per top-up.
 var (
-	holdMon  = "fallen1"
-	holdPack = 8
+	holdMon  = "zombie1"
+	holdPack = 5
+)
+
+// holdLife is the character's life and holdDmg the blow of the held monsters: a hit only cuts a cast above max life / 12
+// (docs/fixcrowd.md: five zombie hits of 2 to 3 did not cut a portal cast), so the pack gets a logged `debug mon set dmg`.
+const (
+	holdLife = 300
+	holdDmg  = 30 // above holdLife / 12 = 25
 )
 
 const (
-	holdLeadMS = 22000
+	holdLeadMS = 50000
 	holdDueMS  = 114000
 	holdPostMS = 6000
 )
@@ -36,10 +44,11 @@ func (l *lab) ArmorHold(ctx context.Context, r *drill.Run, simMS int) (o drill.A
 	if m := os.Getenv("D29_MON"); m != "" {
 		holdMon = m
 	}
+	clear(holdSet)
 	save := d11Mon
 	d11Mon = holdMon
 	defer func() { d11Mon = save }()
-	if err := l.d11Setup(ctx, r, 2, 200, 6); err != nil {
+	if err := l.d11Setup(ctx, r, 2, holdLife, 6); err != nil {
 		o.Err = "setup: " + err.Error()
 		return
 	}
@@ -120,8 +129,12 @@ func (l *lab) ArmorHold(ctx context.Context, r *drill.Run, simMS int) (o drill.A
 	holdUntil := 0
 	// holdBuff is one call of the bot's Buff pass with everything recorded; it also runs inside the spawn and lure loop,
 	// where 20 to 40 s can pass (the bot buffs between its own steps, so the hold must not starve the pass).
+	holdRounds := 0
 	holdBuff := func() {
-		adj, _, _, _ := l.d11Within(ctx, 8)
+		adj, nalive, _, _ := l.d11Within(ctx, 8)
+		if holdRounds++; holdRounds%10 == 1 {
+			o.Trace = append(o.Trace, fmt.Sprintf("t=%d alive=%d adj8=%d dist=%s", now(), nalive, adj, d11each))
+		}
 		mi, _ := mode()
 		at := now()
 		bmk := l.rec.Mark()
@@ -190,8 +203,12 @@ func (l *lab) ArmorHold(ctx context.Context, r *drill.Run, simMS int) (o drill.A
 		holding := el >= lastCast+holdDueMS-holdLeadMS || el < holdUntil
 		if !holding {
 			if alive, _ := l.monstersAlive(ctx); alive > 0 {
-				_, _ = l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 2 * time.Second})
+				res, cerr := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 2 * time.Second})
 				l.rig.Fighter.ForgetIgnored()
+				if res.Elapsed == 0 || cerr != nil { // nothing in reach: walk toward the nearest idle monster and let the clock run
+					l.d11Lure(ctx)
+					_ = l.Tick(ctx, 20)
+				}
 			} else {
 				_ = l.Tick(ctx, 25)
 			}
@@ -203,14 +220,57 @@ func (l *lab) ArmorHold(ctx context.Context, r *drill.Run, simMS int) (o drill.A
 			l.d11SpawnHold(ctx, r)
 		}
 		holdBuff()
+		l.holdApproach(ctx)
 		_ = l.Tick(ctx, 5)
 	}
 	sample()
+	o.Lines = append(o.Lines, holdMoveLog...)
 	return
 }
 
 // d11SpawnHold spawns a pack next to the character without waiting for a lure: the monsters come to her in a few ticks
 // (a spawned monster idles until she is close, so this also walks toward the nearest one while it waits).
+var holdMoves int
+var holdMoveLog []string
+
+var holdSet = map[int]bool{}
+
 func (l *lab) d11SpawnHold(ctx context.Context, r *drill.Run) {
 	l.d11Spawn(ctx, r, holdPack, 3, 8)
+	ms, err := l.be.Client.Monsters(ctx)
+	if err != nil {
+		return
+	}
+	for _, m := range ms.Items {
+		if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" && !holdSet[m.Unit] {
+			holdSet[m.Unit] = true
+			_, _ = r.Cheat(ctx, fmt.Sprintf("debug mon set %d dmg %d %d", m.Unit, holdDmg, holdDmg), "D29-C: a blow above max life / 12 so a hit during the cast is a real get-hit (weak zombie hits do not cut a cast, docs/fixcrowd.md)")
+		}
+	}
+}
+
+// holdApproach walks the character to the nearest living monster while it is farther than 3 subtiles: a spawned monster
+// idles or hovers at 6 to 9 subtiles until she is close, and the pack must be hitting her at the due time.
+func (l *lab) holdApproach(ctx context.Context) {
+	ms, err := l.be.Client.Monsters(ctx)
+	lv, lerr := l.be.Client.Level(ctx)
+	if err != nil || lerr != nil {
+		return
+	}
+	best, bx, by := 1e9, 0.0, 0.0
+	for _, m := range ms.Items {
+		if m.HP.Cur <= 0 || m.Mode == "DD" || m.Mode == "DT" {
+			continue
+		}
+		if d := 5 * math.Hypot(m.CellX-lv.X, m.CellY-lv.Y); d < best {
+			best, bx, by = d, m.CellX, m.CellY
+		}
+	}
+	if best > 3 && best < 1e9 {
+		err := l.be.Client.CmdMove(ctx, bx, by)
+		holdMoves++
+		if holdMoves%25 == 1 {
+			holdMoveLog = append(holdMoveLog, fmt.Sprintf("move to (%.0f,%.0f) from %.0f,%.0f d=%.0f err=%v", bx, by, lv.X, lv.Y, best, err))
+		}
+	}
 }

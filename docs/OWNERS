@@ -103,3 +103,7 @@ docs/armorcut.md  armorcut  armorcut
 internal/combat/fighter.go  armorcut  armorcut
 internal/combat/armorcut_test.go  armorcut  armorcut
 openspec/changes/armorcut/**  armorcut  armorcut
+openspec/changes/drills29/**  drills29  drills29
+internal/drill/d29.go  drills29  drills29
+internal/drill/d29_test.go  drills29  drills29
+cmd/d2drill/d29_lab.go  drills29  drills29

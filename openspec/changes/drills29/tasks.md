@@ -1,0 +1,28 @@
+# Tasks
+
+```yaml
+change: drills29
+status: in-progress
+agent: drills29
+branch: agent/drills29
+worktree: ~/code/d2lod-wt/drills29
+skip_specs: true
+owns:
+  - openspec/changes/drills29/**
+  - internal/drill/d29.go
+  - internal/drill/d29_test.go
+  - cmd/d2drill/d29_lab.go
+  - docs/probes/drills/2026-11-01-drills29-*
+exclusive:
+  - instance:drills29-slot-0
+gates:
+  - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test on the worker host"
+merge:
+result: ""
+live: ""
+```
+
+- [x] 1.1 D29-C drill and offline verdict test
+- [x] 1.2 D26-A dead zone fix
+- [ ] 1.3 Live runs (D29-C, D26-A, nexthit2 comparison, D2 and D3 regression)
+- [ ] 1.4 Docs: README DRILLS29, primitives row, armorcut live line
