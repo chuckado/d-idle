@@ -2,7 +2,8 @@
 
 ```yaml
 change: glossaryadd
-status: active
+status: archived
+merge: 87f4674
 agent: glossaryadd
 branch: agent/glossaryadd
 worktree: ~/code/d2lod-wt/glossaryadd
@@ -13,7 +14,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits"
-result: "six user-approved terms added; docs only, not applicable live"
+result: "six user-approved terms added; docs only, verified live: not applicable"
 ```
 
 - [x] add the six entries
