@@ -175,45 +175,79 @@ func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome
 	return o
 }
 
+// d22legs are the Act 2 legs: a tile exit (Rocky Waste to Stony Tomb, Dry Hills to Halls of the Dead 1), where
+// Navigator.ExitTo hops (S: exit.go hops only when the gate is not a border), and the border crossing Rocky Waste to
+// Dry Hills, where it walks.
+var d22legs = []struct {
+	Name     string
+	From, To int
+}{{"tile41-55", d22Rocky, 55}, {"tile42-57", d22Dry, 57}, {"border41-42", d22Rocky, d22Dry}}
+
+func (l *lab) d22legsRun(ctx context.Context, r *drill.Run, learn bool, tag string) ([]d22leg, error) {
+	var out []d22leg
+	for _, lg := range d22legs {
+		if err := l.d22prep(ctx, r, lg.From, learn); err != nil {
+			return out, err
+		}
+		l.d22wire(l.navr, true)
+		g := l.d22run(ctx, l.navr, lg.To, 150*time.Second)
+		l.d22dump(g, tag+" "+lg.Name)
+		out = append(out, g)
+	}
+	return out, nil
+}
+
+func d22sum(gs []d22leg) (hops, refused, ticks int, paid float64, errs int, obs string) {
+	var parts []string
+	for i, g := range gs {
+		hops += g.Hops
+		refused += g.Refused
+		ticks += g.Ticks
+		paid += g.ManaB - g.ManaA
+		if g.Err != nil {
+			errs++
+		}
+		parts = append(parts, d22legs[i].Name+": "+g.String())
+	}
+	return hops, refused, ticks, paid, errs, strings.Join(parts, " || ")
+}
+
 func (l *lab) d22C(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
-	if err := l.d22prep(ctx, r, d22Rocky, false); err != nil {
+	gs, err := l.d22legsRun(ctx, r, false, "control")
+	if err != nil {
 		return drill.Outcome{}, err
 	}
-	l.d22wire(l.navr, true)
-	g := l.d22run(ctx, l.navr, d22Dry, 150*time.Second)
-	obs := l.d22dump(g, "control")
-	o := drill.Outcome{Intended: "no Teleport learned: key empty, no hop, the leg walks", Observed: obs, Sig: fmt.Sprintf("hops=%d key=%q", g.Hops, g.Key)}
-	switch {
-	case g.Key != "" || g.Hops != 0 || g.Refused != 0:
+	hops, refused, ticks, _, errs, obs := d22sum(gs)
+	o := drill.Outcome{Intended: "no Teleport learned: key empty, no hop, the legs walk", Observed: obs, Sig: fmt.Sprintf("hops=%d", hops)}
+	if hops != 0 || refused != 0 || gs[0].Key != "" {
 		o.Verdict, o.Reason = drill.Fail, "the control hopped or had a key"
-	case g.Err != nil:
-		o.Verdict, o.Reason = drill.Fail, "the walking control failed: "+g.Err.Error()
-	default:
-		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("walked %d ticks, no key, no hops, no error", g.Ticks)
+	} else if errs > 0 {
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d walking legs failed", errs)
+	} else {
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("3 legs walked %d ticks in all, no key, no hops, no error", ticks)
 	}
 	return o, nil
 }
 
 func (l *lab) d22A(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
-	if err := l.d22prep(ctx, r, d22Rocky, true); err != nil {
+	gs, err := l.d22legsRun(ctx, r, true, "teleport")
+	if err != nil {
 		return drill.Outcome{}, err
 	}
-	l.d22wire(l.navr, true)
-	g := l.d22run(ctx, l.navr, d22Dry, 150*time.Second)
-	obs := l.d22dump(g, "teleport")
-	o := drill.Outcome{Intended: "Teleport learned at clvl 18 in Act 2: the leg hops (>0), refused hops are few, mana is paid per hop", Observed: obs, Sig: fmt.Sprintf("hops=%d refused=%d", g.Hops, g.Refused)}
-	paid := g.ManaB - g.ManaA
+	hops, refused, ticks, paid, errs, obs := d22sum(gs)
+	o := drill.Outcome{Intended: "Teleport learned at clvl 18 in Act 2: tile-exit legs hop (>0), refused hops are few, mana is paid per hop", Observed: obs, Sig: fmt.Sprintf("hops=%d refused=%d", hops, refused)}
+	tileHops := gs[0].Hops + gs[1].Hops
 	switch {
-	case g.Key == "":
+	case gs[0].Key == "":
 		o.Verdict, o.Reason = drill.Fail, "no Teleport key after learning and BindSkills"
-	case g.Hops == 0:
-		o.Verdict, o.Reason = drill.Fail, "no hop fired on an Act 2 leg"
-	case g.Err != nil:
-		o.Verdict, o.Reason = drill.Fail, "the leg failed: "+g.Err.Error()
-	case g.Refused > 3:
-		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d refused hops", g.Refused)
+	case tileHops == 0:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("no hop on the tile-exit legs (border leg hops %d)", gs[2].Hops)
+	case errs > 0:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d legs failed", errs)
+	case gs[0].Refused > 3 || gs[1].Refused > 3 || gs[2].Refused > 3:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("refused hops %d in all", refused)
 	default:
-		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("%d hops, %d refused, mana net %.1f, %d ticks", g.Hops, g.Refused, paid, g.Ticks)
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("%d hops (border leg %d), %d refused, mana net %.1f, %d ticks", hops, gs[2].Hops, refused, paid, ticks)
 	}
 	return o, nil
 }
@@ -237,12 +271,14 @@ func (l *lab) d22B(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	_, x0, y0, m0, _ := l.d22state(ctx)
 	castErr := error(nil)
 	if key != "" {
-		castErr = l.be.Env.In.CastAt(key, input.Point{X: int(x0) + 12, Y: int(y0)})
+		dx, dy, n := l.d15dir(ctx, x0, y0, 12)
+		tx, ty := x0+dx*float64(min(n, 12)), y0+dy*float64(min(n, 12))
+		castErr = l.be.Env.In.CastAt(key, input.Point{X: int(tx), Y: int(ty)})
 		_ = l.Tick(ctx, 14)
 	}
 	_, x1, y1, m1, _ := l.d22state(ctx)
 	moved := cdist(x0, y0, x1, y1)
-	obs := fmt.Sprintf("TeleportKey=%q HasTeleport=%v skills=[%s] debug states: %s; CastAt(%q) 12 cells east: err=%v moved %.1f cells, mana %.1f->%.1f", key, l.navr.HasTeleport(), strings.Join(sks, " "), strings.TrimSpace(states.Text()), key, castErr, moved, m0, m1)
+	obs := fmt.Sprintf("TeleportKey=%q HasTeleport=%v skills=[%s] debug states: %s; CastAt(%q) a free line: err=%v moved %.1f cells, mana %.1f->%.1f", key, l.navr.HasTeleport(), strings.Join(sks, " "), strings.TrimSpace(states.Text()), key, castErr, moved, m0, m1)
 	fmt.Println("D22 bind:", obs)
 	o := drill.Outcome{Intended: "key is the bind of skill 54, the cast through it hops and pays mana", Observed: obs, Sig: key}
 	if key == fmt.Sprintf("sk%d", 54) && castErr == nil && moved >= 2 && m1 < m0 {
