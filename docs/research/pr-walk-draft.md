@@ -1,6 +1,6 @@
 # PR body draft: walk velocity
 
-> status: draft, NOT posted (needs the user's go). Branch `fix/walk-velocity-v2`, card walkfix (the verifier's findings are fixed or listed under Limits). Earlier draft: card decompwalk.
+> status: draft, NOT posted (needs the user's go). Branch `fix/walk-velocity-v3` (v2 plus two ponytail notes), card prfixes (the verifier's findings are fixed or listed under Limits). Earlier draft: card decompwalk.
 
 **Title:** game: monster, merc and pet walk speed, chill and velocitypercent follow FUN_00623f50
 
@@ -33,7 +33,17 @@ uv run python walk_velocity.py compare cases.tsv g.txt d.txt     # mismatches 0
 
 `tools/emu/walk_velocity.py` is under `tools/`, so it needs CODEOWNERS review; it reads your own game data. Upstream tests: test_game, test_rules, test_combat, test_protocol pass; pr_guard 0 FAIL / 0 WARN; presubmit --quick 0 FAIL.
 
-Limits: what feeds stat 0x43 (boss speed +20, pace, auras, a running player's Run x 100 / Walk) is d2d's model, taken as given on both sides. game.exe truncates the velocity to an integer and d2d's float step does not (under 1/4096 subtile a tick). Not covered: a Shadow pet's base (class WalkVelocity / RunVelocity in `pets.cpp`: FUN_00621360 gives a player class WalkVelocity in every mode, and whether a Shadow's run has the stat list is not traced), the chase of an untraced pet (`pets.cpp`, `max(Run, Velocity)` and no floor), and skill moves (`ai.cpp` Diablo's run and the whirl keep a multiplied chill and a 10 floor). `rules::effective_speed` leaves negative IAS / FHR / FCR / FBR undiminished (FUN_00621740 rows 0..3): a separate change. The scenario state hashes were not re-run.
+Limits: what feeds stat 0x43 (boss speed +20, pace, auras, a running player's Run x 100 / Walk) is d2d's model, taken as given on both sides. game.exe truncates the velocity to an integer and d2d's float step does not (under 1/4096 subtile a tick).
+
+Not claimed (each has a `// ponytail:` where d2d's code stands):
+- Two pet paths still follow the owner at RunVelocity x 1.1: an untraced pet (`pets.cpp`, no target) and every pet in town (`fight/tick.cpp`). game.exe's rule for those paths is untraced; they are outside the claim and behave as before.
+- Merc chill, an item's faster run/walk on a merc, and pet chill are not modelled (stat 0x43 / 96 inputs are d2d's own).
+- A leftover pace stat list in game.exe is untraced.
+- Shadow pets are excluded: FUN_00621360 gives a player class WalkVelocity in every mode, and whether a Shadow's run has the stat list is not traced (a ponytail in `pets.cpp`); the chase of an untraced pet (`max(Run, Velocity)`, no floor) stays.
+- Skill moves (`ai.cpp` Diablo's run and the whirl, about lines 1883 and 1937) keep a multiplied chill and a 10 floor.
+- `rules::effective_speed` leaves negative IAS / FHR / FCR / FBR undiminished (FUN_00621740 rows 0..3): a separate candidate.
+- Integer truncation (game.exe) against d2d's float step, as above.
+- The scenario state hashes were not re-run.
 
 Presubmit answers: siblings (merc and pet are claims 4 and 5, a co-op partner is a Player: the same code); error-path at `walk_velocity.py` (a fixed 4-byte `struct.unpack` of a 32-bit argument).
 
