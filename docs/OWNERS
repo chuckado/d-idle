@@ -86,3 +86,5 @@ README.md  readmedocs  readmedocs
 docs/capabilities.md  readmedocs  readmedocs
 docs/running.md  readmedocs  readmedocs
 openspec/changes/readmedocs/**  readmedocs  readmedocs
+docs/forknext.md  forknext  forknext
+openspec/changes/forknext/**  forknext  forknext
