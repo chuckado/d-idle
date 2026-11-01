@@ -74,3 +74,5 @@ internal/nav/nav.go  fixmouth  fixmouth
 internal/nav/fixmouth_test.go  fixmouth  fixmouth
 internal/combat/combatspin_test.go  fixmouth  fixmouth
 docs/fixmouth.md  fixmouth  fixmouth
+docs/research/sorc-act-gate.md  actgate  actgate
+openspec/changes/actgate/**  actgate  actgate
