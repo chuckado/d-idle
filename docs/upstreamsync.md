@@ -102,6 +102,10 @@ Nothing below is edited by this card (other cards own the files). Lines are as o
 
 Count: 22 rows (about 45 line references); `review-strategy.md`, README and capabilities need nothing.
 
+## After #157 / #158 (upstream main 52362d52)
+
+The maintainer also merged #157 and #158. Merge-tree (textual) of the four rebased copies against 52362d52: `fix/armor-hit-rebased`, `fix/freeze-resume-rebased`, `fix/frozen-armor-and-resume-2c-rebased` and `fix/curse-immune-rebased` all merge clean (rc 0, no conflicts). Builds and tests were not re-run on the new head. Still open on our side: #155, #156 (README row conflict, section 1). The fork plan (section 2) drops the lab-nexthit commits now, because #158 is merged.
+
 ## Shared-file lines for the merger
 
 - docs/BACKLOG.md: "upstreamsync (card upstreamsync, 2026-11-01): the maintainer merged #152 (vendor prices) and #153 (waypoint cooldown) on 2026-11-01; main is 7c3a50af. Merge preview clean for #155, #157, #158 and the armor / resume / curse-immune candidates (rebased copies fix/armor-hit-rebased, fix/freeze-resume-rebased, fix/frozen-armor-and-resume-2c-rebased, fix/curse-immune-rebased: pr_guard 0/0, tests green); #156 conflicts in one README row; fork stack needs a hand merge of the lab click-modifier commit (plan in docs/upstreamsync.md); bot WpCooldownSec removable once the lab binary is on 7c3a50af."
