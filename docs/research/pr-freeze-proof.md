@@ -1,8 +1,31 @@
 # PR candidate: freeze rules (C5, C3, C4)
 
-> status: BUILT, local candidate, stacked on #155 (card decompfreeze, 2026-11-01); independent verifier done (card verifyfreeze, 2026-11-01: C5 / C3 / C4 HOLD WITH LIMITS, NOT READY until the commit bodies are cut to three lines and the det state hashes run; section "Independent verifier" below); nothing pushed or posted. Rules and addresses: [freeze-rules-trace.md](freeze-rules-trace.md). Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-freeze-draft.md](pr-freeze-draft.md).
+> status: BUILT, polished (card freezepolish, 2026-11-01), local candidate `fix/freeze-rules-v2` (head 409903a6) on the fork's current #155 head 8c56e96a; independently verified (card verifyfreeze: C5 / C3 HOLD WITH LIMITS, C4 HOLDS); commit bodies cut to the standard. NOT READY to open: the det state hashes need a d2d slot, the rebase onto upstream/main after #155 merges, the user's go. Nothing pushed or posted. Rules and addresses: [freeze-rules-trace.md](freeze-rules-trace.md). Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-freeze-draft.md](pr-freeze-draft.md). Hashes below the "v2" section are the old branch `fix/freeze-rules` (bbf506c6), kept as the evidence trail.
 
-## Candidate
+## v2: the polished branch (card freezepolish, 2026-11-01)
+
+Branch `fix/freeze-rules-v2` in the worker host's PR checkout (worktree `freeze2`), created from the fork's current `fix/static-field` head 8c56e96a (#155 after SPOT155's fixup) with the four commits cherry-picked (clean, no shared file). Tree equals the old bbf506c6 plus the fixup (test_static_field.cpp, static_field.py). Author and committer the numeric-ID noreply form copied from 8c56e96a; each body is two lines plus `Agent: Claude Code`, no Claude trailer (the old bodies were 9 to 20 lines; "d2ds" / "dont" fixed). Nothing pushed.
+
+| old | v2 | claim |
+|---|---|---|
+| 9ec91600 | 4dc07e7d | C5 |
+| 39ef104e | 42460cf6 | C3 |
+| 61620d08 | 31a63579 | C4 |
+| bbf506c6 | 409903a6 | tooling |
+
+Gates re-run on 409903a6 (worker host, offline, no game, no d2d slot):
+
+- pr_guard: upstream/main..head 0 FAIL / 0 WARN (this covers #155's 7 commits as well) and each of the 11 commits 0 / 0, the four v2 commits included.
+- Author's differential (`freeze_rules.py gen 100000 20261101`, same cases.tsv, game side unchanged, real d2d build of the head): 225,748 cases, 0 mismatches, 0 RESFAIL. `freeze_rules.py flags`: special=1 chills, special=0 freezes; `state`: bits [118, 630], no stat byte changed, stat 0x76 reads 0.
+- Verifier's differential (`verify_freeze.py 120000 0x1F00DFACE` against `test_verify_freeze --verify-freeze 0x1F00DFACE 120000`, harness files copied into a throwaway worktree): 146,591 cases, inputs identical line by line, 6 differ: all freeze length 0x100001 (the known residual, game.exe's MulDiv divides first above 0x100000; unreachable in play).
+- test_game (with the game data dir), test_rules, test_combat, test_protocol: ok. test_freeze_rules without arguments: SKIP. Static-field mode (seed 1, 3,000 rounds): 212,664 lines, 0 differ from `static_field.py`; cold-length mode (seed 1): 24,312 lines, 0 differ. Seeds -1 and -7 (3,000 rounds each): 212,664 and 24,312 lines, 0 differ in both modes.
+- gcc -Wshadow -Wunused -Wsign-compare full build: 0 warnings on added lines. clang-tidy (repo .clang-tidy, "Names and includes") on missiles.cpp, gamedata_load.cpp, ai.cpp, test_freeze_rules.cpp, test_combat.cpp: 0 warnings on added lines (only the pre-existing outdoor.hpp binding names x / y). ruff with upstream's rule set (the presubmit run) is clean on the added Python.
+- presubmit --quick: 0 FAIL, 4 WARN (the known siblings and data-gating notes, answered in the body's Limits; the data-gating ones sit in #155's files).
+- Size: 11 files on top of #155's 9 (17 distinct files against upstream/main, under 100); longest touched files ai.cpp 3,050 and gamedata_load.cpp 1,749 get one line each, new files 312 and 118 lines.
+
+Still open: the det state hashes (need a d2d slot; NOT run, not claimed); after #155 merges `git rebase --onto upstream/main 8c56e96a fix/freeze-rules-v2`, then re-run the differential and the gates; the user's go.
+
+## Candidate (old branch fix/freeze-rules, bbf506c6)
 
 Branch `fix/freeze-rules` in the worker host's PR checkout (worktree `freeze`), on #155's head ddc8281d (= the fork's `fix/static-field`; upstream main 72132b99 + the four #155 commits). Authored and committed with the numeric-ID noreply form copied from ddc8281d, body `Agent: Claude Code`, no Claude trailer.
 
@@ -73,7 +96,7 @@ A verifier should write their own generator and seed and re-derive FUN_0057b230 
 
 ## How to open
 
-Stacked on #155 (the freeze path is next to its chill commit in `Fight::strike` / combat.hpp). Recommended: after #155 merges, `git rebase --onto upstream/main ddc8281d fix/freeze-rules` (4 commits, 11 files), re-run the differential and the CI-class checks on the new head, then open as its own PR with the draft body, under the bundle policy (opens when an open PR has no CodeRabbit review). A PR on upstream main before #155 merges would need #155's chill commits as a prerequisite: not recommended. Appending to #155 is possible only with the user's go (it already has a CodeRabbit review).
+Stacked on #155 (the freeze path is next to its chill commit in `Fight::strike` / combat.hpp). Recommended: after #155 merges, `git rebase --onto upstream/main 8c56e96a fix/freeze-rules-v2` (4 commits, 11 files; v2 supersedes the old branch, whose base ddc8281d is no longer #155's head), re-run the differential and the CI-class checks on the new head, then open as its own PR with the draft body, under the bundle policy (opens when an open PR has no CodeRabbit review). A PR on upstream main before #155 merges would need #155's chill commits as a prerequisite: not recommended. Appending to #155 is possible only with the user's go (it already has a CodeRabbit review).
 
 ## Independent verifier (card verifyfreeze, 2026-11-01)
 

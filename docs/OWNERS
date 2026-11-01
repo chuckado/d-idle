@@ -51,3 +51,8 @@ docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
 docs/review-strategy.md  specmin  soak-minutes-virtual
 docs/d2d-soak.md  specmin  soak-minutes-virtual
 docs/geninv.md  specmin  soak-minutes-virtual
+docs/research/pr-freeze-draft.md  freezepolish  freezepolish
+docs/research/pr-freeze-proof.md  freezepolish  freezepolish
+docs/research/pr-bundle-queue.md  freezepolish  freezepolish
+docs/BACKLOG.md  freezepolish  freezepolish
+openspec/changes/freezepolish/**  freezepolish  freezepolish
