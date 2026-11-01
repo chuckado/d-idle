@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"sort"
 	"strings"
 	"time"
 
@@ -43,6 +44,27 @@ func (l *lab) d11Leave(ctx context.Context, r *drill.Run) {
 
 // d11Adjacent counts living monsters within 3 subtiles of the player (the crowd rule's adjacency) and all listed alive.
 func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife int) {
+	return l.d11Within(ctx, 3)
+}
+
+// d11att counts the distances (whole subtiles) at which living monsters stood while in an attack mode (A1, A2), over a drill.
+var d11att = map[int]int{}
+
+func d11AttStr() string {
+	var k []int
+	for d := range d11att {
+		k = append(k, d)
+	}
+	sort.Ints(k)
+	var b []string
+	for _, d := range k {
+		b = append(b, fmt.Sprintf("%d:%d", d, d11att[d]))
+	}
+	return strings.Join(b, " ")
+}
+
+// d11Within is d11Adjacent with a radius in subtiles.
+func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, life, maxLife int) {
 	sn, err := l.be.Env.Snapshot()
 	if err != nil || sn.Player == nil {
 		return
@@ -58,11 +80,53 @@ func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife in
 			continue
 		}
 		alive++
-		if math.Hypot(5*(m.CellX-lv.X), 5*(m.CellY-lv.Y)) <= 3 {
+		d := math.Hypot(5*(m.CellX-lv.X), 5*(m.CellY-lv.Y))
+		if strings.HasPrefix(m.Mode, "A") {
+			d11att[int(d+0.5)]++
+		}
+		if d <= radius {
 			adj++
 		}
 	}
 	return
+}
+
+// d11Squeeze warps the character next to the want nearest monsters (logged `debug warp` to the cell of their centroid)
+// until at least want of them are within 3 subtiles, at most 8 tries: the attackers' natural distance is larger than the
+// bot's adjacency (finding of DRILLS11), so the rule's branch is reached by placing the character.
+func (l *lab) d11Squeeze(ctx context.Context, r *drill.Run, want int) (tries int) {
+	for ; tries < 8; tries++ {
+		if a, _, _, _ := l.d11Within(ctx, 3); a >= want {
+			return tries
+		}
+		ms, err := l.be.Client.Monsters(ctx)
+		lv, lerr := l.be.Client.Level(ctx)
+		if err != nil || lerr != nil {
+			return tries
+		}
+		type md struct{ x, y, d float64 }
+		var near []md
+		for _, m := range ms.Items {
+			if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" {
+				near = append(near, md{m.CellX, m.CellY, math.Hypot(m.CellX-lv.X, m.CellY-lv.Y)})
+			}
+		}
+		sort.Slice(near, func(i, j int) bool { return near[i].d < near[j].d })
+		if len(near) < want {
+			return tries
+		}
+		var cx, cy float64
+		for _, m := range near[:want] {
+			cx += m.x
+			cy += m.y
+		}
+		cx, cy = cx/float64(want), cy/float64(want)
+		if err := l.Warp(ctx, r, int(cx+0.5)-tries%2, int(cy+0.5)); err != nil {
+			return tries
+		}
+		_ = l.Tick(ctx, 1)
+	}
+	return tries
 }
 
 // d11OneScroll empties the belt and the pack and puts exactly one Town Portal scroll in the pack.
@@ -102,17 +166,18 @@ func (l *lab) d11OneScroll(ctx context.Context, r *drill.Run) error {
 const d11Mon = "fallen1"
 
 // d11Spawn spawns n zombies and steps until at least want of them are adjacent (600 ticks at most).
-func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int) (adj int) {
+func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius float64) (adj int) {
+	clear(d11att)
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn %s %d near", d11Mon, n), "melee monsters near the throwaway: the fight under test (docs/forkcheats.md)"); err != nil {
 		return -1
 	}
 	for i := 0; i < 60; i++ {
 		_ = l.Tick(ctx, 10)
-		if a, _, _, _ := l.d11Adjacent(ctx); a >= want {
+		if a, _, _, _ := l.d11Within(ctx, radius); a >= want {
 			return a
 		}
 	}
-	a, _, _, _ := l.d11Adjacent(ctx)
+	a, _, _, _ := l.d11Within(ctx, radius)
 	return a
 }
 
@@ -127,9 +192,12 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 		pi.Err = "scroll: " + err.Error()
 		return
 	}
-	if got := l.d11Spawn(ctx, r, adj, adj); got < 0 {
+	if got := l.d11Spawn(ctx, r, adj, adj, 3); got < 0 {
 		pi.Err = "spawn failed"
 		return
+	}
+	if got, _, _, _ := l.d11Within(ctx, 3); got < adj {
+		pi.Squeezed = l.d11Squeeze(ctx, r, adj)
 	}
 	if err := l.SetLife(ctx, r, 34); err != nil {
 		pi.Err = "life: " + err.Error()
@@ -142,6 +210,7 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 		return
 	}
 	pi.Adjacent, pi.Hostiles, pi.Life, pi.MaxLife = l.d11Adjacent(ctx)
+	pi.AttackDists = d11AttStr()
 	pi.Life = sn.Player.Life
 	hp, mp := l.beltKinds(sn)
 	pi.BeltPotions = hp + mp
@@ -182,7 +251,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 		ci.Err = "no scroll"
 		return
 	}
-	if got := l.d11Spawn(ctx, r, 1, 1); got < 0 {
+	if got := l.d11Spawn(ctx, r, 1, 1, 8); got < 0 {
 		ci.Err = "spawn failed"
 		return
 	}
@@ -200,7 +269,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 	}
 	_ = c.Hover(ctx, x, y)
 	_ = l.Tick(ctx, 4)
-	ci.Adjacent, _, ci.LifeStart, _ = l.d11Adjacent(ctx)
+	ci.Adjacent, _, ci.LifeStart, _ = l.d11Within(ctx, 8)
 	old := map[int]bool{} // portal objects by id: an earlier trial's portal can stand on the same cell
 	if pv, err := l.PView(ctx); err == nil {
 		for _, id := range pv.PortalIDs {
@@ -214,7 +283,13 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 	}
 	ci.Rights = 1
 	last, run, prev := ci.LifeStart, 0, -1
-	var seq []string
+	var seq, mseq []string
+	mprev, mrun := "", 0
+	flushM := func() {
+		if mrun > 0 {
+			mseq = append(mseq, fmt.Sprintf("%s x%d", mprev, mrun))
+		}
+	}
 	flush := func() {
 		if run > 0 {
 			seq = append(seq, fmt.Sprintf("%d x%d", prev, run))
@@ -225,6 +300,22 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 		sn, err := l.be.Env.Snapshot()
 		if err != nil || sn.Player == nil {
 			continue
+		}
+		if ms, e := l.be.Client.Monsters(ctx); e == nil { // the nearest living monster's mode, run length encoded
+			best, bm := 1e9, "-"
+			lv, _ := l.be.Client.Level(ctx)
+			for _, m := range ms.Items {
+				if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" {
+					if d := math.Hypot(m.CellX-lv.X, m.CellY-lv.Y); d < best {
+						best, bm = d, m.Mode
+					}
+				}
+			}
+			if bm != mprev {
+				flushM()
+				mprev, mrun = bm, 0
+			}
+			mrun++
 		}
 		if sn.Player.Life < last {
 			ci.Hits++
@@ -250,7 +341,10 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 		}
 	}
 	flush()
+	flushM()
 	ci.ModeSeq = strings.Join(seq, ", ")
+	ci.AttackDists = d11AttStr()
+	ci.MonSeq = strings.Join(mseq, ", ")
 	ci.LifeEnd = last
 	pv, _ := l.PView(ctx)
 	ci.ScrollsAfter = pv.Scrolls

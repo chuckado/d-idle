@@ -33,6 +33,8 @@ type PMInfo struct {
 	PortalOpen                  bool // a portal object near the player after the act
 	LifeAfter                   int
 	Where                       string
+	Squeezed                    int    // warps needed to bring the monsters within 3 subtiles (0: they came by themselves)
+	AttackDists                 string // "distance:samples" of monsters in an attack mode (whole subtiles)
 }
 
 // CastTick is one tick of a cast trace.
@@ -50,6 +52,8 @@ type CastInfo struct {
 	PortalTick, PortalMS        int // ticks and game milliseconds from the click to the portal object, -1 none within the trace
 	ScrollsBefore, ScrollsAfter int
 	ModeSeq                     string // player mode, run length encoded "mode x ticks"
+	MonSeq                      string // mode of the nearest living monster, run length encoded
+	AttackDists                 string
 	Rights                      int
 }
 
@@ -134,13 +138,13 @@ func (i EmptyPlanInfo) String() string {
 }
 
 func (i PMInfo) String() string {
-	return fmt.Sprintf("%s: adjacent %d of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, err %q",
-		i.Where, i.Adjacent, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.Err)
+	return fmt.Sprintf("%s: adjacent %d of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, warps %d, attack-mode distances (subtile:samples) [%s], err %q",
+		i.Where, i.Adjacent, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.Squeezed, i.AttackDists, i.Err)
 }
 
 func (c CastInfo) String() string {
-	return fmt.Sprintf("adjacent %d, life %d -> %d, hit ticks %d, portal after %d ticks = %d game ms (-1 none), scrolls %d -> %d, rights %d, player modes [%s], err %q",
-		c.Adjacent, c.LifeStart, c.LifeEnd, c.Hits, c.PortalTick, c.PortalMS, c.ScrollsBefore, c.ScrollsAfter, c.Rights, c.ModeSeq, c.Err)
+	return fmt.Sprintf("adjacent %d, life %d -> %d, hit ticks %d, portal after %d ticks = %d game ms (-1 none), scrolls %d -> %d, rights %d, player modes [%s], monster modes [%s], attack-mode distances [%s], err %q",
+		c.Adjacent, c.LifeStart, c.LifeEnd, c.Hits, c.PortalTick, c.PortalMS, c.ScrollsBefore, c.ScrollsAfter, c.Rights, c.ModeSeq, c.MonSeq, c.AttackDists, c.Err)
 }
 
 // dEmptyPlan: PASS when the log has no "empty path" and there were back-offs; BLOCKED when none ran.
