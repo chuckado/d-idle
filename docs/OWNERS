@@ -75,7 +75,3 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
-openspec/changes/feedtick/**  feedtick  feedtick
-tools/discord/**  feedtick  feedtick
-docs/process/feed-after-events.md  feedtick  feedtick
-docs/community/discord/feeds.md  feedtick  feedtick
