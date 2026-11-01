@@ -134,3 +134,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/forkrebase.md: the private fork stack rebuilt on upstream main (lab2-*): what conflicted, what became redundant, vetting, binary and naming rule
 - docs/forkfreeze.md: private fork carries the freeze-end resume fix (lab-freezeresume, bin/d2d.lab-freezeresume), vetting and live readback
 - docs/classes/paladin-probe.md: second-class probe, Paladin offline results (see the table), findings F1 to F7, Sorceress-fitted pieces, live probes owed (PALPROBE)
+- docs/palfix.md: Paladin fix cards, offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, legacy table rows, plandata seam, Zealot-lite)

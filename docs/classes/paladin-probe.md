@@ -2,6 +2,8 @@
 
 > status: current. Card `palprobe` (user go 2026-11-01). Offline only: nothing here ran on the game or on d2d. Builds on `docs/research/paladin-act1-recon.md` and `docs/research/build-flexibility-audit.md` (rows cited as "row n").
 
+> status: F2 to F5 and F7 are fixed offline (card `palfix`, see docs/palfix.md); the live probes remain owed.
+
 Tags: **V** verified by a test in this change (name given) or by reading the file (named); **I** inferred; **U** unverified or a model input. Test runs: `go test -p 1 -count=1 -v -run PalProbe ./internal/leveler ./internal/combat ./internal/resource` on the small dev box; the town and install-backed tests (`internal/town`, `TestPalProbeRulesMatchInstall`) skip there and ran on the worker host (same command, `-p 4`, package list `./internal/town ./internal/leveler`).
 
 ## 1. Part A: the seams (Sorceress behaviour unchanged)

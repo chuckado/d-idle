@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- palfix (offline): Paladin fixes: mana-heavy flag in the build table (hammerdin included), Blessed Hammer band from clvl 18, simulator takes the class's attack names, legacy Paladin table trains Zeal 4 and Prayer, data tables can name themselves and `--build paladin-zealot-lite` exists (docs/palfix.md); not verified live.
 - boardgrow (offline, tooling and docs): work archive (docs/community/work-archive.md; `board.py --archive` moves done items out of open-work.md, `--check` fails while one is left); the chunker sync and groom read archived items too, so they are never withdrawn or re-created (an open issue of an archived item is closed once); SKMELEE and SKRESIST archived; 12 new work items (5 verify, 7 decomp). Chunker sync verified live: it closed issues #5 and #6 with one comment each.
 - docs: opened upstream PRs #159 (Frozen Armor and freeze-resume bundle) and #160 (curse lowering on immune monsters); posted log in docs/research/openpr-log.md.
 - docs: FORKREBASE: the private d2d fork is rebuilt on upstream main as lab2-freezeresume (docs/forkrebase.md).

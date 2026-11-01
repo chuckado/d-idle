@@ -2,7 +2,8 @@
 
 ```yaml
 change: palfix
-status: in-progress
+status: archived
+merge: db9b20e
 agent: palfix
 branch: agent/palfix
 worktree: ~/code/d2lod-wt/palfix
@@ -35,7 +36,7 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "PALMANA, PALBAND, SIMCLASS, PALTABLE, PALZEAL done offline (docs/palfix.md). Nothing run live; the Paladin tables and the new Zealot-lite table are not proven in a game."
+result: "Paladin findings fixed offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, legacy table Zeal and Prayer rows, plandata table seam, Zealot-lite table selectable by --build): unit-tested; not verified live"
 live: "offline only"
 ```
 
