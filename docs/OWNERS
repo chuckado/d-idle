@@ -84,3 +84,7 @@ internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
 docs/fixmouth2.md  fixmouth2  fixmouth2
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+internal/nav/roam.go  fixmouth3  fixmouth3
+internal/nav/fixmouth3_test.go  fixmouth3  fixmouth3
+internal/combat/fixmouth3_test.go  fixmouth3  fixmouth3
+docs/fixmouth3.md  fixmouth3  fixmouth3
