@@ -120,9 +120,13 @@ func floodHops(f *Field, sx, sy int) []int32 {
 // dropNearExits keeps coverage points away from tile exits (caves, stairs): walking to a point next to the Den of Evil
 // entrance entered the Den, the guard walked back, and the roam started over in a loop (D2DLOOP r2, V live).
 //
-// FIXMOUTH3: the filter radius is mouthApproachR (Euclidean), not 7 Chebyshev: the roam position 13 from the Cave Level 1
-// exit (V DRILLS17) was kept and its first click fired the trigger. The target is filtered rather than every walk guarded
-// out to 15, so a coverage point near the mouth is simply not visited (monsters there wake up and come anyway).
+// FIXMOUTH3: the filter radius is Euclidean 17, not 7 Chebyshev: the roam position 13 from the Cave Level 1 exit (V DRILLS17)
+// was kept and its first click fired the trigger. 17 is above mouthApproachR and above exitAvoidR+2 (penalizeExits ignores
+// an exit whose goal lies within that, so a target at 15 got no detour around the mouth: sim-reproduced). The target is
+// filtered rather than every walk guarded out to 17; a coverage point near the mouth is not visited (monsters there wake
+// up and come anyway).
+
+const roamExitClear = exitAvoidR + 3
 
 func dropNearExits(pts []input.Point, exits []d2map.Exit) []input.Point {
 	if len(exits) == 0 {
@@ -132,7 +136,7 @@ func dropNearExits(pts []input.Point, exits []d2map.Exit) []input.Point {
 next:
 	for _, p := range pts {
 		for _, e := range exits {
-			if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthApproachR {
+			if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= roamExitClear {
 				continue next
 			}
 		}
