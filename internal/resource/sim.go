@@ -85,8 +85,34 @@ type Scenario struct {
 	MeleeSec     float64
 	TripSec      float64
 	Seed         uint64
-	HasMelee     bool // the policy may use the staff
-	Belt         int  // belt rows
+	HasMelee     bool // the policy may use the weapon skill
+	// MainAttack is the costed attack the policy casts and WeaponSkill the free weapon swing; empty keeps the
+	// Sorceress names (Fire Bolt, Staff). WithLadder takes both from a class profile's attack ladder.
+	MainAttack, WeaponSkill string
+	Belt                    int // belt rows
+}
+
+// WithLadder names the main attack and the weapon skill after a profile attack ladder (first rung and the free
+// last rung, combat.Profile.AttackNames), so a class other than the Sorceress is not simulated with her skills.
+func (s Scenario) WithLadder(names []string) Scenario {
+	if len(names) > 0 {
+		s.MainAttack, s.WeaponSkill = names[0], names[len(names)-1]
+	}
+	return s
+}
+
+func (s Scenario) mainAttack() string {
+	if s.MainAttack != "" {
+		return s.MainAttack
+	}
+	return "Fire Bolt"
+}
+
+func (s Scenario) weaponSkill() string {
+	if s.WeaponSkill != "" {
+		return s.WeaponSkill
+	}
+	return "Staff"
 }
 
 // BloodMoorSorc is the stock scenario: clvl 8 Sorceress, Fire Bolt, 5 minutes of Blood Moor packs.
@@ -100,6 +126,20 @@ func BloodMoorSorc() Scenario {
 		// to-hit factor 5, the Blood Moor foe (defense 15, level 3) and the staff range are U, nearest defaults.
 		Blow: &Blow{AR: AttackRating(0, 25, 5), Level: 8, Weapon: true, Min: 1, Max: 5, Str: 10, DmgPct: StatDmgPct(0, 10, 25, 100, 0, 0), Blunt: true},
 		Foe:  Foe{Defense: 15, Level: 3},
+	}
+}
+
+// BloodMoorPaladin is the stock melee scenario: clvl 12 Paladin on the Zeal / Smite / Attack ladder (Zeal is the
+// costed main attack, the plain weapon swing the free rung), 5 minutes of Blood Moor packs. Life, mana, Zeal's
+// 2 mana, the 0.7 s swing and its damage are U (nearest defaults, not measurements); the monsters are
+// BloodMoorSorc's. The names are the ladder of profiles.json at clvl 12 (a combat test compares them).
+func BloodMoorPaladin() Scenario {
+	return Scenario{
+		Name: "Blood Moor, clvl 12 Paladin", Seconds: 300, Class: d2.Paladin, Level: 12, MaxLife: 190, MaxMana: 40, StartMana: 40,
+		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: []int{12, 24, 24, 45},
+		MonsterDps: 1.6, Exposure: 1, GoldPerKill: 6, SpellCost: 2, SpellDmg: 12, CastSec: 0.7,
+		MeleeDmg: 9, MeleeSec: 0.6, TripSec: 75, Seed: 7, HasMelee: true, Belt: 1,
+		MainAttack: "Zeal", WeaponSkill: "Attack",
 	}
 }
 
@@ -146,9 +186,9 @@ type world struct {
 }
 
 func (w *world) input(hostiles, seen int) Input {
-	sk := []Skill{{Name: "Fire Bolt", Cost: w.sc.SpellCost, Ready: true}}
+	sk := []Skill{{Name: w.sc.mainAttack(), Cost: w.sc.SpellCost, Ready: true}}
 	if w.sc.HasMelee {
-		sk = append(sk, Skill{Name: "Staff", Melee: true, Ready: true})
+		sk = append(sk, Skill{Name: w.sc.weaponSkill(), Melee: true, Ready: true})
 	}
 	w.belt.Rows = w.sc.Belt
 	in := Input{
