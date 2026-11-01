@@ -147,3 +147,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skabrecheck.md: SKRESIST A/B follow-up: Fire/Lightning Mastery pierce refuted, whole-point missile physical roll confirmed on a real build
 - docs/research/pal-skill-trace.md: Paladin skills (Holy Bolt hit rule and heal, Blessed Hammer path / Concentration / undead bonus, aura pulse / stats / mana), game.exe vs d2d vs bot, deviations D1-D7, findings B1-B5, drill recipe (PALSKILL)
 - docs/coverage/rule-coverage.md: generated coverage table per subsystem against the game's data tables (README.md there explains the ledger)
+- docs/research/monster-missile-trace.md | monster missiles Acts 1 and 2: game.exe launch record V run (213 launches), d2d drops NM / Hell level brackets (D1), HitShift (D2) and the row's poison / fire (D3); 25 of 49 rows unblockable; bot dodge has no threat model | card monstermissile
