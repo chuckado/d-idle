@@ -140,3 +140,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/sk-ground-trace.md: ground skills in game.exe (Blizzard, Meteor traced; Frozen Orb and Thunder Storm to dispatch level) against d2d
 - docs/builder.md: the Linux builder (limits, how fork and test binaries are built off the game host, parity with the game host builds)
 - docs/research/sk-ground2-trace.md: Fire Wall and Hydra in game.exe, Blizzard shard hit area and offsets on the real d2d build
+- docs/fixbelt.md: Gate 1 belt window (early game, recovery cooldown with an empty belt) and the low-kit fix

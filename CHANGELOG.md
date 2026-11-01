@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- A nearly empty potion kit now starts recovery inside the 15 minute cooldown (recoveryPotionFloor, default 2).
 - SKGROUND2: Fire Wall, Hydra and the Blizzard hit area traced; a one-line shard offset fix is a local d2d PR candidate (docs/research/sk-ground2-trace.md).
 - Gate 1 rerun on the rebuilt d2d stack: not passed on one seed (progress and belt window); fixes in progress (docs/soaks/gate1-rerun.md).
 - forkstats: the private fork's dump stats can show worn-gear property sums and weapon base damage (read only); d2d has no player stats 17, 18, 21, 22 (docs/forkdbg.md).
