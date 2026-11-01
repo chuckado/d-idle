@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- The town trip no longer loops when the tome count is stale: an empty portal source marks the tome empty for the next visit (FIXPROGRESS).
 - A nearly empty potion kit now starts recovery inside the 15 minute cooldown (recoveryPotionFloor, default 2).
 - SKGROUND2: Fire Wall, Hydra and the Blizzard hit area traced; a one-line shard offset fix is a local d2d PR candidate (docs/research/sk-ground2-trace.md).
 - Gate 1 rerun on the rebuilt d2d stack: not passed on one seed (progress and belt window); fixes in progress (docs/soaks/gate1-rerun.md).
