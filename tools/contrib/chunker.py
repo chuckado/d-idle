@@ -412,10 +412,11 @@ def check_text(label, s, limit, errs):
         errs.append("%s: privacy scan hit (%s)" % (label, ",".join(dc.scan(s))))
     if BAD_ASK.search(s):
         errs.append("%s: asks for game files, MPQ data or disassembly" % label)
-    low = s.lower()
-    named = [c for c in CLASSES if c in low]
-    if named == ["sorceress"] and not GENERIC.search(s):
-        errs.append("%s: Sorceress-only (multi-build rule)" % label)
+
+
+def sorc_only(parts):
+    low = " ".join(str(x) for x in parts).lower()
+    return [c for c in CLASSES if c in low] == ["sorceress"] and not GENERIC.search(low)
 
 
 def validate_proposals(d, items, issues):
@@ -474,6 +475,8 @@ def validate_proposals(d, items, issues):
             errs.append("brief fields must be single lines")
         if p.get("kind") in ("decomp", "verify") and not re.search(r"docs/\S+\.md", str(p.get("deliverable", ""))):
             errs.append("deliverable must name a docs/ path")
+        if sorc_only([p.get("title", "")] + [p.get(f, "") for f in BRIEF]):
+            errs.append("Sorceress-only (multi-build rule)")
         ev(p, errs)
         (rej.append(("add " + str(i), errs)) if errs else acc["add"].append(p))
     for k in ("retire", "rescope", "merge"):
