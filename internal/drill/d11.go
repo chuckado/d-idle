@@ -10,13 +10,13 @@ import (
 // EmptyPlanInfo is one D-emptyplan fight: Fighter.Clear in short rounds with the mana set to 0 before each one, so the
 // out-of-mana back-off runs (docs/fixemptyplan.md). The counts are of the fight's own log lines.
 type EmptyPlanInfo struct {
-	Err                                       string
-	Rounds, Kills, Spawned                    int
+	Err                                                     string
+	Rounds, Kills, Spawned                                  int
 	Backoffs, MoveFailed, EmptyPath, LevelChanged, CapMelee int // "out of mana: backing off", "move failed", failures whose err holds "empty path", "back-off cap, melee"
-	Waits, AlreadyThere                       int // "out of mana: waiting"; "combat move: already there" (the quiet tick of a snapped goal)
-	Elapsed                                   time.Duration
-	Samples                                   []string // the first failing lines, else the first back-off lines
-	Where                                     string
+	Waits, AlreadyThere                                     int // "out of mana: waiting"; "combat move: already there" (the quiet tick of a snapped goal)
+	Elapsed                                                 time.Duration
+	Samples                                                 []string // the first failing lines, else the first back-off lines
+	Where                                                   string
 }
 
 // PMInfo is one D-portalmelee observation: adj melee monsters next to the character at about 34 percent life, an empty
