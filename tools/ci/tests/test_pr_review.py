@@ -125,7 +125,7 @@ class Tick(unittest.TestCase):
         facts = {"running": ["x"], "merged": ["a", "b"], "blocked": ""}
         self.assertEqual(haiku_tick.tick(facts, FAKE_KEY, http), "merged: a, b")
         self.assertEqual(sent[0]["model"], "claude-haiku-5-5")
-        self.assertEqual(sent[0]["max_tokens"], 1200)
+        self.assertEqual(sent[0]["max_tokens"], 600)
         self.assertNotIn("blocked", sent[0]["messages"][0]["content"])
         out = io.StringIO()
         old, sys.stdout = sys.stdout, out
