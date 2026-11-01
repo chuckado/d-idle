@@ -103,7 +103,7 @@ On upstream main directly (no stack). Under the bundle policy it waits for the n
 
 ## Independent verifier (VERIFYMODS, card verifymods, 2026-11-01)
 
-> Offline, read-mostly. Re-derived from the disassembly (tools/emu/disasm.py and a byte scan of every E8 call into the functions below) BEFORE reading this doc or the author's oracle; own generator and harness: tools/emu/verify_mods.py (game.exe under the emulator), tools/emu/verify_mods_mode.inc (d2d's real make_boss / monster_stats), tools/emu/verify_mods_compare.py. Builds of my own throwaway worktrees on the worker host (upstream main 72132b99, 98c248d3, a5892044, b4a1e5da, 1915a9a9, c048a356); the author's worktrees and branch untouched. Not run: the det state hashes (need a d2d slot).
+> Offline, read-mostly. Verdict at the end of this section. Re-derived from the disassembly (tools/emu/disasm.py and a byte scan of every E8 call into the functions below) BEFORE reading this doc or the author's oracle; own generator and harness: tools/emu/verify_mods.py (game.exe under the emulator), tools/emu/verify_mods_mode.inc (d2d's real make_boss / monster_stats), tools/emu/verify_mods_compare.py. Builds of my own throwaway worktrees on the worker host (upstream main 72132b99, 98c248d3, a5892044, b4a1e5da, 1915a9a9, c048a356); the author's worktrees and branch untouched. Not run: the det state hashes (need a d2d slot).
 
 ### Which level game.exe reads, stat by stat (own table)
 
@@ -135,9 +135,9 @@ Four seeds x 30,000 (0x1001, 0x2002, 0x3003, 0x4004, each masked to 32 bits in b
 |---|---|---|---|---|---|---|---|---|
 | upstream main 72132b99 | 143,984 | 36,203 | 3,427 | 7,300 | 4,875 | 4,089 | 5,526 | 804 |
 | 98c248d3 (D1) | 0 | 36,203 | 3,427 | 7,300 | 18,591 | 4,089 | 327 | 472 |
-| a5892044 (D2) | C2D1 | C2D2 | C2D3 | C2B | C2R | C2N | C2S | C2X |
-| b4a1e5da (D3) | C3D1 | C3D2 | C3D3 | C3B | C3R | C3N | C3S | C3X |
-| 1915a9a9 (B) | C4D1 | C4D2 | C4D3 | C4B | C4R | C4N | C4S | C4X |
+| a5892044 (D2) | 0 | 0 | 3,427 | 7,300 | 18,591 | 4,089 | 327 | 342 |
+| b4a1e5da (D3) | 0 | 0 | 0 | 7,300 | 18,591 | 4,089 | 327 | 331 |
+| 1915a9a9 (B) | 0 | 0 | 0 | 0 | 18,591 | 4,089 | 327 | 313 |
 | c048a356 (head) | 0 | 0 | 0 | 0 | 18,591 | 4,089 | 327 | 313 |
 
 Residuals, each shown not to depend on the claims: life +-2 (FUN_005a0d20 works in 256ths, d2d in whole points: identical from 98c248d3 on; before, these cases were inside the larger D1 mismatch); no-life rows (game.exe life 0, d2d clamps to 1 and adds the hp %: the same 4,089 in every build); stone skin (d2d keeps half of game.exe's defence for a unique with mod 28 and two immunities: `resist()` returns before setting double_defense; the same 327 in every build from 98c248d3 on, a factor 2, level-free); rows 0x137 / 0x138 (my harness does not hook their extra FUN_0045c390 roll before the life roll: harness limit, the author excludes them too). Plain monsters (kind p): 0 mismatches outside those rows in every build. The BaseId 0x76 halving (H1) is in damage, which my harness does not compare.
@@ -151,7 +151,7 @@ python verify_mods_compare.py g.txt d.txt
 
 ### CI-class checks (my runs, head c048a356)
 
-pr_guard 0 FAIL / 0 WARN for the range and each of the five commits; presubmit --quick (ruff on PATH): 0 FAIL, 2 WARN (siblings "pet": summons.cpp:143 passes level_add 0, unchanged; build skipped); test_game (data dir), test_rules, test_combat, test_protocol, test_monsters rc 0 (with -Wno-error=maybe-uninitialized -Wno-error=array-bounds); gcc -Wshadow -Wunused -Wsign-compare on test_monsters.cpp, test_boss_level.cpp, ai.cpp: 0 warnings in touched files; clang-tidy (CI's Names and includes, tidy-pr-select over the 208 TUs that include a touched file): TIDY; the reviewer mode test_boss_level calls the real make_monster / make_boss; files 6 (monsters.hpp 3,910 lines on upstream already, +9 / -3; uniques.hpp 404; test_monsters.cpp 332; new 237 and 75); replays cleanly on upstream main (still 72132b99); #152 / #153 / #155 / #156 share no file.
+pr_guard 0 FAIL / 0 WARN for the range and each of the five commits; presubmit --quick (ruff on PATH): 0 FAIL, 2 WARN (siblings "pet": summons.cpp:143 passes level_add 0, unchanged; build skipped); test_game (data dir), test_rules, test_combat, test_protocol, test_monsters rc 0 (with -Wno-error=maybe-uninitialized -Wno-error=array-bounds); gcc -Wshadow -Wunused -Wsign-compare on test_monsters.cpp, test_boss_level.cpp, ai.cpp: 0 warnings in touched files; clang-tidy (CI's Names and includes, tidy-pr-select over the 208 TUs that include a touched file): nothing in the touched files (only structured-binding names in untouched outdoor.hpp, merc.hpp and others, the same lines on upstream main); the reviewer mode test_boss_level calls the real make_monster / make_boss; files 6 (monsters.hpp 3,910 lines on upstream already, +9 / -3; uniques.hpp 404; test_monsters.cpp 332; new 237 and 75); replays cleanly on upstream main (still 72132b99); #152 / #153 / #155 / #156 share no file.
 
 ### Impact tables and the draft
 
@@ -165,5 +165,5 @@ Draft review (title fine, no overclaim found in the four claim sections) needs t
 - D2: HOLDS WITH LIMITS: 36,203 -> 0; the leader-side owner lookup in FUN_0058f380 was read, not run (the oracle runs the per-minion handlers as FUN_005a2100 calls them); D2b not built.
 - D3: HOLDS: 3,427 -> 0 (dead store confirmed).
 - B: HOLDS: 7,300 -> 0.
-- Claim isolation: ISOLATION.
+- Claim isolation: each commit removes only its own slice (table above: D1 at 98c248d3, D2 at a5892044, D3 at b4a1e5da, B at 1915a9a9; the head equals 1915a9a9).
 - NOT READY to open until: the det state hashes (d2d slot) and the four draft edits above. No code fix needed.
