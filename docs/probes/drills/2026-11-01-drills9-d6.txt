@@ -456,3 +456,730 @@ time=2026-10-31T20:38:31.618-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:145
 time=2026-10-31T20:38:31.621-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:138}" wp="{X:165 Y:126}" cur=5 of=23
 time=2026-10-31T20:38:31.625-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:130}" wp="{X:165 Y:118}" cur=6 of=23
 time=2026-10-31T20:38:31.643-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:121}" wp="{X:166 Y:110}" cur=7 of=23
+time=2026-10-31T20:38:31.655-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:114}" wp="{X:166 Y:102}" cur=8 of=23
+time=2026-10-31T20:38:31.656-04:00 level=DEBUG msg="nav plan" from="{X:166 Y:112}" to="{X:182 Y:0}" wps=15 partial=false cells=112
+time=2026-10-31T20:38:31.656-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:112}" wp="{X:166 Y:104}" cur=0 of=15
+time=2026-10-31T20:38:31.660-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:108}" wp="{X:165 Y:96}" cur=1 of=15
+time=2026-10-31T20:38:31.666-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:100}" wp="{X:165 Y:88}" cur=2 of=15
+time=2026-10-31T20:38:31.672-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:92}" wp="{X:164 Y:80}" cur=3 of=15
+time=2026-10-31T20:38:31.677-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:84}" wp="{X:164 Y:72}" cur=4 of=15
+time=2026-10-31T20:38:31.687-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:76}" wp="{X:163 Y:64}" cur=5 of=15
+time=2026-10-31T20:38:31.691-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:68}" wp="{X:163 Y:59}" cur=6 of=15
+time=2026-10-31T20:38:31.693-04:00 level=DEBUG msg="nav plan" from="{X:163 Y:66}" to="{X:182 Y:0}" wps=11 partial=false cells=66
+time=2026-10-31T20:38:31.693-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:66}" wp="{X:163 Y:59}" cur=0 of=11
+time=2026-10-31T20:38:31.694-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:62}" wp="{X:167 Y:52}" cur=1 of=11
+time=2026-10-31T20:38:31.711-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:55}" wp="{X:172 Y:46}" cur=2 of=11
+time=2026-10-31T20:38:31.715-04:00 level=DEBUG msg="nav click" pos="{X:170 Y:49}" wp="{X:176 Y:39}" cur=3 of=11
+time=2026-10-31T20:38:31.717-04:00 level=DEBUG msg="nav plan" from="{X:172 Y:46}" to="{X:182 Y:0}" wps=8 partial=false cells=46
+time=2026-10-31T20:38:31.717-04:00 level=DEBUG msg="nav click" pos="{X:172 Y:46}" wp="{X:176 Y:39}" cur=0 of=8
+time=2026-10-31T20:38:31.720-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:42}" wp="{X:181 Y:33}" cur=1 of=8
+time=2026-10-31T20:38:31.729-04:00 level=DEBUG msg="nav click" pos="{X:179 Y:35}" wp="{X:185 Y:26}" cur=2 of=8
+time=2026-10-31T20:38:31.733-04:00 level=DEBUG msg="nav plan" from="{X:182 Y:30}" to="{X:182 Y:0}" wps=6 partial=false cells=30
+time=2026-10-31T20:38:31.734-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:30}" wp="{X:187 Y:24}" cur=0 of=6
+time=2026-10-31T20:38:31.737-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:27}" wp="{X:188 Y:22}" cur=1 of=6
+time=2026-10-31T20:38:31.739-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:25}" wp="{X:188 Y:17}" cur=2 of=6
+time=2026-10-31T20:38:31.743-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:20}" wp="{X:185 Y:10}" cur=3 of=6
+time=2026-10-31T20:38:31.745-04:00 level=DEBUG msg="nav plan" from="{X:187 Y:17}" to="{X:182 Y:0}" wps=3 partial=false cells=17
+time=2026-10-31T20:38:31.745-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:17}" wp="{X:185 Y:13}" cur=0 of=3
+time=2026-10-31T20:38:31.746-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:16}" wp="{X:183 Y:5}" cur=1 of=3
+time=2026-10-31T20:38:31.752-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:8}" wp="{X:182 Y:0}" cur=2 of=3
+time=2026-10-31T20:38:31.772-04:00 level=DEBUG msg="nav plan" from="{X:183 Y:3}" to="{X:182 Y:0}" wps=1 partial=false cells=3
+time=2026-10-31T20:38:31.772-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:3}" wp="{X:182 Y:0}" cur=0 of=1
+time=2026-10-31T20:38:32.160-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:32.163-04:00 level=INFO msg="nav exit" to=2 gate="{X:102 Y:399}" push="{X:102 Y:407}" border=true
+time=2026-10-31T20:38:32.163-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:32.164-04:00 level=DEBUG msg="nav plan" from="{X:102 Y:392}" to="{X:102 Y:399}" wps=1 partial=false cells=7
+time=2026-10-31T20:38:32.164-04:00 level=DEBUG msg="nav click" pos="{X:102 Y:392}" wp="{X:102 Y:399}" cur=0 of=1
+time=2026-10-31T20:38:32.186-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:32.192-04:00 level=INFO msg="nav exit" to=1 gate="{X:279 Y:352}" push="{X:287 Y:352}" border=true
+time=2026-10-31T20:38:32.192-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:32.195-04:00 level=DEBUG msg="nav plan" from="{X:182 Y:7}" to="{X:279 Y:352}" wps=60 partial=false cells=378
+time=2026-10-31T20:38:32.196-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:7}" wp="{X:185 Y:4}" cur=0 of=60
+time=2026-10-31T20:38:32.197-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:6}" wp="{X:187 Y:4}" cur=1 of=60
+time=2026-10-31T20:38:32.198-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:5}" wp="{X:191 Y:9}" cur=2 of=60
+time=2026-10-31T20:38:32.200-04:00 level=DEBUG msg="nav click" pos="{X:189 Y:8}" wp="{X:191 Y:17}" cur=3 of=60
+time=2026-10-31T20:38:32.204-04:00 level=DEBUG msg="nav click" pos="{X:190 Y:14}" wp="{X:191 Y:20}" cur=4 of=60
+time=2026-10-31T20:38:32.205-04:00 level=DEBUG msg="nav click" pos="{X:191 Y:16}" wp="{X:186 Y:25}" cur=5 of=60
+time=2026-10-31T20:38:32.211-04:00 level=DEBUG msg="nav plan" from="{X:188 Y:22}" to="{X:279 Y:352}" wps=56 partial=false cells=355
+time=2026-10-31T20:38:32.211-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:22}" wp="{X:182 Y:32}" cur=1 of=56
+time=2026-10-31T20:38:32.216-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:29}" wp="{X:177 Y:38}" cur=2 of=56
+time=2026-10-31T20:38:32.220-04:00 level=DEBUG msg="nav click" pos="{X:179 Y:35}" wp="{X:173 Y:45}" cur=3 of=56
+time=2026-10-31T20:38:32.226-04:00 level=DEBUG msg="nav plan" from="{X:176 Y:41}" to="{X:279 Y:352}" wps=51 partial=false cells=336
+time=2026-10-31T20:38:32.226-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:41}" wp="{X:171 Y:48}" cur=0 of=51
+time=2026-10-31T20:38:32.229-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:45}" wp="{X:167 Y:54}" cur=1 of=51
+time=2026-10-31T20:38:32.234-04:00 level=DEBUG msg="nav click" pos="{X:168 Y:52}" wp="{X:163 Y:60}" cur=2 of=51
+time=2026-10-31T20:38:32.238-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:57}" wp="{X:163 Y:68}" cur=3 of=51
+time=2026-10-31T20:38:32.242-04:00 level=DEBUG msg="nav plan" from="{X:165 Y:59}" to="{X:279 Y:352}" wps=49 partial=false cells=319
+time=2026-10-31T20:38:32.242-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:59}" wp="{X:163 Y:69}" cur=1 of=49
+time=2026-10-31T20:38:32.266-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:66}" wp="{X:163 Y:77}" cur=2 of=49
+time=2026-10-31T20:38:32.274-04:00 level=DEBUG msg="nav plan" from="{X:163 Y:73}" to="{X:279 Y:352}" wps=46 partial=false cells=304
+time=2026-10-31T20:38:32.274-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:73}" wp="{X:163 Y:81}" cur=0 of=46
+time=2026-10-31T20:38:32.276-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:77}" wp="{X:163 Y:89}" cur=1 of=46
+time=2026-10-31T20:38:32.284-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:86}" wp="{X:163 Y:97}" cur=2 of=46
+time=2026-10-31T20:38:32.289-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:93}" wp="{X:162 Y:105}" cur=3 of=46
+time=2026-10-31T20:38:32.293-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:102}" wp="{X:162 Y:113}" cur=4 of=46
+time=2026-10-31T20:38:32.296-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:109}" wp="{X:162 Y:121}" cur=5 of=46
+time=2026-10-31T20:38:32.300-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:117}" wp="{X:162 Y:129}" cur=6 of=46
+time=2026-10-31T20:38:32.322-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:125}" wp="{X:162 Y:137}" cur=7 of=46
+time=2026-10-31T20:38:32.326-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:134}" wp="{X:162 Y:145}" cur=8 of=46
+time=2026-10-31T20:38:32.329-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:141}" wp="{X:162 Y:153}" cur=9 of=46
+time=2026-10-31T20:38:32.334-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:149}" wp="{X:162 Y:161}" cur=10 of=46
+time=2026-10-31T20:38:32.340-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:157}" wp="{X:161 Y:169}" cur=11 of=46
+time=2026-10-31T20:38:32.346-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:165}" wp="{X:161 Y:177}" cur=12 of=46
+time=2026-10-31T20:38:32.354-04:00 level=DEBUG msg="nav plan" from="{X:161 Y:173}" to="{X:279 Y:352}" wps=35 partial=false cells=204
+time=2026-10-31T20:38:32.354-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:173}" wp="{X:161 Y:181}" cur=0 of=35
+time=2026-10-31T20:38:32.359-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:177}" wp="{X:162 Y:189}" cur=1 of=35
+time=2026-10-31T20:38:32.385-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:185}" wp="{X:162 Y:191}" cur=2 of=35
+time=2026-10-31T20:38:32.386-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:187}" wp="{X:161 Y:194}" cur=3 of=35
+time=2026-10-31T20:38:32.389-04:00 level=DEBUG msg="nav plan" from="{X:162 Y:188}" to="{X:279 Y:352}" wps=33 partial=false cells=188
+time=2026-10-31T20:38:32.389-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:188}" wp="{X:161 Y:193}" cur=0 of=33
+time=2026-10-31T20:38:32.390-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:190}" wp="{X:161 Y:197}" cur=1 of=33
+time=2026-10-31T20:38:32.392-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:193}" wp="{X:167 Y:202}" cur=2 of=33
+time=2026-10-31T20:38:32.396-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:199}" wp="{X:174 Y:207}" cur=3 of=33
+time=2026-10-31T20:38:32.401-04:00 level=DEBUG msg="nav click" pos="{X:171 Y:205}" wp="{X:178 Y:209}" cur=4 of=33
+time=2026-10-31T20:38:32.403-04:00 level=DEBUG msg="nav plan" from="{X:173 Y:206}" to="{X:279 Y:352}" wps=29 partial=false cells=167
+time=2026-10-31T20:38:32.403-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:206}" wp="{X:179 Y:211}" cur=0 of=29
+time=2026-10-31T20:38:32.407-04:00 level=DEBUG msg="nav click" pos="{X:177 Y:209}" wp="{X:185 Y:217}" cur=1 of=29
+time=2026-10-31T20:38:32.412-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:215}" wp="{X:191 Y:222}" cur=2 of=29
+time=2026-10-31T20:38:32.417-04:00 level=DEBUG msg="nav click" pos="{X:189 Y:220}" wp="{X:197 Y:228}" cur=3 of=29
+time=2026-10-31T20:38:32.422-04:00 level=DEBUG msg="nav click" pos="{X:195 Y:226}" wp="{X:198 Y:229}" cur=4 of=29
+time=2026-10-31T20:38:32.423-04:00 level=DEBUG msg="nav click" pos="{X:196 Y:227}" wp="{X:198 Y:237}" cur=5 of=29
+time=2026-10-31T20:38:32.446-04:00 level=DEBUG msg="nav plan" from="{X:197 Y:234}" to="{X:279 Y:352}" wps=23 partial=false cells=137
+time=2026-10-31T20:38:32.447-04:00 level=DEBUG msg="nav click" pos="{X:197 Y:234}" wp="{X:198 Y:242}" cur=0 of=23
+time=2026-10-31T20:38:32.451-04:00 level=DEBUG msg="nav click" pos="{X:198 Y:238}" wp="{X:199 Y:250}" cur=1 of=23
+time=2026-10-31T20:38:32.459-04:00 level=DEBUG msg="nav click" pos="{X:199 Y:246}" wp="{X:199 Y:258}" cur=2 of=23
+time=2026-10-31T20:38:32.462-04:00 level=DEBUG msg="nav plan" from="{X:199 Y:248}" to="{X:279 Y:352}" wps=21 partial=false cells=123
+time=2026-10-31T20:38:32.462-04:00 level=DEBUG msg="nav click" pos="{X:199 Y:248}" wp="{X:200 Y:256}" cur=0 of=21
+time=2026-10-31T20:38:32.467-04:00 level=DEBUG msg="nav click" pos="{X:199 Y:253}" wp="{X:200 Y:263}" cur=1 of=21
+time=2026-10-31T20:38:32.479-04:00 level=DEBUG msg="nav click" pos="{X:200 Y:259}" wp="{X:204 Y:270}" cur=2 of=21
+time=2026-10-31T20:38:32.483-04:00 level=DEBUG msg="nav plan" from="{X:201 Y:262}" to="{X:279 Y:352}" wps=20 partial=false cells=109
+time=2026-10-31T20:38:32.483-04:00 level=DEBUG msg="nav click" pos="{X:201 Y:262}" wp="{X:201 Y:267}" cur=0 of=20
+time=2026-10-31T20:38:32.484-04:00 level=DEBUG msg="nav click" pos="{X:201 Y:264}" wp="{X:204 Y:274}" cur=1 of=20
+time=2026-10-31T20:38:32.491-04:00 level=DEBUG msg="nav click" pos="{X:203 Y:271}" wp="{X:208 Y:281}" cur=2 of=20
+time=2026-10-31T20:38:32.496-04:00 level=DEBUG msg="nav plan" from="{X:207 Y:279}" to="{X:279 Y:352}" wps=17 partial=false cells=92
+time=2026-10-31T20:38:32.497-04:00 level=DEBUG msg="nav click" pos="{X:207 Y:279}" wp="{X:210 Y:286}" cur=0 of=17
+time=2026-10-31T20:38:32.506-04:00 level=DEBUG msg="nav click" pos="{X:209 Y:283}" wp="{X:214 Y:293}" cur=1 of=17
+time=2026-10-31T20:38:32.511-04:00 level=DEBUG msg="nav click" pos="{X:213 Y:291}" wp="{X:217 Y:301}" cur=2 of=17
+time=2026-10-31T20:38:32.534-04:00 level=DEBUG msg="nav click" pos="{X:216 Y:299}" wp="{X:219 Y:304}" cur=3 of=17
+time=2026-10-31T20:38:32.536-04:00 level=DEBUG msg="nav click" pos="{X:218 Y:302}" wp="{X:222 Y:308}" cur=4 of=17
+time=2026-10-31T20:38:32.539-04:00 level=DEBUG msg="nav click" pos="{X:220 Y:306}" wp="{X:228 Y:313}" cur=5 of=17
+time=2026-10-31T20:38:32.544-04:00 level=DEBUG msg="nav click" pos="{X:227 Y:312}" wp="{X:234 Y:318}" cur=6 of=17
+time=2026-10-31T20:38:32.545-04:00 level=DEBUG msg="nav plan" from="{X:228 Y:313}" to="{X:279 Y:352}" wps=10 partial=false cells=57
+time=2026-10-31T20:38:32.545-04:00 level=DEBUG msg="nav click" pos="{X:228 Y:313}" wp="{X:234 Y:318}" cur=0 of=10
+time=2026-10-31T20:38:32.548-04:00 level=DEBUG msg="nav click" pos="{X:232 Y:316}" wp="{X:240 Y:323}" cur=1 of=10
+time=2026-10-31T20:38:32.559-04:00 level=DEBUG msg="nav click" pos="{X:238 Y:321}" wp="{X:241 Y:324}" cur=2 of=10
+time=2026-10-31T20:38:32.560-04:00 level=DEBUG msg="nav click" pos="{X:239 Y:322}" wp="{X:245 Y:331}" cur=3 of=10
+time=2026-10-31T20:38:32.565-04:00 level=DEBUG msg="nav click" pos="{X:243 Y:328}" wp="{X:249 Y:338}" cur=4 of=10
+time=2026-10-31T20:38:32.572-04:00 level=DEBUG msg="nav click" pos="{X:247 Y:335}" wp="{X:255 Y:344}" cur=5 of=10
+time=2026-10-31T20:38:32.597-04:00 level=DEBUG msg="nav click" pos="{X:253 Y:341}" wp="{X:260 Y:349}" cur=6 of=10
+time=2026-10-31T20:38:32.603-04:00 level=DEBUG msg="nav click" pos="{X:258 Y:347}" wp="{X:263 Y:352}" cur=7 of=10
+time=2026-10-31T20:38:32.607-04:00 level=DEBUG msg="nav click" pos="{X:261 Y:350}" wp="{X:271 Y:352}" cur=8 of=10
+time=2026-10-31T20:38:32.612-04:00 level=DEBUG msg="nav click" pos="{X:268 Y:351}" wp="{X:279 Y:352}" cur=9 of=10
+time=2026-10-31T20:38:32.625-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:32.627-04:00 level=INFO msg="nav exit" to=2 gate="{X:0 Y:112}" push="{X:-8 Y:112}" border=true
+time=2026-10-31T20:38:32.627-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:32.628-04:00 level=DEBUG msg="nav plan" from="{X:7 Y:112}" to="{X:0 Y:112}" wps=1 partial=false cells=7
+time=2026-10-31T20:38:32.628-04:00 level=DEBUG msg="nav click" pos="{X:7 Y:112}" wp="{X:0 Y:112}" cur=0 of=1
+time=2026-10-31T20:38:32.652-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:32.658-04:00 level=INFO msg="nav exit" to=3 gate="{X:182 Y:0}" push="{X:182 Y:-8}" border=true
+time=2026-10-31T20:38:32.659-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:32.663-04:00 level=DEBUG msg="nav plan" from="{X:272 Y:352}" to="{X:182 Y:0}" wps=65 partial=false cells=374
+time=2026-10-31T20:38:32.663-04:00 level=DEBUG msg="nav click" pos="{X:272 Y:352}" wp="{X:269 Y:348}" cur=0 of=65
+time=2026-10-31T20:38:32.664-04:00 level=DEBUG msg="nav click" pos="{X:271 Y:350}" wp="{X:269 Y:343}" cur=1 of=65
+time=2026-10-31T20:38:32.667-04:00 level=DEBUG msg="nav click" pos="{X:270 Y:345}" wp="{X:268 Y:340}" cur=2 of=65
+time=2026-10-31T20:38:32.669-04:00 level=DEBUG msg="nav click" pos="{X:269 Y:342}" wp="{X:267 Y:338}" cur=3 of=65
+time=2026-10-31T20:38:32.670-04:00 level=DEBUG msg="nav click" pos="{X:268 Y:340}" wp="{X:262 Y:331}" cur=4 of=65
+time=2026-10-31T20:38:32.674-04:00 level=DEBUG msg="nav click" pos="{X:263 Y:333}" wp="{X:260 Y:328}" cur=5 of=65
+time=2026-10-31T20:38:32.678-04:00 level=DEBUG msg="nav plan" from="{X:263 Y:332}" to="{X:182 Y:0}" wps=59 partial=false cells=354
+time=2026-10-31T20:38:32.678-04:00 level=DEBUG msg="nav click" pos="{X:263 Y:332}" wp="{X:258 Y:326}" cur=0 of=59
+time=2026-10-31T20:38:32.681-04:00 level=DEBUG msg="nav click" pos="{X:259 Y:328}" wp="{X:254 Y:319}" cur=1 of=59
+time=2026-10-31T20:38:32.685-04:00 level=DEBUG msg="nav click" pos="{X:256 Y:322}" wp="{X:249 Y:313}" cur=2 of=59
+time=2026-10-31T20:38:32.689-04:00 level=DEBUG msg="nav click" pos="{X:251 Y:315}" wp="{X:245 Y:306}" cur=3 of=59
+time=2026-10-31T20:38:32.693-04:00 level=DEBUG msg="nav plan" from="{X:250 Y:314}" to="{X:182 Y:0}" wps=56 partial=false cells=336
+time=2026-10-31T20:38:32.693-04:00 level=DEBUG msg="nav click" pos="{X:250 Y:314}" wp="{X:246 Y:307}" cur=0 of=56
+time=2026-10-31T20:38:32.697-04:00 level=DEBUG msg="nav click" pos="{X:247 Y:310}" wp="{X:243 Y:300}" cur=1 of=56
+time=2026-10-31T20:38:32.702-04:00 level=DEBUG msg="nav click" pos="{X:244 Y:302}" wp="{X:241 Y:297}" cur=2 of=56
+time=2026-10-31T20:38:32.704-04:00 level=DEBUG msg="nav click" pos="{X:243 Y:300}" wp="{X:241 Y:289}" cur=3 of=56
+time=2026-10-31T20:38:32.730-04:00 level=DEBUG msg="nav plan" from="{X:242 Y:297}" to="{X:182 Y:0}" wps=53 partial=false cells=319
+time=2026-10-31T20:38:32.730-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:297}" wp="{X:242 Y:289}" cur=0 of=53
+time=2026-10-31T20:38:32.734-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:293}" wp="{X:242 Y:281}" cur=1 of=53
+time=2026-10-31T20:38:32.741-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:285}" wp="{X:242 Y:273}" cur=2 of=53
+time=2026-10-31T20:38:32.750-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:276}" wp="{X:241 Y:265}" cur=3 of=53
+time=2026-10-31T20:38:32.758-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:269}" wp="{X:241 Y:257}" cur=4 of=53
+time=2026-10-31T20:38:32.762-04:00 level=DEBUG msg="nav plan" from="{X:241 Y:266}" to="{X:182 Y:0}" wps=49 partial=false cells=288
+time=2026-10-31T20:38:32.763-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:266}" wp="{X:241 Y:258}" cur=0 of=49
+time=2026-10-31T20:38:32.766-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:261}" wp="{X:241 Y:250}" cur=1 of=49
+time=2026-10-31T20:38:32.772-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:253}" wp="{X:241 Y:244}" cur=2 of=49
+time=2026-10-31T20:38:32.775-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:248}" wp="{X:236 Y:240}" cur=3 of=49
+time=2026-10-31T20:38:32.777-04:00 level=DEBUG msg="nav click" pos="{X:239 Y:245}" wp="{X:241 Y:244}" cur=2 of=49
+time=2026-10-31T20:38:32.778-04:00 level=DEBUG msg="nav click" pos="{X:241 Y:244}" wp="{X:236 Y:240}" cur=3 of=49
+time=2026-10-31T20:38:32.780-04:00 level=DEBUG msg="nav click" pos="{X:238 Y:242}" wp="{X:228 Y:240}" cur=4 of=49
+time=2026-10-31T20:38:32.799-04:00 level=DEBUG msg="nav click" pos="{X:230 Y:240}" wp="{X:221 Y:235}" cur=6 of=49
+time=2026-10-31T20:38:32.810-04:00 level=DEBUG msg="nav click" pos="{X:224 Y:237}" wp="{X:215 Y:230}" cur=7 of=49
+time=2026-10-31T20:38:32.815-04:00 level=DEBUG msg="nav click" pos="{X:217 Y:232}" wp="{X:208 Y:225}" cur=8 of=49
+time=2026-10-31T20:38:32.823-04:00 level=DEBUG msg="nav click" pos="{X:211 Y:227}" wp="{X:202 Y:220}" cur=9 of=49
+time=2026-10-31T20:38:32.826-04:00 level=DEBUG msg="nav plan" from="{X:209 Y:226}" to="{X:182 Y:0}" wps=40 partial=false cells=234
+time=2026-10-31T20:38:32.827-04:00 level=DEBUG msg="nav click" pos="{X:209 Y:226}" wp="{X:203 Y:221}" cur=0 of=40
+time=2026-10-31T20:38:32.831-04:00 level=DEBUG msg="nav click" pos="{X:206 Y:223}" wp="{X:197 Y:216}" cur=1 of=40
+time=2026-10-31T20:38:32.839-04:00 level=DEBUG msg="nav click" pos="{X:200 Y:218}" wp="{X:190 Y:211}" cur=2 of=40
+time=2026-10-31T20:38:32.843-04:00 level=DEBUG msg="nav plan" from="{X:198 Y:217}" to="{X:182 Y:0}" wps=40 partial=false cells=223
+time=2026-10-31T20:38:32.843-04:00 level=DEBUG msg="nav click" pos="{X:198 Y:217}" wp="{X:192 Y:212}" cur=0 of=40
+time=2026-10-31T20:38:32.847-04:00 level=DEBUG msg="nav click" pos="{X:194 Y:214}" wp="{X:186 Y:207}" cur=1 of=40
+time=2026-10-31T20:38:32.855-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:209}" wp="{X:180 Y:201}" cur=2 of=40
+time=2026-10-31T20:38:32.858-04:00 level=DEBUG msg="nav plan" from="{X:186 Y:207}" to="{X:182 Y:0}" wps=37 partial=false cells=211
+time=2026-10-31T20:38:32.858-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:207}" wp="{X:180 Y:202}" cur=0 of=37
+time=2026-10-31T20:38:32.860-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:204}" wp="{X:173 Y:197}" cur=1 of=37
+time=2026-10-31T20:38:32.878-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:199}" wp="{X:172 Y:196}" cur=2 of=37
+time=2026-10-31T20:38:32.879-04:00 level=DEBUG msg="nav click" pos="{X:175 Y:198}" wp="{X:171 Y:193}" cur=3 of=37
+time=2026-10-31T20:38:32.881-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:196}" wp="{X:166 Y:186}" cur=4 of=37
+time=2026-10-31T20:38:32.886-04:00 level=DEBUG msg="nav plan" from="{X:170 Y:192}" to="{X:182 Y:0}" wps=32 partial=false cells=193
+time=2026-10-31T20:38:32.886-04:00 level=DEBUG msg="nav click" pos="{X:170 Y:192}" wp="{X:166 Y:186}" cur=0 of=32
+time=2026-10-31T20:38:32.889-04:00 level=DEBUG msg="nav click" pos="{X:168 Y:189}" wp="{X:165 Y:178}" cur=1 of=32
+time=2026-10-31T20:38:32.894-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:181}" wp="{X:165 Y:173}" cur=2 of=32
+time=2026-10-31T20:38:32.896-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:177}" wp="{X:165 Y:165}" cur=3 of=32
+time=2026-10-31T20:38:32.902-04:00 level=DEBUG msg="nav plan" from="{X:165 Y:171}" to="{X:182 Y:0}" wps=29 partial=false cells=172
+time=2026-10-31T20:38:32.902-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:171}" wp="{X:165 Y:163}" cur=0 of=29
+time=2026-10-31T20:38:32.904-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:167}" wp="{X:165 Y:155}" cur=1 of=29
+time=2026-10-31T20:38:32.911-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:159}" wp="{X:166 Y:147}" cur=2 of=29
+time=2026-10-31T20:38:32.916-04:00 level=DEBUG msg="nav plan" from="{X:165 Y:155}" to="{X:182 Y:0}" wps=27 partial=false cells=156
+time=2026-10-31T20:38:32.917-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:155}" wp="{X:165 Y:147}" cur=0 of=27
+time=2026-10-31T20:38:32.921-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:150}" wp="{X:166 Y:139}" cur=1 of=27
+time=2026-10-31T20:38:32.947-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:143}" wp="{X:166 Y:131}" cur=2 of=27
+time=2026-10-31T20:38:32.953-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:135}" wp="{X:166 Y:123}" cur=3 of=27
+time=2026-10-31T20:38:32.960-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:127}" wp="{X:166 Y:115}" cur=4 of=27
+time=2026-10-31T20:38:32.964-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:118}" wp="{X:167 Y:107}" cur=5 of=27
+time=2026-10-31T20:38:32.968-04:00 level=DEBUG msg="nav click" pos="{X:167 Y:110}" wp="{X:167 Y:99}" cur=6 of=27
+time=2026-10-31T20:38:32.973-04:00 level=DEBUG msg="nav click" pos="{X:167 Y:103}" wp="{X:167 Y:94}" cur=7 of=27
+time=2026-10-31T20:38:32.975-04:00 level=DEBUG msg="nav click" pos="{X:167 Y:98}" wp="{X:172 Y:88}" cur=8 of=27
+time=2026-10-31T20:38:32.979-04:00 level=DEBUG msg="nav click" pos="{X:171 Y:91}" wp="{X:176 Y:84}" cur=9 of=27
+time=2026-10-31T20:38:32.982-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:87}" wp="{X:181 Y:78}" cur=10 of=27
+time=2026-10-31T20:38:33.001-04:00 level=DEBUG msg="nav click" pos="{X:179 Y:80}" wp="{X:184 Y:75}" cur=11 of=27
+time=2026-10-31T20:38:33.003-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:78}" wp="{X:186 Y:71}" cur=12 of=27
+time=2026-10-31T20:38:33.006-04:00 level=DEBUG msg="nav plan" from="{X:184 Y:74}" to="{X:182 Y:0}" wps=14 partial=false cells=75
+time=2026-10-31T20:38:33.006-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:74}" wp="{X:190 Y:68}" cur=0 of=14
+time=2026-10-31T20:38:33.011-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:70}" wp="{X:190 Y:65}" cur=1 of=14
+time=2026-10-31T20:38:33.013-04:00 level=DEBUG msg="nav click" pos="{X:189 Y:68}" wp="{X:186 Y:58}" cur=2 of=14
+time=2026-10-31T20:38:33.019-04:00 level=DEBUG msg="nav plan" from="{X:187 Y:61}" to="{X:182 Y:0}" wps=12 partial=false cells=61
+time=2026-10-31T20:38:33.019-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:61}" wp="{X:186 Y:57}" cur=0 of=12
+time=2026-10-31T20:38:33.020-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:60}" wp="{X:184 Y:55}" cur=1 of=12
+time=2026-10-31T20:38:33.021-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:58}" wp="{X:185 Y:47}" cur=2 of=12
+time=2026-10-31T20:38:33.028-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:50}" wp="{X:185 Y:39}" cur=3 of=12
+time=2026-10-31T20:38:33.031-04:00 level=DEBUG msg="nav plan" from="{X:185 Y:47}" to="{X:182 Y:0}" wps=10 partial=false cells=48
+time=2026-10-31T20:38:33.031-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:47}" wp="{X:189 Y:43}" cur=0 of=10
+time=2026-10-31T20:38:33.033-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:45}" wp="{X:188 Y:35}" cur=1 of=10
+time=2026-10-31T20:38:33.037-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:38}" wp="{X:186 Y:26}" cur=3 of=10
+time=2026-10-31T20:38:33.042-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:28}" wp="{X:188 Y:22}" cur=5 of=10
+time=2026-10-31T20:38:33.059-04:00 level=DEBUG msg="nav plan" from="{X:187 Y:26}" to="{X:182 Y:0}" wps=5 partial=false cells=26
+time=2026-10-31T20:38:33.059-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:26}" wp="{X:188 Y:18}" cur=0 of=5
+time=2026-10-31T20:38:33.062-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:21}" wp="{X:185 Y:10}" cur=2 of=5
+time=2026-10-31T20:38:33.066-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:13}" wp="{X:182 Y:2}" cur=3 of=5
+time=2026-10-31T20:38:33.070-04:00 level=DEBUG msg="nav plan" from="{X:183 Y:5}" to="{X:182 Y:0}" wps=1 partial=false cells=5
+time=2026-10-31T20:38:33.070-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:5}" wp="{X:182 Y:0}" cur=0 of=1
+time=2026-10-31T20:38:33.103-04:00 level=INFO msg="nav exit" to=3 gate="{X:182 Y:0}" push="{X:182 Y:-8}" border=true
+time=2026-10-31T20:38:33.103-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:33.106-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:182 Y:0}" wps=37 partial=false cells=246
+time=2026-10-31T20:38:33.107-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:140 Y:237}" cur=0 of=37
+time=2026-10-31T20:38:33.110-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:238}" to="{X:182 Y:0}" wps=37 partial=false cells=245
+time=2026-10-31T20:38:33.110-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:238}" wp="{X:141 Y:236}" cur=0 of=37
+time=2026-10-31T20:38:33.110-04:00 level=INFO msg="nav stuck" pos="{X:140 Y:238}" wp="{X:141 Y:236}" rung=0
+time=2026-10-31T20:38:33.110-04:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:140 Y:238}" near=1
+time=2026-10-31T20:38:33.112-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.112-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=2 hostiles=63
+time=2026-10-31T20:38:33.113-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.113-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.114-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.114-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.115-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.115-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.116-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.116-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.117-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.117-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.118-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.118-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.119-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.119-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.120-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.120-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.121-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.121-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=3 hostiles=63
+time=2026-10-31T20:38:33.122-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.122-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.123-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.123-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.123-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.123-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.124-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.124-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.125-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.125-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.126-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.126-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.127-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.127-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.128-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.128-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.128-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.129-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=2 hostiles=63
+time=2026-10-31T20:38:33.129-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.129-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.130-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.130-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.131-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.131-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.132-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.132-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.133-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.133-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.134-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.134-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.135-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.135-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.136-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.136-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.137-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.137-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=2 hostiles=63
+time=2026-10-31T20:38:33.138-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.138-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.138-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.138-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.139-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.139-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.140-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.140-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.141-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.141-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.141-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.141-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.142-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.142-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.143-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.143-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.144-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.144-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=2 hostiles=63
+time=2026-10-31T20:38:33.144-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.144-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.145-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.145-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.146-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.146-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.147-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.147-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.147-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.147-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.148-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.148-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.149-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.149-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.149-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.149-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.150-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.150-04:00 level=DEBUG msg="combat decision" act=cast skill=Attack target=Fallen dist=2 hostiles=63
+time=2026-10-31T20:38:33.151-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.151-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.152-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.152-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.153-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.153-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.154-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.154-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.154-04:00 level=INFO msg="combat no bound attack skill, swinging the basic attack" known=1 keys=0
+time=2026-10-31T20:38:33.154-04:00 level=DEBUG msg="combat decision" act=wait why="cast gap"
+time=2026-10-31T20:38:33.155-04:00 level=INFO msg="combat fight area=2 diff=0 danger=0 kills=0 damage=2 minlife=99 potions=0 dodges=0 sec=4 casts=6 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.47"
+time=2026-10-31T20:38:33.155-04:00 level=INFO msg="combat health killsPerMin=0.0 castsPerMin=6.7 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=0 windowSec=107"
+time=2026-10-31T20:38:33.159-04:00 level=DEBUG msg="nav plan" from="{X:135 Y:233}" to="{X:182 Y:0}" wps=40 partial=false cells=244
+time=2026-10-31T20:38:33.159-04:00 level=DEBUG msg="nav click" pos="{X:135 Y:233}" wp="{X:134 Y:235}" cur=0 of=40
+time=2026-10-31T20:38:33.160-04:00 level=DEBUG msg="nav click" pos="{X:134 Y:235}" wp="{X:130 Y:236}" cur=2 of=40
+time=2026-10-31T20:38:33.161-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:235}" wp="{X:128 Y:234}" cur=3 of=40
+time=2026-10-31T20:38:33.162-04:00 level=DEBUG msg="nav click" pos="{X:131 Y:235}" wp="{X:128 Y:226}" cur=4 of=40
+time=2026-10-31T20:38:33.166-04:00 level=DEBUG msg="nav click" pos="{X:129 Y:228}" wp="{X:133 Y:219}" cur=6 of=40
+time=2026-10-31T20:38:33.167-04:00 level=DEBUG msg="nav click" pos="{X:130 Y:227}" wp="{X:128 Y:225}" cur=5 of=40
+time=2026-10-31T20:38:33.167-04:00 level=DEBUG msg="nav click" pos="{X:128 Y:226}" wp="{X:133 Y:219}" cur=6 of=40
+time=2026-10-31T20:38:33.170-04:00 level=DEBUG msg="nav click" pos="{X:131 Y:221}" wp="{X:137 Y:217}" cur=7 of=40
+time=2026-10-31T20:38:33.174-04:00 level=DEBUG msg="nav plan" from="{X:133 Y:220}" to="{X:182 Y:0}" wps=33 partial=false cells=221
+time=2026-10-31T20:38:33.174-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:220}" wp="{X:139 Y:215}" cur=0 of=33
+time=2026-10-31T20:38:33.176-04:00 level=DEBUG msg="nav click" pos="{X:137 Y:217}" wp="{X:145 Y:209}" cur=1 of=33
+time=2026-10-31T20:38:33.181-04:00 level=DEBUG msg="nav click" pos="{X:143 Y:211}" wp="{X:150 Y:204}" cur=2 of=33
+time=2026-10-31T20:38:33.186-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:205}" wp="{X:156 Y:198}" cur=3 of=33
+time=2026-10-31T20:38:33.191-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:199}" wp="{X:162 Y:192}" cur=4 of=33
+time=2026-10-31T20:38:33.197-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:193}" wp="{X:163 Y:183}" cur=6 of=33
+time=2026-10-31T20:38:33.200-04:00 level=DEBUG msg="nav plan" from="{X:161 Y:192}" to="{X:182 Y:0}" wps=27 partial=false cells=192
+time=2026-10-31T20:38:33.200-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:192}" wp="{X:161 Y:184}" cur=0 of=27
+time=2026-10-31T20:38:33.203-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:188}" wp="{X:161 Y:176}" cur=1 of=27
+time=2026-10-31T20:38:33.226-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:180}" wp="{X:161 Y:168}" cur=2 of=27
+time=2026-10-31T20:38:33.231-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:172}" wp="{X:161 Y:160}" cur=3 of=27
+time=2026-10-31T20:38:33.233-04:00 level=DEBUG msg="nav plan" from="{X:161 Y:170}" to="{X:182 Y:0}" wps=24 partial=false cells=170
+time=2026-10-31T20:38:33.233-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:170}" wp="{X:161 Y:162}" cur=0 of=24
+time=2026-10-31T20:38:33.236-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:166}" wp="{X:161 Y:154}" cur=1 of=24
+time=2026-10-31T20:38:33.241-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:158}" wp="{X:161 Y:146}" cur=2 of=24
+time=2026-10-31T20:38:33.246-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:150}" wp="{X:162 Y:138}" cur=3 of=24
+time=2026-10-31T20:38:33.251-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:141}" wp="{X:162 Y:130}" cur=4 of=24
+time=2026-10-31T20:38:33.255-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:134}" wp="{X:162 Y:122}" cur=5 of=24
+time=2026-10-31T20:38:33.259-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:126}" wp="{X:162 Y:114}" cur=6 of=24
+time=2026-10-31T20:38:33.281-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:118}" wp="{X:162 Y:106}" cur=7 of=24
+time=2026-10-31T20:38:33.284-04:00 level=DEBUG msg="nav plan" from="{X:162 Y:112}" to="{X:182 Y:0}" wps=17 partial=false cells=112
+time=2026-10-31T20:38:33.285-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:112}" wp="{X:162 Y:106}" cur=0 of=17
+time=2026-10-31T20:38:33.286-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:110}" wp="{X:162 Y:98}" cur=1 of=17
+time=2026-10-31T20:38:33.293-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:102}" wp="{X:162 Y:90}" cur=2 of=17
+time=2026-10-31T20:38:33.297-04:00 level=DEBUG msg="nav plan" from="{X:162 Y:98}" to="{X:182 Y:0}" wps=15 partial=false cells=98
+time=2026-10-31T20:38:33.297-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:98}" wp="{X:162 Y:90}" cur=0 of=15
+time=2026-10-31T20:38:33.300-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:94}" wp="{X:162 Y:82}" cur=1 of=15
+time=2026-10-31T20:38:33.308-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:85}" wp="{X:163 Y:74}" cur=2 of=15
+time=2026-10-31T20:38:33.311-04:00 level=DEBUG msg="nav plan" from="{X:162 Y:83}" to="{X:182 Y:0}" wps=13 partial=false cells=83
+time=2026-10-31T20:38:33.311-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:83}" wp="{X:162 Y:75}" cur=0 of=13
+time=2026-10-31T20:38:33.316-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:78}" wp="{X:163 Y:67}" cur=1 of=13
+time=2026-10-31T20:38:33.321-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:71}" wp="{X:163 Y:59}" cur=2 of=13
+time=2026-10-31T20:38:33.323-04:00 level=DEBUG msg="nav plan" from="{X:163 Y:68}" to="{X:182 Y:0}" wps=12 partial=false cells=68
+time=2026-10-31T20:38:33.323-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:68}" wp="{X:163 Y:60}" cur=0 of=12
+time=2026-10-31T20:38:33.325-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:64}" wp="{X:163 Y:59}" cur=1 of=12
+time=2026-10-31T20:38:33.342-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:62}" wp="{X:166 Y:51}" cur=2 of=12
+time=2026-10-31T20:38:33.347-04:00 level=DEBUG msg="nav click" pos="{X:165 Y:54}" wp="{X:168 Y:44}" cur=3 of=12
+time=2026-10-31T20:38:33.351-04:00 level=DEBUG msg="nav plan" from="{X:167 Y:46}" to="{X:182 Y:0}" wps=9 partial=false cells=46
+time=2026-10-31T20:38:33.351-04:00 level=DEBUG msg="nav click" pos="{X:167 Y:46}" wp="{X:170 Y:39}" cur=0 of=9
+time=2026-10-31T20:38:33.355-04:00 level=DEBUG msg="nav click" pos="{X:169 Y:41}" wp="{X:173 Y:31}" cur=1 of=9
+time=2026-10-31T20:38:33.359-04:00 level=DEBUG msg="nav click" pos="{X:172 Y:34}" wp="{X:173 Y:30}" cur=2 of=9
+time=2026-10-31T20:38:33.362-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:30}" wp="{X:176 Y:27}" cur=3 of=9
+time=2026-10-31T20:38:33.365-04:00 level=DEBUG msg="nav plan" from="{X:176 Y:27}" to="{X:182 Y:0}" wps=5 partial=false cells=27
+time=2026-10-31T20:38:33.365-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:27}" wp="{X:176 Y:24}" cur=0 of=5
+time=2026-10-31T20:38:33.366-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:24}" wp="{X:172 Y:20}" cur=1 of=5
+time=2026-10-31T20:38:33.368-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:22}" wp="{X:173 Y:15}" cur=2 of=5
+time=2026-10-31T20:38:33.370-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:18}" wp="{X:177 Y:8}" cur=3 of=5
+time=2026-10-31T20:38:33.376-04:00 level=DEBUG msg="nav plan" from="{X:176 Y:11}" to="{X:182 Y:0}" wps=2 partial=false cells=11
+time=2026-10-31T20:38:33.376-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:11}" wp="{X:180 Y:4}" cur=0 of=2
+time=2026-10-31T20:38:33.380-04:00 level=DEBUG msg="nav click" pos="{X:178 Y:7}" wp="{X:182 Y:0}" cur=1 of=2
+time=2026-10-31T20:38:33.423-04:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:33.427-04:00 level=INFO msg="nav exit" to=2 gate="{X:102 Y:399}" push="{X:102 Y:407}" border=true
+time=2026-10-31T20:38:33.427-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:33.427-04:00 level=DEBUG msg="nav plan" from="{X:102 Y:392}" to="{X:102 Y:399}" wps=1 partial=false cells=7
+time=2026-10-31T20:38:33.427-04:00 level=DEBUG msg="nav click" pos="{X:102 Y:392}" wp="{X:102 Y:399}" cur=0 of=1
+time=2026-10-31T20:38:33.452-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:33.458-04:00 level=INFO msg="nav exit" to=1 gate="{X:279 Y:352}" push="{X:287 Y:352}" border=true
+time=2026-10-31T20:38:33.459-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:33.462-04:00 level=DEBUG msg="nav plan" from="{X:182 Y:7}" to="{X:279 Y:352}" wps=60 partial=false cells=367
+time=2026-10-31T20:38:33.463-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:7}" wp="{X:188 Y:9}" cur=1 of=60
+time=2026-10-31T20:38:33.464-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:8}" wp="{X:188 Y:17}" cur=2 of=60
+time=2026-10-31T20:38:33.468-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:14}" wp="{X:188 Y:22}" cur=3 of=60
+time=2026-10-31T20:38:33.471-04:00 level=DEBUG msg="nav click" pos="{X:188 Y:19}" wp="{X:186 Y:25}" cur=4 of=60
+time=2026-10-31T20:38:33.474-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:23}" wp="{X:184 Y:33}" cur=5 of=60
+time=2026-10-31T20:38:33.479-04:00 level=DEBUG msg="nav plan" from="{X:186 Y:26}" to="{X:279 Y:352}" wps=56 partial=false cells=344
+time=2026-10-31T20:38:33.479-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:26}" wp="{X:185 Y:34}" cur=0 of=56
+time=2026-10-31T20:38:33.482-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:31}" wp="{X:183 Y:42}" cur=1 of=56
+time=2026-10-31T20:38:33.487-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:39}" wp="{X:183 Y:44}" cur=2 of=56
+time=2026-10-31T20:38:33.488-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:41}" wp="{X:180 Y:52}" cur=3 of=56
+time=2026-10-31T20:38:33.496-04:00 level=DEBUG msg="nav plan" from="{X:181 Y:47}" to="{X:279 Y:352}" wps=53 partial=false cells=323
+time=2026-10-31T20:38:33.496-04:00 level=DEBUG msg="nav click" pos="{X:181 Y:47}" wp="{X:179 Y:55}" cur=0 of=53
+time=2026-10-31T20:38:33.499-04:00 level=DEBUG msg="nav click" pos="{X:180 Y:52}" wp="{X:177 Y:62}" cur=1 of=53
+time=2026-10-31T20:38:33.506-04:00 level=DEBUG msg="nav click" pos="{X:178 Y:59}" wp="{X:176 Y:66}" cur=2 of=53
+time=2026-10-31T20:38:33.513-04:00 level=DEBUG msg="nav plan" from="{X:177 Y:63}" to="{X:279 Y:352}" wps=50 partial=false cells=307
+time=2026-10-31T20:38:33.513-04:00 level=DEBUG msg="nav click" pos="{X:177 Y:63}" wp="{X:176 Y:71}" cur=0 of=50
+time=2026-10-31T20:38:33.535-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:67}" wp="{X:174 Y:79}" cur=1 of=50
+time=2026-10-31T20:38:33.543-04:00 level=DEBUG msg="nav click" pos="{X:175 Y:76}" wp="{X:174 Y:80}" cur=2 of=50
+time=2026-10-31T20:38:33.546-04:00 level=DEBUG msg="nav plan" from="{X:174 Y:77}" to="{X:279 Y:352}" wps=47 partial=false cells=293
+time=2026-10-31T20:38:33.546-04:00 level=DEBUG msg="nav click" pos="{X:174 Y:77}" wp="{X:171 Y:85}" cur=0 of=47
+time=2026-10-31T20:38:33.552-04:00 level=DEBUG msg="nav click" pos="{X:172 Y:83}" wp="{X:168 Y:92}" cur=1 of=47
+time=2026-10-31T20:38:33.558-04:00 level=DEBUG msg="nav click" pos="{X:169 Y:89}" wp="{X:166 Y:100}" cur=2 of=47
+time=2026-10-31T20:38:33.563-04:00 level=DEBUG msg="nav click" pos="{X:167 Y:97}" wp="{X:163 Y:107}" cur=3 of=47
+time=2026-10-31T20:38:33.569-04:00 level=DEBUG msg="nav click" pos="{X:164 Y:105}" wp="{X:160 Y:115}" cur=4 of=47
+time=2026-10-31T20:38:33.573-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:113}" wp="{X:159 Y:122}" cur=5 of=47
+time=2026-10-31T20:38:33.577-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:119}" wp="{X:158 Y:130}" cur=6 of=47
+time=2026-10-31T20:38:33.608-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:127}" wp="{X:157 Y:138}" cur=7 of=47
+time=2026-10-31T20:38:33.612-04:00 level=DEBUG msg="nav plan" from="{X:158 Y:134}" to="{X:279 Y:352}" wps=40 partial=false cells=236
+time=2026-10-31T20:38:33.612-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:134}" wp="{X:156 Y:142}" cur=0 of=40
+time=2026-10-31T20:38:33.615-04:00 level=DEBUG msg="nav click" pos="{X:157 Y:139}" wp="{X:155 Y:149}" cur=1 of=40
+time=2026-10-31T20:38:33.621-04:00 level=DEBUG msg="nav click" pos="{X:156 Y:146}" wp="{X:154 Y:152}" cur=2 of=40
+time=2026-10-31T20:38:33.624-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:149}" wp="{X:155 Y:158}" cur=3 of=40
+time=2026-10-31T20:38:33.626-04:00 level=DEBUG msg="nav plan" from="{X:155 Y:150}" to="{X:279 Y:352}" wps=39 partial=false cells=220
+time=2026-10-31T20:38:33.626-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:150}" wp="{X:153 Y:157}" cur=1 of=39
+time=2026-10-31T20:38:33.629-04:00 level=DEBUG msg="nav click" pos="{X:154 Y:154}" wp="{X:155 Y:165}" cur=2 of=39
+time=2026-10-31T20:38:33.636-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:161}" wp="{X:156 Y:173}" cur=3 of=39
+time=2026-10-31T20:38:33.641-04:00 level=DEBUG msg="nav plan" from="{X:155 Y:165}" to="{X:279 Y:352}" wps=35 partial=false cells=205
+time=2026-10-31T20:38:33.641-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:165}" wp="{X:156 Y:172}" cur=0 of=35
+time=2026-10-31T20:38:33.646-04:00 level=DEBUG msg="nav click" pos="{X:156 Y:169}" wp="{X:155 Y:175}" cur=1 of=35
+time=2026-10-31T20:38:33.648-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:171}" wp="{X:155 Y:183}" cur=2 of=35
+time=2026-10-31T20:38:33.657-04:00 level=DEBUG msg="nav plan" from="{X:155 Y:179}" to="{X:279 Y:352}" wps=36 partial=false cells=194
+time=2026-10-31T20:38:33.657-04:00 level=DEBUG msg="nav click" pos="{X:155 Y:179}" wp="{X:160 Y:181}" cur=1 of=36
+time=2026-10-31T20:38:33.659-04:00 level=DEBUG msg="nav click" pos="{X:157 Y:180}" wp="{X:165 Y:187}" cur=2 of=36
+time=2026-10-31T20:38:33.664-04:00 level=DEBUG msg="nav click" pos="{X:163 Y:185}" wp="{X:170 Y:193}" cur=3 of=36
+time=2026-10-31T20:38:33.683-04:00 level=DEBUG msg="nav click" pos="{X:168 Y:190}" wp="{X:171 Y:194}" cur=4 of=36
+time=2026-10-31T20:38:33.685-04:00 level=DEBUG msg="nav click" pos="{X:169 Y:192}" wp="{X:172 Y:196}" cur=5 of=36
+time=2026-10-31T20:38:33.686-04:00 level=DEBUG msg="nav click" pos="{X:170 Y:193}" wp="{X:177 Y:202}" cur=6 of=36
+time=2026-10-31T20:38:33.688-04:00 level=DEBUG msg="nav plan" from="{X:171 Y:194}" to="{X:279 Y:352}" wps=31 partial=false cells=176
+time=2026-10-31T20:38:33.688-04:00 level=DEBUG msg="nav click" pos="{X:171 Y:194}" wp="{X:177 Y:202}" cur=1 of=31
+time=2026-10-31T20:38:33.693-04:00 level=DEBUG msg="nav click" pos="{X:175 Y:200}" wp="{X:182 Y:209}" cur=2 of=31
+time=2026-10-31T20:38:33.699-04:00 level=DEBUG msg="nav click" pos="{X:180 Y:206}" wp="{X:186 Y:215}" cur=3 of=31
+time=2026-10-31T20:38:33.703-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:212}" wp="{X:191 Y:222}" cur=4 of=31
+time=2026-10-31T20:38:33.709-04:00 level=DEBUG msg="nav click" pos="{X:189 Y:219}" wp="{X:196 Y:228}" cur=5 of=31
+time=2026-10-31T20:38:33.714-04:00 level=DEBUG msg="nav click" pos="{X:194 Y:225}" wp="{X:201 Y:234}" cur=6 of=31
+time=2026-10-31T20:38:33.718-04:00 level=DEBUG msg="nav plan" from="{X:197 Y:229}" to="{X:279 Y:352}" wps=23 partial=false cells=141
+time=2026-10-31T20:38:33.718-04:00 level=DEBUG msg="nav click" pos="{X:197 Y:229}" wp="{X:199 Y:237}" cur=0 of=23
+time=2026-10-31T20:38:33.724-04:00 level=DEBUG msg="nav click" pos="{X:198 Y:234}" wp="{X:202 Y:244}" cur=1 of=23
+time=2026-10-31T20:38:33.747-04:00 level=DEBUG msg="nav click" pos="{X:201 Y:241}" wp="{X:204 Y:252}" cur=2 of=23
+time=2026-10-31T20:38:33.750-04:00 level=DEBUG msg="nav plan" from="{X:201 Y:243}" to="{X:279 Y:352}" wps=22 partial=false cells=127
+time=2026-10-31T20:38:33.750-04:00 level=DEBUG msg="nav click" pos="{X:201 Y:243}" wp="{X:203 Y:249}" cur=0 of=22
+time=2026-10-31T20:38:33.752-04:00 level=DEBUG msg="nav click" pos="{X:202 Y:246}" wp="{X:207 Y:256}" cur=1 of=22
+time=2026-10-31T20:38:33.758-04:00 level=DEBUG msg="nav click" pos="{X:206 Y:253}" wp="{X:210 Y:263}" cur=2 of=22
+time=2026-10-31T20:38:33.762-04:00 level=DEBUG msg="nav plan" from="{X:207 Y:256}" to="{X:279 Y:352}" wps=20 partial=false cells=114
+time=2026-10-31T20:38:33.762-04:00 level=DEBUG msg="nav click" pos="{X:207 Y:256}" wp="{X:209 Y:264}" cur=0 of=20
+time=2026-10-31T20:38:33.766-04:00 level=DEBUG msg="nav click" pos="{X:209 Y:260}" wp="{X:210 Y:266}" cur=1 of=20
+time=2026-10-31T20:38:33.768-04:00 level=DEBUG msg="nav click" pos="{X:210 Y:264}" wp="{X:212 Y:274}" cur=2 of=20
+time=2026-10-31T20:38:33.774-04:00 level=DEBUG msg="nav click" pos="{X:212 Y:272}" wp="{X:213 Y:278}" cur=3 of=20
+time=2026-10-31T20:38:33.776-04:00 level=DEBUG msg="nav plan" from="{X:212 Y:275}" to="{X:279 Y:352}" wps=17 partial=false cells=95
+time=2026-10-31T20:38:33.776-04:00 level=DEBUG msg="nav click" pos="{X:212 Y:275}" wp="{X:216 Y:282}" cur=0 of=17
+time=2026-10-31T20:38:33.779-04:00 level=DEBUG msg="nav click" pos="{X:215 Y:280}" wp="{X:218 Y:290}" cur=1 of=17
+time=2026-10-31T20:38:33.784-04:00 level=DEBUG msg="nav click" pos="{X:217 Y:288}" wp="{X:220 Y:297}" cur=2 of=17
+time=2026-10-31T20:38:33.809-04:00 level=DEBUG msg="nav click" pos="{X:219 Y:294}" wp="{X:223 Y:305}" cur=3 of=17
+time=2026-10-31T20:38:33.814-04:00 level=DEBUG msg="nav click" pos="{X:222 Y:302}" wp="{X:224 Y:309}" cur=4 of=17
+time=2026-10-31T20:38:33.815-04:00 level=DEBUG msg="nav plan" from="{X:222 Y:304}" to="{X:279 Y:352}" wps=12 partial=false cells=66
+time=2026-10-31T20:38:33.815-04:00 level=DEBUG msg="nav click" pos="{X:222 Y:304}" wp="{X:225 Y:310}" cur=0 of=12
+time=2026-10-31T20:38:33.817-04:00 level=DEBUG msg="nav click" pos="{X:223 Y:307}" wp="{X:231 Y:315}" cur=1 of=12
+time=2026-10-31T20:38:33.824-04:00 level=DEBUG msg="nav click" pos="{X:229 Y:313}" wp="{X:237 Y:321}" cur=2 of=12
+time=2026-10-31T20:38:33.827-04:00 level=DEBUG msg="nav plan" from="{X:232 Y:316}" to="{X:279 Y:352}" wps=9 partial=false cells=53
+time=2026-10-31T20:38:33.828-04:00 level=DEBUG msg="nav click" pos="{X:232 Y:316}" wp="{X:238 Y:321}" cur=0 of=9
+time=2026-10-31T20:38:33.831-04:00 level=DEBUG msg="nav click" pos="{X:235 Y:319}" wp="{X:244 Y:327}" cur=1 of=9
+time=2026-10-31T20:38:33.838-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:325}" wp="{X:247 Y:334}" cur=2 of=9
+time=2026-10-31T20:38:33.843-04:00 level=DEBUG msg="nav click" pos="{X:245 Y:331}" wp="{X:248 Y:337}" cur=3 of=9
+time=2026-10-31T20:38:33.847-04:00 level=DEBUG msg="nav click" pos="{X:247 Y:334}" wp="{X:254 Y:343}" cur=4 of=9
+time=2026-10-31T20:38:33.851-04:00 level=DEBUG msg="nav click" pos="{X:252 Y:341}" wp="{X:259 Y:348}" cur=5 of=9
+time=2026-10-31T20:38:33.871-04:00 level=DEBUG msg="nav click" pos="{X:257 Y:345}" wp="{X:263 Y:352}" cur=6 of=9
+time=2026-10-31T20:38:33.875-04:00 level=DEBUG msg="nav click" pos="{X:261 Y:350}" wp="{X:271 Y:352}" cur=7 of=9
+time=2026-10-31T20:38:33.878-04:00 level=DEBUG msg="nav click" pos="{X:268 Y:351}" wp="{X:279 Y:352}" cur=8 of=9
+time=2026-10-31T20:38:33.890-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:33.892-04:00 level=INFO msg="nav exit" to=2 gate="{X:0 Y:112}" push="{X:-8 Y:112}" border=true
+time=2026-10-31T20:38:33.892-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:33.892-04:00 level=DEBUG msg="nav plan" from="{X:7 Y:112}" to="{X:0 Y:112}" wps=1 partial=false cells=7
+time=2026-10-31T20:38:33.892-04:00 level=DEBUG msg="nav click" pos="{X:7 Y:112}" wp="{X:0 Y:112}" cur=0 of=1
+time=2026-10-31T20:38:33.917-04:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:33.923-04:00 level=INFO msg="nav exit" to=3 gate="{X:182 Y:0}" push="{X:182 Y:-8}" border=true
+time=2026-10-31T20:38:33.923-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).Exits < d2lod-bot/internal/drill.d6exit"
+time=2026-10-31T20:38:33.927-04:00 level=DEBUG msg="nav plan" from="{X:272 Y:352}" to="{X:182 Y:0}" wps=59 partial=false cells=368
+time=2026-10-31T20:38:33.927-04:00 level=DEBUG msg="nav click" pos="{X:272 Y:352}" wp="{X:264 Y:351}" cur=0 of=59
+time=2026-10-31T20:38:33.930-04:00 level=DEBUG msg="nav click" pos="{X:268 Y:351}" wp="{X:262 Y:351}" cur=1 of=59
+time=2026-10-31T20:38:33.931-04:00 level=DEBUG msg="nav click" pos="{X:265 Y:351}" wp="{X:256 Y:345}" cur=2 of=59
+time=2026-10-31T20:38:33.935-04:00 level=DEBUG msg="nav click" pos="{X:259 Y:347}" wp="{X:251 Y:340}" cur=3 of=59
+time=2026-10-31T20:38:33.939-04:00 level=DEBUG msg="nav click" pos="{X:253 Y:342}" wp="{X:245 Y:334}" cur=4 of=59
+time=2026-10-31T20:38:33.943-04:00 level=DEBUG msg="nav click" pos="{X:247 Y:336}" wp="{X:241 Y:330}" cur=5 of=59
+time=2026-10-31T20:38:33.948-04:00 level=DEBUG msg="nav click" pos="{X:243 Y:332}" wp="{X:241 Y:324}" cur=6 of=59
+time=2026-10-31T20:38:33.956-04:00 level=DEBUG msg="nav plan" from="{X:242 Y:326}" to="{X:182 Y:0}" wps=51 partial=false cells=334
+time=2026-10-31T20:38:33.956-04:00 level=DEBUG msg="nav click" pos="{X:242 Y:326}" wp="{X:239 Y:322}" cur=0 of=51
+time=2026-10-31T20:38:33.958-04:00 level=DEBUG msg="nav click" pos="{X:240 Y:325}" wp="{X:232 Y:318}" cur=1 of=51
+time=2026-10-31T20:38:33.965-04:00 level=DEBUG msg="nav click" pos="{X:235 Y:320}" wp="{X:225 Y:314}" cur=2 of=51
+time=2026-10-31T20:38:33.974-04:00 level=DEBUG msg="nav plan" from="{X:230 Y:317}" to="{X:182 Y:0}" wps=52 partial=false cells=330
+time=2026-10-31T20:38:33.974-04:00 level=DEBUG msg="nav click" pos="{X:230 Y:317}" wp="{X:228 Y:321}" cur=1 of=52
+time=2026-10-31T20:38:33.975-04:00 level=DEBUG msg="nav click" pos="{X:230 Y:318}" wp="{X:224 Y:320}" cur=2 of=52
+time=2026-10-31T20:38:33.979-04:00 level=DEBUG msg="nav click" pos="{X:227 Y:319}" wp="{X:220 Y:316}" cur=3 of=52
+time=2026-10-31T20:38:34.000-04:00 level=DEBUG msg="nav click" pos="{X:223 Y:317}" wp="{X:220 Y:308}" cur=4 of=52
+time=2026-10-31T20:38:34.009-04:00 level=DEBUG msg="nav plan" from="{X:221 Y:312}" to="{X:182 Y:0}" wps=49 partial=false cells=314
+time=2026-10-31T20:38:34.009-04:00 level=DEBUG msg="nav click" pos="{X:221 Y:312}" wp="{X:219 Y:307}" cur=1 of=49
+time=2026-10-31T20:38:34.010-04:00 level=DEBUG msg="nav click" pos="{X:221 Y:310}" wp="{X:218 Y:299}" cur=2 of=49
+time=2026-10-31T20:38:34.016-04:00 level=DEBUG msg="nav click" pos="{X:219 Y:302}" wp="{X:216 Y:291}" cur=3 of=49
+time=2026-10-31T20:38:34.022-04:00 level=DEBUG msg="nav click" pos="{X:217 Y:294}" wp="{X:215 Y:283}" cur=4 of=49
+time=2026-10-31T20:38:34.027-04:00 level=DEBUG msg="nav plan" from="{X:216 Y:290}" to="{X:182 Y:0}" wps=46 partial=false cells=292
+time=2026-10-31T20:38:34.027-04:00 level=DEBUG msg="nav click" pos="{X:216 Y:290}" wp="{X:216 Y:282}" cur=0 of=46
+time=2026-10-31T20:38:34.031-04:00 level=DEBUG msg="nav click" pos="{X:215 Y:285}" wp="{X:216 Y:280}" cur=1 of=46
+time=2026-10-31T20:38:34.032-04:00 level=DEBUG msg="nav click" pos="{X:216 Y:284}" wp="{X:212 Y:273}" cur=2 of=46
+time=2026-10-31T20:38:34.038-04:00 level=DEBUG msg="nav click" pos="{X:213 Y:276}" wp="{X:209 Y:266}" cur=3 of=46
+time=2026-10-31T20:38:34.046-04:00 level=DEBUG msg="nav plan" from="{X:210 Y:270}" to="{X:182 Y:0}" wps=44 partial=false cells=272
+time=2026-10-31T20:38:34.046-04:00 level=DEBUG msg="nav click" pos="{X:210 Y:270}" wp="{X:208 Y:262}" cur=0 of=44
+time=2026-10-31T20:38:34.050-04:00 level=DEBUG msg="nav click" pos="{X:209 Y:265}" wp="{X:207 Y:258}" cur=1 of=44
+time=2026-10-31T20:38:34.053-04:00 level=DEBUG msg="nav click" pos="{X:208 Y:261}" wp="{X:206 Y:255}" cur=2 of=44
+time=2026-10-31T20:38:34.076-04:00 level=DEBUG msg="nav click" pos="{X:207 Y:258}" wp="{X:206 Y:251}" cur=3 of=44
+time=2026-10-31T20:38:34.080-04:00 level=DEBUG msg="nav click" pos="{X:206 Y:254}" wp="{X:208 Y:248}" cur=4 of=44
+time=2026-10-31T20:38:34.083-04:00 level=DEBUG msg="nav plan" from="{X:207 Y:253}" to="{X:182 Y:0}" wps=42 partial=false cells=264
+time=2026-10-31T20:38:34.083-04:00 level=DEBUG msg="nav click" pos="{X:207 Y:253}" wp="{X:203 Y:256}" cur=1 of=42
+time=2026-10-31T20:38:34.086-04:00 level=DEBUG msg="nav click" pos="{X:205 Y:254}" wp="{X:199 Y:255}" cur=2 of=42
+time=2026-10-31T20:38:34.089-04:00 level=DEBUG msg="nav click" pos="{X:202 Y:255}" wp="{X:194 Y:249}" cur=3 of=42
+time=2026-10-31T20:38:34.094-04:00 level=DEBUG msg="nav click" pos="{X:197 Y:251}" wp="{X:188 Y:243}" cur=4 of=42
+time=2026-10-31T20:38:34.099-04:00 level=DEBUG msg="nav plan" from="{X:195 Y:249}" to="{X:182 Y:0}" wps=39 partial=false cells=250
+time=2026-10-31T20:38:34.099-04:00 level=DEBUG msg="nav click" pos="{X:195 Y:249}" wp="{X:189 Y:244}" cur=0 of=39
+time=2026-10-31T20:38:34.104-04:00 level=DEBUG msg="nav click" pos="{X:191 Y:246}" wp="{X:183 Y:238}" cur=1 of=39
+time=2026-10-31T20:38:34.112-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:240}" wp="{X:182 Y:237}" cur=2 of=39
+time=2026-10-31T20:38:34.114-04:00 level=DEBUG msg="nav plan" from="{X:184 Y:239}" to="{X:182 Y:0}" wps=36 partial=false cells=239
+time=2026-10-31T20:38:34.114-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:239}" wp="{X:181 Y:228}" cur=1 of=36
+time=2026-10-31T20:38:34.124-04:00 level=DEBUG msg="nav click" pos="{X:182 Y:230}" wp="{X:178 Y:221}" cur=2 of=36
+time=2026-10-31T20:38:34.128-04:00 level=DEBUG msg="nav click" pos="{X:179 Y:224}" wp="{X:176 Y:213}" cur=3 of=36
+time=2026-10-31T20:38:34.133-04:00 level=DEBUG msg="nav plan" from="{X:177 Y:218}" to="{X:182 Y:0}" wps=33 partial=false cells=218
+time=2026-10-31T20:38:34.134-04:00 level=DEBUG msg="nav click" pos="{X:177 Y:218}" wp="{X:175 Y:210}" cur=0 of=33
+time=2026-10-31T20:38:34.137-04:00 level=DEBUG msg="nav click" pos="{X:176 Y:213}" wp="{X:174 Y:208}" cur=1 of=33
+time=2026-10-31T20:38:34.138-04:00 level=DEBUG msg="nav click" pos="{X:175 Y:211}" wp="{X:169 Y:202}" cur=2 of=33
+time=2026-10-31T20:38:34.160-04:00 level=DEBUG msg="nav click" pos="{X:171 Y:204}" wp="{X:163 Y:196}" cur=3 of=33
+time=2026-10-31T20:38:34.166-04:00 level=DEBUG msg="nav plan" from="{X:166 Y:199}" to="{X:182 Y:0}" wps=31 partial=false cells=199
+time=2026-10-31T20:38:34.166-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:199}" wp="{X:161 Y:189}" cur=1 of=31
+time=2026-10-31T20:38:34.172-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:192}" wp="{X:160 Y:187}" cur=2 of=31
+time=2026-10-31T20:38:34.173-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:190}" wp="{X:160 Y:179}" cur=3 of=31
+time=2026-10-31T20:38:34.181-04:00 level=DEBUG msg="nav plan" from="{X:160 Y:182}" to="{X:182 Y:0}" wps=28 partial=false cells=182
+time=2026-10-31T20:38:34.182-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:182}" wp="{X:158 Y:171}" cur=1 of=28
+time=2026-10-31T20:38:34.191-04:00 level=DEBUG msg="nav click" pos="{X:159 Y:174}" wp="{X:158 Y:163}" cur=2 of=28
+time=2026-10-31T20:38:34.197-04:00 level=DEBUG msg="nav plan" from="{X:158 Y:168}" to="{X:182 Y:0}" wps=26 partial=false cells=168
+time=2026-10-31T20:38:34.198-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:168}" wp="{X:158 Y:160}" cur=0 of=26
+time=2026-10-31T20:38:34.202-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:163}" wp="{X:158 Y:152}" cur=1 of=26
+time=2026-10-31T20:38:34.209-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:156}" wp="{X:158 Y:144}" cur=2 of=26
+time=2026-10-31T20:38:34.211-04:00 level=DEBUG msg="nav plan" from="{X:158 Y:152}" to="{X:182 Y:0}" wps=24 partial=false cells=152
+time=2026-10-31T20:38:34.211-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:152}" wp="{X:158 Y:144}" cur=0 of=24
+time=2026-10-31T20:38:34.233-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:147}" wp="{X:158 Y:136}" cur=1 of=24
+time=2026-10-31T20:38:34.237-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:140}" wp="{X:158 Y:128}" cur=2 of=24
+time=2026-10-31T20:38:34.242-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:132}" wp="{X:157 Y:120}" cur=3 of=24
+time=2026-10-31T20:38:34.247-04:00 level=DEBUG msg="nav click" pos="{X:157 Y:124}" wp="{X:157 Y:112}" cur=4 of=24
+time=2026-10-31T20:38:34.248-04:00 level=DEBUG msg="nav plan" from="{X:157 Y:122}" to="{X:182 Y:0}" wps=19 partial=false cells=122
+time=2026-10-31T20:38:34.248-04:00 level=DEBUG msg="nav click" pos="{X:157 Y:122}" wp="{X:157 Y:114}" cur=0 of=19
+time=2026-10-31T20:38:34.257-04:00 level=DEBUG msg="nav click" pos="{X:157 Y:118}" wp="{X:156 Y:106}" cur=1 of=19
+time=2026-10-31T20:38:34.261-04:00 level=DEBUG msg="nav click" pos="{X:156 Y:110}" wp="{X:158 Y:98}" cur=2 of=19
+time=2026-10-31T20:38:34.266-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:102}" wp="{X:159 Y:90}" cur=3 of=19
+time=2026-10-31T20:38:34.268-04:00 level=DEBUG msg="nav plan" from="{X:158 Y:101}" to="{X:182 Y:0}" wps=16 partial=false cells=101
+time=2026-10-31T20:38:34.268-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:101}" wp="{X:159 Y:93}" cur=0 of=16
+time=2026-10-31T20:38:34.272-04:00 level=DEBUG msg="nav click" pos="{X:158 Y:96}" wp="{X:160 Y:85}" cur=1 of=16
+time=2026-10-31T20:38:34.296-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:88}" wp="{X:161 Y:77}" cur=2 of=16
+time=2026-10-31T20:38:34.299-04:00 level=DEBUG msg="nav plan" from="{X:160 Y:86}" to="{X:182 Y:0}" wps=15 partial=false cells=86
+time=2026-10-31T20:38:34.299-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:86}" wp="{X:159 Y:80}" cur=1 of=15
+time=2026-10-31T20:38:34.303-04:00 level=DEBUG msg="nav click" pos="{X:159 Y:83}" wp="{X:160 Y:72}" cur=2 of=15
+time=2026-10-31T20:38:34.309-04:00 level=DEBUG msg="nav click" pos="{X:160 Y:76}" wp="{X:162 Y:64}" cur=3 of=15
+time=2026-10-31T20:38:34.314-04:00 level=DEBUG msg="nav plan" from="{X:161 Y:72}" to="{X:182 Y:0}" wps=12 partial=false cells=72
+time=2026-10-31T20:38:34.314-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:72}" wp="{X:161 Y:67}" cur=0 of=12
+time=2026-10-31T20:38:34.316-04:00 level=DEBUG msg="nav click" pos="{X:161 Y:70}" wp="{X:163 Y:59}" cur=1 of=12
+time=2026-10-31T20:38:34.324-04:00 level=DEBUG msg="nav click" pos="{X:162 Y:62}" wp="{X:167 Y:53}" cur=2 of=12
+time=2026-10-31T20:38:34.328-04:00 level=DEBUG msg="nav plan" from="{X:166 Y:56}" to="{X:182 Y:0}" wps=9 partial=false cells=56
+time=2026-10-31T20:38:34.328-04:00 level=DEBUG msg="nav click" pos="{X:166 Y:56}" wp="{X:170 Y:49}" cur=0 of=9
+time=2026-10-31T20:38:34.331-04:00 level=DEBUG msg="nav click" pos="{X:168 Y:51}" wp="{X:175 Y:43}" cur=1 of=9
+time=2026-10-31T20:38:34.336-04:00 level=DEBUG msg="nav click" pos="{X:173 Y:46}" wp="{X:179 Y:36}" cur=2 of=9
+time=2026-10-31T20:38:34.341-04:00 level=DEBUG msg="nav click" pos="{X:177 Y:39}" wp="{X:183 Y:29}" cur=3 of=9
+time=2026-10-31T20:38:34.343-04:00 level=DEBUG msg="nav plan" from="{X:178 Y:38}" to="{X:182 Y:0}" wps=7 partial=false cells=38
+time=2026-10-31T20:38:34.343-04:00 level=DEBUG msg="nav click" pos="{X:178 Y:38}" wp="{X:182 Y:31}" cur=0 of=7
+time=2026-10-31T20:38:34.364-04:00 level=DEBUG msg="nav click" pos="{X:181 Y:33}" wp="{X:186 Y:24}" cur=1 of=7
+time=2026-10-31T20:38:34.367-04:00 level=DEBUG msg="nav click" pos="{X:184 Y:27}" wp="{X:188 Y:22}" cur=2 of=7
+time=2026-10-31T20:38:34.369-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:25}" wp="{X:188 Y:17}" cur=3 of=7
+time=2026-10-31T20:38:34.372-04:00 level=DEBUG msg="nav click" pos="{X:187 Y:20}" wp="{X:185 Y:10}" cur=4 of=7
+time=2026-10-31T20:38:34.375-04:00 level=DEBUG msg="nav click" pos="{X:186 Y:13}" wp="{X:182 Y:2}" cur=5 of=7
+time=2026-10-31T20:38:34.377-04:00 level=DEBUG msg="nav plan" from="{X:185 Y:11}" to="{X:182 Y:0}" wps=2 partial=false cells=11
+time=2026-10-31T20:38:34.377-04:00 level=DEBUG msg="nav click" pos="{X:185 Y:11}" wp="{X:183 Y:3}" cur=0 of=2
+time=2026-10-31T20:38:34.381-04:00 level=DEBUG msg="nav click" pos="{X:183 Y:6}" wp="{X:182 Y:0}" cur=1 of=2
+DRILL D6.c P24 PASS 5 of 5 level transitions | intended: 5 of 5 transitions change the area id to the wanted one | observed: 5 of 5: 2->3 (wanted 3) 671 ticks | 3->2 (wanted 2) 36 ticks | 2->1 (wanted 1) 909 ticks | 1->2 (wanted 2) 36 ticks | 2->3 (wanted 3) 882 ticks | runs: 2, identical
+time=2026-10-31T20:38:34.392-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T20:38:34.411-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:150 Y:240}" wps=2 partial=false cells=10
+time=2026-10-31T20:38:34.411-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:148 Y:240}" cur=0 of=2
+time=2026-10-31T20:38:34.412-04:00 level=INFO msg="nav stuck" pos="{X:141 Y:240}" wp="{X:148 Y:240}" rung=0
+time=2026-10-31T20:38:34.412-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:141 Y:240}" hits=3 lastMethod=spiral
+time=2026-10-31T20:38:34.412-04:00 level=INFO msg="nav: blacklisted cell" at="{X:145 Y:240}" radius=7 ttlSec=180
+time=2026-10-31T20:38:34.414-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:236}" to="{X:150 Y:240}" wps=1 partial=false cells=9
+time=2026-10-31T20:38:34.414-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:236}" wp="{X:150 Y:240}" cur=0 of=1
+time=2026-10-31T20:38:34.414-04:00 level=INFO msg="nav: stuck recovered" at="{X:141 Y:240}" method=spiral rung=1 repeat=true
+time=2026-10-31T20:38:34.420-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T20:38:34.421-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:240}" to="{X:209 Y:239}" wps=10 partial=false cells=57
+time=2026-10-31T20:38:34.421-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:240}" wp="{X:160 Y:240}" cur=0 of=10
+time=2026-10-31T20:38:34.422-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:240}" to="{X:209 Y:239}" wps=10 partial=false cells=57
+time=2026-10-31T20:38:34.423-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:160 Y:240}" cur=0 of=10
+time=2026-10-31T20:38:34.426-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:240}" to="{X:209 Y:239}" wps=10 partial=false cells=57
+time=2026-10-31T20:38:34.426-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:160 Y:240}" cur=0 of=10
+time=2026-10-31T20:38:34.429-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:240}" to="{X:209 Y:239}" wps=10 partial=false cells=57
+time=2026-10-31T20:38:34.429-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:160 Y:240}" cur=0 of=10
+time=2026-10-31T20:38:34.429-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:240}" wp="{X:160 Y:240}" rung=0
+time=2026-10-31T20:38:34.429-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:151 Y:240}" hits=4 lastMethod=spiral
+time=2026-10-31T20:38:34.429-04:00 level=INFO msg="nav: blacklisted cell" at="{X:155 Y:240}" radius=7 ttlSec=180
+time=2026-10-31T20:38:34.432-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:240}" to="{X:209 Y:239}" wps=11 partial=false cells=60
+time=2026-10-31T20:38:34.432-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:240}" wp="{X:151 Y:233}" cur=0 of=11
+time=2026-10-31T20:38:34.436-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=60
+time=2026-10-31T20:38:34.436-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:151 Y:233}" cur=0 of=11
+time=2026-10-31T20:38:34.439-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=60
+time=2026-10-31T20:38:34.439-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:151 Y:233}" cur=0 of=11
+time=2026-10-31T20:38:34.443-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=60
+time=2026-10-31T20:38:34.443-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:151 Y:233}" cur=0 of=11
+time=2026-10-31T20:38:34.446-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=60
+time=2026-10-31T20:38:34.447-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:151 Y:233}" cur=0 of=11
+time=2026-10-31T20:38:34.447-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:237}" wp="{X:151 Y:233}" rung=1
+time=2026-10-31T20:38:34.449-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=13 partial=false cells=63
+time=2026-10-31T20:38:34.449-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:149 Y:232}" cur=0 of=13
+time=2026-10-31T20:38:34.453-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:237}" to="{X:209 Y:239}" wps=13 partial=false cells=63
+time=2026-10-31T20:38:34.453-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:237}" wp="{X:149 Y:232}" cur=0 of=13
+time=2026-10-31T20:38:34.457-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:237}" to="{X:209 Y:239}" wps=13 partial=false cells=63
+time=2026-10-31T20:38:34.457-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:237}" wp="{X:149 Y:232}" cur=0 of=13
+time=2026-10-31T20:38:34.460-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:237}" to="{X:209 Y:239}" wps=13 partial=false cells=63
+time=2026-10-31T20:38:34.460-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:237}" wp="{X:149 Y:232}" cur=0 of=13
+time=2026-10-31T20:38:34.460-04:00 level=INFO msg="nav stuck" pos="{X:149 Y:237}" wp="{X:149 Y:232}" rung=2
+time=2026-10-31T20:38:34.462-04:00 level=DEBUG msg="nav plan" from="{X:149 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.462-04:00 level=DEBUG msg="nav click" pos="{X:149 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.465-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.465-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.468-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.469-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.471-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.471-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.471-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:237}" wp="{X:152 Y:230}" rung=3
+time=2026-10-31T20:38:34.474-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.474-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.477-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.477-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.480-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.481-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.484-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.484-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.484-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:237}" wp="{X:152 Y:230}" rung=4
+time=2026-10-31T20:38:34.486-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.487-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.490-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.490-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.493-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.493-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.497-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.497-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.497-04:00 level=INFO msg="nav stuck" pos="{X:151 Y:237}" wp="{X:152 Y:230}" rung=5
+time=2026-10-31T20:38:34.500-04:00 level=DEBUG msg="nav plan" from="{X:147 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=61
+time=2026-10-31T20:38:34.500-04:00 level=DEBUG msg="nav click" pos="{X:147 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.500-04:00 level=INFO msg="nav: stuck recovered" at="{X:151 Y:240}" method=hop rung=6 repeat=true
+time=2026-10-31T20:38:34.504-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.504-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.507-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.507-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.510-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.511-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.514-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:237}" to="{X:209 Y:239}" wps=11 partial=false cells=62
+time=2026-10-31T20:38:34.514-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:237}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.514-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:151 Y:237}" rung=6
+time=2026-10-31T20:38:34.535-04:00 level=INFO msg="arrived in town" area=1
+time=2026-10-31T20:38:34.541-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T20:38:34.542-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:240}" to="{X:150 Y:240}" wps=2 partial=false cells=10
+time=2026-10-31T20:38:34.542-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:240}" wp="{X:148 Y:240}" cur=0 of=2
+time=2026-10-31T20:38:34.543-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:240}" wp="{X:148 Y:240}" cur=0 of=2
+time=2026-10-31T20:38:34.543-04:00 level=INFO msg="nav stuck" pos="{X:141 Y:240}" wp="{X:148 Y:240}" rung=0
+time=2026-10-31T20:38:34.543-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:141 Y:240}" hits=5 lastMethod=hop
+time=2026-10-31T20:38:34.543-04:00 level=INFO msg="nav: blacklisted cell" at="{X:145 Y:240}" radius=7 ttlSec=180
+time=2026-10-31T20:38:34.547-04:00 level=DEBUG msg="nav plan" from="{X:142 Y:244}" to="{X:150 Y:240}" wps=1 partial=false cells=8
+time=2026-10-31T20:38:34.547-04:00 level=DEBUG msg="nav click" pos="{X:142 Y:244}" wp="{X:150 Y:240}" cur=0 of=1
+time=2026-10-31T20:38:34.547-04:00 level=INFO msg="nav: stuck recovered" at="{X:141 Y:240}" method=spiral rung=1 repeat=true
+time=2026-10-31T20:38:34.555-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < main.(*lab).Pin < d2lod-bot/internal/drill.d6pin.func1 < d2lod-bot/internal/drill.(*Runner).once.func1"
+time=2026-10-31T20:38:34.556-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:240}" to="{X:210 Y:240}" wps=11 partial=false cells=64
+time=2026-10-31T20:38:34.556-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:240}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.557-04:00 level=DEBUG msg="nav plan" from="{X:151 Y:239}" to="{X:210 Y:240}" wps=11 partial=false cells=64
+time=2026-10-31T20:38:34.557-04:00 level=DEBUG msg="nav click" pos="{X:151 Y:239}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.561-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=11 partial=false cells=65
+time=2026-10-31T20:38:34.561-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.564-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=12 partial=false cells=65
+time=2026-10-31T20:38:34.564-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:153 Y:229}" cur=0 of=12
+time=2026-10-31T20:38:34.568-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=12 partial=false cells=65
+time=2026-10-31T20:38:34.568-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:153 Y:229}" cur=0 of=12
+time=2026-10-31T20:38:34.570-04:00 level=INFO msg="nav stuck" pos="{X:152 Y:238}" wp="{X:153 Y:229}" rung=0
+time=2026-10-31T20:38:34.573-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=11 partial=false cells=64
+time=2026-10-31T20:38:34.573-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:150 Y:235}" cur=0 of=11
+time=2026-10-31T20:38:34.577-04:00 level=DEBUG msg="nav plan" from="{X:150 Y:238}" to="{X:210 Y:240}" wps=11 partial=false cells=63
+time=2026-10-31T20:38:34.577-04:00 level=DEBUG msg="nav click" pos="{X:150 Y:238}" wp="{X:153 Y:229}" cur=0 of=11
+time=2026-10-31T20:38:34.579-04:00 level=INFO msg="nav stuck" pos="{X:152 Y:238}" wp="{X:153 Y:229}" rung=1
+time=2026-10-31T20:38:34.581-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=11 partial=false cells=63
+time=2026-10-31T20:38:34.581-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.584-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=11 partial=false cells=63
+time=2026-10-31T20:38:34.584-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:152 Y:230}" cur=0 of=11
+time=2026-10-31T20:38:34.585-04:00 level=INFO msg="nav stuck" pos="{X:152 Y:238}" wp="{X:152 Y:230}" rung=2
+time=2026-10-31T20:38:34.587-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=10 partial=false cells=63
+time=2026-10-31T20:38:34.587-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:152 Y:230}" cur=0 of=10
+time=2026-10-31T20:38:34.590-04:00 level=DEBUG msg="nav plan" from="{X:152 Y:238}" to="{X:210 Y:240}" wps=10 partial=false cells=63
+time=2026-10-31T20:38:34.590-04:00 level=DEBUG msg="nav click" pos="{X:152 Y:238}" wp="{X:152 Y:230}" cur=0 of=10
+time=2026-10-31T20:38:34.591-04:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=2 pos="{X:152 Y:238}" rung=3
+time=2026-10-31T20:38:34.593-04:00 level=INFO msg="arrived in town through an open portal" area=1
+DRILL D6.d P25 PASS out of the pocket after 16 s of game time (area 1) | intended: a 12-cell walk from inside a collision ring: the navigator's stall ladder ends with the character out of the pocket (town portal or waypoint) within 60 s of game time | observed: pinned=true freed=false moved 25.3 cells in 405 ticks (16 s), area 1, err "nav: the level changed during the walk: escaped from level 2 to 1 after a stall in a pocket"; ladder lines: nav stuck pos={151 240} wp={160 240} rung=0 / nav: stuck again at the same spot pos={151 240} hits=4 lastMethod=spiral / nav stuck pos={151 237} wp={151 233} rung=1 / nav stuck pos={149 237} wp={149 232} rung=2 / nav stuck pos={151 237} wp={152 230} rung=3 / nav stuck pos={151 237} wp={152 230} rung=4 / nav stuck pos={151 237} wp={152 230} rung=5 / nav: stuck recovered at={151 240} method=hop rung=6 repeat=true | runs: 2, identical
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D6.a      P22   PASS     same 10 of 10 walks arrived
+D6.b      P22   PASS     same 10 of 10 walks arrived
+D6.c      P24   PASS     same 5 of 5 level transitions
+D6.d      P25   PASS     same out of the pocket after 16 s of game time (area 1)
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug pin off, debug pin on, debug stat 6 512000, debug stat 7 512000
+cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T20:38:34.595-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 7s

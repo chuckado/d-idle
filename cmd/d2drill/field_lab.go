@@ -498,6 +498,9 @@ func (l *lab) Claim(ctx context.Context, r *drill.Run) (bool, string, int, int, 
 	defer func() { d2dctl.Pause, d2dctl.Now = savedP, savedN }()
 	res, err := d2dtown.ClaimRogue(ctx, l.be.Client)
 	_ = l.CloseAll(ctx)
+	if res.HadMerc {
+		return res.Granted, drill.MercOwnedBefore + res.Merc, res.BurialBefore, res.BurialAfter, err
+	}
 	return res.Granted, res.Merc, res.BurialBefore, res.BurialAfter, err
 }
 
