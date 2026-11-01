@@ -233,4 +233,7 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | DW.m3 x3 (fixmouthloop) | FAIL | drills20: gate preserved (0 bounces, 0 level-change errors) but 129 step-aways, 117 holds, 173 walk timeouts per run, identical to drills19; 0 back-off lines: the loop is inside one Navigator.walk (walk.go:74, :124)|
 | P23 | DW.m4 (fixmouthloop) | PASS | drills20: 0 bounces, 4 step-aways; dirty-UI verdict as before |
 | P23 | D2 (11), D3 (12) regression | PASS | drills20: 11 of 11 and 12 of 12 on the fixmouthloop build |
+| P23 | DW.m3 x3 (fixmouthloop2) | PARTIAL | drills21: 0 mouth bounces; 0 `walk did not finish` (drills20: 173), 1 `backing off` line (was 0), 154 rewrites, 51 holds, 62 step-aways per invocation (was 129; target about 20); the remaining ones are Navigator.roam from Explore (10 failed legs per episode, 5 episodes); 22 level-change errors: one pocket-stall town-portal escape at (102,183) in run 1 plus 21 stale retries in Fighter.move; run 2 PASS (runs DIFFER). Kills 0 (no attack skill). Clear and Explore finish |
+| P23 | DW.m4 (fixmouthloop2) | PASS | drills21: 0 bounces, 1 rewrite, 4 step-aways; the character dies in cave level 1 and 30 walks time out afterwards; dirty-UI verdict as before |
+| P23 | D2 (11), D3 (12) regression | PASS | drills21: 11 of 11 and 12 of 12 on the fixmouthloop2 build; ends in town |
 

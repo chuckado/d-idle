@@ -643,3 +643,36 @@ Drilly (throwaway Sorceress, `--no-save`): drill cheats only (`debug goto`, `deb
 - docs/BACKLOG.md: FIXMOUTHLOOP2: fixmouthloop FAILED live (DRILLS20): counts equal DRILLS19 (129 step-aways, 117 holds, 173 timeouts per DW.m3 run), 0 Fighter back-off lines. The loop is inside one Navigator.walk: walk.go:74 bumps walkSeq in the nested step-away walk, so walk.go:124 re-triggers the step-away after every failed one. Fix in nav (capture the sequence before the nested walk), keep the Fighter back-off.
 - docs/INDEX.md: DRILLS20 section in docs/probes/drills/README.md.
 - CHANGELOG: nothing (fixmouthloop not merge-ready).
+
+## DRILLS21 (2026-11-01): live proof of fixmouthloop2 (PARTIAL: the storm halves, a roam loop remains)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from branch agent/drills21 (agent/fixmouthloop2 tip 293c816 plus origin/main merged). Capacity before: idle 47 plus nice 0.7 percent. Files `2026-11-01-drills21-<label>.txt`: `m31` (DW.m3, filtered, repeats collapsed), `m32`/`m33` (first 250 filtered lines; the three invocations are identical, line for line in count), `m41` (DW.m4, first 400), `d3`, `d2` (DRILL lines). Command as DRILLS19 (`-group F -only DW.m3 -label drills21-m3N -v`, `-only DW.m4`; groups D3 and D2 without `-only`). Each invocation took 3 to 7 s of wall time. Each DW.m3 invocation runs the drill twice: run 1 FAIL (one level change), run 2 PASS, verdict DIFFER (DRILLS19/20: identical runs).
+
+### Result: PARTIAL
+| Item | DRILLS19/20 | DRILLS21 (fixmouthloop2) |
+|---|---|---|
+| Mouth bounces | 0 | 0 (V): no `arrived in level` from a gate click |
+| `level changed during the walk` | 0 | 22 per invocation (V), all from ONE pocket-stall town-portal escape (`nav: stalled in a pocket, escaping by town portal`, level 8 pos (102,183), 74 from the exit, run 1, explore phase of cycle 3) plus 21 stale retries of the same error in `Fighter.move` over 30 ms. Not a mouth event (DRILLS18 saw the same escape); the drill verdict counts it as a bounce |
+| `click rewritten` / `click held` | 351 / 117 | 154 / 51 (both runs of the drill together) |
+| `stepping away from a cave mouth` | 129 | 62 (about 20 wanted; not met) |
+| `walk did not finish in 2m0s` | 173 | 0 (DW.m4: 30, all after the character died, see below) |
+| `combat move held by the mouth gate, backing off` | 0 | 1 (V): holds=1, backoff 3 s, long 30 s, to (37,150) |
+| `combat swing held` / `combat move skipped` | 16 / 7 | 24 / 14 |
+| Kills | 0 | 0 in every fight summary: the throwaway has no attack skill (`swinging the basic attack`), so nothing here shows whether a fight ends |
+| Den cycle time | burned the phase limit | U: wall time is not comparable (lockstep game clock, 3 to 7 s per invocation in both); the cycle no longer ends by `walk did not finish` timeouts, and Clear and Explore finish in every cycle (every trace phase `ok`) |
+| DW.m4 | 0 bounces, 4 step-aways | 0 bounces, 1 rewrite, 4 step-aways; 341 `character is dead` lines (the character dies in cave level 1 as before), 30 walk timeouts after that; dirty-UI verdict as before |
+| Regression | D3 12/12, D2 11/11 | D3 12/12, D2 11/11; D2 ends life 34/40, D3 40/40, in town (V) |
+
+### What the fix did (V, m31)
+The Fighter path now works: the DRILLS19 chain (Den, step-away blocked, 3 rewrites then `click held`) ends in `combat move held by the mouth gate, backing off` (once, at (36,140)), and the nested `ErrMouthGate` no longer re-arms the step-away inside one walk. No 2 minute timeout remains. The count of step-aways fell from 129 to 62.
+
+### The remaining repeats: a roam loop (V, m31 lines 1429 to 1585, 4583 to 4739, 4896 to 5057, 5227 to 5383, 5540 to 5696)
+Five episodes of ten step-aways each at the same spot (36,140), 5.1 from the exit. Chain on every `nav walk` line: `nav.walk < nav.roam < nav.explore < nav.Explore < DenPhase`. The step-away walk is rewritten 3 times and held (`click held ... cap=3`), the outer roam leg fails with `roam leg failed ... no path: the click would cross the trigger area of an unwanted exit`, roam.go:222 treats that as `ErrNoPath` (it marks the target failed and picks another one), and the next target starts the same way: 50 `roam leg failed` lines in all, exactly 10 per episode, so roam stops after about 10 failed targets and Explore ends. The loop is bounded (about 8 ms of wall time per leg) and no longer burns the phase, but each failed leg costs a step-away. Fix direction (not done): let roam return `ErrMouthGate` (or stop after the first one) instead of folding it into the failed-target case, or pick the next roam target away from the mouth. U whether that frees a fight in place.
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`): drill cheats only (`debug goto`, `debug stat`), as DRILLS19. Last run (D3) ends in the Rogue Encampment, alive (40/40), panels closed. Cleanup: `tools/agentreap.sh drills21` and `--list` run at the end (see the report).
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: FIXMOUTHLOOP3: fixmouthloop2 PARTIAL live (DRILLS21): 0 mouth bounces, 0 `walk did not finish` (was 173), the Fighter back-off line fires, step-aways 129 to 62 per DW.m3 invocation (target about 20). Remaining: Navigator.roam folds ErrMouthGate into the failed-target case (roam.go:222), 10 failed legs and 10 step-aways per episode in Explore; and one pocket-stall town-portal escape (22 level-change errors, 21 stale Fighter.move retries) makes the drill verdict FAIL in run 1. Merge-ready as an improvement; the roam fix is a follow-up.
+- docs/INDEX.md: DRILLS21 section in docs/probes/drills/README.md.
+- CHANGELOG: fixmouthloop2 (one step-away per walk) verified live: no walk timeouts, back-off runs.
