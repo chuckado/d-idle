@@ -134,7 +134,7 @@ const (
 // Hooks are optional callbacks for the integration (events, buffs, logging).
 type Hooks struct {
 	OnPhase      func(name string)
-	BeforeAttack func(ctx context.Context, v View, b Mon) error // buffs, Static Field openers
+	BeforeAttack func(ctx context.Context, v View, b Mon) error // buffs (no script opens with Static Field: fixstatic)
 	OnKill       func(b Mon)
 }
 

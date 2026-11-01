@@ -231,6 +231,7 @@ func finish(res runResult, logPath string, hours, want float64) (runResult, erro
 	}
 	res.Run = d2dsoakstat.Extract("seed-"+strconv.Itoa(res.Seed), ms, d2dsoakstat.Options{Hours: hours})
 	res.NoteDropped(dropped)
+	res.Run.Table = d2dsoakstat.LogTable(logPath)
 	res.Run.Seed = res.Seed
 	if res.Inv, err = scanInvariants(logPath, d2dsoakstat.ExitInfo{WantHours: want, End: res.End, CmdErr: res.CmdErr}); err != nil {
 		return res, err

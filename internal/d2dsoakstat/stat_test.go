@@ -3,6 +3,7 @@ package d2dsoakstat
 import (
 	"math"
 	"os"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -214,5 +215,21 @@ func TestCommittedBaselines(t *testing.T) {
 		if r.Source == "" || r.Metrics["xp_per_hour"] <= 0 {
 			t.Errorf("baseline run %s: source %q xp/h %v", r.Name, r.Source, r.Metrics["xp_per_hour"])
 		}
+	}
+}
+
+func TestLogTable(t *testing.T) {
+	p := filepath.Join(t.TempDir(), "bot.log")
+	in := `time=2026-10-30T03:00:00-04:00 level=INFO msg=minute area=3 clvl=5 xp=1000 table=sorceress_v2 kills=10
+{"time":"2026-10-30T03:01:00-04:00","msg":"minute","table":"sorceress_v2"}
+`
+	if err := os.WriteFile(p, []byte(in), 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if got := LogTable(p); got != "sorceress_v2" {
+		t.Fatalf("table %q", got)
+	}
+	if got := LogTable(p + ".missing"); got != "" {
+		t.Fatalf("missing file: %q", got)
 	}
 }

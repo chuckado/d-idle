@@ -41,7 +41,7 @@ Pure pieces, all unit-tested: `Hostiles(snap, HostileCtx)`, `Rank(targets, quali
 - Skills: Blizzard build: Charged Bolt, Fire Bolt, Ice Bolt before clvl 26 (or without Blizzard); then Blizzard, Glacial Spike, Ice Blast, Ice Bolt, Charged Bolt, Fire Bolt.
   First skill that is bound, not immune-blocked for the target, affordable and off cooldown wins (Blizzard's 45-frame delay is respected); too expensive falls to a cheaper one,
   blocked falls to the next element, everything blocked tries Static Field, else the target is skipped. Immunity: stat list resists (36/37/39/41/43/45) when present, else monstats; >= 100 is immune.
-- Static Field opens elite/boss fights (`staticCasts`, floor by difficulty) when the target is within its range.
+- Static Field opens elite/boss fights (`staticCasts`, floor by difficulty) when the target is within its range, but only for a character that has learned it (legacy table); the fresh table never buys it (docs/fixstatic.md).
 - Positioning: approach to range minus margin and into the viewport (`onScreen`); kite melee monsters closer than `kiteDistance` when life <= kiteLifePct or an elite/dangerous one is near
   (budget `kiteMaxSteps` per 10 quiet seconds); dodge hostile missiles within `dodgeRadius`. All walking via Mover (`PathTo` validates candidate points).
 - Survival (`Decide`): life <= chicken%: rejuv if ready else Chicken (out of a fight a healing potion first); < rejuv%: rejuv; < drink%: healing potion, no potion at all -> TownPortal;

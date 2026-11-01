@@ -30,6 +30,8 @@ type Run struct {
 	Kills   int                `json:"kills"`
 	XP      int64              `json:"xp"`
 	Metrics map[string]float64 `json:"metrics"`
+	// Table is the leveler skill table the bot reported on its minute lines (last non-empty value); "" in older logs. Set by the caller (LogTable).
+	Table string `json:"table,omitempty"`
 	// States is the minute-count share per bot activity group (state field); empty in old logs.
 	States map[string]float64 `json:"states,omitempty"`
 	// Invalid is why the run must not count as exposure (crashed or short seed, unreadable lines); the verdict

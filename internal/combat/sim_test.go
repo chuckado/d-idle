@@ -683,3 +683,17 @@ func TestStaticFieldSkippedOnBloodRaven(t *testing.T) {
 		t.Fatal("static field opened on Blood Raven with staticCastsBR 0")
 	}
 }
+
+// fixstatic: a character that never learned Static Field (the fresh table) gets no opener and no cold-immune fallback.
+func TestStaticFieldNeverPlannedWithoutTheSkill(t *testing.T) {
+	h := newHarness(t)
+	h.f.SetHotkeys(map[int]string{36: "f8"})
+	p := &d2.Player{Skills: []d2.Skill{{ID: 36, Bonus: 1}}, Mana: 200, MaxMana: 200}
+	tg := Target{Boss: true, Elite: true, Dist: 3, LifePct: 100, Mon: &data.Monster{Key: "andariel"}}
+	if _, ok := h.f.staticOpener(p, &tg, &track{}); ok {
+		t.Fatal("static field opener without the skill")
+	}
+	if _, ok := h.f.fallbackSkill(p, &tg); ok {
+		t.Fatal("static field fallback without the skill")
+	}
+}
