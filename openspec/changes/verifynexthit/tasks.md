@@ -11,6 +11,7 @@ owns:
   - openspec/changes/verifynexthit/
   - tools/emu/verify_nexthit.py
   - tools/emu/test_verify_nexthit.cpp
+  - tools/emu/verify_nexthit_compare.py
   - docs/research/pr-nexthit-verifier.md
   - docs/research/pr-bundle-queue.md
 exclusive: []

@@ -68,13 +68,23 @@ int main(int argc, char** argv) try {
     world.actor->player.y = (float(cy) + 0.5f) / 5;
     // a MonStats row per size: the first hostile-looking row of that size from my own list, else any
     std::array<int, 4> kind{ -1, -1, -1, -1 };
-    for (const char* name : { "quillrat1", "fallen1", "skeleton1", "zombie1", "brute1", "wendigo1", "fetish1", "sandmaggot1" })
+    for (const char* name : { "bat1", "fetish1", "imp1", "quillrat1", "fallen1", "skeleton1", "zombie1", "brute1", "wendigo1", "sandmaggot1" })
         if (auto f = data->monsters.by_id.find(name); f != data->monsters.by_id.end()) {
             const int size = data->monsters.types[f->second].size;
             if (size >= 1 && size <= 3 && kind[std::size_t(size)] < 0) kind[std::size_t(size)] = int(f->second);
         }
-    for (std::size_t row = 0; row < data->monsters.types.size(); ++row)
-        if (const int size = data->monsters.types[row].size; size >= 1 && size <= 3 && kind[std::size_t(size)] < 0) kind[std::size_t(size)] = int(row);
+    for (const char* name : { "bat1", "fetish1", "imp1", "quillrat1", "fallen1", "skeleton1", "zombie1" })
+        if (auto f = data->monsters.by_id.find(name); f != data->monsters.by_id.end()) std::fprintf(stderr, "%s size %d\n", name, data->monsters.types[f->second].size);
+    {
+        d2d::rules::Rng probe{ 3 };
+        for (std::size_t row = 0; row < data->monsters.types.size(); ++row) {
+            const int size = data->monsters.types[row].size;
+            if (size < 1 || size > 3 || kind[std::size_t(size)] >= 0) continue;
+            const Monster m = make_monster(*data, int(row), 10, 10, probe, 0);
+            if (m.targetable() && m.alive() && data->monsters.types[row].id.find("chicken") == std::string::npos) kind[std::size_t(size)] = int(row);
+        }
+    }
+    for (int s = 1; s <= 3; ++s) if (kind[std::size_t(s)] < 0) { std::fprintf(stderr, "no size %d\n", s); return 1; }
     for (int s = 1; s <= 3; ++s) std::fprintf(stderr, "size %d row %d %s\n", s, kind[std::size_t(s)], data->monsters.types[std::size_t(kind[std::size_t(s)])].id.c_str());
     const int nova = data->skills.by_name.at("Nova"), frost = data->skills.by_name.at("Frost Nova");
     const Crowd crowd;
