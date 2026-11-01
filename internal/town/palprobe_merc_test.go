@@ -1,6 +1,10 @@
-package merc
+package town_test
 
-import "testing"
+import (
+	"testing"
+
+	. "d2lod-bot/internal/merc"
+)
 
 // PALPROBE part B (d): the Act 2 mercenary policy for a Paladin (a melee class with auras of its own). Normal asks for
 // Defiance, then Prayer; Might only appears from Nightmare. Nothing in the policy is Paladin specific: the class
