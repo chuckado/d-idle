@@ -130,11 +130,14 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 				fl := &fleeState{exit: input.Point{X: n.mouthLast.x, Y: n.mouthLast.y}, goal: away}
 				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return fl.goal, 3, nil }, walkOpts{timeout: 10 * time.Second, oneClick: true, flee: fl})
 				n.inMouth = false
+				// FIXMOUTHLOOP2: the nested walk bumped walkSeq; without this the next iteration saw mouthSeq != walkSeq
+				// and stepped away again, about 7 ms per round until the timeout (V DRILLS20). One attempt per walk.
+				mouthSeq = n.walkSeq
 				if errors.Is(err, ErrLevelChanged) {
 					n.noteMouthBounce() // the same step again would fire the same trigger (FIXNAV)
 				}
-				if errors.Is(err, ErrLevelChanged) || ctx.Err() != nil {
-					return err
+				if errors.Is(err, ErrLevelChanged) || errors.Is(err, ErrMouthGate) || ctx.Err() != nil {
+					return err // the gate held: the caller (Fighter.move) backs off instead of walking from here again
 				}
 				continue
 			}

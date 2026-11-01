@@ -854,7 +854,16 @@ func (f *Fighter) move(ctx context.Context, p input.Point) error {
 		// loop re-picked the same flee point (live: m2early seed 2, 40 iterations on one point, watchdog fired)
 		return f.sleep(ctx, ms(f.tune().PollMs))
 	}
+	if f.mouthHoldActive() {
+		f.mouthHold.skips++ // FIXMOUTHLOOP: the same walk from here was just held by the mouth gate
+		return f.sleep(ctx, ms(f.tune().PollMs))
+	}
 	err := f.mv.GoTo(ctx, p)
+	if isMouthHold(err) && ctx.Err() == nil {
+		f.noteMouthHold(p, err)
+	} else if err == nil {
+		f.mouthHold = mouthHoldState{}
+	}
 	if errors.Is(err, input.ErrAlreadyThere) && ctx.Err() == nil {
 		// arrived (the goal snapped onto our own cell): not a failed walk. It still costs a tick, see below.
 		f.log().Debug("combat move: already there", "to", p)

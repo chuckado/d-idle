@@ -7,3 +7,5 @@ allow_merges:
   - 0226219   # basicsfix branch: merge origin/main commit, no Change trailer (history, not rewritten)
   - 9720f1b   # cardboard: coordinator-style doc plus stub, no card
   - 3f62842   # fixdenbounce: evidence doc only, no card (coordinator brief)
+  - 0e83373   # drills20: merge origin/main commit, no Change trailer (history, not rewritten)
+  - 6bb01a0   # fixmouthloop2: merge origin/main commit, no Change trailer

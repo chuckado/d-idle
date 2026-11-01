@@ -79,3 +79,12 @@ internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
 internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+internal/combat/mouthhold.go  fixmouthloop  fixmouthloop
+internal/combat/fixmouthloop_test.go  fixmouthloop  fixmouthloop
+docs/fixmouthloop.md  fixmouthloop  fixmouthloop
+openspec/changes/fixmouthloop/**  fixmouthloop  fixmouthloop
+openspec/changes/drills20/**  drills20  drills20
+internal/nav/fixmouthloop2_test.go  fixmouthloop2  fixmouthloop2
+docs/fixmouthloop2.md  fixmouthloop2  fixmouthloop2
+openspec/changes/fixmouthloop2/**  fixmouthloop2  fixmouthloop2
+openspec/changes/drills21/**  drills21  drills21

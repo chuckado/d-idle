@@ -1,0 +1,300 @@
+time=2026-11-01T08:51:42.211-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:42.215-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T08:51:42.303-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:42.310-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=100 potions=0 dodges=0 sec=0 casts=0 kites=0 approaches=0 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T08:51:42.312-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.313-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T08:51:42.313-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+time=2026-11-01T08:51:42.329-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.333-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.335-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.338-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.341-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.344-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.346-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.348-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.352-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.357-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.359-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.362-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.364-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.368-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.370-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.374-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.376-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.380-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.381-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.385-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.389-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.392-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.400-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.403-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.410-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.455-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=10 minlife=99 potions=0 dodges=0 sec=6 casts=5 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.83"
+time=2026-11-01T08:51:42.457-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.460-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.464-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.492-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.496-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.499-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.502-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.508-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.511-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.515-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.518-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.520-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.541-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.553-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T08:51:42.644-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:42.650-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T08:51:42.655-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:42.662-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.662-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T08:51:42.662-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:42.671-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:48 Y:161}" near=1
+time=2026-11-01T08:51:42.678-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.679-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.680-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.680-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+time=2026-11-01T08:51:42.680-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:42.691-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:55 Y:162}" near=1
+time=2026-11-01T08:51:42.692-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.693-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.722-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=4 minlife=99 potions=0 dodges=0 sec=4 casts=6 kites=0 approaches=2 novas=0 forced=0 castsPerSec=1.47"
+time=2026-11-01T08:51:42.731-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=99 potions=0 dodges=0 sec=7 casts=2 kites=0 approaches=3 novas=0 forced=0 castsPerSec=0.26"
+time=2026-11-01T08:51:42.736-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=99 potions=0 dodges=0 sec=9 casts=0 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T08:51:42.737-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.745-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.747-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.751-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.755-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.759-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.763-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.767-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.773-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.776-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.780-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.783-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.805-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.811-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.817-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.819-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.822-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.831-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:42.837-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.854-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:42.870-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.882-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:162}" near=4
+time=2026-11-01T08:51:42.883-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.915-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:88 Y:162}" near=5
+time=2026-11-01T08:51:42.917-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.954-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.957-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.965-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:42.967-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=12 minlife=97 potions=0 dodges=0 sec=4 casts=3 kites=0 approaches=4 novas=0 forced=0 castsPerSec=0.73"
+time=2026-11-01T08:51:42.987-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=98 potions=0 dodges=0 sec=10 casts=0 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T08:51:42.989-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=7 minlife=98 potions=0 dodges=1 sec=15 casts=1 kites=0 approaches=2 novas=0 forced=0 castsPerSec=0.06"
+time=2026-11-01T08:51:42.990-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.000-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.003-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.007-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.010-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.014-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.019-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.023-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.027-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.030-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.036-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.041-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.049-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.054-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.060-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.064-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.067-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.071-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.080-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.084-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.087-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.091-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.094-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.097-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.103-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.107-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T08:51:43.212-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:43.218-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T08:51:43.226-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T08:51:43.233-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.233-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T08:51:43.233-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.242-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:48 Y:161}" near=1
+time=2026-11-01T08:51:43.251-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.257-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.258-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.259-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+time=2026-11-01T08:51:43.259-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.280-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=1 minlife=96 potions=0 dodges=0 sec=4 casts=3 kites=0 approaches=3 novas=0 forced=0 castsPerSec=0.61"
+time=2026-11-01T08:51:43.284-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=0 minlife=96 potions=0 dodges=0 sec=6 casts=0 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.00"
+time=2026-11-01T08:51:43.285-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T08:51:43.294-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:41 Y:158}" near=1
+time=2026-11-01T08:51:43.300-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.300-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:150}" to="{X:47 Y:169}"
+time=2026-11-01T08:51:43.300-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.314-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:47 Y:167}" near=1
+time=2026-11-01T08:51:43.347-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=4 minlife=96 potions=0 dodges=0 sec=4 casts=6 kites=0 approaches=0 novas=0 forced=0 castsPerSec=1.47"
+time=2026-11-01T08:51:43.354-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=1 minlife=96 potions=0 dodges=0 sec=7 casts=1 kites=0 approaches=1 novas=0 forced=0 castsPerSec=0.13"
+time=2026-11-01T08:51:43.370-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.370-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:149}" to="{X:40 Y:169}"
+time=2026-11-01T08:51:43.370-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.389-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.394-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T08:51:43.395-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:148}" to="{X:40 Y:168}"
+time=2026-11-01T08:51:43.395-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.403-05:00 level=INFO msg="nav stalled by monsters, yielding" pos="{X:38 Y:151}" near=1
+time=2026-11-01T08:51:43.408-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:148}"
+time=2026-11-01T08:51:43.409-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:146}"
+time=2026-11-01T08:51:43.409-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:145}"
+time=2026-11-01T08:51:43.410-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:143}"
+time=2026-11-01T08:51:43.411-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:142}"
+time=2026-11-01T08:51:43.412-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:141}"
+time=2026-11-01T08:51:43.413-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:140}"
+time=2026-11-01T08:51:43.414-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:144}"
+time=2026-11-01T08:51:43.414-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:143}"
+time=2026-11-01T08:51:43.415-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:142}"
+time=2026-11-01T08:51:43.416-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.417-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.418-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.419-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.419-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.420-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.421-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.422-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.422-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.423-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.424-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.425-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.426-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T08:51:43.426-05:00 level=INFO msg="combat fight area=8 diff=0 danger=0 kills=0 damage=2 minlife=95 potions=0 dodges=0 sec=4 casts=1 kites=0 approaches=7 novas=0 forced=0 castsPerSec=0.25"
+time=2026-11-01T08:51:43.428-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:138}" to="{X:37 Y:140}" as="{X:42 Y:157}" how=away rewrites=1
+time=2026-11-01T08:51:43.429-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.431-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.433-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.433-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.433-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.434-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.436-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.437-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.439-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.440-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.440-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.440-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.442-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.444-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.445-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.446-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.446-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.446-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.448-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.450-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.452-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.452-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.452-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.453-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.455-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.457-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.459-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.460-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.460-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.460-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.462-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.465-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.467-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.467-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.467-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.468-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.470-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.472-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.473-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.474-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.474-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.474-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.476-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.478-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.480-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.480-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.480-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.481-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.483-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.485-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.487-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.487-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.487-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.487-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.489-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.491-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.493-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.494-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.494-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.494-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.496-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.499-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.500-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.501-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.501-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.501-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.503-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.505-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.507-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.507-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.507-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.508-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.510-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.512-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.514-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.514-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.514-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.515-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.517-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.518-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.520-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.521-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.521-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.521-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.523-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.525-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.527-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.527-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.527-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.528-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.530-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.532-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.534-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.534-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.534-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.535-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.537-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.539-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.541-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.542-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.542-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.542-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.544-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.546-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.548-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.548-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.548-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.549-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.551-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.553-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.554-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.555-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.555-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.555-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.557-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.559-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.561-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T08:51:43.561-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T08:51:43.561-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T08:51:43.562-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T08:51:43.563-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T08:51:43.565-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T08:51:43.567-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
