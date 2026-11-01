@@ -190,3 +190,9 @@ Expected effect (U): roughly a third of the tokens, and the verified surface gro
 - I did not read code beyond greps; "fixed" claims are taken from INDEX s4 and commit subjects (S).
 - Merge times are commit dates (V, 11:20 to 11:38); the live binary mtime is 10:48 (V).
 - The CFS weight factor and Tdarr ownership on the worker host are U.
+
+## Second machine for PR vetting (card macvet, 2026-11-01)
+
+The portable differentials (the d2d half of each, with the stored game-side data or the emulator), the Python checks (ruff with B905, tooling tests, pr_guard, presubmit --quick), clang-tidy and `git merge-tree` run on a second machine (arm64 macOS), so the worker host stays free for soaks and drills; Linux binaries, drills and anything live stay on the worker host.
+Parity was checked on one lab branch and two PR heads: armor 0 of 108,506, freeze-resume 0 of 12,548 and 12,516 frozen, armor verifier 0 of 134,400, curse adj 0 of 147,628 (dealt 1,958, not claimed), hit-once 0 of 100,198.
+One real parity bug: clang on arm64 fuses multiply-adds, which changed 5 of 842,156 hit-once lines until the build used `-ffp-contract=off`; vet only with that flag.

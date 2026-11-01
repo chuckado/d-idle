@@ -51,6 +51,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
+| [macvet](../../openspec/changes/macvet/) | in-progress | macvet | `openspec/changes/macvet/**` | - |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
@@ -101,6 +102,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: 2 seeds x 4 virtual hours from clvl 9 after Blood Raven on hidden d2d: the Rogue claimed exactly once per seed, 0 paid Act 1 hires, merc alive at least 70 percent of field time, every revive logged with price and gold delta within the revive rule (raw in docs/probes/merc)
 - change m3-merc: go test -p 1 ./internal/merc ./internal/bot -run 'Merc|Claim' passes; go test ./internal/env -run EveryKnob passes with the d2d default
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
+- change macvet: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
