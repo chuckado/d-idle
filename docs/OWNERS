@@ -52,3 +52,10 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+tools/emu/verify_freeze.py  verifyfreeze  verifyfreeze
+tools/emu/verify_freeze_spawn.py  verifyfreeze  verifyfreeze
+tools/emu/verify_freeze_mode.inc  verifyfreeze  verifyfreeze
+docs/research/pr-freeze-proof.md  verifyfreeze  verifyfreeze
+docs/research/pr-bundle-queue.md  verifyfreeze  verifyfreeze
+docs/BACKLOG.md  verifyfreeze  verifyfreeze
+openspec/changes/verifyfreeze/**  verifyfreeze  verifyfreeze
