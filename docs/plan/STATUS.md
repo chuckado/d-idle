@@ -109,6 +109,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 7a408e6 11-01 10:54 `Merge agent/boardlinks: link the 8 opened work-item issues on the board` (boardlinks)
 - e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
 - 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
 - 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
@@ -118,5 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8827073 11-01 10:08 `Merge agent/buildv3: fallback-lightning-v3 FRESH skill rows (opt-in, default stays v2)` (buildv3)
 - c7f140e 11-01 10:05 `Merge agent/buildflex: build-flexibility audit (docs only)` (buildflex)
 - 4fbfbf2 11-01 10:00 `Merge agent/armorhit: Frozen Armor d2d vs game.exe proof, PR draft (docs only, card kept open)` (armorhit)
-- 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
 <!-- statusgen:end -->
