@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [decompfreeze](../../openspec/changes/decompfreeze/) | in-progress | decompfreeze | `docs/research/freeze-rules-trace.md`<br>`docs/research/pr-freeze-proof.md`<br>`docs/research/pr-freeze-draft.md`<br>`tools/emu/freeze_rules.py`<br>`tools/emu/freeze_rules_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/decompfreeze/**` | `fork-branch:fix/freeze-rules` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -71,6 +72,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change decompfreeze: differential on real d2d builds: before > 0, after 0 per claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
+- change decompfreeze: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixmeter: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixmeter: live proof after merge: spawn a pack, fight, compare the Meter totals with the monsters' life deltas and the kill count (docs/fixmeter.md)
