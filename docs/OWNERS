@@ -62,3 +62,10 @@ docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
 docs/review-strategy.md  specmin  soak-minutes-virtual
 docs/d2d-soak.md  specmin  soak-minutes-virtual
 docs/geninv.md  specmin  soak-minutes-virtual
+tools/emu/verify_freeze.py  verifyfreeze  verifyfreeze
+tools/emu/verify_freeze_spawn.py  verifyfreeze  verifyfreeze
+tools/emu/verify_freeze_mode.inc  verifyfreeze  verifyfreeze
+docs/research/pr-freeze-proof.md  verifyfreeze  verifyfreeze
+docs/research/pr-bundle-queue.md  verifyfreeze  verifyfreeze
+docs/BACKLOG.md  verifyfreeze  verifyfreeze
+openspec/changes/verifyfreeze/**  verifyfreeze  verifyfreeze
