@@ -30,12 +30,14 @@ const (
 const (
 	stateAmplify   = 9
 	stateBoneArmor = 14
-	stateWeaken    = 19
+	// stateFrozenArmor is states.txt "frozenarmor" (S, stock row order; d2.StateFrozenArmor).
+	stateFrozenArmor = d2.StateFrozenArmor
+	stateWeaken      = 19
 )
 
 var (
 	curseStates = map[string]int{"Amplify Damage": stateAmplify, "Weaken": stateWeaken}
-	buffStates  = map[string]int{"Bone Armor": stateBoneArmor}
+	buffStates  = map[string]int{"Bone Armor": stateBoneArmor, "Frozen Armor": stateFrozenArmor}
 	curseNames  = map[string]bool{"Amplify Damage": true, "Weaken": true, "Lower Resist": true, "Dim Vision": true,
 		"Terror": true, "Confuse": true, "Life Tap": true, "Attract": true, "Decrepify": true}
 	// golems in preference order. Iron Golem needs an item in the world and Blood Golem costs life: not used (U).
@@ -456,19 +458,47 @@ func (f *Fighter) necroTick(ctx context.Context, snap *d2.Snapshot) (bool, error
 	return f.corpseExplode(ctx, snap, hs)
 }
 
-// buffDue says whether an armor or shield needs a cast. Bone Armor: by state when the state is proven readable
-// (seen present once), with a 4 s grace after a cast; otherwise (and for every other buff) the BuffRecastSec timer.
+// buffDue says whether an armor or shield needs a cast.
+//   - State readable (Player.States, V live for Bone Armor 14; Frozen Armor 10 is the stock states.txt id, S): present
+//     means up. Bone Armor has no duration (it ends when its absorb is used up), so present = not due. An armor with a
+//     real duration is recast BuffMarginSec before it ends (the state is a bit, not a timer: the cast time is the
+//     clock). Once seen present the state is learned: absent later (after a 4 s grace after the cast) = due at once.
+//   - Otherwise the timer: the shorter of BuffRecastSec and the real duration minus the margin, so a 150 s knob can no
+//     longer outlast a 120 s Frozen Armor.
+//
+// Time is the bot's clock (f.now): under lockstep it runs at least as fast as the game's, which only recasts early.
 func (f *Fighter) buffDue(p *d2.Player, sp SkillSpec) bool {
 	f.necro.init()
 	at, seen := f.buffAt[sp.ID]
+	limit, timed := f.buffLimit(sp)
 	if st, ok := buffStates[sp.Name]; ok {
 		if p.States.Has(st) {
 			f.necro.learned[st] = true
-			return false
+			return timed && seen && f.now().Sub(at) >= limit
 		}
 		if f.necro.learned[st] {
 			return !seen || f.now().Sub(at) >= 4*time.Second
 		}
 	}
-	return !seen || f.now().Sub(at) >= time.Duration(f.tune().BuffRecastSec)*time.Second
+	return !seen || f.now().Sub(at) >= limit
+}
+
+// buffLimit is how long after a cast the buff is recast by the clock: BuffRecastSec, or less when the skill's real
+// duration at its current level (Skills.txt auralencalc, 25 frames per second) minus BuffMarginSec is shorter. timed
+// says that a real duration is known.
+func (f *Fighter) buffLimit(sp SkillSpec) (limit time.Duration, timed bool) {
+	limit = time.Duration(f.tune().BuffRecastSec) * time.Second
+	if f.cat == nil {
+		return limit, false
+	}
+	s := f.cat.Skill(sp.ID)
+	if s == nil {
+		return limit, false
+	}
+	frames, ok := s.AuraFrames(sp.Level)
+	if !ok {
+		return limit, false
+	}
+	real := time.Duration(frames)*40*time.Millisecond - time.Duration(f.tune().BuffMarginSec)*time.Second
+	return min(limit, max(real, 4*time.Second)), true
 }

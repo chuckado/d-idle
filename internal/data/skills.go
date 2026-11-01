@@ -52,6 +52,7 @@ type Skill struct {
 	ELen           int
 	ELevLen        [3]int
 	Calc           [4]string // calc1..calc4 (radius, duration, ...)
+	AuraLenCalc    string    // auralencalc: duration of the state the skill switches on (frames), see AuraFrames
 	Param          [8]int    // Param1..8 values (par1..par8 in formulas)
 }
 
@@ -63,7 +64,7 @@ var skillCols = []string{
 	"MaxDam", "MaxLevDam1", "MaxLevDam2", "MaxLevDam3", "MaxLevDam4", "MaxLevDam5", "DmgSymPerCalc",
 	"EType", "EMin", "EMinLev1", "EMinLev2", "EMinLev3", "EMinLev4", "EMinLev5",
 	"EMax", "EMaxLev1", "EMaxLev2", "EMaxLev3", "EMaxLev4", "EMaxLev5", "EDmgSymPerCalc", "ELen", "ELevLen1", "ELevLen2", "ELevLen3",
-	"calc1", "calc2", "calc3", "calc4", "Param1", "Param2", "Param3", "Param4", "Param5", "Param6", "Param7", "Param8",
+	"auralencalc", "calc1", "calc2", "calc3", "calc4", "Param1", "Param2", "Param3", "Param4", "Param5", "Param6", "Param7", "Param8",
 }
 
 var skillDescCols = []string{"skilldesc", "SkillPage", "SkillRow", "SkillColumn", "str name"}
@@ -109,6 +110,7 @@ func loadSkills(t, desc *Table) []*Skill {
 		for k := 0; k < 3; k++ {
 			s.ELevLen[k] = r.Int("ELevLen" + itoa(k+1))
 		}
+		s.AuraLenCalc = r.Str("auralencalc")
 		for k := 0; k < 4; k++ {
 			s.Calc[k] = r.Str("calc" + itoa(k+1))
 		}
@@ -277,4 +279,21 @@ func (e *Experience) LevelFor(exp int64) int {
 		}
 	}
 	return lv
+}
+
+var linCalc = regexp.MustCompile(`^ln([1-8])([1-8])\b`)
+
+// AuraFrames is the duration, in frames (25 per second), of the state the skill switches on at the given level:
+// the leading `lnAB` term of auralencalc is Param A + Param B x (level-1) (Frozen Armor: ln34 = 3000 + 300 x (L-1),
+// 120 s at level 1; Energy Shield: ln12 = 3600 + 1500 x (L-1)). The synergy term some armors add after it
+// (+250 frames per point in the sibling armors) is left out: that errs on the short side, which recasts early, never late.
+// ok is false when the skill has no auralencalc or it is not of that form (VERIFIED OFFLINE against Skills.txt rows, docs/fixrecast.md).
+func (s *Skill) AuraFrames(level int) (frames int, ok bool) {
+	m := linCalc.FindStringSubmatch(strings.TrimSpace(strings.ToLower(s.AuraLenCalc)))
+	if m == nil || level < 1 {
+		return 0, false
+	}
+	a, b := int(m[1][0]-'1'), int(m[2][0]-'1')
+	frames = s.Param[a] + s.Param[b]*(level-1)
+	return frames, frames > 0
 }
