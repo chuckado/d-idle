@@ -2,7 +2,7 @@
 
 ```yaml
 change: macvet
-status: in-progress
+status: archived
 agent: macvet
 branch: agent/macvet
 worktree: ~/code/d2lod-wt/macvet
@@ -12,8 +12,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Second-machine vetting built and run on three branches (not the live game). Parity on the stored differentials: armor 0 of 108,506, freeze-resume 0 of 12,548 / 12,516, armor verifier 0 of 134,400, curse adj 0 of 147,628 (dealt 1,958 unclaimed), hit-once 0 of 100,198 after one parity bug (fused multiply-add on arm64, fixed with -ffp-contract=off). Private ops repo holds the wrapper and doc."
+result: "second-machine vetting wrapper works; parity with the game host byte-identical on armor, freeze-resume, curse and hit-once (with -ffp-contract=off); one arm64 fused multiply-add parity bug found and fixed in the wrapper; not for Linux binaries or live runs"
 live: "not verified live: no game run; offline differentials on stored data and game.exe under the emulator"
+merge: 7c4fd4b
 ```
 
 - [x] toolchain on the second machine, checkout, d2d test builds
