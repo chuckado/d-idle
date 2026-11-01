@@ -57,7 +57,10 @@ P23 verdict (fixwp, 2026-10-31): live PASS on d2d for act 1 rows 1 and 8 and act
 | P2 | D1.P2 | PASS | reader boxes = engine boxes for 5 belt types (8/8/12/12/16), overflow stays in the pack |
 | P3 | D1.P3 | PASS | each drink removes one potion of the asked kind from the right column; empty kind returns the error; D1.P3m (merc) BLOCKED: no merc cheat (`debug merc hire\|kill\|revive` exists in the lab binary as of 2026-10-31, docs/forkcheats.md: unblocked, rerun pending) |
 | P7 | D1.P7a, D1.P7 | PASS | engine auto-belts a ground potion; pickit takes both and reports picked 2 (arrival by held count works) |
-| P10 | fixrecast | OFFLINE | armors (buff upkeep) are recast by Skills.txt duration minus a margin and the Frozen Armor state, not a flat 150 s; live recipe in [fixrecast.md](fixrecast.md) |
+| P10 | fixrecast | LIVE (drills13) | armors (buff upkeep) are recast by Skills.txt duration minus a margin, not a flat 150 s; live recipe in [fixrecast.md](fixrecast.md); D-fro1/D-fro2 PASS with a fresh tables cache, FAIL on a stale one (see the next rows) |
+| P10 | D-fro1, D-fro2 | PASS | Frozen Armor level 1 / 2: state on 8 ticks after the cast, gone 120.32 s / 132.32 s after the command (table 120 s / 132 s), the bot's Buff recast at 114.0 s / 126.0 s, armor never absent in a simulated 600 s (775 to 819 samples); `Player.States` is NOT readable on d2d (the state read here is the lab verb `debug states`) |
+| P10 | D-fro1 (stale cache) | FAIL | tables cache made before fixrecast has no auralencalc column: the bot recasts every 150 s and the armor is down 118 s of 600 (data.Open does not notice a changed column list) |
+| P26 | D-m1 | RECORD | Fire Bolt on d2d: mana paid on the first tick after the command (+1), missile made on tick +8; a forced hit at +1..+7 cuts the cast with no missile and the mana stays spent |
 | P10 | fixportalmelee | OFFLINE | a cast under 3+ adjacent attackers is cut (soak 2 death): Decide/AbortFight choose potion or chicken instead; live recipe in [fixportalmelee.md](fixportalmelee.md) |
 | P10 | D2.a | PASS | portal verb from the field: 1 right click, 32 virtual ticks from the call (click at +22, the fixed panel sleeps), one portal object, one source spent |
 | P10 | D2.a2 | PASS | raw cast: portal object 8 ticks after the right click, 3 casts, identical (trace: about 7) |

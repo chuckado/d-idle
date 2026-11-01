@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [drills13](../../openspec/changes/drills13/) | in-progress | drills13 | `openspec/changes/drills13/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
@@ -74,6 +75,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change drills13: gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes

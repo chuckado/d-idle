@@ -1,0 +1,9 @@
+d2dslot: got slot 1
+DRILL D-fro1 P10 FAIL the armor was absent in 567 samples (118040 ms) after it had been on | intended: level 1: the armor state switches on after a cast and lasts 120000 ms; the bot's Buff recasts at buffLimit before it ends, so the armor is never down in a simulated 600 s | observed: DURATION (no bot): state on after 320 ms (buffs="40:1,"), gone after 120320 ms, table says 120000 ms, cast cost 6.9 points || BOT: level 1, 600 s simulated, 1512 samples (longest gap between samples 2080 ms), casts at game s [0.0 150.0 300.0 450.0] (intervals 150.0 150.0 150.0 s; bot clock intervals [150.0 150.0 150.0] s), first state-on sample at 2080 ms, down samples 567 (118040 ms), mana refills 0, bot's limit 114000 ms, Player.States readable by the bot: false | log: table: Skills.txt row 40 auralencalc="" params=[30 5 3000 300 30 3 250 5] AuraFrames(1)=0 ok=false ; combat buff skill=Frozen Armor ; combat buff skill=Frozen Armor
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D-fro1    P10   FAIL     -    the armor was absent in 567 samples (118040 ms) after it had been on
+cheat verbs used (each ledgered with a reason): debug points 40 1
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T01:05:47.166-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
