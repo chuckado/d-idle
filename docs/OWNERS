@@ -75,3 +75,5 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
+docs/research/pr-mods-draft-v2.md  modsprep  modsprep
+docs/research/pr-mods-evidence-addendum.md  modsprep  modsprep

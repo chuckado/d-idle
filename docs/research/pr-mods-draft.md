@@ -2,6 +2,8 @@
 
 > status: draft (card buildmods, 2026-11-01), not posted. Proof and numbers: [pr-mods-proof.md](pr-mods-proof.md). Opens only with the user's go, in the next bundle slot.
 
+> status: superseded by [pr-mods-draft-v2.md](pr-mods-draft-v2.md) (verifier edits applied, card modsprep); kept as written.
+
 Title: `Boss and minion spawn stats: base-level life, minion leveladd, ghostly and berserker`
 
 ---
