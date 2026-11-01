@@ -2,7 +2,8 @@
 
 ```yaml
 change: crfollow159
-status: done
+status: archived
+merge: 7739d9d
 skip_specs: true
 agent: crfollow159
 branch: agent/crfollow159
@@ -15,7 +16,7 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit and the range"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "One valid docstring finding fixed in c4e9db97 on the PR branch (plain push), replied to the bot; code AST unchanged; not a live game change."
+result: "CodeRabbit finding on #159 fixed with one docstring-only follow-up commit (c4e9db97, no force-push) and answered; #160 untouched (review limit); not verified live (docs/process only)"
 ```
 
 ## 1. Work
