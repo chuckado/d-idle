@@ -119,3 +119,11 @@ internal/resource/sim.go  skmeleewire  skmeleewire
 internal/resource/wire_test.go  skmeleewire  skmeleewire
 docs/skmeleewire.md  skmeleewire  skmeleewire
 openspec/changes/skmeleewire/**  skmeleewire  skmeleewire
+tools/contrib/board.py  boardgrow  boardgrow
+tools/contrib/tests/test_board.py  boardgrow  boardgrow
+docs/community/open-work.md  boardgrow  boardgrow
+docs/community/work-board.md  boardgrow  boardgrow
+docs/community/work-archive.md  boardgrow  boardgrow
+docs/community/issues.tsv  boardgrow  boardgrow
+docs/contributing/agent-work.md  boardgrow  boardgrow
+openspec/changes/boardgrow/**  boardgrow  boardgrow

@@ -12,5 +12,17 @@ Finished items (2) are in the [archive](work-archive.md).
 | SKGROUND | ground skills (Blizzard, Meteor, Hydra, Fire Wall, Thunder Storm, Frozen Orb) | L | decomp | proposed | [brief](open-work.md#skground-ground-skills-blizzard-meteor-hydra-fire-wall-thunder-storm-frozen-orb) | [issue](https://github.com/shatteredeagle/d-idle/issues/4) |
 | VERIFY-SKMANA | independent re-check of the mana trace | S | verify | ready | [brief](open-work.md#verify-skmana-independent-re-check-of-the-mana-trace) | [issue](https://github.com/shatteredeagle/d-idle/issues/7) |
 | VERIFY-WAYPOINT | independent re-check of the waypoint refusal claim | S | verify | ready | [brief](open-work.md#verify-waypoint-independent-re-check-of-the-waypoint-refusal-claim) | [issue](https://github.com/shatteredeagle/d-idle/issues/8) |
+| VERIFY-FREEZE-KINDS | independent re-check of which monsters game.exe can freeze | S | verify | ready | [brief](open-work.md#verify-freeze-kinds-independent-re-check-of-which-monsters-gameexe-can-freeze) | (not opened yet) |
+| VERIFY-TELEPORT-ROOM | independent re-check of the Teleport room rule | S | verify | ready | [brief](open-work.md#verify-teleport-room-independent-re-check-of-the-teleport-room-rule) | (not opened yet) |
+| VERIFY-AIDEL | independent re-check of the monster think period | S | verify | ready | [brief](open-work.md#verify-aidel-independent-re-check-of-the-monster-think-period) | (not opened yet) |
+| VERIFY-SKMELEE2 | independent re-check of the melee deviations on the real build | M | verify | ready | [brief](open-work.md#verify-skmelee2-independent-re-check-of-the-melee-deviations-on-the-real-build) | (not opened yet) |
+| VERIFY-SKRESIST | independent re-check of the resistance rules Q1 to Q10 | M | verify | ready | [brief](open-work.md#verify-skresist-independent-re-check-of-the-resistance-rules-q1-to-q10) | (not opened yet) |
+| SKGEARAR | attack rating terms from gear (stats 115, 116, 120, 123, 124, 179) | S | decomp | ready | [brief](open-work.md#skgearar-attack-rating-terms-from-gear-stats-115-116-120-123-124-179) | (not opened yet) |
+| SKSHIELD | does a shield's damage reach the player's stats | S | decomp | ready | [brief](open-work.md#skshield-does-a-shields-damage-reach-the-players-stats) | (not opened yet) |
+| SKCURSEVAL | the curse value calculations on game.exe against d2d | S | decomp | ready | [brief](open-work.md#skcurseval-the-curse-value-calculations-on-gameexe-against-d2d) | (not opened yet) |
+| SKDEFENDERS | hirelings and players as defenders against resistances | M | decomp | proposed | [brief](open-work.md#skdefenders-hirelings-and-players-as-defenders-against-resistances) | (not opened yet) |
+| SKIAS | swing speed, increased attack speed and the weapon speed modifier | M | decomp | proposed | [brief](open-work.md#skias-swing-speed-increased-attack-speed-and-the-weapon-speed-modifier) | (not opened yet) |
+| SKZEROHIT | what a zero-damage hit still triggers | M | decomp | proposed | [brief](open-work.md#skzerohit-what-a-zero-damage-hit-still-triggers) | (not opened yet) |
+| SKSTATEEV | the state events fired on a hit (FUN_005d3ac0) | L | decomp | proposed | [brief](open-work.md#skstateev-the-state-events-fired-on-a-hit-fun005d3ac0) | (not opened yet) |
 
-6 of 6 listed items are open (the rest are claimed).
+18 of 18 listed items are open (the rest are claimed).
