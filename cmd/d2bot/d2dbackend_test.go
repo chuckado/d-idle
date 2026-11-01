@@ -240,7 +240,11 @@ func synthTables(t *testing.T) string {
 	}
 	t.Cleanup(func() { os.RemoveAll(dir) })
 	for _, n := range []string{"monstats", "levels", "skills", "charstats", "experience", "itemtypes", "weapons", "armor", "misc"} {
-		if err := os.WriteFile(filepath.Join(dir, n+".tsv"), []byte("x\n"), 0o644); err != nil {
+		hdr := "x\n"
+		if n == "skills" {
+			hdr = "auralencalc\n" // data.CacheCurrent / Load require this column (fixbuff)
+		}
+		if err := os.WriteFile(filepath.Join(dir, n+".tsv"), []byte(hdr), 0o644); err != nil {
 			t.Fatal(err)
 		}
 	}
