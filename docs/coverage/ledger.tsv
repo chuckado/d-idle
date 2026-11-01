@@ -40,3 +40,4 @@ formulas	F07	READ-ONLY	docs/research/cast-trace-gameexe.md		2026-10-30	cast tick
 formulas	F10	READ-ONLY	docs/research/xp-award-trace.md		2026-10-30	award chain 0057e480 / 0057e2f0 read; per monster XP equal d2d; no differential
 formulas	F17	READ-ONLY	docs/research/sk-mana-trace.md		2026-11-01	regen FUN_005806f0 read equal to d2d; bot regen model 1.2-1.8x fast
 formulas	F09	TESTED-DEVIATION	docs/research/monster-mods-trace.md	157618	2026-10-31	boss and minion spawn stats D1 D2 G1; plain monsters by level not compared
+missiles	2-5,7-10,13-16,22-25,32,63-66,70-72,77-79,125-128,130,133,135,196-200,226,227,229,238,239,266,341,346,653	READ-ONLY	docs/research/monster-missile-trace.md		2026-11-01	game.exe launch record V run (mm_launch, 213 launches) vs d2d by source read and a port; D1 level bracket, D2 hitshift, D3 row element; no real-d2d run
