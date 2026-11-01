@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixstall4
-status: in-progress
+status: archived
 agent: fixstall4
 branch: agent/fixstall4
 worktree: ~/code/d2lod-wt/fixstall4
@@ -18,8 +18,8 @@ gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: H.pause x3 invocations open Kashya in 6 of 6 first-run tries and 6 of 6 second-run tries (docs/fixstall4.md)"
 live: "H.pause PASS x3 (DRILLS9): 6 of 6 first-run and 6 of 6 second-run tries open Kashya, 248 ticks each"
-merge:
-result: offline; live proof by DRILLS9 (see live:, docs/fixstall4.md)
+merge: 912086a
+result: "live PASS (DRILLS8 D6.d x3, NPC smoke; DRILLS9 H.pause 12 of 12 with fixstall4)"
 ```
 
 ## 1. Work
