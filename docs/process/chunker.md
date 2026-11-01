@@ -10,7 +10,8 @@
 |---|---|
 | item open (ready, proposed) and no issue | create the issue (label `work-item`, body from `board.issue_body`), add it to issues.tsv |
 | item `done`, or its issue has a MERGED linked PR | close with ONE templated comment (with the PR link); a merged PR with the item still open prints a todo to set `status: done` |
-| item removed from open-work.md, issue still open | close as not planned, reason from docs/community/withdrawn.tsv (`id<TAB>reason`), default "no longer on the roadmap" |
+| item moved to the archive ([../community/work-archive.md](../community/work-archive.md)) | known item, status done: an open issue is closed once as done, a closed issue is left alone, nothing is created or withdrawn |
+| item removed from open-work.md and the archive, issue still open | close as not planned, reason from docs/community/withdrawn.tsv (`id<TAB>reason`), default "no longer on the roadmap" |
 | body differs from the generated body | edit the body (title and id never change) |
 | `claiming` comment, no linked PR, no activity for 14 days | ONE nudge comment; 7 days later with no reply a release comment (printed todo: set `claimed` back to `ready`) |
 | issue closed but item still open | todo only (reopen or mark done) |
@@ -23,6 +24,10 @@ Dry run is the default. `--apply` does the writes, then rewrites issues.tsv and 
 3. Model `claude-sonnet-5-5`, thinking off (`{"type":"between_tools"}`: Sonnet 5.5 rejects `disabled`, claude-api skill), strict JSON with `add`, `retire`, `rescope`, `merge` and an `evidence` list per proposal. At most 2 calls (the second only if the first is not JSON), 8000 output tokens.
 4. Deterministic validation: schema, ids do not collide with items, issues or each other, sizes and kinds, `source` names a real queue row (state must fit the kind) or a BACKLOG name, every evidence path exists in the repo, titles plain, briefs pass the privacy scan, no request to share game files, MPQ data or disassembly, no Sorceress-only item (multi-build rule). Retire needs existing evidence. A failed proposal is listed under "Rejected" with the reason.
 5. Writes docs/community/groom-proposal.md (one section per proposal with evidence and the exact open-work.md edit). API failure, bad key, truncated or invalid answer: the file says "No model proposals: reason" and still lists the mechanical flags. The tool never edits open-work.md.
+
+## The archive rule
+
+When an item is done, set `- status: done` in open-work.md and run `python3 tools/contrib/board.py --archive` (add `--date YYYY-MM-DD` and `--by <public login>` if known; the default is today and "maintainer agents"). The section moves to docs/community/work-archive.md with `done`, `by` and `result` (the deliverable path) lines; work-board.md then lists only items that are not done. `board.py --check` fails while a done item still sits in open-work.md. `sync` reads both files (`board.load_all`): the issue is closed once with the templated comment, an archived item is never re-created and never counts as withdrawn, and issues.tsv keeps its line. `by` names a public GitHub login only if it appears in the closing pull request.
 
 ## Caps and safety
 
@@ -44,3 +49,14 @@ Dry run is the default. `--apply` does the writes, then rewrites issues.tsv and 
 Three real groom calls: about 31,400 input and 28 to 420 output tokens each (first call 37.8k input before the per-file trim; the estimator uses 2.3 characters per token, measured). Price at the Sonnet 5.5 rate of the claude-api skill is about 6 to 8 cents per run. Results: the first prompt produced one weak retire (a verify item retired because its queue row is done, which is exactly why a verify item exists) and two rejected proposals (a privacy-scan false positive on a run of short words, and a title with parentheses that the first check wrongly refused); both were fixed (prompt rule, title check). The last run returned no proposals, which is the expected answer for a backlog of eight fresh items.
 
 Dead end: using the Discord board-feed title cleaner for issue titles dropped the parentheses of existing titles; maintainer titles now use `issue_title` and only outside text uses the strict cleaner.
+
+## Dry run for the grown board (2026-11-01, card boardgrow)
+
+`sync` (dry run, read-only gh, from a scratch extraction of the branch) plans one `create` for each of the 12 new items and nothing for the archived two or the six existing items; with the write cap of 10 per run the last two creates are deferred to the next tick:
+
+```
+sync (dry run): 12 action(s) planned, 0 write(s) done
+  create  VERIFY-FREEZE-KINDS, VERIFY-TELEPORT-ROOM, VERIFY-AIDEL, VERIFY-SKMELEE2, VERIFY-SKRESIST
+  create  SKGEARAR, SKSHIELD, SKCURSEVAL, SKDEFENDERS, SKIAS, SKZEROHIT, SKSTATEEV
+  (no edit, close or withdraw actions; no todos)
+```
