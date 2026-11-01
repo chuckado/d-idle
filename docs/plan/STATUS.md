@@ -54,6 +54,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
+| [palfix](../../openspec/changes/palfix/) | in-progress | palfix | `docs/plan/data/build-paladin-normal30.json`<br>`docs/plan/data/build-paladin-zealot-lite.json`<br>`docs/plan/data/builds-endgame/barbarian_warcry_endgame90.json`<br>`docs/plan/data/builds-endgame/druid_tornado_endgame90.json`<br>`docs/plan/data/builds-endgame/necromancer_summoner_endgame90.json`<br>`docs/plan/data/builds-endgame/paladin_hammerdin_endgame90.json`<br>`docs/plan/data/builds-endgame/sorceress_blizzard_endgame90.json`<br>`docs/plan/data/builds-endgame/gen_endgame.py`<br>`docs/plan/data/potions-belt.json`<br>`internal/combat/simladder_test.go`<br>`internal/leveler/palprobe_ladder_test.go`<br>`internal/leveler/palzeal_test.go`<br>`internal/plandata/build-barbarian_warcry_endgame90.json`<br>`internal/plandata/build-druid_tornado_endgame90.json`<br>`internal/plandata/build-necromancer_summoner_endgame90.json`<br>`internal/plandata/build-paladin-normal30.json`<br>`internal/plandata/build-paladin-zealot-lite.json`<br>`internal/plandata/build-paladin_hammerdin_endgame90.json`<br>`internal/plandata/build-sorceress_blizzard_endgame90.json`<br>`internal/resource/manaheavy.go`<br>`internal/resource/manaheavy_test.go`<br>`internal/resource/sim_test.go`<br>`docs/palfix.md`<br>`openspec/changes/palfix/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -108,6 +109,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
+- change palfix: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -118,7 +120,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- c0209d4 11-01 13:22 `Merge origin/main into palfix` (-)
 - 8509a1b 11-01 13:16 `Merge agent/palprobe: offline Paladin probe and blocking class seams (profile id, per-class prefs, class row errors)` (palprobe)
+- 35df24f 11-01 13:16 `Merge origin/main into palfix` (-)
 - b960937 11-01 13:10 `Merge agent/forkrebase: private fork stack rebuilt on upstream as lab2-*` (forkrebase)
 - 1fccb88 11-01 13:03 `Merge agent/skmeleewire: wire melee blow and foe into the resource decision input` (skmeleewire)
 - 024c03e 11-01 12:58 `Merge agent/verifycurseimmune: independent verifier of the curse-immune PR candidate (READY)` (verifycurseimmune)
@@ -126,6 +130,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
 - 19c1daf 11-01 12:44 `Merge agent/upstreamsync: upstream merges recorded, mergeability table, fork rebase plan` (upstreamsync)
 - 370d5c2 11-01 12:40 `Merge agent/skmelee2: melee blow compared on a real d2d build` (skmelee2)
-- 63a8fbb 11-01 12:34 `Merge agent/bundledet: two-commit squash, determinism doc, body update` (bundledet)
-- 8be58bb 11-01 12:34 `Merge agent/bundlearmor: combined armor+resume upstream PR body (held)` (bundlearmor)
 <!-- statusgen:end -->
