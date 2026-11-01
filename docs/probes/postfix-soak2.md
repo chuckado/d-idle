@@ -100,5 +100,10 @@ Nav counts per virtual hour are unchanged from soak 1 (stuck 86/vh vs 86, replan
 ## Second seed
 Run the same recipe with 2 more seeds (and the same d2d binary) in parallel on slots 1 and 2 to turn the XP/h number into a verdict (the compare gate needs 5 seeds for a PASS/FAIL, `docs/d2d-baselines-early.md` section 3 for the sample size). Compare per seed: the clvl at which healing runs out (F1), the share of minutes in `recovery`, the poverty loops (F2) and the first 30 virtual minutes (belt window), since those decide the three FAILs. Add a save-and-exit at the end to settle `saveXp == charXp`.
 
+## Corrections 2026-11-01
+Two statements above are wrong or stale (full analysis: [postfix-soak2-analysis.md](postfix-soak2-analysis.md)).
+- F1: the belt was NOT empty at the death. It held 4 healing potions at entry; all 4 were drunk in about 16 virtual s against 5 undead at about 40 life, then the town portal cast was cut in melee and the scroll was spent (VERIFIED in the full bot logs). The belt-window failure is the poverty after that death (gold 0, 25 virtual minutes) plus clvl 2 at the start (58 percent of the 463 `no healing potion` lines).
+- F6: `walkingRaw` means "moving" (the drills README already proved it live); the UNVERIFIED tag is stale.
+
 ## Files
 `docs/probes/soak-logs/postfix2-minutes.jsonl.gz`: the supervisor log, every `minute` line, the death lines and the fault lines of the run (the full 12 MB bot log stays on the worker host in the run directory). Build on the worker host: `go build ./cmd/d2bot ./cmd/d2dsoak` at 0b0bdb2.
