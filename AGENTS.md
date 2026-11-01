@@ -43,6 +43,15 @@ Maintainers also read `AGENTS.private.md` if present (it is not in this repo; `t
 - Do not write secrets (CD keys, passwords, tokens) or private hostnames, IPs, home paths or people's names anywhere in the repo (`go run ./cmd/leakcheck`, docs/process/public-split.md).
 - This is an offline tool. Do not add anything that talks to Battle.net.
 
+## Build flexibility
+The project supports several builds and classes (user direction 2026-11-01; `docs/research/build-flexibility-audit.md` lists the known leftovers).
+- Builds are data. Do not write a skill id, a skill name string, a character-level literal that belongs to one build, or a class check in Go. Read it from the plan table (internal/plandata), the combat profile (internal/combat/classdata) or the class traits table, or add it there.
+- A new rule that only makes sense for one build or class (Static Field, Frost Nova, a kite range, a belt column) goes into that build's profile or table as a field with today's value as the default, not into a function body or a knob named after the skill.
+- Never fall back silently to the Sorceress for an unknown class, table or profile: return an error that names the class or table.
+- Write the test for a new combat or economy rule against two builds (the default Sorceress and one other class or build); a rule that only passes for the default Sorceress is not done.
+- Say in the card result which part of the change is build-specific and where its data lives; docs/research/build-flexibility-audit.md lists the known leftovers, do not add to it.
+- Drills, soaks and simulators take the class and build as parameters; resolve skill ids by name from the character, never by a numeric literal.
+
 ## Memory limits
 - On a small box do not run whole-repo `go test ./...`, `go vet ./...` or `-race` builds; run them on the worker host. Per-package tests with `-p 1` are fine.
 
