@@ -1,6 +1,8 @@
 package bot
 
 import (
+	"context"
+	"errors"
 	"testing"
 	"time"
 )
@@ -38,5 +40,46 @@ func TestEmptyAreaLeave(t *testing.T) {
 	step(0)
 	if step(200 * time.Second) {
 		t.Fatal("a quest area is not left")
+	}
+}
+
+// A roam that keeps failing in a quiet area (the g1 soak: "explore: nav: timeout: roaming for 5m0s" in Cold Plains and
+// Blood Moor in turn, nothing ever marked cleared) ends the area after exploreGiveUp failures, counted per area so a
+// visit to another area in between does not restart them; a kill does, a quest area never gives up.
+func TestExploreGaveUp(t *testing.T) {
+	g := newRig(t)
+	r := g.r
+	ctx := context.Background()
+	fail := errors.New("nav: timeout: roaming")
+	for _, c := range []struct {
+		name  string
+		steps []int // areas of successive failures
+		kill  bool  // a kill after the first failure
+		want  bool  // area 2 cleared at the end
+	}{
+		{"two failures", []int{2, 2}, false, true},
+		{"ping-pong between areas", []int{2, 3, 2, 3}, false, true},
+		{"a kill restarts", []int{2, 2}, true, false},
+		{"one failure", []int{2}, false, false},
+	} {
+		r.loop.cleared = map[int]bool{}
+		r.loop.exploreFails = nil
+		for i, a := range c.steps {
+			if i == 1 && c.kill {
+				r.obMu.Lock()
+				r.ob.kills++
+				r.obMu.Unlock()
+			}
+			r.exploreGaveUp(ctx, a, fail)
+		}
+		if r.loop.cleared[2] != c.want {
+			t.Errorf("%s: cleared[2] = %v, want %v", c.name, r.loop.cleared[2], c.want)
+		}
+	}
+	r.loop.cleared, r.loop.exploreFails = map[int]bool{}, nil
+	r.loop.run = &LevelRun{Area: 2}
+	r.exploreGaveUp(ctx, 2, fail)
+	if r.exploreGaveUp(ctx, 2, fail) || r.loop.cleared[2] {
+		t.Fatal("a quest area keeps roaming")
 	}
 }

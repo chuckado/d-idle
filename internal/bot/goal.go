@@ -1100,6 +1100,9 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 		}
 		// Explore (a roam) runs for minutes until a hostile shows: the empty-area check must run inside it.
 		if err := r.d.Mover.Explore(ctx, func() bool { return hostile() || r.emptyAreaLeave(area) }); err != nil {
+			if r.exploreGaveUp(ctx, area, err) {
+				return nil
+			}
 			return fmt.Errorf("explore: %w", err)
 		}
 		if r.loop.cleared[area] && r.loop.emptyArea == 0 {
@@ -1123,6 +1126,41 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 		}
 	}
 	return nil
+}
+
+// exploreGiveUp is how many explore failures in a row, in one area with no kill in between, make it count as emptied.
+const exploreGiveUp = 2
+
+// exploreGaveUp handles a failed explore (roam timeout, stuck, no path) in a quiet area. emptyAreaLeave cannot catch
+// this: it is off by default, and its timer restarts on every area change and every pause over 90 s, which the
+// Blood Moor <-> Cold Plains ping-pong of the g1 soak did every few minutes (docs/soakstall.md). The failures are
+// counted per area instead, and a kill restarts the count. It marks the area cleared (the planner then takes the
+// next area or the fresh-game path) and returns true. Quest areas keep roaming.
+func (r *Runner) exploreGaveUp(ctx context.Context, area int, err error) bool {
+	l := &r.loop
+	if ctx.Err() != nil || (l.run != nil && l.run.Area == area) {
+		return false
+	}
+	r.obMu.Lock()
+	kills := r.ob.kills
+	r.obMu.Unlock()
+	if l.exploreFails == nil {
+		l.exploreFails = map[int]exploreFail{}
+	}
+	f := l.exploreFails[area]
+	if f.kills != kills {
+		f = exploreFail{kills: kills}
+	}
+	f.n++
+	l.exploreFails[area] = f
+	if f.n < exploreGiveUp {
+		return false
+	}
+	delete(l.exploreFails, area)
+	l.cleared[area] = true
+	r.e.Log.Info("area abandoned: exploring failed with no kill", "area", area, "name", r.areaName(area), "failures", f.n, "err", err)
+	r.logSweep(area, true)
+	return true
 }
 
 // emptyAreaLeave marks area cleared once the sweep went Config.EmptyAreaSec without a kill (KILLFIX: on d2d 7 of the 20
