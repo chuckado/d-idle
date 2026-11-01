@@ -224,7 +224,7 @@ func TestLayoutHasUniqueKeys(t *testing.T) {
 		seen := map[string]string{}
 		for skill, key := range Layout(b) {
 			if o, dup := seen[key]; dup {
-				t.Fatalf("build %d: %s and %s share %s", b, skill, o, key)
+				t.Fatalf("build %v: %s and %s share %s", b, skill, o, key)
 			}
 			seen[key] = skill
 		}

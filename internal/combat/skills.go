@@ -9,12 +9,13 @@ import (
 	"d2lod-bot/internal/data"
 )
 
-// Build selects the skill preferences (docs/plan/leveling.md section 1).
-type Build int
+// Build is the combat profile id within a class (the Build field of a classdata profile; docs/plan/leveling.md
+// section 1). "" means the class default. A leveler table names its profile in its "combat" key.
+type Build string
 
 const (
-	BuildBlizzard  Build = iota // primary: Charged Bolt, then Blizzard after the respec at clvl 26
-	BuildLightning              // fallback: Charged Bolt, then Chain Lightning
+	BuildBlizzard  Build = "blizzard"  // primary: Charged Bolt, then Blizzard after the respec at clvl 26; also the default
+	BuildLightning Build = "lightning" // fallback: Charged Bolt, then Chain Lightning
 )
 
 // respecLevel is when the primary build switches its main attack (plan: respec at 26).

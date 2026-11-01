@@ -149,7 +149,7 @@ func TestPrefsSorceressUnchanged(t *testing.T) {
 		t.Fatalf("%+v", p)
 	}
 	if q := PrefsFor("Necromancer"); q.DmgWeight != p.DmgWeight {
-		t.Fatal("unknown class must keep the old behaviour")
+		t.Fatal("the Necromancer keeps its caster row")
 	}
 	pal := PrefsFor("Paladin")
 	if !pal.WantsShield || pal.TwoHandMult >= 1 || len(pal.TypeBonus) != 0 {
@@ -336,5 +336,23 @@ func TestFallbackSorceressBuildHasEnergy(t *testing.T) {
 	}
 	if ene < 30 {
 		t.Fatalf("energy points in the table: %d", ene)
+	}
+}
+
+func TestLookupPrefsPerClass(t *testing.T) {
+	for _, c := range []string{"Sorceress", "Necromancer", "Druid", "Paladin", "Amazon", "Barbarian", "Assassin"} {
+		if _, err := LookupPrefs(c); err != nil {
+			t.Errorf("%s: %v", c, err)
+		}
+	}
+	if _, err := LookupPrefs("Warlock"); err == nil {
+		t.Fatal("unknown class must be an error")
+	}
+	// a weapon class does not get the caster bonus, an unknown class is scored as damage only (and logged)
+	if a, _ := LookupPrefs("Barbarian"); len(a.TypeBonus) != 0 || a.WantsShield {
+		t.Fatalf("%+v", a)
+	}
+	if u := PrefsFor("Warlock"); len(u.TypeBonus) != 0 {
+		t.Fatalf("unknown class scored as a caster: %+v", u)
 	}
 }

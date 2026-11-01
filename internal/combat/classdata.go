@@ -4,6 +4,7 @@ import (
 	"embed"
 	"encoding/json"
 	"fmt"
+	"log/slog"
 	"strings"
 	"sync"
 
@@ -194,21 +195,49 @@ func deriveMeta(s *data.Skill) (skillMeta, bool) {
 
 func classKey(c d2.Class) string { return strings.ToLower(c.String()) }
 
-// ProfileFor returns the profile of a class. Only the Sorceress has builds; other classes have one profile.
-// Never nil: an unknown class gets the Sorceress profile.
-func ProfileFor(c d2.Class, b Build) *Profile {
-	db := loadClassData()
-	build := "blizzard"
-	if b == BuildLightning {
-		build = "lightning"
+// ProfileID is the full id of a profile: "paladin", "sorceress/lightning".
+func (p *Profile) ProfileID() string {
+	if p.Build == "" {
+		return p.Class
 	}
+	return p.Class + "/" + p.Build
+}
+
+// LookupProfile finds the profile of a class by build id. id is "" (the class default), a bare build name
+// ("lightning"), or a full id ("sorceress/lightning"). A class whose only profile has no build name also answers
+// "blizzard" and "lightning", the two ids every caller used to pass whatever the class. An unknown class or id is an error, never the Sorceress.
+func LookupProfile(c d2.Class, id Build) (*Profile, error) {
+	db := loadClassData()
+	key := classKey(c)
+	want := strings.TrimPrefix(string(id), key+"/")
+	if want == "" {
+		want = string(BuildBlizzard)
+	}
+	known := false
 	for i := range db.profiles {
 		p := &db.profiles[i]
-		if p.Class == classKey(c) && (p.Build == "" || p.Build == build) {
-			return p
+		if p.Class != key {
+			continue
+		}
+		known = true
+		if p.Build == want || (p.Build == "" && (id == "" || want == string(BuildBlizzard) || want == string(BuildLightning) || id == Build(key))) {
+			return p, nil
 		}
 	}
-	return ProfileFor(d2.Sorceress, b)
+	if !known {
+		return nil, fmt.Errorf("combat: no profile for class %q", key)
+	}
+	return nil, fmt.Errorf("combat: class %q has no profile %q", key, id)
+}
+
+// ProfileFor is LookupProfile for callers that pass a known class and id (tests, the Sorceress helpers). It
+// panics on an unknown one: the production paths call LookupProfile and handle the error.
+func ProfileFor(c d2.Class, b Build) *Profile {
+	p, err := LookupProfile(c, b)
+	if err != nil {
+		panic(err)
+	}
+	return p
 }
 
 // Profiles lists every profile (tests, docs).
@@ -267,10 +296,15 @@ var classByCode = map[string]d2.Class{"ama": d2.Amazon, "sor": d2.Sorceress, "ne
 // SelectProfile picks the profile for a character: the class the skills belong to when skills.txt says so (a
 // misread class byte must not send a Paladin into the Sorceress loop), else the Player.Class one; if that profile
 // uses none of the character's skills, the profile that uses the most of them (ties: the Sorceress).
-func SelectProfile(p *d2.Player, cat Catalog, b Build) *Profile {
+// SelectProfileChecked is the strict form: an unknown class or profile id is an error (the profile is nil then).
+func SelectProfileChecked(p *d2.Player, cat Catalog, b Build) (*Profile, error) {
 	class := p.Class
 	if c, ok := classByCode[classOfSkills(p, cat)]; ok {
 		class = c
+	}
+	pr, err := LookupProfile(class, b)
+	if err != nil {
+		return nil, err
 	}
 	known := KnownSkills(p, cat, nil)
 	score := func(pr *Profile) int {
@@ -282,18 +316,41 @@ func SelectProfile(p *d2.Player, cat Catalog, b Build) *Profile {
 		}
 		return n
 	}
-	pr := ProfileFor(class, b)
 	if score(pr) > 0 {
-		return pr
+		return pr, nil
 	}
 	best, bs := pr, 0
 	for _, c := range []d2.Class{d2.Sorceress, d2.Paladin, d2.Amazon, d2.Necromancer, d2.Barbarian, d2.Druid, d2.Assassin} {
-		cand := ProfileFor(c, b)
+		cand, err := LookupProfile(c, b)
+		if err != nil {
+			cand, err = LookupProfile(c, "") // the id belongs to another class: that class's default
+		}
+		if err != nil {
+			continue
+		}
 		if s := score(cand); s > bs {
 			best, bs = cand, s
 		}
 	}
-	return best
+	return best, nil
+}
+
+var loggedSelectErr sync.Map
+
+// SelectProfile is SelectProfileChecked for callers that need a profile whatever happens: the error is logged
+// loudly and the character gets its class default (or, for an unknown class, the profile that fits its skills).
+func SelectProfile(p *d2.Player, cat Catalog, b Build) *Profile {
+	pr, err := SelectProfileChecked(p, cat, b)
+	if err == nil {
+		return pr
+	}
+	if _, seen := loggedSelectErr.LoadOrStore(err.Error(), true); !seen { // once per message: this runs every tick
+		slog.Error("combat: profile selection failed, using a fallback", "err", err, "class", int(p.Class), "build", string(b))
+	}
+	if pr, err := SelectProfileChecked(p, cat, ""); err == nil {
+		return pr
+	}
+	return ProfileFor(d2.Sorceress, "")
 }
 
 func profileUses(p *Profile, name string) bool {

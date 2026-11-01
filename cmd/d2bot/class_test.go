@@ -55,3 +55,21 @@ func TestPlanForClassJoinsCombatAndLeveler(t *testing.T) {
 		}
 	}
 }
+
+func TestPlanForClassProfileFromTable(t *testing.T) {
+	// the END Sorceress table declares no combat key: Blizzard profile; the v2 and v3 lightning tables declare it
+	if p := planForClass(d2.Sorceress, "sorceress_blizzard_endgame90", 30, nil); p.Err != nil || p.Profile != "sorceress/blizzard" {
+		t.Errorf("end table: %+v", p)
+	}
+	if p := planForClass(d2.Sorceress, "fallback-lightning-v2", 1, nil); p.Err != nil || p.Profile != "sorceress/lightning" {
+		t.Errorf("v2: %+v", p)
+	}
+	// a Paladin selected by table: its own single profile, no error
+	if p := planForClass(d2.Paladin, "paladin-normal30", 5, nil); p.Err != nil || p.Profile != "paladin" {
+		t.Errorf("paladin: %+v", p)
+	}
+	// an unknown class is an error in the plan, not a Sorceress profile
+	if p := planForClass(d2.Class(42), "", 1, nil); p.Err == nil || p.Profile != "" {
+		t.Errorf("unknown class: %+v", p)
+	}
+}

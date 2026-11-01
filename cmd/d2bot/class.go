@@ -19,9 +19,10 @@ import (
 // Lightning profile) and puts the decision in the log at the start of every game.
 type classPlan struct {
 	Class        d2.Class
-	Profile      string // combat profile name, e.g. "paladin"
-	CombatBuild  combat.Build
-	LevelerBuild string // leveler table, "" when the class has none
+	Profile      string       // combat profile name, e.g. "paladin"
+	CombatBuild  combat.Build // combat profile id inside the class ("" = class default)
+	LevelerBuild string       // leveler table, "" when the class has none
+	Err          error        // no combat profile for this class and table: the caller must log it and not fight on a guess
 }
 
 // planForClass resolves the pair. cfgBuild is the operator's explicit leveler table (config levelerBuild), which wins.
@@ -31,15 +32,19 @@ func planForClass(c d2.Class, cfgBuild string, level int, owned map[string]int) 
 	if lb == "" {
 		lb = leveler.SelectBuild(strings.ToLower(c.String()), level, owned)
 	}
-	cp := classPlan{Class: c, LevelerBuild: lb, CombatBuild: combat.BuildBlizzard}
-	if c == d2.Sorceress && (lb == "fallback" || leveler.TableCombat(lb) == "lightning") {
-		cp.CombatBuild = combat.BuildLightning
+	cp := classPlan{Class: c, LevelerBuild: lb, CombatBuild: combat.BuildBlizzard} // the id every class has always carried
+	switch {
+	case leveler.TableCombat(lb) != "":
+		cp.CombatBuild = combat.Build(leveler.TableCombat(lb)) // the table names its combat profile
+	case c == d2.Sorceress && lb == "fallback":
+		cp.CombatBuild = combat.BuildLightning // the legacy table predates the "combat" key
 	}
-	pr := combat.ProfileFor(c, cp.CombatBuild)
-	cp.Profile = pr.Class
-	if pr.Build != "" {
-		cp.Profile += "/" + pr.Build
+	pr, err := combat.LookupProfile(c, cp.CombatBuild)
+	if err != nil {
+		cp.Err = err
+		return cp
 	}
+	cp.Profile = pr.ProfileID()
 	return cp
 }
 
@@ -50,7 +55,9 @@ func applyClass(ctx context.Context, snap func() (*d2.Snapshot, error), cb *comb
 		return
 	}
 	cp := planForClass(s.Player.Class, cfgBuild, s.Player.Level, leveler.OwnedSkills(db, s.Player))
-	if cb.Build != cp.CombatBuild {
+	if cp.Err != nil {
+		log.Error("class-aware start: no combat profile, the fighter keeps its default (fix the table's combat key)", "class", s.Player.Class.String(), "levelerBuild", cp.LevelerBuild, "err", cp.Err)
+	} else if cb.Build != cp.CombatBuild {
 		cb.Build = cp.CombatBuild
 	}
 	cb.GearBuild = cp.LevelerBuild
@@ -62,7 +69,7 @@ func applyClass(ctx context.Context, snap func() (*d2.Snapshot, error), cb *comb
 		lt.SetBuild(cp.LevelerBuild)
 	}
 	log.Info("class-aware start", "class", s.Player.Class.String(), "level", s.Player.Level, "combatProfile", cp.Profile,
-		"combatBuild", int(cp.CombatBuild), "levelerBuild", cp.LevelerBuild)
+		"combatBuild", string(cp.CombatBuild), "levelerBuild", cp.LevelerBuild)
 }
 
 // ammoPath maps a gear build name to the town's ammo path ("" for builds without a launcher or thrown stack).
