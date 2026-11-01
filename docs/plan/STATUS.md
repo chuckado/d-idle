@@ -46,7 +46,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
-| [pushchill](../../openspec/changes/pushchill/) | in-progress | pushchill | `docs/research/pr-static-evidence-pack.md`<br>`docs/research/pr-static-chill-proof.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/pushchill/**` | `fork-branch:fix/static-field-chill`<br>`upstream-pr:static-field` |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -84,10 +83,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change pushchill: preconditions held, gates re-run on the exact head, fast-forward push, title and body edited
-- change pushchill: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 
 ### Recent merges
+- fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
 - 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
 - 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
@@ -97,5 +95,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 74020bf 10-31 20:38 `Merge agent/prfixes: PR walk v3 and price v2 docs, verified holds with limits` (prfixes)
 - 33d7d1f 10-31 20:26 `Merge agent/chillpatch: static-field chill proof and draft` (chillpatch)
 - 544d89f 10-31 20:24 `Merge agent/verifyprs2: verifier harnesses for walk and price follow-on` (verifyprs2)
-- 912086a 10-31 20:02 `Merge agent/fixstall4: town verbs follow line of sight, route at every stall` (fixstall4)
 <!-- statusgen:end -->

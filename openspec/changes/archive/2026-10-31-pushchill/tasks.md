@@ -2,7 +2,7 @@
 
 ```yaml
 change: pushchill
-status: in-progress
+status: archived
 agent: pushchill
 branch: agent/pushchill
 worktree: ~/code/d2lod-wt/pushchill
@@ -19,7 +19,7 @@ exclusive:
 gates:
   - "preconditions held, gates re-run on the exact head, fast-forward push, title and body edited"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge: "merged to main (agent/pushchill)"
+merge: fe6bcb4a
 result: "Pushed 6270d162 -> 79c9a496 to #155, title and body edited; gates clean on the head; not verified live (offline differential)."
 ```
 
