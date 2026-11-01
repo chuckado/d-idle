@@ -1,6 +1,6 @@
 # PR body (combined): Frozen Armor and the freeze resume (BUNDLEARMOR)
 
-> status: READY, held for the user's go; NOT posted, NOT pushed, not opened (card bundlearmor, 2026-11-01). One upstream PR with two claims, the user's decision of 2026-11-01 (armor claim first, freeze-resume claim second). Everything below the rule is the text to post. Branch `fix/frozen-armor-and-resume` in the worker host's PR checkout `bundlear`, built from upstream main 72132b99 by cherry-picking the two verified candidates: `fix/armor-hit` (claim 36cbe015, tooling d5bd19c1) and `fix/freeze-resume` (claim c6cc4f12, tooling efacc7f4). Both source branches and their worktrees are untouched. Sources: [pr-armorhit-body-final.md](pr-armorhit-body-final.md), [pr-armorhit-addendum.md](pr-armorhit-addendum.md), [pr-armorhit-verifier.md](pr-armorhit-verifier.md), [pr-freezeresume-proof.md](pr-freezeresume-proof.md), [pr-freezeresume-verifier.md](pr-freezeresume-verifier.md), [pr-freezeresume-draft.md](pr-freezeresume-draft.md) (revised version on branch agent/forkfreeze until merged). Process: [../process/upstream-pr-standard.md](../process/upstream-pr-standard.md).
+> status: READY, held for the user's go; NOT posted, NOT pushed, not opened (card bundlearmor, 2026-11-01). One upstream PR with two claims, the user's decision of 2026-11-01 (armor claim first, freeze-resume claim second; one PR, two commits). Det state hashes now run: 14 of 14 scenarios identical on the resume claim and on the combination, see [pr-bundle-armor-resume-det.md](pr-bundle-armor-resume-det.md). Everything below the rule is the text to post. Final branch `fix/frozen-armor-and-resume-2c` (TWO commits, f9e38b15 armor claim plus tooling, 9a4e726a freeze-resume claim plus tooling; BUNDLEDET squash, tree identical to the four-commit branch) in the worker host's PR checkout `bundlear`, built from upstream main 72132b99. The four-commit branch `fix/frozen-armor-and-resume` (6b5f0267, a2a16a87, 0ab7b5e7, a4ad2099) is kept intact; commit hashes below that name those four are its commits, and the per-commit statements apply to the squashed pair. Built from the two verified candidates: `fix/armor-hit` (claim 36cbe015, tooling d5bd19c1) and `fix/freeze-resume` (claim c6cc4f12, tooling efacc7f4). Both source branches and their worktrees are untouched. Sources: [pr-armorhit-body-final.md](pr-armorhit-body-final.md), [pr-armorhit-addendum.md](pr-armorhit-addendum.md), [pr-armorhit-verifier.md](pr-armorhit-verifier.md), [pr-freezeresume-proof.md](pr-freezeresume-proof.md), [pr-freezeresume-verifier.md](pr-freezeresume-verifier.md), [pr-freezeresume-draft.md](pr-freezeresume-draft.md) (revised version on branch agent/forkfreeze until merged). Process: [../process/upstream-pr-standard.md](../process/upstream-pr-standard.md).
 
 **Title:** `Frozen Armor freezes by the freeze rule; a frozen monster thinks again at the freeze end + aidel`
 
@@ -8,14 +8,12 @@
 
 ## Summary
 
-Two claims about what happens to a monster that game.exe freezes, one commit pair each (a claim commit, then a tooling commit with the oracle and the test mode):
+Two claims about what happens to a monster that game.exe freezes, two commits, each a claim plus its tooling (the oracle and the test mode):
 
 | commit | what it claims |
 |---|---|
-| `6b5f0267` game: Frozen Armor freezes a striker by the freeze rule | `Fight::buff_events` resists the Frozen Armor length by cold resistance less pierce; specials are chilled for it; plain monsters are frozen only at coldeffect < 0, for length / MonsterFreezeDivisor, and not chilled. Adds `GameData::freeze_divisor`. |
-| `a2a16a87` tools: armor_hit.py oracle and test_armor_hit --armor-hit | tooling for the first claim (no d2d behaviour) |
-| `0ab7b5e7` game: a frozen monster thinks again at the freeze end + aidel | a monster whose freeze (state 1) ends thinks again at the end + MonStats aidel, not at the end. Adds `Monster::stunned_until` to tell a stun from a freeze. |
-| `a4ad2099` tools: freeze_resume.py oracle and test_freeze_resume --freeze-resume | tooling for the second claim (no d2d behaviour) |
+| `f9e38b15` game: Frozen Armor freezes a striker by the freeze rule | `Fight::buff_events` resists the Frozen Armor length by cold resistance less pierce; specials are chilled for it; plain monsters are frozen only at coldeffect < 0, for length / MonsterFreezeDivisor, and not chilled. Adds `GameData::freeze_divisor`. Also adds `armor_hit.py` and `test_armor_hit --armor-hit` (tooling, no d2d behaviour). |
+| `9a4e726a` game: a frozen monster thinks again at the freeze end + aidel | a monster whose freeze (state 1) ends thinks again at the end + MonStats aidel, not at the end. Adds `Monster::stunned_until` to tell a stun from a freeze. Also adds `freeze_resume.py` and `test_freeze_resume --freeze-resume` (tooling, no d2d behaviour). |
 
 The claims are independent (each differential was proven on its own branch on upstream main) and they compose: Frozen Armor's new freeze sets `stun_until` without `stunned_until`, so the resume claim reads it as a freeze and applies the aidel delay. That composition is by reading (see Limits), not by a joint differential. Merging either alone is fine; the order here is the order the user chose.
 
@@ -41,7 +39,7 @@ Claim 2, freeze resume (residuals, none introduced by the claim):
 Both, together:
 - **No joint differential.** Each harness ran on the combined head (below) and gives the same answer as on its own branch, but no harness drives Frozen Armor and then steps the monster's AI. The composition claim (an armor freeze thaws at end + aidel) rests on the code: the armor path writes `stun_until` only, the resume branch fires when `stun_until != stunned_until`.
 - **The armor verifier's resume column** (it measures the stun end, not the AI turn) still reports 52,714 of 134,400 on this head, exactly as on the armor branch alone. That column predates the resume claim and is answered by the resume harness, not by that one.
-- **Det state hashes**: the armor claim alone ran 14 of 14 scenarios identical to base (no scenario wears Frozen Armor, so this only shows nothing outside the changed branch moved). The resume claim alone and the combined head were NOT run: a d2d slot is needed and this PR candidate was prepared offline. They are owed before posting; say so in the PR if they are still not run.
+- **Det state hashes** (BUNDLEDET, [pr-bundle-armor-resume-det.md](pr-bundle-armor-resume-det.md)): the 14 DETHASH2 scenarios, a fresh d2d per run, on the lab base, the lab base plus the resume claim, and the lab base plus both claims: **14 of 14 identical** (monster hash and state hash) in both; the base reruns agree with themselves. The armor claim alone ran 14 of 14 identical earlier. Coverage limit: no scenario wears Frozen Armor, and the hit scenes (Glacial Spike included) show a stun deadline but no changed hash, so the hashes show only that nothing outside the claims moved (no RNG draw added); the freeze and the thaw are covered by the differentials, not by these hashes.
 - Not run: an MSVC build.
 
 ## What
@@ -59,7 +57,7 @@ When a frozen monster's freeze ends, game.exe's state-1 callback (0x57b170, regi
 
 ## Evidence
 
-Differentials against game.exe's own code run natively under upstream's emulator, d2d side through the real functions (`Fight::buff_events`; `Fight::strike` plus `monster_update`). Counts are on the COMBINED head (a4ad2099), Release build with `-Wshadow -Wunused -Wsign-compare`; "base" is the count each claim's own proof recorded on upstream main 72132b99 plus the tooling files.
+Differentials against game.exe's own code run natively under upstream's emulator, d2d side through the real functions (`Fight::buff_events`; `Fight::strike` plus `monster_update`). Counts are on the COMBINED head (a4ad2099 on the four-commit branch; 9a4e726a on the two-commit branch has the identical tree), Release build with `-Wshadow -Wunused -Wsign-compare`; "base" is the count each claim's own proof recorded on upstream main 72132b99 plus the tooling files.
 
 **Claim 1, Frozen Armor** (differing cases, chill and freeze end frames):
 
@@ -98,15 +96,15 @@ uv run python freeze_resume.py compare c1.tsv g1.tsv d1.tsv            # "frozen
 
 ## How to review
 
-Commit by commit; each claim commit stands alone on upstream main (the tooling commits add no d2d behaviour).
+Commit by commit; each commit stands alone on upstream main (the tooling inside each adds no d2d behaviour).
 
-1. `6b5f0267`: the Frozen Armor rule in `states.cpp` (about 30 lines), the divisor member and its load line, one doc line. Then `a2a16a87` for the oracle: it runs FUN_005cac50 and everything under it natively and compares against `Fight::buff_events`.
-2. `0ab7b5e7`: one member, one assignment in `Fight::land`, one branch in `monster_update`, one doc paragraph. Then `a4ad2099` for the oracle: it runs FUN_0057b230, FUN_005a7f80, the expiry walk and the callback natively and drives a Zombie (every think a swing) through the real `Fight::strike` and `monster_update`.
+1. `f9e38b15`: the Frozen Armor rule in `states.cpp` (about 30 lines), the divisor member and its load line, one doc line; the oracle (`armor_hit.py`, `test_armor_hit`) is in the same commit: it runs FUN_005cac50 and everything under it natively and compares against `Fight::buff_events`.
+2. `9a4e726a`: one member, one assignment in `Fight::land`, one branch in `monster_update`, one doc paragraph; the oracle (`freeze_resume.py`, `test_freeze_resume`) is in the same commit: it runs FUN_0057b230, FUN_005a7f80, the expiry walk and the callback natively and drives a Zombie (every think a swing) through the real `Fight::strike` and `monster_update`.
 3. Check the two residual lists above against the code comments (`// ponytail:` in `states.cpp` and `ai.cpp`).
 
 ## Checks
 
-On the combined head a4ad2099 (worker host): `tools/pr_guard.py` 0 FAIL / 0 WARN on the range and on each of the four commits; `tools/presubmit.py --quick` 0 FAIL / 3 WARN; test_monsters, test_rules, test_combat, test_protocol and test_game pass; gcc `-Wshadow -Wunused -Wsign-compare` Release build 0 warnings on added lines; clang-tidy (names and includes, the PR-selected translation units) 0 findings in the touched files; ruff clean with presubmit's rules, plus `--select B905` clean. Commits: author and committer the numeric-ID noreply identity, body at most three lines, `Agent: Claude Code`, no other trailer.
+On the combined head a4ad2099, whose tree is identical to 9a4e726a (worker host): `tools/pr_guard.py` 0 FAIL / 0 WARN on the range and on each of the four commits, and again 0 / 0 on the range and on both commits of the two-commit branch; each of the two commits builds on its own (armor test 0 mismatches of 108,506 on commit 1 and on commit 2, resume test 0 differ of 12,548 frozen on commit 2); `tools/presubmit.py --quick` 0 FAIL / 3 WARN; test_monsters, test_rules, test_combat, test_protocol and test_game pass; gcc `-Wshadow -Wunused -Wsign-compare` Release build 0 warnings on added lines; clang-tidy (names and includes, the PR-selected translation units) 0 findings in the touched files; ruff clean with presubmit's rules, plus `--select B905` clean. Commits: author and committer the numeric-ID noreply identity, body at most three lines, `Agent: Claude Code`, no other trailer.
 
 Answers to the presubmit WARNs:
 - siblings (unit kinds): only monsters are frozen by these paths. Players are chilled, and hireling classes are chilled, by FUN_0057b230's other branches; the Frozen Armor wearer's hireling path (`merc_buff_events`) is not changed (see Limits).

@@ -101,3 +101,5 @@ docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
 docs/research/pr-bundle-armor-resume-body.md  bundlearmor  bundlearmor
 openspec/changes/bundlearmor/**  bundlearmor  bundlearmor
+docs/research/pr-bundle-armor-resume-det.md  bundledet  bundledet
+openspec/changes/bundledet/**  bundledet  bundledet
