@@ -54,6 +54,7 @@ type CastInfo struct {
 	Hits                        int   // ticks on which the life dropped after the click
 	HitTicks                    []int // those ticks, counted from the click
 	PortalTick, PortalMS        int   // ticks and game milliseconds from the click to the portal object, -1 none within the trace
+	PortalStep                  int   // the step (one Step call after the click) on which the portal object was first listed
 	ScrollTick                  int   // tick on which the scroll left the pack, -1 never
 	ScrollsBefore, ScrollsAfter int
 	Timeline                    string // the events, tick offsets from the click
@@ -111,12 +112,24 @@ func D11(l D11Lab) []Drill {
 		{ID: "D-castcut", Primitive: "P10", Title: "D2.d unknown: does a monster hit cut a town portal cast, and how many ticks does a cast take (record)", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			var rows []string
 			cut, done, blocked := 0, 0, 0
+			before, same, during := 0, 0, 0 // hits that landed before the portal object appeared, on the same step, and after it but inside the cast animation (to step 7)
 			for i, tr := range []struct {
 				life, delay int
 				sync        bool
-			}{{300, 0, false}, {300, 0, true}, {300, 1, true}, {300, 2, true}, {300, 3, true}, {300, 2, true}, {40, 3, true}, {40, 3, true}, {40, 2, true}, {40, 2, true}} {
+			}{{300, 0, false}, {300, 0, true}, {300, 1, true}, {300, 2, true}, {300, 3, true}, {300, 2, true}, {40, 3, true}, {40, 3, true}, {40, 2, true}, {40, 2, true}, {300, 3, true}, {300, 3, true}, {300, 3, true}, {300, 2, true}, {300, 2, true}, {300, 2, true}} {
 				c := l.CastTrace(ctx, r, tr.life, i, tr.sync, tr.delay)
 				rows = append(rows, fmt.Sprintf("trial %d (max life %d): %s", i+1, tr.life, c.String()))
+				for _, h := range c.HitTicks {
+					switch {
+					case c.PortalTick < 0:
+					case h < c.PortalStep:
+						before++
+					case h == c.PortalStep:
+						same++
+					case h <= 7:
+						during++
+					}
+				}
 				switch {
 				case c.Err != "" || c.Adjacent < 1:
 					blocked++
@@ -132,7 +145,7 @@ func D11(l D11Lab) []Drill {
 			if done+cut == 0 {
 				o.Verdict, o.Reason = Blocked, "no trial reached an adjacent monster: "+o.Observed
 			} else {
-				o.Verdict, o.Reason = Pass, fmt.Sprintf("RECORD: %d trials completed the cast, %d did not produce a portal, %d blocked", done, cut, blocked)
+				o.Verdict, o.Reason = Pass, fmt.Sprintf("RECORD: %d trials completed the cast (portal object listed), %d did not produce a portal, %d blocked; monster hits that landed before the portal object %d, on the same step %d, later inside the cast animation %d", done, cut, blocked, before, same, during)
 			}
 			return o
 		}},

@@ -411,7 +411,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync
 		if ci.PortalTick < 0 {
 			for k, id := range pv.PortalIDs {
 				if !oldID[id] || !oldPos[pv.PortalPos[k]] {
-					ci.PortalTick, ci.PortalMS = l.tick()-t0, l.gameMS()-ms0
+					ci.PortalTick, ci.PortalMS, ci.PortalStep = l.tick()-t0, l.gameMS()-ms0, i
 					add(i, "PORTAL object")
 				}
 			}
