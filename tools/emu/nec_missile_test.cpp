@@ -72,7 +72,7 @@ int main(int argc, char** argv) try {
         d2d::rules::Target target;
         target.res[kRes[std::size_t(skill->etype)]] = res;
         std::array<int, 4> pierces{};
-        pierces[std::size_t(skill->etype)] = pierce;
+        if (skill->etype < 4) pierces[std::size_t(skill->etype)] = pierce;   // magic has no pierce stat
         d2d::rules::Rng rng;
         rng.low = std::uint32_t(seed_low & 0xFFFFFFFFULL);
         rng.high = std::uint32_t(seed_high & 0xFFFFFFFFULL);
