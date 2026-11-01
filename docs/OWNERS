@@ -75,3 +75,6 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
+internal/d2dctl/debug_skills.go  forkdbg  forkdbg
+internal/d2dctl/debug_skills_test.go  forkdbg  forkdbg
+docs/forkdbg.md  forkdbg  forkdbg
