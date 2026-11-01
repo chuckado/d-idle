@@ -53,3 +53,18 @@ Body ending convention (copied from merged #157 and #158): the body ends with th
 - BACKLOG: #159 got a docstring follow-up (c4e9db97) for CodeRabbit; #160 review still pending after the rate limit (own card).
 - BACKLOG: #160 got a tooling and test follow-up (802dee68) for CodeRabbit; watch for the maintainer.
 - INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## CodeRabbit follow-up on #163 (card crfollow163)
+
+- posted: 2026-11-01 CodeRabbit review (state COMMENTED, 1 actionable, 1 nitpick) read: inline finding on tools/emu/sk_ground_blizz.py:147 (Minor, quick win): cmp still accepts -(R-1)..(R-1) as d2d's range, so +(R-1) counts as valid for d2d; bounds, range and share lines and the docstring need the new upper end R-2. Nitpick in the review body (not inline): tests/game/test_sk_ground.cpp lines 66-67 and 86, short loop variable names (x, y, i) against the repo's clang-tidy rule.
+- decision: inline finding valid (the claim code in missiles.cpp is right: rng(2 reach) - reach is -6..5 at radius 7; only the tool's idea of d2d's range was stale). Fixed in tooling only: lo/hi, the d2d-only value set, the printed range and the docstring use -(R-1)..(R-2); radius 1 keeps 0..0 (it draws nothing; without that clamp the check flagged 246 radius-1 shards); the old 14.8 percent share is kept as a labelled "before the fix" line. +8 -5 lines in one file.
+- decision: nitpick not applied: the brief's standing go covers the one inline thread and keeps the tests unchanged; presubmit's short-names check passes (it only looks at added lines). Left for the author to decide.
+- check: ruff (presubmit rules plus B905, py312) clean, tooling tests 31 ok, presubmit --quick 0 FAIL (1 WARN: build skipped by --quick), pr_guard 0 FAIL / 0 WARN for the commit and for origin/main..head. Differential re-run on the stored data: Blizzard 14,926 / 14,957 of 100,000 off-grid on base and 0 / 0 on head (seeds 1 / 7), cmp over 42,100 cases: reading differs 0, game offsets outside d2d's range 0. No game-side or d2d-side code changed, so behaviour is unchanged. No Release build rerun (no C++ touched).
+- posted: 2026-11-01 push (plain, no force) to the fork: fix/blizzard-shard-offsets-v2 3d6f3fe7 -> 3ac63fa0 (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`). The PR head was 3d6f3fe7 before the push and is 3ac63fa0 now.
+- posted: 2026-11-01 reply to the CodeRabbit inline thread (comment id 4437340451, reply 4437363818): valid, fixed in 3ac63fa0. No re-review was requested.
+- non-inline: walkthrough repeats the claim and tools; effort 3 (about 25 minutes); possibly related issue 103 (RNG stand-ins), no action. Merge risk Low, with the same note as the inline finding (now fixed). Pre-merge checks: 4 passed, 1 warning: docstring coverage 11.11 percent against 80 (scoped to touched functions with complexity of 2 or more); a style gate on the tooling script, no action taken (not a defect; the author may add docstrings). Status checks: guard success, CodeRabbit neutral; review decision REVIEW_REQUIRED.
+
+## Shared-file lines for the merger
+
+- BACKLOG: #163 got a tooling follow-up (3ac63fa0) for CodeRabbit; watch for the maintainer.
+- INDEX, CHANGELOG, decomp-queue, research README: no change.
