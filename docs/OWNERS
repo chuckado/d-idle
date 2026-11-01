@@ -108,3 +108,10 @@ openspec/changes/chunker/**  chunker  chunker
 docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
 docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
 openspec/changes/skresistfix/**  skresistfix  skresistfix
+internal/resource/melee.go  skmeleebot  skmeleebot
+internal/resource/melee_test.go  skmeleebot  skmeleebot
+internal/resource/types.go  skmeleebot  skmeleebot
+internal/resource/attack.go  skmeleebot  skmeleebot
+internal/resource/sim.go  skmeleebot  skmeleebot
+docs/skmeleebot.md  skmeleebot  skmeleebot
+openspec/changes/skmeleebot/**  skmeleebot  skmeleebot

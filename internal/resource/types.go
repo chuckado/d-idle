@@ -58,12 +58,14 @@ type Input struct {
 	Poor          bool // poverty mode: no gold to refill potions
 	MaxPackDanger int  // with Poor and no healing potion: packs rated above this are not engaged
 
-	Hostiles     int  // awake hostile monsters inside the fight radius
-	PackSeen     int  // monsters of a not-yet-engaged pack in view (asleep or far)
-	ChampionPack bool // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
-	WeakPack     bool // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not
-	Adjacent     int  // awake hostiles in melee reach (within combat.crowdAdjacent subtiles, default 8); with CastAdjacentMax a portal cast is cut
-	PackDanger   int  // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
+	Hostiles     int   // awake hostile monsters inside the fight radius
+	PackSeen     int   // monsters of a not-yet-engaged pack in view (asleep or far)
+	ChampionPack bool  // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
+	WeakPack     bool  // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not (with Blow and Foe also needs a to-hit of WeakMinHitPct)
+	Blow         *Blow // the wielded weapon's blow model; nil = unknown (WeakPack and the pack limit stay level-only)
+	Foe          *Foe  // the pack's hardest target to hit and whether it is all undead; read with Melee
+	Adjacent     int   // awake hostiles in melee reach (within combat.crowdAdjacent subtiles, default 8); with CastAdjacentMax a portal cast is cut
+	PackDanger   int   // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
 	SinceFight   float64
 	MercKnown    bool // a merc was hired this run
 	MercLifePct  int  // 0 = dead, only meaningful when MercKnown
@@ -120,6 +122,27 @@ func (in Input) hasCheaper() bool {
 		}
 	}
 	return false
+}
+
+// weak is WeakPack with the attack-rating term: when the blow model and a foe are known, the swings must also land
+// often enough (trace B2: the level ratio alone ignores AR against defense).
+func (in Input) weak() bool {
+	if !in.WeakPack {
+		return false
+	}
+	if in.Blow == nil || in.Foe == nil {
+		return true
+	}
+	return in.Blow.HitPct(*in.Foe) >= WeakMinHitPct
+}
+
+// meleePack is the largest pack the melee rung takes: the knob, raised by what the Blunt-vs-undead rule adds to a
+// blow (trace B3); the knob itself when the weapon, the foe or the model is unknown.
+func (in Input) meleePack(t Tuning) int {
+	if in.Blow == nil || in.Foe == nil {
+		return t.MeleeMaxPack
+	}
+	return int(float64(t.MeleeMaxPack)*in.Blow.undeadGain(*in.Foe) + 1e-9)
 }
 
 func (in Input) hasMelee() bool {

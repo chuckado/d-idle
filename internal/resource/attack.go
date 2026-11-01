@@ -71,7 +71,7 @@ func AttackChoice(in Input, t Tuning) AttackDecision {
 			return AttackDecision{Kind: Free, Skill: s, Reason: "free skill"}
 		}
 	}
-	if in.hasMelee() && in.LifePct() >= t.MeleeMinLifePct && (in.Hostiles <= t.MeleeMaxPack || in.WeakPack) && in.PackDanger < 2 {
+	if in.hasMelee() && in.LifePct() >= t.MeleeMinLifePct && (in.Hostiles <= in.meleePack(t) || in.weak()) && in.PackDanger < 2 {
 		for _, s := range in.Skills {
 			if s.Melee {
 				return AttackDecision{Kind: Melee, Skill: s, Reason: "out of mana, melee fallback"}
@@ -87,7 +87,7 @@ func AttackChoice(in Input, t Tuning) AttackDecision {
 			}
 		}
 	}
-	if in.LifePct() >= t.MinEngageLifePct && in.PackDanger < 2 && (in.Hostiles <= t.MeleeMaxPack || in.WeakPack) {
+	if in.LifePct() >= t.MinEngageLifePct && in.PackDanger < 2 && (in.Hostiles <= t.MeleeMaxPack || in.weak()) {
 		return AttackDecision{Kind: Wait, WaitMs: t.LowManaWaitMs, Reason: "out of mana, stop casting"}
 	}
 	return AttackDecision{Kind: Retreat, Reason: "out of mana, not safe to stand"}

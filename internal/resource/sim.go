@@ -77,7 +77,9 @@ type Scenario struct {
 	SpellCost    int
 	SpellDmg     float64
 	CastSec      float64
-	MeleeDmg     float64
+	MeleeDmg     float64 // flat damage per swing that always lands; used only when Melee is nil
+	Blow         *Blow   // the blow model (trace B1); nil keeps the flat MeleeDmg
+	Foe          Foe     // what the swings hit (defense, level, undead)
 	MeleeSec     float64
 	TripSec      float64
 	Seed         uint64
@@ -92,6 +94,10 @@ func BloodMoorSorc() Scenario {
 		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: []int{12, 24, 24, 45},
 		MonsterDps: 1.6, Exposure: 0.35, GoldPerKill: 6, SpellCost: 3, SpellDmg: 8, CastSec: 0.45,
 		MeleeDmg: 3, MeleeSec: 1.0, TripSec: 75, Seed: 7, HasMelee: true, Belt: 1,
+		// A clvl 8 Sorceress at 25 Dex and 10 Str with a 1-5 staff (StrBonus 100): trace sk-melee-trace.md B1. The
+		// to-hit factor 5, the Blood Moor foe (defense 15, level 3) and the staff range are U, nearest defaults.
+		Blow: &Blow{AR: AttackRating(0, 25, 5), Level: 8, Weapon: true, Min: 1, Max: 5, Str: 10, DmgPct: StatDmgPct(0, 10, 25, 100, 0, 0), Blunt: true},
+		Foe:  Foe{Defense: 15, Level: 3},
 	}
 }
 
@@ -147,6 +153,7 @@ func (w *world) input(hostiles, seen int) Input {
 		Life: int(w.life + 0.5), MaxLife: w.sc.MaxLife, Mana: int(w.mana), MaxMana: w.sc.MaxMana, Belt: w.belt, HasTP: w.hasTP,
 		NearTown: true, Gold: w.gold, LastTripGold: w.lastTrip, Level: w.sc.Level, Class: w.sc.Class, Area: 2,
 		Hostiles: hostiles, PackSeen: seen, Skills: sk,
+		Blow: w.sc.Blow, Foe: &w.sc.Foe,
 	}
 }
 
@@ -317,7 +324,7 @@ func (w *world) fight() {
 			w.rep.MeleeHits++
 			idle = 0
 			w.advance(w.sc.MeleeSec, contact)
-			w.hit(w.sc.MeleeDmg)
+			w.hit(w.meleeDmg())
 		case Retreat:
 			w.rep.Retreats++
 			w.advance(10, 0)
@@ -338,6 +345,14 @@ func (w *world) fight() {
 			w.mHP = nil
 		}
 	}
+}
+
+// meleeDmg is one swing's damage: the flat figure, or a to-hit and damage roll from the blow model.
+func (w *world) meleeDmg() float64 {
+	if w.sc.Blow == nil {
+		return w.sc.MeleeDmg
+	}
+	return w.sc.Blow.Swing(w.sc.Foe, func(n int) int { return int(w.r.next() % uint64(n)) })
 }
 
 func (w *world) hit(dmg float64) {
