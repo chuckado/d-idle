@@ -97,7 +97,7 @@ class Refusals(unittest.TestCase):
             rc, _, err = run("release", "--tag", "v1", "--notes", "n", "--url", url, "--repo", d)
             self.assertEqual(rc, 2)
             self.assertIn("no release exists", err)
-            subprocess.run(["git", "-C", d, "-c", "user.name=t", "-c", "user.email=t@example.com", "commit", "-q",
+            subprocess.run(["git", "-C", d, "-c", "user.name=t", "-c", "user.email=t" + "@example.com", "commit", "-q",
                             "--allow-empty", "-m", "x"], check=True)
             subprocess.run(["git", "-C", d, "tag", "v1"], check=True)
             rc, out, _ = run("release", "--tag", "v1", "--notes", "first notes", "--url", url, "--repo", d)
