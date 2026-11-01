@@ -1,0 +1,1713 @@
+      1 INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8 arrival=false stay=false r=9
+      1 INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=false r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.roam < nav.explore < nav.Explore"
+      1 DEBUG msg="nav mouth check" pos="{X:48 Y:161}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=29.1 skip=true
+      1 INFO msg="nav stuck" pos="{X:48 Y:161}" wp="{X:40 Y:162}" rung=0
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:35 Y:161}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=26 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:32 Y:167}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=32.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:29 Y:165}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=30.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:28 Y:167}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=32.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:27 Y:163}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=29.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:22 Y:164}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:19 Y:166}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=34.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:18 Y:168}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=37.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:15 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=43.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:21 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=41.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:24 Y:176}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=42.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:24 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:26 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:24 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:27 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:34 Y:186}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=51 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:35 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:39 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=48.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:42 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:195}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=60.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:39 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:41 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:47 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:54 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=67.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:87 Y:202}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=84.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:204}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=88.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:209}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=91.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=78.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:73 Y:197}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=72.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:71 Y:197}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=71.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:69 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=73.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:73 Y:209}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=83.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:74 Y:210}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=84.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:74 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=89 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:74 Y:219}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=92.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:75 Y:220}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=93.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:69 Y:190}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:190}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+      1 INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+      1 INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:48 Y:161}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=29.1 skip=true
+      1 INFO msg="nav stuck" pos="{X:48 Y:161}" wp="{X:43 Y:163}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:48 Y:161}" near=1
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:45 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:45 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:44 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:55 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:55 Y:162}" wp="{X:48 Y:161}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:55 Y:162}" near=1
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:55 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:54 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33 skip=true
+      1 DEBUG msg="nav mouth check" pos="{X:52 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=28.6 skip=true
+      1 DEBUG msg="nav mouth check" pos="{X:45 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:41 Y:160}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=25.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:48 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:49 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:54 Y:145}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=21.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:53 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:54 Y:133}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:61 Y:131}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=26.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:66 Y:131}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:66 Y:139}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:69 Y:141}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=34.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:67 Y:146}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:68 Y:147}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=35.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=44 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:83 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=49.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:152}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=55.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:152}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:91 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:160}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=59.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:166}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:155}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=56.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:91 Y:163}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:162}" wp="{X:89 Y:157}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:162}" near=4
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=60.4 skip=true
+      1 INFO msg="nav stuck" pos="{X:88 Y:162}" wp="{X:88 Y:157}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:88 Y:162}" near=5
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=59.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+      1 DEBUG msg="nav mouth check" pos="{X:87 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=54.4 skip=true
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:173}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=67.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:94 Y:177}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=72.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:96 Y:179}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=75.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:97 Y:184}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=79 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:104 Y:185}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=85.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:107 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=86.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:110 Y:185}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=90.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:110 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=91.3 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:114 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=92.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:117 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=94.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:120 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=99.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:124 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=101.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:127 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=105.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:130 Y:186}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=107.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:131 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=109.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:132 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=108.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:125 Y:194}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=107.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:120 Y:196}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=104.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:121 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=108.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:124 Y:204}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=112.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:124 Y:206}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=113.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:120 Y:207}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=111.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:112 Y:208}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=106.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:111 Y:208}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+      1 INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+      1 INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:48 Y:161}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=29.1 skip=true
+      1 INFO msg="nav stuck" pos="{X:48 Y:161}" wp="{X:41 Y:158}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:48 Y:161}" near=1
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:45 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:44 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=16.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:44 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:55 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:55 Y:162}" wp="{X:47 Y:160}" rung=0
+      1 DEBUG msg="nav mouth check" pos="{X:44 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.5 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:41 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=23.8 skip=true
+      1 INFO msg="nav stuck" pos="{X:41 Y:158}" wp="{X:47 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:41 Y:158}" near=1
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:150}" to="{X:47 Y:169}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:47 Y:167}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=34.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:47 Y:167}" wp="{X:49 Y:171}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:47 Y:167}" near=1
+      1 DEBUG msg="nav mouth check" pos="{X:41 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:37 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=14.1 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:149}" to="{X:40 Y:169}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:39 Y:168}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:39 Y:168}" wp="{X:41 Y:160}" rung=0
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:37 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=16.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:37 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=13.2 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:148}" to="{X:40 Y:168}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.GoTo < combat.move < combat.engage"
+      1 INFO msg="nav stuck" pos="{X:38 Y:151}" wp="{X:40 Y:168}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:38 Y:151}" near=1
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:148}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:146}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:145}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:143}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:142}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:141}"
+      1 INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:140}"
+      1 INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 INFO msg="combat move failed" to="{X:37 Y:150}" err="nav: the level changed during the walk: 8 -> 2"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:105 Y:143}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+      1 INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:144}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=10.3 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:144}" to="{X:24 Y:158}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.roam < nav.explore < nav.Explore"
+      1 DEBUG msg="nav mouth check" pos="{X:25 Y:158}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=25.1 skip=true
+      1 INFO msg="nav stuck" pos="{X:25 Y:158}" wp="{X:30 Y:162}" rung=0
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:47 Y:166}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:50 Y:172}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=39.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:43 Y:173}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=38.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:191}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=70.6 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:170}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:169}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:173}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.8 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:86 Y:176}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.4 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:169}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.7 skip=true
+      1 INFO msg="nav stuck" pos="{X:88 Y:171}" wp="{X:88 Y:171}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:88 Y:171}" near=7
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:88 Y:163}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=59.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:90 Y:172}" wp="{X:88 Y:172}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:90 Y:172}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:172}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:90 Y:171}" wp="{X:94 Y:168}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:90 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:90 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.7 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:163}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:89 Y:171}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.9 skip=true
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=8
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=9
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=9
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:89 Y:171}" near=9
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=0
+      1 INFO msg="nav stuck" pos="{X:89 Y:171}" wp="{X:89 Y:166}" rung=1
+      1 INFO msg="nav stuck" pos="{X:90 Y:171}" wp="{X:92 Y:163}" rung=2
+      1 WARN msg="nav: stalled in a pocket, escaping by town portal" level=8 pos="{X:90 Y:171}" rung=3
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: escaped from level 8 to 1 after a stall in a pocket"
+      1 INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:92 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:89 Y:163}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:93 Y:164}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:87 Y:172}" err="nav: the level changed during the walk: 8 -> 1"
+      1 INFO msg="combat move failed" to="{X:86 Y:176}" err="nav: the level changed during the walk: 8 -> 1"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:83 Y:131}" level=1 exits=0 wantExit=2 arrival=true stay=false r=16
+      1 INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.ExitTo < nav.ToArea < main.(*lab).ToArea < drill.fDen"
+      1 DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+      1 INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+      1 INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:24 Y:158}"
+      1 DEBUG msg="nav walk" callers="nav.walk < nav.roam < nav.explore < nav.Explore"
+      1 DEBUG msg="nav mouth check" pos="{X:25 Y:159}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=26 skip=true
+      1 INFO msg="nav stuck" pos="{X:25 Y:159}" wp="{X:26 Y:167}" rung=0
+      1 DEBUG msg="nav walk" callers="nav.roam < nav.explore < nav.Explore < main.(*lab).DenPhase"
+      1 DEBUG msg="nav mouth check" pos="{X:79 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.1 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.engage < combat.fight"
+      1 DEBUG msg="nav mouth check" pos="{X:81 Y:184}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=67.2 skip=true
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:79 Y:178}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.5 skip=true
+      1 INFO msg="nav stuck" pos="{X:79 Y:180}" wp="{X:79 Y:180}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:79 Y:180}" near=6
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:79 Y:179}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=7
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:180}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=9
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:180}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:180}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:180}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:180}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.2 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:77 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.engage"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:89 Y:176}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=9
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:185}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=9
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:76 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:86 Y:179}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:76 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:76 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:86 Y:179}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:86 Y:179}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:86 Y:179}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=9
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:78 Y:181}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:81 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 DEBUG msg="nav walk" callers="nav.GoTo < combat.move < combat.evade < combat.retreatStep"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=9
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:65 Y:175}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:81 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:90 Y:178}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:73 Y:170}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:78 Y:181}" wp="{X:79 Y:178}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:78 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:70 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:78 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=63 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:77 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:77 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:77 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:77 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=12
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:72 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:75 Y:183}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=10
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="nav stuck" pos="{X:76 Y:181}" wp="{X:74 Y:182}" rung=0
+      1 INFO msg="nav stalled by monsters, yielding" pos="{X:76 Y:181}" near=11
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="combat: left the game to survive"
+      1 DEBUG msg="nav mouth check" pos="{X:76 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+      1 DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=61.6 skip=true
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:71 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:88 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:88 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:89 Y:176}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:170}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:170}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:170}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:71 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:84 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:170}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:67 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:172}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:176}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:65 Y:176}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:69 Y:173}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:81 Y:169}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:171}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:170}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:66 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:179}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:179}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:68 Y:179}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:187}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:73 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:72 Y:174}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:180}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:180}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:180}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:180}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:70 Y:180}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:71 Y:179}" err="nav: timeout: walk did not finish in 2m0s"
+      1 INFO msg="combat move failed" to="{X:71 Y:175}" err="nav: timeout: walk did not finish in 2m0s"
+      1 DRILL DW.m3 P23 FAIL 2 bounce(s) out of the cave, first in clear | intended: after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired) | observed: run1: 4 entries

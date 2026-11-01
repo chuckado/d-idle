@@ -17,7 +17,7 @@ gates:
   - "live: DW.m3 x3 and DW.m4 rerun, no bounce, Clear finishes (docs/fixmouth2.md)"
 merge: ""
 result: "offline tests pass; live proof FAILED (drills17): bounces remain, see the DRILLS17 section of docs/probes/drills/README.md"
-live: "verified live (drills17, hidden slot 0, lab build cheats3): (a) arrival flag set on the level change and cleared after the first step-away (walk starts 28.7 from the exit), so later walks run at mouthR 9 and NearMouth is off (mouthGuard off): FAIL; (b) the evade cap never fired (no spin: 14 step-aways per run, was about 25k); DW.m3 x3 identical 3 bounces in 4 entries, DW.m4 2 bounces in 4 (explore); the Clear phase finishes (no 200 s TTL)"
+live: "verified live (drills17, hidden slot 0, lab build cheats3): (a) arrival flag set on the level change and cleared after the first step-away (walk starts 28.7 from the exit), so later walks run at mouthR 9 and NearMouth is off (mouthGuard off): FAIL; (b) the evade cap never fired (no spin: 14 step-aways per run, was about 25k); DW.m3 x3 identical 3 bounces in 4 entries, DW.m4 2 bounces in 4 (explore); the Clear phase finishes (no 200 s TTL); drills18 (fixmouth3 build on top): DW.m3 x3 down to 1 mouth bounce per run, DW.m4 0 bounces"
 ```
 
 - [x] decide the change from the DRILLS16 geometry

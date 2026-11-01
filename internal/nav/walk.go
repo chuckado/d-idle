@@ -11,6 +11,8 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 )
@@ -21,6 +23,7 @@ type walkOpts struct {
 	timeout    time.Duration    // 0: tuning WalkTimeout
 	onPlan     func(planResult) // test and debug hook
 	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
+	oneClick   bool             // click the goal itself while it is in line of sight (the step away from a cave mouth, FIXMOUTH3)
 }
 
 type walkState struct {
@@ -112,7 +115,7 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 			if ok {
 				n.log.Info("nav: stepping away from a cave mouth", "from", o.pos, "to", away)
 				n.inMouth = true
-				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return away, 3, nil }, walkOpts{timeout: 10 * time.Second})
+				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return away, 3, nil }, walkOpts{timeout: 10 * time.Second, oneClick: true})
 				n.inMouth = false
 				if errors.Is(err, ErrLevelChanged) {
 					n.noteMouthBounce() // the same step again would fire the same trigger (FIXNAV)
@@ -199,6 +202,9 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 			return emptyPathErr()
 		}
 		wp := w.res.wps[w.cur]
+		if wo.oneClick && sees(o.pos, goal) {
+			wp = goal // one long click: no waypoint click lands inside the trigger area on the way out
+		}
 		if !sees(o.pos, wp) {
 			switch {
 			case w.cur > 0 && sees(o.pos, w.res.wps[w.cur-1]):
@@ -603,10 +609,11 @@ const (
 	mouthR        = 9.0
 	mouthArrivalR = 16.0
 	mouthAway     = 20.0
-	// mouthApproachR: NearMouth radius. FIXMOUTH2, V (DRILLS16 logs, Den of Evil): an approach to a Zombie at (43,141),
-	// 9.4 from the exit (35,135), then 8.9, fired the trigger; mouthR 9 let the first one through. 12 covers both with
-	// 2.6 margin and the 11.2 arrival offset; the trigger bound itself stays U.
-	mouthApproachR = 12.0
+	// mouthApproachR: the radius inside which a click may fire an unwanted exit (NearMouth, the roam target filter).
+	// FIXMOUTH3, V (DRILLS16/17 logs): clicks fired the trigger 13.0 from the exit (Den, click (42,146), exit (35,135))
+	// and 11.7 and 11.2 from it (Cave Level 1); clicks 16.2 to 18 away never did. 15 covers 13.0 with 2 margin and stays
+	// below 16.2. The real trigger bound stays U (docs/fixmouth3.md).
+	mouthApproachR = 15.0
 )
 
 // SetMouthGuard turns NearMouth on. d2d only (arrival inside a warp's trigger area is a d2d behavior, docs/d2d-loop.md);
@@ -618,11 +625,11 @@ func (n *Navigator) SetMouthGuard(on bool) { n.mouthGuard = on }
 // the bounce put the character back inside the trigger and the fight became a border shuttle (KILLFIX: Fallen packs
 // at the Den mouth, 8 ms between "approach" and "Entered Den of Evil"; penalizeExits skips exits near the goal).
 func (n *Navigator) NearMouth(p input.Point) bool {
-	if !(n.mouthGuard || n.avoiding() || n.arrival) || n.w == nil {
+	if n.w == nil {
 		return false
 	}
 	lm := n.w.Current()
-	if lm == nil {
+	if lm == nil || !(n.mouthGuard || n.avoiding() || n.arrival || n.stayLevel == lm.No) {
 		return false
 	}
 	for _, e := range lm.Exits {
@@ -638,11 +645,11 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 
 func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 	r := mouthR
-	if n.arrival {
+	if n.arrival || n.stayLevel == o.level {
 		r = mouthArrivalR
 	}
 	if n.log.Enabled(context.Background(), slog.LevelDebug) {
-		n.log.Debug("nav mouth check", "pos", o.pos, "level", o.level, "exits", len(o.lm.Exits), "wantExit", n.wantExit, "arrival", n.arrival, "r", r)
+		n.log.Debug("nav mouth check", "pos", o.pos, "level", o.level, "exits", len(o.lm.Exits), "wantExit", n.wantExit, "arrival", n.arrival, "stay", n.stayLevel == o.level, "r", r)
 	}
 	inside := false
 	for _, e := range o.lm.Exits {
@@ -658,30 +665,34 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 			continue
 		}
 		inside = true
+		if !data.IsTown(o.level) {
+			// FIXMOUTH3: a level whose mouth the walker had to step away from keeps its guard for the whole stay (DRILLS17:
+			// the one-shot arrival flag ended after the first step-away and the engage approach at 10.0 bounced).
+			n.stayLevel = o.level
+		}
 		// FIXNAV: after a bounce (the step fired a trigger) the next attempt from this exit turns the direction: the
 		// trigger area is seed-dependent (docs/d2d-loop.md), the same step repeated 12 times in the post-fix soak.
 		key := mouthKey{o.level, e.Pos.X, e.Pos.Y}
 		k := n.mouthBounces(key)
-		ang := mouthTurns[k%len(mouthTurns)] * math.Pi / 180
-		ux, uy := dx/d, dy/d
-		ux, uy = ux*math.Cos(ang)-uy*math.Sin(ang), ux*math.Sin(ang)+uy*math.Cos(ang)
 		n.mouthLast, n.mouthLastOK = key, true
-		tx, ty := o.pos.X+int(math.Round(ux*mouthAway)), o.pos.Y+int(math.Round(uy*mouthAway))
 		f := n.fieldFor(o.lm)
-		x, y, ok := f.nearestWalkable(tx, ty, 6)
-		if k > 0 && ok {
-			return input.Point{X: x, Y: y}, true
-		}
-		if !ok || math.Hypot(float64(x-e.Pos.X), float64(y-e.Pos.Y)) < d+8 {
-			// Walls in the straight line (cave corridors): the nearest reachable cell that is at least 8 subtiles
-			// farther from the warp. Without it the walk went on toward the warp and the cave shuttle began (KILLFIX).
-			if p, found := n.mouthStepFlood(f, o.pos, e.Pos.X, e.Pos.Y, d); found {
-				return p, true
+		base := mouthTurns[k%len(mouthTurns)] * math.Pi / 180
+		// FIXMOUTH3: the turned direction, then its opposite when the straight path would cross the trigger.
+		for _, ang := range []float64{base, base + math.Pi} {
+			ux, uy := dx/d, dy/d
+			ux, uy = ux*math.Cos(ang)-uy*math.Sin(ang), ux*math.Sin(ang)+uy*math.Cos(ang)
+			tx, ty := o.pos.X+int(math.Round(ux*mouthAway)), o.pos.Y+int(math.Round(uy*mouthAway))
+			x, y, ok := f.nearestWalkable(tx, ty, 6)
+			if ok && leavesExit(o.pos, input.Point{X: x, Y: y}, e.Pos, d) && (k > 0 || math.Hypot(float64(x-e.Pos.X), float64(y-e.Pos.Y)) >= d+8) {
+				return input.Point{X: x, Y: y}, true
 			}
-			n.log.Info("nav: next to a cave mouth, no way away found", "pos", o.pos, "exit", e.Pos, "dest", e.Dest, "dist", int(d))
-			continue
 		}
-		return input.Point{X: x, Y: y}, true
+		// Walls in the straight line (cave corridors): the nearest reachable cell that is at least 8 subtiles
+		// farther from the warp. Without it the walk went on toward the warp and the cave shuttle began (KILLFIX).
+		if p, found := n.mouthStepFlood(f, o.pos, e.Pos.X, e.Pos.Y, d); found {
+			return p, true
+		}
+		n.log.Info("nav: next to a cave mouth, no way away found", "pos", o.pos, "exit", e.Pos, "dest", e.Dest, "dist", int(d))
 	}
 	if n.arrival && !inside {
 		// FIXMOUTH2: the arrival radius holds for the whole stay (V DRILLS16: a roam walk 13 from the exit after Clear
@@ -689,6 +700,20 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 		n.arrival = false
 	}
 	return input.Point{}, false
+}
+
+// leavesExit: the straight path from a to b never gets nearer to the exit than a was (d, minus half a subtile of slack):
+// it neither passes the exit nor starts by walking toward it. FIXMOUTH3 proof case: from (256,148), 3.2 from the exit
+// (255,145), the second click fired the trigger.
+func leavesExit(a, b input.Point, e d2map.Point, d float64) bool {
+	ax, ay := float64(a.X), float64(a.Y)
+	vx, vy := float64(b.X)-ax, float64(b.Y)-ay
+	l2 := vx*vx + vy*vy
+	t := 0.0
+	if l2 > 0 {
+		t = math.Max(0, math.Min(1, ((float64(e.X)-ax)*vx+(float64(e.Y)-ay)*vy)/l2))
+	}
+	return math.Hypot(ax+t*vx-float64(e.X), ay+t*vy-float64(e.Y)) >= d-0.5
 }
 
 // mouthStepFlood returns the walkable cell within mouthFlood hops of pos that lies at least 8 subtiles farther from

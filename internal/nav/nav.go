@@ -108,6 +108,7 @@ type Navigator struct {
 	spots     []*stuckSpot // recent stalls (stuckmem.go)
 	walkSeq   int
 	walkLevel int  // level of the last walk's first observation (0: none yet)
+	stayLevel int  // level whose unwanted exits are guarded for the whole stay (FIXMOUTH3); 0: none
 	arrival   bool // a warp brought us here and no walk has consulted mouthStep since (FIXMOUTH)
 	escaping  bool
 	teleBad   map[[2]int]int  // hop cells where nothing happened

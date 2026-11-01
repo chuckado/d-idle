@@ -539,3 +539,35 @@ Drilly (throwaway Sorceress, `--no-save`): `debug goto 1/2/3`, `debug stat 6/7` 
 - docs/BACKLOG.md: FIXMOUTH3: fixmouth2 live proof FAILED (DRILLS17): DW.m3 x3 3 bounces in 4 entries and DW.m4 2 in 4 remain. The arrival flag ends after the first step-away (start 28.7 from the exit), then NearMouth is off (mouthGuard default off) so engage approaches to (43,141) in Den and roam at 13 in Cave Level 1 bounce; a step-away from 3.2 also fires the trigger once. Clear now finishes and the spin is gone. Fix proposed in DRILLS17, not implemented.
 - docs/INDEX.md: DRILLS17 section in docs/probes/drills/README.md.
 - CHANGELOG: none.
+
+## DRILLS18 (2026-11-01): live proof of fixmouth3 (FAIL, large progress)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from branch agent/fixmouth3 (tip 2a9234a) merged with origin/main. Capacity before: idle 29 plus nice 33 percent. Files `2026-11-01-drills18-<label>.txt`: `m31`..`m33` (DW.m3 x3; m31 the filtered log, m32/m33 the first 400 filtered lines; the three runs are identical), `m41` (DW.m4), `d3`, `d2` (DRILL lines). Filter: nav mouth, step-away, level-change, walk-caller, stall and DRILL lines, repeats collapsed. Command as DRILLS17 (`-group F -only DW.m3 -label drills18-m3N -v`, `-only DW.m4`; groups D3 and D2 without `-only`). Each invocation took about 7 s of wall time.
+
+### Result
+| Drill | DRILLS17 | DRILLS18 |
+|---|---|---|
+| DW.m3 x3 | 3 of 4 entries bounced, 18 level-change errors per run | all 3 runs identical: verdict FAIL `2 bounce(s)` of 4 entries; 1 real mouth bounce (cycle 2 clear) plus 1 town-portal escape from a pocket stall (cycle 3 clear, area 1); 18 errors per run, but 16 are one stale move retried after the escape (`8 -> 1`), 1 the real bounce (`8 -> 2`), 1 the escape; 11 `arrived in level` lines, no `Entered` cycle within 1 s except the one bounce |
+| DW.m4 | 2 of 4 bounced | 0 bounces in 4 entries, 0 level-change errors; the drill then timed out `walk back out` (2 min) and left the inventory open (P35 dirty UI, group stopped; the later D3 group started clean) |
+
+Clear still FINISHES in both drills (no TTL). `stayLevel`: V. The first `nav mouth check` on arrival shows `arrival=true stay=false r=16`, the first step-away sets it (`stay=true` from the next check), and every later check in the level logs `stay=true r=16` (arrival goes false after the first walk clear of the exits) until the level changes. 11 `nav: stepping away from a cave mouth` lines per DW.m3 run (DRILLS17: 14); DW.m4 8 (DRILLS17: 6). The evade cap never fired. `combat move skipped: the point is in a cave mouth` fired 7 times in m3 and once in m4: the Fighter filter works.
+
+### The remaining bounce (V, m31 log)
+Caller chain (V): `nav.walk < nav.GoTo < combat.Fighter.move < combat.Fighter.engage < combat.Fighter.fight`. Engage targets a Fallen and calls `move` to (37,150): 15.1 from the exit (35,135), just outside `mouthApproachR` 15, so not skipped. The walk's `mouthStep` at (37,148), 13.2 away, steps away to (40,168) (`stay=true r=16`). The step is blocked by a monster (`nav stuck`, `stalled by monsters, yielding`), the fight loop runs inside the step-away, and its basic-attack swings (no bound attack skill in the drill) walk the character toward the Fallen at the mouth: 7 `approach` decisions, 7 `move skipped` lines, and the character ends at (36,138), 3.2 from the exit. The step-away walk then replans from there (29 cells, 5 waypoints) and its FIRST click wp (37,140) fires the trigger 16 ms later (`arrived in level 2`). So: click distance 5.4 from the exit, start 3.2; the replan path first goes along the corridor toward the exit, so the `leavesExit` check (done once, at the original start 13.2) did not cover the replan. The other failure in the same run is not a mouth bounce: a pocket stall at (90,171) (`nav stuck` rung 0..2, `escaping by town portal`), which the drill counts as leaving the cave. DW.m4 had neither.
+
+### The long single click (UNVERIFIED, partly)
+No step-away's single long click fired the trigger in the 11 plus 8 step-aways of these runs: every step-away that ran without interference completed. The 3.2 start of DRILLS17 was not reproduced in a clean case. The one failure above is a REPLAN of the step-away after interference (oneClick only applies while the goal is in line of sight; the path from (36,138) was cornered, so ordinary waypoints were used). U: whether the long click itself is safe at a start of 3.2 in Den.
+
+### Coverage (V, weak evidence)
+`nav plan` lines: 664 in m3, 519 in m4; roam walks in the filtered m3 log 92 (DRILLS17 m31: 41, m41: 130; the filters differ, so only the order of magnitude is comparable). The sweep did not starve: Explore still logs roam walks in the Den after the step-away (m31, cycles 0 to 3), and cave Level 1 in DW.m4 reached `walk back out` after four full cycles. No per-point visited count exists in the logs: U.
+
+### Regression (V)
+D3 12 of 12 PASS (`d3`), D2 11 of 11 PASS (`d2`).
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`): `debug goto 1/2/3`, `debug stat 6/7` life (ledgered cheats `drills:<drill id>`), portal and town drills of D2/D3. Ends in Rogue Encampment (`END character Drilly ... in town: true`), panels closed (the D3 and D2 groups cleaned the inventory left open by DW.m4).
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: FIXMOUTH4: fixmouth3 live proof FAILED narrowly (DRILLS18): DW.m3 x3 down to 1 mouth bounce per run, DW.m4 0 bounces. The remaining bounce is a step-away replan after a fight inside it (monster stall) pulled the character to 3.2 from the exit; the replan's first click (37,140) fired. Also a Fighter.move target 15.1 from the exit (just outside mouthApproachR 15) and a pocket-stall town portal escape. Fix proposed in DRILLS18, not implemented: re-run `leavesExit`/mouthStep on every step-away replan and refuse fight swings toward a mouth during the step-away.
+- docs/INDEX.md: DRILLS18 section in docs/probes/drills/README.md.
+- CHANGELOG: none.

@@ -18,7 +18,7 @@ gates:
   - "live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)"
 merge: ""
 result: "offline tests pass; live proof FAILED (drills16): the arrival step-away works, bounces remain from other walks; follow-up card FIXMOUTH2 (agent/fixmouth2)"
-live: "verified live (drills16, hidden slot, lab build cheats3): the arrival guard fired at radius 16 on every first walk (dist 11.2) and the Explore first walk stepped away (no bounce there); DW.m3 x3 identical: 23 level-change errors from Fighter.move (engage approach and evade), never finishes; DW.m4: 2 explore bounces of 4 entries from roam first walk 13 subtiles from the exit after arrival was consumed; the Cave Level 1 step-away click did NOT fire the trigger (U resolved); drills17 (current main with fixmouth2): still FAIL, DW.m3 3 bounces in 4 entries (x3 identical), DW.m4 2 in 4; the Clear phase now finishes"
+live: "verified live (drills16, hidden slot, lab build cheats3): the arrival guard fired at radius 16 on every first walk (dist 11.2) and the Explore first walk stepped away (no bounce there); DW.m3 x3 identical: 23 level-change errors from Fighter.move (engage approach and evade), never finishes; DW.m4: 2 explore bounces of 4 entries from roam first walk 13 subtiles from the exit after arrival was consumed; the Cave Level 1 step-away click did NOT fire the trigger (U resolved); drills17 (current main with fixmouth2): still FAIL, DW.m3 3 bounces in 4 entries (x3 identical), DW.m4 2 in 4; the Clear phase now finishes; drills18 (fixmouth3 build on top): DW.m3 x3 down to 1 mouth bounce per run, DW.m4 0 bounces"
 ```
 
 - [x] decide the option (first-walk arrival radius) from the logged geometry
