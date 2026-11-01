@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
+| [fixemptyplan](../../openspec/changes/fixemptyplan/) | in-progress | fixemptyplan | `internal/input/client.go`<br>`internal/nav/nav.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixemptyplan_test.go`<br>`internal/combat/fight.go`<br>`internal/combat/reach.go`<br>`internal/combat/fixemptyplan_test.go`<br>`docs/fixemptyplan.md` | - |
 | [fixf17](../../openspec/changes/fixf17/) | in-progress | fixf17 | `docs/fixf17.md` | - |
 | [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
 | [fixtalk](../../openspec/changes/fixtalk/) | in-progress | fixtalk | `internal/talk/**`<br>`cmd/d2bot/task.go`<br>`cmd/d2bot/acts.go`<br>`cmd/d2bot/acts_test.go`<br>`cmd/d2bot/cain_test.go`<br>`docs/fixtalk.md` | - |
@@ -74,6 +75,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
+- change fixemptyplan: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change fixemptyplan: live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)
 - change fixf17: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixf17: live proof after merge: the full F group x3 passes DW.m1 in run 1 and no `the Pacer lagged` line above 100 s (docs/fixf17.md)
 - change fixmeter: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
@@ -91,6 +94,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 65b117a 10-31 23:11 `Merge agent/decompmods: monster mods decomp trace` (decompmods)
 - 7534522 10-31 23:06 `Merge agent/soakg1d2d: Gate 1 soak 2 report (not passed, 1 seed)` (soakg1d2d)
 - 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
@@ -100,5 +104,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
 - 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
-- 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
 <!-- statusgen:end -->
