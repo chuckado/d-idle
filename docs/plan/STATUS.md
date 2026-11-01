@@ -114,6 +114,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- aab77a1 11-01 12:02 `Merge agent/chunker: chunker.py sync/groom for the community work board` (chunker)
 - 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
 - 792145a 11-01 11:53 `Merge agent/skmelee: player melee blow traced in game.exe, emulator oracle, deviations vs a d2d port` (skmelee)
 - f85fcc3 11-01 11:48 `Merge agent/drills28: armorcut buff retry after a hit-cut cast, drill D28-0 and D26-A rerun` (drills28)
@@ -123,5 +124,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
 - bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
 - fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
-- 78f45e7 11-01 11:22 `Merge origin/main into drills27` (drills27)
 <!-- statusgen:end -->

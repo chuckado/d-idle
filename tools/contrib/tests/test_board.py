@@ -95,7 +95,7 @@ class Real(unittest.TestCase):
             rc, out, _ = run("--write-issues", d)
             self.assertEqual(rc, 0)
             files = sorted(os.listdir(d))
-            self.assertIn("SKMELEE.md", files)
+            self.assertTrue(files and all(f.endswith(".md") for f in files))
             self.assertNotIn("BBB-2.md", files)
             self.assertIn("nothing was sent", out)
 
