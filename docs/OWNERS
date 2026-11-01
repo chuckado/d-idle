@@ -74,3 +74,8 @@ docs/decomp-queue.md  skmiss  skmiss
 docs/BACKLOG.md  skmiss  skmiss
 docs/INDEX.md  skmiss  skmiss
 openspec/changes/skmiss/**  skmiss  skmiss
+tools/discord/feed.py  feedtick2  feedtick2
+tools/discord/tests/**  feedtick2  feedtick2
+docs/process/feed-after-events.md  feedtick2  feedtick2
+docs/community/discord/feeds.md  feedtick2  feedtick2
+openspec/changes/feedtick2/**  feedtick2  feedtick2

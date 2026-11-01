@@ -215,13 +215,29 @@ TICK_FIELDS = ("running", "merged", "launched", "upstream", "blocked", "waiting"
 TICK_NEW = TICK_FIELDS[1:]  # a tick that only lists what is running is idle
 TICK_LABELS = {"running": "Running", "merged": "Merged", "launched": "Launched", "upstream": "Upstream",
                "blocked": "Blocked", "waiting": "Waiting on the maintainer"}
-TICK_MAX = 900
+TICK_MAX = 3800  # embed description limit is 4096 (notify.LIMITS); headroom for the cut line
 EMPTY_VALUES = ("", "none", "nothing", "-", "n/a", "no change", "unchanged")
 
 
 def tick_clean(v):
     v = " ".join((v or "").split())
     return "" if v.lower().rstrip(".") in EMPTY_VALUES else v
+
+
+def tick_cut(text):
+    """Keep the whole tick as one post; over the cap, cut at a line boundary and say so."""
+    if len(text) <= TICK_MAX:
+        return text
+    marker = "(cut: %d chars)"
+    keep, lines = [], text.split("\n")
+    for ln in lines:
+        if len("\n".join(keep + [ln])) + 1 + len(marker % 99999) > TICK_MAX:
+            break
+        keep.append(ln)
+    if not keep:  # one huge line: hard cut of the first line
+        keep = [lines[0][:TICK_MAX - len(marker % 99999) - 1].rstrip()]
+    dropped = len(text) - len("\n".join(keep))
+    return "\n".join(keep) + "\n" + marker % dropped
 
 
 def tick_from_file(path):
@@ -250,9 +266,9 @@ def build_tick(a):
     for k in TICK_FIELDS:
         if vals[k]:
             items = [i.strip() for i in vals[k].split(",") if i.strip()] if k in ("running", "merged", "launched") else [vals[k]]
-            lines.append("- %s: %s" % (TICK_LABELS[k], notify.trunc(", ".join(items), 300)))
+            lines.append("- %s: %s" % (TICK_LABELS[k], ", ".join(items)))
     stamp = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime(a.now if a.now is not None else time.time()))
-    return "dispatcher tick " + stamp, notify.trunc("\n".join(lines), TICK_MAX), ""
+    return "dispatcher tick " + stamp, tick_cut("\n".join(lines)), ""
 
 
 def neutralize(text):

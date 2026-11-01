@@ -172,8 +172,27 @@ class Tick(unittest.TestCase):
         rc, out, _ = self.tick("--merged", ",".join("agent%d" % i for i in range(200)), "--blocked", "x" * 2000,
                                "--waiting", "y" * 2000)
         self.assertEqual(rc, 0)
-        body = out.split("\n", 2)[2]
-        self.assertLessEqual(len(body.strip()), 900)
+        body = out.split("\n", 2)[2].strip()
+        self.assertLessEqual(len(body), feed.TICK_MAX)
+        self.assertLess(feed.TICK_MAX, 4096)
+
+    def test_long_tick_is_whole_below_cap(self):
+        text = "z" * 2500
+        rc, out, _ = self.tick("--blocked", text, "--waiting", "w" * 1000)
+        self.assertEqual(rc, 0)
+        self.assertIn(text, out)
+        self.assertNotIn("(cut:", out)
+
+    def test_cut_at_line_boundary_with_marker(self):
+        lines = ["- Blocked: " + "b" * 1500, "- Waiting on the maintainer: " + "w" * 1500, "- Upstream: " + "u" * 1500]
+        text = "\n".join(lines)
+        got = feed.tick_cut(text)
+        self.assertLessEqual(len(got), feed.TICK_MAX)
+        self.assertEqual(got.split("\n")[:2], lines[:2])
+        self.assertEqual(got.split("\n")[-1], "(cut: %d chars)" % (len(text) - len("\n".join(lines[:2]))))
+        self.assertNotIn("u" * 10, got)
+        self.assertEqual(feed.tick_cut("a" * feed.TICK_MAX), "a" * feed.TICK_MAX)
+        self.assertIn("(cut: ", feed.tick_cut("a" * (feed.TICK_MAX + 1)))
 
     def test_channel_is_progress_on_send(self):
         m = Mock()
