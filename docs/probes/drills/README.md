@@ -382,7 +382,6 @@ Result files `2026-11-01-drills12-<label>.txt` (stdout of each d2drill invocatio
 - BACKLOG: close fixcrowd item 1.5 (drill wait fixed) and its live proof (task 1.4): verified live (D-portalmelee PASS x3, control PASS x3).
 - INDEX / CHANGELOG: "drills12: live proof of fixcrowd: the 3-adjacent portal drill passes at crowdAdjacent 8 (Safety chicken, scroll kept); the control still casts; the drill measures in the bot's own unit".
 
-<<<<<<< HEAD
 ## DRILLS13 (2026-11-01): live proof of fixrecast (Frozen Armor), M1 mana timing
 Result files `2026-11-01-drills13-<label>.txt` (stdout of each d2drill invocation, scrubbed): `fro12` (D-fro1 and D-fro2, the proof), `fro1-stalecache` (the same drill on the lab's old tables cache, the failing control), `m1a`, `m1b` (D-m1, two invocations; identical). The first D-fro2 invocation (BLOCKED, "did not reach level 2": `debug points <skill> <n>` SETS the level, the harness added one point per call) was not kept. New group `Q` (internal/drill/d13.go, cmd/d2drill/d13_lab.go; overlap declared: three lines in cmd/d2drill/main.go for the group switch and the end-of-run goto town). Run on the worker host, one hidden slot (slot 1), `lab-debug-skills` binary, lockstep, throwaway Sorceress `--no-save`: `D2D_AGENT=drills13 D2D_BIN=<fork>/bin/d2d.lab-debug-skills tools/agentrun.sh drills13 --ttl 900 -- tools/d2dslot.sh run -n 1 -t 900 -- <built>/d2drill -group Q -only D-fro1,D-fro2 -repeat 1 -cache <fresh tables dir> -label drills13-fro12`. Capacity: worker host idle+nice 54 percent before the first run. A whole invocation takes under 10 s of wall time (600 virtual seconds). Skill-drill verbs go through `d2dctl.SkillDebug` (ledgered with reason and actor `drills:<drill id>`); `debug points`, `debug hit`, `debug stat`, `debug goto`, `debug kill` through the logged lab cheats.
 
@@ -418,7 +417,7 @@ Mana = `dump stats` raw[8] (256ths), full 9472 before the cast; cost 640 (2.5 po
 ### Shared-file lines for the merger
 - BACKLOG: fixrecast live proof done (verified live, 114 s / 126 s recasts, 120 s / 132 s real duration); NEW items F1 (cache column stamp in data.Open / CacheCurrent), F2 (Buff only on needBuff: re-arm needBuff by the armor's recast time), F3 (Player.States empty on d2d); sk-mana-trace D1 and D3 confirmed live on d2d (pay at +1, action frame +8, a cut cast stays paid): PR candidate "pay at the action frame" now has its live evidence.
 - INDEX / CHANGELOG: "drills13: live proof of fixrecast (Frozen Armor recast at 114 s / 126 s, real duration 120 s / 132 s, recast refreshes the state) and the M1 mana trace (d2d pays 1 tick after the command, 7 ticks before the action frame, a cut cast is not refunded); finds a stale tables cache disables the fix and that Buff is only called on needBuff".
-=======
+
 
 ## DRILLS14 (2026-11-01): DENBOUNCE, the call that leaves the cave
 
@@ -445,4 +444,3 @@ Smallest: make `mouthStep` measure from where d2d puts the character, not only f
 - docs/BACKLOG.md: FIXDENBOUNCE: cause named by drills14 (nav mouthStep mouthR 9 vs arrival at 11.2 subtiles; Explore/roam first walk fires the trigger; Fighter.Clear approach in Cave Level 1); fix proposed in the DRILLS14 section, not implemented.
 - docs/INDEX.md: DRILLS14 section in docs/probes/drills/README.md.
 - CHANGELOG: none (no product change).
->>>>>>> agent/drills14
