@@ -14,4 +14,4 @@ SKARMOR (docs/research/sk-armor-trace.md, findings B1-B3) found that the armor r
 
 Offline only. No spec names buff timing (grep openspec/specs): no delta. Live proof pending.
 
-Overlap (declared, as fixcrowd does): cmd/d2bot/d2dbackend_test.go (synthetic cache header, one line) is not owned by an open card; internal/data/data_test.go (fixture column and one test) is owned by fixrecast; internal/combat/necro.go is owned by the open card fixrecast and internal/combat/fighter.go by the open card fixportalmelee (both code-merged, open for their live proofs). This card edits them (buffStates; Buff split and fightBuff) and does not list them in owns.
+Overlap (declared, as fixcrowd does): cmd/d2bot/d2dbackend_test.go (synthetic cache header, one line) is not owned by an open card; internal/data/data_test.go (fixture column and one test) is owned by the archived card fixrecast; internal/combat/necro.go is owned by the card fixrecast (archived) and internal/combat/fighter.go by the card fixportalmelee (archived). This card edits them (buffStates; Buff split and fightBuff) and does not list them in owns.
