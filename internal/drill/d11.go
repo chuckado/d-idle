@@ -66,7 +66,7 @@ func D11(l D11Lab) []Drill {
 	lim := 10 * time.Minute
 	return []Drill{
 		{ID: "D-emptyplan", Primitive: "P22", Title: "fixemptyplan: a pack, mana drained to 0 before every round: the out-of-mana back-off leaves no 'no path: empty path' line", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return dEmptyPlan(ctx, r, l) }},
-		{ID: "D-portalmelee", Primitive: "P10", Title: "fixportalmelee: 3 melee monsters adjacent, 34 percent life, empty belt, one scroll: Safety chickens and the scroll stays", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		{ID: "D-portalmelee", Primitive: "P10", Title: "fixportalmelee: 3 Fallen adjacent, 34 percent life, empty belt, one scroll: Safety chickens and the scroll stays", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			i := l.PortalMelee(ctx, r, 3, false)
 			o := Outcome{Intended: "adjacent >= 3, no potion, one scroll: Safety is Chicken (not TownPortal), scroll count unchanged"}
 			o.Observed = i.String()
