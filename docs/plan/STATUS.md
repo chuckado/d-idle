@@ -48,7 +48,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
-| [prfixes](../../openspec/changes/prfixes/) | in-progress | prfixes | `docs/research/pr-walk-draft.md`<br>`docs/research/pr-walk-evidence-pack.md`<br>`docs/research/pr-price2-draft.md`<br>`docs/research/pr-price2-evidence-pack.md`<br>`docs/research/pr-bundle-queue.md`<br>`openspec/changes/prfixes/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -90,9 +89,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change prfixes: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 
 ### Recent merges
+- 74020bf 10-31 20:38 `Merge agent/prfixes: PR walk v3 and price v2 docs, verified holds with limits` (prfixes)
+- 33d7d1f 10-31 20:26 `Merge agent/chillpatch: static-field chill proof and draft` (chillpatch)
 - 544d89f 10-31 20:24 `Merge agent/verifyprs2: verifier harnesses for walk and price follow-on` (verifyprs2)
 - 912086a 10-31 20:02 `Merge agent/fixstall4: town verbs follow line of sight, route at every stall` (fixstall4)
 - 75b2469 10-31 19:51 `Merge agent/drills8: drill results, harness edits` (drills8)
@@ -101,6 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b8e56a9 10-31 19:41 `Merge agent/decompprice2: price proof, draft, evidence pack` (decompprice2)
 - ae161cd 10-31 19:41 `Merge agent/staticopen: open upstream PR #155 (Static Field)` (staticopen)
 - 31064d7 10-31 19:36 `Merge agent/cr153: CodeRabbit round on upstream PR 153 posted lines` (cr153)
-- ed3836f 10-31 19:18 `Merge agent/decomppets: pets and merc decomp trace` (decomppets)
-- 2e04c06 10-31 19:13 `Merge agent/fixstall3: planAround clearance fallback, d2dtown.Input walking town, F12 log fields` (fixstall3)
 <!-- statusgen:end -->
