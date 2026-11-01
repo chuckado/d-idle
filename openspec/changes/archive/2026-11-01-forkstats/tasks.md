@@ -2,7 +2,7 @@
 
 ```yaml
 change: forkstats
-status: in-progress
+status: archived
 agent: forkstats
 branch: agent/forkstats
 worktree: ~/code/d2lod-wt/forkstats
@@ -13,7 +13,8 @@ owns:
 exclusive: []   # the fork branch lab2-stats is new and written only by this card; no slot, no socket, no lab binary overwritten
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Fork branch lab2-stats pushed (d68ff038), binary d2d.lab2-stats-d68ff038-linuxbuild built on the NAS builder (319 s, tests rc 0). Verified live on one hidden slot: dump stats shows gear and weapons for a fresh Sorceress. d2d has no player stats 17/18/21/22; gear is the item-prop sums, see docs/forkdbg.md."
+result: "fork branch lab2-stats built on the builder, test passes, one live read: a clvl 1 Sorceress has only the staff base 1-5; d2d has no player stats 17/18/21/22 (fight code adds item props itself)"
+merge: 120e534
 ```
 
 ## 1. Work

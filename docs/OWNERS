@@ -123,5 +123,3 @@ docs/fixwp.md  wpcooldown  wpcooldown
 docs/research/sk-ground-trace.md  skground  skground
 tools/emu/sk_ground*  skground  skground
 openspec/changes/skground/**  skground  skground
-docs/forkdbg.md  forkstats  forkstats
-openspec/changes/forkstats/**  forkstats  forkstats
