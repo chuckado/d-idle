@@ -14,4 +14,6 @@ D2FLEET_MAX_LOAD_FACTOR=-1 bash tools/container-checklist.sh || { echo "FAIL: co
 bash packaging/release.sh --dry-run ci || { echo "FAIL: release.sh --dry-run"; fail=1; }
 python3 -m unittest discover -s tools/ci/tests -t tools/ci || { echo "FAIL: tools/ci python tests"; fail=1; }
 python3 -m unittest discover -s tools/discord/tests -t tools/discord -p "test_tick_post.py" || { echo "FAIL: tick_post tests"; fail=1; }
+python3 -m unittest discover -s tools/contrib/tests -t tools/contrib || { echo "FAIL: tools/contrib python tests"; fail=1; }
+python3 tools/contrib/board.py --check || { echo "FAIL: work-board.md is stale or open-work.md is malformed"; fail=1; }
 exit $fail
