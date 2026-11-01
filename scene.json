@@ -70,8 +70,8 @@
   "live": false
  },
  "tagline": "say it: die dull",
- "ts": 1793552106,
- "updated": "2026-11-01T16:55Z",
+ "ts": 1793553013,
+ "updated": "2026-11-01T17:10Z",
  "work": [
   {
    "state": "working",
@@ -86,8 +86,8 @@
    "task": "Playing in a party of bots"
   },
   {
-   "state": "working",
-   "task": "Finding its way around the map"
+   "state": "blocked",
+   "task": "Running the bot on the d2d engine"
   }
  ]
 }
