@@ -29,6 +29,19 @@ func (l *lab) d15playerMissiles(ctx context.Context) (n int, ids map[int][2]floa
 	return n, ids, strings.Join(nm, ",")
 }
 
+func (l *lab) d15monMode(ctx context.Context, id int) string {
+	ms, err := l.be.Client.Monsters(ctx)
+	if err != nil {
+		return ""
+	}
+	for _, m := range ms.Items {
+		if m.Unit == id {
+			return m.Mode
+		}
+	}
+	return ""
+}
+
 func (l *lab) d15M2(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if err := l.d15prep(ctx, r, skFireBolt, 1); err != nil {
 		return drill.Outcome{}, err
@@ -49,7 +62,7 @@ func (l *lab) d15M2(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	}
 	var ts []trial
 	var cutPaid, cutNoMiss, cutTrials, missBeforeHit, noHit, skipped int
-	for i := 0; i < 40; i++ {
+	for i := 0; i < 48; i++ {
 		_, _ = r.Cheat(ctx, "debug stat 6 25600", "M2: full life before each trial")
 		_ = l.d15mana(ctx, r, -1, "M2: full mana before each trial")
 		l.d15settle(ctx)
@@ -58,7 +71,14 @@ func (l *lab) d15M2(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 				l.d15warp(ctx, r, x+1, y)
 			}
 		}
-		_ = l.Tick(ctx, 1)
+		// start the cast a varying number of ticks after the monster's attack animation (A1) begins, so that its blow
+		// lands at different points of the cast's 8 ticks before the action frame
+		for w := 0; w < 80 && l.d15monMode(ctx, id) != "A1"; w++ {
+			_, _ = l.be.Client.Step(ctx, 1)
+		}
+		for w := 0; w < i%8; w++ {
+			_, _ = l.be.Client.Step(ctx, 1)
+		}
 		b, err := l.d15read(ctx)
 		if err != nil {
 			return drill.Outcome{}, err
@@ -122,7 +142,7 @@ func (l *lab) d15M2(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	o.Sig = fmt.Sprintf("cut=%d paid=%d", cutNoMiss, cutPaid)
 	switch {
 	case cutNoMiss == 0:
-		return drill.Blocks(fmt.Sprintf("no cast was cut by a real blow in %d casts (the monster's A1 rarely lands inside the 8-tick window)", len(ts))), nil
+		o.Verdict, o.Reason = drill.Blocked, fmt.Sprintf("no cast was cut by a real blow in %d casts (the monster's A1 rarely lands inside the 8-tick window)", len(ts))
 	case cutPaid == cutNoMiss:
 		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d of %d cut casts (real monster blow, dmg 20) lost the mana with no missile (trace D3: game.exe pays nothing)", cutPaid, cutNoMiss)
 	case cutPaid == 0:
@@ -234,40 +254,48 @@ func (l *lab) d15M6(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	tx, ty := s.X+dx*float64(n), s.Y+dy*float64(n)
 	var obs []string
 	second := map[int]bool{}
-	for _, gap := range []int{25, 40, 60, 100} {
-		l.d15warp(ctx, r, s.X, s.Y)
-		_ = l.Tick(ctx, 60)
-		if err := l.d15mana(ctx, r, -1, "M6: full mana for the first Blizzard"); err != nil {
-			return drill.Outcome{}, err
+	// one cast read for 20 ticks: the mana before, the lowest mana, whether the player entered cast mode, new missiles
+	castRead := func(why string) (before, low int, mode10 bool, newMiss int, err error) {
+		if err = l.d15mana(ctx, r, -1, "M6: full mana before the cast"); err != nil {
+			return
 		}
 		l.d15settle(ctx)
-		b1, _ := l.d15read(ctx)
-		if _, err := l.skillDebug(r).CastAt(ctx, skBlizzard, tx, ty, fmt.Sprintf("M6: first Blizzard, the second %d ticks later", gap)); err != nil {
-			return drill.Outcome{}, err
+		b, _ := l.d15read(ctx)
+		before, low = b.Mana, b.Mana
+		_, ids0, _ := l.d15playerMissiles(ctx)
+		if _, err = l.skillDebug(r).CastAt(ctx, skBlizzard, tx, ty, why); err != nil {
+			return
 		}
-		_ = l.Tick(ctx, gap-1)
-		st, _ := l.be.Client.Do(ctx, "debug states")
-		p, _ := l.d15read(ctx)
-		if err := l.d15mana(ctx, r, -1, "M6: full mana for the second Blizzard (the first one's cost is not the question)"); err != nil {
-			return drill.Outcome{}, err
-		}
-		before, _ := l.d15read(ctx)
-		if _, err := l.skillDebug(r).CastAt(ctx, skBlizzard, tx, ty, fmt.Sprintf("M6: second Blizzard %d ticks after the first", gap)); err != nil {
-			return drill.Outcome{}, err
-		}
-		paid, mode10 := false, false
+		seen := map[int]bool{}
 		for k := 0; k < 20; k++ {
 			_, _ = l.be.Client.Step(ctx, 1)
 			q, _ := l.d15read(ctx)
-			if q.PMode == 10 {
-				mode10 = true
-			}
-			if q.Mana <= before.Mana-1000 {
-				paid = true
+			mode10 = mode10 || q.PMode == 10
+			low = min(low, q.Mana)
+			_, ids, _ := l.d15playerMissiles(ctx)
+			for id := range ids {
+				if _, old := ids0[id]; !old {
+					seen[id] = true
+				}
 			}
 		}
+		return before, low, mode10, len(seen), nil
+	}
+	for _, gap := range []int{25, 40, 60, 100} {
+		_ = l.Tick(ctx, 120) // everything from the previous trial is long over
+		b1, l1, m1, n1, err := castRead(fmt.Sprintf("M6: first Blizzard, the second %d ticks after its command", gap))
+		if err != nil {
+			return drill.Outcome{}, err
+		}
+		_ = l.Tick(ctx, gap-20-1)
+		st, _ := l.be.Client.Do(ctx, "debug states")
+		b2, l2, m2, n2, err := castRead(fmt.Sprintf("M6: second Blizzard %d ticks after the first command", gap))
+		if err != nil {
+			return drill.Outcome{}, err
+		}
+		paid := b2-l2 >= 1000
 		second[gap] = paid
-		obs = append(obs, fmt.Sprintf("gap %d ticks (%d ms): first cost %.1f points; at the second cast mode %d, states %q; second cast started (mode 10 seen) %s, mana paid %s", gap, 40*gap, float64(b1.Mana-0)/256-float64(p.Mana)/256+0, p.PMode, strings.TrimSpace(st.Text()), yn(mode10), yn(paid)))
+		obs = append(obs, fmt.Sprintf("gap %d ticks (%d ms): first cast paid %.1f points, cast mode %s, %d missiles; states at the second cast %q; second cast paid %.1f points, cast mode %s, %d new missiles", gap, 40*gap, float64(b1-l1)/256, yn(m1), n1, strings.TrimSpace(st.Text()), float64(b2-l2)/256, yn(m2), n2))
 	}
 	o := drill.Outcome{Intended: "game.exe: the second cast is refused until 45 frames after the first's action frame (skilldelay state 0x79); d2d (trace D6) casts both", Observed: strings.Join(obs, " || ")}
 	o.Sig = fmt.Sprint(second)
@@ -446,6 +474,7 @@ func (l *lab) d15E1(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if err != nil {
 		return drill.Outcome{}, err
 	}
+	_ = l.Tick(ctx, 2)
 	p1, _ := l.d15read(ctx)
 	b1, _ := l.buffsText(ctx)
 	obs = append(obs, fmt.Sprintf("hit 50 (%s): life %.2f -> %.2f (lost %.2f points), mana %.2f -> %.2f, buffs=%s", strings.TrimSpace(out), float64(p0.Life)/256, float64(p1.Life)/256, float64(p0.Life-p1.Life)/256, float64(p0.Mana)/256, float64(p1.Mana)/256, b1))
@@ -455,6 +484,7 @@ func (l *lab) d15E1(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	_ = l.Tick(ctx, 2)
 	q0, _ := l.d15read(ctx)
 	_, _ = r.Cheat(ctx, "debug hit 50", "E1: second 50 point blow after the refill")
+	_ = l.Tick(ctx, 2)
 	q1, _ := l.d15read(ctx)
 	b2, _ := l.buffsText(ctx)
 	obs = append(obs, fmt.Sprintf("after mana full, hit 50: life lost %.2f points, mana %.2f -> %.2f, buffs=%s", float64(q0.Life-q1.Life)/256, float64(q0.Mana)/256, float64(q1.Mana)/256, b2))

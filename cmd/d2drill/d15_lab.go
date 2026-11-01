@@ -142,12 +142,19 @@ func (l *lab) d15prep(ctx context.Context, r *drill.Run, skill, level int) error
 }
 
 // d15mana sets mana: raw < 0 is `debug mana full`, else `debug stat 8 <raw/256 points>` (stat 8 takes points x 256).
+// The stats read (`dump stats` raw[]) shows the new value only after the next tick (V: life and mana read stale
+// right after a cheat), so one tick is stepped here.
 func (l *lab) d15mana(ctx context.Context, r *drill.Run, raw int, why string) error {
+	var err error
 	if raw < 0 {
-		_, err := l.skillDebug(r).ManaFull(ctx, "DRILLS15: "+why)
+		_, err = l.skillDebug(r).ManaFull(ctx, "DRILLS15: "+why)
+	} else {
+		_, err = r.Cheat(ctx, fmt.Sprintf("debug stat 8 %d", raw), "DRILLS15: "+why)
+	}
+	if err != nil {
 		return err
 	}
-	_, err := r.Cheat(ctx, fmt.Sprintf("debug stat 8 %d", raw), "DRILLS15: "+why)
+	_, err = l.be.Client.Step(ctx, 1)
 	return err
 }
 
