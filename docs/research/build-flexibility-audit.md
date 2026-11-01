@@ -2,6 +2,8 @@
 
 > status: read-only audit and design, decides nothing. Card `buildflex`. Answers the user direction of 2026-11-01 ("we're focusing on one sorc build for now which is good, but I want this to be far more flexible at the end and have multiple builds, so can we make sure we're not hyper focusing/hard coding anything based on this one sorc build"). Builds on the class-level study `docs/research/bot-generality.md` (framework or stencil), which counted class branches; this doc goes one level down, to the build. Tags: V = read or grepped in this worktree (file:line given), U = judgment. Nothing was run live.
 
+> status update 2026-11-01: rows 1, 2, 3, 6 and 29 are fixed by card palprobe (profile id string, per-class prefs, class row errors); see `docs/classes/paladin-probe.md`.
+
 ## 1. Summary in plain words
 
 **How hard-coded is it today?** Less than feared at the data layer, more than hoped at the glue. The bot already treats a "build" as a data file for every class: 20 plan tables in `internal/plandata`, a per-class combat profile file (`internal/combat/classdata/profiles.json`), and a skill-aiming table (`skills.json`). The default lightning Sorceress is not baked into the leveler's stat/skill spending; that part is generic and reads any table. The fitting sits in the small pieces of Go that decide *which* table and *which* profile go together, and in a handful of combat rules that name Sorceress skills by string.

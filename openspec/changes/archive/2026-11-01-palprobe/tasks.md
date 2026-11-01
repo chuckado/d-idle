@@ -2,7 +2,7 @@
 
 ```yaml
 change: palprobe
-status: in-progress
+status: archived
 agent: palprobe
 branch: agent/palprobe
 worktree: ~/code/d2lod-wt/palprobe
@@ -26,7 +26,8 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Part A seams done (profile id, per-class prefs, classRow errors); part B Paladin probe: 16 working, 4 broken, 1 unverified, 1 not done (docs/classes/paladin-probe.md). Offline only, nothing run live."
+merge: 8509a1b
+result: "blocking seams fixed (profile id, per-class prefs, class row errors; Sorceress unchanged); Paladin offline probe: 16 working, 4 broken, live d2d probes owed (PALHOLD, PALHAND, PALAURA, PALDUR); not verified live"
 live: "offline only; PALHOLD, PALHAND, PALAURA, PALDUR still owed live"
 ```
 
