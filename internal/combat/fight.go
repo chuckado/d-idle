@@ -698,6 +698,10 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 
 	// static field opener on elites and bosses
 	if sf, ok := f.staticOpener(p, &tg, tr); ok {
+		if f.swingIntoMouth(sf, me, target) {
+			f.info("swing held: the click would walk into a cave mouth", "from", me, "to", target)
+			return f.sleep(ctx, ms(t.PollMs))
+		}
 		if !f.castReady() {
 			f.decision(st, "wait", "cast gap")
 			return nil
@@ -709,6 +713,10 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 		return f.cast(snap, sf, target)
 	}
 
+	if f.swingIntoMouth(spec, me, target) {
+		f.info("swing held: the click would walk into a cave mouth", "from", me, "to", target)
+		return f.sleep(ctx, ms(t.PollMs))
+	}
 	if !f.castReady() {
 		f.decision(st, "wait", "cast gap")
 		return nil
@@ -808,6 +816,22 @@ func (f *Fighter) reachable(p input.Point, arrivalOK bool) bool {
 func (f *Fighter) nearMouth(p input.Point) bool {
 	g, ok := f.mv.(interface{ NearMouth(input.Point) bool })
 	return ok && g.NearMouth(p)
+}
+
+// swingNoWalk: a left click on a target this close does not walk the character (it is already in melee range). U: the
+// melee reach of the basic attack in subtiles.
+const swingNoWalk = 2.5
+
+// swingIntoMouth: a left-hand click (basic attack, melee profile, left skill) is a movement order, the game walks the
+// character to the monster or to the ground point when it moved (V DRILLS18: swings took the character from 13 to 3.2
+// subtiles from the Den exit; the step-away replanned from there and bounced). The mover's cave-mouth gate decides
+// (FIXMOUTH4, nav.MouthClickOK); right-hand casts at a point do not move the character and are not asked.
+func (f *Fighter) swingIntoMouth(sp SkillSpec, from, to input.Point) bool {
+	if !(sp.Hand == HandLeft || sp.ID == meleeSpec().ID) || pdist(from, to) <= swingNoWalk {
+		return false
+	}
+	g, ok := f.mv.(interface{ MouthClickOK(from, to input.Point) bool })
+	return ok && !g.MouthClickOK(from, to)
 }
 
 func anyDanger(ts []Target) bool {
