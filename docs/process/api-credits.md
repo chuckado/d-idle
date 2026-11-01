@@ -4,11 +4,11 @@ The owner has an Anthropic Console API key funded by a promo credit. That credit
 
 ## What the key is for
 - Automatic PR review (`.github/workflows/pr-review.yml`, `tools/ci/pr_review.py`): one advisory summary comment per PR, updated on each push.
-- An optional Haiku tick writer (`tools/ci/haiku_tick.py`): turns tick facts into the text for `tools/discord/feed.py tick`. Not wired anywhere.
+- An optional Haiku tick writer (`tools/ci/haiku_tick.py`): turns tick facts into the text for `tools/discord/feed.py tick`. Wired into the dispatcher tick through `tools/discord/tick_post.py` (see below).
 - Home Assistant use is the owner's own step and is out of scope here.
 
 ## Where the key lives and the never-print rules
-- Local use: a file in the owner's home under `.local/share/d2idle-api/` named `anthropic-key`, mode 0600. Only `haiku_tick.py --send` reads it, and only to put it in the `x-api-key` header sent to api.anthropic.com.
+- Local use: a file in the owner's home under `.local/share/d2idle-api/` named `anthropic-key`, mode 0600. Only `haiku_tick.read_key` reads it (called by `haiku_tick.py --send` and `tick_post.py`), and only to put it in the `x-api-key` header sent to api.anthropic.com.
 - GitHub use: the repository secret `ANTHROPIC_API_KEY`. The owner sets it: `gh secret set ANTHROPIC_API_KEY -R shatteredeagle/d-idle`. Agents never set it.
 - Never print, log, echo, commit or paste the key; never put a key-shaped literal in a test (tests build fake keys from fragments); `anthropic_http.py` raises errors that carry only the HTTP status and the API error type.
 - Agents do not read the file. The tests and dry runs use a fake HTTP layer and make no call.
@@ -32,3 +32,12 @@ All agent sessions, coding, merges and the dispatcher's decisions stay on the Cl
 
 ## Revoke
 Console, API keys: delete the key (kills both uses at once). Then `gh secret delete ANTHROPIC_API_KEY -R shatteredeagle/d-idle` and remove the key file. Without the secret the review posts a "skipped" comment and nothing else.
+
+## Haiku tick: wired (card tickwire)
+`tools/discord/tick_post.py` reads the tick facts JSON on stdin (keys running, merged, launched, upstream, blocked, waiting), has Haiku (`claude-haiku-5-5`, max_tokens 600) write the field text, checks that every fact survived and nothing was invented, then validates with the `feed.py tick` path (idle refusal, 3800 cap, notify sanitizer with the privacy guard). Dry run is the default (it still makes the one API call and prints text, chars and tokens); `--send` posts one embed to #progress through `feed.send`; `--no-api` renders without a call.
+- Fallbacks, never blocking the tick: if the guard would refuse the Haiku text (for example a run of five 4-to-6-letter words, the cdkey pattern), Haiku is asked once to reword the matched phrase; if that still fails, or on any API failure (no key file, HTTP error, timeout, text that drops a fact), the plain deterministic rendering of the facts is posted and stderr says so. If the plain text trips the guard too, nothing is sent (exit 2), same as `feed.py tick`.
+- The old direct `feed.py tick` call stays the documented fallback in the dispatcher notes.
+- Needs `tools/ci/haiku_tick.py` and `tools/ci/anthropic_http.py` next to `tools/discord` when extracted.
+- Honest scope: this saves the coordinator session only the tokens of writing the tick text (about 600 to 900 output tokens). Decisions (merges, launches) still need a Claude Code session; the tick text is still produced inside that session's turn, so the saving is real only for the writing step.
+
+Measured (V, the wiring test of 2026-11-01, real API usage field): dry run 292 input and 459 output tokens for a 156 character tick; the sent post 265 input and 331 output tokens for 74 characters. Output counts exceed the visible text, so the model apparently spends tokens beyond the text (U: not investigated). About 300 in and 300 to 500 out per tick is a fraction of a cent on Haiku; at several ticks a day it is negligible against the credit.

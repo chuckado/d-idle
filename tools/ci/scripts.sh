@@ -13,4 +13,5 @@ bash tools/winereap_test.sh || { echo "FAIL: winereap_test.sh"; fail=1; }
 D2FLEET_MAX_LOAD_FACTOR=-1 bash tools/container-checklist.sh || { echo "FAIL: container-checklist.sh"; fail=1; }
 bash packaging/release.sh --dry-run ci || { echo "FAIL: release.sh --dry-run"; fail=1; }
 python3 -m unittest discover -s tools/ci/tests -t tools/ci || { echo "FAIL: tools/ci python tests"; fail=1; }
+python3 -m unittest discover -s tools/discord/tests -t tools/discord -p "test_tick_post.py" || { echo "FAIL: tick_post tests"; fail=1; }
 exit $fail

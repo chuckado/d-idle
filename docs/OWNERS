@@ -79,3 +79,6 @@ internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
 internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+tools/discord/tick_post.py  tickwire  tickwire
+tools/discord/tests/test_tick_post.py  tickwire  tickwire
+openspec/changes/tickwire/**  tickwire  tickwire
