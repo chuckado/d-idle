@@ -9,7 +9,7 @@ feed.send. The text goes through the same checks as `feed.py tick` (idle refusal
 privacy guard). If the guard would refuse the Haiku text, Haiku is asked ONCE to reword the offending phrase; if that
 fails or any API step fails (no key, HTTP error, timeout, text that drops a fact) the plain deterministic rendering of
 the facts is used instead and stderr says so. It never raises and never prints the key (haiku_tick.read_key is the only
-reader; the key only goes into the x-api-key header). Needs tools/ci/haiku_tick.py and tools/ci/anthropic_http.py.
+reader; the key only goes into the x-api-key header). Thinking is disabled for the call (it used the token budget). Needs tools/ci/haiku_tick.py and tools/ci/anthropic_http.py.
 """
 import argparse
 import json
@@ -29,7 +29,7 @@ import notify  # noqa: E402
 
 FIELDS = feed.TICK_FIELDS
 LISTY = ("running", "merged", "launched")
-RULES_TEXT = (" Keep every fact and add nothing. Never write host names, file paths, emails, tokens or addresses; "
+RULES_TEXT = (" Keep every fact, every number and every name exactly as given, and add nothing. Never write host names, file paths, emails, tokens or addresses; "
               "say 'the worker host' instead. Avoid any run of five or more short words (4 to 6 letters each) in a "
               "row: break such runs with a longer word or punctuation. Each field is one line.")
 
@@ -65,23 +65,46 @@ def parse_haiku(text):
     return vals
 
 
-def facts_kept(src, got):
-    """Every fact field present and no invented field; list items and most long words must survive."""
+NUM = re.compile(r"\d+(?:\.\d+)?")
+WORD = re.compile(r"[A-Za-z0-9][A-Za-z0-9_./-]*")
+
+
+def idlike(w):
+    """Salient outside the list fields: has a digit, '_' or '-', or is capitalised (PR, Navi)."""
+    return bool(re.search(r"[\d_-]", w)) or w[0].isupper()
+
+
+def salient(vals):
+    """Lowercase tokens that must survive rewording: numbers, every word of list items (card names), ids."""
+    toks = set()
+    for k in FIELDS:
+        v = vals[k]
+        toks.update(NUM.findall(v))
+        for w in WORD.findall(v):
+            w = w.strip("./-")
+            if w and (k in LISTY or idlike(w)):
+                toks.add(w.lower())
+    return toks
+
+
+def fact_problem(src, got):
+    """None when the text keeps every fact and invents none; else a short reason. Set based, so rewording passes."""
     for k in FIELDS:
         if bool(src[k]) != bool(got[k]):
-            return False
-        if not src[k]:
-            continue
-        low = got[k].lower()
-        if k in LISTY:
-            items = [i.strip().lower() for i in src[k].split(",") if i.strip()]
-            if not all(i in low for i in items):
-                return False
-        else:
-            words = [w for w in re.findall(r"[A-Za-z0-9]{4,}", src[k].lower())]
-            if words and sum(w in low for w in words) < 0.7 * len(words):
-                return False
-    return True
+            return "field %s %s" % (k, "dropped" if src[k] else "invented")
+    have = set(w.strip("./-").lower() for k in FIELDS for w in WORD.findall(got[k])) | \
+        set(n for k in FIELDS for n in NUM.findall(got[k]))
+    missing = sorted(salient(src) - have)
+    if missing:
+        return "dropped %s" % ", ".join(missing[:6])
+    extra = sorted(set(n for k in FIELDS for n in NUM.findall(got[k])) - set(n for k in FIELDS for n in NUM.findall(src[k])))
+    if extra:
+        return "invented number %s" % ", ".join(extra[:3])
+    return None
+
+
+def facts_kept(src, got):
+    return fact_problem(src, got) is None
 
 
 def offending(text):
@@ -106,18 +129,29 @@ def usage_http(http, acc):
     return wrapped
 
 
+def call(key, system, user, http, acc):
+    """One Haiku call, thinking off; a cut-off answer (stop_reason max_tokens) is an error, not text to parse."""
+    meta = {}
+    text = anthropic_http.message(key, haiku_tick.MODEL, system, user, haiku_tick.MAX_TOKENS,
+                                  http=usage_http(http, acc), thinking=haiku_tick.THINKING, meta=meta)
+    acc["stop"] = meta.get("stop_reason")
+    if meta.get("stop_reason") == "max_tokens":
+        raise RuntimeError("haiku answer truncated (stop_reason max_tokens, output_tokens=%s)"
+                           % (meta.get("usage") or {}).get("output_tokens"))
+    return text
+
+
 def haiku_text(vals, key, http, acc):
     facts = {k: v for k, v in vals.items() if v}
     user = haiku_tick.build_user(facts)
-    return anthropic_http.message(key, haiku_tick.MODEL, haiku_tick.SYSTEM + RULES_TEXT, user,
-                                  haiku_tick.MAX_TOKENS, http=usage_http(http, acc))
+    return call(key, haiku_tick.SYSTEM + RULES_TEXT, user, http, acc)
 
 
 def reword(text, phrases, key, http, acc):
     system = ("You fix one problem in a status text. Reword only the listed phrases so they no longer match; keep every "
               "other word and all facts. Output the full corrected '<field>: <text>' lines only." + RULES_TEXT)
     user = "Phrases to reword: %s\n\nText:\n%s" % (json.dumps(phrases), text)
-    return anthropic_http.message(key, haiku_tick.MODEL, system, user, haiku_tick.MAX_TOKENS, http=usage_http(http, acc))
+    return call(key, system, user, http, acc)
 
 
 def compose(vals, no_api, http, key_reader, acc, log, now=None):
@@ -130,8 +164,12 @@ def compose(vals, no_api, http, key_reader, acc, log, now=None):
         raw = haiku_text(vals, key, http, acc)
         for attempt in (0, 1):
             got = parse_haiku(raw)
-            if got is None or not facts_kept(vals, got):
-                raise RuntimeError("haiku text dropped or invented facts, or was not in the field format")
+            if got is None:
+                bad = next((ln for ln in raw.splitlines() if ln.strip() and not parse_haiku(ln)), "")
+                raise RuntimeError("not in the field format (stop_reason %s; first bad line: %r)" % (acc.get("stop"), bad[:80]))
+            why = fact_problem(vals, got)
+            if why:
+                raise RuntimeError("fact check failed: %s (stop_reason %s)" % (why, acc.get("stop")))
             title, text = render(got, now)
             phrases, hits = offending(text)
             if not hits:

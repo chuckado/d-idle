@@ -100,3 +100,10 @@ cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
 
+tools/discord/tick_post.py  tickfix  tickfix
+tools/ci/haiku_tick.py  tickfix  tickfix
+tools/ci/anthropic_http.py  tickfix  tickfix
+tools/discord/tests/test_tick_post.py  tickfix  tickfix
+tools/ci/tests/test_pr_review.py  tickfix  tickfix
+docs/process/api-credits.md  tickfix  tickfix
+openspec/changes/tickfix/**  tickfix  tickfix

@@ -14,7 +14,8 @@ GOOD = "running: navi, combi\nmerged: fixrecast\nwaiting: go for the release"
 
 
 class FakeHTTP:
-    def __init__(self, *texts, status=200):
+    def __init__(self, *texts, status=200, stop="end_turn"):
+        self.stop = stop
         self.texts, self.status, self.calls, self.seen = list(texts), status, 0, []
 
     def __call__(self, url, headers, body, *a, **kw):
@@ -25,7 +26,8 @@ class FakeHTTP:
         t = self.texts.pop(0)
         if isinstance(t, Exception):
             raise t
-        return 200, {"content": [{"type": "text", "text": t}], "usage": {"input_tokens": 100, "output_tokens": 40}}
+        return 200, {"content": [{"type": "text", "text": t}], "stop_reason": self.stop,
+                     "usage": {"input_tokens": 100, "output_tokens": 40}}
 
 
 def run(facts, http, *argv, key=lambda: FAKE_KEY, sender=None):
@@ -45,7 +47,7 @@ class Post(unittest.TestCase):
         self.assertIn("- Running: navi, combi", out)
         self.assertEqual(h.calls, 1)
         self.assertEqual(h.seen[0]["model"], "claude-haiku-5-5")
-        self.assertEqual(h.seen[0]["max_tokens"], 600)
+        self.assertEqual(h.seen[0]["max_tokens"], 1200)
         self.assertEqual(err, "")
 
     def test_send_uses_sender_once(self):
@@ -99,6 +101,38 @@ class Post(unittest.TestCase):
         rc, out, err = run(FACTS, FakeHTTP("running: navi, combi\nwaiting: go for the release"))
         self.assertIn("source=deterministic", out)
         self.assertIn("- Merged: fixrecast", out)
+
+    def test_thinking_disabled_and_budget(self):
+        h = FakeHTTP(GOOD)
+        run(FACTS, h)
+        self.assertEqual(h.seen[0]["thinking"], {"type": "disabled"})
+        self.assertGreaterEqual(h.seen[0]["max_tokens"], 1200)
+        self.assertNotIn("temperature", h.seen[0])
+
+    def test_truncated_response_falls_back_and_logs(self):
+        rc, out, err = run(FACTS, FakeHTTP(GOOD[:30], stop="max_tokens"))
+        self.assertEqual(rc, 0)
+        self.assertIn("source=deterministic", out)
+        self.assertIn("stop_reason max_tokens", err)
+
+    def test_reworded_but_complete_accepted(self):
+        f = dict(FACTS, merged=["fixrecast (PR 41)"], waiting="go for the release 1.2")
+        h = FakeHTTP("Running: Navi, Combi\nmerged: fixrecast (PR 41)\nWaiting: The release 1.2 needs a go")
+        rc, out, err = run(f, h)
+        self.assertIn("source=haiku", out, err)
+
+    def test_dropped_or_invented_number_rejected(self):
+        f = dict(FACTS, merged=["fixrecast (PR 41)"])
+        rc, out, err = run(f, FakeHTTP("running: navi, combi\nmerged: fixrecast\nwaiting: go for the release"))
+        self.assertIn("source=deterministic", out)
+        self.assertIn("dropped 41", err)
+        rc, out, err = run(f, FakeHTTP("running: navi, combi\nmerged: fixrecast (PR 41), PR 42\nwaiting: go for the release"))
+        self.assertIn("invented number 42", err)
+
+    def test_bad_line_logged_without_key(self):
+        rc, out, err = run(FACTS, FakeHTTP("Here is your tick: sure thing"))
+        self.assertIn("first bad line", err)
+        self.assertNotIn(FAKE_KEY, err)
 
     def test_idle_refused_without_api(self):
         h = FakeHTTP(GOOD)
