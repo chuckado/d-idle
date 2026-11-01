@@ -109,3 +109,8 @@ docs/process/chunker.md  chunker  chunker
 docs/community/groom-proposal.md  chunker  chunker
 docs/community/withdrawn.tsv  chunker  chunker
 openspec/changes/chunker/**  chunker  chunker
+internal/combat/rules.go  skresistbot  skresistbot
+internal/combat/target.go  skresistbot  skresistbot
+internal/combat/skresist_test.go  skresistbot  skresistbot
+docs/skresistbot.md  skresistbot  skresistbot
+openspec/changes/skresistbot/**  skresistbot  skresistbot

@@ -84,10 +84,6 @@ func TestPierceFromStats(t *testing.T) {
 	if PierceFromStats(nil) != [6]int{} {
 		t.Fatal("empty list")
 	}
-	h := HostileCtx{Pierce: p}
-	if h.Pierce[data.Cold] != 20 {
-		t.Fatal("ctx")
-	}
 }
 
 // Q4 + Q2: a caster whose preferred element has pierce keeps it against a 75 target (45 % vs fire 60 % is within

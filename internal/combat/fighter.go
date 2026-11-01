@@ -196,7 +196,7 @@ func (f *Fighter) read(ctx context.Context) (*d2.Snapshot, error) {
 func isDead(p *d2.Player) bool { return IsDead(p) }
 
 func (f *Fighter) hostileCtx(p *d2.Player) HostileCtx {
-	return HostileCtx{Cat: f.cat, Diff: p.Difficulty, ClassLvl: p.Level, Weights: f.weights, Pierce: PierceFromStats(p.Stats)}
+	return HostileCtx{Cat: f.cat, Diff: p.Difficulty, ClassLvl: p.Level, Weights: f.weights}
 }
 
 // ---- survival -------------------------------------------------------------------------------------------
@@ -779,7 +779,7 @@ func (f *Fighter) skillReady(sp SkillSpec) bool {
 	return !ok || f.now().Sub(at) >= sp.Delay
 }
 
-// refineResists replaces the monstats resistances of a target with the live stat list (modifiers, curses).
+// refineResists replaces the monstats resistances of a target with the live stat list (curses, difficulty).
 func (f *Fighter) refineResists(t *Target, diff d2.Difficulty) {
 	now := f.now()
 	if c, ok := f.resCache[t.Unit.ID]; ok && now.Sub(c.at) < 1500*time.Millisecond {

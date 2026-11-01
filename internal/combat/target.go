@@ -121,7 +121,6 @@ type HostileCtx struct {
 	Cat      Catalog
 	Diff     d2.Difficulty
 	Resists  func(u d2.Unit, m *data.Monster) ([6]int, bool) // optional: stat-list resistances
-	Pierce   [6]int                                          // the player's resistance pierce, copied to every target
 	ClassLvl int
 	Weights  DeathWeights // lessons from past deaths
 }
@@ -164,6 +163,7 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 		return nil
 	}
 	p := snap.Player
+	pierce := PierceFromStats(p.Stats)
 	friendly := Friendlies(snap, hc.Cat)
 	var out []Target
 	for _, u := range snap.Monsters {
@@ -220,7 +220,7 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 			t.Avoid = true
 		}
 		t.Res, t.HasRes = resistsOf(u, mon, hc)
-		t.Pierce = hc.Pierce
+		t.Pierce = pierce
 		out = append(out, t)
 	}
 	avoidChampionGroup(out, hc.ClassLvl)
