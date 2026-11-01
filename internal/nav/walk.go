@@ -616,12 +616,18 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 }
 
 func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
+	if n.log.Enabled(context.Background(), slog.LevelDebug) {
+		n.log.Debug("nav mouth check", "pos", o.pos, "level", o.level, "exits", len(o.lm.Exits), "wantExit", n.wantExit)
+	}
 	for _, e := range o.lm.Exits {
 		if e.Dest == n.wantExit {
 			continue
 		}
 		dx, dy := float64(o.pos.X-e.Pos.X), float64(o.pos.Y-e.Pos.Y)
 		d := math.Hypot(dx, dy)
+		if n.log.Enabled(context.Background(), slog.LevelDebug) {
+			n.log.Debug("nav mouth exit", "dest", e.Dest, "exit", e.Pos, "dist", math.Round(d*10)/10, "skip", d > mouthR || d < 0.5)
+		}
 		if d > mouthR || d < 0.5 {
 			continue
 		}

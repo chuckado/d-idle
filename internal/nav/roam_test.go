@@ -2,7 +2,9 @@ package nav
 
 import (
 	"errors"
+	"log/slog"
 	"math"
+	"strings"
 	"testing"
 
 	"d2lod-bot/internal/d2map"
@@ -172,5 +174,25 @@ func TestNearMouthOnlyWhenGuardedAndNotWanted(t *testing.T) {
 	n.wantExit = 8
 	if n.NearMouth(p) {
 		t.Fatal("the wanted exit is not a mouth")
+	}
+}
+
+// DRILLS14: mouthStep writes its inputs at debug level (a primitive diagnostic, no behaviour change).
+func TestMouthStepDebugLines(t *testing.T) {
+	_, n := newKnown(t, openField(2000, 2000, 120, 120), input.Point{X: 2050, Y: 2050}, true)
+	var buf strings.Builder
+	n.log = slog.New(slog.NewTextHandler(&buf, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	o, err := n.observe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	o.lm.Exits = []d2map.Exit{{Dest: 8, Pos: d2map.Point{X: 2048, Y: 2050}}}
+	if _, ok := n.mouthStep(o); !ok {
+		t.Fatal("no step")
+	}
+	for _, want := range []string{"nav mouth check", "exits=1", "nav mouth exit", "dest=8", "skip=false"} {
+		if !strings.Contains(buf.String(), want) {
+			t.Fatalf("missing %q in %s", want, buf.String())
+		}
 	}
 }
