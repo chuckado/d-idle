@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/input"
@@ -37,8 +38,21 @@ func (l *lab) d22wire(nv *nav.Navigator, wired bool) {
 	nv.TeleportKey = ""
 	nv.TeleportKeyFn = l.rig.Fighter.TeleportKey
 	nv.TeleportOK = nil
+	nv.TeleportCost = nil
 	if !wired || l.db == nil {
 		return
+	}
+	nv.TeleportCost = func(p *d2.Player) int { // as cmd/d2bot/telewire.go teleCost (DRILLS24: teletune reads the cost)
+		sk := l.db.SkillByName("Teleport")
+		if sk == nil {
+			return 0
+		}
+		for _, s := range p.Skills {
+			if s.ID == sk.ID && s.Effective() > 0 {
+				return int(math.Ceil(sk.ManaCost(s.Effective())))
+			}
+		}
+		return 0
 	}
 	nv.TeleportOK = func(level int) bool {
 		a := l.db.AreaByID(level)
@@ -58,6 +72,8 @@ type d22leg struct {
 	StartX, StartY, EX, EY float64
 	Lines                  []string
 	Key                    string
+	HopTicks               []int // ticks from the previous hop line (or the leg start) to each landed hop
+	Declined               int
 }
 
 func (g d22leg) String() string {
@@ -145,10 +161,20 @@ func (l *lab) d22run(ctx context.Context, nv *nav.Navigator, to int, max time.Du
 	cancel()
 	g.Ticks, g.Wall = l.tick()-t0, time.Since(w0)
 	g.Lines = l.rec.Since(mark)
-	for _, ln := range g.Lines {
+	lt := l.rec.Ticks(mark)
+	prev := t0
+	for i, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav teleport declined") {
+			g.Declined++
+		}
+		if strings.HasPrefix(ln, "nav teleport ") && !strings.HasPrefix(ln, "nav teleport declined") && !strings.HasPrefix(ln, "nav teleport did not move") && i < len(lt) {
+			g.HopTicks = append(g.HopTicks, lt[i]-prev)
+			prev = lt[i]
+		}
 		switch {
 		case strings.HasPrefix(ln, "nav teleport did not move"):
 			g.Refused++
+		case strings.HasPrefix(ln, "nav teleport declined"):
 		case strings.HasPrefix(ln, "nav teleport "):
 			g.Hops++
 		}
@@ -173,7 +199,13 @@ func (l *lab) d22dump(g d22leg, tag string) string {
 	for _, h := range hop {
 		fmt.Printf("D22 %s hop line: %s\n", tag, h)
 	}
-	fmt.Printf("D22 %s: %s\n", tag, g)
+	fmt.Printf("D22 %s: %s declined=%d hopticks=%v\n", tag, g, g.Declined, g.HopTicks)
+	for _, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav teleport declined") {
+			fmt.Printf("D22 %s line: %s\n", tag, ln)
+			break
+		}
+	}
 	return g.String()
 }
 

@@ -18,6 +18,25 @@ type recorder struct {
 type recStore struct {
 	mu    sync.Mutex
 	lines []string
+	ticks []int // game tick at each line (0 when no tick source), for per-hop timing (DRILLS24)
+	tick  func() int
+}
+
+// SetTick gives the recorder a game-tick source: Ticks then returns the tick of each line.
+func (r *recorder) SetTick(f func() int) {
+	r.st.mu.Lock()
+	r.st.tick = f
+	r.st.mu.Unlock()
+}
+
+// Ticks returns the game tick of each line after a mark (same indexing as Since).
+func (r *recorder) Ticks(mark int) []int {
+	r.st.mu.Lock()
+	defer r.st.mu.Unlock()
+	if mark > len(r.st.ticks) {
+		mark = len(r.st.ticks)
+	}
+	return append([]int(nil), r.st.ticks[mark:]...)
 }
 
 func newRecorder(next slog.Handler) *recorder { return &recorder{next: next, st: &recStore{}} }
@@ -32,7 +51,12 @@ func (r *recorder) Handle(ctx context.Context, rec slog.Record) error {
 		return true
 	})
 	r.st.mu.Lock()
+	t := 0
+	if r.st.tick != nil {
+		t = r.st.tick()
+	}
 	r.st.lines = append(r.st.lines, b.String())
+	r.st.ticks = append(r.st.ticks, t)
 	r.st.mu.Unlock()
 	if r.next.Enabled(ctx, rec.Level) {
 		return r.next.Handle(ctx, rec)

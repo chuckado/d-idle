@@ -52,6 +52,8 @@ func run() int {
 	verbose := flag.Bool("v", false, "debug log of the bot code paths on stderr")
 	probe := flag.String("probe", "", "semicolon list of verbs to run and print (debug verbs go through the cheat ledger), then exit; for finding out what a verb does")
 	label := flag.String("label", "", "result file label after the date (default: the group, lower case)")
+	teleMinLeg := flag.Float64("tele-min-leg", -1, "override nav.teleMinLeg (subtiles; default keeps the knob default 36; 0 hops whenever mana allows)")
+	teleReserve := flag.Float64("tele-reserve", -1, "override nav.teleReservePct (percent of max mana kept after a hop; default keeps 40)")
 	repairBelow := flag.Int("repair-below", 0, "override the bot's repairBelowPct knob (default 30; `debug durability all 1` leaves 5 percent, so the default reaches the repair path)")
 	botBin := flag.String("bot", envOr("D2BOT_BIN", filepath.Join(home, "d2d-lab/drills4/d2bot")), "D10: the d2bot binary the fault drill runs managed")
 	killAfter := flag.Duration("d10-kill-after", 4*time.Minute, "D10: wall time from the bot start to the kill -9 of the slot's d2d")
@@ -89,6 +91,12 @@ func run() int {
 		return 1
 	}
 	tune := env.DefaultTuning()
+	if *teleMinLeg >= 0 { // DRILLS24: the knob override of docs/teletune.md's live recipe
+		tune.Nav.TeleMinLeg = *teleMinLeg
+	}
+	if *teleReserve >= 0 {
+		tune.Nav.TeleReservePct = *teleReserve
+	}
 	if *repairBelow > 0 {
 		tune.Town.RepairBelowPct = *repairBelow
 	}
@@ -125,6 +133,7 @@ func run() int {
 	}
 	l := newLab(be, db, led, *name, "slot"+os.Getenv("D2D_SLOT"), log)
 	l.rec = rec
+	rec.SetTick(l.tick)
 	l.tune = &tune
 	if *probe != "" {
 		return l.runProbe(ctx, *probe)
