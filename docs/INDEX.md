@@ -112,4 +112,6 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - Paladin Act 1 recon: [research/paladin-act1-recon.md](research/paladin-act1-recon.md) (what exists for the Paladin, Act 1 melee needs, Zealot-lite starter table as a proposal, generality metric and predicted file list, 8 SME questions; card palrecon)
 - docs/research/pr-armorhit-verifier.md: independent verifier of fix/armor-hit (freeze chain and resume frame traced, own differential, det hashes)
 - docs/research/pr-armorhit-addendum.md / pr-armorhit-body-final.md: fix/armor-hit after the verifier: verified limits, proof rows, final PR body, ready checklist (ARMORFINISH)
+- docs/research/pr-freezeresume-proof.md / pr-freezeresume-draft.md: fix/freeze-resume (frozen monster resumes at end + aidel), differential proof and PR draft
+- docs/research/pr-freezeresume-verifier.md: independent verifier of fix/freeze-resume (real event queue, own differential, side claims)
 - docs/forkarmor.md: private fork carries the Frozen Armor freeze-rule fix
