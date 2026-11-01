@@ -12,3 +12,5 @@ DRILLS11 finding F18: the melee cast guard (card fixportalmelee) counts attacker
 ## Impact
 
 Offline fix; live proof pending (docs/fixcrowd.md). No spec names crowdAdjacent or the guard, so no spec delta (grep openspec/specs).
+
+Overlap (declared, as fixemptyplan does): internal/combat/crowd.go, fighter.go, resource.go and internal/resource/types.go are owned by the open card fixportalmelee (its code is already merged; it stays open for its live proof), and docs/knobs.md and internal/env/tuning_combat.go by the open card fixrecast (it also touches the generated knobs). This card edits them for the knob only and does not list them in owns.

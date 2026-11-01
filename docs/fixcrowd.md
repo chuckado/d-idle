@@ -25,3 +25,5 @@
 ## Live proof (pending, not run)
 Rerun the DRILLS11 group P drill on the worker host with the lab build, same as the README DRILLS11 section:
 `D2D_AGENT=fixcrowd D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh fixcrowd --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group P -only D-portalmelee -label fixcrowd-portalmelee1` (repeat 3 times) and the control with `-only D-portalmelee.ctl`. The drill's wait for "3 within 3 subtiles" must become "3 within combat.crowdAdjacent" (internal/drill, not owned here). Expect Safety `chicken` with 3 zombies in reach and the scroll unspent; the control still `town-portal` with the scroll spent.
+
+Follow-up (a later drill agent, after drills11 merges): change the drill's wait from '3 within 3 subtiles' to '3 within crowdAdjacent' in internal/drill (owned by the drills cards).
