@@ -147,7 +147,7 @@ func (c CastInfo) String() string {
 func dEmptyPlan(ctx context.Context, r *Run, l D11Lab) Outcome {
 	var all []EmptyPlanInfo
 	var obs []string
-	for _, lv := range []struct{ level, n int }{{2, 8}, {9, 8}} {
+	for _, lv := range []struct{ level, n int }{{2, 12}, {9, 12}} {
 		i := l.EmptyPlan(ctx, r, lv.level, lv.n, 100*time.Second)
 		all = append(all, i)
 		obs = append(obs, i.String())
