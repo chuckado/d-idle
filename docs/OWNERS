@@ -134,7 +134,3 @@ internal/town/fixprogress_test.go  fixprogress  fixprogress
 openspec/changes/fixprogress/**  fixprogress  fixprogress
 internal/town/chores.go  fixprogress  fixprogress
 internal/town/town.go  fixprogress  fixprogress
-internal/d2dsrc/gearstats.go  skmeleewire2  skmeleewire2
-internal/d2dsrc/gearstats_test.go  skmeleewire2  skmeleewire2
-docs/skmeleewire2.md  skmeleewire2  skmeleewire2
-openspec/changes/skmeleewire2/**  skmeleewire2  skmeleewire2

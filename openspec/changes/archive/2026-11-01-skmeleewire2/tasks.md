@@ -2,7 +2,7 @@
 
 ```yaml
 change: skmeleewire2
-status: in-progress
+status: archived
 agent: skmeleewire2
 branch: agent/skmeleewire2
 worktree: ~/code/d2lod-wt/skmeleewire2
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/d2dsrc ./internal/combat ./internal/resource"
-result: "d2d gear and weapons fields feed stats 19/21/22/25 offline (table test); not verified live"
+result: "offline only, table tests pass; not verified live (live checklist in docs/skmeleewire2.md, needs the stats binary); no gear key means defaults unchanged"
 live: "offline only, nothing run live"
+merge: 47970bf
 ```
 
 ## 1. Work
