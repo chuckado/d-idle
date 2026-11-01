@@ -56,3 +56,6 @@ str Jade/Garnet
 str tower-area half
 # OAuth grant type name
 str grant_type=authorization_code
+
+# change card id of the worker-host tuning job (contains the machine word)
+str oriontune
