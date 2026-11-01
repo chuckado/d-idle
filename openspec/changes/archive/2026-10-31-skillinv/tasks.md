@@ -2,7 +2,7 @@
 
 ```yaml
 change: skillinv
-status: in-progress
+status: archived
 agent: skillinv
 branch: agent/skillinv
 worktree: ~/code/d2lod-wt/skillinv
@@ -13,8 +13,8 @@ owns:
 exclusive: []
 gates:
   - "docs/research/sorc-skill-matrix.md has the inventory, the matrix with V/S/I/U tags, the ranked gap decomps, the drill design and the per-act gate; changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict"
-merge:
-result: ""
+merge: 4d00c76
+result: "docs only: sorc skill matrix (30 skills, 172 tagged statements), 10 proposed decomps (decomp-queue rows 14-23), SK drill and per-act gate proposal; not verified live (no game)"
 live: "not run (docs only; the drill is a proposal)"
 ```
 
