@@ -24,7 +24,7 @@ gates:
   - "go test -p 1 ./internal/combat ./internal/d2 ./internal/d2dctl ./internal/d2dsrc ./internal/d2denv passes including TestFightBuffRecastsInLongFight and TestBuffStates"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
-live: "not verified live: see the live proof recipe in docs/fixbuff.md"
+live: "verified live (drills16, hidden slot 1, lab build debug-skills): raw `debug states` line parsed by Client.Buffs, Player.States bit 10 set in 12 of 12 up samples and clear after the clear, armor recast from inside a 300 s fight at 115.1 s and 229.2 s with 0 of 66 samples absent, states 20/30/88 and 14 confirmed (R-bs1/R-bs3/R-bs4); stale-cache failure offline only"
 ```
 
 - [x] B1 fight-loop buff check (fightBuff)
@@ -33,4 +33,4 @@ live: "not verified live: see the live proof recipe in docs/fixbuff.md"
 - [x] tests (600 s fights, levels 1 and 2, clock and state, surrounded, refused verb)
 - [x] F1 stale cache: CacheCurrent / Load check required columns
 - [x] docs/fixbuff.md
-- [ ] live proof (rerun the DRILLS13 armor recast proof as a long fight)
+- [x] live proof (drills16: PASS)
