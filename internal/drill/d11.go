@@ -33,7 +33,6 @@ type PMInfo struct {
 	PortalOpen                  bool // a portal object near the player after the act
 	LifeAfter                   int
 	Where                       string
-	Squeezed                    int    // warps needed to bring the monsters within 3 subtiles (0: they came by themselves)
 	AttackDists                 string // "distance:samples" of monsters in an attack mode (whole subtiles)
 }
 
@@ -160,8 +159,8 @@ func (i EmptyPlanInfo) String() string {
 }
 
 func (i PMInfo) String() string {
-	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, warps %d, attack-mode distances (subtile:samples) [%s], err %q",
-		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.Squeezed, i.AttackDists, i.Err)
+	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, attack-mode distances (subtile:samples) [%s], err %q",
+		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.AttackDists, i.Err)
 }
 
 func (c CastInfo) String() string {

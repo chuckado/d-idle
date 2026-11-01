@@ -116,44 +116,6 @@ func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, li
 	return
 }
 
-// d11Squeeze warps the character next to the want nearest monsters (logged `debug warp` to the cell of their centroid)
-// until at least want of them are within 3 subtiles, at most 8 tries: the attackers' natural distance is larger than the
-// bot's adjacency (finding of DRILLS11), so the rule's branch is reached by placing the character.
-func (l *lab) d11Squeeze(ctx context.Context, r *drill.Run, want int) (tries int) {
-	for ; tries < 8; tries++ {
-		if a, _, _, _ := l.d11Within(ctx, 3); a >= want {
-			return tries
-		}
-		ms, err := l.be.Client.Monsters(ctx)
-		lv, lerr := l.be.Client.Level(ctx)
-		if err != nil || lerr != nil {
-			return tries
-		}
-		type md struct{ x, y, d float64 }
-		var near []md
-		for _, m := range ms.Items {
-			if m.HP.Cur > 0 && m.Mode != "DD" && m.Mode != "DT" {
-				near = append(near, md{m.CellX, m.CellY, math.Hypot(m.CellX-lv.X, m.CellY-lv.Y)})
-			}
-		}
-		sort.Slice(near, func(i, j int) bool { return near[i].d < near[j].d })
-		if len(near) < want {
-			return tries
-		}
-		var cx, cy float64
-		for _, m := range near[:want] {
-			cx += m.x
-			cy += m.y
-		}
-		cx, cy = cx/float64(want), cy/float64(want)
-		if err := l.Warp(ctx, r, int(cx+0.5)-tries%2, int(cy+0.5)); err != nil {
-			return tries
-		}
-		_ = l.Tick(ctx, 1)
-	}
-	return tries
-}
-
 // d11OneScroll empties the belt and the pack and puts exactly one Town Portal scroll in the pack.
 func (l *lab) d11OneScroll(ctx context.Context, r *drill.Run) error {
 	if _, err := r.Cheat(ctx, "debug belt clear", "no potion in the belt: the fight under test has none to drink"); err != nil {
@@ -259,9 +221,6 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 	if got := l.d11Spawn(ctx, r, n, adj, 3); got < 0 {
 		pi.Err = "spawn failed"
 		return
-	}
-	if got, _, _, _ := l.d11Within(ctx, 3); got < adj {
-		pi.Squeezed = l.d11Squeeze(ctx, r, adj)
 	}
 	if err := l.SetLife(ctx, r, 102); err != nil {
 		pi.Err = "life: " + err.Error()
