@@ -101,6 +101,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 2b23d81 11-01 08:38 `Merge agent/skpass: SKPASS passives trace (decomp row 23)` (skpass)
 - d8e48e0 11-01 02:22 `Merge agent/nexthitfix: nexthit v2 end-frame fix addendum, fork lab-nexthit2` (nexthitfix)
 - 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
 - db32c75 11-01 01:54 `Merge agent/drills18: fixmouth3 (stayLevel) proven live as a partial; DRILLS18 probes` (drills18)
@@ -110,5 +111,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e64c13a 11-01 01:36 `Merge agent/drills17: DRILLS17 live result for fixmouth2 (FAIL, bounces remain)` (drills17)
 - 34559ca 11-01 01:36 `readmedocs: coordinator review fixes, merge origin/main` (readmedocs)
 - 2527484 11-01 01:31 `Merge agent/forknext: private fork carries the NextHit fix (lab-nexthit), docs only` (forknext)
-- 97f2fc3 11-01 01:24 `Merge agent/apireview: advisory PR review workflow (owner PRs only) and Anthropic HTTP helper` (apireview)
 <!-- statusgen:end -->
