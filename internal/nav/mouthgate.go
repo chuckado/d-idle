@@ -15,8 +15,8 @@ import (
 // fired the trigger (V DRILLS18: a step-away replanned from 3.2 and its first click, 5.4 from the exit, fired it).
 const (
 	// mouthTriggerR: a click whose straight segment comes within this many subtiles of an unwanted exit may fire it.
-	// V (DRILLS16 to 18 logs): clicks fired the trigger 13.0 (Den), 11.7 and 11.2 (Cave Level 1) and 5.4 (Den) from the
-	// listed exit position; clicks 16.2 to 18 away never did. 15 covers 13.0 with 2 margin and stays below 16.2. The real
+	// V (DRILLS16 to 18 logs): click targets that fired the trigger lay 13.0 (Den), 12.1, 11.7 and 11.2 (Cave Level 1)
+	// and 5.4 (Den) from the listed exit position; click targets 16.2 to 18 away never did. 15 covers 13.0 with 2 margin and stays below 16.2. The real
 	// bound and shape of the trigger area (seed-dependent, docs/d2d-loop.md) are UNVERIFIED, as is whether the game's own
 	// short path from a click bends into it.
 	mouthTriggerR = 15.0
@@ -74,15 +74,20 @@ func (n *Navigator) MouthClickOK(from, to input.Point) bool {
 	return clickOKAll(from, to, exits)
 }
 
-// mouthClickOK is the invariant for one exit. From outside the bound the straight segment must stay outside it; from
-// inside (arrival offset, after a swing or knockback) the click may only move outward: the segment never gets nearer to
-// the exit than from is, and it ends no nearer.
+// mouthClickOK is the invariant for one exit. The click target must lie outside the bound: every logged fired click had
+// its target inside it, outward ones included (V: from 3.2 the click at 5.4 fired, DRILLS18; from 3.2 the second
+// step-away waypoint at 12.1 fired, DRILLS17), while long step-away clicks to targets 20 and more away never fired. From
+// outside the bound the straight segment must stay outside too (the game walks roughly that line); from inside
+// (arrival offset, after a swing or knockback) it may only move outward (leavesExit).
 func mouthClickOK(from, to, ex input.Point) bool {
+	if dist(to, ex) < mouthTriggerR {
+		return false
+	}
 	d0 := dist(from, ex)
 	if d0 >= mouthTriggerR {
 		return segDist(ex, from, to) >= mouthTriggerR
 	}
-	return dist(to, ex) >= d0 && leavesExit(from, to, d2map.Point{X: ex.X, Y: ex.Y}, d0)
+	return leavesExit(from, to, d2map.Point{X: ex.X, Y: ex.Y}, d0)
 }
 
 func clickOKAll(from, to input.Point, exits []input.Point) bool {
@@ -122,7 +127,8 @@ func (n *Navigator) gateClick(ctl input.Controller, p input.Point) (input.Point,
 }
 
 // gateRewrite: from outside the bound the click is clipped at the boundary; from inside it goes along the away vector
-// (exit to character), turned by up to 90 degrees, 20 then 10 subtiles, onto a walkable cell. how is "" when nothing
+// (exit to character), turned by up to 90 degrees, 20, 25 then 15 subtiles, onto a walkable cell (the target must end
+// outside the bound). how is "" when nothing
 // passes the invariant.
 func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits []input.Point) (q input.Point, how string) {
 	ex, best := exits[0], math.MaxFloat64
@@ -146,21 +152,27 @@ func (n *Navigator) gateRewrite(lm *d2map.LevelMap, from, to input.Point, exits 
 		f = n.fieldFor(lm)
 	}
 	ux, uy := float64(from.X-ex.X)/d0, float64(from.Y-ex.Y)/d0
-	for _, l := range []float64{mouthAway, 10} {
-		for _, deg := range []float64{0, 30, -30, 60, -60, 90, -90} {
-			a := deg * math.Pi / 180
-			vx, vy := ux*math.Cos(a)-uy*math.Sin(a), ux*math.Sin(a)+uy*math.Cos(a)
-			c := input.Point{X: from.X + int(math.Round(vx*l)), Y: from.Y + int(math.Round(vy*l))}
-			if f != nil {
-				x, y, ok := f.nearestWalkable(c.X, c.Y, 3)
-				if !ok {
-					continue
+	// first pass: a straight walkable line (the character walks it as clicked); second pass: any walkable target
+	for pass := 0; pass < 2; pass++ {
+		for _, l := range []float64{mouthAway, mouthAway + 5, 15} {
+			for _, deg := range []float64{0, 30, -30, 60, -60, 90, -90} {
+				a := deg * math.Pi / 180
+				vx, vy := ux*math.Cos(a)-uy*math.Sin(a), ux*math.Sin(a)+uy*math.Cos(a)
+				c := input.Point{X: from.X + int(math.Round(vx*l)), Y: from.Y + int(math.Round(vy*l))}
+				if f != nil {
+					x, y, ok := f.nearestWalkable(c.X, c.Y, 3)
+					if !ok || pass == 0 && !f.los(from.X, from.Y, x, y, 0) {
+						continue
+					}
+					c = input.Point{X: x, Y: y}
 				}
-				c = input.Point{X: x, Y: y}
+				if clickOKAll(from, c, exits) {
+					return c, "away"
+				}
 			}
-			if clickOKAll(from, c, exits) {
-				return c, "away"
-			}
+		}
+		if f == nil {
+			break
 		}
 	}
 	return input.Point{}, ""

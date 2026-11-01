@@ -719,9 +719,9 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 	return input.Point{}, false
 }
 
-// fleeRetarget: a step-away that replanned (after a stall, a fight inside it, knockback) checks the first waypoint it
-// would click from where the character stands NOW; when that heads toward the exit it computes a new away goal from
-// here (FIXMOUTH4, V DRILLS18: the replan from 3.2 first clicked 5.4 from the exit and fired it). The mouth gate would
+// fleeRetarget: a step-away that replanned (after a stall, a fight inside it, knockback) checks the first click it
+// would send from where the character stands NOW against the mouth invariant (mouthClickOK); when it breaks it, it
+// computes a new away goal from here (FIXMOUTH4, V DRILLS18: the replan from 3.2 first clicked 5.4 from the exit and fired it). The mouth gate would
 // rewrite that click anyway; this keeps the walk's own goal from fighting the gate.
 func (n *Navigator) fleeRetarget(o *obs, res planResult, fl *fleeState) bool {
 	if fl == nil || fl.retargets >= fleeRetargets || len(res.wps) == 0 {
@@ -734,8 +734,11 @@ func (n *Navigator) fleeRetarget(o *obs, res planResult, fl *fleeState) bool {
 			break
 		}
 	}
+	if f := n.fieldFor(o.lm); f.los(o.pos.X, o.pos.Y, fl.goal.X, fl.goal.Y, 0) {
+		wp = fl.goal // oneClick: the walk clicks the goal itself
+	}
 	d := dist(o.pos, fl.exit)
-	if leavesExit(o.pos, wp, d2map.Point{X: fl.exit.X, Y: fl.exit.Y}, d) {
+	if mouthClickOK(o.pos, wp, fl.exit) {
 		return false
 	}
 	fl.retargets++
