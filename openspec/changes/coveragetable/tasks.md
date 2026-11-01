@@ -14,10 +14,10 @@ owns:
 exclusive: []
 gates:
   - "coverage.py --check; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: ""
+result: "docs/coverage/rule-coverage.md generated (21 subsystems, 4910 rows, ledger seeded from the research docs), coverage.py --check wired into tools/ci/scripts.sh, 12 unit tests. Not verified live (docs and tooling only)."
 live: "docs and tooling only, nothing run live"
 ```
 
-- [ ] generator, denominators, ledger seeded from the docs
-- [ ] tests, README, pointer line in decomp-queue
-- [ ] checks and merge-lines
+- [x] generator, denominators, ledger seeded from the docs
+- [x] tests, README, pointer line in decomp-queue
+- [x] checks and merge-lines
