@@ -70,7 +70,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 4 | Minimum time between healing or mana potions. |
 | combat.rejuvGapMs | 300 | 250..1500 | ms | 1500 | 1 | Minimum time between rejuvenation potions. |
 | combat.reactionMs | 120 | 40..700 | ms | 700 | 1 | Delay before the bot acts on a survival event. |
-| combat.pollMs | 60 | 30..400 | ms | 400 | 7 | How often the fight loop looks at the game. |
+| combat.pollMs | 60 | 30..400 | ms | 400 | 8 | How often the fight loop looks at the game. |
 | combat.targetQuality | 100 | 20..100 | % | 20 | 3 | 100 picks the best target; lower picks the nearest more often and loses ticks. |
 | combat.rangeMargin | 3 | 0..8 | subtiles | 0 | 1 | Distance kept inside a skill's maximum range. |
 | combat.clearRadius | 40 | 15..80 | subtiles | 15 | 1 | Radius around the start point cleared when the caller gives none. |
@@ -99,7 +99,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.ignoreMemorySec | 90 | 20..300 | s | 20 | 1 | How long an ignored target is left alone (the memory doubles with every repeat). |
 | combat.auraCheckMs | 1500 | 500..5000 | ms | 5000 | 1 | How often the fight loop re-reads the active aura and re-applies it. |
 | combat.leftFailSec | 60 | 10..300 | s | 10 | 1 | After a left skill could not be selected, wait this long before trying it again. |
-| combat.buffRecastSec | 150 | 60..300 | s | 300 | 1 | Recast armors and shields this long after the last cast. |
+| combat.buffRecastSec | 150 | 60..300 | s | 300 | 1 | Upper bound and fallback: recast armors and shields this long after the last cast. An armor whose real duration is known (Frozen Armor 120 s at level 1) is recast earlier, see buffMarginSec. |
+| combat.buffMarginSec | 6 | 0..30 | s | 30 | 1 | Recast an armor or shield this many seconds before its real duration (Skills.txt auralencalc at the skill's level) runs out. |
 
 ### town.*
 
@@ -112,14 +113,14 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tripBeltColumnPct | 50 | 0..100 | % | 0 | 2 | Go to town when a planned belt column is filled below this. |
 | town.tripPackUsedPct | 80 | 40..100 | % | 100 | 4 | Go to town when the backpack is this full. |
 | town.tripRepairPct | 20 | 0..60 | % | 0 | 1 | Go to town when an equipped item is below this durability. |
-| town.beltFillPct | 100 | 25..100 | % | 25 | 2 | Refill each potion type to this share of its planned columns. |
+| town.beltFillPct | 100 | 25..100 | % | 25 | 1 | Refill each potion type to this share of its planned columns. |
 | town.tpScrollTarget | 2 | 1..20 | count | 1 | 3 | Scrolls to hold when no tome is owned. |
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
 | town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 2 | Buy a Tome of Town Portal when gold is at least this. |
 | town.idScrollTarget | 2 | 0..20 | count | 0 | 4 | Scrolls to hold when no tome is owned. |
 | town.minGoldReserve | 100 | 0..1e+04 | gold | 1e+04 | 4 | Optional purchases never spend below this. |
 | town.keyTarget | 0 | 0..12 | count | 0 | 6 | Keys to hold; 0 never buys keys. |
-| town.repairBelowPct | 30 | 0..90 | % | 0 | 1 | Repair when any equipped item is below this durability. |
+| town.repairBelowPct | 30 | 0..90 | % | 0 | 3 | Repair when any equipped item is below this durability. |
 | town.stashGoldBase | 300 | 0..2e+04 | gold | 2e+04 | 3 | Deposit inventory gold above this plus level times stashGoldPerLvl. Death takes ALL carried gold (LIVE G1 attempt 12: 1125 to 0), so keep little. |
 | town.stashGoldPerLvl | 50 | 0..2e+04 | gold/lvl | 2e+04 | 3 | Deposit inventory gold above stashGoldBase plus level times this. |
 | town.beltBuyLevel | 10 | 0..40 | clvl | 0 | 4 | From this level on a town visit buys the cheapest belt with more potion slots than the worn one (after the potion kit, never below the gold reserve plus a minimal kit). 0 = never. docs/sme/potion-policy.md. |
@@ -164,7 +165,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.gapMs | 150 | 0..1000 | ms | 1000 | 1 | Pause between two pickups. |
 | loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 1 | Ignore gold piles smaller than this. |
 | loot.freeCellsKeep | 2 | 0..12 | cells | 0 | 1 | Inventory cells that must stay free after a pickup. |
-| loot.potionBuffer | 0 | 0..10 | count | 0 | 1 | Extra needed-type potions carried in the pack beyond the belt. |
+| loot.potionBuffer | 0 | 0..10 | count | 0 | 2 | Extra needed-type potions carried in the pack beyond the belt. |
 | loot.rejuvSpare | 3 | 0..6 | count | 0 | 4 | Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them. |
 | loot.lowGoldBelow | 2000 | 0..1e+05 | gold | 1e+05 | 1 | Below this gold, also pick items worth selling. |
 | loot.minValuePerCell | 100 | 0..5000 | gold | 5000 | 1 | Sell value per cell an item needs to be picked in low-gold mode. |
