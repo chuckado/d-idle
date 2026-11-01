@@ -94,3 +94,52 @@ Per claim, before to after: claims 1 and 2 (monster, WL and RN): 38,543 to 0 (WL
 - gcc `-Wshadow -Wunused -Wsign-compare -Wextra` over every touched TU (compile_commands flags): one finding on our lines at first, `rng` in the new test mode hid an upstream local of `main` (the MSVC C4456 class that failed two earlier PRs); renamed `case_rng`, now 0 on added lines.
 - Built with `-Wno-error=maybe-uninitialized -Wno-error=array-bounds`: `test_game` (with the game data dir), `test_rules`, `test_combat`, `test_protocol` all rc 0; `d2d` links.
 
+
+## Independent verifier 2 (card verifyprs2, 2026-10-31): the merc and pet claims
+
+Scope: the new claims 455e366f (merc) and 85d50c78 (pet), the replay on the current upstream main, the reviewer-runnable mode; the first three claims were verified above. Offline, throwaway worktrees on the worker host (the author's `walk2` worktree and branch untouched, nothing pushed or posted).
+
+Verdict: **HOLDS WITH LIMITS** (merc and pet, no counter-example inside the claims). **NOT READY** to open: two steps remain (below).
+
+### Re-derived from the disassembly (before reading the author's oracle)
+
+- A merc and a pet are monster units (unit +0 = 1). FUN_00623f50 takes type and class from unit +0 / +4 through FUN_00645270, which remaps them only with unit +0xc8 bit 3 and a state of States gfxtype 1 or 2 (gfxtype 2: player type, class = gfxclass: the Shadows, not claimed). FUN_006214a0: a monster's mode 2 (WL) and 15 (RN) are moving modes whether or not MonStats +0xd bit 0 is set: both mode tables (0x6e8b90 for hcIdx < 0x19a, 0x6e8cd0 for the act 5 mercs 0x230 / 0x231) have row +4 = 1 for modes 2 and 15. Moving: pct = FUN_00621740 row 4 (stat 96) + stat 0x43, at least 0x19 (0x62414e); velocity = FUN_00621360(1, class) = MonStats +0x32 (Velocity) << 8, in any mode, x pct / 100 (truncating) to FUN_00648690. So a merc and a pet walk at Velocity in WL and RN with floor 25 (V, disassembly read).
+- Where Run comes in: as a pace on stat 0x43. FUN_005a6260 stores an AI's pct at control +0x1c; FUN_005a63f0 moves it to +0x10 for path types other than 100 (WL, RN, 13, 14 get type 101 -> 13 from the table at 0x6e23d0); FUN_005a6380 (called by FUN_005a7c20 at 0x5a7dbf) puts a non-zero +0x10 on stat 0x43 in stat list 0x4004 and re-runs FUN_00623f50. The merc's run after its owner's footsteps paces 0x3c (FUN_005e52d0, d2d `footsteps(kMonsterRun, 0x3c)`); its run at a foe (FUN_005ded00 -> FUN_005deb60, mode 0xf, WL under state 0x3c) sets no pace, as d2d (`move_pct = 0`). d2d's pets take Run x 100 / Velocity - 100 as their pace (rules/pets.hpp:222, 337). Same model as the author's.
+
+### Reviewer-runnable mode
+
+`test_game --walk-velocity` (10338345) calls the REAL functions: `monster_update` (one frame), `World::walk_percent`, `Fight::merc_turn` (a merc made by `World::spawn_merc` from the header), `Fight::pet_walking` (a `Fight::Pet` with `make_monster`); the walk % is measured from the distance moved. No transcription of the rule (V, read).
+
+### Own differential
+
+`tools/emu/verify_walk_mercpet.py` (seed 5577, `gen 100000`) + `verify_walk_mercpet_mode.inc` (`test_game --verify-mercpet`, pasted into a throwaway worktree). Game side: game.exe's own FUN_00623f50 with FUN_00645270, FUN_006214a0, FUN_006216e0, FUN_00621740 and FUN_00621360 native against fake MonStats rows (Velocity and the +0xd flag from the case); hooked only the animation rate, two stat reads and FUN_00648690 (records the velocity); every case's recorded velocity equals Velocity << 8 x max(sum, 25) / 100 (0 failures). d2d side: one real `merc_turn` / `pet_walking` with a step sized so the unit moves about 4 cells under either rule (a huge walk % never reaches the path end, a slow unit is not lost in float noise). 123,904 cases: every hireling Id (all merc types and difficulties) and 23 pet rows with their summoning skills (skeletons, mages, the four golems, Valkyrie, wolves, Fenris, Grizzly, vines, spirits, revives of 8 monster rows), WL and RN, Velocity 1..255, sums from -30,000 to 30,100 (0, the old floor 10 and the new 25 each side, the merc's 160, huge), paces 0 / 15 / 60 / 30 / 120, pet speed and buff negative and positive. Tolerance 0.01 + 1e-5 x the walk % (d2d steps in float: at most 4e-6 relative, only at walk % 12,599 and up).
+
+| build (upstream main + the commits) | merc WL | merc RN | pet WL | pet RN | total |
+|---|---|---|---|---|---|
+| 72132b99 upstream main | 10,798 | 32,451 | 17,620 | 28,675 | **89,544** |
+| + d8e63d4a, a5cf6415, 1c3fa4e5 | 10,798 | 32,451 | 17,620 | 28,675 | 89,544 |
+| + 455e366f (merc) | 0 | 0 | 17,620 | 28,675 | 46,295 |
+| + 85d50c78 (pet) | 0 | 0 | 0 | 0 | 0 |
+| 10338345 (head) | 0 | 0 | 0 | 0 | **0** |
+
+Per claim: merc 43,249 -> 0 of 65,923; pet 46,295 -> 0 of 57,981. The case file is reproducible (`gen` twice, `cmp` equal).
+
+### Sweeps and CI class (head 10338345)
+
+- Replay: upstream main fetched again, still 72132b99 = the branch base; the six commits stand on it unchanged.
+- Other d2d paths with the same rule: three pet moves outside `pet_walking` do NOT follow it: `pets.cpp:218` (an untraced pet's chase, `max(Run, Velocity)`, no floor: has a ponytail), `pets.cpp:246` (an untraced pet follows the owner at the owner's CharStats RunVelocity x 1.1) and `fight/tick.cpp:446` (every pet in town follows at the owner's RunVelocity x 1.1): **no ponytail, no PR-body line** for the last two, so "a pet walks at MonStats Velocity" over-states the commit. The merc has one move site (merc.cpp:288). `ai.cpp:643` picks `run` for RN, now the same as `walk`. Skill moves and Diablo's run: as in the first verifier's finding 3.
+- game.exe: the merc and pet go through the same FUN_00623f50 as every unit; no merc- or pet-only velocity path found (the other FUN_00648690 callers are the skill moves of finding 3).
+- pr_guard 0 FAIL 0 WARN for the range and for each of the six commits against its parent. presubmit --quick: 0 FAIL, WARN siblings (it does not see merc.cpp's change), error-path (`walk_velocity.py:163`), build skipped; ruff with upstream's rule set (0.17.3, F,E9,B,BLE001,PLW1510,S602,S604): clean. test_game (data dir), test_rules, test_combat, test_protocol rc 0; d2d links. clang-tidy (the repo's .clang-tidy: identifier length 3, misc-include-cleaner) and gcc `-Wshadow -Wunused -Wsign-compare -Wextra` over the 135 TUs `tools/tidy-pr-select.py` picks for the touched files: clang-tidy 28 findings in all, 0 on added lines (the rest in untouched upstream lines: apps/d2d, apps/launcher, outdoor.hpp, setup.cpp, rules/merc.hpp, rules/pets.hpp, test_monster_ai.cpp; the local clang-tidy is newer than CI's); gcc 0 findings at all.
+
+### Limits
+
+1. The inputs of stat 0x43 are d2d's model on both sides: a merc's chill (MonStats coldeffect on a merc unit) and faster run/walk from its items (stat 96, e.g. a runeword armor) are not modelled for a merc, nor chill for a pet; the claim covers the formula, not those inputs.
+2. When a move sets no pace, FUN_005a6380 leaves an earlier 0x4004 stat list on stat 0x43 (it only writes a non-zero pct); whether that list expires is not traced (UNVERIFIED); d2d resets `move_pct` to 0.
+3. Shadow pets are not in the differential (their base is not claimed: ponytail at pets.cpp:282).
+4. Velocity <= 0 is not measured on the d2d side (no distance); game.exe's integer truncation of the velocity vs d2d's float step, as limit 5 above.
+5. Det state hashes not run (needs a d2d slot; not allowed in this card).
+
+### Remaining steps before the coordinator asks for a go
+
+1. Add a `// ponytail:` at `pets.cpp:246` and `fight/tick.cpp:446` (or one PR-body line) saying that an untraced pet and every pet in town still follow at the owner's RunVelocity x 1.1, not FUN_00623f50.
+2. Run the det state hashes on a d2d slot (moving mercs and pets change them by design; record the new hashes).

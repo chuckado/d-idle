@@ -91,6 +91,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 912086a 10-31 20:02 `Merge agent/fixstall4: town verbs follow line of sight, route at every stall` (fixstall4)
 - 75b2469 10-31 19:51 `Merge agent/drills8: drill results, harness edits` (drills8)
 - f795c60 10-31 19:48 `Merge agent/fixmeter: combat Meter derived in d2dcombat.Attach` (fixmeter)
 - 2c92b29 10-31 19:46 `Merge agent/fixstatus: agentstatus.py stub as real Python` (fixstatus)
@@ -100,5 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ed3836f 10-31 19:18 `Merge agent/decomppets: pets and merc decomp trace` (decomppets)
 - 2e04c06 10-31 19:13 `Merge agent/fixstall3: planAround clearance fallback, d2dtown.Input walking town, F12 log fields` (fixstall3)
 - 3e39c98 10-31 19:10 `Merge agent/drills7: drills7 findings F10-F12, harness fixes; archive drills7 and fix-portal2; backlog line` (drills7)
-- cb9d24a 10-31 19:07 `Merge agent/walkfix: walk-velocity v2 candidate docs and tooling` (walkfix)
 <!-- statusgen:end -->
