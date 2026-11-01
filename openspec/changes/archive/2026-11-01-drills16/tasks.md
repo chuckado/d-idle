@@ -2,7 +2,7 @@
 
 ```yaml
 change: drills16
-status: in-progress
+status: archived
 agent: drills16
 branch: agent/drills16
 worktree: ~/code/d2lod-wt/drills16
@@ -12,6 +12,7 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits"
+merge: 96be00f
 result: "Verified live on hidden d2d slots 0 and 1: fixmouth FAIL (bounces remain, callers named), fixbuff PASS on all four live items; see the DRILLS16 section of docs/probes/drills/README.md"
 live: "verified live: DW.m3 x3 (identical) and DW.m4 FAIL; R-bs1, R-bs3, R-bs4 PASS"
 ```

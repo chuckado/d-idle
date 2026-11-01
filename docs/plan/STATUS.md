@@ -42,9 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [drills16](../../openspec/changes/drills16/) | in-progress | drills16 | `openspec/changes/drills16/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
-| [fixbuff](../../openspec/changes/fixbuff/) | in-progress | fixbuff | `docs/fixbuff.md`<br>`internal/combat/fight.go`<br>`internal/data/extract.go`<br>`internal/combat/fixbuff_test.go`<br>`internal/d2/states.go`<br>`internal/d2dctl/verbs.go`<br>`internal/d2dctl/parse.go`<br>`internal/d2dctl/parse_test.go`<br>`internal/d2dsrc/source.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2denv/env.go` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -78,10 +76,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change drills16: gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
-- change fixbuff: go test -p 1 ./internal/combat ./internal/d2 ./internal/d2dctl ./internal/d2dsrc ./internal/d2denv passes including TestFightBuffRecastsInLongFight and TestBuffStates
-- change fixbuff: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmouth: live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)
@@ -100,6 +95,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 96be00f 11-01 01:08 `Merge agent/drills16: DRILLS16 live results (fixmouth FAIL, fixbuff PASS)` (drills16)
 - 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
 - d837d1c 11-01 01:57 `Merge agent/sknova: Frost Nova ring trace (SKNOVA)` (sknova)
 - 4b86423 11-01 01:52 `Merge agent/fixcastgap: per-skill cast gap (Lightning 890 ms on game.exe, 650 ms on d2d)` (fixcastgap)
@@ -109,5 +105,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 27049dd 11-01 01:27 `Merge agent/fixbuff: re-cast buffs in long fights, buff states, stale skills cache check` (fixbuff)
 - 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
 - 0c88fdc 11-01 01:16 `Merge agent/crfix157: CodeRabbit follow-up records for upstream PR 157 (docs only)` (crfix157)
-- 89d6a22 11-01 01:13 `Merge agent/drills13: DRILLS13 live results (Frozen Armor recast pass, mana timing M1)` (drills13)
 <!-- statusgen:end -->

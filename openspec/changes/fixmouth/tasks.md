@@ -17,7 +17,7 @@ exclusive: []
 gates:
   - "live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)"
 merge: ""
-result: "offline tests pass; live proof FAILED (drills16): the arrival step-away works, bounces remain from other walks"
+result: "offline tests pass; live proof FAILED (drills16): the arrival step-away works, bounces remain from other walks; follow-up card FIXMOUTH2 (agent/fixmouth2)"
 live: "verified live (drills16, hidden slot, lab build cheats3): the arrival guard fired at radius 16 on every first walk (dist 11.2) and the Explore first walk stepped away (no bounce there); DW.m3 x3 identical: 23 level-change errors from Fighter.move (engage approach and evade), never finishes; DW.m4: 2 explore bounces of 4 entries from roam first walk 13 subtiles from the exit after arrival was consumed; the Cave Level 1 step-away click did NOT fire the trigger (U resolved)"
 ```
 
