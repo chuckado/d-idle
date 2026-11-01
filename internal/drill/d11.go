@@ -70,7 +70,7 @@ func D11(l D11Lab) []Drill {
 	lim := 10 * time.Minute
 	return []Drill{
 		{ID: "D-emptyplan", Primitive: "P22", Title: "fixemptyplan: a pack, mana drained to 0 before every round: the out-of-mana back-off leaves no 'no path: empty path' line", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return dEmptyPlan(ctx, r, l) }},
-		{ID: "D-portalmelee", Primitive: "P10", Title: "fixportalmelee: 3 Fallen adjacent, 34 percent life, empty belt, one scroll: Safety chickens and the scroll stays", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
+		{ID: "D-portalmelee", Primitive: "P10", Title: "fixportalmelee: 3 Zombies adjacent, 34 percent life, empty belt, one scroll: Safety chickens and the scroll stays", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			i := l.PortalMelee(ctx, r, 3, false)
 			o := Outcome{Intended: "adjacent >= 3, no potion, one scroll: Safety is Chicken (not TownPortal), scroll count unchanged"}
 			o.Observed = i.String()
@@ -80,7 +80,7 @@ func D11(l D11Lab) []Drill {
 				o.Verdict, o.Reason = Blocked, i.Err
 			case i.Adjacent < 3 || i.BeltPotions != 0 || i.ScrollsBefore != 1:
 				o.Verdict, o.Reason = Blocked, "setup not reached: "+i.String()
-			case i.Decision != "Chicken" || i.ScrollsAfter != 1:
+			case i.Decision != "chicken" || i.ScrollsAfter != 1:
 				o.Verdict, o.Reason = Fail, "decision "+i.Decision+", scrolls "+fmt.Sprint(i.ScrollsBefore, "->", i.ScrollsAfter)
 			default:
 				o.Verdict, o.Reason = Pass, fmt.Sprintf("%d adjacent at life %d/%d: Chicken, scroll kept (1)", i.Adjacent, i.Life, i.MaxLife)
@@ -97,7 +97,7 @@ func D11(l D11Lab) []Drill {
 				o.Verdict, o.Reason = Blocked, i.Err
 			case i.Adjacent != 1 || i.BeltPotions != 0 || i.ScrollsBefore != 1:
 				o.Verdict, o.Reason = Blocked, "setup not reached: "+i.String()
-			case i.Decision != "TownPortal":
+			case i.Decision != "town-portal":
 				o.Verdict, o.Reason = Fail, "decision "+i.Decision
 			default:
 				o.Verdict, o.Reason = Pass, fmt.Sprintf("TownPortal decided with 1 adjacent; act err %q, scrolls %d->%d, portal open %v, life after %d", i.ActErr, i.ScrollsBefore, i.ScrollsAfter, i.PortalOpen, i.LifeAfter)

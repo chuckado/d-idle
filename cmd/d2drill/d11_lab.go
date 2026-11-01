@@ -162,16 +162,16 @@ func (l *lab) d11OneScroll(ctx context.Context, r *drill.Run) error {
 	return nil
 }
 
-// d11Mon is the melee monster of the portal drills: a Fallen is fast (a Zombie did not reach the character in 200 ticks, docs/forkcheats.md).
-const d11Mon = "fallen1"
+// d11Mon is the melee monster of the portal drills: a Zombie does not scatter after a hit, so several end up adjacent at once (a Fallen darts in and out: 1 of 3 within 3 subtiles in 600 ticks).
+const d11Mon = "zombie1"
 
-// d11Spawn spawns n zombies and steps until at least want of them are adjacent (600 ticks at most).
+// d11Spawn spawns n zombies and steps until at least want of them are adjacent (1200 ticks at most).
 func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius float64) (adj int) {
 	clear(d11att)
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn %s %d near", d11Mon, n), "melee monsters near the throwaway: the fight under test (docs/forkcheats.md)"); err != nil {
 		return -1
 	}
-	for i := 0; i < 60; i++ {
+	for i := 0; i < 120; i++ {
 		_ = l.Tick(ctx, 10)
 		if a, _, _, _ := l.d11Within(ctx, radius); a >= want {
 			return a
@@ -182,8 +182,8 @@ func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius fl
 }
 
 func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) (pi drill.PMInfo) {
-	pi.Where = fmt.Sprintf("Blood Moor, %d fallen", adj)
-	if err := l.d11Setup(ctx, r, 2, 100); err != nil {
+	pi.Where = fmt.Sprintf("Blood Moor, %d zombie", adj)
+	if err := l.d11Setup(ctx, r, 2, 300); err != nil {
 		pi.Err = err.Error()
 		return
 	}
@@ -199,7 +199,7 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 	if got, _, _, _ := l.d11Within(ctx, 3); got < adj {
 		pi.Squeezed = l.d11Squeeze(ctx, r, adj)
 	}
-	if err := l.SetLife(ctx, r, 34); err != nil {
+	if err := l.SetLife(ctx, r, 102); err != nil {
 		pi.Err = "life: " + err.Error()
 		return
 	}
