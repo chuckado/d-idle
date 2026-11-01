@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate1
-status: in-progress
+status: archived
 agent: gate1
 branch: agent/gate1
 worktree: ~/code/d2lod-wt/gate1
@@ -14,7 +14,8 @@ owns:
 exclusive:
   - instance:gate1-slot-0
 gates: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-rerun.md)
-result: Gate 1 NOT PASSED (docs/soaks/gate1-rerun.md); verified live on a hidden d2d slot
+result: "Gate 1 rerun NOT PASSED (one seed): fault recovery, stability, deaths, route guard, town portal pass; progress (43 virtual min) and belt window (6 min) fail; XP per hour indicative fail; fix cards FIXPROGRESS and FIXBELT"
+merge: 0764a88
 ```
 
 - [x] 1. Soak run on a hidden d2d slot with one injected fault

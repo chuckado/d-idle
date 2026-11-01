@@ -49,7 +49,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
-| [gate1](../../openspec/changes/gate1/) | in-progress | gate1 | `docs/soaks/gate1-rerun.md`<br>`docs/probes/soak-logs/gate1-*`<br>`openspec/changes/gate1/**` | `instance:gate1-slot-0` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -97,7 +96,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change gate1: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-rerun.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -121,6 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0764a88 11-01 15:15 `Merge agent/gate1: Gate 1 rerun entry: not passed on one seed (progress, belt window)` (gate1)
 - 120e534 11-01 15:08 `Merge agent/forkstats: forkstats docs: read-only gear stats and weapon base damage in the fork dump; d2d has no player stats 17/18/21/22` (forkstats)
 - 7c4fd4b 11-01 15:01 `Merge agent/macvet: PR vetting on a second machine: portable differentials and checks, parity checked` (macvet)
 - a8c49d9 11-01 14:56 `Merge agent/linuxbuild: Linux builder container docs: fork and test binaries built off the game host` (linuxbuild)
@@ -130,5 +129,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
 - 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
 - 8422bcc 11-01 14:16 `Merge agent/tickpolish: Discord tick wrapper: privacy-guard repair by separators, empty waiting rendered directly` (tickpolish)
-- c7178a3 11-01 14:07 `Merge agent/docsapprove: record approval of the contributor docs` (docsapprove)
 <!-- statusgen:end -->
