@@ -100,3 +100,70 @@ A verifier should write their own generator and re-derive FUN_00573cb0 / FUN_005
 ## How to open
 
 On upstream main directly (no stack). Under the bundle policy it waits for the next bundle slot (one open bundle at a time); re-run pr_guard, the four test binaries and the differential if upstream main moves. Push and PR commands are the coordinator's, with the user's go: `git -C <PR checkout>/buildmods push origin fix/boss-stats` then `gh pr create --repo psi29a/d2decomped --head shatteredeagle:fix/boss-stats --title "<title from the draft>" --body-file <draft body>`.
+
+## Independent verifier (VERIFYMODS, card verifymods, 2026-11-01)
+
+> Offline, read-mostly. Re-derived from the disassembly (tools/emu/disasm.py and a byte scan of every E8 call into the functions below) BEFORE reading this doc or the author's oracle; own generator and harness: tools/emu/verify_mods.py (game.exe under the emulator), tools/emu/verify_mods_mode.inc (d2d's real make_boss / monster_stats), tools/emu/verify_mods_compare.py. Builds of my own throwaway worktrees on the worker host (upstream main 72132b99, 98c248d3, a5892044, b4a1e5da, 1915a9a9, c048a356); the author's worktrees and branch untouched. Not run: the det state hashes (need a d2d slot).
+
+### Which level game.exe reads, stat by stat (own table)
+
+| stat | when | level | where (V: disasm read; R: also run in my oracle) |
+|---|---|---|---|
+| level (stat 12) | spawn | MonStats Level by difficulty (word +0xaa); in an expansion Nightmare / Hell game the area level (FUN_0061a1b0 -> FUN_0061dca0, 0x573e48), unless MonStats flags 0x6ce270 / 0x6ce280 | FUN_00573cb0 0x573e70 (V, R with the classic rule) |
+| life (7 / 6), defence (0x1f), experience (0xd) | spawn, once | that same base level: FUN_006538a0 mask 7 | 0x573f7e (V, R) |
+| leveladd: stat 12 + 3, exp x 5 | spawn, fixed mod 4, no flag test | - | FUN_005a0e40 (V, R) |
+| champion: stat 12 - 1, exp - 2 x (exp / 5), +dmg% 0x19, +tohit% 0x77, speed | spawn, mods 16 / 36 / 37 / 38 (needs flag != 0) | - | FUN_005a0e80 (V, R) |
+| hpmultiply: life += life x row % | spawn, fixed mod 2: flag 0 minion rows 1..3, champion 4..6, unique 7..9 | - | FUN_005a0dc0 / FUN_005a0d20 (V, R) |
+| AR, damage (A1 / A2 / S1) | every hit | stat 12 at the hit (raised) | FUN_005a4f50: FUN_006538a0 masks 0x20 / 8 / 0x10 at FUN_00625480(unit, 12), 0x5a5049 / 0x5a508b / 0x5a50d7 (V) |
+| enchanted / ghostly cold / mana burn / poison hit damage | spawn, after the fixed mods | stat 12 then (raised) | FUN_005a1080 0x5a1121, FUN_005a1990 & co (V; elements not compared) |
+| minions | the leader's mods, each with flag 0, through the owner's minion list | - | FUN_005a2120 -> FUN_0058f380 (list at AI control +0x34, filled by FUN_0058f100 from FUN_005a0c00) -> FUN_005a2100 (V); minions are made BEFORE the fixed mods run (0x5a2135); FUN_005a0930 copies the leader's mod bytes whose MonUMod +7 is set into the minion (D2b) |
+| champion companions | separate champions (FUN_0054e1e0 -> FUN_005b2f70, FUN_005a48c0 mod 16) | - | no minion-list link (FUN_005a0c00 returns for flag 4): no pack propagation (V) |
+| ghostly speed | FUN_005a0e80 with edx = 36 | - | `cmp ecx, 0x24; je 0x5a106e` at 0x5a0ff8 runs before `sub ecx, 0x24; je 0x5a1062`: the -33 store is dead (V) |
+| berserker | FUN_005a1280: life -75 % (FUN_005a0d20), +300 x DifficultyLevels +0x34 / 100 to 0x19 / 0x77, no FUN_005a0e80 | the fixed leveladd stands: +3, x5 | V, R |
+
+The other readers of MonLvl at stat 12 (byte scan of every call to FUN_006538a0: 0x573f7e, 0x5a26ff, 0x5a3f8f, 0x5a5058 / 0x5a509a / 0x5a50e6 / 0x5a527a, 0x5a71d6, 0x5c4ec8, 0x5c57a4, plus client display 0x4a7xxx / 0x4ecxxx): FUN_005a2620 (Fire Enchanted death blast, mask 1), FUN_005a6ff0 (DT start, missile 0x75 blast, mask 1), FUN_005a3ef0 (suicideminion blast), FUN_005c4df0 (Corpse Explosion, mask 1), FUN_005c56c0 (Revive, mask 1). Each takes MonStats HP % x MonLvl HP at the RAISED level for its own damage or life; none writes the unit's own life, defence or experience. **They do not change D1** (the unit's own stats). But d2d feeds the unit's rolled life (`monster.stats.hit_points`, with the boss hp % and the player bonus) into its equivalents, so the patch CHANGES their input for boss units: `Fight::fire_blast` (deaths.cpp:177), the monster Corpse Explosion (ai.cpp:2364), Resurrect (ai.cpp:2219), the player's Corpse Explosion (already a `// ponytail:` in fight.hpp). Example, Normal unique of MonStats level 2 with Fire Enchanted: game.exe's blast input is maxHP % x HP(5); d2d's is about 3x that before the patch and about 1.6x after (unique +300 % life). Closer, still not equal: a separate candidate (feed FUN_006538a0's mask-1 max at stats.level), and a line in the body's callers list.
+
+XP-path sweep (d2d): the kill awards `monster.stats.exp` (deaths.cpp:212 / 225 / 243) with the level penalty at `monster.stats.level` (kill_exp, combat.hpp:618), as before; nothing re-boosts experience or re-reads MonLvl after make_boss; `monster_stats` callers: make_monster (level_add 0), make_boss, summons.cpp:143 (level_add 0): for level_add 0 the patch is a no-op. No other path computes boss stats (grep boss_stats / champion / minion / exp_mult / level_add).
+
+Upstream's reason for the raised level (step b): none. abedd2e8 ("rules: champions and uniques from game.exe's spawn code") says "Not proven against game.exe (monster unit seeds aren't emulated)"; re/monsters.md line 394 repeats it.
+
+### Differential (own harness, 120,000 cases)
+
+Four seeds x 30,000 (0x1001, 0x2002, 0x3003, 0x4004, each masked to 32 bits in both generators), the first 768 of each the 16 edge rows (0, 1, 2, 3, 5, 19, 156, 229, 250, 300, 400, 500, 571, 650, 700, 733: first / last rows, low and high levels where +3 clamps at MonLvl's last row) x 3 difficulties x every kind; then random row, difficulty, kind (u / s / c / m / p), unique mods from {5, 6, 8, 9, 17, 18, 25, 27, 28} (0..3), champion kind from {16, 36..39}. Field mismatches (level, life, defence, experience, velocity):
+
+| build | D1 | D2 | D3 | B | life +-2 | no-life rows | stone skin | rows 0x137 / 0x138 |
+|---|---|---|---|---|---|---|---|---|
+| upstream main 72132b99 | 143,984 | 36,203 | 3,427 | 7,300 | 4,875 | 4,089 | 5,526 | 804 |
+| 98c248d3 (D1) | 0 | 36,203 | 3,427 | 7,300 | 18,591 | 4,089 | 327 | 472 |
+| a5892044 (D2) | C2D1 | C2D2 | C2D3 | C2B | C2R | C2N | C2S | C2X |
+| b4a1e5da (D3) | C3D1 | C3D2 | C3D3 | C3B | C3R | C3N | C3S | C3X |
+| 1915a9a9 (B) | C4D1 | C4D2 | C4D3 | C4B | C4R | C4N | C4S | C4X |
+| c048a356 (head) | 0 | 0 | 0 | 0 | 18,591 | 4,089 | 327 | 313 |
+
+Residuals, each shown not to depend on the claims: life +-2 (FUN_005a0d20 works in 256ths, d2d in whole points: identical from 98c248d3 on; before, these cases were inside the larger D1 mismatch); no-life rows (game.exe life 0, d2d clamps to 1 and adds the hp %: the same 4,089 in every build); stone skin (d2d keeps half of game.exe's defence for a unique with mod 28 and two immunities: `resist()` returns before setting double_defense; the same 327 in every build from 98c248d3 on, a factor 2, level-free); rows 0x137 / 0x138 (my harness does not hook their extra FUN_0045c390 roll before the life roll: harness limit, the author excludes them too). Plain monsters (kind p): 0 mismatches outside those rows in every build. The BaseId 0x76 halving (H1) is in damage, which my harness does not compare.
+
+```sh
+# worker host, PYTHONPATH = upstream tools/emu, D2_MPQ_DIR / D2_PATCH_INSTALLER as for the other oracles
+python verify_mods.py 30000 0x1001 > g.txt
+build/tests/test_verify_mods --verify-mods 0x1001 30000 2>/dev/null | grep ' | ' > d.txt   # verify_mods_mode.inc in a test_verify_mods.cpp wrapper
+python verify_mods_compare.py g.txt d.txt
+```
+
+### CI-class checks (my runs, head c048a356)
+
+pr_guard 0 FAIL / 0 WARN for the range and each of the five commits; presubmit --quick (ruff on PATH): 0 FAIL, 2 WARN (siblings "pet": summons.cpp:143 passes level_add 0, unchanged; build skipped); test_game (data dir), test_rules, test_combat, test_protocol, test_monsters rc 0 (with -Wno-error=maybe-uninitialized -Wno-error=array-bounds); gcc -Wshadow -Wunused -Wsign-compare on test_monsters.cpp, test_boss_level.cpp, ai.cpp: 0 warnings in touched files; clang-tidy (CI's Names and includes, tidy-pr-select over the 208 TUs that include a touched file): TIDY; the reviewer mode test_boss_level calls the real make_monster / make_boss; files 6 (monsters.hpp 3,910 lines on upstream already, +9 / -3; uniques.hpp 404; test_monsters.cpp 332; new 237 and 75); replays cleanly on upstream main (still 72132b99); #152 / #153 / #155 / #156 share no file.
+
+### Impact tables and the draft
+
+Recomputed from MonLvl's L- columns (Normal): every cell of the Act 1 table matches except level 10 champion life: 1.14, not 1.26. So "champions 1.3-1.7x life" (BACKLOG, bundle queue) should read 1.1-1.7x and the draft's "1.3-2.1x the life" 1.1-2.1x. The pack sums (level 2: unique pack 1,100 vs 530, about 2x; champion pack 0.67x) recompute as stated and are labelled rough (same type and Exp % assumed). The soak-baseline paragraph is accurate and not overclaiming.
+
+Draft review (title fine, no overclaim found in the four claim sections) needs these edits before it opens: (1) the level-10 cell and the two ranges above; (2) Limits: replace "Not traced: FUN_005a6ff0 and FUN_005a2620" with the traced result above and list the d2d callers whose input now changes (fire_blast, monster Corpse Explosion, Resurrect, player Corpse Explosion); (3) say the "MonStats level" in the code comment and section 1 is the classic / Normal rule (game.exe takes the area level in an expansion Nightmare / Hell game; d2d has no area-level rule, before or after); (4) answer the siblings WARN in the body.
+
+### Verdict
+
+- D1 (narrow form): HOLDS WITH LIMITS: 143,984 -> 0; limits: base level = MonStats Level only in Normal / classic; the stat-12 MonLvl-life readers above change input in d2d (not in game.exe).
+- D2: HOLDS WITH LIMITS: 36,203 -> 0; the leader-side owner lookup in FUN_0058f380 was read, not run (the oracle runs the per-minion handlers as FUN_005a2100 calls them); D2b not built.
+- D3: HOLDS: 3,427 -> 0 (dead store confirmed).
+- B: HOLDS: 7,300 -> 0.
+- Claim isolation: ISOLATION.
+- NOT READY to open until: the det state hashes (d2d slot) and the four draft edits above. No code fix needed.

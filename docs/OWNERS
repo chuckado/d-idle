@@ -75,3 +75,9 @@ internal/data/data_test.go  fixrecast  fixrecast
 internal/env/tuning_combat.go  fixrecast  fixrecast
 docs/knobs.md  fixrecast  fixrecast
 docs/fixrecast.md  fixrecast  fixrecast
+tools/emu/verify_mods.py            verifymods  verifymods
+tools/emu/verify_mods_mode.inc      verifymods  verifymods
+tools/emu/verify_mods_compare.py    verifymods  verifymods
+docs/research/pr-mods-proof.md      verifymods  verifymods
+docs/research/pr-bundle-queue.md    verifymods  verifymods
+docs/BACKLOG.md                     verifymods  verifymods
