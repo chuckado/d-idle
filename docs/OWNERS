@@ -99,3 +99,7 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
+docs/research/sk-resist-trace.md  skresist  skresist
+tools/emu/sk_resist.py  skresist  skresist
+tools/emu/sk_resist_test.cpp  skresist  skresist
+openspec/changes/skresist/**  skresist  skresist
