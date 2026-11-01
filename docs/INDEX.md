@@ -144,3 +144,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/fixprogress.md: Gate 1 progress failure (a 43 virtual minute town-trip loop with a stale tome scroll count) and the fix
 - docs/research/model-ab-skresist.md - model A/B on SKRESIST (Opus vs blind Sonnet vs blind Haiku): rule-by-rule table, deviations, errors, effort, trust verdicts
 - docs/agents/claude-tracing-guide.md: guide for Claude users (evidence tags, trace steps, verifier rules, model per role, brief templates)
+- docs/research/skabrecheck.md: SKRESIST A/B follow-up: Fire/Lightning Mastery pierce refuted, whole-point missile physical roll confirmed on a real build
