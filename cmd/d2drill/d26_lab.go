@@ -68,6 +68,9 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 	}
 	o.MinLife = 1 << 30
 	prev, first, stuck := 0, false, 0
+	var lastSpawn bool
+	var lastClear int
+	var lastRep time.Duration
 	for {
 		g, _, err := l.gameClock(ctx)
 		if err != nil {
@@ -81,6 +84,9 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 		b, _ := l.buffsText(ctx)
 		o.Samples++
 		o.MaxGapMS = max(o.MaxGapMS, el-prev)
+		if el-prev > 15000 {
+			o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: sample gap %d ms (previous round: spawn %v, Clear %d ms, reported %v)", el, el-prev, lastSpawn, lastClear, lastRep))
+		}
 		if froOn(b) {
 			first = true
 			o.UpSamples++
@@ -111,12 +117,32 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 				}
 			}
 		}
+		spawned := false
 		if alive, _ := l.monstersAlive(ctx); alive == 0 {
+			// the bot buffs between fights before it walks to the next pack: do the same before the lure (it checks the clock itself)
+			bmk := l.rec.Mark()
+			_ = l.rig.Fighter.Buff(ctx)
+			for _, ln := range l.rec.Since(bmk) {
+				if isCast(ln) {
+					gb, _, _ := l.gameClock(ctx)
+					o.CastsMS = append(o.CastsMS, gb-g0)
+					o.FightCastMS = append(o.FightCastMS, gb-g0)
+					bt, _ := l.buffsText(ctx)
+					o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: %s (between packs: buffs=%q)", gb-g0, ln, bt))
+				}
+				if strings.HasPrefix(ln, "combat buff cut by a hit") {
+					o.Lines = append(o.Lines, fmt.Sprintf("between packs: %s", ln))
+				}
+			}
 			spawn()
+			spawned = true
 		}
+		t0, _, _ := l.gameClock(ctx)
 		mk := l.rec.Mark()
 		res, cerr := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 2 * time.Second})
 		o.Rounds++
+		t1, _, _ := l.gameClock(ctx)
+		lastSpawn, lastClear, lastRep = spawned, t1-t0, res.Elapsed
 		o.Kills += res.Kills
 		o.Potions += res.Potions
 		if res.Elapsed == 0 || cerr != nil {
