@@ -360,3 +360,24 @@ The helper process that injects input into one Game.exe instance. `docs/multi.md
 
 **d2fleet / container**:
 The supported product path: a container where the bot owns the game per slot, set up by a wizard. ADR 0001; native worker host stays the dev path. `docs/container.md`, `docs/fleet.md`.
+
+### Skills and missiles
+
+**blvl / lvl**:
+blvl is a skill's base level (the points spent in it); lvl is its level with bonuses from gear, charms and shrines added. Damage, mana cost, duration and passives read lvl; synergies read blvl only. `docs/research/sk-passives-trace.md`. See **synergy**.
+
+**Frost Nova ring**:
+The 64 `frostnova` missiles one Frost Nova cast spawns from the caster's subtile, one per direction; they fly 14 frames and end about 12 subtiles out. `docs/research/sk-nova-trace.md`.
+_Not to be confused with_: the equipment slot. "ring" alone in the code and docs means the slot unless the text says Frost Nova.
+
+**hop**:
+One Chain Lightning missile after the first: aimed at the next unit within radius 20 of the hit spot that has a clear line from the caster and is not in the **justhit** state. A cast makes (26 + level - 1) / 5 of them. `docs/research/sk-lightning-trace.md`.
+
+**justhit**:
+Game.exe unit state 0x56, put on a unit struck by a NextHit missile until the missile pass of frame + NextDelay has run. While it is on, every NextHit missile passes the unit by. d2d has no such state, only a per-missile timer. `docs/research/pr-nexthit-v2-addendum.md`.
+
+**pierce**:
+A resistance-reduction stat, for example Cold Mastery's stat 335. It is subtracted from a monster's resistance only when that resistance is under 100, with a floor of -100; it never breaks an immunity (100 or more). It is not a damage bonus. `docs/research/sk-passives-trace.md`.
+
+**synergy**:
+A bonus to one skill's damage (or duration, for Frozen Armor) per base point spent in other named skills; the feeding skills are listed in Skills.txt columns such as EDmgSymPerCalc. Synergies read base points (**blvl**) only, never gear bonuses. `docs/research/sk-passives-trace.md`.
