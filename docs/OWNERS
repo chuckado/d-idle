@@ -74,4 +74,3 @@ internal/nav/nav.go  fixmouth  fixmouth
 internal/nav/fixmouth_test.go  fixmouth  fixmouth
 internal/combat/combatspin_test.go  fixmouth  fixmouth
 docs/fixmouth.md  fixmouth  fixmouth
-openspec/changes/drills15/**  drills15  drills15

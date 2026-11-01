@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills15
-status: in-progress
+status: archived
+merge: c53dc1d
 agent: drills15
 branch: agent/drills15
 worktree: ~/code/d2lod-wt/drills15
