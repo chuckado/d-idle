@@ -58,7 +58,16 @@ Contacts base vs head: identical in all 100,624 cases of my harness (I lines). T
 
 ## 3. Isolation (each commit built alone)
 
-ISOLATION
+Four throwaway builds of my harness: base (72132b99), tool (72132b99 + cherry-pick of 7901fda2 alone), claim (8abab0ed alone), head (7901fda2). md5 of every case, contact and hit line (K / I / P / D / S, log lines dropped), per seed:
+
+| seed | base | tool alone | claim alone | head |
+|---|---|---|---|---|
+| 0x5101 | c404e16dfa6a | c404e16dfa6a | cf2cb90b1bff | cf2cb90b1bff |
+| 0x6202 | 0937a86a0772 | 0937a86a0772 | d134e972902d | d134e972902d |
+| 0x7303 | 04ad986c0bb3 | 04ad986c0bb3 | 85a6f8097457 | 85a6f8097457 |
+| 0x8404 | 373d3913120a | 373d3913120a | d9aba07f0b53 | d9aba07f0b53 |
+
+The tooling commit changes nothing in d2d's behaviour (tool = base, byte for byte); the claim commit alone carries the whole change (claim = head, and the oracle outputs of claim and head are identical). The `fix` variant differs from the head only in the cases section 2 counts.
 
 ## 4. CI-class checks (head 7901fda2, my runs on the worker host)
 
@@ -74,7 +83,22 @@ ISOLATION
 
 ## 5. Det state hashes (base vs patched, one hidden d2d slot)
 
-DETHASH
+Builds: the DETHASH2 lab tree (upstream 72132b99 + lab commits, 5e0a51bc) as base (its binary, sha256 70c7b3694173, the one docs/research/det-hashes-2026-11-01b.md used) and the same tree + cherry-pick of the claim 8abab0ed (`nexthit`, sha256 f01f2fe206e9; the tooling commit adds no d2d code, section 3). One hidden slot (`tools/d2dslot.sh run`, slot 0, under `agentrun.sh verifynexthit`), capacity checked first (idle + nice 83 %), the DETHASH2 driver unchanged: `det_scenarios_run.py run BINDIR OUTDIR <14 scenarios> base,nexthit`, seed 3, lockstep, a fresh d2d per run, 28 runs.
+
+The base hashes reproduce DETHASH2's base column in all 14 scenarios (mon and state). Results (V):
+
+| scenario | nexthit vs base | class |
+|---|---|---|
+| passive, fight, cold, static, cold2 | same | no NextHit missile |
+| hit_minion | same | the Frost Nova reaches no minion (as in DETHASH2) |
+| merc, pet, follow | same | no NextHit missile |
+| hit_plain | differs, only the Frost Nova target #5 and the next target #6 | EXPECTED: Frost Nova point blank hits once: hp 106/133 -> 131/133, last chill 40 ms earlier (14000 -> 13960); then #6's spawn roll comes from a shifted RNG stream (max life 119 -> 93); Glacial Spike's chill / stun deadlines unchanged |
+| hit_champion | same two targets | EXPECTED: 303/312 -> 310/312 (chill same); #6's Glacial Spike damage roll shifted (20 -> 24 lost), deadlines unchanged |
+| hit_unique | same two targets | EXPECTED: 494/520 -> 518/520, chill 14000 -> 13960; #6 is another unique (spawn roll shifted: Spine Shank 560 -> Steel Shank the Unclean 708), deadlines unchanged |
+| hit_boss (Blood Raven) | same two targets | EXPECTED: 109/113 -> 112/113, chill 10160 -> 10120; #6's damage 10 -> 9 lost, deadlines unchanged |
+| hit_immune (Hell zombie) | only target #10 | EXPECTED (RNG): the cold-immune #9 loses nothing either way (fewer hit draws though), so #10's spawn roll shifts (max life 4495 -> 5918); chill / stun deadlines unchanged |
+
+DET-CHANGES-EXPLAINED: 9 of 14 scenarios identical, 5 differ only by the claimed Frost Nova hit count (damage, the last chill's frame) and the RNG stream shift it causes for the next spawned target; 0 unexplained. Coverage: no Nova and no moving or multi-target Frost Nova in the scenario set; no other NextHit row (Chain Lightning, Multiple Shot, the war cries) is cast; the `fix` variant (`<=`) was not run here (one more binary, the same harness).
 
 ## 6. Code review notes (S unless tagged)
 
@@ -86,7 +110,21 @@ DETHASH
 
 ## 7. Verdict
 
-VERDICT
+- **C1a (a NextHit hit puts justhit on the unit, every NextHit missile of any cast passes it by): HOLDS WITH LIMITS.** The mechanism is right (V read, V run). The window is one frame short: game.exe blocks frames f+1..f+NextDelay and allows f+NextDelay+1 (FUN_005414d0 runs the monsters' timers after the missiles); the patch allows f+NextDelay. On my 100,624 cases the head differs from game.exe in **25,252 cases / 17,115 monster-casts** (one cast, standing: 6,065 of 50,302; moving 19,187 of 50,322; two casts 9,147 of 20,076), d2d 1.30 vs game.exe 1.21 hits per touched monster; upstream main differs in 82,876 (10.28 vs 1.21). With `<=` (one character) the residual is **0 of 100,624** on every slice.
+- **C1b (a LastCollide row skips its last unit): HOLDS** (V read: FUN_0064a470 compares only when row +4 bit 0 is set, the missile data's one slot; run inside the oracle; no case where it alone decides: the novas' 0x56 test always fires first).
+- **C1c (one unit a frame): HOLDS WITH LIMITS** (V read FUN_005ae1f0; restated, not run, as the author says); within a frame the order of units differs between d2d (monster index) and game.exe (subtiles crossed, then FUN_00641cb0's room order, U): 6 of 100,624 cases.
+- Isolation: HOLDS (tool alone = base, claim alone = head, md5 equal on all four seeds).
+- CI-class: clean (pr_guard 0/0 per commit, presubmit 0 FAIL / 4 WARN, tests rc 0, gcc and clang-tidy 0 in touched files, ruff clean with upstream rules); shared files with #155 and #156 (merges clean).
+- Det hashes: DET-CHANGES-EXPLAINED, 0 unexplained.
+
+**NOT READY** as it stands: the end frame is a correctness bug the differential can see (a quarter of my cases). READY once (1) `now_ms < struck_unit.just_hit_until` becomes `<=` in missiles.cpp and the `// ponytail:` note is replaced by the traced rule; (2) the author's oracle `next_hit.py` runs the expiry after the frame's contacts (it runs it before: the 0-differ was by construction on that point) and the differential is re-run (my `fix` run: 0 of 100,624); (3) the draft edits below. No other code change needed.
+
+Draft edits (pr-nexthit-draft.md):
+1. Change: "for NextDelay frames" -> "until the missile pass of frame + NextDelay has run (FUN_005414d0 runs the missile timers, group 2, before the monsters', group 1): struck at f, struck again at f + NextDelay + 1 at the earliest".
+2. Limits: drop "the frame justhit ends ... is not traced"; add: moving monsters and second casts are covered by the verifier's run (100,624 cases), standing-only no longer; Nova / Frost Nova only, the other 46 NextHit rows (Chain Lightning, Multiple Shot / Strafe, the war cries, Fissure, Twister / Tornado, Volcano, Shock Field, Blade Sentinel, Dragon Breath, Claws of Thunder) get the same rule, not compared; Chain Lightning hop search and piercing Lightning not claimed; units' order inside one frame (subtile order) not compared (6 of 100,624); players, mercs and pets as targets keep no justhit and monster novas still multi-hit the player (presubmit "unit kinds" answer).
+3. Evidence table: replace the counts by the re-run after the fix (author's 100,198 and the verifier's 100,624), and say the oracle runs the stat-list expiry chain (FUN_005a7ef0 -> FUN_00627460 -> 0x5adaf0) for real if that is adopted from verify_nexthit.py.
+4. docs-sync answer: correct re/skills.md:928 in the same PR.
+5. Optional: `ruff check --fix` for I001 / SIM115 in next_hit.py (ruff 0.17 defaults; not upstream's rules).
 
 ## Commands (worker host)
 
