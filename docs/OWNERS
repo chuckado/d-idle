@@ -108,3 +108,8 @@ openspec/changes/chunker/**  chunker  chunker
 docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
 docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
 openspec/changes/skresistfix/**  skresistfix  skresistfix
+
+openspec/changes/verifycurseimmune/**    verifycurseimmune  verifycurseimmune
+tools/emu/verify_curse_immune.py         verifycurseimmune  verifycurseimmune
+tools/emu/test_verify_curse_immune.cpp   verifycurseimmune  verifycurseimmune
+docs/research/pr-curseimmune-verifier.md verifycurseimmune  verifycurseimmune
