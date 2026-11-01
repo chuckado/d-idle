@@ -1,0 +1,42 @@
+#	Hand-maintained. One line per row range and status. TESTED-* needs cases > 0 that appear in the evidence doc. See README.md.
+subsystem	rows	status	evidence	cases	seed_or_date	note
+skills.sor	36,38,39,44,45,48,49,53	TESTED-DEVIATION	docs/research/sk-missile-trace.md	104000	2026-11-01	missile roll D1 (top inclusive); flight and hit by read; SKMISS
+skills.sor	40	TESTED-DEVIATION	docs/research/sk-armor-trace.md	184771	2026-11-01	Frozen Armor striker effect D1 (freeze rule); SKARMOR
+skills.sor	50,58,60	READ-ONLY	docs/research/sk-armor-trace.md		2026-11-01	Shiver Armor, Energy Shield, Chilling Armor read in game.exe (V read), no run; D3 D4
+skills.sor	42	TESTED-DEVIATION	docs/research/static-field-chill-trace.md	309664	2026-10-31	Static Field S1-S6 (floor, life - 1, negative resist)
+skills.sor	54	TESTED-DEVIATION	docs/research/sk-teleport-trace.md	100000	2026-11-01	Teleport range, landing, refusals D1 D2 D3; SKTELE
+skills.sor	43,37,61,63,65	READ-ONLY	docs/research/sk-passives-trace.md		2026-11-01	Telekinesis D1, masteries, Warmth read (V read); SKPASS
+skills.sor	59	TESTED-DEVIATION	docs/research/sk-ground-trace.md	64200	2026-11-01	Blizzard shard offsets D1 (V run both sides); SKGROUND
+skills.sor	51,56,57,62,64	READ-ONLY	docs/research/sk-ground2-trace.md		2026-11-01	Fire Wall (80 cases, game side), Meteor, Thunder Storm, Hydra, Frozen Orb read to dispatch or spawn
+skills.pal	98,99,102,104,113,114,115,118,119,123	TESTED-0-DIFF	docs/research/pal-skill-trace.md	21760	2026-11-01	aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations
+skills.pal	101,112	READ-ONLY	docs/research/pal-skill-trace.md		2026-11-01	Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential
+skills.monster	0	TESTED-DEVIATION	docs/research/sk-melee2-trace.md	100000	2026-11-01	plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4
+skillfx.mana	22,28,54,88,89,98	TESTED-DEVIATION	docs/research/sk-mana-trace.md	130840	2026-11-01	minmana floor D2 (Guided Arrow, Dopplezon, Teleport, Bone Prison, Summon Resist, Might)
+skillfx.mana	0-21,23-27,29-53,55-87,90-97,99-356	TESTED-0-DIFF	docs/research/sk-mana-trace.md	130840	2026-11-01	mana formula equal d2d mana_cost on 357 rows x levels 1..60; payment timing is D1 D3 (read)
+skillfx.damage	all	TESTED-DEVIATION	docs/research/skill-damage-trace.md	116000	2026-10-31	min synergy gate (13 skills, see doc) and MulDiv above 4,096 points; the rest 0 diff; docs/research/pr-skill-damage-proof.md
+missiles	56,58,59,90,91,93,98,119	TESTED-DEVIATION	docs/research/sk-missile-trace.md	104000	2026-11-01	hit roll top inclusive D1; Fire Bolt, Charged Bolt, Ice Bolt, Nova, Ice Blast, Chain Lightning, Lightning, Frost Nova
+missiles	55,92	READ-ONLY	docs/research/pal-skill-trace.md		2026-11-01	Holy Bolt and Blessed Hammer flight and hit read and run in game.exe only
+missiles	158-162	TESTED-DEVIATION	docs/research/sk-ground-trace.md	64200	2026-11-01	Blizzard center and shards, offset D1
+missiles	68,69,100-103,247,260-263	READ-ONLY	docs/research/sk-ground2-trace.md		2026-11-01	firewall maker and wall, meteor, hydra, frozen orb read
+monster.flags	all	TESTED-0-DIFF	docs/research/pal-skill-trace.md	734	2026-11-01	undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared
+states	1,11,118	TESTED-DEVIATION	docs/research/pr-freeze-proof.md	225748	2026-11-01	freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess)
+states	10	TESTED-DEVIATION	docs/research/sk-armor-trace.md	184771	2026-11-01	frozenarmor state and its striker effect D1
+states	20,30,88	READ-ONLY	docs/research/sk-armor-trace.md		2026-11-01	chillingarmor, energyshield, shiverarmor read
+states	61,28	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	lowerresist and conviction on an immune D1 (negative change / 5)
+states	86	READ-ONLY	docs/research/sk-lightning-trace.md		2026-11-01	justhit (NextHit) read; D1 model only
+formulas	F01	TESTED-0-DIFF	docs/research/sk-melee2-trace.md	100000	2026-11-01	melee to-hit, real build, two seeds
+formulas	F03	TESTED-DEVIATION	docs/research/sk-melee2-trace.md	100000	2026-11-01	physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md)
+formulas	F04	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal
+formulas	F05	TESTED-DEVIATION	docs/research/skill-damage-trace.md	116000	2026-10-31	docs/research/pr-skill-damage-proof.md
+formulas	F06	TESTED-DEVIATION	docs/research/sk-mana-trace.md	130840	2026-11-01	D2 minmana floor; D1 D3 timing read
+formulas	F08	TESTED-DEVIATION	docs/research/walk-speed-trace.md	712362	2026-10-31	monster velocity uses Run, chill multiplies, floor; D1 (see doc)
+formulas	F11	TESTED-DEVIATION	docs/research/price-trace.md	100000	2026-10-31	D1 D2 armor defence, class sell, identified, stacks; docs/research/pr-price2-proof.md
+formulas	F12	TESTED-DEVIATION	docs/research/pr-freeze-proof.md	225748	2026-11-01	C3 C4 C5 freeze rule; cold length C1 in docs/research/static-field-chill-trace.md
+formulas	F13	TESTED-0-DIFF	docs/research/monster-attack-trace.md	100000	2026-10-31	monster melee physical roll
+formulas	F14	TESTED-DEVIATION	docs/research/monster-attack-trace.md	100000	2026-10-31	missile block gate (a) and MissA to-hit (b): docs/research/monster-attack-trace.md verdict 2
+formulas	F15	TESTED-DEVIATION	docs/research/pets-merc-trace.md	100000	2026-10-31	monster search pet tie order D1; merc target 0 diff
+formulas	F18	TESTED-0-DIFF	docs/research/pal-skill-trace.md	21760	2026-11-01	aura calc machine equals d2d eval_calc on every aura row and slot
+formulas	F07	READ-ONLY	docs/research/cast-trace-gameexe.md		2026-10-30	cast ticks read in game.exe; PR #128 merged upstream
+formulas	F10	READ-ONLY	docs/research/xp-award-trace.md		2026-10-30	award chain 0057e480 / 0057e2f0 read; per monster XP equal d2d; no differential
+formulas	F17	READ-ONLY	docs/research/sk-mana-trace.md		2026-11-01	regen FUN_005806f0 read equal to d2d; bot regen model 1.2-1.8x fast
+formulas	F09	TESTED-DEVIATION	docs/research/monster-mods-trace.md	157618	2026-10-31	boss and minion spawn stats D1 D2 G1; plain monsters by level not compared
