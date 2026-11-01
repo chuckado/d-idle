@@ -13,6 +13,7 @@
 #include <uniques.hpp>
 
 #include <cassert>
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
@@ -47,8 +48,11 @@ int main(int argc, char** argv) try {
         int row = 0, difficulty = 0;
         std::uint64_t seed = 0;
         if (!(fields >> id >> name >> row >> difficulty >> kind >> mod_list >> seed)) continue;
-        const auto type = data->monsters.by_id.find(name);
-        if (type == data->monsters.by_id.end()) { std::printf("%s | no-type\n", id.c_str()); continue; }
+        // The MonStats row, if d2d's row of that index is the same Id (d2d keeps one of a duplicated Id).
+        if (row < 0 || std::size_t(row) >= data->monsters.types.size() || data->monsters.types[std::size_t(row)].id != name) {
+            std::printf("%s | no-type\n", id.c_str());
+            continue;
+        }
         std::vector<int> mods;
         if (mod_list != "-") {
             std::istringstream parts(mod_list);
@@ -57,7 +61,7 @@ int main(int argc, char** argv) try {
         const auto boss = kind == "c" ? d2d::rules::Boss::champion : kind == "u" ? d2d::rules::Boss::unique
                         : kind == "s" ? d2d::rules::Boss::superunique : d2d::rules::Boss::minion;
         d2d::rules::Rng look_rng{ 1 };
-        Monster monster = make_monster(*data, int(type->second), 0, 0, look_rng, difficulty, false);
+        Monster monster = make_monster(*data, row, 0, 0, look_rng, difficulty, false);
         d2d::rules::Rng rng{ std::uint32_t(seed & 0xffffffffU) };   // the unit seed: the life roll is its first draw
         make_boss(*data, monster, boss, mods, -1, 0, difficulty, rng);
         const auto& stats = monster.stats;

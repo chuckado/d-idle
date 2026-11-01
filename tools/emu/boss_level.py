@@ -35,6 +35,9 @@ in FUN_005a4f50 FUN_0056e050 (no bonus), FUN_00625760 / FUN_00627340 (the
 list), FUN_006259b0 (1: no player scaling), FUN_00451f60 (elements: not
 compared). Rows 0x137 / 0x138 (their own extra roll) are left out.
 
+`compare` keys a life at most 2 points off as `life~2` (game.exe keeps life in
+256ths through the percent inits; d2d in whole points: not this claim).
+
 Output `id | lvl life def exp ar dmg_lo dmg_hi vel`: life whole points
 (stat 7 >> 8), def with item_armor_percent folded in as d2d does, ar and
 damage with the to-hit / damage percent added as d2d's make_boss does (the
@@ -167,26 +170,49 @@ def game(path):
         print(i, "|", *g.run(int(row), int(diff), kind, mods, int(seed) & 0xFFFFFFFF))
 
 
+def claim(field, kind, mods):
+    """The commit a mismatch belongs to: D1 a boss's life / defence / experience
+    row, D2 a minion's level, D3 ghostly speed, B a berserker's level."""
+    if field == "vel" and kind == "c" and mods == "36": return "D3"
+    leveled = field in ("lvl", "exp", "ar", "dmg_lo", "dmg_hi")
+    if kind == "c" and mods == "39" and leveled: return "B"
+    if kind == "m" and leveled: return "D2"
+    if kind in "cus" and field in ("life", "def", "exp"): return "D1"
+    return "other"
+
+
 def compare(cases_path, game_path, d2d_path):
     cases = {l.split()[0]: l.split() for l in open(cases_path)}
     want = {l.split()[0]: l.split()[2:] for l in open(game_path)}
-    bad, examples, total, differ = {}, {}, 0, 0
+    bad, examples, total, differ, skipped = {}, {}, 0, 0, 0
+    claims = {}
     for line in open(d2d_path):
         got = line.split()
         if not got or got[0] not in want: continue
+        if got[2:] == ["no-type"]:
+            skipped += 1
+            continue
         total += 1
         case = cases[got[0]]
         kind, mods = case[4], case[5]
         mods_key = mods if kind == "c" or "." not in mods else "multi"
         one = False
-        for field, a, b in zip(FIELDS, want[got[0]], got[2:]):
+        for field, a, b in zip(FIELDS, want[got[0]], got[2:], strict=True):
             if a == b: continue
             one = True
-            key = (field, kind, mods_key)
+            # game.exe keeps life in 256ths through the percent inits (and over
+            # 4096 points FUN_005a0d20 divides first); d2d in whole points.
+            rounding = field == "life" and abs(int(a) - int(b)) <= 2
+            key = (field + ("~2" if rounding else ""), kind, mods_key)
             bad[key] = bad.get(key, 0) + 1
+            slice_ = "life within 2 (256ths)" if rounding else "life 0 in game.exe" if field == "life" and a == "0" else claim(field, kind, mods)
+            claims[slice_] = claims.get(slice_, 0) + 1
             examples.setdefault(key, (case[1], case[3], a, b))
         differ += one
-    print(f"cases {total}, mismatching cases {differ}")
+    print(f"cases {total}, mismatching cases {differ}, not d2d's row {skipped}")
+    print(f"apart from life within 2 points: {sum(v for k, v in bad.items() if not k[0].endswith('~2'))} field mismatches")
+    for name in ("D1", "D2", "D3", "B", "other", "life within 2 (256ths)", "life 0 in game.exe"):
+        print(f"claim {name}: {claims.get(name, 0)} field mismatches")
     for key in sorted(bad, key=lambda k: -bad[k]):
         mon, diff, a, b = examples[key]
         print(f"{bad[key]:7d}  {key[0]:6s} kind {key[1]} mods {key[2]:6s}  e.g. {mon} diff {diff}: game {a} d2d {b}")

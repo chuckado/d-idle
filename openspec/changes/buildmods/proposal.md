@@ -9,6 +9,6 @@ Decomp item 13 (docs/research/monster-mods-trace.md) found that d2d's spawn-time
 - `tools/emu/boss_level.py` and `tools/emu/boss_level_test.cpp` (copies of the PR's oracle and test mode, new names).
 - One line each in `docs/decomp-queue.md`, `docs/research/pr-bundle-queue.md`, `docs/BACKLOG.md`; a correction banner line in `docs/research/monster-mods-trace.md`.
 
-owns: docs/research/pr-mods-*.md, tools/emu/boss_level*, openspec/changes/buildmods/**
-exclusive: none (offline; no game instance, no d2d slot)
+owns: docs/research/pr-mods-*.md, tools/emu/boss_level*, docs/research/monster-mods-trace.md (banner), docs/decomp-queue.md, docs/research/pr-bundle-queue.md, docs/BACKLOG.md (one line each), openspec/changes/buildmods/**
+exclusive: fork-branch:fix/boss-stats (the worker host's PR checkout; offline, no game instance, no d2d slot)
 gates: none (research and a local candidate)

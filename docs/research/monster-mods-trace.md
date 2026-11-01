@@ -1,5 +1,7 @@
 # Champion, unique and minion modifiers: game.exe 1.14d vs d2d vs our bot (DECOMPMODS, decomp-queue item 13)
 
+> status: partly superseded (2026-11-01, card buildmods): D1 is narrower than written here: game.exe reads a boss's AR and damage per hit at the RAISED level (FUN_005a4f50, stat 12), so only life, defence and experience come from the base level; d2d's AR and damage were right. Built and proven: [pr-mods-proof.md](pr-mods-proof.md).
+
 > status: current (2026-10-31, card decompmods). Offline only: no game instance, no d2d slot; nothing pushed, posted or filed. d2d read at upstream main 72132b99 (worktree `trace/mods` under the PR checkout dir on the worker host). Tags: V = read in game.exe 1.14d (md5 2b3600c1..., `tools/emu/disasm.py`) or run in its own code under unicorn by this agent; V-d2d = d2d source read at file:line; D = 1.14d tables as game.exe's own loader holds them (drlg.boot) or `monstats.table`; S = upstream doc (`docs/research/re/monsters.md`); I = inference; U = unverified. Oracles: `tools/emu/umod_spawn.py` (real room population, every stat write), `tools/emu/umod_stats.py` (the real MonUMod inits on synthetic units) + `tools/emu/umod_stats_harness.cpp` (d2d's real `rules::boss_stats` from `components/rules/uniques.hpp`, plus `make_boss`'s application copied line for line).
 
 ## Answer in five lines

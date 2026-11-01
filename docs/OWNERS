@@ -52,3 +52,12 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+docs/research/pr-mods-proof.md  buildmods  buildmods
+docs/research/pr-mods-draft.md  buildmods  buildmods
+tools/emu/boss_level.py  buildmods  buildmods
+tools/emu/boss_level_test.cpp  buildmods  buildmods
+docs/research/monster-mods-trace.md  buildmods  buildmods
+docs/decomp-queue.md  buildmods  buildmods
+docs/research/pr-bundle-queue.md  buildmods  buildmods
+docs/BACKLOG.md  buildmods  buildmods
+openspec/changes/buildmods/**  buildmods  buildmods
