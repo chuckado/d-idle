@@ -49,6 +49,7 @@ type sim struct {
 	mana, maxMana int     // maxMana 0: not simulated
 	manaRegen     float64 // per second
 	casts         []input.Point
+	lastKey       string // hotkey of the last CastAt
 	castCost      int
 	noTeleport    bool // casts do nothing
 	voidUnknown   bool // truth cells that are not in the truth grid never become known
@@ -288,7 +289,8 @@ func (s *sim) ClickWorld(w input.Point) error {
 }
 func (s *sim) MoveTo(w input.Point, _ input.MoveOpts) error { return s.ClickWorld(w) }
 func (s *sim) SelectSkill(string) error                     { return nil }
-func (s *sim) CastAt(_ string, w input.Point) error {
+func (s *sim) CastAt(k string, w input.Point) error {
+	s.lastKey = k
 	s.casts = append(s.casts, w)
 	if s.noTeleport || !s.walkableTruth(w.X, w.Y) || s.maxMana > 0 && s.mana < s.castCost {
 		return nil

@@ -1,0 +1,70 @@
+d2dslot: got slot 0
+time=2026-11-01T10:25:58.370-05:00 level=WARN msg="d2d channel not answering: d2d process pid 1444384 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T10:25:59.334-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-11-01T10:26:00.123-05:00 level=INFO msg="d2dworld: arrived in level 40: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:26:00.126-05:00 level=INFO msg="nav exit" to=47 gate="{X:220 Y:180}" push="{X:220 Y:180}" border=false
+time=2026-11-01T10:26:00.126-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22T < main.(*lab).D22"
+time=2026-11-01T10:26:00.127-05:00 level=DEBUG msg="nav mouth check" pos="{X:123 Y:125}" level=40 exits=3 wantExit=47 arrival=false stay=false r=9
+time=2026-11-01T10:26:00.127-05:00 level=DEBUG msg="nav mouth exit" dest=50 exit="{X:45 Y:140}" dist=79.4 skip=true
+time=2026-11-01T10:26:00.128-05:00 level=DEBUG msg="nav plan" from="{X:123 Y:125}" to="{X:220 Y:180}" wps=20 partial=false cells=114
+time=2026-11-01T10:26:00.128-05:00 level=DEBUG msg="nav click" pos="{X:123 Y:125}" wp="{X:131 Y:127}" cur=0 of=20
+time=2026-11-01T10:26:00.130-05:00 level=DEBUG msg="nav click" pos="{X:128 Y:126}" wp="{X:138 Y:129}" cur=1 of=20
+time=2026-11-01T10:26:00.134-05:00 level=DEBUG msg="nav click" pos="{X:135 Y:128}" wp="{X:144 Y:131}" cur=2 of=20
+time=2026-11-01T10:26:00.136-05:00 level=DEBUG msg="nav click" pos="{X:141 Y:130}" wp="{X:152 Y:133}" cur=3 of=20
+time=2026-11-01T10:26:00.139-05:00 level=DEBUG msg="nav click" pos="{X:149 Y:132}" wp="{X:159 Y:136}" cur=4 of=20
+time=2026-11-01T10:26:00.142-05:00 level=DEBUG msg="nav click" pos="{X:157 Y:135}" wp="{X:165 Y:141}" cur=5 of=20
+time=2026-11-01T10:26:00.152-05:00 level=DEBUG msg="nav click" pos="{X:163 Y:139}" wp="{X:171 Y:146}" cur=6 of=20
+time=2026-11-01T10:26:00.155-05:00 level=DEBUG msg="nav click" pos="{X:169 Y:145}" wp="{X:180 Y:148}" cur=8 of=20
+time=2026-11-01T10:26:00.158-05:00 level=DEBUG msg="nav click" pos="{X:177 Y:147}" wp="{X:188 Y:150}" cur=9 of=20
+time=2026-11-01T10:26:00.169-05:00 level=DEBUG msg="nav click" pos="{X:185 Y:149}" wp="{X:196 Y:151}" cur=10 of=20
+time=2026-11-01T10:26:00.171-05:00 level=DEBUG msg="nav click" pos="{X:194 Y:151}" wp="{X:203 Y:153}" cur=11 of=20
+time=2026-11-01T10:26:00.180-05:00 level=DEBUG msg="nav click" pos="{X:200 Y:152}" wp="{X:211 Y:154}" cur=12 of=20
+time=2026-11-01T10:26:00.183-05:00 level=DEBUG msg="nav click" pos="{X:209 Y:154}" wp="{X:214 Y:157}" cur=13 of=20
+time=2026-11-01T10:26:00.185-05:00 level=DEBUG msg="nav click" pos="{X:213 Y:156}" wp="{X:215 Y:162}" cur=14 of=20
+time=2026-11-01T10:26:00.186-05:00 level=DEBUG msg="nav click" pos="{X:214 Y:159}" wp="{X:216 Y:163}" cur=15 of=20
+time=2026-11-01T10:26:00.194-05:00 level=DEBUG msg="nav click" pos="{X:215 Y:161}" wp="{X:217 Y:166}" cur=16 of=20
+time=2026-11-01T10:26:00.195-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:164}" wp="{X:220 Y:174}" cur=17 of=20
+time=2026-11-01T10:26:00.198-05:00 level=DEBUG msg="nav click" pos="{X:219 Y:172}" wp="{X:220 Y:175}" cur=18 of=20
+time=2026-11-01T10:26:00.225-05:00 level=INFO msg="d2dworld: arrived in level 47: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+D22 town: key="sk54" level 40->47 (123,125)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=218 wall=111ms err=<nil>
+D22 town/rules: level 40 allowed=false || level 41 allowed=true || level 73 allowed=false || level 74 allowed=true || key="sk54" level 40->47 (123,125)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=218 wall=111ms err=<nil> || goto 74 -> area 74, HasTeleport=true
+DRILL D22-T P26 PASS town leg: 0 hops, 0 refused | intended: no hop in town (level rule), Duriel's Lair left to walking, Summoner level allows hops | observed: level 40 allowed=false || level 41 allowed=true || level 73 allowed=false || level 74 allowed=true || key="sk54" level 40->47 (123,125)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=218 wall=111ms err=<nil> || goto 74 -> area 74, HasTeleport=true
+time=2026-11-01T10:26:00.255-05:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+time=2026-11-01T10:26:00.262-05:00 level=INFO msg="d2dworld: arrived in level 40: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:26:00.264-05:00 level=INFO msg="nav exit" to=47 gate="{X:220 Y:180}" push="{X:220 Y:180}" border=false
+time=2026-11-01T10:26:00.267-05:00 level=INFO msg="nav teleport did not move" to="{X:155 Y:149}"
+time=2026-11-01T10:26:00.269-05:00 level=INFO msg="nav teleport did not move" to="{X:155 Y:148}"
+time=2026-11-01T10:26:00.270-05:00 level=INFO msg="nav teleport did not move" to="{X:156 Y:146}"
+time=2026-11-01T10:26:00.271-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < main.(*lab).d22run < main.(*lab).d22R < main.(*lab).D22"
+time=2026-11-01T10:26:00.271-05:00 level=DEBUG msg="nav mouth check" pos="{X:139 Y:141}" level=40 exits=3 wantExit=47 arrival=false stay=false r=9
+time=2026-11-01T10:26:00.271-05:00 level=DEBUG msg="nav mouth exit" dest=50 exit="{X:45 Y:140}" dist=94 skip=true
+time=2026-11-01T10:26:00.272-05:00 level=DEBUG msg="nav plan" from="{X:139 Y:141}" to="{X:220 Y:180}" wps=18 partial=false cells=98
+time=2026-11-01T10:26:00.272-05:00 level=DEBUG msg="nav click" pos="{X:139 Y:141}" wp="{X:146 Y:145}" cur=1 of=18
+time=2026-11-01T10:26:00.274-05:00 level=DEBUG msg="nav click" pos="{X:143 Y:143}" wp="{X:154 Y:147}" cur=2 of=18
+time=2026-11-01T10:26:00.277-05:00 level=DEBUG msg="nav click" pos="{X:151 Y:146}" wp="{X:162 Y:149}" cur=3 of=18
+time=2026-11-01T10:26:00.279-05:00 level=DEBUG msg="nav click" pos="{X:159 Y:148}" wp="{X:169 Y:150}" cur=4 of=18
+time=2026-11-01T10:26:00.282-05:00 level=DEBUG msg="nav click" pos="{X:166 Y:149}" wp="{X:177 Y:152}" cur=5 of=18
+time=2026-11-01T10:26:00.285-05:00 level=DEBUG msg="nav click" pos="{X:174 Y:151}" wp="{X:185 Y:154}" cur=6 of=18
+time=2026-11-01T10:26:00.288-05:00 level=DEBUG msg="nav click" pos="{X:182 Y:153}" wp="{X:193 Y:154}" cur=7 of=18
+time=2026-11-01T10:26:00.290-05:00 level=DEBUG msg="nav click" pos="{X:189 Y:154}" wp="{X:201 Y:154}" cur=8 of=18
+time=2026-11-01T10:26:00.293-05:00 level=DEBUG msg="nav click" pos="{X:197 Y:154}" wp="{X:209 Y:154}" cur=9 of=18
+time=2026-11-01T10:26:00.303-05:00 level=DEBUG msg="nav click" pos="{X:206 Y:154}" wp="{X:211 Y:154}" cur=10 of=18
+time=2026-11-01T10:26:00.304-05:00 level=DEBUG msg="nav click" pos="{X:207 Y:154}" wp="{X:214 Y:157}" cur=11 of=18
+time=2026-11-01T10:26:00.306-05:00 level=DEBUG msg="nav click" pos="{X:213 Y:157}" wp="{X:215 Y:162}" cur=12 of=18
+time=2026-11-01T10:26:00.308-05:00 level=DEBUG msg="nav click" pos="{X:214 Y:160}" wp="{X:217 Y:166}" cur=14 of=18
+time=2026-11-01T10:26:00.309-05:00 level=DEBUG msg="nav click" pos="{X:216 Y:163}" wp="{X:220 Y:174}" cur=15 of=18
+time=2026-11-01T10:26:00.312-05:00 level=DEBUG msg="nav click" pos="{X:219 Y:171}" wp="{X:220 Y:175}" cur=16 of=18
+time=2026-11-01T10:26:00.320-05:00 level=INFO msg="d2dworld: arrived in level 47: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+D22 unwired-town hop line: nav teleport did not move to={155 149}
+D22 unwired-town hop line: nav teleport did not move to={155 148}
+D22 unwired-town hop line: nav teleport did not move to={156 146}
+D22 unwired-town: key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=3 mana 150.0->150.0 ticks=235 wall=66ms err=<nil>
+DRILL D22-R P26 PASS 3 refused hops, 0 landed, mana net 0.0, leg err=<nil> | intended: the game refuses every hop in a town: the navigator gives up after a few (teleportBadHops 3) and walks | observed: key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=3 mana 150.0->150.0 ticks=235 wall=66ms err=<nil>
+END character Drilly life 2000/2000 in town: true
+
+drill     prim  verdict  det  reason
+D22-T     P26   PASS     -    town leg: 0 hops, 0 refused
+D22-R     P26   PASS     -    3 refused hops, 0 landed, mana net 0.0, leg err=<nil>
+cheat verbs used (each ledgered with a reason): debug goto 40, debug kill, debug points 54 1, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T10:26:00.329-05:00 level=WARN msg="d2d: stopped by the bot (kill)"

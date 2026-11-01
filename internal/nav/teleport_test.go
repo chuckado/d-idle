@@ -2,10 +2,12 @@ package nav
 
 import (
 	"context"
+	"math"
 	"testing"
 	"time"
 
 	"d2lod-bot/internal/d2map"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 )
 
@@ -22,6 +24,7 @@ func TestTeleportExploreCrossesWallsAndLandsOnWalkableCells(t *testing.T) {
 	s := newSim(g, input.Point{X: 2010, Y: 2010})
 	n := s.navigator()
 	n.TeleportKey = "f2"
+	oldHopRules(n)
 	tuningOf(n).Nav.ExploreTimeoutSec = 2000
 	target := d2map.Point{X: 2290, Y: 2010}
 	done := func() bool { return s.Current().Grid.Known(target.X, target.Y) }
@@ -46,6 +49,7 @@ func TestTeleportExploreTowardHintHeadsThatWay(t *testing.T) {
 	s := newSim(g, input.Point{X: 2200, Y: 2200})
 	n := s.navigator()
 	n.TeleportKey = "f2"
+	oldHopRules(n)
 	tuningOf(n).Nav.ExploreTimeoutSec = 2000
 	hint := input.Point{X: 2390, Y: 2200}
 	done := func() bool { return s.pos().X > 2330 }
@@ -63,6 +67,7 @@ func TestTeleportFallsBackToWalkingWhenCastsDoNothing(t *testing.T) {
 	s.noTeleport = true
 	n := s.navigator()
 	n.TeleportKey = "f2"
+	oldHopRules(n)
 	tuningOf(n).Nav.ExploreTimeoutSec = 5000
 	if err := n.Explore(ctxT(t), nil); err != ErrExplored {
 		t.Fatalf("err = %v, want ErrExplored", err)
@@ -75,42 +80,26 @@ func TestTeleportFallsBackToWalkingWhenCastsDoNothing(t *testing.T) {
 	}
 }
 
-func TestTeleportWaitsForMana(t *testing.T) {
+func TestTeleportWithoutManaWalksInsteadOfWaiting(t *testing.T) {
 	g := openField(2000, 2000, 400, 100)
 	s := newSim(g, input.Point{X: 2010, Y: 2050})
-	s.maxMana, s.mana, s.castCost, s.manaRegen = 100, 0, 24, 4
+	s.maxMana, s.mana, s.castCost, s.manaRegen = 100, 0, 24, 0.1
 	n := s.navigator()
 	n.TeleportKey = "f2"
+	oldHopRules(n)
+	refills := 0
+	n.Refill = func(context.Context, int, int) error { refills++; return nil }
 	tuningOf(n).Nav.ExploreTimeoutSec = 2000
 	start := s.now
 	done := func() bool { return s.pos().X > 2060 }
 	if err := n.ExploreToward(ctxT(t), input.Point{X: 2390, Y: 2050}, done); err != nil {
 		t.Fatal(err)
 	}
-	if s.now.Sub(start) < 5*time.Second {
-		t.Fatalf("took %v: the cast did not wait for mana", s.now.Sub(start))
+	if len(s.casts) != 0 || refills != 0 {
+		t.Fatalf("%d casts, %d refills: a hop without mana must walk, not wait", len(s.casts), refills)
 	}
-	for _, c := range s.casts {
-		if c == (input.Point{}) {
-			t.Fatal("bad cast")
-		}
-	}
-}
-
-func TestTeleportRefillHookIsCalledWhenDry(t *testing.T) {
-	g := openField(2000, 2000, 400, 100)
-	s := newSim(g, input.Point{X: 2010, Y: 2050})
-	s.maxMana, s.mana, s.castCost = 100, 0, 24
-	n := s.navigator()
-	n.TeleportKey = "f2"
-	calls := 0
-	n.Refill = func(_ context.Context, mana, need int) error { calls++; s.mana = 100; return nil }
-	done := func() bool { return s.pos().X > 2060 }
-	if err := n.ExploreToward(ctxT(t), input.Point{X: 2390, Y: 2050}, done); err != nil {
-		t.Fatal(err)
-	}
-	if calls != 1 {
-		t.Fatalf("Refill called %d times", calls)
+	if w := s.now.Sub(start); w > 20*time.Second {
+		t.Fatalf("took %v: idle wait for mana", w)
 	}
 }
 
@@ -119,6 +108,7 @@ func TestTeleportTowardStopsNearTarget(t *testing.T) {
 	s := newSim(g, input.Point{X: 2010, Y: 2010})
 	n := s.navigator()
 	n.TeleportKey = "f2"
+	oldHopRules(n)
 	// the east side must be known to hop there: reveal it first
 	s.px, s.py = 2200, 2010
 	_, _ = s.Update()
@@ -129,5 +119,102 @@ func TestTeleportTowardStopsNearTarget(t *testing.T) {
 	}
 	if d := dist(s.pos(), input.Point{X: 2200, Y: 2010}); d > 10 {
 		t.Fatalf("ended %.0f away", d)
+	}
+}
+
+// oldHopRules switches the break-even rules off (any leg, no mana reserve): the pre-teletune behaviour.
+func oldHopRules(n *Navigator) {
+	tuningOf(n).Nav.TeleMinLeg = 0
+	tuningOf(n).Nav.TeleReservePct = 0
+}
+
+func TestTeleportHopsAcrossWallWhenTheWalkIsLong(t *testing.T) {
+	g := wallMaze()
+	s := newSim(g, input.Point{X: 2090, Y: 2100})
+	n := s.navigator()
+	n.TeleportKey = "f2" // default break-even rules
+	tuningOf(n).Nav.ExploreTimeoutSec = 2000
+	done := func() bool { return s.pos().X > 2115 }
+	if err := n.ExploreToward(ctxT(t), input.Point{X: 2290, Y: 2100}, done); err != nil {
+		t.Fatal(err)
+	}
+	if len(s.casts) == 0 || s.travelled > 80 {
+		t.Fatalf("%d casts, walked %.0f: the walk around the wall is over the break-even, so it must hop", len(s.casts), s.travelled)
+	}
+}
+
+func TestOpenGroundLegsWalkByDefault(t *testing.T) {
+	g := openField(2000, 2000, 400, 100)
+	s := newSim(g, input.Point{X: 2010, Y: 2050})
+	n := s.navigator()
+	n.TeleportKey = "f2"
+	tuningOf(n).Nav.ExploreTimeoutSec = 2000
+	done := func() bool { return s.pos().X > 2200 }
+	if err := n.ExploreToward(ctxT(t), input.Point{X: 2390, Y: 2050}, done); err != nil {
+		t.Fatal(err)
+	}
+	if len(s.casts) != 0 {
+		t.Fatalf("%d hops over open ground: a hop of 18 subtiles is below the break-even leg", len(s.casts))
+	}
+}
+
+func TestHopWorth(t *testing.T) {
+	inf := math.Inf(1)
+	cases := []struct {
+		name string
+		h    hopFacts
+		want bool
+		why  string
+	}{
+		{"long walk, full pool", hopFacts{WalkLen: 80, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
+		{"straight 17 subtiles (DRILLS22 hop)", hopFacts{WalkLen: 17, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, false, "leg"},
+		{"no walk at all (island)", hopFacts{WalkLen: inf, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
+		{"reserve: 150 - 24 = 126 ok, 81 - 24 = 57 below 60", hopFacts{WalkLen: 80, Mana: 81, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, false, "mana"},
+		{"reserve exactly met", hopFacts{WalkLen: 80, Mana: 84, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
+		{"mana stat unknown: leg rule only", hopFacts{WalkLen: 80, Mana: 0, MaxMana: 0, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
+		{"knobs at 0: old behaviour", hopFacts{WalkLen: 5, Mana: 24, MaxMana: 150, Cost: 24}, true, ""},
+	}
+	for _, c := range cases {
+		got, why := hopWorth(c.h)
+		if got != c.want || why != c.why {
+			t.Errorf("%s: got %v %q, want %v %q", c.name, got, why, c.want, c.why)
+		}
+	}
+}
+
+// DRILLS22 geometry (docs/teletune.md): Rocky Waste to Stony Tomb walks in 254 ticks (143 subtiles at 0.5625). Seven
+// hops of 17 subtiles on the 150 mana pool lost to the walk in the model as on the live d2d slot.
+func TestBreakEvenDrills22Legs(t *testing.T) {
+	const regen, fps = 1.17, 25.0 // 150 max mana: 12 256ths a frame (internal/resource.ManaPerSec)
+	for _, c := range []struct {
+		name  string
+		ticks float64 // walking control
+		hops  int
+	}{{"Stony Tomb", 254, 7}, {"Halls of the Dead 1", 578, 5}} {
+		walkSub := c.ticks * RunSubPerTick
+		hopTicks := 64.0 // 448 ticks / 7 hops, DRILLS22; about twice the nominal teleHopTicksNominal
+		withHops := TeleLegTicks(walkSub, 17, hopTicks, c.hops, 150, 24, regen, fps)
+		if c.name == "Stony Tomb" && withHops <= c.ticks {
+			t.Errorf("%s: %d hops model %.0f ticks, not slower than walking %.0f", c.name, c.hops, withHops, c.ticks)
+		}
+		// With the default knobs every one of these straight hops is declined, so the leg is the walk.
+		taken := 0
+		for left := walkSub; left > 0; left -= 17 {
+			if ok, _ := hopWorth(hopFacts{WalkLen: 17, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: BreakEvenLeg(RunSubPerTick, 64)}); ok {
+				taken++
+			}
+		}
+		if taken != 0 {
+			t.Errorf("%s: %d straight hops taken", c.name, taken)
+		}
+	}
+	if got := BreakEvenLeg(RunSubPerTick, 64); got != 36 {
+		t.Errorf("break-even leg %.1f, want 36 (the knob default)", got)
+	}
+}
+
+func TestMinLegDefaultMatchesBreakEven(t *testing.T) {
+	if d := env.DefaultNavTuning().TeleMinLeg; d != BreakEvenLeg(RunSubPerTick, 64) {
+		t.Fatalf("default %v", d)
 	}
 }

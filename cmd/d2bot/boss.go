@@ -298,7 +298,7 @@ func newBossRunner(g *bossGame) *actRunner {
 		}
 	}
 	return &actRunner{FarmRunner: boss.FarmRunner{Act45Runner: boss.Act45Runner{
-		Runner: boss.Runner{W: g, A: bossActs{g}, Scripts: sc, Opts: boss.Opts{CanTeleport: g.nv != nil && g.nv.TeleportKey != "", AndarielMinLevel: andarielFloor(g.e), MaxRetreats: brMaxRetreats(g.e), Hooks: boss.Hooks{
+		Runner: boss.Runner{W: g, A: bossActs{g}, Scripts: sc, Opts: boss.Opts{CanTeleportFn: func() bool { return g.nv != nil && g.nv.HasTeleport() }, AndarielMinLevel: andarielFloor(g.e), MaxRetreats: brMaxRetreats(g.e), Hooks: boss.Hooks{
 			BeforeAttack: func(ctx context.Context, _ boss.View, _ boss.Mon) error { return g.f.Buff(ctx) },
 		}}},
 		Ops: objectAdapter{e: g.e, nv: g.nv},
@@ -407,7 +407,7 @@ func farmLoop(g *bossGame, r *actRunner, log func(msg string, args ...any)) func
 		if strings.EqualFold(fixed, "auto") {
 			fixed = ""
 		}
-		tele := g.nv != nil && g.nv.TeleportKey != ""
+		tele := g.nv != nil && g.nv.HasTeleport()
 		return boss.FarmLoop(ctx, g, teleOps{c.Ops, tele}, r, tab, boss.FarmOpts{
 			Fixed: fixed, FirstHere: c.FirstHere, Limits: boss.Limits{Runs: c.Runs, Duration: c.Duration}, OnRun: c.OnRun,
 			Log: func(f string, a ...any) { log("farm", "msg", fmt.Sprintf(f, a...)) },

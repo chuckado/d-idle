@@ -86,6 +86,7 @@ func buildBehaviors(ctx context.Context, e *env.Env, o options, gameDir string, 
 	cb := combat.New(e, nv)
 	cb.D2D = o.d2d.on()
 	nv.Yield = packYield(e, cb)
+	wireTeleport(nv, cb, db)
 	if rows, err := combat.LoadListRows(gameDir, db); err != nil {
 		log.Warn("skill list rows unavailable: hotkeys cannot be bound", "err", err)
 	} else {

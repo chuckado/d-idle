@@ -50,6 +50,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | nav.wpCooldownSec | 10 | 10..20 | s | 10 | 2 | game.exe silently refuses a waypoint travel for 10 s after any level change; the bot waits this long since arriving before clicking a row. Lower is not useful. |
 | nav.badEdgeTTLSec | 300 | 0..3600 | s | 300 | 2 | A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge). |
 | nav.cautionRadius | 20 | 8..40 | subtiles | 8 | 1 | A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius. |
+| nav.teleReservePct | 40 | 0..90 | % | 40 | 1 | A Teleport hop is skipped (the walk goes on, no waiting for mana) when the mana after it would be below this share of max mana, so fights are not starved. Default: about eight casts of a 5 to 8 mana attack on a 150 mana pool (UNSURE, docs/teletune.md). |
+| nav.teleMinLeg | 36 | 0..120 | subtiles | 36 | 1 | A hop is skipped when the walk to its landing cell is shorter than this: running speed times the measured time of a hop (0.5625 x 64 ticks). 0 hops whenever mana allows. |
 
 ### combat.*
 

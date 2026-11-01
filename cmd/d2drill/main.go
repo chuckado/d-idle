@@ -52,6 +52,8 @@ func run() int {
 	verbose := flag.Bool("v", false, "debug log of the bot code paths on stderr")
 	probe := flag.String("probe", "", "semicolon list of verbs to run and print (debug verbs go through the cheat ledger), then exit; for finding out what a verb does")
 	label := flag.String("label", "", "result file label after the date (default: the group, lower case)")
+	teleMinLeg := flag.Float64("tele-min-leg", -1, "override nav.teleMinLeg (subtiles; default keeps the knob default 36; 0 hops whenever mana allows)")
+	teleReserve := flag.Float64("tele-reserve", -1, "override nav.teleReservePct (percent of max mana kept after a hop; default keeps 40)")
 	repairBelow := flag.Int("repair-below", 0, "override the bot's repairBelowPct knob (default 30; `debug durability all 1` leaves 5 percent, so the default reaches the repair path)")
 	botBin := flag.String("bot", envOr("D2BOT_BIN", filepath.Join(home, "d2d-lab/drills4/d2bot")), "D10: the d2bot binary the fault drill runs managed")
 	killAfter := flag.Duration("d10-kill-after", 4*time.Minute, "D10: wall time from the bot start to the kill -9 of the slot's d2d")
@@ -89,6 +91,12 @@ func run() int {
 		return 1
 	}
 	tune := env.DefaultTuning()
+	if *teleMinLeg >= 0 { // DRILLS24: the knob override of docs/teletune.md's live recipe
+		tune.Nav.TeleMinLeg = *teleMinLeg
+	}
+	if *teleReserve >= 0 {
+		tune.Nav.TeleReservePct = *teleReserve
+	}
 	if *repairBelow > 0 {
 		tune.Town.RepairBelowPct = *repairBelow
 	}
@@ -125,6 +133,7 @@ func run() int {
 	}
 	l := newLab(be, db, led, *name, "slot"+os.Getenv("D2D_SLOT"), log)
 	l.rec = rec
+	rec.SetTick(l.tick)
 	l.tune = &tune
 	if *probe != "" {
 		return l.runProbe(ctx, *probe)
@@ -160,6 +169,8 @@ func run() int {
 		drills = drill.D13(l)
 	case "R": // DRILLS15 (skill-smoke traces) and DRILLS16 (fixbuff live proof): one group, drill names R-bs* / D15-* tell them apart
 		drills = append(drill.D15(l), drill.D16(l)...)
+	case "T": // DRILLS22: live proof of fixtelekey (Teleport capability in Act 2 legs)
+		drills = drill.D22(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
@@ -200,7 +211,7 @@ func run() int {
 	r := &drill.Runner{W: l, Repeat: *repeat, Logf: func(f string, a ...any) { fmt.Printf(f+"\n", a...) }}
 	g := r.RunGroup(ctx, drills)
 
-	if g := strings.ToUpper(*group); g == "D2" || g == "DW" || g == "Q" || g == "R" { // the portal drills end in the field: put the character back in town (logged cheat)
+	if g := strings.ToUpper(*group); g == "D2" || g == "DW" || g == "Q" || g == "R" || g == "T" { // the portal drills end in the field: put the character back in town (logged cheat)
 		if _, err := l.Cheat(ctx, "drills:cleanup", "debug goto 1", "return the throwaway character to the Rogue Encampment after the portal drills"); err != nil {
 			fmt.Fprintln(os.Stderr, "d2drill: cleanup goto:", err)
 		}

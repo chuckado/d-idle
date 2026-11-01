@@ -24,7 +24,7 @@ const (
 	teleportBadHops      = 3 // consecutive hops that did not move the character
 )
 
-func (n *Navigator) hasTeleport() bool { return n.TeleportKey != "" }
+func (n *Navigator) hasTeleport() bool { return n.teleKey() != "" }
 
 func (n *Navigator) teleRange() float64 {
 	if n.TeleportRange > 0 {
@@ -102,8 +102,16 @@ func (n *Navigator) hopCell(o *obs, target input.Point) (input.Point, bool) {
 // hop casts Teleport once toward target. moved is true when the character ended up somewhere else. ok is false
 // when no hop could be made (no mana, no candidate cell); the caller should walk.
 func (n *Navigator) hop(ctx context.Context, o *obs, target input.Point) (moved bool, ok bool, err error) {
+	if !n.teleAllowed(o.level) {
+		return false, false, nil
+	}
+	n.teleDeclined = false
 	cell, found := n.hopCell(o, target)
 	if !found {
+		return false, false, nil
+	}
+	if n.hopDeclined(o, cell) {
+		n.teleDeclined = true
 		return false, false, nil
 	}
 	return n.hopAt(ctx, o, cell)
@@ -111,10 +119,13 @@ func (n *Navigator) hop(ctx context.Context, o *obs, target input.Point) (moved 
 
 // hopAt casts Teleport at cell and checks the result by position.
 func (n *Navigator) hopAt(ctx context.Context, o *obs, cell input.Point) (moved bool, ok bool, err error) {
+	if !n.teleAllowed(o.level) {
+		return false, false, nil
+	}
 	if enough, err := n.waitMana(ctx, o); err != nil || !enough {
 		return false, false, err
 	}
-	if err := n.in.CastAt(n.TeleportKey, cell); err != nil {
+	if err := n.in.CastAt(n.teleKey(), cell); err != nil {
 		return false, false, err
 	}
 	n.clk.Sleep(teleportSettle)
@@ -165,7 +176,7 @@ func (n *Navigator) teleportToward(ctx context.Context, p input.Point, stop floa
 // teleLeg is one exploration step by Teleport: it picks the best frontier bucket anywhere on the known grid
 // (reachable by walking or not) and hops toward it. handled is false when the caller should walk this leg.
 func (n *Navigator) teleLeg(ctx context.Context, o *obs, hint *input.Point) (handled bool, err error) {
-	if n.teleFails >= teleportBadHops {
+	if n.teleFails >= teleportBadHops || !n.teleAllowed(o.level) {
 		return false, nil
 	}
 	f := n.fieldFor(o.lm)
@@ -214,6 +225,9 @@ func (n *Navigator) teleLeg(ctx context.Context, o *obs, hint *input.Point) (han
 	moved, ok, err := n.hop(ctx, o, pick.pos)
 	if err != nil {
 		return false, err
+	}
+	if !ok && n.teleDeclined {
+		return false, nil // the break-even rules say walk (teletune.go); not a dead end, not an island
 	}
 	if !ok {
 		// No greedy hop: islands separated by void need a planned route or a bounded blind cast.

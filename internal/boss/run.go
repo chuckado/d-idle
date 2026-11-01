@@ -14,12 +14,21 @@ type Opts struct {
 	LocatePolls int           // polls for the boss at each step (default 16)
 	Explore     time.Duration // exploration budget when the boss is still unseen (default 90 s)
 	CanTeleport bool          // allow StandPoint.NeedsTeleport points
-	Exit        *ExitPlan     // overrides Script.Exit
-	Hooks       Hooks
+	// CanTeleportFn, if set, is asked at each use instead of CanTeleport: Teleport may be learned after the runner was built.
+	CanTeleportFn func() bool
+	Exit          *ExitPlan // overrides Script.Exit
+	Hooks         Hooks
 	// AndarielMinLevel overrides the Normal clvl floor of the Andariel script (Tuning.Boss.AndarielMinLevel); 0 = the script's own.
 	AndarielMinLevel int
 	// MaxRetreats overrides Script.MaxRetreats when above 0 (Tuning.Boss.BRMaxRetreats).
 	MaxRetreats int
+}
+
+func (o Opts) canTeleport() bool {
+	if o.CanTeleportFn != nil {
+		return o.CanTeleportFn()
+	}
+	return o.CanTeleport
 }
 
 func (o Opts) withDefaults() Opts {
@@ -699,7 +708,7 @@ func (r *runner) kite(ctx context.Context, v View, boss Mon) error {
 	n := len(r.s.Stand)
 	for i := 0; i < n; i++ {
 		sp := r.s.Stand[(r.st.standIdx+i)%n]
-		if sp.NeedsTeleport && !r.o.CanTeleport {
+		if sp.NeedsTeleport && !r.o.canTeleport() {
 			continue
 		}
 		p := sp.Pos

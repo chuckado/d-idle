@@ -1,0 +1,431 @@
+package main
+
+import (
+	"context"
+	"errors"
+	"fmt"
+	"math"
+	"strings"
+	"time"
+
+	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/drill"
+	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/nav"
+)
+
+// DRILLS22 (card drills22): the live proof of card fixtelekey. The leg is the bot's own Navigator.ExitTo with its
+// Teleport capability wired as cmd/d2bot/telewire.go wires it (that function is in package main of another command, so
+// d22wire repeats its four lines: TeleportKeyFn = Fighter.TeleportKey, TeleportOK from data.CanTeleportIn and the
+// clear-line rule). Hops are counted from the navigator's own log lines ("nav teleport" at Debug, "nav teleport did
+// not move" at Info) through the recorder. Tags: V = read from the log of the run, S = read from code, U = not measured.
+
+const (
+	d22Rocky    = 41
+	d22Dry      = 42
+	d22Lair     = 73
+	d22Arcane   = 74
+	d22Lut      = 40
+	d22Sewer    = 47 // Sewers level 1: a tile exit of Lut Gholein, the one way a town leg can reach hop code
+	d22ManaPts  = 150
+	d22ClvlWant = 18
+)
+
+// d22wire installs the Teleport capability on the navigator: wired=true is the production wiring, wired=false is the
+// deliberately unwired variant (key but no level rule) used to provoke refused hops in a town.
+func (l *lab) d22wire(nv *nav.Navigator, wired bool) {
+	nv.TeleportKey = ""
+	nv.TeleportKeyFn = l.rig.Fighter.TeleportKey
+	nv.TeleportOK = nil
+	nv.TeleportCost = nil
+	if !wired || l.db == nil {
+		return
+	}
+	nv.TeleportCost = func(p *d2.Player) int { // as cmd/d2bot/telewire.go teleCost (DRILLS24: teletune reads the cost)
+		sk := l.db.SkillByName("Teleport")
+		if sk == nil {
+			return 0
+		}
+		for _, s := range p.Skills {
+			if s.ID == sk.ID && s.Effective() > 0 {
+				return int(math.Ceil(sk.ManaCost(s.Effective())))
+			}
+		}
+		return 0
+	}
+	nv.TeleportOK = func(level int) bool {
+		a := l.db.AreaByID(level)
+		return a == nil || data.CanTeleportIn(a) && a.TeleportRule() == data.TeleportAllowed
+	}
+}
+
+var d22start = map[int][2]float64{}
+
+type d22leg struct {
+	Err                    error
+	Hops, Refused          int
+	ManaB, ManaA           float64
+	Ticks                  int
+	Wall                   time.Duration
+	StartLvl, EndLvl       int
+	StartX, StartY, EX, EY float64
+	Lines                  []string
+	Key                    string
+	HopTicks               []int // ticks from the previous hop line (or the leg start) to each landed hop
+	Declined               int
+}
+
+func (g d22leg) String() string {
+	return fmt.Sprintf("key=%q level %d->%d (%.0f,%.0f)->(%.0f,%.0f) hops=%d refused=%d mana %.1f->%.1f ticks=%d wall=%s err=%v",
+		g.Key, g.StartLvl, g.EndLvl, g.StartX, g.StartY, g.EX, g.EY, g.Hops, g.Refused, g.ManaB, g.ManaA, g.Ticks, g.Wall.Round(time.Millisecond), g.Err)
+}
+
+func (l *lab) d22state(ctx context.Context) (lvl int, x, y, mana float64, err error) {
+	s, err := l.be.Env.Snapshot()
+	if err != nil || s.Player == nil {
+		return 0, 0, 0, 0, fmt.Errorf("snapshot: %v", err)
+	}
+	raw, err := l.rawStats(ctx)
+	if err != nil {
+		return 0, 0, 0, 0, err
+	}
+	return s.Player.Area, float64(s.Player.X), float64(s.Player.Y), float64(raw[8]) / 256, nil
+}
+
+// d22prep warps to the level, clears the natural monsters, gives life, level 18 and a big mana pool.
+func (l *lab) d22prep(ctx context.Context, r *drill.Run, level int, learn, warp bool) error {
+	// the arrival cell of `debug goto` depends on the level the character came from: always come from Lut Gholein
+	if level != d22Lut {
+		if err := l.Goto(ctx, r, d22Lut); err != nil {
+			return err
+		}
+	}
+	if err := l.Goto(ctx, r, level); err != nil {
+		return err
+	}
+	// the arrival cell of `debug goto` varies between calls: the control fixes it, later legs warp back to it
+	if !warp {
+	} else if c, ok := d22start[level]; ok {
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(c[0]), int(c[1])), "DRILLS22: the same start cell as the control leg"); err != nil {
+			return err
+		}
+		_ = l.Tick(ctx, 20)
+	} else if x, y, _, err := l.playerCell(ctx); err == nil {
+		d22start[level] = [2]float64{math.Round(x), math.Round(y)}
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(math.Round(x)), int(math.Round(y))), "DRILLS22: the control also warps, so both passes start after the same warp"); err != nil {
+			return err
+		}
+		_ = l.Tick(ctx, 20)
+	}
+	for _, v := range []struct{ verb, why string }{
+		{"debug kill", "DRILLS22: clear the level's natural monsters: the leg measures navigation, not a fight"},
+		{fmt.Sprintf("debug stat 12 %d", d22ClvlWant), "DRILLS22: character level 18, the level of the fixtelekey claim"},
+		{fmt.Sprintf("debug stat 9 %d", d22ManaPts*256), "DRILLS22: max mana a clvl 18 Sorceress would have, so the leg is not mana-starved"},
+		{fmt.Sprintf("debug stat 7 %d", 2000*256), "DRILLS22: life for the leg"},
+		{fmt.Sprintf("debug stat 6 %d", 2000*256), "DRILLS22: life for the leg"},
+	} {
+		if _, err := r.Cheat(ctx, v.verb, v.why); err != nil {
+			return err
+		}
+	}
+	if learn {
+		if _, err := r.Cheat(ctx, "debug points 54 1", "DRILLS22: Teleport learnt (level 1) at clvl 18 for the fixtelekey proof"); err != nil {
+			return err
+		}
+	}
+	if _, err := l.skillDebug(r).ManaFull(ctx, "DRILLS22: full mana at the start of the leg"); err != nil {
+		return err
+	}
+	_ = l.Tick(ctx, 30)
+	if _, err := l.rig.BindSkills(); err != nil {
+		return err
+	}
+	return nil
+}
+
+// d22run runs ExitTo(to) from the current level and returns the counts.
+func (l *lab) d22run(ctx context.Context, nv *nav.Navigator, to int, max time.Duration) d22leg {
+	var g d22leg
+	g.Key = nv.TeleportKeyFn()
+	lvl, x, y, mana, err := l.d22state(ctx)
+	if err != nil {
+		g.Err = err
+		return g
+	}
+	g.StartLvl, g.StartX, g.StartY, g.ManaB = lvl, x, y, mana
+	mark := l.rec.Mark()
+	t0, w0 := l.tick(), time.Now()
+	cctx, cancel := context.WithTimeout(ctx, max)
+	g.Err = nv.ExitTo(cctx, to)
+	cancel()
+	g.Ticks, g.Wall = l.tick()-t0, time.Since(w0)
+	g.Lines = l.rec.Since(mark)
+	lt := l.rec.Ticks(mark)
+	prev := t0
+	for i, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav teleport declined") {
+			g.Declined++
+		}
+		if strings.HasPrefix(ln, "nav teleport ") && !strings.HasPrefix(ln, "nav teleport declined") && !strings.HasPrefix(ln, "nav teleport did not move") && i < len(lt) {
+			g.HopTicks = append(g.HopTicks, lt[i]-prev)
+			prev = lt[i]
+		}
+		switch {
+		case strings.HasPrefix(ln, "nav teleport did not move"):
+			g.Refused++
+		case strings.HasPrefix(ln, "nav teleport declined"):
+		case strings.HasPrefix(ln, "nav teleport "):
+			g.Hops++
+		}
+	}
+	lvl, x, y, mana, err = l.d22state(ctx)
+	if err == nil {
+		g.EndLvl, g.EX, g.EY, g.ManaA = lvl, x, y, mana
+	}
+	return g
+}
+
+func (l *lab) d22dump(g d22leg, tag string) string {
+	var hop []string
+	for _, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav teleport") {
+			hop = append(hop, ln)
+		}
+	}
+	if len(hop) > 12 {
+		hop = append(hop[:6:6], hop[len(hop)-6:]...)
+	}
+	for _, h := range hop {
+		fmt.Printf("D22 %s hop line: %s\n", tag, h)
+	}
+	fmt.Printf("D22 %s: %s declined=%d hopticks=%v\n", tag, g, g.Declined, g.HopTicks)
+	for _, ln := range g.Lines {
+		if strings.HasPrefix(ln, "nav teleport declined") {
+			fmt.Printf("D22 %s line: %s\n", tag, ln)
+			break
+		}
+	}
+	return g.String()
+}
+
+func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome) {
+	var err error
+	switch id {
+	case "D22-C":
+		o, err = l.d22C(ctx, r)
+	case "D22-PC":
+		o, err = l.d22pocket(ctx, r, false)
+	case "D22-P":
+		o, err = l.d22pocket(ctx, r, true)
+	case "D22-A":
+		o, err = l.d22A(ctx, r)
+	case "D22-B":
+		o, err = l.d22B(ctx, r)
+	case "D22-T":
+		o, err = l.d22T(ctx, r)
+	case "D22-R":
+		o, err = l.d22R(ctx, r)
+	default:
+		err = fmt.Errorf("unknown drill %s", id)
+	}
+	if err != nil {
+		return drill.Blocks(err.Error())
+	}
+	return o
+}
+
+// d22legs are the Act 2 legs: a tile exit (Rocky Waste to Stony Tomb, Dry Hills to Halls of the Dead 1), where
+// Navigator.ExitTo hops (S: exit.go hops only when the gate is not a border), and the border crossing Rocky Waste to
+// Dry Hills, where it walks.
+var d22legs = []struct {
+	Name     string
+	From, To int
+	Warp     bool
+}{{"tile41-55", d22Rocky, 55, false}, {"tile42-56", d22Dry, 56, false}, {"border41-42", d22Rocky, d22Dry, false}}
+
+func (l *lab) d22legsRun(ctx context.Context, r *drill.Run, learn bool, tag string) ([]d22leg, error) {
+	var out []d22leg
+	for _, lg := range d22legs {
+		if err := l.d22prep(ctx, r, lg.From, learn, lg.Warp); err != nil {
+			return out, err
+		}
+		l.d22wire(l.navr, true)
+		g := l.d22run(ctx, l.navr, lg.To, 150*time.Second)
+		l.d22dump(g, tag+" "+lg.Name)
+		out = append(out, g)
+	}
+	return out, nil
+}
+
+func d22sum(gs []d22leg) (hops, refused, ticks int, paid float64, errs int, obs string) {
+	var parts []string
+	for i, g := range gs {
+		hops += g.Hops
+		refused += g.Refused
+		ticks += g.Ticks
+		paid += g.ManaB - g.ManaA
+		if g.Err != nil {
+			errs++
+		}
+		parts = append(parts, d22legs[i].Name+": "+g.String())
+	}
+	return hops, refused, ticks, paid, errs, strings.Join(parts, " || ")
+}
+
+func (l *lab) d22C(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	gs, err := l.d22legsRun(ctx, r, false, "control")
+	if err != nil {
+		return drill.Outcome{}, err
+	}
+	hops, refused, ticks, _, errs, obs := d22sum(gs)
+	o := drill.Outcome{Intended: "no Teleport learned: key empty, no hop, the legs walk", Observed: obs, Sig: fmt.Sprintf("hops=%d", hops)}
+	if hops != 0 || refused != 0 || gs[0].Key != "" {
+		o.Verdict, o.Reason = drill.Fail, "the control hopped or had a key"
+	} else if errs > 0 {
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d walking legs failed", errs)
+	} else {
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("3 legs walked %d ticks in all, no key, no hops, no error", ticks)
+	}
+	return o, nil
+}
+
+func (l *lab) d22A(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	gs, err := l.d22legsRun(ctx, r, true, "teleport")
+	if err != nil {
+		return drill.Outcome{}, err
+	}
+	hops, refused, ticks, paid, errs, obs := d22sum(gs)
+	o := drill.Outcome{Intended: "Teleport learned at clvl 18 in Act 2: tile-exit legs hop (>0), refused hops are few, mana is paid per hop", Observed: obs, Sig: fmt.Sprintf("hops=%d refused=%d", hops, refused)}
+	tileHops := gs[0].Hops + gs[1].Hops
+	switch {
+	case gs[0].Key == "":
+		o.Verdict, o.Reason = drill.Fail, "no Teleport key after learning and BindSkills"
+	case tileHops == 0 && l.tune.Nav.TeleMinLeg > 0:
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("teletune: 0 hops on the tile-exit legs (the leg rule declined them), %d ticks, mana net %.1f", ticks, paid)
+	case tileHops == 0:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("no hop on the tile-exit legs (border leg hops %d)", gs[2].Hops)
+	case errs > 0:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d legs failed", errs)
+	case gs[0].Refused > 3 || gs[1].Refused > 3 || gs[2].Refused > 3:
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("refused hops %d in all", refused)
+	default:
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("%d hops (border leg %d), %d refused, mana net %.1f, %d ticks", hops, gs[2].Hops, refused, paid, ticks)
+	}
+	return o, nil
+}
+
+func (l *lab) d22B(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	if err := l.d22prep(ctx, r, d22Rocky, true, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	l.d22wire(l.navr, true)
+	s, err := l.be.Env.Snapshot()
+	if err != nil || s.Player == nil {
+		return drill.Outcome{}, fmt.Errorf("snapshot: %v", err)
+	}
+	var sks []string
+	for _, sk := range s.Player.Skills {
+		sks = append(sks, fmt.Sprintf("%d:%d", sk.ID, sk.Level))
+	}
+	key := l.rig.Fighter.TeleportKey()
+	states, _ := l.be.Client.Do(ctx, "debug states")
+	// the hop through the key: one ExitTo hop count on a short leg is not needed, a single CastAt through the navigator's input is
+	_, _, _, m0, _ := l.d22state(ctx)
+	x0, y0, _, _ := l.playerCell(ctx)
+	castErr := error(nil)
+	if key != "" {
+		dx, dy, n := l.d15dir(ctx, x0, y0, 12)
+		tx, ty := x0+dx*float64(min(n, 12)), y0+dy*float64(min(n, 12))
+		castErr = l.be.Env.In.CastAt(key, input.Point{X: int(tx * 5), Y: int(ty * 5)})
+		_ = l.Tick(ctx, 14)
+	}
+	_, _, _, m1, _ := l.d22state(ctx)
+	x1, y1, _, _ := l.playerCell(ctx)
+	moved := cdist(x0, y0, x1, y1)
+	obs := fmt.Sprintf("TeleportKey=%q HasTeleport=%v skills=[%s] debug states: %s; CastAt(%q) a free line: err=%v moved %.1f cells, mana %.1f->%.1f", key, l.navr.HasTeleport(), strings.Join(sks, " "), strings.TrimSpace(states.Text()), key, castErr, moved, m0, m1)
+	fmt.Println("D22 bind:", obs)
+	o := drill.Outcome{Intended: "key is the bind of skill 54, the cast through it hops and pays mana", Observed: obs, Sig: key}
+	if key == fmt.Sprintf("sk%d", 54) && castErr == nil && moved >= 2 && m1 < m0 {
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("bind %s, cast moved %.1f cells and paid %.1f mana", key, moved, m0-m1)
+	} else if key != "sk54" {
+		o.Verdict, o.Reason = drill.Fail, "TeleportKey is not sk54"
+	} else {
+		o.Verdict, o.Reason = drill.Fail, "the cast through the bind did not hop (blocked cell or not bound in the input)"
+	}
+	return o, nil
+}
+
+func (l *lab) d22T(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	var parts []string
+	// rules by level (S: Levels.txt through data.CanTeleportIn and TeleportRule)
+	l.d22wire(l.navr, true)
+	for _, lv := range []int{d22Lut, d22Rocky, d22Lair, d22Arcane} {
+		parts = append(parts, fmt.Sprintf("level %d allowed=%v", lv, l.navr.TeleportOK(lv)))
+	}
+	ok := !l.navr.TeleportOK(d22Lut) && l.navr.TeleportOK(d22Rocky) && !l.navr.TeleportOK(d22Lair)
+	// town leg: Lut Gholein to Rocky Waste with the wired navigator and Teleport learned (the earlier drills learnt it)
+	if err := l.d22prep(ctx, r, d22Lut, true, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	g := l.d22run(ctx, l.navr, d22Sewer, 100*time.Second)
+	obs := l.d22dump(g, "town")
+	parts = append(parts, obs)
+	// the Summoner's level: reachable by goto only; a Teleport stand point needs the boss runner (not reachable from a drill)
+	if _, err := l.Cheat(ctx, "drills:D22-T", fmt.Sprintf("debug goto %d", d22Arcane), "DRILLS22: is the Arcane Sanctuary reachable by goto (no boss fight is forced)"); err != nil {
+		parts = append(parts, "goto 74: "+err.Error())
+	} else {
+		_ = l.Tick(ctx, 30)
+		lv, _, _, _, _ := l.d22state(ctx)
+		parts = append(parts, fmt.Sprintf("goto 74 -> area %d, HasTeleport=%v", lv, l.navr.HasTeleport()))
+	}
+	fmt.Println("D22 town/rules:", strings.Join(parts, " || "))
+	o := drill.Outcome{Intended: "no hop in town (level rule), Duriel's Lair left to walking, Summoner level allows hops", Observed: strings.Join(parts, " || "), Sig: fmt.Sprintf("hops=%d", g.Hops)}
+	if ok && g.Hops == 0 && g.Refused == 0 {
+		o.Verdict, o.Reason = drill.Pass, "town leg: 0 hops, 0 refused"
+	} else {
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("rules ok=%v town hops=%d refused=%d err=%v", ok, g.Hops, g.Refused, g.Err)
+	}
+	return o, nil
+}
+
+func (l *lab) d22R(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
+	if err := l.d22prep(ctx, r, d22Lut, true, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	l.d22wire(l.navr, false)
+	defer l.d22wire(l.navr, true)
+	g := l.d22run(ctx, l.navr, d22Sewer, 100*time.Second)
+	obs := l.d22dump(g, "unwired-town")
+	o := drill.Outcome{Intended: "the game refuses every hop in a town: the navigator gives up after a few (teleportBadHops 3) and walks", Observed: obs, Sig: fmt.Sprintf("hops=%d refused=%d", g.Hops, g.Refused)}
+	paid := g.ManaB - g.ManaA
+	if g.Refused <= 6 && !errors.Is(g.Err, context.DeadlineExceeded) {
+		o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("%d refused hops, %d landed, mana net %.1f, leg err=%v", g.Refused, g.Hops, paid, g.Err)
+	} else {
+		o.Verdict, o.Reason = drill.Fail, fmt.Sprintf("%d refused hops (bound 6), err=%v", g.Refused, g.Err)
+	}
+	return o, nil
+}
+
+// d22pocket starts a leg in the Rocky Waste pocket DRILLS22 found (arrival (165,220): a walk trap) and asks for the
+// Stony Tomb exit. Without Teleport the leg walks (or times out: the walk to the exit is unreachable or long); with
+// it the hops should cross the wall (the island rule of teleStep and the leg rule). Both report ticks and the end.
+func (l *lab) d22pocket(ctx context.Context, r *drill.Run, learn bool) (drill.Outcome, error) {
+	if err := l.d22prep(ctx, r, d22Rocky, learn, false); err != nil {
+		return drill.Outcome{}, err
+	}
+	if _, err := r.Cheat(ctx, "debug warp 33 44", "DRILLS24: start in the Rocky Waste pocket (a walk trap, DRILLS22 finding 4) to test what Teleport is for"); err != nil {
+		return drill.Outcome{}, err
+	}
+	_ = l.Tick(ctx, 20)
+	l.d22wire(l.navr, true)
+	g := l.d22run(ctx, l.navr, 55, 80*time.Second)
+	tag := "pocket-control"
+	if learn {
+		tag = "pocket-teleport"
+	}
+	l.d22dump(g, tag)
+	o := drill.Outcome{Intended: "pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport", Observed: g.String(), Sig: fmt.Sprintf("hops=%d", g.Hops)}
+	o.Verdict, o.Reason = drill.Pass, fmt.Sprintf("measurement: %d hops, %d ticks, reached level %d, err=%v", g.Hops, g.Ticks, g.EndLvl, g.Err)
+	return o, nil
+}

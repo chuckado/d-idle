@@ -35,12 +35,12 @@ func (m moverAdapter) Explore(ctx context.Context, done func() bool) error {
 }
 
 // CanTeleport feeds task.World.CanTeleport: the navigator has a Teleport key.
-func (m moverAdapter) CanTeleport() bool { return m.Navigator.TeleportKey != "" }
+func (m moverAdapter) CanTeleport() bool { return m.Navigator.HasTeleport() }
 
 // TeleportToArea hops toward the exit into levelNo (the navigator teleports along the way); without the Teleport key
 // there is nothing to hop with.
 func (m moverAdapter) TeleportToArea(ctx context.Context, levelNo int) error {
-	if m.Navigator.TeleportKey == "" {
+	if !m.Navigator.HasTeleport() {
 		return task.ErrNoTeleport
 	}
 	return m.Navigator.ToArea(ctx, levelNo)

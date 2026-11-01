@@ -1,0 +1,15 @@
+time=2026-11-01T10:53:03.754-05:00 level=DEBUG msg="nav teleport" from="{X:165 Y:220}" to="{X:174 Y:235}" aimed="{X:174 Y:235}"
+time=2026-11-01T10:53:03.772-05:00 level=DEBUG msg="nav teleport" from="{X:174 Y:235}" to="{X:191 Y:240}" aimed="{X:191 Y:240}"
+time=2026-11-01T10:53:03.791-05:00 level=DEBUG msg="nav teleport" from="{X:191 Y:240}" to="{X:208 Y:245}" aimed="{X:208 Y:245}"
+time=2026-11-01T10:53:03.792-05:00 level=INFO msg="nav teleport declined, walking" why=mana mana=80 max=150
+D22 pocket-teleport hop line: nav teleport from={165 220} to={174 235} aimed={174 235}
+D22 pocket-teleport hop line: nav teleport from={174 235} to={191 240} aimed={191 240}
+D22 pocket-teleport hop line: nav teleport from={191 240} to={208 245} aimed={208 245}
+D22 pocket-teleport hop line: nav teleport declined, walking why=mana mana=80 max=150
+D22 pocket-teleport: key="sk54" level 41->55 (165,220)->(120,147) hops=3 refused=0 mana 150.0->88.5 ticks=224 wall=368ms err=<nil> declined=1 hopticks=[18 18 18]
+D22 pocket-teleport line: nav teleport declined, walking why=mana mana=80 max=150
+DRILL D22-P P26 PASS measurement: 3 hops, 224 ticks, reached level 55, err=<nil> | intended: pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport | observed: key="sk54" level 41->55 (165,220)->(120,147) hops=3 refused=0 mana 150.0->88.5 ticks=224 wall=368ms err=<nil>
+END character Drilly life 2000/2000 in town: true
+D22-P     P26   PASS     -    measurement: 3 hops, 224 ticks, reached level 55, err=<nil>
+cheat verbs used (each ledgered with a reason): debug goto 40, debug goto 41, debug kill, debug points 54 1, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400, debug warp 33 44
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)

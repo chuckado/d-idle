@@ -1,0 +1,998 @@
+time=2026-11-01T10:27:02.115-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:02.119-05:00 level=DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8 arrival=false stay=false r=9
+time=2026-11-01T10:27:02.206-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:02.215-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=false r=16
+time=2026-11-01T10:27:02.215-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+time=2026-11-01T10:27:02.215-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T10:27:02.228-05:00 level=INFO msg="nav: stuck recovered" at="{X:48 Y:161}" method=reclick rung=1 repeat=false
+time=2026-11-01T10:27:02.231-05:00 level=DEBUG msg="nav mouth check" pos="{X:35 Y:161}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:02.231-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=26 skip=true
+time=2026-11-01T10:27:02.234-05:00 level=DEBUG msg="nav mouth check" pos="{X:32 Y:167}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.234-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=32.1 skip=true
+time=2026-11-01T10:27:02.236-05:00 level=DEBUG msg="nav mouth check" pos="{X:29 Y:165}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.236-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=30.6 skip=true
+time=2026-11-01T10:27:02.238-05:00 level=DEBUG msg="nav mouth check" pos="{X:28 Y:167}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.238-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=32.8 skip=true
+time=2026-11-01T10:27:02.241-05:00 level=DEBUG msg="nav mouth check" pos="{X:27 Y:163}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.241-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=29.1 skip=true
+time=2026-11-01T10:27:02.244-05:00 level=DEBUG msg="nav mouth check" pos="{X:22 Y:164}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.244-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.8 skip=true
+time=2026-11-01T10:27:02.247-05:00 level=DEBUG msg="nav mouth check" pos="{X:19 Y:166}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.247-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=34.9 skip=true
+time=2026-11-01T10:27:02.249-05:00 level=DEBUG msg="nav mouth check" pos="{X:18 Y:168}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.249-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=37.1 skip=true
+time=2026-11-01T10:27:02.253-05:00 level=DEBUG msg="nav mouth check" pos="{X:15 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.253-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=43.8 skip=true
+time=2026-11-01T10:27:02.258-05:00 level=DEBUG msg="nav mouth check" pos="{X:21 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.258-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=41.4 skip=true
+time=2026-11-01T10:27:02.260-05:00 level=DEBUG msg="nav mouth check" pos="{X:24 Y:176}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.260-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=42.4 skip=true
+time=2026-11-01T10:27:02.264-05:00 level=DEBUG msg="nav mouth check" pos="{X:24 Y:181}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.264-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.3 skip=true
+time=2026-11-01T10:27:02.266-05:00 level=DEBUG msg="nav mouth check" pos="{X:26 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.266-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.9 skip=true
+time=2026-11-01T10:27:02.269-05:00 level=DEBUG msg="nav mouth check" pos="{X:24 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.269-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+time=2026-11-01T10:27:02.272-05:00 level=DEBUG msg="nav mouth check" pos="{X:27 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.272-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52.6 skip=true
+time=2026-11-01T10:27:02.275-05:00 level=DEBUG msg="nav mouth check" pos="{X:34 Y:186}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.275-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=51 skip=true
+time=2026-11-01T10:27:02.278-05:00 level=DEBUG msg="nav mouth check" pos="{X:35 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.278-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52 skip=true
+time=2026-11-01T10:27:02.281-05:00 level=DEBUG msg="nav mouth check" pos="{X:39 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.281-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=48.2 skip=true
+time=2026-11-01T10:27:02.283-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.283-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=47.3 skip=true
+time=2026-11-01T10:27:02.286-05:00 level=DEBUG msg="nav mouth check" pos="{X:42 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.286-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=52.5 skip=true
+time=2026-11-01T10:27:02.291-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:195}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.291-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=60.2 skip=true
+time=2026-11-01T10:27:02.294-05:00 level=DEBUG msg="nav mouth check" pos="{X:39 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.294-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.1 skip=true
+time=2026-11-01T10:27:02.301-05:00 level=DEBUG msg="nav mouth check" pos="{X:41 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.301-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.3 skip=true
+time=2026-11-01T10:27:02.305-05:00 level=DEBUG msg="nav mouth check" pos="{X:47 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.305-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.1 skip=true
+time=2026-11-01T10:27:02.311-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.311-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=67.7 skip=true
+time=2026-11-01T10:27:02.357-05:00 level=DEBUG msg="nav mouth check" pos="{X:87 Y:202}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.358-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=84.8 skip=true
+time=2026-11-01T10:27:02.361-05:00 level=DEBUG msg="nav mouth check" pos="{X:90 Y:204}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.361-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=88.2 skip=true
+time=2026-11-01T10:27:02.364-05:00 level=DEBUG msg="nav mouth check" pos="{X:89 Y:209}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.364-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=91.6 skip=true
+time=2026-11-01T10:27:02.392-05:00 level=DEBUG msg="nav mouth check" pos="{X:78 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.392-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=78.8 skip=true
+time=2026-11-01T10:27:02.397-05:00 level=DEBUG msg="nav mouth check" pos="{X:73 Y:197}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.397-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=72.7 skip=true
+time=2026-11-01T10:27:02.399-05:00 level=DEBUG msg="nav mouth check" pos="{X:71 Y:197}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.399-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=71.7 skip=true
+time=2026-11-01T10:27:02.403-05:00 level=DEBUG msg="nav mouth check" pos="{X:69 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.403-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=73.4 skip=true
+time=2026-11-01T10:27:02.409-05:00 level=DEBUG msg="nav mouth check" pos="{X:73 Y:209}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.409-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=83.2 skip=true
+time=2026-11-01T10:27:02.411-05:00 level=DEBUG msg="nav mouth check" pos="{X:74 Y:210}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.411-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=84.5 skip=true
+time=2026-11-01T10:27:02.414-05:00 level=DEBUG msg="nav mouth check" pos="{X:74 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.414-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=89 skip=true
+time=2026-11-01T10:27:02.418-05:00 level=DEBUG msg="nav mouth check" pos="{X:74 Y:219}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.418-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=92.6 skip=true
+time=2026-11-01T10:27:02.420-05:00 level=DEBUG msg="nav mouth check" pos="{X:75 Y:220}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.420-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=93.9 skip=true
+time=2026-11-01T10:27:02.441-05:00 level=DEBUG msg="nav mouth check" pos="{X:69 Y:190}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.441-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=64.7 skip=true
+time=2026-11-01T10:27:02.450-05:00 level=DEBUG msg="nav mouth check" pos="{X:77 Y:190}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.535-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:02.541-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:02.546-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:02.553-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:02.553-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+time=2026-11-01T10:27:02.553-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T10:27:02.569-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:150}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:02.569-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18 skip=true
+time=2026-11-01T10:27:02.570-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.570-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.2 skip=true
+time=2026-11-01T10:27:02.571-05:00 level=DEBUG msg="nav mouth check" pos="{X:44 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.571-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+time=2026-11-01T10:27:02.571-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+time=2026-11-01T10:27:02.585-05:00 level=DEBUG msg="nav mouth check" pos="{X:55 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.585-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.6 skip=true
+time=2026-11-01T10:27:02.586-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.586-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33 skip=true
+time=2026-11-01T10:27:02.615-05:00 level=DEBUG msg="nav mouth check" pos="{X:52 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.615-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=28.6 skip=true
+time=2026-11-01T10:27:02.623-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.623-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18 skip=true
+time=2026-11-01T10:27:02.630-05:00 level=DEBUG msg="nav mouth check" pos="{X:41 Y:160}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.630-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=25.7 skip=true
+time=2026-11-01T10:27:02.637-05:00 level=DEBUG msg="nav mouth check" pos="{X:48 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.637-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.8 skip=true
+time=2026-11-01T10:27:02.639-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.639-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.1 skip=true
+time=2026-11-01T10:27:02.643-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:145}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.643-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=21.5 skip=true
+time=2026-11-01T10:27:02.647-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.647-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=18.7 skip=true
+time=2026-11-01T10:27:02.651-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:133}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.651-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.1 skip=true
+time=2026-11-01T10:27:02.655-05:00 level=DEBUG msg="nav mouth check" pos="{X:61 Y:131}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.655-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=26.3 skip=true
+time=2026-11-01T10:27:02.659-05:00 level=DEBUG msg="nav mouth check" pos="{X:66 Y:131}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.659-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.3 skip=true
+time=2026-11-01T10:27:02.664-05:00 level=DEBUG msg="nav mouth check" pos="{X:66 Y:139}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.664-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=31.3 skip=true
+time=2026-11-01T10:27:02.667-05:00 level=DEBUG msg="nav mouth check" pos="{X:69 Y:141}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.667-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=34.5 skip=true
+time=2026-11-01T10:27:02.671-05:00 level=DEBUG msg="nav mouth check" pos="{X:67 Y:146}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.671-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=33.8 skip=true
+time=2026-11-01T10:27:02.674-05:00 level=DEBUG msg="nav mouth check" pos="{X:68 Y:147}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.674-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=35.1 skip=true
+time=2026-11-01T10:27:02.696-05:00 level=DEBUG msg="nav mouth check" pos="{X:77 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.696-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=44 skip=true
+time=2026-11-01T10:27:02.702-05:00 level=DEBUG msg="nav mouth check" pos="{X:83 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.702-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=49.7 skip=true
+time=2026-11-01T10:27:02.708-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:152}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.708-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=55.7 skip=true
+time=2026-11-01T10:27:02.710-05:00 level=DEBUG msg="nav mouth check" pos="{X:90 Y:152}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.710-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.6 skip=true
+time=2026-11-01T10:27:02.714-05:00 level=DEBUG msg="nav mouth check" pos="{X:91 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.714-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.5 skip=true
+time=2026-11-01T10:27:02.722-05:00 level=DEBUG msg="nav mouth check" pos="{X:89 Y:160}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.722-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=59.5 skip=true
+time=2026-11-01T10:27:02.728-05:00 level=DEBUG msg="nav mouth check" pos="{X:89 Y:166}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.728-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.3 skip=true
+time=2026-11-01T10:27:02.745-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:155}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.745-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=56.6 skip=true
+time=2026-11-01T10:27:02.761-05:00 level=DEBUG msg="nav mouth check" pos="{X:91 Y:163}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.761-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=62.6 skip=true
+time=2026-11-01T10:27:02.774-05:00 level=DEBUG msg="nav mouth check" pos="{X:89 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.774-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=60.4 skip=true
+time=2026-11-01T10:27:02.806-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:162}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.806-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=59.5 skip=true
+time=2026-11-01T10:27:02.837-05:00 level=DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.837-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+time=2026-11-01T10:27:02.840-05:00 level=DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.840-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+time=2026-11-01T10:27:02.847-05:00 level=DEBUG msg="nav mouth check" pos="{X:86 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.847-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=53.2 skip=true
+time=2026-11-01T10:27:02.849-05:00 level=DEBUG msg="nav mouth check" pos="{X:87 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.849-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=54.4 skip=true
+time=2026-11-01T10:27:02.870-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.870-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.8 skip=true
+time=2026-11-01T10:27:02.872-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.872-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=57.8 skip=true
+time=2026-11-01T10:27:02.882-05:00 level=DEBUG msg="nav mouth check" pos="{X:88 Y:173}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.882-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.2 skip=true
+time=2026-11-01T10:27:02.884-05:00 level=DEBUG msg="nav mouth check" pos="{X:90 Y:174}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.884-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=67.4 skip=true
+time=2026-11-01T10:27:02.889-05:00 level=DEBUG msg="nav mouth check" pos="{X:94 Y:177}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.889-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=72.4 skip=true
+time=2026-11-01T10:27:02.892-05:00 level=DEBUG msg="nav mouth check" pos="{X:96 Y:179}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.892-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=75.2 skip=true
+time=2026-11-01T10:27:02.897-05:00 level=DEBUG msg="nav mouth check" pos="{X:97 Y:184}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.897-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=79 skip=true
+time=2026-11-01T10:27:02.903-05:00 level=DEBUG msg="nav mouth check" pos="{X:104 Y:185}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.903-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=85.2 skip=true
+time=2026-11-01T10:27:02.906-05:00 level=DEBUG msg="nav mouth check" pos="{X:107 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.906-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=86.5 skip=true
+time=2026-11-01T10:27:02.910-05:00 level=DEBUG msg="nav mouth check" pos="{X:110 Y:185}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.910-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=90.1 skip=true
+time=2026-11-01T10:27:02.913-05:00 level=DEBUG msg="nav mouth check" pos="{X:110 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.913-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=91.3 skip=true
+time=2026-11-01T10:27:02.919-05:00 level=DEBUG msg="nav mouth check" pos="{X:114 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.919-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=92.4 skip=true
+time=2026-11-01T10:27:02.924-05:00 level=DEBUG msg="nav mouth check" pos="{X:117 Y:182}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.924-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=94.5 skip=true
+time=2026-11-01T10:27:02.932-05:00 level=DEBUG msg="nav mouth check" pos="{X:120 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.932-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=99.6 skip=true
+time=2026-11-01T10:27:02.938-05:00 level=DEBUG msg="nav mouth check" pos="{X:124 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.938-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=101.1 skip=true
+time=2026-11-01T10:27:02.942-05:00 level=DEBUG msg="nav mouth check" pos="{X:127 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.942-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=105.7 skip=true
+time=2026-11-01T10:27:02.947-05:00 level=DEBUG msg="nav mouth check" pos="{X:130 Y:186}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.947-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=107.8 skip=true
+time=2026-11-01T10:27:02.950-05:00 level=DEBUG msg="nav mouth check" pos="{X:131 Y:187}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.950-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=109.2 skip=true
+time=2026-11-01T10:27:02.955-05:00 level=DEBUG msg="nav mouth check" pos="{X:132 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.955-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=108.2 skip=true
+time=2026-11-01T10:27:02.964-05:00 level=DEBUG msg="nav mouth check" pos="{X:125 Y:194}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.964-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=107.6 skip=true
+time=2026-11-01T10:27:02.968-05:00 level=DEBUG msg="nav mouth check" pos="{X:120 Y:196}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.968-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=104.6 skip=true
+time=2026-11-01T10:27:02.972-05:00 level=DEBUG msg="nav mouth check" pos="{X:121 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.972-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=108.4 skip=true
+time=2026-11-01T10:27:02.976-05:00 level=DEBUG msg="nav mouth check" pos="{X:124 Y:204}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.976-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=112.6 skip=true
+time=2026-11-01T10:27:02.979-05:00 level=DEBUG msg="nav mouth check" pos="{X:124 Y:206}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.979-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=113.9 skip=true
+time=2026-11-01T10:27:02.982-05:00 level=DEBUG msg="nav mouth check" pos="{X:120 Y:207}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.982-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=111.4 skip=true
+time=2026-11-01T10:27:02.987-05:00 level=DEBUG msg="nav mouth check" pos="{X:112 Y:208}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:02.987-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=106.1 skip=true
+time=2026-11-01T10:27:02.991-05:00 level=DEBUG msg="nav mouth check" pos="{X:111 Y:208}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.094-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:03.100-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:03.105-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:03.112-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:03.112-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+time=2026-11-01T10:27:03.112-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T10:27:03.130-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:149}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:03.130-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.2 skip=true
+time=2026-11-01T10:27:03.136-05:00 level=DEBUG msg="nav mouth check" pos="{X:44 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.136-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=16.6 skip=true
+time=2026-11-01T10:27:03.137-05:00 level=DEBUG msg="nav mouth check" pos="{X:44 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.137-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+time=2026-11-01T10:27:03.137-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:44 Y:148}" to="{X:55 Y:164}"
+time=2026-11-01T10:27:03.147-05:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:55 Y:162}" hits=2 lastMethod=reclick
+time=2026-11-01T10:27:03.147-05:00 level=INFO msg="nav: blacklisted cell" at="{X:51 Y:161}" radius=5.5 ttlSec=180
+time=2026-11-01T10:27:03.149-05:00 level=INFO msg="nav: stuck recovered" at="{X:55 Y:162}" method=spiral rung=1 repeat=true
+time=2026-11-01T10:27:03.157-05:00 level=DEBUG msg="nav mouth check" pos="{X:44 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.157-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.5 skip=true
+time=2026-11-01T10:27:03.163-05:00 level=DEBUG msg="nav mouth check" pos="{X:41 Y:158}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.163-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=23.8 skip=true
+time=2026-11-01T10:27:03.177-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:150}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.177-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=15.8 skip=false
+time=2026-11-01T10:27:03.177-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:150}" to="{X:47 Y:169}"
+time=2026-11-01T10:27:03.232-05:00 level=DEBUG msg="nav mouth check" pos="{X:41 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.232-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.1 skip=true
+time=2026-11-01T10:27:03.247-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:149}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.247-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=14.1 skip=false
+time=2026-11-01T10:27:03.247-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:149}" to="{X:40 Y:169}"
+time=2026-11-01T10:27:03.262-05:00 level=INFO msg="nav: stuck recovered" at="{X:39 Y:168}" method=reclick rung=1 repeat=false
+time=2026-11-01T10:27:03.266-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:151}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.267-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=16.1 skip=true
+time=2026-11-01T10:27:03.272-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:148}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.272-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=13.2 skip=false
+time=2026-11-01T10:27:03.272-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:148}" to="{X:40 Y:168}"
+time=2026-11-01T10:27:03.285-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:148}"
+time=2026-11-01T10:27:03.286-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:146}"
+time=2026-11-01T10:27:03.286-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:145}"
+time=2026-11-01T10:27:03.287-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:143}"
+time=2026-11-01T10:27:03.288-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:142}"
+time=2026-11-01T10:27:03.289-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:141}"
+time=2026-11-01T10:27:03.290-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:140}"
+time=2026-11-01T10:27:03.291-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:144}"
+time=2026-11-01T10:27:03.291-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:143}"
+time=2026-11-01T10:27:03.292-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:142}"
+time=2026-11-01T10:27:03.293-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T10:27:03.303-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.303-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:03.303-05:00 level=INFO msg="nav: step-away replan heads to the mouth, new goal" pos="{X:36 Y:138}" wp="{X:37 Y:140}" old="{X:40 Y:168}" new="{X:42 Y:157}" dist=3.2
+time=2026-11-01T10:27:03.304-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.304-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:03.304-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:138}" to="{X:37 Y:140}" as="{X:42 Y:157}" how=away rewrites=1
+time=2026-11-01T10:27:03.306-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.308-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:37 Y:140}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.310-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.310-05:00 level=DEBUG msg="combat move held by the mouth gate, backing off" at="{X:36 Y:140}" to="{X:37 Y:150}" holds=1 skipped=0 backoff=3s long=30s err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.310-05:00 level=INFO msg="combat move failed" to="{X:37 Y:150}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.312-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.312-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.312-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.313-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.313-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.313-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.315-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.317-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.319-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.319-05:00 level=INFO msg="roam leg failed" to="{X:52 Y:171}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.320-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.320-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.320-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.320-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.320-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.321-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.323-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.324-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.326-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.326-05:00 level=INFO msg="roam leg failed" to="{X:38 Y:171}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.328-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.328-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.328-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.328-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.328-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.328-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.330-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.332-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.333-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.333-05:00 level=INFO msg="roam leg failed" to="{X:46 Y:171}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.335-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.335-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.335-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.335-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.335-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.335-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.337-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.340-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.341-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.341-05:00 level=INFO msg="roam leg failed" to="{X:52 Y:176}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.343-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.343-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.343-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.343-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.343-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.343-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.345-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.348-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.350-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.350-05:00 level=INFO msg="roam leg failed" to="{X:80 Y:178}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.351-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.351-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.351-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.351-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.351-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.351-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.353-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.355-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.357-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.357-05:00 level=INFO msg="roam leg failed" to="{X:76 Y:181}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.358-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.358-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.358-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.359-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.359-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.359-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.361-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.362-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.364-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.364-05:00 level=INFO msg="roam leg failed" to="{X:108 Y:199}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.365-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.365-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.365-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.366-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.366-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.366-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.368-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.370-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.372-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.372-05:00 level=INFO msg="roam leg failed" to="{X:88 Y:220}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.373-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.373-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.373-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.374-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.374-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.374-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.376-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.378-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.380-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.380-05:00 level=INFO msg="roam leg failed" to="{X:94 Y:220}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.381-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.381-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.381-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:140}" to="{X:40 Y:160}"
+time=2026-11-01T10:27:03.381-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.381-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.1 skip=false
+time=2026-11-01T10:27:03.381-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=1
+time=2026-11-01T10:27:03.383-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=2
+time=2026-11-01T10:27:03.385-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:140}" to="{X:38 Y:141}" as="{X:40 Y:160}" how=away rewrites=3
+time=2026-11-01T10:27:03.387-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:140}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:03.387-05:00 level=INFO msg="roam leg failed" to="{X:88 Y:224}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:03.389-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:140}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.402-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:03.408-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:03.415-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:03.468-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:144}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:03.468-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=10.3 skip=false
+time=2026-11-01T10:27:03.468-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:144}" to="{X:50 Y:161}"
+time=2026-11-01T10:27:03.477-05:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:49 Y:159}" hits=3 lastMethod=spiral
+time=2026-11-01T10:27:03.477-05:00 level=INFO msg="nav: blacklisted cell" at="{X:47 Y:157}" radius=7 ttlSec=180
+time=2026-11-01T10:27:03.479-05:00 level=INFO msg="nav: stuck recovered" at="{X:49 Y:159}" method=spiral rung=1 repeat=true
+time=2026-11-01T10:27:03.559-05:00 level=DEBUG msg="nav mouth check" pos="{X:111 Y:188}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:03.559-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=92.7 skip=true
+time=2026-11-01T10:27:03.782-05:00 level=INFO msg="nav: stuck recovered" at="{X:102 Y:182}" method=sidestep rung=2 repeat=false
+time=2026-11-01T10:27:03.817-05:00 level=DEBUG msg="nav mouth check" pos="{X:96 Y:178}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.817-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=74.6 skip=true
+time=2026-11-01T10:27:03.842-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.842-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.854-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.854-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.865-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.865-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.877-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.877-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.889-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.889-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.904-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.904-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.915-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.915-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.927-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.927-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.939-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.939-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.957-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.957-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.970-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.970-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.982-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.982-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:03.994-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:03.994-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.005-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.005-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.017-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.017-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.029-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.029-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.040-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.040-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.051-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.051-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.065-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.065-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.076-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.076-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.087-05:00 level=DEBUG msg="nav mouth check" pos="{X:101 Y:183}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.087-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=81.6 skip=true
+time=2026-11-01T10:27:04.278-05:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:102 Y:183}" hits=2 lastMethod=sidestep
+time=2026-11-01T10:27:04.278-05:00 level=INFO msg="nav: blacklisted cell" at="{X:106 Y:183}" radius=5.5 ttlSec=180
+time=2026-11-01T10:27:04.295-05:00 level=WARN msg="nav: stalled in a pocket, escaping by town portal" level=8 pos="{X:102 Y:183}" rung=3
+time=2026-11-01T10:27:04.317-05:00 level=INFO msg="combat move failed" to="{X:107 Y:177}" err="nav: the level changed during the walk: escaped from level 8 to 1 after a stall in a pocket"
+time=2026-11-01T10:27:04.322-05:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:04.322-05:00 level=INFO msg="combat move failed" to="{X:107 Y:177}" err="nav: the level changed during the walk: 8 -> 1"
+time=2026-11-01T10:27:04.338-05:00 level=INFO msg="combat move failed" to="{X:108 Y:179}" err="nav: the level changed during the walk: 8 -> 1"
+time=2026-11-01T10:27:04.345-05:00 level=INFO msg="combat move failed" to="{X:107 Y:177}" err="nav: the level changed during the walk: 8 -> 1"
+time=2026-11-01T10:27:04.357-05:00 level=DEBUG msg="nav mouth check" pos="{X:83 Y:131}" level=1 exits=0 wantExit=2 arrival=true stay=false r=16
+time=2026-11-01T10:27:04.461-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:04.465-05:00 level=DEBUG msg="nav mouth check" pos="{X:140 Y:240}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:04.532-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:04.540-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:04.540-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+time=2026-11-01T10:27:04.540-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:49 Y:163}"
+time=2026-11-01T10:27:04.550-05:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:48 Y:161}" hits=4 lastMethod=spiral
+time=2026-11-01T10:27:04.550-05:00 level=INFO msg="nav: blacklisted cell" at="{X:48 Y:165}" radius=7 ttlSec=180
+time=2026-11-01T10:27:04.555-05:00 level=INFO msg="nav: stuck recovered" at="{X:48 Y:161}" method=reclick rung=1 repeat=true
+time=2026-11-01T10:27:04.606-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:202}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:04.606-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=68.4 skip=true
+time=2026-11-01T10:27:04.617-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.617-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.5 skip=true
+time=2026-11-01T10:27:04.618-05:00 level=DEBUG msg="nav mouth check" pos="{X:52 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.618-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.3 skip=true
+time=2026-11-01T10:27:04.621-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.621-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.8 skip=true
+time=2026-11-01T10:27:04.622-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.622-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.5 skip=true
+time=2026-11-01T10:27:04.623-05:00 level=DEBUG msg="nav mouth check" pos="{X:52 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.623-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.3 skip=true
+time=2026-11-01T10:27:04.626-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.626-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.8 skip=true
+time=2026-11-01T10:27:04.629-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.629-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.8 skip=true
+time=2026-11-01T10:27:04.630-05:00 level=DEBUG msg="nav mouth check" pos="{X:53 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.630-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.5 skip=true
+time=2026-11-01T10:27:04.631-05:00 level=DEBUG msg="nav mouth check" pos="{X:52 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.631-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.3 skip=true
+time=2026-11-01T10:27:04.634-05:00 level=DEBUG msg="nav mouth check" pos="{X:54 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.634-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=65.8 skip=true
+time=2026-11-01T10:27:04.637-05:00 level=DEBUG msg="nav mouth check" pos="{X:55 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.637-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=66.1 skip=true
+time=2026-11-01T10:27:04.652-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:195}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.652-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=60.8 skip=true
+time=2026-11-01T10:27:04.704-05:00 level=DEBUG msg="nav mouth check" pos="{X:55 Y:200}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.704-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=68 skip=true
+time=2026-11-01T10:27:04.763-05:00 level=DEBUG msg="nav mouth check" pos="{X:132 Y:198}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.763-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=115.7 skip=true
+time=2026-11-01T10:27:04.766-05:00 level=DEBUG msg="nav mouth check" pos="{X:134 Y:201}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.766-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=119 skip=true
+time=2026-11-01T10:27:04.770-05:00 level=DEBUG msg="nav mouth check" pos="{X:138 Y:204}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.770-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=124 skip=true
+time=2026-11-01T10:27:04.774-05:00 level=DEBUG msg="nav mouth check" pos="{X:137 Y:209}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.774-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=126 skip=true
+time=2026-11-01T10:27:04.777-05:00 level=DEBUG msg="nav mouth check" pos="{X:138 Y:210}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.777-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=127.4 skip=true
+time=2026-11-01T10:27:04.781-05:00 level=DEBUG msg="nav mouth check" pos="{X:137 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.781-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=129.6 skip=true
+time=2026-11-01T10:27:04.785-05:00 level=DEBUG msg="nav mouth check" pos="{X:138 Y:219}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.785-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=132.9 skip=true
+time=2026-11-01T10:27:04.787-05:00 level=DEBUG msg="nav mouth check" pos="{X:137 Y:220}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.787-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=132.8 skip=true
+time=2026-11-01T10:27:04.789-05:00 level=DEBUG msg="nav mouth check" pos="{X:138 Y:221}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.789-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=134.2 skip=true
+time=2026-11-01T10:27:04.793-05:00 level=DEBUG msg="nav mouth check" pos="{X:145 Y:220}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.793-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=139 skip=true
+time=2026-11-01T10:27:04.796-05:00 level=DEBUG msg="nav mouth check" pos="{X:147 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.796-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=139.4 skip=true
+time=2026-11-01T10:27:04.800-05:00 level=DEBUG msg="nav mouth check" pos="{X:149 Y:223}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.800-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=144 skip=true
+time=2026-11-01T10:27:04.803-05:00 level=DEBUG msg="nav mouth check" pos="{X:152 Y:221}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.803-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=145.2 skip=true
+time=2026-11-01T10:27:04.805-05:00 level=DEBUG msg="nav mouth check" pos="{X:153 Y:222}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.805-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=146.6 skip=true
+time=2026-11-01T10:27:04.808-05:00 level=DEBUG msg="nav mouth check" pos="{X:156 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.808-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=146.7 skip=true
+time=2026-11-01T10:27:04.813-05:00 level=DEBUG msg="nav mouth check" pos="{X:157 Y:218}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.944-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:04.950-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:04.955-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:04.963-05:00 level=DEBUG msg="nav mouth check" pos="{X:40 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:04.963-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=11.2 skip=false
+time=2026-11-01T10:27:04.963-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:40 Y:145}" to="{X:54 Y:161}"
+time=2026-11-01T10:27:04.991-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:145}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:04.991-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=17.2 skip=true
+time=2026-11-01T10:27:04.992-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:144}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:04.992-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=16.6 skip=true
+time=2026-11-01T10:27:05.001-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:49 Y:140}"
+time=2026-11-01T10:27:05.002-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:46 Y:139}"
+time=2026-11-01T10:27:05.005-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:45 Y:138}" to="{X:48 Y:140}"
+time=2026-11-01T10:27:05.016-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:138}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.016-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=10.4 skip=false
+time=2026-11-01T10:27:05.016-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:45 Y:138}" to="{X:64 Y:144}"
+time=2026-11-01T10:27:05.100-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:43 Y:142}" to="{X:43 Y:147}" as="{X:39 Y:162}" how=away rewrites=1
+time=2026-11-01T10:27:05.109-05:00 level=DEBUG msg="nav mouth check" pos="{X:52 Y:145}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.109-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=19.7 skip=true
+time=2026-11-01T10:27:05.197-05:00 level=DEBUG msg="nav mouth check" pos="{X:124 Y:195}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.197-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=107.3 skip=true
+time=2026-11-01T10:27:05.249-05:00 level=DEBUG msg="nav mouth check" pos="{X:112 Y:196}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.249-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=98.2 skip=true
+time=2026-11-01T10:27:05.263-05:00 level=DEBUG msg="nav mouth check" pos="{X:139 Y:194}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.263-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=119.6 skip=true
+time=2026-11-01T10:27:05.282-05:00 level=DEBUG msg="nav mouth check" pos="{X:159 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.282-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=149.2 skip=true
+time=2026-11-01T10:27:05.296-05:00 level=DEBUG msg="nav mouth check" pos="{X:167 Y:220}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.296-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=157 skip=true
+time=2026-11-01T10:27:05.298-05:00 level=DEBUG msg="nav mouth check" pos="{X:168 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.298-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=156.8 skip=true
+time=2026-11-01T10:27:05.302-05:00 level=DEBUG msg="nav mouth check" pos="{X:170 Y:223}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.302-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=161.1 skip=true
+time=2026-11-01T10:27:05.306-05:00 level=DEBUG msg="nav mouth check" pos="{X:173 Y:221}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.306-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=162.6 skip=true
+time=2026-11-01T10:27:05.308-05:00 level=DEBUG msg="nav mouth check" pos="{X:174 Y:223}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.308-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=164.5 skip=true
+time=2026-11-01T10:27:05.313-05:00 level=DEBUG msg="nav mouth check" pos="{X:177 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.313-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=164.5 skip=true
+time=2026-11-01T10:27:05.317-05:00 level=DEBUG msg="nav mouth check" pos="{X:181 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.317-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=166.5 skip=true
+time=2026-11-01T10:27:05.322-05:00 level=DEBUG msg="nav mouth check" pos="{X:187 Y:214}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.322-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=171.3 skip=true
+time=2026-11-01T10:27:05.325-05:00 level=DEBUG msg="nav mouth check" pos="{X:188 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.325-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=172.7 skip=true
+time=2026-11-01T10:27:05.329-05:00 level=DEBUG msg="nav mouth check" pos="{X:195 Y:213}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.329-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=178 skip=true
+time=2026-11-01T10:27:05.334-05:00 level=DEBUG msg="nav mouth check" pos="{X:198 Y:210}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.334-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=179.4 skip=true
+time=2026-11-01T10:27:05.337-05:00 level=DEBUG msg="nav mouth check" pos="{X:201 Y:212}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.337-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=183 skip=true
+time=2026-11-01T10:27:05.341-05:00 level=DEBUG msg="nav mouth check" pos="{X:200 Y:215}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.341-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=183.4 skip=true
+time=2026-11-01T10:27:05.344-05:00 level=DEBUG msg="nav mouth check" pos="{X:201 Y:216}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.344-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=184.7 skip=true
+time=2026-11-01T10:27:05.349-05:00 level=DEBUG msg="nav mouth check" pos="{X:200 Y:223}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.349-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=187 skip=true
+time=2026-11-01T10:27:05.351-05:00 level=DEBUG msg="nav mouth check" pos="{X:202 Y:224}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.351-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=189.2 skip=true
+time=2026-11-01T10:27:05.357-05:00 level=DEBUG msg="nav mouth check" pos="{X:208 Y:218}" level=8 exits=1 wantExit=0 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.357-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=191.9 skip=true
+time=2026-11-01T10:27:05.363-05:00 level=DEBUG msg="nav mouth check" pos="{X:209 Y:219}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.510-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:200}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.524-05:00 level=DEBUG msg="nav mouth check" pos="{X:51 Y:198}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.525-05:00 level=DEBUG msg="nav mouth check" pos="{X:50 Y:198}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.527-05:00 level=DEBUG msg="nav mouth check" pos="{X:49 Y:198}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.534-05:00 level=DEBUG msg="nav mouth check" pos="{X:47 Y:198}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.535-05:00 level=DEBUG msg="nav mouth check" pos="{X:46 Y:197}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.542-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:196}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.545-05:00 level=DEBUG msg="nav mouth check" pos="{X:46 Y:197}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.547-05:00 level=DEBUG msg="nav mouth check" pos="{X:45 Y:196}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.555-05:00 level=DEBUG msg="nav mouth check" pos="{X:46 Y:198}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.561-05:00 level=DEBUG msg="nav mouth check" pos="{X:42 Y:191}" level=8 exits=1 wantExit=2 arrival=false stay=true r=16
+time=2026-11-01T10:27:05.608-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:05.614-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:05.622-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:05.630-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:40 Y:144}" to="{X:41 Y:147}"
+time=2026-11-01T10:27:05.632-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:39 Y:143}" to="{X:41 Y:147}"
+time=2026-11-01T10:27:05.633-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:39 Y:141}" to="{X:41 Y:147}"
+time=2026-11-01T10:27:05.635-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:39 Y:142}"
+time=2026-11-01T10:27:05.637-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:37 Y:141}"
+time=2026-11-01T10:27:05.638-05:00 level=INFO msg="combat move skipped: the point is in a cave mouth" to="{X:36 Y:140}"
+time=2026-11-01T10:27:05.640-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:39 Y:143}"
+time=2026-11-01T10:27:05.642-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:39 Y:142}"
+time=2026-11-01T10:27:05.643-05:00 level=INFO msg="combat swing held: the click would walk into a cave mouth" from="{X:36 Y:138}" to="{X:37 Y:141}"
+time=2026-11-01T10:27:05.686-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.686-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:05.686-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:138}" to="{X:42 Y:157}"
+time=2026-11-01T10:27:05.686-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.686-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:05.686-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:138}" to="{X:37 Y:140}" as="{X:42 Y:157}" how=away rewrites=1
+time=2026-11-01T10:27:05.687-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:148}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.690-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:148}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.692-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:42 Y:148}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.692-05:00 level=INFO msg="roam leg failed" to="{X:150 Y:234}" err="nav: click {42 148}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.693-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.693-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.693-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.694-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.694-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.694-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.696-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.698-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.701-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.701-05:00 level=INFO msg="roam leg failed" to="{X:157 Y:234}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.702-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.702-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.702-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.703-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.703-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.703-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:141}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.706-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:141}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.708-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:141}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.711-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:38 Y:141}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.711-05:00 level=INFO msg="roam leg failed" to="{X:171 Y:234}" err="nav: click {38 141}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.712-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.712-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.712-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.712-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.712-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.712-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.715-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.717-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.720-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.720-05:00 level=INFO msg="roam leg failed" to="{X:175 Y:234}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.721-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.721-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.721-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.721-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.721-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.722-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.724-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.726-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.729-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.729-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:206}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.730-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.730-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.730-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.730-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.730-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.730-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.733-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.735-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.738-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.738-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:199}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.739-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.739-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.739-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.739-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.739-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.739-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.741-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.743-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.745-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.745-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:199}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.746-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.746-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.746-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.747-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.747-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.747-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.749-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.751-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.753-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.753-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:206}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.754-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.754-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.754-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.755-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.755-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.755-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.757-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.760-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.762-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.762-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:225}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.764-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.764-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.764-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.765-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.765-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.765-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.767-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.769-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.773-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:42 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.773-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:199}" err="nav: click {42 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.839-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.839-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:05.839-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:138}" to="{X:42 Y:157}"
+time=2026-11-01T10:27:05.839-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:138}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.839-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=3.2 skip=false
+time=2026-11-01T10:27:05.839-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:138}" to="{X:38 Y:145}" as="{X:42 Y:157}" how=away rewrites=1
+time=2026-11-01T10:27:05.842-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.842-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.842-05:00 level=INFO msg="nav: step-away replan heads to the mouth, new goal" pos="{X:36 Y:139}" wp="{X:38 Y:142}" old="{X:42 Y:157}" new="{X:41 Y:158}" dist=4.1
+time=2026-11-01T10:27:05.843-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:142}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.845-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:142}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.847-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:38 Y:142}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.847-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:193}" err="nav: click {38 142}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.848-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.848-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.848-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.849-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.849-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.849-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.851-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.853-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.856-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.856-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:193}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.857-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.857-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.857-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.857-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.857-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.857-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.860-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.862-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.864-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.864-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:192}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.865-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.865-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.865-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.866-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.866-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.866-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:142}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.868-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:142}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.870-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:38 Y:142}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.872-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:38 Y:142}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.872-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:206}" err="nav: click {38 142}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.873-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.873-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.873-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.874-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.874-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.874-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.876-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.878-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:42 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.881-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:42 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.881-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:213}" err="nav: click {42 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.882-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.882-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.882-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.883-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.883-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.883-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.885-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.887-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.889-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.889-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:199}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.891-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.891-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.891-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.891-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.891-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.891-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.893-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.895-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.898-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.898-05:00 level=INFO msg="roam leg failed" to="{X:221 Y:192}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.899-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.899-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.899-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.899-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.899-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.899-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.902-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.904-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:37 Y:140}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.906-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:37 Y:140}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.906-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:185}" err="nav: click {37 140}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.908-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.908-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.908-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.908-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.908-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.908-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:147}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.910-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:147}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.913-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:147}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.915-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:147}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.915-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:184}" err="nav: click {41 147}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.916-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.916-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.916-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:36 Y:139}" to="{X:41 Y:158}"
+time=2026-11-01T10:27:05.917-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.917-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=4.1 skip=false
+time=2026-11-01T10:27:05.917-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=1
+time=2026-11-01T10:27:05.919-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=2
+time=2026-11-01T10:27:05.921-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:36 Y:139}" to="{X:41 Y:145}" as="{X:50 Y:153}" how=away rewrites=3
+time=2026-11-01T10:27:05.924-05:00 level=INFO msg="nav mouth gate: click held" from="{X:36 Y:139}" to="{X:41 Y:145}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:05.924-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:199}" err="nav: click {41 145}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:05.926-05:00 level=DEBUG msg="nav mouth check" pos="{X:36 Y:139}" level=8 exits=1 wantExit=2 arrival=true stay=true r=16
+time=2026-11-01T10:27:05.945-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:05.951-05:00 level=DEBUG msg="nav mouth check" pos="{X:105 Y:145}" level=2 exits=1 wantExit=8 arrival=true stay=false r=16
+time=2026-11-01T10:27:05.959-05:00 level=INFO msg="d2dworld: arrived in level 8: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T10:27:06.020-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.020-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.020-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.021-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.021-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.021-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.022-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.024-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.026-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.026-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:206}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.028-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.028-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.028-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.029-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.029-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.029-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.031-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.033-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.035-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.035-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:213}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.036-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.036-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.036-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.037-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.037-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.037-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.039-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.041-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.043-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.043-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:192}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.045-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.045-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.045-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.045-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.045-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.045-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.048-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.050-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.052-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.052-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:178}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.054-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.054-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.054-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.054-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.054-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.054-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.057-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.059-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.061-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.061-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:178}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.062-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.062-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.062-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.063-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.063-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.063-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.065-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.067-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.069-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.069-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:185}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.070-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.070-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.070-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.071-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.071-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.071-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.073-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.075-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.077-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.077-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:178}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.078-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.078-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.078-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.079-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.079-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.079-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.081-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.083-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.086-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.086-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:184}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.087-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.087-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.087-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.088-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.088-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.088-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.090-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.092-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.093-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.093-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:184}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.095-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.095-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.095-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.095-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.095-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.095-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.097-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.099-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.102-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.102-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:171}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.154-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.154-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.154-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.155-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.155-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.155-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.157-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.160-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.162-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.162-05:00 level=INFO msg="roam leg failed" to="{X:206 Y:171}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.163-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.163-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.163-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.163-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.163-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.164-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.166-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.168-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.170-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.170-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:171}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.171-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.171-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.171-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.172-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.172-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.172-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.174-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.176-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.178-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.178-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:178}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.180-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.180-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.180-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.180-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.180-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.180-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.182-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.184-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.186-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.186-05:00 level=INFO msg="roam leg failed" to="{X:227 Y:178}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.188-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.188-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.188-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.188-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.188-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.189-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.191-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.193-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.195-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.195-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:171}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.196-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.196-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.196-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.196-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.196-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.197-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.199-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.201-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.203-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.203-05:00 level=INFO msg="roam leg failed" to="{X:192 Y:170}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.204-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.204-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.204-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.204-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.204-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.204-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.207-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.209-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.211-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.211-05:00 level=INFO msg="roam leg failed" to="{X:192 Y:164}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.212-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.212-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.212-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.212-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.212-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.212-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.214-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.216-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.219-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.219-05:00 level=INFO msg="roam leg failed" to="{X:199 Y:164}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.220-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.220-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.220-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.221-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.221-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.221-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.223-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.225-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.227-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.227-05:00 level=INFO msg="roam leg failed" to="{X:213 Y:164}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.228-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.228-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.228-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:37 Y:140}" to="{X:44 Y:159}"
+time=2026-11-01T10:27:06.228-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=0 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.228-05:00 level=DEBUG msg="nav mouth exit" dest=2 exit="{X:35 Y:135}" dist=5.4 skip=false
+time=2026-11-01T10:27:06.228-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=1
+time=2026-11-01T10:27:06.230-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=2
+time=2026-11-01T10:27:06.232-05:00 level=INFO msg="nav mouth gate: click rewritten" from="{X:37 Y:140}" to="{X:43 Y:146}" as="{X:53 Y:152}" how=away rewrites=3
+time=2026-11-01T10:27:06.234-05:00 level=INFO msg="nav mouth gate: click held" from="{X:37 Y:140}" to="{X:43 Y:146}" why="rewrite cap" cap=3
+time=2026-11-01T10:27:06.234-05:00 level=INFO msg="roam leg failed" to="{X:220 Y:164}" err="nav: click {43 146}: nav: no path: the click would cross the trigger area of an unwanted exit"
+time=2026-11-01T10:27:06.237-05:00 level=DEBUG msg="nav mouth check" pos="{X:37 Y:140}" level=8 exits=1 wantExit=2 arrival=true stay=true r=16
+time=2026-11-01T10:27:06.253-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+DRILL DW.m3 P23 FAIL 1 bounce(s) out of the cave, first in explore | intended: after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired) | observed: run1: 4 entries, 1 bounces (first in "explore"); trace: c0 enter: area 8 ok | c0 idle: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c1 enter: area 8 ok | c1 idle: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c2 enter: area 8 ok | c2 idle: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c3 enter: area 8 ok | c3 idle: area 8 ok | c3 clear: area 8 ok | c3 explore: area 8 ok | c3 clear: area 8 ok | c3 explore: area 1 error: nav: the level changed during the walk: 8 -> 1; callers at the bounce: --- cycle 3 phase explore: / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={96 178} level=8 exits=1 wantExit=0 arrival=false stay=true r=16 / nav mouth exit dest=2 exit={35 135} dist=74.6 skip=true / nav plan from={96 178} to={136 199} wps=9 partial=false cells=40 / nav click pos={96 178} wp={100 182} cur=1 of=9 / nav click pos={100 182} wp={107 184} cur=3 of=9 / nav plan from={101 182} to={136 199} wps=7 partial=false cells=34 / nav click pos={101 182} wp={102 183} cur=0 of=7 / nav click pos={102 183} wp={106 184} cur=1 of=7 / nav click pos={102 183} wp={106 184} cur=1 of=7 / nav click pos={102 183} wp={106 184} cur=1 of=7 / nav stuck pos={102 183} wp={106 184} rung=0 / nav stalled by monsters, yielding pos={102 183} near=6 / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=cast skill=Attack target=Fallen Shaman dist=4 hostiles=28 / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=cast skill=Attack target=Fallen Shaman dist=3 hostiles=28 / combat no bound attack skill, swinging the basic attack known=1 keys=0 / combat decision act=wait why=cast gap / combat decision act=dodge why=missile on top of us / combat dodging to={107 177} / nav walk callers=d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage / nav mouth check pos={101 183} level=8 exits=1 wantExit=0 arrival=false stay=true r=16; run2 (PASS): 4 entries, 0 bounces (first in ""); trace: c0 enter: area 8 ok | c0 idle: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c0 clear: area 8 ok | c0 explore: area 8 ok | c1 enter: area 8 ok | c1 idle: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c1 clear: area 8 ok | c1 explore: area 8 ok | c2 enter: area 8 ok | c2 idle: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c2 clear: area 8 ok | c2 explore: area 8 ok | c3 enter: area 8 ok | c3 idle: area 8 ok | c3 clear: area 8 ok | c3 explore: area 8 ok | c3 clear: area 8 ok | c3 explore: area 8 ok; callers at the bounce:  | runs: 2, DIFFER
+END character Drilly life 1786/2000 in town: false
