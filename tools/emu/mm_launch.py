@@ -92,6 +92,9 @@ def main():
                 for p in ("mon", "nmon", "umon"):
                     if l.get(f"{p}{k}", "") in mons: ids.add(l[f"{p}{k}"])
     ids |= {b for b in ("andariel", "bloodraven", "radament", "summoner") if b in mons}
+    # the brief's other shooters (not in Act 1 / 2 spawn lists): the Fetish blowdart family, Corpse Spitters, Maggot Queens
+    ids |= {b for b in ("fetishblow1", "fetishblow2", "fetishblow3", "fetishblow4", "regurgitator1", "regurgitator2", "regurgitator3",
+                        "maggotqueen1", "maggotqueen2", "maggotqueen3") if b in mons}
     todo = []
     for mid in sorted(ids, key=lambda i: int(mons[i]["hcIdx"])):
         m = mons[mid]
@@ -105,6 +108,7 @@ def main():
     total = 0
     kinds, diffs = {}, []
     ecases, ediffs = [0, 0, 0], []
+    unblock, tohit_rows = {}, set()
     for diff in (0, 1, 2):
         g = G(diff)
         e = g.e
@@ -122,7 +126,7 @@ def main():
             def pct(v): return v if num(m.get("noRatio", "")) else dm * v // 100      # monsters.hpp pct(): base * percent / 100
             tmin = pct(num(m[f"{sc}MinD{sfx}"])); tmax = max(pct(num(m[f"{sc}MaxD{sfx}"])), tmin)
             p = e.alloc(0x60)
-            for i, v in {0: 0x21, 1: u, 4: int(r["Id"]), 5: x, 6: y, 7: x + 8, 8: y + 3, 0xc: 1}.items(): e.w32(p + 4 * i, v)
+            for i, v in {0: 0x21, 1: u, 4: int(r["Id"]), 5: x, 6: y, 7: x + 8, 8: y + 3, 0xc: (0, 3, 7)[diff] + 1}.items(): e.w32(p + 4 * i, v)
             mu = e.call(0x59fa30, ecx=g.g, edx=p)
             if not mu:
                 print(f"no missile {mid} {mn}"); continue
@@ -156,11 +160,13 @@ def main():
                     ecases[1] += 1
                     ediffs.append(f"  element differs: diff {diff} {mid} {src} {mn}: game {have}{' (+ row element ' + r['EType'] + ' ' + r['EMin'] + '-' + r['Emax'] + ' x ' + r['ELen'] + ')' if row_el else ''}, d2d MissA path {want}")
             total += 1
+            unblock.setdefault(mn, set()).add(gmax == 0)
+            if r["ToHit"]: tohit_rows.add(mn)
             if (gmin, gmax) != (rmin, rmax): bad["game_vs_read"] += 1
             if (omin, omax) != (tmin, tmax): bad["owner_vs_table"] += 1
             if (gmin, gmax) != (dmin << 8, dmax << 8):
                 bad["d2d_vs_game"] += 1
-                cause = ("min<<hitshift" if sh != 8 and (num(r["MinDamage"]) or num(r["MaxDamage"])) else "") or ("src fraction" if S else "other")
+                cause = ("level bracket" if any(num(r[c]) for c in ("MinLevDam1", "MaxLevDam1")) and diff > 0 else "") or ("min<<hitshift" if sh != 8 and (num(r["MinDamage"]) or num(r["MaxDamage"])) else "") or ("src fraction" if S else "other")
                 kinds[cause] = kinds.get(cause, 0) + 1
                 diffs.append(f"  d2d differs ({cause}): diff {diff} {mid} {src} {mn} S={S} shift={sh} row min/max {r['MinDamage']}/{r['MaxDamage']}: owner {omin}-{omax}, game {gmin}-{gmax} (256ths), d2d {dmin}-{dmax} points")
             print("\t".join(str(v) for v in (diff, mid, mode, src, mn, "own", omin, omax, "pred(lvl %d)" % mlvl, tmin, tmax, "game256", gmin, gmax, "read256", rmin, rmax,
@@ -168,6 +174,10 @@ def main():
     print(f"cases {total}: game vs reading differ {bad['game_vs_read']}; owner stat vs MonLvl x pct / 100 differ {bad['owner_vs_table']}; "
           f"d2d port (whole points << 8) vs game 256ths differ {bad['d2d_vs_game']} {kinds}")
     print(f"elements on the MissA path (d2d carries the monster's own El rows only): {ecases[0]} cases, {ecases[1]} differ; {ecases[2]} cases skipped (El Pct 1..99: a chance per hit, one launch cannot tell)")
+    print("rows with a physical part (game record max > 0: blockable): " + " ".join(sorted(k for k, v in unblock.items() if v == {False})))
+    print("rows with NO physical part (cannot be blocked): " + " ".join(sorted(k for k, v in unblock.items() if v == {True})))
+    print("rows mixed over launches (weapon / chance): " + " ".join(sorted(k for k, v in unblock.items() if len(v) == 2)))
+    print("rows whose ToHit is set (the AR roll runs): " + " ".join(sorted(tohit_rows)))
     print("\n".join(diffs + ediffs))
 
 
