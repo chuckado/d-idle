@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixstatic
-status: in-progress
+status: archived
 agent: fixstatic
 branch: agent/fixstatic
 worktree: ~/code/d2lod-wt/fixstatic
@@ -23,8 +23,8 @@ owns:
 exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
-result: offline only, not verified live
+merge: ba5e848
+result: not verified live (offline only); the Andariel 1-point-vs-0 drill stays an open idea in docs/fixstatic.md
 ```
 
 ## 1. Work
