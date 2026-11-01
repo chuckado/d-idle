@@ -68,3 +68,10 @@ internal/combat/fight.go  fixemptyplan  fixemptyplan
 internal/combat/reach.go  fixemptyplan  fixemptyplan
 internal/combat/fixemptyplan_test.go  fixemptyplan  fixemptyplan
 docs/fixemptyplan.md  fixemptyplan  fixemptyplan
+internal/combat/necro.go  fixrecast  fixrecast
+internal/combat/buffrecast_test.go  fixrecast  fixrecast
+internal/data/skills.go  fixrecast  fixrecast
+internal/data/data_test.go  fixrecast  fixrecast
+internal/env/tuning_combat.go  fixrecast  fixrecast
+docs/knobs.md  fixrecast  fixrecast
+docs/fixrecast.md  fixrecast  fixrecast

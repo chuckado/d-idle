@@ -61,7 +61,8 @@ type CombatTuning struct {
 	IgnoreMemorySec int // an ignored target is left alone this long (doubles with each repeat, up to 4x)
 
 	// Buffs.
-	BuffRecastSec int // recast armors/shields this long after the last cast (state is not readable yet)
+	BuffRecastSec int // upper bound / fallback: recast armors/shields this long after the last cast (the real duration, when known, is shorter)
+	BuffMarginSec int // recast an armor this many seconds before its real duration (Skills.txt auralencalc at the skill's level) ends
 
 	// Class profiles (docs/combat.md).
 	AuraCheckMs int // re-read the active aura this often during a fight (the read is a few memory words)
@@ -76,7 +77,7 @@ func DefaultCombatTuning() CombatTuning {
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
 		KiteEnabled: 1, KiteDistance: 10, KiteLifePct: 70, KiteMaxSteps: 6, KiteRetreat: 12, DodgeRadius: 4, MissileDodge: 0, CurseRetreatPct: 60, MaxApproaches: 12, ReachSec: 15, IgnoreMemorySec: 90,
-		BuffRecastSec: 150, AuraCheckMs: 1500, LeftFailSec: 60,
+		BuffRecastSec: 150, BuffMarginSec: 6, AuraCheckMs: 1500, LeftFailSec: 60,
 	}
 }
 
@@ -130,6 +131,7 @@ func combatKnobs() []Knob {
 		k("ignoreMemorySec", "Ignore memory", "s", "How long an ignored target is left alone (the memory doubles with every repeat).", float64(d.IgnoreMemorySec), 20, 300, true),
 		k("auraCheckMs", "Aura check", "ms", "How often the fight loop re-reads the active aura and re-applies it.", float64(d.AuraCheckMs), 500, 5000, false),
 		k("leftFailSec", "Left skill retry", "s", "After a left skill could not be selected, wait this long before trying it again.", float64(d.LeftFailSec), 10, 300, true),
-		k("buffRecastSec", "Buff recast", "s", "Recast armors and shields this long after the last cast.", float64(d.BuffRecastSec), 60, 300, false),
+		k("buffRecastSec", "Buff recast", "s", "Upper bound and fallback: recast armors and shields this long after the last cast. An armor whose real duration is known (Frozen Armor 120 s at level 1) is recast earlier, see buffMarginSec.", float64(d.BuffRecastSec), 60, 300, false),
+		k("buffMarginSec", "Buff recast margin", "s", "Recast an armor or shield this many seconds before its real duration (Skills.txt auralencalc at the skill's level) runs out.", float64(d.BuffMarginSec), 0, 30, false),
 	}
 }

@@ -443,3 +443,27 @@ func TestOpenCachedLayoutAndLegacy(t *testing.T) {
 }
 
 func dirHas(d, n string) bool { _, err := os.Stat(filepath.Join(d, n)); return err == nil }
+
+// Skills.txt rows (1.14d): Frozen Armor ln34 = 3000 + 300 x (L-1) frames, Energy Shield ln12 = 3600 + 1500 x (L-1),
+// Chilling Armor ln34 = 3600 + 150 x (L-1) (Param3/4 there). Frames at 25 per second.
+func TestAuraFrames(t *testing.T) {
+	fa := &Skill{AuraLenCalc: "ln34+(skill('Shiver Armor'.blvl)+skill('Chilling Armor'.blvl))*par7"}
+	fa.Param[2], fa.Param[3] = 3000, 300
+	es := &Skill{AuraLenCalc: "ln12"}
+	es.Param[0], es.Param[1] = 3600, 1500
+	for _, c := range []struct {
+		s      *Skill
+		lvl    int
+		frames int
+	}{{fa, 1, 3000}, {fa, 2, 3300}, {es, 1, 3600}, {es, 2, 5100}} {
+		if got, ok := c.s.AuraFrames(c.lvl); !ok || got != c.frames {
+			t.Errorf("%s level %d: %d %v, want %d", c.s.AuraLenCalc, c.lvl, got, ok, c.frames)
+		}
+	}
+	if _, ok := (&Skill{}).AuraFrames(1); ok {
+		t.Error("no calc: not ok")
+	}
+	if _, ok := fa.AuraFrames(0); ok {
+		t.Error("level 0")
+	}
+}
