@@ -123,6 +123,9 @@ The same seed run under both arms of an A/B, so the analysis unit is the per-see
 **wedge**:
 A permanent nav failure: a failed walk marked a route edge bad for good, so every route from that level read "no route" and the bot sat in town (navsoak runs lost 60 to 167 wall min). Fixed by expiring bad edges (`nav.badEdgeTTLSec`). `docs/townwedge.md`, `docs/probes/navsoak-compare.md`, spec `bot-loop`.
 
+**Virtual minute**:
+One minute of game (lockstep) time, equal to one `minute` line of the soak log. On d2d it runs about 10 times faster than the wall clock. All minute-based Gate 1 criteria (belt window, no kill and no XP) are measured in virtual minutes.
+
 **pocket**:
 A cell cut off from the gate on the known map grid; the usual cause of a **wedge**. The bot steps to the nearest connected cell and returns ErrNoPath, not ErrNoExit, so nothing is marked. `docs/townwedge.md`.
 
