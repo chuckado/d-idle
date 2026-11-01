@@ -58,6 +58,12 @@ def plain(text, limit=100):
     return board_feed.clean_title(text)[:limit]
 
 
+def issue_title(item_id, title):
+    """Maintainer text from open-work.md: keep parentheses, drop control characters, markup and mentions."""
+    t = "".join(c for c in "%s: %s" % (item_id, title) if c.isprintable())
+    return " ".join(re.sub(r"[`@<>|*\[\]]", "", t).split())[:120]
+
+
 # ---------------------------------------------------------------- gh layer
 
 def run_gh(argv, stdin=None):
@@ -228,7 +234,7 @@ def do_sync(gh, items, issues, prs, withdrawn, now, tsv):
         k, n = a["kind"], a.get("number")
         try:
             if k == "create":
-                title = plain("%s: %s" % (a["id"], a["title"]), 120)
+                title = issue_title(a["id"], a["title"])
                 out = gh.write("create issue %s" % a["id"], ["issue", "create", "--title", title, "--label", LABEL, "--body-file", "-"], a["body"])
                 m = ISSUE_URL_RE.search(out or "")
                 if m:
@@ -300,10 +306,10 @@ def cmd_sync(a, runner=run_gh, now=None):
 
 MODEL = "claude-sonnet-5-5"
 MAX_CALLS, MAX_INPUT_TOKENS, MAX_OUT = 2, 40000, 8000
-CHARS_PER_TOKEN = 3.0  # conservative estimate before the call; the real usage is logged after
+CHARS_PER_TOKEN = 2.3  # measured on the real sources (37.8k tokens for 87k chars); the real usage is logged after
 PROPOSAL = "docs/community/groom-proposal.md"
-SOURCES = (("docs/community/open-work.md", 9000), ("docs/BACKLOG.md", 26000), ("docs/decomp-queue.md", 22000),
-           ("docs/primitives.md", 12000), ("docs/research/pr-bundle-queue.md", 8000), ("docs/plan/STATUS.md", 10000))
+SOURCES = (("docs/community/open-work.md", 9000), ("docs/BACKLOG.md", 20000), ("docs/decomp-queue.md", 18000),
+           ("docs/primitives.md", 10000), ("docs/research/pr-bundle-queue.md", 6000), ("docs/plan/STATUS.md", 8000))
 SIZES, KINDS, REASONS = ("S", "M", "L"), ("decomp", "verify", "doc"), ("answered", "superseded", "off-roadmap", "duplicate")
 BRIEF = ("question", "start", "deliverable", "needs")
 BAD_ASK = re.compile(r"(?i)\b(?:send|upload|attach|paste|share|post|include|commit|publish)\b[^.]{0,60}\b(?:game\.exe|\.mpq|mpq|disassembl\w*|decompil\w*|binary|binaries|dll|dumps?)\b"
@@ -323,7 +329,10 @@ SYSTEM = (
     "Rules: the project supports every class, so propose class-generic items, not Sorceress-only ones. Never ask a contributor to share, "
     "paste or upload game files, MPQ contents, disassembly or decompiled code. No hostnames, file system paths, emails or keys in any text. "
     "Cite only paths that appear in the given text. Prefer few, well-scoped proposals (at most 6 in total); an empty list is a good answer. "
-    "Items listed under mechanical_flags may already be answered: check them first.")
+    "A verify item exists BECAUSE its queue row is done: a done row is never a reason to retire it. Retire only with a repo path that "
+    "already holds the item's deliverable or states the question is answered or dropped. "
+    "Items listed under mechanical_flags may already be answered: check them first. Write titles as plain text without markup characters. "
+    "Avoid any run of five or more short words (4 to 6 letters each) in a row: break such runs with a longer word or punctuation.")
 
 
 def collect(sources=SOURCES):
@@ -404,6 +413,13 @@ def path_ok(p):
         os.path.isfile(os.path.join(ROOT, p))
 
 
+TITLE_RE = re.compile(r"[A-Za-z0-9][A-Za-z0-9 ,.:;'()/+&-]{2,99}")
+
+
+def title_ok(t):
+    return isinstance(t, str) and bool(TITLE_RE.fullmatch(t)) and not dc.scan(t)
+
+
 def check_text(label, s, limit, errs):
     if not isinstance(s, str) or not s.strip() or len(s) > limit:
         errs.append("%s: missing or longer than %d" % (label, limit))
@@ -453,11 +469,8 @@ def validate_proposals(d, items, issues):
             errs.append("kind must be decomp, verify or doc")
         if p.get("status") not in board.OPEN:
             errs.append("status must be ready or proposed")
-        try:
-            if plain(p.get("title", ""), 200) != " ".join(str(p.get("title")).split()) or len(p["title"]) > 100:
-                errs.append("title not plain or too long")
-        except Exception:
-            errs.append("bad title")
+        if not title_ok(p.get("title")):
+            errs.append("title not plain or too long")
         m = re.fullmatch(r"(queue|backlog):(\S+)", str(p.get("source", "")))
         if not m:
             errs.append("source must be queue:N or backlog:NAME")
@@ -502,7 +515,7 @@ def validate_proposals(d, items, issues):
                     errs.append("nothing to change")
                 if "size" in p and p["size"] not in SIZES:
                     errs.append("size must be S, M or L")
-                if "title" in p and (not isinstance(p["title"], str) or plain(p["title"], 200) != " ".join(p["title"].split()) or len(p["title"]) > 100):
+                if "title" in p and not title_ok(p["title"]):
                     errs.append("title not plain or too long")
                 for f in BRIEF:
                     if f in p:
@@ -599,6 +612,9 @@ def cmd_groom(a, runner=run_gh, http=None, key_reader=None, now=None):
             key, text, msgs = key_reader(), None, user
             for attempt in range(MAX_CALLS):
                 text = call_model(key, SYSTEM, msgs, http, acc)
+                if getattr(a, "save_raw", None):
+                    with open(a.save_raw, "a", encoding="utf-8") as rf:
+                        rf.write(text + "\n")
                 d = parse_json(text)
                 if d is not None:
                     acc_p, rej = validate_proposals(d, items, issues)
@@ -628,6 +644,7 @@ def main(argv=None):
     s.add_argument("--max-writes", type=int, default=MAX_WRITES)
     s.add_argument("--now", help="ISO time (tests)")
     g = sub.add_parser("groom")
+    g.add_argument("--save-raw", metavar="FILE", help="append the raw model answer to FILE (debugging; keep it outside the repo)")
     g.add_argument("--apply", action="store_true", help="call the model and write the proposal file (default: dry run, no API)")
     a = ap.parse_args(argv)
     if a.cmd == "sync":
