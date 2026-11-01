@@ -120,5 +120,3 @@ internal/nav/wpclick_test.go  wpcooldown  wpcooldown
 internal/env/tuning_nav.go  wpcooldown  wpcooldown
 docs/waypoints.md  wpcooldown  wpcooldown
 docs/fixwp.md  wpcooldown  wpcooldown
-docs/research/openpr-log.md  crfollow160  crfollow160
-openspec/changes/crfollow160/**  crfollow160  crfollow160

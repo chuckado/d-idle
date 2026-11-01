@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [crfollow160](../../openspec/changes/crfollow160/) | in-progress | crfollow160 | `docs/research/openpr-log.md`<br>`openspec/changes/crfollow160/**` | `upstream-pr:curse-immune` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -82,8 +81,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change crfollow160: pr_guard 0 FAIL 0 WARN on the new commit and the range
-- change crfollow160: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -120,6 +117,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
 - ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
 - 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
 - 8422bcc 11-01 14:16 `Merge agent/tickpolish: Discord tick wrapper: privacy-guard repair by separators, empty waiting rendered directly` (tickpolish)
@@ -129,5 +127,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - db9b20e 11-01 13:32 `Merge agent/palfix: Paladin findings fixed offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, table rows, plandata seam, Zealot-lite)` (palfix)
 - dd68c40 11-01 13:32 `Merge origin/main into palsme` (palsme)
 - ed03c45 11-01 13:26 `Merge agent/boardgrow: work archive, chunker sync honours it, 12 new board items` (boardgrow)
-- 776af38 11-01 13:22 `Merge agent/openpr: PRs #159 and #160 opened upstream, docs` (openpr)
 <!-- statusgen:end -->

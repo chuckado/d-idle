@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfollow160
-status: in-progress
+status: archived
 skip_specs: true
 agent: crfollow160
 branch: agent/crfollow160
@@ -15,7 +15,8 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit and the range"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "Three CodeRabbit findings on #160 valid and fixed in one tooling and test follow-up commit (802dee68, no force-push), each thread answered; the claim code is unchanged and the differential numbers are identical (adj 0 of 147,628 on both seeds, dealt 1,958 and 1,977); not verified live (no game involved)"
+result: "CodeRabbit comments on #160 fixed in one follow-up commit (802dee68, no force-push), threads answered, test numbers unchanged"
+merge: 2f7f013
 ```
 
 ## 1. Work
