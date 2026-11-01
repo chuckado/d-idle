@@ -414,7 +414,7 @@ func (l *lab) d22pocket(ctx context.Context, r *drill.Run, learn bool) (drill.Ou
 	if err := l.d22prep(ctx, r, d22Rocky, learn, false); err != nil {
 		return drill.Outcome{}, err
 	}
-	if _, err := r.Cheat(ctx, "debug warp 165 220", "DRILLS24: start in the Rocky Waste pocket (a walk trap, DRILLS22 finding 4) to test what Teleport is for"); err != nil {
+	if _, err := r.Cheat(ctx, "debug warp 33 44", "DRILLS24: start in the Rocky Waste pocket (a walk trap, DRILLS22 finding 4) to test what Teleport is for"); err != nil {
 		return drill.Outcome{}, err
 	}
 	_ = l.Tick(ctx, 20)

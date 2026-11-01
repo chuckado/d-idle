@@ -1,0 +1,9 @@
+D22 pocket-control: key="" level 41->40 (165,220)->(178,56) hops=0 refused=0 mana 150.0->150.0 ticks=304 wall=104ms err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall declined=0 hopticks=[]
+DRILL D22-PC P26 PASS measurement: 0 hops, 304 ticks, reached level 40, err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall | intended: pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport | observed: key="" level 41->40 (165,220)->(178,56) hops=0 refused=0 mana 150.0->150.0 ticks=304 wall=104ms err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall
+D22 pocket-teleport: key="sk54" level 41->41 (165,220)->(165,220) hops=0 refused=0 mana 150.0->150.0 ticks=7560 wall=1.762s err=nav: timeout: roaming for 5m0s declined=0 hopticks=[]
+DRILL D22-P P26 PASS measurement: 0 hops, 7560 ticks, reached level 41, err=nav: timeout: roaming for 5m0s | intended: pocket leg Rocky Waste to Stony Tomb: ticks with and without Teleport | observed: key="sk54" level 41->41 (165,220)->(165,220) hops=0 refused=0 mana 150.0->150.0 ticks=7560 wall=1.762s err=nav: timeout: roaming for 5m0s
+END character Drilly life 2000/2000 in town: true
+D22-PC    P26   PASS     -    measurement: 0 hops, 304 ticks, reached level 40, err=nav: the level changed during the walk: escaped from level 41 to 40 after a repeated stall
+D22-P     P26   PASS     -    measurement: 0 hops, 7560 ticks, reached level 41, err=nav: timeout: roaming for 5m0s
+cheat verbs used (each ledgered with a reason): debug goto 40, debug goto 41, debug kill, debug points 54 1, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400, debug warp 33 44
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)

@@ -1,0 +1,44 @@
+D22 control tile41-55: key="" level 41->55 (171,229)->(120,147) hops=0 refused=0 mana 150.0->150.0 ticks=254 wall=270ms err=<nil> declined=0 hopticks=[]
+D22 control tile42-56: key="" level 42->56 (200,200)->(120,217) hops=0 refused=0 mana 150.0->150.0 ticks=578 wall=452ms err=<nil> declined=0 hopticks=[]
+D22 control border41-42: key="" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=708 wall=438ms err=<nil> declined=0 hopticks=[]
+DRILL D22-C P26 PASS 3 legs walked 1540 ticks in all, no key, no hops, no error | intended: no Teleport learned: key empty, no hop, the legs walk | observed: tile41-55: key="" level 41->55 (171,229)->(120,147) hops=0 refused=0 mana 150.0->150.0 ticks=254 wall=270ms err=<nil> || tile42-56: key="" level 42->56 (200,200)->(120,217) hops=0 refused=0 mana 150.0->150.0 ticks=578 wall=452ms err=<nil> || border41-42: key="" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=708 wall=438ms err=<nil>
+time=2026-11-01T10:52:32.017-05:00 level=DEBUG msg="nav teleport" from="{X:171 Y:229}" to="{X:186 Y:238}" aimed="{X:186 Y:238}"
+time=2026-11-01T10:52:32.020-05:00 level=DEBUG msg="nav teleport" from="{X:186 Y:238}" to="{X:203 Y:243}" aimed="{X:203 Y:243}"
+time=2026-11-01T10:52:32.023-05:00 level=DEBUG msg="nav teleport" from="{X:203 Y:243}" to="{X:220 Y:248}" aimed="{X:220 Y:248}"
+time=2026-11-01T10:52:32.024-05:00 level=INFO msg="nav teleport declined, walking" why=mana mana=80 max=150
+D22 teleport tile41-55 hop line: nav teleport from={171 229} to={186 238} aimed={186 238}
+D22 teleport tile41-55 hop line: nav teleport from={186 238} to={203 243} aimed={203 243}
+D22 teleport tile41-55 hop line: nav teleport from={203 243} to={220 248} aimed={220 248}
+D22 teleport tile41-55 hop line: nav teleport declined, walking why=mana mana=80 max=150
+D22 teleport tile41-55: key="sk54" level 41->55 (171,229)->(120,147) hops=3 refused=0 mana 150.0->87.5 ticks=202 wall=99ms err=<nil> declined=1 hopticks=[18 18 18]
+D22 teleport tile41-55 line: nav teleport declined, walking why=mana mana=80 max=150
+time=2026-11-01T10:52:32.130-05:00 level=DEBUG msg="nav teleport" from="{X:200 Y:200}" to="{X:189 Y:186}" aimed="{X:189 Y:186}"
+time=2026-11-01T10:52:32.133-05:00 level=DEBUG msg="nav teleport" from="{X:189 Y:186}" to="{X:189 Y:168}" aimed="{X:189 Y:168}"
+time=2026-11-01T10:52:32.147-05:00 level=DEBUG msg="nav teleport" from="{X:189 Y:168}" to="{X:189 Y:150}" aimed="{X:189 Y:150}"
+D22 teleport tile42-56 hop line: nav teleport from={200 200} to={189 186} aimed={189 186}
+D22 teleport tile42-56 hop line: nav teleport from={189 186} to={189 168} aimed={189 168}
+D22 teleport tile42-56 hop line: nav teleport from={189 168} to={189 150} aimed={189 150}
+D22 teleport tile42-56: key="sk54" level 42->56 (200,200)->(120,217) hops=3 refused=0 mana 150.0->113.4 ticks=755 wall=316ms err=<nil> declined=0 hopticks=[18 18 18]
+D22 teleport border41-42: key="sk54" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=714 wall=293ms err=<nil> declined=0 hopticks=[]
+DRILL D22-A P26 PASS 6 hops (border leg 0), 0 refused, mana net 99.1, 1671 ticks | intended: Teleport learned at clvl 18 in Act 2: tile-exit legs hop (>0), refused hops are few, mana is paid per hop | observed: tile41-55: key="sk54" level 41->55 (171,229)->(120,147) hops=3 refused=0 mana 150.0->87.5 ticks=202 wall=99ms err=<nil> || tile42-56: key="sk54" level 42->56 (200,200)->(120,217) hops=3 refused=0 mana 150.0->113.4 ticks=755 wall=316ms err=<nil> || border41-42: key="sk54" level 41->42 (171,229)->(7,317) hops=0 refused=0 mana 150.0->150.0 ticks=714 wall=293ms err=<nil>
+D22 bind: TeleportKey="sk54" HasTeleport=true skills=[36:1 54:1] debug states: absorb=0 maxlife=2000 maxmana=150 def=6 buffs=; CastAt("sk54") a free line: err=<nil> moved 11.9 cells, mana 150.0->126.7
+DRILL D22-B P26 PASS bind sk54, cast moved 11.9 cells and paid 23.3 mana | intended: key is the bind of skill 54, the cast through it hops and pays mana | observed: TeleportKey="sk54" HasTeleport=true skills=[36:1 54:1] debug states: absorb=0 maxlife=2000 maxmana=150 def=6 buffs=; CastAt("sk54") a free line: err=<nil> moved 11.9 cells, mana 150.0->126.7
+D22 town: key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=191 wall=131ms err=<nil> declined=0 hopticks=[]
+D22 town/rules: level 40 allowed=false || level 41 allowed=true || level 73 allowed=false || level 74 allowed=true || key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=191 wall=131ms err=<nil> || goto 74 -> area 74, HasTeleport=true
+DRILL D22-T P26 PASS town leg: 0 hops, 0 refused | intended: no hop in town (level rule), Duriel's Lair left to walking, Summoner level allows hops | observed: level 40 allowed=false || level 41 allowed=true || level 73 allowed=false || level 74 allowed=true || key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=0 mana 150.0->150.0 ticks=191 wall=131ms err=<nil> || goto 74 -> area 74, HasTeleport=true
+time=2026-11-01T10:52:32.923-05:00 level=INFO msg="nav teleport did not move" to="{X:155 Y:149}"
+time=2026-11-01T10:52:32.925-05:00 level=INFO msg="nav teleport did not move" to="{X:155 Y:148}"
+time=2026-11-01T10:52:32.927-05:00 level=INFO msg="nav teleport did not move" to="{X:156 Y:146}"
+D22 unwired-town hop line: nav teleport did not move to={155 149}
+D22 unwired-town hop line: nav teleport did not move to={155 148}
+D22 unwired-town hop line: nav teleport did not move to={156 146}
+D22 unwired-town: key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=3 mana 150.0->150.0 ticks=235 wall=75ms err=<nil> declined=0 hopticks=[]
+DRILL D22-R P26 PASS 3 refused hops, 0 landed, mana net 0.0, leg err=<nil> | intended: the game refuses every hop in a town: the navigator gives up after a few (teleportBadHops 3) and walks | observed: key="sk54" level 40->47 (139,141)->(400,218) hops=0 refused=3 mana 150.0->150.0 ticks=235 wall=75ms err=<nil>
+END character Drilly life 2000/2000 in town: true
+D22-C     P26   PASS     -    3 legs walked 1540 ticks in all, no key, no hops, no error
+D22-A     P26   PASS     -    6 hops (border leg 0), 0 refused, mana net 99.1, 1671 ticks
+D22-B     P26   PASS     -    bind sk54, cast moved 11.9 cells and paid 23.3 mana
+D22-T     P26   PASS     -    town leg: 0 hops, 0 refused
+D22-R     P26   PASS     -    3 refused hops, 0 landed, mana net 0.0, leg err=<nil>
+cheat verbs used (each ledgered with a reason): debug goto 40, debug goto 41, debug goto 42, debug kill, debug points 54 1, debug stat 12 18, debug stat 6 512000, debug stat 7 512000, debug stat 9 38400
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
