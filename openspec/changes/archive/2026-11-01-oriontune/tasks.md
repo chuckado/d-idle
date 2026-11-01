@@ -2,7 +2,7 @@
 
 ```yaml
 change: oriontune
-status: in-progress
+status: archived
 agent: oriontune
 branch: agent/oriontune
 worktree: ~/code/d2lod-wt/oriontune
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Measured on the worker host (read-only 15 min); wrapper, ccache, cached build script and the capacity2 check live in the private ops repo; worker-capacity.md note added. No game used."
+result: "worker load measured (builds are not the bottleneck; I/O wait came from two stuck whole-filesystem scans on network shares); capacity rule updated; wrapper and ccache in the ops repo"
 live: "worker host measurements only, no game"
+merge: 189f251
 ```
 
 - [x] Measure the load for 15 minutes (CPU, I/O wait, D-state tasks, mounts)
