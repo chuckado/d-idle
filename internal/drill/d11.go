@@ -49,6 +49,7 @@ type CastInfo struct {
 	Adjacent                    int     // monsters within 8 subtiles at the click
 	Dist                        float64 // the nearest monster's distance in subtiles at the click
 	Synced                      bool    // the click came when the monster's blow animation began
+	Delay                       int     // steps waited after that start before the click
 	LifeStart, LifeEnd          int
 	Hits                        int   // ticks on which the life dropped after the click
 	HitTicks                    []int // those ticks, counted from the click
@@ -65,7 +66,7 @@ type D11Lab interface {
 	FieldLab
 	EmptyPlan(ctx context.Context, r *Run, level, n int, total time.Duration) EmptyPlanInfo
 	PortalMelee(ctx context.Context, r *Run, adj int, act bool) PMInfo
-	CastTrace(ctx context.Context, r *Run, life, trial int, sync bool) CastInfo
+	CastTrace(ctx context.Context, r *Run, life, trial int, sync bool, delay int) CastInfo
 }
 
 // D11 returns the DRILLS11 group (letter P).
@@ -110,8 +111,11 @@ func D11(l D11Lab) []Drill {
 		{ID: "D-castcut", Primitive: "P10", Title: "D2.d unknown: does a monster hit cut a town portal cast, and how many ticks does a cast take (record)", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			var rows []string
 			cut, done, blocked := 0, 0, 0
-			for i := 0; i < 5; i++ {
-				c := l.CastTrace(ctx, r, 300, i, i >= 1)
+			for i, tr := range []struct {
+				sync  bool
+				delay int
+			}{{false, 0}, {true, 0}, {true, 1}, {true, 2}, {true, 3}, {true, 2}} {
+				c := l.CastTrace(ctx, r, 300, i, tr.sync, tr.delay)
 				rows = append(rows, fmt.Sprintf("trial %d: %s", i+1, c.String()))
 				switch {
 				case c.Err != "" || c.Adjacent < 1:
@@ -146,8 +150,8 @@ func (i PMInfo) String() string {
 }
 
 func (c CastInfo) String() string {
-	return fmt.Sprintf("monsters within 8: %d, nearest %.1f subtiles, click synced to a blow %v, life %d -> %d, hits after the click %d at ticks %v, portal object after %d ticks = %d game ms (-1 none), scroll left the pack at tick %d (-1 never), scrolls %d -> %d, timeline [%s], err %q",
-		c.Adjacent, c.Dist, c.Synced, c.LifeStart, c.LifeEnd, c.Hits, c.HitTicks, c.PortalTick, c.PortalMS, c.ScrollTick, c.ScrollsBefore, c.ScrollsAfter, c.Timeline, c.Err)
+	return fmt.Sprintf("monsters within 8: %d, nearest %.1f subtiles, click synced to a blow %v (+%d steps), life %d -> %d, hits after the click %d at ticks %v, portal object after %d ticks = %d game ms (-1 none), scroll left the pack at tick %d (-1 never), scrolls %d -> %d, timeline [%s], err %q",
+		c.Adjacent, c.Dist, c.Synced, c.Delay, c.LifeStart, c.LifeEnd, c.Hits, c.HitTicks, c.PortalTick, c.PortalMS, c.ScrollTick, c.ScrollsBefore, c.ScrollsAfter, c.Timeline, c.Err)
 }
 
 // dEmptyPlan: PASS when the log has no "empty path" and there were back-offs; BLOCKED when none ran.

@@ -292,8 +292,9 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 // writing the timeline of events (tick offsets from the click): player mode changes, life drops (hits), the nearest
 // monster's mode changes, the scroll leaving the pack, the portal object. trial moves the standing place east so an
 // earlier trial's portal does not hide this one; sync clicks when the monster's attack animation (A1 or A2) starts, so
-// its blow lands inside the cast window.
-func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync bool) (ci drill.CastInfo) {
+// its blow lands inside the cast window; delay steps are waited after that start, so the blow lands earlier in the cast
+// (the blow hit comes 4 steps after its animation starts: delay 3 puts it 1 step after the click).
+func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync bool, delay int) (ci drill.CastInfo) {
 	ci.PortalTick, ci.ScrollTick = -1, -1
 	if err := l.d11Setup(ctx, r, 2, life, 8*(trial+1)); err != nil {
 		ci.Err = err.Error()
@@ -356,6 +357,10 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life, trial int, sync
 			pm = m
 		}
 	}
+	if sync && delay > 0 {
+		_ = l.Tick(ctx, delay)
+	}
+	ci.Delay = delay
 	_, d0 := nearest()
 	ci.Adjacent, _, ci.LifeStart, _ = l.d11Within(ctx, 8)
 	ci.Dist = d0
