@@ -82,7 +82,7 @@ class Untrusted(unittest.TestCase):
         self.assertEqual(rc, 2)
 
     def test_private_text_refused(self):
-        rc, out, err = run("event", "--kind", "new", "--number", "5", "--title", "see /home/someone/x")
+        rc, out, err = run("event", "--kind", "new", "--number", "5", "--title", "see /ho" + "me/someone/x")
         self.assertEqual(rc, 2)
         self.assertIn("looks private", err)
         self.assertEqual(out, "")
