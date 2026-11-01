@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- oriontune: capacity rule counts I/O wait only when a local disk is busy; worker-capacity doc updated.
 - SKGROUND: ground skills traced (Blizzard, Meteor): d2d deviations and bot delay-timer findings recorded in docs/research/sk-ground-trace.md.
 - Waypoint trips no longer wait 10 s after arriving (nav.wpCooldownSec default 0, deprecated).
 - capdocs: capabilities.md, README, running.md and the sorc skill matrix refreshed (Teleport hops and the Frozen Armor retry proven live, #159 and #160 open, melee, resist and Paladin offline-verified).
