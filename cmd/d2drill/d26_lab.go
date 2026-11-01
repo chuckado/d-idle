@@ -29,7 +29,7 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 		o.Err = err.Error()
 		return
 	}
-	if _, err := r.Cheat(ctx, fmt.Sprintf("debug points %d 8", fireBolt), "D26-A: a Fire Bolt that kills a zombie pack in reasonable time (skill levels, throwaway)"); err != nil {
+	if _, err := r.Cheat(ctx, fmt.Sprintf("debug points %d 3", fireBolt), "D26-A: a Fire Bolt that kills a zombie pack in reasonable time (skill levels, throwaway)"); err != nil {
 		o.Err = err.Error()
 		return
 	}
@@ -45,12 +45,10 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 		return
 	}
 	spawn := func() {
-		if _, err := r.Cheat(ctx, "debug spawn "+d11Mon+" 4 near", "D26-A: top up the plain melee pack under test (docs/forkcheats.md)"); err == nil {
-			o.Spawned += 4
-		}
+		o.Spawned += 4
+		l.d11Spawn(ctx, r, 4, 2, 8) // spawns, then lures until two are in reach: a spawned monster idles until she is close
 	}
 	spawn()
-	_ = l.Tick(ctx, 20)
 	isCast := func(ln string) bool { return strings.HasPrefix(ln, "combat buff skill=Frozen Armor") }
 	g0, _, err := l.gameClock(ctx)
 	if err != nil {
@@ -89,6 +87,7 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 			o.UpMS += el - prev
 		} else if first {
 			o.DownMS += el - prev
+			o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: armor absent at this sample (previous sample %d ms)", el, prev))
 		}
 		prev = el
 		sn, err := l.be.Env.Snapshot()
@@ -112,12 +111,11 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 				}
 			}
 		}
-		if alive, _ := l.monstersAlive(ctx); alive < 3 {
+		if alive, _ := l.monstersAlive(ctx); alive == 0 {
 			spawn()
-			_ = l.Tick(ctx, 10)
 		}
 		mk := l.rec.Mark()
-		res, cerr := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 6 * time.Second})
+		res, cerr := l.rig.Fighter.Clear(ctx, combat.ClearOpts{Timeout: 2 * time.Second})
 		o.Rounds++
 		o.Kills += res.Kills
 		o.Potions += res.Potions
@@ -126,7 +124,8 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 				o.Err = fmt.Sprintf("Clear returns at once (%v) 50 times", cerr)
 				return
 			}
-			_ = l.Tick(ctx, 10)
+			l.d11Lure(ctx) // nothing in reach: walk toward the nearest idle zombie
+			_ = l.Tick(ctx, 20)
 		} else {
 			stuck = 0
 		}
@@ -135,10 +134,18 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 			if isCast(ln) {
 				o.CastsMS = append(o.CastsMS, gg-g0)
 				o.FightCastMS = append(o.FightCastMS, gg-g0)
-				o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: %s", gg-g0, ln))
+				bt, _ := l.buffsText(ctx)
+				mana := -1
+				if sn, err := l.be.Env.Snapshot(); err == nil && sn.Player != nil {
+					mana = sn.Player.Mana
+				}
+				o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: %s (read at the end of the round: buffs=%q mana=%d)", gg-g0, ln, bt, mana))
 			}
 		}
 		l.rig.Fighter.ForgetIgnored()
+	}
+	for i := 1; i < len(o.CastsMS); i++ { // the armor lasts 120.3 s from a cast (V, drills13): a longer gap between casts had it off
+		o.GapBoundMS += max(0, o.CastsMS[i]-o.CastsMS[i-1]-120320)
 	}
 	return
 }

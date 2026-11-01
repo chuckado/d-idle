@@ -23,6 +23,7 @@ type ArmorFight struct {
 	DownMS      int // game ms of the samples with the armor absent after it was first on
 	UpMS        int // game ms with the armor up (state read at each sample, interval-weighted)
 	MaxGapMS    int
+	GapBoundMS  int // game ms the armor must have been off: cast-to-cast time beyond the real 120.3 s duration
 	MinLife     int
 	MaxLife     int
 	Kills       int // monsters that the Clear rounds report killed
@@ -48,18 +49,25 @@ func D26(l D26Lab) []Drill {
 			if f.Err != "" {
 				return Blocks(f.Err)
 			}
-			o.Observed = fmt.Sprintf("binary %s | %d s in %d Clear rounds; casts at game s %v (inside a round: %v); %d samples (longest gap %d ms), armor up %d ms of %d, absent %d ms; life min %d of max %d, refills %d, deaths %d; kills %d of %d spawned, potions %d | log: %s",
-				f.Binary, f.SimMS/1000, f.Rounds, secs(f.CastsMS), secs(f.FightCastMS), f.Samples, f.MaxGapMS, f.UpMS, f.SimMS, f.DownMS, f.MinLife, f.MaxLife, f.Refills, f.Deaths, f.Kills, f.Spawned, f.Potions, strings.Join(f.Lines[:min3(len(f.Lines))], " ; "))
+			o.Observed = fmt.Sprintf("binary %s | %d s in %d Clear rounds; casts at game s %v (inside a round: %v); %d samples (longest gap %d ms), armor up %d ms of %d, absent %d ms (sampled), at least %d ms off by the cast spacing; life min %d of max %d, refills %d, deaths %d; kills %d of %d spawned, potions %d | log: %s",
+				f.Binary, f.SimMS/1000, f.Rounds, secs(f.CastsMS), secs(f.FightCastMS), f.Samples, f.MaxGapMS, f.UpMS, f.SimMS, f.DownMS, f.GapBoundMS, f.MinLife, f.MaxLife, f.Refills, f.Deaths, f.Kills, f.Spawned, f.Potions, strings.Join(f.Lines[:min12(len(f.Lines))], " ; "))
 			o.Sig = fmt.Sprintf("casts=%d", len(f.CastsMS))
 			switch {
 			case len(f.FightCastMS) == 0:
 				o.Verdict, o.Reason = Fail, "no armor cast came from inside the fight"
-			case f.DownMS > 0:
-				o.Verdict, o.Reason = Fail, fmt.Sprintf("armor absent %d ms", f.DownMS)
+			case f.DownMS > 0 || f.GapBoundMS > 0:
+				o.Verdict, o.Reason = Fail, fmt.Sprintf("armor absent: %d ms sampled, %d ms by cast spacing", f.DownMS, f.GapBoundMS)
 			default:
 				o.Verdict, o.Reason = Pass, fmt.Sprintf("RECORD on %s: %d recasts from inside the fight at game s %v, armor up %d of %d ms, life min %d, kills %d", f.Binary, len(f.FightCastMS), secs(f.FightCastMS), f.UpMS, f.SimMS, f.MinLife, f.Kills)
 			}
 			return o
 		}},
 	}
+}
+
+func min12(n int) int {
+	if n > 12 {
+		return 12
+	}
+	return n
 }

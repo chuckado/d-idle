@@ -767,3 +767,24 @@ Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): cheats `debug g
 - docs/BACKLOG.md: TELETUNE follow-up (from DRILLS24): per-hop time is 18 ticks (V), so `teleMinLeg` 36 saves mana, not time (a value near 10 to 17 takes the Stony Tomb hops); after a walk stall the leg rule should be ignored (pocket start: default knobs never leave, `teleMinLeg` 0 leaves in 224 ticks with 3 hops); hop cell by direction detours on Halls of the Dead 1 (755 against 578), consider a hop along the A* path.
 - docs/INDEX.md: DRILLS24 section in docs/probes/drills/README.md.
 - CHANGELOG: none (harness and docs only).
+
+## DRILLS26 (2026-11-01): Frozen Armor recast in a real fight, on lab-armorhit and lab-nexthit2
+
+Run on the worker host, hidden slot 0, `d2drill` from branch agent/drills26 (origin/main 865eb72 plus the new group U). Capacity before: idle 12 plus nice 52 percent. Files `2026-11-01-drills26-a-armorhit.txt` (binary `bin/d2d.lab-armorhit`, private fork branch lab-armorhit) and `2026-11-01-drills26-a-nexthit2.txt` (`bin/d2d.lab-nexthit2`); the binary is named in each header and in the drill line. Filtered -v logs (decision, nav and d2dsrc lines dropped), scrubbed. Command: `D2D_AGENT=drills26 D2D_BIN=<fork>/bin/<binary> tools/agentrun.sh drills26 --ttl 330 -- tools/d2dslot.sh run -n 0 -t 300 -- <built>/d2drill -group U -repeat 1 -bin <fork>/bin/<binary> -label NAME -v`.
+
+Drill D26-A (internal/drill/d26.go, cmd/d2drill/d26_lab.go; harness only): Blood Moor, character life 200, Frozen Armor level 1 and Fire Bolt level 3 (ledgered `debug points`), `debug kill` first, then a `zombie1` pack of 4 (`debug spawn`) topped up when none is alive, lured until two are in reach. The bot's `Fighter.Buff` once, then `Fighter.Clear` rounds of 2 s for 300 game seconds. The state is read with `debug states` at every round. Harness refills only mana below 10 and life below 25 percent (neither life refill happened).
+
+| Binary | Recasts (game s) | Life min / max | Kills | Armor up | Deaths |
+|---|---|---|---|---|---|
+| lab-armorhit | 0.0 (opening), 119.3, 232.4, 240.2, 242.8 | 173 / 201 | 44 (32 spawned in the field, kills count the bot's own report) | 296.1 s of 300 s | 0 |
+| lab-nexthit2 | identical | identical | identical | identical | 0 |
+
+- The two runs are identical to the tick (V): a plain zombie is frozen on both binaries (negative cold effect), so with a plain pack the fork difference does not show. The expected difference (champion, unique, boss strikers frozen only on nexthit2) needs a pack of those and was not run (U). The bot's recast does not depend on the binary (V).
+- First recast at 119.3 s, not the 114 s limit: the bot only recasts between fight rounds (as F2 of DRILLS13), so the limit is met plus up to a round (V). It still lands before the 120.3 s expiry.
+- FINDING (V that it happens, U why): the cast at 232.4 s (113.1 s after the previous one, so the armor was still up) did NOT refresh the state: `debug states` shows `40:1` at the end of that round, then no armor at the sample at 240.2 s (the old one ends at 119.3 + 0.3 + 120.0 = 239.6 s). The bot noticed (state readable, F3 of DRILLS13 fixed by fixbuff), recast at 240.2 s and again at 242.8 s; the armor was absent for 3.5 s at most (sampling). Candidate causes: the cast was cut by a hit recovery or paid and cut (cast cut is not refunded on d2d, DRILLS13 M1), or mana. Mana was 34 at the end of the round, so a cut cast is the lead (U: no per-cast action-frame read was done). The drill verdict is therefore FAIL by its own rule (armor absent).
+- Boss-adjacent check: SKIPPED. The harness has no Andariel stand drill (only the Warriv quest-record drill D8.w); creating one is out of scope for this card.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: ARMORCUT (from DRILLS26): a Frozen Armor recast inside a melee fight can be cut and leave the old armor to expire (3.5 s absent in 300 s, both binaries): find whether it is hit recovery; candidate fix: recast earlier or verify the state after the cast; champion/unique/boss pack drill on lab-armorhit not run; no Andariel stand drill exists.
+- docs/INDEX.md: DRILLS26 section in docs/probes/drills/README.md.
+- CHANGELOG: none (harness and docs only).
