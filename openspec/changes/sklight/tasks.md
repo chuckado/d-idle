@@ -2,7 +2,7 @@
 
 ```yaml
 change: sklight
-status: done
+status: in-progress
 agent: sklight
 branch: agent/sklight
 worktree: ~/code/d2lod-wt/sklight
