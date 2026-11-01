@@ -1,0 +1,120 @@
+labrun: synced code/d2lod-wt/drills10 → orion:~/labrun/herdr/code/d2lod-wt/drills10 in 0s; running: export PATH=$HOME/.local/bin:$PATH; mkdir -p ~/d2d-lab/drills10; go build -o ~/d2d-lab/drills10/d2drill ./cmd/d2drill && D2D_AGENT=drills10 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills10/d2drill -group D8 -label drills10-d8 -v
+d2dslot: got slot 0
+time=2026-10-31T23:12:12.409-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2364972 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T23:12:13.573-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T23:12:14.001-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 3 new unknown fields: merc.aura, merc.level, merc.name"
+DRILL D8.c P18 BLOCKED the free Rogue was granted by the claim (14.3,21.9:RG) | intended: a fresh character with the Blood Raven reward pending: ClaimRogue opens Kashya's menu and a Rogue appears, the dialog is closed | observed: run1: granted=true merc="14.3,21.9:RG" record states 0 -> 0 err <nil>; run2 (BLOCKED): granted=false merc="owned before: 14.1,16.7:RG" record states 0 -> 0 err <nil> | runs: 2, DIFFER
+DRILL D8.a P18 PASS revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap) | intended: merc alive again, gold down by the reported price | observed: merc present=false dead=true code= life=[0,0] -> present=true dead=false code=RG life=[40,1]; gold 3000 -> 3000 (revive reports 0); err <nil>; panels none | runs: 2, identical
+DRILL D8.m P3 PASS merc life 20 -> 32 with one belt potion | intended: merc life up, one belt potion used | observed: merc present=true dead=false code=RG life=[20,1] -> present=true dead=false code=RG life=[32,1]; belt potions 1 -> 0; err <nil> | runs: 2, identical
+time=2026-10-31T23:12:14.093-04:00 level=INFO msg="npc: talk" npc=Akara pick=reward class=148 path=[Talk]
+time=2026-10-31T23:12:14.093-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T23:12:14.099-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T23:12:14.101-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:121 Y:70}" wps=7 partial=false cells=36
+time=2026-10-31T23:12:14.101-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:137 Y:101}" cur=1 of=7
+time=2026-10-31T23:12:14.102-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:102}" wp="{X:137 Y:93}" cur=2 of=7
+time=2026-10-31T23:12:14.104-04:00 level=DEBUG msg="nav click" pos="{X:138 Y:96}" wp="{X:136 Y:85}" cur=3 of=7
+time=2026-10-31T23:12:14.106-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:87}" wp="{X:130 Y:78}" cur=5 of=7
+time=2026-10-31T23:12:14.108-04:00 level=DEBUG msg="nav plan" from="{X:133 Y:83}" to="{X:120 Y:72}" wps=3 partial=false cells=12
+time=2026-10-31T23:12:14.108-04:00 level=DEBUG msg="nav click" pos="{X:133 Y:83}" wp="{X:126 Y:75}" cur=1 of=3
+time=2026-10-31T23:12:14.111-04:00 level=DEBUG msg="nav click" pos="{X:128 Y:77}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.114-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:72}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.116-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:72}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.118-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:72}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.119-04:00 level=INFO msg="nav stuck" pos="{X:123 Y:72}" wp="{X:123 Y:72}" rung=0
+time=2026-10-31T23:12:14.120-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:72}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.121-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:72}" wp="{X:123 Y:72}" cur=2 of=3
+time=2026-10-31T23:12:14.122-04:00 level=INFO msg="nav stuck" pos="{X:123 Y:72}" wp="{X:123 Y:72}" rung=1
+time=2026-10-31T23:12:14.123-04:00 level=DEBUG msg="nav plan" from="{X:123 Y:77}" to="{X:119 Y:74}" wps=1 partial=false cells=3
+time=2026-10-31T23:12:14.123-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:77}" wp="{X:121 Y:75}" cur=0 of=1
+time=2026-10-31T23:12:14.123-04:00 level=INFO msg="nav: stuck recovered" at="{X:123 Y:72}" method=sidestep rung=2 repeat=false
+time=2026-10-31T23:12:14.124-04:00 level=INFO msg="npc: interact" class=148 try=1 dist=3 npc="[119 74]"
+time=2026-10-31T23:12:14.134-04:00 level=INFO msg="npc: time-to-panel" ms=3760 first-contact=false clicks=1 strategy=wait class=148
+time=2026-10-31T23:12:14.134-04:00 level=INFO msg="npc: menu open" class=148 try=1 ms=9240
+time=2026-10-31T23:12:14.138-04:00 level=INFO msg="npc visit: talk done" npc=Akara path=[Talk] ms=11400 err=<nil>
+time=2026-10-31T23:12:14.138-04:00 level=INFO msg="akara talk" skillPointsBefore=0 after=1
+time=2026-10-31T23:12:14.146-04:00 level=INFO msg="npc: talk" npc=Akara pick=reward class=148 path=[Talk]
+time=2026-10-31T23:12:14.146-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T23:12:14.146-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:119 Y:74}" wps=7 partial=false cells=36
+time=2026-10-31T23:12:14.147-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:137 Y:101}" cur=1 of=7
+time=2026-10-31T23:12:14.147-04:00 level=DEBUG msg="nav click" pos="{X:138 Y:102}" wp="{X:137 Y:93}" cur=2 of=7
+time=2026-10-31T23:12:14.149-04:00 level=DEBUG msg="nav click" pos="{X:137 Y:96}" wp="{X:136 Y:85}" cur=3 of=7
+time=2026-10-31T23:12:14.152-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:88}" wp="{X:136 Y:84}" cur=4 of=7
+time=2026-10-31T23:12:14.153-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:86}" wp="{X:130 Y:79}" cur=5 of=7
+time=2026-10-31T23:12:14.154-04:00 level=DEBUG msg="nav plan" from="{X:134 Y:84}" to="{X:119 Y:74}" wps=3 partial=false cells=14
+time=2026-10-31T23:12:14.154-04:00 level=DEBUG msg="nav click" pos="{X:134 Y:84}" wp="{X:127 Y:77}" cur=1 of=3
+time=2026-10-31T23:12:14.156-04:00 level=DEBUG msg="nav click" pos="{X:129 Y:79}" wp="{X:122 Y:74}" cur=2 of=3
+time=2026-10-31T23:12:14.159-04:00 level=INFO msg="npc: interact" class=148 try=1 dist=3 npc="[119 74]"
+time=2026-10-31T23:12:14.167-04:00 level=INFO msg="npc: time-to-panel" ms=3760 first-contact=false clicks=1 strategy=wait class=148
+time=2026-10-31T23:12:14.167-04:00 level=INFO msg="npc: menu open" class=148 try=1 ms=6400
+time=2026-10-31T23:12:14.170-04:00 level=INFO msg="npc visit: talk done" npc=Akara path=[Talk] ms=8560 err=<nil>
+time=2026-10-31T23:12:14.171-04:00 level=INFO msg="akara talk" skillPointsBefore=1 after=2
+DRILL D8.q P20 PASS the bot's own talk path (internal/talk, the code cmd/d2bot runs) claimed the reward: one skill point (built by fixtalk, awaiting live proof: a Pass here is the first) | intended: Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed | observed: skill points 0 -> 1; quest list: 1	0x0001	act1	bits=0; 2	0x0001	act1	bits=0; 41	0x2002	act5	bits=1,13; err <nil> | runs: 2, identical
+time=2026-10-31T23:12:14.179-04:00 level=INFO msg="npc: talk" npc=Warriv pick="go east" class=155 path="[Go East]"
+time=2026-10-31T23:12:14.179-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T23:12:14.180-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:62 Y:108}" wps=14 partial=false cells=85
+time=2026-10-31T23:12:14.180-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:139 Y:103}" cur=0 of=14
+time=2026-10-31T23:12:14.181-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:134 Y:97}" cur=1 of=14
+time=2026-10-31T23:12:14.182-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:99}" wp="{X:130 Y:93}" cur=2 of=14
+time=2026-10-31T23:12:14.184-04:00 level=DEBUG msg="nav click" pos="{X:132 Y:96}" wp="{X:123 Y:91}" cur=3 of=14
+time=2026-10-31T23:12:14.186-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:93}" wp="{X:115 Y:91}" cur=4 of=14
+time=2026-10-31T23:12:14.187-04:00 level=DEBUG msg="nav plan" from="{X:123 Y:92}" to="{X:62 Y:108}" wps=11 partial=false cells=66
+time=2026-10-31T23:12:14.187-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:92}" wp="{X:114 Y:91}" cur=1 of=11
+time=2026-10-31T23:12:14.189-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:91}" wp="{X:106 Y:91}" cur=2 of=11
+time=2026-10-31T23:12:14.192-04:00 level=DEBUG msg="nav click" pos="{X:110 Y:91}" wp="{X:98 Y:91}" cur=3 of=11
+time=2026-10-31T23:12:14.195-04:00 level=DEBUG msg="nav click" pos="{X:101 Y:91}" wp="{X:90 Y:91}" cur=4 of=11
+time=2026-10-31T23:12:14.196-04:00 level=DEBUG msg="nav plan" from="{X:99 Y:91}" to="{X:62 Y:108}" wps=7 partial=false cells=42
+time=2026-10-31T23:12:14.196-04:00 level=DEBUG msg="nav click" pos="{X:99 Y:91}" wp="{X:91 Y:91}" cur=0 of=7
+time=2026-10-31T23:12:14.198-04:00 level=DEBUG msg="nav click" pos="{X:94 Y:91}" wp="{X:83 Y:91}" cur=1 of=7
+time=2026-10-31T23:12:14.200-04:00 level=DEBUG msg="nav click" pos="{X:86 Y:91}" wp="{X:79 Y:91}" cur=2 of=7
+time=2026-10-31T23:12:14.201-04:00 level=DEBUG msg="nav click" pos="{X:83 Y:91}" wp="{X:72 Y:95}" cur=3 of=7
+time=2026-10-31T23:12:14.210-04:00 level=DEBUG msg="nav plan" from="{X:75 Y:94}" to="{X:62 Y:108}" wps=3 partial=false cells=18
+time=2026-10-31T23:12:14.210-04:00 level=DEBUG msg="nav click" pos="{X:75 Y:94}" wp="{X:68 Y:98}" cur=0 of=3
+time=2026-10-31T23:12:14.212-04:00 level=DEBUG msg="nav click" pos="{X:70 Y:97}" wp="{X:63 Y:101}" cur=1 of=3
+time=2026-10-31T23:12:14.214-04:00 level=DEBUG msg="nav click" pos="{X:66 Y:99}" wp="{X:60 Y:106}" cur=2 of=3
+time=2026-10-31T23:12:14.216-04:00 level=INFO msg="npc: interact" class=155 try=1 dist=4 npc="[62 108]"
+time=2026-10-31T23:12:14.219-04:00 level=INFO msg="npc: time-to-panel" ms=320 first-contact=false clicks=1 strategy=wait class=155
+time=2026-10-31T23:12:14.219-04:00 level=INFO msg="npc: menu open" class=155 try=1 ms=6560
+time=2026-10-31T23:12:14.621-04:00 level=INFO msg="npc visit: talk done" npc=Warriv path="[Go East]" ms=11120 err=<nil>
+time=2026-10-31T23:12:14.638-04:00 level=INFO msg="npc: talk" npc=Warriv pick="go east" class=155 path="[Go East]"
+time=2026-10-31T23:12:14.639-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T23:12:14.639-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:62 Y:108}" wps=14 partial=false cells=85
+time=2026-10-31T23:12:14.639-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:139 Y:103}" cur=0 of=14
+time=2026-10-31T23:12:14.640-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:134 Y:97}" cur=1 of=14
+time=2026-10-31T23:12:14.642-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:99}" wp="{X:130 Y:93}" cur=2 of=14
+time=2026-10-31T23:12:14.643-04:00 level=DEBUG msg="nav click" pos="{X:132 Y:96}" wp="{X:123 Y:91}" cur=3 of=14
+time=2026-10-31T23:12:14.645-04:00 level=DEBUG msg="nav click" pos="{X:126 Y:93}" wp="{X:115 Y:91}" cur=4 of=14
+time=2026-10-31T23:12:14.646-04:00 level=DEBUG msg="nav plan" from="{X:123 Y:92}" to="{X:62 Y:108}" wps=11 partial=false cells=66
+time=2026-10-31T23:12:14.647-04:00 level=DEBUG msg="nav click" pos="{X:123 Y:92}" wp="{X:114 Y:91}" cur=1 of=11
+time=2026-10-31T23:12:14.648-04:00 level=DEBUG msg="nav click" pos="{X:118 Y:91}" wp="{X:106 Y:91}" cur=2 of=11
+time=2026-10-31T23:12:14.651-04:00 level=DEBUG msg="nav click" pos="{X:110 Y:91}" wp="{X:98 Y:91}" cur=3 of=11
+time=2026-10-31T23:12:14.653-04:00 level=DEBUG msg="nav click" pos="{X:101 Y:91}" wp="{X:90 Y:91}" cur=4 of=11
+time=2026-10-31T23:12:14.654-04:00 level=DEBUG msg="nav plan" from="{X:99 Y:91}" to="{X:62 Y:108}" wps=7 partial=false cells=42
+time=2026-10-31T23:12:14.654-04:00 level=DEBUG msg="nav click" pos="{X:99 Y:91}" wp="{X:91 Y:91}" cur=0 of=7
+time=2026-10-31T23:12:14.656-04:00 level=DEBUG msg="nav click" pos="{X:94 Y:91}" wp="{X:83 Y:91}" cur=1 of=7
+time=2026-10-31T23:12:14.658-04:00 level=DEBUG msg="nav click" pos="{X:86 Y:91}" wp="{X:78 Y:91}" cur=2 of=7
+time=2026-10-31T23:12:14.660-04:00 level=DEBUG msg="nav click" pos="{X:81 Y:91}" wp="{X:71 Y:95}" cur=3 of=7
+time=2026-10-31T23:12:14.661-04:00 level=DEBUG msg="nav plan" from="{X:78 Y:92}" to="{X:62 Y:108}" wps=4 partial=false cells=21
+time=2026-10-31T23:12:14.661-04:00 level=DEBUG msg="nav click" pos="{X:78 Y:92}" wp="{X:71 Y:96}" cur=0 of=4
+time=2026-10-31T23:12:14.663-04:00 level=DEBUG msg="nav click" pos="{X:73 Y:94}" wp="{X:64 Y:100}" cur=1 of=4
+time=2026-10-31T23:12:14.665-04:00 level=DEBUG msg="nav click" pos="{X:67 Y:98}" wp="{X:62 Y:102}" cur=2 of=4
+time=2026-10-31T23:12:14.666-04:00 level=DEBUG msg="nav click" pos="{X:65 Y:100}" wp="{X:60 Y:106}" cur=3 of=4
+time=2026-10-31T23:12:14.668-04:00 level=INFO msg="npc: interact" class=155 try=1 dist=4 npc="[62 108]"
+time=2026-10-31T23:12:14.670-04:00 level=INFO msg="npc: time-to-panel" ms=320 first-contact=false clicks=1 strategy=wait class=155
+time=2026-10-31T23:12:14.670-04:00 level=INFO msg="npc: menu open" class=155 try=1 ms=6560
+time=2026-10-31T23:12:14.684-04:00 level=INFO msg="npc visit: talk done" npc=Warriv path="[Go East]" ms=11120 err=<nil>
+DRILL D8.w P21 PASS the bot's own act hop talk (internal/talk, the code cmd/d2bot runs) took the character to Lut Gholein (built by fixtalk, awaiting live proof: a Pass here is the first) | intended: Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40) | observed: menu [bot path Go East]; area after 40; err <nil> | runs: 2, identical
+DRILL D8.g P19 BLOCKED missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D8.c      P18   BLOCKED  DIFF the free Rogue was granted by the claim (14.3,21.9:RG)
+D8.a      P18   PASS     same revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)
+D8.m      P3    PASS     same merc life 20 -> 32 with one belt potion
+D8.q      P20   PASS     same the bot's own talk path (internal/talk, the code cmd/d2bot runs) claimed the reward: one skill point (built by fixtalk, awaiting live proof: a Pass here is the first)
+D8.w      P21   PASS     same the bot's own act hop talk (internal/talk, the code cmd/d2bot runs) took the character to Lut Gholein (built by fixtalk, awaiting live proof: a Pass here is the first)
+D8.g      P19   BLOCKED  -    missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario
+cheat verbs used (each ledgered with a reason): debug belt clear, debug give hp1 belt 0, debug goto 1, debug merc hire 0, debug merc hurt 20, debug merc kill, debug quest list, debug quest set 1 0x0002, debug quest set 2 0x0002, debug quest set 6 0x0001, debug stat 14 3000
+cheat ledger: /home/jesse/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T23:12:14.694-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 4s
+exit 0

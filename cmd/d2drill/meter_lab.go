@@ -7,6 +7,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/d2dcombat"
 	"d2lod-bot/internal/drill"
 	"d2lod-bot/internal/env"
 )
@@ -25,6 +26,7 @@ type gtClock struct {
 	dead     map[int]bool
 	class    map[int]string
 	taken    int
+	t0       d2dcombat.Totals // the Meter's totals when the window opened: Enable forgets the last sample, not the totals
 	lastLife int
 	have     bool
 	samples  int
@@ -79,12 +81,19 @@ func (l *lab) startMeter(ctx context.Context) (*gtClock, env.Clock) {
 	g := newGT(l, ctx, old)
 	l.rig.Meter.Clk = g
 	l.rig.Meter.Enable()
+	g.t0 = l.rig.Meter.Totals()
 	return g, old
 }
 
 func (l *lab) finishMeter(g *gtClock, old env.Clock, clearKills int) *drill.MeterCheck {
 	l.rig.Meter.Clk = old
 	t := l.rig.Meter.Totals()
+	t.Damage -= g.t0.Damage
+	t.ManaSpent -= g.t0.ManaSpent
+	t.Deaths -= g.t0.Deaths
+	t.Samples -= g.t0.Samples
+	t.DamageDealt -= g.t0.DamageDealt
+	t.Kills -= g.t0.Kills
 	g.mu.Lock()
 	defer g.mu.Unlock()
 	mc := &drill.MeterCheck{Totals: t.String(), Kills: t.Kills, Dealt: t.DamageDealt, Taken: t.Damage, DealtOK: t.DealtOK, GTTaken: g.taken, Units: len(g.first), Samples: g.samples, ClearKills: clearKills}
