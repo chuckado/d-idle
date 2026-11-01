@@ -39,7 +39,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
-| [apireview](../../openspec/changes/apireview/) | in-progress | apireview | `.github/workflows/pr-review.yml`<br>`tools/ci/pr_review.py`<br>`tools/ci/haiku_tick.py`<br>`tools/ci/anthropic_http.py`<br>`tools/ci/tests/**`<br>`docs/process/api-credits.md` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -74,8 +73,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change apireview: python3 -m unittest discover -s tools/ci/tests -t tools/ci passes; tools/ci/check.sh passes
-- change apireview: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -106,6 +103,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 97f2fc3 11-01 01:24 `Merge agent/apireview: advisory PR review workflow (owner PRs only) and Anthropic HTTP helper` (apireview)
 - b2c88b8 11-01 01:20 `Merge agent/fixmouth2: arrival hold across walks, mouthApproachR 12, capped evade inside a cave mouth` (fixmouth2)
 - 0101ebe 11-01 01:16 `Merge agent/fixmanamodel: accurate mana model (ManaPerFrame256, ManaBook)` (fixmanamodel)
 - 458ecd4 11-01 01:14 `Merge agent/nexthit: D-NEXTHIT evidence pack, PR draft, oracle copies (PR NOT READY)` (nexthit)
@@ -115,5 +113,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4b86423 11-01 01:52 `Merge agent/fixcastgap: per-skill cast gap (Lightning 890 ms on game.exe, 650 ms on d2d)` (fixcastgap)
 - c53dc1d 11-01 01:48 `Merge agent/drills15: DRILLS15 live drill results (13 drills on d2d vs game.exe traces)` (drills15)
 - ea3e136 11-01 01:41 `Merge agent/sklight: SKLIGHT trace of Lightning/Chain Lightning and piercing re-hit` (sklight)
-- d83ceb0 11-01 01:36 `Merge agent/fixmouth: mouthArrivalR for the first walk after a warp arrival (den bounce fix A)` (fixmouth)
 <!-- statusgen:end -->
