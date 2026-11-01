@@ -300,18 +300,18 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 	}
 	for _, ln := range l.rec.Since(mark) {
 		switch {
-		case strings.HasPrefix(ln, "out of mana: backing off"):
+		case strings.Contains(ln, "out of mana: backing off"):
 			ei.Backoffs++
 			if len(ei.Samples) < 2 {
 				ei.Samples = append(ei.Samples, ln)
 			}
-		case strings.HasPrefix(ln, "out of mana: waiting"):
+		case strings.Contains(ln, "out of mana: waiting"):
 			ei.Waits++
-		case strings.HasPrefix(ln, "out of mana: back-off cap"):
+		case strings.Contains(ln, "out of mana: back-off cap"):
 			ei.CapMelee++
-		case strings.HasPrefix(ln, "combat move: already there"):
+		case strings.Contains(ln, "combat move: already there"):
 			ei.AlreadyThere++
-		case strings.HasPrefix(ln, "move failed"):
+		case strings.Contains(ln, "move failed"):
 			ei.MoveFailed++
 			if strings.Contains(ln, "empty path") {
 				ei.EmptyPath++
