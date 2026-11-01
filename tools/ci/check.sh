@@ -21,6 +21,9 @@ while IFS= read -r -d '' f; do
   esac
   sz=$(stat -c %s "$f")
   [ "$sz" -gt 1048576 ] && bad "file over 1 MB outside testdata: $f ($sz bytes)"
+  case "$f" in
+    docs/probes/*) [ "$sz" -gt 524288 ] && bad "probe result over 512 KB (cap it: d2drill -cap $f): $f ($sz bytes)" ;;
+  esac
 done < <(files)
 
 [ "${1:-}" = "--hygiene-only" ] && { [ $fail = 0 ] && echo "hygiene ok"; exit $fail; }

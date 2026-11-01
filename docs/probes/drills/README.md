@@ -2,6 +2,8 @@
 
 > status: DRILLS5 (2026-10-31, last section): live proofs of the merged fixes (fix-bank, fix-obj, fix-price, fix-belt2/pickup, fix-nav, fix-restart, fix-missile) and the drills the fork cheats unblocked. Earlier: D0 to D9 (except as listed BLOCKED), D2.d and the hover audit H ran live (2026-10-31, DRILLS3; see the DRILLS3 section). DRILLS4 (2026-10-31, last section): D10 fault recovery, DW.a3 and acts 3 to 5, the repair price table. Earlier: D0, D1 (rerun after the primitive fixes) and D2 (portals, partly) run live (2026-10-31). Results: `2026-10-31-d1.txt` (first run, before the fixes), `2026-10-31-d1rerun.txt` (after fix-belt and fix-pickup), `2026-10-31-d2.txt`; each `.json` next to it. Findings of the D2 run: section W below.
 
+Size rule: a result log committed here must stay small (CI fails files over 1 MB; `tools/ci/check.sh --hygiene-only` fails probe files over 512 KB, run it before pushing). Cap a pasted `-v` log first: `go run ./cmd/d2drill -cap FILE` (keeps head, tail and verdict/error lines, adds one marker line). See docs/fixbigfiles.md.
+
 Run on the worker host, one hidden slot, lab build, throwaway Sorceress, `--no-save`, lockstep:
 `D2D_AGENT=drills tools/agentrun.sh drills --ttl 3600 -- tools/d2dslot.sh run -t 3600 -- d2drill -group D1 [-only D1.P1] [-repeat 2] [-v] [-label NAME] [-probe 'verb; verb']`.
 The binary is the lab build WITH the click modifier (`D2D_BIN` or `-bin`); `-label` names the result files; `-probe` runs verbs (debug verbs through the cheat ledger) and prints the replies, to find out what a verb does.

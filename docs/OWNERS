@@ -45,3 +45,5 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/fixbigfiles.md  fixbigfiles  fixbigfiles
+openspec/changes/fixbigfiles/**  fixbigfiles  fixbigfiles
