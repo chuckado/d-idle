@@ -9,6 +9,7 @@ import (
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/quest"
 	"d2lod-bot/internal/questmem"
+	"d2lod-bot/internal/talk"
 	"d2lod-bot/internal/task"
 )
 
@@ -63,10 +64,10 @@ func TestActNodesResolveInTheAdapter(t *testing.T) {
 		}
 	}
 	for k := range r.talks {
-		if _, ok := talkPaths[k]; !ok {
+		if _, ok := talk.Paths[k]; !ok {
 			t.Errorf("no talk path for %v", k)
 		}
-		if _, ok := npcByAct[k[0]]; !ok {
+		if _, ok := talk.ByAct[k[0]]; !ok {
 			t.Errorf("no NPC class for %s", k[0])
 		}
 	}
@@ -122,17 +123,17 @@ func TestNPCClassByAct(t *testing.T) {
 		{task.NPCMeshif, 2, quest.Meshif}, {task.NPCMeshif, 3, quest.MeshifA3},
 		{task.NPCTyrael, 4, quest.Tyrael}, {task.NPCTyrael, 2, quest.TyraelTomb}, {task.NPCLarzuk, 5, quest.Larzuk},
 		{task.NPCAnya, 5, quest.AnyaNPC}, {task.NPCMalah, 5, quest.Malah}, {task.NPCQualKehk, 5, quest.QualKehk},
-		{task.NPCAtma, 2, quest.Atma}, {npcAsheara, 3, quest.Asheara}, {task.NPCAkara, 1, quest.Akara},
+		{task.NPCAtma, 2, quest.Atma}, {talk.NPCAsheara, 3, quest.Asheara}, {task.NPCAkara, 1, quest.Akara},
 	}
 	for _, c := range cases {
-		if got, ok := npcClassIn(c.npc, c.act); !ok || got != c.want {
+		if got, ok := talk.ClassIn(c.npc, c.act); !ok || got != c.want {
 			t.Errorf("%s in act %d: %d %v, want %d", c.npc, c.act, got, ok, c.want)
 		}
 	}
-	if _, ok := npcClassIn("Nobody", 2); ok {
+	if _, ok := talk.ClassIn("Nobody", 2); ok {
 		t.Error("unknown NPC resolved")
 	}
-	if _, ok := npcClassIn(task.NPCMeshif, 1); ok {
+	if _, ok := talk.ClassIn(task.NPCMeshif, 1); ok {
 		t.Error("Meshif has no act 1 class")
 	}
 }

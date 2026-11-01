@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"d2lod-bot/internal/talk"
 	"d2lod-bot/internal/task"
 )
 
@@ -27,7 +28,7 @@ func TestAct1CampaignNamesResolve(t *testing.T) {
 		}
 	}
 	for k := range r.talks {
-		if _, ok := talkPaths[k]; !ok {
+		if _, ok := talk.Paths[k]; !ok {
 			t.Errorf("no talk path for %v", k)
 		}
 	}
