@@ -113,6 +113,7 @@ type Runner struct {
 	killMu      sync.Mutex      // killedNames
 	killedNames map[string]bool // normalized names of monsters killed in this game (campaign proxies)
 
+	tpd           tpDumper // inv-tp-dump rate limit (tpdump.go)
 	obMu          sync.Mutex
 	ob            observer
 	dlog          *deathLog         // guarded by obMu

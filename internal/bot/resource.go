@@ -310,5 +310,8 @@ func (r *Runner) hasPortalSource(s *d2.Snapshot) bool {
 	if r.e.Read != nil {
 		st = r.e.Read.UnitStats
 	}
-	return combat.PortalSource(s, portalClasses{r.d.Catalog}, st) != nil
+	cat := portalClasses{r.d.Catalog}
+	src := combat.PortalSource(s, cat, st)
+	r.dumpTP(s, src != nil, cat, st, src)
+	return src != nil
 }

@@ -139,3 +139,5 @@ internal/bot/goal.go  soakstall  soakstall
 internal/bot/runner.go  soakstall  soakstall
 internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
+internal/bot/tpdump.go  hastpdump  hastpdump
+docs/hastpdump.md  hastpdump  hastpdump
