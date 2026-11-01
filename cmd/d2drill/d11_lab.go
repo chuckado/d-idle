@@ -54,6 +54,10 @@ var d11att = map[int]int{}
 var d11all = map[int]int{}
 var d11each string
 
+// d11min[k] is the smallest distance (subtiles, one decimal) at which the k+1th nearest living monster stood over the reads of a drill.
+var d11min = [3]float64{1e9, 1e9, 1e9}
+var d11reads int
+
 func d11AttStr() string {
 	hist := func(m map[int]int) string {
 		var k []int
@@ -67,7 +71,7 @@ func d11AttStr() string {
 		}
 		return strings.Join(b, " ")
 	}
-	return hist(d11att) + "] [all living monsters " + hist(d11all) + "] [last read " + d11each
+	return fmt.Sprintf("%s] [over %d reads the 1st, 2nd and 3rd nearest monster were at best %.1f, %.1f, %.1f subtiles away] [all living monsters ", hist(d11att), d11reads, d11min[0], d11min[1], d11min[2]) + "" + hist(d11all) + "] [last read " + d11each
 }
 
 // d11Within is d11Adjacent with a radius in subtiles.
@@ -83,9 +87,15 @@ func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, li
 		return
 	}
 	var ds []int
+	var fds []float64
 	defer func() {
 		sort.Ints(ds)
 		d11each = fmt.Sprint(ds)
+		sort.Float64s(fds)
+		d11reads++
+		for k := 0; k < 3 && k < len(fds); k++ {
+			d11min[k] = min(d11min[k], fds[k])
+		}
 	}()
 	for _, m := range ms.Items {
 		if m.HP.Cur <= 0 || m.Mode == "DD" || m.Mode == "DT" {
@@ -94,6 +104,7 @@ func (l *lab) d11Within(ctx context.Context, radius float64) (adj, alive int, li
 		alive++
 		d := math.Hypot(5*(m.CellX-lv.X), 5*(m.CellY-lv.Y))
 		d11all[int(d+0.5)]++
+		fds = append(fds, math.Round(d*10)/10)
 		ds = append(ds, int(d+0.5))
 		if strings.HasPrefix(m.Mode, "A") {
 			d11att[int(d+0.5)]++
@@ -183,6 +194,7 @@ const d11Mon = "zombie1"
 func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius float64) (adj int) {
 	clear(d11att)
 	clear(d11all)
+	d11min, d11reads = [3]float64{1e9, 1e9, 1e9}, 0
 	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn %s %d near", d11Mon, n), "melee monsters near the throwaway: the fight under test (docs/forkcheats.md)"); err != nil {
 		return -1
 	}
