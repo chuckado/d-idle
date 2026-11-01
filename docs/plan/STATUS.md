@@ -119,6 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- ccc7ec7 11-01 14:41 `Merge agent/skground: SKGROUND: Blizzard and Meteor traced, d2d deviations, bot delay-timer findings` (skground)
 - 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
 - ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
 - 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
@@ -128,5 +129,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7739d9d 11-01 13:49 `Merge agent/crfollow159: CodeRabbit follow-up on #159 logged` (crfollow159)
 - db9b20e 11-01 13:32 `Merge agent/palfix: Paladin findings fixed offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, table rows, plandata seam, Zealot-lite)` (palfix)
 - dd68c40 11-01 13:32 `Merge origin/main into palsme` (palsme)
-- ed03c45 11-01 13:26 `Merge agent/boardgrow: work archive, chunker sync honours it, 12 new board items` (boardgrow)
 <!-- statusgen:end -->
