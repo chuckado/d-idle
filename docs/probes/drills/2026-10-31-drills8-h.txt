@@ -1,5 +1,5 @@
 d2dslot: got slot 0
-time=2026-10-31T19:24:49.830-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1166413 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:24:49.830-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1166413 still running; socket file is gone (stat <lab>/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <lab>/slots/0/d2d.sock: dial unix <lab>/slots/0/d2d.sock: connect: no such file or directory"
 H.pause-diag: approach of npc 5 failed
 H.pause-diag: verb cmd interact +9
 H.pause-diag: verb cmd move +7

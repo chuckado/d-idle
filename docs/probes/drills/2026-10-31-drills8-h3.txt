@@ -1,5 +1,5 @@
 d2dslot: got slot 0
-time=2026-10-31T19:21:15.267-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1150799 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T19:21:15.267-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1150799 still running; socket file is gone (stat <lab>/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <lab>/slots/0/d2d.sock: dial unix <lab>/slots/0/d2d.sock: connect: no such file or directory"
 time=2026-10-31T19:21:16.293-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
 H.pause-diag: approach of npc 5 failed
 H.pause-diag: verb cmd interact +9

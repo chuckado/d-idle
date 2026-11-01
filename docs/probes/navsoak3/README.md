@@ -12,12 +12,12 @@ origin/main 35ce4c2 (bot binary `bin/d2bot.navsoak3`, sha256 prefix dbcfbd9eef92
 ## What it is
 Recipe of [navsoak2](../navsoak2/README.md): fresh uncheated Sorceress, seed 5, `--backend d2d --managed --d2d-class 4 --toggle autoloot=off,autoparty=off --d2d-args "--lockstep" --goals campaign`, `D2D_RUN=on`, nice 10, no viewer, no stream. Character `Navy4`, instance `navsoak3`, supervisor `bin/navsoak3-sup.sh` (up to 3 restarts with `--d2d-class -1 --clean-start`), started with `D2D_AGENT=navsoak3 bin/agentrun.sh navsoak3 --ttl 15000 -- bin/d2dslot.sh run -w 600 -t 15000 -- bash bin/navsoak3-sup.sh`. Other slots ran m2early baselines at the same time.
 
-## Where (worker host, relative to `~/d2d-lab/navsoak3/`)
+## Where (worker host, relative to `<lab>/navsoak3/`)
 `logs/supervisor.log` (restart reasons), `logs/bot-0.log` (then `bot-1.log`..`bot-3.log`; last line `exit <code>`; exit 5 = the stall ladder asked for a supervisor restart), `data/` (saves), `bin/`.
 
 ## Analysis (read-only)
 ```
-cd ~/d2d-lab/navsoak3
+cd <lab>/navsoak3
 cat logs/supervisor.log; bin/agentreap.sh --list
 grep '"msg":"minute"' logs/bot-*.log | tail -3     # clvl, kills, deaths, gold, area, step
 grep '"msg":"pace"' logs/bot-*.log | tail -1       # virtual vs wall

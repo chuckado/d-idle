@@ -11,14 +11,14 @@
 - Started as `D2D_AGENT=navsoak bin/d2dslot.sh run -w 600 -t 15000 -- bash bin/navsoak-sup.sh` (slot 0, registered under agentrun as agent `navsoak`).
 - Supervisor `bin/navsoak-sup.sh`: if the bot exits (watchdog "runner loop made no progress, exiting for a restart" or any crash) it restarts, up to 3 times, with `--d2d-class -1 --clean-start` (reload the saved Navy, fresh game), one line per restart in the supervisor log, and exits at the time limit.
 
-## Where (on the worker host, relative to `~/d2d-lab/navsoak/`)
+## Where (on the worker host, relative to `<lab>/navsoak/`)
 - `logs/supervisor.log` (start, launches, restarts with reason, end)
 - `logs/bot-0.log` (first run), `bot-1.log` .. `bot-3.log` after restarts; the last line is `exit <code>`
 - `data/` the bot data dir (character saves, state); `bin/` the shipped binaries and scripts
 
 ## Analysis (read-only; run on the worker host or via ssh)
 ```
-cd ~/d2d-lab/navsoak
+cd <lab>/navsoak
 cat logs/supervisor.log
 bin/agentreap.sh --list                                   # still running?
 grep -c 'combat no progress, holding' logs/bot-*.log      # watchdog storm check (0 so far)

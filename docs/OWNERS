@@ -77,3 +77,12 @@ openspec/changes/skmiss/**  skmiss  skmiss
 docs/fixcrowd.md  fixcrowd  fixcrowd
 internal/combat/crowd_test.go  fixcrowd  fixcrowd
 internal/combat/fixcrowd_test.go  fixcrowd  fixcrowd
+openspec/changes/auditfix/**  auditfix  auditfix
+tools/ci/gamecode_guard.sh  auditfix  auditfix
+tools/ci/gamecode_allow.txt  auditfix  auditfix
+tools/ci/gamecode_test.sh  auditfix  auditfix
+tools/ci/scrub_paths.py  auditfix  auditfix
+docs/process/gamecode-guard.md  auditfix  auditfix
+docs/fixtures.md  auditfix  auditfix
+cmd/leakcheck/scan.go  auditfix  auditfix
+cmd/leakcheck/leakcheck_test.go  auditfix  auditfix

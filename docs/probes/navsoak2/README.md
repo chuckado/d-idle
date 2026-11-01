@@ -13,19 +13,19 @@ origin/main d82bd47 (bot binary `bin/d2bot.navsoak2`, sha256 prefix a5d1b39d237c
 ## What it is
 Same recipe as docs/probes/navsoak/README.md (branch agent/navsoak, cfde63b): fresh uncheated Sorceress, seed 5, `--backend d2d --managed --d2d-class 4 --toggle autoloot=off,autoparty=off --d2d-args "--lockstep" --goals campaign`, `D2D_RUN=on`, nice 10, no viewer. Differences: character `Navy2`, instance `navsoak2`, supervisor `bin/navsoak2-sup.sh` (up to 3 restarts with `--d2d-class -1 --clean-start`), started with `D2D_AGENT=navsoak2 bin/d2dslot.sh run -w 600 -t 15000 -- bash bin/navsoak2-sup.sh`.
 
-## Where (worker host, relative to `~/d2d-lab/navsoak2/`)
+## Where (worker host, relative to `<lab>/navsoak2/`)
 `logs/supervisor.log`, `logs/bot-0.log` (then `bot-1.log`..`bot-3.log` after restarts; last line `exit <code>`), `data/` (saves), `bin/`.
 
 ## Analysis (read-only)
 ```
-cd ~/d2d-lab/navsoak2
+cd <lab>/navsoak2
 cat logs/supervisor.log
 bin/agentreap.sh --list
 grep -c 'combat no progress, holding' logs/bot-*.log
 grep '"msg":"minute"' logs/bot-0.log | tail -3     # clvl, kills, deaths, potions, gold, area
 grep '"msg":"pace"' logs/bot-0.log | tail -1
 grep -E 'died|death|failsafe|panic|runner loop made no progress' logs/bot-*.log | tail
-# A/B against ~/d2d-lab/navsoak/logs/bot-0.log (same fields): compare minute lines by "virtual" time, not wall time
+# A/B against <lab>/navsoak/logs/bot-0.log (same fields): compare minute lines by "virtual" time, not wall time
 ```
 
 ## Stop

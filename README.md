@@ -32,6 +32,8 @@ day-by-day notes in `CHANGELOG.md`, and the entry point for everything else is `
   the old 2 h and 8 h Game.exe gate soaks are retired in favour of the same gates on d2d (ADR 0013, spec
   `openspec/specs/soak-gates/spec.md`, "d2d gate ladder" in `docs/review-strategy.md`).
 
+This repo contains no game files: no Blizzard binaries, MPQ archives, saves or data tables; you need your own legitimate install of Diablo II: Lord of Destruction 1.14d.
+
 In both cases **you supply your own Diablo II install**. Nothing Blizzard owns is in this repository, downloaded, or mirrored,
 and the bot never touches Battle.net or chat. Our fixes to d2d are offered to its maintainer upstream as small, proven pull
 requests; this repo contains no d2d code.

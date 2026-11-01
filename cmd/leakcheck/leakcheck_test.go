@@ -116,3 +116,21 @@ func TestRunModesAndManifest(t *testing.T) {
 		t.Errorf("output: %s", sb.String())
 	}
 }
+
+func TestLabPathScopedToProbes(t *testing.T) {
+	cases := []struct {
+		path, line string
+		want       int
+	}{
+		{"docs/probes/drills/x.txt", "d2drill -sock ~/d2d-lab/slots/0/d2d.sock", 1},
+		{"docs/probes/drills/x.txt", "cd ~/labrun/head/code/d2lod-wt/drills9", 1},
+		{"docs/probes/drills/x.txt", "d2drill -sock <lab>/slots/0/d2d.sock in <labrun>/code", 0},
+		{"docs/probes/drills/x.txt", "ledger ~/.local/share/d2bot/ledger/cheats.jsonl", 0},
+		{"docs/d2d-lab.md", "work in ~/d2d-lab/fork", 0},
+	}
+	for _, c := range cases {
+		if got := classes(scanText(c.path, c.line, nil))["labpath"]; got != c.want {
+			t.Errorf("%s %q: labpath hits %d, want %d", c.path, c.line, got, c.want)
+		}
+	}
+}

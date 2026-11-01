@@ -26,6 +26,9 @@ while IFS= read -r -d '' f; do
   esac
 done < <(files)
 
+# --- no decompiled game code or game data tables (docs/process/gamecode-guard.md) ---
+tools/ci/gamecode_guard.sh || fail=1
+
 [ "${1:-}" = "--hygiene-only" ] && { [ $fail = 0 ] && echo "hygiene ok"; exit $fail; }
 
 # --- gofmt ---
