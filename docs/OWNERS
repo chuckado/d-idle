@@ -80,3 +80,6 @@ internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
+docs/fixmanamodel.md  fixmanamodel  fixmanamodel
+internal/resource/manamodel.go  fixmanamodel  fixmanamodel
+internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel

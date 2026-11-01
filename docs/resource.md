@@ -36,10 +36,10 @@ Regen-time sensitivity (50 / 100 / 200 s to refill, a U figure): the policy neve
 ## Tags
 - V: nothing verified by this package (offline only).
 - S: class mana needs (docs/classes), Kolbot ladder and thresholds (prior-art 04, 07), belt tiers (plan.json).
-- U: natural mana regeneration (refill in 100 s, same for all classes; real value comes from charstats ManaRegen and gear), no natural life regeneration, potion prices (`DefaultPrices`), healer restores life and mana, potion heal amounts in the sim, portal 1.3 s / leave 1.8 s (from the combat doc), the clvl to tier map.
+- natural mana regeneration is the per-frame whole-256ths rule of docs/fixmanamodel.md (the old U figure of 100 s is gone), no natural life regeneration, potion prices (`DefaultPrices`), healer restores life and mana, potion heal amounts in the sim, portal 1.3 s / leave 1.8 s (from the combat doc), the clvl to tier map.
 
 ## Live checklist (for the main agent, not run)
-1. Combi or Testy, mana empty, stand still 30 s, log mana every 5 s: gives the real regen per class; set `manaFullSecs` (types.go) or feed `ManaRegenB`.
+1. Combi or Testy, mana empty, stand still 30 s, log mana every 5 s: gives the real regen per class; compare with `ManaPerSec` (internal/resource/manamodel.go, docs/fixmanamodel.md) or feed `ManaRegenB`.
 2. Life at 50% in the field for 30 s: confirms no natural life regeneration.
 3. Akara heal at low mana: confirms the healer restores mana.
 4. Vendor prices per tier from `Stock`: pass as `Prices`.
