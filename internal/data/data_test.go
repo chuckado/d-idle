@@ -99,7 +99,7 @@ var fixtures = map[string]string{
 	"charstats":  "class\tstr\tdex\tint\tvit\tLifePerLevel\titem1\titem1loc\titem1count\titem2\titem2loc\titem2count\nSorceress\t10\t25\t35\t10\t4\tsst\trarm\t1\t0\t\t0\nExpansion\t\t\t\t\t\t\t\t\t\t\t\n",
 	"experience": "Level\tAmazon\tSorceress\tExpRatio\nMaxLvl\t4\t4\t10\n0\t0\t0\t1024\n1\t500\t500\t1024\n2\t1500\t1500\t1024\n3\t3750\t3750\t1024\n",
 	"itemtypes":  "ItemType\tCode\tEquiv1\tEquiv2\tBody\nAny\tweap\t\t\t0\nSword\tswor\tmele\t\t1\nMelee\tmele\tweap\t\t0\n",
-	"weapons":    "name\ttype\tcode\tnamestr\tinvwidth\tinvheight\tmindam\tmaxdam\nShort Sword\tswor\tssd\tssd\t1\t3\t2\t7\n",
+	"weapons":    "name\ttype\tcode\tnamestr\tinvwidth\tinvheight\tmindam\tmaxdam\tStrBonus\tDexBonus\nShort Sword\tswor\tssd\tssd\t1\t3\t2\t7\t100\t0\n",
 	"armor":      "name\ttype\tcode\tnamestr\tinvwidth\tinvheight\tminac\tmaxac\tbelt\nCap\thelm\tcap\tcap\t2\t2\t3\t5\t0\nSash\tbelt\tlbl\tlbl\t2\t1\t1\t1\t1\n",
 	"misc":       "name\ttype\tcode\tnamestr\tinvwidth\tinvheight\tstackable\tmaxstack\tautobelt\nMinor Healing Potion\thpot\thp1\thp1\t1\t1\t0\t0\t1\nArrows\tbowq\taqv\taqv\t1\t3\t1\t350\t0\n",
 	"belts":      "name\tnumboxes\tboxwidth\tboxheight\tbox1left\tbox1right\tbox1top\tbox1bottom\tbox2left\tbox2right\tbox2top\tbox2bottom\nbelt\t2\t29\t29\t343\t372\t442\t471\t374\t403\t442\t471\nsash\t1\t29\t29\t343\t372\t442\t471\t\t\t\t\n",
@@ -232,7 +232,7 @@ func TestExtractAndLoad(t *testing.T) {
 	if !db.IsA("swor", "weap") || db.IsA("weap", "swor") || db.IsA("nope", "weap") {
 		t.Error("IsA")
 	}
-	if it := db.ItemByCode("ssd"); it == nil || it.Display != "Short Sword" || it.Width != 1 || it.Height != 3 || it.MaxDam != 7 || it.Kind != KindWeapon {
+	if it := db.ItemByCode("ssd"); it == nil || it.Display != "Short Sword" || it.Width != 1 || it.Height != 3 || it.MaxDam != 7 || it.Kind != KindWeapon || it.StrBonus != 100 || it.DexBonus != 0 {
 		t.Errorf("ssd %+v", it)
 	}
 	if it := db.ItemByCode("aqv"); it == nil || !it.Stackable || it.MaxStack != 350 || it.Kind != KindMisc || db.ItemByCode("lbl").BeltIndex != 1 || !db.ItemByCode("hp1").AutoBelt {
