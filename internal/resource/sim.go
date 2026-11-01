@@ -80,6 +80,8 @@ type Scenario struct {
 	MeleeDmg     float64 // flat damage per swing that always lands; used only when Melee is nil
 	Blow         *Blow   // the blow model (trace B1); nil keeps the flat MeleeDmg
 	Foe          Foe     // what the swings hit (defense, level, undead)
+	Blind        bool    // the policy is not told Blow / Foe (production before the wiring); the world still rolls them
+	Weak         bool    // the pack counts as WeakPack for the policy (every hostile at most clvl+1)
 	MeleeSec     float64
 	TripSec      float64
 	Seed         uint64
@@ -149,12 +151,16 @@ func (w *world) input(hostiles, seen int) Input {
 		sk = append(sk, Skill{Name: "Staff", Melee: true, Ready: true})
 	}
 	w.belt.Rows = w.sc.Belt
-	return Input{
+	in := Input{
 		Life: int(w.life + 0.5), MaxLife: w.sc.MaxLife, Mana: int(w.mana), MaxMana: w.sc.MaxMana, Belt: w.belt, HasTP: w.hasTP,
 		NearTown: true, Gold: w.gold, LastTripGold: w.lastTrip, Level: w.sc.Level, Class: w.sc.Class, Area: 2,
 		Hostiles: hostiles, PackSeen: seen, Skills: sk,
-		Blow: w.sc.Blow, Foe: &w.sc.Foe,
+		WeakPack: w.sc.Weak,
 	}
+	if !w.sc.Blind {
+		in.Blow, in.Foe = w.sc.Blow, &w.sc.Foe
+	}
+	return in
 }
 
 // advance moves time by dt with natural regeneration and, when hostiles are in contact, damage taken.

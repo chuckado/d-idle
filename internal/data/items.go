@@ -90,6 +90,7 @@ type ItemBase struct {
 	TwoMinDam, TwoMaxDam int // 2-handed damage
 	TwoHanded            bool
 	WClass               string
+	StrBonus, DexBonus   int // percent of Strength / Dexterity added to the weapon's damage (the melee model, internal/resource/melee.go)
 	// Armor (armor.txt).
 	MinAC, MaxAC int
 	Block        int
@@ -105,7 +106,7 @@ var itemCols = []string{
 	"name", "code", "namestr", "type", "type2", "invwidth", "invheight", "stackable", "minstack", "maxstack",
 	"level", "levelreq", "reqstr", "reqdex", "cost", "durability", "nodurability", "gemsockets", "speed", "rarity", "spawnable",
 	"quest", "useable", "throwable", "belt", "autobelt", "normcode", "ubercode", "ultracode",
-	"mindam", "maxdam", "2handmindam", "2handmaxdam", "2handed", "wclass", "minac", "maxac", "block",
+	"mindam", "maxdam", "2handmindam", "2handmaxdam", "2handed", "wclass", "StrBonus", "DexBonus", "minac", "maxac", "block",
 	"pSpell", "state", "len", "stat1", "calc1",
 }
 
@@ -128,7 +129,7 @@ func loadItemBases(t *Table, kind ItemKind) []*ItemBase {
 			AutoBelt: r.Bool("autobelt"), BeltIndex: r.Int("belt"),
 			NormCode: r.Str("normcode"), UberCode: r.Str("ubercode"), UltraCode: r.Str("ultracode"),
 			MinDam: r.Int("mindam"), MaxDam: r.Int("maxdam"), TwoMinDam: r.Int("2handmindam"), TwoMaxDam: r.Int("2handmaxdam"),
-			TwoHanded: r.Bool("2handed"), WClass: r.Str("wclass"),
+			TwoHanded: r.Bool("2handed"), WClass: r.Str("wclass"), StrBonus: r.Int("StrBonus"), DexBonus: r.Int("DexBonus"),
 			MinAC: r.Int("minac"), MaxAC: r.Int("maxac"), Block: r.Int("block"),
 			Spell: r.Str("pSpell"), State: r.Str("state"), Len: r.Int("len"), Stat1: r.Str("stat1"), Calc1: r.Str("calc1"),
 		}

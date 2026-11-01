@@ -106,6 +106,12 @@ func (f *Fighter) resInput(snap *d2.Snapshot, hs []Target, pack int, skills []re
 	}
 	in.PackDanger = f.packDanger(p, hs)
 	in.WeakPack = weakHostiles(p, hs, f.tune().FightRadius)
+	// The melee model is fed only when the tables, the wielded weapon and the pack are all known (melee.go).
+	if in.Blow = meleeBlow(p, snap.Inventory, f.e.Data); in.Blow != nil {
+		if in.Foe = meleeFoe(p, hs, f.tune().FightRadius, in.Blow); in.Foe == nil {
+			in.Blow = nil
+		}
+	}
 	return in
 }
 
