@@ -43,7 +43,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills13](../../openspec/changes/drills13/) | in-progress | drills13 | `openspec/changes/drills13/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
-| [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -77,8 +76,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills13: gofmt, go vet and go test -p 1 ./internal/drill ./cmd/d2drill pass; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
-- change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
-- change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixrecast: go test -p 1 ./internal/combat ./internal/data ./internal/env ./tools/knobdump passes including TestFrozenArmorTimerLeavesGap, TestFrozenArmorRecastBeforeExpiryByClock, TestFrozenArmorRecastBeforeExpiryByState, TestAuraFrames
 - change fixrecast: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
@@ -96,6 +93,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 89d6a22 11-01 01:13 `Merge agent/drills13: DRILLS13 live results (Frozen Armor recast pass, mana timing M1)` (drills13)
 - 3f62842 11-01 01:11 `Merge agent/fixdenbounce: soak 2 den bounce evidence record (docs only)` (fixdenbounce)
 - 598d80e 11-01 01:06 `Merge agent/skarmor: sk-armor trace (decomp row 15), game-side oracle sk_armor.py` (skarmor)
 - 6b922b1 11-01 01:02 `Merge agent/drills12: DRILLS12 live proof of fixcrowd (crowdAdjacent knob), drill harness` (drills12)
@@ -105,5 +103,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 015b95c 11-01 00:48 `Merge agent/feedtick2: feed tick cap 3800 with cut line` (feedtick2)
 - eafb8a1 11-01 00:45 `Merge agent/skmana: SK mana trace` (skmana)
 - 1842cce 11-01 00:42 `Merge agent/forkdbg: d2dctl SkillDebug client, debug verbs doc` (forkdbg)
-- 42238fc 11-01 00:40 `Merge agent/openmods: boss-stats upstream PR records; archive card` (openmods)
 <!-- statusgen:end -->

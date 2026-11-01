@@ -51,15 +51,6 @@ docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
 docs/review-strategy.md  specmin  soak-minutes-virtual
 docs/d2d-soak.md  specmin  soak-minutes-virtual
 docs/geninv.md  specmin  soak-minutes-virtual
-docs/fixportalmelee.md  fixportalmelee  fixportalmelee
-internal/combat/safety.go  fixportalmelee  fixportalmelee
-internal/combat/fighter.go  fixportalmelee  fixportalmelee
-internal/combat/crowd.go  fixportalmelee  fixportalmelee
-internal/combat/resource.go  fixportalmelee  fixportalmelee
-internal/combat/portalmelee_test.go  fixportalmelee  fixportalmelee
-internal/resource/types.go  fixportalmelee  fixportalmelee
-internal/resource/abort.go  fixportalmelee  fixportalmelee
-internal/resource/portalmelee_test.go  fixportalmelee  fixportalmelee
 internal/combat/necro.go  fixrecast  fixrecast
 internal/combat/buffrecast_test.go  fixrecast  fixrecast
 internal/data/skills.go  fixrecast  fixrecast
