@@ -113,3 +113,6 @@ internal/resource/sim.go  skmeleewire  skmeleewire
 internal/resource/wire_test.go  skmeleewire  skmeleewire
 docs/skmeleewire.md  skmeleewire  skmeleewire
 openspec/changes/skmeleewire/**  skmeleewire  skmeleewire
+docs/research/sk-ground-trace.md  skground  skground
+tools/emu/sk_ground*  skground  skground
+openspec/changes/skground/**  skground  skground
