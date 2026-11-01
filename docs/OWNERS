@@ -52,3 +52,12 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+docs/fixportalmelee.md  fixportalmelee  fixportalmelee
+internal/combat/safety.go  fixportalmelee  fixportalmelee
+internal/combat/fighter.go  fixportalmelee  fixportalmelee
+internal/combat/crowd.go  fixportalmelee  fixportalmelee
+internal/combat/resource.go  fixportalmelee  fixportalmelee
+internal/combat/portalmelee_test.go  fixportalmelee  fixportalmelee
+internal/resource/types.go  fixportalmelee  fixportalmelee
+internal/resource/abort.go  fixportalmelee  fixportalmelee
+internal/resource/portalmelee_test.go  fixportalmelee  fixportalmelee

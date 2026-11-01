@@ -22,10 +22,12 @@ func TestAbortFightCutCast(t *testing.T) {
 			t.Errorf("%s: got %v want %v", c.name, got, c.want)
 		}
 	}
+	tu.RetreatBelt = 1
 	thin := base(0, 40)
+	thin.Gold, thin.Level = 2000, 8
 	thin.Belt = Belt{HP: 1}
 	if got := AbortFight(thin, tu); got.Kind != PortalOut {
-		t.Skipf("thin-belt setup does not reach escape here: %v", got)
+		t.Fatalf("thin-belt setup does not reach escape: %v", got)
 	}
 	thin.Adjacent = 3
 	if got := AbortFight(thin, tu).Kind; got != LeaveGame {
