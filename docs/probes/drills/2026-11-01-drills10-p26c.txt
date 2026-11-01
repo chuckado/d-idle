@@ -1,0 +1,80 @@
+labrun: synced code/d2lod-wt/drills10 → worker:~/labrun/head/code/d2lod-wt/drills10 in 0s; running: export PATH=$HOME/.local/bin:$PATH; mkdir -p ~/d2d-lab/drills10; go build -o ~/d2d-lab/drills10/d2drill ./cmd/d2drill && D2D_AGENT=drills10 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 300 -- tools/d2dslot.sh run -n 0 -t 300 -- $HOME/d2d-lab/drills10/d2drill -group M -probe 'debug skill right 36;step 2;debug goto 2;debug kill;step 60;debug spawn zombie1 1;step 3;state;cmd skill 36 30.99 48.03 17;step 4;state;missiles;step 30;monsters;state;cmd skill 42 28 48;step 4;state;debug goto 1;step 30;state;cmd skill 42 12 18;step 4;state;cmd skill 36 12 18;step 4;state' -label drills10-p26c -v
+d2dslot: got slot 0
+time=2026-10-31T23:13:43.303-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2371456 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+> debug skill right 36
+ err=<nil>
+> step 2 err=<nil>
+> debug goto 2
+28.0 48.0 err=<nil>
+> debug kill
+ err=<nil>
+> step 60 err=<nil>
+> debug spawn zombie1 1
+spawned=1 ids=#17 Zombie hp=11 lvl=1 err=<nil>
+> step 3 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.00,48.00 walking=0 dir=12 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=35/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2217:0:0.00/0.00,221:0:0.00/0.01,2723:0:0.20/0.49
+ err=<nil>
+> cmd skill 36 30.99 48.03 17
+
+ err=<nil>
+> step 4 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.00,48.00 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=32/35 stamina=18944/18944 level=1 exp=420 pmode=SC missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=2217:0:0.00/0.00,221:0:0.00/0.01,2723:0:0.20/0.49,2399:0:1.00/1.00
+ err=<nil>
+> missiles
+
+ err=d2d: unknown verb 'missiles'
+> step 30 err=<nil>
+> monsters
+quillrat1	39.70	58.30	512	1172	0/4	DD	-	-	lvl1	Quill Rat	#1	-
+quillrat1	39.70	58.90	464	1196	0/4	DD	-	-	lvl1	Quill Rat	#2	-
+zombie1	24.50	56.90	-592	508	0/9	DD	-	-	lvl1	Zombie	#3	-
+zombie1	24.90	56.30	-512	500	0/7	DD	-	-	lvl1	Zombie	#4	-
+zombie1	29.50	61.90	-592	908	0/12	DD	-	-	lvl1	Zombie	#5	-
+zombie1	30.10	61.70	-528	924	0/12	DD	-	-	lvl1	Zombie	#6	-
+quillrat1	35.30	50.10	816	668	0/1	DD	-	-	lvl1	Quill Rat	#7	-
+quillrat1	35.90	50.10	864	692	0/3	DD	-	-	lvl1	Quill Rat	#8	-
+fallen1	20.30	58.70	-1072	412	0/4	DD	-	-	lvl1	Fallen	#9	-
+fallen1	20.90	59.30	-1072	460	0/1	DD	-	-	lvl1	Fallen	#10	-
+fallen1	20.50	58.10	-1008	396	0/1	DD	-	-	lvl1	Fallen	#11	-
+fallen1	20.50	59.30	-1104	444	0/3	DD	-	-	lvl1	Fallen	#12	-
+zombie1	33.30	43.50	1184	324	0/12	DD	-	-	lvl1	Zombie	#13	-
+zombie1	32.70	44.10	1088	324	0/12	DD	-	-	lvl1	Zombie	#14	-
+zombie1	18.30	41.90	112	-340	0/11	DD	-	-	lvl1	Zombie	#15	-
+zombie1	18.50	41.30	176	-356	0/11	DD	-	-	lvl1	Zombie	#16	-
+zombie1	30.87	48.30	606	419	8/11	GH	-	-	lvl1	Zombie	#17	-
+ err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.00,48.00 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=32/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=0 quake=0,0,0,0,0 sfx=2217:0:0.00/0.00,221:0:0.00/0.01,2723:0:0.20/0.49,2399:0:1.00/1.00,2210:0:0.18/0.36,2722:0:0.23/0.51,2414:0:0.26/0.55
+ err=<nil>
+> cmd skill 42 28 48
+
+ err=<nil>
+> step 4 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.00,48.00 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=32/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=0 quake=0,0,0,0,0 sfx=2217:0:0.00/0.00,221:0:0.00/0.01,2723:0:0.20/0.49,2399:0:1.00/1.00,2210:0:0.18/0.36,2722:0:0.23/0.51,2414:0:0.26/0.55,2746:0:0.25/0.51
+ err=<nil>
+> debug goto 1
+28.3 20.7 err=<nil>
+> step 30 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.30,20.70 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=33/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=0 quake=0,0,0,0,0 sfx=221:0:0.00/0.01,2723:0:0.20/0.49,2722:0:0.23/0.51,2746:0:0.25/0.51
+ err=<nil>
+> cmd skill 42 12 18
+
+ err=<nil>
+> step 4 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.30,20.70 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=33/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=0 quake=0,0,0,0,0 sfx=3271:0:1.00/1.00,221:0:0.00/0.01,2723:0:0.20/0.49,2722:0:0.23/0.51,2746:0:0.25/0.51
+ err=<nil>
+> cmd skill 36 12 18
+
+ err=<nil>
+> step 4 err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=28.30,20.70 walking=0 dir=14 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=33/35 stamina=18944/18944 level=1 exp=420 pmode=- missiles=0 pets=- lskill=0 rskill=36 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4679 music_old=0 quake=0,0,0,0,0 sfx=3271:0:1.00/1.00,221:0:0.00/0.01,2723:0:0.20/0.49,3272:0:1.00/1.00,2722:0:0.23/0.51,2746:0:0.25/0.51
+ err=<nil>
+time=2026-10-31T23:13:45.035-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: worker exited 0 after 3s
+exit 0

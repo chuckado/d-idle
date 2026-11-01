@@ -18,6 +18,7 @@ exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: D8.q and D8.w PASS with the bot's talk path (recipe in docs/fixtalk.md)"
+live: "DRILLS10: D8.q PASS (skill points 0 to 1), D8.w PASS (area 40)"
 result: "offline: talk logic moved to internal/talk with tests, identical behaviour; D8.q/D8.w built on the bot's path, not verified live"
 ```
 
@@ -28,4 +29,4 @@ result: "offline: talk logic moved to internal/talk with tests, identical behavi
 - [x] 1.3 table tests with fakes
 - [x] 1.4 D8.q and D8.w call the bot's path
 - [x] 1.5 docs, INDEX, CHANGELOG, BACKLOG, primitives note
-- [ ] 1.6 live proof (recipe in docs/fixtalk.md)
+- [x] 1.6 live proof (DRILLS10)

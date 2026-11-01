@@ -15,6 +15,7 @@ import (
 	"d2lod-bot/internal/d2dsrc"
 	"d2lod-bot/internal/d2dtown"
 	"d2lod-bot/internal/drill"
+	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/quest"
 	"d2lod-bot/internal/talk"
@@ -346,6 +347,11 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 	}
 	cmd0 := l.skillCmds()
 	mark := l.rec.Mark()
+	var gt *gtClock
+	var gtOld env.Clock
+	if s.Meter {
+		gt, gtOld = l.startMeter(ctx)
+	}
 	to := s.Clear
 	if to == 0 {
 		to = 60 * time.Second
@@ -378,6 +384,9 @@ func (l *lab) Fight(ctx context.Context, r *drill.Run, s drill.FightSpec) drill.
 		}
 		_ = l.Tick(ctx, 100)
 		l.rig.Fighter.ForgetIgnored()
+	}
+	if gt != nil {
+		fi.Meter = l.finishMeter(gt, gtOld, res.Kills)
 	}
 	if s.Cold && res.Kills == 0 {
 		l.clearDiag(ctx)

@@ -280,3 +280,42 @@ Result files `2026-11-01-drills9-<label>.txt` (stdout of each d2drill invocation
 ### Findings (not fixed here)
 - F17 (DW.m1, group F, run 1 only, UNVERIFIED cause): in the full F group (4 of 4 runs, `f`, `f-r2`..`f-r5`) the first repeat of DW.m1 ends BLOCKED `the waypoint trip in failed: nav: timeout: walk did not finish in 2m0s` (the navigator's walk from the camp arrival to the waypoint stops after its first stuck recovery at (139,103), clicks at the next waypoints, then no progress) and the second repeat passes (494 ticks, 1 bounce, 2 step-aways). Narrowing: DW.m1 alone and after any of D-run, D-sync + D-sync.tp, or H.obj.chest + H.obj.shrine, or D-sync.wp alone: PASS (`dwm1-a`..`dwm1-g`, `dwm1-f`); it fails after `D-sync.wp,H.obj.chest,H.obj.shrine` (`dwm1-i`, also `dwm1-h` before the `debug kill` fix, where the shrine failed too). So the trigger needs the waypoint arrival of D-sync.wp followed by the Blood Moor object drills; the navigator is rebuilt by `Goto` (wp_lab.go), so it is not a stale navigator; a leftover in `be.World` or in the camp (a monster, a dropped item) is the next suspect. Product or harness is open: a walk that stalls for 2 game minutes in the camp is the F13 family and may be a product stall.
 - F16 stays open (D5.c, D5.d, H.monster stale BLOCKED text).
+
+## DRILLS10 (2026-11-01): live proof of fixf17, fixtalk, fixmeter; P26 observables; regression pass
+Result files `2026-11-01-drills10-<label>.txt` (stdout of each d2drill invocation, capped with `d2drill -cap`, scrubbed): `f1`..`f3` (full F group, the fixf17 proof), `f4` (F group again at the end), `d8` (D8, fixtalk), `m` and `m2` (group M, D-meter; `m` is the first run before the harness fix below, kept as the record), `p26a`..`p26c` (probe sequences), `d2`, `d6`, `dw`, `h` (regression). Run as in DRILLS9 (build on the worker host through `labrun`, lab build cheats3, code of origin/main at a7f5bc6): `D2D_AGENT=drills10 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group M -label drills10-m2 -v`. Every invocation starts a fresh throwaway (`NoSave`), so D8.c is first-run in each. A whole F group took under 1 minute of wall time in lockstep.
+
+| Card | Drill | Verdict | Numbers |
+|---|---|---|---|
+| fixf17 | full F group x3 (`f1`..`f3`) | PASS | 14 of 14 drills PASS in each of the three invocations; DW.m1 PASS in both repeats of each (483 ticks, 1 bounce, 2 step-aways, identical); `the Pacer lagged` lines: 0 in all three (the log line is written only above 1 s of lag, so the lag never exceeded 1 s). F17 does not reproduce. The fourth F group at the end (`f4`) is the same 14 of 14, 0 lag lines |
+| fixtalk | D8.q | PASS | the bot's own `talk.Adapter.Talk(Akara, reward)` after `debug quest set 1 0x0002`: skill points 0 to 1, quest 1 record now 0x0001, identical in both repeats |
+| fixtalk | D8.w | PASS | `debug quest set 6 0x0001`, `Talk(Warriv, go east)`: menu `[bot path Go East]`, area after 40, identical in both repeats |
+| fixmeter | D-meter (new, group M) | PASS | 20 zombies spawned at Blood Moor, life 1000, `Fighter.Clear`: Meter kills 13, units seen dead by the independent sampler 13, Fighter.Clear kills 13; dealt 121 = 121 (per-unit first alive hp minus last alive hp, plus the last alive hp of the dead; the drops alone are 67), within the spawn hp sum 222 (26 units listed: 20 spawned plus 6 others that stayed untouched); taken 106 = 106 (life drops of `state`); mana 68 spent, deaths 0, min life 894, 1214 samples; hits and misses print `n/a`; identical in both repeats (`m2`) |
+| P26 | probe | RECORDED | see below |
+| regression | D2, D6, DW, H, F | see table | |
+
+### D-meter notes
+- Harness fix (not product): the first run (`m`) FAILED in repeat 2 because Meter totals are cumulative across `Enable()` calls (Enable forgets the last sample and the seen set, not the totals): repeat 2 read kills 17 = 13 + 4, dealt 198 = 121 + 77, taken 246 = 106 + 140, each equal to the sum of the two windows. The drill now subtracts the totals at the start of its window. Product note for a later change: `Meter.Reset` and `Enable` do not zero `Totals`, so a reader needs deltas.
+- The independent sampler (`cmd/d2drill/meter_lab.go`) reads the raw `monsters` and `state` verbs per unit id at the same sleeps (it wraps the clock under the Meter), so the totals are computed twice by different code on the same game ticks. It does not catch a sampling gap (damage between samples), both see the same samples.
+- Repeat 2 of the first run (`m`) killed only 4 of 20 within 150 s while the sampler agreed with the Meter; in `m2` both repeats were identical at 13 kills. Combat variance between invocations is not a meter matter and was not chased.
+
+### P26 observables (record only; `p26a`..`p26c`, lab verbs, recipe of docs/research/skill-bind-trace.md; fresh clvl 1 Sorceress)
+- (1) `cmd select 54 0` then 3 steps: state `rskill=0` (the select is not applied for a 0-point skill; the recipe expected rskill 54 on d2d), UNVERIFIED which side is right (d2d refuses by the picker rule or the select is not visible in `state`).
+- (2) `debug points 36 1` and `debug points 42 1`: accepted, `skillpts=0` before and after, `BindSkills` not run in the probe.
+- (3) `debug skill right 54`: `err d2d: not usable`; `debug skill right 36`: accepted, `rskill=36` after 2 steps (as DRILLS7).
+- (4) in Blood Moor, one zombie (hp 11): `cmd skill 36 <x> <y> <unit>` mana 35 to 32 (whole points as `state` shows them), the zombie hp 11 to 8 in mode GH (the hit effect). `cmd skill 42` (Static Field, no points): mana unchanged 32 to 32.
+- (5) in town: `cmd skill 42` and `cmd skill 36` leave the mana unchanged (33 to 33): no cast, as expected.
+- Not recorded: the 8.8 mana value and the not-in-town cue text (the probe prints `state` only).
+
+### Regression table (code of a7f5bc6 plus the D-meter harness)
+| Group | Verdicts |
+|---|---|
+| D2 | 11 of 11 PASS |
+| D6 | a, b, c, d PASS |
+| DW | 14 of 14 PASS |
+| H | pause, obj, ground PASS; monster BLOCKED (stale text, F16) |
+| F | 14 of 14 PASS in four invocations |
+| D8 | a, m, q, w PASS; c granted in run 1 and BLOCKED in run 2 (once per character); g BLOCKED (no gamble code) |
+
+### Findings
+- F17 closed: not seen in 4 of 4 full F group invocations after fixf17 (DRILLS9: run 1 failed in 4 of 4).
+- F16 stays open (H.monster stale BLOCKED text).
