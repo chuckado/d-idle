@@ -2,7 +2,7 @@
 
 ```yaml
 change: coveragetable
-status: in-progress
+status: archived
 agent: coveragetable
 branch: agent/coveragetable
 worktree: ~/code/d2lod-wt/coveragetable
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "coverage.py --check; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs/coverage/rule-coverage.md generated (21 subsystems, 4910 rows, ledger seeded from the research docs), coverage.py --check wired into tools/ci/scripts.sh, 12 unit tests. Not verified live (docs and tooling only)."
+result: "docs and tooling only; generator check wired into CI scripts; ledger seeded by Sonnet from trace docs, spot-check owed for id mappings and for the damage and mana rows marked fully run-tested"
 live: "docs and tooling only, nothing run live"
+merge: 43d606e
 ```
 
 - [x] generator, denominators, ledger seeded from the docs

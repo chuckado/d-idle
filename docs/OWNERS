@@ -139,6 +139,3 @@ internal/bot/goal.go  soakstall  soakstall
 internal/bot/runner.go  soakstall  soakstall
 internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
-docs/coverage/**  coveragetable  coveragetable
-tools/coverage/**  coveragetable  coveragetable
-openspec/changes/coveragetable/**  coveragetable  coveragetable
