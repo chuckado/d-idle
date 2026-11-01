@@ -99,12 +99,6 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
-tools/contrib/chunker.py  chunker  chunker
-tools/contrib/tests/test_chunker.py  chunker  chunker
-docs/process/chunker.md  chunker  chunker
-docs/community/groom-proposal.md  chunker  chunker
-docs/community/withdrawn.tsv  chunker  chunker
-openspec/changes/chunker/**  chunker  chunker
 docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
 docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
 openspec/changes/skresistfix/**  skresistfix  skresistfix

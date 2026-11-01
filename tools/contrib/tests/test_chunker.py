@@ -93,6 +93,34 @@ class SyncTests(unittest.TestCase):
         sync([item("AAA", "done")], fake2)
         self.assertEqual(fake2.calls, [])
 
+    def test_archived_item_keeps_issue_closed_nothing_created_or_withdrawn(self):
+        arch = item("OLD", "done", done="2026-01-01", by="maintainer agents", result="docs/research/x.md")
+        # closed issue: no action at all, no create, no withdrawal, no todo
+        fake = FakeGh([issue(1, "OLD", state="CLOSED"), issue(2, "AAA")])
+        _, (_, _, todos, acts), _ = sync([item("AAA"), arch], fake)
+        self.assertEqual((acts, todos, fake.calls), ([], [], []))
+        # no issue at all (never opened): an archived item is not created
+        fake = FakeGh()
+        _, (_, _, _, acts), _ = sync([arch], fake)
+        self.assertEqual((acts, fake.calls), ([], []))
+        # still-open issue of an archived item: closed exactly once as done
+        fake = FakeGh([issue(1, "OLD")])
+        sync([arch], fake)
+        self.assertEqual(len(fake.calls), 1)
+        argv = fake.calls[0][0]
+        self.assertEqual(argv[:3], ["issue", "close", "1"])
+        self.assertIn("completed", argv)
+        # an id missing from BOTH files is still withdrawn
+        fake = FakeGh([issue(3, "GONE")])
+        sync([arch], fake)
+        self.assertIn("not planned", fake.calls[0][0])
+
+    def test_all_items_reads_open_work_and_archive(self):
+        ids = {i["id"] for i in chunker.all_items()}
+        cur, archived = board.load_all()
+        self.assertEqual(ids, {i["id"] for i in cur + archived})
+        self.assertTrue(archived and ids >= {i["id"] for i in archived})
+
     def test_merged_pr_closes_and_links_pr(self):
         pr = {"number": 7, "url": "https://github.com/shatteredeagle/d-idle/pull/7", "state": "MERGED", "closingIssuesReferences": [{"number": 1}]}
         fake = FakeGh([issue(1, "AAA")], [pr])

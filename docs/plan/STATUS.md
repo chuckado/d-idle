@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [chunker](../../openspec/changes/chunker/) | in-progress | chunker | `tools/contrib/chunker.py`<br>`tools/contrib/tests/test_chunker.py`<br>`docs/process/chunker.md`<br>`docs/community/groom-proposal.md`<br>`docs/community/withdrawn.tsv`<br>`openspec/changes/chunker/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -82,8 +81,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change chunker: python3 -m unittest discover -s tools/contrib/tests -t tools/contrib passes
-- change chunker: go run ./cmd/changecheck -cli reports 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -120,6 +117,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- ed03c45 11-01 13:26 `Merge agent/boardgrow: work archive, chunker sync honours it, 12 new board items` (boardgrow)
+- 776af38 11-01 13:22 `Merge agent/openpr: PRs #159 and #160 opened upstream, docs` (openpr)
 - 8509a1b 11-01 13:16 `Merge agent/palprobe: offline Paladin probe and blocking class seams (profile id, per-class prefs, class row errors)` (palprobe)
 - b960937 11-01 13:10 `Merge agent/forkrebase: private fork stack rebuilt on upstream as lab2-*` (forkrebase)
 - 1fccb88 11-01 13:03 `Merge agent/skmeleewire: wire melee blow and foe into the resource decision input` (skmeleewire)
@@ -128,6 +127,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
 - 19c1daf 11-01 12:44 `Merge agent/upstreamsync: upstream merges recorded, mergeability table, fork rebase plan` (upstreamsync)
 - 370d5c2 11-01 12:40 `Merge agent/skmelee2: melee blow compared on a real d2d build` (skmelee2)
-- 63a8fbb 11-01 12:34 `Merge agent/bundledet: two-commit squash, determinism doc, body update` (bundledet)
-- 8be58bb 11-01 12:34 `Merge agent/bundlearmor: combined armor+resume upstream PR body (held)` (bundlearmor)
 <!-- statusgen:end -->

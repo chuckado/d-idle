@@ -161,6 +161,12 @@ def fetch_prs(gh):
     return out
 
 
+def all_items():
+    """Open-work items plus the archive (status done): an archived item is known, so it is never withdrawn or re-created."""
+    cur, archived = board.load_all()
+    return cur + archived
+
+
 def plan_sync(items, issues, prs, withdrawn, now):
     """Pure planning: returns (actions, todos). Action = dict(kind, id, number, ...)."""
     by_id, acts, todos = {}, [], []
@@ -271,7 +277,7 @@ def write_tsv(tsv, items):
 
 def cmd_sync(a, runner=run_gh, now=None):
     now = now or datetime.datetime.now(datetime.timezone.utc)
-    items = board.parse(read(board.SRC))
+    items = all_items()
     gh = Gh(runner, a.apply, a.max_writes)
     try:
         issues, prs = fetch_issues(gh), None
@@ -583,7 +589,7 @@ def cmd_groom(a, runner=run_gh, http=None, key_reader=None, now=None):
     import haiku_tick
     http, key_reader = http or anthropic_http.post_json, key_reader or haiku_tick.read_key
     now = (now or datetime.datetime.now(datetime.timezone.utc)).strftime("%Y-%m-%d")
-    items = board.parse(read(board.SRC))
+    items = all_items()
     try:
         issues = fetch_issues(Gh(runner))
     except (RuntimeError, ValueError) as e:

@@ -65,8 +65,9 @@ class Parse(unittest.TestCase):
         t = board.render_board(items, {"AAA-1": "https://github.com/o/r/issues/5"})
         self.assertIn("| AAA-1 | first thing | M | decomp | ready |", t)
         self.assertIn("[issue](https://github.com/o/r/issues/5)", t)
-        self.assertIn("second / pipe", t)
-        self.assertIn("1 of 2 items are open.", t)
+        self.assertNotIn("BBB-2", t)  # done items are not on the board
+        self.assertIn("1 of 1 listed items are open", t)
+        self.assertIn("work-archive.md", t)
 
     def test_issue_body(self):
         b = board.issue_body(board.parse(ITEM)[0])
@@ -82,10 +83,62 @@ class Parse(unittest.TestCase):
             os.unlink(f.name)
 
 
+ARCH = board.ARCHIVE_HEAD
+
+
+class Archive(unittest.TestCase):
+    def moved(self, extra=""):
+        return board.do_archive(ITEM + extra, "", "2026-01-02", "someone")
+
+    def test_done_section_moves_with_metadata(self):
+        src, arc, moved = self.moved()
+        self.assertEqual(moved, ["BBB-2"])
+        self.assertEqual([i["id"] for i in board.parse(src)], ["AAA-1"])
+        item = board.parse(arc)[0]
+        self.assertEqual((item["id"], item["done"], item["by"]), ("BBB-2", "2026-01-02", "someone"))
+        self.assertTrue(item["result"].startswith("docs/"))
+        self.assertEqual(board.validate_archive([item], set()), [])
+
+    def test_idempotent_and_keeps_existing_metadata(self):
+        src, arc, _ = self.moved("- done: 2025-05-05\n- by: octocat\n- result: docs/research/z.md\n")
+        src2, arc2, moved2 = board.do_archive(src, arc, "2030-01-01")
+        self.assertEqual((src2, arc2, moved2), (src, arc, []))
+        item = board.parse(arc)[0]
+        self.assertEqual((item["done"], item["by"], item["result"]), ("2025-05-05", "octocat", "docs/research/z.md"))
+
+    def test_table_between_markers_and_missing_markers(self):
+        _, arc, _ = self.moved()
+        t = board.render_archive(arc, board.parse(arc), {"BBB-2": "https://github.com/o/r/issues/9"})
+        self.assertIn("| BBB-2 | second / pipe | verify | S |", t)
+        self.assertIn("[issue](https://github.com/o/r/issues/9)", t)
+        self.assertEqual(board.render_archive(t, board.parse(t), {"BBB-2": "https://github.com/o/r/issues/9"}), t)
+        with self.assertRaises(board.BoardError):
+            board.render_archive("no markers", [])
+
+    def test_archive_validation(self):
+        _, arc, _ = self.moved()
+        item = board.parse(arc)[0]
+        self.assertTrue(any("both" in e for e in board.validate_archive([item], {"BBB-2"})))
+        bad = dict(item, status="ready", done="soon")
+        errs = board.validate_archive([bad], set())
+        self.assertTrue(any("status done" in e for e in errs) and any("YYYY" in e for e in errs))
+
+
 class Real(unittest.TestCase):
     def test_real_source_is_valid_and_board_current(self):
         rc, _, err = run("--check")
         self.assertEqual(rc, 0, err)
+
+    def test_real_archive_holds_only_done_and_board_holds_none_of_them(self):
+        opens, archived = board.load_all()
+        self.assertTrue(archived)
+        self.assertEqual([i["id"] for i in opens if i["status"] == "done"], [])
+        board_text = board.read(board.OUT)
+        for it in archived:
+            self.assertEqual(it["status"], "done")
+            self.assertNotIn("| %s |" % it["id"], board_text)
+            self.assertIn("| %s |" % it["id"], board.read(board.ARCHIVE))
+            self.assertTrue(os.path.exists(os.path.join(board.ROOT, it["result"])), it["result"])
 
     def test_dry_run_writes_nothing_and_issues_dir(self):
         rc, out, _ = run()
