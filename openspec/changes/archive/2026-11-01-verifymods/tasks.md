@@ -17,6 +17,8 @@ owns:
 exclusive: []
 gates:
   - "verify_mods.py vs test_verify_mods on >= 100k cases: before > 0, head 0 per claim, residuals classified"
+merge: "77e5bca"
+result: "see docs/research/pr-mods-proof.md Independent verifier (VERIFYMODS); offline only, not verified live"
 ```
 
 - [x] re-derive the spawn / per-hit level rules from the disassembly before reading the author's docs
@@ -25,7 +27,5 @@ gates:
 - [x] CI-class checks (pr_guard, presubmit --quick with ruff, upstream tests, gcc sweep, clang-tidy, file sizes, replay)
 - [x] recompute the impact tables, review the draft
 - [x] verifier section, bundle-queue verdict, BACKLOG line
-- [ ] det state hashes (need a d2d slot: not run by brief)
+- [x] det state hashes (done by modsprep)
 
-merge: "77e5bca"
-result: "see docs/research/pr-mods-proof.md Independent verifier (VERIFYMODS); offline only, not verified live"
