@@ -10,11 +10,10 @@ skip_specs: true
 owns:
   - docs/soaks/gate1-rerun.md
   - docs/probes/soak-logs/gate1-*
-  - docs/g1-log.md
   - openspec/changes/gate1/**
 exclusive:
   - instance:gate1-slot-0
-gates:
+gates: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-rerun.md)
 result: Gate 1 NOT PASSED (docs/soaks/gate1-rerun.md); verified live on a hidden d2d slot
 ```
 

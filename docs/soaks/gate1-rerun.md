@@ -20,7 +20,7 @@ At 14:10:04.9 `kill -9` of the slot's d2d (pid 2762879, child of the registered 
 | No single state over 10 min without progress | FAIL | d2dsoak NOKILL: longest no kill and no XP 43 virtual minutes (limit 10) |
 | Belt: no window over 5 min without healing outside town | FAIL | d2dsoak BELT: 6 virtual minutes (limit 5) |
 | At least one town-portal trip | PASS (wording U) | 143 `back to field: portal in town`; the old counter text `arrived in town through an open portal` no longer exists in the log (11 plain `arrived in town`); 105 waypoint fallbacks, 167 `d2d town portal: no portal source (empty)` |
-| Route guard: no boss run when refused | PASS | 0 `blocked: not ready`, no boss-run start; route guard lines present (monastery and tower blocked, no merc, clvl 14 < 16) |
+| Route guard: no boss run when refused | PASS | 0 `blocked: not ready`, no boss-run start; route guard lines present (monastery and the Countess area blocked, no merc, clvl 14 < 16) |
 | Injected fault recovery | PASS | about 3 s, restarts +1, saved XP not lower, no orphan |
 
 d2dsoak (`compare -hours 22.6`): `INVARIANTS: VIOLATED(BELT,NOKILL)`, OVERALL INCONCLUSIVE (exit 2, one seed); hang 0, stall 0, wedge 1m, no-progress (wide) 5 m, unrecovered 0.
@@ -30,8 +30,8 @@ Gate 1 is NOT PASSED on this build (lab2-freezeresume ee5e06d8, bot f4ca264). Fa
 
 ## First evidence and best cause (U)
 - No kill and no XP: minute lines 14:58:14 to 15:02:03 (wall), area 17 then area 3, steps `Going to town ([no town portal scroll])`, state `town chores`/resupplying, gold 603, belt stocked. The bot had no town portal scroll and walked back through Cold Plains on foot: 103 `nav stuck`, 25 `nav: stuck again at the same spot`, 26 `nav: blacklisted cell` in that window, 0 kills. Best cause: poverty or loss of the portal scroll after the 14:27 death (gold went to potions; 167 `no portal source (empty)` in the run) combined with the nav stuck loop on the Cold Plains exit while walking to town. Other shorter windows: 24 min at 14:42 and 11 min at 14:56 in area 17 under `Quest: fighting (Level up`.
-- Belt window 6: not located line by line; d2dsoak reports the length only (0 of the minute lines show it after the first 30 virtual minutes in the same way as soak 2).
-- Fix queue (one agent per criterion): (1) keep one town portal scroll as a reserve before spending gold on potions and avoid the on-foot walk (nav stuck on the Cold Plains exit); (2) belt window: one more minute of potion supply early (clvl 1 to 6, 13:10 to 13:17).
+- Belt window 6: not located line by line; d2dsoak reports the length only.
+- Fix queue (one agent per criterion): (1) keep one town portal scroll as a reserve before spending gold on potions and avoid the on-foot walk (nav stuck on the Cold Plains exit); (2) belt window: find the 6 minute window first (U where it sits).
 
 ## Files
 `docs/probes/soak-logs/gate1-rerun-minutes.jsonl.gz`: every `minute` line, the death, fault and recovery lines, the supervisor and fault logs (the full 10 MB log stays on the worker host in the run directory). Reproduce: `go build ./cmd/d2bot ./cmd/d2dsoak` at f4ca264 on the worker host.
