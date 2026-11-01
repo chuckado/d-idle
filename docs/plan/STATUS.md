@@ -98,6 +98,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 458ecd4 11-01 01:14 `Merge agent/nexthit: D-NEXTHIT evidence pack, PR draft, oracle copies (PR NOT READY)` (nexthit)
 - 96be00f 11-01 01:08 `Merge agent/drills16: DRILLS16 live results (fixmouth FAIL, fixbuff PASS)` (drills16)
 - 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
 - d837d1c 11-01 01:57 `Merge agent/sknova: Frost Nova ring trace (SKNOVA)` (sknova)
@@ -107,5 +108,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d83ceb0 11-01 01:36 `Merge agent/fixmouth: mouthArrivalR for the first walk after a warp arrival (den bounce fix A)` (fixmouth)
 - 27049dd 11-01 01:27 `Merge agent/fixbuff: re-cast buffs in long fights, buff states, stale skills cache check` (fixbuff)
 - 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
-- 0c88fdc 11-01 01:16 `Merge agent/crfix157: CodeRabbit follow-up records for upstream PR 157 (docs only)` (crfix157)
 <!-- statusgen:end -->
