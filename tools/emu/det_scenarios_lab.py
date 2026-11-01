@@ -16,7 +16,7 @@ A snapshot is five read-only replies: `monsters`, `debug monstate`, `debug playe
 
 Scenarios (V = run, see docs/research/det-hashes-2026-11-01b.md):
     passive fight cold static cold2      the five of the first run (clvl 8 / 30, Ice Bolt 39, Static Field 42, Frozen Orb 64)
-    hit_plain hit_champion hit_unique hit_boss
+    hit_plain hit_champion hit_unique hit_boss hit_immune hit_minion
                                          Ice Bolt 39, Ice Blast 45, Frost Nova 44, Glacial Spike 55, one after the
                                          other on a freshly spawned target of the class, cast point blank; the log
                                          has the hp, chill and stun of the target per block
@@ -42,7 +42,10 @@ HIT_CLASS = {
     "champion": "zombie4 1 near champion",
     "unique": "zombie4 1 near unique",
     "boss": "bloodraven 1",  # a MonStats boss-column monster, not a unique
+    "immune": "zombie1 1",  # in Hell (MonStats ColdResist(H) 100) the plain zombie is cold immune: a cold blow deals 0 damage
+    "minion": None,  # Hell Blood Moor has a unique pack: its minions (boss column "minion") are the targets, no spawn verb makes one
 }
+HELL = {"immune", "minion"}
 CLASS_OF = {"passive": "1", "fight": "1", "merc": "4", "pet": "5", "follow": "5"}
 
 
@@ -61,7 +64,7 @@ class Ctl:
         while True:
             line = self.file.readline().decode().rstrip("\n")
             out.append(line)
-            if line == "" or line == "ok" or line.startswith("ok ") or line.startswith("err"):
+            if line == "" or line == "ok" or line.startswith(("ok ", "err")):
                 return out
 
 
@@ -77,7 +80,8 @@ def start(cls, logfile):
     argv = ["nice", "-n10", os.environ["D2D_BIN"], "--data", os.environ["D2D_DATA"], "--headless", "--devctl", SOCK,
             "--no-video", "--toggle", "autoloot=off,autoparty=off", "--lockstep", "--seed", "3",
             "--start-screen", "ingame", "--start-class", cls, "--start-name", "Det"]
-    proc = subprocess.Popen(argv, stdout=open(logfile, "w"), stderr=subprocess.STDOUT, start_new_session=True, env=env)
+    with open(logfile, "w") as out:
+        proc = subprocess.Popen(argv, stdout=out, stderr=subprocess.STDOUT, start_new_session=True, env=env)
     for _ in range(480):
         try:
             ctl = Ctl()
@@ -110,21 +114,23 @@ class Run:
                 if line not in ("ok", ""):
                     self.log.append(tag + "|" + line)
 
-    def rows(self):
-        """The live monsters as (id, x, y) from `monsters`, newest id last."""
+    def rows(self, boss=None):
+        """The live monsters as (id, x, y) from `monsters`, newest id last; only boss column `boss` when given."""
         out = []
         for line in self.ctl.cmd("monsters"):
             field = line.split("\t")
-            if len(field) > 11 and field[6] not in ("DT", "DD"):
+            if len(field) > 11 and field[6] not in ("DT", "DD") and boss in (None, field[7]):
                 out.append((int(field[11][1:]), float(field[1]), float(field[2])))
         return sorted(out)
 
 
-def setup(run, level, power=True):
+def setup(run, level, power=True, life=900):
     if power:
-        for stat, val in ((7, 900), (6, 900), (9, 300), (8, 300)):  # life, max life, mana, max mana
-            run.do("debug stat %d %d" % (stat, val * 256))
-    run.do("debug stat 12 %d" % level)
+        for stat, val in ((7, life), (6, life), (9, 300), (8, 300)):  # life, max life, mana, max mana
+            run.do(f"debug stat {stat} {val * 256}")
+    run.do(f"debug stat 12 {level}")
+    if life > 900:
+        run.do("debug difficulty 2")  # Hell: a new level's monsters
     run.do("debug goto 2")  # Blood Moor
     time.sleep(3)
     run.do("step 10")
@@ -137,55 +143,62 @@ def old_scenario(run, mode):
         run.do("debug warp 36.0 36.0")
     if mode in OLD_SKILL:
         skill = OLD_SKILL[mode]
-        run.do("debug points %d 20" % skill)
+        run.do(f"debug points {skill} 20")
         run.do("step 3")
-        run.do("debug skill left %d" % skill)
+        run.do(f"debug skill left {skill}")
     run.do("click 400 500")
     run.do("step 5")
     for block in range(8):
         if mode in OLD_SKILL:
-            run.do("debug stat 8 %d" % (300 * 256))
-            run.do("debug stat 6 %d" % (900 * 256))
+            run.do(f"debug stat 8 {300 * 256}")
+            run.do(f"debug stat 6 {900 * 256}")
             rows = run.ctl.cmd("monsters")
             first = [line.split("\t") for line in rows if "\t" in line]
             if first:
                 unit = [tok for tok in first[0] if tok.startswith("#")]
                 uid = int(unit[0][1:]) if unit else -1
                 for _ in range(2):
-                    run.do("cmd skill %d %s %s %d 1" % (OLD_SKILL[mode], first[0][1], first[0][2], uid))
+                    run.do(f"cmd skill {OLD_SKILL[mode]} {first[0][1]} {first[0][2]} {uid} 1")
                     run.do("step 12")
-        run.do("step %d" % steps)
-        run.snap("block %d" % block)
+        run.do(f"step {steps}")
+        run.snap(f"block {block}")
 
 
 def hit_scenario(run, cls):
-    setup(run, 30)
-    run.do("debug kill")
+    setup(run, 30, life=9000 if cls in HELL else 900)
+    if cls != "minion":
+        run.do("debug kill")
     run.do("step 5")
     for skill in HIT_SKILLS:
-        run.do("debug points %d 1" % skill)
+        run.do(f"debug points {skill} 1")
     run.do("step 3")
+    used = set()
     for skill in HIT_SKILLS:
-        run.do("debug kill")
+        if cls != "minion":
+            run.do("debug kill")
         run.do("step 3")
-        run.do("debug stat 8 %d" % (300 * 256))
-        run.do("debug warp 44.2 24.2")
-        run.do("step 2")
-        run.do("debug spawn " + HIT_CLASS[cls])
-        run.do("step 1")
-        rows = run.rows()
+        run.do(f"debug stat 8 {300 * 256}")
+        if cls == "minion":
+            rows = [row for row in run.rows("minion") if row[0] not in used]
+            used.update(row[0] for row in rows[-1:])
+        else:
+            run.do("debug warp 44.2 24.2")
+            run.do("step 2")
+            run.do("debug spawn " + HIT_CLASS[cls])
+            run.do("step 1")
+            rows = run.rows()
         if not rows:
-            run.log.append("NOTARGET skill %d" % skill)
+            run.log.append(f"NOTARGET skill {skill}")
             continue
         uid, tx, ty = rows[-1]
-        run.do("debug warp %.2f %.2f" % (tx, ty + 1.6))  # point blank: the target 1.6 cells north of the player
-        run.do("debug skill left %d" % skill)
+        run.do(f"debug warp {tx:.2f} {ty + 1.6:.2f}")  # point blank: the target 1.6 cells north of the player
+        run.do(f"debug skill left {skill}")
         run.do("step 2")
-        run.snap("%s skill %d before" % (cls, skill))
-        run.do("cmd skill %d %.2f %.2f %d 1" % (skill, tx, ty, uid))
+        run.snap(f"{cls} skill {skill} before")
+        run.do(f"cmd skill {skill} {tx:.2f} {ty:.2f} {uid} 1")
         for block in range(8):
             run.do("step 6")
-            run.snap("%s skill %d block %d" % (cls, skill, block))
+            run.snap(f"{cls} skill {skill} block {block}")
 
 
 def party_scenario(run, mode):
@@ -194,7 +207,7 @@ def party_scenario(run, mode):
     run.do("step 5")
     if mode in ("pet", "follow"):
         for skill in (227, 221):  # Summon Spirit Wolf, Raven
-            run.do("debug points %d 5" % skill)
+            run.do(f"debug points {skill} 5")
         run.do("step 3")
         run.do("cmd skill 227 44.2 22.2 0 1")
         run.do("step 30")
@@ -204,15 +217,15 @@ def party_scenario(run, mode):
     if mode in ("merc", "follow"):
         run.do("debug merc hire 0")
         run.do("step 20")
-    run.do("debug spawn zombie1 %d" % (3 if mode == "merc" else 2))
+    run.do(f"debug spawn zombie1 {3 if mode == 'merc' else 2}")
     run.do("click 400 300")
     run.snap("start")
     goals = [(38, 30), (52, 22), (40, 18), (46, 30)]
     for block in range(8):
         if mode == "follow":
-            run.do("cmd move %d %d" % goals[block % len(goals)])
+            run.do("cmd move {} {}".format(*goals[block % len(goals)]))
         run.do("step 100")
-        run.snap("block %d" % block)
+        run.snap(f"block {block}")
 
 
 def hashes(log):
@@ -232,7 +245,7 @@ def main(argv):
         cls = "4"
     else:
         cls = CLASS_OF[mode]
-    ctl, proc = start(cls, os.path.join(outdir, "d2d_%s_%s.log" % (mode, tag)))
+    ctl, proc = start(cls, os.path.join(outdir, f"d2d_{mode}_{tag}.log"))
     run = Run(ctl)
     try:
         time.sleep(2)
@@ -252,9 +265,9 @@ def main(argv):
             except (OSError, subprocess.TimeoutExpired):
                 pass
     mon, state, count = hashes(run.log)
-    with open(os.path.join(outdir, "det8_%s_%s.txt" % (mode, tag)), "w") as out:
+    with open(os.path.join(outdir, f"det8_{mode}_{tag}.txt"), "w") as out:
         out.write("\n".join(run.log) + "\n")
-    print("%s %s mon=%s state=%s monlines=%d" % (mode, tag, mon, state, count))
+    print(f"{mode} {tag} mon={mon} state={state} monlines={count}")
 
 
 if __name__ == "__main__":
