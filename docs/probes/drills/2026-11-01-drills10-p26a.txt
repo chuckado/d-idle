@@ -1,6 +1,6 @@
-labrun: synced code/d2lod-wt/drills10 → worker:~/labrun/head/code/d2lod-wt/drills10 in 0s; running: export PATH=$HOME/.local/bin:$PATH; mkdir -p ~/d2d-lab/drills10; go build -o ~/d2d-lab/drills10/d2drill ./cmd/d2drill && D2D_AGENT=drills10 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 300 -- tools/d2dslot.sh run -n 0 -t 300 -- $HOME/d2d-lab/drills10/d2drill -group M -probe 'debug help;state;dump' -label drills10-p26a -v
+labrun: synced code/d2lod-wt/drills10 → worker:<labrun>/code/d2lod-wt/drills10 in 0s; running: export PATH=$HOME/.local/bin:$PATH; mkdir -p <lab>/drills10; go build -o <lab>/drills10/d2drill ./cmd/d2drill && D2D_AGENT=drills10 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 300 -- tools/d2dslot.sh run -n 0 -t 300 -- $HOME/d2d-lab/drills10/d2drill -group M -probe 'debug help;state;dump' -label drills10-p26a -v
 d2dslot: got slot 0
-time=2026-10-31T23:13:16.372-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2369626 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T23:13:16.372-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2369626 still running; socket file is gone (stat <lab>/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <lab>/slots/0/d2d.sock: dial unix <lab>/slots/0/d2d.sock: connect: no such file or directory"
 > debug help
 act <1-5>: waypoint tabs for acts 1..n (quest flags the panel reads)
 alt: see docs/control_channel.md

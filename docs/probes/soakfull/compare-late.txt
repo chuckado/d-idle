@@ -1,1 +1,1 @@
-d2dsoak: open ~/d2d-lab/loop/baselines.json: no such file or directory
+d2dsoak: open <lab>/loop/baselines.json: no such file or directory
