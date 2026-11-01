@@ -46,3 +46,6 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/research/monster-mods-trace.md  decompmods  decompmods
+tools/emu/umod_*  decompmods  decompmods
+openspec/changes/decompmods/**  decompmods  decompmods
