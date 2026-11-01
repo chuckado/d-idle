@@ -28,7 +28,7 @@ func newWPWorld(t *testing.T, needClicks int) (*wpWorld, *Navigator) {
 	l3 := &simLevel{no: 3, rect: d2map.Rect{X: 1200, Y: 1000, W: 200, H: 100}}
 	s := newSim(g, input.Point{X: 1020, Y: 1050}, l1, l3)
 	s.objects = []d2.Unit{d2Unit(11, 119, 1060, 1050)}
-	w := &wpWorld{s: s, needClicks: needClicks, cooldown: 10 * time.Second, arrived: s.now}
+	w := &wpWorld{s: s, needClicks: needClicks, cooldown: 0, arrived: s.now}
 	s.onInteract = func(s *sim, _ input.Target) error {
 		w.interacts++
 		if w.interacts >= w.needClicks {
@@ -49,17 +49,34 @@ func newWPWorld(t *testing.T, needClicks int) (*wpWorld, *Navigator) {
 	return w, s.navigator()
 }
 
-func TestWaypointWaitsOutCooldown(t *testing.T) {
+// Default (0): no wait; the game here has no cooldown.
+func TestWaypointNoCooldownWait(t *testing.T) {
 	w, n := newWPWorld(t, 1)
 	start := w.s.now
 	if err := n.TakeWaypoint(ctxT(t), 3); err != nil {
 		t.Fatal(err)
 	}
-	if got := w.s.now.Sub(start); got < 10*time.Second {
-		t.Fatalf("clicked after %v, the cooldown is 10 s", got)
+	if got := w.s.now.Sub(start); got >= 9*time.Second {
+		t.Fatalf("took %v on the fake clock, no cooldown wait expected", got)
 	}
 	if w.rowClicks != 1 {
-		t.Fatalf("row clicks = %d, want 1 (waited instead of clicking into the cooldown)", w.rowClicks)
+		t.Fatalf("row clicks = %d, want 1", w.rowClicks)
+	}
+}
+
+// The knob still works for an old binary: a positive value waits it out.
+func TestWaypointKnobWaitsOutCooldown(t *testing.T) {
+	w, n := newWPWorld(t, 1)
+	n.e.Tune.Nav.WpCooldownSec = 10
+	start := w.s.now
+	if err := n.TakeWaypoint(ctxT(t), 3); err != nil {
+		t.Fatal(err)
+	}
+	if got := w.s.now.Sub(start); got < 10*time.Second {
+		t.Fatalf("clicked after %v, the knob says 10 s", got)
+	}
+	if w.rowClicks != 1 {
+		t.Fatalf("row clicks = %d, want 1", w.rowClicks)
 	}
 }
 
@@ -76,7 +93,7 @@ func TestWaypointSecondClickActivates(t *testing.T) {
 // A row click the game ate (our clock started late) is retried while the arrival is recent.
 func TestWaypointRetriesEatenClick(t *testing.T) {
 	w, n := newWPWorld(t, 1)
-	w.cooldown = 14 * time.Second // the game's clock is ahead of the margin we assume
+	w.cooldown = 9 * time.Second // a refusal for another reason: the retry round clicks again, bounded
 	if err := n.TakeWaypoint(ctxT(t), 3); err != nil {
 		t.Fatal(err)
 	}
