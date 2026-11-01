@@ -10,6 +10,7 @@ skip_specs: true
 owns:
   - docs/teletune.md
   - internal/nav/teletune.go
+  - openspec/changes/teletune/**
 exclusive: []
 gates:
   - "go test -p 1 ./internal/nav ./internal/env ./cmd/d2bot ./tools/knobdump passes"

@@ -57,6 +57,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [teletune](../../openspec/changes/teletune/) | in-progress | teletune | `docs/teletune.md`<br>`internal/nav/teletune.go` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -112,20 +113,18 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change teletune: go test -p 1 ./internal/nav ./internal/env ./cmd/d2bot ./tools/knobdump passes
+- change teletune: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
-- 66ba14b 11-01 10:12 `Merge origin/main into drills22` (-)
+- 5698467 11-01 10:36 `Merge origin/main into teletune` (-)
 - 4144cb9 11-01 10:32 `Merge agent/armorfinish: Frozen Armor PR final body and verifier addendum (docs only)` (armorfinish)
 - 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
 - 2b3ed7a 11-01 10:12 `Merge agent/palrecon: Paladin Act 1 recon (docs only)` (palrecon)
+- 19ea836 11-01 10:12 `Merge origin/main into drills22` (drills22)
 - 8827073 11-01 10:08 `Merge agent/buildv3: fallback-lightning-v3 FRESH skill rows (opt-in, default stays v2)` (buildv3)
 - c7f140e 11-01 10:05 `Merge agent/buildflex: build-flexibility audit (docs only)` (buildflex)
 - 4fbfbf2 11-01 10:00 `Merge agent/armorhit: Frozen Armor d2d vs game.exe proof, PR draft (docs only, card kept open)` (armorhit)
 - 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
 - ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
-- c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
-- 6bbd958 11-01 08:59 `Merge agent/opennexthit: PR #158 (NextHit justhit) posted, bundle queue row` (opennexthit)
-- 6bb01a0 11-01 08:55 `Merge origin/main into fixmouthloop2` (-)
-- eced68b 11-01 08:55 `Merge agent/fixskilllvl: d2.SkillBonus / Player.Effective skill levels for the known gate and mana cost` (fixskilllvl)
-- 87f4674 11-01 08:52 `Merge agent/glossaryadd: six user-approved glossary terms` (glossaryadd)
 <!-- statusgen:end -->
