@@ -6,6 +6,8 @@
 
 > TELETUNE3 (ready card; from DRILLS25): teletune2 is merged and live (path-aware hops, `nav.teleMinLeg` 13, 18 ticks per hop: Stony Tomb 211 against walking 254, Halls of the Dead 533 against 578, border leg 717 against 708). Do: (a) find the border leg's 9-tick key-bound cost (0 hops yet slower than the no-Teleport control, also seen in DRILLS24); (b) a same-level stall drill that proves `stalledHere` (the stall escape is unit-tested, not exercised live: the first hop already passed the leg rule); (c) reset the navigator stall memory between drills in one process (D22-PC then D22-P in one process gives a 7560-tick roam timeout).
 
+> ARMORCUT (ready card; from DRILLS26): a Frozen Armor recast inside a melee fight can be cut and leave the old armor to expire (recast works, fixrecast/fixbuff live, but the cast at 232.4 s left the armor down about 3.5 s in 300 s, identical on lab-armorhit and lab-nexthit2). Do: find whether it is hit recovery (per-cast action-frame read); candidate fix: recast earlier or verify the state after the cast. Not run: champion/unique pack drill, Andariel stand drill (none exists).
+
 > MONSTALL (card idea, unproven): `walk did not finish in 2m0s` is back in DW.m3, 50 lines in the last cycle at (98,189) far from the mouth, with `nav stalled by monsters (near=6)` and `combat: left the game to survive` at 29 percent life; the drill character has no attack skill. Investigate only if a real character stalls the same way.
 
 > Bot generality study merged (docs/research/bot-generality.md): proposed first card gen-invariants (holdout seeds 16-23 + invariant counters in the M2 gate run); awaiting the user's approval to launch.

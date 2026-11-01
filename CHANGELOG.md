@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- drills26 (live, harness only): drill D26-A (group U) proves the Frozen Armor recast in a real fight on lab-armorhit and lab-nexthit2 (identical; armor up 296.1 of 300 s, 44 kills, 0 refills); a recast cut at 232.4 s left the armor down about 3.5 s (BACKLOG ARMORCUT); champion pack and boss check not run.
 - docs: FREEZERESUME differential: d2d lets a frozen monster act at the freeze end, game.exe at the end + aidel; local upstream candidate fix/freeze-resume brings the frozen cases from 12,503 to 0 (docs/research/pr-freezeresume-proof.md); independent verifier READY WITH CHANGES (docs/research/pr-freezeresume-verifier.md); not opened upstream.
 - teletune2 (live, DRILLS25): Teleport hops now land on the planned walking path and are taken when they skip more than 13 subtiles of it (was 36 subtiles of walk to a straight-line cell); Stony Tomb 211 ticks against walking 254, Halls of the Dead 533 against 578, border leg 717 against 708 (9 over, 0 hops: TELETUNE3); after a walk stall the leg rule is off and mana may fall to 15 percent (new knob nav.teleEscapeReservePct; unit-tested, not exercised live).
 - agentprompt (research, docs only): a paste-in hands-off prompt for contributors' own AI agents (docs/contributing/agent-prompt.md), linked from the guide and the work board.
