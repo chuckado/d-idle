@@ -84,3 +84,9 @@ internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
 docs/fixmouth2.md  fixmouth2  fixmouth2
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+openspec/changes/verifynexthit/**  verifynexthit  verifynexthit
+tools/emu/verify_nexthit.py  verifynexthit  verifynexthit
+tools/emu/test_verify_nexthit.cpp  verifynexthit  verifynexthit
+docs/research/pr-nexthit-verifier.md  verifynexthit  verifynexthit
+docs/research/pr-bundle-queue.md  verifynexthit  verifynexthit
+tools/emu/verify_nexthit_compare.py  verifynexthit  verifynexthit
