@@ -38,10 +38,10 @@ OLD = {"passive", "fight", "cold", "static", "cold2"}
 OLD_SKILL = {"cold": 39, "static": 42, "cold2": 64}  # Ice Bolt, Static Field, Frozen Orb
 HIT_SKILLS = (39, 45, 44, 55)  # Ice Bolt, Ice Blast, Frost Nova, Glacial Spike
 HIT_CLASS = {
-    "plain": "zombie1 1",
-    "champion": "fallen1 1 near champion",
-    "unique": "fallen1 1 near unique",
-    "boss": "bloodraven 1",
+    "plain": "zombie4 1",  # Drowned Carcass, a plain zombie with 147 life: one point of a cold skill does not kill it
+    "champion": "zombie4 1 near champion",
+    "unique": "zombie4 1 near unique",
+    "boss": "bloodraven 1",  # a MonStats boss-column monster, not a unique
 }
 CLASS_OF = {"passive": "1", "fight": "1", "merc": "4", "pet": "5", "follow": "5"}
 
@@ -115,8 +115,8 @@ class Run:
         out = []
         for line in self.ctl.cmd("monsters"):
             field = line.split("\t")
-            if len(field) > 12 and field[6] not in ("DT", "DD"):
-                out.append((int(field[12][1:]), float(field[1]), float(field[2])))
+            if len(field) > 11 and field[6] not in ("DT", "DD"):
+                out.append((int(field[11][1:]), float(field[1]), float(field[2])))
         return sorted(out)
 
 
