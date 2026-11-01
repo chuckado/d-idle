@@ -65,7 +65,11 @@ The tooling commit changes nothing in d2d (tool = base); the claim alone carries
 
 ## 5. Det state hashes
 
-SEE_DET_SECTION
+Builds: the DETHASH2 lab tree (upstream 72132b99 + lab commits, 5e0a51bc) as base (its binary, sha256 70c7b3694173, the one docs/research/det-hashes-2026-11-01b.md used) and the same tree + cherry-pick of the claim 36cbe015 (`armorhit`, sha256 19f2909199d0; the tooling commit adds no d2d code, section 3). One hidden slot (`tools/d2dslot.sh run`, slot 0, under `agentrun.sh verifyarmorhit`), capacity checked first (idle + nice 55 %), the DETHASH2 driver unchanged: `det_scenarios_run.py run BINDIR OUTDIR <14 scenarios> base,armorhit`, a fresh d2d per run, 28 runs.
+
+The base hashes reproduce DETHASH2's base column in all 14 scenarios. Result (V): **all 14 scenarios identical** (mon and state hashes) between base and armorhit: passive, fight, cold, static, cold2, hit_plain, hit_champion, hit_unique, hit_boss, hit_immune, hit_minion, merc, pet, follow.
+
+Class: EXPECTED, 0 unexplained. Coverage limit: no scenario puts Frozen Armor on the player (the changed branch needs state `frozenarmor`), so the hashes show only that the patch changes nothing outside it (no RNG draw added, no other path touched); they do not exercise the freeze itself. A Frozen Armor scenario (cast skill 40, spawn melee strikers of each kind) would be needed for that; the differential of section 2 covers the rule.
 
 ## 6. Code review notes (S unless tagged)
 
@@ -84,14 +88,15 @@ SEE_DET_SECTION
 - **C5 (skills.md line): HOLDS** (matches section 1).
 - Not claimed and confirmed open: D5 trigger (physical after reduction vs any element), the merc wearer, D2 (armors stacking), state 0x36, the 0x6b roll.
 - Isolation: HOLDS (tool = base, claim = head on all four seeds).
+- Det hashes: 14 of 14 identical, 0 unexplained (the freeze path itself not exercised).
 - CI-class: clean (0/0 pr_guard per commit, presubmit 0 FAIL / 3 WARN answered above, tests rc 0, gcc and clang-tidy 0 in touched files, ruff clean); merges clean with #155..#158 and freeze-rules-v2 (duplicate load line with the latter).
 
-READINESS_LINE
+**READY** for the next upstream PR once the draft edits below are made (text only; no code change is required for the claim). Recommended but optional before posting: the merc wearer (review note 1) and the ponytail comment (note 4). The resume-frame deviation (end + aidel) is shared by all d2d freezes and belongs in its own candidate, not in this PR. Rebase order: independent of #155..#158; with freeze-rules-v2 land one first and drop the second copy of the `freeze_divisor` member / load line from the other.
 
 Draft edits (pr-armorhit-draft.md):
 1. Limits, "Not modelled": replace "the freeze's event 2 at end + 1 (... acts one frame later ...)" with "the AI turn after a freeze: game.exe's freeze-end callback (FUN_0057b170) refiles the monster's AI event at the end + MonStats aidel (13..15 frames for most monsters; the end + 1 event FUN_0057b230 files is removed by it), d2d lets the monster act at the end; this holds for every d2d freeze and is not claimed".
 2. Limits: keep the merc wearer and D5 lines; add "a zero-length freeze (length / MonsterFreezeDivisor = 0) still interrupts the monster's AI in game.exe".
-3. Proof table: add the verifier's run: "independent oracle and harness, 134,400 cases on 4 seeds: upstream main 109,573 differ, this branch 0 (chill and freeze end frames)" and "det state hashes: SEE_DET_SHORT".
+3. Proof table: add the verifier's run: "independent oracle and harness, 134,400 cases on 4 seeds: upstream main 109,573 differ, this branch 0 (chill and freeze end frames)" and "det state hashes: 14 DETHASH2 scenarios identical base vs patched (no scenario wears Frozen Armor)".
 4. Merges: "cleanly with #155, #156, #157 and #158 in either order" (shares gamedata files with #155 and #158).
 5. Not run: drop "det state hashes"; keep "an MSVC build".
 6. If freeze-rules-v2 is posted first: rebase and drop the duplicate `freeze_divisor` member / load line.
@@ -110,5 +115,6 @@ python verify_armor_hit.py compare c-a.tsv g-a.tsv d-a.tsv
 
 - docs/BACKLOG.md: `- ARMORHIT: verifier (VERIFYARMORHIT, docs/research/pr-armorhit-verifier.md): claim holds (0 of 134,400 end frames); draft limit edits listed there; new shared deviation: a frozen monster's next AI turn is freeze end + aidel in game.exe (FUN_0057b170), d2d acts at the end (all freezes)`
 - docs/INDEX.md, research: `- docs/research/pr-armorhit-verifier.md: independent verifier of fix/armor-hit (freeze chain and resume frame traced, own differential, det hashes)`
+- docs/research/pr-bundle-queue.md (owned by the open card armorhit, so not edited here), append: `- ARMORHIT verifier (VERIFYARMORHIT 2026-11-01, docs/research/pr-armorhit-verifier.md): fix/armor-hit **READY after draft text edits** (no code change): own oracle + harness 134,400 cases on 4 seeds, upstream main 109,573 -> 0 chill / freeze end frames differ; isolation tool = base, claim = head; CI clean (presubmit 0 FAIL / 3 WARN answered); det 14/14 identical (Frozen Armor not exercised); limits for the body: game.exe resumes a frozen monster at end + aidel (FUN_0057b170; the draft says end + 1), merc wearer unchanged, D5 trigger, zero-length freeze; duplicate MonsterFreezeDivisor load line if merged with freeze-rules-v2`
 - CHANGELOG.md: none.
 - GLOSSARY.md: none missing.
