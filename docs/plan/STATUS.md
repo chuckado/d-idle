@@ -117,7 +117,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change teletune3: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
-- e9e6da4 11-01 11:11 `Merge origin/main` (-)
+- 8a12242 11-01 11:18 `Merge origin/main into drills25 base` (teletune3)
 - 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
 - 194e1ab 11-01 11:02 `Merge agent/drills24: Teleport key wired from the bound skill, hops tuned (36 subtiles / 40 percent), live drills` (drills24)
 - b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)
