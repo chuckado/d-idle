@@ -22,7 +22,7 @@ gates:
   - "differential on real d2d builds: before > 0, after 0; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
 merge:
-result:
+result: "Local upstream candidate fix/static-field-chill (claim 46ef6c75, tooling 79c9a496) on #155 head: C1 differential 14,239 -> 0 of 121,312 on real d2d builds; C2 not reachable (no patch); CI-class checks clean. Offline, nothing verified live, nothing pushed; verifier and det hashes open."
 ```
 
 ## 1. Work
