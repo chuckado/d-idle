@@ -78,3 +78,5 @@ docs/fixcastgap.md  fixcastgap  fixcastgap
 internal/combat/castgap.go  fixcastgap  fixcastgap
 internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
+docs/research/sorc-act-gate.md  actgate  actgate
+openspec/changes/actgate/**  actgate  actgate
