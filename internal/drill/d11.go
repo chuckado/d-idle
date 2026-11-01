@@ -23,8 +23,9 @@ type EmptyPlanInfo struct {
 // belt and exactly one scroll, then the bot's Safety decision.
 type PMInfo struct {
 	Err                         string
-	Adjacent, Within8, Hostiles int // monsters within Reach subtiles (the guard's adjacency, knob combat.crowdAdjacent; 3 in the control) / within 8 / listed alive
-	Reach                       int // the radius used for Adjacent
+	Adjacent, Within8, Hostiles int    // monsters within Reach subtiles (the guard's adjacency, knob combat.crowdAdjacent; 3 in the control) / within 8 / listed alive
+	Reach                       int    // the radius used for Adjacent
+	BotView                     string // distances as the bot's snapshot sees them (not the monsters verb)
 	Life, MaxLife               int
 	BeltPotions                 int
 	ScrollsBefore, ScrollsAfter int
@@ -160,8 +161,8 @@ func (i EmptyPlanInfo) String() string {
 }
 
 func (i PMInfo) String() string {
-	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, attack-mode distances (subtile:samples) [%s], err %q",
-		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.AttackDists, i.Err)
+	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, attack-mode distances (subtile:samples) [%s], bot view [%s], err %q",
+		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.AttackDists, i.BotView, i.Err)
 }
 
 func (c CastInfo) String() string {
