@@ -129,8 +129,8 @@ func D11(l D11Lab) []Drill {
 }
 
 func (i EmptyPlanInfo) String() string {
-	return fmt.Sprintf("%s: %d rounds, %d spawned, %d kills; back-offs %d, move failed %d (of which empty path %d), back-off cap melee %d, waits %d; %v err %q; samples: %s",
-		i.Where, i.Rounds, i.Spawned, i.Kills, i.Backoffs, i.MoveFailed, i.EmptyPath, i.CapMelee, i.Waits, i.Elapsed.Round(time.Second), i.Err, strings.Join(i.Samples, " / "))
+	return fmt.Sprintf("%s: %d rounds, %d spawned, %d kills; back-offs %d, move failed %d (of which empty path %d), back-off cap melee %d, waits %d, already-there ticks %d; %v err %q; samples: %s",
+		i.Where, i.Rounds, i.Spawned, i.Kills, i.Backoffs, i.MoveFailed, i.EmptyPath, i.CapMelee, i.Waits, i.AlreadyThere, i.Elapsed.Round(time.Second), i.Err, strings.Join(i.Samples, " / "))
 }
 
 func (i PMInfo) String() string {
