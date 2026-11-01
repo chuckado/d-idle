@@ -45,3 +45,12 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/research/freeze-rules-trace.md  decompfreeze  decompfreeze
+docs/research/pr-freeze-proof.md  decompfreeze  decompfreeze
+docs/research/pr-freeze-draft.md  decompfreeze  decompfreeze
+tools/emu/freeze_rules.py  decompfreeze  decompfreeze
+tools/emu/freeze_rules_test.cpp  decompfreeze  decompfreeze
+docs/decomp-queue.md  decompfreeze  decompfreeze
+docs/research/pr-bundle-queue.md  decompfreeze  decompfreeze
+docs/BACKLOG.md  decompfreeze  decompfreeze
+openspec/changes/decompfreeze/**  decompfreeze  decompfreeze
