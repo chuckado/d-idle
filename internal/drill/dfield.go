@@ -111,6 +111,9 @@ func F(l FieldLab) []Drill {
 	if rl, ok := l.(RunLab); ok {
 		run = append(run, DRun(rl))
 	}
+	if dl, ok := l.(DenLab); ok {
+		run = append(run, Drill{ID: "DW.m3", Primitive: "P23", Title: "DENBOUNCE: the bot's exit walk Blood Moor to Den of Evil, then idle, Clear and Explore in the cave: the character stays in the Den", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fDen(ctx, r, l, dl, 2, 8) }})
+	}
 	return append(run, []Drill{
 		fight("D-sync", "P27", "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)", fSync),
 		fight("D-sync.tp", "P27", "fixmisc: the first Clear right after a town portal arrival (the bot's BackToField), no warm-up walk: it attacks", func(ctx context.Context, r *Run, l FieldLab) Outcome {
@@ -466,6 +469,72 @@ func fSyncArrive(ctx context.Context, r *Run, l FieldLab, level int, arrive, wha
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("the first Clear on a cold %s arrival did not attack: kills %d, unreachable lines %d", what, f.Kills, unreach)
 	default:
 		o.Verdict, o.Reason = Pass, fmt.Sprintf("the first Clear on a cold %s arrival attacked and killed %d of %d", what, f.Kills, f.Spawned)
+	}
+	return o
+}
+
+// DenLab is the instance as DW.m3 uses it: one phase of the bot's loop run inside a cave right after the exit walk.
+type DenLab interface {
+	// DenPhase runs "idle" (ticks of Step), "clear" (Fighter.Clear, ticks as the time limit) or "explore" (the navigator's
+	// Explore until ticks passed) and returns the area afterwards and the bot log lines of the call (debug level included).
+	DenPhase(ctx context.Context, phase string, ticks int) (area int, log []string, err string)
+}
+
+// fDen is DW.m3 (DENBOUNCE, docs/fixdenbounce.md): the bot's ToArea walk from outer into the cave (the cave arrival is
+// where d2d puts the character, inside the return trigger), then the phases of Runner.sweepPass one at a time. A phase
+// that ends outside the cave is the bounce; its log (nav walk callers) names the call. Nothing is cheated except the
+// setup goto.
+func fDen(ctx context.Context, r *Run, l FieldLab, dl DenLab, outer, cave int) Outcome {
+	if err := l.Survive(ctx, r); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Goto(ctx, r, outer); err != nil {
+		return setupFail(err)
+	}
+	if err := l.Tick(ctx, 300); err != nil {
+		return setupFail(err)
+	}
+	phases := []struct {
+		name  string
+		ticks int
+	}{{"idle", 30}, {"clear", 150}, {"explore", 250}, {"clear", 150}, {"explore", 250}}
+	var trace, bounceLog []string
+	bounces, entries := 0, 0
+	bouncePhase := ""
+	for cycle := 0; cycle < 4; cycle++ {
+		area, e := l.ToArea(ctx, cave)
+		entries++
+		trace = append(trace, fmt.Sprintf("c%d enter: area %d %s", cycle, area, errOrOK(e)))
+		if area != cave {
+			bounces++
+			bouncePhase = "the exit walk itself"
+			if area != outer {
+				_, _ = l.ToArea(ctx, outer)
+			}
+			continue
+		}
+		for _, ph := range phases {
+			a, lg, perr := dl.DenPhase(ctx, ph.name, ph.ticks)
+			trace = append(trace, fmt.Sprintf("c%d %s: area %d %s", cycle, ph.name, a, errOrOK(perr)))
+			if a != cave {
+				bounces++
+				bouncePhase = ph.name
+				bounceLog = append(bounceLog, fmt.Sprintf("--- cycle %d phase %s:", cycle, ph.name))
+				bounceLog = append(bounceLog, firstN(lg, 40)...)
+				break
+			}
+		}
+		if _, e := l.ToArea(ctx, outer); e != "" && bounces == 0 {
+			trace = append(trace, "walk back out: "+e)
+		}
+	}
+	intended := "after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired)"
+	obs := fmt.Sprintf("%d entries, %d bounces (first in %q); trace: %s; callers at the bounce: %s", entries, bounces, bouncePhase, strings.Join(trace, " | "), strings.Join(firstN(bounceLog, 40), " / "))
+	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("bounces=%d phase=%s", bounces, bouncePhase)}
+	if bounces > 0 {
+		o.Verdict, o.Reason = Fail, fmt.Sprintf("%d bounce(s) out of the cave, first in %s", bounces, bouncePhase)
+	} else {
+		o.Verdict, o.Reason = Pass, "no bounce in 4 entries"
 	}
 	return o
 }
