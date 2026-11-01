@@ -2,7 +2,8 @@
 
 ```yaml
 change: verifynexthit
-status: in-progress
+status: archived
+merge: 0674406
 agent: verifynexthit
 branch: agent/verifynexthit
 worktree: ~/code/d2lod-wt/verifynexthit
