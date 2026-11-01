@@ -2,7 +2,7 @@
 
 ```yaml
 change: capdocs
-status: in-progress
+status: archived
 agent: capdocs
 branch: agent/capdocs
 worktree: ~/code/d2lod-wt/capdocs
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "capability docs refreshed against DRILLS24 to 29 and the offline cards; docs only, nothing run in a game"
+result: "capabilities, README, running and the sorc matrix refreshed; claims scoped to drill ids; docs only"
 live: "not verified live by this card (it cites drill ids)"
+merge: 938760d
 ```
 
 - [x] capabilities.md, README, running.md

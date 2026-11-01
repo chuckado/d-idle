@@ -113,8 +113,3 @@ internal/resource/sim.go  skmeleewire  skmeleewire
 internal/resource/wire_test.go  skmeleewire  skmeleewire
 docs/skmeleewire.md  skmeleewire  skmeleewire
 openspec/changes/skmeleewire/**  skmeleewire  skmeleewire
-docs/capabilities.md                 capdocs capdocs
-docs/running.md                      capdocs capdocs
-README.md                            capdocs capdocs
-docs/research/sorc-skill-matrix.md   capdocs capdocs
-openspec/changes/capdocs/**          capdocs capdocs
