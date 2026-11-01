@@ -88,3 +88,6 @@ internal/nav/roam.go  fixmouth3  fixmouth3
 internal/nav/fixmouth3_test.go  fixmouth3  fixmouth3
 internal/combat/fixmouth3_test.go  fixmouth3  fixmouth3
 docs/fixmouth3.md  fixmouth3  fixmouth3
+openspec/changes/nexthitfix/**  nexthitfix  nexthitfix
+docs/research/pr-nexthit-v2-addendum.md  nexthitfix  nexthitfix
+docs/research/pr-bundle-queue.md  nexthitfix  nexthitfix
