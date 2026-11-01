@@ -134,3 +134,6 @@ internal/town/fixprogress_test.go  fixprogress  fixprogress
 openspec/changes/fixprogress/**  fixprogress  fixprogress
 internal/town/chores.go  fixprogress  fixprogress
 internal/town/town.go  fixprogress  fixprogress
+docs/research/skabrecheck.md  skabrecheck  skabrecheck
+tools/emu/skab_*  skabrecheck  skabrecheck
+openspec/changes/skabrecheck/**  skabrecheck  skabrecheck
