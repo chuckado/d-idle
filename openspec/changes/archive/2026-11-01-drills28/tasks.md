@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills28
-status: in-progress
+status: archived
+merge: f85fcc3
 agent: drills28
 branch: agent/drills28
 worktree: ~/code/d2lod-wt/drills28
@@ -13,7 +14,7 @@ exclusive:
   - instance:drills28-slot-0
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "step 0: d2d refreshes a set Frozen Armor state (candidate d out); D26-A on both binaries: no cut cast seen, armor never absent at a sample, but a harness dead zone (spawn and lure between rounds, up to 43 s) delayed the first recast to 125.0 s (4.7 s off by spacing); the armorcut retry path was not exercised"
+result: "step 0: d2d refreshes a set Frozen Armor state; armorcut code ran 300 s with the armor never absent; retry path not exercised (needs a melee-hold drill). Verified live (harness drills), retry not verified live."
 live: "D28-0 PASS on both binaries; D26-A FAIL by its own spacing rule on both (harness artifact, no cut line); D2 11/11, D3 12/12"
 ```
 
