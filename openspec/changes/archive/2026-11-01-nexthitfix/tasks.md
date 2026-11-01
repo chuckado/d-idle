@@ -2,7 +2,8 @@
 
 ```yaml
 change: nexthitfix
-status: in-progress
+status: archived
+merge: d8e48e0
 agent: nexthitfix
 branch: agent/nexthitfix
 worktree: ~/code/d2lod-wt/nexthitfix
@@ -14,7 +15,7 @@ owns:
 exclusive: []
 gates:
   - "both harnesses 0 differences on the v2 build; det hashes explained; changecheck 0 warnings; leakcheck -mode fail 0"
-result: "READY: fix/nexthit-v2 (head 6b3964fa, base 72132b99): justhit ends after the missiles of frame + NextDelay (<=), oracle expires after the contacts; author's harness 0 of 100,198 (old head 8,473 under the corrected oracle), verifier's 0 of 100,624 (old head 25,252); det hashes 9 of 14 identical, 5 explained; fork lab-nexthit 2c6c4a1a651c pushed to the private remote, bin/d2d.lab-nexthit2, readback equal to the old build; offline plus one hidden d2d slot for det hashes and one for the readback, no game.exe window"
+result: "archived at merge d8e48e0; offline complete, not a live game proof; READY: fix/nexthit-v2 (head 6b3964fa, base 72132b99): justhit ends after the missiles of frame + NextDelay (<=), oracle expires after the contacts; author's harness 0 of 100,198 (old head 8,473 under the corrected oracle), verifier's 0 of 100,624 (old head 25,252); det hashes 9 of 14 identical, 5 explained; fork lab-nexthit 2c6c4a1a651c pushed to the private remote, bin/d2d.lab-nexthit2, readback equal to the old build; offline plus one hidden d2d slot for det hashes and one for the readback, no game.exe window"
 # resources held de facto: fork-branch:lab-nexthit and d2d-lab-binary (bin/d2d.lab-nexthit2); not listed in exclusive because the merged but unarchived forknext card still lists them (changecheck overlap)
 live: "d2d only: det hashes (one hidden slot) and a probe readback on a --no-save throwaway Sorceress (one hidden slot), no game.exe"
 ```

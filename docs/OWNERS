@@ -75,6 +75,3 @@ internal/resource/manamodel.go  fixmanamodel  fixmanamodel
 internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
-openspec/changes/nexthitfix/**  nexthitfix  nexthitfix
-docs/research/pr-nexthit-v2-addendum.md  nexthitfix  nexthitfix
-docs/research/pr-bundle-queue.md  nexthitfix  nexthitfix
