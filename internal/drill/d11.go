@@ -47,7 +47,7 @@ type CastInfo struct {
 	Adjacent                    int
 	LifeStart, LifeEnd          int
 	Hits                        int // ticks on which the life dropped during the trace
-	PortalTick                  int // ticks from the click to the portal object, -1 none within the trace
+	PortalTick, PortalMS        int // ticks and game milliseconds from the click to the portal object, -1 none within the trace
 	ScrollsBefore, ScrollsAfter int
 	ModeSeq                     string // player mode, run length encoded "mode x ticks"
 	Rights                      int
@@ -139,8 +139,8 @@ func (i PMInfo) String() string {
 }
 
 func (c CastInfo) String() string {
-	return fmt.Sprintf("adjacent %d, life %d -> %d, hit ticks %d, portal after %d ticks (-1 none), scrolls %d -> %d, rights %d, player modes [%s], err %q",
-		c.Adjacent, c.LifeStart, c.LifeEnd, c.Hits, c.PortalTick, c.ScrollsBefore, c.ScrollsAfter, c.Rights, c.ModeSeq, c.Err)
+	return fmt.Sprintf("adjacent %d, life %d -> %d, hit ticks %d, portal after %d ticks = %d game ms (-1 none), scrolls %d -> %d, rights %d, player modes [%s], err %q",
+		c.Adjacent, c.LifeStart, c.LifeEnd, c.Hits, c.PortalTick, c.PortalMS, c.ScrollsBefore, c.ScrollsAfter, c.Rights, c.ModeSeq, c.Err)
 }
 
 // dEmptyPlan: PASS when the log has no "empty path" and there were back-offs; BLOCKED when none ran.

@@ -57,7 +57,7 @@ func (l *lab) d11Adjacent(ctx context.Context) (adj, alive int, life, maxLife in
 			continue
 		}
 		alive++
-		if math.Hypot(float64(m.SX-sn.Player.X), float64(m.SY-sn.Player.Y)) <= 3 {
+		if math.Hypot(5*m.CellX-float64(sn.Player.X), 5*m.CellY-float64(sn.Player.Y)) <= 3 {
 			adj++
 		}
 	}
@@ -76,10 +76,24 @@ func (l *lab) d11OneScroll(ctx context.Context, r *drill.Run) error {
 		return err
 	}
 	_ = l.Tick(ctx, 30)
-	if _, err := l.PickupRaw(ctx); err != nil {
+	g, err := l.be.Client.Ground(ctx)
+	if err != nil {
 		return err
 	}
+	for _, it := range g.Items { // only the scroll: potions and gold left on the ground by earlier kills stay there
+		if it.Code != "tsc" {
+			continue
+		}
+		if err := l.be.Client.CmdPickup(ctx, it.Unit); err != nil {
+			return err
+		}
+		_, _ = l.be.Client.Step(ctx, 60)
+		break
+	}
 	_ = l.Tick(ctx, 10)
+	if v, err := l.PView(ctx); err != nil || v.Scrolls != 1 {
+		return fmt.Errorf("want exactly one scroll in the pack, have %d (err %v)", v.Scrolls, err)
+	}
 	return nil
 }
 
@@ -189,7 +203,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 			old[p] = true
 		}
 	}
-	t0 := l.tick()
+	t0, ms0 := l.tick(), l.gameMS()
 	if err := c.RClick(ctx, x, y); err != nil {
 		ci.Err = "rclick: " + err.Error()
 		return
@@ -222,6 +236,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 				for _, p := range pv.PortalPos {
 					if !old[p] {
 						ci.PortalTick = l.tick() - t0
+						ci.PortalMS = l.gameMS() - ms0
 					}
 				}
 			}
@@ -379,4 +394,12 @@ func (l *lab) d11WallBack(ctx context.Context, r *drill.Run) (string, error) {
 	_ = l.Tick(ctx, 10)
 	d := dirs[best[2]]
 	return fmt.Sprintf("warped to cell (%d,%d), wall 3 subtiles behind toward (%d,%d), open ahead", best[0], best[1], -d[0], -d[1]), nil
+}
+
+func (l *lab) gameMS() int {
+	c, err := l.be.Client.Clock(context.Background())
+	if err != nil {
+		return -1
+	}
+	return c.GameMS
 }
