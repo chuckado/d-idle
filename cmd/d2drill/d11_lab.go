@@ -241,7 +241,7 @@ func (l *lab) CastTrace(ctx context.Context, r *drill.Run, life int) (ci drill.C
 // EmptyPlan runs Fighter.Clear in 6 s rounds with the mana set to 0 before each round, counting the out-of-mana
 // back-offs and the failed walks in the log.
 func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total time.Duration) (ei drill.EmptyPlanInfo) {
-	ei.Where = fmt.Sprintf("area %d, %d zombies", level, n)
+	ei.Where = fmt.Sprintf("area %d, %d champion zombies", level, n)
 	if err := l.d11Setup(ctx, r, level, 1000); err != nil {
 		ei.Err = err.Error()
 		return
@@ -259,7 +259,7 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 		ei.Err = err.Error()
 		return
 	}
-	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn zombie1 %d near", n), "a pack near the throwaway: the fight under test (docs/forkcheats.md)"); err != nil {
+	if _, err := r.Cheat(ctx, fmt.Sprintf("debug spawn zombie1 %d near champion", n), "a champion pack near the throwaway (a champion is not a weak pack, so the out-of-mana ladder reaches the retreat step): the fight under test (docs/forkcheats.md)"); err != nil {
 		ei.Err = err.Error()
 		return
 	}
@@ -274,6 +274,10 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 			break
 		}
 		if err := l.SetMana(ctx, r, 0); err != nil {
+			ei.Err = err.Error()
+			break
+		}
+		if err := l.SetLife(ctx, r, 1000); err != nil {
 			ei.Err = err.Error()
 			break
 		}
