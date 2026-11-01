@@ -20,16 +20,16 @@ exclusive:
 gates:
   - "differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: ""
+result: "Offline, nothing verified live. Spawn / mana / flight / hit traced (docs/research/sk-missile-trace.md): D1 missile roll includes the max on d2d, real builds 104,000 cases 31,459 -> 0 (seed 7: 64,000, 16,479 -> 0), local candidate fix/missile-roll-top on upstream 72132b99 (tooling 9ba8d369, claim 23e2baec), CI-class checks clean; D2 mana paid at the action frame in game.exe vs at the command on d2d (read; drill M1); bot B1-B4; verifier, det hash and the user go open."
 ```
 
 ## 1. Work
 
-- [ ] 1.1 Trace spawn, mana payment, flight and hit in game.exe 1.14d (tags)
-- [ ] 1.2 Read d2d's missile creation, flight and damage; the bot's casting model
-- [ ] 1.3 Differential oracle (game.exe natively vs the real d2d build), before and after
-- [ ] 1.4 Local upstream candidate (only if a deviation is proven on the real build)
-- [ ] 1.5 Docs: trace (deviations table, drill recipe), queue row 14, BACKLOG, INDEX
+- [x] 1.1 Trace spawn, mana payment, flight and hit in game.exe 1.14d (tags)
+- [x] 1.2 Read d2d's missile creation, flight and damage; the bot's casting model
+- [x] 1.3 Differential oracle (game.exe natively vs the real d2d build), before and after
+- [x] 1.4 Local upstream candidate (only if a deviation is proven on the real build)
+- [x] 1.5 Docs: trace (deviations table, drill recipe), queue row 14, BACKLOG, INDEX
 
 ## 2. Open
 
