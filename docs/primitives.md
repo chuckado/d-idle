@@ -163,3 +163,13 @@ DRILLS8 rows (2026-10-31, lab build cheats3, code at 1628eeb with fixstall3; fil
 | P27 | D-sync.wp | PASS x3 (after the harness mana fix) | before: 1 of 2 (repeat 2 started with 1 of 35 mana, melee fallback, no obstacle in the grid); after: 3 of 3 killed in every repeat |
 | P14, P15, P16, P5, P13, P18, P3 | D3, D8 NPC smoke through `d2dtown.Input` | PASS | D3 12 of 12, D8 a, m, q, w PASS (D8.c is once per character) |
 Note (fixstall4, 2026-10-31): DRILLS8 F13 (H.pause, NPC approach) cause found offline: the grid route's 12-step waypoints cut the camp block corner (each leg is a straight `cmd move`), and stalls spent the budget; fixed with line-of-sight legs, routing at every stall and a route-sized budget, live proof pending ([fixstall4.md](fixstall4.md)).
+
+DRILLS9 rows (2026-11-01, lab build cheats3, code at 912086a with fixstall4; files `2026-11-01-drills9*.txt`, README section DRILLS9). These supersede the DRILLS8 rows of the same drill ids:
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| AUDIT | H.pause | PASS (F13 closed) | 3 invocations x 2 repeats: the bot's Pause opens Kashya in 6 of 6 first-run and 6 of 6 second-run tries, 248 ticks each (DRILLS8: 3 of 6 failing at 796) |
+| P36/Gate 1 | D10 | PASS x2 | two full runs (kill -9 of d2d under the managed bot): restarts delta 1, loop resumed, saved XP not lower, no leftovers, P35 clean, both inside the TTL |
+| P1 | D1.P1s | PASS in the group x3 | harness: `stagePack` picks up loose items first (F14) |
+| AUDIT | H.obj.chest, H.obj.shrine | PASS in group F x4 | harness: tries further objects of the kind, clears leftover monsters first (F14) |
+| P18 | D8.c | PASS run 1, BLOCKED run 2 | runs first; BLOCKED when a merc is already owned (the reward is once per character) |
+| P23 | DW.m1 | PASS alone, BLOCKED run 1 in the full F group | finding F17 (README DRILLS9) |

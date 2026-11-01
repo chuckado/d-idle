@@ -291,9 +291,9 @@ func D8(l GameLab) []Drill {
 		return func(ctx context.Context, r *Run) Outcome { return f(ctx, r, l) }
 	}
 	return []Drill{
+		d8quest(l, lim), // first: a merc owned from an earlier drill forfeits the free Rogue (DRILLS8 F14)
 		{ID: "D8.a", Primitive: "P18", Title: "merc hired and killed by cheat: the bot's revive through Kashya brings it back for gold", Limit: lim, Do: do(d8revive)},
 		{ID: "D8.m", Primitive: "P3", Title: "merc at low life: the bot's belt verb with the merc flag heals it and spends one potion", Limit: lim, Do: do(d8drink)},
-		d8quest(l, lim),
 		d8akara(l, lim),
 		d8warriv(l, lim),
 		{ID: "D8.g", Primitive: "P19", Title: "gamble never opens the tab when poor", Needs: []string{"the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario"}},
@@ -461,6 +461,9 @@ type QuestLab interface {
 	Warriv(ctx context.Context, r *Run) (area int, menu string, err error)
 }
 
+// MercOwnedBefore prefixes the merc string QuestLab.Claim returns when the character had a merc before the claim.
+const MercOwnedBefore = "owned before: "
+
 func d8quest(l GameLab, lim time.Duration) Drill {
 	ql, ok := l.(QuestLab)
 	if !ok {
@@ -474,6 +477,8 @@ func d8quest(l GameLab, lim time.Duration) Drill {
 		switch {
 		case err != nil:
 			o.Verdict, o.Reason = Fail, "claim: "+err.Error()
+		case strings.HasPrefix(merc, MercOwnedBefore):
+			o.Verdict, o.Reason = Blocked, "the character already owns a merc ("+strings.TrimPrefix(merc, MercOwnedBefore)+"): the free Rogue is claimable once per character, so this drill needs a character that never hired one"
 		case !g:
 			o.Verdict, o.Reason = Fail, "no merc appeared after the claim (a merc already owned forfeits the reward: run D8.c before D8.a)"
 		default:

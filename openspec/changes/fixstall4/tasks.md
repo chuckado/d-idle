@@ -17,8 +17,9 @@ exclusive: []
 gates:
   - "go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
   - "live proof after merge: H.pause x3 invocations open Kashya in 6 of 6 first-run tries and 6 of 6 second-run tries (docs/fixstall4.md)"
+live: "H.pause PASS x3 (DRILLS9): 6 of 6 first-run and 6 of 6 second-run tries open Kashya, 248 ticks each"
 merge:
-result: offline only, not verified live (see docs/fixstall4.md)
+result: offline; live proof by DRILLS9 (see live:, docs/fixstall4.md)
 ```
 
 ## 1. Work

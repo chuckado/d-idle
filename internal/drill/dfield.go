@@ -138,6 +138,9 @@ func fObj(ctx context.Context, r *Run, l FieldLab, level int, want string) Outco
 	op := l.OperateObject(ctx, r, level, want)
 	intended := fmt.Sprintf("a %q of level %d is listed in Snapshot.Objects and Interact operates it (mode NU -> ON)", want, level)
 	obs := fmt.Sprintf("preset %q class %d listed=%v; Interact err %q; mode %s -> %s; %d ticks", op.Found, op.Class, op.Listed, op.InteractErr, op.Before, op.After, op.Ticks)
+	if op.Found != "" && op.Names != "" {
+		obs += "; " + op.Names
+	}
 	o := Outcome{Intended: intended, Observed: obs, Sig: fmt.Sprintf("found=%v listed=%v err=%v after=%s", op.Found != "", op.Listed, op.InteractErr != "", op.After)}
 	switch {
 	case op.Found == "":

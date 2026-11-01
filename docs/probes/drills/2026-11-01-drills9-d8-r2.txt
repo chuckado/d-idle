@@ -1,0 +1,66 @@
+labrun: synced code/d2lod-wt/drills9 → the-worker-host:~/labrun/the-head-host/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group D8 -label drills9-d8-r2 -v'
+d2dslot: got slot 0
+time=2026-10-31T20:40:58.514-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1588360 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:40:59.544-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T20:40:59.956-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 3 new unknown fields: merc.aura, merc.level, merc.name"
+DRILL D8.c P18 BLOCKED the free Rogue was granted by the claim (14.3,21.9:RG) | intended: a fresh character with the Blood Raven reward pending: ClaimRogue opens Kashya's menu and a Rogue appears, the dialog is closed | observed: run1: granted=true merc="14.3,21.9:RG" record states 0 -> 0 err <nil>; run2 (BLOCKED): granted=false merc="owned before: 14.1,16.7:RG" record states 0 -> 0 err <nil> | runs: 2, DIFFER
+DRILL D8.a P18 PASS revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap) | intended: merc alive again, gold down by the reported price | observed: merc present=false dead=true code= life=[0,0] -> present=true dead=false code=RG life=[40,1]; gold 3000 -> 3000 (revive reports 0); err <nil>; panels none | runs: 2, identical
+DRILL D8.m P3 PASS merc life 20 -> 32 with one belt potion | intended: merc life up, one belt potion used | observed: merc present=true dead=false code=RG life=[20,1] -> present=true dead=false code=RG life=[32,1]; belt potions 1 -> 0; err <nil> | runs: 2, identical
+time=2026-10-31T20:41:00.040-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:00.046-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:41:00.047-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:121 Y:69}" wps=6 partial=false cells=35
+time=2026-10-31T20:41:00.047-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:139 Y:103}" cur=0 of=6
+time=2026-10-31T20:41:00.047-04:00 level=DEBUG msg="nav plan" from="{X:139 Y:103}" to="{X:121 Y:70}" wps=5 partial=false cells=33
+time=2026-10-31T20:41:00.048-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:103}" wp="{X:136 Y:100}" cur=0 of=5
+time=2026-10-31T20:41:00.048-04:00 level=INFO msg="nav stuck" pos="{X:139 Y:103}" wp="{X:136 Y:100}" rung=0
+time=2026-10-31T20:41:00.049-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:100}" wp="{X:136 Y:92}" cur=1 of=5
+time=2026-10-31T20:41:00.049-04:00 level=INFO msg="nav: stuck recovered" at="{X:139 Y:103}" method=reclick rung=1 repeat=false
+time=2026-10-31T20:41:00.051-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:95}" wp="{X:136 Y:84}" cur=2 of=5
+time=2026-10-31T20:41:00.053-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:88}" wp="{X:130 Y:78}" cur=3 of=5
+time=2026-10-31T20:41:00.054-04:00 level=DEBUG msg="nav click" pos="{X:135 Y:87}" wp="{X:136 Y:84}" cur=2 of=5
+time=2026-10-31T20:41:00.055-04:00 level=DEBUG msg="nav click" pos="{X:136 Y:85}" wp="{X:130 Y:78}" cur=3 of=5
+time=2026-10-31T20:41:00.057-04:00 level=DEBUG msg="nav click" pos="{X:131 Y:80}" wp="{X:123 Y:71}" cur=4 of=5
+time=2026-10-31T20:41:00.060-04:00 level=DEBUG msg="nav plan" from="{X:124 Y:73}" to="{X:120 Y:74}" wps=1 partial=false cells=2
+time=2026-10-31T20:41:00.061-04:00 level=DEBUG msg="nav click" pos="{X:124 Y:73}" wp="{X:123 Y:74}" cur=0 of=1
+time=2026-10-31T20:41:00.061-04:00 level=INFO msg="npc: interact" class=148 try=1 dist=4 npc="[119 74]"
+time=2026-10-31T20:41:00.070-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-10-31T20:41:00.070-04:00 level=INFO msg="npc: menu open" class=148 try=1 ms=32560
+time=2026-10-31T20:41:00.078-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:41:00.078-04:00 level=DEBUG msg="nav plan" from="{X:141 Y:103}" to="{X:119 Y:74}" wps=7 partial=false cells=37
+time=2026-10-31T20:41:00.078-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:103}" wp="{X:137 Y:101}" cur=1 of=7
+time=2026-10-31T20:41:00.079-04:00 level=DEBUG msg="nav plan" from="{X:140 Y:102}" to="{X:119 Y:74}" wps=7 partial=false cells=35
+time=2026-10-31T20:41:00.079-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:102}" wp="{X:137 Y:101}" cur=1 of=7
+time=2026-10-31T20:41:00.079-04:00 level=INFO msg="nav stuck" pos="{X:140 Y:102}" wp="{X:137 Y:101}" rung=0
+time=2026-10-31T20:41:00.079-04:00 level=INFO msg="nav: stuck again at the same spot" pos="{X:140 Y:102}" hits=2 lastMethod=reclick
+time=2026-10-31T20:41:00.079-04:00 level=INFO msg="nav: blacklisted cell" at="{X:137 Y:101}" radius=5.5 ttlSec=180
+time=2026-10-31T20:41:00.080-04:00 level=DEBUG msg="nav plan" from="{X:139 Y:106}" to="{X:119 Y:74}" wps=8 partial=false cells=40
+time=2026-10-31T20:41:00.080-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:106}" wp="{X:143 Y:106}" cur=0 of=8
+time=2026-10-31T20:41:00.081-04:00 level=INFO msg="nav: stuck recovered" at="{X:140 Y:102}" method=spiral rung=1 repeat=true
+time=2026-10-31T20:41:00.081-04:00 level=DEBUG msg="nav click" pos="{X:141 Y:106}" wp="{X:146 Y:103}" cur=1 of=8
+time=2026-10-31T20:41:00.082-04:00 level=DEBUG msg="nav click" pos="{X:144 Y:104}" wp="{X:146 Y:101}" cur=2 of=8
+time=2026-10-31T20:41:00.083-04:00 level=DEBUG msg="nav click" pos="{X:145 Y:103}" wp="{X:142 Y:94}" cur=3 of=8
+time=2026-10-31T20:41:00.085-04:00 level=DEBUG msg="nav click" pos="{X:143 Y:97}" wp="{X:138 Y:87}" cur=4 of=8
+time=2026-10-31T20:41:00.087-04:00 level=DEBUG msg="nav click" pos="{X:140 Y:90}" wp="{X:135 Y:83}" cur=5 of=8
+time=2026-10-31T20:41:00.088-04:00 level=DEBUG msg="nav plan" from="{X:139 Y:89}" to="{X:119 Y:74}" wps=3 partial=false cells=20
+time=2026-10-31T20:41:00.088-04:00 level=DEBUG msg="nav click" pos="{X:139 Y:89}" wp="{X:135 Y:83}" cur=0 of=3
+time=2026-10-31T20:41:00.089-04:00 level=DEBUG msg="nav click" pos="{X:137 Y:86}" wp="{X:128 Y:78}" cur=1 of=3
+time=2026-10-31T20:41:00.092-04:00 level=DEBUG msg="nav click" pos="{X:130 Y:79}" wp="{X:122 Y:74}" cur=2 of=3
+time=2026-10-31T20:41:00.094-04:00 level=INFO msg="npc: interact" class=148 try=1 dist=4 npc="[119 74]"
+time=2026-10-31T20:41:00.101-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=148
+time=2026-10-31T20:41:00.101-04:00 level=INFO msg="npc: menu open" class=148 try=1 ms=6600
+DRILL D8.q P20 PASS PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path) | intended: Den of Evil reward pending: opening Akara's menu grants one skill point, the record reads done, the dialog is closed | observed: skill points 0 -> 1; quest list: 1	0x0001	act1	bits=0; 2	0x0001	act1	bits=0; 41	0x2002	act5	bits=1,13; err <nil> | runs: 2, identical
+DRILL D8.w P21 PASS PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path | intended: Andariel done: Warriv's menu lists Go East, picking it arrives in Lut Gholein (area 40) | observed: menu [Warriv | talk | go east | cancel]; area after 40; err <nil> | runs: 2, identical
+DRILL D8.g P19 BLOCKED missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D8.c      P18   BLOCKED  DIFF the free Rogue was granted by the claim (14.3,21.9:RG)
+D8.a      P18   PASS     same revived through Kashya's menu; price taken 0 gold (a Rogue at clvl 1 is revived free on this build: U whether the price is a rule or a gap)
+D8.m      P3    PASS     same merc life 20 -> 32 with one belt potion
+D8.q      P20   PASS     same PARTIAL: the game grants the reward at the menu (the bot's own talk node lives in package main and is not importable: UNVERIFIED as the bot's code path)
+D8.w      P21   PASS     same PARTIAL: the menu row works on d2d; the bot's own act hop (cmd/d2bot talk node task.go:285) is package main and not importable: UNVERIFIED as the bot's code path
+D8.g      P19   BLOCKED  -    missing: the bot has no gamble code (docs/primitives.md P19: class listed only); the drill is a log grep on a soak, not a scripted scenario
+cheat verbs used (each ledgered with a reason): debug belt clear, debug give hp1 belt 0, debug goto 1, debug merc hire 0, debug merc hurt 20, debug merc kill, debug quest list, debug quest set 1 0x0002, debug quest set 2 0x0002, debug quest set 6 0x0001, debug stat 14 3000
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T20:41:00.573-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: the-worker-host exited 0 after 4s

@@ -1,0 +1,98 @@
+labrun: synced code/d2lod-wt/drills9 → the-worker-host:~/labrun/the-head-host/code/d2lod-wt/drills9 in 0s; running: bash -c 'export PATH=$HOME/.local/bin:$PATH; go build -o ~/d2d-lab/drills9bin/d2drill ./cmd/d2drill || exit 1; D2D_AGENT=drills9 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- $HOME/d2d-lab/drills9bin/d2drill -group D4 -label drills9-d4 -v'
+d2dslot: got slot 0
+time=2026-10-31T20:38:20.213-04:00 level=WARN msg="d2d channel not answering: d2d process pid 1562577 still running; socket file is gone (stat ~/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial ~/d2d-lab/slots/0/d2d.sock: dial unix ~/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-10-31T20:38:21.295-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 24 new unknown fields: hovered, inventory.item_flags, missiles, monster.hostile, monster.resists, monster.states, monster.unique_no, mouse, object.class, object.mode, player.hotkeys, player.mode, player.resist.magic, player.skills.bonus, player.states, player.stats.effective, ui.chat, ui.merc, ui.party, ui.quest, ui.trade, unit.flags, unit.owner, viewport"
+time=2026-10-31T20:38:21.690-04:00 level=INFO msg=d2dsrc msg="d2dsrc: 2 new unknown fields: ground.ilvl, ground.quality"
+time=2026-10-31T20:38:21.691-04:00 level=INFO msg="loot: potion skip code=hp1 beltWant=0 packHave=0 buffer=0 beltFree=0"
+time=2026-10-31T20:38:21.691-04:00 level=DEBUG msg="loot: ground" units=4 cands=2 skipped=2 radius=60
+time=2026-10-31T20:38:21.691-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/loot.(*Looter).pickOne < d2lod-bot/internal/loot.(*Looter).pickUp < d2lod-bot/internal/loot.(*Looter).PickUp"
+time=2026-10-31T20:38:21.695-04:00 level=INFO msg="d2dworld: arrived in level 1: 1 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-10-31T20:38:21.696-04:00 level=DEBUG msg="nav plan" from="{X:58 Y:87}" to="{X:63 Y:94}" wps=2 partial=false cells=7
+time=2026-10-31T20:38:21.696-04:00 level=DEBUG msg="nav click" pos="{X:58 Y:87}" wp="{X:63 Y:92}" cur=0 of=2
+time=2026-10-31T20:38:21.698-04:00 level=DEBUG msg="nav click" pos="{X:62 Y:91}" wp="{X:63 Y:94}" cur=1 of=2
+time=2026-10-31T20:38:21.700-04:00 level=DEBUG msg="loot: ground" units=3 cands=1 skipped=2 radius=60
+time=2026-10-31T20:38:21.702-04:00 level=DEBUG msg="loot: ground" units=2 cands=0 skipped=2 radius=60
+time=2026-10-31T20:38:21.702-04:00 level=INFO msg="loot: 4 seen, picked 2, skipped 2 (1x filtered: drop [C] plain or inferior item; 1x filtered: keep [C] potion already in the pack), gold +0"
+time=2026-10-31T20:38:21.703-04:00 level=DEBUG msg="loot: ground" units=2 cands=0 skipped=2 radius=60
+time=2026-10-31T20:38:21.703-04:00 level=INFO msg="loot: 2 seen, picked 0, skipped 2 (1x filtered: drop [C] plain or inferior item; 1x filtered: keep [C] potion already in the pack), gold +0"
+time=2026-10-31T20:38:21.708-04:00 level=DEBUG msg="loot: ground" units=6 cands=2 skipped=4 radius=60
+time=2026-10-31T20:38:21.711-04:00 level=DEBUG msg="loot: ground" units=5 cands=1 skipped=4 radius=60
+time=2026-10-31T20:38:21.713-04:00 level=DEBUG msg="loot: ground" units=4 cands=0 skipped=4 radius=60
+time=2026-10-31T20:38:21.713-04:00 level=INFO msg="loot: 6 seen, picked 2, skipped 4 (2x filtered: drop [C] plain or inferior item; 2x filtered: keep [C] potion already in the pack), gold +0"
+DRILL D4.a P9 PASS picked 2 of 4, left 2, rerun quiet | intended: report = end state: picked items in the pack or belt, skipped items still on the ground, rerun picks nothing new | observed: ground capx1 gcvx1 hp1x1 rinx1; call 1: seen 4, picked [Cap (keep [A] empty weapon or body armor slot); Chipped Amethyst (sell [B] surplus low gem, sells)], skipped [Ring: filtered: drop [C] plain or inferior item; Minor Healing Potion: filtered: keep [C] potion already in the pack], failed [] | pack capx1 gcvx1 belt 4, ground hp1x1 rinx1; call 2: seen 2, picked [], skipped [Ring: filtered: drop [C] plain or inferior item; Minor Healing Potion: filtered: keep [C] potion already in the pack], failed [] | pack capx1 gcvx1, ground hp1x1 rinx1; log lines call1 5 call2 2 | runs: 2, identical
+time=2026-10-31T20:38:21.714-04:00 level=DEBUG msg="loot: ground" units=4 cands=0 skipped=4 radius=60
+time=2026-10-31T20:38:21.714-04:00 level=INFO msg="loot: 4 seen, picked 0, skipped 4 (2x filtered: drop [C] plain or inferior item; 2x filtered: keep [C] potion already in the pack), gold +0"
+time=2026-10-31T20:38:21.941-04:00 level=DEBUG msg="loot: ground" units=1 cands=0 skipped=1 radius=60
+time=2026-10-31T20:38:21.941-04:00 level=INFO msg="loot: pack full, item left on the ground" item="Chipped Topaz" id=45
+time=2026-10-31T20:38:21.941-04:00 level=INFO msg="loot: 1 seen, picked 0, skipped 1 (1x no room), gold +0"
+time=2026-10-31T20:38:21.942-04:00 level=DEBUG msg="loot: ground" units=1 cands=0 skipped=1 radius=60
+time=2026-10-31T20:38:21.942-04:00 level=INFO msg="loot: pack full, item left on the ground" item="Chipped Topaz" id=45
+time=2026-10-31T20:38:21.942-04:00 level=INFO msg="loot: 1 seen, picked 0, skipped 1 (1x no room), gold +0"
+time=2026-10-31T20:38:22.179-04:00 level=DEBUG msg="loot: ground" units=1 cands=0 skipped=1 radius=60
+time=2026-10-31T20:38:22.179-04:00 level=INFO msg="loot: pack full, item left on the ground" item="Chipped Topaz" id=85
+time=2026-10-31T20:38:22.179-04:00 level=INFO msg="loot: 1 seen, picked 0, skipped 1 (1x no room), gold +0"
+time=2026-10-31T20:38:22.180-04:00 level=DEBUG msg="loot: ground" units=1 cands=0 skipped=1 radius=60
+time=2026-10-31T20:38:22.180-04:00 level=INFO msg="loot: pack full, item left on the ground" item="Chipped Topaz" id=85
+time=2026-10-31T20:38:22.180-04:00 level=INFO msg="loot: 1 seen, picked 0, skipped 1 (1x no room), gold +0"
+DRILL D4.b P4 PASS full pack: item left once per call, no loop | intended: the gem stays on the ground, at most one 'pack full' line per call, nothing picked, no panel | observed: pack rings 38; call 1: seen 1, picked [], skipped [Chipped Topaz: no room], failed []; call 2: seen 1, picked [], skipped [Chipped Topaz: no room], failed []; ground gcyx1; 'pack full' lines over both calls 2 (1 per item and call allowed, 1 gems on the ground); panels none | runs: 2, identical
+time=2026-10-31T20:38:22.394-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:38:22.395-04:00 level=DEBUG msg="nav plan" from="{X:63 Y:94}" to="{X:31 Y:145}" wps=11 partial=false cells=52
+time=2026-10-31T20:38:22.395-04:00 level=DEBUG msg="nav click" pos="{X:63 Y:94}" wp="{X:54 Y:100}" cur=2 of=11
+time=2026-10-31T20:38:22.396-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC < d2lod-bot/internal/town.(*Town).OpenForTest"
+time=2026-10-31T20:38:22.397-04:00 level=DEBUG msg="nav plan" from="{X:62 Y:95}" to="{X:31 Y:145}" wps=10 partial=false cells=53
+time=2026-10-31T20:38:22.397-04:00 level=DEBUG msg="nav click" pos="{X:62 Y:95}" wp="{X:58 Y:96}" cur=0 of=10
+time=2026-10-31T20:38:22.399-04:00 level=DEBUG msg="nav click" pos="{X:60 Y:95}" wp="{X:53 Y:102}" cur=1 of=10
+time=2026-10-31T20:38:22.404-04:00 level=DEBUG msg="nav click" pos="{X:55 Y:100}" wp="{X:52 Y:103}" cur=2 of=10
+time=2026-10-31T20:38:22.405-04:00 level=DEBUG msg="nav click" pos="{X:54 Y:101}" wp="{X:52 Y:107}" cur=3 of=10
+time=2026-10-31T20:38:22.408-04:00 level=DEBUG msg="nav click" pos="{X:53 Y:104}" wp="{X:48 Y:114}" cur=4 of=10
+time=2026-10-31T20:38:22.415-04:00 level=DEBUG msg="nav plan" from="{X:49 Y:112}" to="{X:31 Y:145}" wps=6 partial=false cells=33
+time=2026-10-31T20:38:22.415-04:00 level=DEBUG msg="nav click" pos="{X:49 Y:112}" wp="{X:45 Y:119}" cur=0 of=6
+time=2026-10-31T20:38:22.419-04:00 level=DEBUG msg="nav click" pos="{X:47 Y:116}" wp="{X:42 Y:126}" cur=1 of=6
+time=2026-10-31T20:38:22.426-04:00 level=DEBUG msg="nav click" pos="{X:43 Y:124}" wp="{X:38 Y:133}" cur=2 of=6
+time=2026-10-31T20:38:22.431-04:00 level=DEBUG msg="nav click" pos="{X:40 Y:130}" wp="{X:35 Y:141}" cur=3 of=6
+time=2026-10-31T20:38:22.440-04:00 level=DEBUG msg="nav click" pos="{X:36 Y:138}" wp="{X:34 Y:142}" cur=4 of=6
+time=2026-10-31T20:38:22.442-04:00 level=DEBUG msg="nav click" pos="{X:36 Y:139}" wp="{X:31 Y:145}" cur=5 of=6
+time=2026-10-31T20:38:22.452-04:00 level=INFO msg="npc: interact" class=147 try=1 dist=1 npc="[31 145]"
+time=2026-10-31T20:38:22.458-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=147
+time=2026-10-31T20:38:22.458-04:00 level=INFO msg="npc: menu open" class=147 try=1 ms=386520
+time=2026-10-31T20:38:22.459-04:00 level=INFO msg="npc: menu click" class=147 entry=trade line=1 lines=4 adj=5 at="[368 159]" npc="[31 145]" try=1 slow=false
+time=2026-10-31T20:38:22.464-04:00 level=INFO msg="npc: window open" class=147 entry=trade adj=5 tries=1 ms=920
+time=2026-10-31T20:38:23.119-04:00 level=INFO msg="town: make room sold" sold=12 gold=10000 refused=28
+time=2026-10-31T20:38:23.339-04:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoToUnitOf < d2lod-bot/internal/nav.(*Navigator).GoToUnit < d2lod-bot/internal/town.(*Town).approach < d2lod-bot/internal/town.(*Town).openNPC"
+time=2026-10-31T20:38:23.341-04:00 level=INFO msg="npc: interact" class=147 try=1 dist=1 npc="[31 145]"
+time=2026-10-31T20:38:23.344-04:00 level=INFO msg="npc: time-to-panel" ms=0 first-contact=false clicks=1 strategy=wait class=147
+time=2026-10-31T20:38:23.344-04:00 level=INFO msg="npc: menu open" class=147 try=1 ms=0
+time=2026-10-31T20:38:23.345-04:00 level=INFO msg="npc: menu click" class=147 entry=trade line=1 lines=4 adj=5 at="[368 159]" npc="[31 145]" try=1 slow=false
+time=2026-10-31T20:38:23.348-04:00 level=INFO msg="npc: window open" class=147 entry=trade adj=5 tries=1 ms=129720
+time=2026-10-31T20:38:24.300-04:00 level=INFO msg="town: make room sold" sold=0 gold=0 refused=40
+DRILL D4.c P4 PASS hole made, 0 rings left | intended: a free 2x2 hole after MakeRoom, or a clean refusal | observed: MakeRoom(2,2) -> true err <nil>; hole now true; rings left 0; gold 10000; town: make room sold sold=12 gold=10000 refused=28; panels none | runs: 2, identical
+time=2026-10-31T20:38:24.525-04:00 level=DEBUG msg="loot: ground" units=1 cands=1 skipped=0 radius=60
+time=2026-10-31T20:38:24.531-04:00 level=DEBUG msg="loot: ground" units=0 cands=0 skipped=0 radius=60
+time=2026-10-31T20:38:24.531-04:00 level=INFO msg="loot: 1 seen, picked 1, skipped 0 (), gold +156"
+time=2026-10-31T20:38:24.756-04:00 level=DEBUG msg="loot: ground" units=1 cands=1 skipped=0 radius=60
+time=2026-10-31T20:38:24.761-04:00 level=DEBUG msg="loot: ground" units=0 cands=0 skipped=0 radius=60
+time=2026-10-31T20:38:24.761-04:00 level=INFO msg="loot: 1 seen, picked 1, skipped 0 (), gold +156"
+DRILL D4.g P8 PASS gold pile taken into a full pack, purse 156 | intended: the pile is taken (purse > 0) although the pack has no free cell | observed: full pack (40 rings); ground gldx1 -> empty; purse 0 -> 156; seen 1, picked [Gold (keep [S] gold)], skipped [], failed [] | runs: 2, identical
+time=2026-10-31T20:38:24.767-04:00 level=DEBUG msg="loot: ground" units=1 cands=1 skipped=0 radius=60
+time=2026-10-31T20:38:24.781-04:00 level=DEBUG msg="pickup failed" item=Gold id=247 err="item still on the ground after 1.77s"
+time=2026-10-31T20:38:24.781-04:00 level=DEBUG msg="loot: ground" units=1 cands=0 skipped=1 radius=60
+time=2026-10-31T20:38:24.781-04:00 level=INFO msg="loot: 1 seen, picked 0, skipped 1 (1x filtered: keep [C] gold pile), gold +0"
+time=2026-10-31T20:38:24.784-04:00 level=DEBUG msg="loot: ground" units=2 cands=2 skipped=0 radius=60
+time=2026-10-31T20:38:24.797-04:00 level=DEBUG msg="pickup failed" item=Gold id=248 err="item still on the ground after 1.77s"
+time=2026-10-31T20:38:24.797-04:00 level=DEBUG msg="loot: ground" units=2 cands=0 skipped=2 radius=60
+time=2026-10-31T20:38:24.797-04:00 level=INFO msg="loot: 2 seen, picked 0, skipped 2 (2x filtered: keep [C] gold pile), gold +0"
+DRILL D4.cap P8 PASS recorded: the purse after taking a pile at 9990 gold, clvl 1, is 10000 (piles left: 1) | intended: record the carry cap behaviour (SME: 10000 x clvl, U) | observed: purse 9990 -> 10000; gold piles left on the ground 1; seen 1, picked [], skipped [Gold: filtered: keep [C] gold pile], failed [] | runs: 2, identical
+DRILL D4.x P6 PASS chipped x3 became flawed x1, cube kept | intended: gcv x3 -> gfv x1, cube kept | observed: pack boxx1 gcvx3 -> boxx1 gfvx1; transmute output [gfv] err <nil>; panels none | runs: 2, identical
+END character Drilly life 40/40 in town: true
+
+drill     prim  verdict  det  reason
+D4.a      P9    PASS     same picked 2 of 4, left 2, rerun quiet
+D4.b      P4    PASS     same full pack: item left once per call, no loop
+D4.c      P4    PASS     same hole made, 0 rings left
+D4.g      P8    PASS     same gold pile taken into a full pack, purse 156
+D4.cap    P8    PASS     same recorded: the purse after taking a pile at 9990 gold, clvl 1, is 10000 (piles left: 1)
+D4.x      P6    PASS     same chipped x3 became flawed x1, cube kept
+cheat verbs used (each ledgered with a reason): debug clearinv, debug give box, debug give cap, debug give gcv, debug give gcy, debug give gld, debug give hp1, debug give rin, debug stat 14 0, debug stat 14 9990
+cheat ledger: ~/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-10-31T20:38:24.885-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: the-worker-host exited 0 after 6s

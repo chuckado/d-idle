@@ -136,6 +136,11 @@ const testBelt = "lbl"
 // because the belt is full when they are picked up (V: the engine puts a ground potion in the belt first); the belt is
 // then drunk empty with the real belt verb.
 func stagePack(ctx context.Context, r *Run, l BeltLab, hp, mp int) error {
+	// loose potions an earlier drill left at the character's feet would be picked up with the staged ones (DRILLS8 F14:
+	// P1s saw hp1x4 instead of x2): take them first, then ClearPack empties the pack again
+	if _, err := l.PickupRaw(ctx); err != nil {
+		return err
+	}
 	if err := l.ClearPack(ctx, r); err != nil {
 		return err
 	}

@@ -239,3 +239,42 @@ Result files `2026-10-31-drills8-<label>.txt` (stdout of each d2drill invocation
 - F14 (note, drill order): in a whole-group process D1.P1s, D8.c and H.obj.chest (group F) differ from their alone runs (leftover pack potions, the Rogue already claimed, another chest preset chosen); D8.c cannot pass at repeat 2 even alone. The groups are not independent; for verdicts read the alone runs.
 - F15 (note, UNVERIFIED): with 1 mana the Sorceress's melee `Attack` fallback did not kill three zombies in 60 s on open floor (12 approaches without closing, three ignores, DRILLS8 `dsyncwp-diag`). The product question is whether a mana-less Sorceress should be able to melee a weak pack.
 - F16 (harness text): D5.c, D5.d and H.monster still say BLOCKED "no debug verb spawns a monster"; the spawn verb exists and the F group covers them. The texts should be removed (not done here, only the BLOCKED lines are stale).
+
+## DRILLS9 (2026-11-01): live proof of fixstall4, the D10 fault drill twice, group-run isolation, regression pass
+Result files `2026-11-01-drills9-<label>.txt` (stdout of each d2drill invocation, no json): `h1`..`h3` (H.pause), `d10a`, `d10b` (D10, `-repeat 1` each, one background job per repeat, TTL 1800 s), one file per group (`d1`, `f`, `h`, `d3`, `d8`, `d2`, `d4`, `d5`, `d6`, `d7`, `d9`, `dw`, `dr`), the group reruns after harness fixes (`f-r2`..`f-r5`, `d1-r2`, `d1-r3`, `d8-r2`, `dr60` = DR with `-repair-below 60`) and the DW.m1 narrowing runs `dwm1-a`..`dwm1-i`. Run as in DRILLS8 (build on the worker host, lab build cheats3, code of origin/main at 912086a with fixstall4): `D2D_AGENT=drills9 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills9 --ttl 900 -- tools/d2dslot.sh run -n 0 -t 900 -- <built>/d2drill -group H -only H.pause -label drills9-h1 -v`; D10 additionally `-repeat 1 -bot <built>/d2bot` with `--ttl 1800 -t 1800` (a repeat takes about 13 minutes: 4 min to the kill, 8 min observed).
+
+| Card | Drill | Verdict | Numbers |
+|---|---|---|---|
+| fixstall4 | H.pause x3 | PASS | all three invocations: the bot's own Pause opens Kashya in 2 of 2 tries of run 1 AND 2 of 2 of run 2 (248 ticks each; lab stepping Pause 147 and 238), so 6 of 6 first-run and 6 of 6 second-run tries (DRILLS8: 3 of 6 at 144 ticks with 3 failing at 796); no failure, so no `H.pause-diag` timeline; character in town afterwards |
+| m1 fault | D10 run 1 | PASS | kill -9 of the slot's d2d under the managed bot: restarts 1 to 2 (delta 1), new d2d pid +2 s, first minute line +4 s, loop resumed (kills 148 to 154), saved XP not lower, P35 clean before and after, no leftover process, bot exits 0 |
+| m1 fault | D10 run 2 | PASS | the same checks: delta 1 at +15 s, first minute line +6 s, kills 201 to 207, no leftovers, P35 clean. Both runs completed inside the 1800 s TTL (DRILLS8's second run was cut at 1200 s) |
+| harness | group isolation | FIXED (3 of 4 causes), 1 open | see below |
+
+### Harness changes (cmd/d2drill and internal/drill only; no product code touched)
+- D1.P1s (F14, setup said pack hp1x4): `stagePack` now takes any loose item at the character's feet first (`PickupRaw`), then ClearPack empties the pack, so potions an earlier drill left on the ground are not counted into the staged pack. D1 group: 9 of 9 rows as before, P1s PASS in all three group runs (`d1`, `d1-r2`, `d1-r3`).
+- H.obj.chest (F14, class 144 chosen in the group, mode stays NU, class 139 alone): the first chest the preset list names depends on which rooms earlier drills left streamed in, and some chest classes do not change mode. `OperateObject` now tries up to 4 objects of the kind (skipping the ones whose mode did not change, each attempt after a fresh `debug goto`), and the result text names the classes tried. Group F: PASS in `f-r2` to `f-r5` (classes 140 and 144 chosen, 139 alone).
+- H.obj.shrine (new in an F subset: NU to NU after D-sync.wp and the chest): `OperateObject` runs `debug kill` (logged, with a reason) before it looks for the object, so a pack a fight drill left in the level does not interrupt the walk to the object. After it the subset `D-sync.wp,H.obj.chest,H.obj.shrine,DW.m1` and the full F group pass shrine.
+- D8.c (F14, FAIL because D8.a ran first and the Rogue is claimable once per character): D8.c now runs FIRST in the group and returns BLOCKED, not FAIL, when the character already owned a merc before the claim (`drill.MercOwnedBefore`). Live in `d8-r2`: run 1 granted (14.3,21.9:RG), run 2 BLOCKED (owned), as the game's rule requires.
+- D-sync (F14, 2 of 3): the `Mana: 35` setup of DRILLS8 holds: D-sync, D-sync.tp and D-sync.wp pass in every group run (D-sync kills 2 of 3 or 3 of 3, both pass).
+
+### Regression table (one invocation per group, code of 912086a plus the harness fixes above)
+| Group | Verdicts |
+|---|---|
+| D1 | 8 PASS (P7a P7 P1 P1b P7b P1s P2 P3), P3m BLOCKED (unchanged); three runs identical |
+| D2 | 11 of 11 PASS |
+| D3 | 12 of 12 PASS |
+| D4 | 6 of 6 PASS |
+| D5 | a, b PASS; c, d BLOCKED (stale text, F16) |
+| D6 | a, b, c, d PASS |
+| D7 | a, b, c PASS |
+| D8 | a, m, q, w PASS; c granted in run 1 and BLOCKED in run 2 (once per character); g BLOCKED (no gamble code); before the harness fix D8.c FAIL in the group |
+| D9 | a, b PASS; c BLOCKED (a soak) |
+| DW | 14 of 14 PASS |
+| DR | r, r0, r1 PASS; rt FAIL at the default knob (13 of 26 rows are half worn and not repaired at knob 30, by design), PASS with `-repair-below 60` (26 rows) |
+| H | pause, obj, ground PASS; monster BLOCKED (stale text) |
+| F | D-run, D-sync, D-sync.tp, D-sync.wp, H.obj.chest, H.obj.shrine, DW.m2, DW.a12, D5.dodge, p27, p29, p28, H.obj.cage PASS in `f-r2` to `f-r5`; DW.m1 BLOCKED DIFF (run 1 only), see F17 |
+| D10 | 2 of 2 PASS |
+
+### Findings (not fixed here)
+- F17 (DW.m1, group F, run 1 only, UNVERIFIED cause): in the full F group (4 of 4 runs, `f`, `f-r2`..`f-r5`) the first repeat of DW.m1 ends BLOCKED `the waypoint trip in failed: nav: timeout: walk did not finish in 2m0s` (the navigator's walk from the camp arrival to the waypoint stops after its first stuck recovery at (139,103), clicks at the next waypoints, then no progress) and the second repeat passes (494 ticks, 1 bounce, 2 step-aways). Narrowing: DW.m1 alone and after any of D-run, D-sync + D-sync.tp, or H.obj.chest + H.obj.shrine, or D-sync.wp alone: PASS (`dwm1-a`..`dwm1-g`, `dwm1-f`); it fails after `D-sync.wp,H.obj.chest,H.obj.shrine` (`dwm1-i`, also `dwm1-h` before the `debug kill` fix, where the shrine failed too). So the trigger needs the waypoint arrival of D-sync.wp followed by the Blood Moor object drills; the navigator is rebuilt by `Goto` (wp_lab.go), so it is not a stale navigator; a leftover in `be.World` or in the camp (a monster, a dropped item) is the next suspect. Product or harness is open: a walk that stalls for 2 game minutes in the camp is the F13 family and may be a product stall.
+- F16 stays open (D5.c, D5.d, H.monster stale BLOCKED text).
