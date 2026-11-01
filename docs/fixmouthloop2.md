@@ -45,7 +45,7 @@ In the outer walk after the nested step-away returns:
 ## Tests
 
 internal/nav/fixmouthloop2_test.go: a sim whose clicks always fail with `ErrMouthGate` from inside the bound. Old code:
-see the test log line (rounds until the timeout); new code: 1 attempt and `ErrMouthGate`. A working step-away still
+V (run on the unfixed walk.go): 682213 held clicks until the 20 s test deadline; new code: 1 click and `ErrMouthGate`. A working step-away still
 ends the walk normally; a wanted exit gets no step-away. internal/combat: an end-to-end hold through a real
 Navigator is not possible without the game; the Fighter side is fixmouthloop_test.go (heldMover).
 
