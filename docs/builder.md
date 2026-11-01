@@ -8,7 +8,7 @@ A resource-limited container on the NAS that builds the private d2d fork on Debi
 
 ## Limits (why the NAS is safe)
 
-Hard limits are set on the container before any build: about 6 CPUs worth, a very low CPU share against normal containers, 8 GB RAM with no swap, a process cap, low IO weight, and builds run under `nice`. The wrapper checks the NAS every 15 s and stops the container if available memory falls under 3 GB (V: coded in the wrapper; what the first build did to the NAS is in the card result).
+Hard limits are set on the container before any build: about 6 CPUs worth, a very low CPU share against normal containers, 8 GB RAM with no swap, a process cap, low IO weight, and builds run under `nice`. The wrapper checks the NAS every 15 s and stops the container if available memory falls under 3 GB (V: coded in the wrapper). First build, V: the NAS available memory never fell under 7 GB.
 
 ## How to use
 
