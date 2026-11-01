@@ -23,8 +23,6 @@ Scenarios (V = run, see docs/research/det-hashes-2026-11-01b.md):
     merc                                 hired merc (type 0) and three zombies
     pet                                  druid with a Spirit Wolf and a Raven and two zombies
     follow                               druid with a wolf and a merc, the player walks about, zombies chase
-    vigor holyfreeze                     paladin with the Vigor aura (player velocitypercent) / the Holy Freeze aura
-                                         (chills monsters in range); the player walks about, zombies chase
 """
 
 import hashlib
@@ -48,8 +46,7 @@ HIT_CLASS = {
     "minion": None,  # Hell Blood Moor has a unique pack: its minions (boss column "minion") are the targets, no spawn verb makes one
 }
 HELL = {"immune", "minion"}
-CLASS_OF = {"passive": "1", "fight": "1", "merc": "4", "pet": "5", "follow": "5", "vigor": "2", "holyfreeze": "2"}
-AURA = {"vigor": 115, "holyfreeze": 114}  # paladin auras: Vigor (velocitypercent), Holy Freeze (chills monsters in range)
+CLASS_OF = {"passive": "1", "fight": "1", "merc": "4", "pet": "5", "follow": "5"}
 
 
 class Ctl:
@@ -217,11 +214,6 @@ def party_scenario(run, mode):
         if mode == "pet":
             run.do("cmd skill 221 44.2 22.2 0 1")
             run.do("step 30")
-    if mode in AURA:
-        run.do(f"debug points {AURA[mode]} 5")
-        run.do("step 3")
-        run.do(f"cmd skill {AURA[mode]} 44.2 22.2 0 1")
-        run.do("step 30")
     if mode in ("merc", "follow"):
         run.do("debug merc hire 0")
         run.do("step 20")
@@ -230,7 +222,7 @@ def party_scenario(run, mode):
     run.snap("start")
     goals = [(38, 30), (52, 22), (40, 18), (46, 30)]
     for block in range(8):
-        if mode in ("follow", *AURA):
+        if mode == "follow":
             run.do("cmd move {} {}".format(*goals[block % len(goals)]))
         run.do("step 100")
         run.snap(f"block {block}")
