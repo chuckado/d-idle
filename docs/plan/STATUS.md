@@ -121,6 +121,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 825cc2c 11-01 15:54 `Merge agent/fixbelt: low potion kit bypasses the recovery cooldown (Gate 1 belt window)` (fixbelt)
 - 6e7b133 11-01 15:23 `Merge agent/skground2: SKGROUND2: Fire Wall, Hydra, Blizzard hit area and offsets on the real d2d build; PR candidate awaiting verifier` (skground2)
 - 0764a88 11-01 15:15 `Merge agent/gate1: Gate 1 rerun entry: not passed on one seed (progress, belt window)` (gate1)
 - 120e534 11-01 15:08 `Merge agent/forkstats: forkstats docs: read-only gear stats and weapon base damage in the fork dump; d2d has no player stats 17/18/21/22` (forkstats)
@@ -130,5 +131,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ccc7ec7 11-01 14:41 `Merge agent/skground: SKGROUND: Blizzard and Meteor traced, d2d deviations, bot delay-timer findings` (skground)
 - 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
 - ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
-- 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
 <!-- statusgen:end -->
