@@ -49,7 +49,16 @@ func TestTwoEmptyVisitsQuietTheScrollTrip(t *testing.T) {
 			t.Fatal(err)
 		}
 	}
-	r.T.NotePortalEmpty() // the next field check finds it empty again
+	// the next field check finds the source empty again (the game's word; the bought scrolls are gone from the pack)
+	items := r.W.Items[:0]
+	for _, u := range r.W.Items {
+		if r.W.DB.Items[u.Class].Code != "tsc" {
+			items = append(items, u)
+		}
+	}
+	r.W.Items = items
+	r.W.Player.Gold = 700
+	r.T.NotePortalEmpty()
 	s, _ := r.W.Snapshot()
 	if ok, why := r.T.NeedsTrip(s); ok {
 		t.Fatalf("scroll trip raised inside the quiet time: %q", why)

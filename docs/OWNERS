@@ -123,3 +123,8 @@ docs/fixwp.md  wpcooldown  wpcooldown
 docs/research/sk-ground-trace.md  skground  skground
 tools/emu/sk_ground*  skground  skground
 openspec/changes/skground/**  skground  skground
+docs/fixprogress.md  fixprogress  fixprogress
+internal/town/fixprogress_test.go  fixprogress  fixprogress
+openspec/changes/fixprogress/**  fixprogress  fixprogress
+internal/town/chores.go  fixprogress  fixprogress
+internal/town/town.go  fixprogress  fixprogress
