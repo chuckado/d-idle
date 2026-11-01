@@ -1,6 +1,13 @@
 package resource
 
-import "d2lod-bot/internal/d2"
+import (
+	"encoding/json"
+	"strings"
+	"sync"
+
+	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/plandata"
+)
 
 // Mana-heavy builds (docs/builds-endgame.md W7, docs/plan/data/potions-belt.json "mana_heavy_builds", U design, needs
 // a live Hell check): War Cry and Blizzard packs drain the single mana column, so from Nightmare on these builds
@@ -9,16 +16,39 @@ import "d2lod-bot/internal/d2"
 // ManaHeavyDrinkPct is the mana % below which a mana-heavy build drinks (json drink_mana_below_pct).
 const ManaHeavyDrinkPct = 35
 
-// manaHeavyBuilds is the json "builds" list (a test compares both).
-var manaHeavyBuilds = map[string]bool{
-	"barbarian_warcry_endgame90":     true,
-	"sorceress_blizzard_endgame90":   true,
-	"druid_tornado_endgame90":        true,
-	"necromancer_summoner_endgame90": true,
+var (
+	manaHeavyOnce   sync.Once
+	manaHeavyBuilds map[string]bool
+)
+
+// loadManaHeavy reads the builds that flag themselves `"mana_heavy": true` in their embedded table, so a new
+// build needs a data edit and no Go name (audit S4 seam; the json "builds" list mirrors it, a test compares both).
+func loadManaHeavy() map[string]bool {
+	manaHeavyOnce.Do(func() {
+		manaHeavyBuilds = map[string]bool{}
+		ents, _ := plandata.FS.ReadDir(".")
+		for _, e := range ents {
+			if !strings.HasPrefix(e.Name(), "build-") {
+				continue
+			}
+			raw, err := plandata.FS.ReadFile(e.Name())
+			if err != nil {
+				continue
+			}
+			var h struct {
+				Build     string `json:"build"`
+				ManaHeavy bool   `json:"mana_heavy"`
+			}
+			if json.Unmarshal(raw, &h) == nil && h.ManaHeavy && h.Build != "" {
+				manaHeavyBuilds[h.Build] = true
+			}
+		}
+	})
+	return manaHeavyBuilds
 }
 
 // ManaHeavyBuild reports whether the leveler table name is a mana-heavy build.
-func ManaHeavyBuild(build string) bool { return manaHeavyBuilds[build] }
+func ManaHeavyBuild(build string) bool { return loadManaHeavy()[build] }
 
 // manaHeavyCols is the json by_clvl block (hp, mp, mp, hp / hp, mp, mp, rejuv / rejuv, mp, mp, rejuv).
 func manaHeavyCols(level int) [4]Potion {

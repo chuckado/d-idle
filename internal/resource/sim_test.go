@@ -43,3 +43,39 @@ func TestReplayRegenSensitivity(t *testing.T) {
 		})
 	}
 }
+
+// SIMCLASS: the simulator names the class's own attack and weapon skill; the Sorceress defaults stay.
+func TestScenarioSkillNames(t *testing.T) {
+	sc := BloodMoorSorc()
+	if sc.mainAttack() != "Fire Bolt" || sc.weaponSkill() != "Staff" {
+		t.Errorf("Sorceress defaults changed: %s / %s", sc.mainAttack(), sc.weaponSkill())
+	}
+	w := &world{sc: BloodMoorPaladin()}
+	in := w.input(1, 0)
+	if len(in.Skills) != 2 || in.Skills[0].Name != "Zeal" || in.Skills[0].Cost != 2 || in.Skills[1].Name != "Attack" || !in.Skills[1].Melee {
+		t.Errorf("Paladin skills %+v", in.Skills)
+	}
+	if got := BloodMoorSorc().WithLadder([]string{"Zeal", "Smite", "Attack"}); got.MainAttack != "Zeal" || got.WeaponSkill != "Attack" {
+		t.Errorf("WithLadder: %+v", got)
+	}
+}
+
+// The Paladin stock replay: the Zeal rung is cast while mana lasts, then the plain swing takes over; deterministic.
+func TestBloodMoorPaladinReplay(t *testing.T) {
+	r := Replay(BloodMoorPaladin(), ResourcePolicy(), DefaultTuning())
+	t.Logf("Paladin stock: kills %d casts %d melee %d deaths %d trips %d lifePots %d waits %d", r.Kills, r.Casts, r.MeleeHits, r.Deaths, r.Trips, r.LifePots, r.Waits)
+	if r.Kills == 0 || r.Casts == 0 || r.MeleeHits == 0 {
+		t.Errorf("ladder not walked: %+v", r)
+	}
+	if again := Replay(BloodMoorPaladin(), ResourcePolicy(), DefaultTuning()); again != r {
+		t.Error("not deterministic")
+	}
+}
+
+// The Sorceress stock replay is unchanged by SIMCLASS (SKMELEEBOT/WIRE: 22 kills, 28 swings, 66 casts).
+func TestSorceressStockReplayPinned(t *testing.T) {
+	r := Replay(BloodMoorSorc(), ResourcePolicy(), DefaultTuning())
+	if r.Kills != 22 || r.MeleeHits != 28 || r.Casts != 66 {
+		t.Errorf("kills %d melee %d casts %d, want 22/28/66", r.Kills, r.MeleeHits, r.Casts)
+	}
+}

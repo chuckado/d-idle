@@ -1,6 +1,7 @@
 {
  "build": "druid_tornado_endgame90",
  "class": "druid",
+ "mana_heavy": true,
  "schema": "per-clvl allocation, same shape as internal/gear/builds/*.json (leveler.ParseBuild) plus main_attack; rows clvl 2..90, NO respec. A row with no skills means the point is saved (no unlocked plan skill); the planner spends it in the row where the skill unlocks. Quest points (Den, Radament, Izual in each difficulty) are folded into rows 8, 15, 26, 38, 44, 56, 68, 72, 82 (U timing; planner pulls rows forward).",
  "tags": "Skills: V end state Maxroll Tornado Hurricane Druid (fetched 2026-10-29): 1 each Oak Sage, Summon Spirit Wolf, Dire Wolf (Fenris), Grizzly; max Tornado, Hurricane, Cyclone Armor, Twister, Oak Sage. U no-respec adaptation: Raven 1 (Spirit Wolf prereq), Arctic Blast 6 as the early attack and Cyclone Armor prerequisite (the only wasted points), Twister as attack 18-23 (a maxed skill anyway), Tornado from 24, Hurricane from 30. Armageddon not taken. Stats: Str 43 by clvl 24 (Spirit sword), 55 by 55 (Enigma in a Mage Plate, V armor.txt), from internal/gear/milestones.json, rest Vitality.",
  "respec": {

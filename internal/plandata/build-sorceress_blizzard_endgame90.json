@@ -1,6 +1,7 @@
 {
  "build": "sorceress_blizzard_endgame90",
  "class": "sorceress",
+ "mana_heavy": true,
  "schema": "per-clvl allocation, same shape as internal/gear/builds/*.json (leveler.ParseBuild) plus main_attack; rows clvl 2..90, NO respec. A row with no skills means the point is saved (no unlocked plan skill); the planner spends it in the row where the skill unlocks. Quest points (Den, Radament, Izual in each difficulty) are folded into rows 8, 15, 26, 38, 44, 56, 68, 72, 82 (U timing; planner pulls rows forward).",
  "tags": "Skills: V end state from Maxroll Blizzard Sorceress (fetched 2026-10-29). U ordering/no-respec adaptation: Ice Bolt, Ice Blast and Glacial Spike are all maxed in the endgame, so the early attack skills are never wasted; Blizzard from 24 (V skills.txt reqlevel), Cold Mastery from 30, Static Field 1 early for cold immunes (the existing combat fallback). Stats: Str 43 by clvl 24 (Spirit Crystal Sword, V data.json), Str 55 by 55 (Enigma in a Mage Plate, V armor.txt; item choice U), derived from internal/gear/milestones.json, rest Vitality, no Energy. Prerequisites and reqlevels checked against skills.txt (V data.json).",
  "respec": {

@@ -85,6 +85,10 @@ def stat_rows(cls, stages):
         out[clvl] = tuple(add)
     return out, cur
 
+# Builds whose packs drain the single mana column; internal/resource reads the flag (PALMANA).
+MANA_HEAVY = {"barbarian_warcry_endgame90", "sorceress_blizzard_endgame90", "druid_tornado_endgame90",
+              "necromancer_summoner_endgame90", "paladin_hammerdin_endgame90"}
+
 def build(name, cls, tags, plan, stages, hotkeys, main):
     srows, lv, bank = skill_rows(name, plan)
     stats, final = stat_rows(cls, stages)
@@ -93,8 +97,11 @@ def build(name, cls, tags, plan, stages, hotkeys, main):
         s, d, v, e = stats[clvl]
         rows.append({"clvl": clvl, "strength": s, "dexterity": d, "vitality": v, "energy": e,
                      "skills": [{"skill": k, "points": p} for k, p in got.items()]})
-    out = {"build": name, "class": CLS_NAME[cls], "schema": SCHEMA, "tags": tags, "respec": {"enabled": False},
-           "hotkeys": hotkeys, "main_attack": main, "rows": rows}
+    out = {"build": name, "class": CLS_NAME[cls]}
+    if name in MANA_HEAVY:
+        out["mana_heavy"] = True
+    out.update({"schema": SCHEMA, "tags": tags, "respec": {"enabled": False},
+                "hotkeys": hotkeys, "main_attack": main, "rows": rows})
     json.dump(out, open(os.path.join(HERE, name + ".json"), "w"), indent=1)
     print(f"{name}: skills {dict(sorted(lv.items(), key=lambda x: -x[1]))} unspent_bank_at_90={bank} stats(str,dex,vit,ene)@90={final}")
 

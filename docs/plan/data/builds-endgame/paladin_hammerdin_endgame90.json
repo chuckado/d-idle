@@ -1,6 +1,7 @@
 {
  "build": "paladin_hammerdin_endgame90",
  "class": "paladin",
+ "mana_heavy": true,
  "schema": "per-clvl allocation, same shape as internal/gear/builds/*.json (leveler.ParseBuild) plus main_attack; rows clvl 2..90, NO respec. A row with no skills means the point is saved (no unlocked plan skill); the planner spends it in the row where the skill unlocks. Quest points (Den, Radament, Izual in each difficulty) are folded into rows 8, 15, 26, 38, 44, 56, 68, 72, 82 (U timing; planner pulls rows forward).",
  "tags": "Skills: V end state Maxroll Blessed Hammer Paladin (fetched 2026-10-29). U adaptation: no respec, so clvl 2-17 spend only Might, Smite, Holy Bolt, Charge (Holy Shield prerequisites, V skills.txt) and bank the rest (Prayer/Defiance/Cleansing/Blessed Aim 1 from 12); row 18 spends the bank into Blessed Hammer (reqlevel 18, needs Holy Bolt, V) like amazon_javelin_normal30 rows 2-5/6. Smite (needs a shield) and the starting sword carry clvl 2-17. Holy Shield 1 at 24. Stats: Str 43 by clvl 25 (Spirit sword), 86 by clvl 45 (Sacred Targe, V armor.txt; Fortitude in a Dusk Shroud needs 77, V), from internal/gear/milestones.json; Dex 70 for block with Holy Shield (U; Maxroll: enough Dex for 75% block), rest Vitality.",
  "respec": {
