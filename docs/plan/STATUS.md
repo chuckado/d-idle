@@ -112,6 +112,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
 - 4144cb9 11-01 10:32 `Merge agent/armorfinish: Frozen Armor PR final body and verifier addendum (docs only)` (armorfinish)
 - 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
 - 2b3ed7a 11-01 10:12 `Merge agent/palrecon: Paladin Act 1 recon (docs only)` (palrecon)
@@ -121,5 +122,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
 - ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
 - c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
-- 6bbd958 11-01 08:59 `Merge agent/opennexthit: PR #158 (NextHit justhit) posted, bundle queue row` (opennexthit)
 <!-- statusgen:end -->
