@@ -6,6 +6,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/resource"
 )
 
 // Crowd rule (SME decision EXP, docs/combat.md "Crowd rule"): Soaky died three times at one spot with 22 hostiles near,
@@ -13,11 +14,11 @@ import (
 // 55 percent drink and 25 percent chicken rules still decide ordinary fights alone. Thresholds are knobs
 // (combat.crowdN, crowdPortalPct, crowdDrinkPct, crowdAbandonN); the radii below are U (judgment, not measured).
 const (
-	crowdRadius      = 8  // subtiles: a hostile this close counts to the crowd
-	crowdAdjacent    = 3  // subtiles: a hostile this close is in melee with us
-	crowdAdjacentMax = 3  // this many adjacent monsters or more: a 2 s portal cast fails (U)
-	crowdRetreatDist = 20 // subtiles an abandon retreat goes before the portal
-	crowdMaxSteps    = 8  // retreat steps of one abandon
+	crowdRadius      = 8                        // subtiles: a hostile this close counts to the crowd
+	crowdAdjacent    = 3                        // subtiles: a hostile this close is in melee with us
+	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: a 2 s portal cast fails (U)
+	crowdRetreatDist = 20                       // subtiles an abandon retreat goes before the portal
+	crowdMaxSteps    = 8                        // retreat steps of one abandon
 )
 
 // Crowd counts the hostiles within crowdRadius of the player and those adjacent.

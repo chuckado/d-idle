@@ -221,8 +221,9 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		}
 	}
 	in.Walking = f.walking.Load()
+	in.Crowd, in.Adjacent = Crowd(p, hs)
 	if t.CrowdN > 0 {
-		if in.Crowd, in.Adjacent = Crowd(p, hs); in.Crowd >= t.CrowdN {
+		if in.Crowd >= t.CrowdN {
 			in.CanRetreat = f.canRetreat(snap, hs)
 		}
 	}

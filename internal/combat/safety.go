@@ -130,6 +130,28 @@ func pct(v, max int) int {
 //	mana <  mana%:       mana potion
 //	hurt, out of a fight and few healing potions left: town portal (free healing, restock)
 func Decide(in SafetyInput) SafetyAction {
+	return meleeCastGuard(in, decideBase(in))
+}
+
+// meleeCastGuard replaces a town portal cast that melee would cut (card fixportalmelee, docs/fixportalmelee.md). A cast
+// takes game time and a hit interrupts it, so with resource.CastAdjacentMax or more attackers in reach it is not an
+// escape (soak 2 death: scroll spent, character died). Order: drink if a potion is ready, else leave the game. A step
+// away is not offered: melee monsters follow at walking speed and the hits continue (INFERRED, UNVERIFIED live).
+// Only fights count; quiet town trips and every case below the adjacent count are untouched.
+func meleeCastGuard(in SafetyInput, a SafetyAction) SafetyAction {
+	if a != TownPortal || !in.InFight || in.Adjacent < crowdAdjacentMax {
+		return a
+	}
+	switch {
+	case in.Belt.Count(PotionRejuv) > 0 && in.RejuvReady:
+		return DrinkRejuv
+	case in.Belt.Count(PotionHealing) > 0 && in.HealReady:
+		return DrinkLife
+	}
+	return Chicken
+}
+
+func decideBase(in SafetyInput) SafetyAction {
 	if in.InTown || in.Max <= 0 || in.Life <= 0 {
 		return SafetyNone
 	}
