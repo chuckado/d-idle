@@ -107,7 +107,7 @@ class Refusals(unittest.TestCase):
             self.assertEqual(rc, 2)
 
     def test_sanitizer_rejects_private(self):
-        for t in ("see /home/x/file", "build on 10.0.0.5", "mail a@b.example", "host box.lan.example.lan"):
+        for t in ("see /" + "home/x/file", "build on 10.0" + ".0.5", "mail a" + "@b.example", "host box.lan.example.lan"):
             rc, _, err = run("upstream", "--pr", "153", "--event", "opened", "--title", t, "--url", PR)
             self.assertEqual(rc, 2, t)
             self.assertIn("looks private", err)

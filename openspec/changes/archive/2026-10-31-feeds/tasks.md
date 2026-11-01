@@ -2,7 +2,7 @@
 
 ```yaml
 change: feeds
-status: done
+status: archived
 agent: feeds
 branch: agent/feeds
 worktree: ~/code/d2lod-wt/feeds
@@ -16,8 +16,8 @@ owns:
 exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/discord/tests; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
-result:
+merge: 6abd497
+result: feed.py built and tested offline (16 tests); one real post to #progress succeeded (verified live)
 ```
 
 ## 1. Work
