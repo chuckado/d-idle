@@ -33,7 +33,7 @@ text channel, so `#announcements` could not serve both and became the Announceme
 - `member`: the trusted tier, assigned by hand to people the moderator has seen behave; may create public threads and use external emoji.
 - `mod` (OPTIONAL, disabled by default: listed under `optional_roles` in server.json, not created by the tool): helper with Manage Messages, Timeout, Kick, View Audit Log; below `owner`. See [roles.md](roles.md).
 - `@everyone`: view, read history, send, embed links, react, send in threads; attach files only in `#show-your-runs` and `#bug-reports`. No mentions of everyone, no thread creation, no Create Invite.
-- Bots and webhooks: only webhooks at the start (GitHub feed, `notify.py`; URLs in private 0600 files on a headless box, keyring on a desktop). They post regardless of channel permissions. No role needed.
+- Bots and webhooks: only webhooks at the start (GitHub feed, `notify.py`, summaries by `feed.py`: subcommands, channel mapping and the not-wired list are in [feeds.md](feeds.md) section (e); `#soak/drill/pr-status` summaries go to `#progress`, releases to `#announcements`, upstream PR news to `#d2d-upstream` once it has a webhook; URLs in private 0600 files on a headless box, keyring on a desktop). They post regardless of channel permissions. No role needed.
 Raid switch: remove send permissions from `@everyone` so only `member` and above can talk (`member` already holds them). Full guideline, permission table and runbook: [roles.md](roles.md).
 
 ## Permission matrix
