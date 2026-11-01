@@ -52,3 +52,4 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+docs/probes/postfix-soak2-analysis.md  soak2study  soak2study
