@@ -195,6 +195,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
   - SKPASS B2 (fix queue, card FIXSKILLLVL is separate): Skill.Effective() reads base + stat 107 only; game.exe adds 127 / 83 / 188 / 97 / 126 / shrine (FUN_00644180); affects mana cost and spec level with +skills gear (docs/research/sk-passives-trace.md B2)
 - wpcooldown: live drill pending (waypoint trip timing, docs/wpcooldown.md)
 - UPSTREAM: #160 CodeRabbit review answered 2026-11-01 (3 comments fixed in one follow-up commit 802dee68, ruff B905 fixed, numbers unchanged); #159 and #160 open, awaiting the maintainer
+- SKGROUND: Blizzard and Meteor traced (V run on FUN_005a9820: 22,100 and 42,100 cases, 0 differ); d2d deviations D1 shard offsets -6..6 vs -6..5, D4 shard hit area about 4x, D5 Meteor rolls per monster, D7 no player skill delay, D8 no 0x64 cast cap; bot findings B1-B5 (delay timer starts at input, booked for failed casts, state 121 unread); NOT reached: Hydra and Fire Wall in game.exe, the D4 oracle, the D1 real-build test (SKGROUND2); board item SKGROUND stays open
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
