@@ -62,3 +62,4 @@ docs/probes/postfix-soak2.md  specmin  soak-minutes-virtual
 docs/review-strategy.md  specmin  soak-minutes-virtual
 docs/d2d-soak.md  specmin  soak-minutes-virtual
 docs/geninv.md  specmin  soak-minutes-virtual
+docs/probes/postfix-soak2-analysis.md  soak2study  soak2study
