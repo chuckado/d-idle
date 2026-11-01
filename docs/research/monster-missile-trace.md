@@ -88,7 +88,7 @@ Physical and element come from the missile's own stats right after `0059fa30` (s
 | regurgitatorcorpse (341) | regurgitator1 (MissA2) | 25-55 / 70-100 / 130-160 | - / - / - | - / - / - | - | yes | 131.2 (vel 14, range 200) |
 | leapknockback (346) | sandleaper1 (Skill1:Leap) | - / - / - | - / - / - | - / - / - | - | no | 0.0 (vel 0, range 2) |
 | countessfirewallmaker (653) | corruptrogue3 (Skill1:CountessFirewall) | - / - / - | - / - / - | - / - / - | - | no | 3.9 (vel 12, range 7) |
-labrun: orion exited 0 after 1s
+labrun: the worker host exited 0 after 1s
 
 Not in the table (own rows, one line each, V run): Andariel spray (id 32): phys 7-10 / 22-25 / 42-45, poison 50 / 215 / 470 total; Summoner Frost Nova (119): cold 2-4 / 8-11.5 / 16-21.5; Countess / vampire fire walls and meteors (653, 130, 133): no physical part (the wall's fire is its own hit function, sk-ground2-trace); Sand Leaper (346): no damage record.
 
