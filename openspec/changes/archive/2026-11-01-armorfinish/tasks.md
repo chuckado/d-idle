@@ -2,7 +2,8 @@
 
 ```yaml
 change: armorfinish
-status: in-progress
+status: archived
+merge: 4144cb9
 agent: armorfinish
 branch: agent/armorfinish
 worktree: ~/code/d2lod-wt/armorfinish
@@ -13,7 +14,7 @@ owns:
   - docs/research/pr-armorhit-body-final.md
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs only, offline, no game. Addendum, final body and ready checklist written; one status banner on pr-armorhit-draft.md (declared overlap with card armorhit, text of the banner only). Upstream branch fix/armor-hit checked on the worker host: head d5bd19c1, parent 36cbe015. Not opened: awaiting the user go."
+result: "Docs only, offline, not verified live (no game involved). Addendum, final body and ready checklist written; one status banner on pr-armorhit-draft.md (declared overlap with card armorhit, text of the banner only). Upstream branch fix/armor-hit checked on the worker host: head d5bd19c1, parent 36cbe015. Not opened: awaiting the user go."
 ```
 
 ## 1. Work
