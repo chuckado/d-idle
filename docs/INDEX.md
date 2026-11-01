@@ -138,3 +138,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/palsme.md: Zealot-lite table per the SME review (Prayer 1, Might, Holy Fire, no Vigor path) and the ready Paladin cards PALRETREAT, PALBELT, PALBRGATE, PALMERC1, SMEDOCS
 - docs/wpcooldown.md: waypoint arrival cooldown removed (default 0), live drill recipe
 - docs/research/sk-ground-trace.md: ground skills in game.exe (Blizzard, Meteor traced; Frozen Orb and Thunder Storm to dispatch level) against d2d
+- docs/builder.md: the Linux builder (limits, how fork and test binaries are built off the game host, parity with the game host builds)
