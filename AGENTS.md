@@ -38,6 +38,8 @@ Maintainers also read `AGENTS.private.md` if present (it is not in this repo; `t
 - When a doc is superseded or only partly true, add a `> status:` banner under its title (one line, with the pointer to the current doc) instead of leaving it to mislead; archive with `git mv` into `docs/archive/` and leave a one-line stub. Never delete docs.
 - Decisions the user makes go into `docs/decisions.md` (one line index) with an ADR under `docs/adr/` when they matter; written by the coordinator or the user's grill session only (guard rule below).
 
+Guide for Claude users and the agent setup: docs/agents/claude-tracing-guide.md
+
 ## Facts and honesty
 - Every offset, struct layout or behavior you rely on is tagged in code comments or docs as VERIFIED LIVE (say how), or UNVERIFIED. Never present a guess as a fact. Keep a short `docs/<your-area>.md` of what you learned, including dead ends.
 - Do not write secrets (CD keys, passwords, tokens) or private hostnames, IPs, home paths or people's names anywhere in the repo (`go run ./cmd/leakcheck`, docs/process/public-split.md).
