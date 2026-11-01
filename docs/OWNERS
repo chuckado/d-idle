@@ -79,3 +79,4 @@ internal/combat/mouthhold.go  fixmouthloop  fixmouthloop
 internal/combat/fixmouthloop_test.go  fixmouthloop  fixmouthloop
 docs/fixmouthloop.md  fixmouthloop  fixmouthloop
 openspec/changes/fixmouthloop/**  fixmouthloop  fixmouthloop
+openspec/changes/drills20/**  drills20  drills20

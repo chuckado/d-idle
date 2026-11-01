@@ -230,4 +230,7 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | DW.m3 x3 (fixmouth4) | PASS | drills19: zero level-change errors and zero bounces in 4 entries, x3 identical (drills18: 1 real bounce per run); the DRILLS18 chain recurred (step-away blocked, fight pulled the character to (36,138), replan from 3.2) and the gate caught it: 3 `away` rewrites then 117 holds; Clear and Explore finish; live defect: the holds loop (117 step-aways at (36,140)) until the phase limit |
 | P23 | DW.m4 x3 (fixmouth4) | PASS | drills19: 0 bounces, 0 level-change errors, 1 gate rewrite (clip), 4 step-aways; the drill's character dies in cave level 1 cycle 1 from a 23-monster crowd (also in drills18), so entries 3 and 4 are on a dead character; dirty UI inventory as in drills18 |
 | P23 | D2 (11), D3 (12) regression | PASS | drills19: 11 of 11 and 12 of 12 on the fixmouth4 build |
+| P23 | DW.m3 x3 (fixmouthloop) | FAIL | drills20: gate preserved (0 bounces, 0 level-change errors) but 129 step-aways, 117 holds, 173 walk timeouts per run, identical to drills19; 0 back-off lines: the loop is inside one Navigator.walk (walk.go:74, :124)|
+| P23 | DW.m4 (fixmouthloop) | PASS | drills20: 0 bounces, 4 step-aways; dirty-UI verdict as before |
+| P23 | D2 (11), D3 (12) regression | PASS | drills20: 11 of 11 and 12 of 12 on the fixmouthloop build |
 

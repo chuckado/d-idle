@@ -616,3 +616,30 @@ Drilly (throwaway Sorceress, `--no-save`, fresh in every invocation): `debug got
 - docs/BACKLOG.md: FIXMOUTH5 (optional): fixmouth4 live proof PASSED (DRILLS19): DW.m3 x3 and DW.m4 x3 zero mouth bounces and zero level-change errors, including the DRILLS18 chain (replan from 3.2 caught, 351 rewrites and 117 holds per DW.m3 run). Defect: after the 3-rewrite cap the held walk fails and the Fighter restarts a step-away at once, 117 times at (36,140) in one Den cycle (monsters block the away route); make ErrMouthGate end the engage or fight in place, and log it. DW.m4 drill character dies in cave level 1 (no attack skill, no scrolls): fix the drill setup.
 - docs/INDEX.md: DRILLS19 section in docs/probes/drills/README.md.
 - CHANGELOG: fixmouth4 (cave-mouth click gate) verified live; nothing else.
+
+## DRILLS20 (2026-11-01): live proof of fixmouthloop (FAIL: the loop is inside nav, not in the Fighter)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from branch agent/drills20 (agent/fixmouthloop tip 27285b3 plus origin/main merged). Capacity before: idle 47 plus nice 0.8 percent. Files `2026-11-01-drills20-<label>.txt`: `m31` (DW.m3, 1200 filtered lines), `m32`/`m33` (first 300 lines), `m41` (DW.m4, first 400), `d3`, `d2` (DRILL lines). Command as DRILLS19 (`-group F -only DW.m3 -label drills20-m3N -v`, `-only DW.m4`; groups D3 and D2 without `-only`). Every DW.m3 run is identical to the DRILLS19 run, count for count.
+
+### Result: FAIL (the restart storm is unchanged)
+| Item | DRILLS19 | DRILLS20 (fixmouthloop) |
+|---|---|---|
+| DW.m3 x3 verdict | PASS no bounce in 4 entries | same, 0 bounces, 0 `level changed during the walk` (V) |
+| `click rewritten` / `click held` per run | 351 / 117 | 351 / 117 (V) |
+| `stepping away from a cave mouth` per run | 129 | 129 (V; target was about 20 or fewer) |
+| `walk did not finish in 2m0s` per run | 173 | 173 (V) |
+| `combat move held by the mouth gate, backing off` | not applicable | 0 lines (V): the Fighter back-off never ran |
+| DW.m4 | 0 bounces, 1 rewrite, 4 step-aways | the same (V); verdict FAIL only on the dirty-UI check as before |
+| Fights | kills 0 everywhere | kills 0 in all 284 fight summaries; no new stall seen, no improvement |
+| Regression | D3 12/12, D2 11/11 | D3 12/12, D2 11/11; ends in town, life 34/40 (V) |
+
+### Why it does not fire (V, m31 lines 1437 to 1470)
+No `combat move failed` line mentions ErrMouthGate: the hold is not seen by `Fighter.move`. The repeats are inside ONE `Navigator.walk`: `walk.go:74` increments `n.walkSeq` on every call, including the nested step-away walk started at `walk.go:127`. That nested walk fails with `ErrMouthGate` (cap 3), the outer loop does `continue` (only `ErrLevelChanged` and a cancelled context return), and at `walk.go:124` `mouthSeq != n.walkSeq` is true again, so it steps away again, 3 more rewrites, held, and so on at about 7 ms of wall time per round until the outer 2 minute timeout (173 per run). Caller chain on every `nav walk` line: `nav.walk < nav.GoTo < combat.Fighter.move < combat.Fighter.engage`, one GoTo call per episode. The DRILLS19 reading (fresh walks by the caller) was wrong; fixmouthloop's design and offline test (a mover that returns ErrMouthGate) assume it. Fix direction (not done): `walk.go:124` should compare against a walk sequence captured before the nested walk (or the step-away should return `ErrMouthGate` / set a per-walk flag), then the Fighter back-off would take over. U whether the Fighter then resolves the fight.
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`): drill cheats only (`debug goto`, `debug stat`), as DRILLS19. Last run (D2) ends in the Rogue Encampment, alive, panels closed. No process of mine left.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: FIXMOUTHLOOP2: fixmouthloop FAILED live (DRILLS20): counts equal DRILLS19 (129 step-aways, 117 holds, 173 timeouts per DW.m3 run), 0 Fighter back-off lines. The loop is inside one Navigator.walk: walk.go:74 bumps walkSeq in the nested step-away walk, so walk.go:124 re-triggers the step-away after every failed one. Fix in nav (capture the sequence before the nested walk), keep the Fighter back-off.
+- docs/INDEX.md: DRILLS20 section in docs/probes/drills/README.md.
+- CHANGELOG: nothing (fixmouthloop not merge-ready).
