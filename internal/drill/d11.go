@@ -23,7 +23,7 @@ type EmptyPlanInfo struct {
 // belt and exactly one scroll, then the bot's Safety decision.
 type PMInfo struct {
 	Err                         string
-	Adjacent, Hostiles          int // monsters within 3 subtiles / listed alive
+	Adjacent, Within8, Hostiles int // monsters within 3 subtiles (the rule's adjacency) / within 8 (melee reach, measured) / listed alive
 	Life, MaxLife               int
 	BeltPotions                 int
 	ScrollsBefore, ScrollsAfter int
@@ -83,8 +83,10 @@ func D11(l D11Lab) []Drill {
 			switch {
 			case i.Err != "":
 				o.Verdict, o.Reason = Blocked, i.Err
-			case i.Adjacent < 3 || i.BeltPotions != 0 || i.ScrollsBefore != 1:
+			case i.BeltPotions != 0 || i.ScrollsBefore != 1 || i.Within8 < 3:
 				o.Verdict, o.Reason = Blocked, "setup not reached: "+i.String()
+			case i.Adjacent < 3 && i.Decision == "town-portal" && i.ScrollsAfter == 1:
+				o.Verdict, o.Reason = Fail, fmt.Sprintf("PRODUCT: %d monsters in melee reach (within 8 subtiles) but only %d within the rule's 3: Safety is town-portal at life %d/%d, the rule does not fire (the live geometry never put 3 within 3 subtiles)", i.Within8, i.Adjacent, i.Life, i.MaxLife)
 			case i.Decision != "chicken" || i.ScrollsAfter != 1:
 				o.Verdict, o.Reason = Fail, "decision "+i.Decision+", scrolls "+fmt.Sprint(i.ScrollsBefore, "->", i.ScrollsAfter)
 			default:
@@ -158,8 +160,8 @@ func (i EmptyPlanInfo) String() string {
 }
 
 func (i PMInfo) String() string {
-	return fmt.Sprintf("%s: adjacent %d of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, warps %d, attack-mode distances (subtile:samples) [%s], err %q",
-		i.Where, i.Adjacent, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.Squeezed, i.AttackDists, i.Err)
+	return fmt.Sprintf("%s: adjacent %d (within 8: %d) of %d hostiles, life %d/%d, belt potions %d, scrolls %d -> %d, decision %s, acted %v (err %q), portal open %v, life after %d, warps %d, attack-mode distances (subtile:samples) [%s], err %q",
+		i.Where, i.Adjacent, i.Within8, i.Hostiles, i.Life, i.MaxLife, i.BeltPotions, i.ScrollsBefore, i.ScrollsAfter, i.Decision, i.Acted, i.ActErr, i.PortalOpen, i.LifeAfter, i.Squeezed, i.AttackDists, i.Err)
 }
 
 func (c CastInfo) String() string {

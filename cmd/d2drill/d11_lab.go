@@ -206,6 +206,16 @@ func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius fl
 		l.d11Lure(ctx)
 	}
 	a, _, _, _ := l.d11Within(ctx, radius)
+	if a < want && radius < 8 { // the rule's adjacency was never reached: carry on until the same number of monsters is within melee reach (8 subtiles)
+		for i := 0; i < 60; i++ {
+			if w, _, _, _ := l.d11Within(ctx, 8); w >= want {
+				break
+			}
+			_ = l.Tick(ctx, 10)
+			l.d11Lure(ctx)
+		}
+		a, _, _, _ = l.d11Within(ctx, radius)
+	}
 	return a
 }
 
@@ -264,6 +274,7 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 		return
 	}
 	pi.Adjacent, pi.Hostiles, pi.Life, pi.MaxLife = l.d11Adjacent(ctx)
+	pi.Within8, _, _, _ = l.d11Within(ctx, 8)
 	pi.AttackDists = d11AttStr()
 	pi.Life = sn.Player.Life
 	hp, mp := l.beltKinds(sn)
