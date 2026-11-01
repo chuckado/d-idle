@@ -55,6 +55,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [verifyfreezeresume](../../openspec/changes/verifyfreezeresume/) | in-progress | verifyfreezeresume | `openspec/changes/verifyfreezeresume/**`<br>`tools/emu/verify_freeze_resume.py`<br>`tools/emu/test_verify_freeze_resume.cpp`<br>`docs/research/pr-freezeresume-verifier.md` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -107,6 +108,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change verifyfreezeresume: verify_freeze_resume.py (real event queue) vs test_verify_freeze_resume on >= 30k cases: base > 0, head 0 or classified, per case class
 
 ### Recent merges
 - b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)

@@ -15,12 +15,12 @@ owns:
 exclusive: []
 gates:
   - "verify_freeze_resume.py (real event queue) vs test_verify_freeze_resume on >= 30k cases: base > 0, head 0 or classified, per case class"
-result: ""
+result: "READY WITH CHANGES (body only): real queue run, no off-by-one, claimed frozen classes 0 of 34,299 (base 34,200), claim alone = head; residuals prior stun, zero-length, d2d tick order; det hashes not run; offline, not verified live"
 ```
 
-- [ ] trace the queue (FUN_005416b0, FUN_005414d0), 0x57b170, FUN_005a7f80 before reading the author's proof in depth
-- [ ] own oracle with the real queue code, own generator (seeds masked to 32 bits)
-- [ ] own d2d probe; builds base / claim alone / head
-- [ ] differential by case class, off-by-one check
-- [ ] side claims (kinds frozen, stun / chill callbacks, d2d freeze vs chill skills)
-- [ ] verifier doc, checks, commit
+- [x] trace the queue (FUN_005416b0, FUN_005414d0), 0x57b170, FUN_005a7f80 before reading the author's proof in depth
+- [x] own oracle with the real queue code, own generator (seeds masked to 32 bits)
+- [x] own d2d probe; builds base / claim alone / head
+- [x] differential by case class, off-by-one check
+- [x] side claims (kinds frozen, stun / chill callbacks, d2d freeze vs chill skills)
+- [x] verifier doc, checks, commit
