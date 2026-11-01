@@ -177,3 +177,5 @@ pushchill (2026-11-01, card pushchill): chill appended to #155 (head 6270d162 ->
 
 - #155 CodeRabbit nitpick open (docs/research/pr-static-evidence-pack.md): the --static-field mode does not call Fight::spot, so a wrong input in the production kStaticField block (pierce index, res index, floor lookup) would not change its diff; driving spot with a caster and monsters in aurarange would close it but widens the claim. Coordinator decides.
 fixf17 (card [fixf17](../openspec/changes/fixf17/proposal.md), offline): F17 DW.m1 run 1 walk timeout = harness Pacer lag after direct Client.Step; Tick re-syncs, waypoint trip logs the lag; live proof pending = full F group x3, DW.m1 PASS in run 1 (docs/fixf17.md)
+
+fixtalk (card [fixtalk](../openspec/changes/fixtalk/proposal.md), offline): town talk tables and Adapter moved from cmd/d2bot to internal/talk (identical behaviour, table tests); D8.q and D8.w call the bot's path; live proof pending (recipe in docs/fixtalk.md)

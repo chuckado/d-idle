@@ -162,6 +162,8 @@ DRILLS8 rows (2026-10-31, lab build cheats3, code at 1628eeb with fixstall3; fil
 | P25 | D6.d | PASS x3 | `ErrLevelChanged` after the pocket escape, 225 ticks (9 s), in town, identical repeats (DRILLS7 run 2: stuck 62 s) |
 | P27 | D-sync.wp | PASS x3 (after the harness mana fix) | before: 1 of 2 (repeat 2 started with 1 of 35 mana, melee fallback, no obstacle in the grid); after: 3 of 3 killed in every repeat |
 | P14, P15, P16, P5, P13, P18, P3 | D3, D8 NPC smoke through `d2dtown.Input` | PASS | D3 12 of 12, D8 a, m, q, w PASS (D8.c is once per character) |
+Note (fixtalk, 2026-11-01): the bot's talk nodes (P20 Akara reward, P21 Warriv act hop) now live in internal/talk (moved out of cmd/d2bot, behaviour identical); D8.q and D8.w call them and are built, awaiting live proof ([fixtalk.md](fixtalk.md)).
+
 Note (fixf17, 2026-11-01): DRILLS9 F17 (DW.m1 walk timeout, F group run 1) is a harness Pacer lag, not a nav stall (the lab's direct `Client.Step` is invisible to the Pacer); fixed in cmd/d2drill, live proof pending ([fixf17.md](fixf17.md)).
 
 Note (fixstall4, 2026-10-31): DRILLS8 F13 (H.pause, NPC approach) cause found offline: the grid route's 12-step waypoints cut the camp block corner (each leg is a straight `cmd move`), and stalls spent the budget; fixed with line-of-sight legs, routing at every stall and a route-sized budget, live proof pending ([fixstall4.md](fixstall4.md)).
