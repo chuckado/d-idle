@@ -1,0 +1,1062 @@
+time=2026-11-01T01:31:57.023-05:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:57.030-05:00 level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+time=2026-11-01T01:31:57.030-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:57.031-05:00 level=DEBUG msg="nav mouth check" pos="{X:200 Y:200}" level=3 exits=1 wantExit=9 arrival=false r=9
+time=2026-11-01T01:31:57.184-05:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:57.197-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.198-05:00 level=DEBUG msg="nav mouth check" pos="{X:260 Y:155}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:57.198-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.2 skip=false
+time=2026-11-01T01:31:57.198-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:260 Y:155}" to="{X:269 Y:173}"
+time=2026-11-01T01:31:57.198-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+time=2026-11-01T01:31:57.218-05:00 level=DEBUG msg="nav mouth check" pos="{X:269 Y:171}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:57.218-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=29.5 skip=true
+time=2026-11-01T01:31:57.218-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.9 skip=true
+time=2026-11-01T01:31:57.225-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.225-05:00 level=DEBUG msg="nav mouth check" pos="{X:263 Y:165}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.225-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=21.5 skip=true
+time=2026-11-01T01:31:57.225-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=208.8 skip=true
+time=2026-11-01T01:31:57.229-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.230-05:00 level=DEBUG msg="nav mouth check" pos="{X:263 Y:167}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.230-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=23.4 skip=true
+time=2026-11-01T01:31:57.230-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.3 skip=true
+time=2026-11-01T01:31:57.234-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.235-05:00 level=DEBUG msg="nav mouth check" pos="{X:264 Y:166}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.235-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=22.8 skip=true
+time=2026-11-01T01:31:57.235-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=208.7 skip=true
+time=2026-11-01T01:31:57.241-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.242-05:00 level=DEBUG msg="nav mouth check" pos="{X:259 Y:165}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.242-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=20.4 skip=true
+time=2026-11-01T01:31:57.242-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=206.4 skip=true
+time=2026-11-01T01:31:57.247-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.249-05:00 level=DEBUG msg="nav mouth check" pos="{X:258 Y:166}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.249-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=21.2 skip=true
+time=2026-11-01T01:31:57.249-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=205 skip=true
+time=2026-11-01T01:31:57.262-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.262-05:00 level=DEBUG msg="nav mouth check" pos="{X:264 Y:160}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.262-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=17.5 skip=true
+time=2026-11-01T01:31:57.263-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=213.4 skip=true
+time=2026-11-01T01:31:57.269-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.270-05:00 level=DEBUG msg="nav mouth check" pos="{X:268 Y:155}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.270-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=16.4 skip=true
+time=2026-11-01T01:31:57.270-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=219.8 skip=true
+time=2026-11-01T01:31:57.273-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.274-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:153}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.274-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=17.9 skip=true
+time=2026-11-01T01:31:57.274-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=223.2 skip=true
+time=2026-11-01T01:31:57.280-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.281-05:00 level=DEBUG msg="nav mouth check" pos="{X:275 Y:156}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.281-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=22.8 skip=true
+time=2026-11-01T01:31:57.281-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=223.3 skip=true
+time=2026-11-01T01:31:57.285-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.285-05:00 level=DEBUG msg="nav mouth check" pos="{X:275 Y:159}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.285-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=24.4 skip=true
+time=2026-11-01T01:31:57.285-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=221 skip=true
+time=2026-11-01T01:31:57.290-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.290-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:158}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.290-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.3 skip=true
+time=2026-11-01T01:31:57.290-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=224.3 skip=true
+time=2026-11-01T01:31:57.299-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.300-05:00 level=DEBUG msg="nav mouth check" pos="{X:281 Y:155}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.300-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=27.9 skip=true
+time=2026-11-01T01:31:57.300-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=227.9 skip=true
+time=2026-11-01T01:31:57.305-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.306-05:00 level=DEBUG msg="nav mouth check" pos="{X:285 Y:152}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.306-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=30.8 skip=true
+time=2026-11-01T01:31:57.306-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=232.8 skip=true
+time=2026-11-01T01:31:57.313-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.314-05:00 level=DEBUG msg="nav mouth check" pos="{X:293 Y:151}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.314-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=38.5 skip=true
+time=2026-11-01T01:31:57.314-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=238.8 skip=true
+time=2026-11-01T01:31:57.317-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.318-05:00 level=DEBUG msg="nav mouth check" pos="{X:294 Y:152}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.318-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=39.6 skip=true
+time=2026-11-01T01:31:57.318-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=238.7 skip=true
+time=2026-11-01T01:31:57.323-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.324-05:00 level=DEBUG msg="nav mouth check" pos="{X:297 Y:147}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.324-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=42 skip=true
+time=2026-11-01T01:31:57.324-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.4 skip=true
+time=2026-11-01T01:31:57.328-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.329-05:00 level=DEBUG msg="nav mouth check" pos="{X:299 Y:145}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.329-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44 skip=true
+time=2026-11-01T01:31:57.329-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.2 skip=true
+time=2026-11-01T01:31:57.333-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.333-05:00 level=DEBUG msg="nav mouth check" pos="{X:299 Y:142}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.333-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44.1 skip=true
+time=2026-11-01T01:31:57.333-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=249.5 skip=true
+time=2026-11-01T01:31:57.341-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.342-05:00 level=DEBUG msg="nav mouth check" pos="{X:306 Y:140}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.342-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.2 skip=true
+time=2026-11-01T01:31:57.342-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=255.6 skip=true
+time=2026-11-01T01:31:57.349-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.350-05:00 level=DEBUG msg="nav mouth check" pos="{X:310 Y:146}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.350-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=55 skip=true
+time=2026-11-01T01:31:57.350-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=253.9 skip=true
+time=2026-11-01T01:31:57.357-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.358-05:00 level=DEBUG msg="nav mouth check" pos="{X:314 Y:141}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.358-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=59.1 skip=true
+time=2026-11-01T01:31:57.358-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=260.3 skip=true
+time=2026-11-01T01:31:57.364-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.365-05:00 level=DEBUG msg="nav mouth check" pos="{X:317 Y:145}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.365-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=62 skip=true
+time=2026-11-01T01:31:57.365-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=259.5 skip=true
+time=2026-11-01T01:31:57.399-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.400-05:00 level=DEBUG msg="nav mouth check" pos="{X:316 Y:158}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.400-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=62.4 skip=true
+time=2026-11-01T01:31:57.400-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=249.7 skip=true
+time=2026-11-01T01:31:57.407-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.408-05:00 level=DEBUG msg="nav mouth check" pos="{X:315 Y:159}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.408-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=61.6 skip=true
+time=2026-11-01T01:31:57.408-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=248.3 skip=true
+time=2026-11-01T01:31:57.413-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.414-05:00 level=DEBUG msg="nav mouth check" pos="{X:314 Y:160}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.414-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=60.9 skip=true
+time=2026-11-01T01:31:57.414-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=246.9 skip=true
+time=2026-11-01T01:31:57.428-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.429-05:00 level=DEBUG msg="nav mouth check" pos="{X:307 Y:154}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.429-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=52.8 skip=true
+time=2026-11-01T01:31:57.429-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=246.1 skip=true
+time=2026-11-01T01:31:57.430-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.431-05:00 level=DEBUG msg="nav mouth check" pos="{X:306 Y:154}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.431-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.8 skip=true
+time=2026-11-01T01:31:57.431-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=245.4 skip=true
+time=2026-11-01T01:31:57.432-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.432-05:00 level=DEBUG msg="nav mouth check" pos="{X:305 Y:154}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.432-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=50.8 skip=true
+time=2026-11-01T01:31:57.432-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.7 skip=true
+time=2026-11-01T01:31:57.452-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.452-05:00 level=DEBUG msg="nav mouth check" pos="{X:303 Y:153}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.452-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=48.7 skip=true
+time=2026-11-01T01:31:57.452-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244 skip=true
+time=2026-11-01T01:31:57.453-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.454-05:00 level=DEBUG msg="nav mouth check" pos="{X:302 Y:152}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.454-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.5 skip=true
+time=2026-11-01T01:31:57.454-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.1 skip=true
+time=2026-11-01T01:31:57.455-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.456-05:00 level=DEBUG msg="nav mouth check" pos="{X:301 Y:152}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.456-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.5 skip=true
+time=2026-11-01T01:31:57.456-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=243.4 skip=true
+time=2026-11-01T01:31:57.465-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.466-05:00 level=DEBUG msg="nav mouth check" pos="{X:300 Y:151}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.466-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=45.4 skip=true
+time=2026-11-01T01:31:57.466-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=243.4 skip=true
+time=2026-11-01T01:31:57.475-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.476-05:00 level=DEBUG msg="nav mouth check" pos="{X:300 Y:151}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.476-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=45.4 skip=true
+time=2026-11-01T01:31:57.476-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=243.4 skip=true
+time=2026-11-01T01:31:57.491-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.491-05:00 level=DEBUG msg="nav mouth check" pos="{X:296 Y:149}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.491-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=41.2 skip=true
+time=2026-11-01T01:31:57.491-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=242.2 skip=true
+time=2026-11-01T01:31:57.499-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.500-05:00 level=DEBUG msg="nav mouth check" pos="{X:294 Y:148}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.500-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=39.1 skip=true
+time=2026-11-01T01:31:57.500-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=241.7 skip=true
+time=2026-11-01T01:31:57.502-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.503-05:00 level=DEBUG msg="nav mouth check" pos="{X:292 Y:148}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.503-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=37.1 skip=true
+time=2026-11-01T01:31:57.503-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.4 skip=true
+time=2026-11-01T01:31:57.508-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.510-05:00 level=DEBUG msg="nav mouth check" pos="{X:292 Y:148}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.510-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=37.1 skip=true
+time=2026-11-01T01:31:57.510-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.4 skip=true
+time=2026-11-01T01:31:57.519-05:00 level=DEBUG msg="nav mouth check" pos="{X:294 Y:149}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.519-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=39.2 skip=true
+time=2026-11-01T01:31:57.519-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.9 skip=true
+time=2026-11-01T01:31:57.543-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.543-05:00 level=DEBUG msg="nav mouth check" pos="{X:308 Y:153}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.543-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=53.6 skip=true
+time=2026-11-01T01:31:57.543-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.5 skip=true
+time=2026-11-01T01:31:57.551-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.551-05:00 level=DEBUG msg="nav mouth check" pos="{X:306 Y:159}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.552-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=52.9 skip=true
+time=2026-11-01T01:31:57.552-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=241.8 skip=true
+time=2026-11-01T01:31:57.560-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.561-05:00 level=DEBUG msg="nav mouth check" pos="{X:308 Y:166}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.561-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=57 skip=true
+time=2026-11-01T01:31:57.561-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=238.4 skip=true
+time=2026-11-01T01:31:57.566-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.567-05:00 level=DEBUG msg="nav mouth check" pos="{X:308 Y:169}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.567-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=58.2 skip=true
+time=2026-11-01T01:31:57.567-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=236.3 skip=true
+time=2026-11-01T01:31:57.573-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.573-05:00 level=DEBUG msg="nav mouth check" pos="{X:306 Y:173}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.573-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=58.2 skip=true
+time=2026-11-01T01:31:57.573-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=232.1 skip=true
+time=2026-11-01T01:31:57.580-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.581-05:00 level=DEBUG msg="nav mouth check" pos="{X:305 Y:180}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.581-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=61 skip=true
+time=2026-11-01T01:31:57.581-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=226.7 skip=true
+time=2026-11-01T01:31:57.585-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.586-05:00 level=DEBUG msg="nav mouth check" pos="{X:307 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.586-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=63.2 skip=true
+time=2026-11-01T01:31:57.586-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=227.6 skip=true
+time=2026-11-01T01:31:57.594-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.595-05:00 level=DEBUG msg="nav mouth check" pos="{X:313 Y:177}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.595-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=66.2 skip=true
+time=2026-11-01T01:31:57.595-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=234.7 skip=true
+time=2026-11-01T01:31:57.599-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.600-05:00 level=DEBUG msg="nav mouth check" pos="{X:315 Y:180}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.600-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=69.5 skip=true
+time=2026-11-01T01:31:57.600-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=234.3 skip=true
+time=2026-11-01T01:31:57.606-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.606-05:00 level=DEBUG msg="nav mouth check" pos="{X:319 Y:177}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.606-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=71.6 skip=true
+time=2026-11-01T01:31:57.606-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=239.3 skip=true
+time=2026-11-01T01:31:57.609-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.610-05:00 level=DEBUG msg="nav mouth check" pos="{X:321 Y:177}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.610-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=73.3 skip=true
+time=2026-11-01T01:31:57.610-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.8 skip=true
+time=2026-11-01T01:31:57.615-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.615-05:00 level=DEBUG msg="nav mouth check" pos="{X:323 Y:180}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.615-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=76.5 skip=true
+time=2026-11-01T01:31:57.615-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.5 skip=true
+time=2026-11-01T01:31:57.621-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.622-05:00 level=DEBUG msg="nav mouth check" pos="{X:328 Y:179}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.622-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=80.5 skip=true
+time=2026-11-01T01:31:57.622-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=245.1 skip=true
+time=2026-11-01T01:31:57.625-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.626-05:00 level=DEBUG msg="nav mouth check" pos="{X:329 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.626-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=82.3 skip=true
+time=2026-11-01T01:31:57.626-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=244.6 skip=true
+time=2026-11-01T01:31:57.631-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.632-05:00 level=DEBUG msg="nav mouth check" pos="{X:327 Y:185}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.632-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=82.4 skip=true
+time=2026-11-01T01:31:57.632-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=240.6 skip=true
+time=2026-11-01T01:31:57.640-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.641-05:00 level=DEBUG msg="nav mouth check" pos="{X:334 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.641-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=86.8 skip=true
+time=2026-11-01T01:31:57.641-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=248.6 skip=true
+time=2026-11-01T01:31:57.647-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.647-05:00 level=DEBUG msg="nav mouth check" pos="{X:336 Y:186}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.647-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=90.8 skip=true
+time=2026-11-01T01:31:57.647-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=247.3 skip=true
+time=2026-11-01T01:31:57.653-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.653-05:00 level=DEBUG msg="nav mouth check" pos="{X:340 Y:182}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.653-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=92.7 skip=true
+time=2026-11-01T01:31:57.653-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=252.8 skip=true
+time=2026-11-01T01:31:57.704-05:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-11-01T01:31:57.704-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:57.704-05:00 level=DEBUG msg="nav mouth check" pos="{X:308 Y:167}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:31:57.704-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=237.7 skip=true
+time=2026-11-01T01:31:57.775-05:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:57.787-05:00 level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+time=2026-11-01T01:31:57.787-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:57.788-05:00 level=DEBUG msg="nav mouth check" pos="{X:220 Y:140}" level=3 exits=1 wantExit=9 arrival=true r=16
+time=2026-11-01T01:31:57.812-05:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:57.824-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.825-05:00 level=DEBUG msg="nav mouth check" pos="{X:260 Y:155}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:57.825-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.2 skip=false
+time=2026-11-01T01:31:57.825-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:260 Y:155}" to="{X:269 Y:173}"
+time=2026-11-01T01:31:57.825-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:57.840-05:00 level=DEBUG msg="nav mouth check" pos="{X:269 Y:171}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:57.840-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=29.5 skip=true
+time=2026-11-01T01:31:57.840-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.9 skip=true
+time=2026-11-01T01:31:57.893-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.894-05:00 level=DEBUG msg="nav mouth check" pos="{X:267 Y:149}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.894-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=12.6 skip=true
+time=2026-11-01T01:31:57.894-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=224 skip=true
+time=2026-11-01T01:31:57.895-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:57.895-05:00 level=DEBUG msg="nav mouth check" pos="{X:266 Y:149}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.895-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.7 skip=true
+time=2026-11-01T01:31:57.895-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=223.4 skip=true
+time=2026-11-01T01:31:57.900-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:57.901-05:00 level=DEBUG msg="nav mouth check" pos="{X:267 Y:150}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:57.901-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=13 skip=true
+time=2026-11-01T01:31:57.901-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=223.2 skip=true
+time=2026-11-01T01:31:57.932-05:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:57.941-05:00 level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+time=2026-11-01T01:31:57.941-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:57.942-05:00 level=DEBUG msg="nav mouth check" pos="{X:215 Y:140}" level=3 exits=1 wantExit=9 arrival=true r=16
+time=2026-11-01T01:31:57.976-05:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:58.073-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.074-05:00 level=DEBUG msg="nav mouth check" pos="{X:256 Y:148}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:58.074-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=3.2 skip=false
+time=2026-11-01T01:31:58.074-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:256 Y:148}" to="{X:262 Y:167}"
+time=2026-11-01T01:31:58.074-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+time=2026-11-01T01:31:58.112-05:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:58.121-05:00 level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+time=2026-11-01T01:31:58.121-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:58.121-05:00 level=DEBUG msg="nav mouth check" pos="{X:216 Y:140}" level=3 exits=1 wantExit=9 arrival=true r=16
+time=2026-11-01T01:31:58.153-05:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:58.239-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.239-05:00 level=DEBUG msg="nav mouth check" pos="{X:259 Y:154}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:58.239-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=9.8 skip=false
+time=2026-11-01T01:31:58.240-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:259 Y:154}" to="{X:265 Y:160}"
+time=2026-11-01T01:31:58.240-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+time=2026-11-01T01:31:58.244-05:00 level=DEBUG msg="nav mouth check" pos="{X:263 Y:158}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:58.244-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=15.3 skip=false
+time=2026-11-01T01:31:58.245-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:263 Y:158}" to="{X:262 Y:168}"
+time=2026-11-01T01:31:58.245-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore"
+time=2026-11-01T01:31:58.253-05:00 level=DEBUG msg="nav mouth check" pos="{X:262 Y:166}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:58.253-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=22.1 skip=true
+time=2026-11-01T01:31:58.253-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.4 skip=true
+time=2026-11-01T01:31:58.279-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.280-05:00 level=DEBUG msg="nav mouth check" pos="{X:270 Y:172}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.280-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=30.9 skip=true
+time=2026-11-01T01:31:58.280-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.8 skip=true
+time=2026-11-01T01:31:58.284-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.285-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:173}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.285-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=32.2 skip=true
+time=2026-11-01T01:31:58.285-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=207.7 skip=true
+time=2026-11-01T01:31:58.295-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.296-05:00 level=DEBUG msg="nav mouth check" pos="{X:264 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.296-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=37.1 skip=true
+time=2026-11-01T01:31:58.296-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=197.1 skip=true
+time=2026-11-01T01:31:58.302-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.302-05:00 level=DEBUG msg="nav mouth check" pos="{X:259 Y:179}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.302-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=34.2 skip=true
+time=2026-11-01T01:31:58.302-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=195.4 skip=true
+time=2026-11-01T01:31:58.305-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.306-05:00 level=DEBUG msg="nav mouth check" pos="{X:259 Y:180}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.306-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=35.2 skip=true
+time=2026-11-01T01:31:58.306-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=194.6 skip=true
+time=2026-11-01T01:31:58.311-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.312-05:00 level=DEBUG msg="nav mouth check" pos="{X:252 Y:179}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.312-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=34.1 skip=true
+time=2026-11-01T01:31:58.312-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=191 skip=true
+time=2026-11-01T01:31:58.314-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.315-05:00 level=DEBUG msg="nav mouth check" pos="{X:251 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.315-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=36.2 skip=true
+time=2026-11-01T01:31:58.315-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=188.8 skip=true
+time=2026-11-01T01:31:58.321-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.322-05:00 level=DEBUG msg="nav mouth check" pos="{X:246 Y:180}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.322-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=36.1 skip=true
+time=2026-11-01T01:31:58.322-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=186.6 skip=true
+time=2026-11-01T01:31:58.327-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.328-05:00 level=DEBUG msg="nav mouth check" pos="{X:241 Y:181}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.328-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=38.6 skip=true
+time=2026-11-01T01:31:58.328-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=182.9 skip=true
+time=2026-11-01T01:31:58.336-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.337-05:00 level=DEBUG msg="nav mouth check" pos="{X:239 Y:182}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.337-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=40.3 skip=true
+time=2026-11-01T01:31:58.337-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.9 skip=true
+time=2026-11-01T01:31:58.347-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.348-05:00 level=DEBUG msg="nav mouth check" pos="{X:233 Y:184}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.348-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=44.8 skip=true
+time=2026-11-01T01:31:58.348-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=175.8 skip=true
+time=2026-11-01T01:31:58.354-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.355-05:00 level=DEBUG msg="nav mouth check" pos="{X:232 Y:187}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.355-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.9 skip=true
+time=2026-11-01T01:31:58.355-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.8 skip=true
+time=2026-11-01T01:31:58.363-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.364-05:00 level=DEBUG msg="nav mouth check" pos="{X:236 Y:190}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.364-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=48.8 skip=true
+time=2026-11-01T01:31:58.364-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.6 skip=true
+time=2026-11-01T01:31:58.373-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.374-05:00 level=DEBUG msg="nav mouth check" pos="{X:231 Y:195}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.374-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=55.5 skip=true
+time=2026-11-01T01:31:58.374-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=165.7 skip=true
+time=2026-11-01T01:31:58.381-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.382-05:00 level=DEBUG msg="nav mouth check" pos="{X:236 Y:197}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.382-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=55.4 skip=true
+time=2026-11-01T01:31:58.382-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=167 skip=true
+time=2026-11-01T01:31:58.393-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.394-05:00 level=DEBUG msg="nav mouth check" pos="{X:232 Y:201}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.394-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=60.5 skip=true
+time=2026-11-01T01:31:58.394-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=161.4 skip=true
+time=2026-11-01T01:31:58.401-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.402-05:00 level=DEBUG msg="nav mouth check" pos="{X:233 Y:206}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.402-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=64.8 skip=true
+time=2026-11-01T01:31:58.402-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=158.1 skip=true
+time=2026-11-01T01:31:58.407-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.409-05:00 level=DEBUG msg="nav mouth check" pos="{X:237 Y:206}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.409-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=63.6 skip=true
+time=2026-11-01T01:31:58.409-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=160.6 skip=true
+time=2026-11-01T01:31:58.419-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.420-05:00 level=DEBUG msg="nav mouth check" pos="{X:244 Y:201}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.420-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=57.1 skip=true
+time=2026-11-01T01:31:58.420-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=168.9 skip=true
+time=2026-11-01T01:31:58.428-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.429-05:00 level=DEBUG msg="nav mouth check" pos="{X:244 Y:195}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.429-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.2 skip=true
+time=2026-11-01T01:31:58.429-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.5 skip=true
+time=2026-11-01T01:31:58.440-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.441-05:00 level=DEBUG msg="nav mouth check" pos="{X:242 Y:196}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.441-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=52.6 skip=true
+time=2026-11-01T01:31:58.441-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=171.5 skip=true
+time=2026-11-01T01:31:58.443-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.444-05:00 level=DEBUG msg="nav mouth check" pos="{X:241 Y:195}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.444-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.9 skip=true
+time=2026-11-01T01:31:58.444-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=171.6 skip=true
+time=2026-11-01T01:31:58.445-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.446-05:00 level=DEBUG msg="nav mouth check" pos="{X:240 Y:194}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.446-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=51.2 skip=true
+time=2026-11-01T01:31:58.446-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=171.8 skip=true
+time=2026-11-01T01:31:58.452-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.452-05:00 level=DEBUG msg="nav mouth check" pos="{X:237 Y:191}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.452-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=49.4 skip=true
+time=2026-11-01T01:31:58.452-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.4 skip=true
+time=2026-11-01T01:31:58.454-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.454-05:00 level=DEBUG msg="nav mouth check" pos="{X:236 Y:190}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.455-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=48.8 skip=true
+time=2026-11-01T01:31:58.455-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.6 skip=true
+time=2026-11-01T01:31:58.457-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.458-05:00 level=DEBUG msg="nav mouth check" pos="{X:235 Y:190}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.458-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=49.2 skip=true
+time=2026-11-01T01:31:58.458-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172 skip=true
+time=2026-11-01T01:31:58.459-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.460-05:00 level=DEBUG msg="nav mouth check" pos="{X:234 Y:189}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.460-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=48.8 skip=true
+time=2026-11-01T01:31:58.460-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.3 skip=true
+time=2026-11-01T01:31:58.467-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.467-05:00 level=DEBUG msg="nav mouth check" pos="{X:234 Y:188}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.467-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.9 skip=true
+time=2026-11-01T01:31:58.467-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.1 skip=true
+time=2026-11-01T01:31:58.482-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.482-05:00 level=DEBUG msg="nav mouth check" pos="{X:232 Y:186}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.483-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47 skip=true
+time=2026-11-01T01:31:58.483-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.6 skip=true
+time=2026-11-01T01:31:58.485-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.486-05:00 level=DEBUG msg="nav mouth check" pos="{X:231 Y:185}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.486-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.6 skip=true
+time=2026-11-01T01:31:58.486-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.9 skip=true
+time=2026-11-01T01:31:58.487-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.488-05:00 level=DEBUG msg="nav mouth check" pos="{X:230 Y:185}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.488-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.2 skip=true
+time=2026-11-01T01:31:58.488-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.3 skip=true
+time=2026-11-01T01:31:58.495-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.496-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:184}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.496-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.9 skip=true
+time=2026-11-01T01:31:58.496-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.6 skip=true
+time=2026-11-01T01:31:58.498-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.498-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:184}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.498-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.9 skip=true
+time=2026-11-01T01:31:58.498-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.6 skip=true
+time=2026-11-01T01:31:58.503-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.504-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:184}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.504-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.9 skip=true
+time=2026-11-01T01:31:58.504-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.6 skip=true
+time=2026-11-01T01:31:58.507-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.508-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:185}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.508-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.7 skip=true
+time=2026-11-01T01:31:58.508-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.8 skip=true
+time=2026-11-01T01:31:58.510-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:58.510-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:185}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.510-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=47.7 skip=true
+time=2026-11-01T01:31:58.510-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=172.8 skip=true
+time=2026-11-01T01:31:58.565-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.566-05:00 level=DEBUG msg="nav mouth check" pos="{X:229 Y:184}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.566-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=46.9 skip=true
+time=2026-11-01T01:31:58.566-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.6 skip=true
+time=2026-11-01T01:31:58.590-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.590-05:00 level=DEBUG msg="nav mouth check" pos="{X:225 Y:198}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.590-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=60.9 skip=true
+time=2026-11-01T01:31:58.590-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=159.8 skip=true
+time=2026-11-01T01:31:58.596-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.597-05:00 level=DEBUG msg="nav mouth check" pos="{X:225 Y:201}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.597-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=63.5 skip=true
+time=2026-11-01T01:31:58.597-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=157.3 skip=true
+time=2026-11-01T01:31:58.639-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.639-05:00 level=DEBUG msg="nav mouth check" pos="{X:218 Y:203}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.639-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=68.8 skip=true
+time=2026-11-01T01:31:58.639-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=151.7 skip=true
+time=2026-11-01T01:31:58.645-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.646-05:00 level=DEBUG msg="nav mouth check" pos="{X:216 Y:206}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.646-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=72.4 skip=true
+time=2026-11-01T01:31:58.646-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=148.1 skip=true
+time=2026-11-01T01:31:58.652-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.653-05:00 level=DEBUG msg="nav mouth check" pos="{X:218 Y:208}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.653-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=73.1 skip=true
+time=2026-11-01T01:31:58.653-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=147.6 skip=true
+time=2026-11-01T01:31:58.661-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.662-05:00 level=DEBUG msg="nav mouth check" pos="{X:222 Y:210}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.662-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=72.9 skip=true
+time=2026-11-01T01:31:58.662-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=148.2 skip=true
+time=2026-11-01T01:31:58.668-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.669-05:00 level=DEBUG msg="nav mouth check" pos="{X:223 Y:214}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.669-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=76.1 skip=true
+time=2026-11-01T01:31:58.669-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=145.6 skip=true
+time=2026-11-01T01:31:58.673-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.674-05:00 level=DEBUG msg="nav mouth check" pos="{X:222 Y:215}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.674-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.4 skip=true
+time=2026-11-01T01:31:58.674-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=144.2 skip=true
+time=2026-11-01T01:31:58.680-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.681-05:00 level=DEBUG msg="nav mouth check" pos="{X:221 Y:220}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.681-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=82.3 skip=true
+time=2026-11-01T01:31:58.681-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=139.6 skip=true
+time=2026-11-01T01:31:58.723-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.724-05:00 level=DEBUG msg="nav mouth check" pos="{X:211 Y:200}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.724-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=70.4 skip=true
+time=2026-11-01T01:31:58.724-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=150.6 skip=true
+time=2026-11-01T01:31:58.728-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.728-05:00 level=DEBUG msg="nav mouth check" pos="{X:210 Y:201}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.728-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=71.8 skip=true
+time=2026-11-01T01:31:58.728-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=149.2 skip=true
+time=2026-11-01T01:31:58.743-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.745-05:00 level=DEBUG msg="nav mouth check" pos="{X:203 Y:205}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.745-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.4 skip=true
+time=2026-11-01T01:31:58.745-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=142.3 skip=true
+time=2026-11-01T01:31:58.762-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.762-05:00 level=DEBUG msg="nav mouth check" pos="{X:195 Y:204}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.762-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=84.1 skip=true
+time=2026-11-01T01:31:58.762-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=139.6 skip=true
+time=2026-11-01T01:31:58.771-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.772-05:00 level=DEBUG msg="nav mouth check" pos="{X:190 Y:205}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.772-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=88.5 skip=true
+time=2026-11-01T01:31:58.772-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=136.6 skip=true
+time=2026-11-01T01:31:58.779-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.779-05:00 level=DEBUG msg="nav mouth check" pos="{X:188 Y:208}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.779-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=92 skip=true
+time=2026-11-01T01:31:58.779-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=133 skip=true
+time=2026-11-01T01:31:58.789-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.790-05:00 level=DEBUG msg="nav mouth check" pos="{X:183 Y:207}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.790-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=95 skip=true
+time=2026-11-01T01:31:58.790-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=132 skip=true
+time=2026-11-01T01:31:58.795-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.796-05:00 level=DEBUG msg="nav mouth check" pos="{X:182 Y:208}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.796-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=96.4 skip=true
+time=2026-11-01T01:31:58.796-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=130.7 skip=true
+time=2026-11-01T01:31:58.807-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:58.808-05:00 level=DEBUG msg="nav mouth check" pos="{X:177 Y:204}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:58.808-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=97.8 skip=true
+time=2026-11-01T01:31:58.808-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=132.8 skip=true
+time=2026-11-01T01:31:58.831-05:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-11-01T01:31:58.831-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:58.831-05:00 level=DEBUG msg="nav mouth check" pos="{X:177 Y:204}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:31:58.831-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=132.8 skip=true
+time=2026-11-01T01:31:59.021-05:00 level=INFO msg="d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:59.136-05:00 level=INFO msg="nav exit" to=9 gate="{X:215 Y:140}" push="{X:215 Y:140}" border=false
+time=2026-11-01T01:31:59.136-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:31:59.137-05:00 level=DEBUG msg="nav mouth check" pos="{X:200 Y:200}" level=3 exits=1 wantExit=9 arrival=true r=16
+time=2026-11-01T01:31:59.224-05:00 level=INFO msg="d2dworld: arrived in level 9: 0 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T01:31:59.248-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:59.249-05:00 level=DEBUG msg="nav mouth check" pos="{X:260 Y:155}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:59.249-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=11.2 skip=false
+time=2026-11-01T01:31:59.253-05:00 level=INFO msg="nav: stepping away from a cave mouth" from="{X:260 Y:155}" to="{X:266 Y:161}"
+time=2026-11-01T01:31:59.253-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).walk < d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.267-05:00 level=DEBUG msg="nav mouth check" pos="{X:264 Y:159}" level=9 exits=2 wantExit=0 arrival=true r=16
+time=2026-11-01T01:31:59.267-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=16.6 skip=true
+time=2026-11-01T01:31:59.267-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=214.2 skip=true
+time=2026-11-01T01:31:59.387-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.387-05:00 level=DEBUG msg="nav mouth check" pos="{X:253 Y:160}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.387-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=15.1 skip=true
+time=2026-11-01T01:31:59.387-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=206.9 skip=true
+time=2026-11-01T01:31:59.434-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.435-05:00 level=DEBUG msg="nav mouth check" pos="{X:260 Y:186}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.435-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=41.3 skip=true
+time=2026-11-01T01:31:59.435-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=190.7 skip=true
+time=2026-11-01T01:31:59.439-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.439-05:00 level=DEBUG msg="nav mouth check" pos="{X:259 Y:187}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.439-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=42.2 skip=true
+time=2026-11-01T01:31:59.439-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=189.3 skip=true
+time=2026-11-01T01:31:59.451-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.452-05:00 level=DEBUG msg="nav mouth check" pos="{X:256 Y:195}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.452-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=50 skip=true
+time=2026-11-01T01:31:59.452-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=181.3 skip=true
+time=2026-11-01T01:31:59.462-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.463-05:00 level=DEBUG msg="nav mouth check" pos="{X:255 Y:201}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.463-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=56 skip=true
+time=2026-11-01T01:31:59.463-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=176.2 skip=true
+time=2026-11-01T01:31:59.467-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.469-05:00 level=DEBUG msg="nav mouth check" pos="{X:257 Y:202}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.469-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=57 skip=true
+time=2026-11-01T01:31:59.469-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=176.8 skip=true
+time=2026-11-01T01:31:59.474-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.475-05:00 level=DEBUG msg="nav mouth check" pos="{X:253 Y:206}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.475-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=61 skip=true
+time=2026-11-01T01:31:59.475-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=171.2 skip=true
+time=2026-11-01T01:31:59.481-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.482-05:00 level=DEBUG msg="nav mouth check" pos="{X:254 Y:209}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.482-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=64 skip=true
+time=2026-11-01T01:31:59.482-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=169.7 skip=true
+time=2026-11-01T01:31:59.507-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.508-05:00 level=DEBUG msg="nav mouth check" pos="{X:257 Y:211}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.508-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=66 skip=true
+time=2026-11-01T01:31:59.508-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=170.4 skip=true
+time=2026-11-01T01:31:59.514-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.514-05:00 level=DEBUG msg="nav mouth check" pos="{X:256 Y:216}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.514-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=71 skip=true
+time=2026-11-01T01:31:59.514-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=166.2 skip=true
+time=2026-11-01T01:31:59.517-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.518-05:00 level=DEBUG msg="nav mouth check" pos="{X:257 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.518-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=72 skip=true
+time=2026-11-01T01:31:59.518-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=166.3 skip=true
+time=2026-11-01T01:31:59.532-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.533-05:00 level=DEBUG msg="nav mouth check" pos="{X:265 Y:210}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.533-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=65.8 skip=true
+time=2026-11-01T01:31:59.533-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=176.9 skip=true
+time=2026-11-01T01:31:59.545-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.546-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:215}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.546-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=71.8 skip=true
+time=2026-11-01T01:31:59.546-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=178.1 skip=true
+time=2026-11-01T01:31:59.555-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.556-05:00 level=DEBUG msg="nav mouth check" pos="{X:276 Y:214}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.556-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=72.1 skip=true
+time=2026-11-01T01:31:59.556-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=182.6 skip=true
+time=2026-11-01T01:31:59.561-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.562-05:00 level=DEBUG msg="nav mouth check" pos="{X:277 Y:215}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.562-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=73.4 skip=true
+time=2026-11-01T01:31:59.562-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=182.7 skip=true
+time=2026-11-01T01:31:59.570-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.571-05:00 level=DEBUG msg="nav mouth check" pos="{X:276 Y:210}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.571-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=68.3 skip=true
+time=2026-11-01T01:31:59.571-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=185.2 skip=true
+time=2026-11-01T01:31:59.588-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.589-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:223}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.589-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.6 skip=true
+time=2026-11-01T01:31:59.589-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173 skip=true
+time=2026-11-01T01:31:59.598-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.599-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:229}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.599-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=85.5 skip=true
+time=2026-11-01T01:31:59.599-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=169.4 skip=true
+time=2026-11-01T01:31:59.609-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.610-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:228}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.610-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=86.4 skip=true
+time=2026-11-01T01:31:59.610-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=176.5 skip=true
+time=2026-11-01T01:31:59.614-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:31:59.615-05:00 level=DEBUG msg="nav mouth check" pos="{X:280 Y:229}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.615-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=87.6 skip=true
+time=2026-11-01T01:31:59.615-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=176.7 skip=true
+time=2026-11-01T01:31:59.624-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:31:59.624-05:00 level=DEBUG msg="nav mouth check" pos="{X:283 Y:229}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.624-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=88.5 skip=true
+time=2026-11-01T01:31:59.624-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.2 skip=true
+time=2026-11-01T01:31:59.637-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.638-05:00 level=DEBUG msg="nav mouth check" pos="{X:285 Y:225}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.638-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=85.4 skip=true
+time=2026-11-01T01:31:59.638-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=183.1 skip=true
+time=2026-11-01T01:31:59.662-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.663-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.663-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.663-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.690-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.691-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.691-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.691-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.718-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.719-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.719-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.719-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.747-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.748-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.748-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.748-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.785-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.786-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.786-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.786-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.834-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.835-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.835-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.835-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.878-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.879-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.879-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.879-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.906-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.907-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.907-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.907-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.944-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.944-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.944-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.944-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:31:59.980-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:31:59.981-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:31:59.981-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:31:59.981-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.021-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.022-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.022-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.022-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.049-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.050-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.050-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.050-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.096-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.096-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.096-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.096-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.138-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.138-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.138-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.138-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.177-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.177-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.177-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.177-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.213-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.214-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.214-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.214-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.245-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.246-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.246-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.246-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.284-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.285-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.285-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.285-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.325-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.326-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.326-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.326-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.361-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.362-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.362-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.362-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.392-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.393-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.393-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.393-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.429-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.430-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.430-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.430-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.454-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.455-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.455-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.455-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.487-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.488-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.488-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.488-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.525-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.526-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.526-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.526-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.550-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.551-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.551-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.551-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.576-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.577-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.577-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.577-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.612-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:00.613-05:00 level=DEBUG msg="nav mouth check" pos="{X:279 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.613-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.7 skip=true
+time=2026-11-01T01:32:00.613-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=180.6 skip=true
+time=2026-11-01T01:32:00.650-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).engage < d2lod-bot/internal/combat.(*Fighter).fight"
+time=2026-11-01T01:32:00.651-05:00 level=DEBUG msg="nav mouth check" pos="{X:269 Y:220}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.651-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=76.3 skip=true
+time=2026-11-01T01:32:00.651-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=173.4 skip=true
+time=2026-11-01T01:32:00.690-05:00 level=DEBUG msg="nav mouth check" pos="{X:284 Y:224}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.690-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=84.2 skip=true
+time=2026-11-01T01:32:00.690-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=182.9 skip=true
+time=2026-11-01T01:32:00.711-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.711-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.711-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.719-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.719-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.719-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.726-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.726-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.726-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.733-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.733-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.733-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.741-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.741-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.741-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.749-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.749-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.749-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.757-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.757-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.757-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.764-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.764-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.764-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.773-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.773-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.773-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.780-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.780-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.780-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.787-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.787-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.787-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.796-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.796-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.796-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.803-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.803-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.803-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.811-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.811-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.811-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.818-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.818-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.818-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.822-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.822-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.822-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.827-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.827-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.827-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.834-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.835-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.835-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.842-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.842-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.842-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.850-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.850-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.850-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.857-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.857-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.857-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.863-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.863-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.863-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.867-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.867-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.867-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.874-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.874-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.874-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.881-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.881-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.881-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.888-05:00 level=DEBUG msg="nav mouth check" pos="{X:272 Y:217}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.888-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=74 skip=true
+time=2026-11-01T01:32:00.888-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=177.6 skip=true
+time=2026-11-01T01:32:00.898-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.899-05:00 level=DEBUG msg="nav mouth check" pos="{X:271 Y:221}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.899-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=77.7 skip=true
+time=2026-11-01T01:32:00.899-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=174.3 skip=true
+time=2026-11-01T01:32:00.929-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.930-05:00 level=DEBUG msg="nav mouth check" pos="{X:288 Y:231}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.930-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=92.1 skip=true
+time=2026-11-01T01:32:00.930-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=182.2 skip=true
+time=2026-11-01T01:32:00.938-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.939-05:00 level=DEBUG msg="nav mouth check" pos="{X:292 Y:230}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.939-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=92.7 skip=true
+time=2026-11-01T01:32:00.939-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=186.1 skip=true
+time=2026-11-01T01:32:00.945-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.947-05:00 level=DEBUG msg="nav mouth check" pos="{X:292 Y:225}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.947-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=88.1 skip=true
+time=2026-11-01T01:32:00.947-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=188.9 skip=true
+time=2026-11-01T01:32:00.983-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.984-05:00 level=DEBUG msg="nav mouth check" pos="{X:298 Y:216}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.984-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=83 skip=true
+time=2026-11-01T01:32:00.984-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=198.9 skip=true
+time=2026-11-01T01:32:00.991-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.991-05:00 level=DEBUG msg="nav mouth check" pos="{X:298 Y:212}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.991-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.6 skip=true
+time=2026-11-01T01:32:00.991-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=201.2 skip=true
+time=2026-11-01T01:32:00.996-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:00.997-05:00 level=DEBUG msg="nav mouth check" pos="{X:299 Y:211}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:00.997-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=79.3 skip=true
+time=2026-11-01T01:32:00.997-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=202.6 skip=true
+time=2026-11-01T01:32:01.010-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.011-05:00 level=DEBUG msg="nav mouth check" pos="{X:307 Y:207}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.011-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=80.9 skip=true
+time=2026-11-01T01:32:01.011-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=211.5 skip=true
+time=2026-11-01T01:32:01.015-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.015-05:00 level=DEBUG msg="nav mouth check" pos="{X:308 Y:208}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.015-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=82.3 skip=true
+time=2026-11-01T01:32:01.016-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=211.7 skip=true
+time=2026-11-01T01:32:01.024-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.025-05:00 level=DEBUG msg="nav mouth check" pos="{X:313 Y:207}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.025-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=84.9 skip=true
+time=2026-11-01T01:32:01.025-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=216.4 skip=true
+time=2026-11-01T01:32:01.034-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.035-05:00 level=DEBUG msg="nav mouth check" pos="{X:313 Y:213}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.035-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=89.4 skip=true
+time=2026-11-01T01:32:01.035-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=213 skip=true
+time=2026-11-01T01:32:01.039-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.040-05:00 level=DEBUG msg="nav mouth check" pos="{X:314 Y:215}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.040-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=91.5 skip=true
+time=2026-11-01T01:32:01.040-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=212.8 skip=true
+time=2026-11-01T01:32:01.076-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.077-05:00 level=DEBUG msg="nav mouth check" pos="{X:321 Y:211}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.077-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=93.3 skip=true
+time=2026-11-01T01:32:01.077-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=220.8 skip=true
+time=2026-11-01T01:32:01.085-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.086-05:00 level=DEBUG msg="nav mouth check" pos="{X:324 Y:216}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.086-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=99 skip=true
+time=2026-11-01T01:32:01.086-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=220.7 skip=true
+time=2026-11-01T01:32:01.091-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.092-05:00 level=DEBUG msg="nav mouth check" pos="{X:325 Y:216}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.092-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=99.7 skip=true
+time=2026-11-01T01:32:01.092-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=221.6 skip=true
+time=2026-11-01T01:32:01.099-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.099-05:00 level=DEBUG msg="nav mouth check" pos="{X:328 Y:214}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.100-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=100.4 skip=true
+time=2026-11-01T01:32:01.100-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=225.2 skip=true
+time=2026-11-01T01:32:01.108-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:01.109-05:00 level=DEBUG msg="nav mouth check" pos="{X:331 Y:210}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:01.109-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=100 skip=true
+time=2026-11-01T01:32:01.109-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=229.8 skip=true
+time=2026-11-01T01:32:01.142-05:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-11-01T01:32:01.142-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:32:01.143-05:00 level=DEBUG msg="nav mouth check" pos="{X:313 Y:221}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.143-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=208.7 skip=true
+time=2026-11-01T01:32:01.215-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.216-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.216-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.269-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.271-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.271-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.309-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.310-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.310-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.348-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.349-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.349-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.376-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.377-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.377-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.404-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.405-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.405-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.431-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.432-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.432-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.461-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.462-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.462-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.497-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.498-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.498-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.527-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.528-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.528-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.562-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.563-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.563-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.592-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.592-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.592-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.629-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.630-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.630-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.654-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.655-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.655-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.682-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.683-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.683-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.718-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.719-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.719-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.742-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.743-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.743-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.770-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.771-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.771-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.800-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.801-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.801-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.834-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.834-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.834-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.857-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.858-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.858-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.880-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.881-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.881-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.910-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.911-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.911-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.946-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.946-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.946-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.969-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).GoTo < d2lod-bot/internal/combat.(*Fighter).move < d2lod-bot/internal/combat.(*Fighter).evade < d2lod-bot/internal/combat.(*Fighter).engage"
+time=2026-11-01T01:32:01.970-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:01.970-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:01.994-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.001-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.005-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.005-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.026-05:00 level=INFO msg="combat move failed" to="{X:278 Y:233}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.031-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.031-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.050-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.055-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.055-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.074-05:00 level=INFO msg="combat move failed" to="{X:278 Y:233}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.079-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.079-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.097-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.101-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.101-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.122-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.126-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.126-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.145-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.148-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.148-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.165-05:00 level=INFO msg="combat move failed" to="{X:278 Y:233}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.169-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.169-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.186-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.190-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.190-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.206-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.210-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.210-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.226-05:00 level=INFO msg="combat move failed" to="{X:278 Y:236}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.230-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.230-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.252-05:00 level=INFO msg="combat move failed" to="{X:280 Y:238}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.257-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.257-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.274-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.277-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.277-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.294-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.299-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.299-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.319-05:00 level=INFO msg="combat move failed" to="{X:278 Y:234}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.325-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.325-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.344-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.348-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.348-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.367-05:00 level=INFO msg="combat move failed" to="{X:278 Y:233}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.371-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.371-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.389-05:00 level=INFO msg="combat move failed" to="{X:278 Y:236}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.393-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.394-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.413-05:00 level=INFO msg="combat move failed" to="{X:278 Y:236}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.417-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.417-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.435-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.439-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.439-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.457-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.461-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.461-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.479-05:00 level=INFO msg="combat move failed" to="{X:278 Y:236}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.483-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.483-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.501-05:00 level=INFO msg="combat move failed" to="{X:278 Y:235}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.505-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.505-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.522-05:00 level=INFO msg="combat move failed" to="{X:279 Y:237}" err="combat: left the game to survive"
+time=2026-11-01T01:32:02.526-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.526-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.562-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:02.563-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:02.563-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=93.3 skip=true
+time=2026-11-01T01:32:02.563-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.589-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:02.590-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:02.590-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=93.3 skip=true
+time=2026-11-01T01:32:02.590-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.611-05:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-11-01T01:32:02.611-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:32:02.612-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.612-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.647-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:02.647-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:02.647-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=93.3 skip=true
+time=2026-11-01T01:32:02.647-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.670-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase"
+time=2026-11-01T01:32:02.671-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=0 arrival=false r=9
+time=2026-11-01T01:32:02.671-05:00 level=DEBUG msg="nav mouth exit" dest=3 exit="{X:255 Y:145}" dist=93.3 skip=true
+time=2026-11-01T01:32:02.671-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+time=2026-11-01T01:32:02.695-05:00 level=INFO msg="nav exit" to=3 gate="{X:255 Y:145}" push="{X:255 Y:145}" border=false
+time=2026-11-01T01:32:02.695-05:00 level=DEBUG msg="nav walk" callers="d2lod-bot/internal/nav.(*Navigator).ExitTo < d2lod-bot/internal/nav.(*Navigator).ToArea < main.(*lab).ToArea < d2lod-bot/internal/drill.fDen"
+time=2026-11-01T01:32:02.695-05:00 level=DEBUG msg="nav mouth check" pos="{X:286 Y:233}" level=9 exits=2 wantExit=3 arrival=false r=9
+time=2026-11-01T01:32:02.695-05:00 level=DEBUG msg="nav mouth exit" dest=13 exit="{X:135 Y:330}" dist=179.5 skip=true
+DRILL DW.m4 P23 FAIL 2 bounce(s) out of the cave, first in explore | intended: after the exit walk into the cave the character stays in it through idle, Clear and Explore (no return trigger fired) | observed: run1: 4 entries, 2 bounces (first in "explore"); trace: c0 enter: area 9 ok | c0 idle: area 9 ok | c0 clear: area 9 ok | c0 explore: area 9 ok | c0 clear: area 9 ok | c0 explore: area 9 ok | c1 enter: area 9 ok | c1 idle: area 9 ok | c1 clear: area 9 ok | c1 explore: area 3 error: nav: the level changed during the walk: 9 -> 3 | c2 enter: area 9 ok | c2 idle: area 9 ok | c2 clear: area 9 ok | c2 explore: area 3 error: nav: the level changed during the walk: 9 -> 3 | c3 enter: area 9 ok | c3 idle: area 9 ok | c3 clear: area 9 ok | c3 explore: area 9 ok | c3 clear: area 9 ok | c3 explore: area 9 ok; callers at the bounce: --- cycle 1 phase explore: / nav walk callers=d2lod-bot/internal/nav.(*Navigator).roam < d2lod-bot/internal/nav.(*Navigator).explore < d2lod-bot/internal/nav.(*Navigator).Explore < main.(*lab).DenPhase / nav mouth check pos={267 150} level=9 exits=2 wantExit=0 arrival=false r=9 / nav mouth exit dest=3 exit={255 145} dist=13 skip=true / nav mouth exit dest=13 exit={135 330} dist=223.2 skip=true / nav plan from={267 150} to={275 171} wps=7 partial=false cells=33 / nav click pos={267 150} wp={265 151} cur=0 of=7 / d2dworld: arrived in level 3: 3 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s) / --- cycle 2 phase explore: / nav walk caller
+END character Drilly life 0/2000 in town: false
+cheat verbs used (each ledgered with a reason): debug goto 3, debug stat 6 512000, debug stat 7 512000
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
