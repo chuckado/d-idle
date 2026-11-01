@@ -174,6 +174,8 @@ func run() int {
 		drills = drill.D26(l)
 	case "V": // DRILLS28: D28-0 Frozen Armor refresh with no monsters (armorcut step 0)
 		drills = drill.D28(l)
+	case "W": // DRILLS29: Frozen Armor recast with a pack held in melee at the due time (armorcut retry)
+		drills = drill.D29(l)
 	case "T": // DRILLS22: live proof of fixtelekey (Teleport capability in Act 2 legs)
 		drills = drill.D22(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)

@@ -163,6 +163,9 @@ func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius fl
 			return a
 		}
 		l.d11Lure(ctx)
+		if spawnHook != nil {
+			spawnHook(ctx)
+		}
 	}
 	a, _, _, _ := l.d11Within(ctx, radius)
 	if a < want && radius < 8 { // the rule's adjacency was never reached: carry on until the same number of monsters is within melee reach (8 subtiles)
