@@ -9,7 +9,7 @@
 
 > modsprep (docs, card in progress): boss-stat candidate prepared: draft v2 with the verifier's four edits (champion life range 1.1-2.1x, follow-on callers, area-level limit, siblings answer) and det state hashes on a patched d2d (equal in 10 of 14 scenarios, 4 differ only by the claimed life / minion level, 0 unexplained): READY, needs the user's go: docs/research/pr-mods-evidence-addendum.md
 
-> fixrecast (offline, card in progress): armors are recast by their real duration and the Frozen Armor state (120 s at level 1, was 150 s); live check open: docs/fixrecast.md
+> fixrecast (offline, card in progress): armors are recast by their real duration and the Frozen Armor state (120 s at level 1, was 150 s); clock path verified live by drills13 (recast at 114.0/126.0 s, armor absent in 0 samples); state path untested (d2d never fills Player.States); F1 stale tables cache disables the fix (card fixbuff), F2 Buff only on needBuff: docs/fixrecast.md
 
 > fixportalmelee (offline, card in progress): a town portal cast with 3+ adjacent attackers becomes a potion or a chicken (soak 2 death); live check: DRILLS11 1-adjacent PASS x3, 3-adjacent FAIL x3 = product finding F18 (crowdAdjacent=3 too small for live melee reach; fix on card fixcrowd, branch agent/fixcrowd); card stays open: docs/fixportalmelee.md
 > fixcrowd (done, verified live): DRILLS11 F18 fixed (melee reach knob combat.crowdAdjacent, default 8); DRILLS12: D-portalmelee PASS x3, control PASS x3; drill wait fixed (item 1.5): docs/fixcrowd.md
@@ -233,3 +233,5 @@ dethash2 (2026-11-01, card dethash2): second det run, 14 scenarios on 5 builds (
 - SKARMOR D1 harness: d2d test mode for Fight::buff_events vs tools/emu/sk_armor.py (then a freeze-rule PR candidate for Frozen Armor). docs/research/sk-armor-trace.md sections 6 and 8.
 - SKARMOR B1-B3 (bot findings): already being fixed by card FIXBUFF (agent/fixbuff, launched separately); B4-B6 need no fix (docs/research/sk-armor-trace.md section 7).
 - SKARMOR D1-D4 (d2d deviations: Frozen Armor striker effect, armor group stacking, Energy Shield at 0 mana and arithmetic): candidates for a later d2d test mode for buff_events (and an Energy Shield absorb differential); not ready for an upstream PR (docs/research/sk-armor-trace.md sections 6 and 8).
+
+> drills13 (live): sk-mana-trace D1 and D3 confirmed live on d2d (mana paid 1 tick after the command, action frame +8, a cut cast stays paid): PR candidate "pay at the action frame" has its live evidence; new items F1 (cache column stamp in data.Open / CacheCurrent), F2 (re-arm needBuff by the armor's recast time), F3 (Player.States empty on d2d): docs/probes/drills/README.md DRILLS13

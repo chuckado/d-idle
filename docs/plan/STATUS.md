@@ -95,6 +95,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 0c88fdc 11-01 01:16 `Merge agent/crfix157: CodeRabbit follow-up records for upstream PR 157 (docs only)` (crfix157)
 - 89d6a22 11-01 01:13 `Merge agent/drills13: DRILLS13 live results (Frozen Armor recast pass, mana timing M1)` (drills13)
 - 3f62842 11-01 01:11 `Merge agent/fixdenbounce: soak 2 den bounce evidence record (docs only)` (fixdenbounce)
 - 598d80e 11-01 01:06 `Merge agent/skarmor: sk-armor trace (decomp row 15), game-side oracle sk_armor.py` (skarmor)
@@ -104,5 +105,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6a6eabe 11-01 00:50 `Merge agent/sktele: Teleport trace (decomp row 16), sk_tele_spot.py` (sktele)
 - 015b95c 11-01 00:48 `Merge agent/feedtick2: feed tick cap 3800 with cut line` (feedtick2)
 - eafb8a1 11-01 00:45 `Merge agent/skmana: SK mana trace` (skmana)
-- 1842cce 11-01 00:42 `Merge agent/forkdbg: d2dctl SkillDebug client, debug verbs doc` (forkdbg)
 <!-- statusgen:end -->

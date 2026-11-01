@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- drills13 (live): live proof of fixrecast (Frozen Armor recast at 114 s / 126 s, real duration 120 s / 132 s, a recast refreshes the state) and the M1 mana trace (d2d pays 1 tick after the command, 7 ticks before the action frame, a cut cast is not refunded); finds a stale tables cache disables the fix and that Buff is only called on needBuff (agent/drills13).
 - skarmor (research): SKARMOR trace of the Sorceress armors and Energy Shield (docs/research/sk-armor-trace.md, tools/emu/sk_armor.py): Frozen Armor's striker effect follows the freeze rule in game.exe (V run), d2d stuns and chills every striker (D1); bot finding B1 (buffs only recast on needBuff edges).
 - drills12 (live): live proof of fixcrowd: the 3-adjacent portal drill passes at crowdAdjacent 8 (Safety chicken, scroll kept); the control still casts; the drill measures in the bot's own unit (agent/drills12).
 - fixlair (offline): Level data models Teleport 0/1/2 (lair = allowed on a clear line, towns refuse); comments corrected; no behaviour change, the Duriel script still walks (docs/fixlair.md, agent/fixlair).
