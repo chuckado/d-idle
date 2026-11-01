@@ -49,7 +49,7 @@ Off-data buckets (not 1.14d-reachable, reported, not counter-examples):
 - pr_guard: 0 FAIL 0 WARN against 8a45cfc9, against upstream/main, and for each of the three commits against its parent.
 - presubmit --quick with ruff on PATH: **1 FAIL**: `tools/emu/price_claims.py:41: B905 zip() without an explicit strict= parameter` (upstream's RUFF_RULES include B; tools/emu/pyproject.toml requires Python >= 3.12, so the pinned ruff 0.8.6 flags it too). Without ruff on PATH it reports 0 FAIL, 2 WARN (ruff missing, build skipped), which is how the author's run passed. Fix: `zip(m.price(case), normal, strict=True)` (both lists come from the same case).
 - test_game (data dir), test_rules, test_combat, test_protocol: rc 0 on 312272a7.
-- clang-tidy (the repo's .clang-tidy) and gcc `-Wshadow -Wunused -Wsign-compare -Wextra` over the TUs tools/tidy-pr-select.py picks for the touched files: see the line below.
+- clang-tidy (the repo's .clang-tidy) and gcc `-Wshadow -Wunused -Wsign-compare -Wextra` over the 135 TUs tools/tidy-pr-select.py picks for the touched files (rules.hpp reaches most of the tree): clang-tidy 28 findings in all, 0 on added lines (the rest in untouched upstream lines; the local clang-tidy is newer than CI's); gcc 0 findings at all.
 - One claim per commit (D9 e297025a, D10 312272a7, tooling c3bab73e). Ponytails: `npc_mult`'s (the sale's column) is accurate; repair_cost's new ponytail (a refused item with missing charges still adds its base in game.exe) matches FUN_0062efb0's mode 3 reading in the author's proof, not re-traced here (UNVERIFIED by this verifier).
 
 ## Limits
