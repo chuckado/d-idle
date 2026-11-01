@@ -220,7 +220,7 @@ func (l *lab) d11Lure(ctx context.Context) {
 }
 
 func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) (pi drill.PMInfo) {
-	pi.Where = fmt.Sprintf("Blood Moor, %d zombie", adj)
+	pi.Where = fmt.Sprintf("Blood Moor, zombies spawned (waiting for %d within 3 subtiles; the crowd rule starts at 8 within 8)", adj)
 	if err := l.d11Setup(ctx, r, 2, 300); err != nil {
 		pi.Err = err.Error()
 		return
@@ -230,7 +230,11 @@ func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) 
 		pi.Err = "scroll: " + err.Error()
 		return
 	}
-	if got := l.d11Spawn(ctx, r, adj, adj, 3); got < 0 {
+	n := adj
+	if adj >= 3 {
+		n = 2 * adj // more monsters, more chance that 3 are within 3 subtiles at one read
+	}
+	if got := l.d11Spawn(ctx, r, n, adj, 3); got < 0 {
 		pi.Err = "spawn failed"
 		return
 	}
