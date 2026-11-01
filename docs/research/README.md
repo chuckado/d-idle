@@ -39,6 +39,7 @@ One line per doc: what it shows, status, PR. Status: current = still the best so
 - [lutgholein-proof.md](lutgholein-proof.md) the two missing level-seed steps, traced, fixed, proven. current.
 - [pr-lut-gholein-draft.md](pr-lut-gholein-draft.md) and [pr-lut-gholein-evidence-pack.md](pr-lut-gholein-evidence-pack.md) the tool fix, NOT posted yet (waits for the user's go); rebased onto upstream main 4778a47c, 20/20 after. current.
 - [skill-damage-trace.md](skill-damage-trace.md) skill damage on the unit path, game.exe vs d2d (synergy gate, MulDiv shares). current. Proof [pr-skill-damage-proof.md](pr-skill-damage-proof.md), body [pr-skill-damage-draft.md](pr-skill-damage-draft.md), evidence [pr-skill-damage-evidence-pack.md](pr-skill-damage-evidence-pack.md). PR candidate READY, pending the user's go; not posted. current.
+- [sorc-skill-matrix.md](sorc-skill-matrix.md) every Sorceress skill, which ones the plan uses by act, what is verified (V/S/I/U matrix), ranked gap decomps (decomp-queue 14-23), the live skill-smoke drill and a per-act gate. current; proposals only (card skillinv).
 
 ## Upstream PRs: candidates, scan, posted record
 - [pr-bundle-draft.md](pr-bundle-draft.md) and [pr-bundle-evidence-pack.md](pr-bundle-evidence-pack.md) the combined PR (renderer get-hit frames + Lut Gholein tool fix, two commits), prepared on upstream afa0cdae, NOT opened. current.
