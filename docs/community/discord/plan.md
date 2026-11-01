@@ -15,7 +15,7 @@ Built and verified by the coordinator through the API (guild id 1566190902735675
 - Settings: verification 2 (Medium), explicit filter 2 (all members), notifications 1 (mentions only). Community enabled (rules `#rules`, updates channel the hidden `#discord-updates` in the hidden STAFF category).
 - AutoMod: four rules (presets, mention spam, spam content, invite links; owner exempt for invites), all block plus alert to `#discord-updates`.
 - Pinned by the bot: welcome text and FAQ in `#welcome`, rules in `#rules`, the three templates in `#bug-reports`, `#show-your-runs`, `#help`.
-- Feeds: three `d.idle feed` webhooks (`#progress`, `#announcements`, `#stream`), test posts ok; GitHub repo webhook (release, pull_request, workflow_run) to `#progress`, ping ok.
+- Feeds: three `d.idle feed` webhooks (`#progress`, `#announcements`, `#stream`), test posts ok; GitHub repo webhook (release, pull_request) to `#progress`, CI failures through the `notify-failure` job (feeds.md section f), ping ok.
 - Decision: the bot keeps Administrator (accepted risk, roles.md).
 
 Remaining steps for the user, in order:
