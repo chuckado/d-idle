@@ -69,3 +69,7 @@ internal/d2dsrc/source.go  fixbuff  fixbuff
 internal/d2dsrc/source_test.go  fixbuff  fixbuff
 internal/d2denv/env.go  fixbuff  fixbuff
 internal/data/extract.go  fixbuff  fixbuff
+docs/fixcastgap.md  fixcastgap  fixcastgap
+internal/combat/castgap.go  fixcastgap  fixcastgap
+internal/combat/castgap_test.go  fixcastgap  fixcastgap
+docs/knobs.md  fixcastgap  fixcastgap
