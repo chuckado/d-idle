@@ -2,9 +2,9 @@ package main
 
 import (
 	"context"
-	"math"
 	"errors"
 	"fmt"
+	"math"
 	"strings"
 	"time"
 
@@ -77,18 +77,23 @@ func (l *lab) d22state(ctx context.Context) (lvl int, x, y, mana float64, err er
 }
 
 // d22prep warps to the level, clears the natural monsters, gives life, level 18 and a big mana pool.
-func (l *lab) d22prep(ctx context.Context, r *drill.Run, level int, learn bool) error {
+func (l *lab) d22prep(ctx context.Context, r *drill.Run, level int, learn, warp bool) error {
 	if err := l.Goto(ctx, r, level); err != nil {
 		return err
 	}
 	// the arrival cell of `debug goto` varies between calls: the control fixes it, later legs warp back to it
-	if c, ok := d22start[level]; ok {
+	if !warp {
+	} else if c, ok := d22start[level]; ok {
 		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(c[0]), int(c[1])), "DRILLS22: the same start cell as the control leg"); err != nil {
 			return err
 		}
 		_ = l.Tick(ctx, 20)
 	} else if x, y, _, err := l.playerCell(ctx); err == nil {
 		d22start[level] = [2]float64{math.Round(x), math.Round(y)}
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(math.Round(x)), int(math.Round(y))), "DRILLS22: the control also warps, so both passes start after the same warp"); err != nil {
+			return err
+		}
+		_ = l.Tick(ctx, 20)
 	}
 	for _, v := range []struct{ verb, why string }{
 		{"debug kill", "DRILLS22: clear the level's natural monsters: the leg measures navigation, not a fight"},
@@ -193,12 +198,13 @@ func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome
 var d22legs = []struct {
 	Name     string
 	From, To int
-}{{"tile41-55", d22Rocky, 55}, {"tile42-56", d22Dry, 56}, {"border41-42", d22Rocky, d22Dry}}
+	Warp     bool
+}{{"tile41-55", d22Rocky, 55, true}, {"tile42-56", d22Dry, 56, true}, {"border41-42", d22Rocky, d22Dry, false}}
 
 func (l *lab) d22legsRun(ctx context.Context, r *drill.Run, learn bool, tag string) ([]d22leg, error) {
 	var out []d22leg
 	for _, lg := range d22legs {
-		if err := l.d22prep(ctx, r, lg.From, learn); err != nil {
+		if err := l.d22prep(ctx, r, lg.From, learn, lg.Warp); err != nil {
 			return out, err
 		}
 		l.d22wire(l.navr, true)
@@ -265,7 +271,7 @@ func (l *lab) d22A(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 }
 
 func (l *lab) d22B(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
-	if err := l.d22prep(ctx, r, d22Rocky, true); err != nil {
+	if err := l.d22prep(ctx, r, d22Rocky, true, false); err != nil {
 		return drill.Outcome{}, err
 	}
 	l.d22wire(l.navr, true)
@@ -314,7 +320,7 @@ func (l *lab) d22T(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	}
 	ok := !l.navr.TeleportOK(d22Lut) && l.navr.TeleportOK(d22Rocky) && !l.navr.TeleportOK(d22Lair)
 	// town leg: Lut Gholein to Rocky Waste with the wired navigator and Teleport learned (the earlier drills learnt it)
-	if err := l.d22prep(ctx, r, d22Lut, true); err != nil {
+	if err := l.d22prep(ctx, r, d22Lut, true, false); err != nil {
 		return drill.Outcome{}, err
 	}
 	g := l.d22run(ctx, l.navr, d22Rocky, 100*time.Second)
@@ -339,7 +345,7 @@ func (l *lab) d22T(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 }
 
 func (l *lab) d22R(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
-	if err := l.d22prep(ctx, r, d22Lut, true); err != nil {
+	if err := l.d22prep(ctx, r, d22Lut, true, false); err != nil {
 		return drill.Outcome{}, err
 	}
 	l.d22wire(l.navr, false)
