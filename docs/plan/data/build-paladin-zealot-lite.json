@@ -3,7 +3,7 @@
  "selector": "paladin-zealot-lite",
  "class": "paladin",
  "schema": "per-clvl allocation, same shape as build-paladin-normal30-v2.json. selector: the name `--build` and config levelerBuild use (a data table needs no Go entry, leveler.registerDataTables). Optional metadata: endgame_for, default_for_class (a class name; only fill a class that has none).",
- "note": "PALZEAL: the Zealot-lite table of docs/research/paladin-act1-recon.md section 3.2 (U, SME review open): Might, Sacrifice (Zeal prerequisite), Smite at clvl 4, Prayer 3, Zeal 4 at clvl 12 to 15, Defiance and Cleansing at 16 as Vigor prerequisites, Vigor 18 to 19; rows 20 to 30 are the v2 rows. Opt-in by name only, never a default. Den of Evil point counted on row 5 as in the v2 table.",
+ "note": "PALZEAL/PALSME: the Zealot-lite table of docs/research/paladin-act1-recon.md section 3.2 (U), revised by the SME review (docs/palsme.md): Might, Sacrifice (Zeal prerequisite), Smite at clvl 4, Prayer 1 at clvl 5 (a resting aura only), Zeal 4 at clvl 12 to 15, Defiance 1 and Holy Fire 2 (Might is its prerequisite) instead of Cleansing/Vigor, Might 10 by clvl 18; rows 20 to 30 are the v2 rows. Opt-in by name only, never a default. Den of Evil point counted on row 5 as in the v2 table.",
  "respec": {
   "enabled": false
  },
@@ -98,7 +98,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Prayer",
+     "skill": "Might",
      "points": 1
     }
    ]
@@ -137,7 +137,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Prayer",
+     "skill": "Might",
      "points": 1
     }
    ]
@@ -232,7 +232,7 @@
      "points": 1
     },
     {
-     "skill": "Cleansing",
+     "skill": "Holy Fire",
      "points": 1
     }
    ]
@@ -258,7 +258,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Vigor",
+     "skill": "Might",
      "points": 1
     }
    ]
@@ -271,7 +271,7 @@
    "energy": 0,
    "skills": [
     {
-     "skill": "Vigor",
+     "skill": "Holy Fire",
      "points": 1
     }
    ]

@@ -137,3 +137,5 @@ internal/resource/manaheavy_test.go  palfix  palfix
 internal/resource/sim_test.go  palfix  palfix
 docs/palfix.md  palfix  palfix
 openspec/changes/palfix/**  palfix  palfix
+docs/palsme.md  palsme  palsme
+openspec/changes/palsme/**  palsme  palsme
