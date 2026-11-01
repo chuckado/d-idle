@@ -29,6 +29,10 @@ func TestPlanForClassJoinsCombatAndLeveler(t *testing.T) {
 	if p := planForClass(d2.Barbarian, "", 1, nil); p.LevelerBuild == "" || p.Profile == "" {
 		t.Errorf("barbarian %+v", p)
 	}
+	// BUILDV3: an explicit table name selects the lightning combat line from the table's own data key
+	if p := planForClass(d2.Sorceress, "fallback-lightning-v3", 1, nil); p.LevelerBuild != "fallback-lightning-v3" || p.CombatBuild != combat.BuildLightning {
+		t.Errorf("v3 by name: %+v", p)
+	}
 	// BUILDV2: a fresh character gets the v2 tables, one that owns a skill the new table dropped keeps the old one
 	for _, c := range []struct {
 		class d2.Class

@@ -53,6 +53,9 @@ type Build struct {
 	Class string
 	// Hotkeys is the build's hotkey plan for the combat agent; the leveler never presses it.
 	Hotkeys []Hotkey
+	// Combat names the combat line the table is made for ("lightning"; "" = the class default). Data, so a new table
+	// selects its combat profile without a Go change (BUILDV3).
+	Combat string
 }
 
 // Hotkey is one entry of a build's hotkey plan: bind Skill to Key on Hand ("left" or "right") from clvl FromClvl
@@ -68,6 +71,7 @@ type Hotkey struct {
 type rawBuild struct {
 	Build   string   `json:"build"`
 	Class   string   `json:"class"`
+	Combat  string   `json:"combat"`
 	Hotkeys []Hotkey `json:"hotkeys"`
 	Rows    []struct {
 		Clvl      int `json:"clvl"`
@@ -95,7 +99,7 @@ func ParseBuild(b []byte) (*Build, error) {
 	if err := json.Unmarshal(b, &rb); err != nil {
 		return nil, err
 	}
-	out := &Build{Name: rb.Build, Class: strings.ToLower(rb.Class), Hotkeys: rb.Hotkeys}
+	out := &Build{Name: rb.Build, Class: strings.ToLower(rb.Class), Hotkeys: rb.Hotkeys, Combat: rb.Combat}
 	if out.Class == "" {
 		out.Class = "sorceress"
 	}
@@ -131,6 +135,8 @@ var buildFiles = map[string]string{
 	"fallback": "build-fallback-lightning.json",
 	// BUILDV2: tables for fresh characters (SelectBuild); the names above stay what existing characters run.
 	FallbackV2: "build-fallback-lightning-v2.json",
+	// BUILDV3: SME rows (Lightning at 12, Chain Lightning from 19), opt-in by name until a live soak; docs/buildv3.md.
+	FallbackV3: "build-fallback-lightning-v3.json",
 	PaladinV2:  "build-paladin-normal30-v2.json",
 	// Paladin, Normal to clvl 30 (docs/plan/data/build-paladin-normal30.json; sources and tags inside the file).
 	"paladin-normal30": "build-paladin-normal30.json",
@@ -151,6 +157,15 @@ var buildFiles = map[string]string{
 	"druid_tornado_endgame90":          "build-druid_tornado_endgame90.json",
 	"assassin_sentry_endgame90":        "build-assassin_sentry_endgame90.json",
 	"barbarian_warcry_endgame90":       "build-barbarian_warcry_endgame90.json",
+}
+
+// TableCombat is the combat line a table declares in its data ("combat" key), "" for none or an unknown table.
+func TableCombat(name string) string {
+	bd, err := LoadBuild(name, "")
+	if err != nil {
+		return ""
+	}
+	return bd.Combat
 }
 
 // EndgameAlias is the build selector ("--build endgame", config levelerBuild) that means "the endgame table of the
@@ -186,6 +201,7 @@ func ResolveBuild(name, class string) string {
 // BUILDV2 table names.
 const (
 	FallbackV2 = "fallback-lightning-v2"
+	FallbackV3 = "fallback-lightning-v3"
 	PaladinV2  = "paladin-normal30-v2"
 )
 

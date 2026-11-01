@@ -27,7 +27,8 @@ func TestClassDataLoads(t *testing.T) {
 		seen[p.Class] = true
 		last := 1 << 20
 		for _, b := range p.Bands {
-			if b.MinLevel > last {
+			// a band gated by a learned skill (requires) may sit above lower-level bands: the skill, not the level, gates it
+			if b.MinLevel > last && b.Requires == "" {
 				t.Errorf("%s: bands must be ordered by descending minLevel", p.Class)
 			}
 			last = b.MinLevel
