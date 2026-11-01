@@ -18,6 +18,7 @@ type CombatTuning struct {
 	CrowdN         int // hostiles within 8 subtiles that make a crowd (0 = rule off)
 	CrowdPortalPct int // in a crowd: open a town portal at or below this life % (a scroll exists, fewer than 3 melee adjacent)
 	CrowdDrinkPct  int // in a crowd: drink a healing potion below this life % (when the portal cannot be cast)
+	CrowdAdjacent  int // subtiles: a hostile this close is in melee reach and counts as adjacent (crowd rule, melee cast guard)
 	CrowdAbandonN  int // hostiles within 8 subtiles on a walk: abandon the walk, retreat 20+ subtiles, then portal
 
 	// Potion timing.
@@ -72,7 +73,7 @@ type CombatTuning struct {
 func DefaultCombatTuning() CombatTuning {
 	return CombatTuning{
 		DrinkLifePct: 55, DrinkRejuvPct: 35, DrinkRejuvBossPct: 50, ChampionEarlyPct: 10, ChickenPct: 25, ChickenHellPct: 30, DrinkManaPct: 25, TownPotionMin: 2,
-		CrowdN: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
+		CrowdN: 8, CrowdAdjacent: 8, CrowdPortalPct: 70, CrowdDrinkPct: 65, CrowdAbandonN: 15,
 		PotionGapMs: 1000, RejuvGapMs: 300, ReactionMs: 120, PollMs: 60,
 		TargetQuality: 100, RangeMargin: 3, ClearRadius: 40, FightRadius: 22, MaxTargetSec: 45, NoProgressSec: 12, ClearMaxSec: 180,
 		CastGapMs: 650, LowManaWaitMs: 700, StaticCasts: 4, StaticCastsBR: 0, StaticFloorNorm: 25, StaticFloorNM: 33, StaticFloorHell: 50, NovaManaFloor: 25,
@@ -98,6 +99,7 @@ func combatKnobs() []Knob {
 		k("crowdN", "Crowd size", "count", "Hostiles within 8 subtiles that make a crowd: below it the normal drink and chicken rules apply alone. 0 turns the crowd rule off.", float64(d.CrowdN), 0, 20, false),
 		k("crowdPortalPct", "Crowd portal at life", "%", "In a crowd, open a town portal at or below this life percent when a scroll exists and fewer than 3 monsters are adjacent (a 2 s cast fails when surrounded).", float64(d.CrowdPortalPct), 40, 90, true),
 		k("crowdDrinkPct", "Crowd drink below life", "%", "In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55.", float64(d.CrowdDrinkPct), 40, 85, true),
+		k("crowdAdjacent", "Melee reach for adjacent", "subtiles", "A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters.", float64(d.CrowdAdjacent), 3, 12, false),
 		k("crowdAbandonN", "Crowd abandon size", "count", "Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off.", float64(d.CrowdAbandonN), 0, 30, false),
 		k("potionGapMs", "Potion gap", "ms", "Minimum time between healing or mana potions.", float64(d.PotionGapMs), 900, 3000, false),
 		k("rejuvGapMs", "Rejuvenation gap", "ms", "Minimum time between rejuvenation potions.", float64(d.RejuvGapMs), 250, 1500, false),

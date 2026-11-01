@@ -96,7 +96,7 @@ func (f *Fighter) resInput(snap *d2.Snapshot, hs []Target, pack int, skills []re
 	for _, h := range hs {
 		if h.Dist <= fr {
 			in.Hostiles++
-			if h.Dist <= crowdAdjacent {
+			if h.Dist <= float64(f.tune().CrowdAdjacent) {
 				in.Adjacent++
 			}
 			if h.Champion && !h.Boss {

@@ -49,8 +49,11 @@ func TestCrowdDecide(t *testing.T) {
 }
 
 // Through the Fighter: nine monsters 5 to 7 subtiles away at 60% life: portal; the same life with two monsters: nothing.
+// The reach is set to 3 so these monsters are a crowd but not "surrounded" (at the default reach 8 they would be, which
+// TestSafetyMeleeCutCastDrillGeometry covers).
 func TestSafetyCrowdFromSnapshot(t *testing.T) {
 	h := newHarness(t)
+	h.f.e.Tune.Combat.CrowdAdjacent = 3
 	h.s.stock(itHP1, 0, 3)
 	for i := 0; i < 9; i++ {
 		h.s.addMon(uint32(10+i), clsFallen, 105+float64(i%3), 98+float64(i%5), 30, 5, 5)
