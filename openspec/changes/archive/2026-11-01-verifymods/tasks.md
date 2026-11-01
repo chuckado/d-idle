@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifymods
-status: in-progress
+status: archived
 agent: verifymods
 branch: agent/verifymods
 worktree: ~/code/d2lod-wt/verifymods
@@ -27,4 +27,5 @@ gates:
 - [x] verifier section, bundle-queue verdict, BACKLOG line
 - [ ] det state hashes (need a d2d slot: not run by brief)
 
-result: see docs/research/pr-mods-proof.md "Independent verifier (VERIFYMODS)". Offline only, not verified live.
+merge: "77e5bca"
+result: "see docs/research/pr-mods-proof.md Independent verifier (VERIFYMODS); offline only, not verified live"

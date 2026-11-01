@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfix156
-status: in-progress
+status: archived
 agent: CRFIX156
 branch: agent/crfix156
 worktree: ~/code/d2lod-wt/crfix156
@@ -14,6 +14,7 @@ owns:
 exclusive: []
 gates:
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
+merge: "071008f"
 result: "CodeRabbit on upstream PR #156: finding 1 (merc.cpp) INVALID, answered in thread; finding 2 (walk_velocity.py compare) VALID, fixed and pushed as a fast-forward (3f418788), answered in thread"
 ```
 

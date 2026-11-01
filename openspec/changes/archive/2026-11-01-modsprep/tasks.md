@@ -2,7 +2,7 @@
 
 ```yaml
 change: modsprep
-status: in-progress
+status: archived
 agent: modsprep
 branch: agent/modsprep
 worktree: ~/code/d2lod-wt/modsprep
@@ -13,6 +13,7 @@ owns:
 exclusive: []
 gates:
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
+merge: "4bcbd36"
 result: "draft v2 + addendum; det hashes: 10 of 14 scenarios equal, 4 differ only by the claimed unique/champion life and minion level, 0 unexplained; READY. Not verified live (no game.exe)."
 live: "not applicable: docs and a headless d2d run, no game.exe"
 ```
