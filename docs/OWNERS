@@ -103,3 +103,9 @@ docs/armorcut.md  armorcut  armorcut
 internal/combat/fighter.go  armorcut  armorcut
 internal/combat/armorcut_test.go  armorcut  armorcut
 openspec/changes/armorcut/**  armorcut  armorcut
+tools/contrib/chunker.py  chunker  chunker
+tools/contrib/tests/test_chunker.py  chunker  chunker
+docs/process/chunker.md  chunker  chunker
+docs/community/groom-proposal.md  chunker  chunker
+docs/community/withdrawn.tsv  chunker  chunker
+openspec/changes/chunker/**  chunker  chunker
