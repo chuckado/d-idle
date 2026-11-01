@@ -100,19 +100,3 @@ cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
 
-docs/contributing/**  communitywork  communitywork
-docs/community/open-work.md  communitywork  communitywork
-docs/community/work-board.md  communitywork  communitywork
-docs/community/discord/work-channels.md  communitywork  communitywork
-docs/community/discord/server-work.json  communitywork  communitywork
-docs/process/outside-prs.md  communitywork  communitywork
-.github/ISSUE_TEMPLATE/**  communitywork  communitywork
-.github/pull_request_template.md  communitywork  communitywork
-.coderabbit.yaml  communitywork  communitywork
-tools/contrib/**  communitywork  communitywork
-tools/discord/board_feed.py  communitywork  communitywork
-tools/discord/tests/test_board_feed.py  communitywork  communitywork
-tools/discord/tests/test_work_channels.py  communitywork  communitywork
-tools/ci/scripts.sh  communitywork  communitywork
-README.md  communitywork  communitywork
-openspec/changes/communitywork/**  communitywork  communitywork
