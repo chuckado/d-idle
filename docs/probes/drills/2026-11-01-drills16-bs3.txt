@@ -1,0 +1,12 @@
+labrun: synced to the worker host in 0s; running: bash -lc 'D2D_AGENT=drills16 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-debug-skills tools/agentrun.sh drills16 --ttl 900 -- tools/d2dslot.sh run -n 1 -t 800 -- /tmp/d16-d2drill-r -group R -only R-bs3 -repeat 1 -label drills16-bs3'
+d2dslot: got slot 1
+time=2026-11-01T01:57:18.356-04:00 level=WARN msg="d2d channel not answering: d2d process pid 3482297 still running; socket file is gone (stat <home>/d2d-lab/slots/1/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/1/d2d.sock: dial unix <home>/d2d-lab/slots/1/d2d.sock: connect: no such file or directory"
+DRILL R-bs3 P10 PASS 2 casts from inside the fight at game s [115.1 229.2], armor never absent in 66 samples | intended: a monster that cannot die keeps the bot fighting for 300 s; the armor is recast from the fight loop before the 120 s expiry, armor absent in 0 samples | observed: 300 s simulated in 66 Clear rounds; casts at game s [0.0 115.1 229.2] (inside a Clear round: [115.1 229.2]); 66 samples (longest gap 6080 ms), armor absent in 0 (0 ms); bit 10 set in 66 of the up samples, clear in 0; monster #24 Zombie maxlife 9 -> 1000000 life 9 -> 1000000 dmg 0-0 | log: manual: combat buff skill=Frozen Armor ; t=115120 ms: combat buff skill=Frozen Armor ; t=229160 ms: combat buff skill=Frozen Armor
+END character Drilly life 100/100 in town: true
+
+drill     prim  verdict  det  reason
+R-bs3     P10   PASS     -    2 casts from inside the fight at game s [115.1 229.2], armor never absent in 66 samples
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug kill, debug points 40 1, debug spawn zombie1 1 near, debug stat 6 25600, debug stat 7 25600
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T01:57:22.766-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: the worker host exited 0 after 6s

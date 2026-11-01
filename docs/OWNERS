@@ -80,3 +80,4 @@ internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
+openspec/changes/drills16/**  drills16  drills16

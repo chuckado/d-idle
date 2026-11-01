@@ -158,8 +158,8 @@ func run() int {
 		drills = drill.D11(l)
 	case "Q": // DRILLS13: fixrecast Frozen Armor proof, M1 mana timing
 		drills = drill.D13(l)
-	case "R": // DRILLS15: first live skill-smoke drills (teleport, mana, missile, armor traces)
-		drills = drill.D15(l)
+	case "R": // DRILLS15 (skill-smoke traces) and DRILLS16 (fixbuff live proof): one group, drill names R-bs* / D15-* tell them apart
+		drills = append(drill.D15(l), drill.D16(l)...)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
