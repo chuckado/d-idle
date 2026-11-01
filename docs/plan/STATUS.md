@@ -45,6 +45,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
+| [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -83,6 +84,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmanamodel: go test -p 1 ./internal/resource ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
+- change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -101,6 +104,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- cffe57c 11-01 08:51 `Merge origin/main into fixskilllvl` (fixskilllvl)
 - 2b23d81 11-01 08:38 `Merge agent/skpass: SKPASS passives trace (decomp row 23)` (skpass)
 - d8e48e0 11-01 02:22 `Merge agent/nexthitfix: nexthit v2 end-frame fix addendum, fork lab-nexthit2` (nexthitfix)
 - 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
@@ -110,5 +114,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4ca38ec 11-01 01:40 `Merge agent/readmedocs: honest README capabilities and running docs` (readmedocs)
 - e64c13a 11-01 01:36 `Merge agent/drills17: DRILLS17 live result for fixmouth2 (FAIL, bounces remain)` (drills17)
 - 34559ca 11-01 01:36 `readmedocs: coordinator review fixes, merge origin/main` (readmedocs)
-- 2527484 11-01 01:31 `Merge agent/forknext: private fork carries the NextHit fix (lab-nexthit), docs only` (forknext)
 <!-- statusgen:end -->
