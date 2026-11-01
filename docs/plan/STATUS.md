@@ -94,14 +94,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 4bcbd36 11-01 00:25 `Merge agent/modsprep` (modsprep)
+- 071008f 11-01 00:25 `Merge agent/crfix156` (crfix156)
+- 77e5bca 11-01 00:25 `Merge agent/verifymods` (verifymods)
 - 2295f2b 11-01 00:20 `Merge agent/drills11: drills11 harness and live results` (drills11)
 - 7f52c58 11-01 00:15 `Merge agent/skmiss: sk missile trace` (skmiss)
 - 50af070 11-01 00:12 `Merge agent/feedtick: feed.py tick subcommand` (feedtick)
 - 599c0fc 11-01 00:08 `Merge agent/brandapply: apply brand to README, d2dview, d2bot banner` (brandapply)
 - bbf46c8 11-01 00:08 `Merge agent/brandfinal: final brand assets` (brandfinal)
 - ba5e848 11-01 00:04 `Merge agent/fixstatic: static field prose fix, table= in minute line and soak aggregate` (fixstatic)
-- 3ae26fb 11-01 00:00 `Merge brandfinal docs update into brandapply` (brandapply)
-- 770dc5a 10-31 23:55 `Merge origin/main into brandfinal` (brandfinal)
-- 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
-- 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
+- ff5d59f 11-01 00:01 `Merge origin/main into agent/verifymods` (verifymods)
 <!-- statusgen:end -->
