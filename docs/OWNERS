@@ -89,4 +89,3 @@ openspec/changes/verifyarmorhit/**  verifyarmorhit  verifyarmorhit
 tools/emu/verify_armor_hit.py  verifyarmorhit  verifyarmorhit
 tools/emu/test_verify_armor_hit.cpp  verifyarmorhit  verifyarmorhit
 docs/research/pr-armorhit-verifier.md  verifyarmorhit  verifyarmorhit
-docs/research/pr-bundle-queue.md  verifyarmorhit  verifyarmorhit

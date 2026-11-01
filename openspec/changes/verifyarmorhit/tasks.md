@@ -12,7 +12,6 @@ owns:
   - tools/emu/verify_armor_hit.py
   - tools/emu/test_verify_armor_hit.cpp
   - docs/research/pr-armorhit-verifier.md
-  - docs/research/pr-bundle-queue.md
 exclusive: []
 gates:
   - "verify_armor_hit.py vs test_verify_armor_hit on >= 100k cases: base > 0, head 0 or classified; end frames compared"
