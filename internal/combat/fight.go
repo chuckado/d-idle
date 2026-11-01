@@ -723,7 +723,7 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 // castReady keeps the minimum gap between two casts without blocking: the fight loop ticks in between, so
 // survival checks never wait for a cast gap.
 func (f *Fighter) castReady() bool {
-	return f.now().Sub(f.lastCast) >= ms(f.tune().CastGapMs)
+	return f.now().Sub(f.lastCast) >= f.castGap()
 }
 
 func (f *Fighter) staticOpener(p *d2.Player, tg *Target, tr *track) (SkillSpec, bool) {

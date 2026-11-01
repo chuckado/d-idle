@@ -58,6 +58,8 @@ type sim struct {
 	noTP        bool  // no town portal scroll in the pack
 	events      []goals.Event
 	ranged      bool
+	clvl        int  // character level in the snapshot (0: 1)
+	instantCast bool // CastAt takes no clock time: the command is the start of the cast
 	skills      []d2.Skill
 	keysPressed []string
 	castKeys    []string // keys of CastAt, in order
@@ -123,7 +125,7 @@ func (s *sim) snapshot() (*d2.Snapshot, error) {
 	}
 	snap := &d2.Snapshot{
 		State: d2.StateInGame,
-		Player: &d2.Player{ID: 1, X: int(math.Round(s.px)), Y: int(math.Round(s.py)), Area: 2, Level: 1, Mode: mode,
+		Player: &d2.Player{ID: 1, X: int(math.Round(s.px)), Y: int(math.Round(s.py)), Area: 2, Level: max(s.clvl, 1), Mode: mode,
 			Life: int(math.Round(s.life)), MaxLife: int(s.maxL), Mana: int(s.mana), MaxMana: int(s.maxM), Exp: s.exp, Skills: s.skills,
 			RightSkill: 36, LeftSkill: s.left_},
 		Inventory: &d2.Inventory{Items: append([]d2.Unit(nil), s.belt...)},
@@ -209,7 +211,9 @@ func (s *sim) Key(name string) error {
 func (s *sim) CastAt(key string, w input.Point) error {
 	s.mu.Lock()
 	defer s.mu.Unlock()
-	s.advance(300 * time.Millisecond) // cast animation
+	if !s.instantCast {
+		s.advance(300 * time.Millisecond) // cast animation
+	}
 	s.castKeys = append(s.castKeys, key)
 	if s.mana < s.castCost || s.dead {
 		return nil
@@ -269,7 +273,7 @@ type harness struct {
 
 // oldCastGap pins the 450 ms cast gap the simulator's timing fixtures were written against (the default is 650 since
 // FIXMISSILE, above the 560 ms early cast); the scenarios that pin it test other logic than the gap.
-func oldCastGap(tu *env.Tuning) { tu.Combat.CastGapMs = 450 }
+func oldCastGap(tu *env.Tuning) { tu.Combat.CastGapMs, tu.Combat.CastPerSkill = 450, 0 }
 
 func newHarness(t testing.TB, mods ...func(*env.Tuning)) *harness {
 	if t != nil {
@@ -572,9 +576,9 @@ func TestHandicapSlowerNotSuicidal(t *testing.T) {
 			func(tu *env.Tuning) { tu.Combat.PollMs = 400 },
 		}},
 		{"castGapMs", []func(*env.Tuning){
-			func(tu *env.Tuning) { tu.Combat.CastGapMs = 250 },
-			func(tu *env.Tuning) { tu.Combat.CastGapMs = 600 },
-			func(tu *env.Tuning) { tu.Combat.CastGapMs = 1200 },
+			func(tu *env.Tuning) { tu.Combat.CastGapMs, tu.Combat.CastPerSkill = 250, 0 },
+			func(tu *env.Tuning) { tu.Combat.CastGapMs, tu.Combat.CastPerSkill = 600, 0 },
+			func(tu *env.Tuning) { tu.Combat.CastGapMs, tu.Combat.CastPerSkill = 1200, 0 },
 		}},
 		{"potionGapMs", []func(*env.Tuning){
 			func(tu *env.Tuning) { tu.Combat.PotionGapMs = 900 },
