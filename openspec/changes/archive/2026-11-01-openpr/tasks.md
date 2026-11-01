@@ -3,7 +3,7 @@
 ```yaml
 change: openpr
 status: archived
-merge: MERGEHASH
+merge: 776af38
 agent: openpr
 branch: agent/openpr
 worktree: ~/code/d2lod-wt/openpr

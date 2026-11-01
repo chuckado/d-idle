@@ -118,6 +118,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 776af38 11-01 13:22 `Merge agent/openpr: PRs #159 and #160 opened upstream, docs` (openpr)
 - 8509a1b 11-01 13:16 `Merge agent/palprobe: offline Paladin probe and blocking class seams (profile id, per-class prefs, class row errors)` (palprobe)
 - b960937 11-01 13:10 `Merge agent/forkrebase: private fork stack rebuilt on upstream as lab2-*` (forkrebase)
 - 1fccb88 11-01 13:03 `Merge agent/skmeleewire: wire melee blow and foe into the resource decision input` (skmeleewire)
@@ -127,5 +128,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 19c1daf 11-01 12:44 `Merge agent/upstreamsync: upstream merges recorded, mergeability table, fork rebase plan` (upstreamsync)
 - 370d5c2 11-01 12:40 `Merge agent/skmelee2: melee blow compared on a real d2d build` (skmelee2)
 - 63a8fbb 11-01 12:34 `Merge agent/bundledet: two-commit squash, determinism doc, body update` (bundledet)
-- 8be58bb 11-01 12:34 `Merge agent/bundlearmor: combined armor+resume upstream PR body (held)` (bundlearmor)
 <!-- statusgen:end -->
