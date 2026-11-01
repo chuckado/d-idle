@@ -107,6 +107,8 @@ type Navigator struct {
 	hard      []blocked    // cells the planner must not cross for a while (stuckmem.go)
 	spots     []*stuckSpot // recent stalls (stuckmem.go)
 	walkSeq   int
+	walkLevel int  // level of the last walk's first observation (0: none yet)
+	arrival   bool // a warp brought us here and no walk has consulted mouthStep since (FIXMOUTH)
 	escaping  bool
 	teleBad   map[[2]int]int  // hop cells where nothing happened
 	teleFails int             // consecutive explore hops that did not move

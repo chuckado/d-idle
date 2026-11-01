@@ -66,3 +66,37 @@ func TestSkippedMoveAdvancesTime(t *testing.T) {
 		t.Fatalf("10 skipped moves advanced only %v", got)
 	}
 }
+
+// pointMouth is a mouth guard that only covers points within 9 subtiles of (255,145), like nav.NearMouth after a warp arrival.
+type pointMouth struct {
+	Mover
+	walks []input.Point
+}
+
+func (m *pointMouth) NearMouth(p input.Point) bool {
+	dx, dy := p.X-255, p.Y-145
+	return dx*dx+dy*dy <= 81
+}
+func (m *pointMouth) GoTo(ctx context.Context, p input.Point) error {
+	m.walks = append(m.walks, p)
+	return m.Mover.GoTo(ctx, p)
+}
+
+// FIXMOUTH (Cave Level 1): the Clear approach toward a monster beside the mouth walked and fired the return trigger.
+func TestMoveSkipsTargetsInsideAMouthOnly(t *testing.T) {
+	h := newHarness(t)
+	mv := &pointMouth{Mover: h.s}
+	h.f.mv = mv
+	if err := h.f.move(context.Background(), input.Point{X: 258, Y: 153}); err != nil {
+		t.Fatal(err)
+	}
+	if len(mv.walks) != 0 {
+		t.Fatalf("walked to a point in the mouth: %v", mv.walks)
+	}
+	if err := h.f.move(context.Background(), input.Point{X: 90, Y: 90}); err != nil {
+		t.Fatal(err)
+	}
+	if len(mv.walks) != 1 {
+		t.Fatalf("a point elsewhere must be walked to: %v", mv.walks)
+	}
+}

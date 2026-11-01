@@ -73,6 +73,11 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 	w.anchorTime = n.clk.Now()
 	first := true
 	startLevel := 0
+	defer func() {
+		if startLevel != 0 {
+			n.walkLevel = startLevel // a walk that ended in another level (trigger fired) leaves the old one here
+		}
+	}()
 	for {
 		if err := ctx.Err(); err != nil {
 			return err
@@ -91,6 +96,10 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 		}
 		if startLevel == 0 {
 			startLevel = o.level
+			if n.walkLevel != 0 && n.walkLevel != o.level {
+				n.arrival = true // the first walk in a level reached by a warp
+			}
+			n.walkLevel = o.level
 		} else if o.level != startLevel {
 			return fmt.Errorf("%w: %d -> %d", ErrLevelChanged, startLevel, o.level) // a tile fired early; coordinates of the old level mean nothing now
 		}
@@ -99,7 +108,9 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 		}
 		if !n.inMouth && mouthSeq != n.walkSeq {
 			mouthSeq = n.walkSeq
-			if away, ok := n.mouthStep(o); ok {
+			away, ok := n.mouthStep(o)
+			n.arrival = false // consulted once: later walks use the plain radius
+			if ok {
 				n.log.Info("nav: stepping away from a cave mouth", "from", o.pos, "to", away)
 				n.inMouth = true
 				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return away, 3, nil }, walkOpts{timeout: 10 * time.Second})
@@ -583,9 +594,16 @@ func (n *Navigator) retreat(f *Field, pos input.Point, pack []d2.Unit, w *walkSt
 // trigger area, which reaches about 2 tiles to the sides it faces, and any step inside fires it again (the bot then
 // shuttled between the Blood Moor and the Den at 10 Hz). Walking straight away from the warp's position was safe on both
 // seeds probed, so a walk that starts within mouthR subtiles of an exit it does not want first goes mouthAway subtiles that way.
+//
+// FIXMOUTH: the walk that starts right after a warp arrival uses mouthArrivalR instead. V (DRILLS14 logs, Den of Evil 4 of 4):
+// the arrival (40,145) is 11.2 subtiles from the listed exit (35,135), so mouthR 9 skipped the step-away and the first roam
+// click fired the trigger 12 ms later; Cave Level 1 arrives at the same (+5,+10) offset. Positions 16.2 to 18 from the exit
+// did not fire (Cave Level 1 log). 16 covers the offset with a margin and stays UNVERIFIED as a trigger bound. A global
+// mouthR of 14 was rejected: it would push every walk that passes within 14 subtiles of an exit and widen NearMouth for fights.
 const (
-	mouthR    = 9.0
-	mouthAway = 20.0
+	mouthR        = 9.0
+	mouthArrivalR = 16.0
+	mouthAway     = 20.0
 )
 
 // SetMouthGuard turns NearMouth on. d2d only (arrival inside a warp's trigger area is a d2d behavior, docs/d2d-loop.md);
@@ -597,7 +615,7 @@ func (n *Navigator) SetMouthGuard(on bool) { n.mouthGuard = on }
 // the bounce put the character back inside the trigger and the fight became a border shuttle (KILLFIX: Fallen packs
 // at the Den mouth, 8 ms between "approach" and "Entered Den of Evil"; penalizeExits skips exits near the goal).
 func (n *Navigator) NearMouth(p input.Point) bool {
-	if !(n.mouthGuard || n.avoiding()) || n.w == nil {
+	if !(n.mouthGuard || n.avoiding() || n.arrival) || n.w == nil {
 		return false
 	}
 	lm := n.w.Current()
@@ -616,13 +634,17 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 }
 
 func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
+	r := mouthR
+	if n.arrival {
+		r = mouthArrivalR
+	}
 	for _, e := range o.lm.Exits {
 		if e.Dest == n.wantExit {
 			continue
 		}
 		dx, dy := float64(o.pos.X-e.Pos.X), float64(o.pos.Y-e.Pos.Y)
 		d := math.Hypot(dx, dy)
-		if d > mouthR || d < 0.5 {
+		if d > r || d < 0.5 {
 			continue
 		}
 		// FIXNAV: after a bounce (the step fired a trigger) the next attempt from this exit turns the direction: the
