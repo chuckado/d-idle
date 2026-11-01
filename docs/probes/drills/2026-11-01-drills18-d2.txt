@@ -1,0 +1,23 @@
+      1 DRILL D2.a P10 PASS verb returned after 32 ticks with one portal pair and one source spent (tome 2->2, scrolls 1->0) | intended: from the field (area 2) the verb opens one portal object next to the player, sends one right click and spends exactly one source | observed: area 2; verb ok: 1 rig
+      1 DRILL D2.t P10 PASS entered the open portal, arrived in town, no second scroll | intended: d2dTown.ToTown with the portal open next to the player enters it: area 1 with no further scroll spent | observed: scrolls 3 -> 2; ToTown ok after 5 ticks, 0 right clicks through the spy (the town packa
+      1 DRILL D2.a2 P10 PASS observed [8 8 8] ticks vs the trace's about 7 | intended: d2d casts: object 59 about 7 ticks (280 ms, sorceress FCR 0) after the right click (docs/research/town-portal-trace.md); game.exe would be 0 | observed: ticks from click to object, 3 casts: [8 8 8]; scrolls left 0
+      1 DRILL D2.b P10 PASS no portal source: no click, no key, error at tick 0 | intended: tome at 0 charges and no scroll: the verb finds no source, sends no click and no key, returns the no-portal error with no ticks spent (fix-portal F4) | observed: tome 0, scrolls 0; verb error "combat: no town
+      1 DRILL D2.c P10 PASS scroll used, empty tome never clicked | intended: tome at 0 plus one scroll: the verb skips the tome, casts the scroll once, portal object near the player, tome untouched | observed: before: tome 0, scrolls 1; verb ok, 1 right click, 27 ticks; after: tome 0, scrolls 0, po
+      1 DRILL D2.g P10 PASS EnterPortal arrives in town | intended: the d2dctl EnterPortal verb (walk to the portal, click its sprite) takes the open portal: area 1 | observed: area 2 -> 1, verb error <nil>, portal objects in town 1 | runs: 2, identical
+      1 DRILL D2.d P10 PASS 2 clicks, 1 scrolls left, one portal | intended: the click is dropped (source unchanged), the retry opens the portal with the same scroll | observed: verb: ok, 2 right clicks, 102 ticks; scrolls left 1, portal objects near 1 any 1; lines: d2d portal: click without a porta
+      1 DRILL D2.d3 P10 PASS 2 clicks, 0 scrolls left, one portal | intended: the hit cuts the cast (scroll spent, no portal), the retry opens the portal with the next scroll | observed: verb: ok, 2 right clicks, 105 ticks; scrolls left 0, portal objects near 1 any 1; lines: d2d portal: click withou
+      1 DRILL D2.e P10 PASS waited: click at +34 vs idle +22 ticks, one click, portal open | intended: player in cast mode when the verb is called: it waits until idle, then clicks once and the portal opens (fix-portal2); the click tick is later than the idle baseline | observed: player mode at call
+      1 DRILL D2.h P10 PASS second cast closed the first: one object, 48 subtiles away | intended: cast, walk 12 cells, cast again with the first portal still open: exactly one portal object in the level, at the new place, both casts spent a scroll | observed: cast1 ok, objects near 1 any 1 at [[138
+      1 DRILL D2.f P11 PASS round trip through the portals, arrival 4 subtiles from the origin | intended: after ToTown, the bot's BackToField returns by the town portal into area 2 within 25 subtiles of the origin | observed: origin (140,240); ToTown ok -> area 1; BackToField ok -> area 2 at (142,2
+      1 END character Drilly life 34/40 in town: true
+      1 D2.a      P10   PASS     same verb returned after 32 ticks with one portal pair and one source spent (tome 2->2, scrolls 1->0)
+      1 D2.t      P10   PASS     same entered the open portal, arrived in town, no second scroll
+      1 D2.a2     P10   PASS     same observed [8 8 8] ticks vs the trace's about 7
+      1 D2.b      P10   PASS     same no portal source: no click, no key, error at tick 0
+      1 D2.c      P10   PASS     same scroll used, empty tome never clicked
+      1 D2.g      P10   PASS     same EnterPortal arrives in town
+      1 D2.d      P10   PASS     same 2 clicks, 1 scrolls left, one portal
+      1 D2.d3     P10   PASS     same 2 clicks, 0 scrolls left, one portal
+      1 D2.e      P10   PASS     same waited: click at +34 vs idle +22 ticks, one click, portal open
+      1 D2.h      P10   PASS     same second cast closed the first: one object, 48 subtiles away
+      1 D2.f      P11   PASS     same round trip through the portals, arrival 4 subtiles from the origin
