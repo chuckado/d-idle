@@ -38,7 +38,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [auditfix](../../openspec/changes/auditfix/) | in-progress | auditfix | `openspec/changes/auditfix/**`<br>`tools/ci/gamecode_guard.sh`<br>`tools/ci/gamecode_allow.txt`<br>`tools/ci/gamecode_test.sh`<br>`tools/ci/scrub_paths.py`<br>`docs/process/gamecode-guard.md`<br>`docs/fixtures.md`<br>`cmd/leakcheck/scan.go`<br>`cmd/leakcheck/leakcheck_test.go` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -70,9 +69,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change auditfix: tools/ci/gamecode_test.sh passes (fake listing and pseudo-C fail) and tools/ci/check.sh passes on the whole tree
-- change auditfix: go test -p 1 ./cmd/leakcheck passes incl. TestLabPathScopedToProbes; go run ./cmd/leakcheck -mode fail finds 0
-- change auditfix: go run ./cmd/changecheck -cli has 0 warnings; tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -101,6 +97,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- ba90992 11-01 00:52 `Merge agent/auditfix: gamecode guard, fixtures provenance, lab-path scrub of docs/probes` (auditfix)
 - 6a6eabe 11-01 00:50 `Merge agent/sktele: Teleport trace (decomp row 16), sk_tele_spot.py` (sktele)
 - 015b95c 11-01 00:48 `Merge agent/feedtick2: feed tick cap 3800 with cut line` (feedtick2)
 - eafb8a1 11-01 00:45 `Merge agent/skmana: SK mana trace` (skmana)
@@ -110,5 +107,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6ba15b7 11-01 00:29 `Merge agent/dethash2: det-hash scenarios; archive card` (dethash2)
 - 4bcbd36 11-01 00:25 `Merge agent/modsprep` (modsprep)
 - 071008f 11-01 00:25 `Merge agent/crfix156` (crfix156)
-- 77e5bca 11-01 00:25 `Merge agent/verifymods` (verifymods)
 <!-- statusgen:end -->

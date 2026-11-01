@@ -2,7 +2,8 @@
 
 ```yaml
 change: auditfix
-status: in-progress
+status: archived
+merge: ba90992
 agent: auditfix
 branch: agent/auditfix
 worktree: ~/code/d2lod-wt/auditfix
@@ -22,7 +23,7 @@ gates:
   - "tools/ci/gamecode_test.sh passes (fake listing and pseudo-C fail) and tools/ci/check.sh passes on the whole tree"
   - "go test -p 1 ./cmd/leakcheck passes incl. TestLabPathScopedToProbes; go run ./cmd/leakcheck -mode fail finds 0"
   - "go run ./cmd/changecheck -cli has 0 warnings; tools/openspec.sh validate --all --strict passes"
-result: ""
+result: "offline-complete, not verified live (no live run needed): gamecode guard, labpath leakcheck class, 801 paths scrubbed; merged tree passes leakcheck, guard, check.sh, whole-repo vet+test on the worker"
 live: "n/a: offline docs and CI"
 ```
 
