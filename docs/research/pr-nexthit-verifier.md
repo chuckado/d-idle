@@ -34,7 +34,10 @@ Other rows: 48 Missiles.txt rows have NextHit (V, the 1.14d Missiles.txt read th
 | upstream main 72132b99 | pre | 82,800 | 173,196 | 10.28 | 1.30 |
 | fix/nexthit head 7901fda2 | pre (author's order) | **0** | 0 | 1.30 | 1.30 |
 | fix/nexthit head 7901fda2 | post (traced) | **25,252** | **17,115** | 1.30 | 1.21 |
-FIXROWS
+| head + `<=` (the `fix` variant, one character in missiles.cpp) | post (traced) | **0** | 0 | 1.21 | 1.21 |
+| head + `<=` | pre | 25,252 | 17,115 | 1.21 | 1.30 |
+
+The `fix` variant is 0 on every slice under the traced order (Nova, Frost Nova, standing, moving, one and two casts; 6 cases in the subtile order, as for the head under its own order). So the whole residual of the head is the end frame, and `<=` removes it.
 
 Head vs the traced order, by slice (cases differing / cases; d2d vs game.exe hits per touched monster):
 
