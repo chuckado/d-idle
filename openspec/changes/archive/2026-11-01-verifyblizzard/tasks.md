@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyblizzard
-status: done
+status: archived
 agent: verifyblizzard
 branch: agent/verifyblizzard
 worktree: ~/code/d2lod-wt/verifyblizzard
@@ -17,7 +17,8 @@ gates:
   - "own game-side harness: model vs game.exe FUN_005a9820 0 differences on 100,000+ cases"
   - "own d2d probe on real builds: shards off game.exe's -6..5 grid before > 0, after 0"
   - "changecheck 0 new warnings; leakcheck -mode fail 0"
-result: "fix/blizzard-shard-offsets READY WITH CHANGES: game.exe FUN_005a9820 vs own model 0 of 120,000; d2d real builds Blizzard 14,804 -> 0 of 99,925 shards, Eruption 1,872 -> 0 of 13,039, rng stream equal 5,000 / 5,000; presubmit short-names FAIL in the tooling test; D2 / D3 separate. Offline, not verified live, nothing pushed."
+result: "independent verifier READY WITH CHANGES (own harness: game.exe rule 0 differ over 120,000 cases; Blizzard 14,804 of 99,925 shards off the grid on base and 0 on head; Eruption 1,872 of 13,039 and 0; no other roll shifts); changes applied by blizzardfix"
+merge: 3cc11d1
 ```
 
 - [x] 1.1 Re-derive FUN_005a9820 from the disassembly; own generator and emulator harness, 100,000+ cases incl. edges
