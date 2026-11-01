@@ -170,21 +170,29 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 
 		// --- plan
 		replan := !w.have || dist(goal, w.planGoal) > math.Max(3, tol)
+		why := "first" // why this plan was made, for the "nav plan" line (TELETUNE3: which trigger split two walks)
+		if w.have && replan {
+			why = "goal"
+		}
 		every := t.Replan()
 		if w.res.optimistic {
 			every = max(every/3, 400*time.Millisecond) // the plan crosses unknown ground: look again soon
 		}
 		if !replan && now.Sub(w.planAt) >= every {
-			replan = o.lm.Grid.KnownCount() != w.res.known || n.monsterSig(o, w.res.wps, w.cur) != w.sig
+			if o.lm.Grid.KnownCount() != w.res.known {
+				replan, why = true, "map"
+			} else if n.monsterSig(o, w.res.wps, w.cur) != w.sig {
+				replan, why = true, "monsters"
+			}
 		}
 		if !replan && deviation(o.pos, w.res.wps) > 2*t.WaypointSpacing+4 {
-			replan = true
+			replan, why = true, "deviation"
 		}
 		if w.have && w.res.partial && dist(o.pos, w.res.goal) <= 2.5 {
 			if o.lm.Grid.KnownCount() == w.res.known {
 				return fmt.Errorf("%w: reached the closest reachable point %v to %v", ErrNoPath, o.pos, goal)
 			}
-			replan = true
+			replan, why = true, "partial"
 		}
 		if replan {
 			res, err := n.plan(o.lm, o.pos, goal, tol, o.snap.Monsters, wo.ignoreUnit)
@@ -197,7 +205,7 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 			if wo.onPlan != nil {
 				wo.onPlan(res)
 			}
-			n.log.Debug("nav plan", "from", o.pos, "to", goal, "wps", len(res.wps), "partial", res.partial, "cells", res.cells)
+			n.log.Debug("nav plan", "from", o.pos, "to", goal, "wps", len(res.wps), "partial", res.partial, "cells", res.cells, "why", why)
 			if n.fleeRetarget(o, res, wo.flee) {
 				w.have = false
 				continue

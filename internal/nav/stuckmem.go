@@ -178,3 +178,17 @@ func (n *Navigator) exitUnstick(ctx context.Context, o *obs, levelNo int, g gate
 	}
 	return false, nil
 }
+
+// ResetStallMemory forgets what earlier walks learned about where they stalled and which exits and hop cells failed:
+// the stall spots, the hard-blocked cells, the stalled gates, the declined-exit marks, the refused hop cells and the
+// hop decline reason, plus the search memory (roam coverage, visited and failed frontier buckets, mouth bounces). The drill harness calls it between drills so one process can run a pocket drill after another
+// (DRILLS25: D22-P after D22-PC roamed 7560 ticks with 0 hops because the memory of the first escape stayed). The
+// bot never calls it. Map-derived state (grids, learned level links) stays.
+func (n *Navigator) ResetStallMemory() {
+	n.spots, n.hard, n.badGates, n.noExit = nil, nil, nil, nil
+	n.teleBad = map[[2]int]int{}
+	n.teleFails, n.teleWhy, n.teleDeclined = 0, "", false
+	n.cov, n.visited, n.failed, n.mouthFails = nil, map[[2]int]bool{}, map[[2]int]int{}, nil
+	n.escaping = false
+	n.invalidate()
+}
