@@ -125,6 +125,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
 - a439ea3 11-01 17:16 `Merge agent/palskill: PALSKILL: Holy Bolt, Blessed Hammer and Paladin aura trace against game.exe: seven d2d deviations, five bot findings` (palskill)
 - b94cfc1 11-01 17:09 `Merge agent/skabrecheck: SKABRECHECK: pierce claim refuted (0 diffs on 147k real-build cases), whole-point physical roll confirmed on 84k of 101k cases` (skabrecheck)
 - 47970bf 11-01 16:54 `Merge agent/skmeleewire2: melee model fed on d2d: gear and weapon fields mapped to player stats 19/21/22/25` (skmeleewire2)
@@ -134,5 +135,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 63ba464 11-01 16:25 `Merge agent/openpr-blizzard: log of upstream PR 163 (Blizzard shard offsets)` (openpr-blizzard)
 - acb7daf 11-01 16:22 `Merge agent/blizzardfix: Blizzard candidate v2: verifier's three changes applied (names, Eruption in the message, ruff)` (blizzardfix)
 - e3e8fc7 11-01 16:13 `Merge agent/fixprogress: town trip loop fix: an empty portal source marks the tome empty for the next visit (Gate 1 progress failure)` (fixprogress)
-- 3cc11d1 11-01 16:06 `Merge agent/verifyblizzard: independent verifier of the Blizzard shard-offset candidate (READY WITH CHANGES)` (verifyblizzard)
 <!-- statusgen:end -->
