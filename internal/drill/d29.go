@@ -38,6 +38,7 @@ type ArmorHold struct {
 	MaxDownMS  int // longest absent run (sample to sample)
 	Hits       int // reads of the player in hit recovery (mode 4) across the run
 	ModeReads  int
+	Modes      map[int]int // reads per player mode (bot snapshot; -1 = idle or unmapped)
 	MinLife    int
 	Refills    int
 	Deaths     int
@@ -64,8 +65,8 @@ func D29(l D29Lab) []Drill {
 			for _, c := range f.Recasts {
 				rc = append(rc, fmt.Sprintf("[%.1f-%.1f s cast=%v cut=%v mode %d>%d adj=%d on=%v life=%d]", float64(c.AtMS)/1000, float64(c.EndMS)/1000, c.Cast, c.Cut, c.ModeIn, c.ModeOut, c.Adjacent, c.StateOn, c.Life))
 			}
-			o.Observed = fmt.Sprintf("binary %s | %d s; casts %d, cuts %d, cut-retries %d; %d samples (longest interval %d ms), armor absent %d ms in total, longest run %d ms; hit-recovery in %d of %d mode reads; life min %d, refills %d, deaths %d, spawned %d | recasts %s | log: %s",
-				f.Binary, f.SimMS/1000, f.Casts, f.Cuts, f.CutRetries, f.Samples, f.PollMS, f.DownMS, f.MaxDownMS, f.Hits, f.ModeReads, f.MinLife, f.Refills, f.Deaths, f.Spawned, strings.Join(rc, " "), strings.Join(f.Lines[:min12(len(f.Lines))], " ; "))
+			o.Observed = fmt.Sprintf("binary %s | %d s; casts %d, cuts %d, cut-retries %d; %d samples (longest interval %d ms), armor absent %d ms in total, longest run %d ms; hit-recovery in %d of %d mode reads (by mode %v); life min %d, refills %d, deaths %d, spawned %d | recasts %s | log: %s",
+				f.Binary, f.SimMS/1000, f.Casts, f.Cuts, f.CutRetries, f.Samples, f.PollMS, f.DownMS, f.MaxDownMS, f.Hits, f.ModeReads, f.Modes, f.MinLife, f.Refills, f.Deaths, f.Spawned, strings.Join(rc, " "), strings.Join(f.Lines[:min12(len(f.Lines))], " ; "))
 			o.Sig = fmt.Sprintf("casts=%d cuts=%d", f.Casts, f.Cuts)
 			switch {
 			case f.Casts < 2:

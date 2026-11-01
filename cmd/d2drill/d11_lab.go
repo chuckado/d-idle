@@ -147,7 +147,7 @@ func (l *lab) d11OneScroll(ctx context.Context, r *drill.Run) error {
 }
 
 // d11Mon is the melee monster of the portal drills: a Zombie does not scatter after a hit, so several end up adjacent at once (a Fallen darts in and out: 1 of 3 within 3 subtiles in 600 ticks).
-const d11Mon = "zombie1"
+var d11Mon = "zombie1"
 
 // d11Spawn spawns n zombies and steps until at least want of them are adjacent (1200 ticks at most).
 func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius float64) (adj int) {
