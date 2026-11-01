@@ -42,6 +42,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
+| [feedtick](../../openspec/changes/feedtick/) | in-progress | feedtick | `openspec/changes/feedtick/**`<br>`tools/discord/**`<br>`docs/process/feed-after-events.md`<br>`docs/community/discord/feeds.md` | - |
 | [fixemptyplan](../../openspec/changes/fixemptyplan/) | in-progress | fixemptyplan | `internal/input/client.go`<br>`internal/nav/nav.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixemptyplan_test.go`<br>`internal/combat/fight.go`<br>`internal/combat/reach.go`<br>`internal/combat/fixemptyplan_test.go`<br>`docs/fixemptyplan.md` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
@@ -75,6 +76,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
+- change feedtick: python3 -m unittest discover -s tools/discord/tests; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixemptyplan: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixemptyplan: live proof after merge: low-mana pack next to a wall, log has no 'empty path' and the bot falls through to its next option (docs/fixemptyplan.md)
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
@@ -94,6 +96,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
 - 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
 - 1a47b45 10-31 23:43 `Merge agent/walkopen: open upstream PR #156 (walk velocity)` (walkopen)
@@ -103,5 +106,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
 - c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 - fe39b63 10-31 23:20 `Merge agent/soak2study: post-fix soak 2 analysis` (soak2study)
-- 12c11b9 10-31 23:16 `Merge agent/specmin: soak Gate 1 virtual minutes (BELT, NOKILL)` (soak-minutes-virtual)
 <!-- statusgen:end -->
