@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [brandapply](../../openspec/changes/brandapply/) | in-progress | brandapply | `README.md`<br>`cmd/d2bot/banner.go`<br>`cmd/d2bot/banner_test.go`<br>`cmd/d2bot/main.go`<br>`cmd/d2dview/web/icon.svg`<br>`cmd/d2dview/web/favicon.ico`<br>`cmd/d2dview/web/apple-touch-icon.png`<br>`cmd/d2dview/brand_test.go` | - |
 | [brandfinal](../../openspec/changes/brandfinal/) | in-progress | brandfinal | `assets/branding/**`<br>`docs/branding.md` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -69,6 +70,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change brandapply: changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict; go test -p 1 ./cmd/d2bot ./cmd/d2dview; whole-repo vet and test -short on the worker host
 - change brandfinal: changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -96,7 +98,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- bbf46c8 11-01 00:08 `Merge agent/brandfinal: final brand assets` (brandfinal)
 - ba5e848 11-01 00:04 `Merge agent/fixstatic: static field prose fix, table= in minute line and soak aggregate` (fixstatic)
+- 770dc5a 10-31 23:55 `Merge origin/main into brandfinal` (brandfinal)
 - 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
 - 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
@@ -104,6 +108,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e809e7f 10-31 23:41 `Merge agent/freezepolish: PR freeze draft polish` (freezepolish)
 - ea5e2ae 10-31 23:34 `Merge agent/fixemptyplan: empty plan on snapped start (ErrAlreadyThere)` (fixemptyplan)
 - 8ac245e 10-31 23:30 `Merge agent/fixportalmelee: no town portal cast with 3+ adjacent hostiles` (fixportalmelee)
-- 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
-- c0ff783 10-31 23:23 `Merge agent/verifyfreeze: freeze rules verifier` (verifyfreeze)
 <!-- statusgen:end -->

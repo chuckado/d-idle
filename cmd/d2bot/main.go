@@ -94,6 +94,7 @@ func parseFlags(args []string) (options, error) {
 	fs.BoolVar(&o.cleanStart, "clean-start", false, "managed mode: stop a game left over from a crashed d2bot before launching a fresh one (set by --supervise on restarts)")
 	d2dFlags(fs, &o.d2d)
 	fs.BoolVar(&o.showVersion, "version", false, "print the version and exit")
+	fs.Usage = func() { printUsage(fs, bannerUnicode(fs.Output(), os.Getenv)) } // banner only here, never on --version or the log
 	if err := fs.Parse(args); err != nil {
 		return o, err
 	}
