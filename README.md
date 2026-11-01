@@ -92,11 +92,10 @@ Between runs.
 
 **Being worked on:**
 
-- Long unattended test runs (working)
 - Working on the bot (working)
+- Long unattended test runs (working)
 - Playing in a party of bots (working)
 - Running the bot on the d2d engine (blocked)
-- Town chores: shopping, stashing and loot (working)
 
 ## What shipped
 
@@ -105,7 +104,7 @@ Nothing merged in this window.
 
 [Chat and help: the d.idle Discord](https://discord.gg/U2v9q4h5UH)
 
-Last updated: 2026-11-01 04:25 UTC
+Last updated: 2026-11-01 04:31 UTC
 
 _Numbers are conservative._  
 _A check only counts as done once it has been verified for real: a live run in the game, or automated tests when that is what the check asks for._  
