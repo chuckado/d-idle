@@ -2,7 +2,7 @@
 
 ```yaml
 change: feeds
-status: in-progress
+status: done
 agent: feeds
 branch: agent/feeds
 worktree: ~/code/d2lod-wt/feeds
