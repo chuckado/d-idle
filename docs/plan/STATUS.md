@@ -85,6 +85,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
 - 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
 - b617048 10-31 21:03 `Merge agent/fixbigfiles: cap oversized drills9 logs (CI size gate)` (fixbigfiles)
 - 98b8178 10-31 20:49 `Merge agent/drills9: DRILLS9 live drills, harness fixes` (drills9)
@@ -94,5 +95,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 544d89f 10-31 20:24 `Merge agent/verifyprs2: verifier harnesses for walk and price follow-on` (verifyprs2)
 - 912086a 10-31 20:02 `Merge agent/fixstall4: town verbs follow line of sight, route at every stall` (fixstall4)
 - 75b2469 10-31 19:51 `Merge agent/drills8: drill results, harness edits` (drills8)
-- f795c60 10-31 19:48 `Merge agent/fixmeter: combat Meter derived in d2dcombat.Attach` (fixmeter)
 <!-- statusgen:end -->
