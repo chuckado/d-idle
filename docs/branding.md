@@ -50,7 +50,7 @@ python3 assets/branding/render.py --preview   # ASCII occupancy of the icon at 1
 
 ## Application checklist (each needs the user's go)
 
-Prepared in-repo on branch `agent/brandapply` (not merged; card `brandapply`): README header image, favicon links in the public web pages of this repo, the banner printed by `d2bot --version` and `-h`.
+Prepared in-repo on branch `agent/brandapply` (not merged; card `brandapply`; whole-repo vet and `test -short` green on the worker host): README header image, favicon files for d2dview plus the head links as a patch (card `mapitem` owns the two pages), and the banner printed at the head of `d2bot -h` (never on `--version` or the log: scripts parse both).
 
 - [ ] Merge `brandfinal`, then `brandapply`: needs the user's go
 - [ ] GitHub social preview (`header-1280x640.png`): needs the user's go
