@@ -45,3 +45,8 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/research/pr-static-evidence-pack.md  pushchill  pushchill
+docs/research/pr-static-chill-proof.md  pushchill  pushchill
+docs/research/pr-bundle-queue.md  pushchill  pushchill
+docs/BACKLOG.md  pushchill  pushchill
+openspec/changes/pushchill/**  pushchill  pushchill
