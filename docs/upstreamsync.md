@@ -38,7 +38,7 @@ Cherry-picks (`-x`) of the original commits onto 7c3a50af; no conflicts. Checks 
 
 Not rebased: #155, #157, #158 (open PR heads; a rebase would change the PR head and the maintainer has not asked), #156 (conflict, see above), `price4` (stacked follow-on, rebase recipe in verify-price2.md now applies: `git rebase --onto upstream/main 8a45cfc9`; merge preview clean). Test targets of the pr_guard-built trees: `~/d2d-lab/pr/upstreamsync-out/<tree>/`.
 
-## 2. The private fork (`~/d2d-lab/fork/src`, remote Forgejo `jesse/d2d-fork`)
+## 2. The private fork (the fork checkout on the worker host, private remote)
 
 Fork branches are a linear stack, each on the previous: `lab-debug-skills` (6 commits over 03f42254) < `lab-nexthit` (+3) < `lab-armorhit` (+2) < `lab-freezeresume` (+2). Base is 03f42254, older than the old upstream main 72132b99, so the fork also lacks #147 and #149.
 
