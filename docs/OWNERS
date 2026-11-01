@@ -88,3 +88,17 @@ openspec/changes/armorhit/**  armorhit  armorhit
 docs/roamleg.md  roamleg  roamleg
 internal/nav/roamleg_test.go  roamleg  roamleg
 openspec/changes/roamleg/**  roamleg  roamleg
+internal/plandata/build-fallback-lightning-v3.json  buildv3  buildv3
+internal/plandata/build-fallback-lightning-v2.json  buildv3  buildv3
+docs/plan/data/build-fallback-lightning-v3.json  buildv3  buildv3
+docs/plan/data/build-fallback-lightning-v2.json  buildv3  buildv3
+internal/plandata/plandata_test.go  buildv3  buildv3
+internal/leveler/build.go  buildv3  buildv3
+internal/leveler/buildv3_test.go  buildv3  buildv3
+internal/combat/classdata/profiles.json  buildv3  buildv3
+internal/combat/class_test.go  buildv3  buildv3
+internal/combat/pure_test.go  buildv3  buildv3
+cmd/d2bot/class.go  buildv3  buildv3
+cmd/d2bot/class_test.go  buildv3  buildv3
+docs/buildv3.md  buildv3  buildv3
+openspec/changes/buildv3/**  buildv3  buildv3

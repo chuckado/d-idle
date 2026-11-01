@@ -15,7 +15,7 @@ from test_notify import Mock  # also points D2IDLE_DISCORD_HOME at an empty temp
 
 ROOT = feed.ROOT
 SOAK = os.path.join(ROOT, "docs/probes/postfix-soak1.md")
-DRILLS = os.path.join(ROOT, "docs/probes/drills/README.md")
+DRILLS = os.path.join(os.path.dirname(__file__), "fixtures", "drills-readme.md")
 PR = "https://github.com/psi29a/d2decomped/pull/153"
 
 

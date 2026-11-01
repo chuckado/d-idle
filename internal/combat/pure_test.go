@@ -195,6 +195,28 @@ func TestAttackOrder(t *testing.T) {
 	if o := attackOrder(BuildLightning, 30, has()); o[0] != "Chain Lightning" {
 		t.Fatalf("fallback build: %v", o)
 	}
+	// BUILDV3: the profile's Chain Lightning band is gated by the learned skill, not by a clvl literal, so a table that
+	// learns it at clvl 19 attacks with it from then on; a table that has not learned it keeps the Charged Bolt band
+	// until clvl 26 (the older band, unchanged) and never falls below it.
+	learned := func(names ...string) func(string) bool {
+		return func(n string) bool {
+			for _, x := range names {
+				if x == n {
+					return true
+				}
+			}
+			return false
+		}
+	}
+	if o := attackOrder(BuildLightning, 19, learned("Charged Bolt", "Lightning", "Chain Lightning")); o[0] != "Chain Lightning" {
+		t.Fatalf("clvl 19 with Chain Lightning learned: %v", o)
+	}
+	if o := attackOrder(BuildLightning, 22, learned("Charged Bolt")); o[0] != "Charged Bolt" {
+		t.Fatalf("clvl 22 without Chain Lightning: %v", o)
+	}
+	if o := attackOrder(BuildLightning, 26, learned("Charged Bolt")); o[0] != "Chain Lightning" {
+		t.Fatalf("clvl 26 keeps the older level band: %v", o)
+	}
 }
 
 func TestLayoutHasUniqueKeys(t *testing.T) {

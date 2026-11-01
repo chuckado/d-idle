@@ -47,6 +47,16 @@
    "build": "lightning",
    "bands": [
     {
+     "minLevel": 0,
+     "requires": "Chain Lightning",
+     "attack": [
+      "Chain Lightning",
+      "Lightning",
+      "Charged Bolt",
+      "Fire Bolt"
+     ]
+    },
+    {
      "minLevel": 26,
      "attack": [
       "Chain Lightning",

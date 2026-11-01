@@ -32,7 +32,7 @@ func planForClass(c d2.Class, cfgBuild string, level int, owned map[string]int) 
 		lb = leveler.SelectBuild(strings.ToLower(c.String()), level, owned)
 	}
 	cp := classPlan{Class: c, LevelerBuild: lb, CombatBuild: combat.BuildBlizzard}
-	if c == d2.Sorceress && (lb == "fallback" || lb == leveler.FallbackV2) {
+	if c == d2.Sorceress && (lb == "fallback" || leveler.TableCombat(lb) == "lightning") {
 		cp.CombatBuild = combat.BuildLightning
 	}
 	pr := combat.ProfileFor(c, cp.CombatBuild)
