@@ -79,3 +79,5 @@ internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
 internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+docs/research/build-flexibility-audit.md  buildflex  buildflex
+openspec/changes/buildflex/**  buildflex  buildflex
