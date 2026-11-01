@@ -14,6 +14,9 @@ import (
 // binName is the d2d binary of this run (set in main), named in every DRILLS26 result.
 var binName string
 
+// spawnHook runs after each lure step of d11Spawn (nil: nothing).
+var spawnHook func(ctx context.Context)
+
 const fireBolt = 36
 
 // ArmorFight: Frozen Armor level 1 and a stronger Fire Bolt (logged `debug points`), Blood Moor, a zombie pack that is
@@ -44,12 +47,31 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 		o.Err = err.Error()
 		return
 	}
+	// DRILLS29: the spawn and lure after each pack can take 18 to 43 s of game time, so the bot's Buff pass also runs
+	// inside the lure loop (the real bot buffs between its own steps); the 114 s rule itself is unchanged.
+	isCast := func(ln string) bool { return strings.HasPrefix(ln, "combat buff skill=Frozen Armor") }
+	var g0 int
+	buffRec := func(where string) {
+		bmk := l.rec.Mark()
+		_ = l.rig.Fighter.Buff(ctx)
+		for _, ln := range l.rec.Since(bmk) {
+			if isCast(ln) {
+				gb, _, _ := l.gameClock(ctx)
+				o.CastsMS = append(o.CastsMS, gb-g0)
+				o.FightCastMS = append(o.FightCastMS, gb-g0)
+				bt, _ := l.buffsText(ctx)
+				o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: %s (%s: buffs=%q)", gb-g0, ln, where, bt))
+			}
+			if strings.HasPrefix(ln, "combat buff cut by a hit") {
+				o.Lines = append(o.Lines, fmt.Sprintf("%s: %s", where, ln))
+			}
+		}
+	}
 	spawn := func() {
 		o.Spawned += 4
 		l.d11Spawn(ctx, r, 4, 2, 8) // spawns, then lures until two are in reach: a spawned monster idles until she is close
 	}
 	spawn()
-	isCast := func(ln string) bool { return strings.HasPrefix(ln, "combat buff skill=Frozen Armor") }
 	g0, _, err := l.gameClock(ctx)
 	if err != nil {
 		o.Err = err.Error()
@@ -66,6 +88,8 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 			o.Lines = append(o.Lines, "opening: "+ln)
 		}
 	}
+	spawnHook = func(ctx context.Context) { buffRec("in the lure") }
+	defer func() { spawnHook = nil }()
 	o.MinLife = 1 << 30
 	prev, first, stuck := 0, false, 0
 	var lastSpawn bool
@@ -119,21 +143,7 @@ func (l *lab) ArmorFight(ctx context.Context, r *drill.Run, simMS int) (o drill.
 		}
 		spawned := false
 		if alive, _ := l.monstersAlive(ctx); alive == 0 {
-			// the bot buffs between fights before it walks to the next pack: do the same before the lure (it checks the clock itself)
-			bmk := l.rec.Mark()
-			_ = l.rig.Fighter.Buff(ctx)
-			for _, ln := range l.rec.Since(bmk) {
-				if isCast(ln) {
-					gb, _, _ := l.gameClock(ctx)
-					o.CastsMS = append(o.CastsMS, gb-g0)
-					o.FightCastMS = append(o.FightCastMS, gb-g0)
-					bt, _ := l.buffsText(ctx)
-					o.Lines = append(o.Lines, fmt.Sprintf("t=%d ms: %s (between packs: buffs=%q)", gb-g0, ln, bt))
-				}
-				if strings.HasPrefix(ln, "combat buff cut by a hit") {
-					o.Lines = append(o.Lines, fmt.Sprintf("between packs: %s", ln))
-				}
-			}
+			buffRec("between packs")
 			spawn()
 			spawned = true
 		}

@@ -1,0 +1,27 @@
+d2dslot: got slot 0
+time=2026-11-01T12:13:49.343-05:00 level=WARN msg="d2d channel not answering: d2d process pid 2076134 still running; socket file is gone (stat <home>/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial <home>/d2d-lab/slots/0/d2d.sock: dial unix <home>/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+time=2026-11-01T12:13:51.171-05:00 level=INFO msg="d2dworld: arrived in level 2: 2 adjacent entries, 0 levels not linked yet (pending 0, linkwait 30s)"
+time=2026-11-01T12:13:51.194-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T12:13:52.186-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T12:13:52.203-05:00 level=INFO msg="combat buff cut by a hit, will retry" skill="Frozen Armor" try=1
+time=2026-11-01T12:13:52.210-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T12:13:52.372-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:52.383-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:52.436-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:52.480-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:52.534-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:53.631-05:00 level=INFO msg="combat buff" skill="Frozen Armor"
+time=2026-11-01T12:13:53.804-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:53.815-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:53.819-05:00 level=INFO msg="combat health killsPerMin=3.6 castsPerMin=8.8 kitesPerMin=0.0 novas=0 forced=0 damagePerKill=8 windowSec=116"
+time=2026-11-01T12:13:53.830-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:53.871-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+time=2026-11-01T12:13:53.899-05:00 level=INFO msg="combat kill" monster=Zombie boss=false xp=33
+DRILL D29-C P10 PASS RECORD on d2d.lab-nexthit2: 1 cuts, 1 retried, armor absent 0 ms | intended: a pack is hitting the player when the armor is due: the bot's Buff pass recasts, a hit that cuts the cast is retried at once, and the armor is never absent longer than one poll interval | observed: binary d2d.lab-nexthit2 | 300 s; casts 4, cuts 1, cut-retries 1; 544 samples (longest interval 2080 ms), armor absent 0 ms in total, longest run 0 ms; hit-recovery in 17 of 544 mode reads (by mode map[-1:521 4:17 10:6]); life min 76, refills 3, deaths 0, spawned 15 | recasts [114.0-115.4 s cast=true cut=true mode -1>4 adj=2 on=true life=172] [115.7-117.1 s cast=true cut=false mode -1>-1 adj=2 on=true life=142] [229.8-231.2 s cast=true cut=false mode -1>-1 adj=2 on=true life=180] | trace: t=65280 alive=5 adj8=0 dist=[14 15 15 15 16] ; t=69680 alive=5 adj8=2 dist=[7 7 24 27 31] ; t=74080 alive=5 adj8=1 dist=[1 14 22 22 27] ; t=78480 alive=5 adj8=1 dist=[7 13 25 26 33] ; t=82880 alive=5 adj8=1 dist=[6 9 18 26 27] ; t=87280 alive=5 adj8=2 dist=[3 7 22 24 26] ; t=91680 alive=5 adj8=1 dist=[2 8 19 20 21] ; t=96080 alive=5 adj8=2 dist=[6 7 9 18 27] ; t=100480 alive=5 adj8=2 dist=[2 5 11 17 27] ; t=104680 alive=5 adj8=2 dist=[5 6 9 17 20] ; t=107080 alive=5 adj8=2 dist=[2 5 12 14 28] ; t=109480 alive=5 adj8=2 dist=[2 2 13 14 24] ; t=111880 alive=5 adj8=2 dist=[2 2 12 17 24] ; t=115680 alive=5 adj8=2 dist=[2 2 13 18 24] ; t=119720 alive=5 adj8=2 dist=[2 2 11 15 20] ; t=122120 alive=5 adj8=2 dis
+END character Drilly life 229/300 in town: true
+
+drill     prim  verdict  det  reason
+D29-C     P10   PASS     -    RECORD on d2d.lab-nexthit2: 1 cuts, 1 retried, armor absent 0 ms
+cheat verbs used (each ledgered with a reason): debug goto 1, debug goto 2, debug kill, debug mon set 24 dmg 30 30, debug mon set 25 dmg 30 30, debug mon set 26 dmg 30 30, debug mon set 27 dmg 30 30, debug mon set 28 dmg 30 30, debug mon set 29 dmg 30 30, debug mon set 30 dmg 30 30, debug mon set 31 dmg 30 30, debug mon set 32 dmg 30 30, debug mon set 33 dmg 30 30, debug mon set 34 dmg 30 30, debug mon set 35 dmg 30 30, debug mon set 36 dmg 30 30, debug mon set 37 dmg 30 30, debug mon set 38 dmg 30 30, debug points 36 3, debug points 40 1, debug spawn zombie1 5 near, debug stat 6 76800, debug stat 7 76800
+cheat ledger: <home>/.local/share/d2bot/ledger/cheats.jsonl (actor drills:<drill id>, kind d2d-debug)
+time=2026-11-01T12:13:54.605-05:00 level=WARN msg="d2d: stopped by the bot (kill)"
