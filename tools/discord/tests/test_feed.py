@@ -121,6 +121,74 @@ class Refusals(unittest.TestCase):
         self.assertEqual(rc, 2)
 
 
+class Tick(unittest.TestCase):
+    NOW = "1793543400"  # 2026-11-01 14:30 UTC
+
+    def tick(self, *argv):
+        return run("tick", "--now", self.NOW, *argv)
+
+    def test_dry_run(self):
+        rc, out, _ = self.tick("--running", "navi,combi", "--merged", "fixrecast,feedtick", "--waiting", "go for X")
+        self.assertEqual(rc, 0)
+        self.assertIn("[dry run] channel #progress", out)
+        self.assertIn("dispatcher tick 2026-11-01 14:30 UTC", out)
+        self.assertIn("- Running: navi, combi", out)
+        self.assertIn("- Merged: fixrecast, feedtick", out)
+        self.assertIn("- Waiting on the maintainer: go for X", out)
+
+    def test_empty_and_idle_refused(self):
+        for argv in ((), ("--running", "navi"), ("--merged", "none", "--blocked", "-"), ("--upstream", "no change")):
+            rc, out, err = self.tick(*argv)
+            self.assertEqual(rc, 2, argv)
+            self.assertIn("idle tick", err)
+            self.assertEqual(out, "")
+
+    def test_file(self):
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as f:
+            f.write("Running: a, b\nMerged: c\nBlocked: none\n")
+        self.addCleanup(os.unlink, f.name)
+        rc, out, _ = self.tick("--file", f.name)
+        self.assertEqual(rc, 0)
+        self.assertIn("- Merged: c", out)
+        self.assertNotIn("Blocked", out)
+        with open(f.name, "w") as g:
+            g.write("gibberish line\n")
+        rc, _, err = self.tick("--file", f.name)
+        self.assertEqual(rc, 2)
+        self.assertIn("unknown line", err)
+
+    def test_hostile_strings(self):
+        rc, out, _ = self.tick("--merged", "ping @everyone")
+        self.assertEqual(rc, 0)
+        self.assertNotIn("@everyone", out)
+        hook = "https://discord.com/api/" + "webhooks/123456789/abcDEF"
+        for t in ("see /" + "home/x/file", "build on 10.0" + ".0.5", "mail a" + "@b.example", "host box.lan.example.lan", hook):
+            rc, out, err = self.tick("--blocked", t)
+            self.assertEqual(rc, 2, t)
+            self.assertIn("looks private", err)
+            self.assertNotIn("abcDEF", err + out)
+
+    def test_length_cap(self):
+        rc, out, _ = self.tick("--merged", ",".join("agent%d" % i for i in range(200)), "--blocked", "x" * 2000,
+                               "--waiting", "y" * 2000)
+        self.assertEqual(rc, 0)
+        body = out.split("\n", 2)[2]
+        self.assertLessEqual(len(body.strip()), 900)
+
+    def test_channel_is_progress_on_send(self):
+        m = Mock()
+        self.addCleanup(m.close)
+        home = tempfile.TemporaryDirectory()
+        self.addCleanup(home.cleanup)
+        env = {dc.HOME_ENV: home.name, notify.env_name("progress"): m.url}
+        rc, out, err = run("tick", "--now", self.NOW, "--merged", "x", "--send", store=dc.MemoryStore(), env=env,
+                           sleep=lambda s: None, base_ok=(m.base,))
+        self.assertEqual(rc, 0, err)
+        self.assertIn("posted to #progress", out)
+        self.assertEqual(len(m.requests), 1)
+        self.assertIn("dispatcher tick", m.requests[0][1]["embeds"][0]["title"])
+
+
 SOAK_LINK = feed.REPO_URL + "/blob/main/docs/probes/postfix-soak1.md"
 
 

@@ -5,6 +5,7 @@
   feed.py drill    [--file docs/probes/drills/README.md] [--pass N --fail N --blocked N --finding TEXT ...]
   feed.py upstream --pr N --event opened|merged|reviewed|ci-green|changes-requested --title T --url U
   feed.py pr-status [--pr 'N|title|CI|reviews|state' ...]   (or the same lines on stdin)
+  feed.py tick     [--running 'A,B' --merged 'x,y' --launched 'z' --upstream T --blocked T --waiting T | --file F]
   feed.py release  --tag T --notes TEXT|--notes-file F --url U
 
 Dry run is the default: the summary is printed as plain text and nothing is sent. `--send` posts it (one embed,
@@ -17,6 +18,7 @@ import os
 import re
 import subprocess
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import common as dc
@@ -27,7 +29,7 @@ UPSTREAM_PR_RE = re.compile(r"https://github\.com/psi29a/d2decomped/pull/(\d+)")
 RELEASE_URL_RE = re.compile(re.escape(REPO_URL) + r"/releases/tag/([A-Za-z0-9._-]+)")
 EVENTS = {"opened": "opened", "merged": "merged", "reviewed": "reviewed", "ci-green": "CI is green",
           "changes-requested": "changes requested"}
-DEFAULT_CHANNEL = {"soak": "progress", "drill": "progress", "pr-status": "progress",
+DEFAULT_CHANNEL = {"soak": "progress", "tick": "progress", "drill": "progress", "pr-status": "progress",
                    "release": "announcements", "upstream": "d2d-upstream"}
 CHANNELS = ("progress", "announcements", "d2d-upstream", "stream")
 NO_HOOK = "no webhook for %s: store its private file discord-webhook-%s first (docs/community/discord/feeds.md)"
@@ -209,6 +211,50 @@ def build_release(a):
     return "Release %s" % a.tag, notify.trunc(notes, 500) + "\n" + a.url, a.url
 
 
+TICK_FIELDS = ("running", "merged", "launched", "upstream", "blocked", "waiting")
+TICK_NEW = TICK_FIELDS[1:]  # a tick that only lists what is running is idle
+TICK_LABELS = {"running": "Running", "merged": "Merged", "launched": "Launched", "upstream": "Upstream",
+               "blocked": "Blocked", "waiting": "Waiting on the maintainer"}
+TICK_MAX = 900
+EMPTY_VALUES = ("", "none", "nothing", "-", "n/a", "no change", "unchanged")
+
+
+def tick_clean(v):
+    v = " ".join((v or "").split())
+    return "" if v.lower().rstrip(".") in EMPTY_VALUES else v
+
+
+def tick_from_file(path):
+    vals = {}
+    for ln in read(path).splitlines():
+        if not ln.strip():
+            continue
+        m = re.match(r"^\W*([A-Za-z ]+?)\s*[:=]\s*(.*)$", ln)
+        key = m and next((k for k in TICK_FIELDS if m.group(1).strip().lower().startswith(k)), None)
+        if not key:
+            raise FeedError("refused: unknown line in the tick file (want '<running|merged|launched|upstream|blocked|waiting>: text'): %s"
+                            % notify.trunc(ln.strip(), 60))
+        vals[key] = (vals.get(key, "") + "; " + m.group(2)).strip("; ")
+    return vals
+
+
+def build_tick(a):
+    vals = tick_from_file(a.file) if a.file else {}
+    for k in TICK_FIELDS:
+        if getattr(a, k, None):
+            vals[k] = getattr(a, k)
+    vals = {k: tick_clean(vals.get(k)) for k in TICK_FIELDS}
+    if not any(vals[k] for k in TICK_NEW):
+        raise FeedError("refused: idle tick (no merged, launched, upstream, blocked or waiting item); nothing built")
+    lines = []
+    for k in TICK_FIELDS:
+        if vals[k]:
+            items = [i.strip() for i in vals[k].split(",") if i.strip()] if k in ("running", "merged", "launched") else [vals[k]]
+            lines.append("- %s: %s" % (TICK_LABELS[k], notify.trunc(", ".join(items), 300)))
+    stamp = time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime(a.now if a.now is not None else time.time()))
+    return "dispatcher tick " + stamp, notify.trunc("\n".join(lines), TICK_MAX), ""
+
+
 def neutralize(text):
     """Break @mentions in the visible text (allowed_mentions is empty as well)."""
     return text.replace("@", "@​")
@@ -267,6 +313,12 @@ def main(argv=None, **sendkw):
     p = sub.add_parser("pr-status")
     common(p)
     p.add_argument("--pr", action="append")
+    t = sub.add_parser("tick")
+    common(t)
+    t.add_argument("--file", help="tick text, one '<field>: text' line per field")
+    for k in TICK_FIELDS:
+        t.add_argument("--" + k, help="comma separated names" if k in ("running", "merged", "launched") else "plain text")
+    t.add_argument("--now", type=float, help=argparse.SUPPRESS)
     r = sub.add_parser("release")
     common(r)
     r.add_argument("--tag")
@@ -279,7 +331,7 @@ def main(argv=None, **sendkw):
     try:
         channel = check_channel(a.channel or DEFAULT_CHANNEL[a.cmd])
         builders = {"soak": build_soak, "drill": build_drill, "upstream": build_upstream,
-                    "pr-status": build_pr_status, "release": build_release}
+                    "pr-status": build_pr_status, "tick": build_tick, "release": build_release}
         title, text, url = builders[a.cmd](a)
         hits = notify.check_text(title, text, "")
         if hits:
