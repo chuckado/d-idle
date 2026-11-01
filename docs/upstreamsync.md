@@ -38,7 +38,7 @@ Cherry-picks (`-x`) of the original commits onto 7c3a50af; no conflicts. Checks 
 
 Not rebased: #155, #157, #158 (open PR heads; a rebase would change the PR head and the maintainer has not asked), #156 (conflict, see above), `price4` (stacked follow-on, rebase recipe in verify-price2.md now applies: `git rebase --onto upstream/main 8a45cfc9`; merge preview clean). Test targets of the pr_guard-built trees: `~/d2d-lab/pr/upstreamsync-out/<tree>/`.
 
-## 2. The private fork (`~/d2d-lab/fork/src`, remote Forgejo `jesse/d2d-fork`)
+## 2. The private fork (the fork checkout on the worker host, private remote)
 
 Fork branches are a linear stack, each on the previous: `lab-debug-skills` (6 commits over 03f42254) < `lab-nexthit` (+3) < `lab-armorhit` (+2) < `lab-freezeresume` (+2). Base is 03f42254, older than the old upstream main 72132b99, so the fork also lacks #147 and #149.
 
@@ -101,6 +101,10 @@ Nothing below is edited by this card (other cards own the files). Lines are as o
 | docs/review-strategy.md:115 and README.md:17, 30, docs/capabilities.md:12 | gate ladder / capability lines | checked: NOT outdated (no PR or waypoint status in them) |
 
 Count: 22 rows (about 45 line references); `review-strategy.md`, README and capabilities need nothing.
+
+## After #157 / #158 (upstream main 52362d52)
+
+The maintainer also merged #157 and #158. Merge-tree (textual) of the four rebased copies against 52362d52: `fix/armor-hit-rebased`, `fix/freeze-resume-rebased`, `fix/frozen-armor-and-resume-2c-rebased` and `fix/curse-immune-rebased` all merge clean (rc 0, no conflicts). Builds and tests were not re-run on the new head. Still open on our side: #155, #156 (README row conflict, section 1). The fork plan (section 2) drops the lab-nexthit commits now, because #158 is merged.
 
 ## Shared-file lines for the merger
 
