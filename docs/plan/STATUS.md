@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [blizzardfix](../../openspec/changes/blizzardfix/) | in-progress | blizzardfix | `docs/research/pr-blizzard-draft.md`<br>`openspec/changes/blizzardfix/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -84,7 +83,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change blizzardfix: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -125,6 +123,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- acb7daf 11-01 16:22 `Merge agent/blizzardfix: Blizzard candidate v2: verifier's three changes applied (names, Eruption in the message, ruff)` (blizzardfix)
 - e3e8fc7 11-01 16:13 `Merge agent/fixprogress: town trip loop fix: an empty portal source marks the tome empty for the next visit (Gate 1 progress failure)` (fixprogress)
 - 3cc11d1 11-01 16:06 `Merge agent/verifyblizzard: independent verifier of the Blizzard shard-offset candidate (READY WITH CHANGES)` (verifyblizzard)
 - 825cc2c 11-01 15:54 `Merge agent/fixbelt: low potion kit bypasses the recovery cooldown (Gate 1 belt window)` (fixbelt)
@@ -134,5 +133,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7c4fd4b 11-01 15:01 `Merge agent/macvet: PR vetting on a second machine: portable differentials and checks, parity checked` (macvet)
 - a8c49d9 11-01 14:56 `Merge agent/linuxbuild: Linux builder container docs: fork and test binaries built off the game host` (linuxbuild)
 - 189f251 11-01 14:53 `Merge agent/oriontune: capacity rule treats phantom I/O wait as OK; worker-capacity doc` (oriontune)
-- ccc7ec7 11-01 14:41 `Merge agent/skground: SKGROUND: Blizzard and Meteor traced, d2d deviations, bot delay-timer findings` (skground)
 <!-- statusgen:end -->
