@@ -5,9 +5,10 @@
 
 ## Live state (2026-10-31)
 - Three webhooks named `d.idle feed` exist on `#progress`, `#announcements` and `#stream`; the URLs are only in private 0600 files (never in the repo). Test posts succeeded.
-- The GitHub repo webhook (id 705756116) delivers `release`, `pull_request` and `workflow_run` events to `#progress` (ping delivered, 204). The
-  user asked for workflow runs. `workflow_run` posts on every CI run: if `#progress` gets noisy, remove the event or keep only failures. Edit the events in
-  GitHub (repo Settings, Webhooks), or from a shell: `gh api -X PATCH repos/shatteredeagle/d-idle/hooks/705756116 -f events[]=release -f events[]=pull_request`.
+- A fourth webhook named `d.idle feed` exists on `#d2d-upstream` (feeds2, 2026-11-01); private 0600 file `discord-webhook-d2d-upstream` in the same directory.
+- The GitHub repo webhook (id 705756116) now delivers `release` and `pull_request` events only, to `#progress`. `workflow_run` was removed (feeds2): GitHub cannot
+  filter a webhook by conclusion, so it posted every CI run. Failures come from the CI job `notify-failure` instead (section (f)). Edit the events from a shell:
+  `gh api -X PATCH repos/shatteredeagle/d-idle/hooks/705756116 -f 'events[]=release' -f 'events[]=pull_request'` (never print `config.url`).
 
 Order of value:
 
@@ -52,11 +53,11 @@ daemon or a timer (nothing is self-hosted on the dev box).
 | `soak` | `--file docs/probes/postfix-soak*.md` or `--verdict/--duration/--deaths/--restarts/--xph/--kph` | `#progress` | 3 to 5 lines; REFUSED without a verdict line (`Verdict: ...` or the `d2dsoak compare` `OVERALL <verdict>` line, or `--verdict`) |
 | `drill` | newest `## DRILLS<n>` section of `docs/probes/drills/README.md`, or `--pass/--fail/--blocked/--finding` | `#progress` | PASS/FAIL/BLOCKED counts from the section's verdict table, open findings |
 | `upstream` | `--pr N --event opened\|merged\|reviewed\|ci-green\|changes-requested --title T --url U` | `#d2d-upstream` | `U` must be exactly `https://github.com/psi29a/d2decomped/pull/<digits>` and match `--pr` |
-| `pr-status` | `--pr 'N\|title\|CI\|reviews\|state'` (repeat) or the same lines on stdin | `#progress` (until `#d2d-upstream` has a webhook) | compact code-block table |
+| `pr-status` | `--pr 'N\|title\|CI\|reviews\|state'` (repeat) or the same lines on stdin | `#progress`; `--channel d2d-upstream` for the open upstream PRs | compact code-block table |
 | `release` | `--tag T --notes TEXT\|--notes-file F --url U` | `#announcements` | REFUSED unless the git tag exists; `U` must be `https://github.com/shatteredeagle/d-idle/releases/tag/<tag>` |
 
-`--channel progress|announcements|d2d-upstream|stream` overrides the default. A channel without a webhook file fails closed with
-`no webhook file for <channel> yet (needs the user go to create one)`; `--dry-run` (the default) still works for it.
+`--channel progress|announcements|d2d-upstream|stream` overrides the default. A channel without a webhook fails closed with
+`no webhook for <channel>: store its private file ...`; `--dry-run` (the default) still works for it.
 
 ```
 python3 tools/discord/feed.py soak --file docs/probes/postfix-soak1.md            # look first
@@ -70,10 +71,16 @@ webhook-shaped URLs (the sanitizer refuses them), unverified numbers presented a
 per-run noise (one summary per soak or drill report, not per attempt), anything about the user's lab. The rule for when to run
 it is [process/feed-after-events.md](../../process/feed-after-events.md).
 
-### Not wired yet (needs the user go)
-- (a) CI failures only. GitHub cannot filter webhooks by conclusion, so it needs a GitHub Actions job that posts failures using a
-  Discord webhook stored as a repository secret, and then removing `workflow_run` from the repo webhook. Not done: it needs a new
-  secret and a workflow edit.
-- (b) A webhook for `#d2d-upstream`: missing when the helper was built. Without the private file `upstream` (and `pr-status --channel
-  d2d-upstream`) fail closed; `pr-status` goes to `#progress` meanwhile. A file of that name was seen on the worker host afterwards;
-  its first deliberate post needs the user go.
+### (f) CI failures to `#progress` (live, feeds2)
+The job `notify-failure` in `.github/workflows/ci.yml` (`needs: [checks, test]`, `permissions: contents: read`) posts ONE line, `CI failed on main: <short sha> <run URL>`,
+to `#progress` when a non-PR run fails; it is skipped on a green run and on pull requests. Why a job: a GitHub webhook cannot filter `workflow_run` by conclusion.
+- Secret: GitHub Actions repository secret `DISCORD_PROGRESS_WEBHOOK` (the `#progress` webhook URL); it is in the env of that single step only. Nothing user-controlled
+  (commit message, branch name) is interpolated into `run:`; the body is built with `jq -n --arg`, `allowed_mentions` is empty, `curl --fail`.
+- Rotate: in Discord reset or recreate the `#progress` webhook, rewrite `~/.local/share/d2idle/discord-webhook-progress` (umask 077, mode 0600), then
+  `gh secret set DISCORD_PROGRESS_WEBHOOK -R shatteredeagle/d-idle < ~/.local/share/d2idle/discord-webhook-progress`. Check with `gh secret list` (names only).
+- Test without a failure: `gh workflow run ci -R shatteredeagle/d-idle -f feed_test=true` (a `workflow_dispatch` input); the job then posts `feed test: CI failure notices are wired`.
+  The `if` uses `always()` so the dispatch test runs even though the needed jobs succeeded.
+
+### (g) `#d2d-upstream`
+The webhook file exists, so `upstream` and `pr-status --channel d2d-upstream` post there. Build `pr-status` rows from the live GET state of our open PRs
+(CI, CodeRabbit review count, whether the maintainer reviewed); do not guess. If the webhook leaks: delete it in Discord and create a new one, rewrite the file.

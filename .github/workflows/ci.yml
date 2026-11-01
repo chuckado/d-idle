@@ -1,5 +1,6 @@
-# CI for the public repository, on GitHub-hosted runners (ubuntu-latest). No secrets beyond the built-in GITHUB_TOKEN.
+# CI for the public repository, on GitHub-hosted runners (ubuntu-latest). No secrets beyond the built-in GITHUB_TOKEN and, in notify-failure only, DISCORD_PROGRESS_WEBHOOK.
 # `checks` is light and always runs; `test` is heavy and skipped when only docs, cards or markdown changed;
+# `notify-failure` posts a failed non-PR run to the progress feed (secret DISCORD_PROGRESS_WEBHOOK, only in that job);
 # `release` builds the tarball and publishes a GitHub release on a v* tag. What runs and the local commands: docs/ci.md.
 name: ci
 # Branch pushes other than main (agent branches, and gh-pages, which the status publisher pushes) do not trigger it.
@@ -9,6 +10,11 @@ on:
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
+    inputs:
+      feed_test:
+        description: "Post one test notice to the progress feed through notify-failure"
+        type: boolean
+        default: false
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -107,3 +113,32 @@ jobs:
           path: |
             dist/*.tar.gz
             dist/*.tar.gz.sha256
+
+  # Failure notice for #progress. GitHub's webhook cannot filter workflow_run by conclusion, so the repo webhook carries
+  # release and pull_request only and this job posts failures on main/tags. always() is needed so the feed_test dispatch
+  # can run when the needs succeeded; on a normal green run the if is false and the job is skipped.
+  notify-failure:
+    needs: [checks, test]
+    if: ${{ always() && ((failure() && github.event_name != 'pull_request') || (github.event_name == 'workflow_dispatch' && inputs.feed_test)) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Post to #progress
+        env:
+          DISCORD_PROGRESS_WEBHOOK: ${{ secrets.DISCORD_PROGRESS_WEBHOOK }}
+          SHA: ${{ github.sha }}
+          RUN_ID: ${{ github.run_id }}
+          SERVER_URL: ${{ github.server_url }}
+          REPO: ${{ github.repository }}
+          EVENT: ${{ github.event_name }}
+          FEED_TEST: ${{ inputs.feed_test }}
+        run: |
+          if [ "$EVENT" = workflow_dispatch ] && [ "$FEED_TEST" = true ]; then
+            msg="feed test: CI failure notices are wired"
+          else
+            msg="CI failed on main: ${SHA:0:7} ${SERVER_URL}/${REPO}/actions/runs/${RUN_ID}"
+          fi
+          body=$(jq -nc --arg c "$msg" '{content: $c, allowed_mentions: {parse: []}}')
+          curl --fail --silent --show-error -H 'Content-Type: application/json' -d "$body" "$DISCORD_PROGRESS_WEBHOOK"

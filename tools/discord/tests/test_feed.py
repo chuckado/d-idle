@@ -97,7 +97,7 @@ class Refusals(unittest.TestCase):
             rc, _, err = run("release", "--tag", "v1", "--notes", "n", "--url", url, "--repo", d)
             self.assertEqual(rc, 2)
             self.assertIn("no release exists", err)
-            subprocess.run(["git", "-C", d, "-c", "user.name=t", "-c", "user.email=t@example.com", "commit", "-q",
+            subprocess.run(["git", "-C", d, "-c", "user.name=t", "-c", "user.email=t" + "@" + "example.invalid", "commit", "-q",
                             "--allow-empty", "-m", "x"], check=True)
             subprocess.run(["git", "-C", d, "tag", "v1"], check=True)
             rc, out, _ = run("release", "--tag", "v1", "--notes", "first notes", "--url", url, "--repo", d)
@@ -136,25 +136,33 @@ class Send(unittest.TestCase):
     def go(self, *argv, **kw):
         return run(*argv, store=self.store, env=self.env, sleep=lambda s: None, base_ok=(self.m.base,), **kw)
 
-    def test_d2d_upstream_fails_closed_dry_run_still_works(self):
+    def test_channel_without_webhook_fails_closed_dry_run_still_works(self):
         rc, out, err = self.go("upstream", "--pr", "153", "--event", "opened", "--title", "t", "--url", PR, "--send")
         self.assertEqual(rc, 1)
-        self.assertEqual(err.strip(), "no webhook file for d2d-upstream yet (needs the user go to create one)")
+        self.assertIn("no webhook for d2d-upstream", err)
         self.assertEqual(self.m.requests, [])
         rc, out, _ = self.go("upstream", "--pr", "153", "--event", "opened", "--title", "t", "--url", PR)
         self.assertEqual(rc, 0)
         self.assertIn("#d2d-upstream", out)
 
-    def test_pr_status_goes_to_progress_or_fails_closed_on_override(self):
+    def test_d2d_upstream_posts_once_its_webhook_exists(self):
+        self.env[notify.env_name("d2d-upstream")] = self.m.url
+        rc, out, _ = self.go("upstream", "--pr", "153", "--event", "opened", "--title", "t", "--url", PR, "--send")
+        self.assertEqual(rc, 0, out)
+        rc, out, _ = self.go("pr-status", "--pr", "153|t|green|1|waiting", "--channel", "d2d-upstream", "--send")
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(len(self.m.requests), 2)
+        for _, body in self.m.requests:
+            self.assertEqual(body["allowed_mentions"], {"parse": []})
+
+    def test_pr_status_goes_to_progress_and_other_channels_fail_closed(self):
         self.env[notify.env_name("progress")] = self.m.url
         rc, out, _ = self.go("pr-status", "--pr", "153|t|green|1|waiting", "--send")
         self.assertEqual(rc, 0, out)
         self.assertEqual(len(self.m.requests), 1)
-        body = self.m.requests[0][1]
-        self.assertEqual(body["allowed_mentions"], {"parse": []})
-        rc, _, err = self.go("pr-status", "--pr", "153|t|green|1|waiting", "--channel", "d2d-upstream", "--send")
+        rc, _, err = self.go("pr-status", "--pr", "153|t|green|1|waiting", "--channel", "stream", "--send")
         self.assertEqual(rc, 1)
-        self.assertIn("no webhook file for d2d-upstream", err)
+        self.assertIn("no webhook for stream", err)
         self.assertEqual(len(self.m.requests), 1)
 
     def test_rate_limit_retried_then_posts(self):

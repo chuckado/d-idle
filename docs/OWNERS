@@ -45,3 +45,9 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+.github/workflows/ci.yml  feeds2  feeds2
+docs/community/discord/plan.md  feeds2  feeds2
+tools/discord/feed.py  feeds2  feeds2
+tools/discord/tests/test_feed.py  feeds2  feeds2
+docs/community/discord/feeds.md  feeds2  feeds2
+docs/community/discord/server.md  feeds2  feeds2

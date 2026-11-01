@@ -30,7 +30,7 @@ EVENTS = {"opened": "opened", "merged": "merged", "reviewed": "reviewed", "ci-gr
 DEFAULT_CHANNEL = {"soak": "progress", "drill": "progress", "pr-status": "progress",
                    "release": "announcements", "upstream": "d2d-upstream"}
 CHANNELS = ("progress", "announcements", "d2d-upstream", "stream")
-NO_HOOK = "no webhook file for %s yet (needs the user go to create one)"
+NO_HOOK = "no webhook for %s: store its private file discord-webhook-%s first (docs/community/discord/feeds.md)"
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 
@@ -227,7 +227,7 @@ def send(channel, title, text, url, *, store=None, env=None, **kw):
     except dc.DiscordError as e:
         return False, str(e)
     if not hook:
-        return False, NO_HOOK % channel
+        return False, NO_HOOK % (channel, channel)
     r = notify.post(channel, title, text, url, store=store, env=env, **kw)
     return (True, "posted to #%s" % channel) if r.ok else (False, r.error)
 

@@ -201,3 +201,4 @@ Source: `docs/INDEX.md` sections 1, 2 and 4 (as of 2026-10-29), `docs/BACKLOG.md
 - `agent/plan`, `agent/goalcat`, `agent/goals`: leveling strategy, goal catalog, goal manager, API and embedded dashboard (simulation runner).
 - `agent/progdesign`, `agent/prior`, `agent/priorart2`, `agent/net`, `agent/review`, `agent/hacheck`: progression design, prior-art specs, multiplayer feasibility, plan review with gotchas and roadmap, rebuilt HA stream dashboard.
 - Project skeleton (88d22fb): memory-read probe, input helper, memory reference, plan and agent rules. Agent rules cover cheats, muting, disk policy, commit-often and the four project agent types.
+- feeds2 (live): CI job `notify-failure` posts failed non-PR runs to `#progress` (secret `DISCORD_PROGRESS_WEBHOOK`, `workflow_dispatch` input `feed_test`); the repo webhook no longer sends `workflow_run`; `#d2d-upstream` webhook added and `feed.py upstream`/`pr-status` post there (agent/feeds2).
