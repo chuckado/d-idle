@@ -1,6 +1,6 @@
 # fixmouth4: one click gate for unwanted exits, on every click sent during a stay
 
-> status: IMPLEMENTED OFFLINE, live proof pending. Evidence: DRILLS18 section of docs/probes/drills/README.md (branch agent/drills18, log 2026-11-01-drills18-m31). Follows docs/fixmouth.md, docs/fixmouth2.md and docs/fixmouth3.md. V = read from those logs, S = simulated here, U = unverified.
+> status: IMPLEMENTED OFFLINE, live proof pending. Evidence: DRILLS18 section of docs/probes/drills/README.md (merged to main with drills18; log 2026-11-01-drills18-m31). Follows docs/fixmouth.md, docs/fixmouth2.md and docs/fixmouth3.md. V = read from those logs, S = simulated here, U = unverified.
 
 ## Why three iterations did not converge
 
@@ -32,20 +32,22 @@ Active when (`n.gateActive`): the current level is not a town and either the sta
 
 The check (`mouthClickOK(from, to, exit)`), with `from` the character's current position read at the moment of the click (`Pos()`, falling back to the last observation):
 
-- `from` outside `mouthTriggerR`: the straight segment from `from` to `to` must stay at least `mouthTriggerR` from the exit.
-- `from` inside `mouthTriggerR` (arrival offset, after a swing, after knockback): the segment must never get nearer to the exit than `from` is (`leavesExit`, half a subtile of slack), and must end no nearer than `from`. Moving outward is the only allowed motion.
+- always: the click TARGET lies at least `mouthTriggerR` from the exit. Every logged fired click had its target inside the bound, outward ones included: from 3.2 the click at 5.4 fired (DRILLS18), from 3.2 the second step-away waypoint at 12.1 fired (DRILLS17 DW.m4, (260,156) vs exit (255,145)); long step-away clicks to targets 20 and more away never fired (19 of 19 in DRILLS18). So "moving outward" alone is not safe.
+- `from` outside `mouthTriggerR`: the straight segment from `from` to `to` also stays at least `mouthTriggerR` from the exit.
+- `from` inside `mouthTriggerR` (arrival offset, after a swing, after knockback): the segment never gets nearer to the exit than `from` is (`leavesExit`, half a subtile of slack). Moving outward to a target outside the bound is the only allowed motion.
 
 A refused click is rewritten, never dropped silently:
 
 - outside: CLIPPED to the last point of the segment that stays outside the bound (half a subtile of margin), when that is at least `gateMinClip` (2) subtiles long; the walk makes progress up to the boundary;
-- inside, or no clip room: the AWAY vector (exit to character), rotated 0, +-30, +-60, +-90 degrees, length `mouthAway` (20) then 10, snapped to a walkable cell within 3, and the candidate must itself pass the check;
+- inside: the AWAY vector (exit to character), rotated 0, +-30, +-60, +-90 degrees, length `mouthAway` (20), 25, then 15, snapped to a walkable cell within 3; a first pass takes only candidates with a straight walkable line from the character (the character walks it as clicked), a second pass any walkable one; the candidate must itself pass the check;
+- outside without clip room: no detour (an away click from outside would only start a shuttle);
 - nothing passes: HOLD. No click, the click returns `ErrMouthGate` (wraps `ErrNoPath`), logged with the reason. The walk's main click turns that into a failed walk; roam and explore already treat `ErrNoPath` as "drop this target", the Fighter's `move` logs "move failed" and spends a tick.
 
 Bounded: at most `gateMaxRewrites` (3) rewrites per walk, then HOLD. A walk whose target lies behind the mouth therefore ends in at most three rewritten clicks plus one hold, instead of shuttling between the boundary and the away point. Never a loop, never a wait.
 
 ### The trigger bound
 
-`mouthTriggerR` = 15 (the same value as `mouthApproachR`). Evidence (V): clicks that fired reached 13.0 (Den, DRILLS17), 11.7 and 11.2 (Cave Level 1, DRILLS17) and 5.4 (Den, DRILLS18) from the listed exit position; clicks 16.2 to 18 away never fired (DRILLS16). 15 covers 13.0 with a margin of 2 and stays under 16.2. The real bound, its shape (the trigger area is seed-dependent, docs/d2d-loop.md) and whether the game's own short path from a click can bend into it are U. The exact radius is no longer critical: the 15.1 target of step 1 is allowed, but every click of the walk to it is gated, so the walk cannot cross into the disc on the way.
+`mouthTriggerR` = 15 (`mouthApproachR` is now defined as it). Evidence (V): click targets that fired lay 13.0 (Den, DRILLS17), 12.1, 11.7 and 11.2 (Cave Level 1, DRILLS17) and 5.4 (Den, DRILLS18) from the listed exit position; click targets 16.2 to 18 away never fired (DRILLS16). Swing walks did NOT fire in DRILLS18 (the character went from 13 to 3.2 by swings alone without a level change, V): only walk clicks are known to fire. 15 covers 13.0 with a margin of 2 and stays under 16.2. The real bound, its shape (the trigger area is seed-dependent, docs/d2d-loop.md) and whether the game's own short path from a click can bend into it are U. The exact radius is no longer critical: the 15.1 target of step 1 is allowed, but every click of the walk to it is gated, so the walk cannot cross into the disc on the way.
 
 ### Swings (internal/combat)
 
@@ -53,7 +55,7 @@ The left-hand click of `cast` (basic attack, melee profiles, left skills) is a m
 
 ### The step-away replan
 
-The step-away walk (`oneClick`) carries the exit it flees. On every replan it re-checks the first waypoint it would click with `leavesExit` from the CURRENT position; when the replanned path heads toward the exit, it computes a new away target from the current position (`mouthStep` again, which also turns the direction after a bounce) and walks there. The gate would rewrite the click anyway; the re-check keeps the walk's own goal honest so it does not fight the gate.
+The step-away walk (`oneClick`) carries the exit it flees (`fleeState`). On every replan it re-checks the first click it would send (the goal itself when in line of sight, else the first waypoint) against `mouthClickOK` from the CURRENT position (`leavesExit` alone would have passed the DRILLS18 click: it was outward); when it breaks the invariant, it computes a new away target from the current position (`mouthStep` again, which also turns the direction after a bounce) and walks there. At most `fleeRetargets` (2) per step-away. The gate would rewrite the click anyway; the re-check keeps the walk's own goal honest so it does not fight the gate.
 
 ### Kept
 
@@ -69,13 +71,18 @@ nav (`internal/nav/fixmouth4_test.go`):
 - `TestGateIgnoresWantedExit`, `TestGateOffWithoutStay`, `TestGateOffInTown`.
 - `TestStepAwayReplanRetargets`.
 - `TestEveryNavClickGoesThroughTheGate`.
-- `TestSweepWithPackAndBlockedStepAwayNeverCrosses` (S): Clear-like yield plus Explore sweep, a pack near the mouth whose yield drags the character to 3.2 from the exit (the DRILLS18 swing) and a step-away blocked by it: zero clicks violate the invariant.
+- `TestSweepWithPackAndBlockedStepAwayNeverCrosses` (S): Explore sweep from 13.2 with a pack that blocks the step-away; the yield (the fight inside the walk) drags the character to 3.2 from the exit (the DRILLS18 swings), and a wall corners it so the replanned way out runs along the mouth. The log shows the DRILLS18 chain and its fix: `step-away replan heads to the mouth, new goal`, then two `click rewritten ... how=away`; zero clicks violate the invariant.
+- `TestCorneredAtTheMouthNeverCrosses` (S): the same corner without the pack, a GoTo from 3.2.
 
 combat (`internal/combat/fixmouth4_test.go`):
 - `TestSwingHeldTowardMouth`: basic attack at a Fallen at the mouth from 8 subtiles: no left click while the mover refuses; time passes.
-- `TestSwingAllowedInMeleeRange`, `TestSwingAllowedWithoutGate`.
+- `TestSwingAllowedInMeleeRange`, `TestSwingAllowedAwayFromMouth`.
 
 The sims have no tile warps, so "zero level changes" is proxied by "zero clicks that violate the invariant".
+
+### Trade-off (U)
+
+A character inside the bound whose only way out is a path whose first clicks land inside the bound, with no walkable away line within 90 degrees, now HOLDS: the walk fails with `ErrMouthGate` instead of bouncing. The callers drop that goal; Explore moves on. Whether such geometry occurs in Den or Cave Level 1 is U (in the sim corner the away rewrite found the way around the wall). A high `click held` count in the live logs is the sign.
 
 ## Live proof recipe (not run: no game in this task)
 
