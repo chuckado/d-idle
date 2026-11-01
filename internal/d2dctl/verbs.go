@@ -279,6 +279,20 @@ func (c *Client) Level(ctx context.Context) (LevelInfo, error) {
 	return parseLevel(r.Rest)
 }
 
+// Buff is one self state of the player in the read-only `debug states` listing: the skill that started it and its level.
+type Buff struct{ Skill, Level int }
+
+// Buffs is the bare, read-only `debug states` (docs/forkdbg.md: `buffs=<skill>:<level>,`; the listing is in the
+// fork's docs, the exact line shape is not yet seen live: U, parsed leniently). It never changes the game, so it is
+// not a SkillDebug verb. An error reply (a binary without the verb) is a *CmdError.
+func (c *Client) Buffs(ctx context.Context) ([]Buff, error) {
+	r, err := c.Debug(ctx, "states")
+	if err != nil {
+		return nil, err
+	}
+	return parseBuffs(r), nil
+}
+
 // QuestShow returns quest q's flag bits and the Act 1 record states.
 func (c *Client) QuestShow(ctx context.Context, q int) (QuestInfo, error) {
 	r, err := c.Debug(ctx, "quest", strconv.Itoa(q), "show")

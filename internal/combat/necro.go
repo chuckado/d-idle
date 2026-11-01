@@ -37,8 +37,11 @@ const (
 
 var (
 	curseStates = map[string]int{"Amplify Damage": stateAmplify, "Weaken": stateWeaken}
-	buffStates  = map[string]int{"Bone Armor": stateBoneArmor, "Frozen Armor": stateFrozenArmor}
-	curseNames  = map[string]bool{"Amplify Damage": true, "Weaken": true, "Lower Resist": true, "Dim Vision": true,
+	// Chilling 20, Energy Shield 30, Shiver 88: States.txt rows (V read, sk-armor-trace Q1); not seen live (U). Energy
+	// Shield ends at 0 mana in game.exe, so its state reads as gone when the clock would still say up.
+	buffStates = map[string]int{"Bone Armor": stateBoneArmor, "Frozen Armor": stateFrozenArmor, "Chilling Armor": d2.StateChillingArmor,
+		"Shiver Armor": d2.StateShiverArmor, "Energy Shield": d2.StateEnergyShield}
+	curseNames = map[string]bool{"Amplify Damage": true, "Weaken": true, "Lower Resist": true, "Dim Vision": true,
 		"Terror": true, "Confuse": true, "Life Tap": true, "Attract": true, "Decrepify": true}
 	// golems in preference order. Iron Golem needs an item in the world and Blood Golem costs life: not used (U).
 	golemLadder = []string{"Fire Golem", "Clay Golem"}

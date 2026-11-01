@@ -611,3 +611,28 @@ func ParseMissile(line string) (Missile, error) {
 	}
 	return m, firstErr(e[:]...)
 }
+
+// parseBuffs finds the buffs=40:1,50:3, token in any payload line or the status rest; a malformed pair is skipped.
+func parseBuffs(r *Reply) []Buff {
+	var out []Buff
+	for _, line := range append(append([]string(nil), r.Lines...), r.Rest) {
+		for _, t := range strings.Fields(line) {
+			v, ok := strings.CutPrefix(t, "buffs=")
+			if !ok {
+				continue
+			}
+			for _, pair := range strings.Split(v, ",") {
+				a, b, ok := strings.Cut(pair, ":")
+				if !ok {
+					continue
+				}
+				sk, e1 := atoi(a)
+				lv, e2 := atoi(b)
+				if e1 == nil && e2 == nil {
+					out = append(out, Buff{sk, lv})
+				}
+			}
+		}
+	}
+	return out
+}

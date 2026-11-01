@@ -506,3 +506,40 @@ func TestFieldObjectsListed(t *testing.T) {
 		t.Errorf("debug presets read %d times for two snapshots on one spot (want 1)", n)
 	}
 }
+
+func TestBuffStates(t *testing.T) {
+	r := lateReplies(t)
+	r["debug states"] = "absorb=0 maxlife=100 maxmana=50 def=7 buffs=40:1,68:2,999:1,\nok\n"
+	_, c := startScript(t, r)
+	src := New(c, Options{Tables: fakeTables{}, Logf: quiet, BuffStates: true})
+	res, err := src.Read(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	st := res.Snap.Player.States
+	if !st.Has(d2.StateFrozenArmor) || !st.Has(14) || st.Has(d2.StateShiverArmor) || st.Has(d2.StatePoison) {
+		t.Errorf("states %v", st)
+	}
+	// without the option the bit array stays empty and the verb is not asked
+	_, c = startScript(t, lateReplies(t))
+	res, err = New(c, Options{Tables: fakeTables{}, Logf: quiet}).Read(context.Background())
+	if err != nil || res.Snap.Player.States != (d2.StateSet{}) {
+		t.Errorf("option off: %v %v", res.Snap.Player.States, err)
+	}
+}
+
+func TestBuffStatesRefused(t *testing.T) {
+	r := lateReplies(t)
+	r["debug states"] = "err unknown debug verb\n"
+	_, c := startScript(t, r)
+	src := New(c, Options{Tables: fakeTables{}, Logf: quiet, BuffStates: true})
+	for i := 0; i < 2; i++ {
+		res, err := src.Read(context.Background())
+		if err != nil || res.Snap.Player.States != (d2.StateSet{}) {
+			t.Fatalf("read %d: %v %v", i, res.Snap.Player.States, err)
+		}
+	}
+	if !src.noBuff.Load() {
+		t.Error("a refused verb should switch the read off")
+	}
+}

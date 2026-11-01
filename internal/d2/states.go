@@ -5,7 +5,12 @@ package d2
 const (
 	StatePoison      = 2
 	StateFrozenArmor = 10
-	stateWords       = 6 // 192 state bits
+	// The other group-1 armors and Energy Shield: States.txt row = id as game.exe loads the tables (V read: SKARMOR
+	// trace Q1, sk-armor-trace.md; the live bit of Bone Armor 14 was seen, these three were not yet seen live: U).
+	StateChillingArmor = 20
+	StateEnergyShield  = 30
+	StateShiverArmor   = 88
+	stateWords         = 6 // 192 state bits
 )
 
 // slStateFlags is the offset inside an extended StatList (flag 0x80000000) of a POINTER to the state bit array (DWORD[6]).
