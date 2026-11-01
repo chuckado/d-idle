@@ -199,7 +199,7 @@ def model(path):
     for (cid, every, radius, cx, cy, frame, start, own, rm, block, mask) in read_cases(path):
         lo, hi = 0xDEADBEEF, 0xCAFEF00D
         age = s16(frame) - s16(start)
-        sev = every - (1 << 32) if every & 0x80000000 else every
+        sev = (every & M32) - (1 << 32) if every & 0x80000000 else every
         # C remainder (truncates toward zero)
         rem = None if sev == 0 else abs(age) % abs(sev) * (1 if age >= 0 else -1)
         if sev == 0 or rem != 0 or not own or not rm:
