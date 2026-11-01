@@ -77,9 +77,10 @@ class Post(unittest.TestCase):
         bad = GOOD + "\nblocked: " + phrase
         h = FakeHTTP(bad, bad)
         rc, out, err = run(f, h)
-        # the plain rendering contains the same phrase, so nothing can be posted
-        self.assertEqual(rc, 2)
-        self.assertIn("looks private", err)
+        # the plain rendering has the same run; the separator repair now makes it postable (it used to be refused)
+        self.assertEqual(rc, 0, err)
+        self.assertIn("guard run found", err)
+        self.assertIn("some tiny word, runs like this", out)
 
     def test_fallback_on_http_error(self):
         rc, out, err = run(FACTS, FakeHTTP(status=529))
@@ -153,6 +154,67 @@ class Post(unittest.TestCase):
         self.assertEqual(h.calls, 0)
         self.assertIn("source=deterministic", out)
 
+
+
+
+REFUSED_TODAY = {"running": "FORKFREEZE: freeze resume fix on the fork",
+                 "merged": "Freeze-resume fix proof and independent verifier (READY WITH CHANGES, held for your go) and the Frozen Armor recast drill held",
+                 "waiting": ["Nothing."]}
+
+
+class Repair(unittest.TestCase):
+    def guard(self, text):
+        return tick_post.notify.check_text("", text, "")
+
+    def test_repair_text_passes_real_guard_and_keeps_tokens(self):
+        t = "- Blocked: aaaa bbbbb cccccc dddd eeeee ffff gggg hhhh iiii jjjj 12.5 PR-41"
+        self.assertEqual(self.guard(t), ["cdkey"])
+        fixed, runs = tick_post.repair_runs(t)
+        self.assertEqual(self.guard(fixed), [])
+        self.assertTrue(runs)
+        self.assertEqual(fixed.replace(",", ""), t)  # only commas were inserted
+        self.assertIn("12.5 PR-41", fixed)
+
+    def test_hyphen_run_and_clean_text(self):
+        fixed, runs = tick_post.repair_runs("aaaa-bbbb-cccc-dddd-eeee")
+        self.assertEqual(self.guard(fixed), [])
+        self.assertEqual(fixed.replace(", ", "-"), "aaaa-bbbb-cccc-dddd-eeee")
+        clean = "- Running: navi, combi (PR 41)"
+        self.assertEqual(tick_post.repair_runs(clean), (clean, []))
+
+    def test_gives_up_after_five(self):
+        t = " ".join(["word"] * 40)
+        fixed, runs = tick_post.repair_runs(t)
+        self.assertEqual(len(runs), 5)
+
+    def test_refused_today_facts_post_plain_after_repair(self):
+        v = tick_post.facts_to_vals(REFUSED_TODAY)
+        self.assertEqual(self.guard(tick_post.render(v, 1793543400.0)[1]), ["cdkey"])  # refused before the repair
+        for facts in (REFUSED_TODAY, dict(REFUSED_TODAY, blocked="aaaa bbbb cccc dddd eeee 7")):
+            rc, out, err = run(facts, FakeHTTP(status=529), "--no-api")
+            self.assertEqual(rc, 0, err)
+            self.assertEqual(self.guard(out), [])
+            self.assertIn("Freeze-resume", out)
+            self.assertNotIn("Waiting", out)
+
+    def test_haiku_text_repaired_after_failed_reword(self):
+        f = dict(REFUSED_TODAY, blocked="aaaa bbbb cccc dddd eeee 7")
+        bad = ("running: FORKFREEZE: freeze resume fix on the fork\nmerged: " + REFUSED_TODAY["merged"] +
+               "\nblocked: aaaa bbbb cccc dddd eeee 7")
+        h = FakeHTTP(bad, bad)
+        rc, out, err = run(f, h)
+        self.assertEqual(rc, 0, err)
+        self.assertIn("source=haiku", out)
+        self.assertIn("guard run found", err)
+        self.assertIn("aaaa bbbb cccc, dddd eeee 7", out)
+
+    def test_waiting_nothing_not_invented(self):
+        good = ("running: FORKFREEZE: freeze resume fix on the fork\nmerged: " + REFUSED_TODAY["merged"] +
+                "\nwaiting: Nothing is waiting on you right now")
+        rc, out, err = run(REFUSED_TODAY, FakeHTTP(good))
+        self.assertEqual(rc, 0, err)
+        self.assertNotIn("invented", err)
+        self.assertNotIn("Waiting", out)
 
 if __name__ == "__main__":
     unittest.main()
