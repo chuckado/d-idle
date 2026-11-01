@@ -52,3 +52,7 @@ cmd/d2bot/acts.go  fixtalk  fixtalk
 cmd/d2bot/acts_test.go  fixtalk  fixtalk
 cmd/d2bot/cain_test.go  fixtalk  fixtalk
 docs/fixtalk.md  fixtalk  fixtalk
+openspec/changes/walkopen/**  walkopen  walkopen
+docs/research/pr-walk-evidence-pack.md  walkopen  walkopen
+docs/research/pr-bundle-queue.md  walkopen  walkopen
+docs/BACKLOG.md  walkopen  walkopen

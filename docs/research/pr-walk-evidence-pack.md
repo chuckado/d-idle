@@ -58,3 +58,13 @@ Go for the bundle slot after the det state hashes (a d2d slot) and the user's go
 git -C ~/d2d-lab/pr/walk3 push origin fix/walk-velocity-v3
 gh pr create --repo psi29a/d2decomped --base main --head shatteredeagle:fix/walk-velocity-v3   # body: docs/research/pr-walk-draft.md
 ```
+
+## Posted log
+
+- posted: 2026-11-01 replay: upstream main unchanged at 72132b99, #152 #153 #155 still open; own branch fix/walk-velocity-v4 from v3 head 8db11206 (card walkopen). Review lessons applied before opening: the reviewer mode moved out of test_game.cpp (1,609 lines with it, upstream's limit about 1,500) into tests/game/test_walk_velocity.cpp (reviewer command now `test_walk_velocity --walk-velocity cases.tsv`; skips rc 77 without the argument or patched data), oracle seed masked to 32 bits (`& 0xFFFFFFFF`, seed 9191 gives the same cases), include-cleaner fixes (clang-tidy clean on the new file). Folded into the tooling commit; the tree differs from 8db11206 only in tests/game/test_game.cpp, tests/game/test_walk_velocity.cpp, tools/emu/README.md, tools/emu/walk_velocity.py.
+- posted: 2026-11-01 gates on head e4a13181: pr_guard 0 FAIL / 0 WARN (range and each commit), presubmit --quick 0 FAIL / 3 WARN (answered in the body), test_game (data dir), test_rules, test_combat, test_protocol rc 0, gcc -Wshadow -Wunused -Wsign-compare 0 on added lines, reviewer mode 122,646 cases 0 mismatches, output identical to v2 and v3. The verifier's own harnesses were not re-run: the component sources are byte-identical to the verified head.
+- posted: 2026-11-01 branch pushed to the fork as fix/walk-velocity (head e4a13181, six commits on upstream main 72132b99).
+- posted: 2026-11-01 PR #156 opened https://github.com/psi29a/d2decomped/pull/156 (title 'game: monsters, mercs and pets walk at Velocity, chill adds coldeffect (differential proof vs game.exe)'; body: the draft with the precise claims, counts, reviewer command, all limits and the determinism note). go: user, 2026-11-01 ('queue the walk velocity pr behind the spot155').
+- CI on e4a13181 (read-only polls): guard pass 7s; Linux (GCC) pass 20m25s; Windows (MSVC) pass 16m5s; macOS (Clang) pass 18m23s; Flatpak x86_64 pass 18m10s; Flatpak aarch64 pass 13m12s. No fixup needed.
+- CodeRabbit: 'Review limit reached' notice on #156 at about 6 minutes after opening ("Next included review available in 29 minutes", i.e. about 03:50Z on 2026-11-01); no review comments yet; nothing answered. A later agent handles findings under the standing go.
+
