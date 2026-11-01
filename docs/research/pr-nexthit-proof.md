@@ -1,5 +1,6 @@
 # PR proof: a NextHit hit marks the unit `justhit` (D-NEXTHIT, Nova / Frost Nova)
 
+> status: SUPERSEDED on the end frame and the counts by [pr-nexthit-v2-addendum.md](pr-nexthit-v2-addendum.md): justhit ends after the missiles of frame + NextDelay (struck at f, next hit at f+NextDelay+1), candidate `fix/nexthit-v2`; the "0 of 100,198" below was built into the oracle on that point.
 > status: BUILT, local candidate `fix/nexthit` on the worker host (claim 8abab0ed, tooling 7901fda2, on upstream main 72132b99); differential run before and after on real d2d builds; **NOT READY**: no independent verifier, no det state hashes, Chain Lightning and Lightning claims not built (designs below). Nothing pushed or posted (card nexthit, 2026-11-01). Follows docs/research/sk-lightning-trace.md (D1, D2), docs/research/sk-nova-trace.md (D1) and docs/research/sk-missile-trace.md. Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-nexthit-draft.md](pr-nexthit-draft.md).
 
 Tags: **V run** game.exe's own code run under upstream's emulator; **V read** disassembled with upstream's `tools/emu/disasm.py`; **D** 1.14d Missiles.txt read through `emu.mpq_file`; **S** d2d source at 72132b99 (file:line) or an earlier trace of ours; **I** inferred; **U** unknown.
