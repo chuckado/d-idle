@@ -25,7 +25,7 @@ REFOCUS (user, 2026-10-31): the primitives first: docs/primitives.md (36 primiti
   - FIXEMPTYPLAN (primitive, S): merged, live PASS x3 (DRILLS11), card archived.
   - FIXPORTALMELEE (safety, S): running.
   - FIXROAMKNOWS (primitive memory + policy recycle trigger, M): queued.
-  - FIXDENBOUNCE (primitive, S-M): queued; evidence in docs/fixdenbounce.md; leave path unproven; needs a debug-level live slice (DW.m3).
+  - FIXDENBOUNCE (primitive, S-M): cause named live by drills14 (nav mouthStep mouthR 9 vs arrival at 11.2 subtiles; Explore/roam first walk; Fighter.Clear approach in Cave Level 1); the fix is card fixmouth (agent/fixmouth, implementation in progress).
   - WALKSPLIT (telemetry, S): queued.
   - TRIPECON / POSTDEATHSELL / AREAMIN11 (POLICY): paused until the primitives have a live PASS.
   - Walking breakdown: walk time of Gate 1 soak 2 (53,865 virtual s): same-level search and approach 38 percent, gaps containing a town trip 33 percent, level hopping 15 percent, gaps with 2+ stuck rungs 10 percent; approach walking itself is not the problem; 77 gaps of 160 s or more hold 30 percent of kill time.
