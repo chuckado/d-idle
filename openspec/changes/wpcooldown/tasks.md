@@ -14,7 +14,6 @@ owns:
   - docs/wpcooldown.md
   - docs/waypoints.md
   - docs/fixwp.md
-  - docs/knobs.md
   - openspec/changes/wpcooldown/**
 exclusive: []
 gates:
