@@ -36,6 +36,7 @@ type FightSpec struct {
 	Arrive         string   // "" the cheat goto; "tp" a town portal round trip (the bot's portal verb, ToTown, BackToField); "wp" the navigator's waypoint trip from town (drills7)
 	Cold           bool     // no warm-up walk after the arrival and one Clear only: the first Clear on a map the navigator has not walked (fixmisc)
 	Clear          time.Duration
+	Meter          bool // enable the rig's Meter around the Clear loop and report MeterCheck (fixmeter)
 	// LifeAt, when set, lowers the life to this value as soon as the first spawned monster is within reach (P29 retreat)
 	LifeAt int
 }
@@ -60,6 +61,7 @@ type FightInfo struct {
 	Ignores                                   []string
 	Mons                                      string
 	LogHead                                   []string // the first non-decision log lines of the call
+	Meter                                     *MeterCheck
 }
 
 func (f FightInfo) String() string {

@@ -152,6 +152,8 @@ func run() int {
 		drills = drill.D9(l)
 	case "F": // DRILLS5 field drills: operating field objects, fights with debug spawn (dodge, target choice, retreat, mana drink)
 		drills = drill.F(l)
+	case "M": // fixmeter live proof (D-meter)
+		drills = drill.M(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
