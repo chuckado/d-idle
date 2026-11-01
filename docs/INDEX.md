@@ -87,3 +87,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - DRILLS15 (live result): first live skill-smoke drills (group R): Teleport, mana, missile and armor traces compared with d2d, deviations confirmed: [probes/drills/README.md](probes/drills/README.md)
 - fixmanamodel: [fixmanamodel.md](fixmanamodel.md) regen per-frame whole 256ths, backend mana booking, potion over time (offline; live drill pending).
 - FORKNEXT: [forknext.md](forknext.md) the private fork carries the NextHit fix (lab-nexthit), vetting, binary naming rule.
+- DRILLS17 (live result): fixmouth2 live proof FAIL (Clear finishes, spin gone, bounces remain; town D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md)
