@@ -129,3 +129,8 @@ internal/resource/recovery_test.go  fixbelt  fixbelt
 internal/bot/broke.go  fixbelt  fixbelt
 internal/bot/area_ban_test.go  fixbelt  fixbelt
 openspec/changes/fixbelt/**  fixbelt  fixbelt
+docs/fixprogress.md  fixprogress  fixprogress
+internal/town/fixprogress_test.go  fixprogress  fixprogress
+openspec/changes/fixprogress/**  fixprogress  fixprogress
+internal/town/chores.go  fixprogress  fixprogress
+internal/town/town.go  fixprogress  fixprogress

@@ -358,7 +358,9 @@ func (t *Town) scrollCount(s *d2.Snapshot, scroll, tome string) (have int, hasTo
 			have++
 		case b.Code == tome:
 			hasTome = true
-			have += t.qty(u)
+			if !(t.portalEmpty && tome == "tbk") { // an empty source reported by the game outranks the stat read
+				have += t.qty(u)
+			}
 		}
 	}
 	return have, hasTome

@@ -39,6 +39,9 @@ func (t *Town) NeedsTrip(s *d2.Snapshot) (bool, string) {
 		if t.isFutile(r, s.Player.Gold) {
 			continue
 		}
+		if r.key == "tsc" && t.e.Clock.Now().Before(t.tscQuietUntil) {
+			continue
+		}
 		return true, r.why
 	}
 	return false, ""
@@ -231,6 +234,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		return rep, ErrNotInTown
 	}
 	rep.GoldBefore = s.Player.Gold
+	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
 	defer func() {
@@ -313,6 +317,9 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		if err := step(st.name, st.enabled, st.need, st.run); err != nil {
 			return rep, err
 		}
+	}
+	if wasEmpty {
+		t.afterEmptyVisit()
 	}
 	if err := t.h.CloseAll(ctx); err != nil {
 		rep.add("close", true, "", err)
@@ -599,3 +606,27 @@ func (t *Town) RepairEstimateForTest() (int, error) {
 	}
 	return t.repairEstimate(s), nil
 }
+
+// maxEmptyVisits is how many town visits in a row may start from "the game found no portal source" before the
+// scroll trip goes quiet (FIXPROGRESS, Gate 1 rerun: 43 virtual minutes of walk, shop, walk with 600 gold).
+const maxEmptyVisits = 2
+
+// afterEmptyVisit closes a visit that began with an empty portal source. The flag is spent (the shop has had its
+// chance to restock against the game's count). Two such visits in a row mean the purchases do not reach a usable
+// source (U: the stat read or the tome); the "no town portal scroll" trip then stays quiet for FutileMinutes so the
+// character fights on instead of looping walk, shop, walk. A portal that opens again resets the count (ToTown).
+func (t *Town) afterEmptyVisit() {
+	t.portalEmpty = false
+	t.emptyStreak++
+	if t.emptyStreak < maxEmptyVisits {
+		return
+	}
+	quiet := time.Duration(t.tune().FutileMinutes) * time.Minute
+	t.tscQuietUntil = t.e.Clock.Now().Add(quiet)
+	t.emptyStreak = 0
+	t.e.Log.Warn("town: portal source still empty after restocking, no scroll trip for a while", "quiet", quiet)
+}
+
+// NotePortalEmpty records that a portal cast found no usable source (an empty tome, no scroll). The next town visit
+// restocks against that fact instead of the pack's stat read.
+func (t *Town) NotePortalEmpty() { t.portalEmpty = true }
