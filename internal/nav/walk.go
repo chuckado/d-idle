@@ -24,7 +24,18 @@ type walkOpts struct {
 	onPlan     func(planResult) // test and debug hook
 	escape     bool             // a stalled walk tries the Escape hook (town portal) before it gives up (GoTo, GoToUnit)
 	oneClick   bool             // click the goal itself while it is in line of sight (the step away from a cave mouth, FIXMOUTH3)
+	flee       *fleeState       // the step away from a cave mouth: re-checked on every replan (FIXMOUTH4)
 }
+
+// fleeState is the step-away's goal and the exit it flees. The walk's target reads goal, so a replan can move it.
+type fleeState struct {
+	exit      input.Point
+	goal      input.Point
+	retargets int
+}
+
+// fleeRetargets bounds how often one step-away picks a new goal after a replan.
+const fleeRetargets = 2
 
 type walkState struct {
 	res      planResult
@@ -61,6 +72,7 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 	}
 	deadline := n.clk.Now().Add(timeout)
 	n.walkSeq++
+	n.gateRewrites = 0
 	if n.log.Enabled(ctx, slog.LevelDebug) {
 		var pcs [6]uintptr
 		k := runtime.Callers(2, pcs[:])
@@ -115,7 +127,8 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 			if ok {
 				n.log.Info("nav: stepping away from a cave mouth", "from", o.pos, "to", away)
 				n.inMouth = true
-				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return away, 3, nil }, walkOpts{timeout: 10 * time.Second, oneClick: true})
+				fl := &fleeState{exit: input.Point{X: n.mouthLast.x, Y: n.mouthLast.y}, goal: away}
+				err := n.walk(ctx, func(*obs) (input.Point, float64, error) { return fl.goal, 3, nil }, walkOpts{timeout: 10 * time.Second, oneClick: true, flee: fl})
 				n.inMouth = false
 				if errors.Is(err, ErrLevelChanged) {
 					n.noteMouthBounce() // the same step again would fire the same trigger (FIXNAV)
@@ -182,6 +195,10 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 				wo.onPlan(res)
 			}
 			n.log.Debug("nav plan", "from", o.pos, "to", goal, "wps", len(res.wps), "partial", res.partial, "cells", res.cells)
+			if n.fleeRetarget(o, res, wo.flee) {
+				w.have = false
+				continue
+			}
 		}
 
 		// --- follow: advance along the waypoints, but only while the next one is in line of sight. Cutting
@@ -613,7 +630,7 @@ const (
 	// FIXMOUTH3, V (DRILLS16/17 logs): clicks fired the trigger 13.0 from the exit (Den, click (42,146), exit (35,135))
 	// and 11.7 and 11.2 from it (Cave Level 1); clicks 16.2 to 18 away never did. 15 covers 13.0 with 2 margin and stays
 	// below 16.2. The real trigger bound stays U (docs/fixmouth3.md).
-	mouthApproachR = 15.0
+	mouthApproachR = mouthTriggerR
 )
 
 // SetMouthGuard turns NearMouth on. d2d only (arrival inside a warp's trigger area is a d2d behavior, docs/d2d-loop.md);
@@ -700,6 +717,35 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 		n.arrival = false
 	}
 	return input.Point{}, false
+}
+
+// fleeRetarget: a step-away that replanned (after a stall, a fight inside it, knockback) checks the first waypoint it
+// would click from where the character stands NOW; when that heads toward the exit it computes a new away goal from
+// here (FIXMOUTH4, V DRILLS18: the replan from 3.2 first clicked 5.4 from the exit and fired it). The mouth gate would
+// rewrite that click anyway; this keeps the walk's own goal from fighting the gate.
+func (n *Navigator) fleeRetarget(o *obs, res planResult, fl *fleeState) bool {
+	if fl == nil || fl.retargets >= fleeRetargets || len(res.wps) == 0 {
+		return false
+	}
+	wp := res.wps[0]
+	for _, p := range res.wps {
+		if dist(o.pos, p) > 1 {
+			wp = p
+			break
+		}
+	}
+	d := dist(o.pos, fl.exit)
+	if leavesExit(o.pos, wp, d2map.Point{X: fl.exit.X, Y: fl.exit.Y}, d) {
+		return false
+	}
+	fl.retargets++
+	p, ok := n.mouthStep(o)
+	if !ok || p == fl.goal {
+		return false
+	}
+	n.log.Info("nav: step-away replan heads to the mouth, new goal", "pos", o.pos, "wp", wp, "old", fl.goal, "new", p, "dist", math.Round(d*10)/10)
+	fl.goal = p
+	return true
 }
 
 // leavesExit: the straight path from a to b never gets nearer to the exit than a was (d, minus half a subtile of slack):

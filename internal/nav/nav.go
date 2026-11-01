@@ -101,26 +101,28 @@ type Navigator struct {
 	planMu     sync.Mutex // planHard mutates the shared Field (dyn costs, passMask) and n.black: one plan at a time
 	rng        *rand.Rand
 
-	field     *Field
-	fieldKey  fieldKey
-	black     []blocked
-	hard      []blocked    // cells the planner must not cross for a while (stuckmem.go)
-	spots     []*stuckSpot // recent stalls (stuckmem.go)
-	walkSeq   int
-	walkLevel int  // level of the last walk's first observation (0: none yet)
-	stayLevel int  // level whose unwanted exits are guarded for the whole stay (FIXMOUTH3); 0: none
-	arrival   bool // a warp brought us here and no walk has consulted mouthStep since (FIXMOUTH)
-	escaping  bool
-	teleBad   map[[2]int]int  // hop cells where nothing happened
-	teleFails int             // consecutive explore hops that did not move
-	visited   map[[2]int]bool // exploration buckets the player has stood in
-	failed    map[[2]int]int  // frontier buckets that did not pan out
-	badGates  []badGate
-	noExit    []noExitMark                                                         // ExitTo gave up exploring for an exit: see exitCooldown
-	exploreFn func(ctx context.Context, done func() bool, hint *input.Point) error // test seam, nil: explore
-	seen      map[edgeKey]bool                                                     // level crossings made (Route)
-	bad       map[edgeKey]badEdge                                                  // guessed edges that turned out not to exist
-	avoid     atomic.Pointer[map[int]bool]                                         // levels a walk should not pass through (SetAvoidLevels)
+	field        *Field
+	fieldKey     fieldKey
+	black        []blocked
+	hard         []blocked    // cells the planner must not cross for a while (stuckmem.go)
+	spots        []*stuckSpot // recent stalls (stuckmem.go)
+	walkSeq      int
+	walkLevel    int         // level of the last walk's first observation (0: none yet)
+	stayLevel    int         // level whose unwanted exits are guarded for the whole stay (FIXMOUTH3); 0: none
+	arrival      bool        // a warp brought us here and no walk has consulted mouthStep since (FIXMOUTH)
+	lastPos      input.Point // position of the last observation (the gate's fallback when Pos fails)
+	gateRewrites int         // clicks the mouth gate rewrote in the current walk (FIXMOUTH4)
+	escaping     bool
+	teleBad      map[[2]int]int  // hop cells where nothing happened
+	teleFails    int             // consecutive explore hops that did not move
+	visited      map[[2]int]bool // exploration buckets the player has stood in
+	failed       map[[2]int]int  // frontier buckets that did not pan out
+	badGates     []badGate
+	noExit       []noExitMark                                                         // ExitTo gave up exploring for an exit: see exitCooldown
+	exploreFn    func(ctx context.Context, done func() bool, hint *input.Point) error // test seam, nil: explore
+	seen         map[edgeKey]bool                                                     // level crossings made (Route)
+	bad          map[edgeKey]badEdge                                                  // guessed edges that turned out not to exist
+	avoid        atomic.Pointer[map[int]bool]                                         // levels a walk should not pass through (SetAvoidLevels)
 }
 
 type fieldKey struct {
@@ -154,6 +156,9 @@ func New(e *env.Env) *Navigator {
 			return env.DefaultNavTuning()
 		}
 		return e.Tune.Nav
+	}
+	if n.in != nil {
+		n.in = mouthGate{Controller: n.in, n: n} // FIXMOUTH4: every world click passes the cave-mouth gate (mouthgate.go)
 	}
 	n.defaults()
 	return n
@@ -215,6 +220,7 @@ func (n *Navigator) observe() (*obs, error) {
 		return nil, errLoading
 	}
 	n.noteLevel(snap)
+	n.lastPos = input.Point{X: snap.Player.X, Y: snap.Player.Y}
 	return &obs{snap: snap, state: st, lm: lm, pos: input.Point{X: snap.Player.X, Y: snap.Player.Y}, level: snap.Player.Area}, nil
 }
 
