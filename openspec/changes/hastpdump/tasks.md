@@ -11,7 +11,8 @@ owns:
   - internal/bot/tpdump.go
   - docs/hastpdump.md
 exclusive: []
-gates: []
+gates:
+  - "TestInvTPDump: dump on first look, area change and verdict change, not otherwise"
 result: "offline test TestInvTPDump passes; not verified live"
 ```
 
