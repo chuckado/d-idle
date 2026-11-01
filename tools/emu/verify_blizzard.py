@@ -257,7 +257,7 @@ def d2d(path):
     hx, hy, n, off, per = {}, {}, 0, 0, {}
     for l in open(path):
         f = l.split()
-        if len(f) != 5 or f[0] == "#":
+        if len(f) != 5 or f[1] not in ("Blizzard", "Eruption"):
             continue
         cid, frame, dx, dy = f[0], int(f[2]), int(f[3]), int(f[4])
         n += 1

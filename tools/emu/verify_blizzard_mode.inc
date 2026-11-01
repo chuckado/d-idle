@@ -7,6 +7,8 @@
 //                                     and one `# id centre_frames shards rng_low rng_high` line per case
 // A case: `id skill_name rng_low rng_high level target_dx target_dy` (target in cells from the player).
 // The world rng is set to {rng_low, rng_high} first; d2d's shards roll the shared world rng.
+// Per frame: Fight::missile_tick, then the pending missiles join and the spent ones (now >= dies) go,
+// as Fight::world does (tick.cpp) without flight, hits or the town / Blood Moor split.
 if (argc > 2 && std::string_view(argv[1]) == "--vb-blizzard") {
     World world(&*data, -1, -1);
     world.enter(character);
@@ -57,6 +59,10 @@ if (argc > 2 && std::string_view(argv[1]) == "--vb-blizzard") {
                         ++shards;
                         std::printf("%d %s %d %ld %ld\n", id, name.c_str(), f, std::lround((m.x - cx) * 5), std::lround((m.y - cy) * 5));
                     }
+            // what Fight::world does after missile_tick, minus flight and hits: the new join, the spent go
+            std::ranges::move(world.fight.pending, std::back_inserter(world.fight.missiles));
+            world.fight.pending.clear();
+            std::erase_if(world.fight.missiles, [&](const Missile& m) { return now >= m.dies; });
         }
         std::printf("# %d %d %d %u %u\n", id, centre_frames, shards, world.rng.low, world.rng.high);
     }
