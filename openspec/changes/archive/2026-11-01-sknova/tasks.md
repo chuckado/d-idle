@@ -2,7 +2,8 @@
 
 ```yaml
 change: sknova
-status: in-progress
+status: archived
+merge: d837d1ca440415f605b4c3271da5da02d340966d
 agent: sknova
 branch: agent/sknova
 worktree: ~/code/d2lod-wt/sknova

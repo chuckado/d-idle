@@ -27,6 +27,8 @@ Tags: **V** read with upstream's `tools/emu/disasm.py` or run natively under the
 | Frost Nova / Nova (srvdofunc 22) | a ring of missiles from the caster; the ring's count and directions come from tables at 0x6e1288 | S (upstream "not yet": d2d sends 64 evenly spaced); U here |
 | Chain Lightning (srvdofunc 26, FUN_005ca1b0) | one `chainlightning` missile carrying calc1 = ln34 / 5 hops (Param3 26 + Param4 1 x (lvl - 1)) / 5: 5 at level 1, 9 at 20; each hit (SrvHitFunc 12, FUN_005aa730) launches the next from the hit spot to another foe within sHitPar1 / aurarange | S (d2d comments, fight/missiles.cpp:597-604); D for the calc |
 
+> Frost Nova / Nova ring: resolved by docs/research/sk-nova-trace.md (64 missiles, tables 0x6e1288 / 0x6e1388, reach 12-12.7 subtiles; D3 superseded).
+
 The plan's skills (D, Skills.txt patched): no srvstfunc on any; srvdofunc none for Fire Bolt (36), Ice Bolt (39), Lightning (49) (srvmissile `firebolt`, `icebolt`, `lightningbolt`), 17 for Charged Bolt (38, srvmissilea `chargedbolt`), 22 for Frost Nova (44, `frostnova`), 26 for Chain Lightning (53, `chainlightning`). Mana (`mana`, `lvlmana`, `manashift`, `minmana`): Fire Bolt 5/0/7/1 (2.5 points), Charged Bolt 24/4/5/1 (0.75 + 0.125 per level), Ice Bolt 3/0/8/1, Frost Nova 9/1/8/1, Lightning 16/1/7/1 (8 + 0.5 per level), Chain Lightning 9/1/8/1.
 
 ### Missile rows (D, Missiles.txt patched) and reach (arithmetic on the S rules)

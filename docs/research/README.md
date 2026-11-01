@@ -77,3 +77,4 @@ Every doc here tags claims V (run or read by the author), D (data table read), S
 - [bot-generality.md](bot-generality.md) framework vs stencil: what is fitted to class, act, clvl, difficulty and engine, a vocabulary for generality, target layers, ranked experiments and a card plan. current.
 - sk-armor-trace.md: armors and Energy Shield (SKARMOR, decomp row 15); oracle tools/emu/sk_armor.py
 - sk-lightning-trace.md (SKLIGHT, 2026-11-01): Chain Lightning hop rule and NextHit as unit state justhit; Lightning one unit a frame; no PR candidate
+- sk-nova-trace.md (SKNOVA, 2026-11-01): Frost Nova's 64-missile ring from the truncated tables at 0x6e1288 / 0x6e1388, reach 12-12.7 subtiles (V run); d2d hits a monster with every touching ring missile (D1, model ~6x); no PR candidate
