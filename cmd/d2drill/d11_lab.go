@@ -485,6 +485,9 @@ func (l *lab) EmptyPlan(ctx context.Context, r *drill.Run, level, n int, total t
 			if strings.Contains(ln, "empty path") {
 				ei.EmptyPath++
 			}
+			if strings.Contains(ln, "level changed during the walk") {
+				ei.LevelChanged++
+			}
 			if len(ei.Samples) < 5 {
 				ei.Samples = append(ei.Samples, ln)
 			}

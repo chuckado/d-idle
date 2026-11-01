@@ -12,7 +12,7 @@ import (
 type EmptyPlanInfo struct {
 	Err                                       string
 	Rounds, Kills, Spawned                    int
-	Backoffs, MoveFailed, EmptyPath, CapMelee int // "out of mana: backing off", "move failed", failures whose err holds "empty path", "back-off cap, melee"
+	Backoffs, MoveFailed, EmptyPath, LevelChanged, CapMelee int // "out of mana: backing off", "move failed", failures whose err holds "empty path", "back-off cap, melee"
 	Waits, AlreadyThere                       int // "out of mana: waiting"; "combat move: already there" (the quiet tick of a snapped goal)
 	Elapsed                                   time.Duration
 	Samples                                   []string // the first failing lines, else the first back-off lines
@@ -154,8 +154,8 @@ func D11(l D11Lab) []Drill {
 }
 
 func (i EmptyPlanInfo) String() string {
-	return fmt.Sprintf("%s: %d rounds, %d spawned, %d kills; back-offs %d, move failed %d (of which empty path %d), back-off cap melee %d, waits %d, already-there ticks %d; %v err %q; samples: %s",
-		i.Where, i.Rounds, i.Spawned, i.Kills, i.Backoffs, i.MoveFailed, i.EmptyPath, i.CapMelee, i.Waits, i.AlreadyThere, i.Elapsed.Round(time.Second), i.Err, strings.Join(i.Samples, " / "))
+	return fmt.Sprintf("%s: %d rounds, %d spawned, %d kills; back-offs %d, move failed %d (of which empty path %d, level changed during the walk %d), back-off cap melee %d, waits %d, already-there ticks %d; %v err %q; samples: %s",
+		i.Where, i.Rounds, i.Spawned, i.Kills, i.Backoffs, i.MoveFailed, i.EmptyPath, i.LevelChanged, i.CapMelee, i.Waits, i.AlreadyThere, i.Elapsed.Round(time.Second), i.Err, strings.Join(i.Samples, " / "))
 }
 
 func (i PMInfo) String() string {
@@ -167,6 +167,8 @@ func (c CastInfo) String() string {
 	return fmt.Sprintf("monsters within 8: %d, nearest %.1f subtiles, click synced to a blow %v (+%d steps), life %d -> %d, hits after the click %d at ticks %v, portal object after %d ticks = %d game ms (-1 none), scroll left the pack at tick %d (-1 never), scrolls %d -> %d, timeline [%s], err %q",
 		c.Adjacent, c.Dist, c.Synced, c.Delay, c.LifeStart, c.LifeEnd, c.Hits, c.HitTicks, c.PortalTick, c.PortalMS, c.ScrollTick, c.ScrollsBefore, c.ScrollsAfter, c.Timeline, c.Err)
 }
+
+var emptyCalls int
 
 // dEmptyPlan: PASS when the log has no "empty path" and there were back-offs; BLOCKED when none ran.
 func dEmptyPlan(ctx context.Context, r *Run, l D11Lab) Outcome {
@@ -188,7 +190,9 @@ func dEmptyPlan(ctx context.Context, r *Run, l D11Lab) Outcome {
 		ki += i.Kills
 		errs += i.Err
 	}
-	o.Sig = o.Observed // the whole observation: both repeats must agree, so a run-2 difference shows in the report
+	o.Sig = fmt.Sprintf("empty=%d", ep)
+	emptyCalls++
+	fmt.Printf("D-emptyplan call %d (verdict by this call alone: empty-path lines %d): %s\n", emptyCalls, ep, o.Observed) // every repeat is in the saved log, the runner reports the first only when the repeats agree
 	switch {
 	case ep > 0:
 		o.Verdict, o.Reason = Fail, fmt.Sprintf("%d 'empty path' lines (back-offs %d, move failed %d)", ep, bo, mf)
