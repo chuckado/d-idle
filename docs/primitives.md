@@ -203,3 +203,9 @@ DRILLS12 rows (2026-11-01, lab build cheats3, code at 2f34d65 plus the harness; 
 | P10 | D-portalmelee x3 | PASS (was FAIL, F18) | fixcrowd live: 3 zombies within combat.crowdAdjacent (8) at 102/300 life, empty belt, one scroll: Safety `chicken`, scroll 1 to 1; the chicken action itself is not run by the harness |
 | P10 | D-portalmelee.ctl x3 | PASS | one zombie: `town-portal`, scroll 1 to 0, portal object listed |
 
+DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`, README section DRILLS14):
+| prim | drill | verdict | evidence |
+|---|---|---|---|
+| P23 | DW.m3 x4 (m3a..m3d) | FAIL (product, DENBOUNCE) | the bot's exit walk Blood Moor to Den of Evil lands at (40,145); the first Navigator.Explore walk (roam, 1 click to (36,146)) fires the return trigger: 4 of 4 entries, identical in 4 invocations; nav mouthStep skipped the exit at 11.2 subtiles (mouthR is 9) |
+| P23 | DW.m4 (m4a) | FAIL (product) | Cave Level 1: Fighter.Clear approach (engage, move, GoTo) to a monster beside the mouth: step-away from 7.3 subtiles fires the trigger in 2 of 4 entries; Explore in a third |
+
