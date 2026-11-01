@@ -102,3 +102,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/sk-passives-trace.md: Sorceress passives (masteries, Warmth, Telekinesis), the 1.14d synergy table, +skills base vs level; decomp row 23 (SKPASS)
 - docs/research/build-flexibility-audit.md: what is hard-coded to the one Sorceress build (39 findings by layer and severity), what already works as data, seams, phased roadmap to several builds, guardrail text for briefs (BUILDFLEX)
 - Paladin Act 1 recon: [research/paladin-act1-recon.md](research/paladin-act1-recon.md) (what exists for the Paladin, Act 1 melee needs, Zealot-lite starter table as a proposal, generality metric and predicted file list, 8 SME questions; card palrecon)
+- docs/research/pr-armorhit-verifier.md: independent verifier of fix/armor-hit (freeze chain and resume frame traced, own differential, det hashes)

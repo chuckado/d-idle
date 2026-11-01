@@ -99,3 +99,7 @@ cmd/d2bot/class.go  buildv3  buildv3
 cmd/d2bot/class_test.go  buildv3  buildv3
 docs/buildv3.md  buildv3  buildv3
 openspec/changes/buildv3/**  buildv3  buildv3
+openspec/changes/verifyarmorhit/**  verifyarmorhit  verifyarmorhit
+tools/emu/verify_armor_hit.py  verifyarmorhit  verifyarmorhit
+tools/emu/test_verify_armor_hit.cpp  verifyarmorhit  verifyarmorhit
+docs/research/pr-armorhit-verifier.md  verifyarmorhit  verifyarmorhit
