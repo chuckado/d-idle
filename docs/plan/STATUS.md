@@ -96,7 +96,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change verifymods: verify_mods.py vs test_verify_mods on >= 100k cases: before > 0, head 0 per claim, residuals classified
 
 ### Recent merges
-- 21774b3 10-31 23:57 `Merge remote-tracking branch 'origin/main' into agent/verifymods` (-)
+- ff5d59f 11-01 00:01 `Merge origin/main into agent/verifymods` (verifymods)
 - 1a4b228 10-31 23:52 `Merge agent/fixrecast: armor recast before expiry` (fixrecast)
 - 4d00c76 10-31 23:48 `Merge agent/skillinv: sorceress skill matrix` (skillinv)
 - 7475063 10-31 23:46 `Merge agent/buildmods: boss and minion spawn stats PR candidate` (buildmods)
