@@ -10,3 +10,4 @@ allow_merges:
   - 0e83373   # drills20: merge origin/main commit, no Change trailer (history, not rewritten)
   - 6bb01a0   # fixmouthloop2: merge origin/main commit, no Change trailer
   - 7a408e6   # boardlinks: board issue links, coordinator-style doc change, no card
+  - dafbbf5   # agentprompt: contributor agent prompt, docs only, no card

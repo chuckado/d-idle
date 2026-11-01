@@ -109,6 +109,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- dafbbf5 11-01 11:20 `Merge agent/agentprompt: hands-off contributor prompt for outside agents` (agentprompt)
 - ff279c7 11-01 11:12 `Merge agent/drills25: teletune2 path-aware Teleport hops, DRILLS25 live drills` (drills25)
 - 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
 - 194e1ab 11-01 11:02 `Merge agent/drills24: Teleport key wired from the bound skill, hops tuned (36 subtiles / 40 percent), live drills` (drills24)
@@ -118,5 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0ec709e 11-01 10:43 `Merge origin/main into teletune` (teletune)
 - e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
 - 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
-- 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
 <!-- statusgen:end -->
