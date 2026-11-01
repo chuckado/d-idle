@@ -39,14 +39,12 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
-| [armorcut](../../openspec/changes/armorcut/) | in-progress | armorcut | `openspec/changes/armorcut/**`<br>`docs/armorcut.md`<br>`internal/combat/fighter.go`<br>`internal/combat/armorcut_test.go` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [chunker](../../openspec/changes/chunker/) | in-progress | chunker | `tools/contrib/chunker.py`<br>`tools/contrib/tests/test_chunker.py`<br>`docs/process/chunker.md`<br>`docs/community/groom-proposal.md`<br>`docs/community/withdrawn.tsv`<br>`openspec/changes/chunker/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [drills29](../../openspec/changes/drills29/) | in-progress | drills29 | `openspec/changes/drills29/**` | `instance:drills29-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -78,7 +76,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change armorcut: go test -p 1 ./internal/combat passes; go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -90,7 +87,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change drills29: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test on the worker host
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -116,6 +112,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
 - 44ff859 11-01 12:08 `Merge agent/skresist: SKRESIST resistance and immunity trace, oracle, d2d curse-on-immune deviation` (skresist)
 - aab77a1 11-01 12:02 `Merge agent/chunker: chunker.py sync/groom for the community work board` (chunker)
 - 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
@@ -125,5 +122,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 022546b 11-01 11:38 `Merge agent/drills27: teletune3 stall-memory reset, D22-BL/D22-S drills, stall escape proven live` (drills27)
 - 6a2c69c 11-01 11:34 `Merge agent/drills26: DRILLS26 drill D26-A Frozen Armor recast proof (harness only)` (drills26)
 - f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
-- bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
 <!-- statusgen:end -->

@@ -102,7 +102,8 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/teletune3.md: border-leg analysis (key not on the walking path), stall escape tests and drill D22-S, `Navigator.ResetStallMemory`.
 - DRILLS27 (live result): teletune3 proven live (stall memory reset, stall escape, border-leg gap is replan spread not the key): [probes/drills/README.md](probes/drills/README.md)
 - DRILLS28 (live result): armorcut step 0, d2d refreshes a set Frozen Armor state; D26-A rerun 300 s armor never absent, retry path not exercised: [probes/drills/README.md](probes/drills/README.md)
-- [armorcut.md](armorcut.md): Frozen Armor recast cut by a hit (buff retry, offline; live proof open)
+- DRILLS29 (live result): drill D29-C (group W) proves the armorcut retry live (cut at 114.0 s, retry 1.6 s later); D26-A rerun PASS: [probes/drills/README.md](probes/drills/README.md)
+- [armorcut.md](armorcut.md): Frozen Armor recast cut by a hit (buff retry; retry proven live in DRILLS29)
 - DRILLS23 (live result): roamleg passes live (0 failed legs, step-aways 62 to 11, 0 bounces) and a Den monster-stall finding: [probes/drills/README.md](probes/drills/README.md)
 - DRILLS15 (live result): first live skill-smoke drills (group R): Teleport, mana, missile and armor traces compared with d2d, deviations confirmed: [probes/drills/README.md](probes/drills/README.md)
 - fixmanamodel: [fixmanamodel.md](fixmanamodel.md) regen per-frame whole 256ths, backend mana booking, potion over time (offline; live drill pending).
