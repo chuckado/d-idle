@@ -48,7 +48,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
-| [forkarmor](../../openspec/changes/forkarmor/) | in-progress | forkarmor | `docs/forkarmor.md`<br>`openspec/changes/forkarmor/**` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -92,7 +91,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change forkarmor: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -111,6 +109,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
 - dafbbf5 11-01 11:20 `Merge agent/agentprompt: hands-off contributor prompt for outside agents` (agentprompt)
 - ff279c7 11-01 11:12 `Merge agent/drills25: teletune2 path-aware Teleport hops, DRILLS25 live drills` (drills25)
 - 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
@@ -120,5 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7a408e6 11-01 10:54 `Merge agent/boardlinks: link the 8 opened work-item issues on the board` (boardlinks)
 - 0ec709e 11-01 10:43 `Merge origin/main into teletune` (teletune)
 - e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
-- 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
 <!-- statusgen:end -->

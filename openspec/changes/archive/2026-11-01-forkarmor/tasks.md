@@ -2,7 +2,8 @@
 
 ```yaml
 change: forkarmor
-status: in-progress
+status: archived
+merge: fb4c078
 agent: forkarmor
 branch: agent/forkarmor
 worktree: ~/code/d2lod-wt/forkarmor
@@ -15,7 +16,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "fork branch lab-armorhit pushed (7c73b881ca24); armor differentials on the fork build 0 of 108,506 (author) and 0 of 134,400 end frames (verifier), hit-once 0 of 100,198; live readback: plain frozen not chilled, champion/unique/Andariel chilled only; docs/forkarmor.md"
+result: "private fork carries the Frozen Armor fix (lab-armorhit); verified by differential and one live readback"
 live: "verified live on one hidden slot with a --no-save throwaway Sorceress (no game.exe)"
 ```
 
