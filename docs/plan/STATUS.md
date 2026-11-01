@@ -115,14 +115,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- f0e7163 11-01 13:51 `Merge agent/palsme: Zealot-lite table: Prayer 1, Might and Holy Fire, no Vigor path; legality incl. install check passes; ready cards PALRETREAT PALBELT PALBRGATE PALMERC1 SMEDOCS` (palsme)
 - 7739d9d 11-01 13:49 `Merge agent/crfollow159: CodeRabbit follow-up on #159 logged` (crfollow159)
 - db9b20e 11-01 13:32 `Merge agent/palfix: Paladin findings fixed offline (mana-heavy flag, Blessed Hammer band 18, simulator class slots, table rows, plandata seam, Zealot-lite)` (palfix)
+- dd68c40 11-01 13:32 `Merge origin/main into palsme` (palsme)
 - ed03c45 11-01 13:26 `Merge agent/boardgrow: work archive, chunker sync honours it, 12 new board items` (boardgrow)
 - 776af38 11-01 13:22 `Merge agent/openpr: PRs #159 and #160 opened upstream, docs` (openpr)
 - 8509a1b 11-01 13:16 `Merge agent/palprobe: offline Paladin probe and blocking class seams (profile id, per-class prefs, class row errors)` (palprobe)
 - b960937 11-01 13:10 `Merge agent/forkrebase: private fork stack rebuilt on upstream as lab2-*` (forkrebase)
 - 1fccb88 11-01 13:03 `Merge agent/skmeleewire: wire melee blow and foe into the resource decision input` (skmeleewire)
 - 024c03e 11-01 12:58 `Merge agent/verifycurseimmune: independent verifier of the curse-immune PR candidate (READY)` (verifycurseimmune)
-- 015f4c1 11-01 12:51 `Merge agent/skmeleebot: melee model (to-hit, damage, Blunt vs undead) in the resource simulator; production not yet fed` (skmeleebot)
-- 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
 <!-- statusgen:end -->

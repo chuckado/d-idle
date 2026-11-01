@@ -2,7 +2,7 @@
 
 ```yaml
 change: palsme
-status: in-progress
+status: archived
 agent: palsme
 branch: agent/palsme
 worktree: ~/code/d2lod-wt/palsme
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Zealot-lite table revised per the SME; install legality check run on the worker host and passes. Policy items recorded as ready cards only. Nothing run live."
+result: "Zealot-lite table adjusted per the SME review (Prayer 3 -> 1, Cleansing and Vigor dropped, Defiance 1 kept, points to Might and Holy Fire); legality passes incl. the install check on the worker host; Paladin policy items recorded as ready cards; not verified live"
 live: "offline only"
+merge: f0e7163
 ```
 
 - [x] Zealot-lite table (Prayer 1, Might, Defiance 1, Holy Fire 2)
