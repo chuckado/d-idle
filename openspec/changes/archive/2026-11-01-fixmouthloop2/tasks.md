@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixmouthloop2
-status: in-progress
+status: archived
 agent: fixmouthloop2
 branch: agent/fixmouthloop2
 worktree: ~/code/d2lod-wt/fixmouthloop2
@@ -14,8 +14,8 @@ owns:
 exclusive: []
 gates:
   - "live: DW.m3 x3 and DW.m4: 0 bounces, step-aways per run about 20 or fewer, no 2m0s walk timeouts, the backing off line appears (docs/fixmouthloop2.md)"
-merge: ""
-result: "offline: nav and combat tests pass, loop reproduced (682213 held clicks old, 1 new)"
+merge: 5516648
+result: "step-away restart storm fixed live (walk timeouts 173 -> 0, hold runs, bounces stay 0); step-aways 129 -> 62 (target 20 not met): remaining roam leg retries are bounded (card ROAMLEG, recorded in BACKLOG)"
 live: "PARTIAL (DRILLS21, tip 293c816): V 0 mouth bounces, 0 walk timeouts (was 173), back-off line fires (1), Clear and Explore finish; NOT met: step-aways 62 per invocation (was 129, target about 20), 22 level-change errors from one pocket-stall town-portal escape; remaining storm is Navigator.roam (10 failed legs per episode)"
 ```
 

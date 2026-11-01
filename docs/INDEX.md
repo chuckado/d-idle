@@ -93,6 +93,8 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - DRILLS17 (live result): fixmouth2 live proof FAIL (Clear finishes, spin gone, bounces remain; town D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md)
 - DRILLS18 (live result): fixmouth3 live proof PARTIAL (DW.m4 PASS, DW.m3 one bounce per run left; D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md); [fixmouth3.md](fixmouth3.md) (stay guard held until the level changes, one-click step-away, roam targets filtered at 17)
 - DRILLS19 (live result): fixmouth4 live proof PASS (DW.m3 x3 and DW.m4 x3 zero mouth bounces; D2/D3 PASS; defect: gate hold loop in Den cycle 2): [probes/drills/README.md](probes/drills/README.md); [fixmouth4.md](fixmouth4.md) (one exit gate on every nav click and movement swing)
+- DRILLS20 (live result): fixmouthloop live proof FAIL (the loop is inside nav, not the Fighter): [probes/drills/README.md](probes/drills/README.md)
+- DRILLS21 (live result): fixmouthloop2 live proof PARTIAL (walk timeouts 173 to 0, step-aways 129 to 62, roam leg retries remain): [probes/drills/README.md](probes/drills/README.md)
 - docs/research/pr-nexthit-v2-addendum.md: NextHit v2: end-frame fix (f+NextDelay+1), re-run of both harnesses, det hashes, fork lab-nexthit2, the verifier's five edits
 - docs/research/pr-nexthit-posted.md: NextHit v2 posted log (PR #158, final gates, differentials)
 - docs/research/sk-passives-trace.md: Sorceress passives (masteries, Warmth, Telekinesis), the 1.14d synergy table, +skills base vs level; decomp row 23 (SKPASS)

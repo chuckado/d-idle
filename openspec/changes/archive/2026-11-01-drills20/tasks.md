@@ -2,7 +2,7 @@
 
 ```yaml
 change: drills20
-status: in-progress
+status: archived
 agent: drills20
 branch: agent/drills20
 worktree: ~/code/d2lod-wt/drills20
@@ -12,8 +12,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-merge:
-result: "fixmouthloop FAIL live: counts equal DRILLS19, 0 back-off lines; regression D3 12/12 and D2 11/11 PASS"
+merge: 5516648
+result: "step-away restart storm fixed live (walk timeouts 173 -> 0, hold runs, bounces stay 0); step-aways 129 -> 62 (target 20 not met): remaining roam leg retries are bounded (card ROAMLEG, recorded in BACKLOG)"
 live: "DW.m3 x3 FAIL (restart storm unchanged), DW.m4 unchanged, D2 PASS, D3 PASS"
 ```
 

@@ -104,14 +104,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
 - ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
+- c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
 - 6bbd958 11-01 08:59 `Merge agent/opennexthit: PR #158 (NextHit justhit) posted, bundle queue row` (opennexthit)
+- 6bb01a0 11-01 08:55 `Merge origin/main into fixmouthloop2` (-)
 - eced68b 11-01 08:55 `Merge agent/fixskilllvl: d2.SkillBonus / Player.Effective skill levels for the known gate and mana cost` (fixskilllvl)
 - 87f4674 11-01 08:52 `Merge agent/glossaryadd: six user-approved glossary terms` (glossaryadd)
+- 0e83373 11-01 08:51 `Merge remote-tracking branch 'origin/main' into agent/drills20` (-)
 - cffe57c 11-01 08:51 `Merge origin/main into fixskilllvl` (fixskilllvl)
-- 2b23d81 11-01 08:38 `Merge agent/skpass: SKPASS passives trace (decomp row 23)` (skpass)
-- d8e48e0 11-01 02:22 `Merge agent/nexthitfix: nexthit v2 end-frame fix addendum, fork lab-nexthit2` (nexthitfix)
-- 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
-- db32c75 11-01 01:54 `Merge agent/drills18: fixmouth3 (stayLevel) proven live as a partial; DRILLS18 probes` (drills18)
-- 0674406 11-01 01:50 `Merge agent/verifynexthit: independent verifier of the NextHit candidate (NOT READY, off by one frame)` (verifynexthit)
+- 2ffa3ef 11-01 08:39 `drills20: merge origin/main` (drills20)
 <!-- statusgen:end -->
