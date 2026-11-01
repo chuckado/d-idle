@@ -236,4 +236,6 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | DW.m3 x3 (fixmouthloop2) | PARTIAL | drills21: 0 mouth bounces; 0 `walk did not finish` (drills20: 173), 1 `backing off` line (was 0), 154 rewrites, 51 holds, 62 step-aways per invocation (was 129; target about 20); the remaining ones are Navigator.roam from Explore (10 failed legs per episode, 5 episodes); 22 level-change errors: one pocket-stall town-portal escape at (102,183) in run 1 plus 21 stale retries in Fighter.move; run 2 PASS (runs DIFFER). Kills 0 (no attack skill). Clear and Explore finish |
 | P23 | DW.m4 (fixmouthloop2) | PASS | drills21: 0 bounces, 1 rewrite, 4 step-aways; the character dies in cave level 1 and 30 walks time out afterwards; dirty-UI verdict as before |
 | P23 | D2 (11), D3 (12) regression | PASS | drills21: 11 of 11 and 12 of 12 on the fixmouthloop2 build; ends in town |
-
+| P23 | DW.m3 x3 (roamleg) | PASS | drills23: 0 mouth bounces, 0 level-change errors, 0 `roam leg failed` (drills21: 50), 1 `roam: held by the mouth gate` per run, 11 step-aways (was 62), 425 plan lines (was 559-664); 50 `walk did not finish` in the last cycle (finding, mid-fight stall away from the mouth) |
+| P23 | DW.m4 (roamleg) | PASS | drills23: 0 bounces, 4 step-aways; death and dirty-UI verdict as before |
+| P23 | D2 (11), D3 (12) regression | PASS | drills23: 11 of 11 and 12 of 12 on the roamleg build; ends in town |

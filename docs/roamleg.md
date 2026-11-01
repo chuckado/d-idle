@@ -1,6 +1,6 @@
 # ROAMLEG: a mouth-gate hold is not a failed roam target
 
-> status: offline fix, tests pass, NOT verified live (recipe below).
+> status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50), 11 step-aways per run (was 62).
 
 ## Finding (V, DRILLS21 in docs/probes/drills/README.md, logs `2026-11-01-drills21-*.txt`)
 After fixmouthloop2 a held step-away makes the outer walk return `ErrMouthGate`. `ErrMouthGate` wraps `ErrNoPath` (internal/nav/mouthgate.go), so the roam leg switch folded it into the failed-target case: 10 failed legs and 10 step-aways per episode, 5 episodes, 50 `roam leg failed` lines per DW.m3 run.
