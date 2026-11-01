@@ -38,6 +38,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
+| [chillpatch](../../openspec/changes/chillpatch/) | in-progress | chillpatch | `docs/research/pr-static-chill-proof.md`<br>`docs/research/pr-static-chill-draft.md`<br>`tools/emu/chill_length.py`<br>`tools/emu/chill_length_mode.inc`<br>`docs/decomp-queue.md`<br>`docs/research/pr-bundle-queue.md`<br>`docs/BACKLOG.md`<br>`openspec/changes/chillpatch/**` | `fork-branch:fix/static-field-chill` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -66,6 +67,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
+- change chillpatch: differential on real d2d builds: before > 0, after 0; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
+- change chillpatch: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes

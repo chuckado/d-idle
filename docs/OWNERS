@@ -49,3 +49,11 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+docs/research/pr-static-chill-proof.md       chillpatch chillpatch
+docs/research/pr-static-chill-draft.md       chillpatch chillpatch
+tools/emu/chill_length.py                    chillpatch chillpatch
+tools/emu/chill_length_mode.inc              chillpatch chillpatch
+docs/decomp-queue.md                         chillpatch chillpatch
+docs/research/pr-bundle-queue.md             chillpatch chillpatch
+docs/BACKLOG.md                              chillpatch chillpatch
+openspec/changes/chillpatch/**               chillpatch chillpatch
