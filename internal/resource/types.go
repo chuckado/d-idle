@@ -62,7 +62,7 @@ type Input struct {
 	PackSeen     int  // monsters of a not-yet-engaged pack in view (asleep or far)
 	ChampionPack bool // a champion (not a boss) is among the hostiles in range: Tuning.ChampionEarlyPct applies in early Normal
 	WeakPack     bool // every hostile in range is at most clvl+1: a weapon swing is enough, retreating is not
-	Adjacent     int  // awake hostiles in melee reach (within 3 subtiles); with CastAdjacentMax a portal cast is cut
+	Adjacent     int  // awake hostiles in melee reach (within combat.crowdAdjacent subtiles, default 8); with CastAdjacentMax a portal cast is cut
 	PackDanger   int  // 0 trash, 1 champions/ranged shamans, 2 elite/boss/dangerous affix, 3 deadly (Hell uniques)
 	SinceFight   float64
 	MercKnown    bool // a merc was hired this run

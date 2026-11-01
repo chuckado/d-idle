@@ -15,19 +15,19 @@ import (
 // (combat.crowdN, crowdPortalPct, crowdDrinkPct, crowdAbandonN); the radii below are U (judgment, not measured).
 const (
 	crowdRadius      = 8                        // subtiles: a hostile this close counts to the crowd
-	crowdAdjacent    = 3                        // subtiles: a hostile this close is in melee with us
 	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: a 2 s portal cast fails (U)
 	crowdRetreatDist = 20                       // subtiles an abandon retreat goes before the portal
 	crowdMaxSteps    = 8                        // retreat steps of one abandon
 )
 
-// Crowd counts the hostiles within crowdRadius of the player and those adjacent.
-func Crowd(p *d2.Player, hs []Target) (crowd, adjacent int) {
+// Crowd counts the hostiles within crowdRadius of the player and those adjacent (within reach subtiles: the
+// combat.crowdAdjacent knob, the melee reach of the monsters met, see docs/fixcrowd.md).
+func Crowd(p *d2.Player, hs []Target, reach float64) (crowd, adjacent int) {
 	for _, h := range hs {
 		if h.Dist <= crowdRadius {
 			crowd++
 		}
-		if h.Dist <= crowdAdjacent {
+		if h.Dist <= reach {
 			adjacent++
 		}
 	}
