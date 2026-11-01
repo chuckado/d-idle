@@ -115,6 +115,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
 - 19c1daf 11-01 12:44 `Merge agent/upstreamsync: upstream merges recorded, mergeability table, fork rebase plan` (upstreamsync)
 - 370d5c2 11-01 12:40 `Merge agent/skmelee2: melee blow compared on a real d2d build` (skmelee2)
 - 63a8fbb 11-01 12:34 `Merge agent/bundledet: two-commit squash, determinism doc, body update` (bundledet)
@@ -124,5 +125,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
 - 44ff859 11-01 12:08 `Merge agent/skresist: SKRESIST resistance and immunity trace, oracle, d2d curse-on-immune deviation` (skresist)
 - aab77a1 11-01 12:02 `Merge agent/chunker: chunker.py sync/groom for the community work board` (chunker)
-- 0962758 11-01 11:58 `Merge agent/forkfreeze: private fork carries the freeze-resume fix (lab-freezeresume), docs and vetting` (forkfreeze)
 <!-- statusgen:end -->
