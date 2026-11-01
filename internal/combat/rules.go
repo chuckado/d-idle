@@ -139,13 +139,31 @@ func PlanForTarget(t Target, c d2.Class, diff d2.Difficulty, clvl int) Plan {
 	return p
 }
 
+// minResist is the floor of a monster's resistance for all six damage types (V read + V run, docs/research/
+// sk-resist-trace.md Q8): below it the game clamps, so the damage factor never exceeds 2.
+const minResist = -100
+
 // expFactor is the share of damage an element still does against a resistance (100 = full, immune and above = 0,
-// negative resist amplifies).
+// negative resist amplifies down to the minResist floor).
 func expFactor(res int) float64 {
 	if res >= 100 {
 		return 0
 	}
+	if res < minResist {
+		res = minResist
+	}
 	return float64(100-res) / 100
+}
+
+// EffRes is the resistance of the target against the attacker's element as the game applies it: the attacker's
+// pierce (Cold Mastery and the like) is subtracted only while the total is under 100, so it never breaks an
+// immunity (V read + V run, sk-resist-trace.md Q4), and the result is floored at minResist (Q8).
+func (t *Target) EffRes(d data.DamageType) int {
+	r := t.Res[d]
+	if r < 100 {
+		r -= t.Pierce[d]
+	}
+	return max(r, minResist)
 }
 
 // DamageFactor is the expected share of a skill's damage that gets through the target, including Stone Skin
@@ -156,7 +174,7 @@ func DamageFactor(sp SkillSpec, t *Target) float64 {
 	}
 	f := 1.0
 	if t.HasRes {
-		f = expFactor(t.Res[sp.Elem])
+		f = expFactor(t.EffRes(sp.Elem))
 	}
 	if sp.Elem == data.Physical && t.Affixes&AffixStoneSkin != 0 && (!t.HasRes || t.Res[data.Physical] < 50) {
 		f *= 0.5 // the live stat list may already hold it (then Res[Physical] >= 50); U which
@@ -253,7 +271,7 @@ func ImmuneWorkaround(c d2.Class, t *Target) Workaround {
 	}
 	var cs []cand
 	for d := range opts {
-		if f := expFactor(t.Res[d]); f > 0 {
+		if f := expFactor(t.EffRes(d)); f > 0 {
 			cs = append(cs, cand{d, f})
 		}
 	}

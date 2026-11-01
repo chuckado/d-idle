@@ -96,6 +96,8 @@ type Target struct {
 	// Res are the effective resistances per damage type (stat list when readable, else monstats); HasRes tells if set.
 	Res    [6]int
 	HasRes bool
+	// Pierce is the attacker's resistance pierce per damage type (player stats, PierceFromStats); see EffRes.
+	Pierce [6]int
 }
 
 // Immune reports whether the target takes no damage of this type.
@@ -119,6 +121,7 @@ type HostileCtx struct {
 	Cat      Catalog
 	Diff     d2.Difficulty
 	Resists  func(u d2.Unit, m *data.Monster) ([6]int, bool) // optional: stat-list resistances
+	Pierce   [6]int                                          // the player's resistance pierce, copied to every target
 	ClassLvl int
 	Weights  DeathWeights // lessons from past deaths
 }
@@ -217,6 +220,7 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 			t.Avoid = true
 		}
 		t.Res, t.HasRes = resistsOf(u, mon, hc)
+		t.Pierce = hc.Pierce
 		out = append(out, t)
 	}
 	avoidChampionGroup(out, hc.ClassLvl)
@@ -229,7 +233,8 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 	return out
 }
 
-// resistsOf prefers the live stat list (it includes curses and difficulty penalties) and falls back to the monstats row.
+// resistsOf prefers the live stat list (the game's own total: base row of the difficulty plus modifiers and curses; a
+// monster has no difficulty penalty, sk-resist-trace.md Q10) and falls back to the monstats row.
 func resistsOf(u d2.Unit, mon *data.Monster, hc HostileCtx) ([6]int, bool) {
 	if hc.Resists != nil {
 		if r, ok := hc.Resists(u, mon); ok {
@@ -250,6 +255,22 @@ func resistsOf(u d2.Unit, mon *data.Monster, hc HostileCtx) ([6]int, bool) {
 // resistStat are the stat ids for physical, magic, fire, lightning, cold, poison in data.DamageType order
 // (damageresist 36, magicresist 37, fireresist 39, lightresist 41, coldresist 43, poisonresist 45).
 var resistStat = [6]int{36, 37, 39, 41, 43, 45}
+
+// pierceStat are the stat ids of the player's fire, lightning, cold and poison resistance pierce (passive_*_pierce),
+// in data.DamageType order, 0 for types without one. Cold 335 is V read + V run (sk-resist-trace.md Q4); fire 333,
+// lightning 334 and poison 336 follow the ItemStatCost order (S).
+var pierceStat = [6]int{0, 0, 333, 334, 335, 336}
+
+// PierceFromStats reads the player's resistance pierce per damage type from the stat list.
+func PierceFromStats(st d2.Stats) [6]int {
+	var p [6]int
+	for i, id := range pierceStat {
+		if id != 0 && st.Has(id) {
+			p[i] = int(st.Get(id))
+		}
+	}
+	return p
+}
 
 // ResistsFromStats merges a monster's stat list with its monstats row: a stat that is present wins.
 func ResistsFromStats(st d2.Stats, mon *data.Monster, diff d2.Difficulty) [6]int {
