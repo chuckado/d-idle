@@ -191,9 +191,32 @@ func (l *lab) d11Spawn(ctx context.Context, r *drill.Run, n, want int, radius fl
 		if a, _, _, _ := l.d11Within(ctx, radius); a >= want {
 			return a
 		}
+		l.d11Lure(ctx)
 	}
 	a, _, _, _ := l.d11Within(ctx, radius)
 	return a
+}
+
+// d11Lure walks the character toward the nearest living monster that is not yet within 6 subtiles: a spawned zombie
+// idles until something comes close (measured: most stay 14 to 20 subtiles away for 1200 ticks), then it follows.
+func (l *lab) d11Lure(ctx context.Context) {
+	ms, err := l.be.Client.Monsters(ctx)
+	lv, lerr := l.be.Client.Level(ctx)
+	if err != nil || lerr != nil {
+		return
+	}
+	best, bx, by := 1e9, 0.0, 0.0
+	for _, m := range ms.Items {
+		if m.HP.Cur <= 0 || m.Mode == "DD" || m.Mode == "DT" {
+			continue
+		}
+		if d := 5 * math.Hypot(m.CellX-lv.X, m.CellY-lv.Y); d > 6 && d < best {
+			best, bx, by = d, m.CellX, m.CellY
+		}
+	}
+	if best < 1e9 {
+		_ = l.be.Client.CmdMove(ctx, bx, by)
+	}
 }
 
 func (l *lab) PortalMelee(ctx context.Context, r *drill.Run, adj int, act bool) (pi drill.PMInfo) {
