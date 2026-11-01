@@ -48,6 +48,28 @@ Body ending convention (copied from merged #157 and #158): the body ends with th
 - posted: 2026-11-01 push (plain, no force) to the fork: fix/frozen-armor-and-resume-final d8cc3b47 -> c4e9db97 (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head. PR #159 now has 3 commits.
 - posted: 2026-11-01 reply to the CodeRabbit inline thread (comment id 4436799936, reply 4436827126): valid, fixed in c4e9db97, docstring only.
 
+## Blizzard / Eruption shard offsets (card openpr-blizzard)
+
+- posted: 2026-11-01 go: the user's popup answer "Open it now" for the Blizzard shard-offset PR (one PR, upstream psi29a/d2decomped).
+- posted: 2026-11-01 fetch upstream: main 7d5b3a5c (unchanged since the candidate's base, so no rebase and no new branch was needed; the candidate's tree and identity are as built).
+- posted: 2026-11-01 push (plain, new branch name, no force) to the fork: fix/blizzard-shard-offsets-v2 head 3d6f3fe7 (46c55621 tests and tooling, then 3d6f3fe7 claim; numeric-ID noreply identity, `Agent: Claude Code`, no other trailer). The first candidate fix/blizzard-shard-offsets (9a1a90eb, 681d52a9) was not used.
+- posted: 2026-11-01 PR opened: https://github.com/psi29a/d2decomped/pull/163 (5 files, 2 commits; title "Blizzard and Eruption shards fall -(R-1)..(R-2) of the centre, not -(R-1)..(R-1) (FUN_005a9820)"). State OPEN, base 7d5b3a5c, head 3d6f3fe7 as checked with gh pr view. Body: the draft's body section with the status line, internal links and internal wording removed; it ends with a blank line and the bare `Agent: Claude Code` line, like #157 and #158 (no "Generated with" line, no session link).
+- check (all V, run on the worker host on head 3d6f3fe7 before the push):
+
+| check | result |
+|---|---|
+| pr_guard, range origin/main..head and each commit | 0 FAIL / 0 WARN, rc 0 each |
+| Release build (`-ffp-contract=off`), test_game (with the data dir) and test_rules | build rc 0, both pass |
+| presubmit --quick | 0 FAIL, 1 WARN (build skipped by --quick); tooling unit tests ok |
+| ruff 0.8.6, repo rules plus B905, py312 | clean |
+| test_sk_ground --blizz, base build (tooling only, source of main) | seed 1: 14,926 of 100,000 off the -6..5 grid; seed 7: 14,957 |
+| same on the head | 0 and 0 |
+| independent harness (verify_blizzard.py gen-d2d 5000 777, two Release probe builds) | base 16,676 of 112,964 shards off the grid (= Blizzard 14,804 + Eruption 1,872 of the claim's split); head 0; shards per cast {25: 3997, 13: 1003}; the per-skill split itself was not re-tabulated |
+| git merge-tree (write-tree) head against #160 | clean; against main clean; against #159 conflicts in ai.hpp (a file this PR does not touch, the known #159 conflict) |
+
+- not re-run: the game-side emulator comparisons (64,200 and 120,000 cases), the world-rng-state check, gcc -Wshadow and clang-tidy (clean on the first candidate, identical source), det state hashes, MSVC, a live game. The body says so.
+- nothing else posted: no comment, label or reviewer request; CodeRabbit follow-ups are a later task.
+
 ## Shared-file lines for the merger
 
 - BACKLOG: #159 got a docstring follow-up (c4e9db97) for CodeRabbit; #160 review still pending after the rate limit (own card).
