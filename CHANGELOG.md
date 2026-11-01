@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: opened upstream PRs #159 (Frozen Armor and freeze-resume bundle) and #160 (curse lowering on immune monsters); posted log in docs/research/openpr-log.md.
 - docs: FORKREBASE: the private d2d fork is rebuilt on upstream main as lab2-freezeresume (docs/forkrebase.md).
 - verifycurseimmune (research, docs and tools/emu only): independent verifier of the curse-immune PR candidate (own harness running game.exe's FUN_005c3540 / FUN_00645b20 natively and the real `Fight::target_of`): READY, 0 differ on head across 5 classes, hirelings and curse calcs checked; draft text edits applied; nothing pushed or posted.
 - skmeleewire (offline, not live): the resource decision now gets the melee model: weapons.txt StrBonus / DexBonus in data.ItemBase (schemaVersion 3, older caches re-extract), combat.meleeBlow / meleeFoe fill Input.Blow / Input.Foe as a pair (nil on any missing input); stock replay unchanged (22 kills / 28 swings / 66 casts), undead and high-defense packs change rung as designed; awaits an early-game soak and drill R1 (docs/skmeleewire.md).
