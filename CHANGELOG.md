@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- fixskilllvl (offline, not verified live): +skills (all, class, tab, oskill, elemental, shrine) now raise the cast level the bot uses for mana cost and the known-skill gate; synergies keep base points; stat ids UNVERIFIED live (card open).
 - fixmouth4 (live): every navigator world click and movement swing passes one exit gate while a stay guard holds in a cave (clip, away rewrite, bounded hold, step-away re-check); proven live in DRILLS19 (Den of Evil: 0 bounces in DW.m3 x3 and DW.m4 x3); known limit: a blocked away route can make the fighter retry (card fixmouthloop).
 - forknext (research): the private fork gets lab-nexthit: Nova and Frost Nova strike a monster once per cast like game.exe (differential 84,779 -> 0 of 100,198).
 - readmedocs (research): README sections "What it can do today (honestly)" and "Running it", docs/capabilities.md (capability table with evidence links), docs/running.md.
