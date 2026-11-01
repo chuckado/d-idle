@@ -4,7 +4,7 @@
 
 ## What it is
 
-A resource-limited container on the NAS that builds the private d2d fork on Debian 13 (x86_64), so builds stop competing with the game on the worker host. It carries the d2d build toolchain (gcc, clang, clang-tidy, cmake, ninja, ccache, ruff, SDL3, OpenAL, Qt6) and a Forgejo Actions runner for the user's repositories (labels `linux-build`, `linux-x86_64`, host executor, one job at a time).
+A resource-limited container on the NAS that builds the private d2d fork on Debian 13 (x86_64), so builds stop competing with the game on the worker host. It carries the d2d build toolchain (gcc, clang, clang-tidy, cmake, ninja, ccache, ruff, SDL3, OpenAL, Qt6) and a forge Actions runner for the user's repositories (labels `linux-build`, `linux-x86_64`, host executor, one job at a time).
 
 ## Limits (why the NAS is safe)
 
@@ -16,7 +16,7 @@ Private wrapper, run from the d2lod-bot checkout: `tools/ops.sh run build-fork.s
 
 - It takes the branch tip from the fork checkout on the worker host (`git archive`, so no git hash in the version stamp), stages it into the builder, builds `d2d` (and with `--tests` the test binaries), and waits with a bounded timeout.
 - Artifacts are copied to the worker host next to the other fork binaries with a new suffix (`d2d.<branch>-<hash>-linuxbuild`, tests in `lbtests-<branch>-<hash>/`); an existing file is never overwritten. Sizes and hash prefixes are printed.
-- The same host also serves Forgejo workflows with `runs-on: linux-build`.
+- The same host also serves forge workflows with `runs-on: linux-build`.
 
 ## Behaviour check (V, card linuxbuild)
 
@@ -24,7 +24,7 @@ Test binaries built here were run on the worker host against the same stored gam
 
 ## Stop or remove it
 
-In the NAS web UI, Docker tab: stop the container (nothing else depends on it) or remove it; its data folder under appdata holds ccache, staged sources and the runner registration and can be deleted afterwards. The runner then shows offline in Forgejo and can be deleted there.
+In the NAS web UI, Docker tab: stop the container (nothing else depends on it) or remove it; its data folder under appdata holds ccache, staged sources and the runner registration and can be deleted afterwards. The runner then shows offline on the forge and can be deleted there.
 
 ## What it is NOT for
 
@@ -32,7 +32,7 @@ No game, no live runs, no soak, no drills; it does not hold game data. Binaries 
 
 ## Shared-file lines for the merger
 
-docs/BACKLOG.md, add: `- LINUXBUILD: NAS build container + Forgejo runner (linux-build) and build-fork.sh wrapper for fork binaries (docs/builder.md)`
+docs/BACKLOG.md, add: `- LINUXBUILD: NAS build container + forge runner (linux-build) and build-fork.sh wrapper for fork binaries (docs/builder.md)`
 
 docs/INDEX.md, add: `- docs/builder.md: the Linux build host for fork binaries (limits, wrapper use, stop/remove, not for the game)`
 

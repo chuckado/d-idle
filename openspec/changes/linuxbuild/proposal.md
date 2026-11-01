@@ -4,7 +4,7 @@ Fork binaries and PR-candidate builds ran on the worker host, which is also the 
 
 ## What Changes
 
-- A resource-limited build container on the NAS (details in the private ops repo), with the d2d build toolchain and a Forgejo Actions runner (labels `linux-build`, `linux-x86_64`).
+- A resource-limited build container on the NAS (details in the private ops repo), with the d2d build toolchain and a forge Actions runner (labels `linux-build`, `linux-x86_64`).
 - A private wrapper `build-fork.sh` that builds a fork branch there and copies the binaries back under a new name.
 - docs/builder.md: what it is, its limits, how to use and stop it, what it is not for.
 
