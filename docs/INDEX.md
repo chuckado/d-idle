@@ -143,3 +143,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/fixbelt.md: Gate 1 belt window (early game, recovery cooldown with an empty belt) and the low-kit fix
 - docs/fixprogress.md: Gate 1 progress failure (a 43 virtual minute town-trip loop with a stale tome scroll count) and the fix
 - docs/research/model-ab-skresist.md - model A/B on SKRESIST (Opus vs blind Sonnet vs blind Haiku): rule-by-rule table, deviations, errors, effort, trust verdicts
+- docs/agents/claude-tracing-guide.md: guide for Claude users (evidence tags, trace steps, verifier rules, model per role, brief templates)

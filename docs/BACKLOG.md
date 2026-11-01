@@ -207,6 +207,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - upstream #163 (Blizzard / Eruption shard offsets, 2 commits, fork branch fix/blizzard-shard-offsets-v2) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
 - #163 (Blizzard shard offsets) got a tooling follow-up (3ac63fa0) for CodeRabbit; watch for the maintainer.
 - SKRESIST model A/B done (docs/research/model-ab-skresist.md): Opus and Sonnet found the curse 1/5 rule, Haiku missed it (port-only d2d side); open follow-ups: re-check Sonnet's Fire / Lightning Mastery pierce claim (likely wrong) and its missile physical whole-point deviation (read missile_blow and Blow::frac first)
+- claudeguide: guide for Claude users on tracing claims and the agent setup (docs/agents/claude-tracing-guide.md); model advice rests on one blind item, other models untested
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
