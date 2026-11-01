@@ -69,3 +69,9 @@ internal/combat/castgap_test.go  fixcastgap  fixcastgap
 docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
+docs/research/pr-nexthit-proof.md  nexthit  nexthit
+docs/research/pr-nexthit-draft.md  nexthit  nexthit
+tools/emu/next_hit.py  nexthit  nexthit
+tools/emu/next_hit_mode.inc  nexthit  nexthit
+tools/emu/next_hit_summary.py  nexthit  nexthit
+openspec/changes/nexthit/**  nexthit  nexthit
