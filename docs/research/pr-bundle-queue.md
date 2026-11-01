@@ -31,6 +31,7 @@
 
 When the tome PR opens, add any other READY candidate to the same bundle only if the file count stays under the margin above.
 - posted: 2026-11-01 #156 CodeRabbit findings (card crfix156): merc.cpp run-at-foe pace INVALID (answered in thread); walk_velocity.py compare ignoring missing d2d rows VALID, fixed and pushed as a fast-forward to the fork fix/walk-velocity (head e4a13181 -> 3f418788, no force-push), answered in thread (docs/research/pr-walk-evidence-pack.md).
+- posted: 2026-11-01 #157 CodeRabbit findings (card crfix157): boss_level.py compare ignoring unanswered d2d rows VALID, fixed and pushed as a fast-forward to the fork fix/boss-stats (head c048a356 -> cf85634a, no force-push); nonzero exit on any mismatch not changed (classified residuals S1 / H1), both answered in thread (docs/research/pr-mods-evidence-addendum.md).
 
 boss-stats: verifier HOLDS WITH LIMITS; draft v2 + det hashes (modsprep): READY (user's go still needed, next bundle slot). Det hashes equal base vs patched in 10 of 14 scenarios (all without a boss or minion), the other 4 differ only by the claimed unique / champion life and minion level (0 unexplained). Draft: pr-mods-draft-v2.md; evidence: pr-mods-evidence-addendum.md.
 
