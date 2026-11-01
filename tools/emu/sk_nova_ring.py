@@ -85,7 +85,7 @@ def record_params(game, src, sx, sy, lvl):
         return 0
     e.hook(0x59fa30, on_make2, 0)
     vel = e.call(0x663270, ROW, lvl)
-    e.call(0x56d400, ROW, SKILL, lvl, vel, ecx=game.g, edx=src)
+    e.call(0x56d400, src, ROW, SKILL, lvl, vel, ecx=game.g, edx=src)   # (unit, row, skill, lvl, vel), ret 0x14
     return seen, vel
 
 
