@@ -105,3 +105,6 @@ docs/process/chunker.md  chunker  chunker
 docs/community/groom-proposal.md  chunker  chunker
 docs/community/withdrawn.tsv  chunker  chunker
 openspec/changes/chunker/**  chunker  chunker
+docs/research/pr-curseimmune-draft.md  skresistfix  skresistfix
+docs/research/pr-curseimmune-proof.md  skresistfix  skresistfix
+openspec/changes/skresistfix/**  skresistfix  skresistfix
