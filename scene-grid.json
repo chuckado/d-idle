@@ -173,16 +173,16 @@
   "stall_s": 150,
   "wide_px": 640
  },
- "ts": 1793510726,
- "updated": "2026-11-01T05:25Z",
+ "ts": 1793511326,
+ "updated": "2026-11-01T05:35Z",
  "work": [
   {
    "state": "working",
-   "task": "Working on the bot"
+   "task": "Long unattended test runs"
   },
   {
    "state": "working",
-   "task": "Long unattended test runs"
+   "task": "Working on the bot"
   },
   {
    "state": "working",
