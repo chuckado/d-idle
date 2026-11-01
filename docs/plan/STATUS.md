@@ -55,7 +55,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [palskill](../../openspec/changes/palskill/) | in-progress | palskill | `docs/research/pal-skill-trace.md`<br>`tools/emu/pal_*`<br>`openspec/changes/palskill/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
@@ -112,8 +111,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change palskill: game.exe natively vs the real d2d build: flags, element damage, aura calcs; every mismatch explained
-- change palskill: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -126,6 +123,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- a439ea3 11-01 17:16 `Merge agent/palskill: PALSKILL: Holy Bolt, Blessed Hammer and Paladin aura trace against game.exe: seven d2d deviations, five bot findings` (palskill)
 - b94cfc1 11-01 17:09 `Merge agent/skabrecheck: SKABRECHECK: pierce claim refuted (0 diffs on 147k real-build cases), whole-point physical roll confirmed on 84k of 101k cases` (skabrecheck)
 - 47970bf 11-01 16:54 `Merge agent/skmeleewire2: melee model fed on d2d: gear and weapon fields mapped to player stats 19/21/22/25` (skmeleewire2)
 - f933d0f 11-01 16:38 `Merge agent/claudeguide: Claude guide: how to trace claims against game.exe, agent setup, model roles and verification` (claudeguide)
@@ -135,5 +133,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - acb7daf 11-01 16:22 `Merge agent/blizzardfix: Blizzard candidate v2: verifier's three changes applied (names, Eruption in the message, ruff)` (blizzardfix)
 - e3e8fc7 11-01 16:13 `Merge agent/fixprogress: town trip loop fix: an empty portal source marks the tome empty for the next visit (Gate 1 progress failure)` (fixprogress)
 - 3cc11d1 11-01 16:06 `Merge agent/verifyblizzard: independent verifier of the Blizzard shard-offset candidate (READY WITH CHANGES)` (verifyblizzard)
-- 825cc2c 11-01 15:54 `Merge agent/fixbelt: low potion kit bypasses the recovery cooldown (Gate 1 belt window)` (fixbelt)
 <!-- statusgen:end -->

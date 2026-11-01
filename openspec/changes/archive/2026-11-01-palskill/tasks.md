@@ -2,7 +2,7 @@
 
 ```yaml
 change: palskill
-status: in-progress
+status: archived
 agent: palskill
 branch: agent/palskill
 worktree: ~/code/d2lod-wt/palskill
@@ -15,7 +15,8 @@ exclusive: []
 gates:
   - "game.exe natively vs the real d2d build: flags, element damage, aura calcs; every mismatch explained"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. Holy Bolt hits only undead and heals friendly units (V read), Blessed Hammer spirals out of the caster, gains half of Concentration's damage % and +50 % vs undead / demon (V read; factor and flight V run); undead / demon flags (734 ids), element damage (8,640) and aura calcs (21,760) equal d2d with 0 differ; deviations D1-D7 are rules d2d lacks (no differential today); bot B1-B5; no PR candidate."
+result: "docs only, V run for flags, element damage, aura calcs and mana (0 differ on 8,640 and 21,760 cases); no PR candidate (no d2d-side test mode yet)"
+merge: a439ea3
 ```
 
 ## 1. Work
