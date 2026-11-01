@@ -55,7 +55,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifyarmorhit](../../openspec/changes/verifyarmorhit/) | in-progress | verifyarmorhit | `openspec/changes/verifyarmorhit/**`<br>`tools/emu/verify_armor_hit.py`<br>`tools/emu/test_verify_armor_hit.cpp`<br>`docs/research/pr-armorhit-verifier.md` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -108,9 +107,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifyarmorhit: verify_armor_hit.py vs test_verify_armor_hit on >= 100k cases: base > 0, head 0 or classified; end frames compared
 
 ### Recent merges
+- 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
 - 2b3ed7a 11-01 10:12 `Merge agent/palrecon: Paladin Act 1 recon (docs only)` (palrecon)
 - 8827073 11-01 10:08 `Merge agent/buildv3: fallback-lightning-v3 FRESH skill rows (opt-in, default stays v2)` (buildv3)
 - c7f140e 11-01 10:05 `Merge agent/buildflex: build-flexibility audit (docs only)` (buildflex)
@@ -120,5 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
 - 6bbd958 11-01 08:59 `Merge agent/opennexthit: PR #158 (NextHit justhit) posted, bundle queue row` (opennexthit)
 - 6bb01a0 11-01 08:55 `Merge origin/main into fixmouthloop2` (-)
-- eced68b 11-01 08:55 `Merge agent/fixskilllvl: d2.SkillBonus / Player.Effective skill levels for the known gate and mana cost` (fixskilllvl)
 <!-- statusgen:end -->

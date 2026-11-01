@@ -2,7 +2,8 @@
 
 ```yaml
 change: verifyarmorhit
-status: in-progress
+status: archived
+merge: 0f5a315
 agent: verifyarmorhit
 branch: agent/verifyarmorhit
 worktree: ~/code/d2lod-wt/verifyarmorhit
