@@ -2,7 +2,8 @@
 
 ```yaml
 change: skmelee
-status: in-progress
+status: archived
+merge: 792145a
 agent: skmelee
 branch: agent/skmelee
 worktree: ~/code/d2lod-wt/skmelee
@@ -15,7 +16,7 @@ exclusive: []
 gates:
   - "emulator oracle: 0 differences from the reading on 100,000 cases a part, two seeds"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "Offline, nothing verified live. Plain Attack traced (docs/research/sk-melee-trace.md): to-hit and whole-point weapon damage equal a port of d2d on 100,000 cases x 2 seeds (0 differ from the reading); d2d floors the physical (D1, +0.50 a hit in game.exe), lacks Blunt +50 % vs undead (D2, V run) and the barehanded rule (D4); D3 gear AR terms; Q3 / D7 weapon ED at the player U (drill R1); bot B1-B4; no PR candidate."
+result: "melee blow traced and oracle-verified vs game.exe; deviations proven only against a port of d2d: a real-build differential is the next card (SKMELEE2). Offline, not verified live. Plain Attack traced (docs/research/sk-melee-trace.md): to-hit and whole-point weapon damage equal a port of d2d on 100,000 cases x 2 seeds (0 differ from the reading); d2d floors the physical (D1, +0.50 a hit in game.exe), lacks Blunt +50 % vs undead (D2, V run) and the barehanded rule (D4); D3 gear AR terms; Q3 / D7 weapon ED at the player U (drill R1); bot B1-B4; no PR candidate."
 ```
 
 Overlaps (not edited here, lines for the merger in the trace's last section): docs/decomp-queue.md, docs/BACKLOG.md, docs/INDEX.md, CHANGELOG.md, docs/research/README.md, docs/OWNERS, docs/research/sorc-skill-matrix.md.

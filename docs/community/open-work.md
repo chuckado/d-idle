@@ -8,7 +8,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 
 ## SKMELEE: the player's own blow (staff or weapon swing)
 - size: M
-- status: ready
+- status: done
 - kind: decomp
 - source: queue:20
 - question: In game.exe 1.14d, how does the player's plain Attack roll to-hit and physical damage (weapon share, Strength bonus, shield carrier), and does d2d's `player_blow` / `attack_line` give the same numbers? The first levels of every melee class and the Sorceress staff rung run on this.

@@ -54,7 +54,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [skmelee](../../openspec/changes/skmelee/) | in-progress | skmelee | `docs/research/sk-melee-trace.md`<br>`tools/emu/sk_melee.py`<br>`openspec/changes/skmelee/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 
@@ -106,14 +105,13 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change skmelee: emulator oracle: 0 differences from the reading on 100,000 cases a part, two seeds
-- change skmelee: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 792145a 11-01 11:53 `Merge agent/skmelee: player melee blow traced in game.exe, emulator oracle, deviations vs a d2d port` (skmelee)
 - f85fcc3 11-01 11:48 `Merge agent/drills28: armorcut buff retry after a hit-cut cast, drill D28-0 and D26-A rerun` (drills28)
 - 600490f 11-01 11:43 `Merge origin/main into drills28` (drills28)
 - 022546b 11-01 11:38 `Merge agent/drills27: teletune3 stall-memory reset, D22-BL/D22-S drills, stall escape proven live` (drills27)
@@ -123,5 +121,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
 - 78f45e7 11-01 11:22 `Merge origin/main into drills27` (drills27)
 - dafbbf5 11-01 11:20 `Merge agent/agentprompt: hands-off contributor prompt for outside agents` (agentprompt)
-- 8a12242 11-01 11:18 `Merge origin/main into drills25 base` (teletune3)
 <!-- statusgen:end -->

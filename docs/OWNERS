@@ -103,6 +103,3 @@ docs/armorcut.md  armorcut  armorcut
 internal/combat/fighter.go  armorcut  armorcut
 internal/combat/armorcut_test.go  armorcut  armorcut
 openspec/changes/armorcut/**  armorcut  armorcut
-docs/research/sk-melee-trace.md  skmelee  skmelee
-tools/emu/sk_melee.py  skmelee  skmelee
-openspec/changes/skmelee/**  skmelee  skmelee
