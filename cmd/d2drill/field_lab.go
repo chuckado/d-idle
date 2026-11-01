@@ -51,22 +51,48 @@ func (l *lab) objectMode(ctx context.Context, r *drill.Run, idx int) string {
 	return "absent"
 }
 
+// OperateObject operates an object of the wanted kind. Which preset is found first depends on where the earlier drills left
+// the character (the rooms streamed in around it): DRILLS8 F14 saw a chest of class 144 (mode stays NU) in the group run and
+// class 139 alone. The drill therefore tries further objects of the kind (up to 4) while the interact leaves the mode
+// unchanged, and reports the last attempt; the classes tried are in Names of a failing result.
 func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want string) drill.ObjOp {
+	skip := map[int]bool{}
+	var tried []string
+	var op drill.ObjOp
+	for attempt := 0; attempt < 4; attempt++ {
+		next, idx := l.operateObject(ctx, r, level, want, skip)
+		if attempt > 0 && next.Found == "" { // nothing else of the kind: report the last attempt
+			break
+		}
+		op = next
+		if op.Found == "" || !op.Listed || op.InteractErr != "" || op.After != op.Before || want == "gibbet" {
+			break
+		}
+		tried = append(tried, fmt.Sprintf("class %d", op.Class))
+		skip[idx] = true
+	}
+	if len(tried) > 0 && op.After == op.Before && op.Found != "" {
+		op.Names = "no change for " + strings.Join(tried, ", ")
+	}
+	return op
+}
+
+func (l *lab) operateObject(ctx context.Context, r *drill.Run, level int, want string, skip map[int]bool) (drill.ObjOp, int) {
 	op := drill.ObjOp{Level: level, Want: want}
 	if err := l.Goto(ctx, r, level); err != nil {
 		op.InteractErr = "goto: " + err.Error()
-		return op
+		return op, 0
 	}
 	_ = l.be.Ctl.CloseAll()
 	ps, err := l.be.Client.Presets(ctx)
 	if err != nil {
 		op.InteractErr = "presets: " + err.Error()
-		return op
+		return op, 0
 	}
 	var names []string
 	for _, p := range ps.Items {
 		names = append(names, p.Name)
-		if op.Found == "" && !p.Hidden && strings.Contains(strings.ToLower(p.Name), want) {
+		if op.Found == "" && !p.Hidden && !skip[p.Index] && strings.Contains(strings.ToLower(p.Name), want) {
 			op.Found, op.Class = p.Name, p.ObjectID
 			op.Names = strconv.Itoa(p.Index) // the index, replaced below by the names when nothing matched
 		}
@@ -97,7 +123,7 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 				_ = l.Tick(ctx, 40)
 				if ps2, err := l.be.Client.Presets(ctx); err == nil {
 					for _, p := range ps2.Items {
-						if !p.Hidden && p.X-x < 1 && x-p.X < 1 && p.Y-y < 1 && y-p.Y < 1 {
+						if !p.Hidden && !skip[p.Index] && p.X-x < 1 && x-p.X < 1 && p.Y-y < 1 && y-p.Y < 1 {
 							op.Found, op.Class, op.Names = p.Name, p.ObjectID, strconv.Itoa(p.Index)
 						}
 					}
@@ -108,14 +134,14 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 	}
 	if op.Found == "" {
 		op.Names = strings.Join(names, ",")
-		return op
+		return op, 0
 	}
 	idx, _ := strconv.Atoi(op.Names)
 	op.Names = ""
 	s, err := l.be.Env.Snapshot()
 	if err != nil {
 		op.InteractErr = err.Error()
-		return op
+		return op, 0
 	}
 	id := uint32(d2dsrc.NPCIDBase + idx)
 	for _, u := range s.Objects {
@@ -134,7 +160,7 @@ func (l *lab) OperateObject(ctx context.Context, r *drill.Run, level int, want s
 		}
 	}
 	_ = l.CloseAll(ctx)
-	return op
+	return op, idx
 }
 
 func (l *lab) monstersAlive(ctx context.Context) (int, string) {
