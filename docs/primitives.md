@@ -236,4 +236,6 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | DW.m3 x3 (fixmouthloop2) | PARTIAL | drills21: 0 mouth bounces; 0 `walk did not finish` (drills20: 173), 1 `backing off` line (was 0), 154 rewrites, 51 holds, 62 step-aways per invocation (was 129; target about 20); the remaining ones are Navigator.roam from Explore (10 failed legs per episode, 5 episodes); 22 level-change errors: one pocket-stall town-portal escape at (102,183) in run 1 plus 21 stale retries in Fighter.move; run 2 PASS (runs DIFFER). Kills 0 (no attack skill). Clear and Explore finish |
 | P23 | DW.m4 (fixmouthloop2) | PASS | drills21: 0 bounces, 1 rewrite, 4 step-aways; the character dies in cave level 1 and 30 walks time out afterwards; dirty-UI verdict as before |
 | P23 | D2 (11), D3 (12) regression | PASS | drills21: 11 of 11 and 12 of 12 on the fixmouthloop2 build; ends in town |
-
+| P26 | D22-C, D22-A (fixtelekey) | PASS | drills22: Act 2 tile-exit legs at clvl 18 with Teleport: 12 hops landed, 0 refused, mana 150 to 3.0 and 69.9; slower than the walking control (448 against 254 and 851 against 578 ticks); border exits never hop |
+| P26 | D22-B (fixtelekey) | PASS | `Fighter.TeleportKey()` is `sk54` after BindSkills; the cast through it hops 11.9 cells and pays 23.3 mana |
+| P26 | D22-T, D22-R (fixtelekey) | PASS | town leg 0 hops; Lair level refused by rule; unwired navigator in a town: 3 refused hops, no mana, then walks |

@@ -43,6 +43,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [drills22](../../openspec/changes/drills22/) | in-progress | drills22 | `openspec/changes/drills22/**`<br>`internal/drill/d22.go`<br>`cmd/d2drill/d22_lab.go`<br>`docs/probes/drills/2026-11-01-drills22-*.txt` | `instance:drills-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -83,6 +84,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change drills22: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -110,6 +112,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 66ba14b 11-01 10:12 `Merge origin/main into drills22` (-)
 - c7f140e 11-01 10:05 `Merge agent/buildflex: build-flexibility audit (docs only)` (buildflex)
 - 4fbfbf2 11-01 10:00 `Merge agent/armorhit: Frozen Armor d2d vs game.exe proof, PR draft (docs only, card kept open)` (armorhit)
 - 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
@@ -119,5 +122,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6bb01a0 11-01 08:55 `Merge origin/main into fixmouthloop2` (-)
 - eced68b 11-01 08:55 `Merge agent/fixskilllvl: d2.SkillBonus / Player.Effective skill levels for the known gate and mana cost` (fixskilllvl)
 - 87f4674 11-01 08:52 `Merge agent/glossaryadd: six user-approved glossary terms` (glossaryadd)
-- 0e83373 11-01 08:51 `Merge remote-tracking branch 'origin/main' into agent/drills20` (-)
 <!-- statusgen:end -->
