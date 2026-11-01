@@ -60,3 +60,9 @@ internal/combat/portalmelee_test.go  fixportalmelee  fixportalmelee
 internal/resource/types.go  fixportalmelee  fixportalmelee
 internal/resource/abort.go  fixportalmelee  fixportalmelee
 internal/resource/portalmelee_test.go  fixportalmelee  fixportalmelee
+docs/research/det-hashes-2026-11-01b.md  dethash2  dethash2
+docs/research/pr-bundle-queue.md  dethash2  dethash2
+docs/BACKLOG.md  dethash2  dethash2
+tools/emu/det_scenarios_lab.py  dethash2  dethash2
+tools/emu/det_scenarios_run.py  dethash2  dethash2
+openspec/changes/dethash2/**  dethash2  dethash2
