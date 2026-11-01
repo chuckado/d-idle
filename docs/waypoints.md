@@ -1,5 +1,7 @@
 # Waypoints (agent WPUSE, 2026-10-30)
 
+> status: partly superseded: the 10 s arrival wait described below is gone (`nav.wpCooldownSec` defaults to 0, deprecated); see docs/wpcooldown.md. The rest is current.
+
 Tags: **D2D** = from the d2decomped notes (`docs/sme/d2decomped-findings-2.md` section 6, traced in game.exe 1.14d), **V** = verified in our own code or live (how given), **U** = unverified. Offline work only: nothing here ran against the game.
 
 ## Facts

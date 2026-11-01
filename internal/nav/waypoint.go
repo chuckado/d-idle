@@ -65,10 +65,15 @@ func (n *Navigator) noteLevel(s *d2.Snapshot) {
 
 // waitCooldown sleeps until d2d will accept a waypoint travel again (10 s since the last level change, silently
 // ignored otherwise). This is d2d's rule, not game.exe's: game.exe only refuses inside a PvP hostility window, never
-// in single player (docs/research/waypoint-trace.md, W3). Kept on purpose while d2d refuses; the d2d patch candidate
-// may make it unnecessary. It returns how long it waited.
+// in single player (docs/research/waypoint-trace.md, W3), and the d2d binaries in use carry the same rule since
+// upstream #153 (docs/wpcooldown.md). The default is 0: no wait. A positive nav.wpCooldownSec restores it (plus a 1 s
+// margin). It returns how long it waited.
 func (n *Navigator) waitCooldown(ctx context.Context) (time.Duration, error) {
-	cool := time.Duration(n.tune().WpCooldownSec*float64(time.Second)) + time.Second
+	sec := n.tune().WpCooldownSec
+	if sec <= 0 {
+		return 0, nil
+	}
+	cool := time.Duration(sec*float64(time.Second)) + time.Second
 	start := n.clk.Now()
 	for {
 		left := cool - n.clk.Now().Sub(n.wpSince)
