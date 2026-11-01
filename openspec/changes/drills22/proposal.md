@@ -1,5 +1,7 @@
 ## Why
 
+no observable behaviour change: harness and docs only (live proof drills, no bot code).
+
 Card fixtelekey wired Teleport as a capability of the character (Fighter bind, level rule) but was proven offline only. DRILLS22 is the live proof on a hidden d2d slot before the merge.
 
 ## What Changes
