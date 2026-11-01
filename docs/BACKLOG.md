@@ -173,6 +173,8 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
   - ARMORHIT (proposed, M, proof only): d2d test mode for `buff_events` against `sk_armor.py`, then a Frozen Armor freeze-rule candidate.
   - FIXMANAMODEL (ready, S, offline): regen in 256ths per frame, book mana at the action frame, potions over 5.12 s (SKMANA B1, B2, B3).
   - SOAKSKILLS (ready, S, offline): `d2dsoak report` per-skill fields of section 2 of the gate doc.
+  - SKPASS B1 (PLAN question for the user, the build is theirs; POLICY-class, paused, needs the user's decision): the leveler does not save refused points and spends them on the next legal row (internal/leveler/plan.go:82-95), so the FRESH table's clvl 40 Lightning row is spent at clvl 25 (27 without quest points); the real order is Chain Lightning from 26 (28), Lightning Mastery from 30, five by 33 (34); the build owner reorders or annotates rows 26-40 (docs/research/sk-passives-trace.md B1)
+  - SKPASS B2 (fix queue, card FIXSKILLLVL is separate): Skill.Effective() reads base + stat 107 only; game.exe adds 127 / 83 / 188 / 97 / 126 / shrine (FUN_00644180); affects mana cost and spec level with +skills gear (docs/research/sk-passives-trace.md B2)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
