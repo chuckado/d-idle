@@ -118,6 +118,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 1fccb88 11-01 13:03 `Merge agent/skmeleewire: wire melee blow and foe into the resource decision input` (skmeleewire)
 - 024c03e 11-01 12:58 `Merge agent/verifycurseimmune: independent verifier of the curse-immune PR candidate (READY)` (verifycurseimmune)
 - 015f4c1 11-01 12:51 `Merge agent/skmeleebot: melee model (to-hit, damage, Blunt vs undead) in the resource simulator; production not yet fed` (skmeleebot)
 - 45f6294 11-01 12:48 `Merge agent/upstreamsync (follow-up): leakcheck rewording, check against 52362d52` (upstreamsync)
@@ -127,5 +128,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8be58bb 11-01 12:34 `Merge agent/bundlearmor: combined armor+resume upstream PR body (held)` (bundlearmor)
 - 22b20eb 11-01 12:30 `Merge agent/skresistbot: SKRESISTBOT bot resist floor -100 and pierce below 100` (skresistbot)
 - 69192f1 11-01 12:26 `Merge agent/skresistfix: SKRESISTFIX curse-immune draft and proof docs (local d2d candidate, unverified)` (skresistfix)
-- 54b1d9c 11-01 12:21 `Merge agent/drills29: DRILLS29 D29-C armorcut retry proven live, D26-A lure Buff hook` (drills29)
 <!-- statusgen:end -->
