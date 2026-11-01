@@ -96,6 +96,9 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - DRILLS22, DRILLS24 (live result): fixtelekey proven live (12 hops landed, 0 refused, slower than walking); teletune live (0 hops with the defaults, near walking speed, 18 ticks per hop): [probes/drills/README.md](probes/drills/README.md)
 - docs/teletune2.md: Teleport hops along the planned path, minimum skipped path 13 subtiles (v x 18 ticks + 3), stall escape, knob nav.teleEscapeReservePct.
 - DRILLS25 (live result): teletune2 proven on two legs (Stony Tomb 211 against 254, Halls 533 against 578), border leg 9 ticks over: [probes/drills/README.md](probes/drills/README.md)
+- DRILLS26 (live result): Frozen Armor recast in Blood Moor on lab-armorhit and lab-nexthit2 (identical; armor up 296.1 of 300 s, one cut recast: ARMORCUT): [probes/drills/README.md](probes/drills/README.md)
+- docs/teletune3.md: border-leg analysis (key not on the walking path), stall escape tests and drill D22-S, `Navigator.ResetStallMemory`.
+- DRILLS27 (live result): teletune3 proven live (stall memory reset, stall escape, border-leg gap is replan spread not the key): [probes/drills/README.md](probes/drills/README.md)
 - DRILLS23 (live result): roamleg passes live (0 failed legs, step-aways 62 to 11, 0 bounces) and a Den monster-stall finding: [probes/drills/README.md](probes/drills/README.md)
 - DRILLS15 (live result): first live skill-smoke drills (group R): Teleport, mana, missile and armor traces compared with d2d, deviations confirmed: [probes/drills/README.md](probes/drills/README.md)
 - fixmanamodel: [fixmanamodel.md](fixmanamodel.md) regen per-frame whole 256ths, backend mana booking, potion over time (offline; live drill pending).
@@ -112,4 +115,6 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - Paladin Act 1 recon: [research/paladin-act1-recon.md](research/paladin-act1-recon.md) (what exists for the Paladin, Act 1 melee needs, Zealot-lite starter table as a proposal, generality metric and predicted file list, 8 SME questions; card palrecon)
 - docs/research/pr-armorhit-verifier.md: independent verifier of fix/armor-hit (freeze chain and resume frame traced, own differential, det hashes)
 - docs/research/pr-armorhit-addendum.md / pr-armorhit-body-final.md: fix/armor-hit after the verifier: verified limits, proof rows, final PR body, ready checklist (ARMORFINISH)
+- docs/research/pr-freezeresume-proof.md / pr-freezeresume-draft.md: fix/freeze-resume (frozen monster resumes at end + aidel), differential proof and PR draft
+- docs/research/pr-freezeresume-verifier.md: independent verifier of fix/freeze-resume (real event queue, own differential, side claims)
 - docs/forkarmor.md: private fork carries the Frozen Armor freeze-rule fix

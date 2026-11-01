@@ -792,3 +792,42 @@ Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): cheats `debug g
 - docs/BACKLOG.md: TELETUNE3 (from DRILLS25): the border leg costs 9 ticks over walking when Teleport is bound (717 against 708, 0 hops): find the per-step cost; stall escape (`stalledHere`) not yet proven live, needs a drill with a real same-level stall.
 - docs/INDEX.md: DRILLS25 section in docs/probes/drills/README.md.
 - CHANGELOG: none (docs only).
+
+## DRILLS26 (2026-11-01): Frozen Armor recast in a real fight, on lab-armorhit and lab-nexthit2
+
+Run on the worker host, hidden slot 0, `d2drill` from branch agent/drills26 (origin/main 865eb72 plus the new group U). Capacity before: idle 12 plus nice 52 percent. Files `2026-11-01-drills26-a-armorhit.txt` (binary `bin/d2d.lab-armorhit`, private fork branch lab-armorhit) and `2026-11-01-drills26-a-nexthit2.txt` (`bin/d2d.lab-nexthit2`); the binary is named in each header and in the drill line. Filtered -v logs (decision, nav and d2dsrc lines dropped), scrubbed. Command: `D2D_AGENT=drills26 D2D_BIN=<fork>/bin/<binary> tools/agentrun.sh drills26 --ttl 330 -- tools/d2dslot.sh run -n 0 -t 300 -- <built>/d2drill -group U -repeat 1 -bin <fork>/bin/<binary> -label NAME -v`.
+
+Drill D26-A (internal/drill/d26.go, cmd/d2drill/d26_lab.go; harness only): Blood Moor, character life 200, Frozen Armor level 1 and Fire Bolt level 3 (ledgered `debug points`), `debug kill` first, then a `zombie1` pack of 4 (`debug spawn`) topped up when none is alive, lured until two are in reach. The bot's `Fighter.Buff` once, then `Fighter.Clear` rounds of 2 s for 300 game seconds. The state is read with `debug states` at every round. Harness refills only mana below 10 and life below 25 percent (neither life refill happened).
+
+| Binary | Recasts (game s) | Life min / max | Kills | Armor up | Deaths |
+|---|---|---|---|---|---|
+| lab-armorhit | 0.0 (opening), 119.3, 232.4, 240.2, 242.8 | 173 / 201 | 44 (32 spawned in the field, kills count the bot's own report) | 296.1 s of 300 s | 0 |
+| lab-nexthit2 | identical | identical | identical | identical | 0 |
+
+- The two runs are identical to the tick (V): a plain zombie is frozen on both binaries (negative cold effect), so with a plain pack the fork difference does not show. The expected difference (champion, unique, boss strikers frozen only on nexthit2) needs a pack of those and was not run (U). The bot's recast does not depend on the binary (V).
+- First recast at 119.3 s, not the 114 s limit: the bot only recasts between fight rounds (as F2 of DRILLS13), so the limit is met plus up to a round (V). It still lands before the 120.3 s expiry.
+- FINDING (V that it happens, U why): the cast at 232.4 s (113.1 s after the previous one, so the armor was still up) did NOT refresh the state: `debug states` shows `40:1` at the end of that round, then no armor at the sample at 240.2 s (the old one ends at 119.3 + 0.3 + 120.0 = 239.6 s). The bot noticed (state readable, F3 of DRILLS13 fixed by fixbuff), recast at 240.2 s and again at 242.8 s; the armor was absent for 3.5 s at most (sampling). Candidate causes: the cast was cut by a hit recovery or paid and cut (cast cut is not refunded on d2d, DRILLS13 M1), or mana. Mana was 34 at the end of the round, so a cut cast is the lead (U: no per-cast action-frame read was done). The drill verdict is therefore FAIL by its own rule (armor absent).
+- Boss-adjacent check: SKIPPED. The harness has no Andariel stand drill (only the Warriv quest-record drill D8.w); creating one is out of scope for this card.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: ARMORCUT (from DRILLS26): a Frozen Armor recast inside a melee fight can be cut and leave the old armor to expire (3.5 s absent in 300 s, both binaries): find whether it is hit recovery; candidate fix: recast earlier or verify the state after the cast; champion/unique/boss pack drill on lab-armorhit not run; no Andariel stand drill exists.
+- docs/INDEX.md: DRILLS26 section in docs/probes/drills/README.md.
+- CHANGELOG: none (harness and docs only).
+
+## DRILLS27 (2026-11-01): live proof of teletune3 (PASS: border spread is walking variance, stall escape proven, pocket hops)
+
+Run on the worker host, hidden slot 1 (slot 0 left free for DRILLS26), `lab-debug-skills` binary for group T (D2 and D3 on `lab-cheats3`), `d2drill` built UNCHANGED from branch agent/drills27 (agent/teletune3 tip 75e0003 plus origin/main), default knobs. Capacity before: idle 50 plus nice 7 percent (41 iowait). Files `2026-11-01-drills27-<label>.txt` (stdout, scrubbed, all under 50 KB): `bl` (D22-BL; invoked three times, identical output, one kept), `stall` (D22-S), `pocket-pair` (D22-PC then D22-P in one process), `t-default` (D22-C, A, B, T, R), `d2`, `d3`. Run: `D2D_BIN=<fork>/bin/d2d.lab-debug-skills tools/agentrun.sh drills27 --ttl 200 -- tools/d2dslot.sh run -n 1 -t 200 -- d2drill -group T -repeat 1 -label NAME -v -only D22-BL`. Each invocation took 4 to 6 s of wall time.
+
+### Result (V)
+- Border leg, D22-BL (ticks, three legs per arm): no key 630, 692, 680 (spread 62); key 704, 677, 704 (spread 27); 0 hops, mana untouched. Three invocations gave the same numbers (lockstep is deterministic). The `why=` sequence: every leg starts `why=first` (wps 51 or 52, cells 299). The keyed arm has NO further plan line in any of its three legs. The no-key arm has none in legs 2 and 3; its leg 1 has 13 replans, all `why=monsters`, one about every 39 ticks from +115 (from (226,236), wps 41) to +586 (from (388,78), wps 2). So the replan trigger is the monster signature changing (a monster in view while the first leg of the process walks past the spawn area), not the key: it is the arm's first leg, the one that starts right after the prep, and it is the FASTEST leg of all six (630). The 717 against 708 gap of DRILLS25 was a different run history (each control ran after two walking legs, each keyed run after two hop legs); inside one process the legs vary 630 to 704 with no systematic key effect (mean no key 667, key 695: the key arm legs 1 and 3 are 704, but leg 2 is 677, below two of the three no-key legs). Verdict: measurement PASS by the criterion in docs/teletune3.md (the gap is explained by plan reasons: monster-triggered replans in some legs and not others). A replan does not cost ticks by itself: the replanning leg was the fastest; what differs is the route that results (U: not tested which route is shorter).
+- D22-S: PASS. Call 1: `nav teleport declined, walking why=leg mana=150`, 0 hops, `nav: stuck at {165 220} going to {295 270} (after 6 recoveries)`, 169 ticks. Call 2 (after the 132 s of game time the drill waits): `nav teleport after a stall, leg rule off pos={165 220}`, then 2 hops (hopticks [0 18]: the first landed in the same tick as the call), a second decline `why=leg` at mana 126, level 55 reached, 256 ticks, mana 150 to 138. So `stalledHere` fires live and the leg rule really is off after a recorded stall.
+- D22-PC then D22-P in ONE process: PASS. PC walks 304 ticks and escapes to level 40 (as before); P now leaves by hop: 3 hops (hopticks [18 18 18]), 229 ticks, level 55, mana 150 to 88.7. Before the reset (DRILLS25): 0 hops, 7560 ticks, roam timeout. `ResetStallMemory` between drills works live (and the stall escape of PC no longer poisons P).
+- Regression: D2 11 of 11, D3 12 of 12 (both END in town, life full). Group T: walking 254 / 578 / 708 (0 hops), Teleport Stony Tomb 211 (3 hops), Halls 533 (3 hops), border 717 (0 hops), town 191, unwired town 235 (3 refused), all as in DRILLS25, ticks identical.
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): the same logged cheats as DRILLS25 (`debug goto`, `debug kill`, `debug stat`, `debug points 54 1`, `debug mana full`, `debug warp 33 44`). Last invocation (D3) ended in town, panels closed. The worker-host slot 1 was held only during each invocation; `tools/agentreap.sh drills27` and `--list`: nothing left.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: TELETUNE3 live proof done (DRILLS27): remove the TELETUNE3 item; open question (U): which route the monster-triggered replan picks on the border leg and whether it is shorter.
+- docs/INDEX.md: DRILLS27 section in docs/probes/drills/README.md.
+- CHANGELOG: none (docs only).

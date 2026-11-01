@@ -111,14 +111,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 022546b 11-01 11:38 `Merge agent/drills27: teletune3 stall-memory reset, D22-BL/D22-S drills, stall escape proven live` (drills27)
+- 6a2c69c 11-01 11:34 `Merge agent/drills26: DRILLS26 drill D26-A Frozen Armor recast proof (harness only)` (drills26)
+- f570e02 11-01 11:28 `Merge agent/verifyfreezeresume: independent verifier for freeze-resume (READY WITH CHANGES)` (verifyfreezeresume)
+- bc86cec 11-01 11:28 `Merge agent/freezeresume: freeze-resume local PR candidate proof and tooling` (freezeresume)
 - fb4c078 11-01 11:24 `Merge agent/forkarmor: private fork Frozen Armor freeze-rule fix (lab-armorhit) documented` (forkarmor)
+- 78f45e7 11-01 11:22 `Merge origin/main into drills27` (drills27)
 - dafbbf5 11-01 11:20 `Merge agent/agentprompt: hands-off contributor prompt for outside agents` (agentprompt)
+- 8a12242 11-01 11:18 `Merge origin/main into drills25 base` (teletune3)
 - ff279c7 11-01 11:12 `Merge agent/drills25: teletune2 path-aware Teleport hops, DRILLS25 live drills` (drills25)
 - 8d5f20c 11-01 11:04 `teletune2: merge origin/main` (teletune2)
-- 194e1ab 11-01 11:02 `Merge agent/drills24: Teleport key wired from the bound skill, hops tuned (36 subtiles / 40 percent), live drills` (drills24)
-- b051a79 11-01 10:58 `Merge agent/tickfix: Haiku tick wrapper fix (thinking disabled, max_tokens 1200, set-based fact check)` (tickfix)
-- 8ff5841 11-01 10:48 `Merge origin/main into drills24` (drills24)
-- 7a408e6 11-01 10:54 `Merge agent/boardlinks: link the 8 opened work-item issues on the board` (boardlinks)
-- 0ec709e 11-01 10:43 `Merge origin/main into teletune` (teletune)
-- e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
 <!-- statusgen:end -->
