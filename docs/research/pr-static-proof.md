@@ -42,8 +42,16 @@ What was done, without reading the author's oracle first:
 
 Limits (what the claim does not cover):
 
-1. The author's own after side (`test_game --static-field`) re-states the call site's arithmetic; the real `Fight::spot` is covered by this verifier's run only. The PR body should cite a reviewer command that drives `spot` (or say the mode is a restatement).
+1. The author's own after side (`test_game --static-field`) re-states the call site's arithmetic; the real `Fight::spot` is covered by this verifier's run only. The PR body should cite a reviewer command that drives `spot` (or say the mode is a restatement). Update 2026-11-01 (card spot155, pushed 8c56e96a to #155: the reviewer mode now drives Fight::spot): the reviewer mode (now `test_static_field --static-field`) drives Fight::spot (see Full path below); the limit is closed.
 2. Real 1.14d data gives calc1 25 and calc2 0 at every level, so the life - 1 cap and the calc2 floor are reached only with synthetic Skills.txt values (checked, 0 mismatches).
 3. Not modelled on either side of the claim: a monster's magic damage reduction (FUN_0057bf80 subtracts table row 2's flat reduction, MDR, for lightning) and lightning absorb (FUN_0057bf10); FUN_0057c060's damage percent (100 for a player hitting a monster; other attacker kinds not run); players, mercs and pets as targets (the aurafilter walk, line of sight).
 4. Hooked in the game side: stat getters, max life, the difficulty row, events and the get-hit event; the life step of FUN_0057c6c0 (0x57c852..0x57c874) is applied in Python.
 5. Det state hashes: no scripted scenario casts Static Field; not run.
+
+## Full path (card spot155, 2026-11-01)
+
+The reviewer mode `test_static_field --static-field SEED N` casts Static Field through the real `Fight::spot` in a World: the caster (level 1..20, the case's lightning pierce in its stat sums, an expansion game), the skill row's calc1 / calc2 and DifficultyLevels StaticFieldMin set from the case, two monsters in range (the case's, and the previous case's max life, life and resistance: the per-unit loop). Columns after the case: the first monster's life after the cast, the second's, then the inner-function result (static_field_fine + resisted_fine, or `skip`); `tools/emu/static_field.py` prints the same three from game.exe's FUN_005c96a0 / FUN_0057c6c0 under the emulator. Not covered, as before: the area walk (line of sight, players as targets, the range test itself: monsters sit well inside aurarange), magic damage reduction, absorb.
+
+Result on the worker host (real d2d builds, same cases): seeds 1 and -7, 309,664 cases each (209,664 boundary plus 100,000 random), 619,328 in all. After (PR head with the fixup, 8c56e96a): 0 differ on all three columns (no RESFAIL: the monster's resistance read back equals the case's). Before (upstream main 72132b99 built with the same mode, spot and second columns only, no floor): 261,335 lines differ (first monster 115,103 and 115,353, the same counts as the line-for-line copy of the old arithmetic). Also re-run on the final tree: 212,664 cases (seed 1, 3000 random) 0 differ; the cold-length mode 24,312 cases 0 differ; test_game, test_rules, test_combat, test_protocol rc 0; pr_guard 0 FAIL / 0 WARN; presubmit --quick 0 FAIL; clang-tidy (upstream config) clean on the new file; gcc -Wshadow -Wunused -Wsign-compare clean; ruff clean.
+
+posted: 2026-11-01 fixup 8c56e96a pushed to #155 (old head ddc8281d, fast-forward) and one PR comment (see docs/research/pr-static-evidence-pack.md); CI all pass.

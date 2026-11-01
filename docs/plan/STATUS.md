@@ -47,6 +47,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
+| [spot155](../../openspec/changes/spot155/) | in-progress | spot155 | `docs/research/pr-static-evidence-pack.md`<br>`docs/research/pr-static-proof.md` | `upstream-pr:static-field` |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -86,8 +87,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change spot155: full-path differential: after 0 differ, before > 0 (real d2d builds)
+- change spot155: changecheck -cli 0 warnings; leakcheck -mode fail 0; check.sh --hygiene-only no FAIL; openspec validate --all --strict
 
 ### Recent merges
+- 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
 - 40bc78f 10-31 22:22 `Merge agent/cr155: CodeRabbit round on upstream PR 155 recorded` (cr155)
 - fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
@@ -97,5 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 98b8178 10-31 20:49 `Merge agent/drills9: DRILLS9 live drills, harness fixes` (drills9)
 - 2ff7991 10-31 20:46 `Merge agent/verifychill: chill verifier` (verifychill)
 - 74020bf 10-31 20:38 `Merge agent/prfixes: PR walk v3 and price v2 docs, verified holds with limits` (prfixes)
-- 33d7d1f 10-31 20:26 `Merge agent/chillpatch: static-field chill proof and draft` (chillpatch)
 <!-- statusgen:end -->
