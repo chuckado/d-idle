@@ -291,6 +291,9 @@ func (b *builder) playerStats(pl *d2.Player, st, p obj) {
 	} else {
 		rp.unknown("player.resist", "missing in stats")
 	}
+	for id, v := range gearStats(st) {
+		put(id, v)
+	}
 	rp.unknown("player.resist.magic", "panel shows 4 resists; no magic resist")
 	rp.unknown("player.stats.effective", "no effective stat vector (FCR, FRW, IAS, FHR, MF ...): Stats holds only the keys d2d gives")
 }
