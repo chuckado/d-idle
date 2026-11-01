@@ -63,6 +63,8 @@ type Fighter struct {
 	walking       atomic.Bool // the bot is on a travel or quest walk (SetWalking)
 	pinned        int         // consecutive evasive moves that went nowhere (evade)
 	noEvadeUntil  time.Time   // pinned: no kite or dodge before this
+	mouthEvades   int         // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
+	mouthEvadeAt  time.Time
 	resCache      map[uint32]resEntry
 	health        healthWindow
 	curve         []LifeSample

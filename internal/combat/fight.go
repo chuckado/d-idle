@@ -850,6 +850,12 @@ const (
 	pinHold   = 8 * time.Second // how long the fighter then stands and fights before trying to evade again
 )
 
+// mouthEvadeCap evasive moves started inside a cave mouth within mouthEvadeWindow, then evading is off like a pin.
+const (
+	mouthEvadeCap    = 3
+	mouthEvadeWindow = 10 * time.Second
+)
+
 // mayEvade is false while the fighter is pinned (see evade): kite and dodge are suppressed so it casts instead.
 func (f *Fighter) mayEvade() bool { return !f.now().Before(f.noEvadeUntil) }
 
@@ -857,6 +863,23 @@ func (f *Fighter) mayEvade() bool { return !f.now().Before(f.noEvadeUntil) }
 // crowd; moving again only stalls the fight (live: Countess, 10 min without a cast), so evading is off for pinHold and
 // the fighter fights in place. The state lives on the Fighter because Kill and Clear are called in short slices.
 func (f *Fighter) evade(ctx context.Context, from input.Point, to input.Point) error {
+	if f.nearMouth(from) {
+		// FIXMOUTH2: every walk that starts inside a mouth first steps away from it, so evading from there ping-pongs
+		// between the step-away and the evade target (V DRILLS16: 25,565 step-aways in 200 s at 3.2 from the exit).
+		now := f.now()
+		if now.Sub(f.mouthEvadeAt) > mouthEvadeWindow {
+			f.mouthEvades = 0
+		}
+		f.mouthEvadeAt = now
+		if f.mouthEvades++; f.mouthEvades > mouthEvadeCap {
+			f.mouthEvades = 0
+			f.noEvadeUntil = now.Add(pinHold)
+			f.info("evade: capped inside a cave mouth, fighting in place", "at", from, "cap", mouthEvadeCap, "for", pinHold)
+			return f.sleep(ctx, ms(f.tune().PollMs))
+		}
+	} else {
+		f.mouthEvades = 0
+	}
 	err := f.move(ctx, to)
 	if f.snapFn == nil {
 		return err

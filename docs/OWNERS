@@ -78,3 +78,7 @@ openspec/changes/nexthit/**  nexthit  nexthit
 docs/fixmanamodel.md  fixmanamodel  fixmanamodel
 internal/resource/manamodel.go  fixmanamodel  fixmanamodel
 internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel
+internal/combat/fight.go  fixmouth2  fixmouth2
+internal/combat/fighter.go  fixmouth2  fixmouth2
+internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
+docs/fixmouth2.md  fixmouth2  fixmouth2

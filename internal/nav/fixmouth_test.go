@@ -53,8 +53,8 @@ func TestRoamFirstWalkAfterArrivalStepsAway(t *testing.T) {
 	if d := dist(c, input.Point{X: 2048, Y: 2050}); d < 16 {
 		t.Fatalf("first click %v is %.1f from the exit: not a step away", c, d)
 	}
-	if n.arrival {
-		t.Fatal("arrival must be consumed by the first walk")
+	if !n.arrival {
+		t.Fatal("arrival must hold until a walk starts clear of the exit (FIXMOUTH2)")
 	}
 }
 
@@ -72,5 +72,50 @@ func TestNearMouthAnswersAfterArrival(t *testing.T) {
 	n.arrival = true
 	if !n.NearMouth(p) || n.NearMouth(input.Point{X: 2100, Y: 2100}) {
 		t.Fatal("after an arrival, within mouthR only")
+	}
+}
+
+// FIXMOUTH2, geometry V from DRILLS16 (Cave Level 1): a roam walk 13 from the exit after Clear's walk used to find
+// arrival consumed and skip the step-away (13 > mouthR 9). The flag now holds until a walk starts clear of the exit.
+func TestArrivalHoldsForTheStay(t *testing.T) {
+	exit := []d2map.Exit{{Dest: 3, Pos: d2map.Point{X: 2048, Y: 2050}}}
+	_, n := newKnown(t, openField(2000, 2000, 120, 120), input.Point{X: 2048 + 12, Y: 2050 + 5}, true) // 13 away
+	o, err := n.observe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	o.lm.Exits = exit
+	n.arrival = true
+	if _, ok := n.mouthStep(o); !ok {
+		t.Fatal("13 from the exit with the stay guard: must step away")
+	}
+	if !n.arrival {
+		t.Fatal("arrival must hold while inside the radius")
+	}
+	o.pos = input.Point{X: 2048 + 20, Y: 2050 + 20} // 28 away
+	if _, ok := n.mouthStep(o); ok {
+		t.Fatal("clear of the exit: no step")
+	}
+	if n.arrival {
+		t.Fatal("arrival must end once a walk starts clear of every unwanted exit")
+	}
+}
+
+// FIXMOUTH2: NearMouth covers the logged approach targets (9.4 and 8.9 from the exit), not points 20 away.
+func TestNearMouthApproachRadius(t *testing.T) {
+	_, n := newKnown(t, openField(2000, 2000, 120, 120), input.Point{X: 2053, Y: 2060}, true)
+	o, err := n.observe()
+	if err != nil {
+		t.Fatal(err)
+	}
+	o.lm.Exits = []d2map.Exit{{Dest: 8, Pos: d2map.Point{X: 2048, Y: 2050}}}
+	n.SetMouthGuard(true)
+	for _, p := range []input.Point{{X: 2056, Y: 2056}, {X: 2055, Y: 2055}} {
+		if !n.NearMouth(p) {
+			t.Errorf("%v must be guarded", p)
+		}
+	}
+	if n.NearMouth(input.Point{X: 2068, Y: 2070}) {
+		t.Error("20 away must not be guarded")
 	}
 }

@@ -46,6 +46,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixmouth](../../openspec/changes/fixmouth/) | in-progress | fixmouth | `internal/nav/walk.go`<br>`internal/nav/nav.go`<br>`internal/nav/fixmouth_test.go`<br>`internal/combat/combatspin_test.go`<br>`docs/fixmouth.md` | - |
+| [fixmouth2](../../openspec/changes/fixmouth2/) | in-progress | fixmouth2 | `internal/combat/fight.go`<br>`internal/combat/fighter.go`<br>`internal/combat/fixmouth2_test.go`<br>`docs/fixmouth2.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -84,6 +85,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixmanamodel: go test -p 1 ./internal/resource ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmouth: live: DW.m3 x3 and DW.m4 rerun, no bounce (docs/fixmouth.md)
+- change fixmouth2: live: DW.m3 x3 and DW.m4 rerun, no bounce, Clear finishes (docs/fixmouth2.md)
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -101,6 +103,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 0101ebe 11-01 01:16 `Merge agent/fixmanamodel: accurate mana model (ManaPerFrame256, ManaBook)` (fixmanamodel)
 - 458ecd4 11-01 01:14 `Merge agent/nexthit: D-NEXTHIT evidence pack, PR draft, oracle copies (PR NOT READY)` (nexthit)
 - 96be00f 11-01 01:08 `Merge agent/drills16: DRILLS16 live results (fixmouth FAIL, fixbuff PASS)` (drills16)
 - 25598ab 11-01 01:01 `Merge agent/actgate: per-act sorceress skill gate draft (ACTGATE)` (actgate)
@@ -110,5 +113,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ea3e136 11-01 01:41 `Merge agent/sklight: SKLIGHT trace of Lightning/Chain Lightning and piercing re-hit` (sklight)
 - d83ceb0 11-01 01:36 `Merge agent/fixmouth: mouthArrivalR for the first walk after a warp arrival (den bounce fix A)` (fixmouth)
 - 27049dd 11-01 01:27 `Merge agent/fixbuff: re-cast buffs in long fights, buff states, stale skills cache check` (fixbuff)
-- 8e783b1 11-01 01:21 `Archive fixrecast (1a4b228); OWNERS; STATUS` (fixrecast)
 <!-- statusgen:end -->

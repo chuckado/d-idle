@@ -109,7 +109,6 @@ func (n *Navigator) walk(ctx context.Context, tgt func(*obs) (input.Point, float
 		if !n.inMouth && mouthSeq != n.walkSeq {
 			mouthSeq = n.walkSeq
 			away, ok := n.mouthStep(o)
-			n.arrival = false // consulted once: later walks use the plain radius
 			if ok {
 				n.log.Info("nav: stepping away from a cave mouth", "from", o.pos, "to", away)
 				n.inMouth = true
@@ -604,6 +603,10 @@ const (
 	mouthR        = 9.0
 	mouthArrivalR = 16.0
 	mouthAway     = 20.0
+	// mouthApproachR: NearMouth radius. FIXMOUTH2, V (DRILLS16 logs, Den of Evil): an approach to a Zombie at (43,141),
+	// 9.4 from the exit (35,135), then 8.9, fired the trigger; mouthR 9 let the first one through. 12 covers both with
+	// 2.6 margin and the 11.2 arrival offset; the trigger bound itself stays U.
+	mouthApproachR = 12.0
 )
 
 // SetMouthGuard turns NearMouth on. d2d only (arrival inside a warp's trigger area is a d2d behavior, docs/d2d-loop.md);
@@ -626,7 +629,7 @@ func (n *Navigator) NearMouth(p input.Point) bool {
 		if e.Dest == n.wantExit {
 			continue
 		}
-		if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthR {
+		if math.Hypot(float64(p.X-e.Pos.X), float64(p.Y-e.Pos.Y)) <= mouthApproachR {
 			return true
 		}
 	}
@@ -641,6 +644,7 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 	if n.log.Enabled(context.Background(), slog.LevelDebug) {
 		n.log.Debug("nav mouth check", "pos", o.pos, "level", o.level, "exits", len(o.lm.Exits), "wantExit", n.wantExit, "arrival", n.arrival, "r", r)
 	}
+	inside := false
 	for _, e := range o.lm.Exits {
 		if e.Dest == n.wantExit {
 			continue
@@ -653,6 +657,7 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 		if d > r || d < 0.5 {
 			continue
 		}
+		inside = true
 		// FIXNAV: after a bounce (the step fired a trigger) the next attempt from this exit turns the direction: the
 		// trigger area is seed-dependent (docs/d2d-loop.md), the same step repeated 12 times in the post-fix soak.
 		key := mouthKey{o.level, e.Pos.X, e.Pos.Y}
@@ -677,6 +682,11 @@ func (n *Navigator) mouthStep(o *obs) (input.Point, bool) {
 			continue
 		}
 		return input.Point{X: x, Y: y}, true
+	}
+	if n.arrival && !inside {
+		// FIXMOUTH2: the arrival radius holds for the whole stay (V DRILLS16: a roam walk 13 from the exit after Clear
+		// had consumed the flag fired the trigger) and ends once a walk starts clear of every unwanted exit.
+		n.arrival = false
 	}
 	return input.Point{}, false
 }
