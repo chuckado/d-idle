@@ -21,13 +21,22 @@ def post_json(url, headers, body, timeout=60):
             return e.code, {}
 
 
-def message(key, model, system, user, max_tokens, http=post_json):
-    """One Messages API call. Returns the text. Raises RuntimeError with a key-free message on failure."""
+def message(key, model, system, user, max_tokens, http=post_json, thinking=None, meta=None):
+    """One Messages API call. Returns the text. Raises RuntimeError with a key-free message on failure.
+
+    thinking: optional request param, e.g. {"type": "disabled"} (thinking tokens count against max_tokens).
+    meta: optional dict that receives stop_reason and the usage block.
+    """
     headers = {"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"}
     body = {"model": model, "max_tokens": max_tokens, "system": system,
             "messages": [{"role": "user", "content": user}]}
+    if thinking:
+        body["thinking"] = thinking
     status, data = http(API_URL, headers, body)
     if status != 200:
         kind = (data.get("error") or {}).get("type", "unknown") if isinstance(data, dict) else "unknown"
         raise RuntimeError("anthropic api http %s (%s)" % (status, kind))
+    if meta is not None:
+        meta["stop_reason"] = data.get("stop_reason")
+        meta["usage"] = data.get("usage")
     return "".join(b.get("text", "") for b in data.get("content", []) if b.get("type") == "text").strip()
