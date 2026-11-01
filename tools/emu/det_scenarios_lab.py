@@ -194,11 +194,11 @@ def hit_scenario(run, cls):
         run.do(f"debug warp {tx:.2f} {ty + 1.6:.2f}")  # point blank: the target 1.6 cells north of the player
         run.do(f"debug skill left {skill}")
         run.do("step 2")
-        run.snap(f"{cls} skill {skill} before")
+        run.snap(f"{cls} skill {skill} #{uid} before")
         run.do(f"cmd skill {skill} {tx:.2f} {ty:.2f} {uid} 1")
         for block in range(8):
             run.do("step 6")
-            run.snap(f"{cls} skill {skill} block {block}")
+            run.snap(f"{cls} skill {skill} #{uid} block {block}")
 
 
 def party_scenario(run, mode):

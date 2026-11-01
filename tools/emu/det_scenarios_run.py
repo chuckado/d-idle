@@ -72,11 +72,15 @@ def compare(outdir, scenarios, base, tags):
 
 
 def table(outdir, scen, tag):
-    """hp / chill / stun / mode of the newest monster per snapshot (the hit scenarios' target)."""
+    """hp / chill / stun / mode of the hit scenarios' target per snapshot (else the newest monster)."""
     for label, lines in load(outdir, scen, tag):
-        rows = [line for line in lines if line.startswith("S|#")]
+        target = re.search(r" #(\d+) ", label)  # the hit scenarios put the target's id in the label
+        rows = [line for line in lines if line.startswith("S|#") and (not target or line.startswith(f"S|#{target.group(1)} "))]
         who = rows[-1][2:] if rows else "(target dead or gone)"
         who = re.sub(r"\s+at=\S+", "", who)
+        for line in lines:  # a neighbour the blow also reached (chilled or stunned, not the target)
+            if line.startswith("S|#") and line not in rows and not re.search(r"chill=0 stun=0", line):
+                who += " ALSO " + re.sub(r"\s+(at|mode)=\S+", "", line[2:])
         player = [line[2:] for line in lines if line.startswith("P|")]
         print(f"{label:<34} {who}  player {player[0].split(chr(9))[2:4] if player else ''}")
 
