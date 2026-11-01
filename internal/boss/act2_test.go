@@ -162,3 +162,10 @@ func TestSummonerTeleportsToAnchorWhenAvailable(t *testing.T) {
 		t.Fatalf("no teleport: %v", f.log)
 	}
 }
+
+// fixlair: the lair is Teleport 2 (allowed on a clear line, docs/fixlair.md); the script deliberately keeps walking.
+func TestDurielDoesNotTeleport(t *testing.T) {
+	if duriel().Anchor.Teleport {
+		t.Error("Duriel script must not use Teleport in the lair (docs/fixlair.md)")
+	}
+}

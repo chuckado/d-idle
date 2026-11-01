@@ -77,3 +77,10 @@ openspec/changes/skmiss/**  skmiss  skmiss
 docs/fixcrowd.md  fixcrowd  fixcrowd
 internal/combat/crowd_test.go  fixcrowd  fixcrowd
 internal/combat/fixcrowd_test.go  fixcrowd  fixcrowd
+docs/fixlair.md  fixlair  fixlair
+internal/data/levels.go  fixlair  fixlair
+internal/data/teleportrule_test.go  fixlair  fixlair
+internal/boss/act2.go  fixlair  fixlair
+internal/boss/act2_test.go  fixlair  fixlair
+docs/act2.md  fixlair  fixlair
+openspec/changes/fixlair/**  fixlair  fixlair

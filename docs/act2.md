@@ -38,7 +38,7 @@ Tests: `go test -p 1 -count=1 ./internal/quest ./internal/boss ./internal/task` 
 ### Corrections to older docs (V from levels.txt)
 `docs/goals/execution.md` / `catalog.md` list Halls of the Dead 3 as 58 and Claw Viper 2 as 61 and Maggot Lair 3 as 64 "from memory". The table says
 Halls of the Dead 3 = **60**, Claw Viper Temple 1 = **58**, Claw Viper Temple 2 = 61, Maggot Lair 3 = 64. `quest.Meshif` (210) is the Act 2 harbour Meshif; the Act 3 one is 264
-(`MeshifA3`). Act 2 Warriv is 175 (`WarrivA2`, already present). Duriel's Lair has `Teleport = 2` in levels.txt (V): no teleporting inside.
+(`MeshifA3`). Act 2 Warriv is 175 (`WarrivA2`, already present). Duriel's Lair has `Teleport = 2` in levels.txt (V), which game.exe reads as "allowed on a clear line" (docs/fixlair.md), not "no teleporting"; the script still walks there.
 
 ## Horadric Cube primitive (request for `internal/town`)
 
@@ -68,7 +68,7 @@ Throwaway character on a worker host instance, cheated to the state named, stand
 | T3 | Object 100 leads to area 73 | `Player.Area == 73` | area read |
 | S1 | Palace Cellar 3 (54): portal object 298; Arcane Sanctuary 74; which waypoint object class is the Arcane one (323?) | arrival in 74, waypoint touchable | screenshot of the portal |
 | S2 | Summoner: preset 357 offset (-3,-3) vs where he stands; class 250; journal 357 click opens a red portal (object 60) to the Canyon | portal object, arrival 46 | positions of preset and boss |
-| D1 | Duriel: Normal stats from the table (life 4757, cold resist 50) vs observed; `Teleport = 2` in the lair; where `ColdAura` should fire (radius 7, life < 55%) | no teleport; the chill is visible | screenshot at melee range, life readings |
+| D1 | Duriel: Normal stats from the table (life 4757, cold resist 50) vs observed; `Teleport = 2` in the lair (clear-line hop allowed, docs/fixlair.md); where `ColdAura` should fire (radius 7, life < 55%) | the script walks (Teleport 2 allows a clear-line hop, docs/fixlair.md); the chill is visible | screenshot at melee range, life readings |
 | D2 | Tyrael (251) appears after the kill; talk row; word 14 | word 14 Done after Tyrael, word 15 after Jerhyn | dialog screenshot |
 | H1 | Jerhyn talk then Meshif "Sail East" row (existing hop) | `Player.Area == 75` | row index |
 | M1 | Greiz hire with `Act2Merc` (aura Defiance): `town.MercWant{Act: 2, Diff: Normal, Aura: "Defiance", Row: n}` | gold drops, merc unit appears | hire window screenshot |
