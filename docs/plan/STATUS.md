@@ -42,9 +42,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [drills20](../../openspec/changes/drills20/) | in-progress | drills20 | `openspec/changes/drills20/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
+| [fixmouthloop](../../openspec/changes/fixmouthloop/) | in-progress | fixmouthloop | `internal/combat/mouthhold.go`<br>`internal/combat/fixmouthloop_test.go`<br>`docs/fixmouthloop.md`<br>`openspec/changes/fixmouthloop/**` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -78,11 +80,13 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change drills20: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixmanamodel: go test -p 1 ./internal/resource ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fixmouthloop: live: DW.m3 with the gate: step-aways per Den cycle drop from 117 to a handful, the cycle does not burn the phase limit (docs/fixmouthloop.md)
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -101,6 +105,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 0e83373 11-01 08:51 `Merge remote-tracking branch 'origin/main' into agent/drills20` (-)
+- 2ffa3ef 11-01 08:39 `drills20: merge origin/main` (drills20)
 - 2b23d81 11-01 08:38 `Merge agent/skpass: SKPASS passives trace (decomp row 23)` (skpass)
 - d8e48e0 11-01 02:22 `Merge agent/nexthitfix: nexthit v2 end-frame fix addendum, fork lab-nexthit2` (nexthitfix)
 - 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
@@ -109,6 +115,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e07cf9f 11-01 01:43 `Merge origin/main into drills18 (STATUS regenerated later)` (drills18)
 - 4ca38ec 11-01 01:40 `Merge agent/readmedocs: honest README capabilities and running docs` (readmedocs)
 - e64c13a 11-01 01:36 `Merge agent/drills17: DRILLS17 live result for fixmouth2 (FAIL, bounces remain)` (drills17)
-- 34559ca 11-01 01:36 `readmedocs: coordinator review fixes, merge origin/main` (readmedocs)
-- 2527484 11-01 01:31 `Merge agent/forknext: private fork carries the NextHit fix (lab-nexthit), docs only` (forknext)
 <!-- statusgen:end -->
