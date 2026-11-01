@@ -16,19 +16,23 @@ type Hit struct {
 type rule struct {
 	class string
 	rx    *regexp.Regexp
-	quiet bool // do not echo the match
+	quiet bool   // do not echo the match
+	only  string // when set, the rule applies to paths with this prefix only
 }
 
 // RE2 has no lookbehind, so the letter-boundary rule (PUBFIX: letters only, so orion_box and Jade_x match) is
 // written with consumed boundary groups; the name itself is capture group 1.
 var rules = []rule{
-	{"domain", regexp.MustCompile(`(?i)birbhub`), false},
-	{"machine", regexp.MustCompile(`(?i)(orion|herdr|forgejo|unraid|omlette|macmini)|(?:^|[^a-z])(venus|jade|onyx|tower)(?:[^a-z]|$)`), false},
-	{"person", regexp.MustCompile(`(?i)jesse|desmond`), false},
-	{"ip", regexp.MustCompile(`(?:^|[^0-9.])((?:10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}))(?:[^0-9]|\.[^0-9]|\.?$)`), false},
-	{"homepath", regexp.MustCompile(`/home/[A-Za-z_][\w.-]*|/Users/`), false},
-	{"email", regexp.MustCompile(`[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+`), false},
-	{"secret", regexp.MustCompile(`(?i)authorization|bearer\s+\S{8,}|BEGIN [A-Z ]*PRIVATE KEY|\bgh[pousr]_[A-Za-z0-9]{20,}|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b`), true},
+	{"domain", regexp.MustCompile(`(?i)birbhub`), false, ""},
+	{"machine", regexp.MustCompile(`(?i)(orion|herdr|forgejo|unraid|omlette|macmini)|(?:^|[^a-z])(venus|jade|onyx|tower)(?:[^a-z]|$)`), false, ""},
+	{"person", regexp.MustCompile(`(?i)jesse|desmond`), false, ""},
+	{"ip", regexp.MustCompile(`(?:^|[^0-9.])((?:10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2}))(?:[^0-9]|\.[^0-9]|\.?$)`), false, ""},
+	{"homepath", regexp.MustCompile(`/home/[A-Za-z_][\w.-]*|/Users/`), false, ""},
+	// Private lab directories of the worker host in run logs (scrubbed by tools/ci/scrub_paths.py). Scoped to the
+	// probe logs: tools and docs elsewhere name ~/d2d-lab as a documented working directory.
+	{"labpath", regexp.MustCompile(`~/(?:d2d-lab|labrun|d2lod-wt|d2lod-ops)\b`), false, "docs/probes/"},
+	{"email", regexp.MustCompile(`[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+`), false, ""},
+	{"secret", regexp.MustCompile(`(?i)authorization|bearer\s+\S{8,}|BEGIN [A-Z ]*PRIVATE KEY|\bgh[pousr]_[A-Za-z0-9]{20,}|\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b`), true, ""},
 }
 
 var (
@@ -71,6 +75,9 @@ func scanText(path, text string, allowStr []string) []Hit {
 	for i, line := range strings.Split(text, "\n") {
 		work := blank(line, allowStr)
 		for _, r := range rules {
+			if r.only != "" && !strings.HasPrefix(path, r.only) {
+				continue
+			}
 			for _, m := range r.rx.FindAllStringSubmatch(work, -1) {
 				h := Hit{Path: path, Line: i + 1, Class: r.class}
 				if !r.quiet {
