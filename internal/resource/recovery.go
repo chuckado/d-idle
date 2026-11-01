@@ -16,6 +16,7 @@ type RecoveryInput struct {
 	LastEnd   time.Time // when the last one ended (zero: never)
 	Was       bool      // a recovery is running
 	Force     bool      // a death streak with an empty purse: start even inside the cooldown
+	LowKit    bool      // KitLow: the healing potions are under the floor (Gate 1 rerun: 6 virtual minutes fighting with none)
 }
 
 // RecoveryVerdict is the answer of RecoveryCheck. Start and End are the edges (log them once).
@@ -30,6 +31,12 @@ const (
 	RecoveryForceDeaths = 3
 	RecoveryForceMin    = 30
 )
+
+// KitLow reports healing potions (belt plus pack) under RecoveryPotionFloor. With an unaffordable kit that overrides the
+// cooldown: a character one potion from none must not keep pushing the quest (Gate 1 rerun, docs/fixbelt.md).
+func KitLow(healing int, t Tuning) bool {
+	return t.RecoveryPotionFloor > 0 && healing < t.RecoveryPotionFloor
+}
 
 // RecoveryCheck is the recovery state machine. A human with an empty purse does not push the quest: he drops back to easy
 // monsters, farms gold and sellable loot, restocks and returns. Start: gold is under RecoveryKitGold and the kit it lacks
@@ -46,7 +53,7 @@ func RecoveryCheck(in RecoveryInput, t Tuning) RecoveryVerdict {
 			return RecoveryVerdict{Reason: "gold covers the kit"}
 		case in.Shortfall <= in.Gold:
 			return RecoveryVerdict{Reason: "the missing kit is affordable"}
-		case !in.LastEnd.IsZero() && in.Now.Sub(in.LastEnd) < cool && !in.Force:
+		case !in.LastEnd.IsZero() && in.Now.Sub(in.LastEnd) < cool && !in.Force && !in.LowKit:
 			return RecoveryVerdict{Reason: "cooldown"}
 		}
 		return RecoveryVerdict{On: true, Start: true, Reason: fmt.Sprintf("gold %d < kit %d", in.Gold, t.RecoveryKitGold)}

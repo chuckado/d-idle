@@ -24,6 +24,15 @@ func TestRecoveryCheck(t *testing.T) {
 	if v := RecoveryCheck(in, tu); v.On {
 		t.Fatalf("cooldown: %+v", v)
 	}
+	in.LowKit = true
+	if v := RecoveryCheck(in, tu); !v.Start {
+		t.Fatalf("low kit overrides the cooldown: %+v", v)
+	}
+	in.Shortfall, in.Gold = 30, 40
+	if v := RecoveryCheck(in, tu); v.On {
+		t.Fatalf("low kit but affordable: %+v", v)
+	}
+	in.LowKit, in.Shortfall, in.Gold = false, 250, 37
 	run := RecoveryInput{Was: true, Gold: 950, Sellable: 3, SellMin: 2, Since: t0, Now: t0.Add(10 * time.Minute)}
 	if v := RecoveryCheck(run, tu); !v.On || v.End {
 		t.Fatalf("loot still unsold: %+v", v)
@@ -52,5 +61,17 @@ func TestRecoveryForceBypassesCooldown(t *testing.T) {
 	in.Gold = 600
 	if v := RecoveryCheck(in, tu); v.On {
 		t.Fatalf("force must not start with the kit paid: %+v", v)
+	}
+}
+
+func TestKitLow(t *testing.T) {
+	tu := DefaultTuning()
+	tu.RecoveryPotionFloor = 2
+	if !KitLow(1, tu) || KitLow(2, tu) {
+		t.Fatal("floor 2: 1 is low, 2 is not")
+	}
+	tu.RecoveryPotionFloor = 0
+	if KitLow(0, tu) {
+		t.Fatal("floor 0 disables the override")
 	}
 }

@@ -70,7 +70,7 @@ func (r *Runner) updateRecovery(s *d2.Snapshot) bool {
 	v := resource.RecoveryCheck(resource.RecoveryInput{
 		Gold: s.Player.Gold, Shortfall: resource.KitShortfall(in.HasTP, healing, mana, t), Sellable: in.Sellable,
 		SellMin: r.e.Tune.Bot.SellMinItems, Now: r.e.Clock.Now(), Since: b.since, LastEnd: b.lastEnd, Was: b.on,
-		Force: streak >= resource.RecoveryForceDeaths,
+		Force: streak >= resource.RecoveryForceDeaths, LowKit: resource.KitLow(healing, t),
 	}, t)
 	now := r.e.Clock.Now()
 	switch {
