@@ -68,3 +68,6 @@ internal/combat/fight.go  fixemptyplan  fixemptyplan
 internal/combat/reach.go  fixemptyplan  fixemptyplan
 internal/combat/fixemptyplan_test.go  fixemptyplan  fixemptyplan
 docs/fixemptyplan.md  fixemptyplan  fixemptyplan
+internal/d2dsoakstat/minute.go  fixstatic  fixstatic
+internal/d2dsoakstat/metrics.go  fixstatic  fixstatic
+docs/fixstatic.md  fixstatic  fixstatic

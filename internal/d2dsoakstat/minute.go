@@ -23,6 +23,7 @@ type Minute struct {
 	XP                        uint64
 	State, RState             string
 	Goal, Step                string
+	Table                     string // leveler skill table (SelectBuild choice), "" in logs before change fixstatic
 	// DmgTaken (running counter, life points lost) and HPMinPct (lowest life percent seen in the minute) are
 	// V (by unit test, not live): the bot minute line emits both since change minutefields; HasHP is false for older logs that lack both keys.
 	DmgTaken, HPMinPct int
@@ -72,7 +73,7 @@ func ParseMinutesCount(r io.Reader) ([]Minute, int, error) {
 
 // minuteFromKV builds a Minute from the key/values of a `msg=minute` line; ok is false when time, xp or a counter did not parse.
 func minuteFromKV(kv map[string]string) (Minute, bool) {
-	m := Minute{Goal: kv["goal"], Step: kv["step"], State: kv["state"], RState: kv["rstate"]}
+	m := Minute{Goal: kv["goal"], Step: kv["step"], State: kv["state"], RState: kv["rstate"], Table: kv["table"]}
 	var terr error
 	m.At, terr = time.Parse(time.RFC3339Nano, kv["time"])
 	ok := terr == nil

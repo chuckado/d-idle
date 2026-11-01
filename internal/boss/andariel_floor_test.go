@@ -32,3 +32,11 @@ func TestAndarielFloorKnob(t *testing.T) {
 		t.Errorf("knob 14 at clvl 14: %v", err)
 	}
 }
+
+// fixstatic: the Andariel card kites at 10+ subtiles and has no opener hook (Static Field's radius is 5 at level 1).
+func TestAndarielScriptHasNoStaticFieldOpener(t *testing.T) {
+	s := andariel()
+	if s.Kite == nil || s.Kite.Range < 10 {
+		t.Fatalf("kite %+v", s.Kite)
+	}
+}

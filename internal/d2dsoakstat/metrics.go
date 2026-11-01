@@ -30,6 +30,8 @@ type Run struct {
 	Kills   int                `json:"kills"`
 	XP      int64              `json:"xp"`
 	Metrics map[string]float64 `json:"metrics"`
+	// Table is the leveler skill table the bot reported on its minute lines (last non-empty value); "" in older logs.
+	Table string `json:"table,omitempty"`
 	// States is the minute-count share per bot activity group (state field); empty in old logs.
 	States map[string]float64 `json:"states,omitempty"`
 	// Invalid is why the run must not count as exposure (crashed or short seed, unreadable lines); the verdict
@@ -98,6 +100,11 @@ func Extract(name string, ms []Minute, o Options) Run {
 		return r
 	}
 	first, last := ms[0], ms[len(ms)-1]
+	for _, m := range ms {
+		if m.Table != "" {
+			r.Table = m.Table
+		}
+	}
 	elapsed := make([]float64, len(ms)) // hours since the first line
 	switch {
 	case o.Hours > 0:

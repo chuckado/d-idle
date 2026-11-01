@@ -349,6 +349,20 @@ func aggText(runs []d2dsoakstat.Run, agg map[string]d2dsoakstat.Stat) string {
 	for _, r := range runs {
 		fmt.Fprintf(&b, "%-26s %6.2f %7d %7d %9.0f %8d %8.0f %6.0f\n", r.Name, r.Hours, r.Minutes, r.Kills, r.Metrics["xp_per_hour"], r.Deaths, r.Metrics["kills_per_hour"], r.Metrics["clvl_gain"])
 	}
+	tables := map[string]bool{}
+	for _, r := range runs {
+		if r.Table != "" {
+			tables[r.Table] = true
+		}
+	}
+	if len(tables) > 0 {
+		names := make([]string, 0, len(tables))
+		for k := range tables {
+			names = append(names, k)
+		}
+		sort.Strings(names)
+		fmt.Fprintf(&b, "table=%s\n", strings.Join(names, ","))
+	}
 	fmt.Fprintf(&b, "\n%-22s %12s %10s %12s %12s %5s\n", "metric (all runs)", "mean", "sd", "min", "max", "n")
 	keys := d2dsoakstat.MetricKeys
 	for _, k := range keys {

@@ -47,7 +47,7 @@ func TestMinuteLineBeltAndState(t *testing.T) {
 	g.r.minuteLine(s, s.Player, now)
 	g.r.obMu.Unlock()
 	l := lastMinute(buf)
-	for _, w := range []string{" potions=3", " mana=0", " potionsUsed=7", " state=\"quest fight\"", " rstate=idle", " kills=0", " killsGame=0"} {
+	for _, w := range []string{" potions=3", " mana=0", " potionsUsed=7", " state=\"quest fight\"", " rstate=idle", " table=", " kills=0", " killsGame=0"} {
 		if !strings.Contains(l, w) {
 			t.Fatalf("%q missing: %s", w, l)
 		}
