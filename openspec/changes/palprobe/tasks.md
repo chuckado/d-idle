@@ -19,9 +19,6 @@ owns:
   - internal/town/panel/panel_class_test.go
   - internal/town/palprobe_test.go
   - internal/town/palprobe_merc_test.go
-  - cmd/d2bot/class.go
-  - cmd/d2bot/class_test.go
-  - internal/combat/pure_test.go
   - internal/leveler/class_test.go
   - internal/resource/palprobe_test.go
   - docs/classes/paladin-probe.md

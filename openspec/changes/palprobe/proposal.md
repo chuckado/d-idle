@@ -10,3 +10,7 @@ User go 2026-11-01 ("start the paladin probe"): the second-class probe. It learn
 ## Impact
 
 Code: the seam files named in `owns`. Existing tests unchanged except one format verb (`%d` to `%v` for the string build) and one assertion that pinned the silent Sorceress fallback for a Necromancer's gear preferences. No spec, ADR or glossary change.
+
+## Overlap (declared)
+
+Card buildv3 (open) owns `cmd/d2bot/class.go`, `cmd/d2bot/class_test.go` and `internal/combat/pure_test.go`. This change edits them minimally and does not claim them: `class.go` lets the leveler table name its combat profile (the `combat` key buildv3 introduced) and returns the lookup error in the plan; `class_test.go` gains one test; `pure_test.go` changes one format verb (`%d` to `%v`). Merge order: either, the hunks are disjoint from buildv3's table rows.

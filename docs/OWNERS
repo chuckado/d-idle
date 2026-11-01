@@ -119,9 +119,6 @@ internal/town/panel/panel.go  palprobe  palprobe
 internal/town/panel/panel_class_test.go  palprobe  palprobe
 internal/town/palprobe_test.go  palprobe  palprobe
 internal/town/palprobe_merc_test.go  palprobe  palprobe
-cmd/d2bot/class.go  palprobe  palprobe
-cmd/d2bot/class_test.go  palprobe  palprobe
-internal/combat/pure_test.go  palprobe  palprobe
 internal/leveler/class_test.go  palprobe  palprobe
 internal/resource/palprobe_test.go  palprobe  palprobe
 docs/classes/paladin-probe.md  palprobe  palprobe
