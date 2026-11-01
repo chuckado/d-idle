@@ -95,6 +95,7 @@ Between runs.
 - Long unattended test runs (working)
 - Working on the bot (working)
 - Playing in a party of bots (working)
+- Fighting and staying alive (working)
 - Running the bot on the d2d engine (working)
 - Running the bot on the d2d engine (blocked)
 
@@ -105,7 +106,7 @@ Nothing merged in this window.
 
 [Chat and help: the d.idle Discord](https://discord.gg/U2v9q4h5UH)
 
-Last updated: 2026-11-01 19:40 UTC
+Last updated: 2026-11-01 19:50 UTC
 
 _Numbers are conservative._  
 _A check only counts as done once it has been verified for real: a live run in the game, or automated tests when that is what the check asks for._  
