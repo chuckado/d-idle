@@ -508,3 +508,34 @@ Drilly (throwaway Sorceress, `--no-save`): `debug goto 1/2/3`, `debug kill`, `de
 - docs/BACKLOG.md: FIXMOUTH2: fixmouth live proof FAILED (DRILLS16): the arrival step-away works but later walks bounce (roam first walk 9..16 from the exit after arrival is consumed; Fighter.move engage/evade targets near the Den mouth); fix proposed in DRILLS16 A, not implemented. fixbuff live proof done, PASS.
 - docs/INDEX.md: DRILLS16 section in docs/probes/drills/README.md.
 - CHANGELOG: the armor recast inside long fights and the d2d armor states are verified live (fixbuff); none for fixmouth.
+
+## DRILLS17 (2026-11-01): live proof of fixmouth2 (FAIL)
+
+Run on the worker host, hidden slot 0, lab build cheats3, `d2drill` built from origin/main 2d1b4ba (fixmouth2 merged as b2c88b8). Capacity before: idle 3.7 plus nice 84.4 percent. Files `2026-11-01-drills17-<label>.txt`: `m31`..`m33` (DW.m3 x3; m31 the filtered log, m32/m33 the first 400 filtered lines; the three runs are identical), `m41` (DW.m4), `d3` (town group, DRILL lines and mouth lines), `d2` (regression, full stdout). The -v logs are filtered to the nav mouth, step-away, arrival, level-change, walk-caller and DRILL lines (consecutive repeats collapsed). Command: `D2D_AGENT=drills17 D2D_BIN=<fork>/bin/d2d.lab-cheats3 tools/agentrun.sh drills17 --ttl 300 -- tools/d2dslot.sh run -n 0 -t 200 -- <built>/d2drill -group F -only DW.m3 -label drills17-m3-N -v` (and DW.m4; groups D3 and D2 without `-only`). Each invocation took about 6 s of wall time.
+
+### Result: fixmouth2 FAILS, but with real progress
+| Drill | DRILLS16 | DRILLS17 |
+|---|---|---|
+| DW.m3 x3 | Clear never ends (200 s TTL), 23 `the level changed during the walk` per run, about 25,565 `stepping away` lines | all 3 runs identical and FINISH in about 6 s: verdict FAIL `3 bounce(s)` (run 1: entries 2, 3, 4 bounce, first in clear; run 2: 4 of 4, first in explore); 18 level-change errors per run, 14 `stepping away` lines, no `evade: capped` line (no spin, so the cap never had to fire: U whether it works live) |
+| DW.m4 | 2 bounces in 4 entries (first in explore) | 2 bounces in 4 entries (first in explore): unchanged |
+
+### Callers (V, from the m31 and m41 logs)
+1. DW.m3, Den of Evil, the bounce at log line 620 (entry 2 clear): `GoTo < combat.(*Fighter).move < combat.(*Fighter).engage < combat.(*Fighter).fight`, approach to a Zombie at (43,141): `nav mouth check arrival=false r=9`, `nav mouth exit dist=10 skip=true`, then dist 9.4 and 8.9 (`skip=false`, `stepping away` to (61,148), 3 clicks), then the engage approach plans (60,147) to (43,141) (25 cells) and its last click at (42,146) fires `arrived in level 2`, `combat move failed ... level changed during the walk: 8 -> 2`. The Fighter did NOT skip (43,141), which is 10.0 from the exit (35,135): well inside `mouthApproachR` 12.
+2. Why: `NearMouth` answers only when `n.mouthGuard || n.avoiding() || n.arrival`. The drill build leaves mouthGuard off (the bot's default too: cmd/d2bot/d2dwire.go sets it from config key `mouthGuard`, default off). `n.arrival` was already false: the first walk after the arrival stepped away to (49,163), the next `mouthStep` found the start 28.7 from the exit (beyond 16), and the held flag ended there (`nav mouth check pos=(37,151) arrival=false r=9` is the next line). So the hold ends after ONE step-away in Den, and every approach after it (Clear's engage) is unguarded and walks back into the 9.4 to 12 subtile band. The arrival flag is a one-step guard in practice here; the card's "whole stay" holds only when no walk starts 16 away.
+3. DW.m4 bounce 1 (entry 2, explore): `roam < explore < Explore`, position (267,150), `arrival=false r=9`, `nav mouth exit dest=3 exit={255 145} dist=13 skip=true`, first click wp (265,151) fires the trigger: the same cause (flag ended after Clear's first walk cleared 16, the character wandered back to 13, outside mouthR 9).
+4. DW.m4 bounce 2 (entry 3, explore): `arrival=true r=16`, position (256,148), 3.2 from the exit, `stepping away` to (262,167) and its second click wp (260,156) fires the trigger. The step-away itself walks too close to the trigger when the arrival lands inside it (DRILLS16 saw 4 of 4 step-aways safe: here 1 of 3 fired; the start was 3.2 from the exit rather than 11.2).
+
+### Arrival flag across Clear and Explore (V)
+Set on every `arrived in level` (`arrival=true r=16` on the first `nav mouth check` of a stay: Den at (40,145), 11.2 from the exit, Cave Level 1 at (260,155)); it ends on the next walk start beyond 16 of every unwanted exit (28.7 to 31.3 in Den after the step-away), after which every walk logs `arrival=false r=9` through the rest of Clear and Explore until the next level change. It does not carry between stays. Proposal (not implemented): keep NearMouth guarded for the stay in a cave level whose arrival was inside the mouth (a separate `stayGuard` that stays true until the level changes), or turn `mouthGuard` on for d2d by default; the DRILLS16 note that a bigger radius widens fight filtering still applies.
+
+### Side effects and regression (V)
+- Town: D3 12 of 12 PASS (`d3`: g0, n, h, b, b2, tp, r, r0, s, s2, u, i). Rogue Encampment lists `exits=0` tile exits, so the arrival flag (set on the level change, `arrival=true wantExit=2` seen once on the way back) guards nothing there and has no effect; every D3 `nav mouth check` shows `arrival=false`. Not checked: a town with tile exits.
+- D2 (DRILLS11 group): 11 of 11 PASS (`d2`).
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`): `debug goto 1/2/3`, `debug stat 6/7` life (512000) in DW.m3/DW.m4 (ledgered cheats `drills:<drill id>`); portal and town drills of D2/D3 as in DRILLS11. Ends in Rogue Encampment, panels closed.
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: FIXMOUTH3: fixmouth2 live proof FAILED (DRILLS17): DW.m3 x3 3 bounces in 4 entries and DW.m4 2 in 4 remain. The arrival flag ends after the first step-away (start 28.7 from the exit), then NearMouth is off (mouthGuard default off) so engage approaches to (43,141) in Den and roam at 13 in Cave Level 1 bounce; a step-away from 3.2 also fires the trigger once. Clear now finishes and the spin is gone. Fix proposed in DRILLS17, not implemented.
+- docs/INDEX.md: DRILLS17 section in docs/probes/drills/README.md.
+- CHANGELOG: none.

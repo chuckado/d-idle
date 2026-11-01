@@ -84,3 +84,4 @@ internal/combat/fixmouth2_test.go  fixmouth2  fixmouth2
 docs/fixmouth2.md  fixmouth2  fixmouth2
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext
+openspec/changes/drills17/**  drills17  drills17
