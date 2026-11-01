@@ -1,6 +1,8 @@
 # Independent verifier: vendor prices follow-on (D9, D10)
 
 > status: current (card verifyprs2, 2026-10-31). Verifier section for `fix/vendor-prices-followon` (worker host worktree `price3`, head 312272a7 on #152's head 8a45cfc9); the author's proof is pr-price2-proof.md (card decompprice2). Offline, throwaway worktrees; the author's worktree and branch untouched; nothing pushed or posted.
+>
+> status: #152 MERGED 2026-11-01: the lines below that say the rebase 'does NOT apply today' are history; rebase onto upstream/main is clean (merge-tree 2026-11-01, docs/upstreamsync.md).
 
 Verdict: **D9 HOLDS WITH LIMITS, D10 HOLDS WITH LIMITS** (no counter-example on 1.14d data). **NOT READY** to open: one presubmit FAIL to fix, and #152 must merge first (steps at the end).
 

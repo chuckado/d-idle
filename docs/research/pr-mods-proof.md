@@ -1,6 +1,8 @@
 # PR candidate: boss and minion spawn stats (D1 narrowed, D2, D3, B)
 
 > status: BUILT, local candidate on upstream main 72132b99 (card buildmods, 2026-11-01); PROOF incomplete: no independent verifier yet, no det state hashes (need a d2d slot); nothing pushed or posted. Rules: [monster-mods-trace.md](monster-mods-trace.md) (its D1 is corrected here). Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-mods-draft.md](pr-mods-draft.md).
+>
+> status: MERGED upstream as #157 on 2026-11-01 (maintainer); #152 and #153 are merged too (card upstreamsync). The text below is the pre-merge state.
 
 ## Candidate
 

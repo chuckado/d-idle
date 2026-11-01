@@ -1,6 +1,8 @@
 # PR candidate evidence pack: walk velocity
 
 > status: local candidate, nothing pushed or posted (card walkfix, 2026-10-31; earlier: decompwalk). Proof: docs/research/pr-walk-proof.md (author's differential, the verifier's report, the fix pass); body: docs/research/pr-walk-draft.md.
+>
+> status: #156 MERGED upstream 2026-11-01T17:37Z (maintainer); the README table row conflict against the new main was resolved by keeping both rows. The posted lines below are history (card upstreamsync).
 
 PROOF: complete for the five claims. READY pending the user's go (and the det state hashes, see Residual risks).
 

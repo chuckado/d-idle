@@ -1,6 +1,8 @@
 # Proof: curse and aura lowering on an immune monster (SKRESISTFIX)
 
 > status: evidence for the local candidate `fix/curse-immune` (claim 6a04cb3e, tooling 557d14e3, base upstream main 72132b99) on the worker host. Offline; nothing pushed or posted. Not independently verified. PR body draft: [pr-curseimmune-draft.md](pr-curseimmune-draft.md). Trace: `docs/research/sk-resist-trace.md` (D1, section 7).
+>
+> status: 2026-11-01 (card upstreamsync): #152, #153, #155, #156 and #157 are MERGED upstream; base is now 7c3a50af or later; the candidate merges clean, rebased copy `fix/curse-immune-rebased` (4132071c, 16d6663a on 7c3a50af, pr_guard 0/0). The merged-against list below is history.
 
 Tags: **V run** executed by this agent on the worker host; **S** source reading; **I** inference.
 

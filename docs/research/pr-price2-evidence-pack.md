@@ -1,6 +1,8 @@
 # Evidence pack: fix/vendor-prices-followon-v2 (for the user's go / no-go)
 
 > status: current (agent DECOMPPRICE2, Opus, 2026-10-31; updated by card prfixes: branch `fix/vendor-prices-followon-v2`, head da80d0ab, independently verified HOLDS WITH LIMITS in [verify-price2.md](verify-price2.md); the old `fix/vendor-prices-followon` (312272a7) is untouched). One page. Detail: [pr-price2-proof.md](pr-price2-proof.md); body: [pr-price2-draft.md](pr-price2-draft.md); base PR: #152 ([pr-price-evidence-pack.md](pr-price-evidence-pack.md)); standard: docs/process/upstream-pr-standard.md. posted: nothing.
+>
+> status: #152 MERGED 2026-11-01: rebase onto upstream main is clean (merge-tree, docs/upstreamsync.md). The follow-on itself is not posted.
 
 **Claims (one commit each, stacked on #152's head 8a45cfc9).** game.exe 1.14d's `FUN_0062efb0`: D9 the npc.txt and quest multipliers divide by 1024 first when the price is above 0xffff (`0x62faac`, `0x62fae5`, `0x62fb1d`, quest loop `0x62fb70`); D10 a repair costs 0 unless the item has missing charges or its ItemTypes row has Repair and it restocks or has durability (`FUN_0062e660`, `FUN_00629930`): worn bows, crossbows and throwing potions are not repaired. d2d did neither. Both V (disassembly read, game.exe's function run).
 

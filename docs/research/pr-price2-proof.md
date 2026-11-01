@@ -1,6 +1,8 @@
 # Proof: vendor prices follow-on, two claims (fix/vendor-prices-followon, stacked on #152)
 
 > status: current (agent DECOMPPRICE2, Opus, 2026-10-31; decomp-queue items 10 and 11). Applies docs/process/upstream-pr-standard.md. Local upstream branch `fix/vendor-prices-followon` in the worker host's PR checkout (worktree `price3`), built on #152's head `8a45cfc9` (fix/vendor-prices, not modified); nothing pushed or posted. Base trace: [price-trace.md](price-trace.md); #152's proof: [pr-price-proof.md](pr-price-proof.md). Body: [pr-price2-draft.md](pr-price2-draft.md); one page: [pr-price2-evidence-pack.md](pr-price2-evidence-pack.md).
+>
+> status: #152 MERGED 2026-11-01: rebase onto upstream main is clean (merge-tree, docs/upstreamsync.md). The follow-on itself is not posted.
 
 Tags: V = verified (disassembly read with `disasm.py` and game.exe's own function run in the emulator), D = read from disassembly only, S = upstream doc, I = inferred, U = unverified. Addresses are game.exe 1.14d.
 

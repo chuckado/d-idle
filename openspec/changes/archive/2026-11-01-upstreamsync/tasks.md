@@ -2,7 +2,8 @@
 
 ```yaml
 change: upstreamsync
-status: in-progress
+status: archived
+merge: 19c1daf
 agent: upstreamsync
 branch: agent/upstreamsync
 worktree: ~/code/d2lod-wt/upstreamsync
@@ -14,7 +15,7 @@ exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
   - "no push, no GitHub or upstream post, no fork rebase"
-result: "Offline, nothing verified live, no game, nothing pushed or posted, fork not rebased. Upstream main 7c3a50af: merge preview clean for #155, #157, #158 and the armor, resume, bundle, curse-immune and price follow-on candidates; #156 conflicts in one tools/emu/README.md row; four rebased copies built and checked (pr_guard 0/0, test_rules, test_game); fork stack conflicts in update.cpp and rules.hpp from the lab click-modifier commit (same against the old main); plan and outdated-docs list in docs/upstreamsync.md."
+result: "upstream merges recorded; every candidate merges clean (rebased copies built); fork rebase plan written: needs new branches, not a force-push (FORKREBASE). Offline docs, not verified live."
 ```
 
 ## 1. Work

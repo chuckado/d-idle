@@ -1,6 +1,8 @@
 # Independent verifier: fix/nexthit (D-NEXTHIT, NextHit justhit) (VERIFYNEXTHIT, card verifynexthit, 2026-11-01)
 
 > status: verifier record for the local upstream candidate `fix/nexthit` (claim 8abab0ed, tooling 7901fda2, base upstream main 72132b99) on the worker host. Author's proof and draft: `docs/research/pr-nexthit-proof.md` / `pr-nexthit-draft.md` (commit a9e92a2). Offline and read-mostly; nothing pushed or posted; the author's branch and worktrees untouched. Verdict at the end.
+>
+> status: #152 and #153 are MERGED upstream (2026-11-01), so 'shares no file with #152, #153' still holds as history; #158 is still open (card upstreamsync).
 
 Tags: **V read** disassembled with upstream's `tools/emu/disasm.py` (my own dumps); **V run** game.exe's code run under upstream's emulator in my own oracle; **S** d2d source; **U** not traced.
 

@@ -1,6 +1,8 @@
 # Evidence pack: waypoint refusal window (agents DECOMPWP, WPPR, 2026-10-31)
 
 > status: POSTED 2026-10-31 as psi29a/d2decomped#153 (user go); see the posted lines at the end.
+>
+> status: MERGED 2026-11-01 (maintainer, #153; card upstreamsync).
 
 **Claim.** game.exe refuses a waypoint travel for 10 s only after the player's last hostile declaration (never in single player); d2d refused it for 10 s after every arrival. The patch drops d2d's test and its `arrived_at` stamp.
 

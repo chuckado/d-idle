@@ -1,6 +1,8 @@
 # Proof: vendor prices, five claims (fix/vendor-prices)
 
 > status: current (agent PRICEPR, Opus, 2026-10-31; builds on DECOMPREPAIR's trace). Applies docs/process/upstream-pr-standard.md. Local upstream branch `fix/vendor-prices` in the worker host's PR checkout (a new worktree `price2` off upstream/main d0ea14b7), six commits, 8 files; nothing pushed or posted. Trace and formula: [price-trace.md](price-trace.md). Body: [pr-price-draft.md](pr-price-draft.md); one page: [pr-price-evidence-pack.md](pr-price-evidence-pack.md).
+>
+> status: MERGED as #152 on 2026-11-01 (maintainer; card upstreamsync). The text below is the pre-merge state.
 
 ## Commits (local, worker host)
 

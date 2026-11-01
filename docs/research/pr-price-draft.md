@@ -1,6 +1,8 @@
 # PR draft: vendor prices as game.exe prices them (five claims)
 
 > status: DRAFT (agent PRICEPR, 2026-10-31). Nothing is pushed, posted or filed. Branch `fix/vendor-prices` in the worker host's PR checkout (worktree `price2`), six commits on upstream/main d0ea14b7, 8 files. Proof: docs/research/pr-price-proof.md. The body below follows the earlier PRs' template; one section per claim (bundle rule, docs/research/pr-bundle-queue.md).
+>
+> status: MERGED as #152 on 2026-11-01 (maintainer; card upstreamsync). The text below is the pre-merge state.
 
 ````
 ## What changes

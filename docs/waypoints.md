@@ -17,7 +17,7 @@ Tags: **D2D** = from the d2decomped notes (`docs/sme/d2decomped-findings-2.md` s
 
 | rule | where | status |
 |---|---|---|
-| wait until 10 s (+1 s margin) after the level change before clicking a row; the wait comes after the walk to the waypoint and the panel opening, so walking counts | `nav.waitCooldown`, `noteLevel` (arrival = first observation in the level, so never earlier than the real one) | tested with the sim clock |
+| (d2d needs this only until the lab binary has #153, merged upstream 2026-11-01) wait until 10 s (+1 s margin) after the level change before clicking a row; the wait comes after the walk to the waypoint and the panel opening, so walking counts | `nav.waitCooldown`, `noteLevel` (arrival = first observation in the level, so never earlier than the real one) | tested with the sim clock |
 | a row click that did nothing is retried once after 2 s while the character arrived recently (the game's clock may be ahead of ours); a long-standing character fails fast (no retry) | `nav.TakeWaypoint`, `wpRetryWindow` | tested |
 | second click for an unlit waypoint: `openWaypoint` already interacts up to 3 times; it now counts the clicks and logs `wp: activated` when more than one was needed | `nav.openWaypoint` | tested (`TestWaypointSecondClickActivates`) |
 | cursor item: refuse to click, call the `Navigator.ClearCursor` hook first (`ErrCursorItem` when absent or failing) | `nav.clearCursor`, `town.Town.ClearCursor` | tested; WIRING NEEDED in `cmd/d2bot/behaviors.go`: `nv.ClearCursor = tw.ClearCursor` (not my directory) |

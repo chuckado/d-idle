@@ -1,6 +1,8 @@
 # PR draft: waypoint refusal window (agents DECOMPWP, WPPR, 2026-10-31)
 
 > status: DRAFT for a LOCAL branch; not pushed, not posted. Branch `fix/waypoint-hostile-window` on the worker host (74199f4f tooling, 4724e138 claim, on upstream/main d0ea14b7). Proof: [pr-wp-proof.md](pr-wp-proof.md). Evidence: [pr-wp-evidence-pack.md](pr-wp-evidence-pack.md).
+>
+> status: MERGED upstream on 2026-11-01 as #153 (maintainer); the text below is the pre-merge state (card upstreamsync).
 
 **Title:** world: the waypoint refusal counts from hostility, not the level change
 

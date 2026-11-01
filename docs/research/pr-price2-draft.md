@@ -1,6 +1,8 @@
 # Draft PR body: vendor prices follow-on (fix/vendor-prices-followon-v2)
 
 > status: draft (agent DECOMPPRICE2, 2026-10-31; branch renamed `fix/vendor-prices-followon-v2` by card prfixes, which only changed one tooling line: `zip(..., strict=True)` for ruff B905). Not posted. Proof: [pr-price2-proof.md](pr-price2-proof.md). Written for the case "open after #152 merges, rebased to the two claims plus tooling" (the recommendation in the evidence pack); if it goes into #152 instead, the two sections below become sections of #152's body.
+>
+> status: #152 MERGED 2026-11-01: rebase onto upstream main is clean (merge-tree, docs/upstreamsync.md). The follow-on itself is not posted.
 
 ---
 

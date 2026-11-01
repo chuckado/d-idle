@@ -1,6 +1,8 @@
 # Draft PR body: boss and minion spawn stats
 
 > status: draft v2 (card modsprep, 2026-11-01), not posted; replaces [pr-mods-draft.md](pr-mods-draft.md) (the verifier's four edits applied). Proof: [pr-mods-proof.md](pr-mods-proof.md), addendum with the verifier verdict and the det state hashes: [pr-mods-evidence-addendum.md](pr-mods-evidence-addendum.md). Opens only with the user's go, in the next bundle slot.
+>
+> status: MERGED upstream as #157 on 2026-11-01 (maintainer); #152 and #153 are merged too (card upstreamsync). The text below is the pre-merge state.
 
 Title: `Boss and minion spawn stats: base-level life, minion leveladd, ghostly and berserker`
 

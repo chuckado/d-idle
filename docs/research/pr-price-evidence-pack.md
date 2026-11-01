@@ -1,6 +1,8 @@
 # Evidence pack: fix/vendor-prices (for the user's go / no-go)
 
 > status: current (agent PRICEPR, Opus, 2026-10-31). One page. Detail: docs/research/pr-price-proof.md; body: docs/research/pr-price-draft.md; trace: docs/research/price-trace.md; standard: docs/process/upstream-pr-standard.md. posted: nothing.
+>
+> status: MERGED as #152 on 2026-11-01 (maintainer; card upstreamsync). The text below is the pre-merge state.
 
 **Claims (one commit each).** game.exe 1.14d's `FUN_0062efb0`: D1 an armor is priced at cost x defence / maxac (buy, sell, repair); D2 a class item sells for a quarter; D3 quality extras count only on identified items; D4 an unidentified item cannot be repaired; D7 a broken ethereal item sells for 1. d2d did none of these.
 
