@@ -104,6 +104,30 @@ func (l *lab) d15dir(ctx context.Context, x, y float64, max int) (dx, dy float64
 	return dx, dy, int(best)
 }
 
+// d15line returns the free length (cells, half-cell steps, up to max) from (x,y) along (dx,dy).
+func (l *lab) d15line(ctx context.Context, x, y, dx, dy float64, max int) float64 {
+	free := 0.0
+	for s := 0.5; s <= float64(max); s += 0.5 {
+		if l.d15blocked(ctx, x+dx*s, y+dy*s) {
+			break
+		}
+		free = s
+	}
+	return free
+}
+
+// d15longline finds a start cell and direction with at least want free cells ahead: the best direction from the
+// character, extended backwards through the character's cell, the start moved to the far end of the line (the caller warps there).
+func (l *lab) d15longline(ctx context.Context, x, y float64, want int) (sx, sy, dx, dy float64, n int) {
+	dx, dy, nn := l.d15dir(ctx, x, y, want)
+	back := l.d15line(ctx, x, y, -dx, -dy, want)
+	if back > 0.5 {
+		back -= 0.5
+	}
+	sx, sy = x-dx*back, y-dy*back
+	return sx, sy, dx, dy, int(float64(nn) + back)
+}
+
 // d15prep puts the character in Blood Moor with the natural monsters gone, the skill learnt at the given level and mana full.
 func (l *lab) d15prep(ctx context.Context, r *drill.Run, skill, level int) error {
 	if err := l.d11Setup(ctx, r, 2, 100, 6); err != nil {
@@ -222,8 +246,9 @@ func (l *lab) d15T1(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 			return drill.Outcome{}, err
 		}
 		mv := cdist(a.X, a.Y, b.X, b.Y)
-		obs = append(obs, fmt.Sprintf("target %.1f cells away: before %s, after 14 ticks %s, moved %.2f cells, mana change %+.2f points", cdist(tx, ty, b.X, b.Y), b, a, mv, float64(a.Mana-b.Mana)/256))
-		moved = moved || mv > 0.5
+		hop := mv >= 0.8*cdist(tx, ty, b.X, b.Y) // a walk toward the target covers about 1.1 cells in 14 ticks, a hop all of it
+		obs = append(obs, fmt.Sprintf("target %.1f cells away: before %s, after 14 ticks %s, moved %.2f cells (hop %s), mana change %+.2f points", cdist(tx, ty, b.X, b.Y), b, a, mv, yn(hop), float64(a.Mana-b.Mana)/256))
+		moved = moved || hop
 		paid = paid || a.Mana < b.Mana
 	}
 	o := drill.Outcome{Intended: "game.exe: refused in a town room at the start (FUN_0056f640), the character stays and no mana is taken", Observed: strings.Join(obs, " || ")}
@@ -245,7 +270,8 @@ func (l *lab) d15T2(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if err != nil {
 		return drill.Outcome{}, err
 	}
-	dx, dy, n := l.d15dir(ctx, s.X, s.Y, 26)
+	sx, sy, dx, dy, n := l.d15longline(ctx, s.X, s.Y, 26)
+	s.X, s.Y = sx, sy
 	var obs []string
 	landed := map[int]bool{}
 	for _, d := range []int{3, 6, 9, 12, 15, 18, 24} {
@@ -493,9 +519,10 @@ func (l *lab) d15T7(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if err != nil {
 		return drill.Outcome{}, err
 	}
-	dx, dy, n := l.d15dir(ctx, s.X, s.Y, 26)
-	if n < 24 {
-		return drill.Outcome{}, fmt.Errorf("no free line of 24 cells (best %d)", n)
+	sx, sy, dx, dy, n := l.d15longline(ctx, s.X, s.Y, 26)
+	s.X, s.Y = sx, sy
+	if n < 25 {
+		return drill.Outcome{}, fmt.Errorf("no free line of 25 cells (best %d)", n)
 	}
 	var obs []string
 	kept := false
