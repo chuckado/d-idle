@@ -159,6 +159,44 @@ var buildFiles = map[string]string{
 	"barbarian_warcry_endgame90":       "build-barbarian_warcry_endgame90.json",
 }
 
+// tableMeta is the self-description a plandata build table may carry: Selector is its `--build` name, EndgameFor and
+// DefaultForClass name a class (audit S4). registerDataTables only fills what the Go maps below leave empty, so
+// no existing class changes its default or endgame table.
+type tableMeta struct {
+	Selector        string `json:"selector"`
+	EndgameFor      string `json:"endgame_for"`
+	DefaultForClass string `json:"default_for_class"`
+}
+
+func init() { registerDataTables(plandata.FS) }
+
+func registerDataTables(fsys fs.FS) {
+	ents, _ := fs.ReadDir(fsys, ".")
+	for _, e := range ents {
+		if !strings.HasPrefix(e.Name(), "build-") || !strings.HasSuffix(e.Name(), ".json") {
+			continue
+		}
+		raw, err := fs.ReadFile(fsys, e.Name())
+		if err != nil {
+			continue
+		}
+		var m tableMeta
+		if json.Unmarshal(raw, &m) != nil || m.Selector == "" {
+			continue
+		}
+		if _, taken := buildFiles[m.Selector]; taken {
+			continue
+		}
+		buildFiles[m.Selector] = e.Name()
+		if c := strings.ToLower(m.EndgameFor); c != "" && endgameBuild[c] == "" {
+			endgameBuild[c] = m.Selector
+		}
+		if c := strings.ToLower(m.DefaultForClass); c != "" && defaultBuild[c] == "" && gear.DefaultBuild(c) == "" {
+			defaultBuild[c] = m.Selector
+		}
+	}
+}
+
 // TableCombat is the combat line a table declares in its data ("combat" key), "" for none or an unknown table.
 func TableCombat(name string) string {
 	bd, err := LoadBuild(name, "")
