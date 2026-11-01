@@ -21,7 +21,7 @@ gates:
   - "go test -p 1 ./internal/nav ./internal/combat ./internal/boss ./cmd/d2bot passes"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: "offline: Teleport key and level rule wired from the Fighter bind in both stacks, tests pass; not verified live"
-live: "verified live on d2d (DRILLS22): hops fire on Act 2 tile-exit legs at clvl 18 (12 hops, 0 refused, key sk54), no hop in town, refused hops bounded at 3, no-Teleport control walks; border exits never hop and the hops are slower than walking (finding); boss stand point and a second class not run"
+live: "verified live on d2d (DRILLS22): hops fire on Act 2 tile-exit legs at clvl 18 (12 hops, 0 refused, key sk54), no hop in town, refused hops bounded at 3, no-Teleport control walks; border exits never hop and the hops are slower than walking (finding); boss stand point and a second class not run; DRILLS24 re-ran the legs on the teletune build: key sk54 and the bind still hold, no hop in town, goto 74 reaches the Arcane Sanctuary with HasTeleport and TeleportOK true"
 ```
 
 - [x] call graph of the finding (docs/fixtelekey.md)

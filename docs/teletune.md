@@ -1,6 +1,6 @@
 # teletune: when a Teleport hop is worth it
 
-> status: card teletune, offline, NOT verified live (recipe at the end). Evidence: DRILLS22 (docs/probes/drills/README.md on branch agent/drills22, logs `docs/probes/drills/2026-11-01-drills22-*.txt`), docs/research/sk-teleport-trace.md (SKTELE), docs/fixmanamodel.md. Tags: V = measured live on d2d (DRILLS22) or read from game.exe, S = secondary, U = unverified, UNSURE = a guess that a knob lets you move.
+> status: card teletune, verified live in DRILLS24 (docs/probes/drills/README.md; per-hop time 18 ticks, not 33 or 64). Evidence: DRILLS22 (docs/probes/drills/README.md on branch agent/drills22, logs `docs/probes/drills/2026-11-01-drills22-*.txt`), docs/research/sk-teleport-trace.md (SKTELE), docs/fixmanamodel.md. Tags: V = measured live on d2d (DRILLS22) or read from game.exe, S = secondary, U = unverified, UNSURE = a guess that a knob lets you move.
 
 ## The finding (V, DRILLS22)
 
@@ -37,7 +37,7 @@ A hop pays only if both hold:
 
 With a hop range of 18 subtiles and a 21 to 24 mana price at level 1, Teleport on the bot's own legs helps only where the walk is more than twice the jump: across walls, cut-off pockets and islands (`teleStep`), escaping, and the stand points of bosses that need it (`NeedsTeleport`, for example the Act 2 Summoner). It does not speed up open ground. Larger pools, higher skill levels (cost 24 minus level plus one) and a longer hop range on d2d (DRILLS15 T2: 15 to 24 cells landed; the cap is the navigator's `defaultTeleportRange`) would move the break-even; raising the range is NOT done here (game.exe refuses hops outside the caster's room, SKTELE: the room limit is 40 to 80 subtiles, but an unrefused 18 is the only measured safe value).
 
-## Live recipe (not run)
+## Live recipe (run in DRILLS24, see its README section)
 
 Group T of d2drill, same slot and cheats as DRILLS22 (`debug stat 12 18`, `debug stat 9` = 150, `debug points 54 1`, `debug mana full`; command line in the DRILLS22 section of docs/probes/drills/README.md), built from branch agent/teletune:
 

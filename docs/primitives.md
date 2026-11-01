@@ -242,3 +242,5 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | DW.m3 x3 (roamleg) | PASS | drills23: 0 mouth bounces, 0 level-change errors, 0 `roam leg failed` (drills21: 50), 1 `roam: held by the mouth gate` per run, 11 step-aways (was 62), 425 plan lines (was 559-664); 50 `walk did not finish` in the last cycle (finding, mid-fight stall away from the mouth) |
 | P23 | DW.m4 (roamleg) | PASS | drills23: 0 bounces, 4 step-aways; death and dirty-UI verdict as before |
 | P23 | D2 (11), D3 (12) regression | PASS | drills23: 11 of 11 and 12 of 12 on the roamleg build; ends in town |
+| P26 | D22-A, D22-C (teletune) | PASS | drills24: default knobs 0 hops, 265 and 605 ticks (walking 254 and 578), mana untouched; `teleMinLeg` 0: 3 hops, hop declined at mana 80, 202 and 755 ticks; every hop 18 ticks (V) |
+| P26 | D22-PC, D22-P (teletune) | PASS | drills24: pocket start in Rocky Waste: walking and default-knob Teleport both stall (304 ticks, escape); `teleMinLeg` 0 hops 3 times to Stony Tomb in 224 ticks |

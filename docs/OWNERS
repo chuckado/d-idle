@@ -111,4 +111,4 @@ openspec/changes/buildv3/**  buildv3  buildv3
 internal/nav/teletune.go  teletune  teletune
 docs/teletune.md  teletune  teletune
 openspec/changes/teletune/**  teletune  teletune
-
+openspec/changes/drills24/**  drills24  drills24
