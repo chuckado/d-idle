@@ -120,3 +120,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-freezeresume-proof.md / pr-freezeresume-draft.md: fix/freeze-resume (frozen monster resumes at end + aidel), differential proof and PR draft
 - docs/research/pr-freezeresume-verifier.md: independent verifier of fix/freeze-resume (real event queue, own differential, side claims)
 - docs/forkarmor.md: private fork carries the Frozen Armor freeze-rule fix
+- docs/forkfreeze.md: private fork carries the freeze-end resume fix (lab-freezeresume, bin/d2d.lab-freezeresume), vetting and live readback

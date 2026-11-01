@@ -323,3 +323,4 @@ dethash2 (2026-11-01, card dethash2): second det run, 14 scenarios on 5 builds (
 - skmelee B3 (ready fix line, record only): the melee rung (internal/resource/attack.go:74) ignores the +50 % Blunt vs undead bonus of a staff in game.exe (about 1.4-1.5x on Act 1 undead).
 - skmelee B4 (ready fix line, record only): early d2d melee soaks (paladin-act1-recon.md row 4, clvl 1-11) carry D1 and D2: d2d kills slower than game.exe in the first levels.
 - skmelee glossary proposal (coordinator only, not written): see the closing "Shared-file lines" section of docs/research/sk-melee-trace.md (plain Attack = skill 0, do 1; Blunt = ItemTypes 57).
+- FORKFREEZE: lab-freezeresume (efe7bc368b36, bin/d2d.lab-freezeresume) carries FREEZERESUME on top of lab-armorhit: cold-skill soaks should prefer it and name the binary (docs/forkfreeze.md)

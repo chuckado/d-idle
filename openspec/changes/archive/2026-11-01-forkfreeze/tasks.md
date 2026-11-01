@@ -2,7 +2,8 @@
 
 ```yaml
 change: forkfreeze
-status: in-progress
+status: archived
+merge: 0962758
 agent: forkfreeze
 branch: agent/forkfreeze
 worktree: ~/code/d2lod-wt/forkfreeze
@@ -16,7 +17,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "private fork carries the freeze-end resume fix (lab-freezeresume); verified by four differentials on the fork build; live readback on one hidden slot (monster mode, no game.exe)"
+result: "private fork carries the freeze-resume fix (lab-freezeresume); verified by differentials and one live readback (7 steps later, step-to-frame ratio unverified)"
 live: "verified live on one hidden slot with a --no-save throwaway Sorceress (no game.exe)"
 ```
 
