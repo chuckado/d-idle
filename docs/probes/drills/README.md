@@ -831,3 +831,32 @@ Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): the same logged
 - docs/BACKLOG.md: TELETUNE3 live proof done (DRILLS27): remove the TELETUNE3 item; open question (U): which route the monster-triggered replan picks on the border leg and whether it is shorter.
 - docs/INDEX.md: DRILLS27 section in docs/probes/drills/README.md.
 - CHANGELOG: none (docs only).
+## DRILLS28 (2026-11-01): live proof attempt of card armorcut (Frozen Armor cut-cast retry)
+
+Run on the worker host, hidden slot 0, `d2drill` from branch agent/drills28 (agent/armorcut 80d2df4 plus origin/main and agent/drills26). Capacity before: idle 49 plus nice 0 percent (iowait 45). Files `2026-11-01-drills28-0-idle-{armorhit,nexthit2}.txt` (D28-0), `2026-11-01-drills28-a-{armorhit,nexthit2}.txt` (D26-A rerun), `2026-11-01-drills28-reg-d2.txt`, `-reg-d3.txt`; filtered -v logs (decision, nav, d2dsrc, debug lines dropped), scrubbed. Command: `D2D_AGENT=drills28 D2D_BIN=<fork>/bin/<binary> tools/agentrun.sh drills28 --ttl 330 -- tools/d2dslot.sh run -n 0 -t 330 -- <built>/d2drill -group V|U -repeat 1 -bin <fork>/bin/<binary> -label NAME -v` (`.run28.sh`).
+
+Step 0, drill D28-0 (group V, harness only): Blood Moor, no monsters (`debug kill`), Frozen Armor level 1, cast with the command the bot's key press sends at 60.3 s and again at 114.0 s, `debug states` read about every second.
+
+| Binary | Casts (game s) | State | Result |
+|---|---|---|---|
+| lab-armorhit | 60.3, 114.0 | `40:1` at every sample 60.9 to 62.0, 114.0 to 131.7 s (original armor would end at 120.6 s) | PASS |
+| lab-nexthit2 | identical | identical | PASS |
+
+- V: the second cast, 53.7 s into the first armor, extended it past 131.7 s (11 s beyond the old expiry; 4 samples in 121 to 125 s, all on). So d2d DOES refresh a set state: hypothesis (d) is out. With (b) mana out already (DRILLS26), the remaining lead for the DRILLS26 miss is (a) a cut cast, still unproven. The harness reads the player mode column as -1 (not exposed by the players verb), so D28-0 shows no mode.
+
+D26-A rerun (group U, 300 game s, seed as DRILLS26, armorcut code, mode, cut-line and gap lines added to the log):
+
+| Binary | Casts (game s) | Cut lines | Armor sampled absent | Off by cast spacing | Life min / max | Kills | Armor up |
+|---|---|---|---|---|---|---|---|
+| lab-armorhit | 0.0, 125.0, 239.2 | 0 | 0 of 53 samples | 4.7 s | 166 / 201 | 51 of 52 spawned | 299.9 s of 300 s sampled |
+| lab-nexthit2 | identical | 0 | identical | identical | identical | identical | identical |
+
+- V: no `buff cut by a hit` line on either binary, in 4 runs (two with the new diagnostics): the armorcut retry path was NOT exercised, so it stays unverified live. The DRILLS26 recast at 232.4 s that did not refresh did not recur: the 239.2 s cast, 114.2 s after the previous one, held the armor to 300 s (states `40:1` at each later sample, old armor ends at 245.6 s).
+- FINDING (V, harness): the drill's own spawn and lure between Clear rounds took 18 to 43 s of game time (sample gaps 32.9, 30.7, 19.0, 18.3, 22.8, 43.0 s in the log), outside the bot's buff pass. The first recast was due at 114 s, the sample at 101.7 s was followed by an 18.3 s spawn, so the cast came at 125.0 s: the real armor (up to 120.6 s) was off about 4.4 to 4.7 s. The drill's own rule marks that FAIL; no sample saw it (sampling is too sparse), so "absent more than one poll interval" is not judged by the samples. This is a harness dead zone, not a bot defect; the real bot does not walk 20 to 40 s between buff checks while a fight is on (U for the roam path). Adding a Buff call before the spawn does not help (not due at 101.7 s).
+- Regression: D2 11/11 (ends life 40/40 in town), D3 12/12 (40/40 in town) on lab-armorhit.
+- Open: provoking a cut needs a striker that lands hits on the cast frame (several monsters in melee at the due time) and the player mode must be read through the snapshot the bot uses; a drill with a pack held next to the character at the due time (spawn at 100 s, no lure) is the next try (U).
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: ARMORCUT live proof (DRILLS28): step 0 PASS, d2d refreshes a set Frozen Armor state (candidate d out); the cut-retry is still unproven live (no cut seen in 4 D26-A runs); next drill: pack held in melee at the 114 s due time; the D26-A harness spawn/lure leaves 18 to 43 s dead zones (4.7 s armor gap by spacing).
+- docs/INDEX.md: DRILLS28 section in docs/probes/drills/README.md.
+- CHANGELOG: none (harness and docs only).
