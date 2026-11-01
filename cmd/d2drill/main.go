@@ -34,7 +34,7 @@ func main() { os.Exit(run()) }
 func run() int {
 	home := os.Getenv("HOME")
 	slotDir := os.Getenv("D2D_SLOT_DIR")
-	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, D3 town, D4 pack, D5 combat, D6 movement, D7 build, D9 lifecycle, DW waypoints, DR repair, D10 fault recovery, H hover audit)")
+	group := flag.String("group", "D1", "drill group (D0 gate self-test, D1 belt, D2 portals and town entry, D3 town, D4 pack, D5 combat, D6 movement, D7 build, D9 lifecycle, DW waypoints, DR repair, D10 fault recovery, H hover audit, P DRILLS11 fix proofs)")
 	only := flag.String("only", "", "comma list of drill ids to run (default: the whole group)")
 	repeat := flag.Int("repeat", 2, "runs per drill (determinism check)")
 	bin := flag.String("bin", envOr("D2D_BIN", filepath.Join(home, "d2d-lab/fork/bin/d2d.lab6")), "d2d binary (the lab build)")
@@ -154,6 +154,8 @@ func run() int {
 		drills = drill.F(l)
 	case "M": // fixmeter live proof (D-meter)
 		drills = drill.M(l)
+	case "P": // DRILLS11: fixemptyplan and fixportalmelee live proofs, the cut-cast record
+		drills = drill.D11(l)
 	case "H": // hover blind-spot audit (docs/probes/drills/hover-audit.md)
 		drills = drill.H(l)
 	case "DW":
