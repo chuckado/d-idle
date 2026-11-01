@@ -7,11 +7,11 @@
     uv run python freeze_resume.py compare cases.tsv game.tsv d2d.tsv
 
 Run for real: FUN_0057b230 (the freeze: state 1 to frame + length, its
-callback FUN_0057b170, timer 0xc at the end, the pending AI events
+callback 0x57b170, timer 0xc at the end, the pending AI events
 removed and one filed at frame + length + 1), FUN_005a7f80 (a monster's
 timer event: types 0, 1, 2, 6, 7, 9 and 10 are dropped while state 1 is
-on), its type 12 handler FUN_005a7ef0 -> FUN_00627460 (the lists whose end
-is due expire) and the callback FUN_0057b170 (state 1 off; a monster's AI
+on), its type 12 handler 0x5a7ef0 -> FUN_00627460 (the lists whose end
+is due expire) and the callback 0x57b170 (state 1 off; a monster's AI
 events removed and event 2 filed at frame + MonStats aidel, +0x4f plus the
 difficulty when game +0x6a or +0x74 is set, 15 when 0), with FUN_0057af30
 (coldeffect), FUN_0063e9f0, FUN_005a0180 and FUN_0063ee90.

@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // test-links: game
 // `--freeze-resume CASES`: when a frozen monster thinks again, the cases of
-// tools/emu/freeze_resume.py (game.exe's FUN_0057b230 / FUN_0057b170 /
+// tools/emu/freeze_resume.py (game.exe's FUN_0057b230 / 0x57b170 /
 // FUN_005a7f80). A Zombie (it swings at every think with its foe in melee)
 // carrying the case row's MonStats aidel is frozen through the REAL
 // Fight::strike (a missile's freeze), then monster_update runs a tick at a
@@ -10,6 +10,7 @@
 
 #include <ai.hpp>
 #include <character.hpp>
+#include <character_store.hpp>
 #include <fight.hpp>
 #include <gamedata.hpp>
 #include <gamedata_load.hpp>
@@ -49,6 +50,7 @@ int main(int argc, char** argv) try {
 
     auto data = load_game_data(data_dir, patch ? fs::path(patch) : fs::path{}, 0x1234);
     assert(data && data->town.id == 1);
+    if (!data->patched) { std::printf("SKIP: the oracle is 1.14d's game.exe: set D2_PATCH_INSTALLER\n"); return D2D_TEST_SKIPPED; }
     d2d::rules::Rng rng(7);
     constexpr int kSorceress = 1;
     auto made = new_character(*data, kSorceress, "Headless", false, true, rng);
@@ -113,11 +115,11 @@ int main(int argc, char** argv) try {
         int first = -1, second = -1;
         auto& struck = world.fight.monsters[0];
         for (int tick = 1; tick <= kHorizon && (first < 0 || (second_at > 0 && second < 0)); ++tick) {
-            const std::uint32_t at = now + std::uint32_t(tick) * kTickMs;
-            if (tick == second_at) world.fight.strike(missile, 0, at, second_length);
+            const std::uint32_t tick_ms = now + std::uint32_t(tick) * kTickMs;
+            if (tick == second_at) world.fight.strike(missile, 0, tick_ms, second_length);
             const std::string_view before = struck.mode;
             foes[0].alive = true;
-            monster_update(*data, here, struck, foes, think_rng, at, 0.04f, crowd, shots, world.fight.monsters);
+            monster_update(*data, here, struck, foes, think_rng, tick_ms, 0.04f, crowd, shots, world.fight.monsters);
             const bool swung = struck.mode != before && (struck.mode == "A1" || struck.mode == "A2");
             if (swung && first < 0) first = tick;
             if (swung && second_at > 0 && tick >= second_at && second < 0) second = tick;

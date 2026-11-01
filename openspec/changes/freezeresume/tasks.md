@@ -18,7 +18,7 @@ exclusive:
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
   - "PR claim only with a differential on real builds: before > 0, after 0"
-result: "RESULT_PLACEHOLDER"
+result: "Offline, nothing verified live, no d2d slot, no game window. Local upstream candidate fix/freeze-resume on the worker host (claim c6cc4f12, tooling efacc7f4, base upstream main 72132b99): a frozen monster thinks again at the freeze end + MonStats aidel (state 1 callback 0x57b170; FUN_005a7f80 drops thinks while frozen). Differential (d2d test_freeze_resume through the real Fight::strike and monster_update vs game.exe FUN_0057b230 / FUN_005a7f80 / 0x57b170 natively): frozen cases 12,503 -> 0 of 12,548 and 12,459 -> 0 of 12,516 (two seeds, every aidel value); specials differ by freeze-rules C3 (0 when merged with fix/freeze-rules-v2). pr_guard 0/0 per commit, presubmit 0 FAIL / 2 WARN answered, upstream tests green, gcc / clang-tidy clean on touched lines, ruff clean, merges clean both orders with #155..#158, freeze-rules-v2, armor-hit. NOT READY: independent verifier, det hashes."
 ```
 
 ## 1. Work
