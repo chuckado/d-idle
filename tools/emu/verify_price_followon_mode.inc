@@ -48,7 +48,9 @@ if (argc > 2 && std::string_view(argv[1]) == "--verify-price") {
             if (which < 2) {
                 value = item_price(vt, it, "vnpc", which == 1, header);
             } else {
+#ifdef VFY_TYPE_REPAIR
                 vt.types["vfyt"].repair = true;
+#endif
                 base.durability = 10;
                 it.max_durability = 1; it.durability = 0;
                 value = repair_cost(vt, it, "vnpc", header);
@@ -59,7 +61,11 @@ if (argc > 2 && std::string_view(argv[1]) == "--verify-price") {
             std::array<int, 4> charges{};
             if (!(fields >> ident >> eth >> repair >> throwable >> stack >> kind2 >> nodur >> durcol >> max >> dur >> indes >> qty >> maxstack
                   >> charges[0] >> charges[1] >> charges[2] >> charges[3])) continue;
-            vt.types["vfyt"].repair = repair != 0;
+#ifdef VFY_TYPE_REPAIR
+            vt.types["vfyt"].repair = repair != 0;   // ItemType::repair exists from D10 on (the build script defines this then)
+#else
+            (void)repair;
+#endif
             vt.types["vfyt"].throwable = throwable != 0;
             info.kind = kind2 ? 2 : 0;
             base.cost = 5000; base.stackable = stack != 0; base.max_stack = maxstack; base.no_durability = nodur != 0; base.durability = durcol;

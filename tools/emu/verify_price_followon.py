@@ -227,7 +227,7 @@ def compare(cases, a, b):
             continue
         if r[1] == "9":
             which = ("buy", "sell", "repair")[int(r[2])]
-            if r[11] == "1":
+            if r[10] == "1":
                 key = "D9 sale, buy column 0 (quirk, off-data)"
             elif ga[k][2] == "1":
                 key = f"D9 {which} int32 overflow (off-data)"
@@ -235,7 +235,7 @@ def compare(cases, a, b):
                 key = f"D9 {which}" + (" quest" if r[5] != "0" else "")
             ok = int(ga[k][1]) == int(gb[k][1])
         else:
-            off = r[6] != r[7]
+            off = r[5] != r[7]                       # Throwable vs d2d's kind 2
             key = "D10 repair" + (" (kind 2 != Throwable, off-data)" if off else "")
             ok = int(ga[k][2]) == int(int(gb[k][1]) > 0)
         seen[key] += 1
