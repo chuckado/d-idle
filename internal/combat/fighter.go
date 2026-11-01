@@ -65,6 +65,7 @@ type Fighter struct {
 	noEvadeUntil  time.Time   // pinned: no kite or dodge before this
 	mouthEvades   int         // evasive moves started inside a cave mouth (evade, FIXMOUTH2)
 	mouthEvadeAt  time.Time
+	mouthHold     mouthHoldState // back-off after nav.ErrMouthGate (FIXMOUTHLOOP)
 	resCache      map[uint32]resEntry
 	health        healthWindow
 	curve         []LifeSample
