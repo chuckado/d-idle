@@ -117,6 +117,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
 - 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
 - 8422bcc 11-01 14:16 `Merge agent/tickpolish: Discord tick wrapper: privacy-guard repair by separators, empty waiting rendered directly` (tickpolish)
 - c7178a3 11-01 14:07 `Merge agent/docsapprove: record approval of the contributor docs` (docsapprove)
@@ -126,5 +127,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - dd68c40 11-01 13:32 `Merge origin/main into palsme` (palsme)
 - ed03c45 11-01 13:26 `Merge agent/boardgrow: work archive, chunker sync honours it, 12 new board items` (boardgrow)
 - 776af38 11-01 13:22 `Merge agent/openpr: PRs #159 and #160 opened upstream, docs` (openpr)
-- 8509a1b 11-01 13:16 `Merge agent/palprobe: offline Paladin probe and blocking class seams (profile id, per-class prefs, class row errors)` (palprobe)
 <!-- statusgen:end -->
