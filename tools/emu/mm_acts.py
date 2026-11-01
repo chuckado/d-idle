@@ -45,7 +45,7 @@ def main():
     boss = {"andariel": 0, "bloodraven": 0, "countess": 0, "radament": 1, "summoner": 1, "duriel": 1}
     both = acts[0] | acts[1] | {b for b in boss if b in mons}
     print("act1_mons", len(acts[0]), "act2_mons", len(acts[1]))
-    print("id\tact\tsource\tmissile\tmid\tvel\trange\tsize\tck\ttohit\tsrcdmg\tmin\tmax\tshift\tetype\temin\temax\telen\tskill\tsrvdmg\thitfn\tsrc-stat(N/NM/H)\tgame_phys_min-max (Nrm/NM/Hell)")
+    print("id\tact\tsource\tmissile\tmid\tvel\trange\tsize\tck\ttohit\tsrcdmg\tmin\tmax\tshift\tetype\temin\temax\telen\tskill\tsrvdmg\thitfn\tmonstats pct (N/NM/H)\t(no projection: the game's own record is mm_launch.py, the stat columns are PERCENTS of MonLvl damage)")
     for mid in sorted(both, key=lambda i: int(mons[i]["hcIdx"])):
         m = mons[mid]
         act = "1" if mid in acts[0] else "2" if mid in acts[1] else "B"
@@ -68,7 +68,7 @@ def main():
                 # 256ths -> points; trunc toward zero like (v*S + ((v*S >> 31) & 0x7f)) >> 7
                 pmin = ((a << 8) * S) // 128 + (lo << sh)
                 pmax = ((b << 8) * S) // 128 + (hi << sh)
-                phys.append(f"{pmin/256:.1f}-{pmax/256:.1f}")
+                phys.append("-")
             print("\t".join(str(x) for x in (mid, act, c, mn, r["Id"], r["Vel"], r["Range"], r["Size"], r["CollideKill"], r["ToHit"], r["SrcDamage"], lo, hi, sh,
                                            r["EType"], r["EMin"], r["Emax"], r["ELen"], r["Skill"], r["pSrvDmgFunc"], r["pSrvHitFunc"], " ".join(stat), " ".join(phys))))
 
