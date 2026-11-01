@@ -9,6 +9,8 @@
 
 > fixrecast (offline, card in progress): armors are recast by their real duration and the Frozen Armor state (120 s at level 1, was 150 s); live check open: docs/fixrecast.md
 
+> fixcrowd (offline, card in progress): DRILLS11 F18 fixed offline (melee reach knob combat.crowdAdjacent, default 8); live proof pending: docs/fixcrowd.md
+
 > fixportalmelee (offline, card in progress): a town portal cast with 3+ adjacent attackers becomes a potion or a chicken (soak 2 death); live check open: docs/fixportalmelee.md
 
 Trimmed 2026-10-31 (doctrim); each item was checked against the code and `git log` that day. The full old list, with the items that have since merged, is [archive/BACKLOG-2026-10-30.md](archive/BACKLOG-2026-10-30.md). Where we are: [plan/STATUS.md](plan/STATUS.md). Live items need a free instance or d2d slot (`tools/d2dslot.sh status`) and a non-NO `tools/capacity.sh --add <cores>` ([process/worker-capacity.md](process/worker-capacity.md)). When a report says "not done", add a line here; when an item gets a card, replace the line with the card id.
