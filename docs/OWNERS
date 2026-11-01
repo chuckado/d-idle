@@ -54,3 +54,7 @@ internal/d2dctl/approach_path.go  fixstall4  fixstall4
 internal/d2dctl/approach_path_test.go  fixstall4  fixstall4
 internal/d2dctl/town_verbs.go  fixstall4  fixstall4
 internal/d2dctl/fixstall4_test.go  fixstall4  fixstall4
+docs/research/det-hashes-2026-11-01.md  dethash  dethash
+docs/research/pr-bundle-queue.md  dethash  dethash
+docs/BACKLOG.md  dethash  dethash
+openspec/changes/dethash/**  dethash  dethash
