@@ -107,6 +107,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change tickwire: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
 - 6bbd958 11-01 08:59 `Merge agent/opennexthit: PR #158 (NextHit justhit) posted, bundle queue row` (opennexthit)
 - eced68b 11-01 08:55 `Merge agent/fixskilllvl: d2.SkillBonus / Player.Effective skill levels for the known gate and mana cost` (fixskilllvl)
 - 87f4674 11-01 08:52 `Merge agent/glossaryadd: six user-approved glossary terms` (glossaryadd)
@@ -116,5 +117,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 1787725 11-01 02:17 `Merge agent/drills19: fixmouth4 exit gate (nav) proven live in DRILLS19; DRILLS19 probes` (drills19)
 - db32c75 11-01 01:54 `Merge agent/drills18: fixmouth3 (stayLevel) proven live as a partial; DRILLS18 probes` (drills18)
 - 0674406 11-01 01:50 `Merge agent/verifynexthit: independent verifier of the NextHit candidate (NOT READY, off by one frame)` (verifynexthit)
-- e07cf9f 11-01 01:43 `Merge origin/main into drills18 (STATUS regenerated later)` (drills18)
 <!-- statusgen:end -->
