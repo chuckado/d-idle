@@ -107,6 +107,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 4fbfbf2 11-01 10:00 `Merge agent/armorhit: Frozen Armor d2d vs game.exe proof, PR draft (docs only, card kept open)` (armorhit)
 - 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
 - ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
 - c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
@@ -116,5 +117,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 87f4674 11-01 08:52 `Merge agent/glossaryadd: six user-approved glossary terms` (glossaryadd)
 - 0e83373 11-01 08:51 `Merge remote-tracking branch 'origin/main' into agent/drills20` (-)
 - cffe57c 11-01 08:51 `Merge origin/main into fixskilllvl` (fixskilllvl)
-- 2ffa3ef 11-01 08:39 `drills20: merge origin/main` (drills20)
 <!-- statusgen:end -->

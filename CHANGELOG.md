@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- armorhit (research, docs only): Frozen Armor's answer to a melee striker on d2d differs from game.exe on every damaging case (95,920 of 108,506); local upstream candidate fix/armor-hit brings it to 0 (docs/research/pr-armorhit-proof.md).
 - tickwire (offline, one live wiring test): The dispatcher tick can be written by Haiku (tools/discord/tick_post.py, plain fallback); see docs/process/api-credits.md.
 - fixskilllvl (offline, not verified live): +skills (all, class, tab, oskill, elemental, shrine) now raise the cast level the bot uses for mana cost and the known-skill gate; synergies keep base points; stat ids UNVERIFIED live (card open).
 - fixmouthloop, fixmouthloop2 (live, partial): one step-away attempt per outer walk and a Fighter hold/back-off after a mouth-gate error; walk timeouts 173 to 0, step-aways 129 to 62 per drill run, bounces stay 0 (DRILLS21); remaining roam leg retries are bounded (BACKLOG ROAMLEG).
