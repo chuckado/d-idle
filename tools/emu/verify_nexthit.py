@@ -54,6 +54,7 @@ class Oracle:
         self.player = e.alloc(0x200); e.w32(self.player, 0); e.w32(self.player + 0xc, 1)
         self.timers = []
         self.count = {}
+        self.heap = None
         e.hook(0x40b430, lambda e: e.alloc(max(e.mu.reg_read(UC_X86_REG_EDX), 0x40)), 3)
         e.hook(0x40b480, lambda e: 0, 3)
         e.hook(0x554010, lambda e: self.game, 0)
@@ -79,6 +80,8 @@ class Oracle:
 
     def new_case(self, skill, n):
         e = self.e
+        if self.heap is None: self.heap = e.brk
+        e.brk = self.heap                     # every case's units, lists and contexts from the same heap
         self.timers = []
         self.kind, self.row = self.row_at[skill]
         self.mons = []

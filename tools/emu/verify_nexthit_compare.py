@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 """VERIFYNEXTHIT compare: d2d (test_verify_nexthit) vs game.exe (verify_nexthit.py).
 
-    python verify_nexthit_compare.py d2d.txt g.txt
+    python verify_nexthit_compare.py d2d.txt g.txt [d2d2.txt g2.txt ...]   (pairs: one per seed, tags are per file)
 
 Prints: cases, cases differing (any per-frame hit line), monster-casts touched, monster-casts whose
 total differs, hits per touched monster (d2d, game.exe), split by skill and by moving / second cast.
@@ -10,12 +10,11 @@ import sys
 from collections import defaultdict
 
 
-def load(path):
-    frames, totals, info, touched = defaultdict(list), {}, {}, defaultdict(set)
+def load(path, prefix, frames, totals, info, touched):
     for line in open(path):
         f = line.split()
         if not f: continue
-        tag = f[0][1:]
+        tag = prefix + f[0][1:]
         if line[0] == "K":
             moving = any(not p.endswith("/0.00,0.00") for p in f[5:])
             info[tag] = (f[1], moving, f[4] != "0")
@@ -26,12 +25,14 @@ def load(path):
         elif line[0] == "I":
             for c in f[2:]:
                 for u in c.split(":")[1].split("."): touched[tag].add(int(u))
-    return frames, totals, info, touched
 
 
 def main():
-    df, dt, info, touched = load(sys.argv[1])
-    gf, gt, _, _ = load(sys.argv[2])
+    df, dt, info, touched = defaultdict(list), {}, {}, defaultdict(set)
+    gf, gt = defaultdict(list), {}
+    for k in range(1, len(sys.argv), 2):
+        load(sys.argv[k], f"{k}:", df, dt, info, touched)
+        load(sys.argv[k + 1], f"{k}:", gf, gt, {}, defaultdict(set))
     agg = defaultdict(lambda: [0, 0, 0, 0, 0, 0])   # cases, differ, touched, total differ, d2d hits, game hits
     for tag, (skill, moving, two) in info.items():
         keys = ["all", skill, ("moving" if moving else "standing"), ("2 casts" if two else "1 cast")]
