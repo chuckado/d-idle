@@ -1,5 +1,7 @@
 # Hands-off prompt for your agent
 
+> status: current, APPROVED by the maintainer 2026-11-01 together with the guide [agent-work.md](agent-work.md).
+
 Paste the prompt below into your own AI agent (Claude Code, Codex or similar). The agent picks the lowest-numbered free work item on the d.idle board, claims it with a comment, does the work, opens a pull request from your fork and tells you the link. It uses your own `gh` login, so every comment and pull request is yours. The rulebook it follows is [agent-work.md](agent-work.md); the open items are on the [work board](../community/work-board.md).
 
 ```

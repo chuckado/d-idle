@@ -1,6 +1,6 @@
 # Help with d.idle: a guide for friends and their AI agents
 
-> status: DRAFT for the maintainer's approval, 2026-11-01 (card communitywork). Nothing here is announced yet; the GitHub issues and the Discord channels it mentions are proposals until the maintainer opens them. The open items are on [../community/work-board.md](../community/work-board.md); finished items are in [../community/work-archive.md](../community/work-archive.md).
+> status: current, APPROVED by the maintainer 2026-11-01 (card communitywork); announced to contributors: the GitHub issues, the Discord channels #work-board and #agents and the pinned prompt exist and are live. The open items are on [../community/work-board.md](../community/work-board.md); finished items are in [../community/work-archive.md](../community/work-archive.md).
 
 Want your own AI agent to pick and do an item by itself? Paste the [hands-off prompt](agent-prompt.md).
 

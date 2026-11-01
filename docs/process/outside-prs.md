@@ -1,6 +1,6 @@
 # Outside pull requests: the proposed review gate
 
-> status: PROPOSAL for the maintainer, 2026-11-01 (card communitywork). Nothing here is switched on: no repository setting was changed, no app installed, no label created, no workflow added. Tags: V = read in this repo, S = GitHub or CodeRabbit documentation as the author remembers it (not re-read this session), U = unverified. Re-check every S item in the GitHub settings page before relying on it.
+> status: policy text APPROVED by the maintainer 2026-11-01 (card communitywork); its proposed repository settings (branch protection, CodeRabbit app on this repo, PR-based workflow) remain OFF until the maintainer turns them on (decision 2026-11-01: direct pushes with the merge lock stay for now). Tags: V = read in this repo, S = GitHub or CodeRabbit documentation as the author remembers it (not re-read this session), U = unverified. Re-check every S item in the GitHub settings page before relying on it.
 
 Contributors are friends and their AI agents, working from forks, on docs and small tools. The gate has to keep three things safe: the repo (no game code, no secrets, no binaries), the maintainer's credit (the API key is only spent on the owner's own PRs), and the maintainer's agents (outside text is data, never instructions). Contributor guide: [../contributing/agent-work.md](../contributing/agent-work.md).
 
