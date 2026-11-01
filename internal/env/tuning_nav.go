@@ -12,30 +12,31 @@ type NavTuning struct {
 	// Sloppiness is the largest sideways displacement of a waypoint (subtiles) at PathQuality 0.
 	Sloppiness float64
 	// WaypointSpacing is the distance between walking clicks (subtiles). Kolbot walks at 5, KO at 15..30.
-	WaypointSpacing   float64
-	ArriveTolerance   float64 // GoTo is done within this many subtiles
-	PollMs            float64 // observation tick while walking; also the reaction time
-	ReplanMs          float64 // earliest a changed grid or monster layout triggers a new plan
-	StuckMs           float64 // no progress for this long counts as stuck
-	MaxRecoveries     int     // rungs of the stuck ladder to climb (re-click, side step, detour, door, ...) before giving up
-	WallClearance     float64 // cells around walls that cost extra
-	WallWeight        float64 // extra cost per cell of missing clearance
-	MonsterRadius     float64 // subtiles around a monster that cost extra
-	MonsterPenalty    float64 // extra cost at the monster itself, fading to 0 at MonsterRadius
-	ExploreInformed   bool    // true: prefer big, forward frontiers; false: nearest frontier
-	ExploreBucket     float64 // visited-set resolution and the radius that counts a frontier as inspected (subtiles)
-	WalkTimeoutSec    float64 // hard cap for one GoTo
-	ExploreTimeoutSec float64 // hard cap for one Explore
-	ExitPush          float64 // how far past a border gap or exit tile to walk (subtiles)
-	LoadWaitSec       float64 // how long to wait through a loading screen
-	PanelWaitMs       float64 // how long to wait for a clicked panel (waypoint) to open
-	UseWaypoints      bool    // travel, the corpse run and town returns take activated waypoints (docs/waypoints.md)
-	WpMinDistance     float64 // a waypoint hop must skip at least this many levels, otherwise the bot walks
-	WpCooldownSec     float64 // game.exe refuses a waypoint travel this long after a level change (D2D-V: 10 s)
-	BadEdgeTTLSec     float64 // a nav edge or gate marked bad is forgotten after this long (0: never, the old behaviour; also switches the cut-off-pocket unstick off)
-	TeleReservePct    float64 // a Teleport hop is declined (the walk goes on) when mana after it would fall below this % of max mana
-	TeleMinLeg        float64 // a hop is declined when the walk to its landing cell is shorter than this (subtiles)
-	CautionRadius     float64 // CorpseApproach stops when a living monster is this close (subtiles); its paths avoid monsters at twice the usual radius
+	WaypointSpacing      float64
+	ArriveTolerance      float64 // GoTo is done within this many subtiles
+	PollMs               float64 // observation tick while walking; also the reaction time
+	ReplanMs             float64 // earliest a changed grid or monster layout triggers a new plan
+	StuckMs              float64 // no progress for this long counts as stuck
+	MaxRecoveries        int     // rungs of the stuck ladder to climb (re-click, side step, detour, door, ...) before giving up
+	WallClearance        float64 // cells around walls that cost extra
+	WallWeight           float64 // extra cost per cell of missing clearance
+	MonsterRadius        float64 // subtiles around a monster that cost extra
+	MonsterPenalty       float64 // extra cost at the monster itself, fading to 0 at MonsterRadius
+	ExploreInformed      bool    // true: prefer big, forward frontiers; false: nearest frontier
+	ExploreBucket        float64 // visited-set resolution and the radius that counts a frontier as inspected (subtiles)
+	WalkTimeoutSec       float64 // hard cap for one GoTo
+	ExploreTimeoutSec    float64 // hard cap for one Explore
+	ExitPush             float64 // how far past a border gap or exit tile to walk (subtiles)
+	LoadWaitSec          float64 // how long to wait through a loading screen
+	PanelWaitMs          float64 // how long to wait for a clicked panel (waypoint) to open
+	UseWaypoints         bool    // travel, the corpse run and town returns take activated waypoints (docs/waypoints.md)
+	WpMinDistance        float64 // a waypoint hop must skip at least this many levels, otherwise the bot walks
+	WpCooldownSec        float64 // game.exe refuses a waypoint travel this long after a level change (D2D-V: 10 s)
+	BadEdgeTTLSec        float64 // a nav edge or gate marked bad is forgotten after this long (0: never, the old behaviour; also switches the cut-off-pocket unstick off)
+	TeleReservePct       float64 // a Teleport hop is declined (the walk goes on) when mana after it would fall below this % of max mana
+	TeleMinLeg           float64 // a hop is declined unless it skips more than this much of the planned walk (subtiles)
+	TeleEscapeReservePct float64 // after a walk stall the leg rule is off and this smaller reserve (% of max mana) applies
+	CautionRadius        float64 // CorpseApproach stops when a living monster is this close (subtiles); its paths avoid monsters at twice the usual radius
 }
 
 func DefaultNavTuning() NavTuning {
@@ -43,7 +44,7 @@ func DefaultNavTuning() NavTuning {
 		PathQuality: 1, Sloppiness: 8, WaypointSpacing: 8, ArriveTolerance: 2, PollMs: 100, ReplanMs: 1500,
 		StuckMs: 1200, MaxRecoveries: 6, WallClearance: 3, WallWeight: 0.75, MonsterRadius: 8, MonsterPenalty: 6,
 		ExploreInformed: true, ExploreBucket: 10, WalkTimeoutSec: 120, ExploreTimeoutSec: 300, ExitPush: 8,
-		LoadWaitSec: 20, PanelWaitMs: 2500, CautionRadius: 20, TeleReservePct: 40, TeleMinLeg: 36,
+		LoadWaitSec: 20, PanelWaitMs: 2500, CautionRadius: 20, TeleReservePct: 40, TeleMinLeg: 13, TeleEscapeReservePct: 15,
 		UseWaypoints: true, WpMinDistance: 2, WpCooldownSec: 10, BadEdgeTTLSec: 300,
 	}
 }
@@ -127,6 +128,8 @@ func navKnobs() []Knob {
 		{Key: "nav.teleReservePct", Label: "Teleport mana reserve", Unit: "%", Default: d.TeleReservePct, Min: 0, Max: 90, HigherIsBetter: true, NoHandicap: true,
 			Desc: "A Teleport hop is skipped (the walk goes on, no waiting for mana) when the mana after it would be below this share of max mana, so fights are not starved. Default: about eight casts of a 5 to 8 mana attack on a 150 mana pool (UNSURE, docs/teletune.md)."},
 		{Key: "nav.teleMinLeg", Label: "Teleport minimum leg", Unit: "subtiles", Default: d.TeleMinLeg, Min: 0, Max: 120, HigherIsBetter: false, NoHandicap: true,
-			Desc: "A hop is skipped when the walk to its landing cell is shorter than this: running speed times the measured time of a hop (0.5625 x 64 ticks). 0 hops whenever mana allows."},
+			Desc: "A hop is skipped unless it skips more than this much of the planned walking path: running speed times the measured time of a hop (0.5625 x 18 ticks = 10, DRILLS24) plus a margin of 3 (docs/teletune2.md). 0 hops whenever mana allows."},
+		{Key: "nav.teleEscapeReservePct", Label: "Teleport escape reserve", Unit: "%", Default: d.TeleEscapeReservePct, Min: 0, Max: 90, HigherIsBetter: true, NoHandicap: true,
+			Desc: "After a walk stalled at the character's spot, a hop ignores the minimum leg and may spend mana down to this share of max mana (never above nav.teleReservePct): leaving a pocket beats keeping mana for fights. Default: about three casts of a 5 to 8 mana attack on a 150 pool (UNSURE)."},
 	}
 }

@@ -7,14 +7,17 @@ import (
 	"d2lod-bot/internal/input"
 )
 
-// TELETUNE: when a hop is worth its time and mana (docs/teletune.md). A hop is declined, and the caller walks, when
-//  1. the walk to the landing cell is shorter than the break-even leg (the hop costs more time than the walk), or
+// TELETUNE and TELETUNE2: when a hop is worth its time and mana (docs/teletune.md, docs/teletune2.md). A hop is
+// declined, and the caller walks, when
+//  1. it would not shorten the planned walking path by more than the break-even leg (the hop costs more time than
+//     the walk it skips), or
 //  2. the mana left after it would fall below the reserve kept for fights.
+// After a walk stall at this spot the leg rule is off and the reserve drops to the escape reserve (pocket escape).
 // Nothing here waits for mana: a hop that mana does not allow is a walk (the regeneration wait of DRILLS22 is gone).
 
-// teleHopTicksNominal is the lockstep ticks one hop takes: the settle sleep (700 ms) plus the cast animation and one
-// observation. The default leg uses 64 (DRILLS22: 448 ticks / 7 hops), about twice this.
-const teleHopTicksNominal = 33.0 // 17.5 settle + about 13 cast frames (S, U) + 2.5 poll
+// teleHopTicks is the lockstep ticks one landed hop takes (V live, DRILLS24: 18 on 9 of 9 hops; the 64 of DRILLS22
+// was mostly mana waiting, the nominal 33 was a guess).
+const teleHopTicks = 18.0
 
 // RunSubPerTick is the running speed (V live, DRILLS: about 0.5625 subtiles per tick).
 const RunSubPerTick = 0.5625
@@ -28,16 +31,23 @@ type hopFacts struct {
 	WalkLen             float64
 	Mana, MaxMana, Cost int
 	ReservePct, MinLeg  float64
+	// Escape: a walk stalled here, so the leg rule is off and EscapePct replaces ReservePct.
+	Escape    bool
+	EscapePct float64
 }
 
 // hopWorth says whether to hop and, when not, why ("leg": too short, "mana": reserve). MaxMana 0 means the stat is
-// unknown: only the leg rule applies.
+// unknown: only the leg rule applies. WalkLen is the walking distance the hop skips.
 func hopWorth(h hopFacts) (bool, string) {
-	if h.WalkLen < h.MinLeg {
+	if h.WalkLen < h.MinLeg && !h.Escape {
 		return false, "leg"
 	}
 	if h.MaxMana > 0 {
-		reserve := int(math.Ceil(h.ReservePct / 100 * float64(h.MaxMana)))
+		pct := h.ReservePct
+		if h.Escape {
+			pct = math.Min(h.EscapePct, h.ReservePct)
+		}
+		reserve := int(math.Ceil(pct / 100 * float64(h.MaxMana)))
 		if h.Mana-h.Cost < reserve {
 			return false, "mana"
 		}
@@ -104,14 +114,73 @@ func (n *Navigator) walkLen(o *obs, c input.Point) float64 {
 	return sum
 }
 
-// hopDeclined applies hopWorth to a candidate landing cell and logs a decline once per reason change.
-func (n *Navigator) hopDeclined(o *obs, cell input.Point) bool {
+// pathHop chooses the landing cell along the planned walking path: the path cell within hop range that skips the
+// most path (the farthest along it), so a hop never lands where the walk from there is longer than from here. saved
+// is the path length skipped. planned is false when no complete walk to the target is known (an island, a void in
+// between): the caller falls back to the greedy cell.
+func (n *Navigator) pathHop(o *obs, target input.Point) (cell input.Point, saved float64, found, planned bool) {
+	f := n.fieldFor(o.lm)
+	if f.W == 0 {
+		return
+	}
+	sx, sy, ok := f.nearestWalkable(o.pos.X, o.pos.Y, 8)
+	if !ok {
+		return
+	}
+	tx, ty, ok := f.nearestWalkable(target.X, target.Y, 8)
+	if !ok {
+		return
+	}
+	f.passMask = fWalk
+	cells, partial := n.pl.Plan(f, sx, sy, tx, ty, 0, 1)
+	if partial || len(cells) < 2 {
+		return
+	}
+	planned = true
+	r := n.teleRange()
+	px, py := f.pt(cells[0])
+	cum := 0.0
+	for _, i := range cells[1:] {
+		x, y := f.pt(i)
+		cum += math.Hypot(float64(x-px), float64(y-py))
+		px, py = x, y
+		c := input.Point{X: x, Y: y}
+		if d := dist(c, o.pos); d > r || d < teleportMinHop || n.teleBad[[2]int{x, y}] > 0 {
+			continue
+		}
+		if cum > saved {
+			cell, saved, found = c, cum, true
+		}
+	}
+	return
+}
+
+// stalledHere reports whether a walk stalled lately within stuckRadius of the character (stuckmem.go): the map
+// says walkable but the walk does not get through, so a hop is the way out whatever its leg.
+func (n *Navigator) stalledHere(o *obs) bool {
+	now := n.clk.Now()
+	for _, s := range n.spots {
+		if s.level == o.level && dist(s.at, o.pos) <= stuckRadius && now.Sub(s.last) < stuckMemory {
+			return true
+		}
+	}
+	return false
+}
+
+// hopDeclined applies hopWorth to a candidate landing cell (saved: the walking distance the hop skips) and logs a
+// decline once per reason change.
+func (n *Navigator) hopDeclined(o *obs, saved float64) bool {
 	t := n.tune()
 	p := o.snap.Player
+	esc := n.stalledHere(o)
 	ok, why := hopWorth(hopFacts{
-		WalkLen: n.walkLen(o, cell), Mana: p.Mana, MaxMana: p.MaxMana, Cost: n.teleCost(p),
-		ReservePct: t.TeleReservePct, MinLeg: t.TeleMinLeg,
+		WalkLen: saved, Mana: p.Mana, MaxMana: p.MaxMana, Cost: n.teleCost(p),
+		ReservePct: t.TeleReservePct, MinLeg: t.TeleMinLeg, Escape: esc, EscapePct: t.TeleEscapeReservePct,
 	})
+	if esc && ok && n.teleWhy != "escape" {
+		n.teleWhy = "escape"
+		n.log.Info("nav teleport after a stall, leg rule off", "pos", o.pos)
+	}
 	if ok {
 		return false
 	}

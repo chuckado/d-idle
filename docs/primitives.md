@@ -244,3 +244,4 @@ DRILLS14 rows (2026-11-01, lab build cheats3; files `2026-11-01-drills14-*.txt`,
 | P23 | D2 (11), D3 (12) regression | PASS | drills23: 11 of 11 and 12 of 12 on the roamleg build; ends in town |
 | P26 | D22-A, D22-C (teletune) | PASS | drills24: default knobs 0 hops, 265 and 605 ticks (walking 254 and 578), mana untouched; `teleMinLeg` 0: 3 hops, hop declined at mana 80, 202 and 755 ticks; every hop 18 ticks (V) |
 | P26 | D22-PC, D22-P (teletune) | PASS | drills24: pocket start in Rocky Waste: walking and default-knob Teleport both stall (304 ticks, escape); `teleMinLeg` 0 hops 3 times to Stony Tomb in 224 ticks |
+| P26 | D22-A, D22-C, D22-P (teletune2) | PASS | drills25: default knobs 211 (3 hops, mana to 87.9) and 533 (3 hops, mana to 103.0) ticks against walking 254 and 578, border 717 against 708 (0 hops); pocket start leaves by 3 hops in 233 ticks, mana to 88.9; every hop 18 ticks (V) |

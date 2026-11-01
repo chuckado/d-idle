@@ -143,21 +143,6 @@ func TestTeleportHopsAcrossWallWhenTheWalkIsLong(t *testing.T) {
 	}
 }
 
-func TestOpenGroundLegsWalkByDefault(t *testing.T) {
-	g := openField(2000, 2000, 400, 100)
-	s := newSim(g, input.Point{X: 2010, Y: 2050})
-	n := s.navigator()
-	n.TeleportKey = "f2"
-	tuningOf(n).Nav.ExploreTimeoutSec = 2000
-	done := func() bool { return s.pos().X > 2200 }
-	if err := n.ExploreToward(ctxT(t), input.Point{X: 2390, Y: 2050}, done); err != nil {
-		t.Fatal(err)
-	}
-	if len(s.casts) != 0 {
-		t.Fatalf("%d hops over open ground: a hop of 18 subtiles is below the break-even leg", len(s.casts))
-	}
-}
-
 func TestHopWorth(t *testing.T) {
 	inf := math.Inf(1)
 	cases := []struct {
@@ -167,7 +152,12 @@ func TestHopWorth(t *testing.T) {
 		why  string
 	}{
 		{"long walk, full pool", hopFacts{WalkLen: 80, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
-		{"straight 17 subtiles (DRILLS22 hop)", hopFacts{WalkLen: 17, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, false, "leg"},
+		{"short leg 9 subtiles", hopFacts{WalkLen: 9, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 13}, false, "leg"},
+		{"straight 17 subtiles (DRILLS24 hop)", hopFacts{WalkLen: 17, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 13}, true, ""},
+		{"escape: short leg allowed", hopFacts{WalkLen: 3, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 13, Escape: true, EscapePct: 15}, true, ""},
+		{"escape: 60 - 24 = 36 above the 23 floor", hopFacts{WalkLen: 3, Mana: 60, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 13, Escape: true, EscapePct: 15}, true, ""},
+		{"escape: 40 - 24 = 16 below the 23 floor", hopFacts{WalkLen: 3, Mana: 40, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 13, Escape: true, EscapePct: 15}, false, "mana"},
+		{"escape reserve never above the normal one", hopFacts{WalkLen: 3, Mana: 60, MaxMana: 150, Cost: 24, ReservePct: 10, MinLeg: 13, Escape: true, EscapePct: 50}, true, ""},
 		{"no walk at all (island)", hopFacts{WalkLen: inf, Mana: 150, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
 		{"reserve: 150 - 24 = 126 ok, 81 - 24 = 57 below 60", hopFacts{WalkLen: 80, Mana: 81, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, false, "mana"},
 		{"reserve exactly met", hopFacts{WalkLen: 80, Mana: 84, MaxMana: 150, Cost: 24, ReservePct: 40, MinLeg: 36}, true, ""},
@@ -208,13 +198,12 @@ func TestBreakEvenDrills22Legs(t *testing.T) {
 			t.Errorf("%s: %d straight hops taken", c.name, taken)
 		}
 	}
-	if got := BreakEvenLeg(RunSubPerTick, 64); got != 36 {
-		t.Errorf("break-even leg %.1f, want 36 (the knob default)", got)
-	}
 }
 
+// TELETUNE2: the default minimum leg is v x T (T = 18 ticks, V DRILLS24) plus a margin of 3, rounded.
 func TestMinLegDefaultMatchesBreakEven(t *testing.T) {
-	if d := env.DefaultNavTuning().TeleMinLeg; d != BreakEvenLeg(RunSubPerTick, 64) {
-		t.Fatalf("default %v", d)
+	want := math.Round(BreakEvenLeg(RunSubPerTick, teleHopTicks) + 3)
+	if d := env.DefaultNavTuning().TeleMinLeg; d != want {
+		t.Fatalf("default %v, want %v", d, want)
 	}
 }

@@ -106,11 +106,20 @@ func (n *Navigator) hop(ctx context.Context, o *obs, target input.Point) (moved 
 		return false, false, nil
 	}
 	n.teleDeclined = false
-	cell, found := n.hopCell(o, target)
+	cell, saved, found, planned := n.pathHop(o, target)
+	if !planned || !found && n.stalledHere(o) {
+		// no complete walk (island) or no path cell in range while stalled: the greedy cell, its walk as the leg
+		var ok bool
+		if cell, ok = n.hopCell(o, target); !ok {
+			return false, false, nil
+		}
+		saved = n.walkLen(o, cell)
+		found = true
+	}
 	if !found {
 		return false, false, nil
 	}
-	if n.hopDeclined(o, cell) {
+	if n.hopDeclined(o, saved) {
 		n.teleDeclined = true
 		return false, false, nil
 	}

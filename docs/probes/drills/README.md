@@ -767,3 +767,28 @@ Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): cheats `debug g
 - docs/BACKLOG.md: TELETUNE follow-up (from DRILLS24): per-hop time is 18 ticks (V), so `teleMinLeg` 36 saves mana, not time (a value near 10 to 17 takes the Stony Tomb hops); after a walk stall the leg rule should be ignored (pocket start: default knobs never leave, `teleMinLeg` 0 leaves in 224 ticks with 3 hops); hop cell by direction detours on Halls of the Dead 1 (755 against 578), consider a hop along the A* path.
 - docs/INDEX.md: DRILLS24 section in docs/probes/drills/README.md.
 - CHANGELOG: none (harness and docs only).
+
+## DRILLS25 (2026-11-01): live proof of teletune2 (PASS on two legs, border leg +9 ticks)
+
+Run on the worker host, hidden slot 0, `lab-debug-skills` binary for group T (D2 and D3 on `lab-cheats3`), `d2drill` built UNCHANGED from branch agent/drills25 (agent/teletune2 tip 0d72e35 plus origin/main), DEFAULT knobs (no `-tele-min-leg`). Capacity before: idle 16 plus nice 48 percent. Files `2026-11-01-drills25-<label>.txt` (stdout, scrubbed): `t-default` (D22-C, A, B, T, R), `pocket-default` (D22-P alone), `pocket-control` (D22-PC alone), `pocket-after-control` (D22-PC then D22-P in one process, middle of the roam loop dropped), `d2`, `d3`. Run: `D2D_BIN=<fork>/bin/d2d.lab-debug-skills tools/agentrun.sh drills25 --ttl 600 -- tools/d2dslot.sh run -n 0 -t 540 -- d2drill -group T -repeat 1 -label NAME -v -only D22-C,D22-A,D22-B,D22-T,D22-R`.
+
+### Result (V, lockstep ticks)
+| Leg | walking | DRILLS24 default (36) | DRILLS24 minLeg 0 | DRILLS25 default (13, path hop) |
+|---|---|---|---|---|
+| Rocky Waste to Stony Tomb | 254 | 265, 0 hops | 202, 3 hops | 211, 3 hops (171,229)>(180,244)>(196,249)>(213,250), mana 150 to 87.9, 4th declined at 80 (reserve), hopticks [18 18 18] |
+| Dry Hills to Halls of the Dead 1 | 578 | 605, 0 hops | 755, 3 hops | 533, 3 hops straight down x=200 (200,218) (200,236) (200,254), mana 150 to 103.0, hopticks [18 18 18] |
+| border Rocky Waste to Dry Hills | 708 | 714, 0 hops | 714 | 717, 0 hops, mana untouched |
+
+- PASS: Stony Tomb 211 <= 254 and Halls 533 <= 578 (the path-aware cell removed the 755 detour; 45 ticks better than walking). FAIL by 9 ticks: the border leg, 717 against 708 walking, 0 hops, 0 declines logged; it is the same unexplained cost of having the key bound as DRILLS24 (714), now 3 ticks more (UNSURE: the per-step leg check or the extra observation; no hop was taken so the log has no per-hop data). Stony Tomb is 9 ticks slower than minLeg 0 (211 against 202): the path cells cost a few subtiles of landing choice.
+- Controls: no-Teleport legs 254 / 578 / 708 unchanged, 0 hops. Town leg 191 ticks, 0 hops, `goto 74` fine. Refused-hop bound (D22-R, unwired town): 3 refused, 0 landed, 235 ticks, so the live bound IS exercised now (`teleportBadHops` 3).
+- Pocket (D22-P alone): leaves by hop, 3 hops (165,220)>(172,236)>(186,245)>(203,250), 233 ticks, Stony Tomb reached, mana 150 to 88.9 (never below 80 at a cast, 4th declined `why=mana` at 80), hopticks [18 18 18]. Walking control D22-PC: 304 ticks, stall escape to Lut Gholein, not reached (as DRILLS24). So the path-aware hop alone beats the pocket; the stall escape (`stalledHere`, 15 percent floor, "leg rule off" log line) was NOT exercised live: the first hop already passed the 13 leg rule without a stall (V: no "after a stall" line in the log).
+- Stall escape in one process (`pocket-after-control`, D22-PC then D22-P): D22-P did 0 hops in 7560 ticks and ended `nav: timeout: roaming for 5m0s` at the start cell. This is the known harness poison (search and stall memory of the navigator after the escape to level 40, DRILLS24); whether `stalledHere` also failed to fire cannot be told from this run (UNSURE, next card: a drill that makes a real stall at the pocket on the same level without the level-40 escape).
+- Regression: D2 11 of 11, D3 12 of 12 (END in town, life full).
+
+### What was done to the character
+Drilly (throwaway Sorceress, `--no-save`, fresh per invocation): cheats `debug goto`, `debug kill`, `debug stat 12 18`, `debug stat 9`, `debug stat 6/7`, `debug points 54 1`, `debug mana full`, `debug warp 33 44` (the pocket), all logged. Last invocation (D3) ended in town, panels closed. `tools/agentreap.sh drills25`: nothing left; `--list` empty (checked below).
+
+### Shared-file lines for the merger
+- docs/BACKLOG.md: TELETUNE3 (from DRILLS25): the border leg costs 9 ticks over walking when Teleport is bound (717 against 708, 0 hops): find the per-step cost; stall escape (`stalledHere`) not yet proven live, needs a drill with a real same-level stall.
+- docs/INDEX.md: DRILLS25 section in docs/probes/drills/README.md.
+- CHANGELOG: none (docs only).
