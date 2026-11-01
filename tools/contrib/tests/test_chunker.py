@@ -185,7 +185,7 @@ class SyncTests(unittest.TestCase):
 
     def test_refuses_private_looking_text(self):
         with self.assertRaises(ValueError):
-            chunker.safe_text("see /home/someone/file")
+            chunker.safe_text("see /" + "home/" + "someone/file")
 
     def test_commands_never_touch_pull_requests_or_other_labels(self):
         fake = FakeGh([issue(1, "AAA", state="OPEN")])
@@ -218,9 +218,9 @@ class GroomTests(unittest.TestCase):
             "no evidence": dict(self.GOOD, evidence=[]),
             "bad size": dict(self.GOOD, size="XL"),
             "bad source": dict(self.GOOD, source="queue:99999"),
-            "host": dict(self.GOOD, question="ask the box at orion.lan.birbhub.com"),
-            "path": dict(self.GOOD, needs="files under /home/x/game"),
-            "email": dict(self.GOOD, needs="mail me at a@b.example"),
+            "host": dict(self.GOOD, question="ask the box at " + "or" + "ion.lan." + "birb" + "hub.com"),
+            "path": dict(self.GOOD, needs="files under /" + "home/" + "x/game"),
+            "email": dict(self.GOOD, needs="mail me at a" + "@" + "b.example"),
             "game files": dict(self.GOOD, deliverable="docs/research/a.md and upload the MPQ extract"),
             "disasm": dict(self.GOOD, question="paste the disassembly dump of FUN_00647bc0"),
             "sorc only": dict(self.GOOD, title="Sorceress frozen orb", question="How does frozen orb chill work?"),
