@@ -6,7 +6,9 @@
 
 > TELETUNE-DONE: Teleport primitive proven live (key wired, hops pay, stall escape, pockets). TELETUNE3 done (DRILLS27): border-leg gap is replan spread, not the key; stall escape and `ResetStallMemory` proven live. Open question (U): which route the monster-triggered replan picks on the border leg and whether it is shorter.
 
-> ARMORCUT (ready card; from DRILLS26): a Frozen Armor recast inside a melee fight can be cut and leave the old armor to expire (recast works, fixrecast/fixbuff live, but the cast at 232.4 s left the armor down about 3.5 s in 300 s, identical on lab-armorhit and lab-nexthit2). Do: find whether it is hit recovery (per-cast action-frame read); candidate fix: recast earlier or verify the state after the cast. Not run: champion/unique pack drill, Andariel stand drill (none exists).
+> ARMORCUT (offline fix merged, card armorcut open, awaits a live proof of the retry; DRILLS28): step 0 PASS, d2d refreshes a set Frozen Armor state (candidate d out); the armorcut code ran 300 game s with the armor never absent (53 of 53 samples, 51 of 52 kills, 0 deaths) but no `buff cut by a hit` line appeared in 4 runs, so the cut-retry is not exercised live. docs/armorcut.md
+
+> ARMORCUT2 (ready card): a drill that holds a pack in melee at the buff due time (spawn at about 100 s, no lure, due at 114 s) to provoke a hit-cut cast and prove the retry live (read the player mode through the snapshot the bot uses); and fix the D26-A spawn/lure dead zone (18 to 43 s between Clear rounds, 4.7 s armor gap by cast spacing) so the drill's spacing rule is meaningful.
 
 > MONSTALL (card idea, unproven): `walk did not finish in 2m0s` is back in DW.m3, 50 lines in the last cycle at (98,189) far from the mouth, with `nav stalled by monsters (near=6)` and `combat: left the game to survive` at 29 percent life; the drill character has no attack skill. Investigate only if a real character stalls the same way.
 

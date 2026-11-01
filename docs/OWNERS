@@ -103,4 +103,3 @@ docs/armorcut.md  armorcut  armorcut
 internal/combat/fighter.go  armorcut  armorcut
 internal/combat/armorcut_test.go  armorcut  armorcut
 openspec/changes/armorcut/**  armorcut  armorcut
-openspec/changes/drills28/**  drills28  drills28
