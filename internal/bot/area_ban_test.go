@@ -142,6 +142,7 @@ func TestRecoveryAllBannedWaitsWithoutLadder(t *testing.T) {
 // DEATHCHAIN: a death streak with an empty purse starts recovery inside the cooldown.
 func TestDeathStreakStartsRecoveryInsideCooldown(t *testing.T) {
 	g := soakyRig(t, 1)
+	g.r.e.Tune.Resource.RecoveryPotionFloor = 0 // the low-kit override is tested below
 	now := g.clock.Now()
 	g.r.loop.broke.lastEnd = now.Add(-2 * time.Minute)
 	g.r.updateRecovery(g.r.latest())
@@ -154,5 +155,15 @@ func TestDeathStreakStartsRecoveryInsideCooldown(t *testing.T) {
 	g.r.updateRecovery(g.r.latest())
 	if !g.r.recoveryActive() {
 		t.Fatal("3 deaths at gold 0 must start recovery despite the cooldown")
+	}
+}
+
+// FIXBELT: an empty belt with an unaffordable kit starts recovery inside the cooldown (Gate 1 rerun belt window).
+func TestLowKitStartsRecoveryInsideCooldown(t *testing.T) {
+	g := soakyRig(t, 2)
+	g.r.loop.broke.lastEnd = g.clock.Now().Add(-2 * time.Minute)
+	g.r.updateRecovery(g.r.latest())
+	if !g.r.recoveryActive() {
+		t.Fatal("no healing potion and gold 0 must start recovery despite the cooldown")
 	}
 }

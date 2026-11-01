@@ -123,3 +123,9 @@ docs/fixwp.md  wpcooldown  wpcooldown
 docs/research/sk-ground-trace.md  skground  skground
 tools/emu/sk_ground*  skground  skground
 openspec/changes/skground/**  skground  skground
+docs/fixbelt.md  fixbelt  fixbelt
+internal/resource/recovery.go  fixbelt  fixbelt
+internal/resource/recovery_test.go  fixbelt  fixbelt
+internal/bot/broke.go  fixbelt  fixbelt
+internal/bot/area_ban_test.go  fixbelt  fixbelt
+openspec/changes/fixbelt/**  fixbelt  fixbelt
