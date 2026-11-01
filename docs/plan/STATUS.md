@@ -43,6 +43,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcrowd](../../openspec/changes/fixcrowd/) | in-progress | fixcrowd | `docs/fixcrowd.md`<br>`internal/combat/crowd_test.go`<br>`internal/combat/fixcrowd_test.go` | - |
+| [fixlair](../../openspec/changes/fixlair/) | in-progress | fixlair | `docs/fixlair.md`<br>`internal/data/levels.go`<br>`internal/data/teleportrule_test.go`<br>`internal/boss/act2.go`<br>`internal/boss/act2_test.go`<br>`docs/act2.md`<br>`openspec/changes/fixlair/**` | - |
 | [fixportalmelee](../../openspec/changes/fixportalmelee/) | in-progress | fixportalmelee | `docs/fixportalmelee.md`<br>`internal/combat/safety.go`<br>`internal/combat/fighter.go`<br>`internal/combat/crowd.go`<br>`internal/combat/resource.go`<br>`internal/combat/portalmelee_test.go`<br>`internal/resource/types.go`<br>`internal/resource/abort.go`<br>`internal/resource/portalmelee_test.go` | - |
 | [fixrecast](../../openspec/changes/fixrecast/) | in-progress | fixrecast | `docs/fixrecast.md`<br>`docs/knobs.md`<br>`internal/combat/necro.go`<br>`internal/combat/buffrecast_test.go`<br>`internal/data/skills.go`<br>`internal/data/data_test.go`<br>`internal/env/tuning_combat.go` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -78,6 +79,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcrowd: go test -p 1 ./internal/combat ./internal/env ./internal/resource ./tools/knobdump passes; whole-repo vet and go test -short on the worker host
 - change fixcrowd: live proof after merge: D-portalmelee x3 passes (Safety is chicken with 3 zombies in reach, scroll unspent) and D-portalmelee.ctl still passes (docs/fixcrowd.md)
+- change fixlair: go test -p 1 ./internal/data ./internal/boss passes; whole-repo vet and go test -short on the worker host
 - change fixportalmelee: go test -p 1 ./internal/combat ./internal/resource passes including TestSafetyMeleeCutCastScenario, TestMeleeCastGuardOrder, TestAbortFightCutCast
 - change fixportalmelee: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixrecast: go test -p 1 ./internal/combat ./internal/data ./internal/env ./tools/knobdump passes including TestFrozenArmorTimerLeavesGap, TestFrozenArmorRecastBeforeExpiryByClock, TestFrozenArmorRecastBeforeExpiryByState, TestAuraFrames

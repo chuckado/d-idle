@@ -14,6 +14,7 @@ owns:
   - internal/boss/act2.go
   - internal/boss/act2_test.go
   - docs/act2.md
+  - openspec/changes/fixlair/**
 exclusive: []
 gates:
   - "go test -p 1 ./internal/data ./internal/boss passes; whole-repo vet and go test -short on the worker host"
