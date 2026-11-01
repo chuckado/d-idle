@@ -60,8 +60,22 @@ def main():
             print("  ", r.get("code"), hits)
 
 
+def physrows():
+    """Skills with a physical MinDam / MaxDam of their own (the missile's physical pair, d2d skill_phys)."""
+    e = emu.Emu()
+    _, rows = table(e, "Skills")
+    for r in rows:
+        mx = (r.get("MaxDam") or "0")
+        mn = (r.get("MinDam") or "0")
+        if mx not in ("", "0") or mn not in ("", "0"):
+            print(r.get("Id"), r.get("skill"), r.get("charclass"), "MinDam", mn, "MaxDam", mx, "srcdam", r.get("SrcDam"),
+                  "srvmissile", r.get("srvmissile"), "srvdofunc", r.get("srvdofunc"), "EType", r.get("EType"))
+
+
 if __name__ == "__main__" and len(sys.argv) == 1:
     main()
+elif __name__ == "__main__" and sys.argv[1] == "phys":
+    physrows()
 
 
 def rowdump(ids):
@@ -72,5 +86,5 @@ def rowdump(ids):
             print("---", r.get("skill"), {k: v for k, v in r.items() if v and (k.startswith("passive") or k in ("Id", "charclass", "reqlevel", "srvdofunc", "EType", "srvstfunc", "srvmissile"))})
 
 
-if __name__ == "__main__" and len(sys.argv) > 1:
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] != "phys":
     rowdump(sys.argv[1:])
