@@ -91,6 +91,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 7534522 10-31 23:06 `Merge agent/soakg1d2d: Gate 1 soak 2 report (not passed, 1 seed)` (soakg1d2d)
+- 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
 - 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
 - 2adbd6b 10-31 22:47 `Merge agent/decompfreeze: freeze rules trace, proof, PR draft` (decompfreeze)
 - 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
@@ -99,6 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
 - 6291100 10-31 21:26 `Merge agent/feeds2: CI failure notices, d2d-upstream feed` (feeds2)
 - 6abd497 10-31 21:20 `Merge agent/feeds: Discord feed summaries` (feeds)
-- b617048 10-31 21:03 `Merge agent/fixbigfiles: cap oversized drills9 logs (CI size gate)` (fixbigfiles)
-- 98b8178 10-31 20:49 `Merge agent/drills9: DRILLS9 live drills, harness fixes` (drills9)
 <!-- statusgen:end -->
