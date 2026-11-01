@@ -26,11 +26,11 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "pending"
+result: "Part A seams done (profile id, per-class prefs, classRow errors); part B Paladin probe: 16 working, 4 broken, 1 unverified, 1 not done (docs/classes/paladin-probe.md). Offline only, nothing run live."
 live: "offline only; PALHOLD, PALHAND, PALAURA, PALDUR still owed live"
 ```
 
 - [x] part A seams: profile id (rows 1 to 3), PrefsFor (row 6), classRow (row 29); row 5 checked
 - [x] part B probes (a) to (f)
 - [x] (g) Zealot-lite table: not added, S4 seam absent (documented as a ready card)
-- [ ] docs/classes/paladin-probe.md
+- [x] docs/classes/paladin-probe.md
