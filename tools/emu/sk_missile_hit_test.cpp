@@ -9,6 +9,7 @@
 
 #include <ai.hpp>
 #include <combat.hpp>
+#include <d2s_items.hpp>
 #include <gamedata.hpp>
 #include <gamedata_load.hpp>
 #include <rules.hpp>

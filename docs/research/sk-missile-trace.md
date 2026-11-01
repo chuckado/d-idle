@@ -114,6 +114,17 @@ The oracle also counts a line-for-line copy of d2d's old roll against game.exe's
 
 What the numbers mean for play (I, arithmetic): the mean roll drops by 1/512 point (Charged Bolt 4-8 at level 1: 6.000 -> 5.998; Lightning 1-40: 20.50 -> 20.498); casts per kill and kills per hour for the early Sorceress do not move measurably. The value is fidelity and determinism: with game.exe's draw the same seed gives the same damage.
 
+## 7b. PR candidate `fix/missile-roll-top` (local, the worker host, PR checkout dir `skmiss`; nothing pushed or posted)
+
+Base upstream main 72132b99. Commits authored and committed by the user's numeric-ID noreply identity (copied from fix/static-field), body `Agent: Claude Code`, no trailer:
+
+- `9ba8d369` tooling: `tools/emu/missile_hit.py`, `tests/game/test_missile_hit.cpp` (own file; test_game.cpp is at its length limit), a row in `tools/emu/README.md`.
+- `23e2baec` the claim: `rules::missile_blow` rolls `low + rng(high - low)` with low / high the sorted ends, 0 unless low > 0 (components/rules/combat.hpp), a test_combat check (top 256th never rolled over 1,000 seeds; min 0 deals nothing), a "The roll" section in docs/research/re/missiles.md.
+
+Checks (V, the worker host): real builds before / after as section 7 (104,000 and 64,000 cases, 0 after on the final head); pr_guard 0 FAIL / 0 WARN on the range and per commit; presubmit --quick 0 FAIL, 2 WARN (doc-claims "never": FUN_005a8910 has one path, read; build skipped by --quick); ruff (upstream rule set F,E9,B,BLE001,PLW1510,S602,S604) clean; gcc -Wshadow -Wunused -Wsign-compare full build: 0 warnings on added lines; clang-tidy (repo config) on the changed TUs: 0 on added lines after adding `d2s_items.hpp` (misc-include-cleaner); the remaining findings are the pre-existing short binding names in untouched files (outdoor.hpp, merc.hpp, apps/); test_rules, test_combat, test_protocol, test_game (with the data dir) rc 0.
+
+Open: an independent verifier (second agent), the det state-hash run on a patched lab binary (needs the d2d slot; not run by this card), the user's go before any push. Limits for the PR body: the physical roll (`range(lo, hi) >> 8`, D5) is unchanged and outside the claim; every player-side caller of `rules::missile_blow` takes the change (skill missiles, auras and novas in fight/states.cpp, strike.cpp, pets' and the merc's skills, traps in tick.cpp: 12 call sites, S); monsters' missiles on the player use a different function (`game::missile_blow` in ai.hpp, unchanged; their roll is in docs/research/monster-attack-trace.md); d2d draws on the fight's Rng, game.exe on the missile's own seed: the harness sets the Rng to the case's seed, so the claim is the bound, not the seed source.
+
 ## 8. Drill recipe (live, a throwaway Sorceress on one instance, offline)
 
 Fork debug verbs by name: `debug spawn`, `debug points`, `debug skill`, `debug missiles`, `debug stat`. MISSING verbs the matrix proposed and these drills need: `debug states`, `debug mon set` (pin a monster's life / resistances), `debug cast` (cast at a unit or point by id, no input), `debug mana full`.
