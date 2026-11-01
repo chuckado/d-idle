@@ -1,4 +1,8 @@
+<p align="center"><img src="assets/branding/final/header-1280x640.png" alt="d.idle" width="640"></p>
+
 # d2lod-bot (d.idle)
+
+Chat and help: the [d.idle Discord](https://discord.gg/U2v9q4h5UH).
 
 A bot that plays one character of classic **Diablo II: Lord of Destruction 1.14d**, offline single player, on a game you own
 and run yourself. Written in Go (standard library only). It reads the game's memory, decides what to do (level, quest, farm,
