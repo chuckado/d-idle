@@ -2,7 +2,8 @@
 
 ```yaml
 change: sktele
-status: in-progress
+status: archived
+merge: 6a6eabe
 agent: sktele
 branch: agent/sktele
 worktree: ~/code/d2lod-wt/sktele
