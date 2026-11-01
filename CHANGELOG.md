@@ -9,6 +9,7 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 - chunker (offline, `sync --apply` against GitHub not yet run): `tools/contrib/chunker.py` keeps the work-item issues in step with the board (sync, dry run by default, 10 writes a run cap) and proposes new items (groom, one Sonnet call, proposals only); 35 contrib tests; 3 real groom calls, last proposal empty (docs/process/chunker.md).
+- skresistfix (research, docs only): local upstream candidate fix/curse-immune for curses and auras on immune monsters (differential 88,101 -> 0 of 147,628; docs/research/pr-curseimmune-proof.md, draft marked DRAFT); not independently verified, nothing pushed or opened upstream.
 - Decomp row 21 (SKRESIST, research and tooling): monster resistances, immunities, curse 1/5 rule and pierce in game.exe 1.14d vs d2d (real build) vs the bot (docs/research/sk-resist-trace.md, tools/emu/sk_resist.py); d2d curse-on-immune deviation proven, fix is the follow-up SKRESISTFIX.
 - Decomp row 20 (SKMELEE): the player's plain Attack in game.exe 1.14d vs d2d (docs/research/sk-melee-trace.md, tools/emu/sk_melee.py).
 - drills29 (live, harness only): drill D29-C (group W) proves the armorcut retry live on both fork binaries (cut at 114.0 s, retry 1.6 s later, armor never absent; a cut needed a logged debug damage boost); D26-A now passes (Buff pass also runs in the lure loop).
