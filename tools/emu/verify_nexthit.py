@@ -38,7 +38,7 @@ class Oracle:
         e.w32(tables + 0xb64, block); e.w32(tables + 0xb6c, 2)
         for k, name in enumerate(("nova", "frostnova")):
             r = rows[name]
-            v = lambda c: int(r.get(c) or 0)
+            def v(c, r=r): return int(r.get(c) or 0)
             at = block + 0x1a4 * k
             e.w32(at + 4, v("LastCollide") | v("Explosion") << 1 | v("Pierce") << 2)
             for off, col in ((0xc, "pSrvDoFunc"), (0xe, "pSrvHitFunc"), (0x10, "pSrvDmgFunc")):
@@ -149,7 +149,9 @@ def main():
     def finish():
         if tag is not None: print("S" + tag + "".join(f" {t}" for t in o.total))
 
-    for line in open(path):
+    with open(path) as source:
+        lines = source.readlines()
+    for line in lines:
         if line[0] == "K":
             finish()
             f = line.split()

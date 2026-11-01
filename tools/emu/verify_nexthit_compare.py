@@ -11,7 +11,9 @@ from collections import defaultdict
 
 
 def load(path, prefix, frames, totals, info, touched):
-    for line in open(path):
+    with open(path) as source:
+        lines = source.readlines()
+    for line in lines:
         f = line.split()
         if not f: continue
         tag = prefix + f[0][1:]
