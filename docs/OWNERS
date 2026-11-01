@@ -45,3 +45,8 @@ internal/d2dcombat/meter.go  fixmeter  fixmeter
 internal/d2dcombat/meter_test.go  fixmeter  fixmeter
 internal/d2dcombat/rig.go  fixmeter  fixmeter
 docs/fixmeter.md  fixmeter  fixmeter
+tools/discord/feed.py  feeds  feeds
+tools/discord/tests/test_feed.py  feeds  feeds
+docs/community/discord/feeds.md  feeds  feeds
+docs/community/discord/server.md  feeds  feeds
+docs/process/feed-after-events.md  feeds  feeds

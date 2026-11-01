@@ -40,3 +40,40 @@ when going live, with the public channel link only. Not wired; U until the strea
 ## (d) No bots that read messages
 No moderation or chat bots at the start: they need the message-content intent, add attack surface and a data-handling duty. Revisit
 only if solo moderation fails, and then choose one with open source and minimal permissions.
+
+## (e) Summaries with `feed.py` (live since 2026-11-01)
+`python3 tools/discord/feed.py <subcommand>` builds a short plain summary from facts in our docs (or from flags) and posts it through
+the same webhook loader, sanitizer and 3-try rate-limit handling as `notify.py`. **Dry run is the default**: it prints the channel and
+the text (no webhook URL is ever printed); `--send` posts. Run it by hand or from an agent after an event; it is a command, not a
+daemon or a timer (nothing is self-hosted on the dev box).
+
+| subcommand | input | default channel | notes |
+|---|---|---|---|
+| `soak` | `--file docs/probes/postfix-soak*.md` or `--verdict/--duration/--deaths/--restarts/--xph/--kph` | `#progress` | 3 to 5 lines; REFUSED without a verdict line (`Verdict: ...` or the `d2dsoak compare` `OVERALL <verdict>` line, or `--verdict`) |
+| `drill` | newest `## DRILLS<n>` section of `docs/probes/drills/README.md`, or `--pass/--fail/--blocked/--finding` | `#progress` | PASS/FAIL/BLOCKED counts from the section's verdict table, open findings |
+| `upstream` | `--pr N --event opened\|merged\|reviewed\|ci-green\|changes-requested --title T --url U` | `#d2d-upstream` | `U` must be exactly `https://github.com/psi29a/d2decomped/pull/<digits>` and match `--pr` |
+| `pr-status` | `--pr 'N\|title\|CI\|reviews\|state'` (repeat) or the same lines on stdin | `#progress` (until `#d2d-upstream` has a webhook) | compact code-block table |
+| `release` | `--tag T --notes TEXT\|--notes-file F --url U` | `#announcements` | REFUSED unless the git tag exists; `U` must be `https://github.com/shatteredeagle/d-idle/releases/tag/<tag>` |
+
+`--channel progress|announcements|d2d-upstream|stream` overrides the default. A channel without a webhook file fails closed with
+`no webhook file for <channel> yet (needs the user go to create one)`; `--dry-run` (the default) still works for it.
+
+```
+python3 tools/discord/feed.py soak --file docs/probes/postfix-soak1.md            # look first
+python3 tools/discord/feed.py soak --file docs/probes/postfix-soak1.md --send     # then post
+python3 tools/discord/feed.py drill --file docs/probes/drills/README.md
+python3 tools/discord/feed.py upstream --pr 153 --event ci-green --title "Waypoint hostile window" --url https://github.com/psi29a/d2decomped/pull/153
+```
+
+Mentions are disabled (and every `@` is broken in the text). **Do not post**: machine names, home paths, IPs, emails, tokens,
+webhook-shaped URLs (the sanitizer refuses them), unverified numbers presented as fact, private chat or maintainer messages,
+per-run noise (one summary per soak or drill report, not per attempt), anything about the user's lab. The rule for when to run
+it is [process/feed-after-events.md](../../process/feed-after-events.md).
+
+### Not wired yet (needs the user go)
+- (a) CI failures only. GitHub cannot filter webhooks by conclusion, so it needs a GitHub Actions job that posts failures using a
+  Discord webhook stored as a repository secret, and then removing `workflow_run` from the repo webhook. Not done: it needs a new
+  secret and a workflow edit.
+- (b) A webhook for `#d2d-upstream`: missing when the helper was built. Without the private file `upstream` (and `pr-status --channel
+  d2d-upstream`) fail closed; `pr-status` goes to `#progress` meanwhile. A file of that name was seen on the worker host afterwards;
+  its first deliberate post needs the user go.
