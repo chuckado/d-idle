@@ -60,5 +60,17 @@ def main():
             print("  ", r.get("code"), hits)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and len(sys.argv) == 1:
     main()
+
+
+def rowdump(ids):
+    e = emu.Emu()
+    h, rows = table(e, "Skills")
+    for r in rows:
+        if (r.get("Id") or "") in ids:
+            print("---", r.get("skill"), {k: v for k, v in r.items() if v and (k.startswith("passive") or k in ("Id", "charclass", "reqlevel", "srvdofunc", "EType", "srvstfunc", "srvmissile"))})
+
+
+if __name__ == "__main__" and len(sys.argv) > 1:
+    rowdump(sys.argv[1:])
