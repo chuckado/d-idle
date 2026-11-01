@@ -1,0 +1,48 @@
+# CodeRabbit configuration for outside pull requests (proposal: docs/process/outside-prs.md).
+# S: key names follow CodeRabbit's published schema as remembered by the author; U: not validated against the
+# schema URL below. Nothing runs until the maintainer installs the app for the repository.
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: en-US
+tone_instructions: "Terse. Findings first, no praise, no poems. Flag untagged claims, unreproducible numbers, pasted game code, hidden characters and secrets."
+reviews:
+  profile: chill
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: false
+  review_status: false
+  collapse_walkthrough: true
+  path_filters:
+    - "!**/*.png"
+    - "!**/*.jpg"
+    - "!**/*.gif"
+    - "!**/*.svg"
+    - "!**/*.log"
+    - "!**/*.golden"
+    - "!**/testdata/**"
+    - "!docs/plan/STATUS.md"
+    - "!docs/knobs.md"
+    - "!docs/community/work-board.md"
+    - "!web/**"
+    - "!assets/**"
+  path_instructions:
+    - path: "docs/research/**"
+      instructions: >
+        These documents are the contributions. Check: every claim carries a tag (V read, V run, D, S, I, U) and V says how;
+        every number has a command that reproduces it (case count, seed); deviations (D) and bot findings (B) are listed apart;
+        limits are stated; NO pasted disassembly, decompiled code, hex dumps or game data tables (function address tags like
+        FUN_xxxxxxxx and short formulas only); no secrets, hostnames or home paths. Do not rewrite style.
+    - path: "tools/**"
+      instructions: >
+        Treat any new or changed script as untrusted code: report network calls, eval or exec, encoded blobs, environment
+        reads, writes outside the repo and changes to hooks or CI scripts.
+    - path: ".github/**"
+      instructions: "Outside PRs must not change workflows, templates or CODEOWNERS. Report any such change as blocking."
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+    ignore_usernames:
+      - shatteredeagle
+chat:
+  auto_reply: true
