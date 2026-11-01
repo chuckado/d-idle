@@ -13,6 +13,7 @@ import (
 	"log"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -45,6 +46,10 @@ type Options struct {
 	NoPrefetch bool
 	// NoInvHint leaves the inventory flag unknown when dump ui has no rects instead of tracking the i key.
 	NoInvHint bool
+	// BuffStates fills Player.States from the bare `debug states` listing (the player's self buffs by skill id,
+	// mapped to States.txt ids by buffSkillState): one more verb in the read batch. Off by default; a binary without the
+	// verb switches it off after one note. Without it the bot recasts its armors on the clock alone.
+	BuffStates bool
 }
 
 // Source reads snapshots from one d2d socket.
@@ -66,6 +71,7 @@ type Source struct {
 	}
 	wmu    sync.Mutex // warned is touched by every reader goroutine (runner, quest source, merc, town)
 	warned map[string]bool
+	noBuff atomic.Bool // the binary answered an error to `debug states`: stop asking
 }
 
 // New wraps a client. The Source does not own it (the caller closes it); one client per socket.
@@ -220,7 +226,11 @@ func (s *Source) Read(ctx context.Context) (*Result, error) {
 	// One write, one d2d frame: every read this snapshot needs (docs/d2d-pace.md). The typed calls below find their
 	// replies in the prefetch store. A failed prefetch only costs the speed-up: they fall back to a round trip each.
 	if !s.o.NoPrefetch {
-		_ = s.c.Prefetch(ctx, readBatch...)
+		batch := readBatch
+		if s.o.BuffStates && !s.noBuff.Load() {
+			batch = append(append([]string(nil), readBatch...), "debug states")
+		}
+		_ = s.c.Prefetch(ctx, batch...)
 		defer s.c.DropPrefetch()
 	}
 	st, _, err := s.c.State(ctx)
@@ -280,6 +290,7 @@ func (s *Source) Read(ctx context.Context) (*Result, error) {
 		res.Report = rp.Report
 		return res, nil
 	}
+	s.fillBuffStates(ctx, snap.Player)
 	if b.lvl != nil && s.o.AddOrigin {
 		res.Extras.Level = b.lvl
 	}
@@ -329,4 +340,32 @@ func stateOf(screen string) d2.State {
 		return d2.StateLoading
 	}
 	return d2.StateMenu
+}
+
+// buffSkillState maps the skills whose self state the bot tracks to States.txt ids. Skill ids: Frozen Armor 40 is V
+// (docs/forkdbg.md vetting); Shiver Armor 50, Energy Shield 58, Chilling Armor 60 and Bone Armor 68 are stock
+// Skills.txt rows (S, not read live here). State ids: d2.State* (Bone Armor 14 V live on game.exe, the rest V read).
+var buffSkillState = map[int]int{40: d2.StateFrozenArmor, 50: d2.StateShiverArmor, 58: d2.StateEnergyShield,
+	60: d2.StateChillingArmor, 68: 14}
+
+// fillBuffStates sets the state bits of the tracked buffs from `debug states`. It is blind to any other state.
+func (s *Source) fillBuffStates(ctx context.Context, p *d2.Player) {
+	if !s.o.BuffStates || s.noBuff.Load() {
+		return
+	}
+	bs, err := s.c.Buffs(ctx)
+	if err != nil {
+		if isCmdErr(err) {
+			s.noBuff.Store(true)
+			s.warnOnce("nobuffs", "d2dsrc: `debug states` refused (%v): armor recast stays on the clock", err)
+		}
+		return
+	}
+	var set d2.StateSet
+	for _, b := range bs {
+		if st, ok := buffSkillState[b.Skill]; ok {
+			set[st>>5] |= 1 << (uint(st) & 31)
+		}
+	}
+	p.States = set
 }

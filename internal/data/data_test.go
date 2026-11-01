@@ -92,9 +92,9 @@ var fixtures = map[string]string{
 		"Act 1 - Town\t1\t0\t1\t1\tRogue Encampment\t\t2\n" +
 		"Act 1 - Wilderness 1\t2\t0\t1\t5\tBlood Moor\tzombie1\t1\n" +
 		"Expansion\t\t\t\t\t\t\t\n",
-	"skills": "skill\tId\tcharclass\tskilldesc\tmana\tlvlmana\tmanashift\tminmana\tEDmgSymPerCalc\n" +
-		"Fire Bolt\t36\tsor\tfire bolt\t5\t0\t7\t1\t(skill('Fire Ball'.blvl)+skill('Meteor'.blvl))*par8\n" +
-		"Teleport\t54\tsor\tteleport\t24\t-1\t8\t1\t\n",
+	"skills": "skill\tId\tcharclass\tskilldesc\tmana\tlvlmana\tmanashift\tminmana\tEDmgSymPerCalc\tauralencalc\n" +
+		"Fire Bolt\t36\tsor\tfire bolt\t5\t0\t7\t1\t(skill('Fire Ball'.blvl)+skill('Meteor'.blvl))*par8\t\n" +
+		"Teleport\t54\tsor\tteleport\t24\t-1\t8\t1\t\t\n",
 	"skilldesc":  "skilldesc\tSkillPage\tSkillRow\tSkillColumn\tstr name\nfire bolt\t1\t1\t2\tskillname36\nteleport\t3\t3\t2\tskillname54\n",
 	"charstats":  "class\tstr\tdex\tint\tvit\tLifePerLevel\titem1\titem1loc\titem1count\titem2\titem2loc\titem2count\nSorceress\t10\t25\t35\t10\t4\tsst\trarm\t1\t0\t\t0\nExpansion\t\t\t\t\t\t\t\t\t\t\t\n",
 	"experience": "Level\tAmazon\tSorceress\tExpRatio\nMaxLvl\t4\t4\t10\n0\t0\t0\t1024\n1\t500\t500\t1024\n2\t1500\t1500\t1024\n3\t3750\t3750\t1024\n",
@@ -465,5 +465,38 @@ func TestAuraFrames(t *testing.T) {
 	}
 	if _, ok := fa.AuraFrames(0); ok {
 		t.Error("level 0")
+	}
+}
+
+// DRILLS13 F1: a cache without the auralencalc column must be rebuilt by Open, and refused loudly by Load.
+func TestStaleCacheMissingColumn(t *testing.T) {
+	inst, cache := t.TempDir(), t.TempDir()
+	writeInstall(t, inst, nil)
+	if _, err := Open(inst, cache); err != nil {
+		t.Fatal(err)
+	}
+	p := filepath.Join(cache, "skills.tsv")
+	b, _ := os.ReadFile(p)
+	lines := strings.Split(string(b), "\n")
+	cols := strings.Split(lines[0], "\t")
+	for i, c := range cols {
+		if c == "auralencalc" {
+			cols[i] = "calc0" // the column the old build did not have
+		}
+	}
+	lines[0] = strings.Join(cols, "\t")
+	stale := []byte(strings.Join(lines, "\n"))
+	os.WriteFile(p, stale, 0o644)
+	if CacheCurrent(inst, cache) {
+		t.Fatal("stale cache reported current")
+	}
+	if _, err := Load(cache); err == nil || !strings.Contains(err.Error(), "skills.auralencalc") {
+		t.Fatalf("Load should name the column, got %v", err)
+	}
+	if _, err := Open(inst, cache); err != nil {
+		t.Fatalf("Open should re-extract: %v", err)
+	}
+	if now, _ := os.ReadFile(p); string(now) == string(stale) || !CacheCurrent(inst, cache) {
+		t.Fatal("cache was not rebuilt")
 	}
 }

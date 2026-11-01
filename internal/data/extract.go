@@ -263,13 +263,42 @@ func CacheCurrent(installDir, cacheDir string) bool {
 		return false
 	}
 	want, err := InstallStamp(installDir)
-	return err == nil && want.equal(have)
+	return err == nil && want.equal(have) && missingColumn(cacheDir) == ""
+}
+
+// requiredCols are columns the bot's behaviour depends on without a visible failure when they are empty: a cache made
+// before the loader read them (schemaVersion was not bumped) silently turns the feature off (DRILLS13 F1: no auralencalc
+// column, so Frozen Armor was recast on the 150 s clock and was down 118 s of 600). Keep in step with skills.go.
+var requiredCols = map[string][]string{"skills": {"auralencalc"}}
+
+// missingColumn names the first required column the cached table lacks ("skills.auralencalc"), or "".
+func missingColumn(cacheDir string) string {
+	for table, cols := range requiredCols {
+		b, err := os.ReadFile(filepath.Join(cacheDir, table+".tsv"))
+		if err != nil {
+			continue // a missing file is reported by Load
+		}
+		hdr, _, _ := strings.Cut(string(b), "\n")
+		have := map[string]bool{}
+		for _, c := range strings.Split(hdr, "\t") {
+			have[strings.ToLower(strings.TrimSpace(c))] = true
+		}
+		for _, c := range cols {
+			if !have[strings.ToLower(c)] {
+				return table + "." + c
+			}
+		}
+	}
+	return ""
 }
 
 // Load reads a cache written by Extract.
 func Load(cacheDir string) (*DB, error) {
 	if _, err := os.Stat(filepath.Join(cacheDir, stampFile)); err != nil {
 		return nil, fmt.Errorf("data: no valid cache in %s: %w", cacheDir, err)
+	}
+	if c := missingColumn(cacheDir); c != "" {
+		return nil, fmt.Errorf("data: cache %s has no column %s (made by an older build: delete it or run Open/OpenCached with the install to re-extract)", cacheDir, c)
 	}
 	s := &sources{tables: map[string][]byte{}, strs: map[string]string{}}
 	for _, sp := range specs {

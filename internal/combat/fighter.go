@@ -580,17 +580,24 @@ func (f *Fighter) inventoryGrid(s *d2.Snapshot) (panel.Grid, error) {
 
 // ---- buffs ----------------------------------------------------------------------------------------------
 
-// Buff casts the armors and shields that are missing. The buff state is not readable yet (UNVERIFIED offset), so
-// "missing" means not cast within BuffRecastSec.
+// Buff casts the armors and shields that are due (buffDue: the state when it is readable, else the recast clock).
+// It runs on the bot's need-buff edges (new game, back from town, death) and, for a long fight, from the fight loop
+// (fightBuff).
 func (f *Fighter) Buff(ctx context.Context) error {
 	snap, err := f.read(ctx)
 	if err != nil {
 		return err
 	}
-	p := snap.Player
 	if _, err := f.KeepAura(ctx, snap, nil, true); err != nil {
 		return err
 	}
+	_, err = f.buffPass(ctx, snap)
+	return err
+}
+
+// buffPass casts what buffDue says is missing, one cast per group, and reports whether it cast. It reads nothing.
+func (f *Fighter) buffPass(ctx context.Context, snap *d2.Snapshot) (cast bool, err error) {
+	p := snap.Player
 	known := KnownSkills(p, f.cat, f.keys)
 	mana := p.Mana
 	for _, group := range f.profileFor(p).Buffs {
@@ -606,18 +613,33 @@ func (f *Fighter) Buff(ctx context.Context) error {
 				break
 			}
 			if err := f.cast(snap, sp, input.Point{X: p.X, Y: p.Y}); err != nil {
-				return err
+				return cast, err
 			}
+			cast = true
 			f.buffAt[sp.ID] = f.now()
 			mana -= sp.Cost
 			f.info("buff", "skill", sp.Name)
 			if err := f.sleep(ctx, ms(f.tune().CastGapMs)+ms(400)); err != nil {
-				return err
+				return cast, err
 			}
 			break
 		}
 	}
-	return nil
+	return cast, nil
+}
+
+// fightBuff is the buff check of the fight loop (SKARMOR B1, card fixbuff): Buff otherwise runs only on need-buff
+// edges, so inside one long clear an armor with a real duration (Frozen Armor 120 s) lapsed. It is a clock comparison
+// per tick on the snapshot the loop already has. Casting is skipped where the portal cast is already refused: with
+// crowdAdjacentMax or more attackers in reach a hit cuts the cast (meleeCastGuard's rule, U).
+func (f *Fighter) fightBuff(ctx context.Context, snap *d2.Snapshot, hs []Target) (bool, error) {
+	if len(f.profileFor(snap.Player).Buffs) == 0 {
+		return false, nil
+	}
+	if _, adj := Crowd(snap.Player, hs, float64(f.tune().CrowdAdjacent)); adj >= crowdAdjacentMax {
+		return false, nil
+	}
+	return f.buffPass(ctx, snap)
 }
 
 // ---- casting --------------------------------------------------------------------------------------------

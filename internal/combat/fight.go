@@ -278,6 +278,14 @@ func (f *Fighter) fight(ctx context.Context, sp fightSpec, snap *d2.Snapshot) (r
 			continue
 		}
 
+		// 1c. armor upkeep: a recast whose time came during a long fight (the need-buff edges never fire inside one)
+		if cast, berr := f.fightBuff(ctx, snap, hs); berr != nil {
+			f.info("fight buff failed", "err", berr)
+		} else if cast {
+			snap = nil
+			continue
+		}
+
 		// 2. the targets of this fight
 		cand := f.inScope(hs, sp, p, st)
 		if sp.only != 0 {

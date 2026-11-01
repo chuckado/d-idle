@@ -77,3 +77,14 @@ func TestSubtile(t *testing.T) {
 		t.Fatal(SubTile(30.7), Cell(153))
 	}
 }
+
+func TestParseBuffs(t *testing.T) {
+	r := &Reply{Lines: []string{"absorb=0 def=7 buffs=40:1,50:3,bad,x:1,", "mon 5 cursed"}, Rest: ""}
+	got := parseBuffs(r)
+	if len(got) != 2 || got[0] != (Buff{40, 1}) || got[1] != (Buff{50, 3}) {
+		t.Fatalf("%v", got)
+	}
+	if got := parseBuffs(&Reply{Rest: "absorb=0 buffs="}); len(got) != 0 {
+		t.Fatalf("%v", got)
+	}
+}
