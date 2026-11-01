@@ -129,3 +129,5 @@ internal/resource/recovery_test.go  fixbelt  fixbelt
 internal/bot/broke.go  fixbelt  fixbelt
 internal/bot/area_ban_test.go  fixbelt  fixbelt
 openspec/changes/fixbelt/**  fixbelt  fixbelt
+docs/research/model-ab-skresist.md  modelab  modelab
+openspec/changes/modelab/**  modelab  modelab
