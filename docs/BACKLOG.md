@@ -241,3 +241,8 @@ dethash2 (2026-11-01, card dethash2): second det run, 14 scenarios on 5 builds (
 > crfix157 (done): CodeRabbit on upstream PR 157, finding 1 valid (fixed cf85634a, fast-forward), finding 2 not changed (classified residuals); records in docs/research/pr-mods-evidence-addendum.md and pr-bundle-queue.md.
 
 > FIXMOUTH: mouthStep arrival radius 16 for the first walk after a warp (Den bounce, DRILLS14); offline tests pass, live DW.m3 x3 + DW.m4 proof pending (docs/fixmouth.md).
+
+- SKLIGHT follow-ups: build the stateful d2d Fight test mode + game.exe FUN_005adf10 / FUN_0056bd10 oracle for D1 (justhit) and D2 (one unit a frame); SKNOVA to check D1 on the 64-missile nova; bot B1 per-skill cast gap (Lightning / Chain Lightning 760 ms at 0 FCR) and B2 Chain Lightning on immunes (docs/research/sk-lightning-trace.md)
+- FIXCASTGAP (card, branch agent/fixcastgap, launching separately): B1 the single CastGapMs of 650 ms is shorter than the 760 ms Lightning / Chain Lightning cast (internal/env/tuning_combat.go:38-42,:79; internal/combat/fight.go:717-719).
+- SKLIGHT B2 (POLICY-class, recorded, paused): immune targets skip Chain Lightning although it would hop (internal/combat/skills.go:179).
+- SKLIGHT B3 (POLICY-class, recorded, paused): cast range 25 vs reach 35.2 (docs/research/sk-lightning-trace.md).
