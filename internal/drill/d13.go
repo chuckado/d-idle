@@ -9,7 +9,7 @@ import (
 
 // FroDur is one Frozen Armor duration measurement with no bot in the loop: the skill is cast with `cmd skill 40`, the
 // state list (`debug states`, buffs=) is read at every step, nobody recasts. Times are game milliseconds from the cast
-// command (Step 1 is 2 ticks of 40 ms, so the resolution is 80 ms).
+// command (one tick is 40 ms, the sampler steps 1 tick near the end).
 type FroDur struct {
 	Err         string
 	Level       int
@@ -45,7 +45,7 @@ func (b FroBot) String() string {
 		iv = append(iv, fmt.Sprintf("%.1f", float64(b.CastsMS[i]-b.CastsMS[i-1])/1000))
 	}
 	return fmt.Sprintf("level %d, %d s simulated, %d samples (longest gap between samples %d ms), casts at game s %v (intervals %s s; bot clock intervals %v s), first state-on sample at %d ms, down samples %d (%d ms), mana refills %d, bot's limit %d ms, Player.States readable by the bot: %v",
-		b.Level, b.SimMS/1000, b.Samples, b.MaxStepMS, secs(b.CastsMS), strings.Join(iv, " "), clockIv(b.ClockCastsMS), b.FirstOnMS, b.DownSamples, b.DownMS, b.ManaRefills, b.LimitMS, b.StateReadable)
+		b.Level, b.SimMS/1000, b.Samples, b.MaxStepMS, secs(b.CastsMS), strings.Join(iv, " "), clockIv(b.ClockCastsMS), b.FirstOnMS, b.DownSamples, b.DownMS, b.ManaRefills, b.LimitMS, b.StateReadable) + " | log: " + strings.Join(b.Lines[:min3(len(b.Lines))], " ; ")
 }
 
 func secs(ms []int) []string {
@@ -137,7 +137,7 @@ func D13(l D13Lab) []Drill {
 		{ID: "D-m1", Primitive: "P26", Title: "M1 (sk-mana-trace D1/D3): when Fire Bolt's mana leaves on d2d relative to the command and the action frame; does an interrupted cast cost mana (record)", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome {
 			var rows []string
 			var trs []ManaTrace
-			for _, hit := range []int{-1, -1, 0, 1, 2, 3, 4, 5, 6} {
+			for _, hit := range []int{-1, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9} {
 				t := l.ManaTrace(ctx, r, hit)
 				if t.Err != "" {
 					return Blocks(fmt.Sprintf("trial hit=%d: %s", hit, t.Err))
@@ -148,8 +148,15 @@ func D13(l D13Lab) []Drill {
 			o := Outcome{Intended: "record only: the tick on which mana is paid and the tick of the missile for an undisturbed Fire Bolt, and the mana of casts interrupted by a forced hit (cheat debug hit) at each step"}
 			o.Observed = strings.Join(rows, " || ")
 			o.Sig = fmt.Sprintf("pay=%d miss=%d", trs[0].PayTick, trs[0].MissTick)
-			o.Verdict, o.Reason = Pass, fmt.Sprintf("RECORD: undisturbed cast pays at tick +%d and lists the missile at +%d (ticks of 40 ms after the command was queued; the sampler steps 2 ticks at a time)", trs[0].PayTick, trs[0].MissTick)
+			o.Verdict, o.Reason = Pass, fmt.Sprintf("RECORD: undisturbed cast pays at tick +%d and lists the missile at +%d (ticks of 40 ms after the command was queued; the sampler steps one tick at a time)", trs[0].PayTick, trs[0].MissTick)
 			return o
 		}},
 	}
+}
+
+func min3(n int) int {
+	if n > 3 {
+		return 3
+	}
+	return n
 }

@@ -20,7 +20,7 @@ gates:
   - "go test -p 1 ./internal/combat ./internal/data ./internal/env ./tools/knobdump passes including TestFrozenArmorTimerLeavesGap, TestFrozenArmorRecastBeforeExpiryByClock, TestFrozenArmorRecastBeforeExpiryByState, TestAuraFrames"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
 result: ""
-live: "not verified live: see the live recipe in docs/fixrecast.md"
+live: "verified live by drills13 (2026-11-01, d2d lab slot): Frozen Armor state on after a cast (8 ticks), real duration 120.0 s at level 1 and 132.0 s at level 2, the bot recast at 114.0 s and 126.0 s with a fresh tables cache, armor never absent in a simulated 600 s; BUT on a stale tables cache (made before this card) the recast stays at 150 s, see DRILLS13 in docs/probes/drills/README.md"
 ```
 
 - [x] buff recast logic found (Fighter.buffDue, Buff)

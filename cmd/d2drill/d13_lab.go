@@ -79,7 +79,7 @@ func (l *lab) playerCell(ctx context.Context) (x, y float64, pmode int, err erro
 	return ps.Items[0].X, ps.Items[0].Y, ps.Items[0].PMode, nil
 }
 
-// froLearn gives Frozen Armor points until its base level is want.
+// froLearn sets Frozen Armor's base level to want (`debug points <skill> <n>` sets the level, it does not add).
 func (l *lab) froLearn(ctx context.Context, r *drill.Run, want int) error {
 	for i := 0; i < 5; i++ {
 		sn, err := l.be.Env.Snapshot()
@@ -95,7 +95,7 @@ func (l *lab) froLearn(ctx context.Context, r *drill.Run, want int) error {
 		if have >= want {
 			return nil
 		}
-		if _, err := r.Cheat(ctx, fmt.Sprintf("debug points %d 1", frostArmor), fmt.Sprintf("learn Frozen Armor level %d: the recast proof needs the skill (fixrecast live recipe)", have+1)); err != nil {
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug points %d %d", frostArmor, want), fmt.Sprintf("learn Frozen Armor level %d: the recast proof needs the skill (fixrecast live recipe)", want)); err != nil {
 			return err
 		}
 		_ = l.Tick(ctx, 10)
@@ -153,13 +153,13 @@ func (l *lab) FroDuration(ctx context.Context, r *drill.Run, level int) (o drill
 					o.CostPoints = float64(m0[8]-m1[8]) / 256 // not corrected for the regen of the ticks in between
 				}
 			}
-		} else if el > o.ExpectMS-4000 { // 80 ms steps only around the end
+		} else if el > o.ExpectMS-4000 { // 1-tick steps only near the end
 			if b, err := l.buffsText(ctx); err == nil && !froOn(b) {
 				o.GoneAfterMS = el
 				break
 			}
 		}
-		if o.OnAfterMS >= 0 && el < o.ExpectMS-4000 { // coarse: 24 steps of 2 ticks at a time
+		if o.OnAfterMS >= 0 && el < o.ExpectMS-4000 { // coarse: 25 ticks per loop
 			if _, err := l.be.Client.Step(ctx, 24); err != nil {
 				o.Err = err.Error()
 				return
@@ -191,6 +191,12 @@ func (l *lab) FroBot(ctx context.Context, r *drill.Run, level int, simMS int) (o
 		return
 	}
 	_ = l.Tick(ctx, 5)
+	if sk := l.db.SkillByID(frostArmor); sk != nil {
+		f, ok := sk.AuraFrames(level)
+		o.Lines = append(o.Lines, fmt.Sprintf("table: Skills.txt row 40 auralencalc=%q params=%v AuraFrames(%d)=%d ok=%v", sk.AuraLenCalc, sk.Param, level, f, ok))
+	} else {
+		o.Lines = append(o.Lines, "table: no skill 40 in the loaded tables")
+	}
 	c := l.tune.Combat
 	frames := 3000 + 300*(level-1)
 	o.LimitMS = min(c.BuffRecastSec*1000, frames*40-c.BuffMarginSec*1000)
@@ -246,7 +252,7 @@ func (l *lab) FroBot(ctx context.Context, r *drill.Run, level int, simMS int) (o
 			return
 		}
 		for _, ln := range l.rec.Since(mark) {
-			if strings.HasPrefix(ln, "buff skill=Frozen Armor") {
+			if strings.HasPrefix(ln, "combat buff skill=Frozen Armor") {
 				o.CastsMS = append(o.CastsMS, el)
 				o.ClockCastsMS = append(o.ClockCastsMS, int(cs.Sub(c0).Milliseconds()))
 				last = el
