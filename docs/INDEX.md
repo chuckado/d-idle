@@ -94,4 +94,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - DRILLS18 (live result): fixmouth3 live proof PARTIAL (DW.m4 PASS, DW.m3 one bounce per run left; D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md); [fixmouth3.md](fixmouth3.md) (stay guard held until the level changes, one-click step-away, roam targets filtered at 17)
 - DRILLS19 (live result): fixmouth4 live proof PASS (DW.m3 x3 and DW.m4 x3 zero mouth bounces; D2/D3 PASS; defect: gate hold loop in Den cycle 2): [probes/drills/README.md](probes/drills/README.md); [fixmouth4.md](fixmouth4.md) (one exit gate on every nav click and movement swing)
 - docs/research/pr-nexthit-v2-addendum.md: NextHit v2: end-frame fix (f+NextDelay+1), re-run of both harnesses, det hashes, fork lab-nexthit2, the verifier's five edits
+- docs/research/pr-nexthit-posted.md: NextHit v2 posted log (PR #158, final gates, differentials)
 - docs/research/sk-passives-trace.md: Sorceress passives (masteries, Warmth, Telekinesis), the 1.14d synergy table, +skills base vs level; decomp row 23 (SKPASS)

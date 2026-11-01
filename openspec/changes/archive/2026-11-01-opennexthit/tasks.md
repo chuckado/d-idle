@@ -2,7 +2,8 @@
 
 ```yaml
 change: opennexthit
-status: in-progress
+status: archived
+merge: 6bbd958
 agent: opennexthit
 branch: agent/opennexthit
 worktree: ~/code/d2lod-wt/opennexthit
