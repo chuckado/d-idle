@@ -46,6 +46,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills22](../../openspec/changes/drills22/) | in-progress | drills22 | `openspec/changes/drills22/**` | `instance:drills-slot-0` |
 | [drills24](../../openspec/changes/drills24/) | in-progress | drills24 | `openspec/changes/drills24/**` | `instance:drills24-slot-0` |
+| [drills25](../../openspec/changes/drills25/) | in-progress | drills25 | `openspec/changes/drills25/**` | `instance:drills25-slot-0` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -91,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills22: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills24: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
+- change drills25: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
