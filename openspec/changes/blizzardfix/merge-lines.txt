@@ -1,0 +1,3 @@
+docs/BACKLOG.md: BLIZZARDFIX: Blizzard / Eruption shard-offset PR candidate READY, held for the user's go (docs/research/pr-blizzard-draft.md; local branch fix/blizzard-shard-offsets-v2, commits 46c55621 + 3d6f3fe7); verifier's three changes applied (short names, Eruption in the commit, ruff); D2 / D3 stay out.
+CHANGELOG.md: docs: Blizzard shard-offset PR candidate brought to READY (names, Eruption, ruff), draft updated with the verifier's counts.
+docs/INDEX.md, docs/decomp-queue.md, docs/research/README.md: no change.

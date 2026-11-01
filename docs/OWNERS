@@ -123,3 +123,5 @@ docs/fixwp.md  wpcooldown  wpcooldown
 docs/research/sk-ground-trace.md  skground  skground
 tools/emu/sk_ground*  skground  skground
 openspec/changes/skground/**  skground  skground
+docs/research/pr-blizzard-draft.md  blizzardfix  blizzardfix
+openspec/changes/blizzardfix/**  blizzardfix  blizzardfix
