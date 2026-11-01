@@ -38,7 +38,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [crfix157](../../openspec/changes/crfix157/) | in-progress | CRFIX157 | `docs/research/pr-mods-evidence-addendum.md`<br>`docs/research/pr-bundle-queue.md`<br>`openspec/changes/crfix157/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -68,7 +67,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change crfix157: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes

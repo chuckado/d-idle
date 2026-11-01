@@ -2,7 +2,8 @@
 
 ```yaml
 change: crfix157
-status: in-progress
+status: archived
+merge: 0c88fdc
 agent: CRFIX157
 branch: agent/crfix157
 worktree: ~/code/d2lod-wt/crfix157
@@ -14,7 +15,7 @@ owns:
 exclusive: []
 gates:
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes"
-result: "CodeRabbit on upstream PR #157: finding 1 (compare coverage) VALID, fixed and pushed as a fast-forward (cf85634a), answered in thread; finding 2 (nonzero exit on mismatch) not changed, the head carries classified residuals, answered in thread. Verified live: the differential was re-run on the worker host (compare on the head's saved d2d output)."
+result: "CodeRabbit on upstream PR #157: finding 1 (compare coverage) VALID, fixed and pushed as a fast-forward (cf85634a), answered in thread; finding 2 (nonzero exit on mismatch) not changed, the head carries classified residuals, answered in thread. Verified live: yes, the differential was re-run on the worker host (compare on the head's saved d2d output)."
 ```
 
 ## 1. Work

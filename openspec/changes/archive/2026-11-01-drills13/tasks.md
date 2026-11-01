@@ -3,7 +3,7 @@
 ```yaml
 change: drills13
 status: archived
-merge: 0c88fdc
+merge: 89d6a22
 agent: drills13
 branch: agent/drills13
 worktree: ~/code/d2lod-wt/drills13
