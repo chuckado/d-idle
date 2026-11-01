@@ -2,7 +2,8 @@
 
 ```yaml
 change: communitywork
-status: in-progress
+status: archived
+merge: 37fc3ad
 agent: communitywork
 branch: agent/communitywork
 worktree: ~/code/d2lod-wt/communitywork
@@ -28,7 +29,7 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/contrib/tests -t tools/contrib; the two tools/discord tests; python3 tools/contrib/board.py --check"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and stdlib scripts only, nothing run live, nothing posted or created (no issue, label, webhook, channel, repo setting). Guide, templates, open-work list (8 items) with the board generator, outside-PR gate proposal with .coderabbit.yaml, Discord draft (#work-board feed script, #agents, server delta planned offline)."
+result: "Not verified live (offline-complete; board.py --check and python tests pass): docs and stdlib scripts only, nothing run live, nothing posted or created (no issue, label, webhook, channel, repo setting). Guide, templates, open-work list (8 items) with the board generator, outside-PR gate proposal with .coderabbit.yaml, Discord draft (#work-board feed script, #agents, server delta planned offline)."
 ```
 
 ## 1. Work
