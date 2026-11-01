@@ -1,0 +1,81 @@
+labrun: synced code/d2lod-wt/drills10 → orion:~/labrun/herdr/code/d2lod-wt/drills10 in 0s; running: export PATH=$HOME/.local/bin:$PATH; mkdir -p ~/d2d-lab/drills10; go build -o ~/d2d-lab/drills10/d2drill ./cmd/d2drill && D2D_AGENT=drills10 D2D_BIN=$HOME/d2d-lab/fork/bin/d2d.lab-cheats3 tools/agentrun.sh drills10 --ttl 300 -- tools/d2dslot.sh run -n 0 -t 300 -- $HOME/d2d-lab/drills10/d2drill -group M -probe 'debug help;state;dump' -label drills10-p26a -v
+d2dslot: got slot 0
+time=2026-10-31T23:13:16.372-04:00 level=WARN msg="d2d channel not answering: d2d process pid 2369626 still running; socket file is gone (stat /home/jesse/d2d-lab/slots/0/d2d.sock: no such file or directory); ping: d2dctl: dial /home/jesse/d2d-lab/slots/0/d2d.sock: dial unix /home/jesse/d2d-lab/slots/0/d2d.sock: connect: no such file or directory"
+> debug help
+act <1-5>: waypoint tabs for acts 1..n (quest flags the panel reads)
+alt: see docs/control_channel.md
+attack: see docs/control_channel.md
+automap: reveal the whole level
+belt clear: empty the belt boxes
+blocked <x> <y>: 1 if a unit can't stand there
+boss: see docs/control_channel.md
+charges: see docs/control_channel.md
+chat: see docs/control_channel.md
+clearinv: see docs/control_channel.md
+collision: see docs/control_channel.md
+corpses: see docs/control_channel.md
+critters: see docs/control_channel.md
+day: see docs/control_channel.md
+die: see docs/control_channel.md
+difficulty: see docs/control_channel.md
+durability <slot|all> <value>: worn items' durability, capped at the maximum
+enter: see docs/control_channel.md
+equip <code> <slot>: a normal item worn in a body slot
+give <code> [quality] [unid]: on the ground (0 by level, 4 magic, 6 rare); give <code> pack|belt [box] [q<quality>] [l<ilvl>] [unid]: into the pack or a belt box
+goto: see docs/control_channel.md
+grid: see docs/control_channel.md
+help: this list
+hit <damage>: one monster blow on the player (life, wear, death, get-hit)
+itemat: see docs/control_channel.md
+kill [<keep>] [spare <MonStats id>] [within <cells>]: kill the level's monsters
+laid: see docs/control_channel.md
+layout: see docs/control_channel.md
+level: see docs/control_channel.md
+light: see docs/control_channel.md
+merc hire <type>|kill|revive|hurt <damage>: the merc (no gold)
+missiles: one row per live missile: unit, id, x, y, dx, dy (unit vector), speed (cells/s), owner type, owner unit, ttl ticks, friendly, name
+nearby: see docs/control_channel.md
+net: see docs/control_channel.md
+netsend: see docs/control_channel.md
+objects: see docs/control_channel.md
+operate: see docs/control_channel.md
+party: see docs/control_channel.md
+passives: see docs/control_channel.md
+pets: see docs/control_channel.md
+pin on [radius 3..8 subtiles]|off|status: wall the player into a pocket (collision ring), or take it down
+players: see docs/control_channel.md
+points: see docs/control_channel.md
+portals: see docs/control_channel.md
+presets: see docs/control_channel.md
+quest <q> [show|reset]: done (bit 0) | quest list: nonzero records | quest set <q> <flags 0..0xffff> | quest bit <q> <0..15> on|off | quest join: re-run the act's join
+rain: see docs/control_channel.md
+release: see docs/control_channel.md
+relevel: see docs/control_channel.md
+roster: see docs/control_channel.md
+skill: see docs/control_channel.md
+skillpts: see docs/control_channel.md
+spawn <MonStats id|row> [n 1..20] [near] [champion|unique [mod ids]]: monsters round the player (field level)
+stat <0..15> <value>: a character stat (14 purse, 15 stash)
+states: see docs/control_channel.md
+statpts: see docs/control_channel.md
+tiles: see docs/control_channel.md
+tomb: see docs/control_channel.md
+tradestate: see docs/control_channel.md
+typing: see docs/control_channel.md
+unbuilt: see docs/control_channel.md
+unequip <slot|belt>: take what is worn there off
+unid: unidentify every pack item (magic or better ones too)
+walls: see docs/control_channel.md
+warp <x> <y>: put the player at a cell
+warps: see docs/control_channel.md
+wear: see docs/control_channel.md
+wp <index|all|level <id>>: activate waypoints err=<nil>
+> state
+screen=ingame save=-1 scroll=0 class=4 name=Drilly hardcore=0 difficulty=0 cam=12.70,18.70 walking=0 dir=4 saves=0 stash=0 cube=0 store=-1 store_tab=0 gold=0 statpts=0 str=10 life=40/40 mana=35/35 stamina=18944/18944 level=1 exp=0 pmode=- missiles=0 pets=- lskill=0 rskill=0 picker=0 hover=-1 hireling=0 help=0 wset=0 gamemenu=0:0 mini=1 volume=100,50 charges=- skillpts=0 tree=0 waypoint=0 items=7 held=- unid=0 merc=- menu=0 automap=0 speech=0 voice=0 music=4673 music_old=0 quake=0,0,0,0,0 sfx=-
+ err=<nil>
+> dump
+{"v":1,"time":{"frame":8,"game_ms":0,"tick":0,"lockstep":true,"scale":1},"player":{"name":"Drilly","class":"sorceress","level":1,"exp":0,"gold":0,"stash_gold":0,"difficulty":0,"hardcore":false,"expansion":true,"area":1,"area_name":"Rogue Encampment","x":12.70,"y":18.70,"walking":false,"mode":"-","life":[40,40],"mana":[35,35],"stamina":[74,74],"stat_pts":0,"skill_pts":0,"lskill":0,"rskill":0,"screen":"ingame"},"stats":{"base":{"str":10,"dex":25,"vit":10,"ene":35},"bonus":[0,0,0,0,0,0,0,0,0,0,0,0],"defense":6,"res":{"fire":0,"cold":0,"light":0,"poison":0},"res_cap":[75,75,75,75],"raw":[10,35,25,10,0,0,10240,10240,8960,8960,18944,18944,1,0,0,0]},"skills":{"base_levels":[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]},"items":[{"id":-1,"code":"sst","loc":"body","slot":4,"x":0,"y":0,"w":1,"h":3,"quality":2,"ilvl":1,"sockets":0,"qty":-1,"dur":[20,20],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Short Staff"},{"id":-1,"code":"hp1","loc":"belt","slot":0,"x":0,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Minor Healing Potion"},{"id":-1,"code":"hp1","loc":"belt","slot":0,"x":1,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Minor Healing Potion"},{"id":-1,"code":"hp1","loc":"belt","slot":0,"x":2,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Minor Healing Potion"},{"id":-1,"code":"hp1","loc":"belt","slot":0,"x":3,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Minor Healing Potion"},{"id":-1,"code":"tsc","loc":"inventory","slot":0,"x":0,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Scroll of Town Portal"},{"id":-1,"code":"isc","loc":"inventory","slot":0,"x":1,"y":0,"w":1,"h":1,"quality":2,"ilvl":0,"sockets":0,"qty":-1,"dur":[0,0],"unique":-1,"set":-1,"flags":{"identified":true,"ethereal":false,"socketed":false,"runeword":false},"name":"Scroll of Identify"}],"quests":{"diff":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]],"waypoints":[1,0,0]},"ui":{"stash":false,"cube":false,"npc_menu":false,"vendor":false,"skill_tree":false,"waypoint":false,"game_menu":false,"mini_panel":true,"automap":false,"held":"","rects":{"belt":[[423,562,30,30],[454,562,30,30],[485,562,30,30],[516,562,30,30]]}},"merc":{"present":false,"dead":false}}
+ err=<nil>
+time=2026-10-31T23:13:17.385-04:00 level=WARN msg="d2d: stopped by the bot (kill)"
+labrun: orion exited 0 after 3s
+exit 0
