@@ -2,7 +2,7 @@
 
 ```yaml
 change: skground2
-status: in-progress
+status: archived
 agent: skground2
 branch: agent/skground2
 worktree: ~/code/d2lod-wt/skground2
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and offline tooling. D1 proven on a real d2d build (14,926 / 14,957 of 100,000 shards off game.exe's grid before, 0 / 0 after one line); local PR candidate fix/blizzard-shard-offsets (9a1a90eb tooling, 681d52a9 claim) on the worker host, pr_guard 0/0, independent verifier next, nothing pushed. D4 proven on a real build (shard 5 / 13 / 21 vs d2d 21 subtiles; Fire Wall 1 / 5 / 9 vs 21). Fire Wall cast, makers and hits traced (V run 80 / 80). Hydra read to the spawn; AI not run. Not verified live."
+result: "Fire Wall matched game.exe subtiles on the real build (80 of 80), Hydra read only, shard hit area and offset deviations measured on the real build; local PR candidate for the offsets awaits an independent verifier; not verified live"
 live: "docs only, nothing run live"
+merge: 6e7b133
 ```
 
 - [x] Fire Wall (do 24, maker do 6, hits) read and run against a real d2d build

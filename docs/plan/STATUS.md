@@ -54,7 +54,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
-| [skground2](../../openspec/changes/skground2/) | in-progress | skground2 | `docs/research/sk-ground2-trace.md`<br>`docs/research/pr-blizzard-draft.md`<br>`tools/emu/sk_gnd2_*`<br>`openspec/changes/skground2/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -109,7 +108,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change skground2: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -121,6 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 6e7b133 11-01 15:23 `Merge agent/skground2: SKGROUND2: Fire Wall, Hydra, Blizzard hit area and offsets on the real d2d build; PR candidate awaiting verifier` (skground2)
 - 0764a88 11-01 15:15 `Merge agent/gate1: Gate 1 rerun entry: not passed on one seed (progress, belt window)` (gate1)
 - 120e534 11-01 15:08 `Merge agent/forkstats: forkstats docs: read-only gear stats and weapon base damage in the fork dump; d2d has no player stats 17/18/21/22` (forkstats)
 - 7c4fd4b 11-01 15:01 `Merge agent/macvet: PR vetting on a second machine: portable differentials and checks, parity checked` (macvet)
@@ -130,5 +129,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2f7f013 11-01 14:37 `Merge agent/crfollow160: log of the CodeRabbit follow-up on PR #160 (3 comments and ruff B905 fixed)` (crfollow160)
 - ddf6213 11-01 14:24 `Merge agent/wpcooldown: waypoint arrival cooldown removed by default (nav.wpCooldownSec 0, deprecated)` (wpcooldown)
 - 938760d 11-01 14:21 `Merge agent/capdocs: capability docs and Sorceress matrix refreshed with what is proven` (capdocs)
-- 8422bcc 11-01 14:16 `Merge agent/tickpolish: Discord tick wrapper: privacy-guard repair by separators, empty waiting rendered directly` (tickpolish)
 <!-- statusgen:end -->
