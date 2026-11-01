@@ -26,6 +26,7 @@ const (
 	d22Lair     = 73
 	d22Arcane   = 74
 	d22Lut      = 40
+	d22Sewer    = 47 // Sewers level 1: a tile exit of Lut Gholein, the one way a town leg can reach hop code
 	d22ManaPts  = 150
 	d22ClvlWant = 18
 )
@@ -329,7 +330,7 @@ func (l *lab) d22T(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	if err := l.d22prep(ctx, r, d22Lut, true, false); err != nil {
 		return drill.Outcome{}, err
 	}
-	g := l.d22run(ctx, l.navr, d22Rocky, 100*time.Second)
+	g := l.d22run(ctx, l.navr, d22Sewer, 100*time.Second)
 	obs := l.d22dump(g, "town")
 	parts = append(parts, obs)
 	// the Summoner's level: reachable by goto only; a Teleport stand point needs the boss runner (not reachable from a drill)
@@ -356,7 +357,7 @@ func (l *lab) d22R(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	}
 	l.d22wire(l.navr, false)
 	defer l.d22wire(l.navr, true)
-	g := l.d22run(ctx, l.navr, d22Rocky, 100*time.Second)
+	g := l.d22run(ctx, l.navr, d22Sewer, 100*time.Second)
 	obs := l.d22dump(g, "unwired-town")
 	o := drill.Outcome{Intended: "the game refuses every hop in a town: the navigator gives up after a few (teleportBadHops 3) and walks", Observed: obs, Sig: fmt.Sprintf("hops=%d refused=%d", g.Hops, g.Refused)}
 	paid := g.ManaB - g.ManaA
