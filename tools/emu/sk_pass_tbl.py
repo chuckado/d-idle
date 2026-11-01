@@ -7,6 +7,7 @@ passive stats, for the Sorceress rows, as game.exe's MPQ stack serves them
     python sk_pass_tbl.py cols            # the Skills.txt header
     python sk_pass_tbl.py stats NAME...   # ItemStatCost rows by stat name
     python sk_pass_tbl.py states N...     # States.txt names by row
+    python sk_pass_tbl.py func ST DO      # srvstfunc ST / srvdofunc DO addresses
     python sk_pass_tbl.py res             # the hit element descriptors at 0x732980
 """
 import os
@@ -76,10 +77,14 @@ def restable():
         print(i, " ".join(s))
 
 
-if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "res":
-    restable()
-    sys.exit(0)
+
+
+def functab():
+    """srvstfunc / srvdofunc table entries (0x732140 / 0x7322b0, 4 bytes each)."""
+    e = emu.Emu()
+    for base, idx in ((0x732140, int(sys.argv[2])), (0x7322b0, int(sys.argv[3]))):
+        print(hex(base), idx, hex(e.r32(base + 4 * idx)))
 
 
 if __name__ == "__main__":
-    main()
+    {"res": restable, "func": functab}.get(sys.argv[1] if len(sys.argv) > 1 else "", main)()
