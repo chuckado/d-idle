@@ -1,0 +1,7 @@
+schema: spec-driven
+created: 2026-11-01
+skip_specs: true
+gates:
+  - "changecheck -cli 0 warnings; leakcheck -mode fail 0; ci check.sh --hygiene-only no FAIL; openspec validate --all --strict"
+merge:
+result:
