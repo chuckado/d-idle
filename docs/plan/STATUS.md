@@ -97,6 +97,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 84dd214 11-01 00:29 `Merge agent/fixcrowd: combat.crowdAdjacent knob` (fixcrowd)
 - 6ba15b7 11-01 00:29 `Merge agent/dethash2: det-hash scenarios; archive card` (dethash2)
 - 4bcbd36 11-01 00:25 `Merge agent/modsprep` (modsprep)
 - 071008f 11-01 00:25 `Merge agent/crfix156` (crfix156)
@@ -106,5 +107,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 50af070 11-01 00:12 `Merge agent/feedtick: feed.py tick subcommand` (feedtick)
 - 599c0fc 11-01 00:08 `Merge agent/brandapply: apply brand to README, d2dview, d2bot banner` (brandapply)
 - bbf46c8 11-01 00:08 `Merge agent/brandfinal: final brand assets` (brandfinal)
-- ba5e848 11-01 00:04 `Merge agent/fixstatic: static field prose fix, table= in minute line and soak aggregate` (fixstatic)
 <!-- statusgen:end -->

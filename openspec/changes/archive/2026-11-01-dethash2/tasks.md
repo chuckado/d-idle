@@ -2,7 +2,7 @@
 
 ```yaml
 change: dethash2
-status: in-progress
+status: archived
 agent: dethash2
 branch: agent/dethash2
 worktree: ~/code/d2lod-wt/dethash2
@@ -15,6 +15,7 @@ owns:
   - tools/emu/det_scenarios_run.py
   - openspec/changes/dethash2/**
 exclusive: []
+merge: 6ba15b7
 gates:
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
 result: "second det run done on a headless d2d slot (no game.exe): 14 scenarios x 5 builds, baseline repeated identical; #155 DET-CLEAN, freeze v2 and walk DET-CHANGES-EXPLAINED; docs/research/det-hashes-2026-11-01b.md. Not run on game.exe."
