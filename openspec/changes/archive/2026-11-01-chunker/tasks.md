@@ -2,7 +2,8 @@
 
 ```yaml
 change: chunker
-status: in-progress
+status: archived
+merge: ed03c45
 agent: chunker
 branch: agent/chunker
 worktree: ~/code/d2lod-wt/chunker
@@ -18,8 +19,7 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/contrib/tests -t tools/contrib passes"
   - "go run ./cmd/changecheck -cli reports 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits"
-merge: ""
-result: "Offline-verified: 35 contrib tests (fake gh, fake HTTP). Real: 3 groom calls (claude-sonnet-5-5, thinking between_tools, about 31k input tokens each, 0 to 1 accepted proposals; the last answer was empty, groom-proposal.md has no proposals) and one read-only sync dry run (0 actions: all 8 issues match). No gh writes, no Discord sends. Not verified: sync --apply against GitHub (create, close, comment), PR closingIssuesReferences shape on a real merged PR."
+result: "chunker sync verified live (closed #5 and #6 with one comment each); groom ran 4 times, 0 useful proposals"
 ```
 
 ## 1. Tool

@@ -2,7 +2,8 @@
 
 ```yaml
 change: boardgrow
-status: in-progress
+status: archived
+merge: ed03c45
 agent: boardgrow
 branch: agent/boardgrow
 worktree: ~/code/d2lod-wt/boardgrow
@@ -20,8 +21,7 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/contrib/tests passes; python3 tools/contrib/board.py --check"
   - "go run ./cmd/changecheck -cli reports 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits"
-merge: ""
-result: "Offline: 42 contrib tests, board --check, leakcheck 0, check.sh ok; sync dry run lists 12 creates (docs/process/chunker.md). No gh writes, no live runs."
+result: "work archive added (done items leave the board; sync keeps their issues closed and never re-creates them); 12 new items on the board; sync dry run plans 12 creates; unit-tested. Not verified live (the 12 issues are created by the coordinator after the merge)."
 ```
 
 Overlap (declared): the open card `chunker` owns tools/contrib/chunker.py, tools/contrib/tests/test_chunker.py and docs/process/chunker.md. This card makes small edits there (sync and groom read the archive through `board.load_all`; one test; the archive rule in the doc). They are not in `owns:` here; the merger applies them on top of the chunker card.

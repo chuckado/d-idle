@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- boardgrow (offline, tooling and docs): work archive (docs/community/work-archive.md; `board.py --archive` moves done items out of open-work.md, `--check` fails while one is left); the chunker sync and groom read archived items too, so they are never withdrawn or re-created (an open issue of an archived item is closed once); SKMELEE and SKRESIST archived; 12 new work items (5 verify, 7 decomp). Chunker sync verified live: it closed issues #5 and #6 with one comment each.
 - docs: opened upstream PRs #159 (Frozen Armor and freeze-resume bundle) and #160 (curse lowering on immune monsters); posted log in docs/research/openpr-log.md.
 - docs: FORKREBASE: the private d2d fork is rebuilt on upstream main as lab2-freezeresume (docs/forkrebase.md).
 - verifycurseimmune (research, docs and tools/emu only): independent verifier of the curse-immune PR candidate (own harness running game.exe's FUN_005c3540 / FUN_00645b20 natively and the real `Fight::target_of`): READY, 0 differ on head across 5 classes, hirelings and curse calcs checked; draft text edits applied; nothing pushed or posted.
