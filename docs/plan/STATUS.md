@@ -91,6 +91,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- e809e7f 10-31 23:41 `Merge agent/freezepolish: PR freeze draft polish` (freezepolish)
 - ea5e2ae 10-31 23:34 `Merge agent/fixemptyplan: empty plan on snapped start (ErrAlreadyThere)` (fixemptyplan)
 - 8ac245e 10-31 23:30 `Merge agent/fixportalmelee: no town portal cast with 3+ adjacent hostiles` (fixportalmelee)
 - 6a08f08 10-31 23:24 `Merge agent/drills10: drills round 10 (D-meter, live lines)` (drills10)
@@ -100,5 +101,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 65b117a 10-31 23:11 `Merge agent/decompmods: monster mods decomp trace` (decompmods)
 - 7534522 10-31 23:06 `Merge agent/soakg1d2d: Gate 1 soak 2 report (not passed, 1 seed)` (soakg1d2d)
 - 0492f23 10-31 23:06 `Merge agent/spot155: #155 --static-field drives Fight::spot, evidence recorded` (spot155)
-- 5f67ea3 10-31 22:52 `Merge agent/fixtalk: talk tables and dialog adapter into internal/talk` (fixtalk)
 <!-- statusgen:end -->
