@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills12
-status: in-progress
+status: archived
+merge: 6b922b19b40c891a2c72a994050c992ba0badf4a
 agent: drills12
 branch: agent/drills12
 worktree: ~/code/d2lod-wt/drills12

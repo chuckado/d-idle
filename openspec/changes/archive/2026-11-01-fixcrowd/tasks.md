@@ -2,7 +2,7 @@
 
 ```yaml
 change: fixcrowd
-status: in-progress
+status: archived
 agent: fixcrowd
 branch: agent/fixcrowd
 worktree: ~/code/d2lod-wt/fixcrowd
@@ -15,8 +15,8 @@ exclusive: []
 gates:
   - "go test -p 1 ./internal/combat ./internal/env ./internal/resource ./tools/knobdump passes; whole-repo vet and go test -short on the worker host"
   - "live proof after merge: D-portalmelee x3 passes (Safety is chicken with 3 zombies in reach, scroll unspent) and D-portalmelee.ctl still passes (docs/fixcrowd.md)"
-merge:
-result: ""
+merge: 6b922b19b40c891a2c72a994050c992ba0badf4a
+result: verified live: DRILLS12 D-portalmelee PASS x3 and control PASS x3 at crowdAdjacent 8; the weak-hit premise stays unverified
 live: "verified live (DRILLS12): D-portalmelee PASS x3 at crowdAdjacent 8 (3 zombies within 8 subtiles, life 102/300, no potion, one scroll: Safety chicken, scroll kept); control PASS x3; the chicken action itself is not run by the harness"
 ```
 
