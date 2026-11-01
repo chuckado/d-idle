@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- openmods (research, upstream PR): boss and minion spawn stats opened as psi29a/d2decomped PR #157 (user go 2026-11-01); gates and differential re-run before opening; posted log in `docs/research/pr-mods-evidence-addendum.md`.
 - brandfinal (offline): d.idle brand = cursor concept (user decision 2026-11-01); final asset set (SVG, PNG renders, favicon.ico, banners) in `assets/branding/final/` with a stdlib-only PNG renderer (`assets/branding/render.py`); nothing applied to the README, web pages, GitHub or Discord yet (docs/branding.md).
 - feedtick (offline, not posted): `tools/discord/feed.py tick` builds the dispatcher tick report (running, merged, launched, upstream, blocked, waiting) as one `#progress` post, dry run by default, refuses an idle tick; docs/process/feed-after-events.md, feeds.md (e).
 - soak-minutes-virtual (offline, not verified live): soak-gate minutes are virtual (game) minutes (user decision 2026-11-01); `d2dsoak` reports the Gate 1 belt window (BELT, over 5) and no kill and no XP stretch (NOKILL, over 10) in virtual minutes; Gate 1 soak 2 now fails both; spec delta in the card, applied at archive.
