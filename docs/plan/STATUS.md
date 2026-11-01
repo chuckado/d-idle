@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
+| [decompmods](../../openspec/changes/decompmods/) | in-progress | decompmods | `docs/research/monster-mods-trace.md`<br>`tools/emu/umod_*`<br>`openspec/changes/decompmods/**` | - |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixf17](../../openspec/changes/fixf17/) | in-progress | fixf17 | `docs/fixf17.md` | - |
 | [fixmeter](../../openspec/changes/fixmeter/) | in-progress | fixmeter | `internal/d2dcombat/meter.go`<br>`internal/d2dcombat/meter_test.go`<br>`internal/d2dcombat/rig.go`<br>`docs/fixmeter.md` | - |
@@ -72,6 +73,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
+- change decompmods: every rule in the trace doc is tagged V, V-d2d, D, S, I or U with an address or file:line
+- change decompmods: tools/emu/umod_stats.py runs game.exe's own inits on >= 100,000 cases against d2d's real rules::boss_stats
+- change decompmods: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixf17: go vet ./... and go test -short -count=1 ./... on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change fixf17: live proof after merge: the full F group x3 passes DW.m1 in run 1 and no `the Pacer lagged` line above 100 s (docs/fixf17.md)
@@ -88,6 +92,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 
 ### Recent merges
+- 53c3469 10-31 22:28 `Merge agent/fixf17: drill Pacer lag harness fix` (fixf17)
 - 40bc78f 10-31 22:22 `Merge agent/cr155: CodeRabbit round on upstream PR 155 recorded` (cr155)
 - fe6bcb4 10-31 21:59 `Merge agent/pushchill: chill commits pushed to upstream PR #155` (pushchill)
 - 503e6ba 10-31 21:33 `Merge agent/dethash: det state hashes for #155, chill, walk3` (dethash)
@@ -97,5 +102,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 98b8178 10-31 20:49 `Merge agent/drills9: DRILLS9 live drills, harness fixes` (drills9)
 - 2ff7991 10-31 20:46 `Merge agent/verifychill: chill verifier` (verifychill)
 - 74020bf 10-31 20:38 `Merge agent/prfixes: PR walk v3 and price v2 docs, verified holds with limits` (prfixes)
-- 33d7d1f 10-31 20:26 `Merge agent/chillpatch: static-field chill proof and draft` (chillpatch)
 <!-- statusgen:end -->
