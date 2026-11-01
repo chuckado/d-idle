@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+	"time"
 
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/drill"
@@ -106,6 +107,10 @@ func (l *lab) captureTabs() {
 
 func (l *lab) TakeWaypoint(ctx context.Context, level int) drill.WPCall {
 	n, sp := l.wpNavigator()
+	// F17: other direct steps (the object drills' Client.Step) leave the Pacer behind; a lag is logged so a live log shows it
+	if lag := l.syncPacer(); lag > time.Second {
+		l.log.Info("drill: the Pacer lagged the game before a waypoint trip", "lag", lag.Round(time.Millisecond))
+	}
 	l.wpTabs = ""
 	c0, mark, t0 := sp.clicks, l.rec.Mark(), l.tick()
 	err := n.TakeWaypoint(ctx, level)

@@ -163,7 +163,22 @@ func (l *lab) Cheat(ctx context.Context, actor, verb, reason string) (string, er
 
 func (l *lab) Tick(ctx context.Context, n int) error {
 	_, err := l.be.Client.Step(ctx, n)
+	l.syncPacer() // F17: keep the navigator's clock on game time
 	return err
+}
+
+// syncPacer steps one tick through the Pacer (the navigator's clock under lockstep) and returns how far its virtual time
+// lagged the game: ticks stepped with Client.Step directly are invisible to it until its next step, which then jumps
+// by all of them at once. A walk takes its deadline and stall timers before that first step, so a lag near the walk
+// timeout expires it after a few seconds (F17: DW.m1 run 1). 0 on a wall clock.
+func (l *lab) syncPacer() time.Duration {
+	if l.be.Clock == nil || !l.be.Clock.Lockstep() {
+		return 0
+	}
+	_, _, v0, _ := l.be.Clock.Pace()
+	l.be.Clock.Sleep(d2dinput.TickDur)
+	_, _, v1, _ := l.be.Clock.Pace()
+	return v1 - v0 - d2dinput.TickDur
 }
 
 // PlanCols is the plan town.Town.plan returns for the character (belt.PlanForBuild; the build name is unset here).

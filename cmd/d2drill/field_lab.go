@@ -160,7 +160,7 @@ func (l *lab) operateObject(ctx context.Context, r *drill.Run, level int, want s
 			if err := l.be.Ctl.Interact(tg); err != nil {
 				op.InteractErr = err.Error()
 			}
-			_, _ = l.be.Client.Step(ctx, 250)
+			_ = l.Tick(ctx, 250)
 			op.Ticks = l.tick() - t0
 			op.After = l.objectMode(ctx, r, idx)
 			break
