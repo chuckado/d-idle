@@ -1,6 +1,6 @@
 #!/bin/sh
 # usage: run28.sh BINNAME LABEL GROUP TTL  (from inside the synced worktree on the worker)
-cd ~/labrun/herdr/code/d2lod-wt/drills28 || exit 1
+cd "$(dirname "$0")" || exit 1
 mkdir -p ~/d2d-lab/drills28
 go build -o ~/d2d-lab/drills28/d2drill ./cmd/d2drill || exit 1
 F=$HOME/d2d-lab/fork/bin
