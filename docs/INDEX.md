@@ -90,3 +90,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - fixmanamodel: [fixmanamodel.md](fixmanamodel.md) regen per-frame whole 256ths, backend mana booking, potion over time (offline; live drill pending).
 - FORKNEXT: [forknext.md](forknext.md) the private fork carries the NextHit fix (lab-nexthit), vetting, binary naming rule.
 - DRILLS17 (live result): fixmouth2 live proof FAIL (Clear finishes, spin gone, bounces remain; town D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md)
+- DRILLS18 (live result): fixmouth3 live proof PARTIAL (DW.m4 PASS, DW.m3 one bounce per run left; D2/D3 PASS): [probes/drills/README.md](probes/drills/README.md); [fixmouth3.md](fixmouth3.md) (stay guard held until the level changes, one-click step-away, roam targets filtered at 17)
