@@ -1,6 +1,9 @@
 package bot
 
 import (
+	"log/slog"
+	"strings"
+	"sync"
 	"testing"
 
 	"d2lod-bot/internal/d2"
@@ -55,5 +58,53 @@ func TestHasTPCountsCharges(t *testing.T) {
 	}
 	if !hasTP(t, 3, 0) {
 		t.Error("tome with 3 charges is a portal source")
+	}
+}
+
+type logBuf struct {
+	mu sync.Mutex
+	b  strings.Builder
+}
+
+func (l *logBuf) Write(p []byte) (int, error) { l.mu.Lock(); defer l.mu.Unlock(); return l.b.Write(p) }
+func (l *logBuf) dumps() int {
+	l.mu.Lock()
+	defer l.mu.Unlock()
+	return strings.Count(l.b.String(), "inv-tp-dump")
+}
+
+// The dump fires on the first look, on an area change and on a verdict change, and not otherwise.
+func TestInvTPDump(t *testing.T) {
+	g := newRig(t)
+	g.r.d.Catalog = tomeCatalog{}
+	st := map[uint32]d2.Stats{100: {70: 3}}
+	g.r.e.Read = statsReader{st: st}
+	buf := &logBuf{}
+	g.r.e.Log = slog.New(slog.NewTextHandler(buf, nil))
+	g.w.set(func(w *world) {
+		w.items = append(w.items, d2.Unit{ID: 900, Addr: 100, Type: d2.TypeItem, Class: 6, Item: &d2.Item{Where: d2.ContInventory}})
+	})
+	look := func() {
+		s, _ := g.w.snapshot()
+		g.r.resInput(s)
+	}
+	step := func(name string, want int, f func()) {
+		t.Helper()
+		if f != nil {
+			f()
+		}
+		look()
+		if got := buf.dumps(); got != want {
+			t.Fatalf("%s: %d dump lines, want %d", name, got, want)
+		}
+	}
+	step("first", 1, nil)
+	step("same area, same verdict", 1, nil)
+	step("again", 1, nil)
+	step("area change", 2, func() { g.w.set(func(w *world) { w.area = 2 }) })
+	step("verdict change", 3, func() { delete(st, 100) })
+	step("steady", 3, nil)
+	if out := buf.b.String(); !strings.Contains(out, "raw70=err:") || !strings.Contains(out, "hastp=false") {
+		t.Errorf("dump lacks the raw stat read or the verdict:\n%s", out)
 	}
 }
