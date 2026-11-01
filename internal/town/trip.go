@@ -73,6 +73,7 @@ func (t *Town) ToTown(ctx context.Context) error {
 			var err error
 			if portal, err = t.openPortal(ctx); err != nil {
 				if errors.Is(err, ErrNoPortal) {
+					t.NotePortalEmpty()
 					return t.walkToTown(ctx, s, err)
 				}
 				last = err
@@ -90,6 +91,7 @@ func (t *Town) ToTown(ctx context.Context) error {
 			continue
 		}
 		t.arrived = t.e.Clock.Now()
+		t.portalEmpty, t.emptyStreak = false, 0
 		if open {
 			t.e.Log.Info("arrived in town through an open portal", "area", cur.Player.Area)
 		} else {

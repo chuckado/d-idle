@@ -67,6 +67,9 @@ type Town struct {
 	planFn           func(class d2.Class, clvl int) belt.Band // belt plan override (SetPlan)
 	beltBuyGold      int                                      // gold at the last belt purchase attempt that bought nothing; 0 = none
 	repairFail       repairLatch                              // BASICSFIX: last failed repair
+	portalEmpty      bool                                     // the last ToTown found no usable portal source: the game says empty whatever the stat read says (FIXPROGRESS)
+	emptyStreak      int                                      // town visits in a row that began with portalEmpty (FIXPROGRESS watchdog)
+	tscQuietUntil    time.Time                                // no "no town portal scroll" trip before this (FIXPROGRESS watchdog)
 	futile           map[string]futileMark                    // trip reason -> when and with how much gold a visit left it unfixed
 	presetsFn        func() []d2map.Preset                    // test seam: preset units of the current level
 	ammoPath         string                                   // "bow" or "javelin" for an Amazon (SetAmmoPath)
