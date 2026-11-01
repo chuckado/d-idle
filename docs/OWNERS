@@ -73,5 +73,9 @@ openspec/changes/nexthit/**  nexthit  nexthit
 docs/fixmanamodel.md  fixmanamodel  fixmanamodel
 internal/resource/manamodel.go  fixmanamodel  fixmanamodel
 internal/resource/manamodel_test.go  fixmanamodel  fixmanamodel
+docs/fixskilllvl.md  fixskilllvl  fixskilllvl
+internal/d2/skilllevel.go  fixskilllvl  fixskilllvl
+internal/d2/skilllevel_test.go  fixskilllvl  fixskilllvl
+internal/combat/skilllevel_test.go  fixskilllvl  fixskilllvl
 docs/forknext.md  forknext  forknext
 openspec/changes/forknext/**  forknext  forknext

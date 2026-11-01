@@ -138,14 +138,15 @@ func Layout(b Build) map[string]string { return ProfileFor(d2.Sorceress, b).Layo
 func KnownSkills(p *d2.Player, cat Catalog, keys map[int]string) map[string]SkillSpec {
 	out := map[string]SkillSpec{}
 	for _, sk := range p.Skills {
-		if sk.Effective() < 1 && sk.ID > 3 { // Attack, Kick, Throw, Unsummon are usable at level 0
-			continue
-		}
 		def := cat.Skill(sk.ID)
 		if def == nil {
 			continue
 		}
-		sp, ok := makeSpec(cat, def.Key, max(sk.Effective(), 1))
+		lvl := p.Effective(sk.ID, SkillRefOf(p, def))
+		if lvl < 1 && sk.ID > 3 { // Attack, Kick, Throw, Unsummon are usable at level 0
+			continue
+		}
+		sp, ok := makeSpec(cat, def.Key, max(lvl, 1))
 		if !ok {
 			continue
 		}
@@ -199,4 +200,18 @@ func PickAttack(order []SkillSpec, t *Target, mana int, ready func(SkillSpec) bo
 		return SkillSpec{}, PickCooling
 	}
 	return SkillSpec{}, PickNoSkill
+}
+
+// SkillRefOf resolves the table facts the +skills rules need (d2.SkillBonus): own class, tab and element byte.
+func SkillRefOf(p *d2.Player, def *data.Skill) d2.SkillRef {
+	ref := d2.SkillRef{Own: classByCode[def.Class] == p.Class && def.Class != "", Tab: def.Page}
+	switch def.EType {
+	case "fire":
+		ref.Elem = d2.ElemFire
+	case "ltng":
+		ref.Elem = d2.ElemLight
+	case "cold":
+		ref.Elem = d2.ElemCold
+	}
+	return ref
 }
