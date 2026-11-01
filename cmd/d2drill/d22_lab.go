@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"math"
 	"errors"
 	"fmt"
 	"strings"
@@ -44,6 +45,8 @@ func (l *lab) d22wire(nv *nav.Navigator, wired bool) {
 	}
 }
 
+var d22start = map[int][2]float64{}
+
 type d22leg struct {
 	Err                    error
 	Hops, Refused          int
@@ -77,6 +80,15 @@ func (l *lab) d22state(ctx context.Context) (lvl int, x, y, mana float64, err er
 func (l *lab) d22prep(ctx context.Context, r *drill.Run, level int, learn bool) error {
 	if err := l.Goto(ctx, r, level); err != nil {
 		return err
+	}
+	// the arrival cell of `debug goto` varies between calls: the control fixes it, later legs warp back to it
+	if c, ok := d22start[level]; ok {
+		if _, err := r.Cheat(ctx, fmt.Sprintf("debug warp %d %d", int(c[0]), int(c[1])), "DRILLS22: the same start cell as the control leg"); err != nil {
+			return err
+		}
+		_ = l.Tick(ctx, 20)
+	} else if x, y, _, err := l.playerCell(ctx); err == nil {
+		d22start[level] = [2]float64{math.Round(x), math.Round(y)}
 	}
 	for _, v := range []struct{ verb, why string }{
 		{"debug kill", "DRILLS22: clear the level's natural monsters: the leg measures navigation, not a fight"},
@@ -181,7 +193,7 @@ func (l *lab) D22(ctx context.Context, r *drill.Run, id string) (o drill.Outcome
 var d22legs = []struct {
 	Name     string
 	From, To int
-}{{"tile41-55", d22Rocky, 55}, {"tile42-57", d22Dry, 57}, {"border41-42", d22Rocky, d22Dry}}
+}{{"tile41-55", d22Rocky, 55}, {"tile42-56", d22Dry, 56}, {"border41-42", d22Rocky, d22Dry}}
 
 func (l *lab) d22legsRun(ctx context.Context, r *drill.Run, learn bool, tag string) ([]d22leg, error) {
 	var out []d22leg
@@ -268,15 +280,17 @@ func (l *lab) d22B(ctx context.Context, r *drill.Run) (drill.Outcome, error) {
 	key := l.rig.Fighter.TeleportKey()
 	states, _ := l.be.Client.Do(ctx, "debug states")
 	// the hop through the key: one ExitTo hop count on a short leg is not needed, a single CastAt through the navigator's input is
-	_, x0, y0, m0, _ := l.d22state(ctx)
+	_, _, _, m0, _ := l.d22state(ctx)
+	x0, y0, _, _ := l.playerCell(ctx)
 	castErr := error(nil)
 	if key != "" {
 		dx, dy, n := l.d15dir(ctx, x0, y0, 12)
 		tx, ty := x0+dx*float64(min(n, 12)), y0+dy*float64(min(n, 12))
-		castErr = l.be.Env.In.CastAt(key, input.Point{X: int(tx), Y: int(ty)})
+		castErr = l.be.Env.In.CastAt(key, input.Point{X: int(tx * 5), Y: int(ty * 5)})
 		_ = l.Tick(ctx, 14)
 	}
-	_, x1, y1, m1, _ := l.d22state(ctx)
+	_, _, _, m1, _ := l.d22state(ctx)
+	x1, y1, _, _ := l.playerCell(ctx)
 	moved := cdist(x0, y0, x1, y1)
 	obs := fmt.Sprintf("TeleportKey=%q HasTeleport=%v skills=[%s] debug states: %s; CastAt(%q) a free line: err=%v moved %.1f cells, mana %.1f->%.1f", key, l.navr.HasTeleport(), strings.Join(sks, " "), strings.TrimSpace(states.Text()), key, castErr, moved, m0, m1)
 	fmt.Println("D22 bind:", obs)
