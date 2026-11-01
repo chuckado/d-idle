@@ -78,6 +78,12 @@ func (l *lab) d22state(ctx context.Context) (lvl int, x, y, mana float64, err er
 
 // d22prep warps to the level, clears the natural monsters, gives life, level 18 and a big mana pool.
 func (l *lab) d22prep(ctx context.Context, r *drill.Run, level int, learn, warp bool) error {
+	// the arrival cell of `debug goto` depends on the level the character came from: always come from Lut Gholein
+	if level != d22Lut {
+		if err := l.Goto(ctx, r, d22Lut); err != nil {
+			return err
+		}
+	}
 	if err := l.Goto(ctx, r, level); err != nil {
 		return err
 	}
@@ -199,7 +205,7 @@ var d22legs = []struct {
 	Name     string
 	From, To int
 	Warp     bool
-}{{"tile41-55", d22Rocky, 55, true}, {"tile42-56", d22Dry, 56, true}, {"border41-42", d22Rocky, d22Dry, false}}
+}{{"tile41-55", d22Rocky, 55, false}, {"tile42-56", d22Dry, 56, false}, {"border41-42", d22Rocky, d22Dry, false}}
 
 func (l *lab) d22legsRun(ctx context.Context, r *drill.Run, learn bool, tag string) ([]d22leg, error) {
 	var out []d22leg
