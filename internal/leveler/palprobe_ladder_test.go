@@ -89,18 +89,24 @@ func TestPalProbeHammerBandStartsAtTraining(t *testing.T) {
 	}
 }
 
-// The legacy table has no Prayer, so the Paladin's resting aura (Prayer below 70 percent life) is never available
-// on it; only the v2 table trains it (clvl 4).
+// PALTABLE (probe F3): the legacy table trains Prayer (row 16), so the resting aura
+// rung is alive for a Paladin that keeps it.
 func TestPalProbeLegacyTableHasNoPrayer(t *testing.T) {
-	if skillsAt(t, "paladin-normal30")[30]["Prayer"] == 0 {
-		t.Skip("PALPROBE finding F3: build paladin-normal30 (the table a Paladin that already owns Might or Holy Fire keeps) never trains Prayer, so the profile's resting aura rung is dead for it (the ladder falls through to Holy Fire / Might)")
+	sk := skillsAt(t, "paladin-normal30")
+	// the planner pulls the point forward into the idle clvl 10 or 11 point (replay: clvl 10), the row says 16
+	if sk[30]["Prayer"] != 1 || sk[16]["Prayer"] != 1 || sk[3]["Prayer"] != 0 {
+		t.Errorf("legacy Prayer: clvl 3 %d, clvl 16 %d, clvl 30 %d", sk[3]["Prayer"], sk[16]["Prayer"], sk[30]["Prayer"])
 	}
 }
 
-// Zeal at level 1 for the whole game on the legacy table: hold clicks of a one-point Zeal.
+// PALTABLE (probe F4): the legacy table follows the v2 Zeal curve level for level (Zeal 4 by clvl 16 in the replay
+// without a Den point, 4 at clvl 30; it stayed at 1 before).
 func TestPalProbeLegacyZealStaysAtOne(t *testing.T) {
-	if z := skillsAt(t, "paladin-normal30")[30]["Zeal"]; z < 4 {
-		t.Skip("PALPROBE finding F4: build paladin-normal30 trains Zeal to " + string(rune('0'+z)) + " only (v2 trains 4 by clvl 15); the profile holds the button for Zeal from clvl 12 either way, so the legacy Paladin swings the slow low-hit-count Zeal for all of Normal")
+	for _, table := range []string{"paladin-normal30", "paladin-normal30-v2"} {
+		sk := skillsAt(t, table)
+		if sk[16]["Zeal"] != 4 || sk[30]["Zeal"] != 4 || sk[11]["Zeal"] != 0 {
+			t.Errorf("%s Zeal: clvl 11 %d, clvl 16 %d, clvl 30 %d", table, sk[11]["Zeal"], sk[16]["Zeal"], sk[30]["Zeal"])
+		}
 	}
 }
 
