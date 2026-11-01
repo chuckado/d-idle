@@ -1,6 +1,6 @@
 # PR proof: a cold missile chills whatever damage it deals (addition to #155)
 
-> status: BUILT, local candidate, PROOF incomplete (independent verifier not run, det state hashes not run), nothing pushed or posted (card chillpatch, 2026-10-31). Follows docs/research/static-field-chill-trace.md (Q2, C1 / C2, which this doc re-derives and partly corrects). Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-static-chill-draft.md](pr-static-chill-draft.md).
+> status: BUILT, local candidate, independent verifier run (card verifychill, 2026-10-31: HOLDS WITH LIMITS, section at the end); PROOF incomplete only for the det state hashes (need a d2d slot); nothing pushed or posted (card chillpatch, 2026-10-31). Follows docs/research/static-field-chill-trace.md (Q2, C1 / C2, which this doc re-derives and partly corrects). Standard: docs/process/upstream-pr-standard.md. Draft body: [pr-static-chill-draft.md](pr-static-chill-draft.md).
 
 Tags: **V** = run in game.exe's own code under the emulator or read with upstream's `tools/emu/disasm.py` (said which); **D** = patched 1.14d tables read with mpq-cat (docs/process/mpq-data-reading.md); **S** = source read (d2d file:line at the candidate's base 6270d162); **I** = inferred; **U** = unknown.
 
@@ -99,3 +99,68 @@ D2_MPQ_DIR=<MPQ dir> <build>/tests/test_game --cold-length 1 100000 | grep -E '^
 ## How it would join #155
 
 The branch is a fast-forward of #155's head (`git merge-base --is-ancestor origin/fix/static-field fix/static-field-chill`: yes). With the user's go, before CodeRabbit's first review of #155: `git -C <PR checkout>/chill push origin fix/static-field-chill:fix/static-field` (a normal push, no force), then edit the PR title and body as in the draft. Commits authored and committed with the numeric-ID noreply form copied from fix/static-field, body line `Agent: Claude Code`, no trailer.
+
+## Independent verifier (card verifychill, 2026-10-31)
+
+Role: the verifier of docs/process/upstream-pr-standard.md section 5. Offline, no game, no d2d slot. Candidate `fix/static-field-chill` (claim 46ef6c75, tooling 79c9a496) in a throwaway worktree of the PR checkout on the worker host; the author's branches and worktree were not touched. The rule was re-derived from `disasm.py` before this doc, the draft or `chill_length.py` were read.
+
+**Verdict: HOLDS WITH LIMITS. READY to append to #155 after: the det state-hash run (needs a d2d slot), the title and body changes below, and the user's go.**
+
+### (a) Rule re-derived from the disassembly (V read with disasm.py; table bytes with pefile)
+
+- FUN_0057c6c0: the early returns (FUN_00554200 / record +0 & 0x1000, FUN_00620bb0, FUN_0061ab00 with the MonStats +0xd test, FUN_00457490(class, 0xf) for a monster defender, FUN_005541b0) all come before the resistance call at 0x57c7a0, and none reads the damage. From 0x57c7a5 to the call at 0x57c8a8 the only branches are the event flags (0x57c7a9..0x57c7f3, they rejoin at 0x57c7f8), the attacker-is-monster test at 0x57c830 (rejoins 0x57c844) and `jle 0x57c879` around the life step (rejoins at 0x57c879). Nothing between the resistance and `push [rec+0x30]; push attacker; call FUN_0057af80` tests +0x24 or the life: CONFIRMED. The life step runs first, so even a killing blow is chilled. The freeze (FUN_0057b230, +0x34) follows at 0x57c8b7.
+- FUN_0057c1e0: context +0x10 / +0x14 = attacker / defender "is a monster and not a hireling" (FUN_0063ee90 is the hireling-class test: 271, 338, 359, 560, 561). FUN_0057c140 first (defender stat 0x99: +0x30 and +0x34 to 0; else 0x76: both halved, signed). Table 0x732980 row 5 = offset 0x30, res 0x2b, maxres 0x2c, pierce 0x14f, no absorb (-1 / -1), reduction slot 0, hireling-only 0, damage-% 0; the hireling-only rows 9..11 come after it, so row 5 always runs. CONFIRMED as the author has it.
+- FUN_0057be00 for a plain monster defender: pierce taken off unless res >= 100; no difficulty penalty, no 75 + maxres cap; at or under 0: at least -100. FUN_0057bf80: value <= 0 gives 0; res >= 100 gives 0; else FUN_00483360(v, 100 - res, 100) (divides first above 0x100000).
+- FUN_0057af80: length <= 0 nothing; coldeffect = MonStats +0x168 + difficulty (signed), 0 nothing; a non-monster -50; monster with coldeffect < 0: / DifficultyLevels +0x18 (MonsterColdDivisor); at least 1; only ever lengthened (FUN_00625330 / FUN_00625310); a positive coldeffect chills too (no division).
+- FUN_0057b230 (freeze): a player gets FUN_0057af80 (chill); a monster with state 0x36 nothing; a MonStats boss (FUN_0063e9f0, +0xc & [0x6ce280]), monster data +0x16 & **8** (FUN_005a0180) or a hireling (FUN_0063ee90) gets FUN_0057af80 with the freeze length; any other monster is frozen only if its coldeffect is negative (FUN_0057af30), length / MonsterFreezeDivisor (+0x14), and gets no chill.
+- Boundaries: resisted length 0 (res >= 100, or e.g. length 1 at res 1): no chill; resisted length 1 at a negative coldeffect and divisor 2 or 4: 0 after the division, raised to 1 tick; negative resistance lengthens (to x2 at -100); pierce at res >= 100 does nothing for a monster.
+
+### (b) Own differential (tools/emu/verify_chill.py, tools/emu/verify_chill_mode.inc)
+
+- game side: game.exe's FUN_0057c6c0 natively with FUN_0057c1e0 / c140 / be00 / bf80 / bf10 / FUN_00483360 / FUN_0057af80 / FUN_0057b230 / FUN_0057af30 / FUN_0063ee90 / FUN_0063e9f0 / FUN_005a0180 unhooked (the author's oracle also runs FUN_0057af80; mine also runs the freeze and the boss, unique and hireling tests natively); hooks listed in the script's docstring; DifficultyLevels read from the MPQ.
+- d2d side: phase 0 the REAL `missile_blow` + `Fight::land`; phase 1 the REAL `Fight::strike` with a freeze (the hit_func 13 path), on real builds of 6270d162 (#155's head, = the fork's `fix/static-field`) and 79c9a496, each with only the mode pasted.
+- Cases (seed 20261031): 201,757 = 101,757 boundary + 100,000 random; rolls -256..0x10000 (256ths), lengths -50..0xFFFFFF, res -300..300, pierce 0..300, coldeffect -128..127, running chills, monster-data flags 0 / 4 / 8 / 0xA / 0x10, MonStats boss bit, hireling classes (game only), freeze 0..200; 0 RESFAIL. game.tsv md5 616349712bdb.
+
+| Class | before (6270d162) | after (79c9a496) |
+|---|---|---|
+| C1: resisted cold under one point, length > 0 (the claim) | **34,635** | **0** |
+| C3: freeze on a MonStats boss / flag 8 / hireling: game.exe chills, d2d stuns and chills (phase 1) | 4,282 | 4,282 |
+| C5: freeze on any other monster: game.exe freezes only (coldeffect < 0, length resisted and / MonsterFreezeDivisor), d2d stuns for the raw length and chills (phase 1) | 2,836 | 2,836 |
+| R-ehi: roll max <= 0: `missile_blow` returns before the cold, game.exe chills on the length alone | 17,912 | 17,912 |
+| R-big: length >= 0x100000: `resisted()` multiplies in int (overflow) where FUN_00483360 divides first | 41 | 29 |
+| any other | 0 | **0** |
+
+Every before mismatch outside C3 / C5 / R-ehi / R-big passes the whole-point test (resisted fine < 256 with roll > 0), and none is left after. C3, C5, R-ehi and R-big are not touched by the commit and are not part of the claim. The author's own commands also reproduce: `chill_length.py 100000 1` vs `test_game --cold-length 1 100000` on 79c9a496: 121,312 lines, 0 differ; the mode calls the real `missile_blow` and `Fight::land` (read in test_game.cpp), not a transcription.
+
+Reachability of the residuals: R-ehi needs a cold length with no cold damage: no Skills.txt missile skill has it (Vengeance has cold ELen 30 and no EMin / EMax, but it is a melee skill: `player_blow`); Missiles.txt `rogue3` (cold, ELen 50, no damage) is the one row of that shape; whether it reaches `missile_blow` in d2d is not traced. R-big needs a length of 0x100000 frames (about 11.6 hours): unreachable.
+
+### (c) Other cold-chill paths in d2d (at 79c9a496)
+
+| Path | Covered by the commit | Note |
+|---|---|---|
+| `missile_blow` callers: missiles.cpp:656 (skill missiles), 790 (enemy auras incl. Holy Freeze); states.cpp:165 (Shiver Armor), 227, 352; pets.cpp:120, 161, 942; strike.cpp:673, 679, 771; tick.cpp:403 (shrine potion) | yes | game.exe path of each caller not traced; all reach FUN_0057c6c0 only by inference (I) |
+| combat.hpp:545 `player_blow` skill cold (`swing.cold_pct`, Vengeance) | no | `cold > 0` gate; length `max(cold_len, 1)` (game.exe: resisted length 0 is no chill) |
+| combat.hpp:551 `player_blow` gear cold (`fighter.elem[2]`) | no | `element_damage > 0` gate |
+| combat.hpp:560-561 converted cold (`conv_type == 2`) | no | gate, and a 50-tick floor |
+| combat.hpp:618 `monster_blow` on the player | n/a (player target) | gates on the raw roll > 0, not the resisted damage; `chill_length` reads 0x99 / 0x76 |
+| deaths.cpp:164 suicide explosion on the party | no | `cold > 0` gate; the length is `resisted(element, res)` with `element` = aip[0], the element code: looks wrong (U), own candidate |
+| missiles.cpp:657-662 freeze | no | C3, C4 (half_freeze), C5 |
+| states.cpp:161, 195 Frozen Armor (stun + chill on the striker) | no | not cold damage; not compared |
+
+The ponytail "player_blow's cold still chills only on a whole point" is accurate (three sites); it does not say that Vengeance, a real skill, is one of them.
+
+### (d) CI-class checks on 79c9a496
+
+- One claim per commit: 46ef6c75 changes only combat.hpp (the gate and its comment); 79c9a496 only tooling. pr_guard 0 FAIL / 0 WARN against upstream/main for 46ef6c75, against 46ef6c75 for 79c9a496, against 6270d162, and for the whole branch.
+- test_game (MPQ dir), test_rules, test_combat, test_protocol (`-Wno-error=maybe-uninitialized -Wno-error=array-bounds`): rc 0.
+- presubmit --quick with ruff 0.17.3 on PATH: against upstream/main 0 FAIL, 3 WARN (siblings, docs-sync, build skipped); against 6270d162 0 FAIL, 2 WARN. ruff check of chill_length.py clean (ruff format would reformat it, as 64 upstream tools/emu files; CI does not check format).
+- gcc -Wshadow -Wunused -Wsign-compare over test_game.cpp, test_combat.cpp, strike.cpp, missiles.cpp: 0 warnings in the whole files.
+- clang-tidy with the repo's .clang-tidy over test_game.cpp and test_combat.cpp: only the 4 pre-existing components/drlg/outdoor.hpp binding names (also on upstream main), nothing on an added line, nothing in a touched file.
+- Size: 8 files against upstream/main 72132b99 (still its tip). Fast-forward of #155's current head (fork `fix/static-field` = 6270d162): yes. `git merge-tree` with fix/walk-velocity-v2 (10338345): clean.
+
+### (e) Limits and the draft
+
+- Not run: the det state hashes (gate 4, needs a slot). Record flags 0x100 / 0x200 / 0x400 and FUN_0057c6c0 without the resistance step not exercised. The 0x6b roll is hooked (it does not change the chill). Hireling targets only on the game side (d2d's cold missiles do not hit mercs). Stats 0x99 / 0x76: re-checked (D): Properties codes `nofreeze` / `half-freeze`; no MonProp, MonUMod, States, Skills, SuperUniques, MonStats, MonStats2 or Hireling cell names them or their stats.
+- Title "Static Field and chill length as game.exe does" overclaims: the commit does not change the length, and only skill missiles. Proposed: `game: Static Field and cold-missile chill as game.exe does (differential proof vs game.exe)`.
+- Body: "chills the monster whatever damage it deals" holds when the element's max is over 0 (R-ehi; say so). "The length ... were already right": add "for lengths under 0x100000 frames". Limits: add that Vengeance is among the `player_blow` paths that keep the gate, and that freeze handling (C3, C5) is not in the claim. Keep the existing ponytail on pierce ("isn't traced"), or update it: FUN_0057be00 skips the pierce at res >= 100 only for a plain-monster defender (V read here).
+- C3 wording in this doc and BACKLOG: game.exe tests monster-data flag **8** (FUN_005a0180 edx 8). In the common D2 layout 8 is unique (superuniques carry it too) and champions carry 4; in my run flags 4 and 0x10 were frozen, only 8 chilled. "champions" in C3 is not verified; say "MonStats bosses, flag-8 (unique) monsters and hirelings". New candidates from this run (reading only, not claims): C5 (freeze length unresisted, no MonsterFreezeDivisor, chill added, coldeffect >= 0 still frozen), deaths.cpp:164 length.
