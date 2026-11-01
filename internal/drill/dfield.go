@@ -113,6 +113,7 @@ func F(l FieldLab) []Drill {
 	}
 	if dl, ok := l.(DenLab); ok {
 		run = append(run, Drill{ID: "DW.m3", Primitive: "P23", Title: "DENBOUNCE: the bot's exit walk Blood Moor to Den of Evil, then idle, Clear and Explore in the cave: the character stays in the Den", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fDen(ctx, r, l, dl, 2, 8) }})
+		run = append(run, Drill{ID: "DW.m4", Primitive: "P23", Title: "DENBOUNCE: the same for Cold Plains to Cave Level 1", Limit: lim, Do: func(ctx context.Context, r *Run) Outcome { return fDen(ctx, r, l, dl, 3, 9) }})
 	}
 	return append(run, []Drill{
 		fight("D-sync", "P27", "fixmisc: the first Fighter.Clear right after a `debug goto`, no warm-up walk, against a weak pack: it attacks (no `no path and no firing position`)", fSync),
