@@ -2,7 +2,8 @@
 
 ```yaml
 change: drills23
-status: in-progress
+status: archived
+merge: e11da5e
 agent: drills23
 branch: agent/drills23
 worktree: ~/code/d2lod-wt/drills23
@@ -18,4 +19,4 @@ live: "verified live"
 
 - [x] DW.m3 x3, DW.m4, D2, D3 live
 - [x] logs, README section, primitives rows
-- [ ] gates
+- [x] gates

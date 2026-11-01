@@ -109,6 +109,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- e11da5e 11-01 10:42 `Merge agent/drills23: roamleg (held mouth-gate walk) + DRILLS23 live result` (drills23)
+- 43f5d08 11-01 10:36 `Merge origin/main into drills23` (drills23)
 - 37fc3ad 11-01 10:36 `Merge agent/communitywork: community work guide, templates, board tools, drafts (docs and stdlib scripts)` (communitywork)
 - 4144cb9 11-01 10:32 `Merge agent/armorfinish: Frozen Armor PR final body and verifier addendum (docs only)` (armorfinish)
 - 0f5a315 11-01 10:28 `Merge agent/verifyarmorhit: independent verifier of the armorhit candidate (docs only)` (verifyarmorhit)
@@ -117,6 +119,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c7f140e 11-01 10:05 `Merge agent/buildflex: build-flexibility audit (docs only)` (buildflex)
 - 4fbfbf2 11-01 10:00 `Merge agent/armorhit: Frozen Armor d2d vs game.exe proof, PR draft (docs only, card kept open)` (armorhit)
 - 5516648 11-01 09:55 `Merge agent/drills21: step-away restart storm fix (fixmouthloop, fixmouthloop2), drills20/21 live results` (drills21)
-- ff9c20c 11-01 09:03 `Merge agent/tickwire: tick_post.py Haiku tick writer, tests, api-credits numbers` (tickwire)
-- c1a1b35 11-01 09:01 `Merge origin/main into drills21` (drills21)
 <!-- statusgen:end -->
