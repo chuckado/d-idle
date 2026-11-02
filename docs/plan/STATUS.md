@@ -62,6 +62,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
+| [skshield](../../openspec/changes/skshield/) | in-progress | skshield | `docs/research/skshield-trace.md`<br>`tools/emu/skshield_*`<br>`openspec/changes/skshield/**` | - |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
@@ -124,11 +125,15 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
+- change skshield: equip and hand-toggle run: game.exe's FUN_004c0d20 / FUN_00535d10 / FUN_00627910 on 382 scenarios, 0 differ from the reading; item maker run on 306 weapon and 69 armor rows
+- change skshield: d2d side: SKMELEE2's real-build O part re-compared (cases 1000, seeds 7 and 1)
+- change skshield: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- eb6f29de 11-02 07:14 `merge origin/main into skshield` (skshield)
 - 51a5d6e9 11-02 07:09 `Merge agent/skdefenders: skdefenders: credit-funded first-pass decomposition (docs and emulator tools only)` (skdefenders)
 - 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
 - 9584f9c7 11-02 06:54 `Merge agent/skcurseval: skcurseval: curse value calculations on game.exe against d2d, levels 1..99 (first pass; docs and emulator tools only)` (skcurseval)
@@ -138,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b5f855dd 11-02 05:48 `merge origin/main into propenmonsterpacea` (propenmonsterpacea)
 - 13162292 11-02 05:41 `Merge agent/skias: skias: Pro account job result (docs and emulator tools only)` (skias)
 - eba39266 11-02 05:36 `Merge agent/geararmore: geararmore: Pro account job result (docs and emulator tools only)` (geararmore)
-- e3736c1e 11-02 05:35 `merge origin/main into geararmore` (geararmore)
 <!-- statusgen:end -->
