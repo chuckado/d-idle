@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterskill
-status: in-progress
+status: archived
 agent: monsterskill
 branch: agent/monsterskill
 worktree: ~/code/d2lod-wt/monsterskill
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs and emulator tools only; nothing run live. Slot levels 216 cases 0 differ, monster mana 42,840 cases 0 paid, Corrupt Archer think vs d2d 3,000 cases 0 differ; D1 (usable gate) read only; bot B1-B5; no PR candidate"
+result: "docs and emulator tools only; see the doc for tags and deviations"
 live: "docs and emulator only, nothing run live"
+merge: 2085bde
 ```
 
 - [x] trace slot loading, usability gate, shaman / archer thinks in game.exe (V read, addresses)
