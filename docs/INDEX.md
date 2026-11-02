@@ -233,3 +233,22 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/kitstall.md - kit lane i2 stall analysis and fixes
 - Credit: [../CONTRIBUTORS.md](../CONTRIBUTORS.md) contributor table (who traced or built what, PR status, upstream); rules in [process/chunker.md](process/chunker.md) section "Credit".
 - openspec/changes/kitstall2 - lane i2 lost weapon and gloves, bow worn by the game; fixes and open question
+- docs/research/pr-skmelee3-d1-draft.md - draft PR text, melee fine physical (on hold)
+- docs/research/pr-skmelee3-d2-draft.md - draft PR text, undead / Blunt bonus with the corrected gate (on hold)
+- docs/research/lockstep-p3.md - lockstep probe P3: unhooked control and k=1/2/4 runs, frame rate, kills per real and per game minute, why the bot breaks under k, what Tier A supports
+- docs/timescale.md | how to run the bot with D2BOT_TIMESCALE=k next to the clock hook; game-clock vs host-clock wait classification | ops
+- docs/research/smiteblock-trace.md | Smite vs the block check: game.exe 1.14d lands every blow (V run, 96,000 cases), d2d lets a block stop it; bot findings, drill recipe
+- docs/research/alignment2-trace.md - alignment (stat 0xac) per unit kind and the undead-blow gate of FUN_0057b7d0, game.exe 1.14d (card alignment2)
+- CodeRabbit limits and bundle budget: [research/coderabbit-limits-20261102.md](research/coderabbit-limits-20261102.md)
+- docs/process/credit.md: how credit is written for upstream PRs (author, Traced-by, Reported-by, Agent), tools/credit usage; docs/community/credits-ledger.md: contributor names and consent
+- docs/process/coderabbit-prescan.md - CodeRabbit pre-scan runbook: install, fork config, quota test, bundle workflow, CLI
+- docs/research/lockstep-p4.md: lockstep hook re-measured at k=2 and k=4 with the scaled bot clock
+- docs/research/rebase174-20261102.md - re-rebase of the PR candidates onto upstream main after PR 174: old and new heads, conflicts, counts, parity
+- docs/research/pr-bundle-1-draft.md - draft body of the combined PR (bundle 1), size and checks
+- docs/process/baseline-runs.md | section 10: hooked lanes (--timescale K), game-time conversion, regime flag, watchdog | process
+- docs/research/pr-bundle-1-verifier.md: independent verifier of PR bundle 1 (ground own harness, integration, CI parity, hygiene, verdict)
+- docs/research/pr-bundle-1-body.md: final PR body of bundle 1 (card bundlefinal)
+- docs/research/pr-monsterpace-a-draft.md: PR A draft (Act 1 think paces, Blood Raven, shaman corpse reach): counts, det, CI parity, limits.
+- docs/research/pr-monsterpace-b-draft.md: PR B draft (monster base velocity 75): oracle, reach, det, CI parity, limits.
+- docs/research/pr-nmlevel-draft.md: PR draft for the Nightmare / Hell monster level rule (candidate local/nmlevel-v5).
+- docs/research/pr-playerroll-draft.md: PR draft for the player-side missile roll bundle (element roll top, physical roll in 256ths, -100 floor), counts, reach, side effect.

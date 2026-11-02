@@ -16,6 +16,12 @@ gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
 result: "docs only; PR hold in force"
 merge: e9f2394
+credit:
+  component: Freeze rules
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifyfreeze, independent run; freeze re-run in card verifybundle)"]
+  consent: none
 ```
 
 ## 1. Work

@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildskmelee3b
-status: in-progress
+status: archived
 agent: prbuildskmelee3b
 branch: agent/prbuildskmelee3b
 worktree: d2lod-wt/prbuildskmelee3b
@@ -21,8 +21,15 @@ exclusive:
 gates:
   - "suites test_rules test_game_rules test_monsters test_monster_thinks test_monster_ai test_combat test_game green on each head"
   - "counted differential base vs head over at least 100,000 cases"
-result: "Fork branches local/skmelee3-d1-final 46ced89a and local/skmelee3-d2-final 283c7bce (private remote only) on upstream main cb716f10; verifier findings applied; two generators 0 differences vs game.exe on armed blows; 7 suites green on both heads; CI parity 0; PR 174 merge resolution prepared; det hashes not run. Not verified live (no game)."
+result: "docs only; PR hold in force"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
+merge: dc11d0e
+credit:
+  component: Melee fine physical (D1) and undead / Blunt bonus (D2)
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifyskmelee3, independent run)"]
+  consent: none
 ```
 
 - [x] 1 Fork branches local/skmelee3-d1 and -d2 from upstream main (squashed, noreply identity)
