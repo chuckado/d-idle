@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: SKDEFENDERS trace (docs/research/skdefenders-trace.md) and emulator oracle tools/emu/skdef_*; docs/coverage ledger row F04 (defender side) and regenerated rule-coverage.md
+- Curse value calcs traced and differentialled (skcurseval-trace.md, tools/emu/sk_curseval*.py): equal d2d at every level 1..99; bot finding on Lower Resist vs magic
 - docs: original-game baseline runs 20261102 (1 rows, docs/probes/baseline-runs/20261102/record.md).
 - Docs: opened upstream PR #167 (monster think paces); posted log in docs/research/openpr-log.md.
 - SKIAS partial desk trace of the swing frame count (docs/research/sk-ias-trace.md, tools/emu/skias_bp.py)

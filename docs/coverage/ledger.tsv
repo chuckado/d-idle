@@ -26,7 +26,7 @@ states	61,28	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01
 states	86	READ-ONLY	docs/research/sk-lightning-trace.md		2026-11-01	justhit (NextHit) read; D1 model only
 formulas	F01	TESTED-0-DIFF	docs/research/sk-melee2-trace.md	100000	2026-11-01	melee to-hit, real build, two seeds
 formulas	F03	TESTED-DEVIATION	docs/research/sk-melee2-trace.md	100000	2026-11-01	physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md)
-formulas	F04	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal
+formulas	F04	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal; defender side (player, hireling) docs/research/skdefenders-trace.md: 222,464 cases rule check on game.exe 0 mismatches, penalty and cap equal d2d, D1 flat order D2 no magic resistance D3 no absorb
 formulas	F05	TESTED-DEVIATION	docs/research/skill-damage-trace.md	116000	2026-10-31	docs/research/pr-skill-damage-proof.md
 formulas	F06	TESTED-DEVIATION	docs/research/sk-mana-trace.md	130840	2026-11-01	D2 minmana floor; D1 D3 timing read
 formulas	F08	TESTED-DEVIATION	docs/research/walk-speed-trace.md	712362	2026-10-31	monster velocity uses Run, chill multiplies, floor; D1 (see doc)
@@ -63,3 +63,4 @@ skills.sor	41,46,52	READ-ONLY	docs/research/sor-rest-trace.md		2026-11-01	Infern
 treasure	#850	TESTED-0-DIFF	docs/research/treasure-trace.md	100000	2026-11-01	class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared
 monster.ai	Hireable	TESTED-0-DIFF	docs/research/mercstats-trace.md	100000	2026-11-02	merc think FUN_005e52d0 vs d2d real hireable_think, 100,000 cases seeds 31..34; attack think and skill pick 100,000 more (seeds 41..44); aspect: think and attack choice, not the target search or movement
 monster.ai	CorruptArcher	TESTED-0-DIFF	docs/research/monsterskill-trace.md	3000	2026-11-02	game.exe think (0x5f5a20) vs rules::mon_think: 1,500 seed 20261102 + 1,500 seed 7; second target = primary, FUN_005defb0 hooked as run, step count as passed (msk_run.sh)
+skills.monster	309,310	TESTED-0-DIFF	docs/research/skcurseval-trace.md	4752	2026-11-02	Defense Curse and Blood Mana calc cells at levels 1..99 equal d2d eval_calc (calc aspect only; effects not compared); SKCURSEVAL

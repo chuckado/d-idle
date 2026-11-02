@@ -199,3 +199,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/sk-ias-trace.md - swing speed / IAS / WSM, d2d side read, game.exe side open (partial)
 - docs/research/openpr-log.md: posted log now also covers #167.
 - docs/probes/baseline-runs/20261102/record.md: original-game baseline set 20261102, per-run quality flags and rows
+- docs/research/skcurseval-trace.md: curse value calcs (Lower Resist, Conviction cap, Amplify, Decrepify, Weaken) game.exe vs d2d at levels 1..99, curse do level and length divisor read
+- docs/research/skdefenders-trace.md: hireling and player as defenders against resistances (penalty, cap, floor, flat reduction, absorb, poison fields), game.exe vs d2d (real monster_blow) vs bot; V run 111,232 cases x 2 seeds
