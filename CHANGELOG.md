@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs/research/coderabbit-limits-20261102.md added (CodeRabbit review limits, upstream batch sizes, bundle budget)
 - Research: alignment2-trace.md, game.exe gives alignment 2 to mercs, Shadows and all player-side units, so the undead / Blunt blow bonus gate (player or alignment 2) covers them; tools/emu/al2_run.py native runs.
 - Added docs/research/smiteblock-trace.md and tools/emu/sb_* (SMITEBLOCK): a block does not stop Smite in game.exe 1.14d, d2d deviates (V run, no PR candidate).
 - botclock: internal/gclock time-scale facility (D2BOT_TIMESCALE, default 1 = unchanged); env.RealClock and the game-clock timeouts use it; guard test for new direct time calls

@@ -239,3 +239,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/timescale.md | how to run the bot with D2BOT_TIMESCALE=k next to the clock hook; game-clock vs host-clock wait classification | ops
 - docs/research/smiteblock-trace.md | Smite vs the block check: game.exe 1.14d lands every blow (V run, 96,000 cases), d2d lets a block stop it; bot findings, drill recipe
 - docs/research/alignment2-trace.md - alignment (stat 0xac) per unit kind and the undead-blow gate of FUN_0057b7d0, game.exe 1.14d (card alignment2)
+- CodeRabbit limits and bundle budget: [research/coderabbit-limits-20261102.md](research/coderabbit-limits-20261102.md)
