@@ -164,3 +164,26 @@ Not re-run: the emulator differentials and the deterministic scenarios (run on t
 
 - BACKLOG: #166 (player missile damage roll) is open; watch for the maintainer and CodeRabbit.
 - INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
+
+## Monster think paces (card propenmonsterpacea)
+
+- posted: 2026-11-02 go: the user, standing authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 2. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 3be426d3 (unchanged since the candidate's base, so no rebase). The candidate (local/monsterpace-a, 260eb34f, 13 commits) was rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (no session link, no model trailer); trees identical (same tree hash). Messages, diff and body scanned for host names, home paths, emails, tool names, session links, model attribution: none.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-think-paces head bf7671a7 (2bb1de00 Zombie, 7ad32869 Brute, 9d7579d4 Blood Hawk, 7f3d0e16 Rogue, 18115b2d Lancer, dccb6756 Fallen flee, 6d77436b Blood Raven paces, 99a9c30b Blood Raven home rule, 94ac4cfb tools, a622ef7d replay cases, 29785180 unit asserts, 2b1a2f55 shaman corpse reach, bf7671a7 docs). Also pushed to the private remote.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/167 (11 files, 13 commits; title "Monsters carry the pace game.exe's Act 1 thinks give them, Blood Raven goes home by FUN_005dc480's distances, and a unique Fallen Shaman's corpse reach is FUN_005f1380's"). State OPEN, base 3be426d3, head bf7671a7 as checked with gh pr view. The body states its limits: the Brute's act and the Rogue's n-only fields untouched, the superunique flag bit unverified, no MSVC build. The base-velocity change is not opened (waits for this one).
+
+| check (worker host, head bf7671a7) | result |
+|---|---|
+| pr_guard, range and each of 13 commits | 0 FAIL |
+| presubmit --quick | 0 FAIL, 3 WARN (unit kinds, doc-claims, build skipped; answered in the body) |
+| tooling unit tests | 17 ok |
+| Release build, test_monster_thinks, test_monster_ai, test_monsters, test_rules, test_game_rules, test_combat, test_game (data dir) | 7 of 7 exit 0 |
+| g++ and clang++, TU compile commands plus -Wall -Wextra -Wpedantic -Wshadow -Wrange-loop-construct -Wconversion -Wsign-conversion, ai.cpp and the two test TUs, against a base build | rc 0; 0 new warning messages vs 3be426d3; corpse harness 0 warnings |
+| clang-tidy on the three changed TUs | 0 findings, 0 include-cleaner |
+
+Not re-run: the emulator differentials (run on the identical tree by the author and a verifier), the deterministic scenarios, the full CI tidy selection, an MSVC build.
+
+## Shared-file lines for the merger (propenmonsterpacea)
+
+- BACKLOG: #167 (monster think paces) is open; watch for the maintainer and CodeRabbit. The velocity change waits for it.
+- INDEX, decomp-queue, research README: see merge-lines.txt.
