@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [baselinefree](../../openspec/changes/baselinefree/) | in-progress | baselinefree | `tools/d2dsoak/baselines.json`<br>`tools/d2dsoak/baselines-early.json`<br>`cmd/d2dsoak/**`<br>`internal/d2dsoakstat/bands.go`<br>`internal/d2dsoakstat/bands_test.go`<br>`internal/d2dsoakstat/compare.go`<br>`internal/d2dsoakstat/gatev2.go`<br>`docs/research/baseline-audit.md`<br>`openspec/changes/baselinefree/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -89,9 +88,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change baselinefree: baselines.json holds the whole a14 run, g2-8h and provenance on every row; baselines-early.json holds the Fresha chain; every number reproducible with d2dsoak baseline from the raw logs
-- change baselinefree: d2dsoak bands prints per-band XP/h and a verdict; go test -p 1 ./cmd/d2dsoak ./internal/d2dsoakstat passes
-- change baselinefree: go run ./cmd/changecheck -cli 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits; tools/ci/check.sh; tools/openspec.sh validate --all --strict
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -137,6 +133,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
+- 6ac8a44 11-01 20:13 `merge origin/main into baselinefree` (baselinefree)
 - f8f9666 11-01 20:05 `Merge agent/botthreat: BOTTHREAT: missile threat table, runner guard (no kite/retreat from Zombie, Brute, Hawk, Rogue, Lancer, Arach), kill-first and dodge verdicts behind knobs` (botthreat)
 - 3d59e8e 11-01 19:56 `Merge agent/monsterai: MONSTERAI: Act 1/2 monster AI trace: 25 AIs 75,000 cases in game.exe real code vs d2d think; Skeleton Goatman Quill Rat exact; Zombie and Brute run on game.exe, d2d walks` (monsterai)
 - 1df86ca 11-01 19:55 `merge origin/main into monsterai` (monsterai)
@@ -145,6 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
 - 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
 - f87ba9c 11-01 19:01 `Merge agent/necskill: NECSKILL: Necromancer skill trace: 27,800 calc cases 0 differ, magic roll life deviation 10,509 of 36,600 (the SKMISS fix covers it), Corpse Explosion deviations read only` (necskill)
-- 262a5c0 11-01 19:00 `merge origin/main into necskill` (necskill)
-- 38f6e36 11-01 18:50 `Merge agent/monstermissile: MONSTERMISSILE: Act 1/2 monster missile trace: 213 real game.exe launches match the formula, six d2d deviations (NM/Hell level brackets, HitShift, poison/fire on MissA), six bot findings` (monstermissile)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: baselinefree
-status: in-progress
+status: archived
 agent: baselinefree
 branch: agent/baselinefree
 worktree: ~/code/d2lod-wt/baselinefree
@@ -21,8 +21,8 @@ gates:
   - "baselines.json holds the whole a14 run, g2-8h and provenance on every row; baselines-early.json holds the Fresha chain; every number reproducible with d2dsoak baseline from the raw logs"
   - "d2dsoak bands prints per-band XP/h and a verdict; go test -p 1 ./cmd/d2dsoak ./internal/d2dsoakstat passes"
   - "go run ./cmd/changecheck -cli 0 warnings; go run ./cmd/leakcheck -mode fail 0 hits; tools/ci/check.sh; tools/openspec.sh validate --all --strict"
-merge: merge-lines.txt
-result: "Baselines extended from the raw worker-host logs (late file 4 runs, 14.04 h, 5 deaths; Fresha chain 5.9 h, 4 deaths), Gate 1 XP clause per clvl band as a delta spec, d2dsoak bands tool; offline, not verified live (no game used)"
+merge: 9aa58ed
+result: "offline from raw logs; only band 11-14 can give a hard verdict (n=4); 2 more fresh runs would harden bands 1-10"
 ```
 
 ## 1. Baselines
