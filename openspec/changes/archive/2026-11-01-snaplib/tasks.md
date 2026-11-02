@@ -2,7 +2,7 @@
 
 ```yaml
 change: snaplib
-status: in-progress
+status: archived
 agent: snaplib
 branch: agent/snaplib
 worktree: ~/code/d2lod-wt/snaplib
@@ -17,8 +17,8 @@ skip_specs: true
 exclusive: []
 gates:
   - "go test -p 1 ./internal/saves ./internal/cheat/... ./cmd/d2restore; gofmt -l empty; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-merge:
-result: "Offline unit tests only; NOT verified live: the game loading a renamed character and the map seed question are in docs/snaplib.md."
+merge: cf575ae
+result: "offline on synthetic fixtures; the game loading a renamed character and the map seed question are untested; private tools still key by name"
 ```
 
 ## 1. Work

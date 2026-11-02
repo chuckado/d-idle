@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
-| [snaplib](../../openspec/changes/snaplib/) | in-progress | snaplib | `internal/saves/snaplib.go`<br>`internal/saves/snaplib_test.go`<br>`internal/cheat/d2s/tail.go`<br>`cmd/d2restore/**`<br>`docs/snaplib.md`<br>`openspec/changes/snaplib/**` | - |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [soakgiveup](../../openspec/changes/soakgiveup/) | in-progress | soakgiveup | `openspec/changes/soakgiveup/**` | - |
 | [soakstall](../../openspec/changes/soakstall/) | in-progress | soakstall | `docs/soakstall.md`<br>`internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/emptyarea_test.go`<br>`openspec/changes/soakstall/**` | - |
@@ -129,7 +128,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
-- change snaplib: go test -p 1 ./internal/saves ./internal/cheat/... ./cmd/d2restore; gofmt -l empty; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change soakgiveup: go test -p 1 ./internal/bot passes, including the new clear-run case
@@ -137,6 +135,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- cf575ae 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
+- b1ea270 11-01 20:55 `merge origin/main into snaplib` (snaplib)
 - 18608e7 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
 - 39aaf7b 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
 - 8961692 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
@@ -145,6 +145,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d14b782 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
 - f50e477 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
 - 2713abf 11-01 20:35 `merge origin/main into charfactory` (charfactory)
-- c7a2f38 11-01 20:30 `Merge agent/missilediff: MISSILEDIFF: monster missile deviations D1 D2 D3 confirmed on the real d2d build (44,456 of 120,000 cases differ, 0 after the local fix)` (missilediff)
-- 17835b4 11-01 20:29 `merge origin/main into missilediff` (missilediff)
 <!-- statusgen:end -->
