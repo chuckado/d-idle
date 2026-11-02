@@ -289,6 +289,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SKGROUND M2: game.exe's blast searches the caster's room and its near list only (0 of 168 far pairs found, 34 within the 100-subtile cap); d2d scans every monster (docs/research/skground-trace.md)
 - SKGROUND open: Hydra AI and HydraMissile, Frozen Orb and Thunder Storm native runs, skill-delay refusal, names of the unit flag bits 0x4 / 0x8 in FUN_0056b3e0
 - VERIFY-TELEPORT-ROOM (docs/research/verifyteleroom-trace.md): room rule HOLDS (150,225 emulator cases, 0 violations); landing may leave the caster's near zone, a map-edge target lands one cell inward (candidate extra deviation, needs d2d side); real near lists of real levels still unverified.
+- #8 VERIFY-WAYPOINT (second pass) done: claim holds (writer FUN_0055b720 only; refusal = field + 10000 > tick, unsigned); 59,309 of 132,964 reproduced with game.exe code vs d2d's own pre-fix binary; new: tick-wrap quirk, hostile reachable by C->S 0x5d (I); no PR candidate, no ledger row; docs/research/verifywaypoint2-trace.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
