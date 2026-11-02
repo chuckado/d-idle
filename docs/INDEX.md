@@ -277,3 +277,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/townshop.md - Gate 2 town resupply analysis and fix
 - docs/tomestat.md: why the field read lost the Tome of Town Portal's stat 70 (ground/carried id collision) and the fix
 - docs/research/covmissiles-trace.md - missiles coverage first pass: table values, flight formulas and hit roll of the Sorceress and Paladin rows (covmissiles)
+- docs/research/verifyskamazon-trace.md: independent verification of the Amazon first pass: calc cells 0 of 52,300 differ (own harness), element roll top-exclusive rule 20,000 cases, Pierce function 99,092 cases vs own model, shooter stat 0x148 is a per-shot counter (V read), one wrong cell (card verifyskamazon)
