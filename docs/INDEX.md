@@ -169,3 +169,10 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/soaks/gate1r2-20261101.md: Gate 1 rerun 2 (run gate1-20261101-1949) record and Review 2: bands, stall windows, guard firings, HasTP root cause, verdict per criterion, rerun recipe
 - docs/research/lockstep-licences.md: licences and Blizzard terms for a releasable 1.14d time/lockstep hook; clean-room and PROVENANCE proposal, offline notice (card licensecheck)
 - tools/contrib/claim.py: maintainer claim, done and watch commands for work-item issues (dry run default, docs/process/chunker.md)
+- docs/api-agent-cookbook.md - command forms that work for API-credit runner jobs (emulator wrapper, data paths, forbidden list)
+- docs/research/pr-missilerecord-reverify.md: independent Opus re-verification of the fixed monster missile record candidate and the Andariel poison split (READY WITH CHANGES)
+- docs/research/pr-missilerecord-draft.md: PR draft for the monster missile launch record (brackets, HitShift, row element), fixed head, re-verification owed
+- Monster melee against the player, defender side: [research/monsterhit-trace.md](research/monsterhit-trace.md) (reduction, El side parts, block order; D1-D5, bot B1-B5; drill recipe; read-only pass).
+- Unique, champion and minion pick rules and superuniques: [research/uniqmods-trace.md](research/uniqmods-trace.md) (MonUMod weights per difficulty, pack sizes 2..4 and 3..6, Act 1 superunique records, multipliers by class; bot findings; drill recipe).
+- playerdef-trace.md: the player's derived defence stats (life, mana, regen, defence, block, resistances) in game.exe vs d2d vs the bot; D1..D8, B1..B4, recipes (docs/research/playerdef-trace.md)
+- docs/research/verify-waypoint.md - independent re-check of the waypoint refusal window (HOLDS / LIMITS)
