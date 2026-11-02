@@ -10,7 +10,7 @@ Tags: V run (a command ran, output read), V read (code or doc read), D (data tab
 |---|---|---|---|
 | `go build ./cmd/d2bot ./cmd/d2soak ./cmd/d2dsoak ./cmd/d2input ./cmd/d2cheat` | this checkout (worktree of current main) | exit 0, `gofmt -l internal cmd` empty | V run |
 | `go vet ./internal/mem ./internal/d2 ./internal/input ./internal/d2dsrc` and `go test -short -count=1 -p 1 ./internal/mem ./internal/d2 ./internal/input ./internal/d2dsrc ./internal/cheat` | this checkout | all `ok` | V run |
-| `labrun orion -- sh -c 'go vet ./... && go test -short -count=1 -p 4 ./...'` run from inside the worktree | the worker host | exit 0 after 120 s; 88 packages `ok`, 0 FAIL, the rest "no test files" | V run |
+| `labrun the worker host -- sh -c 'go vet ./... && go test -short -count=1 -p 4 ./...'` run from inside the worktree | the worker host | exit 0 after 120 s; 88 packages `ok`, 0 FAIL, the rest "no test files" | V run |
 | Per-package run with the memory-path set (`internal/mem d2 env input cheat nav town combat d2map d2dsrc d2dcombat d2dtown`, `cmd/d2bot d2soak d2input d2cheat d2dsoak`, `go vet` first) | the worker host | exit 0 after 19 s | V run |
 | `tools/soak/soak24_test.sh`, `failsafe_test.sh`, `fresh_test.sh`, `contsoak_test.sh` (offline shell tests of the Game.exe soak driver) | this checkout | all PASS / ok | V run |
 
@@ -98,7 +98,7 @@ Cost estimate (I, agent-hours of a Sonnet worker, offline work unless noted):
 
 Goal: prove, in 10 minutes of real time on one hidden instance, that the current main bot attaches to the original game, plays, saves and stops cleanly, and read the three unverified inputs (rows 10, 15, and the stat vector). It does NOT count as a gate, and no kill is injected.
 
-Preconditions (all must hold, else wait): the Gate 1 rerun on d2d has ended (state `done`, result file written); `labrun orion -- top -bn2 -d1` shows idle + nice at least 25 percent; no `/tmp/d2lod-live.notice` and no running Game.exe or d2bot of the chosen instance; instance lock free; `tools/capacity.sh --add 1` replaced by the labrun top check (capacity.sh hangs); the d2bot to ship is built from the current main tip (preflight checks the stamp).
+Preconditions (all must hold, else wait): the Gate 1 rerun on d2d has ended (state `done`, result file written); `labrun the worker host -- top -bn2 -d1` shows idle + nice at least 25 percent; no `/tmp/d2lod-live.notice` and no running Game.exe or d2bot of the chosen instance; instance lock free; `tools/capacity.sh --add 1` replaced by the labrun top check (capacity.sh hangs); the d2bot to ship is built from the current main tip (preflight checks the stamp).
 
 Instance and character: hidden instance i5 with Fresha (Sorceress, clvl 11 at the 2026-10-30 result, never cheated per g1-log; U that the save is unchanged), or i4 with Soaky (clvl 15) if i5's prefix is broken. First check, read-only: `d2savecheck` of the save (name, class, level, softcore, expansion) and the cheat ledger for that name.
 
