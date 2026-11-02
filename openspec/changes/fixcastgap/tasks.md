@@ -11,7 +11,6 @@ owns:
   - docs/fixcastgap.md
   - internal/combat/castgap.go
   - internal/combat/castgap_test.go
-  - docs/knobs.md
 exclusive: []
 gates:
   - "go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly"
