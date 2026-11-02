@@ -16,7 +16,7 @@ cat > "$T/agentrun" <<'S'
 echo "AGENTRUN $*" >> "$TESTLOG"; shift; [ "$1" = --ttl ] && shift 2; shift; exec "$@"
 S
 chmod +x "$T/labrun" "$T/agentrun"
-export TESTLOG=$T/log WRAP_LABRUN=$T/labrun WRAP_AGENTRUN=$T/agentrun D2D_AGENT=tj
+export TESTLOG=$T/log WRAP_LABRUN=$T/labrun WRAP_AGENTRUN=$T/agentrun D2D_JOB=tj
 echo 'echo hi' > "$T/wt/tools/emu/ok.sh"; echo 'print(1)' > "$T/wt/tools/emu/ok.py"
 echo 'sudo ls' > "$T/wt/tools/emu/bad.sh"; echo 'pkill x' > "$T/wt/tools/emu/bad2.sh"; echo 'wine game.exe' > "$T/wt/tools/emu/bad3.sh"
 ln -s ok.sh "$T/wt/tools/emu/link.sh"
@@ -51,6 +51,6 @@ refuses "abs path /etc" ok.sh /etc/passwd
 refuses "abs path of another agent scratch" ok.sh /tmp/d2agent-other/x
 refuses "abs path under home but not d2d-lab" ok.sh "$HOME/.ssh/id_rsa"
 accepts "d2d-lab path" ok.sh "$HOME/d2d-lab/src/tools/emu/x.py"
-D2D_AGENT='a b' refuses "bad agent name" ok.sh
+D2D_JOB='a b' refuses "bad agent name" ok.sh
 [ $fail = 0 ] && echo "PASS ($pass)" || echo "FAIL ($fail of $((pass + fail)))"
 [ $fail = 0 ]

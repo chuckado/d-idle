@@ -20,6 +20,7 @@ The runner runs `claude -p` in dontAsk mode: every Bash call is matched against 
 | `python3 - <<'EOF'` and `cat > f <<'EOF'` heredocs | denied | use the Write and Edit tools |
 | `chmod`, `rm file`, `sed -i`, `git checkout -- f`, `printf >> docs/OWNERS` | denied | use Edit, `git rm`, `git restore` |
 | `VAR=x tools/agentrun.sh ...` (env prefix) | denied | no env prefix; the wrapper sets the environment |
+| any `labrun` line containing the letters "kill", even in "skill" | denied (`labrun *kill*`) | write the pattern as `ski[l]l` |
 | `until ...; do sleep; done` | denied | use the wrapper's ttl instead |
 
 ## 1. Run an emulator script on the worker host: the wrapper
@@ -38,7 +39,7 @@ The runner runs `claude -p` in dontAsk mode: every Bash call is matched against 
 - Emulator MPQ dir: `/tmp/ug-emu` (d2data, d2exp, d2char, music and speech MPQs, `Patch_D2.mpq`, `bin/`). `/tmp` is volatile: if it is gone, say so, do not search for it.
 - Game data dir (never written): `~/d2d-lab/data`. The game binary the emulator loads: `/tmp/casttrace/game.exe`. Patch installer: `~/Downloads/LODPatch_114d.exe`.
 - A table in the PATCHED 1.14d stack (the trap is in docs/process/mpq-data-reading.md): `tools/emu/run-on-worker.sh mpq-table.sh monstats > /tmp/d2agent-NAME/monstats.txt` (optional second argument: first N lines). Check the first line: patched is `Id hcIdx ...`.
-- Upstream checkouts (read-only, absolute paths, `labrun orion -- grep|cat|head|tail|ls`): `~/d2d-lab/src` (main, with `tools/emu/*.py`, `components/rules/*.hpp`, `docs/research/re/*.md`), `~/d2d-lab/pr/<name>` read checkouts such as `skmana`, `gaps`, `walk2`, `sorcrest-d2d`. List them with `labrun orion -- ls /home/USER/d2d-lab/pr` (USER is the account named in your read-only dirs; `ls ~/d2d-lab/pr` through the mirror works too).
+- Upstream checkouts (read-only, absolute paths, `labrun orion -- grep|cat|head|tail|ls`): `~/d2d-lab/src` (main, with `tools/emu/*.py`, `components/rules/*.hpp`, `docs/research/re/*.md`), `~/d2d-lab/pr/<name>` read checkouts such as `skmana`, `gaps`, `walk2`, `sorcrest-d2d`. List them with `labrun orion -- ls` and the absolute path of `~/d2d-lab/pr` (the runner preamble spells it out).
 - Emulator venv: `~/d2d-lab/pr/walk2-venv/bin/python`; the wrapper's `.py` form uses it. Existing wrappers to copy from `tools/emu/`: `ms_run.sh` (stat rows), `tre_run.sh` (drops), `sk_*_run.sh`, `nec_run.sh`.
 
 ## 3. d2d probe builds

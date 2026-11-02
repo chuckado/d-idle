@@ -8,7 +8,7 @@
 # - ARGS may only use [A-Za-z0-9 _.,:=@%+/-]; no "..", and an absolute path must sit under /tmp/ug-emu, /tmp/casttrace, ~/d2d-lab or the
 #   agent's scratch /tmp/d2agent-AGENT (exported to the script as D2_SCRATCH, created first).
 # - Runs `timeout TTL` on the worker host and registers the local ssh under tools/agentrun.sh AGENT --ttl TTL+30 (reap: tools/agentreap.sh AGENT).
-# - AGENT = $D2D_AGENT, else the worktree directory name. Default ttl 900, max 3000. Exit code is the script's (124 = ttl).
+# - AGENT = $D2D_JOB (set by the API-credit runner to the job name), else the worktree directory name. Default ttl 900, max 3000. Exit code is the script's (124 = ttl).
 # Test hooks: WRAP_LABRUN, WRAP_AGENTRUN replace the two programs (tools/emu/run-on-worker-test.sh).
 set -u
 die() { echo "run-on-worker: $*" >&2; exit 2; }
@@ -28,7 +28,7 @@ case $script in *.sh|*.py) ;; *) die "SCRIPT must end in .sh or .py" ;; esac
 root=$(cd "$(dirname "$0")/../.." && pwd -P) || die "no repo root"
 f=$root/tools/emu/$script
 [ -f "$f" ] && [ ! -L "$f" ] || die "tools/emu/$script is not a regular file"
-agent=${D2D_AGENT:-$(basename "$root")}
+agent=${D2D_JOB:-$(basename "$root")}
 case $agent in ''|*[!A-Za-z0-9._-]*) die "bad agent name '$agent'" ;; esac
 scratch=/tmp/d2agent-$agent
 
