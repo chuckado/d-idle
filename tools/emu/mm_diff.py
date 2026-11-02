@@ -171,6 +171,7 @@ def cmp(outdir, d2d_out):
     by_row, by_cause = {}, {}
     ex = []
     missing = 0
+    real = [0, 0]                                  # cases at the level the game really uses (1 / 4 / 8 by difficulty): total, differ
     for g in gl:
         cid = int(g[0]); diff, mid, mode, mn, lvl, omin, omax, ownel = int(g[1]), g[2], g[3], g[4], int(g[5]), int(g[6]), int(g[7]), int(g[8])
         pmin, pmax = int(g[9]), int(g[10])
@@ -198,6 +199,9 @@ def cmp(outdir, d2d_out):
             bad_el = gel != dd
             if bad_el: bad["elem"] += 1
         if bad_phys: bad["phys"] += 1
+        if lvl == (1, 4, 8)[diff]:
+            real[0] += 1
+            real[1] += bad_phys or bad_el
         if bad_phys or bad_el:
             bad["any"] += 1
             by_row[mn] = by_row.get(mn, 0) + 1
@@ -207,8 +211,15 @@ def cmp(outdir, d2d_out):
             by_cause["+".join(cause)] = by_cause.get("+".join(cause), 0) + 1
             if len(ex) < 12: ex.append(f"  case {cid} diff {diff} {mid} {mode} {mn} lvl {lvl} owner {omin}-{omax}: game phys {pmin}-{pmax} d2d {dphys[0]}-{dphys[1]}; game elems {gel if not ownel else 'skipped'} d2d {delems}")
     print(f"cases {tot}: d2d lines missing {missing}; physical differ {bad['phys']}; element compared {elem_cmp} differ {bad['elem']}; any differ {bad['any']} {by_cause}")
+    print(f"at the game's own missile level (1 / 4 / 8): {real[0]} cases, {real[1]} differ")
     print("rows with a difference: " + " ".join(f"{k}:{v}" for k, v in sorted(by_row.items())))
     print("\n".join(ex))
+    tab = os.environ.get("MMTAB", os.path.expanduser("~/mmtab"))
+    mis = {m["Missile"]: m for m in rows(tab, "missiles.txt")}
+    print("row data of the rows with a difference (D1 = MinLevDam / MaxLevDam, D2 = HitShift, D3 = EType): row | MinDamage MaxDamage | MinLevDam1 MaxLevDam1 | HitShift | SrcDamage | EType EMin Emax ELen")
+    for k in sorted(by_row):
+        r = mis[k]
+        print(f"  {k} | {r['MinDamage']} {r['MaxDamage']} | {r['MinLevDam1']} {r['MaxLevDam1']} | {r['HitShift']} | {r['SrcDamage']} | {r['EType']} {r['EMin']} {r['Emax']} {r['ELen']}")
     return bad["any"]
 
 
