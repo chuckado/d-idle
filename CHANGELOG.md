@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: monster-missile PR drafts updated after the re-verifier (owner poison rule, trap sibling, merge order), poison-units PR draft added
+- verifywaypoint: independent verification of the waypoint refusal claim (docs and tools/emu/wpv_* only)
+- playerdef: docs/research/playerdef-trace.md, trace of the player's life, mana, regen, defence, block and resistance rules with 8 d2d deviations and 4 bot findings (docs only, nothing run)
 - uniqmods (research): game.exe pick rules for champion / unique / minion mods, pack and minion counts and Act 1 superunique records traced against d2d and the bot (docs/research/uniqmods-trace.md); no code change.
 - monsterhit (docs only): docs/research/monsterhit-trace.md and tools/emu/mh_rows.py (table helper); read-only decomposition of the monster swing on the player, no oracle run, no ledger row.
 - docs: monster-missile record PR candidate fixed after the independent verifier (poison units), rebased candidate and Andariel sibling named, PR draft added
