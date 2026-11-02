@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- tools: d2restore snapshot library (snapshot, verify, list, place) and a prefix-keyed cheat ledger (docs/snaplib.md).
 - Research: lockstep probe P0 (no game) shows an import-table time hook scales a 25 fps frame gate under Wine; probes in tools/lockstep/
 - docs: research on lockstep / speed-up for the original Game.exe 1.14d (no prior art found; proxy-DLL clock hook plan, probes, policy); nothing run
 - docs: runbook for the extra original-game baseline runs (docs/process/baseline-runs.md).

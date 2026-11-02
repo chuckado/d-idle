@@ -161,3 +161,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/process/baseline-runs.md: recipe, kit restore, schedule, flags and prerequisites for the extra original-game baseline runs
 - docs/research/original-game-lockstep.md: lockstep or speed-up for the original Game.exe 1.14d: prior art (libTAS, faketime, speed hackers, whisper, D2MOO), frame scheduler, tiers, probe runbook, instrumentation policy (card lockstepresearch)
 - docs/research/lockstep-p0.md - lockstep probe P0 results: IAT time hook under Wine, k = 1/2/4 frame gate, verdict PASS
+- docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist
