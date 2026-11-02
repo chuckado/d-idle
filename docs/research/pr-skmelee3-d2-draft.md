@@ -42,7 +42,7 @@ Determinism scenarios: not run (U). Expected: only scenarios with a hit on an un
 
 ## Evidence (worker host, V unless said)
 
-- Branch `local/skmelee3-d2-final`, base cb716f10 (fetched 2026-11-02), noreply identity for author and committer, trailer `Agent: Claude Code` only.
+- Branch `local/skmelee3-d2-r174` 10e16ad5, base 48908176 (the merge of #174; earlier `local/skmelee3-d2-final` 283c7bce on cb716f10; the #174 conflict in ai.hpp and combat.hpp is resolved in this branch; counts re-run: rebase174-20261102.md), noreply identity for author and committer, trailer `Agent: Claude Code` only.
 - Generator A: `sk_melee2.py` (U cases: undead 0 / 1, Blunt, stat 122 -60..50) with the build's `test_melee`, d2d md5 head 29d551c4 (seed 7), 2db2590a (seed 1). Generator B: the independent verifier's harness, header compiled in place.
 - Disassembly read: `0057b805..0057b828`, `006259b0..006259ee`, `0057b660` (called at `0057b874`, before `FUN_0057b420` at `0057b8a4`).
 
