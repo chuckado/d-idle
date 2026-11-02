@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
-- 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
-- 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
-- 5483ee50 11-02 13:58 `merge origin/main into lockstepbase` (lockstepbase)
-- 436019b3 11-02 13:47 `Merge agent/rebase174: REBASE174: all candidates rebased onto the #174 merge and assembled into bundle-1 (docs: table and combined PR body draft; nothing upstream)` (rebase174)
-- 927a3177 11-02 13:46 `merge origin/main into rebase174` (rebase174)
-- 6af67a2d 11-02 13:43 `Merge agent/lockstepp4: LOCKSTEP P4: scaled bot clock removes the chore failures at k=2 and k=4; usable for mechanics tests, not yet cleared for measured baselines (docs only)` (lockstepp4)
-- e3063c08 11-02 13:42 `merge origin/main into lockstepp4` (lockstepp4)
-- 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
-- 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
+- d2027358 11-02 15:08 `Merge agent/stateevrun: stateevrun: result (docs and emulator tools only)` (stateevrun)
+- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
+- b4ee3d23 11-02 15:01 `merge origin/main into stateevrun` (stateevrun)
+- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
+- 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
+- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
+- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
+- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
+- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
+- 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
 <!-- statusgen:end -->

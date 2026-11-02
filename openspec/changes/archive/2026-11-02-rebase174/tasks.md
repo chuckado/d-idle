@@ -24,6 +24,12 @@ gates:
 result: "docs only"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
 merge: 436019b
+credit:
+  component: Bundle 1 rebase onto upstream main
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifybundle, independent run)"]
+  consent: none
 ```
 
 - [x] 1 Rebase the four candidates onto the new upstream main (D2 conflict resolved)

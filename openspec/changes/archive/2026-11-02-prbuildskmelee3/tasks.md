@@ -22,6 +22,12 @@ gates:
 result: "docs only; PR hold in force"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
 merge: 7620862
+credit:
+  component: Melee fine physical (D1) and undead / Blunt bonus (D2), first build
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifyskmelee3, independent run)"]
+  consent: none
 ```
 
 - [x] 1 Fork branch local/skmelee3-v1 from upstream main: D1 and D2 commits with tests
