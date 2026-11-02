@@ -11,7 +11,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.nec (Necromancer skills) | 30 | 27 | 3 | 0 | 0 | 0 | 100% | 100% | 64,400 |
 | skills.pal (Paladin skills) | 30 | 10 | 3 | 2 | 0 | 15 | 43% | 50% | 42,260 |
 | skills.bar (Barbarian skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
-| skills.dru (Druid skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
+| skills.dru (Druid skills) | 30 | 30 | 0 | 0 | 0 | 0 | 100% | 100% | 27,800 |
 | skills.ass (Assassin skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 2 | 1 | 0 | 0 | 144 | 2% | 2% | 104,752 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2145** | **920** | **53** | **0** | **1792** | **62%** | **64%** | **5,398,111** |
+| **total** | **4910** | **2175** | **920** | **53** | **0** | **1762** | **63%** | **64%** | **5,425,911** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1874 (50%), compared 1927 (52%), read-only 53, untested 1792.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1904 (51%), compared 1957 (53%), read-only 53, untested 1762.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -53,6 +53,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |
 | skills.pal | 101,112 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential |
 | skills.pal | 96,97,106 | TESTED-DEVIATION | `docs/research/palskill-trace.md` | 20,500 | 2026-11-02 | Smite damage 20,500 cases per seed (seeds 7, 1): stat 111 omitted D1, min = max D2; calc slots and to-hit of 96, 97, 106 equal d2d in 20,360 cases per seed; Sacrifice price and Zeal reach U; PALSKILL; Smite vs block: game.exe lands every blow, d2d lets a block stop it (docs/research/smiteblock-trace.md, 96,000 game cases and 80,000 d2d blow pairs, V run) |
+| skills.dru | 221-250 | TESTED-0-DIFF | `docs/research/skdruid-trace.md` | 27,800 | 2026-11-02 | calc cells only (calc1..4, petmax, sumskill, aura, passive) game.exe FUN_00646ca0 vs d2d eval_calc, seeds 1 and 7; effects not compared; SKDRUID |
 | skills.monster | 0 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4 |
 | skills.monster | 309,310 | TESTED-0-DIFF | `docs/research/skcurseval-trace.md` | 4,752 | 2026-11-02 | Defense Curse and Blood Mana calc cells at levels 1..99 equal d2d eval_calc (calc aspect only; effects not compared); SKCURSEVAL |
 | skillfx.mana | 22,28,54,88,89,98 | TESTED-DEVIATION | `docs/research/sk-mana-trace.md` | 130,840 | 2026-11-01 | minmana floor D2 (Guided Arrow, Dopplezon, Teleport, Bone Prison, Summon Resist, Might) |
