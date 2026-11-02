@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepp3
-status: in-progress
+status: archived
 agent: lockstepp3
 branch: agent/lockstepp3
 worktree: d2lod-wt/lockstepp3
@@ -14,8 +14,9 @@ exclusive:
   - instance:i4
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "verified live on i4 (Booti): unhooked, k=1, k=2, k=4 runs; docs only; scaled bot clock needed before k>1 measured runs"
+result: "docs only; single runs, no noise band"
 live: "i4 Booti"
+merge: e5d5a4e
 ```
 
 - [x] hook periodic STAT line (private repo, local commit)
