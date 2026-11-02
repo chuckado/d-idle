@@ -19,7 +19,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | missiles (missile flight, range, hit roll) | 684 | 21 | 30 | 26 | 0 | 607 | 7% | 11% | 322,421 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 734 | 0 | 0 | 0 | 100% | 100% | 242,220 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
-| monster.ai (monster AI types) | 146 | 6 | 5 | 0 | 0 | 135 | 8% | 8% | 7,500 |
+| monster.ai (monster AI types) | 146 | 9 | 9 | 5 | 0 | 123 | 12% | 16% | 36,830 |
 | states (states and auras) | 185 | 0 | 6 | 4 | 0 | 175 | 3% | 5% | 558,147 |
 | itemtypes (item types) | 98 | 0 | 0 | 0 | 0 | 98 | 0% | 0% | 0 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 11 | 3 | 0 | 1 | 78% | 94% | 2,211,956 |
-| **total** | **4910** | **2002** | **910** | **51** | **0** | **1947** | **59%** | **60%** | **4,800,453** |
+| **total** | **4910** | **2005** | **914** | **56** | **0** | **1935** | **59%** | **61%** | **4,829,783** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1721 (46%), compared 1772 (48%), read-only 51, untested 1947.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1728 (46%), compared 1784 (48%), read-only 56, untested 1935.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -66,7 +66,14 @@ Case counts add the cases of every ledger line; one differential that covers man
 | monster.stats | all | TESTED-DEVIATION | `docs/research/monster-stats-trace.md` | 242,220 | 2026-11-01 | stat rows (life, defence, to-hit, damage, exp) 0 differ in 242,220 cases and 85,213 real Normal units; NM / Hell level D1; monster regeneration D2; resists compared on the 123 rows the populations hold |
 | monster.flags | all | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 734 | 2026-11-01 | undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared |
 | monster.ai | Skeleton,Goatman,QuillRat,Griswold,Smith | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | think act, pace, effects, seed vs rules::mon_think; 3000 cases each (seeds 20261101, 7); QuillRat scene without leader commands; second target as primary |
-| monster.ai | Fallen | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 1,500 | 2026-11-01 | no leader command word, dying false (seed 7); command word 2 differs (D8, unreachable); flee pace 50 not run (D11) |
+| monster.ai | Fallen | TESTED-DEVIATION | `docs/research/monsterai2-trace.md` | 3,000 | 2026-11-02 | flee pace 50 omitted (D1: 416 of 416 dying cases differ in pace only, 0 of 1,084 others); command word 2 differs (D2, 1,500 of 1,500, unreachable); seeds 20261102 and 7 |
+| monster.ai | FallenShaman | TESTED-DEVIATION | `docs/research/monsterai2-trace.md` | 13,500 | 2026-11-02 | think 0 of 1,500 differ after labels (Q7); corpse reach D3: callback run on 12,000 candidates, 1,365 disagree with the unique-shaman rule (d2d side by reading) |
+| monster.ai | Wraith,SkeletonBow | TESTED-0-DIFF | `docs/research/monsterai2-trace.md` | 3,000 | 2026-11-02 | 1,500 each (seed 20261102); keep y is the move mode (label, Q5); second target as primary |
+| monster.ai | GargoyleTrap | TESTED-0-DIFF | `docs/research/monsterai2-trace.md` | 1,500 | 2026-11-02 | seed 20261102; the replay feeds the target offset (Q7) |
+| monster.ai | FoulCrowNest | TESTED-DEVIATION | `docs/research/monsterai2-trace.md` | 1,500 | 2026-11-02 | 521 of 1,500 act label gone vs die (D9); effect I |
+| monster.ai | BloodRaven | TESTED-DEVIATION | `docs/research/monsterai2-trace.md` | 4,500 | 2026-11-02 | pace D4 (820 of 1,500), target home D5 (162), boundary D6 (3); 3,000 more cases seed 20261102 |
+| monster.ai | Andariel | TESTED-0-DIFF | `docs/research/monsterai2-trace.md` | 3,830 | 2026-11-02 | d2d andariel_think compiled and replayed on game.exe cases with both skills set; the port also equals game.exe on 6,000 cases |
+| monster.ai | DarkWanderer,TownRogue,ElementalBeast,FlyingScimitar,QuillMother | READ-ONLY | `docs/research/monsterai2-trace.md` | - | 2026-11-02 | game.exe run against a Python port, 6,000 cases each 0 differ (Q1); d2d has no think for four, ai.cpp code for the Dark Wanderer: not run |
 | monster.ai | Zombie,Brute,BloodHawk,CorruptRogue,CorruptLancer | TESTED-DEVIATION | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | pace and run act omitted by the port: D1 D2 D3 D4 (649, 1820, 1686, 917, 1656 differ of 3000 each) |
 | states | 1,11,118 | TESTED-DEVIATION | `docs/research/pr-freeze-proof.md` | 225,748 | 2026-11-01 | freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess) |
 | states | 10 | TESTED-DEVIATION | `docs/research/sk-armor-trace.md` | 184,771 | 2026-11-01 | frozenarmor state and its striker effect D1 |
@@ -99,7 +106,7 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | rank | subsystem | rows | why it matters | source |
 |---:|---|---|---|---|
 | 1 | missiles | untested (607 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
-| 2 | monster.ai | untested (135 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
+| 2 | monster.ai | untested (123 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (137 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 6 | skills.pal | untested (18 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
