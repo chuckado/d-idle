@@ -143,3 +143,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/playerdef-trace.md  playerdef  playerdef
+tools/emu/pd_dis.sh  playerdef  playerdef
+tools/emu/pd_calc.py  playerdef  playerdef
+openspec/changes/playerdef/**  playerdef  playerdef
