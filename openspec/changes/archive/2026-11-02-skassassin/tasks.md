@@ -2,7 +2,7 @@
 
 ```yaml
 change: skassassin
-status: in-progress
+status: archived
 agent: skassassin
 branch: agent/skassassin
 worktree: d2lod-wt/skassassin
@@ -12,11 +12,12 @@ owns:
   - openspec/changes/skassassin/**
 exclusive: []
 gates: leakcheck 0 hits, changecheck 0 warnings
-result: "first pass, table-derived only (D/I/U), no emulator differential, no ledger rows; not verified live"
+result: "docs only; see the doc for tags and limits"
 credit:
   component: SKASSASSIN
   author: owner
   agents: [Claude Code]
+merge: de908e2
 ```
 
 - [x] 1. Dump skills table, group ass rows
