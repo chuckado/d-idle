@@ -175,3 +175,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - Monster melee against the player, defender side: [research/monsterhit-trace.md](research/monsterhit-trace.md) (reduction, El side parts, block order; D1-D5, bot B1-B5; drill recipe; read-only pass).
 - Unique, champion and minion pick rules and superuniques: [research/uniqmods-trace.md](research/uniqmods-trace.md) (MonUMod weights per difficulty, pack sizes 2..4 and 3..6, Act 1 superunique records, multipliers by class; bot findings; drill recipe).
 - playerdef-trace.md: the player's derived defence stats (life, mana, regen, defence, block, resistances) in game.exe vs d2d vs the bot; D1..D8, B1..B4, recipes (docs/research/playerdef-trace.md)
+- docs/research/verify-waypoint.md - independent re-check of the waypoint refusal window (HOLDS / LIMITS)
