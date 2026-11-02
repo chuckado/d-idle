@@ -146,9 +146,3 @@ docs/probes/soak-logs/gate1-20261101-*  gaterun  gate1run-20261101
 openspec/changes/gate1run-20261101/**  gaterun  gate1run-20261101
 openspec/changes/soakgiveup/**  soakgiveup  soakgiveup
 openspec/changes/povertyflip/**  povertyflip  povertyflip
-docs/research/missilediff.md  missilediff  missilediff
-tools/emu/mm_diff.py  missilediff  missilediff
-tools/emu/mm_diff_run.sh  missilediff  missilediff
-openspec/changes/missilediff/**  missilediff  missilediff
-docs/coverage/ledger.tsv  missilediff  missilediff
-docs/coverage/rule-coverage.md  missilediff  missilediff

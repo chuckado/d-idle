@@ -2,7 +2,7 @@
 
 ```yaml
 change: missilediff
-status: in-progress
+status: archived
 agent: missilediff
 branch: agent/missilediff
 worktree: ~/code/d2lod-wt/missilediff
@@ -17,8 +17,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict; coverage.py --check"
-result: "real-build differential: 120,000 cases, 44,456 differ before, 0 after; D1-D3 CONFIRMED; local fork branch local/missilediff-record; offline, not verified live"
+result: "local PR candidate local/missilediff-record on the private fork only; independent Opus verifier owed; fork test suites and presubmit not run"
 live: "docs only, nothing run live"
+merge: c7a2f38
 ```
 
 - [x] d2d scratch build with the test mode (worker host, fork worktree)
