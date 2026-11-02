@@ -8,6 +8,18 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/verifypalskill2.md and tools/emu/vp2*: independent check of the Smite, Zeal and Sacrifice deviations.
+- Added docs/research/pr-skmelee3-verifier.md: independent check of the SKMELEE3 fork candidate (fine physical, undead/Blunt bonus).
+- verifyprices: independent Opus verification of the vendor prices follow-on (docs and tools/emu/vpr_* only)
+- docs: verifypaldur independent check of the durability-loss trace (docs/research/verifypaldur.md).
+- Added docs/research/sk-zero-hit-trace.md (SKZEROHIT: zero-damage hit effects in game.exe vs d2d, static)
+- verifypalaura: independent check of PALAURA (docs/research/verifypalaura.md, tools/emu/vp_check.py)
+- SKSTATEEV state-event decomposition: docs/research/sk-state-events-trace.md (static; nothing run)
+- verifywaypoint2: docs/research/verifywaypoint2-trace.md and tools/emu/vw2_*: waypoint refusal claim re-verified against d2d's own test binary (docs and emulator scripts only)
+- Teleport room rule re-checked independently (verifyteleroom): holds on 150,225 emulator cases; limits and extra findings in docs/research/verifyteleroom-trace.md.
+- Docs: upstream PR candidate inventory and ranking for the next five slots (docs/research/pr-candidates-20261102.md).
+- docs: verifier report for the curse-value, defender and shield first-pass traces (verify-cursedef.md)
+- Added docs/research/palskill-trace.md and tools/emu/pal2*: dispatch of Smite, Zeal and Sacrifice, calc and Smite damage differentials, deviations D1 to D9, bot findings B1 to B5.
 - ci: fix board archive research paths and chunker groom privacy-scan false positive (Scripts job).
 - docs: palaura-trace, the Paladin aura apply decomposed (area search disc, aurafilter bits, enemy roll and resist, Prayer mana and state 85) with game.exe run under the emulator (docs/research/palaura-trace.md).
 - VERIFYFREEZEEND2: docs/research/verifyfreezeend2-trace.md, own emulator harness tools/emu/vfe2_*; game.exe runs the AI think during a get-hit, d2d holds it (D1)
