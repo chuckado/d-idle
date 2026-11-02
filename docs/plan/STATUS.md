@@ -127,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
 - 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
 - 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
 - af24e7ce 11-02 14:38 `Merge agent/nmlevel: nmlevel: finished docs and tools work that was never merged (branch triage 2026-11-02)` (nmlevel)
@@ -136,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5b07021a 11-02 14:25 `Merge agent/bundlefinal: BUNDLEFINAL: bundle-2 prepared (commit messages, credit blocks on cards, final PR body); staged on the fork for the CodeRabbit pre-scan` (bundlefinal)
 - b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
 - 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
-- 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
 <!-- statusgen:end -->
