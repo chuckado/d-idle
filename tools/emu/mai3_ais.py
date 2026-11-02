@@ -1,0 +1,67 @@
+"""covmonai2: third pass of the monster think differential (docs/research/covmonai2-trace.md). Imports mai2_ais.py (second pass), mai_ais.py
+(first pass) and upstream's mon_ais.py; edits none. What changes against mai2_ais.check, and why:
+
+  * `keep`'s y (the move mode, always 2 for FUN_005de6d0) is normalised to 0 only for the AIs whose d2d port has no such field (Wraith,
+    SkeletonBow, as the second pass found). The Vulture's d2d port does carry a mode in y (2, 9, 8); zeroing it was a harness artifact
+    (719 of 1,500 Vulture cases and 15 Izual cases in the first run of this card).
+  * no Fallen / Blood Raven special cases (those AIs are not run here).
+
+    PYTHONPATH=<upstream tools/emu>:tools/emu D2_MPQ_DIR=<dir> python mai3_ais.py <ai,ai> <cases> <seed> --dump <dir>
+Writes <dir>/mai2_cases.inc and mai2_names.inc (the names mai2_patch.py's replay program reads). Never runs a game."""
+import os
+import random
+import sys
+
+import mai2_ais as B
+import mai_ais as A
+import mon_ais as M
+
+KEEP_Y_ZERO = ("Wraith", "SkeletonBow")
+
+
+def check(e, ai, cases, rng, lines, tally):
+    mark = e.brk
+    for _ in range(cases):
+        e.brk = mark
+        s = M.setup(rng, ai)
+        command = s["command"]
+        out, ctrl, seed = M.run_game(e, s, M.AIS[ai], random.Random(rng.getrandbits(32)))
+        s["command"] = command
+        out = [x for x in out if x[0] not in ("scream", "home")]
+        s["dying"] = False
+        act, pace, effects, asks = M.outcome(s, out)
+        if act[0] == "keep" and ai in KEEP_Y_ZERO: act[3] = 0
+        s["stat"][("mon", 0x2b)] = 0
+        lines.append(M.dump_case(s, act, pace, effects, asks, ctrl, seed))
+        key = (ai, act[0])
+        tally[key] = tally.get(key, 0) + 1
+
+
+def main():
+    args = [a for a in sys.argv[1:] if not a.startswith("--") and not os.path.isdir(a)]
+    which = args[0]
+    cases = int(args[1]) if len(args) > 1 else 1500
+    rng = random.Random(int(args[2]) if len(args) > 2 else 1)
+    out_dir = sys.argv[sys.argv.index("--dump") + 1]
+    for name, addr in A.NEW.items(): M.AIS.setdefault(name, addr)
+    M.ORDER[:] = list(M.AIS)
+    M._setup = M.setup
+    M.setup = B.setup
+    e = M.emu.Emu()
+    A.patch(e)
+    B.patch2(e)
+    M.install(e)
+    B.extra_hooks(e)
+    lines, tally = [], {}
+    for ai in which.split(","):
+        check(e, ai, cases, rng, lines, tally)
+    with open(os.path.join(out_dir, "mai2_cases.inc"), "w") as f:
+        f.write("// tools/emu/mai3_ais.py --dump\n" + "".join(f'"{line}",\n' for line in lines))
+    M.write_names(os.path.join(out_dir, "mai2_names.inc"))
+    for key, n in sorted(tally.items()): print("acts", *key, n)
+    print("cases", len(lines))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
