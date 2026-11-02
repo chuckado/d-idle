@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/rebase174-20261102.md and pr-bundle-1-draft.md: the four PR candidates rebased onto upstream main after PR 174 and assembled into one bundle branch with counted differentials.
+- Lockstep P4 live measurement: with the bot clock scaled the time hook at k=2 and k=4 no longer breaks shop chores or kill rate (docs only)
+- crsetup: .coderabbit.yaml revised and schema-validated; CodeRabbit pre-scan runbook (docs and config only)
 - docs: credit kit for upstream PRs (credit: card block, tools/credit/credit.py, credits ledger, GPL carry-over sentence in the contributor docs).
 - docs/research/coderabbit-limits-20261102.md added (CodeRabbit review limits, upstream batch sizes, bundle budget)
 - Research: alignment2-trace.md, game.exe gives alignment 2 to mercs, Shadows and all player-side units, so the undead / Blunt blow bonus gate (player or alignment 2) covers them; tools/emu/al2_run.py native runs.

@@ -241,3 +241,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/alignment2-trace.md - alignment (stat 0xac) per unit kind and the undead-blow gate of FUN_0057b7d0, game.exe 1.14d (card alignment2)
 - CodeRabbit limits and bundle budget: [research/coderabbit-limits-20261102.md](research/coderabbit-limits-20261102.md)
 - docs/process/credit.md: how credit is written for upstream PRs (author, Traced-by, Reported-by, Agent), tools/credit usage; docs/community/credits-ledger.md: contributor names and consent
+- docs/process/coderabbit-prescan.md - CodeRabbit pre-scan runbook: install, fork config, quota test, bundle workflow, CLI
+- docs/research/lockstep-p4.md: lockstep hook re-measured at k=2 and k=4 with the scaled bot clock
+- docs/research/rebase174-20261102.md - re-rebase of the PR candidates onto upstream main after PR 174: old and new heads, conflicts, counts, parity
+- docs/research/pr-bundle-1-draft.md - draft body of the combined PR (bundle 1), size and checks
