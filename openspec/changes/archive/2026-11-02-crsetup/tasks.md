@@ -2,7 +2,7 @@
 
 ```yaml
 change: crsetup
-status: in-progress
+status: archived
 agent: crsetup
 branch: agent/crsetup
 worktree: d2lod-wt/crsetup
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "Docs and config only. Both YAML files validate against the published schema (jsonschema, 0 errors). Nothing run against GitHub or CodeRabbit; quota test and CLI sign-in unrun."
+result: "docs and config; quota test in progress"
 live: "docs only, nothing run live"
+merge: 1063082
 ```
 
 - [x] .coderabbit.yaml for d-idle, schema-validated
