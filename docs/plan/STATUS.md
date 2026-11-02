@@ -131,14 +131,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 08590a5d 11-02 15:42 `Merge agent/skdruid: skdruid: coverage-gap or verification result (docs and emulator tools only)` (skdruid)
-- bab1c358 11-02 15:39 `Merge agent/branchtriage: branchtriage: finished docs and tools work that was never merged (branch triage 2026-11-02)` (branchtriage)
-- 0c6becab 11-02 15:38 `merge origin/main into skdruid` (skdruid)
-- 9b0a9c1b 11-02 15:35 `Merge agent/crfixbundle: CRFIXBUNDLE: CodeRabbit's six staging comments judged and fixed in bundle-3; throwaway merge with batch 9 (docs, harness, card)` (crfixbundle)
-- 4d7c1618 11-02 15:35 `merge origin/main into branchtriage` (branchtriage)
-- 52670323 11-02 15:35 `merge origin/main into crfixbundle` (crfixbundle)
-- d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
-- 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
-- 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
-- ab07b57f 11-02 15:22 `merge origin/main into verifytele` (verifytele)
+- 873fd1a6 11-02 16:21 `Merge agent/verifyzerohit: verifyzerohit: coverage-gap or verification result (docs and emulator tools only)` (verifyzerohit)
+- 3f184c0d 11-02 16:21 `merge origin/main into verifyzerohit` (verifyzerohit)
+- 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
+- 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
+- 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
+- e81ab739 11-02 16:05 `merge origin/main into skamazon` (skamazon)
+- 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
+- f75f9c72 11-02 15:58 `merge origin/main into levelsareas` (levelsareas)
+- 5c44a788 11-02 15:55 `Merge agent/itemweapons: itemweapons: coverage-gap or verification result (docs and emulator tools only)` (itemweapons)
+- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
 <!-- statusgen:end -->
