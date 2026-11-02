@@ -145,3 +145,5 @@ docs/knobs.md  mercpolicy  mercpolicy
 docs/botlogs.md  mercpolicy  mercpolicy
 internal/merc/**  mercpolicy  mercpolicy
 openspec/changes/mercpolicy/**  mercpolicy  mercpolicy
+internal/bot/routeguard_test.go  mercpolicy  mercpolicy
+cmd/d2bot/d2dbackend_test.go  mercpolicy  mercpolicy

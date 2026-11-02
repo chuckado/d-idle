@@ -4,7 +4,7 @@ User decision 2026-11-02 ("go with the SME suggestions and what you see as the b
 
 ## What Changes
 
-- `merc.enabled` default 1 (was 0). New knobs `merc.kitReservePct` 150 and `merc.goldFarmMaxLevel` 16; `merc.reviveGoldMult` 2 to 1, `merc.hireGoldMult` 3 to 1, `merc.potionLifePct` 40 to 50, `route.monasteryMinLevel` 16 to 14 (the full kit stays required on every guard; Andariel stays 17 and 15, tower stays 16 and 14).
+- `merc.enabled` default 1 (was 0). New knobs `merc.kitReservePct` 150 and `merc.goldFarmMaxLevel` 16; `merc.reviveGoldMult` 2 to 1, `merc.hireGoldMult` 3 to 1, `merc.potionLifePct` 40 to 50, `route.monasteryMinLevel` 16 to 14 (the full kit stays required on every guard; Andariel stays 17 and 15, the Forgotten Tower stays 16 and 14).
 - Spending order, potions first: a revive or hire needs gold >= price x mult + 150 percent of the full kit refill (portal + `resource.kitMinHP` healing + `resource.kitMinMP` mana). Max 2 revives an hour (`merc.reviveMaxPerHour`, verified to bind by test).
 - The revive price is never taken from the formula for the payment: the NPC takes what it takes; `merc: revived price=<paid> level=<n> estimate=<formula>` logs both. The formula is the pre-check estimate only (S, unconfirmed on 1.14d).
 - Act 2: `mercWire.HireStep` (Hirer interface) swaps the Rogue for the Desert Mercenary with the best class aura (Defiance for the Sorceress), strips her gear first, only when affordable under the reserve; one-shot `merc: hire window` line per row (name, level, aura, price) for the live read. The d2d side of the window (open, read, click) does not exist: production wiring leaves the Hirer nil, so the step is unit-tested only.

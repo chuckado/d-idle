@@ -12,9 +12,11 @@ owns:
   - internal/env/tuning_merc.go
   - internal/env/tuning_route.go
   - internal/bot/routeguard.go
+  - internal/bot/routeguard_test.go
   - internal/task/floors_test.go
   - cmd/d2bot/mercwire.go
   - cmd/d2bot/mercwire_test.go
+  - cmd/d2bot/d2dbackend_test.go
   - docs/merc-wire.md
   - docs/knobs.md
   - docs/botlogs.md
