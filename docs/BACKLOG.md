@@ -332,6 +332,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SKASSASSIN first pass done (docs/research/skassassin-trace.md); next: feed ids 251-280 to the mana and calc harnesses
 - ITEMWEAPONS: first-pass weapons.txt table trace, no run yet (docs/research/itemweapons-trace.md)
 - levelsareas D3: density / umin / umax / spawn-count differential of d2d vs game.exe (ms_spawn.py plus a d2d probe), see docs/research/levelsareas-trace.md
+- skamazon follow-ups (docs/research/skamazon-trace.md): (1) D2 Pierce: settle whether a player's stat 328 ever changes (16 setter sites listed in the trace) then build a Fight harness with a line of monsters and compare units struck per arrow against FUN_0059f940 + collision 0x5ada60; (2) D3 Strafe timing through FUN_005dba40 with fake units; (3) Poison / Plague Javelin and Charged / Lightning Strike hit rolls (the d2d test element switch covers fire, lightning, cold only); (4) Magic Arrow conversion (missile DmgCalc1 dl12) under the calc oracle; (5) bot: internal/combat/rules.go:238 gives the Paladin Charged Strike (Amazon skill) and :244 omits Lightning Bolt, arrows and Jab (B1, B2).
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

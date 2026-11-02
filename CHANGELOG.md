@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Amazon skill trace (docs/research/skamazon-trace.md) and emulator tools tools/emu/ama_*; coverage skills.ama 0 of 30 to 30 of 30 (calc aspect, 8 rows with the roll deviation), missiles 12, 28, 40, 41, 85, 87, 205, 206.
 - levelsareas: area-level rows of Levels.txt compared with game.exe (1,088 cases, 0 differences); trace docs/research/levelsareas-trace.md
 - docs: itemweapons first-pass trace (docs/research/itemweapons-trace.md).
 - Assassin skills first-pass trace (table-derived, no ledger rows)
