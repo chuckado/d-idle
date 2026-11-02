@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [boardclaim](../../openspec/changes/boardclaim/) | in-progress | boardclaim | `tools/contrib/claim.py`<br>`tools/contrib/tests/test_claim.py`<br>`tools/contrib/chunker.py`<br>`docs/community/**`<br>`docs/process/chunker.md`<br>`docs/contributing/agent-work.md`<br>`openspec/changes/boardclaim/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -87,7 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change boardclaim: contrib tests; board.py --check; changecheck -cli 0 warnings; leakcheck 0; tools/ci/check.sh
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -131,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- d33de75d 11-01 22:50 `Merge agent/boardclaim: BOARDCLAIM: board audit: 1 item closed (VERIFY-FREEZE-KINDS), 5 narrowed, 1 claimed by the maintainers; claim.py with claim, done and watch; claim-before-launch and comment-watching rules` (boardclaim)
+- ffe6a9e8 11-01 22:49 `merge origin/main into boardclaim` (boardclaim)
 - 611bcc63 11-01 22:46 `Merge agent/palauranarrow: PALAURANARROW: PALAURA work item narrowed to the open parts (target filter and area search, enemy-hit damage, Prayer per-pulse mana and state 85); prior trace linked` (palauranarrow)
 - 91e287bc 11-01 22:38 `Merge agent/archive5: ARCHIVE5: archive pingpongrate card (code merged in soakfixes2)` (archive5)
 - 6ae81240 11-01 22:26 `Merge agent/soakfixes2: SOAKFIXES2: tome-read debounce in hasPortalSource for the kit gate and poverty check, ping-pong guard by XP rate` (tpglitch)
@@ -139,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 39cbc04c 11-01 22:16 `merge origin/main into soakstall,hastpdump,soakgiveup,povertyflip,tpglitch,pingpongrate` (soakstall)
 - 1ca519ac 11-01 22:11 `Merge agent/licensecheck: LICENSECHECK: licences read for the lockstep hook sources; MIT workable for our own code only; clean-room procedure and provenance format; Blizzard terms ban modification` (licensecheck)
 - b02d6cb7 11-01 22:10 `merge origin/main into licensecheck` (licensecheck)
-- 3c0673d2 11-01 22:07 `Merge agent/gate1review2: GATE1REVIEW2: Gate 1 rerun 2 FAIL analysis: stall minutes 337 to 52, XP/h 7937 vs 9172, guards fired correctly, false empty-tome reads drove the kit gate; three cards` (gate1review2)
-- 6fda8125 11-01 22:07 `merge origin/main into gate1review2` (gate1review2)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: boardclaim
-status: in-progress
+status: archived
 agent: boardclaim
 branch: agent/boardclaim
 worktree: ~/code/d2lod-wt/boardclaim
@@ -18,8 +18,9 @@ owns:
 exclusive: []
 gates:
   - "contrib tests; board.py --check; changecheck -cli 0 warnings; leakcheck 0; tools/ci/check.sh"
-result: "Audit of the 16 open work-item issues done, comments posted and #9 closed on the project's own repo; claim.py and rules written; unit tests only. Not verified live beyond the real gh posts."
+result: "docs and tooling only; issue body sync applied separately after review; one posted comment is cut off mid-sentence and needs a fix"
 live: "no game"
+merge: d33de75
 ```
 
 - [x] audit and classify

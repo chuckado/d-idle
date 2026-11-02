@@ -143,10 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-tools/contrib/claim.py  boardclaim  boardclaim
-tools/contrib/tests/test_claim.py  boardclaim  boardclaim
-openspec/changes/boardclaim/**  boardclaim  boardclaim
-tools/contrib/chunker.py  boardclaim  boardclaim
-docs/community/**  boardclaim  boardclaim
-docs/process/chunker.md  boardclaim  boardclaim
-docs/contributing/agent-work.md  boardclaim  boardclaim
