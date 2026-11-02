@@ -309,6 +309,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - ALIGNMENT2 done (offline): FUN_006259b0 returns 2 for the player's side (merc, Shadows, skeletons, golems, Revive, Valkyrie, Hydra, druid summons, sentries, converted): the undead block of FUN_0057b7d0 applies to them, so not_player on merc / Shadow is wrong; V run 734 rows + 18 + 168 + 288 cases 0 differ; no PR candidate: docs/research/alignment2-trace.md
 - CodeRabbit limits research done; bundle budget in docs/research/coderabbit-limits-20261102.md
 - CREDITKIT: credit: block on cards, tools/credit/credit.py (trailers, PR Credits, check), credits ledger, upstream-use sentence (docs/process/credit.md)
+- CRSETUP done (card crsetup): CodeRabbit pre-scan config and runbook; the owner installs the app, then the coordinator runs the quota test (docs/process/coderabbit-prescan.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
