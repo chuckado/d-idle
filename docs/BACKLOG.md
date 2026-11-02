@@ -325,6 +325,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - verifyalign: independent re-check of alignment2-trace.md (docs/research/verify-alignment2.md): gate and spawn alignment VERIFIED by own emulator runs, no claim WRONG; live drill for merc/Shadow stat 0xac still open
 - VERIFY-PLAYERROLL done (card verifyplayerroll): pr/player-roll 28c0540a READY WITH CHANGES (docs/research/pr-playerroll-verifier.md): head 0 of 110,000 physical (incl. res -101..-300) and 0 of 60,000 element rolls vs game.exe; required: three missing includes in tests/game/test_game_missiles.cpp or CI's clang-tidy step fails; PR text: lo == hi overclaim, element reach list, current numbers
 - VERIFY-TELEPORT-ROOM done: the Teleport room rule holds (20000 cases, seed 4242); Teleport 2 line test read only (docs/research/verify-teleport-room.md)
+- PRBUILDSMITE built (private fork branch local/smite-block-v1-final 887b502a on upstream main 82ea6db4; no PR): a block no longer stops Smite, two lines plus tests; 30,035 monster cases against game.exe: base differs in 6,435, head 0; 7 suites green; animation stated as a limit; det hashes not run: docs/research/pr-smite-block-draft.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
