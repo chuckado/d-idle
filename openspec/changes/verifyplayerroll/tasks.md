@@ -19,10 +19,10 @@ result: "pending"
 
 ## 1. Work
 
-- [ ] 1.1 Diff and clean merge against current upstream main
-- [ ] 1.2 Own counts: physical roll and floor, Sorceress and Necromancer element rolls, lo == hi draws
-- [ ] 1.3 Caller audit
-- [ ] 1.4 Det scenarios base vs head (15, one hidden slot)
-- [ ] 1.5 Warnings-as-errors build (g++ and clang++), MSVC hazards by reading
-- [ ] 1.6 Suites and ctest base vs head
+- [x] 1.1 Diff and clean merge against current upstream main
+- [x] 1.2 Own counts: physical roll and floor, Sorceress and Necromancer element rolls, lo == hi draws
+- [x] 1.3 Caller audit
+- [x] 1.4 Det scenarios base vs head (15, one hidden slot)
+- [x] 1.5 Warnings-as-errors build (g++ and clang++), MSVC hazards by reading
+- [x] 1.6 Suites and ctest base vs head
 - [ ] 1.7 Draft claims vs counts; verdict
