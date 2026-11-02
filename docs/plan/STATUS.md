@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
+| [bundlefinal2](../../openspec/changes/bundlefinal2/) | in-progress | bundlefinal2 | `docs/research/pr-bundle-final-body.md`<br>`openspec/changes/bundlefinal2/**` | `fork-branch:local/bundle-final` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -86,6 +87,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
+- change bundlefinal2: 11 commits on upstream main bdc1eb02, bodies of at most three lines, author and committer the numeric noreply identity, the Smite commit ends with Traced-by
+- change bundlefinal2: suites, differentials and CI parity re-run on the final head
+- change bundlefinal2: credit.py check passes for the bundle's cards
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -127,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 43b85457 11-02 16:29 `merge origin/main into bundlefinal2` (bundlefinal2)
 - 873fd1a6 11-02 16:21 `Merge agent/verifyzerohit: verifyzerohit: coverage-gap or verification result (docs and emulator tools only)` (verifyzerohit)
 - 3f184c0d 11-02 16:21 `merge origin/main into verifyzerohit` (verifyzerohit)
 - 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
@@ -136,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
 - f75f9c72 11-02 15:58 `merge origin/main into levelsareas` (levelsareas)
 - 5c44a788 11-02 15:55 `Merge agent/itemweapons: itemweapons: coverage-gap or verification result (docs and emulator tools only)` (itemweapons)
-- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
 <!-- statusgen:end -->
