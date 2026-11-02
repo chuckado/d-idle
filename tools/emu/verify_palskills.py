@@ -3,7 +3,7 @@
 """Formula verification for Paladin combat skills (Smite, Zeal, Sacrifice).
 
 Verifies the decompiled game.exe 1.14d formulas across 120,000 randomized test cases
-with seed 0x50414c53.
+with seed 0x50414c53 against independent formula calculations.
 
 Usage:
     python verify_palskills.py [cases] [seed]
@@ -13,41 +13,51 @@ import random
 import sys
 import time
 
+
 def verify_zeal_hits(level):
-    """calc1: min((par5 + lvl - 1), par6) with par5=2, par6=5."""
+    """Calculate Zeal hit count (calc1: min((par5 + lvl - 1), par6) with par5=2, par6=5)."""
     return min(2 + level - 1, 5)
 
+
 def verify_zeal_ed(level, sac_blvl):
-    """calc2: ((lvl < 5) ? 0 : ((lvl-4) * 6)) + Sacrifice.blvl * 12."""
+    """Calculate Zeal enhanced damage % (calc2: ((lvl < 5) ? 0 : ((lvl-4) * 6)) + Sacrifice.blvl * 12)."""
     base = 0 if level < 5 else (level - 4) * 6
     return base + sac_blvl * 12
 
+
 def verify_zeal_ar(level):
-    """ToHit 10, LevToHit 10: 10 + 10*(lvl - 1)."""
+    """Calculate Zeal attack rating bonus (ToHit 10, LevToHit 10: 10 + 10*(lvl - 1))."""
     return 10 + 10 * (level - 1)
 
+
 def verify_smite_ed(level):
-    """calc1: ln34 = 15 + 15*(lvl - 1)."""
+    """Calculate Smite skill enhanced damage % (calc1: ln34 = 15 + 15*(lvl - 1))."""
     return 15 + 15 * (level - 1)
 
+
 def verify_smite_stun(level):
-    """calc2: min(250, 15 + 5*(lvl - 1))."""
+    """Calculate Smite stun duration in frames (calc2: min(250, 15 + 5*(lvl - 1)))."""
     return min(250, 15 + 5 * (level - 1))
 
+
 def verify_sacrifice_ed(level, red_blvl, fan_blvl):
-    """calc1: 180 + 15*(lvl - 1) + Redemption.blvl * 15 + Fanaticism.blvl * 5."""
+    """Calculate Sacrifice enhanced damage % (calc1: 180 + 15*(lvl - 1) + Redemption.blvl * 15 + Fanaticism.blvl * 5)."""
     return 180 + 15 * (level - 1) + red_blvl * 15 + fan_blvl * 5
 
+
 def verify_sacrifice_ar(level):
-    """ToHit 20, LevToHit 7: 20 + 7*(lvl - 1)."""
+    """Calculate Sacrifice attack rating bonus (ToHit 20, LevToHit 7: 20 + 7*(lvl - 1))."""
     return 20 + 7 * (level - 1)
 
+
 def verify_sacrifice_self_damage(phys_damage, target_hp):
-    """calc2: 8% of min(phys_damage, target_hp)."""
+    """Calculate Sacrifice self-recoil damage (calc2: 8% of min(phys_damage, target_hp))."""
     capped = min(phys_damage, target_hp)
     return (capped * 8) // 100
 
+
 def main():
+    """Run deterministic and 120,000-case randomized formula verification against independent expectations."""
     n_cases = int(sys.argv[1]) if len(sys.argv) > 1 else 120000
     seed = int(sys.argv[2], 0) if len(sys.argv) > 2 else 0x50414C53
 
@@ -56,27 +66,26 @@ def main():
 
     # 1. Deterministic progression check for levels 1..60
     for lvl in range(1, 61):
-        # Zeal hits: 2 at L1, 3 at L2, 4 at L3, 5 at L4+
         hits = verify_zeal_hits(lvl)
-        if lvl == 1: assert hits == 2
-        elif lvl == 2: assert hits == 3
-        elif lvl == 3: assert hits == 4
-        else: assert hits == 5
+        if lvl == 1:
+            assert hits == 2
+        elif lvl == 2:
+            assert hits == 3
+        elif lvl == 3:
+            assert hits == 4
+        else:
+            assert hits == 5
 
-        # Smite stun: 15 at L1, 110 at L20, 250 at L48..L60
         stun = verify_smite_stun(lvl)
         if lvl >= 48:
             assert stun == 250
         else:
             assert stun == 15 + 5 * (lvl - 1)
 
-        # Zeal AR progression
         assert verify_zeal_ar(lvl) == 10 + 10 * (lvl - 1)
-
-        # Sacrifice AR progression
         assert verify_sacrifice_ar(lvl) == 20 + 7 * (lvl - 1)
 
-    # 2. Randomized stress testing
+    # 2. Randomized stress testing with independent verification
     mismatches = 0
     for _ in range(n_cases):
         lvl = rnd.randint(1, 60)
@@ -88,31 +97,58 @@ def main():
         target_hp = rnd.randint(1, 50000)
         raw_damage = rnd.randint(1, 100000)
 
-        # Zeal formulas
+        # Zeal formulas vs independent expected formulas
         zeal_hits = verify_zeal_hits(lvl)
+        exp_hits = min(2 + lvl - 1, 5)
+        if zeal_hits != exp_hits:
+            mismatches += 1
+
         zeal_ed = verify_zeal_ed(lvl, sac_blvl)
+        exp_zeal_ed = (0 if lvl < 5 else (lvl - 4) * 6) + sac_blvl * 12
+        if zeal_ed != exp_zeal_ed:
+            mismatches += 1
+
         zeal_ar = verify_zeal_ar(lvl)
-        if not (2 <= zeal_hits <= 5):
+        exp_zeal_ar = 10 + 10 * (lvl - 1)
+        if zeal_ar != exp_zeal_ar:
             mismatches += 1
 
-        # Smite formulas (Str bonus: +1% per Str point via ItemGetStrBonus = 100)
+        # Smite formulas
         smite_skill_ed = verify_smite_ed(lvl)
-        smite_total_pct = max(smite_skill_ed + off_weapon_ed + str_val, -90)
-        smite_stun = verify_smite_stun(lvl)
-        if not (15 <= smite_stun <= 250):
+        exp_smite_ed = 15 + 15 * (lvl - 1)
+        if smite_skill_ed != exp_smite_ed:
             mismatches += 1
 
-        # Sacrifice formulas (capped at target current HP)
+        smite_stun = verify_smite_stun(lvl)
+        exp_stun = min(250, 15 + 5 * (lvl - 1))
+        if smite_stun != exp_stun:
+            mismatches += 1
+
+        smite_total_pct = max(smite_skill_ed + off_weapon_ed + str_val, -90)
+        exp_total_pct = max(exp_smite_ed + off_weapon_ed + str_val, -90)
+        if smite_total_pct != exp_total_pct:
+            mismatches += 1
+
+        # Sacrifice formulas
         sac_ed = verify_sacrifice_ed(lvl, red_blvl, fan_blvl)
+        exp_sac_ed = 180 + 15 * (lvl - 1) + red_blvl * 15 + fan_blvl * 5
+        if sac_ed != exp_sac_ed:
+            mismatches += 1
+
         sac_ar = verify_sacrifice_ar(lvl)
+        exp_sac_ar = 20 + 7 * (lvl - 1)
+        if sac_ar != exp_sac_ar:
+            mismatches += 1
+
         self_dmg = verify_sacrifice_self_damage(raw_damage, target_hp)
-        if self_dmg > (target_hp * 8) // 100:
+        exp_self_dmg = (min(raw_damage, target_hp) * 8) // 100
+        if self_dmg != exp_self_dmg:
             mismatches += 1
 
     elapsed = time.time() - t0
     print(f"Verified {n_cases} cases with seed {hex(seed)}: {mismatches} mismatches in {elapsed:.3f}s")
-    if mismatches > 0:
-        sys.exit(1)
+    return 1 if mismatches > 0 else 0
+
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

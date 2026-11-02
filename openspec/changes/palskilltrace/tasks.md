@@ -7,6 +7,7 @@ agent: chuckado
 branch: palskill-trace
 skip_specs: true
 owns:
+  - docs/research/pal-skill-trace.md
   - docs/research/pal-smite-zeal-sacrifice-trace.md
   - tools/emu/verify_palskills.py
   - openspec/changes/palskilltrace/**
@@ -22,3 +23,4 @@ result: "Offline formula verification (120,000 cases with seed 0x50414c53, 0 mis
 - [x] 1.2 Verify d2d skill_built implementation in components/game/fight.hpp
 - [x] 1.3 Implement formula verification suite tools/emu/verify_palskills.py
 - [x] 1.4 Write dedicated trace doc docs/research/pal-smite-zeal-sacrifice-trace.md
+- [x] 1.5 Update cross-reference link in docs/research/pal-skill-trace.md

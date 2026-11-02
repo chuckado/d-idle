@@ -1,6 +1,7 @@
 ## Why
 
 Work item PALSKILL (Issue #3): trace the melee dispatch of Smite, Zeal, and Sacrifice in game.exe 1.14d vs d2d's skill_built.
+no observable behaviour change: docs and offline formula tooling only, no code under internal/** or cmd/**.
 
 ## What Changes
 
