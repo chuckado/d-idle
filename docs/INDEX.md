@@ -182,3 +182,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/openpr-log.md: posted log now also covers #164.
 - no change
 - docs/research/monsterai2-trace.md | Monster AI second pass: six untraced AIs ported and run (36,000 cases 0 differ, Andariel's d2d function 3,830 0 differ), Fallen flee, corpse reach, Blood Raven, run speed chain, D1-D9, B1-B4
+- docs/research/monsterskill-trace.md | Monster skill use, Act 1/2 casters and shooters: slot loading and levels (216 cases 0 differ), usability gate, mana-less casting (42,840 cases), Corrupt Archer think vs d2d (3,000 cases 0 differ), D1-D3, B1-B5, drill recipe
