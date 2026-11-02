@@ -137,3 +137,9 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/verify-cursedef.md  verifycursedef  verifycursedef
+tools/emu/vcd_calc.py  verifycursedef  verifycursedef
+tools/emu/vcd_test.cpp  verifycursedef  verifycursedef
+tools/emu/vcd_run.sh  verifycursedef  verifycursedef
+tools/emu/vcd_tbl.py  verifycursedef  verifycursedef
+openspec/changes/verifycursedef/**  verifycursedef  verifycursedef
