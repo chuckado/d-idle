@@ -1,7 +1,7 @@
 #!/bin/sh
 # Build the P0 probes (32-bit Win32 PE) with clang + lld against Wine's headers
 # and import libraries; no mingw-w64 needed. Run on the worker host:
-#   labrun orion -- tools/lockstep/build.sh      (from inside the worktree)
+#   labrun <worker-host> -- tools/lockstep/build.sh      (from inside the worktree)
 set -eu
 cd "$(dirname "$0")"
 OUT=${OUT:-build}

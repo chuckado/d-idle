@@ -1,6 +1,6 @@
 #!/bin/bash
 # Run the P0 probes under Wine (console only, no display). Run on the worker host:
-#   labrun orion -- tools/lockstep/run.sh [all|one MODE KPCT [SLEEP [MODS]]]
+#   labrun <worker-host> -- tools/lockstep/run.sh [all|one MODE KPCT [SLEEP [MODS]]]
 # Scratch Wine prefix: $LOCKSTEP_PREFIX (default ~/lockstepp0-scratch/prefix). Never a game prefix.
 set -eu
 cd "$(dirname "$0")"
