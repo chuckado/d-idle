@@ -257,6 +257,9 @@ func (t *Town) buyPotions(ctx context.Context, npc d2.Unit, floor int, rep *Chor
 	for _, k := range order {
 		src := k
 		for want[k] > 0 {
+			if t.budgetHit(rep) {
+				return nil
+			}
 			// Rejuvenation the shop does not sell becomes healing.
 			if _, ok := t.pickPotion(stock, src, band.MaxTier(src), 1<<30); !ok && src == belt.RV {
 				want[belt.HP] += want[belt.RV]
@@ -366,6 +369,16 @@ func (t *Town) scrollCount(s *d2.Snapshot, scroll, tome string) (have int, hasTo
 	return have, hasTome
 }
 
+// tomeQty is the town portal tome's stat-read quantity, ignoring portalEmpty.
+func (t *Town) tomeQty(s *d2.Snapshot) int {
+	for _, u := range s.Inventory.Container(d2.ContInventory) {
+		if b := t.base(u); b != nil && b.Code == "tbk" {
+			return t.qty(u)
+		}
+	}
+	return 0
+}
+
 // buyScrolls tops up town portal and identify scrolls (and buys a tome when affordable).
 func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) error {
 	s, err := t.current()
@@ -434,7 +447,17 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 		if !ok {
 			continue
 		}
+		if j.scroll == "tsc" && t.portalEmpty && hasTome && t.tomeQty(cur) > 0 {
+			q := t.tomeQty(cur) // the stat read counts; only prove the source works
+			have, j.target = q, q+emptyRestock
+			if q >= tomeCap {
+				j.target = have
+			}
+		}
 		for have < j.target {
+			if t.budgetHit(rep) {
+				return nil
+			}
 			cur, err := t.current()
 			if err != nil {
 				return err
