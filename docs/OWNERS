@@ -151,3 +151,9 @@ internal/cheat/ledgerkey.go  snaplib  ledgerkey
 internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
+docs/soaks/gate1r2-20261101.md  gate1review2  gate1review2
+docs/probes/soak-logs/gate1r2-20261101-*  gate1review2  gate1review2
+openspec/changes/gate1review2/**  gate1review2  gate1review2
+openspec/changes/tpglitch/**  tpglitch  tpglitch
+openspec/changes/pingpongrate/**  pingpongrate  pingpongrate
+openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
