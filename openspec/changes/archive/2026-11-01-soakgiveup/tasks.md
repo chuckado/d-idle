@@ -2,7 +2,7 @@
 
 ```yaml
 change: soakgiveup
-status: in-progress
+status: archived
 agent: soakgiveup
 branch: agent/soakgiveup
 worktree: ~/code/d2lod-wt/soakgiveup
@@ -14,6 +14,7 @@ exclusive: []
 gates:
   - go test -p 1 ./internal/bot passes, including the new clear-run case
 result: implemented: exploreGaveUp guards on the run kind (keepRoaming) plus a ping-pong guard (noteArea); TestExploreGaveUp, TestPingPongGuard; offline only, not verified live
+merge: 9b99e098
 ```
 
 - [x] 1 Test first: a LevelRun{Kind: RunClear, Area: a} gives up after two failed explores in a with no kill (fails on main), a RunQuest or RunBoss run in a does not
