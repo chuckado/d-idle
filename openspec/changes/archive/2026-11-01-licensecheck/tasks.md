@@ -2,7 +2,7 @@
 
 ```yaml
 change: licensecheck
-status: in-progress
+status: archived
 agent: licensecheck
 branch: agent/licensecheck
 worktree: ~/code/d2lod-wt/licensecheck
@@ -14,7 +14,8 @@ exclusive: []
 gates:
   - go run ./cmd/changecheck: 0 warnings
   - go run ./cmd/leakcheck: 0 hits
-result: "docs only; licences fetched and read; not legal advice"
+result: "docs only; not legal advice; open legal questions listed"
+merge: 1ca519a
 ```
 
 - [x] Fetch and read licences (d2d, D2MOO, libTAS, speedhack-rs, PlugY)
