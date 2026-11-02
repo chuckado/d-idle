@@ -235,3 +235,8 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - openspec/changes/kitstall2 - lane i2 lost weapon and gloves, bow worn by the game; fixes and open question
 - docs/research/pr-skmelee3-d1-draft.md - draft PR text, melee fine physical (on hold)
 - docs/research/pr-skmelee3-d2-draft.md - draft PR text, undead / Blunt bonus with the corrected gate (on hold)
+- docs/research/lockstep-p3.md - lockstep probe P3: unhooked control and k=1/2/4 runs, frame rate, kills per real and per game minute, why the bot breaks under k, what Tier A supports
+- docs/timescale.md | how to run the bot with D2BOT_TIMESCALE=k next to the clock hook; game-clock vs host-clock wait classification | ops
+- docs/research/smiteblock-trace.md | Smite vs the block check: game.exe 1.14d lands every blow (V run, 96,000 cases), d2d lets a block stop it; bot findings, drill recipe
+- docs/research/alignment2-trace.md - alignment (stat 0xac) per unit kind and the undead-blow gate of FUN_0057b7d0, game.exe 1.14d (card alignment2)
+- CodeRabbit limits and bundle budget: [research/coderabbit-limits-20261102.md](research/coderabbit-limits-20261102.md)
