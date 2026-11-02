@@ -8,6 +8,15 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/pr-smite-block-draft.md and tools/emu/sbp_*: the Smite-block upstream candidate built on the private fork with a counted differential against game.exe.
+- Independent verification of the Teleport room rule (docs/research/verify-teleport-room.md, tools/emu/vt_*)
+- verifyplayerroll: independent verification of the player-roll PR candidate (docs only)
+- verifyalign: docs/research/verify-alignment2.md and tools/emu/vfal_run.py (own harness: gate 1200 runs, spawn map 734 MonStats rows, 0 differ)
+- stateevrun: docs/research/stateevrun-trace.md, tools/emu/ser_events.py (game.exe swing gate / resolver / damage applier run natively: event order, event 11 vs resistance, event 3 on a miss; counted cases)
+- sorcrest2: trace of Inferno, Blaze and Enchant run in game.exe (one flame per do call, Enchant picks the ally else the caster, Blaze's cast makes only the state) and the Fire Ball burst rim on the real d2d build (549 of 16,875 cases differ); docs and emulator scripts only
+- reviewprs: review of community PRs 19, 22 and 23 with emulator spot checks and draft comments (docs only)
+- verifysmite: independent verification of SMITEBLOCK; block does not stop Smite in game.exe (V run), d2d fix proposed, docs only
+- Docs: PR draft for the player-side missile damage roll bundle; det scenario hit_phys.
 - Docs: PR draft and population comparison tool for the Nightmare / Hell monster level rule (docs/research/pr-nmlevel-draft.md, tools/emu/nm_pop.py).
 - Docs: the monster movement pace PR draft split into two (think paces + Blood Raven + shaman corpse reach; base velocity 75), rebased on current upstream main.
 - bundlefinal: final PR body for bundle 1 and credit blocks on its cards

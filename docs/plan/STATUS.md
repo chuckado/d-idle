@@ -130,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- af24e7ce 11-02 14:38 `Merge agent/nmlevel: nmlevel: finished docs and tools work that was never merged (branch triage 2026-11-02)` (nmlevel)
-- 5d40cf92 11-02 14:38 `merge origin/main into nmlevel` (nmlevel)
-- 7fa2b9df 11-02 14:31 `Merge agent/monsterpace: monsterpace: finished docs and tools work that was never merged (branch triage 2026-11-02)` (monsterpace)
-- 6ee620fc 11-02 14:30 `merge origin/main into monsterpace` (monsterpace)
-- 5b07021a 11-02 14:25 `Merge agent/bundlefinal: BUNDLEFINAL: bundle-2 prepared (commit messages, credit blocks on cards, final PR body); staged on the fork for the CodeRabbit pre-scan` (bundlefinal)
-- b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
-- 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
-- 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
-- 5483ee50 11-02 13:58 `merge origin/main into lockstepbase` (lockstepbase)
-- 436019b3 11-02 13:47 `Merge agent/rebase174: REBASE174: all candidates rebased onto the #174 merge and assembled into bundle-1 (docs: table and combined PR body draft; nothing upstream)` (rebase174)
+- d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
+- 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
+- 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
+- ab07b57f 11-02 15:22 `merge origin/main into verifytele` (verifytele)
+- c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
+- 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
+- 4fc04c20 11-02 15:13 `merge origin/main into verifyplayerroll` (verifyplayerroll)
+- f7b3ab41 11-02 15:13 `merge origin/main into verifyalign` (verifyalign)
+- d2027358 11-02 15:08 `Merge agent/stateevrun: stateevrun: result (docs and emulator tools only)` (stateevrun)
+- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
 <!-- statusgen:end -->
