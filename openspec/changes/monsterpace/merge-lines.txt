@@ -1,0 +1,3 @@
+BACKLOG: monsterpace: bundled upstream PR candidate (base velocity 75, six think paces, Blood Raven home rule, shaman corpse reach) is on the fork as local/monsterpace-clean; independent verification, then the user's go.
+INDEX: docs/research/pr-monsterpace-draft.md: PR draft for the monster movement pace bundle (counts per claim, limits, verifier checklist).
+CHANGELOG: Docs: PR draft for the monster movement pace bundle (monster base velocity 75, think paces, Blood Raven, shaman corpse reach); evidence tooling tools/emu/mp_run.sh.
