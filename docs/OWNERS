@@ -141,3 +141,6 @@ internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
 internal/bot/tpdump.go  hastpdump  hastpdump
 docs/hastpdump.md  hastpdump  hastpdump
+docs/soaks/gate1-20261101.md  gaterun  gate1run-20261101
+docs/probes/soak-logs/gate1-20261101-*  gaterun  gate1run-20261101
+openspec/changes/gate1run-20261101/**  gaterun  gate1run-20261101
