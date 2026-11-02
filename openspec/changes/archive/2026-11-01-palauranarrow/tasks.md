@@ -2,7 +2,7 @@
 
 ```yaml
 change: palauranarrow
-status: in-progress
+status: archived
 agent: palauranarrow
 branch: agent/palauranarrow
 worktree: ~/code/d2lod-wt/palauranarrow
@@ -13,6 +13,8 @@ owns:
 exclusive: []
 gates:
   - python3 tools/contrib/board.py --check passes
+merge: 611bcc6
+result: "docs only; issue body sync applied separately after review"
 ```
 
 - [x] Rewrite the PALAURA entry in open-work.md
