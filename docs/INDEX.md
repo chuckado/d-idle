@@ -242,3 +242,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - CodeRabbit limits and bundle budget: [research/coderabbit-limits-20261102.md](research/coderabbit-limits-20261102.md)
 - docs/process/credit.md: how credit is written for upstream PRs (author, Traced-by, Reported-by, Agent), tools/credit usage; docs/community/credits-ledger.md: contributor names and consent
 - docs/process/coderabbit-prescan.md - CodeRabbit pre-scan runbook: install, fork config, quota test, bundle workflow, CLI
+- docs/research/lockstep-p4.md: lockstep hook re-measured at k=2 and k=4 with the scaled bot clock

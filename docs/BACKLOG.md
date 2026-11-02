@@ -310,6 +310,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - CodeRabbit limits research done; bundle budget in docs/research/coderabbit-limits-20261102.md
 - CREDITKIT: credit: block on cards, tools/credit/credit.py (trailers, PR Credits, check), credits ledger, upstream-use sentence (docs/process/credit.md)
 - CRSETUP done (card crsetup): CodeRabbit pre-scan config and runbook; the owner installs the app, then the coordinator runs the quota test (docs/process/coderabbit-prescan.md)
+- lockstepp4 DONE: scaled bot clock at k=2/k=4 restores chores and kills per real minute (154 and 271 combat-kill events, 142 and 204 observed, in 10 min), 50 to 77 percent of k=1 per game minute; noise band and character reset still open (docs/research/lockstep-p4.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
