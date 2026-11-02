@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- VERIFYFREEZEEND2: docs/research/verifyfreezeend2-trace.md, own emulator harness tools/emu/vfe2_*; game.exe runs the AI think during a get-hit, d2d holds it (D1)
 - skiasgame2: docs/research/skiasgame2-trace.md, tools/emu/skiasgame2_rate.py: game.exe attack rate equals d2d over 198,988 cases; sequence-mode -30 and dual-wield rule listed as deviations; ledger F07 updated
 - docs: paldur-trace, durability loss per hit and per block traced in game.exe and compared with d2d (docs/research/paldur-trace.md).
 - docs: original-game baseline runs 20261102 (4 rows, docs/probes/baseline-runs/20261102/record.md).

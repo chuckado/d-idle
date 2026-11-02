@@ -212,3 +212,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/probes/baseline-runs/20261102/record.md: original-game baseline set 20261102, per-run quality flags and rows
 - docs/research/paldur-trace.md: durability loss per hit and per block, game.exe 1.14d vs d2d vs the bot, differential tools/emu/pal_wear.py
 - docs/research/skiasgame2-trace.md | SKIAS second pass: game.exe attack animation rate (IAS, WSM, skill speed) run under the emulator vs d2d attack_speed / attack_ticks; sequence mode -30 deviation
+- docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
