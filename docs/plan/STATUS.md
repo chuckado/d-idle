@@ -127,7 +127,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 08590a5d 11-02 15:42 `Merge agent/skdruid: skdruid: coverage-gap or verification result (docs and emulator tools only)` (skdruid)
 - bab1c358 11-02 15:39 `Merge agent/branchtriage: branchtriage: finished docs and tools work that was never merged (branch triage 2026-11-02)` (branchtriage)
+- 0c6becab 11-02 15:38 `merge origin/main into skdruid` (skdruid)
 - 9b0a9c1b 11-02 15:35 `Merge agent/crfixbundle: CRFIXBUNDLE: CodeRabbit's six staging comments judged and fixed in bundle-3; throwaway merge with batch 9 (docs, harness, card)` (crfixbundle)
 - 4d7c1618 11-02 15:35 `merge origin/main into branchtriage` (branchtriage)
 - 52670323 11-02 15:35 `merge origin/main into crfixbundle` (crfixbundle)
@@ -135,6 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
 - 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
 - ab07b57f 11-02 15:22 `merge origin/main into verifytele` (verifytele)
-- c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
-- 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
 <!-- statusgen:end -->

@@ -134,8 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-docs/research/skdruid-trace.md  skdruid  skdruid
-tools/emu/skdruid_calc.py  skdruid  skdruid
-tools/emu/skdruid_test.cpp  skdruid  skdruid
-tools/emu/skdruid_run.sh  skdruid  skdruid
-openspec/changes/skdruid/**  skdruid  skdruid

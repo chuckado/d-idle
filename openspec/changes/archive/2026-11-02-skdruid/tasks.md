@@ -2,7 +2,7 @@
 
 ```yaml
 change: skdruid
-status: in-progress
+status: archived
 agent: skdruid
 branch: agent/skdruid
 worktree: d2lod-wt/skdruid
@@ -17,10 +17,11 @@ exclusive: []
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
   - "ledger rows only with case counts"
-result: "Offline, not verified live. Calc aspect of Skills 221..250: game.exe FUN_00646ca0 vs d2d eval_calc, 0 differ of 27,800 cases (seeds 1 and 7). Effects not run; no deviation, no PR candidate."
+result: "docs only; see the doc for tags and limits"
 credit:
   author: owner
   agents: [Claude Code]
+merge: 08590a5
 ```
 
 ## 1. Work
