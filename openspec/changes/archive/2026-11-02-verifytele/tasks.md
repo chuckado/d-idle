@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifytele
-status: in-progress
+status: archived
 agent: verifytele
 branch: agent/verifytele
 worktree: ~/code/d2lod-wt/verifytele
@@ -15,7 +15,8 @@ owns:
 exclusive: []
 gates:
   - none
-result: C1 to C4 hold (20000 cases, seed 4242, V run on the worker host); C5 (Teleport 2 line test) read only; not verified live
+result: "docs and tools only; merged by the triage queue"
+merge: 469bbc3
 ```
 
 - [x] 1 Read FUN_005ca360, FUN_00554ea0, FUN_00463740 before the author's trace
