@@ -611,6 +611,12 @@ func (t *Town) sellTo(ctx context.Context, list []d2.Unit, rep *ChoreReport) (re
 		if !ok {
 			continue
 		}
+		// Only pack items are sold. A worn item (or the start kit) never reaches the vendor from here: findIn looks at
+		// every unit, so a stale list or a reused id must not turn into a click on a worn slot (KITSTALL2).
+		if fresh.Item == nil || fresh.Item.Where != d2.ContInventory || fresh.Item.Flags&d2.FlagStartItem != 0 {
+			t.e.Log.Warn("sell: refused, not a sellable pack item", "item", t.nameOf(fresh))
+			continue
+		}
 		g0 := cur.Player.Gold
 		sold := func(s *d2.Snapshot) bool {
 			_, still := findIn(s.Inventory, u.ID)
@@ -647,6 +653,7 @@ func (t *Town) sellTo(ctx context.Context, list []d2.Unit, rep *ChoreReport) (re
 		}
 		rep.Sold++
 		rep.Earned += after.Player.Gold - g0
+		t.e.Log.Info("sell: sold", "item", t.nameOf(fresh), "gold", after.Player.Gold-g0)
 	}
 	return refused, nil
 }
