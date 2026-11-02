@@ -2,7 +2,7 @@
 
 ```yaml
 change: mercfix
-status: in-progress
+status: archived
 agent: mercfix
 branch: agent/mercfix
 worktree: d2lod-wt/mercfix
@@ -16,7 +16,7 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./cmd/d2bot ./internal/merc ./internal/d2dmerc ./internal/task; changecheck 0 warnings; leakcheck 0 hits"
-result: "Guard reads the dump merc also with the policy off; the claim is read back (claim verified / not seen after N tries, bounded retry); offline tests only, NOT verified live (a probe on a d2d slot: claim, walk out of town, read merc.present and the unit table)"
+result: "go tests cmd/d2bot internal/merc d2dmerc task pass; not verified live"
 live: "not run"
 credit:
   component: mercfix
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: ["Claude Code (card mercfix, own reading of the Gate 2 log)"]
   consent: none
+merge: cde0413
 ```
 
 - [x] Reconstruct the claim timeline from the Gate 2 bot log
