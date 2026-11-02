@@ -39,7 +39,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
-| [alignment2](../../openspec/changes/alignment2/) | in-progress | alignment2 | `docs/research/alignment2-trace.md`<br>`tools/emu/al2_run.py`<br>`tools/emu/al2_ctx.py`<br>`tools/emu/al2_peek.py`<br>`openspec/changes/alignment2/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
@@ -84,8 +83,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change alignment2: game.exe native runs on the worker host: counts in the trace (734 rows, 18, 168, 288 cases; 0 differ)
-- change alignment2: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -130,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
 - 6d2b15dd 11-02 13:17 `merge origin/main into alignment2` (alignment2)
 - 0ee7978f 11-02 13:12 `Merge agent/smiteblock: smiteblock: credit-funded result (docs and emulator tools only)` (smiteblock)
 - 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
@@ -139,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
 - 41d992c7 11-02 12:49 `Merge agent/contribid: CONTRIBID: community contributors commit as themselves; reproducibility rule and PR template checkboxes (docs and template only)` (contribid)
 - 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
-- dc11d0eb 11-02 12:45 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: private PR candidate records and drafts for the melee blow D1 and D2 split (docs only; nothing upstream)` (prbuildskmelee3b)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: alignment2
-status: in-progress
+status: archived
 agent: alignment2
 branch: agent/alignment2
 worktree: ~/code/d2lod-wt/alignment2
@@ -17,7 +17,8 @@ exclusive: []
 gates:
   - "game.exe native runs on the worker host: counts in the trace (734 rows, 18, 168, 288 cases; 0 differ)"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. FUN_006259b0 = alignment: player / merc / Shadow / skeletons / golems / revived / Valkyrie / Hydra / druid summons / sentries / converted all 2 (setter FUN_005543b0, spawn map of MonStats Align 1 -> 2); the undead block gate is player or alignment 2 (V run 288 cases 0 differ), so d2d's not_player exclusion of merc and Shadow is wrong (S d2d side, not re-read). No PR candidate, no ledger row."
+result: "docs only; see the doc for tags and limits"
+merge: 0ed9efc
 ```
 
 ## 1. Work
