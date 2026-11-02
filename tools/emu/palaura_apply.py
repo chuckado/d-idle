@@ -61,7 +61,6 @@ def friendly(w, skill, level):
         elif l in hurt:
             e.call(0x627150, e.r32(u + 0x5c), 6, e.call(0x625480, u, 7, 0) // 2, 0)
     life = lambda u: e.call(0x625480, u, 6, 0) / 256
-    row = e.call(0x0, ecx=0) if False else None
     rec = e.r32(e.r32(0x744304) + 0xb98) + skill * 0x23c
     print(f"skill {skill} level {level}: aurastate {e.r16(rec + 0x80)} auratargetstate {e.r16(rec + 0x82)} aurafilter {e.r32(rec + 0x50):#x}"
           f" stats {[e.r16(rec + 0x54 + 2 * k) for k in range(6)]}")

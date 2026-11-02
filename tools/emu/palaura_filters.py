@@ -4,7 +4,7 @@ skill row that has an aurafilter, as game.exe loaded them (patched 1.14d tables)
 
     tools/emu/run-on-worker.sh palaura_filters.py
 
-Prints `id name filter(hex) srvdofunc aurastate auratargetstate`, then the bit table of the filter words in use, with
+Prints `id name filter(hex) aurastate auratargetstate` (65535 = none), then the bit table of the filter words in use, with
 the bits decoded in FUN_0056b3e0 (palaura-trace.md section 2)."""
 import monstats
 import skill_tips
@@ -19,8 +19,7 @@ for s in range(count):
     f = e.r32(r + 0x50)
     if f:
         used.setdefault(f, []).append(s)
-        print(s, names[s] if s < len(names) else "?", hex(f), "do", e.r32(r + 0x1c) if False else "", "aurastate", e.s32(r + 0x80) << 16 >> 16,
-              "auratargetstate", e.s32(r + 0x82) << 16 >> 16)
+        print(s, names[s] if s < len(names) else "?", hex(f), "aurastate", e.r16(r + 0x80), "auratargetstate", e.r16(r + 0x82))
 print("filter words in use:")
 for f, ids in sorted(used.items()):
     bits = [hex(1 << b) for b in range(32) if f >> b & 1]
