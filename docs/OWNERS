@@ -160,3 +160,14 @@ openspec/changes/pingpongrate/**  pingpongrate  pingpongrate
 internal/bot/goal.go  pingpongrate  pingpongrate
 internal/bot/emptyarea_test.go  pingpongrate  pingpongrate
 docs/soakstall.md  pingpongrate  pingpongrate
+docs/kitgate.md  kitgatelevel  kitgatelevel
+docs/knobs.md  kitgatelevel  kitgatelevel
+internal/bot/kitgate.go  kitgatelevel  kitgatelevel
+internal/bot/kitgate_test.go  kitgatelevel  kitgatelevel
+internal/bot/kitlevel_test.go  kitgatelevel  kitgatelevel
+internal/bot/observe.go  kitgatelevel  kitgatelevel
+internal/bot/resource.go  kitgatelevel  kitgatelevel
+internal/bot/goal.go  kitgatelevel  kitgatelevel
+internal/resource/tuning.go  kitgatelevel  kitgatelevel
+internal/env/tuning_resource.go  kitgatelevel  kitgatelevel
+openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel

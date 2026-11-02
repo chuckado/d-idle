@@ -326,6 +326,11 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		why = append(why, "resource: "+trip.Reason)
 		emergency = r.resInput(s).Belt.HP == 0
 	}
+	if why2, ok := r.kitTrip(s); ok && known {
+		hard = true // not floorable: the kit is the survival need (KITGATELEVEL)
+		plan.Potions = true
+		why = append(why, why2)
+	}
 	if known {
 		threshold := t.ResupplyPotions
 		if p.InTown() {

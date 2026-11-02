@@ -95,6 +95,9 @@ func (r *Runner) noteTripGold(gold int) {
 func (r *Runner) logTrip(t *trip, gold int) {
 	r.obMu.Lock()
 	n := len(r.ob.tripTimes)
+	if strings.Contains(t.plan.Reason, "kit: ") {
+		r.ob.kitTrips++
+	}
 	r.obMu.Unlock()
 	rt := r.e.Tune.Resource
 	r.e.Log.Info("trip budget: trip done", "reason", t.plan.Reason, "emergency", t.emergency, "goldBefore", t.startGold, "goldAfter", gold,
