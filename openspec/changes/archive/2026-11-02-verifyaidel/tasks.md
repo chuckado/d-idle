@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyaidel
-status: in-progress
+status: archived
 agent: verifyaidel
 branch: agent/verifyaidel
 worktree: ~/code/d2lod-wt/verifyaidel
@@ -15,7 +15,8 @@ owns:
 exclusive: []
 gates:
   - changecheck and leakcheck clean
-result: aidel table and FUN_005a73e0 re-verified under the emulator (352,800 cases, 0 differ); freeze-end path not covered; not verified live
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: 7f945d3
 ```
 
 - [x] 1 Table per difficulty
