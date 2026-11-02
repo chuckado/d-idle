@@ -58,7 +58,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -117,7 +116,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -129,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 54fff8ef 11-02 10:34 `Merge agent/fixci: FIXCI: repair the board archive paths and the chunker flag text that broke the Scripts CI job` (fixci)
-- fcd78e5e 11-02 10:29 `Merge agent/palaura: palaura: credit-funded decomposition result (docs and emulator tools only)` (palaura)
-- d9d34ffa 11-02 10:29 `merge origin/main into palaura` (palaura)
-- b123648d 11-02 10:22 `Merge agent/verifyfreezeend2: verifyfreezeend2: credit-funded decomposition result (docs and emulator tools only)` (verifyfreezeend2)
-- c3906af9 11-02 10:21 `merge origin/main into verifyfreezeend2` (verifyfreezeend2)
-- 0430f68e 11-02 10:14 `Merge agent/skiasgame2: skiasgame2: credit-funded decomposition result (docs and emulator tools only)` (skiasgame2)
-- 644cc14e 11-02 10:14 `merge origin/main into skiasgame2` (skiasgame2)
-- b415aefb 11-02 10:09 `Merge agent/paldur: paldur: credit-funded decomposition result (docs and emulator tools only)` (paldur)
-- 558d7b0d 11-02 10:08 `merge origin/main into paldur` (paldur)
-- d37b5b21 11-02 09:55 `Merge agent/baselineruns-20261102: Baseline runs 20261102 set late: four restored level-12 lanes on the original game (generated records)` (baselineruns-20261102)
+- 76452305 11-02 11:42 `Merge agent/verifypaldur: verifypaldur: Pro-account job result (docs and emulator tools only)` (verifypaldur)
+- b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
+- 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
+- 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
+- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
+- 94bb76e6 11-02 11:29 `merge origin/main into verifypalaura` (verifypalaura)
+- 34d019b7 11-02 11:24 `Merge agent/skstateev: skstateev: Pro-account job result (docs and emulator tools only)` (skstateev)
+- d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
+- 2d789491 11-02 11:23 `merge origin/main into skzerohit` (skzerohit)
+- caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
 <!-- statusgen:end -->
