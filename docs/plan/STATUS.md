@@ -65,7 +65,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [soakgiveup](../../openspec/changes/soakgiveup/) | in-progress | soakgiveup | `openspec/changes/soakgiveup/**` | - |
 | [soakstall](../../openspec/changes/soakstall/) | in-progress | soakstall | `docs/soakstall.md`<br>`internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/emptyarea_test.go`<br>`openspec/changes/soakstall/**` | - |
-| [sorcrest](../../openspec/changes/sorcrest/) | in-progress | sorcrest | `docs/research/sor-rest-trace.md`<br>`tools/emu/sk_rest_*`<br>`tools/emu/sorcrest_*`<br>`openspec/changes/sorcrest/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -131,10 +130,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change soakgiveup: go test -p 1 ./internal/bot passes, including the new clear-run case
 - change soakstall: TestExploreGaveUp (internal/bot) passes
-- change sorcrest: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- fa03b72 11-01 19:43 `Merge agent/sorcrest: SORCREST: remaining Sorceress skills traced: Fire Ball and Glacial Spike pipeline 31,000 cases 0 differ, burst roll deviation proven on a real build (0/400 vs 400/400)` (sorcrest)
 - 9b99e09 11-01 19:33 `Merge agent/soakfixes: SOAKFIXES: explore give-up guards on run kind, ping-pong guard, town-portal verdict hysteresis` (soakgiveup)
 - cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
 - 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
@@ -144,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c4e701e 11-01 18:33 `Merge agent/hastpdump: HASTPDUMP: inv-tp-dump diagnostic line on area entry and HasTP change, no behaviour change` (hastpdump)
 - 43d606e 11-01 18:20 `Merge agent/coveragetable: Rule coverage table: 4,910 data-table rows in 21 subsystems, generated from a checked ledger` (coveragetable)
 - 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
-- a439ea3 11-01 17:16 `Merge agent/palskill: PALSKILL: Holy Bolt, Blessed Hammer and Paladin aura trace against game.exe: seven d2d deviations, five bot findings` (palskill)
 <!-- statusgen:end -->

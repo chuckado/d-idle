@@ -2,7 +2,7 @@
 
 ```yaml
 change: sorcrest
-status: in-progress
+status: archived
 agent: sorcrest
 branch: agent/sorcrest
 worktree: ~/code/d2lod-wt/sorcrest
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Fire Ball and Glacial Spike hit pipeline 31,000 cases equal, burst radius 3,375 cases equal, burst roll deviation proven on the real d2d build (0 of 400 trials equal on d2d, 400 of 400 in game.exe), 22,400 calc cases equal; Inferno, Blaze, Enchant read only; no PR candidate; not verified live"
+result: "docs and emulator tools only; D1 is a restructure of missile_blow, one claim with SKGROUND D5 plus an independent verifier before any PR"
 live: "docs only, nothing run live"
+merge: fa03b72
 ```
 
 - [x] rank the untested rows from the ledger
