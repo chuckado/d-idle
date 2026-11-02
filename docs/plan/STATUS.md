@@ -51,7 +51,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixprogress](../../openspec/changes/fixprogress/) | in-progress | fixprogress | `docs/fixprogress.md`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/town/fixprogress_test.go`<br>`openspec/changes/fixprogress/**` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
-| [gate1review2](../../openspec/changes/gate1review2/) | in-progress | gate1review2 | `docs/soaks/gate1r2-20261101.md`<br>`docs/probes/soak-logs/gate1r2-20261101-*`<br>`openspec/changes/gate1review2/**` | - |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [hastpdump](../../openspec/changes/hastpdump/) | in-progress | hastpdump | `internal/bot/tpdump.go`<br>`docs/hastpdump.md` | - |
 | [kitgatelevel](../../openspec/changes/kitgatelevel/) | proposed | kitgatelevel | `openspec/changes/kitgatelevel/**` | - |
@@ -110,7 +109,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change gate1review2: changecheck 0 warnings, leakcheck 0 hits
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change hastpdump: TestInvTPDump: dump on first look, area change and verdict change, not otherwise
 - change kitgatelevel: d2-sme answer recorded in the card result; then a number for the follow-up
@@ -143,6 +141,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 3c0673d2 11-01 22:07 `Merge agent/gate1review2: GATE1REVIEW2: Gate 1 rerun 2 FAIL analysis: stall minutes 337 to 52, XP/h 7937 vs 9172, guards fired correctly, false empty-tome reads drove the kit gate; three cards` (gate1review2)
+- 6fda8125 11-01 22:07 `merge origin/main into gate1review2` (gate1review2)
 - 47920c18 11-01 22:04 `Merge agent/seedstudy: SEEDSTUDY: one d2s file pins the seed on both sides; static layout and spawn comparison feasible with work; frame lockstep blocked by tier B and the unit-seed stream` (seedstudy)
 - 296d9c21 11-01 22:03 `merge origin/main into seedstudy` (seedstudy)
 - af74c4d4 11-01 22:00 `Merge agent/verifymissile: VERIFYMISSILE: independent Opus verification of the monster missile record candidate: NOT READY, the added poison is up to 62x too strong; record claim holds` (verifymissile)
@@ -151,6 +151,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 3fd36b32 11-01 21:52 `merge origin/main into treasure` (treasure)
 - 625ea93f 11-01 21:51 `merge origin/main into verifymissile` (verifymissile)
 - fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
-- b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
-- 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
 <!-- statusgen:end -->

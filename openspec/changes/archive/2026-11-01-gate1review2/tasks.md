@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate1review2
-status: in-progress
+status: archived
 agent: gate1review2
 branch: agent/gate1review2
 worktree: ~/code/d2lod-wt/gate1review2
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - changecheck 0 warnings, leakcheck 0 hits
-result: "docs and cards only (the three new cards are proposals with their own owns); counts from the run logs on the worker host (read-only), root cause pattern V, fork side U; not verified live"
+result: "docs and cards only; reasoning about the fix coverage is from logs; do not merge the gate1run branch over main"
+merge: 3c0673d
 ```
 
 - [x] 1 Read the record, the run logs and the audit
