@@ -186,3 +186,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/mercstats-trace.md | Hirelings (Rogue archers, Desert Mercenaries): stats by level, hire and resurrection price, experience, AI and skill roll vs d2d's C++ (411,196 runs, 0 differ), merc regen and auras missing in d2d (D1, D2), bot findings B1-B6, drill recipe
 - docs/soaks/gate1-20261102.md: Gate 1 run 20261102 (PASSED) with Review 3: criteria, guard counts, comparison, caveats
 - no change
+- docs/research/openpr-log.md: posted log now also covers #166.
+- no change

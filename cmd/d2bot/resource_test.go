@@ -26,8 +26,9 @@ func TestResourceKnobsRegistered(t *testing.T) {
 			t.Errorf("%s: field default %v, knob default %v", k.Key, v, k.Default)
 		}
 	}
-	if n != 55 {
-		t.Fatalf("%d resource knobs registered, want 55", n)
+	// 55 before the kit gate; kitGateLevel, kitMinHP, kitMinMP and kitTripCap added 4.
+	if n != 59 {
+		t.Fatalf("%d resource knobs registered, want 59", n)
 	}
 }
 

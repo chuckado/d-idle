@@ -9,6 +9,10 @@ else, it is offline-tested. This file was written from merge subjects and `docs/
 
 ## Unreleased / known issues
 - no change
+- Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
+- bot logs: countable lines explore-giveup, tp-debounce-hold, tp-debounce-flip, kitgate-trip (docs/botlogs.md)
+- kit gate by character level: from clvl 8 an incomplete kit makes a town trip instead of holding the character in Blood Moor and Cold Plains
+- no change
 - docs: Gate 1 PASS review (docs/soaks/gate1-20261102.md, Review 3).
 - Docs: hireling trace (mercstats): game.exe's merc level-up, hire offer, resurrection price, experience award, think and attack code equal d2d's rules in 411,196 emulator runs; merc life regeneration and Act 2 auras are missing in d2d (effect U); Cold Arrow, Defiance and Thorns need merc level 6 so low-level offers can lack their skill; the merc accepts Rejuvenation Potions
 - Docs: monster skill use trace (monsterskill): monster skill levels, free casting and the Corrupt Archer think run against game.exe and d2d (no deviation proven); usability-gate deviation read only; bot shooter model findings; ledger row CorruptArcher

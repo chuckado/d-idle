@@ -252,6 +252,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - mercstats (SKDEFENDERS in part): hireling stats by level, hire offer and price, resurrection price, levelling, think, attack and skill roll all equal d2d's real C++ against game.exe (levelup 2,940, hire 108,000, revive 256, think 100,000, attack 100,000, experience 100,000 cases, 0 differ); gaps D1 merc life regeneration (stat 0x4a) and D2 Act 2 auras do nothing (effect U, no PR candidate); bot findings B1 offer level ignored although Cold Arrow, Defiance, Thorns need merc level 6 (Blessed Aim 12, Holy Freeze 18), B2 Rejuvenation Potions ARE accepted by the merc (V run), B3 bot hire and revive formulas equal game.exe; SKDEFENDERS still open for absorb, poison per tick, curses and auras on a merc; docs/research/mercstats-trace.md
 - GATE1: Review 3 of the first Gate 1 PASS (run 20261102): all hard criteria PASS, band 11-14 -11 percent inside tolerance, caveats and next steps (docs/soaks/gate1-20261102.md)
 - #164 got a second CodeRabbit tooling follow-up (11bc2c4d, empty game.tsv fails cmp); watch for the maintainer.
+- kitgatelevel: kit gate by clvl (town trip from clvl 8, cap 2, kitgate-skip); needs the gate 1 rerun to verify live
+- upstream #166 (player missile damage roll: element top, physical in 256ths, -100 floor; 5 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
+- #166 (player missile damage roll) got a follow-up (7d4f6f0e) for CodeRabbit; watch for the maintainer.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
