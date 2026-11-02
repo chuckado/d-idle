@@ -143,3 +143,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+openspec/changes/verifyaidel/**  verifyaidel  verifyaidel
+docs/research/verify-aidel.md  verifyaidel  verifyaidel
+tools/emu/va_aidel.py  verifyaidel  verifyaidel
+tools/emu/va_aidel_run.py  verifyaidel  verifyaidel
