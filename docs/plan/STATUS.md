@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
 - e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
 - 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
 - 41d992c7 11-02 12:49 `Merge agent/contribid: CONTRIBID: community contributors commit as themselves; reproducibility rule and PR template checkboxes (docs and template only)` (contribid)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
 - 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
 - 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
-- 6572f5e3 11-02 12:30 `merge origin/main into credits` (credits)
 <!-- statusgen:end -->
