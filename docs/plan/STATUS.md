@@ -130,6 +130,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
 - 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
 - 9621b8f8 11-02 13:23 `merge origin/main into crlimits` (crlimits)
 - 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
@@ -139,5 +140,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
 - 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
 - e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
-- 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
 <!-- statusgen:end -->
