@@ -187,6 +187,43 @@ def filt(w):
     print("flags +0xc4:", {l: hex(e.r32(u + 0xc4)) for l, u in rows})
 
 
+def los(w):
+    """filter bit 0x200: FUN_0056b3e0 calls FUN_0064e260(room, caster xy, unit xy, 4) and rejects the unit when it answers nonzero.
+    Foes at random offsets (radius 16) around a caster in a room full of walls: which pass 0x3 and 0x203; which collision
+    bit along the straight line explains the rejected ones."""
+    e, g = w.e, w.game
+    pairs = []
+    best = None
+    for attempt in range(60):
+        cx, cy = w.free_spot(margin=18)
+        # prefer an area with walls: count blocked cells in the 33 x 33 box
+        blocked = sum(1 for a in range(-16, 17) for b in range(-16, 17) if g.collision(cx + a, cy + b) & 0x1 and g.collision(cx + a, cy + b) != 0xFFFF)
+        if best is None or blocked > best[0]:
+            best = (blocked, cx, cy)
+    blocked, cx, cy = best
+    print("caster", (cx, cy), "blocked cells in its 33 x 33 box:", blocked)
+    caster, _, _ = w.make(PLAYER, 4, cx, cy)
+    units = []
+    used = {(0, 0)}
+    while len(units) < 1200:
+        dx, dy = w.rng.randint(-20, 20), w.rng.randint(-20, 20)
+        if (dx, dy) in used or dx * dx + dy * dy > 20 * 20: continue
+        used.add((dx, dy))
+        got = w.make(MONSTER, 63, cx + dx, cy + dy)
+        if got: units.append(got)
+    plain = w.search(caster, 20, 0x3)
+    withlos = w.search(caster, 20, 0x203)
+
+    def line(x0, y0, x1, y1):
+        n = max(abs(x1 - x0), abs(y1 - y0), 1)
+        return [(x0 + round((x1 - x0) * i / n), y0 + round((y1 - y0) * i / n)) for i in range(1, n)]
+    rejected = [(u, x, y) for u, x, y in units if u in plain and u not in withlos]
+    print(f"{len(units)} foes in range: {len(plain)} found by 0x3, {len(withlos)} by 0x203, {len(rejected)} rejected by bit 0x200; any accepted that 0x3 missed: {len(withlos - plain)}")
+    for bit in (0x1, 0x2, 0x4, 0x8, 0x10, 0x20, 0x40, 0x80, 0x100, 0x400, 0x800, 0x1000):
+        hits = sum(1 for u, x, y in units if u in plain and any(g.collision(a, b) & bit and g.collision(a, b) != 0xFFFF for a, b in line(cx, cy, x, y)) == (u not in withlos))
+        print(f"   hypothesis 'a cell with collision bit {bit:#x} on the straight line blocks': agrees for {hits} of {sum(1 for u, x, y in units if u in plain)} foes")
+
+
 def owner(w):
     e = w.e
     cx, cy = w.free_spot()
@@ -204,7 +241,7 @@ def owner(w):
 
 def main():
     w = World(int(sys.argv[2]) if len(sys.argv) > 2 else 5)
-    {"radius": radius, "filter": filt, "owner": owner}[sys.argv[1]](w)
+    {"radius": radius, "filter": filt, "owner": owner, "los": los}[sys.argv[1]](w)
 
 
 if __name__ == "__main__":

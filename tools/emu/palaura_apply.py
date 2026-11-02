@@ -135,8 +135,13 @@ def hit(w, skill, level, pulses, do=0x5cf3a0):
     # the unit's own seed (FUN_0045c3e0 rolls it): a fresh unit's is 0 and then the roll is stuck at the minimum
     e.w32(caster + 0x20, w.rng.getrandbits(32) | 1)
     e.w32(caster + 0x24, 666)
+    pierce = int(sys.argv[5]) if len(sys.argv) > 5 else 0
+    if pierce:
+        stat = {1: 333, 2: 334, 4: 335, 5: 336}[e.read(rec + 0x1dc, 1)[0]]   # passive_fire / ltng / cold / pois pierce
+        e.call(0x627150, e.r32(caster + 0x5c), stat, pierce, 0)
+        print(f"caster stat {stat} (element pierce) = {pierce}")
     import monstats
-    rows = [r for r in monstats.table("monstats") if r.get("id") and r["id"] != "Expansion"]
+    rows =[r for r in monstats.table("monstats") if r.get("id") and r["id"] != "Expansion"]
     col = {1: "resfi", 2: "resli", 3: "resma", 4: "resco", 5: "respo"}[e.read(rec + 0x1dc, 1)[0]]
     # one Quill Rat (63, resist 0) and rows with other values of the element's resist column (MonStats, normal)
     picks = [63]
@@ -145,8 +150,9 @@ def hit(w, skill, level, pulses, do=0x5cf3a0):
             if r.get(col, "") == str(want) and i < 700 and r.get("npc") != "1" and r.get("enabled") == "1" and i not in picks:
                 picks.append(i)
                 break
+    picks.append(156)   # Andariel: boss and prime evil (MonStats flags), her resist from the table
     resist = {63: 0}
-    resist.update({i: int(rows[i][col]) for i in picks[1:]})
+    resist.update({i: int(rows[i][col] or 0) for i in picks[1:]})
     foes = []
     for k, cls in enumerate(picks):
         u, _, _ = w.make(pa.MONSTER, cls, cx + 2, cy - 2 + k)
@@ -175,11 +181,18 @@ def hit(w, skill, level, pulses, do=0x5cf3a0):
     rolls = [d[0] for d in drops]
     print(f"{len(rolls)} pulses: roll (resist 0 rat) within [{lo}, {hi}]:", sum(lo <= v <= hi for v in rolls), "of", len(rolls),
           "; distinct rolls", len(set(rolls)), "; mean", sum(rolls) / len(rolls), "(table mean", (lo + hi) / 2, ")")
+    # rule under test: damage = roll * (100 - eff) // 100 with eff = clamp(resist - pierce, -100, 100) and immunity (resist >= 100) kept;
+    # the pulse's roll is one value for all targets, so the pulse is explained when some roll in [lo, hi) gives every target's damage
+    def eff(r):
+        return 100 if r >= 100 else max(r - pierce, -100)
+    ok = 0
+    for d in drops:
+        cands = [x for x in range(lo, hi) if x * (100 - eff(0)) // 100 == d[0]]
+        ok += any(all(x * (100 - eff(resist[c])) // 100 == d[j] for j, c in enumerate(picks)) for x in cands)
+    print(f"pierce {pierce}: every target's damage explained by one roll and (100 - eff) // 100 in {ok} of {len(drops)} pulses")
     for j, c in enumerate(picks[1:], 1):
-        r = resist[c]
-        same = sum(d[j] == d[0] * (100 - r) // 100 for d in drops)
-        same_md = sum(d[j] == (d[0] * (100 - r) + 50) // 100 for d in drops)
-        print(f"   class {c} resist {r}: damage == roll * (100 - r) // 100 in {same} of {len(drops)} pulses (rounded: {same_md})")
+        print(f"   class {c} resist {resist[c]}: eff {eff(resist[c])}")
+    print("states on the in-range rat after the last pulse:", states(e, foes[0]), "; on the pet:", states(e, ally_pet), "; on the rat out of range:", states(e, far))
     print("targets outside the circle, owned, or NPC took damage in", sum(1 for d in drops if any(d[len(picks):])), "pulses")
 
 
