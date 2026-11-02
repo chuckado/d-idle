@@ -69,10 +69,10 @@ Which word is `dwGameFrame` of the D2MOO game struct is U (the heap words are th
 | 10 s read, main counters | 24.975 | 50.055 (per-second min/max 49.95/50.95) |
 | After the bot run, 20 s | 25.03 | 50.01 |
 | Read errors | 0 | 0 |
-| Blood Moor bot run, 5 min real (character level 12) | 36 kills by minute 4, 0 deaths | 76 kills by minute 3 (09:27 of a run started 09:24), 0 deaths in the minute log, no crash, no stall, ended in town alive |
+| Blood Moor bot run, 5 min real (character level 12) | 36 kills by minute 4, 0 deaths | 76 kills by minute 3 of the run, 0 deaths in the minute log, no crash, no stall, ended in town alive |
 | Game-time reading | 25 fps | the game ran 2.00 times faster per real second |
 
-Kills per real minute at k=2 was about 25 against about 9 at k=1; the two runs differ in start state (the k=1 run began with vendor chores and a full pack), so this is not a clean xp-per-game-hour comparison (U); the original success test (xp and kills per game hour inside the k=1 noise band, `d2dsoak bands`) was NOT run. Frame ratio is V run; fidelity of fights at k=2 is only a first look (no death, no stall in 5 minutes). k=4 not tried (not in the brief).
+Kills at k=2 (76 in 3 min) and k=1 (36 in 4 min) are NOT comparable: different durations, and the k=1 run began with vendor chores and a full pack, so no kills-per-minute or xp-per-game-hour claim is made (U); the original success test (xp and kills per game hour inside the k=1 noise band, `d2dsoak bands`) was NOT run. Frame ratio is V run; fidelity of fights at k=2 is only a first look (no death, no stall in 5 minutes). k=4 not tried (not in the brief).
 
 Not captured: the hook's exit `REHASH`/`EXIT` lines. `game.sh stop` kills the process, so the exit handler never ran (V: no REHASH line in the k=1 log after a stop). The start `READY` hash is the only evidence of the slot set; an end-of-run re-hash needs a graceful exit or a periodic hook log line (U, next step).
 
@@ -81,3 +81,26 @@ Not captured: the hook's exit `REHASH`/`EXIT` lines. `game.sh stop` kills the pr
 - A periodic `STAT` log line (virtual and real time, offset) so the evidence survives a kill.
 - A scaled bot clock for k > 1 (the bot's own timers, input holds, are real time; section 2.6 of original-game-lockstep.md). The k=2 bot run worked without it, so the bot tolerates 2x at least in town and Blood Moor (V run, one 5 min sample).
 - Same-day unhooked bot control on the same character and a k=4 step, then the `d2dsoak bands` comparison.
+
+## Per-API clock coverage (V, hook log of the run)
+
+The hook patched 20 import slots before the first game frame: the exe (tick count, performance counter, `timeGetTime`, `Sleep`, `WaitForSingleObject`, `WaitForMultipleObjects`, `LoadLibraryA/W/ExA`, `GetProcAddress`), the video library (`timeGetTime`, `Sleep`, `LoadLibraryA`, `GetProcAddress`), the audio/animation library (`timeGetTime`, `timeSetEvent`, `LoadLibraryA`, `GetProcAddress`) and the real JPEG library. The frame counter ratio of 1.0000 times k at k=2 shows the logic clock is covered. Not covered by design (U whether the game uses them): `GetSystemTimeAsFileTime`, waitable timers, delay-load imports, DirectDraw timing.
+
+## What remains U
+
+- Which counter is the game struct's `dwGameFrame`, who calls the progress update, the client frame cadence.
+- Same-day unhooked bot control and the xp and kills per game-hour comparison against the baseline bands (`d2dsoak bands`); k=4 and higher; longer runs; fights beyond Blood Moor.
+- The end-of-run slot re-hash (needs a graceful exit or a periodic log line; a stop kills the process).
+- Whether the bot's own timers need scaling at higher k.
+
+## What Tier A needs for baseline-scale use
+
+A periodic hook status line; a scaled bot clock and rate read from the hook; an unhooked control run of the same length on the same character; the bands comparison at k=2 then k=4, tagged "time hook k=N, null control run lockstep-p2-k1"; a launch path that confirms offline use without an environment variable.
+
+## Lesson: the hung start
+
+A refused hook leaves the game launcher alive and every later start, hooked or not, fails with "Game.exe did not start" until the instance is stopped. Always stop before a retry; read the shared per-instance game log (`game-<id>.out`) before blaming the hook.
+
+## State left
+
+i4: original DLL restored, no proxy, no cfg, instance stopped by the coordinator, character Booti in town at the end of the k=2 run. Hook repo changes (offline guard in the cfg file) are committed locally only in the private hook repository; the forge was going offline, no push was attempted.
