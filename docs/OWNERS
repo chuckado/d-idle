@@ -141,3 +141,9 @@ internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
 internal/bot/tpdump.go  hastpdump  hastpdump
 docs/hastpdump.md  hastpdump  hastpdump
+docs/research/monster-ai-trace.md  monsterai  monsterai
+docs/coverage/ledger.tsv  monsterai  monsterai
+docs/coverage/rule-coverage.md  monsterai  monsterai
+docs/coverage/gaps.tsv  monsterai  monsterai
+tools/emu/mai_*  monsterai  monsterai
+openspec/changes/monsterai/**  monsterai  monsterai
