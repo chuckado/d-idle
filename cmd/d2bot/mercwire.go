@@ -3,7 +3,9 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"net/http"
+	"strconv"
 	"strings"
 	"sync"
 	"sync/atomic"
@@ -320,10 +322,23 @@ func (t *mercTown) NeedsTrip(s *d2.Snapshot) (bool, string) {
 	return t.Townsman.NeedsTrip(s)
 }
 
-// claimDep builds task deps ClaimMerc over a Claimer: the policy check, the claim, the log line. A nil claimer
-// answers task.ErrClaimUnsupported (the step logs and moves on). The claim step already requires Blood Raven dead and
-// Normal difficulty (task.ClaimNeeded); ShouldClaimFreeRogue re-checks them from the reader.
+// claimVerify bounds the read-back after a claim: claimTries reads, claimPause apart. A var so tests do not sleep.
+var (
+	claimTries = 4
+	claimPause = 500 * time.Millisecond
+)
+
+// claimFailLimit is how many claims may end unseen before the step stops retrying (the reward is spent at the first
+// grant: a Rogue that died at once cannot be claimed again, only revived or hired).
+const claimFailLimit = 3
+
+// claimDep builds task deps ClaimMerc over a Claimer: the policy check, the claim, the read-back, the log line. A nil
+// claimer answers task.ErrClaimUnsupported (the step logs and moves on). The claim step already requires Blood Raven
+// dead and Normal difficulty (task.ClaimNeeded); ShouldClaimFreeRogue re-checks them from the reader. After a grant
+// the merc is read back from the dump (merc.present): `merc: claim verified` or `merc: claim not seen after N tries`
+// (an error, so the step retries, at most claimFailLimit times; Gate 2 logged "claimed" and the merc was gone 5 s later).
 func claimDep(c Claimer, rd merc.Reader, diff func() merc.Difficulty, log interface{ Info(string, ...any) }) func(context.Context) error {
+	unseen := 0
 	return func(ctx context.Context) error {
 		if c == nil {
 			return task.ErrClaimUnsupported
@@ -344,11 +359,63 @@ func claimDep(c Claimer, rd merc.Reader, diff func() merc.Difficulty, log interf
 		if err != nil {
 			return err
 		}
-		if granted {
-			log.Info(merc.Prefix + "claimed free rogue")
-		} else {
+		if !granted {
 			log.Info(merc.Prefix + "claim: nothing granted (merc already owned)")
+			return nil
 		}
+		log.Info(merc.Prefix + "claimed free rogue")
+		if rd == nil {
+			return nil
+		}
+		for i := 0; i < claimTries; i++ {
+			if i > 0 {
+				if err := sleepCtx(ctx, claimPause); err != nil {
+					return err
+				}
+			}
+			if s, err := rd.State(); err == nil && s.Known && s.Owned {
+				log.Info(merc.Prefix + "claim verified")
+				return nil
+			}
+		}
+		log.Info(merc.Prefix + "claim not seen after " + strconv.Itoa(claimTries) + " tries")
+		if unseen++; unseen >= claimFailLimit {
+			return nil
+		}
+		return errClaimUnseen
+	}
+}
+
+var errClaimUnseen = errors.New("merc: claimed but not seen in the dump")
+
+func sleepCtx(ctx context.Context, d time.Duration) error {
+	t := time.NewTimer(d)
+	defer t.Stop()
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case <-t.C:
 		return nil
+	}
+}
+
+// guardMercHook is task.MercAlive for runs with the merc policy off: the route guards then read the dump (merc.present),
+// not only the unit table, where the Rogue shows up only while it is near the player. Root cause of Gate 2: with
+// merc.enabled=0 the hook stayed nil, d2.FindMerc found the Rogue once in town and never again (5 s later the character
+// stood in the Burial Grounds), so every guard read "merc=none" for 8 h. A read error or a missing dump section is
+// "unknown" and leaves the unit table as the only source. Reads are reused for mercStateTTL (each is a full snapshot).
+func guardMercHook(rd merc.Reader, now func() time.Time) func() (bool, bool) {
+	var mu sync.Mutex
+	var at time.Time
+	var alive, known bool
+	return func() (bool, bool) {
+		mu.Lock()
+		defer mu.Unlock()
+		if !at.IsZero() && now().Sub(at) < mercStateTTL {
+			return alive, known
+		}
+		alive, known = merc.AliveHook(rd)()
+		at = now()
+		return alive, known
 	}
 }
