@@ -2,7 +2,7 @@
 
 ```yaml
 change: apicookbook
-status: in-progress
+status: archived
 agent: apicookbook
 branch: agent/apicookbook-pub
 worktree: ~/code/d2lod-wt/apicookbook-pub
@@ -16,7 +16,8 @@ owns:
 exclusive: []
 gates:
   - tools/emu/run-on-worker-test.sh passes offline
-result: wrapper tested offline (stub labrun) and live from the head box (mpq-table monstats first line, hello.py on the worker host); live Haiku job through the runner recorded in the ops repo
+result: "offline stub tests 26 of 26; live smoke through the ops runner passed"
+merge: 7f3c38b
 ```
 
 - [x] 1 Read the stream logs of the seven jobs, list working and denied forms
