@@ -143,3 +143,8 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/api-agent-cookbook.md  apicookbook  apicookbook
+tools/emu/run-on-worker*  apicookbook  apicookbook
+tools/emu/run-py.sh  apicookbook  apicookbook
+tools/emu/mpq-table.sh  apicookbook  apicookbook
+openspec/changes/apicookbook/**  apicookbook  apicookbook
