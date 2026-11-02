@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 5c3ee126 11-02 08:28 `merge origin/main into lockstepp1p2` (lockstepp1p2)
 - 4ea66249 11-02 08:25 `Merge agent/boardclean: BOARDCLEAN: eight finished board items closed, two partial items narrowed, open-work.md synced` (boardclean)
 - 5d9b879d 11-02 07:57 `Merge agent/propenmonsterpaceb: PROPEN-MONSTERPACE-B: upstream PR 171 opened (base monster velocity 75)` (propenmonsterpaceb)
 - 5a761420 11-02 07:57 `merge origin/main into propenmonsterpaceb` (propenmonsterpaceb)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - eb6f29de 11-02 07:14 `merge origin/main into skshield` (skshield)
 - 51a5d6e9 11-02 07:09 `Merge agent/skdefenders: skdefenders: credit-funded first-pass decomposition (docs and emulator tools only)` (skdefenders)
 - 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
-- 9584f9c7 11-02 06:54 `Merge agent/skcurseval: skcurseval: curse value calculations on game.exe against d2d, levels 1..99 (first pass; docs and emulator tools only)` (skcurseval)
 <!-- statusgen:end -->
