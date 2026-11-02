@@ -16,6 +16,11 @@ gates:
   - own harness run before the author's ground draft is compared
 result: "docs only; changes applied in bundlefinal"
 merge: b174a29
+credit:
+  component: Verifier: bundle 1
+  author: owner
+  agents: [Claude Code]
+  consent: none
 ```
 
 - [x] 1 Ground: own game.exe oracle and own d2d probe, base vs head counts
