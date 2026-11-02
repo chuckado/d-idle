@@ -134,3 +134,14 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/verifywaypoint2-trace.md  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_xref.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_tab.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_tab2.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_disp.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_hdis.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_op.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_game.py  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_d2d.sh  verifywaypoint2  verifywaypoint2
+tools/emu/vw2_trace.py  verifywaypoint2  verifywaypoint2
+openspec/changes/verifywaypoint2/**  verifywaypoint2  verifywaypoint2
