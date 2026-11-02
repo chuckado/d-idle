@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyalign
-status: in-progress
+status: archived
 agent: verifyalign
 branch: agent/verifyalign
 worktree: d2lod-wt/verifyalign
@@ -14,12 +14,13 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Offline, not verified live. Own harness vfal_run.py (seeds 20261102 and 77): getter/setter 400 + 400 random units, gate FUN_0057b7d0 600 + 600 runs, spawn map 734 MonStats rows, 21 setter call sites: 0 differ; no claim of alignment2-trace.md found WRONG; open: live stat 0xac on merc/Shadow, merc weapon path of FUN_00535bc0, two unattributed value-2 setter sites."
+result: "docs only; see the doc for tags and limits"
 credit:
   component: verifyalign
   author: owner
   verified_by: []
   agents: [Claude Code]
+merge: 1046ffd
 ```
 
 ## 1. Work
