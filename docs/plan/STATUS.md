@@ -127,7 +127,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
 - 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
+- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
 - 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
 - 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
 - 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
@@ -135,6 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5d40cf92 11-02 14:38 `merge origin/main into nmlevel` (nmlevel)
 - 7fa2b9df 11-02 14:31 `Merge agent/monsterpace: monsterpace: finished docs and tools work that was never merged (branch triage 2026-11-02)` (monsterpace)
 - 6ee620fc 11-02 14:30 `merge origin/main into monsterpace` (monsterpace)
-- 5b07021a 11-02 14:25 `Merge agent/bundlefinal: BUNDLEFINAL: bundle-2 prepared (commit messages, credit blocks on cards, final PR body); staged on the fork for the CodeRabbit pre-scan` (bundlefinal)
-- b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
 <!-- statusgen:end -->
