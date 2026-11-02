@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: freeze rules PR draft and prep notes (docs/research/pr-freeze-rules-draft.md).
 - Added docs/research/verifypalskill2.md and tools/emu/vp2*: independent check of the Smite, Zeal and Sacrifice deviations.
 - Added docs/research/pr-skmelee3-verifier.md: independent check of the SKMELEE3 fork candidate (fine physical, undead/Blunt bonus).
 - verifyprices: independent Opus verification of the vendor prices follow-on (docs and tools/emu/vpr_* only)
