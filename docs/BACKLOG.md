@@ -342,6 +342,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - MERCWIRE: merc field rules wired (wait after portal/waypoint, leave with merc down in a crowd, healing potion for her via cmd belt N merc) and the Lut Gholein first-visit flag persisted per character (agent/mercwire); open: live check of the potion verb, arrival wait and leave
 - TOWNSHOP: Gate 2 NOKILL 15 root cause is a false-empty portal trip loop (stat 70 dropped in the field), not single buy clicks; chore budget inside buy loops and a 2-scroll proof top-up (docs/townshop.md); awaits a live check
 - tomestat: the tome's stat 70 lost in the field was a unit-id collision between ground and carried items in d2dsrc extras; fixed bot side, live check pending (docs/tomestat.md)
+- covmissiles: missiles first pass done (docs/research/covmissiles-trace.md): D1 hit roll proven on 8 more skills, table and flight values of all 684 rows run; open: D2 d2d loads 302 of 684 rows, D3 CollideFriend and CollideType unread by d2d, D4 pierce rule, B1 RangeAt off by one LevRange, B2 threat speed ignores Accel and VelLev, B3 derived skill kind
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

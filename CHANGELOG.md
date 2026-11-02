@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- covmissiles: missiles coverage first pass (docs/research/covmissiles-trace.md, tools/emu/cm_*): 138,000 hit cases and 13,680 table and flight cases run against game.exe, missiles run-tested 9 to 42 percent
 - Fixed: the bot no longer loses the Tome of Town Portal's charge count in the field when a ground item shares its unit id.
 - fix: town resupply stops at its time budget inside the buy loops, and a portal-empty report with a readable tome buys 2 scrolls, not a refill (docs/townshop.md).
 - bot: with the merc policy on, the character waits briefly for the Rogue after a portal or waypoint, leaves a crowd when she is down, gives her a healing potion below 50 percent life, and remembers the Lut Gholein hire decision across restarts.
