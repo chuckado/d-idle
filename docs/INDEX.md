@@ -190,3 +190,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - no change
 - docs/research/pr-nmlevel-verifier.md - independent check of local/nmlevel (Nightmare / Hell area monster level), own harness in docs/research/pr-nmlevel-verifier/
 - docs/research/sk-gearar-trace.md - attack rating from gear (stats 115, 116, 120, 123, 124, 179) in game.exe vs d2d (SKGEARAR)
+- docs/research/verify-aidel.md: independent re-check of the monster think period aidel (VERIFY-AIDEL)
