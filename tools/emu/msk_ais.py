@@ -18,7 +18,7 @@ RAW_N = __import__("os").environ.get("MSK_RAWN", "1") == "1"    # 1: the step co
 
 
 def install(e):
-    """The Corrupt Archer runs in with FUN_005defb0 (move mode 0xf, RN: FUN_005deb60(unit, 0xf, 0, 0, 0, n, 0)), not FUN_005ded40 (mode 2 with
+    """The Corrupt Archer runs in with FUN_005defb0 (move mode 0xf, RN: FUN_005deb60(target, 0xf, 0, 0, n, 0)), not FUN_005ded40 (mode 2 with
     FUN_005a6260(0xd)), which mon_ais hooks. Left unhooked, the real FUN_005defb0 reaches FUN_005dead0 and the harness labels the run a skill
     (the first run of this card: 551 of 1,500 'skill' for 'run'). Hooked here the same way as FUN_005ded40: ("run", target, n, 1), set off."""
     _install(e)

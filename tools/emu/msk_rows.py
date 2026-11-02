@@ -12,9 +12,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 def table(name):
     out = subprocess.run(['bash', os.path.join(here, 'mpq-table.sh'), name], capture_output=True, text=True).stdout
     L = [x for x in out.split('\n') if x.strip()]
-    i = 0
-    while not (L[i].startswith('Id\t') or L[i].startswith('skill\t') or L[i].startswith('Skill\t') or L[i].split('\t')[0] in ('Id', 'skill', 'Skill', 'Name')):
-        i += 1
+    i = 0                                    # the table's own header is the first line (stdout of mpq-table.sh is clean)
     h = L[i].split('\t')
     return h, [dict(zip(h, l.split('\t'))) for l in L[i + 1:]]
 
