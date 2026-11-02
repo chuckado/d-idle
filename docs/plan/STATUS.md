@@ -127,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
-- 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
-- 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
-- 6572f5e3 11-02 12:30 `merge origin/main into credits` (credits)
-- 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
-- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
-- 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
-- 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
-- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
-- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
+- 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
+- 6d2b15dd 11-02 13:17 `merge origin/main into alignment2` (alignment2)
+- 0ee7978f 11-02 13:12 `Merge agent/smiteblock: smiteblock: credit-funded result (docs and emulator tools only)` (smiteblock)
+- 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
+- dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
+- 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
+- e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
+- 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
+- 41d992c7 11-02 12:49 `Merge agent/contribid: CONTRIBID: community contributors commit as themselves; reproducibility rule and PR template checkboxes (docs and template only)` (contribid)
+- 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
 <!-- statusgen:end -->
