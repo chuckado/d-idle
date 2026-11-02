@@ -1,6 +1,6 @@
 # Lockstep probes P1 and P2: preparation state
 
-> status: PARTIAL. Probes P1 and P2 of docs/research/original-game-lockstep.md (section 4) are prepared but NOT run: no live numbers exist yet. Card `lockstepp1p2`. Previous step: docs/research/lockstep-p0.md.
+> status: PARTIAL (P1 done, P2 k=1 control done, k=2 see below). Probes P1 and P2 of docs/research/original-game-lockstep.md (section 4) are prepared but NOT run: no live numbers exist yet. Card `lockstepp1p2`. Previous step: docs/research/lockstep-p0.md.
 
 ## Authorisation and ledger
 
@@ -32,3 +32,29 @@ P2: install the proxy in the chosen instance's game folder (instance stopped), `
 - Not hooked: `GetSystemTimeAsFileTime`, DirectDraw timing, waitable timers, delay-loaded imports. Whether Game.exe uses any of these for pacing is unknown until P1.
 - k is fixed at process start; the P2 plan needs a restart per k.
 - The bot's own timers need a scaled clock for k > 1 (original-game-lockstep.md section 2.6); not written.
+
+
+## P1 results (V read, hidden instance i4, 2026-11-02, read only, tool `cmd/lockstepscan`)
+
+Method: snapshot all rw regions below 2 GB twice 2 s apart, keep 32-bit words that grew by 45 to 56, re-filter twice, then sample the survivors once a second for 10 s by the tool's own wall clock. No writes, no hook (first session) and again with the hook at k=1 (second session).
+
+| Fact | Value |
+|---|---|
+| Candidates after the 2 s pass / after filters | 36 / 13 (first session), 34 / 8 (second) |
+| Counters at exactly 25 fps | 11 words (static data of the exe image, plus 3 heap words), all 24.975 per second over 10.010 s = 250 frames; per-second minimum 24.97, maximum 24.98 (the 0.025 is the 10.01 s sampling span, not jitter) |
+| Same static addresses after a restart | yes (two game starts, one unhooked, one with the proxy) |
+| Other near-25 counters | one at 23.976 per second (U what it counts), one client-like counter with per-second jitter 23.97 to 27.97 (mean 25.175) |
+| Jitter of the main counter | none measurable at 1 s resolution (U below that) |
+
+Which word is `dwGameFrame` of the D2MOO game struct is U (the heap words are the candidates for fields of a game struct; the static ones may be copies or client-side counters). Not derived: the caller of the progress update and the client frame cadence (U, not done). The 25 fps model holds on our build (V read): 250 frames per 10.01 s, 7506 frames in 300.229 s = 25.0009 fps with the proxy at k=1.
+
+## P2 k=1 control (V run, hook with k=1 from `d2hook.cfg`, run id lockstep-p2-k1)
+
+- Hook log: `CLOCK k=1.0000 source=cfg`, `READY patched_slots=20` before the first frame; modules patched: the exe, the video and smack libraries and the JPEG stand-in's real DLL (APIs: tick counts, QPC, `timeGetTime`, `Sleep`, waits, `timeSetEvent`, `LoadLibrary*`, `GetProcAddress`). The exit `REHASH` line is pending the stop.
+- Town idle 300.2 s: 7506 frames, 25.0009 fps, windows 24.98 to 25.18, 0 read errors (unhooked: 24.975 per 10 s, same counter).
+- Blood Moor, bot `farm:Blood Moor`, 5 min (character level 12): 36 kills in 4 min and 0 deaths in the log minutes; no crash, no stall; frame counter after the run 25.03 fps over 20 s. No unhooked bot run on the same character was made today, so kills per minute has no same-day control (U); the null control claim rests on frame rate and on the run finishing like a normal run.
+
+## What failed on the way (V)
+
+- First start with the proxy: the hook refused (`D2HOOK_OFFLINE` is an environment variable and does not cross the remote start). The launcher process of Game.exe stayed alive after the refusal and left a hung process tree (proton launcher, steam.exe, wineserver, Xvfb) in the instance prefix; every later start, even unhooked, printed "Game.exe did not start" until `game.sh stop` cleared it. Rule: always stop before a retry. Fix in the hook (private repo): `offline=1` in `d2hook.cfg` also confirms offline use.
+- Game logs of an extra instance are in the shared logs folder as `game-<id>.out`, not in the instance folder.
