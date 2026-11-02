@@ -126,3 +126,27 @@ Not re-run on the combined head: the differentials (emulator comparisons), clang
 
 - BACKLOG: #164 got a tooling follow-up (cd01212f) for CodeRabbit; watch for the maintainer.
 - INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## Player missile damage roll (card propenplayerroll)
+
+- posted: 2026-11-02 go: the user, explicit authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 1. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 6935cf64 (unchanged; the five candidate commits are a clean fast-forward on it). The candidate (pr/player-roll-v2, e66e10ba) was rewritten for the PR: numeric-ID noreply identity as author and committer (the candidate's committer was a generic one), only the `Agent: Claude Code` trailer; trees identical (git diff e66e10ba..head empty). Messages, branch name and body scanned for host names, home paths, emails, tool names, session links, model attribution: none.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/player-missile-damage-roll head 1c273ef1 (610c0474 oracle and test mode, 4f51d89c element roll top, 1ea79c57 physical in 256ths, d67720e0 -100 floor, 1c273ef1 three include lines). Also pushed to the private remote. The old pr/player-roll (28c0540a) was not touched.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/166 (7 files, 5 commits; title "A missile's element roll never reaches its max, and its physical roll keeps its 256ths (FUN_005a89a0)"). State OPEN, base 6935cf64, head 1c273ef1 as checked with gh pr view. Body from pr-playerroll-draft.md without the internal sections (lab-binary scenarios, verifier checklist, merger lines), ends with the bare `Agent: Claude Code` line; it says the include lines duplicate #164's and either merge order works.
+
+| check (worker host, head 1c273ef1) | result |
+|---|---|
+| throwaway merge with fix/monster-missile-record-and-poison | clean, no conflict |
+| pr_guard, range and each of 5 commits | 0 FAIL / 0 WARN |
+| presubmit --quick | 0 FAIL, 2 WARN (doc-claims "never" at missiles.md:106, build skipped; both answered in the body) |
+| tooling unit tests | 17 ok; test_tooling 7 ok (1 skip) |
+| Release build with -Wall -Wextra -Wshadow, test_combat, test_rules, test_game_rules, test_game, test_game_missiles (data dir set) | exit 0 each; 0 warnings in combat.hpp, test_combat, test_missile_hit, test_game_missiles |
+| diff scan for `for (const auto [..] :` copying loops | none added |
+| CI "Names and includes" selection (tidy-pr-select, clang-tidy 124 files) | 0 include-cleaner findings; 0 findings in our files; 377 readability-identifier-length in untouched files (a newer-LLVM check, same as upstream main) |
+
+Not re-run: the emulator differentials and the deterministic scenarios (run on the candidate head by the author and the verifier; the tree is identical), an MSVC build. No comment, label or reviewer request was posted.
+
+## Shared-file lines for the merger (propenplayerroll)
+
+- BACKLOG: #166 (player missile damage roll) is open; watch for the maintainer and CodeRabbit.
+- INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
