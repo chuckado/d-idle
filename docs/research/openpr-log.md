@@ -210,3 +210,28 @@ Not re-run on the rebased head: the det scenarios (run on the same two commits o
 
 - BACKLOG: #170 (Nightmare/Hell monster start level) is open; watch for the maintainer and CodeRabbit.
 - INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
+
+## Monster base velocity (card propenmonsterpaceb)
+
+- posted: 2026-11-02 go: the user, standing authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 4 of 4 and the last. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 5df54372 (the #167 merge; the candidate local/monsterpace-b-velocity, 8a77a4ab, was on 3be426d3). Both commits were cherry-picked onto it as a new local branch (local/monsterpace-b-v2). One conflict: a comment block over the walk sum in `ai.cpp` that #167 had reworded; resolved by keeping #167's sentences and adding the 75 sentence (no code line conflicted). Then rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (same tree as the gated head). Messages, diff and body scanned for host names, home paths, emails, tool names, session links, model attribution: none. A throwaway merge with the open #170, #163 and #159 is clean (#160 conflicts with main in `missiles.cpp` regardless).
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-base-velocity head f8447aff (8bf07f12 code and oracle, f8447aff monster-ai.md). Also pushed to the private remote, with local/monsterpace-b-v2 (the pre-rewrite head).
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/171 (4 files, 2 commits; title "A monster starts at 75 percent velocity, not 100 (FUN_00573cb0 SetStat(0x43, 0x4b))"). State OPEN, base 5df54372, head f8447aff as checked with gh pr view. The body says plainly that it changes every awake monster's walking speed, that chill and slows become relatively stronger (a coldeffect -50 walker hits the 25 percent floor), that Diablo's run and the whirl step stay at 100, that d2d mercs and pets are unchanged although in game.exe they probably also start at 75 (not traced), that there is no MSVC build, and that the deterministic hashes change for 14 of 15 scenarios.
+
+| check (worker host, head f8447aff; tree identical to the gated head) | result |
+|---|---|
+| Release build, test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game (MPQ folder set) | 7 of 7 exit 0 |
+| speed oracle, seed 20261102, 122,646 cases | base 5df54372: 50,626 of 61,654 monster rows differ (RN 25,321, WL 25,305), merc/pet/player 0; head: 0 of everything |
+| deterministic scenarios, 15, seed 3, one slot | passive identical; 14 differ, first differing line a monster position; base reruns repeat their hashes in all 15 |
+| g++ and clang++, TU compile commands plus -Wall -Wextra -Wpedantic -Wshadow -Wrange-loop-construct -Wconversion -Wsign-conversion, ai.cpp and the two monster tests | rc 0; 29 (g++) and 33 (clang++) warnings, equal to the base |
+| clang-tidy on the same three TUs | no finding on an added line |
+| pr_guard, range and each of the 2 commits | 0 FAIL / 0 WARN |
+| presubmit --quick | 0 FAIL, 3 WARN (unit kinds, test-gap, build skipped; answered in the body) |
+| tooling unit tests (tools/*.py) | 31 ok |
+
+Not re-run: an MSVC build, the full ctest, the full CI tidy selection. No comment, label or reviewer request was posted. The limit of four authorised PRs is used up (#166, #167, #170, #171).
+
+## Shared-file lines for the merger (propenmonsterpaceb)
+
+- BACKLOG: #171 (monster base velocity 75) is open; watch for the maintainer and CodeRabbit. The authorised four PRs are used up.
+- INDEX, decomp-queue, research README: see merge-lines.txt.
