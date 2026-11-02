@@ -54,6 +54,39 @@ func snap(p *mem.Proc, rs []region) map[uint32][]byte {
 	return m
 }
 
+// watch ADDR SECONDS: sample one counter every 5 s and print frames per wall second per window and in total.
+func watch(p *mem.Proc, args []string) {
+	ad64, _ := strconv.ParseUint(strings.TrimPrefix(args[0], "0x"), 16, 32)
+	secs, _ := strconv.Atoi(args[1])
+	var buf [4]byte
+	rd := func() (uint32, bool) {
+		if p.ReadAt(buf[:], uint32(ad64)) != nil {
+			return 0, false
+		}
+		return binary.LittleEndian.Uint32(buf[:]), true
+	}
+	v0, ok := rd()
+	if !ok {
+		fmt.Println("read error at start")
+		os.Exit(1)
+	}
+	t0 := time.Now()
+	pv, pt := v0, t0
+	errs := 0
+	for time.Since(t0) < time.Duration(secs)*time.Second {
+		time.Sleep(5 * time.Second)
+		v, ok := rd()
+		if !ok {
+			errs++
+			continue
+		}
+		now := time.Now()
+		fmt.Printf("t=%.1fs frame=%d window_fps=%.3f\n", now.Sub(t0).Seconds(), v, float64(v-pv)/now.Sub(pt).Seconds())
+		pv, pt = v, now
+	}
+	fmt.Printf("TOTAL frames=%d wall=%.3fs fps=%.4f read_errors=%d\n", pv-v0, pt.Sub(t0).Seconds(), float64(pv-v0)/pt.Sub(t0).Seconds(), errs)
+}
+
 func main() {
 	p, err := mem.OpenGame()
 	if err != nil {
@@ -61,6 +94,10 @@ func main() {
 		os.Exit(1)
 	}
 	defer p.Close()
+	if len(os.Args) == 4 && os.Args[1] == "watch" {
+		watch(p, os.Args[2:])
+		return
+	}
 	pid, _ := mem.FindGame()
 	rs := regions(pid)
 	fmt.Printf("regions rw below 2G: %d\n", len(rs))
