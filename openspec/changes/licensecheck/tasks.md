@@ -2,7 +2,7 @@
 
 ```yaml
 change: licensecheck
-status: done
+status: in-progress
 agent: licensecheck
 branch: agent/licensecheck
 worktree: ~/code/d2lod-wt/licensecheck
