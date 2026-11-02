@@ -90,15 +90,8 @@ func minDist(p input.Point, ps []input.Point) float64 {
 
 // hostileMissiles lists missile positions that are not the player's or a friendly unit's.
 func hostileMissiles(snap *d2.Snapshot) []input.Point {
-	if snap == nil || snap.Player == nil {
-		return nil
-	}
-	friendly := Friendlies(snap, nil)
 	var out []input.Point
-	for _, m := range snap.Missiles {
-		if _, ok := friendly[m.OwnerID]; ok || (m.OwnerID == snap.Player.ID && m.OwnerType == 0) {
-			continue
-		}
+	for _, m := range hostileMissileUnits(snap) {
 		out = append(out, input.Point{X: m.X, Y: m.Y})
 	}
 	return out
