@@ -224,3 +224,9 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifypalaura.md: independent verification of palaura-trace (roll and disc verified, rest not re-run)
 - docs/research/sk-zero-hit-trace.md - what a zero-damage hit still triggers (SKZEROHIT, static)
 - docs/research/verifypaldur.md: independent verification of the PALDUR durability trace (claims, limits, one prose error)
+- docs/research/pr-prices-verifier.md - Opus verifier of the vendor prices follow-on (repair gate holds; divide-first already upstream; rebase needed)
+- docs/research/pr-skmelee3-verifier.md - independent verification of the SKMELEE3 PR candidate (own harness vs3_*)
+- docs/research/verifypalskill2.md - independent re-check of the PALSKILL trace (Smite, Zeal, Sacrifice; own harness tools/emu/vp2*)
+- docs/research/pr-freeze-rules-draft.md: PR body draft for the freeze rules branch (local/freeze-rules-v3), order versus #159, CI parity notes.
+- docs/research/pr-skmelee3-draft.md - draft PR text for the melee fine physical and undead / Blunt bonus (on hold)
+- docs/research/pr-vendor-repair-gate-draft.md - PR draft: vendor repair gate alone, rebased on upstream main, counts and CI parity
