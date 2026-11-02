@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifyresistq](../../openspec/changes/verifyresistq/) | in-progress | verifyresistq | `docs/research/verifyresistq.md`<br>`tools/emu/vq_*.py`<br>`openspec/changes/verifyresistq/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -127,10 +126,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifyresistq: own harness run on two seeds before the author's rows are compared
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- bbf5986b 11-02 05:30 `Merge agent/verifyresistq: verifyresistq: Pro account job result (docs and emulator tools only)` (verifyresistq)
 - c9da90ec 11-02 05:30 `merge origin/main into verifyresistq` (verifyresistq)
 - 3f14d224 11-02 05:23 `Merge agent/verifyskmana: verifyskmana: Pro account job result (docs and emulator tools only)` (verifyskmana)
 - 3e8e647d 11-02 05:22 `merge origin/main into verifyskmana` (verifyskmana)
@@ -140,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 335a1c00 11-02 05:09 `merge origin/main into verifyskmelee2` (verifyskmelee2)
 - 7f945d32 11-02 05:02 `Merge agent/verifyaidel: verifyaidel: Pro account job result (docs and emulator tools only)` (verifyaidel)
 - e85b5227 11-02 05:02 `merge origin/main into verifyaidel` (verifyaidel)
-- b0637e1f 11-02 04:55 `Merge agent/skgearar: skgearar: Pro account job result (docs and emulator tools only)` (skgearar)
 <!-- statusgen:end -->

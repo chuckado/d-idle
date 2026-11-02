@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyresistq
-status: in-progress
+status: archived
 agent: verifyresistq
 branch: agent/verifyresistq
 worktree: ~/code/d2lod-wt/verifyresistq
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own harness run on two seeds before the author's rows are compared
-result: "docs and emulator scripts only; game.exe side V run, d2d side not run"
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: bbf5986
 ```
 
 - [x] 1 Read FUN_005a1370 and FUN_0057cb00 in the disassembly
