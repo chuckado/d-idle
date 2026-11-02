@@ -66,7 +66,9 @@ def model_s(f):
     mx = (f["bM"] + f["n111"]) << 8
     mn = max(mn, 0x100)
     if mx <= mn: mx = mn + 0x100
-    p = max(f["ed"] + f["dp"] + f["str"], -90)
+    # the shield is passed as the item, so the Strength / Dex term is the item's StrBonus / DexBonus percent of them (0 here);
+    # my first model added Strength itself (the barehanded path): wrong, 4,463 of 8,000 outside the bounds (see the doc)
+    p = max(f["ed"] + f["dp"] + (f["str"] * f["sb"] + f["dex"] * f["db"]) // 100, -90)
     return mn + tdiv(mn * (f["off"] + p), 100), mx + tdiv(mx * (f["off"] + p), 100)
 
 
@@ -136,14 +138,17 @@ def cmp(cpath, gpath, bpath, kpath):
             c = r["S"]; c[0] += 1
             got, phys = int(gl[2]), int(b[(tag, i)][3])
             lo, hi = model_s(f)
-            if not lo <= got <= hi: c[1] += 1
+            if not lo <= got <= hi:
+                c[1] += 1
+                if c[1] <= 40 and (c[1] % 5 == 0 or f["n111"] == 0): print("outside", got, (lo, hi), f)
             if (got >> 8) != phys: c[2] += 1
             if got == phys << 8: c[3] += 1
             c[4] += got / 256 - phys
     print("C n, game!=my model, game!=d2d, by skill:", r["C"])
     s = r["S"]
     print(f"S n={s[0]} game outside my bounds={s[1]} d2d whole points differ={s[2]} exact-256ths equal={s[3]} mean(game-d2d)={s[4] / max(s[0], 1):.3f}")
-    for name, pred in (("n111>0", lambda f: f["n111"] > 0), ("n111=0", lambda f: f["n111"] == 0)):
+    for name, pred in (("n111>0", lambda f: f["n111"] > 0), ("n111=0 min<max", lambda f: f["n111"] == 0 and f["bm"] < f["bM"]),
+                       ("n111=0 min=max", lambda f: f["n111"] == 0 and f["bm"] == f["bM"])):
         n = d = 0
         for (tag, i, f), gl in zip(cases, g):
             if tag == "S" and pred(f):
