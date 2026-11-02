@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyskmana
-status: in-progress
+status: archived
 agent: verifyskmana
 branch: agent/verifyskmana
 worktree: ~/code/d2lod-wt/verifyskmana
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - tools/ci/check.sh
-result: C1 C2 C3 C5 C6 hold (20,000 cases, seed 20261102, V run on the worker host), C4 not tested; no live game
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: 3f14d22
 ```
 
 - [x] 1 Read FUN_0056c160 and FUN_0056bfe0 and write an own oracle
