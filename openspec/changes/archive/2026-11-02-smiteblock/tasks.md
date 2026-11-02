@@ -2,7 +2,7 @@
 
 ```yaml
 change: smiteblock
-status: in-progress
+status: archived
 agent: smiteblock
 branch: agent/smiteblock
 worktree: ~/code/d2lod-wt/smiteblock
@@ -19,8 +19,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and emulator scripts only. A block does not stop Smite in game.exe 1.14d (V run, 96,000 cases, 23,347 blocked, all applied); d2d lets a block end it (V run, 34,916 of 60,000 blows with block > 0 differ, 0 after a one-line fix). No PR candidate (harness new). Nothing run live."
+result: "docs only; see the doc for tags and limits"
 live: "not run live; emulator on the worker host only"
+merge: 0ee7978
 ```
 
 - [x] read the Smite / block path, FUN_0057ec10 flag mapping, gate and consumers

@@ -61,7 +61,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
-| [smiteblock](../../openspec/changes/smiteblock/) | in-progress | smiteblock | `docs/research/smiteblock-trace.md`<br>`tools/emu/sb_block.py`<br>`tools/emu/sb_run.sh`<br>`tools/emu/sb_dbg.py`<br>`tools/emu/sb_d2d_test.cpp`<br>`tools/emu/sb_build.sh`<br>`tools/emu/sb_after.sh`<br>`openspec/changes/smiteblock/**` | - |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
@@ -123,12 +122,12 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
-- change smiteblock: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0ee7978f 11-02 13:12 `Merge agent/smiteblock: smiteblock: credit-funded result (docs and emulator tools only)` (smiteblock)
 - 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
 - dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
 - 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
 - dc11d0eb 11-02 12:45 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: private PR candidate records and drafts for the melee blow D1 and D2 split (docs only; nothing upstream)` (prbuildskmelee3b)
 - 4e693443 11-02 12:44 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
-- 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
 <!-- statusgen:end -->
