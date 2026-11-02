@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
 - 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
 - 6572f5e3 11-02 12:30 `merge origin/main into credits` (credits)
 - 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
 - 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
 - e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
-- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
 <!-- statusgen:end -->
