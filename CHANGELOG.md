@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- uniqmods (research): game.exe pick rules for champion / unique / minion mods, pack and minion counts and Act 1 superunique records traced against d2d and the bot (docs/research/uniqmods-trace.md); no code change.
+- monsterhit (docs only): docs/research/monsterhit-trace.md and tools/emu/mh_rows.py (table helper); read-only decomposition of the monster swing on the player, no oracle run, no ledger row.
+- docs: monster-missile record PR candidate fixed after the independent verifier (poison units), rebased candidate and Andariel sibling named, PR draft added
 - tools/emu/run-on-worker.sh: audited wrapper to run a tools/emu script on the worker host; docs/api-agent-cookbook.md
 - Contributor board: the maintainers now claim items their own work covers, close finished ones with a citation, and watch issue comments each cycle (tools/contrib/claim.py).
 - tpglitch: town-portal verdict debounced at its single source (kit gate and poverty check); pingpongrate: ping-pong guard resets on XP progress, not on any kill
