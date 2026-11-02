@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [baselineruns-20261102](../../openspec/changes/baselineruns-20261102/) | in-progress | baselinerun | `docs/probes/baseline-runs/20261102/**`<br>`openspec/changes/baselineruns-20261102/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -86,6 +87,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change baselineruns-20261102: rows load with d2dsoak compare; weak and invalid runs flagged in record.md
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -129,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 88f6f85a 11-02 09:54 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
 - be84737b 11-02 09:48 `Merge agent/prconflicts: PRCONFLICTS: PRs 159, 160, 163 rebased onto upstream main and force-pushed with the user's go` (prconflicts)
 - b0b6a713 11-02 09:48 `merge origin/main into prconflicts` (prconflicts)
 - 633ef305 11-02 09:33 `Merge agent/lockstepp1p2b: LOCKSTEP P1 and P2: 25 fps confirmed on our build; proxy clock hook at k=1 control and k=2 (50.0001 fps, clean fight); hung-start lesson (docs only)` (lockstepp1p2b)
@@ -138,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5d9b879d 11-02 07:57 `Merge agent/propenmonsterpaceb: PROPEN-MONSTERPACE-B: upstream PR 171 opened (base monster velocity 75)` (propenmonsterpaceb)
 - 5a761420 11-02 07:57 `merge origin/main into propenmonsterpaceb` (propenmonsterpaceb)
 - ff1dcb45 11-02 07:46 `Merge agent/crfollow170: CRFOLLOW170: CodeRabbit follow-up on PR 170: one comment fixed, one declined with reason, replies posted` (crfollow170)
-- d3285539 11-02 07:24 `Merge agent/propennmlevel: PROPEN-NMLEVEL: upstream PR 170 opened (Nightmare and Hell monster level)` (propennmlevel)
 <!-- statusgen:end -->
