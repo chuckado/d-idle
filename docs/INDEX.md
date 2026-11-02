@@ -205,3 +205,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/openpr-log.md: posted log now also covers #170.
 - no change
 - docs/research/openpr-log.md: posted log now also covers #171.
+- openspec/changes/boardclean - board cleanup, closed finished work items

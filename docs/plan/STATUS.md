@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 4ea66249 11-02 08:25 `Merge agent/boardclean: BOARDCLEAN: eight finished board items closed, two partial items narrowed, open-work.md synced` (boardclean)
 - 5d9b879d 11-02 07:57 `Merge agent/propenmonsterpaceb: PROPEN-MONSTERPACE-B: upstream PR 171 opened (base monster velocity 75)` (propenmonsterpaceb)
 - 5a761420 11-02 07:57 `merge origin/main into propenmonsterpaceb` (propenmonsterpaceb)
 - ff1dcb45 11-02 07:46 `Merge agent/crfollow170: CRFOLLOW170: CodeRabbit follow-up on PR 170: one comment fixed, one declined with reason, replies posted` (crfollow170)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 51a5d6e9 11-02 07:09 `Merge agent/skdefenders: skdefenders: credit-funded first-pass decomposition (docs and emulator tools only)` (skdefenders)
 - 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
 - 9584f9c7 11-02 06:54 `Merge agent/skcurseval: skcurseval: curse value calculations on game.exe against d2d, levels 1..99 (first pass; docs and emulator tools only)` (skcurseval)
-- b58718e1 11-02 06:11 `Merge agent/baselineruns-20261102: Baseline runs 20261102: generated record of the baseline runs (tools/baseline-run.sh)` (baselineruns-20261102)
 <!-- statusgen:end -->
