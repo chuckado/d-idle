@@ -83,7 +83,14 @@ Compile (V run, `werror.sh`): with each TU's own compile command from `compile_c
 
 MSVC /W4 /WX (not runnable here; by reading the diff): the new locals `roll` and `fine` in the physical block are in the `if` scope and the outer `roll` / `fine` are declared after it, so no C4456; `std::max(target.res[0], -100)` is int/int; `low + rng(high - low)` int; test_combat's new names (`edge`, `edge_rng`, `phys_rng`, `phys`, `half`, `phys_hit`) did not trip g++ `-Wshadow` (which flags the same nested-scope hiding as C4456/C4457); test_missile_hit uses `std::getenv` (C4996 silenced by `_CRT_SECURE_NO_WARNINGS`, set in CMakeLists) and explicit casts on the seed. No /W4 hazard found (S).
 
-clang-tidy (CI step "Names and includes (Linux)": `.clang-tidy` = `readability-identifier-length`, `misc-include-cleaner`, WarningsAsErrors `*`): see section 7a.
+### 6a. CI step "Names and includes (Linux)" (V run, coordinator's addition)
+
+Run as the workflow does (`.github/workflows/ci.yml` 241-267): `changed.txt` = the PR's `.cpp` / `.hpp` (`components/rules/combat.hpp`, `tests/game/test_missile_hit.cpp`, `tests/test_combat.cpp`), `tools/tidy-pr-select.py` against my full head build (`ninja -t deps`), which re-tidies every TU that includes a changed file: **125 TUs** (124 without my probe), then `clang-tidy -p build --quiet --extra-arg=-Wno-unknown-warning-option` on each (`.clang-tidy`: `readability-identifier-length`, `misc-include-cleaner`, WarningsAsErrors `*`). Local clang-tidy is LLVM 23.1.4; CI installs Ubuntu 26.04's (older).
+
+Findings:
+- **`tests/game/test_game_missiles.cpp` (an upstream-main file the PR does not touch, re-tidied because it includes `combat.hpp`): 3 misc-include-cleaner errors**: line 133 `d2d::game::new_character` (character_store.hpp), line 223 `d2d::rules::Blow` (combat.hpp), line 286 `d2d::rules::kMonsterCurses` (skills.hpp). These are exactly the three that failed PR #164; the file is the same on upstream main 6935cf64, so **this PR will fail the step too** unless they are fixed first. Fix verified (V run, scratch copy, restored after): add `#include <character_store.hpp>`, `#include <combat.hpp>`, `#include <skills.hpp>` to test_game_missiles.cpp: 0 include-cleaner findings left in that TU.
+- The PR's own files: **0 findings** in `combat.hpp`, `test_combat.cpp`, `test_missile_hit.cpp` (the check is live: deleting `#include <map>` from test_missile_hit.cpp in a scratch copy gives `no header providing "std::map"`).
+- Everything else is `readability-identifier-length` "binding variable name 'x' / 'y' is too short" in untouched files (outdoor.hpp, merc.hpp, apps/d2d/*), identical on base TUs: a check of LLVM 23 that CI's clang-tidy does not apply (main passes the step), not this PR's.
 
 ## 7. Suites (V run, my Release builds; tests keep asserts, tests/CMakeLists.txt strips NDEBUG)
 
