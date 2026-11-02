@@ -143,6 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-tools/emu/mm_diff.py  crfollow164  crfollow164
-docs/research/openpr-log.md  crfollow164  crfollow164
-openspec/changes/crfollow164/**  crfollow164  crfollow164

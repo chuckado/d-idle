@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfollow164
-status: in-progress
+status: archived
 skip_specs: true
 agent: crfollow164
 branch: agent/crfollow164
@@ -16,7 +16,8 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit and the range"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "both CodeRabbit comments on 164 valid: one tooling commit cd01212f (plain push), two replies posted; not verified live (offline tooling check, no game needed)"
+result: "tooling only; commit cd01212f on the PR branch"
+merge: 50d3bad
 ```
 
 ## 1. Work
