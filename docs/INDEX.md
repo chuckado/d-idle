@@ -272,3 +272,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-bundle-final-body.md: final PR body of the upstream bundle (repair gate, melee, freeze, standing missiles, Smite block), counts and limits (card bundlefinal2)
 - openspec/changes/mercfix: guard merc from the dump and claim read-back after the Gate 2 merc=none defect
 - openspec/changes/credit177: credit bookkeeping for upstream PR #177
+- openspec/changes/mercpolicy: merc policy (revive, Act 2 hire, spending order, floors, gold farm)

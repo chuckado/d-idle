@@ -338,6 +338,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - bundlefinal2: final upstream bundle (11 commits on bdc1eb02, Smite included) on private branch local/bundle-final; PR body in docs/research/pr-bundle-final-body.md; the coordinator opens the PR
 - MERCFIX: Gate 2 merc=none fixed offline (agent/mercfix): route guards read the dump merc with the policy off, free-rogue claim read back; live probe on a d2d slot still open; a dead Rogue needs merc.enabled=1 revive or a paid hire (user choice)
 - credit177: upstream PR #177 merged; CONTRIBUTORS.md and credits ledger updated
+- MERCPOLICY: merc policy of 2026-11-02 offline (agent/mercpolicy): merc.enabled default on, revive/hire need price + 150 percent kit, Act 2 swap (Hirer, dormant until a d2d window reader exists), no-merc Monastery floor 14, early-area gold farm; open: live revive price read, hire window read, wiring of wait/leave helpers
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
