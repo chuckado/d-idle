@@ -25,11 +25,13 @@ SLOT_WEIGHTS = (
 
 
 def step_rng(seed_lo, seed_hi):
+    """Advance 64-bit LCG state by one step and return (lo, hi) 32-bit words."""
     prod = (seed_lo * 0x6AC690C5 + seed_hi) & 0xFFFFFFFFFFFFFFFF
     return prod & 0xFFFFFFFF, (prod >> 32) & 0xFFFFFFFF
 
 
 def rand_range(seed_lo, seed_hi, n):
+    """Simulate Game.exe FUN_0045c3e0 rand(n) and return (value, lo, hi)."""
     lo, hi = step_rng(seed_lo, seed_hi)
     if n <= 0:
         return 0, lo, hi
@@ -37,6 +39,7 @@ def rand_range(seed_lo, seed_hi, n):
 
 
 def main():
+    """Execute 100,000 verification cases across 4 suites against native 1.14d Game.exe."""
     t0 = time.time()
     e = boot_game.boot()
     rnd = random.Random(0x50414C44)
@@ -440,7 +443,9 @@ def main():
         got_att_lo = e.r32(attacker + 0x20)
         got_def_lo = e.r32(defender + 0x20)
 
-        ok = (got_w_dur == exp_w_dur and got_att_lo == exp_att_lo and got_def_lo == exp_def_lo)
+        ok = (got_w_dur == exp_w_dur
+              and got_att_lo == exp_att_lo and e.r32(attacker + 0x24) == exp_att_hi
+              and got_def_lo == exp_def_lo and e.r32(defender + 0x24) == exp_def_hi)
         for idx in range(7):
             u = equipped_armo[idx]
             if u is not None:
@@ -601,7 +606,8 @@ def main():
     elapsed = time.time() - t0
     print(f"Suite 4 (FUN_00535bc0 weapsel + FUN_0057d4f0 block vs hit): 10,000 cases, mismatches={mismatches}")
     print(f"TOTAL: {total_cases} cases in {elapsed:.2f}s, mismatches={mismatches}")
+    return 1 if mismatches > 0 else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

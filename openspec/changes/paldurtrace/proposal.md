@@ -1,6 +1,7 @@
 ## Why
 
 Work item PALDUR (Issue #2): trace durability loss per hit and per block in game.exe 1.14d vs d2d.
+no observable behaviour change: docs and offline emulator tooling only, no code under internal/** or cmd/**.
 
 ## What Changes
 

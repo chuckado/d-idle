@@ -186,7 +186,7 @@ When a melee hit lands (`dmg.result_flags & 0x01 != 0`) and `defender` is a play
    - For each `i in 0..6`:
      - Calls `item = FUN_0063bde0(inv, slot_table[i].slot)` (`0x57d451`), which reads `[body_slots + slot * 4]`.
      - If `item != NULL` and **`FUN_00629bb0(item, 0x32) != 0`** (`ItemTypes` `0x32` `"armo"`), sets `worn[i] = item` and adds `slot_table[i].weight` to `total_weight`.
-     - **Important subtlety (`V read`, `V run`):** `FUN_0057d3d0` checks only `FUN_00629bb0(item, 0x32)` (`"armo"`). It does **not** filter out `"armo"` items that are indestructible (`stat 152 > 0`) or already broken (`flag 0x100`) when building `worn[0..6]` and `total_weight`. Thus an indestructible or already-broken armor piece still absorbs its weight share (`weight[i] / total_weight`) of hits on the player, and when selected, `FUN_00559e30` becomes a no-op!
+     - **Important subtlety (`V read`, `V run`):** `FUN_0057d3d0` checks only `FUN_00629bb0(item, 0x32)` (`"armo"`). It does **not** filter out `"armo"` items that are indestructible (`stat 152 > 0`) or already broken (`flag 0x100`) when building `worn[0..6]` and `total_weight`. Thus an indestructible or already-broken armor piece still absorbs its weight share (`weight[i] / total_weight`) of hits on the player; an already-broken armor piece (`durability == 0, maxdur > 0`) still passes `FUN_00629930` and rolls wear RNG, remaining clamped at 0 durability without re-triggering the break event (`0x559f30`).
 2. **Two-step RNG slot pick (`0x57d47e..0x57d4dd`, `V read`, `V run`):**
    - If `total_weight <= 0`, returns without advancing the defender's RNG.
    - Otherwise, advances `defender`'s unit RNG (`[defender + 0x20..0x24]`) **twice** (`FUN_0045c3e0`):
