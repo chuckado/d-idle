@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifybundle
-status: open
+status: in-progress
 agent: verifybundle
 branch: agent/verifybundle
 worktree: d2lod-wt/verifybundle
