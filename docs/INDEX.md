@@ -260,3 +260,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-playerroll-verifier.md - independent verifier of pr/player-roll (element roll top, physical in 256ths, -100 floor): own oracles, caller audit, det, CI flags and clang-tidy step
 - docs/research/verify-teleport-room.md - independent check of the Teleport room rule (card verifytele)
 - docs/research/pr-smite-block-draft.md - draft PR text, a block no longer stops Smite (private, on hold)
+- docs/research/crfix-bundle-20261102.md: CodeRabbit comments on staging PR 2, verdicts, reply texts, #176 merge probe (card crfixbundle)
