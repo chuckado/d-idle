@@ -225,6 +225,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - CHARFACTORY: research done (docs/research/character-factory.md): fresh chars of all 7 classes and cheated level/act/quest/waypoint setups exist, one honest in-band Sorceress (Fresha), no item creation on Game.exe, no cross-prefix restore tool; plan for an honest snapshot library; ranked cards SNAPLIB-TOOL, LEDGERKEY, SNAPSEED-TEST, SNAPSMOKE, HONESTLADDER, D2DSNAP, FRESHCLASS, PRESETS, ITEMKIT, CLASSLADDER
 - BASELINERUNS: prepared the extra original-game baseline runs (5 late clvl 11-14 m1, 3 fresh): runbook docs/process/baseline-runs.md and the ops launcher tools/baseline-run.sh; waiting on the user's go, the kit decision and free instances
 - LOCKSTEPRESEARCH: original Game.exe lockstep/speed-up researched (docs/research/original-game-lockstep.md): no prior art for D2; frame gate is GAME_UpdateGamesProgress 0x52FC20 (timeGetTime vs 40 ms); proxy-DLL IAT time hook (Tier A) is the plan, probes P0 (Wine clock test, no game) and P1 first; stepping (Tier B) only if needed
+- lockstep P0 done (Wine IAT time hook scales frame gate, PASS): next P1 (read dwGameFrame) then tier A proxy DLL, see docs/research/lockstep-p0.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
