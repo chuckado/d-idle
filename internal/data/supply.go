@@ -8,8 +8,8 @@ package data
 type KillKind int
 
 const (
-	KillPlain KillKind = iota // a Normal-rarity monster of a melee (H2H) class
-	KillCaster                // shamans, archers: fewer gold piles
+	KillPlain  KillKind = iota // a Normal-rarity monster of a melee (H2H) class
+	KillCaster                 // shamans, archers: fewer gold piles
 	KillChampion
 	KillUnique
 	KillSuperUnique

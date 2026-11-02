@@ -52,3 +52,20 @@ func TestPileAtLeastAndMinWorth(t *testing.T) {
 		t.Error("share 0 must disable the bar")
 	}
 }
+
+func TestScaledHPNoRatioAndClamp(t *testing.T) {
+	db := &DB{MonLevels: []*MonLevel{nil, {Level: 1, HP: [3]int{100, 150, 300}}, {Level: 2, HP: [3]int{200, 250, 400}}}}
+	m := &Monster{HPMin: [3]int{4, 0, 0}, HPMax: [3]int{12, 0, 0}}
+	for _, tc := range []struct{ lvl, want int }{{1, 12}, {2, 24}, {99, 24}, {-3, 12}} { // 99 clamps to the last row; -3 to 0 (nil row: unscaled)
+		if got := db.ScaledHP(m, Normal, tc.lvl); got != tc.want && !(tc.lvl == -3 && got == 12) {
+			t.Errorf("lvl %d: %d want %d", tc.lvl, got, tc.want)
+		}
+	}
+	if got := db.MeanHP(m, Normal, 2); got != 16 { // (8 + 24) / 2
+		t.Errorf("mean %v", got)
+	}
+	pet := &Monster{NoRatio: true, HPMin: [3]int{50}, HPMax: [3]int{60}}
+	if db.ScaledHP(pet, Normal, 2) != 60 || db.MeanHP(pet, Normal, 2) != 55 {
+		t.Error("a NoRatio row must ignore the ratio rows")
+	}
+}
