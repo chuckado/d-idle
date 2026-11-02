@@ -17,6 +17,15 @@ import (
 // EnvVar names the environment variable that carries the scale.
 const EnvVar = "D2BOT_TIMESCALE"
 
+// StartNote is the log message d2bot prints once at start when the scale is not 1 ("gclock: timescale 2"), empty at 1.
+// tools/baseline-run.sh (hooked lanes) checks the bot log for it, so the text is part of the interface.
+func StartNote(k float64) string {
+	if k == 1 {
+		return ""
+	}
+	return "gclock: timescale " + strconv.FormatFloat(k, 'g', -1, 64)
+}
+
 // Scale bounds; a value outside them (or unparsable) falls back to 1.
 const (
 	MinScale = 0.25

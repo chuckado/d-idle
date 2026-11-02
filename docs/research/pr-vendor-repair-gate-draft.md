@@ -1,10 +1,10 @@
-# Draft PR body: vendor repair gate (local/vendor-repair-gate-v3)
+# Draft PR body: vendor repair gate (local/vendor-repair-gate-v4)
 
 > status: draft (card prbuildprices2, 2026-11-02). NOT posted: the PR hold is in force (no push to the public fork, no PR, no comment). Replaces the earlier two-claim draft [pr-price2-draft.md](pr-price2-draft.md): the divide-first half is already upstream, this is the repair gate alone. Verifier: [pr-prices-verifier.md](pr-prices-verifier.md). Tags: V = verified (how stated), S = secondary, U = unverified.
 
 ## Branch
 
-- `local/vendor-repair-gate-v3`, ONE commit `f0360487` on the private fork's remote, on upstream/main `cb716f10` (fetched read-only 2026-11-02). Rebase again after the maintainer's current merge.
+- `local/vendor-repair-gate-v4`, ONE commit `ee2d03f9` on the private fork's remote, on upstream/main `48908176` (the merge of #174; rebased 2026-11-02, no conflict; the earlier `local/vendor-repair-gate-v3` `f0360487` was on `cb716f10`). Counts re-run on the new base: see [rebase174-20261102.md](rebase174-20261102.md).
 - Built from the verified candidate `da80d0ab` (fix/vendor-prices-followon-v2) by: dropping `aed23fc8` (divide-first: upstream has it as `a9548d38`) and the divide-first half of the oracle commit `777df9d7` (no tooling goes in this PR); cherry-picking `da80d0ab` alone; resolving its one conflict in `tests/test_rules.cpp` (kept the bow / crossbow asserts; the `dear` assert stays upstream's); correcting the text (below). The old branch is untouched, no force-push.
 - Author and committer: the numeric-ID noreply identity (V: `git log --format='%an <%ae> | %cn <%ce>'` shows the same on both). Message body ends with `Agent: Claude Code` only.
 - Overlap with the open PR #174 (head `489ef83d`, based on `3852c904`): V, throwaway merge of this commit with #174's head: clean, no conflicts (`rules.hpp` and `test_rules.cpp` auto-merge in different hunks, `gamedata_load.cpp` too). Nothing to resolve.
