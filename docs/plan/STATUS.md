@@ -137,14 +137,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 18608e7 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
+- 39aaf7b 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
+- 8961692 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
+- d06b33c 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
+- 86b15dc 11-01 20:42 `Merge agent/baselineruns: BASELINERUNS: runbook for the extra original-game baseline runs (5 late, 3 fresh), launcher prepared in the ops repo` (baselineruns)
+- d14b782 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
+- f50e477 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
+- 2713abf 11-01 20:35 `merge origin/main into charfactory` (charfactory)
 - c7a2f38 11-01 20:30 `Merge agent/missilediff: MISSILEDIFF: monster missile deviations D1 D2 D3 confirmed on the real d2d build (44,456 of 120,000 cases differ, 0 after the local fix)` (missilediff)
 - 17835b4 11-01 20:29 `merge origin/main into missilediff` (missilediff)
-- f1fdda0 11-01 20:26 `Merge agent/parityaudit: PARITYAUDIT: bot backend parity: memory backend builds and passes (88 packages), 26-row matrix, gate tooling assumes d2d, smoke runbook, backlog` (parityaudit)
-- 631f7d2 11-01 20:23 `merge origin/main into parityaudit` (parityaudit)
-- 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
-- 6ac8a44 11-01 20:13 `merge origin/main into baselinefree` (baselinefree)
-- f8f9666 11-01 20:05 `Merge agent/botthreat: BOTTHREAT: missile threat table, runner guard (no kite/retreat from Zombie, Brute, Hawk, Rogue, Lancer, Arach), kill-first and dodge verdicts behind knobs` (botthreat)
-- 3d59e8e 11-01 19:56 `Merge agent/monsterai: MONSTERAI: Act 1/2 monster AI trace: 25 AIs 75,000 cases in game.exe real code vs d2d think; Skeleton Goatman Quill Rat exact; Zombie and Brute run on game.exe, d2d walks` (monsterai)
-- 1df86ca 11-01 19:55 `merge origin/main into monsterai` (monsterai)
-- fa03b72 11-01 19:43 `Merge agent/sorcrest: SORCREST: remaining Sorceress skills traced: Fire Ball and Glacial Spike pipeline 31,000 cases 0 differ, burst roll deviation proven on a real build (0/400 vs 400/400)` (sorcrest)
 <!-- statusgen:end -->
