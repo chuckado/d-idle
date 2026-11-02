@@ -58,7 +58,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -118,7 +117,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -131,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 3c1b5006 11-02 01:07 `Merge agent/monsterai2: MONSTERAI2: monster AI trace completion: six unported AIs, Fallen cases, run base speed, mismatches root-caused` (monsterai2)
-- 190fe392 11-02 01:06 `merge origin/main into monsterai2` (monsterai2)
-- 50d3bad5 11-02 00:59 `Merge agent/crfollow164: CRFOLLOW164: CodeRabbit follow-up on PR 164: MMTAB lookup only when rows differ, missing d2d cases fail; replies posted` (crfollow164)
-- 898bc4d6 11-02 00:48 `Merge agent/propenmissile: PROPENMISSILE: upstream PR 164 opened (monster missile record and poison units, bundled, 8 commits on upstream main)` (propenmissile)
-- 87053a54 11-02 00:40 `Merge agent/missilefix3: MISSILEFIX3: SrcDamage byte read, text corrections from the third check, both PR drafts final; third check section added` (missilefix3)
-- 1b745bbd 11-02 00:39 `merge origin/main into missilefix3` (missilefix3)
-- dd62521e 11-02 00:28 `Merge agent/botsupply: BOTSUPPLY: level-aware gold model, pile bar from the area's pile size, traced area XP table, real monster HP in the sim; per-kill supply table cited from the treasure trace` (botsupply)
-- 13eaa255 11-02 00:27 `merge origin/main into botsupply` (botsupply)
-- 198d76fb 11-02 00:23 `Merge agent/missilefix2: MISSILEFIX2: owner-poison rule from the re-verifier, trap fix folded into the poison branch, PR drafts revised` (missilefix2)
-- 3636d585 11-02 00:22 `merge origin/main into missilefix2` (missilefix2)
+- e5137ebd 11-02 04:12 `merge origin/main into verifyplayerroll` (verifyplayerroll)
+- f1c51826 11-02 04:05 `Merge agent/crfollow166: CRFOLLOW166: CodeRabbit follow-up on PR 166: three valid comments fixed in 7d4f6f0e, replies posted` (crfollow166)
+- b5af241a 11-02 03:50 `Merge agent/propenplayerroll: PROPENPLAYERROLL: upstream PR 166 opened (player-side missile damage roll: element top, physical 256ths, -100 floor), 5 commits` (propenplayerroll)
+- 804d4b75 11-02 03:49 `merge origin/main into propenplayerroll` (propenplayerroll)
+- bfbd8652 11-02 03:40 `Merge agent/botlogs: BOTLOGS: explore-giveup, tp-debounce-hold/flip and kitgate-trip log lines so gate records can count the guards` (botlogs)
+- 4cb8add9 11-02 03:25 `merge origin/main into botlogs` (botlogs)
+- b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
+- b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
+- bf6b9e46 11-02 02:42 `Merge agent/crfollow164b: CRFOLLOW164B: CodeRabbit follow-up 2 on PR 164: an empty game.tsv comparison fails; reply posted` (crfollow164b)
+- 2522460e 11-02 02:30 `merge origin/main into kitgatelevel` (kitgatelevel)
 <!-- statusgen:end -->
