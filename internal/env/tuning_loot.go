@@ -8,7 +8,8 @@ type LootTuning struct {
 	WalkDist        int // walk to within this many subtiles of an item before clicking it
 	ConfirmMs       int // after a click, wait this long for the item to leave the ground
 	GapMs           int // pause between two pickups
-	GoldMinStack    int // ignore gold piles smaller than this
+	GoldMinStack    int // ignore gold piles smaller than this (a ceiling: GoldPileShare lowers it in early areas)
+	GoldPileShare   int // percent of an area's piles the min-pile bar must let through (model: data.PileMinWorth); 0 = the flat GoldMinStack only
 	FreeCellsKeep   int // inventory cells that must stay free after a pickup (the pickit may override for gold and runes)
 	PotionBuffer    int // extra potions of a needed type to carry in the pack beyond the belt
 	RejuvSpare      int // rejuvenation potions carried in total, belt plus pack (the rest is left or sold, Full preferred)
@@ -25,7 +26,7 @@ type LootTuning struct {
 func DefaultLootTuning() LootTuning {
 	return LootTuning{
 		PickRadius: 30, PickStrictness: 1, PickTries: 3, WalkDist: 4, ConfirmMs: 1500, GapMs: 150,
-		GoldMinStack: 10, FreeCellsKeep: 2, PotionBuffer: 0, RejuvSpare: 3, LowGoldBelow: 2000, MinValuePerCell: 100, ValuableMinGold: 1500, ValuableMinPrio: 70, CarryValuables: 0, MaxPerCall: 30,
+		GoldMinStack: 10, GoldPileShare: 50, FreeCellsKeep: 2, PotionBuffer: 0, RejuvSpare: 3, LowGoldBelow: 2000, MinValuePerCell: 100, ValuableMinGold: 1500, ValuableMinPrio: 70, CarryValuables: 0, MaxPerCall: 30,
 		PoorGoldBelow: 300, PoorMinSell: 6,
 	}
 }
@@ -44,7 +45,8 @@ func lootKnobs() []Knob {
 		lootK("walkDist", "Walk-to distance", "subtiles", "Walk to within this distance before clicking an item.", d.WalkDist, 2, 8, false),
 		lootK("confirmMs", "Pickup confirm wait", "ms", "Wait after a click for the item to leave the ground.", d.ConfirmMs, 400, 4000, true),
 		lootK("gapMs", "Pickup gap", "ms", "Pause between two pickups.", d.GapMs, 0, 1000, false),
-		lootK("goldMinStack", "Min gold pile", "gold", "Ignore gold piles smaller than this.", d.GoldMinStack, 0, 2000, false),
+		lootK("goldMinStack", "Min gold pile", "gold", "Ignore gold piles smaller than this (a ceiling: see goldPileShare).", d.GoldMinStack, 0, 2000, false),
+		lootK("goldPileShare", "Gold pile share", "percent", "The min-pile bar never skips more than this share of the area's piles: pile size is ilvl to 6 ilvl - 1 coins (treasure-trace section 4), so Blood Moor piles (1..5) would all fall under 10. 0 keeps the flat bar.", d.GoldPileShare, 0, 100, false),
 		lootK("freeCellsKeep", "Free cells kept", "cells", "Inventory cells that must stay free after a pickup.", d.FreeCellsKeep, 0, 12, true),
 		lootK("potionBuffer", "Potion buffer", "count", "Extra needed-type potions carried in the pack beyond the belt.", d.PotionBuffer, 0, 10, true),
 		lootK("rejuvSpare", "Rejuvenation cap", "count", "Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them.", d.RejuvSpare, 0, 6, true),

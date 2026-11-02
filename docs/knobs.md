@@ -175,7 +175,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.walkDist | 4 | 2..8 | subtiles | 8 | 1 | Walk to within this distance before clicking an item. |
 | loot.confirmMs | 1500 | 400..4000 | ms | 400 | 1 | Wait after a click for the item to leave the ground. |
 | loot.gapMs | 150 | 0..1000 | ms | 1000 | 1 | Pause between two pickups. |
-| loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 1 | Ignore gold piles smaller than this. |
+| loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 4 | Ignore gold piles smaller than this (a ceiling: see goldPileShare). |
+| loot.goldPileShare | 50 | 0..100 | percent | 100 | 2 | The min-pile bar never skips more than this share of the area's piles: pile size is ilvl to 6 ilvl - 1 coins (treasure-trace section 4), so Blood Moor piles (1..5) would all fall under 10. 0 keeps the flat bar. |
 | loot.freeCellsKeep | 2 | 0..12 | cells | 0 | 1 | Inventory cells that must stay free after a pickup. |
 | loot.potionBuffer | 0 | 0..10 | count | 0 | 2 | Extra needed-type potions carried in the pack beyond the belt. |
 | loot.rejuvSpare | 3 | 0..6 | count | 0 | 4 | Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them. |
