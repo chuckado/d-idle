@@ -41,20 +41,19 @@ int main(int argc, char** argv) try {
     std::ifstream cases(argv[2]);
     std::string line;
     while (std::getline(cases, line)) {
-        std::istringstream fields(line);
-        std::string name;
-        int level = 0;
-        fields >> name >> level;
+        const auto tab = line.find('\t');
+        const std::string name = line.substr(0, tab);
+        const int level = tab == std::string::npos ? 0 : std::atoi(line.c_str() + tab + 1);
         const auto found = data->missiles.find(name);
         if (flags) {
-            if (found == data->missiles.end()) { std::printf("%s -\n", name.c_str()); continue; }
+            if (found == data->missiles.end()) { std::printf("%s\t0\t-\n", name.c_str()); continue; }
             const auto& m = found->second;
-            std::printf("%s %d %d %d %d %d %d\n", name.c_str(), int(m.to_hit), int(m.collide_kill), int(m.pierce), m.size, int(m.next_hit), int(m.return_fire));
+            std::printf("%s\t0\t%d\t%d\t%d\t%d\t%d\t%d\n", name.c_str(), int(m.to_hit), int(m.collide_kill), int(m.pierce), m.size, int(m.next_hit), int(m.return_fire));
             continue;
         }
-        if (found == data->missiles.end()) { std::printf("%s %d -\n", name.c_str(), level); continue; }
+        if (found == data->missiles.end()) { std::printf("%s\t%d\t-\n", name.c_str(), level); continue; }
         const auto& m = found->second;
-        std::printf("%s %d %d %d %d %d %d\n", name.c_str(), level, d2d::rules::missile_velocity(m.vel, m.vel_lev, level),
+        std::printf("%s\t%d\t%d\t%d\t%d\t%d\t%d\n", name.c_str(), level, d2d::rules::missile_velocity(m.vel, m.vel_lev, level),
                     d2d::rules::missile_range(m.range, m.lev_range, level), m.max_vel << 8, m.accel, m.activate);
     }
     return 0;

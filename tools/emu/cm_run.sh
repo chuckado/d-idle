@@ -19,13 +19,12 @@ if [ "$MODE" = rows ]; then
   nice $PY "$HERE/cm_missile_hit.py" rows
 elif [ "$MODE" = flight ]; then
   bash "$HERE/mpq-table.sh" missiles > "$OUT/missiles.tsv"
-  nice $PY "$HERE/cm_flight.py" game "$OUT" "$OUT/missiles.tsv" 2> "$OUT/game.err"
+  wc -l "$OUT/missiles.tsv"
+  nice $PY "$HERE/cm_flight.py" game "$OUT" "$OUT/missiles.tsv" 2> "$OUT/game.err" || { tail -20 "$OUT/game.err"; exit 1; }
   cat "$OUT/game.err"
-  nice "$BIN/flight_test" --flight "$OUT/cases.txt" 2> "$OUT/d2d.err" | grep -E '^[^ ]+ [0-9]+ ' > "$OUT/d2d.tsv"
+  nice "$BIN/flight_test" --flight "$OUT/cases.txt" 2> "$OUT/d2d.err" | grep -P '\t[0-9]+\t' > "$OUT/d2d.tsv"
   wc -l "$OUT/cases.txt" "$OUT/game.tsv" "$OUT/d2d.tsv"
-  echo "NOT LOADED BY D2D: $(grep -c ' -$' "$OUT/d2d.tsv" || true)"
-  diff "$OUT/game.tsv" "$OUT/d2d.tsv" | grep -v ' -$' | head -20 || true
-  echo "DIFF (loaded rows) $(diff "$OUT/game.tsv" "$OUT/d2d.tsv" | grep '^>' | grep -vc ' -$' || true)"
+  python3 "$HERE/cm_flightcmp.py" "$OUT"
 else
   $PY "$HERE/cm_missile_hit.py" gen "$N" "$SEED" > "$OUT/cases.tsv"
   nice $PY "$HERE/cm_missile_hit.py" game "$OUT/cases.tsv" > "$OUT/game.tsv" 2> "$OUT/game.err"
