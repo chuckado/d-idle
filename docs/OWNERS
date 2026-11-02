@@ -141,3 +141,7 @@ internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
 internal/bot/tpdump.go  hastpdump  hastpdump
 docs/hastpdump.md  hastpdump  hastpdump
+docs/research/sor-rest-trace.md  sorcrest  sorcrest
+tools/emu/sk_rest_*  sorcrest  sorcrest
+tools/emu/sorcrest_*  sorcrest  sorcrest
+openspec/changes/sorcrest/**  sorcrest  sorcrest

@@ -12,5 +12,6 @@ wc -l < $O/calc_cases.tsv
 nice $PY sk_rest_calc.py game $O/calc_cases.tsv > $O/calc_game.tsv 2> $O/calc_game.err
 nice $HOME/d2d-lab/pr/sorcrest-out/build/tests/test_sk_rest_calc --calc $O/calc_cases.tsv > $O/calc_d2d.tsv
 wc -l $O/calc_game.tsv $O/calc_d2d.tsv
-diff $O/calc_game.tsv $O/calc_d2d.tsv | grep -c '^<' || true
-md5sum $O/calc_game.tsv $O/calc_d2d.tsv
+grep -E "^[0-9]+ " $O/calc_d2d.tsv > $O/calc_d2d.f; wc -l < $O/calc_d2d.f
+diff $O/calc_game.tsv $O/calc_d2d.f | grep -c '^<' || true
+md5sum $O/calc_game.tsv $O/calc_d2d.f

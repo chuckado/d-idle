@@ -1,5 +1,5 @@
 set -e
-W=~/labrun/herdr/code/d2lod-wt/sorcrest/tools/emu
+W=$(cd "$(dirname "$0")" && pwd)
 UP=$HOME/d2d-lab/pr/skmiss
 cp $W/sk_missile_hit.py $W/sk_rest_hit.py $UP/tools/emu/
 cd $UP/tools/emu
