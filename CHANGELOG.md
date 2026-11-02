@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- treasure: docs/research/treasure-trace.md (class selection, no-drop and picks, potion, scroll and gold rates per kill for Act 1 and 2, chests; d2d differential re-run), tools/emu/tre_* oracles, coverage ledger row for the treasure classes.
 - monsterstats (docs only): docs/research/monster-stats-trace.md and tools/emu/ms_* (stat-row and unit differential vs d2d's rules::monster_stats: 242,220 + 85,213 cases, Normal 0 differ); coverage row monster.stats TESTED-DEVIATION.
 - memory rule (ADR 0014): memory writes allowed for setup, instrumentation, diagnosis, fixtures; crutch rule; d2cheat runstart and ledger --since-run
 - tools: d2restore snapshot library (snapshot, verify, list, place) and a prefix-keyed cheat ledger (docs/snaplib.md).

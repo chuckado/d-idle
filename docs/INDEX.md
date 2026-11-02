@@ -163,3 +163,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/lockstep-p0.md - lockstep probe P0 results: IAT time hook under Wine, k = 1/2/4 frame gate, verdict PASS
 - docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist
 - Monster base stats: [research/monster-stats-trace.md](research/monster-stats-trace.md) (game.exe vs d2d stat rows, units, XP per kill; D1 NM / Hell level, D2 regeneration; bot B1-B4; drill recipe).
+- Treasure classes, drops and gold (Act 1 and 2; game.exe 1.14d vs d2d vs the bot): [research/treasure-trace.md](research/treasure-trace.md)
