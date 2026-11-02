@@ -2,7 +2,7 @@
 
 ```yaml
 change: botthreat
-status: in-progress
+status: archived
 agent: botthreat
 branch: agent/botthreat
 worktree: ~/code/d2lod-wt/botthreat
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/combat ./internal/env ./tools/knobdump; gofmt; go vet; changecheck 0 warnings; leakcheck 0"
-result: "Offline only, mem.Fake / table-driven tests; nothing verified live. runnerGuard ON by default, the rest OFF."
+result: "offline tests only; runnerGuard default ON, threatDodge/shooterKillMin/standOK default OFF; live drill checklist in docs/botthreat.md; d2d feeds no missiles so dodge does nothing there"
 live: "not run live; checklist in docs/botthreat.md"
+merge: f8f9666
 ```
 
 - [x] threat table, verdict, ranking
