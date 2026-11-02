@@ -137,3 +137,10 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+openspec/changes/verifyprices/**  verifyprices  verifyprices
+docs/research/pr-prices-verifier.md  verifyprices  verifyprices
+tools/emu/vpr_dis.py  verifyprices  verifyprices
+tools/emu/vpr_oracle.py  verifyprices  verifyprices
+tools/emu/vpr_probe0.py  verifyprices  verifyprices
+tools/emu/vpr_probe.inc  verifyprices  verifyprices
+tools/emu/vpr_cmp.py  verifyprices  verifyprices
