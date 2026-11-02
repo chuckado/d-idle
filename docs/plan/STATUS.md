@@ -132,6 +132,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 078dbbef 11-02 10:49 `merge origin/main into verifycursedef` (verifycursedef)
 - 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
 - 54fff8ef 11-02 10:34 `Merge agent/fixci: FIXCI: repair the board archive paths and the chunker flag text that broke the Scripts CI job` (fixci)
 - fd74df8a 11-02 10:34 `merge origin/main into palskill` (palskill)
@@ -141,5 +142,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c3906af9 11-02 10:21 `merge origin/main into verifyfreezeend2` (verifyfreezeend2)
 - 0430f68e 11-02 10:14 `Merge agent/skiasgame2: skiasgame2: credit-funded decomposition result (docs and emulator tools only)` (skiasgame2)
 - 644cc14e 11-02 10:14 `merge origin/main into skiasgame2` (skiasgame2)
-- b415aefb 11-02 10:09 `Merge agent/paldur: paldur: credit-funded decomposition result (docs and emulator tools only)` (paldur)
 <!-- statusgen:end -->
