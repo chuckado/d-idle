@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: hireling trace (mercstats): game.exe's merc level-up, hire offer, resurrection price, experience award, think and attack code equal d2d's rules in 411,196 emulator runs; merc life regeneration and Act 2 auras are missing in d2d (effect U); Cold Arrow, Defiance and Thorns need merc level 6 so low-level offers can lack their skill; the merc accepts Rejuvenation Potions
 - Docs: monster skill use trace (monsterskill): monster skill levels, free casting and the Corrupt Archer think run against game.exe and d2d (no deviation proven); usability-gate deviation read only; bot shooter model findings; ledger row CorruptArcher
 - Docs: monster AI trace, second pass (monsterai2): ports of the six thinks d2d lacks equal game.exe on 36,000 cases; d2d's andariel_think equals game.exe on 3,830; Fallen flee pace 50, Blood Raven pace and home rules, Fallen Shaman corpse reach proven deviations; the pass 1 mismatch families root-caused (harness labels); coverage ledger monster.ai 23 of 146 rows
 - no change
