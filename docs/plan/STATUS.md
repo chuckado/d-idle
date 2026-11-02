@@ -131,14 +131,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 9f9b32d0 11-02 00:08 `Merge agent/playerdef: PLAYERDEF: player defence, block and attack rating run against game.exe (102,604 cases, 0 mismatches vs a port of d2d formulas); life and mana tables read` (playerdef)
+- 82c13a0a 11-02 00:07 `merge origin/main into playerdef` (playerdef)
+- 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
+- bd354909 11-02 00:00 `merge origin/main into uniqmods` (uniqmods)
+- abed0924 11-01 23:55 `Merge agent/monsterhit: MONSTERHIT: monster melee against the player: to-hit, damage, block and get-hit rules run against game.exe (100,000 cases each, 0 differ); block deviation in the d2d port` (monsterhit)
+- 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
+- eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
+- 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
 - a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
 - 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
-- 7f3c38bc 11-01 23:28 `Merge agent/apicookbook-pub: APICOOKBOOK: emulator wrapper run-on-worker.sh and mpq-table.sh for headless agents (host from env), cookbook doc` (apicookbook)
-- e58357fc 11-01 23:24 `merge origin/main into reverifymissile` (reverifymissile)
-- d33de75d 11-01 22:50 `Merge agent/boardclaim: BOARDCLAIM: board audit: 1 item closed (VERIFY-FREEZE-KINDS), 5 narrowed, 1 claimed by the maintainers; claim.py with claim, done and watch; claim-before-launch and comment-watching rules` (boardclaim)
-- ffe6a9e8 11-01 22:49 `merge origin/main into boardclaim` (boardclaim)
-- 611bcc63 11-01 22:46 `Merge agent/palauranarrow: PALAURANARROW: PALAURA work item narrowed to the open parts (target filter and area search, enemy-hit damage, Prayer per-pulse mana and state 85); prior trace linked` (palauranarrow)
-- 91e287bc 11-01 22:38 `Merge agent/archive5: ARCHIVE5: archive pingpongrate card (code merged in soakfixes2)` (archive5)
-- 6ae81240 11-01 22:26 `Merge agent/soakfixes2: SOAKFIXES2: tome-read debounce in hasPortalSource for the kit gate and poverty check, ping-pong guard by XP rate` (tpglitch)
-- aa0787d6 11-01 22:25 `merge origin/main into tpglitch` (tpglitch)
 <!-- statusgen:end -->
