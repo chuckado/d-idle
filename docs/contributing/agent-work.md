@@ -57,6 +57,8 @@ The maintainer reviews the PR (an automated first pass may comment; see [../proc
 ## 8. Credit
 Proposal (the maintainer decides): the trace header names the author and the verifier ("Author: <handle>, Verifier: <handle>", handles you choose), merged contributors are listed in a `CONTRIBUTORS.md` file added with the first merge, and the Discord `contributor` role is given for merged work or a real verification review. Upstream PRs carry the maintainer's name as submitter with a credit line for you in the body if you want one.
 
+Upstream use and licence: contributions to d-idle may be carried into pull requests to the upstream decomp project, which is GPL-3.0-or-later. By submitting a contribution you agree it can be used under those terms upstream, you are credited by name or pseudonym of your choice (git author, or a `Traced-by` / `Reported-by` line in the commit) and you can withdraw it before it is merged upstream. Tell the maintainer how you want to be named; the record is [../community/credits-ledger.md](../community/credits-ledger.md), the mechanics [../process/credit.md](../process/credit.md).
+
 ## 9. Prompt block for your agent
 Paste this into your agent, then give it the issue link.
 

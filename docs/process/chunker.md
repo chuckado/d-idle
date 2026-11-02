@@ -42,6 +42,7 @@ The board is public, so an outside helper can take an item our own work already 
 - Contributors claim an item with the claim tool (a `claiming` comment on its issue) before they start. An item claimed by someone else is not started by agents.
 - When a second independent trace of the same item exists, it is recorded as an independent cross-check and the two docs are cross-linked. The first merged sound trace stays primary and keeps its author.
 - Merged work gets a line in `CHANGELOG.md` and the contributor's row in [../../CONTRIBUTORS.md](../../CONTRIBUTORS.md).
+- Upstream carry-over: contributions to d-idle may be carried into pull requests to the upstream decomp project (psi29a/d2decomped), which is GPL-3.0-or-later. By submitting a contribution the contributor agrees it can be used under those terms upstream, is credited by name or pseudonym of their choice (git author, or a `Traced-by` / `Reported-by` line) and can withdraw it before it is merged upstream. How: [credit.md](credit.md), ledger [../community/credits-ledger.md](../community/credits-ledger.md).
 - The Discord `contributor` role is given by the owner by hand on first merged work ([../community/discord/roles.md](../community/discord/roles.md)).
 
 ## Watching comments
