@@ -2,7 +2,7 @@
 
 ```yaml
 change: skground
-status: in-progress
+status: archived
 agent: skground
 branch: agent/skground
 worktree: ~/code/d2lod-wt/skground
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and offline tooling: docs/research/skground-trace.md (third pass, Meteor's blast shape: Q26-Q32, M1-M4, B1-B3, drill G1-G4); game.exe's FUN_0056bad0 / FUN_0056b7e0 run natively (disc on integer subtiles 0 differ in 120,000 cases, radius 6 at 20 of 20 levels, caster-room rule 0 of 168 far, filter modes) and compared with the real d2d Fight::area (9.1 percent of 80,000 rim cases differ, no bias); no PR candidate. Not verified live."
+result: "docs only; first pass, not yet independently verified"
 live: "docs only, nothing run live"
+merge: 650c59b
 ```
 
 - [x] Meteor blast read (FUN_005aabb0, FUN_0056bad0, FUN_0056b7e0, FUN_0056b3e0, FUN_006492a0)

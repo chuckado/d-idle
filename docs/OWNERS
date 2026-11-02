@@ -112,9 +112,6 @@ internal/nav/wpclick_test.go  wpcooldown  wpcooldown
 internal/env/tuning_nav.go  wpcooldown  wpcooldown
 docs/waypoints.md  wpcooldown  wpcooldown
 docs/fixwp.md  wpcooldown  wpcooldown
-docs/research/sk-ground-trace.md  skground  skground
-tools/emu/sk_ground*  skground  skground
-openspec/changes/skground/**  skground  skground
 docs/fixbelt.md  fixbelt  fixbelt
 internal/resource/recovery.go  fixbelt  fixbelt
 internal/resource/recovery_test.go  fixbelt  fixbelt
@@ -137,5 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-docs/research/skground-trace.md  skground  skground
-tools/emu/skg_*  skground  skground
