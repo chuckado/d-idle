@@ -2,7 +2,7 @@
 
 ```yaml
 change: boardclean
-status: in-progress
+status: archived
 agent: boardclean
 branch: agent/boardclean
 worktree: d2lod-wt/boardclean
@@ -17,7 +17,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "8 issues closed and archived, 2 narrowed; verified against gh (not a live game job)"
+result: "docs only; board writes were done through the sanctioned tools"
+merge: 4ea6624
 ```
 
 ## 1. Work
