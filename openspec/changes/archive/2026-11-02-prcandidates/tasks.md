@@ -2,7 +2,7 @@
 
 ```yaml
 change: prcandidates
-status: in-progress
+status: archived
 agent: prcandidates
 branch: agent/prcandidates
 worktree: d2lod-wt/prcandidates
@@ -13,7 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "Offline read-only inventory, nothing verified live, no pushes, no PRs. Fork refs read on the worker host after a read-only fetch of upstream (main 3852c904)."
+result: "docs only"
+merge: 4ffc246
 ```
 
 ## 1. Work
