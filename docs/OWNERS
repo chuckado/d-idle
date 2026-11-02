@@ -143,6 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-docs/research/monsterhit-trace.md  monsterhit  monsterhit
-tools/emu/mh_rows.py  monsterhit  monsterhit
-openspec/changes/monsterhit/**  monsterhit  monsterhit

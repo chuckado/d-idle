@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterhit
-status: in-progress
+status: archived
 agent: monsterhit
 branch: agent/monsterhit
 worktree: ~/code/d2lod-wt/monsterhit
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs and one table helper only; no oracle run (no game.exe or emulator on the box, worker host not reachable): nothing V run, no ledger row, no PR candidate; section 8 of the trace is the recipe to run on the worker host"
+result: "docs and emulator tools only; credits runner; player-defender damage rules not run"
 live: "docs only, nothing run live"
+merge: abed092
 ```
 
 - [x] read the earlier melee and missile traces and the d2d source (combat.hpp, monsters.hpp, ai.cpp)
