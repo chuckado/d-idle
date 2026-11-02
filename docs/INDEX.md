@@ -231,3 +231,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-skmelee3-draft.md - draft PR text for the melee fine physical and undead / Blunt bonus (on hold)
 - docs/research/pr-vendor-repair-gate-draft.md - PR draft: vendor repair gate alone, rebased on upstream main, counts and CI parity
 - docs/kitstall.md - kit lane i2 stall analysis and fixes
+- Credit: [../CONTRIBUTORS.md](../CONTRIBUTORS.md) contributor table (who traced or built what, PR status, upstream); rules in [process/chunker.md](process/chunker.md) section "Credit".
