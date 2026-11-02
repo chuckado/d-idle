@@ -187,3 +187,26 @@ Not re-run: the emulator differentials (run on the identical tree by the author 
 
 - BACKLOG: #167 (monster think paces) is open; watch for the maintainer and CodeRabbit. The velocity change waits for it.
 - INDEX, decomp-queue, research README: see merge-lines.txt.
+
+## Nightmare and Hell monster start level (card propennmlevel)
+
+- posted: 2026-11-02 go: the user, standing authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 3. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 3be426d3 at first (the candidate local/nmlevel-v5, 94562869, 2 commits, was on it); a plain push of that head to the fork as fix/nightmare-hell-monster-level was made and is not used (no PR). Then #167 merged: main 5df54372. Rebased as a new branch (`cherry-pick` of the two commits, no conflict, identities already the numeric-ID noreply, only `Agent: Claude Code`).
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/nightmare-hell-monster-level-2 head 9b04f5b1 (0afc3f36 the rule, 9b04f5b1 oracle and test mode). Also pushed to the private remote.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/170 (11 files, 2 commits; title "Nightmare and Hell monsters start at the area MonLvl, not their own Level(N) / Level(H) (FUN_00573cb0)"). State OPEN, base 5df54372, head 9b04f5b1 as checked with gh pr view. Body from the verified draft without internal sections; states the limits (network client copy and pets/Revive not covered, levels 83/110/111/117 crash the oracle, the level-0 clamp is shared, the two XP samples named, the pet flap pre-existing); ends with the bare `Agent: Claude Code` line.
+
+| check (worker host) | result |
+|---|---|
+| det scenarios, rebuilt lab binaries from the v5 head and from its base 3be426d3, 14 scenarios, each binary twice | 13 identical in monster and state hash; pet differs (position flap) |
+| pet flap control, 5 runs per build | base alone gives both end states (3 of 5 / 2 of 5), head the same two (1 of 5 / 4 of 5); monster hash equal throughout |
+| 7 suites (test_game with data, combat, rules, game_rules, monsters, monster_ai, monster_thinks), Release -Wall -Wextra -Wshadow | exit 0 each on v5 head and on the rebased head; 0 compiler warnings |
+| pr_guard, range and each commit, rebased head | 0 FAIL / 0 WARN |
+| presubmit --quick, ruff 0.8.6 | 0 FAIL, 4 WARN (answered in the body) |
+| grep of make_monster / spawn_monsters callers on the rebased head | no new caller from #167 |
+
+Not re-run on the rebased head: the det scenarios (run on the same two commits over 3be426d3), clang-tidy, an MSVC build. Nothing else posted.
+
+## Shared-file lines for the merger (propennmlevel)
+
+- BACKLOG: #170 (Nightmare/Hell monster start level) is open; watch for the maintainer and CodeRabbit.
+- INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
