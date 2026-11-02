@@ -41,7 +41,7 @@ So **Energy Shield absorbs the raw (percent-scaled) damage and the resistance wo
 
 ## Q2. Event 7 and event 3 on a miss, owners, reach mode (V run, B)
 
-B ran 16 cells (attacker kind x defender kind x hit x reach) with 1,000 random-flag cases each (seed 7), 16,000 cases in all. Every cell has exactly one shape (the 1,000 cases of a cell are identical).
+B ran 16 cells (attacker kind x defender kind x hit x reach) with 1,000 random-flag cases each (seed 7), 16,000 cases in all. Every cell has exactly one shape (the 1,000 cases of a cell are identical); the expectation "events 7 and 3 iff reach, damage iff hit and reach" held in 16,000 of 16,000 cases (the harness's `match` column, rerun after fixing a stale clause of the metric; the shapes did not change).
 
 | Check | Result |
 |---|---|
