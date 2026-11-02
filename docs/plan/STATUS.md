@@ -130,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
-- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
-- 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
-- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
-- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
-- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
-- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
-- 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
-- 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
-- 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
+- 9b0a9c1b 11-02 15:35 `Merge agent/crfixbundle: CRFIXBUNDLE: CodeRabbit's six staging comments judged and fixed in bundle-3; throwaway merge with batch 9 (docs, harness, card)` (crfixbundle)
+- 52670323 11-02 15:35 `merge origin/main into crfixbundle` (crfixbundle)
+- d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
+- 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
+- 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
+- ab07b57f 11-02 15:22 `merge origin/main into verifytele` (verifytele)
+- c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
+- 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
+- 4fc04c20 11-02 15:13 `merge origin/main into verifyplayerroll` (verifyplayerroll)
+- f7b3ab41 11-02 15:13 `merge origin/main into verifyalign` (verifyalign)
 <!-- statusgen:end -->
