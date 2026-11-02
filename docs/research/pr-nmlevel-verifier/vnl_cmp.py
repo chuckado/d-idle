@@ -11,12 +11,12 @@ start level / final level / experience differ from game.exe's. Then mean experie
 import collections
 import sys
 
-KINDS = ((2, "superunique"), (8, "unique"), (4, "champion"), (0x10, "minion"))
+KINDS = ((2, "superunique"), (4, "champion"), (0x10, "minion"), (9, "unique"), (8, "actboss"))
 
 
 def kind_of(tflags, flags):
-    for bit, name in KINDS:
-        if tflags & bit: return name
+    for bits, name in KINDS:
+        if tflags & bits == bits: return name
     if flags & 0x40: return "bosscol"
     if flags & 0x04: return "noratio"
     return "plain"

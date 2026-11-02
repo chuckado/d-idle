@@ -45,8 +45,10 @@ int main(int argc, char** argv) try {
             std::istringstream parts(mod_list);
             for (std::string part; std::getline(parts, part, '.');) if (std::stoi(part)) mods.push_back(std::stoi(part));
         }
-        const auto kind = tflags & 2 ? d2d::rules::Boss::superunique : tflags & 8 ? d2d::rules::Boss::unique
-                        : tflags & 4 ? d2d::rules::Boss::champion : tflags & 0x10 ? d2d::rules::Boss::minion : d2d::rules::Boss::none;
+        // MonsterData +0x16 as game.exe left it: 1 rolled, 2 superunique, 4 champion, 8 unique, 0x10 minion (a champion is
+        // 1|4|8, a superunique 1|2|8). 8 alone is an act boss (FUN_005b1cf0): d2d makes it plain, no make_boss.
+        const auto kind = tflags & 2 ? d2d::rules::Boss::superunique : tflags & 4 ? d2d::rules::Boss::champion
+                        : tflags & 0x10 ? d2d::rules::Boss::minion : (tflags & 9) == 9 ? d2d::rules::Boss::unique : d2d::rules::Boss::none;
         const bool boss = kind != d2d::rules::Boss::none;
         d2d::rules::Rng rng{ std::uint32_t(seed) ^ std::uint32_t(cls * 7919 + lid) };
 #ifdef VNL_HEAD
