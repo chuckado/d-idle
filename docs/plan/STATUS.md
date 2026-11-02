@@ -133,6 +133,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 9b99e09 11-01 19:33 `Merge agent/soakfixes: SOAKFIXES: explore give-up guards on run kind, ping-pong guard, town-portal verdict hysteresis` (soakgiveup)
 - cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
 - 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
 - f87ba9c 11-01 19:01 `Merge agent/necskill: NECSKILL: Necromancer skill trace: 27,800 calc cases 0 differ, magic roll life deviation 10,509 of 36,600 (the SKMISS fix covers it), Corpse Explosion deviations read only` (necskill)
@@ -142,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 43d606e 11-01 18:20 `Merge agent/coveragetable: Rule coverage table: 4,910 data-table rows in 21 subsystems, generated from a checked ledger` (coveragetable)
 - 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
 - a439ea3 11-01 17:16 `Merge agent/palskill: PALSKILL: Holy Bolt, Blessed Hammer and Paladin aura trace against game.exe: seven d2d deviations, five bot findings` (palskill)
-- b94cfc1 11-01 17:09 `Merge agent/skabrecheck: SKABRECHECK: pierce claim refuted (0 diffs on 147k real-build cases), whole-point physical roll confirmed on 84k of 101k cases` (skabrecheck)
 <!-- statusgen:end -->
