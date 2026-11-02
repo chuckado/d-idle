@@ -196,8 +196,31 @@ def hit(w, skill, level, pulses, do=0x5cf3a0):
     print("targets outside the circle, owned, or NPC took damage in", sum(1 for d in drops if any(d[len(picks):])), "pulses")
 
 
+def town_hit(w):
+    """Holy Fire (102) level 5 in town: a rat in range (Akara is an NPC, the rat stands in for any hostile)."""
+    e = w.e
+    prep(w, {102: 5})
+    cx, cy = w.free_spot(margin=12)
+    caster, _, _ = w.make(pa.PLAYER, 4, cx, cy)
+    e.call(0x627150, e.r32(caster + 0x5c), 0xc, 30, 0)
+    e.w32(caster + 0x20, 12345)
+    e.w32(caster + 0x24, 666)
+    rat, _, _ = w.make(pa.MONSTER, 63, cx + 2, cy)
+    e.call(0x627150, e.r32(rat + 0x5c), 7, 100000 << 8, 0)
+    e.call(0x627150, e.r32(rat + 0x5c), 6, 100000 << 8, 0)
+    before = e.call(0x625480, rat, 6, 0)
+    e.call(0x5cf3a0, 102, 5, ecx=w.game.g, edx=caster, limit=50000000)
+    print("TOWN Holy Fire 5 on a rat 2 subtiles away: damage", before - e.call(0x625480, rat, 6, 0), "(256ths); caster room is town (FUN_00061ab00):", e.call(0x61ab00, e.call(0x620bb0, caster)))
+
+
 def main():
     mode = sys.argv[1]
+    if mode == "town":      # the same friendly pulse and Holy Fire pulse inside the Rogue Encampment (level 1)
+        w = pa.World(5, lid=1)
+        w.real_callback()
+        sys.argv[1:] = ["friendly", "98", "1"]
+        friendly(w, 98, 1)
+        return town_hit(w)
     w = pa.World(5)
     w.real_callback()
     if mode == "regen":

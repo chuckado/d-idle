@@ -29,8 +29,8 @@ class World:
         self.e.mu.mem_write(0x5cedc0, bytes([0x55, 0x8b, 0xec, 0x83, 0xec]))
         self.e.mu.ctl_remove_cache(0x5cedc0, 0x5cedc5)
 
-    def __init__(self, seed):
-        self.game = g = missiles.Game()
+    def __init__(self, seed, lid=2):
+        self.game = g = missiles.Game(lid=lid)      # level 2 = Blood Moor, 1 = the Rogue Encampment (town)
         self.e = g.e
         self.rng = random.Random(seed)
         self.seen = []
