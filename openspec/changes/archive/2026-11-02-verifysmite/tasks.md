@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifysmite
-status: in-progress
+status: archived
 agent: verifysmite
 branch: agent/verifysmite
 worktree: d2lod-wt/verifysmite
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own game.exe run before the author's trace is read
-result: "docs only; game side verified (V run), d2d side read not run; HOLDS WITH LIMITS, candidate NEEDS CHANGES"
+result: "docs and records"
+merge: 894788d
 ```
 
 - [x] 1 Own disassembly and do-func table
