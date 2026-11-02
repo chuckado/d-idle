@@ -1,5 +1,5 @@
 {
- "description": "Original-game (Game.exe 1.14d under Wine, i4, Soaky Sorceress, offline, honest play) m1-profile soaks, metrics recomputed from the bot's minute lines by d2dsoak extract so both sides use one definition. G2 (8 h, m24, started 2026-10-30 08:23) is NOT included until it ends and its log is copied.",
+ "description": "Original-game (Game.exe 1.14d under Wine, i4, Soaky Sorceress, offline, honest play) m1-profile soaks, metrics recomputed from the bot's minute lines by d2dsoak extract so both sides use one definition. Card baselinefree (2026-11-01) added the whole a14 run (a14-full; the 64-line a14 row is kept but excluded from the means), the 8 h G2 run (m24) and per-run clvl band tables (bands), plus provenance fields (run_id, bot, backend, date, profile, weak). Rows with exclude_from_mean stay out of the whole-run means; their bands still count in `d2dsoak bands`.",
  "minSeeds": 5,
  "minHoursPerSeed": 2,
  "minTotalHours": 10,
@@ -82,7 +82,14 @@
     "xp_per_hour": 12235.753943364223
    },
    "source": "V: docs/g1-log.md attempt 14 (bot de9b597, Soaky clvl 11-12, Game.exe); first 64 minute lines only, old build, no state field",
-   "note": "PARTIAL: 1 h of the 2 h; a14 had 1 death in the full run"
+   "note": "PARTIAL: 1 h of the 2 h; a14 had 1 death in the full run",
+   "run_id": "soak24/runs/20261029-235659-d2bot.log (first 64 minute lines)",
+   "bot": "de9b597",
+   "backend": "game.exe",
+   "date": "2026-10-29",
+   "profile": "m1",
+   "weak": "partial: 64 of 120 minute lines",
+   "exclude_from_mean": "superseded by a14-full (the whole 2 h run, same log)"
   },
   {
    "name": "a16",
@@ -112,7 +119,26 @@
     "waiting": 0.04504504504504504
    },
    "source": "V: docs/g1-log.md attempt 16 verdict (bot b2e010c, Soaky clvl 13-14, Game.exe); minute lines of the 2 h run",
-   "note": "an OOM restart at 04:45 lost unsaved XP/gold (counted); potions_per_hour here is the minute-line counter, which reset at the restart"
+   "note": "an OOM restart at 04:45 lost unsaved XP/gold (counted); potions_per_hour here is the minute-line counter, which reset at the restart",
+   "run_id": "soak24/runs/20261030-030600-d2bot.log",
+   "bot": "b2e010c",
+   "backend": "game.exe",
+   "date": "2026-10-30",
+   "profile": "m1",
+   "weak": "OOM restart at 04:45 (unsaved XP counted against it)",
+   "bands": [
+    {
+     "band": "11-14",
+     "hours": 1.84124589508,
+     "minutes": 110,
+     "xp": 21740,
+     "kills": 889,
+     "deaths": 0,
+     "xp_per_hour": 11807.222521495654,
+     "kills_per_hour": 482.82524478425194,
+     "open": true
+    }
+   ]
   },
   {
    "name": "a18",
@@ -141,7 +167,127 @@
     "town chores": 0.20967741935483872
    },
    "source": "V: docs/g1-log.md attempt 18 verdict (bot b478bd9, Soaky clvl 14, Game.exe); minute lines of the 2 h run",
-   "note": "d2soak report: 9,103 XP/h, 688 kills/h from its samples; stash banking keeps gold near 1,000"
+   "note": "d2soak report: 9,103 XP/h, 688 kills/h from its samples; stash banking keeps gold near 1,000",
+   "run_id": "soak24/runs/20261030-061457-d2bot.log",
+   "bot": "b478bd9",
+   "backend": "game.exe",
+   "date": "2026-10-30",
+   "profile": "m1",
+   "bands": [
+    {
+     "band": "11-14",
+     "hours": 2.0525097143936115,
+     "minutes": 123,
+     "xp": 18965,
+     "kills": 1272,
+     "deaths": 0,
+     "xp_per_hour": 9239.907546845874,
+     "kills_per_hour": 619.7291009537544,
+     "open": true
+    }
+   ]
+  },
+  {
+   "name": "a14-full",
+   "hours": 1.9910445382597222,
+   "minutes": 120,
+   "deaths": 1,
+   "kills": 787,
+   "xp": 22571,
+   "metrics": {
+    "clvl_1h": 12,
+    "clvl_gain": 1,
+    "deaths_per_1000_kills": 1.2706480304955527,
+    "deaths_per_hour": 0.502248935563266,
+    "gold_per_hour": -104.46777859715934,
+    "kills_per_hour": 395.26991228829036,
+    "potions_per_100_kills": 0,
+    "potions_per_hour": 0,
+    "repeat_sites": 0,
+    "xp_per_hour": 11336.260724598478
+   },
+   "source": "V: d2dsoak baseline on the whole bot log of attempt 14 (120 minute lines, 2 h, 1 death at about 01:40; the first 64 lines are the old a14 row)",
+   "note": "full 2 h run: the death and the 17 min idle in town after it (Blood Moor banned, 0 gold) are in; old build, no state field",
+   "run_id": "soak24/runs/20261029-235659-d2bot.log",
+   "bot": "de9b597",
+   "backend": "game.exe",
+   "date": "2026-10-29",
+   "profile": "m1",
+   "bands": [
+    {
+     "band": "11-14",
+     "hours": 1.9910445382597215,
+     "minutes": 119,
+     "xp": 22571,
+     "kills": 787,
+     "deaths": 1,
+     "xp_per_hour": 11336.260724598482,
+     "kills_per_hour": 395.2699122882905,
+     "open": true
+    }
+   ]
+  },
+  {
+   "name": "g2-8h",
+   "hours": 8.062915542547778,
+   "minutes": 482,
+   "deaths": 4,
+   "kills": 4081,
+   "xp": 32852,
+   "metrics": {
+    "clvl_1h": 14,
+    "clvl_2h": 14,
+    "clvl_gain": 1,
+    "deaths_per_1000_kills": 0.98015192354815,
+    "deaths_per_hour": 0.49609846201316543,
+    "farming_share": 0.6763485477178424,
+    "gold_per_hour": 84.708812388748,
+    "kills_per_hour": 506.144455868932,
+    "potions_per_100_kills": 4.974271012006861,
+    "potions_per_hour": 25.176996947168146,
+    "recovery_share": 0.13070539419087138,
+    "repeat_sites": 1,
+    "town_share": 0.18464730290456433,
+    "xp_per_hour": 4074.456668514128
+   },
+   "states": {
+    "dead-recovering": 0.01867219917012448,
+    "farming": 0.6763485477178424,
+    "quest fight": 0.006224066390041493,
+    "quest travel": 0.002074688796680498,
+    "recovery": 0.11203319502074689,
+    "town chores": 0.18464730290456433
+   },
+   "source": "V: d2dsoak baseline on the whole bot log of G2 (482 minute lines, 8.06 h, 4 deaths); counters per the extractor (4081 kills; docs/g1-log.md quotes 7100 from the counter total)",
+   "note": "m24 profile, Soaky clvl 14 to 15 (about 2 h at clvl 14, then 6 h at clvl 15 gated by the route guard and no merc); one approved Game.exe kill at 08:36; 17 bot restarts per the counter, 17 fresh games",
+   "run_id": "soak24/runs/20261030-082115-d2bot.log",
+   "bot": "b478bd9 plus later merges (exact hash U)",
+   "backend": "game.exe",
+   "date": "2026-10-30",
+   "profile": "m24",
+   "bands": [
+    {
+     "band": "11-14",
+     "hours": 2.0285170404063884,
+     "minutes": 121,
+     "xp": 14304,
+     "kills": 1206,
+     "deaths": 0,
+     "xp_per_hour": 7051.4566627127615,
+     "kills_per_hour": 594.5229820491884
+    },
+    {
+     "band": "15-20",
+     "hours": 6.034398502141388,
+     "minutes": 360,
+     "xp": 18548,
+     "kills": 2875,
+     "deaths": 4,
+     "xp_per_hour": 3073.7114881322454,
+     "kills_per_hour": 476.43522365647,
+     "open": true
+    }
+   ]
   }
  ]
 }

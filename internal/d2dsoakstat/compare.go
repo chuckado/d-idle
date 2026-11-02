@@ -22,6 +22,28 @@ type BaselineRun struct {
 	Run
 	Source string `json:"source"` // file or doc the numbers come from, with a V/S/U tag
 	Note   string `json:"note,omitempty"`
+	// Provenance (card baselinefree): which live run this is. Empty in rows from before the card.
+	RunID   string     `json:"run_id,omitempty"`  // the bot log name(s) of the run, "+"-joined when a run spans restarts
+	Bot     string     `json:"bot,omitempty"`     // bot commit(s), "" when unknown
+	Backend string     `json:"backend,omitempty"` // "game.exe" for the original game
+	Date    string     `json:"date,omitempty"`    // start date of the run
+	Profile string     `json:"profile,omitempty"` // soak profile (m1, m24)
+	Weak    string     `json:"weak,omitempty"`    // why the run is weak or partial, "" when it is not
+	Bands   []BandStat `json:"bands,omitempty"`   // the run split by clvl band (d2dsoak baseline -bands)
+	// Exclude is why the row stays out of the whole-run means, the pooled death rate and the baseline-run count
+	// (superseded or overlapping another row); its bands still count in the per-band baseline (BandBaseline).
+	Exclude string `json:"exclude_from_mean,omitempty"`
+}
+
+// Counted are the baseline rows that enter the whole-run mean and the pooled death rate.
+func (b Baselines) Counted() []BaselineRun {
+	var out []BaselineRun
+	for _, r := range b.Runs {
+		if r.Exclude == "" {
+			out = append(out, r)
+		}
+	}
+	return out
 }
 
 // Baselines is the file tools/d2dsoak/baselines.json.
@@ -204,8 +226,8 @@ func compare(d2d []Run, b Baselines) Verdict {
 	if b.MinTotalHours > 0 && hours < b.MinTotalHours {
 		v.Warnings = append(v.Warnings, fmt.Sprintf("%.1f virtual hours in total, minimum %.0f for the death metrics: at about 0.2 deaths/h fewer hours hold under 4 deaths", hours, b.MinTotalHours))
 	}
-	if len(b.Runs) < 3 {
-		v.Warnings = append(v.Warnings, fmt.Sprintf("only %d baseline run(s): the baseline itself is uncertain", len(b.Runs)))
+	if n := len(b.Counted()); n < 3 {
+		v.Warnings = append(v.Warnings, fmt.Sprintf("only %d baseline run(s): the baseline itself is uncertain", n))
 	}
 	anyFail, anyInc := false, false
 	for _, k := range MetricKeys {
@@ -253,9 +275,9 @@ func compare(d2d []Run, b Baselines) Verdict {
 }
 
 func runsOf(b Baselines) []Run {
-	rs := make([]Run, len(b.Runs))
-	for i, r := range b.Runs {
-		rs[i] = r.Run
+	var rs []Run
+	for _, r := range b.Counted() {
+		rs = append(rs, r.Run)
 	}
 	return rs
 }
