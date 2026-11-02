@@ -2,7 +2,7 @@
 
 ```yaml
 change: bundlefinal2
-status: in-progress
+status: archived
 agent: bundlefinal2
 branch: agent/bundlefinal2
 worktree: d2lod-wt/bundlefinal2
@@ -16,7 +16,7 @@ gates:
   - "11 commits on upstream main bdc1eb02, bodies of at most three lines, author and committer the numeric noreply identity, the Smite commit ends with Traced-by"
   - "suites, differentials and CI parity re-run on the final head"
   - "credit.py check passes for the bundle's cards"
-result: "docs and card; local/bundle-final (11 commits on bdc1eb02) on the private remote; suites, differentials and CI parity re-run on the final head, not live"
+result: "docs only; upstream PR 177 opened"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
 credit:
   component: Final PR body for the upstream bundle
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: ["Claude Code (card verifybundle, independent run on the earlier bundle)"]
   consent: none
+merge: 7ce0bd9
 ```
 
 - [x] 1 local/bundle-final on upstream main bdc1eb02: 10 bundle-4 commits plus Smite, conflict resolved
