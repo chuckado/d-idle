@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifystateev2
-status: in-progress
+status: archived
 agent: verifystateev2
 branch: agent/verifystateev2
 worktree: d2lod-wt/verifystateev2
@@ -15,7 +15,7 @@ exclusive: []
 gates:
   - own disassembly reading and model before the authors' scripts are read
   - own game.exe emulator runs with own seeds (4242, 90210), game-vs-game oracle, 0 exceptions on the verified claims
-result: "docs and emulator scripts only; game side V run (seeds 4242, 90210), d2d side read only, not verified live; no PR candidate"
+result: "docs only; see the doc for tags and limits"
 credit:
   component: SKSTATEEV
   author: owner
@@ -24,6 +24,7 @@ credit:
   verified_by: []
   agents: [Claude Code]
   consent: none
+merge: 8dd3f97
 ```
 
 - [x] 1 Own disassembly reading of FUN_0057dbf0, FUN_0057d4f0, FUN_005c0c30, FUN_0057c1e0, FUN_0057c6c0, FUN_0057b7d0 (tools/emu/vse_dis.py)
