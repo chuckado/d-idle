@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: branch triage of the 15 unmerged local agent branches (docs/research/branch-triage-20261102.md).
 - crfixbundle: bundle 3 (CodeRabbit review fixes: charge-repair base, confidence tags, ground-roll comparison) and the judged comments
 - Added docs/research/pr-smite-block-draft.md and tools/emu/sbp_*: the Smite-block upstream candidate built on the private fork with a counted differential against game.exe.
 - Independent verification of the Teleport room rule (docs/research/verify-teleport-room.md, tools/emu/vt_*)

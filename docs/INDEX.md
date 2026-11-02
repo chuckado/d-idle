@@ -261,3 +261,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-teleport-room.md - independent check of the Teleport room rule (card verifytele)
 - docs/research/pr-smite-block-draft.md - draft PR text, a block no longer stops Smite (private, on hold)
 - docs/research/crfix-bundle-20261102.md: CodeRabbit comments on staging PR 2, verdicts, reply texts, #176 merge probe (card crfixbundle)
+- docs/research/branch-triage-20261102.md | Triage of the local agent branches not on main: verdict, reason and merge or delete command per branch
