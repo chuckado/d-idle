@@ -177,3 +177,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - playerdef-trace.md: the player's derived defence stats (life, mana, regen, defence, block, resistances) in game.exe vs d2d vs the bot; D1..D8, B1..B4, recipes (docs/research/playerdef-trace.md)
 - docs/research/verify-waypoint.md - independent re-check of the waypoint refusal window (HOLDS / LIMITS)
 - docs/research/pr-missilepoison-draft.md: PR draft for the skill-sourced and trap monster missile poison units (Andariel x 62), narrow third check owed
+- Bot supply rates and where the code reads them: [botsupply.md](botsupply.md).
