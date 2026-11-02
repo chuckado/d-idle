@@ -326,6 +326,11 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		why = append(why, "resource: "+trip.Reason)
 		emergency = r.resInput(s).Belt.HP == 0
 	}
+	if why2, ok := r.kitTrip(s); ok && known {
+		hard = true // not floorable: the kit is the survival need (KITGATELEVEL)
+		plan.Potions = true
+		why = append(why, why2)
+	}
 	if known {
 		threshold := t.ResupplyPotions
 		if p.InTown() {
@@ -433,6 +438,18 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			}
 			return err
 		})
+		if !ok && strings.Contains(t.plan.Reason, "kit: ") && r.State() == StateResupplying {
+			// a kit trip whose chores keep failing counts like a finished one, else it repeats until the failsafe ladder
+			// skips the field and pauses the character far from the safe area (KITGATELEVEL)
+			r.obMu.Lock()
+			r.ob.kitTrips++
+			capped := r.ob.kitTrips >= r.e.Tune.Resource.KitTripCap
+			r.obMu.Unlock()
+			if capped {
+				r.e.Log.Warn("town trip abandoned", "reason", t.plan.Reason)
+				l.trip, l.failures = nil, 0
+			}
+		}
 		if ok {
 			t.stage = 2
 			if s := r.latest(); s != nil {
