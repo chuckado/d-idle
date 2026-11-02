@@ -235,3 +235,28 @@ Not re-run: an MSVC build, the full ctest, the full CI tidy selection. No commen
 
 - BACKLOG: #171 (monster base velocity 75) is open; watch for the maintainer and CodeRabbit. The authorised four PRs are used up.
 - INDEX, decomp-queue, research README: see merge-lines.txt.
+
+## Conflict rebase of #159, #160, #163 (card prconflicts)
+
+- rule (V, read fresh from upstream main 4bf911b3: AGENTS.md section 6, CONTRIBUTING.md, .github/pull_request_template.md, .claude/skills/contribute): "Keep the branch current with `git rebase origin/main` before asking for review and after main moves." Commits: short subject, at most three lines of body; the author is the contributor; the PR body follows the template and ends `Agent: <name>`; run `python3 tools/pr_guard.py` and `python3 tools/presubmit.py --quick` before pushing; ask before every push and reply. No merge-commit policy is stated, but the stated policy is rebase, which rewrites the PR branch (force-push). The maintainer merges with merge commits ("Merge pull request #171"), so no squash is expected.
+- found: no human comment on #159, #160 or #163 (issue comments, review comments, reviews: only CodeRabbit and our own replies); the conflict is GitHub's own state (#159 and #160 CONFLICTING/DIRTY, #163 MERGEABLE/BEHIND).
+- posted: nothing. No push to the PR branches, no comment.
+- fetch upstream: main 4bf911b3 (the #171 merge). Rebased with `git rebase upstream/main` in a worktree on the worker host, numeric-ID noreply identity as author and committer, `Agent: Claude Code` unchanged. New local branches (also pushed to the private fork remote only): local/prconf-163 3b6dfc83 (3 commits, no conflict), local/prconf-160 b91e9c38 (3 commits), local/prconf-159 1a0a26d9 (3 commits).
+- conflicts: #160 in `components/game/fight.hpp` and `fight/missiles.cpp`: upstream gave `apply_target_stats` an optional `CalcEnv*` (enemy auras carry their own env) and added `self_state`; resolved by keeping both: signature `(skill_row, lvl, target, base, aura_env = nullptr)`, the `base` snapshot taken before any curse, the fifth rule inside the stat cases, the enemy-aura loop passes `base` and `&aura.env`. #159 in `components/game/ai.hpp`: upstream added `shatter` and `no_heal_until` beside our `stunned_until`; kept all three. #163 had no conflict. ai.cpp, strike.cpp and states.cpp of #159 merged without conflict; no other writer of `stun_until` was added upstream (grep).
+- check (worker host, Release build with `-ffp-contract=off`, `D2_MPQ_DIR` set):
+
+| check | result |
+|---|---|
+| test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game | exit 0 on each of the three heads |
+| #163: `test_sk_ground --blizz` seeds 1 and 7, 100,000 casts each, vs the stored game.exe offsets | 2,500,000 shards each, never-made offsets 0 (0.00%), MISMATCH 0; offsets -6..5 on both sides |
+| #160: `test_sk_resist --resist` on the stored 147,628-case files for both seeds, `sk_resist.py cmp` | adj differ 0; effres differ 3,986 / 3,992 and dealt differ 1,958 / 1,977, all under -100 (the floor, outside the claim, same as recorded) |
+| #159: `test_armor_hit --armor-hit`, 108,506 stored cases | mismatches 0, calc1 differs 0, RESFAIL 0 |
+| #159: `test_freeze_resume --freeze-resume`, two stored 37,776-case files | frozen in game.exe 0 differ (12,548 / 12,516), aidel 1 0 differ; output byte-identical to the recorded head output; the 25k chilled cases differ as before (outside the claim) |
+| pr_guard (`upstream/main` range) and each commit | 0 FAIL / 0 WARN |
+| presubmit --quick | 0 FAIL; 2 WARN (#160, #163), 3 WARN (#159): build skipped and test kinds, as at open time |
+| tooling unit tests | 31 ok |
+| g++ and clang++ -fsyntax-only with the TU command plus -Wall -Wextra -Wpedantic -Wshadow -Wrange-loop-construct -Wconversion -Wsign-conversion, changed TUs | warning counts equal to upstream main on every changed .cpp (29 g++; clang++ 39 missiles, 66 ai, 45 states, 44 strike, 38 gamedata_load) |
+| merge-tree of the three heads pairwise | clean |
+
+- not re-run: clang-tidy over the changed TUs, ruff with the repo configuration, MSVC, new game.exe oracle runs (stored game-side files used; the game side does not depend on d2d).
+- hold: publishing needs `git push --force-with-lease` of local/prconf-N to fix/frozen-armor-and-resume-final, fix/curse-immune-final and fix/blizzard-shard-offsets-v2 on the public fork. Not done (standing rule); the user decides. The alternative is a merge of upstream main into each PR branch (plain push), which the maintainer's rule does not ask for.
