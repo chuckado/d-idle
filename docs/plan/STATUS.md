@@ -131,14 +131,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 9f9b32d0 11-02 00:08 `Merge agent/playerdef: PLAYERDEF: player defence, block and attack rating run against game.exe (102,604 cases, 0 mismatches vs a port of d2d formulas); life and mana tables read` (playerdef)
-- 82c13a0a 11-02 00:07 `merge origin/main into playerdef` (playerdef)
-- 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
-- bd354909 11-02 00:00 `merge origin/main into uniqmods` (uniqmods)
-- abed0924 11-01 23:55 `Merge agent/monsterhit: MONSTERHIT: monster melee against the player: to-hit, damage, block and get-hit rules run against game.exe (100,000 cases each, 0 differ); block deviation in the d2d port` (monsterhit)
-- 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
-- eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
-- 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
-- a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
-- 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
+- 42236144 11-02 05:53 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
+- 62da358f 11-02 05:49 `Merge agent/propenmonsterpacea: PROPEN-MONSTERPACE-A: upstream PR 167 opened (monster think paces, Blood Raven, shaman corpse reach)` (propenmonsterpacea)
+- b5f855dd 11-02 05:48 `merge origin/main into propenmonsterpacea` (propenmonsterpacea)
+- 13162292 11-02 05:41 `Merge agent/skias: skias: Pro account job result (docs and emulator tools only)` (skias)
+- eba39266 11-02 05:36 `Merge agent/geararmore: geararmore: Pro account job result (docs and emulator tools only)` (geararmore)
+- e3736c1e 11-02 05:35 `merge origin/main into geararmore` (geararmore)
+- bbf5986b 11-02 05:30 `Merge agent/verifyresistq: verifyresistq: Pro account job result (docs and emulator tools only)` (verifyresistq)
+- c9da90ec 11-02 05:30 `merge origin/main into verifyresistq` (verifyresistq)
+- 3f14d224 11-02 05:23 `Merge agent/verifyskmana: verifyskmana: Pro account job result (docs and emulator tools only)` (verifyskmana)
+- 3e8e647d 11-02 05:22 `merge origin/main into verifyskmana` (verifyskmana)
 <!-- statusgen:end -->
