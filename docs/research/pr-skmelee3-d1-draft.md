@@ -1,6 +1,6 @@
 # PR draft D1: a player blow keeps its 256ths through the resistance (SKMELEE3, part 1)
 
-> status: DRAFT, 2026-11-02 (card prbuildskmelee3b). ON HOLD: all upstream PRs are on hold; nothing is posted, nothing is pushed to a public remote. Branch `local/skmelee3-d1-final` on the private fork remote, head 46ced89a, one commit on upstream main cb716f10. Replaces the single draft of card prbuildskmelee3 (D1 and D2 are now two independent PRs; the D2 text is pr-skmelee3-d2-draft.md). Tags: V = run, S = from an earlier doc, U = unverified. Four older branch names of the first attempts (`local/skmelee3-d1`, `-d1-v2`, `-d2`, `-d2-v2`) are stale and must not be used (the first and third have a failing or missing test, the others carry a stray file).
+> status: DRAFT, 2026-11-02 (card prbuildskmelee3b). ON HOLD: all upstream PRs are on hold; nothing is posted, nothing is pushed to a public remote. Branch `local/skmelee3-d1-r174` on the private fork remote, head 5689c007, one commit on upstream main 48908176 (the merge of #174; the earlier `local/skmelee3-d1-final` 46ced89a was on cb716f10; counts re-run: rebase174-20261102.md). Replaces the single draft of card prbuildskmelee3 (D1 and D2 are now two independent PRs; the D2 text is pr-skmelee3-d2-draft.md). Tags: V = run, S = from an earlier doc, U = unverified. Four older branch names of the first attempts (`local/skmelee3-d1`, `-d1-v2`, `-d2`, `-d2-v2`) are stale and must not be used (the first and third have a failing or missing test, the others carry a stray file).
 
 ## PR text (for upstream; no private names)
 
@@ -39,7 +39,7 @@ Determinism scenarios: not run (U). Expected: every scenario with a player, merc
 
 ## Evidence (worker host, V unless said)
 
-- Branch `local/skmelee3-d1-final`, base cb716f10 (upstream main, fetched 2026-11-02), commit identity the contributor's noreply address for author and committer, trailer `Agent: Claude Code` only.
+- Branch `local/skmelee3-d1-r174`, base 48908176 (upstream main after #174, 2026-11-02), commit identity the contributor's noreply address for author and committer, trailer `Agent: Claude Code` only.
 - Generator A: `tools/emu/sm3_run.sh` flow (`sk_melee2.py gen 100000 SEED 1700`, `game`, build's `test_melee --melee`, `cmp`); d2d md5 head seed 7 c0dff1b9, seed 1 5819013b; base eba407be / 1809103f.
 - Generator B: the independent verifier's harness (own cases, game side from `FUN_0057b660` + `FUN_0057b420`, d2d side the real `rules::player_blow` of each tree's header compiled in place; the game side resisted as `resisted_fine` states it).
 - Suites and tidy logs: worker host, `sm3b-out/`.
