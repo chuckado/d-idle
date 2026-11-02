@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 558d7b0d 11-02 10:08 `merge origin/main into paldur` (paldur)
 - d37b5b21 11-02 09:55 `Merge agent/baselineruns-20261102: Baseline runs 20261102 set late: four restored level-12 lanes on the original game (generated records)` (baselineruns-20261102)
 - 88f6f85a 11-02 09:54 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
 - be84737b 11-02 09:48 `Merge agent/prconflicts: PRCONFLICTS: PRs 159, 160, 163 rebased onto upstream main and force-pushed with the user's go` (prconflicts)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5c3ee126 11-02 08:28 `merge origin/main into lockstepp1p2` (lockstepp1p2)
 - 4ea66249 11-02 08:25 `Merge agent/boardclean: BOARDCLEAN: eight finished board items closed, two partial items narrowed, open-work.md synced` (boardclean)
 - 5d9b879d 11-02 07:57 `Merge agent/propenmonsterpaceb: PROPEN-MONSTERPACE-B: upstream PR 171 opened (base monster velocity 75)` (propenmonsterpaceb)
-- 5a761420 11-02 07:57 `merge origin/main into propenmonsterpaceb` (propenmonsterpaceb)
 <!-- statusgen:end -->
