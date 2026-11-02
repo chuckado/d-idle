@@ -59,7 +59,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [povertyflip](../../openspec/changes/povertyflip/) | in-progress | povertyflip | `openspec/changes/povertyflip/**` | - |
-| [seedstudy](../../openspec/changes/seedstudy/) | in-progress | seedstudy | `docs/research/seed-study.md`<br>`openspec/changes/seedstudy/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
@@ -122,7 +121,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change povertyflip: go test -p 1 ./internal/bot passes, including the flip replay test
-- change seedstudy: changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -137,14 +135,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- cf575aee 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
-- b1ea270c 11-01 20:55 `merge origin/main into snaplib` (snaplib)
-- 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
-- 39aaf7b3 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
-- 8961692a 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
-- d06b33cf 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
-- 86b15dc9 11-01 20:42 `Merge agent/baselineruns: BASELINERUNS: runbook for the extra original-game baseline runs (5 late, 3 fresh), launcher prepared in the ops repo` (baselineruns)
-- d14b7829 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
-- f50e4778 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
-- 2713abf3 11-01 20:35 `merge origin/main into charfactory` (charfactory)
+- 47920c18 11-01 22:04 `Merge agent/seedstudy: SEEDSTUDY: one d2s file pins the seed on both sides; static layout and spawn comparison feasible with work; frame lockstep blocked by tier B and the unit-seed stream` (seedstudy)
+- 296d9c21 11-01 22:03 `merge origin/main into seedstudy` (seedstudy)
+- af74c4d4 11-01 22:00 `Merge agent/verifymissile: VERIFYMISSILE: independent Opus verification of the monster missile record candidate: NOT READY, the added poison is up to 62x too strong; record claim holds` (verifymissile)
+- f036c275 11-01 22:00 `merge origin/main into verifymissile` (verifymissile)
+- b8689ae2 11-01 21:52 `Merge agent/treasure: TREASURE: treasure class trace for Act 1 and 2, produced on the API credits runner` (treasure)
+- 3fd36b32 11-01 21:52 `merge origin/main into treasure` (treasure)
+- 625ea93f 11-01 21:51 `merge origin/main into verifymissile` (verifymissile)
+- fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
+- b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
+- 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
 <!-- statusgen:end -->

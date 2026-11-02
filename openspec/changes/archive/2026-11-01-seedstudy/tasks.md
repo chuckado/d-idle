@@ -2,7 +2,7 @@
 
 ```yaml
 change: seedstudy
-status: in-progress
+status: archived
 agent: seedstudy
 branch: agent/seedstudy
 worktree: ~/code/d2lod-wt/seedstudy
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh"
-result: "Docs only: docs/research/seed-study.md. Nothing run live, nothing built."
+result: "docs only; the pin is untested live; a read-only SEEDPIN probe settles the orig-spawns conflict"
 live: "docs only, nothing run live"
+merge: 47920c1
 ```
 
 - [x] seed choice on both sides, pinning, RNG advance

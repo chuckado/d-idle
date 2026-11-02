@@ -151,5 +151,3 @@ internal/cheat/ledgerkey.go  snaplib  ledgerkey
 internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
-docs/research/seed-study.md  seedstudy  seedstudy
-openspec/changes/seedstudy/**  seedstudy  seedstudy
