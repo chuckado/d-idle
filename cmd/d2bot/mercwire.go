@@ -46,6 +46,22 @@ type Reviver interface {
 	Revive(ctx context.Context) (paid int, err error)
 }
 
+// Hirer drives the Act 2 hire window. No d2d implementation exists yet (the rows are only readable on screen, docs/d2d-probes.md
+// section 4), so production wiring leaves it nil and the hire step does nothing; tests use a fake.
+type Hirer interface {
+	// Window opens the hireling's window and reads its rows (name, level, aura, price). The window stays open.
+	Window(ctx context.Context) ([]merc.HireOffer, error)
+	// Hire clicks a row and returns the gold actually paid.
+	Hire(ctx context.Context, row int) (paid int, err error)
+	Unequip(ctx context.Context, slot merc.Slot) error
+	Close(ctx context.Context) error
+}
+
+const (
+	areaLutGholein  = 40  // levels.txt id (V)
+	hireQuoteNormal = 400 // Normal Desert Mercenary quote used only to size the gold farm (V docs/town.md: 360 at merc level 9)
+)
+
 // latestMerc is the wiring of the running bot, for the API mount. nil: merc policy not running.
 var latestMerc atomic.Pointer[mercWire]
 
@@ -102,6 +118,7 @@ func newMercWireD2D(e *env.Env) *mercWire {
 	}
 	w := newMercWire(e, rd, rev, cat)
 	task.MercAlive = w.AliveHook()
+	bot.MercGoldFarm = w.GoldFarm
 	latestMerc.Store(w)
 	e.Log.Info("merc policy on (merc.enabled=1)", "reviver", rev != nil)
 	return w
@@ -123,6 +140,7 @@ type mercWire struct {
 	knobs merc.Knobs
 	rd    merc.Reader
 	rev   Reviver
+	hirer Hirer
 	cat   bot.Catalog
 	now   func() time.Time
 
@@ -136,10 +154,15 @@ type mercWire struct {
 	revives  []time.Time
 	lastLine time.Time
 	lastDec  string
+
+	lutDone   map[merc.Difficulty]bool // the swap decision of the first Lut Gholein visit is final (hired, or declined for good)
+	winLogged map[merc.Difficulty]bool // `merc: hire window` is written once per difficulty
+	farmOn    bool
 }
 
 func newMercWire(e *env.Env, rd merc.Reader, rev Reviver, cat bot.Catalog) *mercWire {
-	return &mercWire{e: e, log: e.Log, knobs: merc.KnobsFrom(e.Tune.Merc), rd: rd, rev: rev, cat: cat, now: time.Now}
+	return &mercWire{e: e, log: e.Log, knobs: merc.KnobsFrom(e.Tune.Merc), rd: rd, rev: rev, cat: cat, now: time.Now,
+		lutDone: map[merc.Difficulty]bool{}, winLogged: map[merc.Difficulty]bool{}}
 }
 
 // State is the merc state of at most mercStateTTL ago. A death while the player is away from town is logged once.
@@ -260,7 +283,134 @@ func mercCtx(w *mercWire, s *d2.Snapshot) merc.Ctx {
 	c.Act = s.Player.Act + 1
 	c.PlayerClass = s.Player.Class.String()
 	c.HaveTP, c.HavePotions = w.kit(s)
+	c.Kit = kitRefill(w.e)
 	return c
+}
+
+// kitRefill is the full kit refill in gold from the resource knobs (merc.KitRefill).
+func kitRefill(e *env.Env) int {
+	rt := e.Tune.Resource
+	return merc.KitRefill(rt.KitTPGold, rt.KitPotionGold, rt.KitMinHP, rt.KitMinMP)
+}
+
+// GoldFarm is bot.MercGoldFarm: true while the merc is dead or missing, gold cannot pay the next merc action and the
+// character is below merc.goldFarmMaxLevel. The price is the formula estimate (pre-check only) or the Normal hire quote.
+// Logs `merc: gold farm on|off` once per change.
+func (w *mercWire) GoldFarm(s *d2.Snapshot) bool {
+	if s == nil || s.Player == nil {
+		return false
+	}
+	st, err := w.State()
+	if err != nil || !st.Known {
+		return false
+	}
+	c := mercCtx(w, s)
+	missing, price := !st.Owned, hireQuoteNormal
+	if st.Owned && !st.Alive {
+		missing, price = true, merc.ReviveCost(max(st.Level, 1))
+	}
+	need := merc.GoldNeed(c, price)
+	on := missing && merc.GoldFarm(true, c.Gold, need, s.Player.Level, w.knobs)
+	w.mu.Lock()
+	changed := on != w.farmOn
+	w.farmOn = on
+	w.mu.Unlock()
+	if changed {
+		w.log.Info(merc.LogGoldFarm(on, need, c.Gold, s.Player.Level))
+	}
+	return on
+}
+
+// HireStep is the Act 2 town step: on the first Lut Gholein visit per difficulty read the hire window (one
+// `merc: hire window` line per row), and swap to the best Desert Mercenary the policy allows: strip the Rogue's gear
+// first (the hire destroys it), pay the read price. A decline for gold or an unreadable window keeps the visit open;
+// any other decision is final. "" = nothing to do (no hirer, not in Lut Gholein, merc state unknown).
+func (w *mercWire) HireStep(ctx context.Context, s *d2.Snapshot) string {
+	if w.hirer == nil || s == nil || s.Player == nil || !s.Player.InTown() || s.Player.Area != areaLutGholein {
+		return ""
+	}
+	st, err := w.State()
+	if err != nil || !st.Known {
+		return ""
+	}
+	c := mercCtx(w, s)
+	w.mu.Lock()
+	done := w.lutDone[c.Difficulty]
+	w.mu.Unlock()
+	if done {
+		return ""
+	}
+	c.FirstLutVisit = true
+	offers, err := w.hirer.Window(ctx)
+	if err != nil {
+		w.log.Info(merc.Prefix + "hire window unreadable (" + err.Error() + ")")
+		return "merc hire skipped: window unreadable"
+	}
+	defer w.hirer.Close(ctx)
+	w.mu.Lock()
+	first := !w.winLogged[c.Difficulty]
+	w.winLogged[c.Difficulty] = true
+	w.mu.Unlock()
+	if first {
+		for _, o := range offers {
+			w.log.Info(merc.LogHireWindow(o, c.Gold, s.Player.Level))
+		}
+	}
+	best, bestRank, why := -1, 1<<30, merc.ReasonNoBetter
+	var bestDec merc.Decision
+	prefs := merc.AuraPrefs(c.PlayerClass, c.Difficulty, c.BowOrJavelin)
+	for i, o := range offers {
+		var dec merc.Decision
+		if st.Owned {
+			dec = merc.ShouldReplace(st, o, c)
+		} else {
+			dec = merc.ShouldHire(o, st, c)
+		}
+		if !dec.Do {
+			if dec.Reason == merc.ReasonGold {
+				why = dec.Reason
+			}
+			continue
+		}
+		if r := merc.AuraRank(prefs, o.Aura); r < bestRank {
+			best, bestRank, bestDec = i, r, dec
+		}
+	}
+	if best < 0 {
+		w.log.Info(merc.Prefix + "hire skipped (" + why + ")")
+		if why != merc.ReasonGold {
+			w.mu.Lock()
+			w.lutDone[c.Difficulty] = true
+			w.mu.Unlock()
+		}
+		return "merc hire skipped: " + why
+	}
+	if bestDec.StripFirst {
+		plan := merc.PlanStrip(st, st.FreeCells)
+		if plan.StashCells > 0 {
+			w.log.Info(merc.Prefix + "hire skipped (strip needs stash space)")
+			return "merc hire skipped: pack full"
+		}
+		for _, step := range plan.Steps {
+			if err := w.hirer.Unequip(ctx, step.Slot); err != nil {
+				w.log.Info(merc.Prefix + "hire skipped (strip failed: " + err.Error() + ")")
+				return "merc hire failed"
+			}
+			w.log.Info(merc.LogStrip(step.Slot, step.Item.Name, step.Item.Cells()))
+		}
+	}
+	o := offers[best]
+	paid, err := w.hirer.Hire(ctx, o.Row)
+	if err != nil {
+		w.log.Info(merc.Prefix + "hire failed (" + err.Error() + ")")
+		return "merc hire failed"
+	}
+	w.mu.Lock()
+	w.lutDone[c.Difficulty] = true
+	w.curAt = time.Time{}
+	w.mu.Unlock()
+	w.log.Info(merc.LogHired(o.Class, o.Aura, paid, c.Gold, c.Gold-paid))
+	return "merc hired"
 }
 
 // ReviveStep is the town-visit step: if the merc is known dead and the policy says so, revive. Returns what happened
@@ -287,6 +437,7 @@ func (w *mercWire) ReviveStep(ctx context.Context, s *d2.Snapshot) string {
 		w.log.Info(merc.LogReviveSkipped("no reviver", price, c.Gold))
 		return "merc revive skipped: no reviver"
 	}
+	est := price
 	paid, err := w.rev.Revive(ctx)
 	if err != nil {
 		w.log.Info(merc.LogReviveSkipped("failed: "+err.Error(), price, c.Gold))
@@ -296,7 +447,7 @@ func (w *mercWire) ReviveStep(ctx context.Context, s *d2.Snapshot) string {
 	w.revives = append(w.revives, w.now())
 	w.curAt = time.Time{} // re-read: the merc should be alive now
 	w.mu.Unlock()
-	w.log.Info(merc.LogRevived(paid, st.Level))
+	w.log.Info(merc.LogRevived(paid, st.Level, est))
 	return "merc revived"
 }
 
@@ -309,6 +460,9 @@ type mercTown struct {
 func (t *mercTown) Chores(ctx context.Context, plan bot.ChorePlan) (bot.ChoreReport, error) {
 	rep, err := t.Townsman.Chores(ctx, plan)
 	if s, serr := t.w.e.Snapshot(); serr == nil {
+		if what := t.w.HireStep(ctx, s); what != "" {
+			rep.Done = append(rep.Done, what)
+		}
 		if what := t.w.ReviveStep(ctx, s); what != "" {
 			rep.Done = append(rep.Done, what)
 		}
