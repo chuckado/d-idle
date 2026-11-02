@@ -10,3 +10,5 @@ The SOAKSTALL fix (25918ea) skips its give-up for the planner's run area, but th
 ## Impact
 
 No spec delta. Overlap (declared): internal/bot/goal.go and emptyarea_test.go are held by the finished card soakstall (merged, awaiting archive); no other card in flight touches them.
+
+Also in this branch (agent/soakfixes): ping-pong guard (noteArea) in goal.go, tpDebounce for povertyflip. Overlap (declared): internal/bot/goal.go and runner.go.

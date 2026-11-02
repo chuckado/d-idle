@@ -133,6 +133,7 @@ func (r *Runner) updateStarvation(s *d2.Snapshot) bool {
 		return false
 	}
 	in := r.resInput(s)
+	in.HasTP = l.tpSeen.look(in.HasTP, r.e.Clock.Now())
 	v := resource.PovertyCheck(in, resource.FromEnv(*r.e.Tune), l.starved)
 	adv := resource.PovertyAdvice(in, v, r.e.Tune.Bot.SellMinItems)
 	switch {

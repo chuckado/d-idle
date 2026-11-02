@@ -77,9 +77,55 @@ func TestExploreGaveUp(t *testing.T) {
 		}
 	}
 	r.loop.cleared, r.loop.exploreFails = map[int]bool{}, nil
-	r.loop.run = &LevelRun{Area: 2}
+	for _, k := range []RunKind{RunQuest, RunBoss} {
+		r.loop.cleared, r.loop.exploreFails = map[int]bool{}, nil
+		r.loop.run = &LevelRun{Area: 2, Kind: k}
+		r.exploreGaveUp(ctx, 2, fail)
+		if r.exploreGaveUp(ctx, 2, fail) || r.loop.cleared[2] {
+			t.Fatalf("a %s run keeps roaming", k)
+		}
+	}
+	// the planner sets a clear run for every leveling step: it must still give up (Gate 1: 20 of 22 timeouts)
+	r.loop.cleared, r.loop.exploreFails = map[int]bool{}, nil
+	r.loop.run = &LevelRun{Area: 2, Kind: RunClear}
 	r.exploreGaveUp(ctx, 2, fail)
-	if r.exploreGaveUp(ctx, 2, fail) || r.loop.cleared[2] {
-		t.Fatal("a quest area keeps roaming")
+	if !r.exploreGaveUp(ctx, 2, fail) || !r.loop.cleared[2] {
+		t.Fatal("a clear run in the failing area gives up after two failures")
+	}
+}
+
+// The 17:27 window of Gate 1: Blood Moor and Cold Plains alternating about every 35 s wall (7 virtual minutes a cycle),
+// no kill, no explore timeout. Both become cleared; a kill, a third area or a quest run prevents it.
+func TestPingPongGuard(t *testing.T) {
+	for _, c := range []struct {
+		name  string
+		areas []int
+		kill  int // index before which a kill happens, -1 none
+		run   *LevelRun
+		step  time.Duration
+		want  bool
+	}{
+		{"replay", []int{2, 3, 2, 3, 2, 3, 2, 3}, -1, &LevelRun{Area: 3, Kind: RunClear}, 150 * time.Second, true},
+		{"a kill restarts", []int{2, 3, 2, 3, 2, 3}, 3, nil, 150 * time.Second, false},
+		{"third area", []int{2, 3, 2, 3, 4, 3, 2, 3}, -1, nil, 150 * time.Second, false},
+		{"too fast", []int{2, 3, 2, 3, 2}, -1, nil, 10 * time.Second, false},
+		{"quest run", []int{2, 3, 2, 3, 2, 3, 2, 3}, -1, &LevelRun{Area: 3, Kind: RunQuest}, 150 * time.Second, false},
+	} {
+		g := newRig(t)
+		r := g.r
+		r.loop.cleared = map[int]bool{}
+		r.loop.run = c.run
+		for i, a := range c.areas {
+			if i == c.kill {
+				r.obMu.Lock()
+				r.ob.kills++
+				r.obMu.Unlock()
+			}
+			g.clock.Sleep(c.step)
+			r.noteArea(a)
+		}
+		if got := r.loop.cleared[2] && r.loop.cleared[3]; got != c.want {
+			t.Errorf("%s: both cleared = %v, want %v", c.name, got, c.want)
+		}
 	}
 }
