@@ -1,6 +1,6 @@
 # Re-verifier: local/missilediff-record-up and local/missilepoison-skillrows (REVERIFYMISSILE, 2026-11-01)
 
-> status: current re-verifier record for the two private-fork candidates; verdicts in section 9. Supersedes the verdict of `docs/research/pr-missilerecord-verifier.md` (first head, NOT READY) for the fixed heads; that doc stays the record of the first round.
+> status: current re-verifier record for the two private-fork candidates; verdicts in section 9, updated for heads 1824870b / 71f98145 in "Third check" (T5). Supersedes the verdict of `docs/research/pr-missilerecord-verifier.md` (first head, NOT READY) for the fixed heads; that doc stays the record of the first round.
 
 Candidates (private fork remote only; nothing pushed by me, nothing posted): `local/missilediff-record-up` = upstream main 6935cf64 + 554067e0 / 4224a2be / ec09c73f (unrebased: 9d7e7d81 / 312b0bbb / c301eaef on the roll-top pair 23e2baec); `local/missilepoison-skillrows` = 70fa479d on 6935cf64. Author's evidence (`docs/research/missilediff.md`, `docs/research/pr-missilerecord-draft.md`, branch agent/missilefix at e9d5b3e2) read only after sections 3-7 were run. Offline: no game, no game instance, no lab binary, no det scenarios this round.
 
@@ -134,7 +134,7 @@ So the risk is real but narrow. Those shooters' spit carries the owner's poison 
 
 ## 8. Suites, presubmit, the PR text
 
-**Suites (V run):** RESULT_SUITES
+**Suites (V run):** see "Third check", T3 (the `RESULT_*` placeholders of this section were never filled).
 
 **pr_guard / presubmit (V run, ruff via uvx):**
 
@@ -160,9 +160,9 @@ The author's answers to the 4 WARNs:
 | "pantherpotgreen 102-108 for 400 (159-169)" | yes at level 8 in Normal arithmetic; in Hell the player's total is x 4, not x 2 (section 4) |
 | "drill ... player poison resistance -100: ... now 359" | number not re-run by me (S). Its explanation "x 2 for the resistance" (missilediff.md) is incomplete: the length doubles too, and the 500-frame window cuts it |
 | "pr_guard 0 / 0; presubmit 0 FAIL" | yes (V run) |
-| test_game, test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters pass | RESULT_SUITES_SHORT |
+| test_game, test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters pass | see T3 (suites run on the merge) |
 | Limits: "No Act 1 / 2 MissA row has an owner poison" / "the length is the larger (FUN_0064a930 +0x3c sum not traced)" | **wrong, and now traced**: game.exe adds no owner poison on SrcDamage-0 rows (every poison row); where it does add, it sums the length. Baal Subject 2 is affected (section 5) |
-| test_mpq / smoke_d2d / quests_act1 / quests_act4 fail for environment / pre-existing reasons | RESULT_FAIL_SHORT |
+| test_mpq / smoke_d2d / quests_act1 / quests_act4 fail for environment / pre-existing reasons | not re-run (S) |
 | "MissS1 / MissC / MissSQ never fire", imp double fire, SrcDamage -1 | yes (round 1, V run / V read) |
 
 ## 9. Verdicts and the exact changes
@@ -194,3 +194,111 @@ VM_BLOW=1 ../base/build/tests/test_vm_probe --skill casesS.tsv > rvup_skill_r0.t
 ## Left on the worker host
 
 RESULT_LEFT
+
+## Third check (2026-11-02, narrow: heads 1824870b and 71f98145)
+
+Scope as briefed: only the owner-poison commit, the trap commit, the merge of the two, and the two PR drafts (`agent/missilefix2` at 33b1c4e2: `pr-missilerecord-draft.md`, `pr-missilepoison-draft.md`). The rest of sections 3 to 7 is not re-derived. My oracle files (`vm_game.py`, `vm_game2.py`, `vm_dot.py`) and all case files are unchanged. New on the worker host: `test_vm_probe3.cpp` (my own copy of the probe change: column 16 of a case line, the SrcDamage override that `vm_game2.py` writes into the row's +0x12d, now also goes into the probe's copy of `MissileInfo::src_damage`; probe2 ignored it), `cases_trap.tsv`, `rv3_*.sh`. Builds -j1 / -j2, niced, capacity WARN (allowed).
+
+### T1. The owner-poison rule on 1824870b (V run)
+
+| set (probe3 on 1824870b vs my game.exe record) | compared | differ |
+|---|---|---|
+| OP, poison (2,176 cases: 544 at the rows' real SrcDamage, 1,632 with SrcDamage patched to 128 / 64 / 255) | 2,112 | **0** |
+| OP, physical | 2,176 (544 real, 1,632 patched) | 0 |
+| OP, poison, the previous head ec09c73f (same oracle) | 2,112 | 1,776 |
+| C: physical / other elements / poison | 108,140 / 16,903 / 23,884 | 0 / 0 / 0 |
+| D (all acts): physical / other elements / poison | 112,760 / 7,916 / 23,926 | 0 / 0 / 0 |
+| C hits at res / plr 0/0, -100/0, 40/25, 75/50; D hits at 0/0 | 18,092 each; 22,743 | 0 |
+| DOT (resist stage), in domain | 5,926 | 0 |
+
+For C, D, the four C hit runs and DOT, every numeric output line of 1824870b is byte-identical to ec09c73f's; only the log timestamps differ. So the new rule changes nothing in the record claim sets (they carry no owner poison).
+
+**Non-poison rows.** In game.exe the gate is SrcDamage, not the row's element type. FUN_0064b860 calls FUN_0064a930 whenever +0x12d != 0, for any row (V read, section 5). So applying the rule to every row is game.exe's behaviour. The non-poison rows in OP (bighead1 and spike1: SrcDamage 128, no row poison) match the oracle at their real SrcDamage and also patched to 64 and 255, with and without an owner poison (0 differ; V run). Compared with ec09c73f, at the rows' real SrcDamage only the 360 poison-row cases that carry an owner poison change. The 120 poison-row cases without an owner poison, and all 64 bighead1 / spike1 cases, give the same output. In real play there is one change on non-poison rows: an owner's poisonhit is now dropped on a SrcDamage-0 non-poison row as well, where before it rode along. That matches game.exe. Which shooters it touches beyond Baal Subject 2 and the Maggot Queen class: S.
+
+**SrcDamage -1 (low, new).**
+- The new gate tests `info.src_damage != 0`, so a -1 row scales the owner's and the row's poison by -1 / 128. With probe3 and a -1 override:
+  - goospit1 with an owner poison of 40 / 40 / 300 gives poison 0;
+  - bighead1 with an owner poison of 200 gives `poison_min = poison_max = -1`.
+- game.exe stores -1 as the byte 0xff and reads it as 255. My 255 override gives 95 / 95 / 500 for the goospit1 case (V run: `vm_game2.py` writes `src & 0xff`).
+- `monster_shot_phys` treats `src_damage <= 0` as 0, so the two halves of the same function disagree.
+- Not reachable through a monster Miss row: only poisonjavcloud, plaguejavcloud and furylightning have -1, all player skill missiles (D).
+- Fix: gate on `info.src_damage > 0`, as `monster_shot_phys` does and as the draft's "treated as 0 here" says. Otherwise the text must say the poison half scales by -1 / 128.
+
+U, as the author also says: whether a cast (MissC) shot takes this path.
+
+### T2. The diffs against my previous heads (V read, V run)
+
+- **`local/missilediff-record-up`**: parent of 1824870b = ec09c73f. One commit, two files: `components/game/ai.hpp` (`monster_shot_stats`, 20 lines) and `tests/game/test_monster_missile.cpp`. Nothing else changed. The order in the code: clear the owner's poison when SrcDamage is 0, add the row's poison (lengths summed), then scale the pair by SrcDamage / 128 with int64 truncation toward 0. That is section 9 change 1, and the oracle agrees: (8 + 40) x 64 / 128 = 24, not 8 + 20. `test_monster_missile` passes on 1824870b (rc 0).
+- **`local/missilepoison-skillrows`**: parent of 71f98145 = 70fa479d. One commit, three files:
+  - `ai.hpp`: `put_missile_element` is the old `missile_blow` body moved out unchanged.
+  - `world/objects.cpp`: the `pts()` lambda is replaced by the helper. Non-poison trap elements are unchanged (`value >> 8` before and after). Poison now goes to `poison_*` per frame.
+  - the test.
+  `missile_blow` is unchanged in effect: my S-set probe output on 71f98145 is byte-identical to 70fa479d's on every numeric line. Poison 13,272 compared, 0 differ; other elements 3,018 compared, 0 differ; hits through `monster_blow` 12,586, 0 differ. (Section 7's "939 misses" is the row-filtered `vm_hit.py` count; unfiltered there are 686.) `test_missile_blow_poison` passes on 71f98145 (rc 0).
+- **The trap path (`objects.cpp:706`).**
+  - Correction to my own section 6: the trap that d2d fires is `kTrapMissile[3]` = **primepoisoncloud** (rules/shrines.hpp:284), not trappoisonjavcloud. No trap entry names trappoisonjavcloud. Both drafts, the commit message of 71f98145 and its test comment copied my "trappoisonjavcloud, ELen 500, x 39".
+  - primepoisoncloud has no Skill, so `spring_trap` takes `row_damage(...)` at `kTrapLevel` 1 / 4 / 8 and then the helper. Upstream's old store was x 20 x ELen / 256 too strong: x 23 / 28 / 34 at those levels (ELen 300 / 360 / 440; arithmetic on the old `pts()` line, V read).
+  - My check: `vm_game2.py` (game.exe's FUN_0064b860 row path, zero owner) on primepoisoncloud, trappoisonjavcloud, trapfirebolt and trapnova at levels 1..40 / 50 / 60 / 99 (172 cases), against probe3 `--skill` on 71f98145. `--skill` is the same `row_damage` call followed by the same `put_missile_element`.
+  - Result: poison 86 compared, 0 differ; other elements 86 compared, 0 differ; hits through `monster_blow` 80, 0 differ (6 misses). primepoisoncloud is 10 x 300 at level 1, 25 x 360 at level 4 and 45 x 440 at level 8, in game.exe and on the head.
+  - So the trap record arithmetic equals game.exe's FUN_0064b860 row path: **V run**.
+  - **U**: that game.exe's object-trap launcher reaches the row path at that level with nothing added. My oracle uses a zero-stat monster owner, not a trap object.
+  - **U**: whether a cloud missile (pSrvDoFunc 3) hits more than once.
+  - `spring_trap` itself is not executed by any test: the unit case calls the helper only. Its call is V read.
+- Low (readability): the helper's comment sits under `missile_blow`'s old comment block. That block ("...up to 62x as much") now reads as the helper's description.
+
+### T3. Merge, suites, guards (V run)
+
+**Merge.** 1824870b with 71f98145 merges cleanly (one auto-merge in `ai.hpp`; throwaway commit 2fd6d693 in my `mid` tree, not pushed). Built with -j2 at the test targets: `test_game`, `test_combat`, `test_game_rules`, `test_rules`, `test_monster_ai`, `test_monsters`, `test_monster_missile`, `test_missile_blow_poison` and my probe (rc 0). Each passes under ctest on the merge (8 of 8). The apps and crashpad were not rebuilt; the merged code is in the `game` library, which these targets build. On the merge, my probe output is byte-identical to the single heads' on every numeric line: OP and C against 1824870b, S and trap against 71f98145. So neither branch changes the other's results.
+
+| branch | pr_guard vs 6935cf64 | presubmit --quick vs 6935cf64 |
+|---|---|---|
+| record-up 1824870b | 0 FAIL, 0 WARN | 0 FAIL, 4 WARN (unit kinds, hit paths, docs-sync, build skipped) |
+| skillrows 71f98145 | 0 FAIL, 0 WARN | 0 FAIL, 3 WARN (hit paths, docs-sync, build skipped) |
+
+Housekeeping: my round-2 lane `rv_run4.sh` (the upstream ctest baseline) was still running under my agent name, in the `base` tree I needed. I stopped it with `agentreap.sh reverifymissile`. Its partial log is kept as `logs/rv-up-ctest.partial.log`. Section 8's `RESULT_*` placeholders were never filled by round 2. They are left as they are; T3 holds this round's suite numbers. Left on the worker host from this round, nothing running (`agentreap.sh --list` is empty for me):
+
+- `verifymissile/{head,base,mid}` detached at 1824870b / 71f98145 / 2fd6d693, each with my untracked probe;
+- `harness/test_vm_probe3.cpp`, `cases_trap.tsv`, `game_trap.txt`, `rv3*` outputs and `rv3_*.sh`.
+
+### T4. PR draft claims vs counted runs
+
+**`pr-missilerecord-draft.md`**
+
+| claim | verdict |
+|---|---|
+| owner-poison rule and its numbers (8 / 8 / 200; 48 / 24 / 95 x 500) | yes (T1, my oracle and my probe copy) |
+| "owner-poison set ... 0 differences in poison (2,112 compared)" on 1824870b | yes (T1) |
+| "the head before it differed in 1,416 of them" | **does not reproduce**: 1,776 of 2,112 with my oracle on ec09c73f. The old head ignores `src_damage` for poison, so a patched probe cannot change that count. Use 1,776 |
+| re-verifier counts on ec09c73f; the earlier commits' output "unchanged on every numeric line" | yes (T1: byte-identical on C, D, hits, DOT) |
+| Hell pot x 4 in total; the drill number is S | yes (section 4) |
+| "a SrcDamage -1 (game.exe: 255, treated as 0 here)" | **half true**: physical yes, poison no (T1). Fix the code (`> 0`) or the text |
+| "trap missiles (... trappoisonjavcloud x 39)" under Not in this PR | **wrong row**: primepoisoncloud, x 23 / 28 / 34 at trap levels 1 / 4 / 8 (T2) |
+| ctest 7 of 7 on 1824870b | `test_monster_missile` rc 0 on 1824870b (mine); the six suites: see T3 (I ran them on the merge, not on 1824870b alone) |
+| "Third check (narrow, owed ...)" section | superseded by this section: replace it with a pointer here |
+| rows that moved on base; the first verifier's 11,804 / 34,067 | S (not re-run this round) |
+
+**`pr-missilepoison-draft.md`**
+
+| claim | verdict |
+|---|---|
+| x 62 table on upstream main; 13,272 / 3,018 / 12,586 with 0 differ after the split | yes (section 7; re-run on 71f98145, T2) |
+| "trappoisonjavcloud (ELen 500) was x 39" (Siblings, Proof, the commit message, the test comment) | **wrong row**: say primepoisoncloud, x 23 / 28 / 34 at levels 1 / 4 / 8. The test values can stay (they test the helper), but its comment names the wrong row |
+| "U that the trap record has no further difference (no live or game.exe differential was run on traps)" and Limits "a trap in game.exe" not run | now partly run: the row-path record arithmetic is V run, 0 of 86 (T2); the launcher remains U. Update the line |
+| `test_missile_blow_poison` "covers" the trap | **overclaim (low)**: it covers the helper, not `spring_trap` |
+| pr_guard 0 / 0, presubmit 0 FAIL 3 WARN | yes (T3) |
+| merge clean, both unit tests pass on the merge | yes (T3: clean, 8 of 8 suites pass, outputs identical to each head) |
+| death clouds x 2, melee-skill element U, named as siblings | consistent with section 6 |
+
+### T5. Verdicts
+
+**`local/missilediff-record-up` (1824870b): READY WITH CHANGES.** The code matches game.exe on every set (T1). Changes before the user's go:
+1. Draft: replace 1,416 with 1,776 (T1).
+2. Draft: the trap sibling is primepoisoncloud, x 23 / 28 / 34 at trap levels 1 / 4 / 8, not trappoisonjavcloud x 39.
+3. Draft: replace the "Third check (narrow, owed)" section with a pointer to this section.
+4. SrcDamage -1: either gate the poison on `info.src_damage > 0` (a one-token code change; then `test_monster_missile` and my OP set must be re-run, and they should still give 0) or say in the draft that the poison half scales by -1 / 128. Recommended: the code change, to match `monster_shot_phys`. Not blocking: no monster Miss row has -1.
+
+**`local/missilepoison-skillrows` (71f98145): READY WITH CHANGES** (text only; the code is right, T2).
+1. Commit message, test comment and draft: name primepoisoncloud (x 23 / 28 / 34 at trap levels 1 / 4 / 8) instead of trappoisonjavcloud x 39.
+2. Draft: the trap record arithmetic is now V run against game.exe's row path (0 of 86 poison, 0 of 80 hits). The trap launcher and the cloud's hit count stay U, and the unit test covers the helper, not `spring_trap`.
+3. Optional: move the helper's comment so `missile_blow`'s old comment stays with `missile_blow`.
+
+Merge order: no constraint (T3).

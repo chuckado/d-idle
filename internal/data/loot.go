@@ -7,7 +7,7 @@ type TreasureClass struct {
 	Name                     string
 	Group                    int
 	Level                    int
-	Picks                    int // negative means "all items, each rolled independently"
+	Picks                    int // negative: no random draw, pick k takes entry k, so an entry of weight w gives w drops (treasure-trace B4, V run)
 	Unique, Set, Rare, Magic int // quality chance modifiers
 	NoDrop                   int
 	Items                    []TCItem

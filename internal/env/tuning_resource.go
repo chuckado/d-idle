@@ -66,6 +66,10 @@ type ResourceTuning struct {
 	RecoveryXPPick       int // 1: the recovery area is the safe area with the best XP per kill for the level; 0 = the plan area of a character PovertyLevels lower
 	RecoveryMaxAreaAbove int // XP pick only: area monster level may be at most clvl plus this
 	RecoveryKitGate      int // 1 (default): a recovering character without a healing potion in the belt or without a town portal scroll farms only Blood Moor and Cold Plains and never routes through a dungeon area; 0 = the old choice
+	KitGateLevel         int // KITGATELEVEL: below this clvl the kit gate holds the character in Blood Moor and Cold Plains; from it an incomplete kit makes a town trip and the progression goes on (0 = the gate holds at every level, the old behaviour)
+	KitMinHP             int // minimum kit from KitGateLevel: healing potions (belt, pack and rejuvenation)
+	KitMinMP             int // minimum kit from KitGateLevel: mana potions in the belt
+	KitTripCap           int // kit town trips with the kit still incomplete before the bot proceeds anyway (kitgate-skip)
 	RecoveryXPEarly      int // XP pick only: the area may be entered this many levels below its enter and kit level (0 = the plan levels, the old behaviour)
 	PovertySellMin       int // poor character: pack junk items needed for a sell trip (0 = the built-in 4 on foot, 6 with a portal scroll)
 	BRAttempts           int // Blood Raven attempts before waiting for more levels; 0 = unlimited
@@ -83,7 +87,7 @@ func DefaultResourceTuning() ResourceTuning {
 		RetreatBelt: 0, RetreatCountPack: 1, ManaPaysCasts: 3, MinFieldBeltPct: 0,
 		GearGateMode: 1, GearRiskMedium: 3, GearRiskHigh: 6, GearDeathsHigh: 4, EarlyGearMax: 15,
 		TripBudget: 3, TripWindowMin: 10, TripGoldFloor: 300,
-		RecoveryOn: 1, RecoveryKitGold: 500, RecoveryTargetGold: 900, RecoveryMaxMin: 45, RecoveryCooldownMin: 15, RecoveryPotionFloor: 2, RecoveryManaFloor: 2, RecoveryXPPick: 1, RecoveryKitGate: 1, RecoveryMaxAreaAbove: 1, BRAttempts: 3, BRLevelGap: 2,
+		RecoveryOn: 1, RecoveryKitGold: 500, RecoveryTargetGold: 900, RecoveryMaxMin: 45, RecoveryCooldownMin: 15, RecoveryPotionFloor: 2, RecoveryManaFloor: 2, RecoveryXPPick: 1, RecoveryKitGate: 1, KitGateLevel: 8, KitMinHP: 4, KitMinMP: 3, KitTripCap: 2, RecoveryMaxAreaAbove: 1, BRAttempts: 3, BRLevelGap: 2,
 	}
 }
 
