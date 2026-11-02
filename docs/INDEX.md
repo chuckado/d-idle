@@ -214,3 +214,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skiasgame2-trace.md | SKIAS second pass: game.exe attack animation rate (IAS, WSM, skill speed) run under the emulator vs d2d attack_speed / attack_ticks; sequence mode -30 deviation
 - docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
 - docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*
+- docs/research/palskill-trace.md - Smite, Zeal and Sacrifice in game.exe vs d2d vs the bot (own harness tools/emu/pal2*)
