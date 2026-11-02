@@ -195,3 +195,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-skresist.md: independent re-check of the monster resistance rules (own emulator harness, game.exe 1.14d)
 - docs/research/verify-skmana.md: independent re-check of the mana check and payment (FUN_0056c160, FUN_0056bfe0), own harness tools/emu/vsm_diff.py
 - docs/research/verifyresistq.md - second pass on the resistance rules Q3 / Q7 / Q9 (FUN_005a1370, FUN_0057cb00 run natively), harness tools/emu/vq_*.py
+- docs/research/geararmore.md - gear attack rating, second pass: stats 179 and 120 vs game.exe (V run), table census, bot finding B1
+- docs/research/sk-ias-trace.md - swing speed / IAS / WSM, d2d side read, game.exe side open (partial)
