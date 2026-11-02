@@ -29,6 +29,7 @@ type Entry struct {
 	Success   bool           `json:"success"`
 	Error     string         `json:"error,omitempty"`
 	Backup    string         `json:"backup,omitempty"` // save-file backup made before an edit
+	Run       string         `json:"run,omitempty"`    // measured-run id ($D2BOT_RUN), see run.go
 }
 
 // DefaultLedgerPath is $D2CHEAT_LEDGER or <data>/ledger/cheats.jsonl (paths.Layout). The old

@@ -162,3 +162,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/original-game-lockstep.md: lockstep or speed-up for the original Game.exe 1.14d: prior art (libTAS, faketime, speed hackers, whisper, D2MOO), frame scheduler, tiers, probe runbook, instrumentation policy (card lockstepresearch)
 - docs/research/lockstep-p0.md - lockstep probe P0 results: IAT time hook under Wine, k = 1/2/4 frame gate, verdict PASS
 - docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist
+- Monster base stats: [research/monster-stats-trace.md](research/monster-stats-trace.md) (game.exe vs d2d stat rows, units, XP per kill; D1 NM / Hell level, D2 regeneration; bot B1-B4; drill recipe).

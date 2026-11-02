@@ -137,14 +137,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- cf575ae 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
-- b1ea270 11-01 20:55 `merge origin/main into snaplib` (snaplib)
-- 18608e7 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
-- 39aaf7b 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
-- 8961692 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
-- d06b33c 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
-- 86b15dc 11-01 20:42 `Merge agent/baselineruns: BASELINERUNS: runbook for the extra original-game baseline runs (5 late, 3 fresh), launcher prepared in the ops repo` (baselineruns)
-- d14b782 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
-- f50e477 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
-- 2713abf 11-01 20:35 `merge origin/main into charfactory` (charfactory)
+- fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
+- b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
+- 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
+- fbd5e46a 11-01 21:38 `merge origin/main into memrules` (memrules)
+- cf575aee 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
+- b1ea270c 11-01 20:55 `merge origin/main into snaplib` (snaplib)
+- 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
+- 39aaf7b3 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
+- 8961692a 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
+- d06b33cf 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
 <!-- statusgen:end -->
