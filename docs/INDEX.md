@@ -247,3 +247,16 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-bundle-1-draft.md - draft body of the combined PR (bundle 1), size and checks
 - docs/process/baseline-runs.md | section 10: hooked lanes (--timescale K), game-time conversion, regime flag, watchdog | process
 - docs/research/pr-bundle-1-verifier.md: independent verifier of PR bundle 1 (ground own harness, integration, CI parity, hygiene, verdict)
+- docs/research/pr-bundle-1-body.md: final PR body of bundle 1 (card bundlefinal)
+- docs/research/pr-monsterpace-a-draft.md: PR A draft (Act 1 think paces, Blood Raven, shaman corpse reach): counts, det, CI parity, limits.
+- docs/research/pr-monsterpace-b-draft.md: PR B draft (monster base velocity 75): oracle, reach, det, CI parity, limits.
+- docs/research/pr-nmlevel-draft.md: PR draft for the Nightmare / Hell monster level rule (candidate local/nmlevel-v5).
+- docs/research/pr-playerroll-draft.md: PR draft for the player-side missile roll bundle (element roll top, physical roll in 256ths, -100 floor), counts, reach, side effect.
+- docs/research/verify-smiteblock.md: independent verifier of the Smite-vs-block trace (own oracle, other skills, proposed d2d diff)
+- docs/research/review-community-prs-20261102.md - review of community PRs 19, 22, 23 (verdicts, spot checks, draft comments for the user)
+- docs/research/sorcrest2-trace.md | Sorceress rest of skills part 2: Inferno, Blaze, Enchant do functions run in game.exe, burst rim on the real d2d build (D2, D4, D5, D7)
+- docs/research/stateevrun-trace.md | SKSTATEEV second pass with runs: which first-pass state-event claims hold (event 11 before resistances, event 3 on a miss), which are wrong (event 7 owner, reach mode 1/3, d2d Shiver modelled)
+- docs/research/verify-alignment2.md - independent verification of the alignment (stat 0xac) and undead-blow gate trace
+- docs/research/pr-playerroll-verifier.md - independent verifier of pr/player-roll (element roll top, physical in 256ths, -100 floor): own oracles, caller audit, det, CI flags and clang-tidy step
+- docs/research/verify-teleport-room.md - independent check of the Teleport room rule (card verifytele)
+- docs/research/pr-smite-block-draft.md - draft PR text, a block no longer stops Smite (private, on hold)

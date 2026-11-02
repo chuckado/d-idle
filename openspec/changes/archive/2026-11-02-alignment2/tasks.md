@@ -19,6 +19,12 @@ gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
 result: "docs only; see the doc for tags and limits"
 merge: 0ed9efc
+credit:
+  component: Undead / Blunt bonus (D2 trace)
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifyskmelee3, independent run)"]
+  consent: none
 ```
 
 ## 1. Work
