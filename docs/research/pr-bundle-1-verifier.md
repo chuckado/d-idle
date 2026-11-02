@@ -56,13 +56,13 @@ Comparison with the author (read after the counts): the earlier D4 run (sk-groun
 
 - Components: the five component branches' commits are all in the bundle, patch-ids equal for 8 of 10; dabffee8 vs 10e16ad5 differs by one blank line, b83f22a3 vs 42b1c9e0 by context lines only (V run `git patch-id`, interdiff). All component heads are on the private fork remote (V run `git ls-remote`).
 - Shared code (V read): `strike` gets both the freeze rule (`monster_freeze`) and the shared roll; the freeze length is per unit and not rolled, so they do not interact. `missile_blow`'s new pointer defaults to null: every other caller (states.cpp, strike.cpp, pets.cpp, tick.cpp, missiles.cpp 873) is unchanged. `area` passes the roll only for hit functions 1 and 13 (callers at missiles.cpp 742 / 744; 743, 750, 758, 784 keep null). D1 / D2 change `player_blow`; inside a burst it is reached only for a `srcdam > 0` row (F5). D2 follows alignment2-trace.md: the bonus is in `player_blow`, so the player, the merc (its own `make_fighter`: Blunt and stat 122 from its gear) and the Shadow take it; pets build a `simple_fighter` (no Blunt, stat 122 = 0), matching the trace's "no visible effect" for units with no inventory.
-- Counted differentials on the bundle head: ground (section 1), V run. Freeze rules: re-run with the upstream oracle freeze_rules.py, own seed 7717, see section 2a. Repair, D1, D2: their harnesses are the authors' emulator tools, not in the repo or the bundle; NOT RUN on the bundle head beyond the suites (their unit tests in test_combat / test_rules pass).
+- Counted differentials on the bundle head: ground (section 1) and freeze rules (section 2a), V run. Repair, D1, D2: their harnesses are the authors' emulator tools, not in the repo or the bundle; NOT RUN on the bundle head beyond the suites (their unit tests in test_combat / test_rules pass).
 - Suites on the head (V run, Release, the 1.14d data): test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_sk_ground: rc 0 each. test_freeze_rules, test_freeze_resume, test_armor_hit: rc 77 without a case file (oracle modes); test_freeze_rules with cases in 2a.
 - Det scenarios: NOT RUN (F6).
 
 ### 2a. Freeze rules on the bundle head
 
-FREEZE_RESULT
+V run with the existing oracle (upstream's tools/emu/freeze_rules.py `gen 30000 7717`: 125,748 boundary cases plus 30,000 random on a seed the author did not use), game.exe's FUN_0057c6c0 under the emulator, and the bundle's `test_freeze_rules --freeze-rules` on each build (on the base the bundle's test file was copied into the scratch worktree, the code under test untouched): **155,748 cases, base 129,904 differ, head 0** (`freeze_rules.py compare`, resfail 0; `vb-freeze.sh`, `vb-freeze-base.sh`). The freeze claim holds on the bundle head with the burst roll and the footprint in.
 
 ## 3. CI parity (bundle head)
 
@@ -80,7 +80,7 @@ FREEZE_RESULT
 
 ## 5. PR body draft (pr-bundle-1-draft.md, afef8cef)
 
-- Repair, D1, D2, freeze numbers: as in their own drafts and verifier reports (S, not re-run here except freeze, 2a).
+- Repair, D1, D2, freeze numbers: as in their own drafts and verifier reports (S, not re-run here; freeze re-run in 2a: base 129,904 of 155,748 differ, head 0).
 - Overclaims: "Author and committer ... trailer `Agent: Claude Code` only" true; "pr_guard 0 / 0" true; "presubmit 3 WARN" (4 here, the extra is ruff missing on the host). No claim of a number that did not run, except that section 5 says the hit areas are 5 / 13 / 21 and 1 / 5 / 9 without counts (F3).
 - Limits: honest on det, MSVC and live; missing F4, F5 (Meteor's roll), F10.
 - Credits section: missing (F2).
