@@ -88,10 +88,11 @@ func TestKnobOffLeavesSeamsAndHookAlone(t *testing.T) {
 	var s d2denv.Seams
 	installMercSeam(&s)
 	dt := env.DefaultTuning()
-	tune := &dt // merc.enabled defaults to 0
-	if tune.Merc.Enabled != 0 {
-		t.Fatal("merc.enabled must default to 0")
+	tune := &dt
+	if tune.Merc.Enabled != 1 {
+		t.Fatal("merc.enabled must default to 1")
 	}
+	tune.Merc.Enabled = 0
 	e := &env.Env{Tune: tune, Log: slog.Default()}
 	got := s.Town(e, (*nav.Navigator)(nil))
 	if _, wrapped := got.(*mercTown); wrapped {
@@ -333,5 +334,180 @@ func TestMercMount(t *testing.T) {
 		if !strings.Contains(rec.Body.String(), want) {
 			t.Errorf("missing %s in %s", want, rec.Body)
 		}
+	}
+}
+
+type fakeHirer struct {
+	rows     []merc.HireOffer
+	winErr   error
+	paid     int
+	hired    []int
+	stripped []merc.Slot
+	closed   int
+}
+
+func (f *fakeHirer) Window(context.Context) ([]merc.HireOffer, error) { return f.rows, f.winErr }
+func (f *fakeHirer) Hire(_ context.Context, row int) (int, error) {
+	f.hired = append(f.hired, row)
+	return f.paid, nil
+}
+func (f *fakeHirer) Unequip(_ context.Context, s merc.Slot) error {
+	f.stripped = append(f.stripped, s)
+	return nil
+}
+func (f *fakeHirer) Close(context.Context) error { f.closed++; return nil }
+
+func lutSnap(gold int) *d2.Snapshot {
+	s := townSnap(gold, true)
+	s.Player.Area, s.Player.Act = areaLutGholein, 1
+	return s
+}
+
+var desertRows = []merc.HireOffer{
+	{Row: 0, Name: "Pol", Class: merc.ClassDesert, Level: 9, Aura: "Prayer", Price: 360},
+	{Row: 1, Name: "Han", Class: merc.ClassDesert, Level: 9, Aura: "Defiance", Price: 400},
+	{Row: 2, Name: "Ash", Class: merc.ClassDesert, Level: 9, Aura: "Blessed Aim", Price: 300},
+}
+
+func rogueWithGear() merc.MercState {
+	return merc.MercState{Known: true, Owned: true, Alive: true, Class: merc.ClassRogue, Level: 12, FreeCells: 30,
+		Gear: [merc.NumSlots]*merc.Item{merc.SlotHelm: {Name: "Cap", W: 2, H: 2}, merc.SlotWeapon: {Name: "Bow", W: 2, H: 3}}}
+}
+
+func TestHireStepSwapsRogueForDefiance(t *testing.T) {
+	rd := &fakeReader{st: rogueWithGear()}
+	w, buf, _ := testWire(t, rd, nil)
+	h := &fakeHirer{rows: desertRows, paid: 400}
+	w.hirer = h
+	if got := w.HireStep(context.Background(), lutSnap(5000)); got != "merc hired" {
+		t.Fatalf("got %q\n%s", got, buf)
+	}
+	if len(h.hired) != 1 || h.hired[0] != 1 {
+		t.Errorf("hired rows %v, want the Defiance row 1", h.hired)
+	}
+	if len(h.stripped) != 2 || h.stripped[0] != merc.SlotWeapon {
+		t.Errorf("strip before the hire: %v", h.stripped)
+	}
+	out := buf.String()
+	for _, want := range []string{"merc: hire window row=1 name=Han class=338 level=9 aura=Defiance price=400 gold=5000 clvl=10", "merc: strip slot=weapon", "merc: hired class=338 aura=Defiance price=400"} {
+		if !strings.Contains(out, want) {
+			t.Errorf("missing %q in\n%s", want, out)
+		}
+	}
+	if strings.Index(out, "strip slot") > strings.Index(out, "merc: hired") {
+		t.Error("the strip must come before the hire")
+	}
+	// the visit is final: no second swap, window not read again
+	if w.HireStep(context.Background(), lutSnap(5000)) != "" || len(h.hired) != 1 {
+		t.Error("second Lut Gholein visit acted")
+	}
+}
+
+func TestHireStepPoorKeepsRogueAndVisitOpen(t *testing.T) {
+	rd := &fakeReader{st: rogueWithGear()}
+	w, buf, _ := testWire(t, rd, nil)
+	h := &fakeHirer{rows: desertRows, paid: 400}
+	w.hirer = h
+	// price 400 + 150% of the 310 kit = 865
+	if got := w.HireStep(context.Background(), lutSnap(864)); !strings.Contains(got, "gold") || len(h.hired) != 0 || len(h.stripped) != 0 {
+		t.Fatalf("poor: %q hired %v stripped %v", got, h.hired, h.stripped)
+	}
+	if h.closed != 1 {
+		t.Error("window left open")
+	}
+	if got := w.HireStep(context.Background(), lutSnap(865)); got != "merc hired" {
+		t.Fatalf("affordable later: %q\n%s", got, buf)
+	}
+	if n := strings.Count(buf.String(), "merc: hire window row="); n != 3 {
+		t.Errorf("hire window lines %d, want one per row once", n)
+	}
+}
+
+func TestHireStepGuards(t *testing.T) {
+	rd := &fakeReader{st: rogueWithGear()}
+	w, _, _ := testWire(t, rd, nil)
+	if w.HireStep(context.Background(), lutSnap(5000)) != "" {
+		t.Error("no hirer must do nothing")
+	}
+	h := &fakeHirer{rows: desertRows}
+	w.hirer = h
+	if w.HireStep(context.Background(), townSnap(5000, true)) != "" || h.closed != 0 {
+		t.Error("outside Lut Gholein")
+	}
+	h.winErr = errors.New("no window")
+	if got := w.HireStep(context.Background(), lutSnap(5000)); !strings.Contains(got, "unreadable") {
+		t.Errorf("window error: %q", got)
+	}
+	w.knobs.ReplaceAtAct2 = false
+	h.winErr = nil
+	if got := w.HireStep(context.Background(), lutSnap(5000)); !strings.Contains(got, "knob off") || len(h.hired) != 0 {
+		t.Errorf("knob off: %q", got)
+	}
+}
+
+func TestHireStepNoMercHires(t *testing.T) {
+	rd := &fakeReader{st: merc.MercState{Known: true}}
+	w, _, _ := testWire(t, rd, nil)
+	h := &fakeHirer{rows: desertRows, paid: 400}
+	w.hirer = h
+	if got := w.HireStep(context.Background(), lutSnap(5000)); got != "merc hired" || len(h.stripped) != 0 {
+		t.Errorf("%q stripped %v", got, h.stripped)
+	}
+}
+
+func TestReviveCapTwoPerHour(t *testing.T) {
+	rd := &fakeReader{st: merc.MercState{Known: true, Owned: true, Level: 10}}
+	rev := &fakeReviver{paid: 750}
+	w, _, clk := testWire(t, rd, rev)
+	for i := 0; i < 3; i++ {
+		clk.t = clk.t.Add(10 * time.Minute)
+		rd.set(merc.MercState{Known: true, Owned: true, Level: 10})
+		w.ReviveStep(context.Background(), townSnap(9000, true))
+	}
+	if rev.calls != 2 {
+		t.Errorf("revives %d, want the cap of 2 an hour", rev.calls)
+	}
+	clk.t = clk.t.Add(time.Hour)
+	rd.set(merc.MercState{Known: true, Owned: true, Level: 10})
+	w.ReviveStep(context.Background(), townSnap(9000, true))
+	if rev.calls != 3 {
+		t.Errorf("revives %d after the hour", rev.calls)
+	}
+}
+
+func TestReviveLogsEstimateAndReadPrice(t *testing.T) {
+	rd := &fakeReader{st: merc.MercState{Known: true, Owned: true, Level: 10}}
+	rev := &fakeReviver{paid: 600} // the dialog price differs from the 750 formula
+	w, buf, _ := testWire(t, rd, rev)
+	w.ReviveStep(context.Background(), townSnap(9000, true))
+	if !strings.Contains(buf.String(), "merc: revived price=600 level=10 estimate=750") {
+		t.Errorf("log:\n%s", buf)
+	}
+}
+
+func TestGoldFarmFollowsMerc(t *testing.T) {
+	rd := &fakeReader{st: merc.MercState{Known: true, Owned: true, Level: 10}} // dead
+	w, buf, _ := testWire(t, rd, nil)
+	field := func(gold, lvl int) *d2.Snapshot {
+		s := townSnap(gold, true)
+		s.Player.Level = lvl
+		return s
+	}
+	if !w.GoldFarm(field(300, 11)) {
+		t.Error("dead merc and short gold must farm")
+	}
+	if !strings.Contains(buf.String(), "merc: gold farm on need=1215 gold=300 clvl=11") {
+		t.Errorf("log:\n%s", buf)
+	}
+	if w.GoldFarm(field(5000, 11)) {
+		t.Error("rich enough: no farm")
+	}
+	if w.GoldFarm(field(300, 16)) {
+		t.Error("clvl 16 is past the cap")
+	}
+	rd.set(merc.MercState{Known: true, Owned: true, Alive: true})
+	w.curAt = time.Time{}
+	if w.GoldFarm(field(300, 11)) {
+		t.Error("living merc: no farm")
 	}
 }

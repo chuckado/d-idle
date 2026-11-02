@@ -5,8 +5,8 @@ Tags: V verified (how), S secondary source, U unverified.
 
 ## What is wired (d2d backend only)
 
-Switch: knob `merc.enabled` (group `merc.*`, default 0, NoHandicap; `PUT .../knobs {"overrides":{"merc.enabled":1}}` or config.json `"tuning": {"merc.enabled": 1}`).
-OFF (default): no seam is wrapped, `task.MercAlive` stays nil, no goroutine, no log line, no API body but `{"enabled":false}`. V by test `TestKnobOffLeavesSeamsAndHookAlone` (cmd/d2bot) that a seam built with the knob off returns the inner Townsman object itself and leaves the hook nil. Game.exe (`--backend mem`, live.go) is not touched at all: nothing in this change is reachable from it.
+Switch: knob `merc.enabled` (group `merc.*`, default 1 since the 2026-11-02 merc decision (card mercpolicy), NoHandicap; `PUT .../knobs {"overrides":{"merc.enabled":1}}` or config.json `"tuning": {"merc.enabled": 1}`).
+OFF (`merc.enabled` 0): no seam is wrapped, `task.MercAlive` stays nil, no goroutine, no log line, no API body but `{"enabled":false}`. V by test `TestKnobOffLeavesSeamsAndHookAlone` (cmd/d2bot) that a seam built with the knob off returns the inner Townsman object itself and leaves the hook nil. Game.exe (`--backend mem`, live.go) is not touched at all: nothing in this change is reachable from it.
 
 ON (d2d, `runD2D`):
 | Piece | Where | What it does |
@@ -53,3 +53,13 @@ Today `d2.FindMerc(snapshot)` finds a merc-class unit (271, 338, 359, 561) in th
    e. Let him die in the field: dump the unit table in the field (corpse? mode?), after a town portal (gone?), and open Kashya's menu: record the "Resurrect" line text, the quoted price, then pay it: gold delta against `merc.ReviveCost(level)`, carried-vs-stash order, unit reappearing.
    f. Record all of it as a fixture (JSON of the reads) so `internal/d2` gets an offline test; then implement `merc.Reader` over `internal/mem` and flip nothing: `merc.enabled` stays 0 on Game.exe until a soak with it on passes.
 5. Not known (SME and docs): client merc record address, the owner semantics, the aura source, the dead-merc flag address. Nothing in docs/sme covers a client-side merc layout.
+
+
+## Merc policy of 2026-11-02 (card mercpolicy)
+User decision: the free Act 1 Rogue is a decoy to about clvl 12. Claim at Blood Raven (unchanged), revive her at Kashya when gold allows, swap her for the Act 2 Desert Mercenary with Defiance at Lut Gholein (strip her gear first), potions before merc, lower the no-merc Monastery floor to 14 with a full kit, farm gold in the early areas while the merc is missing.
+- Spending order: gold >= price x mult + `merc.kitReservePct` (150) percent of the full kit refill (portal + `resource.kitMinHP` healing + `resource.kitMinMP` mana at the shop prices). The town chores buy the kit first (mercTown.Chores runs the base chores, then HireStep, then ReviveStep). Max `merc.reviveMaxPerHour` (2) revives per hour (V by cmd/d2bot TestReviveCapTwoPerHour).
+- Revive price: the formula `min(L^2/2 x 15, 50000)` is S and unconfirmed on 1.14d, used only as the pre-check estimate (the merc level is the player level, an overestimate). The payment is whatever the NPC takes; `merc: revived price=<paid> estimate=<formula>` logs both. U: no pre-payment quote read exists on d2d (probe below).
+- Act 2 hire: `mercWire.HireStep` (Hirer interface; no d2d implementation yet, so production wiring leaves it nil and the step is dormant, only unit-tested with a fake). It reads the window, logs `merc: hire window` per row once per difficulty, waits for the best aura in the window, strips, hires. Declined for gold keeps the first-visit decision open; any other decision is final for the difficulty (in memory only: a restart forgets it, U).
+- Gold farm: `bot.MercGoldFarm` (set by the wiring) makes `guardedAreas` exclude every area outside `merc.FarmAreas` (Blood Moor, Cold Plains, Stony Field, Den, Caves 1 and 2, Burial Grounds, Crypt) in Normal act 1 while the merc is dead or missing, gold < revive estimate or Normal hire quote (400) plus the kit reserve, and clvl < `merc.goldFarmMaxLevel` (16).
+- Policy helpers not wired yet: `merc.ShouldWaitForMerc` (wait for her after TP/WP) and `merc.LeaveWithMercDown` (leave when the crowd rule fires with her down); the potion for her below 50 percent is `merc.ShouldGiveHealing` (knob 50), also not wired to a d2d verb.
+- Live probes: (1) kill or let the Rogue die, walk to Kashya, read the price in the revive dialog and the gold delta, compare with `estimate=`; (2) open Greiz's hire window at Lut Gholein once (needs a d2d window reader) and read name, level, aura, price per row.
