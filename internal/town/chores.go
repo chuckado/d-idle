@@ -238,6 +238,8 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
+	t.choreDeadline, t.budgetLogged = deadline, false
+	defer func() { t.choreDeadline = time.Time{} }()
 	defer func() {
 		if s, err := t.current(); err == nil {
 			rep.GoldAfter = s.Player.Gold
@@ -631,3 +633,24 @@ func (t *Town) afterEmptyVisit() {
 // NotePortalEmpty records that a portal cast found no usable source (an empty tome, no scroll). The next town visit
 // restocks against that fact instead of the pack's stat read.
 func (t *Town) NotePortalEmpty() { t.portalEmpty = true }
+
+// emptyRestock is how many portal scrolls a visit buys when the game said "empty" but the tome's stat read still shows
+// scrolls: enough to prove the source works, not a full refill. Gate 2 (docs/townshop.md) read 13 scrolls, bought 7
+// more (700 gold) and was empty again two minutes later because the field read drops stat 70, not the scrolls.
+const (
+	emptyRestock = 2
+	tomeCap      = 20 // a tome of town portal holds 20 scrolls (S: D2 rules)
+)
+
+// budgetHit reports whether the current Chores call is out of time. Called inside the buy loops, which the
+// between-steps check cannot interrupt. The line is written once per Chores call.
+func (t *Town) budgetHit(rep *ChoreReport) bool {
+	if t.choreDeadline.IsZero() || t.e.Clock.Now().Before(t.choreDeadline) {
+		return false
+	}
+	if !t.budgetLogged {
+		t.budgetLogged = true
+		t.e.Log.Warn("town: resupply budget hit", "budgetS", t.tune().ChoreBudgetS, "spent", rep.Spent, "bought", rep.Bought)
+	}
+	return true
+}

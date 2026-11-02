@@ -8,6 +8,13 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Independent verification of the Amazon skills trace (docs/research/verifyskamazon-trace.md) and emulator tools tools/emu/vam_*; no ledger change, repair text proposed.
+- covmissiles: missiles coverage first pass (docs/research/covmissiles-trace.md, tools/emu/cm_*): 138,000 hit cases and 13,680 table and flight cases run against game.exe, missiles run-tested 9 to 42 percent
+- Fixed: the bot no longer loses the Tome of Town Portal's charge count in the field when a ground item shares its unit id.
+- fix: town resupply stops at its time budget inside the buy loops, and a portal-empty report with a readable tome buys 2 scrolls, not a refill (docs/townshop.md).
+- bot: with the merc policy on, the character waits briefly for the Rogue after a portal or waypoint, leaves a crowd when she is down, gives her a healing potion below 50 percent life, and remembers the Lut Gholein hire decision across restarts.
+- bot: the merc policy is on by default: dead Rogue revived when gold covers the price plus a potion reserve, Desert Mercenary swap at Lut Gholein (needs a window reader), no-merc Monastery floor 14 with a full kit, gold farm in the early areas while the merc is missing.
+- Upstream PR #177 merged: five d2d fidelity fixes (vendor repair gate, melee 256ths and undead bonus, freeze rules, standing missile footprint and burst roll, Smite on a block) with game.exe differentials
 - bot: route guards read the merc from the d2d dump even with the merc policy off; the free Rogue claim is verified (merc: claim verified / claim not seen).
 - bundlefinal2: final bundle rebased onto upstream PR 176, Smite component added, CodeRabbit ground-roll comment folded in
 - verifyzerohit: independent verification of the zero-damage hit trace; game side V run, d2d read only, no PR candidate

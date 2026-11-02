@@ -271,3 +271,10 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifyzerohit.md: independent verifier of SKZEROHIT (both passes, own emulator harness, claim verdicts)
 - docs/research/pr-bundle-final-body.md: final PR body of the upstream bundle (repair gate, melee, freeze, standing missiles, Smite block), counts and limits (card bundlefinal2)
 - openspec/changes/mercfix: guard merc from the dump and claim read-back after the Gate 2 merc=none defect
+- openspec/changes/credit177: credit bookkeeping for upstream PR #177
+- openspec/changes/mercpolicy: merc policy (revive, Act 2 hire, spending order, floors, gold farm)
+- openspec/changes/mercwire: merc field rules wired into the bot, first-visit flag persisted
+- docs/townshop.md - Gate 2 town resupply analysis and fix
+- docs/tomestat.md: why the field read lost the Tome of Town Portal's stat 70 (ground/carried id collision) and the fix
+- docs/research/covmissiles-trace.md - missiles coverage first pass: table values, flight formulas and hit roll of the Sorceress and Paladin rows (covmissiles)
+- docs/research/verifyskamazon-trace.md: independent verification of the Amazon first pass: calc cells 0 of 52,300 differ (own harness), element roll top-exclusive rule 20,000 cases, Pierce function 99,092 cases vs own model, shooter stat 0x148 is a per-shot counter (V read), one wrong cell (card verifyskamazon)
