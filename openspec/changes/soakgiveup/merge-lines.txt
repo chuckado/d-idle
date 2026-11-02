@@ -1,0 +1,1 @@
+BACKLOG: soakgiveup and povertyflip implemented in agent/soakfixes (offline)
