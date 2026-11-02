@@ -2,7 +2,7 @@
 
 ```yaml
 change: baselineaudit
-status: in-progress
+status: archived
 agent: baselineaudit
 branch: agent/baselineaudit
 worktree: ~/code/d2lod-wt/baselineaudit
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "Docs only; numbers recomputed from the committed baseline files and logs of the repo; nothing run on the game host, not verified live."
+result: "docs only; recomputed from the baseline files; raw minute logs not reopened"
 live: "not run"
+merge: 016bd0b
 ```
 
 - [x] read specs, baseline files, tools, g1-log, d2d docs
