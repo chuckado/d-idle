@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 34d019b7 11-02 11:24 `Merge agent/skstateev: skstateev: Pro-account job result (docs and emulator tools only)` (skstateev)
-- d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
-- caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
-- 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
-- 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
-- 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
-- 650c59b7 11-02 11:01 `Merge agent/skground: skground: credit-funded decomposition result (docs and emulator tools only)` (skground)
-- 93042b4f 11-02 11:00 `merge origin/main into skground` (skground)
-- 4ffc2466 11-02 10:57 `Merge agent/prcandidates: PRCANDIDATES: ranked inventory of upstream PR candidates (docs only)` (prcandidates)
-- d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
+- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
+- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
+- e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
+- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
+- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
+- 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
+- 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
+- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
+- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
+- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
 <!-- statusgen:end -->
