@@ -181,3 +181,87 @@ Everything is recomputed from committed files; the raw minute logs of a14, a16 a
 
 - fidelity-gate, `Minimum sample`: add that the baseline's own mean interval (n, SD, t) is printed with every verdict and that a baseline of fewer than 5 runs caps the verdict at INCONCLUSIVE for any gap under the baseline's own half width.
 - soak-gates, `Gate 1 deaths and progression`: restate the XP clause per clvl band, or mark it indicative at one seed.
+
+## After: baselines extended and the Gate 1 XP clause per clvl band (card baselinefree, 2026-11-01)
+
+> Tags as above. V here = recomputed in this card with `d2dsoak` from the raw bot logs on the worker host (read-only copy of `soak24/runs` and `soak24-i5/runs` under the game host's live directory; the logs of 2026-10-29 and 2026-10-30 are all still there) or from committed files; D = arithmetic on those numbers. No new run was made. Reproduce: `d2dsoak baseline ...` (recipe in the "Reproduce" block below), then `d2dsoak bands -baselines tools/d2dsoak/baselines.json,tools/d2dsoak/baselines-early.json LOG`.
+
+### What was added (V)
+
+| row | file | log | hours | deaths | XP/h | kills/h | counted in whole-run means |
+|---|---|---|---|---|---|---|---|
+| a14-full (whole 2 h run, bot de9b597, 2026-10-29) | baselines.json | `soak24/runs/20261029-235659-d2bot.log`, 120 minute lines | 1.99 | 1 | 11336 | 395 | yes (replaces the 64-line a14 row) |
+| a14 (first 64 lines) | baselines.json | same log | 1.06 | 0 | 12236 | 421 | no: `exclude_from_mean` (superseded) |
+| g2-8h (m24, 2026-10-30, bot b478bd9 plus merges) | baselines.json | `soak24/runs/20261030-082115-d2bot.log`, 482 lines | 8.06 | 4 | 4074 | 506 | yes |
+| fresha-1-11-chain (m24, 7527d07 then a920fef) | baselines-early.json | `soak24-i5/runs/` 095519 + 105216 + 120747, 353 lines, play-time hours | 5.90 | 4 | 12776 | 403 | no: bands only (it is the same run as fresha-fresh-1-7 plus its 4 h continuation) |
+
+Every row now has `run_id`, `bot`, `backend`, `date`, `profile`, `weak`; the band tables are in `bands`. Corrections to the sections above, both V by the extractor: the audit's Fresha 4 h kills/h (590, from the g1-log total 2387) and G2's (880, from 7100 kills) used the counter totals of the g1-log; the extractor (sum of positive increments, the definition both sides share) gives 407 and 506 kills/h. The g1-log numbers stay as quoted there; the baseline rows use the extractor. a14 over its full 2 h: the death at about 01:40 and the 17 minute idle after it are now in, XP/h 11336 (the partial cut gave 12236, +8 percent).
+
+### Counts and hours (V, D)
+
+| file | runs counted | virtual hours (was) | deaths (was) | death rate |
+|---|---|---|---|---|
+| baselines.json (late) | 4: a14-full, a16, a18, g2-8h (was 3) | 14.04 (5.05) | 5 (0) | 0.36/h, 0.71 per 1000 kills over 7029 kills |
+| baselines-early.json | 2, unchanged (Soaky S quality, Fresha) | 5.42 | 2 | 0.37/h |
+| all original runs with minute lines, one count per run | a14-full, a16, a18, g2-8h, Fresha chain | 19.9 | 9 | 0.45/h |
+
+The death evidence is now 9 events in 19.9 h of minute-line data (0.45/h), three times the 0.15/h cap, as the audit's pooled estimate (0.42/h, S) said; the late file alone is 0.36/h. The original game is not inside the death-rule cap, so a d2d miss of the cap is not by itself a fidelity bug (verdict table, row "Deaths: the fixed budget" stands).
+
+### Spread and intervals recomputed (D, sample SD, t(0.975, 3 df) = 3.182)
+
+| metric | before (3 runs) | after (4 runs, whole-run) | after without g2-8h (3 runs, a14-full) |
+|---|---|---|---|
+| XP/h mean, SD (CV), 95 % interval | 10901, 1524 (14.0 %), +-34.7 % | 8969, 3402 (37.9 %), +-60.4 % | 10601, 1180 (11.1 %), +-27.6 % |
+| kills/h mean, SD (CV), 95 % interval | 500, 105 (21.1 %), +-52 % | 495, 95 (19.1 %), +-30.4 % | 491, 116 (23.5 %), +-58.5 % |
+| XP/h, hours-weighted | 10630 | 6845 | |
+
+Reading: G2 is a different regime (clvl 14 to 15, 6 of its 8 h at clvl 15 with the level-up goal gated by the route guard, m24 profile). Counting it as a fourth equal run drops the late XP/h mean by 15 percent and its CV to 38 percent, so the whole-run late mean is no longer a clean "clvl 11-14" number and is a worse gate than before for XP (the compare tool treats the mean as exact and does not see the wider interval). It does improve kills/h (the interval narrows because G2's kills/h sits near the mean) and the death evidence. Recommendation (I): judge XP per clvl band (below) and keep the whole-run late mean as information; the deaths and kills rows of the whole-run compare are better than before. The weak flags stay: still fewer than 5 runs in both files.
+
+### Per-band baseline (V from the band tables, D for the statistics)
+
+Bands are tiled (a level-up out of the band belongs to the band); XP/h is net XP over play time (restart gaps out); only runs with at least 0.5 h in the band count.
+
+| band | baseline runs (n) | hours | deaths | XP/h per run | mean | CV | 95 % half width of the mean | single-seed tolerance (spec formula) | verdict class |
+|---|---|---|---|---|---|---|---|---|---|
+| 1-4 | 1 (Fresha) | 0.74 | 1 | 11089 | 11089 | floor 14 % | undefined | 38.8 % | ADVISORY |
+| 5-7 | 1 (Fresha) | 1.80 | 0 | 13662 | 13662 | floor | undefined | 38.8 % | ADVISORY |
+| 8-10 | 1 (Fresha) | 3.12 | 3 | 12531 | 12531 | floor | undefined | 38.8 % | ADVISORY |
+| 11-14 | 4 (a16, a18, a14-full, G2) | 7.91 | 1 | 11807 / 9240 / 11336 / 7051 | 9859 | 22.1 % | +-35.2 % | 48.4 % | hard (FAIL possible) |
+| 15-20 | 1 (G2) | 6.03 | 4 | 3074 | 3074 | floor | undefined | 38.8 % | ADVISORY |
+
+Why these bands (I, from the data): XP/h is flat across clvl 1-10 on the Fresha chain (11.1k, 13.7k, 12.5k: the three early bands are within 20 percent of each other, so splitting them costs nothing and keeps the d2d early deviations visible per band) but falls at clvl 15 (3.1k) where the route guard gates progress, and the clvl 11-14 band is the level where a14 to a18 played. The old Soaky attempts 8 to 13 (2026-10-29, builds before the fixes of g1-log attempt 14) also cover clvl 8-11 (8-10 band: 6515 and 5274 XP/h in the two 2 h runs, 3 to 5 deaths in 2 h) but were NOT added: pre-fix builds, a different bot, and mixing them would put a 2x build effect into the band mean (this is the same bot-drift confound as section 4a, now visible inside one band). They are on the worker host if a later card wants them.
+
+The single-seed tolerance uses the spec formula 1.96 x sqrt(CV^2 / k + CV^2 / n) with k = 1 d2d run, n the band's baseline runs and CV the larger of the band CV and 0.14; the 14 percent floor is the audit's section 3 value, the observed clvl 11-14 CV is 22 percent. At n = 4 the tolerance is wide (48 percent): a single Gate 1 run cannot resolve anything smaller there, which is the honest reading of the data.
+
+Minimum sample per band (D, t-quantile, as in section 3): to bring the band mean to +-20 percent (the fidelity tolerance) the band needs 5 runs at CV 14 percent and 8 runs at the observed 22 percent (6 and 11 for +-15 percent, 10 and 21 for +-10 percent). The spec therefore marks a band ADVISORY below 3 runs (at n = 2 the interval is wider than the mean, section 1b) and gives a hard FAIL from 3 runs on with the wider tolerance above; "5 or more runs" ends the weak flag, not the hard/advisory split.
+
+### Gate 1 re-scored per band (V, `d2dsoak bands -hours H`, the committed minute logs)
+
+| d2d Gate 1 run (bot f4ca264 and earlier) | virtual h | 1-4 | 5-7 | 8-10 | 11-14 |
+|---|---|---|---|---|---|
+| gate1-rerun (2026-11-01, docs/soaks/gate1-rerun.md) | 22.6 | 7276 (-34 %, advisory) | 10539 (-23 %, advisory) | 11730 (-6 %, advisory) | 6191 over 15.8 h (-37 %, inside the 48 % tolerance: PASS) |
+| gate1-20261101 (docs/soaks/gate1-20261101.md) | 24.67 | 6950 (-37 %) | 9760 (-29 %) | 3753 (-70 %, the stall windows) | 8371 (-15 %) PASS |
+| postfix-soak2 (2026-10-31) | 21.25 | 5523 (-50 %) | 10037 (-27 %) | 9231 (-26 %) | 3324 over 13.1 h (-66 %): FAIL |
+
+Reading: the old whole-run clause gave one number per run against the clvl 1-7 early mean (7517 vs 9172, -18 percent for the rerun; the same run is -6 to -34 percent per band and 11-14 is PASS). The per-band view shows where the gap sits: d2d is 23 to 50 percent below the Fresha chain in clvl 1-4 and 5-7 (consistent with the early -48 percent set, section 1b, and with the d2d deviations of 4c) but all of those rows are advisory because the early bands hold one baseline run each. The one hard band, clvl 11-14, fails only postfix-soak2, which spent 13 h there at 3.3k XP/h (the pre-fix run); the two later runs pass it. The honest summary (I): with the data we have, Gate 1 XP is a hard test only for clvl 11-14; the early-band verdicts need 3 fresh uncheated original runs (item 2 of the list above), which this card does not do.
+
+### What the tools now do and do not do (V, `go test -p 1 ./cmd/d2dsoak ./internal/d2dsoakstat`)
+
+- New `d2dsoak bands [-bands LO-HI,..] [-hours H] [-baselines F[,F]] LOG[+LOG]...` prints XP/h, kills/h, deaths per band and, with baselines, the band baseline (n, hours, mean, CV), tolerance, gap and verdict (exit 3 only on a FAIL, exit-zero overrides). The default bands are `1-4,5-7,8-10,11-14,15-20` and are the spec's.
+- `d2dsoak baseline` takes `LOG+LOG` chains, a fifth `key=value` field for provenance and a `-bands` flag; rows with `exclude_from_mean` stay out of the whole-run means, the pooled death rate and the baseline-run count of `compare` (`Baselines.Counted`), but their bands count in `bands`.
+- Not done: `compare` itself is unchanged (still whole-run, still treats the baseline mean as exact); `run` does not call `bands` yet; `gate-run.sh` (ops repo) still writes the whole-run XP row. Follow-up card: have `compare`/`run` print the band table and have the Gate 1 record generator use `bands` (the ops script is outside this repo's owns).
+
+### Still missing
+
+- Fresh clvl 1-10 original runs: bands 1-4, 5-7, 8-10 each rest on one run (Fresha); the Soaky early run has no minute lines. 2 more fresh uncheated runs make them hard.
+- clvl 15+ rests on G2 alone; no original run reaches clvl 16.
+- Bot hashes: a14, a16, a18, Fresha 7527d07/a920fef are recorded from the g1-log; G2's exact build (b478bd9 plus later merges) and the build of Fresha's first log are U.
+- No original run has been repeated on the current bot (section 4a drift stays open).
+
+Reproduce (on the worker host logs; recipe of docs/d2d-soak.md section 1 plus the new flags):
+```
+d2dsoak baseline 'a14-full|soak24/runs/20261029-235659-d2bot.log|SOURCE|NOTE|run_id=..,bot=de9b597,backend=game.exe,date=2026-10-29,profile=m1'
+d2dsoak baseline 'g2-8h|soak24/runs/20261030-082115-d2bot.log|SOURCE|NOTE|run_id=..,backend=game.exe,date=2026-10-30,profile=m24'
+d2dsoak baseline 'fresha-1-11-chain|soak24-i5/runs/20261030-095519-d2bot.log+soak24-i5/runs/20261030-105216-d2bot.log+soak24-i5/runs/20261030-120747-d2bot.log|SOURCE|NOTE|..'
+d2dsoak bands -hours 22.6 -baselines tools/d2dsoak/baselines.json,tools/d2dsoak/baselines-early.json gate1-rerun-minutes.jsonl   # gunzip first
+```
