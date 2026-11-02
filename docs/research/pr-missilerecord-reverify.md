@@ -134,7 +134,7 @@ So the risk is real but narrow. Those shooters' spit carries the owner's poison 
 
 ## 8. Suites, presubmit, the PR text
 
-**Suites (V run):** RESULT_SUITES
+**Suites (V run):** see "Third check", T3 (the `RESULT_*` placeholders of this section were never filled).
 
 **pr_guard / presubmit (V run, ruff via uvx):**
 
@@ -160,9 +160,9 @@ The author's answers to the 4 WARNs:
 | "pantherpotgreen 102-108 for 400 (159-169)" | yes at level 8 in Normal arithmetic; in Hell the player's total is x 4, not x 2 (section 4) |
 | "drill ... player poison resistance -100: ... now 359" | number not re-run by me (S). Its explanation "x 2 for the resistance" (missilediff.md) is incomplete: the length doubles too, and the 500-frame window cuts it |
 | "pr_guard 0 / 0; presubmit 0 FAIL" | yes (V run) |
-| test_game, test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters pass | RESULT_SUITES_SHORT |
+| test_game, test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters pass | see T3 (suites run on the merge) |
 | Limits: "No Act 1 / 2 MissA row has an owner poison" / "the length is the larger (FUN_0064a930 +0x3c sum not traced)" | **wrong, and now traced**: game.exe adds no owner poison on SrcDamage-0 rows (every poison row); where it does add, it sums the length. Baal Subject 2 is affected (section 5) |
-| test_mpq / smoke_d2d / quests_act1 / quests_act4 fail for environment / pre-existing reasons | RESULT_FAIL_SHORT |
+| test_mpq / smoke_d2d / quests_act1 / quests_act4 fail for environment / pre-existing reasons | not re-run (S) |
 | "MissS1 / MissC / MissSQ never fire", imp double fire, SrcDamage -1 | yes (round 1, V run / V read) |
 
 ## 9. Verdicts and the exact changes

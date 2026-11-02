@@ -17,9 +17,9 @@ exclusive:
   - fork-branch:local/missilepoison-skillrows
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: ""
+result: "fork: record-up 59d319c8, skillrows f52df8d4 pushed to the private remote; all verifier sets 0 differences, merge 8/8; drafts revised; verified offline on the worker host, not live; nothing upstream"
 ```
 
-- [ ] 1 SrcDamage -1 on the owner poison: decide against game.exe, implement, unit test, re-run suites and the verifier's sets
-- [ ] 2 PR drafts: the verifier's overclaim list
-- [ ] 3 reverify doc updated with the third-check section
+- [x] 1 SrcDamage -1 on the owner poison: decide against game.exe, implement, unit test, re-run suites and the verifier's sets
+- [x] 2 PR drafts: the verifier's overclaim list
+- [x] 3 reverify doc updated with the third-check section
