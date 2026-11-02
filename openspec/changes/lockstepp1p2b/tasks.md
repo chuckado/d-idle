@@ -15,10 +15,10 @@ exclusive:
   - instance:i4
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "P1 verified live on i4 (24.975 fps); P2 not done (see doc)"
+result: "P1 and P2 k=1 control verified live on i4; k=2 pending (needs stop, cfg edit, start)"
 live: "i4 Booti: read-only scans; hook run marker lockstep-p2-k1 written"
 ```
 
 - [x] P1 live read, 25 fps model
-- [ ] P2 k=1 control
+- [x] P2 k=1 control
 - [ ] P2 k=2
