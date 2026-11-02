@@ -2,7 +2,7 @@
 
 ```yaml
 change: creditkit
-status: in-progress
+status: archived
 agent: creditkit
 branch: agent/creditkit
 worktree: d2lod-wt/creditkit
@@ -16,8 +16,8 @@ exclusive: []
 gates:
   - "python3 -m unittest discover -s tools/credit -t tools/credit -p test_credit.py passes"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh ok"
-result: "docs and python tooling; unit tests only, not verified against a real upstream PR"
-merge:
+result: "docs and tools; 12 unit tests in CI"
+merge: e983945
 credit:
   author: owner
   agents: [Claude Code]

@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [creditkit](../../openspec/changes/creditkit/) | in-progress | creditkit | `tools/credit/**`<br>`docs/process/credit.md`<br>`docs/community/credits-ledger.md`<br>`openspec/changes/creditkit/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -87,8 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change creditkit: python3 -m unittest discover -s tools/credit -t tools/credit -p test_credit.py passes
-- change creditkit: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh ok
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -130,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
 - 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
 - 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
 - 9621b8f8 11-02 13:23 `merge origin/main into crlimits` (crlimits)
@@ -139,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
 - dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
 - 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
-- e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
 <!-- statusgen:end -->
