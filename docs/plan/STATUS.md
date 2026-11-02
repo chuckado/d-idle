@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [baselineruns-20261102](../../openspec/changes/baselineruns-20261102/) | in-progress | baselinerun | `docs/probes/baseline-runs/20261102/**`<br>`openspec/changes/baselineruns-20261102/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -86,6 +87,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change baselineruns-20261102: rows load with d2dsoak compare; weak and invalid runs flagged in record.md
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -129,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 42236144 11-02 05:53 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
 - 62da358f 11-02 05:49 `Merge agent/propenmonsterpacea: PROPEN-MONSTERPACE-A: upstream PR 167 opened (monster think paces, Blood Raven, shaman corpse reach)` (propenmonsterpacea)
 - b5f855dd 11-02 05:48 `merge origin/main into propenmonsterpacea` (propenmonsterpacea)
 - 13162292 11-02 05:41 `Merge agent/skias: skias: Pro account job result (docs and emulator tools only)` (skias)
@@ -138,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c9da90ec 11-02 05:30 `merge origin/main into verifyresistq` (verifyresistq)
 - 3f14d224 11-02 05:23 `Merge agent/verifyskmana: verifyskmana: Pro account job result (docs and emulator tools only)` (verifyskmana)
 - 3e8e647d 11-02 05:22 `merge origin/main into verifyskmana` (verifyskmana)
-- 0175d161 11-02 05:17 `Merge agent/verifyskresist: verifyskresist: Pro account job result (docs and emulator tools only)` (verifyskresist)
 <!-- statusgen:end -->

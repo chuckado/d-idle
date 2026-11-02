@@ -134,6 +134,8 @@ internal/cheat/ledgerkey.go  snaplib  ledgerkey
 internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
+docs/probes/baseline-runs/20261102/**  baselinerun  baselineruns-20261102
+openspec/changes/baselineruns-20261102/**  baselinerun  baselineruns-20261102
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
