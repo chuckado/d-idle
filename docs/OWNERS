@@ -137,3 +137,6 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/lockstep-p1p2.md  lockstepp1p2b  lockstepp1p2b
+cmd/lockstepscan/**  lockstepp1p2b  lockstepp1p2b
+openspec/changes/lockstepp1p2b/**  lockstepp1p2b  lockstepp1p2b
