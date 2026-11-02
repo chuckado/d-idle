@@ -13,7 +13,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.bar (Barbarian skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.dru (Druid skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.ass (Assassin skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
-| skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 0 | 1 | 0 | 0 | 146 | 1% | 1% | 100,000 |
+| skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 2 | 1 | 0 | 0 | 144 | 2% | 2% | 104,752 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
 | skillfx.damage (skills with an element type: element damage and synergy formula) | 100 | 0 | 100 | 0 | 0 | 0 | 100% | 100% | 116,000 |
 | missiles (missile flight, range, hit roll) | 684 | 21 | 30 | 26 | 0 | 607 | 7% | 11% | 322,421 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 11 | 3 | 0 | 1 | 78% | 94% | 2,211,956 |
-| **total** | **4910** | **2007** | **914** | **56** | **0** | **1933** | **59%** | **61%** | **4,932,783** |
+| **total** | **4910** | **2009** | **914** | **56** | **0** | **1931** | **60%** | **61%** | **4,937,535** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1730 (47%), compared 1786 (48%), read-only 56, untested 1933.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1732 (47%), compared 1788 (48%), read-only 56, untested 1931.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -52,6 +52,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |
 | skills.pal | 101,112 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential |
 | skills.monster | 0 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4 |
+| skills.monster | 309,310 | TESTED-0-DIFF | `docs/research/skcurseval-trace.md` | 4,752 | 2026-11-02 | Defense Curse and Blood Mana calc cells at levels 1..99 equal d2d eval_calc (calc aspect only; effects not compared); SKCURSEVAL |
 | skillfx.mana | 22,28,54,88,89,98 | TESTED-DEVIATION | `docs/research/sk-mana-trace.md` | 130,840 | 2026-11-01 | minmana floor D2 (Guided Arrow, Dopplezon, Teleport, Bone Prison, Summon Resist, Might) |
 | skillfx.mana | 0-21,23-27,29-53,55-87,90-97,99-356 | TESTED-0-DIFF | `docs/research/sk-mana-trace.md` | 130,840 | 2026-11-01 | mana formula equal d2d mana_cost on 357 rows x levels 1..60; payment timing is D1 D3 (read) |
 | skillfx.damage | all | TESTED-DEVIATION | `docs/research/skill-damage-trace.md` | 116,000 | 2026-10-31 | min synergy gate (13 skills, see doc) and MulDiv above 4,096 points; the rest 0 diff; docs/research/pr-skill-damage-proof.md |
