@@ -1,8 +1,10 @@
 # Durability Loss per Hit and per Block in 1.14d (`PALDUR`)
 
-> **Authorship & Epistemic Notice:** This document was written by an AI agent (`Antigravity`) for work item [#2 (`PALDUR`)](https://github.com/shatteredeagle/d-idle/issues/2) following `docs/contributing/agent-work.md`. Every factual claim is tagged:
+> **Authorship & Epistemic Notice:** This document was written by an AI agent (`Antigravity`) for work item [#2 (`PALDUR`)](https://github.com/shatteredeagle/d-idle/issues/2) following `docs/contributing/agent-work.md`.
+> **Author:** Chuck (@chuckado) with Claude / Antigravity
+> Every factual claim is tagged:
 > - `V read` — verified by reading the 1.14d `Game.exe` binary (`SHA256 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf`, image base `0x00400000`) or `Patch_D2.mpq` (`SHA256 082f6bbd8edb2bee6efdc9eb7de9ae4bdbe4ddca9dbc8f7ba6fd5fbf3a36d2eb`)
-> - `V run` — verified by executing the original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness (`100,000` test cases, `0` mismatches)
+> - `V run` — verified by executing the original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness (`100,000` test cases, `0` mismatches, `tools/emu/verify_paldur.py` with seed `0x50414c44`)
 > - `D` — arithmetic deduction from verified formulas or tables
 > - `S` — secondary source: `d2d` (`d2decomped`) source at commit `6935cf6` or `d-idle` repository code/docs
 > - `I` — inference
@@ -19,16 +21,16 @@ Issue #2 (`PALDUR`, from `docs/community/open-work.md` and `docs/research/paladi
 
 1. **When durability loss runs (`V read`, `V run`):**
    - Across the entire 1.14d `Game.exe` binary, the single-item durability wear routine `FUN_00559e30` (`0x559e30..0x55a07f`) has only two callers: `0x57d3f3` (attacker's weapon) and `0x57d4d8` (defender's armor), both inside `FUN_0057d3d0` (`0x57d3d0..0x57d4e3`).
-   - `FUN_0057d3d0` has only one caller: `0x57d5f6` inside the melee hit-record processor `FUN_0057d4f0` (`0x57d4f0..0x57d683`), gated behind `(dmg.result_flags & 0x01) != 0` at `0x57d591` (plus Amazon Impale's dedicated `FUN_005daa40` at `0x5daa40..0x5dab3d`).
+   - `FUN_0057d3d0` has only one caller: `0x57d5f6` inside the melee hit-record processor `FUN_0057d4f0` (`0x57d4f0..0x57d683`), gated behind `(dmg.result_flags & 0x01) != 0` at `0x57d591` (plus Amazon Impale's dedicated `FUN_005daa40` at `0x5daa40..0x5dab3d`, called at `0x5dac99` inside `FUN_005dabe0`).
 2. **Blocking an attack NEVER causes durability loss (`V read`, `V run`):**
    - In the melee to-hit and block/dodge resolver `FUN_0057ec10` (`0x57ec10..0x57ed44`), when `FUN_0057dfb0` (`0x57dfb0..0x57e08b`, shield block + `FUN_0057dd60` weapon block / dodge / avoid / evade) returns non-zero (`0x01` shield block, `0x02` avoid, `0x04` dodge, `0x08` evade, `0x10` weapon block), `FUN_0057ec10` sets `result_flags |= 0x10` (for shield block) or `0x8000` (for weapon block) and clears bit `0` (`0x57ed16`: `result_flags &= ~0x0001`).
    - Because `FUN_0057d4f0` skips `FUN_0057d3d0` whenever `(dmg.result_flags & 0x01) == 0` (`0x57d591..0x57d595`), a blocked attack, missed swing, or dodged/avoided/evaded swing never calls `FUN_0057d3d0` or `FUN_00559e30`. A shield only loses durability when a melee attack **lands** (`result_flags & 0x01 != 0`) and the shield's arm slot (`4` or `5`) is selected in the defender's 7-slot armor lottery (`FUN_0057d3d0`).
 3. **When the player hits in melee (`FUN_0057d3d0` -> `FUN_00535bc0` -> `FUN_00559e30`, `V read`, `V run`):**
    - If the attacker is a player (`[attacker + 0x00] == 0`), `FUN_0057d3d0` selects the active weapon via `FUN_00535bc0` (`0x535bc0..0x535cff`) and passes it to `FUN_00559e30`.
    - For a normal melee weapon (`ItemTypes` `0x2d` `"weap"`, not throwable), the chance to lose `1` durability (`stat 72`, `0x48`) per landed melee hit is **`4%`** (`rand_range(&attacker.seed, 100) < 4`).
-   - For a throwable weapon (`ItemTypes` `+0x10` `Throwable != 0`, `FUN_0062ba80`) used in melee, the chance per landed melee hit is **`10%`** in Expansion (`[game + 0x70] != 0`) and **`0%`** in Classic (`[game + 0x70] == 0`, early exit at `0x559e85..0x559e91`).
+   - For a throwable weapon (`ItemTypes` `+0x10` `Throwable != 0`, `FUN_0062ba80`) used in melee, the chance per landed melee hit is **`10%`** in Expansion (`[game + 0x70] != 0`, `I`) and **`0%`** in Classic (`[game + 0x70] == 0`, `I`, early exit at `0x559e85..0x559e91`).
    - Bows/crossbows and Phase Blades (`Items.txt` `nodurability != 0` or `durability == 0`), items with `stat 152` (`item_indesctructible > 0`), and missile attacks (`FUN_005ad730`) have **`0%`** durability loss in `FUN_00559e30`.
-   - **Paladin Smite (`srvdofunc` 64, `FUN_005cea30`, `V read`):** Smite reads the shield (`FUN_0063c8f0`) for base damage (`[shield_rec + 0xfe..0xff]`), sets `result_flags |= 0x01` (`0x5cebb0`), and queues a standard melee hit record processed by `FUN_0057d4f0` (`0x5cec35`). Because `FUN_0057d3d0` calls `FUN_00535bc0(attacker)`, **Smite wears the Paladin's equipped weapon (`4%` chance per hit), not the shield**.
+   - **Paladin Smite (`srvdofunc` 150, `FUN_005ce9f0`, `V read`):** Smite reads the shield (`FUN_0063c8f0`) for base damage (`[shield_rec + 0xfe..0xff]`), sets `result_flags |= 0x01` (`0x5cebb0`), and queues a standard melee hit record processed by `FUN_0057d4f0` (`0x5cec35`). Because `FUN_0057d3d0` calls `FUN_00535bc0(attacker)`, **Smite wears the Paladin's equipped weapon (`4%` chance per hit), not the shield**.
 4. **When the player is hit in melee (`FUN_0057d3d0` -> `FUN_00559e30`, `V read`, `V run`):**
    - If the defender is a player (`[defender + 0x00] == 0`), `FUN_0057d3d0` scans the 7-entry slot-weight table at `0x00732b90` (`[0x00732bc8] = 7`):
      - Slot `1` (**Head / Helm**): weight **`3`**
@@ -63,7 +65,7 @@ Issue #2 (`PALDUR`, from `docs/community/open-work.md` and `docs/research/paladi
 | `FUN_00629930` | `0x59` (`0x629930..0x629988`) | `__stdcall(item)` (`ret 4`) | Returns `1` iff item uses durability (`nodurability == 0 && durability > 0 && maxdur != 0 && stat_152 <= 0`) | `0x559e5e` (`FUN_00559e30`), `0x5803ed` (`FUN_00580380`), `0x62e88a` (`FUN_0062e660` repair cost), `0x5761fb` (`FUN_005761c0` smith repair) |
 | `FUN_0055f850` | `0xac` (`0x55f850..0x55f8fb`) | `__fastcall(ecx = game, edx = player, item)` (`ret 4`) | Sets `item_data.flags \|= 0x100` (`broken`), strips item stats from player, sets `stat 72 = 0`, plays sound `9` | `0x559f3a` (`FUN_00559e30` armor), `0x5800ca` (`FUN_00580030` magic+ throwable), `0x58042a` (`FUN_00580380` weapon), `0x5dab36` (`FUN_005daa40` Impale) |
 | `FUN_00580380` | `0xcd` (`0x580380..0x58044c`) | `__fastcall(ecx = game, edx = player)` (`ret`) | Scans equipped weapons (`location_type == 3`); calls `FUN_0055f850` on any weapon with `stat 72 <= 0` and `(flags & 0x100) == 0` | `0x581095` (end of attack sequence), `0x56ca96`, `0x56cace`, `0x5d8e55`, `0x5d8e9d`, `0x5da8ce`, `0x5dad2a` |
-| `FUN_005daa40` | `0xfe` (`0x5daa40..0x5dab3d`) | `__fastcall(ecx = game, edx = player, skill_lvl)` (`ret 4`) | Amazon Impale (`srvdofunc` 9) dedicated weapon durability wear (`param3%` chance to lose `param4` durability) | `0x5dad1a` (Impale `srvdofunc`) |
+| `FUN_005daa40` | `0xfe` (`0x5daa40..0x5dab3d`) | `__fastcall(ecx = game, edx = player, skill_lvl)` (`ret 4`) | Amazon Impale (`srvdofunc` 9) dedicated weapon durability wear (`param3%` chance to lose `param4` durability) | `0x5dac99` (Impale `srvdofunc` 9 inside `FUN_005dabe0`) |
 
 ---
 
@@ -126,8 +128,8 @@ At the start of `FUN_0057d3d0(eax = attacker, game, defender)`:
 | `3` | `0x535c89` (`jt[2]`) | Checks unit flag `([player + 0x38] >> 8) & 1`: picks off-hand (`6`) when bit `0x100` is `1`, else primary (`5`) |
 | `4` | `0x535ca5` (`jt[3]`) | Clears fallback `[ebp - 4] = 0` and returns `NULL` (`0`, no weapon wear) |
 
-3. **Paladin Smite (`srvdofunc` 64, `FUN_005cea30`, `0x5cea30..0x5cec45`, `V read`):**
-   - `FUN_005cea30` checks that the Paladin has a shield equipped (`FUN_0063c8f0` at `0x5cea6e`), reads the shield's `Items.txt` record (`+0xfe`, `+0xff`) for base Smite damage (`0x5cea96..0x5ceaa0`), sets `dmg.result_flags |= 0x01` (`0x5cebb0`), queues the hit record (`0x5cec23`), and immediately calls `FUN_0057d4f0` (`0x5cec35`).
+3. **Paladin Smite (`srvdofunc` 150, `FUN_005ce9f0`, `0x5ce9f0..0x5cec45`, `V read`):**
+   - `FUN_005ce9f0` checks that the Paladin has a shield equipped (`FUN_0063c8f0` at `0x5cea76`), reads the shield's `Items.txt` record (`+0xfe`, `+0xff`) for base Smite damage (`0x5cea96..0x5ceaa0`), sets `dmg.result_flags |= 0x01` (`0x5cebb0`), queues the hit record (`0x5cec23`), and immediately calls `FUN_0057d4f0` (`0x5cec35`).
    - Inside `FUN_0057d4f0` -> `FUN_0057d3d0`, `FUN_00535bc0` selects the Paladin's **equipped weapon** (`slot 4` or `5` matching `"weap"`), NOT the shield (`"armo"`). Thus **Smite wears the Paladin's equipped weapon at `4%` per landed hit, and never wears the shield** (`V read`).
 
 ### 4.3 Weapon Durability Loss Chance (`FUN_00559e30`, `0x559e30..0x559ec5`, `V read`, `V run`)
@@ -154,7 +156,7 @@ Given `item` passed to `FUN_00559e30(ecx = game, edx = unit, item)`:
 
 ### 4.4 Special Case: Amazon Impale (`FUN_005daa40`, `0x5daa40..0x5dab3d`, `V read`)
 
-Amazon Impale (`skill 19`, `srvdofunc` 9 at `FUN_005dabe0`) runs a separate weapon-wear check `FUN_005daa40` at `0x5dad1a` in addition to normal melee hit processing:
+Amazon Impale (`skill 19`, `srvdofunc` 9 at `FUN_005dabe0`) runs a separate weapon-wear check `FUN_005daa40` at `0x5dac99` (inside `FUN_005dabe0`) in addition to normal melee hit processing:
 - Evaluates `Skills.txt` `calc2` (`par3 = 25`, `25%` chance in 1.14d) against `rand_range(&player.seed, 100)`.
 - If the roll is `< calc2` (or if `calc2 <= 0`, which forces wear unconditionally at `0x5daa76`), subtracts `par4` (`[skill_rec + 0x194] = 1` durability in 1.14d) from `stat 72` (`0x48`), and if `new_dur <= 0`, immediately breaks the weapon via `FUN_0055f850` (`0x5dab36`) (`V read`).
 
