@@ -273,6 +273,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - upstream #170 (Nightmare and Hell monster start level at the area MonLvl; 2 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
 - #170 (Nightmare/Hell monster start level) got a follow-up (9d762384) for CodeRabbit; watch for the maintainer.
 - upstream #171 (monster base velocity 75; 2 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card). The authorised four PRs are used up.
+- boardclean: board closed 8 finished items (VERIFY-SKMANA, VERIFY-WAYPOINT, VERIFY-SKMELEE2, VERIFY-SKRESIST, SKGEARAR, SKSHIELD, SKCURSEVAL, SKDEFENDERS); VERIFY-AIDEL and SKIAS narrowed
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
