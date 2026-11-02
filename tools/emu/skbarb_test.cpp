@@ -62,6 +62,7 @@ int main(int argc, char** argv) try {
             std::printf(" %d %d %d %d", value(skill->delay), value(skill->aurarange), value(skill->auralen), value(skill->perdelay_calc));
             for (std::size_t k = 0; k < 6; ++k) { if (skill->aurastat[k] >= 0) std::printf(" %d", value(skill->aura_calc[k])); else std::printf(" x"); }
             for (std::size_t k = 0; k < 5; ++k) { if (skill->passive_stat[k] >= 0) std::printf(" %d", value(skill->passive_calc[k])); else std::printf(" x"); }
+            std::printf(" %d %d", d2d::rules::skill_phys(data->skills, *skill, env, lvl, false), d2d::rules::skill_phys(data->skills, *skill, env, lvl, true));
             std::printf("\n");
         }
     }

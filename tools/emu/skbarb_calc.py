@@ -53,6 +53,10 @@ def run(o, skill, lvl, clvl, m, pairs):
         out.append(calc(0x68 + 4 * k) if sid(0x54 + 2 * k) >= 0 else "x")
     for k in range(5):
         out.append(calc(0xa4 + 4 * k) if sid(0x98 + 2 * k) >= 0 else "x")
+    # the skill's own physical min / max (FUN_00647bc0 / FUN_00647d00, 256ths; the weapon-share flag off, d2d's skill_phys
+    # has none): MinDam / MaxDam + level brackets, the synergy calc (+0x1d8 for the min), HitShift
+    out.append(s32(e.call(0x647bc0, o.unit, skill, lvl, 0)))
+    out.append(s32(e.call(0x647d00, o.unit, skill, lvl, 0)))
     return out
 
 
