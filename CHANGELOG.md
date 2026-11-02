@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: research on lockstep / speed-up for the original Game.exe 1.14d (no prior art found; proxy-DLL clock hook plan, probes, policy); nothing run
+- docs: runbook for the extra original-game baseline runs (docs/process/baseline-runs.md).
+- docs: character factory research (docs/research/character-factory.md).
+- docs: missilediff (monster missile record, real d2d build vs game.exe, 120,000 cases), tools/emu/mm_diff.py, ledger rows for 22 missile rows
 - docs: backend parity audit for resuming the bot on the original game (docs/research/backend-parity.md).
 - tools: `d2dsoak bands` (XP/h per clvl band with a baseline verdict), baseline files extended with the whole a14 run, G2 and the Fresha chain plus provenance fields; soak-gates delta spec for the per-band Gate 1 XP clause.
 - combat: missile threat model, kill-first for unblockable shooters, no walk-away retreat from runners (knobs combat.threatDodge, shooterKillMin, runnerGuard, standOK)
