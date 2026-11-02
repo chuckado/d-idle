@@ -188,3 +188,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - no change
 - docs/research/openpr-log.md: posted log now also covers #166.
 - no change
+- docs/research/pr-nmlevel-verifier.md - independent check of local/nmlevel (Nightmare / Hell area monster level), own harness in docs/research/pr-nmlevel-verifier/
