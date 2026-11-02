@@ -153,3 +153,6 @@ internal/cheat/ledgerkey.go  snaplib  ledgerkey
 internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
+openspec/changes/tpglitch/**  tpglitch  tpglitch
+openspec/changes/pingpongrate/**  pingpongrate  pingpongrate
+openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
