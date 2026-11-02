@@ -2,7 +2,7 @@
 
 ```yaml
 change: playerroll
-status: in-progress
+status: archived
 agent: playerroll
 branch: agent/playerroll
 worktree: ~/code/d2lod-wt/playerroll
@@ -15,8 +15,9 @@ exclusive:
   - fork-branch:pr/player-roll
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "fork branch pr/player-roll head e66e10ba (5 commits on upstream main 6935cf64: the 4 measured ones with one author identity, plus the three include lines CI needs) rebuilt and re-checked on the worker host after the independent verifier (READY WITH CHANGES; changes made); draft updated; not verified live (offline, no game); held for the user go"
+result: "docs and tools only; merged by the triage queue"
 live: "no game; emulator differentials, d2d unit tests and the headless det scenarios on the worker host"
+merge: 9dc7281
 ```
 
 - [x] build pr/player-roll on upstream main (roll-top pair, physical roll, -100 floor)
