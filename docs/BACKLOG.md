@@ -266,6 +266,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SKIAS partial: docs/research/sk-ias-trace.md (d2d formula and breakpoints; game.exe attack branch of 00623f50 still to run under the emulator)
 - upstream #167 (monster think paces: Act 1 paces, Blood Raven home rule, unique Fallen Shaman corpse reach; 13 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card). The velocity change (branch b) waits for it.
 - BASELINERUNS: original-game baseline set late1, 1 runs with rows (docs/probes/baseline-runs/20261102/record.md)
+- SKCURSEVAL done (docs/research/skcurseval-trace.md): curse calc cells of 11 rows at levels 1..99 equal d2d, 0 of 46,136 (seed 1) and 0 of 66,136 (seed 7) differ; no calc deviation; bot B1 Lower Resist chosen for magic resistance but lowers none (necro.go:358); no PR candidate
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
