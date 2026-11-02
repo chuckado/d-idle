@@ -51,7 +51,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | nav.badEdgeTTLSec | 300 | 0..3600 | s | 300 | 2 | A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge). |
 | nav.cautionRadius | 20 | 8..40 | subtiles | 8 | 1 | A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius. |
 | nav.teleReservePct | 40 | 0..90 | % | 40 | 2 | A Teleport hop is skipped (the walk goes on, no waiting for mana) when the mana after it would be below this share of max mana, so fights are not starved. Default: about eight casts of a 5 to 8 mana attack on a 150 mana pool (UNSURE, docs/teletune.md). |
-| nav.teleMinLeg | 13 | 0..120 | subtiles | 13 | 3 | A hop is skipped unless it skips more than this much of the planned walking path: running speed times the measured time of a hop (0.5625 x 18 ticks = 10, DRILLS24) plus a margin of 3 (docs/teletune2.md). 0 hops whenever mana allows. |
+| nav.teleMinLeg | 13 | 0..120 | subtiles | 13 | 6 | A hop is skipped unless it skips more than this much of the planned walking path: running speed times the measured time of a hop (0.5625 x 18 ticks = 10, DRILLS24) plus a margin of 3 (docs/teletune2.md). 0 hops whenever mana allows. |
 | nav.teleEscapeReservePct | 15 | 0..90 | % | 15 | 1 | After a walk stalled at the character's spot, a hop ignores the minimum leg and may spend mana down to this share of max mana (never above nav.teleReservePct): leaving a pocket beats keeping mana for fights. Default: about three casts of a 5 to 8 mana attack on a 150 pool (UNSURE). |
 
 ### combat.*
@@ -74,11 +74,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 4 | Minimum time between healing or mana potions. |
 | combat.rejuvGapMs | 300 | 250..1500 | ms | 1500 | 1 | Minimum time between rejuvenation potions. |
 | combat.reactionMs | 120 | 40..700 | ms | 700 | 1 | Delay before the bot acts on a survival event. |
-| combat.pollMs | 60 | 30..400 | ms | 400 | 12 | How often the fight loop looks at the game. |
+| combat.pollMs | 60 | 30..400 | ms | 400 | 13 | How often the fight loop looks at the game. |
 | combat.targetQuality | 100 | 20..100 | % | 20 | 3 | 100 picks the best target; lower picks the nearest more often and loses ticks. |
 | combat.rangeMargin | 3 | 0..8 | subtiles | 0 | 1 | Distance kept inside a skill's maximum range. |
 | combat.clearRadius | 40 | 15..80 | subtiles | 15 | 1 | Radius around the start point cleared when the caller gives none. |
-| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 12 | A hostile monster this close counts as a fight. |
+| combat.fightRadius | 22 | 10..40 | subtiles | 10 | 13 | A hostile monster this close counts as a fight. |
 | combat.maxTargetSec | 45 | 20..90 | s | 90 | 1 | Give up on one target after this long. |
 | combat.noProgressSec | 12 | 5..30 | s | 30 | 1 | Give up on a target whose life did not drop for this long. |
 | combat.clearMaxSec | 180 | 30..600 | s | 30 | 2 | Upper bound of one Clear call. |
@@ -94,12 +94,17 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.staticFloorHell | 50 | 10..70 | % | 70 | 1 | Same in Hell. |
 | combat.novaManaFloor | 25 | 0..60 | mana | 60 | 1 | Frost Nova on a crowd of 3 or more is not cast with less mana than this, so the mana stays for the bolts. |
 | combat.kiteEnabled | 1 | 0..1 | bool | 0 | 2 | 1 backs away from melee monsters that get close. |
-| combat.kiteDistance | 10 | 4..20 | subtiles | 4 | 1 | Back away when a melee monster is closer than this. |
+| combat.kiteDistance | 10 | 4..20 | subtiles | 4 | 2 | Back away when a melee monster is closer than this. |
 | combat.kiteLifePct | 70 | 40..100 | % | 40 | 0 | Kite normal monsters only below this life percent. |
 | combat.kiteMaxSteps | 6 | 0..12 | count | 0 | 4 | Retreat steps per target before standing to fight. |
 | combat.kiteRetreat | 12 | 6..20 | subtiles | 6 | 10 | Length of one retreat step. |
-| combat.dodgeRadius | 4 | 0..8 | subtiles | 0 | 6 | Step away from hostile missiles closer than this. |
+| combat.dodgeRadius | 4 | 0..8 | subtiles | 0 | 7 | Step away from hostile missiles closer than this. |
 | combat.missileDodge | 0 | 0..1 | bool | 0 | 1 | 1 sidesteps fire walls, lightning, hydra and chaos missiles (unverified live, off by default). |
+| combat.threatDodge | 0 | 0..1 | bool | 0 | 2 | 1 dodges only hostile missiles the missile threat table says can be dodged in dodgeReactMs and fights the owners of the fast ones first (card botthreat, off until a live drill). |
+| combat.dodgeReactMs | 400 | 100..800 | ms | 100 | 2 | Poll plus click time the threat model assumes before the character moves; a missile reaching us sooner is not dodged (I). |
+| combat.shooterKillMin | 0 | 0..200 | pts | 0 | 4 | Ranged monsters with an elemental-only attack and a peak hit of at least this are fought first; 0 = off (derived from monstats, U). |
+| combat.runnerGuard | 1 | 0..1 | bool | 0 | 1 | 1 skips the kite, step-back and curse retreat while a monster that runs at the player (Zombie, Brute, Blood Hawk, Corrupt Rogue) is close; walking away cannot break contact. |
+| combat.standOK | 0 | 0..1 | bool | 0 | 1 | 1 does not drop a Fallen that stands still as never in range (S, off until a live drill). |
 | combat.curseRetreatPct | 60 | 30..90 | % | 30 | 2 | With Amplify Damage or Iron Maiden on the player, retreat and drink below this life percent. |
 | combat.maxApproaches | 12 | 4..30 | count | 4 | 1 | Approach steps per target before it is dropped as unreachable. |
 | combat.reachSec | 15 | 6..40 | s | 40 | 1 | Give up on a target that was not shot at once in this long (unreachable, no line of sight). |
@@ -145,7 +150,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.greetingWaitS | 90 | 0..180 | s | 180 | 1 | Wait for an NPC menu after a click (first contact plays a long speech). |
 | town.greetingSkip | 0 | 0..3 | mode | 3 | 2 | How the first-contact greeting is skipped when the menu is not open 1 s after the click: 0 wait it out (greetingWaitS), 1 click the NPC again, 2 Esc then click again, 3 left click on the NPC tile without hover. docs/npc-skip.md. |
 | town.futileGoldStep | 100 | 0..5000 | gold | 5000 | 4 | After a town visit could not fix a trip reason, do not ask again until gold grew by this. |
-| town.futileMinutes | 10 | 0..120 | min | 120 | 2 | A trip reason a visit left unfixed is not raised again for this long. |
+| town.futileMinutes | 10 | 0..120 | min | 120 | 3 | A trip reason a visit left unfixed is not raised again for this long. |
 | town.spareKeep | 4 | 0..30 | count | 0 | 1 | A full pack sells spare potions and identify scrolls beyond this many per kind (they fill the pack but are never belted). |
 | town.sellMaxS | 60 | 15..300 | s | 15 | 2 | Time the sell chore alone may take before it is cut off. |
 | town.potionsFirst | 1 | 0..1 | bool | 0 | 2 | 1 buys the kit potions before the first town portal scroll, which then needs gold for the scroll plus tpScrollPotions potions (d2-sme order, decision D3). 0 = scroll first (old). |
@@ -294,7 +299,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.hpReserve | 1 | 0..4 | count | 0 | 1 | Healing potions kept for emergencies, not spent on engaging. |
 | resource.economyManaPct | 40 | 10..70 | % | 10 | 1 | Below this mana percent the cheapest attack skill is used. |
 | resource.meleeMinLifePct | 50 | 30..80 | % | 30 | 2 | Life percent needed for the melee fallback when out of mana. |
-| resource.meleeMaxPack | 3 | 1..6 | count | 6 | 2 | Largest hostile count the melee fallback accepts. |
+| resource.meleeMaxPack | 3 | 1..6 | count | 6 | 3 | Largest hostile count the melee fallback accepts. |
 | resource.lowManaWaitMs | 700 | 300..2000 | ms | 2000 | 2 | Wait when out of mana and nothing else is possible. |
 | resource.waitMaxSec | 8 | 2..30 | s | 30 | local var | Longest stretch of waiting for mana inside a fight before retreating. |
 | resource.backoffMaxSteps | 8 | 0..30 | steps | 30 | 2 | Consecutive out-of-mana back-off steps before a weak caster swings its weapon instead of running on (any pack size, danger below 3, life above the melee line). 0 = never. |
@@ -331,7 +336,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | resource.recoveryTargetGold | 900 | 400..2000 | gold | 400 | 2 | Recovery ends at this gold once the loot is sold. SME: 800-1000. |
 | resource.recoveryMaxMin | 45 | 10..120 | min | 10 | 3 | Longest recovery cycle; it ends at the cap even when the target is not reached. SME: 30-60. |
 | resource.recoveryCooldownMin | 15 | 0..120 | min | 0 | 1 | Minutes after a recovery before the next one may start. |
-| resource.recoveryPotionFloor | 2 | 0..6 | count | 6 | 1 | While recovering, town buys healing potions only up to this many in the belt (no mana, no rejuvenation) so the last gold stays for the kit. 0 = normal belt plan. |
+| resource.recoveryPotionFloor | 2 | 0..6 | count | 6 | 3 | While recovering, town buys healing potions only up to this many in the belt (no mana, no rejuvenation) so the last gold stays for the kit. 0 = normal belt plan. |
 | resource.recoveryXPPick | 1 | 0..1 | 0/1 | 0 | 1 | 1 = a recovering Normal act 1 character farms the safe area with the best XP per kill for its level (gold per kill is the same everywhere, d2d); 0 = the plan area of a character povertyLevels lower. |
 | resource.recoveryMaxAreaAbove | 1 | 0..4 | levels | 4 | 1 | XP pick: the recovery area's monster level may be at most this many above the character level. |
 | resource.recoveryXPEarly | 0 | 0..3 | levels | 0 | 1 | XP pick: a recovering character may enter an area this many levels below its plan enter and kit level (XPGAP: Cold Plains pays 1.5x the XP per kill of Blood Moor at the same kill rate). 0 = the plan levels. |
