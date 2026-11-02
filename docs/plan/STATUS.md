@@ -131,14 +131,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
+- 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
+- a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
+- 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
 - 7f3c38bc 11-01 23:28 `Merge agent/apicookbook-pub: APICOOKBOOK: emulator wrapper run-on-worker.sh and mpq-table.sh for headless agents (host from env), cookbook doc` (apicookbook)
+- e58357fc 11-01 23:24 `merge origin/main into reverifymissile` (reverifymissile)
 - d33de75d 11-01 22:50 `Merge agent/boardclaim: BOARDCLAIM: board audit: 1 item closed (VERIFY-FREEZE-KINDS), 5 narrowed, 1 claimed by the maintainers; claim.py with claim, done and watch; claim-before-launch and comment-watching rules` (boardclaim)
 - ffe6a9e8 11-01 22:49 `merge origin/main into boardclaim` (boardclaim)
 - 611bcc63 11-01 22:46 `Merge agent/palauranarrow: PALAURANARROW: PALAURA work item narrowed to the open parts (target filter and area search, enemy-hit damage, Prayer per-pulse mana and state 85); prior trace linked` (palauranarrow)
 - 91e287bc 11-01 22:38 `Merge agent/archive5: ARCHIVE5: archive pingpongrate card (code merged in soakfixes2)` (archive5)
-- 6ae81240 11-01 22:26 `Merge agent/soakfixes2: SOAKFIXES2: tome-read debounce in hasPortalSource for the kit gate and poverty check, ping-pong guard by XP rate` (tpglitch)
-- aa0787d6 11-01 22:25 `merge origin/main into tpglitch` (tpglitch)
-- b8d3cca2 11-01 22:19 `Merge agent/archive4: ARCHIVE4: archive soakstall, hastpdump, soakgiveup, povertyflip cards (code merged earlier)` (archive4)
-- 39cbc04c 11-01 22:16 `merge origin/main into soakstall,hastpdump,soakgiveup,povertyflip,tpglitch,pingpongrate` (soakstall)
-- 1ca519ac 11-01 22:11 `Merge agent/licensecheck: LICENSECHECK: licences read for the lockstep hook sources; MIT workable for our own code only; clean-room procedure and provenance format; Blizzard terms ban modification` (licensecheck)
 <!-- statusgen:end -->
