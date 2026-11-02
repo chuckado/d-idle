@@ -2,7 +2,7 @@
 
 ```yaml
 change: skcurseval
-status: in-progress
+status: archived
 agent: skcurseval
 branch: agent/skcurseval
 worktree: ~/code/d2lod-wt/skcurseval
@@ -17,7 +17,8 @@ exclusive: []
 gates:
   - "every claim tagged V read / V run / D / S / I / U; numbers reproducible with command, case count and seed"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "curse calc cells equal d2d on every level 1..99 (0 of 46,136 and 0 of 66,136 cases differ, seeds 1 and 7); no calc deviation, no PR candidate; ledger row 309-310; not verified live"
+result: "docs only; first pass, not yet independently verified"
+merge: 9584f9c
 ```
 
 ## 1. Work
