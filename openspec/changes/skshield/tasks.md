@@ -25,4 +25,4 @@ result: "offline, not verified live. Shield never a hand item and attached activ
 - [x] 1.2 Run them natively on 382 scenarios (skshield_run.py) and the item maker on every weapon and armor row (skshield_base.py)
 - [x] 1.3 Compare with d2d (fight.cpp, combat.hpp) and re-compare SKMELEE2's O part (skshield_cmp.py)
 - [x] 1.4 Bot findings with file:line, PR decision, drill recipe, matrix text, shared-file lines
-- [ ] 1.5 Checks: changecheck, leakcheck, openspec validate, gofmt not applicable (no Go)
+- [x] 1.5 Checks: changecheck (0 warnings), leakcheck (0 hits), openspec validate --all --strict (57 passed), tools/ci/check.sh ok; gofmt and go test not applicable (no Go changed)
