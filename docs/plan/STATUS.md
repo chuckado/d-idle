@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 611bcc63 11-01 22:46 `Merge agent/palauranarrow: PALAURANARROW: PALAURA work item narrowed to the open parts (target filter and area search, enemy-hit damage, Prayer per-pulse mana and state 85); prior trace linked` (palauranarrow)
 - 91e287bc 11-01 22:38 `Merge agent/archive5: ARCHIVE5: archive pingpongrate card (code merged in soakfixes2)` (archive5)
 - 6ae81240 11-01 22:26 `Merge agent/soakfixes2: SOAKFIXES2: tome-read debounce in hasPortalSource for the kit gate and poverty check, ping-pong guard by XP rate` (tpglitch)
 - aa0787d6 11-01 22:25 `merge origin/main into tpglitch` (tpglitch)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b02d6cb7 11-01 22:10 `merge origin/main into licensecheck` (licensecheck)
 - 3c0673d2 11-01 22:07 `Merge agent/gate1review2: GATE1REVIEW2: Gate 1 rerun 2 FAIL analysis: stall minutes 337 to 52, XP/h 7937 vs 9172, guards fired correctly, false empty-tome reads drove the kit gate; three cards` (gate1review2)
 - 6fda8125 11-01 22:07 `merge origin/main into gate1review2` (gate1review2)
-- 47920c18 11-01 22:04 `Merge agent/seedstudy: SEEDSTUDY: one d2s file pins the seed on both sides; static layout and spawn comparison feasible with work; frame lockstep blocked by tier B and the unit-seed stream` (seedstudy)
 <!-- statusgen:end -->

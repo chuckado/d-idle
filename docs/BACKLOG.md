@@ -233,6 +233,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SEEDSTUDY: same-seed lockstep of d2d vs Game.exe studied (docs/research/seed-study.md): the seed is pinnable by the .d2s map id (0xAB, active difficulty byte) on both sides, layout and spawn placement should match; frame-level lockstep is blocked by Tier B stepping and by d2d not modelling the game-seed stream (every unit made steps it); cards ranked
 - GATE1 rerun 2 review (card gate1review2): XP/h 7937 vs 9172 (-13.5 %, above the 7338 acceptance line; per band 1-4 6951, 5-7 9762, 8-10 15516, 11-14 6484 PASS), stall minutes 337 -> 52, 3 windows (20, 16, 16); ping-pong guard fired 2 of 3 times, HasTP drop-out of the tome stat explains 95 false verdicts and half of the kit-gate activations; cards tpglitch, pingpongrate, kitgatelevel proposed (docs/soaks/gate1r2-20261101.md)
 - LICENSECHECK: licences of lockstep sources read (docs/research/lockstep-licences.md): d2d/whisper GPL-3.0, D2MOO MIT, libTAS GPL-3.0, speedhack-rs unlicensed; MIT hook workable if clean-room; lawyer questions listed
+- PALAURA narrowed to the open parts (target filter, enemy-hit damage, Prayer mana and state 85); prior work pal-skill-trace.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
