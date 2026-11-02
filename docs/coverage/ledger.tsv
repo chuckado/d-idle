@@ -26,7 +26,7 @@ states	61,28	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01
 states	86	READ-ONLY	docs/research/sk-lightning-trace.md		2026-11-01	justhit (NextHit) read; D1 model only
 formulas	F01	TESTED-0-DIFF	docs/research/sk-melee2-trace.md	100000	2026-11-01	melee to-hit, real build, two seeds
 formulas	F03	TESTED-DEVIATION	docs/research/sk-melee2-trace.md	100000	2026-11-01	physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md)
-formulas	F04	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal
+formulas	F04	TESTED-DEVIATION	docs/research/sk-resist-trace.md	147628	2026-11-01	resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal; defender side (player, hireling) docs/research/skdefenders-trace.md: 222,464 cases rule check on game.exe 0 mismatches, penalty and cap equal d2d, D1 flat order D2 no magic resistance D3 no absorb
 formulas	F05	TESTED-DEVIATION	docs/research/skill-damage-trace.md	116000	2026-10-31	docs/research/pr-skill-damage-proof.md
 formulas	F06	TESTED-DEVIATION	docs/research/sk-mana-trace.md	130840	2026-11-01	D2 minmana floor; D1 D3 timing read
 formulas	F08	TESTED-DEVIATION	docs/research/walk-speed-trace.md	712362	2026-10-31	monster velocity uses Run, chill multiplies, floor; D1 (see doc)
