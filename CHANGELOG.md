@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: original-game baseline runs 20261102 (4 rows, docs/probes/baseline-runs/20261102/record.md).
 - Docs: rebased the three open upstream PRs (#159, #160, #163) on current upstream main, held for a force-push decision; log in docs/research/openpr-log.md.
 - Research: lockstep probes P1 and P2 run on a hidden instance: the game frame counter runs at 25.00 fps, a null time hook changes nothing measurable and k=2 doubles the frame rate
 - Research: lockstep probes P1/P2 prepared (time-hook proxy builds against the game's own DLL and passes the offline tests); live runs pending
