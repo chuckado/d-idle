@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Assassin skills first-pass trace (table-derived, no ledger rows)
 - skdruid: docs/research/skdruid-trace.md, Druid calc differential 0 of 27,800 cases (tools/emu/skdruid_*)
 - Docs: branch triage of the 15 unmerged local agent branches (docs/research/branch-triage-20261102.md).
 - crfixbundle: bundle 3 (CodeRabbit review fixes: charge-repair base, confidence tags, ground-roll comparison) and the judged comments
