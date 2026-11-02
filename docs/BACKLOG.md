@@ -247,6 +247,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - MISSILEFIX3: both missile PR drafts ready for the user's go (record head 59d319c8, skill-rows head f52df8d4 on the private fork, clean on upstream main 6935cf64); ask the user before any upstream PR
 - upstream #164 (monster missile record + poison units, bundled, 8 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
 - #164 (monster missile record + poison units) got a tooling follow-up (cd01212f) for CodeRabbit; watch for the maintainer.
+- monsterai2 D1 (Fallen flee pace 50, 416 of 416), D4-D6 (Blood Raven pace, target-home distance, boundary) and D3 (Fallen Shaman corpse reach 24 vs 80) proven on the monsterai2 harness, no PR candidate (not the existing upstream differential); D7 (a monster's base velocity percent is 75, not 100: plain walks 4/3 too fast in d2d; V read 0x573f16 + live capture S + formula V run 196 cases) for the Opus verifier and walk_speed.py with a 75 base, D8 (run act is a walk-mode move, pace = stat 0x43 on the next mode); bot findings B1-B4 (Blood Raven walks home at double speed, StaticCastsBR comment now D); tools/emu/mai2_*; docs/research/monsterai2-trace.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

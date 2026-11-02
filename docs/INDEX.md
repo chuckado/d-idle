@@ -181,3 +181,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-missilerecord-draft.md and pr-missilepoison-draft.md: the two private-fork PR drafts (monster missile record, poison units), revised after the third check; held for the user's go
 - docs/research/openpr-log.md: posted log now also covers #164.
 - no change
+- docs/research/monsterai2-trace.md | Monster AI second pass: six untraced AIs ported and run (36,000 cases 0 differ, Andariel's d2d function 3,830 0 differ), Fallen flee, corpse reach, Blood Raven, run speed chain, D1-D9, B1-B4
