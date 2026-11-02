@@ -11,7 +11,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.nec (Necromancer skills) | 30 | 27 | 3 | 0 | 0 | 0 | 100% | 100% | 64,400 |
 | skills.pal (Paladin skills) | 30 | 10 | 3 | 2 | 0 | 15 | 43% | 50% | 42,260 |
 | skills.bar (Barbarian skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
-| skills.dru (Druid skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
+| skills.dru (Druid skills) | 30 | 30 | 0 | 0 | 0 | 0 | 100% | 100% | 27,800 |
 | skills.ass (Assassin skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 2 | 1 | 0 | 0 | 144 | 2% | 2% | 104,752 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
@@ -25,11 +25,11 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
-| levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
+| levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2031** | **936** | **53** | **0** | **1890** | **60%** | **62%** | **5,660,823** |
+| **total** | **4910** | **2197** | **936** | **53** | **0** | **1724** | **64%** | **65%** | **5,689,711** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1776 (48%), compared 1829 (49%), read-only 53, untested 1890.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1942 (52%), compared 1995 (54%), read-only 53, untested 1724.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -55,6 +55,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |
 | skills.pal | 101,112 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential |
 | skills.pal | 96,97,106 | TESTED-DEVIATION | `docs/research/palskill-trace.md` | 20,500 | 2026-11-02 | Smite damage 20,500 cases per seed (seeds 7, 1): stat 111 omitted D1, min = max D2; calc slots and to-hit of 96, 97, 106 equal d2d in 20,360 cases per seed; Sacrifice price and Zeal reach U; PALSKILL; Smite vs block: game.exe lands every blow, d2d lets a block stop it (docs/research/smiteblock-trace.md, 96,000 game cases and 80,000 d2d blow pairs, V run) |
+| skills.dru | 221-250 | TESTED-0-DIFF | `docs/research/skdruid-trace.md` | 27,800 | 2026-11-02 | calc cells only (calc1..4, petmax, sumskill, aura, passive) game.exe FUN_00646ca0 vs d2d eval_calc, seeds 1 and 7; effects not compared; SKDRUID |
 | skills.monster | 0 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4 |
 | skills.monster | 309,310 | TESTED-0-DIFF | `docs/research/skcurseval-trace.md` | 4,752 | 2026-11-02 | Defense Curse and Blood Mana calc cells at levels 1..99 equal d2d eval_calc (calc aspect only; effects not compared); SKCURSEVAL |
 | skillfx.mana | 22,28,54,88,89,98 | TESTED-DEVIATION | `docs/research/sk-mana-trace.md` | 130,840 | 2026-11-01 | minmana floor D2 (Guided Arrow, Dopplezon, Teleport, Bone Prison, Summon Resist, Might) |
@@ -90,6 +91,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | states | 61,28 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | lowerresist and conviction on an immune D1 (negative change / 5) |
 | states | 86 | READ-ONLY | `docs/research/sk-lightning-trace.md` | - | 2026-11-01 | justhit (NextHit) read; D1 model only |
 | treasure | #850 | TESTED-0-DIFF | `docs/research/treasure-trace.md` | 100,000 | 2026-11-01 | class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared |
+| levels | 1-136 | TESTED-0-DIFF | `docs/research/levelsareas-trace.md` | 1,088 | 2026-11-02 | area monster level only: game.exe FUN_0061dca0 run natively equals the Levels columns d2d holds, ids 1..136 x difficulty 0..3 x expansion 0/1; density, uniques, spawn counts untested; LEVELSAREAS |
 | formulas | F01 | TESTED-0-DIFF | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | melee to-hit, real build, two seeds |
 | formulas | F03 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md) |
 | formulas | F04 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal; defender side (player, hireling) docs/research/skdefenders-trace.md: 222,464 cases rule check on game.exe 0 mismatches, penalty and cap equal d2d, D1 flat order D2 no magic resistance D3 no absorb |
@@ -116,7 +118,7 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 |---:|---|---|---|---|
 | 1 | missiles | untested (599 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
 | 2 | monster.ai | untested (121 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
-| 4 | levels | untested (137 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
+| 4 | levels | untested (1 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 6 | skills.pal | untested (15 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
 | 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
