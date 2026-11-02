@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- contribid: AGENTS.md no longer tells community contributors to commit as Claude; reproducibility rule and PR template checkboxes
 - Added docs/research/pr-skmelee3-d1-draft.md and pr-skmelee3-d2-draft.md: the SKMELEE3 candidate split in two upstream-ready branches with counted differentials.
 - A looted bow is taken off a non-Amazon the game wore it on, the sell chore never offers worn or start items, and a removed start weapon is worn again.
 - CONTRIBUTORS.md added; Credit section in docs/process/chunker.md
