@@ -12,19 +12,20 @@ owns:
   - tools/emu/sk_melee2.py
   - tools/emu/sk_melee2_test.cpp
   - tools/emu/sm3_probe.py
+  - tools/emu/sm3_run.sh
   - openspec/changes/prbuildskmelee3/**
 exclusive:
   - fork-branch:local/skmelee3-v1
 gates:
   - "suites test_rules test_game_rules test_monsters test_monster_thinks test_monster_ai test_combat test_game green on the head"
   - "counted differential base vs head over at least 100,000 cases"
-result: ""
+result: "Fork branch local/skmelee3-v1 head 81b7a0a0 (private remote only); weapon cases 289,857 of 290,847 differ on base, 0 on head; 7 suites green; draft written; det hashes and Opus verification owed. Not verified live (no game)."
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
 ```
 
-- [ ] 1 Fork branch local/skmelee3-v1 from upstream main: D1 and D2 commits with tests
-- [ ] 2 Differential base vs head over >= 100,000 cases per claim
-- [ ] 3 Det scenarios on lab builds of base and head (if the tool allows)
-- [ ] 4 CI parity (gcc and clang flags, include audit, MSVC read, pr_guard, presubmit --quick)
-- [ ] 5 Draft docs/research/pr-skmelee3-draft.md
+- [x] 1 Fork branch local/skmelee3-v1 from upstream main: D1 and D2 commits with tests
+- [x] 2 Differential base vs head over >= 100,000 cases per claim
+- [ ] 3 Det scenarios on lab builds of base and head: not run (checklist in the draft)
+- [x] 4 CI parity (gcc and clang flags, include audit, MSVC read, pr_guard, presubmit --quick)
+- [x] 5 Draft docs/research/pr-skmelee3-draft.md
 - [ ] 6 changecheck and leakcheck

@@ -142,3 +142,4 @@ tools/emu/sk_melee2.py  prbuildskmelee3  prbuildskmelee3
 tools/emu/sk_melee2_test.cpp  prbuildskmelee3  prbuildskmelee3
 tools/emu/sm3_probe.py  prbuildskmelee3  prbuildskmelee3
 openspec/changes/prbuildskmelee3/**  prbuildskmelee3  prbuildskmelee3
+tools/emu/sm3_run.sh  prbuildskmelee3  prbuildskmelee3
