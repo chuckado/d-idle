@@ -48,7 +48,7 @@ func poissonLower(k int, alpha float64) float64 {
 // correction) so that the null rate is not exactly 0.
 func baselineDeathRate(b Baselines) (perHour, perKill float64) {
 	var d, h, k float64
-	for _, r := range b.Runs {
+	for _, r := range b.Counted() {
 		d += float64(r.Deaths)
 		h += r.Hours
 		k += float64(r.Kills)
