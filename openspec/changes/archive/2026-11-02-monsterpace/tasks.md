@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterpace
-status: in-progress
+status: archived
 agent: monsterpace
 branch: agent/monsterpace
 worktree: ~/code/d2lod-wt/monsterpace
@@ -20,8 +20,9 @@ exclusive:
   - "fork-branch:local/monsterpace-b-velocity"
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "split into two independent PR candidates on upstream main 3be426d3 (private fork remote): local/monsterpace-a (260eb34f, 13 commits, think paces + Blood Raven + shaman) and local/monsterpace-b-velocity (8a77a4ab, 2 commits, base velocity 75); rebased, suites rc 0 on base/A/B/A+B, counted differentials, det scenarios, CI-parity (g++, clang++, 130 + 111 tidy TUs); not verified live (no game); nothing opened upstream"
+result: "docs and tools only; merged by the triage queue"
 live: "no game; the lab d2d binary runs the det scenarios offline"
+merge: 7fa2b9d
 ```
 
 - [x] read upstream think / pace code and PR 156
