@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfollow164b
-status: in-progress
+status: archived
 skip_specs: true
 agent: crfollow164b
 branch: agent/crfollow164b
@@ -15,7 +15,8 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit and the range"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "tooling only; commit 11bc2c4d on the PR branch; not verified live"
+result: "tooling only; commit 11bc2c4d on the PR branch"
+merge: bf6b9e4
 ```
 
 ## 1. Work
