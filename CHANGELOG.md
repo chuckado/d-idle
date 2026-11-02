@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- monsterstats (docs only): docs/research/monster-stats-trace.md and tools/emu/ms_* (stat-row and unit differential vs d2d's rules::monster_stats: 242,220 + 85,213 cases, Normal 0 differ); coverage row monster.stats TESTED-DEVIATION.
 - memory rule (ADR 0014): memory writes allowed for setup, instrumentation, diagnosis, fixtures; crutch rule; d2cheat runstart and ledger --since-run
 - tools: d2restore snapshot library (snapshot, verify, list, place) and a prefix-keyed cheat ledger (docs/snaplib.md).
 - Research: lockstep probe P0 (no game) shows an import-table time hook scales a 25 fps frame gate under Wine; probes in tools/lockstep/
