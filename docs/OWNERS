@@ -134,3 +134,8 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/rebase174-20261102.md  rebase174  rebase174
+docs/research/pr-freeze-rules-draft.md  rebase174  rebase174
+docs/research/pr-vendor-repair-gate-draft.md  rebase174  rebase174
+openspec/changes/rebase174/**  rebase174  rebase174
+docs/research/pr-bundle-1-draft.md  rebase174  rebase174
