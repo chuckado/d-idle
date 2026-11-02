@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
-- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
-- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
-- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
-- 76452305 11-02 11:42 `Merge agent/verifypaldur: verifypaldur: Pro-account job result (docs and emulator tools only)` (verifypaldur)
-- b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
-- 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
-- 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
-- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
-- 94bb76e6 11-02 11:29 `merge origin/main into verifypalaura` (verifypalaura)
+- 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
+- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
+- 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
+- 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
+- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
+- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
+- e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
+- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
+- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
+- 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
 <!-- statusgen:end -->
