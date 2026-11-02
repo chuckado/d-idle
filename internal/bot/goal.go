@@ -438,6 +438,18 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			}
 			return err
 		})
+		if !ok && strings.Contains(t.plan.Reason, "kit: ") && r.State() == StateResupplying {
+			// a kit trip whose chores keep failing counts like a finished one, else it repeats until the failsafe ladder
+			// skips the field and pauses the character far from the safe area (KITGATELEVEL)
+			r.obMu.Lock()
+			r.ob.kitTrips++
+			capped := r.ob.kitTrips >= r.e.Tune.Resource.KitTripCap
+			r.obMu.Unlock()
+			if capped {
+				r.e.Log.Warn("town trip abandoned", "reason", t.plan.Reason)
+				l.trip, l.failures = nil, 0
+			}
+		}
 		if ok {
 			t.stage = 2
 			if s := r.latest(); s != nil {
