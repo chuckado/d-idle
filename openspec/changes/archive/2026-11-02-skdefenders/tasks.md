@@ -2,7 +2,7 @@
 
 ```yaml
 change: skdefenders
-status: in-progress
+status: archived
 agent: skdefenders
 branch: agent/skdefenders
 worktree: ~/code/d2lod-wt/skdefenders
@@ -17,7 +17,8 @@ exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
   - "every number tagged V run is reproducible with the commands in the trace (cases and seeds given)"
-result: "Offline, nothing verified live, no d2d slot, no game window; emulator runs on the worker host only."
+result: "docs only; first pass, not yet independently verified"
+merge: 51a5d6e
 ```
 
 ## 1. Work
