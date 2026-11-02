@@ -8,6 +8,23 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/pr-nmlevel-verifier.md and its harness: independent verification of the nmlevel candidate.
+- no change
+- Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
+- bot logs: countable lines explore-giveup, tp-debounce-hold, tp-debounce-flip, kitgate-trip (docs/botlogs.md)
+- kit gate by character level: from clvl 8 an incomplete kit makes a town trip instead of holding the character in Blood Moor and Cold Plains
+- no change
+- docs: Gate 1 PASS review (docs/soaks/gate1-20261102.md, Review 3).
+- Docs: hireling trace (mercstats): game.exe's merc level-up, hire offer, resurrection price, experience award, think and attack code equal d2d's rules in 411,196 emulator runs; merc life regeneration and Act 2 auras are missing in d2d (effect U); Cold Arrow, Defiance and Thorns need merc level 6 so low-level offers can lack their skill; the merc accepts Rejuvenation Potions
+- Docs: monster skill use trace (monsterskill): monster skill levels, free casting and the Corrupt Archer think run against game.exe and d2d (no deviation proven); usability-gate deviation read only; bot shooter model findings; ledger row CorruptArcher
+- Docs: monster AI trace, second pass (monsterai2): ports of the six thinks d2d lacks equal game.exe on 36,000 cases; d2d's andariel_think equals game.exe on 3,830; Fallen flee pace 50, Blood Raven pace and home rules, Fallen Shaman corpse reach proven deviations; the pass 1 mismatch families root-caused (harness labels); coverage ledger monster.ai 23 of 146 rows
+- no change
+- Docs: opened upstream PR #164 (monster missile launch record and poison units); posted log in docs/research/openpr-log.md.
+- Private fork: a monster missile's owner poison reads SrcDamage as game.exe's unsigned byte; the two missile PR drafts follow the third check.
+- botsupply: gold per kill follows the monster level (Blood Moor 0.39, not 6), early gold piles are no longer skipped, recovery XP table from the real means, simulator monsters with real life.
+- docs: monster-missile PR drafts updated after the re-verifier (owner poison rule, trap sibling, merge order), poison-units PR draft added
+- verifywaypoint: independent verification of the waypoint refusal claim (docs and tools/emu/wpv_* only)
+- playerdef: docs/research/playerdef-trace.md, trace of the player's life, mana, regen, defence, block and resistance rules with 8 d2d deviations and 4 bot findings (docs only, nothing run)
 - uniqmods (research): game.exe pick rules for champion / unique / minion mods, pack and minion counts and Act 1 superunique records traced against d2d and the bot (docs/research/uniqmods-trace.md); no code change.
 - monsterhit (docs only): docs/research/monsterhit-trace.md and tools/emu/mh_rows.py (table helper); read-only decomposition of the monster swing on the player, no oracle run, no ledger row.
 - docs: monster-missile record PR candidate fixed after the independent verifier (poison units), rebased candidate and Andariel sibling named, PR draft added
