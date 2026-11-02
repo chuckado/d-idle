@@ -150,3 +150,5 @@ docs/research/missilediff.md  missilediff  missilediff
 tools/emu/mm_diff.py  missilediff  missilediff
 tools/emu/mm_diff_run.sh  missilediff  missilediff
 openspec/changes/missilediff/**  missilediff  missilediff
+docs/coverage/ledger.tsv  missilediff  missilediff
+docs/coverage/rule-coverage.md  missilediff  missilediff
