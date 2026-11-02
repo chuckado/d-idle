@@ -143,3 +143,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+openspec/changes/skgearar/**  skgearar  skgearar
+docs/research/sk-gearar-trace.md  skgearar  skgearar
+tools/emu/sk_gearar.py  skgearar  skgearar
+tools/emu/sk_gearar_dis.py  skgearar  skgearar
