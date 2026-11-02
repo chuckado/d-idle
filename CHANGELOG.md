@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- kit gate by character level: from clvl 8 an incomplete kit makes a town trip instead of holding the character in Blood Moor and Cold Plains
 - no change
 - docs: Gate 1 PASS review (docs/soaks/gate1-20261102.md, Review 3).
 - Docs: hireling trace (mercstats): game.exe's merc level-up, hire offer, resurrection price, experience award, think and attack code equal d2d's rules in 411,196 emulator runs; merc life regeneration and Act 2 auras are missing in d2d (effect U); Cold Arrow, Defiance and Thorns need merc level 6 so low-level offers can lack their skill; the merc accepts Rejuvenation Potions

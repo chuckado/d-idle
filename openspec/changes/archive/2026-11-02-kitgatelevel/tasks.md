@@ -2,7 +2,7 @@
 
 ```yaml
 change: kitgatelevel
-status: in-progress
+status: archived
 agent: kitgatelevel
 branch: agent/kitgatelevel
 worktree: ~/code/d2lod-wt/kitgatelevel
@@ -22,7 +22,8 @@ owns:
 exclusive: []
 gates:
   - go test -p 1 ./internal/bot ./internal/resource ./internal/env ./tools/knobdump passes
-result: offline only (mem fakes); NOT verified live.
+result: "whole-repo and race gates green; live behaviour unverified; adopted by the user 2026-11-02"
+merge: b53c6d1
 ```
 
 - [x] knobs and the one kit definition
