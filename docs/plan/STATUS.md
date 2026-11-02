@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b4ee3d23 11-02 15:01 `merge origin/main into stateevrun` (stateevrun)
 - 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
 - b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
 - e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
 - 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
 - af24e7ce 11-02 14:38 `Merge agent/nmlevel: nmlevel: finished docs and tools work that was never merged (branch triage 2026-11-02)` (nmlevel)
-- 5d40cf92 11-02 14:38 `merge origin/main into nmlevel` (nmlevel)
 <!-- statusgen:end -->
