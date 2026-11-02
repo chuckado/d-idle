@@ -129,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
+- 85fd1005 11-02 17:41 `merge origin/main into townshop` (townshop)
 - 597e972f 11-02 17:29 `Merge agent/mercwire: MERCWIRE: wait for the Rogue after portal or waypoint, leave when the crowd rule fires with her down, healing potion to the merc below 50 percent, persisted Lut Gholein first-visit flag (offline tests)` (mercwire)
 - ce30a061 11-02 17:29 `merge origin/main into mercwire` (mercwire)
 - fdbc3340 11-02 17:17 `Merge agent/mercpolicy: MERCPOLICY: merc.enabled default on, revive and Act 2 hire spending order, no-merc Monastery floor 14, gold farm while missing; delta specs; offline tests (hire reader and field rules not wired yet)` (mercpolicy)
@@ -137,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - cde0413e 11-02 16:51 `Merge agent/mercfix: MERCFIX: route guards read the dump merc when the policy is off; claim verified after the grant with bounded retries (Gate 2 root cause; offline tests)` (mercfix)
 - 7ce0bd95 11-02 16:30 `Merge agent/bundlefinal2: bundlefinal2: final upstream bundle records and body (docs, cards)` (bundlefinal2)
 - 43b85457 11-02 16:29 `merge origin/main into bundlefinal2` (bundlefinal2)
-- 873fd1a6 11-02 16:21 `Merge agent/verifyzerohit: verifyzerohit: coverage-gap or verification result (docs and emulator tools only)` (verifyzerohit)
-- 3f184c0d 11-02 16:21 `merge origin/main into verifyzerohit` (verifyzerohit)
 <!-- statusgen:end -->
