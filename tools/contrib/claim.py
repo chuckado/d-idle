@@ -65,7 +65,7 @@ def already(item_id, iss, kind):
     return any(tag in (c.get("body") or "") for c in iss.get("comments") or [])
 
 
-def clean(s, limit=300):
+def clean(s, limit=600):
     return " ".join("".join(c for c in s if c.isprintable()).replace("@", "").replace("<", "").replace(">", "").split())[:limit]
 
 
