@@ -130,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
-- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
-- 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
-- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
-- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
-- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
-- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
-- 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
-- 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
-- 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
+- 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
+- 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
+- 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
+- e81ab739 11-02 16:05 `merge origin/main into skamazon` (skamazon)
+- 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
+- f75f9c72 11-02 15:58 `merge origin/main into levelsareas` (levelsareas)
+- 5c44a788 11-02 15:55 `Merge agent/itemweapons: itemweapons: coverage-gap or verification result (docs and emulator tools only)` (itemweapons)
+- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
+- de908e29 11-02 15:49 `Merge agent/skassassin: skassassin: coverage-gap or verification result (docs and emulator tools only)` (skassassin)
+- fe33b6e7 11-02 15:49 `merge origin/main into skassassin` (skassassin)
 <!-- statusgen:end -->
