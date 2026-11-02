@@ -130,6 +130,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
 - c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
 - 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
 - 4fc04c20 11-02 15:13 `merge origin/main into verifyplayerroll` (verifyplayerroll)
@@ -139,5 +140,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b4ee3d23 11-02 15:01 `merge origin/main into stateevrun` (stateevrun)
 - 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
 - 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
-- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
 <!-- statusgen:end -->
