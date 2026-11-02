@@ -236,7 +236,9 @@ func TestClaimDep(t *testing.T) {
 		t.Errorf("nil claimer: %v", err)
 	}
 	c := &fakeClaimer{granted: true}
-	if err := claimDep(c, none, nil, log)(ctx); err != nil || c.calls != 1 || !strings.Contains(buf.String(), "merc: claimed free rogue") {
+	seen := &seqReader{seq: []merc.MercState{{Known: true}, {Known: true}, {Known: true, Owned: true, Alive: true}}}
+	if err := claimDep(c, seen, nil, log)(ctx); err != nil || c.calls != 1 || !strings.Contains(buf.String(), "merc: claimed free rogue") ||
+		!strings.Contains(buf.String(), "merc: claim verified") {
 		t.Errorf("grant: %v %d\n%s", err, c.calls, buf.String())
 	}
 	// a merc already owned: policy declines, the claimer is not even called
@@ -253,6 +255,64 @@ func TestClaimDep(t *testing.T) {
 	c = &fakeClaimer{err: errors.New("kashya missing")}
 	if err := claimDep(c, nil, nil, log)(ctx); err == nil || c.calls != 1 {
 		t.Errorf("error: %v %d", err, c.calls)
+	}
+}
+
+// seqReader answers the reads in order, then repeats the last one.
+type seqReader struct {
+	seq []merc.MercState
+	i   int
+}
+
+func (f *seqReader) State() (merc.MercState, error) {
+	st := f.seq[min(f.i, len(f.seq)-1)]
+	f.i++
+	return st, nil
+}
+func (f *seqReader) Offers() ([]merc.HireOffer, error) { return nil, errors.New("none") }
+
+// TestClaimDepNotSeen: Gate 2 logged "claimed" and the merc was gone; now the step errors (retry) until the limit.
+func TestClaimDepNotSeen(t *testing.T) {
+	claimPause = time.Millisecond
+	var buf bytes.Buffer
+	log := slog.New(slog.NewTextHandler(&buf, nil))
+	gone := &fakeReader{st: merc.MercState{Known: true}}
+	c := &fakeClaimer{granted: true}
+	dep := claimDep(c, gone, nil, log)
+	for i := 1; i < claimFailLimit; i++ {
+		if err := dep(context.Background()); !errors.Is(err, errClaimUnseen) {
+			t.Fatalf("try %d: %v", i, err)
+		}
+	}
+	if err := dep(context.Background()); err != nil {
+		t.Errorf("at the limit the step stops retrying: %v", err)
+	}
+	if !strings.Contains(buf.String(), "merc: claim not seen after 4 tries") || strings.Contains(buf.String(), "claim verified") {
+		t.Errorf("log:\n%s", buf.String())
+	}
+}
+
+// TestGuardMercHook: the dump keeps the merc while the unit table lost it; errors and a missing section are unknown.
+func TestGuardMercHook(t *testing.T) {
+	clk := &clock{t: time.Unix(1000, 0)}
+	rd := &fakeReader{st: merc.MercState{Known: true, Owned: true, Alive: true}}
+	h := guardMercHook(rd, clk.now)
+	if a, k := h(); !a || !k {
+		t.Errorf("owned alive: %v %v", a, k)
+	}
+	rd.set(merc.MercState{Known: true})
+	h()
+	if rd.n != 1 {
+		t.Errorf("read within the TTL: %d reads", rd.n)
+	}
+	clk.t = clk.t.Add(mercStateTTL)
+	if a, k := h(); a || k {
+		t.Errorf("no merc is unknown (the unit table decides): %v %v", a, k)
+	}
+	rd.set(merc.MercState{Known: true, Owned: true})
+	clk.t = clk.t.Add(mercStateTTL)
+	if a, k := h(); a || !k {
+		t.Errorf("owned dead: %v %v", a, k)
 	}
 }
 

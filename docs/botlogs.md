@@ -12,3 +12,5 @@ Soak extractors (tools/ops gate judge, d2dsoak) count guard events by `msg=` in 
 | `inv-tp-dump` | unchanged (docs/hastpdump.md). | |
 
 Counting: `grep -c 'msg=explore-giveup '`. A hold line is a debounce that saved a false verdict; a flip line is a verdict change that the debounce let through. Not every false run is logged: a run still open when the log ends has no line.
+
+Merc claim (cmd/d2bot/mercwire.go `claimDep`): `merc: claimed free rogue` is followed by a read-back of the dump (merc.present); `merc: claim verified` when the merc is seen, `merc: claim not seen after 4 tries` when not (the step errors and retries, at most 3 times). Mercfix card, root cause in docs/research/gate2-analysis-20261102.md fix 1.

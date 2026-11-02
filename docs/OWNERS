@@ -134,3 +134,8 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+cmd/d2bot/mercwire.go  mercfix  mercfix
+cmd/d2bot/mercwire_test.go  mercfix  mercfix
+openspec/changes/mercfix/**  mercfix  mercfix
+cmd/d2bot/d2dwire.go  mercfix  mercfix
+docs/botlogs.md  mercfix  mercfix
