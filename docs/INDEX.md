@@ -208,3 +208,9 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - openspec/changes/boardclean - board cleanup, closed finished work items
 - docs/research/lockstep-p1p2.md - lockstep probes P1/P2: preparation state, run plan, blockers
 - docs/research/lockstep-p1p2.md - lockstep probes P1/P2 live: frame counter fps, time-hook k=1 control and k=2 results, failures, next steps
+- docs/research/openpr-log.md: posted log for #159 and #160 (now also the conflict rebase of #159, #160, #163).
+- docs/probes/baseline-runs/20261102/record.md: original-game baseline set 20261102, per-run quality flags and rows
+- docs/research/paldur-trace.md: durability loss per hit and per block, game.exe 1.14d vs d2d vs the bot, differential tools/emu/pal_wear.py
+- docs/research/skiasgame2-trace.md | SKIAS second pass: game.exe attack animation rate (IAS, WSM, skill speed) run under the emulator vs d2d attack_speed / attack_ticks; sequence mode -30 deviation
+- docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
+- docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*

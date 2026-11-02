@@ -26,10 +26,10 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
-| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 11 | 3 | 0 | 1 | 78% | 94% | 2,211,956 |
-| **total** | **4910** | **2009** | **917** | **56** | **0** | **1928** | **60%** | **61%** | **4,958,035** |
+| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
+| **total** | **4910** | **2009** | **918** | **55** | **0** | **1928** | **60%** | **61%** | **5,157,023** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1735 (47%), compared 1791 (48%), read-only 56, untested 1928.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 1736 (47%), compared 1791 (48%), read-only 55, untested 1928.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -97,7 +97,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | formulas | F14 | TESTED-DEVIATION | `docs/research/monster-attack-trace.md` | 100,000 | 2026-10-31 | missile block gate (a) and MissA to-hit (b): docs/research/monster-attack-trace.md verdict 2 |
 | formulas | F15 | TESTED-DEVIATION | `docs/research/pets-merc-trace.md` | 100,000 | 2026-10-31 | monster search pet tie order D1; merc target 0 diff |
 | formulas | F18 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura calc machine equals d2d eval_calc on every aura row and slot |
-| formulas | F07 | READ-ONLY | `docs/research/cast-trace-gameexe.md` | - | 2026-10-30 | cast ticks read in game.exe; PR #128 merged upstream |
+| formulas | F07 | TESTED-DEVIATION | `docs/research/skiasgame2-trace.md` | 198,988 | 2026-11-02 | attack-speed aspect: FUN_00623f50 attack branch equals d2d attack_speed (194,568 + 4,420 cases, 0 differ) and ticks (81); D1 sequence mode -30 (game.exe reading and run, d2d side read); cast ticks read in game.exe, PR #128 merged upstream |
 | formulas | F10 | READ-ONLY | `docs/research/xp-award-trace.md` | - | 2026-10-30 | award chain 0057e480 / 0057e2f0 read; per monster XP equal d2d; no differential |
 | formulas | F17 | READ-ONLY | `docs/research/sk-mana-trace.md` | - | 2026-11-01 | regen FUN_005806f0 read equal to d2d; bot regen model 1.2-1.8x fast |
 | formulas | F09 | TESTED-DEVIATION | `docs/research/monster-mods-trace.md` | 157,618 | 2026-10-31 | boss and minion spawn stats D1 D2 G1; plain monsters by level not compared |
