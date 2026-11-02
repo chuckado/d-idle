@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
 - 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
 - 5483ee50 11-02 13:58 `merge origin/main into lockstepbase` (lockstepbase)
 - 436019b3 11-02 13:47 `Merge agent/rebase174: REBASE174: all candidates rebased onto the #174 merge and assembled into bundle-1 (docs: table and combined PR body draft; nothing upstream)` (rebase174)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
 - 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
 - e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
-- 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
 <!-- statusgen:end -->
