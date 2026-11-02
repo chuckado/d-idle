@@ -252,3 +252,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-monsterpace-b-draft.md: PR B draft (monster base velocity 75): oracle, reach, det, CI parity, limits.
 - docs/research/pr-nmlevel-draft.md: PR draft for the Nightmare / Hell monster level rule (candidate local/nmlevel-v5).
 - docs/research/pr-playerroll-draft.md: PR draft for the player-side missile roll bundle (element roll top, physical roll in 256ths, -100 floor), counts, reach, side effect.
+- docs/research/verify-smiteblock.md: independent verifier of the Smite-vs-block trace (own oracle, other skills, proposed d2d diff)

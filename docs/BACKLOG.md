@@ -318,6 +318,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - monsterpace: split into PR A (local/monsterpace-a: Act 1 think paces, Blood Raven home rule, shaman corpse reach) and PR B (local/monsterpace-b-velocity: monster base velocity 75) on upstream main 3be426d3, verifier changes applied; ready for the PR-open step on the user's go.
 - upstream PR candidate local/nmlevel-v5 (head 94562869, base 3be426d3; Nightmare / Hell monster level = area MonLvl) drafted in docs/research/pr-nmlevel-draft.md, independently verified (READY WITH CHANGES, done); waits for the go.
 - PLAYERROLL: fork branch pr/player-roll (roll-top pair + physical roll + -100 floor, 4 commits on upstream main) built and measured; PR draft docs/research/pr-playerroll-draft.md waits for the independent verifier and the user's go.
+- verifysmite: SMITEBLOCK verified on the game side (own end-to-end FUN_005ce9f0 run, 20,000 of 20,000 land, unforced 1,552, Smite the only forcing site); d2d side read only; candidate NEEDS CHANGES (stale line refs, block animation half, d2d run), docs/research/verify-smiteblock.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
