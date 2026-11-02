@@ -259,6 +259,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SKGEARAR done: AR terms from gear (115 / 116 / 123 / 124 run, 100,960 cases, 0 differ from the reading; 179 / 120 read only); docs/research/sk-gearar-trace.md; follow-up: run 179, d2d-side test
 - VERIFY-AIDEL done (docs/research/verify-aidel.md): FUN_005a73e0 holds over 352,800 cases on real MonStats rows; open: FUN_005a7c20 / freeze-end path and game type 3
 - VERIFY-SKMELEE2 done: D1 and D4 hold, D2 / D5 / D6 hold with limits on the real build (own harness, seeds 11 and 3): docs/research/verify-skmelee2.md
+- VERIFY-SKRESIST done (docs/research/verify-skresist.md): Q4, Q5, Q6, Q8 HOLD, Q1, Q2, Q10 HOLD WITH LIMITS, 0 mismatches in 70,000 cases per part (seeds 11, 2025)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
