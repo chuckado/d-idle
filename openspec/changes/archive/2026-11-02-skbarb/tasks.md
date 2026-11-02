@@ -2,7 +2,7 @@
 
 ```yaml
 change: skbarb
-status: in-progress
+status: archived
 agent: skbarb
 branch: agent/skbarb
 worktree: ~/code/d2lod-wt/skbarb
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; coverage.py --check; tools/ci/check.sh"
-result: "docs and emulator tools only; no PR candidate; coverage ledger updated (skills.bar calc and physical aspect, 27,800 cases)"
+result: "docs only; see the doc for tags and limits"
 live: "docs and emulator only, nothing run live"
+merge: 0f4feb7
 ```
 
 - [x] calc and skill-physical differential (skbarb_calc.py, skbarb_test.cpp, skbarb_run.sh)
