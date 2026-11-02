@@ -2,7 +2,7 @@
 
 ```yaml
 change: credits
-status: in-progress
+status: archived
 agent: credits
 branch: agent/credits
 worktree: d2lod-wt/credits
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "Docs only; PR facts from gh pr list, upstream count 23 from gh. Nothing run live."
+result: "docs only"
 live: "docs only, nothing run live"
+merge: 2f14b20
 ```
 
 - [x] CONTRIBUTORS.md
