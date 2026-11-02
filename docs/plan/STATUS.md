@@ -132,6 +132,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
 - 9584f9c7 11-02 06:54 `Merge agent/skcurseval: skcurseval: curse value calculations on game.exe against d2d, levels 1..99 (first pass; docs and emulator tools only)` (skcurseval)
 - b58718e1 11-02 06:11 `Merge agent/baselineruns-20261102: Baseline runs 20261102: generated record of the baseline runs (tools/baseline-run.sh)` (baselineruns-20261102)
 - 42236144 11-02 05:53 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
@@ -141,5 +142,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - eba39266 11-02 05:36 `Merge agent/geararmore: geararmore: Pro account job result (docs and emulator tools only)` (geararmore)
 - e3736c1e 11-02 05:35 `merge origin/main into geararmore` (geararmore)
 - bbf5986b 11-02 05:30 `Merge agent/verifyresistq: verifyresistq: Pro account job result (docs and emulator tools only)` (verifyresistq)
-- c9da90ec 11-02 05:30 `merge origin/main into verifyresistq` (verifyresistq)
 <!-- statusgen:end -->
