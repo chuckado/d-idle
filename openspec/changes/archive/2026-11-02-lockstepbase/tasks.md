@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepbase
-status: in-progress
+status: archived
 agent: lockstepbase
 branch: agent/lockstepbase
 worktree: d2lod-wt/lockstepbase
@@ -16,7 +16,8 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/gclock; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "tooling prepared offline; ops-repo tests pass on fake game folders; NOT verified live (no game, no hook install on a live instance)"
+result: "tests offline; live run pending"
+merge: 30c7c6c
 ```
 
 - [x] 1. gclock.StartNote and the d2bot start line (K != 1 only), test
