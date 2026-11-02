@@ -51,7 +51,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixprogress](../../openspec/changes/fixprogress/) | in-progress | fixprogress | `docs/fixprogress.md`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/town/fixprogress_test.go`<br>`openspec/changes/fixprogress/**` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
-| [gate1review](../../openspec/changes/gate1review/) | in-progress | gate1review | `openspec/changes/gate1review/**` | - |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [hastpdump](../../openspec/changes/hastpdump/) | in-progress | hastpdump | `internal/bot/tpdump.go`<br>`docs/hastpdump.md` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -106,7 +105,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change gate1review: changecheck 0 warnings, leakcheck 0 hits
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change hastpdump: TestInvTPDump: dump on first look, area change and verdict change, not otherwise
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
@@ -135,6 +133,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
 - 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
 - f87ba9c 11-01 19:01 `Merge agent/necskill: NECSKILL: Necromancer skill trace: 27,800 calc cases 0 differ, magic roll life deviation 10,509 of 36,600 (the SKMISS fix covers it), Corpse Explosion deviations read only` (necskill)
 - 262a5c0 11-01 19:00 `merge origin/main into necskill` (necskill)
@@ -144,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
 - a439ea3 11-01 17:16 `Merge agent/palskill: PALSKILL: Holy Bolt, Blessed Hammer and Paladin aura trace against game.exe: seven d2d deviations, five bot findings` (palskill)
 - b94cfc1 11-01 17:09 `Merge agent/skabrecheck: SKABRECHECK: pierce claim refuted (0 diffs on 147k real-build cases), whole-point physical roll confirmed on 84k of 101k cases` (skabrecheck)
-- 47970bf 11-01 16:54 `Merge agent/skmeleewire2: melee model fed on d2d: gear and weapon fields mapped to player stats 19/21/22/25` (skmeleewire2)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate1review
-status: in-progress
+status: archived
 agent: gate1review
 branch: agent/gate1review
 worktree: ~/code/d2lod-wt/gate1review
@@ -12,7 +12,8 @@ owns:
 exclusive: []
 gates:
   - changecheck 0 warnings, leakcheck 0 hits
-result: offline analysis of the run logs read from the worker host, no game, nothing run live; claims about 25918ea are reasoned from code (U).
+result: "docs and cards only; claims about the earlier fix reasoned from code (U)"
+merge: cbb1f84
 ```
 
 - [x] 1 Read the record and the run logs
