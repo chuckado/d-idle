@@ -61,16 +61,28 @@ def sources(d):
 
 
 def setstat(e, u, stat, value):
-    """Rewrite one stat of the unit's list in place (the entry the getter FUN_00625480 finds); False when the unit has none."""
+    """Set one stat of the unit's list as the getter FUN_00625480 finds it: in place when the entry exists, else inserted in key order
+    (entries are 8 bytes {key = stat << 16 | layer, value}, sorted; head+4 holds count (word) and capacity (word)). Stats 0x15 / 0x16 are
+    held as the getter returns them (points). The list grows when full."""
     lst = e.r32(u + 0x5c)
     head = lst + (0x48 if e.r32(lst + 0x10) & 0x80000000 else 0x24)
-    arr, count = e.r32(head), e.r32(head + 4)
-    key = (stat << 16)
-    for i in range(count):
-        if e.r32(arr + 8 * i) == key:
-            e.w32(arr + 8 * i + 4, value & M32)
-            return True
-    return False
+    arr = e.r32(head)
+    count, cap = e.r16(head + 4), e.r16(head + 6)
+    key = stat << 16
+    pos = 0
+    while pos < count and e.r32(arr + 8 * pos) < key: pos += 1
+    if pos < count and e.r32(arr + 8 * pos) == key:
+        e.w32(arr + 8 * pos + 4, value & M32)
+        return True
+    if count >= cap:                      # grow it: a new 64-entry array, the old one left behind
+        new = e.alloc(8 * 64)
+        for i in range(count * 2): e.w32(new + 4 * i, e.r32(arr + 4 * i))
+        e.w32(head, new); e.mu.mem_write(head + 6, (64).to_bytes(2, "little")); arr = new
+    for i in range(count, pos, -1):
+        e.w32(arr + 8 * i, e.r32(arr + 8 * (i - 1))); e.w32(arr + 8 * i + 4, e.r32(arr + 8 * (i - 1) + 4))
+    e.w32(arr + 8 * pos, key); e.w32(arr + 8 * pos + 4, value & M32)
+    e.mu.mem_write(head + 4, int(count + 1).to_bytes(2, "little"))
+    return True
 
 
 def owner_pairs(rng):
@@ -110,14 +122,21 @@ def game(d, n_cases, seed, outdir):
             n = sorted(units)[rng.below(len(units))]
             a = rng.below(1500)
             grid.append((n, 1 + rng.below(60), (a, a + rng.below(500))))
-        grid = grid[:budget] if len(grid) > budget else grid
+        for i in range(len(grid) - 1, 0, -1):          # a Fisher-Yates shuffle on the seed: a short budget still touches every row
+            j = rng.below(i + 1); grid[i], grid[j] = grid[j], grid[i]
+        grid = grid[:budget]
         for n, lvl, (omin, omax) in grid:
             mid, mode, src, mn = todo[n]
             m, r = mons[mid], mis[mn]
             u, x, y = units[n]
             if not (setstat(e, u, 0x15, omin) and setstat(e, u, 0x16, omax)):
-                skipped_nostat += 1; continue
-            assert e.call(0x625480, u, 0x15, 0) == omin and e.call(0x625480, u, 0x16, 0) == omax
+                skipped_nostat += 1
+                if skipped_nostat <= 3:
+                    lst = e.r32(u + 0x5c); hd = lst + (0x48 if e.r32(lst + 0x10) & 0x80000000 else 0x24)
+                    print(f"  list full: diff {diff} {mid} {mode} count {e.r16(hd + 4)} cap {e.r16(hd + 6)}")
+                continue
+            got = (e.call(0x625480, u, 0x15, 0), e.call(0x625480, u, 0x16, 0))
+            assert got == (omin, omax), (mid, mode, omin, omax, got)
             p = e.alloc(0x60)
             for i, v in {0: 0x21, 1: u, 4: int(r["Id"]), 5: x, 6: y, 7: x + 8, 8: y + 3, 0xc: lvl}.items(): e.w32(p + 4 * i, v)
             mu = e.call(0x59fa30, ecx=g.g, edx=p)
@@ -161,7 +180,9 @@ def cmp(outdir, d2d_out):
         dphys = (d[0], d[1])
         delems = {}
         for i in range(2, len(d), 4): delems[d[i]] = tuple(d[i + 1:i + 4])
-        bad_phys = dphys != (pmin, pmax)
+        weapon = mid == "bloodraven"            # her record carries her weapon's random damage (D5 of the trace): not compared
+        bad_phys = dphys != (pmin, pmax) and not weapon
+        ownel = ownel or weapon
         bad_el = False
         if not ownel:
             elem_cmp += 1
