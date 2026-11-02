@@ -58,6 +58,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
+| [pingpongrate](../../openspec/changes/pingpongrate/) | in-progress | pingpongrate | `openspec/changes/pingpongrate/**`<br>`internal/bot/goal.go`<br>`internal/bot/emptyarea_test.go`<br>`docs/soakstall.md` | - |
 | [povertyflip](../../openspec/changes/povertyflip/) | in-progress | povertyflip | `openspec/changes/povertyflip/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
@@ -66,6 +67,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [soakgiveup](../../openspec/changes/soakgiveup/) | in-progress | soakgiveup | `openspec/changes/soakgiveup/**` | - |
 | [soakstall](../../openspec/changes/soakstall/) | in-progress | soakstall | `docs/soakstall.md`<br>`internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/emptyarea_test.go`<br>`openspec/changes/soakstall/**` | - |
+| [tpglitch](../../openspec/changes/tpglitch/) | in-progress | tpglitch | `openspec/changes/tpglitch/**`<br>`internal/bot/tpdebounce.go`<br>`internal/bot/tpdebounce_test.go`<br>`internal/bot/resource.go`<br>`internal/bot/leveling.go` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -120,6 +122,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
+- change pingpongrate: go test -p 1 ./internal/bot passes, including the cluster C replay
 - change povertyflip: go test -p 1 ./internal/bot passes, including the flip replay test
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
@@ -132,6 +135,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change soakgiveup: go test -p 1 ./internal/bot passes, including the new clear-run case
 - change soakstall: TestExploreGaveUp (internal/bot) passes
+- change tpglitch: go test -p 1 ./internal/d2denv ./internal/combat ./internal/bot passes, including a replay of the 4, no70, 4 sequence of run gate1-20261101-1949 (19:57:17 to 19:57:30)
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
