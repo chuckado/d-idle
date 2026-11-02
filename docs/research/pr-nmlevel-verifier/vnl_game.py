@@ -21,6 +21,7 @@ FUN_00573cb0 initialised:
 Only the hooks below are added; the population runs natively. NPC rows (MonStats npc) are skipped: d2d leaves
 them to the level's NPCs.
 """
+import os
 import sys
 
 from unicorn import UC_HOOK_CODE
@@ -46,9 +47,20 @@ def main():
     seed, diffs, lids, outfile = int(sys.argv[1], 0), ranges(sys.argv[2]), ranges(sys.argv[3]), sys.argv[4]
     npcs = {int(r["hcidx"]) for r in monstats.table("monstats") if r.get("npc") == "1" and r.get("hcidx", "").isdigit()}
     e = drlg.boot()
-    out = open(outfile, "a")
     for diff in diffs:
         for lid in lids:
+            # Each level in a child forked off the booted emulator: a fresh game every time, and a game.exe
+            # fatal error (emu exits) loses that level only.
+            pid = os.fork()
+            if pid == 0:
+                with open(outfile, "a") as out:
+                    one_level(e, seed, diff, lid, npcs, out)
+                os._exit(0)
+            _, status = os.waitpid(pid, 0)
+            if status: print(f"{seed} diff {diff} level {lid}: CRASHED (status {status})", file=sys.stderr, flush=True)
+
+
+def one_level(e, seed, diff, lid, npcs, out):
             units, col, sets = {}, {}, {}
 
             def on_col(mu, addr, size, _):          # 0x573e20: edx = the MonStats Level column
@@ -79,7 +91,7 @@ def main():
                 lvl = drlg.find_level(e, e.r32(act + 0x48), lid)
                 if not lvl:
                     print(f"skip {diff} {lid}: not built", file=sys.stderr)
-                    continue
+                    return
                 rooms = set()
                 r = e.r32(lvl + 0x10)
                 while r:
