@@ -211,16 +211,27 @@ Not re-run on the rebased head: the det scenarios (run on the same two commits o
 - BACKLOG: #170 (Nightmare/Hell monster start level) is open; watch for the maintainer and CodeRabbit.
 - INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
 
-## CodeRabbit follow-up on #170 (card crfollow170)
+## Monster base velocity (card propenmonsterpaceb)
 
-- posted: 2026-11-02 CodeRabbit review read: two inline findings, monsters.hpp:374 (Major: limit the area-level rule to expansion games) and boss_level.py:244 (Minor: restrict the S1 residual to Stone Skin cases). Walkthrough and the ruff E701 notes attached to the second are non-inline.
-- decision: monsters.hpp:374 not changed: the PR body already lists classic games under "Not in this PR" (d2d loads the expansion Levels.txt columns only). Gating on expansion would fall back to the MonStats Level(N) / Level(H), which is not game.exe's classic result either (the classic MonLvl2 / MonLvl3 columns are not loaded; what FUN_0061dca0 returns there is unverified, U). It would be a behaviour change on an unverified claim, so it stays a stated limit. boss_level.py:244 valid: `residual()` took neither kind nor mods, so any doubled defence was named S1. It now names S1 only for kind u or s whose mods hold 28 (the stone skin mod, components/rules/uniques.hpp umod::stoneskin); H1 unchanged. The ruff E701 notes are rules outside the presubmit set (RUFF_RULES) and the file's one-line style: not acted on.
-- check: ruff with the presubmit rules 0; tooling unit tests 7 ok (1 skipped); pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head; presubmit --quick 0 FAIL, 4 WARN (the earlier three plus docs-sync for a tooling-only commit; no C++ touched, so no new compile flags to run); area differential on the unchanged test_boss_level build: gen-area 20000 seed 11, 37440 cases compared: level mismatches 0, other fields not a named residual 0, S1 named 223 times; negative checks: S1 is not named for kind u without mod 28, kind p or kind c, and is named for kind u or s with mod 28. The game was not run live.
-- posted: 2026-11-02 push (plain, no force) to the fork: fix/nightmare-hell-monster-level-2 9b04f5b1 -> 9d762384 (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); also pushed to the private remote (local/crfollow170).
-- posted: 2026-11-02 replies to the inline threads (comment ids 4442386686, 4442386694; replies 4442530314, 4442530532): the first declined with the reason above, the second fixed in 9d762384. No re-review was requested.
-- non-inline: the walkthrough and the ruff E701 tool notes need no action.
+- posted: 2026-11-02 go: the user, standing authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 4 of 4 and the last. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 5df54372 (the #167 merge; the candidate local/monsterpace-b-velocity, 8a77a4ab, was on 3be426d3). Both commits were cherry-picked onto it as a new local branch (local/monsterpace-b-v2). One conflict: a comment block over the walk sum in `ai.cpp` that #167 had reworded; resolved by keeping #167's sentences and adding the 75 sentence (no code line conflicted). Then rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (same tree as the gated head). Messages, diff and body scanned for host names, home paths, emails, tool names, session links, model attribution: none. A throwaway merge with the open #170, #163 and #159 is clean (#160 conflicts with main in `missiles.cpp` regardless).
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-base-velocity head f8447aff (8bf07f12 code and oracle, f8447aff monster-ai.md). Also pushed to the private remote, with local/monsterpace-b-v2 (the pre-rewrite head).
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/171 (4 files, 2 commits; title "A monster starts at 75 percent velocity, not 100 (FUN_00573cb0 SetStat(0x43, 0x4b))"). State OPEN, base 5df54372, head f8447aff as checked with gh pr view. The body says plainly that it changes every awake monster's walking speed, that chill and slows become relatively stronger (a coldeffect -50 walker hits the 25 percent floor), that Diablo's run and the whirl step stay at 100, that d2d mercs and pets are unchanged although in game.exe they probably also start at 75 (not traced), that there is no MSVC build, and that the deterministic hashes change for 14 of 15 scenarios.
 
-## Shared-file lines for the merger (crfollow170)
+| check (worker host, head f8447aff; tree identical to the gated head) | result |
+|---|---|
+| Release build, test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game (MPQ folder set) | 7 of 7 exit 0 |
+| speed oracle, seed 20261102, 122,646 cases | base 5df54372: 50,626 of 61,654 monster rows differ (RN 25,321, WL 25,305), merc/pet/player 0; head: 0 of everything |
+| deterministic scenarios, 15, seed 3, one slot | passive identical; 14 differ, first differing line a monster position; base reruns repeat their hashes in all 15 |
+| g++ and clang++, TU compile commands plus -Wall -Wextra -Wpedantic -Wshadow -Wrange-loop-construct -Wconversion -Wsign-conversion, ai.cpp and the two monster tests | rc 0; 29 (g++) and 33 (clang++) warnings, equal to the base |
+| clang-tidy on the same three TUs | no finding on an added line |
+| pr_guard, range and each of the 2 commits | 0 FAIL / 0 WARN |
+| presubmit --quick | 0 FAIL, 3 WARN (unit kinds, test-gap, build skipped; answered in the body) |
+| tooling unit tests (tools/*.py) | 31 ok |
 
-- BACKLOG: #170 got a follow-up (9d762384) for CodeRabbit; watch for the maintainer.
-- INDEX, CHANGELOG, decomp-queue, research README: no change.
+Not re-run: an MSVC build, the full ctest, the full CI tidy selection. No comment, label or reviewer request was posted. The limit of four authorised PRs is used up (#166, #167, #170, #171).
+
+## Shared-file lines for the merger (propenmonsterpaceb)
+
+- BACKLOG: #171 (monster base velocity 75) is open; watch for the maintainer and CodeRabbit. The authorised four PRs are used up.
+- INDEX, decomp-queue, research README: see merge-lines.txt.
