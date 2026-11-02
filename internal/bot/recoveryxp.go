@@ -7,15 +7,17 @@ import (
 )
 
 // recoveryXPTier is the farm list of a recovering Normal act 1 character who can pick by XP: the old safe tier plus Dark
-// Wood, Black Marsh and Burial Grounds, which pay several times more XP per kill from clvl 10 on. Gold per kill is area
-// independent (V-d2d, docs/d2d-fidelity.md), so the XP is the only thing that differs between the areas.
+// Wood, Black Marsh and Burial Grounds, which pay several times more XP per kill from clvl 10 on. Gold per pile grows with the
+// monster level (3.5 ilvl - 0.5 coins, treasure-trace B2) but a plain kill drops a pile only 13 percent of the time,
+// so XP still decides the pick; docs/botsupply.md has the supply numbers.
 // Burial Grounds (17) is NOT a candidate: Blood Raven lives there and her fight is gated on a full kit (BRKILL); a broke character must not wander in.
 var recoveryXPTier = map[int]bool{2: true, 3: true, 4: true, 5: true, 6: true, 9: true, 13: true}
 
 // normalMLvl is the Normal monster level of the act 1 farm areas for a run without install data (offline tests, a missing
 // MPQ cache). V: Blood Moor 1, Cold Plains 2, Stony Field 4, Dark Wood 5, Black Marsh 6 (plandata progression-normal.json);
-// S (wiki recollection): Den 2, Cave 1 2, Cave 2 3, Burial Grounds 3.
-var normalMLvl = map[int]int{2: 1, 3: 2, 4: 4, 5: 5, 6: 6, 8: 2, 9: 2, 13: 3, 17: 3}
+// Levels.txt MonLvl1Ex (D, docs/research/monster-stats-trace.md B2): Den 1, Cave 1 2, Cave 2 2, Burial Grounds 3
+// (the earlier wiki recollection of Den 2 and Cave 2 3 was wrong).
+var normalMLvl = map[int]int{2: 1, 3: 2, 4: 4, 5: 5, 6: 6, 8: 1, 9: 2, 13: 2, 17: 3}
 
 // recoveryMLvl is the area's monster level from the install data, else the fallback table (Normal only).
 func (r *Runner) recoveryMLvl(area int, d d2.Difficulty) int {
@@ -48,11 +50,34 @@ func xpLevelPct(clvl, mlvl int) float64 {
 	return 5.08
 }
 
-// areaXPPerKill estimates the XP of one kill in an area of monster level mlvl: a base of 10 per monster level times the
-// level-difference share. S: the base is a fit, not data; it reproduces the d2d means at clvl 12 (Cold Plains about 1,
-// Stony Field 17 against 15, Dark Wood 31 against 35, V-d2d) and only the ranking matters here.
+// areaXPPerKill estimates the XP of one kill in an area of monster level mlvl with no measured table row: a base of 10
+// per monster level times the level-difference share. S: the base is a fit, not data (0.45x to 1.15x of the real
+// means, docs/research/monster-stats-trace.md B1); areaXP prefers the traced table.
 func areaXPPerKill(clvl, mlvl int) float64 {
 	return float64(mlvl) * 10 * xpLevelPct(clvl, mlvl) / 100
+}
+
+// areaXPRow is a traced Normal area: the mean experience of a plain monster of its real population (before the level
+// gap) and the mean unit level. V run, monster-stats-trace.md section 4 (12 seeds of the real room populations, bosses
+// and their packs excluded; the mean is per unit, not per kill the bot makes).
+type areaXPRow struct {
+	exp  float64
+	mlvl int // round(mean level)
+}
+
+var areaXPTable = map[int]areaXPRow{
+	2: {22.0, 1}, 3: {25.6, 2}, 4: {37.3, 3}, 5: {47.0, 5}, 6: {52.0, 6}, 8: {26.1, 1}, 9: {35.2, 2}, 13: {27.2, 2},
+	17: {40.2, 2}, 27: {76.4, 8}, 35: {97.2, 11}, 41: {159.3, 14}, 44: {218.6, 17}, 47: {140.0, 13},
+}
+
+// areaXP is the XP of one plain kill of a Normal area for a character of level clvl: the traced mean times the
+// level-gap share at the area's mean unit level; an area without a row (or a harder difficulty) falls back to
+// areaXPPerKill on the area's monster level.
+func areaXP(clvl, area, mlvl int, d d2.Difficulty) float64 {
+	if row, ok := areaXPTable[area]; ok && d == d2.Normal {
+		return row.exp * xpLevelPct(clvl, row.mlvl) / 100
+	}
+	return areaXPPerKill(clvl, mlvl)
 }
 
 // recoveryXPArea picks the safe area with the best XP per kill for a recovering character, among the plan steps the
@@ -77,7 +102,7 @@ func (r *Runner) recoveryXPArea(s *d2.Snapshot, ex map[int]bool) (int, bool) {
 		if ml == 0 || ml > clvl+r.e.Tune.Resource.RecoveryMaxAreaAbove {
 			continue
 		}
-		if xp := areaXPPerKill(clvl, ml); xp > bestXP || (xp == bestXP && ml < bestML) {
+		if xp := areaXP(clvl, st.Area, ml, s.Player.Difficulty); xp > bestXP || (xp == bestXP && ml < bestML) {
 			best, bestML, bestXP = st.Area, ml, xp
 		}
 	}

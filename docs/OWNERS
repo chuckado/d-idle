@@ -61,7 +61,6 @@ openspec/changes/skmiss/**  skmiss  skmiss
 docs/fixcastgap.md  fixcastgap  fixcastgap
 internal/combat/castgap.go  fixcastgap  fixcastgap
 internal/combat/castgap_test.go  fixcastgap  fixcastgap
-docs/knobs.md  fixcastgap  fixcastgap
 docs/research/sorc-act-gate.md  actgate  actgate
 openspec/changes/actgate/**  actgate  actgate
 docs/research/pr-nexthit-proof.md  nexthit  nexthit
@@ -147,3 +146,6 @@ openspec/changes/verifytele/**  verifytele  verifytele
 docs/research/verify-teleport-room.md  verifytele  verifytele
 tools/emu/vt_run.sh  verifytele  verifytele
 tools/emu/vt_check.py  verifytele  verifytele
+docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
+docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
+openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
