@@ -189,3 +189,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/openpr-log.md: posted log now also covers #166.
 - no change
 - docs/research/pr-nmlevel-verifier.md - independent check of local/nmlevel (Nightmare / Hell area monster level), own harness in docs/research/pr-nmlevel-verifier/
+- docs/research/sk-gearar-trace.md - attack rating from gear (stats 115, 116, 120, 123, 124, 179) in game.exe vs d2d (SKGEARAR)
+- docs/research/verify-aidel.md: independent re-check of the monster think period aidel (VERIFY-AIDEL)
+- docs/research/verify-skmelee2.md - independent re-check of the SKMELEE2 melee deviations (own harness tools/emu/vm2_*)
+- docs/research/verify-skresist.md: independent re-check of the monster resistance rules (own emulator harness, game.exe 1.14d)
