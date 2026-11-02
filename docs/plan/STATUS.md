@@ -58,7 +58,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [prconflicts](../../openspec/changes/prconflicts/) | in-progress | prconflicts | `openspec/changes/prconflicts/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
@@ -118,7 +117,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change prconflicts: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -131,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- be84737b 11-02 09:48 `Merge agent/prconflicts: PRCONFLICTS: PRs 159, 160, 163 rebased onto upstream main and force-pushed with the user's go` (prconflicts)
 - b0b6a713 11-02 09:48 `merge origin/main into prconflicts` (prconflicts)
 - 633ef305 11-02 09:33 `Merge agent/lockstepp1p2b: LOCKSTEP P1 and P2: 25 fps confirmed on our build; proxy clock hook at k=1 control and k=2 (50.0001 fps, clean fight); hung-start lesson (docs only)` (lockstepp1p2b)
 - 43af719f 11-02 08:28 `Merge agent/lockstepp1p2: LOCKSTEP P1/P2 preparation: offline hook test results and what the in-game probes need (no game run yet)` (lockstepp1p2)
@@ -140,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5a761420 11-02 07:57 `merge origin/main into propenmonsterpaceb` (propenmonsterpaceb)
 - ff1dcb45 11-02 07:46 `Merge agent/crfollow170: CRFOLLOW170: CodeRabbit follow-up on PR 170: one comment fixed, one declined with reason, replies posted` (crfollow170)
 - d3285539 11-02 07:24 `Merge agent/propennmlevel: PROPEN-NMLEVEL: upstream PR 170 opened (Nightmare and Hell monster level)` (propennmlevel)
-- 142f6178 11-02 07:14 `Merge agent/skshield: skshield: credit-funded first-pass decomposition (docs and emulator tools only)` (skshield)
 <!-- statusgen:end -->
