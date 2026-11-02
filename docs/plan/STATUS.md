@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
 - d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
 - cda4be88 11-02 17:49 `merge origin/main into tomestat` (tomestat)
 - a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - fdbc3340 11-02 17:17 `Merge agent/mercpolicy: MERCPOLICY: merc.enabled default on, revive and Act 2 hire spending order, no-merc Monastery floor 14, gold farm while missing; delta specs; offline tests (hire reader and field rules not wired yet)` (mercpolicy)
 - 99aa1c20 11-02 17:17 `merge origin/main into mercpolicy` (mercpolicy)
 - b6d21b1b 11-02 17:12 `Merge agent/credit177: CREDIT177: upstream PR 177 merged; CONTRIBUTORS, credits ledger, changelog (docs only)` (credit177)
-- cde0413e 11-02 16:51 `Merge agent/mercfix: MERCFIX: route guards read the dump merc when the policy is off; claim verified after the grant with bounded retries (Gate 2 root cause; offline tests)` (mercfix)
 <!-- statusgen:end -->
