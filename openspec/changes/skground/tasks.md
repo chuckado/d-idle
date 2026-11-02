@@ -9,17 +9,18 @@ worktree: ~/code/d2lod-wt/skground
 skip_specs: true
 owns:
   - docs/research/sk-ground-trace.md
+  - docs/research/skground-trace.md
   - tools/emu/sk_ground*
+  - tools/emu/skg_*
   - openspec/changes/skground/**
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and offline tooling: docs/research/sk-ground-trace.md (Q1-Q16, D1-D8, B1-B5, drill G1-G5); Blizzard and Meteor finished, Frozen Orb and Thunder Storm read at dispatch level, Hydra and Fire Wall not reached; game-side oracle tools/emu/sk_ground_blizz.py run on the worker host (64,200 cases, 0 differ from the reading); no real d2d build comparison, no PR candidate. Not verified live."
+result: "Docs and offline tooling: docs/research/skground-trace.md (third pass, Meteor's blast shape: Q26-Q32, M1-M4, B1-B3, drill G1-G4); game.exe's FUN_0056bad0 / FUN_0056b7e0 run natively (disc on integer subtiles 0 differ in 120,000 cases, radius 6 at 20 of 20 levels, caster-room rule 0 of 168 far, filter modes) and compared with the real d2d Fight::area (9.1 percent of 80,000 rim cases differ, no bias); no PR candidate. Not verified live."
 live: "docs only, nothing run live"
 ```
 
-- [x] Blizzard and Meteor traced in game.exe (address tags)
-- [x] Frozen Orb, Thunder Storm (read); Hydra, Fire Wall not reached
-- [x] d2d comparison (source read; game-side run; no real build)
-- [x] bot findings
-- [x] trace doc with deviations, drill recipe, matrix cells, shared-file lines
+- [x] Meteor blast read (FUN_005aabb0, FUN_0056bad0, FUN_0056b7e0, FUN_0056b3e0, FUN_006492a0)
+- [x] game-side native run (shape, rooms, filter, radius) and real-d2d differential (120,000 cases)
+- [x] deviations M1-M4, bot findings, drill recipe, matrix cells
+- [x] coverage ledger rows for Meteor (56) and meteorcenter (101); merge-lines.txt
