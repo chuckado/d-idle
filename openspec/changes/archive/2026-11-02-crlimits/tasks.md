@@ -2,7 +2,7 @@
 
 ```yaml
 change: crlimits
-status: in-progress
+status: archived
 agent: crlimits
 branch: agent/crlimits
 worktree: d2lod-wt/crlimits
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings; leakcheck 0 hits"
-result: "Limits table and bundle budget written; sources fetched 2026-11-02."
+result: "docs only"
 live: "not applicable (docs only)"
+merge: 00058c9
 ```
 
 - [x] gather limits (repo config, upstream PR history, CodeRabbit docs)
