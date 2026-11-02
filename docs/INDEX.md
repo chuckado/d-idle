@@ -237,3 +237,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-skmelee3-d2-draft.md - draft PR text, undead / Blunt bonus with the corrected gate (on hold)
 - docs/research/lockstep-p3.md - lockstep probe P3: unhooked control and k=1/2/4 runs, frame rate, kills per real and per game minute, why the bot breaks under k, what Tier A supports
 - docs/timescale.md | how to run the bot with D2BOT_TIMESCALE=k next to the clock hook; game-clock vs host-clock wait classification | ops
+- docs/research/smiteblock-trace.md | Smite vs the block check: game.exe 1.14d lands every blow (V run, 96,000 cases), d2d lets a block stop it; bot findings, drill recipe

@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/smiteblock-trace.md and tools/emu/sb_* (SMITEBLOCK): a block does not stop Smite in game.exe 1.14d, d2d deviates (V run, no PR candidate).
 - botclock: internal/gclock time-scale facility (D2BOT_TIMESCALE, default 1 = unchanged); env.RealClock and the game-clock timeouts use it; guard test for new direct time calls
 - Research: the original-game clock hook scales the frame rate exactly up to 4x (100 fps), but the bot's own real-time waits make k=2 yield half the work per game minute and k=4 unusable
 - contribid: AGENTS.md no longer tells community contributors to commit as Claude; reproducibility rule and PR template checkboxes
