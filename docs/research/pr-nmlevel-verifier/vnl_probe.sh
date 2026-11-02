@@ -14,6 +14,6 @@ for t in base head; do
   def=""; [ $t = head ] && def=-DVNL_HEAD
   ( cd "$B" && nice -n 15 c++ $def -DSTORMLIB_NO_AUTO_LINK $IN -I$F/src/build/_deps/stormlib-src/src -O1 -std=c++26 -include $SRC/cmake/no_near_far.hpp \
       -Wno-missing-field-initializers -o "$S/vnl_d2d_$t" "$here/vnl_d2d.cpp" components/game/libgame.a $(ls _deps/stormlib-build/libstorm.a 2>/dev/null) \
-      /usr/lib/libz.so /usr/lib/libbz2.so $(ls components/install/libinstall_detect.a 2>/dev/null) -lstorm 2>&1 | tail -20 )
+      /usr/lib/libz.so /usr/lib/libbz2.so $(ls components/install/libinstall_detect.a 2>/dev/null) 2>&1 | tail -20 )
   for seed in "$@"; do nice -n 15 "$S/vnl_d2d_$t" "$S/pop_$seed.txt" > "$S/d2d_${t}_$seed.txt"; echo "$t $seed: $(wc -l < "$S/d2d_${t}_$seed.txt")"; done
 done
