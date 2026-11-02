@@ -269,6 +269,12 @@ func cmdLedger(l *cheat.Ledger, args []string) {
 		case "--char":
 			i++
 			f.Character = args[i]
+		case "--key": // one character in one prefix: INST/NAME
+			i++
+			f.Key = args[i]
+		case "--inst":
+			i++
+			f.Instance = args[i]
 		case "--kind":
 			i++
 			f.Kind = cheat.Kind(args[i])
@@ -292,7 +298,7 @@ func cmdLedger(l *cheat.Ledger, args []string) {
 		if !e.Success {
 			ok = "FAIL"
 		}
-		fmt.Printf("%s %s %-6s %-7s %-9s %-9s %v  [%s]", e.Time.Local().Format("01-02 15:04:05"), ok, e.Actor, e.Character, e.Kind, "", e.Params, e.Reason)
+		fmt.Printf("%s %s %-6s %-12s %-9s %-9s %v  [%s]", e.Time.Local().Format("01-02 15:04:05"), ok, e.Actor, e.Key(), e.Kind, "", e.Params, e.Reason)
 		if e.Error != "" {
 			fmt.Printf(" err=%s", e.Error)
 		}
