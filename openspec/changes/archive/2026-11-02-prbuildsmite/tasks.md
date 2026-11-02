@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildsmite
-status: in-progress
+status: archived
 agent: prbuildsmite
 branch: agent/prbuildsmite
 worktree: d2lod-wt/prbuildsmite
@@ -18,8 +18,8 @@ exclusive:
 gates:
   - "suites test_rules test_game_rules test_monsters test_monster_thinks test_monster_ai test_combat test_game green on the head"
   - "counted differential base vs head, at least 20,000 cases against game.exe"
-merge:
-result: "Fork branch local/smite-block-v1-final 887b502a (private remote only), one commit on upstream main 82ea6db4; 30,035 monster cases: base differs in 6,435, head in 0; 7 suites green; CI parity 0 new warnings; the blocked-Smite animation is stated as a limit (needs the to-hit gating and a hurt() flag); det hashes not run. Not verified live (no game; game.exe's own functions under the emulator)."
+merge: d3ec289
+result: "docs and tools; PR candidate private"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
 credit:
   component: SMITEBLOCK

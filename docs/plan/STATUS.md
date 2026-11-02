@@ -127,7 +127,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
 - 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
+- 0133478e 11-02 15:22 `merge origin/main into prbuildsmite` (prbuildsmite)
 - ab07b57f 11-02 15:22 `merge origin/main into verifytele` (verifytele)
 - c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
 - 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
@@ -135,6 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f7b3ab41 11-02 15:13 `merge origin/main into verifyalign` (verifyalign)
 - d2027358 11-02 15:08 `Merge agent/stateevrun: stateevrun: result (docs and emulator tools only)` (stateevrun)
 - 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
-- b4ee3d23 11-02 15:01 `merge origin/main into stateevrun` (stateevrun)
-- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
 <!-- statusgen:end -->
