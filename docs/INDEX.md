@@ -214,3 +214,10 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skiasgame2-trace.md | SKIAS second pass: game.exe attack animation rate (IAS, WSM, skill speed) run under the emulator vs d2d attack_speed / attack_ticks; sequence mode -30 deviation
 - docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
 - docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*
+- docs/research/palskill-trace.md - Smite, Zeal and Sacrifice in game.exe vs d2d vs the bot (own harness tools/emu/pal2*)
+- docs/research/verify-cursedef.md: independent verifier of skcurseval / skdefenders / skshield traces (verdicts per claim, own oracle tools/emu/vcd_*)
+- docs/research/pr-candidates-20261102.md: ranked list of upstream PR candidates (fork branches, drafts, verifier status, next action).
+- docs/research/skground-trace.md: Meteor's blast shape (FUN_0056bad0 / FUN_0056b7e0 run natively, disc on integer subtiles, radius 6, caster-room search, filter) vs the real d2d Fight::area
+- [verifyteleroom-trace.md](research/verifyteleroom-trace.md): independent re-check of the Teleport room rule (game.exe FUN_005ca360 / FUN_00554ea0 / FUN_00463740), verdicts per claim.
+- docs/research/verifywaypoint2-trace.md | second independent check of the waypoint refusal window: writers/readers of pcdata+0x160, game.exe vs d2d's own binary on 232,964 cases, D1.. B1.. | research
+- docs/research/sk-state-events-trace.md - state events on hit and miss (Shiver Armor on a miss, Energy Shield before resistances)
