@@ -1,11 +1,7 @@
 ## Why
 
-The user asked whether d2d and Game.exe 1.14d could run from the same seed and be compared frame by frame in lockstep (the "time to first divergence" method). Docs and read-only research only: no game, no build, no code. No spec number moves.
+The monster missile record candidate (local/missilediff-record) needed an independent verification before any upstream PR, with a harness written from scratch by someone other than the author.
 
 ## What Changes
 
-- docs/research/pr-missilerecord-verifier.md: how each side chooses and uses its seed, whether the seed can be fixed, observation and input parity, determinism test plan P3, verdict, expected first divergences, ranked cards.
-
-## Impact
-
-Docs only. No spec, policy, ADR or glossary change.
+- docs/research/pr-missilerecord-verifier.md: the independent verifier report. Verdict NOT READY: the record claim (D1 brackets, D2 HitShift, D3 row element) holds with 0 differences on head, but the row poison reaches monster_blow up to 62 times too strong. Required changes are listed.

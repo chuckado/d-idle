@@ -13,7 +13,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh"
-result: "Docs only: docs/research/pr-missilerecord-verifier.md. Nothing run live, nothing built."
+result: "Docs only: docs/research/pr-missilerecord-verifier.md. Verdict NOT READY; nothing posted upstream."
 live: "docs only, nothing run live"
 ```
 
