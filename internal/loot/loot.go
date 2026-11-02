@@ -122,6 +122,26 @@ func (l *Looter) RecoveryTotals() (picked, gold, full int) {
 	return int(l.recTotals[0].Load()), int(l.recTotals[1].Load()), int(l.recTotals[2].Load())
 }
 
+// goldBar is the smallest gold pile worth walking to in the snapshot's area: the flat GoldMinStack, lowered to the pile
+// size that GoldPileShare percent of the area's piles reach (a pile is ilvl .. 6 ilvl - 1 coins and ilvl is the monster
+// level, treasure-trace B3: the flat 10 skipped every Blood Moor pile). Unknown area data keeps the flat bar. In Normal
+// the Levels.txt monster level is an upper bound of the real unit levels, so the bar errs a little high there.
+func (l *Looter) goldBar(s *d2.Snapshot) int {
+	t := l.e.Tune.Loot
+	if t.GoldPileShare <= 0 || l.e.Data == nil {
+		return t.GoldMinStack
+	}
+	a := l.e.Data.AreaByID(s.Player.Area)
+	if a == nil {
+		return t.GoldMinStack
+	}
+	ml := a.MonLvl[min(max(int(s.Player.Difficulty), 0), 2)]
+	if ml <= 0 {
+		return t.GoldMinStack
+	}
+	return min(t.GoldMinStack, data.PileMinWorth(ml, float64(t.GoldPileShare)/100))
+}
+
 // poorBelow is the gold under which the looter is in poor mode: the tuned line, or the recovery kit line while recovering.
 func (l *Looter) poorBelow() int {
 	n := l.e.Tune.Loot.PoorGoldBelow

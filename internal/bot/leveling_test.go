@@ -181,6 +181,13 @@ func starvingFarm(t *testing.T, gate int) {
 	// enough gold: back to the plan area
 	g.w.set(func(w *world) { w.gold0 = 400 })
 	if gate == 0 {
+		// failing chores must not repeat the kit trip until the failsafe skips Blood Moor (30 s idle wait, then a pause)
+		start := time.Now()
+		defer func() {
+			if d := time.Since(start); d > 10*time.Second {
+				t.Errorf("back to the plan took %v: the kit trip looped on failing chores", d)
+			}
+		}()
 		g.waitFor("back to the plan", func() bool { a := g.r.Status().Character.AreaID; return a == 3 || a == 17 || a == 9 || a == 4 })
 		return
 	}

@@ -64,6 +64,7 @@ type Tuning struct {
 
 	RecoveryOn, RecoveryKitGold, RecoveryTargetGold, RecoveryMaxMin, RecoveryCooldownMin, RecoveryPotionFloor, RecoveryManaFloor, RecoveryXPPick, RecoveryMaxAreaAbove int
 	RecoveryXPEarly, RecoveryKitGate, PovertySellMin                                                                                                                   int
+	KitGateLevel, KitMinHP, KitMinMP, KitTripCap                                                                                                                       int
 	BRAttempts, BRLevelGap                                                                                                                                             int
 }
 
@@ -128,6 +129,10 @@ func Knobs() []env.Knob {
 		k("recoveryMaxAreaAbove", "Recovery area level above", "levels", "XP pick: the recovery area's monster level may be at most this many above the character level.", d.RecoveryMaxAreaAbove, 0, 4, false),
 		k("recoveryXPEarly", "Recovery area early entry", "levels", "XP pick: a recovering character may enter an area this many levels below its plan enter and kit level (XPGAP: Cold Plains pays 1.5x the XP per kill of Blood Moor at the same kill rate). 0 = the plan levels.", d.RecoveryXPEarly, 0, 3, true),
 		k("recoveryKitGate", "Recovery kit gate", "0/1", "1 = a recovering character with no healing potion in the belt or no town portal scroll farms only Blood Moor and Cold Plains and its walks avoid dungeon areas (Den, caves, Burial Grounds, Crypt, Mausoleum; KITGATE). 0 = the old area choice.", d.RecoveryKitGate, 0, 1, true),
+		k("kitGateLevel", "Kit gate holds below clvl", "level", "KITGATELEVEL: below this character level an incomplete kit holds a recovering character in Blood Moor and Cold Plains; from it the gate holds only a character with no portal and no healing potion, any other incomplete kit makes a town trip and the area progression goes on. 0 = the gate holds at every level.", d.KitGateLevel, 0, 20, false),
+		k("kitMinHP", "Minimum kit healing potions", "count", "Minimum kit from kitGateLevel: healing potions (belt, pack, rejuvenation). Advisor range 4-6.", d.KitMinHP, 1, 6, true),
+		k("kitMinMP", "Minimum kit mana potions", "count", "Minimum kit from kitGateLevel: mana potions in the belt. Advisor range 3-4. Casters only (a build that needs no mana is not asked).", d.KitMinMP, 0, 4, true),
+		k("kitTripCap", "Kit trips before proceeding", "trips", "Kit town trips with the kit still incomplete before the bot proceeds anyway and logs kitgate-skip.", d.KitTripCap, 1, 5, false),
 		k("povertySellMin", "Poverty sell trip items", "items", "A poor character walks to town to sell junk only with this many sellable items (XPGAP: 4-item trips netted +23 gold for 3.5 minutes). 0 = built-in 4 on foot, 6 with a portal scroll.", d.PovertySellMin, 0, 16, true),
 		k("brAttempts", "Blood Raven attempts", "count", "Blood Raven attempts before the bot waits for more levels (or skips her). 0 = unlimited. SME: 2-3.", d.BRAttempts, 0, 6, false),
 		k("brLevelGap", "Blood Raven retry levels", "levels", "Levels to gain after the last attempt before the Blood Raven budget renews. SME: clvl+2.", d.BRLevelGap, 1, 6, true),
@@ -153,7 +158,7 @@ func FromEnv(t env.Tuning) Tuning {
 		GearGateMode: r.GearGateMode, GearRiskMedium: r.GearRiskMedium, GearRiskHigh: r.GearRiskHigh, GearDeathsHigh: r.GearDeathsHigh, EarlyGearMax: r.EarlyGearMax,
 		TripBudget: r.TripBudget, TripWindowMin: r.TripWindowMin, TripGoldFloor: r.TripGoldFloor,
 		RecoveryOn: r.RecoveryOn, RecoveryKitGold: r.RecoveryKitGold, RecoveryTargetGold: r.RecoveryTargetGold,
-		RecoveryMaxMin: r.RecoveryMaxMin, RecoveryCooldownMin: r.RecoveryCooldownMin, RecoveryPotionFloor: r.RecoveryPotionFloor, RecoveryManaFloor: r.RecoveryManaFloor, RecoveryXPPick: r.RecoveryXPPick, RecoveryMaxAreaAbove: r.RecoveryMaxAreaAbove, RecoveryXPEarly: r.RecoveryXPEarly, RecoveryKitGate: r.RecoveryKitGate, PovertySellMin: r.PovertySellMin, BRAttempts: r.BRAttempts, BRLevelGap: r.BRLevelGap,
+		RecoveryMaxMin: r.RecoveryMaxMin, RecoveryCooldownMin: r.RecoveryCooldownMin, RecoveryPotionFloor: r.RecoveryPotionFloor, RecoveryManaFloor: r.RecoveryManaFloor, RecoveryXPPick: r.RecoveryXPPick, RecoveryMaxAreaAbove: r.RecoveryMaxAreaAbove, RecoveryXPEarly: r.RecoveryXPEarly, RecoveryKitGate: r.RecoveryKitGate, KitGateLevel: r.KitGateLevel, KitMinHP: r.KitMinHP, KitMinMP: r.KitMinMP, KitTripCap: r.KitTripCap, PovertySellMin: r.PovertySellMin, BRAttempts: r.BRAttempts, BRLevelGap: r.BRLevelGap,
 	}
 }
 
