@@ -77,6 +77,8 @@ type observer struct {
 	tripGold      int // gold when the last chore ended (resource.Input.LastTripGold)
 	tripGoldSet   bool
 	tripTimes     []time.Time            // finished chore trips, for the trip budget
+	kitTrips      int                    // finished kit trips with the kit still incomplete (kitgate.go)
+	kitSkipped    bool                   // kitgate-skip logged for this stretch
 	idleTrips     int                    // consecutive chores that left no more gold (resource.Input.IdleTrips)
 	povertyPlan   resource.PovertyAction // last resource.PovertyAdvice verdict
 	maxPackDanger int                    // PlayLean: highest pack danger worth engaging while poor
