@@ -214,3 +214,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skiasgame2-trace.md | SKIAS second pass: game.exe attack animation rate (IAS, WSM, skill speed) run under the emulator vs d2d attack_speed / attack_ticks; sequence mode -30 deviation
 - docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
 - docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*
+- docs/research/palskill-trace.md - Smite, Zeal and Sacrifice in game.exe vs d2d vs the bot (own harness tools/emu/pal2*)
+- docs/research/verify-cursedef.md: independent verifier of skcurseval / skdefenders / skshield traces (verdicts per claim, own oracle tools/emu/vcd_*)
+- docs/research/pr-candidates-20261102.md: ranked list of upstream PR candidates (fork branches, drafts, verifier status, next action).
+- docs/research/skground-trace.md: Meteor's blast shape (FUN_0056bad0 / FUN_0056b7e0 run natively, disc on integer subtiles, radius 6, caster-room search, filter) vs the real d2d Fight::area
