@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: research on lockstep / speed-up for the original Game.exe 1.14d (no prior art found; proxy-DLL clock hook plan, probes, policy); nothing run
 - docs: runbook for the extra original-game baseline runs (docs/process/baseline-runs.md).
 - docs: character factory research (docs/research/character-factory.md).
 - docs: missilediff (monster missile record, real d2d build vs game.exe, 120,000 cases), tools/emu/mm_diff.py, ledger rows for 22 missile rows
