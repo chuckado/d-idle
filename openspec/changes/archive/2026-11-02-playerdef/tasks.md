@@ -2,7 +2,7 @@
 
 ```yaml
 change: playerdef
-status: in-progress
+status: archived
 agent: playerdef
 branch: agent/playerdef
 worktree: ~/code/d2lod-wt/playerdef
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Trace plus upgrade run: block, defence, attack rating of game.exe run natively (pd_calc.py, 102,604 cases: AR 0 differ, block 0 differ after the floor at 0, defence 0 differ for positive base; D9 negative-base defence); D1..D8 still S/I/U; 4 bot findings; no PR candidate; one ledger row."
+result: "docs and emulator tools only; credits runner; the d2d side is a port not the build"
 live: "not a live game; emulator V run of FUN_00622720 / 006223f0 / 00622560 against a port of the d2d source (not the compiled build)"
+merge: 9f9b32d
 ```
 
 - [x] read upstream traces, d2d source, bot source
