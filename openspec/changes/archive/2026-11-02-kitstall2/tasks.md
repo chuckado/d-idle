@@ -2,7 +2,7 @@
 
 ```yaml
 change: kitstall2
-status: in-progress
+status: archived
 agent: kitstall2
 branch: agent/kitstall2
 worktree: d2lod-wt/kitstall2
@@ -19,8 +19,9 @@ owns:
 exclusive: []
 gates:
   - "gofmt; go vet and go test of internal/loot, internal/town, internal/town/sim; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline only, not verified live. Tests: TestPickUpTakesOffBowWornByTheGame, TestSellNeverTouchesWornItems, TestEquipFoundRewearsStartWeaponNotBow. How the staff and gloves left the body stays U."
+result: "go tests loot town leveler pass; not verified live; staff and gloves loss cause still U"
 live: "not run live"
+merge: 0737a5f
 ```
 
 - [x] reconstruct 11:30 to 11:40 from the lane log
