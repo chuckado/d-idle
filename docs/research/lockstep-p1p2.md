@@ -1,6 +1,6 @@
 # Lockstep probes P1 and P2: preparation state
 
-> status: PARTIAL (P1 done, P2 k=1 control done, k=2 see below). Probes P1 and P2 of docs/research/original-game-lockstep.md (section 4) are prepared but NOT run: no live numbers exist yet. Card `lockstepp1p2`. Previous step: docs/research/lockstep-p0.md.
+> status: PARTIAL (P1, k=1 control and k=2 done; REHASH not captured). Probes P1 and P2 of docs/research/original-game-lockstep.md (section 4) are prepared but NOT run: no live numbers exist yet. Card `lockstepp1p2`. Previous step: docs/research/lockstep-p0.md.
 
 ## Authorisation and ledger
 
@@ -58,3 +58,26 @@ Which word is `dwGameFrame` of the D2MOO game struct is U (the heap words are th
 
 - First start with the proxy: the hook refused (`D2HOOK_OFFLINE` is an environment variable and does not cross the remote start). The launcher process of Game.exe stayed alive after the refusal and left a hung process tree (proton launcher, steam.exe, wineserver, Xvfb) in the instance prefix; every later start, even unhooked, printed "Game.exe did not start" until `game.sh stop` cleared it. Rule: always stop before a retry. Fix in the hook (private repo): `offline=1` in `d2hook.cfg` also confirms offline use.
 - Game logs of an extra instance are in the shared logs folder as `game-<id>.out`, not in the instance folder.
+
+## P2 k=2 (V run, hook `k=2` from `d2hook.cfg`, same start path, run id lockstep-p2-k2)
+
+| Measure | k=1 control | k=2 |
+|---|---|---|
+| Hook log | `CLOCK k=1.0000`, `READY patched_slots=20 hash_start=ca48e140e919615a` | `CLOCK k=2.0000`, `READY patched_slots=20`, same hash_start |
+| Town idle 300.2 s, frames per real second | 25.0009 (windows 24.98 to 25.18) | 50.0001 (windows 49.958 to 50.160), 15012 frames |
+| Ratio to k | 1.0000 | 1.0000 (error 0.002 percent; limit was 5 percent) |
+| 10 s read, main counters | 24.975 | 50.055 (per-second min/max 49.95/50.95) |
+| After the bot run, 20 s | 25.03 | 50.01 |
+| Read errors | 0 | 0 |
+| Blood Moor bot run, 5 min real (character level 12) | 36 kills by minute 4, 0 deaths | 76 kills by minute 3 (09:27 of a run started 09:24), 0 deaths in the minute log, no crash, no stall, ended in town alive |
+| Game-time reading | 25 fps | the game ran 2.00 times faster per real second |
+
+Kills per real minute at k=2 was about 25 against about 9 at k=1; the two runs differ in start state (the k=1 run began with vendor chores and a full pack), so this is not a clean xp-per-game-hour comparison (U); the original success test (xp and kills per game hour inside the k=1 noise band, `d2dsoak bands`) was NOT run. Frame ratio is V run; fidelity of fights at k=2 is only a first look (no death, no stall in 5 minutes). k=4 not tried (not in the brief).
+
+Not captured: the hook's exit `REHASH`/`EXIT` lines. `game.sh stop` kills the process, so the exit handler never ran (V: no REHASH line in the k=1 log after a stop). The start `READY` hash is the only evidence of the slot set; an end-of-run re-hash needs a graceful exit or a periodic hook log line (U, next step).
+
+## What the hook needs next
+
+- A periodic `STAT` log line (virtual and real time, offset) so the evidence survives a kill.
+- A scaled bot clock for k > 1 (the bot's own timers, input holds, are real time; section 2.6 of original-game-lockstep.md). The k=2 bot run worked without it, so the bot tolerates 2x at least in town and Blood Moor (V run, one 5 min sample).
+- Same-day unhooked bot control on the same character and a k=4 step, then the `d2dsoak bands` comparison.
