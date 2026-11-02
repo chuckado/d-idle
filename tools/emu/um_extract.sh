@@ -1,7 +1,7 @@
 #!/bin/bash
 # SPDX-License-Identifier: GPL-3.0-or-later
 # um_extract.sh (card uniqmods): print one 1.14d table to stdout through mpq-cat on the worker host.
-#   labrun orion -- bash tools/emu/um_extract.sh monumod|superuniques|monstats|levels|difficultylevels
+#   (on the worker host) bash tools/emu/um_extract.sh monumod|superuniques|monstats|levels|difficultylevels
 # Read-only: links the MPQs into a scratch dir (patch layer under the lowercase name, see
 # docs/process/mpq-data-reading.md), reads one table, deletes the dir.
 set -e

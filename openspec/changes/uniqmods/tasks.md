@@ -14,7 +14,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and offline tooling: docs/research/uniqmods-trace.md (Q1-Q9, D1-D4 read-only, B1-B7, drill G1-G6). No new emulator run (the runner refused remote scripts): Normal numbers are the DECOMPMODS run log re-summarised (S-run), pick rules by disassembly read and tables. Act 2 superunique records not extracted (U). No PR candidate, no coverage ledger row. Not verified live."
+result: "Docs and offline tooling: docs/research/uniqmods-trace.md (Q1-Q9, D1-D4 read-only, B1-B7, drill G1-G6). Upgrade run: um_all.sh + um_agg.py ran game.exe's room population on the worker host for Normal, Nightmare and Hell over 8 areas (about 3700 unit lines, V run, no d2d side); Beetleburst record added; other Act 2 superuniques still U. No PR candidate, no coverage ledger row. Not verified live."
 live: "docs only, nothing run live"
 ```
 

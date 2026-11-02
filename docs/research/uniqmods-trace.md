@@ -1,6 +1,6 @@
 # Champions, uniques, minions and the Act 1 / 2 superuniques: game.exe 1.14d vs d2d vs our bot (UNIQMODS, follow-up of decomp-queue item 13)
 
-> status: current (2026-11-01, card uniqmods, agent d2-decomp on Sonnet). Offline, docs and tools only: no game, no d2d slot, no Go change; nothing pushed or posted. **No new emulator run was possible in this session** (the runner refused every remote script or binary; only remote reads of existing files worked), so nothing here is "V run" by this agent. Every number below is either **D** (the 1.14d patch-layer tables, read by header name), **V read** (disassembly of game.exe, listings left by the DECOMPMODS card), **S-run** (the DECOMPMODS run log of game.exe's own code under the emulator, `umod_spawn.py`, 526 lines, re-summarised here by `tools/emu/um_summ.py`, not re-run), **S** (upstream docs `re/monsters.md`, `re/superuniques.md`), **I** or **U**. This doc does not repeat [monster-mods-trace.md](monster-mods-trace.md) (what each init writes, the 157,618-case differential; read it first) or [pr-mods-proof.md](pr-mods-proof.md) (D1 narrowed, D2, D3, B built and merged upstream as #157); it adds the pick rules, the pack and minion counts, the Act 1 / 2 superunique records, the multiplier summary by class and difficulty, and the bot side. d2d read at the upstream checkout the DECOMPMODS follow-up used (components/rules/uniques.hpp, components/game/objgroups.cpp).
+> status: current (2026-11-01, card uniqmods, agent d2-decomp on Sonnet). Offline, docs and tools only: no game, no d2d slot, no Go change; nothing pushed or posted. **Upgrade run (second session, 2026-11-01): the worker-host emulator ran game.exe's own room population again (new section Q10: 24 runs, 8 seeds each, three difficulties, Acts 1 and 2, about 3,700 unit lines) and confirms the earlier S-run Normal values byte for byte; tag "V run" below means that run. It is game.exe against itself, not a differential against d2d (the d2d half of the differential is the 157,618-case run in monster-mods-trace.md).** The first session had no emulator, so older "S-run" tags in Q2..Q8 remain as written unless Q10 restates the number. Every number below is either **D** (the 1.14d patch-layer tables, read by header name), **V read** (disassembly of game.exe, listings left by the DECOMPMODS card), **S-run** (the DECOMPMODS run log of game.exe's own code under the emulator, `umod_spawn.py`, 526 lines, re-summarised here by `tools/emu/um_summ.py`, not re-run), **S** (upstream docs `re/monsters.md`, `re/superuniques.md`), **I** or **U**. This doc does not repeat [monster-mods-trace.md](monster-mods-trace.md) (what each init writes, the 157,618-case differential; read it first) or [pr-mods-proof.md](pr-mods-proof.md) (D1 narrowed, D2, D3, B built and merged upstream as #157); it adds the pick rules, the pack and minion counts, the Act 1 / 2 superunique records, the multiplier summary by class and difficulty, and the bot side. d2d read at the upstream checkout the DECOMPMODS follow-up used (components/rules/uniques.hpp, components/game/objgroups.cpp).
 
 ## Answer in six lines
 
@@ -117,6 +117,27 @@ Kill experience is the monster's stat 13 (mods applied at spawn: x5 for unique, 
 
 Unchanged from monster-mods-trace.md ("In the fight"): Cursed (7, FUN_005a2530, 3 in 4 on its seed, Amplify Damage level `stat12 / 5 + 1`, melee only in d2d), Fire Enchanted death blast (9), Lightning Enchanted bolts on being hit (17, eight `lightunique`, at most every 10 frames), Cold Enchanted death nova (18), Spectral Hit (27), Multiple Shots (29, ranged only), Teleportation AI (FUN_005b11f0: AI flag 0x20, 40 %, then low life or a shooter nearby, 15 %). The handlers need flag 8, so a minion never explodes, bolts, curses or teleports (S + structural V: the same flag test as the stat inits). Extra Fast / Strong reach the minions (S-run).
 
+## Q10. Upgrade run: Normal, Nightmare, Hell and Act 2 (V run, game.exe's own code)
+
+Command: `tools/emu/run-on-worker.sh --ttl 3000 um_all.sh` (24 runs of `umod_spawn.py` seeds 1..8 over Levels ids 3, 4, 5, 8, 17 (Act 1: Cold Plains, Stony Field, Dark Wood, Den of Evil, Burial Grounds) and 41, 43, 44 (Act 2: Rocky Waste, Far Oasis, Lost City) at difficulty 0, 1, 2; 245 s), then `um_agg.py` over the logs. Method: game.exe populates the rooms; every stat write by FUN_00627260 / FUN_006272b0 is hooked; units with flag 4, 8 or 0x10 are printed. About 3,700 unit lines; no d2d side (so no mismatch count: this is a V run of the game, not a differential). The Normal Act 1 lines equal the first session's S-run lines (Bishibosh `8.9.22` fire / light / cold 140 / 40 / 40, Rakanishu `17.6.22` speed +100, Blood Raven `12.22` unchanged).
+
+| fact | Normal | Nightmare | Hell | tag |
+|---|---|---|---|---|
+| random unique: mods in its list (counting the rolled ones only) | 1 (54 of 65 lines; 3 more carry a fixed mod, see below; 8 are Blood Raven) | 2 (150) or 3 (20) | 3 (223) or 4 (26), 2 (8 = Blood Raven) | V run for the counts; I that the 3rd (NM) and 4th (Hell) entries are mostly the fixed mod 20 of scarab classes (only the Normal 20.x lines were read one by one) |
+| unique level add / experience ratio | +3 / x5 (57 of 57) | +3 / x5 (162) | +3 / x5 (249) | V run |
+| champion level add / experience ratio | +2 / x3 (31); +3 / x5 for berserker (4) | +2 / x3 (95); berserker +3 / x5 (11) | +2 / x3 (152); berserker +3 / x5 (16) | V run |
+| minion level add / experience ratio | +3 / x5 (425) | +3 / x5 (968) | +3 / x5 (1353) | V run |
+| Act 1 superuniques: add / ratio | +3 / x5 (48 lines over three difficulties, every one) | same | same | V run |
+| Bishibosh (class 58) level, experience, max life | level 2 -> 5, exp 32 -> 160, hp 20..32 | level 36 -> 39, exp 3852 -> 19260, hp 870..1299 | level 68 -> 71, exp 42138 -> 210690, hp 4096..5534 | V run (the Level(N) / Level(H) column of the row drives the growth, mods only add +3) |
+| champion kind mixes (leader's `kind` mod) | 16 plain 25, berserker 39: 4, fanatic 37: 4, possessed 38: 2 | 16: 76, 39: 10, 37: 9, 38: 5, 36: 4 | 16: 115, 39: 14, 37: 10, 36: 9, 38: 5 (+ `20.16`, `13.16` rare) | V run |
+| Blood Raven (act boss) | +0 / x1 | +0 / x1 | +0 / x1 | V run (8 of 8 per difficulty in Burial Grounds) |
+
+Act 2 superuniques seen (Normal, Far Oasis, area 43, 8 of 8 seeds): **Beetleburst** = class 92 (scarab2), mods `20.8.22`, level 16 -> 19, exp 256 -> 1280, life 188..240 at 4x the row (hpcreate 47..60), resists fire / light / cold 40 / 40 / 40 (Magic Resistant 8 applies +40 to each; no champion bonuses): V run. Mod 20 (MonUMod "scarab", id 20, xfer 0, no pick weight, D) is a leader-marker with no stat init; it is also the front of every random unique of MonStats classes scarab1 / scarab2 (SetBoss 1, BossXfer 1, PartyMin 2..3, PartyMax 4; D, the MonStats table via `mpq-table.sh monstats`). In Normal the class 91 (scarab1) random uniques show `20.17` (Lightning Enchanted) and `20.9` (Fire Enchanted): mod 20 is the extra entry in the list, so "one rolled mod" still holds. The other Act 2 superuniques (Fangskin, Creeping Feature, Bloodwitch, Radament, Coldworm, the Summoner) live in areas outside the eight runs: not run (U).
+
+Dead ends resolved or narrowed by this run: (a) the earlier `13.5` unique of class 28 (brute1) in Cold Plains seed 7 appears once in the 8 Normal seeds and 0 times in the 8 NM / Hell seeds of any area; the pick still cannot produce 13 (no `upick`), the reading "a Treehead-style fixed list on a flag-9 unit" stays U (G6). (b) The "unique mod count" of 11 two-mod lines in Normal is 8 Blood Raven (`12.22`, flag 9, +0) plus the 3 above: the one-rolled-mod rule is confirmed for 54 of 54 random uniques with no fixed mod.
+
+What this run does NOT show: minion counts per boss in NM / Hell (the log prints every unit but `um_agg.py` does not group them by boss; the unit totals of 425 / 968 / 1353 `0x10` lines include the champion followers, so no per-boss count is claimed here), Act 2 areas outside 41 / 43 / 44, and any monster behaviour (AI, damage in a hit): those need the drill recipe. No d2d value was compared in this session.
+
 ## Deviations d2d vs game.exe
 
 The proven ones are in monster-mods-trace.md and pr-mods-proof.md (D1 life / defence / experience level, D2 minion level and experience, D3 ghostly speed, B berserker, merged upstream as #157; E1, E2, H1, S1 classified, not claimed). New here, all read-only:
@@ -150,8 +171,8 @@ Use one hidden slot, a throwaway character on a field level, the lab binary of d
 
 | id | confirms | steps and expected |
 |---|---|---|
-| G1 | the Act 2 superunique records | on the worker host: `labrun orion -- bash tools/emu/um_extract.sh superuniques` (writes the table to stdout), then read the `Mod1..3`, `MinGrp`, `MaxGrp`, `Class` of the Act 2 rows; extend Q6 |
-| G2 | D1 (fPick 1 / 3) | `spawn <a row from um_fpick.py> 1 unique 6` then `unique 26`: d2d accepts it (game.exe would not roll it); the row is a nest, egg, tower or trap, so the visible effect is nil in Acts 1 / 2: the drill only proves d2d's side |
+| G1 | the Act 2 superunique records | on the worker host: `tools/emu/run-on-worker.sh mpq-table.sh superuniques` (writes the table to stdout), then read the `Mod1..3`, `MinGrp`, `MaxGrp`, `Class` of the Act 2 rows; extend Q6 |
+| G2 | D1 (fPick 1 / 3) | `spawn <a row from um_fpick.py> 1 unique 6` then `unique 26`: d2d accepts it (game.exe would not roll it); the row is a nest, egg, turret or trap, so the visible effect is nil in Acts 1 / 2: the drill only proves d2d's side |
 | G3 | pick weights | spawn 10,000 random uniques in a field level by `debug goto` loops and tally mods: Normal expect no 8, the other twelve at about 8.3 % each, one mod each; Nightmare 2 mods, 13 rows |
 | G4 | champion pack size | count packs in the same sweep: expect 2..4, followers mod 16 only, the leader one of 16 / 36..39 at 1 / 5 |
 | G5 | B4 (minion enchant copy) | spawn Bishibosh's pack on the original (not available) or a d2d unique with mods 8 9: read a minion's enchant list; expect the same bytes as the boss, resist stats 0 |
@@ -161,11 +182,11 @@ Use one hidden slot, a throwaway character on a field level, the lab binary of d
 
 - `docs/research/monster-mods-trace.md` row "Bot B3 (PackDanger)": add B6 above (Normal minions carry Strong / Fast).
 - `docs/difficulty.md` section 4 (not edited here): the pack rule "champions in groups of 2-4 (all but one are Champion ...)" is half wrong: the leader holds the kind, the followers are plain champions, and the size is 2..4 (V read FUN_0054e1e0); "Unique gets 1 extra mod in NM, 2 in Hell" reads as 2 / 3 mods total (Normal 1): V read FUN_005a0760.
-- `docs/coverage/ledger.tsv`: **no new row**. No differential run was possible (no new case count); the existing line `formulas F09 TESTED-DEVIATION docs/research/monster-mods-trace.md 157618` stays the evidence. `docs/coverage/rule-coverage.md` was not regenerated.
+- `docs/coverage/ledger.tsv`: **no new row**. The Q10 run (about 3,700 unit lines) is game.exe against itself, with no d2d oracle compared, so it cannot be a TESTED-* row; the existing line `formulas F09 TESTED-DEVIATION docs/research/monster-mods-trace.md 157618` stays the evidence. `docs/coverage/rule-coverage.md` was not regenerated.
 
 ## Dead ends
 
-- Remote scripts and the emulator were refused by the runner this session, so Q3's D1..D3 differential, the Act 2 superunique table and the Nightmare / Hell populations were not run; the tools added here (`um_extract.sh`, `um_tab.py`, `um_fpick.py`, `um_summ.py`) are the offline half and were run only locally on copies of tables the DECOMPMODS and CHILL cards had already extracted.
+- First session: the runner refused remote scripts, so nothing was run; the upgrade session (Q10) ran the Normal / Nightmare / Hell populations and the Far Oasis superunique, but still not Q3's D1..D3 differential against d2d nor the Act 2 superuniques outside areas 41 / 43 / 44; the tools added here (`um_extract.sh`, `um_tab.py`, `um_fpick.py`, `um_summ.py`) are the offline half and were run only locally on copies of tables the DECOMPMODS and CHILL cards had already extracted.
 - The `13.5` random unique (Q6) is unexplained.
 - FUN_0046c140's mask table and the `0x6ce26c` flag in the Multiple Shots branch were taken from upstream's doc and a read of the branch, not decoded further.
 
@@ -177,6 +198,9 @@ python3 -I tools/emu/um_tab.py weights monumod.txt
 python3 -I tools/emu/um_tab.py rows monstats.txt 58 20 24 5 267 402
 python3 -I tools/emu/um_fpick.py monstats.txt monstats2.txt
 python3 -I tools/emu/um_summ.py spawn-normal.txt     # the DECOMPMODS umod_spawn.py log (526 lines)
+# worker host, the Q10 run (writes $D2_SCRATCH/um_d<diff>_a<area>.txt, then aggregates them)
+tools/emu/run-on-worker.sh --ttl 3000 um_all.sh
+tools/emu/run-on-worker.sh um_agg.py
 ```
 
 ## Shared-file lines for the merger

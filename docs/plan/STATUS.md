@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 861de2b3 11-01 23:33 `merge origin/main into uniqmods` (uniqmods)
 - 7f3c38bc 11-01 23:28 `Merge agent/apicookbook-pub: APICOOKBOOK: emulator wrapper run-on-worker.sh and mpq-table.sh for headless agents (host from env), cookbook doc` (apicookbook)
 - d33de75d 11-01 22:50 `Merge agent/boardclaim: BOARDCLAIM: board audit: 1 item closed (VERIFY-FREEZE-KINDS), 5 narrowed, 1 claimed by the maintainers; claim.py with claim, done and watch; claim-before-launch and comment-watching rules` (boardclaim)
 - ffe6a9e8 11-01 22:49 `merge origin/main into boardclaim` (boardclaim)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - aa0787d6 11-01 22:25 `merge origin/main into tpglitch` (tpglitch)
 - b8d3cca2 11-01 22:19 `Merge agent/archive4: ARCHIVE4: archive soakstall, hastpdump, soakgiveup, povertyflip cards (code merged earlier)` (archive4)
 - 39cbc04c 11-01 22:16 `merge origin/main into soakstall,hastpdump,soakgiveup,povertyflip,tpglitch,pingpongrate` (soakstall)
-- 1ca519ac 11-01 22:11 `Merge agent/licensecheck: LICENSECHECK: licences read for the lockstep hook sources; MIT workable for our own code only; clean-room procedure and provenance format; Blizzard terms ban modification` (licensecheck)
 <!-- statusgen:end -->
