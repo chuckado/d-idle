@@ -169,3 +169,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/soaks/gate1r2-20261101.md: Gate 1 rerun 2 (run gate1-20261101-1949) record and Review 2: bands, stall windows, guard firings, HasTP root cause, verdict per criterion, rerun recipe
 - docs/research/lockstep-licences.md: licences and Blizzard terms for a releasable 1.14d time/lockstep hook; clean-room and PROVENANCE proposal, offline notice (card licensecheck)
 - tools/contrib/claim.py: maintainer claim, done and watch commands for work-item issues (dry run default, docs/process/chunker.md)
+- docs/api-agent-cookbook.md - command forms that work for API-credit runner jobs (emulator wrapper, data paths, forbidden list)
