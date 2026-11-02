@@ -53,6 +53,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
+| [itemweapons](../../openspec/changes/itemweapons/) | in-progress | itemweapons | `docs/research/itemweapons-trace.md`<br>`openspec/changes/itemweapons/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -104,6 +105,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
+- change itemweapons: trace doc exists, leakcheck and changecheck clean
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -127,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
 - de908e29 11-02 15:49 `Merge agent/skassassin: skassassin: coverage-gap or verification result (docs and emulator tools only)` (skassassin)
 - fe33b6e7 11-02 15:49 `merge origin/main into skassassin` (skassassin)
 - 08590a5d 11-02 15:42 `Merge agent/skdruid: skdruid: coverage-gap or verification result (docs and emulator tools only)` (skdruid)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4d7c1618 11-02 15:35 `merge origin/main into branchtriage` (branchtriage)
 - 52670323 11-02 15:35 `merge origin/main into crfixbundle` (crfixbundle)
 - d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
-- 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
 <!-- statusgen:end -->
