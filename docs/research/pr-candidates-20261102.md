@@ -4,7 +4,7 @@
 
 ## 1. How this was made
 
-- V: the private fork checkout and the PR scratch checkout on the worker host, after a read-only `git fetch upstream` (main 3852c904, "Coverity: init on the project's slug"). For every branch (local, forgejo remote, ghfork remote) `git rev-list --count upstream/main..<branch>`, `git cherry`, merge-base distance and a subject match against `git log upstream/main` (a rebased or reworded commit shows as unmatched in `git cherry`, so the subject match decides).
+- V: the private fork checkout and the PR scratch checkout on the worker host, after a read-only `git fetch upstream` (main 3852c904, "Coverity: init on the project's slug"). For every branch (local, private remote, public-fork remote) `git rev-list --count upstream/main..<branch>`, `git cherry`, merge-base distance and a subject match against `git log upstream/main` (a rebased or reworded commit shows as unmatched in `git cherry`, so the subject match decides).
 - V: PR states from `gh pr list --repo psi29a/d2decomped --author <fork owner> --state all` (read only).
 - S: the PR drafts, proofs and verifier records under docs/research, the ledger, BACKLOG, decomp-queue and open-work.
 
@@ -31,7 +31,7 @@ Fields: branch and head (private fork), commits and files (against the merge bas
 
 ### C1. Freeze rules (fix/freeze-rules-v2, 409903a6), the one built and Opus-verified candidate
 
-- Branch: `fix/freeze-rules-v2` in the PR scratch checkout (also `fix/freeze-rules`, bbf506c6, the pre-polish copy); 4 commits (tooling 409903a6, Blood Raven and Countess 31a63579, special monsters chilled 42460cf6, Glacial Spike freeze 4dc07e7d), 11 files, +476 -9. Not on the fork's private remote under that name (V: not among forgejo or ghfork refs): push it there first.
+- Branch: `fix/freeze-rules-v2` in the PR scratch checkout (also `fix/freeze-rules`, bbf506c6, the pre-polish copy); 4 commits (tooling 409903a6, Blood Raven and Countess 31a63579, special monsters chilled 42460cf6, Glacial Spike freeze 4dc07e7d), 11 files, +476 -9. Not on the fork's private remote under that name (V: not among private or public-fork refs): push it there first.
 - Deviation (V ledger rows states 1,11,118 and formulas F12, TESTED-DEVIATION): game.exe FUN_0057b230 resists a freeze length by cold resistance less pierce and divides it by MonsterFreezeDivisor; d2d stood any monster for the raw length and chilled it too (C5); champions, uniques and bosses are chilled instead of frozen (C3); Blood Raven and the Countess are not halved, state 118 (C4).
 - Evidence: author differential 225,748 real-d2d cases, 185,746 -> 0 (docs/research/pr-freeze-proof.md). Independent Opus verifier VERIFYFREEZE (pr-freeze-proof.md section "Independent verifier"; BACKLOG): own generator and seed, 146,591 cases, 124,662 mismatches on #155's head, 6 on the candidate (freeze length 0x100001 only, unreachable); C5 and C3 HOLD WITH LIMITS, C4 HOLDS; chill set read from game.exe's own spawn path, 12,830 monsters. Not covered: Freezing Arrow, Ice Blast, item freeze.
 - Risk: every freeze and chill on a monster with cold resistance and every champion, unique, superunique and act boss in Normal, NM and Hell (a Frost Nova or Glacial Spike changes from freeze to chill on them): a wide gameplay change, deliberate and measured. Players unchanged. det state hashes not run (needs a d2d slot).

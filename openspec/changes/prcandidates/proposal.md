@@ -1,3 +1,9 @@
-# prcandidates: inventory and ranking of upstream PR candidates (2026-11-02)
+# prcandidates: inventory and ranking of upstream PR candidates
 
-Read-only inventory of every upstream PR candidate (private fork checkouts on the worker host, public docs, ledger, backlog), ranked for up to five more PR slots. Docs only; nothing pushed, nothing posted.
+## Why
+
+The user asked for up to five more upstream PRs, each after an independent Opus verification. Before any slot is used we need one ranked list of every candidate (fork branches, drafts, verifier status), with the merged and open PRs removed.
+
+## What Changes
+
+Adds docs/research/pr-candidates-20261102.md: a read-only inventory and ranking. No code, no push, no PR.
