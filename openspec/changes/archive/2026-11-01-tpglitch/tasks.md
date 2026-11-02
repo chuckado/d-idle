@@ -2,7 +2,7 @@
 
 ```yaml
 change: tpglitch
-status: in-progress
+status: archived
 agent: tpglitch
 branch: agent/soakfixes2
 worktree: ~/code/d2lod-wt/tpglitch
@@ -16,7 +16,8 @@ owns:
 exclusive: []
 gates:
   - go test -p 1 ./internal/d2denv ./internal/combat ./internal/bot passes, including a replay of the 4, no70, 4 sequence of run gate1-20261101-1949 (19:57:17 to 19:57:30)
-result: implemented and tested offline (mem.Fake rig); not verified live
+result: "offline table tests only; guards verified in part by Gate 1 rerun 2; rate rule scaling unproven"
+merge: 6ae8124
 ```
 
 - [x] 1 Test first: replay of the 4, no70 for 12 s, 4 sequence; the verdict stays true, kit gate and poverty mode do not flip
