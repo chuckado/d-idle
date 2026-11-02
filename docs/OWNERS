@@ -134,3 +134,8 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/verifyteleroom-trace.md  verifyteleroom  verifyteleroom
+tools/emu/vtr_room.py  verifyteleroom  verifyteleroom
+tools/emu/vtr_dis.py  verifyteleroom  verifyteleroom
+tools/emu/vtr_cmp.sh  verifyteleroom  verifyteleroom
+openspec/changes/verifyteleroom/**  verifyteleroom  verifyteleroom
