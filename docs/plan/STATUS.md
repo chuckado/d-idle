@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [uniqmods](../../openspec/changes/uniqmods/) | in-progress | uniqmods | `docs/research/uniqmods-trace.md`<br>`tools/emu/um_*`<br>`openspec/changes/uniqmods/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -127,18 +126,17 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change uniqmods: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
+- bd354909 11-02 00:00 `merge origin/main into uniqmods` (uniqmods)
+- abed0924 11-01 23:55 `Merge agent/monsterhit: MONSTERHIT: monster melee against the player: to-hit, damage, block and get-hit rules run against game.exe (100,000 cases each, 0 differ); block deviation in the d2d port` (monsterhit)
+- 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
+- eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
+- 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
+- a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
+- 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
 - 861de2b3 11-01 23:33 `merge origin/main into uniqmods` (uniqmods)
-- 7f3c38bc 11-01 23:28 `Merge agent/apicookbook-pub: APICOOKBOOK: emulator wrapper run-on-worker.sh and mpq-table.sh for headless agents (host from env), cookbook doc` (apicookbook)
-- d33de75d 11-01 22:50 `Merge agent/boardclaim: BOARDCLAIM: board audit: 1 item closed (VERIFY-FREEZE-KINDS), 5 narrowed, 1 claimed by the maintainers; claim.py with claim, done and watch; claim-before-launch and comment-watching rules` (boardclaim)
-- ffe6a9e8 11-01 22:49 `merge origin/main into boardclaim` (boardclaim)
-- 611bcc63 11-01 22:46 `Merge agent/palauranarrow: PALAURANARROW: PALAURA work item narrowed to the open parts (target filter and area search, enemy-hit damage, Prayer per-pulse mana and state 85); prior trace linked` (palauranarrow)
-- 91e287bc 11-01 22:38 `Merge agent/archive5: ARCHIVE5: archive pingpongrate card (code merged in soakfixes2)` (archive5)
-- 6ae81240 11-01 22:26 `Merge agent/soakfixes2: SOAKFIXES2: tome-read debounce in hasPortalSource for the kit gate and poverty check, ping-pong guard by XP rate` (tpglitch)
-- aa0787d6 11-01 22:25 `merge origin/main into tpglitch` (tpglitch)
-- b8d3cca2 11-01 22:19 `Merge agent/archive4: ARCHIVE4: archive soakstall, hastpdump, soakgiveup, povertyflip cards (code merged earlier)` (archive4)
-- 39cbc04c 11-01 22:16 `merge origin/main into soakstall,hastpdump,soakgiveup,povertyflip,tpglitch,pingpongrate` (soakstall)
+- dfad2c6d 11-01 23:33 `merge origin/main into monsterhit` (monsterhit)
 <!-- statusgen:end -->

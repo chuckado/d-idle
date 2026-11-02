@@ -143,6 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-docs/research/uniqmods-trace.md  uniqmods  uniqmods
-tools/emu/um_*  uniqmods  uniqmods
-openspec/changes/uniqmods/**  uniqmods  uniqmods
