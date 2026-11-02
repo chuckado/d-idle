@@ -4,7 +4,7 @@
 # at build time, in the scratch dir; the tree is only read; the cases are read from the file at run time).
 #   tools/emu/run-on-worker.sh --ttl 1500 mp_run.sh <ai,ai|all> <cases per AI> <seed> [MAI2_CMD none1|two|-] [less] [replay]
 # phase `replay` (6th word): reuse the cases of the last run (same scratch dir), rebuild and replay only.
-# env: D2D_TREE (the d2d tree, default ~/d2d-lab/fork/wt-monsterpace), D2_SCRATCH. Output: `mp AI cases differ` per AI (Fallen: +dying, +cmdN), `mp TOTAL`.
+# env: PATCH_TREE (the tree to cut the replay block from, default D2D_TREE), D2D_TREE (the d2d tree, default ~/d2d-lab/fork/wt-monsterpace), D2_SCRATCH. Output: `mp AI cases differ` per AI (Fallen: +dying, +cmdN), `mp TOTAL`.
 set -e
 here=$(cd "$(dirname "$0")" && pwd)
 SRC=${D2D_TREE:-$HOME/d2d-lab/fork/wt-monsterpace}
@@ -21,7 +21,7 @@ if [ "$PHASE" != "replay" ]; then
 	tail -1 "$S/run/acts.txt"
 	mv "$S/run/mai2_cases.inc" "$S/run/mp_cases.inc"; mv "$S/run/mai2_names.inc" "$S/run/mp_names.inc"
 fi
-python3 "$here/mp_patch.py" "$SRC" "$S/run"
+D2D_TREE=$SRC python3 "$here/mp_patch.py" "${PATCH_TREE:-$SRC}" "$S/run"   # PATCH_TREE: a tree whose test_monster_ai.cpp is still upstream's (the head tree carries the committed replay)
 IN="-I$S/run"
 for d in tests components/game components/game/character components/game/gamedata components/game/npc components/log components/mpq components/d2s components/txt components/rules components/drlg components/ds1 components/userdir components/install components/cof components/compcode components/dt1 components/tbl; do IN="$IN -I$SRC/$d"; done
 IN="$IN -I$HOME/d2d-lab/src/build/_deps/stormlib-src/src"

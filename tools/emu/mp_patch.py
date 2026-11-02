@@ -10,7 +10,8 @@ import sys
 
 root, out_dir = sys.argv[1], sys.argv[2]
 t = open(root + "/tests/monsters/test_monster_ai.cpp").read()
-HAS_TARGET_HOME = "target_home_dist" in open(root + "/components/rules/monsters.hpp").read()
+import os
+HAS_TARGET_HOME = "target_home_dist" in open(os.environ.get("D2D_TREE", root) + "/components/rules/monsters.hpp").read()   # the headers the replay builds against (D2D_TREE), the test text from `root`
 head = t[:t.index("using namespace d2d::rules;") + len("using namespace d2d::rules;")]
 head = head.replace("#include <array>", "#include <array>\n#include <fstream>\n#include <map>", 1)
 a = t.index("            // Act 2's monster thinks (rules::mon_think")
