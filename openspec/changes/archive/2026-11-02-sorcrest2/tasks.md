@@ -2,7 +2,7 @@
 
 ```yaml
 change: sorcrest2
-status: in-progress
+status: archived
 agent: sorcrest2
 branch: agent/sorcrest2
 worktree: ~/code/d2lod-wt/sorcrest2
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Inferno do 48 cases, Enchant 6, Blaze 3 run on the game side (fake units); d2d burst rim 16,875 cases (549 differ from the integer rule); no PR candidate; docs and emulator scripts only"
+result: "docs and tools only; merged by the triage queue"
 live: "docs and emulator tools only; nothing run live"
+merge: 18c9c1a
 ```
 
 - [ ] D2 rim: d2d side with monsters between subtile centres, game rule as oracle
