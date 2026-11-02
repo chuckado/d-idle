@@ -5,7 +5,7 @@ change: baselineruns-20261102
 status: in-progress
 agent: baselinerun
 branch: agent/baselineruns-20261102
-worktree: /home/jesse/code/d2lod-wt/baselineruns-20261102
+worktree: d2lod-wt/baselineruns-20261102
 skip_specs: true
 owns:
   - docs/probes/baseline-runs/20261102/**
