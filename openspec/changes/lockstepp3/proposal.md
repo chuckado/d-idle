@@ -5,7 +5,6 @@ Continuation of lockstepp1p2b. User go 2026-11-02 ("run the lockstep work") for 
 ## What Changes
 
 - docs/research/lockstep-p3.md: results of the runs, no hook source or addresses.
-- cmd/lockstepscan: only if a small reader change is needed.
 
 ## Impact
 
