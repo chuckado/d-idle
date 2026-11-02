@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [credit177](../../openspec/changes/credit177/) | in-progress | credit177 | `CONTRIBUTORS.md`<br>`docs/community/credits-ledger.md`<br>`openspec/changes/credit177/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -87,7 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change credit177: changecheck 0 warnings, leakcheck 0 hits, tools/ci/check.sh ok
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -129,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b6d21b1b 11-02 17:12 `Merge agent/credit177: CREDIT177: upstream PR 177 merged; CONTRIBUTORS, credits ledger, changelog (docs only)` (credit177)
 - cde0413e 11-02 16:51 `Merge agent/mercfix: MERCFIX: route guards read the dump merc when the policy is off; claim verified after the grant with bounded retries (Gate 2 root cause; offline tests)` (mercfix)
 - 7ce0bd95 11-02 16:30 `Merge agent/bundlefinal2: bundlefinal2: final upstream bundle records and body (docs, cards)` (bundlefinal2)
 - 43b85457 11-02 16:29 `merge origin/main into bundlefinal2` (bundlefinal2)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
 - 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
 - e81ab739 11-02 16:05 `merge origin/main into skamazon` (skamazon)
-- 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
 <!-- statusgen:end -->
