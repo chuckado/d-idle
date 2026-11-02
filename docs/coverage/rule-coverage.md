@@ -24,12 +24,12 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | itemtypes (item types) | 98 | 0 | 0 | 0 | 0 | 98 | 0% | 0% | 0 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
-| treasure (drops: treasure classes) | 852 | 0 | 0 | 0 | 0 | 852 | 0% | 0% | 0 |
+| treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 10 | 3 | 0 | 2 | 72% | 89% | 2,111,956 |
-| **total** | **4910** | **1152** | **175** | **51** | **0** | **3532** | **27%** | **28%** | **4,358,233** |
+| **total** | **4910** | **2002** | **175** | **51** | **0** | **2682** | **44%** | **45%** | **4,458,233** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 136 (4%), compared 187 (5%), read-only 51, untested 3532.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 986 (27%), compared 1037 (28%), read-only 51, untested 2682.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -72,6 +72,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | states | 20,30,88 | READ-ONLY | `docs/research/sk-armor-trace.md` | - | 2026-11-01 | chillingarmor, energyshield, shiverarmor read |
 | states | 61,28 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | lowerresist and conviction on an immune D1 (negative change / 5) |
 | states | 86 | READ-ONLY | `docs/research/sk-lightning-trace.md` | - | 2026-11-01 | justhit (NextHit) read; D1 model only |
+| treasure | #850 | TESTED-0-DIFF | `docs/research/treasure-trace.md` | 100,000 | 2026-11-01 | class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared |
 | formulas | F01 | TESTED-0-DIFF | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | melee to-hit, real build, two seeds |
 | formulas | F03 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md) |
 | formulas | F04 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal |
@@ -99,7 +100,6 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | 2 | monster.ai | untested (135 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 3 | monster.stats | untested (734 of 734) | Per-class life, defence, damage and resists drive kill time in every act; risk map rank 13; only boss spawn stats were differenced, not the base rows | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (137 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
-| 5 | treasure | untested (852 of 852) | Treasure classes set drops and magic find, which feed gear for the Sorceress and Paladin plans; no differential exists | `docs/classes/ranking.md` |
 | 6 | skills.pal | untested (18 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
 | 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |

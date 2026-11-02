@@ -169,6 +169,7 @@ def stats_line(t, i):
             f"{1 - poly[0]:.4f}", f"{en:.3f}", f"{poly[DEG]:.5f}"]
     cols += [f"{exp.get(k, 0):.4f}" for k in CATS]
     cols.append(" ".join(f"mul{m}:{v:.3f}" for m, v in sorted(piles.items())))
+    cols += [c["group"], c["level"]]
     return "\t".join(str(x) for x in cols)
 
 
@@ -189,7 +190,7 @@ def main():
     e = o.e
     if cmd == "classes":
         prefixes = tuple(sys.argv[2:]) or ("Act 1", "Act 2")
-        print("\t".join(["class", "picks", "nodrop", "total", "nodrop%", "P(>=1)", "E[drops]", "P(7+)"] + [f"E[{k}]" for k in CATS] + ["gold piles by mul"]))
+        print("\t".join(["class", "picks", "nodrop", "total", "nodrop%", "P(>=1)", "E[drops]", "P(7+)"] + [f"E[{k}]" for k in CATS] + ["gold piles by mul", "group", "level"]))
         for i, name in enumerate(o.names):
             if name and name.startswith(prefixes) and t.rec(i)["items"] is not None:
                 print(stats_line(t, i))
@@ -219,6 +220,19 @@ def main():
             if r.get("Id") and r.get("TCQuestId") not in ("", "0", None):
                 show(f"quest {r['Id']} id{r['TCQuestId']}/cp{r['TCQuestCP']} boss{r.get('boss')} noRatio{r.get('noRatio')}",
                      [r["TreasureClass1"], r["TreasureClass4"], r["TreasureClass1(N)"], r["TreasureClass4(N)"], r["TreasureClass1(H)"], r["TreasureClass4(H)"]])
+        return
+    if cmd == "players":                        # NoDrop share of a plain monster class by the player count, native rolls against the formula
+        n_rolls = int(sys.argv[2]) if len(sys.argv) > 2 else 20000
+        c = t.rec(o.index["Act 1 H2H A"])
+        print("players\tNoDrop (formula, truncated)\tnodrop%\tnative nodrop%\tnative drops/kill")
+        for n in range(1, 9):
+            p = c["nodrop"] / (c["nodrop"] + c["total"]); q = 1 - p ** n
+            nd = 0 if q == 0 else int((1 - q) * c["total"] / q)
+            rng, zero, drops_n = random.Random(5), 0, 0
+            for _ in range(n_rolls):
+                got = parse_roll(o.roll(rng.getrandbits(32), "Act 1 H2H A", 0, 10, n, 0))
+                zero += not got; drops_n += len(got)
+            print(f"{n}\t{nd}\t{nd / (nd + c['total']) * 100:.1f}\t{zero / n_rolls * 100:.1f}\t{drops_n / n_rolls:.3f}")
         return
     if cmd == "coins":                        # mean coins per gold pile at an item level (mul 0), and per kill with the plain monster class's pile rate
         print("ilvl\tmean coins\tmin\tmax\tcoins per Act 1 H2H kill")
