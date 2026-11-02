@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Upstream PR #177 merged: five d2d fidelity fixes (vendor repair gate, melee 256ths and undead bonus, freeze rules, standing missile footprint and burst roll, Smite on a block) with game.exe differentials
 - bot: route guards read the merc from the d2d dump even with the merc policy off; the free Rogue claim is verified (merc: claim verified / claim not seen).
 - bundlefinal2: final bundle rebased onto upstream PR 176, Smite component added, CodeRabbit ground-roll comment folded in
 - verifyzerohit: independent verification of the zero-damage hit trace; game side V run, d2d read only, no PR candidate

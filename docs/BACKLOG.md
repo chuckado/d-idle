@@ -337,6 +337,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - verifyzerohit: SKZEROHIT verified with an own harness (game.exe FUN_0057cee0 / FUN_0057cb00 / enchant walk / FUN_005a29a0 run, 3 seeds, 0 differences): zero-damage hit keeps knockback, no get-hit unless stunned, Lightning Enchanted bolts on a no-recovery hit; first pass wrong on 0x5c and d2d bolts, both passes miss the state 0x36 gate, special classes and the bit 0x100 clear; event 2 = dispatch entry 7 of 0x6e2490; ledger row missiles 195 READ-ONLY earned with a note; docs/research/verifyzerohit.md
 - bundlefinal2: final upstream bundle (11 commits on bdc1eb02, Smite included) on private branch local/bundle-final; PR body in docs/research/pr-bundle-final-body.md; the coordinator opens the PR
 - MERCFIX: Gate 2 merc=none fixed offline (agent/mercfix): route guards read the dump merc with the policy off, free-rogue claim read back; live probe on a d2d slot still open; a dead Rogue needs merc.enabled=1 revive or a paid hire (user choice)
+- credit177: upstream PR #177 merged; CONTRIBUTORS.md and credits ledger updated
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
