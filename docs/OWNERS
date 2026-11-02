@@ -158,3 +158,8 @@ internal/cheat/ledger.go  memrules  memrules
 internal/cheat/cheat.go  memrules  memrules
 cmd/d2cheat/main.go  memrules  memrules
 openspec/changes/memrules/**  memrules  memrules
+internal/cheat/ledger.go  snaplib  ledgerkey
+internal/cheat/ledgerkey.go  snaplib  ledgerkey
+internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
+cmd/d2cheat/main.go  snaplib  ledgerkey
+openspec/changes/ledgerkey/**  snaplib  ledgerkey

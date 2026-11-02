@@ -20,6 +20,7 @@ type Entry struct {
 	Actor     string         `json:"actor"`
 	Instance  string         `json:"instance,omitempty"`
 	Character string         `json:"character,omitempty"`
+	CharID    string         `json:"char_id,omitempty"` // optional unique identity; see Entry.Key
 	Kind      Kind           `json:"kind"`
 	Params    map[string]any `json:"params,omitempty"`
 	Before    map[string]any `json:"before,omitempty"`
@@ -91,6 +92,7 @@ type Filter struct {
 	Actor        string
 	Instance     string
 	Character    string
+	Key          string // "<instance>/<name>" (see Entry.Key); legacy entries without an instance match by name
 	Kind         Kind
 	OnlySuccess  bool
 }
@@ -102,6 +104,7 @@ func (f Filter) Match(e Entry) bool {
 	case f.Actor != "" && e.Actor != f.Actor:
 	case f.Instance != "" && e.Instance != f.Instance:
 	case f.Character != "" && !strings.EqualFold(e.Character, f.Character):
+	case f.Key != "" && !matchKey(e, f.Key):
 	case f.Kind != "" && e.Kind != f.Kind:
 	case f.OnlySuccess && !e.Success:
 	default:
@@ -146,11 +149,12 @@ type Summary struct {
 	First, Last              time.Time
 	ByKind                   map[Kind]int
 	ByCharacter              map[string]int
+	ByKey                    map[string]int // per prefix+name, so copies of one name stay apart
 	ByActor                  map[string]int
 }
 
 func Summarize(es []Entry) Summary {
-	s := Summary{ByKind: map[Kind]int{}, ByCharacter: map[string]int{}, ByActor: map[string]int{}}
+	s := Summary{ByKind: map[Kind]int{}, ByCharacter: map[string]int{}, ByKey: map[string]int{}, ByActor: map[string]int{}}
 	for i, e := range es {
 		s.Total++
 		if e.Success {
@@ -166,6 +170,7 @@ func Summarize(es []Entry) Summary {
 		}
 		s.ByKind[e.Kind]++
 		s.ByCharacter[e.Character]++
+		s.ByKey[e.Key()]++
 		s.ByActor[e.Actor]++
 	}
 	return s
@@ -189,14 +194,32 @@ func (s Summary) String() string {
 		kinds[string(k)] = v
 	}
 	return fmt.Sprintf("%d entries (%d ok, %d failed)\n  kinds: %s\n  characters: %s\n  actors: %s",
-		s.Total, s.Succeeded, s.Failed, keys(kinds), keys(s.ByCharacter), keys(s.ByActor))
+		s.Total, s.Succeeded, s.Failed, keys(kinds), keys(s.ByKey), keys(s.ByActor))
 }
 
 // Cheated reports whether a successful cheat on character (any character when "") happened at or after
 // since. Statistics and the dashboard call it to flag or exclude a run: pass the run's start time.
 func (l *Ledger) Cheated(since time.Time, character string) bool {
-	es, err := l.List(Filter{Since: since, Character: character, OnlySuccess: true})
-	return err == nil && len(es) > 0
+	return l.cheated(Filter{Since: since, Character: character, OnlySuccess: true})
+}
+
+// CheatedKey is Cheated for one character in one prefix (key "<instance>/<name>"): a cheat on a copy in
+// another prefix does not count. Legacy entries without an instance still count against the name.
+func (l *Ledger) CheatedKey(since time.Time, key string) bool {
+	return l.cheated(Filter{Since: since, Key: key, OnlySuccess: true})
+}
+
+func (l *Ledger) cheated(f Filter) bool {
+	es, err := l.List(f)
+	if err != nil {
+		return false
+	}
+	for _, e := range es {
+		if !e.Kind.IsMarker() {
+			return true
+		}
+	}
+	return false
 }
 
 // Cheated is Ledger.Cheated on the default ledger.

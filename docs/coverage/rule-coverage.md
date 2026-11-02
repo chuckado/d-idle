@@ -16,7 +16,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 0 | 1 | 0 | 0 | 146 | 1% | 1% | 100,000 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
 | skillfx.damage (skills with an element type: element damage and synergy formula) | 100 | 0 | 100 | 0 | 0 | 0 | 100% | 100% | 116,000 |
-| missiles (missile flight, range, hit roll) | 684 | 0 | 16 | 61 | 0 | 607 | 2% | 11% | 204,800 |
+| missiles (missile flight, range, hit roll) | 684 | 21 | 30 | 26 | 0 | 607 | 7% | 11% | 322,421 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 0 | 0 | 0 | 734 | 0% | 0% | 0 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
 | monster.ai (monster AI types) | 146 | 6 | 5 | 0 | 0 | 135 | 8% | 8% | 7,500 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 0 | 0 | 0 | 0 | 852 | 0% | 0% | 0 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 10 | 3 | 0 | 2 | 72% | 89% | 2,111,956 |
-| **total** | **4910** | **1131** | **161** | **86** | **0** | **3532** | **26%** | **28%** | **4,240,612** |
+| **total** | **4910** | **1152** | **175** | **51** | **0** | **3532** | **27%** | **28%** | **4,358,233** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 101 (3%), compared 187 (5%), read-only 86, untested 3532.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 136 (4%), compared 187 (5%), read-only 51, untested 3532.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -60,7 +60,9 @@ Case counts add the cases of every ledger line; one differential that covers man
 | missiles | 158-162 | TESTED-DEVIATION | `docs/research/sk-ground-trace.md` | 64,200 | 2026-11-01 | Blizzard center and shards, offset D1 |
 | missiles | 68,69,100-103,247,260-263 | READ-ONLY | `docs/research/sk-ground2-trace.md` | - | 2026-11-01 | firewall maker and wall, meteor, hydra, frozen orb read |
 | missiles | 114,192,193 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | Teeth, Bone Spear, Bone Spirit hit roll D1 (min and max equal on all cases) |
-| missiles | 2-5,7-10,13-16,22-25,32,63-66,70-72,77-79,125-128,130,133,135,196-200,226,227,229,238,239,266,341,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | game.exe launch record V run (mm_launch, 213 launches) vs d2d by source read and a port; D1 level bracket, D2 hitshift, D3 row element; no real-d2d run |
+| missiles | 7-10,63-66,70-72,238,239,341 | TESTED-DEVIATION | `docs/research/missilediff.md` | 44,792 | 2026-11-01 | D1 D2 D3 monster MissA record vs the real d2d build, fixed on local branch |
+| missiles | 2-5,13-16,125-128,196-200,226,227,229,266 | TESTED-0-DIFF | `docs/research/missilediff.md` | 72,829 | 2026-11-01 | monster MissA record (physical, levels 1..40; element where the owner has none) vs the real d2d build |
+| missiles | 22-25,32,77-79,130,133,135,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | skill-sourced, weapon or no-record rows: game.exe launch record V run, d2d by read |
 | monster.flags | all | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 734 | 2026-11-01 | undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared |
 | monster.ai | Skeleton,Goatman,QuillRat,Griswold,Smith | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | think act, pace, effects, seed vs rules::mon_think; 3000 cases each (seeds 20261101, 7); QuillRat scene without leader commands; second target as primary |
 | monster.ai | Fallen | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 1,500 | 2026-11-01 | no leader command word, dying false (seed 7); command word 2 differs (D8, unreachable); flee pace 50 not run (D11) |
