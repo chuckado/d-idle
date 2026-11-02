@@ -2,7 +2,7 @@
 
 ```yaml
 change: paldur
-status: in-progress
+status: archived
 agent: paldur
 branch: agent/paldur
 worktree: d2lod-wt/paldur
@@ -19,7 +19,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "offline, not verified live: game.exe's FUN_0057d3d0 / FUN_00559e30 run natively against d2d's Fight::wear_*, 50,192 and 20,192 cases; live drill recipe in the doc"
+result: "docs only; first or second pass, not yet independently verified"
+merge: b415aef
 ```
 
 - [x] trace the call chain (FUN_0057d4f0 -> FUN_0057d3d0 -> FUN_00559e30)
