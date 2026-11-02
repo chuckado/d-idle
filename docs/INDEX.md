@@ -224,3 +224,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifypalaura.md: independent verification of palaura-trace (roll and disc verified, rest not re-run)
 - docs/research/sk-zero-hit-trace.md - what a zero-damage hit still triggers (SKZEROHIT, static)
 - docs/research/verifypaldur.md: independent verification of the PALDUR durability trace (claims, limits, one prose error)
+- docs/research/pr-prices-verifier.md - Opus verifier of the vendor prices follow-on (repair gate holds; divide-first already upstream; rebase needed)
