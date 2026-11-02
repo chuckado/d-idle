@@ -2,7 +2,7 @@
 
 ```yaml
 change: reverifymissile
-status: in-progress
+status: archived
 agent: reverifymissile
 branch: agent/reverifymissile
 worktree: ~/code/d2lod-wt/reverifymissile
@@ -13,7 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs only: independent re-verification of the fixed monster missile record candidate and the Andariel poison split: READY WITH CHANGES for both; nothing posted upstream"
+result: "docs only; nothing upstream; PR drafts to be revised"
+merge: a43549d
 ```
 
 - [x] 1 re-verify the record claim, the consumer, the owner-poison add and the skill split with an own harness
