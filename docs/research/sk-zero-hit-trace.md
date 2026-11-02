@@ -59,7 +59,7 @@ Melee callers of FUN_0057cee0, the player branch, FUN_0057ccb0 (flag 2) and the 
 ## Reproduce
 
 ```sh
-tools/agentrun.sh <agent> --ttl 120 -- labrun orion -- bash tools/emu/mai2_dis.sh 57cee0 140   # also 57d073, 57cb00, 5a43a0, 5a4270, 5a2ba0, 5a29a0, 5a54f0
+tools/agentrun.sh <agent> --ttl 120 -- labrun the worker host -- bash tools/emu/mai2_dis.sh 57cee0 140   # also 57d073, 57cb00, 5a43a0, 5a4270, 5a2ba0, 5a29a0, 5a54f0
 tools/emu/run-on-worker.sh skzh_table.py        # the 0x73c0b8 table, rows per enchant id (D)
 tools/emu/run-on-worker.sh mpq-table.sh monstats | awk -F'\t' '$2==78 {print $6}'   # SandLeaper
 ```
