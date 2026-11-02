@@ -131,6 +131,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 2522460e 11-02 02:30 `merge origin/main into kitgatelevel` (kitgatelevel)
+- 4e475182 11-02 02:27 `Merge agent/gate1pass: Gate 1 PASS record and Review 3: run gate1-20261102-0005, 16.3 virtual hours, clvl 14, 0 deaths, band 11-14 XP/h 8748 vs 9859, longest no-progress window 5 min, fault recovered in 2.5 s; build 050a509 had the OLD kit gate` (gate1pass)
 - 2b34c8c2 11-02 02:20 `merge origin/main into kitgatelevel` (kitgatelevel)
 - 089af520 11-02 01:54 `Merge agent/mercstats: MERCSTATS: hireling stats, costs, AI and gear effects traced; produced on the API credits runner` (mercstats)
 - 645ae2e2 11-02 01:53 `merge origin/main into mercstats` (mercstats)
@@ -139,6 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 190fe392 11-02 01:06 `merge origin/main into monsterai2` (monsterai2)
 - 50d3bad5 11-02 00:59 `Merge agent/crfollow164: CRFOLLOW164: CodeRabbit follow-up on PR 164: MMTAB lookup only when rows differ, missing d2d cases fail; replies posted` (crfollow164)
 - 898bc4d6 11-02 00:48 `Merge agent/propenmissile: PROPENMISSILE: upstream PR 164 opened (monster missile record and poison units, bundled, 8 commits on upstream main)` (propenmissile)
-- 87053a54 11-02 00:40 `Merge agent/missilefix3: MISSILEFIX3: SrcDamage byte read, text corrections from the third check, both PR drafts final; third check section added` (missilefix3)
-- 1b745bbd 11-02 00:39 `merge origin/main into missilefix3` (missilefix3)
 <!-- statusgen:end -->
