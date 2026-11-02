@@ -302,6 +302,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - PRBUILDPRICES2 done (card prbuildprices2): repair-gate-only PR branch local/vendor-repair-gate-v3 (f0360487) on upstream main cb716f10, verified (gate 143+17 wrong on base, 0 on head; 7 suites green; clean merge with #174), draft docs/research/pr-vendor-repair-gate-draft.md; not posted (PR hold)
 - kitstall: dead-gate memory, caster bow not a weapon problem, ammo chore Amazon-only (kit lane i2 stall)
 - kitstall2 - worn items lost / bow on a Sorceress (loot unwear, sell guard, start weapon rewear); probe: read the new "sell: worn before/after" and "sell: sold" lines on the next baseline run
+- PRBUILDSKMELEE3B built (private fork branches local/skmelee3-d1-final 46ced89a and local/skmelee3-d2-final 283c7bce on upstream main cb716f10; PRs on hold): D1 fine physical and D2 undead / Blunt bonus as two independent PRs, verifier findings applied (merc and Shadow no longer excluded, missile-path tests, comment); counts 0 vs game on both heads; PR 174 merge resolution prepared; det hashes and an Opus re-check owed: docs/research/pr-skmelee3-d1-draft.md, pr-skmelee3-d2-draft.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
