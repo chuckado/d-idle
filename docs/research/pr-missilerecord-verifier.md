@@ -120,6 +120,21 @@ Not required but cheap: record cases for the three space-named rows I did not ru
 | merge with upstream main 6935cf64 (read-only fetch) | whole branch: clean (`git merge-tree --write-tree`, no conflict); the two candidate commits alone on upstream (`--merge-base=23e2baec`): clean | V run |
 | base commits upstream? | 9ba8d369 / 23e2baec not in upstream main, not an open PR | V run |
 
+**Det state hashes and a d2d drill** (V run; one hidden d2d slot on the worker host, no game.exe, no game instance). Lab binaries = the lab patch set of the det-hash runs (docs/research/det-hashes-2026-11-01b.md) cherry-picked with 9ba8d369 + 23e2baec (base, d2d sha256 69308544c353) and then 9d7e7d81 + 312b0bbb (head, d6c0bc50e482), all clean; `det_scenarios_lab.py` / `det_scenarios_run.py` copied into my harness dir, seed 3, lockstep.
+
+- The 14 existing scenarios (passive, fight, cold, static, cold2, hit_plain / champion / unique / boss / immune / minion, merc, pet, follow): **base = head on every `mon` and `state` hash** (e.g. passive d1ca6c463f45 / 84942b4a0e26, the det-hash runs' upstream values; hit_minion, Hell Blood Moor, 778c963eb8da / 367f7e302e78). base2 reruns of passive, hit_immune, spit_mummy repeat base's hashes. Expected: no affected row fires in those scenarios.
+- My added scenario `spit_<shooter>[_h]` (in my copy only): one shooter spawned (`debug spawn`), a passive player 4 cells south (900 life Normal, 9000 Hell), 10 blocks of 50 frames, the player's life (`dump stats` raw[6]) per block. Player life lost over the 500 frames, base -> head:
+
+| shooter (row) | Normal | Hell |
+|---|---|---|
+| sandmaggot1 (goospit1) | 22 -> 83 | 351 -> 1,168 |
+| unraveler1 (mummy1) | 43 -> 115 | 1,004 -> 1,485 (both include melee) |
+| slinger6 (pantherpotgreen) | no throw in the window | **0 -> 5,922** (one pot, then 637 a block) |
+| slinger5 (pantherpotorange) | no throw | 5 -> 144 (one hit: D1 physical + D3 fire, as game.exe's record) |
+| quillrat1 (spike1) | no shot | 36 -> 57 (D1 bracket, +21 = 7 x 3) |
+
+The Hell Night Slinger line is the blocker of section 5 in the real game loop: one green pot takes 5,922 life over 20 s and keeps going (game.exe's record: 102-108 a frame for 400 frames, 159-169 points in all).
+
 ## Reproduce (worker host)
 
 ```sh
