@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 38f6e36 11-01 18:50 `Merge agent/monstermissile: MONSTERMISSILE: Act 1/2 monster missile trace: 213 real game.exe launches match the formula, six d2d deviations (NM/Hell level brackets, HitShift, poison/fire on MissA), six bot findings` (monstermissile)
 - c4e701e 11-01 18:33 `Merge agent/hastpdump: HASTPDUMP: inv-tp-dump diagnostic line on area entry and HasTP change, no behaviour change` (hastpdump)
 - 43d606e 11-01 18:20 `Merge agent/coveragetable: Rule coverage table: 4,910 data-table rows in 21 subsystems, generated from a checked ledger` (coveragetable)
 - 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f933d0f 11-01 16:38 `Merge agent/claudeguide: Claude guide: how to trace claims against game.exe, agent setup, model roles and verification` (claudeguide)
 - 058ec1c 11-01 16:32 `Merge agent/modelab: model A/B on SKRESIST: Opus vs Sonnet vs Haiku comparison` (modelab)
 - d7e739d 11-01 16:29 `Merge agent/crfollow163: log of the CodeRabbit follow-up on PR 163 (stale tool range fixed)` (crfollow163)
-- 63ba464 11-01 16:25 `Merge agent/openpr-blizzard: log of upstream PR 163 (Blizzard shard offsets)` (openpr-blizzard)
 <!-- statusgen:end -->
