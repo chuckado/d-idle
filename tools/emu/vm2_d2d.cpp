@@ -49,7 +49,7 @@ int main(int argc, char** argv) try {
             swing.ar_pct = int(bonus);
             Rng rng; rng.low = s0; rng.high = s1;
             std::printf("H %lld %d\n", id, player_blow(fighter, target, int(clvl), rng, swing).hit ? 1 : 0);
-        } else if (tag == "B") {
+        } else if (tag == "B" || tag == "C") {
             std::uint32_t s0, s1;
             long long armed, bm, bM, sb, db, ed, fmin, fmax, n111, dp, strn, dex, mastery, eskill, srcdam;
             if (!(in >> s0 >> s1 >> armed >> bm >> bM >> sb >> db >> ed >> fmin >> fmax >> n111 >> dp >> strn >> dex >> mastery >> eskill >> srcdam)) continue;
@@ -64,7 +64,7 @@ int main(int argc, char** argv) try {
             swing.ed_pct = int(eskill); swing.srcdam = int(srcdam);
             Rng rng; rng.low = s0; rng.high = s1;
             const auto blow = player_blow(fighter, target, 1, rng, swing);
-            std::printf("B %lld %d %d %d\n", id, blow.hit ? 1 : 0, blow.phys, blow.frac);
+            std::printf("%s %lld %d %d %d\n", tag.c_str(), id, blow.hit ? 1 : 0, blow.phys, blow.frac);
         }
     }
     return 0;

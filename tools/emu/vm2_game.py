@@ -88,8 +88,12 @@ def main():
         out.write(f"H {i} {s0} {s1} {dex} {clvl} {gear} {togain} {pct} {bonus} {dfn} {dlvl} {armed} {hit}\n")
         n_h += 1
     # ---- physical damage
-    for i in range(cases):
-        armed = 1 if rng.random() < 0.7 else 0
+    # Tag B: random gear. Tag C (control): barehanded, game Strength forced to 0 (d2d is told the real one and
+    # ignores it) and half of them with no flat damage, to separate D4's Strength term from its range rule.
+    for i in range(cases + cases // 2):
+        ctl = i >= cases
+        tag = "C" if ctl else "B"
+        armed = 0 if ctl else (1 if rng.random() < 0.7 else 0)
         bm = rng.randrange(1, 40); bM = bm + rng.randrange(1, 60)
         sb, db = rng.choice(((100, 0), (100, 0), (110, 0), (0, 100), (75, 75), (0, 0)))
         ed = rng.choice((0, 0, 0, 30, 50, 100, 200, 300))
@@ -108,15 +112,17 @@ def main():
             s0, s1 = rng.getrandbits(32), rng.getrandbits(32); probe = [s0, s1]
         lcg(probe)
         g0, g1 = probe
+        if ctl and i % 2: fmin = fmax = 0
+        gstr = 0 if ctl else strn
         att = e.alloc(0x100)
         e.w32(att, 0); e.w32(att + 0x20, g0); e.w32(att + 0x24, g1)
         s21 = (tdiv(bm * (100 + ed), 100) if armed else 0) + fmin
         s22 = (tdiv(bM * (100 + ed), 100) if armed else 0) + fmax
         st.update(weapon=0x7000000 if armed else 0, sb=sb, db=db, mastery=mastery)
         stats.clear()
-        stats.update({(att, 0x15): s21, (att, 0x16): s22, (att, 0x6f): n111, (att, 0x19): dp, (att, 0): strn, (att, 2): dex})
+        stats.update({(att, 0x15): s21, (att, 0x16): s22, (att, 0x6f): n111, (att, 0x19): dp, (att, 0): gstr, (att, 2): dex})
         fine = s32(e.call(0x57b420, 0, 0, 0, eskill, 0, srcdam, ecx=att, edx=1))
-        out.write(f"B {i} {s0} {s1} {armed} {bm} {bM} {sb} {db} {ed} {fmin} {fmax} {n111} {dp} {strn} {dex} {mastery} {eskill} {srcdam} {fine}\n")
+        out.write(f"{tag} {i} {s0} {s1} {armed} {bm} {bM} {sb} {db} {ed} {fmin} {fmax} {n111} {dp} {strn} {dex} {mastery} {eskill} {srcdam} {gstr} {fine}\n")
         n_b += 1
     # ---- undead bonus (FUN_0057b660), exhaustive grid
     st2 = {}

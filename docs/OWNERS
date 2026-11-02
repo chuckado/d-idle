@@ -143,3 +143,6 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+openspec/changes/verifyskmelee2/**  verifyskmelee2  verifyskmelee2
+docs/research/verify-skmelee2.md  verifyskmelee2  verifyskmelee2
+tools/emu/vm2_*  verifyskmelee2  verifyskmelee2

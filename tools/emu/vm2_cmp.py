@@ -14,12 +14,16 @@ def tdiv(a, b):
     return q if (a >= 0) == (b > 0) else -q
 
 
+def pg_ok(dp, mastery, strn, sb, dex, db):
+    return dp + mastery + tdiv(strn * sb, 100) + tdiv(dex * db, 100) >= -90
+
+
 def main():
     cases_file, d2d_file = sys.argv[1], sys.argv[2]
     d2d = {}
     for ln in open(d2d_file):
         f = ln.split()
-        if f and f[0] in ("H", "B"):
+        if f and f[0] in ("H", "B", "C"):
             d2d[(f[0], int(f[1]))] = [int(x) for x in f[2:]]
     h = Counter(); b = Counter(); u = Counter()
     shown = Counter()
@@ -47,9 +51,25 @@ def main():
                 print(f"H diff [{cat}] id {i}: AR {ar} pct {tot} -> game AR' {game_ar} / d2d {d2d_ar}, def {dfn}, lv {clvl}/{dlvl}: game {game} d2d {d}")
             if cat == "ar<=0": h["ar<=0_cases"] += 0
             if game_ar <= 0: pass
+        elif tag == "C":
+            (i, s0, s1, armed, bm, bM, sb, db, ed, fmin, fmax, n111, dp, strn, dex, mastery, eskill, srcdam, gstr, fine) = [int(x) for x in f[1:]]
+            hit, phys, frac = d2d[("C", i)]
+            # barehanded, game Strength 0: d2d ignores Strength, so only the range rule can differ
+            if dp + mastery < -90 and eskill != 0:       # D6 acts here (floor twice in d2d): not a range-rule case
+                b["ctl_d6_n"] += 1
+                if max(fine >> 8, 1) != phys: b["ctl_d6_diff"] += 1
+                continue
+            key = "ctl_flat0" if fmin == 0 and fmax == 0 else "ctl_flat"
+            b[key + "_n"] += 1
+            if max(fine >> 8, 1) == phys: b[key + "_floor_equal"] += 1
+            elif shown[key] < 3:
+                shown[key] += 1
+                print(f"C diff [{key}] id {i}: flat {fmin}/{fmax} n111 {n111} dp {dp} e {eskill} src {srcdam}: game fine {fine / 256:.3f}, d2d {phys}")
         elif tag == "B":
-            (i, s0, s1, armed, bm, bM, sb, db, ed, fmin, fmax, n111, dp, strn, dex, mastery, eskill, srcdam, fine) = [int(x) for x in f[1:]]
+            (i, s0, s1, armed, bm, bM, sb, db, ed, fmin, fmax, n111, dp, strn, dex, mastery, eskill, srcdam, gstr, fine) = [int(x) for x in f[1:]]
             hit, phys, frac = d2d[("B", i)]
+            if armed and pg_ok(dp, mastery, strn, sb, dex, db) and srcdam == 0x80 and fine >= 256 and not eskill:
+                sums["clean_n"] += 1; sums["clean_delta256"] += fine - (phys << 8)
             b["cases"] += 1
             if frac != 0: b["d2d_frac_nonzero"] += 1
             if fine & 255: b["game_has_fraction"] += 1
@@ -94,6 +114,7 @@ def main():
     for k in ("weapon", "bare"):
         n = sums[k + "_n"]
         if n: print(f"B {k}: {n} landed blows, mean game fine - d2d phys = {sums[k + '_delta256'] / n / 256:+.4f} points")
+    if sums["clean_n"]: print(f"B clean weapon blows (SrcDam 0x80, no skill ED, fine >= 1 point, p >= -90): {sums['clean_n']}, mean game fine - d2d phys = {sums['clean_delta256'] / sums['clean_n'] / 256:+.4f} points")
     print("U", dict(u))
 
 
