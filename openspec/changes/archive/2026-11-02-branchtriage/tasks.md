@@ -2,7 +2,7 @@
 
 ```yaml
 change: branchtriage
-status: in-progress
+status: archived
 agent: branchtriage
 branch: agent/branchtriage
 worktree: d2lod-wt/branchtriage
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "docs only; read-only triage, nothing run live"
+result: "docs and tools only; merged by the triage queue"
 live: "docs only, nothing run live"
+merge: bab1c35
 ```
 
 - [x] recompute the unmerged agent branches against origin/main
