@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
 - bot logs: countable lines explore-giveup, tp-debounce-hold, tp-debounce-flip, kitgate-trip (docs/botlogs.md)
 - kit gate by character level: from clvl 8 an incomplete kit makes a town trip instead of holding the character in Blood Moor and Cold Plains
 - no change
