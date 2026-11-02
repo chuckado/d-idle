@@ -133,6 +133,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- eb6f29de 11-02 07:14 `merge origin/main into skshield` (skshield)
 - 51a5d6e9 11-02 07:09 `Merge agent/skdefenders: skdefenders: credit-funded first-pass decomposition (docs and emulator tools only)` (skdefenders)
 - 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
 - 9584f9c7 11-02 06:54 `Merge agent/skcurseval: skcurseval: curse value calculations on game.exe against d2d, levels 1..99 (first pass; docs and emulator tools only)` (skcurseval)
@@ -142,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b5f855dd 11-02 05:48 `merge origin/main into propenmonsterpacea` (propenmonsterpacea)
 - 13162292 11-02 05:41 `Merge agent/skias: skias: Pro account job result (docs and emulator tools only)` (skias)
 - eba39266 11-02 05:36 `Merge agent/geararmore: geararmore: Pro account job result (docs and emulator tools only)` (geararmore)
-- e3736c1e 11-02 05:35 `merge origin/main into geararmore` (geararmore)
 <!-- statusgen:end -->
