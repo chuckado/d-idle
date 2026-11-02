@@ -2,7 +2,7 @@
 
 ```yaml
 change: townshop
-status: in-progress
+status: archived
 agent: townshop
 branch: agent/townshop
 worktree: d2lod-wt/townshop
@@ -15,11 +15,12 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/town ./internal/bot on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Budget inside buy loops and proof top-up implemented, offline tests pass on the worker host; NOT verified live."
+result: "go tests town bot pass on the worker host; real cause (field tome stat 70 drop) still open"
 live: "not verified; checklist in docs/townshop.md"
 credit:
   author: owner
   agents: [Claude Code]
+merge: a788442
 ```
 
 - [x] root cause from the Gate 2 log
