@@ -141,3 +141,6 @@ internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
 internal/bot/tpdump.go  hastpdump  hastpdump
 docs/hastpdump.md  hastpdump  hastpdump
+docs/research/nec-skill-trace.md  necskill  necskill
+tools/emu/nec_*  necskill  necskill
+openspec/changes/necskill/**  necskill  necskill

@@ -8,7 +8,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | skills.ama (Amazon skills: start/do functions, missile, states) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.sor (Sorceress skills) | 30 | 0 | 12 | 13 | 0 | 5 | 40% | 83% | 762,635 |
-| skills.nec (Necromancer skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
+| skills.nec (Necromancer skills) | 30 | 27 | 3 | 0 | 0 | 0 | 100% | 100% | 64,400 |
 | skills.pal (Paladin skills) | 30 | 10 | 0 | 2 | 0 | 18 | 33% | 40% | 21,760 |
 | skills.bar (Barbarian skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
 | skills.dru (Druid skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
@@ -16,7 +16,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 0 | 1 | 0 | 0 | 146 | 1% | 1% | 100,000 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
 | skillfx.damage (skills with an element type: element damage and synergy formula) | 100 | 0 | 100 | 0 | 0 | 0 | 100% | 100% | 116,000 |
-| missiles (missile flight, range, hit roll) | 684 | 0 | 13 | 61 | 0 | 610 | 2% | 11% | 168,200 |
+| missiles (missile flight, range, hit roll) | 684 | 0 | 16 | 61 | 0 | 607 | 2% | 11% | 204,800 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 0 | 0 | 0 | 734 | 0% | 0% | 0 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
 | monster.ai (monster AI types) | 146 | 0 | 0 | 0 | 0 | 146 | 0% | 0% | 0 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 0 | 0 | 0 | 0 | 852 | 0% | 0% | 0 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 10 | 3 | 0 | 2 | 72% | 89% | 2,111,956 |
-| **total** | **4910** | **1098** | **148** | **83** | **0** | **3581** | **25%** | **27%** | **4,101,112** |
+| **total** | **4910** | **1125** | **154** | **83** | **0** | **3548** | **26%** | **28%** | **4,202,112** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 55 (1%), compared 138 (4%), read-only 83, untested 3581.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 88 (2%), compared 171 (5%), read-only 83, untested 3548.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -45,6 +45,8 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.sor | 43,37,61,63,65 | READ-ONLY | `docs/research/sk-passives-trace.md` | - | 2026-11-01 | Telekinesis D1, masteries, Warmth read (V read); SKPASS |
 | skills.sor | 59 | TESTED-DEVIATION | `docs/research/sk-ground-trace.md` | 64,200 | 2026-11-01 | Blizzard shard offsets D1 (V run both sides); SKGROUND |
 | skills.sor | 51,56,57,62,64 | READ-ONLY | `docs/research/sk-ground2-trace.md` | - | 2026-11-01 | Fire Wall (80 cases, game side), Meteor, Thunder Storm, Hydra, Frozen Orb read to dispatch or spawn |
+| skills.nec | 66,68-83,85-92,94,95 | TESTED-0-DIFF | `docs/research/nec-skill-trace.md` | 27,800 | 2026-11-01 | calc cells only (calc1-4, petmax, sumsk, delay, aura, passive) equal d2d eval_calc; Corpse Explosion D3-D7 and pet base stats read-only or untested |
+| skills.nec | 67,84,93 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | magic missile roll D1 (top inclusive, 10509 differ, 0 after the SKMISS fix); Teeth NextHit D2 is S plus I |
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |
 | skills.pal | 101,112 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential |
 | skills.monster | 0 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4 |
@@ -55,6 +57,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | missiles | 55,92 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt and Blessed Hammer flight and hit read and run in game.exe only |
 | missiles | 158-162 | TESTED-DEVIATION | `docs/research/sk-ground-trace.md` | 64,200 | 2026-11-01 | Blizzard center and shards, offset D1 |
 | missiles | 68,69,100-103,247,260-263 | READ-ONLY | `docs/research/sk-ground2-trace.md` | - | 2026-11-01 | firewall maker and wall, meteor, hydra, frozen orb read |
+| missiles | 114,192,193 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | Teeth, Bone Spear, Bone Spirit hit roll D1 (min and max equal on all cases) |
 | missiles | 2-5,7-10,13-16,22-25,32,63-66,70-72,77-79,125-128,130,133,135,196-200,226,227,229,238,239,266,341,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | game.exe launch record V run (mm_launch, 213 launches) vs d2d by source read and a port; D1 level bracket, D2 hitshift, D3 row element; no real-d2d run |
 | monster.flags | all | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 734 | 2026-11-01 | undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared |
 | states | 1,11,118 | TESTED-DEVIATION | `docs/research/pr-freeze-proof.md` | 225,748 | 2026-11-01 | freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess) |
@@ -85,13 +88,12 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 
 | rank | subsystem | rows | why it matters | source |
 |---:|---|---|---|---|
-| 1 | missiles | untested (610 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
+| 1 | missiles | untested (607 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
 | 2 | monster.ai | untested (146 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 3 | monster.stats | untested (734 of 734) | Per-class life, defence, damage and resists drive kill time in every act; risk map rank 13; only boss spawn stats were differenced, not the base rows | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (137 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 5 | treasure | untested (852 of 852) | Treasure classes set drops and magic find, which feed gear for the Sorceress and Paladin plans; no differential exists | `docs/classes/ranking.md` |
 | 6 | skills.pal | untested (18 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
-| 7 | skills.nec | untested (30 of 30) | Necromancer plan (Bone Spear, Summoner): summons, curses and corpses untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
 | 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
 | 10 | itemtypes | untested (98 of 98) | Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced | `docs/research/price-trace.md` |
