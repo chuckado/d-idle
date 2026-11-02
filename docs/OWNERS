@@ -143,3 +143,6 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/sk-ias-trace.md  skias  skias
+tools/emu/skias_bp.py  skias  skias
+openspec/changes/skias/**  skias  skias
