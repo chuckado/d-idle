@@ -53,8 +53,8 @@ func palScenario(l int) Scenario {
 	return Scenario{
 		Name: fmt.Sprintf("Blood Moor, clvl %d Paladin, melee only", l), Seconds: 300, Class: d2.Paladin, Level: l,
 		MaxLife: life, MaxMana: mana, StartMana: mana, Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4,
-		MonsterHP: []int{12, 24, 24, 45}, MonsterDps: 1.6, Exposure: 1, // in contact for the whole fight (no kiting)
-		GoldPerKill: 6, SpellCost: 999, SpellDmg: 0, CastSec: 0.45, // no ranged spell: the cast slot is never affordable
+		MonsterHP: BloodMoorLife, MonsterDps: 1.6, Exposure: 1, // in contact for the whole fight (no kiting)
+		SpellCost: 999, SpellDmg: 0, CastSec: 0.45, // no ranged spell: the cast slot is never affordable
 		MeleeSec: 0.6, TripSec: 75, Seed: 7, HasMelee: true, Belt: 1,
 		// To-hit: AR (dex-7) x 5 + factor, factor 20 is U (charstats ToHitFactor not read here); damage: Str through
 		// the sword's StrBonus 100 (U: short sword in 1.14d), no skill ED yet.
@@ -106,7 +106,7 @@ func TestPalProbeEarlyLifeCurve(t *testing.T) {
 		for _, size := range []int{1, 2, 4} {
 			lost, alive := 0.0, size
 			for k := 0; k < size; k++ {
-				hp := float64(sc.MonsterHP[k%len(sc.MonsterHP)])
+				hp := sc.MonsterHP[k%len(sc.MonsterHP)]
 				secs := hp / perSwing * sc.MeleeSec
 				lost += float64(alive) * sc.MonsterDps * secs
 				alive--
@@ -121,7 +121,7 @@ func TestPalProbeEarlyLifeCurve(t *testing.T) {
 	}
 	// a single Blood Moor monster must never take the clvl 1 Paladin through the retreat line in the model
 	sc := palScenario(1)
-	hp := float64(sc.MonsterHP[3])
+	hp := sc.MonsterHP[3]
 	if lost := hp / sc.Blow.Expected(sc.Foe) * sc.MeleeSec * sc.MonsterDps; lost > float64(sc.MaxLife)*0.6 {
 		t.Errorf("one 45 hp monster costs %.0f of %d life at clvl 1", lost, sc.MaxLife)
 	}

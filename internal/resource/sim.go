@@ -1,6 +1,9 @@
 package resource
 
-import "d2lod-bot/internal/d2"
+import (
+	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/data"
+)
 
 // Policy is a set of decision functions the simulator can drive; ResourcePolicy is this package, LegacyPolicy
 // reproduces the behaviour seen live (cast until empty, wait, drink at 25%).
@@ -70,10 +73,10 @@ type Scenario struct {
 	TravelSec    float64 // walking between packs
 	PackMin      int
 	PackMax      int
-	MonsterHP    []int   // cycled
-	MonsterDps   float64 // life lost per second per monster in contact
-	Exposure     float64 // share of the fight a monster is in contact (ranged kiting)
-	GoldPerKill  int
+	MonsterHP    []float64 // cycled
+	MonsterDps   float64   // life lost per second per monster in contact
+	Exposure     float64   // share of the fight a monster is in contact (ranged kiting)
+	MonLevel     int       // monster level of the area (the gold pile size follows it); 0 = 1, the Blood Moor
 	SpellCost    int
 	SpellDmg     float64
 	CastSec      float64
@@ -115,12 +118,18 @@ func (s Scenario) weaponSkill() string {
 	return "Staff"
 }
 
+// BloodMoorLife is the cycle of monster life of the stock scenarios: the real Blood Moor Normal population, plain
+// monsters (docs/research/monster-stats-trace.md section 4, V run): Fallen 1..4, Quill Rat 1..5, Zombie 7..12 in a
+// 10 : 4 : 4 mix, mean 4.17 (means of the row ranges) against the traced 4.2 per unit (the old 12 / 24 / 24 / 45 was 2.5 to 10 times too high).
+// LifeCycle builds the same from the loaded rows of any area.
+var BloodMoorLife = []float64{2.5, 3, 9.5, 2.5, 3, 2.5, 2.5, 9.5, 3, 2.5, 2.5, 9.5, 3, 2.5, 2.5, 9.5, 2.5, 2.5}
+
 // BloodMoorSorc is the stock scenario: clvl 8 Sorceress, Fire Bolt, 5 minutes of Blood Moor packs.
 func BloodMoorSorc() Scenario {
 	return Scenario{
 		Name: "Blood Moor, clvl 8 Sorceress", Seconds: 300, Class: d2.Sorceress, Level: 8, MaxLife: 60, MaxMana: 45, StartMana: 45,
-		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: []int{12, 24, 24, 45},
-		MonsterDps: 1.6, Exposure: 0.35, GoldPerKill: 6, SpellCost: 3, SpellDmg: 8, CastSec: 0.45,
+		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: BloodMoorLife,
+		MonsterDps: 1.6, Exposure: 0.35, SpellCost: 3, SpellDmg: 8, CastSec: 0.45,
 		MeleeDmg: 3, MeleeSec: 1.0, TripSec: 75, Seed: 7, HasMelee: true, Belt: 1,
 		// A clvl 8 Sorceress at 25 Dex and 10 Str with a 1-5 staff (StrBonus 100): trace sk-melee-trace.md B1. The
 		// to-hit factor 5, the Blood Moor foe (defense 15, level 3) and the staff range are U, nearest defaults.
@@ -136,8 +145,8 @@ func BloodMoorSorc() Scenario {
 func BloodMoorPaladin() Scenario {
 	return Scenario{
 		Name: "Blood Moor, clvl 12 Paladin", Seconds: 300, Class: d2.Paladin, Level: 12, MaxLife: 190, MaxMana: 40, StartMana: 40,
-		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: []int{12, 24, 24, 45},
-		MonsterDps: 1.6, Exposure: 1, GoldPerKill: 6, SpellCost: 2, SpellDmg: 12, CastSec: 0.7,
+		Gold: 120, HP: 3, MP: 0, TravelSec: 9, PackMin: 1, PackMax: 4, MonsterHP: BloodMoorLife,
+		MonsterDps: 1.6, Exposure: 1, SpellCost: 2, SpellDmg: 12, CastSec: 0.7,
 		MeleeDmg: 9, MeleeSec: 0.6, TripSec: 75, Seed: 7, HasMelee: true, Belt: 1,
 		MainAttack: "Zeal", WeaponSkill: "Attack",
 	}
@@ -175,6 +184,7 @@ type world struct {
 	potLeft    float64 // mana potion points still to arrive
 	potRate    float64 // points per second of the running potion
 	gold       int
+	goldFrac   float64 // the expected gold of kills not yet whole coins
 	belt       Belt
 	hasTP      bool
 	lastTrip   int
@@ -296,7 +306,7 @@ func Replay(sc Scenario, pol Policy, t Tuning) Report {
 		n := sc.PackMin + int(w.r.next()%uint64(sc.PackMax-sc.PackMin+1))
 		w.mHP = w.mHP[:0]
 		for i := 0; i < n; i++ {
-			w.mHP = append(w.mHP, float64(sc.MonsterHP[kind%len(sc.MonsterHP)]))
+			w.mHP = append(w.mHP, sc.MonsterHP[kind%len(sc.MonsterHP)])
 			kind++
 		}
 		w.beforePack(n)
@@ -409,6 +419,26 @@ func (w *world) hit(dmg float64) {
 	if w.mHP[0] <= 0 {
 		w.mHP = w.mHP[1:]
 		w.rep.Kills++
-		w.gold += w.sc.GoldPerKill
+		w.goldFrac += data.GoldPerKill(data.KillPlain, w.sc.MonLevel)
+		w.gold += int(w.goldFrac)
+		w.goldFrac -= float64(int(w.goldFrac))
 	}
+}
+
+// LifeCycle builds a MonsterHP cycle from loaded monster rows: weights[i] monsters of mons[i] at monster level mlvl
+// (mean life, at least 1), interleaved so a pack mixes kinds. Class and build independent.
+func LifeCycle(db *data.DB, d data.Difficulty, mlvl int, mons []*data.Monster, weights []int) []float64 {
+	var out []float64
+	left := append([]int(nil), weights...)
+	for more := true; more; {
+		more = false
+		for i, m := range mons {
+			if left[i] > 0 {
+				left[i]--
+				out = append(out, max(1, db.MeanHP(m, d, mlvl)))
+				more = more || left[i] > 0
+			}
+		}
+	}
+	return out
 }

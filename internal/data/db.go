@@ -409,15 +409,28 @@ func (db *DB) MonLevelRow(level int) *MonLevel {
 	return db.MonLevels[level]
 }
 
-// ScaledHP estimates a monster's maximum life at difficulty d and monster
-// level mlvl: monstats MaxHP times the monlvl HP percentage. UNVERIFIED
-// against a live monster; bosses and uniques add their own multipliers.
+// ScaledHP is a monster's maximum life at difficulty d and monster level mlvl: monstats MaxHP times the monlvl HP
+// percentage, with the level clamped to the last monlvl row. V run (docs/research/monster-stats-trace.md R1:
+// equal to game.exe's FUN_006538a0 on every hostile row x 3 difficulties x level 1..110). A NoRatio row (the pets
+// and summons) skips the percentage, as game.exe does. It is the maximum of the roll; MeanHP is the mean.
 func (db *DB) ScaledHP(m *Monster, d Difficulty, mlvl int) int {
-	row := db.MonLevelRow(mlvl)
-	if row == nil {
-		return m.HPMax[d]
+	return db.scaledLife(m, m.HPMax[d], d, mlvl)
+}
+
+// MeanHP is the mean of the life roll (between MinHP and MaxHP, both scaled like ScaledHP).
+func (db *DB) MeanHP(m *Monster, d Difficulty, mlvl int) float64 {
+	return float64(db.scaledLife(m, m.HPMin[d], d, mlvl)+db.scaledLife(m, m.HPMax[d], d, mlvl)) / 2
+}
+
+func (db *DB) scaledLife(m *Monster, base int, d Difficulty, mlvl int) int {
+	if m.NoRatio || len(db.MonLevels) == 0 {
+		return base
 	}
-	return m.HPMax[d] * row.HP[d] / 100
+	row := db.MonLevelRow(min(max(mlvl, 0), len(db.MonLevels)-1))
+	if row == nil {
+		return base
+	}
+	return base * row.HP[d] / 100
 }
 
 // BeltByIndex returns belts.txt row i (an armor.txt belt item's "belt"
