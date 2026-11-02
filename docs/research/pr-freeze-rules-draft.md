@@ -1,6 +1,6 @@
 # Draft PR body: freeze rules (Glacial Spike's freeze on monsters)
 
-> status: DRAFT for the fork branch `local/freeze-rules-v3` (four commits on upstream main 3852c904, 11 files, +482 -9; supersedes `fix/freeze-rules-v2` and the stale [pr-freeze-draft.md](pr-freeze-draft.md)). Rebuilt, re-run and re-checked on the final head on 2026-11-02 (numbers below). Not posted; needs the user's go and one independent re-check of the final head before it is opened. Evidence trail: [pr-freeze-proof.md](pr-freeze-proof.md), [freeze-rules-trace.md](freeze-rules-trace.md). Order, merge tests and CI parity: the section "Prep notes" at the end. All PRs are on hold by the user (2026-11-02); nothing is to be opened.
+> status: DRAFT for the fork branch `local/freeze-rules-v4` (four commits on upstream main cb716f10, which already contains #159; 8 files, +166 -9; supersedes `fix/freeze-rules-v2`, `local/freeze-rules-v3` and the stale [pr-freeze-draft.md](pr-freeze-draft.md)). Rebuilt and re-run on the final head on 2026-11-02 (numbers below). Not posted; all upstream PRs are on hold (user, 2026-11-02); it needs one independent re-check of the final head before it is opened. The maintainer is expected to merge more soon: re-rebase (`git rebase --onto upstream/main cb716f10 local/freeze-rules-v4`), re-check and re-run before opening. Evidence trail: [pr-freeze-proof.md](pr-freeze-proof.md), [freeze-rules-trace.md](freeze-rules-trace.md). CI parity and prep: the section "Prep notes" at the end.
 
 ---
 
@@ -17,7 +17,7 @@ Glacial Spike's freeze on a monster now follows game.exe's FUN_0057b230:
 
 Before this, d2d stood every monster for the raw length at any coldeffect and also chilled it.
 
-Four commits, one claim each (resist / divide / coldeffect; special monsters chill; no halving; tools). Files: `components/rules/combat.hpp` (`Freeze`, `monster_freeze`), `components/game/fight/missiles.cpp` (`Fight::strike`), `gamedata.hpp` / `gamedata_load.cpp` (`MonsterFreezeDivisor`), comments in `ai.cpp`, `ai.hpp`, `uniques.hpp`, `docs/research/re/superuniques.md`, `tools/emu/monsters.py`; new `tools/emu/freeze_rules.py` and `tests/game/test_freeze_rules.cpp`.
+Four commits, one claim each (resist / divide / coldeffect; special monsters chill; no halving; tools). Files: `components/rules/combat.hpp` (`Freeze`, `monster_freeze`), `components/game/fight/missiles.cpp` (`Fight::strike`), comments in `ai.cpp`, `ai.hpp`, `uniques.hpp`, `docs/research/re/superuniques.md`, `tools/emu/monsters.py`; new `tests/game/test_freeze_rules.cpp` (the oracle `tools/emu/freeze_rules.py` and `GameData::freeze_divisor` came in with #159).
 
 ### Proof
 
@@ -25,7 +25,7 @@ Four commits, one claim each (resist / divide / coldeffect; special monsters chi
 
 | build | cases that differ from game.exe |
 |---|---|
-| upstream main 3852c904 (test file added) | 185,746 of 225,748 (plain 48,946, special 78,501, half_freeze 58,299) |
+| upstream main cb716f10 (test file added) | 185,746 of 225,748 (plain 48,946, special 78,501, half_freeze 58,299) |
 | this branch | 0 of 225,748 |
 
 ```sh
@@ -54,26 +54,24 @@ Det state hashes: not run.
 - Siblings: a player's freeze is already a chill in d2d (FUN_0057b230's player branch). Pets and a co-op partner as freeze targets are not traced.
 - Gameplay change, by design: a Frost Nova or Glacial Spike now chills (does not freeze) every champion, unique, superunique and act boss, and monsters with cold resistance are frozen for a shorter time, as in the original game.
 
-### Order with #159
+### Relation to #159
 
-This branch and #159 (Frozen Armor and the freeze resume) are independent and can merge in either order. Both add the same `tools/emu/freeze_rules.py` (byte-identical here and there) and both add `GameData::freeze_divisor` on the same lines, so git merges them without a conflict; a trial merge of this branch onto #159's head builds and passes the same suites and the same differential. If #159 lands first, nothing needs to change here. After both land, Frozen Armor's own copy of the rule in `states.cpp` could call `rules::monster_freeze`: a follow-up, not part of this PR.
+#159 (Frozen Armor and the freeze resume) is merged. This branch uses its `freeze_rules.py` oracle and its `GameData::freeze_divisor`, and does not touch Frozen Armor's own copy of the rule in `states.cpp`; that copy could call `rules::monster_freeze` in a follow-up.
+
+---
 
 ---
 
 ## Prep notes (not part of the PR body)
 
-Branch and head: private fork, `local/freeze-rules-v3`, head 21010485, pushed to the private remote only (not to the public fork, no PR). Built from upstream main 3852c904 by cherry-picking the four v2 commits with two edits so that the overlap with #159 disappears: (1) `freeze_divisor` is added on the same lines #159 uses (V: identical hunks merge to one line, checked in the merged tree: one declaration, one load line); (2) `tools/emu/freeze_rules.py` is byte-identical to #159's final head 36e7fcde (V: same blob hash; v2's copy differed only in four docstring lines), and the `compare` usage lines moved into the header of `tests/game/test_freeze_rules.cpp`.
+Base and head: private fork, branch `local/freeze-rules-v4`, head 9caa1b9b, on upstream main cb716f10 (exact base; it contains #159 as 7c1ecf57). Pushed to the private remote only; nothing to the public fork, no PR. To re-rebase after the maintainer's next merge: `git fetch upstream && git rebase --onto upstream/main cb716f10 local/freeze-rules-v4` in the PR checkout; the four commits touch `combat.hpp`, `missiles.cpp`, `ai.cpp`, `ai.hpp`, `uniques.hpp` (comments), `superuniques.md`, `monsters.py` (docstring) and add `test_freeze_rules.cpp`. The commit bodies cite "upstream main cb716f10" as the differential base (update the hash on rebase). The earlier shapes `fix/freeze-rules-v2` (conflicted with #159 on `tools/emu/freeze_rules.py`) and `local/freeze-rules-v3` (made independent of #159) are superseded, since #159 is now in main (V: `git merge-tree` of v2 against #159's head gave the one add/add conflict in the tool file).
 
-Order, with evidence (V: `git merge-tree` and a throwaway merge, a full build of the merged tree):
-- v2 as it was on #159's head: CONFLICT, add/add on `tools/emu/freeze_rules.py`, the only conflict (the other seven shared files auto-merge); the docstring is the whole difference.
-- v3 with #159 (36e7fcde): clean in either order; merged tree builds with 0 warnings; test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_freeze_rules, test_freeze_resume, test_armor_hit all rc 0; the freeze differential on the merged tree: 225,748 cases, 0 differ.
-- Choice: (a), independent of #159; no stacking needed. Either may merge first. If #159 changes its `freeze_rules.py` or the `freeze_divisor` lines before it lands, v3 must take the same bytes (rebase and re-check merge-tree). #159's Frozen Armor keeps its own copy of the rule; a later follow-up could call `rules::monster_freeze`.
+Counts (worker host, offline, no game, no d2d slot; cases.tsv md5 ddbd53b274ad and game.tsv md5 0168caed598e, equal to the earlier runs, game side re-run natively): upstream main cb716f10 plus the test file 185,746 of 225,748 differ (plain 48,946, special 78,501, half_freeze 58,299); v4 head 0. The separately written harness (own generator, seed 0x1F00DFACE): 146,591 cases, 6 differ, all freeze length above 0x100000 (the known residual). Suites on the v4 head with the game data dir, rc 0: test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_freeze_resume, test_armor_hit; test_freeze_rules without arguments SKIP.
 
-Counts (worker host, offline, no game, no d2d slot; cases md5 ddbd53b274ad, game md5 0168caed598e, equal to the earlier runs): upstream main + test file 185,746 of 225,748 differ; v3 head 0; v3 + #159 0; second harness 6 of 146,591 (0x100001 only). Suites on the v3 head with the game data dir: test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game rc 0; test_freeze_rules without arguments SKIP.
+CI parity (V where run): g++ full build of the test set with the build's flags (-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror, plus -Wshadow -Wunused -Wsign-compare): 0 warnings. A syntax-only pass over the changed .cpp files with clang++ and g++ using -Wshadow -Wrange-loop-construct -Wconversion: 0 warnings on added lines (g++ -Wsign-conversion, beyond CI, flags `types[fallen->second]` at test_freeze_rules.cpp line 67; left as is). clang-tidy (repo .clang-tidy) on the changed .cpp files: 0 warnings on added lines (pre-existing x / y binding names elsewhere). pr_guard: range and each of the four commits 0 FAIL / 0 WARN. presubmit --quick: 0 FAIL, 2 WARN (siblings: the diff touches monster only; build skipped by --quick). MSVC /W4 and windows.h macro names (read the diff only, U for a real MSVC build): no min/max macro use, designated initializers are C++20 and already in the tree. Direct includes: `missiles.cpp` adds `<uniques.hpp>` for `rules::Boss`.
 
-CI parity (V where run): g++ with the build's flags (-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror, plus -Wshadow -Wunused -Wsign-compare) full build of the test set: 0 warnings. A syntax-only pass over the four changed .cpp files with clang++ and g++ using -Wshadow -Wrange-loop-construct -Wconversion: 0 warnings on added lines (g++ -Wsign-conversion, beyond CI, flags one: test_freeze_rules.cpp line 67, `types[fallen->second]` with an int index; left as is). clang-tidy (repo .clang-tidy) on the four changed .cpp files: 0 warnings on added lines (pre-existing x / y binding names elsewhere). pr_guard: range and each of the four commits 0 FAIL / 0 WARN. presubmit --quick: 0 FAIL, 2 WARN (siblings: the diff touches monster only; build skipped by --quick). MSVC /W4 and windows.h macros (read the diff, U for a real MSVC build): the added code uses no min/max macro names, no unsigned/narrowing implicit conversions beyond `std::uint32_t(...)` casts already in the replaced lines, the `.chill_ticks =` designated initializers are C++20 and already used in the tree. Direct includes: `missiles.cpp` adds `<uniques.hpp>` for `rules::Boss`; combat.hpp needs nothing new (`std::max` already included).
+Against PR #174 (Ponytail batch 8, head 489ef83d, base 3852c904, 14 commits): throwaway merge of v4 and #174's head is clean (V: `git merge-tree`, no conflict). Three files change on both sides: `ai.hpp` (#174 adds `Monster::crush_divisor` near the `Target` builder; ours is a `half_freeze` comment), `combat.hpp` (#174: `Target::crush_divisor`, `Swing::missile`, Crushing Blow in `player_blow`; ours: `Freeze` / `monster_freeze` after `missile_blow`), `missiles.cpp` (#174: one line `swing.missile = true` near line 692; ours: the freeze block near line 656). The hunks are separate, no semantic overlap (V by reading the diff: #174 never touches freeze, chill_ticks, half_freeze or stun_until in the strike path). I also built the merged tree (v4 + #174 head) with the test set: 0 warnings, the same ten suites rc 0, freeze differential 225,748 cases 0 differ. No resolution is needed after either lands; if #174 lands first, the rebase is `git rebase --onto upstream/main cb716f10 local/freeze-rules-v4` with no manual step expected.
 
-U: det state hashes (need a d2d slot); an MSVC build; the final head has not had the independent re-check yet; the commit body of the tooling commit cites a base hash ("ddc8281d: 185,746 differ") that is not upstream's: change it to "upstream main" before opening (the body is already in the private branch; amending changes the head).
-
+U: det state hashes (need a d2d slot); an MSVC build; the independent re-check of the final head.
 
 Agent: Claude Code
