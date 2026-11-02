@@ -121,6 +121,7 @@ func Do(ctx context.Context, req Request) (*Result, error) { return DefaultEnv()
 func (e *Env) Do(ctx context.Context, req Request) (*Result, error) {
 	ent := Entry{Time: e.now(), Actor: req.Actor, Instance: e.Instance, Kind: req.Kind, Params: req.Params,
 		Reason: strings.TrimSpace(req.Reason)}
+	ent.Run = os.Getenv(RunEnv)
 	if ent.Actor == "" {
 		ent.Actor = os.Getenv("D2BOT_AGENT")
 	}
