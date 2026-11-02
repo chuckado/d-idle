@@ -2,7 +2,7 @@
 
 ```yaml
 change: reviewprs
-status: in-progress
+status: archived
 agent: reviewprs
 branch: agent/reviewprs
 worktree: d2lod-wt/reviewprs
@@ -13,7 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs only, offline (emulator spot checks on the worker host, no game); provisional verdicts, see the doc"
+result: "docs and tools only; merged by the triage queue"
+merge: 5ffb902
 ```
 
 ## 1. Work
