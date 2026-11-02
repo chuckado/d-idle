@@ -2,7 +2,7 @@
 
 ```yaml
 change: contribid
-status: in-progress
+status: archived
 agent: contribid
 branch: agent/contribid
 worktree: d2lod-wt/contribid
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "Docs and PR template only; nothing run live."
+result: "docs and template only"
 live: "docs only, nothing run live"
+merge: 41d992c
 ```
 
 - [x] AGENTS.md identity rule split
