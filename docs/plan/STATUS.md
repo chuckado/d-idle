@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
 - 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
 - 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
 - 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
 - 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
 - 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
-- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
 <!-- statusgen:end -->
