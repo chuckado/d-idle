@@ -12,7 +12,7 @@
 
 Exact changes for a PR:
 1. Drop aed23fc8 (divide-first): upstream has it. Drop the `bigmul` parts of the oracle commit 777df9d7 (`price_edge.py`, `price_claims.py`) or cut them to the repair gate.
-2. Rebase da80d0ab onto current upstream main; resolve the `tests/test_rules.cpp` hunk (keep the bow / crossbow asserts; the `dear` assert still uses upstream's `big` item). My local resolution (drop the conflict markers, keep both sides) is in section 4; its build and suites were still running when this was written.
+2. Rebase da80d0ab onto current upstream main; resolve the `tests/test_rules.cpp` hunk (keep the bow / crossbow asserts; the `dear` assert still uses upstream's `big` item). My local resolution (drop the conflict markers, keep both sides) is in section 4; built (-Werror) and the 7 suites are green, and its probe gives the same counts as the head (V: 0 gate mismatches on 4,664, 0 mult mismatches above 0xffff, the same 8 / 10 harness residuals).
 3. Fix the text: bows are nodurability 1 too (V, below), so "worn bows (Repair 0)" is not the reason a bow is refused in vanilla data; say the ItemTypes Repair half is redundant with nodurability for every vanilla base and kept for fidelity (mods). Title loses the divide-first half: "Vendor repair: no price without ItemTypes Repair or durability (FUN_0062e660)".
 4. Re-run `pr_guard` and `presubmit --quick` on the rebased head (done here locally: 0 FAIL).
 
@@ -61,11 +61,11 @@ Game side: M runs FUN_0062efb0's own block 0062faac..0062fc59 on the real npc ro
 
 | check | head da80d0ab | rebased (3852c904 + da80d0ab, local) |
 |---|---|---|
-| g++ build, CI flags + -Werror, the 7 suite targets | rc 0 | NOT RUN at writing (build running, ETA 11:30) |
-| suites test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game (data dir, no SKIP) | all rc 0 | NOT RUN at writing (after its build) |
-| g++ and clang++ `-fsyntax-only`, CI flags + -Wshadow -Wrange-loop-construct -Wconversion, TUs test_rules.cpp, gamedata_load.cpp, world/commands.cpp, apps/d2d/store.cpp | 0 warnings in rules.hpp, gamedata_load.cpp, test_rules.cpp (clang's other hits are -Wsign-conversion in untouched headers) | NOT RUN (needs its build dir) |
+| g++ build, CI flags + -Werror, the 7 suite targets | rc 0 | rc 0 |
+| suites test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game (data dir, no SKIP) | all rc 0 | all rc 0 |
+| g++ and clang++ `-fsyntax-only`, CI flags + -Wshadow -Wrange-loop-construct -Wconversion, TUs test_rules.cpp, gamedata_load.cpp, world/commands.cpp, apps/d2d/store.cpp | 0 warnings in rules.hpp, gamedata_load.cpp, test_rules.cpp (clang's other hits are -Wsign-conversion in untouched headers) | 0 warnings in our files (same as head) |
 | MSVC /W4 by reading | no new nested redeclaration (C4456: `info`, `kind`, `mends`, `durable` are new names in `repair_cost`, not reused below it); no narrowing (`npc_mult` returns `long long` into `long long`; `repair` is a bool); no windows.h macro names (far, near, min, max, small, interface, IN, OUT) in new identifiers; the designated initializer `{ .type, .kind }` follows ItemInfo's order | same |
-| clang-tidy "Names and includes" (tools/tidy-pr-select.py with the 3 changed files: 206 TUs) | run on test_rules.cpp and gamedata_load.cpp: 0 findings in our files; 4 in `components/drlg/outdoor.hpp` (`x`, `y` bindings), untouched by the branch (local clang-tidy 23.1.4 may be newer than CI's). The other 204 TUs NOT RUN: they see the same rules.hpp, whose #includes the diff does not change, so include-cleaner cannot change there (S) | NOT RUN (needs its build dir) |
+| clang-tidy "Names and includes" (tools/tidy-pr-select.py with the 3 changed files: 206 TUs) | run on test_rules.cpp and gamedata_load.cpp: 0 findings in our files; 4 in `components/drlg/outdoor.hpp` (`x`, `y` bindings), untouched by the branch (local clang-tidy 23.1.4 may be newer than CI's). The other 204 TUs NOT RUN: they see the same rules.hpp, whose #includes the diff does not change, so include-cleaner cannot change there (S) | same as head: 0 in our files, the same 4 outdoor.hpp findings |
 | required direct includes | none new: the added code uses no new std or project symbol | same |
 | pr_guard per commit (777df9d7, aed23fc8, da80d0ab) and range | 0 FAIL, 0 WARN each | 0 FAIL, 0 WARN |
 | presubmit --quick | 0 FAIL, 1 WARN (build skipped) | 0 FAIL, 1 WARN |
