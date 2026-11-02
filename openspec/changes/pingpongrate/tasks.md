@@ -2,19 +2,21 @@
 
 ```yaml
 change: pingpongrate
-status: proposed
+status: in-progress
 agent: pingpongrate
-branch: agent/pingpongrate
+branch: agent/soakfixes2
 worktree: ~/code/d2lod-wt/pingpongrate
 skip_specs: true
 owns:
-  # code paths (goal.go, emptyarea_test.go) are added when an agent takes the card
   - openspec/changes/pingpongrate/**
+  - internal/bot/goal.go
+  - internal/bot/emptyarea_test.go
+  - docs/soakstall.md
 exclusive: []
 gates:
   - go test -p 1 ./internal/bot passes, including the cluster C replay
-result: not started
+result: implemented and tested offline (mem.Fake rig); not verified live
 ```
 
-- [ ] 1 Test first: cluster C replay fires, A and B fire, a field with real kills does not
-- [ ] 2 noteArea resets on progress, not on a kill; the knob is listed in docs/knobs.md by the generator
+- [x] 1 Test first: cluster C replay fires, A and B fire, a field with real kills does not
+- [x] 2 noteArea resets on progress, not on a kill; the knob is listed in docs/knobs.md by the generator

@@ -68,6 +68,7 @@ func TestExploreGaveUp(t *testing.T) {
 			if i == 1 && c.kill {
 				r.obMu.Lock()
 				r.ob.kills++
+				r.ob.exp += 5000 // a real kill: far above the floor
 				r.obMu.Unlock()
 			}
 			r.exploreGaveUp(ctx, a, fail)
@@ -115,13 +116,56 @@ func TestPingPongGuard(t *testing.T) {
 		r := g.r
 		r.loop.cleared = map[int]bool{}
 		r.loop.run = c.run
+		r.obMu.Lock()
+		r.ob.level, r.ob.exp = 14, 1000
+		r.obMu.Unlock()
 		for i, a := range c.areas {
 			if i == c.kill {
 				r.obMu.Lock()
 				r.ob.kills++
+				r.ob.exp += 5000 // a real kill: far above the floor
 				r.obMu.Unlock()
 			}
 			g.clock.Sleep(c.step)
+			r.noteArea(a)
+		}
+		if got := r.loop.cleared[2] && r.loop.cleared[3]; got != c.want {
+			t.Errorf("%s: both cleared = %v, want %v", c.name, got, c.want)
+		}
+	}
+}
+
+// Cluster C of gate1r2-20261101: 8 switches over 52 virtual minutes, 26 kills worth 18 XP, clvl 14. A farm that earns
+// XP at a normal pace must not fire.
+func TestPingPongRate(t *testing.T) {
+	for _, c := range []struct {
+		name   string
+		xpKill uint32
+		want   bool
+	}{
+		{"cluster C", 0, true}, // 26 kills, 18 XP in total: 18 / 26 per kill rounds to 0 or 1
+		{"farm pace", 60, false},
+	} {
+		g := newRig(t)
+		r := g.r
+		r.loop.cleared = map[int]bool{}
+		r.obMu.Lock()
+		r.ob.level, r.ob.exp = 14, 100000
+		r.obMu.Unlock()
+		areas := []int{2, 3, 2, 3, 2, 3, 2, 3, 2}
+		kill := 0
+		for _, a := range areas {
+			g.clock.Sleep(6*time.Minute + 30*time.Second) // 8 switches over 52 minutes
+			for k := 0; k < 3 && kill < 26; k++ {         // about 3 kills per pass, 26 in all
+				kill++
+				r.obMu.Lock()
+				r.ob.kills++
+				r.ob.exp += c.xpKill
+				if c.xpKill == 0 && kill <= 18 {
+					r.ob.exp++ // 18 XP over the 26 kills
+				}
+				r.obMu.Unlock()
+			}
 			r.noteArea(a)
 		}
 		if got := r.loop.cleared[2] && r.loop.cleared[3]; got != c.want {

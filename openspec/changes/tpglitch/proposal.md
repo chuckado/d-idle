@@ -11,3 +11,5 @@ Gate 1 rerun 2 (docs/soaks/gate1r2-20261101.md, Review 2 sections 6 and 7): the 
 ## Impact
 
 No spec delta. Overlap (declared): povertyflip (merged, tpdebounce.go) is replaced or extended; internal/bot/tpdump.go (hastpdump) is only read.
+
+Overlap (declared): internal/bot goal.go, leveling.go, kitgate.go (read only), resource.go, internal/d2denv/reader.go and internal/combat/portal.go (unchanged: the debounce at hasPortalSource covers the glitch; the fork probe stays open).

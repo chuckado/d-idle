@@ -1,40 +1,41 @@
 package bot
 
-import "time"
-
-// Debounce of the town-portal verdict for the poverty check (docs/soakstall.md, povertyflip). Gate 1 showed HasTP
-// flipping per area (82 of 86 "poverty mode: on" lines said no town portal while 131 scrolls were bought); the code
-// shows no evident root cause (PortalSource only takes ContInventory items with a positive PortalQty; the per-area
-// inv-tp-dump line of docs/hastpdump.md will tell), so a verdict must hold before poverty mode may see it.
-const (
-	tpDebounceLooks = 3
-	tpDebounceSpan  = 2 * time.Minute // virtual
+import (
+	"sync"
+	"time"
 )
 
+// Debounce of the town-portal verdict (docs/soakstall.md, povertyflip and tpglitch). The tome's stat 70 drops out of
+// the dump while the tome is full (V: 95 provable cases in the inv-tp-dump lines of gate1r2-20261101, 2.6 s median,
+// 63 s at most), so "no portal source" only counts once it has held for tpDebounceSpan of virtual time. Gaining a
+// source is taken at once. It sits at the single source of the verdict (hasPortalSource) so the kit gate, the poverty
+// check and every other reader see the same value.
+const tpDebounceSpan = 2 * time.Minute // virtual; above the longest drop-out seen
+
 type tpDebounce struct {
-	set, val  bool // val is the accepted verdict once set
-	cand      bool
-	n         int
-	candSince time.Time
+	mu          sync.Mutex
+	set, val    bool // val is the accepted verdict once set
+	emptySince  time.Time
+	emptyActive bool
 }
 
-// look returns the accepted verdict after seeing raw: the first look is taken as is, a change needs tpDebounceLooks
-// consecutive looks or tpDebounceSpan without a contrary look.
+// look returns the accepted verdict after seeing raw: the first look is taken as is, true is accepted at once, false
+// only after every look for tpDebounceSpan said false.
 func (d *tpDebounce) look(raw bool, now time.Time) bool {
-	if !d.set {
-		d.set, d.val = true, raw
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	if !d.set || raw {
+		d.set, d.val, d.emptyActive = true, raw, false
 		return raw
 	}
-	if raw == d.val {
-		d.n = 0
-		return d.val
+	if !d.val {
+		return false
 	}
-	if d.n == 0 || d.cand != raw {
-		d.cand, d.n, d.candSince = raw, 0, now
+	if !d.emptyActive {
+		d.emptyActive, d.emptySince = true, now
 	}
-	d.n++
-	if d.n >= tpDebounceLooks || now.Sub(d.candSince) >= tpDebounceSpan {
-		d.val, d.n = raw, 0
+	if now.Sub(d.emptySince) >= tpDebounceSpan {
+		d.val = false
 	}
 	return d.val
 }
