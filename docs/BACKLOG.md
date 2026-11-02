@@ -298,6 +298,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFY-SKMELEE3 done (provisional READY WITH CHANGES, split D1/D2): D1 holds on own cases; D2 merc/Shadow exclusion contradicts FUN_006259b0 gate: docs/research/pr-skmelee3-verifier.md
 - VERIFY-PALSKILL2 done: calc slots and Smite D1 / D2 verified on 16,000 + 16,000 own cases, D6 / D7 / D8 read only (U for live): docs/research/verifypalskill2.md
 - PRBUILDFREEZE (2026-11-02): local/freeze-rules-v4 (9caa1b9b on upstream cb716f10, private remote), differential 185,746 -> 0 of 225,748; draft docs/research/pr-freeze-rules-draft.md; PRs on hold, needs the independent re-check, det hashes and the user's go.
+- PRBUILDSKMELEE3 built (private fork branch local/skmelee3-v1, head 81b7a0a0; upstream PRs on hold): D1 and D2 differential 290,847 weapon cases base 289,857 differ, head 0; Opus verification and det hashes owed: docs/research/pr-skmelee3-draft.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

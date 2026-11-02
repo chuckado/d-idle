@@ -58,7 +58,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [prbuildskmelee3](../../openspec/changes/prbuildskmelee3/) | in-progress | prbuildskmelee3 | `docs/research/pr-skmelee3-draft.md`<br>`tools/emu/sk_melee2.py`<br>`tools/emu/sk_melee2_test.cpp`<br>`tools/emu/sm3_probe.py`<br>`tools/emu/sm3_run.sh`<br>`openspec/changes/prbuildskmelee3/**` | `fork-branch:local/skmelee3-v1` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -117,8 +116,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change prbuildskmelee3: suites test_rules test_game_rules test_monsters test_monster_thinks test_monster_ai test_combat test_game green on the head
-- change prbuildskmelee3: counted differential base vs head over at least 100,000 cases
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -130,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
-- 54fff8ef 11-02 10:34 `Merge agent/fixci: FIXCI: repair the board archive paths and the chunker flag text that broke the Scripts CI job` (fixci)
-- fd74df8a 11-02 10:34 `merge origin/main into palskill` (palskill)
-- fcd78e5e 11-02 10:29 `Merge agent/palaura: palaura: credit-funded decomposition result (docs and emulator tools only)` (palaura)
-- d9d34ffa 11-02 10:29 `merge origin/main into palaura` (palaura)
-- b123648d 11-02 10:22 `Merge agent/verifyfreezeend2: verifyfreezeend2: credit-funded decomposition result (docs and emulator tools only)` (verifyfreezeend2)
-- c3906af9 11-02 10:21 `merge origin/main into verifyfreezeend2` (verifyfreezeend2)
-- 0430f68e 11-02 10:14 `Merge agent/skiasgame2: skiasgame2: credit-funded decomposition result (docs and emulator tools only)` (skiasgame2)
-- 644cc14e 11-02 10:14 `merge origin/main into skiasgame2` (skiasgame2)
-- b415aefb 11-02 10:09 `Merge agent/paldur: paldur: credit-funded decomposition result (docs and emulator tools only)` (paldur)
+- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
+- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
+- e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
+- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
+- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
+- 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
+- 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
+- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
+- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
+- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildskmelee3
-status: in-progress
+status: archived
 agent: prbuildskmelee3
 branch: agent/prbuildskmelee3
 worktree: d2lod-wt/prbuildskmelee3
@@ -19,8 +19,9 @@ exclusive:
 gates:
   - "suites test_rules test_game_rules test_monsters test_monster_thinks test_monster_ai test_combat test_game green on the head"
   - "counted differential base vs head over at least 100,000 cases"
-result: "Fork branch local/skmelee3-v1 head 81b7a0a0 (private remote only); weapon cases 289,857 of 290,847 differ on base, 0 on head; 7 suites green; draft written; det hashes and Opus verification owed. Not verified live (no game)."
+result: "docs only; PR hold in force"
 live: "offline: no game; game.exe's own functions run under the emulator on the worker host"
+merge: 7620862
 ```
 
 - [x] 1 Fork branch local/skmelee3-v1 from upstream main: D1 and D2 commits with tests
