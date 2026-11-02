@@ -54,6 +54,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
+| [lockstepp3](../../openspec/changes/lockstepp3/) | in-progress | lockstepp3 | `docs/research/lockstep-p3.md`<br>`openspec/changes/lockstepp3/**` | `instance:i4` |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -105,6 +106,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
+- change lockstepp3: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -127,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
 - 41d992c7 11-02 12:49 `Merge agent/contribid: CONTRIBID: community contributors commit as themselves; reproducibility rule and PR template checkboxes (docs and template only)` (contribid)
 - 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
 - dc11d0eb 11-02 12:45 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: private PR candidate records and drafts for the melee blow D1 and D2 split (docs only; nothing upstream)` (prbuildskmelee3b)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
 - 6572f5e3 11-02 12:30 `merge origin/main into credits` (credits)
 - 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
-- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
 <!-- statusgen:end -->
