@@ -255,3 +255,11 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-smiteblock.md: independent verifier of the Smite-vs-block trace (own oracle, other skills, proposed d2d diff)
 - docs/research/review-community-prs-20261102.md - review of community PRs 19, 22, 23 (verdicts, spot checks, draft comments for the user)
 - docs/research/sorcrest2-trace.md | Sorceress rest of skills part 2: Inferno, Blaze, Enchant do functions run in game.exe, burst rim on the real d2d build (D2, D4, D5, D7)
+- docs/research/stateevrun-trace.md | SKSTATEEV second pass with runs: which first-pass state-event claims hold (event 11 before resistances, event 3 on a miss), which are wrong (event 7 owner, reach mode 1/3, d2d Shiver modelled)
+- docs/research/verify-alignment2.md - independent verification of the alignment (stat 0xac) and undead-blow gate trace
+- docs/research/pr-playerroll-verifier.md - independent verifier of pr/player-roll (element roll top, physical in 256ths, -100 floor): own oracles, caller audit, det, CI flags and clang-tidy step
+- docs/research/verify-teleport-room.md - independent check of the Teleport room rule (card verifytele)
+- docs/research/pr-smite-block-draft.md - draft PR text, a block no longer stops Smite (private, on hold)
+- docs/research/crfix-bundle-20261102.md: CodeRabbit comments on staging PR 2, verdicts, reply texts, #176 merge probe (card crfixbundle)
+- docs/research/branch-triage-20261102.md | Triage of the local agent branches not on main: verdict, reason and merge or delete command per branch
+- docs/research/skdruid-trace.md | Druid skills 221..250 calc cells by game.exe vs d2d, summon caps (skdruid)
