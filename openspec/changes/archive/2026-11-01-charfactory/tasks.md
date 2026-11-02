@@ -2,7 +2,7 @@
 
 ```yaml
 change: charfactory
-status: in-progress
+status: archived
 agent: charfactory
 branch: agent/charfactory
 worktree: ~/code/d2lod-wt/charfactory
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "docs only; read-only worker-host look (directory listing, .d2s header read, ledger count); nothing run live"
+result: "docs only; nothing started; ADR 0014 cited from the unmerged memrules branch"
 live: "not run"
+merge: f50e477
 ```
 
 - [x] Inventory, capability table, snapshot library plan, ranked backlog
