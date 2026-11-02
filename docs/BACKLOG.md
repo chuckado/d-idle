@@ -284,6 +284,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - PALAURA: done offline (docs/research/palaura-trace.md): aura filter 0x12003 / 0xa783 / 0x4a283 and area search decoded and run in game.exe, enemy hit and Prayer mana / state 85 run; deviations D1..D9 vs d2d, drills P1..P4 pending (live half is maintainer-only), no PR candidate
 - PALSKILL done: d2d builds Smite, Zeal and Sacrifice (no plain-attack fallback); calc slots and to-hit 0 differ in 40,720 cases; Smite damage D1 (stat 111) and D2 (min = max) small deviations; Sacrifice price and Zeal reach U: docs/research/palskill-trace.md
 - verifycursedef (2026-11-02): independent check of SKCURSEVAL (CONFIRMED WITH CAVEATS: real game.exe calc machine, 0 diff on 8,810 own cases, but only lvl is ever an input; ledger count inflated), SKDEFENDERS (Q4 rule V read holds; d2d effres is a line copy), SKSHIELD (attach rule V read holds; 382-scenario run is self-consistency); docs/research/verify-cursedef.md
+- PRCANDIDATES (2026-11-02): inventory and ranking of upstream PR candidates for the next five slots: docs/research/pr-candidates-20261102.md; no branch pushed, no PR opened.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

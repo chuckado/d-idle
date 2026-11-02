@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: upstream PR candidate inventory and ranking for the next five slots (docs/research/pr-candidates-20261102.md).
 - docs: verifier report for the curse-value, defender and shield first-pass traces (verify-cursedef.md)
 - Added docs/research/palskill-trace.md and tools/emu/pal2*: dispatch of Smite, Zeal and Sacrifice, calc and Smite damage differentials, deviations D1 to D9, bot findings B1 to B5.
 - ci: fix board archive research paths and chunker groom privacy-scan false positive (Scripts job).
