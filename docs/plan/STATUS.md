@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [crfollow170](../../openspec/changes/crfollow170/) | in-progress | crfollow170 | `docs/research/openpr-log.md`<br>`openspec/changes/crfollow170/**` | `upstream-pr:nightmare-hell-monster-level` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -88,8 +87,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change crfollow170: pr_guard 0 FAIL 0 WARN on the new commit
-- change crfollow170: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -132,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- ff1dcb45 11-02 07:46 `Merge agent/crfollow170: CRFOLLOW170: CodeRabbit follow-up on PR 170: one comment fixed, one declined with reason, replies posted` (crfollow170)
 - d3285539 11-02 07:24 `Merge agent/propennmlevel: PROPEN-NMLEVEL: upstream PR 170 opened (Nightmare and Hell monster level)` (propennmlevel)
 - 142f6178 11-02 07:14 `Merge agent/skshield: skshield: credit-funded first-pass decomposition (docs and emulator tools only)` (skshield)
 - eb6f29de 11-02 07:14 `merge origin/main into skshield` (skshield)
@@ -141,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b58718e1 11-02 06:11 `Merge agent/baselineruns-20261102: Baseline runs 20261102: generated record of the baseline runs (tools/baseline-run.sh)` (baselineruns-20261102)
 - 42236144 11-02 05:53 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
 - 62da358f 11-02 05:49 `Merge agent/propenmonsterpacea: PROPEN-MONSTERPACE-A: upstream PR 167 opened (monster think paces, Blood Raven, shaman corpse reach)` (propenmonsterpacea)
-- b5f855dd 11-02 05:48 `merge origin/main into propenmonsterpacea` (propenmonsterpacea)
 <!-- statusgen:end -->

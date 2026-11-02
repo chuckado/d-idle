@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfollow170
-status: in-progress
+status: archived
 skip_specs: true
 agent: crfollow170
 branch: agent/crfollow170
@@ -15,7 +15,8 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "docs and tooling only; commit on the PR branch; area differential re-run (not the game live)"
+result: "log and card only; commit on the PR branch"
+merge: ff1dcb4
 ```
 
 ## 1. Work
