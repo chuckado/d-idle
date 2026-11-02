@@ -2,7 +2,7 @@
 
 ```yaml
 change: stateevrun
-status: in-progress
+status: archived
 agent: stateevrun
 branch: agent/stateevrun
 worktree: ~/code/d2lod-wt/stateevrun
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "docs/research/stateevrun-trace.md: first-pass claims run under the emulator (V run: 104,158 + 101,386 + 16,000 + 3 x 21,386 cases). Event 11 before resistances holds but fires at queue time; event 3 on a miss holds; event 7 owner and reach mode 1/3 were wrong in the first pass; d2d already models Shiver on a miss; d2d ES absorbs after resistances (deviation, no real-build differential, no PR candidate). Not verified live; no ledger row changed."
+result: "docs only; see the doc for tags and limits"
 live: "docs and emulator scripts only, nothing run live"
+merge: d202735
 ```
 
 - [x] harness ser_events.py (event 11 vs resistance, swing resolution, whole chain)
