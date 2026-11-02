@@ -187,3 +187,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/soaks/gate1-20261102.md: Gate 1 run 20261102 (PASSED) with Review 3: criteria, guard counts, comparison, caveats
 - no change
 - docs/research/openpr-log.md: posted log now also covers #166.
+- no change
