@@ -99,10 +99,99 @@ def friendly(w, skill, level):
     print("after pulse: mana", e.call(0x625480, caster, 8, 0) / 256, "state 85", e.call(0x639df0, caster, 0x55) != 0)
 
 
+def regen(w):
+    """FUN_005806f0 (EDI = unit; the per-frame mana regeneration, SKMANA's) with state 85 off / on, a flat stat 26 and a stat 27 %."""
+    e = w.e
+    cx, cy = w.free_spot()
+    caster, _, _ = w.make(pa.PLAYER, 4, cx, cy)
+    lst = e.r32(caster + 0x5c)
+    for stat, val in ((9, 100 << 8),):
+        e.call(0x627150, lst, stat, val, 0)
+    print("max mana 100 points = 25600; per-frame base = max(25600 / 3000, 1) =", 25600 // 3000, "(256ths)")
+    for flat, pct, st85 in ((0, 0, 0), (0, 0, 1), (512, 0, 0), (512, 0, 1), (0, 100, 0), (0, 100, 1), (512, 100, 0), (512, 100, 1)):
+        e.call(0x627150, lst, 8, 0, 0)
+        e.call(0x627150, lst, 26, flat, 0)
+        e.call(0x627150, lst, 27, pct, 0)
+        e.call(0x639db0, caster, 0x55, st85)
+        e.call(0x5806f0, regs={"edi": caster})
+        print(f"state 85 {'on ' if st85 else 'off'} stat 26 {flat:4d} stat 27 {pct:3d}: mana after one frame {e.call(0x625480, caster, 8, 0)} (256ths)")
+
+
+def hit(w, skill, level, pulses, do=0x5cf3a0):
+    """enemy damage per pulse: FUN_005cf3a0 (do 66) or FUN_005d0920 (do 81) on Quill Rats in range, rat life before / after."""
+    e = w.e
+    levels = {skill: level}
+    prep(w, levels)
+    cx, cy = w.free_spot()
+    caster, _, _ = w.make(pa.PLAYER, 4, cx, cy)
+    for stat, val in ((0xc, 30), (9, 100 << 8), (8, 100 << 8), (7, 100 << 8), (6, 100 << 8)):
+        e.call(0x627150, e.r32(caster + 0x5c), stat, val, 0)
+    lo = e.call(0x644d50, caster, skill, level, 1)
+    hi = e.call(0x644e40, caster, skill, level, 1)
+    rec = e.r32(e.r32(0x744304) + 0xb98) + skill * 0x23c
+    rng = e.call(0x646ca0, caster, e.r32(rec + 0x64), skill, level)
+    print(f"skill {skill} level {level}: element min {lo} max {hi} (256ths, FUN_00644d50 / 00644e40 flag 1), range {rng}, aurafilter {e.r32(rec + 0x50):#x},"
+          f" etype {e.read(rec + 0x1dc, 1)[0]}, auratargetstate {e.r16(rec + 0x82)}")
+    # the unit's own seed (FUN_0045c3e0 rolls it): a fresh unit's is 0 and then the roll is stuck at the minimum
+    e.w32(caster + 0x20, w.rng.getrandbits(32) | 1)
+    e.w32(caster + 0x24, 666)
+    import monstats
+    rows = [r for r in monstats.table("monstats") if r.get("id") and r["id"] != "Expansion"]
+    col = {1: "resfi", 2: "resli", 3: "resma", 4: "resco", 5: "respo"}[e.read(rec + 0x1dc, 1)[0]]
+    # one Quill Rat (63, resist 0) and rows with other values of the element's resist column (MonStats, normal)
+    picks = [63]
+    for want in (50, 75, 100, -20):
+        for i, r in enumerate(rows):
+            if r.get(col, "") == str(want) and i < 700 and r.get("npc") != "1" and r.get("enabled") == "1" and i not in picks:
+                picks.append(i)
+                break
+    resist = {63: 0}
+    resist.update({i: int(rows[i][col]) for i in picks[1:]})
+    foes = []
+    for k, cls in enumerate(picks):
+        u, _, _ = w.make(pa.MONSTER, cls, cx + 2, cy - 2 + k)
+        foes.append(u)
+    print(f"element column {col}; targets (class: resist %):", {i: resist[i] for i in picks})
+    far, _, _ = w.make(pa.MONSTER, 63, cx + rng + 3, cy)
+    ally_pet, _, _ = w.make(pa.MONSTER, 63, cx, cy + 3)
+    w.own(ally_pet, caster)
+    npc, _, _ = w.make(pa.MONSTER, 148, cx, cy - 3)
+    allv = foes + [far, ally_pet, npc]
+    for u in allv:
+        e.call(0x627150, e.r32(u + 0x5c), 7, 100000 << 8, 0)
+        e.call(0x627150, e.r32(u + 0x5c), 6, 100000 << 8, 0)
+    drops = []
+    for p in range(pulses):
+        before = [e.call(0x625480, u, 6, 0) for u in allv]
+        e.call(do, skill, level, ecx=w.game.g, edx=caster, limit=50000000)
+        after = [e.call(0x625480, u, 6, 0) for u in allv]
+        d = [b - a for a, b in zip(after, before)]
+        drops.append(d)
+        for u, b in zip(allv, after): e.call(0x627150, e.r32(u + 0x5c), 6, 100000 << 8, 0)
+    names = [f"class {c} (resist {resist[c]})" for c in picks] + ["rat out of range", "caster's pet", "NPC (Akara)"]
+    for i, n in enumerate(names):
+        vals = [d[i] for d in drops]
+        print(f"   {n:28s} damage per pulse (256ths) min {min(vals)} max {max(vals)} distinct {len(set(vals))} first {vals[:6]}")
+    rolls = [d[0] for d in drops]
+    print(f"{len(rolls)} pulses: roll (resist 0 rat) within [{lo}, {hi}]:", sum(lo <= v <= hi for v in rolls), "of", len(rolls),
+          "; distinct rolls", len(set(rolls)), "; mean", sum(rolls) / len(rolls), "(table mean", (lo + hi) / 2, ")")
+    for j, c in enumerate(picks[1:], 1):
+        r = resist[c]
+        same = sum(d[j] == d[0] * (100 - r) // 100 for d in drops)
+        same_md = sum(d[j] == (d[0] * (100 - r) + 50) // 100 for d in drops)
+        print(f"   class {c} resist {r}: damage == roll * (100 - r) // 100 in {same} of {len(drops)} pulses (rounded: {same_md})")
+    print("targets outside the circle, owned, or NPC took damage in", sum(1 for d in drops if any(d[len(picks):])), "pulses")
+
+
 def main():
     mode = sys.argv[1]
     w = pa.World(5)
     w.real_callback()
+    if mode == "regen":
+        return regen(w)
+    if mode == "hit":
+        s = int(sys.argv[2])
+        return hit(w, s, int(sys.argv[3]), int(sys.argv[4]) if len(sys.argv) > 4 else 20, 0x5d0920 if s == 114 else 0x5cf3a0)
     if mode == "friendly":
         friendly(w, int(sys.argv[2]) if len(sys.argv) > 2 else 98, int(sys.argv[3]) if len(sys.argv) > 3 else 1)
 
