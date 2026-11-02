@@ -53,6 +53,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [hastpdump](../../openspec/changes/hastpdump/) | in-progress | hastpdump | `internal/bot/tpdump.go`<br>`docs/hastpdump.md` | - |
+| [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -107,6 +108,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change hastpdump: TestInvTPDump: dump on first look, area change and verdict change, not otherwise
+- change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -133,14 +135,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
-- 6ac8a44 11-01 20:13 `merge origin/main into baselinefree` (baselinefree)
-- f8f9666 11-01 20:05 `Merge agent/botthreat: BOTTHREAT: missile threat table, runner guard (no kite/retreat from Zombie, Brute, Hawk, Rogue, Lancer, Arach), kill-first and dodge verdicts behind knobs` (botthreat)
-- 3d59e8e 11-01 19:56 `Merge agent/monsterai: MONSTERAI: Act 1/2 monster AI trace: 25 AIs 75,000 cases in game.exe real code vs d2d think; Skeleton Goatman Quill Rat exact; Zombie and Brute run on game.exe, d2d walks` (monsterai)
-- 1df86ca 11-01 19:55 `merge origin/main into monsterai` (monsterai)
-- fa03b72 11-01 19:43 `Merge agent/sorcrest: SORCREST: remaining Sorceress skills traced: Fire Ball and Glacial Spike pipeline 31,000 cases 0 differ, burst roll deviation proven on a real build (0/400 vs 400/400)` (sorcrest)
-- 9b99e09 11-01 19:33 `Merge agent/soakfixes: SOAKFIXES: explore give-up guards on run kind, ping-pong guard, town-portal verdict hysteresis` (soakgiveup)
-- cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
-- 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
-- f87ba9c 11-01 19:01 `Merge agent/necskill: NECSKILL: Necromancer skill trace: 27,800 calc cases 0 differ, magic roll life deviation 10,509 of 36,600 (the SKMISS fix covers it), Corpse Explosion deviations read only` (necskill)
+- fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
+- b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
+- 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
+- fbd5e46a 11-01 21:38 `merge origin/main into memrules` (memrules)
+- cf575aee 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
+- b1ea270c 11-01 20:55 `merge origin/main into snaplib` (snaplib)
+- 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
+- 39aaf7b3 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
+- 8961692a 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
+- d06b33cf 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
 <!-- statusgen:end -->
