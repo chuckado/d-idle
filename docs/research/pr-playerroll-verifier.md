@@ -105,7 +105,7 @@ Findings:
 | presubmit.py --quick --base 6935cf64 (ruff on PATH) | | 0 FAIL, 2 WARN (doc-claims missiles.md:106 "never"; build skipped) |
 | CI tooling tests (test_tidy_pr_select, test_gaps, test_pr_guard; tools/emu test_tooling) | | 17 OK; 7 OK (1 skipped) |
 
-ctest: section 7b.
+ctest (V run, `ctest -j1 -E rollprobe`, D2_MPQ_DIR and the patch installer set, my full builds): head 67 tests, 56 pass, 7 skip, 4 fail; base 66 tests (no test_missile_hit), 56 pass, 6 skip, 4 fail. **The same four fail on both**: `test_mpq` (abort on this MPQ folder), `smoke_d2d`, `quests_act1`, `quests_act4`. No failure is new at head; test_missile_hit skips without arguments (by design).
 
 ## 8. The draft against my counts (read after sections 3-5)
 
@@ -118,11 +118,21 @@ Overclaims and errors in the draft:
 4. Element proof is narrow: "Sorceress (Fire Ball, Glacial Spike)" is two skills; this record covers all 25 Sorceress and 8 Necromancer element skills at the roll. The draft's Necromancer "10,509 differ before" is life after one hit (a different measure from my roll-level 29,491 of 29,540); not contradictory, but the PR text should say the gameplay effect is 1/512 point on average (section 3b), not imply 30 % of hits are wrong.
 5. Det: "the pet differs only on the first run" (brief) / "first run" (draft): here the flake hit 3 of 6 non-base runs. Say "run-to-run flake of the pet's start position".
 6. "Twister and Shock Wave did not move a hash here": true, but they did hit (5 and 13 points); say why (no fraction carry crossed a point), so a reader does not think they missed.
-7. ctest "of the 68 tests" and the clang-tidy step "Not run": see section 7.
+7. ctest: the draft's "68 tests" counts my old probe; the PR's tree has 67 (66 on base), and the same four fail on base (agree in substance). "Not run: the clang-tidy step": run here (section 6a), and it **fails** on an untouched file the PR pulls in.
 
 ## 9. Verdict
 
-(written after 7a / 7b)
+**READY WITH CHANGES.** The code is right (V run): head 28c0540a matches game.exe on 0 of 110,000 physical cases (every res class, 30,000 of them at res -101..-300 on a monster defender) and on 0 of 60,000 element rolls (all 33 Sorceress / Necromancer element skills plus 920 edge cases incl. the seed after the roll); upstream main differs on 81,464 and 59,580 of them. The diff is the four claimed commits, a fast-forward of current upstream main; det hashes move only where and by which commit the draft says; g++ / clang++ with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion: 0 warnings in the PR's files; suites and ctest: no new failure.
+
+Changes, in order:
+1. **Required (CI blocker): add `#include <character_store.hpp>`, `#include <combat.hpp>`, `#include <skills.hpp>` to `tests/game/test_game_missiles.cpp`** (as its own small commit in this PR, or wait until #164's fix of the same three lines is on upstream main and rebase). Touching `combat.hpp` makes CI re-tidy that file, and its three include-cleaner errors fail "Names and includes (Linux)" (section 6a; fix verified).
+2. PR text: replace "a `lo == hi` element no longer draws" with the true RNG effect (a zero / negative low end no longer draws or deals damage, swapped ends now draw; no skill produces either, so the draw count is unchanged for every skill missile).
+3. PR text, reach of the element roll: drop "trap missiles with a Skill (objects.cpp)" and merc auras; add the merc skill missiles (via `strike`), `spot()` skills, shrine potions, missile rows without a Skill.
+4. PR text, proof table: use this record's numbers for head 28c0540a (0 of 110,000 physical, 0 of 60,000 element; upstream main 28,707 / 28,873 / 23,884 and 59,580); the earlier 30,000 / 60,000 runs were on the floor-less candidate. Say the element fix is a fidelity fix worth 1/512 point on average per hit.
+5. PR text, det: "run-to-run flake of the pet's start position" (3 of 6 here), and that Twister and Shock Wave hit in `hit_phys` without moving a hash.
+6. Low: one author identity across the four commits.
+
+Not tested here (U): MSVC itself; CI's exact clang-tidy version; the mastery stat on the missile unit in FUN_005a8910 (section 2; d2d applies mastery once); the physical roll range (left out of the PR by design, still differs from game.exe).
 
 ## Reproduce (worker host; tools/emu of a lab tree as cwd for the oracles, PYTHONPATH there, D2_MPQ_DIR / D2_PATCH_INSTALLER set)
 

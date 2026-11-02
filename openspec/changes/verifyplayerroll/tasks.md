@@ -14,7 +14,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "pending"
+result: "docs only, not live (no game.exe); READY WITH CHANGES: required three includes in tests/game/test_game_missiles.cpp (CI clang-tidy step), PR-text fixes; see docs/research/pr-playerroll-verifier.md"
 ```
 
 ## 1. Work
@@ -25,4 +25,4 @@ result: "pending"
 - [x] 1.4 Det scenarios base vs head (15, one hidden slot)
 - [x] 1.5 Warnings-as-errors build (g++ and clang++), MSVC hazards by reading
 - [x] 1.6 Suites and ctest base vs head
-- [ ] 1.7 Draft claims vs counts; verdict
+- [x] 1.7 Draft claims vs counts; verdict
