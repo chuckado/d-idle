@@ -538,13 +538,13 @@ func (w *mercWire) WaitForMerc(ctx context.Context, why string) {
 		near := m.Alive && max(abs(m.X-s.Player.X), abs(m.Y-s.Player.Y)) <= mercNearDist
 		if !merc.ShouldWaitForMerc(st, near, waited, maxMs) {
 			if logged {
-				w.log.Info(merc.Prefix+"wait over", "waited_ms", waited, "near", near)
+				w.log.Info(merc.Prefix + "wait over waited_ms=" + strconv.Itoa(waited) + " near=" + strconv.FormatBool(near))
 			}
 			return
 		}
 		if !logged {
 			logged = true
-			w.log.Info(merc.Prefix+"waiting for the merc", "why", why)
+			w.log.Info(merc.Prefix + "waiting for the merc why=" + why)
 		}
 		w.e.Clock.Sleep(mercWaitStep)
 		waited += int(mercWaitStep / time.Millisecond)

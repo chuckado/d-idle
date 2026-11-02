@@ -1,7 +1,7 @@
 package combat
 
 import (
-	"strconv"
+	"fmt"
 	"sync"
 	"time"
 
@@ -63,7 +63,7 @@ func (f *Fighter) mercDownLeave(snap *d2.Snapshot, in SafetyInput) SafetyAction 
 	}
 	f.mercSt.mu.Unlock()
 	if due {
-		f.log().Info(merc.Prefix+"down in a crowd, leaving", "action", a.String(), "crowd", in.Crowd)
+		f.log().Info(fmt.Sprintf("%sdown in a crowd, leaving action=%s crowd=%d", merc.Prefix, a, in.Crowd))
 	}
 	return a
 }
@@ -117,9 +117,9 @@ func (f *Fighter) mercPotion(snap *d2.Snapshot, hs []Target) bool {
 	f.mercSt.potionAt = now // also after a failure: no hammering
 	f.mercSt.mu.Unlock()
 	if err := sem.Belt(col, true); err != nil {
-		f.log().Info(merc.Prefix+"potion failed", "col", col+1, "err", err)
+		f.log().Info(fmt.Sprintf("%spotion failed col=%d err=%v", merc.Prefix, col+1, err))
 		return false
 	}
-	f.log().Info(merc.Prefix+"gave healing potion", "col", col+1, "merc_life", strconv.Itoa(st.LifePct)+"%")
+	f.log().Info(fmt.Sprintf("%sgave healing potion col=%d merc_life=%d", merc.Prefix, col+1, st.LifePct))
 	return true
 }
