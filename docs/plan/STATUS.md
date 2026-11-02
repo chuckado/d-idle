@@ -58,6 +58,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
+| [playerroll](../../openspec/changes/playerroll/) | in-progress | playerroll | `docs/research/pr-playerroll-draft.md`<br>`tools/emu/det_scenarios_lab.py`<br>`openspec/changes/playerroll/**` | `fork-branch:pr/player-roll` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -116,6 +117,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
+- change playerroll: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -127,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- af24e7ce 11-02 14:38 `Merge agent/nmlevel: nmlevel: finished docs and tools work that was never merged (branch triage 2026-11-02)` (nmlevel)
-- 5d40cf92 11-02 14:38 `merge origin/main into nmlevel` (nmlevel)
-- 7fa2b9df 11-02 14:31 `Merge agent/monsterpace: monsterpace: finished docs and tools work that was never merged (branch triage 2026-11-02)` (monsterpace)
-- 6ee620fc 11-02 14:30 `merge origin/main into monsterpace` (monsterpace)
-- 5b07021a 11-02 14:25 `Merge agent/bundlefinal: BUNDLEFINAL: bundle-2 prepared (commit messages, credit blocks on cards, final PR body); staged on the fork for the CodeRabbit pre-scan` (bundlefinal)
-- b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
-- 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
-- 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
-- 5483ee50 11-02 13:58 `merge origin/main into lockstepbase` (lockstepbase)
-- 436019b3 11-02 13:47 `Merge agent/rebase174: REBASE174: all candidates rebased onto the #174 merge and assembled into bundle-1 (docs: table and combined PR body draft; nothing upstream)` (rebase174)
+- 898bc4d6 11-02 00:48 `Merge agent/propenmissile: PROPENMISSILE: upstream PR 164 opened (monster missile record and poison units, bundled, 8 commits on upstream main)` (propenmissile)
+- 87053a54 11-02 00:40 `Merge agent/missilefix3: MISSILEFIX3: SrcDamage byte read, text corrections from the third check, both PR drafts final; third check section added` (missilefix3)
+- 1b745bbd 11-02 00:39 `merge origin/main into missilefix3` (missilefix3)
+- dd62521e 11-02 00:28 `Merge agent/botsupply: BOTSUPPLY: level-aware gold model, pile bar from the area's pile size, traced area XP table, real monster HP in the sim; per-kill supply table cited from the treasure trace` (botsupply)
+- 13eaa255 11-02 00:27 `merge origin/main into botsupply` (botsupply)
+- 198d76fb 11-02 00:23 `Merge agent/missilefix2: MISSILEFIX2: owner-poison rule from the re-verifier, trap fix folded into the poison branch, PR drafts revised` (missilefix2)
+- 3636d585 11-02 00:22 `merge origin/main into missilefix2` (missilefix2)
+- 35ca0451 11-02 00:15 `Merge agent/verifywaypoint: VERIFY-WAYPOINT: independent re-check of the waypoint refusal claim (Pro account verifier)` (verifywaypoint)
+- 929ff1f8 11-02 00:15 `merge origin/main into verifywaypoint` (verifywaypoint)
+- 9f9b32d0 11-02 00:08 `Merge agent/playerdef: PLAYERDEF: player defence, block and attack rating run against game.exe (102,604 cases, 0 mismatches vs a port of d2d formulas); life and mana tables read` (playerdef)
 <!-- statusgen:end -->
