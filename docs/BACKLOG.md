@@ -288,6 +288,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SKGROUND M1: d2d Fight::area finds units by float hypot, game.exe by the disc dx^2 + dy^2 <= r^2 on integer subtile words (FUN_0056bad0 / FUN_0056b7e0): 9.1 percent of 80,000 rim cases differ, no bias; differential tools/emu/skg_diff.sh; not a PR candidate until the other callers of FUN_0056bad0 are traced (docs/research/skground-trace.md)
 - SKGROUND M2: game.exe's blast searches the caster's room and its near list only (0 of 168 far pairs found, 34 within the 100-subtile cap); d2d scans every monster (docs/research/skground-trace.md)
 - SKGROUND open: Hydra AI and HydraMissile, Frozen Orb and Thunder Storm native runs, skill-delay refusal, names of the unit flag bits 0x4 / 0x8 in FUN_0056b3e0
+- VERIFY-TELEPORT-ROOM (docs/research/verifyteleroom-trace.md): room rule HOLDS (150,225 emulator cases, 0 violations); landing may leave the caster's near zone, a map-edge target lands one cell inward (candidate extra deviation, needs d2d side); real near lists of real levels still unverified.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

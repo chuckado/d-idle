@@ -218,3 +218,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-cursedef.md: independent verifier of skcurseval / skdefenders / skshield traces (verdicts per claim, own oracle tools/emu/vcd_*)
 - docs/research/pr-candidates-20261102.md: ranked list of upstream PR candidates (fork branches, drafts, verifier status, next action).
 - docs/research/skground-trace.md: Meteor's blast shape (FUN_0056bad0 / FUN_0056b7e0 run natively, disc on integer subtiles, radius 6, caster-room search, filter) vs the real d2d Fight::area
+- [verifyteleroom-trace.md](research/verifyteleroom-trace.md): independent re-check of the Teleport room rule (game.exe FUN_005ca360 / FUN_00554ea0 / FUN_00463740), verdicts per claim.
