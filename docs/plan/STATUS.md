@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [botsupply](../../openspec/changes/botsupply/) | in-progress | botsupply | `docs/botsupply.md`<br>`internal/data/supply.go`<br>`internal/data/supply_test.go`<br>`internal/resource/supply_test.go`<br>`openspec/changes/botsupply/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -87,7 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change botsupply: gofmt, go vet, go test -p 1 of data resource loot bot env combat tools/knobdump; changecheck 0 warnings; leakcheck 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -131,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- dd62521e 11-02 00:28 `Merge agent/botsupply: BOTSUPPLY: level-aware gold model, pile bar from the area's pile size, traced area XP table, real monster HP in the sim; per-kill supply table cited from the treasure trace` (botsupply)
+- 13eaa255 11-02 00:27 `merge origin/main into botsupply` (botsupply)
 - 198d76fb 11-02 00:23 `Merge agent/missilefix2: MISSILEFIX2: owner-poison rule from the re-verifier, trap fix folded into the poison branch, PR drafts revised` (missilefix2)
 - 3636d585 11-02 00:22 `merge origin/main into missilefix2` (missilefix2)
 - 35ca0451 11-02 00:15 `Merge agent/verifywaypoint: VERIFY-WAYPOINT: independent re-check of the waypoint refusal claim (Pro account verifier)` (verifywaypoint)
@@ -139,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 82c13a0a 11-02 00:07 `merge origin/main into playerdef` (playerdef)
 - 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
 - bd354909 11-02 00:00 `merge origin/main into uniqmods` (uniqmods)
-- abed0924 11-01 23:55 `Merge agent/monsterhit: MONSTERHIT: monster melee against the player: to-hit, damage, block and get-hit rules run against game.exe (100,000 cases each, 0 differ); block deviation in the d2d port` (monsterhit)
-- 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
 <!-- statusgen:end -->

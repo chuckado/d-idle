@@ -2,7 +2,7 @@
 
 ```yaml
 change: botsupply
-status: in-progress
+status: archived
 agent: botsupply
 branch: agent/botsupply
 worktree: ~/code/d2lod-wt/botsupply
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet, go test -p 1 of data resource loot bot env combat tools/knobdump; changecheck 0 warnings; leakcheck 0"
-result: "offline only, not verified live; unit tests on mem.Fake-free fixtures; the pile bar and XP table are play-affecting, ON by default (trace proves the old values wrong)"
+result: "offline per-package tests; play-affecting defaults on where the traces prove the old values wrong; not verified live"
 live: "none"
+merge: dd62521
 ```
 
 - [x] level-aware gold model and supply table (data/supply.go)
