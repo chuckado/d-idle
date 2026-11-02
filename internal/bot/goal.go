@@ -1177,10 +1177,17 @@ const (
 	pingPongSpan = 5 * time.Minute // ... that took at least this long (virtual)
 )
 
+// A kill only restarts the record when it is progress: the experience gained since the record began must reach
+// pingPongXPPerMin * clvl per virtual minute of the span (U: the clvl scales the floor with the XP a kill is worth
+// in the areas of that level). Cluster C of gate1r2-20261101: 26 kills, 18 XP in 52 minutes at clvl 14, a floor of
+// 14 per minute; a real farm gives tens of XP per kill.
+const pingPongXPPerMin = 1.0
+
 type pingPong struct {
 	a, b  int // the two areas; a is the current one
 	alt   int
 	kills int
+	xp    uint32 // experience when the record began
 	since time.Time
 }
 
@@ -1190,18 +1197,27 @@ func (r *Runner) noteArea(area int) {
 	l := &r.loop
 	now := r.e.Clock.Now()
 	r.obMu.Lock()
-	kills := r.ob.kills
+	kills, xp, level := r.ob.kills, r.ob.exp, r.ob.level
 	r.obMu.Unlock()
 	pp := &l.pp
-	if pp.kills != kills || pp.a == 0 {
-		*pp = pingPong{a: area, kills: kills, since: now}
+	fresh := func(a int) { *pp = pingPong{a: a, kills: kills, xp: xp, since: now} }
+	if pp.a == 0 {
+		fresh(area)
 		return
+	}
+	if pp.kills != kills {
+		mins := now.Sub(pp.since).Minutes()
+		if xp < pp.xp || float64(xp-pp.xp) >= pingPongXPPerMin*float64(max(level, 1))*max(mins, 1) {
+			fresh(area)
+			return
+		}
+		pp.kills = kills // a trickle of kills: the alternation count and span continue
 	}
 	if area == pp.a {
 		return
 	}
 	if pp.alt > 0 && area != pp.b { // a third area: not a ping-pong
-		*pp = pingPong{a: area, kills: kills, since: now}
+		fresh(area)
 		return
 	}
 	pp.a, pp.b = area, pp.a

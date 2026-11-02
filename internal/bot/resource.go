@@ -313,5 +313,5 @@ func (r *Runner) hasPortalSource(s *d2.Snapshot) bool {
 	cat := portalClasses{r.d.Catalog}
 	src := combat.PortalSource(s, cat, st)
 	r.dumpTP(s, src != nil, cat, st, src)
-	return src != nil
+	return r.loop.tpSeen.look(src != nil, r.e.Clock.Now())
 }

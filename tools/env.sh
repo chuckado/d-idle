@@ -11,6 +11,7 @@ if [ -f "$_d2_root/local.env" ]; then
 fi
 : "${D2_WORKER_HOST:=worker.example}" "${D2_WORKER_USER:=${USER:-$(id -un)}}" "${D2_NAS_HOST:=nas.example}"
 : "${D2_BOARD_URL:=http://board.example:8897}" "${D2_FORGE_URL:=https://forge.example}" "${D2_COLD_DIR:=/mnt/cold}"
+# D2_LABRUN_HOST: the machine name labrun takes (`labrun $D2_LABRUN_HOST -- cmd`); no default, tools/emu/run-on-worker.sh refuses without it.
 export D2_WORKER_HOST D2_WORKER_USER D2_NAS_HOST D2_BOARD_URL D2_FORGE_URL D2_COLD_DIR
 # Go processes do not read local.env: scripts that start one on another host put this in front of its command
 # (`ssh host "$(d2_role_env) cmd"`), so D2_COLD_DIR and the d2dview host words reach it. Prints NAME='value' pairs,

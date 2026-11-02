@@ -162,3 +162,12 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/original-game-lockstep.md: lockstep or speed-up for the original Game.exe 1.14d: prior art (libTAS, faketime, speed hackers, whisper, D2MOO), frame scheduler, tiers, probe runbook, instrumentation policy (card lockstepresearch)
 - docs/research/lockstep-p0.md - lockstep probe P0 results: IAT time hook under Wine, k = 1/2/4 frame gate, verdict PASS
 - docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist
+- Monster base stats: [research/monster-stats-trace.md](research/monster-stats-trace.md) (game.exe vs d2d stat rows, units, XP per kill; D1 NM / Hell level, D2 regeneration; bot B1-B4; drill recipe).
+- Treasure classes, drops and gold (Act 1 and 2; game.exe 1.14d vs d2d vs the bot): [research/treasure-trace.md](research/treasure-trace.md)
+- docs/research/pr-missilerecord-verifier.md: independent verifier of the monster missile record candidate (record 0-diff confirmed; poison units blocker; det hashes equal)
+- docs/research/seed-study.md: seed choice and use on Game.exe and d2d, pinning via the save map id, observation and input parity, determinism plan P3, verdict, first-divergence expectations, ranked cards (card seedstudy)
+- docs/soaks/gate1r2-20261101.md: Gate 1 rerun 2 (run gate1-20261101-1949) record and Review 2: bands, stall windows, guard firings, HasTP root cause, verdict per criterion, rerun recipe
+- docs/research/lockstep-licences.md: licences and Blizzard terms for a releasable 1.14d time/lockstep hook; clean-room and PROVENANCE proposal, offline notice (card licensecheck)
+- tools/contrib/claim.py: maintainer claim, done and watch commands for work-item issues (dry run default, docs/process/chunker.md)
+- docs/api-agent-cookbook.md - command forms that work for API-credit runner jobs (emulator wrapper, data paths, forbidden list)
+- docs/research/pr-missilerecord-reverify.md: independent Opus re-verification of the fixed monster missile record candidate and the Andariel poison split (READY WITH CHANGES)

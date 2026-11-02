@@ -2,7 +2,7 @@
 
 ```yaml
 change: povertyflip
-status: in-progress
+status: archived
 agent: povertyflip
 branch: agent/povertyflip
 worktree: ~/code/d2lod-wt/povertyflip
@@ -14,6 +14,7 @@ exclusive: []
 gates:
   - go test -p 1 ./internal/bot passes, including the flip replay test
 result: implemented as hysteresis only (tpDebounce: 3 looks or 2 virtual minutes), no evident root cause in code; TestTPDebounceReplay/Holds; offline only, not verified live; inv-tp-dump still to read
+merge: 9b99e098
 ```
 
 - [x] 1 Read the `inv-tp-dump` lines of the rerun (docs/hastpdump.md drill) and record the cause under docs/soakstall.md Missing data (not owned here: report it)

@@ -2,7 +2,7 @@
 
 ```yaml
 change: soakstall
-status: in-progress
+status: archived
 agent: soakstall
 branch: agent/soakstall
 worktree: ~/code/d2lod-wt/soakstall
@@ -17,6 +17,7 @@ exclusive: []
 gates:
   - TestExploreGaveUp (internal/bot) passes
 result: offline analysis of the run logs plus a unit test (TestExploreGaveUp, go test -p 1 ./internal/bot ok); NOT verified live.
+merge: 25918ead
 ```
 
 - [x] 1 Timeline and root cause from the run logs

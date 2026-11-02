@@ -12,3 +12,5 @@ allow_merges:
   - 7a408e6   # boardlinks: board issue links, coordinator-style doc change, no card
   - dafbbf5   # agentprompt: contributor agent prompt, docs only, no card
   - c7178a3   # docsapprove: record user approval of contributor docs, docs only, no card
+  - b8d3cca   # archive4: merged without a card (merge.sh --card none)
+  - 91e287b   # archive5: merged without a card (merge.sh --card none)

@@ -44,6 +44,8 @@ func usage() {
   (FILE = character name or path; D = normal|nightmare|hell|0-2; all edits need the game stopped, a backup is made)
   show                      read-only: both player copies (no ledger)
   ledger [--since 2h] [--char NAME] [--kind K] [--json]   list / summarize the ledger
+  ledger --since-run ID     print "writes after start: N" for a measured run (exit 1 when N > 0 or no marker)
+  runstart ID               write the run-start marker (needs --reason); setup writes go before it
   probe                     read-only research dump
 `)
 	os.Exit(2)
@@ -83,6 +85,18 @@ func main() {
 	switch cmd {
 	case "ledger":
 		cmdLedger(env.Ledger, rest)
+		return
+	case "runstart":
+		if len(rest) != 1 || strings.TrimSpace(reason) == "" {
+			fatal(fmt.Errorf("runstart ID needs --reason"))
+		}
+		if actor == "" {
+			actor = os.Getenv("D2BOT_AGENT")
+		}
+		if err := env.Ledger.MarkRun(rest[0], actor, env.Instance, reason, time.Now()); err != nil {
+			fatal(err)
+		}
+		fmt.Println("run-start marker written:", rest[0])
 		return
 	case "show":
 		_, st, err := env.Inspect()
@@ -283,6 +297,20 @@ func cmdLedger(l *cheat.Ledger, args []string) {
 			f.Actor = args[i]
 		case "--json":
 			asJSON = true
+		case "--since-run":
+			i++
+			n, es, err := l.WritesAfterStart(args[i])
+			if err != nil {
+				fatal(err)
+			}
+			for _, e := range es {
+				fmt.Println(cheat.FormatJSON(e))
+			}
+			fmt.Printf("writes after start: %d\n", n)
+			if n > 0 {
+				os.Exit(1)
+			}
+			return
 		}
 	}
 	es, err := l.List(f)

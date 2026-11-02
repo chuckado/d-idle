@@ -8,6 +8,15 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- tools/emu/run-on-worker.sh: audited wrapper to run a tools/emu script on the worker host; docs/api-agent-cookbook.md
+- Contributor board: the maintainers now claim items their own work covers, close finished ones with a citation, and watch issue comments each cycle (tools/contrib/claim.py).
+- tpglitch: town-portal verdict debounced at its single source (kit gate and poverty check); pingpongrate: ping-pong guard resets on XP progress, not on any kill
+- docs: licence research for a standalone Game.exe time hook (not legal advice); nothing run
+- docs: Gate 1 rerun 2 record and review (XP/h per band, stall windows, HasTP root cause), cards tpglitch, pingpongrate, kitgatelevel proposed.
+- docs: research on running d2d and Game.exe from one seed in lockstep (seed pin by save map id, RNG stream, parity, plan P3, verdict); nothing run
+- treasure: docs/research/treasure-trace.md (class selection, no-drop and picks, potion, scroll and gold rates per kill for Act 1 and 2, chests; d2d differential re-run), tools/emu/tre_* oracles, coverage ledger row for the treasure classes.
+- monsterstats (docs only): docs/research/monster-stats-trace.md and tools/emu/ms_* (stat-row and unit differential vs d2d's rules::monster_stats: 242,220 + 85,213 cases, Normal 0 differ); coverage row monster.stats TESTED-DEVIATION.
+- memory rule (ADR 0014): memory writes allowed for setup, instrumentation, diagnosis, fixtures; crutch rule; d2cheat runstart and ledger --since-run
 - tools: d2restore snapshot library (snapshot, verify, list, place) and a prefix-keyed cheat ledger (docs/snaplib.md).
 - Research: lockstep probe P0 (no game) shows an import-table time hook scales a 25 fps frame gate under Wine; probes in tools/lockstep/
 - docs: research on lockstep / speed-up for the original Game.exe 1.14d (no prior art found; proxy-DLL clock hook plan, probes, policy); nothing run
