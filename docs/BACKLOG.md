@@ -258,6 +258,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFY-NMLEVEL done: READY WITH CHANGES (rule holds, head 0 start-level mismatches on 88,951 units and the full grid; add 3 includes to test_game_missiles.cpp; name the sample): docs/research/pr-nmlevel-verifier.md
 - SKGEARAR done: AR terms from gear (115 / 116 / 123 / 124 run, 100,960 cases, 0 differ from the reading; 179 / 120 read only); docs/research/sk-gearar-trace.md; follow-up: run 179, d2d-side test
 - VERIFY-AIDEL done (docs/research/verify-aidel.md): FUN_005a73e0 holds over 352,800 cases on real MonStats rows; open: FUN_005a7c20 / freeze-end path and game type 3
+- VERIFY-SKMELEE2 done: D1 and D4 hold, D2 / D5 / D6 hold with limits on the real build (own harness, seeds 11 and 3): docs/research/verify-skmelee2.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
