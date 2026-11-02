@@ -59,6 +59,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
+| [skiasgame2](../../openspec/changes/skiasgame2/) | in-progress | skiasgame2 | `docs/research/skiasgame2-trace.md`<br>`tools/emu/skiasgame2_rate.py`<br>`docs/coverage/ledger.tsv`<br>`docs/coverage/rule-coverage.md`<br>`openspec/changes/skiasgame2/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -118,6 +119,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
+- change skiasgame2: differential game.exe attack rate vs d2d attack_speed, 0 mismatches over the IAS x WSM grid (counts in the trace)
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
