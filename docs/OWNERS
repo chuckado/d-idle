@@ -144,3 +144,4 @@ tools/emu/pal_build.sh  paldur  paldur
 tools/emu/pal_run.sh  paldur  paldur
 tools/emu/pal_callgraph.py  paldur  paldur
 openspec/changes/paldur/**  paldur  paldur
+tools/emu/pal_tables.py  paldur  paldur

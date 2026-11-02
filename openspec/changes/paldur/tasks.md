@@ -14,6 +14,7 @@ owns:
   - tools/emu/pal_build.sh
   - tools/emu/pal_run.sh
   - tools/emu/pal_callgraph.py
+  - tools/emu/pal_tables.py
   - openspec/changes/paldur/**
 exclusive: []
 gates:
