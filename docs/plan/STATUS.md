@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifywaypoint](../../openspec/changes/verifywaypoint/) | in-progress | verifywaypoint | `openspec/changes/verifywaypoint/**`<br>`docs/research/verify-waypoint.md`<br>`tools/emu/wpv_scan.py`<br>`tools/emu/wpv_ctx.py`<br>`tools/emu/wpv_dis.py`<br>`tools/emu/wpv_cmp.py` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -127,10 +126,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifywaypoint: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 35ca0451 11-02 00:15 `Merge agent/verifywaypoint: VERIFY-WAYPOINT: independent re-check of the waypoint refusal claim (Pro account verifier)` (verifywaypoint)
+- 929ff1f8 11-02 00:15 `merge origin/main into verifywaypoint` (verifywaypoint)
 - 9f9b32d0 11-02 00:08 `Merge agent/playerdef: PLAYERDEF: player defence, block and attack rating run against game.exe (102,604 cases, 0 mismatches vs a port of d2d formulas); life and mana tables read` (playerdef)
 - 82c13a0a 11-02 00:07 `merge origin/main into playerdef` (playerdef)
 - 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
@@ -139,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
 - eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
 - 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
-- a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
-- 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
 <!-- statusgen:end -->

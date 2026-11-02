@@ -143,9 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-openspec/changes/verifywaypoint/**  verifywaypoint  verifywaypoint
-docs/research/verify-waypoint.md  verifywaypoint  verifywaypoint
-tools/emu/wpv_scan.py  verifywaypoint  verifywaypoint
-tools/emu/wpv_ctx.py  verifywaypoint  verifywaypoint
-tools/emu/wpv_dis.py  verifywaypoint  verifywaypoint
-tools/emu/wpv_cmp.py  verifywaypoint  verifywaypoint

@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifywaypoint
-status: in-progress
+status: archived
 agent: verifywaypoint
 branch: agent/verifywaypoint
 worktree: ~/code/d2lod-wt/verifywaypoint
@@ -17,7 +17,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Offline, not verified live. Writer/reader scan of game.exe (24 hits, one pcdata writer FUN_0055b720), 59,309 of 132,964 reproduced exactly (seed 7), second set seed 11 100000 cases: hostile rule 0 mismatches. New: FUN_00584870 reads the field with a 5 s window. Single player is inferred, not proven."
+result: "docs only; see the doc for HOLDS LIMITS FAILS"
+merge: 35ca045
 ```
 
 ## 1. Work
