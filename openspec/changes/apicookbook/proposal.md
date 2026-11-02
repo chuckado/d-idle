@@ -1,6 +1,6 @@
 ## Why
 
-Three of seven API-credit decomposition jobs wrote desk-only traces: their `labrun orion -- bash tools/emu/x.sh` calls were denied by the runner's allow-list (the successful jobs used the `tools/agentrun.sh NAME --ttl N -- labrun orion -- bash ...` spelling, which no brief told the others about).
+Three of seven API-credit decomposition jobs wrote desk-only traces: their `labrun <host> -- bash tools/emu/x.sh` calls were denied by the runner's allow-list (the successful jobs used the `tools/agentrun.sh NAME --ttl N -- labrun <host> -- bash ...` spelling, which no brief told the others about).
 
 ## What Changes
 

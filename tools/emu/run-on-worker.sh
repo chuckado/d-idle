@@ -1,6 +1,6 @@
 #!/bin/bash
 # Run ONE script of this worktree's tools/emu on the worker host, under agentrun with a ttl. Audited entry point for the
-# API-credit runner (it allows exactly this path, not arbitrary `labrun orion -- bash ...`). Card apicookbook.
+# API-credit runner (it allows exactly this path, not arbitrary `labrun <host> -- bash ...`). Card apicookbook.
 #   tools/emu/run-on-worker.sh [--ttl SECS] SCRIPT.sh|SCRIPT.py [ARGS...]
 # - SCRIPT is a bare file name in tools/emu (this worktree is mirrored to the worker host by labrun, so a script you just wrote there
 #   is already visible). .sh runs with bash, .py with the emulator venv python (PYTHONPATH tools/emu + upstream tools/emu).
@@ -46,6 +46,8 @@ for a in "$@"; do
 done
 
 LABRUN=${WRAP_LABRUN:-labrun}
+if [ -z "${D2_LABRUN_HOST:-}" ] && [ -f "$root/tools/env.sh" ]; then . "$root/tools/env.sh"; fi
+[ -n "${D2_LABRUN_HOST:-}" ] || die "D2_LABRUN_HOST is not set (labrun machine name; see local.env.example)"
 AGENTRUN=${WRAP_AGENTRUN:-$root/tools/agentrun.sh}
 cd "$root" || die "cd"
 if [ "${script##*.}" = py ]; then
@@ -53,6 +55,6 @@ if [ "${script##*.}" = py ]; then
 else
 	prog=(bash "tools/emu/$script")
 fi
-exec "$AGENTRUN" "$agent" --ttl $((ttl + 30)) -- "$LABRUN" orion -- \
+exec "$AGENTRUN" "$agent" --ttl $((ttl + 30)) -- "$LABRUN" "$D2_LABRUN_HOST" -- \
 	env "D2_SCRATCH=$scratch" D2_MPQ_DIR=/tmp/ug-emu \
 	sh -c 'mkdir -p "$D2_SCRATCH" && exec "$@"' sh timeout "$ttl" "${prog[@]}" "$@"
