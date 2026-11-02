@@ -95,7 +95,17 @@ func (r *Runner) noteTripGold(gold int) {
 func (r *Runner) logTrip(t *trip, gold int) {
 	r.obMu.Lock()
 	n := len(r.ob.tripTimes)
+	kitN, level := 0, r.ob.level
+	_, kitReason, isKit := strings.Cut(t.plan.Reason, "kit: ")
+	if isKit {
+		r.ob.kitTrips++
+		kitN = r.ob.kitTrips
+	}
 	r.obMu.Unlock()
+	if isKit {
+		missing, _, _ := strings.Cut(kitReason, "]")
+		r.e.Log.Info("kitgate-trip", "level", level, "missing", missing, "gold", gold, "trip", kitN)
+	}
 	rt := r.e.Tune.Resource
 	r.e.Log.Info("trip budget: trip done", "reason", t.plan.Reason, "emergency", t.emergency, "goldBefore", t.startGold, "goldAfter", gold,
 		"spent", t.startGold-gold, "tripsInWindow", n, "windowMin", rt.TripWindowMin, "budget", rt.TripBudget, "goldFloor", rt.TripGoldFloor)
@@ -313,5 +323,9 @@ func (r *Runner) hasPortalSource(s *d2.Snapshot) bool {
 	cat := portalClasses{r.d.Catalog}
 	src := combat.PortalSource(s, cat, st)
 	r.dumpTP(s, src != nil, cat, st, src)
-	return r.loop.tpSeen.look(src != nil, r.e.Clock.Now())
+	v, ev := r.loop.tpSeen.look(src != nil, r.e.Clock.Now())
+	if ev.kind != "" && r.e.Log != nil {
+		r.e.Log.Info("tp-debounce-"+ev.kind, "verdict", v, "raw", src != nil, "looks", ev.looks, "held_s", int(ev.held.Seconds()))
+	}
+	return v
 }
