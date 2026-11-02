@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
 - caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
 - 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
 - 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4ffc2466 11-02 10:57 `Merge agent/prcandidates: PRCANDIDATES: ranked inventory of upstream PR candidates (docs only)` (prcandidates)
 - d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
 - 86a71332 11-02 10:49 `Merge agent/verifycursedef: VERIFY-CURSEDEF: independent Opus check of the curse, defenders and shield first passes (curse oracle confirmed with caveats; the other two hold with limits)` (verifycursedef)
-- 078dbbef 11-02 10:49 `merge origin/main into verifycursedef` (verifycursedef)
 <!-- statusgen:end -->
