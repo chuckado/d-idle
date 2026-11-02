@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- c9da90ec 11-02 05:30 `merge origin/main into verifyresistq` (verifyresistq)
 - 3f14d224 11-02 05:23 `Merge agent/verifyskmana: verifyskmana: Pro account job result (docs and emulator tools only)` (verifyskmana)
 - 3e8e647d 11-02 05:22 `merge origin/main into verifyskmana` (verifyskmana)
 - 0175d161 11-02 05:17 `Merge agent/verifyskresist: verifyskresist: Pro account job result (docs and emulator tools only)` (verifyskresist)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7f945d32 11-02 05:02 `Merge agent/verifyaidel: verifyaidel: Pro account job result (docs and emulator tools only)` (verifyaidel)
 - e85b5227 11-02 05:02 `merge origin/main into verifyaidel` (verifyaidel)
 - b0637e1f 11-02 04:55 `Merge agent/skgearar: skgearar: Pro account job result (docs and emulator tools only)` (skgearar)
-- 9b4c4b24 11-02 04:27 `merge origin/main into verifyskmana` (verifyskmana)
 <!-- statusgen:end -->
