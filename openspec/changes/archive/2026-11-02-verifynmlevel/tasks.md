@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifynmlevel
-status: in-progress
+status: archived
 agent: verifynmlevel
 branch: agent/verifynmlevel
 worktree: ~/code/d2lod-wt/verifynmlevel
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own harness run on two seeds before the author's draft is compared
-result: "READY WITH CHANGES: rule V (grid and 88,951 real units, head 0 start mismatches); test_game_missiles.cpp include-cleaner FAIL; det, warnings, suites not run; emulator and probe, not live"
+result: "docs only; several checks not run, listed in the report"
+merge: 1d6dfd1
 ```
 
 - [x] 1 Read FUN_00573cb0 / FUN_0061a1b0 / FUN_0061dca0 and the masks in the disassembly

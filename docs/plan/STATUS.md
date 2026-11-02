@@ -129,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 1d6dfd13 11-02 04:14 `Merge agent/verifynmlevel: VERIFY-NMLEVEL: independent Opus verification of the Nightmare and Hell monster level fix: READY WITH CHANGES; 310,482 grid cases, head 0 mismatches` (verifynmlevel)
+- b1da815d 11-02 04:13 `merge origin/main into verifynmlevel` (verifynmlevel)
 - f1c51826 11-02 04:05 `Merge agent/crfollow166: CRFOLLOW166: CodeRabbit follow-up on PR 166: three valid comments fixed in 7d4f6f0e, replies posted` (crfollow166)
 - b5af241a 11-02 03:50 `Merge agent/propenplayerroll: PROPENPLAYERROLL: upstream PR 166 opened (player-side missile damage roll: element top, physical 256ths, -100 floor), 5 commits` (propenplayerroll)
 - 804d4b75 11-02 03:49 `merge origin/main into propenplayerroll` (propenplayerroll)
@@ -137,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
 - b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
 - bf6b9e46 11-02 02:42 `Merge agent/crfollow164b: CRFOLLOW164B: CodeRabbit follow-up 2 on PR 164: an empty game.tsv comparison fails; reply posted` (crfollow164b)
-- 2522460e 11-02 02:30 `merge origin/main into kitgatelevel` (kitgatelevel)
-- 4e475182 11-02 02:27 `Merge agent/gate1pass: Gate 1 PASS record and Review 3: run gate1-20261102-0005, 16.3 virtual hours, clvl 14, 0 deaths, band 11-14 XP/h 8748 vs 9859, longest no-progress window 5 min, fault recovered in 2.5 s; build 050a509 had the OLD kit gate` (gate1pass)
 <!-- statusgen:end -->
