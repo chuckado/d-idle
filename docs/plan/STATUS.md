@@ -131,14 +131,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 2ae7673f 11-02 00:00 `Merge agent/uniqmods: UNIQMODS: champion, unique and minion modifiers traced; game.exe population census (about 3,700 units, 24 runs)` (uniqmods)
-- bd354909 11-02 00:00 `merge origin/main into uniqmods` (uniqmods)
-- abed0924 11-01 23:55 `Merge agent/monsterhit: MONSTERHIT: monster melee against the player: to-hit, damage, block and get-hit rules run against game.exe (100,000 cases each, 0 differ); block deviation in the d2d port` (monsterhit)
-- 29ca8eef 11-01 23:54 `merge origin/main into monsterhit` (monsterhit)
-- eccd99ae 11-01 23:47 `Merge agent/missilefix: MISSILEFIX: monster missile record candidate fixed on the private fork (poison units), Andariel poison split, differentials 0 differ, PR draft` (missilefix)
-- 0811b65d 11-01 23:47 `merge origin/main into missilefix` (missilefix)
-- a43549d5 11-01 23:39 `Merge agent/reverifymissile: REVERIFYMISSILE: independent Opus re-verification of the fixed monster missile record: READY WITH CHANGES; owner poison add must be removed on poison rows; Andariel split sound` (reverifymissile)
-- 06ba7001 11-01 23:39 `merge origin/main into reverifymissile` (reverifymissile)
-- 861de2b3 11-01 23:33 `merge origin/main into uniqmods` (uniqmods)
-- dfad2c6d 11-01 23:33 `merge origin/main into monsterhit` (monsterhit)
+- 730d14ee 11-02 04:26 `merge origin/main into verifyskmelee2` (verifyskmelee2)
+- 1d6dfd13 11-02 04:14 `Merge agent/verifynmlevel: VERIFY-NMLEVEL: independent Opus verification of the Nightmare and Hell monster level fix: READY WITH CHANGES; 310,482 grid cases, head 0 mismatches` (verifynmlevel)
+- b1da815d 11-02 04:13 `merge origin/main into verifynmlevel` (verifynmlevel)
+- f1c51826 11-02 04:05 `Merge agent/crfollow166: CRFOLLOW166: CodeRabbit follow-up on PR 166: three valid comments fixed in 7d4f6f0e, replies posted` (crfollow166)
+- b5af241a 11-02 03:50 `Merge agent/propenplayerroll: PROPENPLAYERROLL: upstream PR 166 opened (player-side missile damage roll: element top, physical 256ths, -100 floor), 5 commits` (propenplayerroll)
+- 804d4b75 11-02 03:49 `merge origin/main into propenplayerroll` (propenplayerroll)
+- bfbd8652 11-02 03:40 `Merge agent/botlogs: BOTLOGS: explore-giveup, tp-debounce-hold/flip and kitgate-trip log lines so gate records can count the guards` (botlogs)
+- 4cb8add9 11-02 03:25 `merge origin/main into botlogs` (botlogs)
+- b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
+- b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
 <!-- statusgen:end -->

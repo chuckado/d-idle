@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: VERIFY-AIDEL independent check of aidel and FUN_005a73e0 (0 differ in 352,800 cases)
+- SKGEARAR: trace of the gear attack-rating terms, FUN_0057d8a0 run natively (docs/research/sk-gearar-trace.md, tools/emu/sk_gearar.py)
 - Added docs/research/pr-nmlevel-verifier.md and its harness: independent verification of the nmlevel candidate.
 - no change
 - Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
