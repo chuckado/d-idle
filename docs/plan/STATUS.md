@@ -53,7 +53,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [hastpdump](../../openspec/changes/hastpdump/) | in-progress | hastpdump | `internal/bot/tpdump.go`<br>`docs/hastpdump.md` | - |
-| [lockstepresearch](../../openspec/changes/lockstepresearch/) | in-progress | lockstepresearch | `docs/research/original-game-lockstep.md`<br>`openspec/changes/lockstepresearch/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -108,8 +107,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change hastpdump: TestInvTPDump: dump on first look, area change and verdict change, not otherwise
-- change lockstepresearch: go run ./cmd/changecheck: 0 warnings
-- change lockstepresearch: go run ./cmd/leakcheck: 0 hits
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -136,14 +133,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 8961692 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
+- d06b33c 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
 - 86b15dc 11-01 20:42 `Merge agent/baselineruns: BASELINERUNS: runbook for the extra original-game baseline runs (5 late, 3 fresh), launcher prepared in the ops repo` (baselineruns)
 - d14b782 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
 - f50e477 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
 - 2713abf 11-01 20:35 `merge origin/main into charfactory` (charfactory)
 - c7a2f38 11-01 20:30 `Merge agent/missilediff: MISSILEDIFF: monster missile deviations D1 D2 D3 confirmed on the real d2d build (44,456 of 120,000 cases differ, 0 after the local fix)` (missilediff)
 - 17835b4 11-01 20:29 `merge origin/main into missilediff` (missilediff)
+- 8b284fb 11-01 20:29 `merge origin/main into lockstepresearch` (lockstepresearch)
 - f1fdda0 11-01 20:26 `Merge agent/parityaudit: PARITYAUDIT: bot backend parity: memory backend builds and passes (88 packages), 26-row matrix, gate tooling assumes d2d, smoke runbook, backlog` (parityaudit)
-- b0ffaaa 11-01 20:23 `merge origin/main into baselineruns` (baselineruns)
-- 631f7d2 11-01 20:23 `merge origin/main into parityaudit` (parityaudit)
-- 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepresearch
-status: in-progress
+status: archived
 agent: lockstepresearch
 branch: agent/lockstepresearch
 worktree: ~/code/d2lod-wt/lockstepresearch
@@ -14,7 +14,8 @@ exclusive: []
 gates:
   - go run ./cmd/changecheck: 0 warnings
   - go run ./cmd/leakcheck: 0 hits
-result: research doc written from web sources and our docs; nothing run live, nothing built; frame scheduler facts are from D2MOO source, not yet read on our Game.exe
+result: "docs only; nothing started; hook policy conditions listed"
+merge: 8961692
 ```
 
 - [x] 1 prior art table with sources
