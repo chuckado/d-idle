@@ -215,3 +215,16 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
 - docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*
 - docs/research/palskill-trace.md - Smite, Zeal and Sacrifice in game.exe vs d2d vs the bot (own harness tools/emu/pal2*)
+- docs/research/verify-cursedef.md: independent verifier of skcurseval / skdefenders / skshield traces (verdicts per claim, own oracle tools/emu/vcd_*)
+- docs/research/pr-candidates-20261102.md: ranked list of upstream PR candidates (fork branches, drafts, verifier status, next action).
+- docs/research/skground-trace.md: Meteor's blast shape (FUN_0056bad0 / FUN_0056b7e0 run natively, disc on integer subtiles, radius 6, caster-room search, filter) vs the real d2d Fight::area
+- [verifyteleroom-trace.md](research/verifyteleroom-trace.md): independent re-check of the Teleport room rule (game.exe FUN_005ca360 / FUN_00554ea0 / FUN_00463740), verdicts per claim.
+- docs/research/verifywaypoint2-trace.md | second independent check of the waypoint refusal window: writers/readers of pcdata+0x160, game.exe vs d2d's own binary on 232,964 cases, D1.. B1.. | research
+- docs/research/sk-state-events-trace.md - state events on hit and miss (Shiver Armor on a miss, Energy Shield before resistances)
+- docs/research/verifypalaura.md: independent verification of palaura-trace (roll and disc verified, rest not re-run)
+- docs/research/sk-zero-hit-trace.md - what a zero-damage hit still triggers (SKZEROHIT, static)
+- docs/research/verifypaldur.md: independent verification of the PALDUR durability trace (claims, limits, one prose error)
+- docs/research/pr-prices-verifier.md - Opus verifier of the vendor prices follow-on (repair gate holds; divide-first already upstream; rebase needed)
+- docs/research/pr-skmelee3-verifier.md - independent verification of the SKMELEE3 PR candidate (own harness vs3_*)
+- docs/research/verifypalskill2.md - independent re-check of the PALSKILL trace (Smite, Zeal, Sacrifice; own harness tools/emu/vp2*)
+- docs/research/pr-freeze-rules-draft.md: PR body draft for the freeze rules branch (local/freeze-rules-v3), order versus #159, CI parity notes.
