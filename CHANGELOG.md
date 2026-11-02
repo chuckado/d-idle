@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifyalign: docs/research/verify-alignment2.md and tools/emu/vfal_run.py (own harness: gate 1200 runs, spawn map 734 MonStats rows, 0 differ)
 - stateevrun: docs/research/stateevrun-trace.md, tools/emu/ser_events.py (game.exe swing gate / resolver / damage applier run natively: event order, event 11 vs resistance, event 3 on a miss; counted cases)
 - sorcrest2: trace of Inferno, Blaze and Enchant run in game.exe (one flame per do call, Enchant picks the ally else the caster, Blaze's cast makes only the state) and the Fire Ball burst rim on the real d2d build (549 of 16,875 cases differ); docs and emulator scripts only
 - reviewprs: review of community PRs 19, 22 and 23 with emulator spot checks and draft comments (docs only)

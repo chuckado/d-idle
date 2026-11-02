@@ -256,3 +256,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/review-community-prs-20261102.md - review of community PRs 19, 22, 23 (verdicts, spot checks, draft comments for the user)
 - docs/research/sorcrest2-trace.md | Sorceress rest of skills part 2: Inferno, Blaze, Enchant do functions run in game.exe, burst rim on the real d2d build (D2, D4, D5, D7)
 - docs/research/stateevrun-trace.md | SKSTATEEV second pass with runs: which first-pass state-event claims hold (event 11 before resistances, event 3 on a miss), which are wrong (event 7 owner, reach mode 1/3, d2d Shiver modelled)
+- docs/research/verify-alignment2.md - independent verification of the alignment (stat 0xac) and undead-blow gate trace
