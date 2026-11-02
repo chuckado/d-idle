@@ -5,7 +5,7 @@ change: gate1pass
 status: in-progress
 agent: gate1pass
 branch: agent/gate1pass
-worktree: /home/jesse/code/d2lod-wt/gate1pass
+worktree: ~/code/d2lod-wt/gate1pass
 skip_specs: true
 owns:
   - openspec/changes/gate1pass/**
