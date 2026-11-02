@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: baseline trust audit (docs/research/baseline-audit.md).
 - Necromancer skill trace (docs/research/nec-skill-trace.md) and emulator differentials tools/emu/nec_*; coverage skills.nec 0 of 30 to 30 of 30 (calc aspect), missiles 114, 192, 193.
 - docs: monster-missile-trace (Acts 1 and 2 monster missiles, 213 game.exe launches under the emulator), tools/emu/mm_* oracle, ledger line for 48 missile rows
 - Added a generated rule-coverage table (docs/coverage) that counts, per data-table subsystem, which rows were differentially tested against game.exe 1.14d, with a CI freshness check.
