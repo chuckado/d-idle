@@ -10,6 +10,7 @@ Soak extractors (tools/ops gate judge, d2dsoak) count guard events by `msg=` in 
 | `kitgate-trip` | a finished town trip whose reason holds `kit: ` (counted by `logTrip`, next to `trip budget: trip done`). | `level`, `missing` (text after `kit: `), `gold` (after the trip), `trip` (number since the kit was last complete) |
 | `kitgate-skip` | from KitGateLevel (clvl 8) up: the cap `kitTripCap` of kit trips is reached with the kit still incomplete; once per stretch, reset by a complete kit. Never below clvl 8, where the old hold applies. | `trips`, `missing`, `gold`, `level` |
 | `inv-tp-dump` | unchanged (docs/hastpdump.md). | |
+| `town: resupply budget hit` | a Chores call ran out of `choreBudgetS` inside a buy loop (potions or scrolls); once per Chores call, the purchases so far stay (docs/townshop.md). | `budgetS`, `spent`, `bought` |
 
 Counting: `grep -c 'msg=explore-giveup '`. A hold line is a debounce that saved a false verdict; a flip line is a verdict change that the debounce let through. Not every false run is logged: a run still open when the log ends has no line.
 
