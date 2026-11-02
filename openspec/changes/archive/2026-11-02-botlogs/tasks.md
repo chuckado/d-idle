@@ -2,7 +2,7 @@
 
 ```yaml
 change: botlogs
-status: in-progress
+status: archived
 agent: botlogs
 branch: agent/botlogs
 worktree: ~/code/d2lod-wt/botlogs
@@ -16,7 +16,8 @@ owns:
 exclusive: []
 gates:
   - go test -p 1 ./internal/bot passes
-result: offline only (mem fakes); NOT verified live.
+result: "offline table tests only; formats in docs/botlogs.md"
+merge: bfbd865
 ```
 
 - [x] explore-giveup line
