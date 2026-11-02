@@ -2,7 +2,7 @@
 
 ```yaml
 change: mercwire
-status: in-progress
+status: archived
 agent: mercwire
 branch: agent/mercwire
 worktree: d2lod-wt/mercwire
@@ -21,14 +21,14 @@ gates:
   - "go test -p 1 ./internal/combat ./internal/bot ./internal/merc/... ./cmd/d2bot passes"
   - "wait ends on arrival and is bounded, leave-with-merc-down respects the runner guard, potion given once per gap and logs (no verb), first-visit flag survives a restart: named tests in internal/combat, internal/bot, cmd/d2bot"
   - "changecheck 0 warnings; leakcheck 0 hits"
-result: "offline tests pass (combat, bot, merc, d2bot); NOT verified live: that the fork's cmd belt N merc heals the merc, the arrival wait on d2d, the crowd leave with a real dead merc"
+result: "go tests pass; potion verb effect and live behaviour unverified"
 live: "not run"
 credit:
   component: mercwire
   author: owner
   agents: [Claude Code]
   consent: none
-merge:
+merge: 597e972
 ```
 
 - [x] Wait for the Rogue after a portal or waypoint (bot.MercWait, mercWire.WaitForMerc, bounded 6 s, log lines)

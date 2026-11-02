@@ -57,7 +57,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
-| [mercwire](../../openspec/changes/mercwire/) | in-progress | mercwire | `openspec/changes/mercwire/**`<br>`internal/combat/mercfield.go`<br>`internal/combat/mercfield_test.go`<br>`internal/bot/mercwait.go`<br>`internal/bot/mercwait_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercwire_test.go`<br>`docs/merc-wire.md`<br>`docs/botlogs.md` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
@@ -115,9 +114,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change mercwire: go test -p 1 ./internal/combat ./internal/bot ./internal/merc/... ./cmd/d2bot passes
-- change mercwire: wait ends on arrival and is bounded, leave-with-merc-down respects the runner guard, potion given once per gap and logs (no verb), first-visit flag survives a restart: named tests in internal/combat, internal/bot, cmd/d2bot
-- change mercwire: changecheck 0 warnings; leakcheck 0 hits
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
@@ -131,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 597e972f 11-02 17:29 `Merge agent/mercwire: MERCWIRE: wait for the Rogue after portal or waypoint, leave when the crowd rule fires with her down, healing potion to the merc below 50 percent, persisted Lut Gholein first-visit flag (offline tests)` (mercwire)
+- ce30a061 11-02 17:29 `merge origin/main into mercwire` (mercwire)
+- fdbc3340 11-02 17:17 `Merge agent/mercpolicy: MERCPOLICY: merc.enabled default on, revive and Act 2 hire spending order, no-merc Monastery floor 14, gold farm while missing; delta specs; offline tests (hire reader and field rules not wired yet)` (mercpolicy)
+- 99aa1c20 11-02 17:17 `merge origin/main into mercpolicy` (mercpolicy)
+- b6d21b1b 11-02 17:12 `Merge agent/credit177: CREDIT177: upstream PR 177 merged; CONTRIBUTORS, credits ledger, changelog (docs only)` (credit177)
 - cde0413e 11-02 16:51 `Merge agent/mercfix: MERCFIX: route guards read the dump merc when the policy is off; claim verified after the grant with bounded retries (Gate 2 root cause; offline tests)` (mercfix)
 - 7ce0bd95 11-02 16:30 `Merge agent/bundlefinal2: bundlefinal2: final upstream bundle records and body (docs, cards)` (bundlefinal2)
 - 43b85457 11-02 16:29 `merge origin/main into bundlefinal2` (bundlefinal2)
 - 873fd1a6 11-02 16:21 `Merge agent/verifyzerohit: verifyzerohit: coverage-gap or verification result (docs and emulator tools only)` (verifyzerohit)
 - 3f184c0d 11-02 16:21 `merge origin/main into verifyzerohit` (verifyzerohit)
-- 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
-- 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
-- 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
-- e81ab739 11-02 16:05 `merge origin/main into skamazon` (skamazon)
-- 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
 <!-- statusgen:end -->
