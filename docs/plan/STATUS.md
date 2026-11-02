@@ -127,7 +127,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
 - 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
+- 4fc04c20 11-02 15:13 `merge origin/main into verifyplayerroll` (verifyplayerroll)
 - f7b3ab41 11-02 15:13 `merge origin/main into verifyalign` (verifyalign)
 - d2027358 11-02 15:08 `Merge agent/stateevrun: stateevrun: result (docs and emulator tools only)` (stateevrun)
 - 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
@@ -135,6 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
 - 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
 - b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
-- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
-- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
 <!-- statusgen:end -->

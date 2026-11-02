@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyplayerroll
-status: in-progress
+status: archived
 agent: verifyplayerroll
 branch: agent/verifyplayerroll
 worktree: ~/code/d2lod-wt/verifyplayerroll
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs only, not live (no game.exe); READY WITH CHANGES: required three includes in tests/game/test_game_missiles.cpp (CI clang-tidy step), PR-text fixes; see docs/research/pr-playerroll-verifier.md"
+result: "docs and tools only; merged by the triage queue"
+merge: c833e45
 ```
 
 ## 1. Work
