@@ -143,3 +143,6 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/pr-nmlevel-draft.md  nmlevel  nmlevel
+tools/emu/nm_pop.py  nmlevel  nmlevel
+openspec/changes/nmlevel/**  nmlevel  nmlevel
