@@ -18,6 +18,9 @@ for path in sys.argv[1:]:
         case = line[line.index(":") + 2:]
         scene, _, _, tail = case.split(" | ")
         want = [int(v) for v in tail.split()]
+        if "|" not in lines[k + 1]:                            # "got N effects" / "got effect ..": the effect list differs, not the act
+            buckets[(ai, ACTS[int(case.split(" | ")[3].split()[0])], "effects", "effects", lines[k + 1].strip())].append(case.split(" | ")[0])
+            continue
         got_text = lines[k + 1][6:].replace("|", " ").split()
         got = [int(v) for v in got_text]
         # got: act n x y unit wait event pace steps c0 c1 c2 seed_lo seed_hi ; want: act n x y unit wait event pace steps c0 c1 c2 seed_lo seed_hi

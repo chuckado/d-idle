@@ -122,11 +122,13 @@ def check(e, ai, cases, rng, lines, tally):
     for _ in range(cases):
         e.brk = mark
         s = M.setup(rng, ai)
+        command = s["command"]                                                # the flee clears it in the scene (FUN_0058ed10); the case line keeps what it was
         out, ctrl, seed = M.run_game(e, s, M.AIS[ai], random.Random(rng.getrandbits(32)))
+        s["command"] = command
         out = [x for x in out if x[0] != "scream"]
         home = any(x[0] == "home" for x in out)
         out = [x for x in out if x[0] != "home"]
-        s["dying"] = ai == "Fallen" and any(x[0] == "command_done" for x in out)
+        s["dying"] = ai == "Fallen" and ("pace", 50, 0) in out                    # the flee branch's pace (0x5f03a8); command_done also comes from a command word that is not 1 (0x5f068b)
         act, pace, effects, asks = M.outcome(s, out)
         if ai == "BloodRaven" and s.get("home_set"): s["free"][0] = s["home_set"]   # the case line carries the home she kept
         if ai == "FallenShaman" and act[0] == "seq": act[:] = ["skill", act[1], 0, 0, 0, act[5], act[6]]   # ai.cpp:1559-1560 runs seq and skill alike; its corpse is skill_unit
@@ -135,7 +137,7 @@ def check(e, ai, cases, rng, lines, tally):
         if ai == "BloodRaven" and act[0] == "circle": act[3] = 0                    # the circle's flag 1 (walk flagged 4): d2d's Think has no field for it
         if home: act[:] = ["home", 0, 0, 0, 0, act[5], act[6]]
         if act[0] == "keep": act[3] = 0                                       # y is the move mode, always 2 (FUN_005de6d0), d2d's Think has none
-        if ai in ("FallenShaman", "BloodRaven") and act[4] == 2: act[4] = 0   # the second target is the primary one, as ai.cpp feeds it
+        if ai in ("FallenShaman", "BloodRaven", "SkeletonBow") and act[4] == 2: act[4] = 0   # the second target is the primary one, as ai.cpp feeds it
         s["stat"][("mon", 0x2b)] = int(s["dying"])
         lines.append(M.dump_case(s, act, pace, effects, asks, ctrl, seed))
         key = (ai, "dying" if s["dying"] else "-", act[0])
