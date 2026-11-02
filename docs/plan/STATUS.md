@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
 - de908e29 11-02 15:49 `Merge agent/skassassin: skassassin: coverage-gap or verification result (docs and emulator tools only)` (skassassin)
 - fe33b6e7 11-02 15:49 `merge origin/main into skassassin` (skassassin)
 - 08590a5d 11-02 15:42 `Merge agent/skdruid: skdruid: coverage-gap or verification result (docs and emulator tools only)` (skdruid)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4d7c1618 11-02 15:35 `merge origin/main into branchtriage` (branchtriage)
 - 52670323 11-02 15:35 `merge origin/main into crfixbundle` (crfixbundle)
 - d3ec2892 11-02 15:27 `Merge agent/prbuildsmite: PRBUILD-SMITE: Smite lands on a block fix candidate, record and draft (docs, tools, card; nothing upstream)` (prbuildsmite)
-- 469bbc3f 11-02 15:22 `Merge agent/verifytele: verifytele: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifytele)
 <!-- statusgen:end -->
