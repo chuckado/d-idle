@@ -143,8 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-openspec/changes/monsterai2/**  monsterai2  monsterai2
-docs/research/monsterai2-trace.md  monsterai2  monsterai2
-tools/emu/mai2_*  monsterai2  monsterai2
-docs/coverage/ledger.tsv  monsterai2  monsterai2
-docs/coverage/rule-coverage.md  monsterai2  monsterai2

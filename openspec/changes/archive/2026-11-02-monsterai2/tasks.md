@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterai2
-status: in-progress
+status: archived
 agent: monsterai2
 branch: agent/monsterai2
 worktree: ~/code/d2lod-wt/monsterai2
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs and emulator tools only. V run: six think ports equal game.exe on 36,000 cases; d2d andariel_think 3,830 cases 0 differ; Fallen flee pace (416 of 416), Blood Raven (pace, target home distance), Fallen Shaman corpse reach proven; four mismatch families root-caused; run-speed chain read (base of stat 0x43 still U). No PR candidate."
+result: "docs and emulator tools only; credits runner"
 live: "docs and emulator only, nothing run live"
+merge: 3c1b500
 ```
 
 - [x] six untraced AIs: acts run in game.exe, Python port checked against it (36,000 cases, 0 differ)
