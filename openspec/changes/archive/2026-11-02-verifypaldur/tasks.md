@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifypaldur
-status: in-progress
+status: archived
 agent: verifypaldur
 branch: agent/verifypaldur
 worktree: d2lod-wt/verifypaldur
@@ -13,7 +13,8 @@ owns:
   - openspec/changes/verifypaldur/**
 exclusive: []
 gates: independent re-check of paldur-trace.md claims with an own model run against game.exe native code
-result: "claims re-checked with own seeds (34,000 weapon and 34,000 armor cases, 0 mismatches); verified on the worker host emulator, not live"
+result: "docs only; see the doc for tags, holds and limits"
+merge: 7645230
 ```
 
 - [x] 1. Read FUN_0057d3d0 / FUN_00559e30 in the disassembly
