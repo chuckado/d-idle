@@ -4,8 +4,8 @@ The second monster AI pass (monsterai2) and the first (monster-ai-trace) proved 
 
 ## What Changes
 
-- Private fork (not this repo): branches `local/monsterpace-clean` (14 commits) and `local/monsterpace` (15, same tree) on upstream main 6935cf64; counts per commit in the draft.
-- docs/research/pr-monsterpace-draft.md: the PR draft, proofs, limits and the verifier's checklist.
+- Private fork (not this repo): branches `local/monsterpace-a` (13 commits) and `local/monsterpace-b-velocity` (2) on upstream main 3be426d3 (the first single-bundle branches `local/monsterpace-clean` / `local/monsterpace` on 6935cf64 stay for the record).
+- docs/research/pr-monsterpace-a-draft.md and pr-monsterpace-b-draft.md: the two PR drafts (think paces, Blood Raven, shaman; base velocity 75) with proofs and limits; they replace the single draft after the verifier's report.
 - tools/emu/mp_run.sh, mp_patch.py: the counting replay (evidence tooling; the oracle files are monsterai2's).
 
 ## Overlap (declared)

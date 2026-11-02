@@ -143,7 +143,8 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-docs/research/pr-monsterpace-draft.md  monsterpace  monsterpace
+docs/research/pr-monsterpace-a-draft.md  monsterpace  monsterpace
+docs/research/pr-monsterpace-b-draft.md  monsterpace  monsterpace
 tools/emu/mp_run.sh  monsterpace  monsterpace
 tools/emu/mp_patch.py  monsterpace  monsterpace
 openspec/changes/monsterpace/**  monsterpace  monsterpace
