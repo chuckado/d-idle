@@ -9,7 +9,7 @@ mismatches. Columns of the levelup output can be masked with --skip NAME (repeat
 import re
 import sys
 
-LINE = re.compile(r"^([TA] \d|[0-9a-f]{8} \d+ \d+ \d+:|\d+ \d+ str |\d+ \d+$)")
+LINE = re.compile(r"^([TAK] \d|[0-9a-f]{8} \d+ \d+ \d+:|\d+ \d+ str |\d+ \d+$)")
 
 
 def rows(path):

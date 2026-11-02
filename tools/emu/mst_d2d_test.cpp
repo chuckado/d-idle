@@ -145,6 +145,23 @@ int main(int argc, char** argv) try {
         }
         return 0;
     }
+    if (mode == "xp") {   // a file of tools/emu/mst_kill.py lines (argv[2]), results to argv[3]
+        std::string line;
+        std::ifstream file(argv[2]);
+        if (argc > 3 && !std::freopen(argv[3], "w", stdout)) return 1;
+        while (std::getline(file, line)) {
+            const auto cut = line.find(" ::: ");
+            if (line.rfind("K ", 0) != 0 || cut == std::string::npos) continue;
+            std::istringstream in(line.substr(2, cut - 2));
+            int hid = 0, blow = 0, merc_level = 0, owner_level = 0;
+            long long exp = 0, award = 0;
+            in >> hid >> exp >> award >> blow >> merc_level >> owner_level;
+            const auto after = R::merc_kill_exp(std::uint32_t(exp), award, blow != 0, merc_level, owner_level);
+            const int level = after == std::uint32_t(exp) ? merc_level : R::merc_stats(tables, hid, after).level;
+            std::printf("%s ::: %u %d\n", line.substr(0, cut).c_str(), after, level);
+        }
+        return 0;
+    }
     if (mode == "levelup") {
         std::set<int> ids;
         for (const auto& row : tables.hirelings) if (row.version == 100) ids.insert(row.id);
