@@ -11,15 +11,17 @@ sys.path.insert(0, str(cur_dir))
 import boot_game
 
 def s32(v):
+    """Convert unsigned 32-bit int to signed 32-bit int."""
     v &= 0xFFFFFFFF
     return v - 0x100000000 if (v & 0x80000000) else v
 
 def step_rng(lo, hi):
+    """Advance 64-bit LCG state by one step and return (lo, hi) 32-bit words."""
     prod = ((lo & 0xFFFFFFFF) * 0x6AC690C5 + (hi & 0xFFFFFFFF)) & 0xFFFFFFFFFFFFFFFF
     return prod & 0xFFFFFFFF, (prod >> 32) & 0xFFFFFFFF
 
 def mul_div_trunc(a, b, c):
-    # FUN_00483360: if abs(a) > 0x100000, unsigned (a // c) * b, else signed 64-bit (a * b) / c
+    """Model Game.exe FUN_00483360 integer scaling with overflow guard."""
     if c == 0:
         return 0
     if abs(a) > 0x100000:
@@ -30,6 +32,7 @@ def mul_div_trunc(a, b, c):
     return prod // c
 
 def level_bracket(base, lev, lvl):
+    """Calculate standard 5-bracket skill leveling progression."""
     if lvl <= 1:
         return base
     b1, b2, b3, b4, b5 = lev
@@ -105,6 +108,7 @@ def python_aurafilter(caster_info, target_info, filt):
 
 
 def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
+    """Run 100,000 cases verifying FUN_0056b3e0 target filter and FUN_0056b7e0 search."""
     print(f"=== Suite 1: Aura Target Filter & Area Search (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
     e = boot_game.boot(use_snap=True)
@@ -368,6 +372,7 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
 
 
 def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
+    """Run 100,000 cases verifying FUN_0056e0c0 pulse damage across Holy Fire/Freeze/Shock."""
     print(f"=== Suite 2: Enemy-Hit Pulse Damage (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
     e = boot_game.boot(use_snap=True)
@@ -530,6 +535,7 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
 
 
 def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
+    """Run 100,000 cases verifying Prayer mana payment, state 85, and FUN_005806f0 regen."""
     print(f"=== Suite 3: Prayer Mana Cost, State 85 (nomanaregen), and FUN_005806f0 (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
     e = boot_game.boot(use_snap=True)

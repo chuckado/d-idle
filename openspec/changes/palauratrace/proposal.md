@@ -1,6 +1,7 @@
 ## Why
 
 Work item PALAURA (Issue #1): trace Paladin aura application, target filter, pulse damage, and Prayer mana / state 85 in game.exe 1.14d vs d2d vs the bot.
+no observable behaviour change: docs and offline emulator tooling only, no code under internal/** or cmd/**.
 
 ## What Changes
 
