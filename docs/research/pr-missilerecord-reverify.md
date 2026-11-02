@@ -28,10 +28,12 @@ Process note (O): the author wrote `vm_cmp_p.py` into my harness directory and r
 |---|---|---|---|---|
 | C, c301eaef | 108,140 (2,408 on rows d2d does not load, 9,652 skill-path rows set aside) | 0 | 16,903 / 0 | 23,884 / 0 |
 | D all acts, c301eaef | 112,760 (4,858 not loaded, 6,294 skill path) | 0 | 7,916 / 0 | 23,926 / 0 |
-| C, ec09c73f | RESULT_UP_C | | | |
-| D, ec09c73f | RESULT_UP_D | | | |
+| C, ec09c73f | 108,140 | 0 | 16,903 / 0 | 23,884 / 0 |
+| D, ec09c73f | 112,760 | 0 | 7,916 / 0 | 23,926 / 0 |
 
-Rebase: `git range-diff 23e2baec..c301eaef 6935cf64..ec09c73f` shows the three patches identical (`=`). The tree differences are upstream's own (Monster / Foe / Missile fields), none in the shot functions (V run). `git merge-tree ec09c73f 70fa479d`: clean (V run). The author's unit test (`test_monster_missile` with no arguments) passes on c301eaef (RESULT_UP_UNIT on ec09c73f).
+The ec09c73f probe output (C, D and OP sets, hits included) is byte-identical to c301eaef's on every numeric line; the hit compare gives 0 of 18,092 (C) and 0 of 22,743 (D) on ec09c73f too.
+
+Rebase: `git range-diff 23e2baec..c301eaef 6935cf64..ec09c73f` shows the three patches identical (`=`). The tree differences are upstream's own (Monster / Foe / Missile fields), none in the shot functions (V run). `git merge-tree ec09c73f 70fa479d`: clean (V run). The author's unit test (`test_monster_missile` with no arguments) passes on c301eaef and on ec09c73f (rc 0).
 
 ## 4. The consumer: what a hit applies (V run, V read)
 
