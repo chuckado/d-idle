@@ -210,3 +210,17 @@ Not re-run on the rebased head: the det scenarios (run on the same two commits o
 
 - BACKLOG: #170 (Nightmare/Hell monster start level) is open; watch for the maintainer and CodeRabbit.
 - INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
+
+## CodeRabbit follow-up on #170 (card crfollow170)
+
+- posted: 2026-11-02 CodeRabbit review read: two inline findings, monsters.hpp:374 (Major: limit the area-level rule to expansion games) and boss_level.py:244 (Minor: restrict the S1 residual to Stone Skin cases). Walkthrough and the ruff E701 notes attached to the second are non-inline.
+- decision: monsters.hpp:374 not changed: the PR body already lists classic games under "Not in this PR" (d2d loads the expansion Levels.txt columns only). Gating on expansion would fall back to the MonStats Level(N) / Level(H), which is not game.exe's classic result either (the classic MonLvl2 / MonLvl3 columns are not loaded; what FUN_0061dca0 returns there is unverified, U). It would be a behaviour change on an unverified claim, so it stays a stated limit. boss_level.py:244 valid: `residual()` took neither kind nor mods, so any doubled defence was named S1. It now names S1 only for kind u or s whose mods hold 28 (the stone skin mod, components/rules/uniques.hpp umod::stoneskin); H1 unchanged. The ruff E701 notes are rules outside the presubmit set (RUFF_RULES) and the file's one-line style: not acted on.
+- check: ruff with the presubmit rules 0; tooling unit tests 7 ok (1 skipped); pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head; presubmit --quick 0 FAIL, 4 WARN (the earlier three plus docs-sync for a tooling-only commit; no C++ touched, so no new compile flags to run); area differential on the unchanged test_boss_level build: gen-area 20000 seed 11, 37440 cases compared: level mismatches 0, other fields not a named residual 0, S1 named 223 times; negative checks: S1 is not named for kind u without mod 28, kind p or kind c, and is named for kind u or s with mod 28. The game was not run live.
+- posted: 2026-11-02 push (plain, no force) to the fork: fix/nightmare-hell-monster-level-2 9b04f5b1 -> 9d762384 (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); also pushed to the private remote (local/crfollow170).
+- posted: 2026-11-02 replies to the inline threads (comment ids 4442386686, 4442386694; replies 4442530314, 4442530532): the first declined with the reason above, the second fixed in 9d762384. No re-review was requested.
+- non-inline: the walkthrough and the ruff E701 tool notes need no action.
+
+## Shared-file lines for the merger (crfollow170)
+
+- BACKLOG: #170 got a follow-up (9d762384) for CodeRabbit; watch for the maintainer.
+- INDEX, CHANGELOG, decomp-queue, research README: no change.
