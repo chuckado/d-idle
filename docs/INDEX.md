@@ -265,3 +265,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skdruid-trace.md | Druid skills 221..250 calc cells by game.exe vs d2d, summon caps (skdruid)
 - docs/research/skassassin-trace.md - Assassin skills table decomposition, first pass
 - docs/research/itemweapons-trace.md: weapon base table facts (306 rows), plan for damage and speed differential
+- docs/research/levelsareas-trace.md - Levels.txt area level: game.exe FUN_0061dca0 vs d2d columns, 1,088 cases equal, census, drill recipe
