@@ -66,6 +66,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [soakgiveup](../../openspec/changes/soakgiveup/) | in-progress | soakgiveup | `openspec/changes/soakgiveup/**` | - |
 | [soakstall](../../openspec/changes/soakstall/) | in-progress | soakstall | `docs/soakstall.md`<br>`internal/bot/goal.go`<br>`internal/bot/runner.go`<br>`internal/bot/emptyarea_test.go`<br>`openspec/changes/soakstall/**` | - |
+| [verifymissile](../../openspec/changes/verifymissile/) | in-progress | verifymissile | `docs/research/pr-missilerecord-verifier.md`<br>`openspec/changes/verifymissile/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -132,9 +133,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change soakgiveup: go test -p 1 ./internal/bot passes, including the new clear-run case
 - change soakstall: TestExploreGaveUp (internal/bot) passes
+- change verifymissile: changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 625ea93f 11-01 21:51 `merge origin/main into verifymissile` (verifymissile)
 - fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
 - b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
 - 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
@@ -144,5 +147,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
 - 39aaf7b3 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
 - 8961692a 11-01 20:45 `Merge agent/lockstepresearch: LOCKSTEPRESEARCH: no prior art for Game.exe lockstep; speed-up via proxy DLL time hooks 6 to 12 agent-hours, true stepping 20 to 40; probes P0 to P3` (lockstepresearch)
-- d06b33cf 11-01 20:44 `merge origin/main into lockstepresearch` (lockstepresearch)
 <!-- statusgen:end -->
