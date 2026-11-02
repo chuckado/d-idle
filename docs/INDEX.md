@@ -246,3 +246,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/rebase174-20261102.md - re-rebase of the PR candidates onto upstream main after PR 174: old and new heads, conflicts, counts, parity
 - docs/research/pr-bundle-1-draft.md - draft body of the combined PR (bundle 1), size and checks
 - docs/process/baseline-runs.md | section 10: hooked lanes (--timescale K), game-time conversion, regime flag, watchdog | process
+- docs/research/pr-bundle-1-verifier.md: independent verifier of PR bundle 1 (ground own harness, integration, CI parity, hygiene, verdict)
