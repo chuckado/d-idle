@@ -208,3 +208,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - openspec/changes/boardclean - board cleanup, closed finished work items
 - docs/research/lockstep-p1p2.md - lockstep probes P1/P2: preparation state, run plan, blockers
 - docs/research/lockstep-p1p2.md - lockstep probes P1/P2 live: frame counter fps, time-hook k=1 control and k=2 results, failures, next steps
+- docs/research/openpr-log.md: posted log for #159 and #160 (now also the conflict rebase of #159, #160, #163).
