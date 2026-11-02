@@ -311,6 +311,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - CREDITKIT: credit: block on cards, tools/credit/credit.py (trailers, PR Credits, check), credits ledger, upstream-use sentence (docs/process/credit.md)
 - CRSETUP done (card crsetup): CodeRabbit pre-scan config and runbook; the owner installs the app, then the coordinator runs the quota test (docs/process/coderabbit-prescan.md)
 - lockstepp4 DONE: scaled bot clock at k=2/k=4 restores chores and kills per real minute (154 and 271 combat-kill events, 142 and 204 observed, in 10 min), 50 to 77 percent of k=1 per game minute; noise band and character reset still open (docs/research/lockstep-p4.md)
+- REBASE174 done (private fork branches on upstream main 48908176 after #174: local/freeze-rules-v5 32c4943a, local/vendor-repair-gate-v4 ee2d03f9, local/skmelee3-d1-r174 5689c007, local/skmelee3-d2-r174 10e16ad5, and local/bundle-1 ed087f88: 10 commits, 20 files, +759 -42); counts and CI parity re-run; final integration check pending
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
