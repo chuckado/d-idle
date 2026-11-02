@@ -314,6 +314,9 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - REBASE174 done (private fork branches on upstream main 48908176 after #174: local/freeze-rules-v5 32c4943a, local/vendor-repair-gate-v4 ee2d03f9, local/skmelee3-d1-r174 5689c007, local/skmelee3-d2-r174 10e16ad5, and local/bundle-1 ed087f88: 10 commits, 20 files, +759 -42); counts and CI parity re-run; final integration check pending
 - LOCKSTEPBASE: hooked baseline lanes (`baseline-run.sh --timescale K`: hook install/restore, D2BOT_TIMESCALE forwarding, game-time series, regime flag, watchdog; ops repo) plus the bot's `gclock: timescale K` start line; pair set kitk2 needs a pin with gclock (docs/process/baseline-runs.md section 10)
 - verifybundle: bundle 1 (local/bundle-1 ed087f88) verified, READY WITH CHANGES (commit bodies, credits, ground numbers in the body; no code change), docs/research/pr-bundle-1-verifier.md
+- bundlefinal: final PR body for bundle 1 (docs/research/pr-bundle-1-body.md) and private branches local/bundle-2 / stage/bundle-2; waits for the user's go to push or open a PR
+- monsterpace: split into PR A (local/monsterpace-a: Act 1 think paces, Blood Raven home rule, shaman corpse reach) and PR B (local/monsterpace-b-velocity: monster base velocity 75) on upstream main 3be426d3, verifier changes applied; ready for the PR-open step on the user's go.
+- upstream PR candidate local/nmlevel-v5 (head 94562869, base 3be426d3; Nightmare / Hell monster level = area MonLvl) drafted in docs/research/pr-nmlevel-draft.md, independently verified (READY WITH CHANGES, done); waits for the go.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

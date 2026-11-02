@@ -16,6 +16,11 @@ gates:
   - own harness run before the author's draft is compared
 result: "docs only; see the doc for tags, holds and limits"
 merge: 5461819
+credit:
+  component: Verifier: melee D1 and D2
+  author: owner
+  agents: [Claude Code]
+  consent: none
 ```
 
 - [x] 1 Read the candidate diff and the disassembly for each rule, address and mask
