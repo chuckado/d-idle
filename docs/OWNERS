@@ -143,3 +143,6 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/pr-playerroll-draft.md  playerroll  playerroll
+tools/emu/det_scenarios_lab.py  playerroll  playerroll
+openspec/changes/playerroll/**  playerroll  playerroll
