@@ -206,3 +206,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - no change
 - docs/research/openpr-log.md: posted log now also covers #171.
 - openspec/changes/boardclean - board cleanup, closed finished work items
+- docs/research/lockstep-p1p2.md - lockstep probes P1/P2: preparation state, run plan, blockers

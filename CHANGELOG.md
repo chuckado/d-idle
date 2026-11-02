@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Research: lockstep probes P1/P2 prepared (time-hook proxy builds against the game's own DLL and passes the offline tests); live runs pending
 - boardclean: contributor board cleanup, finished items closed and archived (docs/community only)
 - Docs: opened upstream PR #171 (monster base velocity 75 percent); posted log in docs/research/openpr-log.md.
 - no change
