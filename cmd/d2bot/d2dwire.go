@@ -28,6 +28,7 @@ import (
 	"d2lod-bot/internal/loot"
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/nav"
+	"d2lod-bot/internal/task"
 	"d2lod-bot/internal/town"
 )
 
@@ -79,7 +80,9 @@ func buildD2DStack(ctx context.Context, o options, be *d2denv.Backend, nv *nav.N
 	oo := o
 	oo.managed = false // saveDirOf would load the Game.exe managed config; there is no save dir to find for d2d
 	s.task = newTaskDeps(ctx, oo, tw, nv, e, charName)
-	s.task.ClaimMerc = claimDep(d2dmerc.Claimer{C: be.Client}, &d2dmerc.Reader{Read: be.Reader.Read, LevelEstimate: levelEstimate},
+	mercRd := &d2dmerc.Reader{Read: be.Reader.Read, LevelEstimate: levelEstimate}
+	task.MercAlive = guardMercHook(mercRd, time.Now) // the policy wiring (merc.enabled=1) replaces it with its own
+	s.task.ClaimMerc = claimDep(d2dmerc.Claimer{C: be.Client}, mercRd,
 		func() merc.Difficulty { return merc.Normal }, log) // d2d starts Normal only (Spec.Difficulty)
 	ta := s.town
 	bg := newBossGame(e, db, cb, nv, lt, ta.ToTown)

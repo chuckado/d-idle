@@ -264,3 +264,16 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/branch-triage-20261102.md | Triage of the local agent branches not on main: verdict, reason and merge or delete command per branch
 - docs/research/skdruid-trace.md | Druid skills 221..250 calc cells by game.exe vs d2d, summon caps (skdruid)
 - docs/research/skassassin-trace.md - Assassin skills table decomposition, first pass
+- docs/research/itemweapons-trace.md: weapon base table facts (306 rows), plan for damage and speed differential
+- docs/research/levelsareas-trace.md - Levels.txt area level: game.exe FUN_0061dca0 vs d2d columns, 1,088 cases equal, census, drill recipe
+- docs/research/skamazon-trace.md: Amazon skills (Jab, Strafe, Fend, Multiple Shot, arrows, javelins, passives, Decoy, Valkyrie): game.exe vs d2d vs bot; calc differential 27,800 cases 0 differ, elemental arrow roll D1 118,000 cases, Pierce D2 (card skamazon)
+- docs/research/skbarb-trace.md: Barbarian skills (Bash family, Whirlwind, Frenzy, Howl, war cries, masteries): game.exe vs d2d vs bot; calc and physical differential 27,800 cases 0 differ, deviations D1-D7 (card skbarb)
+- docs/research/verifyzerohit.md: independent verifier of SKZEROHIT (both passes, own emulator harness, claim verdicts)
+- docs/research/pr-bundle-final-body.md: final PR body of the upstream bundle (repair gate, melee, freeze, standing missiles, Smite block), counts and limits (card bundlefinal2)
+- openspec/changes/mercfix: guard merc from the dump and claim read-back after the Gate 2 merc=none defect
+- openspec/changes/credit177: credit bookkeeping for upstream PR #177
+- openspec/changes/mercpolicy: merc policy (revive, Act 2 hire, spending order, floors, gold farm)
+- openspec/changes/mercwire: merc field rules wired into the bot, first-visit flag persisted
+- docs/townshop.md - Gate 2 town resupply analysis and fix
+- docs/tomestat.md: why the field read lost the Tome of Town Portal's stat 70 (ground/carried id collision) and the fix
+- docs/research/covmissiles-trace.md - missiles coverage first pass: table values, flight formulas and hit roll of the Sorceress and Paladin rows (covmissiles)
