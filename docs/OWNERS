@@ -137,6 +137,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-docs/research/palaura-trace.md  palaura  palaura
-tools/emu/palaura_*  palaura  palaura
-openspec/changes/palaura/**  palaura  palaura

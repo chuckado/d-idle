@@ -2,7 +2,7 @@
 
 ```yaml
 change: palaura
-status: in-progress
+status: archived
 agent: palaura
 branch: agent/palaura
 worktree: ~/code/d2lod-wt/palaura
@@ -15,7 +15,8 @@ exclusive: []
 gates:
   - "game.exe's own aura code run under the emulator on real player and monster units (area search, filter, apply, enemy hit, Prayer mana and state 85, regeneration), every claim tagged"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict"
-result: "Offline, nothing verified live. Game side V run only (no d2d differential): area search = integer subtile disc d2 <= r2 (2,028 of 2,032 equal, 4 outside near rooms); filter bits 0x12003 / 0xa783 / 0x4a283 decoded (MonStats bits boss, primeevil, npc, noAura by data); enemy hit one roll min..max-1 (6,000 pulses) and roll x (100 - (resist - pierce)) / 100; Holy Freeze skips prime evil; Prayer pays mana and sets state 85 only when a life rose, no heal below the cost, state 85 zeroes base and percent regen not the flat bonus. Deviations D1..D9, bot B1..B3, no PR candidate, drills P1..P4."
+result: "docs only; first or second pass, not yet independently verified"
+merge: fcd78e5
 ```
 
 ## 1. Work
