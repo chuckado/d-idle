@@ -45,6 +45,30 @@ def flags(e):
         print(f"flag {flag:#x} ret {ok}:", *[e.s32(out + 4 * i) for i in range(11)])
 
 
+def levels(e):
+    """Levels.txt MonLvl1Ex / 2Ex / 3Ex (and the classic MonLvl1..3) per area id: what the bot's areaMLvl reads."""
+    from monstats import table
+    for r in table("levels"):
+        if r.get("id", "").isdigit() and 1 <= int(r["id"]) <= 75:
+            print(r["id"], r.get("levelname", r.get("name", "")), *[r.get(k.lower(), "") for k in ("MonLvl1", "MonLvl2", "MonLvl3", "MonLvl1Ex", "MonLvl2Ex", "MonLvl3Ex")])
+
+
+def regen(e):
+    """The MonStats column FUN_00573cb0's life regeneration reads (monster record +0x1a0, 0x574030): print the
+    columns with `reg` in the name and, per row of the Act 1 fallen / zombie / quill rat / skeleton, their values."""
+    from monstats import table
+    rows = [r for r in table("monstats") if r.get("id") and r["id"] != "Expansion"]
+    cols = [k for k in rows[0] if "reg" in k]
+    print("columns", cols)
+    for r in rows:
+        if r["id"] in ("fallen1", "zombie1", "quillrat1", "skeleton1", "bloodraven", "andariel", "duriel", "brute1", "wraith1"):
+            print(r["id"], {k: r[k] for k in cols})
+    vals = {}
+    for r in rows:
+        for k in cols: vals.setdefault(k, {}).setdefault(r[k], 0); vals[k][r[k]] += 1
+    print("value counts", {k: dict(sorted(v.items(), key=lambda kv: -kv[1])[:8]) for k, v in vals.items()})
+
+
 def players(e):
     """FUN_005738f0 (life %) and FUN_00573910 (experience %) for 0..16 players, fastcall ecx = the count:
     lines `n life exp` like `ms_d2d_test --players`."""
@@ -119,4 +143,4 @@ if __name__ == "__main__":
     else:
         import drlg
         e = drlg.boot()
-        {"game": game, "flags": flags, "probe": probe, "players": players}[mode](e)
+        {"game": game, "flags": flags, "probe": probe, "players": players, "levels": levels, "regen": regen}[mode](e)

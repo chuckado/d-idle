@@ -32,6 +32,7 @@ def main():
     seen = {}
     bad = {}
     shown_flag = [0]
+    sums = [0.0] * 8    # units, game exp, d2d-level exp, game life, d2d-level mid life; units at another level, their game exp, d2d exp
     for line in open(spawn):
         f = line.split()
         if not f or f[0] != "U": continue
@@ -57,6 +58,12 @@ def main():
         g = need.get((row, lv))
         if g is None: cnt["nolookup"] += 1; continue
         mn, mx, ac, exp = int(g[3]), int(g[4]), int(g[5]), int(g[13])
+        own = need.get((row, level[row]))
+        if own is not None:
+            # what d2d would have given at ITS level (MonStats Level column) against the game's level
+            sums[0] += 1; sums[1] += st.get(0xd, 0); sums[2] += int(own[13]); sums[3] += st.get(7, 0) / 256
+            sums[4] += (int(own[3]) + int(own[4])) / 2
+            if lv != level[row]: sums[5] += 1; sums[6] += st.get(0xd, 0); sums[7] += int(own[13])
         hp = st.get(7, 0) / 256
         key = ids[row]
         r = seen.setdefault(key, [1 << 30, 0, set()]); r[0] = min(r[0], hp); r[1] = max(r[1], hp); r[2].add(lv)
@@ -76,6 +83,10 @@ def main():
             shown_flag[0] += 1; print("example:", line.strip())
     print(cnt)
     for k, v in sorted(bad.items(), key=lambda kv: -kv[1])[:25]: print("  ", k, v)
+    if sums[0]:
+        print(f"d2d-level view: {int(sums[0])} units; mean exp game {sums[1] / sums[0]:.1f} vs d2d level {sums[2] / sums[0]:.1f}; mean life game {sums[3] / sums[0]:.1f} vs d2d mid {sums[4] / sums[0]:.1f}")
+    if sums[5]:
+        print(f"units at another level than d2d's: {int(sums[5])}; their mean exp game {sums[6] / sums[5]:.1f} vs d2d {sums[7] / sums[5]:.1f}")
     print("rows seen:", len(seen))
     for k, (lo, hi, lv) in sorted(seen.items()):
         mn = None
