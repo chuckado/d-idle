@@ -275,3 +275,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - openspec/changes/mercpolicy: merc policy (revive, Act 2 hire, spending order, floors, gold farm)
 - openspec/changes/mercwire: merc field rules wired into the bot, first-visit flag persisted
 - docs/townshop.md - Gate 2 town resupply analysis and fix
+- docs/tomestat.md: why the field read lost the Tome of Town Portal's stat 70 (ground/carried id collision) and the fix
