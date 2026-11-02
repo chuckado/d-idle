@@ -203,3 +203,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skdefenders-trace.md: hireling and player as defenders against resistances (penalty, cap, floor, flat reduction, absorb, poison fields), game.exe vs d2d (real monster_blow) vs bot; V run 111,232 cases x 2 seeds
 - , [research/skshield-trace.md](research/skshield-trace.md) (does a shield's damage reach the player's stats)
 - docs/research/openpr-log.md: posted log now also covers #170.
+- no change
