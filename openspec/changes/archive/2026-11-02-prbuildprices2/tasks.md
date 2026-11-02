@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildprices2
-status: in-progress
+status: archived
 agent: prbuildprices2
 branch: agent/prbuildprices2
 worktree: d2lod-wt/prbuildprices2
@@ -13,7 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs only, not live; fork branch local/vendor-repair-gate-v3 (f0360487) built and verified offline, not posted"
+result: "docs only; PR hold in force"
+merge: 08f85a5
 ```
 
 ## 1. Work
