@@ -270,3 +270,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/skbarb-trace.md: Barbarian skills (Bash family, Whirlwind, Frenzy, Howl, war cries, masteries): game.exe vs d2d vs bot; calc and physical differential 27,800 cases 0 differ, deviations D1-D7 (card skbarb)
 - docs/research/verifyzerohit.md: independent verifier of SKZEROHIT (both passes, own emulator harness, claim verdicts)
 - docs/research/pr-bundle-final-body.md: final PR body of the upstream bundle (repair gate, melee, freeze, standing missiles, Smite block), counts and limits (card bundlefinal2)
+- openspec/changes/mercfix: guard merc from the dump and claim read-back after the Gate 2 merc=none defect
