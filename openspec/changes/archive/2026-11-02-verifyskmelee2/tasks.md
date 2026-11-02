@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyskmelee2
-status: in-progress
+status: archived
 agent: verifyskmelee2
 branch: agent/verifyskmelee2
 worktree: ~/code/d2lod-wt/verifyskmelee2
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own harness run on two seeds before the author's trace is compared
-result: D1 holds, D4 holds, D2 / D5 / D6 hold with limits; run on the emulator and a d2d probe build (V run), not live
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: c40e7e6
 ```
 
 - [x] 1 Read FUN_0057b420 / FUN_0057d9b0 / FUN_0057b660 in the disassembly
