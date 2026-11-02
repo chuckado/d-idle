@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- tpglitch: town-portal verdict debounced at its single source (kit gate and poverty check); pingpongrate: ping-pong guard resets on XP progress, not on any kill
 - docs: licence research for a standalone Game.exe time hook (not legal advice); nothing run
 - docs: Gate 1 rerun 2 record and review (XP/h per band, stall windows, HasTP root cause), cards tpglitch, pingpongrate, kitgatelevel proposed.
 - docs: research on running d2d and Game.exe from one seed in lockstep (seed pin by save map id, RNG stream, parity, plan P3, verdict); nothing run
