@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifypalaura
-status: in-progress
+status: archived
 agent: verifypalaura
 branch: agent/verifypalaura
 worktree: d2lod-wt/verifypalaura
@@ -14,8 +14,8 @@ skip_specs: true
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-merge:
-result: "Emulator runs on the worker host (roll 4000 pulses, disc radius 7 and 16); no live game."
+merge: 0c7e7ec
+result: "docs only; see the doc for tags, holds and limits"
 ```
 
 ## 1. Work
