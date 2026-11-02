@@ -110,7 +110,15 @@ Not required but cheap: record cases for the three space-named rows I did not ru
 
 ## 8. Fork suites, style checks, merge, det hashes
 
-(filled in below as they finish)
+| Check | Result | Tag |
+|---|---|---|
+| `ctest` on head 312b0bbb (all 52 test executables built; `D2_MPQ_DIR` / `D2_PATCH_INSTALLER` set, so data tests ran) | test_game, test_game_rules, test_combat, test_monsters, test_monster_ai, test_rules, test_skills, test_drops and every other unit test pass; skipped: test_missile_hit / test_monster_missile (oracle modes), test_iso9660; failed: test_mpq (the integrity assertion on my MPQ folder: no d2video / d2xvideo there, environment) and the 9 tests that run the d2d binary (smoke, co-op, pad, quests act 1-5: no d2d app in a tests-only build) | V run |
+| `ctest` on base 23e2baec, same set | (pending, below) | |
+| `tools/pr_guard.py 23e2baec HEAD` | 0 FAIL, 0 WARN | V run |
+| `tools/presubmit.py --quick --base 23e2baec` (ruff via uvx) | **2 FAIL**: `short-names` ai.hpp:670 `lo` (and `hi`); `ruff` 8 findings in mm_diff.py / mm_launch.py. 3 WARN: siblings (unit kinds, hit paths), docs-sync. Same against upstream/main | V run |
+| clang-tidy (repo `.clang-tidy`, LLVM 23) on test_monster_missile.cpp and gamedata_load.cpp | **new-file errors**: test_monster_missile.cpp:13 `combat.hpp` included but unused (misc-include-cleaner); :47 variable `s1` too short. (outdoor.hpp `x` / `y` binding names: pre-existing, newer tidy only) | V run |
+| merge with upstream main 6935cf64 (read-only fetch) | whole branch: clean (`git merge-tree --write-tree`, no conflict); the two candidate commits alone on upstream (`--merge-base=23e2baec`): clean | V run |
+| base commits upstream? | 9ba8d369 / 23e2baec not in upstream main, not an open PR | V run |
 
 ## Reproduce (worker host)
 
