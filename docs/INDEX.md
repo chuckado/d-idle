@@ -151,3 +151,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/nec-skill-trace.md: Necromancer skills (Raise Skeleton, Corpse Explosion, Teeth, Bone Spear, curses): game.exe vs d2d vs bot; calc differential 27,800 cases 0 differ, magic roll D1 36,600 cases (card necskill)
 - docs/research/baseline-audit.md: audit of baselines.json and baselines-early.json against the spec minimums, power, confounds, verdict per gate criterion
 - docs/soaks/gate1-20261101.md: Gate 1 run 20261101 review section: stall windows, restart causes, SOAKSTALL gap, rerun recipe
+- docs/research/sor-rest-trace.md | Sorceress rest of the skills (Fire Ball, Glacial Spike, Inferno, Blaze, Enchant): game.exe vs d2d vs bot, burst radius and roll, calc differential (card sorcrest)
