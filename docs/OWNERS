@@ -147,3 +147,12 @@ internal/merc/**  mercpolicy  mercpolicy
 openspec/changes/mercpolicy/**  mercpolicy  mercpolicy
 internal/bot/routeguard_test.go  mercpolicy  mercpolicy
 cmd/d2bot/d2dbackend_test.go  mercpolicy  mercpolicy
+openspec/changes/mercwire/**  mercwire  mercwire
+internal/combat/mercfield.go  mercwire  mercwire
+internal/combat/mercfield_test.go  mercwire  mercwire
+internal/bot/mercwait.go  mercwire  mercwire
+internal/bot/mercwait_test.go  mercwire  mercwire
+cmd/d2bot/mercwire.go  mercwire  mercwire
+cmd/d2bot/mercwire_test.go  mercwire  mercwire
+docs/merc-wire.md  mercwire  mercwire
+docs/botlogs.md  mercwire  mercwire
