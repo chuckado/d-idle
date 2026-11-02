@@ -134,3 +134,7 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/crfix-bundle-20261102.md  crfixbundle  crfixbundle
+docs/research/crfix-bundle-20261102/**  crfixbundle  crfixbundle
+openspec/changes/crfixbundle/**  crfixbundle  crfixbundle
+docs/research/pr-bundle-1-body.md  crfixbundle  crfixbundle
