@@ -143,3 +143,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/pr-missilerecord-reverify.md  missilefix3  missilefix3
+docs/research/pr-missilerecord-draft.md  missilefix3  missilefix3
+docs/research/pr-missilepoison-draft.md  missilefix3  missilefix3
+openspec/changes/missilefix3/**  missilefix3  missilefix3
