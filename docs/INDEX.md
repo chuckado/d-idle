@@ -164,3 +164,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist
 - Monster base stats: [research/monster-stats-trace.md](research/monster-stats-trace.md) (game.exe vs d2d stat rows, units, XP per kill; D1 NM / Hell level, D2 regeneration; bot B1-B4; drill recipe).
 - Treasure classes, drops and gold (Act 1 and 2; game.exe 1.14d vs d2d vs the bot): [research/treasure-trace.md](research/treasure-trace.md)
+- docs/research/pr-missilerecord-verifier.md: independent verifier of the monster missile record candidate (record 0-diff confirmed; poison units blocker; det hashes equal)
