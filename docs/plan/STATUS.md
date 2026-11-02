@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
-- 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
-- 650c59b7 11-02 11:01 `Merge agent/skground: skground: credit-funded decomposition result (docs and emulator tools only)` (skground)
-- 93042b4f 11-02 11:00 `merge origin/main into skground` (skground)
-- 4ffc2466 11-02 10:57 `Merge agent/prcandidates: PRCANDIDATES: ranked inventory of upstream PR candidates (docs only)` (prcandidates)
-- d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
-- 86a71332 11-02 10:49 `Merge agent/verifycursedef: VERIFY-CURSEDEF: independent Opus check of the curse, defenders and shield first passes (curse oracle confirmed with caveats; the other two hold with limits)` (verifycursedef)
-- 078dbbef 11-02 10:49 `merge origin/main into verifycursedef` (verifycursedef)
-- 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
-- 54fff8ef 11-02 10:34 `Merge agent/fixci: FIXCI: repair the board archive paths and the chunker flag text that broke the Scripts CI job` (fixci)
+- 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
+- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
+- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
+- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
+- 76452305 11-02 11:42 `Merge agent/verifypaldur: verifypaldur: Pro-account job result (docs and emulator tools only)` (verifypaldur)
+- b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
+- 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
+- 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
+- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
+- 94bb76e6 11-02 11:29 `merge origin/main into verifypalaura` (verifypalaura)
 <!-- statusgen:end -->
