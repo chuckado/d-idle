@@ -247,3 +247,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-bundle-1-draft.md - draft body of the combined PR (bundle 1), size and checks
 - docs/process/baseline-runs.md | section 10: hooked lanes (--timescale K), game-time conversion, regime flag, watchdog | process
 - docs/research/pr-bundle-1-verifier.md: independent verifier of PR bundle 1 (ground own harness, integration, CI parity, hygiene, verdict)
+- docs/research/pr-bundle-1-body.md: final PR body of bundle 1 (card bundlefinal)

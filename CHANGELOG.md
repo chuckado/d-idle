@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- bundlefinal: final PR body for bundle 1 and credit blocks on its cards
 - verifybundle: independent verification of PR bundle 1; ground footprint and burst roll confirmed (base 476 of 3,726 hit cases differ, head 0), docs only
 - lockstepbase: d2bot logs `gclock: timescale K` at start when the clock scale is not 1; runbook section 10 for hooked baseline lanes (tooling in the ops repo, not run live).
 - Added docs/research/rebase174-20261102.md and pr-bundle-1-draft.md: the four PR candidates rebased onto upstream main after PR 174 and assembled into one bundle branch with counted differentials.
