@@ -15,6 +15,12 @@ gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
 result: "docs only; PR hold in force"
 merge: 08f85a5
+credit:
+  component: Vendor repair gate
+  author: owner
+  agents: [Claude Code]
+  verified_by: ["Claude Code (card verifyprices, independent run)"]
+  consent: none
 ```
 
 ## 1. Work
