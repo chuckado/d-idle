@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
 - e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
 - 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
 - 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0ee7978f 11-02 13:12 `Merge agent/smiteblock: smiteblock: credit-funded result (docs and emulator tools only)` (smiteblock)
 - 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
 - dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
-- 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
 <!-- statusgen:end -->
