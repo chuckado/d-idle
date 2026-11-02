@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfollow166
-status: in-progress
+status: archived
 skip_specs: true
 agent: crfollow166
 branch: agent/crfollow166
@@ -15,7 +15,8 @@ exclusive:
 gates:
   - "pr_guard 0 FAIL 0 WARN on the new commit"
   - "go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0"
-result: "docs, tests and tooling only; commit 7d4f6f0e on the PR branch; built with g++ and clang++ with -Wshadow -Wrange-loop-construct -Wconversion, test_combat/test_game_missiles run with the data dir; no game run"
+result: "docs and tooling only; commit on the PR branch"
+merge: f1c5182
 ```
 
 ## 1. Work
