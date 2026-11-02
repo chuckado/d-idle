@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e3063c08 11-02 13:42 `merge origin/main into lockstepp4` (lockstepp4)
 - 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
 - 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
 - e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
 - 6d2b15dd 11-02 13:17 `merge origin/main into alignment2` (alignment2)
 - 0ee7978f 11-02 13:12 `Merge agent/smiteblock: smiteblock: credit-funded result (docs and emulator tools only)` (smiteblock)
-- 9bc7b7fc 11-02 13:12 `merge origin/main into smiteblock` (smiteblock)
 <!-- statusgen:end -->
