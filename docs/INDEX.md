@@ -180,3 +180,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - Bot supply rates and where the code reads them: [botsupply.md](botsupply.md).
 - docs/research/pr-missilerecord-draft.md and pr-missilepoison-draft.md: the two private-fork PR drafts (monster missile record, poison units), revised after the third check; held for the user's go
 - docs/research/openpr-log.md: posted log now also covers #164.
+- no change

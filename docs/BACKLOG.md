@@ -246,6 +246,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - botsupply (card [botsupply](../openspec/changes/botsupply/proposal.md), offline): level-aware gold model and supply table (internal/data/supply.go), area-aware gold pile bar (knob loot.goldPileShare), traced area XP table and fallback levels, ScaledHP fixed, sim gold and monster life from the traced rows (docs/botsupply.md); not verified live
 - MISSILEFIX3: both missile PR drafts ready for the user's go (record head 59d319c8, skill-rows head f52df8d4 on the private fork, clean on upstream main 6935cf64); ask the user before any upstream PR
 - upstream #164 (monster missile record + poison units, bundled, 8 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
+- #164 (monster missile record + poison units) got a tooling follow-up (cd01212f) for CodeRabbit; watch for the maintainer.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
