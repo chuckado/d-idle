@@ -152,3 +152,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/baseline-audit.md: audit of baselines.json and baselines-early.json against the spec minimums, power, confounds, verdict per gate criterion
 - docs/soaks/gate1-20261101.md: Gate 1 run 20261101 review section: stall windows, restart causes, SOAKSTALL gap, rerun recipe
 - docs/research/sor-rest-trace.md | Sorceress rest of the skills (Fire Ball, Glacial Spike, Inferno, Blaze, Enchant): game.exe vs d2d vs bot, burst radius and roll, calc differential (card sorcrest)
+- docs/research/monster-ai-trace.md | Monster AI: Act 1 and 2 core thinks, game.exe vs d2d vs bot (146-row per-AI table, 25 AIs run, D1-D11, B1-B3)
