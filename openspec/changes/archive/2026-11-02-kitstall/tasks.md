@@ -2,7 +2,7 @@
 
 ```yaml
 change: kitstall
-status: in-progress
+status: archived
 agent: kitstall
 branch: agent/kitstall
 worktree: ../d2lod-wt/kitstall
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/nav ./internal/gear ./internal/town; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Dead-gate memory, caster bow no longer a weapon problem, ammo chore Amazon-only; offline tests pass. Not verified live; how the bow got equipped is U (docs/kitstall.md)."
+result: "go tests nav gear town pass; not verified live"
 live: "not verified"
+merge: 49cead9
 ```
 
 - [x] timeline from the bot log
