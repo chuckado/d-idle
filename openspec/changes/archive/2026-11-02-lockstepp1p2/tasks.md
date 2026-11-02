@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepp1p2
-status: in-progress
+status: archived
 agent: lockstepp1p2
 branch: agent/lockstepp1p2
 worktree: d2lod-wt/lockstepp1p2
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "preparation only: proxy built and tested offline under Wine; no hidden instance was running and agents may not start one, so P1 and P2 live runs are NOT done"
+result: "docs only; probes not yet run"
 live: "no game driven"
+merge: 43af719
 ```
 
 - [x] hook repo read, proxy DLL built against the game's own ijl11.dll copy, offline test suite passes

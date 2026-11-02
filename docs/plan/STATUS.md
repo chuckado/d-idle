@@ -54,7 +54,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
-| [lockstepp1p2](../../openspec/changes/lockstepp1p2/) | in-progress | lockstepp1p2 | `docs/research/lockstep-p1p2.md`<br>`openspec/changes/lockstepp1p2/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -107,7 +106,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
-- change lockstepp1p2: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -131,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 43af719f 11-02 08:28 `Merge agent/lockstepp1p2: LOCKSTEP P1/P2 preparation: offline hook test results and what the in-game probes need (no game run yet)` (lockstepp1p2)
 - 5c3ee126 11-02 08:28 `merge origin/main into lockstepp1p2` (lockstepp1p2)
 - 4ea66249 11-02 08:25 `Merge agent/boardclean: BOARDCLEAN: eight finished board items closed, two partial items narrowed, open-work.md synced` (boardclean)
 - 5d9b879d 11-02 07:57 `Merge agent/propenmonsterpaceb: PROPEN-MONSTERPACE-B: upstream PR 171 opened (base monster velocity 75)` (propenmonsterpaceb)
@@ -140,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 142f6178 11-02 07:14 `Merge agent/skshield: skshield: credit-funded first-pass decomposition (docs and emulator tools only)` (skshield)
 - eb6f29de 11-02 07:14 `merge origin/main into skshield` (skshield)
 - 51a5d6e9 11-02 07:09 `Merge agent/skdefenders: skdefenders: credit-funded first-pass decomposition (docs and emulator tools only)` (skdefenders)
-- 5a16ae25 11-02 07:08 `merge origin/main into skdefenders` (skdefenders)
 <!-- statusgen:end -->
