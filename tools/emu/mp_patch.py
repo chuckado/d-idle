@@ -11,14 +11,24 @@ import sys
 root, out_dir = sys.argv[1], sys.argv[2]
 t = open(root + "/tests/monsters/test_monster_ai.cpp").read()
 head = t[:t.index("using namespace d2d::rules;") + len("using namespace d2d::rules;")]
-head = head.replace("#include <array>", "#include <array>\n#include <map>", 1)
+head = head.replace("#include <array>", "#include <array>\n#include <fstream>\n#include <map>", 1)
 a = t.index("            // Act 2's monster thinks (rules::mon_think")
 b = t.index("            // The AI toggle (FUN_005b0e00)")
 block = t[a:b]
 a2 = block.index('#include "mon_ais_cases.inc"')
 b2 = block.index('#include "mon_ais_act1_cases.inc"') + len('#include "mon_ais_act1_cases.inc"')
-block = block[:a2] + '#include "mp_cases.inc"' + block[b2:]
+block = block[:a2] + '#include "mp_cases_stub.inc"' + block[b2:]
 block = block.replace('#include "mon_ais_names.inc"', '#include "mp_names.inc"')
+# the cases are read at run time from the file named by argv[1] (a 100,000-class corpus does not compile as a literal array)
+ka=block.index("static const std::string_view kCases[] = {")
+kb=block.index("};", ka)+2
+block=block[:ka]+'''std::vector<std::string> kCaseText;
+                {
+                    std::ifstream in(argv[1]);
+                    for (std::string raw; std::getline(in, raw);)
+                        if (raw.size() > 3 && raw[0] == '"') kCaseText.push_back(raw.substr(1, raw.rfind('"') - 1));
+                }
+                const std::vector<std::string_view> kCases(kCaseText.begin(), kCaseText.end());'''+block[kb:]
 block = block.replace("                int checked = 0;\n                for (const std::string_view case_line : kCases) {",
                       "                int checked = 0;\n                std::map<std::string, std::array<int, 2>> tally;\n                for (const std::string_view case_line : kCases) {", 1)
 for old, new in (
@@ -53,4 +63,4 @@ for old, new in (
 ):
     assert old in block, old[:70]
     block = block.replace(old, new, 1)
-open(out_dir + "/mp_replay.cpp", "w").write(head + "\n\nint main(int argc, char**) {\n    const bool less_two = argc > 1;   // any argument: the home distance as game.exe takes it (FUN_005dc480, less 2), else as ai.cpp:897 feeds it\n" + block + "    return 0;\n}\n")
+open(out_dir + "/mp_replay.cpp", "w").write(head + "\n\nint main(int argc, char** argv) {\n    const bool less_two = argc > 2;   // any argument: the home distance as game.exe takes it (FUN_005dc480, less 2), else as ai.cpp:897 feeds it\n" + block + "    return 0;\n}\n")
