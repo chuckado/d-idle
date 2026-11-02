@@ -143,6 +143,11 @@ cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/kitgate.md  kitgatelevel  kitgatelevel
 docs/knobs.md  kitgatelevel  kitgatelevel
+docs/botlogs.md  botlogs  botlogs
+internal/bot/botlogs_test.go  botlogs  botlogs
+internal/bot/tpdebounce.go  botlogs  botlogs
+internal/bot/tpdebounce_test.go  botlogs  botlogs
+openspec/changes/botlogs/**  botlogs  botlogs
 internal/bot/kitgate.go  kitgatelevel  kitgatelevel
 internal/bot/kitgate_test.go  kitgatelevel  kitgatelevel
 internal/bot/kitlevel_test.go  kitgatelevel  kitgatelevel
