@@ -2,7 +2,7 @@
 
 ```yaml
 change: itemweapons
-status: in-progress
+status: archived
 agent: itemweapons
 branch: agent/itemweapons
 worktree: d2lod-wt/itemweapons
@@ -12,10 +12,11 @@ owns:
   - openspec/changes/itemweapons/**
 exclusive: []
 gates: trace doc exists, leakcheck and changecheck clean
-result: "first pass: weapons.txt table facts from the MPQ (D); no emulator run, no ledger rows; not verified live"
+result: "docs only; see the doc for tags and limits"
 credit:
   author: owner
   agents: [Claude Code]
+merge: 5c44a78
 ```
 
 - [x] 1. Dump weapons.txt and tabulate (D)
