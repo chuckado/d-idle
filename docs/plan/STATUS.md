@@ -62,7 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifywaypoint2](../../openspec/changes/verifywaypoint2/) | in-progress | verifywaypoint2 | `docs/research/verifywaypoint2-trace.md`<br>`tools/emu/vw2_xref.py`<br>`tools/emu/vw2_tab.py`<br>`tools/emu/vw2_tab2.py`<br>`tools/emu/vw2_disp.py`<br>`tools/emu/vw2_hdis.py`<br>`tools/emu/vw2_op.py`<br>`tools/emu/vw2_game.py`<br>`tools/emu/vw2_d2d.sh`<br>`tools/emu/vw2_trace.py`<br>`openspec/changes/verifywaypoint2/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -125,10 +124,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifywaypoint2: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
 - 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
 - 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
 - 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
 - 86a71332 11-02 10:49 `Merge agent/verifycursedef: VERIFY-CURSEDEF: independent Opus check of the curse, defenders and shield first passes (curse oracle confirmed with caveats; the other two hold with limits)` (verifycursedef)
 - 078dbbef 11-02 10:49 `merge origin/main into verifycursedef` (verifycursedef)
-- 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
 <!-- statusgen:end -->

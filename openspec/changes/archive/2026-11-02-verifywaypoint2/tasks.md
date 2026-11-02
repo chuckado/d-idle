@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifywaypoint2
-status: in-progress
+status: archived
 agent: verifywaypoint2
 branch: agent/verifywaypoint2
 worktree: ~/code/d2lod-wt/verifywaypoint2
@@ -22,8 +22,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Claim holds; reproduced 59,309 of 132,964 with game.exe code against d2d's own pre-fix binary; new: tick-wrap quirk, hostile path reachable by C->S 0x5d (I). Offline, not verified live."
+result: "docs only; first pass, not yet independently verified"
 live: "not verified (emulator and d2d test binary only); drill recipe in the trace"
+merge: caad9fd
 ```
 
 - [x] writers and readers scan (own sweep incl. lea/add, pointer tables, call sites)
