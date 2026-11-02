@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 644cc14e 11-02 10:14 `merge origin/main into skiasgame2` (skiasgame2)
 - b415aefb 11-02 10:09 `Merge agent/paldur: paldur: credit-funded decomposition result (docs and emulator tools only)` (paldur)
 - 558d7b0d 11-02 10:08 `merge origin/main into paldur` (paldur)
 - d37b5b21 11-02 09:55 `Merge agent/baselineruns-20261102: Baseline runs 20261102 set late: four restored level-12 lanes on the original game (generated records)` (baselineruns-20261102)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 633ef305 11-02 09:33 `Merge agent/lockstepp1p2b: LOCKSTEP P1 and P2: 25 fps confirmed on our build; proxy clock hook at k=1 control and k=2 (50.0001 fps, clean fight); hung-start lesson (docs only)` (lockstepp1p2b)
 - 43af719f 11-02 08:28 `Merge agent/lockstepp1p2: LOCKSTEP P1/P2 preparation: offline hook test results and what the in-game probes need (no game run yet)` (lockstepp1p2)
 - 5c3ee126 11-02 08:28 `merge origin/main into lockstepp1p2` (lockstepp1p2)
-- 4ea66249 11-02 08:25 `Merge agent/boardclean: BOARDCLEAN: eight finished board items closed, two partial items narrowed, open-work.md synced` (boardclean)
 <!-- statusgen:end -->
