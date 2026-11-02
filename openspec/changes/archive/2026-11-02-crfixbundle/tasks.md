@@ -2,7 +2,7 @@
 
 ```yaml
 change: crfixbundle
-status: in-progress
+status: archived
 agent: crfixbundle
 branch: agent/crfixbundle
 worktree: d2lod-wt/crfixbundle
@@ -18,13 +18,14 @@ exclusive:
 gates:
   - "every comment judged with evidence; the two Functional Correctness items proven or refuted by a build or the game.exe oracle"
   - "bundle 3 commits: author and committer the numeric noreply identity, at most 3 body lines, last line Agent: Claude Code"
-result: "bundle 3 pushed to the private remote (local f68c3e0d, stage 053a0507); 6 comments judged (all valid, docstring warning declined); verified offline against game.exe under the emulator, no live game"
+result: "docs and harness; nothing upstream"
 credit:
   component: Review fixes for bundle 2 (bundle 3)
   author: owner
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 9b0a9c1
 ```
 
 - [x] 1 comments read and judged
