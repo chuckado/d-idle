@@ -215,3 +215,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifyfreezeend2-trace.md: think due during a get-hit and freeze during a get-hit, game.exe vs d2d (VERIFY-AIDEL second pass)
 - docs/research/palaura-trace.md: how an aura applies in game.exe 1.14d (target filter, area search, enemy hit per pulse, Prayer mana and state 85) vs d2d vs the bot; tools/emu/palaura_*
 - docs/research/palskill-trace.md - Smite, Zeal and Sacrifice in game.exe vs d2d vs the bot (own harness tools/emu/pal2*)
+- docs/research/verify-cursedef.md: independent verifier of skcurseval / skdefenders / skshield traces (verdicts per claim, own oracle tools/emu/vcd_*)
