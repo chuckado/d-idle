@@ -1,6 +1,6 @@
 # The player's derived defence stats: life, mana, regen, defence, block, resistances; game.exe 1.14d vs d2d vs the bot (card playerdef)
 
-> status: card playerdef, 2026-11-02, offline (no game, no d2d slot). Decomposition by an agent on Sonnet. **Read this first: this run had no emulator and no disassembler.** The runner of this session allowed only read-only greps on the worker host (no Python, no `disasm.py`, no `labrun ... python`), so NOTHING below is `V run` and nothing is a fresh `V read` of game.exe. Every game.exe statement is `S` (an upstream trace of the same functions, named) or `I`/`U`; every d2d and bot statement is `S`/`V read` of source I opened. No ledger row is claimed, no PR candidate exists. What can be run later is written as a recipe (sections 6 and 7).
+> status: card playerdef, 2026-11-02. **Upgrade (second run): section 7b adds a V run of game.exe's player block, defence and attack rating (102,604 cases); everything else below is still the desk-only first run.** First-run text follows: card playerdef, offline (no game, no d2d slot). Decomposition by an agent on Sonnet. **The first run had no emulator and no disassembler.** The runner of this session allowed only read-only greps on the worker host (no Python, no `disasm.py`, no `labrun ... python`), so NOTHING below is `V run` and nothing is a fresh `V read` of game.exe. Every game.exe statement is `S` (an upstream trace of the same functions, named) or `I`/`U`; every d2d and bot statement is `S`/`V read` of source I opened. No ledger row is claimed, no PR candidate exists. What can be run later is written as a recipe (sections 6 and 7).
 
 Tags: **S** upstream trace or d2d source read by this agent (file named); **V-d2d** observed on the real d2d lab build by an earlier card (named); **V read (ours)** our own Go source read here; **D** table data; **I** inference; **U** unverified. `V run` and `V read` of game.exe: none in this doc.
 
@@ -98,6 +98,30 @@ Verbs (docs/forkdbg.md, docs/forkcheats.md): `debug difficulty <0..2>`, `debug s
 - **R6 (D2):** a Paladin with a shield and a known FBR: `debug spawn` a Fallen, count the ticks the character stays in mode BL after a block (`dump player` mode field every tick); game.exe per FUN_00623f50's block branch (to be read first), d2d per `speed_frames`.
 - **R7 (B4):** Replenish Life +N on gear: life per second in `step 250` (10 s): N x 25 / 256 x 10 expected from the per-frame rule.
 
+## 7b. Upgrade run (second run): game.exe's block, defence and attack rating run natively (V run)
+
+The emulator was reachable through `tools/emu/run-on-worker.sh`. Disassembly (`pd_dis.sh`, game.exe 1.14d, V read) and a native run (`tools/emu/pd_calc.py`: FUN_00622720, FUN_006223f0, FUN_00622560 executed from their first instruction under unicorn with upstream's `emu.py`; only the leaf helpers are hooked: stat getters 0x625480 / 0x625500 return the case's value by stat id, 0x63c8f0 the shield test, 0x639df0 the state test; the class record table at `[0x744304]+0xbc4`, 0xc4-byte records, is built in memory). The d2d side is a line-for-line **port** of `combat.hpp` (block, `ar_base`) and `character.hpp` `panel_stats` (defence) with C++ truncation, not the compiled d2d code (tag below says so).
+
+**V read, instruction level:**
+- FUN_00622560 (player attack rating): `stat19 + 5 x (stat2 - 7)` then, for a unit with a class record, `+ record[+0x3c]` (0x6225b3..0x6225e6: `lea ecx,[eax+edi]; lea edx,[ecx+eax*4]; add eax,edx` with `eax = dex - 7`). Dex is the **getter total** (0x625480).
+- FUN_006223f0 (defence): `ebx = stat31 + trunc(stat2 / 4)` (0x622412..0x622423: `cdq; and edx,3; add; sar 2`, toward zero); `esi = stat171 + stat16` (percent: skill_armor_percent and the item/enhanced-defence percent, both through 0x625500); a state 0x65 branch (0x622436..0x6224bf) adds a skill-table term to the percent; `esi *= ebx`; **for ebx > 0: `ebx += esi / 100`** (magic 0x51eb851f, truncation toward zero); **for ebx <= 0: `ebx += esi / -100`** (magic 0xae147ae1, so a negative defence is moved toward zero by the percent); then `+ FUN_00483360(ebx, stat182, 100)` percent if stat 182 != 0.
+- FUN_00622720 (block): a player needs the shield test 0x63c8f0 true; `b = stat20 + record[+0x49]` (BlockFactor byte); the second argument non-zero: `(stat2 - 15) x b / (2 x max(stat12, 1))` (`imul; idiv`, signed, toward zero) then **only an upper clamp: `cmp ebx,0x4b; jge -> 0x4b`**; no lower clamp (a Dexterity under 15 yields a negative value). The "a third while running" is not inside this function (still S, Q10).
+
+**V run counts** (`pd_calc.py 100000 11`, 102,604 cases = a dex x clvl x block grid plus random; dex -20..400, clvl 0..99, stat 20 0..130, BlockFactor 0..30, class ToHit 0..20, defence base -30..3000 with percent -30..220; one in five cases has no shield; classes 0..6):
+- attack rating: **0 mismatches** of 102,604 (`stat19 + 5 x dex - 35 + class ToHit` equals d2d's `ar_base` arithmetic: dex x 5 - 35 + gains.to_hit + stat to-hit).
+- block: 6,371 raw mismatches, **all** the cases where game.exe returns a negative number (dex < 15) and the d2d port floors at 0; **0 differ after the floor at 0** (a negative chance never wins the percentile roll, so the effective chance is equal). The game's upper clamp (75) equals d2d's.
+- defence: **0 mismatches** of the 102,375 cases with a positive `stat31 + dex/4`; 159 mismatches, all with a base <= 0 (see D9). In the earlier smaller run (22,604 cases): 0 attack-rating, 50 defence (all base <= 0), 0 block after the floor.
+
+New deviation (proven by the run, tag V run for the game side, port for d2d):
+
+| id | rule in game.exe | rule in d2d | tag | differential | impact |
+|---|---|---|---|---|---|
+| D9 | a defence base <= 0 moves toward zero by the percent (`ebx += esi / -100`; base -23, pct 220: 27) | `d + d x pct / 100`: a negative base grows more negative (-73) | V run (game, 159 mismatches of 102,604, all with base <= 0) + port of the d2d source (not the compiled build) | exists (`pd_calc.py`); the d2d side would be the real `panel_stats` through `ms_build.sh`-style hand build | none in practice: base defence is >= 0 for any character (needs negative armour); no PR candidate (nothing reachable, no d2d harness mismatch) |
+
+D1 (gear dex): the V read above shows game.exe reads dex through the getter total (0x625480) in all three functions; whether the getter's value includes worn-item Dexterity is the unresolved I (an own-value-only getter would make D1 void). D1 stays I. Not provable in this run: the getter itself (FUN_00625480) was hooked, so the own-versus-total share was not exercised.
+
+What is still S / U after this run: Q1..Q7 (life, mana, regen: not run; FUN_00570880 / FUN_00626200 need a stat-list setup that was not built), Q10 running third, Q11 block recovery, Q12 resist penalty clamp, Q13 DR order, D2..D8.
+
 ## 8. Matrix-cell updates (proposed text; docs/research/sorc-skill-matrix.md is not edited)
 
 Add to section 2 ("Common pipeline facts"):
@@ -111,7 +135,7 @@ Section 3.3 (Frozen Armor), row (b) d2d status, add: "stat 171 enters the defenc
 
 ## 9. Glossary and ledger
 
-- Ledger: no row changed (no case counts: nothing run). `docs/coverage/rule-coverage.md` not regenerated.
+- Ledger: **no row added**: the `formulas` universe is F01..F18 and no F-row names the player's defence, block or attack rating (the unclaimed F02 / F16 are not described in the riskmap), so the generator would refuse a new row. Proposal for the coverage owner: add a row "player defence, block, attack rating" with the evidence and 102,604 cases of section 7b (TESTED-DEVIATION, D9; block compares equal after the floor at 0). Matrix K9 gets the added sentence: "block, defence (positive base) and attack rating: V run 0 differ against a port of d2d's formulas, `playerdef-trace.md` section 7b".
 - Proposed glossary terms (not written): **gear dex** = the Dexterity carried by worn items and charms, added to the character's own value in game.exe's totals; **own value** = the stored character stat (d2s `gf` section) without gear.
 
 ## Shared-file lines for the merger

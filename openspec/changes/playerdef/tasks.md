@@ -10,16 +10,17 @@ skip_specs: true
 owns:
   - docs/research/playerdef-trace.md
   - tools/emu/pd_dis.sh
-  - tools/emu/pd_sh.sh
+  - tools/emu/pd_calc.py
   - openspec/changes/playerdef/**
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Trace written from upstream traces and source reads; 8 d2d deviations (none run), 4 bot findings (B1 double resist penalty on d2d, B2 attribute bonus list shape); no PR candidate, no ledger row."
-live: "not verified; no game.exe run, no emulator in this session; recipes R1..R7 and differentials in the trace"
+result: "Trace plus upgrade run: block, defence, attack rating of game.exe run natively (pd_calc.py, 102,604 cases: AR 0 differ, block 0 differ after the floor at 0, defence 0 differ for positive base; D9 negative-base defence); D1..D8 still S/I/U; 4 bot findings; no PR candidate; one ledger row."
+live: "not a live game; emulator V run of FUN_00622720 / 006223f0 / 00622560 against a port of the d2d source (not the compiled build)"
 ```
 
 - [x] read upstream traces, d2d source, bot source
 - [x] write docs/research/playerdef-trace.md
 - [x] merge-lines.txt, OWNERS
-- [ ] differentials of section 6 (needs the emulator; follow-up)
+- [x] differential of block / defence / attack rating (section 7b)
+- [ ] differentials of the rest of section 6 (life, mana, resist clamp, DR order, block recovery)
