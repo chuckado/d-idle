@@ -5,39 +5,30 @@ import (
 	"time"
 )
 
-// Replay of the 17:50 cycle: HasTP false in area 3, true in area 2, one look per area entry about 35 s wall.
-func TestTPDebounceReplay(t *testing.T) {
+// Replay of the tpglitch dump pattern: full tome, stat 70 absent for 63 s (the longest drop-out), full again; one
+// look every 2 s. The verdict must hold, so neither the kit gate nor the poverty check sees an empty tome.
+func TestTPDebounceDropout(t *testing.T) {
 	var d tpDebounce
 	now := time.Unix(0, 0)
-	d.look(true, now)
-	flips, last := 0, true
-	for i := 0; i < 40; i++ { // 40 looks, 3 virtual minutes apart
-		now = now.Add(3 * time.Minute)
-		got := d.look(i%2 == 1, now)
-		if got != last {
-			flips++
-			last = got
+	for i := 0; i < 200; i++ {
+		raw := !(i >= 20 && i < 52) // 32 looks x 2 s = 64 s of false
+		if !d.look(raw, now.Add(time.Duration(i)*2*time.Second)) {
+			t.Fatalf("look %d: verdict flipped to empty during a drop-out", i)
 		}
-	}
-	if flips != 0 {
-		t.Fatalf("alternating looks flipped the verdict %d times", flips)
 	}
 }
 
-func TestTPDebounceHolds(t *testing.T) {
+func TestTPDebounceRealEmpty(t *testing.T) {
 	var d tpDebounce
 	now := time.Unix(0, 0)
 	d.look(true, now)
-	if !d.look(false, now) || !d.look(false, now.Add(time.Second)) {
-		t.Fatal("two looks must not flip")
+	if !d.look(false, now.Add(time.Second)) || !d.look(false, now.Add(tpDebounceSpan-time.Second)) {
+		t.Fatal("must hold inside the span")
 	}
-	if d.look(false, now.Add(2*time.Second)) {
-		t.Fatal("three consecutive looks flip")
+	if d.look(false, now.Add(time.Second+tpDebounceSpan)) {
+		t.Fatal("a tome empty for the whole span must read empty")
 	}
-	d = tpDebounce{}
-	d.look(true, now)
-	d.look(false, now.Add(time.Second))
-	if d.look(false, now.Add(3*time.Minute)) {
-		t.Fatal("a verdict held for the span flips")
+	if !d.look(true, now.Add(5*time.Minute)) {
+		t.Fatal("a new scroll is taken at once")
 	}
 }

@@ -10,3 +10,7 @@ Gate 1 rerun 2 (docs/soaks/gate1r2-20261101.md, Review 2 sections 3 and 4): the 
 ## Impact
 
 No spec delta. Overlap (declared): soakgiveup (merged, the guard's code) is extended.
+
+Overlap (declared): internal/bot goal.go, leveling.go, kitgate.go (read only), resource.go, internal/d2denv/reader.go and internal/combat/portal.go (unchanged: the debounce at hasPortalSource covers the glitch; the fork probe stays open).
+
+Overlap (declared): soakstall (not yet archived) owns goal.go, emptyarea_test.go and docs/soakstall.md; this card extends its ping-pong guard and the same doc.

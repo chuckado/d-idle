@@ -21,9 +21,9 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - status: proposed
 - kind: decomp
 - source: backlog:PALAURA
-- question: Which function applies an aura state and its stats (Might, Holy Fire, Thorns, Prayer, Defiance, Resist X), how does the magnitude scale per level, how often does it refresh, and does it reach a mercenary? Does d2d skip aura stats ("aurastats and passives skipped" in the old risk map, U)?
-- start: docs/research/paladin-act1-recon.md section 6 rows 3 and 11; docs/research/sk-armor-trace.md (state timers and the buff event, same family of functions: FUN_005cac50 is the armor event); docs/research/d2d-fidelity-riskmap.md.
-- deliverable: docs/research/pal-aura-trace.md; the live half (d2d probes) is maintainer-only, so end with the exact probe the maintainer should run and the number you expect.
+- question: Prior work (do not redo): docs/research/pal-skill-trace.md section 3 already has the pulse period (50 frames), the ranges (16 + 2 per level for Might, Prayer, Defiance and Concentration; 6 + 1 per level for Holy Fire) and every calc slot (21,760 cases, 0 differ against d2d). Open: (1) the aura target filter (aurafilter 0x12003 for the friendly auras, 0xa783 for Holy Fire) and the shape of the area search FUN_0056b7e0 (who is passed: self, merc, pets, party, enemies; the exact radius test); (2) the damage an aura does to enemies per pulse (Holy Fire, Shock, Freeze: roll, resist, which units), read and then run; (3) Prayer's per-pulse mana and state 85 (`nomanaregen`): does the regeneration code really stop while it is set. Also useful: the D5 Might mana floor and aura reach to merc and party on d2d (the trace's D1 to D7).
+- start: docs/research/pal-skill-trace.md sections 3, 6 (D5, D6) and 8 (drills A2, A3); FUN_005cf010 (friendly aura do), FUN_005cf3a0 / FUN_005d0920 (Holy Fire, Shock, Freeze do), FUN_0056b7e0 (area apply), FUN_005cedc0 (callback), FUN_00644b10 and FUN_0056c110 (mana); the emulator style of tools/emu/pal_aura.py; docs/research/paladin-act1-recon.md section 6 rows 3 and 11; docs/research/d2d-fidelity-riskmap.md.
+- deliverable: docs/research/pal-aura-trace.md covering only the open parts above, each claim tagged V (run in the emulator), V read, S or U; for each part end with the exact probe the maintainer should run on d2d (the live half is maintainer-only) and the number you expect. Done when: the filter bits are decoded and the area search shape is stated with a V run on a fake player, merc and monster set; the enemy hit of one aura is run against the trace's element tables; Prayer's mana and state 85 effect are read to the regeneration code; the trace's D5 and D6 rows can be updated from it.
 - needs: your own game.exe 1.14d, upstream d2decomped checkout, Python 3 with unicorn.
 
 ## PALDUR: durability loss per hit and per block
@@ -37,12 +37,12 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - needs: your own game.exe 1.14d, upstream d2decomped checkout, Python 3 with unicorn.
 
 ## SKGROUND: ground skills (Blizzard, Meteor, Hydra, Fire Wall, Thunder Storm, Frozen Orb)
-- size: L
+- size: M
 - status: proposed
 - kind: decomp
 - source: queue:22
-- question: How many sub-missiles do these skills create, at what ticks and radius, and what is the skill delay (status 8, which d2d does not model)? Pick ONE skill (say Blizzard) and trace it fully; the others are separate PRs.
-- start: docs/research/sorc-skill-matrix.md section 5 row 9; docs/research/sk-missile-trace.md and sk-nova-trace.md for the sub-missile timeline style (FUN_0056d400 is the Frost Nova ring spawn).
+- question: Blizzard, Meteor and Fire Wall are already traced and run against game.exe (docs/research/sk-ground-trace.md, sk-ground2-trace.md), including the skill delay. Left open: Hydra (read to the spawn only: its AI and missile are not run), Frozen Orb and Thunder Storm (read depth equals d2d, nothing run natively), and the shape of Meteor's blast. Pick ONE of these and trace it fully with a native run; the others are separate PRs.
+- start: docs/research/sk-ground-trace.md and sk-ground2-trace.md (what is done, their section of U lines); docs/research/sk-missile-trace.md and sk-nova-trace.md for the sub-missile timeline style (FUN_0056d400 is the Frost Nova ring spawn).
 - deliverable: docs/research/sk-ground-<skill>-trace.md; advanced item, claim it only if you have done a decomp before.
 - needs: your own game.exe 1.14d, upstream d2decomped checkout, Python 3 with unicorn.
 
@@ -66,16 +66,6 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - deliverable: docs/research/verify-waypoint.md in the same HOLDS / LIMITS / FAILS format, with the reproduction command.
 - needs: your own game.exe 1.14d, upstream d2decomped checkout, Python 3 with unicorn.
 
-## VERIFY-FREEZE-KINDS: independent re-check of which monsters game.exe can freeze
-- size: S
-- status: ready
-- kind: verify
-- source: queue:6
-- question: Our claim: game.exe freezes only plain monsters and the minions of a unique; bosses, champions and uniques are chilled at most (the test is the MonStats boss bit, monster data flag 8, or a hireling class; the flag-8 makers are the champion, unique and boss pack functions). Re-derive the test and its flag writers yourself, then check the claim over a population of spawned monsters with your own harness. Say which parts hold, which hold with limits, which fail.
-- start: your own look at FUN_0057c6c0 and FUN_0057b230 first; then docs/research/freeze-rules-trace.md (the claim C3 and its flag table, read AFTER you formed your own view); docs/research/pr-freezeresume-verifier.md for the report style.
-- deliverable: docs/research/verify-freeze-kinds.md: per claim HOLDS / HOLDS WITH LIMITS / FAILS, your own case count and seed, the command to reproduce, differences from the author's numbers; an oracle script under tools/emu/ if you ran game code.
-- needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
-
 ## VERIFY-TELEPORT-ROOM: independent re-check of the Teleport room rule
 - size: S
 - status: ready
@@ -91,7 +81,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - status: ready
 - kind: verify
 - source: backlog:FREEZERESUME
-- question: Our claim: a monster thinks again every `aidel` frames (MonStats value, 15 for the Normal rows read, difficulty-dependent in the later rows) and resumes thinking at the freeze end; d2d's `set_off` uses `aidel`, or 15 when the value is 0. Check the aidel column per difficulty and the think scheduling (FUN_005a73e0, FUN_005a7c20) with your own harness, and the 55,268 equal cases claimed for stand and aidel.
+- question: Already independently re-checked (docs/research/pr-freezeresume-verifier.md): the aidel column per difficulty and the resume at freeze end + aidel (FUN_0057b170, the event queue run for real). Left open: the periodic think scheduling (FUN_005a73e0, FUN_005a7c20; a think event due during a get-hit is U) and the 55,268 equal cases claimed for stand and aidel in docs/research/mon-wake-trace.md. Re-derive those with your own harness.
 - start: docs/research/mon-wake-trace.md (the aidel rows, read AFTER your own look at the two functions); docs/research/pr-freezeresume-proof.md for the freeze-end claim.
 - deliverable: docs/research/verify-aidel.md: HOLDS / HOLDS WITH LIMITS / FAILS per claim, your case count and seed, the command, differences from the author's numbers.
 - needs: your own game.exe 1.14d install (the monster table read only, never shared), upstream d2decomped checkout, Python 3 with unicorn.
@@ -111,7 +101,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - status: ready
 - kind: verify
 - source: queue:21
-- question: Re-check our monster resistance rules with your own harness, not ours: spawn base per difficulty, immune at a total of 100 or more, the damage formula from a resistance, the one-fifth rule for curses and auras on an immune, pierce, and the penalty and cap that apply only to non-plain defenders. Say per rule which hold, which hold with limits, which fail.
+- question: The one-fifth rule for curses and auras on an immune and the curse values (Q6, Q7) are already independently verified (docs/research/pr-curseimmune-verifier.md, 616,160 cases), and the missile-path pierce was re-checked by us (docs/research/skabrecheck.md). Re-check the rest with your own harness, not ours: spawn base per difficulty (Q1 to Q3), the resistance a hit uses and the damage formula (Q4, Q5), what an immune hit still does (Q9), the penalty and cap that apply only to non-plain defenders (Q10), and pierce on the melee path. Say per rule which hold, which hold with limits, which fail.
 - start: docs/research/sk-resist-trace.md (section 1 table Q1 to Q10, read AFTER your own look at FUN_00573cb0, FUN_0057be00, FUN_0057bf80 and FUN_005c3540); docs/research/pr-curseimmune-verifier.md for the earlier verifier's style; tools/emu/sk_resist.py only to compare numbers at the end.
 - deliverable: docs/research/verify-skresist.md: per rule HOLDS / HOLDS WITH LIMITS / FAILS, your own case count and seeds, the reproduction commands, differences from the author's numbers.
 - needs: your own game.exe 1.14d install (the data tables read only, never shared), upstream d2decomped checkout, Python 3 with unicorn.
@@ -131,7 +121,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - status: ready
 - kind: decomp
 - source: backlog:SKMELEE2
-- question: Does a carried shield add its base damage, or any enhanced damage, to the player's damage stats 21, 22, 17 and 18 in game.exe (the carrier flag 0x40000000 on a child list, FUN_00624fe0 and FUN_00627910), or only a weapon in the active hand? Does a barehanded player with a shield in the off slot get the shield's stats? d2d ignores all of it.
+- question: The normal case is answered by a read (docs/research/sk-melee2-trace.md Q3, V read): a shield is never the item FUN_00535bc0 returns, so with a weapon in use its damage stats do not reach the player. Left open: the barehanded player with a shield in the off slot (marked I there), the other FUN_00627910 callers, and a native run of the stat-list merge (V run) to turn the read into a counted result.
 - start: docs/research/sk-melee2-trace.md Q3 (the shield question, marked I there); docs/research/sk-melee-trace.md Q3; docs/research/paladin-act1-recon.md section 6 row 4 and the slot function FUN_0063bef0.
 - deliverable: docs/research/sk-shield-damage-trace.md; a static answer from the equip path (tagged V read) is a valid first PR, a run of the stat-list merge natively (tagged V run) is better.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
@@ -141,7 +131,7 @@ Format (read by the board script): one `## ID: title` section per item, then `- 
 - status: ready
 - kind: decomp
 - source: backlog:SKRESIST
-- question: Curse values come from skill calcs (Lower Resist `dm56`, Conviction `ln34` capped at 150, Amplify Damage and others). Does d2d's shared calc evaluator give the same value as game.exe's for every level from 1 to 99, including the synergy terms and the cap? Compare the two evaluators on the same calcs and levels.
+- question: Already done for the curse rows (docs/research/pr-curseimmune-verifier.md): d2d's `eval_calc` equals the game side for Lower Resist, Amplify Damage, Decrepify and Conviction at levels 1 to 99 (396 rows, 0 differ), with `dm` run through game.exe's own function. Left open: run game.exe's own calc machine (not the calc text) for the `ln34` and `par` / `min` parts and the cap at 150, and extend to the other curses (Weaken, Iron Maiden, Terror, Confuse, Life Tap, Attract) and synergy terms.
 - start: docs/research/sk-resist-trace.md section 10 (not traced: the curse value calcs) and Q7; docs/research/sk-passives-trace.md for synergies; upstream d2decomped `eval_calc` (public).
 - deliverable: docs/research/sk-curse-calc-trace.md with the table of calcs, levels and cases compared (counts and seed), plus an oracle script under tools/emu/ if you ran game code.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
