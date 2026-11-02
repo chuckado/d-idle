@@ -5,7 +5,7 @@ change: gate1run-20261101
 status: in-progress
 agent: gaterun
 branch: agent/gate1run-20261101
-worktree: /home/jesse/code/d2lod-wt/gate1run-20261101
+worktree: ~/code/d2lod-wt/gate1run-20261101
 skip_specs: true
 owns:
   - docs/soaks/gate1-20261101.md
