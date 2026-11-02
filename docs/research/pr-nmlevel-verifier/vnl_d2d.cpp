@@ -35,6 +35,21 @@ int main(int argc, char** argv) try {
     std::string line;
     while (std::getline(cases, line)) {
         std::istringstream in(line);
+        if (line.rfind("G ", 0) == 0) {
+            // The grid: a plain unit of row `cls` made in level `lid`; its start level (stats.level, no leveladd).
+            std::string grid_tag;
+            int cls = 0, diff = 0, lid = 0;
+            in >> grid_tag >> cls >> diff >> lid;
+            if (cls < 0 || std::size_t(cls) >= data->monsters.types.size()) { std::printf("G %d %d %d no-type\n", cls, diff, lid); continue; }
+            d2d::rules::Rng rng{ 5 };
+#ifdef VNL_HEAD
+            const Monster monster = make_monster(*data, cls, 0, 0, rng, diff, true, 1, lid);
+#else
+            const Monster monster = make_monster(*data, cls, 0, 0, rng, diff, true, 1);
+#endif
+            std::printf("G %d %d %d %d\n", cls, diff, lid, monster.stats.level);
+            continue;
+        }
         std::string tag, mod_list;
         long long seed = 0;
         int diff = 0, lid = 0, cls = 0, col = 0, start = 0, final_level = 0, flags = 0, tflags = 0;
