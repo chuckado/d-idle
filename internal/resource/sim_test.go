@@ -62,20 +62,24 @@ func TestScenarioSkillNames(t *testing.T) {
 
 // The Paladin stock replay: the Zeal rung is cast while mana lasts, then the plain swing takes over; deterministic.
 func TestBloodMoorPaladinReplay(t *testing.T) {
-	r := Replay(BloodMoorPaladin(), ResourcePolicy(), DefaultTuning())
+	// sturdy monsters (the old 12 / 24 / 24 / 45 mix): the real Blood Moor life dies to one Zeal and never drains the mana
+	sc := BloodMoorPaladin()
+	sc.MonsterHP = []float64{12, 24, 24, 45}
+	r := Replay(sc, ResourcePolicy(), DefaultTuning())
 	t.Logf("Paladin stock: kills %d casts %d melee %d deaths %d trips %d lifePots %d waits %d", r.Kills, r.Casts, r.MeleeHits, r.Deaths, r.Trips, r.LifePots, r.Waits)
 	if r.Kills == 0 || r.Casts == 0 || r.MeleeHits == 0 {
 		t.Errorf("ladder not walked: %+v", r)
 	}
-	if again := Replay(BloodMoorPaladin(), ResourcePolicy(), DefaultTuning()); again != r {
+	if again := Replay(sc, ResourcePolicy(), DefaultTuning()); again != r {
 		t.Error("not deterministic")
 	}
 }
 
-// The Sorceress stock replay is unchanged by SIMCLASS (SKMELEEBOT/WIRE: 22 kills, 28 swings, 66 casts).
+// The Sorceress stock replay, pinned. Was 22 kills, 28 swings, 66 casts (SKMELEEBOT/WIRE) with the old monster life
+// 12 / 24 / 24 / 45; botsupply re-pinned it on the traced Blood Moor life (mean 4.2), which dies to about one Fire Bolt.
 func TestSorceressStockReplayPinned(t *testing.T) {
 	r := Replay(BloodMoorSorc(), ResourcePolicy(), DefaultTuning())
-	if r.Kills != 22 || r.MeleeHits != 28 || r.Casts != 66 {
-		t.Errorf("kills %d melee %d casts %d, want 22/28/66", r.Kills, r.MeleeHits, r.Casts)
+	if r.Kills != 45 || r.MeleeHits != 15 || r.Casts != 45 {
+		t.Errorf("kills %d melee %d casts %d, want 45/15/45", r.Kills, r.MeleeHits, r.Casts)
 	}
 }
