@@ -43,7 +43,7 @@ func usage() {
   act FILE [D/]N            start in the town of act N (1-5): difficulty byte, town waypoint, earlier act-done words
   (FILE = character name or path; D = normal|nightmare|hell|0-2; all edits need the game stopped, a backup is made)
   show                      read-only: both player copies (no ledger)
-  ledger [--since 2h] [--char NAME] [--key INST/NAME] [--inst I] [--kind K] [--json]   list / summarize the ledger
+  ledger [--since 2h] [--char NAME] [--kind K] [--json]   list / summarize the ledger
   probe                     read-only research dump
 `)
 	os.Exit(2)
