@@ -256,6 +256,12 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - upstream #166 (player missile damage roll: element top, physical in 256ths, -100 floor; 5 commits) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
 - #166 (player missile damage roll) got a follow-up (7d4f6f0e) for CodeRabbit; watch for the maintainer.
 - VERIFY-NMLEVEL done: READY WITH CHANGES (rule holds, head 0 start-level mismatches on 88,951 units and the full grid; add 3 includes to test_game_missiles.cpp; name the sample): docs/research/pr-nmlevel-verifier.md
+- SKGEARAR done: AR terms from gear (115 / 116 / 123 / 124 run, 100,960 cases, 0 differ from the reading; 179 / 120 read only); docs/research/sk-gearar-trace.md; follow-up: run 179, d2d-side test
+- VERIFY-AIDEL done (docs/research/verify-aidel.md): FUN_005a73e0 holds over 352,800 cases on real MonStats rows; open: FUN_005a7c20 / freeze-end path and game type 3
+- VERIFY-SKMELEE2 done: D1 and D4 hold, D2 / D5 / D6 hold with limits on the real build (own harness, seeds 11 and 3): docs/research/verify-skmelee2.md
+- VERIFY-SKRESIST done (docs/research/verify-skresist.md): Q4, Q5, Q6, Q8 HOLD, Q1, Q2, Q10 HOLD WITH LIMITS, 0 mismatches in 70,000 cases per part (seeds 11, 2025)
+- VERIFY-SKMANA: done, claims C1 C2 C3 C5 C6 hold (20,000 cases, own harness), C4 untested (docs/research/verify-skmana.md)
+- VERIFY-SKRESIST part 2 done: Q3 modifier adds HOLDS WITH LIMITS (80,000 cases 0 mismatches; ids 23, 25, 27 missing in the author's row), Q7 curse values D (arithmetic I), Q9 no get-hit under one point V run 80,000 cases: docs/research/verifyresistq.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

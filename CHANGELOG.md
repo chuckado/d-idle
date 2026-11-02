@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/verifyresistq.md and tools/emu/vq_*.py: second-pass check of the monster modifier resist adds, curse values and the no-get-hit rule.
+- docs: verify-skmana, independent re-check of the skill mana check and payment against game.exe (docs/research/verify-skmana.md).
+- Independent verification of the resistance rules (verify-skresist.md, tools/emu/vr_resist.py): no rule fails
+- Added docs/research/verify-skmelee2.md and tools/emu/vm2_*: independent check of the player-blow deviations D1, D2, D4, D5, D6.
+- docs: VERIFY-AIDEL independent check of aidel and FUN_005a73e0 (0 differ in 352,800 cases)
+- SKGEARAR: trace of the gear attack-rating terms, FUN_0057d8a0 run natively (docs/research/sk-gearar-trace.md, tools/emu/sk_gearar.py)
 - Added docs/research/pr-nmlevel-verifier.md and its harness: independent verification of the nmlevel candidate.
 - no change
 - Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
