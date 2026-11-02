@@ -148,3 +148,8 @@ openspec/changes/soakgiveup/**  soakgiveup  soakgiveup
 openspec/changes/povertyflip/**  povertyflip  povertyflip
 openspec/changes/licensecheck/**  licensecheck  licensecheck
 docs/research/lockstep-licences.md  licensecheck  licensecheck
+internal/cheat/ledger.go  snaplib  ledgerkey
+internal/cheat/ledgerkey.go  snaplib  ledgerkey
+internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
+cmd/d2cheat/main.go  snaplib  ledgerkey
+openspec/changes/ledgerkey/**  snaplib  ledgerkey
