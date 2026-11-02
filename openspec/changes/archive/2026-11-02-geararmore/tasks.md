@@ -2,7 +2,7 @@
 
 ```yaml
 change: geararmore
-status: in-progress
+status: archived
 agent: pa-geararmore
 branch: agent/geararmore
 worktree: ~/code/d2lod-wt/geararmore
@@ -17,7 +17,8 @@ exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
   - "every V run number has a command, a case count and a seed in the doc"
-result: "Offline, nothing verified live, no game, no Go change. Stat 179 (FUN_0057d9b0, 100,032 cases) and stat 120 (FUN_0057b7d0 branch, 100,648 cases) run natively on the worker host: 0 differ from the reading. Table census (D): 179 is on no row of the item tables. Bot finding B1: the fork gear sums omit stat 119 and the five monster-specific stats. No PR candidate. Ledger not changed."
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: eba3926
 ```
 
 ## 1. Work
