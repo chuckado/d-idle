@@ -55,6 +55,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [hastpdump](../../openspec/changes/hastpdump/) | in-progress | hastpdump | `internal/bot/tpdump.go`<br>`docs/hastpdump.md` | - |
 | [kitgatelevel](../../openspec/changes/kitgatelevel/) | proposed | kitgatelevel | `openspec/changes/kitgatelevel/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
+| [licensecheck](../../openspec/changes/licensecheck/) | in-progress | licensecheck | `docs/research/lockstep-licences.md`<br>`openspec/changes/licensecheck/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -113,6 +114,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change hastpdump: TestInvTPDump: dump on first look, area change and verdict change, not otherwise
 - change kitgatelevel: d2-sme answer recorded in the card result; then a number for the follow-up
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
+- change licensecheck: go run ./cmd/changecheck: 0 warnings
+- change licensecheck: go run ./cmd/leakcheck: 0 hits
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -141,14 +144,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 3c0673d2 11-01 22:07 `Merge agent/gate1review2: GATE1REVIEW2: Gate 1 rerun 2 FAIL analysis: stall minutes 337 to 52, XP/h 7937 vs 9172, guards fired correctly, false empty-tome reads drove the kit gate; three cards` (gate1review2)
-- 6fda8125 11-01 22:07 `merge origin/main into gate1review2` (gate1review2)
-- 47920c18 11-01 22:04 `Merge agent/seedstudy: SEEDSTUDY: one d2s file pins the seed on both sides; static layout and spawn comparison feasible with work; frame lockstep blocked by tier B and the unit-seed stream` (seedstudy)
-- 296d9c21 11-01 22:03 `merge origin/main into seedstudy` (seedstudy)
-- af74c4d4 11-01 22:00 `Merge agent/verifymissile: VERIFYMISSILE: independent Opus verification of the monster missile record candidate: NOT READY, the added poison is up to 62x too strong; record claim holds` (verifymissile)
-- f036c275 11-01 22:00 `merge origin/main into verifymissile` (verifymissile)
+- b3e29977 11-01 21:59 `merge origin/main into licensecheck` (licensecheck)
 - b8689ae2 11-01 21:52 `Merge agent/treasure: TREASURE: treasure class trace for Act 1 and 2, produced on the API credits runner` (treasure)
 - 3fd36b32 11-01 21:52 `merge origin/main into treasure` (treasure)
-- 625ea93f 11-01 21:51 `merge origin/main into verifymissile` (verifymissile)
 - fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
+- b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
+- 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
+- fbd5e46a 11-01 21:38 `merge origin/main into memrules` (memrules)
+- cf575aee 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
+- b1ea270c 11-01 20:55 `merge origin/main into snaplib` (snaplib)
+- 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
 <!-- statusgen:end -->
