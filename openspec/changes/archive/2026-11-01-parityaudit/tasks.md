@@ -2,7 +2,7 @@
 
 ```yaml
 change: parityaudit
-status: in-progress
+status: archived
 agent: parityaudit
 branch: agent/parityaudit
 worktree: ~/code/d2lod-wt/parityaudit
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs only: docs/research/backend-parity.md. Build/test: whole repo go vet + go test -short on the worker host exit 0 (88 packages ok), 4 skips. 26-row matrix, gate tooling gaps, smoke runbook, backlog. Nothing run live (read-only audit)."
+result: "docs only; PRESENT-TESTED for the memory backend rests on the g1-log, not on a run today"
 live: "docs only, nothing run live"
+merge: f1fdda0
 ```
 
 - [x] build and test state (this checkout and the worker host)

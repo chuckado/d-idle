@@ -57,7 +57,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [parityaudit](../../openspec/changes/parityaudit/) | in-progress | parityaudit | `docs/research/backend-parity.md`<br>`openspec/changes/parityaudit/**` | - |
 | [povertyflip](../../openspec/changes/povertyflip/) | in-progress | povertyflip | `openspec/changes/povertyflip/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
@@ -119,7 +118,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change parityaudit: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change povertyflip: go test -p 1 ./internal/bot passes, including the flip replay test
 - change skground: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
@@ -135,6 +133,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- f1fdda0 11-01 20:26 `Merge agent/parityaudit: PARITYAUDIT: bot backend parity: memory backend builds and passes (88 packages), 26-row matrix, gate tooling assumes d2d, smoke runbook, backlog` (parityaudit)
+- 631f7d2 11-01 20:23 `merge origin/main into parityaudit` (parityaudit)
 - 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
 - 6ac8a44 11-01 20:13 `merge origin/main into baselinefree` (baselinefree)
 - f8f9666 11-01 20:05 `Merge agent/botthreat: BOTTHREAT: missile threat table, runner guard (no kite/retreat from Zombie, Brute, Hawk, Rogue, Lancer, Arach), kill-first and dodge verdicts behind knobs` (botthreat)
@@ -143,6 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - fa03b72 11-01 19:43 `Merge agent/sorcrest: SORCREST: remaining Sorceress skills traced: Fire Ball and Glacial Spike pipeline 31,000 cases 0 differ, burst roll deviation proven on a real build (0/400 vs 400/400)` (sorcrest)
 - 9b99e09 11-01 19:33 `Merge agent/soakfixes: SOAKFIXES: explore give-up guards on run kind, ping-pong guard, town-portal verdict hysteresis` (soakgiveup)
 - cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
-- 016bd0b 11-01 19:20 `Merge agent/baselineaudit: Baseline audit: 3 original runs, below the spec minimums; one seed detects only 24 to 32 percent XP/h gaps; Gate 1 XP/h not a hard gate` (baselineaudit)
-- f87ba9c 11-01 19:01 `Merge agent/necskill: NECSKILL: Necromancer skill trace: 27,800 calc cases 0 differ, magic roll life deviation 10,509 of 36,600 (the SKMISS fix covers it), Corpse Explosion deviations read only` (necskill)
 <!-- statusgen:end -->
