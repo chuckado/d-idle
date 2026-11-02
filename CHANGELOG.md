@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Contributor board: the maintainers now claim items their own work covers, close finished ones with a citation, and watch issue comments each cycle (tools/contrib/claim.py).
 - tpglitch: town-portal verdict debounced at its single source (kit gate and poverty check); pingpongrate: ping-pong guard resets on XP progress, not on any kill
 - docs: licence research for a standalone Game.exe time hook (not legal advice); nothing run
 - docs: Gate 1 rerun 2 record and review (XP/h per band, stall windows, HasTP root cause), cards tpglitch, pingpongrate, kitgatelevel proposed.
