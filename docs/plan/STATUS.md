@@ -46,13 +46,13 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixbelt](../../openspec/changes/fixbelt/) | in-progress | fixbelt | `docs/fixbelt.md`<br>`internal/resource/recovery.go`<br>`internal/resource/recovery_test.go`<br>`internal/bot/broke.go`<br>`internal/bot/area_ban_test.go`<br>`openspec/changes/fixbelt/**` | - |
-| [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go`<br>`docs/knobs.md` | - |
+| [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixprogress](../../openspec/changes/fixprogress/) | in-progress | fixprogress | `docs/fixprogress.md`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/town/fixprogress_test.go`<br>`openspec/changes/fixprogress/**` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
-| [kitgatelevel](../../openspec/changes/kitgatelevel/) | proposed | kitgatelevel | `openspec/changes/kitgatelevel/**` | - |
+| [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -63,6 +63,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [verifyplayerroll](../../openspec/changes/verifyplayerroll/) | in-progress | verifyplayerroll | `openspec/changes/verifyplayerroll/**`<br>`docs/research/pr-playerroll-verifier.md`<br>`docs/research/pr-playerroll-verifier/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -104,7 +105,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
-- change kitgatelevel: d2-sme answer recorded in the card result; then a number for the follow-up
+- change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -126,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change verifyplayerroll: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
