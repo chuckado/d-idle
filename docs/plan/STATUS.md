@@ -133,6 +133,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b8d3cca2 11-01 22:19 `Merge agent/archive4: ARCHIVE4: archive soakstall, hastpdump, soakgiveup, povertyflip cards (code merged earlier)` (archive4)
 - 1ca519ac 11-01 22:11 `Merge agent/licensecheck: LICENSECHECK: licences read for the lockstep hook sources; MIT workable for our own code only; clean-room procedure and provenance format; Blizzard terms ban modification` (licensecheck)
 - b02d6cb7 11-01 22:10 `merge origin/main into licensecheck` (licensecheck)
 - 3c0673d2 11-01 22:07 `Merge agent/gate1review2: GATE1REVIEW2: Gate 1 rerun 2 FAIL analysis: stall minutes 337 to 52, XP/h 7937 vs 9172, guards fired correctly, false empty-tome reads drove the kit gate; three cards` (gate1review2)
@@ -142,5 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - af74c4d4 11-01 22:00 `Merge agent/verifymissile: VERIFYMISSILE: independent Opus verification of the monster missile record candidate: NOT READY, the added poison is up to 62x too strong; record claim holds` (verifymissile)
 - f036c275 11-01 22:00 `merge origin/main into verifymissile` (verifymissile)
 - b3e29977 11-01 21:59 `merge origin/main into licensecheck` (licensecheck)
-- b8689ae2 11-01 21:52 `Merge agent/treasure: TREASURE: treasure class trace for Act 1 and 2, produced on the API credits runner` (treasure)
 <!-- statusgen:end -->
