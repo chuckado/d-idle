@@ -1,6 +1,6 @@
 # Independent verifier: local/missilediff-record (monster missile launch record) (VERIFYMISSILE, 2026-11-01)
 
-> status: verifier record for the private-fork candidate `local/missilediff-record` (9d7e7d81 refactor + test mode, 312b0bbb fix; parent 23e2baec = upstream 72132b99 + the unsubmitted roll-top pair 9ba8d369 / 23e2baec). Author's evidence: `docs/research/missilediff.md` (commit a8515f8, card missilediff), read only after my own result. Offline: no game, no game instance; nothing pushed or posted; the candidate branch and the author's worktree untouched (my trees are separate detached worktrees on the worker host). Verdict in section 7.
+> status: current verifier record (verdict NOT READY, section 7) for the private-fork candidate `local/missilediff-record` (9d7e7d81 refactor + test mode, 312b0bbb fix; parent 23e2baec = upstream 72132b99 + the unsubmitted roll-top pair 9ba8d369 / 23e2baec). Author's evidence: `docs/research/missilediff.md` (commit a8515f8, card missilediff), read only after my own result. Offline: no game, no game instance; nothing pushed or posted; the candidate branch and the author's worktree untouched (my trees are separate detached worktrees on the worker host). Verdict in section 7.
 
 Tags: **V run** game.exe code run under upstream's emulator in MY oracle, or real d2d builds run with MY probe; **V read** disassembled by me (upstream `tools/emu/disasm.py`) or d2d source read at the named commit; **D** 1.14d MPQ tables; **S** stated in a doc or comment, not re-traced; **U** not traced; **O** opinion.
 
@@ -113,7 +113,7 @@ Not required but cheap: record cases for the three space-named rows I did not ru
 | Check | Result | Tag |
 |---|---|---|
 | `ctest` on head 312b0bbb (all 52 test executables built; `D2_MPQ_DIR` / `D2_PATCH_INSTALLER` set, so data tests ran) | test_game, test_game_rules, test_combat, test_monsters, test_monster_ai, test_rules, test_skills, test_drops and every other unit test pass; skipped: test_missile_hit / test_monster_missile (oracle modes), test_iso9660; failed: test_mpq (the integrity assertion on my MPQ folder: no d2video / d2xvideo there, environment) and the 9 tests that run the d2d binary (smoke, co-op, pad, quests act 1-5: no d2d app in a tests-only build) | V run |
-| `ctest` on base 23e2baec, same set | (pending, below) | |
+| `ctest` on base 23e2baec, same set (minus test_monster_missile) | the same 10 failures (test_mpq + the 9 d2d-binary tests), everything else passes: the candidate adds no test failure | V run |
 | `tools/pr_guard.py 23e2baec HEAD` | 0 FAIL, 0 WARN | V run |
 | `tools/presubmit.py --quick --base 23e2baec` (ruff via uvx) | **2 FAIL**: `short-names` ai.hpp:670 `lo` (and `hi`); `ruff` 8 findings in mm_diff.py / mm_launch.py. 3 WARN: siblings (unit kinds, hit paths), docs-sync. Same against upstream/main | V run |
 | clang-tidy (repo `.clang-tidy`, LLVM 23) on test_monster_missile.cpp and gamedata_load.cpp | **new-file errors**: test_monster_missile.cpp:13 `combat.hpp` included but unused (misc-include-cleaner); :47 variable `s1` too short. (outdoor.hpp `x` / `y` binding names: pre-existing, newer tidy only) | V run |
@@ -145,3 +145,12 @@ cd ../head/tools/emu && D2_MPQ_DIR=<MPQ dir with bin/game.exe> D2_BUILD=<build w
 cd ../../../harness && for b in mid head; do VM_BLOW=1 ../$b/build/tests/test_vm_probe cases.tsv > ${b}_cases.txt; done
 python3 vm_cmp.py cases.tsv game.txt head_cases.txt --ids 5; python3 vm_moves.py cases.tsv mid_cases.txt head_cases.txt
 ```
+
+## Left on the worker host
+
+`~/d2d-lab/verifymissile/`: the harness (`harness/`, with outputs), detached worktrees `base` / `mid` / `head` of the fork checkout (my probe file untracked in each `tests/game/`; remove with `git -C ~/d2d-lab/fork/src worktree remove --force <dir>`), the two lab d2d binaries (`bin/`) and the det logs (`det/`). The lab worktrees and their temporary ref were removed; nothing was committed to or pushed from the fork. Nothing of mine is registered (`tools/agentreap.sh --list`).
+
+## Shared-file lines for the merger
+
+- BACKLOG: `- MISSILEDIFF-FIX: candidate local/missilediff-record NOT READY (docs/research/pr-missilerecord-verifier.md): the row poison reaches monster_blow x 20 x ELen / 256 too strong (carry it as per-frame 256ths, MonStats::poison_*); same bug in ai.hpp missile_blow (Andariel's poison, x 62, upstream too); presubmit short-names + ruff FAILs; tidy include / s1 in test_monster_missile.cpp; rebase off the unsubmitted roll-top pair`
+- INDEX: `- docs/research/pr-missilerecord-verifier.md: independent verifier of the monster missile record candidate (record 0-diff confirmed; poison units blocker; det hashes equal)`
