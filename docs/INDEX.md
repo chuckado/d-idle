@@ -158,3 +158,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/backend-parity.md: original-game (memory backend) vs d2d parity matrix, gate tooling gaps, smoke runbook, parity backlog
 - docs/research/missilediff.md | monster missiles Acts 1 and 2 real-build differential: 120,000 cases game.exe vs the real d2d build, D1 brackets / D2 HitShift / D3 row element CONFIRMED (44,456 differ before, 0 after the local fix); 21 rows 0-diff | card missilediff
 - docs/research/character-factory.md: what character creation, level and kit setting, save copies and restores exist; capability table; honest snapshot library plan; ranked backlog cards
+- docs/process/baseline-runs.md: recipe, kit restore, schedule, flags and prerequisites for the extra original-game baseline runs
