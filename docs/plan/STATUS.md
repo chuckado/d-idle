@@ -127,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
 - 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
+- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
 - 94bb76e6 11-02 11:29 `merge origin/main into verifypalaura` (verifypalaura)
 - 34d019b7 11-02 11:24 `Merge agent/skstateev: skstateev: Pro-account job result (docs and emulator tools only)` (skstateev)
 - d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
+- 2d789491 11-02 11:23 `merge origin/main into skzerohit` (skzerohit)
 - caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
 - 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
 - 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
-- 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
-- 650c59b7 11-02 11:01 `Merge agent/skground: skground: credit-funded decomposition result (docs and emulator tools only)` (skground)
-- 93042b4f 11-02 11:00 `merge origin/main into skground` (skground)
 <!-- statusgen:end -->

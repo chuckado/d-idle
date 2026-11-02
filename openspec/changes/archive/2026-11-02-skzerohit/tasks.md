@@ -2,7 +2,7 @@
 
 ```yaml
 change: skzerohit
-status: in-progress
+status: archived
 agent: skzerohit
 branch: agent/skzerohit
 worktree: ~/code/d2lod-wt/skzerohit
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live, nothing V run. Static answer (V read) in docs/research/sk-zero-hit-trace.md: FUN_0057cee0 runs for a zero-damage hit, knockback ignores damage, get-hit needs one point, no wake, Lightning Enchanted on-hit bolts fire only on a no-recovery hit; D1 to D3 and a drill recipe listed, no PR candidate."
+result: "docs only; see the doc for tags, holds and limits"
+merge: 518f87b
 ```
 
 ## 1. Work
