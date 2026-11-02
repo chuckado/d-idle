@@ -1,0 +1,162 @@
+# Monster AI, second pass: the six untraced AIs, the Fallen flee, corpse reach, keep, command word, run speed, and the residual mismatches (agent monsterai2, 2026-11-02)
+
+> status: research, current. Continues docs/research/monster-ai-trace.md (first pass: D1 to D11, B1 to B3, 25 AIs run). Tags: V read = read in the game.exe disassembly (`disasm.py`, addresses given); V run = game.exe's own code run under the emulator against an oracle (counts below); D = 1.14d patched tables (`mpq-table.sh monstats`); S = an existing upstream proof or doc (named); I = inferred; U = unverified. d2d = upstream f8aab0e8 (`components/rules/monsters.hpp`, `components/game/ai.cpp`), read in a scratch tree on the worker host. Offline only: no game, no slot, nothing pushed or posted. Deviation numbers here (D1..D9) and bot findings (B1..B4) are this card's; "pass 1 D11" names the first pass's number.
+
+## Verdict
+
+1. **The six AIs the first pass could not compare are decomposed.** Town Rogue, Elemental Beast, Flying Scimitar, Quill Mother, Andariel and Dark Wanderer each got a Python port written from the disassembly (`tools/emu/mai2_six.py`); every port equals game.exe's own think on **6,000 cases each, 36,000 in all, 0 differ** (calls in order, the three AI control words, the seed after; V run). d2d has no `mon_think` port for the first four (V read: not in `traced_ai`); none of the four is placed in an Act 1 or 2 level (D, first pass section 12). **Andariel's d2d function `andariel_think` equals game.exe on 3,830 cases, 0 differ** (V run, d2d's real code compiled and replayed). Dark Wanderer's d2d code is in `ai.cpp:823-853` (not callable), equal to the port by reading.
+2. **The Fallen flee is a proven deviation of one field**: d2d omits the pace 50 of the flee (`0x5f03a8`). Of 1,500 Fallen cases (seed 20261102) 416 have a dying kin near; **416 of 416 differ in the pace only** (act, effects, back-off asks, seed all equal) and the 1,084 without one differ in nothing (pass 1 D11: V run now, was V read; D1 below).
+3. **Three of the four unexplained mismatch families were harness artifacts, now 0**: Fallen Shaman (176 of 3,000 -> 0 of 1,500), Gargoyle Trap (124 -> 0 of 1,500), Wraith and Skeleton Archer keep y (pass 1 D7: a move mode, 0 of 3,000 after normalising). Foul Crow Nest (1,034 -> 521 of 1,500) is one act label (`gone` vs `die`). **Blood Raven (2,162 -> 985 of 1,500) is real**: pace (820), the target's distance from her home (162), a boundary (3).
+4. **The Fallen Shaman's corpse reach is a proven deviation (game side V run, d2d side V read)**: the game's callback takes a corpse within aip4 squared (24 subtiles, 26 in Hell) and not a champion's; d2d's unique shaman takes any within 80 by `ai_distance` (D3).
+5. **The "run" act is a walk-mode move in game.exe** (V read: `FUN_005ded40` is mode 2, path type 0xd, exactly `FUN_005dec80`'s mode); d2d runs it in RN at the MonStats Run column. A pace is a temporary stat 0x43 entry on the next mode (V read). What that does to the Zombie's speed (Velocity 1, Run 3, pace 100) is the one number still U (the base value of stat 0x43 for a monster; D8).
+6. **No PR candidate**: the differential is this card's, not the existing upstream harness, and the effect of the paces on speed is U.
+
+## Q1. The six AIs with no `mon_think` port (V read of the disassembly, V run of the port)
+
+Notation: `p1..p5` = aip1..aip5 (MonStats `aip1`..`aip5` for the difficulty, row + 0x56 + 6k + 2 x diff), `roll` = `rand(100)` = one seed step (`FUN_0045c390`) % 100, `target` = params[2], `melee` = params[6], `dist` = params[5], `slot k` = Skill(k+1) id at row + 0x170 + 2k, its mode byte at + 0x180 + k.
+
+| AI | think | Rule (V read; every roll in the order written) |
+|---|---|---|
+| TownRogue (rogue3, Vel 8) | `0x5e7d60` | second target (`FUN_005ddc30`): found and its distance < 25 (`0x5e7d8e`) -> A1 at it, else stand 50 (`0x5e7da8`) |
+| ElementalBeast (firebeast, iceglobe, lightningbeast, poisonorb) | `0x5f6b70` | state (control +0x14) 2 -> `FUN_0057ccb0` (it dies). State 0: `dist < p2` or hit (`FUN_005dd2b0`) -> S1 (mode 8) at the target, state 1. State 1: not in melee -> `roll < p1` walk (flags 0) else wander 8; in melee -> S1, event at frame + 1 (`FUN_005417d0`), state 2. Else stand p3 |
+| FlyingScimitar | `0x5f6ca0` | in melee: `roll < p2` A1, else `roll < p4` circle (target, 2, 0), else stand p3. Not in melee: `roll < p1` keep (target, 8, 1), else `roll < p1` walk (target, 7), else stand p3 |
+| QuillMother (quillbear1..5) | `0x5fb2a0` | hit: command kind 1 to the group (`FUN_0058f730`), then A1 if in melee else walk 7. Else in melee: `roll < p1` A1 else stand p3; not in melee: `roll < p2` walk 7 else stand p4 |
+| Andariel | `0x5f5830` | in melee: Skill1 set and `roll < p1` Skill1 (spray) else A1. Not in melee: `roll < p2` stand 5; else `roll < p3`: Skill1 set and `roll < p4` Skill1, else Skill2 if set; else (or nothing cast) pace (0, 0) then walk 7 |
+| DarkWanderer (darkwanderer, Vel 2) | `0x5ea130` | `FUN_005bd0d0` (his spot) not found -> stand 10. Control +0x14 0 -> 1, +0x18 and +0x1c 0. No target -> stand 10. `dist >= 20` -> stand 40. State 1: walk to the spot (`FUN_005ded90`), state 2. State 2: `FUN_005dc5c0` < 2 or +0x18 >= 3 -> flag 0x20000, `FUN_005ddfc0(0, 0, 0)` (mode 0), `FUN_005bd4a0` (the quest step); else +0x18++, pace (0, 0) and walk to the spot again. Other state: stand 40 |
+
+Run (`tools/emu/mai2_six.py 6000 20261102`, the worker host; scenes are upstream `mon_ais.py`'s random ones plus the Dark Wanderer's spot and states, Andariel's both skills mostly set): `six TownRogue 6000 0`, `ElementalBeast 6000 0`, `FlyingScimitar 6000 0`, `QuillMother 6000 0`, `Andariel 6000 0`, `DarkWanderer 6000 0`; total 36,000, 0 differ. Every branch of every think was reached (acts seen: TownRogue a1 2,852 idle 3,148; ElementalBeast die 975, idle 1,793, s1 1,997, walk 332, wander 903; FlyingScimitar a1 656, circle 443, idle 3,715, keep 1,006, walk 180; QuillMother a1 1,165, idle 3,043, walk 1,792; Andariel a1 1,919, idle 983, skill 1,070, walk 2,028; DarkWanderer gone 575, idle 3,098, move_to 2,327). A first run of 3,000 cases per AI had 2,246 differences, all one trailing field the hook adds to a walk (V run, the port was wrong, not game.exe).
+
+d2d's side, per AI (V read):
+- TownRogue, ElementalBeast, FlyingScimitar, QuillMother: not in `traced_ai` (monsters.hpp:1296-1307); the driver treats an untraced AI as "goes at what it found" (upstream docs/research/re/monster-ai.md:738, S). None is placed in an Act 1 or 2 level (D: the first pass's section 12 table, `levels.txt` columns, shows `-` for all four). Not a bot risk today.
+- Andariel: `andariel_think` (monsters.hpp:1064-1069) is the same four-branch rule; `ai.cpp:1374-1380` maps its acts to spray (SC), bolt (A1), A1, idle 5, walk 7. **V run**: `tools/emu/mai2_and_test.cpp` (d2d's real function, compiled by hand against the scratch tree) replayed 3,830 of the 6,000 game.exe cases (the ones with both skills set, which is her real row: the function assumes it): **3,830 compared, 0 differ**; the 2,170 with a skill unset are not comparable by design. Her `walk` carries the pace (0, 0) call which sets nothing (`FUN_005de190` stores a pace only when it is not 0): not a deviation.
+- DarkWanderer: `ai.cpp:823-853`: same states, `best >= 0x14` stand 0x28, `ai_distance < 2 || state2 >= 3` -> gone, `++state2` head off again (V read; no replay: the code is inside the monster loop). The spot lookup `FUN_005bd0d0` is a quest-record lookup (not decomposed: U).
+
+## Q2. The Fallen flee (pass 1 D11)
+
+Game (V read `0x5f02c0`..`0x5f03df`): after the mode test (not DT / DD, `0x5f02e5`..`0x5f02eb`), the room scan `FUN_00619790` returns the near rooms; each entry holds four unit ids at +0x38; `FUN_00552f60` looks each up; a unit with mode 0 (DT) within `FUN_005dc530` < 15 of the Fallen sets state 1 (control +0x14), clears the command (`FUN_0058ed10`), **pace 50** (`FUN_005de190(50, 0)` at `0x5f03a8`..`0x5f03b0`) and backs off 12 from the target (`FUN_005defe0(target, 12, 1)`); a back-off that sets off ends the think after a seed step (1 in 20 a scream, `FUN_00553380`), one that does not falls through to the normal branches with the state and command already changed. d2d (monsters.hpp:1525-1528): state 1, command 0, `away(12, false)`, one seed step; **no pace**.
+
+Run (V run): `mai2_ais.py` makes a dying unit in 55 % of the Fallen scenes (the room scan and the id lookup are the hooks; the 15-subtile test is game.exe's `FUN_005dc530`), the case line carries `dying` in an unused stat word and the replay (`mai2_patch.py`) feeds `input.dying`. Seed 20261102, 1,500 Fallen cases, leader command none or 1: **no dying kin 1,084 cases (546 no command, 538 command 1): 0 differ; dying kin 416 cases (223 no command, 193 command 1): 416 differ, every one in `pace` only** (game 50, d2d 0; acts walk 67, none 213, a2 56, idle 35, a1 24, wander 12, s2 9 all equal). Fix shape (not built): `*input.pace = 50` in the dying branch (monsters.hpp:1526).
+
+## Q3. The command word (pass 1 D8)
+
+Game (V read `0x5f03e9`..`0x5f0405`, `0x5f05e0`, `0x5f068b`): the Fallen reads its leader command (`FUN_0058ee80`); kind 1 charges; **any other kind: `FUN_0058ed10` (clear it) then stand 10** (`0x5f068b`..`0x5f069a`). d2d ignores a kind other than 1 (monsters.hpp:1523 "commands other than 1 never come").
+
+Who can send one (V read of every caller of `FUN_0058f730`, the group send, in the disassembly: `0x5d18a2`, `0x5e5a08` (kind 2), `0x5e5a8c` (8), `0x5e7ff2` (8), `0x5f04b9` (the Fallen, **1**), `0x5f155f` (the Fallen Shaman, **1**), `0x5f25e4` (1), `0x5f9b19`, `0x5f9c33` (0xe), `0x5fb2f9` (Quill Mother, 1); the direct writer `FUN_0058ef40` has twelve callers, two generic: `0x54c48a` and `0x5d612e`, the latter a kind-0 record). The leader of every Fallen pack is a row with AI Fallen or FallenShaman (D: `monstats` minion1 of all 16 Fallen / FallenShaman rows names a Fallen row; `tools/emu/mai2_minions.py`), so the only senders that can reach a Fallen are `0x5f04b9` and `0x5f155f`, both kind 1. The two generic callers were not followed (I that they send to the unit's own group, U).
+
+Run (V run): 1,500 Fallen cases with command 2 on every case (seed 7): **1,500 of 1,500 differ** (game clears and stands 10, with a `FUN_0058ed10` effect d2d does not make; d2d walks, swings or wanders). Unreachable from Act 1 (I), so a deviation with no effect today.
+
+## Q4. The Fallen Shaman: think and corpse reach (pass 1 D9)
+
+The think (V read `0x5f1440`): in melee `roll < p3` A1; `roll < p1` rally (kind 1, `FUN_0058f730`); if the corpse search found one and `roll < p1` and the skill is usable (`FUN_005fd470`): Skill1 sequence at the corpse (`FUN_005de000`); inside p5 `roll < p2` Skill2; a second target search repeats the shot; `roll < p3` circle 3, else stand 10. **V run: 1,500 of 1,500 equal** (seed 20261102) after the harness fixes below.
+
+The search (V read `0x5f14bc`..`0x5f1513`): ctx = {found, count, best, limit = **p4 squared**}; `FUN_005a0180(unit, 8)` true and `(unit, 4)` false (flag bit 8 set, bit 4 clear) -> the room search `FUN_005dd0b0` (type 1) with callback `FUN_005f1380`; else the group search (type 9, callback 0). The callback (V read `0x5f1380`..`0x5f142e`) takes a candidate that is a monster, class `0x13` or `0x3a` (`FUN_00463860`), not in state `FUN_006259b0`, with the corpse bit (+0xc4 bit 1), not used (`FUN_0063a770`), in mode DD (0xc), `FUN_0063a320` false, squared distance <= limit, and `FUN_005a0180(candidate, 0xc)` false.
+
+Run (V run, `tools/emu/mai2_corpse.py 12000 20261102`): game.exe's callback on 12,000 random candidates (class, flags 0 / 4 / 8 / 0xc, mode, corpse bit, offsets up to 100 subtiles, p4 in {10, 24, 26, 40}), 754 accepted; my reading of the callback (the list above) equals the run on all 12,000. d2d's rule for a unique shaman (`ai.cpp:880-884`: base 19 or 58, not `Boss::unique` / `superunique`, `ai_distance < 80`) accepts 2,119; **1,365 disagree: 824 within 80 by `ai_distance` but beyond p4 squared (d2d takes a corpse the game leaves), 541 a champion-flagged (bit 4) corpse the game rejects**. The d2d side is the ported expression (V read), not d2d's code run. The non-unique shaman (d2d: own group within p4 squared) goes through the group search (type 9): not run, U.
+
+## Q5. `keep`'s y field (pass 1 D7): a label, not a rule
+
+`FUN_005de6d0(unit, n, x)` (V read `0x5de6d0`..`0x5de6e7`) is `push 2` plus a call to `FUN_005de4e0(unit, 2, n, x)`, whose second argument is the **move mode** (`FUN_005a7e60(unit, mode, &request)` at `0x5de671`..`0x5de67d`). The harness labels that argument y; it is 2 (WL) for every caller of the wrapper. d2d's Think has no such field (y 0). With y normalised: **Wraith 1,500 of 1,500 equal, Skeleton Archer 1,500 of 1,500 equal** (V run; Skeleton Archer's other 1,336 pass-1 mismatches were the second-target label, below). Pass 1 D7 closes as "not a deviation" (V read plus V run).
+
+## Q6. Run speed and the pace (pass 1 D10)
+
+V read, the chain from a think to the unit's speed:
+1. `FUN_005de190(pct, steps)` -> `FUN_005a6260` writes the pending request in monster data +0x2c: +0x18 type, +0x1c pct, +0x20 steps (cap 0x4d), each only when not 0 (`0x5a6260`..`0x5a6285`).
+2. `FUN_005a63f0` (called by the mode setter `FUN_005a7c20` at `0x5a7d2f`) takes them, clears all three, stores pct at +0x10 and a flag (-1, or 10 when `FUN_00648bf0` says so) at +0x14 (`0x5a63f0`..`0x5a648d`).
+3. `FUN_005a6380` (`0x5a6380`..`0x5a63e5`) reads +0x10 and, when not 0, sets **stat 0x43 (velocitypercent) = pct on a temporary stat list (flag 0x4000)**, then calls `FUN_00623f50` to re-rate the unit (S: upstream monster-ai.md:199 says the same). A pace therefore lasts the very next mode only.
+4. `FUN_00623f50` moving-mode branch (`0x624132`..`0x6241c9`): `ESI = max(25, FUN_00621740(unit, 4) + stat 0x43)`; the unit's animation rate (+0x4c) is `FUN_006213d0(...) x ESI / 100` and the **path speed is `FUN_00621360(...) x ESI / 100`**. For a monster `FUN_00621360` returns **MonStats `Velocity` (row + 0x32) << 8** whatever the mode (`0x621360`..`0x621392`); the Run column (row + 0x34) is not read there. Run is read by thinks and a few skill functions (V read, grep of `movsx r, word [r + 0x34]`: `0x5cf808`, `0x5d9fdd`, `0x5e48e0`, `0x5e81e3`, `0x5eccec`, `0x5ed07a`, `0x5ed461`, `0x5ed7e3`, `0x5f0d15`, `0x5f4bcb`, `0x5f6e2b`, `0x5f6e9a`, `0x5fa3c3`); the Vampire's think turns it into a pace (Run x 100 / Velocity - 100, clamped 0..120; S monster-ai.md:199). S net-packets.md:243-248 says the same of the client and that the host sent 70 / 75 for walks and 125 / 130 for runs in Act 1 Normal (1,513 moves).
+5. The think's "run" is `FUN_005ded40`: `FUN_005a6260(type 0xd)` then `FUN_005deb60(target, mode 2, ...)` (`0x5ded40`..`0x5ded8a`), where `FUN_005deb60`'s second argument is the mode (`0x5deb69`, `0x5deba1`..`0x5deba3`). `FUN_005dec80` (walk) and `FUN_005def80` (approach) call `FUN_005deb60` with mode 2 too; of the four helpers read, only `FUN_005ded20` passes mode 0xf (RN) (the others' callers elsewhere were not swept: U). So **in game.exe the Zombie, Brute, Blood Hawk, Corrupt Rogue and Lancer "run" = a walk-mode move (type 0xd) at Velocity, with the think's pace**. d2d's `MonAct::run` is an RN move at the Run column (`ai.cpp:1520-1522` `set_off(run = true)`, speed `ai.cpp:2693-2694`).
+
+What stays U: the **base value of stat 0x43 for a monster** (whether a plain walk is ESI 100) and the first term `FUN_00621740(unit, 4)`. If the base is 100: the Zombie (Velocity 1, Run 3, D) moves at 1 x (100 + 100) / 100 = 2 in game.exe against d2d's Run 3 (a 1.5x error toward fast); the Brute (Velocity = Run = 3) moves at 3 x (100 + p) / 100 with p = `100 - clamp(life %, 40, 100)` (0..60) against d2d's plain 3; Blood Raven (Velocity 6, Run 8) walks home at 12. These are I, not V. A differential would run `FUN_00623f50` for a monster unit in modes 2 and 0xf with stat 0x43 = 0 and 100 and read the argument of `FUN_00648690` (not built: needs the unit, stat list and path objects).
+
+## Q7. The four unexplained mismatch families (root causes)
+
+| Family (pass 1) | Root cause | Evidence |
+|---|---|---|
+| Fallen Shaman 176 / 3,000 | (a) unset skill ids were all -1, so the harness named the first slot for every unset one (slot labels, the largest bucket); (b) the second target is the primary one by construction (unit label foe2 vs foe); (c) game.exe's raise is `FUN_005de000` (`seq`) and d2d's `skill` 0: `ai.cpp:1559-1560` runs both alike; (d) Skill1 unset is unreachable (every shaman row has it) | after distinct unset ids, Skill1 set, Skill1's usable test true, `seq` read as `skill` and foe2 as foe: **0 of 1,500** (V run, seed 20261102) |
+| Gargoyle Trap 124 / 3,000 | the replay did not feed `off_x` / `off_y` (ai.cpp builds them from the spots; the case line carries the spots, not the offsets), so the "facing square within 5" test always passed | rebuilt in `mai2_patch.py`: **0 of 1,500** (V run) |
+| Foul Crow Nest 1,034 / 3,000 | the ending: game.exe calls `FUN_005ddfc0(0, 0, 0)` after `or [unit + 0xc4], 0x20000` (V read `0x5f6698`..`0x5f66b1`) = mode 0 (DT) with a flag; the harness labels that `gone`, d2d returns `die` (ai.cpp:1712: hit points 0, DT, "no loot, no experience"). Every other field equal | **521 of 1,500 differ, all `gone` vs `die`** (V run). d2d uses `gone` (removed) for the same call in other ports (monsters.hpp:2750, 3473, 3653): inconsistent inside d2d. What the flag 0x20000 does is U |
+| Blood Raven 2,162 / 3,000 | see Q8 | |
+
+## Q8. Blood Raven (decomposed this pass)
+
+Game (V read `0x5e6320`..`0x5e67fa`, init `0x5e6800`): her home is the command word kind 10 (`FUN_0058eef0`), created at the first think at her own spot (`0x5e6800`..`0x5e684e`). With it: `d_t` = distance from the **target** to home (`FUN_005dc480`: each axis less size / 2 + 1, then (2 x long + short) / 2), `dist > 45` -> stand 5; `d_t >= 50` **or her own distance to home > 50** -> flag (control +0x1c) = 1, **pace 100**, walk home (`FUN_005dede0`); flag set and own distance > 5 -> pace 100, walk home; else flag 0. Then `dist > 20` and `d_t < 50` -> **pace 100**, walk about the target at max(dist / 2, 12) (`FUN_005df680`). Then +3 to the state; out of melee, Skill1 set, fewer than 8 + 2 x difficulty raised, `roll < state` -> raise a zombie 5..19 off the target (Skill1 at a point), state 0; `dist > 5`: `roll < 5` and `d_t < 50` -> **pace 100**, about 12; else a second target search: not hit and `roll < 80` -> Skill2 if `roll < (difficulty + 4) x 10` else A1; else **pace 50**, circle (target, 4, flag 1); within 5: `roll < 30` and `dist < 12` -> **pace 100**, back off (12 - dist), else A1.
+
+d2d (monsters.hpp:1582-1606): the same shape with **no pace at all**, a home test on her own distance only (`home_dist >= 50` sets the flag, `*command && home_dist > 5` walks home), no condition on the target's distance in the walk-about branches, and `home_dist = ai_distance(home - own spot)` (ai.cpp:897; the game takes `FUN_005dc480`, which subtracts the size term).
+
+Run (V run, seed 20261102, 1,500 cases, home point in 85 % of scenes, 15 % at the first think): game.exe 985 of 1,500 differ, in four causes: **pace only 820**; **the target at 50 or more from home, 162** (game: she goes home or does not walk about, d2d acts: every one with `d_t >= 50` and her own distance <= 50); **3 boundary cases** (her own distance exactly 50: the game's test is `> 50` (`jbe` at `0x5e6433`), d2d's `>= 50`); the home distance with d2d's formula: a further 79 in a 3,000-case run without the size term (see below). A separate Blood Raven run of 3,000 cases (seed 20261102): with ai.cpp's `ai_distance` 2,058 differ (pace only 1,681, target 293, other 84); with the size term (`point_apart(.., 2)`, what `FUN_005dc480` computes with the hooked size 2) 1,994 (pace only 1,681, target 308, other 5). The unit size is a hook (`FUN_00620510` = 2), so the size term's exact value for her row is U.
+
+## Deviations, d2d vs game.exe (this pass)
+
+| # | Rule in game.exe | d2d | Tag | Differential |
+|---|---|---|---|---|
+| D1 (pass 1 D11) | Fallen flees a dying kin within 15 with pace 50 (`0x5f03a8`) | no pace (monsters.hpp:1526) | **V run**: 416 of 416 dying cases differ in pace only; 0 of 1,084 others; speed effect U (Q6) | yes: `mai2_run.sh Fallen ...` (built) |
+| D2 (pass 1 D8) | a command word other than 1: `FUN_0058ed10`, stand 10 (`0x5f068b`) | ignores it | **V run** 1,500 of 1,500 (command 2); unreachable (I, Q3) | yes: `MAI2_CMD=two` |
+| D3 (pass 1 D9) | corpse search by callback `FUN_005f1380`: p4 squared, no flag 0xc | unique shaman: any base 19 / 58, not unique, `ai_distance < 80` | game V run 12,000 candidates (754 accepted, 0 misread); d2d V read; 1,365 disagree (824 distance, 541 champion); non-unique rule U | partly: `mai2_corpse.py` (game side native, d2d side the ported expression); full: needs `ai.cpp`'s pack loop |
+| D4 | Blood Raven: pace 100 on walk home, walk about, back off; pace 50 on the circle | none | **V run**: 820 of 1,500 differ in pace only (1,681 of 3,000 in the second run) | yes: `mai2_run.sh BloodRaven` |
+| D5 | Blood Raven: the **target's** distance from home >= 50 sends her home and stops the walk-about | only her own distance | **V run**: 162 of 1,500 (308 of 3,000) | yes (same) |
+| D6 | her own distance to home: `> 50` (flag), size term (less 2) | `>= 50`, `ai_distance` (no size term) | V run: 3 of 1,500 boundary; 79 more of 3,000 from the size term | yes: replay variant `less` |
+| D7 (pass 1 D1 to D6) | "run" = mode 2 walk, type 0xd, Velocity, with the think's pace | RN at the Run column | V read (`0x5ded40`, `0x5deb60`, `0x621360`); Zombie effect I; base of stat 0x43 U | no existing; build: run `FUN_00623f50` for a monster in modes 2 / 0xf, stat 0x43 0 and 100, read the `FUN_00648690` argument; oracle `Velocity << 8 x ESI / 100` |
+| D8 (pass 1 D10) | pace -> stat 0x43 on the next mode only | pace -> `monster.move_pct`, added in the speed % (ai.cpp:1401, 2692-2694) | V read + S (monster-ai.md:199); base value U | same build as D7 |
+| D9 | Foul Crow Nest ends with `FUN_005ddfc0(0, 0, 0)` (mode 0, flag 0x20000) | `die` (DT, hp 0, no loot, no experience) | V run: 521 of 1,500 act labels differ; effect I (equal if 0x20000 means no loot); flag meaning U | yes: `mai2_run.sh FoulCrowNest` |
+
+Not deviations (closed): keep y (pass 1 D7, Q5); Fallen Shaman residual, Gargoyle Trap (Q7); Andariel (Q1: 0 of 3,830); the six ports (Q1: 0 of 36,000, no d2d code to compare for four).
+
+## Bot findings (described, not changed)
+
+- B1: **Blood Raven walks home at double speed and ignores a distant target** (D4, D5): she retreats to her spot when the player is 50 or more from it, whatever her own position, and a bot that waits for her to come or that kites at a distance sees her leave. `internal/combat/fight.go:487-490` (`IgnoreNoShot`: "never in range with a clear line" after `ReachSec`) can drop her as ignored; the quest kill then waits on `brAttempts` (`internal/resource/tuning.go:132`, `internal/merc/policy.go:38`). Live behaviour U (d2d walks her at base speed and does not test the target's distance).
+- B2: `StaticCastsBR` 0 (`internal/env/tuning_combat.go:50` and the default at `:89`) rests on "her 50 percent resists, U": **now D**: Blood Raven's row has ResFi / ResLi / ResCo / ResPo / ResMa 50 (`monstats`, bloodraven). The comment can say D.
+- B3: the bot's drills spawn `fallenshaman1` (`internal/drill/dfield.go:195`) and `fallen1 ... champion` (`:236`); against d2d a unique shaman raises corpses up to 80 subtiles away and a champion's corpse too (D3), against game.exe within 24 (26 in Hell) of a non-champion only. A pack drill on d2d over-states the raised Fallen.
+- B4: the stepback / kite rule (`internal/combat/fight.go:628-632`, pass 1 B1) assumes monsters move at base speed; a fleeing Fallen runs at pace 50 (D1), the Zombie and Brute at their pace (Q6): the retreat does not break contact. Speed effect U (D8).
+
+## PR candidates
+
+None. The Fallen flee (D1), Blood Raven (D4 to D6), the corpse reach (D3) and the Foul Crow Nest (D9) are proven on this card's harness, not on the existing upstream differential (`tools/emu/mon_ais.py` and its corpus carry none of these AIs' flee, home or corpse inputs), and the speed effect of every pace is U (D8). No fork branch was made, nothing was posted. If D8 is closed and the paces matter, the fix shapes are one line each: `*input.pace = 50` (monsters.hpp:1526), `*input.pace = 100` before the Blood Raven's home / about / back-off returns and 50 before her circle, a `target_home_dist` input for D5, `point_apart(.., 2)` for D6, a `FUN_005f1380`-shaped corpse test for D3.
+
+## Dead ends and limits
+
+- Dead end: the first harness run of the Fallen flee flagged every case as fleeing, because `FUN_0058ed10` is also called by the command-word branch (`0x5f068b`); the flee is identified by its pace 50 call instead. A second: `FUN_005df680` (the Raven's walk about) ran unhooked and failed to set off, so no `around` act ever appeared; hooked, with the same four seed steps as `FUN_005de200`. A third: with the Raven's home missing at the first think the game re-reads the word it just created (home = her own spot); the first harness version skipped the whole home block.
+- Dead end: the chain from a pace to a speed (Q6) stops at the base value of stat 0x43 and at `FUN_00621740(unit, 4)`: the unit's stat initialisation was not read. `FUN_005a4f50` (the large function after the pace call) is a stat setter for other events, not the pace.
+- L1: the Fallen's stand 10 when its mode is not NU (`0x5f0694`) is not run (the harness gives NU; d2d leaves it out by a documented ponytail, monsters.hpp:1522).
+- L2: normalisations before a case is written (each a representation difference, read above): `keep` y, foe2 -> foe (FallenShaman, BloodRaven, SkeletonBow: d2d feeds the primary as the second target, S monster-ai.md:740, so the Skeleton Archer's 1,336 pass-1 label mismatches vanish and a real second-target difference stays U), `seq` -> `skill` for the shaman, the Raven's raise offset (game: absolute point, d2d: offset from the target), her circle's flag 1, her flag word (game control word 3, d2d `command`).
+- L3: hooked outside the claim: the room scan and id lookup (Fallen flee), the spot and size functions (`FUN_00620510` = 2), the walks' set-off answers (always set off, d2d's assumption), `FUN_005df680` / `FUN_005dede0`.
+- L4: Foul Crow Nest's flag 0x20000 and Dark Wanderer's spot lookup were not decomposed.
+- L5: 'run' vs 'walk' acts of the other first-pass AIs (Blood Hawk, Corrupt Rogue and Lancer, Arach, Fetish: D3 to D6 of pass 1) were not re-run; Q6's reading applies to all of them.
+
+## Drill recipe for the fork verbs (docs/forkdbg.md, docs/forkcheats.md; not run)
+
+1. Fallen flee (D1): `debug spawn fallen1 3 near`, read `monsters`, `debug kill` one, then `step 1` and read the others' positions per tick for 40 ticks: game.exe moves each 12 subtiles away at the next mode's speed x 1.5 if the base of stat 0x43 is 100; the drill measures cells per tick before and after.
+2. Blood Raven (D4 to D6, B1): `debug spawn bloodraven 1 unique` (or the boss row), `debug goto` a field level, walk the player 60 subtiles from her spot (`cmd move`), `step 1` and read her position: game.exe: she walks home as soon as the player is 50 from it (D5) at twice her walking speed (D4); d2d: only when she is 50 from home herself. Then `debug mon set <id> life ...` is not needed.
+3. Zombie / Brute speed (D7, D8): `debug spawn zombie1 1 near` on a level, read `monsters` positions every tick: cells per second walking (Velocity 1) and while chasing; the ratio chasing / walking is `(base + pace) / base`; d2d's value is Run 3 / Velocity 1.
+4. Corpse reach (D3): `debug spawn fallenshaman1 1 unique`, `debug spawn fallen1 4`, place the player so the Fallens are 30, 60 and 78 subtiles from the shaman, `debug kill` one at a time and `step 200`: game.exe raises only within 24 (26 in Hell); a champion-flagged one (`debug spawn fallen1 1 champion`) never.
+5. Foul Crow Nest (D9): `debug spawn crownest1 1`, `step` until it has laid its aip3 nests, read its mode (DT) and whether a corpse and a drop exist.
+6. Command word (D2) cannot be drilled (no sender), skip.
+
+## Matrix-cell updates (proposed text)
+
+- docs/research/monster-ai-trace.md section 5: D7 -> "closed by monsterai2: a move mode (not a deviation)"; D8 -> "V run 1,500 of 1,500 (command 2), unreachable: I with the sender list"; D9 -> "game callback V run 12,000, 1,365 disagree (monsterai2 D3)"; D10 -> "chain read, base of stat 0x43 U (monsterai2 Q6, D7 and D8)"; D11 -> "V run: 416 of 416 pace only (monsterai2 D1)". Section 4's rows: Fallen Shaman 176 -> "0 of 1,500 after labels (monsterai2 Q7)"; Gargoyle Trap 124 -> "0 of 1,500"; Foul Crow Nest 1,034 -> "521 of 1,500, one label (D9)"; Blood Raven 2,162 -> "985 of 1,500: pace, target home, boundary (D4 to D6)"; the six `untraced` rows -> "ports written, 0 of 6,000 each (Q1); d2d has no think for four, Andariel's function equals game.exe (0 of 3,830)".
+- docs/coverage/ledger.tsv (applied in this card, case counts in this doc): Fallen TESTED-DEVIATION (3,000: 1,500 seed 20261102, 1,500 seed 7 command 2); FallenShaman TESTED-DEVIATION (13,500: 1,500 think + 12,000 corpse candidates); Wraith and Skeleton Archer TESTED-0-DIFF (3,000); Gargoyle Trap TESTED-0-DIFF (1,500); Foul Crow Nest TESTED-DEVIATION (1,500); Blood Raven TESTED-DEVIATION (4,500); Andariel TESTED-0-DIFF (3,830); Dark Wanderer, Town Rogue, Elemental Beast, Flying Scimitar, Quill Mother READ-ONLY (game.exe run against a port only).
+- docs/research/d2d-fidelity-riskmap.md rank 5 `mon_wake`: add "think proper: D1 to D6 of monsterai2 open (flee pace, Blood Raven, corpse reach)".
+- docs/coverage/gaps.tsv row 2 (monster.ai): stays; after this pass 8 more AI rows are run-tested (Andariel, Fallen Shaman, Wraith, Skeleton Archer, Gargoyle Trap, Foul Crow Nest, Blood Raven, plus Fallen moved to deviation).
+
+## Reproduce (the worker host)
+
+```sh
+tools/emu/run-on-worker.sh mai2_six.py 6000 20261102 --dump-andariel <scratch>/andariel_cases.txt   # the six ports vs game.exe
+tools/emu/run-on-worker.sh --ttl 1500 mai2_build.sh                                                  # d2d's andariel_think on those cases
+tools/emu/run-on-worker.sh --ttl 1500 mai2_run.sh all 1500 20261102 none1 less                       # Fallen, Fallen Shaman, Gargoyle, Foul Crow Nest, Blood Raven, Wraith, Skeleton Archer
+tools/emu/run-on-worker.sh --ttl 1500 mai2_run.sh Fallen 1500 7 two less                              # command word 2
+tools/emu/run-on-worker.sh --ttl 1500 mai2_run.sh BloodRaven 3000 20261102 none1 less                 # (without `less`: ai.cpp's home distance)
+tools/emu/run-on-worker.sh --ttl 600 mai2_corpse.py 12000 20261102                                    # the corpse callback
+python3 tools/emu/mai2_resid.py <replay stderr> [--samples=BloodRaven]                                # bucket the mismatches
+python3 tools/emu/mai2_minions.py <monstats table>                                                    # who leads a Fallen
+```
+
+The harness imports the first pass's `mai_ais.py` and upstream's `mon_ais.py`; neither is edited. `mai2_patch.py` cuts the replay block out of the scratch d2d tree's test at build time (no upstream code is committed), the scratch tree is only read, and every output goes to the agent's scratch directory.
+
+## Glossary term missing (for the coordinator)
+
+"pace": a monster think's temporary speed percent on the next mode (`FUN_005de190`, stat 0x43), used throughout this trace.
+
+## Shared-file lines for the merger
+
+See `openspec/changes/monsterai2/merge-lines.txt`.

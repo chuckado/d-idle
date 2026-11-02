@@ -16,11 +16,11 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: ""
+result: "docs and emulator tools only. V run: six think ports equal game.exe on 36,000 cases; d2d andariel_think 3,830 cases 0 differ; Fallen flee pace (416 of 416), Blood Raven (pace, target home distance), Fallen Shaman corpse reach proven; four mismatch families root-caused; run-speed chain read (base of stat 0x43 still U). No PR candidate."
 live: "docs and emulator only, nothing run live"
 ```
 
-- [ ] six untraced AIs: acts run in game.exe, Python port checked against it
-- [ ] Fallen flee (D11), Fallen Shaman corpse reach (D9), keep y (D7), command word (D8), run base speed (D10)
-- [ ] residual mismatches root-caused (Fallen Shaman, Gargoyle Trap, Foul Crow Nest, Blood Raven)
-- [ ] docs/research/monsterai2-trace.md, ledger rows, merge-lines.txt
+- [x] six untraced AIs: acts run in game.exe, Python port checked against it (36,000 cases, 0 differ)
+- [x] Fallen flee (D1), Fallen Shaman corpse reach (D3), keep y (closed), command word (D2), run speed chain (D7, D8)
+- [x] residual mismatches root-caused (Fallen Shaman, Gargoyle Trap, Foul Crow Nest, Blood Raven)
+- [x] docs/research/monsterai2-trace.md, ledger rows, merge-lines.txt
