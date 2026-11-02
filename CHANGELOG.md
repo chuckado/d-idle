@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: backend parity audit for resuming the bot on the original game (docs/research/backend-parity.md).
+- tools: `d2dsoak bands` (XP/h per clvl band with a baseline verdict), baseline files extended with the whole a14 run, G2 and the Fresha chain plus provenance fields; soak-gates delta spec for the per-band Gate 1 XP clause.
+- combat: missile threat model, kill-first for unblockable shooters, no walk-away retreat from runners (knobs combat.threatDodge, shooterKillMin, runnerGuard, standOK)
 - Docs: monster AI trace (monsterai): 25 Act 1/2 AI thinks run in game.exe under the emulator and replayed through d2d's rules::mon_think (Skeleton, Goatman, Quill Rat, Griswold, Smith 0 differ; Zombie, Brute, Blood Hawk, Corrupt Rogue/Lancer pace and run deviations); coverage ledger monster.ai 11 of 146 rows
 - Research: sor-rest-trace.md closes the Sorceress ledger (skills.sor 14 run-tested, 16 read-only, 0 untested); d2d rolls damage per monster in a Fire Ball / Glacial Spike burst where game.exe rolls once (proven on the real build, no fix yet); oracles tools/emu/sk_rest_*.
 - docs: Gate 1 run 20261101 review (stall windows, gap analysis, rerun recipe), cards soakgiveup and povertyflip proposed.
