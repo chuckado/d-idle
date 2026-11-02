@@ -15,7 +15,7 @@ exclusive:
   - fork-branch:pr/player-roll
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "fork branch pr/player-roll head 28c0540a (4 commits on upstream main 6935cf64) built and measured on the worker host; draft written; not verified live (offline, no game); held for the independent verifier and the user go"
+result: "fork branch pr/player-roll head e66e10ba (5 commits on upstream main 6935cf64: the 4 measured ones with one author identity, plus the three include lines CI needs) rebuilt and re-checked on the worker host after the independent verifier (READY WITH CHANGES; changes made); draft updated; not verified live (offline, no game); held for the user go"
 live: "no game; emulator differentials, d2d unit tests and the headless det scenarios on the worker host"
 ```
 
@@ -23,3 +23,4 @@ live: "no game; emulator differentials, d2d unit tests and the headless det scen
 - [x] differentials on the combined head
 - [x] unit tests, pr_guard, presubmit, det scenarios
 - [x] write docs/research/pr-playerroll-draft.md
+- [x] verifier changes: include commit (CI clang-tidy), draft overclaims, proof numbers, one author
