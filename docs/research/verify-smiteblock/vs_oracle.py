@@ -17,6 +17,8 @@ import random, sys
 import emu
 
 FORCE_AT = 0x5cebb0
+import os
+DMG_INV = os.environ.get("VS_INV") == "1"
 SKILL = 97
 
 
@@ -81,7 +83,17 @@ def main(cases, seed, mode):
             if name: c[name] = c.get(name, 0) + 1
             return 0
         e.hook(a, f, n)
+    from unicorn import UC_HOOK_CODE
+    from unicorn.x86_const import UC_X86_REG_EAX
+    def after_b420(mu, a, n, _): c["b420"] = mu.reg_read(UC_X86_REG_EAX)
+    e.mu.hook_add(UC_HOOK_CODE, after_b420, begin=0x5ceb36, end=0x5ceb36)
+    from unicorn.x86_const import UC_X86_REG_ESP
+    def before_b420(mu, a, n, _):
+        sp = mu.reg_read(UC_X86_REG_ESP); c["b420args"] = [e.r32(sp + 4 * k) for k in range(6)]
+    e.mu.hook_add(UC_HOOK_CODE, before_b420, begin=0x5ceb31, end=0x5ceb31)
     rng = random.Random(seed)
+    if mode == "dmg":
+        return dmg_grid(e, st, stats, rng)
     game = e.alloc(0x200); e.w32(game + 0x1c, e.alloc(0x40))
     for i in range(cases):
         att, dfd = e.alloc(0x200), e.alloc(0x200)
@@ -100,7 +112,7 @@ def main(cases, seed, mode):
         stats[(att, 0)] = rng.randint(20, 200)
         for k in ("tohit", "def", "resist", "b7d0", "undead"): c[k] = 0
         c["consumer"] = []; c["state"] = []
-        for k in ("event", "d3d0", "d10c0", "cee0"): c.pop(k, None)
+        for k in ("event", "d3d0", "d10c0", "cee0", "b420"): c.pop(k, None)
         ret = e.call(0x5ce9f0, SKILL and 30, 0, ecx=game, edx=att) if False else None
         # arg0 = skill id (row index into the skills table), arg1 = skill level
         ret = e.call(0x5ce9f0, SKILL, 20, ecx=game, edx=att)
@@ -111,8 +123,24 @@ def main(cases, seed, mode):
         else:
             out = "flags - dmg - resist - consumer 0"
         print(f"C {i} dt {dtype} dm {dmode} hit {st['hit']} def {st['defense']:#x} hs {st['hs']} hsmin {st['hsmin']} hsmax {st['hsmax']} "
-              f"smin {smin} smax {smax} ed {st['ed']} sb {st['sb']} undead {st['undead']} | ret {ret} {out} tohit {c['tohit']} defroll {c['def']} "
-              f"b7d0 {c['b7d0']} undeadq {c['undead']} cee0 {c.get('cee0', 0)} d10c0 {c.get('d10c0', 0)} ev {c.get('event', 0)} states {','.join(hex(s) for s in c['state'])}")
+              f"smin {smin} smax {smax} ed {st['ed']} sb {st['sb']} str {stats[(att, 0)]} undead {st['undead']} | ret {ret} {out} tohit {c['tohit']} defroll {c['def']} "
+              f"b420 {c.get('b420')} args {','.join(map(str, c.get('b420args', [])))} b7d0 {c['b7d0']} undeadq {c['undead']} cee0 {c.get('cee0', 0)} d10c0 {c.get('d10c0', 0)} ev {c.get('event', 0)} states {','.join(hex(s) for s in c['state'])}")
+
+
+def dmg_grid(e, st, stats, rng):
+    """FUN_0057b420 alone, Smite's argument shape (item, min<<8, max<<8, ED, 0, 0x80; edx 0): D smin smax ed sb str lo hi n."""
+    st.update(hs=0, undead=0)
+    for smin, smax, ed, sb, strv in ((10, 10, 0, 0, 0), (1, 1, 0, 0, 0), (10, 20, 0, 0, 0), (10, 10, 100, 0, 0), (10, 10, 0, 100, 0),
+                                     (10, 10, 0, 0, 100), (10, 10, 100, 100, 0), (1, 24, 0, 130, 0), (18, 40, 0, 142, 0), (10, 10, 50, 50, 77)):
+        st["sb"] = sb
+        att = e.alloc(0x200); e.w32(att, 0); item = e.alloc(0x100)
+        if DMG_INV: e.w32(att + 0x60, e.alloc(0x100)); st["item"] = item
+        stats.clear(); stats[(att, 0)] = strv
+        got = []
+        for k in range(400):
+            e.w32(att + 0x20, rng.getrandbits(32) | 1); e.w32(att + 0x24, rng.getrandbits(31) + 1)
+            got.append(e.call(0x57b420, item, smin << 8, smax << 8, ed, 0, 0x80, ecx=att, edx=0) & 0xffffffff)
+        print(f"D smin {smin} smax {smax} ed {ed} sb {sb} str {strv} lo {min(got)} hi {max(got)} n {len(got)} distinct {len(set(got))}")
 
 
 if __name__ == "__main__":
