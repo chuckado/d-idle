@@ -330,6 +330,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - BRANCHTRIAGE (card branchtriage, 2026-11-02): 15 unmerged local agent branches sorted into MERGE / ALREADY ON MAIN / SUPERSEDED / KEEP / DROP with the exact commands (docs/research/branch-triage-20261102.md)
 - skdruid first pass done (calc aspect of skills.dru 0 differ of 27,800); effects of the Druid skills (forms, Twister, Tornado, Hurricane, Armageddon, summon spawn) still untested; docs/research/skdruid-trace.md
 - SKASSASSIN first pass done (docs/research/skassassin-trace.md); next: feed ids 251-280 to the mana and calc harnesses
+- ITEMWEAPONS: first-pass weapons.txt table trace, no run yet (docs/research/itemweapons-trace.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

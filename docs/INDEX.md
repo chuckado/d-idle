@@ -264,3 +264,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/branch-triage-20261102.md | Triage of the local agent branches not on main: verdict, reason and merge or delete command per branch
 - docs/research/skdruid-trace.md | Druid skills 221..250 calc cells by game.exe vs d2d, summon caps (skdruid)
 - docs/research/skassassin-trace.md - Assassin skills table decomposition, first pass
+- docs/research/itemweapons-trace.md: weapon base table facts (306 rows), plan for damage and speed differential
