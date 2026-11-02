@@ -16,10 +16,10 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 0 | 1 | 0 | 0 | 146 | 1% | 1% | 100,000 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
 | skillfx.damage (skills with an element type: element damage and synergy formula) | 100 | 0 | 100 | 0 | 0 | 0 | 100% | 100% | 116,000 |
-| missiles (missile flight, range, hit roll) | 684 | 0 | 16 | 61 | 0 | 607 | 2% | 11% | 204,800 |
+| missiles (missile flight, range, hit roll) | 684 | 21 | 30 | 26 | 0 | 607 | 7% | 11% | 322,421 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 734 | 0 | 0 | 0 | 100% | 100% | 242,220 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
-| monster.ai (monster AI types) | 146 | 0 | 0 | 0 | 0 | 146 | 0% | 0% | 0 |
+| monster.ai (monster AI types) | 146 | 6 | 5 | 0 | 0 | 135 | 8% | 8% | 7,500 |
 | states (states and auras) | 185 | 0 | 6 | 4 | 0 | 175 | 3% | 5% | 558,147 |
 | itemtypes (item types) | 98 | 0 | 0 | 0 | 0 | 98 | 0% | 0% | 0 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 0 | 0 | 0 | 0 | 852 | 0% | 0% | 0 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 10 | 3 | 0 | 2 | 72% | 89% | 2,111,956 |
-| **total** | **4910** | **1125** | **890** | **86** | **0** | **2809** | **41%** | **43%** | **4,475,332** |
+| **total** | **4910** | **1152** | **909** | **51** | **0** | **2798** | **42%** | **43%** | **4,600,453** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 824 (22%), compared 910 (24%), read-only 86, untested 2809.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 870 (23%), compared 921 (25%), read-only 51, untested 2798.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -60,9 +60,14 @@ Case counts add the cases of every ledger line; one differential that covers man
 | missiles | 158-162 | TESTED-DEVIATION | `docs/research/sk-ground-trace.md` | 64,200 | 2026-11-01 | Blizzard center and shards, offset D1 |
 | missiles | 68,69,100-103,247,260-263 | READ-ONLY | `docs/research/sk-ground2-trace.md` | - | 2026-11-01 | firewall maker and wall, meteor, hydra, frozen orb read |
 | missiles | 114,192,193 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | Teeth, Bone Spear, Bone Spirit hit roll D1 (min and max equal on all cases) |
-| missiles | 2-5,7-10,13-16,22-25,32,63-66,70-72,77-79,125-128,130,133,135,196-200,226,227,229,238,239,266,341,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | game.exe launch record V run (mm_launch, 213 launches) vs d2d by source read and a port; D1 level bracket, D2 hitshift, D3 row element; no real-d2d run |
+| missiles | 7-10,63-66,70-72,238,239,341 | TESTED-DEVIATION | `docs/research/missilediff.md` | 44,792 | 2026-11-01 | D1 D2 D3 monster MissA record vs the real d2d build, fixed on local branch |
+| missiles | 2-5,13-16,125-128,196-200,226,227,229,266 | TESTED-0-DIFF | `docs/research/missilediff.md` | 72,829 | 2026-11-01 | monster MissA record (physical, levels 1..40; element where the owner has none) vs the real d2d build |
+| missiles | 22-25,32,77-79,130,133,135,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | skill-sourced, weapon or no-record rows: game.exe launch record V run, d2d by read |
 | monster.stats | all | TESTED-DEVIATION | `docs/research/monster-stats-trace.md` | 242,220 | 2026-11-01 | stat rows (life, defence, to-hit, damage, exp) 0 differ in 242,220 cases and 85,213 real Normal units; NM / Hell level D1; monster regeneration D2; resists compared on the 123 rows the populations hold |
 | monster.flags | all | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 734 | 2026-11-01 | undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared |
+| monster.ai | Skeleton,Goatman,QuillRat,Griswold,Smith | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | think act, pace, effects, seed vs rules::mon_think; 3000 cases each (seeds 20261101, 7); QuillRat scene without leader commands; second target as primary |
+| monster.ai | Fallen | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 1,500 | 2026-11-01 | no leader command word, dying false (seed 7); command word 2 differs (D8, unreachable); flee pace 50 not run (D11) |
+| monster.ai | Zombie,Brute,BloodHawk,CorruptRogue,CorruptLancer | TESTED-DEVIATION | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | pace and run act omitted by the port: D1 D2 D3 D4 (649, 1820, 1686, 917, 1656 differ of 3000 each) |
 | states | 1,11,118 | TESTED-DEVIATION | `docs/research/pr-freeze-proof.md` | 225,748 | 2026-11-01 | freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess) |
 | states | 10 | TESTED-DEVIATION | `docs/research/sk-armor-trace.md` | 184,771 | 2026-11-01 | frozenarmor state and its striker effect D1 |
 | states | 20,30,88 | READ-ONLY | `docs/research/sk-armor-trace.md` | - | 2026-11-01 | chillingarmor, energyshield, shiverarmor read |
@@ -92,7 +97,7 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | rank | subsystem | rows | why it matters | source |
 |---:|---|---|---|---|
 | 1 | missiles | untested (607 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
-| 2 | monster.ai | untested (146 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
+| 2 | monster.ai | untested (135 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (137 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 5 | treasure | untested (852 of 852) | Treasure classes set drops and magic find, which feed gear for the Sorceress and Paladin plans; no differential exists | `docs/classes/ranking.md` |
 | 6 | skills.pal | untested (18 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |

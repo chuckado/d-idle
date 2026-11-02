@@ -152,3 +152,13 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/baseline-audit.md: audit of baselines.json and baselines-early.json against the spec minimums, power, confounds, verdict per gate criterion
 - docs/soaks/gate1-20261101.md: Gate 1 run 20261101 review section: stall windows, restart causes, SOAKSTALL gap, rerun recipe
 - docs/research/sor-rest-trace.md | Sorceress rest of the skills (Fire Ball, Glacial Spike, Inferno, Blaze, Enchant): game.exe vs d2d vs bot, burst radius and roll, calc differential (card sorcrest)
+- docs/research/monster-ai-trace.md | Monster AI: Act 1 and 2 core thinks, game.exe vs d2d vs bot (146-row per-AI table, 25 AIs run, D1-D11, B1-B3)
+- docs/botthreat.md - missile threat table, shooter kill-first, runner retreat guard, standing Fallen (card botthreat)
+- docs/research/baseline-audit.md: baseline audit plus the "After" section (extended baselines, per-clvl-band Gate 1 XP rule, recomputed spread)
+- docs/research/backend-parity.md: original-game (memory backend) vs d2d parity matrix, gate tooling gaps, smoke runbook, parity backlog
+- docs/research/missilediff.md | monster missiles Acts 1 and 2 real-build differential: 120,000 cases game.exe vs the real d2d build, D1 brackets / D2 HitShift / D3 row element CONFIRMED (44,456 differ before, 0 after the local fix); 21 rows 0-diff | card missilediff
+- docs/research/character-factory.md: what character creation, level and kit setting, save copies and restores exist; capability table; honest snapshot library plan; ranked backlog cards
+- docs/process/baseline-runs.md: recipe, kit restore, schedule, flags and prerequisites for the extra original-game baseline runs
+- docs/research/original-game-lockstep.md: lockstep or speed-up for the original Game.exe 1.14d: prior art (libTAS, faketime, speed hackers, whisper, D2MOO), frame scheduler, tiers, probe runbook, instrumentation policy (card lockstepresearch)
+- docs/research/lockstep-p0.md - lockstep probe P0 results: IAT time hook under Wine, k = 1/2/4 frame gate, verdict PASS
+- docs/snaplib.md: snapshot library and d2restore usage, live preflight checklist

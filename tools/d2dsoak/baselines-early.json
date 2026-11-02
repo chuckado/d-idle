@@ -1,5 +1,5 @@
 {
- "description": "EARLY profile: fresh Sorceress clvl 1-7, Game.exe, two runs (Soaky 2026-10-29 old builds, S quality; Fresha 2026-10-30 minute lines, V). Weak until 5 runs (Game.exe is frozen, so it stays weak: docs/d2d-baselines-early.md). Use when the d2d replica starts from a fresh clvl 1 character.",
+ "description": "EARLY profile: fresh Sorceress clvl 1-7, Game.exe, two runs (Soaky 2026-10-29 old builds, S quality; Fresha 2026-10-30 minute lines, V). Weak until 5 runs (Game.exe is frozen, so it stays weak: docs/d2d-baselines-early.md). Use when the d2d replica starts from a fresh clvl 1 character. Card baselinefree added fresha-1-11-chain (clvl 1 to 11, excluded from the means, bands only), provenance fields and bands.",
  "minSeeds": 5,
  "minHoursPerSeed": 3,
  "minTotalHours": 15,
@@ -41,7 +41,11 @@
     "deaths_per_1000_kills": 0.7
    },
    "kills": 1427,
-   "deaths": 1
+   "deaths": 1,
+   "backend": "game.exe",
+   "date": "2026-10-29",
+   "profile": "unknown",
+   "weak": "S quality: doc numbers, wall-time XP, no minute lines (no bands)"
   },
   {
    "name": "fresha-fresh-1-7",
@@ -56,7 +60,96 @@
     "deaths_per_1000_kills": 1.34
    },
    "kills": 746,
-   "deaths": 1
+   "deaths": 1,
+   "run_id": "soak24-i5/runs/20261030-095519+105216+(first 6 lines of 120747)-d2bot.log",
+   "bot": "7527d07 (first log U)",
+   "backend": "game.exe",
+   "date": "2026-10-30",
+   "profile": "m24"
+  },
+  {
+   "name": "fresha-1-11-chain",
+   "hours": 5.896663318033333,
+   "minutes": 353,
+   "deaths": 4,
+   "kills": 2377,
+   "xp": 75336,
+   "metrics": {
+    "clvl_1h": 5,
+    "clvl_2h": 7,
+    "clvl_gain": 10,
+    "deaths_per_1000_kills": 1.6827934371055953,
+    "deaths_per_hour": 0.678349735140396,
+    "farming_share": 0.29178470254957506,
+    "gold_per_hour": -0.169587433785099,
+    "kills_per_hour": 403.1093301071803,
+    "potions_per_100_kills": 6.647034076567102,
+    "potions_per_hour": 26.79481453804564,
+    "recovery_share": 0.3654390934844193,
+    "repeat_sites": 1,
+    "town_share": 0.26628895184135976,
+    "xp_per_hour": 12776.038911634218
+   },
+   "states": {
+    "dead-recovering": 0.0113314447592068,
+    "farming": 0.29178470254957506,
+    "other": 0.0084985835694051,
+    "quest fight": 0.0453257790368272,
+    "quest travel": 0.025495750708215296,
+    "recovery": 0.35127478753541075,
+    "town chores": 0.26628895184135976
+   },
+   "source": "V: d2dsoak baseline on the three Fresha bot logs chained over restarts (353 minute lines, clvl 1 to 11); hours = play time, restart gaps out (the early-baseline definition)",
+   "note": "same run as fresha-fresh-1-7 for its first 115 minutes, plus the 4 h m24 run (clvl 6-11, 3 deaths); bands only",
+   "run_id": "soak24-i5/runs/20261030-095519+105216+120747-d2bot.log",
+   "bot": "7527d07 then a920fef (first log U)",
+   "backend": "game.exe",
+   "date": "2026-10-30",
+   "profile": "m24",
+   "bands": [
+    {
+     "band": "1-4",
+     "hours": 0.7420650719116669,
+     "minutes": 44,
+     "xp": 8229,
+     "kills": 311,
+     "deaths": 1,
+     "xp_per_hour": 11089.32398448684,
+     "kills_per_hour": 419.1007120154827
+    },
+    {
+     "band": "5-7",
+     "hours": 1.8023019870211112,
+     "minutes": 107,
+     "xp": 24623,
+     "kills": 714,
+     "deaths": 0,
+     "xp_per_hour": 13661.972398253578,
+     "kills_per_hour": 396.16002486914897
+    },
+    {
+     "band": "8-10",
+     "hours": 3.1188723094975,
+     "minutes": 187,
+     "xp": 39082,
+     "kills": 1278,
+     "deaths": 3,
+     "xp_per_hour": 12530.811178446973,
+     "kills_per_hour": 409.76348922919067
+    },
+    {
+     "band": "11-14",
+     "hours": 0.23342394960305551,
+     "minutes": 14,
+     "xp": 3402,
+     "kills": 74,
+     "deaths": 0,
+     "xp_per_hour": 14574.339975761715,
+     "kills_per_hour": 317.0197408014012,
+     "open": true
+    }
+   ],
+   "exclude_from_mean": "same run as fresha-fresh-1-7 for clvl 1-7 and the 4 h Fresha run after it; kept for the per-band tables only"
   }
  ]
 }

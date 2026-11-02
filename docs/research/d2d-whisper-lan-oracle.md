@@ -59,7 +59,7 @@
 - Spawn/XP diff harness (same area, matched seed, compare unit lists and kill XP over scripted actions, packet diff report, spec for a new fidelity metric): 15-25 h, with an open feasibility risk on seed control.
 
 (f) **Risks / blockers**
-- Seed control: host seed is random per game (U); without forcing it, spawn diffs are not matched. Possible via memory write to the host (forbidden: memory is READ-ONLY except logged cheats) or choose-and-replicate from the observed seed in d2d.
+- Seed control: host seed is random per game (U); without forcing it, spawn diffs are not matched. Possible via memory write to the host (allowed since 2026-11-02 as DIAGNOSIS or INSTRUMENTATION through the logged tool, ADR 0014; never inside a measured run) or choose-and-replicate from the observed seed in d2d.
 - Our d2d is a private lockstep fork (d2d.lab); upstream `--join` and net-host maturity vs fork divergence (U).
 - Player-count scaling: host+joiner = 2 players, so monster HP/XP use the /players 2 tables (V net-host.md section 2: tables [0,0,50,100,...] indexed by player count, so 2 players = +50% HP and +50% exp); fidelity numbers for 1-player soaks are NOT comparable unless d2d has the same scaling (net-host lists it as a still-to-do for d2d, V). Big caveat for XP/damage diffs.
 - Joiner character is written back and its act/difficulty changed (V net-join.md): use throwaway chars.

@@ -5,7 +5,8 @@
 //	d2dsoak run     -seeds 1-8 -hours 2 -out DIR [-cmd 'bot --backend d2d ...'] [-clock runner|bot] [-fake]
 //	d2dsoak extract [-hours H] LOG...                  metrics of minute-line logs (original-game soak logs too)
 //	d2dsoak compare [-baselines FILE] [-json] [-holdout 16-23] RUN...   RUN = run.json, seed dir, or minute log (invariants: docs/geninv.md)
-//	d2dsoak baseline NAME|LOG|SOURCE|NOTE...           print baseline runs as JSON (build baselines.json)
+//	d2dsoak baseline [-bands 1-4,..] NAME|LOG[+LOG]|SOURCE|NOTE|key=value,...   print baseline runs as JSON (build baselines.json)
+//	d2dsoak bands [-bands ..] [-hours H] [-baselines F[,F]] LOG[+LOG]...   XP/h per clvl band, with the per-band verdict
 package main
 
 import (
@@ -38,6 +39,8 @@ func main() {
 		err = cmdCompare(os.Args[2:])
 	case "baseline":
 		err = cmdBaseline(os.Args[2:])
+	case "bands":
+		err = cmdBands(os.Args[2:])
 	default:
 		usage()
 	}
@@ -80,7 +83,7 @@ func verdictExit(overall string, zero bool) int {
 }
 
 func usage() {
-	fmt.Fprintln(os.Stderr, "usage: d2dsoak run|extract|compare|baseline ... (see the package comment and docs/d2d-soak.md)")
+	fmt.Fprintln(os.Stderr, "usage: d2dsoak run|extract|compare|baseline|bands ... (see the package comment and docs/d2d-soak.md)")
 	os.Exit(ExitUsage)
 }
 
@@ -261,26 +264,83 @@ func compareGate(runs []d2dsoakstat.Run, blPath string, asJSON bool, save, gate 
 }
 
 func cmdBaseline(args []string) error {
-	var runs []d2dsoakstat.BaselineRun
-	for _, a := range args {
-		p := strings.SplitN(a, "|", 4)
-		if len(p) < 3 {
-			return fmt.Errorf("want NAME|LOG|SOURCE[|NOTE], got %q", a)
+	fs := flag.NewFlagSet("baseline", flag.ExitOnError)
+	bandSpec := fs.String("bands", d2dsoakstat.DefaultBands, "clvl bands stored with each run (empty = none)")
+	fs.Parse(args)
+	var bands []d2dsoakstat.Band
+	if *bandSpec != "" {
+		var err error
+		if bands, err = d2dsoakstat.ParseBands(*bandSpec); err != nil {
+			return err
 		}
-		rs, err := loadRuns([]string{p[1]}, 0)
+	}
+	var runs []d2dsoakstat.BaselineRun
+	for _, a := range fs.Args() {
+		// NAME|LOG[+LOG...]|SOURCE[|NOTE[|key=value,...]]; keys: run_id, bot, backend, date, profile, weak (no commas in values)
+		p := strings.SplitN(a, "|", 5)
+		if len(p) < 3 {
+			return fmt.Errorf("want NAME|LOG|SOURCE[|NOTE[|PROVENANCE]], got %q", a)
+		}
+		ms, name, err := loadChained(strings.Split(p[1], "+"))
 		if err != nil {
 			return err
 		}
-		r := rs[0]
-		r.Inv = nil // baselines carry metrics only
+		opt := d2dsoakstat.Options{}
+		if strings.Contains(p[1], "+") {
+			// logs chained over restarts: hours = play time (restart gaps out), the early-baseline definition
+			opt.Hours = d2dsoakstat.BandHours(ms, 0, len(ms)-1, 0)
+		}
+		r := d2dsoakstat.Extract(name, ms, opt)
 		r.Name = p[0]
 		br := d2dsoakstat.BaselineRun{Run: r, Source: p[2]}
-		if len(p) == 4 {
+		if len(p) >= 4 {
 			br.Note = p[3]
 		}
+		if len(p) == 5 {
+			for _, kv := range strings.Split(p[4], ",") {
+				k, v, _ := strings.Cut(kv, "=")
+				switch k {
+				case "run_id":
+					br.RunID = v
+				case "bot":
+					br.Bot = v
+				case "backend":
+					br.Backend = v
+				case "date":
+					br.Date = v
+				case "profile":
+					br.Profile = v
+				case "weak":
+					br.Weak = v
+				default:
+					return fmt.Errorf("unknown provenance key %q", k)
+				}
+			}
+		}
+		br.Bands = d2dsoakstat.Bands(ms, bands, 0)
 		runs = append(runs, br)
 	}
 	return json.NewEncoder(os.Stdout).Encode(runs)
+}
+
+// loadChained reads minute lines of several logs of one run (restarts) in order.
+func loadChained(paths []string) ([]d2dsoakstat.Minute, string, error) {
+	var all []d2dsoakstat.Minute
+	var names []string
+	for _, p := range paths {
+		f, err := os.Open(p)
+		if err != nil {
+			return nil, "", err
+		}
+		ms, _, err := d2dsoakstat.ParseMinutesCount(f)
+		f.Close()
+		if err != nil {
+			return nil, "", err
+		}
+		all = append(all, ms...)
+		names = append(names, filepath.Base(p))
+	}
+	return all, strings.Join(names, "+"), nil
 }
 
 // loadRuns reads each path as a run.json, a seed directory (run.json, else bot.log) or a minute log.

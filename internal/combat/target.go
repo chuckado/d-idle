@@ -123,6 +123,10 @@ type HostileCtx struct {
 	Resists  func(u d2.Unit, m *data.Monster) ([6]int, bool) // optional: stat-list resistances
 	ClassLvl int
 	Weights  DeathWeights // lessons from past deaths
+	// ThreatReactSec > 0 turns on the missile threat model: owners of missiles too fast to dodge are fought first.
+	ThreatReactSec float64
+	// ShooterKillMin > 0: ranged monsters whose peak hit (ShooterPeak) is at least this, unblockable, are fought first.
+	ShooterKillMin int
 }
 
 func dist(ax, ay, bx, by int) float64 { return math.Hypot(float64(ax-bx), float64(ay-by)) }
@@ -165,6 +169,13 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 	p := snap.Player
 	pierce := PierceFromStats(p.Stats)
 	friendly := Friendlies(snap, hc.Cat)
+	var fast map[uint32]bool // shooters whose missiles cannot be dodged
+	if hc.ThreatReactSec > 0 {
+		fast = map[uint32]bool{}
+		for _, id := range RankIncoming(snap, threatTable, 1e9, hc.ThreatReactSec).Shooters {
+			fast[id] = true
+		}
+	}
 	var out []Target
 	for _, u := range snap.Monsters {
 		if _, ok := friendly[u.ID]; ok || !u.Alive() || u.ID == p.ID {
@@ -206,6 +217,14 @@ func Hostiles(snap *d2.Snapshot, hc HostileCtx) []Target {
 			}
 		}
 		if t.Affixes&killFirstAffixes != 0 {
+			t.KillFast = true
+		}
+		if hc.ShooterKillMin > 0 {
+			if peak, unb := ShooterPeak(mon, p.Difficulty); unb && peak >= hc.ShooterKillMin {
+				t.KillFast = true
+			}
+		}
+		if fast[u.ID] {
 			t.KillFast = true
 		}
 		if hc.Diff == d2.Hell && t.Affixes&avoidHell != 0 && hc.ClassLvl < avoidHellLevel && !t.Boss {

@@ -149,3 +149,8 @@ openspec/changes/povertyflip/**  povertyflip  povertyflip
 docs/research/monster-stats-trace.md  monsterstats  monsterstats
 tools/emu/ms_*  monsterstats  monsterstats
 openspec/changes/monsterstats/**  monsterstats  monsterstats
+internal/cheat/ledger.go  snaplib  ledgerkey
+internal/cheat/ledgerkey.go  snaplib  ledgerkey
+internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
+cmd/d2cheat/main.go  snaplib  ledgerkey
+openspec/changes/ledgerkey/**  snaplib  ledgerkey
