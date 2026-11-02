@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildfreeze
-status: in-progress
+status: archived
 agent: prbuildfreeze
 branch: agent/prbuildfreeze
 worktree: d2lod-wt/prbuildfreeze
@@ -14,7 +14,8 @@ exclusive:
   - fork-branch:local/freeze-rules-v4
 gates:
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "Offline on the worker host, no game, nothing verified live. Private fork branch local/freeze-rules-v4 head 9caa1b9b (base cb716f10) pushed to the private remote only; no PR, nothing to the public fork. PR 159 is merged in the base; clean merge with PR 174 checked. Differential 185,746 -> 0 of 225,748 (also on v4 + PR 174 merged tree). Det hashes, MSVC and the re-check are U."
+result: "docs only; PR hold in force"
+merge: e9f2394
 ```
 
 ## 1. Work
