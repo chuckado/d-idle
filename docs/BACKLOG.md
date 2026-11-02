@@ -291,6 +291,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFY-TELEPORT-ROOM (docs/research/verifyteleroom-trace.md): room rule HOLDS (150,225 emulator cases, 0 violations); landing may leave the caster's near zone, a map-edge target lands one cell inward (candidate extra deviation, needs d2d side); real near lists of real levels still unverified.
 - #8 VERIFY-WAYPOINT (second pass) done: claim holds (writer FUN_0055b720 only; refusal = field + 10000 > tick, unsigned); 59,309 of 132,964 reproduced with game.exe code vs d2d's own pre-fix binary; new: tick-wrap quirk, hostile reachable by C->S 0x5d (I); no PR candidate, no ledger row; docs/research/verifywaypoint2-trace.md
 - SKSTATEEV done (static, V read): FUN_005d3ac0 is an attacker hit bonus not the dispatcher; dispatcher FUN_005c0c30; event 3 fires on miss too after damage (FUN_0057d4f0); event 11 in FUN_0057c1e0 before the resistance pass. docs/research/sk-state-events-trace.md. Open: dump Skills +0x44 and the 0x732980 rows, order of absorb nodes, a native run.
+- verifypalaura: independent re-run of palaura roll (min..max-1) and area disc VERIFIED; filter, Prayer, regen, resist re-runs still open (docs/research/verifypalaura.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
