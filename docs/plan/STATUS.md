@@ -54,6 +54,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
+| [lockstepbase](../../openspec/changes/lockstepbase/) | in-progress | lockstepbase | `docs/process/baseline-runs.md`<br>`internal/gclock/gclock.go`<br>`internal/gclock/gclock_test.go`<br>`cmd/d2bot/main.go`<br>`openspec/changes/lockstepbase/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -105,6 +106,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
+- change lockstepbase: go test -p 1 ./internal/gclock; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -127,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 5483ee50 11-02 13:58 `merge origin/main into lockstepbase` (lockstepbase)
 - 436019b3 11-02 13:47 `Merge agent/rebase174: REBASE174: all candidates rebased onto the #174 merge and assembled into bundle-1 (docs: table and combined PR body draft; nothing upstream)` (rebase174)
 - 927a3177 11-02 13:46 `merge origin/main into rebase174` (rebase174)
 - 6af67a2d 11-02 13:43 `Merge agent/lockstepp4: LOCKSTEP P4: scaled bot clock removes the chore failures at k=2 and k=4; usable for mechanics tests, not yet cleared for measured baselines (docs only)` (lockstepp4)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
 - 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
 - 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
-- 9621b8f8 11-02 13:23 `merge origin/main into crlimits` (crlimits)
 <!-- statusgen:end -->

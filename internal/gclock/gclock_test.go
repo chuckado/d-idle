@@ -118,3 +118,14 @@ func TestNoNewDirectTimeCalls(t *testing.T) {
 		}
 	}
 }
+
+func TestStartNote(t *testing.T) {
+	for _, c := range []struct {
+		k    float64
+		want string
+	}{{1, ""}, {2, "gclock: timescale 2"}, {4, "gclock: timescale 4"}, {0.5, "gclock: timescale 0.5"}} {
+		if got := StartNote(c.k); got != c.want {
+			t.Errorf("StartNote(%v) = %q, want %q", c.k, got, c.want)
+		}
+	}
+}
