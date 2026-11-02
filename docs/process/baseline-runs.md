@@ -129,7 +129,7 @@ Supplied by a human or the coordinator before `start` (the agent that wrote this
 1. The user's go (`--user-go`), and the decision on the kit restore (a file-level copy of an honest character, section 3).
 2. Characters: Fresha (clvl 11, kit) and Freshb/c/d (clvl 1) exist in i5 now; for lanes other than i5 someone must authorise placing copies into those prefixes (or create fresh characters there with `tools/soak/fresh.sh`, OOG tooling). Five honest in-band characters do not exist.
 3. Free instances and a quiet worker host at the time (the preflight decides); a bot checkout at a pushed commit; the helper deployed from that checkout.
-4. No fork binary, no lab binary, no Orion/d2d slot is needed (V: nothing in `soak24.sh` touches d2d).
+4. No fork binary, no lab binary, no the worker host/d2d slot is needed (V: nothing in `soak24.sh` touches d2d).
 
 Unverifiable until a live preflight (U, none of these was run):
 - That the restored `.d2s` set loads in the game and the bot continues as usual (V only for a manual byte-identical restore of Multi, `docs/cheats.md`); and whether the `.map` file pins the map seed (then restored runs would replay layouts: independence lost).
