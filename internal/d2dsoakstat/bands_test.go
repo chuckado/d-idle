@@ -2,6 +2,7 @@ package d2dsoakstat
 
 import (
 	"math"
+	"os"
 	"testing"
 	"time"
 )
@@ -97,5 +98,38 @@ func TestBandBaselineAndJudge(t *testing.T) {
 	// too little d2d exposure in the band
 	if v, _, _ := BandJudge(1, 0.1, b, 1); v != BandAdvisory {
 		t.Errorf("short: %s", v)
+	}
+}
+
+// The committed baseline files carry the band tables of card baselinefree.
+func TestCommittedBaselineBands(t *testing.T) {
+	var rows []BaselineRun
+	for _, p := range []string{"../../tools/d2dsoak/baselines.json", "../../tools/d2dsoak/baselines-early.json"} {
+		f, err := os.Open(p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		b, err := ReadBaselines(f)
+		f.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+		if len(b.Counted()) >= len(b.Runs) && p == "../../tools/d2dsoak/baselines.json" {
+			t.Errorf("a14 partial must be excluded from the means")
+		}
+		for _, r := range b.Runs {
+			if r.Backend == "" || r.RunID == "" && r.Name != "soaky-fresh-1-7" {
+				t.Errorf("%s lacks provenance", r.Name)
+			}
+		}
+		rows = append(rows, b.Runs...)
+	}
+	if b := BandBaseline(rows, "11-14"); b.N != 4 {
+		t.Errorf("clvl 11-14 baseline runs = %d, want 4 (a14-full, a16, a18, g2-8h): %v", b.N, b.Runs)
+	}
+	for _, band := range []string{"1-4", "5-7", "8-10", "15-20"} {
+		if b := BandBaseline(rows, band); b.N != 1 {
+			t.Errorf("band %s has %d runs, want 1 (Fresha chain, G2)", band, b.N)
+		}
 	}
 }
