@@ -137,3 +137,11 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/paldur-trace.md  paldur  paldur
+tools/emu/pal_wear.py  paldur  paldur
+tools/emu/pal_wear_test.cpp  paldur  paldur
+tools/emu/pal_build.sh  paldur  paldur
+tools/emu/pal_run.sh  paldur  paldur
+tools/emu/pal_callgraph.py  paldur  paldur
+openspec/changes/paldur/**  paldur  paldur
+tools/emu/pal_tables.py  paldur  paldur
