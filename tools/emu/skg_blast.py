@@ -121,6 +121,11 @@ def main():
             mon_by_room[room[0]] = (m[0], m[1], m[2])
     near_has_self = [int(r[0] in game.near[r[0]]) for r in game.rooms]
     print("# rooms whose near list contains the room itself:", sum(near_has_self), "of", len(near_has_self))
+    owner_at = {}
+    for room, (sx, sy) in sites:
+        if room[0] in ow_by_room: owner_at[room[0]] = (sx + 3, sy + 3)
+    far_d = []
+    near_d = []
     for a, ow in ow_by_room.items():
         for b, (mu_, mx, my) in mon_by_room.items():
             kind = "own" if a == b else ("near" if b in game.near[a] else "far")
@@ -128,6 +133,13 @@ def main():
             hit = any(g[0] == mu_ for g in got)
             cases[kind][0] += 1
             cases[kind][1] += hit
+            ax, ay = owner_at[a]
+            d = max(abs(mx - ax), abs(my - ay))
+            if kind == "far": far_d.append((d, hit))
+            if kind == "near": near_d.append((d, hit))
+    print("S rooms far: Chebyshev distance owner -> monster min", min(d for d, _ in far_d), "; far cases within 100 subtiles:", sum(1 for d, _ in far_d if d <= 100),
+          "(found:", sum(h for d, h in far_d if d <= 100), "); near cases max distance", max(d for d, _ in near_d))
+    print("S rooms: the owner's near list has", sorted({len(game.near[a]) for a in ow_by_room}), "rooms (itself included)")
     for k, (n, h) in cases.items():
         print(f"S rooms {k}: {n} cases, {h} found the monster")
     print("SUMMARY rooms:", {k: f"{h}/{n}" for k, (n, h) in cases.items()})
