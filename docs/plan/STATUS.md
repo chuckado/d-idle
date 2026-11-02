@@ -56,7 +56,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
-| [monsterai](../../openspec/changes/monsterai/) | in-progress | monsterai | `docs/research/monster-ai-trace.md`<br>`docs/coverage/ledger.tsv`<br>`docs/coverage/rule-coverage.md`<br>`docs/coverage/gaps.tsv`<br>`tools/emu/mai_*`<br>`openspec/changes/monsterai/**` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [povertyflip](../../openspec/changes/povertyflip/) | in-progress | povertyflip | `openspec/changes/povertyflip/**` | - |
 | [skground](../../openspec/changes/skground/) | in-progress | skground | `docs/research/sk-ground-trace.md`<br>`tools/emu/sk_ground*`<br>`openspec/changes/skground/**` | - |
@@ -117,7 +116,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change monsterai: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change povertyflip: go test -p 1 ./internal/bot passes, including the flip replay test
@@ -135,6 +133,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 3d59e8e 11-01 19:56 `Merge agent/monsterai: MONSTERAI: Act 1/2 monster AI trace: 25 AIs 75,000 cases in game.exe real code vs d2d think; Skeleton Goatman Quill Rat exact; Zombie and Brute run on game.exe, d2d walks` (monsterai)
+- 1df86ca 11-01 19:55 `merge origin/main into monsterai` (monsterai)
 - fa03b72 11-01 19:43 `Merge agent/sorcrest: SORCREST: remaining Sorceress skills traced: Fire Ball and Glacial Spike pipeline 31,000 cases 0 differ, burst roll deviation proven on a real build (0/400 vs 400/400)` (sorcrest)
 - 9b99e09 11-01 19:33 `Merge agent/soakfixes: SOAKFIXES: explore give-up guards on run kind, ping-pong guard, town-portal verdict hysteresis` (soakgiveup)
 - cbb1f84 11-01 19:23 `Merge agent/gate1review: Gate 1 review: FAIL, 71 percent of the XP gap is two stall windows; the SOAKSTALL fix would not have fired; two fix cards` (gate1review)
@@ -143,6 +143,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 262a5c0 11-01 19:00 `merge origin/main into necskill` (necskill)
 - 38f6e36 11-01 18:50 `Merge agent/monstermissile: MONSTERMISSILE: Act 1/2 monster missile trace: 213 real game.exe launches match the formula, six d2d deviations (NM/Hell level brackets, HitShift, poison/fire on MissA), six bot findings` (monstermissile)
 - c4e701e 11-01 18:33 `Merge agent/hastpdump: HASTPDUMP: inv-tp-dump diagnostic line on area entry and HasTP change, no behaviour change` (hastpdump)
-- 43d606e 11-01 18:20 `Merge agent/coveragetable: Rule coverage table: 4,910 data-table rows in 21 subsystems, generated from a checked ledger` (coveragetable)
-- 25918ea 11-01 18:00 `Merge agent/soakstall: SOAKSTALL: Gate 1 stall (two empty areas ping-pong, never marked cleared): two failed explores with no kill mark the area cleared` (soakstall)
 <!-- statusgen:end -->

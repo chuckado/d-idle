@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterai
-status: in-progress
+status: archived
 agent: monsterai
 branch: agent/monsterai
 worktree: ~/code/d2lod-wt/monsterai
@@ -17,8 +17,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and emulator harness: docs/research/monster-ai-trace.md (146-row per-AI table, 25 AIs run twice, 75,000 cases; D1-D11, B1-B3, no PR candidate); ledger monster.ai 11 rows (6 TESTED-0-DIFF, 5 TESTED-DEVIATION). Nothing run live."
+result: "docs and emulator tools only; V run on the think output only; no PR candidate"
 live: "docs and emulator only, nothing run live"
+merge: 3d59e8e
 ```
 
 - [x] per-AI table, Q1.. with tags
