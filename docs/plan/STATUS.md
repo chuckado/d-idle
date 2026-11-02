@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 927a3177 11-02 13:46 `merge origin/main into rebase174` (rebase174)
 - 6af67a2d 11-02 13:43 `Merge agent/lockstepp4: LOCKSTEP P4: scaled bot clock removes the chore failures at k=2 and k=4; usable for mechanics tests, not yet cleared for measured baselines (docs only)` (lockstepp4)
 - e3063c08 11-02 13:42 `merge origin/main into lockstepp4` (lockstepp4)
 - 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
 - 9621b8f8 11-02 13:23 `merge origin/main into crlimits` (crlimits)
 - 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
-- 6d2b15dd 11-02 13:17 `merge origin/main into alignment2` (alignment2)
 <!-- statusgen:end -->
