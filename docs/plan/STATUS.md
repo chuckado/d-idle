@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [bundlefinal](../../openspec/changes/bundlefinal/) | in-progress | bundlefinal | `docs/research/pr-bundle-1-body.md`<br>`openspec/changes/bundlefinal/**` | `fork-branch:local/bundle-2`<br>`fork-branch:stage/bundle-2` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -87,8 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change bundlefinal: 10 commits on current upstream main, bodies of at most three lines, author and committer the numeric noreply identity
-- change bundlefinal: credit.py check passes for the bundle's cards
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -130,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 5b07021a 11-02 14:25 `Merge agent/bundlefinal: BUNDLEFINAL: bundle-2 prepared (commit messages, credit blocks on cards, final PR body); staged on the fork for the CodeRabbit pre-scan` (bundlefinal)
 - b174a297 11-02 14:08 `Merge agent/verifybundle: VERIFY-BUNDLE: independent Opus integration check of the bundle PR candidate: READY WITH CHANGES (docs only)` (verifybundle)
 - 15f2303a 11-02 14:07 `merge origin/main into verifybundle` (verifybundle)
 - 30c7c6cf 11-02 13:59 `Merge agent/lockstepbase: LOCKSTEPBASE: hooked baseline lanes (--timescale), hook watchdog, game-time sampler and the gclock log line (tests offline; nothing run live)` (lockstepbase)
@@ -139,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 6af67a2d 11-02 13:43 `Merge agent/lockstepp4: LOCKSTEP P4: scaled bot clock removes the chore failures at k=2 and k=4; usable for mechanics tests, not yet cleared for measured baselines (docs only)` (lockstepp4)
 - e3063c08 11-02 13:42 `merge origin/main into lockstepp4` (lockstepp4)
 - 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
-- 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
 <!-- statusgen:end -->
