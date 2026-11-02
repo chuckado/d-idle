@@ -97,13 +97,16 @@ def burst(row, cases):
     e = game.e
     foes = set()
     e.hook(0x554200, lambda e: int(e.arg(0) in foes), 1)
-    count = {"roll": 0, "h1": 0, "h13": 0}
+    count = {"roll": 0, "h1": 0, "h13": 0, "phys": 0, "elem": 0, "apply": 0}
     def at(name):
         def cb(mu, addr, size, _): count[name] += 1
         return cb
     e.mu.hook_add(UC_HOOK_CODE, at("roll"), begin=0x5a8c70, end=0x5a8c70)
     e.mu.hook_add(UC_HOOK_CODE, at("h1"), begin=0x5a9a70, end=0x5a9a70)
     e.mu.hook_add(UC_HOOK_CODE, at("h13"), begin=0x5aa8b0, end=0x5aa8b0)
+    e.mu.hook_add(UC_HOOK_CODE, at("phys"), begin=0x5a89a0, end=0x5a89a0)
+    e.mu.hook_add(UC_HOOK_CODE, at("elem"), begin=0x5a8910, end=0x5a8910)
+    e.mu.hook_add(UC_HOOK_CODE, at("apply"), begin=0x57c6c0, end=0x57c6c0)
     rng = random.Random(23)
     sites = free_sites(game, rng, cases + 1)
     fn = e.r32(0x73c768 + 4 * game.row(row, 0xc, 2))
@@ -115,7 +118,7 @@ def burst(row, cases):
         if not shooter or not units: continue
         game.foe = units[0][0]
         p = e.alloc(0x60)
-        for i, v in {0: 3, 1: shooter[0], 4: row, 5: x + 3, 6: y, 7: x, 8: y, 0xc: 5}.items(): e.w32(p + 4 * i, v)
+        for i, v in {0: 0x21, 1: shooter[0], 4: row, 5: x + 3, 6: y, 7: x, 8: y, 0xc: 5}.items(): e.w32(p + 4 * i, v)
         m = e.call(0x59fa30, ecx=game.g, edx=p)
         if not m: print(f"B {c} nomissile"); continue
         for k in count: count[k] = 0
@@ -125,7 +128,7 @@ def burst(row, cases):
             except RuntimeError as err:
                 print(f"# case {c} frame {frame}: {err}", file=sys.stderr); break
             if count["h1"] or count["h13"]: break
-        print(f"B {c} units {len(units)} hitfunc1 {count['h1']} hitfunc13 {count['h13']} rolls {count['roll']}")
+        print(f"B {c} units {len(units)} hitfunc1 {count['h1']} hitfunc13 {count['h13']} rolls {count['roll']} phys {count['phys']} elem {count['elem']} apply {count['apply']}")
     print("done", file=sys.stderr)
 
 
@@ -146,7 +149,18 @@ def find(names):
 
 if __name__ == "__main__":
     mode = sys.argv[1]
-    if mode == "find": find(sys.argv[2:])
+    if mode == "bdbg":
+        game = missiles.Game(seed=11); e = game.e
+        x, y = free_sites(game, random.Random(23), 3)[0]
+        sh = game.unit(63, x + 12, y + 12)
+        print("shooter", sh)
+        for row in (62, 96, 159):
+            for flags in (3, 1, 0x21):
+                for sx, sy in ((x + 3, y), (x, y), (x + 6, y + 6)):
+                    p = e.alloc(0x60)
+                    for i, v in {0: flags, 1: sh[0], 4: row, 5: sx, 6: sy, 7: x, 8: y, 0xc: 5}.items(): e.w32(p + 4 * i, v)
+                    print("row", row, "flags", flags, "start", sx - x, sy - y, "->", hex(e.call(0x59fa30, ecx=game.g, edx=p)))
+    elif mode == "find": find(sys.argv[2:])
     elif mode == "rows": rows()
     elif mode == "hit": hit(int(sys.argv[2]), int(sys.argv[3]), [int(c) for c in sys.argv[4:]])
     elif mode == "burst": burst(int(sys.argv[2]), int(sys.argv[3]))
