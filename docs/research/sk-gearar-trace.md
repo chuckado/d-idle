@@ -67,7 +67,7 @@ Confirm later (U): (a) which monsters FUN_0063ee90 and the mask-10 / mask-2 bits
 
 ## Matrix-cell updates (proposed)
 
-docs/research/sorc-skill-matrix.md and the melee row of the skill matrix: "AR from gear: game.exe applies 115 / 116 / 123 / 124 / 179 (players only); d2d none; gear only; V run for 115 / 116 / 123 / 124 (0 differ, 100,960 cases)." docs/coverage/ledger.tsv: one row, skills.monster, TESTED-DEVIATION (game side) evidence this doc.
+docs/research/sorc-skill-matrix.md and the melee row of the skill matrix: "AR from gear: game.exe applies 115 / 116 / 123 / 124 / 179 (players only); d2d none; gear only; V run for 115 / 116 / 123 / 124 (0 differ, 100,960 cases)." docs/coverage/ledger.tsv: no row added (skills.monster row 0 is already taken by sk-melee2-trace.md; a merger may fold this doc into that note).
 
 ## Limits not covered
 
