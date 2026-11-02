@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyskmelee3
-status: done
+status: in-progress
 agent: verifyskmelee3
 branch: agent/verifyskmelee3
 worktree: d2lod-wt/verifyskmelee3
