@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifypalskill2
-status: in-progress
+status: archived
 agent: verifypalskill2
 branch: agent/verifypalskill2
 worktree: d2lod-wt/verifypalskill2
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own harness run on two seeds before the author's scripts are compared
-result: "docs and emulator tools only; offline, no game; see the doc for the verdicts"
+result: "docs only; see the doc for tags, holds and limits"
+merge: 5294558
 ```
 
 - [x] 1 Read FUN_005ce9f0 and FUN_005ce8e0 in the disassembly

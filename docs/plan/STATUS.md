@@ -62,7 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifypalskill2](../../openspec/changes/verifypalskill2/) | in-progress | verifypalskill2 | `docs/research/verifypalskill2.md`<br>`tools/emu/vp2*`<br>`openspec/changes/verifypalskill2/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -125,10 +124,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifypalskill2: own harness run on two seeds before the author's scripts are compared
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
 - 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
 - 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
 - bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
 - 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
 - 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
-- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
 <!-- statusgen:end -->
