@@ -296,6 +296,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFYPALDUR: independent re-check of paldur-trace.md, durability rules VERIFIED with own model (docs/research/verifypaldur.md)
 - VERIFYPRICES done (card verifyprices): Opus verify of fix/vendor-prices-followon-v2: both rules HOLD (head 0 mismatches on 60,000 own mult cases and 4,664 gate cases), but NOT READY as is: 3 rules.hpp conflicts with upstream main, whose a9548d38 already has divide-first; send only the repair gate, rebased (docs/research/pr-prices-verifier.md)
 - VERIFY-SKMELEE3 done (provisional READY WITH CHANGES, split D1/D2): D1 holds on own cases; D2 merc/Shadow exclusion contradicts FUN_006259b0 gate: docs/research/pr-skmelee3-verifier.md
+- VERIFY-PALSKILL2 done: calc slots and Smite D1 / D2 verified on 16,000 + 16,000 own cases, D6 / D7 / D8 read only (U for live): docs/research/verifypalskill2.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

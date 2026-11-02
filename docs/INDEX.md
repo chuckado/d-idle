@@ -226,3 +226,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifypaldur.md: independent verification of the PALDUR durability trace (claims, limits, one prose error)
 - docs/research/pr-prices-verifier.md - Opus verifier of the vendor prices follow-on (repair gate holds; divide-first already upstream; rebase needed)
 - docs/research/pr-skmelee3-verifier.md - independent verification of the SKMELEE3 PR candidate (own harness vs3_*)
+- docs/research/verifypalskill2.md - independent re-check of the PALSKILL trace (Smite, Zeal, Sacrifice; own harness tools/emu/vp2*)
