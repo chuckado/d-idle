@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 99aa1c20 11-02 17:17 `merge origin/main into mercpolicy` (mercpolicy)
 - b6d21b1b 11-02 17:12 `Merge agent/credit177: CREDIT177: upstream PR 177 merged; CONTRIBUTORS, credits ledger, changelog (docs only)` (credit177)
 - cde0413e 11-02 16:51 `Merge agent/mercfix: MERCFIX: route guards read the dump merc when the policy is off; claim verified after the grant with bounded retries (Gate 2 root cause; offline tests)` (mercfix)
 - 7ce0bd95 11-02 16:30 `Merge agent/bundlefinal2: bundlefinal2: final upstream bundle records and body (docs, cards)` (bundlefinal2)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
 - 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
 - 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
-- e81ab739 11-02 16:05 `merge origin/main into skamazon` (skamazon)
 <!-- statusgen:end -->
