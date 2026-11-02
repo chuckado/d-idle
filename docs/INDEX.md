@@ -250,3 +250,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-bundle-1-body.md: final PR body of bundle 1 (card bundlefinal)
 - docs/research/pr-monsterpace-a-draft.md: PR A draft (Act 1 think paces, Blood Raven, shaman corpse reach): counts, det, CI parity, limits.
 - docs/research/pr-monsterpace-b-draft.md: PR B draft (monster base velocity 75): oracle, reach, det, CI parity, limits.
+- docs/research/pr-nmlevel-draft.md: PR draft for the Nightmare / Hell monster level rule (candidate local/nmlevel-v5).

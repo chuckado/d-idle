@@ -316,6 +316,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - verifybundle: bundle 1 (local/bundle-1 ed087f88) verified, READY WITH CHANGES (commit bodies, credits, ground numbers in the body; no code change), docs/research/pr-bundle-1-verifier.md
 - bundlefinal: final PR body for bundle 1 (docs/research/pr-bundle-1-body.md) and private branches local/bundle-2 / stage/bundle-2; waits for the user's go to push or open a PR
 - monsterpace: split into PR A (local/monsterpace-a: Act 1 think paces, Blood Raven home rule, shaman corpse reach) and PR B (local/monsterpace-b-velocity: monster base velocity 75) on upstream main 3be426d3, verifier changes applied; ready for the PR-open step on the user's go.
+- upstream PR candidate local/nmlevel-v5 (head 94562869, base 3be426d3; Nightmare / Hell monster level = area MonLvl) drafted in docs/research/pr-nmlevel-draft.md, independently verified (READY WITH CHANGES, done); waits for the go.
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
