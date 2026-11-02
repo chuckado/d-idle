@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Private fork: a monster missile's owner poison reads SrcDamage as game.exe's unsigned byte; the two missile PR drafts follow the third check.
 - botsupply: gold per kill follows the monster level (Blood Moor 0.39, not 6), early gold piles are no longer skipped, recovery XP table from the real means, simulator monsters with real life.
 - docs: monster-missile PR drafts updated after the re-verifier (owner poison rule, trap sibling, merge order), poison-units PR draft added
 - verifywaypoint: independent verification of the waypoint refusal claim (docs and tools/emu/wpv_* only)

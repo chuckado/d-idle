@@ -244,6 +244,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFY-WAYPOINT done (card verifywaypoint): 59,309 of 132,964 reproduced; single writer holds; single player inferred; FUN_00584870 reads with a 5 s window (docs/research/verify-waypoint.md)
 - MISSILEFIX2: re-verifier's changes done on the missile PR candidates (owner poison follows FUN_0064a930 in local/missilediff-record-up 1824870b; trap poison fixed in local/missilepoison-skillrows 71f98145; his differentials re-run, 0 differ); drafts docs/research/pr-missilerecord-draft.md and pr-missilepoison-draft.md updated, a narrow third check owed before the user's go.
 - botsupply (card [botsupply](../openspec/changes/botsupply/proposal.md), offline): level-aware gold model and supply table (internal/data/supply.go), area-aware gold pile bar (knob loot.goldPileShare), traced area XP table and fallback levels, ScaledHP fixed, sim gold and monster life from the traced rows (docs/botsupply.md); not verified live
+- MISSILEFIX3: both missile PR drafts ready for the user's go (record head 59d319c8, skill-rows head f52df8d4 on the private fork, clean on upstream main 6935cf64); ask the user before any upstream PR
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

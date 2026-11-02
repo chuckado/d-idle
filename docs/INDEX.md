@@ -178,3 +178,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-waypoint.md - independent re-check of the waypoint refusal window (HOLDS / LIMITS)
 - docs/research/pr-missilepoison-draft.md: PR draft for the skill-sourced and trap monster missile poison units (Andariel x 62), narrow third check owed
 - Bot supply rates and where the code reads them: [botsupply.md](botsupply.md).
+- docs/research/pr-missilerecord-draft.md and pr-missilepoison-draft.md: the two private-fork PR drafts (monster missile record, poison units), revised after the third check; held for the user's go
