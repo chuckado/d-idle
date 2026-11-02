@@ -131,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
 - 86a71332 11-02 10:49 `Merge agent/verifycursedef: VERIFY-CURSEDEF: independent Opus check of the curse, defenders and shield first passes (curse oracle confirmed with caveats; the other two hold with limits)` (verifycursedef)
 - 078dbbef 11-02 10:49 `merge origin/main into verifycursedef` (verifycursedef)
 - 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
@@ -140,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d9d34ffa 11-02 10:29 `merge origin/main into palaura` (palaura)
 - b123648d 11-02 10:22 `Merge agent/verifyfreezeend2: verifyfreezeend2: credit-funded decomposition result (docs and emulator tools only)` (verifyfreezeend2)
 - c3906af9 11-02 10:21 `merge origin/main into verifyfreezeend2` (verifyfreezeend2)
-- 0430f68e 11-02 10:14 `Merge agent/skiasgame2: skiasgame2: credit-funded decomposition result (docs and emulator tools only)` (skiasgame2)
 <!-- statusgen:end -->
