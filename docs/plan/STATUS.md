@@ -47,6 +47,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixbelt](../../openspec/changes/fixbelt/) | in-progress | fixbelt | `docs/fixbelt.md`<br>`internal/resource/recovery.go`<br>`internal/resource/recovery_test.go`<br>`internal/bot/broke.go`<br>`internal/bot/area_ban_test.go`<br>`openspec/changes/fixbelt/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go` | - |
+| [fixci](../../openspec/changes/fixci/) | in-progress | fixci | `docs/community/work-archive.md`<br>`tools/contrib/chunker.py`<br>`openspec/changes/fixci/**` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixprogress](../../openspec/changes/fixprogress/) | in-progress | fixprogress | `docs/fixprogress.md`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/town/fixprogress_test.go`<br>`openspec/changes/fixprogress/**` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
@@ -97,6 +98,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixbelt: go test -p 1 internal/resource internal/bot; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change fixci: tools/ci/scripts.sh passes; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change fixmanamodel: go test -p 1 ./internal/resource ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixmanamodel: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change fixprogress: go test -p 1 ./internal/town ./internal/bot passes; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
