@@ -29,6 +29,21 @@ Dry run is the default. `--apply` does the writes, then rewrites issues.tsv and 
 
 When an item is done, set `- status: done` in open-work.md and run `python3 tools/contrib/board.py --archive` (add `--date YYYY-MM-DD` and `--by <public login>` if known; the default is today and "maintainer agents"). The section moves to docs/community/work-archive.md with `done`, `by` and `result` (the deliverable path) lines; work-board.md then lists only items that are not done. `board.py --check` fails while a done item still sits in open-work.md. `sync` reads both files (`board.load_all`): the issue is closed once with the templated comment, an archived item is never re-created and never counts as withdrawn, and issues.tsv keeps its line. `by` names a public GitHub login only if it appears in the closing pull request.
 
+## Claim before launch
+
+The board is public, so an outside helper can take an item our own work already covers. Rule for the coordinator:
+1. Before launching an internal job on a topic that matches a board item, post the claim: `python3 tools/contrib/claim.py claim ITEM-ID --job NAME --note TEXT` (dry run; add `--send`). The comment is the claim: the board defines no claim label. It refuses an issue that is closed, assigned, or already holds a human's `claiming` comment (a human claim wins; talk to them instead).
+2. When the job merges, post the result and close or narrow: `claim.py done ITEM-ID --doc PATH --note TEXT --close` for a finished item; for a partly covered one narrow the item text in docs/community/open-work.md (never edit an issue body by hand: `sync` rewrites it) and comment what is covered.
+3. Every sent action is logged in docs/community/claims.tsv. Posting needs the project owner's standing go for the task or a go per post; nothing is ever posted on an upstream repo.
+4. Audit: `chunker.py groom` (dry run) lists "covered" candidates from the mechanical pass: deliverable file exists, queue row done, or a BACKLOG line that names the item id with a finished word. These are candidates only (name collisions happen: the board's PALSKILL is not our internal Holy Bolt trace).
+
+## Watching comments
+
+Every tick the maintainers read the comments of every work-item issue (`tickstatus` diffs comment counts; `python3 tools/contrib/claim.py watch [--update]` lists issues whose comment count or newest-comment time changed since the last run and guesses the class of the newest comment by keyword; read only, state in the gitignored data-cache). Each new comment is one of CLAIM (someone says claiming), QUESTION, SUBMISSION (a link, PR or write-up), WITHDRAWAL or OTHER; the keyword guess is a hint, the maintainer reads the comment.
+- Claims and submissions are answered within the next cycle, never silently: acknowledge a claim, point to prior work, answer a question with a doc link, review a submission with the evidence rules of [../contributing/agent-work.md](../contributing/agent-work.md).
+- Replies to people are posted only with the project owner's go (the coordinator asks first), except a pure acknowledgement template listed here: "Thanks, noted. You hold this item; say so here if you stop."
+- A claim with no activity for 14 days gets one friendly check-in (the `sync` nudge); 7 more days without a reply and it is released with a comment.
+
 ## Caps and safety
 
 - Writes: 10 per run (`--max-writes`), each through `Gh.write` with one log line; the rest are deferred to the next tick.

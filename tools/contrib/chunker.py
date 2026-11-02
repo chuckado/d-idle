@@ -35,6 +35,7 @@ MAX_WRITES = 10
 NUDGE_DAYS, RELEASE_DAYS = 14, 7
 MARK_NUDGE, MARK_RELEASE, MARK_CLOSE = "<!-- chunker:nudge -->", "<!-- chunker:release -->", "<!-- chunker:close -->"
 WITHDRAWN = "docs/community/withdrawn.tsv"  # id<TAB>reason (maintainer text, scanned before use)
+COVERED_RE = re.compile(r"\b(DONE|done|traced|verified|settled|merged)\b")
 CLAIM_RE = re.compile(r"(?im)^\s*claiming\b")
 PR_URL_RE = re.compile(r"https://github\.com/[\w.-]+/[\w.-]+/pull/\d+")
 ISSUE_URL_RE = re.compile(r"https://github\.com/[\w.-]+/[\w.-]+/issues/(\d+)")
@@ -375,12 +376,17 @@ def card_summary():
 def mechanical_flags(items, issues):
     """Cheap 'is it still needed' evidence: the deliverable file already exists, or the queue row is done."""
     flags, rows = [], board.queue_rows(read("docs/decomp-queue.md"))
+    backlog = read("docs/BACKLOG.md").splitlines()
     for it in items:
         if it["status"] not in board.OPEN:
             continue
         for p in re.findall(r"(?:docs|tools)/[\w./-]+\.\w+", it.get("deliverable", "")):
             if os.path.exists(os.path.join(ROOT, p)):
                 flags.append((it["id"], "deliverable `%s` already exists on main" % p, [p]))
+        for ln in backlog:  # candidate only: a maintainer line names the item with a finished word
+            if re.search(r"\b%s\b" % re.escape(it["id"]), ln) and COVERED_RE.search(ln):
+                flags.append((it["id"], "BACKLOG line says covered: " + plain(ln.strip("- "), 90), ["docs/BACKLOG.md"]))
+                break
         m = re.fullmatch(r"queue:(\d+)", it.get("source", ""))
         if m and it["kind"] == "decomp" and rows.get(int(m.group(1)), "").startswith("done"):
             flags.append((it["id"], "queue row %s is marked done" % m.group(1), ["docs/decomp-queue.md"]))

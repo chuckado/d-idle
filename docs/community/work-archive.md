@@ -7,6 +7,7 @@
 |---|---|---|---|---|---|---|---|
 | SKMELEE | the player's own blow (staff or weapon swing) | decomp | M | [issue](https://github.com/shatteredeagle/d-idle/issues/5) | [docs/research/sk-melee-trace.md](../research/sk-melee-trace.md) | 2026-11-01 | maintainer agents |
 | SKRESIST | monster resistance and immunity by difficulty | decomp | M | [issue](https://github.com/shatteredeagle/d-idle/issues/6) | [docs/research/sk-resist-trace.md](../research/sk-resist-trace.md) | 2026-11-01 | maintainer agents |
+| VERIFY-FREEZE-KINDS | independent re-check of which monsters game.exe can freeze | verify | S | [issue](https://github.com/shatteredeagle/d-idle/issues/9) | [docs/research/pr-freezeresume-verifier.md](../research/pr-freezeresume-verifier.md) | 2026-11-02 | maintainer agents |
 <!-- archive-table:end -->
 
 ## SKMELEE: the player's own blow (staff or weapon swing)
@@ -34,3 +35,16 @@
 - done: 2026-11-01
 - by: maintainer agents
 - result: docs/research/sk-resist-trace.md
+
+## VERIFY-FREEZE-KINDS: independent re-check of which monsters game.exe can freeze
+- size: S
+- status: done
+- kind: verify
+- source: queue:6
+- question: Our claim: game.exe freezes only plain monsters and the minions of a unique; bosses, champions and uniques are chilled at most (the test is the MonStats boss bit, monster data flag 8, or a hireling class; the flag-8 makers are the champion, unique and boss pack functions). Re-derive the test and its flag writers yourself, then check the claim over a population of spawned monsters with your own harness. Say which parts hold, which hold with limits, which fail.
+- start: your own look at FUN_0057c6c0 and FUN_0057b230 first; then docs/research/freeze-rules-trace.md (the claim C3 and its flag table, read AFTER you formed your own view); docs/research/pr-freezeresume-verifier.md for the report style.
+- deliverable: docs/research/pr-freezeresume-verifier.md: per claim HOLDS / HOLDS WITH LIMITS / FAILS, your own case count and seed, the command to reproduce, differences from the author's numbers; an oracle script under tools/emu/ if you ran game code.
+- needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
+- done: 2026-11-02
+- by: maintainer agents
+- result: docs/research/pr-freezeresume-verifier.md
