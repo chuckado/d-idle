@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
 - 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
 - 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
 - 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2d789491 11-02 11:23 `merge origin/main into skzerohit` (skzerohit)
 - caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
 - 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
-- 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
 <!-- statusgen:end -->
