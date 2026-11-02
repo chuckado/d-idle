@@ -198,3 +198,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/geararmore.md - gear attack rating, second pass: stats 179 and 120 vs game.exe (V run), table census, bot finding B1
 - docs/research/sk-ias-trace.md - swing speed / IAS / WSM, d2d side read, game.exe side open (partial)
 - docs/research/openpr-log.md: posted log now also covers #167.
+- docs/probes/baseline-runs/20261102/record.md: original-game baseline set 20261102, per-run quality flags and rows
