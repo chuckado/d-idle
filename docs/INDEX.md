@@ -173,3 +173,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-missilerecord-reverify.md: independent Opus re-verification of the fixed monster missile record candidate and the Andariel poison split (READY WITH CHANGES)
 - docs/research/pr-missilerecord-draft.md: PR draft for the monster missile launch record (brackets, HitShift, row element), fixed head, re-verification owed
 - Monster melee against the player, defender side: [research/monsterhit-trace.md](research/monsterhit-trace.md) (reduction, El side parts, block order; D1-D5, bot B1-B5; drill recipe; read-only pass).
+- Unique, champion and minion pick rules and superuniques: [research/uniqmods-trace.md](research/uniqmods-trace.md) (MonUMod weights per difficulty, pack sizes 2..4 and 3..6, Act 1 superunique records, multipliers by class; bot findings; drill recipe).
