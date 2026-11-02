@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
 - dc11d0eb 11-02 12:45 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: private PR candidate records and drafts for the melee blow D1 and D2 split (docs only; nothing upstream)` (prbuildskmelee3b)
 - 4e693443 11-02 12:44 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
 - 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
 - 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
 - 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
-- 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
 <!-- statusgen:end -->
