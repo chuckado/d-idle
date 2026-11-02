@@ -143,14 +143,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 47920c18 11-01 22:04 `Merge agent/seedstudy: SEEDSTUDY: one d2s file pins the seed on both sides; static layout and spawn comparison feasible with work; frame lockstep blocked by tier B and the unit-seed stream` (seedstudy)
+- 296d9c21 11-01 22:03 `merge origin/main into seedstudy` (seedstudy)
+- af74c4d4 11-01 22:00 `Merge agent/verifymissile: VERIFYMISSILE: independent Opus verification of the monster missile record candidate: NOT READY, the added poison is up to 62x too strong; record claim holds` (verifymissile)
+- f036c275 11-01 22:00 `merge origin/main into verifymissile` (verifymissile)
 - b8689ae2 11-01 21:52 `Merge agent/treasure: TREASURE: treasure class trace for Act 1 and 2, produced on the API credits runner` (treasure)
 - 3fd36b32 11-01 21:52 `merge origin/main into treasure` (treasure)
+- 625ea93f 11-01 21:51 `merge origin/main into verifymissile` (verifymissile)
 - fe72d3af 11-01 21:46 `Merge agent/monsterstats: MONSTERSTATS: monster base stats trace: 242,220 stat-row cases and 85,213 real Normal Act 1/2 units equal; Nightmare/Hell level deviation; regen missing; XP flags are kill mix` (monsterstats)
 - b3cdd4d3 11-01 21:45 `merge origin/main into monsterstats` (monsterstats)
 - 8610229d 11-01 21:38 `Merge agent/memrules: MEMRULES: memory access rule (reading and writing allowed for setup, instrumentation, diagnosis, fixtures), crutch rule, cheated runs, ADR 0014, run-start marker in the cheat ledger` (memrules)
-- fbd5e46a 11-01 21:38 `merge origin/main into memrules` (memrules)
-- cf575aee 11-01 20:56 `Merge agent/snaplib: SNAPLIB: d2restore snapshot, verify, list and place for save copies across prefixes; ledger keyed by prefix and name` (snaplib)
-- b1ea270c 11-01 20:55 `merge origin/main into snaplib` (snaplib)
-- 18608e76 11-01 20:48 `Merge agent/lockstepp0: LOCKSTEPP0: Wine clock probe PASS: an IAT time hook scales a frame gate under Wine (25.0, 49.9, 100.0 frames per second at k=1,2,4)` (lockstepp0)
-- 39aaf7b3 11-01 20:48 `merge origin/main into lockstepp0` (lockstepp0)
 <!-- statusgen:end -->
