@@ -278,6 +278,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - lockstep P1/P2 done live: game frame counter 25.00 fps, proxy hook k=1 control clean, k=2 gives 50.00 frames per real second with a clean 5 min Blood Moor run; next: periodic hook STAT line, scaled bot clock, bands comparison, k=4 (docs/research/lockstep-p1p2.md)
 - upstream #159, #160 conflict and #163 is behind main; rebased heads are ready (local/prconf-159, -160, -163 on the private fork); publishing them needs a force-push to the PR branches: user decides.
 - BASELINERUNS: original-game baseline set late, 4 runs with rows (docs/probes/baseline-runs/20261102/record.md)
+- PALDUR: done (decomp), durability loss per landed hit traced in game.exe: armor 10 %, weapon 4 %, weighted slot pick, blocked or dodged blow wears nothing; d2d equal on 34,939 armor and 15,253 weapon cases (0 differ), deviations D1 monster missiles wear armor on d2d (I), D2 javelin gate +0x70 (V run, live value U); no PR candidate; drill R1..R7 remains (docs/research/paldur-trace.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
