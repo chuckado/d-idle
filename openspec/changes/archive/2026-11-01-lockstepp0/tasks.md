@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepp0
-status: in-progress
+status: archived
 agent: lockstepp0
 branch: agent/lockstepp0
 worktree: ~/code/d2lod-wt/lockstepp0
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Wine IAT time hook PASS: k=1/2/4 ratios within 0.04 percent, gate 25.0/49.9/100.0 fps, CPU 1.8 percent of a core; Q5 not run (no libfaketime). Verified on the worker host with Wine console probes; no game."
+result: "no game involved; tools/lockstep build and run recipe; game-side behaviour untested"
 live: "no game; Wine console probes on the worker host"
+merge: 18608e7
 ```
 
 - [x] toolchain found, probes built
