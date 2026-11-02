@@ -60,7 +60,7 @@ The lab trees are built: base 3852c904 plus the 8 lab-overlay commits, and the s
 
 - Clean merge with upstream main cb716f10: `git merge-tree` exit 0 (V).
 - MSVC by reading: no windows.h macro names, no shadowed locals in the src diff, every narrowing is an explicit `int(...)` (V read).
-- g++ 16 syntax-only on merc.cpp and pets.cpp with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion: 0 warnings (V). clang++: warnings only in unchanged headers (cube.hpp, ds1.hpp), sign-conversion.
+- g++ 16 syntax-only on merc.cpp and pets.cpp with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion: 0 warnings (V). clang++: warnings only in unchanged headers (cube.hpp, ds1.hpp), sign-conversion. test_combat.cpp: g++ gives 37 set-but-unused warnings on head, 4 of them on the new lines (land_blow, mace, skeleton, foot). They are the same kind as the old ones and come from the -DNDEBUG I took from the Release command (asserts compiled out), so they are not a CI finding (S).
 - Includes: merc.cpp, pets.cpp and test_combat.cpp include `combat.hpp` directly; combat.hpp includes `rules.hpp` (`type_is`) and `d2s_items.hpp` (V read).
 - NOT RUN: clang-tidy, the 7 suites (the head test build was at 244/270), pr_guard, presubmit --quick.
 
