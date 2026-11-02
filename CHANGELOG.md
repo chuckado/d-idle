@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- bot: with the merc policy on, the character waits briefly for the Rogue after a portal or waypoint, leaves a crowd when she is down, gives her a healing potion below 50 percent life, and remembers the Lut Gholein hire decision across restarts.
 - bot: the merc policy is on by default: dead Rogue revived when gold covers the price plus a potion reserve, Desert Mercenary swap at Lut Gholein (needs a window reader), no-merc Monastery floor 14 with a full kit, gold farm in the early areas while the merc is missing.
 - Upstream PR #177 merged: five d2d fidelity fixes (vendor repair gate, melee 256ths and undead bonus, freeze rules, standing missile footprint and burst roll, Smite on a block) with game.exe differentials
 - bot: route guards read the merc from the d2d dump even with the merc policy off; the free Rogue claim is verified (merc: claim verified / claim not seen).

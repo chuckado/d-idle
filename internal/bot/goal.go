@@ -487,7 +487,11 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			return true
 		}
 		ok := r.do(ctx, c, StateResupplying, "Returning to the field", sec(r.cfg.TravelTimeoutSec), "back to field", func(ctx context.Context) error {
-			return r.d.Town.BackToField(ctx, t.returnTo)
+			err := r.d.Town.BackToField(ctx, t.returnTo)
+			if err == nil {
+				r.waitForMerc(ctx, "portal")
+			}
+			return err
 		})
 		if ok || l.failures > 1 {
 			l.trip = nil // on repeated failure travel() walks back by itself
@@ -1022,6 +1026,7 @@ func (r *Runner) travelTo(ctx context.Context, target int) error {
 				if err := r.waitArea(ctx, w, 30*time.Second); err != nil {
 					return err
 				}
+				r.waitForMerc(ctx, "waypoint")
 				r.markTouched(snap, cur, w)
 				moved = true
 			}
