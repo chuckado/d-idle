@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 3922d8ee 11-02 18:07 `merge origin/main into verifyskamazon` (verifyskamazon)
 - 975bfbdf 11-02 18:00 `Merge agent/covmissiles: covmissiles: coverage-gap or verification result (docs and emulator tools only)` (covmissiles)
 - a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
 - d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 597e972f 11-02 17:29 `Merge agent/mercwire: MERCWIRE: wait for the Rogue after portal or waypoint, leave when the crowd rule fires with her down, healing potion to the merc below 50 percent, persisted Lut Gholein first-visit flag (offline tests)` (mercwire)
 - ce30a061 11-02 17:29 `merge origin/main into mercwire` (mercwire)
 - fdbc3340 11-02 17:17 `Merge agent/mercpolicy: MERCPOLICY: merc.enabled default on, revive and Act 2 hire spending order, no-merc Monastery floor 14, gold farm while missing; delta specs; offline tests (hire reader and field rules not wired yet)` (mercpolicy)
-- 99aa1c20 11-02 17:17 `merge origin/main into mercpolicy` (mercpolicy)
 <!-- statusgen:end -->
