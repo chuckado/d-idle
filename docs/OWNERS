@@ -170,4 +170,5 @@ internal/bot/resource.go  kitgatelevel  kitgatelevel
 internal/bot/goal.go  kitgatelevel  kitgatelevel
 internal/resource/tuning.go  kitgatelevel  kitgatelevel
 internal/env/tuning_resource.go  kitgatelevel  kitgatelevel
+openspec/changes/pingpongrate/**  pingpongrate  pingpongrate
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
