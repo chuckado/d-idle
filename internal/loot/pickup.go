@@ -335,7 +335,7 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		}
 		if b != nil && b.Type == "gold" {
 			// A broke character takes every pile: small piles are most of what Normal drops, and it needs the gold.
-			if amt := c.Stats.Get(d2.StatGold); c.Stats != nil && int(amt) < t.GoldMinStack && s.Player.Gold >= l.poorBelow() {
+			if amt := c.Stats.Get(d2.StatGold); c.Stats != nil && int(amt) < l.goldBar(s) && s.Player.Gold >= l.poorBelow() {
 				skip("small gold pile")
 				continue
 			}

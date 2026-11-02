@@ -90,3 +90,100 @@ Body ending convention (copied from merged #157 and #158): the body ends with th
 
 - BACKLOG: #163 got a tooling follow-up (3ac63fa0) for CodeRabbit; watch for the maintainer.
 - INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## Monster missile record and poison units, bundled (card propenmissile)
+
+- posted: 2026-11-02 go: the user, explicit "open the two now", then corrected before anything was opened: "if they haven't been posted I meant to bundle them". One PR, two commit groups, no squash.
+- posted: 2026-11-02 fetch upstream: main 6935cf64 (unchanged since both candidates' base, so no rebase). The record candidate (5 commits, local head 59d319c8) and the skill-rows candidate (3 commits, local head f52df8d4) were rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (no session link, no model trailer); trees identical to the candidates. The skill-rows commits were cherry-picked onto the record commits (no conflict), record first.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-missile-record-and-poison head ee8a2093 (92f9a9dc test mode, 02205609 record, 809023e9 poison units, 85b8fa3e owner poison, 28400999 SrcDamage byte, 6d4fa1bf skill-sourced poison, 50175311 trap poison, ee8a2093 wording). The same branch was pushed to the private remote.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/164 (9 files, 8 commits; title "A monster missile's launch record and poison units as game.exe fills them (FUN_0064b860): physical brackets, HitShift, row element; skill-sourced and trap poison per frame"). State OPEN, base 6935cf64, head ee8a2093 as checked with gh pr view. Body from pr-missilerecord-draft.md and pr-missilepoison-draft.md merged into one, ends with the bare `Agent: Claude Code` line.
+
+| check (worker host, head ee8a2093) | result |
+|---|---|
+| pr_guard, range and each of 8 commits | 0 FAIL / 0 WARN, rc 0 each |
+| presubmit --quick with the CI-pinned ruff 0.8.6 | 0 FAIL, 4 WARN (unit kinds, hit paths, docs-sync, build skipped; answered in the body) |
+| presubmit --quick with ruff 0.17.3 (a newer one on the box) | 1 FAIL: B905 `zip()` without strict= in mm_diff.py:179 and mm_launch.py:42; not the CI version, not changed |
+| tooling unit tests | 17 ok; test_tooling 7 ok (1 skip) |
+| Release build, ctest test_game (data dir), test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters, test_monster_missile, test_missile_blow_poison | 8 of 8 pass |
+
+Not re-run on the combined head: the differentials (emulator comparisons), clang-tidy, the gcc shadow sweep; they were run on each group separately (the body says so). Nothing else posted: no comment, label or reviewer request.
+
+## Shared-file lines for the merger (propenmissile)
+
+- BACKLOG: #164 (monster missile record + poison units, bundled) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
+- INDEX, decomp-queue, research README: no change.
+
+## CodeRabbit follow-up on #164 (card crfollow164)
+
+- posted: 2026-11-02 CodeRabbit review read: two inline findings, both Minor on tools/emu/mm_diff.py: line 222 (the MMTAB table is read on every cmp even with zero differences, so a clean comparison fails with FileNotFoundError when ~/mmtab is absent), line 226 (cmp skips cases without a d2d line and returns only the mismatch count, so an incomplete d2d output can exit 0). Own check: ruff 0.8.6 (CI-pinned) is clean; B905 (zip without strict=) shows only on newer ruff at mm_diff.py:179.
+- decision: line 222 valid: the table is needed only for the row data of a difference, so it is read only when by_row is non-empty. Line 226 valid: a missing case is a failure, cmp now returns bad["any"] + missing (same class as the #160 sk_resist finding). B905 at mm_diff.py:179 fixed with strict=False (clean on 0.8.6 too); mm_launch.py:42 not touched. Claim commits untouched. +9 -8 lines in one file.
+- check: ruff 0.8.6 with the presubmit rules plus B905 clean, tools test_tooling 7 ok, pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head. Negative checks with MMTAB pointing at a missing directory: clean case rc 0 (before: traceback, rc 1), a case with no d2d line rc 1 (before: rc 0), a mismatch still reads the table. No game or d2d code changed, so behaviour on a complete run is unchanged; no differential re-run needed (tooling output only).
+- posted: 2026-11-02 push (plain, no force) to the fork: fix/monster-missile-record-and-poison ee8a2093 -> cd01212f (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); also pushed to the private remote. PR #164 now has 9 commits.
+- posted: 2026-11-02 replies to the two inline threads (comment ids 4439301404, 4439301382; replies 4439323712, 4439323832): each valid, fixed in cd01212f. No re-review was requested.
+- non-inline: none read beyond the two inline items.
+
+## Shared-file lines for the merger (crfollow164)
+
+- BACKLOG: #164 got a tooling follow-up (cd01212f) for CodeRabbit; watch for the maintainer.
+- INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## Player missile damage roll (card propenplayerroll)
+
+- posted: 2026-11-02 go: the user, explicit authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 1. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 6935cf64 (unchanged; the five candidate commits are a clean fast-forward on it). The candidate (pr/player-roll-v2, e66e10ba) was rewritten for the PR: numeric-ID noreply identity as author and committer (the candidate's committer was a generic one), only the `Agent: Claude Code` trailer; trees identical (git diff e66e10ba..head empty). Messages, branch name and body scanned for host names, home paths, emails, tool names, session links, model attribution: none.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/player-missile-damage-roll head 1c273ef1 (610c0474 oracle and test mode, 4f51d89c element roll top, 1ea79c57 physical in 256ths, d67720e0 -100 floor, 1c273ef1 three include lines). Also pushed to the private remote. The old pr/player-roll (28c0540a) was not touched.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/166 (7 files, 5 commits; title "A missile's element roll never reaches its max, and its physical roll keeps its 256ths (FUN_005a89a0)"). State OPEN, base 6935cf64, head 1c273ef1 as checked with gh pr view. Body from pr-playerroll-draft.md without the internal sections (lab-binary scenarios, verifier checklist, merger lines), ends with the bare `Agent: Claude Code` line; it says the include lines duplicate #164's and either merge order works.
+
+| check (worker host, head 1c273ef1) | result |
+|---|---|
+| throwaway merge with fix/monster-missile-record-and-poison | clean, no conflict |
+| pr_guard, range and each of 5 commits | 0 FAIL / 0 WARN |
+| presubmit --quick | 0 FAIL, 2 WARN (doc-claims "never" at missiles.md:106, build skipped; both answered in the body) |
+| tooling unit tests | 17 ok; test_tooling 7 ok (1 skip) |
+| Release build with -Wall -Wextra -Wshadow, test_combat, test_rules, test_game_rules, test_game, test_game_missiles (data dir set) | exit 0 each; 0 warnings in combat.hpp, test_combat, test_missile_hit, test_game_missiles |
+| diff scan for `for (const auto [..] :` copying loops | none added |
+| CI "Names and includes" selection (tidy-pr-select, clang-tidy 124 files) | 0 include-cleaner findings; 0 findings in our files; 377 readability-identifier-length in untouched files (a newer-LLVM check, same as upstream main) |
+
+Not re-run: the emulator differentials and the deterministic scenarios (run on the candidate head by the author and the verifier; the tree is identical), an MSVC build. No comment, label or reviewer request was posted.
+
+## CodeRabbit follow-up on #166 (card crfollow166)
+
+- posted: 2026-11-02 CodeRabbit review read: three inline findings, all Minor: missiles.md:106 (the physical roll is described as max-exclusive and pointed at rules::missile_blow, which rolls it inclusive), test_missile_hit.cpp:55 (an unreadable case file returns success), tools/emu/README.md:45 (the oracle row can pass on empty input). Non-inline nitpicks (loop names `i` in test_combat.cpp:437 and `k` in test_missile_hit.cpp:62) were read and not acted on.
+- decision: missiles.md valid: the max-exclusive wording is now for the elements, and a separate paragraph says the physical roll is inclusive, rolled whenever phys_hi > 0, not examined and not covered by the differential. test_missile_hit valid: it prints an error and returns 1 when the file does not open. README valid: the row sets pipefail and chains the stages with &&; only this row (the table's other rows keep their form). Claim commits untouched; +15 -6 lines in three files.
+- check: pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head; presubmit --quick 0 FAIL, 3 WARN (ruff not installed there, build skipped, the older "never" wording at missiles.md:105 that holds for the elements); test_missile_hit built with g++ and clang++ with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion, 0 warnings in it (D2D_WERROR off because unrelated files such as ai.cpp shadow under -Wshadow); test_combat ok, test_game_missiles ok with the data dir; negative check: a missing case file now exits 1 and the pipefail row fails; the gen output (47,000 rows) still runs through test_missile_hit. The game-side oracle was not re-run (the guard does not change a result).
+- posted: 2026-11-02 push (plain, no force) to the fork: fix/player-missile-damage-roll 1c273ef1 -> 7d4f6f0e (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); also pushed to the private remote. PR #166 now has 6 commits.
+- posted: 2026-11-02 replies to the three inline threads (comment ids 4440416918, 4440416929, 4440416938; replies 4440512312, 4440512543, 4440512785): each valid, fixed in 7d4f6f0e. No re-review was requested.
+- non-inline: the nitpick loop names (i, k) are style notes on lines this PR added; not acted on, no reply (not inline threads of ours to answer under this go).
+
+## Shared-file lines for the merger (crfollow166)
+
+- BACKLOG: #166 got a follow-up (7d4f6f0e) for CodeRabbit; watch for the maintainer.
+- INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## Shared-file lines for the merger (propenplayerroll)
+
+- BACKLOG: #166 (player missile damage roll) is open; watch for the maintainer and CodeRabbit.
+- INDEX, CHANGELOG, decomp-queue, research README: see merge-lines.txt.
+
+## Monster think paces (card propenmonsterpacea)
+
+- posted: 2026-11-02 go: the user, standing authorisation of up to 4 more upstream PRs overnight, bundled commits; this is number 2. Only this PR was opened.
+- posted: 2026-11-02 fetch upstream: main 3be426d3 (unchanged since the candidate's base, so no rebase). The candidate (local/monsterpace-a, 260eb34f, 13 commits) was rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (no session link, no model trailer); trees identical (same tree hash). Messages, diff and body scanned for host names, home paths, emails, tool names, session links, model attribution: none.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-think-paces head bf7671a7 (2bb1de00 Zombie, 7ad32869 Brute, 9d7579d4 Blood Hawk, 7f3d0e16 Rogue, 18115b2d Lancer, dccb6756 Fallen flee, 6d77436b Blood Raven paces, 99a9c30b Blood Raven home rule, 94ac4cfb tools, a622ef7d replay cases, 29785180 unit asserts, 2b1a2f55 shaman corpse reach, bf7671a7 docs). Also pushed to the private remote.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/167 (11 files, 13 commits; title "Monsters carry the pace game.exe's Act 1 thinks give them, Blood Raven goes home by FUN_005dc480's distances, and a unique Fallen Shaman's corpse reach is FUN_005f1380's"). State OPEN, base 3be426d3, head bf7671a7 as checked with gh pr view. The body states its limits: the Brute's act and the Rogue's n-only fields untouched, the superunique flag bit unverified, no MSVC build. The base-velocity change is not opened (waits for this one).
+
+| check (worker host, head bf7671a7) | result |
+|---|---|
+| pr_guard, range and each of 13 commits | 0 FAIL |
+| presubmit --quick | 0 FAIL, 3 WARN (unit kinds, doc-claims, build skipped; answered in the body) |
+| tooling unit tests | 17 ok |
+| Release build, test_monster_thinks, test_monster_ai, test_monsters, test_rules, test_game_rules, test_combat, test_game (data dir) | 7 of 7 exit 0 |
+| g++ and clang++, TU compile commands plus -Wall -Wextra -Wpedantic -Wshadow -Wrange-loop-construct -Wconversion -Wsign-conversion, ai.cpp and the two test TUs, against a base build | rc 0; 0 new warning messages vs 3be426d3; corpse harness 0 warnings |
+| clang-tidy on the three changed TUs | 0 findings, 0 include-cleaner |
+
+Not re-run: the emulator differentials (run on the identical tree by the author and a verifier), the deterministic scenarios, the full CI tidy selection, an MSVC build.
+
+## Shared-file lines for the merger (propenmonsterpacea)
+
+- BACKLOG: #167 (monster think paces) is open; watch for the maintainer and CodeRabbit. The velocity change waits for it.
+- INDEX, decomp-queue, research README: see merge-lines.txt.

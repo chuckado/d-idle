@@ -43,8 +43,6 @@ func TestKitGateRecoveryArea(t *testing.T) {
 		{"no belt, no portal, clvl 7", 7, false, false},
 		{"no belt, portal, clvl 7", 7, false, true},
 		{"belt, no portal, clvl 7", 7, true, false},
-		{"no belt, portal, clvl 14", 14, false, true},
-		{"belt, no portal, clvl 14", 14, true, false},
 	} {
 		g, s := kitRig(t, tc.level, tc.belt, tc.tp, 1)
 		if !g.r.kitMissing(s) {
@@ -80,7 +78,7 @@ func TestKitGateKeepsOldChoices(t *testing.T) {
 
 // Both fields cleared or banned: no area (the goal waits at home) instead of a fall-through to the quest ladder.
 func TestKitGateNoSafeFieldWaits(t *testing.T) {
-	g, s := kitRig(t, 14, false, true, 1)
+	g, s := kitRig(t, 7, false, true, 1)
 	for id := range kitSafeTier {
 		g.r.avoid[id] = g.clock.Now().Add(20 * 60e9)
 	}

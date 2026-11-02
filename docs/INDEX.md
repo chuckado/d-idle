@@ -175,3 +175,26 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - Monster melee against the player, defender side: [research/monsterhit-trace.md](research/monsterhit-trace.md) (reduction, El side parts, block order; D1-D5, bot B1-B5; drill recipe; read-only pass).
 - Unique, champion and minion pick rules and superuniques: [research/uniqmods-trace.md](research/uniqmods-trace.md) (MonUMod weights per difficulty, pack sizes 2..4 and 3..6, Act 1 superunique records, multipliers by class; bot findings; drill recipe).
 - playerdef-trace.md: the player's derived defence stats (life, mana, regen, defence, block, resistances) in game.exe vs d2d vs the bot; D1..D8, B1..B4, recipes (docs/research/playerdef-trace.md)
+- docs/research/verify-waypoint.md - independent re-check of the waypoint refusal window (HOLDS / LIMITS)
+- docs/research/pr-missilepoison-draft.md: PR draft for the skill-sourced and trap monster missile poison units (Andariel x 62), narrow third check owed
+- Bot supply rates and where the code reads them: [botsupply.md](botsupply.md).
+- docs/research/pr-missilerecord-draft.md and pr-missilepoison-draft.md: the two private-fork PR drafts (monster missile record, poison units), revised after the third check; held for the user's go
+- docs/research/openpr-log.md: posted log now also covers #164.
+- no change
+- docs/research/monsterai2-trace.md | Monster AI second pass: six untraced AIs ported and run (36,000 cases 0 differ, Andariel's d2d function 3,830 0 differ), Fallen flee, corpse reach, Blood Raven, run speed chain, D1-D9, B1-B4
+- docs/research/monsterskill-trace.md | Monster skill use, Act 1/2 casters and shooters: slot loading and levels (216 cases 0 differ), usability gate, mana-less casting (42,840 cases), Corrupt Archer think vs d2d (3,000 cases 0 differ), D1-D3, B1-B5, drill recipe
+- docs/research/mercstats-trace.md | Hirelings (Rogue archers, Desert Mercenaries): stats by level, hire and resurrection price, experience, AI and skill roll vs d2d's C++ (411,196 runs, 0 differ), merc regen and auras missing in d2d (D1, D2), bot findings B1-B6, drill recipe
+- docs/soaks/gate1-20261102.md: Gate 1 run 20261102 (PASSED) with Review 3: criteria, guard counts, comparison, caveats
+- no change
+- docs/research/openpr-log.md: posted log now also covers #166.
+- no change
+- docs/research/pr-nmlevel-verifier.md - independent check of local/nmlevel (Nightmare / Hell area monster level), own harness in docs/research/pr-nmlevel-verifier/
+- docs/research/sk-gearar-trace.md - attack rating from gear (stats 115, 116, 120, 123, 124, 179) in game.exe vs d2d (SKGEARAR)
+- docs/research/verify-aidel.md: independent re-check of the monster think period aidel (VERIFY-AIDEL)
+- docs/research/verify-skmelee2.md - independent re-check of the SKMELEE2 melee deviations (own harness tools/emu/vm2_*)
+- docs/research/verify-skresist.md: independent re-check of the monster resistance rules (own emulator harness, game.exe 1.14d)
+- docs/research/verify-skmana.md: independent re-check of the mana check and payment (FUN_0056c160, FUN_0056bfe0), own harness tools/emu/vsm_diff.py
+- docs/research/verifyresistq.md - second pass on the resistance rules Q3 / Q7 / Q9 (FUN_005a1370, FUN_0057cb00 run natively), harness tools/emu/vq_*.py
+- docs/research/geararmore.md - gear attack rating, second pass: stats 179 and 120 vs game.exe (V run), table census, bot finding B1
+- docs/research/sk-ias-trace.md - swing speed / IAS / WSM, d2d side read, game.exe side open (partial)
+- docs/research/openpr-log.md: posted log now also covers #167.

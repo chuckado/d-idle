@@ -8,6 +8,31 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: opened upstream PR #167 (monster think paces); posted log in docs/research/openpr-log.md.
+- SKIAS partial desk trace of the swing frame count (docs/research/sk-ias-trace.md, tools/emu/skias_bp.py)
+- docs/research/geararmore.md: second pass of gear attack rating terms (stats 179, 120 run on game.exe, 0 differ), tools/emu/gar_run.py gar_census.sh
+- Added docs/research/verifyresistq.md and tools/emu/vq_*.py: second-pass check of the monster modifier resist adds, curse values and the no-get-hit rule.
+- docs: verify-skmana, independent re-check of the skill mana check and payment against game.exe (docs/research/verify-skmana.md).
+- Independent verification of the resistance rules (verify-skresist.md, tools/emu/vr_resist.py): no rule fails
+- Added docs/research/verify-skmelee2.md and tools/emu/vm2_*: independent check of the player-blow deviations D1, D2, D4, D5, D6.
+- docs: VERIFY-AIDEL independent check of aidel and FUN_005a73e0 (0 differ in 352,800 cases)
+- SKGEARAR: trace of the gear attack-rating terms, FUN_0057d8a0 run natively (docs/research/sk-gearar-trace.md, tools/emu/sk_gearar.py)
+- Added docs/research/pr-nmlevel-verifier.md and its harness: independent verification of the nmlevel candidate.
+- no change
+- Docs: opened upstream PR #166 (player-side missile damage roll); posted log in docs/research/openpr-log.md.
+- bot logs: countable lines explore-giveup, tp-debounce-hold, tp-debounce-flip, kitgate-trip (docs/botlogs.md)
+- kit gate by character level: from clvl 8 an incomplete kit makes a town trip instead of holding the character in Blood Moor and Cold Plains
+- no change
+- docs: Gate 1 PASS review (docs/soaks/gate1-20261102.md, Review 3).
+- Docs: hireling trace (mercstats): game.exe's merc level-up, hire offer, resurrection price, experience award, think and attack code equal d2d's rules in 411,196 emulator runs; merc life regeneration and Act 2 auras are missing in d2d (effect U); Cold Arrow, Defiance and Thorns need merc level 6 so low-level offers can lack their skill; the merc accepts Rejuvenation Potions
+- Docs: monster skill use trace (monsterskill): monster skill levels, free casting and the Corrupt Archer think run against game.exe and d2d (no deviation proven); usability-gate deviation read only; bot shooter model findings; ledger row CorruptArcher
+- Docs: monster AI trace, second pass (monsterai2): ports of the six thinks d2d lacks equal game.exe on 36,000 cases; d2d's andariel_think equals game.exe on 3,830; Fallen flee pace 50, Blood Raven pace and home rules, Fallen Shaman corpse reach proven deviations; the pass 1 mismatch families root-caused (harness labels); coverage ledger monster.ai 23 of 146 rows
+- no change
+- Docs: opened upstream PR #164 (monster missile launch record and poison units); posted log in docs/research/openpr-log.md.
+- Private fork: a monster missile's owner poison reads SrcDamage as game.exe's unsigned byte; the two missile PR drafts follow the third check.
+- botsupply: gold per kill follows the monster level (Blood Moor 0.39, not 6), early gold piles are no longer skipped, recovery XP table from the real means, simulator monsters with real life.
+- docs: monster-missile PR drafts updated after the re-verifier (owner poison rule, trap sibling, merge order), poison-units PR draft added
+- verifywaypoint: independent verification of the waypoint refusal claim (docs and tools/emu/wpv_* only)
 - playerdef: docs/research/playerdef-trace.md, trace of the player's life, mana, regen, defence, block and resistance rules with 8 d2d deviations and 4 bot findings (docs only, nothing run)
 - uniqmods (research): game.exe pick rules for champion / unique / minion mods, pack and minion counts and Act 1 superunique records traced against d2d and the bot (docs/research/uniqmods-trace.md); no code change.
 - monsterhit (docs only): docs/research/monsterhit-trace.md and tools/emu/mh_rows.py (table helper); read-only decomposition of the monster swing on the player, no oracle run, no ledger row.
