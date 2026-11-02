@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- SKIAS partial desk trace of the swing frame count (docs/research/sk-ias-trace.md, tools/emu/skias_bp.py)
 - docs/research/geararmore.md: second pass of gear attack rating terms (stats 179, 120 run on game.exe, 0 differ), tools/emu/gar_run.py gar_census.sh
 - Added docs/research/verifyresistq.md and tools/emu/vq_*.py: second-pass check of the monster modifier resist adds, curse values and the no-get-hit rule.
 - docs: verify-skmana, independent re-check of the skill mana check and payment against game.exe (docs/research/verify-skmana.md).

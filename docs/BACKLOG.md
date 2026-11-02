@@ -263,6 +263,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - VERIFY-SKMANA: done, claims C1 C2 C3 C5 C6 hold (20,000 cases, own harness), C4 untested (docs/research/verify-skmana.md)
 - VERIFY-SKRESIST part 2 done: Q3 modifier adds HOLDS WITH LIMITS (80,000 cases 0 mismatches; ids 23, 25, 27 missing in the author's row), Q7 curse values D (arithmetic I), Q9 no get-hit under one point V run 80,000 cases: docs/research/verifyresistq.md
 - SKGEARAR second pass done (card geararmore, docs/research/geararmore.md): stat 179 and stat 120 run natively, 0 differ in 100,032 and 100,648 cases; 179 is on no item table row; bot finding B1 (fork gear sums omit stat 119 and the monster-specific stats); no PR candidate
+- SKIAS partial: docs/research/sk-ias-trace.md (d2d formula and breakpoints; game.exe attack branch of 00623f50 still to run under the emulator)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
