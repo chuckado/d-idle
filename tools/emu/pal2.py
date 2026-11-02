@@ -12,8 +12,9 @@ Case lines (one tag each):
 - C id skill lvl clvl n (skill level)*n : the calc slots of a skill row (Sacrifice 96, Smite 97, Zeal 106).
     game: `C id c1 c2 c3 c4 tohit` = FUN_00646ca0(unit, calc, skill, lvl) for the four calc slots (row +0x138 ..
     +0x144) and FUN_006449f0 (the to-hit bonus every melee skill passes to FUN_0057ec10).
-- T id s0 s1 ar pct alvl dlvl armed def mdef : Smite's to-hit. game: FUN_0057d9b0 with bonus 0 (what FUN_005ce9f0
-    passes to FUN_0057ec10 at 0x5ceba8: push 0, push 0). d2d: player_blow with swing.smite (the real rule) and without.
+- T id s0 s1 ar pct alvl dlvl armed def mdef : the roll inside Smite's to-hit. game: FUN_0057d9b0 with bonus 0 (what
+    FUN_005ce9f0 passes to FUN_0057ec10 at 0x5ceba8: push 0, push 0). The roll misses often, but 0x5cebb0 ORs the hit
+    bit back in on the player path (V read): NOT a deviation (a dead end of this card, kept as the record of it).
 - S id d0 d1 bm bM hl hh ed n111 dp str dex sb db off : Smite's damage. game: FUN_0057b420 with edx = 0, the shield
     as the item, min / max the shield's (<< 8) plus Holy Shield's (hl / hh, 256ths), ED = calc1, SrcDam 0x80 (the
     exact call at 0x5ceb31). d2d: player_blow with swing.smite, the shield's item_base row; its Rng is seeded with
@@ -53,9 +54,9 @@ def gen(n, seed):
         pct = rng.choice((0, 0, 0, 10, 25, 50, 100, 200, -10, -25))
         mdef = rng.choice((0, 0, 0, 10))
         out.append(f"T {case} {s0} {s1} {ar} {pct} {rng.randrange(1, 99)} {rng.randrange(1, 99)} {rng.choice((0, 1))} {defense} {mdef}")
-    for case in range(n):                               # Smite damage
+    for case in range(n + n // 40):                     # Smite damage; the last n / 40 cases have min = max (Zakarum Shield 46 / 46)
         d0, d1 = rng.getrandbits(32), rng.getrandbits(32)
-        bm = rng.randrange(1, 30); bM = bm + rng.randrange(0, 40)
+        bm = rng.randrange(1, 30); bM = bm + rng.randrange(1, 40) if case < n else bm   # game.exe forces max >= min + 1 point (0x57b4ef)
         hl, hh = rng.choice(((0, 0), (0, 0), (0, 0), (256 * rng.randrange(1, 40), 256 * rng.randrange(40, 120))))
         if hh < hl: hh = hl
         ed = rng.choice((15, 30, 45, 90, 150, 285, 300, 0, 0, -20))
@@ -129,21 +130,24 @@ def game(path):
             stats.update({(att, 0xc): f["alvl"], (att, 0x77): f["pct"], (dfd, 0xc): f["dlvl"], (dfd, "def"): f["def"], (dfd, 0x21): f["mdef"]})
             out[(tag, i)] = f"T {i} {e.call(0x57d9b0, 0, 0, ecx=att, edx=dfd)}"
             continue
-        g0, g1 = step(f["d0"], f["d1"])
-        e.w32(att + 0x20, g0); e.w32(att + 0x24, g1)
-        st.update(weapon=0, sb=f["sb"], db=f["db"])
-        stats.update({(att, 0x6f): f["n111"], (att, 0x19): f["dp"], (att, 0): f["str"], (att, 2): f["dex"], (att, 0x11): f["off"], (att, 0x12): f["off"]})
-        got = s32(e.call(0x57b420, 0x7100000, (f["bm"] << 8) + f["hl"], (f["bM"] << 8) + f["hh"], f["ed"] & M32, 0, 0x80, ecx=att, edx=0))
-        out[(tag, i)] = f"S {i} {got}"
+        # two seedings: d2d today makes no to-hit draw for Smite, so its damage roll is its FIRST draw (game state d0 / d1);
+        # with the fix it draws the to-hit roll first, so the damage roll is the second (game state one step later).
+        gots = []
+        for g0, g1 in ((f["d0"], f["d1"]), step(f["d0"], f["d1"])):
+            e.w32(att + 0x20, g0); e.w32(att + 0x24, g1)
+            st.update(weapon=0, sb=f["sb"], db=f["db"])
+            stats.update({(att, 0x6f): f["n111"], (att, 0x19): f["dp"], (att, 0): f["str"], (att, 2): f["dex"], (att, 0x11): f["off"], (att, 0x12): f["off"]})
+            gots.append(s32(e.call(0x57b420, 0x7100000, (f["bm"] << 8) + f["hl"], (f["bM"] << 8) + f["hh"], f["ed"] & M32, 0, 0x80, ecx=att, edx=0)))
+        out[(tag, i)] = f"S {i} {gots[0]} {gots[1]}"
     for tag, i, f in cases:
         print(out[(tag, i)])
 
 
-def cmp(cpath, gpath, bpath, kpath):
+def cmp(cpath, gpath, bpath, kpath, after=False):
     cases = [parse(l) for l in open(cpath)]
     g = [l.split() for l in open(gpath)]
     b = {(l.split()[0], int(l.split()[1])): l.split() for l in open(bpath)}
-    k = {(l.split()[0], int(l.split()[1])): l.split() for l in open(kpath)}
+    k = {(l.split()[0], int(l.split()[1])): l.split() for l in open(kpath) if l.startswith("C ")}   # d2d's loader logs to stdout
     assert len(cases) == len(g)
     rep = {}
     for (tag, i, f), gl in zip(cases, g):
@@ -162,10 +166,29 @@ def cmp(cpath, gpath, bpath, kpath):
             if gl[2] == "0": r["cat"]["game miss"] = r["cat"].get("game miss", 0) + 1
         else:
             dl = b[(tag, i)]
-            got, phys = int(gl[2]), int(dl[3])
+            if after and dl[2] == "0":
+                r["miss"] = r.get("miss", 0) + 1                  # the fixed d2d misses (95 % cap): no damage to compare
+                continue
+            got, phys = int(gl[2]), int(dl[3])      # gl[3]: the game's state one draw later (its forced-hit to-hit roll consumed); unused
+            for key in (f"hs{int(f['hl'] > 0)}", f"n111_{int(f['n111'] > 0)}", f"dp{'<0' if f['dp'] < 0 else '>0' if f['dp'] > 0 else '0'}",
+                        f"off{int(f['off'] > 0)}", f"ed{'<0' if f['ed'] < 0 else '0' if f['ed'] == 0 else '>0'}"):
+                c = r["cat"].setdefault(key, [0, 0]); c[0] += 1
+                if max(got >> 8, 1) != phys: c[1] += 1
+            grp = "min=max" if f["bm"] == f["bM"] else "n111>0" if f["n111"] > 0 else "dp<-90" if f["dp"] < -90 else "rest"
+            gc = r.setdefault("grp", {}).setdefault(grp, [0, 0, 0.0]); gc[0] += 1
+            if max(got >> 8, 1) != phys: gc[1] += 1
+            gc[2] += got / 256 - phys
+            if f["dp"] >= 0 and f["ed"] >= 0 and f["bm"] != f["bM"]:                  # no negative percentage anywhere: no -90 floor, no toward-zero rounding
+                key = "clean n111>0" if f["n111"] > 0 else "clean n111=0"
+                cc = r["grp"].setdefault(key, [0, 0, 0.0]); cc[0] += 1
+                if max(got >> 8, 1) != phys: cc[1] += 1
+                cc[2] += got / 256 - phys
+            if max(got >> 8, 1) != phys and grp == "rest" and len(r.setdefault("rest", [])) < 8: r["rest"].append((i, got, phys, f))
             if max(got >> 8, 1) != phys: r["diff"] += 1
             if got != phys << 8: r["fine"] += 1
     for tag, r in rep.items():
+        r.pop("rest", None)
+        if tag == "S": r.pop("cat", None)
         print(tag, r)
 
 
@@ -173,4 +196,4 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a[0] == "gen": print("\n".join(gen(int(a[1]), int(a[2]))))
     elif a[0] == "game": game(a[1])
-    elif a[0] == "cmp": cmp(*a[1:5])
+    elif a[0] == "cmp": cmp(*a[1:5], after=len(a) > 5 and a[5] == "after")

@@ -19,6 +19,7 @@
 #include <filesystem>
 #include <fstream>
 #include <map>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -30,7 +31,7 @@ int main(int argc, char** argv) try {
     if (argc < 3) return 2;
     const std::string_view mode = argv[1];
     namespace s = d2d::d2s;
-    std::unique_ptr<d2d::game::GameData> data;
+    std::optional<d2d::game::GameData> data;
     if (mode == "--calc") {
         const char* mpq_dir = std::getenv("D2_MPQ_DIR");
         const char* patch = std::getenv("D2_PATCH_INSTALLER");
