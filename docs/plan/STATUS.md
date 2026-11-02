@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
-- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
-- 76452305 11-02 11:42 `Merge agent/verifypaldur: verifypaldur: Pro-account job result (docs and emulator tools only)` (verifypaldur)
-- b3a654fa 11-02 11:42 `merge origin/main into verifypaldur` (verifypaldur)
-- 518f87bb 11-02 11:37 `Merge agent/skzerohit: skzerohit: result (docs and emulator tools only)` (skzerohit)
-- 0c7e7ec5 11-02 11:30 `Merge agent/verifypalaura: verifypalaura: Pro-account job result (docs and emulator tools only)` (verifypalaura)
-- 075a8650 11-02 11:29 `merge origin/main into skzerohit` (skzerohit)
-- 94bb76e6 11-02 11:29 `merge origin/main into verifypalaura` (verifypalaura)
-- 34d019b7 11-02 11:24 `Merge agent/skstateev: skstateev: Pro-account job result (docs and emulator tools only)` (skstateev)
-- d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
+- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
+- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
+- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
+- 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
+- 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
+- 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
+- af24e7ce 11-02 14:38 `Merge agent/nmlevel: nmlevel: finished docs and tools work that was never merged (branch triage 2026-11-02)` (nmlevel)
+- 5d40cf92 11-02 14:38 `merge origin/main into nmlevel` (nmlevel)
+- 7fa2b9df 11-02 14:31 `Merge agent/monsterpace: monsterpace: finished docs and tools work that was never merged (branch triage 2026-11-02)` (monsterpace)
+- 6ee620fc 11-02 14:30 `merge origin/main into monsterpace` (monsterpace)
 <!-- statusgen:end -->

@@ -8,6 +8,32 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifysmite: independent verification of SMITEBLOCK; block does not stop Smite in game.exe (V run), d2d fix proposed, docs only
+- Docs: PR draft for the player-side missile damage roll bundle; det scenario hit_phys.
+- Docs: PR draft and population comparison tool for the Nightmare / Hell monster level rule (docs/research/pr-nmlevel-draft.md, tools/emu/nm_pop.py).
+- Docs: the monster movement pace PR draft split into two (think paces + Blood Raven + shaman corpse reach; base velocity 75), rebased on current upstream main.
+- bundlefinal: final PR body for bundle 1 and credit blocks on its cards
+- verifybundle: independent verification of PR bundle 1; ground footprint and burst roll confirmed (base 476 of 3,726 hit cases differ, head 0), docs only
+- lockstepbase: d2bot logs `gclock: timescale K` at start when the clock scale is not 1; runbook section 10 for hooked baseline lanes (tooling in the ops repo, not run live).
+- Added docs/research/rebase174-20261102.md and pr-bundle-1-draft.md: the four PR candidates rebased onto upstream main after PR 174 and assembled into one bundle branch with counted differentials.
+- Lockstep P4 live measurement: with the bot clock scaled the time hook at k=2 and k=4 no longer breaks shop chores or kill rate (docs only)
+- crsetup: .coderabbit.yaml revised and schema-validated; CodeRabbit pre-scan runbook (docs and config only)
+- docs: credit kit for upstream PRs (credit: card block, tools/credit/credit.py, credits ledger, GPL carry-over sentence in the contributor docs).
+- docs/research/coderabbit-limits-20261102.md added (CodeRabbit review limits, upstream batch sizes, bundle budget)
+- Research: alignment2-trace.md, game.exe gives alignment 2 to mercs, Shadows and all player-side units, so the undead / Blunt blow bonus gate (player or alignment 2) covers them; tools/emu/al2_run.py native runs.
+- Added docs/research/smiteblock-trace.md and tools/emu/sb_* (SMITEBLOCK): a block does not stop Smite in game.exe 1.14d, d2d deviates (V run, no PR candidate).
+- botclock: internal/gclock time-scale facility (D2BOT_TIMESCALE, default 1 = unchanged); env.RealClock and the game-clock timeouts use it; guard test for new direct time calls
+- Research: the original-game clock hook scales the frame rate exactly up to 4x (100 fps), but the bot's own real-time waits make k=2 yield half the work per game minute and k=4 unusable
+- contribid: AGENTS.md no longer tells community contributors to commit as Claude; reproducibility rule and PR template checkboxes
+- Added docs/research/pr-skmelee3-d1-draft.md and pr-skmelee3-d2-draft.md: the SKMELEE3 candidate split in two upstream-ready branches with counted differentials.
+- A looted bow is taken off a non-Amazon the game wore it on, the sell chore never offers worn or start items, and a removed start weapon is worn again.
+- CONTRIBUTORS.md added; Credit section in docs/process/chunker.md
+- Fixed: town walk no longer loops on a gate that stalled every approach; a Sorceress with a stray bow keeps casting and no longer spends her gold on Arrows.
+- prbuildprices2: repair-gate PR draft and branch (docs only)
+- Added docs/research/pr-skmelee3-draft.md and sm3_run.sh / sm3_probe.py: the SKMELEE3 candidate built in the private fork with a counted differential.
+- Docs: freeze rules PR draft and prep notes (docs/research/pr-freeze-rules-draft.md).
+- Added docs/research/verifypalskill2.md and tools/emu/vp2*: independent check of the Smite, Zeal and Sacrifice deviations.
+- Added docs/research/pr-skmelee3-verifier.md: independent check of the SKMELEE3 fork candidate (fine physical, undead/Blunt bonus).
 - verifyprices: independent Opus verification of the vendor prices follow-on (docs and tools/emu/vpr_* only)
 - docs: verifypaldur independent check of the durability-loss trace (docs/research/verifypaldur.md).
 - Added docs/research/sk-zero-hit-trace.md (SKZEROHIT: zero-damage hit effects in game.exe vs d2d, static)
