@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Added docs/research/sk-zero-hit-trace.md (SKZEROHIT: zero-damage hit effects in game.exe vs d2d, static)
 - verifypalaura: independent check of PALAURA (docs/research/verifypalaura.md, tools/emu/vp_check.py)
 - SKSTATEEV state-event decomposition: docs/research/sk-state-events-trace.md (static; nothing run)
 - verifywaypoint2: docs/research/verifywaypoint2-trace.md and tools/emu/vw2_*: waypoint refusal claim re-verified against d2d's own test binary (docs and emulator scripts only)

@@ -222,3 +222,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifywaypoint2-trace.md | second independent check of the waypoint refusal window: writers/readers of pcdata+0x160, game.exe vs d2d's own binary on 232,964 cases, D1.. B1.. | research
 - docs/research/sk-state-events-trace.md - state events on hit and miss (Shiver Armor on a miss, Energy Shield before resistances)
 - docs/research/verifypalaura.md: independent verification of palaura-trace (roll and disc verified, rest not re-run)
+- docs/research/sk-zero-hit-trace.md - what a zero-damage hit still triggers (SKZEROHIT, static)
