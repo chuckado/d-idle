@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: verifier report for the curse-value, defender and shield first-pass traces (verify-cursedef.md)
+- Added docs/research/palskill-trace.md and tools/emu/pal2*: dispatch of Smite, Zeal and Sacrifice, calc and Smite damage differentials, deviations D1 to D9, bot findings B1 to B5.
+- ci: fix board archive research paths and chunker groom privacy-scan false positive (Scripts job).
 - docs: palaura-trace, the Paladin aura apply decomposed (area search disc, aurafilter bits, enemy roll and resist, Prayer mana and state 85) with game.exe run under the emulator (docs/research/palaura-trace.md).
 - VERIFYFREEZEEND2: docs/research/verifyfreezeend2-trace.md, own emulator harness tools/emu/vfe2_*; game.exe runs the AI think during a get-hit, d2d holds it (D1)
 - skiasgame2: docs/research/skiasgame2-trace.md, tools/emu/skiasgame2_rate.py: game.exe attack rate equals d2d over 198,988 cases; sequence-mode -30 and dual-wield rule listed as deviations; ledger F07 updated
