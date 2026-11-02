@@ -90,3 +90,25 @@ Body ending convention (copied from merged #157 and #158): the body ends with th
 
 - BACKLOG: #163 got a tooling follow-up (3ac63fa0) for CodeRabbit; watch for the maintainer.
 - INDEX, CHANGELOG, decomp-queue, research README: no change.
+
+## Monster missile record and poison units, bundled (card propenmissile)
+
+- posted: 2026-11-02 go: the user, explicit "open the two now", then corrected before anything was opened: "if they haven't been posted I meant to bundle them". One PR, two commit groups, no squash.
+- posted: 2026-11-02 fetch upstream: main 6935cf64 (unchanged since both candidates' base, so no rebase). The record candidate (5 commits, local head 59d319c8) and the skill-rows candidate (3 commits, local head f52df8d4) were rewritten for the PR: numeric-ID noreply identity as author and committer, the trailers replaced by the bare `Agent: Claude Code` line (no session link, no model trailer); trees identical to the candidates. The skill-rows commits were cherry-picked onto the record commits (no conflict), record first.
+- posted: 2026-11-02 push (plain, new branch, no force) to the fork: fix/monster-missile-record-and-poison head ee8a2093 (92f9a9dc test mode, 02205609 record, 809023e9 poison units, 85b8fa3e owner poison, 28400999 SrcDamage byte, 6d4fa1bf skill-sourced poison, 50175311 trap poison, ee8a2093 wording). The same branch was pushed to the private remote.
+- posted: 2026-11-02 PR opened: https://github.com/psi29a/d2decomped/pull/164 (9 files, 8 commits; title "A monster missile's launch record and poison units as game.exe fills them (FUN_0064b860): physical brackets, HitShift, row element; skill-sourced and trap poison per frame"). State OPEN, base 6935cf64, head ee8a2093 as checked with gh pr view. Body from pr-missilerecord-draft.md and pr-missilepoison-draft.md merged into one, ends with the bare `Agent: Claude Code` line.
+
+| check (worker host, head ee8a2093) | result |
+|---|---|
+| pr_guard, range and each of 8 commits | 0 FAIL / 0 WARN, rc 0 each |
+| presubmit --quick with the CI-pinned ruff 0.8.6 | 0 FAIL, 4 WARN (unit kinds, hit paths, docs-sync, build skipped; answered in the body) |
+| presubmit --quick with ruff 0.17.3 (a newer one on the box) | 1 FAIL: B905 `zip()` without strict= in mm_diff.py:179 and mm_launch.py:42; not the CI version, not changed |
+| tooling unit tests | 17 ok; test_tooling 7 ok (1 skip) |
+| Release build, ctest test_game (data dir), test_combat, test_game_rules, test_rules, test_monster_ai, test_monsters, test_monster_missile, test_missile_blow_poison | 8 of 8 pass |
+
+Not re-run on the combined head: the differentials (emulator comparisons), clang-tidy, the gcc shadow sweep; they were run on each group separately (the body says so). Nothing else posted: no comment, label or reviewer request.
+
+## Shared-file lines for the merger (propenmissile)
+
+- BACKLOG: #164 (monster missile record + poison units, bundled) is open; watch for the maintainer and CodeRabbit (follow-ups need their own card).
+- INDEX, decomp-queue, research README: no change.

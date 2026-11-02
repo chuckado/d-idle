@@ -143,3 +143,5 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+docs/research/openpr-log.md  propenmissile  propenmissile
+openspec/changes/propenmissile/**  propenmissile  propenmissile
