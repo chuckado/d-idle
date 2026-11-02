@@ -39,7 +39,10 @@ def main():
     for i, m in enumerate(pop):
         seed, diff, lid, cls, col, start, final, flags, mods, tflags, gexp = m[1], int(m[2]), int(m[3]), int(m[4]), int(m[5]), int(m[6]), int(m[7]), int(m[8]), m[9], int(m[10]), int(m[11])
         k = kind_of(tflags, flags)
-        for key in ((diff, "all"), (diff, k), (diff, f"act{act_of(lid)}")):
+        keys = [(diff, "all"), (diff, k), (diff, f"act{act_of(lid)}")]
+        if flags & 0x04: keys.append((diff, "row-noRatio"))
+        if flags & 0x40: keys.append((diff, "row-boss"))
+        for key in keys:
             c = stat[key]
             c["units"] += 1
             c["moved"] += start != col
