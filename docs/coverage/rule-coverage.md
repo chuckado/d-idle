@@ -7,7 +7,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | subsystem | rows | run 0 diff | run deviation | read-only | bot-only | untested | run-tested | compared (run + read) | cases run |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | skills.ama (Amazon skills: start/do functions, missile, states) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
-| skills.sor (Sorceress skills) | 30 | 0 | 12 | 13 | 0 | 5 | 40% | 83% | 762,635 |
+| skills.sor (Sorceress skills) | 30 | 0 | 14 | 16 | 0 | 0 | 47% | 100% | 793,635 |
 | skills.nec (Necromancer skills) | 30 | 27 | 3 | 0 | 0 | 0 | 100% | 100% | 64,400 |
 | skills.pal (Paladin skills) | 30 | 10 | 0 | 2 | 0 | 18 | 33% | 40% | 21,760 |
 | skills.bar (Barbarian skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 0 | 0 | 0 | 0 | 852 | 0% | 0% | 0 |
 | levels (areas) | 137 | 0 | 0 | 0 | 0 | 137 | 0% | 0% | 0 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 10 | 3 | 0 | 2 | 72% | 89% | 2,111,956 |
-| **total** | **4910** | **1131** | **159** | **83** | **0** | **3537** | **26%** | **28%** | **4,209,612** |
+| **total** | **4910** | **1131** | **161** | **86** | **0** | **3532** | **26%** | **28%** | **4,240,612** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 99 (3%), compared 182 (5%), read-only 83, untested 3537.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 101 (3%), compared 187 (5%), read-only 86, untested 3532.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -45,6 +45,8 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.sor | 43,37,61,63,65 | READ-ONLY | `docs/research/sk-passives-trace.md` | - | 2026-11-01 | Telekinesis D1, masteries, Warmth read (V read); SKPASS |
 | skills.sor | 59 | TESTED-DEVIATION | `docs/research/sk-ground-trace.md` | 64,200 | 2026-11-01 | Blizzard shard offsets D1 (V run both sides); SKGROUND |
 | skills.sor | 51,56,57,62,64 | READ-ONLY | `docs/research/sk-ground2-trace.md` | - | 2026-11-01 | Fire Wall (80 cases, game side), Meteor, Thunder Storm, Hydra, Frozen Orb read to dispatch or spawn |
+| skills.sor | 47,55 | TESTED-DEVIATION | `docs/research/sor-rest-trace.md` | 31,000 | 2026-11-01 | Fire Ball, Glacial Spike hit pipeline 31,000 cases (SKMISS D1 holds); burst radius 3,375 cases equal; burst roll D1 (400 trials, d2d one roll per monster, game.exe one per burst); SORCREST |
+| skills.sor | 41,46,52 | READ-ONLY | `docs/research/sor-rest-trace.md` | - | 2026-11-01 | Inferno, Blaze, Enchant start / do read (V read), no behaviour run; calcs V run 22,400 cases 0 differ; D4 D5 U; SORCREST |
 | skills.nec | 66,68-83,85-92,94,95 | TESTED-0-DIFF | `docs/research/nec-skill-trace.md` | 27,800 | 2026-11-01 | calc cells only (calc1-4, petmax, sumsk, delay, aura, passive) equal d2d eval_calc; Corpse Explosion D3-D7 and pet base stats read-only or untested |
 | skills.nec | 67,84,93 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | magic missile roll D1 (top inclusive, 10509 differ, 0 after the SKMISS fix); Teeth NextHit D2 is S plus I |
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |

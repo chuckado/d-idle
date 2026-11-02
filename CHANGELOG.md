@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Research: sor-rest-trace.md closes the Sorceress ledger (skills.sor 14 run-tested, 16 read-only, 0 untested); d2d rolls damage per monster in a Fire Ball / Glacial Spike burst where game.exe rolls once (proven on the real build, no fix yet); oracles tools/emu/sk_rest_*.
+- docs: Gate 1 run 20261101 review (stall windows, gap analysis, rerun recipe), cards soakgiveup and povertyflip proposed.
+- docs: baseline trust audit (docs/research/baseline-audit.md).
 - Necromancer skill trace (docs/research/nec-skill-trace.md) and emulator differentials tools/emu/nec_*; coverage skills.nec 0 of 30 to 30 of 30 (calc aspect), missiles 114, 192, 193.
 - docs: monster-missile-trace (Acts 1 and 2 monster missiles, 213 game.exe launches under the emulator), tools/emu/mm_* oracle, ledger line for 48 missile rows
 - Added a generated rule-coverage table (docs/coverage) that counts, per data-table subsystem, which rows were differentially tested against game.exe 1.14d, with a CI freshness check.

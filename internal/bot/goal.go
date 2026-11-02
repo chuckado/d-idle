@@ -1047,6 +1047,7 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 	l := &r.loop
 	radius := r.e.Tune.Bot.ClearRadius
 	name := r.areaName(area)
+	r.noteArea(area)
 	if l.needBuff {
 		l.needBuff = false
 		if err := r.d.Fighter.Buff(ctx); err != nil {
@@ -1135,10 +1136,11 @@ const exploreGiveUp = 2
 // this: it is off by default, and its timer restarts on every area change and every pause over 90 s, which the
 // Blood Moor <-> Cold Plains ping-pong of the g1 soak did every few minutes (docs/soakstall.md). The failures are
 // counted per area instead, and a kill restarts the count. It marks the area cleared (the planner then takes the
-// next area or the fresh-game path) and returns true. Quest areas keep roaming.
+// next area or the fresh-game path) and returns true. Quest and boss runs keep roaming. The planner sets a run (Area
+// included) for every leveling step, so the guard is the run kind, not the area (Gate 1: 20 of 22 timeouts uncounted).
 func (r *Runner) exploreGaveUp(ctx context.Context, area int, err error) bool {
 	l := &r.loop
-	if ctx.Err() != nil || (l.run != nil && l.run.Area == area) {
+	if ctx.Err() != nil || l.keepRoaming(area) {
 		return false
 	}
 	r.obMu.Lock()
@@ -1161,6 +1163,59 @@ func (r *Runner) exploreGaveUp(ctx context.Context, area int, err error) bool {
 	r.e.Log.Info("area abandoned: exploring failed with no kill", "area", area, "name", r.areaName(area), "failures", f.n, "err", err)
 	r.logSweep(area, true)
 	return true
+}
+
+// keepRoaming is true when the current run needs every target of area: a quest or boss run, not a plain clear run.
+func (l *loopState) keepRoaming(area int) bool {
+	return l.run != nil && l.run.Area == area && l.run.Kind != RunClear
+}
+
+// Ping-pong guard (docs/soakstall.md, the 17:27 window of Gate 1: 61 virtual minutes alternating Blood Moor and Cold
+// Plains with no kill and no explore timeout, so exploreGaveUp never counted).
+const (
+	pingPongAlt  = 4               // area switches between the same two areas with no kill
+	pingPongSpan = 5 * time.Minute // ... that took at least this long (virtual)
+)
+
+type pingPong struct {
+	a, b  int // the two areas; a is the current one
+	alt   int
+	kills int
+	since time.Time
+}
+
+// noteArea records the area of a sweep pass. After pingPongAlt switches between the same two areas with no kill, both
+// count as emptied and the planner takes the fresh-game path. Quest and boss areas are never marked.
+func (r *Runner) noteArea(area int) {
+	l := &r.loop
+	now := r.e.Clock.Now()
+	r.obMu.Lock()
+	kills := r.ob.kills
+	r.obMu.Unlock()
+	pp := &l.pp
+	if pp.kills != kills || pp.a == 0 {
+		*pp = pingPong{a: area, kills: kills, since: now}
+		return
+	}
+	if area == pp.a {
+		return
+	}
+	if pp.alt > 0 && area != pp.b { // a third area: not a ping-pong
+		*pp = pingPong{a: area, kills: kills, since: now}
+		return
+	}
+	pp.a, pp.b = area, pp.a
+	pp.alt++
+	if pp.alt < pingPongAlt || now.Sub(pp.since) < pingPongSpan || l.keepRoaming(pp.a) || l.keepRoaming(pp.b) {
+		return
+	}
+	if l.cleared == nil {
+		l.cleared = map[int]bool{}
+	}
+	l.cleared[pp.a], l.cleared[pp.b] = true, true
+	r.e.Log.Info("area abandoned: ping-pong without a kill", "areas", []int{pp.a, pp.b}, "switches", pp.alt, "seconds", int(now.Sub(pp.since)/time.Second))
+	r.logSweep(pp.a, true)
+	*pp = pingPong{}
 }
 
 // emptyAreaLeave marks area cleared once the sweep went Config.EmptyAreaSec without a kill (KILLFIX: on d2d 7 of the 20

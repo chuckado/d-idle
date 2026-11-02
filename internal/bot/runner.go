@@ -214,6 +214,8 @@ type loopState struct {
 	emptySince time.Time
 	// failed explores per area since the last kill (exploreGaveUp)
 	exploreFails map[int]exploreFail
+	pp           pingPong // area ping-pong guard (noteArea)
+	tpSeen       tpDebounce
 	stallStage   int       // campaign stall ladder (stall.go): 0 quiet, 1 warned and fresh game tried
 	stallAt      time.Time // when stage 1 was reached
 	emptyLast    time.Time // last call: a longer pause (town trip, new game) restarts the count

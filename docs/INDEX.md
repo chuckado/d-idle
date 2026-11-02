@@ -149,3 +149,6 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/coverage/rule-coverage.md: generated coverage table per subsystem against the game's data tables (README.md there explains the ledger)
 - docs/research/monster-missile-trace.md | monster missiles Acts 1 and 2: game.exe launch record V run (213 launches), d2d drops NM / Hell level brackets (D1), HitShift (D2) and the row's poison / fire (D3); 25 of 49 rows unblockable; bot dodge has no threat model | card monstermissile
 - docs/research/nec-skill-trace.md: Necromancer skills (Raise Skeleton, Corpse Explosion, Teeth, Bone Spear, curses): game.exe vs d2d vs bot; calc differential 27,800 cases 0 differ, magic roll D1 36,600 cases (card necskill)
+- docs/research/baseline-audit.md: audit of baselines.json and baselines-early.json against the spec minimums, power, confounds, verdict per gate criterion
+- docs/soaks/gate1-20261101.md: Gate 1 run 20261101 review section: stall windows, restart causes, SOAKSTALL gap, rerun recipe
+- docs/research/sor-rest-trace.md | Sorceress rest of the skills (Fire Ball, Glacial Spike, Inferno, Blaze, Enchant): game.exe vs d2d vs bot, burst radius and roll, calc differential (card sorcrest)
