@@ -2,7 +2,7 @@
 
 ```yaml
 change: monsterstats
-status: in-progress
+status: archived
 agent: monsterstats
 branch: agent/monsterstats
 worktree: ~/code/d2lod-wt/monsterstats
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Docs and tools/emu/ms_* only. Offline emulator runs on the worker host (game.exe FUN_006538a0 / FUN_00573cb0 against d2d's real rules::monster_stats); see docs/research/monster-stats-trace.md. Not verified live."
+result: "docs and emulator tools only; produced on the API credits runner; no PR candidate yet for D1"
 live: "docs only, nothing run live"
+merge: fe72d3a
 ```
 
 - [x] game.exe stat rows (FUN_006538a0) and unit creation (FUN_00573cb0) run for all rows x difficulties x levels
