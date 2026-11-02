@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
 - 650c59b7 11-02 11:01 `Merge agent/skground: skground: credit-funded decomposition result (docs and emulator tools only)` (skground)
 - 93042b4f 11-02 11:00 `merge origin/main into skground` (skground)
 - 4ffc2466 11-02 10:57 `Merge agent/prcandidates: PRCANDIDATES: ranked inventory of upstream PR candidates (docs only)` (prcandidates)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 900ac2e1 11-02 10:42 `Merge agent/palskill: palskill: credit-funded decomposition result (docs and emulator tools only)` (palskill)
 - 54fff8ef 11-02 10:34 `Merge agent/fixci: FIXCI: repair the board archive paths and the chunker flag text that broke the Scripts CI job` (fixci)
 - fd74df8a 11-02 10:34 `merge origin/main into palskill` (palskill)
-- fcd78e5e 11-02 10:29 `Merge agent/palaura: palaura: credit-funded decomposition result (docs and emulator tools only)` (palaura)
 <!-- statusgen:end -->
