@@ -484,7 +484,7 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 		f.ignore(st, tg, why, fmt.Sprintf("casts %d life %d%% engaged %v", tr.casts, tg.LifePct, tr.engaged.Round(time.Second)))
 		return nil
 	}
-	if !tr.inShot && sp.only == 0 && tr.engaged > time.Duration(t.ReachSec)*time.Second {
+	if !tr.inShot && sp.only == 0 && !(t.StandOK != 0 && Stands(tg.Mon)) && tr.engaged > time.Duration(t.ReachSec)*time.Second {
 		f.ignore(st, tg, IgnoreNoShot, fmt.Sprintf("never in range with a clear line in %v, %d approaches", tr.engaged.Round(time.Second), tr.approaches))
 		return nil
 	}
@@ -492,9 +492,13 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 	// missiles on top of us
 	if t.DodgeRadius > 0 && f.mv != nil && f.mayEvade() && f.evadeOK(st) && now.Sub(f.lastDodge) > 1200*time.Millisecond && st.dodges < 40 {
 		var near []input.Point
-		for _, m := range hostileMissiles(snap) {
-			if pdist(me, m) < float64(t.DodgeRadius) {
-				near = append(near, m)
+		if t.ThreatDodge != 0 {
+			near = RankIncoming(snap, threatTable, float64(t.DodgeRadius), float64(t.DodgeReactMs)/1000).Dodge
+		} else {
+			for _, m := range hostileMissiles(snap) {
+				if pdist(me, m) < float64(t.DodgeRadius) {
+					near = append(near, m)
+				}
 			}
 		}
 		if pt, ok := awayPoint(me, near, nil, t.DodgeRadius+4, f.valid); ok {
@@ -600,7 +604,7 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 
 	// Cursed (Amplify Damage / Iron Maiden) and below the retreat line: break contact instead of trading blows; Safety
 	// drinks meanwhile. Bounded like a kite burst, and skipped when pinned (evade).
-	if f.mv != nil && f.mayEvade() && f.evadeOK(st) && CurseRetreat(p, t.CurseRetreatPct) && st.kites < 2*t.KiteMaxSteps {
+	if f.mv != nil && f.mayEvade() && f.evadeOK(st) && CurseRetreat(p, t.CurseRetreatPct) && st.kites < 2*t.KiteMaxSteps && !f.runnerClose(snap, p, float64(t.KiteDistance)) {
 		var pts []input.Point
 		for _, h := range Hostiles(snap, f.hostileCtx(p)) {
 			if h.Dist <= float64(t.KiteDistance) {
@@ -625,7 +629,7 @@ func (f *Fighter) engage(ctx context.Context, snap *d2.Snapshot, tg Target, sp f
 	if now.Sub(st.lastKite) > 10*time.Second {
 		st.kites = 0
 	}
-	if t.KiteEnabled != 0 && f.mv != nil && f.mayEvade() && st.kites < stepBackSteps && (!hard || plan.Kite) && spec.Kind != KindSelf && spec.Kind != KindMelee {
+	if t.KiteEnabled != 0 && f.mv != nil && f.mayEvade() && st.kites < stepBackSteps && !f.runnerClose(snap, p, stepBackDist+1) && (!hard || plan.Kite) && spec.Kind != KindSelf && spec.Kind != KindMelee {
 		if th := f.kiteThreats(snap, p, stepBackDist+1); len(th) == 1 && th[0].Dist <= stepBackDist &&
 			pct(p.Life, p.MaxLife) < stepBackLife && st.lifeDropping(now, p.Life) {
 			pts := []input.Point{{X: th[0].Unit.X, Y: th[0].Unit.Y}}
@@ -760,6 +764,12 @@ func (f *Fighter) fallbackSkill(p *d2.Player, tg *Target) (SkillSpec, bool) {
 		return SkillSpec{}, false
 	}
 	return sf, true
+}
+
+// runnerClose reports whether a monster that runs after the player is within d (RunnerGuard knob): walking away
+// from it only costs hits.
+func (f *Fighter) runnerClose(snap *d2.Snapshot, p *d2.Player, d float64) bool {
+	return f.tune().RunnerGuard != 0 && anyRunner(Hostiles(snap, f.hostileCtx(p)), d)
 }
 
 // kiteThreats are living melee monsters closer than dist.

@@ -196,7 +196,13 @@ func (f *Fighter) read(ctx context.Context) (*d2.Snapshot, error) {
 func isDead(p *d2.Player) bool { return IsDead(p) }
 
 func (f *Fighter) hostileCtx(p *d2.Player) HostileCtx {
-	return HostileCtx{Cat: f.cat, Diff: p.Difficulty, ClassLvl: p.Level, Weights: f.weights}
+	hc := HostileCtx{Cat: f.cat, Diff: p.Difficulty, ClassLvl: p.Level, Weights: f.weights}
+	t := f.tune()
+	if t.ThreatDodge != 0 {
+		hc.ThreatReactSec = float64(t.DodgeReactMs) / 1000
+	}
+	hc.ShooterKillMin = t.ShooterKillMin
+	return hc
 }
 
 // ---- survival -------------------------------------------------------------------------------------------
