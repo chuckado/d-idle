@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate1pass
-status: in-progress
+status: archived
 agent: gate1pass
 branch: agent/gate1pass
 worktree: ~/code/d2lod-wt/gate1pass
@@ -11,7 +11,8 @@ owns:
   - openspec/changes/gate1pass/**
 exclusive: []
 gates: none (docs review of a finished run)
-result: "Review 3 written into docs/soaks/gate1-20261102.md from the run logs read on the worker host (read-only); no live run, nothing started"
+result: "docs only; one seed so XP/h stays INCONCLUSIVE; Gate 2 and a seed set need the owner's go"
+merge: 4e47518
 ```
 
 - [x] 1. Verify the PASS per criterion and per clvl band
