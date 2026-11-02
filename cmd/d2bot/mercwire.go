@@ -356,9 +356,18 @@ func (w *mercWire) HireStep(ctx context.Context, s *d2.Snapshot) string {
 			w.log.Info(merc.LogHireWindow(o, c.Gold, s.Player.Level))
 		}
 	}
-	best, bestRank, why := -1, 1<<30, merc.ReasonNoBetter
-	var bestDec merc.Decision
 	prefs := merc.AuraPrefs(c.PlayerClass, c.Difficulty, c.BowOrJavelin)
+	// Wait for the best aura in the window: a cheaper acceptable aura is not taken while the better one is unaffordable.
+	top := 1 << 30
+	for _, o := range offers {
+		if o.Class == merc.ClassDesert {
+			if r := merc.AuraRank(prefs, o.Aura); r >= 0 && r < top {
+				top = r
+			}
+		}
+	}
+	best, bestRank, why := -1, 1<<30, ""
+	var bestDec merc.Decision
 	for i, o := range offers {
 		var dec merc.Decision
 		if st.Owned {
@@ -366,8 +375,11 @@ func (w *mercWire) HireStep(ctx context.Context, s *d2.Snapshot) string {
 		} else {
 			dec = merc.ShouldHire(o, st, c)
 		}
+		if dec.Do && merc.AuraRank(prefs, o.Aura) > top {
+			dec = merc.Decision{Reason: merc.ReasonGold} // the better aura is in the window: wait for the gold
+		}
 		if !dec.Do {
-			if dec.Reason == merc.ReasonGold {
+			if dec.Reason == merc.ReasonGold || why == "" {
 				why = dec.Reason
 			}
 			continue
@@ -375,6 +387,9 @@ func (w *mercWire) HireStep(ctx context.Context, s *d2.Snapshot) string {
 		if r := merc.AuraRank(prefs, o.Aura); r < bestRank {
 			best, bestRank, bestDec = i, r, dec
 		}
+	}
+	if why == "" {
+		why = merc.ReasonNoBetter
 	}
 	if best < 0 {
 		w.log.Info(merc.Prefix + "hire skipped (" + why + ")")
