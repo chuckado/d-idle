@@ -69,13 +69,13 @@
    "clvl": 11,
    "deaths": 0,
    "doing": "Recovering after trouble",
-   "kills": 2487,
+   "kills": 2637,
    "name": "Fresha",
-   "potionsUsed": 6,
+   "potionsUsed": 15,
    "running": true,
-   "updated": "2026-11-02T03:24Z",
-   "uptime_seconds": 918,
-   "xp": 78647
+   "updated": "2026-11-02T03:40Z",
+   "uptime_seconds": 1879,
+   "xp": 81795
   }
  ],
  "runs_state": "running",
@@ -91,18 +91,18 @@
    "deaths": 0,
    "doing": "Recovering after trouble",
    "id": "fresha-orig",
-   "kills": 2487,
-   "last_seen": 1793589840,
+   "kills": 2637,
+   "last_seen": 1793590800,
    "name": "Fresha",
    "running": true,
-   "started": 1793588922,
+   "started": 1793588921,
    "testing": false
   }
  ],
  "stats": {
   "items": [
    {
-    "label": "d2lod (original game), 2,487 kills, 0 deaths",
+    "label": "d2lod (original game), 2,637 kills, 0 deaths",
     "value": "Fresha lvl 11"
    }
   ],
@@ -120,8 +120,8 @@
   "stall_s": 150,
   "wide_px": 640
  },
- "ts": 1793589931,
- "updated": "2026-11-02T03:25Z",
+ "ts": 1793590842,
+ "updated": "2026-11-02T03:40Z",
  "work": [
   {
    "state": "working",

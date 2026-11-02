@@ -24,13 +24,13 @@
    "clvl": 11,
    "deaths": 0,
    "doing": "Recovering after trouble",
-   "kills": 2487,
+   "kills": 2637,
    "name": "Fresha",
-   "potionsUsed": 6,
+   "potionsUsed": 15,
    "running": true,
-   "updated": "2026-11-02T03:24Z",
-   "uptime_seconds": 918,
-   "xp": 78647
+   "updated": "2026-11-02T03:40Z",
+   "uptime_seconds": 1879,
+   "xp": 81795
   }
  ],
  "runs_state": "running",
@@ -40,15 +40,15 @@
  "stats": {
   "items": [
    {
-    "label": "d2lod (original game), 2,487 kills, 0 deaths",
+    "label": "d2lod (original game), 2,637 kills, 0 deaths",
     "value": "Fresha lvl 11"
    }
   ],
   "live": true
  },
  "tagline": "say it: die dull",
- "ts": 1793589931,
- "updated": "2026-11-02T03:25Z",
+ "ts": 1793590842,
+ "updated": "2026-11-02T03:40Z",
  "work": [
   {
    "state": "working",
