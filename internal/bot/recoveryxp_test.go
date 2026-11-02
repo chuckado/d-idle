@@ -105,3 +105,32 @@ func TestRecoveryXPEarlyEntry(t *testing.T) {
 		t.Fatalf("knob 2, clvl 2 picked %d %v, want Blood Moor", a, ok)
 	}
 }
+
+// monster-stats-trace B1: the table follows the real plain-monster means (22.0 Blood Moor, 26.1 Den, ...) and ranks
+// Cave 1 > Cave 2 > Cold Plains, which the old 10 x level formula tied.
+func TestAreaXPTable(t *testing.T) {
+	for _, tc := range []struct {
+		area, clvl int
+		want       float64
+	}{
+		{2, 5, 22.0}, {8, 5, 26.1}, {3, 5, 25.6}, {9, 5, 35.2}, {13, 5, 27.2}, {4, 5, 37.3}, {5, 10, 47.0}, {6, 10, 52.0},
+		{2, 10, 5.2}, // trace 4.9 at clvl 10 (per unit mix): within 10 percent
+		{44, 15, 215.8 * 0.95},
+	} {
+		got := areaXP(tc.clvl, tc.area, 0, d2.Normal)
+		if got < tc.want*0.9 || got > tc.want*1.1 {
+			t.Errorf("area %d clvl %d: %.1f want about %.1f", tc.area, tc.clvl, got, tc.want)
+		}
+	}
+	if !(areaXP(5, 9, 2, d2.Normal) > areaXP(5, 13, 2, d2.Normal) && areaXP(5, 13, 2, d2.Normal) > areaXP(5, 3, 2, d2.Normal)) {
+		t.Error("order Cave 1 > Cave 2 > Cold Plains")
+	}
+	if areaXP(5, 2, 7, d2.Nightmare) != areaXPPerKill(5, 7) || areaXP(5, 999, 4, d2.Normal) != areaXPPerKill(5, 4) {
+		t.Error("fallback for harder difficulties and unknown areas")
+	}
+	for _, id := range []int{8, 13} {
+		if normalMLvl[id] != map[int]int{8: 1, 13: 2}[id] {
+			t.Errorf("fallback level %d", id)
+		}
+	}
+}
