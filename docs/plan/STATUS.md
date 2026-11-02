@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
-- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
-- 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
-- 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
-- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
-- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
-- e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
-- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
-- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
-- 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
+- 6af67a2d 11-02 13:43 `Merge agent/lockstepp4: LOCKSTEP P4: scaled bot clock removes the chore failures at k=2 and k=4; usable for mechanics tests, not yet cleared for measured baselines (docs only)` (lockstepp4)
+- e3063c08 11-02 13:42 `merge origin/main into lockstepp4` (lockstepp4)
+- 1063082b 11-02 13:35 `Merge agent/crsetup: CRSETUP: CodeRabbit configuration for d-idle (revised) and the fork, plus the pre-scan runbook and quota test (docs and config)` (crsetup)
+- 25720aef 11-02 13:35 `merge origin/main into crsetup` (crsetup)
+- e983945e 11-02 13:27 `Merge agent/creditkit: CREDITKIT: credit block on cards, trailer generator and bundle credit check, GPL carry-over line in the board terms` (creditkit)
+- 0ffaca64 11-02 13:27 `merge origin/main into creditkit` (creditkit)
+- 00058c95 11-02 13:24 `Merge agent/crlimits: CRLIMITS: CodeRabbit review limits and a bundle budget (docs only)` (crlimits)
+- 9621b8f8 11-02 13:23 `merge origin/main into crlimits` (crlimits)
+- 0ed9efce 11-02 13:18 `Merge agent/alignment2: alignment2: credit-funded result (docs and emulator tools only)` (alignment2)
+- 6d2b15dd 11-02 13:17 `merge origin/main into alignment2` (alignment2)
 <!-- statusgen:end -->
