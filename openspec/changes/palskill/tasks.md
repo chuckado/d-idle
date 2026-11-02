@@ -21,4 +21,4 @@ result: "docs and tools/emu only; V run counts in the trace (calc and to-hit 40,
 - [x] 2 Harness pal2 (game.exe calc machine, FUN_0057b420, FUN_0057d9b0; d2d real rules), seeds 7 and 1
 - [x] 3 Candidate fix F measured before / after (copy of combat.hpp in scratch, upstream untouched)
 - [x] 4 Write docs/research/palskill-trace.md; ledger line and coverage regenerated
-- [ ] 5 changecheck and leakcheck, commit
+- [x] 5 changecheck (0 warnings), leakcheck (0 hits), tools/ci/check.sh, openspec validate, commit
