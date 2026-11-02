@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [baselineruns](../../openspec/changes/baselineruns/) | in-progress | baselineruns | `docs/process/baseline-runs.md`<br>`openspec/changes/baselineruns/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -89,7 +88,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change baselineruns: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -135,14 +133,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 86b15dc 11-01 20:42 `Merge agent/baselineruns: BASELINERUNS: runbook for the extra original-game baseline runs (5 late, 3 fresh), launcher prepared in the ops repo` (baselineruns)
+- d14b782 11-01 20:41 `merge origin/main into baselineruns` (baselineruns)
 - f50e477 11-01 20:36 `Merge agent/charfactory: CHARFACTORY: character creation and level setup inventory, capability table, honest snapshot library plan, ten ranked cards` (charfactory)
 - 2713abf 11-01 20:35 `merge origin/main into charfactory` (charfactory)
 - c7a2f38 11-01 20:30 `Merge agent/missilediff: MISSILEDIFF: monster missile deviations D1 D2 D3 confirmed on the real d2d build (44,456 of 120,000 cases differ, 0 after the local fix)` (missilediff)
 - 17835b4 11-01 20:29 `merge origin/main into missilediff` (missilediff)
 - f1fdda0 11-01 20:26 `Merge agent/parityaudit: PARITYAUDIT: bot backend parity: memory backend builds and passes (88 packages), 26-row matrix, gate tooling assumes d2d, smoke runbook, backlog` (parityaudit)
+- b0ffaaa 11-01 20:23 `merge origin/main into baselineruns` (baselineruns)
 - 631f7d2 11-01 20:23 `merge origin/main into parityaudit` (parityaudit)
 - 9aa58ed 11-01 20:13 `Merge agent/baselinefree: BASELINEFREE: baselines extended (late file 14 h, 5 deaths; Fresha chain), per-band Gate 1 XP rule with advisory bands, d2dsoak bands` (baselinefree)
-- 6ac8a44 11-01 20:13 `merge origin/main into baselinefree` (baselinefree)
-- f8f9666 11-01 20:05 `Merge agent/botthreat: BOTTHREAT: missile threat table, runner guard (no kite/retreat from Zombie, Brute, Hawk, Rogue, Lancer, Arach), kill-first and dodge verdicts behind knobs` (botthreat)
-- 3d59e8e 11-01 19:56 `Merge agent/monsterai: MONSTERAI: Act 1/2 monster AI trace: 25 AIs 75,000 cases in game.exe real code vs d2d think; Skeleton Goatman Quill Rat exact; Zombie and Brute run on game.exe, d2d walks` (monsterai)
 <!-- statusgen:end -->
