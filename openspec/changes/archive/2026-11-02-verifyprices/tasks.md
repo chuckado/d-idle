@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyprices
-status: in-progress
+status: archived
 agent: verifyprices
 branch: agent/verifyprices
 worktree: d2lod-wt/verifyprices
@@ -18,7 +18,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs only, not live; NOT READY as is (conflicts with upstream main, divide-first already upstream as a9548d38), READY WITH CHANGES: repair gate alone, rebased"
+result: "docs only; see the doc for tags, holds and limits"
+merge: 7571907
 ```
 
 ## 1. Work
