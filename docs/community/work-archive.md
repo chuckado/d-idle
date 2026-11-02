@@ -12,10 +12,10 @@
 | VERIFY-WAYPOINT | independent re-check of the waypoint refusal claim | verify | S | [issue](https://github.com/shatteredeagle/d-idle/issues/8) | [docs/research/verify-waypoint.md](../research/verify-waypoint.md) | 2026-11-02 | maintainer agents |
 | VERIFY-SKMELEE2 | independent re-check of the melee deviations on the real build | verify | M | [issue](https://github.com/shatteredeagle/d-idle/issues/12) | [docs/research/verify-skmelee2.md](../research/verify-skmelee2.md) | 2026-11-02 | maintainer agents |
 | VERIFY-SKRESIST | independent re-check of the resistance rules Q1 to Q10 | verify | M | [issue](https://github.com/shatteredeagle/d-idle/issues/13) | [docs/research/verify-skresist.md](../research/verify-skresist.md) | 2026-11-02 | maintainer agents |
-| SKGEARAR | attack rating terms from gear (stats 115, 116, 120, 123, 124, 179) | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/14) | [docs/research/sk-gear-ar-trace.md](../research/sk-gear-ar-trace.md) | 2026-11-02 | maintainer agents |
-| SKSHIELD | does a shield's damage reach the player's stats | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/15) | [docs/research/sk-shield-damage-trace.md](../research/sk-shield-damage-trace.md) | 2026-11-02 | maintainer agents |
-| SKCURSEVAL | the curse value calculations on game.exe against d2d | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/16) | [docs/research/sk-curse-calc-trace.md](../research/sk-curse-calc-trace.md) | 2026-11-02 | maintainer agents |
-| SKDEFENDERS | hirelings and players as defenders against resistances | decomp | M | [issue](https://github.com/shatteredeagle/d-idle/issues/17) | [docs/research/sk-defender-resist-trace.md](../research/sk-defender-resist-trace.md) | 2026-11-02 | maintainer agents |
+| SKGEARAR | attack rating terms from gear (stats 115, 116, 120, 123, 124, 179) | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/14) | [docs/research/sk-gearar-trace.md](../research/sk-gearar-trace.md) | 2026-11-02 | maintainer agents |
+| SKSHIELD | does a shield's damage reach the player's stats | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/15) | [docs/research/skshield-trace.md](../research/skshield-trace.md) | 2026-11-02 | maintainer agents |
+| SKCURSEVAL | the curse value calculations on game.exe against d2d | decomp | S | [issue](https://github.com/shatteredeagle/d-idle/issues/16) | [docs/research/skcurseval-trace.md](../research/skcurseval-trace.md) | 2026-11-02 | maintainer agents |
+| SKDEFENDERS | hirelings and players as defenders against resistances | decomp | M | [issue](https://github.com/shatteredeagle/d-idle/issues/17) | [docs/research/skdefenders-trace.md](../research/skdefenders-trace.md) | 2026-11-02 | maintainer agents |
 <!-- archive-table:end -->
 
 ## SKMELEE: the player's own blow (staff or weapon swing)
@@ -116,11 +116,11 @@
 - source: backlog:SKMELEE2
 - question: game.exe adds attack rating terms for the stats 115, 116, 120, 123, 124 and 179 (FUN_0057d8a0 and FUN_0057b7d0); d2d has no input for them. What does each term do (percent or flat, which target kinds, order against the other terms), and how many gear-built characters would a to-hit roll differ for? Run FUN_0057d8a0 natively with its boss tests stubbed, as the existing melee harness does for the other parts.
 - start: docs/research/sk-melee2-trace.md (row D3 of the deviation table); docs/research/sk-melee-trace.md Q2; tools/emu/sk_melee2.py for the harness pattern.
-- deliverable: docs/research/sk-gear-ar-trace.md in the trace style (rules with address tags, V read / V run / S / U, deviations, bot findings); an oracle script under tools/emu/ if you ran game code; 100,000 cases or exhaustive boundaries for any number you call V.
+- deliverable: docs/research/sk-gearar-trace.md in the trace style (rules with address tags, V read / V run / S / U, deviations, bot findings); an oracle script under tools/emu/ if you ran game code; 100,000 cases or exhaustive boundaries for any number you call V.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
 - done: 2026-11-02
 - by: maintainer agents
-- result: docs/research/sk-gear-ar-trace.md
+- result: docs/research/sk-gearar-trace.md
 
 ## SKSHIELD: does a shield's damage reach the player's stats
 - size: S
@@ -129,11 +129,11 @@
 - source: backlog:SKMELEE2
 - question: The normal case is answered by a read (docs/research/sk-melee2-trace.md Q3, V read): a shield is never the item FUN_00535bc0 returns, so with a weapon in use its damage stats do not reach the player. Left open: the barehanded player with a shield in the off slot (marked I there), the other FUN_00627910 callers, and a native run of the stat-list merge (V run) to turn the read into a counted result.
 - start: docs/research/sk-melee2-trace.md Q3 (the shield question, marked I there); docs/research/sk-melee-trace.md Q3; docs/research/paladin-act1-recon.md section 6 row 4 and the slot function FUN_0063bef0.
-- deliverable: docs/research/sk-shield-damage-trace.md; a static answer from the equip path (tagged V read) is a valid first PR, a run of the stat-list merge natively (tagged V run) is better.
+- deliverable: docs/research/skshield-trace.md; a static answer from the equip path (tagged V read) is a valid first PR, a run of the stat-list merge natively (tagged V run) is better.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
 - done: 2026-11-02
 - by: maintainer agents
-- result: docs/research/sk-shield-damage-trace.md
+- result: docs/research/skshield-trace.md
 
 ## SKCURSEVAL: the curse value calculations on game.exe against d2d
 - size: S
@@ -142,11 +142,11 @@
 - source: backlog:SKRESIST
 - question: Already done for the curse rows (docs/research/pr-curseimmune-verifier.md): d2d's `eval_calc` equals the game side for Lower Resist, Amplify Damage, Decrepify and Conviction at levels 1 to 99 (396 rows, 0 differ), with `dm` run through game.exe's own function. Left open: run game.exe's own calc machine (not the calc text) for the `ln34` and `par` / `min` parts and the cap at 150, and extend to the other curses (Weaken, Iron Maiden, Terror, Confuse, Life Tap, Attract) and synergy terms.
 - start: docs/research/sk-resist-trace.md section 10 (not traced: the curse value calcs) and Q7; docs/research/sk-passives-trace.md for synergies; upstream d2decomped `eval_calc` (public).
-- deliverable: docs/research/sk-curse-calc-trace.md with the table of calcs, levels and cases compared (counts and seed), plus an oracle script under tools/emu/ if you ran game code.
+- deliverable: docs/research/skcurseval-trace.md with the table of calcs, levels and cases compared (counts and seed), plus an oracle script under tools/emu/ if you ran game code.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
 - done: 2026-11-02
 - by: maintainer agents
-- result: docs/research/sk-curse-calc-trace.md
+- result: docs/research/skcurseval-trace.md
 
 ## SKDEFENDERS: hirelings and players as defenders against resistances
 - size: M
@@ -155,8 +155,8 @@
 - source: backlog:SKRESIST
 - question: A hireling or a player that is hit gets the resistance penalty and the cap, and a curse or aura on it applies in full (no one-fifth rule). Trace the full rule for these defenders: which function decides "plain monster", the Normal column read for hirelings, absorb, and the poison per-tick path. Does d2d match, and does the bot's reading of a mercenary's resistances need a change?
 - start: docs/research/sk-resist-trace.md section 4 limits (hireling defenders and players as defenders; FUN_0063ee90 is the plain-monster test); docs/research/pets-merc-trace.md; docs/research/d2d-fidelity-riskmap.md.
-- deliverable: docs/research/sk-defender-resist-trace.md; oracle script under tools/emu/ if you ran game code; 100,000 cases for any number you call V.
+- deliverable: docs/research/skdefenders-trace.md; oracle script under tools/emu/ if you ran game code; 100,000 cases for any number you call V.
 - needs: your own game.exe 1.14d install, upstream d2decomped checkout, Python 3 with unicorn.
 - done: 2026-11-02
 - by: maintainer agents
-- result: docs/research/sk-defender-resist-trace.md
+- result: docs/research/skdefenders-trace.md
