@@ -146,6 +146,20 @@ Not re-run on the combined head: the differentials (emulator comparisons), clang
 
 Not re-run: the emulator differentials and the deterministic scenarios (run on the candidate head by the author and the verifier; the tree is identical), an MSVC build. No comment, label or reviewer request was posted.
 
+## CodeRabbit follow-up on #166 (card crfollow166)
+
+- posted: 2026-11-02 CodeRabbit review read: three inline findings, all Minor: missiles.md:106 (the physical roll is described as max-exclusive and pointed at rules::missile_blow, which rolls it inclusive), test_missile_hit.cpp:55 (an unreadable case file returns success), tools/emu/README.md:45 (the oracle row can pass on empty input). Non-inline nitpicks (loop names `i` in test_combat.cpp:437 and `k` in test_missile_hit.cpp:62) were read and not acted on.
+- decision: missiles.md valid: the max-exclusive wording is now for the elements, and a separate paragraph says the physical roll is inclusive, rolled whenever phys_hi > 0, not examined and not covered by the differential. test_missile_hit valid: it prints an error and returns 1 when the file does not open. README valid: the row sets pipefail and chains the stages with &&; only this row (the table's other rows keep their form). Claim commits untouched; +15 -6 lines in three files.
+- check: pr_guard 0 FAIL / 0 WARN for the commit and for upstream/main..head; presubmit --quick 0 FAIL, 3 WARN (ruff not installed there, build skipped, the older "never" wording at missiles.md:105 that holds for the elements); test_missile_hit built with g++ and clang++ with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion, 0 warnings in it (D2D_WERROR off because unrelated files such as ai.cpp shadow under -Wshadow); test_combat ok, test_game_missiles ok with the data dir; negative check: a missing case file now exits 1 and the pipefail row fails; the gen output (47,000 rows) still runs through test_missile_hit. The game-side oracle was not re-run (the guard does not change a result).
+- posted: 2026-11-02 push (plain, no force) to the fork: fix/player-missile-damage-roll 1c273ef1 -> 7d4f6f0e (one follow-up commit, numeric-ID noreply identity, `Agent: Claude Code`); also pushed to the private remote. PR #166 now has 6 commits.
+- posted: 2026-11-02 replies to the three inline threads (comment ids 4440416918, 4440416929, 4440416938; replies 4440512312, 4440512543, 4440512785): each valid, fixed in 7d4f6f0e. No re-review was requested.
+- non-inline: the nitpick loop names (i, k) are style notes on lines this PR added; not acted on, no reply (not inline threads of ours to answer under this go).
+
+## Shared-file lines for the merger (crfollow166)
+
+- BACKLOG: #166 got a follow-up (7d4f6f0e) for CodeRabbit; watch for the maintainer.
+- INDEX, CHANGELOG, decomp-queue, research README: no change.
+
 ## Shared-file lines for the merger (propenplayerroll)
 
 - BACKLOG: #166 (player missile damage roll) is open; watch for the maintainer and CodeRabbit.
