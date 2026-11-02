@@ -2,7 +2,7 @@
 
 ```yaml
 change: levelsareas
-status: in-progress
+status: archived
 agent: pa-levelsareas
 branch: agent/levelsareas
 worktree: d2lod-wt/levelsareas
@@ -14,8 +14,8 @@ skip_specs: true
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0 hits; coverage.py --write"
-merge:
-result: "Emulator run (lv_area.py, 1,088 cases equal) and table census; not verified live."
+merge: 2f99299
+result: "docs only; see the doc for tags and limits"
 credit:
   author: owner
   agents: [Claude Code]

@@ -54,7 +54,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
-| [levelsareas](../../openspec/changes/levelsareas/) | in-progress | pa-levelsareas | `docs/research/levelsareas-trace.md`<br>`tools/emu/lv_*.py`<br>`openspec/changes/levelsareas/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
@@ -106,7 +105,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
-- change levelsareas: changecheck -cli 0 warnings; leakcheck -mode fail 0 hits; coverage.py --write
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
 - change m1-liveproof: starting gold and unidentified sell prices recorded V in docs/basics-live.md with cheat ledger ids
@@ -129,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
-- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
-- 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
-- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
-- e50f1bd2 11-02 14:54 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: finished docs and tools work that was never merged (branch triage 2026-11-02)` (prbuildskmelee3b)
-- 894788d7 11-02 14:51 `Merge agent/verifysmite: verifysmite: records (docs and generated records only)` (verifysmite)
-- d6cb2f71 11-02 14:51 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
-- 9dc7281a 11-02 14:46 `Merge agent/playerroll: playerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (playerroll)
-- 053f5ebf 11-02 14:45 `merge origin/main into verifysmite` (verifysmite)
-- 9e894c1e 11-02 14:45 `merge origin/main into playerroll` (playerroll)
+- 2f99299e 11-02 15:58 `Merge agent/levelsareas: levelsareas: coverage-gap or verification result (docs and emulator tools only)` (levelsareas)
+- f75f9c72 11-02 15:58 `merge origin/main into levelsareas` (levelsareas)
+- 5c44a788 11-02 15:55 `Merge agent/itemweapons: itemweapons: coverage-gap or verification result (docs and emulator tools only)` (itemweapons)
+- 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
+- de908e29 11-02 15:49 `Merge agent/skassassin: skassassin: coverage-gap or verification result (docs and emulator tools only)` (skassassin)
+- fe33b6e7 11-02 15:49 `merge origin/main into skassassin` (skassassin)
+- 08590a5d 11-02 15:42 `Merge agent/skdruid: skdruid: coverage-gap or verification result (docs and emulator tools only)` (skdruid)
+- bab1c358 11-02 15:39 `Merge agent/branchtriage: branchtriage: finished docs and tools work that was never merged (branch triage 2026-11-02)` (branchtriage)
+- 0c6becab 11-02 15:38 `merge origin/main into skdruid` (skdruid)
+- 9b0a9c1b 11-02 15:35 `Merge agent/crfixbundle: CRFIXBUNDLE: CodeRabbit's six staging comments judged and fixed in bundle-3; throwaway merge with batch 9 (docs, harness, card)` (crfixbundle)
 <!-- statusgen:end -->
