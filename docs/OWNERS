@@ -145,3 +145,4 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
 openspec/changes/verifyplayerroll/**  verifyplayerroll  verifyplayerroll
 docs/research/pr-playerroll-verifier.md  verifyplayerroll  verifyplayerroll
+docs/research/pr-playerroll-verifier/**  verifyplayerroll  verifyplayerroll

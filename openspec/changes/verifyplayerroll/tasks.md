@@ -10,6 +10,7 @@ skip_specs: true
 owns:
   - openspec/changes/verifyplayerroll/**
   - docs/research/pr-playerroll-verifier.md
+  - docs/research/pr-playerroll-verifier/**
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
