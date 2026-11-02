@@ -2,7 +2,7 @@
 
 ```yaml
 change: skias
-status: in-progress
+status: archived
 agent: skias
 branch: agent/skias
 worktree: ~/code/d2lod-wt/skias
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Partial desk trace: d2d attack_speed / attack_ticks read and breakpoints reproduced by skias_bp.py; game.exe attack branch not read, nothing V run, no ledger row. Not verified live."
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
 live: "docs only, nothing run live"
+merge: 1316229
 ```
 
 - [x] read d2d attack_speed / attack_ticks, breakpoint script
