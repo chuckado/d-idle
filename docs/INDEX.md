@@ -170,3 +170,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/lockstep-licences.md: licences and Blizzard terms for a releasable 1.14d time/lockstep hook; clean-room and PROVENANCE proposal, offline notice (card licensecheck)
 - tools/contrib/claim.py: maintainer claim, done and watch commands for work-item issues (dry run default, docs/process/chunker.md)
 - docs/api-agent-cookbook.md - command forms that work for API-credit runner jobs (emulator wrapper, data paths, forbidden list)
+- docs/research/pr-missilerecord-reverify.md: independent Opus re-verification of the fixed monster missile record candidate and the Andariel poison split (READY WITH CHANGES)
