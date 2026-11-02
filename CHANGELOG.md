@@ -8,6 +8,18 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- A looted bow is taken off a non-Amazon the game wore it on, the sell chore never offers worn or start items, and a removed start weapon is worn again.
+- CONTRIBUTORS.md added; Credit section in docs/process/chunker.md
+- Fixed: town walk no longer loops on a gate that stalled every approach; a Sorceress with a stray bow keeps casting and no longer spends her gold on Arrows.
+- prbuildprices2: repair-gate PR draft and branch (docs only)
+- Added docs/research/pr-skmelee3-draft.md and sm3_run.sh / sm3_probe.py: the SKMELEE3 candidate built in the private fork with a counted differential.
+- Docs: freeze rules PR draft and prep notes (docs/research/pr-freeze-rules-draft.md).
+- Added docs/research/verifypalskill2.md and tools/emu/vp2*: independent check of the Smite, Zeal and Sacrifice deviations.
+- Added docs/research/pr-skmelee3-verifier.md: independent check of the SKMELEE3 fork candidate (fine physical, undead/Blunt bonus).
+- verifyprices: independent Opus verification of the vendor prices follow-on (docs and tools/emu/vpr_* only)
+- docs: verifypaldur independent check of the durability-loss trace (docs/research/verifypaldur.md).
+- Added docs/research/sk-zero-hit-trace.md (SKZEROHIT: zero-damage hit effects in game.exe vs d2d, static)
+- verifypalaura: independent check of PALAURA (docs/research/verifypalaura.md, tools/emu/vp_check.py)
 - SKSTATEEV state-event decomposition: docs/research/sk-state-events-trace.md (static; nothing run)
 - verifywaypoint2: docs/research/verifywaypoint2-trace.md and tools/emu/vw2_*: waypoint refusal claim re-verified against d2d's own test binary (docs and emulator scripts only)
 - Teleport room rule re-checked independently (verifyteleroom): holds on 150,225 emulator cases; limits and extra findings in docs/research/verifyteleroom-trace.md.

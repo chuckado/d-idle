@@ -130,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 34d019b7 11-02 11:24 `Merge agent/skstateev: skstateev: Pro-account job result (docs and emulator tools only)` (skstateev)
-- d7b062ed 11-02 11:23 `merge origin/main into skstateev` (skstateev)
-- caad9fdb 11-02 11:16 `Merge agent/verifywaypoint2: verifywaypoint2: credit-funded decomposition result (docs and emulator tools only)` (verifywaypoint2)
-- 1cc36322 11-02 11:15 `merge origin/main into verifywaypoint2` (verifywaypoint2)
-- 2d3187e1 11-02 11:08 `Merge agent/verifyteleroom: verifyteleroom: credit-funded decomposition result (docs and emulator tools only)` (verifyteleroom)
-- 8db72999 11-02 11:07 `merge origin/main into verifyteleroom` (verifyteleroom)
-- 650c59b7 11-02 11:01 `Merge agent/skground: skground: credit-funded decomposition result (docs and emulator tools only)` (skground)
-- 93042b4f 11-02 11:00 `merge origin/main into skground` (skground)
-- 4ffc2466 11-02 10:57 `Merge agent/prcandidates: PRCANDIDATES: ranked inventory of upstream PR candidates (docs only)` (prcandidates)
-- d0836a1f 11-02 10:56 `merge origin/main into prcandidates` (prcandidates)
+- 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
+- 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
+- 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
+- 6572f5e3 11-02 12:30 `merge origin/main into credits` (credits)
+- 49cead9c 11-02 12:20 `Merge agent/kitstall: KITSTALL: Sorceress ammo/launcher chore and dead nav gate memory fixes found by the kit baseline lane (offline tests)` (kitstall)
+- 4466665d 11-02 12:19 `merge origin/main into kitstall` (kitstall)
+- 08f85a5e 11-02 12:16 `Merge agent/prbuildprices2: prbuildprices2: private PR candidate record and draft for the vendor repair gate (docs only; nothing upstream)` (prbuildprices2)
+- 9749431e 11-02 12:15 `merge origin/main into prbuildprices2` (prbuildprices2)
+- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
+- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
 <!-- statusgen:end -->
