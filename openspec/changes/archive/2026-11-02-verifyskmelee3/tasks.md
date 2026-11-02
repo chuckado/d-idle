@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyskmelee3
-status: in-progress
+status: archived
 agent: verifyskmelee3
 branch: agent/verifyskmelee3
 worktree: d2lod-wt/verifyskmelee3
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - own harness run before the author's draft is compared
-result: "docs only, not verified live; provisional READY WITH CHANGES (D2 merc/Shadow gate); det, suites, tidy NOT RUN"
+result: "docs only; see the doc for tags, holds and limits"
+merge: 5461819
 ```
 
 - [x] 1 Read the candidate diff and the disassembly for each rule, address and mask
