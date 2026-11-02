@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyfreezeend2
-status: in-progress
+status: archived
 agent: verifyfreezeend2
 branch: agent/verifyfreezeend2
 worktree: ~/code/d2lod-wt/verifyfreezeend2
@@ -19,7 +19,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Offline, not verified live. game.exe run natively under the emulator: think due during a get-hit 3,000 cases (1,271 inside) driver entered at the due frame, 0 differ; freeze during get-hit 3,000 cases (1,952 end event dropped) 0 differ from the stated rule; d2d probe differential 2,504 cases: think inside the get-hit 1,133 of 1,133 differ (d2d holds it to the get-hit end), after it 0 of 1,371. No PR candidate. Coverage ledger unchanged."
+result: "docs only; first or second pass, not yet independently verified"
+merge: b123648
 ```
 
 ## 1. Work

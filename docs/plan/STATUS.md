@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifyfreezeend2](../../openspec/changes/verifyfreezeend2/) | in-progress | verifyfreezeend2 | `openspec/changes/verifyfreezeend2/**`<br>`docs/research/verifyfreezeend2-trace.md`<br>`tools/emu/vfe2_run.py`<br>`tools/emu/vfe2_cmp.py`<br>`tools/emu/vfe2_tab.py`<br>`tools/emu/vfe2_all.sh`<br>`tools/emu/vfe2_build.sh`<br>`tools/emu/test_vfe2_gh.cpp` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -127,10 +126,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifyfreezeend2: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b123648d 11-02 10:22 `Merge agent/verifyfreezeend2: verifyfreezeend2: credit-funded decomposition result (docs and emulator tools only)` (verifyfreezeend2)
 - c3906af9 11-02 10:21 `merge origin/main into verifyfreezeend2` (verifyfreezeend2)
 - 0430f68e 11-02 10:14 `Merge agent/skiasgame2: skiasgame2: credit-funded decomposition result (docs and emulator tools only)` (skiasgame2)
 - 644cc14e 11-02 10:14 `merge origin/main into skiasgame2` (skiasgame2)
@@ -140,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 88f6f85a 11-02 09:54 `merge origin/main into baselineruns-20261102` (baselineruns-20261102)
 - be84737b 11-02 09:48 `Merge agent/prconflicts: PRCONFLICTS: PRs 159, 160, 163 rebased onto upstream main and force-pushed with the user's go` (prconflicts)
 - b0b6a713 11-02 09:48 `merge origin/main into prconflicts` (prconflicts)
-- 633ef305 11-02 09:33 `Merge agent/lockstepp1p2b: LOCKSTEP P1 and P2: 25 fps confirmed on our build; proxy clock hook at k=1 control and k=2 (50.0001 fps, clean fight); hung-start lesson (docs only)` (lockstepp1p2b)
 <!-- statusgen:end -->
