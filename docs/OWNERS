@@ -143,8 +143,3 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
-docs/research/mercstats-trace.md  mercstats  mercstats
-tools/emu/mst_*  mercstats  mercstats
-docs/coverage/ledger.tsv  mercstats  mercstats
-docs/coverage/rule-coverage.md  mercstats  mercstats
-openspec/changes/mercstats/**  mercstats  mercstats

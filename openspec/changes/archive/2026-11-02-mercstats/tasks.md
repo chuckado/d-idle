@@ -2,7 +2,7 @@
 
 ```yaml
 change: mercstats
-status: in-progress
+status: archived
 agent: mercstats
 branch: agent/mercstats
 worktree: ~/code/d2lod-wt/mercstats
@@ -17,7 +17,8 @@ exclusive: []
 gates:
   - tools/emu/mst_cmp.py reports 0 mismatches for each differential named in the trace
   - go run ./cmd/changecheck and go run ./cmd/leakcheck -mode fail clean
-result: trace written; V run on the worker host (emulator, d2d scratch build), not verified live
+result: "docs and emulator tools only; see the doc for tags and deviations"
+merge: 089af52
 ```
 
 - [x] 1 Read AGENTS.md, the pets-merc and monster-stats traces, upstream hireling / merc-ai notes
