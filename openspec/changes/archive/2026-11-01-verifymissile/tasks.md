@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifymissile
-status: in-progress
+status: archived
 agent: verifymissile
 branch: agent/verifymissile
 worktree: ~/code/d2lod-wt/verifymissile
@@ -13,8 +13,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh"
-result: "Docs only: docs/research/pr-missilerecord-verifier.md. Verdict NOT READY; nothing posted upstream."
+result: "docs only; changes required listed; Andariel poison bolt has the same bug on upstream"
 live: "docs only, nothing run live"
+merge: af74c4d
 ```
 
 - [x] seed choice on both sides, pinning, RNG advance
