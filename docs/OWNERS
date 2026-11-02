@@ -134,3 +134,10 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/pr-skmelee3-d1-draft.md  prbuildskmelee3b  prbuildskmelee3b
+docs/research/pr-skmelee3-d2-draft.md  prbuildskmelee3b  prbuildskmelee3b
+tools/emu/sk_melee2.py  prbuildskmelee3b  prbuildskmelee3b
+tools/emu/sk_melee2_test.cpp  prbuildskmelee3b  prbuildskmelee3b
+tools/emu/sm3_probe.py  prbuildskmelee3b  prbuildskmelee3b
+tools/emu/sm3_run.sh  prbuildskmelee3b  prbuildskmelee3b
+openspec/changes/prbuildskmelee3b/**  prbuildskmelee3b  prbuildskmelee3b
