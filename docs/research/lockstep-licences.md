@@ -70,7 +70,7 @@ URLs: https://github.com/ThePhrozenKeep/D2MOO (`LICENSE`, `README.md`, GitHub AP
 ## 6. Blizzard terms (V unless marked)
 
 ### 6.1 Blizzard End User License Agreement (LAST REVISED March 21, 2024)
-URL: https://www.blizzard.com/en-us/legal/fba4d00f-c7e4-4883-b8b9-1b4500a402ea/blizzard-end-user-license-agreement (fetched, 188 lines of text). It covers "the Battle.net desktop app software ... each of the Games" as the "Platform". Whether it governs a retail 1.14d copy installed from a disc is U: the page says games from other sources may have "a separate End User License Agreement". The original 2000/2001 Diablo II LoD EULA text was not fetched; the only quoted form I found is a court opinion's wording (6.4, S/V).
+URL: https://www.blizzard.com/en-us/legal/<page-id>/blizzard-end-user-license-agreement (fetched, 188 lines of text). It covers "the Battle.net desktop app software ... each of the Games" as the "Platform". Whether it governs a retail 1.14d copy installed from a disc is U: the page says games from other sources may have "a separate End User License Agreement". The original 2000/2001 Diablo II LoD EULA text was not fetched; the only quoted form I found is a court opinion's wording (6.4, S/V).
 
 License Limitations ("You agree that you will not, in whole or in part or under any circumstances, do the following"):
 - "Derivative Works: Copy or reproduce ..., translate, reverse engineer, derive source code from, modify, disassemble, decompile, or create derivative works based on or related to the Platform."
@@ -82,7 +82,7 @@ License Limitations ("You agree that you will not, in whole or in part or under 
 - Reading for us: the EULA's "bots" and "modify" limits on their face cover the d2lod-bot itself and any in-process hook, online or offline; the clause is not limited to Battle.net play. Our whole project sits outside what Blizzard "expressly authorized". That is the main legal-terms risk and it already applies today; a public hook makes it more visible, not different in kind (U, judgment).
 
 ### 6.2 Blizzard Legal FAQ
-URL: https://www.blizzard.com/en-us/legal/28d5ebbf-c245-4408-8ba9-043dd5f056bf/ (undated page, fetched; old, still hosted, text refers to Diablo III and Hearthstone forums so it is at least 2010s).
+URL: https://www.blizzard.com/en-us/legal/<page-id>/ (undated page, fetched; old, still hosted, text refers to Diablo III and Hearthstone forums so it is at least 2010s).
 - "Can I make add-ons or expansions for Blizzard Entertainment games? ... We do not allow add-ons or expansions for Diablo(R)."
 - "Can I do a total conversion of your games? Yes. ... no problems with total conversions so long as they are for personal use and do not infringe our End User License Agreement included in our games, nor the rights of any other parties including copyrights, trademarks or other rights."
 - "Can I create and/or distribute hack and cheats for your games? No. Blizzard Entertainment does not support or condone the use or distribution of cheats and/or hacks for use with Blizzard Entertainment games under any circumstance."
@@ -179,7 +179,7 @@ Things that force "do not release": any Blizzard bytes, decompiled code, or tabl
 - https://github.com/Hirtol/speedhack-rs (API, README, Cargo.toml files, root listing)
 - https://github.com/hi-angel/clock_gettime_override (API, root listing)
 - https://github.com/ChaosMarc/PlugY (API, LICENSE, README, listing)
-- https://www.blizzard.com/en-us/legal/fba4d00f-c7e4-4883-b8b9-1b4500a402ea/blizzard-end-user-license-agreement
-- https://www.blizzard.com/en-us/legal/28d5ebbf-c245-4408-8ba9-043dd5f056bf/ (Legal FAQ)
+- https://www.blizzard.com/en-us/legal/<page-id>/blizzard-end-user-license-agreement
+- https://www.blizzard.com/en-us/legal/<page-id>/ (Legal FAQ)
 - https://kotaku.com/blizzard-sends-cease-and-desists-to-diablo-ii-resurrec-1846977935 and https://gamedeveloper.com/game-platforms/blizzard-suspends-350k-i-starcraft-diablo-ii-i-users-for-third-party-hacks- (summariser fetch)
 - https://law.resource.org/pub/us/case/reporter/F3/422/422.F3d.630.04-3654.html (summariser fetch)
