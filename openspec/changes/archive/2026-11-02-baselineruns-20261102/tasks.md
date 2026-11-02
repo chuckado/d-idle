@@ -13,7 +13,7 @@ owns:
 exclusive: []
 gates: rows load with d2dsoak compare; weak and invalid runs flagged in record.md
 result: "generated records only"
-merge: b58718e
+merge: d37b5b2
 ```
 
 - [x] 1. Runs executed by the driver, logs pulled
