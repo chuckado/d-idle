@@ -2,7 +2,7 @@
 
 ```yaml
 change: skgearar
-status: in-progress
+status: archived
 agent: skgearar
 branch: agent/skgearar
 worktree: ~/code/d2lod-wt/skgearar
@@ -15,7 +15,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. FUN_0057d8a0 (stats 115 / 116 / 123 / 124) run natively under the emulator: 100,960 cases (seed 7), 0 differ from the written reading. Stats 179 and 120 read only. No PR candidate."
+result: "docs only; see the doc for tags, holds and limits; board item updated separately"
+merge: b0637e1
 ```
 
 ## 1. Work
