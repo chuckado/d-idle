@@ -2,7 +2,7 @@
 
 ```yaml
 change: palskill
-status: in-progress
+status: archived
 agent: palskill
 branch: agent/palskill
 worktree: ~/code/d2lod-wt/palskill
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - game.exe side run on the worker host (seeds 7 and 1) before the trace states a number
-result: "docs and tools/emu only; V run counts in the trace (calc and to-hit 40,720 cases 0 differ; Smite damage 41,000 cases, D1 before / after); not verified live (no game); no PR candidate by the rule"
+result: "docs only; first or second pass, not yet independently verified"
+merge: 900ac2e
 ```
 
 - [x] 1 Read the five dispatch functions in the disassembly and the upstream notes
