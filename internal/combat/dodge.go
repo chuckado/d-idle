@@ -18,10 +18,13 @@ var curseIDs = d2.DefaultCurseIDs
 // missileKinds maps a missile class to its kind; nil means unknown, which never dodges.
 var missileKinds func(class int) d2.MissileKind
 
+// threatTable is the missile threat table of the loaded data (threat.go); nil until SetTables ran with a DB.
+var threatTable ThreatTable
+
 // SetTables resolves the curse state ids and the missile names from the loaded data tables. A nil DB keeps the S
 // defaults and disables the sidestep.
 func SetTables(db *data.DB) {
-	curseIDs, missileKinds = d2.DefaultCurseIDs, nil
+	curseIDs, missileKinds, threatTable = d2.DefaultCurseIDs, nil, nil
 	if db == nil {
 		return
 	}
@@ -31,6 +34,7 @@ func SetTables(db *data.DB) {
 		}
 		return 0, false
 	})
+	threatTable = BuildThreatTable(db)
 	missileKinds = func(class int) d2.MissileKind {
 		if m := db.MissileByID(class); m != nil {
 			return d2.MissileKindByName(m.Name)
