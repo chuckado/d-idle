@@ -2,7 +2,7 @@
 
 ```yaml
 change: pingpongrate
-status: in-progress
+status: archived
 agent: pingpongrate
 branch: agent/soakfixes2
 worktree: ~/code/d2lod-wt/pingpongrate
@@ -15,7 +15,8 @@ owns:
 exclusive: []
 gates:
   - go test -p 1 ./internal/bot passes, including the cluster C replay
-result: implemented and tested offline (mem.Fake rig); not verified live
+result: "offline table tests only; ping-pong guard by XP rate in soakfixes2; rate rule scaling unproven"
+merge: 6ae8124
 ```
 
 - [x] 1 Test first: cluster C replay fires, A and B fire, a field with real kills does not
