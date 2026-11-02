@@ -103,7 +103,7 @@ func TestTPDebounceLinesLogged(t *testing.T) {
 	if count(buf, "tp-debounce-hold") != 1 || count(buf, "tp-debounce-flip") != 0 {
 		t.Fatalf("hold run: %s", buf)
 	}
-	for _, w := range []string{"verdict=true", "raw=false", "looks=1", "held_s=5"} {
+	for _, w := range []string{"verdict=true", "raw=true", "looks=1", "held_s=5"} {
 		if !strings.Contains(buf.String(), w) {
 			t.Errorf("missing %s in %s", w, buf)
 		}

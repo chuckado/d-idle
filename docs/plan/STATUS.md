@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [botlogs](../../openspec/changes/botlogs/) | in-progress | botlogs | `docs/botlogs.md`<br>`internal/bot/botlogs_test.go`<br>`internal/bot/tpdebounce.go`<br>`internal/bot/tpdebounce_test.go`<br>`openspec/changes/botlogs/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -52,7 +53,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
-| [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [kitgatelevel](../../openspec/changes/kitgatelevel/) | in-progress | kitgatelevel | `docs/kitgate.md`<br>`docs/knobs.md`<br>`internal/bot/kitgate.go`<br>`internal/bot/kitgate_test.go`<br>`internal/bot/kitlevel_test.go`<br>`internal/bot/observe.go`<br>`internal/bot/resource.go`<br>`internal/bot/goal.go`<br>`internal/resource/tuning.go`<br>`internal/env/tuning_resource.go`<br>`openspec/changes/kitgatelevel/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
@@ -87,6 +87,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change botlogs: go test -p 1 ./internal/bot passes
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -105,7 +106,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
-- change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change kitgatelevel: go test -p 1 ./internal/bot ./internal/resource ./internal/env ./tools/knobdump passes
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
@@ -131,9 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 2522460e 11-02 02:30 `merge origin/main into kitgatelevel` (kitgatelevel)
-- 4e475182 11-02 02:27 `Merge agent/gate1pass: Gate 1 PASS record and Review 3: run gate1-20261102-0005, 16.3 virtual hours, clvl 14, 0 deaths, band 11-14 XP/h 8748 vs 9859, longest no-progress window 5 min, fault recovered in 2.5 s; build 050a509 had the OLD kit gate` (gate1pass)
-- 2b34c8c2 11-02 02:20 `merge origin/main into kitgatelevel` (kitgatelevel)
+- dd3b2824 11-02 02:15 `Merge agent/kitgatelevel (kitgate-skip lives there)` (kitgatelevel)
 - 089af520 11-02 01:54 `Merge agent/mercstats: MERCSTATS: hireling stats, costs, AI and gear effects traced; produced on the API credits runner` (mercstats)
 - 645ae2e2 11-02 01:53 `merge origin/main into mercstats` (mercstats)
 - 2085bdee 11-02 01:39 `Merge agent/monsterskill: MONSTERSKILL: monster skill use for Act 1 and 2 casters and shooters traced; produced on the API credits runner` (monsterskill)
@@ -141,4 +139,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 190fe392 11-02 01:06 `merge origin/main into monsterai2` (monsterai2)
 - 50d3bad5 11-02 00:59 `Merge agent/crfollow164: CRFOLLOW164: CodeRabbit follow-up on PR 164: MMTAB lookup only when rows differ, missing d2d cases fail; replies posted` (crfollow164)
 - 898bc4d6 11-02 00:48 `Merge agent/propenmissile: PROPENMISSILE: upstream PR 164 opened (monster missile record and poison units, bundled, 8 commits on upstream main)` (propenmissile)
+- 87053a54 11-02 00:40 `Merge agent/missilefix3: MISSILEFIX3: SrcDamage byte read, text corrections from the third check, both PR drafts final; third check section added` (missilefix3)
+- 1b745bbd 11-02 00:39 `merge origin/main into missilefix3` (missilefix3)
 <!-- statusgen:end -->
