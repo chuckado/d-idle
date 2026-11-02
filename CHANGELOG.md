@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: opened upstream PR #171 (monster base velocity 75 percent); posted log in docs/research/openpr-log.md.
 - no change
 - Docs: opened upstream PR #170 (Nightmare and Hell monster start level); posted log in docs/research/openpr-log.md.
 - Decomp item 15 (SKSHIELD): shield and off-weapon gear in the player's stat list traced and run (docs/research/skshield-trace.md, tools/emu/skshield_run.py, skshield_base.py); SKMELEE2's D7 settled, D8 given its game-side input.
