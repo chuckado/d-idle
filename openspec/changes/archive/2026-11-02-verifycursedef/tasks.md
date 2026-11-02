@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifycursedef
-status: in-progress
+status: archived
 agent: verifycursedef
 branch: agent/verifycursedef
 worktree: d2lod-wt/verifycursedef
@@ -18,7 +18,8 @@ exclusive: []
 gates:
   - "own game.exe oracle and own d2d probe; counts and seeds given"
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "docs only; emulator runs on the worker host (no game, not live); verdicts in docs/research/verify-cursedef.md"
+result: "docs and emulator tools only"
+merge: 86a7133
 ```
 
 ## 1. Work
