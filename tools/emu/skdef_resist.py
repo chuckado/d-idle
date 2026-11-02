@@ -226,7 +226,9 @@ def cmp(cases, gpath, dpath, shift=True, core=False):
                 continue
             tot[col] += 1
             cause = "curse" if v else "pierce" if p else "floor" if elem == 0 and s < -100 else \
-                "no-MR" if elem == 1 and s else "flat-order" if col == "dealt" and aux and elem < 5 else "other"
+                "no-MR" if elem == 1 and s else \
+                "flat-order" if col == "dealt" and aux and elem < 5 and (roll - aux) << 8 <= 0x100000 else \
+                "muldiv>4096" if col == "dealt" and (roll - aux) << 8 > 0x100000 else "other"
             key = (col, "player hireling".split()[kind], "phys mag fire ltng cold pois".split()[elem], cause)
             cat[key] = cat.get(key, 0) + 1
             if "list" in sys.argv[5:] and cat[key] <= 3:

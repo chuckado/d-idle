@@ -12,3 +12,7 @@ Decomp board item 17 (SKDEFENDERS, source SKRESIST): docs/research/sk-resist-tra
 ## Impact
 
 Docs and emulator tooling only.
+
+## Overlap (declared)
+
+docs/coverage/ledger.tsv and the generated docs/coverage/rule-coverage.md are shared by every trace card; this card only extends the note of the existing F04 row (the brief names both files) and regenerates the table with `python3 tools/coverage/coverage.py --write`. Other cards that edit other rows merge by hand-resolving the one line.

@@ -85,7 +85,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | treasure | #850 | TESTED-0-DIFF | `docs/research/treasure-trace.md` | 100,000 | 2026-11-01 | class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared |
 | formulas | F01 | TESTED-0-DIFF | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | melee to-hit, real build, two seeds |
 | formulas | F03 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | physical kept in 256ths D1 (and missile physical, docs/research/skabrecheck.md) |
-| formulas | F04 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal |
+| formulas | F04 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | resist, pierce, immunity: D1 curse on an immune; pierce under 100, floor -100 equal; defender side (player, hireling) docs/research/skdefenders-trace.md: 222,464 cases rule check on game.exe 0 mismatches, penalty and cap equal d2d, D1 flat order D2 no magic resistance D3 no absorb |
 | formulas | F05 | TESTED-DEVIATION | `docs/research/skill-damage-trace.md` | 116,000 | 2026-10-31 | docs/research/pr-skill-damage-proof.md |
 | formulas | F06 | TESTED-DEVIATION | `docs/research/sk-mana-trace.md` | 130,840 | 2026-11-01 | D2 minmana floor; D1 D3 timing read |
 | formulas | F08 | TESTED-DEVIATION | `docs/research/walk-speed-trace.md` | 712,362 | 2026-10-31 | monster velocity uses Run, chill multiplies, floor; D1 (see doc) |
