@@ -332,9 +332,9 @@ def part_b(n, seed):
                         tot["owner_ok"] += (reach and {x[0]: x[1:] for x in ev} == {"E7": ("a", "d"), "E3": ("d", "a")})
                         tot["e7_owner_defender"] += any(x[0] == "E7" and x[1] == "d" for x in ev)
                         rarg = [x[1] for x in log if x[0] == "R"]
-                        tot["reach_arg_ok"] += bool(rarg) and rarg[0] == (3 if attk == 0 else 1)
+                        tot["reach_arg_ok"] += bool(rarg) and rarg[0] == (1 if attk == 0 else 3)     # observed: 1 for a player attacker, 3 for a monster (first pass had it reversed)
                         want = (reach == 1)
-                        tot["match"] += (has3 == want and has7 == want and (not hit or ("DMG" in names) == bool(hit)) and ("DMG" in names) == bool(hit and reach))
+                        tot["match"] += (has3 == want and has7 == want and ("DMG" in names) == bool(hit and reach))
                         shape = (attk, dfdk, hit, reach, tuple("DMG(flag=%d)" % x[1] if x[0] == "DMG" else
                                                                  "%s(owner %s)" % (x[0], x[1]) if x[0][0] == "E" else x[0] for x in log))
                         shapes[shape] = shapes.get(shape, 0) + 1
