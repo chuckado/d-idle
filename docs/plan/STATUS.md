@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [botlogs](../../openspec/changes/botlogs/) | in-progress | botlogs | `docs/botlogs.md`<br>`internal/bot/botlogs_test.go`<br>`internal/bot/tpdebounce.go`<br>`internal/bot/tpdebounce_test.go`<br>`openspec/changes/botlogs/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -86,6 +87,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change botlogs: go test -p 1 ./internal/bot passes
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -129,6 +131,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 4cb8add9 11-02 03:25 `merge origin/main into botlogs` (botlogs)
 - b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
 - b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
 - bf6b9e46 11-02 02:42 `Merge agent/crfollow164b: CRFOLLOW164B: CodeRabbit follow-up 2 on PR 164: an empty game.tsv comparison fails; reply posted` (crfollow164b)
@@ -138,5 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 089af520 11-02 01:54 `Merge agent/mercstats: MERCSTATS: hireling stats, costs, AI and gear effects traced; produced on the API credits runner` (mercstats)
 - 645ae2e2 11-02 01:53 `merge origin/main into mercstats` (mercstats)
 - 2085bdee 11-02 01:39 `Merge agent/monsterskill: MONSTERSKILL: monster skill use for Act 1 and 2 casters and shooters traced; produced on the API credits runner` (monsterskill)
-- 3c1b5006 11-02 01:07 `Merge agent/monsterai2: MONSTERAI2: monster AI trace completion: six unported AIs, Fallen cases, run base speed, mismatches root-caused` (monsterai2)
 <!-- statusgen:end -->
