@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyskamazon
-status: in-progress
+status: archived
 agent: verifyskamazon
 branch: agent/verifyskamazon
 worktree: ~/code/d2lod-wt/verifyskamazon
@@ -14,8 +14,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; coverage.py --check; tools/ci/check.sh"
-result: "docs and emulator tools only; offline; see the trace for the run counts"
+result: "docs only; see the doc for tags and limits"
 live: "docs and emulator only, nothing run live"
+merge: 0489b0f
 ```
 
 - [x] read FUN_0059f940, collision tail, FUN_005a8910, FUN_0045c3e0
