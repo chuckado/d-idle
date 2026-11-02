@@ -11,7 +11,6 @@ owns:
   - internal/loot/pickup.go
   - internal/loot/loot_test.go
   - internal/town/shop.go
-  - internal/town/chores.go
   - internal/town/rebuy.go
   - internal/town/earlygear_test.go
   - internal/town/sim/sim.go

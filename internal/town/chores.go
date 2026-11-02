@@ -478,8 +478,6 @@ func (t *Town) sell(parent context.Context, a *Act, rep *ChoreReport) error {
 	defer cancel()
 	var first error
 	tried := map[int]bool{}
-	t.logWorn("sell: worn before")
-	defer t.logWorn("sell: worn after")
 	for _, class := range a.Sell {
 		if tried[class] {
 			continue
@@ -524,20 +522,6 @@ func (t *Town) sell(parent context.Context, a *Act, rep *ChoreReport) error {
 		}
 	}
 	return first
-}
-
-// logWorn names every worn item. The sell chore logs it before and after so a lost weapon or glove (KITSTALL2, U: how
-// it left the body is not in the logs) shows which vendor step took it.
-func (t *Town) logWorn(msg string) {
-	s, err := t.current()
-	if err != nil || s.Inventory == nil {
-		return
-	}
-	var names []string
-	for _, u := range s.Inventory.Container(d2.ContEquipment) {
-		names = append(names, fmt.Sprintf("%d:%s", u.Item.Body, t.nameOf(u)))
-	}
-	t.e.Log.Info(msg, "worn", names, "gold", s.Player.Gold)
 }
 
 // logDurability writes the durability of every worn item (diagnosis of repairs that change nothing).

@@ -602,6 +602,8 @@ func (t *Town) sellTo(ctx context.Context, list []d2.Unit, rep *ChoreReport) (re
 	if err != nil {
 		return nil, err
 	}
+	t.logWorn("sell: worn before")
+	defer t.logWorn("sell: worn after")
 	for _, u := range list {
 		cur, err := t.current()
 		if err != nil {
@@ -783,4 +785,18 @@ func (t *Town) poorKit(s *d2.Snapshot) bool {
 	}
 	bs := belt.Read(t.e.Data, s.Inventory)
 	return bs.Count[belt.HP]+bs.Count[belt.RV]+belt.PackCount(t.e.Data, s.Inventory, belt.HP) < 2
+}
+
+// logWorn names every worn item. sellTo logs it before and after each vendor so a lost weapon or glove (KITSTALL2, U:
+// how it left the body is not in the logs) shows which vendor step took it.
+func (t *Town) logWorn(msg string) {
+	s, err := t.current()
+	if err != nil || s.Inventory == nil {
+		return
+	}
+	var names []string
+	for _, u := range s.Inventory.Container(d2.ContEquipment) {
+		names = append(names, fmt.Sprintf("%d:%s", u.Item.Body, t.nameOf(u)))
+	}
+	t.e.Log.Info(msg, "worn", names, "gold", s.Player.Gold)
 }

@@ -137,7 +137,6 @@ openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
 internal/loot/pickup.go  kitstall2  kitstall2
 internal/loot/loot_test.go  kitstall2  kitstall2
 internal/town/shop.go  kitstall2  kitstall2
-internal/town/chores.go  kitstall2  kitstall2
 internal/town/rebuy.go  kitstall2  kitstall2
 internal/town/earlygear_test.go  kitstall2  kitstall2
 internal/town/sim/sim.go  kitstall2  kitstall2
