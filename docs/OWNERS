@@ -143,3 +143,8 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+openspec/changes/verifyskresist/**  verifyskresist  verifyskresist
+docs/research/verify-skresist.md  verifyskresist  verifyskresist
+tools/emu/vr_dis.py  verifyskresist  verifyskresist
+tools/emu/vr_tbl.py  verifyskresist  verifyskresist
+tools/emu/vr_resist.py  verifyskresist  verifyskresist
