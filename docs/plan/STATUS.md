@@ -127,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 76208627 11-02 12:10 `Merge agent/prbuildskmelee3: prbuildskmelee3: private PR candidate record and draft (docs only; nothing upstream)` (prbuildskmelee3)
-- 1673a3f6 11-02 12:10 `merge origin/main into prbuildskmelee3` (prbuildskmelee3)
-- e9f23947 11-02 12:07 `Merge agent/prbuildfreeze: prbuildfreeze: private PR candidate record and draft (docs only; nothing upstream)` (prbuildfreeze)
-- e87cbb58 11-02 12:06 `merge origin/main into prbuildfreeze` (prbuildfreeze)
-- 52945582 11-02 12:01 `Merge agent/verifypalskill2: verifypalskill2: result (docs and emulator tools only)` (verifypalskill2)
-- 444e6825 11-02 12:00 `merge origin/main into verifypalskill2` (verifypalskill2)
-- 54618196 11-02 11:57 `Merge agent/verifyskmelee3: verifyskmelee3: result (docs and emulator tools only)` (verifyskmelee3)
-- bb1629aa 11-02 11:56 `merge origin/main into verifyskmelee3` (verifyskmelee3)
-- 75719073 11-02 11:49 `Merge agent/verifyprices: verifyprices: result (docs and emulator tools only)` (verifyprices)
-- 4e48d30d 11-02 11:49 `merge origin/main into verifyprices` (verifyprices)
+- dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
+- 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
+- e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
+- 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
+- 41d992c7 11-02 12:49 `Merge agent/contribid: CONTRIBID: community contributors commit as themselves; reproducibility rule and PR template checkboxes (docs and template only)` (contribid)
+- 2047f287 11-02 12:48 `merge origin/main into contribid` (contribid)
+- dc11d0eb 11-02 12:45 `Merge agent/prbuildskmelee3b: prbuildskmelee3b: private PR candidate records and drafts for the melee blow D1 and D2 split (docs only; nothing upstream)` (prbuildskmelee3b)
+- 4e693443 11-02 12:44 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
+- 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
+- 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
 <!-- statusgen:end -->
