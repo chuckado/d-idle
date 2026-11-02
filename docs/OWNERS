@@ -141,3 +141,5 @@ internal/bot/emptyarea_test.go  soakstall  soakstall
 openspec/changes/soakstall/**  soakstall  soakstall
 internal/bot/tpdump.go  hastpdump  hastpdump
 docs/hastpdump.md  hastpdump  hastpdump
+docs/research/baseline-audit.md  baselineaudit  baselineaudit
+openspec/changes/baselineaudit/**  baselineaudit  baselineaudit
