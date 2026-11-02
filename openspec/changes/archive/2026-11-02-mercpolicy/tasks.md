@@ -2,7 +2,7 @@
 
 ```yaml
 change: mercpolicy
-status: in-progress
+status: archived
 agent: mercpolicy
 branch: agent/mercpolicy
 worktree: d2lod-wt/mercpolicy
@@ -25,14 +25,14 @@ gates:
   - "go test -p 1 ./internal/merc/... ./internal/env ./internal/task ./internal/bot ./tools/knobdump ./cmd/d2bot passes"
   - "revive when affordable, not when poor, kit reserve, cap 2 an hour, Act 2 hire with strip first, hire window line, floors with and without merc: named tests in cmd/d2bot and internal/merc"
   - "changecheck 0 warnings; leakcheck 0 hits"
-result: "offline tests pass (merc, env, task, knobdump, d2bot); NOT verified live: revive price, hire window read, Act 2 hire (no d2d window reader exists)"
+result: "whole-repo go test -short passes on the worker host; not verified live"
 live: "not run"
 credit:
   component: mercpolicy
   author: owner
   agents: [Claude Code]
   consent: none
-merge:
+merge: fdbc334
 ```
 
 - [x] Knobs: merc.enabled 1, kitReservePct, goldFarmMaxLevel, reviveGoldMult 1, hireGoldMult 1, potionLifePct 50, monasteryMinLevel 14; docs/knobs.md regenerated
