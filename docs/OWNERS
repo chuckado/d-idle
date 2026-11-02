@@ -143,3 +143,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 openspec/changes/kitgatelevel/**  kitgatelevel  kitgatelevel
+openspec/changes/verifytele/**  verifytele  verifytele
+docs/research/verify-teleport-room.md  verifytele  verifytele
+tools/emu/vt_run.sh  verifytele  verifytele
+tools/emu/vt_check.py  verifytele  verifytele
