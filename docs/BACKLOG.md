@@ -328,6 +328,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - PRBUILDSMITE built (private fork branch local/smite-block-v1-final 887b502a on upstream main 82ea6db4; no PR): a block no longer stops Smite, two lines plus tests; 30,035 monster cases against game.exe: base differs in 6,435, head 0; 7 suites green; animation stated as a limit; det hashes not run: docs/research/pr-smite-block-draft.md
 - crfixbundle: CodeRabbit review of staging PR 2 judged and fixed on private branches local/bundle-3 / stage/bundle-3 (docs/research/crfix-bundle-20261102.md); coordinator posts the replies and pushes the staging branch
 - BRANCHTRIAGE (card branchtriage, 2026-11-02): 15 unmerged local agent branches sorted into MERGE / ALREADY ON MAIN / SUPERSEDED / KEEP / DROP with the exact commands (docs/research/branch-triage-20261102.md)
+- skdruid first pass done (calc aspect of skills.dru 0 differ of 27,800); effects of the Druid skills (forms, Twister, Tornado, Hurricane, Armageddon, summon spawn) still untested; docs/research/skdruid-trace.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
