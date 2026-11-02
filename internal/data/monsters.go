@@ -43,6 +43,7 @@ type Monster struct {
 	Melee     bool // isMelee
 	Ranged    bool // rangedtype
 	Boss      bool
+	NoRatio   bool // NoRatio: life, damage and experience ignore the monlvl ratio rows (pets, summons)
 	PrimeEvil bool
 	LUndead   bool
 	HUndead   bool
@@ -90,7 +91,7 @@ func (m *Monster) Immune(t DamageType, d Difficulty) bool { return m.Res[d][t] >
 var monsterCols = []string{
 	"Id", "hcIdx", "BaseId", "NameStr", "MonType", "AI", "enabled", "rangedtype", "minion1", "minion2",
 	"SetBoss", "PartyMin", "PartyMax", "MinGrp", "MaxGrp", "Velocity", "Run", "Level", "Level(N)", "Level(H)",
-	"isMelee", "npc", "interact", "lUndead", "hUndead", "demon", "flying", "boss", "primeevil", "killable",
+	"isMelee", "NoRatio", "npc", "interact", "lUndead", "hUndead", "demon", "flying", "boss", "primeevil", "killable",
 	"ResDm", "ResMa", "ResFi", "ResLi", "ResCo", "ResPo",
 	"ResDm(N)", "ResMa(N)", "ResFi(N)", "ResLi(N)", "ResCo(N)", "ResPo(N)",
 	"ResDm(H)", "ResMa(H)", "ResFi(H)", "ResLi(H)", "ResCo(H)", "ResPo(H)",
@@ -123,7 +124,7 @@ func loadMonsters(t *Table) []*Monster {
 			PartyMin: r.Int("PartyMin"), PartyMax: r.Int("PartyMax"), MinGrp: r.Int("MinGrp"), MaxGrp: r.Int("MaxGrp"),
 			Velocity: r.Int("Velocity"), Run: r.Int("Run"),
 			Melee: r.Bool("isMelee"), NPC: r.Bool("npc"), Interact: r.Bool("interact"), Killable: r.Bool("killable"),
-			Boss: r.Bool("boss"), PrimeEvil: r.Bool("primeevil"), LUndead: r.Bool("lUndead"), HUndead: r.Bool("hUndead"),
+			Boss: r.Bool("boss"), NoRatio: r.Bool("NoRatio"), PrimeEvil: r.Bool("primeevil"), LUndead: r.Bool("lUndead"), HUndead: r.Bool("hUndead"),
 			Demon: r.Bool("demon"), Flying: r.Bool("flying"),
 		}
 		res := [...]string{"ResDm", "ResMa", "ResFi", "ResLi", "ResCo", "ResPo"}
