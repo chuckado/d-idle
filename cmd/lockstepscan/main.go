@@ -98,6 +98,11 @@ func main() {
 		watch(p, os.Args[2:])
 		return
 	}
+	rate := 25.0
+	if len(os.Args) == 2 && strings.HasPrefix(os.Args[1], "k=") { // expected game speed factor (hook runs)
+		rate, _ = strconv.ParseFloat(os.Args[1][2:], 64)
+		rate *= 25
+	}
 	pid, _ := mem.FindGame()
 	rs := regions(pid)
 	fmt.Printf("regions rw below 2G: %d\n", len(rs))
@@ -106,7 +111,7 @@ func main() {
 	time.Sleep(2 * time.Second)
 	b := snap(p, rs)
 	dt := time.Since(t0).Seconds()
-	lo, hi := uint32(25*dt*0.9), uint32(25*dt*1.1+1)
+	lo, hi := uint32(rate*dt*0.9), uint32(rate*dt*1.1+1)
 	var cand []uint32
 	for base, x := range a {
 		y := b[base]
@@ -138,7 +143,7 @@ func main() {
 		time.Sleep(2 * time.Second)
 		d := time.Since(tl).Seconds()
 		tl = time.Now()
-		lo, hi := uint32(25*d*0.9), uint32(25*d*1.1+1)
+		lo, hi := uint32(rate*d*0.9), uint32(rate*d*1.1+1)
 		for ad, v := range last {
 			n, ok := rd(ad)
 			if !ok || n-v < lo || n-v > hi {
