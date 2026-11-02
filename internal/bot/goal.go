@@ -1178,6 +1178,7 @@ func (r *Runner) exploreGaveUp(ctx context.Context, area int, err error) bool {
 	delete(l.exploreFails, area)
 	l.cleared[area] = true
 	r.e.Log.Info("area abandoned: exploring failed with no kill", "area", area, "name", r.areaName(area), "failures", f.n, "err", err)
+	r.e.Log.Info("explore-giveup", "area", area, "failures", f.n, "kills", kills)
 	r.logSweep(area, true)
 	return true
 }

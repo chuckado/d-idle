@@ -131,6 +131,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- bfbd8652 11-02 03:40 `Merge agent/botlogs: BOTLOGS: explore-giveup, tp-debounce-hold/flip and kitgate-trip log lines so gate records can count the guards` (botlogs)
+- 4cb8add9 11-02 03:25 `merge origin/main into botlogs` (botlogs)
 - b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
 - b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
 - bf6b9e46 11-02 02:42 `Merge agent/crfollow164b: CRFOLLOW164B: CodeRabbit follow-up 2 on PR 164: an empty game.tsv comparison fails; reply posted` (crfollow164b)
@@ -139,6 +141,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2b34c8c2 11-02 02:20 `merge origin/main into kitgatelevel` (kitgatelevel)
 - 089af520 11-02 01:54 `Merge agent/mercstats: MERCSTATS: hireling stats, costs, AI and gear effects traced; produced on the API credits runner` (mercstats)
 - 645ae2e2 11-02 01:53 `merge origin/main into mercstats` (mercstats)
-- 2085bdee 11-02 01:39 `Merge agent/monsterskill: MONSTERSKILL: monster skill use for Act 1 and 2 casters and shooters traced; produced on the API credits runner` (monsterskill)
-- 3c1b5006 11-02 01:07 `Merge agent/monsterai2: MONSTERAI2: monster AI trace completion: six unported AIs, Fallen cases, run base speed, mismatches root-caused` (monsterai2)
 <!-- statusgen:end -->
