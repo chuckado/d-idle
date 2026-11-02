@@ -2,7 +2,7 @@
 
 ```yaml
 change: botclock
-status: in-progress
+status: archived
 agent: botclock
 branch: agent/botclock
 worktree: d2lod-wt/botclock
@@ -14,7 +14,8 @@ owns:
 exclusive: []
 gates:
   - "gofmt, go vet and go test of the touched packages; changecheck 0 warnings; leakcheck 0"
-result: "offline tests only; not verified live (needs the user's go, i4 and the hook)"
+result: "go tests per package pass; not verified live"
+merge: dbbc0f7
 ```
 
 - [x] inventory and classification (docs/timescale.md)

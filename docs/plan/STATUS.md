@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [botclock](../../openspec/changes/botclock/) | in-progress | botclock | `internal/gclock/**`<br>`docs/timescale.md`<br>`openspec/changes/botclock/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -86,7 +85,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change botclock: gofmt, go vet and go test of the touched packages; changecheck 0 warnings; leakcheck 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -129,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- dbbc0f70 11-02 13:00 `Merge agent/botclock: BOTCLOCK: D2BOT_TIMESCALE scales the bot's game-clock waits (default 1: unchanged); offline tests; live k=2 re-measure pending` (botclock)
 - 0132de11 11-02 12:59 `merge origin/main into botclock` (botclock)
 - e5d5a4e0 11-02 12:56 `Merge agent/lockstepp3: LOCKSTEP P3: unhooked, k=1, k=2 and k=4 runs on the original game; frame rate scales exactly; k=2 usable for the game only, k=4 needs a scaled bot clock (docs only)` (lockstepp3)
 - 6fd26100 11-02 12:56 `merge origin/main into lockstepp3` (lockstepp3)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4e693443 11-02 12:44 `merge origin/main into prbuildskmelee3b` (prbuildskmelee3b)
 - 0737a5f3 11-02 12:34 `Merge agent/kitstall2: KITSTALL2: worn bow taken off, sell never touches worn items (with sell logging), start weapon re-worn (offline tests)` (kitstall2)
 - 1df61abf 11-02 12:34 `merge origin/main into kitstall2` (kitstall2)
-- 2f14b208 11-02 12:31 `Merge agent/credits: CREDITS: CONTRIBUTORS.md, board credit rules (docs only)` (credits)
 <!-- statusgen:end -->
