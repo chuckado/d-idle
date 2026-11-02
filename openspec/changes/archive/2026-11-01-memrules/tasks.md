@@ -2,7 +2,7 @@
 
 ```yaml
 change: memrules
-status: in-progress
+status: archived
 agent: memrules
 branch: agent/memrules
 worktree: ~/code/d2lod-wt/memrules
@@ -23,7 +23,8 @@ exclusive: []
 gates:
   - "go test -p 1 ./internal/cheat passes"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Rules, ADR 0014, delta spec and ledger run marker written; ledger code unit-tested offline, not verified live."
+result: "user decision 2026-11-02; offline tests only; the private overlay and gate judge are updated separately"
+merge: 8610229
 ```
 
 - [x] 1.1 rule text in AGENTS.md, docs/cheats.md, ADR, decisions line
