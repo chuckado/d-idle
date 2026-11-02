@@ -62,6 +62,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [verifytele](../../openspec/changes/verifytele/) | in-progress | verifytele | `openspec/changes/verifytele/**`<br>`docs/research/verify-teleport-room.md`<br>`tools/emu/vt_run.sh`<br>`tools/emu/vt_check.py` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -124,17 +125,18 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change verifytele: none
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- c833e458 11-02 15:19 `Merge agent/verifyplayerroll: verifyplayerroll: finished docs and tools work that was never merged (branch triage 2026-11-02)` (verifyplayerroll)
-- 1046ffdd 11-02 15:14 `Merge agent/verifyalign: verifyalign: result (docs and emulator tools only)` (verifyalign)
-- 4fc04c20 11-02 15:13 `merge origin/main into verifyplayerroll` (verifyplayerroll)
-- f7b3ab41 11-02 15:13 `merge origin/main into verifyalign` (verifyalign)
-- d2027358 11-02 15:08 `Merge agent/stateevrun: stateevrun: result (docs and emulator tools only)` (stateevrun)
-- 18c9c1ae 11-02 15:01 `Merge agent/sorcrest2: sorcrest2: finished docs and tools work that was never merged (branch triage 2026-11-02)` (sorcrest2)
-- b4ee3d23 11-02 15:01 `merge origin/main into stateevrun` (stateevrun)
-- 8c55c53f 11-02 15:01 `merge origin/main into sorcrest2` (sorcrest2)
-- 5ffb9027 11-02 14:58 `Merge agent/reviewprs: reviewprs: finished docs and tools work that was never merged (branch triage 2026-11-02)` (reviewprs)
-- b3a2a929 11-02 14:57 `merge origin/main into reviewprs` (reviewprs)
+- 9e2fb231 11-02 04:24 `merge origin/main into verifytele` (verifytele)
+- 1d6dfd13 11-02 04:14 `Merge agent/verifynmlevel: VERIFY-NMLEVEL: independent Opus verification of the Nightmare and Hell monster level fix: READY WITH CHANGES; 310,482 grid cases, head 0 mismatches` (verifynmlevel)
+- b1da815d 11-02 04:13 `merge origin/main into verifynmlevel` (verifynmlevel)
+- f1c51826 11-02 04:05 `Merge agent/crfollow166: CRFOLLOW166: CodeRabbit follow-up on PR 166: three valid comments fixed in 7d4f6f0e, replies posted` (crfollow166)
+- b5af241a 11-02 03:50 `Merge agent/propenplayerroll: PROPENPLAYERROLL: upstream PR 166 opened (player-side missile damage roll: element top, physical 256ths, -100 floor), 5 commits` (propenplayerroll)
+- 804d4b75 11-02 03:49 `merge origin/main into propenplayerroll` (propenplayerroll)
+- bfbd8652 11-02 03:40 `Merge agent/botlogs: BOTLOGS: explore-giveup, tp-debounce-hold/flip and kitgate-trip log lines so gate records can count the guards` (botlogs)
+- 4cb8add9 11-02 03:25 `merge origin/main into botlogs` (botlogs)
+- b53c6d1d 11-02 03:14 `Merge agent/kitgatelevel: KITGATELEVEL: kit gate from clvl 8 is a town trip then progress (cap 2 trips, kitgate-skip log), hold only without portal and healing potion; a kit trip whose chores fail now counts toward the cap; knob count test updated` (kitgatelevel)
+- b7424b4e 11-02 02:49 `merge origin/main into kitgatelevel` (kitgatelevel)
 <!-- statusgen:end -->
