@@ -8,6 +8,14 @@ Code: `internal/cheat` (policy, ledger, memory and save cheats, overlay), `inter
 `cmd/d2cheat` (CLI), `mem.Writer` + `Proc.WriteAt` in `internal/mem`. Tags: VERIFIED LIVE = observed on instance i5
 ("Multi", GE-Proton11-11, 1.14d, 2026-10-28); UNVERIFIED = not observed.
 
+## Memory rule (ADR 0014, user decision 2026-11-02)
+> "We can read/edit memory whenever we want, but we have to make sure we aren't using memory editing as a crutch."
+
+Reading is always allowed. Writing is allowed for SETUP, INSTRUMENTATION, DIAGNOSIS and FIXTURE capture (wording and the CRUTCH RULE: AGENTS.md "The live games"), always through this tool or a declared instrumentation module, with a reason, in the ledger. This replaces the old "memory is READ-ONLY except test cheats" rule; everything below (allow-list, offline only, ledger) still applies to the tool.
+- Measured runs (gate, soak, baseline, fidelity): setup writes before the start only, declared in the run record; no gameplay-affecting write after the start. Otherwise the run is CHEATED and counts toward nothing.
+- Mark the start with `d2cheat --reason R runstart <run>`; set `D2BOT_RUN=<run>` for the writes of that run so entries carry the run id. `d2cheat ledger --since-run <run>` prints the writes after the marker and the line `writes after start: N` (exit 1 when N > 0 or the marker is missing: "no marker" never reads as 0). The record of a soak or gate pastes that line.
+- A feature is not done until its live drill passes with writes disabled. Code injected into the game (DLL, hook) is INSTRUMENTATION only: the user's go per hook set, documented, logged.
+
 ## Rules the code enforces
 - One entry point: `cheat.Do(ctx, Request{Kind, Params, Reason, Actor})` (`Env.Do` for tests). **Reason is required**; a call
   without one is refused and still written to the ledger (reason `(none)`).
@@ -42,7 +50,7 @@ JSONL, one `Entry` per attempt, refusals and failures included:
      "params":{"value":30},"before":{"server.level":25,...},"after":{"server.level":30,...},
      "reason":"...","success":true,"error":"","backup":"/mnt/cold/d2lod/backups/Multi-....d2s"}
 
-Kinds: heal god gold stashgold level xp stats setstat saveedit dataoverlay. God writes a `phase:start` line when it begins
+Kinds: runstart (marker, no write) heal god gold stashgold level xp stats setstat saveedit dataoverlay. God writes a `phase:start` line when it begins
 (a killed process still leaves a trace) and the normal line when it ends. Reader: `Ledger.List(Filter{Since, Until, Actor,
 Instance, Character, Kind, OnlySuccess})`, `Summarize(entries)`, `Ledger.Cheated(since, character)` and `cheat.Cheated(since)`:
 telemetry/dashboard call these with a run's start time to flag or exclude cheated sessions. CLI: `d2cheat ledger [--since 2h|RFC3339]
