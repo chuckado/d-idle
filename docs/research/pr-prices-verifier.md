@@ -43,7 +43,7 @@ Game side: M runs FUN_0062efb0's own block 0062faac..0062fc59 on the real npc ro
 | M, P <= 0xffff (34,326) | buy | 2,955 (2,048 or 1,088 mult pushes it over 0xffff before a quest mult) | 8 |
 | | sell | 0 | 0 |
 | | repair | 10 | 10 |
-| G, something to repair (4,664) | gate (cost > 0 vs game passes) | 143 (d2d prices, game refuses; e.g. `6cb` crossbow-type bow) | 0 |
+| G, something to repair (4,664) | gate (cost > 0 vs game passes) | 143 (d2d prices, game refuses; e.g. `6cb`, an elite bow, half durability) | 0 |
 | G, whole (3,244) | gate | 17 + 626 | 626 |
 
 - Head residuals (V, listed): the 8 buy and 10 repair cases are all prices that reach 0 in the mult block (P 0, 1 or 7); d2d's later minimum 1 gives 1, my comparator does not model the game's later minimum for buy and repair. Same count on base and head: harness, not the change.
@@ -70,7 +70,7 @@ Game side: M runs FUN_0062efb0's own block 0062faac..0062fc59 on the real npc ro
 | pr_guard per commit (777df9d7, aed23fc8, da80d0ab) and range | 0 FAIL, 0 WARN each | 0 FAIL, 0 WARN |
 | presubmit --quick | 0 FAIL, 1 WARN (build skipped) | 0 FAIL, 1 WARN |
 | merge into upstream main 3852c904 | **3 conflicts, rules.hpp** | (is the rebase) |
-| merge into open #159 (36e7fcde), #160 (df1bf0e5), #163 (5e2d3f87) | the same 3 rules.hpp conflicts each (they sit on current main) | REBASED_PRS |
+| merge into open #159 (36e7fcde), #160 (df1bf0e5), #163 (5e2d3f87) | the same 3 rules.hpp conflicts each (they sit on current main) | clean against all three (merge-tree rc 0) |
 
 ## 5. The draft's claims against counted runs
 

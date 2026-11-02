@@ -18,12 +18,12 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: ""
+result: "docs only, not live; NOT READY as is (conflicts with upstream main, divide-first already upstream as a9548d38), READY WITH CHANGES: repair gate alone, rebased"
 ```
 
 ## 1. Work
 
-- [ ] 1.1 Rules and addresses against the disassembly
-- [ ] 1.2 Own oracle and d2d probe, base vs head counts
-- [ ] 1.3 Readers of the changed code, CI parity, merges
-- [ ] 1.4 Draft claims vs counted runs; verdict in docs/research/pr-prices-verifier.md
+- [x] 1.1 Rules and addresses against the disassembly
+- [x] 1.2 Own oracle and d2d probe, base vs head counts
+- [x] 1.3 Readers of the changed code, CI parity, merges
+- [x] 1.4 Draft claims vs counted runs; verdict in docs/research/pr-prices-verifier.md
