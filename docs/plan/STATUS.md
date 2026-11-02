@@ -130,6 +130,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 3f184c0d 11-02 16:21 `merge origin/main into verifyzerohit` (verifyzerohit)
 - 0f4feb76 11-02 16:14 `Merge agent/skbarb: skbarb: coverage-gap or verification result (docs and emulator tools only)` (skbarb)
 - 452b11ea 11-02 16:13 `merge origin/main into skbarb` (skbarb)
 - 36ac3a39 11-02 16:06 `Merge agent/skamazon: skamazon: coverage-gap or verification result (docs and emulator tools only)` (skamazon)
@@ -139,5 +140,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 5c44a788 11-02 15:55 `Merge agent/itemweapons: itemweapons: coverage-gap or verification result (docs and emulator tools only)` (itemweapons)
 - 02e57da8 11-02 15:54 `merge origin/main into itemweapons` (itemweapons)
 - de908e29 11-02 15:49 `Merge agent/skassassin: skassassin: coverage-gap or verification result (docs and emulator tools only)` (skassassin)
-- fe33b6e7 11-02 15:49 `merge origin/main into skassassin` (skassassin)
 <!-- statusgen:end -->
