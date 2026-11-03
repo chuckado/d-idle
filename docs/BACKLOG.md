@@ -390,6 +390,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - SORCDIFF: the lightning Sorceress build crossed with rule coverage; one proven deviation left on upstream main 005c7cab for the bot's skills (Lightning and Chain Lightning cast length, `local/sorc-lightning-seq` on the private remote, base 802 of 3,609 differ, head 0); Energy Shield and Thunder Storm are not used by the build; ready-for-Opus list in the doc
 - lockstepplan: plan for the cheapest d2d vs game.exe A:B (fresh clvl 1-6 cell at k=1, 2 rounds of 3 hidden lanes after Gate 2), native Windows PC lane judged NO for now, AB-SEEDPIN checklist; docs/research/lockstep-plan-20261103.md
 - ORACLEPORT: upstream batch 2 as two PRs with the oracles in the tree: A `local/batch2-A-r5` (41afdc6a: mana floor, Teleport room rule, nearest spot) then B `local/batch2-B-r2` (0399e357: monster damage roll), on upstream main e1eea02a; bodies in docs/research/pr-batch2-A-body.md and pr-batch2-B-body.md; the user decides when to open
+- gate3prep: Gate 2 tick checklist and Gate 3 requirements table; first gap to close is d2d resource sampling (fds, threads, bot RSS) in gate-sup.sh and the judge (docs/research/gate3-prep-20261103.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
