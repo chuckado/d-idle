@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- b2rebase2: batch 2 bundle rebased onto upstream main 005c7cab, split proposal, bodies on the new PR template; nothing pushed upstream
 - verifydmg4: fourth verification of the monster damage roll r4 (tools/emu/v4_*, docs/research/verify-dmgroll4.md)
 - verifydmg2: second verification of the monster damage roll r2 (tools/emu/v2_*, docs/research/verify-dmgroll2.md)
 - review180: private review of upstream PR 180 and its effect on batch 2; nothing posted upstream
