@@ -384,6 +384,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - housekeep: soak-minutes-virtual archived (soak-gates delta applied); branch and worktree inventory awaits the lead's cleanup go; docs/research/housekeep-20261103.md
 - REVIEW180: private review of upstream PR 180 (merged 7d999228): no behaviour change in components or tests; the bundle is already on top of it; open PR 181 is the real conflict for batch 2 (combat.hpp monster_blow), see docs/research/review-pr180-20261103.md
 - DMGROLL r2 second verification: NOT READY FOR PR (b9ecb415): both findings fixed (roll/reduce/absorb 0 of 240,000), but the clamp now also hits the fixed-record callers (Corpse Explosion, Diablo's cold touch) and the absorb-after-reduction order leaves the pool 3 % worse than base; see docs/research/verify-dmgroll2.md
+- DMGROLL r4 fourth verification: READY FOR PR yes (9ea2afe9): roll, reduce, absorb, both, negpct, exact 0 differences through the REAL Fight::absorb (354,000 frames, real = glue = hurt_side); never worse than base except Bone Armor and Energy Shield together with the shield cast last (pool mean +2 %); PR text and one ponytail sentence to fix; see docs/research/verify-dmgroll4.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
