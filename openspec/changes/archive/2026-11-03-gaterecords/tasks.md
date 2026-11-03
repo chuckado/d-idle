@@ -2,7 +2,7 @@
 
 ```yaml
 change: gaterecords
-status: in-progress
+status: archived
 agent: gaterecords
 branch: agent/gaterecords
 worktree: d2lod-wt/gaterecords
@@ -18,12 +18,13 @@ owns:
   - openspec/changes/gaterecords/**
 exclusive: []
 gates: "changecheck 0 warnings; leakcheck fail mode 0 hits; openspec validate --all --strict"
-result: "restored three Gate 1 records (commits 8cd08011, 174e9e68, 7fb57db1) under unique run-id names plus an index; docs only, not verified live (records are copies of generated output)"
+result: "docs only"
 credit:
   component: Gate 1 records
   author: owner
   agents: [Claude Code]
   consent: none
+merge: b5496da
 ```
 
 - [x] 1. Restore the three records and minutes archives under unique names
