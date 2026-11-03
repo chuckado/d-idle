@@ -2,7 +2,7 @@
 
 ```yaml
 change: b2rebase2
-status: in-progress
+status: archived
 agent: b2rebase2
 branch: agent/b2rebase2
 worktree: d2lod-wt/b2rebase2
@@ -19,7 +19,7 @@ exclusive:
 gates:
   - "local/batch2-bundle-r3 is the four bundle commits on upstream main 005c7cab, same authors, subjects, range-diff equal, nothing pushed upstream"
   - "changecheck 0 warnings, leakcheck 0 hits"
-result: "docs and scripts; not verified live. Checks run on the worker host: parity (13 stages rc 0), presubmit --quick with GCC and tidy, mana and Teleport seed 1 differentials. Not run: Teleport seed 9, damage sets, WSL and MSVC lanes (checklist in pr-batch2-run.txt)."
+result: "docs and tools only; see card result"
 credit:
   component: Batch 2 bundle onto upstream main 005c7cab, split proposal
   author: owner
@@ -27,6 +27,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: f498e13
 ```
 
 ## 1. Work
