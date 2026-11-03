@@ -2,7 +2,7 @@
 
 ```yaml
 change: gatetriage
-status: in-progress
+status: archived
 agent: gatetriage
 branch: agent/gatetriage
 worktree: d2lod-wt/gatetriage
@@ -14,11 +14,12 @@ owns:
   - openspec/changes/gatetriage/**
 exclusive: []
 gates: python3 -I tools/baseline/tests/test_gate_triage.py; changecheck 0 new warnings; leakcheck 0 hits
-result: "offline tool over recorded minute archives; outputs checked against the hand findings of 2026-11-02/03; not verified live (no game, no host load)"
+result: "python tests pass; docs and tooling only"
 credit:
   author: owner
   agents: [Claude Code]
   consent: none
+merge: 5833ec2
 ```
 
 - [x] 1. gate_triage.py: verdicts per current rules, windows, XP by band and area, log counts and context, cause hints, exit code
