@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifydmg3: third verification of the monster damage roll r3 (tools/emu/w3_*, docs/research/verify-dmgroll3.md)
+- beltfix2: analysis of the Gate 1 20261103 belt and no-kill failures with a ranked fix plan (docs)
+- hirefix: the bot now sees a dead merc after its corpse is gone, maps all four hireling codes, and reads the revive price before paying
 - HIREREADER: design and trace of the d2d merc reader (docs/research/hirereader-*.md) plus a purse differential of game.exe FUN_00576d90 and the revive chain against d2d's rules::hire and resurrect_merc, 200,000 cases, 0 differ (tools/emu/hrd_*); five bot findings, no PR candidate; offline, nothing run live
 - BOTAB: docs/research/botab-20261102.md and botab-trace.md compare d2d and game.exe at bot level from committed minute lines (tools/baseline/botab_extract.py, botab_run.py on ab_compare); no verdict is EQUIVALENT, kills per hour of d2d is lower than game.exe (offline, no game run)
 - beltfix: a poor character without a portal scroll and without healing potions now walks home for a potion instead of staying in the field (Gate 1 BELT failure)
