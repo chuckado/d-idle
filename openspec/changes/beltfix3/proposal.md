@@ -12,3 +12,5 @@ Gate 1 run gate1-20261102-2210 still failed BELT (37 virtual minutes) and NOKILL
 ## Impact
 
 internal/bot/goal.go, internal/town/trip.go, internal/resource/town.go, cmd/d2bot/d2dwire.go and their tests. No spec delta.
+
+Overlap (declared): cmd/d2drill/portal_copy.go (owned by m1-liveproof, glob cmd/d2drill/**) is a verbatim copy of the portal verb in cmd/d2bot/d2dwire.go (TestPortalCopyInStep); this card refreshes only that copy. The drills card owns the rest of cmd/d2drill.
