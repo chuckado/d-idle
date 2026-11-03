@@ -2,7 +2,7 @@
 
 ```yaml
 change: covpal
-status: in-progress
+status: archived
 agent: covpal
 branch: agent/covpal
 worktree: ~/code/d2lod-wt/covpal
@@ -22,7 +22,8 @@ exclusive: []
 gates:
   - "differential on real d2d builds: 0 mismatches counted per row in the doc; ledger case counts appear in the doc"
   - "python3 tools/coverage/coverage.py --check; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. 15 Paladin rows run (game.exe calc machine vs d2d, 14,400 cases per aspect, 0 differ); Redemption callback and Vengeance read; D1 (Redemption one corpse a pulse) and D2 (Vengeance mastery term) read on both sides, no PR candidate; bot B1 element table; ledger rows 100-125 minus the 15 already covered now all tested."
+result: "docs and tools only; see card result"
+merge: 18d2c1a
 ```
 
 ## 1. Work
