@@ -52,7 +52,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
-| [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
+| [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -130,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
-- 8dc49ed9 11-02 20:16 `merge origin/main into covitemtypes` (covitemtypes)
-- e74797c2 11-02 20:09 `Merge agent/abtool: abtool: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (abtool)
-- fc9c8079 11-02 20:08 `merge origin/main into abtool` (abtool)
-- 998c07ae 11-02 20:01 `Merge agent/seedspawn: seedspawn: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seedspawn)
-- e8ba69f3 11-02 20:01 `merge origin/main into seedspawn` (seedspawn)
-- c34baafc 11-02 19:54 `Merge agent/seeddist: seeddist: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seeddist)
-- 780d857f 11-02 19:23 `Merge agent/tierbdesign: TIERBDESIGN: Tier B and A:B design: statistical A:B first, Tier B held until a gap needs it; six staged cards; kitb vs kitk2 pair verdict (docs only)` (tierbdesign)
-- 8dd3f975 11-02 18:15 `Merge agent/verifystateev2: verifystateev2: coverage-gap or verification result (docs and emulator tools only)` (verifystateev2)
-- d8922e54 11-02 18:14 `merge origin/main into verifystateev2` (verifystateev2)
+- 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
+- c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
+- ab3a9747 11-03 09:25 `Merge agent/areareach: AREAREACH: leveling planner walks up to 5 hops and activates waypoints on the way (Dark Wood and Black Marsh were refused 28 times in run 0628); fallback ranked by XP per kill` (areareach)
+- 22378e28 11-03 09:24 `merge origin/main into areareach` (areareach)
+- 2a4a7063 11-03 09:17 `Merge agent/msvcc2026: msvcc2026: MSVC C2026 trace (oversize raw-string literals upstream), byte-identical split probe (docs, emulator tools)` (msvcc2026)
+- 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
+- 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
+- 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
+- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
+- 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
 <!-- statusgen:end -->

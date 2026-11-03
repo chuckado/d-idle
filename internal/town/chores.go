@@ -306,6 +306,8 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		{"belt", plan.Potions, t.NeedsBeltFill, func() error { _, err := t.FillBelt(ctx); return err }},
 		// before shop: the surplus is banked first, so the shop cannot spend it (BASICSFIX bankFirst)
 		{"bank", plan.Gold, func(s *d2.Snapshot) bool { return t.needBank(s, plan) }, func() error { return t.bank(ctx, a) }},
+		// BELTFIX5: the bank is not out of reach when the belt is empty and the purse is thin (Gate 1 20261103-0338)
+		{"withdraw", plan.Potions && plan.Gold, t.needWithdraw, func() error { return t.withdraw(ctx, a) }},
 		{"shop", plan.Potions || plan.Scrolls || plan.Antidotes > 0, func(s *d2.Snapshot) bool {
 			return plan.Potions && t.needPotions(s) || plan.Scrolls && t.needScrolls(s) || t.needAntidotes(plan, s)
 		}, func() error { return t.shopVisit(ctx, a, plan, &rep) }},

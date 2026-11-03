@@ -8,6 +8,28 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- covpal: Paladin coverage first pass (docs/research/covpal-trace.md, tools/emu/covpal*): skills.pal now fully in the ledger (15 rows, 14,400 cases per aspect, 0 differ); Redemption callback and Vengeance read; no PR candidate
+- areareach: the leveling planner no longer refuses Dark Wood or Black Marsh when it stands in a field without a waypoint, and a fallback area is chosen by XP per kill
+- MSVC2026 trace: test_monster_ai fails MSVC C2026 because four raw-string literals (62345, 59449, 59285, 16762 bytes) exceed 16380; fix by splitting into adjacent literals, same bytes (g++ probe, 4 constants, 0 mismatches); docs only
+- specdelta: Gate 1 now excuses belt windows where the character could not afford a potion (pack plus stash gold under 30) and lets a single seed inside the XP tolerance pass with a note
+- stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
+- Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
+- b2rebase: batch 2 bundle rebased onto upstream main 552acc9a, PR body and run record refreshed; nothing pushed upstream
+- beltfix4: a character in recovery mode with no healing potion and gold for one now shops on arrival in town instead of walking back out
+- docs: restore the three Gate 1 soak records of 2026-11-02/03 under unique run-id names, add an index (docs/soaks/gate1-index-20261103.md).
+- b2bundle: batch 2 bundle branch on upstream main and its PR body (docs/research/pr-batch2-body.md); nothing pushed upstream
+- Bot: a character in town with no healing potion now shops at once, can walk home from the act 1 fields without scroll or waypoint, no longer burns charges on a cut portal cast, and retries the town portal once on the way back.
+- verifydmg3: third verification of the monster damage roll r3 (tools/emu/w3_*, docs/research/verify-dmgroll3.md)
+- beltfix2: analysis of the Gate 1 20261103 belt and no-kill failures with a ranked fix plan (docs)
+- hirefix: the bot now sees a dead merc after its corpse is gone, maps all four hireling codes, and reads the revive price before paying
+- HIREREADER: design and trace of the d2d merc reader (docs/research/hirereader-*.md) plus a purse differential of game.exe FUN_00576d90 and the revive chain against d2d's rules::hire and resurrect_merc, 200,000 cases, 0 differ (tools/emu/hrd_*); five bot findings, no PR candidate; offline, nothing run live
+- BOTAB: docs/research/botab-20261102.md and botab-trace.md compare d2d and game.exe at bot level from committed minute lines (tools/baseline/botab_extract.py, botab_run.py on ab_compare); no verdict is EQUIVALENT, kills per hour of d2d is lower than game.exe (offline, no game run)
+- beltfix: a poor character without a portal scroll and without healing potions now walks home for a potion instead of staying in the field (Gate 1 BELT failure)
+- DMGROLL: docs/research/dmgroll-draft.md and tools/emu/mdmg* (differential of a monster's physical roll against game.exe)
+- Added docs/research/pr-batch2-draft.md and the pb2_mana / pb2_tele worker helpers: two private upstream-PR branches (mana check floor, Teleport room limit and landing spot) with counted differentials against game.exe.
+- covmissiles2: trace of the skill-sourced monster missiles of Acts 1 and 2 (17 rows, 21,926 compared cases, tools/emu/cm2_*), ledger rows 22, 24, 32, 77, 130, 346, 653 upgraded from READ-ONLY; deviations D1 to D3, no PR candidate
+- covstates2: curse and state put rule traced (game.exe run natively vs real d2d put_state, 200,000 sequences); five d2d deviations proven, no PR candidate; states coverage 3 to 11 percent
+- covmonai2: monster AI third pass (docs/research/covmonai2-trace.md, tools/emu/mai3_*): 139,500 think cases run against game.exe, monster.ai run-tested 14 to 69 percent
 - covitemtypes: docs/research/covitemtypes-trace.md and tools/emu/cit_*: ItemTypes decomposed (game.exe type walk, closure matrix, slot, hands, socket cap vs d2d, 0 mismatches on 553,647 cases); bot findings B1-B3; coverage ledger itemtypes 98/98 TESTED-0-DIFF (docs and emulator tools only)
 - tools: A:B comparison tool for d2d against game.exe records (equivalence interval, per-k regimes).
 - docs: SEEDSPAWN trace of layout, spawn list and RNG draws, d2d against game.exe, and levels.layout coverage rows (seedspawn)
