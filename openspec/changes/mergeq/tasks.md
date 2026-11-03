@@ -11,6 +11,7 @@ owns:
   - tools/merge_lines_check.py
   - tools/ci/check.sh
   - tools/ci/tests/test_merge_lines_check.py
+  - AGENTS.md
   - openspec/changes/mergeq/**
 exclusive: []
 gates:

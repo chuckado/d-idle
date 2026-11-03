@@ -138,3 +138,4 @@ tools/merge_lines_check.py  mergeq  mergeq
 tools/ci/tests/test_merge_lines_check.py  mergeq  mergeq
 openspec/changes/mergeq/**  mergeq  mergeq
 tools/ci/check.sh  mergeq  mergeq
+AGENTS.md  mergeq  mergeq
