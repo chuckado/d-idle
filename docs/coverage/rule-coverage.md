@@ -21,16 +21,16 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
 | monster.ai (monster AI types) | 146 | 11 | 9 | 5 | 0 | 121 | 14% | 17% | 139,830 |
 | states (states and auras) | 185 | 0 | 6 | 4 | 0 | 175 | 3% | 5% | 558,147 |
-| itemtypes (item types) | 98 | 0 | 0 | 0 | 0 | 98 | 0% | 0% | 0 |
+| itemtypes (item types) | 98 | 98 | 0 | 0 | 0 | 0 | 100% | 100% | 553,647 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 4 | 12 | 2 | 0 | 0 | 89% | 100% | 2,770,944 |
 | levels.layout (Act 1 areas: layout, preset units, room seeds, spawn list (Rogue Encampment, Blood Moor, Cold Plains, Stony Field, Den of Evil)) | 5 | 5 | 0 | 0 | 0 | 0 | 100% | 100% | 1,116 |
-| **total** | **4915** | **2455** | **942** | **53** | **0** | **1465** | **69%** | **70%** | **6,186,506** |
+| **total** | **4915** | **2553** | **942** | **53** | **0** | **1367** | **71%** | **72%** | **6,740,153** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2206 (59%), compared 2259 (61%), read-only 53, untested 1465.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2304 (62%), compared 2357 (63%), read-only 53, untested 1367.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -94,6 +94,7 @@ Case counts add the cases of every ledger line; one differential that covers man
 | states | 20,30,88 | READ-ONLY | `docs/research/sk-armor-trace.md` | - | 2026-11-01 | chillingarmor, energyshield, shiverarmor read |
 | states | 61,28 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | lowerresist and conviction on an immune D1 (negative change / 5) |
 | states | 86 | READ-ONLY | `docs/research/sk-lightning-trace.md` | - | 2026-11-01 | justhit (NextHit) read; D1 model only |
+| itemtypes | all | TESTED-0-DIFF | `docs/research/covitemtypes-trace.md` | 553,647 | 2026-11-02 | Equiv chain 9,604 pairs, item membership 64,582 cells, own-row flags, equip slot, two-hands 393,132, socket cap 73,149 all equal d2d (exhaustive grids, no seed); latent D1-D5 and bot B1-B3 in the doc; stack/AutoStack/store reader not run |
 | treasure | #850 | TESTED-0-DIFF | `docs/research/treasure-trace.md` | 100,000 | 2026-11-01 | class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared |
 | levels | 1-136 | TESTED-0-DIFF | `docs/research/levelsareas-trace.md` | 1,088 | 2026-11-02 | area monster level only: game.exe FUN_0061dca0 run natively equals the Levels columns d2d holds, ids 1..136 x difficulty 0..3 x expansion 0/1; density, uniques, spawn counts untested; LEVELSAREAS |
 | formulas | F01 | TESTED-0-DIFF | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | melee to-hit, real build, two seeds |
@@ -129,7 +130,6 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | 6 | skills.pal | untested (15 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
 | 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
-| 10 | itemtypes | untested (98 of 98) | Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced | `docs/research/price-trace.md` |
 
 ## Limits of this measure
 

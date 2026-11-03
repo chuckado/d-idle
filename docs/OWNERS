@@ -134,3 +134,16 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/covitemtypes-trace.md  covitemtypes  covitemtypes
+tools/emu/cit_oracle.py  covitemtypes  covitemtypes
+tools/emu/cit_d2d_test.cpp  covitemtypes  covitemtypes
+tools/emu/cit_build.sh  covitemtypes  covitemtypes
+tools/emu/cit_dis.sh  covitemtypes  covitemtypes
+tools/emu/cit_diff.py  covitemtypes  covitemtypes
+tools/emu/cit_diff2.py  covitemtypes  covitemtypes
+tools/emu/cit_diff3.py  covitemtypes  covitemtypes
+tools/emu/cit_diff4.py  covitemtypes  covitemtypes
+docs/coverage/ledger.tsv  covitemtypes  covitemtypes
+docs/coverage/gaps.tsv  covitemtypes  covitemtypes
+docs/coverage/rule-coverage.md  covitemtypes  covitemtypes
+openspec/changes/covitemtypes/**  covitemtypes  covitemtypes
