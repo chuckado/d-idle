@@ -62,6 +62,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [verifydmg3](../../openspec/changes/verifydmg3/) | in-progress | verifydmg3 | `openspec/changes/verifydmg3/**`<br>`docs/research/verify-dmgroll3.md`<br>`docs/research/verify-dmgroll3-run.txt`<br>`tools/emu/w3_*` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -124,9 +125,12 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change verifydmg3: own differential: r3 against game.exe's roll and the verifier's game-order model, own seed, every set; never worse than base
+- change verifydmg3: changecheck 0 warnings; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 80a64736 11-03 00:35 `merge origin/main into verifydmg3` (verifydmg3)
 - 0121d34b 11-03 00:32 `Merge agent/beltfix2: beltfix2: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (beltfix2)
 - e27b9616 11-03 00:32 `merge origin/main into beltfix2` (beltfix2)
 - 94b7a627 11-03 00:24 `Merge agent/hirefix: HIREFIX: merc observation on d2d (dead merc visible, GU/IW/0A hireling ids mapped, revive quote parsed, judge matches the bot's hire line) so Gate 2 can confirm hire, alive-and-following and revive; offline tests only, not run live` (hirefix)
@@ -136,5 +140,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - c5e6c03c 11-02 23:10 `Merge agent/botab: botab: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (botab)
 - 2d196e9b 11-02 22:01 `Merge agent/beltfix: BELTFIX: kit trip priced at one potion when healing is missing and counted as an emergency, mana potions capped when poor, waypoint counts as a way home (Gate 1 belt window of 12 virtual minutes; offline tests, live waypoint trip unverified)` (beltfix)
 - 8784c4cb 11-02 22:00 `merge origin/main into beltfix` (beltfix)
-- b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
 <!-- statusgen:end -->
