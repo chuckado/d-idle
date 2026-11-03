@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate1multi-20261103-1226-ms1
-status: in-progress
+status: archived
 agent: gaterun
 branch: agent/gate1multi-20261103-1226-ms1
 worktree: the agent worktree of this branch
@@ -23,6 +23,7 @@ owns:
 exclusive: []
 gates: Gate 1 criteria of the soak-gates spec over seeds 16,17,18,19,20, judged by d2dsoak compare (numbers in docs/soaks/gate1-multiseed-20261103-1226-ms1.md)
 result: "Gate 1 multi-seed NOT PASSED; unattended soaks by tools/gate-run.sh, seeds 16,17,18,19,20; verified live on the worker host (script-run, not hand-run), record generated from the logs"
+merge: a2dfd7e
 ```
 
 - [x] 1. Soaks run unattended on hidden d2d slots with the injected fault(s)
