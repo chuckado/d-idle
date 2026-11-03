@@ -4,6 +4,8 @@ import (
 	"strings"
 	"testing"
 	"time"
+
+	"d2lod-bot/internal/task"
 )
 
 // Replay of the Gate 1 20261102 BELT window (virtual minutes 446 to 457, clvl 12, Blood Moor, 37 gold, no healing
@@ -51,5 +53,22 @@ func TestKitTripNoPotionEmergencyCooldown(t *testing.T) {
 	g.r.setLastTrip(g.e.Clock.Now().Add(-90 * time.Second))
 	if g.r.tripDue(s) {
 		t.Error("two potions and a portal: the ordinary cooldown applies")
+	}
+}
+
+// Stony Field (lines 446 to 448 of the window) has no walk home, but its waypoint was used (log "wp: used 1 -> 4"):
+// with the waypoint activated the potion trip is allowed, without it it stays quiet.
+func TestKitTripWaypointHome(t *testing.T) {
+	for _, on := range []bool{false, true} {
+		g, _ := kitField(t, 12, 0, false, 30)
+		q := &fakeQuests{}
+		q.v.Quests = map[string]task.QuestState{}
+		q.v.WPs = map[int]bool{4: on}
+		g.r.d.Task = &TaskDeps{Quests: q}
+		s, _ := g.w.snapshot()
+		_, ok := g.r.kitTrip(s)
+		if ok != on {
+			t.Errorf("waypoint active %v: kit trip %v", on, ok)
+		}
 	}
 }

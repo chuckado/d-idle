@@ -124,10 +124,20 @@ func (r *Runner) kitTrip(s *d2.Snapshot) (string, bool) {
 	if !k.TP && k.HP >= k.minHP {
 		price = rt.KitTPGold
 	}
-	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area)) {
+	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area) || r.wpActive(s)) {
 		return "", false
 	}
 	return "kit: " + strings.Join(miss, ", "), true
+}
+
+// wpActive reports an activated waypoint in the current area: Town.ToTown without a scroll takes it to the town
+// (waypointToTown), so the way home works from fields beyond the walkable ones (Stony Field, Gate 1 20261102 BELT window).
+func (r *Runner) wpActive(s *d2.Snapshot) bool {
+	if r.d.Task == nil || r.d.Task.Quests == nil {
+		return false
+	}
+	v, ok := r.d.Task.Quests.Read(int(s.Player.Difficulty))
+	return ok && v.WPs[s.Player.Area]
 }
 
 // kitAvoider is the part of a Mover that keeps walks out of levels (nav.Navigator.SetAvoidLevels).

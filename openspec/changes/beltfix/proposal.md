@@ -11,3 +11,5 @@ Gate 1 run gate1-20261102-1939 failed on one criterion, BELT: 12 virtual minutes
 ## Impact
 
 Bot behaviour only, no spec or knob change (skip_specs). Overlap (declared): internal/bot/goal.go and kitgate.go were last changed by kittrip, kitstall and townshop (merged); no open card owns them.
+
+Second pass: internal/town/shop.go buyPotions leaves 130 gold (one healing potion plus one scroll) before any mana potion; internal/bot/kitgate.go kitTrip counts an activated waypoint as a way home.

@@ -12,6 +12,8 @@ owns:
   - internal/bot/kitgate.go
   - internal/bot/goal.go
   - internal/bot/beltfix_test.go
+  - internal/town/shop.go
+  - internal/town/manareserve_test.go
   - openspec/changes/beltfix/**
 exclusive: []
 gates:
