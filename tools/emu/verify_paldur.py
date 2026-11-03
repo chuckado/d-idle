@@ -6,7 +6,7 @@ import time
 from pathlib import Path
 cur_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(cur_dir))
-import boot_game
+import skill_tips
 
 STAT_QTY = 0x46      # 70 quantity
 STAT_DUR = 0x48      # 72 durability
@@ -41,7 +41,7 @@ def rand_range(seed_lo, seed_hi, n):
 def main():
     """Execute 100,000 verification cases across 4 suites against native 1.14d Game.exe."""
     t0 = time.time()
-    e = boot_game.boot()
+    e = skill_tips.boot()
     rnd = random.Random(0x50414C44)
 
     # Read all Items.txt records
