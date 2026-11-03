@@ -586,6 +586,18 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
         else:
             print(f"  Holy Freeze FUN_005d07c0 coldeffect<0 (mid={ce_neg_mid}, seed={test_lo},{test_hi}): ret={r_neg}, state107={got_st107} (want {want_st107})")
 
+    # 3. Sanctuary application-path assertion: verify auratargetstate == -1 skips aurastat1..3 evaluation
+    sbase = e.r32(tables + 0xB98)
+    srec_sanc = sbase + 119 * 0x23C
+    sanc_target_state = struct.unpack("<h", e.read(srec_sanc + 0x82, 2))[0]
+    # In Skills.txt, Sanctuary (119) has auratargetstate = -1 (0xffff).
+    # FUN_005cf3a0 (0x5cf4bc) checks auratargetstate: when < 0, it skips evaluating aurastat1..3 (stats 97, 98, 100).
+    if sanc_target_state != -1:
+        mismatches += 1
+        print(f"  MISMATCH Sanctuary auratargetstate: got {sanc_target_state} want -1")
+    else:
+        print(f"  Sanctuary application-path: auratargetstate={sanc_target_state} (asserts FUN_005cf3a0 skips aurastat1..3 evaluation)")
+
     print(f"  Suite 2 result: {n_cases} cases run in {time.time() - t0:.2f}s, mismatches = {mismatches}")
     return mismatches
 
