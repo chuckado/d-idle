@@ -19,6 +19,27 @@ import mon_ais as M
 KEEP_Y_ZERO = ("Wraith", "SkeletonBow")
 
 
+RAW_SKILLS = ("CatapultSpotter", "PutridDefiler")      # cast raw ids (288, 300, 304): a random scene skill id equal to one is a label collision
+
+
+def setup3(rng, ai):
+    s = B.setup(rng, ai)
+    if ai == "Ancient":
+        # d2d's Ancient measures `apart` from the positions less 2 an axis (self_size / target_size 2 by default), the harness hooks
+        # FUN_006416d0 to answer s["dist"] whatever the positions are: put the target dist + 2 east of the monster so both agree.
+        mx, my = s["spots"]["mon"]
+        s["spots"]["foe"] = (mx + (s["dist"] + 2 if s["dist"] > 0 else 0), my)
+    if ai == "WillOWisp":
+        # the dance states are 5 (the fives') or 6..12 with word 3 = its place + 1 (1..5 / 1..4): the only values the think writes
+        st = s["ctrl"][0]
+        if st >= 5:
+            s["ctrl"][0] = min(st, 12)
+            s["ctrl"][2] = rng.randint(1, 5) if s["ctrl"][0] == 5 else rng.randint(1, 4)
+    if ai in RAW_SKILLS:
+        s["skills"] = [99 if 280 <= k <= 320 else k for k in s["skills"]]
+    return s
+
+
 def check(e, ai, cases, rng, lines, tally):
     mark = e.brk
     for _ in range(cases):
@@ -46,7 +67,7 @@ def main():
     for name, addr in A.NEW.items(): M.AIS.setdefault(name, addr)
     M.ORDER[:] = list(M.AIS)
     M._setup = M.setup
-    M.setup = B.setup
+    M.setup = setup3
     e = M.emu.Emu()
     A.patch(e)
     B.patch2(e)
