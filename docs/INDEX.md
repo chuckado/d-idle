@@ -334,3 +334,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/navexit21.md: Blood Moor to town exit lost (border kept), empty-tome scroll priority, live checklist
 - docs/research/pr-batch2-C-rows.md: batch C rows (mana payment on the action frame, action-frame tick, armor group) to add to the open batch A pull request, conflict resolutions, counts on the exact head, limits, size
 - docs/navexit22.md: seed 17 town exit root cause (border gate frames), recorded replies, live checklist
+- docs/research/pr-guardfix-body.md: PR text for the upstream pr_guard fix (cited tool checked in the PR head), evidence, tests, results
+- docs/research/pr-batch2-A-final-body.md: final PR text for batch A (r9): Claims, counts, dependency on the guard fix, CodeRabbit's 10 findings, size, MSVC
