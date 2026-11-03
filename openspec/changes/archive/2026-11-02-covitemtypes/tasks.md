@@ -2,7 +2,7 @@
 
 ```yaml
 change: covitemtypes
-status: in-progress
+status: archived
 agent: covitemtypes
 branch: agent/covitemtypes
 worktree: ~/code/d2lod-wt/covitemtypes
@@ -25,7 +25,8 @@ exclusive: []
 gates:
   - "every ledger case count appears in the trace; python3 tools/coverage/coverage.py --check clean"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. game.exe's item-type functions run natively (emulator) against the real d2d rules on the stock table: Equiv chain 9,604 pairs, membership 64,582 cells, own-row flags 3,954, equip slot 8,567, two hands 393,132, socket cap 73,149, Beltable 659: 0 mismatches (553,647 cases, exhaustive grids). No d2d deviation proven, no PR candidate; latent D1-D5 (read), bot B1-B3 (socket cap tier off by one and cap 0 ignored, throwable flag from a missing weapons column). Ledger itemtypes all TESTED-0-DIFF."
+result: "docs/tools only; see the doc for tags and limits"
+merge: 62e78ff
 ```
 
 ## 1. Work
