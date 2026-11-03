@@ -130,6 +130,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
 - 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
 - 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
 - 41db4964 11-02 20:39 `Merge agent/covmissiles2: covmissiles2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmissiles2)
@@ -139,5 +140,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 2c6af24f 11-02 20:24 `Merge agent/covmonai2: covmonai2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmonai2)
 - 37ac620f 11-02 20:24 `merge origin/main into covmonai2` (covmonai2)
 - 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
-- 8dc49ed9 11-02 20:16 `merge origin/main into covitemtypes` (covitemtypes)
 <!-- statusgen:end -->
