@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
 - Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
 - b2rebase: batch 2 bundle rebased onto upstream main 552acc9a, PR body and run record refreshed; nothing pushed upstream
 - beltfix4: a character in recovery mode with no healing potion and gold for one now shops on arrival in town instead of walking back out

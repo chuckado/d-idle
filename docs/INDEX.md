@@ -303,3 +303,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/beltfix4.md: Gate 1 20261103-0053 BELT and XP/h analysis, one recovery fix
 - docs/research/pr-batch2-run.txt: raw results of the batch 2 bundle on upstream main 552acc9a (suites, CI checks, differentials, MSVC 14.51, WSL lane)
 - docs/research/beltfix5.md - Gate 1 20261103-0338 second belt window: where the gold went, the stash defect, belt windows of four runs by gold level
+- docs/research/stashfield.md: the stashGold minute field and the belt window gold report line
