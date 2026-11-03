@@ -62,7 +62,6 @@
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
-| [sorcdiff2](../../openspec/changes/sorcdiff2/) | in-progress | sorcdiff2 | `docs/research/sorcdiff2.md`<br>`tools/emu/sorcdiff2_*`<br>`openspec/changes/sorcdiff2/**` | `fork-branch:local/sorc-mana-timing-r2`<br>`fork-branch:local/sorc-armor-group-r2`<br>`fork-branch:local/sorc-bolts` |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -120,18 +119,16 @@
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
-- change sorcdiff2: each local/sorc-* branch: harness and fix in separate commits on the newest upstream main, numeric noreply identity, private remote only
-- change sorcdiff2: changecheck 0 new warnings, leakcheck 0 hits, merge_lines_check ok
 
 ### Recent merges
-- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
-- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
-- 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
-- 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
-- 5833ec20 11-03 10:15 `Merge agent/gatetriage: GATETRIAGE: one-screen Gate failure triage (gate_triage.py) with 10 tests and examples over the five Gate 1 runs` (gatetriage)
-- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
-- e1c4f73a 11-03 10:08 `Merge agent/xphshort: XPHSHORT: why true XP/h fell across the five Gate 1 runs: area choice at clvl 13+, horizon bias, multi-seed plan; xph_budget.py with tests` (xphshort)
-- 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
-- 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
-- 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
+- d5a82b56 11-03 11:45 `Merge agent/sorcdiff2: SORCDIFF2: counted differentials for the casts the bot makes: mana paid at the command vs the action frame (53,628 cases, all 42,168 started cases differ), cut casts paid by d2d but not game.exe (21,084), action frame one tick early at 132 of 401 FCR values, armor group (48 of 5,476 pairs), Charged Bolt do function equal (2,400); private fix branches` (sorcdiff2)
+- fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
+- 27e5f2b4 11-03 11:41 `Merge agent/b2on181: B2ON181: batch 2 on the maintainer's open PR 181 (one textual conflict, monster_blow merges cleanly, pr_guard now needs the two oracle scripts in the tree); parity partial, differentials not run` (b2on181)
+- 1e88e0bb 11-03 11:41 `merge origin/main into b2on181` (b2on181)
+- bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
+- 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
+- d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
+- cffbe1e7 11-03 11:34 `merge origin/main into gate3prep` (gate3prep)
+- eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
+- 8d4880a3 11-03 11:27 `merge origin/main into oracleport` (oracleport)
 <!-- statusgen:end -->

@@ -2,7 +2,7 @@
 
 ```yaml
 change: sorcdiff2
-status: in-progress
+status: archived
 agent: sorcdiff2
 branch: agent/sorcdiff2
 worktree: d2lod-wt/sorcdiff2
@@ -18,7 +18,7 @@ exclusive:
 gates:
   - "each local/sorc-* branch: harness and fix in separate commits on the newest upstream main, numeric noreply identity, private remote only"
   - "changecheck 0 new warnings, leakcheck 0 hits, merge_lines_check ok"
-result: "docs, a script copy, and three private fork branches; differentials ran on the real d2d build on the Windows build worker WSL lane (V, counts in docs/research/sorcdiff2.md). Frozen Armor trigger D5 not built. Not verified live on a game (none used)."
+result: "docs and emulator tools only"
 credit:
   component: mana payment timing of Sorceress casts (real-Fight harness, oracle, fix), Frozen Armor and Charged Bolt differentials
   author: owner
@@ -26,6 +26,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: d5a82b5
 ```
 
 ## 1. Work
