@@ -62,7 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [specdelta](../../openspec/changes/specdelta/) | in-progress | specdelta | `openspec/changes/specdelta/**`<br>`docs/research/specdelta-rejudge.md`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -125,12 +124,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change specdelta: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes
-- change specdelta: python3 -I tools/tests/gate_judge_xp_test.py in the ops repo passes
-- change specdelta: changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh ok
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
 - 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
 - 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
 - 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
@@ -140,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
 - b5496da4 11-03 03:01 `Merge agent/gaterecords: GATERECORDS: the three Gate 1 run records of 2026-11-02/03 under unique run-id names, an index, merge-lines in the valid format (all three runs NOT PASSED: Belt 12, then Belt 37 and NOKILL 11, then Belt 7 and True XP/h -11 percent); the old PASSED record is untouched` (gaterecords)
 - 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
-- 7a52b7e1 11-03 00:42 `Merge agent/beltfix3: BELTFIX3: shop on every town arrival with no healing potions (5 s gap), walk the level chain home from act 1 fields, do not burn portal charges on a cut cast, retry the return portal; replay of the Gate 1 belt window; offline tests, nothing verified live` (beltfix3)
 <!-- statusgen:end -->
