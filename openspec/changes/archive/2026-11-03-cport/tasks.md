@@ -2,7 +2,7 @@
 
 ```yaml
 change: cport
-status: in-progress
+status: archived
 agent: cport
 branch: agent/cport
 worktree: d2lod-wt/cport
@@ -23,6 +23,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 99328d5
 ```
 
 ## 1. Work

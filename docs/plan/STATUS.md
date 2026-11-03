@@ -43,7 +43,6 @@
 |---|---|---|---|---|
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [cport](../../openspec/changes/cport/) | in-progress | cport | `docs/research/pr-batch2-C-rows.md`<br>`openspec/changes/cport/**` | `fork-branch:local/batch2-C-r1` |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -85,8 +84,6 @@
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change cport: C commits: one claim each with its test and oracle, numeric noreply identity, private remote only
-- change cport: changecheck 0 new warnings, leakcheck 0 hits, merge_lines_check ok
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -124,6 +121,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- 99328d5c 11-03 13:13 `Merge agent/cport: merge origin/main into cport` (cport)
 - 23e68453 11-03 13:13 `merge origin/main into cport` (cport)
 - bf29e35d 11-03 12:37 `Merge agent/navexit21: merge origin/main into navexit21` (navexit21)
 - e149fb2b 11-03 12:37 `merge origin/main into navexit21` (navexit21)
@@ -133,5 +131,4 @@
 - 27e5f2b4 11-03 11:41 `Merge agent/b2on181: B2ON181: batch 2 on the maintainer's open PR 181 (one textual conflict, monster_blow merges cleanly, pr_guard now needs the two oracle scripts in the tree); parity partial, differentials not run` (b2on181)
 - 1e88e0bb 11-03 11:41 `merge origin/main into b2on181` (b2on181)
 - bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
-- 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
 <!-- statusgen:end -->
