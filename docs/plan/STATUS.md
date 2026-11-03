@@ -1,44 +1,46 @@
-# Where we are (hand-written part last edited 2026-10-30 evening by REVIEWDOC; the generated block at the bottom is current)
+# Where we are (hand-written part last edited 2026-11-03 by APPLYREVIEW; the generated block at the bottom is current)
 
-One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr/](../adr/README.md); plan: [plan-v2.md](plan-v2.md); live history: [../g1-log.md](../g1-log.md); work queue: [../BACKLOG.md](../BACKLOG.md); doc map: [../INDEX.md](../INDEX.md). Counts that change (merges, attempts) are not copied here: `git log`, g1-log and the generated block own them. Tags: V = verified (how, in the linked doc), V-d2d = measured on the reimplementation, U = unverified.
+> status: the older 2026-10-30 text (Game.exe soak history, container cards, merged-today lists) is in git history. Decisions: [../decisions.md](../decisions.md), [ADR 0015](../adr/0015-goals-acceptance-on-game-exe.md). Plan: [plan-20261103.md](plan-20261103.md). Review: [../research/project-review-20261103.md](../research/project-review-20261103.md). Open cards mapped to goals: [../research/card-triage-20261103.md](../research/card-triage-20261103.md). Counts that change live in `git log` and the generated block. Tags: V verified, S secondary (coordinator fact), U unverified.
 
-## Headline
-- **d2d is the primary backend** ([ADR 0009](../adr/0009-d2d-primary-backend.md), grill 0001): v1 product is the d2d container, Game.exe is frozen, stays the acceptance reference and retires at the d2d container's 24 h soak; leaving d2d is break glass only. Only the four gated metrics of [fidelity-gate](../../openspec/specs/fidelity-gate/spec.md) must match the original within 20 %.
-- **Game.exe soaks are done and judged** (g1-log): G1 attempt 18 PASS (2 h, 0 deaths, 9.1k XP/h); G2 8 h on Soaky (clvl 14 -> 15, 4 deaths, 7.1k kills, 4.1k XP/h, kill injection PASS with the user's one-off permission, criteria 6/7 closed); Fresha 4 h fresh Sorceress (clvl 6 -> 11, 3 deaths, 13.4k XP/h). Both found the same bug class (healing potions in the belt, none drunk; portal cast starvation; vendor dialog ignoring clicks): fixed offline by potionbug, portalfail, npctrade, manabackoff, rejuvuse, equipconfirm (live effect U, Game.exe frozen).
-- **The whole bot runs on the lockstep fork** (`d2d.lab5`, 22-33x real time, V-d2d): navigation, combat, loot, town (Akara, stash, repair, portal), merc behind a knob. Replicated soak 4 seeds x 2 virtual h: XP/h 3013 then 3869 after ECONOMY (baseline 6600: -54 % then -41 %), kills/h 132 -> 167 (baseline 500), deaths 0 (the bot chickens out instead). **The fidelity gate is NOT met**; verdict INCONCLUSIVE below the sample minimums ([../d2d-loop.md](../d2d-loop.md), [../d2d-economy.md](../d2d-economy.md)).
-- **The gap is mostly bot-side, not d2d** (research, V): seconds per kill 23.6 on d2d vs 9.1 original, of which search/stall 5.5 vs 0.3 and town/recovery 5.2 vs 3.0 ([research/per-kill-time-split.md](../research/per-kill-time-split.md)); casts per kill was a probe artifact; XP per monster identical clvl 1-7 ([research/xp-award-trace.md](../research/xp-award-trace.md)); monster placement equals game.exe per room ([research/spawn-density-trace.md](../research/spawn-density-trace.md)). One real d2d gap: spell damage truncated to whole points (-17 % at skill 1), PR branch built, not pushed (prmeasure measures first).
+## Goals (ADR 0015)
+- G-A acceptance on game.exe: fresh character, 24 h unattended, Act 1 cleared, `writes after start: 0`. Not started (S).
+- G-B Act 1 clear on d2d, 3 of 3 seeds. Nothing past Act 1 has run live (V, M3 cards have no run).
+- G-C stability on d2d: Gate 2 on 3 seeds, then Gate 3; XP/h is not a per-run criterion.
+- G-D transfer measured: statistical A:B (6 game.exe + 6 d2d lanes), verdict at 20 percent.
+- G-E upstream, one batch at a time, only rules on the bot's path.
+- G-F one page of truth: this page fresh, at most 12 open cards (the triage lists the cuts).
 
-## Merged today (by area; details in the archived cards, `openspec/changes/archive/2026-10-30-*`)
-- d2d stack: adapter, control client, pacer/virtual clock, world source, combat, town, loot, exits, roam, economy, speed (Prefetch, immediate verbs), merc wire, tap viewer (`cmd/d2dview`, `/stream`, sanitized `/api/pub`), replicated-soak tool (`cmd/d2dsoak`, gate v2 with exact Poisson bounds), per-kill time split, 4-slot lab pool (`tools/d2dslot.sh`), floating the worker host capacity rule (`tools/capacity.sh`), a Windows worker as a WSL2 d2d worker.
-- Game.exe bot (frozen, acceptance): route/tower guards, death autopsy, recovery XP, early-game tables, inventory/stash, waypoints, nav stuck memory, potion and portal fixes, NPC visit/hover/skip/trade, two soaks at once, minute-line proxy fields (`dmgTaken`, `hpMinPct`).
-- Upstream (psi29a/d2decomped): PR #127 prices posted, PR #128 cast fixes and replies posted (both user-approved); cast trace, XP trace, spawn trace, upstream gap items and three PR drafts (nothing else posted); MPQ reading method; Redivivus, D2MOO, landscape, whisper/LAN-oracle research.
-- Process: change cards + 7 specs + `changecheck`, ADRs 0001-0009, grill workflow and agent, needs-you panel, board `/changes`, forge runners on the NAS/the worker host/a Windows worker/Mac worker A (Mac worker B offline), CI on master/PR, pre-push hook, public page with live soak status and a private runs cache, plugin pin.
+## Gate state (d2d ladder, one seed 11 so far: V, every record)
+- Gate 0 drills: exist and run offline and live; M1 exit not met (13 of 15 C rows in basics-audit, V).
+- Gate 1: passed once (bot 050a509, V), five re-runs NOT PASSED, one re-judged PASSED under the 2026-11-03 soak-gates deltas (V, specdelta-rejudge). Single-seed re-runs are dropped; next is a 5-seed set with 2 holdouts.
+- Gate 2 (8 h): FAILED 2026-11-02 (S: merc claim and guard, kit trip timing, tome stat collision, judge artefacts); fixes merged offline, not verified live.
+- Gate 3 (24 h): not run (S). Gate A (game.exe 2 h, 8 h, 24 h): not run.
+- Fidelity (A:B): INCONCLUSIVE; seed-for-seed comparison is impossible (V, tierb-design); k=2 pilot -2.9 percent XP/h inside noise.
 
-## Open now
-- Cards: d2d-container-build, d2d-container-bot, d2d-container-soak (the retirement soak), d2d-default-backend, d2d-replicated-soak, d2d-lan-oracle-demo, stream-grid; deferred: gameexe-retire-soak, orig-decision-probes. Running agents: killfix, forkrebase, prmeasure, decompmon, decomprec, containerbuild, stridegrid, lanoracle, licensedecide.
-- Unmerged, reviewed in [research/code-review-2026-10-30.md](../research/code-review-2026-10-30.md): agent/killgap (per-kill time buckets), agent/detloop (determinism: the guard runs on the stepping goroutine; the full bot loop was not deterministic before it), agent/replay (record/replay of d2d sessions; two High findings to fix before or with the merge).
-- Review findings to card (same doc, section 9): d2dsoak exit codes and empty/crashed seeds counted as clean exposure (H), replay tap cannot be stopped with a client attached and panics on crafted files (H), d2dview watch speed can stall the bot (M), public page: character names and a stale cache shown as live (M).
-- Not started: Act 2+ on either backend, Andariel, the free Rogue claim on Game.exe, the quit-to-town shortcut, the idle-game layer (parked by the user).
+## Open question that can void gate numbers
+- Records say the gate character is a "Sorceress (class 4)" but class 4 is the Barbarian in `internal/d2/player.go` (V); every committed archive ran the lightning table (V, review). Treated as a Sorceress until the class check (plan S1, worker host, read only, 5 minutes) says otherwise. If it is a Barbarian, all gate numbers since 2026-11-01 are void.
 
-## Decisions awaiting you
-1. Licence and GPL review before any d2d container ships (ADR 0003; agent licensedecide is drafting the options; the fork stays in private the forge `<owner>/d2d-fork`).
-2. Which character names may appear on the public page (today the sanitizer blocks machines and people, not the agents' characters; Soaky/Fresha/Loopy are shown on purpose).
-3. Grill 0003 (merc and Act 2) when the coordinator asks; the SME contradicts the plan on ROUTEGUARD clvl 20 (suggests 14) and the Andariel floor (needs-you `grill-0003`).
-4. Upstream follow-ups: push the missile-damage PR after prmeasure's numbers; the cast follow-up PRs wait for the maintainer's response to #127/#128 (needs-you `pr-cast-followups`).
-5. Stream and ports: the Kick stream stays off; the d2dview `/stream` URL, its deploy and the container viewer port are yours ([../streamctl-d2d.md](../streamctl-d2d.md)).
+## Upstream (G-E)
+- PR #177 (11 commits) merged (S). Batch 2 (mana floor, Teleport, monster damage roll) is built and independently checked, waiting for the maintainer's #181 (S, openpr-log). Nothing new is prepared while a batch waits. Nothing is posted without the owner's go.
 
-## Top risks
-1. The fidelity gate (-41 % XP/h after ECONOMY) is a bot-on-d2d problem (search/stall, poverty recovery, chicken restarts) and the d2d-replicated-soak card inherits it; a d2dsoak verdict can also exit 0 on INCONCLUSIVE/FAIL today (review H1).
-2. Determinism of the full bot loop depends on the unmerged detloop change; replay and the determinism finder are built on it.
-3. The container is unbuilt (build, bot, soak cards all proposed); licence review blocks shipping it; Windows/WSL2 (a Windows worker) runs d2d but not the container.
-4. The public page is PUBLIC: the sanitizer is fail-closed on hosts, IPs, paths and tokens, but names and the stale-cache "live" label are the gaps above.
-5. Game.exe is frozen with known live bugs fixed only offline (potions not drunk, trade dialog, `restarts` counter counts 1 of 17 recycles); it is still the acceptance reference for the 20 % gate.
+## What runs where
+- The worker host: d2d gates and drills (hidden, lockstep fork), hidden game.exe lanes for A:B and Gate A, the lab binary. No gate or A:B run is known to be in flight right now (U; check the board before starting).
+- Public repo: docs, specs, cards, the bot. Private ops repo and the private fork: lab tooling, patches (never in this repo).
+- Credit runner and the Windows build PC: upstream differentials and MSVC parity, only when a batch needs them (S).
+
+## Blocked on whom
+- Owner: nothing open that blocks work; Tier B stays held (trigger in tierb-design); container licence route waits for Gate A.
+- Worker host time: the 5-seed Gate 1 (about 3.5 wall h, U), then Gate 2 on 3 seeds, then A:B pilot; they must not overlap.
+- Maintainer of the upstream project: batch 2 (#181).
+- Merger: card archives and the merge of `agent/projreview` and `agent/applyreview` (docs only).
+
+## Next three days
+1. S1 class check. 2. Multi-seed Gate 1 (seeds 11, 12, 13, holdouts 16, 17). 3. Area-choice fix with a paired A/B. 4. Cut the open cards to 12 (triage). See the plan for triggers and model tiers.
 
 <!-- statusgen:begin (generated by `go run ./cmd/changecheck status -write`; do not edit by hand) -->
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
@@ -50,7 +52,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
 | [fixprogress](../../openspec/changes/fixprogress/) | in-progress | fixprogress | `docs/fixprogress.md`<br>`internal/town/chores.go`<br>`internal/town/town.go`<br>`internal/town/fixprogress_test.go`<br>`openspec/changes/fixprogress/**` | - |
 | [fixskilllvl](../../openspec/changes/fixskilllvl/) | in-progress | fixskilllvl | `docs/fixskilllvl.md`<br>`internal/d2/skilllevel.go`<br>`internal/d2/skilllevel_test.go`<br>`internal/combat/skilllevel_test.go` | - |
-| [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz`<br>`openspec/changes/gate1run-20261102/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
@@ -61,8 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
-| [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -79,10 +78,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [process-hygiene](../../openspec/specs/process-hygiene/spec.md): 9 requirements
 - spec [public-split](../../openspec/specs/public-split/spec.md): 10 requirements
 - spec [replay](../../openspec/specs/replay/spec.md): 7 requirements
-- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
+- spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 20 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -101,7 +99,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change fixprogress: go test -p 1 ./internal/town ./internal/bot passes; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change fixskilllvl: go test -p 1 ./internal/d2 ./internal/combat passes; whole-repo go vet and go test -short on the worker host pass
 - change fixskilllvl: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
-- change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
@@ -122,19 +119,16 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
-- change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
-- change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
-- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
-- 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
-- b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
-- 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
-- 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
-- d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
-- b5496da4 11-03 03:01 `Merge agent/gaterecords: GATERECORDS: the three Gate 1 run records of 2026-11-02/03 under unique run-id names, an index, merge-lines in the valid format (all three runs NOT PASSED: Belt 12, then Belt 37 and NOKILL 11, then Belt 7 and True XP/h -11 percent); the old PASSED record is untouched` (gaterecords)
-- 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
-- 7a52b7e1 11-03 00:42 `Merge agent/beltfix3: BELTFIX3: shop on every town arrival with no healing potions (5 s gap), walk the level chain home from act 1 fields, do not burn portal charges on a cut cast, retry the return portal; replay of the Gate 1 belt window; offline tests, nothing verified live` (beltfix3)
+- 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
+- 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
+- f9298f08 11-03 10:28 `Merge agent/codereview1: CODEREVIEW1: Opus code review of the Gate 1 belt fixes (F1-F10)` (codereview1)
+- 4ce28b17 11-03 10:27 `merge origin/main into codereview1` (codereview1)
+- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
+- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
+- 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
+- 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
+- 5833ec20 11-03 10:15 `Merge agent/gatetriage: GATETRIAGE: one-screen Gate failure triage (gate_triage.py) with 10 tests and examples over the five Gate 1 runs` (gatetriage)
+- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
 <!-- statusgen:end -->

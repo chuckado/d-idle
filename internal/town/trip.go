@@ -9,6 +9,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/resource"
 )
 
 // waitArea waits until the player stands in level (any level when level < 0 and the area is a town).
@@ -171,7 +172,7 @@ func (t *Town) walkChainToTown(ctx context.Context, s *d2.Snapshot, noPortal err
 	ta, ok := t.mv.(interface {
 		ToArea(context.Context, int) error
 	})
-	if !ok || s.Player.Area >= data.Town(1) {
+	if !ok || !resource.ChainHomeArea(s.Player.Area) {
 		return noPortal
 	}
 	town := data.Town(0)

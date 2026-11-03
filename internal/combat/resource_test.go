@@ -83,12 +83,12 @@ func TestFleesWithoutPotionOrPortal(t *testing.T) {
 }
 
 func TestNearTownCoversEveryAct(t *testing.T) {
-	for _, a := range []int{2, 3, 4, 5, 8, 10, 41, 76, 104, 110} {
+	for _, a := range []int{2, 3, 8, 41, 76, 104, 110} {
 		if !nearTown(a) {
 			t.Errorf("area %d must be near town", a)
 		}
 	}
-	for _, a := range []int{0, 1, 7, 40, 42, 109} {
+	for _, a := range []int{0, 1, 4, 5, 6, 7, 9, 10, 17, 40, 42, 109} { // 4-17: chain walk only (codefix F1)
 		if nearTown(a) {
 			t.Errorf("area %d must not be near town", a)
 		}

@@ -40,3 +40,36 @@ func TestBankedGoldIgnoredWithPotionOrNothingBanked(t *testing.T) {
 		t.Errorf("6 gold, empty bank: no potion chore, got %+v emergency=%v", plan, emerg)
 	}
 }
+
+// codefix F2: a visit that bought nothing leaves the purse at 40 and the stash at 1418. The next potion-low check must
+// be futile (stash counted on both sides), not a fresh trip every 60 s.
+func TestStashGoldDoesNotDefeatFutileGuard(t *testing.T) {
+	g := newRig(t)
+	g.w.set(func(w *world) { w.level, w.area, w.gold0, w.stash0 = 11, 6, 40, 1418 })
+	g.w.belt()
+	s, _ := g.w.snapshot()
+	g.r.noteTripEnd(s)
+	if tr := g.r.tripVerdict(s); tr.Go || !tr.Futile {
+		t.Errorf("second trip with nothing new: %+v, want futile", tr)
+	}
+	g.w.set(func(w *world) { w.gold0 += 150 })
+	s, _ = g.w.snapshot()
+	if tr := g.r.tripVerdict(s); !tr.Go {
+		t.Errorf("150 gold of income: want a trip, got %+v", tr)
+	}
+}
+
+// codefix F1 at the bot: Black Marsh is a chain field, not NearTown; 1 potion starts no walk, 0 potions does.
+func TestChainFieldTripPolicy(t *testing.T) {
+	g := newRig(t)
+	g.w.set(func(w *world) { w.level, w.area, w.gold0 = 11, 6, 500 })
+	g.w.belt(101)
+	s, _ := g.w.snapshot()
+	in := g.r.resInput(s)
+	if in.NearTown || !in.ChainHome {
+		t.Errorf("area 6: NearTown %v ChainHome %v", in.NearTown, in.ChainHome)
+	}
+	if tr := g.r.tripVerdict(s); tr.Go {
+		t.Errorf("1 potion, no scroll, Black Marsh: %+v", tr)
+	}
+}

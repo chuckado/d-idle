@@ -104,7 +104,10 @@ type Invariants struct {
 	// outside town with no healing potion in pack or belt). BeltWindowMin is 0 for logs without packHP/beltBoxes.
 	NoKillXPMin   int `json:"noKillXpMin"`
 	BeltWindowMin int `json:"beltWindowMin"`
-	// BeltWindows lists each belt window over BeltReportMin minute lines (report only; the BELT invariant is unchanged).
+	// BeltFundedMin is the longest belt window in which pack plus stash gold covered a potion (PotionPrice) at some
+	// minute; the BELT invariant uses it, poverty windows are reported but do not fail (soak-gates, specdelta).
+	BeltFundedMin int `json:"beltFundedMin"`
+	// BeltWindows lists each belt window over BeltReportMin minute lines (report only).
 	BeltWindows []BeltWindow `json:"beltWindows,omitempty"`
 
 	Deaths        int     `json:"deaths"`
@@ -152,6 +155,17 @@ func (w *BeltWindow) add(m Minute) {
 	w.PackMin, w.PackMax = min(w.PackMin, m.Gold), max(w.PackMax, m.Gold)
 	w.TotMin, w.TotMax = min(w.TotMin, t), max(w.TotMax, t)
 	w.StashKnown = w.StashKnown || m.HasStash
+}
+
+// Funded reports that pack plus stash gold covered a potion at some minute. Old archives have no stash gold, so
+// they count as pack gold only (stash unknown = 0).
+func (w BeltWindow) Funded() bool { return w.TotMax >= PotionPrice }
+
+func (w BeltWindow) verdict() string {
+	if w.Funded() {
+		return "counts"
+	}
+	return "poverty, not failing"
 }
 
 // Tag is "poverty" when even pack plus stash gold stayed under a potion, "funded" otherwise (the best minute counts), "unknown stash" for old archives.
@@ -333,6 +347,14 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 	noKill, belt := 0, 0
 	var win BeltWindow
 	winOpen := false
+	closeWin := func() {
+		if win.Funded() {
+			inv.BeltFundedMin = max(inv.BeltFundedMin, win.Minutes)
+		}
+		if win.Minutes > BeltReportMin {
+			inv.BeltWindows = append(inv.BeltWindows, win)
+		}
+	}
 	for i, m := range mins {
 		inv.ClvlMin, inv.ClvlMax = min(inv.ClvlMin, m.Clvl), max(inv.ClvlMax, m.Clvl)
 		if a := ActOfArea(m.Area); a > 0 {
@@ -361,9 +383,7 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 		}
 		if winOpen && belt == 0 {
 			winOpen = false
-			if win.Minutes > BeltReportMin {
-				inv.BeltWindows = append(inv.BeltWindows, win)
-			}
+			closeWin()
 		}
 		if d := m.Kills - p.Kills; d > 0 {
 			inv.Kills += d
@@ -381,8 +401,8 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 			progress = append(progress, float64(i))
 		}
 	}
-	if winOpen && win.Minutes > BeltReportMin {
-		inv.BeltWindows = append(inv.BeltWindows, win)
+	if winOpen {
+		closeWin()
 	}
 	for a := range acts {
 		inv.Acts = append(inv.Acts, a)
@@ -517,7 +537,7 @@ func violations(inv *Invariants, lim InvLimits) {
 	add(inv.StallWarns > 0 || inv.StallExits > 0, InvStall)
 	add(inv.WedgeMin > lim.WedgeMin, InvWedge)
 	add(inv.NoProgressMin > lim.ProgressMin, InvProgress)
-	add(inv.BeltWindowMin > lim.BeltMin, InvBelt)
+	add(inv.BeltFundedMin > lim.BeltMin, InvBelt)
 	add(inv.NoKillXPMin > lim.NoKillMin, InvNoKillXP)
 	add(inv.DeathStreak || inv.Unrecovered > 0 || (inv.Kills >= lim.DeathsMinKills && inv.DeathsPer1000 > lim.DeathsPer1000), InvDeaths)
 	add(inv.BotRestarts > 0, InvRestarts)
