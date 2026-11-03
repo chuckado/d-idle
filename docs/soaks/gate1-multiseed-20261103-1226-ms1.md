@@ -5,20 +5,20 @@
 ## Runs (V)
 | seed | run | character | virtual min | single-seed verdict | binary / fork | bot |
 |---|---|---|---|---|---|---|
-| 16 | gate1-s16-20261103-1005-ms1 | Gate1s16 | 448 | FAIL | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
+| 16 | gate1-s16-20261103-1005-ms1 | Gate1s16 | 448 | PASS | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
 | 17 | gate1-s17-20261103-1007-ms1 | Gate1s17 | 702 | FAIL | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
-| 18 | gate1-s18-20261103-1008-ms1 | Gate1s18 | 524 | FAIL | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
-| 19 | gate1-s19-20261103-1023-ms1 | Gate1s19 | 589 | FAIL | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
-| 20 | gate1-s20-20261103-1025-ms1 | Gate1s20 | 643 | FAIL | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
+| 18 | gate1-s18-20261103-1008-ms1 | Gate1s18 | 524 | PASS | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
+| 19 | gate1-s19-20261103-1023-ms1 | Gate1s19 | 589 | PASS | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
+| 20 | gate1-s20-20261103-1025-ms1 | Gate1s20 | 643 | PASS | d2d.lab2-freezeresume ee5e06d8ef99 | 764633c |
 
 ## Gate criteria over all seeds
 | criterion (soak-gates spec) | result | evidence |
 |---|---|---|
-| True XP/h at or above the d2d baseline (mean of 5 seeds) | FAIL | 11986 vs 9172 (+30.7%, tolerance 1834), sd 2413, n 5; 5 seeds, d2dsoak says INCONCLUSIVE: below the baseline minus the tolerance |
+| True XP/h at or above the d2d baseline (mean of 5 seeds) | PASS | 11986 vs 9172 (+30.7%, tolerance 1834), sd 2413, n 5; 5 seeds, mean at or above the baseline; d2dsoak says INCONCLUSIVE (95 percent interval straddles the tolerance: the claim is indicative, not conclusive) |
 | Stability: only the injected exit, 0 panics, bot and d2d alive at the end (every seed) | PASS | PASS on all 5 seed(s) |
 | Deaths follow the death rule (every seed) | PASS | PASS on all 5 seed(s) |
 | No single state over 10 min without progress (every seed) | FAIL | failed on seed 17 |
-| Belt: no window over 5 min without healing outside town (every seed) | FAIL | failed on seed 16, seed 17, seed 18, seed 19, seed 20 |
+| Belt: no window over 5 min without healing outside town (every seed) | FAIL | failed on seed 17 |
 | At least one town-portal trip (every seed) | PASS | PASS on all 5 seed(s) |
 | Route guard: no boss run when refused (every seed) | PASS | PASS on all 5 seed(s) |
 | Injected fault recovery (every seed) | PASS | PASS on all 5 seed(s) |
@@ -31,7 +31,7 @@
 | Deaths follow the death rule | PASS | PASS | PASS | PASS | PASS |
 | True XP/h at or above the d2d baseline | PASS | PASS | PASS | PASS | PASS |
 | No single state over 10 min without progress | PASS | FAIL | PASS | PASS | PASS |
-| Belt: no window over 5 min without healing outside town | FAIL | FAIL | FAIL | FAIL | FAIL |
+| Belt: no window over 5 min without healing outside town | PASS | FAIL | PASS | PASS | PASS |
 | At least one town-portal trip | PASS | PASS | PASS | PASS | PASS |
 | Route guard: no boss run when refused | PASS | PASS | PASS | PASS | PASS |
 | Injected fault recovery | PASS | PASS | PASS | PASS | PASS |
@@ -67,9 +67,23 @@ OVERALL: FAIL (exit 3)
 ```
 
 ## Verdict
-Gate 1 is NOT PASSED. Failing: True XP/h at or above the d2d baseline (mean of 5 seeds) (11986 vs 9172 (+30.7%, tolerance 1834), sd 2413, n 5; 5 seeds, d2dsoak says INCONCLUSIVE: below the baseline minus the tolerance); No single state over 10 min without progress (every seed) (failed on seed 17); Belt: no window over 5 min without healing outside town (every seed) (failed on seed 16, seed 17, seed 18, seed 19, seed 20); d2dsoak INVARIANTS over all seeds (minute log only: no panic or exit lines) (VIOLATED(seed 17: BELT,seed 17: NOKILL)).
+Gate 1 is NOT PASSED. Failing: No single state over 10 min without progress (every seed) (failed on seed 17); Belt: no window over 5 min without healing outside town (every seed) (failed on seed 17); d2dsoak INVARIANTS over all seeds (minute log only: no panic or exit lines) (VIOLATED(seed 17: BELT,seed 17: NOKILL)).
 
 Fix queue (one agent per failing criterion): written by the reviewing agent from this record (U: causes are not judged here).
+
+## Re-judged with the corrected judge (V unless tagged)
+The first collect said NOT PASSED on five seeds; two judge bugs (ops repo tools/gate-judge.py, fixed and re-run on the same five runs, no soak was repeated):
+- Belt failed on every seed: the single-seed judge read `longest belt window ... N (limit 5)` and no longer matched d2dsoak's newer wording `(limit 5; funded windows only, ...)`, so each seed got "no BELT line" = FAIL. The multi-seed judge now re-reads belt and no-kill per seed from the d2dsoak per-seed gate-1 lines (funded windows only, as the soak-gates spec delta says; poverty windows are reported, not failing). tools/baseline/gate_triage.py gives the same result.
+- The XP row failed at +30.7 percent: the multi-seed rule accepted only a d2dsoak PASS at n=5, but d2dsoak says INCONCLUSIVE when the 95 percent interval (+-3000) straddles the tolerance (1834) even above the baseline. The spec says at or above the baseline passes; a mean at or above the baseline now passes (noted as not conclusive when d2dsoak is INCONCLUSIVE); below the baseline only a d2dsoak PASS passes.
+
+Corrected verdict: seeds 16, 18, 19, 20 clean; seed 17 fails belt (funded window 19 vmin) and no-kill (15 vmin). Every Gate 1 criterion must hold on every seed, so Gate 1 is NOT PASSED on this run; the XP/h line passes (mean 11986 vs 9172).
+
+## Seed 17 analysis (V from the full bot log on the worker host, minute archive in docs/probes/soak-logs; root cause of the nav failure U)
+- Not the injected fault: the kill was at wall 60 min (virtual minute about 416), recovery 2.2 s; the failing windows are minute lines 282-300 (belt) and 287-301 (no kill), clvl 9, Blood Moor (area 2), 10:37-10:44 wall.
+- State: no Town Portal scroll (the tome is empty: `no portal item ... counted=0`, `d2d town portal: no portal source (empty)`), 0 healing potions, 284 gold in the pack (funded), kit low. The bot started an emergency town trip, the walk back failed 3 times with `nav: no exit to that level: level 1 from 2`, then `low life and no way to heal: waiting before retrying` (retry 2 min) and finally the failsafe ladder (`no progress in state resupplying for 240s` -> leave and re-enter the game) put it in town; that fresh game is the "restart" at minute 302 and ended both windows.
+- The same nav failure recurs: 193 `no exit to that level` lines in seed 17 (all `level 1 from 2`), 12 in seed 19, 0 in seeds 16, 18, 20; 35 failsafe-ladder entries in seed 17 (the 14 "restarts" of the triage are failsafe leave/re-enter and "everything cleared, fresh game" restarts, 10 of the latter, plus the injected kill; chk 0, bot 0, so no bot or checker restart).
+- Class: a bot bug (nav exit knowledge for Blood Moor to Rogue Encampment, plus no TP-scroll restock priority), not a d2d fault. Whether the exit is missing from the nav map data or the roam does not reach it is U (the roam finished with `visited 1824` and still found no exit).
+- Proposed fix card (not implemented): `navexit21`: (1) offline repro of the level-2-to-1 exit lookup with a recorded map of seed 17; (2) when the walk back finds no exit after a full roam, fall back to the failsafe leave and re-enter at once instead of 4 min of waiting; (3) buy Town Portal scrolls before potions when pack plus stash gold allows, so the trip never needs the walk. Gate: seed 17 re-run with no funded belt window over 5 virtual minutes and no no-kill over 10.
 
 ## Notes (U)
 - The invariants scan sees only the compressed minute logs (minute lines, death and exit lines), not the full bot logs: wedge or hang signatures that appear only in other lines are not counted here; the per-seed records carry the full-log judge result.
