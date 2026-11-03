@@ -330,6 +330,10 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		hard = true // not floorable: the kit is the survival need (KITGATELEVEL)
 		plan.Potions = true
 		why = append(why, why2)
+		// no healing potion anywhere is the Gate 1 BELT window: the short emergency cooldown applies (tripDue)
+		if k, kn := r.kitRead(s); kn && k.HP == 0 {
+			emergency = true
+		}
 	}
 	if known {
 		threshold := t.ResupplyPotions

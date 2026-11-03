@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [beltfix](../../openspec/changes/beltfix/) | in-progress | beltfix | `docs/research/beltfix-analysis.md`<br>`internal/bot/kitgate.go`<br>`internal/bot/goal.go`<br>`internal/bot/beltfix_test.go`<br>`internal/town/shop.go`<br>`internal/town/manareserve_test.go`<br>`openspec/changes/beltfix/**` | - |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -85,6 +86,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change beltfix: gofmt; go vet and go test -p 1 of internal/bot, resource, town; whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -127,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 8784c4cb 11-02 22:00 `merge origin/main into beltfix` (beltfix)
 - b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
 - 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
 - b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 773e2176 11-02 20:39 `merge origin/main into covmissiles2` (covmissiles2)
 - ea2ff010 11-02 20:32 `Merge agent/covstates2: covstates2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covstates2)
 - ea32987a 11-02 20:31 `merge origin/main into covstates2` (covstates2)
-- 2c6af24f 11-02 20:24 `Merge agent/covmonai2: covmonai2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmonai2)
 <!-- statusgen:end -->
