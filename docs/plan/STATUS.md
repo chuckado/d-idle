@@ -121,6 +121,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- a7a493b3 11-03 13:26 `Merge agent/reviewbatch2c: reviewbatch2c: independent Opus review of batch C (head 4ed8b651)` (reviewbatch2c)
 - 99328d5c 11-03 13:13 `Merge agent/cport: merge origin/main into cport` (cport)
 - 23e68453 11-03 13:13 `merge origin/main into cport` (cport)
 - bf29e35d 11-03 12:37 `Merge agent/navexit21: merge origin/main into navexit21` (navexit21)
@@ -130,5 +131,4 @@
 - fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
 - 27e5f2b4 11-03 11:41 `Merge agent/b2on181: B2ON181: batch 2 on the maintainer's open PR 181 (one textual conflict, monster_blow merges cleanly, pr_guard now needs the two oracle scripts in the tree); parity partial, differentials not run` (b2on181)
 - 1e88e0bb 11-03 11:41 `merge origin/main into b2on181` (b2on181)
-- bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
 <!-- statusgen:end -->
