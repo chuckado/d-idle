@@ -2,7 +2,7 @@
 
 ```yaml
 change: beltfix
-status: in-progress
+status: archived
 agent: beltfix
 branch: agent/beltfix
 worktree: ~/code/d2lod-wt/beltfix
@@ -18,8 +18,9 @@ owns:
 exclusive: []
 gates:
   - "gofmt; go vet and go test -p 1 of internal/bot, resource, town; whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Analysis of the Gate 1 BELT window (vmin 446 to 457, real, not an artefact) and a bot fix (kit trip priced at one potion when potions are missing, emergency cooldown with no potion); unit tests replay the window state. Not verified live."
+result: "go tests bot/resource/town pass, whole repo vet and test on the worker host; replay window estimated 2-3 min (inference)"
 live: "not run live; Gate 1 re-run after merge is the check"
+merge: 2d196e9
 ```
 
 - [x] find and explain the window from all-minutes.log and bot-0.log
