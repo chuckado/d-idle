@@ -382,6 +382,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - applyreview: cards to cut per docs/research/card-triage-20261103.md (lead applies the ARCHIVE, MERGE-INTO and DROP rows); plan S1 class check next
 - codereview1: fix the belt-fix side effects (NearTown widening reaches fight abort and potion-low trips; stash gold defeats the futile guard; mana reserve with a complete kit; chain walk from any act 1 level); docs/research/codereview1.md
 - housekeep: soak-minutes-virtual archived (soak-gates delta applied); branch and worktree inventory awaits the lead's cleanup go; docs/research/housekeep-20261103.md
+- REVIEW180: private review of upstream PR 180 (merged 7d999228): no behaviour change in components or tests; the bundle is already on top of it; open PR 181 is the real conflict for batch 2 (combat.hpp monster_blow), see docs/research/review-pr180-20261103.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

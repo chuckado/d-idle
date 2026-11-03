@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- review180: private review of upstream PR 180 and its effect on batch 2; nothing posted upstream
 - housekeep: archived the stale soak-minutes-virtual card and applied its virtual-minute spec delta
 - codereview1: review of the Gate 1 belt fixes with ranked findings (docs only)
 - Docs: ADR 0015 (acceptance on game.exe, six goals), plan 2026-11-03, STATUS rewritten, card triage
