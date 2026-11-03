@@ -391,6 +391,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - lockstepplan: plan for the cheapest d2d vs game.exe A:B (fresh clvl 1-6 cell at k=1, 2 rounds of 3 hidden lanes after Gate 2), native Windows PC lane judged NO for now, AB-SEEDPIN checklist; docs/research/lockstep-plan-20261103.md
 - ORACLEPORT: upstream batch 2 as two PRs with the oracles in the tree: A `local/batch2-A-r5` (41afdc6a: mana floor, Teleport room rule, nearest spot) then B `local/batch2-B-r2` (0399e357: monster damage roll), on upstream main e1eea02a; bodies in docs/research/pr-batch2-A-body.md and pr-batch2-B-body.md; the user decides when to open
 - gate3prep: Gate 2 tick checklist and Gate 3 requirements table; first gap to close is d2d resource sampling (fds, threads, bot RSS) in gate-sup.sh and the judge (docs/research/gate3-prep-20261103.md)
+- GATE1: Gate 1 run 20261103-0338 on d2d.lab2-freezeresume ee5e06d8ef99 + bot 30710e1 NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

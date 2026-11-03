@@ -327,3 +327,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-batch2-A-body.md: PR body of upstream batch A (mana floor, Teleport) to the maintainer template, Claims table, re-check commands, counts on the head
 - docs/research/pr-batch2-B-body.md: PR body of upstream batch B (monster damage roll with its oracle monster_damage.py), limits (Energy Shield), counts on the head
 - docs/research/gate3-prep-20261103.md: Gate 2 watch checklist, Gate 3 requirements table (what the judge evaluates), 24 h host risks, Gate 3 after the A:B pilot
+- docs/soaks/gate1-20261103-0338.md: Gate 1 run 20261103-0338 (NOT PASSED (True XP/h at or above the d2d baseline; Belt)), criteria table, fault recovery

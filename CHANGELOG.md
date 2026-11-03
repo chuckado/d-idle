@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: Gate 1 soak run 20261103-0338: NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md).
 - Docs: Gate 3 prep (Gate 2 watch checklist, Gate 3 requirements table, risks)
 - docs: upstream batch 2 PR bodies A and B with the oracles ported to the maintainer rules (private fork branches local/batch2-A-r5, local/batch2-B-r2).
 - lockstepplan: a written plan for the real d2d against game.exe comparison, with lane counts, host sharing with the long gate runs, and the decisions needed
