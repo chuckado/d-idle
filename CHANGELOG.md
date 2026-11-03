@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- tools: A:B comparison tool for d2d against game.exe records (equivalence interval, per-k regimes).
 - docs: SEEDSPAWN trace of layout, spawn list and RNG draws, d2d against game.exe, and levels.layout coverage rows (seedspawn)
 - SEEDDIST: docs/research/seeddist-trace.md (distribution check of d2d vs game.exe RNG outcomes)
 - docs: Tier B design and cross-backend A:B protocol (tierbdesign)
