@@ -42,6 +42,7 @@
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [b2on181](../../openspec/changes/b2on181/) | in-progress | b2on181 | `openspec/changes/b2on181/**`<br>`docs/research/b2-on181.md` | `fork-branch:local/batch2-on181-r2-r2` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -83,6 +84,9 @@
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change b2on181: local/batch2-on181 = PR 181 head + the four batch 2 commits, pushed to the private fork remote
+- change b2on181: CI flags g++ / clang++ and the suites pass on that tree; counted differentials re-run, results compared with the r3 head
+- change b2on181: changecheck 0 warnings; leakcheck -mode fail 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -121,14 +125,14 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
-- bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
-- 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
-- d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
-- cffbe1e7 11-03 11:34 `merge origin/main into gate3prep` (gate3prep)
-- eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
-- 8d4880a3 11-03 11:27 `merge origin/main into oracleport` (oracleport)
-- 62e4ffab 11-03 11:22 `Merge agent/lockstepplan: LOCKSTEPPLAN: lockstep and A:B plan (clvl 1-6 cell, k=1, hidden i2 i3 i5; no native Windows lane for now)` (lockstepplan)
-- 2a7b26b7 11-03 11:21 `merge origin/main into lockstepplan` (lockstepplan)
-- 013512a3 11-03 11:13 `Merge agent/sorcdiff: SORCDIFF: Sorceress skill differentials for the lightning build: the gate character casts only Charged Bolt, Frozen Armor, Frost Nova and Fire Bolt (never past clvl 15); 0 differences in skill_damage 116,000, static_field 229,664, chill_length, next_hit, armor_hit 109,604, freeze_rules 145,748; one proven deviation (Lightning and Chain Lightning cast length 19 vs 13 ticks), private fix branch` (sorcdiff)
-- 94b3dde9 11-03 11:13 `merge origin/main into sorcdiff` (sorcdiff)
+- ffa19e01 11-03 11:10 `merge origin/main into b2on181` (b2on181)
+- 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
+- 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
+- f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
+- 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
+- 9c7bf265 11-03 10:49 `Merge agent/verifydmg4: verifydmg4: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg4)
+- 33798808 11-03 10:48 `merge origin/main into verifydmg4` (verifydmg4)
+- 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
+- 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
+- fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
 <!-- statusgen:end -->
