@@ -298,7 +298,7 @@ func (rep InvReport) Text() string {
 		fmt.Fprintf(&b, "    gate 1 (virtual minutes): longest no kill and no xp %d (limit %d), longest belt window without healing outside town %d (limit %d)\n",
 			r.NoKillXPMin, lim.NoKillMin, r.BeltWindowMin, lim.BeltMin)
 		for _, w := range r.BeltWindows {
-			fmt.Fprintf(&b, "    belt window %d min (report only): pack gold %d..%d, pack+stash gold %d..%d: %s\n", w.Minutes, w.PackMin, w.PackMax, w.TotMin, w.TotMax, w.Tag())
+			fmt.Fprintf(&b, "    belt window %d min (%s): pack gold %d..%d, pack+stash gold %d..%d: %s\n", w.Minutes, w.verdict(), w.PackMin, w.PackMax, w.TotMin, w.TotMax, w.Tag())
 		}
 		if r.ExitNote != "" && (r.Exit == "early" || r.Exit == "crash") {
 			fmt.Fprintf(&b, "    exit: %s\n", r.ExitNote)
