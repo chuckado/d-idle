@@ -289,3 +289,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/covmissiles2-trace.md: missiles coverage second pass, skill-sourced Act 1 / 2 monster missiles (andariel_missile path), game.exe vs d2d, 27,000 cases
 - docs/research/pr-batch2-draft.md - upstream batch 2 (minmana floor, Teleport D1+D2): heads, counted differentials on a real d2d build, parity, #178 overlap, what is left out
 - docs/research/dmgroll-draft.md: DMGROLL, the monster physical damage roll fix on a private branch (step 1 check, differential, parity, commit text)
+- docs/research/beltfix-analysis.md: Gate 1 20261102 BELT window analysis and fix
