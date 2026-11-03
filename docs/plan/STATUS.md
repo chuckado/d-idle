@@ -121,6 +121,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- a2dfd7ee 11-03 12:32 `Merge agent/gate1multi-20261103-1226-ms1: merge origin/main into gate1multi-20261103-1226-ms1` (gate1multi-20261103-1226-ms1)
 - d5a82b56 11-03 11:45 `Merge agent/sorcdiff2: SORCDIFF2: counted differentials for the casts the bot makes: mana paid at the command vs the action frame (53,628 cases, all 42,168 started cases differ), cut casts paid by d2d but not game.exe (21,084), action frame one tick early at 132 of 401 FCR values, armor group (48 of 5,476 pairs), Charged Bolt do function equal (2,400); private fix branches` (sorcdiff2)
 - fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
 - 27e5f2b4 11-03 11:41 `Merge agent/b2on181: B2ON181: batch 2 on the maintainer's open PR 181 (one textual conflict, monster_blow merges cleanly, pr_guard now needs the two oracle scripts in the tree); parity partial, differentials not run` (b2on181)
@@ -130,5 +131,4 @@
 - d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
 - cffbe1e7 11-03 11:34 `merge origin/main into gate3prep` (gate3prep)
 - eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
-- 8d4880a3 11-03 11:27 `merge origin/main into oracleport` (oracleport)
 <!-- statusgen:end -->
