@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e27b9616 11-03 00:32 `merge origin/main into beltfix2` (beltfix2)
 - 94b7a627 11-03 00:24 `Merge agent/hirefix: HIREFIX: merc observation on d2d (dead merc visible, GU/IW/0A hireling ids mapped, revive quote parsed, judge matches the bot's hire line) so Gate 2 can confirm hire, alive-and-following and revive; offline tests only, not run live` (hirefix)
 - 71b25a3f 11-03 00:24 `merge origin/main into hirefix` (hirefix)
 - 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8784c4cb 11-02 22:00 `merge origin/main into beltfix` (beltfix)
 - b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
 - 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
-- b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
 <!-- statusgen:end -->
