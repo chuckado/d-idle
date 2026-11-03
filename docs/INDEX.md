@@ -284,3 +284,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - [docs/research/seedspawn-trace.md](research/seedspawn-trace.md): SEEDSPAWN trace: Act 1 layout, preset units and spawn lists equal game.exe seed for seed; RNG draws before and at spawn (D1-D3), world-stream consumers, bot findings B1-B5, drill recipe
 - tools/baseline/ab_compare.py: d2d vs game.exe A:B comparison (card abtool)
 - docs/research/covitemtypes-trace.md | item types (itemtypes.txt) in game.exe 1.14d vs d2d and our bot: Equiv chain, membership, slot, hands, socket cap, 553,647 emulator cases (card covitemtypes)
+- docs/research/covmonai2-trace.md - monster AI third pass: Act 2 to 5 thinks and the bosses, game.exe vs d2d mon_think on 139,500 cases (covmonai2)
