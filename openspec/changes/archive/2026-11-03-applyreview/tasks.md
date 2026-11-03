@@ -2,7 +2,7 @@
 
 ```yaml
 change: applyreview
-status: in-progress
+status: archived
 agent: applyreview
 branch: agent/applyreview
 worktree: d2lod-wt/applyreview
@@ -15,12 +15,13 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict"
-result: "Review appendix F applied (ADR 0015, decisions, PLAN, roadmap, GLOSSARY), STATUS hand part rewritten, plan and card triage written, three cards archived; docs only, not verified live."
+result: "docs only"
 live: "not verified"
 credit:
   component: APPLYREVIEW
   author: owner
   agents: [Claude Code]
+merge: ca2489d
 ```
 
 - [x] decisions.md lines and ADR 0015

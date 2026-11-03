@@ -41,7 +41,6 @@
 ### Active changes
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
-| [applyreview](../../openspec/changes/applyreview/) | in-progress | applyreview | `docs/adr/0015-goals-acceptance-on-game-exe.md`<br>`docs/plan/plan-20261103.md`<br>`docs/research/card-triage-20261103.md`<br>`openspec/changes/applyreview/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
@@ -83,7 +82,6 @@
 - spec [soak-gates](../../openspec/specs/soak-gates/spec.md): 19 requirements
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
-- change applyreview: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -126,14 +124,14 @@
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
-- 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
-- 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
-- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
-- 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
-- b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
-- 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
-- 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
-- d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
-- b5496da4 11-03 03:01 `Merge agent/gaterecords: GATERECORDS: the three Gate 1 run records of 2026-11-02/03 under unique run-id names, an index, merge-lines in the valid format (all three runs NOT PASSED: Belt 12, then Belt 37 and NOKILL 11, then Belt 7 and True XP/h -11 percent); the old PASSED record is untouched` (gaterecords)
-- 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
+- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
+- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
+- 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
+- 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
+- 5833ec20 11-03 10:15 `Merge agent/gatetriage: GATETRIAGE: one-screen Gate failure triage (gate_triage.py) with 10 tests and examples over the five Gate 1 runs` (gatetriage)
+- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
+- e1c4f73a 11-03 10:08 `Merge agent/xphshort: XPHSHORT: why true XP/h fell across the five Gate 1 runs: area choice at clvl 13+, horizon bias, multi-seed plan; xph_budget.py with tests` (xphshort)
+- 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
+- 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
+- 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
 <!-- statusgen:end -->
