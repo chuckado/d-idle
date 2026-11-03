@@ -58,7 +58,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [prbuildb2](../../openspec/changes/prbuildb2/) | in-progress | prbuildb2 | `docs/research/pr-batch2-draft.md`<br>`tools/emu/pb2_mana.sh`<br>`tools/emu/pb2_tele.sh`<br>`openspec/changes/prbuildb2/**` | `fork-branch:local/batch2-minmana`<br>`fork-branch:local/batch2-teleport` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -117,7 +116,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change prbuildb2: counted differential base vs head on a real d2d build >= 20,000 cases per part; seven suites plus test_sk_ground green; CI parity
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -129,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
 - 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
 - 41db4964 11-02 20:39 `Merge agent/covmissiles2: covmissiles2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmissiles2)
 - 773e2176 11-02 20:39 `merge origin/main into covmissiles2` (covmissiles2)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 37ac620f 11-02 20:24 `merge origin/main into covmonai2` (covmonai2)
 - 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
 - 8dc49ed9 11-02 20:16 `merge origin/main into covitemtypes` (covitemtypes)
-- e74797c2 11-02 20:09 `Merge agent/abtool: abtool: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (abtool)
 <!-- statusgen:end -->

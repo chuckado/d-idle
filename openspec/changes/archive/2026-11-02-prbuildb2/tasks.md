@@ -2,7 +2,7 @@
 
 ```yaml
 change: prbuildb2
-status: in-progress
+status: archived
 agent: prbuildb2
 branch: agent/prbuildb2
 worktree: d2lod-wt/prbuildb2
@@ -17,8 +17,8 @@ exclusive:
   - fork-branch:local/batch2-teleport
 gates:
   - "counted differential base vs head on a real d2d build >= 20,000 cases per part; seven suites plus test_sk_ground green; CI parity"
-merge:
-result: "two private fork branches built and measured offline against game.exe oracles on a real d2d build; not verified in a live game"
+merge: 4137294
+result: "docs only; fork branches on the private remote"
 credit:
   component: Upstream batch 2 candidates (minmana floor, Teleport)
   author: owner
