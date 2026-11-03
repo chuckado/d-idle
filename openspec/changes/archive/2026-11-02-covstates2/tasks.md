@@ -2,7 +2,7 @@
 
 ```yaml
 change: covstates2
-status: in-progress
+status: archived
 agent: covstates2
 branch: agent/covstates2
 worktree: d2lod-wt/covstates2
@@ -15,7 +15,7 @@ exclusive: []
 gates:
   - game.exe FUN_0056e970 and FUN_0056c740 run natively with counted cases, compared with d2d's real put_state
   - ledger rows only for states proven, regenerated with tools/coverage/coverage.py --write
-result: "docs and emulator scripts only; game side V run, d2d put_state real (compiled), slot choice transcribed; no live game"
+result: "docs/tools only; see the doc for tags and limits"
 credit:
   component: COVSTATES2
   author: owner
@@ -24,6 +24,7 @@ credit:
   verified_by: []
   agents: [Claude Code]
   consent: none
+merge: ea2ff01
 ```
 
 - [x] 1 Read the state table (States.txt, patched stack), the curse put FUN_0056e970, the group removal FUN_0056c740, the curse do FUN_005c37c0 / FUN_005c35c0, Taunt and Battle Cry
