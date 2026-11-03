@@ -1,6 +1,6 @@
 # SORCDIFF: which Sorceress skills the lightning build uses, and what is proven
 
-> status: research, 2026-11-03, agent SORCDIFF (card sorcdiff). Offline (no game). Counted differentials ran on the real d2d build (upstream main `005c7cab`) against game.exe's own code in the emulator, on the Venus WSL lane. Nothing pushed upstream, no PR, no comment. Tags: **V** verified (run or read in this card, the way is said), **S** secondary (an earlier doc of ours, not re-run), **I** inference, **U** unverified.
+> status: research, 2026-11-03, agent SORCDIFF (card sorcdiff). Offline (no game). Counted differentials ran on the real d2d build (upstream main `005c7cab`) against game.exe's own code in the emulator, on the build-worker WSL lane. Nothing pushed upstream, no PR, no comment. Tags: **V** verified (run or read in this card, the way is said), **S** secondary (an earlier doc of ours, not re-run), **I** inference, **U** unverified.
 
 ## Answer
 
@@ -55,9 +55,9 @@ Ledger columns are `docs/coverage/ledger.tsv` rows `skills.sor` (V read); "re-ru
 
 The unused skills of the Sorceress ledger rows (Inferno, Blaze, Fire Ball, Nova, Shiver Armor, Fire Wall, Enchant, Meteor, Chilling Armor, Fire Mastery, Hydra, Frozen Orb, Cold Mastery, Ice Blast, Glacial Spike, Blizzard) are not part of the lightning build; their status stays as in the ledger.
 
-## 3. The counted differentials (real d2d build on Venus WSL)
+## 3. The counted differentials (real d2d build on the build-worker WSL lane)
 
-Setup (V): a git bundle of the private fork carries `local/sorc-base` (= upstream main `005c7cab`) and `local/sorc-lightning-seq`; Venus WSL (Ubuntu 26.04, g++ 15.2, ccache, game files and emulator venv as in `docs/venus-build.md` of the ops repo); two builds: A = harness commit only (main plus `tests/game/test_cast_seq.cpp`, `tools/emu/cast_rates.py cast`), B = A plus the fix; game.exe's side is `tools/emu/cast_rates.py` and the other oracles, run natively under unicorn on the same machine. Script: `tools/emu/sorcdiff_venus_run.sh` (stages `build`, `cast`, `harness`). One job at a time was the rule; see "Venus overlap" at the end.
+Setup (V): a git bundle of the private fork carries `local/sorc-base` (= upstream main `005c7cab`) and `local/sorc-lightning-seq`; build-worker WSL (Ubuntu 26.04, g++ 15.2, ccache, game files and emulator venv as in the ops repo build-worker doc); two builds: A = harness commit only (main plus `tests/game/test_cast_seq.cpp`, `tools/emu/cast_rates.py cast`), B = A plus the fix; game.exe's side is `tools/emu/cast_rates.py` and the other oracles, run natively under unicorn on the same machine. Script: `tools/emu/sorcdiff_build-worker_run.sh` (stages `build`, `cast`, `harness`). One job at a time was the rule; see "the build worker overlap" at the end.
 
 ### 3.1 Cast length of the plan's Sorceress casts through the REAL `Fight` (new)
 
@@ -72,7 +72,7 @@ Examples (V, line `cast ID FCR TICKS`): game.exe `cast 53 0 19`, `cast 53 7 18`,
 
 ### 3.2 Re-runs of the existing harnesses on `005c7cab` (build A; the skills the bot uses)
 
-Run on build A (main plus the harness commit), stage `harness2` of `tools/emu/sorcdiff_venus_run.sh` (V, alone on Venus, 299 s), except the first row (stage `harness`, shared Venus, finished before the VM reset killed the rest). Counts are compared cases; "differ" is game.exe against the real d2d build.
+Run on build A (main plus the harness commit), stage `harness2` of `tools/emu/sorcdiff_build-worker_run.sh` (V, alone on the build worker, 299 s), except the first row (stage `harness`, shared the build worker, finished before the VM reset killed the rest). Counts are compared cases; "differ" is game.exe against the real d2d build.
 
 | harness (skills it covers) | compared | differ |
 |---|---|---|
@@ -83,9 +83,9 @@ Run on build A (main plus the harness commit), stage `harness2` of `tools/emu/so
 | armor_hit.py gen 20000 1 (Frozen Armor striker rule, by monster class) | 109,604 | 0 in every class |
 | freeze_rules.py gen 20000 1 (Frost Nova / Glacial Spike freeze) | 145,748 | 0 |
 
-Not re-run: missile_hit (60,000 cases, killed by the Venus VM reset; merged state S from #166). Static Field, cold length, nova hits, Frozen Armor and element damage are therefore clean on main `005c7cab` for these case sets. Smaller N than the 100,000 of the first plan, because three Venus jobs ran at once and the VM had to be reset.
+Not re-run: missile_hit (60,000 cases, killed by the the build worker VM reset; merged state S from #166). Static Field, cold length, nova hits, Frozen Armor and element damage are therefore clean on main `005c7cab` for these case sets. Smaller N than the 100,000 of the first plan, because three the build worker jobs ran at once and the VM had to be reset.
 
-## 4. Fix branch (private fork, remote forgejo only)
+## 4. Fix branch (private fork, the private remote only)
 
 `local/sorc-lightning-seq` on upstream main `005c7cab` (base branch `local/sorc-base`), numeric noreply identity for author and committer, bodies of at most three lines, last line `Agent: Claude Code`, one change per commit:
 
@@ -106,7 +106,7 @@ Not done by the fix (ponytail comment in `set_pmode`): the missile still leaves 
 
 ## 6. Notes
 
-- **Venus overlap.** Three jobs shared the VM while the first `harness` stage ran (my skill_damage took 22 min); the VM was reset by the coordinator and that stage was killed. `build`, `cast` and `harness2` ran alone.
+- **the build worker overlap.** Three jobs shared the VM while the first `harness` stage ran (my skill_damage took 22 min); the VM was reset by the coordinator and that stage was killed. `build`, `cast` and `harness2` ran alone.
 - **Ledger rows to correct (proposed, not edited)**: `skills.sor 43,37,61,63,65` says READ-ONLY for the masteries, but the mastery share of the element damage is inside the `skill_damage.py` differential (merged #146); only the passive stat bookkeeping and Warmth stay read-only.
 - **Premise corrections for the brief**: Energy Shield and Thunder Storm are not cast by the bot, Charged Bolt is the skill that decides a gate run, and the cast counts are not in the minute lines.
 
