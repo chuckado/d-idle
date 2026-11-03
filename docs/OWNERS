@@ -134,3 +134,6 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/sorcdiff.md  sorcdiff  sorcdiff
+tools/emu/sorcdiff_*  sorcdiff  sorcdiff
+openspec/changes/sorcdiff/**  sorcdiff  sorcdiff
