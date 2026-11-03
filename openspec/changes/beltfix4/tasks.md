@@ -10,6 +10,7 @@ skip_specs: true
 owns:
   - internal/bot/goal.go
   - internal/bot/beltfix3_test.go
+  - internal/bot/scenario_test.go
   - docs/research/beltfix4.md
   - openspec/changes/beltfix4/**
 exclusive: []

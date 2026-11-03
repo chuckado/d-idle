@@ -138,3 +138,4 @@ internal/bot/goal.go beltfix4 beltfix4
 internal/bot/beltfix3_test.go beltfix4 beltfix4
 docs/research/beltfix4.md beltfix4 beltfix4
 openspec/changes/beltfix4/** beltfix4 beltfix4
+internal/bot/scenario_test.go beltfix4 beltfix4
