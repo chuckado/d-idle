@@ -2,7 +2,7 @@
 
 ```yaml
 change: b2winworker
-status: in-progress
+status: archived
 agent: b2winworker
 branch: agent/b2winworker
 worktree: d2lod-wt/b2winworker
@@ -14,7 +14,7 @@ exclusive: []
 gates:
   - "MSVC 14.51 and WSL results for local/batch2-bundle-r3, local/batch2-mana-teleport, local/batch2-monsterdmg-pr recorded with the exact heads"
   - "changecheck 0 warnings, leakcheck 0 hits"
-result: "PARTIAL, not verified live on the game: MSVC 14.51 (0 warnings, ctest 0 failed) and WSL parity stages rc 0 for the three branches, damage-roll mdmg2 and v3 0 differences on r3. Mana, Teleport seed 9 and v4 not run (OOM and queueing on the shared Windows build worker); see docs/research/b2-winworker-rerun.md"
+result: "PARTIAL: mana/Teleport seed 9 and v4 not run; docs only"
 credit:
   component: Batch 2 re-run on the Windows build worker
   author: owner
@@ -22,6 +22,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 54ee48a
 ```
 
 ## 1. Work
