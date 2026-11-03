@@ -2,7 +2,7 @@
 
 ```yaml
 change: lockstepplan
-status: in-progress
+status: archived
 agent: lockstepplan
 branch: agent/lockstepplan
 worktree: d2lod-wt/lockstepplan
@@ -13,10 +13,11 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits; tools/openspec.sh validate --all --strict"
-result: "docs only; not verified live (no game, no run); capacity numbers are from committed and private docs, not a fresh sample"
+result: "docs only"
 credit:
   author: owner
   agents: [Claude Code]
+merge: 62e4ffa
 ```
 
 ## 1. Work
