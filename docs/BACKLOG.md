@@ -393,6 +393,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - gate3prep: Gate 2 tick checklist and Gate 3 requirements table; first gap to close is d2d resource sampling (fds, threads, bot RSS) in gate-sup.sh and the judge (docs/research/gate3-prep-20261103.md)
 - GATE1: Gate 1 run 20261103-0338 on d2d.lab2-freezeresume ee5e06d8ef99 + bot 30710e1 NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md)
 - b2on181: batch 2 rebased onto PR 181 in the private fork (local/batch2-on181); see docs/research/b2-on181.md before the A/B split decision
+- SORCDIFF2: counted differentials for the Sorceress casts the bot uses; mana paid at the action frame reproduced (42,168 of 42,168 cases that began differ on upstream main e1eea02a) plus a new action-frame tick deviation (132 of 401 FCR values), both fixed on private `local/sorc-mana-timing-r2` (0 of 53,628 differ); armor group reproduced (48 of 5,476 pairs) and fixed on `local/sorc-armor-group-r2`; Charged Bolt do 2,400 cases 0 differ; Frozen Armor trigger not built; ready-for-Opus list in the doc
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

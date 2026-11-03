@@ -329,3 +329,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/gate3-prep-20261103.md: Gate 2 watch checklist, Gate 3 requirements table (what the judge evaluates), 24 h host risks, Gate 3 after the A:B pilot
 - docs/soaks/gate1-20261103-0338.md: Gate 1 run 20261103-0338 (NOT PASSED (True XP/h at or above the d2d baseline; Belt)), criteria table, fault recovery
 - docs/research/b2-on181.md: batch 2 on top of PR 181, one conflict resolved, CI and counted differentials re-run
+- docs/research/sorcdiff2.md: mana payment timing, Frozen Armor group and the Charged Bolt do as counted differentials on the real d2d build, with private fix branches
