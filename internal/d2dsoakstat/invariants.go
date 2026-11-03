@@ -104,6 +104,8 @@ type Invariants struct {
 	// outside town with no healing potion in pack or belt). BeltWindowMin is 0 for logs without packHP/beltBoxes.
 	NoKillXPMin   int `json:"noKillXpMin"`
 	BeltWindowMin int `json:"beltWindowMin"`
+	// BeltWindows lists each belt window over BeltReportMin minute lines (report only; the BELT invariant is unchanged).
+	BeltWindows []BeltWindow `json:"beltWindows,omitempty"`
 
 	Deaths        int     `json:"deaths"`
 	Kills         int     `json:"kills"`
@@ -125,6 +127,43 @@ type Invariants struct {
 
 // townAreaIDs are the level ids of the five towns; townAreas holds their names.
 var townAreaIDs = map[int]bool{1: true, 40: true, 75: true, 103: true, 109: true}
+
+// BeltReportMin is the shortest belt window (minute lines) the report prints a gold line for; PotionPrice is the
+// Minor Healing Potion price (gold) the poverty tag compares against (V: docs/research/beltfix5.md; the BELT limit itself is in soak-gates).
+const (
+	BeltReportMin = 5
+	PotionPrice   = 30
+)
+
+// BeltWindow is one run of minute lines outside town with no healing potion: Minutes long, with the pack gold and the
+// pack plus stash gold ranges. Old archives have no stashGold, so Tot equals Pack there and StashKnown is false.
+type BeltWindow struct {
+	Minutes    int  `json:"minutes"`
+	PackMin    int  `json:"packMin"`
+	PackMax    int  `json:"packMax"`
+	TotMin     int  `json:"totMin"`
+	TotMax     int  `json:"totMax"`
+	StashKnown bool `json:"stashKnown"`
+}
+
+func (w *BeltWindow) add(m Minute) {
+	w.Minutes++
+	t := m.Gold + m.StashGold
+	w.PackMin, w.PackMax = min(w.PackMin, m.Gold), max(w.PackMax, m.Gold)
+	w.TotMin, w.TotMax = min(w.TotMin, t), max(w.TotMax, t)
+	w.StashKnown = w.StashKnown || m.HasStash
+}
+
+// Tag is "poverty" when even pack plus stash gold stayed under a potion, "funded" otherwise (the best minute counts), "unknown stash" for old archives.
+func (w BeltWindow) Tag() string {
+	switch {
+	case !w.StashKnown:
+		return "stash unknown (old archive)"
+	case w.TotMax < PotionPrice:
+		return "poverty (pack+stash < potion price)"
+	}
+	return "funded (pack+stash >= potion price)"
+}
 
 // hasHealing reports a usable healing potion in the pack or in a belt column.
 func hasHealing(m Minute) bool {
@@ -292,6 +331,8 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 	var progress []float64 // virtual minutes of progress events, sorted below
 	var deaths []deathAt
 	noKill, belt := 0, 0
+	var win BeltWindow
+	winOpen := false
 	for i, m := range mins {
 		inv.ClvlMin, inv.ClvlMax = min(inv.ClvlMin, m.Clvl), max(inv.ClvlMax, m.Clvl)
 		if a := ActOfArea(m.Area); a > 0 {
@@ -310,8 +351,19 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 		if m.HasBelt && !hasHealing(m) && !townAreaIDs[m.Area] {
 			belt++
 			inv.BeltWindowMin = max(inv.BeltWindowMin, belt)
+			if belt == 1 {
+				win = BeltWindow{PackMin: m.Gold, PackMax: m.Gold, TotMin: m.Gold + m.StashGold, TotMax: m.Gold + m.StashGold}
+			}
+			win.add(m)
+			winOpen = true
 		} else {
 			belt = 0
+		}
+		if winOpen && belt == 0 {
+			winOpen = false
+			if win.Minutes > BeltReportMin {
+				inv.BeltWindows = append(inv.BeltWindows, win)
+			}
 		}
 		if d := m.Kills - p.Kills; d > 0 {
 			inv.Kills += d
@@ -328,6 +380,9 @@ func ScanInvariants(r io.Reader, x ExitInfo, lim InvLimits) (Invariants, error) 
 		if m.Kills > p.Kills || m.XP > p.XP || m.Gold < p.Gold || m.Clvl > p.Clvl {
 			progress = append(progress, float64(i))
 		}
+	}
+	if winOpen && win.Minutes > BeltReportMin {
+		inv.BeltWindows = append(inv.BeltWindows, win)
 	}
 	for a := range acts {
 		inv.Acts = append(inv.Acts, a)
