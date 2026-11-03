@@ -7,5 +7,5 @@ no observable behaviour change: docs and offline formula tooling only, no code u
 
 - Dedicated trace in `docs/research/pal-smite-zeal-sacrifice-trace.md`
 - Cross-reference link in `docs/research/pal-skill-trace.md`
-- Formula verification script in `tools/emu/verify_palskills.py` (seed 0x50414c53, 120,000 cases, 0 mismatches)
+- Formula self-check helper in `tools/emu/verify_palskills.py` (arithmetic self-check of written formulas, I)
 - No Go code modified

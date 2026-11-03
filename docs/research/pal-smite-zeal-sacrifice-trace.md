@@ -6,9 +6,9 @@
 
 ## Summary
 
-- **Smite (V read, D).** `srvdofunc 150` (`FUN_005ce9f0`) requires an equipped shield (`FUN_0063c8f0`). Base damage is shield base min / max damage (`Items.txt +0xfe/+0xff`), plus stat 17/18 min / max damage added directly by Holy Shield (`state 0x65`, `FUN_00647bc0` / `FUN_00647d00`). Damage percent bonus is `calc1` (`ln34 = 15 + 15*(lvl-1)%`), plus `stat 25` (off-weapon ED), plus `stat 0` (Strength) via `ItemGetStrBonus` (`FUN_00629860` returns 100 for shields, yielding `+1%` damage per point of Strength). Stun length is `calc2` (`min(250, ln12) = min(250, 15 + 5*(lvl-1))` frames; hard-capped at 250 frames = 10.0 seconds). Knockback is set via `ResultFlags = 8` (bit 3). Smite **unconditionally hits** because `FUN_005ce9f0` forces bit 0 of the hit flags after `FUN_0057ec10` (`0x5ceba8` call, setting bit 0 via bitwise OR with 1 at `0x5cebb0`): shield block, weapon block, defense and attack rating are completely bypassed (a blocking target may trigger a block animation, but still takes full damage, stun, and knockback). Mana cost is 2 mana (`manashift 8, mana 2, minmana 1`), paid in `srvdofunc 150`. A held button repeats Smite attack animation (mode `S1`) each cycle, paying 2 mana per swing.
-- **Zeal (V read, D).** `srvstfunc 37` (`FUN_005daf40`) and `srvdofunc 13` (`FUN_005dbc60`). Hit count is `calc1` (`min(par5 + lvl - 1, par6)` with `par5 = 2, par6 = 5`): 2 hits at level 1, 3 at level 2, 4 at level 3, and 5 hits at level 4+ (cap 5). Damage percent bonus is `calc2` (`((lvl < 5) ? 0 : ((lvl-4) * 6)) + Sacrifice.blvl * 12%`). Attack rating bonus is `ToHit 10, LevToHit 10` (`10 + 10*(lvl-1)%`). Mana cost is 2 mana (`manashift 8, mana 2, minmana 1`), **paid once at srvstfunc 37** when the Zeal sequence starts; individual swings 2..5 cost 0 mana. When a target dies or leaves melee reach during the sequence (`FUN_00622c40` fails), `srvdofunc 13` searches within melee reach for another enemy using filter `0x20003` (`FUN_0056bd10`). In `game.exe`, Zeal uses 100% frame rollback (`Param2 = 100`, `FUN_004efc20`, `FUN_0056e210`, `FUN_00553b10` resetting current animation frame `[esi + 0x44]` directly back to `action_frame` `[edi + 0xa8]`), executing rapid consecutive strikes (~4 frames at base 1H speed, U without live animation timing capture). A held button executes a fresh 2..5 hit Zeal sequence as soon as the previous sequence finishes, paying 2 mana per sequence.
-- **Sacrifice (V read, D).** `srvstfunc 29` (`FUN_005ce790`) and `srvdofunc 64` (`FUN_005ce8e0`). Damage percent bonus is `calc1` (`(180 + 15*(lvl-1)) + Redemption.blvl * 15% + Fanaticism.blvl * 5%`). Attack rating bonus is `ToHit 20, LevToHit 7` (`20 + 7*(lvl-1)%`). Mana cost is 0 mana (`mana 0, lvlmana 0, minmana 0`). Self-damage is `calc2` (`par3 = 8%`): `srvdofunc 64` (`0x5ce961..0x5ce984`) takes the physical damage dealt, **caps it at the target's current hitpoints** (`min(phys_damage, target_hp)`), and inflicts 8% of that capped value onto the caster as direct internal damage (flag `0x1000`). If self-damage meets or exceeds current player life (reducing life to 0), the player dies. A held button repeats Sacrifice attack animation (mode `A1`, `seqnum 2`) each cycle, taking 8% life cost on each landed hit.
+- **Smite (V read, I).** `srvdofunc 150` (`FUN_005ce9f0`) requires an equipped shield (`FUN_0063c8f0`). Base damage is shield base min / max damage (`Items.txt +0xfe/+0xff`), plus stat 17/18 min / max damage added directly by Holy Shield (`state 0x65`, `FUN_00647bc0` / `FUN_00647d00`). Damage percent bonus is `calc1` (`ln34 = 15 + 15*(lvl-1)%`), plus `stat 25` (off-weapon ED), plus `stat 0` (Strength) via `ItemGetStrBonus` (`FUN_00629860` returns 100 for shields, yielding `+1%` damage per point of Strength). Stun length is `calc2` (`min(250, ln12) = min(250, 15 + 5*(lvl-1))` frames; hard-capped at 250 frames = 10.0 seconds). Knockback is set via `ResultFlags = 8` (bit 3). Smite **unconditionally hits** because `FUN_005ce9f0` forces bit 0 of the hit flags after `FUN_0057ec10` (`0x5ceba8` call, setting bit 0 via bitwise OR with 1 at `0x5cebb0`): shield block, weapon block, defense and attack rating are completely bypassed (a blocking target may trigger a block animation, but still takes full damage, stun, and knockback). Mana cost is 2 mana (`manashift 8, mana 2, minmana 1`), paid in `srvdofunc 150`. A held button repeats Smite attack animation (mode `S1`) each cycle, paying 2 mana per swing.
+- **Zeal (V read, I).** `srvstfunc 37` (`FUN_005daf40`) and `srvdofunc 13` (`FUN_005dbc60`). Hit count is `calc1` (`min(par5 + lvl - 1, par6)` with `par5 = 2, par6 = 5`): 2 hits at level 1, 3 at level 2, 4 at level 3, and 5 hits at level 4+ (cap 5). Damage percent bonus is `calc2` (`((lvl < 5) ? 0 : ((lvl-4) * 6)) + Sacrifice.blvl * 12%`). Attack rating bonus is `ToHit 10, LevToHit 10` (`10 + 10*(lvl-1)%`). Mana cost is 2 mana (`manashift 8, mana 2, minmana 1`), **paid once at srvstfunc 37** when the Zeal sequence starts; individual swings 2..5 cost 0 mana. When a target dies or leaves melee reach during the sequence (`FUN_00622c40` fails), `srvdofunc 13` searches within melee reach for another enemy using filter `0x20003` (`FUN_0056bd10`). In `game.exe`, Zeal uses 100% frame rollback (`Param2 = 100`, `FUN_004efc20`, `FUN_0056e210`, `FUN_00553b10` resetting current animation frame `[esi + 0x44]` directly back to `action_frame` `[edi + 0xa8]`), executing rapid consecutive strikes (~4 frames at base 1H speed, U without live animation timing capture). A held button executes a fresh 2..5 hit Zeal sequence as soon as the previous sequence finishes, paying 2 mana per sequence.
+- **Sacrifice (V read, I).** `srvstfunc 29` (`FUN_005ce790`) and `srvdofunc 64` (`FUN_005ce8e0`). Damage percent bonus is `calc1` (`(180 + 15*(lvl-1)) + Redemption.blvl * 15% + Fanaticism.blvl * 5%`). Attack rating bonus is `ToHit 20, LevToHit 7` (`20 + 7*(lvl-1)%`). Mana cost is 0 mana (`mana 0, lvlmana 0, minmana 0`). Self-damage is `calc2` (`par3 = 8%`): `srvdofunc 64` (`0x5ce961..0x5ce984`) takes the physical damage dealt, **caps it at the target's current hitpoints** (`min(phys_damage, target_hp)`), and inflicts 8% of that capped value onto the caster as direct internal damage (flag `0x1000`). If self-damage meets or exceeds current player life (reducing life to 0), the player dies. A held button repeats Sacrifice attack animation (mode `A1`, `seqnum 2`) each cycle, taking 8% life cost on each landed hit.
 - **d2d implementation in `skill_built` (S).** Contrary to early concerns that Smite, Zeal, and Sacrifice might fall back to plain attack, d2d's `skill_built` (`components/game/fight.hpp:62-75`) explicitly implements all three:
   - Smite: `skill.srvdofunc == ServerDoFunction::kSmite` -> true.
   - Zeal: `runs(skill, ServerStartFunction::kRepeatedHit, ServerDoFunction::kRepeatedHit)` -> true.
@@ -73,30 +73,30 @@
 
 > **Note on Case Separation:**
 > - **8,640-Case Elemental Differential (V run):** In [`pal-skill-trace.md`](pal-skill-trace.md#7-differentials-v-run-the-worker-host-nice-one-process-at-a-time), the 8,640 elemental cases represent an emulator vs. d2d differential comparing native `game.exe` 1.14d (`pal_dmg.py gen, game`, calling `FUN_00644d50` / `FUN_00644e40` / `FUN_00644f20`) line-for-line against d2d commit `72132b99` (`pal_test --skill-damage`, testing `elem_damage` / `elem_length`). The input space is an exhaustive Cartesian product grid: 6 skills (Holy Bolt, Blessed Hammer, Holy Fire, Holy Freeze, Holy Shock, Fist of the Heavens) x 40 skill levels (1..40) x 6 synergy point tiers (0, 1, 5, 10, 20, 30) x 3 character levels (clvl 1, 30, 99) x 2 synergy patterns = 8,640 cases. This matrix has **no random seed** (exhaustive evaluation) and captured **0 differ**.
-> - **120,000-Case Melee Formula Verification (D / self-check):** In contrast, the 120,000 cases below are a dedicated self-check of the written formulas and decompiled `game.exe` 1.14d arithmetic implemented in `tools/emu/verify_palskills.py` against independent calculations. This test suite asserts formulas for Zeal, Smite, and Sacrifice across 120,000 randomized cases generated with PRNG seed `0x50414c53` (in addition to exhaustive deterministic evaluation of skill levels 1..60), capturing **0 mismatches** as a consistency self-check of the written formulas.
+> - **Melee Formula Self-Check (I):** The formulas for Zeal, Smite, and Sacrifice documented above are inferred from reading `Skills.txt` calcs and decompiled 1.14d dispatch functions (`FUN_005ce9f0`, `FUN_005daf40`, `FUN_005dbc60`, `FUN_005ce790`, `FUN_005ce8e0`). The helper `tools/emu/verify_palskills.py` provides an offline arithmetic consistency self-check of these written formulas. Because it checks the arithmetic of the written formulas rather than executing native `game.exe` or `d2d` binaries, these formula rows are tagged **I** (inference), without claiming empirical emulator case counts.
 
 ### 3.1 Executable Verification Command & Captured Output
 
-- **Executable Command:** `python tools/emu/verify_palskills.py 120000 0x50414c53`
+- **Executable Command:** `python tools/emu/verify_palskills.py`
 - **Prerequisites:** Python 3 (standard library only)
-- **Input Parameters:** 120,000 randomized iterations, seed `0x50414c53`, plus exhaustive deterministic evaluation of skill levels 1..60
+- **Input Parameters:** Progression across skill levels 1..60 and parameterized input ranges
 - **Captured Output:**
   ```text
-  Verified 120000 cases with seed 0x50414c53: 0 mismatches in 0.481s
+  Verified formula consistency: 0 mismatches
   ```
 
 ### 3.2 Per-Rule Verification Results
 
-| Verification Suite | Tag | Executable Command & Inputs | Case / Level Range & Seed | Captured Output | Verified Rule & Notes |
+| Verification Suite | Tag | Executable Command & Inputs | Case / Level Range | Captured Output | Verified Rule & Notes |
 |---|:---:|---|---|---|---|
-| Zeal Hit Count (`calc1`) | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `min(2 + lvl - 1, 5)`: 2 at L1, 3 at L2, 4 at L3, 5 at L4..L60 |
-| Smite Stun Length (`calc2`) | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `min(250, 15 + 5*(lvl - 1))`: 15 at L1, 110 at L20, capped at 250 at L48..L60 |
-| Zeal Attack Rating Bonus | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `10 + 10*(lvl - 1)%` verified across all levels |
-| Sacrifice Attack Rating Bonus | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `20 + 7*(lvl - 1)%` verified across all levels |
-| Smite Mana Cost (`FUN_00644b10`) | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
-| Zeal Mana Cost (`FUN_00644b10`) | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
-| Sacrifice Mana Cost (`FUN_00644b10`) | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `0` mana verified across all levels |
-| Smite / Zeal / Sacrifice Stress Suite | D | `python tools/emu/verify_palskills.py 120000 0x50414c53` | 120,000 cases, seed `0x50414c53` | `Verified 120000 cases with seed 0x50414c53: 0 mismatches in 0.481s` | Randomized levels (1..60), synergies (0..30), Str (10..500), off-weapon ED (0..400), target HP (1..50,000), raw damage (1..100,000) asserted against independent formulas for Zeal ED/AR, Sacrifice ED/AR/capped self-damage, Smite ED/Strength scaling |
+| Zeal Hit Count (`calc1`) | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `min(2 + lvl - 1, 5)`: 2 at L1, 3 at L2, 4 at L3, 5 at L4..L60 |
+| Smite Stun Length (`calc2`) | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `min(250, 15 + 5*(lvl - 1))`: 15 at L1, 110 at L20, capped at 250 at L48..L60 |
+| Zeal Attack Rating Bonus | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `10 + 10*(lvl - 1)%` verified across all levels |
+| Sacrifice Attack Rating Bonus | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `20 + 7*(lvl - 1)%` verified across all levels |
+| Smite Mana Cost (`FUN_00644b10`) | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
+| Zeal Mana Cost (`FUN_00644b10`) | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
+| Sacrifice Mana Cost (`FUN_00644b10`) | I | `python tools/emu/verify_palskills.py` | Skill levels 1..60 | `0 mismatches` | `0` mana verified across all levels |
+| Smite / Zeal / Sacrifice Arithmetic Suite | I | `python tools/emu/verify_palskills.py` | Levels (1..60), synergies (0..30), Str (10..500), off-weapon ED (0..400), target HP (1..50,000) | `0 mismatches` | Arithmetic consistency self-check for Zeal ED/AR, Sacrifice ED/AR/capped self-damage, Smite ED/Strength scaling (I) |
 
 ---
 
@@ -104,9 +104,9 @@
 
 | id | finding | tag | impact |
 |---|---|---|---|
-| B6 | Smite always hits and stuns up to 10 s; shield base damage + Holy Shield bonus + Strength % ED; costs 2 mana | V read + D | Excellent single-target lock against tough foes or bosses; independent of weapon damage/durability |
-| B7 | Zeal hit count scales 2 -> 3 -> 4 -> 5 at skill levels 1, 2, 3, 4+; costs 2 mana once per sequence | V read + D | Putting 4 points into Zeal reaches the max 5 hits; holding the key repeats 5-hit sequences |
-| B8 | Sacrifice costs 0 mana but inflicts 8% of damage dealt as self-damage (capped at foe HP); lethal | V read + D | High risk at low character life; safe only when life leech or potion buffer exceeds self-hurt |
+| B6 | Smite always hits and stuns up to 10 s; shield base damage + Holy Shield bonus + Strength % ED; costs 2 mana | V read, I | Excellent single-target lock against tough foes or bosses; independent of weapon damage/durability |
+| B7 | Zeal hit count scales 2 -> 3 -> 4 -> 5 at skill levels 1, 2, 3, 4+; costs 2 mana once per sequence | V read, I | Putting 4 points into Zeal reaches the max 5 hits; holding the key repeats 5-hit sequences |
+| B8 | Sacrifice costs 0 mana but inflicts 8% of damage dealt as self-damage (capped at foe HP); lethal | V read, I | High risk at low character life; safe only when life leech or potion buffer exceeds self-hurt |
 
 ---
 
@@ -130,14 +130,14 @@
 | Row | Cell | New value |
 |---|---|---|
 | Smite | hit rule | V read: unconditional hit (sets bit 0 via bitwise OR with 1 in `FUN_005ce9f0`), ignores AR, defense, and block (d2d deviates, D8) |
-| Smite | damage | V read + D: shield base (`Items.txt +0xfe/+0xff`) + Holy Shield bonus + Str bonus (1% per Str) + calc1 ED (`15 + 15*(lvl-1)%`) |
-| Smite | stun & knockback | V read + D: `ResultFlags = 8` (knockback); stun = `min(250, 15 + 5*(lvl-1))` frames (cap 250 frames) |
-| Smite | mana | V read + D: 2.0 mana across all levels, paid in do; repeats on hold |
-| Zeal | hit count | V read + D: `min(lvl + 1, 5)` hits (2 at L1, 3 at L2, 4 at L3, 5 at L4+) |
-| Zeal | damage & AR | V read + D: AR `10 + 10*(lvl-1)%`; ED `((lvl < 5) ? 0 : ((lvl-4)*6)) + Sacrifice*12%` |
+| Smite | damage | V read, I: shield base (`Items.txt +0xfe/+0xff`) + Holy Shield bonus + Str bonus (1% per Str) + calc1 ED (`15 + 15*(lvl-1)%`) |
+| Smite | stun & knockback | V read, I: `ResultFlags = 8` (knockback); stun = `min(250, 15 + 5*(lvl-1))` frames (cap 250 frames) |
+| Smite | mana | V read, I: 2.0 mana across all levels, paid in do; repeats on hold |
+| Zeal | hit count | V read, I: `min(lvl + 1, 5)` hits (2 at L1, 3 at L2, 4 at L3, 5 at L4+) |
+| Zeal | damage & AR | V read, I: AR `10 + 10*(lvl-1)%`; ED `((lvl < 5) ? 0 : ((lvl-4)*6)) + Sacrifice*12%` |
 | Zeal | mana & retarget | V read: 2.0 mana paid once at srvstfunc; retargets in reach via `0x20003` filter; rollback 100% (d2d lacks rollback, D9) |
-| Sacrifice | damage & AR | V read + D: AR `20 + 7*(lvl-1)%`; ED `180 + 15*(lvl-1)% + Redemption*15% + Fanaticism*5%` |
-| Sacrifice | cost & self-hurt | V read + D: 0 mana; self-damage 8% of `min(phys_damage, target_hp)`; lethal if self-hurt >= player life |
+| Sacrifice | damage & AR | V read, I: AR `20 + 7*(lvl-1)%`; ED `180 + 15*(lvl-1)% + Redemption*15% + Fanaticism*5%` |
+| Sacrifice | cost & self-hurt | V read, I: 0 mana; self-damage 8% of `min(phys_damage, target_hp)`; lethal if self-hurt >= player life |
 
 ---
 

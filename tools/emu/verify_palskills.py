@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Formula verification for Paladin combat skills (Smite, Zeal, Sacrifice).
+"""Arithmetic self-check for Paladin combat skills formulas (Smite, Zeal, Sacrifice).
 
-Verifies the decompiled game.exe 1.14d formulas across 120,000 randomized test cases
-with seed 0x50414c53 against independent formula calculations.
+Performs an offline arithmetic self-check of the written formulas (tagged I)
+for progression and scaling across levels 1..60 and randomized input ranges.
+This script checks arithmetic consistency of the written models, not native
+Game.exe or d2d binary execution.
 
 Usage:
     python verify_palskills.py [cases] [seed]
@@ -66,7 +68,7 @@ def verify_mana_cost(skill_name, level):
 
 
 def main():
-    """Run deterministic and 120,000-case randomized formula verification against independent expectations."""
+    """Run deterministic and randomized arithmetic consistency self-checks for skill formulas (I)."""
     n_cases = int(sys.argv[1]) if len(sys.argv) > 1 else 120000
     seed = int(sys.argv[2], 0) if len(sys.argv) > 2 else 0x50414C53
 
@@ -166,7 +168,10 @@ def main():
             mismatches += 1
 
     elapsed = time.time() - t0
-    print(f"Verified {n_cases} cases with seed {hex(seed)}: {mismatches} mismatches in {elapsed:.3f}s")
+    if len(sys.argv) > 1:
+        print(f"Verified formula consistency ({n_cases} cases, seed {hex(seed)}): {mismatches} mismatches in {elapsed:.3f}s")
+    else:
+        print(f"Verified formula consistency: {mismatches} mismatches")
     return 1 if mismatches > 0 else 0
 
 
