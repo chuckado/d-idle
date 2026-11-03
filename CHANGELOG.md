@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- covmissiles2: trace of the skill-sourced monster missiles of Acts 1 and 2 (17 rows, 21,926 compared cases, tools/emu/cm2_*), ledger rows 22, 24, 32, 77, 130, 346, 653 upgraded from READ-ONLY; deviations D1 to D3, no PR candidate
 - covstates2: curse and state put rule traced (game.exe run natively vs real d2d put_state, 200,000 sequences); five d2d deviations proven, no PR candidate; states coverage 3 to 11 percent
 - covmonai2: monster AI third pass (docs/research/covmonai2-trace.md, tools/emu/mai3_*): 139,500 think cases run against game.exe, monster.ai run-tested 14 to 69 percent
 - covitemtypes: docs/research/covitemtypes-trace.md and tools/emu/cit_*: ItemTypes decomposed (game.exe type walk, closure matrix, slot, hands, socket cap vs d2d, 0 mismatches on 553,647 cases); bot findings B1-B3; coverage ledger itemtypes 98/98 TESTED-0-DIFF (docs and emulator tools only)
