@@ -2,7 +2,7 @@
 
 ```yaml
 change: seedspawn
-status: in-progress
+status: archived
 agent: seedspawn
 branch: agent/seedspawn
 worktree: d2lod-wt/seedspawn
@@ -14,11 +14,12 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs and emulator scripts only; V run on the worker host (game.exe in the emulator against d2d's real code), not verified on a live game; no PR candidate"
+result: "docs/tools only; see the doc for tags and limits"
 credit:
   component: SEEDSPAWN
   author: owner
   agents: [Claude Code]
+merge: 998c07a
 ```
 
 - [x] 1. Read seed-study.md and the upstream oracle tools
