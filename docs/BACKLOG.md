@@ -365,6 +365,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - beltfix3 - Gate 1 BELT/NOKILL fixes 1-4 (shop on town arrival, level-chain walk home, cut-cast portal reuse, BackToField portal retry); #5/#6 open; live check pending
 - B2BUNDLE: batch 2 bundle `local/batch2-bundle` on upstream main 3e073888 (4 commits, private remote); PR body drafted in docs/research/pr-batch2-body.md; the user decides staging and opening
 - GATE1: three Gate 1 runs of 2026-11-02/03 all NOT PASSED (Belt in each; NOKILL in run 2; True XP/h in run 3), records under unique run-id names (docs/soaks/gate1-index-20261103.md)
+- beltfix4: recovery keeps the in-town emergency potion restock (3-minute Gate 1 window at clvl 6 fixed); the 7-minute BELT window of gate1-20261103-0053 is poverty at clvl 1-2; XP/h gap analysed; Gate 1 needs a multi-seed re-run; docs/research/beltfix4.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

@@ -300,3 +300,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/beltfix3.md - what BELTFIX3 changed, tests, what is not verified live
 - docs/research/pr-batch2-body.md: PR title and body for the batch 2 bundle (minmana floor, Teleport, monster damage roll), counts on the bundle head
 - docs/soaks/gate1-index-20261103.md: index of the three Gate 1 runs of 2026-11-02/03 with the records gate1-20261102-1939, gate1-20261102-2210, gate1-20261103-0053
+- docs/research/beltfix4.md: Gate 1 20261103-0053 BELT and XP/h analysis, one recovery fix

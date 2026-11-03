@@ -69,3 +69,37 @@ func TestReplayGate1BeltWindowDecisions(t *testing.T) {
 		}
 	}
 }
+
+// BELTFIX4, Gate 1 20261103 (minute lines of the 01:04 window, clvl 6): recovery was on (gold 185 < RecoveryKitGold), the
+// belt empty after a chicken, and the Rogue Encampment visit shopped nothing because `broke` switched the potion chore
+// off, even in town. 185 gold is six potions; recovery's potionFloor still caps what the visit may buy.
+func TestRecoveryTownArrivalRestocksHealing(t *testing.T) {
+	for _, gold := range []int{185, 201} {
+		g := newRig(t)
+		g.w.set(func(w *world) { w.level, w.area, w.gold0 = 6, 1, gold })
+		g.w.belt()
+		g.r.loop.broke.on = true
+		g.r.setLastTrip(g.e.Clock.Now().Add(-10 * time.Second))
+		s, _ := g.w.snapshot()
+		plan, emerg, ok := g.r.choresDue(s)
+		if !ok || !plan.Potions || !emerg {
+			t.Errorf("gold %d in town, recovering, no potion: want an emergency restock, got ok=%v %+v emergency=%v", gold, ok, plan, emerg)
+		}
+		if got := g.r.potionFloor(s.Player); got != g.e.Tune.Resource.RecoveryPotionFloor || got == 0 {
+			t.Errorf("gold %d: the visit must stay capped by the recovery potion floor, got %d", gold, got)
+		}
+	}
+}
+
+// Recovery keeps its field rule: no potion trip out of the field with a purse under the kit gold and a potion in hand,
+// and no emergency in town for a character that still has a healing potion.
+func TestRecoveryStillQuietWithPotionOrNoGold(t *testing.T) {
+	g := newRig(t)
+	g.w.set(func(w *world) { w.level, w.area, w.gold0 = 6, 1, 20 })
+	g.w.belt()
+	g.r.loop.broke.on = true
+	s, _ := g.w.snapshot()
+	if plan, emerg, ok := g.r.choresDue(s); ok && (plan.Potions || emerg) {
+		t.Errorf("20 gold: no potion chore, got %+v emergency=%v", plan, emerg)
+	}
+}
