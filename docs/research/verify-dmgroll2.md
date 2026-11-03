@@ -18,7 +18,8 @@ Tags: **V read** = read in game.exe 1.14d by this verifier (upstream's disasm.py
 | Missile exception | **HOLDS WITH LIMITS** (section 6) |
 | Pet and merc carry | **HOLDS WITH LIMITS** (section 6) |
 | Commit hygiene, merge with PR 178 | **VERIFIED** (section 7) |
-| CI parity, suites | see section 7 |
+| CI parity (g++, clang++ on added lines) | **VERIFIED** (0 on added lines) |
+| The 8 suites (plus 3) | **HOLDS WITH LIMITS** (rc 0, on the author's build of a verified-identical tree) |
 | MSVC | **NOT VERIFIED** here (S: the author's Windows run) |
 
 ## 1. My harness (independent of the author's mdmg2.py)
@@ -75,11 +76,14 @@ Pets (V read): `pet_hurt(.., blow.frac)` -> the existing `hurt(.., fraction)`, w
 ## 7. Hygiene, merge, CI, suites
 
 V run (`tools/emu/run-on-worker.sh v2_git.sh`, on the private clone):
-- Author and committer `shatteredeagle <26069301+shatteredeagle@users.noreply.github.com>` (numeric noreply, both). Parent 3e073888, one commit, 8 files +202 -45. Subject 70 characters; body 3 lines of 72, 72, 72; last line `Agent: Claude Code`; no co-author line. VERIFIED.
+- Author and committer: the same numeric GitHub noreply identity (the numeric-id form) for both. Parent 3e073888, one commit, 8 files +202 -45. Subject 70 characters; body 3 lines of 72, 72, 72; last line `Agent: Claude Code`; no co-author line. VERIFIED.
 - `git merge-tree --write-tree 2597875 b9ecb415` (PR 178's head, present in the fork's objects): rc 0, tree dbbee164, no conflict. VERIFIED.
-- The branch is on the fork's private remote (`forgejo/local/batch2-monsterdmg-r2` contains b9ecb415). VERIFIED.
+- The branch is on the fork's private remote (its remote-tracking `local/batch2-monsterdmg-r2` contains b9ecb415). VERIFIED.
 
-CI_RESULTS_PLACEHOLDER
+V run (`tools/emu/run-on-worker.sh --ttl 3000 v2_ci.py`, read-only on the author's tree and build; no own build, see the limit below):
+- The author's tree equals this verifier's `git archive` of b9ecb415 (`diff -rq` of components/ and tests/: 0 lines), and every suite binary is newer than the newest source in components/rules.
+- g++ and clang++ `-fsyntax-only` with the build's own compile command plus `-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror -Wshadow -Wrange-loop-construct -Wconversion`, on pets.cpp, states.cpp, tick.cpp, strike.cpp, test_game.cpp, test_combat.cpp: g++ 0 diagnostics; clang++ 95 diagnostics, all in untouched headers (the first is cube.hpp:277, `-Wsign-conversion` from the build's flags), **0 on a line the commit added**. VERIFIED (added lines taken from the commit's diff).
+- Suites (the author's Release build `build-mdr2`, run by this verifier in its scratch dir): test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_skills (the 8), plus test_sk_ground, test_monster_missile, test_missile_blow_poison: **rc 0 each**. The tests keep their asserts in this build (the author's first test_combat log shows an assertion firing). HOLDS WITH LIMITS: the binaries were built by the author, not by this verifier; the identity of the sources is checked, the build itself is not redone. Note: the author's own `build-mdr2.run-test_combat.log` on the worker host still shows the pre-fix assertion failure; the binary of 22:01 passes.
 
 MSVC: not re-run (the Windows lane is the ops repo's; S: the author's log, 0 `warning C`, the base's C2026 in `test_monster_ai` only).
 
