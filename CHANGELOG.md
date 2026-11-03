@@ -8,6 +8,19 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- b2on181: batch 2 re-based on PR 181 in the private fork, results in docs/research/b2-on181.md
+- docs: Gate 1 soak run 20261103-0338: NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md).
+- Docs: Gate 3 prep (Gate 2 watch checklist, Gate 3 requirements table, risks)
+- docs: upstream batch 2 PR bodies A and B with the oracles ported to the maintainer rules (private fork branches local/batch2-A-r5, local/batch2-B-r2).
+- lockstepplan: a written plan for the real d2d against game.exe comparison, with lane counts, host sharing with the long gate runs, and the decisions needed
+- sorcdiff: Sorceress skills the bot uses vs rule coverage; Lightning and Chain Lightning cast-length differential on the real d2d build and a private fix branch; nothing pushed upstream
+- b2winworker: batch 2 r3 re-run on the Windows build worker, numbers recorded
+- b2rebase2: batch 2 bundle rebased onto upstream main 005c7cab, split proposal, bodies on the new PR template; nothing pushed upstream
+- verifydmg4: fourth verification of the monster damage roll r4 (tools/emu/v4_*, docs/research/verify-dmgroll4.md)
+- verifydmg2: second verification of the monster damage roll r2 (tools/emu/v2_*, docs/research/verify-dmgroll2.md)
+- review180: private review of upstream PR 180 and its effect on batch 2; nothing posted upstream
+- housekeep: archived the stale soak-minutes-virtual card and applied its virtual-minute spec delta
+- codereview1: review of the Gate 1 belt fixes with ranked findings (docs only)
 - Docs: ADR 0015 (acceptance on game.exe, six goals), plan 2026-11-03, STATUS rewritten, card triage
 - Docs: project review 2026-11-03 (goals evaluated and rewritten, plan short/medium/long)
 - gatetriage: a Gate 1 triage script prints the verdict, the belt and no-kill windows, the XP by area and the likely cause on one screen

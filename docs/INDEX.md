@@ -315,3 +315,17 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/gate-triage-examples.md: output of tools/baseline/gate_triage.py for the five Gate 1 runs of 2026-11-02/03, checked against the hand findings
 - docs/research/project-review-20261103.md: project review 2026-11-03 (goals, done vs verified, effort by area, evaluation, rewritten goals, plan, proposed ADR/decisions text)
 - docs/adr/0015-goals-acceptance-on-game-exe.md: goals G-A..G-F, acceptance on game.exe; docs/plan/plan-20261103.md: plan; docs/research/card-triage-20261103.md: open card triage
+- docs/research/codereview1.md: code review of the Gate 1 belt fixes (BELTFIX..BELTFIX5, HIREFIX), ranked findings and smallest fixes
+- docs/research/housekeep-20261103.md: read-only inventory of agent worktrees, branches and ops repo leftovers (2026-11-03)
+- docs/research/review-pr180-20261103.md: private review of upstream PR 180 (re-pipeline: Ghidra names, structs.tsv, presubmit GCC and tidy, sorted lists) with consequences for batch 2
+- docs/research/verify-dmgroll2.md: second verifier report on DMGROLL r2 (b9ecb415), own differential in verify-dmgroll2-run.txt
+- docs/research/verify-dmgroll4.md: fourth verifier report on DMGROLL r4 (9ea2afe9), own differential in verify-dmgroll4-run.txt
+- docs/research/pr-upstream-rules-20261103.md: upstream AGENTS.md / CONTRIBUTING / PR template rules after commit 549da358 as they apply to a code batch (one subsystem, commit rule, Claims table, presubmit, CodeRabbit)
+- docs/research/b2-winworker-rerun.md: batch 2 r3 on the Windows build worker (MSVC 14.51 warnings and ctest, WSL stages, damage-roll sets, Teleport seed 9)
+- docs/research/sorcdiff.md: the Sorceress skills the lightning build uses, their proof status, cast counts, and the counted differentials on the real d2d build
+- docs/research/lockstep-plan-20261103.md: lockstep status, cheapest A:B path, Windows PC lane feasibility, AB-SEEDPIN checklist, decisions and 3-day schedule
+- docs/research/pr-batch2-A-body.md: PR body of upstream batch A (mana floor, Teleport) to the maintainer template, Claims table, re-check commands, counts on the head
+- docs/research/pr-batch2-B-body.md: PR body of upstream batch B (monster damage roll with its oracle monster_damage.py), limits (Energy Shield), counts on the head
+- docs/research/gate3-prep-20261103.md: Gate 2 watch checklist, Gate 3 requirements table (what the judge evaluates), 24 h host risks, Gate 3 after the A:B pilot
+- docs/soaks/gate1-20261103-0338.md: Gate 1 run 20261103-0338 (NOT PASSED (True XP/h at or above the d2d baseline; Belt)), criteria table, fault recovery
+- docs/research/b2-on181.md: batch 2 on top of PR 181, one conflict resolved, CI and counted differentials re-run
