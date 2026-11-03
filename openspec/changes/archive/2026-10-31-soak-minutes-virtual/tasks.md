@@ -2,7 +2,7 @@
 
 ```yaml
 change: soak-minutes-virtual
-status: in-progress
+status: archived
 skip_specs: false
 agent: specmin
 branch: agent/specmin
@@ -22,8 +22,8 @@ exclusive: []
 gates:
   - "go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)"
   - "tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits"
-merge:
-result: offline; no live run; archive applies the delta once merged and live-proven (coordinator)
+merge: 12c11b9
+result: "offline; no live run; spec delta applied by housekeep at archive (task 1.4 live proof still open)"
 ```
 
 ## 1. Work

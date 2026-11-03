@@ -215,9 +215,19 @@ func (t *Town) pickPotion(stock []d2.Unit, k belt.Kind, maxTier, budget int) (d2
 
 // manaReserve is the gold a mana purchase must leave: one healing potion and one portal scroll (Gate 1 20261102: 180 of
 // 300 gold went into mana potions and the next trips found the purse empty).
-func (t *Town) manaReserve() int {
+//
+// Only the part of the kit still missing is reserved (codefix F3): with the scroll and the potions in the pack every
+// coin may become mana, which the mana-bound Sorceress needs.
+func (t *Town) manaReserve(s *d2.Snapshot) int {
 	r := t.e.Tune.Resource
-	return r.KitPotionGold + r.KitTPGold
+	res := 0
+	if n, hasTome := t.scrollCount(s, "tsc", "tbk"); n == 0 && !hasTome {
+		res += r.KitTPGold
+	}
+	if t.healingCarried(s) < max(r.KitMinHP, 1) {
+		res += r.KitPotionGold
+	}
+	return res
 }
 
 // buyPotions fills the belt to the plan. The shop window of the potion vendor must be open.
@@ -282,7 +292,7 @@ func (t *Town) buyPotions(ctx context.Context, npc d2.Unit, floor int, rep *Chor
 				budget = min(budget, t.potionCap-rep.Spent)
 			}
 			it, ok := t.pickPotion(stock, src, band.MaxTier(src), budget)
-			if ok && k == belt.MP && cur.Player.Gold-t.base(it).Cost < t.manaReserve() {
+			if ok && k == belt.MP && cur.Player.Gold-t.base(it).Cost < t.manaReserve(cur) {
 				break // mana never eats the gold of one healing potion and one portal scroll
 			}
 			if !ok {
