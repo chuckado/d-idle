@@ -226,6 +226,7 @@ var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "belt
 // game" and context errors abort. Every panel is closed at the end.
 func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ error) {
 	rep = ChoreReport{Bought: map[string]int{}}
+	t.withdrew = false
 	s, err := t.current()
 	if err != nil {
 		return rep, err
@@ -425,6 +426,13 @@ func (t *Town) shopVisit(ctx context.Context, a *Act, plan ChorePlan, rep *Chore
 	npc, err := t.openShop(ctx, a.Shop, t.npcPreset(a.Shop...))
 	if err != nil {
 		return err
+	}
+	// Recovery caps the visit by the purse of the trip start; a withdrawal that already lifted the purse to the kit
+	// money lifts the cap too (codefix F5: Gate 1 0338, 6 gold in the pack and 1418 in the stash).
+	if plan.PotionFloor > 0 && t.withdrew {
+		if cs, err := t.current(); err == nil && cs.Player.Gold >= t.e.Tune.Resource.RecoveryKitGold {
+			plan.PotionFloor = 0
+		}
 	}
 	// potionsFirst (default): the kit potions, then the first scroll when allowed (tpAllowed), then the rest of the belt.
 	// potionsFirst 0: the scroll first, as before (without one, potions eat the scroll money and the character stays portal-less).
