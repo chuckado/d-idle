@@ -2,7 +2,7 @@
 
 ```yaml
 change: beltfix4
-status: in-progress
+status: archived
 agent: beltfix4
 branch: agent/beltfix4
 worktree: ~/code/d2lod-wt/beltfix4
@@ -16,8 +16,8 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 -run TestRecovery ./internal/bot fails without the goal.go change and passes with it; changecheck -cli 0 warnings; leakcheck 0"
-merge:
-result: "offline only: the 01:04 recovery-town window is fixed and tested; the 7-minute window is classified as poverty at clvl 1-2 (no bot fix); not verified live"
+merge: 04b5fe1
+result: "go tests bot pass; whole repo vet clean; scenario KitlessClvl7PackDeath changed to 29 gold"
 credit:
   author: owner
   agents: [Claude Code]
