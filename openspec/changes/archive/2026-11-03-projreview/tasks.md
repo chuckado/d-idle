@@ -2,7 +2,7 @@
 
 ```yaml
 change: projreview
-status: in-progress
+status: archived
 agent: projreview
 branch: agent/projreview
 worktree: d2lod-wt/projreview
@@ -13,12 +13,13 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Project review written from the public repo, git log and pending agent branches; not verified live (docs only)."
+result: "docs only"
 live: "not verified"
 credit:
   component: PROJREVIEW
   author: owner
   agents: [Claude Code]
+merge: 1794848
 ```
 
 - [x] Goals traced to sources with status
