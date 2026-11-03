@@ -129,6 +129,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
+- d0c90501 11-02 23:17 `merge origin/main into hirereader` (hirereader)
+- c5e6c03c 11-02 23:10 `Merge agent/botab: botab: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (botab)
 - 2d196e9b 11-02 22:01 `Merge agent/beltfix: BELTFIX: kit trip priced at one potion when healing is missing and counted as an emergency, mana potions capped when poor, waypoint counts as a way home (Gate 1 belt window of 12 virtual minutes; offline tests, live waypoint trip unverified)` (beltfix)
 - 8784c4cb 11-02 22:00 `merge origin/main into beltfix` (beltfix)
 - b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
@@ -136,7 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
 - 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
 - 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
-- 41db4964 11-02 20:39 `Merge agent/covmissiles2: covmissiles2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmissiles2)
-- 773e2176 11-02 20:39 `merge origin/main into covmissiles2` (covmissiles2)
-- ea2ff010 11-02 20:32 `Merge agent/covstates2: covstates2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covstates2)
 <!-- statusgen:end -->
