@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifyb2
-status: in-progress
+status: archived
 agent: pa-verifyb2
 branch: agent/verifyb2
 worktree: d2lod-wt/verifyb2
@@ -15,7 +15,7 @@ exclusive: []
 gates:
   - "own harness: game.exe natively vs the real d2d builds base and head, counted"
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Offline, nothing verified live. Minmana: own native harness, base 117 / 106 differ, head 0 (seeds 3, 11): ready with text changes. Teleport: tie order read in FUN_0064dea0 and run (0 differ on rings 1..49), but warp_spot searches ring 50 where game.exe stops at 49 (179 of 20,000): one-line fix before the PR. Suites, warnings, merge with #178: see docs/research/verify-batch2.md."
+result: "docs and tools only; see card result"
 credit:
   component: VERIFYB2
   author: owner
@@ -24,6 +24,7 @@ credit:
   verified_by: []
   agents: [Claude Code]
   consent: none
+merge: f9aa452
 ```
 
 ## 1. Work

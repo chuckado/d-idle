@@ -62,7 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [verifyb2](../../openspec/changes/verifyb2/) | in-progress | pa-verifyb2 | `docs/research/verify-batch2.md`<br>`tools/emu/vb2_*`<br>`openspec/changes/verifyb2/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -125,11 +124,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change verifyb2: own harness: game.exe natively vs the real d2d builds base and head, counted
-- change verifyb2: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- f9aa4521 11-03 09:40 `Merge agent/verifyb2: verifyb2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifyb2)
 - 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
 - 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
 - c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
@@ -139,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
 - 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
 - 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
-- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
 <!-- statusgen:end -->
