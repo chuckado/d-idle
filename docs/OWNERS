@@ -134,7 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-docs/research/pr-batch2-body.md  b2bundle  b2bundle
-openspec/changes/b2bundle/**  b2bundle  b2bundle
-docs/research/pr-batch2-run.txt  b2bundle  b2bundle
-tools/emu/b2b_*  b2bundle  b2bundle

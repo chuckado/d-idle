@@ -2,7 +2,7 @@
 
 ```yaml
 change: b2bundle
-status: in-progress
+status: archived
 agent: b2bundle
 branch: agent/b2bundle
 worktree: d2lod-wt/b2bundle
@@ -19,7 +19,7 @@ gates:
   - "r5 is one commit on 3e073888 with the verifier's two text conditions; bundle is 4 commits in the order minmana, Teleport D1, Teleport D2, damage roll"
   - "CI flags g++ and clang++, the 13 suites, clang-tidy, pr_guard per commit, presubmit --quick, MSVC 14.51 and the WSL lane all pass on the bundle head"
   - "counted differentials re-run on the bundle head; PR body carries the numbers; changecheck 0 warnings, leakcheck 0 hits"
-result: "bundle head 60d0404e on upstream main 3e073888 (private remote only); PR body in docs/research/pr-batch2-body.md; every check ran offline on the worker host and the build machine, nothing verified in a live game; nothing posted"
+result: "docs only"
 credit:
   component: Batch 2 bundle (minmana floor, Teleport, monster damage roll)
   author: owner
@@ -27,6 +27,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 48a8a28
 ```
 
 ## 1. Work
