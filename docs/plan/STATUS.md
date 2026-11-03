@@ -53,6 +53,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [forknext](../../openspec/changes/forknext/) | in-progress | forknext | `docs/forknext.md`<br>`openspec/changes/forknext/**` | `fork-branch:lab-nexthit`<br>`d2d-lab-binary` |
 | [gate1run-20261101](../../openspec/changes/gate1run-20261101/) | in-progress | gaterun | `docs/soaks/gate1-20261101.md`<br>`docs/probes/soak-logs/gate1-20261101-*`<br>`openspec/changes/gate1run-20261101/**` | - |
 | [gate1run-20261102](../../openspec/changes/gate1run-20261102/) | in-progress | gaterun | `docs/soaks/gate1-20261102.md`<br>`docs/probes/soak-logs/gate1-20261102-*`<br>`openspec/changes/gate1run-20261102/**` | - |
+| [hirefix](../../openspec/changes/hirefix/) | in-progress | hirefix | `internal/d2dsrc/player.go`<br>`internal/d2dsrc/tables.go`<br>`internal/d2dmerc/**`<br>`cmd/d2bot/mercwire.go`<br>`docs/research/hirefix.md`<br>`openspec/changes/hirefix/**` | - |
 | [ledgerkey](../../openspec/changes/ledgerkey/) | in-progress | snaplib | `internal/cheat/ledger.go`<br>`internal/cheat/ledgerkey.go`<br>`internal/cheat/ledgerkey_test.go`<br>`cmd/d2cheat/main.go`<br>`openspec/changes/ledgerkey/**` | - |
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
@@ -104,6 +105,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change forknext: changecheck status -write then -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change gate1run-20261101: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261101.md)
 - change gate1run-20261102: Gate 1 criteria of the soak-gates spec judged by d2dsoak (numbers in docs/soaks/gate1-20261102.md)
+- change hirefix: go test -p 1 ./internal/d2dmerc ./internal/d2dsrc ./cmd/d2bot; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change ledgerkey: go test -p 1 ./internal/cheat/...; go vet ./cmd/d2cheat; changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change m1-liveproof: docs/primitives.md: every primitive with criticality S or A has a drill verdict PASS (or FAIL with a named fix card) in its evidence column, checked by the coordinator by eye
 - change m1-liveproof: docs/basics-audit.md coverage table has 0 G rows and every S1 or S2 row is C with a test name in the offline-test column and a live proof line (`grep -c '| C ' docs/basics-audit.md` is at least 15)
@@ -127,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 71b25a3f 11-03 00:24 `merge origin/main into hirefix` (hirefix)
 - 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
 - d0c90501 11-02 23:17 `merge origin/main into hirereader` (hirereader)
 - c5e6c03c 11-02 23:10 `Merge agent/botab: botab: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (botab)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
 - b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
 - 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
-- 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
 <!-- statusgen:end -->

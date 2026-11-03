@@ -134,3 +134,9 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+openspec/changes/hirefix/**  hirefix  hirefix
+internal/d2dsrc/player.go  hirefix  hirefix
+internal/d2dsrc/tables.go  hirefix  hirefix
+internal/d2dmerc/**  hirefix  hirefix
+cmd/d2bot/mercwire.go  hirefix  hirefix
+docs/research/hirefix.md  hirefix  hirefix
