@@ -41,6 +41,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
+| [covstates2](../../openspec/changes/covstates2/) | in-progress | covstates2 | `docs/research/covstates2-trace.md`<br>`tools/emu/cs2_*`<br>`openspec/changes/covstates2/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -86,6 +87,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
+- change covstates2: game.exe FUN_0056e970 and FUN_0056c740 run natively with counted cases, compared with d2d's real put_state
+- change covstates2: ledger rows only for states proven, regenerated with tools/coverage/coverage.py --write
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -127,14 +130,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 2c6af24f 11-02 20:24 `Merge agent/covmonai2: covmonai2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmonai2)
-- 37ac620f 11-02 20:24 `merge origin/main into covmonai2` (covmonai2)
-- 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
-- 8dc49ed9 11-02 20:16 `merge origin/main into covitemtypes` (covitemtypes)
-- e74797c2 11-02 20:09 `Merge agent/abtool: abtool: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (abtool)
-- fc9c8079 11-02 20:08 `merge origin/main into abtool` (abtool)
-- 998c07ae 11-02 20:01 `Merge agent/seedspawn: seedspawn: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seedspawn)
-- e8ba69f3 11-02 20:01 `merge origin/main into seedspawn` (seedspawn)
-- c34baafc 11-02 19:54 `Merge agent/seeddist: seeddist: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seeddist)
-- 780d857f 11-02 19:23 `Merge agent/tierbdesign: TIERBDESIGN: Tier B and A:B design: statistical A:B first, Tier B held until a gap needs it; six staged cards; kitb vs kitk2 pair verdict (docs only)` (tierbdesign)
+- 8dd3f975 11-02 18:15 `Merge agent/verifystateev2: verifystateev2: coverage-gap or verification result (docs and emulator tools only)` (verifystateev2)
+- d8922e54 11-02 18:14 `merge origin/main into verifystateev2` (verifystateev2)
+- 0489b0f3 11-02 18:07 `Merge agent/verifyskamazon: verifyskamazon: coverage-gap or verification result (docs and emulator tools only)` (verifyskamazon)
+- 3922d8ee 11-02 18:07 `merge origin/main into verifyskamazon` (verifyskamazon)
+- 975bfbdf 11-02 18:00 `Merge agent/covmissiles: covmissiles: coverage-gap or verification result (docs and emulator tools only)` (covmissiles)
+- a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
+- d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
+- cda4be88 11-02 17:49 `merge origin/main into tomestat` (tomestat)
+- a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
+- 85fd1005 11-02 17:41 `merge origin/main into townshop` (townshop)
 <!-- statusgen:end -->
