@@ -316,3 +316,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/project-review-20261103.md: project review 2026-11-03 (goals, done vs verified, effort by area, evaluation, rewritten goals, plan, proposed ADR/decisions text)
 - docs/adr/0015-goals-acceptance-on-game-exe.md: goals G-A..G-F, acceptance on game.exe; docs/plan/plan-20261103.md: plan; docs/research/card-triage-20261103.md: open card triage
 - docs/research/codereview1.md: code review of the Gate 1 belt fixes (BELTFIX..BELTFIX5, HIREFIX), ranked findings and smallest fixes
+- docs/research/housekeep-20261103.md: read-only inventory of agent worktrees, branches and ops repo leftovers (2026-11-03)
