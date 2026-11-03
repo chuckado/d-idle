@@ -672,13 +672,22 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
     rooms[pal] = room_out; rooms[merc] = room_out; owners[merc] = pal
     e.w32(room_out + 0x74, pal); e.w32(pal + 0xE8, merc); e.w32(merc + 0xE8, 0)
 
+    scenario_mismatches = 0
+
     # Pulse 1: Prayer L1 (cost=256, heal=512) with cur_mana = 300 >= 256 (hurt units)
     unit_stats[(pal, 6)] = 5000; unit_stats[(pal, 7)] = 10000
     unit_stats[(merc, 6)] = 5000; unit_stats[(merc, 7)] = 10000
     unit_stats[(pal, 8)] = 300
     unit_states.clear()
     e.call(0x5CF010, 99, 1, ecx=game, edx=pal)
-    print(f"  Prayer L1 pulse (mana=300 >= 256): pal_hp={unit_stats[(pal, 6)]} (+{unit_stats[(pal, 6)]-5000}), merc_hp={unit_stats[(merc, 6)]} (+{unit_stats[(merc, 6)]-5000}), pal_mana={unit_stats[(pal, 8)]}, state85={unit_states.get((pal, 0x55))}")
+    p_hp = unit_stats[(pal, 6)]
+    m_hp = unit_stats[(merc, 6)]
+    p_mana = unit_stats[(pal, 8)]
+    st85 = unit_states.get((pal, 0x55), 0)
+    print(f"  Prayer L1 pulse (mana=300 >= 256): pal_hp={p_hp} (+{p_hp-5000}), merc_hp={m_hp} (+{m_hp-5000}), pal_mana={p_mana}, state85={st85}")
+    if p_hp != 5512 or m_hp != 5512 or p_mana != 44 or st85 != 1:
+        scenario_mismatches += 1
+        print(f"  MISMATCH Prayer L1 hurt pulse: got hp=({p_hp},{m_hp}) want (5512,5512), mana={p_mana} want 44, st85={st85} want 1")
 
     # Pulse 1B: Prayer L1 with cur_mana = 300 >= 256 but Paladin and Merc at FULL HP (applied_count == 0)
     unit_stats[(pal, 6)] = 10000; unit_stats[(pal, 7)] = 10000
@@ -686,16 +695,34 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
     unit_stats[(pal, 8)] = 300
     unit_states[(pal, 0x55)] = 1  # pre-set to verify FUN_005cf010 clears it when no heal lands
     e.call(0x5CF010, 99, 1, ecx=game, edx=pal)
-    print(f"  Prayer L1 pulse (at full life): pal_hp={unit_stats[(pal, 6)]}, merc_hp={unit_stats[(merc, 6)]}, pal_mana={unit_stats[(pal, 8)]} (0 paid), state85={unit_states.get((pal, 0x55))} (cleared)")
+    p_hp_full = unit_stats[(pal, 6)]
+    m_hp_full = unit_stats[(merc, 6)]
+    p_mana_full = unit_stats[(pal, 8)]
+    st85_full = unit_states.get((pal, 0x55), 0)
+    print(f"  Prayer L1 pulse (at full life): pal_hp={p_hp_full}, merc_hp={m_hp_full}, pal_mana={p_mana_full} (0 paid), state85={st85_full} (cleared)")
+    if p_hp_full != 10000 or m_hp_full != 10000 or p_mana_full != 300 or st85_full != 0:
+        scenario_mismatches += 1
+        print(f"  MISMATCH Prayer L1 full-life pulse: got hp=({p_hp_full},{m_hp_full}) want (10000,10000), mana={p_mana_full} want 300, st85={st85_full} want 0")
 
     # Pulse 2: Prayer L1 (cost=256) with cur_mana = 44 < 256
     e.call(0x5CF010, 99, 1, ecx=game, edx=pal)
-    print(f"  Prayer L1 pulse (mana=44  <  256): pal_hp={unit_stats[(pal, 6)]} (+0), merc_hp={unit_stats[(merc, 6)]} (+0), pal_mana={unit_stats[(pal, 8)]}, state85={unit_states.get((pal, 0x55))}")
+    p_hp_low = unit_stats[(pal, 6)]
+    m_hp_low = unit_stats[(merc, 6)]
+    p_mana_low = unit_stats[(pal, 8)]
+    st85_low = unit_states.get((pal, 0x55), 0)
+    print(f"  Prayer L1 pulse (mana=44  <  256): pal_hp={p_hp_low} (+0), merc_hp={m_hp_low} (+0), pal_mana={p_mana_low}, state85={st85_low}")
+    if p_hp_low != 10000 or m_hp_low != 10000 or p_mana_low != 44 or st85_low != 0:
+        scenario_mismatches += 1
+        print(f"  MISMATCH Prayer L1 low-mana pulse: got hp=({p_hp_low},{m_hp_low}) want (10000,10000), mana={p_mana_low} want 44, st85={st85_low} want 0")
 
     # Expiry callback FUN_005cec50(ecx=unit, edx=state_id, statlist) clears state 85 when set
     unit_states[(pal, 0x55)] = 1
     e.call(0x5CEC50, pal_sl, ecx=pal, edx=34)
-    print(f"  FUN_005cec50 (prayer state 34 expiry): state85={unit_states.get((pal, 0x55))}")
+    st85_exp = unit_states.get((pal, 0x55), 0)
+    print(f"  FUN_005cec50 (prayer state 34 expiry): state85={st85_exp}")
+    if st85_exp != 0:
+        scenario_mismatches += 1
+        print(f"  MISMATCH FUN_005cec50 expiry: got st85={st85_exp} want 0")
 
     # Also test Fanaticism (122) L1 self damagepercent (stat 25) vs merc damagepercent when mana > 0 vs mana == 0!
     sl_stats.clear(); unit_stats[(pal, 8)] = 256
@@ -706,6 +733,9 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
     e.call(0x5CF010, 122, 1, ecx=game, edx=pal)
     fanat_self_zero = sl_stats.get((pal_sl, 25))
     print(f"  Fanaticism L1 stat 25 (damagepercent): mana=256 -> self={fanat_self_pos}%, merc={fanat_merc_pos}%; mana=0 -> self={fanat_self_zero}% (drops to ln56/2!)")
+    if fanat_self_pos != 50 or fanat_merc_pos != 25 or fanat_self_zero != 25:
+        scenario_mismatches += 1
+        print(f"  MISMATCH Fanaticism L1 stat 25: got self={fanat_self_pos} (want 50), merc={fanat_merc_pos} (want 25), zero={fanat_self_zero} (want 25)")
 
     # Part 3C: 100,000 cases of FUN_005806f0 (player mana regeneration, player in EDI)
     regen_mismatches = 0
@@ -750,7 +780,7 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
             if regen_mismatches <= 5:
                 print(f"  MISMATCH regen case {i}: got={got_mana} want={want_mana} cur={cur_mana} max={max_mana} s27={stat27} s26={stat26} st85={st85}")
 
-    total_mismatches = cost_mismatches + regen_mismatches
+    total_mismatches = cost_mismatches + scenario_mismatches + regen_mismatches
     print(f"  Suite 3 result: {n_cases} cases run in {time.time() - t0:.2f}s, mismatches = {total_mismatches}")
     return total_mismatches
 
