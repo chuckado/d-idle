@@ -58,6 +58,7 @@
 | [m1-liveproof](../../openspec/changes/m1-liveproof/) | in-progress | drills | `docs/basics-audit.md`<br>`docs/basics-live.md`<br>`docs/primitives.md`<br>`docs/probes/basics/**`<br>`cmd/d2drill/**`<br>`internal/drill/**`<br>`docs/probes/drills/**` | `soak-slot:0` |
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
+| [navexit21](../../openspec/changes/navexit21/) | in-progress | navexit21 | `internal/d2dworld/world.go`<br>`internal/d2dworld/world_test.go`<br>`internal/town/shop.go`<br>`internal/town/chores.go`<br>`internal/town/navexit21_test.go`<br>`docs/navexit21.md`<br>`openspec/changes/navexit21/**` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
@@ -111,6 +112,8 @@
 - change m3-merc: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes; tools/agentreap.sh m3-merc leaves nothing
 - change mapitem: go test -p 1 ./cmd/d2dview passes including TestStitchTransitionBloodMoorColdPlains, TestStitchFieldAndTown, TestStitchFieldToCaveIsNotStitched
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
+- change navexit21: go test -p 1 ./internal/d2dworld ./internal/town ./internal/nav passes (town needs the extracted tables)
+- change navexit21: Gate 1 seed 17 re-run: no funded belt window over 5 virtual minutes, no no-kill over 10 (live, not done)
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
@@ -121,6 +124,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- e149fb2b 11-03 12:37 `merge origin/main into navexit21` (navexit21)
 - a2dfd7ee 11-03 12:32 `Merge agent/gate1multi-20261103-1226-ms1: merge origin/main into gate1multi-20261103-1226-ms1` (gate1multi-20261103-1226-ms1)
 - d5a82b56 11-03 11:45 `Merge agent/sorcdiff2: SORCDIFF2: counted differentials for the casts the bot makes: mana paid at the command vs the action frame (53,628 cases, all 42,168 started cases differ), cut casts paid by d2d but not game.exe (21,084), action frame one tick early at 132 of 401 FCR values, armor group (48 of 5,476 pairs), Charged Bolt do function equal (2,400); private fix branches` (sorcdiff2)
 - fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
@@ -130,5 +134,4 @@
 - 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
 - d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
 - cffbe1e7 11-03 11:34 `merge origin/main into gate3prep` (gate3prep)
-- eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
 <!-- statusgen:end -->
