@@ -9,7 +9,6 @@ skip_specs: true
 owns:
   - docs/research/pal-aura-trace.md
   - tools/emu/verify_palaura.py
-  - tools/emu/boot_game.py
   - openspec/changes/palauratrace/**
 exclusive: []
 gates:

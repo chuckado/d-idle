@@ -8,13 +8,7 @@ from unicorn.x86_const import UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI, UC
 from pathlib import Path
 cur_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(cur_dir))
-try:
-    import skill_tips as boot_helper
-except ImportError:
-    try:
-        import boot_game as boot_helper
-    except ImportError:
-        boot_helper = None
+import skill_tips as boot_helper
 
 def s32(v):
     """Convert unsigned 32-bit int to signed 32-bit int."""
@@ -560,19 +554,37 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
     e.w32(stack_ctx + 0x08, 0)
     e.w32(stack_ctx + 0x0C, hf_ctx)
 
+    # 1. coldeffect >= 0 returns 0 immediately (immunity gate)
     e.w32(defender + 0x04, ce_zero_mid)
     r_zero = e.call(0x5D07C0, ecx=stack_ctx, edx=defender)
-    e.w32(defender + 0x04, ce_neg_mid)
-    e.w32(defender + 0x20, 12345); e.w32(defender + 0x24, 666)
-    r_neg = e.call(0x5D07C0, ecx=stack_ctx, edx=defender)
-    n_lo, _ = step_rng(12345, 666)
-    want_st107 = int((n_lo % 100) < 20)
-    got_st107 = st107.get((defender, 0x6B))
-    if r_zero != 0 or r_neg != 1 or got_st107 != want_st107:
+    if r_zero != 0:
         mismatches += 1
-        print(f"  MISMATCH Holy Freeze callback: r_zero={r_zero} (want 0), r_neg={r_neg} (want 1), st107={got_st107} (want {want_st107})")
-    else:
-        print(f"  Holy Freeze FUN_005d07c0 coldeffect>=0 (mid={ce_zero_mid}): ret={r_zero}; coldeffect<0 (mid={ce_neg_mid}): ret={r_neg}, state107={got_st107} (want {want_st107})")
+        print(f"  MISMATCH Holy Freeze coldeffect>=0 gate: got ret={r_zero} want 0")
+
+    # 2. coldeffect < 0 returns 1, rolls shatter state 107
+    e.w32(defender + 0x04, ce_neg_mid)
+    for test_lo, test_hi in [(6, 100), (12345, 666)]:
+        e.w32(defender + 0x20, test_lo)
+        e.w32(defender + 0x24, test_hi)
+        st107.clear()
+        r_neg = e.call(0x5D07C0, ecx=stack_ctx, edx=defender)
+        n_lo, _ = step_rng(test_lo, test_hi)
+        want_st107 = int((n_lo % 100) < 20)
+        # In Game.exe FUN_005d07c0 (0x5d0876..0x5d08fa), state 107 is set to 1 if roll < 20,
+        # or explicitly cleared to 0 via FUN_00639db0(target, 0x6b, 0) if roll >= 20.
+        # An absent st107 key indicates FUN_00639db0 was not called at all.
+        if (defender, 0x6B) not in st107:
+            got_st107 = 0
+            call_recorded = False
+        else:
+            got_st107 = st107[(defender, 0x6B)]
+            call_recorded = True
+
+        if r_neg != 1 or got_st107 != want_st107 or not call_recorded:
+            mismatches += 1
+            print(f"  MISMATCH Holy Freeze callback (seed={test_lo},{test_hi}): ret={r_neg} (want 1), st107={got_st107} (want {want_st107}, recorded={call_recorded})")
+        else:
+            print(f"  Holy Freeze FUN_005d07c0 coldeffect<0 (mid={ce_neg_mid}, seed={test_lo},{test_hi}): ret={r_neg}, state107={got_st107} (want {want_st107})")
 
     print(f"  Suite 2 result: {n_cases} cases run in {time.time() - t0:.2f}s, mismatches = {mismatches}")
     return mismatches
