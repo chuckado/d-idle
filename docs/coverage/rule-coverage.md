@@ -19,7 +19,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | missiles (missile flight, range, hit roll) | 684 | 243 | 45 | 25 | 0 | 371 | 42% | 46% | 668,300 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 734 | 0 | 0 | 0 | 100% | 100% | 242,220 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
-| monster.ai (monster AI types) | 146 | 11 | 9 | 5 | 0 | 121 | 14% | 17% | 139,830 |
+| monster.ai (monster AI types) | 146 | 89 | 12 | 5 | 0 | 40 | 69% | 73% | 276,330 |
 | states (states and auras) | 185 | 0 | 6 | 4 | 0 | 175 | 3% | 5% | 558,147 |
 | itemtypes (item types) | 98 | 98 | 0 | 0 | 0 | 0 | 100% | 100% | 553,647 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
@@ -28,9 +28,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 4 | 12 | 2 | 0 | 0 | 89% | 100% | 2,770,944 |
 | levels.layout (Act 1 areas: layout, preset units, room seeds, spawn list (Rogue Encampment, Blood Moor, Cold Plains, Stony Field, Den of Evil)) | 5 | 5 | 0 | 0 | 0 | 0 | 100% | 100% | 1,116 |
-| **total** | **4915** | **2553** | **942** | **53** | **0** | **1367** | **71%** | **72%** | **6,740,153** |
+| **total** | **4915** | **2631** | **945** | **53** | **0** | **1286** | **73%** | **74%** | **6,876,653** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2304 (62%), compared 2357 (63%), read-only 53, untested 1367.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2385 (64%), compared 2438 (65%), read-only 53, untested 1286.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -89,6 +89,13 @@ Case counts add the cases of every ledger line; one differential that covers man
 | monster.ai | Zombie,Brute,BloodHawk,CorruptRogue,CorruptLancer | TESTED-DEVIATION | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | pace and run act omitted by the port: D1 D2 D3 D4 (649, 1820, 1686, 917, 1656 differ of 3000 each) |
 | monster.ai | Hireable | TESTED-0-DIFF | `docs/research/mercstats-trace.md` | 100,000 | 2026-11-02 | merc think FUN_005e52d0 vs d2d real hireable_think, 100,000 cases seeds 31..34; attack think and skill pick 100,000 more (seeds 41..44); aspect: think and attack choice, not the target search or movement |
 | monster.ai | CorruptArcher | TESTED-0-DIFF | `docs/research/monsterskill-trace.md` | 3,000 | 2026-11-02 | game.exe think (0x5f5a20) vs rules::mon_think: 1,500 seed 20261102 + 1,500 seed 7; second target = primary, FUN_005defb0 hooked as run, step count as passed (msk_run.sh) |
+| monster.ai | Duriel,Summoner,Mephisto,Izual,Hydra,TrappedSoul,UberMephisto,UberDiablo,UberIzual | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 27,000 | seed 20261105 | think act, pace, effects, AI control words and seed: game.exe think vs d2d rules::mon_think, 3,000 cases each, Act 2 to 4 bosses (Duriel, Summoner, Mephisto, Izual, Hydra, Trapped Soul, Uber Izual; UberMephisto and UberDiablo are a bare ret 4); harness hooks listed in the doc |
+| monster.ai | Mummy,GreaterMummy,Vulture,Baboon,SandRaider,ClawViper,SandLeaper,Scarab,Swarm,PantherWoman,PantherJavelin,PinHead,SandMaggot,SandMaggotQueen,MaggotEgg,MaggotLarva,Mosquito,ThornHulk,WillOWisp,ZakarumZealot,ZakarumPriest,FrogDemon,Tentacle,TentacleHead,FetishShaman,HighPriest,FetishBlowgun,BatDemon | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 42,000 | seed 20261105 | same aspect, 1,500 cases each, Act 2 to 4 monsters (mummies, vultures, baboons, sand raiders, scarabs, panthers, maggots, Act 3 and Act 4 thinks); WillOWisp on its reachable dance states |
+| monster.ai | ReanimatedHorde,SiegeBeast,Minion,SuicideMinion,Succubus,SuccubusWitch,Overseer,MinionSpawner,Imp,Catapult,FrozenHorror,BloodLord,CatapultSpotter,NpcBarb,GenericSpawner,DeathMauler,PutridDefiler,BaalTentacle,BaalMinion,Ancient,Nihlathak,ClawViperEx,BaalCrabClone,UberBaal,SiegeTower,HellMeteor,Sarcophagus,Spirit,ArcaneTower,Trap-RightArrow,Trap-LeftArrow,DesertTurret,VileMother,VileDog,FingerMage,Regurgitator,DoomKnight,AbyssKnight,OblivionKnight,Megademon | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 60,000 | seed 20261105 | same aspect, 1,500 cases each, Act 4 casters and Act 5 thinks, Baal's minions, towers, traps; Ancient with the target placed at the AI distance, CatapultSpotter and PutridDefiler with raw skill ids relabelled |
+| monster.ai | Diablo | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 3,000 | seed 20261105 | 61 of 3,000 differ: D4 (Skill1 pending with no target casts at none), D5 (act 15 cast carries unit id and type); 18 act or n differences not isolated (U) |
+| monster.ai | Arach | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | 378 of 1,500 differ: D2 charge is a run in game.exe (337), D3 Spider Lay casts at no unit (41); nothing else differs once a flags-0 back-off that cannot set off is modelled as the idle it is |
+| monster.ai | Fetish | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | 64 of 1,500 differ, all pace 50 vs 0: D1 a back-off that cannot set off keeps pace 50 in game.exe (57), 7 more not isolated |
+| monster.ai | Bighead | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | same aspect as the other covmonai2 rows, 1,500 cases (think 0x5eff50, added by address: not in upstream mon_ais.py); Vampire run too: 11 of 1,500 differ, not isolated, no row |
 | states | 1,11,118 | TESTED-DEVIATION | `docs/research/pr-freeze-proof.md` | 225,748 | 2026-11-01 | freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess) |
 | states | 10 | TESTED-DEVIATION | `docs/research/sk-armor-trace.md` | 184,771 | 2026-11-01 | frozenarmor state and its striker effect D1 |
 | states | 20,30,88 | READ-ONLY | `docs/research/sk-armor-trace.md` | - | 2026-11-01 | chillingarmor, energyshield, shiverarmor read |
@@ -125,7 +132,7 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | rank | subsystem | rows | why it matters | source |
 |---:|---|---|---|---|
 | 1 | missiles | untested (371 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
-| 2 | monster.ai | untested (121 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
+| 2 | monster.ai | untested (40 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (1 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 6 | skills.pal | untested (15 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
