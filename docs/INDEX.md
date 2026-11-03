@@ -294,3 +294,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/botab-trace.md | BOTAB trace: questions, deviations D1.., bot findings B1.., limits, matrix proposals
 - docs/research/hirereader-design.md | hire the merc on d2d: what is readable, smallest change, order of work (HIREREADER)
 - docs/research/hirereader-trace.md | HIREREADER trace: hire and revive money in game.exe vs d2d (purse 200,000 cases 0 differ), dump merc fields, bot findings B1..B5, drill recipe
+- docs/research/hirefix.md: what the Gate 2 hire-the-merc check can and cannot confirm after the bot-side fixes

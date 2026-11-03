@@ -129,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 94b7a627 11-03 00:24 `Merge agent/hirefix: HIREFIX: merc observation on d2d (dead merc visible, GU/IW/0A hireling ids mapped, revive quote parsed, judge matches the bot's hire line) so Gate 2 can confirm hire, alive-and-following and revive; offline tests only, not run live` (hirefix)
+- 71b25a3f 11-03 00:24 `merge origin/main into hirefix` (hirefix)
 - 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
 - d0c90501 11-02 23:17 `merge origin/main into hirereader` (hirereader)
 - c5e6c03c 11-02 23:10 `Merge agent/botab: botab: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (botab)
@@ -137,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
 - 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
 - b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
-- 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
-- 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
 <!-- statusgen:end -->
