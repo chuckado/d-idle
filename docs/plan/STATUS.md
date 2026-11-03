@@ -121,14 +121,14 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
-- 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
-- 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
-- f9298f08 11-03 10:28 `Merge agent/codereview1: CODEREVIEW1: Opus code review of the Gate 1 belt fixes (F1-F10)` (codereview1)
-- 4ce28b17 11-03 10:27 `merge origin/main into codereview1` (codereview1)
-- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
-- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
-- 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
-- 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
-- 5833ec20 11-03 10:15 `Merge agent/gatetriage: GATETRIAGE: one-screen Gate failure triage (gate_triage.py) with 10 tests and examples over the five Gate 1 runs` (gatetriage)
-- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
+- 62e4ffab 11-03 11:22 `Merge agent/lockstepplan: LOCKSTEPPLAN: lockstep and A:B plan (clvl 1-6 cell, k=1, hidden i2 i3 i5; no native Windows lane for now)` (lockstepplan)
+- 2a7b26b7 11-03 11:21 `merge origin/main into lockstepplan` (lockstepplan)
+- 013512a3 11-03 11:13 `Merge agent/sorcdiff: SORCDIFF: Sorceress skill differentials for the lightning build: the gate character casts only Charged Bolt, Frozen Armor, Frost Nova and Fire Bolt (never past clvl 15); 0 differences in skill_damage 116,000, static_field 229,664, chill_length, next_hit, armor_hit 109,604, freeze_rules 145,748; one proven deviation (Lightning and Chain Lightning cast length 19 vs 13 ticks), private fix branch` (sorcdiff)
+- 94b3dde9 11-03 11:13 `merge origin/main into sorcdiff` (sorcdiff)
+- 0ad342c1 11-03 11:11 `merge origin/main into lockstepplan` (lockstepplan)
+- 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
+- 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
+- f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
+- 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
+- 9c7bf265 11-03 10:49 `Merge agent/verifydmg4: verifydmg4: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg4)
 <!-- statusgen:end -->
