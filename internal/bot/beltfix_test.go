@@ -21,7 +21,8 @@ func TestKitTripNoPortalPotionPrice(t *testing.T) {
 	}{
 		{"window: Blood Moor, 37 gold, nothing", 2, 37, false, 0, true},
 		{"window: Blood Moor, 29 gold", 2, 29, false, 0, false},
-		{"Stony Field has no walk home", 4, 37, false, 0, false},
+		{"Stony Field: the level chain leads home", 4, 37, false, 0, true},
+		{"Underground Passage 1 has no portal and no waypoint, 0 gold", 10, 20, false, 0, false},
 		{"portal source, 37 gold", 4, 37, true, 0, true},
 		{"enough potions, scroll missing needs the scroll price", 2, 37, false, 4, false},
 		{"enough potions, scroll affordable", 2, 120, false, 4, true},
@@ -61,9 +62,10 @@ func TestKitTripNoPotionEmergencyCooldown(t *testing.T) {
 func TestKitTripWaypointHome(t *testing.T) {
 	for _, on := range []bool{false, true} {
 		g, _ := kitField(t, 12, 0, false, 30)
+		g.w.set(func(w *world) { w.area = 7 }) // Tamoe Highland: no walk home known
 		q := &fakeQuests{}
 		q.v.Quests = map[string]task.QuestState{}
-		q.v.WPs = map[int]bool{4: on}
+		q.v.WPs = map[int]bool{7: on}
 		g.r.d.Task = &TaskDeps{Quests: q}
 		s, _ := g.w.snapshot()
 		_, ok := g.r.kitTrip(s)
