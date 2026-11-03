@@ -439,7 +439,7 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
         118: {"name": "Holy Shock",  "hs": 8, "emin": 1, "emin_lev": (0, 0, 0, 0, 0), "emax": 10, "emax_lev": (6, 8, 10, 12, 15),
               "syn": ((110, 12), (125, 4)), "mstat": 330, "pstat": 334, "rstat": 41, "dmg_off": 0x1C},
         119: {"name": "Sanctuary",   "hs": 8, "emin": 8, "emin_lev": (4, 4, 5, 5, 6), "emax": 16, "emax_lev": (4, 5, 6, 6, 7),
-              "syn": ((109, 7),),           "mstat": None, "pstat": None, "rstat": 37, "dmg_off": 0x20},
+              "syn": ((109, 7),),           "mstat": 357, "pstat": None, "rstat": 37, "dmg_off": 0x20},
     }
 
     def expected_bounds(sid, lvl, syn_lvls, mastery):
@@ -745,6 +745,10 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
 
 if __name__ == "__main__":
     only = sys.argv[1] if len(sys.argv) > 1 else "all"
+    valid_selectors = ("all", "suite1", "suite2", "suite3")
+    if only not in valid_selectors:
+        print(f"Error: invalid selector '{only}'. Expected one of: {', '.join(valid_selectors)}", file=sys.stderr)
+        sys.exit(2)
     m1 = suite1_filter_and_search(100000, 0x50414C31) if only in ("all", "suite1") else 0
     m2 = suite2_pulse_damage(100000, 0x50414C32) if only in ("all", "suite2") else 0
     m3 = suite3_prayer_mana_and_regen(100000, 0x50414C33) if only in ("all", "suite3") else 0
