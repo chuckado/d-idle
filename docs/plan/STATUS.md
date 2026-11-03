@@ -59,6 +59,8 @@
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
+| [paldurtrace](../../openspec/changes/paldurtrace/) | in-progress | chuckado | `docs/research/durability-trace.md`<br>`tools/emu/verify_paldur.py`<br>`openspec/changes/paldurtrace/**` | - |
+| [palskilltrace](../../openspec/changes/palskilltrace/) | in-progress | chuckado | `docs/research/pal-skill-trace.md`<br>`docs/research/pal-smite-zeal-sacrifice-trace.md`<br>`tools/emu/verify_palskills.py`<br>`openspec/changes/palskilltrace/**` | - |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -113,6 +115,8 @@
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
+- change paldurtrace: changecheck -cli 0 warnings; leakcheck -mode fail 0
+- change palskilltrace: changecheck -cli 0 warnings; leakcheck -mode fail 0
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -121,14 +125,14 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
-- 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
-- 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
-- f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
-- 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
-- 9c7bf265 11-03 10:49 `Merge agent/verifydmg4: verifydmg4: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg4)
-- 33798808 11-03 10:48 `merge origin/main into verifydmg4` (verifydmg4)
-- 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
-- 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
-- fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
-- 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
+- 76c794f5 11-03 14:04 `Merge main into palskill-trace: keep both OWNERS blocks, regenerate STATUS` (-)
+- a1401fd3 11-03 13:45 `Merge agent/navexit22: navexit22: border gate frames (seed 17 Blood Moor to camp), recorded replay fixture, card` (navexit22)
+- a7a493b3 11-03 13:26 `Merge agent/reviewbatch2c: reviewbatch2c: independent Opus review of batch C (head 4ed8b651)` (reviewbatch2c)
+- 99328d5c 11-03 13:13 `Merge agent/cport: merge origin/main into cport` (cport)
+- 23e68453 11-03 13:13 `merge origin/main into cport` (cport)
+- bf29e35d 11-03 12:37 `Merge agent/navexit21: merge origin/main into navexit21` (navexit21)
+- e149fb2b 11-03 12:37 `merge origin/main into navexit21` (navexit21)
+- a2dfd7ee 11-03 12:32 `Merge agent/gate1multi-20261103-1226-ms1: merge origin/main into gate1multi-20261103-1226-ms1` (gate1multi-20261103-1226-ms1)
+- d5a82b56 11-03 11:45 `Merge agent/sorcdiff2: SORCDIFF2: counted differentials for the casts the bot makes: mana paid at the command vs the action frame (53,628 cases, all 42,168 started cases differ), cut casts paid by d2d but not game.exe (21,084), action frame one tick early at 132 of 401 FCR values, armor group (48 of 5,476 pairs), Charged Bolt do function equal (2,400); private fix branches` (sorcdiff2)
+- fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
 <!-- statusgen:end -->
