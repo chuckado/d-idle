@@ -123,6 +123,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- 39e43b1a 11-03 10:35 `merge origin/main into lockstepplan` (lockstepplan)
 - 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
 - 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
 - f9298f08 11-03 10:28 `Merge agent/codereview1: CODEREVIEW1: Opus code review of the Gate 1 belt fixes (F1-F10)` (codereview1)
@@ -132,5 +133,4 @@
 - 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
 - 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
 - 5833ec20 11-03 10:15 `Merge agent/gatetriage: GATETRIAGE: one-screen Gate failure triage (gate_triage.py) with 10 tests and examples over the five Gate 1 runs` (gatetriage)
-- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
 <!-- statusgen:end -->
