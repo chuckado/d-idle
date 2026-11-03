@@ -2,7 +2,7 @@
 
 ```yaml
 change: hirereader
-status: in-progress
+status: archived
 agent: hirereader
 branch: agent/hirereader
 worktree: ~/code/d2lod-wt/hirereader
@@ -19,8 +19,9 @@ exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
   - "a V run claim needs counts: purse differential 200,000 cases, 0 differ"
-result: "Docs and emulator tooling only, nothing run live, no d2d slot, no Go change. Purse differential (game.exe FUN_00576d90 and the revive chain FUN_006637b0 + FUN_00576d90 vs rules::hire and rules::resurrect_merc): 200,000 cases (8 runs of 25,000), 0 differ (V run). Bot findings B1..B5 (B2: a dead merc whose corpse is gone reads as not owned, so the revive never fires on d2d), no PR candidate, no ledger row (needs a new denominator line, proposed in the trace). Design: bot-side fixes first, then four keys in dump merc."
+result: "docs/tools only"
 live: "docs only, nothing run live"
+merge: 3f3db38
 ```
 
 - [x] read the fork and bot sides (dump merc, state, menu, hire and resurrect commands)

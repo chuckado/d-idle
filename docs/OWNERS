@@ -134,10 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-docs/research/hirereader-trace.md  hirereader  hirereader
-docs/research/hirereader-design.md  hirereader  hirereader
-tools/emu/hrd_pay.py  hirereader  hirereader
-tools/emu/hrd_d2d_test.cpp  hirereader  hirereader
-tools/emu/hrd_build.sh  hirereader  hirereader
-tools/emu/hrd_run.sh  hirereader  hirereader
-openspec/changes/hirereader/**  hirereader  hirereader
