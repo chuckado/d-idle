@@ -134,3 +134,9 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/pr-batch2-body.md  b2rebase2  b2rebase2
+docs/research/pr-batch2-body-split.md  b2rebase2  b2rebase2
+docs/research/pr-batch2-run.txt  b2rebase2  b2rebase2
+docs/research/pr-upstream-rules-20261103.md  b2rebase2  b2rebase2
+tools/emu/b2r3_*  b2rebase2  b2rebase2
+openspec/changes/b2rebase2/**  b2rebase2  b2rebase2

@@ -40,6 +40,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
+| [b2rebase2](../../openspec/changes/b2rebase2/) | in-progress | b2rebase2 | `docs/research/pr-batch2-body.md`<br>`docs/research/pr-batch2-body-split.md`<br>`docs/research/pr-batch2-run.txt`<br>`docs/research/pr-upstream-rules-20261103.md`<br>`tools/emu/b2r3_*`<br>`openspec/changes/b2rebase2/**` | `fork-branch:local/batch2-bundle-r3` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -85,6 +86,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
+- change b2rebase2: local/batch2-bundle-r3 is the four bundle commits on upstream main 005c7cab, same authors, subjects, range-diff equal, nothing pushed upstream
+- change b2rebase2: changecheck 0 warnings, leakcheck 0 hits
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
