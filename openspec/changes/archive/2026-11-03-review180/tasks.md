@@ -2,7 +2,7 @@
 
 ```yaml
 change: review180
-status: in-progress
+status: archived
 agent: review180
 branch: agent/review180
 worktree: d2lod-wt/review180
@@ -14,7 +14,7 @@ exclusive: []
 gates:
   - "the review doc exists with ranked findings, evidence tags and a consequences-for-us section"
   - "changecheck 0 new warnings, leakcheck 0 hits"
-result: "docs only; nothing run live, nothing posted upstream"
+result: "docs only"
 credit:
   component: Private review of upstream PR 180
   author: owner
@@ -22,7 +22,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
-merge:
+merge: fe2d493
 ```
 
 ## 1. Work
