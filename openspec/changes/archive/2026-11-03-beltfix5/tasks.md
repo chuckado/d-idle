@@ -2,7 +2,7 @@
 
 ```yaml
 change: beltfix5
-status: in-progress
+status: archived
 agent: beltfix5
 branch: agent/beltfix5
 worktree: ~/code/d2lod-wt/beltfix5
@@ -15,10 +15,11 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/bot ./internal/town; whole repo vet+test on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "Offline tests only (mem.Fake bot rig, town sim); NOT verified live: checklist in docs/research/beltfix5.md section 6."
+result: "whole repo vet and test pass on the worker host; replay test of the window"
 credit:
   author: owner
   agents: [Claude Code]
+merge: 4f7c85e
 ```
 
 - [x] 1 reconstruct the 0338 window from the minute lines and the bot log (docs/research/beltfix5.md)
