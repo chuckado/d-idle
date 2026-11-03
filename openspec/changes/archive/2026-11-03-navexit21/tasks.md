@@ -2,7 +2,7 @@
 
 ```yaml
 change: navexit21
-status: in-progress
+status: archived
 agent: navexit21
 branch: agent/navexit21
 worktree: ~/code/d2lod-wt/navexit21
@@ -23,6 +23,7 @@ result: "Offline only, not verified live. Fix 1 d2dworld keepBorders (TestBorder
 credit:
   author: owner
   agents: [Claude Code]
+merge: bf29e35
 ```
 
 ## 1. Work
