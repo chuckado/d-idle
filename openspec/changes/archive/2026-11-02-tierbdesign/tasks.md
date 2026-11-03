@@ -2,7 +2,7 @@
 
 ```yaml
 change: tierbdesign
-status: in-progress
+status: archived
 agent: tierbdesign
 branch: agent/tierbdesign
 worktree: d2lod-wt/tierbdesign
@@ -13,12 +13,13 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: "docs only, not verified live; design doc docs/research/tierb-design-20261102.md; kitb vs kitk2 read with pair_compare (read-only)"
+result: "docs only"
 credit:
   component: TIERBDESIGN
   author: owner
   agents: [Claude Code]
   consent: none
+merge: 780d857
 ```
 
 - [x] 1 Time-source inventory with evidence tags

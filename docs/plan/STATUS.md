@@ -62,7 +62,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
-| [tierbdesign](../../openspec/changes/tierbdesign/) | in-progress | tierbdesign | `docs/research/tierb-design-20261102.md`<br>`openspec/changes/tierbdesign/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -125,10 +124,10 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
-- change tierbdesign: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 780d857f 11-02 19:23 `Merge agent/tierbdesign: TIERBDESIGN: Tier B and A:B design: statistical A:B first, Tier B held until a gap needs it; six staged cards; kitb vs kitk2 pair verdict (docs only)` (tierbdesign)
 - 8dd3f975 11-02 18:15 `Merge agent/verifystateev2: verifystateev2: coverage-gap or verification result (docs and emulator tools only)` (verifystateev2)
 - d8922e54 11-02 18:14 `merge origin/main into verifystateev2` (verifystateev2)
 - 0489b0f3 11-02 18:07 `Merge agent/verifyskamazon: verifyskamazon: coverage-gap or verification result (docs and emulator tools only)` (verifyskamazon)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
 - cda4be88 11-02 17:49 `merge origin/main into tomestat` (tomestat)
 - a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
-- 85fd1005 11-02 17:41 `merge origin/main into townshop` (townshop)
 <!-- statusgen:end -->
