@@ -62,6 +62,7 @@
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
+| [sorcdiff](../../openspec/changes/sorcdiff/) | in-progress | sorcdiff | `docs/research/sorcdiff.md`<br>`tools/emu/sorcdiff_*`<br>`openspec/changes/sorcdiff/**` | `fork-branch:local/sorc-lightning-seq` |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -119,16 +120,18 @@
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
+- change sorcdiff: local/sorc-lightning-seq is two commits on upstream main 005c7cab, numeric noreply identity, private remote only
+- change sorcdiff: changecheck 0 warnings, leakcheck 0 hits
 
 ### Recent merges
-- 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
-- 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
-- f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
-- 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
-- 9c7bf265 11-03 10:49 `Merge agent/verifydmg4: verifydmg4: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg4)
-- 33798808 11-03 10:48 `merge origin/main into verifydmg4` (verifydmg4)
-- 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
-- 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
-- fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
-- 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
+- 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
+- 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
+- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
+- 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
+- b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
+- 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
+- 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
+- d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
+- b5496da4 11-03 03:01 `Merge agent/gaterecords: GATERECORDS: the three Gate 1 run records of 2026-11-02/03 under unique run-id names, an index, merge-lines in the valid format (all three runs NOT PASSED: Belt 12, then Belt 37 and NOKILL 11, then Belt 7 and True XP/h -11 percent); the old PASSED record is untouched` (gaterecords)
+- 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
 <!-- statusgen:end -->
