@@ -2,7 +2,7 @@
 
 ```yaml
 change: abtool
-status: in-progress
+status: archived
 agent: abtool
 branch: agent/abtool
 worktree: d2lod-wt/abtool
@@ -12,10 +12,11 @@ owns:
   - openspec/changes/abtool/**
 exclusive: []
 gates: python3 -I tools/baseline/tests/test_ab_compare.py passes; changecheck 0 warnings; leakcheck 0 hits
-result: "tool and tests done offline (11 tests pass); not run on real kit sets, no live game"
+result: "docs/tools only; see the doc for tags and limits"
 credit:
   author: owner
   agents: [Claude Code]
+merge: e74797c
 ```
 
 - [x] 1. ab_compare.py (ratio, interval, verdict, Poisson, regimes, pair correlation)
