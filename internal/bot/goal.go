@@ -324,7 +324,12 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 	if known && !p.InTown() {
 		trip = r.tripVerdict(s)
 	}
-	broke := r.recoveryActive() && p.Gold < r.e.Tune.Resource.RecoveryKitGold
+	// BELTFIX5: banked gold counts when no healing potion is left; the town visit withdraws it (Town.withdraw)
+	kitGold := p.Gold
+	if healing == 0 {
+		kitGold += p.StashGold
+	}
+	broke := r.recoveryActive() && kitGold < r.e.Tune.Resource.RecoveryKitGold
 	if broke {
 		trip = resource.Trip{} // recovery: a potion trip with an empty purse buys nothing (G1 attempt 9: 90 min of walking)
 	}
@@ -352,7 +357,7 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
 		// Gate 1 20261103: left Rogue Encampment with 185 gold and 0 potions, 3 virtual minutes outside town unhealed.
-		if healing < threshold && p.Gold >= minPotionPrice && !trip.Futile && (!broke || (p.InTown() && healing == 0)) {
+		if healing < threshold && kitGold >= minPotionPrice && !trip.Futile && (!broke || (p.InTown() && healing == 0)) {
 			plan.Potions = true
 			why = append(why, fmt.Sprintf("%d healing potions", healing))
 			emergency = healing == 0
