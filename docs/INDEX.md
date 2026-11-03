@@ -332,3 +332,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/sorcdiff2.md: mana payment timing, Frozen Armor group and the Charged Bolt do as counted differentials on the real d2d build, with private fix branches
 - docs/soaks/gate1-multiseed-20261103-1226-ms1.md: Gate 1 multi-seed run 20261103-1226-ms1 (NOT PASSED), per-seed criteria, d2dsoak output
 - docs/navexit21.md: Blood Moor to town exit lost (border kept), empty-tome scroll priority, live checklist
+- docs/research/pr-batch2-C-rows.md: batch C rows (mana payment on the action frame, action-frame tick, armor group) to add to the open batch A pull request, conflict resolutions, counts on the exact head, limits, size
