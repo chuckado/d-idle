@@ -1,0 +1,254 @@
+# batch 2 bundle head 60d0404e on upstream main 3e073888: raw results (worker host; sanitized)
+
+## suites (build.sh)
+build rc=0
+test_rules rc=0 test_rules: ok
+test_game_rules rc=0 OK: the Cursed umod's hit hook
+test_monsters rc=0 ok
+test_monster_thinks rc=0 ok
+test_monster_ai rc=0 ok
+test_combat rc=0 ok
+test_game rc=0 OK: two players: their own orders, the other in the View, the party arrives together, monsters go at
+test_skills rc=0 ok
+test_sk_ground rc=0 OK: a Fire Ball and a Glacial Spike burst roll once for every monster in it
+test_sk_mana rc=0 test_sk_mana: ok
+test_tele_spot rc=0 test_tele_spot: ok
+test_monster_missile rc=0 
+test_missile_blow_poison rc=0 
+
+## CI checks (ci.sh)
+== pr_guard per commit
+-- 76c8c3cd game: the mana check has no minmana floor; payment needs enough mana
+pr_guard: 0 FAIL, 0 WARN against 76c8c3cdc6235ae2b0ecfd9f29d2246874b63b60~1
+-- e36daa1e game: Teleport lands only in the caster's room or its near list
+pr_guard: 0 FAIL, 0 WARN against e36daa1e8c52736fbb92884bf92fad8cd4f63c53~1
+-- 2c17df31 game: Teleport lands on the nearest free spot of a blocked target
+pr_guard: 0 FAIL, 0 WARN against 2c17df314eb496aefb555d18a40ce68f9213cf19~1
+-- 60d0404e game: roll a monster's hit in 256ths, absorb, then reduce
+pr_guard: 0 FAIL, 0 WARN against 60d0404ec207d63e43265753f790d9741f8396d8~1
+== pr_guard range
+pr_guard: 0 FAIL, 0 WARN against 3e073888
+== presubmit --quick
+presubmit: local/batch2-bundle in ~/d2d-lab/wt-b2bundle, against 3e073888
+ok    attribution: no co-author or AI lines in the commit messages
+ok    whitespace: 17 files
+WARN  siblings: unit kinds: the diff touches player, merc, pet, monster, not co-op partner. Same rule there? Say so in the PR if not.
+WARN  siblings: hit paths: the diff touches missile, skill, not melee. Same rule there? Say so in the PR if not.
+WARN  docs-sync: code changed, no .md changed: todo.md row, the system's doc, README?
+ok    short-names: no 1-2 letter names added
+WARN  build: skipped (--quick): no build, tidy or ctest
+
+presubmit: 0 FAIL, 4 WARN. Answer each WARN (fix, or one line in the PR body), then read the diff against tools/review-checklist.md.
+== warnings
+components/game/ai.cpp components/game/fight/missiles.cpp components/game/fight/pets.cpp components/game/fight/states.cpp components/game/fight/strike.cpp components/game/fight/summons.cpp components/
+g++ warnings (all lines): 0
+clang++ warnings (all lines): 436
+w-g++.log warnings on added lines: 0
+w-clang++.log warnings on added lines: 0
+== clang-tidy (.clang-tidy: identifier-length, include-cleaner) on changed TUs
+tidy diag lines: 64
+== merge with pull/178
+pr178 2597875781a01b733f62cd63747508e4999fb9b1
+merge-tree rc=0
+c32576d5804786618e4c7a14f0b3b84e581c83e4
+
+## differentials (diff.sh)
+== mana gen 100000 7
+cases 190840 game answers 190840
+base: compared 105978 of 190840 (no cast path: 84862), equal 105697, different 281
+  by kind {'game casts, d2d refuses': 281}
+  by skill {'54': 74, '28': 72, '22': 68, '88': 67}
+head: compared 105978 of 190840 (no cast path: 84862), equal 105978, different 0
+  by kind {}
+  by skill {}
+== tele gen 100000 1
+cases 100000 {'free target': 52539, 'target room not near': 40974, 'Teleport 0': 5026, 'target blocked': 1461}
+game lands 54000
+build 0: equal 73419 of 100000; equal by class {'free target': 52539, 'target room not near': 15854, 'Teleport 0': 5026}
+  different {'target blocked / game lands, d2d refuses': 1461, 'target room not near / game refuses, d2d lands': 25120}
+build 1: equal 98539 of 100000; equal by class {'free target': 52539, 'target room not near': 40974, 'Teleport 0': 5026}
+  different {'target blocked / game lands, d2d refuses': 1461}
+build 2: equal 100000 of 100000; equal by class {'free target': 52539, 'target room not near': 40974, 'Teleport 0': 5026, 'target blocked': 1461}
+  different {}
+== tele gen 100000 9
+cases 100000 {'target room not near': 40969, 'free target': 52397, 'Teleport 0': 5079, 'target blocked': 1555}
+game lands 53952
+build 0: equal 73088 of 100000; equal by class {'free target': 52397, 'Teleport 0': 5079, 'target room not near': 15612}
+  different {'target blocked / game lands, d2d refuses': 1555, 'target room not near / game refuses, d2d lands': 25357}
+build 1: equal 98445 of 100000; equal by class {'target room not near': 40969, 'free target': 52397, 'Teleport 0': 5079}
+  different {'target blocked / game lands, d2d refuses': 1555}
+build 2: equal 100000 of 100000; equal by class {'target room not near': 40969, 'free target': 52397, 'Teleport 0': 5079, 'target blocked': 1555}
+  different {}
+
+## damage roll (dmg.sh)
+head 60d0404e
+probe rc=0
+v4_d2d_base rc=0
+v3_d2d_base rc=0
+mdmg2_d2d_base rc=0
+v4_d2d_r4 rc=0
+v3_d2d_r4 rc=0
+mdmg2_d2d_r4 rc=0
+== v4_run.py 6000 20261103 (real Fight::absorb)
+# v4_run.py N=6000 seed=20261103 frames=354000
+# real Fight::absorb vs my r4 glue: frames differing 0
+# real Fight::absorb vs real Fight::hurt_side (life lost, pool, mana): frames differing 0
+# Energy Shield params used: calc1 range 0..85, calc2 range 0..32, calc1 at 95 cap 0
+roll base: frames 48000 life 47896 pool 0 mana 0 seed 0 mean|life| 1.1689 mean|pool| 0.0000 mean|mana| 0.0000
+roll r4real: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+roll r4glue: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base roll r4real: none
+# roll: frames without Energy Shield 48000, r4real differing among them 0
+reduce base: frames 48000 life 23954 pool 0 mana 0 seed 0 mean|life| 0.6554 mean|pool| 0.0000 mean|mana| 0.0000
+reduce r4real: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+reduce r4glue: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base reduce r4real: none
+# reduce: frames without Energy Shield 48000, r4real differing among them 0
+absorb base: frames 48000 life 16403 pool 33587 mana 0 seed 0 mean|life| 0.3990 mean|pool| 0.8227 mean|mana| 0.0000
+absorb r4real: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+absorb r4glue: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base absorb r4real: none
+# absorb: frames without Energy Shield 48000, r4real differing among them 0
+both base: frames 48000 life 4121 pool 41931 mana 0 seed 0 mean|life| 0.1167 mean|pool| 2.0796 mean|mana| 0.0000
+both r4real: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+both r4glue: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base both r4real: none
+# both: frames without Energy Shield 48000, r4real differing among them 0
+negpct base: frames 48000 life 17378 pool 20007 mana 0 seed 0 mean|life| 0.8078 mean|pool| 0.8857 mean|mana| 0.0000
+negpct r4real: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+negpct r4glue: frames 48000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base negpct r4real: none
+# negpct: frames without Energy Shield 48000, r4real differing among them 0
+eshield base: frames 48000 life 32669 pool 0 mana 47914 seed 0 mean|life| 0.6650 mean|pool| 0.0000 mean|mana| 2.4728
+eshield r4real: frames 48000 life 9881 pool 0 mana 23323 seed 0 mean|life| 0.0851 mean|pool| 0.0000 mean|mana| 1.4541
+eshield r4glue: frames 48000 life 9881 pool 0 mana 23323 seed 0 mean|life| 0.0851 mean|pool| 0.0000 mean|mana| 1.4541
+# worse-than-base eshield r4real: none
+# eshield: frames without Energy Shield 0, r4real differing among them 0
+esbone base: frames 48000 life 9670 pool 37899 mana 14764 seed 0 mean|life| 0.1799 mean|pool| 1.4544 mean|mana| 0.5291
+esbone r4real: frames 48000 life 1359 pool 0 mana 7167 seed 0 mean|life| 0.0099 mean|pool| 0.0000 mean|mana| 0.2742
+esbone r4glue: frames 48000 life 1359 pool 0 mana 7167 seed 0 mean|life| 0.0099 mean|pool| 0.0000 mean|mana| 0.2742
+# worse-than-base esbone r4real: none
+esbone base vs es-first order: life 7838 pool 44042 mana 47989 seed 0 mean|life| 0.2066 mean|pool| 1.5248 mean|mana| 3.7596
+esbone r4real vs es-first order: life 8561 pool 43083 mana 47437 seed 0 mean|life| 0.0683 mean|pool| 1.5670 mean|mana| 3.6172
+esbone r4glue vs es-first order: life 8561 pool 43083 mana 47437 seed 0 mean|life| 0.0683 mean|pool| 1.5670 mean|mana| 3.6172
+# worse-than-base (es-first) esbone r4real: life,epool
+# esbone: frames without Energy Shield 0, r4real differing among them 0
+exact base: frames 9000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+exact r4real: frames 9000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+exact r4glue: frames 9000 life 0 pool 0 mana 0 seed 0 mean|life| 0.0000 mean|pool| 0.0000 mean|mana| 0.0000
+# worse-than-base exact r4real: none
+# exact: frames without Energy Shield 9000, r4real differing among them 0
+exactred base: frames 9000 life 2448 pool 5085 mana 1339 seed 0 mean|life| 0.6543 mean|pool| 5.5220 mean|mana| 1.0185
+exactred r4real: frames 9000 life 670 pool 0 mana 1084 seed 0 mean|life| 0.1034 mean|pool| 0.0000 mean|mana| 0.9417
+exactred r4glue: frames 9000 life 670 pool 0 mana 1084 seed 0 mean|life| 0.1034 mean|pool| 0.0000 mean|mana| 0.9417
+# worse-than-base exactred r4real: none
+exactred base vs es-first order: life 2444 pool 5197 mana 2265 seed 0 mean|life| 0.6652 mean|pool| 5.0987 mean|mana| 3.0224
+exactred r4real vs es-first order: life 681 pool 1247 mana 2010 seed 0 mean|life| 0.1157 mean|pool| 0.9191 mean|mana| 2.9525
+exactred r4glue vs es-first order: life 681 pool 1247 mana 2010 seed 0 mean|life| 0.1157 mean|pool| 0.9191 mean|mana| 2.9525
+# worse-than-base (es-first) exactred r4real: none
+# exactred: frames without Energy Shield 6685, r4real differing among them 0
+== mdmg2.py 20000 20261103
+both fallen1 5000 | 677 4186 0 | 0 0 0
+roll zombie1 20000 | 19973 0 0 | 0 0 0
+reduce zombie1 20000 | 15097 0 0 | 0 0 0
+absorb zombie1 20000 | 11850 9664 0 | 0 0 0
+both zombie1 5000 | 808 4263 0 | 0 0 0
+roll skeleton1 20000 | 19969 0 0 | 0 0 0
+reduce skeleton1 20000 | 15074 0 0 | 0 0 0
+absorb skeleton1 20000 | 11880 9608 0 | 0 0 0
+both skeleton1 5000 | 791 4278 0 | 0 0 0
+roll quillrat1 20000 | 19919 0 0 | 0 0 0
+reduce quillrat1 20000 | 13820 0 0 | 0 0 0
+absorb quillrat1 20000 | 11618 9153 0 | 0 0 0
+both quillrat1 5000 | 736 4076 0 | 0 0 0
+roll corruptrogue1 20000 | 19972 0 0 | 0 0 0
+reduce corruptrogue1 20000 | 15137 0 0 | 0 0 0
+absorb corruptrogue1 20000 | 11809 9648 0 | 0 0 0
+both corruptrogue1 5000 | 822 4281 0 | 0 0 0
+roll brute1 20000 | 19925 0 0 | 0 0 0
+reduce brute1 20000 | 16633 0 0 | 0 0 0
+absorb brute1 20000 | 13525 7028 0 | 0 0 0
+both brute1 5000 | 1253 4228 0 | 0 0 0
+roll bloodraven 20000 | 19965 0 0 | 0 0 0
+reduce bloodraven 20000 | 17412 0 0 | 0 0 0
+absorb bloodraven 20000 | 15145 5803 0 | 0 0 0
+both bloodraven 5000 | 1709 4141 0 | 0 0 0
+roll andariel 20000 | 19998 0 0 | 0 0 0
+reduce andariel 20000 | 17577 0 0 | 0 0 0
+absorb andariel 20000 | 14499 8189 0 | 0 0 0
+negpct andariel 10000 | 9999 0 0 | 0 0 0
+both andariel 5000 | 1536 4357 0 | 0 0 0
+# mdmg2_d2d_base roll: frames 160000 life differ 159654 pool differ 0 seed differ 0
+# mdmg2_d2d_base reduce: frames 160000 life differ 124491 pool differ 0 seed differ 0
+# mdmg2_d2d_base absorb: frames 160000 life differ 102020 pool differ 68173 seed differ 0
+# mdmg2_d2d_base both: frames 40000 life differ 8332 pool differ 33810 seed differ 0
+# mdmg2_d2d_base negpct: frames 10000 life differ 9999 pool differ 0 seed differ 0
+# mdmg2_d2d_r4 roll: frames 160000 life differ 0 pool differ 0 seed differ 0
+# mdmg2_d2d_r4 reduce: frames 160000 life differ 0 pool differ 0 seed differ 0
+# mdmg2_d2d_r4 absorb: frames 160000 life differ 0 pool differ 0 seed differ 0
+# mdmg2_d2d_r4 both: frames 40000 life differ 0 pool differ 0 seed differ 0
+# mdmg2_d2d_r4 negpct: frames 10000 life differ 0 pool differ 0 seed differ 0
+== v3_run.py 10000 314159
+roll andariel 10000 | 9998 0 0 4.4558 0.0000 | 0 0 0 0.0000 0.0000
+reduce andariel 10000 | 6865 0 0 2.7550 0.0000 | 0 0 0 0.0000 0.0000
+absorb andariel 10000 | 3699 7280 0 1.4513 3.0640 | 0 0 0 0.0000 0.0000
+both andariel 10000 | 1378 8926 0 0.5051 7.2103 | 0 0 0 0.0000 0.0000
+exact x0_0 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exact x1_1 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exact x2_2 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exact x3_3 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exact x4_4 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exact x5_5 2500 | 0 0 0 0.0000 0.0000 | 0 0 0 0.0000 0.0000
+exactred x1_1 1250 | 133 405 0 0.0488 0.1565 | 0 0 0 0.0000 0.0000
+exactred x2_2 1250 | 265 400 0 0.1004 0.3377 | 0 0 0 0.0000 0.0000
+exactred x3_3 1250 | 468 364 0 0.2012 0.4003 | 0 0 0 0.0000 0.0000
+exactred x4_4 1250 | 605 297 0 0.2765 0.3453 | 0 0 0 0.0000 0.0000
+exactred x5_5 1250 | 657 259 0 0.3315 0.3194 | 0 0 0 0.0000 0.0000
+exactred x6_6 1250 | 674 249 0 0.3587 0.3549 | 0 0 0 0.0000 0.0000
+exactred x7_7 1250 | 719 198 0 0.3979 0.3221 | 0 0 0 0.0000 0.0000
+exactred x8_8 1250 | 731 189 0 0.4252 0.2698 | 0 0 0 0.0000 0.0000
+exactred x9_9 1250 | 745 177 0 0.4670 0.2736 | 0 0 0 0.0000 0.0000
+exactred x10_10 1250 | 754 178 0 0.4949 0.2988 | 0 0 0 0.0000 0.0000
+exactred x11_11 1250 | 761 179 0 0.5025 0.2949 | 0 0 0 0.0000 0.0000
+exactred x12_12 1250 | 803 161 0 0.5496 0.2818 | 0 0 0 0.0000 0.0000
+# v3_d2d_base roll: frames 80000 life differ 79857 pool differ 0 seed differ 0 mean|life err| 1.1612 hp mean|pool err| 0.0000 hp
+# v3_d2d_r4 roll: frames 80000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_base reduce: frames 80000 life differ 39451 pool differ 0 seed differ 0 mean|life err| 0.6412 hp mean|pool err| 0.0000 hp
+# v3_d2d_r4 reduce: frames 80000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_base absorb: frames 80000 life differ 27017 pool differ 56202 seed differ 0 mean|life err| 0.3952 hp mean|pool err| 0.8292 hp
+# v3_d2d_r4 absorb: frames 80000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_base both: frames 80000 life differ 6806 pool differ 70054 seed differ 0 mean|life err| 0.1150 hp mean|pool err| 2.0889 hp
+# v3_d2d_r4 both: frames 80000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_base exact: frames 15000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_r4 exact: frames 15000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# v3_d2d_base exactred: frames 15000 life differ 7315 pool differ 3056 seed differ 0 mean|life err| 0.3462 hp mean|pool err| 0.3046 hp
+# v3_d2d_r4 exactred: frames 15000 life differ 0 pool differ 0 seed differ 0 mean|life err| 0.0000 hp mean|pool err| 0.0000 hp
+# worse-than-base v3_d2d_r4 roll: none
+# worse-than-base v3_d2d_r4 reduce: none
+# worse-than-base v3_d2d_r4 absorb: none
+# worse-than-base v3_d2d_r4 both: none
+# worse-than-base v3_d2d_r4 exact: none
+# worse-than-base v3_d2d_r4 exactred: none
+
+## MSVC 19.51 (b18) and the WSL lane
+OK: gate passed Tue 01:20
+finished rc=0 wall=492s
+=== bundle (local/batch2-bundle 60d0404ec) 01:20:43
+parity: tree ~/d2d-lab/wt head 60d0404ec base 3e073888e files 12
+parity: cores 8 (G -j4, C -j4) nice 1 ccache 1 dirs ~/d2d-lab/parity-cache/bundle/{gcc,clang}
+stage      rc      wall_s  note
+guard      0            1  
+g-cfg      0            4  
+g-suites   0           97  
+g-all      0          203  info only: every g++ target, known unrelated failures do not count
+c-cfg      0            4  
+c-suites   0           82  
+run        0            3  
+extra      0           50  
+tidy       0          181  
+TOTAL      0          485  phase A 304s, phase B 181s
+ccache Hits:            393 / 559 (70.30%)
+ccache Misses:          166 / 559 (29.70%)
+logs: ~/d2d-lab/parity-cache/bundle/logs
+msvc base: warning C lines 0; Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36260 for x64 100% tests passed, 0 tests failed out of 70 
+msvc bundle: warning C lines 0; Microsoft (R) C/C++ Optimizing Compiler Version 19.51.36260 for x64 100% tests passed, 0 tests failed out of 72 
