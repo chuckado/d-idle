@@ -124,7 +124,7 @@ func (r *Runner) kitTrip(s *d2.Snapshot) (string, bool) {
 	if !k.TP && k.HP >= k.minHP {
 		price = rt.KitTPGold
 	}
-	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area) || r.wpActive(s)) {
+	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area) || k.HP == 0 && resource.ChainHomeArea(s.Player.Area) || r.wpActive(s)) {
 		return "", false
 	}
 	return "kit: " + strings.Join(miss, ", "), true

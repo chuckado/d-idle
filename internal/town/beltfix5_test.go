@@ -66,3 +66,27 @@ func TestNoWithdrawWhenPotionsOrPurseOrStash(t *testing.T) {
 		}
 	}
 }
+
+// codefix F5: recovery caps the healing potions of a visit by the purse at the trip start; once the withdrawal has
+// lifted the purse to the recovery kit money the cap no longer applies.
+func TestRecoveryFloorLiftedByWithdrawal(t *testing.T) {
+	r, c := withdrawRig(t, 6, 1418, 11, false)
+	r.Env.Tune.Resource.RecoveryManaFloor = 0
+	rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true, Gold: true, PotionFloor: 1})
+	if err != nil || len(c.moves) != 1 {
+		t.Fatalf("%v moves %v", err, c.moves)
+	}
+	if hp, mp := boughtLike(rep, "Healing"), boughtLike(rep, "Mana"); hp <= 1 || mp == 0 {
+		t.Errorf("bought %v after a withdrawal to 850 gold, want more than the floor of 1 and mana", rep.Bought)
+	}
+	// without a stash the floor holds
+	r2 := audit(t, 850, 11, false)
+	r2.Env.Tune.Resource.RecoveryManaFloor = 0
+	rep2, err := r2.T.Chores(context.Background(), town.ChorePlan{Potions: true, PotionFloor: 1})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if hp := boughtLike(rep2, "Healing"); hp > 1 {
+		t.Errorf("recovery without a withdrawal bought %v, want at most 1 healing", rep2.Bought)
+	}
+}
