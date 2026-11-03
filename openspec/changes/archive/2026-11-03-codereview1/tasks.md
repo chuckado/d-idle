@@ -2,7 +2,7 @@
 
 ```yaml
 change: codereview1
-status: in-progress
+status: archived
 agent: codereview1
 branch: agent/codereview1
 worktree: d2lod-wt/codereview1
@@ -13,11 +13,12 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 new warnings; leakcheck -mode fail 0"
-result: "review delivered in docs/research/codereview1.md: 10 findings with smallest fixes (no code changed); offline code reading only, nothing verified live"
+result: "docs only"
 live: "not verified; measurement checklist at the end of the doc"
 credit:
   author: owner
   agents: [Claude Code]
+merge: f9298f0
 ```
 
 - [x] read the BELTFIX..BELTFIX5, HIREFIX diffs and the code they touch
