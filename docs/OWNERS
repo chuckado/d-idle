@@ -117,3 +117,6 @@ docs/research/pal-skill-trace.md  chuckado  palskilltrace
 docs/research/pal-smite-zeal-sacrifice-trace.md  chuckado  palskilltrace
 tools/emu/verify_palskills.py  chuckado  palskilltrace
 openspec/changes/palskilltrace/**  chuckado  palskilltrace
+docs/research/durability-trace.md  chuckado  paldurtrace
+tools/emu/verify_paldur.py  chuckado  paldurtrace
+openspec/changes/paldurtrace/**  chuckado  paldurtrace
