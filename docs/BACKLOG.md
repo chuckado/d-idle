@@ -395,6 +395,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - b2on181: batch 2 rebased onto PR 181 in the private fork (local/batch2-on181); see docs/research/b2-on181.md before the A/B split decision
 - SORCDIFF2: counted differentials for the Sorceress casts the bot uses; mana paid at the action frame reproduced (42,168 of 42,168 cases that began differ on upstream main e1eea02a) plus a new action-frame tick deviation (132 of 401 FCR values), both fixed on private `local/sorc-mana-timing-r2` (0 of 53,628 differ); armor group reproduced (48 of 5,476 pairs) and fixed on `local/sorc-armor-group-r2`; Charged Bolt do 2,400 cases 0 differ; Frozen Armor trigger not built; ready-for-Opus list in the doc
 - GATE1: Gate 1 multi-seed run 20261103-1226-ms1 (seeds 16,17,18,19,20) NOT PASSED (docs/soaks/gate1-multiseed-20261103-1226-ms1.md)
+- NAVEXIT21: Blood Moor kept no town border after an empty probe round; empty tome now buys the first scroll before the kit potions; Gate 1 seed 17 re-run pending (docs/navexit21.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
