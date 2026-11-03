@@ -298,3 +298,24 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/beltfix2-analysis.md: Gate 1 20261103 BELT and NOKILL windows, causes and ranked fix plan
 - docs/research/verify-dmgroll3.md: third verifier report on DMGROLL r3 (2df7d1eb), own differential in verify-dmgroll3-run.txt
 - docs/research/beltfix3.md - what BELTFIX3 changed, tests, what is not verified live
+- docs/research/pr-batch2-body.md: PR title and body for the batch 2 bundle (minmana floor, Teleport, monster damage roll), counts on the bundle head
+- docs/soaks/gate1-index-20261103.md: index of the three Gate 1 runs of 2026-11-02/03 with the records gate1-20261102-1939, gate1-20261102-2210, gate1-20261103-0053
+- docs/research/beltfix4.md: Gate 1 20261103-0053 BELT and XP/h analysis, one recovery fix
+- docs/research/pr-batch2-run.txt: raw results of the batch 2 bundle on upstream main 552acc9a (suites, CI checks, differentials, MSVC 14.51, WSL lane)
+- docs/research/beltfix5.md - Gate 1 20261103-0338 second belt window: where the gold went, the stash defect, belt windows of four runs by gold level
+- docs/research/stashfield.md: the stashGold minute field and the belt window gold report line
+- docs/research/specdelta-rejudge.md: the 2026-11-03 Gate 1 belt and XP rules and the re-judge of the recorded runs
+- docs/research/msvcc2026-trace.md: MSVC C2026 in test_monster_ai (raw strings over 16380 bytes), real latent upstream problem, byte-identical split proven with g++ (branch and MSVC rebuild not done)
+- docs/research/areareach.md: why Dark Wood and Black Marsh were unreachable in Gate 1 run 0628
+- docs/research/covpal-trace.md: Paladin skills, the 15 rows not yet run (aura calcs, calc slots, element damage, Redemption callback, Vengeance): game.exe vs d2d vs bot, deviations D1 D2, bot B1 B2
+- docs/research/verify-batch2.md: independent check of upstream batch 2 (minmana floor, Teleport D1 + D2)
+- docs/research/codefix.md - what changed per review finding, tests, what a Gate 1 re-run should show
+- tools/merge_lines_check.py: merge-lines.txt grammar linter (stdlib, tests in tools/ci/tests).
+- docs/research/xphshort.md: Gate 1 XP/h budget and split, remedies, multi-seed Gate 1 plan; tools/baseline/xph_budget.py
+- docs/research/gate-triage-examples.md: output of tools/baseline/gate_triage.py for the five Gate 1 runs of 2026-11-02/03, checked against the hand findings
+- docs/research/project-review-20261103.md: project review 2026-11-03 (goals, done vs verified, effort by area, evaluation, rewritten goals, plan, proposed ADR/decisions text)
+- docs/adr/0015-goals-acceptance-on-game-exe.md: goals G-A..G-F, acceptance on game.exe; docs/plan/plan-20261103.md: plan; docs/research/card-triage-20261103.md: open card triage
+- docs/research/codereview1.md: code review of the Gate 1 belt fixes (BELTFIX..BELTFIX5, HIREFIX), ranked findings and smallest fixes
+- docs/research/housekeep-20261103.md: read-only inventory of agent worktrees, branches and ops repo leftovers (2026-11-03)
+- docs/research/review-pr180-20261103.md: private review of upstream PR 180 (re-pipeline: Ghidra names, structs.tsv, presubmit GCC and tidy, sorted lists) with consequences for batch 2
+- docs/research/verify-dmgroll2.md: second verifier report on DMGROLL r2 (b9ecb415), own differential in verify-dmgroll2-run.txt
