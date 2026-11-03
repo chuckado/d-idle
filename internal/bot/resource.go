@@ -64,6 +64,12 @@ func (r *Runner) resInput(s *d2.Snapshot) resource.Input {
 			}
 		}
 	}
+	// BELTFIX5: with no healing potion anywhere the town visit withdraws the stash gold for the kit (Town.withdraw), so
+	// every purse test of the policy (poor, futile, trip floor, recovery) sees purse plus bank. Gate 1 20261103-0338:
+	// 6 gold in the pack, 1418 in the stash, 7 virtual minutes without a potion.
+	if in.Belt.HP+in.Belt.RV+in.Belt.PackHP+in.Belt.PackRV == 0 {
+		in.Gold += p.StashGold
+	}
 	return in
 }
 

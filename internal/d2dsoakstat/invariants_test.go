@@ -20,6 +20,8 @@ type logB struct {
 	restarts                     int
 	belt                         string // beltBoxes of the minute lines; "" = the log has no belt fields
 	packHP                       int
+	stash                        int  // stashGold of the minute lines
+	noStash                      bool // omit the field (old archive)
 }
 
 func newLog() *logB {
@@ -59,6 +61,9 @@ func (b *logB) minute(kill bool) {
 		"potionsUsed": 0, "gold": b.gold, "restarts": b.restarts, "rung": 0, "goal": "campaign", "step": "x", "state": "farming", "rstate": "clearing"}
 	if b.belt != "" {
 		kv["beltBoxes"], kv["packHP"] = b.belt, b.packHP
+	}
+	if !b.noStash {
+		kv["stashGold"] = b.stash
 	}
 	b.raw("minute", kv)
 }
@@ -498,5 +503,51 @@ func TestInvariantsGate1PostfixSoak2(t *testing.T) {
 	}
 	if strings.Contains(strings.Join(inv.Violated, ","), InvProgress) {
 		t.Errorf("the 30 minute PROGRESS invariant must still hold: %v", inv.Violated)
+	}
+}
+
+func TestBeltWindowGoldReport(t *testing.T) {
+	for _, tc := range []struct {
+		name    string
+		gold    int
+		stash   int
+		noStash bool
+		tag     string
+		totMax  int
+	}{
+		{"poverty", 6, 10, false, "poverty", 16},
+		{"funded", 6, 1418, false, "funded", 1424},
+		{"old archive", 6, 0, true, "stash unknown", 6},
+	} {
+		b := newLog()
+		b.belt = "0:Minor_Mana_Potion"
+		b.gold, b.stash, b.noStash = tc.gold, tc.stash, tc.noStash
+		b.run(8, true)
+		inv := scan(t, b.text(), ExitInfo{})
+		if len(inv.BeltWindows) != 1 {
+			t.Fatalf("%s: windows %+v", tc.name, inv.BeltWindows)
+		}
+		w := inv.BeltWindows[0]
+		if w.PackMax != tc.gold || w.TotMax != tc.totMax || !strings.HasPrefix(w.Tag(), tc.tag) {
+			t.Errorf("%s: %+v tag %q", tc.name, w, w.Tag())
+		}
+		txt := InvReport{Rows: []InvRow{{Run: "r", Invariants: inv}}}.Text()
+		if !strings.Contains(txt, "belt window 7 min") || !strings.Contains(txt, tc.tag) {
+			t.Errorf("%s: report lacks the window line:\n%s", tc.name, txt)
+		}
+	}
+	b := newLog() // a window of exactly 5 minutes is under the report floor
+	b.belt = "0:Minor_Mana_Potion"
+	b.run(5, true)
+	if inv := scan(t, b.text(), ExitInfo{}); len(inv.BeltWindows) != 0 {
+		t.Errorf("5-minute window reported: %+v", inv.BeltWindows)
+	}
+}
+
+func TestMinuteStashGold(t *testing.T) {
+	ms, _ := ParseMinutes(strings.NewReader(`{"time":"2026-10-31T08:00:00Z","msg":"minute","area":2,"clvl":1,"kills":0,"deaths":0,"gold":6,"stashGold":1418,"restarts":0,"xp":0}` + "\n" +
+		`{"time":"2026-10-31T08:01:00Z","msg":"minute","area":2,"clvl":1,"kills":0,"deaths":0,"gold":6,"restarts":0,"xp":0}` + "\n"))
+	if len(ms) != 2 || ms[0].StashGold != 1418 || !ms[0].HasStash || ms[1].StashGold != 0 || ms[1].HasStash {
+		t.Errorf("%+v", ms)
 	}
 }
