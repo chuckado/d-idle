@@ -25,7 +25,7 @@
 | `tests/shadow_init_cases.inc` | (not in the reported errors) | 2 | max 13396 | 0 |
 
 - Every other `*_cases.inc` in `tests/` (23 files) holds no raw literal and quoted lines of at most 508 bytes (`qmax` column of the script output): the `mon_ais*` files are one quoted line per array element and `test_monster_ai.cpp` line 371 even says "not constexpr: their lengths pass the step limit". So the author knew the compiler limits for those; the two big raw-string files are the only ones in the other style (I).
-- The MSVC error lines (`shadow_master_cases.inc` 20, 36, 51, 80, 96, 111, 203; `pet_ais_cases.inc` 35, 68, 100) lie inside the oversize literals (line 203 is in the third literal of 205 lines; V read of the file). MSVC reports where the 16380th byte of each piece is passed (I; the exact reporting rule is U). The Windows build worker log is the source of these line numbers (S: `docs/venus-build.md` of the private ops repo, "FINDING at the BASE").
+- The MSVC error lines (`shadow_master_cases.inc` 20, 36, 51, 80, 96, 111, 203; `pet_ais_cases.inc` 35, 68, 100) lie inside the oversize literals (line 203 is in the third literal of 205 lines; V read of the file). MSVC reports where the 16380th byte of each piece is passed (I; the exact reporting rule is U). The Windows build worker log is the source of these line numbers (S: the build-parity doc of the private ops repo, "FINDING at the BASE").
 - The total of each literal stays below the 65535-byte limit MSVC applies after concatenation (62345 is the largest), so the split pieces concatenate to the same sizes (I: the 65535 limit is from MSVC documentation as remembered, not re-read here; U that 62345 passes after the split on MSVC 14.44).
 
 **Q3. Is the fix byte-identical?** Yes (V run, `tools/emu/msvcc_split.py`, `tools/emu/msvcc_run.sh`, worker host).
@@ -37,7 +37,7 @@
 
 ## Deviation list (upstream vs MSVC, not game rules)
 
-- **D1. Raw-string literals over 16380 bytes in `tests/pet_ais_cases.inc` and `tests/shadow_master_cases.inc`** (V read + V run for the sizes; the MSVC failure itself is S, the Windows build worker log). Rule on the upstream side: GCC and Clang accept them (the Linux and macOS CI jobs); MSVC does not. Differential: the g++ probe above covers the byte identity of the fix; the failure itself can only be confirmed by an MSVC build (Windows build worker via the ops repo's `tools/venus-parity.sh`, gate permitting): U.
+- **D1. Raw-string literals over 16380 bytes in `tests/pet_ais_cases.inc` and `tests/shadow_master_cases.inc`** (V read + V run for the sizes; the MSVC failure itself is S, the Windows build worker log). Rule on the upstream side: GCC and Clang accept them (the Linux and macOS CI jobs); MSVC does not. Differential: the g++ probe above covers the byte identity of the fix; the failure itself can only be confirmed by an MSVC build (Windows build worker via the ops repo's the parity script, gate permitting): U.
 - **D2. Upstream Windows CI result at 3e073888 is unknown** (U). If it is green, either the CI MSVC treats raw literals differently (e.g. a newer compiler on the image) or the job is not required; if red, upstream already knows. Needed: `gh run list --repo <upstream> --workflow ci.yml` (GET), Windows job log, grep `C2026`.
 
 ## Bot findings
@@ -46,15 +46,15 @@
 
 ## PR candidates
 
-- **No PR candidate yet, nothing posted.** The brief allows an upstream-bound branch only for a real or latent upstream problem (this is one), but the MSVC verification and the throwaway worktree could not be done from this runner (Limits), and the policy here is private forgejo only, no PR. Patch description (for whoever creates `local/batch2-msvc2026` in a throwaway worktree under the lab checkout; numeric noreply identity for author and committer, subject at most 72 characters, body at most 3 lines, last line `Agent: Claude Code`, no co-author lines, private remote only, no force-push):
+- **No PR candidate yet, nothing posted.** The brief allows an upstream-bound branch only for a real or latent upstream problem (this is one), but the MSVC verification and the throwaway worktree could not be done from this runner (Limits), and the policy here is private remote only, no PR. Patch description (for whoever creates `local/batch2-msvc2026` in a throwaway worktree under the lab checkout; numeric noreply identity for author and committer, subject at most 72 characters, body at most 3 lines, last line `Agent: Claude Code`, no co-author lines, private remote only, no force-push):
   - Subject: `tests: split raw string cases under MSVC's 16380-byte limit`
   - Body: `C2026 string too big in test_monster_ai (pet_ais, shadow_master).` / `Adjacent raw literals of at most 12000 bytes; same bytes (probe).` / `Agent: Claude Code`
   - Files: `tests/pet_ais_cases.inc`, `tests/shadow_master_cases.inc` replaced by the output of `tools/emu/msvcc_split.py` (scratch `msvcc/new/`).
-  - Then: `tools/venus-parity.sh --labels "<label>"` from the ops repo (add a job per branch, see `docs/venus-build.md`), expect `test_monster_ai` to build and `warning C` count to stay 0.
+  - Then: the parity script with a label for the branch from the ops repo (add a job per branch, see the build-parity doc), expect `test_monster_ai` to build and `warning C` count to stay 0.
 
 ## Limits and dead ends
 
-- **No MSVC run.** The Windows build worker is reached over ssh; ssh is denied on this runner, so `tools/venus-parity.sh` was not run (and its gate was not bypassed). The claim that MSVC fails is therefore S (the worker's earlier log), not V run here.
+- **No MSVC run.** The Windows build worker is reached over ssh; ssh is denied on this runner, so the parity script was not run (and its gate was not bypassed). The claim that MSVC fails is therefore S (the worker's earlier log), not V run here.
 - **No git on the fork checkout from this runner**: `git -C` through `labrun` is denied and worktrees cannot be created, so the branch `local/batch2-msvc2026` does not exist. The generated files are in the worker scratch only (`/tmp/d2agent-msvcc2026/msvcc/new/`, not kept).
 - **`gh run list` denied**: upstream CI status is U (D2). No CI logs are stored in the lab checkouts (searched the `pr/` and `fork/` output directories for the CI job name: only workflow files).
 - **Dead end**: looking for an MSVC switch instead of a source fix. `/Zc:` has no option for the per-literal limit (I, from memory of the compiler's documented limits); not tried.
@@ -62,7 +62,7 @@
 
 ## Drill recipe (what to run later)
 
-1. Windows build worker (gate allowing): ops repo `tools/venus-parity.sh --check`, then a label for the split branch; expect `tests/monsters/test_monster_ai.cpp.obj` built, 0 `C2026`.
+1. Windows build worker (gate allowing): ops repo the parity script (check mode), then a label for the split branch; expect `tests/monsters/test_monster_ai.cpp.obj` built, 0 `C2026`.
 2. On the worker host: `tools/emu/run-on-worker.sh msvcc_run.sh` regenerates the split and prints the 4-constant comparison (expect `mismatches 0`).
 3. For D2: `gh run list --repo <upstream> --workflow ci.yml --limit 20`, open a Windows job log from a run after `3e073888`, grep `C2026`.
 

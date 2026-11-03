@@ -52,6 +52,12 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		gap := sec(r.cfg.ResupplyCooldownSec)
 		if emergency {
 			gap /= 4
+			if inTown {
+				// A visit in town costs no scroll and lastTrip was stamped by the failed field attempt seconds ago: the
+				// full gap sent the character back out with no potion six times (Gate 1 20261102, BELT A). Only a
+				// short pause keeps a shop that cannot sell from being retried every tick.
+				gap = townShopGap
+			}
 		}
 		if now.Sub(r.getLastTrip()) >= gap {
 			l.trip = &trip{plan: plan, returnTo: fieldArea(p), emergency: emergency}
@@ -303,6 +309,9 @@ func (r *Runner) tripWorthIt(s *d2.Snapshot) bool {
 	return false
 }
 
+// townShopGap is the pause between two shopping rounds in town while the character has no healing potion.
+const townShopGap = 5 * time.Second
+
 // choresDue is the pure part of needChores (the guard calls it from its own goroutine).
 func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) {
 	p := s.Player
@@ -315,7 +324,12 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 	if known && !p.InTown() {
 		trip = r.tripVerdict(s)
 	}
-	broke := r.recoveryActive() && p.Gold < r.e.Tune.Resource.RecoveryKitGold
+	// BELTFIX5: banked gold counts when no healing potion is left; the town visit withdraws it (Town.withdraw)
+	kitGold := p.Gold
+	if healing == 0 {
+		kitGold += p.StashGold
+	}
+	broke := r.recoveryActive() && kitGold < r.e.Tune.Resource.RecoveryKitGold
 	if broke {
 		trip = resource.Trip{} // recovery: a potion trip with an empty purse buys nothing (G1 attempt 9: 90 min of walking)
 	}
@@ -340,10 +354,13 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		if p.InTown() {
 			threshold = t.ResupplyPotions * 2
 		}
-		if healing < threshold && p.Gold >= minPotionPrice && !trip.Futile && !broke {
+		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
+		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
+		// Gate 1 20261103: left Rogue Encampment with 185 gold and 0 potions, 3 virtual minutes outside town unhealed.
+		if healing < threshold && kitGold >= minPotionPrice && !trip.Futile && (!broke || (p.InTown() && healing == 0)) {
 			plan.Potions = true
 			why = append(why, fmt.Sprintf("%d healing potions", healing))
-			emergency = healing == 0 && !p.InTown()
+			emergency = healing == 0
 		}
 		if full >= t.InvFullPct && !r.packFullQuiet() {
 			hard = true

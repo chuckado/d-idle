@@ -401,7 +401,7 @@ func TestHealOnlyTripSuppressedAfterIdleTrips(t *testing.T) {
 }
 
 func TestNearTownArea(t *testing.T) {
-	for area, want := range map[int]bool{2: true, 8: true, 3: true, 1: false, 17: false, 5: false} {
+	for area, want := range map[int]bool{2: true, 8: true, 3: true, 4: true, 5: true, 6: true, 9: true, 10: true, 17: true, 1: false, 7: false, 40: false} {
 		if NearTownArea(area) != want {
 			t.Errorf("area %d: want %v", area, want)
 		}

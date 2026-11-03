@@ -8,6 +8,17 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- specdelta: Gate 1 now excuses belt windows where the character could not afford a potion (pack plus stash gold under 30) and lets a single seed inside the XP tolerance pass with a note
+- stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
+- Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
+- b2rebase: batch 2 bundle rebased onto upstream main 552acc9a, PR body and run record refreshed; nothing pushed upstream
+- beltfix4: a character in recovery mode with no healing potion and gold for one now shops on arrival in town instead of walking back out
+- docs: restore the three Gate 1 soak records of 2026-11-02/03 under unique run-id names, add an index (docs/soaks/gate1-index-20261103.md).
+- b2bundle: batch 2 bundle branch on upstream main and its PR body (docs/research/pr-batch2-body.md); nothing pushed upstream
+- Bot: a character in town with no healing potion now shops at once, can walk home from the act 1 fields without scroll or waypoint, no longer burns charges on a cut portal cast, and retries the town portal once on the way back.
+- verifydmg3: third verification of the monster damage roll r3 (tools/emu/w3_*, docs/research/verify-dmgroll3.md)
+- beltfix2: analysis of the Gate 1 20261103 belt and no-kill failures with a ranked fix plan (docs)
+- hirefix: the bot now sees a dead merc after its corpse is gone, maps all four hireling codes, and reads the revive price before paying
 - HIREREADER: design and trace of the d2d merc reader (docs/research/hirereader-*.md) plus a purse differential of game.exe FUN_00576d90 and the revive chain against d2d's rules::hire and resurrect_merc, 200,000 cases, 0 differ (tools/emu/hrd_*); five bot findings, no PR candidate; offline, nothing run live
 - BOTAB: docs/research/botab-20261102.md and botab-trace.md compare d2d and game.exe at bot level from committed minute lines (tools/baseline/botab_extract.py, botab_run.py on ab_compare); no verdict is EQUIVALENT, kills per hour of d2d is lower than game.exe (offline, no game run)
 - beltfix: a poor character without a portal scroll and without healing potions now walks home for a potion instead of staying in the field (Gate 1 BELT failure)

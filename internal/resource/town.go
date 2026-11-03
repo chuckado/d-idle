@@ -12,10 +12,12 @@ const (
 func (m TripMethod) String() string { return [...]string{"none", "portal", "walk"}[m] }
 
 // walkableHome are the act 1 fields from which ToTown can walk back without a scroll: Blood Moor (next to the camp),
-// the Den of Evil (a dead end off Blood Moor) and Cold Plains (waypoint, or via Blood Moor); town.walkToTown handles
-// exactly these hops. V live for Blood Moor; the Den and Cold Plains hops are U (found offline 2026-10-29: a poor
-// clvl 4 Soaky fought 25 minutes in the Den because the policy thought town was too far).
-var walkableHome = map[int]bool{2: true, 8: true, 3: true}
+// the Den of Evil (a dead end off Blood Moor) and Cold Plains (waypoint, or via Blood Moor), and since BELTFIX3 every
+// field of the quest route (Stony Field, Dark Wood, Black Marsh, Burial Grounds, the caves), which town.walkToTown
+// reaches by walking the level chain. V live for Blood Moor and for the chain in the opposite direction (BackToField);
+// U for the walk home from each of the others (found offline 2026-10-29: a poor clvl 4 Soaky fought 25 minutes in the
+// Den; Gate 1 20261102: 37 virtual minutes without potions in Dark Wood).
+var walkableHome = map[int]bool{2: true, 8: true, 3: true, 4: true, 5: true, 6: true, 9: true, 10: true, 17: true}
 
 // NearTownArea reports whether a character without a scroll can still walk home from area (Input.NearTown).
 func NearTownArea(area int) bool { return walkableHome[area] }
