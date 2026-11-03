@@ -321,3 +321,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-dmgroll2.md: second verifier report on DMGROLL r2 (b9ecb415), own differential in verify-dmgroll2-run.txt
 - docs/research/verify-dmgroll4.md: fourth verifier report on DMGROLL r4 (9ea2afe9), own differential in verify-dmgroll4-run.txt
 - docs/research/pr-upstream-rules-20261103.md: upstream AGENTS.md / CONTRIBUTING / PR template rules after commit 549da358 as they apply to a code batch (one subsystem, commit rule, Claims table, presubmit, CodeRabbit)
+- docs/research/b2-winworker-rerun.md: batch 2 r3 on the Windows build worker (MSVC 14.51 warnings and ctest, WSL stages, damage-roll sets, Teleport seed 9)
