@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- e9eed0d2 11-03 00:41 `merge origin/main into beltfix3` (beltfix3)
 - 42e9e2f8 11-03 00:36 `Merge agent/verifydmg3: verifydmg3: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (verifydmg3)
 - 80a64736 11-03 00:35 `merge origin/main into verifydmg3` (verifydmg3)
 - 0121d34b 11-03 00:32 `Merge agent/beltfix2: beltfix2: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (beltfix2)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
 - d0c90501 11-02 23:17 `merge origin/main into hirereader` (hirereader)
 - c5e6c03c 11-02 23:10 `Merge agent/botab: botab: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (botab)
-- 2d196e9b 11-02 22:01 `Merge agent/beltfix: BELTFIX: kit trip priced at one potion when healing is missing and counted as an emergency, mana potions capped when poor, waypoint counts as a way home (Gate 1 belt window of 12 virtual minutes; offline tests, live waypoint trip unverified)` (beltfix)
 <!-- statusgen:end -->
