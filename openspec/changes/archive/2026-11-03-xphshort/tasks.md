@@ -2,7 +2,7 @@
 
 ```yaml
 change: xphshort
-status: in-progress
+status: archived
 agent: xphshort
 branch: agent/xphshort
 worktree: d2lod-wt/xphshort
@@ -14,11 +14,12 @@ owns:
   - openspec/changes/xphshort/**
 exclusive: []
 gates: python3 tools/baseline/tests/test_xph_budget.py; changecheck 0 new warnings; leakcheck 0 hits
-result: "analysis from the recorded minute archives and read-only greps of the worker host run logs; not verified live (no game, no build, no host load); causes are log-text inferences"
+result: "python tests pass; docs and tooling only"
 credit:
   author: owner
   agents: [Claude Code]
   consent: none
+merge: e1c4f73
 ```
 
 - [x] 1. xph_budget.py (budget per band, decomposition, horizon) and fixture test

@@ -63,7 +63,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
-| [xphshort](../../openspec/changes/xphshort/) | in-progress | xphshort | `docs/research/xphshort.md`<br>`tools/baseline/xph_budget.py`<br>`tools/baseline/tests/test_xph_budget.py`<br>`openspec/changes/xphshort/**` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -126,9 +125,9 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
-- change xphshort: python3 tools/baseline/tests/test_xph_budget.py; changecheck 0 new warnings; leakcheck 0 hits
 
 ### Recent merges
+- e1c4f73a 11-03 10:08 `Merge agent/xphshort: XPHSHORT: why true XP/h fell across the five Gate 1 runs: area choice at clvl 13+, horizon bias, multi-seed plan; xph_budget.py with tests` (xphshort)
 - 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
 - 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
 - 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ea55a8ff 11-03 09:39 `merge origin/main into codefix` (codefix)
 - 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
 - 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
-- cc21b3f0 11-03 09:34 `merge origin/main into codefix` (codefix)
 <!-- statusgen:end -->
