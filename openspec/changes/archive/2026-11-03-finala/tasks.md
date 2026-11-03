@@ -2,7 +2,7 @@
 
 ```yaml
 change: finala
-status: in-progress
+status: archived
 agent: finala
 branch: agent/finala
 worktree: d2lod-wt/finala
@@ -26,7 +26,7 @@ credit:
   agents: [Claude Code]
   consent: none
 result: "private fork branches local/guardfix-3 (93851bef) and local/batch2-A-r9 (57d7c39b) on upstream main 9785632c, pushed to the private and public fork; verified on the Windows build worker (not a live game); PR texts drafted, nothing posted"
-merge:
+merge: 0ba9a03
 ```
 
 ## 1. Work

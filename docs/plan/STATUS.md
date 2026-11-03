@@ -47,7 +47,6 @@
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
-| [finala](../../openspec/changes/finala/) | in-progress | finala | `openspec/changes/finala/**`<br>`docs/research/pr-guardfix-body.md`<br>`docs/research/pr-batch2-A-final-body.md` | `fork-branch:local/guardfix-3`<br>`fork-branch:local/batch2-A-r9` |
 | [fixbelt](../../openspec/changes/fixbelt/) | in-progress | fixbelt | `docs/fixbelt.md`<br>`internal/resource/recovery.go`<br>`internal/resource/recovery_test.go`<br>`internal/bot/broke.go`<br>`internal/bot/area_ban_test.go`<br>`openspec/changes/fixbelt/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go` | - |
 | [fixmanamodel](../../openspec/changes/fixmanamodel/) | in-progress | fixmanamodel | `docs/fixmanamodel.md`<br>`internal/resource/manamodel.go`<br>`internal/resource/manamodel_test.go` | - |
@@ -93,8 +92,6 @@
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
-- change finala: changecheck 0 new warnings; leakcheck -mode fail 0; merge_lines_check ok
-- change finala: fixed pr_guard 0 FAIL on local/batch2-A-r9 and on local/guardfix-3; the new add-and-cite test fails on upstream's guard
 - change fixbelt: go test -p 1 internal/resource internal/bot; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
 - change fixcastgap: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
@@ -126,14 +123,14 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- 0ba9a03c 11-03 14:13 `Merge agent/finala: merge origin/main into finala` (finala)
+- cdb7a79b 11-03 14:12 `merge origin/main into finala` (finala)
+- a1401fd3 11-03 13:45 `Merge agent/navexit22: navexit22: border gate frames (seed 17 Blood Moor to camp), recorded replay fixture, card` (navexit22)
+- a7a493b3 11-03 13:26 `Merge agent/reviewbatch2c: reviewbatch2c: independent Opus review of batch C (head 4ed8b651)` (reviewbatch2c)
+- 99328d5c 11-03 13:13 `Merge agent/cport: merge origin/main into cport` (cport)
+- 23e68453 11-03 13:13 `merge origin/main into cport` (cport)
+- bf29e35d 11-03 12:37 `Merge agent/navexit21: merge origin/main into navexit21` (navexit21)
+- e149fb2b 11-03 12:37 `merge origin/main into navexit21` (navexit21)
+- a2dfd7ee 11-03 12:32 `Merge agent/gate1multi-20261103-1226-ms1: merge origin/main into gate1multi-20261103-1226-ms1` (gate1multi-20261103-1226-ms1)
 - d5a82b56 11-03 11:45 `Merge agent/sorcdiff2: SORCDIFF2: counted differentials for the casts the bot makes: mana paid at the command vs the action frame (53,628 cases, all 42,168 started cases differ), cut casts paid by d2d but not game.exe (21,084), action frame one tick early at 132 of 401 FCR values, armor group (48 of 5,476 pairs), Charged Bolt do function equal (2,400); private fix branches` (sorcdiff2)
-- fe0271ce 11-03 11:44 `merge origin/main into sorcdiff2` (sorcdiff2)
-- 27e5f2b4 11-03 11:41 `Merge agent/b2on181: B2ON181: batch 2 on the maintainer's open PR 181 (one textual conflict, monster_blow merges cleanly, pr_guard now needs the two oracle scripts in the tree); parity partial, differentials not run` (b2on181)
-- 1e88e0bb 11-03 11:41 `merge origin/main into b2on181` (b2on181)
-- bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
-- 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
-- d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
-- cffbe1e7 11-03 11:34 `merge origin/main into gate3prep` (gate3prep)
-- eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
-- 8d4880a3 11-03 11:27 `merge origin/main into oracleport` (oracleport)
 <!-- statusgen:end -->
