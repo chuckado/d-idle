@@ -2,7 +2,7 @@
 
 ```yaml
 change: gate3prep
-status: in-progress
+status: archived
 agent: gate3prep
 branch: agent/gate3prep
 worktree: d2lod-wt/gate3prep
@@ -13,12 +13,13 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Doc written from specs, ops docs and the judge source; not verified live (docs only)."
+result: "docs only"
 live: "not verified"
 credit:
   component: GATE3PREP
   author: owner
   agents: [Claude Code]
+merge: d61c680
 ```
 
 - [x] Gate 2 watch checklist
