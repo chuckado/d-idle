@@ -62,6 +62,7 @@
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
+| [verifydmg4](../../openspec/changes/verifydmg4/) | in-progress | verifydmg4 | `openspec/changes/verifydmg4/**`<br>`docs/research/verify-dmgroll4.md`<br>`docs/research/verify-dmgroll4-run.txt`<br>`tools/emu/v4_*` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -119,16 +120,18 @@
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
+- change verifydmg4: own differential through the real Fight::absorb: r4 against game.exe's roll and the game-order model, own seed, every set; never worse than base
+- change verifydmg4: changecheck 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
-- 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
-- fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
-- 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
-- 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
-- 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
-- f9298f08 11-03 10:28 `Merge agent/codereview1: CODEREVIEW1: Opus code review of the Gate 1 belt fixes (F1-F10)` (codereview1)
-- 4ce28b17 11-03 10:27 `merge origin/main into codereview1` (codereview1)
-- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
-- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
+- 7a52b7e1 11-03 00:42 `Merge agent/beltfix3: BELTFIX3: shop on every town arrival with no healing potions (5 s gap), walk the level chain home from act 1 fields, do not burn portal charges on a cut cast, retry the return portal; replay of the Gate 1 belt window; offline tests, nothing verified live` (beltfix3)
+- e9eed0d2 11-03 00:41 `merge origin/main into beltfix3` (beltfix3)
+- 42e9e2f8 11-03 00:36 `Merge agent/verifydmg3: verifydmg3: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (verifydmg3)
+- 80a64736 11-03 00:35 `merge origin/main into verifydmg3` (verifydmg3)
+- 0121d34b 11-03 00:32 `Merge agent/beltfix2: beltfix2: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (beltfix2)
+- e27b9616 11-03 00:32 `merge origin/main into beltfix2` (beltfix2)
+- 94b7a627 11-03 00:24 `Merge agent/hirefix: HIREFIX: merc observation on d2d (dead merc visible, GU/IW/0A hireling ids mapped, revive quote parsed, judge matches the bot's hire line) so Gate 2 can confirm hire, alive-and-following and revive; offline tests only, not run live` (hirefix)
+- 71b25a3f 11-03 00:24 `merge origin/main into hirefix` (hirefix)
+- 3f3db381 11-02 23:17 `Merge agent/hirereader: hirereader: offline result (docs and read-only tools; msvcc2026 conclusion is superseded: upstream Windows CI is green, see the VENUSALIGN follow-up)` (hirereader)
+- d0c90501 11-02 23:17 `merge origin/main into hirereader` (hirereader)
 <!-- statusgen:end -->
