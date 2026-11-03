@@ -34,6 +34,8 @@ def blocks(path):
 def main():
     game, d2d = blocks(sys.argv[1]), blocks(sys.argv[2])
     stat = dict(seeds=0, rooms=0, rooms_same_count=0, units=0, units_boss=0, class_eq=0, start_eq=0, end_eq=0, end_step1=0, end_step2=0, end_other=0)
+    stat["other_high_not_666"] = 0
+    other_class = {}
     shown = 0
     for seed in sorted(game):
         if seed not in d2d: continue
@@ -62,10 +64,13 @@ def main():
                 elif gend == s2: stat["end_step2"] += 1
                 else:
                     stat["end_other"] += 1
+                    other_class[gm.group(1)] = other_class.get(gm.group(1), 0) + 1
+                    if int(gm.group(3), 16) != 666: stat["other_high_not_666"] += 1
                     if shown < 4:
                         shown += 1
                         print(f"  e.g. seed {seed} room {room}: game {g} | d2d {d}")
     for k, v in stat.items(): print(f"{k} {v}")
+    print("classes of the other units:", dict(sorted(other_class.items(), key=lambda kv: -kv[1])))
 
 
 main()
