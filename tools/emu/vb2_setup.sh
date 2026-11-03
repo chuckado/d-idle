@@ -19,7 +19,7 @@ for b in mm tp; do
   git -C "$V/src" diff 3e073888 $b > "$S/diff_$b.txt"
   git -C "$V/src" log -p --stat --format='=== %h %s' 3e073888..$b > "$S/patches_$b.txt"
 done
-git -C "$V/src" ls-remote "$F" 2>/dev/null | grep -E 'batch2|forgejo' || true
+git -C "$V/src" ls-remote "$F" 2>/dev/null | grep -E 'batch2' || true
 git -C "$F" branch -r --contains 82f8d3e4 2>/dev/null || true
 git -C "$F" branch -r --contains d2572d6c 2>/dev/null || true
 wc -l "$S"/diff_*.txt
