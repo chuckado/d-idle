@@ -71,7 +71,9 @@
 
 ## 3. Verification & Formula Checks
 
-> **Note on Case Separation:** The 8,640 elemental cases in `pal-skill-trace.md` represent an emulator vs. d2d differential. The 120,000 cases below are a dedicated formula verification of the decompiled `game.exe` 1.14d arithmetic implemented in `tools/emu/verify_palskills.py` (seed `0x50414c53`) against independent mathematical calculations.
+> **Note on Case Separation:**
+> - **8,640-Case Elemental Differential (V run):** In [`pal-skill-trace.md`](pal-skill-trace.md#7-differentials-v-run-the-worker-host-nice-one-process-at-a-time), the 8,640 elemental cases represent an emulator vs. d2d differential comparing native `game.exe` 1.14d (`pal_dmg.py gen, game`, calling `FUN_00644d50` / `FUN_00644e40` / `FUN_00644f20`) line-for-line against d2d commit `72132b99` (`pal_test --skill-damage`, testing `elem_damage` / `elem_length`). The input space is an exhaustive Cartesian product grid: 6 skills (Holy Bolt, Blessed Hammer, Holy Fire, Holy Freeze, Holy Shock, Fist of the Heavens) x 40 skill levels (1..40) x 6 synergy point tiers (0, 1, 5, 10, 20, 30) x 3 character levels (clvl 1, 30, 99) x 2 synergy patterns = 8,640 cases. This matrix has **no random seed** (exhaustive evaluation) and captured **0 differ**.
+> - **120,000-Case Melee Formula Verification (V run):** In contrast, the 120,000 cases below are a dedicated formula verification of the decompiled `game.exe` 1.14d arithmetic implemented in `tools/emu/verify_palskills.py` against independent mathematical calculations. This test suite asserts formulas for Zeal, Smite, and Sacrifice across 120,000 randomized cases generated with PRNG seed `0x50414c53` (in addition to exhaustive deterministic evaluation of skill levels 1..60), capturing **0 mismatches**.
 
 ### 3.1 Executable Verification Command & Captured Output
 
