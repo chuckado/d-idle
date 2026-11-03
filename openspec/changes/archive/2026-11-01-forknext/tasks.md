@@ -2,7 +2,8 @@
 
 ```yaml
 change: forknext
-status: in-progress
+status: archived
+merge: 25274844
 agent: forknext
 branch: agent/forknext
 worktree: ~/code/d2lod-wt/forknext
