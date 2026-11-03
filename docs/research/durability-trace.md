@@ -4,7 +4,8 @@
 > **Author:** Chuck (@chuckado) with Claude / Antigravity
 > Every factual claim is tagged:
 > - `V read` — verified by reading the 1.14d `Game.exe` binary (`SHA256 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf`, image base `0x00400000`) or `Patch_D2.mpq` (`SHA256 082f6bbd8edb2bee6efdc9eb7de9ae4bdbe4ddca9dbc8f7ba6fd5fbf3a36d2eb`)
-> - `V read + self-check` — verified by static disassembly and executing original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness against an independent Python oracle (`100,000` test cases, `0` mismatches, `tools/emu/verify_paldur.py` with seed `0x50414c44`)
+> - `V read + self-check` — verified by static disassembly and executing original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness compared against an independent Python oracle (not against a real `d2d` build; `100,002` test cases, `0` mismatches, `tools/emu/verify_paldur.py` with seed `0x50414c44`)
+> - `V run` — verified by executing 1.14d `Game.exe` and comparing line-for-line with a real `d2d` build (reserved for real differentials; not run here)
 > - `D` — arithmetic deduction from verified formulas or tables
 > - `S` — secondary source: `d2d` (`d2decomped`) source at commit `6935cf6` or `d-idle` repository code/docs
 > - `I` — inference
@@ -238,17 +239,17 @@ When the `4%` or `10%` roll succeeds in `FUN_00559e30`, it reads `cur_dur = FUN_
 
 ---
 
-## 7. Unicorn Verification (`V read + self-check`, `100,000` Cases, `0` Mismatches)
+## 7. Unicorn Verification (`V read + self-check`, `100,002` Cases, `0` Mismatches)
 
-We executed `FUN_00629930`, `FUN_00559e30`, `FUN_00580380`, `FUN_0057d3d0`, `FUN_00535bc0`, and `FUN_0057d4f0` natively inside the Unicorn x86 harness booted on `Game.exe` 1.14d and `Patch_D2.mpq` (`seed = 0x50414c44`, `100,000` total cases across 4 suites, `14.08s` runtime, **`0` mismatches**):
+We executed `FUN_00629930`, `FUN_00559e30`, `FUN_00580380`, `FUN_0057d3d0`, `FUN_00535bc0`, and `FUN_0057d4f0` natively inside the Unicorn x86 harness booted on `Game.exe` 1.14d and `Patch_D2.mpq` (`seed = 0x50414c44`, `100,002` total cases across 4 suites, `14.08s` runtime, **`0` mismatches**):
 
 | Suite | `Game.exe` Functions Executed (`V read + self-check`) | Cases | Scenarios Verified | Mismatches |
 | :--- | :--- | :---: | :--- | :---: |
 | **Suite 1** | `FUN_00629930` (`item_has_durability`) | `10,000` | All `659` `Items.txt` rows (`202` `"armo"`, `227` melee `"weap"`, `30` throwable `"weap"`, `49` no-durability `"weap"`, `151` misc) across `max_durability in {0, 1, base, 25, 255}` and `stat 152 (item_indesctructible) in {-1, 0, 1, 5}` | **`0`** |
 | **Suite 2** | `FUN_00559e30` (`wear_single_item`) + `FUN_00580380` (`break_zero_dur_weapons`) | `30,000` | Melee weapons (`4%`), armor/shields (`10%`), throwable weapons in melee in Expansion (`10%`) vs Classic (`0%` early exit before RNG step), bows/Phase Blades (`0%`), indestructible (`0%`), `dur > 1 -> min(dur - 1, maxdur)`, `dur == 1` immediate armor break (`flag 0x100`), `dur == 1` stackable `qty > 1 -> (qty - 1, dur = maxdur)` vs `qty == 1 -> FUN_00580310`, and `dur == 1` non-stackable weapon deferred break (`stat 72 = 0` in `FUN_00559e30`, then `flag 0x100` in `FUN_00580380`) | **`0`** |
-| **Suite 3** | `FUN_0057d3d0` (`wear_attacker_and_defender`) | `50,000` | Player vs monster attacker/defender, randomized subsets of the 7 body slots `[1, 3, 4, 5, 8, 9, 10]` with weapons vs shields in slots `4`/`5`, exact 2-step defender RNG slot choice (`start_idx = rand(7)`, `pick = rand(total_weight)`), 3rd RNG step `10%` armor wear, and `16,500`-trial empirical 6-piece frequency check (`slot 1: 0.1671 vs 0.1667`, `slot 3: 0.2798 vs 0.2778`, `slot 5: 0.2230 vs 0.2222`, `slot 8: 0.1122 vs 0.1111`, `slot 9: 0.1096 vs 0.1111`, `slot 10: 0.1084 vs 0.1111`) | **`0`** |
-| **Suite 4** | `FUN_00535bc0` (`attacker_active_weapon`) + `FUN_0057d4f0` (`process_hit_record`) | `10,000` | `5,000` cases of Paladin (`class 3`), Barbarian (`class 4`), and Assassin (`class 6`) across all 5 `Skills.txt` `weapsel` values (`0, 1, 2, 3, 4`), `[skill + 0x0c] & 0x2000`, and `[player + 0x38] & 0x100`; plus `5,000` cases of `FUN_0057d4f0` comparing landed hits (`result_flags = 0x01` -> wears weapon & armor) against blocked hits (`result_flags = 0x10`, bit `0` cleared -> `0` wear) | **`0`** |
-| **Total** | All 6 combat durability routines | **`100,000`** | Full oracle parity on durability, quantity, `0x100` broken flag, and unit RNG state | **`0`** |
+| **Suite 3** | `FUN_0057d3d0` (`wear_attacker_and_defender`) | `50,000` | Player vs monster attacker/defender, randomized subsets of the 7 body slots `[1, 3, 4, 5, 8, 9, 10]` with weapons vs shields in slots `4`/`5`, exact 2-step defender RNG slot choice (`start_idx = rand(7)`, `pick = rand(total_weight)`), 3rd RNG step `10%` armor wear, and `16,500`-trial oracle-derived 6-piece frequency check (`D`, `slot 1: 0.1671 vs 0.1667`, `slot 3: 0.2798 vs 0.2778`, `slot 5: 0.2230 vs 0.2222`, `slot 8: 0.1122 vs 0.1111`, `slot 9: 0.1096 vs 0.1111`, `slot 10: 0.1084 vs 0.1111`) | **`0`** |
+| **Suite 4** | `FUN_00535bc0` (`attacker_active_weapon`) + `FUN_0057d4f0` (`process_hit_record`) | `10,002` | `5,000` cases of Paladin (`class 3`), Barbarian (`class 4`), and Assassin (`class 6`) across all 5 `Skills.txt` `weapsel` values (`0, 1, 2, 3, 4`), `[skill + 0x0c] & 0x2000`, and `[player + 0x38] & 0x100`; plus `2` zero-seed blocked-versus-landed checks (`result_flags = 0x10` vs `0x01`) and `5,000` seeded landed-hit checks using seeded attacker/defender values against Suite 2's RNG oracle | **`0`** |
+| **Total** | All 6 combat durability routines | **`100,002`** | Full oracle parity on durability, quantity, `0x100` broken flag, and unit RNG state | **`0`** |
 
 ---
 
@@ -280,23 +281,23 @@ Contrary to the open question in `docs/community/open-work.md` (*"it has `debug 
 | **`B2`** | `internal/town/chores.go:416-435` (`needsRepair`) & `internal/env/tuning_town.go:35` | `needsRepair` triggers a smith visit when any equipped item has `(flags & 0x100) != 0` (`broken`) or `MaxDurability > 0 && Durability * 100 / MaxDurability <= RepairDurabilityPct` (default `25%`), skipping `Ethereal` items (`chores.go:420`). | Matches 1.14d (`FUN_005761c0` skips ethereal `0x400000`, repairs `stat 72 < max_dur`, and clears `0x100` via `FUN_0055f900`). Note that in `d2d`, because of `D2`, a weapon worn to `0` durability by combat hits has `Durability == 0` (`0% <= 25%`) even though `(flags & 0x100) == 0`, so `needsRepair`'s percentage check (`<= 25%`) catches it even when `broken` (`0x100`) is missing! |
 | **`B3`** | `internal/town/chores.go:416-435` (`needsRepair` indestructible check) | `needsRepair` checks `it.Ethereal` and `it.MaxDurability <= 0`, without checking `stat 152` (`item_indesctructible`) if `MaxDurability > 0`. | In 1.14d (`FUN_00629930`), an item with `stat 152 > 0` (`item_indesctructible`, e.g. Zod-socketed or unique with `indestructible` property that still has a nonzero base `MaxDurability`) never loses durability (`stat 72` stays at `MaxDurability`), so `Durability * 100 / MaxDurability == 100% > 25%` and it will not false-trigger `needsRepair` unless spawned damaged. |
 | **`B4`** | `docs/forkdbg.md:62` & `docs/forkcheats.md:60` (`debug wear` verb) | Documents `debug wear [slot] [durability]` as setting durability (`0` sets broken `0x100`) for town repair drills. | Because of `D2` in `d2d`, `debug wear <weapon_slot> 0` sets `item.flags \|= 0x100u`, whereas natural combat wear to `0` in `d2d` leaves `item.flags & 0x100u == 0`. |
-| **`B5`** | Paladin Zealot / Smiter repair cadence (`docs/research/paladin-act1-recon.md`) | Notes fast-attacking melee builds (Zeal) face weapon durability pressure. | At `4%` (`1/25`) per landed melee hit, a weapon with `24` max durability (e.g., Scepter `scp` `24`, War Scepter `wsp` `70`, Flail `fla` `30`) loses `1` durability every `25` landed hits (`~450` landed hits to reach the `25%` repair threshold of `6/24` on a Scepter). |
+| **`B5`** | Paladin Zealot / Smiter repair cadence (`docs/research/paladin-act1-recon.md`) | Notes fast-attacking melee builds (Zeal) face weapon durability pressure. | At `4%` (averaging `1/25`, `D`) per landed melee hit, a weapon with `24` max durability (e.g., Scepter `scp` `24`, War Scepter `wsp` `70`, Flail `fla` `30`) loses durability averaging `1` point per `25` landed hits (an expected `~450` landed hits for `18` losses to reach the `25%` repair threshold of `6/24` on a Scepter, `D`). |
 
 ---
 
 ## 9. Maintainer Live Verification Recipe & Unverified (`U`) Limits
 
-### 9.1 Live `d2d` Probe Recipe (for Maintainers with Lab Access)
+### 9.1 Proposed Live `d2d` Probe Recipe (for Maintainers with Lab Access, `U`)
 
-Maintainers can confirm `D1` (monster missiles wearing player armor) and `D2` (weapon at `0` durability missing `0x100`) in a live `d2d` instance using the existing `debug` socket without modifying game memory:
-1. **Confirm `D2` (`weapon at 0 durability`):**
+The following steps represent proposed maintainer live verification recipes (`U`, not executed offline) to observe deviations `D1` and `D2` in a live `d2d` instance via the `debug` socket without modifying game memory:
+1. **Proposed Probe for `D2` (`weapon at 0 durability missing 0x100`, `U`):**
    - Set the player's melee weapon to `1` durability via `debug wear 4 1` (or `rarm`).
-   - Melee-attack a monster until the weapon's durability drops from `1` to `0` (`~25` landed hits at `4%`).
-   - Inspect the equipped weapon's `durability` and `flags`: `durability` is `0`, while `(flags & 0x100)` remains `0` (`broken == false`).
-2. **Confirm `D1` (`monster missiles wearing armor`):**
+   - Melee-attack a monster until the weapon's durability drops from `1` to `0` (averaging `~25` landed hits at `4%`, `D`).
+   - Expected live observation on `d2d` (`S`, unverified/expected from `missiles.cpp:141-146, 238`): inspect equipped weapon's `durability` and `flags`; `durability` drops to `0`, while `(flags & 0x100)` remains `0` (`broken == false`).
+2. **Proposed Probe for `D1` (`monster missiles wearing armor`, `U`):**
    - Stand against a ranged-only monster (e.g., Quill Rat or Skeleton Archer) and let monster missiles hit the player without any melee contact.
-   - Observe equipped armor durability decrementing (`10%` per tick in which at least one missile hits).
+   - Expected live observation on `d2d` (`S`, unverified/expected from `tick.cpp:589` and `ai.hpp:797`): equipped armor durability decrements (`10%` wear roll, `D`, per tick in which at least one missile lands).
 
 ### 9.2 Unverified (`U`) Limits
 
-- **`U` (Live 1.14d Battle.net / single-player process capture):** All 1.14d results in this document are verified by static disassembly (`V read`) and native execution of the original 1.14d `Game.exe` functions in Unicorn across `100,000` cases (`V read + self-check`), not by attaching a live debugger to a running Windows `Game.exe` window.
+- **`U` (Live 1.14d Battle.net / single-player process capture):** All 1.14d results in this document are verified by static disassembly (`V read`) and native execution of the original 1.14d `Game.exe` functions in Unicorn across `100,002` cases (`V read + self-check`), not by attaching a live debugger to a running Windows `Game.exe` window.

@@ -1,3 +1,9 @@
+"""One-shot verification harness for 1.14d combat durability loss (PALDUR).
+
+Executes original Game.exe functions in the Unicorn x86 emulator against an
+independent Python oracle across 100,002 cases (seed 0x50414c44). This script
+is a one-shot verification harness and has no separate test target.
+"""
 import random
 import struct
 import sys
@@ -39,7 +45,7 @@ def rand_range(seed_lo, seed_hi, n):
 
 
 def main():
-    """Execute 100,000 verification cases across 4 suites against native 1.14d Game.exe."""
+    """Execute 100,002 verification cases across 4 suites against native 1.14d Game.exe."""
     t0 = time.time()
     e = skill_tips.boot()
     rnd = random.Random(0x50414C44)
@@ -461,7 +467,7 @@ def main():
 
     print(f"Suite 3 (FUN_0057d3d0 slot choice & wear): 50,000 cases, mismatches={mismatches}")
     if all_six_trials > 0:
-        print(f"  Empirical 6-piece armor slot frequencies over {all_six_trials} trials (weights 3:5:4:2:2:2 / 18):")
+        print(f"  Oracle-derived 6-piece armor slot frequencies over {all_six_trials} trials (weights 3:5:4:2:2:2 / 18):")
         for slot, weight in SLOT_WEIGHTS:
             if slot == 4:
                 continue
@@ -469,7 +475,7 @@ def main():
             print(f"    slot {slot:2d} (weight {weight}): {cnt:5d} / {all_six_trials} = {cnt/all_six_trials:.4f} (exact {weight/18:.4f})")
 
     # =========================================================================
-    # SUITE 4: FUN_00535bc0 (dual-wield weapsel) & FUN_0057d4f0 (block vs hit) — 10,000 cases
+    # SUITE 4: FUN_00535bc0 (dual-wield weapsel) & FUN_0057d4f0 (block vs hit) — 10,002 cases
     # =========================================================================
     # Test dual-wielding Barbarian/Assassin weapon selection in FUN_00535bc0 (5,000 cases)
     skill_obj = e.alloc(0x80)
@@ -562,8 +568,8 @@ def main():
     e.w32(att_slots + 4 * 4, w_right)
     e.w32(att_inv + 0x1C, e.r32(w_right + 0x0C))
 
-    for i in range(5000):
-        blocked = (i % 2 == 1)
+    # 1. Zero-seed blocked-versus-landed check (2 distinct result_flags inputs: 0x10 vs 0x01)
+    for blocked in (True, False):
         # When blocked, FUN_0057ec10 sets result_flags = (0x01 & 0xfffe) | 0x10 = 0x10
         result_flags = 0x10 if blocked else 0x01
         e.mu.mem_write(hit_node, b"\x00" * 0x90)
@@ -601,10 +607,73 @@ def main():
         if got_w_dur != exp_w_dur or got_a_dur != exp_a_dur:
             mismatches += 1
             if mismatches <= 5:
-                print(f"[S4-hit mismatch] case={i} blocked={blocked} got={(got_w_dur, got_a_dur)} exp={(exp_w_dur, exp_a_dur)}")
+                print(f"[S4-hit mismatch] blocked={blocked} got={(got_w_dur, got_a_dur)} exp={(exp_w_dur, exp_a_dur)}")
+
+    # 2. Seeded landed-hit check (5,000 cases, result_flags = 0x01) deriving expected wear from Suite 2 RNG oracle
+    for i in range(5000):
+        e.mu.mem_write(hit_node, b"\x00" * 0x90)
+        e.w32(hit_node + 0x04, 0)  # attacker type = 0
+        e.w32(hit_node + 0x08, 1)  # attacker guid = 1
+        e.w32(hit_node + 0x0C, 0)  # defender type = 0
+        e.w32(hit_node + 0x10, 2)  # defender guid = 2
+        e.w32(hit_node + 0x18, 0x01)  # landed hit
+        e.w32(hit_node + 0x84, 0)
+        e.w32(attacker + 0xAC, hit_node)
+
+        att_seed_lo = rnd.randint(1, 0xFFFFFFFF)
+        att_seed_hi = rnd.randint(1, 0xFFFFFFFF)
+        def_seed_lo = rnd.randint(1, 0xFFFFFFFF)
+        def_seed_hi = rnd.randint(1, 0xFFFFFFFF)
+
+        init_w_dur = rnd.randint(5, 50)
+        init_a_dur = rnd.randint(5, 50)
+
+        e.w32(attacker + 0x20, att_seed_lo)
+        e.w32(attacker + 0x24, att_seed_hi)
+        e.w32(w_right + 0x04, hand_weap_cids[0])
+        e.w32(d_right + 0x18, 0)
+        unit_stats[w_right] = {STAT_DUR: init_w_dur, STAT_MAXDUR: 50, STAT_QTY: 0, STAT_INDEST: 0}
+
+        e.w32(defender + 0x20, def_seed_lo)
+        e.w32(defender + 0x24, def_seed_hi)
+        u_torso = item_units[3]
+        unit_stats[u_torso] = {STAT_DUR: init_a_dur, STAT_MAXDUR: 50, STAT_QTY: 0, STAT_INDEST: 0}
+        for s in range(13):
+            e.w32(def_slots + s * 4, 0)
+        e.w32(def_slots + 3 * 4, u_torso)
+
+        e.call(0x57D4F0, defender, 0, ecx=game_ptr, edx=attacker)
+
+        # Oracle expected calculations (confirming return shape and draw order):
+        # Attacker: 1 RNG draw with modulus 100; weapon wears if roll < 4
+        roll_w, exp_att_lo, exp_att_hi = rand_range(att_seed_lo, att_seed_hi, 100)
+        exp_w_dur = init_w_dur - 1 if roll_w < 4 else init_w_dur
+
+        # Defender: 1st draw rand_range(7) for start_idx, 2nd draw rand_range(total_weight=5) for pick,
+        # 3rd draw rand_range(100) for armor wear; armor wears if roll < 10
+        start_idx, exp_def_lo, exp_def_hi = rand_range(def_seed_lo, def_seed_hi, 7)
+        pick, exp_def_lo, exp_def_hi = rand_range(exp_def_lo, exp_def_hi, 5)
+        roll_a, exp_def_lo, exp_def_hi = rand_range(exp_def_lo, exp_def_hi, 100)
+        exp_a_dur = init_a_dur - 1 if roll_a < 10 else init_a_dur
+
+        got_w_dur = unit_stats[w_right][STAT_DUR]
+        got_a_dur = unit_stats[u_torso][STAT_DUR]
+        got_att_lo = e.r32(attacker + 0x20)
+        got_att_hi = e.r32(attacker + 0x24)
+        got_def_lo = e.r32(defender + 0x20)
+        got_def_hi = e.r32(defender + 0x24)
+
+        total_cases += 1
+        if (got_w_dur != exp_w_dur or got_a_dur != exp_a_dur or
+                got_att_lo != exp_att_lo or got_att_hi != exp_att_hi or
+                got_def_lo != exp_def_lo or got_def_hi != exp_def_hi):
+            mismatches += 1
+            if mismatches <= 5:
+                print(f"[S4-seeded mismatch] case={i} got_w={got_w_dur} exp_w={exp_w_dur} "
+                      f"got_a={got_a_dur} exp_a={exp_a_dur}")
 
     elapsed = time.time() - t0
-    print(f"Suite 4 (FUN_00535bc0 weapsel + FUN_0057d4f0 block vs hit): 10,000 cases, mismatches={mismatches}")
+    print(f"Suite 4 (FUN_00535bc0 weapsel + FUN_0057d4f0 block vs hit): 10,002 cases, mismatches={mismatches}")
     print(f"TOTAL: {total_cases} cases in {elapsed:.2f}s, mismatches={mismatches}")
     return 1 if mismatches > 0 else 0
 
