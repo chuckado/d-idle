@@ -130,7 +130,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- aea8be52 11-03 09:49 `merge origin/main into b2venus` (-)
+- 27d226fa 11-03 09:49 `b2winworker: card and doc renamed (public wording: the Windows build worker); merge origin/main` (b2winworker)
 - f9aa4521 11-03 09:40 `Merge agent/verifyb2: verifyb2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifyb2)
 - 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
 - 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
