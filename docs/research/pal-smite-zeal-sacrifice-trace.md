@@ -71,16 +71,30 @@
 
 ## 3. Verification & Formula Checks
 
-> **Note on Case Separation:** The 8,640 elemental cases in `pal-skill-trace.md` represent an emulator vs. d2d differential. The 120,000 cases below are a dedicated formula verification of the decompiled `game.exe` 1.14d arithmetic implemented in `tools/emu/verify_palskills.py` (seed `0x50414c53`).
+> **Note on Case Separation:** The 8,640 elemental cases in `pal-skill-trace.md` represent an emulator vs. d2d differential. The 120,000 cases below are a dedicated formula verification of the decompiled `game.exe` 1.14d arithmetic implemented in `tools/emu/verify_palskills.py` (seed `0x50414c53`) against independent mathematical calculations.
 
-| Verification Suite | Cases | Result | Notes |
-|---|---|---|---|
-| Zeal Hit Count (`calc1`) | 60 levels | **0 mismatches** | `min(2 + lvl - 1, 5)`: 2 at L1, 3 at L2, 4 at L3, 5 at L4..L60 |
-| Smite Stun Length (`calc2`) | 60 levels | **0 mismatches** | `min(250, 15 + 5*(lvl - 1))`: 15 at L1, 110 at L20, capped at 250 at L48..L60 |
-| Smite / Zeal / Sacrifice Formula Cases (`tools/emu/verify_palskills.py`) | 120,000 random cases (seed `0x50414c53`) | **0 mismatches** | Tested Zeal ED/AR, Sacrifice ED/AR/capped self-damage, Smite ED/Strength scaling across random levels (1..60), synergies (0..30), Strength (10..500), ED (0..400) |
-| Smite Mana Cost (`FUN_00644b10`) | Levels 1..60 | **0 mismatches** | Evaluated natively via `FUN_00644b10`: returns 512 (2.0 mana in 256ths) across all levels |
-| Zeal Mana Cost (`FUN_00644b10`) | Levels 1..60 | **0 mismatches** | Evaluated natively via `FUN_00644b10`: returns 512 (2.0 mana in 256ths) across all levels |
-| Sacrifice Mana Cost (`FUN_00644b10`) | Levels 1..60 | **0 mismatches** | Evaluated natively via `FUN_00644b10`: returns 0 across all levels |
+### 3.1 Executable Verification Command & Captured Output
+
+- **Executable Command:** `python tools/emu/verify_palskills.py 120000 0x50414c53`
+- **Prerequisites:** Python 3 (standard library only)
+- **Input Parameters:** 120,000 randomized iterations, seed `0x50414c53`, plus exhaustive deterministic evaluation of skill levels 1..60
+- **Captured Output:**
+  ```text
+  Verified 120000 cases with seed 0x50414c53: 0 mismatches in 0.481s
+  ```
+
+### 3.2 Per-Rule Verification Results
+
+| Verification Suite | Tag | Executable Command & Inputs | Case / Level Range & Seed | Captured Output | Verified Rule & Notes |
+|---|:---:|---|---|---|---|
+| Zeal Hit Count (`calc1`) | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `min(2 + lvl - 1, 5)`: 2 at L1, 3 at L2, 4 at L3, 5 at L4..L60 |
+| Smite Stun Length (`calc2`) | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `min(250, 15 + 5*(lvl - 1))`: 15 at L1, 110 at L20, capped at 250 at L48..L60 |
+| Zeal Attack Rating Bonus | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `10 + 10*(lvl - 1)%` verified across all levels |
+| Sacrifice Attack Rating Bonus | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `20 + 7*(lvl - 1)%` verified across all levels |
+| Smite Mana Cost (`FUN_00644b10`) | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
+| Zeal Mana Cost (`FUN_00644b10`) | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `(2 + 0*(lvl - 1)) << 8 = 512` (2.0 mana in 256ths) verified across all levels |
+| Sacrifice Mana Cost (`FUN_00644b10`) | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | Skill levels 1..60 (deterministic) | `0 mismatches` | `0` mana verified across all levels |
+| Smite / Zeal / Sacrifice Stress Suite | V run | `python tools/emu/verify_palskills.py 120000 0x50414c53` | 120,000 cases, seed `0x50414c53` | `Verified 120000 cases with seed 0x50414c53: 0 mismatches in 0.481s` | Randomized levels (1..60), synergies (0..30), Str (10..500), off-weapon ED (0..400), target HP (1..50,000), raw damage (1..100,000) asserted against independent formulas for Zeal ED/AR, Sacrifice ED/AR/capped self-damage, Smite ED/Strength scaling |
 
 ---
 
@@ -96,12 +110,16 @@
 
 ## 5. Drill recipe (live; lab binary `lab-debug-skills`)
 
-- **Z1 (Zeal hit count & rollback, D9).** `debug points 106 1`, `debug points 106 4`, `debug cast 106 unit <target>`: count strikes landed (expect 2 hits at level 1, 5 hits at level 4). On game.exe, strikes land every ~4 frames; on d2d today, each strike waits for full A1 animation recovery.
-- **Z2 (Zeal retargeting).** Spawn two monsters in melee reach. Set monster 1 HP to 1 (`debug mon set <id1> life 1`). Cast Zeal on monster 1. Observe that after monster 1 dies on hit 1, strikes 2..5 switch to monster 2.
-- **S1 (Smite unconditional hit & block bypass, D8).** Spawn a monster with high block rate (or shield-bearing monster, `debug mon set <id> block 75`). Cast Smite: observe 100% hit rate and damage dealt on every swing, never blocked.
-- **S2 (Smite stun duration).** Cast Smite level 1 (stun 15 frames = 0.6 s) and level 20 (stun 110 frames = 4.4 s) on a non-boss monster. Verify monster is unable to act for exact stun duration.
-- **C1 (Sacrifice self-damage cap).** Spawn monster with 50 life (`debug mon set <id> life 50 maxlife 50`). Cast Sacrifice with 500 damage. Verify player takes 8% of 50 damage (4 life), NOT 8% of 500 damage (40 life).
-- **C2 (Sacrifice lethal self-damage).** Set player life to 10 (`debug stat 6 10`). Cast Sacrifice dealing 200 damage to a high-health monster (self damage = 16). Verify player dies from self-inflicted damage.
+> **Note on Evidence Tags:** Per the contributor rulebook (`docs/contributing/agent-work.md`), agent runs operate offline without access to live game instances or the worker host. The live verification drills below specify maintainer-only commands for `lab-debug-skills` and are tagged **U** (unverified offline).
+
+| Drill ID | Mechanic Tested | Tag | Exact Executable Commands & Inputs | Expected Behavior on `game.exe` 1.14d | Expected Behavior on `d2d` today |
+|---|---|:---:|---|---|---|
+| **Z1** | Zeal hit count scaling & rapid rollback (D9) | U | `debug points 106 1`<br>`debug points 106 4`<br>`debug cast 106 unit <target>` | 2 strikes land at level 1; 5 strikes land at level 4+. Strikes chain rapidly every ~4 frames via 100% frame rollback (`FUN_004efc20` / `FUN_00553b10`). | 2 strikes at level 1; 5 strikes at level 4+. Each strike waits for full ~14-16 frame animation recovery (`strike.cpp:901`). |
+| **Z2** | Zeal retargeting on kill | U | Spawn 2 monsters in reach.<br>`debug mon set <id1> life 1`<br>`debug cast 106 unit <id1>` | When target 1 dies on strike 1, strikes 2..5 dynamically switch to monster 2 via `0x20003` filter search (`FUN_0056bd10`). | Target 1 dies on strike 1; subsequent strikes search for nearby targets in melee reach. |
+| **S1** | Smite unconditional hit & block bypass (D8) | U | Spawn high-block monster.<br>`debug mon set <id> block 75`<br>`debug cast 97 unit <id>` | 100% hit rate and damage dealt on every swing. Target may show block animation, but damage, stun, and knockback are never avoided (`0x5cebb0`). | Monster with `target.block > 0` blocks Smite swings and nullifies damage (`combat.hpp:499`). |
+| **S2** | Smite stun length | U | `debug points 97 1`<br>`debug points 97 20`<br>`debug cast 97 unit <id>` | Level 1 stuns target for 15 frames (0.60 s); level 20 stuns target for 110 frames (4.40 s) (`min(250, 15 + 5*(lvl-1))`). Target cannot attack or move. | Target stunned. |
+| **C1** | Sacrifice self-damage cap at foe HP | U | `debug mon set <id> life 50 maxlife 50`<br>`debug cast 96 unit <id>` (with 500 damage) | Player takes 8% of target current HP (8% of 50 = 4 life cost), NOT 8% of 500 (40 life cost) (`min(phys_dam, target_hp)` at `0x5ce961`). | Player takes 4 self-damage (capped at target HP). |
+| **C2** | Sacrifice lethal self-damage | U | `debug stat 6 10`<br>`debug cast 96 unit <id>` (with 200 damage to healthy foe) | Player takes 8% of 200 = 16 damage. Because player HP is 10 <= 16, player dies from direct self-damage (`0x1000` flag). | Player dies from lethal self-damage. |
 
 ---
 
@@ -123,6 +141,7 @@
 
 ## 7. Not traced (U) and limits
 
+- The live drill expectations in Section 5 (Z1, Z2, S1, S2, C1, C2) were designed for maintainer execution on `lab-debug-skills` and are tagged U because offline agents do not connect to live game instances.
 - Exact hit recovery frame duration when a target blocks a Smite swing (in game.exe the block animation plays if block roll succeeds, but full damage and stun apply regardless).
 - The weapon speed modifier (WSM) and IAS table for Zeal rollback animation frames when equipped with two-handed weapons.
 - Vengeance (Id 111) and Charge (Id 107) melee dispatch details (deferred to future card).

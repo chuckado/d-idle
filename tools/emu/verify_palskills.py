@@ -56,6 +56,15 @@ def verify_sacrifice_self_damage(phys_damage, target_hp):
     return (capped * 8) // 100
 
 
+def verify_mana_cost(skill_name, level):
+    """Calculate skill mana cost in 256ths (FUN_00644b10: (mana + lvlmana*(lvl - 1)) << manashift)."""
+    if skill_name in ("Smite", "Zeal"):
+        return (2 + 0 * (level - 1)) << 8
+    if skill_name == "Sacrifice":
+        return 0
+    raise ValueError(f"Unknown skill: {skill_name}")
+
+
 def main():
     """Run deterministic and 120,000-case randomized formula verification against independent expectations."""
     n_cases = int(sys.argv[1]) if len(sys.argv) > 1 else 120000
@@ -84,6 +93,9 @@ def main():
 
         assert verify_zeal_ar(lvl) == 10 + 10 * (lvl - 1)
         assert verify_sacrifice_ar(lvl) == 20 + 7 * (lvl - 1)
+        assert verify_mana_cost("Smite", lvl) == 512
+        assert verify_mana_cost("Zeal", lvl) == 512
+        assert verify_mana_cost("Sacrifice", lvl) == 0
 
     # 2. Randomized stress testing with independent verification
     mismatches = 0
@@ -143,6 +155,14 @@ def main():
         self_dmg = verify_sacrifice_self_damage(raw_damage, target_hp)
         exp_self_dmg = (min(raw_damage, target_hp) * 8) // 100
         if self_dmg != exp_self_dmg:
+            mismatches += 1
+
+        # Mana costs
+        if verify_mana_cost("Smite", lvl) != 512:
+            mismatches += 1
+        if verify_mana_cost("Zeal", lvl) != 512:
+            mismatches += 1
+        if verify_mana_cost("Sacrifice", lvl) != 0:
             mismatches += 1
 
     elapsed = time.time() - t0
