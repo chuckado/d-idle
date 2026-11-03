@@ -68,3 +68,20 @@ func TestBackToFieldRetriesPortalOnce(t *testing.T) {
 		}
 	}
 }
+
+// codefix F4: the chain walk is for the quest-route fields only; Catacombs 4 or Andariel's Lair keep ErrNoPortal at once.
+func TestToTownNoChainWalkOutsideTheRoute(t *testing.T) {
+	for _, area := range []int{7, 37, 29, 35} {
+		r := newRig(t)
+		cm := &chainMover{Mover: r.Mv}
+		r.T = town.New(r.Env, cm)
+		r.T.UseSource(town.Source{Snapshot: r.W.Snapshot, Items: r.W.AllItems, Owner: r.W.Owner, Stats: r.W.UnitStats})
+		r.W.Player.Area = area
+		if err := r.T.ToTown(context.Background()); !errors.Is(err, town.ErrNoPortal) {
+			t.Errorf("area %d: %v, want ErrNoPortal", area, err)
+		}
+		if len(cm.toArea) != 0 {
+			t.Errorf("area %d: walked the chain %v", area, cm.toArea)
+		}
+	}
+}

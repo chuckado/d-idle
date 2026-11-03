@@ -480,7 +480,7 @@ func TestInvariantsGate1BeltVirtual(t *testing.T) {
 
 // postfix-soak2 (docs/probes/postfix-soak2.md): 120 wall minutes, 1275 minute lines (21.25 virtual h). The belt was empty
 // outside town for 27 virtual minutes at the start (87 s wall) and 26 minute lines in a row had no kill and no XP (2.5
-// wall min): both fail the spec limits (5 and 10 virtual minutes) although d2dsoak's own PROGRESS limit (30) holds.
+// wall min): the belt window is poverty since specdelta (excused), the no-kill stretch fails the spec limit (5 and 10 virtual minutes) although d2dsoak's own PROGRESS limit (30) holds.
 func TestInvariantsGate1PostfixSoak2(t *testing.T) {
 	f, err := os.Open("../../docs/probes/soak-logs/postfix2-minutes.jsonl.gz")
 	if err != nil {
@@ -498,8 +498,9 @@ func TestInvariantsGate1PostfixSoak2(t *testing.T) {
 	if inv.Minutes != 1275 || inv.BeltWindowMin != 27 || inv.NoKillXPMin != 26 {
 		t.Errorf("counters %+v", inv)
 	}
-	if !strings.Contains(strings.Join(inv.Violated, ","), InvBelt) || !strings.Contains(strings.Join(inv.Violated, ","), InvNoKillXP) {
-		t.Errorf("violated %v, want BELT and NOKILL", inv.Violated)
+	// specdelta: the 27 minute window held 0..15 gold (pack, stash unknown in this old archive) so it is poverty, not BELT.
+	if strings.Contains(strings.Join(inv.Violated, ","), InvBelt) || !strings.Contains(strings.Join(inv.Violated, ","), InvNoKillXP) || inv.BeltFundedMin > 5 {
+		t.Errorf("violated %v, want NOKILL only", inv.Violated)
 	}
 	if strings.Contains(strings.Join(inv.Violated, ","), InvProgress) {
 		t.Errorf("the 30 minute PROGRESS invariant must still hold: %v", inv.Violated)
@@ -541,6 +542,44 @@ func TestBeltWindowGoldReport(t *testing.T) {
 	b.run(5, true)
 	if inv := scan(t, b.text(), ExitInfo{}); len(inv.BeltWindows) != 0 {
 		t.Errorf("5-minute window reported: %+v", inv.BeltWindows)
+	}
+}
+
+// specdelta: a window over 5 minutes fails BELT only when pack plus stash gold covered a potion at some minute.
+func TestBeltPovertyExcused(t *testing.T) {
+	for _, tc := range []struct {
+		name      string
+		gold      int
+		stash     int
+		noStash   bool
+		crossAt   int // minute at which pack gold becomes 40 (0 = never)
+		wantFail  bool
+		wantFound int
+	}{
+		{"poverty pack+stash 16", 6, 10, false, 0, false, 0},
+		{"funded pack 6 stash 1418", 6, 1418, false, 0, true, 7},
+		{"mixed crosses 30 mid window", 6, 10, false, 4, true, 7},
+		{"old archive pack 6", 6, 0, true, 0, false, 0},
+		{"old archive pack 40", 40, 0, true, 0, true, 7},
+		{"exactly the price", 20, 10, false, 0, true, 7},
+	} {
+		b := newLog()
+		b.belt = "0:Minor_Mana_Potion"
+		b.gold, b.stash, b.noStash = tc.gold, tc.stash, tc.noStash
+		if tc.crossAt > 0 {
+			b.run(tc.crossAt, true)
+			b.gold = 40
+			b.run(8-tc.crossAt, true)
+		} else {
+			b.run(8, true)
+		}
+		inv := scan(t, b.text(), ExitInfo{})
+		if inv.BeltWindowMin != 7 || inv.BeltFundedMin != tc.wantFound {
+			t.Errorf("%s: window %d funded %d", tc.name, inv.BeltWindowMin, inv.BeltFundedMin)
+		}
+		if got := strings.Contains(strings.Join(inv.Violated, ","), InvBelt); got != tc.wantFail {
+			t.Errorf("%s: violated %v", tc.name, inv.Violated)
+		}
 	}
 }
 
