@@ -64,7 +64,7 @@ d2d rolled a monster's hit in whole points, inclusive. game.exe rolls `(min << 8
 
 | Commit | Claim or change | Evidence | Re-check |
 |---|---|---|---|
-| `bbd339ad` | Roll in 256ths, absorb on the unreduced physical, then reduce; fixed records (min == max) keep their value | `0057b420`, `0057c1e0`, `0057bf80`, `005c6370`, `005ca6c0` | `v4_run.py 6000 20261103` (354,000 frames, 0 differ on no-shield sets, base up to 47,896), `mdmg2.py 20000 20261103`, `v3_run.py 10000 314159` (S: run on the bundle's earlier head, same patch; to be re-run on Venus) |
+| `bbd339ad` | Roll in 256ths, absorb on the unreduced physical, then reduce; fixed records (min == max) keep their value | `0057b420`, `0057c1e0`, `0057bf80`, `005c6370`, `005ca6c0` | `v4_run.py 6000 20261103` (354,000 frames, 0 differ on no-shield sets, base up to 47,896), `mdmg2.py 20000 20261103`, `v3_run.py 10000 314159` (S: run on the bundle's earlier head, same patch; to be re-run on the Windows build worker) |
 
 ### How to re-check
 
