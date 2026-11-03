@@ -123,6 +123,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- ac2a68e2 11-03 11:06 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
 - f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
 - 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
 - 9c7bf265 11-03 10:49 `Merge agent/verifydmg4: verifydmg4: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg4)
@@ -132,5 +133,4 @@
 - fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
 - 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
 - 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
-- 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
 <!-- statusgen:end -->
