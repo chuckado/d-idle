@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifydmg4
-status: in-progress
+status: archived
 agent: verifydmg4
 branch: agent/verifydmg4
 worktree: d2lod-wt/verifydmg4
@@ -16,7 +16,7 @@ exclusive: []
 gates:
   - "own differential through the real Fight::absorb: r4 against game.exe's roll and the game-order model, own seed, every set; never worse than base"
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "docs/tools only, not verified live: READY FOR PR yes (no code cut; PR text must carry the shield-first esbone limit, ponytail sentence to reword)"
+result: "docs and tools only; see card result"
 credit:
   component: Monster physical damage roll (fourth verification)
   author: owner
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 9c7bf26
 ```
 
 ## 1. Work
