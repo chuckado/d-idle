@@ -19,17 +19,18 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | missiles (missile flight, range, hit roll) | 684 | 249 | 46 | 18 | 0 | 371 | 43% | 46% | 682,680 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 734 | 0 | 0 | 0 | 100% | 100% | 242,220 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
-| monster.ai (monster AI types) | 146 | 11 | 9 | 5 | 0 | 121 | 14% | 17% | 139,830 |
-| states (states and auras) | 185 | 0 | 6 | 4 | 0 | 175 | 3% | 5% | 558,147 |
-| itemtypes (item types) | 98 | 0 | 0 | 0 | 0 | 98 | 0% | 0% | 0 |
+| monster.ai (monster AI types) | 146 | 89 | 12 | 5 | 0 | 40 | 69% | 73% | 276,330 |
+| states (states and auras) | 185 | 0 | 21 | 13 | 0 | 151 | 11% | 18% | 758,147 |
+| itemtypes (item types) | 98 | 98 | 0 | 0 | 0 | 0 | 100% | 100% | 553,647 |
 | items.armor (armor bases) | 202 | 0 | 0 | 0 | 0 | 202 | 0% | 0% | 0 |
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
-| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2455** | **943** | **46** | **0** | **1466** | **69%** | **70%** | **5,839,770** |
+| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 4 | 12 | 2 | 0 | 0 | 89% | 100% | 2,770,944 |
+| levels.layout (Act 1 areas: layout, preset units, room seeds, spawn list (Rogue Encampment, Blood Moor, Cold Plains, Stony Field, Den of Evil)) | 5 | 5 | 0 | 0 | 0 | 0 | 100% | 100% | 1,116 |
+| **total** | **4915** | **2637** | **961** | **55** | **0** | **1262** | **73%** | **74%** | **7,091,033** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2207 (59%), compared 2253 (61%), read-only 46, untested 1466.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2407 (65%), compared 2462 (66%), read-only 55, untested 1262.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -90,11 +91,21 @@ Case counts add the cases of every ledger line; one differential that covers man
 | monster.ai | Zombie,Brute,BloodHawk,CorruptRogue,CorruptLancer | TESTED-DEVIATION | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | pace and run act omitted by the port: D1 D2 D3 D4 (649, 1820, 1686, 917, 1656 differ of 3000 each) |
 | monster.ai | Hireable | TESTED-0-DIFF | `docs/research/mercstats-trace.md` | 100,000 | 2026-11-02 | merc think FUN_005e52d0 vs d2d real hireable_think, 100,000 cases seeds 31..34; attack think and skill pick 100,000 more (seeds 41..44); aspect: think and attack choice, not the target search or movement |
 | monster.ai | CorruptArcher | TESTED-0-DIFF | `docs/research/monsterskill-trace.md` | 3,000 | 2026-11-02 | game.exe think (0x5f5a20) vs rules::mon_think: 1,500 seed 20261102 + 1,500 seed 7; second target = primary, FUN_005defb0 hooked as run, step count as passed (msk_run.sh) |
+| monster.ai | Duriel,Summoner,Mephisto,Izual,Hydra,TrappedSoul,UberMephisto,UberDiablo,UberIzual | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 27,000 | seed 20261105 | think act, pace, effects, AI control words and seed: game.exe think vs d2d rules::mon_think, 3,000 cases each, Act 2 to 4 bosses (Duriel, Summoner, Mephisto, Izual, Hydra, Trapped Soul, Uber Izual; UberMephisto and UberDiablo are a bare ret 4); harness hooks listed in the doc |
+| monster.ai | Mummy,GreaterMummy,Vulture,Baboon,SandRaider,ClawViper,SandLeaper,Scarab,Swarm,PantherWoman,PantherJavelin,PinHead,SandMaggot,SandMaggotQueen,MaggotEgg,MaggotLarva,Mosquito,ThornHulk,WillOWisp,ZakarumZealot,ZakarumPriest,FrogDemon,Tentacle,TentacleHead,FetishShaman,HighPriest,FetishBlowgun,BatDemon | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 42,000 | seed 20261105 | same aspect, 1,500 cases each, Act 2 to 4 monsters (mummies, vultures, baboons, sand raiders, scarabs, panthers, maggots, Act 3 and Act 4 thinks); WillOWisp on its reachable dance states |
+| monster.ai | ReanimatedHorde,SiegeBeast,Minion,SuicideMinion,Succubus,SuccubusWitch,Overseer,MinionSpawner,Imp,Catapult,FrozenHorror,BloodLord,CatapultSpotter,NpcBarb,GenericSpawner,DeathMauler,PutridDefiler,BaalTentacle,BaalMinion,Ancient,Nihlathak,ClawViperEx,BaalCrabClone,UberBaal,SiegeTower,HellMeteor,Sarcophagus,Spirit,ArcaneTower,Trap-RightArrow,Trap-LeftArrow,DesertTurret,VileMother,VileDog,FingerMage,Regurgitator,DoomKnight,AbyssKnight,OblivionKnight,Megademon | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 60,000 | seed 20261105 | same aspect, 1,500 cases each, Act 4 casters and Act 5 thinks, Baal's minions, towers, traps; Ancient with the target placed at the AI distance, CatapultSpotter and PutridDefiler with raw skill ids relabelled |
+| monster.ai | Diablo | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 3,000 | seed 20261105 | 61 of 3,000 differ: D4 (Skill1 pending with no target casts at none), D5 (act 15 cast carries unit id and type); 18 act or n differences not isolated (U) |
+| monster.ai | Arach | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | 378 of 1,500 differ: D2 charge is a run in game.exe (337), D3 Spider Lay casts at no unit (41); nothing else differs once a flags-0 back-off that cannot set off is modelled as the idle it is |
+| monster.ai | Fetish | TESTED-DEVIATION | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | 64 of 1,500 differ, all pace 50 vs 0: D1 a back-off that cannot set off keeps pace 50 in game.exe (57), 7 more not isolated |
+| monster.ai | Bighead | TESTED-0-DIFF | `docs/research/covmonai2-trace.md` | 1,500 | seed 20261105 | same aspect as the other covmonai2 rows, 1,500 cases (think 0x5eff50, added by address: not in upstream mon_ais.py); Vampire run too: 11 of 1,500 differ, not isolated, no row |
 | states | 1,11,118 | TESTED-DEVIATION | `docs/research/pr-freeze-proof.md` | 225,748 | 2026-11-01 | freeze and chill rule C3 C4 C5; state 118 corpse_noselect (Blood Raven, Countess) |
 | states | 10 | TESTED-DEVIATION | `docs/research/sk-armor-trace.md` | 184,771 | 2026-11-01 | frozenarmor state and its striker effect D1 |
 | states | 20,30,88 | READ-ONLY | `docs/research/sk-armor-trace.md` | - | 2026-11-01 | chillingarmor, energyshield, shiverarmor read |
 | states | 61,28 | TESTED-DEVIATION | `docs/research/sk-resist-trace.md` | 147,628 | 2026-11-01 | lowerresist and conviction on an immune D1 (negative change / 5) |
 | states | 86 | READ-ONLY | `docs/research/sk-lightning-trace.md` | - | 2026-11-01 | justhit (NextHit) read; D1 model only |
+| states | 9,17,19,23,27,55,56,57,58,59,60,87,89,113,114 | TESTED-DEVIATION | `docs/research/covstates2-trace.md` | 200,000 | 2026-11-02 | timed put rule (curse slot, refuse, refresh, length): game.exe FUN_0056e970 vs real d2d put_state, 100,000 per seed (20261102, 7); D1 D2 D3 D4 D5; effects of the states not run |
+| states | 14,117,120,139,140,157,159,176,177 | READ-ONLY | `docs/research/covstates2-trace.md` | - | 2026-11-02 | state group removal FUN_0056c740 run natively (370 cases) but d2d start_state read only, no d2d run: D7 |
+| itemtypes | all | TESTED-0-DIFF | `docs/research/covitemtypes-trace.md` | 553,647 | 2026-11-02 | Equiv chain 9,604 pairs, item membership 64,582 cells, own-row flags, equip slot, two-hands 393,132, socket cap 73,149 all equal d2d (exhaustive grids, no seed); latent D1-D5 and bot B1-B3 in the doc; stack/AutoStack/store reader not run |
 | treasure | #850 | TESTED-0-DIFF | `docs/research/treasure-trace.md` | 100,000 | 2026-11-01 | class entries (1,012 of 1,012) and rolls (picks, NoDrop by players, item and quality, gold) game.exe vs the real d2d drop code; Act 1 and 2 monster and chest classes in detail; ROP (N) and ROP (H) unique item entries not compared |
 | levels | 1-136 | TESTED-0-DIFF | `docs/research/levelsareas-trace.md` | 1,088 | 2026-11-02 | area monster level only: game.exe FUN_0061dca0 run natively equals the Levels columns d2d holds, ids 1..136 x difficulty 0..3 x expansion 0/1; density, uniques, spawn counts untested; LEVELSAREAS |
 | formulas | F01 | TESTED-0-DIFF | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | melee to-hit, real build, two seeds |
@@ -114,6 +125,9 @@ Case counts add the cases of every ledger line; one differential that covers man
 | formulas | F17 | READ-ONLY | `docs/research/sk-mana-trace.md` | - | 2026-11-01 | regen FUN_005806f0 read equal to d2d; bot regen model 1.2-1.8x fast |
 | formulas | F09 | TESTED-DEVIATION | `docs/research/monster-mods-trace.md` | 157,618 | 2026-10-31 | boss and minion spawn stats D1 D2 G1; plain monsters by level not compared |
 | formulas | F02 | TESTED-DEVIATION | `docs/research/monsterhit-trace.md` | 100,000 | 2026-11-02 | monster side only (defender = player): block 0 differ from the reading in 100,000 cases, d2d block port differs in town walk (mode 6, 653 cases) and the missile gate (F14); to-hit vs defence 0 differ; player-owned defence and block derivation not run |
+| formulas | F16 | TESTED-0-DIFF | `docs/research/seeddist-trace.md` | 360,000 | 2026-11-02 | treasure class pick and item quality: 360,000 seed-for-seed first-drop cases (9 classes x mf 0 and 300 x 20,000 unit seed states) game.exe FUN_0055a6d0 vs d2d roll_drops, 0 differ; Act 1 classes only; plus 540,000 first drops per side on each side own seed supply, distributions equal (seeddist-trace.md section 3.4) |
+| levels.layout | 2-4,8 | TESTED-0-DIFF | `docs/research/seedspawn-trace.md` | 936 | 2026-11-02 | layout, preset units, room seeds, populated room lists and object groups equal for map seeds 1..30, two 32-bit ranges and edge seeds 0 and 4294967295 (5,991 populated rooms); unit seeds after creation are a separate aspect (D1 D2 in the doc); SEEDSPAWN |
+| levels.layout | 1 | TESTED-0-DIFF | `docs/research/seedspawn-trace.md` | 180 | 2026-11-02 | camp: tiles, preset units, room seeds (150 comparisons) and the camp NPCs thinking (30), plus the game-seed chain through the camp (30 games); the monsters kind is not applicable to a preset level; SEEDSPAWN |
 
 ## Top gaps by likely play impact
 
@@ -122,12 +136,11 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | rank | subsystem | rows | why it matters | source |
 |---:|---|---|---|---|
 | 1 | missiles | untested (371 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
-| 2 | monster.ai | untested (121 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
+| 2 | monster.ai | untested (40 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (1 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
 | 6 | skills.pal | untested (15 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
-| 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
-| 10 | itemtypes | untested (98 of 98) | Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced | `docs/research/price-trace.md` |
+| 9 | states | untested (151 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
 
 ## Limits of this measure
 
