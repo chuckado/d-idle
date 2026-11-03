@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Docs: project review 2026-11-03 (goals evaluated and rewritten, plan short/medium/long)
 - gatetriage: a Gate 1 triage script prints the verdict, the belt and no-kill windows, the XP by area and the likely cause on one screen
 - docs: XP/h time-budget tool (tools/baseline/xph_budget.py) and the Gate 1 XP/h analysis (docs/research/xphshort.md).
 - tools: merge_lines_check.py catches bad merge-lines.txt files (OWNERS lines, markdown bullets, missing prefixes) in tools/ci/check.sh before the merge preflight.

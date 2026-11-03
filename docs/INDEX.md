@@ -313,3 +313,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - tools/merge_lines_check.py: merge-lines.txt grammar linter (stdlib, tests in tools/ci/tests).
 - docs/research/xphshort.md: Gate 1 XP/h budget and split, remedies, multi-seed Gate 1 plan; tools/baseline/xph_budget.py
 - docs/research/gate-triage-examples.md: output of tools/baseline/gate_triage.py for the five Gate 1 runs of 2026-11-02/03, checked against the hand findings
+- docs/research/project-review-20261103.md: project review 2026-11-03 (goals, done vs verified, effort by area, evaluation, rewritten goals, plan, proposed ADR/decisions text)

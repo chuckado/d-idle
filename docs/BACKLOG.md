@@ -378,6 +378,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - MERGEQ: tools/merge_lines_check.py lints merge-lines.txt (run by tools/ci/check.sh for the cards a branch touches); ops side: tools/mergeq.sh queue and docs-only merge fast path.
 - XPHSHORT: Gate 1 XP/h drop (10042 to 7060) is area choice at clvl 13+, not the belt/shop fixes (town time 8.8 percent, 141 XP/h); remedies and 5-seed Gate 1 plan (docs/research/xphshort.md)
 - gatetriage - tools/baseline/gate_triage.py: one-screen Gate 1 triage (verdicts under the current rules, belt and no-kill windows with gold, stash, area and overlaps, XP by band and area share, log counts, cause hints, exit 0/1/2); examples for five runs in docs/research/gate-triage-examples.md; gate-run.sh wiring is an ops follow-up
+- projreview: owner review of goals and plan; 6 rewritten goals and a 3-day/2-4 week/2-3 month plan await the owner's approval (docs/research/project-review-20261103.md, appendix F)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
