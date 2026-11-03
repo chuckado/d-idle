@@ -370,6 +370,11 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - beltfix5 - banked gold was out of reach with 0 healing potions (Gate 1 0338 clvl 11 window): town withdraw chore + bot counts pack plus stash gold; belt-rule delta proposed with numbers; live check pending
 - stashfield: minute line gets stashGold; d2dsoak prints a report-only gold line per belt window over 5 vmin (poverty or funded); BELT semantics await the user's spec decision; docs/research/stashfield.md
 - specdelta - Gate 1 belt rule (funded windows only, pack plus stash gold >= 30) and XP rule (single seed inside tolerance passes with a note) as soak-gates delta, d2dsoak BeltFundedMin, gate-judge xp_gate1, re-judge docs/research/specdelta-rejudge.md; ops gate-judge commit 979b83d
+- MSVC2026 follow-up: apply the split of tests/pet_ais_cases.inc and tests/shadow_master_cases.inc (docs/research/msvcc2026-trace.md), create local/batch2-msvc2026 in a throwaway worktree and rebuild on the Windows worker (gate allowing); upstream CI status still U
+- areareach: unreachable() walks the level chain between waypoints from any area; Pick fallback ranked by XP per kill; fixes the Gate 1 0628 area choice; docs/research/areareach.md
+- covpal (2026-11-02): Paladin coverage first pass done, docs/research/covpal-trace.md: 15 rows (Charge, Vengeance, Conversion, Holy Shield, Fist, Redemption, Fanaticism, resist / aim / meditation auras) game.exe vs d2d 14,400 cases per aspect 0 differ (V run); open: D1 Redemption one corpse a pulse (V read both sides), D2 Vengeance mastery term (V read), B1 bot element table; game-side differentials for D1 / D2 not built
+- verifyb2 done: batch 2 minmana ready with text changes; Teleport needs `ring < 50` in warp_spot (game.exe stops at ring 49) before the PR (docs/research/verify-batch2.md)
+- codefix - fixes for the independent review of the belt fixes (F1 NearTown split, F2 futile guard with stash gold, F3 mana reserve, F4 chain walk limit, F5 recovery floor, F8); live check = Gate 1 re-run
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
