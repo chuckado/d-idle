@@ -388,6 +388,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - B2REBASE2: batch 2 bundle carried onto upstream main 005c7cab (PRs 179, 180, new AGENTS.md rules): `local/batch2-bundle-r3` plus a split proposal (`local/batch2-mana-teleport`, `local/batch2-monsterdmg-pr`), private remote only; bodies on the new template; the user decides one PR or two and the opening
 - B2WINWORKER: batch 2 r3 re-run on the Windows build worker (MSVC 14.51, WSL stages, damage-roll sets, Teleport seed 9): numbers in docs/research/b2-winworker-rerun.md
 - SORCDIFF: the lightning Sorceress build crossed with rule coverage; one proven deviation left on upstream main 005c7cab for the bot's skills (Lightning and Chain Lightning cast length, `local/sorc-lightning-seq` on the private remote, base 802 of 3,609 differ, head 0); Energy Shield and Thunder Storm are not used by the build; ready-for-Opus list in the doc
+- lockstepplan: plan for the cheapest d2d vs game.exe A:B (fresh clvl 1-6 cell at k=1, 2 rounds of 3 hidden lanes after Gate 2), native Windows PC lane judged NO for now, AB-SEEDPIN checklist; docs/research/lockstep-plan-20261103.md
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
