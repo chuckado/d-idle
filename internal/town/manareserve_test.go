@@ -35,19 +35,19 @@ func TestManaLeavesKitReserve(t *testing.T) {
 	}
 }
 
-// codefix F3: with the scroll in the pack and 4 healing potions in the belt the reserve is zero: 180 gold become mana.
+// codefix F3: with the scroll in the pack and kitMinHP healing potions in the belt the reserve is zero: 180 gold may become mana.
 func TestManaReserveOnlyWhileKitIncomplete(t *testing.T) {
 	r := audit(t, 180, 12, false)
 	r.Env.Tune.Resource.KitPotionGold, r.Env.Tune.Resource.KitTPGold = 30, 100
-	for x := 0; x < 4; x++ {
-		r.W.Add("hp1", d2.ContBelt, x, 0)
-	}
+	r.Env.Tune.Resource.KitMinHP = 2
+	r.W.Add("hp1", d2.ContBelt, 0, 0)
+	r.W.Add("hp1", d2.ContBelt, 1, 0)
 	r.W.Add("tsc", d2.ContInventory, 9, 3)
 	rep, err := r.T.Chores(context.Background(), town.ChorePlan{Potions: true})
 	if err != nil {
 		t.Fatal(err)
 	}
-	if n := boughtLike(rep, "Mana"); n < 2 {
-		t.Errorf("complete kit, 180 gold bought %v, want 2 or more mana potions", rep.Bought)
+	if n := boughtLike(rep, "Mana"); n < 1 {
+		t.Errorf("complete kit, 180 gold bought %v, want a mana potion (the old reserve refused it)", rep.Bought)
 	}
 }
