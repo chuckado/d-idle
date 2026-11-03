@@ -2,8 +2,7 @@
 
 ```yaml
 change: goldfloor
-status: archived
-merge: 3b94ad78
+status: deferred
 agent: goldfloor
 branch: agent/goldfloor
 worktree: ~/code/d2lod-wt/goldfloor

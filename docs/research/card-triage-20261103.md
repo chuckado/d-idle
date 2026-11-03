@@ -1,6 +1,6 @@
 # Open card triage, 2026-11-03
 
-> status: proposal for the lead (card `applyreview`), docs only. 38 open cards at the start; 4 were archived by this job (merged branch and every task ticked): actgate, forknext, wpcooldown, goldfloor. 35 remain (34 below plus this card), the cap is 12 (G-F). Goals G-A..G-F: [../adr/0015-goals-acceptance-on-game-exe.md](../adr/0015-goals-acceptance-on-game-exe.md). Tags: V = read from the card or `git log` here (`git log main --merges --grep "Merge agent/<x>:"`); I = judgement. "merged" means a merge commit of the card's branch is on main (V); the branch itself is deleted for most. Recommendations are the lead's to apply; nothing below was archived except the four.
+> status: proposal for the lead (card `applyreview`), docs only. 38 open cards at the start; 3 were archived by this job (merged branch and every task ticked): actgate, forknext, wpcooldown. goldfloor (3/3, merged) was left: its card says parked, delta spec not applied. the rest are in the table, the cap is 12 (G-F). Goals G-A..G-F: [../adr/0015-goals-acceptance-on-game-exe.md](../adr/0015-goals-acceptance-on-game-exe.md). Tags: V = read from the card or `git log` here (`git log main --merges --grep "Merge agent/<x>:"`); I = judgement. "merged" means a merge commit of the card's branch is on main (V); the branch itself is deleted for most. Recommendations are the lead's to apply; nothing below was archived except the three.
 
 Key: KEEP stays open; MERGE-INTO folds the remaining task into another card then archives; ARCHIVE the card is finished or superseded; DROP not wanted under the new goals.
 
@@ -20,7 +20,7 @@ Key: KEEP stays open; MERGE-INTO folds the remaining task into another card then
 | fixskilllvl | in-progress 3/4, merged | G-C | MERGE-INTO | same |
 | gate1run-20261101 | in-progress 2/3, no branch merge (records merged via gaterecords, V trailer) | G-C | ARCHIVE | record exists; seed-11 single runs are dropped |
 | gate1run-20261102 | in-progress 2/3, branch unmerged (V) | G-C | ARCHIVE | same; lead decides whether to merge the branch first |
-| goldfloor | archived by this job | - | - | merged, 3/3 |
+| goldfloor | deferred 3/3, merged | none | ARCHIVE | levers off by default after the failed A/B; the card was deliberately parked (result text), the lead applies or drops its unapplied delta spec first |
 | ledgerkey | in-progress 2/3, no merge found (V) | G-F | KEEP | small cheat-ledger key fix; finish or archive when its branch state is checked |
 | m1-liveproof | in-progress 13/15, merged | G-C | MERGE-INTO | M1 exit (15 C rows) is an input to the gate list, not a goal; fold open rows into the Gate 2 fix list |
 | m1-trips | deferred 0/5 | G-C | DROP | trip trigger waste is minor next to gate stability; revisit if S3 shows it |
