@@ -2,7 +2,7 @@
 
 ```yaml
 change: sorcdiff
-status: in-progress
+status: archived
 agent: sorcdiff
 branch: agent/sorcdiff
 worktree: d2lod-wt/sorcdiff
@@ -16,7 +16,7 @@ exclusive:
 gates:
   - "local/sorc-lightning-seq is two commits on upstream main 005c7cab, numeric noreply identity, private remote only"
   - "changecheck 0 warnings, leakcheck 0 hits"
-result: "docs and one script; the differentials ran on the real d2d build on build worker WSL (V, counts in docs/research/sorcdiff.md). Not verified live on a game (none used)."
+result: "docs and emulator tools only"
 credit:
   component: Lightning and Chain Lightning cast length (real-Fight test and fix), Sorceress skill use table
   author: owner
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 013512a
 ```
 
 ## 1. Work
