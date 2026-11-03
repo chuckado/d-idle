@@ -297,3 +297,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/hirefix.md: what the Gate 2 hire-the-merc check can and cannot confirm after the bot-side fixes
 - docs/research/beltfix2-analysis.md: Gate 1 20261103 BELT and NOKILL windows, causes and ranked fix plan
 - docs/research/verify-dmgroll3.md: third verifier report on DMGROLL r3 (2df7d1eb), own differential in verify-dmgroll3-run.txt
+- docs/research/beltfix3.md - what BELTFIX3 changed, tests, what is not verified live

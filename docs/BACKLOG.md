@@ -362,6 +362,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - hirefix: bot side of HIREREADER (dead-and-gone merc owned, GU/IW/0A mapped, revive quote parsed and logged); B3 Hirer and d2d dump keys still open; docs/research/hirefix.md
 - beltfix2: Gate 1 20261103 BELT 37 vmin and NOKILL 11 explained: town arrivals did not restock (in-town potion plan hit the 240 s cooldown) and no way home from Dark Wood; first fix: in-town restock without cooldown (goal.go choresDue), then walk chain home (town/trip.go walkToTown); plan in docs/research/beltfix2-analysis.md
 - DMGROLL r3 third verification: NOT READY FOR PR (2df7d1eb): fixed records reach FUN_0057c1e0 (author right), roll/reduce/absorb/exact 0 differences and never worse than base, but Fight::absorb skips Bone Armor and Energy Shield when the reduced hit is 0 (pool / mana drift) and game.exe runs the absorb state cast last first; see docs/research/verify-dmgroll3.md
+- beltfix3 - Gate 1 BELT/NOKILL fixes 1-4 (shop on town arrival, level-chain walk home, cut-cast portal reuse, BackToField portal retry); #5/#6 open; live check pending
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
