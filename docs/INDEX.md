@@ -287,3 +287,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/covmonai2-trace.md - monster AI third pass: Act 2 to 5 thinks and the bosses, game.exe vs d2d mon_think on 139,500 cases (covmonai2)
 - docs/research/covstates2-trace.md: states second pass: timed-state put rule, curse slot, groups, lengths, d2d deviations D1..D7, bot findings B1..B5 (game.exe run natively, real d2d put_state)
 - docs/research/covmissiles2-trace.md: missiles coverage second pass, skill-sourced Act 1 / 2 monster missiles (andariel_missile path), game.exe vs d2d, 27,000 cases
+- docs/research/pr-batch2-draft.md - upstream batch 2 (minmana floor, Teleport D1+D2): heads, counted differentials on a real d2d build, parity, #178 overlap, what is left out
