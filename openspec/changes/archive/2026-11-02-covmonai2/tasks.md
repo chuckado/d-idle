@@ -2,7 +2,7 @@
 
 ```yaml
 change: covmonai2
-status: in-progress
+status: archived
 agent: covmonai2
 branch: agent/covmonai2
 worktree: ~/code/d2lod-wt/covmonai2
@@ -15,8 +15,9 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0; coverage.py --check; tools/ci/check.sh; openspec validate --all --strict"
-result: "docs and emulator scripts only; 139,500 game.exe think cases replayed through d2d mon_think (78 AIs 0 differ, Arach, Fetish, Diablo deviate); see the doc for tags and limits"
+result: "docs/tools only; see the doc for tags and limits"
 live: "docs only, nothing run live"
+merge: 2c6af24
 ```
 
 - [x] read the coverage docs and the earlier monster AI traces
