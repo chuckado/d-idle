@@ -1,6 +1,6 @@
 # Fidelity fixes against game.exe 1.14d: skill mana check and payment, Teleport target rules, monster damage roll
 
-> status: FINAL BODY, not posted (card b2bundle, 2026-11-03). Nothing is pushed to the public fork and no PR is open: the coordinator opens it after the user's go. Branch `local/batch2-bundle` on the private fork remote, head `60d0404e`: 4 commits on upstream main `3e073888` (the merge of PR 177). PR 178 (the maintainer's batch 10) is still open; see "Merge". Tags: V = run for this head (how stated), S = secondary (an earlier run of ours or a verifier's report, not re-run for this head), U = unverified. Raw results: [pr-batch2-run.txt](pr-batch2-run.txt).
+> status: FINAL BODY, not posted (cards b2bundle and b2rebase, 2026-11-03). Nothing is pushed to the public fork and no PR is open: the coordinator opens it after the user's go. Branch `local/batch2-bundle-r2` on the private fork remote, head `6f036a40`: 4 commits on upstream main `552acc9a` (the merge of PR 178, the maintainer's batch 10). It replaces `local/batch2-bundle` (head `60d0404e` on `3e073888`, kept). Tags: V = run for this head (how stated), S = secondary (an earlier run of ours or a verifier's report, not re-run for this head), U = unverified. Raw results: [pr-batch2-run.txt](pr-batch2-run.txt).
 
 ---
 
@@ -10,12 +10,12 @@ Three fixes where d2d differs from game.exe 1.14d, four commits, one purpose per
 
 | # | component | commit | files | +/- |
 |---|---|---|---|---|
-| 1 | Skill mana: the check has no minmana floor, the payment needs enough mana | `76c8c3cd` | 8 | +190 -11 |
-| 2 | Teleport lands only in the caster's room or its near list | `e36daa1e` | 2 | +148 -0 |
-| 3 | Teleport lands on the nearest free spot of a blocked target | `2c17df31` | 3 | +53 -3 |
-| 4 | A monster's hit is rolled in 256ths, absorbed, then reduced | `60d0404e` | 9 | +346 -50 |
+| 1 | Skill mana: the check has no minmana floor, the payment needs enough mana | `7ca9ed6f` | 8 | +190 -11 |
+| 2 | Teleport lands only in the caster's room or its near list | `61b25c63` | 2 | +148 -0 |
+| 3 | Teleport lands on the nearest free spot of a blocked target | `b7df1839` | 3 | +53 -3 |
+| 4 | A monster's hit is rolled in 256ths, absorbed, then reduced | `6f036a40` | 9 | +346 -50 |
 
-No rebase was needed: the four commits apply to `3e073888` as they were written (V: `git cherry-pick`, no conflict).
+Rebased from `3e073888` onto `552acc9a` by `git cherry-pick` of the four commits in order: no conflict (V). `git range-diff` of the old and new ranges shows all four patches `=` (identical); git auto-merged `strike.cpp`, `gamedata.hpp`, `ai.hpp`, `fight.hpp` and `states.cpp` where PR 178 edited other hunks. PR 178 added nothing that calls `monster_blow`, `Fight::pay`, `pet_hurt`, `mana_cost` or the Teleport branch (V: grep of its diff).
 
 ## 1. Skill mana: no minmana floor in the check, payment only when enough
 
@@ -100,16 +100,17 @@ Only the git author and the Reported-by / Traced-by lines count for the gap map;
 
 ## Checks
 
-All on the head `60d0404e` unless said (V, worker host, Release build with the 1.14d game data, `nice` 19, one job at a time; the build machine for MSVC).
+All on the head `6f036a40` unless said (V, worker host and the build machine, Release build with the 1.14d game data, `nice` 19, one job at a time; the build machine for MSVC).
 
-- Commits: 4, subject line plus a body of three lines of at most 72 characters (subjects 68, 63, 65 and 57), then `Agent: Claude Code`; author and committer the numeric noreply identity on all four, no co-author or AI lines (V: `git log --format='%an <%ae> | %cn <%ce>'`, `tools/presubmit.py --quick` attribution check ok).
+- Commits: 4, subject line plus a body of three lines of at most 72 characters (subjects 57, 65, 63 and 68), then `Agent: Claude Code`; author and committer the numeric noreply identity on all four, no co-author or AI lines (V: `git log --format='%an <%ae> | %cn <%ce>'`, `tools/presubmit.py --quick` attribution check ok).
 - Suites (Release, `D2D_WERROR=ON`, g++, asserts on): test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_skills, test_sk_ground, test_sk_mana, test_tele_spot, test_monster_missile, test_missile_blow_poison: rc 0 each.
 - `tools/pr_guard.py`: 0 FAIL, 0 WARN on the range and on each of the 4 commits. `tools/presubmit.py --quick`: 0 FAIL, 4 WARN, answered below.
-- g++ and clang++ with the CI flags (`-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror`) plus `-Wshadow -Wrange-loop-construct -Wconversion`, `-fsyntax-only` on all changed translation units plus `tick.cpp`, `strike.cpp`, `missiles.cpp`: g++ 0 warnings; clang++ prints 436 lines, 0 of them on a line the diff adds (they are in untouched code). The Release build with `D2D_WERROR=ON` passes.
-- clang-tidy (the repo's `.clang-tidy`: identifier length and include-cleaner) on the 12 changed translation units: 0 diagnostics in the 17 changed files; the ones it prints are the `x` / `y` binding names in `components/drlg/outdoor.hpp`, `components/rules/merc.hpp` and `components/rules/pets.hpp`, which the diff does not touch (main has them). A second lane on the build machine (Ubuntu under WSL: g++ and clang++ configure, suites, run, extra warnings, tidy) is rc 0 in every stage.
-- MSVC 14.51 (cl 19.51.36260, VS 2026, the compiler of upstream CI; RelWithDebInfo, `/W4`, Ninja, apps off): base 0 `warning C`, head 0 `warning C`, no error; ctest base 70 of 70 passed, head 72 of 72 passed. The lane has no game data, so `test_game`, `test_sk_mana` and `test_tele_spot` compile and link there but report Skipped.
+- g++ and clang++ with the CI flags (`-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror`) plus `-Wshadow -Wrange-loop-construct -Wconversion`, `-fsyntax-only` on all changed translation units plus `tick.cpp`, `strike.cpp`, `missiles.cpp`: g++ 0 warnings; clang++ prints 436 lines (as before the rebase), 0 of them on a line the diff adds (they are in untouched code). The Release build with `D2D_WERROR=ON` passes.
+- clang-tidy (the repo's `.clang-tidy`: identifier length and include-cleaner) on the 12 changed translation units: 64 diagnostic lines, 0 in the 17 changed files; they are the `x` / `y` binding names in `components/drlg/outdoor.hpp` (40), `components/rules/merc.hpp` (20) and `components/rules/pets.hpp` (4), which the diff does not touch (main has them). include-cleaner: no diagnostic. A second lane on the build machine (Ubuntu under WSL: g++ and clang++ configure, suites, run, extra warnings, tidy) is rc 0 in every stage for the head (the base row's `guard` stage is rc 1 only because base against itself has no files).
+- MSVC 14.51 (cl 19.51.36260, VS 2026, the compiler of upstream CI; RelWithDebInfo, `/W4`, Ninja, apps off): base `552acc9a` 0 `warning C`, head 0 `warning C`, no error; ctest base 71 of 71 passed, head 73 of 73 passed. The lane has no game data, so `test_game`, `test_sk_mana` and `test_tele_spot` compile and link there but report Skipped.
+- Re-run on this head (V, `tools/emu/b2r_diff.sh`, `b2r_dmg.sh`): every count in sections 1 to 4 came out the same as on `60d0404e` (mana 190,840 cases, Teleport seeds 1 and 9 of 100,000, the nine damage sets of `v4_run.py 6000 20261103`, `mdmg2.py 20000 20261103`, `v3_run.py 10000 314159`); the numbers above are from this run.
 - Size against CodeRabbit's limits: see the budget table.
-- Not run: the determinism scenario hashes; a live game; builds and suites on the tree merged with PR 178 (only `git merge-tree`, below).
+- Not run: the determinism scenario hashes; a live game; anything on the pre-rebase base (all of it is now on the merged main).
 
 ### CodeRabbit budget
 
@@ -124,8 +125,8 @@ Limits from `docs/research/coderabbit-limits-20261102.md` (the repo has no CodeR
 
 ## Merge
 
-- The head is a fast-forward of upstream main `3e073888` (V: `git merge-base`, `git rev-list --count`: 4).
-- PR 178 (head `25978757`) is open. A throwaway `git merge-tree --write-tree` of its head with this head: exit 0, clean, no conflict (V; tree `c32576d5`). PR 178 does not touch `mana_cost`, `Fight::pay`, `cost_of`, the Teleport branch, `monster_blow` or the absorb code; it edits `skills.hpp`, `fight.hpp`, `strike.cpp` and `gamedata.hpp` in other hunks. The differentials were not re-run on the merged tree; earlier per-branch merged-tree builds and suites passed (S). If it merges first: `git rebase --onto <new main> 3e073888 local/batch2-bundle`, then rerun the suites.
+- The head is a fast-forward of upstream main `552acc9a` (V: `git merge-base --is-ancestor`, `git rev-list --count 552acc9a..HEAD`: 4).
+- PR 178 merged at `552acc9a`. What it changed near ours (V, `git diff 3e073888 552acc9a`): the panel state colours (`strike.cpp` `update_fighters`, `skills.hpp` `attack_line`/`PanelColour`, `gamedata.hpp` State `panel_blue`/`panel_red`, replication), `Missile::ar_pct` and the thrown-weapon `toht`, class level requirements (`required_level` gains a class argument; `missiles.cpp`), the store refusals and the belt key text, and ponytail comment edits in `fight.hpp`/`states.cpp`. It does not touch `mana_cost`, `Fight::pay`, `cost_of`, the Teleport branch, `monster_blow`, `settle_blow` or the absorb code, and adds no new caller of them. Our assumptions hold.
 
 ## Answers to the presubmit warnings
 
