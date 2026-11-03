@@ -125,6 +125,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- ffa19e01 11-03 11:10 `merge origin/main into b2on181` (b2on181)
 - 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
 - 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
 - f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
@@ -134,5 +135,4 @@
 - 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
 - 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
 - fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
-- 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
 <!-- statusgen:end -->
