@@ -129,6 +129,8 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 2a4a7063 11-03 09:17 `Merge agent/msvcc2026: msvcc2026: MSVC C2026 trace (oversize raw-string literals upstream), byte-identical split probe (docs, emulator tools)` (msvcc2026)
+- 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
 - 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
 - 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
 - 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
@@ -137,6 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
 - 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
 - d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
-- b5496da4 11-03 03:01 `Merge agent/gaterecords: GATERECORDS: the three Gate 1 run records of 2026-11-02/03 under unique run-id names, an index, merge-lines in the valid format (all three runs NOT PASSED: Belt 12, then Belt 37 and NOKILL 11, then Belt 7 and True XP/h -11 percent); the old PASSED record is untouched` (gaterecords)
-- 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
 <!-- statusgen:end -->
