@@ -28,7 +28,7 @@ Order of work: read game.exe first (section 1), own model and harness (section 2
 | P1 | identity, one purpose per commit, three-line body, `Agent: Claude Code` | **HOLDS WITH LIMITS** | V run `git log`: author = committer = the numeric noreply identity on all three commits; body 2 lines; last line `Agent: Claude Code`; no co-author line. But subjects are 85 / 65 / 63 characters (82f8d3e4, d2572d6c, 74a17909) and the six body lines 113 to 154, unwrapped (F5) |
 | P2 | CI flags g++ and clang++ clean; extra warnings 0 on added lines | **VERIFIED** | V run: syntax-only g++ and clang++ with -Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Wshadow -Wrange-loop-construct -Wconversion on every changed .cpp plus tick / strike / missiles: 0 warnings on added lines for both branches (clang prints 270 / 168 on old lines). Release builds with `D2D_WERROR=ON` (g++) pass |
 | P3 | the suites rc 0 | **VERIFIED** | V run on each head: test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_sk_ground (the 8) plus test_skills and the branch's own test: rc 0 each |
-| P4 | merge with #178 (head 25978757) clean; suites pass on the merged trees | see section 5 | V run merge-tree: clean for both |
+| P4 | merge with #178 (head 25978757) clean; suites pass on the merged trees | **VERIFIED** | V run, section 5 (the author did not re-run the differential on merged trees; this verifier did) |
 | P5 | MSVC /W4, windows.h macros | **HOLDS (read)** | V read: no `min`/`max`/`near`/`far` identifiers added; `std::max` as before; casts explicit; gamedata.hpp already includes `<optional>`, `<utility>`, `<cstdlib>`. A local lambda named `free` shadows the C function (legal; a reviewer may ask for another name) |
 
 ## Findings (ranked)
@@ -74,7 +74,11 @@ Order of work: read game.exe first (section 1), own model and harness (section 2
 
 ## 5. Merge with #178 and the merged trees
 
-MERGED-PLACEHOLDER
+- `git merge-tree --write-tree` of pull/178 (head 25978757, fetched read-only into the own clone) with each branch head: clean, no conflict (V run). Files both touch: minmana fight.hpp, missiles.cpp, strike.cpp, skills.hpp; Teleport strike.cpp, gamedata.hpp (other hunks).
+- Throwaway merge commits (own clone, never pushed), Release builds with `D2D_WERROR=ON` (g++): both build, including #178's test_panel_states (built, not run here).
+- On the merged trees (V run): the 8 suites, test_skills and the branch's own test rc 0 each; the own differentials re-run there: mana seed 3 head-with-#178 0 of 28,454 differ; Teleport seed 5 the same 179 ring-50 cases and nothing else (F1 is not changed by #178).
+
+**P4: VERIFIED** (test_panel_states not run).
 
 ## 6. Re-run
 
