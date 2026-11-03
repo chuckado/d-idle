@@ -369,6 +369,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - B2REBASE: batch 2 bundle rebased onto upstream main 552acc9a (PR 178 merged): `local/batch2-bundle-r2` head 6f036a40, private remote; all checks and differentials re-run, numbers unchanged; PR body updated, the user decides staging and opening
 - beltfix5 - banked gold was out of reach with 0 healing potions (Gate 1 0338 clvl 11 window): town withdraw chore + bot counts pack plus stash gold; belt-rule delta proposed with numbers; live check pending
 - stashfield: minute line gets stashGold; d2dsoak prints a report-only gold line per belt window over 5 vmin (poverty or funded); BELT semantics await the user's spec decision; docs/research/stashfield.md
+- specdelta - Gate 1 belt rule (funded windows only, pack plus stash gold >= 30) and XP rule (single seed inside tolerance passes with a note) as soak-gates delta, d2dsoak BeltFundedMin, gate-judge xp_gate1, re-judge docs/research/specdelta-rejudge.md; ops gate-judge commit 979b83d
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
