@@ -11,3 +11,6 @@ for l in base r2 r3; do
 	nice -n 19 c++ $IN $DEF -O1 -std=c++26 -Wno-missing-field-initializers -o "$S/w3_d2d_$l" "$here/w3_d2d.cpp"
 	echo "built w3_d2d_$l"
 done
+nice -n 19 c++ -I$S/t_r3/components/rules -I$S/t_r3/components/d2s -I$S/t_r3/components/txt -I$S/t_r3/components/log -DW3_NOGUARD \
+	-O1 -std=c++26 -Wno-missing-field-initializers -o "$S/w3_d2d_r3ng" "$here/w3_d2d.cpp"
+echo "built w3_d2d_r3ng (diagnosis: r3 without Fight::absorb's guard)"

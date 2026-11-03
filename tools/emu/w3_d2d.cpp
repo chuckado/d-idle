@@ -63,7 +63,11 @@ int main() {
         std::array<StruckBlow, 1> blows{ StruckBlow{ t.damage, 0, false, t.physical, t.elemental, false, t.frac, t.raw, def.dr_pct, def.dr_flat } };
         const auto sum = [&] { long long s = 0; for (const auto& b : blows) s += ((long long)b.damage << 8) + b.frac; return s; };
         long long fine = ((long long)t.damage << 8) + t.frac;
-        if (fine > 0) {
+#ifdef W3_NOGUARD
+        if (true) {   // diagnosis only: Fight::absorb without its `fine <= 0 -> return 0` guard
+#else
+        if (fine > 0) {   // Fight::absorb: `if (fine <= 0) return 0;` on the REDUCED hit, before any state runs
+#endif
             const long long before = sum();
             if (pool > 0) (void)absorb_blows(blows, pool, false);
             if (espct > 0) { std::int64_t m = mana; (void)shield_blows(blows, espc, per16, m); mana = m; }
