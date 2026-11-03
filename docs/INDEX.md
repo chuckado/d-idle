@@ -314,3 +314,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/xphshort.md: Gate 1 XP/h budget and split, remedies, multi-seed Gate 1 plan; tools/baseline/xph_budget.py
 - docs/research/gate-triage-examples.md: output of tools/baseline/gate_triage.py for the five Gate 1 runs of 2026-11-02/03, checked against the hand findings
 - docs/research/project-review-20261103.md: project review 2026-11-03 (goals, done vs verified, effort by area, evaluation, rewritten goals, plan, proposed ADR/decisions text)
+- docs/adr/0015-goals-acceptance-on-game-exe.md: goals G-A..G-F, acceptance on game.exe; docs/plan/plan-20261103.md: plan; docs/research/card-triage-20261103.md: open card triage
