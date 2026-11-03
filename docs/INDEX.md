@@ -318,3 +318,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/codereview1.md: code review of the Gate 1 belt fixes (BELTFIX..BELTFIX5, HIREFIX), ranked findings and smallest fixes
 - docs/research/housekeep-20261103.md: read-only inventory of agent worktrees, branches and ops repo leftovers (2026-11-03)
 - docs/research/review-pr180-20261103.md: private review of upstream PR 180 (re-pipeline: Ghidra names, structs.tsv, presubmit GCC and tidy, sorted lists) with consequences for batch 2
+- docs/research/verify-dmgroll2.md: second verifier report on DMGROLL r2 (b9ecb415), own differential in verify-dmgroll2-run.txt
