@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- covitemtypes: docs/research/covitemtypes-trace.md and tools/emu/cit_*: ItemTypes decomposed (game.exe type walk, closure matrix, slot, hands, socket cap vs d2d, 0 mismatches on 553,647 cases); bot findings B1-B3; coverage ledger itemtypes 98/98 TESTED-0-DIFF (docs and emulator tools only)
 - tools: A:B comparison tool for d2d against game.exe records (equivalence interval, per-k regimes).
 - docs: SEEDSPAWN trace of layout, spawn list and RNG draws, d2d against game.exe, and levels.layout coverage rows (seedspawn)
 - SEEDDIST: docs/research/seeddist-trace.md (distribution check of d2d vs game.exe RNG outcomes)
