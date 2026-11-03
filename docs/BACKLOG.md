@@ -376,6 +376,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - verifyb2 done: batch 2 minmana ready with text changes; Teleport needs `ring < 50` in warp_spot (game.exe stops at ring 49) before the PR (docs/research/verify-batch2.md)
 - codefix - fixes for the independent review of the belt fixes (F1 NearTown split, F2 futile guard with stash gold, F3 mana reserve, F4 chain walk limit, F5 recovery floor, F8); live check = Gate 1 re-run
 - MERGEQ: tools/merge_lines_check.py lints merge-lines.txt (run by tools/ci/check.sh for the cards a branch touches); ops side: tools/mergeq.sh queue and docs-only merge fast path.
+- XPHSHORT: Gate 1 XP/h drop (10042 to 7060) is area choice at clvl 13+, not the belt/shop fixes (town time 8.8 percent, 141 XP/h); remedies and 5-seed Gate 1 plan (docs/research/xphshort.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

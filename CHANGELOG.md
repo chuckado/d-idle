@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: XP/h time-budget tool (tools/baseline/xph_budget.py) and the Gate 1 XP/h analysis (docs/research/xphshort.md).
 - tools: merge_lines_check.py catches bad merge-lines.txt files (OWNERS lines, markdown bullets, missing prefixes) in tools/ci/check.sh before the merge preflight.
 - Bot: the chain walk home is now only for a character with no healing potion; stash gold no longer defeats the futile-trip guard; the mana reserve applies only while the kit is incomplete.
 - verifyb2: independent verifier of upstream batch 2; one deviation found (Teleport ring 50)

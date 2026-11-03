@@ -311,3 +311,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-batch2.md: independent check of upstream batch 2 (minmana floor, Teleport D1 + D2)
 - docs/research/codefix.md - what changed per review finding, tests, what a Gate 1 re-run should show
 - tools/merge_lines_check.py: merge-lines.txt grammar linter (stdlib, tests in tools/ci/tests).
+- docs/research/xphshort.md: Gate 1 XP/h budget and split, remedies, multi-seed Gate 1 plan; tools/baseline/xph_budget.py
