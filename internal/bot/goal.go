@@ -478,7 +478,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			}
 			r.setLastTrip(r.e.Clock.Now())
 			if s := r.latest(); s != nil {
-				r.noteTripGold(s.Player.Gold)
+				r.noteTripEnd(s)
 				r.logTrip(t, s.Player.Gold)
 				if lb, ok := r.d.Loot.(leftBehinder); ok {
 					lb.ClearLeftBehind()
