@@ -279,3 +279,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/covmissiles-trace.md - missiles coverage first pass: table values, flight formulas and hit roll of the Sorceress and Paladin rows (covmissiles)
 - docs/research/verifyskamazon-trace.md: independent verification of the Amazon first pass: calc cells 0 of 52,300 differ (own harness), element roll top-exclusive rule 20,000 cases, Pierce function 99,092 cases vs own model, shooter stat 0x148 is a per-shot counter (V read), one wrong cell (card verifyskamazon)
 - docs/research/verifystateev2.md: independent verifier of SKSTATEEV (both passes, own emulator harness, claim verdicts)
+- [docs/research/tierb-design-20261102.md](research/tierb-design-20261102.md): Tier B design and the statistical A:B protocol for d2d against game.exe, staged cards, fidelity-gate mapping, kitb vs kitk2 regime reading
