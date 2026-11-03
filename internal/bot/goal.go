@@ -324,7 +324,12 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 	if known && !p.InTown() {
 		trip = r.tripVerdict(s)
 	}
-	broke := r.recoveryActive() && p.Gold < r.e.Tune.Resource.RecoveryKitGold
+	// BELTFIX5: banked gold counts when no healing potion is left; the town visit withdraws it (Town.withdraw)
+	kitGold := p.Gold
+	if healing == 0 {
+		kitGold += p.StashGold
+	}
+	broke := r.recoveryActive() && kitGold < r.e.Tune.Resource.RecoveryKitGold
 	if broke {
 		trip = resource.Trip{} // recovery: a potion trip with an empty purse buys nothing (G1 attempt 9: 90 min of walking)
 	}
@@ -352,7 +357,7 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		// Recovery suppresses potion trips from the field (an empty purse buys nothing), not the visit already under way:
 		// in town with no healing potion and gold for one the shop opens (potionFloor caps it, the kit gold stays).
 		// Gate 1 20261103: left Rogue Encampment with 185 gold and 0 potions, 3 virtual minutes outside town unhealed.
-		if healing < threshold && p.Gold >= minPotionPrice && !trip.Futile && (!broke || (p.InTown() && healing == 0)) {
+		if healing < threshold && kitGold >= minPotionPrice && !trip.Futile && (!broke || (p.InTown() && healing == 0)) {
 			plan.Potions = true
 			why = append(why, fmt.Sprintf("%d healing potions", healing))
 			emergency = healing == 0
@@ -473,7 +478,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 			}
 			r.setLastTrip(r.e.Clock.Now())
 			if s := r.latest(); s != nil {
-				r.noteTripGold(s.Player.Gold)
+				r.noteTripEnd(s)
 				r.logTrip(t, s.Player.Gold)
 				if lb, ok := r.d.Loot.(leftBehinder); ok {
 					lb.ClearLeftBehind()
@@ -827,7 +832,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			ex[areaDenOfEvil] = true // a dungeon quest needs a potion buffer; farm the open field first
 		}
 		pick := func() (Step, bool) {
-			return r.d.Plan.Pick(diff, p.Level, PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class)})
+			return r.d.Plan.Pick(diff, p.Level, PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty)})
 		}
 		step, ok := pick()
 		if !ok && r.denGated(s) && p.Level >= r.denFloor(s)-denYieldGap && !cleared[areaDenOfEvil] && !r.banned(areaDenOfEvil) {

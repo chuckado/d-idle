@@ -8,6 +8,25 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- b2rebase2: batch 2 bundle rebased onto upstream main 005c7cab, split proposal, bodies on the new PR template; nothing pushed upstream
+- verifydmg4: fourth verification of the monster damage roll r4 (tools/emu/v4_*, docs/research/verify-dmgroll4.md)
+- verifydmg2: second verification of the monster damage roll r2 (tools/emu/v2_*, docs/research/verify-dmgroll2.md)
+- review180: private review of upstream PR 180 and its effect on batch 2; nothing posted upstream
+- housekeep: archived the stale soak-minutes-virtual card and applied its virtual-minute spec delta
+- codereview1: review of the Gate 1 belt fixes with ranked findings (docs only)
+- Docs: ADR 0015 (acceptance on game.exe, six goals), plan 2026-11-03, STATUS rewritten, card triage
+- Docs: project review 2026-11-03 (goals evaluated and rewritten, plan short/medium/long)
+- gatetriage: a Gate 1 triage script prints the verdict, the belt and no-kill windows, the XP by area and the likely cause on one screen
+- docs: XP/h time-budget tool (tools/baseline/xph_budget.py) and the Gate 1 XP/h analysis (docs/research/xphshort.md).
+- tools: merge_lines_check.py catches bad merge-lines.txt files (OWNERS lines, markdown bullets, missing prefixes) in tools/ci/check.sh before the merge preflight.
+- Bot: the chain walk home is now only for a character with no healing potion; stash gold no longer defeats the futile-trip guard; the mana reserve applies only while the kit is incomplete.
+- verifyb2: independent verifier of upstream batch 2; one deviation found (Teleport ring 50)
+- covpal: Paladin coverage first pass (docs/research/covpal-trace.md, tools/emu/covpal*): skills.pal now fully in the ledger (15 rows, 14,400 cases per aspect, 0 differ); Redemption callback and Vengeance read; no PR candidate
+- areareach: the leveling planner no longer refuses Dark Wood or Black Marsh when it stands in a field without a waypoint, and a fallback area is chosen by XP per kill
+- MSVC2026 trace: test_monster_ai fails MSVC C2026 because four raw-string literals (62345, 59449, 59285, 16762 bytes) exceed 16380; fix by splitting into adjacent literals, same bytes (g++ probe, 4 constants, 0 mismatches); docs only
+- specdelta: Gate 1 now excuses belt windows where the character could not afford a potion (pack plus stash gold under 30) and lets a single seed inside the XP tolerance pass with a note
+- stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
+- Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
 - b2rebase: batch 2 bundle rebased onto upstream main 552acc9a, PR body and run record refreshed; nothing pushed upstream
 - beltfix4: a character in recovery mode with no healing potion and gold for one now shops on arrival in town instead of walking back out
 - docs: restore the three Gate 1 soak records of 2026-11-02/03 under unique run-id names, add an index (docs/soaks/gate1-index-20261103.md).

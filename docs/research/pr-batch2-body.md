@@ -1,6 +1,6 @@
 # Fidelity fixes against game.exe 1.14d: skill mana check and payment, Teleport target rules, monster damage roll
 
-> status: FINAL BODY, not posted (cards b2bundle and b2rebase, 2026-11-03). Nothing is pushed to the public fork and no PR is open: the coordinator opens it after the user's go. Branch `local/batch2-bundle-r2` on the private fork remote, head `6f036a40`: 4 commits on upstream main `552acc9a` (the merge of PR 178, the maintainer's batch 10). It replaces `local/batch2-bundle` (head `60d0404e` on `3e073888`, kept). Tags: V = run for this head (how stated), S = secondary (an earlier run of ours or a verifier's report, not re-run for this head), U = unverified. Raw results: [pr-batch2-run.txt](pr-batch2-run.txt).
+> status: FINAL BODY on the NEW upstream template (card b2rebase2, 2026-11-03), not posted. Nothing is pushed to the public fork and no PR is open: the coordinator opens it after the user's go. Branch `local/batch2-bundle-r3` on the private fork remote, head `824da884`: 4 commits on upstream main `005c7cab` (PRs 179 and 180 merged; the maintainer's batch rules `549da358` read, see [pr-upstream-rules-20261103.md](pr-upstream-rules-20261103.md)). It replaces `local/batch2-bundle-r2` (head `6f036a40` on `552acc9a`, kept). The rules may ask for two batches instead of one: split bodies in [pr-batch2-body-split.md](pr-batch2-body-split.md). Tags: V = run for this head (how stated), S = secondary (an earlier run of ours or a verifier's report, carried because the patch is identical, not re-run for this head), U = unverified. Raw results: [pr-batch2-run.txt](pr-batch2-run.txt).
 
 ---
 
@@ -10,12 +10,23 @@ Three fixes where d2d differs from game.exe 1.14d, four commits, one purpose per
 
 | # | component | commit | files | +/- |
 |---|---|---|---|---|
-| 1 | Skill mana: the check has no minmana floor, the payment needs enough mana | `7ca9ed6f` | 8 | +190 -11 |
-| 2 | Teleport lands only in the caster's room or its near list | `61b25c63` | 2 | +148 -0 |
-| 3 | Teleport lands on the nearest free spot of a blocked target | `b7df1839` | 3 | +53 -3 |
-| 4 | A monster's hit is rolled in 256ths, absorbed, then reduced | `6f036a40` | 9 | +346 -50 |
+| 1 | Skill mana: the check has no minmana floor, the payment needs enough mana | `486e8ff1` | 8 | +190 -11 |
+| 2 | Teleport lands only in the caster's room or its near list | `4fd9b356` | 2 | +148 -0 |
+| 3 | Teleport lands on the nearest free spot of a blocked target | `9dda1012` | 3 | +53 -3 |
+| 4 | A monster's hit is rolled in 256ths, absorbed, then reduced | `824da884` | 9 | +346 -50 |
 
-Rebased from `3e073888` onto `552acc9a` by `git cherry-pick` of the four commits in order: no conflict (V). `git range-diff` of the old and new ranges shows all four patches `=` (identical); git auto-merged `strike.cpp`, `gamedata.hpp`, `ai.hpp`, `fight.hpp` and `states.cpp` where PR 178 edited other hunks. PR 178 added nothing that calls `monster_blow`, `Fight::pay`, `pet_hurt`, `mana_cost` or the Teleport branch (V: grep of its diff).
+Rebased from `552acc9a` onto `005c7cab` by `git cherry-pick` of the four commits in order: no conflict (V). `git range-diff 552acc9a..local/batch2-bundle-r2 upstream/main..HEAD` shows all four patches `=` (identical). Auto-merged by git: `gamedata.hpp` (PR 180 edited 4 lines of it elsewhere) and nothing else listed; PR 179 and 180 also touched `gamedata.cpp`, `gamedata_load.cpp`, `test_game_missiles.cpp`, `test_game_tables.cpp` and `test_static_field.cpp` (2 to 4 lines each, none in our hunks). Neither adds a caller of `monster_blow`, `Fight::pay`, `pet_hurt`, `mana_cost`, `Level::warp_spot` or the Teleport branch (V: file list of `git diff 552acc9a upstream/main` against our 17 files).
+
+## Claims (batch)
+
+One row per commit, as `.github/pull_request_template.md` asks. Commit 3 builds on commit 2 (same `Fight::spot` Teleport branch and test file; V: applying 3 alone on main conflicts); commits 1, 2 and 4 apply on main in any order (V: cherry-pick of 2, 1, 4 in that order is clean).
+
+| Commit | Claim or change | Evidence | Re-check |
+|---|---|---|---|
+| `486e8ff1` | The skill mana check has no minmana floor; the payment takes `max(formula, minmana x 256)` and only when enough mana | `0056c160` (check), `0056bfe0` (payment) | `pb2_mana.sh 100000 7 BASE_BIN HEAD_BIN` (bins `test_sk_mana`): 105,978 compared, base 281 differ, head 0; `ctest -R "test_sk_mana|test_skills"` |
+| `4fd9b356` | Teleport lands only in the caster's room or its near list | `00554ea0` (warp), `00463740` (room lookup), `005ca360` | `pb2_tele.sh 100000 1 BASE_BIN D1_BIN HEAD_BIN` (bins `test_tele_spot`): 40,974 not-near cases, base 15,854 equal, this commit 40,974; `ctest -R test_tele_spot` |
+| `9dda1012` | Teleport lands on the nearest free spot of a blocked target (rings 1 to 49) | `00554ea0`, `0064e7b0`, `0064dea0` | same run: 1,461 blocked-target cases, 0 before, 1,461 after; the ring-49/50 asserts in `test_tele_spot` |
+| `824da884` | A monster's hit is rolled in 256ths, absorbed on the unreduced physical, then reduced; fixed records keep min == max | `0057b420` (roll), `0057c1e0` (record order), `0057bf80` (reduce), `005c6370` (Bone Armor), `005ca6c0` (Energy Shield) | `v4_run.py 6000 20261103`, `mdmg2.py 20000 20261103`, `v3_run.py 10000 314159`; `ctest -R "test_combat|test_game"`; Energy Shield is NOT equal (section 4) |
 
 ## 1. Skill mana: no minmana floor in the check, payment only when enough
 
@@ -39,7 +50,7 @@ Counted (V, `tools/emu/pb2_tele.sh 100000 1`: `FUN_005ca360` and the warp `FUN_0
 | target blocked | 1,461 | 0 | 0 | 1,461 |
 | all | 100,000 | 73,419 | 98,539 | 100,000 |
 
-Commit 2 removes the 25,120 cases where game.exe refuses and d2d landed. A second set (seed 9, V): base 73,088, after commit 2 98,445, head 100,000 of 100,000 (room not near 40,969, free target 52,397, Teleport 0 5,079, blocked 1,555; base landed 25,357 times where game.exe refuses).
+Commit 2 removes the 25,120 cases where game.exe refuses and d2d landed. A second set (seed 9, S: run on `6f036a40`, not re-run): base 73,088, after commit 2 98,445, head 100,000 of 100,000 (room not near 40,969, free target 52,397, Teleport 0 5,079, blocked 1,555; base landed 25,357 times where game.exe refuses).
 
 Limits: the oracle's near list is the 3 x 3 touching rooms (a hook); d2d's near list gives the same set for 8 x 8 tile rooms, but real levels with irregular rooms are not compared (U). `FUN_0064dea0` looks each candidate up from the last room it found, so game.exe's valid rooms depend on that walk; d2d's `warp_spot` has no room test of its own (S, verifier note F6). Teleport value 2 (the clear-line test) is unchanged and not covered (the oracle hooks it to clear).
 
@@ -55,7 +66,7 @@ Limits: the plus footprint as the player's pattern is read (the oracle runs `FUN
 
 `FUN_0057b420` rolls `(min << 8) + rand((max - min) << 8)` on the attacker's seed, with min taken at least 1 and max at least min + 1 (so `0..0` rolls 1..2 and draws once, and the top is never rolled); d2d rolled whole points, inclusive. `FUN_0057c1e0` then raises the absorb event on the unreduced physical (Bone Armor `FUN_005c6370`, Energy Shield `FUN_005ca6c0`), then reduces the record, flat first and then percent (`FUN_0057bf80`), and the life stat takes the result in 256ths; a result under one point is 0 (`0057c852`). d2d: `rules::monster_blow` rolls in 256ths and returns `Taken::damage`, `Taken::frac` (0..255) and `StruckBlow::frac`; `rules::reduce_fine` does the reduction in 256ths; `rules::absorb_blows` and `Fight::absorb` take the Bone Armor and Cyclone Armor pools in 256ths off the unreduced field and put the reduction back; `Fight::hurt_side` takes `(damage << 8) + frac` off the player's life and treats a life under 256 as dead; pets get the fraction through `pet_hurt(.., fraction)`, the merc through its `life_frac`. Fixed records (Corpse Explosion, Diablo's cold touch: min == max) reach `FUN_0057c1e0` without a roll, take no draw, and keep the reduction and the absorbs.
 
-Counted on this head (V, the worker host; game.exe's `FUN_0057b420` natively, then a game-order model of `FUN_0057c1e0` written from the disassembly; the d2d side is the real compiled `Fight::absorb`, linked from this head's `libgame.a`, and the real `Fight::hurt_side`). Frames where d2d differs from game.exe in life / pool, seed after in every row 0:
+Counted on `6f036a40`, carried to this head (S: the patch is identical and not re-run on `824da884`; originally V on the worker host; game.exe's `FUN_0057b420` natively, then a game-order model of `FUN_0057c1e0` written from the disassembly; the d2d side is the real compiled `Fight::absorb`, linked from this head's `libgame.a`, and the real `Fight::hurt_side`). Frames where d2d differs from game.exe in life / pool, seed after in every row 0:
 
 | set (8 Act 1 classes) | frames | base | head |
 |---|---|---|---|
@@ -100,33 +111,35 @@ Only the git author and the Reported-by / Traced-by lines count for the gap map;
 
 ## Checks
 
-All on the head `6f036a40` unless said (V, worker host and the build machine, Release build with the 1.14d game data, `nice` 19, one job at a time; the build machine for MSVC).
+Head `824da884` on `005c7cab`. Worker host, Release build with `D2D_WERROR=ON` and the 1.14d game data (V unless said). Raw output: [pr-batch2-run.txt](pr-batch2-run.txt).
 
-- Commits: 4, subject line plus a body of three lines of at most 72 characters (subjects 57, 65, 63 and 68), then `Agent: Claude Code`; author and committer the numeric noreply identity on all four, no co-author or AI lines (V: `git log --format='%an <%ae> | %cn <%ce>'`, `tools/presubmit.py --quick` attribution check ok).
-- Suites (Release, `D2D_WERROR=ON`, g++, asserts on): test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_skills, test_sk_ground, test_sk_mana, test_tele_spot, test_monster_missile, test_missile_blow_poison: rc 0 each.
-- `tools/pr_guard.py`: 0 FAIL, 0 WARN on the range and on each of the 4 commits. `tools/presubmit.py --quick`: 0 FAIL, 4 WARN, answered below.
-- g++ and clang++ with the CI flags (`-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Werror`) plus `-Wshadow -Wrange-loop-construct -Wconversion`, `-fsyntax-only` on all changed translation units plus `tick.cpp`, `strike.cpp`, `missiles.cpp`: g++ 0 warnings; clang++ prints 436 lines (as before the rebase), 0 of them on a line the diff adds (they are in untouched code). The Release build with `D2D_WERROR=ON` passes.
-- clang-tidy (the repo's `.clang-tidy`: identifier length and include-cleaner) on the 12 changed translation units: 64 diagnostic lines, 0 in the 17 changed files; they are the `x` / `y` binding names in `components/drlg/outdoor.hpp` (40), `components/rules/merc.hpp` (20) and `components/rules/pets.hpp` (4), which the diff does not touch (main has them). include-cleaner: no diagnostic. A second lane on the build machine (Ubuntu under WSL: g++ and clang++ configure, suites, run, extra warnings, tidy) is rc 0 in every stage for the head (the base row's `guard` stage is rc 1 only because base against itself has no files).
-- MSVC 14.51 (cl 19.51.36260, VS 2026, the compiler of upstream CI; RelWithDebInfo, `/W4`, Ninja, apps off): base `552acc9a` 0 `warning C`, head 0 `warning C`, no error; ctest base 71 of 71 passed, head 73 of 73 passed. The lane has no game data, so `test_game`, `test_sk_mana` and `test_tele_spot` compile and link there but report Skipped.
-- Re-run on this head (V, `tools/emu/b2r_diff.sh`, `b2r_dmg.sh`): every count in sections 1 to 4 came out the same as on `60d0404e` (mana 190,840 cases, Teleport seeds 1 and 9 of 100,000, the nine damage sets of `v4_run.py 6000 20261103`, `mdmg2.py 20000 20261103`, `v3_run.py 10000 314159`); the numbers above are from this run.
+- Commits: 4; subject at most 72 characters (57, 65, 63, 68), body three lines of at most 72, last line `Agent: Claude Code`; author and committer the numeric noreply identity on all four, no co-author or AI line (V: `git log --format='%an <%ae> | %cn <%ce>'`; the `tools/presubmit.py --quick` attribution check is `ok`).
+- Suites on the g++ build, rc 0 each: test_rules, test_game_rules, test_monsters, test_monster_thinks, test_monster_ai, test_combat, test_game, test_sk_ground, test_sk_mana, test_tele_spot (V, `tools/parity.sh`; the clang++ build compiles and links the same suites). test_monster_missile and test_missile_blow_poison (in the earlier run) were not in this run's list.
+- `tools/pr_guard.py`: 0 FAIL, 0 WARN on the range and on each of the 4 commits (V).
+- `tools/presubmit.py --quick --build <g++ build dir>` (the form PR 180 added: GCC and clang-tidy on the changed files): 0 FAIL, 4 WARN (answered below). `gcc: 230 TUs, g++ -Wshadow -Wconversion -Wno-sign-conversion -Werror` ok; `clang-tidy: 230 TUs` ok (453 findings on lines this branch did not add, in `outdoor.hpp`, `merc.hpp`, `pets.hpp`: binding names `x` and `y`, present on main). Without a prior build the GCC and tidy part only warns.
+- g++ and clang++ with the CI flags plus `-Wshadow -Wrange-loop-construct -Wconversion`, changed translation units, added lines: 0 warnings (V, parity `extra` stage). clang-tidy (parity `tidy` stage) rc 0.
+- Every g++ target (parity `g-all`, informational): rc 1 on files this branch does not touch (`apps/d2d/ui.cpp`, `apps/d2d/town/walk.cpp`, `tests/test_protocol.cpp`: GCC 16 `-Werror` maybe-uninitialized and array-bounds); none of the files is in the diff (the base was not built for comparison, U).
+- Counted differentials re-run on this head (V, `tools/emu/b2r3_diff.sh`): mana seed 7, 190,840 cases, 105,978 compared, base 281 differ, head 0; Teleport seed 1, 100,000 cases, equal 73,419 (base), 98,539 (after commit 2), 100,000 (head). Identical to the numbers on `6f036a40`. NOT re-run on this head: Teleport seed 9 (stopped when a long gate run started on the worker host) and the damage-roll sets (`v4_run.py`, `mdmg2.py`, `v3_run.py`). Their numbers in sections 2 and 4 are carried from the run on `6f036a40` (S): the patch is identical (`range-diff` `=`) and the files of commit 4 are not touched by PR 179 or 180 (V).
+- NOT run for this head: the WSL lane and MSVC 14.51 on the build machine (its safety gate refuses weekday daytime); on `6f036a40` both passed (S: MSVC 0 `warning C`, ctest 73 of 73; WSL lane rc 0 in every stage). A live game, a determinism-hash comparison.
 - Size against CodeRabbit's limits: see the budget table.
-- Not run: the determinism scenario hashes; a live game; anything on the pre-rebase base (all of it is now on the merged main).
 
 ### CodeRabbit budget
 
 Limits from `docs/research/coderabbit-limits-20261102.md` (the repo has no CodeRabbit configuration; the file cap is 100, the other numbers are the budget we set ourselves, U):
 
-| quantity | this PR | budget (target / ceiling) |
-|---|---|---|
-| files | 17 | 40 / 70 (cap 100) |
-| added + deleted lines | 797 (735 + 62) | 1,000 / about 1,500 |
-| commits | 4 | 15 / 40 seen accepted |
-| pushes to the PR branch | 1 (the finished bundle at once) | 1, then at most 1 an hour |
+| quantity | one PR (bundle) | batch A (mana, Teleport) | batch B (damage roll) | budget (target / ceiling) |
+|---|---|---|---|---|
+| files | 17 | 10 | 9 | 40 / 70 (cap 100) |
+| added + deleted lines | 797 (735 + 62) | 401 (389 + 12) | 396 (346 + 50) | 1,000 / about 1,500 |
+| commits | 4 | 3 | 1 | 15 / 40 seen accepted |
+| pushes to the PR branch | 1 | 1 | 1 | 1, then at most 1 an hour |
+
+(V: `git diff --shortstat upstream/main...HEAD` on each branch.) No form is near a limit. A and B together list 19 files because `fight.hpp` and `tick.cpp` are in both.
 
 ## Merge
 
-- The head is a fast-forward of upstream main `552acc9a` (V: `git merge-base --is-ancestor`, `git rev-list --count 552acc9a..HEAD`: 4).
-- PR 178 merged at `552acc9a`. What it changed near ours (V, `git diff 3e073888 552acc9a`): the panel state colours (`strike.cpp` `update_fighters`, `skills.hpp` `attack_line`/`PanelColour`, `gamedata.hpp` State `panel_blue`/`panel_red`, replication), `Missile::ar_pct` and the thrown-weapon `toht`, class level requirements (`required_level` gains a class argument; `missiles.cpp`), the store refusals and the belt key text, and ponytail comment edits in `fight.hpp`/`states.cpp`. It does not touch `mana_cost`, `Fight::pay`, `cost_of`, the Teleport branch, `monster_blow`, `settle_blow` or the absorb code, and adds no new caller of them. Our assumptions hold.
+- The head is `005c7cab` plus 4 commits (V: `git rev-list --count upstream/main..HEAD`). If main moves again, `git rebase origin/main` (AGENTS.md section 6) and re-run the checks.
+- One batch or two: [pr-upstream-rules-20261103.md](pr-upstream-rules-20261103.md). The split heads (`local/batch2-mana-teleport`, `local/batch2-monsterdmg-pr`) merge to this head's tree (V: `git merge-tree` of the two, empty diff against this head) and A equals this head's parent tree (V).
 
 ## Answers to the presubmit warnings
 
@@ -135,8 +148,14 @@ Limits from `docs/research/coderabbit-limits-20261102.md` (the repo has no CodeR
 - docs-sync: no `.md` changed; the notes of each rule are in the code comments, the ponytail list above names them.
 - build: skipped by `--quick`; the build and the suites are listed under Checks.
 
-## How to re-run
+## How to re-check
 
-Mana: `pb2_mana.sh N SEED BASE_BIN HEAD_BIN` (the bins are `test_sk_mana` of the base plus the test file and of the head). Teleport: `pb2_tele.sh N SEED BASE_BIN D1_BIN HEAD_BIN` (`test_tele_spot`). Damage roll: `v4_run.py N SEED` after `v4_build` (the probe links the head's `libgame.a`), `mdmg2.py N SEED BIN...` and `v3_run.py N SEED BIN...` against the header programs built for the base and the head. Base for the first two is upstream main plus the head's test files; the middle Teleport build is the head's second commit.
+```sh
+python3 tools/pr_guard.py
+python3 tools/presubmit.py --quick        # GCC and clang-tidy on the changed files need a build first
+cmake --build build && ctest --test-dir build --output-on-failure
+```
+
+Oracle (needs the maintainer's game.exe and `tools/emu`): mana `pb2_mana.sh N SEED BASE_BIN HEAD_BIN` (bins `test_sk_mana` of the base plus the test file and of the head); Teleport `pb2_tele.sh N SEED BASE_BIN D1_BIN HEAD_BIN` (`test_tele_spot`; the middle build is the head's second commit); damage roll `v4_run.py N SEED` after `v4_build` (the probe links the head's `libgame.a`), `mdmg2.py N SEED BIN...` and `v3_run.py N SEED BIN...` against the header programs built for the base and the head. The base for the first two is upstream main plus the head's test files.
 
 Agent: Claude Code
