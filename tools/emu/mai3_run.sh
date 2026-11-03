@@ -21,4 +21,5 @@ IN="$IN -I$HOME/d2d-lab/src/build/_deps/stormlib-src/src"
 nice c++ -std=c++26 -O1 -include "$SRC/cmake/no_near_far.hpp" -Wno-missing-field-initializers -Wno-error $IN -o "$S/run3/mai3_replay" "$S/run3/mai2_replay.cpp"
 cd "$SRC"
 "$S/run3/mai3_replay" 2> "$S/run3/stderr.txt" | grep '^mai2'
+grep "^acts" "$S/run3/acts.txt" || true
 echo "stderr lines: $(wc -l < "$S/run3/stderr.txt")"

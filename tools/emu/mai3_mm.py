@@ -27,12 +27,17 @@ while i < len(lines) - 1:
         if gact and gact[0].isdigit():
             for k, nm in enumerate(("act", "n", "x", "y", "unit", "wait", "event")):
                 if k < len(gact) and k < len(want) and want[k] != gact[k]: fields.append(nm)
-            if want[7:9] != ["0", "0"] and False: pass
+            if len(got) >= 4:
+                if want[7:9] != got[1].split(): fields.append("pace(%s>%s)" % ("/".join(want[7:9]), "/".join(got[1].split())))
+                if want[9:12] != got[2].split(): fields.append("ctrl")
+                if want[12:14] != got[3].split(): fields.append("seed")
         else:
             fields.append(lines[i + 1].strip()[:40])
         if ai == "WillOWisp":                       # the scene's AI control words (state, count, word 3) before the think
             sc = parts[0].split(":", 1)[1].split()  # the numbers: idx diff frame target dist melee hit life ctrl0..2
             fields.append("ctrl=" + ",".join(sc[8:11]))
+        if ai in ("Fetish", "Arach"):               # the back-offs the game asked: "reach ok ; ..." (ok 0: it could not set off)
+            fields.append("asks=" + parts[1].strip())
         if len(sys.argv) > 2 and ai == sys.argv[2]:    # full act fields on both sides for this AI
             fields.append("want=" + ",".join(want[:7]) + " got=" + ",".join(gact[:7]))
         key = (ai, wa, ga, ",".join(fields))

@@ -134,3 +134,7 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/covmonai2-trace.md  covmonai2  covmonai2
+docs/research/covmonai2-runs.txt  covmonai2  covmonai2
+tools/emu/mai3_*  covmonai2  covmonai2
+openspec/changes/covmonai2/**  covmonai2  covmonai2

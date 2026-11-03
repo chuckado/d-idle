@@ -10,7 +10,7 @@ import mon_ais as M
 
 ai, cases, seed, want, limit = sys.argv[1], int(sys.argv[2]), int(sys.argv[3]), sys.argv[4], int(sys.argv[5])
 rng = random.Random(seed)
-for name, addr in A.NEW.items(): M.AIS.setdefault(name, addr)
+for name, addr in {**A.NEW, **C.EXTRA}.items(): M.AIS.setdefault(name, addr)
 M.ORDER[:] = list(M.AIS)
 M._setup = M.setup
 M.setup = C.setup3

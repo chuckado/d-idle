@@ -17,8 +17,10 @@ import mai_ais as A
 import mon_ais as M
 
 KEEP_Y_ZERO = ("Wraith", "SkeletonBow")
+EXTRA = {"Bighead": 0x5eff50, "Vampire": 0x5f4a70}      # section 12 of monster-ai-trace.md: Act 1 and 2 rows upstream mon_ais.py does not list
 
 
+FLAGS0_IDLE = ("Arach", "Vampire")                 # d2d ports say so in their comments (Arach: monsters.hpp:1643); other AIs keep the harness label
 RAW_SKILLS = ("CatapultSpotter", "PutridDefiler")      # cast raw ids (288, 300, 304): a random scene skill id equal to one is a label collision
 
 
@@ -35,6 +37,11 @@ def setup3(rng, ai):
         if st >= 5:
             s["ctrl"][0] = min(st, 12)
             s["ctrl"][2] = rng.randint(1, 5) if s["ctrl"][0] == 5 else rng.randint(1, 4)
+    if ai == "Vampire":                      # scene skill ids may repeat; a cast is labelled by the first slot with its id: make them distinct
+        seen = set()
+        for n, k in enumerate(s["skills"]):
+            if k >= 0 and k in seen: s["skills"][n] = k + 1000 * (n + 1)
+            seen.add(s["skills"][n])
     if ai in RAW_SKILLS:
         s["skills"] = [99 if 280 <= k <= 320 else k for k in s["skills"]]
     return s
@@ -51,6 +58,8 @@ def check(e, ai, cases, rng, lines, tally):
         out = [x for x in out if x[0] not in ("scream", "home")]
         s["dying"] = False
         act, pace, effects, asks = M.outcome(s, out)
+        if ai in FLAGS0_IDLE and act[0] == "none" and any(x[0] == "away" and not x[3] and not x[4] for x in out):
+            act[:] = ["idle", s["aidel"], 0, 0, 0, act[5], act[6]]     # a flags-0 back-off that cannot set off thinks aidel on (FUN_005defe0; the harness models it for Terror only)
         if act[0] == "keep" and ai in KEEP_Y_ZERO: act[3] = 0
         s["stat"][("mon", 0x2b)] = 0
         lines.append(M.dump_case(s, act, pace, effects, asks, ctrl, seed))
@@ -64,7 +73,7 @@ def main():
     cases = int(args[1]) if len(args) > 1 else 1500
     rng = random.Random(int(args[2]) if len(args) > 2 else 1)
     out_dir = sys.argv[sys.argv.index("--dump") + 1]
-    for name, addr in A.NEW.items(): M.AIS.setdefault(name, addr)
+    for name, addr in {**A.NEW, **EXTRA}.items(): M.AIS.setdefault(name, addr)
     M.ORDER[:] = list(M.AIS)
     M._setup = M.setup
     M.setup = setup3
