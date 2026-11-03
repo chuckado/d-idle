@@ -2,7 +2,7 @@
 
 ```yaml
 change: msvcc2026
-status: in-progress
+status: archived
 agent: msvcc2026
 branch: agent/msvcc2026
 worktree: ~/code/d2lod-wt/msvcc2026
@@ -16,8 +16,8 @@ skip_specs: true
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck -mode fail 0 hits"
-merge:
-result: "Docs and emulator-host scripts only. Literal sizes and the split proof are V run (worker host, g++ probe); MSVC itself and upstream CI status are NOT verified here (no Windows access, gh denied)."
+merge: 2a4a706
+result: "docs and tools only; g++ probe V run"
 ```
 
 ## 1. Work
