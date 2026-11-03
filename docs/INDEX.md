@@ -305,3 +305,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/beltfix5.md - Gate 1 20261103-0338 second belt window: where the gold went, the stash defect, belt windows of four runs by gold level
 - docs/research/stashfield.md: the stashGold minute field and the belt window gold report line
 - docs/research/specdelta-rejudge.md: the 2026-11-03 Gate 1 belt and XP rules and the re-judge of the recorded runs
+- docs/research/msvcc2026-trace.md: MSVC C2026 in test_monster_ai (raw strings over 16380 bytes), real latent upstream problem, byte-identical split proven with g++ (branch and MSVC rebuild not done)
+- docs/research/areareach.md: why Dark Wood and Black Marsh were unreachable in Gate 1 run 0628
