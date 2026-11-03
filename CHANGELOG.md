@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- MSVC2026 trace: test_monster_ai fails MSVC C2026 because four raw-string literals (62345, 59449, 59285, 16762 bytes) exceed 16380; fix by splitting into adjacent literals, same bytes (g++ probe, 4 constants, 0 mismatches); docs only
 - specdelta: Gate 1 now excuses belt windows where the character could not afford a potion (pack plus stash gold under 30) and lets a single seed inside the XP tolerance pass with a note
 - stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
 - Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
