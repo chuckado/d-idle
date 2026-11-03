@@ -5,4 +5,3 @@ rank	subsystem	rows	impact	source
 4	levels	untested	Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row	docs/research/spawn-density-trace.md
 8	skills.ass	untested	Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched	docs/classes/ranking.md
 9	states	untested	Remaining states and auras (curses, shrines, poison, stun) alter damage taken	docs/research/sorc-skill-matrix.md
-10	itemtypes	untested	Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced	docs/research/price-trace.md

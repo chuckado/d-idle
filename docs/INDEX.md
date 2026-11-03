@@ -279,3 +279,30 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/covmissiles-trace.md - missiles coverage first pass: table values, flight formulas and hit roll of the Sorceress and Paladin rows (covmissiles)
 - docs/research/verifyskamazon-trace.md: independent verification of the Amazon first pass: calc cells 0 of 52,300 differ (own harness), element roll top-exclusive rule 20,000 cases, Pierce function 99,092 cases vs own model, shooter stat 0x148 is a per-shot counter (V read), one wrong cell (card verifyskamazon)
 - docs/research/verifystateev2.md: independent verifier of SKSTATEEV (both passes, own emulator harness, claim verdicts)
+- [docs/research/tierb-design-20261102.md](research/tierb-design-20261102.md): Tier B design and the statistical A:B protocol for d2d against game.exe, staged cards, fidelity-gate mapping, kitb vs kitk2 regime reading
+- docs/research/seeddist-trace.md: SEEDDIST distribution check, d2d stream vs game.exe unit seeds (statistical equivalence per quantity)
+- [docs/research/seedspawn-trace.md](research/seedspawn-trace.md): SEEDSPAWN trace: Act 1 layout, preset units and spawn lists equal game.exe seed for seed; RNG draws before and at spawn (D1-D3), world-stream consumers, bot findings B1-B5, drill recipe
+- tools/baseline/ab_compare.py: d2d vs game.exe A:B comparison (card abtool)
+- docs/research/covitemtypes-trace.md | item types (itemtypes.txt) in game.exe 1.14d vs d2d and our bot: Equiv chain, membership, slot, hands, socket cap, 553,647 emulator cases (card covitemtypes)
+- docs/research/covmonai2-trace.md - monster AI third pass: Act 2 to 5 thinks and the bosses, game.exe vs d2d mon_think on 139,500 cases (covmonai2)
+- docs/research/covstates2-trace.md: states second pass: timed-state put rule, curse slot, groups, lengths, d2d deviations D1..D7, bot findings B1..B5 (game.exe run natively, real d2d put_state)
+- docs/research/covmissiles2-trace.md: missiles coverage second pass, skill-sourced Act 1 / 2 monster missiles (andariel_missile path), game.exe vs d2d, 27,000 cases
+- docs/research/pr-batch2-draft.md - upstream batch 2 (minmana floor, Teleport D1+D2): heads, counted differentials on a real d2d build, parity, #178 overlap, what is left out
+- docs/research/dmgroll-draft.md: DMGROLL, the monster physical damage roll fix on a private branch (step 1 check, differential, parity, commit text)
+- docs/research/beltfix-analysis.md: Gate 1 20261102 BELT window analysis and fix
+- docs/research/botab-20261102.md | Bot-level d2d vs game.exe from existing records: XP/h, kills, deaths, potions, town trips, areas; comparability, gaps, minimum new runs (card botab)
+- docs/research/botab-trace.md | BOTAB trace: questions, deviations D1.., bot findings B1.., limits, matrix proposals
+- docs/research/hirereader-design.md | hire the merc on d2d: what is readable, smallest change, order of work (HIREREADER)
+- docs/research/hirereader-trace.md | HIREREADER trace: hire and revive money in game.exe vs d2d (purse 200,000 cases 0 differ), dump merc fields, bot findings B1..B5, drill recipe
+- docs/research/hirefix.md: what the Gate 2 hire-the-merc check can and cannot confirm after the bot-side fixes
+- docs/research/beltfix2-analysis.md: Gate 1 20261103 BELT and NOKILL windows, causes and ranked fix plan
+- docs/research/verify-dmgroll3.md: third verifier report on DMGROLL r3 (2df7d1eb), own differential in verify-dmgroll3-run.txt
+- docs/research/beltfix3.md - what BELTFIX3 changed, tests, what is not verified live
+- docs/research/pr-batch2-body.md: PR title and body for the batch 2 bundle (minmana floor, Teleport, monster damage roll), counts on the bundle head
+- docs/soaks/gate1-index-20261103.md: index of the three Gate 1 runs of 2026-11-02/03 with the records gate1-20261102-1939, gate1-20261102-2210, gate1-20261103-0053
+- docs/research/beltfix4.md: Gate 1 20261103-0053 BELT and XP/h analysis, one recovery fix
+- docs/research/pr-batch2-run.txt: raw results of the batch 2 bundle on upstream main 552acc9a (suites, CI checks, differentials, MSVC 14.51, WSL lane)
+- docs/research/beltfix5.md - Gate 1 20261103-0338 second belt window: where the gold went, the stash defect, belt windows of four runs by gold level
+- docs/research/stashfield.md: the stashGold minute field and the belt window gold report line
+- docs/research/specdelta-rejudge.md: the 2026-11-03 Gate 1 belt and XP rules and the re-judge of the recorded runs
+- docs/research/msvcc2026-trace.md: MSVC C2026 in test_monster_ai (raw strings over 16380 bytes), real latent upstream problem, byte-identical split proven with g++ (branch and MSVC rebuild not done)
