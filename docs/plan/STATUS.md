@@ -40,7 +40,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
-| [b2rebase](../../openspec/changes/b2rebase/) | in-progress | b2rebase | `docs/research/pr-batch2-body.md`<br>`docs/research/pr-batch2-run.txt`<br>`tools/emu/b2r_*`<br>`openspec/changes/b2rebase/**` | `fork-branch:local/batch2-bundle-r2` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
@@ -86,9 +85,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
-- change b2rebase: local/batch2-bundle-r2 is the four bundle commits on upstream main 552acc9a, same authors, same subjects, nothing pushed upstream
-- change b2rebase: g++ and clang++ CI flags, the 13 suites, clang-tidy, pr_guard per commit, presubmit --quick, WSL lane and MSVC 14.51 pass on the new head
-- change b2rebase: counted differentials re-run on the new head; changecheck 0 warnings, leakcheck 0 hits
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
@@ -131,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
 - 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
 - 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
 - d601848d 11-03 03:11 `merge origin/main into beltfix4` (beltfix4)
@@ -140,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - e9eed0d2 11-03 00:41 `merge origin/main into beltfix3` (beltfix3)
 - 42e9e2f8 11-03 00:36 `Merge agent/verifydmg3: verifydmg3: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (verifydmg3)
 - 80a64736 11-03 00:35 `merge origin/main into verifydmg3` (verifydmg3)
-- 0121d34b 11-03 00:32 `Merge agent/beltfix2: beltfix2: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (beltfix2)
 <!-- statusgen:end -->

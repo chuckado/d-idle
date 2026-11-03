@@ -2,7 +2,7 @@
 
 ```yaml
 change: b2rebase
-status: in-progress
+status: archived
 agent: b2rebase
 branch: agent/b2rebase
 worktree: d2lod-wt/b2rebase
@@ -18,7 +18,7 @@ gates:
   - "local/batch2-bundle-r2 is the four bundle commits on upstream main 552acc9a, same authors, same subjects, nothing pushed upstream"
   - "g++ and clang++ CI flags, the 13 suites, clang-tidy, pr_guard per commit, presubmit --quick, WSL lane and MSVC 14.51 pass on the new head"
   - "counted differentials re-run on the new head; changecheck 0 warnings, leakcheck 0 hits"
-result: "docs only; not verified in a live game. Head 6f036a40 on 552acc9a: no conflict, range-diff identical, 13 suites rc 0, g++/clang++ 0 new warnings, MSVC 14.51 0 warning C (71/73 ctest), WSL lane rc 0, differentials unchanged."
+result: "docs only"
 credit:
   component: Batch 2 bundle rebase onto upstream main 552acc9a
   author: owner
@@ -26,6 +26,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: b6bd809
 ```
 
 ## 1. Work
