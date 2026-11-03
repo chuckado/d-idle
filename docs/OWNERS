@@ -134,15 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-openspec/changes/beltfix3/**  beltfix3  beltfix3
-internal/town/trip.go  beltfix3  beltfix3
-internal/town/beltfix3_test.go  beltfix3  beltfix3
-internal/bot/goal.go  beltfix3  beltfix3
-internal/bot/beltfix3_test.go  beltfix3  beltfix3
-internal/bot/beltfix_test.go  beltfix3  beltfix3
-internal/resource/town.go  beltfix3  beltfix3
-internal/resource/policy_test.go  beltfix3  beltfix3
-internal/combat/resource_test.go  beltfix3  beltfix3
-cmd/d2bot/d2dwire.go  beltfix3  beltfix3
-cmd/d2bot/d2dportal_test.go  beltfix3  beltfix3
-docs/research/beltfix3.md  beltfix3  beltfix3

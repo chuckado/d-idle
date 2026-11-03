@@ -2,7 +2,7 @@
 
 ```yaml
 change: beltfix3
-status: in-progress
+status: archived
 agent: beltfix3
 branch: agent/beltfix3
 worktree: ~/code/d2lod-wt/beltfix3
@@ -23,8 +23,8 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/bot ./internal/town ./internal/resource ./internal/combat ./cmd/d2bot; whole repo vet+test on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-merge:
-result: "Fixes 1-4 of docs/research/beltfix2-analysis.md section 6 implemented, each with a test that fails when reverted, plus a replay of the Gate 1 BELT A window. Not verified live."
+merge: 7a52b7e
+result: "whole repo vet and test pass on the worker host; replay test of minute lines 218-254"
 live: "not verified; Gate 1 re-run checklist in docs/research/beltfix3.md"
 credit:
   author: owner
