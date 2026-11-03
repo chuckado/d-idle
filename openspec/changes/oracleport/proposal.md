@@ -4,7 +4,7 @@ The owner decided (2026-11-03) that the upstream batch 2 pull requests follow ev
 
 ## What Changes
 
-- On the private fork only (remote forgejo, no push elsewhere): `local/batch2-A-r4` (mana floor, Teleport room rule, Teleport nearest spot, each commit with its oracle, test, README row and structs.tsv rows) and `local/batch2-B-r1` (the monster damage roll with `tools/emu/monster_damage.py`, its test and the d2d side as a `test_combat --monster-damage` mode).
+- On the private fork only (the private remote, no push elsewhere): `local/batch2-A-r4` (mana floor, Teleport room rule, Teleport nearest spot, each commit with its oracle, test, README row and structs.tsv rows) and `local/batch2-B-r1` (the monster damage roll with `tools/emu/monster_damage.py`, its test and the d2d side as a `test_combat --monster-damage` mode).
 - In this repo: docs/research/pr-batch2-A-body.md and pr-batch2-B-body.md (the PR bodies to the maintainer's template: Claims table, evidence, re-check commands, limits, CodeRabbit budget), the maintainer rule list, this card.
 - Nothing is pushed to GitHub or posted; the coordinator opens the PRs after the user's go.
 
