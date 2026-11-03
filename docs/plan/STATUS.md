@@ -124,6 +124,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- 23e68453 11-03 13:13 `merge origin/main into cport` (cport)
 - bf29e35d 11-03 12:37 `Merge agent/navexit21: merge origin/main into navexit21` (navexit21)
 - e149fb2b 11-03 12:37 `merge origin/main into navexit21` (navexit21)
 - a2dfd7ee 11-03 12:32 `Merge agent/gate1multi-20261103-1226-ms1: merge origin/main into gate1multi-20261103-1226-ms1` (gate1multi-20261103-1226-ms1)
@@ -133,5 +134,4 @@
 - 1e88e0bb 11-03 11:41 `merge origin/main into b2on181` (b2on181)
 - bdc81dc5 11-03 11:38 `Merge agent/gate1run-20261103-0338: gate1run-20261103-0338: docs and emulator tools (analysis, verification, coverage; docs only)` (gate1run-20261103-0338)
 - 7da73d73 11-03 11:37 `merge origin/main into gate1run-20261103-0338` (gate1run-20261103-0338)
-- d61c680e 11-03 11:34 `Merge agent/gate3prep: GATE3PREP: Gate 2 watch checklist and Gate 3 requirements` (gate3prep)
 <!-- statusgen:end -->
