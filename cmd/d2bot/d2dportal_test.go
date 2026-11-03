@@ -200,3 +200,22 @@ func TestPortalCutAfterClickReportsSpent(t *testing.T) {
 		t.Fatalf("clicks %v scrolls %v: the second call must reuse the open portal, not cast again", w.clicks, w.scrolls)
 	}
 }
+
+// codefix F8: a call with an already dead context must not forget the cut cast; the next live call still finds its portal.
+func TestPortalCutMemorySurvivesDeadContext(t *testing.T) {
+	w, _, run := newPortalWorld(7, 8)
+	ctx, cancel := context.WithCancelCause(t.Context())
+	w.onClick = func(w *portalWorld, id uint32) { w.spend(id); cancel(errors.New("bot: safety drink-life")) }
+	_ = run(ctx)
+	w.onClick = nil
+	dead, stop := context.WithCancel(t.Context())
+	stop()
+	_ = run(dead)
+	w.portal = true
+	if err := run(t.Context()); err != nil {
+		t.Fatalf("live call: %v", err)
+	}
+	if len(w.clicks) != 1 {
+		t.Fatalf("clicks %v: the live call cast again", w.clicks)
+	}
+}
