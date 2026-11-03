@@ -255,7 +255,7 @@ def drops():
     print("\n## T. first drop (class pick, quality, item count; whole outcome string)")
     print("| class | mf, extra draws | n game / d2d | NoDrop game / d2d % | outcome chi2 (df) p | quality chi2 p | item-count chi2 p | gold-find-free categories (top 3, game %) |")
     print("|---|---|---|---|---|---|---|---|")
-    pool_g, pool_d, codes_g, codes_d = [], [], [], []
+    pool_g, pool_d, codes_g, codes_d, first_g, first_d, per_class = [], [], [], [], [], [], {}
     for cid in CLASSES + ["andariel+q"]:
         for cfg, (mf, k) in enumerate(DROPS):
             g = read_lines(f"{SD}/drop_{cid}_{cfg}.txt"); d = read_lines(f"{SD}/d2d_drop_{cid}_{cfg}.txt")
@@ -270,6 +270,10 @@ def drops():
                 note(name, pv)
             pool_g.extend(qg); pool_d.extend(qd)
             codes_g.extend(t.split(":")[0] for l in g if l != "-" for t in l.split(",")); codes_d.extend(t.split(":")[0] for l in d if l != "-" for t in l.split(","))
+            if cfg == 0:
+                first_g.extend(l.split(",")[0].split(":")[0] for l in g if l != "-"); first_d.extend(l.split(",")[0].split(":")[0] for l in d if l != "-")
+                for cid2, bucket in ((cid, per_class),):
+                    bucket[cid2] = ([l.split(",")[0].split(":")[0] for l in g if l != "-"], [l.split(",")[0].split(":")[0] for l in d if l != "-"])
             top = sorted(counts(g).items(), key=lambda kv: -kv[1])[:3]
             print(f"| {LABEL[cid]} | {mf}, {'0' if k == 0 else '0..' + str(k - 1000)} | {len(g)} / {len(d)} | {100 * g.count('-') / len(g):.2f} / {100 * d.count('-') / len(d):.2f} | {hs:.1f} ({hd}) {fmt(hp)} | {fmt(qp)} | {fmt(np_)} | " + "; ".join(f"{c} {100 * v / len(g):.1f}" for c, v in top) + " |")
 
@@ -278,8 +282,16 @@ def drops():
         names = {"1": "low", "2": "normal", "3": "superior", "4": "magic", "5": "set", "6": "rare", "7": "unique"}
         cg, cd = counts(pool_g), counts(pool_d)
         s, df, p = homogeneity(pool_g, pool_d); note("drop pooled quality", p)
-        cs, cdf, cp = homogeneity(codes_g, codes_d); note("drop pooled item code", cp)
+        cs, cdf, cp = homogeneity(codes_g, codes_d)
         print(f"\npooled over every class and configuration: items game {len(pool_g)}, d2d {len(pool_d)}; quality chi2 {s:.2f} ({df}) p {fmt(p)}; item code chi2 {cs:.1f} ({cdf}) p {fmt(cp)}")
+        fs, fdf, fp = homogeneity(first_g, first_d); note("drop pooled first item code (mf 0, no extra draws)", fp)
+        print(f"first item of each drop (mf 0, no extra draws, 9 classes, one item per monster so the cases are independent): game {len(first_g)}, d2d {len(first_d)}; chi2 {fs:.1f} ({fdf}) p {fmt(fp)}")
+        for cid2, (fg, fd) in per_class.items():
+            s2, d2, p2 = homogeneity(fg, fd); note(f"drop {cid2} first item code", p2)
+            print(f"  {LABEL[cid2]}: first items {len(fg)} / {len(fd)}, chi2 {s2:.1f} ({d2}) p {fmt(p2)}")
+        ca, cb = counts(codes_g), counts(codes_d); na, nb = len(codes_g), len(codes_d)
+        contrib = sorted(((a * math.sqrt(nb / na) - b * math.sqrt(na / nb)) ** 2 / (a + b), k, a, b) for k in set(ca) | set(cb) for a, b in [(ca.get(k, 0), cb.get(k, 0))] if a + b)[::-1][:8]
+        print("largest cells of the pooled item-code chi-square (the items of one drop are not independent, so this pooled test is a diagnostic, not a p-value to read): " + "; ".join(f"{k} game {a} d2d {b} ({c:.1f})" for c, k, a, b in contrib))
         print("| quality | game | d2d |\n|---|---|---|")
         for q in sorted(set(cg) | set(cd)):
             print(f"| {names.get(q, q)} | {cg.get(q, 0)} | {cd.get(q, 0)} |")
