@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- ea55a8ff 11-03 09:39 `merge origin/main into codefix` (codefix)
+- 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
 - cc21b3f0 11-03 09:34 `merge origin/main into codefix` (codefix)
+- c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
 - ab3a9747 11-03 09:25 `Merge agent/areareach: AREAREACH: leveling planner walks up to 5 hops and activates waypoints on the way (Dark Wood and Black Marsh were refused 28 times in run 0628); fallback ranked by XP per kill` (areareach)
 - 22378e28 11-03 09:24 `merge origin/main into areareach` (areareach)
 - 2a4a7063 11-03 09:17 `Merge agent/msvcc2026: msvcc2026: MSVC C2026 trace (oversize raw-string literals upstream), byte-identical split probe (docs, emulator tools)` (msvcc2026)
 - 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
 - 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
 - 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
-- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
-- 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
-- b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
 <!-- statusgen:end -->

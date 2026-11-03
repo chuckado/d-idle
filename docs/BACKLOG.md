@@ -373,6 +373,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - MSVC2026 follow-up: apply the split of tests/pet_ais_cases.inc and tests/shadow_master_cases.inc (docs/research/msvcc2026-trace.md), create local/batch2-msvc2026 in a throwaway worktree and rebuild on the Windows worker (gate allowing); upstream CI status still U
 - areareach: unreachable() walks the level chain between waypoints from any area; Pick fallback ranked by XP per kill; fixes the Gate 1 0628 area choice; docs/research/areareach.md
 - covpal (2026-11-02): Paladin coverage first pass done, docs/research/covpal-trace.md: 15 rows (Charge, Vengeance, Conversion, Holy Shield, Fist, Redemption, Fanaticism, resist / aim / meditation auras) game.exe vs d2d 14,400 cases per aspect 0 differ (V run); open: D1 Redemption one corpse a pulse (V read both sides), D2 Vengeance mastery term (V read), B1 bot element table; game-side differentials for D1 / D2 not built
+- verifyb2 done: batch 2 minmana ready with text changes; Teleport needs `ring < 50` in warp_spot (game.exe stops at ring 49) before the PR (docs/research/verify-batch2.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

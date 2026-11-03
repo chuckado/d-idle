@@ -308,3 +308,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/msvcc2026-trace.md: MSVC C2026 in test_monster_ai (raw strings over 16380 bytes), real latent upstream problem, byte-identical split proven with g++ (branch and MSVC rebuild not done)
 - docs/research/areareach.md: why Dark Wood and Black Marsh were unreachable in Gate 1 run 0628
 - docs/research/covpal-trace.md: Paladin skills, the 15 rows not yet run (aura calcs, calc slots, element damage, Redemption callback, Vengeance): game.exe vs d2d vs bot, deviations D1 D2, bot B1 B2
+- docs/research/verify-batch2.md: independent check of upstream batch 2 (minmana floor, Teleport D1 + D2)
