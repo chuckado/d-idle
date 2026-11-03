@@ -129,14 +129,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 998c07ae 11-02 20:01 `Merge agent/seedspawn: seedspawn: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seedspawn)
+- e8ba69f3 11-02 20:01 `merge origin/main into seedspawn` (seedspawn)
+- c34baafc 11-02 19:54 `Merge agent/seeddist: seeddist: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seeddist)
+- 780d857f 11-02 19:23 `Merge agent/tierbdesign: TIERBDESIGN: Tier B and A:B design: statistical A:B first, Tier B held until a gap needs it; six staged cards; kitb vs kitk2 pair verdict (docs only)` (tierbdesign)
 - 8dd3f975 11-02 18:15 `Merge agent/verifystateev2: verifystateev2: coverage-gap or verification result (docs and emulator tools only)` (verifystateev2)
 - d8922e54 11-02 18:14 `merge origin/main into verifystateev2` (verifystateev2)
 - 0489b0f3 11-02 18:07 `Merge agent/verifyskamazon: verifyskamazon: coverage-gap or verification result (docs and emulator tools only)` (verifyskamazon)
 - 3922d8ee 11-02 18:07 `merge origin/main into verifyskamazon` (verifyskamazon)
 - 975bfbdf 11-02 18:00 `Merge agent/covmissiles: covmissiles: coverage-gap or verification result (docs and emulator tools only)` (covmissiles)
 - a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
-- d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
-- cda4be88 11-02 17:49 `merge origin/main into tomestat` (tomestat)
-- a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
-- 85fd1005 11-02 17:41 `merge origin/main into townshop` (townshop)
 <!-- statusgen:end -->

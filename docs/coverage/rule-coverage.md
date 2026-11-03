@@ -26,10 +26,11 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | items.weapons (weapon bases) | 306 | 0 | 0 | 0 | 0 | 306 | 0% | 0% | 0 |
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
-| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2449** | **942** | **53** | **0** | **1466** | **69%** | **70%** | **5,825,390** |
+| formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 4 | 12 | 2 | 0 | 0 | 89% | 100% | 2,770,944 |
+| levels.layout (Act 1 areas: layout, preset units, room seeds, spawn list (Rogue Encampment, Blood Moor, Cold Plains, Stony Field, Den of Evil)) | 5 | 5 | 0 | 0 | 0 | 0 | 100% | 100% | 1,116 |
+| **total** | **4915** | **2455** | **942** | **53** | **0** | **1465** | **69%** | **70%** | **6,186,506** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2200 (59%), compared 2253 (61%), read-only 53, untested 1466.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3724 rows, run-tested 2206 (59%), compared 2259 (61%), read-only 53, untested 1465.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -112,6 +113,9 @@ Case counts add the cases of every ledger line; one differential that covers man
 | formulas | F17 | READ-ONLY | `docs/research/sk-mana-trace.md` | - | 2026-11-01 | regen FUN_005806f0 read equal to d2d; bot regen model 1.2-1.8x fast |
 | formulas | F09 | TESTED-DEVIATION | `docs/research/monster-mods-trace.md` | 157,618 | 2026-10-31 | boss and minion spawn stats D1 D2 G1; plain monsters by level not compared |
 | formulas | F02 | TESTED-DEVIATION | `docs/research/monsterhit-trace.md` | 100,000 | 2026-11-02 | monster side only (defender = player): block 0 differ from the reading in 100,000 cases, d2d block port differs in town walk (mode 6, 653 cases) and the missile gate (F14); to-hit vs defence 0 differ; player-owned defence and block derivation not run |
+| formulas | F16 | TESTED-0-DIFF | `docs/research/seeddist-trace.md` | 360,000 | 2026-11-02 | treasure class pick and item quality: 360,000 seed-for-seed first-drop cases (9 classes x mf 0 and 300 x 20,000 unit seed states) game.exe FUN_0055a6d0 vs d2d roll_drops, 0 differ; Act 1 classes only; plus 540,000 first drops per side on each side own seed supply, distributions equal (seeddist-trace.md section 3.4) |
+| levels.layout | 2-4,8 | TESTED-0-DIFF | `docs/research/seedspawn-trace.md` | 936 | 2026-11-02 | layout, preset units, room seeds, populated room lists and object groups equal for map seeds 1..30, two 32-bit ranges and edge seeds 0 and 4294967295 (5,991 populated rooms); unit seeds after creation are a separate aspect (D1 D2 in the doc); SEEDSPAWN |
+| levels.layout | 1 | TESTED-0-DIFF | `docs/research/seedspawn-trace.md` | 180 | 2026-11-02 | camp: tiles, preset units, room seeds (150 comparisons) and the camp NPCs thinking (30), plus the game-seed chain through the camp (30 games); the monsters kind is not applicable to a preset level; SEEDSPAWN |
 
 ## Top gaps by likely play impact
 

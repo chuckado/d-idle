@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: SEEDSPAWN trace of layout, spawn list and RNG draws, d2d against game.exe, and levels.layout coverage rows (seedspawn)
+- SEEDDIST: docs/research/seeddist-trace.md (distribution check of d2d vs game.exe RNG outcomes)
+- docs: Tier B design and cross-backend A:B protocol (tierbdesign)
 - verifystateev2: independent verification of the state-event trace; game side V run, d2d read only, no PR candidate
 - Independent verification of the Amazon skills trace (docs/research/verifyskamazon-trace.md) and emulator tools tools/emu/vam_*; no ledger change, repair text proposed.
 - covmissiles: missiles coverage first pass (docs/research/covmissiles-trace.md, tools/emu/cm_*): 138,000 hit cases and 13,680 table and flight cases run against game.exe, missiles run-tested 9 to 42 percent
