@@ -103,6 +103,35 @@ def main():
     show("C2 fresh clvl 1-6: d2d 3 distinct early games vs kitb + kitk2 (6 lanes, both treated as k=1; S)",
          distinct, kitb + kitk2)
 
+    # secondary metrics, clvl 12-13 band: potions drunk per hour, town entries per hour, area shares
+    def rows(files):
+        ex.BANDS = [("12-13", 12, 13)]
+        return {n: ex.extract(ex.load(p)).get("12-13") for n, p in files.items()}
+
+    dr, gr = rows(d2d_files), rows(late)
+    for title, gnames in (("late1,2,4", ("late1", "late2", "late4")), ("late1,2,3,4", tuple(late))):
+        if len(gnames) < 2:
+            continue
+        print("#### D clvl 12-13 secondary metrics, d2d 5 builds vs game.exe", title)
+        for label, key in (("potions per hour", "potions"), ("town entries per hour", "town_trips")):
+            a = [r[key] / (r["minutes"] / 60) for r in dr.values()]
+            b = [gr[n][key] / (gr[n]["minutes"] / 60) for n in gnames]
+            row = ab.ratio_row(label, a, b, 0.15)
+            print(f"{label}: d2d {[round(x, 1) for x in a]} game {[round(x, 1) for x in b]} ratio {row['ratio']:.3f} "
+                  f"[{row['lo']:.3f}, {row['hi']:.3f}] {row['verdict']}")
+        a = [100 * r["town_minutes"] / r["minutes"] for r in dr.values()]
+        b = [100 * gr[n]["town_minutes"] / gr[n]["minutes"] for n in gnames]
+        row = ab.ratio_row("town share of minutes (percent)", a, b, 0.15)
+        print(f"town share: d2d {[round(x, 1) for x in a]} game {[round(x, 1) for x in b]} ratio {row['ratio']:.3f} "
+              f"[{row['lo']:.3f}, {row['hi']:.3f}] {row['verdict']}")
+        print()
+    print("#### area shares of minutes, clvl 12-13 (area id: percent, top 5)")
+    for arm, rr in (("d2d", dr), ("game", gr)):
+        for n, r in rr.items():
+            top = sorted(r["areas"].items(), key=lambda kv: -kv[1])[:5]
+            print(f"  {arm} {n:<20} " + ", ".join(f"{a}: {100 * c / r['minutes']:.0f}" for a, c in top))
+    print()
+
     # records dump for the doc
     print("#### per-run records (hours = minute lines / 60)")
     for title, rs in (("d2d 12-13", alld), ("game late 12-13", list(g12.values())), ("d2d 1-6", list(d16.values()))):
