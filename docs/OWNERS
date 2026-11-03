@@ -115,4 +115,5 @@ docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-2026110
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
 docs/research/pal-aura-trace.md  chuckado  palauratrace
 tools/emu/verify_palaura.py  chuckado  palauratrace
+tools/emu/boot_game.py  chuckado  palauratrace
 openspec/changes/palauratrace/**  chuckado  palauratrace

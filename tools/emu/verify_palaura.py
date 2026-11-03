@@ -8,7 +8,13 @@ from unicorn.x86_const import UC_X86_REG_ECX, UC_X86_REG_EDX, UC_X86_REG_ESI, UC
 from pathlib import Path
 cur_dir = Path(__file__).resolve().parent
 sys.path.insert(0, str(cur_dir))
-import boot_game
+try:
+    import skill_tips as boot_helper
+except ImportError:
+    try:
+        import boot_game as boot_helper
+    except ImportError:
+        boot_helper = None
 
 def s32(v):
     """Convert unsigned 32-bit int to signed 32-bit int."""
@@ -111,7 +117,7 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
     """Run 100,000 cases verifying FUN_0056b3e0 target filter and FUN_0056b7e0 search."""
     print(f"=== Suite 1: Aura Target Filter & Area Search (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
-    e = boot_game.boot(use_snap=True)
+    e = boot_helper.boot()
     rng = random.Random(seed & 0xFFFFFFFF)
 
     rooms = {}
@@ -232,27 +238,58 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
     }
 
     PAL_FILTERS = [
-        ("Friendly (Might/Prayer/etc.)", 0x12003, 1),
-        ("Meditation", 0x12001, 1),
-        ("Holy Fire / Holy Shock", 0x0A783, 0),
-        ("Holy Freeze", 0x4A283, 0),
-        ("Conviction", 0x0A583, 0),
-        ("Sanctuary", 0x0E786, 0),
-        ("Redemption", 0x01102, 0),
+        ("Friendly (Might/Prayer/etc.)", 0x12003, 1, {
+            0: ["merc", "pet", "party_ally"],
+            1: ["merc", "pet", "party_ally"],
+        }),
+        ("Meditation", 0x12001, 1, {
+            0: ["party_ally"],
+            1: ["party_ally"],
+        }),
+        ("Holy Fire / Holy Shock", 0x0A783, 0, {
+            0: ["hostile_plr", "undead_mon", "boss_undead", "demon_mon", "primeevil_mon"],
+            1: [],
+        }),
+        ("Holy Freeze", 0x4A283, 0, {
+            0: ["hostile_plr", "undead_mon", "boss_undead", "demon_mon"],
+            1: [],
+        }),
+        ("Conviction", 0x0A583, 0, {
+            0: ["hostile_plr", "undead_mon", "boss_undead", "demon_mon", "primeevil_mon"],
+            1: ["hostile_plr", "undead_mon", "boss_undead", "demon_mon", "primeevil_mon"],
+        }),
+        ("Sanctuary", 0x0E786, 0, {
+            0: ["undead_mon"],
+            1: [],
+        }),
+        ("Redemption", 0x01102, 0, {
+            0: ["corpse_mon"],
+            1: ["corpse_mon"],
+        }),
     ]
-    for label, filt, chk_noaura in PAL_FILTERS:
+    mismatches = 0
+    for label, filt, chk_noaura, exp_map in PAL_FILTERS:
         for los in (0, 1):
             los_blocked[0] = los
             hit_units.clear()
             e.call(0x56B7E0, 0, 0, 20, filt, cb_addr, 0, chk_noaura, 0, 0, ecx=game, edx=caster)
             names = [uid_names[e.r32(u + 0x0C)] for u in hit_units]
-            if los == 0 or filt in (0x0A783, 0x4A283, 0x0A583, 0x0E786):
+            want = exp_map[los]
+            if sorted(names) != sorted(want):
+                mismatches += 1
+                print(f"  MISMATCH scenario {label} (filt={filt:#x}, los={los}): got={names} want={want}")
+            elif los == 0 or filt in (0x0A783, 0x4A283, 0x0A583, 0x0E786):
                 print(f"  {label:28s} (filter={filt:#07x}, los_blocked={los}): hits={names}")
 
     # Verify FUN_0056b740 applies to self
     hit_units.clear()
     e.call(0x56B740, cb_addr, 0, ecx=game, edx=caster)
-    print(f"  FUN_0056b740 (self-wrapper): hits={[uid_names[e.r32(u + 0x0C)] for u in hit_units]}")
+    self_hits = [uid_names[e.r32(u + 0x0C)] for u in hit_units]
+    if self_hits != ["self"]:
+        mismatches += 1
+        print(f"  MISMATCH FUN_0056b740 self-wrapper: got={self_hits} want=['self']")
+    else:
+        print(f"  FUN_0056b740 (self-wrapper): hits={self_hits}")
 
     target = make_unit(1, 0, cx, cy, mode=1, flags_c4=0x0C, uid=99)
     e.w32(caster + 0xE8, target)
@@ -262,7 +299,6 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
     tp = e.r32(target + 0x2C)
 
     ALL_FILTERS = [0x12003, 0x12001, 0x0A783, 0x4A283, 0x0A583, 0x0E786, 0x01102, 0x10583, 0x08783, 0x01583]
-    mismatches = 0
     for i in range(n_cases):
         if i < 20000:
             radius = (i % 40) + 1
@@ -276,13 +312,14 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
 
         filt = ALL_FILTERS[i % len(ALL_FILTERS)] if i < 50000 else (rng.choice(ALL_FILTERS) | (1 << rng.randint(0, 19)))
         utype = rng.choice((0, 1, 1, 1, 2, 4))
-        mid = rng.choice((0, 18, 146, 156, 267, 271)) if utype == 1 else 1
+        mid = rng.choice((0, 18, 146, 156, 267, 271, noaura_mid)) if utype == 1 else 1
         mode = rng.choice((1, 1, 1, 0, 0x0C, 0x11))
         flags_c4 = rng.choice((0x0C, 0x0C, 0x04, 0x08, 0x00))
         in_t = rng.random() < 0.15
         los_b = int(rng.random() < 0.2)
         melee_b = int(rng.random() < 0.8)
         st86_b = rng.random() < 0.1
+        chk_noaura = rng.choice((0, 1))
         rel = rng.choice(("merc_ally", "party_ally", "enemy", "neutral"))
 
         e.w32(target + 0x00, utype)
@@ -335,10 +372,10 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
             alignments[target] = 1 if utype == 1 else 2
 
         hit_units.clear()
-        e.call(0x56B7E0, 0, 0, radius, filt, cb_addr, 0, 0, 0, 0, ecx=game, edx=caster)
+        e.call(0x56B7E0, 0, 0, radius, filt, cb_addr, 0, chk_noaura, 0, 0, ecx=game, edx=caster)
         got_hit = int(len(hit_units) == 1)
 
-        m = mon_meta.get(mid, {"undead": False, "boss": False, "primeevil": False, "npc": False})
+        m = mon_meta.get(mid, {"undead": False, "boss": False, "primeevil": False, "npc": False, "noaura": False})
         if utype == 0:
             is_ally = (rel in ("merc_ally", "party_ally"))
             is_enemy = (rel == "enemy")
@@ -360,7 +397,8 @@ def suite1_filter_and_search(n_cases=100000, seed=0x50414C31):
         room_ok = not ((filt & 0x2000) and in_t)
         dist_ok = (dx * dx + dy * dy <= radius * radius)
         filt_ok = bool(python_aurafilter(None, t_info, filt))
-        want_hit = int(room_ok and dist_ok and filt_ok)
+        noaura_ok = not (chk_noaura and utype == 1 and m.get("noaura", False))
+        want_hit = int(room_ok and dist_ok and filt_ok and noaura_ok)
 
         if got_hit != want_hit:
             mismatches += 1
@@ -375,7 +413,7 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
     """Run 100,000 cases verifying FUN_0056e0c0 pulse damage across Holy Fire/Freeze/Shock."""
     print(f"=== Suite 2: Enemy-Hit Pulse Damage (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
-    e = boot_game.boot(use_snap=True)
+    e = boot_helper.boot()
     rng = random.Random(seed & 0xFFFFFFFF)
 
     FAKE_SK = 0x30000000
@@ -516,19 +554,25 @@ def suite2_pulse_damage(n_cases=100000, seed=0x50414C32):
     e.hook(0x639DB0, lambda e: (st107.__setitem__((e.arg(0), e.arg(1)), e.arg(2)), 1)[1], 3)
 
     hf_ctx = e.alloc(0xC0)
-    local_ctx = e.alloc(0x10)
-    e.w32(local_ctx + 0x00, game)
-    e.w32(local_ctx + 0x04, caster)
-    e.w32(local_ctx + 0x08, 0)
-    e.w32(local_ctx + 0x0C, hf_ctx)
+    stack_ctx = e.alloc(0x10)
+    e.w32(stack_ctx + 0x00, game)
+    e.w32(stack_ctx + 0x04, caster)
+    e.w32(stack_ctx + 0x08, 0)
+    e.w32(stack_ctx + 0x0C, hf_ctx)
 
     e.w32(defender + 0x04, ce_zero_mid)
-    r_zero = e.call(0x5D07C0, ecx=local_ctx, edx=defender)
+    r_zero = e.call(0x5D07C0, ecx=stack_ctx, edx=defender)
     e.w32(defender + 0x04, ce_neg_mid)
     e.w32(defender + 0x20, 12345); e.w32(defender + 0x24, 666)
-    r_neg = e.call(0x5D07C0, ecx=local_ctx, edx=defender)
+    r_neg = e.call(0x5D07C0, ecx=stack_ctx, edx=defender)
     n_lo, _ = step_rng(12345, 666)
-    print(f"  Holy Freeze FUN_005d07c0 coldeffect>=0 (mid={ce_zero_mid}): ret={r_zero}; coldeffect<0 (mid={ce_neg_mid}): ret={r_neg}, state107={st107.get((defender, 0x6B))} (want {int((n_lo % 100) < 20)})")
+    want_st107 = int((n_lo % 100) < 20)
+    got_st107 = st107.get((defender, 0x6B))
+    if r_zero != 0 or r_neg != 1 or got_st107 != want_st107:
+        mismatches += 1
+        print(f"  MISMATCH Holy Freeze callback: r_zero={r_zero} (want 0), r_neg={r_neg} (want 1), st107={got_st107} (want {want_st107})")
+    else:
+        print(f"  Holy Freeze FUN_005d07c0 coldeffect>=0 (mid={ce_zero_mid}): ret={r_zero}; coldeffect<0 (mid={ce_neg_mid}): ret={r_neg}, state107={got_st107} (want {want_st107})")
 
     print(f"  Suite 2 result: {n_cases} cases run in {time.time() - t0:.2f}s, mismatches = {mismatches}")
     return mismatches
@@ -538,7 +582,7 @@ def suite3_prayer_mana_and_regen(n_cases=100000, seed=0x50414C33):
     """Run 100,000 cases verifying Prayer mana payment, state 85, and FUN_005806f0 regen."""
     print(f"=== Suite 3: Prayer Mana Cost, State 85 (nomanaregen), and FUN_005806f0 (N={n_cases}, seed={seed:#010x}) ===")
     t0 = time.time()
-    e = boot_game.boot(use_snap=True)
+    e = boot_helper.boot()
     rng = random.Random(seed & 0xFFFFFFFF)
 
     # Part 3A: Verify FUN_00644b10 mana cost for Prayer (99), Might (98), Sanctuary (119), Meditation (120)
