@@ -2,7 +2,7 @@
 
 ```yaml
 change: stashfield
-status: in-progress
+status: archived
 agent: stashfield
 branch: agent/stashfield
 worktree: ~/code/d2lod-wt/stashfield
@@ -20,8 +20,8 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 ./internal/d2dsoakstat ./internal/bot ./cmd/d2dsoak; changecheck -cli 0 warnings; leakcheck 0 hits"
-merge:
-result: "unit tests on the three shapes (poverty, funded, old archive) pass; not verified live (no game run)"
+merge: 875cd7c
+result: "whole repo vet and test pass on the worker host; changecheck overlaps with the stale specmin card"
 credit:
   author: owner
   agents: [Claude Code]

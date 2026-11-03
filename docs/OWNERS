@@ -134,12 +134,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-internal/bot/observe.go  stashfield  stashfield
-docs/research/stashfield.md  stashfield  stashfield
-docs/geninv.md  stashfield  stashfield
-docs/d2d-soak.md  stashfield  stashfield
-openspec/changes/stashfield/**  stashfield  stashfield
-internal/d2dsoakstat/invariants.go  stashfield  stashfield
-internal/d2dsoakstat/invariants_test.go  stashfield  stashfield
-internal/d2dsoakstat/invreport.go  stashfield  stashfield
-internal/d2dsoakstat/minute.go  stashfield  stashfield
