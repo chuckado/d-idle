@@ -111,6 +111,9 @@ def cmp(cases_path, a_path, b_path):
                 k = f"both land, ring {da} vs {db}"
             else:
                 k = f"game {ga[0] if ga else '?'} other {gb[0] if gb else '?'}"
+                for g in (ga, gb):
+                    if g and g[0] == "1":
+                        k += f" (lands on ring {max(abs(int(g[1]) - x), abs(int(g[2]) - y))})"
             kinds[k] = kinds.get(k, 0) + 1
     landed = sum(1 for v in a.values() if v[0] == "1")
     moved = 0
