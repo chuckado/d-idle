@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- b2bundle: batch 2 bundle branch on upstream main and its PR body (docs/research/pr-batch2-body.md); nothing pushed upstream
 - Bot: a character in town with no healing potion now shops at once, can walk home from the act 1 fields without scroll or waypoint, no longer burns charges on a cut portal cast, and retries the town portal once on the way back.
 - verifydmg3: third verification of the monster damage roll r3 (tools/emu/w3_*, docs/research/verify-dmgroll3.md)
 - beltfix2: analysis of the Gate 1 20261103 belt and no-kill failures with a ranked fix plan (docs)
