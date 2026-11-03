@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifydmg3
-status: in-progress
+status: archived
 agent: verifydmg3
 branch: agent/verifydmg3
 worktree: d2lod-wt/verifydmg3
@@ -16,7 +16,7 @@ exclusive: []
 gates:
   - "own differential: r3 against game.exe's roll and the verifier's game-order model, own seed, every set; never worse than base"
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "docs and tools only; game.exe reads, own differential (base, r2, r3 and a diagnosis build), commit hygiene, merge-tree, CI syntax parity and suites run on the worker host by the verifier (offline, no live game, not verified live); MSVC not re-run"
+result: "docs/tools only"
 credit:
   component: Monster physical damage roll (third verification)
   author: owner
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 42e9e2f
 ```
 
 ## 1. Work
