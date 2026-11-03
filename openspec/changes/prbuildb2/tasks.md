@@ -18,7 +18,7 @@ exclusive:
 gates:
   - "counted differential base vs head on a real d2d build >= 20,000 cases per part; seven suites plus test_sk_ground green; CI parity"
 merge:
-result:
+result: "two private fork branches built and measured offline against game.exe oracles on a real d2d build; not verified in a live game"
 credit:
   component: Upstream batch 2 candidates (minmana floor, Teleport)
   author: owner
@@ -28,10 +28,10 @@ credit:
 
 ## 1. Work
 
-- [ ] 1.1 Fetch upstream read-only, base both branches on upstream main after #177
-- [ ] 1.2 local/batch2-minmana: the mana check without the floor, the payment rule, counted differential
-- [ ] 1.3 local/batch2-teleport: room limit (D1) and nearest free spot (D2), a counted differential each
-- [ ] 1.4 CI parity (g++, clang++, extra warnings, tidy, pr_guard, presubmit, suites)
-- [ ] 1.5 Throwaway merge of each branch with #178's head, conflicts reported
-- [ ] 1.6 Push both branches to the private remote only
-- [ ] 1.7 docs/research/pr-batch2-draft.md, changecheck, leakcheck
+- [x] 1.1 Fetch upstream read-only, base both branches on upstream main after #177
+- [x] 1.2 local/batch2-minmana: the mana check without the floor, the payment rule, counted differential
+- [x] 1.3 local/batch2-teleport: room limit (D1) and nearest free spot (D2), a counted differential each
+- [x] 1.4 CI parity (g++, clang++, extra warnings, tidy, pr_guard, presubmit, suites)
+- [x] 1.5 Throwaway merge of each branch with #178's head, conflicts reported
+- [x] 1.6 Push both branches to the private remote only
+- [x] 1.7 docs/research/pr-batch2-draft.md, changecheck, leakcheck
