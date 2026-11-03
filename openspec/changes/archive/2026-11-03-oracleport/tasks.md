@@ -2,7 +2,7 @@
 
 ```yaml
 change: oracleport
-status: in-progress
+status: archived
 agent: oracleport
 branch: agent/oracleport
 worktree: d2lod-wt/oracleport
@@ -25,7 +25,8 @@ credit:
   verified_by: []
   agents: [Claude Code]
   consent: none
-result: "Offline docs and private fork branches, no live game. A: local/batch2-A-r5 (41afdc6a, 3 commits on upstream main e1eea02a), B: local/batch2-B-r2 (0399e357), both pushed to the private remote only. Oracles sk_mana.py, sk_tele_spot.py, monster_damage.py with unit tests, README rows and structs.tsv rows. Verified on the Windows build worker: oracle unit tests with game data, mana 190,840 cases base 281 differ head 0, Teleport seeds 1 and 9 head 100,000 of 100,000, monster damage 560,000 frames 0 differ, parity lane and MSVC 14.51 rc 0 for A. Not run: full suites and MSVC for B."
+result: "docs only"
+merge: eda9c72
 ```
 
 ## 1. Work

@@ -59,7 +59,6 @@
 | [m3-merc](../../openspec/changes/m3-merc/) | proposed | m3-merc | `internal/merc/**`<br>`internal/bot/merc_test.go`<br>`docs/merc-d2d.md`<br>`docs/probes/merc/**` | `soak-slot:3` |
 | [mapitem](../../openspec/changes/mapitem/) | in-progress | mapitem | `docs/stream/map-contiguity.md`<br>`cmd/d2dview/stitch.go`<br>`cmd/d2dview/stitch_test.go`<br>`cmd/d2dview/feed.go`<br>`cmd/d2dview/pub.go`<br>`cmd/d2dview/main.go`<br>`cmd/d2dview/view_test.go`<br>`cmd/d2dview/web/stream.html`<br>`cmd/d2dview/web/index.html` | - |
 | [nexthit](../../openspec/changes/nexthit/) | in-progress | nexthit | `docs/research/pr-nexthit-proof.md`<br>`docs/research/pr-nexthit-draft.md`<br>`tools/emu/next_hit.py`<br>`tools/emu/next_hit_mode.inc`<br>`tools/emu/next_hit_summary.py`<br>`openspec/changes/nexthit/**` | `fork-branch:fix/nexthit` |
-| [oracleport](../../openspec/changes/oracleport/) | in-progress | oracleport | `openspec/changes/oracleport/**`<br>`docs/research/pr-batch2-A-body.md`<br>`docs/research/pr-batch2-B-body.md` | `fork-branch:local/batch2-A-r5`<br>`fork-branch:local/batch2-B-r2` |
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
@@ -114,8 +113,6 @@
 - change mapitem: go run ./cmd/changecheck -cli has 0 warnings; go run ./cmd/leakcheck -mode fail finds 0; tools/openspec.sh validate --all --strict passes
 - change nexthit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change nexthit: PR claim only with a differential on real builds: before > 0, after 0
-- change oracleport: changecheck 0 new warnings; leakcheck -mode fail 0; merge_lines_check ok
-- change oracleport: pr_guard 0 FAIL and presubmit --quick 0 FAIL on each fork branch
 - change skmeleewire: go test -p 1 ./internal/data ./internal/resource ./internal/combat ./cmd/d2bot; whole-repo vet and test on the worker host
 - change skmeleewire: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change skmiss: differential on real d2d builds: before > 0, after 0 for any claim; pr_guard 0/0; presubmit --quick 0 FAIL; upstream tests rc 0
@@ -124,6 +121,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- eda9c72f 11-03 11:28 `Merge agent/oracleport: ORACLEPORT: batch 2 split into A (mana floor, Teleport D1/D2 with two oracles) and B (monster damage roll with its oracle), PR bodies in the maintainer's template, rule list; counts on the exact heads` (oracleport)
 - 8d4880a3 11-03 11:27 `merge origin/main into oracleport` (oracleport)
 - 62e4ffab 11-03 11:22 `Merge agent/lockstepplan: LOCKSTEPPLAN: lockstep and A:B plan (clvl 1-6 cell, k=1, hidden i2 i3 i5; no native Windows lane for now)` (lockstepplan)
 - 2a7b26b7 11-03 11:21 `merge origin/main into lockstepplan` (lockstepplan)
@@ -133,5 +131,4 @@
 - 54ee48a6 11-03 11:07 `Merge agent/b2winworker: b2winworker: batch 2 r3 re-run on the Windows build worker (MSVC 14.51 0 warnings, ctest, WSL parity, damage-roll sets 0 differences; partial)` (b2winworker)
 - 72456d2e 11-03 11:06 `merge origin/main into b2winworker` (b2winworker)
 - f498e13e 11-03 10:59 `Merge agent/b2rebase2: b2rebase2: docs and emulator tools (analysis, verification, coverage; docs only)` (b2rebase2)
-- 6b31dec1 11-03 10:58 `merge origin/main into b2rebase2` (b2rebase2)
 <!-- statusgen:end -->
