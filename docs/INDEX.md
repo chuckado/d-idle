@@ -290,3 +290,5 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/pr-batch2-draft.md - upstream batch 2 (minmana floor, Teleport D1+D2): heads, counted differentials on a real d2d build, parity, #178 overlap, what is left out
 - docs/research/dmgroll-draft.md: DMGROLL, the monster physical damage roll fix on a private branch (step 1 check, differential, parity, commit text)
 - docs/research/beltfix-analysis.md: Gate 1 20261102 BELT window analysis and fix
+- docs/research/botab-20261102.md | Bot-level d2d vs game.exe from existing records: XP/h, kills, deaths, potions, town trips, areas; comparability, gaps, minimum new runs (card botab)
+- docs/research/botab-trace.md | BOTAB trace: questions, deviations D1.., bot findings B1.., limits, matrix proposals
