@@ -62,6 +62,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
 | [soak-minutes-virtual](../../openspec/changes/soak-minutes-virtual/) | in-progress | specmin | `openspec/changes/soak-minutes-virtual/**`<br>`internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/d2dsoakstat/testdata/invreport.golden`<br>`docs/probes/postfix-soak2.md`<br>`docs/review-strategy.md`<br>`docs/d2d-soak.md`<br>`docs/geninv.md` | - |
+| [stashfield](../../openspec/changes/stashfield/) | in-progress | stashfield | `internal/d2dsoakstat/invariants.go`<br>`internal/d2dsoakstat/invariants_test.go`<br>`internal/d2dsoakstat/invreport.go`<br>`internal/d2dsoakstat/minute.go`<br>`internal/bot/observe.go`<br>`docs/research/stashfield.md`<br>`docs/geninv.md`<br>`docs/d2d-soak.md`<br>`openspec/changes/stashfield/**` | - |
 | [wpcooldown](../../openspec/changes/wpcooldown/) | in-progress | wpcooldown | `internal/nav/waypoint.go`<br>`internal/nav/wpclick_test.go`<br>`internal/env/tuning_nav.go`<br>`docs/wpcooldown.md`<br>`docs/waypoints.md`<br>`docs/fixwp.md`<br>`openspec/changes/wpcooldown/**` | - |
 
 ### Gates
@@ -124,9 +125,11 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 - change soak-minutes-virtual: go test -p 1 ./internal/d2dsoakstat ./cmd/d2dsoak passes, incl. TestInvariantsGate1PostfixSoak2 (27 and 26 fail) and the clean synthetic log (passes)
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
+- change stashfield: go test -p 1 ./internal/d2dsoakstat ./internal/bot ./cmd/d2dsoak; changecheck -cli 0 warnings; leakcheck 0 hits
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 28ef38ba 11-03 06:18 `merge origin/main into stashfield` (stashfield)
 - 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
 - b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
 - 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
@@ -136,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 48a8a283 11-03 02:06 `Merge agent/b2bundle: B2BUNDLE: upstream batch 2 PR body, card and raw run results (docs only; fork branches local/batch2-bundle stay private until the user's go)` (b2bundle)
 - 7a52b7e1 11-03 00:42 `Merge agent/beltfix3: BELTFIX3: shop on every town arrival with no healing potions (5 s gap), walk the level chain home from act 1 fields, do not burn portal charges on a cut cast, retry the return portal; replay of the Gate 1 belt window; offline tests, nothing verified live` (beltfix3)
 - e9eed0d2 11-03 00:41 `merge origin/main into beltfix3` (beltfix3)
-- 42e9e2f8 11-03 00:36 `Merge agent/verifydmg3: verifydmg3: analysis, verification or draft (docs and emulator tools only; fork branches stay private)` (verifydmg3)
 <!-- statusgen:end -->
