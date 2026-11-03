@@ -123,6 +123,7 @@
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
 
 ### Recent merges
+- 5c6d3493 11-03 10:39 `merge origin/main into gate3prep` (gate3prep)
 - fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
 - 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
 - 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
@@ -132,5 +133,4 @@
 - ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
 - 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
 - 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
-- 670ea9ca 11-03 10:20 `merge origin/main into projreview` (projreview)
 <!-- statusgen:end -->
