@@ -9,7 +9,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.ama (Amazon skills: start/do functions, missile, states) | 30 | 22 | 8 | 0 | 0 | 0 | 100% | 100% | 145,800 |
 | skills.sor (Sorceress skills) | 30 | 0 | 15 | 15 | 0 | 0 | 50% | 100% | 913,635 |
 | skills.nec (Necromancer skills) | 30 | 27 | 3 | 0 | 0 | 0 | 100% | 100% | 64,400 |
-| skills.pal (Paladin skills) | 30 | 10 | 3 | 2 | 0 | 15 | 43% | 50% | 42,260 |
+| skills.pal (Paladin skills) | 30 | 25 | 3 | 2 | 0 | 0 | 93% | 100% | 56,660 |
 | skills.bar (Barbarian skills) | 30 | 30 | 0 | 0 | 0 | 0 | 100% | 100% | 27,800 |
 | skills.dru (Druid skills) | 30 | 30 | 0 | 0 | 0 | 0 | 100% | 100% | 27,800 |
 | skills.ass (Assassin skills) | 30 | 0 | 0 | 0 | 0 | 30 | 0% | 0% | 0 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2449** | **942** | **53** | **0** | **1466** | **69%** | **70%** | **5,825,390** |
+| **total** | **4910** | **2464** | **942** | **53** | **0** | **1451** | **69%** | **70%** | **5,839,790** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2200 (59%), compared 2253 (61%), read-only 53, untested 1466.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2215 (60%), compared 2268 (61%), read-only 53, untested 1451.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -55,6 +55,9 @@ Case counts add the cases of every ledger line; one differential that covers man
 | skills.pal | 98,99,102,104,113,114,115,118,119,123 | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 21,760 | 2026-11-01 | aura range, period and stat calcs equal d2d eval_calc; per-pulse mana D5 and unit reach D6 are read-only deviations |
 | skills.pal | 101,112 | READ-ONLY | `docs/research/pal-skill-trace.md` | - | 2026-11-01 | Holy Bolt (heal D1) and Blessed Hammer (path, D2-D4): game.exe run only, no d2d differential |
 | skills.pal | 96,97,106 | TESTED-DEVIATION | `docs/research/palskill-trace.md` | 20,500 | 2026-11-02 | Smite damage 20,500 cases per seed (seeds 7, 1): stat 111 omitted D1, min = max D2; calc slots and to-hit of 96, 97, 106 equal d2d in 20,360 cases per seed; Sacrifice price and Zeal reach U; PALSKILL; Smite vs block: game.exe lands every blow, d2d lets a block stop it (docs/research/smiteblock-trace.md, 96,000 game cases and 80,000 d2d blow pairs, V run) |
+| skills.pal | 100,103,105,108,109,110,117,120,122,125 | TESTED-0-DIFF | `docs/research/covpal-trace.md` | 9,593 | 2026-11-02 | aura range, perdelay, auralen, aurastat and passive calcs equal d2d eval_calc (seeds 11 and 29, per-row counts in the doc); aura apply, mana per pulse and reach not tested (D5 D6 of pal-skill-trace.md); covpal |
+| skills.pal | 107,111,116,121 | TESTED-0-DIFF | `docs/research/covpal-trace.md` | 3,889 | 2026-11-02 | calc slots, to-hit and element min/max/length equal d2d (seeds 11 and 29); Vengeance mastery term D2 is a read-only deviation; effects of Charge, Conversion, Fist not run; covpal |
+| skills.pal | 124 | TESTED-0-DIFF | `docs/research/covpal-trace.md` | 918 | 2026-11-02 | Redemption calc slots equal d2d; corpse callback D1 (one corpse a pulse) is a read-only deviation; covpal |
 | skills.bar | 126-155 | TESTED-0-DIFF | `docs/research/skbarb-trace.md` | 27,800 | 2026-11-02 | calc cells (calc1-4, petmax, sumsk, delay, aura, passive) and the skill physical min / max equal d2d eval_calc / skill_phys in 27,800 cases (seeds 1 and 7); Whirlwind radius D1, Howl D3-D5, War Cry ring D6 are game-side V run with d2d read only (no row earns TESTED-DEVIATION) |
 | skills.dru | 221-250 | TESTED-0-DIFF | `docs/research/skdruid-trace.md` | 27,800 | 2026-11-02 | calc cells only (calc1..4, petmax, sumskill, aura, passive) game.exe FUN_00646ca0 vs d2d eval_calc, seeds 1 and 7 |
 | skills.monster | 0 | TESTED-DEVIATION | `docs/research/sk-melee2-trace.md` | 100,000 | 2026-11-01 | plain Attack on the real build: to-hit equal, physical in 256ths D1, barehanded D4 |
@@ -122,7 +125,6 @@ Hand-ranked in `gaps.tsv` from the class plans (`docs/classes`) and the work boa
 | 1 | missiles | untested (371 of 684) | Monster and other-class missiles (arrows, bolts, breath) decide most damage taken; risk map rank 1 and 6; only 8 player bolts, Blizzard and a few reads are covered | `docs/research/d2d-fidelity-riskmap.md` |
 | 2 | monster.ai | untested (121 of 146) | Wake, chase, flee and ranged behaviour per AI type moves kills per hour and deaths; risk map rank 5; mon-wake traced for a few types only | `docs/research/d2d-fidelity-riskmap.md` |
 | 4 | levels | untested (1 of 137) | Area spawn density, teleport and layout rules gate every act; risk map ranks 2 and 11; spawn density was compared for 4 levels upstream, not entered per row | `docs/research/spawn-density-trace.md` |
-| 6 | skills.pal | untested (15 of 30) | Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched | `docs/classes/ranking.md` |
 | 8 | skills.ass | untested (30 of 30) | Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched | `docs/classes/ranking.md` |
 | 9 | states | untested (175 of 185) | Remaining states and auras (curses, shrines, poison, stun) alter damage taken | `docs/research/sorc-skill-matrix.md` |
 | 10 | itemtypes | untested (98 of 98) | Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced | `docs/research/price-trace.md` |

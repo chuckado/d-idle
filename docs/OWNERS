@@ -134,3 +134,13 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/research/covpal-trace.md  covpal  covpal
+tools/emu/covpal.py  covpal  covpal
+tools/emu/covpal_build.sh  covpal  covpal
+tools/emu/covpal_run.sh  covpal  covpal
+tools/emu/covpal_rows.py  covpal  covpal
+tools/emu/covpal_tab.py  covpal  covpal
+openspec/changes/covpal/**  covpal  covpal
+docs/coverage/ledger.tsv  covpal  covpal
+docs/coverage/gaps.tsv  covpal  covpal
+docs/coverage/rule-coverage.md  covpal  covpal
