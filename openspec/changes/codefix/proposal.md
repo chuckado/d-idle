@@ -8,6 +8,6 @@ Fixes for F1 to F5 and F8, each with a test that fails when the fix is reverted.
 
 ## Impact
 
-internal/resource/town.go, types.go, internal/bot/resource.go, goal.go, kitgate.go, internal/town/trip.go, shop.go, chores.go, basicsfix.go, town.go, cmd/d2bot/d2dwire.go and their tests.
+cmd/d2drill/portal_copy.go (verbatim copy refresh), internal/resource/town.go, types.go, internal/bot/resource.go, goal.go, kitgate.go, internal/town/trip.go, shop.go, chores.go, basicsfix.go, town.go, cmd/d2bot/d2dwire.go and their tests.
 
 Overlap (declared): these source files belong to other (merged) cards or to no card in docs/OWNERS; each edit is a few lines and no signature other than the new `ChainHome` input field, `ChainHomeArea` and `manaReserve(s)` changes. AREAREACH (agent/areareach) owns internal/bot/task.go and the planner Pick code, which this card does not touch.
