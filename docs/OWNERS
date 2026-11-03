@@ -113,8 +113,3 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
-internal/nav/exit.go  navexit22  navexit22
-internal/nav/seed17_test.go  navexit22  navexit22
-internal/d2dworld/testdata/seed17/**  navexit22  navexit22
-docs/navexit22.md  navexit22  navexit22
-openspec/changes/navexit22/**  navexit22  navexit22

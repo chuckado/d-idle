@@ -2,7 +2,7 @@
 
 ```yaml
 change: navexit22
-status: in-progress
+status: archived
 agent: navexit22
 branch: agent/navexit22
 worktree: ~/code/d2lod-wt/navexit22
@@ -21,6 +21,7 @@ result: "Offline only, not verified live. Root cause found by recording seed 17 
 credit:
   author: owner
   agents: [Claude Code]
+merge: a1401fd
 ```
 
 ## 1. Work
