@@ -2,7 +2,7 @@
 
 ```yaml
 change: botab
-status: in-progress
+status: archived
 agent: botab
 branch: agent/botab
 worktree: ~/code/d2lod-wt/botab
@@ -16,8 +16,9 @@ owns:
 exclusive: []
 gates:
   - "python3 -I tools/baseline/botab_run.py <gate2 minute file> runs; changecheck -cli 0 warnings; leakcheck -mode fail 0"
-result: "Docs and offline scripts: bot-level d2d vs game.exe table from committed minute lines; every XP/h verdict INCONCLUSIVE, kills/h d2d about 0.76 of game.exe. No game run."
+result: "docs/tools only"
 live: "offline only, nothing run live"
+merge: c5e6c03
 ```
 
 - [x] extractor and driver on the committed minute lines (d2d gates 1 and 2, game.exe late set, baselines.json bands)
