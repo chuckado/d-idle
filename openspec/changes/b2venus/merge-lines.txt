@@ -1,3 +1,0 @@
-BACKLOG: B2VENUS: batch 2 r3 re-run on the Venus build worker (MSVC 14.51, WSL stages, damage-roll sets, Teleport seed 9): numbers in docs/research/b2-venus-rerun.md
-INDEX: docs/research/b2-venus-rerun.md: batch 2 r3 on Venus (MSVC 14.51 warnings and ctest, WSL stages, damage-roll sets, Teleport seed 9)
-CHANGELOG: b2venus: batch 2 r3 re-run on the Venus build worker, numbers recorded
