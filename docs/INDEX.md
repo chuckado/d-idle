@@ -312,3 +312,4 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/codefix.md - what changed per review finding, tests, what a Gate 1 re-run should show
 - tools/merge_lines_check.py: merge-lines.txt grammar linter (stdlib, tests in tools/ci/tests).
 - docs/research/xphshort.md: Gate 1 XP/h budget and split, remedies, multi-seed Gate 1 plan; tools/baseline/xph_budget.py
+- docs/research/gate-triage-examples.md: output of tools/baseline/gate_triage.py for the five Gate 1 runs of 2026-11-02/03, checked against the hand findings
