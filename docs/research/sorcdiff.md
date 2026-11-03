@@ -72,7 +72,18 @@ Examples (V, line `cast ID FCR TICKS`): game.exe `cast 53 0 19`, `cast 53 7 18`,
 
 ### 3.2 Re-runs of the existing harnesses on `005c7cab` (build A; the skills the bot uses)
 
-HARNESS_TABLE
+Run on build A (main plus the harness commit), stage `harness2` of `tools/emu/sorcdiff_venus_run.sh` (V, alone on Venus, 299 s), except the first row (stage `harness`, shared Venus, finished before the VM reset killed the rest). Counts are compared cases; "differ" is game.exe against the real d2d build.
+
+| harness (skills it covers) | compared | differ |
+|---|---|---|
+| skill_damage gen 100000 1 (element damage with synergies and masteries: Fire Bolt 36, Charged Bolt 38, Static Field 42, Telekinesis 43, Frost Nova 44, Lightning 49, Chain Lightning 53, Thunder Storm 57, with Lightning Mastery levels) | 116,000 (about 1,120 to 1,250 per bot skill) | 0 |
+| static_field.py 20000, seeds 1 and 7 | 229,664 lines each | 0 and 0 |
+| chill_length.py 20000, seeds 1 and 7 (cold length) | 41,312 lines each | 0 and 0 |
+| next_hit.py, test_next_hit seeds 1 and 7, N 1500 (Frost Nova ring hits, justhit) | 5,027 and 4,964 H/T lines | 0 and 0 |
+| armor_hit.py gen 20000 1 (Frozen Armor striker rule, by monster class) | 109,604 | 0 in every class |
+| freeze_rules.py gen 20000 1 (Frost Nova / Glacial Spike freeze) | 145,748 | 0 |
+
+Not re-run: missile_hit (60,000 cases, killed by the Venus VM reset; merged state S from #166). Static Field, cold length, nova hits, Frozen Armor and element damage are therefore clean on main `005c7cab` for these case sets. Smaller N than the 100,000 of the first plan, because three Venus jobs ran at once and the VM had to be reset.
 
 ## 4. Fix branch (private fork, remote forgejo only)
 
@@ -95,7 +106,7 @@ Not done by the fix (ponytail comment in `set_pmode`): the missile still leaves 
 
 ## 6. Notes
 
-- **Venus overlap.** The Venus state file showed another agent's job (`b2v`, then `b2on181`) running while the `harness` stage ran; all three used different repos and scratch directories under `~/d2d-lab`, only CPU was shared. The `build` and `cast` stages ran alone (state file: finished before they started).
+- **Venus overlap.** Three jobs shared the VM while the first `harness` stage ran (my skill_damage took 22 min); the VM was reset by the coordinator and that stage was killed. `build`, `cast` and `harness2` ran alone.
 - **Ledger rows to correct (proposed, not edited)**: `skills.sor 43,37,61,63,65` says READ-ONLY for the masteries, but the mastery share of the element damage is inside the `skill_damage.py` differential (merged #146); only the passive stat bookkeeping and Warmth stay read-only.
 - **Premise corrections for the brief**: Energy Shield and Thunder Storm are not cast by the bot, Charged Bolt is the skill that decides a gate run, and the cast counts are not in the minute lines.
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # sorcdiff (agent SORCDIFF): Sorceress differentials on the real d2d build. Runs INSIDE the Ubuntu-26.04 WSL distro as user d2
 # (linux.ps1 -Script sorc-run.sh). Input: C:\d2lab\dl\sorc.bundle (branches local/sorc-base = upstream 005c7cab, local/sorc-lightning-seq,
-# whose parent is the harness-only commit). Stages as labels: build | cast | harness (any order, several allowed). Output copy:
+# whose parent is the harness-only commit). Stages as labels: build | cast | harness | harness2 (the later harnesses with 20,000 cases) (any order, several allowed). Output copy:
 # C:\d2lab\logs\sorc-results.txt.
 set -u
 W=/mnt/c/d2lab; H=$HOME/d2d-lab; R=$H/repo-sorc; S=$H/sorc-scratch; D=$H/src/build/_deps
@@ -86,6 +86,25 @@ harness)
   timeout 1500 "$(bin $BA test_armor_hit)" --armor-hit $S/ah_cases.tsv > $S/ah_d2d.tsv; oracle $A $BA armor_hit.py compare $S/ah_cases.tsv $S/ah_game.tsv $S/ah_d2d.tsv 2>&1 | tail -6 | tee -a "$OUT"
   say "== freeze_rules gen 100000 1 (Frost Nova / Glacial Spike freeze) ($((SECONDS-t0))s)"
   oracle $A $BA freeze_rules.py gen 100000 1 > $S/fr_cases.tsv; oracle $A $BA freeze_rules.py game $S/fr_cases.tsv > $S/fr_game.tsv 2>$S/fr_game.err
+  timeout 1500 "$(bin $BA test_freeze_rules)" --freeze-rules $S/fr_cases.tsv | grep -E '^[0-9]+ ' > $S/fr_d2d.tsv; cmpj $S/fr_cases.tsv $S/fr_game.tsv $S/fr_d2d.tsv | tee -a "$OUT";;
+harness2)
+  A=$H/wt-sorc-A; BA=$H/build-sorc-A
+  for sd in 1 7; do
+  say "== static_field.py 20000 $sd ($((SECONDS-t0))s)"
+  oracle $A $BA static_field.py 20000 $sd > $S/sf_game_$sd.txt 2>$S/sf_game.err
+  timeout 1500 "$(bin $BA test_static_field)" --static-field $sd 20000 | grep -E '^[BR][0-9]' > $S/sf_d2d_$sd.txt; say "game $(wc -l < $S/sf_game_$sd.txt) d2d $(wc -l < $S/sf_d2d_$sd.txt) differing $(diff $S/sf_game_$sd.txt $S/sf_d2d_$sd.txt | grep -c '^<')"
+  say "== chill_length.py 20000 $sd ($((SECONDS-t0))s)"
+  oracle $A $BA chill_length.py 20000 $sd > $S/cl_game_$sd.txt 2>$S/cl_game.err
+  timeout 1500 "$(bin $BA test_cold_length)" --cold-length $sd 20000 | grep -E '^[BR][0-9]' > $S/cl_d2d_$sd.txt; say "game $(wc -l < $S/cl_game_$sd.txt) d2d $(wc -l < $S/cl_d2d_$sd.txt) differing $(diff $S/cl_game_$sd.txt $S/cl_d2d_$sd.txt | grep -c '^<')"
+  done
+  say "== next_hit.py (Frost Nova / Nova hits), seeds 1 and 7, N 1500 ($((SECONDS-t0))s)"
+  for sd in 1 7; do timeout 1500 "$(bin $BA test_next_hit)" --next-hit $sd 1500 > $S/nh_d2d_$sd.txt; oracle $A $BA next_hit.py $S/nh_d2d_$sd.txt > $S/nh_game_$sd.txt 2>$S/nh_game.err
+    say "seed $sd: d2d H/T lines $(grep -cE '^[HT]' $S/nh_d2d_$sd.txt) game $(wc -l < $S/nh_game_$sd.txt) differing $(grep -E '^[HT]' $S/nh_d2d_$sd.txt | diff $S/nh_game_$sd.txt - | grep -c '^<')"; done
+  say "== armor_hit (Frozen Armor striker) gen 20000 1 ($((SECONDS-t0))s)"
+  oracle $A $BA armor_hit.py gen 20000 1 > $S/ah_cases.tsv; oracle $A $BA armor_hit.py game $S/ah_cases.tsv > $S/ah_game.tsv 2>$S/ah_game.err
+  timeout 1500 "$(bin $BA test_armor_hit)" --armor-hit $S/ah_cases.tsv > $S/ah_d2d.tsv; oracle $A $BA armor_hit.py compare $S/ah_cases.tsv $S/ah_game.tsv $S/ah_d2d.tsv 2>&1 | tail -6 | tee -a "$OUT"
+  say "== freeze_rules gen 20000 1 (Frost Nova / Glacial Spike freeze) ($((SECONDS-t0))s)"
+  oracle $A $BA freeze_rules.py gen 20000 1 > $S/fr_cases.tsv; oracle $A $BA freeze_rules.py game $S/fr_cases.tsv > $S/fr_game.tsv 2>$S/fr_game.err
   timeout 1500 "$(bin $BA test_freeze_rules)" --freeze-rules $S/fr_cases.tsv | grep -E '^[0-9]+ ' > $S/fr_d2d.tsv; cmpj $S/fr_cases.tsv $S/fr_game.tsv $S/fr_d2d.tsv | tee -a "$OUT";;
 esac; done
 cp "$OUT" $W/logs/sorc-results.txt 2>/dev/null
