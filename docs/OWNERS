@@ -113,3 +113,15 @@ openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
 docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
+docs/soaks/gate1-multiseed-20261103-1226-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/soaks/gate1-s16-20261103-1005-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/probes/soak-logs/gate1-s16-20261103-1005-ms1-minutes.jsonl.gz  gaterun  gate1multi-20261103-1226-ms1
+docs/soaks/gate1-s17-20261103-1007-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/probes/soak-logs/gate1-s17-20261103-1007-ms1-minutes.jsonl.gz  gaterun  gate1multi-20261103-1226-ms1
+docs/soaks/gate1-s18-20261103-1008-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/probes/soak-logs/gate1-s18-20261103-1008-ms1-minutes.jsonl.gz  gaterun  gate1multi-20261103-1226-ms1
+docs/soaks/gate1-s19-20261103-1023-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/probes/soak-logs/gate1-s19-20261103-1023-ms1-minutes.jsonl.gz  gaterun  gate1multi-20261103-1226-ms1
+docs/soaks/gate1-s20-20261103-1025-ms1.md  gaterun  gate1multi-20261103-1226-ms1
+docs/probes/soak-logs/gate1-s20-20261103-1025-ms1-minutes.jsonl.gz  gaterun  gate1multi-20261103-1226-ms1
+openspec/changes/gate1multi-20261103-1226-ms1/**  gaterun  gate1multi-20261103-1226-ms1
