@@ -13,7 +13,7 @@ owns:
 exclusive: []
 gates:
   - "changecheck 0 warnings for this card; leakcheck -mode fail 0"
-result: ""
+result: "docs only, not verified live; design doc docs/research/tierb-design-20261102.md; kitb vs kitk2 read with pair_compare (read-only)"
 credit:
   component: TIERBDESIGN
   author: owner
@@ -21,10 +21,10 @@ credit:
   consent: none
 ```
 
-- [ ] 1 Time-source inventory with evidence tags
-- [ ] 2 Three stepping designs (cost, risk, EULA, A:B question)
-- [ ] 3 Statistical alternative and sample sizes; recommendation
-- [ ] 4 Staged card list and fidelity-gate mapping
-- [ ] 5 User decisions
-- [ ] 6 kitb against kitk2 pair reading
-- [ ] 7 changecheck and leakcheck
+- [x] 1 Time-source inventory with evidence tags
+- [x] 2 Three stepping designs (cost, risk, EULA, A:B question)
+- [x] 3 Statistical alternative and sample sizes; recommendation
+- [x] 4 Staged card list and fidelity-gate mapping
+- [x] 5 User decisions
+- [x] 6 kitb against kitk2 pair reading
+- [x] 7 changecheck and leakcheck

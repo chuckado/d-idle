@@ -5,10 +5,10 @@
 
 ## 0. Recommendation first
 
-1. **Do the statistical A:B first, not Tier B.** The goal "same bot commit, same character and seed, compare outcomes" can be met as *paired statistics* today: pin the map seed on both backends with one `.d2s` file (seed-study.md section 2: d2s 0xAB plus the active-difficulty bit; d2d honours the same field), reset the character from a kit copy per run, interleave the arms, and judge each metric by an equivalence interval. With per-run CV 11 to 14 percent, **about 11 to 15 game.exe runs and as many d2d seeds** answer "d2d XP/hour within 15 percent of game.exe" (section 3).
+1. **Do the statistical A:B first, not Tier B.** The goal "same bot commit, same character and seed, compare outcomes" can be met as *paired statistics* today: pin the map seed on both backends with one `.d2s` file (seed-study.md section 2: d2s 0xAB plus the active-difficulty bit; d2d honours the same field), reset the character from a kit copy per run, interleave the arms, and judge each metric by an equivalence interval. With the late-band CV of 11 to 14 percent **about 11 to 15 game.exe runs and as many d2d seeds** answer "d2d XP/hour within 15 percent of game.exe"; the fresh-kit sets measured today have a CV of 4 to 5 percent, which would bring it down to the spec floor of 5 runs per arm if a pilot confirms it (sections 3.4 and 6).
 2. **Tier B cannot deliver a seed-for-seed cross-backend comparison on its own.** Even a perfectly stepped, deterministic game.exe diverges from d2d at the first monster: d2d's runtime RNG is one fixed-constant stream, game.exe steps the game seed once per unit made and rolls life, looks and drops on per-unit seeds (seed-study.md sections 1.3, 3, 7; D plus V read of the d2d source by that agent). Equal layout and equal spawn positions are reachable; equal fights, drops and XP are not, until d2d models the game-seed stream (a large fork card). So Tier B buys **game.exe self-repeatability and per-event diagnosis**, not a cheaper fidelity verdict.
 3. **Move to Tier B design 1 (frozen virtual clock with a step verb, section 2.1) only when** the statistical A:B gives a FAIL or a gap above 15 percent that the known-gap list does not explain and the per-area time split cannot localise, or when the game.exe within-arm CV comes out above 20 percent (then the run count in section 3 doubles and noise reduction pays). Designs 2 and 3 are not recommended now.
-4. **k=2 as a second regime:** see section 6 (kitb against kitk2).
+4. **k=2 as a second regime: yes, tagged and separate** (section 6): kitk2 is inside the kitb noise on XP/h (-2.9 %), kills/min and deaths, with one consistent delay (clvl 6 reached 12 percent later); use it for pilots and screening, not yet for a fidelity verdict.
 
 ## 1. What true stepping must control in game.exe 1.14d
 
@@ -90,6 +90,7 @@ Equivalence with margin m = 15 percent, alpha 0.05 per side, power 80 percent, u
 
 | per-run CV (both arms) | true gap d = 0 (z = 1.28) | true gap 5 percent (z = 0.84) |
 |---|---|---|
+| 4 to 5 percent (fresh kit, clvl 1 to 7, kitb and kitk2, n = 3 each, section 6) | 2 (floor 5) | 4 (floor 5) |
 | 11 percent (d2d soakfull, game.exe late runs without G2) | 10 | 15 |
 | 12 percent | 11 | 18 |
 | 14 percent (baseline-audit.md section 3 upper bound) | 15 | 25 |
@@ -119,7 +120,7 @@ All live work on hidden instances only (never i0), started by the coordinator's 
 | 1 | **AB-SEEDPIN**: settle the map-id pin on game.exe and d2d (seed-study P3-0, P3-1 for Act 1 town and Blood Moor) | d2-live | `docs/research/ab-seedpin.md`, `openspec/changes/ab-seedpin/**` | `instance:i5` | in-game map seed equals the `.d2s` map id in 3 coordinator starts from one file and from a copy in a second prefix; d2d `--seed` of that id gives the same room list and room seeds for Rogue Encampment and Blood Moor (or the conflict with docs/orig-spawns.md is explained) | read-only reads of `MapId` and `Act.dwMapSeed`, file 0xAB before and after; offline `drlg-dump` against a live room dump; no memory write, no hook |
 | 2 | **AB-TOOL**: cross-backend A:B analysis (ratio, equivalence interval, Poisson deaths, drops, time per area, measured pair correlation, n per arm) plus a delta spec for the fidelity gate | d2-worker | `tools/ab/xbackend.py`, `tools/ab/xbackend_test.py`, `docs/ab-xbackend.md`, `openspec/changes/ab-tool/**` (delta spec inside) | none | unit tests on synthetic sets; reproduces `pair_compare.py`'s lane numbers on kitb and kitk2; `changecheck` 0 warnings; leakcheck 0 | offline only, the collected kit sets and existing d2d soak sets as fixtures |
 | 3 | **AB-PILOT**: 3 pairs, game.exe k=1 on hidden lanes from the kit snapshot, d2d the same pinned seeds, same pin; measures CV per arm and pair correlation | coordinator set run plus d2-mechanic for the d2d arm | `docs/soaks/ab-pilot-<date>.md`, `openspec/changes/ab-pilot/**` | `instance:i2`, `instance:i3`, `instance:i5`, `d2d-lab-binary` (read-only use) | 3 of 3 lanes not weak, 0 writes after start, AB-TOOL report with CV and n per arm | `baseline-run.sh` set with `--fresh-from-set`, the d2d arm through `d2dsoak run` with `--seed` per pair; needs cards 1 and 2 |
-| 4 | **AB-FULL**: n per arm from the pilot (expected 11 to 15 for XP/h at 15 percent) | as card 3 | `docs/soaks/ab-full-<date>.md`, `openspec/changes/ab-full/**` | as card 3 | AB-TOOL verdict per metric; the decision table of 3.5 applied | interleaved rounds of 3 lanes; k=2 lanes only if section 6 admits the regime and the user agrees |
+| 4 | **AB-FULL**: n per arm from the pilot (5 at the fresh-kit CV of section 6, 11 to 15 at the late-band CV, for XP/h at 15 percent) | as card 3 | `docs/soaks/ab-full-<date>.md`, `openspec/changes/ab-full/**` | as card 3 | AB-TOOL verdict per metric; the decision table of 3.5 applied | interleaved rounds of 3 lanes; k=2 lanes only if section 6 admits the regime and the user agrees |
 | 5 | **TIERB-HOOK** (only if 3.5 says so): frozen virtual clock, `step N`, wait semantics, import scan of the not-covered APIs; private hook repository, generic, no game addresses | d2-worker (private repo) | private hook repository only; public `docs/research/tierb-hook.md` (results, public-safe), `openspec/changes/tierb-hook/**` | none (no game) | the hook's own test suite under Wine with a stub game: frame gate yields 0 frames while frozen, exactly N frames per `step N`, no deadlock in timed waits, null control at free-running k=1 unchanged | stub programs only; needs the user's go for the new hook set before any game use |
 | 6 | **TIERB-DET**: bot step mode (clock from the step counter, helper holds in steps) and determinism probes P3a idle town (5000 frames) then a 2 min scripted walk, twice from the same pinned `.d2s` | d2-live | `cmd/lockstepscan/**` or a new `cmd/tierbprobe/**`, `internal/gclock/**`, `docs/research/tierb-det.md`, `openspec/changes/tierb-det/**` | `instance:i4`, `bot-binary:tierbprobe` | equal state vector V1 of seed-study.md section 4 at every 250 frames for the idle span; first divergence frame per state class reported for the walk; speed factor read 0x400 every frame or reported | hidden i4, hook set with the user's go, run markers, read-only memory; then optionally one d2d run of the same seed to report cross-backend first divergence per class |
 
@@ -149,7 +150,22 @@ All live work on hidden instances only (never i0), started by the coordinator's 
 
 ## 6. kitb (k=1) against kitk2 (k=2): should k=2 become a second regime?
 
-KITB_SECTION
+Command (read-only, on the driver host after the set finished at about 7:16 PM EST): `python3 tools/baseline/pair_compare.py <set dir>/kitb <set dir>/kitk2 --a-name kitb --b-name kitk2` (ops repo), exit 0. Both sets: pin 15506e05, fresh characters Freshc, Freshd, Freshe from the kit snapshot of set `kit`, three hidden lanes, rows cut at the first clvl 7 line; kitb at k=1, kitk2 at k=2 with the scaled bot clock. All six lanes are marked weak by the quality script for the same reason (restart counter 6 to 22 inside the run), so the restarts are a bot or harness property at both k, not a k effect. V run (the table), D (the statistics).
+
+| metric | kitb k=1 (3 lanes) | kitk2 k=2 (3 lanes) | k=2 against k=1 |
+|---|---|---|---|
+| XP per game hour, per lane | 11040, 11445, 11952 (mean 11479, CV 4.0 %) | 11734, 10764, 10929 (mean 11142, CV 4.7 %) | -2.9 % of the mean; 95 % interval about -12.6 % to +6.7 % (Welch, 4 df); the k=2 median is just below the k=1 minimum |
+| kills per game minute | 6.29 / 6.74 / 8.60 | 6.23 / 7.37 / 8.17 | +0.6 % of the mean, median inside the spread |
+| deaths | 0, 0, 0 | 1, 0, 0 | no separable difference |
+| restarts | 6 / 11 / 21 | 10 / 13 / 22 | same |
+| game minutes to clvl 6 | 64 / 69 / 73 | 76 / 76 / 79 | +12 %: every k=2 lane slower than every k=1 lane (cause U: the real-time farm and goal timers and the unscaled helper holds of docs/timescale.md are candidates) |
+
+In five lines:
+1. At k=2 with the scaled bot clock the fresh clvl 1 to 7 game is inside the k=1 noise on XP/h (-2.9 %), kills/min (+0.6 %), deaths and restarts; the pair is three runs per arm, so this excludes only gaps larger than about 13 percent on XP/h.
+2. One consistent effect: the time to clvl 6 is 12 percent longer at k=2 in all three lanes, so k=2 is not a perfect copy of k=1 in the first hour.
+3. Recommendation: yes, k=2 becomes a **second, tagged regime** (`REGIME k=2` rows, its own baseline file or field, never merged into the k=1 baselines) for development, pilots and screening, which halves the real time of a fresh lane.
+4. Not yet for the game.exe arm of a fidelity verdict or a gate: that needs a k=1 against k=2 equivalence within 10 percent on XP/h, which at the CV seen here (about 5 percent) is about 5 more pairs (section 3.4), and an explanation of the clvl 6 delay.
+5. A by-product with weight for section 3: the fresh-kit game.exe CV of XP/h is 4 to 5 percent (n = 3, so its upper 95 percent bound is about 6 times that), far below the 11 to 14 percent of the late-band runs; if AB-PILOT confirms it, the A:B needs the spec floor of 5 runs per arm, not 15.
 
 ## 7. Limits of this design
 
