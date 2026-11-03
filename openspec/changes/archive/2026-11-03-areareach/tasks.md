@@ -2,7 +2,7 @@
 
 ```yaml
 change: areareach
-status: in-progress
+status: archived
 agent: areareach
 branch: agent/areareach
 worktree: ~/code/d2lod-wt/areareach
@@ -23,8 +23,8 @@ credit:
   component: AREAREACH
   author: owner
   agents: [Claude Code]
-merge:
-result: "offline only (fake mover and plan tests, go test ./internal/bot); not verified live. Gate 1 re-run must show no 'no activated waypoint' lines for Dark Wood/Black Marsh from a field area."
+merge: ab3a974
+result: "whole repo vet and test pass on the worker host"
 
 ```
 

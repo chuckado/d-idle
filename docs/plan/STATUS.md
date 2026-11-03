@@ -39,7 +39,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | change | status | agent | owns | exclusive |
 |---|---|---|---|---|
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
-| [areareach](../../openspec/changes/areareach/) | in-progress | areareach | `internal/bot/task.go`<br>`internal/bot/task_test.go`<br>`internal/bot/plan.go`<br>`internal/bot/plan_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/recoveryxp.go`<br>`docs/research/areareach.md`<br>`openspec/changes/areareach/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
@@ -84,7 +83,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - spec [town-basics](../../openspec/specs/town-basics/spec.md): 17 requirements
 - spec [upstream-pr](../../openspec/specs/upstream-pr/spec.md): 14 requirements
 - change actgate: changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change areareach: TestDarkWoodReachableByWalkingTheChain, TestLongestWalk and TestPickFallbackByXP fail when the fix is reverted
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
@@ -129,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- ab3a9747 11-03 09:25 `Merge agent/areareach: AREAREACH: leveling planner walks up to 5 hops and activates waypoints on the way (Dark Wood and Black Marsh were refused 28 times in run 0628); fallback ranked by XP per kill` (areareach)
 - 22378e28 11-03 09:24 `merge origin/main into areareach` (areareach)
 - 2a4a7063 11-03 09:17 `Merge agent/msvcc2026: msvcc2026: MSVC C2026 trace (oversize raw-string literals upstream), byte-identical split probe (docs, emulator tools)` (msvcc2026)
 - 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
@@ -138,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 4f7c85ed 11-03 06:06 `Merge agent/beltfix5: BELTFIX5: banked gold counts when no healing potion is carried and a withdraw chore before the shop (Gate 1 fourth run clvl 11 window: 1418 gold sat in the stash while the pack held 6); offline tests, not verified live` (beltfix5)
 - b6bd8094 11-03 03:45 `Merge agent/b2rebase: B2REBASE: batch 2 bundle rebased onto upstream main after the maintainer's batch 10 (no conflicts, four patches identical by range-diff), counts unchanged, MSVC 14.51 0 warnings; PR body updated (docs only; fork branch local/batch2-bundle-r2 stays private)` (b2rebase)
 - 735ed585 11-03 03:45 `merge origin/main into b2rebase` (b2rebase)
-- 04b5fe1f 11-03 03:24 `Merge agent/beltfix4: BELTFIX4: recovery mode (gold under 500) no longer switches the potion chore off on a town arrival with no healing potion (Gate 1 third run window at clvl 6 after a chicken); analysis: the 7-minute belt window is poverty at clvl 2 with 10-16 gold (drop luck), the XP/h gap is early loot divergence plus the injected kill; offline tests, not verified live` (beltfix4)
 <!-- statusgen:end -->
