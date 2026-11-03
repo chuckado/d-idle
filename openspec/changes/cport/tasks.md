@@ -29,5 +29,5 @@ credit:
 
 - [x] 1.1 read the maintainer rules, build local/batch2-C-r1 from batch A (3 commits), resolve conflicts
 - [x] 1.2 pr_guard, presubmit --quick, ruff
-- [ ] 1.3 counted differentials on the exact head, parity lanes
-- [ ] 1.4 docs/research/pr-batch2-C-rows.md, merge-lines.txt, OWNERS lines
+- [x] 1.3 counted differentials on the exact head, parity lanes
+- [x] 1.4 docs/research/pr-batch2-C-rows.md, merge-lines.txt, OWNERS lines

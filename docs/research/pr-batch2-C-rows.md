@@ -69,7 +69,11 @@ Batch A: 16 files, 1,013 lines (+1,001 / -12). Batch C alone: 16 files, +639 / -
 
 ## Checks (V unless said)
 
-TBD-CHECKS
+- Commits (head `4ed8b651`, 3 on top of A): subjects 65 to 67 characters, body 3 lines of at most 72, last line `Agent: Claude Code`; author and committer the numeric noreply identity for all 6 commits of the range (`git log --format='%an <%ae> | %cn <%ce>' e1eea02a..HEAD`); no co-author or AI lines (presubmit attribution ok).
+- `python3 tools/pr_guard.py 41afdc6a HEAD`: 0 FAIL, 0 WARN (and per commit); `python3 tools/pr_guard.py --sorted e1eea02a HEAD`: 0 FAIL. `python3 tools/presubmit.py --quick`: 0 FAIL, 6 WARN (siblings x2, error-path x2, build, gcc: the last two because `--quick` has no build dir; the build worker run below covers them). Ruff: 7 files, 0 findings; the tool tests pass (D2_MPQ_DIR unset: game-backed ones skip).
+- Parity lane (g++ and clang++ with the CI flags, suites, extra warnings, clang-tidy on the lines the range adds), run on `local/batch2-C-r3` against upstream main: every stage rc 0 including tidy. The same lane on `dfd3948c` (r2) had tidy rc 1: misc-include-cleaner wanted `<combat.hpp>` in `tests/game/test_cast_mana.cpp` (`cast_action_ticks`); fixed in commit 2 (rebased to `eb1f87fa`), re-run clean. The suites stages of the r3 run took 0 s (ccache-warm build dir; the 8 suites ran on r2 at 100 s and 83 s, rc 0; U that the include-only change needs a re-run of them, tidy and builds did run).
+- MSVC 14.51 (the lane CI uses): `/W4` build of the head, `ctest` 76 of 76 passed, 0 `warning C` lines, 224 s.
+- Not run: GCC `-Wshadow -Wconversion -Werror` per changed TU through presubmit's own `check_gcc` (needs a presubmit build dir; the g++ lane above builds with the CI flags); a live game; a soak.
 
 ## Shared-file lines for the merger
 
