@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- verifyb2: independent verifier of upstream batch 2; one deviation found (Teleport ring 50)
 - covpal: Paladin coverage first pass (docs/research/covpal-trace.md, tools/emu/covpal*): skills.pal now fully in the ledger (15 rows, 14,400 cases per aspect, 0 differ); Redemption callback and Vengeance read; no PR candidate
 - areareach: the leveling planner no longer refuses Dark Wood or Black Marsh when it stands in a field without a waypoint, and a fallback area is chosen by XP per kill
 - MSVC2026 trace: test_monster_ai fails MSVC C2026 because four raw-string literals (62345, 59449, 59285, 16762 bytes) exceed 16380; fix by splitting into adjacent literals, same bytes (g++ probe, 4 constants, 0 mismatches); docs only
