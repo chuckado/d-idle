@@ -99,6 +99,9 @@ func d2dPortalWith(e *env.Env, itemAt func(context.Context, int) (int, int, erro
 		if at.IsZero() || e.Clock.Now().Sub(at) > portalCutMemory {
 			return false
 		}
+		if ctx.Err() != nil {
+			return false // a dead context never polled: keep the memory for the next call (codefix F8)
+		}
 		for waited := time.Duration(0); waited <= portalCutWait && ctx.Err() == nil; waited += portalIdlePoll {
 			if ns, err := e.Snapshot(); err == nil && ns.Player != nil {
 				if n, _ := portals(ns); n > 0 {

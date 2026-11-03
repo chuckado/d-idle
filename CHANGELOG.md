@@ -8,6 +8,13 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- tools: merge_lines_check.py catches bad merge-lines.txt files (OWNERS lines, markdown bullets, missing prefixes) in tools/ci/check.sh before the merge preflight.
+- Bot: the chain walk home is now only for a character with no healing potion; stash gold no longer defeats the futile-trip guard; the mana reserve applies only while the kit is incomplete.
+- verifyb2: independent verifier of upstream batch 2; one deviation found (Teleport ring 50)
+- covpal: Paladin coverage first pass (docs/research/covpal-trace.md, tools/emu/covpal*): skills.pal now fully in the ledger (15 rows, 14,400 cases per aspect, 0 differ); Redemption callback and Vengeance read; no PR candidate
+- areareach: the leveling planner no longer refuses Dark Wood or Black Marsh when it stands in a field without a waypoint, and a fallback area is chosen by XP per kill
+- MSVC2026 trace: test_monster_ai fails MSVC C2026 because four raw-string literals (62345, 59449, 59285, 16762 bytes) exceed 16380; fix by splitting into adjacent literals, same bytes (g++ probe, 4 constants, 0 mismatches); docs only
+- specdelta: Gate 1 now excuses belt windows where the character could not afford a potion (pack plus stash gold under 30) and lets a single seed inside the XP tolerance pass with a note
 - stashfield: the soak minute line now carries the stash gold, and the soak report tells a poor belt window from a funded one
 - Bot: a character with no healing potion and gold in the stash now withdraws it and shops, instead of farming gold with a full bank.
 - b2rebase: batch 2 bundle rebased onto upstream main 552acc9a, PR body and run record refreshed; nothing pushed upstream
