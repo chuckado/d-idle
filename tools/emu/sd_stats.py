@@ -193,10 +193,12 @@ def insitu():
             f = line.split()
             if len(f) < 8 or f[0] != "U": continue
             cid = ROWID.get(int(f[4]))
-            if cid is None or int(f[5], 16) & 0x1c: continue
+            if cid is None or (cid not in ("bloodraven", "andariel") and int(f[5], 16) & 0x1c): continue   # the two bosses are flagged units
             kv = dict(x.split(":", 1) for x in f[7:] if ":" in x)
             if "7" not in kv: continue
-            seen[cid].append(int(kv["7"]) >> 8); lv[cid].add(int(kv.get("c", "0")))
+            lv[cid].add(int(kv.get("c", "0")))
+            if int(kv.get("c", "0")) != ROW[cid]["level"]: continue      # another level than the row's: not this rule's range
+            seen[cid].append(int(kv["7"]) >> 8)
     for cid in CLASSES:
         xs = seen[cid]; r = ROW[cid]; values = list(range(r["lo"], r["hi"] + 1))
         if not xs:
@@ -230,8 +232,8 @@ def swings():
 
 def damage():
     print("\n## D. physical damage roll of a hit (game: min << 8 + rand((max - min) << 8) in 256ths, top exclusive; d2d: Rng::range(min, max) whole points, inclusive)")
-    print("| class | A1 min..max | game hits | game mean hp / var | game GOF p (1/16 hp bins, uniform on [min, max)) | d2d hits | d2d mean / var | d2d GOF p (uniform on min..max) | mean diff d2d - game (z p) | var ratio d2d / game | KS D p (game hp vs d2d hp) |")
-    print("|---|---|---|---|---|---|---|---|---|---|---|")
+    print("| class | A1 min..max | game hits | game mean hp / var | game GOF p (1/16 hp bins, uniform on [min, max)) | d2d hits | d2d mean / var | d2d GOF p (uniform on min..max) | mean diff d2d - game (z p) | var ratio d2d / game | KS D p (game hp vs d2d hp) | range seen: game 256ths of [min, max] bounds / d2d hp |")
+    print("|---|---|---|---|---|---|---|---|---|---|---|---|")
     for cid in CLASSES:
         r = ROW[cid]; lo, hi = r["a1"]
         g = [int(l.split()[1]) for l in read_lines(f"{SD}/swing_{cid}_0.txt") if l.split()[0] == "1"]
@@ -246,13 +248,14 @@ def damage():
         z = (md - mg) / math.sqrt(vg / len(gh) + vd / len(d))
         dks, kp = ks2(gh, d)
         note(f"damage {cid} game GOF", pg); note(f"damage {cid} d2d GOF", pd); note(f"damage {cid} mean", norm_p(z))
-        print(f"| {LABEL[cid]} | {lo}..{hi} | {len(g)} | {mg:.4f} / {vg:.4f} | {fmt(pg)} | {len(d)} | {md:.4f} / {vd:.4f} | {fmt(pd)} | {md - mg:+.4f} ({fmt(norm_p(z))}) | {vd / vg:.2f} | {dks:.3f} {fmt(kp)} |")
+        print(f"| {LABEL[cid]} | {lo}..{hi} | {len(g)} | {mg:.4f} / {vg:.4f} | {fmt(pg)} | {len(d)} | {md:.4f} / {vd:.4f} | {fmt(pd)} | {md - mg:+.4f} ({fmt(norm_p(z))}) | {vd / vg:.2f} | {dks:.3f} {fmt(kp)} | {min(g)}..{max(g)} of {lo << 8}..{hi << 8} / {min(d)}..{max(d)} |")
 
 
 def drops():
     print("\n## T. first drop (class pick, quality, item count; whole outcome string)")
     print("| class | mf, extra draws | n game / d2d | NoDrop game / d2d % | outcome chi2 (df) p | quality chi2 p | item-count chi2 p | gold-find-free categories (top 3, game %) |")
     print("|---|---|---|---|---|---|---|---|")
+    pool_g, pool_d, codes_g, codes_d = [], [], [], []
     for cid in CLASSES + ["andariel+q"]:
         for cfg, (mf, k) in enumerate(DROPS):
             g = read_lines(f"{SD}/drop_{cid}_{cfg}.txt"); d = read_lines(f"{SD}/d2d_drop_{cid}_{cfg}.txt")
@@ -265,8 +268,21 @@ def drops():
             ns, ndf, np_ = homogeneity(ng, nd)
             for name, pv in ((f"drop {cid} cfg{cfg} outcome", hp), (f"drop {cid} cfg{cfg} quality", qp), (f"drop {cid} cfg{cfg} count", np_)):
                 note(name, pv)
+            pool_g.extend(qg); pool_d.extend(qd)
+            codes_g.extend(t.split(":")[0] for l in g if l != "-" for t in l.split(",")); codes_d.extend(t.split(":")[0] for l in d if l != "-" for t in l.split(","))
             top = sorted(counts(g).items(), key=lambda kv: -kv[1])[:3]
             print(f"| {LABEL[cid]} | {mf}, {'0' if k == 0 else '0..' + str(k - 1000)} | {len(g)} / {len(d)} | {100 * g.count('-') / len(g):.2f} / {100 * d.count('-') / len(d):.2f} | {hs:.1f} ({hd}) {fmt(hp)} | {fmt(qp)} | {fmt(np_)} | " + "; ".join(f"{c} {100 * v / len(g):.1f}" for c, v in top) + " |")
+
+
+    if pool_g and pool_d:
+        names = {"1": "low", "2": "normal", "3": "superior", "4": "magic", "5": "set", "6": "rare", "7": "unique"}
+        cg, cd = counts(pool_g), counts(pool_d)
+        s, df, p = homogeneity(pool_g, pool_d); note("drop pooled quality", p)
+        cs, cdf, cp = homogeneity(codes_g, codes_d); note("drop pooled item code", cp)
+        print(f"\npooled over every class and configuration: items game {len(pool_g)}, d2d {len(pool_d)}; quality chi2 {s:.2f} ({df}) p {fmt(p)}; item code chi2 {cs:.1f} ({cdf}) p {fmt(cp)}")
+        print("| quality | game | d2d |\n|---|---|---|")
+        for q in sorted(set(cg) | set(cd)):
+            print(f"| {names.get(q, q)} | {cg.get(q, 0)} | {cd.get(q, 0)} |")
 
 
 def control():
