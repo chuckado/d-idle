@@ -132,7 +132,7 @@ internal/cheat/ledgerkey_test.go  snaplib  ledgerkey
 cmd/d2cheat/main.go  snaplib  ledgerkey
 openspec/changes/ledgerkey/**  snaplib  ledgerkey
 docs/soaks/gate1-20261102.md  gaterun  gate1run-20261102
-docs/probes/soak-logs/gate1-20261102-*  gaterun  gate1run-20261102
+docs/probes/soak-logs/gate1-20261102-minutes.jsonl.gz  gaterun  gate1run-20261102
 openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
 internal/bot/goal.go beltfix4 beltfix4
 internal/bot/beltfix3_test.go beltfix4 beltfix4
