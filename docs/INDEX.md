@@ -322,3 +322,7 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verify-dmgroll4.md: fourth verifier report on DMGROLL r4 (9ea2afe9), own differential in verify-dmgroll4-run.txt
 - docs/research/pr-upstream-rules-20261103.md: upstream AGENTS.md / CONTRIBUTING / PR template rules after commit 549da358 as they apply to a code batch (one subsystem, commit rule, Claims table, presubmit, CodeRabbit)
 - docs/research/b2-winworker-rerun.md: batch 2 r3 on the Windows build worker (MSVC 14.51 warnings and ctest, WSL stages, damage-roll sets, Teleport seed 9)
+- docs/research/sorcdiff.md: the Sorceress skills the lightning build uses, their proof status, cast counts, and the counted differentials on the real d2d build
+- docs/research/lockstep-plan-20261103.md: lockstep status, cheapest A:B path, Windows PC lane feasibility, AB-SEEDPIN checklist, decisions and 3-day schedule
+- docs/research/pr-batch2-A-body.md: PR body of upstream batch A (mana floor, Teleport) to the maintainer template, Claims table, re-check commands, counts on the head
+- docs/research/pr-batch2-B-body.md: PR body of upstream batch B (monster damage roll with its oracle monster_damage.py), limits (Energy Shield), counts on the head
