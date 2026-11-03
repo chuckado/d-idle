@@ -2,7 +2,7 @@
 
 ```yaml
 change: verifydmg2
-status: in-progress
+status: archived
 agent: verifydmg2
 branch: agent/verifydmg2
 worktree: d2lod-wt/verifydmg2
@@ -17,7 +17,7 @@ exclusive: []
 gates:
   - "own differential: r2 0 differences on roll, reduce and absorb (8 Act 1 classes, 10,000 frames each, own seed)"
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "docs and tools only; differential, game.exe reads, commit hygiene, merge-tree, CI syntax parity and suites run on the worker host by the verifier (offline, no live game); MSVC not re-run"
+result: "docs and tools only; see card result"
 credit:
   component: Monster physical damage roll (second verification)
   author: owner
@@ -25,6 +25,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 158ac61
 ```
 
 ## 1. Work

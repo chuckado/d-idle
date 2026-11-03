@@ -62,7 +62,6 @@
 | [skmeleewire](../../openspec/changes/skmeleewire/) | in-progress | skmeleewire | `internal/combat/melee.go`<br>`internal/combat/melee_test.go`<br>`internal/combat/resource.go`<br>`internal/data/items.go`<br>`internal/data/schema.go`<br>`internal/data/data_test.go`<br>`internal/resource/sim.go`<br>`internal/resource/wire_test.go`<br>`docs/skmeleewire.md`<br>`openspec/changes/skmeleewire/**` | - |
 | [skmiss](../../openspec/changes/skmiss/) | in-progress | skmiss | `docs/research/sk-missile-trace.md`<br>`tools/emu/sk_missile_hit.py`<br>`tools/emu/sk_missile_hit_test.cpp`<br>`docs/decomp-queue.md`<br>`docs/BACKLOG.md`<br>`docs/INDEX.md`<br>`openspec/changes/skmiss/**` | `fork-branch:fix/missile-roll-top` |
 | [skresistfix](../../openspec/changes/skresistfix/) | in-progress | skresistfix | `openspec/changes/skresistfix/**`<br>`docs/research/pr-curseimmune-draft.md`<br>`docs/research/pr-curseimmune-proof.md` | `fork-branch:fix/curse-immune` |
-| [verifydmg2](../../openspec/changes/verifydmg2/) | in-progress | verifydmg2 | `openspec/changes/verifydmg2/**`<br>`docs/research/verify-dmgroll2.md`<br>`docs/research/verify-dmgroll2-run.txt`<br>`tools/emu/v2_*`<br>`tools/emu/vd_xref.py` | - |
 
 ### Gates
 - spec [backend-contract](../../openspec/specs/backend-contract/spec.md): 34 requirements
@@ -120,18 +119,16 @@
 - change skmiss: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict
 - change skresistfix: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change skresistfix: PR claim only with a differential on real builds: before > 0, after 0
-- change verifydmg2: own differential: r2 0 differences on roll, reduce and absorb (8 Act 1 classes, 10,000 frames each, own seed)
-- change verifydmg2: changecheck 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 2d196e9b 11-02 22:01 `Merge agent/beltfix: BELTFIX: kit trip priced at one potion when healing is missing and counted as an emergency, mana potions capped when poor, waypoint counts as a way home (Gate 1 belt window of 12 virtual minutes; offline tests, live waypoint trip unverified)` (beltfix)
-- 8784c4cb 11-02 22:00 `merge origin/main into beltfix` (beltfix)
-- b6c35343 11-02 21:50 `Merge agent/prbuildb2: PRBUILDB2: batch 2 draft updated with the verifier's findings applied (r2 branches, ring limit 49 for Teleport D2); fork branches stay private` (prbuildb2)
-- 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
-- b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
-- 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
-- 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
-- 41db4964 11-02 20:39 `Merge agent/covmissiles2: covmissiles2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmissiles2)
-- 773e2176 11-02 20:39 `merge origin/main into covmissiles2` (covmissiles2)
-- ea2ff010 11-02 20:32 `Merge agent/covstates2: covstates2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covstates2)
+- 158ac610 11-03 10:41 `Merge agent/verifydmg2: verifydmg2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifydmg2)
+- 4015541d 11-03 10:40 `merge origin/main into verifydmg2` (verifydmg2)
+- fe2d4937 11-03 10:36 `Merge agent/review180: REVIEW180: private review of the maintainer's merged PR 180` (review180)
+- 2edb1f30 11-03 10:35 `merge origin/main into review180` (review180)
+- 704deff2 11-03 10:32 `Merge agent/housekeep: HOUSEKEEP: stale card archived and branch/worktree inventory` (housekeep)
+- 3f551a2b 11-03 10:31 `merge origin/main into housekeep` (housekeep)
+- f9298f08 11-03 10:28 `Merge agent/codereview1: CODEREVIEW1: Opus code review of the Gate 1 belt fixes (F1-F10)` (codereview1)
+- 4ce28b17 11-03 10:27 `merge origin/main into codereview1` (codereview1)
+- ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
+- 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
 <!-- statusgen:end -->
