@@ -52,6 +52,12 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		gap := sec(r.cfg.ResupplyCooldownSec)
 		if emergency {
 			gap /= 4
+			if inTown {
+				// A visit in town costs no scroll and lastTrip was stamped by the failed field attempt seconds ago: the
+				// full gap sent the character back out with no potion six times (Gate 1 20261102, BELT A). Only a
+				// short pause keeps a shop that cannot sell from being retried every tick.
+				gap = townShopGap
+			}
 		}
 		if now.Sub(r.getLastTrip()) >= gap {
 			l.trip = &trip{plan: plan, returnTo: fieldArea(p), emergency: emergency}
@@ -303,6 +309,9 @@ func (r *Runner) tripWorthIt(s *d2.Snapshot) bool {
 	return false
 }
 
+// townShopGap is the pause between two shopping rounds in town while the character has no healing potion.
+const townShopGap = 5 * time.Second
+
 // choresDue is the pure part of needChores (the guard calls it from its own goroutine).
 func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) {
 	p := s.Player
@@ -343,7 +352,7 @@ func (r *Runner) choresDue(s *d2.Snapshot) (plan ChorePlan, emergency, ok bool) 
 		if healing < threshold && p.Gold >= minPotionPrice && !trip.Futile && !broke {
 			plan.Potions = true
 			why = append(why, fmt.Sprintf("%d healing potions", healing))
-			emergency = healing == 0 && !p.InTown()
+			emergency = healing == 0
 		}
 		if full >= t.InvFullPct && !r.packFullQuiet() {
 			hard = true
