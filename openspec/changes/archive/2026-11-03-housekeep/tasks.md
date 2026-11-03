@@ -2,7 +2,7 @@
 
 ```yaml
 change: housekeep
-status: in-progress
+status: archived
 agent: housekeep
 branch: agent/housekeep
 worktree: d2lod-wt/housekeep
@@ -13,8 +13,8 @@ owns:
 exclusive: []
 gates:
   - "changecheck -cli 0 warnings; leakcheck 0 hits; tools/ci/check.sh ok"
-merge:
-result: "docs and card moves only; not verified live (no game)"
+merge: 704deff
+result: "docs only"
 credit:
   author: owner
   agents: [Claude Code]
