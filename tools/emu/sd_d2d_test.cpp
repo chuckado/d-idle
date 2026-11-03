@@ -5,7 +5,8 @@
 // swings), tc_upgrade + roll_drops (as Loot::drop). Built by hand against a scratch upstream build
 // (tools/emu/sd_build.sh), never part of upstream. Output: one line per case on stdout.
 //   sd_d2d_test --life  ID N              N monsters in a row off the world rng {0x2545f491} (stream A)
-//   sd_d2d_test --lifeb ID GAMES PER      GAMES fresh world rngs, each advanced by 31 * game draws, PER monsters (stream B)
+//   sd_d2d_test --lifeb ID GAMES PER ADV  GAMES fresh world rngs {0x2545f491}, game g advanced by ADV * g draws first, PER monsters
+//                                       (stream B: ADV large = disjoint stretches; ADV 0 = every game starts alike)
 //   sd_d2d_test --swing ID DEF DLVL GAMES PER   GAMES x PER monsters, 100 swings each at a defender (DEF, level DLVL); "hit phys"
 //   sd_d2d_test --drop  ID MF K GAMES PER       first drop of GAMES x PER monsters (unit seeds off game streams), K extra seed
 //                                       draws (0, or 1000 + n: a draw count 0..n from an independent stream), MF magic find
@@ -66,7 +67,7 @@ int main(int argc, char** argv) try {
         const long long games = mode == "--life" ? 1 : arg(3), per = mode == "--life" ? arg(3) : arg(4);
         for (long long g = 0; g < games; ++g) {
             R::Rng world{ 0x2545f491u };
-            if (mode == "--lifeb") for (long long k = 0; k < 31 * g; ++k) world.next();
+            if (mode == "--lifeb") for (long long k = 0; k < arg(5) * g; ++k) world.next();
             for (long long i = 0; i < per; ++i) {
                 auto monster = make_monster(*data, row, 100.5f, 100.5f, world, 0, true, 1);
                 std::printf("%d\n", monster.stats.hit_points);
@@ -76,7 +77,7 @@ int main(int argc, char** argv) try {
     }
     // unit seeds off a game stream
     auto unit_supply = [&](long long game_index, auto&& body) {
-        R::Rng game{ std::uint32_t(0x51ed270bu * std::uint32_t(game_index + 1) + 12345u) };
+        R::Rng game{ std::uint32_t(0x51ed270bu * std::uint32_t(game_index + 1) + 12345u + std::uint32_t(row) * 0x1000193u) };
         for (int k = 0; k < 4; ++k) game.next();
         R::Rng gaps{ std::uint32_t(0x9e3779b1u * std::uint32_t(game_index + 7)) };
         return std::pair{ game, gaps };
@@ -119,7 +120,8 @@ int main(int argc, char** argv) try {
     if (mode == "--lifectl") {     // life on the unit seed states "low high" read from FILE (argv[3])
         std::ifstream in(argv[3]);
         unsigned long long low = 0, high = 0;
-        while (in >> low >> high) {
+        int level = 0;
+        while (in >> low >> high >> level) {
             R::Rng unit;
             unit.low = std::uint32_t(low); unit.high = std::uint32_t(high);
             const auto stats = R::monster_stats(data->monsters, row, 0, unit);

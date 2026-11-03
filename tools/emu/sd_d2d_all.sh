@@ -9,8 +9,9 @@ OUT=$S/sd
 mkdir -p $OUT
 run() { nice $BIN "$@" 2>/dev/null | grep -v -E '^20[0-9][0-9]-[0-9][0-9]-' || true; }
 for id in fallen1 zombie1 skeleton1 quillrat1 corruptrogue1 brute1 bloodraven andariel; do
-  run --life $id 20000 > $OUT/d2d_lifeA_$id.txt
-  run --lifeb $id 20 1000 > $OUT/d2d_lifeB_$id.txt
+  run --life $id 100000 > $OUT/d2d_lifeA_$id.txt
+  run --lifeb $id 20 1000 100003 > $OUT/d2d_lifeB_$id.txt
+  run --lifeb $id 20 1000 0 > $OUT/d2d_lifeC_$id.txt
   run --swing $id 0 1 11 20 > $OUT/d2d_swing_${id}_0.txt
   run --swing $id 20 2 10 20 > $OUT/d2d_swing_${id}_1.txt
   run --swing $id 120 12 10 20 > $OUT/d2d_swing_${id}_2.txt

@@ -84,10 +84,10 @@ class Game:
 
     def roll(self, unit, n): return self.e.call(ROLL, ecx=unit + 0x20, edx=n)
 
-    def new_game(self, g, check=False):
-        """A game seed {map seed, 666} after its four creation steps."""
+    def new_game(self, g, salt=0):
+        """A game seed {map seed, 666} after its four creation steps (the salt, the class row, keeps classes on their own seeds)."""
         e = self.e
-        ms = (0x7a3c9e11 * (g + 1) + 777) & MASK
+        ms = (0x7a3c9e11 * (g + 1) + 777 + salt * 0x1000193) & MASK
         e.w32(self.gs, ms); e.w32(self.gs + 4, 666)
         mirror = Mirror(ms)
         for _ in range(4):
@@ -125,13 +125,13 @@ def info():
         print(cid, label, " ".join(f"{k}={v}" for k, v in c.items() if k != "label"))
 
 
-def life():
+def life(games=GAMES):
     g = Game()
     for cid, label in CLASSES:
         if "+q" in cid: continue
         lines = []
-        for game in range(GAMES):
-            gaps = g.new_game(game)
+        for game in range(games):
+            gaps = g.new_game(game, g.rows[cid]["row"])
             for _ in range(PER):
                 g.make_unit(game, gaps)
                 lines.append(str(g.look_and_life(cid)))
@@ -160,12 +160,12 @@ def swing(cfg):
         c = g.rows[cid]
         lines = []
         done, game = 0, 0
-        gaps = g.new_game(game)
+        gaps = g.new_game(game, c["row"])
         per_game = 20
         while done < units:
             if done and done % per_game == 0:
                 game += 1
-                gaps = g.new_game(game)
+                gaps = g.new_game(game, c["row"])
             g.make_unit(game, gaps)
             g.look_and_life(cid)
             att = g.unit
@@ -209,7 +209,7 @@ def drop(cfg):
         c = g.rows[cid]
         lines = []
         for game in range(GAMES):
-            gaps = g.new_game(game)
+            gaps = g.new_game(game, c["row"])
             extra = random.Random(game * 104729 + cfg)
             for _ in range(PER):
                 g.make_unit(game, gaps)
@@ -246,7 +246,7 @@ def ctl():
 if __name__ == "__main__":
     mode = sys.argv[1]
     if mode == "info": info()
-    elif mode == "life": life()
+    elif mode == "life": life(int(sys.argv[2]) if len(sys.argv) > 2 else GAMES)
     elif mode == "swing": swing(int(sys.argv[2]))
     elif mode == "drop": drop(int(sys.argv[2]))
     elif mode == "ctl": ctl()

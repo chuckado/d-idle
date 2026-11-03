@@ -157,24 +157,54 @@ def lag1(seq_groups, values):
 
 def life():
     print("## L. life roll (rule: min + rand(max - min + 1); game: unit seed, d2d: world stream)")
-    print("| class | row | game n | game GOF p | d2d A n | d2d A GOF p | d2d B GOF p | game vs A chi2 (df) p | game vs A KS D p | game vs B chi2 p | game lag1 p | A lag1 p | game mean / var | A mean / var | rule mean / var |")
-    print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
+    print("| class | row | game n | game GOF p | d2d A n | d2d A GOF p | d2d B n, GOF p | game vs A chi2 (df) p | game vs A KS D p | game vs B chi2 p | game lag1 p (all / gap-1 games) | A lag1 p | game mean / var | A mean / var | rule mean / var | C: games identical to game 0 |")
+    print("|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|")
     for cid in CLASSES:
         r = ROW[cid]; values = list(range(r["lo"], r["hi"] + 1))
         g, a, b = read_ints(f"{SD}/life_{cid}.txt"), read_ints(f"{SD}/d2d_lifeA_{cid}.txt"), read_ints(f"{SD}/d2d_lifeB_{cid}.txt")
+        c = read_ints(f"{SD}/d2d_lifeC_{cid}.txt")
+        cg = [c[i:i + 1000] for i in range(0, len(c), 1000)]
+        ident = f"{sum(1 for x in cg if x == cg[0])} of {len(cg)}"
         if len(values) == 1:
-            print(f"| {LABEL[cid]} | {r['lo']}..{r['hi']} | {len(g)} | fixed row: {sum(1 for x in g if x == values[0])} of {len(g)} equal | {len(a)} | {sum(1 for x in a if x == values[0])} of {len(a)} equal | {sum(1 for x in b if x == values[0])} of {len(b)} equal | - | - | - | - | - | - | - | - |")
+            print(f"| {LABEL[cid]} | {r['lo']}..{r['hi']} | {len(g)} | fixed row: {sum(1 for x in g if x == values[0])} of {len(g)} equal | {len(a)} | {sum(1 for x in a if x == values[0])} of {len(a)} equal | {len(b)}, {sum(1 for x in b if x == values[0])} equal | - | - | - | - | - | - | - | - | {ident} |")
             continue
         sg, dg, pg = gof_uniform(g, values); sa, da, pa = gof_uniform(a, values); sb, db, pb = gof_uniform(b, values)
         hs, hd, hp = homogeneity(g, a); d, kp = ks2(g, a); _, _, hpb = homogeneity(g, b)
-        # groups: game 20 games x 1000; d2d A one stream of 20000 cut into 20 of 1000 for the same pair count
         gg = [g[i:i + 1000] for i in range(0, len(g), 1000)]; ag = [a[i:i + 1000] for i in range(0, len(a), 1000)]
-        lg = lag1(gg, values); la = lag1(ag, values)
+        lg = lag1(gg, values); lg1 = lag1(gg[0::2], values); la = lag1(ag, values)
         mg, vg = mean_var(g); ma, va = mean_var(a)
         n = len(values); rm = (r["lo"] + r["hi"]) / 2; rv = (n * n - 1) / 12
-        for name, p in ((f"life {cid} game GOF", pg), (f"life {cid} A GOF", pa), (f"life {cid} B GOF", pb), (f"life {cid} game~A", hp), (f"life {cid} game~B", hpb), (f"life {cid} game lag1", lg[2]), (f"life {cid} A lag1", la[2])):
+        for name, p in ((f"life {cid} game GOF", pg), (f"life {cid} A GOF", pa), (f"life {cid} B GOF", pb), (f"life {cid} game~A", hp), (f"life {cid} game~B", hpb), (f"life {cid} game lag1", lg[2]), (f"life {cid} game lag1 gap1", lg1[2]), (f"life {cid} A lag1", la[2])):
             note(name, p)
-        print(f"| {LABEL[cid]} | {r['lo']}..{r['hi']} | {len(g)} | {fmt(pg)} | {len(a)} | {fmt(pa)} | {fmt(pb)} | {hs:.2f} ({hd}) {fmt(hp)} | {d:.4f} {fmt(kp)} | {fmt(hpb)} | {fmt(lg[2])} | {fmt(la[2])} | {mg:.3f} / {vg:.3f} | {ma:.3f} / {va:.3f} | {rm:.3f} / {rv:.3f} |")
+        print(f"| {LABEL[cid]} | {r['lo']}..{r['hi']} | {len(g)} | {fmt(pg)} | {len(a)} | {fmt(pa)} | {len(b)}, {fmt(pb)} | {hs:.2f} ({hd}) {fmt(hp)} | {d:.4f} {fmt(kp)} | {fmt(hpb)} | {fmt(lg[2])} / {fmt(lg1[2])} | {fmt(la[2])} | {mg:.3f} / {vg:.3f} | {ma:.3f} / {va:.3f} | {rm:.3f} / {rv:.3f} | {ident} |")
+
+
+ROWID = {19: "fallen1", 5: "zombie1", 0: "skeleton1", 63: "quillrat1", 43: "corruptrogue1", 28: "brute1", 267: "bloodraven", 156: "andariel"}
+
+
+def insitu():
+    print("\n## I. real room population of game.exe (ms_spawn.py: FUN_00573cb0 itself, Normal, plain monsters): life of the units")
+    print("| class | units | GOF vs uniform p | mean / rule mean | min..max seen | levels (stat 12) seen |")
+    print("|---|---|---|---|---|---|")
+    seen = {cid: [] for cid in CLASSES}; lv = {cid: set() for cid in CLASSES}
+    for name in sorted(os.listdir(SD)):
+        if not name.startswith("spawn_"): continue
+        for line in open(f"{SD}/{name}"):
+            f = line.split()
+            if len(f) < 8 or f[0] != "U": continue
+            cid = ROWID.get(int(f[4]))
+            if cid is None or int(f[5], 16) & 0x1c: continue
+            kv = dict(x.split(":", 1) for x in f[7:] if ":" in x)
+            if "7" not in kv: continue
+            seen[cid].append(int(kv["7"]) >> 8); lv[cid].add(int(kv.get("c", "0")))
+    for cid in CLASSES:
+        xs = seen[cid]; r = ROW[cid]; values = list(range(r["lo"], r["hi"] + 1))
+        if not xs:
+            print(f"| {LABEL[cid]} | 0 | - | - | - | - |"); continue
+        if len(values) == 1:
+            print(f"| {LABEL[cid]} | {len(xs)} | fixed row: {sum(1 for x in xs if x == values[0])} of {len(xs)} equal | - | {min(xs)}..{max(xs)} | {sorted(lv[cid])} |"); continue
+        s, df, p = gof_uniform(xs, values); note(f"insitu {cid} GOF", p)
+        print(f"| {LABEL[cid]} | {len(xs)} | {fmt(p)} | {sum(xs) / len(xs):.3f} / {(r['lo'] + r['hi']) / 2:.3f} | {min(xs)}..{max(xs)} | {sorted(lv[cid])} |")
 
 
 def swings():
@@ -200,7 +230,7 @@ def swings():
 
 def damage():
     print("\n## D. physical damage roll of a hit (game: min << 8 + rand((max - min) << 8) in 256ths, top exclusive; d2d: Rng::range(min, max) whole points, inclusive)")
-    print("| class | A1 min..max | game hits | game mean hp / var | game GOF p (whole-point bins, uniform on min..max-1) | d2d hits | d2d mean / var | d2d GOF p (uniform on min..max) | mean diff d2d - game (z p) | var ratio d2d / game | KS D p (game hp vs d2d hp) |")
+    print("| class | A1 min..max | game hits | game mean hp / var | game GOF p (1/16 hp bins, uniform on [min, max)) | d2d hits | d2d mean / var | d2d GOF p (uniform on min..max) | mean diff d2d - game (z p) | var ratio d2d / game | KS D p (game hp vs d2d hp) |")
     print("|---|---|---|---|---|---|---|---|---|---|---|")
     for cid in CLASSES:
         r = ROW[cid]; lo, hi = r["a1"]
@@ -209,8 +239,8 @@ def damage():
         gh = [x / 256.0 for x in g]
         if lo == hi:
             continue
-        gbin = [x >> 8 for x in g]
-        _, _, pg = gof_uniform(gbin, list(range(lo, hi))) if hi - lo >= 1 else (0, 0, 1)
+        gbin = [x >> 4 for x in g]            # sixteenths of a hit point: 16 bins per whole point, uniform on [min, max)
+        _, _, pg = gof_uniform(gbin, list(range(lo * 16, hi * 16)))
         _, _, pd = gof_uniform(d, list(range(lo, hi + 1)))
         mg, vg = mean_var(gh); md, vd = mean_var(d)
         z = (md - mg) / math.sqrt(vg / len(gh) + vd / len(d))
@@ -267,6 +297,6 @@ def summary():
 
 
 if __name__ == "__main__":
-    which = sys.argv[1:] or ["life", "swings", "damage", "drops", "control"]
+    which = sys.argv[1:] or ["life", "insitu", "swings", "damage", "drops", "control"]
     for w in which: globals()[w]()
     summary()
