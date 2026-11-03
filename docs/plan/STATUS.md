@@ -41,7 +41,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [actgate](../../openspec/changes/actgate/) | in-progress | actgate | `docs/research/sorc-act-gate.md`<br>`openspec/changes/actgate/**` | - |
 | [armorhit](../../openspec/changes/armorhit/) | in-progress | armorhit | `openspec/changes/armorhit/**`<br>`docs/research/pr-armorhit-proof.md`<br>`docs/research/pr-armorhit-draft.md`<br>`docs/research/pr-bundle-queue.md`<br>`tools/emu/armor_hit.py`<br>`tools/emu/armor_hit_mode.inc` | `fork-branch:fix/armor-hit` |
 | [buildv3](../../openspec/changes/buildv3/) | in-progress | buildv3 | `internal/plandata/build-fallback-lightning-v3.json`<br>`internal/plandata/build-fallback-lightning-v2.json`<br>`docs/plan/data/build-fallback-lightning-v3.json`<br>`docs/plan/data/build-fallback-lightning-v2.json`<br>`internal/plandata/plandata_test.go`<br>`internal/leveler/build.go`<br>`internal/leveler/buildv3_test.go`<br>`internal/combat/classdata/profiles.json`<br>`internal/combat/class_test.go`<br>`internal/combat/pure_test.go`<br>`cmd/d2bot/class.go`<br>`cmd/d2bot/class_test.go`<br>`docs/buildv3.md`<br>`openspec/changes/buildv3/**` | - |
-| [codefix](../../openspec/changes/codefix/) | in-progress | codefix | `docs/research/codefix.md`<br>`openspec/changes/codefix/**` | - |
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
@@ -87,7 +86,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change armorhit: changecheck 0 warnings for this card; leakcheck -mode fail 0
 - change armorhit: PR claim only with a differential on real builds: before > 0, after 0
 - change buildv3: gofmt, go vet, go test -p 1 per touched package, whole repo on the worker host; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
-- change codefix: go test -p 1 on the touched packages; whole repo vet+test on the worker host; changecheck -cli 0 new warnings; leakcheck -mode fail 0; tools/ci/check.sh
 - change d2d-container-soak: 24 h soak report.txt says PASS with exit 0
 - change d2d-container-soak: memory curve and periodic d2d restart interval recorded
 - change d2d-default-backend: go test ./cmd/d2bot -run Backend passes
@@ -129,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 9c9b5471 11-03 09:50 `Merge agent/codefix: CODEFIX: review findings F1-F5 and F8 fixed (NearTown list, LastTripGold basis, mana reserve, chain walk scope, recovery floor, cut-cast memory)` (codefix)
+- a39b6581 11-03 09:49 `merge origin/main into codefix` (codefix)
+- f9aa4521 11-03 09:40 `Merge agent/verifyb2: verifyb2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifyb2)
 - ea55a8ff 11-03 09:39 `merge origin/main into codefix` (codefix)
+- 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
 - 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
 - cc21b3f0 11-03 09:34 `merge origin/main into codefix` (codefix)
 - c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
 - ab3a9747 11-03 09:25 `Merge agent/areareach: AREAREACH: leveling planner walks up to 5 hops and activates waypoints on the way (Dark Wood and Black Marsh were refused 28 times in run 0628); fallback ranked by XP per kill` (areareach)
 - 22378e28 11-03 09:24 `merge origin/main into areareach` (areareach)
-- 2a4a7063 11-03 09:17 `Merge agent/msvcc2026: msvcc2026: MSVC C2026 trace (oversize raw-string literals upstream), byte-identical split probe (docs, emulator tools)` (msvcc2026)
-- 7dd67d1d 11-03 09:16 `msvcc2026: leakcheck-clean wording; merge origin/main` (msvcc2026)
-- 4c99d0b9 11-03 08:32 `Merge agent/specdelta: SPECDELTA: soak-gates deltas (belt window counts only when pack plus stash gold reaches one healing potion; single-seed XP inside tolerance and inconclusive passes), judge code and tests, re-judge table of tonight's four Gate 1 runs; decisions.md index lines` (specdelta)
-- 875cd7cd 11-03 06:18 `Merge agent/stashfield: STASHFIELD: the minute line gets an additive stashGold field and d2dsoak prints a report-only pack and stash gold line (poverty or funded at 30 gold) for each belt window over 5 virtual minutes; the BELT invariant itself is unchanged; unit tests only` (stashfield)
 <!-- statusgen:end -->

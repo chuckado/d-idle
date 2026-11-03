@@ -2,7 +2,7 @@
 
 ```yaml
 change: codefix
-status: in-progress
+status: archived
 agent: codefix
 branch: agent/codefix
 worktree: ~/code/d2lod-wt/codefix
@@ -13,10 +13,11 @@ owns:
 exclusive: []
 gates:
   - "go test -p 1 on the touched packages; whole repo vet+test on the worker host; changecheck -cli 0 new warnings; leakcheck -mode fail 0; tools/ci/check.sh"
-result: "offline only, not verified live; each fix has a test that fails when the fix is reverted by hand"
+result: "whole repo vet and test pass on the worker host"
 credit:
   author: owner
   agents: [Claude Code]
+merge: 9c9b547
 ```
 
 - [x] 1 F1 walk-home list split from NearTown (ChainHome, no-healing emergency only)
