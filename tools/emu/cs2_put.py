@@ -193,8 +193,9 @@ class Model:
       attract a state-57 entry refuses every curse put, itself included (game, FUN_0056ea40);
       nofloor the length is kept as given, 0 = never ends (game), not raised to 25 frames (d2d)."""
 
-    def __init__(self, curse_bit, bits=False, multi=False, attract=False, nofloor=False):
+    def __init__(self, curse_bit, bits=False, multi=False, attract=False, nofloor=False, bcguard=True):
         self.bit, self.bits, self.multi, self.attract, self.nofloor = curse_bit, bits, multi, attract, nofloor
+        self.bcguard = bcguard                          # d2d fight.cpp:2924: Battle Cry does nothing while its cry runs
         self.slot = {}                                  # key -> (skill, level, remaining frames or "perm")
 
     def key(self, skill):
@@ -208,9 +209,12 @@ class Model:
         state = BY_SKILL[skill][2]
         if self.attract and self.bit[state] and any(BY_SKILL[v[0]][2] == ATTRACT for v in self.slot.values()):
             return False
-        until = ("perm" if length == 0 else length) if self.nofloor else max(length, 25)
+        floor = 1 if skill == 146 else 25               # d2d: Battle Cry max(auralen, 1) (fight.cpp:2926), the others 25
+        until = ("perm" if length == 0 else length) if self.nofloor else max(length, floor)
         k = self.key(skill)
         cur = self.slot.get(k)
+        if self.bcguard and skill == 146 and cur is not None and cur[0] == 146:
+            return False
         if cur is not None and cur[0] == skill:
             if cur[1] == level:
                 if not (self.nofloor and length == 0):          # game: a refresh with length 0 leaves the end alone
@@ -225,25 +229,17 @@ class Model:
         return sorted(((BY_SKILL[v[0]][2], v[0], v[1], v[2]) for v in self.slot.values()), key=lambda t: (t[0], t[1]))
 
 
-VARIANTS = [
-    ("d2d as read", {}),
-    ("+ curse bit slot (bits)", dict(bits=True)),
-    ("+ own entry per state (multi)", dict(multi=True)),
-    ("+ attract blocks curses", dict(attract=True)),
-    ("+ no length floor", dict(nofloor=True)),
-    ("bits + multi + attract", dict(bits=True, multi=True, attract=True)),
-    ("all four", dict(bits=True, multi=True, attract=True, nofloor=True)),
-]
+FIX = dict(bits=True, multi=True, attract=True, nofloor=True, bcguard=False)
+VARIANTS = [("d2d as read", {})] + [("one fix: " + k, {k: (not v)}) for k, v in FIX.items() if k != "bcguard"] + [
+    ("one fix: no bcguard", dict(bcguard=False)),
+    ("all five fixes", dict(FIX)),
+] + [("all fixes but " + k, {**FIX, k: (not v)}) for k, v in FIX.items()]
 
 
-def run_put(n, seed):
+def make_cases(n, seed):
     rng = random.Random(seed)
-    g = Game()
     ids = [s[0] for s in SKILLS]
-    cases = 0
-    cnt = {name: 0 for name, _ in VARIANTS}
-    acc_cnt = dict(cnt)
-    samples = []
+    out = []
     for i in range(n):
         k = rng.choice((1, 2, 2, 3, 3, 4))
         seq = []
@@ -258,6 +254,61 @@ def run_put(n, seed):
             ln = rng.choice((rng.randint(25, 2000), rng.randint(25, 400), 25, 26, 175, rng.randint(1, 24), 0, 1))
             seq.append((sid, lvl, ln))
             prev = (sid, lvl)
+        out.append(seq)
+    return out
+
+
+def fmt(acc, snap):
+    return "".join("1" if a else "0" for a in acc) + "".join(f" {s}:{k}:{l}:{r}" for s, k, l, r in snap)
+
+
+def run_gen(n, seed):
+    for i, seq in enumerate(make_cases(n, seed)):
+        print(i, len(seq), *[v for t in seq for v in t])
+
+
+def read_cases(path):
+    for line in open(path):
+        f = list(map(int, line.split()))
+        if f:
+            yield f[0], [tuple(f[2 + 3 * j: 5 + 3 * j]) for j in range(f[1])]
+
+
+def run_game(path):
+    g = Game()
+    for i, seq in read_cases(path):
+        g.nodes.clear(); g.info.clear(); g.stat6d = 0
+        acc = [g.put(sid, lvl, ln, BY_SKILL[sid][2]) for sid, lvl, ln in seq]
+        print(i, fmt(acc, g.snapshot()))
+
+
+def run_model(path):
+    e = emu_module.Emu()                 # only for the States.txt text; no game.exe code runs in this mode
+    curse_bit = [1 if r.get("curse") == "1" else 0 for r in states_table(e)[:NSTATES]]
+    for i, seq in read_cases(path):
+        m = Model(curse_bit)
+        acc = [m.put(sid, lvl, ln) for sid, lvl, ln in seq]
+        print(i, fmt(acc, m.snapshot()))
+
+
+def run_cmp(path_a, path_b, label_a, label_b):
+    a = open(path_a).read().splitlines()
+    b = open(path_b).read().splitlines()
+    assert len(a) == len(b), (len(a), len(b))
+    bad = [(x, y) for x, y in zip(a, b) if x != y]
+    acc = sum(1 for x, y in zip(a, b) if x.split()[1] != y.split()[1])
+    print(f"cmp {label_a} vs {label_b}: cases {len(a)}, differing {len(bad)} (accept flags differ in {acc})")
+    for x, y in bad[:3]:
+        print("  ", label_a, x, "|", label_b, y)
+
+
+def run_put(n, seed):
+    g = Game()
+    cases = 0
+    cnt = {name: 0 for name, _ in VARIANTS}
+    acc_cnt = dict(cnt)
+    samples = []
+    for seq in make_cases(n, seed):
         g.nodes.clear(); g.info.clear(); g.stat6d = 0
         g_acc = [g.put(sid, lvl, ln, BY_SKILL[sid][2]) for sid, lvl, ln in seq]
         gs = g.snapshot()
@@ -268,7 +319,7 @@ def run_put(n, seed):
             ms = m.snapshot()
             if m_acc != g_acc or ms != gs:
                 cnt[name] += 1
-                if name == "all four":
+                if name == "all five fixes":
                     samples.append((seq, g_acc, m_acc, gs, ms))
             if m_acc != g_acc:
                 acc_cnt[name] += 1
@@ -356,6 +407,14 @@ if __name__ == "__main__":
     a = sys.argv[1:]
     if a[0] == "put":
         run_put(int(a[1]), int(a[2]))
+    elif a[0] == "gen":
+        run_gen(int(a[1]), int(a[2]))
+    elif a[0] == "game":
+        run_game(a[1])
+    elif a[0] == "model":
+        run_model(a[1])
+    elif a[0] == "cmp":
+        run_cmp(a[1], a[2], a[3], a[4])
     elif a[0] == "group":
         run_group()
     elif a[0] == "gate":
