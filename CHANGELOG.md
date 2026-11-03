@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- b2on181: batch 2 re-based on PR 181 in the private fork, results in docs/research/b2-on181.md
 - docs: Gate 1 soak run 20261103-0338: NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md).
 - Docs: Gate 3 prep (Gate 2 watch checklist, Gate 3 requirements table, risks)
 - docs: upstream batch 2 PR bodies A and B with the oracles ported to the maintainer rules (private fork branches local/batch2-A-r5, local/batch2-B-r2).
