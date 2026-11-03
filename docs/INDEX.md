@@ -281,3 +281,10 @@ Rewritten 2026-10-30 evening by REVIEWDOC. One line per doc, grouped by area; th
 - docs/research/verifystateev2.md: independent verifier of SKSTATEEV (both passes, own emulator harness, claim verdicts)
 - [docs/research/tierb-design-20261102.md](research/tierb-design-20261102.md): Tier B design and the statistical A:B protocol for d2d against game.exe, staged cards, fidelity-gate mapping, kitb vs kitk2 regime reading
 - docs/research/seeddist-trace.md: SEEDDIST distribution check, d2d stream vs game.exe unit seeds (statistical equivalence per quantity)
+- [docs/research/seedspawn-trace.md](research/seedspawn-trace.md): SEEDSPAWN trace: Act 1 layout, preset units and spawn lists equal game.exe seed for seed; RNG draws before and at spawn (D1-D3), world-stream consumers, bot findings B1-B5, drill recipe
+- tools/baseline/ab_compare.py: d2d vs game.exe A:B comparison (card abtool)
+- docs/research/covitemtypes-trace.md | item types (itemtypes.txt) in game.exe 1.14d vs d2d and our bot: Equiv chain, membership, slot, hands, socket cap, 553,647 emulator cases (card covitemtypes)
+- docs/research/covmonai2-trace.md - monster AI third pass: Act 2 to 5 thinks and the bosses, game.exe vs d2d mon_think on 139,500 cases (covmonai2)
+- docs/research/covstates2-trace.md: states second pass: timed-state put rule, curse slot, groups, lengths, d2d deviations D1..D7, bot findings B1..B5 (game.exe run natively, real d2d put_state)
+- docs/research/covmissiles2-trace.md: missiles coverage second pass, skill-sourced Act 1 / 2 monster missiles (andariel_missile path), game.exe vs d2d, 27,000 cases
+- docs/research/pr-batch2-draft.md - upstream batch 2 (minmana floor, Teleport D1+D2): heads, counted differentials on a real d2d build, parity, #178 overlap, what is left out
