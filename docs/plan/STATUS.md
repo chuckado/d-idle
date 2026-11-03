@@ -127,14 +127,14 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
-- 8dd3f975 11-02 18:15 `Merge agent/verifystateev2: verifystateev2: coverage-gap or verification result (docs and emulator tools only)` (verifystateev2)
-- d8922e54 11-02 18:14 `merge origin/main into verifystateev2` (verifystateev2)
-- 0489b0f3 11-02 18:07 `Merge agent/verifyskamazon: verifyskamazon: coverage-gap or verification result (docs and emulator tools only)` (verifyskamazon)
-- 3922d8ee 11-02 18:07 `merge origin/main into verifyskamazon` (verifyskamazon)
-- 975bfbdf 11-02 18:00 `Merge agent/covmissiles: covmissiles: coverage-gap or verification result (docs and emulator tools only)` (covmissiles)
-- a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
-- d09e28fe 11-02 17:50 `Merge agent/tomestat: TOMESTAT: carried and ground items no longer share one map in d2dsrc (ground ids collided with the tome's), so the field dump keeps the tome's charge stat 70 (Gate 2 trip loop root cause; offline tests)` (tomestat)
-- cda4be88 11-02 17:49 `merge origin/main into tomestat` (tomestat)
-- a788442f 11-02 17:42 `Merge agent/townshop: TOWNSHOP: resupply budget inside the buy loops and a 2-scroll proof after a portal-empty report with a readable tome (Gate 2 trip loop; offline tests)` (townshop)
-- 85fd1005 11-02 17:41 `merge origin/main into townshop` (townshop)
+- 41db4964 11-02 20:39 `Merge agent/covmissiles2: covmissiles2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmissiles2)
+- 773e2176 11-02 20:39 `merge origin/main into covmissiles2` (covmissiles2)
+- ea2ff010 11-02 20:32 `Merge agent/covstates2: covstates2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covstates2)
+- ea32987a 11-02 20:31 `merge origin/main into covstates2` (covstates2)
+- 2c6af24f 11-02 20:24 `Merge agent/covmonai2: covmonai2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmonai2)
+- 37ac620f 11-02 20:24 `merge origin/main into covmonai2` (covmonai2)
+- 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
+- 8dc49ed9 11-02 20:16 `merge origin/main into covitemtypes` (covitemtypes)
+- e74797c2 11-02 20:09 `Merge agent/abtool: abtool: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (abtool)
+- fc9c8079 11-02 20:08 `merge origin/main into abtool` (abtool)
 <!-- statusgen:end -->

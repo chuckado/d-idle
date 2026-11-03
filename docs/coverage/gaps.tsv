@@ -6,4 +6,3 @@ rank	subsystem	rows	impact	source
 6	skills.pal	untested	Paladin is the second-ranked class (Hammerdin): Holy Shield, Zeal, Charge, Vengeance and the resist auras are untouched	docs/classes/ranking.md
 8	skills.ass	untested	Assassin plan (Lightning Sentry traps): trap and sentry pipeline untouched	docs/classes/ranking.md
 9	states	untested	Remaining states and auras (curses, shrines, poison, stun) alter damage taken	docs/research/sorc-skill-matrix.md
-10	itemtypes	untested	Item type rules (repair, stack, belt, socket) feed vendor and pickit; only the price and repair gate were differenced	docs/research/price-trace.md
