@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 5d78d312 11-03 10:15 `merge origin/main into gatetriage` (gatetriage)
 - e1c4f73a 11-03 10:08 `Merge agent/xphshort: XPHSHORT: why true XP/h fell across the five Gate 1 runs: area choice at clvl 13+, horizon bias, multi-seed plan; xph_budget.py with tests` (xphshort)
 - 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
 - 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - f9aa4521 11-03 09:40 `Merge agent/verifyb2: verifyb2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifyb2)
 - ea55a8ff 11-03 09:39 `merge origin/main into codefix` (codefix)
 - 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
-- 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
 <!-- statusgen:end -->
