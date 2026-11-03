@@ -364,6 +364,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - DMGROLL r3 third verification: NOT READY FOR PR (2df7d1eb): fixed records reach FUN_0057c1e0 (author right), roll/reduce/absorb/exact 0 differences and never worse than base, but Fight::absorb skips Bone Armor and Energy Shield when the reduced hit is 0 (pool / mana drift) and game.exe runs the absorb state cast last first; see docs/research/verify-dmgroll3.md
 - beltfix3 - Gate 1 BELT/NOKILL fixes 1-4 (shop on town arrival, level-chain walk home, cut-cast portal reuse, BackToField portal retry); #5/#6 open; live check pending
 - B2BUNDLE: batch 2 bundle `local/batch2-bundle` on upstream main 3e073888 (4 commits, private remote); PR body drafted in docs/research/pr-batch2-body.md; the user decides staging and opening
+- GATE1: three Gate 1 runs of 2026-11-02/03 all NOT PASSED (Belt in each; NOKILL in run 2; True XP/h in run 3), records under unique run-id names (docs/soaks/gate1-index-20261103.md)
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
