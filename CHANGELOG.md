@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- DMGROLL: docs/research/dmgroll-draft.md and tools/emu/mdmg* (differential of a monster's physical roll against game.exe)
 - Added docs/research/pr-batch2-draft.md and the pb2_mana / pb2_tele worker helpers: two private upstream-PR branches (mana check floor, Teleport room limit and landing spot) with counted differentials against game.exe.
 - covmissiles2: trace of the skill-sourced monster missiles of Acts 1 and 2 (17 rows, 21,926 compared cases, tools/emu/cm2_*), ledger rows 22, 24, 32, 77, 130, 346, 653 upgraded from READ-ONLY; deviations D1 to D3, no PR candidate
 - covstates2: curse and state put rule traced (game.exe run natively vs real d2d put_state, 200,000 sequences); five d2d deviations proven, no PR candidate; states coverage 3 to 11 percent
