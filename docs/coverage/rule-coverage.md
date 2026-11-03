@@ -16,7 +16,7 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | skills.monster (monster and common skills (Attack, Kick, monster specials)) | 147 | 2 | 1 | 0 | 0 | 144 | 2% | 2% | 104,752 |
 | skillfx.mana (every skill: mana check and payment) | 357 | 351 | 6 | 0 | 0 | 0 | 100% | 100% | 261,680 |
 | skillfx.damage (skills with an element type: element damage and synergy formula) | 100 | 0 | 100 | 0 | 0 | 0 | 100% | 100% | 116,000 |
-| missiles (missile flight, range, hit roll) | 684 | 243 | 45 | 25 | 0 | 371 | 42% | 46% | 668,300 |
+| missiles (missile flight, range, hit roll) | 684 | 249 | 46 | 18 | 0 | 371 | 43% | 46% | 682,680 |
 | monster.stats (monster base stats per class (life, defence, damage, exp, resists)) | 734 | 0 | 734 | 0 | 0 | 0 | 100% | 100% | 242,220 |
 | monster.flags (undead and demon bits per class (one aspect of the flags)) | 734 | 734 | 0 | 0 | 0 | 0 | 100% | 100% | 734 |
 | monster.ai (monster AI types) | 146 | 11 | 9 | 5 | 0 | 121 | 14% | 17% | 139,830 |
@@ -27,9 +27,9 @@ Each subsystem is a fixed set of rows taken from the game's own data tables (`de
 | treasure (drops: treasure classes) | 852 | 850 | 0 | 0 | 0 | 2 | 100% | 100% | 100,000 |
 | levels (areas) | 137 | 136 | 0 | 0 | 0 | 1 | 99% | 99% | 1,088 |
 | formulas (damage, resist and rate formulas (hand-listed rule set)) | 18 | 3 | 12 | 2 | 0 | 1 | 83% | 94% | 2,410,944 |
-| **total** | **4910** | **2449** | **942** | **53** | **0** | **1466** | **69%** | **70%** | **5,825,390** |
+| **total** | **4910** | **2455** | **943** | **46** | **0** | **1466** | **69%** | **70%** | **5,839,770** |
 
-Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2200 (59%), compared 2253 (61%), read-only 53, untested 1466.
+Excluding the single-aspect subsystems (`skillfx.*`, `monster.flags`), which test one property across many rows and so reach 100% easily: 3719 rows, run-tested 2207 (59%), compared 2253 (61%), read-only 46, untested 1466.
 
 Case counts add the cases of every ledger line; one differential that covers many rows counts once per line that cites it, so the column is an effort figure, not a unique-case total.
 
@@ -70,10 +70,12 @@ Case counts add the cases of every ledger line; one differential that covers man
 | missiles | 114,192,193 | TESTED-DEVIATION | `docs/research/nec-skill-trace.md` | 36,600 | 2026-11-01 | Teeth, Bone Spear, Bone Spirit hit roll D1 (min and max equal on all cases) |
 | missiles | 7-10,63-66,70-72,238,239,341 | TESTED-DEVIATION | `docs/research/missilediff.md` | 44,792 | 2026-11-01 | D1 D2 D3 monster MissA record vs the real d2d build, fixed on local branch |
 | missiles | 2-5,13-16,125-128,196-200,226,227,229,266 | TESTED-0-DIFF | `docs/research/missilediff.md` | 72,829 | 2026-11-01 | monster MissA record (physical, levels 1..40; element where the owner has none) vs the real d2d build |
-| missiles | 22-25,32,77-79,130,133,135,346,653 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | skill-sourced, weapon or no-record rows: game.exe launch record V run, d2d by read |
+| missiles | 23,25,78-79,133,135 | READ-ONLY | `docs/research/monster-missile-trace.md` | - | 2026-11-01 | skill-sourced, weapon or no-record rows: game.exe launch record V run, d2d by read |
 | missiles | 12,28,40,41,85,87,205,206 | TESTED-DEVIATION | `docs/research/skamazon-trace.md` | 118,000 | 2026-11-02 | Fire, Ice, Cold, Exploding, Immolation, Freezing Arrow, Lightning Bolt, Lightning Fury hit roll D1 (min and max equal on all cases) |
 | missiles | 60,62,96,166,233,264 | TESTED-DEVIATION | `docs/research/covmissiles-trace.md` | 103,439 | 2026-11-02 | D1 hit roll top inclusive (Inferno flame, Fire Ball, Glacial Spike, Thunder Storm, Fist of the Heavens, Chilling Armor): element pair, roll and life hit by game.exe code, seeds 1 and 7 |
 | missiles | 0-1,6,11,17,27,29-30,33-39,42-49,67,73-75,86,88,106-107,117-118,120,129,131,139-140,144,148-149,170-172,176-180,194-195,203-204,207-211,213-217,219-224,228,230-232,234-237,240-244,246,249-250,252-253,255-256,271,276-277,279-280,282-283,287,323-327,329,331,336,342,367,371,385-389,392,398,404-408,411-414,416,419-420,422-423,425,450,452-453,455,457-459,461-462,474-475,477-479,481,483,493,495,498,502,506,511,515-518,523,525-526,533,540-542,546-547,549-550,553-555,557-559,561,563-564,567-569,577,589-590,592-596,623,641,643-648,650,652,654-665,667-670,674-679,681-683 | TESTED-0-DIFF | `docs/research/covmissiles-trace.md` | 4,440 | 2026-11-02 | table loader and flight values only (velocity, range, MaxVel, Accel, Activate) of the rows d2d loads, 20 levels each, game.exe FUN_0059fa30 vs d2d loader and rules::missile_velocity / missile_range; not the flight walk, hit or collision; effects not compared; SKDRUID |
+| missiles | 32 | TESTED-DEVIATION | `docs/research/covmissiles2-trace.md` | 840 | 2026-11-02 | Andariel spray skill-sourced record vs real d2d andariel_missile ingredients: D1 physical brackets dropped, D2 poison total read as per-frame; element pair and flags equal; seeds 20261102 and 7 |
+| missiles | 22,24,77,130,346,653 | TESTED-0-DIFF | `docs/research/covmissiles2-trace.md` | 13,540 | 2026-11-02 | skill-sourced record vs real d2d andariel_missile ingredients: element pair, collide kill, size, next hit and range equal (130, 346, 653 carry no damage: range and flags only); seeds 20261102 and 7 |
 | monster.stats | all | TESTED-DEVIATION | `docs/research/monster-stats-trace.md` | 242,220 | 2026-11-01 | stat rows (life, defence, to-hit, damage, exp) 0 differ in 242,220 cases and 85,213 real Normal units; NM / Hell level D1; monster regeneration D2; resists compared on the 123 rows the populations hold |
 | monster.flags | all | TESTED-0-DIFF | `docs/research/pal-skill-trace.md` | 734 | 2026-11-01 | undead and demon bits only, game.exe tests vs d2d flags on all 734 ids; boss and other flags not compared |
 | monster.ai | Skeleton,Goatman,QuillRat,Griswold,Smith | TESTED-0-DIFF | `docs/research/monster-ai-trace.md` | 3,000 | 2026-11-01 | think act, pace, effects, seed vs rules::mon_think; 3000 cases each (seeds 20261101, 7); QuillRat scene without leader commands; second target as primary |
