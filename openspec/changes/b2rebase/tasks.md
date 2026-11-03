@@ -18,7 +18,7 @@ gates:
   - "local/batch2-bundle-r2 is the four bundle commits on upstream main 552acc9a, same authors, same subjects, nothing pushed upstream"
   - "g++ and clang++ CI flags, the 13 suites, clang-tidy, pr_guard per commit, presubmit --quick, WSL lane and MSVC 14.51 pass on the new head"
   - "counted differentials re-run on the new head; changecheck 0 warnings, leakcheck 0 hits"
-result: ""
+result: "docs only; not verified in a live game. Head 6f036a40 on 552acc9a: no conflict, range-diff identical, 13 suites rc 0, g++/clang++ 0 new warnings, MSVC 14.51 0 warning C (71/73 ctest), WSL lane rc 0, differentials unchanged."
 credit:
   component: Batch 2 bundle rebase onto upstream main 552acc9a
   author: owner
@@ -30,8 +30,8 @@ credit:
 
 ## 1. Work
 
-- [ ] 1.1 local/batch2-bundle-r2 on 552acc9a, pushed to the private remote
-- [ ] 1.2 PR 178 impact on our areas
-- [ ] 1.3 CI parity on the new head: warnings, 13 suites, clang-tidy, pr_guard, presubmit, MSVC 14.51, WSL lane
-- [ ] 1.4 counted differentials on the new head (mana, Teleport, damage roll)
-- [ ] 1.5 pr-batch2-body.md, pr-batch2-run.txt, merge-lines.txt, OWNERS lines
+- [x] 1.1 local/batch2-bundle-r2 on 552acc9a, pushed to the private remote
+- [x] 1.2 PR 178 impact on our areas
+- [x] 1.3 CI parity on the new head: warnings, 13 suites, clang-tidy, pr_guard, presubmit, MSVC 14.51, WSL lane
+- [x] 1.4 counted differentials on the new head (mana, Teleport, damage roll)
+- [x] 1.5 pr-batch2-body.md, pr-batch2-run.txt, merge-lines.txt, OWNERS lines
