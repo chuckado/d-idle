@@ -2,7 +2,7 @@
 
 ```yaml
 change: dmgroll
-status: in-progress
+status: archived
 agent: dmgroll
 branch: agent/dmgroll
 worktree: d2lod-wt/dmgroll
@@ -16,7 +16,7 @@ exclusive:
 gates:
   - "base mismatches > 0 and head 0 on >= 20,000 cases per class (8 Act 1 classes), real monster_blow against game.exe's FUN_0057b420"
   - "changecheck 0 warnings; leakcheck -mode fail 0"
-result: "fork commit 6f9ded7c on the private remote; differential run on the worker host (8 classes x 20,000: base 19,904..19,994 differ, head 0); not verified in the live game"
+result: "docs only; fork branches on the private remote"
 credit:
   component: Monster physical damage roll
   author: owner
@@ -24,6 +24,7 @@ credit:
   agents: [Claude Code]
   verified_by: []
   consent: none
+merge: 8e99f3c
 ```
 
 ## 1. Work

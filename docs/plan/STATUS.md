@@ -44,7 +44,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 | [d2d-container-soak](../../openspec/changes/d2d-container-soak/) | proposed | d2d-container-soak | `docs/d2d-container-soak.md` | `soak-slot:1` |
 | [d2d-default-backend](../../openspec/changes/d2d-default-backend/) | proposed | d2d-default-backend | `cmd/d2bot/d2dbackend_default_test.go` | - |
 | [d2d-replicated-soak](../../openspec/changes/d2d-replicated-soak/) | proposed | d2d-replicated-soak | `docs/d2d-replicated-soak.md` | `soak-slot:2` |
-| [dmgroll](../../openspec/changes/dmgroll/) | in-progress | dmgroll | `openspec/changes/dmgroll/**`<br>`docs/research/dmgroll-draft.md`<br>`tools/emu/mdmg*` | `fork-branch:local/batch2-monsterdmg` |
 | [drills6](../../openspec/changes/drills6/) | in-progress | drills6 | `openspec/changes/drills6/**` | - |
 | [fixbelt](../../openspec/changes/fixbelt/) | in-progress | fixbelt | `docs/fixbelt.md`<br>`internal/resource/recovery.go`<br>`internal/resource/recovery_test.go`<br>`internal/bot/broke.go`<br>`internal/bot/area_ban_test.go`<br>`openspec/changes/fixbelt/**` | - |
 | [fixcastgap](../../openspec/changes/fixcastgap/) | in-progress | fixcastgap | `docs/fixcastgap.md`<br>`internal/combat/castgap.go`<br>`internal/combat/castgap_test.go` | - |
@@ -93,8 +92,6 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change d2d-default-backend: bot started with no flag uses d2d
 - change d2d-replicated-soak: d2dsoak verdict printed for all four gated metrics, 5 or more seeds
 - change d2d-replicated-soak: gaps listed as explained or as fidelity bugs
-- change dmgroll: base mismatches > 0 and head 0 on >= 20,000 cases per class (8 Act 1 classes), real monster_blow against game.exe's FUN_0057b420
-- change dmgroll: changecheck 0 warnings; leakcheck -mode fail 0
 - change drills6: changecheck -cli 0 warnings; leakcheck -mode fail 0; openspec validate --all --strict; whole-repo vet and test -short on the worker host
 - change fixbelt: go test -p 1 internal/resource internal/bot; changecheck -cli 0 warnings; leakcheck -mode fail 0; tools/ci/check.sh; openspec validate --all --strict
 - change fixcastgap: go test -p 1 ./internal/combat ./internal/env ./tools/knobdump passes including TestFightLoopLightningNeverReissuedEarly
@@ -130,6 +127,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 8e99f3c6 11-02 20:55 `Merge agent/dmgroll: dmgroll: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (dmgroll)
 - b16afba6 11-02 20:54 `merge origin/main into dmgroll` (dmgroll)
 - 41372943 11-02 20:47 `Merge agent/prbuildb2: prbuildb2: batch 2 upstream candidate draft and card (docs and emulator helpers; fork branches stay private)` (prbuildb2)
 - 7acdfdbe 11-02 20:46 `merge origin/main into prbuildb2` (prbuildb2)
@@ -139,5 +137,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - ea32987a 11-02 20:31 `merge origin/main into covstates2` (covstates2)
 - 2c6af24f 11-02 20:24 `Merge agent/covmonai2: covmonai2: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covmonai2)
 - 37ac620f 11-02 20:24 `merge origin/main into covmonai2` (covmonai2)
-- 62e78ffd 11-02 20:16 `Merge agent/covitemtypes: covitemtypes: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (covitemtypes)
 <!-- statusgen:end -->
