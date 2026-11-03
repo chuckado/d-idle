@@ -126,6 +126,7 @@
 - change soak-minutes-virtual: tools/openspec.sh validate --all --strict passes; changecheck -cli 0 warnings; leakcheck -mode fail 0 hits
 
 ### Recent merges
+- 4ce28b17 11-03 10:27 `merge origin/main into codereview1` (codereview1)
 - ca2489d0 11-03 10:24 `Merge agent/applyreview: APPLYREVIEW: ADR 0015 goals G-A..G-F, decisions, plan and roadmap banners, STATUS hand part, card triage, three cards archived` (applyreview)
 - 0e220dfd 11-03 10:24 `merge origin/main into applyreview` (applyreview)
 - 1794848e 11-03 10:21 `Merge agent/projreview: PROJREVIEW: Opus project review (goals, evaluation, plan) as a proposal` (projreview)
@@ -135,5 +136,4 @@
 - e1c4f73a 11-03 10:08 `Merge agent/xphshort: XPHSHORT: why true XP/h fell across the five Gate 1 runs: area choice at clvl 13+, horizon bias, multi-seed plan; xph_budget.py with tests` (xphshort)
 - 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
 - 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
-- 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
 <!-- statusgen:end -->
