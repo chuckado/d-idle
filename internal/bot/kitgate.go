@@ -116,8 +116,12 @@ func (r *Runner) kitTrip(s *d2.Snapshot) (string, bool) {
 		}
 		return "", false
 	}
+	// The cheapest thing the visit can buy: a missing portal scroll is bought first only when it is affordable
+	// (Town.buyFirstTP), so a character short of healing potions needs one potion's gold to make the walk home worth
+	// it. Pricing the scroll kept a 37-gold clvl 12 Sorceress without potions in the field for 12 virtual minutes
+	// (Gate 1 20261102, docs/research/beltfix-analysis.md).
 	price := rt.KitPotionGold
-	if !k.TP {
+	if !k.TP && k.HP >= k.minHP {
 		price = rt.KitTPGold
 	}
 	if s.Player.Gold < price || !(k.TP || resource.NearTownArea(s.Player.Area)) {
