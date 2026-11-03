@@ -104,14 +104,14 @@ DROP or DEFER vs today: d2d container as v1 product (DEFER until G-A passes and 
 | S3 | **Multi-seed Gate 1** on current main: seeds 11, 12, 13 + holdout 16, 17 in parallel, judged per run on stability and per set on XP/h | 5 records + one set verdict; this replaces any further seed-11 rerun | Sonnet, main account | worker host, about 3.5 wall h (xphshort estimate, U) |
 | S4 | **Area choice fix** from xphshort (rank fallback areas by XP per kill; activate Dark Wood/Black Marsh waypoints) as one card with a paired A/B of 8 seeds per arm | A/B shows an effect or `no effect shown`; merge either way if it is not worse | Sonnet (code), Opus review | worker host after S3 |
 | S5 | **Doc truth pass**: STATUS.md hand part rewritten to one page, PLAN.md status block (appendix F), close or defer cards not mapped to G-A..G-E | at most 12 open cards | Sonnet (Pro plan, public repo) | none |
-| S6 | Upstream: answer the maintainer on #181/batch 2 only; nothing new prepared | batch 2 opened or still waiting | Opus for review replies | Venus build lane only if asked |
+| S6 | Upstream: answer the maintainer on #181/batch 2 only; nothing new prepared | batch 2 opened or still waiting | Opus for review replies | the Windows build PC only if asked |
 
 ### Medium (2 to 4 weeks)
 
 1. Gate 2 on 3 seeds (one holdout) after S3/S4 pass. Exit: 3 PASS. Sonnet, main account, worker host 8 wall h per run (parallel slots).
 2. A:B pilot, fresh clvl 1-6 cell (lockstep-plan round 1: 3 game.exe + 3 d2d lanes, about 2 h real), then round 2 to 6 + 6. Exit: verdict at 20 percent. Trigger for Tier B only if DIFFERENT and unexplained (tierb-design rule). Opus design check, Sonnet runs, worker host (3 hidden game.exe instances).
 3. Andariel and Act 1 clear on d2d (G-B): first on a cheat-levelled throwaway to find the fight's problems (setup writes only, never counted), then fresh seeds. Exit: 3 of 3 seeds. Sonnet + Opus review, worker host.
-4. Upstream batch 3 scoped to the gate class's skill rows and the Act 1 monster rules the A:B or Andariel attempts show to matter. Credit runner for emulator differentials; Venus for MSVC parity in its quiet window.
+4. Upstream batch 3 scoped to the gate class's skill rows and the Act 1 monster rules the A:B or Andariel attempts show to matter. Credit runner for emulator differentials; the Windows build PC for MSVC parity in its quiet window.
 5. Gate 3 (24 h d2d) after 1 and 2. Exit: PASS with memory curve.
 
 ### Long (2 to 3 months)
@@ -144,7 +144,7 @@ Process and infra work (board, Discord, brand), further coverage rows, Tier B, t
 | gate runs play a Barbarian | records say "Sorceress (class 4)"; class 4 = Barbarian in code; plan table lightning-v2 in all archives | CONFLICT, U |
 | Barbarian has six d2d deviations | barbdiff (branch) has no run; rule-coverage says 30/30 clean | U |
 | PR #177 merged, batch 2 waiting for #181, maintainer rules | openpr-log | S |
-| Pro / credit / main account / Venus split | runner notes | S |
+| Pro / credit / main account / Windows build PC split | runner notes | S |
 
 Plan table check (D): `python3 -I -c 'import gzip,json,collections,glob; [print(f, collections.Counter(str(json.loads(l).get("table")) for l in gzip.open(f)).most_common(1)) for f in sorted(glob.glob("docs/probes/soak-logs/gate1-2026110*-minutes.jsonl.gz"))]'` gives `fallback-lightning-v2` for all five archives on main.
 
