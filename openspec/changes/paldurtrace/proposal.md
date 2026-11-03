@@ -6,5 +6,5 @@ no observable behaviour change: docs and offline emulator tooling only, no code 
 ## What Changes
 
 - Dedicated trace in `docs/research/durability-trace.md`
-- Harness in `tools/emu/verify_paldur.py` (seed 0x50414c44, 100,002 cases, 0 mismatches)
+- Harness in `tools/emu/verify_paldur.py` (seed 0x50414c44, 100,128 cases, 0 mismatches)
 - No Go code modified

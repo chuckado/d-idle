@@ -4,7 +4,7 @@
 > **Author:** Chuck (@chuckado) with Claude / Antigravity
 > Every factual claim is tagged:
 > - `V read` — verified by reading the 1.14d `Game.exe` binary (`SHA256 631066c1649c4ea9ffe48bf97e24c00bca1f7a6759c21150f1a79982589adaaf`, image base `0x00400000`) or `Patch_D2.mpq` (`SHA256 082f6bbd8edb2bee6efdc9eb7de9ae4bdbe4ddca9dbc8f7ba6fd5fbf3a36d2eb`)
-> - `V read + self-check` — verified by static disassembly and executing original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness compared against an independent Python oracle (not against a real `d2d` build; `100,002` test cases, `0` mismatches, `tools/emu/verify_paldur.py` with seed `0x50414c44`)
+> - `V read + self-check` — verified by static disassembly and executing original 1.14d `Game.exe` functions in the repo's Unicorn x86 harness compared against an independent Python oracle (not against a real `d2d` build; `100,128` test cases, `0` mismatches, `tools/emu/verify_paldur.py` with seed `0x50414c44`)
 > - `V run` — verified by executing 1.14d `Game.exe` and comparing line-for-line with a real `d2d` build (reserved for real differentials; not run here)
 > - `D` — arithmetic deduction from verified formulas or tables
 > - `S` — secondary source: `d2d` (`d2decomped`) source at commit `6935cf6` or `d-idle` repository code/docs
@@ -197,7 +197,7 @@ When a melee hit lands (`dmg.result_flags & 0x01 != 0`) and `defender` is a play
      - If `worn[esi] != NULL`:
        - If `pick < slot_table[esi].weight` (`0x57d4af..0x57d4b1`), breaks out of the loop and calls `FUN_00559e30(ecx = game, edx = defender, worn[esi])` (`0x57d4d8`).
        - Otherwise subtracts `pick -= slot_table[esi].weight` (`0x57d4b3`) and continues.
-   - **Mathematical invariance of `start_idx` (`D`):** Because `pick` is drawn uniformly on `{0, 1, ..., total_weight - 1}`, for every fixed `start_idx in 0..6` the circular traversal partitions `{0, ..., total_weight - 1}` into contiguous intervals of exact length `weight[k]` for each occupied `"armo"` slot `k`. Over all `7 * 18 = 126` `(start_idx, pick)` pairs in the standard 6-piece armor setup, Head is chosen in `21/126 = 3/18`, Torso in `35/126 = 5/18`, Shield in `28/126 = 4/18`, and Belt/Boots/Gloves in `14/126 = 2/18` each (`D`).
+   - **Mathematical invariance of `start_idx` (`D`):** Because `pick` is drawn uniformly on `{0, 1, ..., total_weight - 1}`, for every fixed `start_idx in 0..6` the circular traversal partitions `{0, ..., total_weight - 1}` into contiguous intervals of exact length `weight[k]` for each occupied `"armo"` slot `k`. Over all `7 * 18 = 126` `(start_idx, pick)` pairs in the standard 6-piece armor setup, Head is chosen in `21/126 = 3/18`, Torso in `35/126 = 5/18`, Shield in `28/126 = 4/18`, and Belt/Boots/Gloves in `14/126 = 2/18` each (`D + V read + self-check`, explicitly enumerated in `tools/emu/verify_paldur.py` Suite 3).
 3. **Armor wear roll (`FUN_00559e30`, `V read + self-check`):**
    - Inside `FUN_00559e30(game, defender, worn[esi])`, if `FUN_00629930(worn[esi]) != 0`, advances `defender`'s unit RNG a **third** time (`rand_range(&defender.seed, 100) < 10`, **`10%` chance**) to decrement `stat 72` by `1`.
 
@@ -239,17 +239,17 @@ When the `4%` or `10%` roll succeeds in `FUN_00559e30`, it reads `cur_dur = FUN_
 
 ---
 
-## 7. Unicorn Verification (`V read + self-check`, `100,002` Cases, `0` Mismatches)
+## 7. Unicorn Verification (`V read + self-check`, `100,128` Cases, `0` Mismatches)
 
-We executed `FUN_00629930`, `FUN_00559e30`, `FUN_00580380`, `FUN_0057d3d0`, `FUN_00535bc0`, and `FUN_0057d4f0` natively inside the Unicorn x86 harness booted on `Game.exe` 1.14d and `Patch_D2.mpq` (`seed = 0x50414c44`, `100,002` total cases across 4 suites, `14.08s` runtime, **`0` mismatches**):
+We executed `FUN_00629930`, `FUN_00559e30`, `FUN_00580380`, `FUN_0057d3d0`, `FUN_00535bc0`, and `FUN_0057d4f0` natively inside the Unicorn x86 harness booted on `Game.exe` 1.14d and `Patch_D2.mpq` via the existing upstream emulator helper `skill_tips.boot()` (`seed = 0x50414c44`, `100,128` total cases across 4 suites, `14.08s` runtime, **`0` mismatches**):
 
 | Suite | `Game.exe` Functions Executed (`V read + self-check`) | Cases | Scenarios Verified | Mismatches |
 | :--- | :--- | :---: | :--- | :---: |
 | **Suite 1** | `FUN_00629930` (`item_has_durability`) | `10,000` | All `659` `Items.txt` rows (`202` `"armo"`, `227` melee `"weap"`, `30` throwable `"weap"`, `49` no-durability `"weap"`, `151` misc) across `max_durability in {0, 1, base, 25, 255}` and `stat 152 (item_indesctructible) in {-1, 0, 1, 5}` | **`0`** |
 | **Suite 2** | `FUN_00559e30` (`wear_single_item`) + `FUN_00580380` (`break_zero_dur_weapons`) | `30,000` | Melee weapons (`4%`), armor/shields (`10%`), throwable weapons in melee in Expansion (`10%`) vs Classic (`0%` early exit before RNG step), bows/Phase Blades (`0%`), indestructible (`0%`), `dur > 1 -> min(dur - 1, maxdur)`, `dur == 1` immediate armor break (`flag 0x100`), `dur == 1` stackable `qty > 1 -> (qty - 1, dur = maxdur)` vs `qty == 1 -> FUN_00580310`, and `dur == 1` non-stackable weapon deferred break (`stat 72 = 0` in `FUN_00559e30`, then `flag 0x100` in `FUN_00580380`) | **`0`** |
-| **Suite 3** | `FUN_0057d3d0` (`wear_attacker_and_defender`) | `50,000` | Player vs monster attacker/defender, randomized subsets of the 7 body slots `[1, 3, 4, 5, 8, 9, 10]` with weapons vs shields in slots `4`/`5`, exact 2-step defender RNG slot choice (`start_idx = rand(7)`, `pick = rand(total_weight)`), 3rd RNG step `10%` armor wear, and `16,500`-trial oracle-derived 6-piece frequency check (`D`, `slot 1: 0.1671 vs 0.1667`, `slot 3: 0.2798 vs 0.2778`, `slot 5: 0.2230 vs 0.2222`, `slot 8: 0.1122 vs 0.1111`, `slot 9: 0.1096 vs 0.1111`, `slot 10: 0.1084 vs 0.1111`) | **`0`** |
+| **Suite 3** | `FUN_0057d3d0` (`wear_attacker_and_defender`) | `50,126` | Player vs monster attacker/defender, randomized subsets of the 7 body slots `[1, 3, 4, 5, 8, 9, 10]` with weapons vs shields in slots `4`/`5`, exact 2-step defender RNG slot choice (`start_idx = rand(7)`, `pick = rand(total_weight)`), 3rd RNG step `10%` armor wear, `126`-pair partition check (`D + V read + self-check`, exactly `21/126`, `35/126`, `28/126`, `14/126`, `14/126`, `14/126`), and `16,500`-trial oracle-derived 6-piece frequency check (`D`, `slot 1: 0.1671 vs 0.1667`, `slot 3: 0.2798 vs 0.2778`, `slot 5: 0.2230 vs 0.2222`, `slot 8: 0.1122 vs 0.1111`, `slot 9: 0.1096 vs 0.1111`, `slot 10: 0.1084 vs 0.1111`) | **`0`** |
 | **Suite 4** | `FUN_00535bc0` (`attacker_active_weapon`) + `FUN_0057d4f0` (`process_hit_record`) | `10,002` | `5,000` cases of Paladin (`class 3`), Barbarian (`class 4`), and Assassin (`class 6`) across all 5 `Skills.txt` `weapsel` values (`0, 1, 2, 3, 4`), `[skill + 0x0c] & 0x2000`, and `[player + 0x38] & 0x100`; plus `2` zero-seed blocked-versus-landed checks (`result_flags = 0x10` vs `0x01`) and `5,000` seeded landed-hit checks using seeded attacker/defender values against Suite 2's RNG oracle | **`0`** |
-| **Total** | All 6 combat durability routines | **`100,002`** | Full oracle parity on durability, quantity, `0x100` broken flag, and unit RNG state | **`0`** |
+| **Total** | All 6 combat durability routines | **`100,128`** | Full oracle parity on durability, quantity, `0x100` broken flag, and unit RNG state | **`0`** |
 
 ---
 
@@ -300,4 +300,4 @@ The following steps represent proposed maintainer live verification recipes (`U`
 
 ### 9.2 Unverified (`U`) Limits
 
-- **`U` (Live 1.14d Battle.net / single-player process capture):** All 1.14d results in this document are verified by static disassembly (`V read`) and native execution of the original 1.14d `Game.exe` functions in Unicorn across `100,002` cases (`V read + self-check`), not by attaching a live debugger to a running Windows `Game.exe` window.
+- **`U` (Live 1.14d Battle.net / single-player process capture):** All 1.14d results in this document are verified by static disassembly (`V read`) and native execution of the original 1.14d `Game.exe` functions in Unicorn across `100,128` cases (`V read + self-check`), not by attaching a live debugger to a running Windows `Game.exe` window.

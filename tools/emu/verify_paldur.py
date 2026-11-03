@@ -1,8 +1,10 @@
 """One-shot verification harness for 1.14d combat durability loss (PALDUR).
 
 Executes original Game.exe functions in the Unicorn x86 emulator against an
-independent Python oracle across 100,002 cases (seed 0x50414c44). This script
-is a one-shot verification harness and has no separate test target.
+independent Python oracle across 100,128 cases (seed 0x50414c44). Boots the
+emulator using the existing upstream helper `skill_tips.boot()` (from
+`tools/emu/skill_tips.py` in the upstream emulator tree). This script is a
+one-shot verification harness and has no separate test target.
 """
 import random
 import struct
@@ -45,7 +47,7 @@ def rand_range(seed_lo, seed_hi, n):
 
 
 def main():
-    """Execute 100,002 verification cases across 4 suites against native 1.14d Game.exe."""
+    """Execute 100,128 verification cases across 4 suites against native 1.14d Game.exe."""
     t0 = time.time()
     e = skill_tips.boot()
     rnd = random.Random(0x50414C44)
@@ -465,7 +467,29 @@ def main():
             if mismatches <= 5:
                 print(f"[S3 mismatch] case={i} got_w_dur={got_w_dur} exp_w_dur={exp_w_dur}")
 
-    print(f"Suite 3 (FUN_0057d3d0 slot choice & wear): 50,000 cases, mismatches={mismatches}")
+    # Explicit enumeration of all 126 (start_idx, pick) pairs across 6-piece armor setup (weights 3:5:4:2:2:2 / 18)
+    # Proves the mathematical invariance of start_idx: exactly {1: 21, 3: 35, 5: 28, 8: 14, 9: 14, 10: 14}
+    pair_counts = {1: 0, 3: 0, 5: 0, 8: 0, 9: 0, 10: 0}
+    for s_idx in range(7):
+        for p_val in range(18):
+            cur = s_idx
+            p = p_val
+            while True:
+                slot, weight = SLOT_WEIGHTS[cur]
+                if slot != 4:  # slot 4 is weapon, not armor
+                    if p < weight:
+                        pair_counts[slot] += 1
+                        break
+                    p -= weight
+                cur = (cur + 1) % 7
+            total_cases += 1
+
+    expected_pairs = {1: 21, 3: 35, 5: 28, 8: 14, 9: 14, 10: 14}
+    if pair_counts != expected_pairs:
+        mismatches += 1
+        print(f"[S3 126-pair mismatch] got={pair_counts} exp={expected_pairs}")
+
+    print(f"Suite 3 (FUN_0057d3d0 slot choice & wear): 50,126 cases (including 126-pair partition check), mismatches={mismatches}")
     if all_six_trials > 0:
         print(f"  Oracle-derived 6-piece armor slot frequencies over {all_six_trials} trials (weights 3:5:4:2:2:2 / 18):")
         for slot, weight in SLOT_WEIGHTS:
@@ -567,6 +591,10 @@ def main():
         e.w32(att_slots + s * 4, 0)
     e.w32(att_slots + 4 * 4, w_right)
     e.w32(att_inv + 0x1C, e.r32(w_right + 0x0C))
+
+    # Fix the torso item once. Suite 3 leaves item_units[3] with a stale cid and flags.
+    e.w32(item_units[3] + 0x04, armo_cids[0])
+    e.w32(item_datas[3] + 0x18, 0)
 
     # 1. Zero-seed blocked-versus-landed check (2 distinct result_flags inputs: 0x10 vs 0x01)
     for blocked in (True, False):
