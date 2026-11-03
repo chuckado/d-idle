@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: upstream batch 2 PR bodies A and B with the oracles ported to the maintainer rules (private fork branches local/batch2-A-r5, local/batch2-B-r2).
 - lockstepplan: a written plan for the real d2d against game.exe comparison, with lane counts, host sharing with the long gate runs, and the decisions needed
 - sorcdiff: Sorceress skills the bot uses vs rule coverage; Lightning and Chain Lightning cast-length differential on the real d2d build and a private fix branch; nothing pushed upstream
 - b2winworker: batch 2 r3 re-run on the Windows build worker, numbers recorded
