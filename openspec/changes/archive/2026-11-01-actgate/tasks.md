@@ -2,7 +2,8 @@
 
 ```yaml
 change: actgate
-status: in-progress
+status: archived
+merge: 25598ab9
 agent: actgate
 branch: agent/actgate
 worktree: ~/code/d2lod-wt/actgate

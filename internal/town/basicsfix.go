@@ -174,6 +174,7 @@ func (t *Town) withdraw(ctx context.Context, a *Act) error {
 		_ = t.e.In.Key("esc")
 	}
 	if first == nil {
+		t.withdrew = true
 		t.e.Log.Info("town: withdrew gold for the kit", "amount", amount, "stash", s.Player.StashGold-amount)
 	}
 	if err := t.h.CloseAll(ctx); err != nil && first == nil {

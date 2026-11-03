@@ -2,7 +2,8 @@
 
 ```yaml
 change: wpcooldown
-status: in-progress
+status: archived
+merge: ddf6213d
 agent: wpcooldown
 branch: agent/wpcooldown
 worktree: ~/code/d2lod-wt/wpcooldown
