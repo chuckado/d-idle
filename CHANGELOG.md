@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- codereview1: review of the Gate 1 belt fixes with ranked findings (docs only)
 - Docs: ADR 0015 (acceptance on game.exe, six goals), plan 2026-11-03, STATUS rewritten, card triage
 - Docs: project review 2026-11-03 (goals evaluated and rewritten, plan short/medium/long)
 - gatetriage: a Gate 1 triage script prints the verdict, the belt and no-kill windows, the XP by area and the likely cause on one screen
