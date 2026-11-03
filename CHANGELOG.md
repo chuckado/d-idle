@@ -8,6 +8,10 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- fix: nav border gates compare the neighbour's grid in the neighbour's own frame; the Blood Moor keeps its gate to the Rogue Encampment on seeds where the camp lies east of it (docs/navexit22.md).
+- cport: batch C (mana paid on the action frame, action-frame tick, armor state group) prepared as commits on the batch A branch with Claims rows, counted differentials on the exact head; nothing pushed upstream
+- fix: d2dworld keeps a level border once seen; an empty tome buys the first town portal scroll before the kit potions (docs/navexit21.md).
+- docs: Gate 1 multi-seed soak run 20261103-1226-ms1: NOT PASSED (docs/soaks/gate1-multiseed-20261103-1226-ms1.md).
 - sorcdiff2: counted differentials for Charged Bolt, Frost Nova, Fire Bolt and Frozen Armor on the real d2d build (mana payment timing, action-frame tick, armor group) and private fix branches; nothing pushed upstream
 - b2on181: batch 2 re-based on PR 181 in the private fork, results in docs/research/b2-on181.md
 - docs: Gate 1 soak run 20261103-0338: NOT PASSED (True XP/h at or above the d2d baseline; Belt) (docs/soaks/gate1-20261103-0338.md).

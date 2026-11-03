@@ -116,3 +116,6 @@ openspec/changes/gate1run-20261102/**  gaterun  gate1run-20261102
 docs/research/pr-guardfix-body.md  finala  finala
 docs/research/pr-batch2-A-final-body.md  finala  finala
 openspec/changes/finala/**  finala  finala
+docs/research/durability-trace.md  chuckado  paldurtrace
+tools/emu/verify_paldur.py  chuckado  paldurtrace
+openspec/changes/paldurtrace/**  chuckado  paldurtrace
