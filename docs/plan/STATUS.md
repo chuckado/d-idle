@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- fc9c8079 11-02 20:08 `merge origin/main into abtool` (abtool)
 - 998c07ae 11-02 20:01 `Merge agent/seedspawn: seedspawn: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seedspawn)
 - e8ba69f3 11-02 20:01 `merge origin/main into seedspawn` (seedspawn)
 - c34baafc 11-02 19:54 `Merge agent/seeddist: seeddist: seeding check, A:B tool or coverage result (docs, emulator and baseline tools only)` (seeddist)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 0489b0f3 11-02 18:07 `Merge agent/verifyskamazon: verifyskamazon: coverage-gap or verification result (docs and emulator tools only)` (verifyskamazon)
 - 3922d8ee 11-02 18:07 `merge origin/main into verifyskamazon` (verifyskamazon)
 - 975bfbdf 11-02 18:00 `Merge agent/covmissiles: covmissiles: coverage-gap or verification result (docs and emulator tools only)` (covmissiles)
-- a46d241c 11-02 17:59 `merge origin/main into covmissiles` (covmissiles)
 <!-- statusgen:end -->
