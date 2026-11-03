@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change xphshort: python3 tools/baseline/tests/test_xph_budget.py; changecheck 0 new warnings; leakcheck 0 hits
 
 ### Recent merges
+- 5adf02d3 11-03 10:07 `merge origin/main into xphshort` (xphshort)
 - 5e976d23 11-03 10:02 `Merge agent/mergeq: MERGEQ: merge-lines linter wired into tools/ci/check.sh (public part of the new merge queue)` (mergeq)
 - 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
 - 9c9b5471 11-03 09:50 `Merge agent/codefix: CODEFIX: review findings F1-F5 and F8 fixed (NearTown list, LastTripGold basis, mana reserve, chain walk scope, recovery floor, cut-cast memory)` (codefix)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - 1c07102c 11-03 09:39 `merge origin/main into verifyb2` (verifyb2)
 - 18d2c1a0 11-03 09:34 `Merge agent/covpal: covpal: docs and emulator tools (analysis, verification, coverage; docs only)` (covpal)
 - cc21b3f0 11-03 09:34 `merge origin/main into codefix` (codefix)
-- c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
 <!-- statusgen:end -->
