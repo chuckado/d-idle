@@ -129,6 +129,7 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - change wpcooldown: go test -p 1 ./internal/nav ./internal/env; changecheck -cli 0 warnings; leakcheck -mode fail 0
 
 ### Recent merges
+- 8d87dc1b 11-03 10:01 `merge origin/main into mergeq` (mergeq)
 - 9c9b5471 11-03 09:50 `Merge agent/codefix: CODEFIX: review findings F1-F5 and F8 fixed (NearTown list, LastTripGold basis, mana reserve, chain walk scope, recovery floor, cut-cast memory)` (codefix)
 - a39b6581 11-03 09:49 `merge origin/main into codefix` (codefix)
 - f9aa4521 11-03 09:40 `Merge agent/verifyb2: verifyb2: docs and emulator tools (analysis, verification, coverage; docs only)` (verifyb2)
@@ -138,5 +139,4 @@ One page for the user. Decisions: [../decisions.md](../decisions.md) and [../adr
 - cc21b3f0 11-03 09:34 `merge origin/main into codefix` (codefix)
 - c3e0a074 11-03 09:26 `merge origin/main into covpal` (covpal)
 - ab3a9747 11-03 09:25 `Merge agent/areareach: AREAREACH: leveling planner walks up to 5 hops and activates waypoints on the way (Dark Wood and Black Marsh were refused 28 times in run 0628); fallback ranked by XP per kill` (areareach)
-- 22378e28 11-03 09:24 `merge origin/main into areareach` (areareach)
 <!-- statusgen:end -->
