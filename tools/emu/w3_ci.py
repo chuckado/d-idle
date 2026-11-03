@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""verifydmg2: CI parity and suites for DMGROLL r2, read-only on the author's tree and build.
-1. the author's tree (wt-mdmg-r2) equals this verifier's export of b9ecb415 (t_r2, v2_trees.sh) for components/ and tests/;
+"""verifydmg3: CI parity and suites for DMGROLL r3, read-only on the author's tree and build.
+1. the author's tree (wt-mdmg-r3) equals this verifier's export of 2df7d1eb (t_r3, w3_git.sh) for components/ and tests/;
 2. g++ and clang++ -fsyntax-only with the CI flags plus -Wshadow -Wrange-loop-construct -Wconversion on the changed TUs,
-   from the build's compile_commands.json; diagnostics on lines the commit added are counted (added lines from r2.diff);
+   from the build's compile_commands.json; diagnostics on lines the commit added are counted (added lines from r3.diff);
 3. the suites of that build, run in $D2_SCRATCH, rc and last line.
 
-    run-on-worker.sh --ttl 3000 v2_ci.py [syntax] [suites]
+    run-on-worker.sh --ttl 3000 w3_ci.py [syntax] [suites]
 """
 import json
 import os
@@ -14,10 +14,10 @@ import subprocess
 import sys
 
 HOME = os.path.expanduser("~")
-TREE = f"{HOME}/d2d-lab/wt-mdmg-r2"
-BUILD = f"{HOME}/d2d-lab/build-mdr2"
+TREE = f"{HOME}/d2d-lab/wt-mdmg-r3"
+BUILD = f"{HOME}/d2d-lab/build-mdr3"
 S = os.environ["D2_SCRATCH"]
-TUS = ["components/game/fight/pets.cpp", "components/game/fight/states.cpp", "components/game/fight/tick.cpp",
+TUS = ["components/game/ai.cpp", "components/game/fight/missiles.cpp", "components/game/fight/pets.cpp", "components/game/fight/states.cpp", "components/game/fight/tick.cpp",
        "tests/game/test_game.cpp", "tests/test_combat.cpp", "components/game/fight/strike.cpp"]
 FLAGS = ["-Wall", "-Wextra", "-Wpedantic", "-Wno-missing-field-initializers", "-Werror", "-Wshadow", "-Wrange-loop-construct",
          "-Wconversion", "-fsyntax-only"]
@@ -27,7 +27,7 @@ SUITES = ["test_rules", "test_game_rules", "test_monsters", "test_monster_thinks
 
 def added_lines():
     out, f, ln = {}, None, 0
-    for line in open(f"{S}/r2.diff"):
+    for line in open(f"{S}/r3.diff"):
         if line.startswith("+++ b/"):
             f = line[6:].strip()
             out[f] = set()
@@ -42,9 +42,9 @@ def added_lines():
 
 
 def same_tree():
-    r = subprocess.run(["diff", "-rq", f"{TREE}/components", f"{S}/t_r2/components"], capture_output=True, text=True)
-    t = subprocess.run(["diff", "-rq", f"{TREE}/tests", f"{S}/t_r2/tests"], capture_output=True, text=True)
-    print(f"tree vs export of b9ecb415: components rc={r.returncode} lines={len(r.stdout.splitlines())}, tests rc={t.returncode} lines={len(t.stdout.splitlines())}")
+    r = subprocess.run(["diff", "-rq", f"{TREE}/components", f"{S}/t_r3/components"], capture_output=True, text=True)
+    t = subprocess.run(["diff", "-rq", f"{TREE}/tests", f"{S}/t_r3/tests"], capture_output=True, text=True)
+    print(f"tree vs export of 2df7d1eb: components rc={r.returncode} lines={len(r.stdout.splitlines())}, tests rc={t.returncode} lines={len(t.stdout.splitlines())}")
     print((r.stdout + t.stdout)[:2000])
 
 
