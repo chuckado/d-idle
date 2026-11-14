@@ -162,7 +162,7 @@
   .cv-store { flex: none; display: grid; grid-template-columns: calc(6 * var(--u)) calc(4 * var(--u)); grid-template-rows: calc(8 * var(--u)); min-inline-size: 0; }
   .cv-side { container: side / size; box-sizing: border-box; min-inline-size: 0; min-block-size: 0; display: flex; flex-direction: column; gap: 4px; padding-inline-start: 6px; overflow: hidden; }
   .cv-side > [data-cv=belt] { inline-size: calc(4 * var(--u) - 6px); --cell-size: calc((4 * var(--u) - 6px) / 4); grid-auto-rows: var(--cell-size); grid-template-columns: repeat(4, var(--cell-size)); }
-  .cv-sel { flex: 1 1 0; min-block-size: 0; box-sizing: border-box; padding: 5px 6px; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); display: flex; flex-direction: column; gap: 3px; overflow: hidden; container: sel / size; }
+  .cv-sel { flex: 1 1 0; min-block-size: 0; box-sizing: border-box; padding: 5px 6px; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); display: flex; flex-direction: column; gap: 2px; overflow: hidden; container: sel / size; }
   .cv-sel h3 { flex: none; margin: 0; font: 600 var(--d-fs-1)/1.2 var(--d-font-display); color: var(--q, var(--d-text)); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cv-sel p { flex: none; margin: 0; font-size: var(--d-fs-0); line-height: 1.25; color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .cv-sel p[data-tone="bad"] { color: var(--d-bad); }
@@ -170,7 +170,7 @@
   .cv-sel p[data-tone="prop"] { color: var(--d-q-magic, var(--d-text-2)); }
   .cv-sel .cv-why { flex: none; display: flex; flex-direction: column; gap: 1px; }
   .cv-sel .cv-props { flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
-  .cv-sel .cv-acts { flex: none; margin-block-start: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 24px; gap: 3px; align-content: start; overflow: hidden; }
+  .cv-sel .cv-acts { flex: none; margin-block-start: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 22px; gap: 2px; align-content: start; overflow: hidden; }
   .cv-sel .cv-acts button { min-inline-size: 0; padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; font-size: clamp(9.5px, calc(var(--u) * .17), 11.5px); color: var(--d-text);
     background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); cursor: pointer; }
   .cv-sel .cv-acts button[data-primary] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
