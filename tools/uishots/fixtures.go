@@ -70,7 +70,11 @@ func fxLayout(name string) map[string]any {
 	rail := []string{"fx-needs", "fx-orders", "fx-map"}
 	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"fx-area"}}
 	tabs := map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}}
-	if name != "" {
+	if name == "orders" { // the demo with the real Orders panel (fed by commandsFixture) in place of its stand-in
+		rail = []string{"fx-needs", "orders", "fx-map"}
+		wide["top"] = []string{"fx-needs", "orders"}
+		tabs["Orders"] = []string{"fx-needs", "orders"}
+	} else if name != "" {
 		one := "fx-" + name
 		rail = []string{one}
 		wide = map[string]any{"top": []string{one}, "left": []string{}, "right": []string{}}
@@ -109,7 +113,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			if name == "demo" {
 				name = ""
 			}
-			if name != "" && byID["fx-"+name].id == "" {
+			if name != "" && name != "orders" && byID["fx-"+name].id == "" {
 				http.NotFound(w, r)
 				return
 			}

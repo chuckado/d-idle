@@ -43,6 +43,9 @@ if [ "$fit" = 1 ]; then
 	pages="cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 orders-eight watch?layout=cockpit&theme=dark&cmd=eight
+orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
+orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=3&cmd=eight
+orders-rail-all watch?layout=cockpit-orders&theme=dark&needs=0&cmd=cancel-all
 orders-empty watch?layout=cockpit&theme=dark&cmd=empty
 orders-safety watch?layout=cockpit&theme=dark&cmd=safety
 orders-blocked watch?layout=cockpit&theme=dark&cmd=blocked
@@ -92,6 +95,12 @@ watch-1920-command 1920 2600 watch?theme=dark&layout=command
 watch-1920-edit 1920 2400 watch?theme=dark&edit=1
 watch-1920-editdrag 1920 2400 watch?theme=dark&edit=1&drag=map:1:5
 watch-1280-edit 1280 2400 watch?theme=dark&edit=1
+cockpit-orders-1366 1366 768 watch?theme=dark&layout=cockpit-orders&needs=2
+cockpit-orders-1440 1440 900 watch?theme=dark&layout=cockpit-orders&needs=2
+cockpit-orders-1920 1920 1080 watch?theme=dark&layout=cockpit-orders&needs=2
+cockpit-orders-1280 1280 620 watch?theme=dark&layout=cockpit-orders&needs=2&cmd=eight
+cockpit-orders-390 390 844 watch?theme=dark&layout=cockpit-orders&needs=2
+cockpit-orders-1366-eight 1366 768 watch?theme=dark&layout=cockpit-orders&needs=3&cmd=eight
 overlay-1920-dark 1920 160 watch?theme=dark&mode=overlay
 inventory-390-dark 390 844 watch/inventory?theme=dark
 inventory-390full-dark 390 2400 watch/inventory?theme=dark
