@@ -605,7 +605,9 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/bodies/`
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
+- [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 
@@ -620,13 +622,16 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
+- [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length, and a hit never restarts a get-hit" (status: r1, **ready for the independent verifier, with one open item: the game-side emulator run** (card decomp21,...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
+- [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r2, **ready for the independent verifier** (card decomp21, TASK-440, 2026-11-14); not posted, needs the...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
 
+- [offline-decomp21-2026-11-14.md](upstream/offline-decomp21-2026-11-14.md): Offline upstream work, 2026-11-14 (card decomp21, TASK-440, Sonnet) (status: current. Two pipeline items taken to "ready for the verifier" while the worker host was off limits (no...)
 - [pipeline-2026-11-14.md](upstream/pipeline-2026-11-14.md): Upstream PR pipeline: from finding to merged PR (2026-11-14) (status: current, 2026-11-14 (card TASK-422, agent prpipeline, Sonnet). User instruction 2026-11-14: run every...)
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
