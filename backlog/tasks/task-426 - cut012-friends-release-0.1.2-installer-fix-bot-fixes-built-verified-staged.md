@@ -12,6 +12,7 @@ dependencies: []
 priority: medium
 ordinal: 255000
 card: "cut012"
+result: "Installer fix (quoted .env path, Diablo II subfolder detection, README checksum line) tested offline. 0.1.2 pack (sha256 7041e2783b1c01b9fd3508fdd7160d23d15f758d7f86ee67974701ab73606419), signed set and feed tree staged on the head box, checklist 7/7, NOT published. Live drills (zip target install, 20 minute health run, update 0.1.1 to 0.1.2, rollback) NOT run: they need docker with real game files and the worker host is in use. Details docs/releases/0.1.2.md."
 owns:
   - "docs/releases/0.1.2.md"
   - "docs/friend-checklist-0.1.2.md"
@@ -35,7 +36,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Installer quotes the game path, finds the Diablo II subfolder, README names the tarball checksum
+- [x] #1 Installer quotes the game path, finds the Diablo II subfolder, README names the tarball checksum
 - [ ] #2 Image, pack, signed set 0.1.2 built and staged; checklist 7/7; drills and 20 minute health run
 - [ ] #3 docs/releases/0.1.2.md written
 <!-- AC:END -->
