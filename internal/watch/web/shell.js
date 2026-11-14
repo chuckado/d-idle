@@ -331,7 +331,8 @@ async function getJSON(url) {
 const presetFile = async (name) => asLayout((await getJSON('/watch/layouts/' + name + '.json') || {}).body);
 async function newHero() {
   const o = await getJSON('/api/onboarding');
-  return !!(o && o.body && o.body.showWelcome === true);
+  // new = the welcome card is up and no checklist step has ticked; an old hero who never dismissed it is not new
+  return !!(o && o.body && o.body.showWelcome === true && !(o.body.steps || []).some((x) => x.done));
 }
 
 // -> { layout, preset, origin: url|choice|stored|default, hasStored } or null (no layout: the manifest places)
@@ -343,7 +344,7 @@ async function loadLayout() {
     if (l) return { layout: l, preset: PRESETS.includes(want) ? want : '', origin: 'url', hasStored: false };
   }
   const srv = await getJSON('/api/layout');
-  const hasStored = !!srv && srv.source === 'stored';
+  const hasStored = !!srv && srv.source !== 'default'; // a missing header (a proxy) reads as stored: never replace a stored layout by guess
   const choice = pref(PREF), base = pref(BASE);
   if (PRESETS.includes(choice)) {
     const l = await presetFile(choice);
@@ -352,7 +353,7 @@ async function loadLayout() {
   if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
   // no layout of the hero's own
   let name = 'standard', origin = 'default'; // origin 'default' is the only one that shows the layout note
-  if (choice === 'saved' && PRESETS.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) { name = 'simple'; origin = 'newhero'; }
+  if (choice === 'saved' && PRESETS.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) { name = 'simple'; origin = 'newhero'; pref(PREF, 'simple'); } // pinned: the page does not move to Standard by itself
   let l = asLayout(srv && srv.body); // web/layout.json is the Standard file
   if (name !== 'standard' || !l) l = await presetFile(name) || l;
   return l ? { layout: l, preset: name, origin, hasStored: false } : null;
@@ -529,7 +530,7 @@ async function start() {
   } catch (e) { return; }
   // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
   const sel = layoutReq ? await layoutReq : null;
-  if (layoutReq) list = selectPanels(list, sel && sel.layout);
+  if (layoutReq) list = selectPanels(list, sel && sel.layout, html.dataset.mode);
   const sched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');

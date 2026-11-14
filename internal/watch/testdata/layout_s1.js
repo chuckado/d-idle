@@ -140,4 +140,22 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
   const again = L.plan(out, 1920, '', shell, targets);
   eq(cells(again, true), cells(p, true), 'the saved file plans to the same cells');
 }
+// 5. R1: a stand-in the user switched off stays off after saving and loading again
+{
+  const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
+  const targets = today(layout), saved = JSON.parse(JSON.stringify(layout));
+  for (const bp of Object.values(saved.breakpoints)) { const e = bp.panels.find((x) => x.id === 'needs-you'); e.hidden = true; }
+  const p = L.plan(saved, 1920, '', shell, targets, true);
+  assert.ok(!p.items.some((i) => i.id === 'gear' && !i.hidden), 'a switched-off stand-in is not shown');
+  assert.ok(p.off.includes('gear'), 'it is switched off');
+  const out = L.withShadows(Object.assign({}, saved, { breakpoints: { wide: { cols: 12, panels: L.toPanels(p.items, {}) } } }), saved);
+  const e = out.breakpoints.wide.panels.find((x) => x.id === 'needs-you');
+  assert.ok(e && e.hidden && e.fallback === 'gear', 'saved as the hidden tile with its fallback');
+  assert.ok(!L.plan(out, 1920, '', shell, targets).items.some((i) => i.id === 'gear'), 'still off after a reload');
+}
+// 6. R2: the OBS strip (overlay mode) keeps the page's own status band, whatever the layout lists
+{
+  const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
+  eq(L.selectPanels(manifests, layout, 'overlay').filter((m) => m.band === 'status').map((m) => m.id).sort(), manifests.filter((m) => m.band === 'status').map((m) => m.id).sort(), 'overlay band');
+}
 console.log('ok');

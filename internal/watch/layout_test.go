@@ -248,6 +248,13 @@ func TestLayoutJSPatterns(t *testing.T) {
 			t.Errorf("shell.js lacks %s", want)
 		}
 	}
+	// which layout loads (S1 review R2 to R4): a missing X-Layout-Source header reads as stored, a new hero has ticked nothing and
+	// is pinned to Simple, the overlay strip ignores the layout's status list
+	for _, want := range []string{"srv.source !== 'default'", "!(o.body.steps || []).some((x) => x.done)", "pref(PREF, 'simple')", "selectPanels(list, sel && sel.layout, html.dataset.mode)"} {
+		if !bytes.Contains(shell, []byte(want)) {
+			t.Errorf("shell.js lacks %s", want)
+		}
+	}
 	bad := regexp.MustCompile(`createElement\(\s*['"]style['"]|setAttribute\(\s*['"]style['"]|insertAdjacentHTML|innerHTML|outerHTML|cssText|<style|\sstyle\s*=`)
 	own := regexp.MustCompile(`\b(setInterval|setTimeout|fetch|EventSource|XMLHttpRequest)\s*\(`)
 	focus := regexp.MustCompile(`\.focus\(([^)]*)\)`)

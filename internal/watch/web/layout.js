@@ -76,7 +76,7 @@ export function plan(layout, width, mode, conf, targets, edit) {
     const fb = !res(e.id) && e.fallback ? res(e.fallback) : '';
     if (!fb) return e;
     forced.add(fb);
-    return Object.assign({}, e, { id: fb, hidden: false, via: e.id });
+    return Object.assign({}, e, { id: fb, via: e.id }); // the entry's own hidden stays: a stand-in the user switched off stays off
   });
   for (const e of entries) {
     if (!e.via && forced.has(res(e.id))) continue; // the entry that was hidden stays hidden while it stands in
@@ -174,9 +174,9 @@ export function statusIds(layout, list) {
 }
 
 // selectPanels(list, layout): the manifests the shell mounts. An optIn panel only when the layout in force names it;
-// with a `status` key, only the status-band panels it chooses. Without a layout nothing optIn is mounted.
-export function selectPanels(list, layout) {
-  const names = named(layout), status = statusIds(layout, list);
+// with a `status` key (not in overlay mode), only the status-band panels it chooses. Without a layout nothing optIn is mounted.
+export function selectPanels(list, layout, mode) {
+  const names = named(layout), status = mode === 'overlay' ? null : statusIds(layout, list); // the OBS strip keeps the page's own band
   return list.filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
 }
 

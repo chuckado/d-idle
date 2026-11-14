@@ -581,9 +581,26 @@ func checkFallbacks(m watch.LayoutManifest, c watch.LayoutConf, panels map[strin
 		}
 	}
 	for name, bp := range m.Breakpoints {
+		own := map[string]bool{}
+		for _, p := range bp.Panels {
+			own[p.ID] = p.Hidden
+		}
+		used := map[string]string{}
 		for _, p := range bp.Panels {
 			if err := fb(name, p.ID, p.Fallback); err != nil {
 				return err
+			}
+			if p.Fallback == "" {
+				continue
+			}
+			// one tile stands in for one entry (a second one plans to nothing and is lost when the layout is saved), and the
+			// target's own entry in the same breakpoint must be switched off, else it would leave its own cell
+			if other, dup := used[p.Fallback]; dup {
+				return fmt.Errorf("layout %s: %q and %q both fall back to %q", name, other, p.ID, p.Fallback)
+			}
+			used[p.Fallback] = p.ID
+			if h, named := own[p.Fallback]; named && !h {
+				return fmt.Errorf("layout %s: the target %q of the fallback of %q is also placed in its own cell (it must be hidden there)", name, p.Fallback, p.ID)
 			}
 		}
 	}
