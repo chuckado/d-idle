@@ -8,6 +8,7 @@ const (
 	statMinDmg = 21
 	statMaxDmg = 22
 	statDmgPct = 25
+	statBlock  = 20 // gear block chance only: the class and shield base is not in the dump (U)
 )
 
 // gearStats turns the lab2-stats additions of dump stats ("gear" sums per stat and param, "weapons" base damage per
@@ -31,7 +32,7 @@ func gearStats(st obj) map[int]int {
 		n, _ := g.int("sum")
 		sum[id] += n
 	}
-	out := map[int]int{statToHit: sum[statToHit], statDmgPct: sum[statDmgPct]}
+	out := map[int]int{statToHit: sum[statToHit], statDmgPct: sum[statDmgPct], statBlock: sum[statBlock]}
 	for _, w := range st.list("weapons") {
 		if slot, _ := w.int("slot"); slot != d2.BodyRHand {
 			continue
