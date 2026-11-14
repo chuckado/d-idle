@@ -16,7 +16,7 @@ owns:
   - "docs/upstream/verifier2-p03-2026-11-14.md"
 exclusive: []
 contracts: []
-result: "in progress"
+result: "partial, not verified: run stopped while the head build was running on the NAS builder; no verdict doc yet"
 ---
 
 ## Description
