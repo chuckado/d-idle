@@ -242,3 +242,28 @@ func TestGlancePanelsFollowTheContract(t *testing.T) {
 		}
 	}
 }
+
+// The survival block rides along as "survival" and speaks in words; a block with a number for the margin is dropped.
+func TestGlanceSurvival(t *testing.T) {
+	r := glanceRig(t, "paladin", "daily")
+	h := r.sim.Hub
+	if v := h.Glance(); v.Survival != nil {
+		t.Errorf("survival without a source: %s", v.Survival)
+	}
+	set := func(js string) {
+		h.SetGlanceSources(GlanceSources{Survival: func() json.RawMessage { return json.RawMessage(js) }})
+	}
+	set(`{"schema":"x","zone":{"id":4,"name":"Stony Field","margin":"too hard","dial":"balanced","why":{"code":"c","text":"best pay among safe zones"}}}`)
+	v := h.Glance()
+	if v.Survival == nil || v.Sentence.Margin != "too hard" {
+		t.Errorf("survival %s margin %q", v.Survival, v.Sentence.Margin)
+	}
+	set(`{"zone":{"margin":1.9}}`)
+	if v := h.Glance(); v.Survival != nil {
+		t.Errorf("a numeric margin got through: %s", v.Survival)
+	}
+	set(`not json`)
+	if v := h.Glance(); v.Survival != nil {
+		t.Error("garbage got through")
+	}
+}

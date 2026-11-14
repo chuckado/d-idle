@@ -40,6 +40,9 @@ type GlanceView struct {
 	Health   GlanceHealth   `json:"health"`
 	Progress GlanceProgress `json:"progress"`
 	Journey  *GlanceJourney `json:"journey,omitempty"`
+	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
+	// while no source is bound (an old bot, S-C not merged).
+	Survival json.RawMessage `json:"survival,omitempty"`
 }
 
 // GlanceSentence is the line of the band: a state chip (Word), the Place, and the Reason, with the popover's content.
@@ -138,6 +141,7 @@ type GlanceSources struct {
 	Gear     func() (GlanceLight, bool)
 	Merc     func() (GlanceLight, bool)
 	Supplies func() (GlanceLight, bool)
+	Survival func() json.RawMessage            // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
 	Voice    func() string                     // the hero's latest voice line
 	Paused   func() (paused bool, text string) // a pause the player asked for (card B1)
 }
@@ -216,6 +220,9 @@ func (h *Hub) Glance() GlanceView {
 
 	v := GlanceView{Schema: glanceSchema, Seq: up.Seq, Needs: []GlanceNeed{}}
 	v.Sentence = glanceSentence(hv, up, src)
+	if src.Survival != nil {
+		v.Survival = h.glanceSurvival(&v.Sentence, hv, src.Survival())
+	}
 	if src.Needs != nil {
 		for _, n := range src.Needs() {
 			if len(v.Needs) < glanceMaxNeed {
@@ -430,4 +437,35 @@ func cleanJourney(j GlanceJourney) GlanceJourney {
 
 func (h *Hub) glanceHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) { writeJSON(w, 200, h.Glance()) }
+}
+
+// glanceSurvival embeds the survival block and lets it speak in the sentence: its margin word replaces the readiness
+// one and its zone reason fills an empty reason. A block that does not parse, or whose margin is not one of the three
+// words, is dropped whole: a number never reaches the page.
+func (h *Hub) glanceSurvival(s *GlanceSentence, hv HeroView, raw json.RawMessage) json.RawMessage {
+	if len(raw) == 0 {
+		return nil
+	}
+	var b struct {
+		Zone struct {
+			Margin string `json:"margin"`
+			Why    struct {
+				Text string `json:"text"`
+			} `json:"why"`
+		} `json:"zone"`
+	}
+	if json.Unmarshal(raw, &b) != nil {
+		return nil
+	}
+	switch b.Zone.Margin {
+	case "safe", "risky", "too hard":
+		s.Margin = b.Zone.Margin
+	case "":
+	default:
+		return nil
+	}
+	if hv.Goal == nil && b.Zone.Why.Text != "" && hv.Why.Now == "" {
+		s.Reason = safeText(b.Zone.Why.Text, glanceTextMax)
+	}
+	return raw
 }
