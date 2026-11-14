@@ -74,6 +74,7 @@ Six renders were made; each folder under [iterations/](iterations/) has the page
 | it4 | Character: mercenary sheet under his doll, hero sheet as one eight-column block, loot rules and item actions side by side under it, town errands (gold, scrolls, Cain) beside the stash | Tooltip good. The mercenary sheet was squeezed beside the doll (unreadable); the bottom lists left a 110 px empty band; at 1920 the area map drawing is tiny in its box and zone names are cut |
 | it5 | Mercenary sheet as three columns under the doll, list rows share the remaining height, wider act map at 1920 | 1366x768 and 1440x900 good. Phone: the status sentence was pushed out of the band; the storage side column is too narrow on a phone |
 | final | Phone band fixed, phone storage stacked, the selected box shows the item's requirements and comparison | See "still weak" below |
+| fix (after the user's look at 1914x930) | The zone menu moved off the map (beside it on a wide rail, above it otherwise), the area map letterboxed, four browser-window sizes added to the renders, short-window rules for the strip, the zone rows and the character side column | Watch: all ten zone rows visible with the menu open at 1914x930, 1440x900 and 1280x620. Character fits all seven desktop sizes; at 1536x730 and 1280x620 the column beside the stash shows the selected item's name and buttons only and some labels are cut |
 
 ### Still weak (V on the final renders)
 

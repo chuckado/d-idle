@@ -61,7 +61,7 @@ svg .ht{fill:var(--danger)}
 <p class="lede">The first attempt rearranged cards on a scrolling grid. You said it still has dead space, does not fit one screen, and the inventory is a mess. This round starts from a height budget: both screens are frames that fill the window, and every picture below is a render at an exact window size.</p>
 
 <div class="crit">
-  <div><b>Fits one screen</b>No scrolling at 1440 x 900, 1920 x 1080 and 1366 x 768. The phone is a designed arrangement, not an overflow.</div>
+  <div><b>Fits one screen</b>No scrolling at 1920 x 1080, 1440 x 900, 1366 x 768 and at browser-window sizes down to 1280 x 620. The phone is a designed arrangement, not an overflow.</div>
   <div><b>Zero dead space</b>Tiles tile the frame exactly. A region with nothing to say gives its room to its neighbour.</div>
   <div><b>One character canvas</b>Hero and mercenary in one frame, storage as one connected area, a real tooltip, a right-click menu.</div>
 </div>
@@ -100,6 +100,9 @@ svg .ht{fill:var(--danger)}
   <li>Hero stats, Why, Tally, Thoughts, Gear condition, the logs and the onboarding card are one click away, not tiles.</li>
 </ul>
 
+<h3>After your screenshot: the zone menu no longer covers the map</h3>
+<div class="ba"><figure><img alt="Render at 1914 x 930 with the Stony Field menu open beside the map" src="renders/watch-menu.png"><figcaption>1914 x 930 (a browser window on a 1080p screen), Stony Field picked. The menu opens beside the map on a wide window and above it on a narrower one; every zone stays visible and the picked zone is outlined.</figcaption></figure>
+<div><ul><li><b>It was the menu, not the layout:</b> the zone menu opened as a sheet over the bottom rows of the map. It now never sits on a zone button.</li><li><b>The area map was cropped</b> to fill its tile. It is now scaled to fit, whole.</li><li><b>Browser-window sizes are part of the check now:</b> 1914 x 930, 1904 x 1000, 1536 x 730 and 1280 x 620, next to the full-screen sizes. On short windows the zone rows drop to one line and the strip gets shorter, so all zones always show.</li></ul></div></div>
 <h3>Try it at an exact window size</h3>
 <div class="seg" id="wlive"></div>
 <div class="live" id="wbox"><iframe id="wframe" title="Watch cockpit mockup" src="watch-app.html"></iframe></div>
@@ -155,16 +158,16 @@ svg .ht{fill:var(--danger)}
 <script>
 window.NOTES={w:["First cockpit: it fits and tiles, but text is cut in the strip and on the map, and the map's corners read as holes.","Strip laid out top-down, level range moved under each zone name, legend and act switch in the map's corners.","Final: phone band fixed, wider map at 1920, small fixes at 1366."],
  c:["Three zones: the mercenary is on the far side of the storage, away from the hero. Wrong.","Hero and mercenary in one frame; but empty space under his doll and a half-empty box beside the stash.","Final: his sheet under his doll, loot rules and item actions under the hero's sheet, town errands beside the stash, the selected box shows requirements."]};
-window.WEAK=["The act map's own shape leaves some grid cells unused in its left and right columns.","Character at 1920 x 1080: about 190 by 300 px beside the mercenary's doll is unused.","Character at 1366 x 768: the column beside the stash is narrow; two button labels are cut.","Doll slots are labelled boxes here; spacing has not been judged with your item art.","At 1440 x 900 and below the area map is a switch on the map tile; only 1920 wide shows both maps.","On a phone, Progress, Journey and Health are one tab away.","Static mockups with fake data: nothing here has run in the real shell. The build gets an automatic fit check at these window sizes.","The cockpit needs a new layout kind in the shell; on it the tile editor swaps and resizes slots instead of placing freely."];
+window.WEAK=["The act map's own shape leaves some grid cells unused in its left and right columns.","Character at 1920 x 1080: about 190 by 300 px beside the mercenary's doll is unused.","Character on short windows (1536 x 730, 1280 x 620): the column beside the stash is narrow; some button labels are cut and the selected item shows its name and buttons only.","Doll slots are labelled boxes here; spacing has not been judged with your item art.","At 1440 x 900 and below the area map is a switch on the map tile; only 1920 wide shows both maps.","On a phone, Progress, Journey and Health are one tab away.","Static mockups with fake data: nothing here has run in the real shell. The build gets an automatic fit check at these window sizes.","The cockpit needs a new layout kind in the shell; on it the tile editor swaps and resizes slots instead of placing freely."];
 </script>
 <script>
 (function(){
 var $=function(i){return document.getElementById(i)};
-var SIZES=[[1920,1080],[1440,900],[1366,768],[390,844]];
+var SIZES=[[1914,930],[1920,1080],[1536,730],[1440,900],[1366,768],[1280,620],[390,844]];
 function segs(box,items,cur,fn){box.textContent='';items.forEach(function(it){var b=document.createElement('button');b.type='button';b.textContent=it[0]+' x '+it[1];b.setAttribute('aria-pressed',String(cur()===it));b.addEventListener('click',function(){fn(it)});box.appendChild(b)})}
 function after(prefix,img,label,box){var cur=SIZES[0];function draw(){img.src='renders/'+prefix+'-'+cur[0]+'x'+cur[1]+'.png';label.textContent=cur[0]+' x '+cur[1];segs(box,SIZES,function(){return cur},function(s){cur=s;draw()})}draw()}
 after('watch',$('wafter'),$('wsize'),$('wsizes'));after('character',$('cafter'),$('csize'),$('csizes'));
-function live(frame,box,ctl){var cur=SIZES[1];function fit(){var w=box.clientWidth,s=Math.min(1,w/cur[0]);frame.style.width=cur[0]+'px';frame.style.height=cur[1]+'px';frame.style.transform='scale('+s+')';box.style.height=Math.round(cur[1]*s)+'px';box.style.width=cur[0]*s<w?Math.round(cur[0]*s)+'px':''}
+function live(frame,box,ctl){var cur=SIZES[3];function fit(){var w=box.clientWidth,s=Math.min(1,w/cur[0]);frame.style.width=cur[0]+'px';frame.style.height=cur[1]+'px';frame.style.transform='scale('+s+')';box.style.height=Math.round(cur[1]*s)+'px';box.style.width=cur[0]*s<w?Math.round(cur[0]*s)+'px':''}
  function draw(){segs(ctl,SIZES,function(){return cur},function(s){cur=s;draw()});fit()}draw();addEventListener('resize',fit)}
 live($('wframe'),$('wbox'),$('wlive'));live($('cframe'),$('cbox'),$('clive'));
 var NOTES=window.NOTES||{w:['','',''],c:['','','']};

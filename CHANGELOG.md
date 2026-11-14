@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into buildhosts3 <!--sg:agent/buildhosts3-->
+- uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated <!--sg:agent/uidesign4-->
 - uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card <!--sg:agent/uidesign3-->
 - Merge branch 'main' into TASK-427 <!--sg:agent/uib8-->
 - Merge branch 'main' into TASK-424 <!--sg:agent/uis1-->
