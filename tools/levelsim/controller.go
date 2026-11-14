@@ -351,3 +351,13 @@ func (r *CtlReport) Text() string {
 	b.WriteString("\n")
 	return b.String()
 }
+
+// TSV is one tab-separated line per decision (the uncollapsed rows), for the calibration report.
+func (r *CtlReport) TSV() string {
+	var b strings.Builder
+	b.WriteString("time\tkind\tclvl\tcur\tplanner\tshadow\tword\twhy\thole\tfresh\tmercdead\trevive\tchick\tdeaths\tmercdied\n")
+	for _, x := range r.Rows {
+		fmt.Fprintf(&b, "%s\t%s\t%d\t%d\t%d\t%d\t%s\t%s\t%t\t%t\t%t\t%s\t%d\t%d\t%d\n", x.T.Format("15:04:05"), x.Kind, x.Clvl, x.Cur, x.Planner, x.Shadow, x.Word, x.Code, x.Hole, x.Fresh, x.MercDead, x.Revive, x.Chick, x.Deaths, x.MercDied)
+	}
+	return b.String()
+}

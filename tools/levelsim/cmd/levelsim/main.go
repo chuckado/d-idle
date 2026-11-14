@@ -278,5 +278,8 @@ func runController(log, install, arch, diff, dial string) error {
 		return err
 	}
 	fmt.Print(cr.Text())
+	if os.Getenv("LEVELSIM_ROWS") != "" {
+		fmt.Print("\n== rows ==\n", cr.TSV())
+	}
 	return nil
 }
