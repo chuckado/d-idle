@@ -145,8 +145,9 @@
     [data-cv=msheet] { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.5rem, 32%)), 1fr)); block-size: calc(5 * var(--mu)); }
   }
 
-  .cv-log { flex: 1; min-block-size: 0; display: flex; flex-direction: column; margin-block-start: 6px; container: clog / size; }
-  @container clog (max-height: 3.6rem) { .cv-log > * { display: none; } } /* no room for a heading and one row: the list gives way */
+  .cv-log { flex: 1; min-block-size: 0; display: flex; flex-direction: column; container: clog / size; }
+  .cv-log > h2 { margin-block-start: 6px; }
+  @container clog (max-height: 3.6rem) { .cv .cv-log > * { display: none; } } /* no room for a heading and one row: the list gives way */
   .cv-log > [data-cv=queue] { flex: 1; min-block-size: 0; overflow: hidden; }
   .cv-log .d-list { margin: 0; padding: 0; list-style: none; }
   .cv-log .d-list > li { display: flex; align-items: baseline; gap: var(--d-sp-3); min-block-size: 30px; padding: 3px 2px; border-block-start: var(--d-bw) solid var(--d-line); font-size: var(--d-fs-1); overflow: hidden; }
