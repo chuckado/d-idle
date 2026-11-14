@@ -108,6 +108,18 @@
   .d-editbar .what { font-weight: 650; }
   .d-editbar .keys { color: var(--d-text-2); margin-inline-end: auto; }
 
+  /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
+  .d-menu { position: relative; }
+  .d-menu-pop { position: absolute; inset-block-start: 100%; inset-inline-end: 0; z-index: var(--d-z-sheet); display: grid; gap: var(--d-sp-1); min-inline-size: 14rem; padding: var(--d-sp-2);
+    background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-menu-pop[hidden] { display: none; }
+  .d-menu-pop > .d-btn { inline-size: 100%; }
+  .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
+  .d-menu-pop .d-btn[aria-checked="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
+  .d-layoutnote { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-2) var(--d-sp-3); margin-inline: var(--d-gap); padding: var(--d-sp-2) var(--d-sp-3);
+    background: var(--d-state-bg-info); border-radius: var(--d-r-2); font-size: var(--d-fs-1); }
+  .d-layoutnote[hidden] { display: none; }
+
   /* the shell's toast stack (ctx.toast); the old toasts share the element until their panels move */
   .d-toasts { position: fixed; inset-block-start: var(--d-sp-3); inset-inline-end: var(--d-sp-3); z-index: var(--d-z-toast); display: grid; gap: var(--d-sp-2); max-inline-size: min(92vw, 380px); }
 

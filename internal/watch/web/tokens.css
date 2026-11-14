@@ -38,6 +38,13 @@
     --d-warn: #e3a93a; --d-on-warn: #1a1204;
     --d-bad: #ec7d6c; --d-on-bad: #1c0806;
     --d-info: #7ab0e8; --d-on-info: #06111c;
+    /* the meaning in the name (redesign E.2): aliases over the values above, so the light theme follows without a copy */
+    --d-ok: var(--d-good); --d-danger: var(--d-bad); --d-muted: var(--d-text-3);
+    --d-state-bg-ok: color-mix(in srgb, var(--d-good) 14%, var(--d-surface-1));
+    --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 14%, var(--d-surface-1));
+    --d-state-bg-danger: color-mix(in srgb, var(--d-bad) 14%, var(--d-surface-1));
+    --d-state-bg-info: color-mix(in srgb, var(--d-info) 14%, var(--d-surface-1));
+    --d-hit: 44px; --d-row: 36px; /* least touch target; dense list row (44 on coarse pointers, by the panel) */
 
     --d-life: #d2453a; --d-mana: #4f7fe0; --d-xp: var(--d-gold-9); --d-stamina: #c9b26a;
 
