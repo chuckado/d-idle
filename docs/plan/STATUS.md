@@ -154,7 +154,6 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
-| decomp21 | proposed | - | `docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/offline-decomp21-2026-11-14.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/pr-queue.md` | `fork-branch:fid/load-gold-clamp-r2`<br>`fork-branch:fid/hitrec-modes-r1` |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
