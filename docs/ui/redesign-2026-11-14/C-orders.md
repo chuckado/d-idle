@@ -1,6 +1,6 @@
 # C. Orders: one control surface
 
-> status: design proposal (TASK-416, 2026-11-14), not built. Tags per line: V = the backend exists and was read in the code named, U = unverified or needs bot work. The glossary already has "Player command" (a request the player queues on the watch page; runs right behind safety). "Orders" is the name of the panel; a row in it is a player command. No glossary edit is proposed.
+> status: design accepted by the user's answers of 2026-11-14 (H-open-questions.md), not built. Section 8 (progression) was added after the answers and replaces the earlier "queue free for everyone" assumption. Tags per line: V = the backend exists and was read in the code named, U = unverified or needs bot work. The glossary already has "Player command" (a request the player queues on the watch page; runs right behind safety). "Orders" is the name of the panel; a row in it is a player command. No glossary edit is proposed.
 
 ## 1. The decision: which surface is primary
 
@@ -15,7 +15,7 @@ The user's position (2026-11-14, as relayed): the map is the main command input 
 
 **Picked: 3, the hybrid, with the contextual buttons of option 4 kept as shortcuts into the same queue** (the gear alert still has "Repair now" on it; pressing it adds a row to Orders). Reason in one line: the queue is the thing that must be unified, a queue is a list, and only one verb needs a map.
 
-This is open question 1 (H-open-questions.md). If the user prefers map-first, the cost is the Act 2 to 5 map data and a larger default map tile; the Orders panel is still needed as the status list, so nothing in the build plan before slice S4 changes.
+The user confirmed the hybrid (answer 1) and that the minimap never takes commands (answer 2).
 
 ## 2. The two maps
 
@@ -81,7 +81,7 @@ The panel does not invent a priority. It prints the ladder of `docs/inventory-ac
 2. **Player commands**, in the bot's own order: item actions (identify first, then equip and trash), errands (stash, take, gold, Cain, scrolls), repair, then the zone order. Each row carries a "next" mark when it is the one that runs at the next safe moment.
 3. **The plan** (one grey row, always last, not cancellable): what the hero does when the list is empty, from `/api/campaign` `decision.why` ("Farming Cold Plains for level 10 to unlock Blood Raven") or the Why line.
 
-Because the order is the bot's, **drag to reorder is not offered** in v1. Zone orders are the only kind with a real queue (`MaxOpenOrders` 5, V); for them the choice is made when giving the order: **Now** (`replace: true`, cancels the open zone orders; today's only behaviour) or **Queue** (`replace: false`, V in `postOrder`; the queue is also an unlock-ladder feature in `unlockorderqueue.go`, see open question 5).
+Because the order is the bot's, **drag to reorder is not offered**. Zone orders are the only kind that can wait behind one another, and that ability is earned (section 8): at the start an order replaces the running one (`replace: true`, V); later the Loop and then the queue open. The queue is the sequencer that already exists (`internal/watch/unlockorderqueue.go`, `GET/POST /api/orderqueue`, up to three waiting orders, one ladder row per slot, V), not `replace: false`.
 
 ## 4. Giving a command
 
@@ -94,14 +94,14 @@ Cold Plains                      clvl 6-12 . waypoint
 "open ground, waypoint"          you are level 6: in range
 -------------------------------------------------------
 [ Farm here ]  30 min . 1 h . until level 8 . until I cancel
-[ Go now ]     [ Add to queue ]
+[ Go now ]     [ Loop... ]     [ Add to queue ]      <- Loop and queue only once unlocked (section 8)
 Journey: Blood Raven is next door (too early, floor 9)   [ Go now anyway ]
 Route: Rogue Encampment > Blood Moor > Cold Plains
 ```
 
 | Node | Menu |
 |---|---|
-| A field or dungeon, orderable | Farm here (duration chips; default is the last one used), Go now, Add to queue; the journey line when a chapter lives there |
+| A field or dungeon, orderable | Farm here (duration chips; default is the last one used), Go now; Loop and Add to queue once unlocked, a one-line teaser before that; the journey line when a chapter lives there |
 | Too hard (`status.hard`) | the same, with the guard's reason inline in amber and the button reading "Ask anyway" (the guard keeps the last word, as today) |
 | The zone the hero is in | Stay and fight (`fight_here`), Explore the rest (`go` here until explored, U), Back to town |
 | Town | Rest in town, Repair, Identify all, Sell now, Revive mercenary: the town errands, because this is where they happen. They are the same buttons as the verb row, not a second implementation |
@@ -173,7 +173,7 @@ Nothing existing changes shape. `GET /api/orders`, `POST /api/orders`, `/api/rep
 
 Times in the reply are epoch seconds; the page prints them in the viewer's local time (the project reports in EST; the page must not print UTC).
 
-**New write endpoint `POST /api/commands`** on the answer listener, same gates as today (origin list, token, JSON, small body, unknown fields refused): `{"intent": "go", "args": {...}, "mode": "now" | "queue"}`. In v1 it is a dispatcher: it validates and calls the same Hub and desk methods the existing routes call, so there is one behaviour and two doors. `POST /api/commands/cancel {"id": "repair:1"}` does the same for cancel. Error codes are the existing ones (`charter-needed`, `active`, `cooldown`, `undamaged`, `pact`, `full`).
+**New write endpoint `POST /api/commands`** on the answer listener, same gates as today (origin list, token, JSON, small body, unknown fields refused): `{"intent": "go", "args": {...}, "mode": "now" | "queue"}` (`queue` goes to the existing order queue and answers its own `locked` code while the slot rows are closed; intent `loop` goes to the loop controller). In v1 it is a dispatcher: it validates and calls the same Hub and desk methods the existing routes call, so there is one behaviour and two doors. `POST /api/commands/cancel {"id": "repair:1"}` does the same for cancel. Error codes are the existing ones (`charter-needed`, `active`, `cooldown`, `undamaged`, `pact`, `full`).
 
 Goldens to add (fixtures are only added, never edited): `testdata/commands/view-{empty,three-one-failed,blocked,paused,safety}-{sorceress,paladin}.json`, a compat fixture `testdata/compat/commands-v1.json` once shipped, and the node DOM goldens of the `orders` panel for the same five states.
 
@@ -195,3 +195,73 @@ Goldens to add (fixtures are only added, never edited): `testdata/commands/view-
 Keys are off while a text field has focus and in overlay mode. Every key has a visible button; none is the only way.
 
 Phone (390 px): the status line and the game picture stay on top; under the picture one row of four 44 px buttons (`Go to`, `Town`, `Repair`, `More`); under it the Orders list, one line per row (text, state chip, a cancel target at the end). `Go to` opens the act map as a full-height sheet; a zone tap swaps the sheet content to the zone menu. The bottom tab rail stays (Watch, Orders, Hero, Log).
+
+## 8. Progression: single orders, then the Loop, then the queue (user answer 5)
+
+The user's words: "early game you can set up rough automation by go to area for X number of minutes, come back, repair, repeat; but early you have to tell it to go to a zone, watch for it to need repairs, and THEN unlock the ability to queue these actions."
+
+### Tiers
+
+| Tier | The player can | Opens when | Ladder row |
+|---|---|---|---|
+| 0, from the start | Give one zone order at a time (go for N minutes or until cancelled, fight here, town). Repair now or Farm until repair by hand: the player watches the Gear light and the Needs you row. A new zone order replaces the running one | always | - |
+| 1, the Loop | One Loop order: go to an area for X minutes, come home, repair, go back, repeat | the first full manual cycle: a zone order the player gave ended `done` or was running, and a repair the player asked for ended `done` | new row `orderloop` |
+| 2, the queue | Add to queue: up to three orders wait behind the running one (the existing sequencer) | three Loop rounds finished, or the present triggers as alternatives | existing rows `orderqueue`, `orderqueue2`, `orderqueue3` |
+
+Automatic repair by policy (`repair_break`, `repair_hour`, ... , tally rows, V in `data/unlocks/ladder.json`) is a separate ladder and stays as it is; a Loop repairs because the player asked for the loop, whatever the policy row says.
+
+### The Loop order (new kind)
+
+| Field | Values | Default |
+|---|---|---|
+| `area` | an orderable area (the same list as `go`) | - |
+| `minutes` | 5 to 240 per round | 20 |
+| `repair` | `damaged` (repair in town only when something worn is under the warn line or broken) or `always` | `damaged` |
+| `rounds` | 1 to 20, or `forever` | 5 |
+
+One round: (1) `go` to `area` for `minutes` (the normal order: the charter, the route guard and the 5-open limit apply unchanged); (2) when it ends, come home: a repair request when `repair` says so (the repair trip of `docs/repair.md`, including its safe moment and one farm leg when gold is short), otherwise a plain `home` order; the town chores run as on any visit; (3) back out for the next round.
+
+The loop stops, with the reason on its row and in Needs you, when: the rounds are done (`done`); the player cancels it or gives a zone order with Go now (`cancelled`); the hero dies; the guard refuses the area on arrival; the repair fails or stays unpayable after its farm leg; the Pact or low-life halt is on (the same `Halt` hook as the queue); the bot stops or pauses (`paused`, resumes at the start of the round). Safety and player commands keep their place on the ladder: an identify or a repair-now given during a loop runs at the next safe moment and the round goes on.
+
+Row text: "Loop: Cold Plains 20 min, repair, repeat (round 3 of 5)", state `active`, phase `farming`, `going home`, `repairing`, `returning`; one Cancel.
+
+### Where it is built
+
+The loop controller is a sequencer in `internal/watch`, next to `OrderQueue` and on the same pattern: it places one existing order at a time through `Hub.place` and the repair desk, and reacts to their end. That needs no new behaviour in `internal/bot` (U until built: the `home` order's reliability and the repair request answering `undamaged` are the two edges). New: `GET /api/orderloop` (`watch.orderloop/1`: `open`, `teaser`, `state`, `round`, `rounds`, `area`, `minutes`, `repair`, `stoppedWhy`) and `POST /api/orderloop {action: "start" | "stop", area, minutes, repair, rounds | forever}` on the answer listener; state kept in `<state dir>/orderloop.json` so a restart resumes at the start of the round. A loop and waiting queue entries: a finite loop holds the running place and the queue waits; a `forever` loop is refused while entries wait (`queue-busy`), and adding to the queue during a `forever` loop is refused with the same code.
+
+### Ladder rows (`data/unlocks/ladder.json`)
+
+```json
+{"id": "orderloop", "group": "ui",
+ "trigger": {"kind": "seen", "args": {"what": "manual_repair_cycle"}},
+ "reveal": {"title": "Loop order",
+            "text": "Send the hero to an area for a set time, home to repair, and out again, as many rounds as you say. One loop at a time; it stops when the hero dies or the repair cannot be paid.",
+            "teaser": "Send the hero out, then repair its gear yourself once."}}
+```
+
+The `seen` trigger kind exists (V: rows `chronicle_tape`, `risk`, and the chapter events). The event `manual_repair_cycle` is new: the repair wiring emits it when a player-requested repair ends `done` and at least one player zone order was given before it.
+
+For the queue the proposal is to move the first slot behind the Loop and keep today's trigger as the alternative, so nobody who would have had it loses it:
+
+```json
+{"id": "orderqueue", "group": "ui",
+ "trigger": {"kind": "seen", "args": {"what": "loop_rounds_3"}},
+ "alt": [{"kind": "quest_stage", "args": {"quest": "den_of_evil", "min": 2}}],
+ "reveal": {"title": "Order queue, first slot", "text": "(unchanged)", "teaser": "Finish three loop rounds, or clear the Den of Evil."}}
+```
+
+`orderqueue2` and `orderqueue3` keep their triggers. A row that is already open for a hero stays open (U: assumed from the ladder being a latch; the worker checks it and says so).
+
+**Inconsistency to settle:** today the first queue slot opens at the Den of Evil, which most heroes clear before their first repair. With the alternative kept, the queue can still open before the Loop, which is not the order the user described. Dropping the alternative gives the strict order but takes the slot away from the Den as a reward. The briefs assume the strict order (no `alt` on `orderqueue`); the coordinator can restore the alternative with one line of data.
+
+### UI states
+
+| State | Zone menu | Orders panel |
+|---|---|---|
+| Loop locked | a muted line under Go now: "Loop: send the hero out, then repair its gear yourself once" (the ladder teaser) | nothing |
+| Loop just opened | the reveal the ladder already plays; the Loop button appears with a dot until first used | a Needs you row of kind info: "New: Loop order" |
+| Loop open | `Loop...` opens three controls (minutes, repair, rounds) and Start loop | the loop row, round counter, Cancel |
+| Queue locked | a muted line: the teaser of `orderqueue` | - |
+| Queue open, slots full | Add to queue disabled with "2 of 2 waiting; the next slot: <teaser>" | waiting rows numbered |
+
+A locked control is a line of text, never a dead button.

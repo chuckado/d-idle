@@ -5,9 +5,15 @@
  "density": "comfortable",
  "theme": "dark",
  "status": [
-  "statusline",
+  {
+   "id": "statusline",
+   "fallback": "hero-status"
+  },
   "hero-meters",
-  "needs-count"
+  {
+   "id": "needs-count",
+   "fallback": "alerts-count"
+  }
  ],
  "breakpoints": {
   "phone": {
@@ -32,7 +38,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 1
+     "order": 1,
+     "fallback": "tally"
     },
     {
      "id": "orders",
@@ -42,7 +49,8 @@
      "colSpan": 12,
      "rowSpan": 4,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "now"
     },
     {
      "id": "map",
@@ -62,7 +70,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "thoughts"
     },
     {
      "id": "activity",
@@ -341,7 +350,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 1
+     "order": 1,
+     "fallback": "tally"
     },
     {
      "id": "orders",
@@ -351,7 +361,8 @@
      "colSpan": 12,
      "rowSpan": 4,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "now"
     },
     {
      "id": "map",
@@ -371,7 +382,8 @@
      "colSpan": 6,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "thoughts"
     },
     {
      "id": "activity",
@@ -660,7 +672,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "tally"
     },
     {
      "id": "orders",
@@ -670,7 +683,8 @@
      "colSpan": 3,
      "rowSpan": 4,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "log",
@@ -680,7 +694,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "thoughts"
     },
     {
      "id": "activity",
@@ -969,7 +984,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "tally"
     },
     {
      "id": "orders",
@@ -979,7 +995,8 @@
      "colSpan": 3,
      "rowSpan": 4,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "log",
@@ -989,7 +1006,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "thoughts"
     },
     {
      "id": "activity",

@@ -1,0 +1,338 @@
+<title>d.idle Character Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one frame, three touching zones. Left: who wears (hero doll, sets, mercenary). Middle: the pack, belt, inspector. Right: stash / loot rules. */
+:root{
+  color-scheme:dark;
+  --bg:#0d0b09;--s1:#1c1813;--s2:#241f19;--s3:#2d2720;--line:#3a322a;--line2:#4a4036;
+  --text:#ece2cf;--text2:#b9aa94;--text3:#8c7b67;
+  --accent:#c7a44a;--accent-text:#e6c76f;--on-accent:#1a1408;--focus:#8db8ff;
+  --ok:#7cc47e;--warn:#e3a93a;--danger:#ec7d6c;--info:#7ab0e8;
+  --ok-bg:#1f2a1c;--warn-bg:#33280f;--danger-bg:#351a15;--info-bg:#17232f;
+  --q-magic:#7f9fff;--q-rare:#f0dc5a;--q-unique:#d6ad5a;--q-normal:#e6ddc8;--cell:#14110e;
+  --display:Georgia,"Iowan Old Style","Palatino Linotype",serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  --fs0:.74rem;--fs1:.86rem;--fs2:.98rem;--u:34px;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  color-scheme:light;--bg:#efe8da;--s1:#faf5ea;--s2:#f1e9d8;--s3:#e6dcc6;--line:#d3c6aa;--line2:#b9a988;
+  --text:#231c12;--text2:#55493a;--text3:#7a6c58;--accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--focus:#1f5fbf;
+  --ok:#2c7a34;--warn:#8f5f00;--danger:#b23a2a;--info:#1f5f9f;--ok-bg:#dcecd6;--warn-bg:#f3e3bb;--danger-bg:#f5d9d2;--info-bg:#d7e5f3;
+  --q-magic:#2f4fc0;--q-rare:#7a6400;--q-unique:#7a5510;--q-normal:#231c12;--cell:#e9e0cc;
+}}
+:root[data-theme="light"]{
+  color-scheme:light;--bg:#efe8da;--s1:#faf5ea;--s2:#f1e9d8;--s3:#e6dcc6;--line:#d3c6aa;--line2:#b9a988;
+  --text:#231c12;--text2:#55493a;--text3:#7a6c58;--accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--focus:#1f5fbf;
+  --ok:#2c7a34;--warn:#8f5f00;--danger:#b23a2a;--info:#1f5f9f;--ok-bg:#dcecd6;--warn-bg:#f3e3bb;--danger-bg:#f5d9d2;--info-bg:#d7e5f3;
+  --q-magic:#2f4fc0;--q-rare:#7a6400;--q-unique:#7a5510;--q-normal:#231c12;--cell:#e9e0cc;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--text);font:var(--fs1)/1.4 var(--body);margin:0}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:1px}
+.num{font-family:var(--num);font-variant-numeric:tabular-nums}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mock{border-bottom:1px dashed var(--line2);background:var(--s2);padding-block:8px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:var(--fs0);color:var(--text2)}
+.mock b{color:var(--text)}.grp{display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+.seg{background:transparent;border:1px solid var(--line2);border-radius:4px;padding:3px 8px;color:var(--text2);font-size:var(--fs0)}
+.seg[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+h1{font:700 1.1rem var(--display);color:var(--accent-text);margin:0;padding-block:10px}
+h2{margin:0 0 6px;font:700 var(--fs0) var(--body);letter-spacing:.09em;text-transform:uppercase;color:var(--text2);display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+h2 small{font-weight:400;letter-spacing:0;text-transform:none;color:var(--text)}
+h2 small b{color:var(--text3);font-weight:400}
+
+.frame{display:grid;grid-template-columns:minmax(0,10.5fr) minmax(0,12fr) minmax(0,8.5fr);background:var(--s1);border-radius:8px;margin-bottom:8px}
+.zone{padding:12px;min-width:0}
+.zone+.zone{border-left:1px solid var(--line)}
+.sub{border-top:1px solid var(--line);margin-top:10px;padding-top:10px}
+.up{display:none}
+
+/* cells and items */
+.grid{display:grid;grid-template-columns:repeat(var(--c),minmax(0,var(--u)));grid-auto-rows:var(--u);gap:1px;background:var(--line);border:1px solid var(--line);width:max-content;max-width:100%}
+.grid>.c{background:var(--cell)}
+.grid>.c.go{background:var(--ok-bg)}
+.it{position:relative;background:var(--s3);border:1px solid var(--line2);border-radius:3px;padding:2px 3px;font-size:.62rem;line-height:1.15;text-align:left;overflow:hidden;min-width:0;z-index:1;display:flex;align-items:flex-end;margin:1px}
+.it[data-q="magic"]{color:var(--q-magic)}.it[data-q="rare"]{color:var(--q-rare)}.it[data-q="unique"]{color:var(--q-unique)}.it[data-q="normal"]{color:var(--q-normal)}
+.it.no{opacity:.6}
+.it.dim{opacity:.18}
+.it.sel{outline:2px solid var(--accent);outline-offset:0;opacity:1}
+.it.pend{border-style:dashed;border-color:var(--info)}
+.it.hit{box-shadow:inset 0 0 0 2px var(--info)}
+.bd{position:absolute;top:1px;right:1px;font:700 .55rem var(--num);padding:0 3px;border-radius:2px;background:var(--danger-bg);color:var(--danger)}
+.bd.m{background:var(--info-bg);color:var(--info)}.bd.s{background:var(--warn-bg);color:var(--warn);left:1px;right:auto}.bd.w{background:var(--info-bg);color:var(--info);top:auto;bottom:1px}
+
+/* dolls */
+.doll{display:grid;gap:4px;grid-template-columns:repeat(8,minmax(0,var(--u)));grid-auto-rows:var(--u);width:max-content;max-width:100%}
+.slot{border:1px dashed var(--line2);border-radius:4px;background:var(--cell);display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:.6rem;text-transform:uppercase;letter-spacing:.06em;padding:0;min-width:0;position:relative}
+.slot .it{position:absolute;inset:0;margin:0}
+.slot.ok{border:2px solid var(--ok)}.slot.bad{border:2px solid var(--danger)}
+.slot .why{position:absolute;left:0;right:0;bottom:-1px;background:var(--danger-bg);color:var(--danger);font-size:.55rem;text-transform:none;letter-spacing:0;padding:1px 2px;z-index:2;line-height:1.1}
+.sets{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;align-items:center}
+.chipb{background:var(--s2);border:1px solid var(--line2);border-radius:999px;padding:2px 10px;font-size:var(--fs0)}
+.chipb[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.meter{display:inline-block;width:70px;height:6px;border-radius:3px;background:var(--s3);vertical-align:middle;overflow:hidden}
+.meter i{display:block;height:100%;background:#d2453a}
+.state{font-size:var(--fs0);padding:1px 8px;border-radius:999px;background:var(--ok-bg);color:var(--ok)}
+.state.dead{background:var(--danger-bg);color:var(--danger)}
+.note{font-size:var(--fs0);color:var(--text2);margin:6px 0 0}
+.note.warn{color:var(--warn)}
+
+.tools{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:8px}
+.tools input{background:var(--cell);border:1px solid var(--line2);border-radius:4px;padding:4px 8px;min-width:0;flex:1 1 120px}
+.under{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;margin-top:8px}
+.btn{min-height:30px;padding:3px 10px;border-radius:4px;border:1px solid var(--line2);background:var(--s2)}
+.btn:hover{background:var(--s3)}
+.btn.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+@media (pointer:coarse){.btn,.seg,.chipb{min-height:44px}}
+
+.insp h3{margin:0;font:700 var(--fs2) var(--body)}
+.insp .tip{color:var(--text2);font-size:var(--fs0);margin:2px 0 6px}
+.req{display:grid;grid-template-columns:1fr 1fr;gap:6px 14px;font-size:var(--fs0);margin:6px 0}
+.req h4{margin:0 0 2px;font:600 var(--fs0) var(--body);color:var(--text2)}
+.req ul{list-style:none;margin:0;padding:0}
+.req li{padding:1px 0}.req li.y{color:var(--ok)}.req li.n{color:var(--danger)}
+.cmp{font-size:var(--fs0);color:var(--text2);margin:6px 0;padding:6px 8px;background:var(--s2);border-radius:4px}
+.cmp b{color:var(--text)}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.msg{margin-top:8px;font-size:var(--fs0);padding:6px 8px;border-radius:4px;background:var(--danger-bg);color:var(--text)}
+.msg.i{background:var(--info-bg)}
+
+.rules{list-style:none;margin:0;padding:0;font-size:var(--fs0)}
+.rules li{display:grid;grid-template-columns:18px 1fr auto;gap:6px;padding:5px 4px;border-top:1px solid var(--line);align-items:center;cursor:pointer;border-radius:3px}
+.rules li:hover,.rules li.on{background:var(--s2)}
+.rules li span:first-child{color:var(--text3);font-family:var(--num)}
+.rules .a{color:var(--accent-text)}
+.rules h3{font:600 var(--fs0) var(--body);color:var(--text2);margin:10px 0 2px}
+.strip{background:var(--s1);border-radius:8px;padding:8px 12px;font-size:var(--fs0);color:var(--text2);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center;margin-bottom:32px}
+.strip b{color:var(--text);font-weight:600}
+.strip .x{background:transparent;border:0;color:var(--text3);text-decoration:underline;padding:0 4px}
+.lock{margin-top:10px;padding:6px 8px;border:1px dashed var(--line2);border-radius:4px;font-size:var(--fs0);color:var(--text2)}
+
+@media (max-width:1180px){
+  .frame{grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)}
+  .zone.right{grid-column:1/-1;border-left:0;border-top:1px solid var(--line)}
+}
+@media (max-width:700px){
+  :root{--u:calc((100vw - 58px) / 10)}
+  .frame{grid-template-columns:minmax(0,1fr)}
+  .zone+.zone{border-left:0;border-top:1px solid var(--line)}
+  .up{display:flex;gap:4px;margin-bottom:8px}
+  .zone.left,.zone.right{display:none}
+  [data-up="hero"] .zone.left,[data-up="merc"] .zone.left,[data-up="stash"] .zone.right{display:block;order:-1}
+  [data-up="hero"] #mercBox,[data-up="merc"] #heroBox{display:none}
+  [data-up="merc"] #mercBox{border-top:0;margin-top:0;padding-top:0}
+  .frame{display:flex;flex-direction:column}
+  .req{grid-template-columns:1fr}
+}
+</style>
+
+<div class="mock wrap" role="group" aria-label="Mockup controls, not part of the design">
+  <span><b>Mockup controls</b> (fake data, placeholder shapes, not part of the design)</span>
+  <span class="grp">Hero is <span id="mPlace"></span></span>
+  <span class="grp">Mercenary <span id="mMerc"></span></span>
+</div>
+
+<main class="wrap" id="app" data-up="hero">
+  <h1>Character</h1>
+  <div class="up" id="up"></div>
+  <div class="frame">
+    <section class="zone left">
+      <div id="heroBox">
+        <h2>Hero <small>Simmy, Sorceress, level 7 <b>Str</b> <span class="num">38</span> <b>Dex</b> <span class="num">25</span></small></h2>
+        <div class="doll" id="heroDoll"></div>
+        <div class="sets" id="sets"></div>
+        <p class="note" id="setNote" hidden></p>
+      </div>
+      <div class="sub" id="mercBox">
+        <h2>Mercenary <small>Desert Guard, level 14 <span class="meter"><i id="mLife"></i></span> <span class="state" id="mState"></span> <b>Str</b> <span class="num">60</span> <b>Dex</b> <span class="num">40</span></small></h2>
+        <div class="doll" id="mercDoll"></div>
+        <p class="note" id="mercNote"></p>
+      </div>
+    </section>
+
+    <section class="zone mid">
+      <h2>Pack <small><b>10 by 4</b></small></h2>
+      <div class="tools"><input id="q" type="search" placeholder="Search the pack and stash" aria-label="Search the pack and stash"><span id="chips" class="grp"></span></div>
+      <div class="grid" id="pack" style="--c:10"></div>
+      <div class="under">
+        <span>Belt</span><div class="grid" id="belt" style="--c:4"></div>
+        <span>Gold <b class="num">1,240</b></span>
+        <button class="btn" id="sellBtn" type="button"></button>
+      </div>
+      <div class="sub insp" id="insp"></div>
+    </section>
+
+    <section class="zone right">
+      <div class="tools" id="tabs"></div>
+      <div id="stashPane">
+        <p class="note" id="chest"></p>
+        <div class="grid" id="stash" style="--c:6;margin-top:6px"></div>
+        <div class="under"><span>Stash gold <b class="num">5,300</b></span><button class="btn" type="button" id="dep">Deposit</button><button class="btn" type="button" id="wd">Withdraw</button></div>
+        <div class="lock">Stash from anywhere: locked. A convenience that skips a game rule (the chest must be open). Unlock hint: listed in the unlock ladder when the feature exists.</div>
+      </div>
+      <div id="rulesPane" hidden>
+        <p class="note">Preset: Starter. Editing unlocks later. Click a rule to see what it matches in the pack.</p>
+        <div class="rules"><h3>In the pack (first match wins)</h3><ul class="rules" id="rules"></ul></div>
+      </div>
+    </section>
+  </div>
+  <div class="strip" id="strip"></div>
+</main>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+function el(t,c,x){var e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function btn(t,c,f){var b=el('button','btn'+(c?' '+c:''),t);b.type='button';b.addEventListener('click',f);return b}
+var HERO={name:'you',cls:'Sorceress',lvl:7,str:38,dex:25};
+var MERC={name:'your Desert Guard',kind:'Desert Guard',lvl:14,str:60,dex:40,alive:true,kinds:['helm','armor','spear']};
+var HSLOTS=[['rhand','Weapon','1/3','1/5',['staff','sword','orb','spear','bow']],['head','Helm','4/6','1/3',['helm']],['amulet','Amulet','6/7','2/3',['amulet']],['lhand','Shield','7/9','1/5',['shield','sword']],
+ ['torso','Armor','4/6','3/6',['armor']],['gloves','Gloves','1/3','5/7',['gloves']],['ring1','Ring','3/4','6/7',['ring']],['beltslot','Belt','4/6','6/7',['beltitem']],['ring2','Ring','6/7','6/7',['ring']],['boots','Boots','7/9','5/7',['boots']]];
+var MSLOTS=[['mrhand','Weapon','1/3','1/4',['spear']],['mhead','Helm','3/5','1/3',['helm']],['mtorso','Armor','5/7','1/4',['armor']]];
+var I=[
+ {id:1,name:'Short Staff',q:'normal',kind:'staff',w:1,h:3,at:'rhand',broken:true,stats:{Damage:'1-5',Durability:'0/18'},tip:'Two-handed damage 1 to 5'},
+ {id:2,name:'Cap',q:'normal',kind:'helm',w:2,h:2,at:'head',stats:{Defense:4,Durability:'8/12'},tip:'Defense 4'},
+ {id:3,name:'Sturdy Quilted Armor',q:'magic',kind:'armor',w:2,h:3,at:'torso',stats:{Defense:11,Durability:'5/24'},tip:'Defense 11'},
+ {id:4,name:'Leather Gloves',q:'normal',kind:'gloves',w:2,h:2,at:'gloves',stats:{Defense:2},tip:'Defense 2'},
+ {id:5,name:'Raven Grip',q:'rare',kind:'ring',w:1,h:1,at:'ring1',stats:{'Fire resistance':8,Life:6},tip:'+8% fire resistance, +6 life'},
+ {id:6,name:'Sash',q:'normal',kind:'beltitem',w:2,h:1,at:'beltslot',stats:{Defense:2},tip:'Defense 2'},
+ {id:7,name:'Boots',q:'normal',kind:'boots',w:2,h:2,at:'boots',stats:{Defense:3},tip:'Defense 3'},
+ {id:8,name:'Desert Cap',q:'magic',kind:'helm',w:2,h:2,at:'mhead',stats:{Defense:9},tip:'Defense 9'},
+ {id:10,name:'Staff of Charged Bolt',q:'magic',kind:'staff',w:1,h:3,at:'pack',x:1,y:1,req:{lvl:6},stats:{Damage:'2-8',Durability:'20/20'},tip:'+2 to Charged Bolt'},
+ {id:11,name:'Ring',q:'rare',kind:'ring',w:1,h:1,at:'pack',x:2,y:1,unid:true,tip:'Unidentified'},
+ {id:12,name:'Short Sword',q:'normal',kind:'sword',w:1,h:3,at:'pack',x:3,y:1,mark:'sell',stats:{Damage:'2-7'},tip:'One-handed damage 2 to 7'},
+ {id:13,name:'Light Plate',q:'normal',kind:'armor',w:2,h:3,at:'pack',x:4,y:1,req:{lvl:9,str:41},stats:{Defense:31,Durability:'30/30'},tip:'Defense 31'},
+ {id:14,name:'Targe',q:'magic',kind:'shield',w:2,h:2,at:'pack',x:6,y:1,req:{lvl:3,str:16,cls:'Paladin'},stats:{Defense:10,'All resistances':5},tip:'Paladin shield, +5 all resistances'},
+ {id:15,name:'Pike',q:'normal',kind:'spear',w:2,h:4,at:'pack',x:8,y:1,req:{str:60,dex:45},stats:{Damage:'14-63'},tip:'Two-handed spear damage 14 to 63'},
+ {id:16,name:'Skull Cap',q:'magic',kind:'helm',w:2,h:2,at:'pack',x:6,y:3,req:{str:15},stats:{Defense:11,Life:10},tip:'Defense 11, +10 life'},
+ {id:17,name:'Tome of Town Portal',q:'normal',kind:'misc',w:1,h:2,at:'pack',x:2,y:2,tip:'12 scrolls'},
+ {id:18,name:'Voulge',q:'magic',kind:'spear',w:2,h:4,at:'stash',x:1,y:1,req:{str:50},stats:{Damage:'6-21'},tip:'Polearm damage 6 to 21'},
+ {id:19,name:'Tir Rune',q:'unique',kind:'misc',w:1,h:1,at:'stash',x:3,y:1,tip:'Rune'},
+ {id:20,name:'Chipped Topaz',q:'normal',kind:'misc',w:1,h:1,at:'stash',x:4,y:1,tip:'Gem'},
+ {id:21,name:'Healing',q:'normal',kind:'potion',w:1,h:1,at:'belt',x:1,y:1,tip:'Minor healing potion'},
+ {id:22,name:'Healing',q:'normal',kind:'potion',w:1,h:1,at:'belt',x:2,y:1,tip:'Minor healing potion'},
+ {id:23,name:'Mana',q:'normal',kind:'potion',w:1,h:1,at:'belt',x:3,y:1,tip:'Minor mana potion'}
+];
+var S={sel:null,q:'',chip:'',town:false,tab:'Stash',msg:null,log:[{t:'Identify Skull Cap',s:'done'}],rule:-1,set:''};
+var RULES=[['Runes, gems, jewels, charms','stash',function(i){return /Rune|Topaz/.test(i.name)}],['Unique and set items','stash',function(i){return false}],['Usable by mercenary, magic or better','keep',function(i){return i.q!=='normal'&&usable(i,MERC).ok&&MERC.kinds.indexOf(i.kind)>=0}],
+ ['Marked for sale by you (protected: your mark wins)','sell',function(i){return i.mark==='sell'}],['White items the hero cannot use','sell',function(i){return i.q==='normal'&&!usable(i,HERO).ok}],['Everything else','keep',function(){return true}]];
+
+function wearable(i){return ['misc','potion'].indexOf(i.kind)<0}
+function usable(i,w){var r=[],q=i.req||{};
+ if(i.unid)r.push({c:'UNID',t:'not identified'});
+ if(i.broken)r.push({c:'BRK',t:'broken: repair it first'});
+ if(w===MERC){if(MERC.kinds.indexOf(i.kind)<0)r.push({c:'TYPE',t:'a Desert Guard wears a helm, body armor, and a spear or polearm'});if(!MERC.alive)r.push({c:'DEAD',t:'the mercenary is dead: no gear change until he is revived'})}
+ if(q.cls&&w===HERO&&q.cls!==HERO.cls)r.push({c:'CLS',t:q.cls+' only'});
+ if(q.cls&&w===MERC)r.push({c:'CLS',t:q.cls+' only'});
+ if(q.lvl>w.lvl)r.push({c:'LVL',t:'needs level '+q.lvl+' ('+w.name+' '+(w===HERO?'are':'is')+' '+w.lvl+')'});
+ if(q.str>w.str)r.push({c:'STR',t:'needs '+q.str+' strength ('+w.name+' '+(w===HERO?'have':'has')+' '+w.str+')'});
+ if(q.dex>w.dex)r.push({c:'DEX',t:'needs '+q.dex+' dexterity ('+w.name+' '+(w===HERO?'have':'has')+' '+w.dex+')'});
+ return {ok:!r.length,reasons:r}}
+function at(place){return I.filter(function(i){return i.at===place})[0]}
+function slotFor(i,slots){return slots.filter(function(s){return s[4].indexOf(i.kind)>=0})}
+function free(place,cols,rows,w,h,skip){for(var y=1;y<=rows-h+1;y++)for(var x=1;x<=cols-w+1;x++){var hit=I.some(function(o){return o!==skip&&o.at===place&&x<o.x+o.w&&o.x<x+w&&y<o.y+o.h&&o.y<y+h});if(!hit)return [x,y]}return null}
+function log(t,s){S.log.unshift({t:t,s:s});S.log=S.log.slice(0,4)}
+function say(t,info){S.msg={t:t,i:info}}
+function pendThen(i,fn){i.pend=true;render();setTimeout(function(){i.pend=false;fn();render()},380)}
+
+function equip(i,slotId,who){
+ var u=usable(i,who);
+ if(who===MERC){say(u.ok?'Giving items to the mercenary is not built yet. When it is, this drop is accepted: he meets every requirement.':'Refused: '+u.reasons[0].t+'.',u.ok);render();return}
+ if(!u.ok){say('Refused, nothing was sent: '+u.reasons[0].t+'.');render();return}
+ var old=at(slotId),spot=old?free('pack',10,4,old.w,old.h,i):null;
+ if(old&&!spot){say('Refused: no room in the pack for '+old.name+'.');render();return}
+ S.msg=null;pendThen(i,function(){if(old){old.at='pack';old.x=spot[0];old.y=spot[1]}i.at=slotId;log('Equip '+i.name,'done, instant');S.sel=i.id})}
+function unequip(i){var sp=free('pack',10,4,i.w,i.h);if(!sp){say('Refused: no room in the pack.');render();return}S.msg=null;pendThen(i,function(){i.at='pack';i.x=sp[0];i.y=sp[1];log('Take off '+i.name,'done, instant')})}
+function stash(i,to){var cols=to==='stash'?6:10,rows=to==='stash'?8:4,sp=free(to,cols,rows,i.w,i.h);
+ if(!sp){say('Refused: no room in the '+to+'.');render();return}
+ if(!S.town){i.wait=to;S.msg=null;say('Queued for the next town visit: the chest must be open. The item stays where it is until then.',true);log(i.name+' to the '+to,'waits for town');render();return}
+ S.msg=null;pendThen(i,function(){i.at=to;i.x=sp[0];i.y=sp[1];i.wait=null;log(i.name+' to the '+to,'done, instant')})}
+
+function cell(i){var b=el('button','it',i.name);b.type='button';b.dataset.q=i.q;b.style.gridColumn=i.x+' / span '+i.w;b.style.gridRow=i.y+' / span '+i.h;
+ var uh=usable(i,HERO),um=usable(i,MERC),mercCan=um.ok&&wearable(i);
+ if(wearable(i)&&!uh.ok){if(mercCan)b.appendChild(el('span','bd m','MERC'));else{b.classList.add('no');b.appendChild(el('span','bd',uh.reasons[0].c))}}
+ if(i.mark)b.appendChild(el('span','bd s','SELL'));if(i.wait)b.appendChild(el('span','bd w','TOWN'));
+ var ql=S.q.toLowerCase(),miss=(ql&&i.name.toLowerCase().indexOf(ql)<0)||(S.chip==='hero'&&!(wearable(i)&&uh.ok))||(S.chip==='merc'&&!mercCan)||(S.chip==='sell'&&!i.mark);
+ if(miss&&(i.at==='pack'||i.at==='stash'))b.classList.add('dim');
+ if(S.sel===i.id)b.classList.add('sel');if(i.pend)b.classList.add('pend');
+ if(S.rule>=0&&i.at==='pack'&&ruleOf(i)===S.rule)b.classList.add('hit');
+ b.setAttribute('aria-label',i.name+(uh.ok||!wearable(i)?'':', '+uh.reasons[0].t));
+ b.addEventListener('click',function(e){e.stopPropagation();if(e.altKey&&i.at==='pack'){i.mark=i.mark?null:'sell';render();return}
+  if((e.ctrlKey||e.metaKey)&&(i.at==='pack'||i.at==='stash')){stash(i,i.at==='pack'?'stash':'pack');return}
+  S.sel=S.sel===i.id?null:i.id;S.msg=null;render()});
+ b.addEventListener('dblclick',function(){S.sel=i.id;primary(i)});return b}
+function ruleOf(i){for(var k=0;k<RULES.length;k++)if(RULES[k][2](i))return k}
+function primary(i){if(i.at==='pack'&&wearable(i)){var s=slotFor(i,HSLOTS)[0];if(s)equip(i,s[0],HERO)}else if(i.at==='stash')stash(i,'pack');else if(i.at!=='pack'&&i.at!=='belt'&&i.at.charAt(0)!=='m')unequip(i)}
+function grid(id,place,cols,rows){var g=$(id);g.textContent='';var sel=S.sel&&I.filter(function(i){return i.id===S.sel})[0];
+ for(var y=1;y<=rows;y++)for(var x=1;x<=cols;x++){var c=el('div','c');c.style.gridColumn=x;c.style.gridRow=y;g.appendChild(c)}
+ I.filter(function(i){return i.at===place}).forEach(function(i){g.appendChild(cell(i))})}
+function doll(id,slots,who){var d=$(id);d.textContent='';var sel=S.sel&&I.filter(function(i){return i.id===S.sel})[0];
+ slots.forEach(function(s){var b=el('div','slot',s[1]);b.style.gridColumn=s[2];b.style.gridRow=s[3];b.tabIndex=0;b.setAttribute('role','button');b.setAttribute('aria-label',s[1]+' slot');
+  var worn=at(s[0]);if(worn)b.appendChild(cell(Object.assign(worn,{x:1,y:1})));
+  if(sel&&sel.at==='pack'&&s[4].indexOf(sel.kind)>=0){var u=usable(sel,who);b.classList.add(u.ok?'ok':'bad');if(!u.ok)b.appendChild(el('span','why',u.reasons[0].t))}
+  function drop(){if(sel&&sel.at==='pack'&&s[4].indexOf(sel.kind)>=0)equip(sel,s[0],who)}
+  b.addEventListener('click',drop);b.addEventListener('keydown',function(e){if(e.key==='Enter')drop()});d.appendChild(b)})}
+function reqList(i,w,title){var box=el('div'),q=i.req||{};box.appendChild(el('h4','',title));var ul=el('ul');
+ function row(ok,t){var li=el('li',ok?'y':'n',(ok?'ok  ':'no  ')+t);ul.appendChild(li)}
+ if(w===MERC)row(MERC.kinds.indexOf(i.kind)>=0,MERC.kinds.indexOf(i.kind)>=0?'a kind he can wear':'not a kind a Desert Guard wears');
+ if(q.cls)row(w===HERO&&q.cls===HERO.cls,'Class: '+q.cls+' only');
+ if(q.lvl)row(q.lvl<=w.lvl,'Level '+q.lvl+' ('+w.lvl+')'+(q.lvl>w.lvl?', needs '+(q.lvl-w.lvl)+' more':''));
+ if(q.str)row(q.str<=w.str,'Strength '+q.str+' ('+w.str+')'+(q.str>w.str?', needs '+(q.str-w.str)+' more':''));
+ if(q.dex)row(q.dex<=w.dex,'Dexterity '+q.dex+' ('+w.dex+')'+(q.dex>w.dex?', needs '+(q.dex-w.dex)+' more':''));
+ if(i.unid)row(false,'not identified');if(i.broken)row(false,'broken');if(w===MERC&&!MERC.alive)row(false,'he is dead');
+ if(!ul.children.length)row(true,'no requirements');box.appendChild(ul);return box}
+function insp(){var p=$('insp');p.textContent='';var i=S.sel&&I.filter(function(x){return x.id===S.sel})[0];
+ if(!i){p.appendChild(el('p','note','Select an item: its requirements, a comparison with what is worn, and its actions show here. Double-click does the usual thing. Ctrl-click moves between pack and stash. Alt-click marks for sale.'));
+  if(S.msg)p.appendChild(el('div','msg'+(S.msg.i?' i':''),S.msg.t));return}
+ var h=el('h3','',i.name);h.dataset.q=i.q;p.appendChild(h);p.appendChild(el('p','tip',i.tip+(i.q!=='normal'?' ('+i.q+')':'')));
+ if(wearable(i)){var r=el('div','req');r.appendChild(reqList(i,HERO,'For you (Sorceress 7)'));if(MERC.kinds.indexOf(i.kind)>=0||i.kind==='spear')r.appendChild(reqList(i,MERC,'For your Desert Guard (14)'));p.appendChild(r);
+  var s=slotFor(i,HSLOTS)[0],worn=s&&at(s[0]),uh=usable(i,HERO);
+  if(i.at==='pack'&&worn&&i.stats){var c=el('div','cmp');c.appendChild(el('b','','Against '+worn.name+' (worn): '));var parts=[];Object.keys(i.stats).forEach(function(k){parts.push(k+' '+((worn.stats||{})[k]!=null?(worn.stats[k]+' -> '):'new: ')+i.stats[k])});
+   c.appendChild(document.createTextNode(parts.join(', ')+'.'+(uh.ok?'':' You would need: '+uh.reasons.map(function(x){return x.t}).join('; ')+'.')));p.appendChild(c)}}
+ var a=el('div','acts'),uh2=usable(i,HERO),um=usable(i,MERC);
+ if(i.at==='pack'){
+  if(i.unid)a.appendChild(btn('Identify','primary',function(){pendThen(i,function(){i.unid=false;i.name='Coral Ring';i.tip='+14% lightning resistance';i.stats={'Lightning resistance':14};log('Identify ring','done, instant')})}));
+  if(wearable(i)&&uh2.ok){var sl=slotFor(i,HSLOTS)[0];a.appendChild(btn('Equip','primary',function(){equip(i,sl[0],HERO)}))}
+  if(wearable(i)&&um.ok)a.appendChild(btn('Give to mercenary','',function(){equip(i,'mrhand',MERC)}));
+  a.appendChild(btn(S.town?'Stash':'Stash (waits for town)','',function(){stash(i,'stash')}));
+  a.appendChild(btn(i.mark?'Clear sell mark':'Mark for sale','',function(){i.mark=i.mark?null:'sell';render()}));
+  a.appendChild(btn(i.confirm?'Really drop? It cannot be undone':'Drop','',function(){if(!i.confirm){i.confirm=true;render();return}I.splice(I.indexOf(i),1);S.sel=null;log('Drop '+i.name,'done, instant');render()}));
+ }else if(i.at==='stash')a.appendChild(btn(S.town?'Take':'Take (waits for town)','primary',function(){stash(i,'pack')}));
+ else if(i.at.charAt(0)==='m')a.appendChild(btn('Take off','',function(){say('Taking items off the mercenary is not built yet.',true);render()}));
+ else if(i.at!=='belt'){a.appendChild(btn('Take off','primary',function(){unequip(i)}));if(i.broken)a.appendChild(btn('Repair now','',function(){say('Repair is an errand: the hero walks to the smith at the next safe moment. It shows in Orders.',true);render()}))}
+ if(i.wait)a.appendChild(btn('Cancel the queued move','',function(){i.wait=null;render()}));
+ p.appendChild(a);
+ if(i.at==='pack'&&wearable(i)&&!uh2.ok)p.appendChild(el('p','note','Equip is not offered: '+uh2.reasons.map(function(x){return x.t}).join('; ')+'.'));
+ if(S.msg)p.appendChild(el('div','msg'+(S.msg.i?' i':''),S.msg.t))}
+function segs(id,opts,cur,fn,cls){var b=$(id);b.textContent='';opts.forEach(function(o){var x=el('button',cls||'seg',o[1]);x.type='button';x.setAttribute('aria-pressed',String(cur()===o[0]));x.addEventListener('click',function(){fn(o[0])});b.appendChild(x)})}
+function render(){
+ doll('heroDoll',HSLOTS,HERO);doll('mercDoll',MSLOTS,MERC);grid('pack','pack',10,4);grid('belt','belt',4,1);grid('stash','stash',6,8);insp();
+ $('mLife').style.width=MERC.alive?'90%':'0%';var st=$('mState');st.textContent=MERC.alive?'alive':'dead';st.className='state'+(MERC.alive?'':' dead');
+ var mn=$('mercNote');mn.textContent='';if(MERC.alive)mn.textContent='He wears a helm, body armor and a spear or polearm. Slots he cannot use are not drawn.';else{mn.appendChild(document.createTextNode('Dead. Revive costs 600 gold (you have 1,240). '));mn.appendChild(btn('Revive mercenary','primary',function(){MERC.alive=true;log('Revive mercenary','errand: walks to town');render()}))}
+ var n=I.filter(function(i){return i.mark==='sell'}).length;$('sellBtn').textContent='Sell marked ('+n+')';$('sellBtn').disabled=!n;
+ $('chest').textContent=S.town?'At the chest: stash moves are instant.':'In the field: stash moves wait for the next town visit and show a TOWN badge.';
+ segs('mPlace',[[false,'in the field'],[true,'in town at the chest']],function(){return S.town},function(v){S.town=v;if(v)I.forEach(function(i){if(i.wait){var to=i.wait,sp=free(to,to==='stash'?6:10,to==='stash'?8:4,i.w,i.h);if(sp){i.at=to;i.x=sp[0];i.y=sp[1];log(i.name+' to the '+to,'done on arrival')}i.wait=null}});render()});
+ segs('mMerc',[[true,'alive'],[false,'dead']],function(){return MERC.alive},function(v){MERC.alive=v;render()});
+ segs('chips',[['hero','Usable by hero'],['merc','Usable by mercenary'],['sell','Marked sell']],function(){return S.chip},function(v){S.chip=S.chip===v?'':v;render()},'chipb');
+ segs('tabs',[['Stash','Stash'],['Rules','Loot rules']],function(){return S.tab},function(v){S.tab=v;S.rule=-1;render()});
+ $('stashPane').hidden=S.tab!=='Stash';$('rulesPane').hidden=S.tab!=='Rules';
+ segs('up',[['hero','Hero'],['merc','Mercenary'],['stash','Stash']],function(){return $('app').dataset.up},function(v){$('app').dataset.up=v;render()});
+ segs('sets',[['fire','Fire damage'],['town','Town and trade'],['save','+ Save set']],function(){return S.set},function(v){S.set=S.set===v?'':v;var sn=$('setNote');sn.hidden=!S.set;sn.className='note'+(v==='fire'?' warn':'');
+  sn.textContent=v==='fire'?'Apply would put on Staff of Charged Bolt and Raven Grip. Skipped, not replaced: Light Plate needs 41 strength (you have 38).':v==='town'?'Apply would put on Cap, Sturdy Quilted Armor, Boots: all already worn.':'Saves what the hero wears now as a named set.';render()},'chipb');
+ var rl=$('rules');rl.textContent='';RULES.forEach(function(r,k){var li=el('li',S.rule===k?'on':'');li.appendChild(el('span','',k<RULES.length-1?String(k+1):'-'));var t=el('span','',r[0]+' ');t.appendChild(el('span','a','-> '+r[1]));li.appendChild(t);
+  li.appendChild(el('span','num',String(I.filter(function(i){return i.at==='pack'&&ruleOf(i)===k}).length)));li.addEventListener('click',function(){S.rule=S.rule===k?-1:k;render()});rl.appendChild(li)});
+ var s=$('strip');s.textContent='';s.appendChild(el('b','','Item actions'));
+ I.filter(function(i){return i.wait}).forEach(function(i){var sp=el('span','',i.name+' to the '+i.wait+': waits for town ');var x=el('button','x','cancel');x.type='button';x.addEventListener('click',function(){i.wait=null;render()});sp.appendChild(x);s.appendChild(sp)});
+ S.log.forEach(function(l){s.appendChild(el('span','',l.t+': '+l.s))});
+}
+$('q').addEventListener('input',function(){S.q=this.value;grid('pack','pack',10,4);grid('stash','stash',6,8)});
+$('sellBtn').addEventListener('click',function(){log('Sell marked items','errand: walks to town at the next safe moment');render()});
+$('dep').addEventListener('click',function(){say(S.town?'Deposited.':'Queued for the next town visit: the chest must be open.',true);render()});
+$('wd').addEventListener('click',function(){say(S.town?'Withdrawn.':'Queued for the next town visit: the chest must be open.',true);render()});
+document.addEventListener('keydown',function(e){if(e.key==='/'&&e.target.tagName!=='INPUT'){e.preventDefault();$('q').focus()}if(e.key==='Escape'){S.sel=null;S.msg=null;render()}});
+S.sel=13;render();
+})();
+</script>
