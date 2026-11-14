@@ -1,0 +1,463 @@
+== blocked-paladin
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Stony Field for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Stony Field for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {s=blocked} title="Journey blocked: Blood Raven needs level 9 (you are 7)"
+      span.o-ix "▲"
+      span.o-t.o-wide "Journey blocked: Blood Raven needs level 9 (you are 7)"
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== blocked-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Cold Plains for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Cold Plains for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {s=blocked} title="Journey blocked: Blood Raven needs level 9 (you are 7)"
+      span.o-ix "▲"
+      span.o-t.o-wide "Journey blocked: Blood Raven needs level 9 (you are 7)"
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== cancel-all-paladin
+div
+  div.o-head
+    span "Orders"
+    em "8 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Cancel" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=inv:7:equip,s=queued} title="Equip Tower Shield - queued"
+      span.o-ix "1"
+      span.o-t "Equip Tower Shield"
+      span.o-r "queued"
+      span.o-chip {s=next} "next"
+      button.o-x {key=x-inv:7:equip} "×"
+    div.o-row {id=inv:8:trash,s=active} title="Trash Gem - working on it"
+      span.o-ix ">"
+      span.o-t "Trash Gem"
+      span.o-r "working on it"
+      span.o-chip {s=active} "active"
+      span.o-x
+    div.o-row {id=inv:9:equip,s=queued} title="Equip Ring - queued"
+      span.o-ix "2"
+      span.o-t "Equip Ring"
+      span.o-r "queued"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-inv:9:equip} "×"
+    div.o-row {id=repair:1,s=active} title="Farm until repair - farming for repair: 140 of 300 gold"
+      span.o-ix ">"
+      span.o-t "Farm until repair"
+      span.o-r "farming for repair: 140 of 300 gold"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-repair:1} "×"
+    div.o-row {id=farmgold:1,s=active} title="Farm gold - Farming gold in Dark Wood"
+      span.o-ix ">"
+      span.o-t "Farm gold"
+      span.o-r "Farming gold in Dark Wood"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-farmgold:1} "×"
+    div.o-row {id=loop:1,s=active} title="Loop: Stony Field 20 min, repair, repeat (round 3 of 5) - farming"
+      span.o-ix ">"
+      span.o-t "Loop: Stony Field 20 min, repair, repeat (round 3 of 5)"
+      span.o-r "farming"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-loop:1} "×"
+    div.o-row {id=order:12,s=active} title="Fight here for 30 min - 20 min left"
+      span.o-ix ">"
+      span.o-t "Fight here for 30 min"
+      span.o-r "20 min left"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {id=queue:3,s=queued} title="Farm Dark Wood for 20 min - behind the running order (place 1)"
+      span.o-ix "3"
+      span.o-t "Farm Dark Wood for 20 min"
+      span.o-r "behind the running order (place 1)"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-queue:3} "×"
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== cancel-all-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "8 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Cancel" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=inv:7:equip,s=queued} title="Equip Frost Rune Staff - queued"
+      span.o-ix "1"
+      span.o-t "Equip Frost Rune Staff"
+      span.o-r "queued"
+      span.o-chip {s=next} "next"
+      button.o-x {key=x-inv:7:equip} "×"
+    div.o-row {id=inv:8:trash,s=active} title="Trash Gem - working on it"
+      span.o-ix ">"
+      span.o-t "Trash Gem"
+      span.o-r "working on it"
+      span.o-chip {s=active} "active"
+      span.o-x
+    div.o-row {id=inv:9:equip,s=queued} title="Equip Ring - queued"
+      span.o-ix "2"
+      span.o-t "Equip Ring"
+      span.o-r "queued"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-inv:9:equip} "×"
+    div.o-row {id=repair:1,s=active} title="Farm until repair - farming for repair: 140 of 300 gold"
+      span.o-ix ">"
+      span.o-t "Farm until repair"
+      span.o-r "farming for repair: 140 of 300 gold"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-repair:1} "×"
+    div.o-row {id=farmgold:1,s=active} title="Farm gold - Farming gold in Blood Moor"
+      span.o-ix ">"
+      span.o-t "Farm gold"
+      span.o-r "Farming gold in Blood Moor"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-farmgold:1} "×"
+    div.o-row {id=loop:1,s=active} title="Loop: Cold Plains 20 min, repair, repeat (round 3 of 5) - farming"
+      span.o-ix ">"
+      span.o-t "Loop: Cold Plains 20 min, repair, repeat (round 3 of 5)"
+      span.o-r "farming"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-loop:1} "×"
+    div.o-row {id=order:12,s=active} title="Fight here for 30 min - 20 min left"
+      span.o-ix ">"
+      span.o-t "Fight here for 30 min"
+      span.o-r "20 min left"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {id=queue:3,s=queued} title="Farm Blood Moor for 20 min - behind the running order (place 1)"
+      span.o-ix "3"
+      span.o-t "Farm Blood Moor for 20 min"
+      span.o-r "behind the running order (place 1)"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-queue:3} "×"
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== empty-paladin
+div
+  div.o-head
+    span "Orders"
+    em "0 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-empty "No orders. The hero follows the plan."
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== empty-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "0 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-empty "No orders. The hero follows the plan."
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== paused-paladin
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Resume" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Stony Field for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Stony Field for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== paused-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Resume" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Cold Plains for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Cold Plains for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== safety-paladin
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  div.o-safety {tone=warn} "Safety first: retreating to town. Your orders wait."
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Stony Field for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Stony Field for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== safety-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "1 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  div.o-safety {tone=warn} "Safety first: retreating to town. Your orders wait."
+  div.o-list {scroll=1}
+    div.o-row {id=order:12,s=active} title="Farm Cold Plains for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Cold Plains for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== three-one-failed-paladin
+div
+  div.o-head
+    span "Orders"
+    em "2 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=inv:44:identify,s=waiting} title="Identify Tower Shield - waiting for a safe moment"
+      span.o-ix "1"
+      span.o-t "Identify Tower Shield"
+      span.o-r "waiting for a safe moment"
+      span.o-chip {s=next} "next"
+      button.o-x {key=x-inv:44:identify} "×"
+    div.o-row {id=order:12,s=active} title="Farm Stony Field for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Stony Field for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {id=inv:45:trash,s=failed} title="Trash Cracked Helm - no room on the ground here"
+      span.o-ix "!"
+      span.o-t "Trash Cracked Helm"
+      span.o-r "no room on the ground here"
+      span.o-chip {s=failed} "failed"
+      span.o-x
+  div.o-row.o-plan title="Farming Stony Field for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Stony Field for level 10 to unlock Blood Raven"
+== three-one-failed-sorceress
+div
+  div.o-head
+    span "Orders"
+    em "2 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=inv:44:identify,s=waiting} title="Identify Frost Rune Staff - waiting for a safe moment"
+      span.o-ix "1"
+      span.o-t "Identify Frost Rune Staff"
+      span.o-r "waiting for a safe moment"
+      span.o-chip {s=next} "next"
+      button.o-x {key=x-inv:44:identify} "×"
+    div.o-row {id=order:12,s=active} title="Farm Cold Plains for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Cold Plains for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {id=inv:45:trash,s=failed} title="Trash Cracked Helm - no room on the ground here"
+      span.o-ix "!"
+      span.o-t "Trash Cracked Helm"
+      span.o-r "no room on the ground here"
+      span.o-chip {s=failed} "failed"
+      span.o-x
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== eight-rows
+div
+  div.o-head
+    span "Orders"
+    em "7 open"
+  div.o-verbs
+    button.d-btn {inert=1,intent=go,size=sm} "Go to" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=town,size=sm} "Town" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=repair,size=sm} "Repair now" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=pause,size=sm} "Pause" title="Orders are given from the order card for now"
+    button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
+  [div.o-safety {tone=warn}]
+  div.o-list {scroll=1}
+    div.o-row {id=inv:44:identify,s=waiting} title="Identify Frost Rune Staff - waiting for a safe moment"
+      span.o-ix "1"
+      span.o-t "Identify Frost Rune Staff"
+      span.o-r "waiting for a safe moment"
+      span.o-chip {s=next} "next"
+      button.o-x {key=x-inv:44:identify} "×"
+    div.o-row {id=order:24,s=queued} title="Farm Blood Moor for 14 min - starts when the running order ends"
+      span.o-ix "2"
+      span.o-t "Farm Blood Moor for 14 min"
+      span.o-r "starts when the running order ends"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-order:24} "×"
+    div.o-row {id=order:23,s=queued} title="Farm Blood Moor for 13 min - starts when the running order ends"
+      span.o-ix "3"
+      span.o-t "Farm Blood Moor for 13 min"
+      span.o-r "starts when the running order ends"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-order:23} "×"
+    div.o-row {id=order:22,s=queued} title="Farm Blood Moor for 12 min - starts when the running order ends"
+      span.o-ix "4"
+      span.o-t "Farm Blood Moor for 12 min"
+      span.o-r "starts when the running order ends"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-order:22} "×"
+    div.o-row {id=order:21,s=queued} title="Farm Blood Moor for 11 min - starts when the running order ends"
+      span.o-ix "5"
+      span.o-t "Farm Blood Moor for 11 min"
+      span.o-r "starts when the running order ends"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-order:21} "×"
+    div.o-row {id=order:20,s=queued} title="Farm Blood Moor for 10 min - starts when the running order ends"
+      span.o-ix "6"
+      span.o-t "Farm Blood Moor for 10 min"
+      span.o-r "starts when the running order ends"
+      span.o-chip {s=queued} "queued"
+      button.o-x {key=x-order:20} "×"
+    div.o-row {id=order:12,s=active} title="Farm Cold Plains for 30 min - 20 min left, 41 kills"
+      span.o-ix ">"
+      span.o-t "Farm Cold Plains for 30 min"
+      span.o-r "20 min left, 41 kills"
+      span.o-chip {s=active} "active"
+      button.o-x {key=x-order:12} "×"
+    div.o-row {id=inv:45:trash,s=failed} title="Trash Cracked Helm - no room on the ground here"
+      span.o-ix "!"
+      span.o-t "Trash Cracked Helm"
+      span.o-r "no room on the ground here"
+      span.o-chip {s=failed} "failed"
+      span.o-x
+  div.o-row.o-plan title="Farming Cold Plains for level 10 to unlock Blood Raven"
+    span.o-ix "~"
+    span.o-t "Then the plan"
+    span.o-r "Farming Cold Plains for level 10 to unlock Blood Raven"
+== no connection
+div
+  div.o-head
+    span "Orders"
+    em
+  div.o-verbs
+  div.o-safety {tone=muted} "No connection to the hero. Orders are kept and shown when it is back."
+  div.o-list {scroll=1}
+  div.o-row.o-plan
+== route off (panel hidden)
+div
+  div.o-head
+    span "Orders"
+    em
+  div.o-verbs
+  [div.o-safety]
+  div.o-list {scroll=1}
+  div.o-row.o-plan

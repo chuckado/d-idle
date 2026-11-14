@@ -104,22 +104,35 @@ func TestCommandStateTable(t *testing.T) {
 	}
 }
 
+// mixedScenario has one row of every source, all cancellable but the item being done.
+func mixedScenario(cl cmdClass) CommandSources {
+	s := scenario("three-one-failed", cl)
+	s.Orders = ordersFixture(cl, Order{ID: 12, Kind: OrderHere, Minutes: 30, State: OrderActive, Text: "Fight here for 30 min", StartedAt: 3000}) // a loop holds go and home orders only
+	s.Queue = func() *OrderQueueView {
+		return &OrderQueueView{Entries: []QueueEntry{{ID: 3, Kind: OrderGo, Area: cl.area2, Minutes: 20, Text: "Farm " + cl.area2 + " for 20 min", State: QueueWaiting}}}
+	}
+	s.Loop = func() *LoopView {
+		return &LoopView{State: LoopActive, Text: "Loop: " + cl.area + " 20 min, repair, repeat (round 3 of 5)", Phase: LoopPhaseFarming}
+	}
+	s.Repair = jsrc(`{"request":{"state":"requested","kind":"farm","phase":"farming","have":140,"target":300},"trip":{"line":"Farming gold","button":{"action":"cancel","label":"Cancel","enabled":true}}}`)
+	s.GoldFarm = jsrc(`{"on":true,"text":"Farming gold in ` + cl.area2 + `"}`)
+	s.Items = jsrc(`{"queue":[{"id":7,"kind":"equip","name":"` + cl.item + `","state":"queued"},{"id":8,"kind":"trash","name":"Gem","state":"doing"},{"id":9,"kind":"equip","name":"Ring","state":"queued","group":"g1"}]}`)
+	return s
+}
+
 // A row's Cancel names a route that really exists as a POST route, and only a row that can be cancelled has one.
 func TestCommandCancelRoutesExist(t *testing.T) {
 	post := map[string]bool{"/api/orders/cancel": true, OrderQueueRoute: true, OrderLoopRoute: true, GoldFarmRoute: true}
 	for _, p := range append(append([]string{}, RepairPostRoutes...), InvPostRoutes...) {
 		post[p] = true
 	}
-	cl := cmdClasses["sorceress"]
-	s := scenario("three-one-failed", cl)
-	s.Orders = ordersFixture(cl, Order{ID: 12, Kind: OrderHere, Minutes: 30, State: OrderActive, Text: "Fight here for 30 min", StartedAt: 3000}) // a loop holds go and home orders only
-	s.Queue = func() *OrderQueueView {
-		return &OrderQueueView{Entries: []QueueEntry{{ID: 3, Kind: OrderGo, Area: cl.area2, Minutes: 20, Text: "Farm " + cl.area2 + " for 20 min", State: QueueWaiting}}}
+	for class, cl := range cmdClasses {
+		s := mixedScenario(cl)
+		rec := httptest.NewRecorder()
+		CommandsHandler(func() CommandSources { return s }).ServeHTTP(rec, httptest.NewRequest("GET", CommandsRoute, nil))
+		golden(t, "commands/view-cancel-all-"+class, rec.Body.String())
 	}
-	s.Loop = func() *LoopView { return &LoopView{State: LoopActive, Text: "Loop: x", Phase: LoopPhaseFarming} }
-	s.Repair = jsrc(`{"request":{"state":"requested","kind":"farm","phase":"farming","have":140,"target":300},"trip":{"line":"Farming gold","button":{"action":"cancel","label":"Cancel","enabled":true}}}`)
-	s.GoldFarm = jsrc(`{"on":true,"text":"Farming gold in Blood Moor"}`)
-	s.Items = jsrc(`{"queue":[{"id":7,"kind":"equip","name":"Helm","state":"queued"},{"id":8,"kind":"trash","name":"Gem","state":"doing"},{"id":9,"kind":"equip","name":"Ring","state":"queued","group":"g1"}]}`)
+	s := mixedScenario(cmdClasses["sorceress"])
 	v := BuildCommands(s)
 	seen := map[string]bool{}
 	for _, r := range v.Rows {
@@ -292,4 +305,8 @@ func hasID(l []string, s string) bool {
 		}
 	}
 	return false
+}
+
+func TestOrdersPanelDOM(t *testing.T) {
+	runNode(t, "testdata/orders_dom.js", "web/panels/orders/panel.js")
 }
