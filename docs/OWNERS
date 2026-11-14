@@ -185,6 +185,7 @@ data/onboarding  credit-runner  firstminutes
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
+deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
 docs/away-drill.md  live-agent  awaydrill
@@ -250,6 +251,7 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
+docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
@@ -633,6 +635,8 @@ internal/watch/whyline.json  credit-runner  staletarget
 internal/watch/whyline_test.go  credit-runner  repairtrip
 internal/watch/whyline_test.go  credit-runner  staletarget
 tools/bounce3  pro-runner  bounce3
+tools/dev-update-host.sh  credit-runner  buildhosts3
+tools/dev-update.sh  credit-runner  buildhosts3
 tools/emu  credit-runner  emurebuild
 tools/emu/am_batch.sh  credit-runner  areamon
 tools/emu/am_env.sh  credit-runner  areamon
@@ -646,8 +650,10 @@ tools/emu/pp_*  credit-runner  prprep
 tools/emu/zd_*  credit-runner  palskill-matrix
 tools/emu/zd_*  credit-runner  zealdiff
 tools/firsthour.sh  live-agent  firsthour
+tools/friendpack/build.sh  credit-runner  buildhosts3
 tools/friendpack/checklist.sh  credit-runner  cut010b
 tools/friendpack/checklist.sh  credit-runner  cutfix
+tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
