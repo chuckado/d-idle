@@ -16,6 +16,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/itemreq"
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/status"
 )
@@ -931,6 +932,11 @@ type ItemView struct {
 	// bot has no stash backend or the item lies elsewhere) and, when it is refused now, the reason.
 	StashOp string `json:"stashOp,omitempty"`
 	NoStash string `json:"noStash,omitempty"`
+	// Schema 8: what the item requires (after the modifiers the bot reads; Approx when it cannot read all of them) and
+	// whether the hero and, when one is employed, the mercenary can use it now, with the reasons and their numbers.
+	// Both come from the equip path's own rule (usable.go); absent on items that are no equipment.
+	Req    *itemreq.Req    `json:"req,omitempty"`
+	Usable *itemreq.Usable `json:"usable,omitempty"`
 }
 
 // ViewSchema is the version of the /api/inventory reply: 2 added the optional item fields tip, base and sell (the item
@@ -939,9 +945,9 @@ type ItemView struct {
 // optional merc block (docs/research/merc-gear.md); 5 added the optional identify block, the item field noIdentify and the
 // request kinds identify, buyid and cain with the fields count and result (the identify commands); 7 added the item fields
 // noWearSlot and noUnequip, the sets block, the request kind unequip and the request fields group, groupName and seq
-// (drag and drop, gear sets, docs/gearsets.md); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
+// (drag and drop, gear sets, docs/gearsets.md); 8 added the item fields req and usable (docs/inventory-ui.md, "Requirements and usability"); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
 // fields are optional.
-const ViewSchema = 7
+const ViewSchema = 8
 
 // View is the inventory page's data.
 type View struct {
@@ -1049,15 +1055,21 @@ func (d *Desk) View() View {
 	if c.TidyFor != nil {
 		tidyWhy = c.TidyFor(s)
 	}
-	decorate := func(it status.Item, place string) ItemView {
-		iv := ItemView{Item: it}
+	judge, _ := eq.(Judge)
+	mf := mercFacts(data.Merc)
+	decorate := func(it status.Item, place string) (iv ItemView) {
+		iv = ItemView{Item: it}
 		if place == "mercworn" {
-			return iv // his own id space: no marks, pins or advice by id (stage A is read only)
+			// his own id space: no marks, pins or advice by id (stage A is read only); only his own verdict
+			fillUsable(&iv, usableInput{judge: judge, snap: s, item: it, place: place, merc: mf})
+			return iv
 		}
 		u, _, ok := d.unit(it.ID)
 		if !ok {
 			return iv
 		}
+		in := usableInput{judge: judge, snap: s, unit: &u, item: it, place: place, merc: mf}
+		defer func() { fillUsable(&iv, in) }()
 		for _, m := range marks {
 			if m.ID == it.ID && markFits(m, u) {
 				iv.Mark = m.Mark
@@ -1097,6 +1109,7 @@ func (d *Desk) View() View {
 				if len(iv.CanWear) == 0 && why != nil {
 					iv.NoWear = why.Error()
 				}
+				in.canWear, in.wearWhy, in.hasWhy = len(iv.CanWear), why, true
 			} else if eq == nil {
 				iv.NoWear = "equipping is not available on this bot"
 			}
