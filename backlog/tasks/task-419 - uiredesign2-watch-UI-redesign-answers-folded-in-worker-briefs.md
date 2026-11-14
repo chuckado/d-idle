@@ -1,10 +1,11 @@
 ---
 id: TASK-419
 title: 'uiredesign2: watch UI redesign answers folded in, worker briefs'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:18:00Z'
+updated_date: '2026-11-14T15:45:00Z'
 labels:
   - watch
   - research
