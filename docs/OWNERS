@@ -241,7 +241,6 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
-docs/process/build-hosts-2026-11-14.md  credit-runner  buildhosts
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
@@ -277,7 +276,6 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
-docs/survival/**  user  survivaldesign
 docs/swingmodel.md  credit-runner  swingmodel
 docs/t0-variants.md  credit-runner  qdensity
 docs/tester-guide.md  credit-runner  testerpack
@@ -289,13 +287,11 @@ docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
 docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
 docs/upstream/  credit-runner  prpost3
+docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/briefs/**  credit-runner  prpipeline
-docs/upstream/drafts/swing-start.md  credit-runner  prswing3
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
 docs/upstream/pr-queue.md  credit-runner  prpipeline
-docs/upstream/pr-queue.md  credit-runner  prswing3
-docs/upstream/verification-swing-start-r2-2026-11-14.md  live-agent  prverify6
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees

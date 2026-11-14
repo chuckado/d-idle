@@ -145,14 +145,11 @@
 | boss1 | proposed | - | `docs/research/boss1-trace.md`<br>`tools/emu/bs_spawn.sh`<br>`tools/emu/bs_model.py` | - |
 | levelsim | proposed | - | `tools/levelsim/`<br>`docs/levelsim.md` | - |
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
-| prverify6 | proposed | - | `docs/upstream/verification-swing-start-r2-2026-11-14.md` | - |
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
-| prswing3 | proposed | - | `docs/upstream/drafts/swing-start.md`<br>`docs/upstream/pr-queue.md` | `fork-branch:fid/swing-start-r3` |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
-| survivaldesign | in-progress | - | `docs/survival/**` | - |
-| buildhosts | in-progress | - | `docs/process/build-hosts-2026-11-14.md` | - |
+| prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -201,6 +198,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0453e5922 11-14 12:22 `Merge agent/prpost4: Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row` (prpost4)
+- 97ef7c818 11-14 12:21 `Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row` (-)
 - 7c1ce15d9 11-14 12:18 `Merge agent/buildhosts: buildhosts: scrub machine names for leakcheck` (buildhosts)
 - 83f36854b 11-14 12:18 `Merge agent/survivaldesign: Merge branch 'main' into TASK-430` (survivaldesign)
 - 88dc84a1e 11-14 12:18 `Merge agent/prswing3: Merge branch 'main' into TASK-429` (prswing3)
@@ -209,6 +208,4 @@
 - c28cbd12b 11-14 12:14 `Merge branch 'main' into TASK-429` (-)
 - 5375357ad 11-14 10:55 `Merge branch 'main' into TASK-418` (-)
 - ce23b7818 11-14 10:54 `Merge agent/prpipeline: Merge branch 'main' into TASK-422` (prpipeline)
-- 52867423e 11-14 10:53 `Merge branch 'main' into TASK-422` (-)
-- 03a655a59 11-14 10:49 `Merge agent/drillzip: Merge branch 'main' into TASK-423` (drillzip)
 <!-- statusgen:end -->

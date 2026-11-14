@@ -1,10 +1,11 @@
 ---
 id: TASK-432
 title: 'buildhosts: build hosts study (the NAS builder, labrun nas)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T16:06:00Z'
+updated_date: '2026-11-14T17:23:00Z'
 labels:
   - docs
   - research
