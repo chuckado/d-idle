@@ -158,7 +158,6 @@
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
 | verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
-| emurun | proposed | - | `docs/research/emu-runs-2026-11-14.md`<br>`tools/emu/fl_gold.py`<br>`tools/emu/block_len.py`<br>`tools/emu/emurun_gold.sh`<br>`tools/emu/emurun_block.sh` | - |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
