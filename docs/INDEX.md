@@ -506,6 +506,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [staletarget.md](staletarget.md): Stale target area, border-loop bans and blocked journey steps (TASK-398) (status: fix landed on branch agent/staletarget (not deployed; no live run). Tags: V verified (how is said), S...)
 - [stance.md](stance.md): Fight stance (cards stancefix, stancelever) (status: built and tested offline; NOT run in a live game. Tags: V = proven by a test in this tree or by a log...)
 - [summon.md](summon.md): Necromancer upkeep (internal/combat/necro.go)
+- [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
 - [tally-strip.md](tally-strip.md): Tally strip: credits from events, the strip, the charter sink (status: built offline 2026-11-07 and wired into the bot by TASK-140 (see Wiring), TASK-129 (fun loop, ADR 0018,...)
 - [task.md](task.md): Task layer (internal/task) and how the bot wires it (agent TASKLAYER)
@@ -526,6 +527,18 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [townwedge.md](townwedge.md): townwedge: the permanent town-exit wedge (status: fix merged with card townwedge. Tags: VERIFIED = log line or test, INFERRED = reading. Evidence:...)
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
+
+`ui/redesign-2026-11-14/`
+
+- [A-audit.md](ui/redesign-2026-11-14/A-audit.md): A. Audit: what /watch shows and how the player commands the bot today (status: design input (TASK-416, 2026-11-14). Read from the code on `origin/main` at 883770a9 and from pictures of...)
+- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: design proposal (TASK-416, 2026-11-14). It builds on `docs/ui-design-system.md` (the shell, tokens, panel...)
+- [C-orders.md](ui/redesign-2026-11-14/C-orders.md): C. Orders: one control surface (status: design proposal (TASK-416, 2026-11-14), not built. Tags per line: V = the backend exists and was read in...)
+- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: design proposal (TASK-416, 2026-11-14). The drafts in layouts/ are `watch.layout/1` files written and...)
+- [E-visual-system.md](ui/redesign-2026-11-14/E-visual-system.md): E. Visual system (status: design proposal (TASK-416, 2026-11-14). The identity stays: near-black warm stone, gold accent, serif...)
+- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan: slices for Sonnet workers (status: proposal (TASK-416, 2026-11-14). No slice starts before the user has reviewed the design and answered the...)
+- [H-open-questions.md](ui/redesign-2026-11-14/H-open-questions.md): H. Open questions for the user (status: waiting for answers (TASK-416, 2026-11-14). Each can be answered in a word. The recommendation is what the...)
+- [redesign-2026-11-14/README.md](ui/redesign-2026-11-14/README.md): Watch UI redesign, design phase (2026-11-14) (status: design proposal for the user's review (TASK-416, branch `agent/uidesign`). Nothing is built; no file under...)
+- [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
 - [unlock-alerts.md](unlock-alerts.md): Alerts and pings (TASK-162, unlockalerts)
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
 - [unlock-bestiary.md](unlock-bestiary.md): Cain's notes, the bestiary (TASK-158, unlockbestiary)
@@ -547,6 +560,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
+- [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r2, ready for the SECOND independent verifier pass (prswing2, 2026-11-14). Branch `fid/swing-start-r2` on...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
@@ -554,6 +568,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
+- [verification-swing-start-2026-11-14.md](upstream/verification-swing-start-2026-11-14.md): Independent verification of the swing-start PR r1 (2026-11-14) (status: current, 2026-11-14 (TASK-415, agent prverify5). Verdict **NEEDS-WORK** on r1: one code edit (the held...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
@@ -795,6 +810,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
+- [warpclick-2026-11-14.md](probes/warpclick-2026-11-14.md): Warps on the rebased d2d need a Select-box click (TASK-412, 2026-11-14) (status: result record. Tags: V = run and seen on the worker host (headless throwaway heroes, seed 7 unless said);...)
 - [sentinel.md](sentinel.md): Sentinel: layer 2 failsafes (agent SENTINEL)
 - [soak-analysis.md](soak-analysis.md): Soaky soak analysis (SOAKANALYSIS, 2026-10-29) (status: SUPERSEDED in part: pre-fix baseline; the approved death rule is plan-v2 section 10.2 and...)
 - [soak-hosts.md](soak-hosts.md): Soak hosts (status: moved to the private ops repo (d2lod-ops, `docs/soak-hosts.md`). Not part of the public tree.)

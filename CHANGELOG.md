@@ -8,6 +8,14 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14) <!--sg:agent/stashanywhere-->
+- Merge branch 'main' into TASK-417 <!--sg:agent/prswing2-->
+- Merge branch 'main' into TASK-416 <!--sg:agent/uidesign-->
+- Merge branch 'main' into TASK-415 <!--sg:agent/prverify5-->
+- Merge branch 'main' into TASK-411 <!--sg:agent/prswing-->
+- Merge branch 'main' into TASK-408 <!--sg:agent/decomp18-->
+- Merge branch 'main' into TASK-404 <!--sg:agent/swingmodel-->
+- Merge branch 'main' into TASK-412 <!--sg:agent/warpclick-->
 - Merge branch 'main' into TASK-413 <!--sg:agent/levelsim-->
 - levelplan3: watch campaign goldens for the new Smith and Andariel rows <!--sg:agent/levelplan3-->
 - Merge branch 'main' into TASK-407 <!--sg:agent/hour4-->
