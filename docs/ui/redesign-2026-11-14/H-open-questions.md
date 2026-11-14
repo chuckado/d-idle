@@ -16,3 +16,24 @@
 | 10 | Tile look: borderless tiles with small caps labels (the mockup), or keep today's bordered cards with serif titles? | borderless / bordered | **borderless** tiles with small caps labels | **borderless** | Fewer lines on screen; the serif stays for the brand. It applies to the new panels only, so Classic keeps its look |
 | 11 | Should Needs you raise a desktop notification or sound for red rows? | no / red only / all | **red only**, off until switched on | **red only**, off until switched on | The alert switches exist today in the Alerts card; they move to the menu |
 | 12 | Clock times on the page: the viewer's own zone, or always Eastern? | viewer / eastern | **viewer**: the viewer's own time zone | **viewer** | A friend elsewhere reads local time; your own browser is Eastern anyway |
+
+## Second round (added 2026-11-14 with the character screen, instant actions and loot rules)
+
+> status: 13 is answered; 14 to 25 are open. Each can be answered in a word. The briefs assume the recommendation until answered.
+
+| # | Question | Options | Answer | Recommendation | Why |
+|---|---|---|---|---|---|
+| 13 | Can the player stash and take from anywhere? | at the chest / anywhere | **ANSWERED (user, 2026-11-14): at the chest.** Moves in the field are queued for the next town visit with a badge. "Stash from anywhere" is a possible later unlock (TASK-420); the screen reserves a locked line for it, marked as a convenience that skips a game rule; nothing is built | at the chest | it is the game's rule; a virtual stash is a fidelity trade-off |
+| 14 | May instant item actions (equip, take off, identify, pack moves, drop) run during a fight? | anytime alive / only with no monster near | open | **anytime alive** | the real game allows it, and a verb opens no panel and moves no cursor. It still waits while a safety action or the bot's own click holds the input |
+| 15 | Instant actions for friends? Their release starts the engine without the item-verb flag and the knob is off | queue for friends / instant for all | open | **queue for friends** for now | the flag is off for the release's legal checklist; the same screen works on the queue path, only slower |
+| 16 | Are instant actions allowed in a named (measured) run? | off / on | open | **off** | a verb is not the real input channel; the crutch-rule text for verbs is still a draft (item-verbs section 10) |
+| 17 | A "Tidy pack" button (auto-arrange)? | later / now / never | open | **later** | useful, but it is a batch of moves and not needed for the first version |
+| 18 | When does editing the loot rules unlock? (Viewing the Starter rules is free) | after 20 items sold / a level / tally only / free | open | **after 20 items sold, or tally** | the player has then seen what selling does; the trigger is one row of ladder data |
+| 19 | Where do the loot rules live? | a tab of the character screen / their own page | open | **a tab** | the pack and stash the rules act on are beside it, so the preview can light the items |
+| 20 | Comparison tooltips: facts only, or a better / worse verdict? | facts / verdict | open | **facts** | a verdict is a gear decision, which the bot never makes |
+| 21 | Hire a mercenary from the character screen? | no (Revive only) / yes | open | **no** | hiring is the town policy's; Revive is the player command you asked for |
+| 22 | The first queue slot opens today at the Den of Evil, usually before the first repair. Strict order (single orders, Loop, then queue) or keep the Den as an alternative trigger? | strict / keep the Den | open | **strict** | it is the order you described; one line of data restores the alternative |
+| 23 | What opens the Loop order? | the first manual repair cycle / a level / tally | open | **the first manual repair cycle** | it is exactly "watch for it to need repairs, and THEN unlock" |
+| 24 | When the page cannot know the exact requirement the game enforces (ethereal, reduced-requirement items), show the base number marked approximate, or hide the row? | approximate / hide | open | **approximate** | a number with a caveat beats no number; the server's refusal is still shown as it is |
+| 25 | Does the new character screen replace `/watch/inventory` outright, or sit behind a switch like the layouts? | replace / switch | open | **replace** | it is one page, not a layout file; routes, fields and POST bodies are unchanged, and two inventory pages would both need upkeep |
+

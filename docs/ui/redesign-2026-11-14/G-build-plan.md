@@ -1,36 +1,50 @@
-# G. Build plan: slices for Sonnet workers
+# G. Build plan
 
-> status: proposal (TASK-416, 2026-11-14). No slice starts before the user has reviewed the design and answered the open questions. Estimates are in agent runs of the usual size (one PR family, 60 to 90 minutes, `docs/agents/rules-short.md`); they are guesses, not measurements.
+> status: accepted and ready to build (2026-11-14): the user answered the open questions and lifted the freeze on new /watch panels. The work is cut into cards with one ready-to-send brief each in [briefs/](briefs/README.md); that page has the wave order, the merge order and the review points. This page is the overview and says what changed after the answers. Estimates are agent runs of the usual size and are guesses.
 
-Rules for every slice:
+## What the answers changed
 
-- One card, one branch, through the merge queue. Each is mergeable alone and changes nothing for a user who stays on their layout: new panels are `optIn` and only the new presets name them.
-- The compatibility checklist of `docs/ui-design-system.md` section 6.2 applies: additive, new feature = new panel directory, no fixture edited, `go test ./internal/watch -run Compat` green.
-- Tests per slice: Go handler goldens for any endpoint, node DOM goldens for each panel state (the `testdata/*_dom.txt` pattern), `go run ./tools/uilint` clean, and `tools/uishots.sh` pictures at 390 and 1440 looked at by the worker and named in the card result (said plainly when not looked at).
-- Rules for both builds: any text that names a skill, class or build comes from data; every new handler test runs for the Sorceress and the Paladin fixtures.
-- No slice adds a poll. Each names the readers it removes from the new presets.
-
-| # | Slice | Does | Files | Acceptance | Tests | Est. | Risk | Needs |
-|---|---|---|---|---|---|---|---|---|
-| S1 | Foundations: opt-in panels, layout `status` key, presets, tokens | `optIn` manifest key (shell mounts such a panel only when the layout names it); layout top-level `status` list; `?layout=simple|standard|stream|debug` and the four files (generated from `layouts/gen.py` rows, the new ids added to `reserved`); the menu entry "Layout: ..."; tokens `--d-ok`, `--d-danger`, `--d-muted`, `--d-state-bg-*`, `--d-hit`, `--d-row` with light values | `web/shell.js`, `web/layout.js`, `web/shell.json`, `web/layouts/*.json`, `web/tokens.css`, `internal/watch/layout.go`, `tools/uilint` | An old stored layout and the three old presets render the same cells as before (test). `?layout=standard` loads and shows the existing tiles it names; the reserved ids are skipped without a warning. Token compat test still green | layout plan node tests; a compat test "old layouts, same cells"; uilint rule for `status` | 1 run | Low. Touches the shell: the Fable review is on this one | - |
-| S2 | `/api/glance` and the status sentence | `GET /api/glance` (`watch.glance/1`): `sentence`, `needs`, `health`, `progress`, joined in the Hub from what it already holds; panel `statusline` (status band) with the popover (Now, Would change it, Next) | `internal/watch/glance.go`, `web/panels/statusline/`, `testdata/glance/*` | The sentence equals `/api/hero` `stateLabel` + `area` + `why.now` for every Why code in `whychange.json`; one request serves all glance panels; reply cached like `/api/hero` | handler goldens for 6 states, both classes; DOM goldens; a test that no Why code yields an empty reason | 1 run | Low | S1 |
-| S3 | Needs you, Health, Progress | panels `needs-you`, `needs-count`, `health`, `progress` reading `/api/glance`; xp/h samples kept in the Hub (30 one-minute points); the alert buttons post to the existing routes (repair, answer, campaign intent) | `web/panels/{needs-you,needs-count,health,progress}/`, `internal/watch/glance.go` | With the fixture (broken weapon, 2 alerts, 1 question) Needs you shows three rows, red first, each with a working button; empty state takes no cell; the five lights match the table in B.2 with "unknown" for sources not wired (mercenary, supplies) | DOM goldens per severity and for empty; handler test for the sample ring | 1 to 2 runs | Medium: mercenary and supplies have no watch source (U); ship them as "unknown" and open a bot card | S2 |
-| S4 | Orders, read-only | `GET /api/commands` (`watch.commands/1`) joining orders, repair, invdesk, gold farm, campaign; panel `orders` showing rows, safety banner, plan row, states, reasons; Cancel wired to the existing cancel routes | `internal/watch/commands.go`, `web/panels/orders/`, `testdata/commands/*` | Fixtures empty, three-with-one-failed, blocked, paused, safety render as in the mockup; row order equals the priority ladder; cancel of each kind hits its existing route | handler goldens (5 states x 2 classes); DOM goldens; a test that every invdesk, repair and order state maps to one of the six row states | 2 runs | Medium: the join must not hold the desk mutexes long (the invdesk callbacks rule, TASK-278) | S1 |
-| S5 | Orders write path and the act map | `POST /api/commands` and `/api/commands/cancel` as a dispatcher over the existing Hub and desk methods; verb row; panel `zone-map` (the act graph with bands, pins, route, failed mark, zone menu with durations, Go now and Add to queue, charter inline instead of `window.confirm`); Undo toast; keys `g t r p o z` | `internal/watch/commands.go`, `http_answer.go` (route table only), `web/panels/{orders,zone-map}/` | Every command of the table in C.3 marked "none" under Needs works from the panel and produces the same state as its old button; a zone click to an accepted order is two clicks; the old `orders-map` card still works in old layouts | answer-route tests (gates: origin, token, JSON, unknown fields) for each intent; DOM goldens of the menu for field, here, town, hard, locked, charter; node test of the arrow-key walk | 2 to 3 runs | Medium to high: a second door to the same actions. The dispatcher must call the same methods, not copy them | S4 |
-| S6 | Log, map declutter, phone | panel `log` (tabs Now, Journal, Story, Alerts over the existing endpoints, one fetched at a time); the minimap's controls behind "Layers" via a new panel option (`map` gains a compact mode chosen by the layout entry; its full mode stays the default so old layouts keep the buttons); phone verb row and the Go-to sheet | `web/panels/log/`, `web/panels/map/` (version bump, additive mode), `web/shell.css` | Standard at 390 px shows band, picture and the first order row in 844 px; the map in a classic layout is pixel-identical to before | DOM goldens; uishots at 390, 768, 1440 | 1 to 2 runs | Medium: `map` is the largest panel (35 KB); the change must be a mode switch, not a rewrite | S1 |
-| S7 | Rollout and polish | "Try the new layout" banner (once per hero); new heroes start on the preset the user picked; tile chrome (no borders, small caps labels) applied to the opt-in panels only; focus, touch targets, reduced motion pass; light theme pass | `web/shell.js`, `web/components.css`, panel CSS | A user on a stored layout sees the banner once and nothing else changes; contrast and target sizes meet E.4 | uishots light and dark; an a11y check list in the card | 1 run | Low | S3, S5, S6 |
-| Bot cards (parallel, not UI) | B1 pause and resume route (a desk over `Runner.Pause`, a rule for pausing in the field); B2 `sell_now` errand; B3 `revive_merc` request; B4 until-level for zone orders; B5 mercenary and supplies on a watch endpoint; B6 `journeyBlocked` on `/api/glance` | each makes one "needs bot work" row of C.3 real | `internal/bot`, `internal/invdesk`, `cmd/d2bot/*wire.go` | The verb appears in `/api/commands` `verbs` only when its desk is bound, so the UI never shows a button that cannot work | fake-runner tests, both classes; live drill on the checklist | 1 run each | Varies; B1 touches safety | S4 for the display |
-
-Order: S1, then S2 and S4 in parallel, then S3 and S5, then S6, then S7. The bot cards can start any time after the review.
-
-## What Fable reviews
-
-| After | Looks at |
+| Answer | Change to the plan |
 |---|---|
-| S1 | The shell diff: that an old layout cannot change, that `optIn` cannot hide an existing panel, the lint rule. This is the one slice where a mistake breaks the promise |
-| S2 + S3 | The first screen at 1440, 900 and 390 against B.2: is it readable in three seconds; number count against the tier table; wording of the sentence for every Why code |
-| S4 + S5 | The Orders flows against the mockup and C: row order equals the ladder, no confirmation that is not on the list, failure and blocked states, the dispatcher shares code with the old routes |
-| S7 | The whole thing on the user's own layout and on Standard, before the user is asked whether to flip the default |
+| 4: Standard is the default with S1 | S1 now carries the default flip, the menu and the one-time notice (they were S7). Standard is progressive: every new tile's cell names the old tile that stands in until the new one ships (layout entry key `fallback`, D.1 and D.4), so the page is never missing a function. Today's default stays loadable as Classic |
+| 3: a new hero starts on Simple | in S1; Simple keeps the act map as a tile until S5 can open it from "Go to" |
+| 5: the queue stays an unlock, with a progression | new card B7 (the Loop order, its controller and ladder rows; C.8). S5 shows Loop and Add to queue by unlock state. `mode: queue` uses the order queue that exists, not `replace: false` |
+| 6, 7: pause walks home; Sell now and Revive mercenary | cards B1, B2, B3 as drafted, now with briefs |
+| 8: old tiles retired later | new last slice S8, on hold until the user says the new layouts have proven themselves |
+| 9: the freeze is lifted | wave 1 can be sent now |
+| 10, 11, 12 | borderless look in S3 to S7; red-only notifications, off by default, in S3; viewer-local times in S6 |
+| Added scope: character screen | cards C1 (requirements and usability in the view), C2 (the canvas), C3 (gestures and instant feedback); design in I-character-screen.md |
+| Added scope: instant actions | card B8 (fast lane over the item verbs); stash and take stay at the chest, queued for town (user decision; the unlock is TASK-420, not built here) |
+| Added scope: mercenary gear | card B9 (fork verbs and bot wiring); until then the screen shows him read-only with requirement checks |
+| Added scope: loot filter | UX in loot-rules-ux.md; card L1 on hold until the engine (another agent's design) exists |
+
+## Cards
+
+| # | Card | Does | Est. | Risk | Needs |
+|---|---|---|---|---|---|
+| S1 | Shell foundations and the default flip | `optIn` panels, layout keys `status` and `fallback`, presets Classic, Simple, Standard, Stream, Debug, Standard as default, Simple for a new hero, the menu, tokens | 2 runs | Medium: touches the shell and the default; reviewed before merge | - |
+| S2 | `/api/glance` and the status sentence | one cached read for sentence, needs, health, progress; panel `statusline` | 1 | Low | S1 |
+| S3 | Needs you, Health, Progress | four panels on `/api/glance`; red-only notifications | 1 to 2 | Low | S2 |
+| S4 | Orders, read-only | `/api/commands` join; panel `orders` with Cancel | 2 | Medium: the join across desks | S1 |
+| S5 | Orders write path and the act map | dispatcher `POST /api/commands`; verb row; `zone-map` with the zone menu; Loop and queue by unlock state; Undo; keys | 2 to 3 | Medium to high: a second door to the same actions | S4, B4, B7 |
+| S6 | Log, compact minimap, phone | panel `log`; a compact mode of `map`; narrow widths | 1 to 2 | Medium: `map` is large | S1 |
+| S7 | Polish and access | shared look, contrast, focus, touch, reduced motion, light theme, the `/` palette | 1 | Low | S3, S5, S6 |
+| S8 | Retire the old tiles (HOLD) | stubs, `mergedInto`, aliases per D.3; remove dead drawing code | 2 | High: the one slice that removes things | S7 and the user's go |
+| C1 | Requirements and usability in the view | `req` and `usable` for hero and mercenary from the equip path's own rule; the 21-case table | 1 to 2 | Medium: requirement modifiers are U | - |
+| C2 | The character screen canvas | one frame, three zones, one inspector, requirement display, mercenary strip, stash tabs | 2 to 3 | Medium: a full rework of the inventory page layout | S1, C1 |
+| C3 | Gestures and instant feedback | drag preview, double-click, ctrl-click, pending, refused, queued for town | 1 to 2 | Medium | C2, B8 |
+| L1 | Loot rules tab (HOLD) | routes over the engine; the editor, presets, preview, import and export, the unlock | 2 to 3 | Medium: depends on another design | C2, the engine |
+| B1 | Pause and resume | walk to town, then stop | 1 | Medium: next to safety | - |
+| B2 | Sell now | an errand that sells what the player marked | 1 | Low | - |
+| B3 | Revive mercenary | a player request with a button state like repair | 1 | Low | - |
+| B4 | Until-level for zone orders | `until: level` on `/api/orders` | 1 | Low | - |
+| B5 | Mercenary and supplies for Health | Hub sources for two lights | 1 | Low | S2 |
+| B6 | Journey blocked on the watch side | the bot's reason as a Needs you row and a blocked row | 1 | Low | S2, S4 |
+| B7 | The Loop order and its unlock | loop controller, `/api/orderloop`, ladder rows, events | 2 | Medium: a ladder data change | - |
+| B8 | Instant item actions | the fast lane over the item verbs; `instant` in the view; `wait: town` | 2 | High: runs beside the bot on the control channel; reviewed before merge | - |
+| B9 | Mercenary item verbs | fork verbs wrapping the mercenary item command; Go client and executor | 2 to 3 | High: fork work, never run live | B8, C1 |
+
+Rules every card keeps are in its brief: the compatibility checklist, both-class tests, no new polling, goldens, pictures looked at, the gates, merge `origin/main` before queueing.
 
 ## Not recommended to build
 
