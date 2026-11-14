@@ -40,6 +40,7 @@ type fakeFast struct {
 	caps  []string
 	calls []string
 	err   map[string]error // by verb: equip, unequip, drop, identify, move, gold
+	boom  string           // a verb that panics
 	fl    *flight
 }
 
@@ -51,6 +52,9 @@ func (f *fakeFast) rec(verb, call string) error {
 	f.mu.Lock()
 	defer f.mu.Unlock()
 	f.calls = append(f.calls, call)
+	if f.boom == verb {
+		panic("verb exploded")
+	}
 	return f.err[verb]
 }
 func (f *fakeFast) Caps(context.Context) ([]string, error) { return f.caps, nil }
@@ -129,7 +133,7 @@ func fastRig(t *testing.T, class d2.Class, area int) *fastEnv {
 			Inventory: []status.Item{{ID: 1, Code: "10", W: 1, H: 3}, {ID: 2, Code: "11", W: 1, H: 2}, {ID: 4}},
 			Stash:     []status.Item{{ID: 3, Code: "12"}}}
 	}
-	e.fl = &FastLane{Verbs: e.fv, On: on, Pause: func(context.Context, time.Duration) error { return nil }, Settles: 1}
+	e.fl = &FastLane{Verbs: Serial{Ch: NewChannel(), V: e.fv}, On: on, Instant: on, Pause: func(context.Context, time.Duration) error { return nil }, Settles: 1}
 	d.SetFast(e.fl)
 	return e
 }
@@ -222,6 +226,23 @@ func TestFastLaneClosedQueuesAsBefore(t *testing.T) {
 			{"no caps", func(e *fastEnv) { e.fv.caps = nil }},
 			{"no verb for the kind", func(e *fastEnv) { e.fv.caps = []string{CapItemMove} }},
 			{"named run", func(e *fastEnv) { e.fl.Named = on }},
+			{"instant knob off", func(e *fastEnv) { e.fl.Instant = off }},
+			{"vendor, stash or menu panel open", func(e *fastEnv) {
+				for i := range e.snap.UI { // any index the table calls a blocking panel
+					var u d2.UIState
+					u[i] = 1
+					if u.BlockingPanelOpen() {
+						e.snap.UI[i] = 1
+						break
+					}
+				}
+				e.fl.Hold = func(s *d2.Snapshot) string {
+					if s.UI.BlockingPanelOpen() {
+						return "a panel is open"
+					}
+					return ""
+				}
+			}},
 			{"busy cursor", func(e *fastEnv) {
 				e.fl.Hold = func(s *d2.Snapshot) string { return "the cursor holds an item" }
 			}},
@@ -274,6 +295,7 @@ func TestFastLaneStashTakeGoldNeedTheChest(t *testing.T) {
 	for _, class := range classes {
 		e := fastRig(t, class, field)
 		d := e.d
+		e.fl.capSet(context.Background()) // the view reads the cached list only
 		for _, do := range []func() (Request, error){
 			func() (Request, error) { return d.RequestStash(1) },
 			func() (Request, error) { return d.RequestTake(3) },
@@ -392,8 +414,8 @@ func TestFastLaneChecksBeforeSending(t *testing.T) {
 	}
 }
 
-// Schema 8 golden: the instant block, how=fast in Recent and a stash job waiting for town.
-func TestViewSchema8InstantGolden(t *testing.T) {
+// Schema 9 golden: the instant block, how=fast in Recent and a stash job waiting for town.
+func TestViewSchema9InstantGolden(t *testing.T) {
 	for _, class := range classes {
 		e := fastRig(t, class, field)
 		now := time.Unix(1_800_000_000, 0)
@@ -409,7 +431,7 @@ func TestViewSchema8InstantGolden(t *testing.T) {
 			t.Fatal(err)
 		}
 		b = append(b, '\n')
-		path := filepath.Join("testdata", "view_schema8_instant_"+class.String()+".json")
+		path := filepath.Join("testdata", "view_schema9_instant_"+class.String()+".json")
 		if os.Getenv("UPDATE") != "" {
 			if err := os.WriteFile(path, b, 0o644); err != nil {
 				t.Fatal(err)
@@ -426,3 +448,91 @@ func TestViewSchema8InstantGolden(t *testing.T) {
 }
 
 var _ = errors.New
+
+// With the instant knob off the view says so and every request queues; the verbs may still be on for the bot.
+func TestFastLaneOwnKnob(t *testing.T) {
+	for _, class := range classes {
+		e := fastRig(t, class, town1)
+		e.fl.Instant = off
+		v := e.d.View()
+		if v.Instant == nil || v.Instant.Enabled || v.Instant.Equip || v.Instant.Why == "" {
+			t.Errorf("%v: %+v", class, v.Instant)
+		}
+		e.fl.Instant = on
+		e.fl.capSet(context.Background()) // the view reads the cached list only
+		if v := e.d.View(); !v.Instant.Enabled || !v.Instant.Equip || v.Instant.Why != "" {
+			t.Errorf("%v: %+v", class, v.Instant)
+		}
+	}
+}
+
+// A verb that was sent and not answered in time may have been applied: gold and drop are never repeated through the queue
+// (a second deposit would move the gold twice); the idempotent kinds go back to the queue. A read-back that runs out of
+// time after an ok reply is final for every kind.
+func TestFastLaneLostAnswerIsNeverRepeated(t *testing.T) {
+	for _, class := range classes {
+		for _, c := range []struct {
+			name string
+			do   func(e *fastEnv) (Request, error)
+			verb string
+		}{
+			{"gold", func(e *fastEnv) (Request, error) { return e.d.RequestGold(true, 100) }, "gold"},
+			{"trash", func(e *fastEnv) (Request, error) { return e.d.RequestTrash(e.good, true) }, "drop"},
+		} {
+			e := fastRig(t, class, town1)
+			e.fv.err[c.verb] = context.DeadlineExceeded
+			_, err := c.do(e)
+			v := e.d.View()
+			if code(err) != "timeout" || len(v.Queue) != 0 || len(v.Recent) != 1 || v.Recent[0].Code != "timeout" || e.d.Pending() != 0 {
+				t.Errorf("%v %s: %v queue %v recent %v", class, c.name, err, v.Queue, v.Recent)
+			}
+			if n := len(e.fv.log()); n != 1 {
+				t.Errorf("%v %s: %d verbs", class, c.name, n)
+			}
+		}
+		// an idempotent kind is safe to repeat: back to the queue
+		e := fastRig(t, class, town1)
+		e.fv.err["equip"] = context.DeadlineExceeded
+		if r, err := e.d.RequestEquip(e.good, "rhand"); err != nil || r.State != StateQueued || r.How != HowQueue {
+			t.Errorf("%v: equip %+v %v", class, r, err)
+		}
+		// the channel was never acquired: nothing was sent, the request queues for any kind
+		e = fastRig(t, class, town1)
+		e.fl.Wait = 20 * time.Millisecond
+		ch := NewChannel()
+		e.fl.Verbs = Serial{Ch: ch, V: e.fv}
+		e.fl.capSet(context.Background())
+		_ = ch.Acquire(context.Background())
+		if r, err := e.d.RequestGold(true, 100); err != nil || r.State != StateQueued || len(e.fv.log()) != 0 {
+			t.Errorf("%v: busy channel %+v %v", class, r, err)
+		}
+		// a read-back that times out after an ok reply is final, whatever the kind
+		e = fastRig(t, class, town1)
+		e.fl.Fresh = func() (*d2.Snapshot, error) { return e.snap, nil }
+		e.fl.Pause = func(context.Context, time.Duration) error { return context.DeadlineExceeded }
+		if _, err := e.d.RequestEquip(e.good, "rhand"); code(err) != "timeout" || e.d.Pending() != 0 {
+			t.Errorf("%v: read-back timeout %v", class, err)
+		}
+	}
+}
+
+// A panic in the verb path must not leave the request "doing" (that would stop the whole queue).
+func TestFastLanePanicLeavesNothingDoing(t *testing.T) {
+	for _, class := range classes {
+		e := fastRig(t, class, town1)
+		e.fv.boom = "equip"
+		func() {
+			defer func() { _ = recover() }()
+			_, _ = e.d.RequestEquip(e.good, "rhand")
+		}()
+		e.fv.boom = ""
+		v := e.d.View()
+		if len(v.Queue) != 0 || len(v.Recent) != 1 || v.Recent[0].State != StateFailed || v.Recent[0].Code != "internal" {
+			t.Fatalf("%v: queue %v recent %v", class, v.Queue, v.Recent)
+		}
+		// the queue still works: the next request is done by the lane, and the bot's own path is not blocked
+		if r, err := e.d.RequestEquip(e.good, "rhand"); err != nil || r.State != StateDone {
+			t.Errorf("%v: next request %+v %v", class, r, err)
+		}
+	}
+}

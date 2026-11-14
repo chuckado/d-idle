@@ -167,6 +167,7 @@ type Runner struct {
 	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
 	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
 	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	safetyBusy     atomic.Int32         // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
 	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu

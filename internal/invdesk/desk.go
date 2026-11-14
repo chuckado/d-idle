@@ -239,7 +239,7 @@ type Request struct {
 	Group     string `json:"group,omitempty"`
 	GroupName string `json:"groupName,omitempty"`
 	Seq       int    `json:"seq,omitempty"`
-	// Schema 8 (instant actions, docs/inventory-actions.md): Wait says what a queued request waits for ("safe": the bot's
+	// Schema 9 (instant actions, docs/inventory-actions.md): Wait says what a queued request waits for ("safe": the bot's
 	// next safe moment, "town": the next town visit; empty when it is not waiting, or on a desk without the fast lane);
 	// Code is the refusal code of a failed request. How is also "fast" (the instant lane) or "queue" (answer of a request
 	// that fell back to the queue).
@@ -960,9 +960,9 @@ type ItemView struct {
 // optional merc block (docs/research/merc-gear.md); 5 added the optional identify block, the item field noIdentify and the
 // request kinds identify, buyid and cain with the fields count and result (the identify commands); 7 added the item fields
 // noWearSlot and noUnequip, the sets block, the request kind unequip and the request fields group, groupName and seq
-// (drag and drop, gear sets, docs/gearsets.md); 8 added the instant block and the request fields wait and code (the fast lane, instant.go); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
+// (drag and drop, gear sets, docs/gearsets.md); 9 added the instant block and the request fields wait and code (the fast lane, instant.go); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
 // fields are optional.
-const ViewSchema = 8
+const ViewSchema = 9
 
 // View is the inventory page's data.
 type View struct {
@@ -985,7 +985,7 @@ type View struct {
 	StashOps    *StashOpsView        `json:"stashOps,omitempty"` // schema 6: the stash gold controls; nil = no stash backend
 	Identify    *IdentifyView        `json:"identify,omitempty"` // schema 5: the identify commands' state; nil = no town backend
 	Sets        *SetsView            `json:"sets,omitempty"`     // schema 7: the player's gear sets; nil = no inventory source
-	Instant     *InstantView         `json:"instant,omitempty"`  // schema 8: what would run at once; nil = no fast lane on this bot
+	Instant     *InstantView         `json:"instant,omitempty"`  // schema 9: what would run at once; nil = no fast lane on this bot
 	Merc        *MercView            `json:"merc,omitempty"`     // schema 3: the hired merc and what he wears; nil = the backend cannot read a merc
 }
 

@@ -42,24 +42,36 @@ func wireItemVerbs(ref *runnerRef, tw *town.Town, lv *leveler.Leveler, c *d2dctl
 	ref.inv.SetFast(&invdesk.FastLane{
 		Verbs: verbs,
 		On:    on,
+		// The lane has its own knob (default 0): the verbs may be on for the bot's executors long before the instant lane
+		// has been seen working live.
+		Instant: func() bool { return e.Tune != nil && e.Tune.Invdesk.Instant != 0 },
 		// A named run (gate, soak, drill, D2BOT_RUN) keeps the queue path: whether a verb in a measured run satisfies the
 		// crutch rule is the user's decision (item-verbs section 10), so the lane stays off there. Read once at wiring.
 		Named: namedRun(os.Getenv("D2BOT_RUN") != ""),
-		Hold:  inputHeld,
+		Hold:  inputHeld(func() bool { r := ref.p.Load(); return r != nil && r.SafetyBusy() }),
 		Fresh: e.Snapshot,
 	})
 }
 
 func namedRun(v bool) func() bool { return func() bool { return v } }
 
-// inputHeld says why the lane must not send a verb now. A cursor item means a click path (or the player) holds the hand.
-// U: a safety action in progress (chicken, flee, portal) has no signal outside internal/bot; a verb never touches the
-// cursor or moves the hero, so the lane tolerates it, and the queue path keeps the ladder (docs/inventory-actions.md).
-func inputHeld(s *d2.Snapshot) string {
-	if s != nil && s.Inventory != nil && s.Inventory.Cursor != nil {
-		return "the cursor holds an item"
+// inputHeld says why the lane must not send a verb now. The queue path runs on the bot goroutine at a safe moment; the
+// lane does not, so it stays closed while anything else owns the hands: a cursor item, an open panel (on d2d the bot is the
+// only client, so a panel means a bot click sequence such as a vendor visit, the click identify or the stash visit, an NPC
+// menu, the Esc menu; a verb needs no panel, so closing costs nothing), and a safety action in flight (drink, chicken,
+// flee, safety portal: a player command never bypasses safety, docs/inventory-actions.md).
+func inputHeld(safetyBusy func() bool) func(*d2.Snapshot) string {
+	return func(s *d2.Snapshot) string {
+		switch {
+		case s != nil && s.Inventory != nil && s.Inventory.Cursor != nil:
+			return "the cursor holds an item"
+		case s != nil && s.UI.BlockingPanelOpen():
+			return "a panel is open (the bot is at a vendor, the stash or a menu)"
+		case safetyBusy != nil && safetyBusy():
+			return "a safety action is running"
+		}
+		return ""
 	}
-	return ""
 }
 
 // coder adds unequip and turns the client's refusals into invdesk.VerbRefusal (the code stays in the request).

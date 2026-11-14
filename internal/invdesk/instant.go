@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/d2"
@@ -54,6 +55,19 @@ type coded interface{ refusal() (code, why string) }
 
 func (e *VerbRefusal) refusal() (string, string) { return e.Code, e.Why }
 
+// sentKey carries a *bool that Serial sets once it holds the channel and is about to write the verb: from then on the
+// verb may have been applied whatever the answer says (a deadline inside the call, a lost reply).
+type sentKey struct{}
+
+func markSent(ctx context.Context) {
+	if p, ok := ctx.Value(sentKey{}).(*bool); ok {
+		*p = true
+	}
+}
+
+// afterOK wraps an error that came after the verb was sent (the read-back ran out of time): it is final, never retried.
+type afterOK struct{ error }
+
 // errVerify: the verb answered ok but a fresh snapshot does not show the change (reported failed, never retried).
 var errVerify = errors.New("the item verb answered ok but the game did not show the change")
 
@@ -88,6 +102,7 @@ func (s Serial) hold(ctx context.Context) (func(), error) {
 	if err := s.Ch.Acquire(ctx); err != nil {
 		return nil, err
 	}
+	markSent(ctx)
 	return s.Ch.Release, nil
 }
 
@@ -160,6 +175,9 @@ var _ FastVerbs = Serial{}
 type FastLane struct {
 	Verbs FastVerbs
 	On    func() bool // the knob invdesk.verbs; nil: off
+	// Instant is the knob invdesk.instant (default 0): the lane has its own switch because the verbs may be on for the bot's
+	// own executors long before the instant lane has been seen working live. nil: off.
+	Instant func() bool
 	// Named says the process is a named run (D2BOT_RUN: gate, soak, drill): the lane is off there (the crutch rule, user
 	// decision pending, docs/design/item-verbs.md section 10). nil: not named.
 	Named func() bool
@@ -173,9 +191,10 @@ type FastLane struct {
 	Settles int           // polls of 100 ms; 0 = 25
 	Now     func() time.Time
 
-	mu     sync.Mutex
-	caps   map[string]bool
-	capsAt time.Time
+	reading atomic.Bool
+	mu      sync.Mutex
+	caps    map[string]bool
+	capsAt  time.Time
 }
 
 // SetFast installs the lane; nil removes it (every request queues, as before).
@@ -191,6 +210,8 @@ func (f *FastLane) now() time.Time {
 // why says what keeps the lane closed at all ("" = open). It does not look at the verbs or the request.
 func (f *FastLane) why(s *d2.Snapshot) string {
 	switch {
+	case f.Instant == nil || !f.Instant():
+		return "instant actions are off (knob invdesk.instant)"
 	case f.Verbs == nil || f.On == nil || !f.On():
 		return "item verbs are off (knob invdesk.verbs)"
 	case f.Named != nil && f.Named():
@@ -227,6 +248,26 @@ func (f *FastLane) capSet(ctx context.Context) map[string]bool {
 	f.caps, f.capsAt = set, f.now()
 	f.mu.Unlock()
 	return set
+}
+
+// cachedCaps is the capability list as last read, and whether it is still fresh (a minute).
+func (f *FastLane) cachedCaps() (map[string]bool, bool) {
+	f.mu.Lock()
+	defer f.mu.Unlock()
+	return f.caps, f.caps != nil && f.now().Sub(f.capsAt) < time.Minute
+}
+
+// refreshAsync reads the capability list in the background (at most one read at a time) for the view.
+func (f *FastLane) refreshAsync() {
+	if !f.reading.CompareAndSwap(false, true) {
+		return
+	}
+	go func() {
+		defer f.reading.Store(false)
+		ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
+		defer cancel()
+		f.capSet(ctx)
+	}()
 }
 
 func (f *FastLane) dropCaps() {
@@ -268,9 +309,10 @@ func waitOf(r Request, inTown bool) string {
 	return WaitSafe
 }
 
-// InstantView is what would run at once right now (API schema 8). Why says why nothing would ("" = the lane is open);
+// InstantView is what would run at once right now (API schema 9). Why says why nothing would ("" = the lane is open);
 // Done counts the requests this process finished, by how.
 type InstantView struct {
+	Enabled  bool           `json:"enabled"` // the knob invdesk.instant; false: the UI uses the queue path
 	Equip    bool           `json:"equip"`
 	Unequip  bool           `json:"unequip"`
 	Move     bool           `json:"move"` // the backend has the pack move verb; the desk has no pack-to-pack request yet (docs)
@@ -305,6 +347,7 @@ func (d *Desk) instantView(f *FastLane, s *d2.Snapshot) *InstantView {
 		}
 	}
 	busy := d.doingLocked()
+	v.Enabled = f.Instant != nil && f.Instant()
 	stash := d.stashSvLocked() != nil
 	d.mu.Unlock()
 	if v.Why = f.why(s); v.Why == "" && busy {
@@ -313,9 +356,14 @@ func (d *Desk) instantView(f *FastLane, s *d2.Snapshot) *InstantView {
 	if v.Why != "" {
 		return v
 	}
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
-	caps := f.capSet(ctx)
+	caps, fresh := f.cachedCaps()
+	if !fresh {
+		f.refreshAsync() // the view never waits for the backend
+	}
+	if caps == nil {
+		v.Why = "reading what the backend offers"
+		return v
+	}
 	if len(caps) == 0 {
 		v.Why = "the backend does not offer the item verbs"
 		return v
@@ -403,7 +451,24 @@ func (d *Desk) runFast(f *FastLane, r Request) (Request, error) {
 	_ = d.saveLocked()
 	d.mu.Unlock()
 
-	result, err := f.exec(ctx, r)
+	// A panic below (a verb, a read-back) must not leave the request "doing": that would stop the whole queue.
+	settled := false
+	defer func() {
+		if settled {
+			return
+		}
+		d.mu.Lock()
+		defer d.mu.Unlock()
+		if j := d.findLocked(r.ID, r.kind()); j >= 0 {
+			d.st.Queue = append(d.st.Queue[:j:j], d.st.Queue[j+1:]...)
+		}
+		r.State, r.Reason, r.Code, r.How = StateFailed, "the instant action failed unexpectedly; check the item and ask again", "internal", HowFast
+		d.recentLocked(r)
+		_ = d.saveLocked()
+	}()
+
+	var sent bool
+	result, err := f.exec(context.WithValue(ctx, sentKey{}, &sent), r)
 	var hx, hy int
 	if err == nil && r.kind() == KindTrash {
 		if s := d.snap(); s != nil && s.Player != nil {
@@ -411,16 +476,22 @@ func (d *Desk) runFast(f *FastLane, r Request) (Request, error) {
 		}
 	}
 	code, why, final := classify(err)
+	// Once the verb was sent it may have been applied whatever the answer says. A gold move or a drop is not idempotent:
+	// repeating it through the queue would move the gold twice, so a lost answer is final (the rule of recover()).
+	if err != nil && !final && sent && (r.kind() == KindGold || r.kind() == KindTrash) {
+		code, why, final = "timeout", "no answer in time and the action may have happened; check the item and ask again", true
+	}
+	settled = true
 
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	j := d.findLocked(r.ID, r.kind())
-	if err != nil && !final { // the verb did not run (or not in time): the queue path takes it, nothing was moved
+	if err != nil && !final { // the verb did not run (or is safe to repeat): the queue path takes it
 		if j >= 0 {
 			d.st.Queue[j].State = StateQueued
 			_ = d.saveLocked()
 		}
-		if !errors.Is(err, context.DeadlineExceeded) && !errors.Is(err, context.Canceled) && code == "" {
+		if !errors.Is(err, context.DeadlineExceeded) && !errors.Is(err, context.Canceled) {
 			f.dropCaps()
 		}
 		return queued(r, inTown), nil
@@ -459,6 +530,8 @@ func classify(err error) (code, why string, final bool) {
 		return "", "", true
 	case errors.Is(err, errVerify):
 		return "verify", err.Error(), true
+	case errors.As(err, new(*afterOK)):
+		return "timeout", "the game did not show the change in time; check the item and ask again", true
 	case errors.As(err, &c):
 		code, why = c.refusal()
 		return code, why, code != "cursor" && code != "far"
@@ -562,7 +635,7 @@ func (f *FastLane) settle(ctx context.Context, ok func(*d2.Snapshot) bool) error
 			}
 		}
 		if err := pause(ctx, 100*time.Millisecond); err != nil {
-			return err
+			return &afterOK{err}
 		}
 	}
 	return errVerify

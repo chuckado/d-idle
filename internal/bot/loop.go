@@ -303,7 +303,13 @@ func (r *Runner) hazard(ctx context.Context, snap *d2.Snapshot) {
 	}
 }
 
+// SafetyBusy says a safety action (drink, chicken, flee, safety portal) is being carried out. The inventory desk's fast
+// lane (docs/inventory-actions.md, instant actions) stays closed while it is true: a player command never bypasses safety.
+func (r *Runner) SafetyBusy() bool { return r.safetyBusy.Load() > 0 }
+
 func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
+	r.safetyBusy.Add(1)
+	defer r.safetyBusy.Add(-1)
 	a = r.earlyExit(r.latest(), a)
 	if a != SafetyDrinkLife && a != SafetyDrinkMana && a != SafetyDrinkRejuv {
 		if s := r.latest(); s != nil && s.Player != nil {

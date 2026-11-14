@@ -1,7 +1,7 @@
 {
- "schema": 8,
+ "schema": 9,
  "inTown": false,
- "class": "Sorceress",
+ "class": "Paladin",
  "gold": 5000,
  "stashGold": 20000,
  "equipment": {
@@ -31,18 +31,19 @@
    "w": 1,
    "h": 3,
    "canSell": true,
-   "noWear": "restricted to another class",
+   "canWear": [
+    "rhand"
+   ],
    "noWearSlot": {
-    "belt": "restricted to another class",
-    "feet": "restricted to another class",
-    "gloves": "restricted to another class",
-    "head": "restricted to another class",
-    "lhand": "restricted to another class",
-    "lring": "restricted to another class",
-    "neck": "restricted to another class",
-    "rhand": "restricted to another class",
-    "rring": "restricted to another class",
-    "torso": "restricted to another class"
+    "belt": "does not fit that slot",
+    "feet": "does not fit that slot",
+    "gloves": "does not fit that slot",
+    "head": "does not fit that slot",
+    "lhand": "does not fit that slot",
+    "lring": "does not fit that slot",
+    "neck": "does not fit that slot",
+    "rring": "does not fit that slot",
+    "torso": "does not fit that slot"
    },
    "stashOp": "stash"
   },
@@ -57,19 +58,18 @@
    "w": 1,
    "h": 2,
    "canSell": true,
-   "canWear": [
-    "rhand"
-   ],
+   "noWear": "restricted to another class",
    "noWearSlot": {
-    "belt": "does not fit that slot",
-    "feet": "does not fit that slot",
-    "gloves": "does not fit that slot",
-    "head": "does not fit that slot",
-    "lhand": "does not fit that slot",
-    "lring": "does not fit that slot",
-    "neck": "does not fit that slot",
-    "rring": "does not fit that slot",
-    "torso": "does not fit that slot"
+    "belt": "restricted to another class",
+    "feet": "restricted to another class",
+    "gloves": "restricted to another class",
+    "head": "restricted to another class",
+    "lhand": "restricted to another class",
+    "lring": "restricted to another class",
+    "neck": "restricted to another class",
+    "rhand": "restricted to another class",
+    "rring": "restricted to another class",
+    "torso": "restricted to another class"
    },
    "stashOp": "stash"
   },
@@ -121,7 +121,7 @@
  "pins": [
   {
    "slot": "rhand",
-   "id": 2,
+   "id": 1,
    "name": "thing",
    "since": 1800000000
   }
@@ -140,13 +140,13 @@
  ],
  "recent": [
   {
-   "id": 2,
+   "id": 1,
    "kind": "equip",
    "slot": "rhand",
    "name": "thing",
    "state": "done",
    "at": 1800000000,
-   "print": "11/2/0",
+   "print": "10/4/5",
    "how": "fast"
   }
  ],
@@ -172,6 +172,7 @@
   "sets": []
  },
  "instant": {
+  "enabled": true,
   "equip": true,
   "unequip": true,
   "move": true,
