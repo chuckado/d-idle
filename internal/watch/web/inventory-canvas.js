@@ -302,11 +302,28 @@
     }
     acts.dataset.fit = '';
   }
+  // a label that does not fit its cell or slot is cut with an ellipsis (the full name is the title): the box is never scrolled
+  // or overrun. The full text is kept in data-full so a resize can cut again from the whole name.
+  function fits(h) { return h.scrollHeight <= h.clientHeight + 1 && h.scrollWidth <= h.clientWidth + 1; }
+  function cutText(node, host) {
+    var t = node.firstChild;
+    if (!t || t.nodeType !== 3 || !host.clientHeight) return;
+    if (node.dataset.full === undefined) node.dataset.full = t.nodeValue;
+    var full = node.dataset.full;
+    t.nodeValue = full;
+    if (fits(host)) return;
+    var lo = 0, hi = full.length - 1;
+    while (lo < hi) { var mid = (lo + hi + 1) >> 1; t.nodeValue = full.slice(0, mid).trim() + '\u2026'; if (fits(host)) lo = mid; else hi = mid - 1; }
+    t.nodeValue = lo ? full.slice(0, lo).trim() + '\u2026' : '\u2026';
+  }
+  function cutLabels() {
+    Array.prototype.forEach.call(document.querySelectorAll('.cv .d-cells .item'), function (n) { if (n.dataset.shown === undefined) cutText(n, n); });
+    Array.prototype.forEach.call(document.querySelectorAll('.cv .d-slot2 .nm'), function (n) { cutText(n, n.parentNode); });
+  }
   var trimming = false;
   function trimQueue() {
     var q = $('queue'); if (!q || trimming || !q.clientHeight) return;
-    var ul = q.querySelector('ul'), log = $('cv-log');
-    if (log) { if (ul) delete log.dataset.empty; else log.dataset.empty = ''; }
+    var ul = q.querySelector('ul');
     if (!ul) return;
     trimming = true;
     while (ul.children.length > 1 && q.scrollHeight > q.clientHeight + 1) ul.removeChild(ul.lastChild);
@@ -363,7 +380,7 @@
   }
 
   function relayout() {
-    var go = function () { delete_fit(); var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } trimQueue(); fitActs(); };
+    var go = function () { cutLabels(); delete_fit(); var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } trimQueue(); fitActs(); };
     if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go); else go();
   }
   function delete_fit() { var a = document.querySelector('#cv-sel .cv-acts'); if (a) delete a.dataset.fit; }
@@ -383,7 +400,7 @@
     ensureSel(v); markSel();
     drawBar(v); drawRepair(v, repair); marks(v); dim(); drawSets(v); shorten(); fitSlots(); paintSheets();
     var g = $('gearprompt'); if (g) g.title = g.textContent;
-    drawSel(); trimQueue(); loadHero();
+    drawSel(); cutLabels(); trimQueue(); loadHero();
   }
   function onView(e) {
     view = e.detail;
