@@ -5,9 +5,15 @@
  "density": "dense",
  "theme": "dark",
  "status": [
-  "statusline",
+  {
+   "id": "statusline",
+   "fallback": "hero-status"
+  },
   "hero-meters",
-  "needs-count"
+  {
+   "id": "needs-count",
+   "fallback": "alerts-count"
+  }
  ],
  "breakpoints": {
   "phone": {

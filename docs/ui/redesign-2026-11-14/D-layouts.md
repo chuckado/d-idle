@@ -1,17 +1,18 @@
 # D. Layout presets, migration and rollout
 
-> status: design proposal (TASK-416, 2026-11-14). The drafts in [layouts/](layouts/) are `watch.layout/1` files written and checked by [layouts/gen.py](layouts/gen.py) (V: `python3 -I docs/ui/redesign-2026-11-14/layouts/gen.py` prints 0 findings: schema, spans inside 12 columns, no overlap among shown entries, unique order, known ids). They name six panels that do not exist yet, so the editor loads them only after slice S1 adds those ids to `reserved` in `web/shell.json` (U until then). Nothing in `internal/watch/web/` was changed.
+> status: accepted by the user's answers of 2026-11-14; sections 1 and 4 were rewritten for answer 4 (Standard is the default from S1) and answer 3 (a new hero starts on Simple). The drafts in [layouts/](layouts/) are `watch.layout/1` files written and checked by [layouts/gen.py](layouts/gen.py) (V: `python3 -I docs/ui/redesign-2026-11-14/layouts/gen.py` prints 0 findings: schema, spans inside 12 columns, no overlap among shown entries, unique order, known ids). They name six panels that do not exist yet, so the editor loads them only after slice S1 adds those ids to `reserved` in `web/shell.json` (U until then). Nothing in `internal/watch/web/` was changed.
 
 ## 1. The shell stays
 
 Unchanged: `watch.layout/1`, 12 columns, 48 px rows, the four breakpoints (phone under 640, tablet under 1024, laptop under 1440, wide above), fit rows, the editor (`?edit=1`), `web/layout.json`, `web/layouts/{mockup,live,command}.json`, the alias, compat and reserved blocks of `web/shell.json`, every panel id and every pre-shell card id.
 
-Three small additions are needed. Each is additive and ignored by an older shell:
+Four small additions are needed. Each is additive and ignored by an older shell:
 
 | Addition | Why | Compatibility |
 |---|---|---|
 | Layout key `status: ["statusline", "hero-meters", "needs-count"]` (top level, optional) | The status band's panels come from `web/shell.json` today, so a preset cannot choose the new band. With the key, a layout does; without it, the `shell.json` list applies as now | `ParseLayout` ignores unknown keys (V, design system 15.3). `tools/uilint` is strict for repo files and learns the key in S1 |
 | Panel manifest key `optIn: true` | The shell packs every panel a layout does not name after the placed ones. Without this key, a user with a saved layout would get six new tiles appended to it the day they ship. An `optIn` panel is mounted only when the layout in force names it | A new optional manifest key; `watch.panel/1` readers ignore it |
+| Layout entry key `fallback: "<old id>"` (and the same on a `status` entry written as `{id, fallback}`) | Standard becomes the default with S1, before the new panels exist. An entry whose `id` is not a mounted panel is replaced, in the same cell, by the panel or card its `fallback` names; when the new panel ships, the entry resolves to it and the old tile is hidden as the preset says. Without a `fallback` an unknown id is skipped as today | An older shell ignores the key and skips the reserved id, which leaves a gap but no error |
 | `web/layouts/{simple,standard,stream,debug}.json` and `?layout=<name>` for them | New files next to the three that exist | `?layout=` already loads a preset by name (V, design system 15.5) |
 
 The presets switch old tiles off with the per-entry `hidden: true` that the editor already writes for a tile the user turned off (V `web/layout.js`), so they need no new mechanism: every existing id is named in every preset, either placed or hidden.
@@ -96,13 +97,29 @@ Rule: **no id is removed and no existing alias changes its target.** A saved lay
 | `risk` | reserved | - | skipped as today | stays reserved |
 | new: `statusline`, `needs-count`, `needs-you`, `orders`, `health`, `progress`, `zone-map`, `log` | - | placed | not mounted (`optIn`) | - |
 
-The "later" column is **not** part of this redesign's slices. It is written down so the retirements, if the user ever wants them, follow the promise: stub directory, `mergedInto`, alias, and a new compat fixture. Tests to add with the presets: `testdata/compat/layout-v1-{simple,standard,stream,debug}.json` (once shipped they are only added to), and one test that loads today's `layout-v1-{mockup,live,command}.json` plus `web/layout.json` under the new shell and asserts the same placed ids and cells as before.
+The "later" column is slice S8, the last one, started only on the user's word (answer 8). It is written down so the retirements, if the user ever wants them, follow the promise: stub directory, `mergedInto`, alias, and a new compat fixture. Tests to add with the presets: `testdata/compat/layout-v1-{simple,standard,stream,debug}.json` (once shipped they are only added to), and one test that loads today's `layout-v1-{mockup,live,command}.json` plus `web/layout.json` under the new shell and asserts the same placed ids and cells as before.
 
-## 4. Rollout
+## 4. Rollout (user answers 3, 4, 8)
 
-1. **Nothing changes by itself.** `web/layout.json` stays the default until the user says otherwise; a stored per-profile layout always wins, as today.
-2. **A switch, not a migration.** The "..." menu of the band gets "Layout: Classic / Simple / Standard / Stream / Debug". Choosing one loads `web/layouts/<name>.json` for this browser (`localStorage`, like the theme), without touching the stored layout. "Edit layout" then edits a copy; Save stores it as the profile's layout as today; "Reset to default" returns to the chosen preset.
-3. **"Try the new layout"**: a one-line banner on `/watch` for users on Classic, shown once per hero ("A calmer layout is ready. Try it / Not now"). "Try it" is the same as picking Standard; the menu takes them back.
-4. **New heroes** (no stored layout, the onboarding card not yet dismissed) start on Simple or Standard: open question 3.
-5. **Flip the default** (`web/layout.json` becomes Standard, the present file moves to `web/layouts/classic.json`) only after the user has lived on Standard and says so. A stored layout is not touched by the flip.
-6. The Electron viewer wraps the same page and gets all of it with no change (S `apps/desktop-electron`, ADR 0020).
+1. **With S1, Standard is the default for everyone without a stored layout.** `web/layout.json` becomes the Standard file; today's file moves unchanged to `web/layouts/classic.json` and stays loadable with `?layout=classic` and from the menu. A stored per-profile layout is never read differently and never rewritten.
+2. **Standard is progressive.** At S1 none of the six new tiles exists, so each of their cells shows its fallback:
+
+   | Cell (new tile) | Shows until the tile ships | Ships in |
+   |---|---|---|
+   | `statusline` (band) | `hero-status` | S2 |
+   | `needs-count` (band) | `alerts-count` | S3 |
+   | `needs-you` | `gear` (the repair alert and its button) | S3 |
+   | `health` | `why` | S3 |
+   | `progress` | `tally` | S3 |
+   | `orders` | `now` (the order, Cancel, Come home) | S4 |
+   | `zone-map` | `orders-map` (the act graph that takes orders today) | S5 |
+   | `log` | `thoughts` (open questions and the feed) | S6 |
+
+   A fallback wins over the preset's own `hidden: true` for that old tile while it is standing in. Simple keeps the act map as a tile under the Journey strip until S5 (when "Go to" can open it as a sheet and S5 hides the entry), because otherwise Simple would have no way to give a zone order.
+
+   So the day S1 merges, the default page is: picture, minimap, gear, the current order, the act map, why, tally, thoughts, journey, cards, hero. Every command that works today still has its button on the first two screens; nothing is blank. Each later slice swaps one cell. A test in S1 asserts that Standard resolved against today's panel list has no unknown id, no overlap and no empty cell.
+3. **A new hero starts on Simple** (no stored layout and the onboarding card not yet dismissed); the same fallbacks apply. When the onboarding card is dismissed or done the page offers Standard once.
+4. **Going back is one click.** The "..." menu of the band has "Layout: Classic / Simple / Standard / Stream / Debug", kept per browser like the theme. S1 also shows a one-time line under the band for users who had the old default: "The layout changed. Classic is in the menu."
+5. **Stream and Debug** are opt-in from the menu or `?layout=`.
+6. **Old tiles are retired last** (slice S8, only after the user says the new layouts have proven themselves): `mergedInto` and alias per the table in section 3, the stub stays, a compat fixture is added. Until then every old tile stays mounted for Classic, Debug and stored layouts.
+7. The Electron viewer wraps the same page and gets all of it with no change (S `apps/desktop-electron`, ADR 0020).
