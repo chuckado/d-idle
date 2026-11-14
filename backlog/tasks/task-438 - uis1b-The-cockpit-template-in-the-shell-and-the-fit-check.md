@@ -1,11 +1,11 @@
 ---
 id: TASK-438
 title: 'uis1b: The cockpit template in the shell, and the fit check'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T20:52:00Z'
-updated_date: '2026-11-14T20:52:00Z'
+updated_date: '2026-11-14T23:53:00Z'
 labels:
   - watch
   - feature
