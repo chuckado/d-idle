@@ -271,7 +271,11 @@
     poll();
   }
   function load() {
-    getJSON('/api/repair').then(drawRepair, function (e) { $('repair').textContent = e.message; });
+    getJSON('/api/repair').then(function (v) {
+      drawRepair(v);
+      // the character canvas (inventory-canvas.js) draws its repair chip from the same reply
+      if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:repair', { detail: v }));
+    }, function (e) { $('repair').textContent = e.message; });
     getJSON('/api/inventory').then(draw, function (e) { say(e.message); });
   }
   if (typeof window !== 'undefined' && window.__invTest) {

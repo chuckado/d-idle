@@ -54,9 +54,20 @@ func item(id int, code, name, q string, x, y, w, h int, extra map[string]any) ma
 	return it
 }
 
+// usable is the schema 8 verdict of an item: the hero's and the mercenary's, each with the reason texts the page shows.
+func usable(hero, merc bool, hwhy, mwhy string) map[string]any {
+	side := func(ok bool, why string) map[string]any {
+		if ok {
+			return map[string]any{"ok": true}
+		}
+		return map[string]any{"ok": false, "reasons": []any{map[string]any{"code": "requirements", "stat": "str", "text": why}}}
+	}
+	return map[string]any{"hero": side(hero, hwhy), "merc": side(merc, mwhy)}
+}
+
 func (fixtureDesk) View() any {
 	return map[string]any{
-		"schema": 7, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
+		"schema": 10, "sellPending": 1, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
 		"prompt": "No weapon equipped. Equip one on the Inventory page; the bot will not do it for you.",
 		"equipment": map[string]any{
 			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18}),
@@ -68,14 +79,16 @@ func (fixtureDesk) View() any {
 			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, nil),
 		},
 		"backpack": []any{
-			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand")}),
+			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
 			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
 			item(12, "ssd", "Short Sword", "normal", 2, 0, 1, 3, map[string]any{"mark": "sell", "canSell": true, "maxDur": 24, "dur": 3}),
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 			item(14, "isc", "Scroll of Identify", "normal", 4, 0, 1, 1, nil),
 			item(15, "tbk", "Tome of Town Portal", "normal", 3, 1, 1, 2, nil),
-			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60}),
-			item(17, "box", "Horadric Cube", "unique", 8, 2, 2, 2, map[string]any{"mark": "keep"}),
+			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "usable": usable(false, true, "needs 41 strength (you have 38)", ""), "noWear": "needs 41 strength (you have 38)"}),
+			item(18, "tar", "Targe", "magic", 5, 0, 2, 2, map[string]any{"usable": usable(false, false, "needs 16 strength (you have 38) and is a Paladin shield", "a Desert Guard wears helm, armor, spear or polearm"), "noWear": "Paladin only"}),
+			item(19, "pik", "Pike", "normal", 7, 0, 2, 4, map[string]any{"usable": usable(false, false, "needs level 9 (you are 7)", "needs 45 dexterity (he has 40)")}),
+			item(17, "box", "Horadric Cube", "unique", 5, 2, 2, 2, map[string]any{"mark": "keep"}),
 		},
 		"belt": []any{
 			item(20, "hp1", "Minor Healing Potion", "normal", 0, 0, 1, 1, nil),
