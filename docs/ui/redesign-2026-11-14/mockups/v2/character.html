@@ -105,6 +105,9 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
 .insp li.y{color:var(--ok)}.insp li.n{color:var(--danger)}.insp .hd{font:700 9.5px var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:0 0 2px}
 .insp .cmp{color:var(--text2)}.insp .cmp b{color:var(--text)}.insp .up{color:var(--ok)}.insp .dn{color:var(--danger)}.insp .own{display:inline-block;margin-top:3px;font:700 9px var(--body);letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border-radius:2px;background:var(--s3);color:var(--text2)}
 .selbox .acts{margin-top:auto}
+.selbox>h3{display:none}
+.gold input{min-width:52px}
+@media (max-height:800px) and (min-width:701px){.errands .gold{display:grid;grid-template-columns:1fr 1fr}.errands .gold input{grid-column:1/-1;width:auto}.insp,.errands .mnote{display:none}.selbox>h3{display:block}.lock{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.selbox{padding:5px 6px}.side{gap:4px}}
 .msg{font-size:11px;padding:4px 6px;border-radius:3px;background:var(--danger-bg)}.msg.i{background:var(--info-bg)}
 .lock{flex:none;font-size:10.5px;color:var(--text3);border:1px dashed var(--line2);border-radius:3px;padding:3px 6px}
 
@@ -344,7 +347,7 @@ function doll(id,L,w){var d=$(id);d.textContent='';var sel=S.sel&&by(S.sel);
 function sheet(id,rows){var s=$(id);s.textContent='';rows.forEach(function(r){var d=el('div');d.appendChild(el('label','',r[0]));d.appendChild(el('b',r[2]||'',r[1]));s.appendChild(d)})}
 function selbox(){var p=$('sel');p.textContent='';var i=S.sel&&by(S.sel);
  if(!i){p.appendChild(el('h3','','No item selected'));p.appendChild(el('p','','Hover for details. Click to select, double-click for the usual action, right-click for all. Ctrl-click moves pack and stash. Alt-click marks for sale.'))}
- else{var uh=use(i,HERO);var dz=el('div','insp');fill(dz,i,1);p.appendChild(dz);
+ else{var uh=use(i,HERO);var nh=el('h3','',i.name);nh.style.color='var(--q-'+i.q+')';p.appendChild(nh);var dz=el('div','insp');fill(dz,i,1);p.appendChild(dz);
   var a=el('div','acts');actions(i).forEach(function(x,n){var b=btn(x[0],n===0&&x[2]?'p':'',x[2]||function(){});if(!x[2]){b.disabled=true;b.title=x[3]||''}a.appendChild(b)});p.appendChild(a)}
  if(S.msg)p.appendChild(el('div','msg'+(S.msg[1]?' i':''),S.msg[0]))}
 function segs(id,opts,cur,fn,cls){var b=$(id);b.textContent='';opts.forEach(function(o){var x=el('button',cls||'',o[1]);x.type='button';x.setAttribute('aria-pressed',String(cur()===o[0]));x.addEventListener('click',function(){fn(o[0])});b.appendChild(x)})}
