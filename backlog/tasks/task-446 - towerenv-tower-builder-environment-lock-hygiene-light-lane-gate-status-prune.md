@@ -14,6 +14,7 @@ ordinal: 259000
 card: "towerenv"
 owns:
   - "docs/process/build-hosts-env-2026-11-14.md"
+result: "Applied on the builder with no container restart: /data/bin/lockrun (flock -o, watchdog, light lane), towerctl (status, watchdog, prune), towergate; labrun --light/--gate/tower-status/tower-install. Drilled live on the builder with private locks (daemon no longer holds the slot, watchdog frees stuck holders, light lane runs under a held main lock). First real labrun tower --gate: TOWERGATE PASS (check.sh 24s, tests 159s, race 36s, leakcheck 0 hits). Unverified: User Scripts prune schedule (needs NAS root). Doc: docs/process/build-hosts-env-2026-11-14.md."
 exclusive:
   - "fork-branch:none"
 contracts: []
@@ -29,9 +30,9 @@ User go 2026-11-14. Done when the doc exists and the drills are recorded.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 lockrun: lock not inherited by daemons, watchdog, drilled
-- [ ] #2 light lane drilled while the main lock is held
-- [ ] #3 towergate: whole-repo vet/tests/race/leakcheck/check.sh in one locked job
-- [ ] #4 tower-status and prune policy
-- [ ] #5 doc with rollback and how agents use the builder
+- [x] #1 lockrun: lock not inherited by daemons, watchdog, drilled
+- [x] #2 light lane drilled while the main lock is held
+- [x] #3 towergate: whole-repo vet/tests/race/leakcheck/check.sh in one locked job
+- [x] #4 tower-status and prune policy
+- [x] #5 doc with rollback and how agents use the builder
 <!-- AC:END -->

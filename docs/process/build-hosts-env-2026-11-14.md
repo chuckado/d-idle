@@ -55,7 +55,7 @@ Run on the builder with `TOWER_LD=/data/lock-drill TOWER_MAIN_LOCK=/data/drill.l
 3. A waiter frees the stuck holder itself: the waiting `lockrun` ran after 33 s without a manual watchdog. V.
 4. A main-lane job holds the lock for 40 s; the light probe ran in 0 s; `go test` and `rm` were refused. V.
 
-First gate run (`labrun tower --gate` from this worktree): see the result line in the task card.
+First gate run (`labrun tower --gate`, this worktree, V): `TOWERGATE PASS: gofmt ok 0s check.sh ok 24s test ok 159s race[./internal/watch/...] ok 36s leakcheck ok 24s`; the job waited about 15 min in the queue behind other gates, 1261 s in all.
 
 ## 8. Rollback
 
