@@ -157,6 +157,8 @@ cmd/d2bot/live.go  credit-runner  maphistory
 cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
+cmd/d2bot/loopwire.go  credit-runner  uib7
+cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
@@ -179,6 +181,7 @@ cmd/d2firsthour/  live-agent  firsthour
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
 data/unlocks/ladder.json  credit-runner  gearsets
+data/unlocks/ladder.json  credit-runner  uib7
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
@@ -223,6 +226,7 @@ docs/levelplan3.md  pro-runner  levelplan3
 docs/levelsim.md  credit-runner  levelsim
 docs/live-checks.md  credit-runner  repairtrip
 docs/locks.md  credit-runner  lockscan
+docs/loop-order.md  credit-runner  uib7
 docs/lootrules.md  credit-runner  lootrules
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
@@ -513,6 +517,9 @@ internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes
 internal/watch/onboarding.go  credit-runner  reconnectux
 internal/watch/onboarding_test.go  credit-runner  firstminutes
+internal/watch/orderloop.go  credit-runner  uib7
+internal/watch/orderloop_test.go  credit-runner  uib7
+internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/senses.go  credit-runner  maphistory
@@ -556,6 +563,7 @@ internal/watch/testdata/map_panel.js  credit-runner  maphistoryD
 internal/watch/testdata/map_panel.js  credit-runner  maptrail
 internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
+internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC

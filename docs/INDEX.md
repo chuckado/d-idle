@@ -405,6 +405,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [live-checks.md](live-checks.md): Live checks still open
 - [locks.md](locks.md): Lock order and rules (status: current (lock audit, 2026-11-12, after the sandbox freeze of 2026-11-12: nav.roam called done() under...)
 - [logfields.md](logfields.md): Log fields for the per-skill soak report (change logfields)
+- [loop-order.md](loop-order.md): The Loop order and its unlock (status: built offline (task uib7), not verified live. Design: `docs/ui/redesign-2026-11-14/C-orders.md` section 8....)
 - [loot-charms.md](loot-charms.md): Charms, runes and gems on a sell visit (status: current (card m1-loot, agent m1loot, 2026-10-31). Rule source: user decision D4 and the d2-sme; shared...)
 - [lootmemory.md](lootmemory.md): Loot memory (status: current (TASK-320). Code: `internal/loot/memory.go`; hooks in `internal/bot/observe.go` and `goal.go`...)
 - [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
