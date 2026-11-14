@@ -133,6 +133,8 @@ type Fun struct {
 	Risk *RiskMeter
 	// Readiness serves GET /api/readiness (internal/readiness, TASK-218), read-only; set it before Serve, nil: no route.
 	Readiness http.Handler
+	// Danger serves GET /api/danger (internal/danger, survival slice S-A), read-only; nil: no route.
+	Danger http.Handler
 	// Queue is nil unless FunConfig.OrderQueue is set and the ladder has the slot rows (TASK-161).
 	Queue *OrderQueue
 	// Loop is nil unless FunConfig.OrderLoop is set and the ladder has the row "orderloop"; bind its repair desk with Loop.Bind.
@@ -662,6 +664,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Readiness != nil {
 		m.Handle("/api/readiness", f.Readiness) // readiness.Route
+	}
+	if f.Danger != nil {
+		m.Handle("/api/danger", f.Danger) // danger.Route
 	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.Handler())
