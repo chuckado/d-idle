@@ -154,7 +154,6 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
-| uiredesign3 | in-progress | - | `docs/ui/redesign-2026-11-14/` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |

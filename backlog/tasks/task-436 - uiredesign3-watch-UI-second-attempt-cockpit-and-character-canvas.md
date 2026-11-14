@@ -1,10 +1,11 @@
 ---
 id: TASK-436
 title: 'uiredesign3: watch UI second attempt, cockpit and character canvas'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T19:53:00Z'
+updated_date: '2026-11-14T20:02:00Z'
 labels:
   - watch
   - research
