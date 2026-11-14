@@ -11,14 +11,20 @@ import (
 	"d2lod-bot/internal/data"
 )
 
-const realInstall = "/tmp/d2mpq"
+// realInstall is the game data dir: D2_MPQ_DIR (the builder mounts it at /gamedata), else /tmp/d2mpq.
+func realInstall() string {
+	if d := os.Getenv("D2_MPQ_DIR"); d != "" {
+		return d
+	}
+	return "/tmp/d2mpq"
+}
 
 func realTable(t *testing.T) (*data.DB, *Table) {
 	t.Helper()
-	if _, err := os.Stat(realInstall + "/d2data.mpq"); err != nil {
-		t.Skip("no real install at " + realInstall)
+	if _, err := os.Stat(realInstall() + "/d2data.mpq"); err != nil {
+		t.Skip("no real install at " + realInstall())
 	}
-	db, err := data.Open(realInstall, t.TempDir())
+	db, err := data.Open(realInstall(), t.TempDir())
 	if err != nil {
 		t.Fatal(err)
 	}
