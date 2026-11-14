@@ -14,7 +14,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", "..", ".."))
 WEB = os.path.join(ROOT, "internal", "watch", "web")
 NEW = ["needs-you", "orders", "health", "progress", "zone-map", "log"]  # grid and side panels of this design
-STATUS = ["statusline", "hero-meters", "needs-count"]                   # the status band of the new presets
+# the status band of the new presets; an entry may name the old panel that stands in until the new one ships
+STATUS = [{"id": "statusline", "fallback": "hero-status"}, "hero-meters", {"id": "needs-count", "fallback": "alerts-count"}]
+# The old tile that fills a new tile's cell until the new panel exists (D-layouts.md section 4, user answer 4).
+FALLBACK = {"needs-you": "gear", "orders": "now", "zone-map": "orders-map", "health": "why", "progress": "tally", "log": "thoughts"}
 BAND = {"video": "stage", "zone-map": "grid", "log": "grid"}
 
 
@@ -36,8 +39,9 @@ PRESETS = {
     "simple": {
         "density": "comfortable",
         "grid": [("onboarding", 1, 1, 12, 3), ("video", 1, 4, 8, 14), ("needs-you", 9, 4, 4, 3), ("orders", 9, 7, 4, 6),
-                 ("health", 9, 13, 4, 2), ("progress", 9, 15, 4, 3), ("journey", 1, 18, 12, 5)],
-        "flow": [("onboarding", 12), ("video", 12), ("needs-you", 12), ("orders", 12), ("health", 6), ("progress", 6), ("journey", 12)],
+                 ("health", 9, 13, 4, 2), ("progress", 9, 15, 4, 3), ("journey", 1, 18, 12, 5),
+                 ("zone-map", 1, 23, 12, 12)],  # until S5 opens the act map from "Go to"; S5 hides this entry
+        "flow": [("onboarding", 12), ("video", 12), ("needs-you", 12), ("orders", 12), ("health", 6), ("progress", 6), ("journey", 12), ("zone-map", 12)],
     },
     "standard": {
         "density": "dense",
@@ -77,6 +81,9 @@ def build(name, spec, ids, bands, compat):
         shown = [r[0] for r in rows]
         es = [{"id": i, "band": band(i), "col": c, "row": r, "colSpan": w, "rowSpan": h, "collapsed": False, "order": n}
               for n, (i, c, r, w, h) in enumerate(rows)]
+        for e in es:
+            if e["id"] in FALLBACK and FALLBACK[e["id"]] not in shown:
+                e["fallback"] = FALLBACK[e["id"]]
         row = max(e["row"] + e["rowSpan"] for e in es)
         for i in every:  # every other panel is named and switched off, so the shell does not pack it after the rest
             if i in shown:

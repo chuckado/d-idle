@@ -5,9 +5,15 @@
  "density": "comfortable",
  "theme": "dark",
  "status": [
-  "statusline",
+  {
+   "id": "statusline",
+   "fallback": "hero-status"
+  },
   "hero-meters",
-  "needs-count"
+  {
+   "id": "needs-count",
+   "fallback": "alerts-count"
+  }
  ],
  "breakpoints": {
   "phone": {
@@ -42,7 +48,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -52,7 +59,8 @@
      "colSpan": 12,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -62,7 +70,8 @@
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -72,7 +81,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "tally"
     },
     {
      "id": "journey",
@@ -85,21 +95,21 @@
      "order": 6
     },
     {
-     "id": "activity",
-     "band": "side",
+     "id": "zone-map",
+     "band": "grid",
      "col": 1,
      "row": 37,
      "colSpan": 12,
-     "rowSpan": 2,
+     "rowSpan": 12,
      "collapsed": false,
      "order": 7,
-     "hidden": true
+     "fallback": "orders-map"
     },
     {
-     "id": "alerts",
-     "band": "grid",
+     "id": "activity",
+     "band": "side",
      "col": 1,
-     "row": 39,
+     "row": 49,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -107,10 +117,10 @@
      "hidden": true
     },
     {
-     "id": "atlas",
+     "id": "alerts",
      "band": "grid",
      "col": 1,
-     "row": 41,
+     "row": 51,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -118,10 +128,10 @@
      "hidden": true
     },
     {
-     "id": "bestiary",
+     "id": "atlas",
      "band": "grid",
      "col": 1,
-     "row": 43,
+     "row": 53,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -129,10 +139,10 @@
      "hidden": true
     },
     {
-     "id": "cards",
+     "id": "bestiary",
      "band": "grid",
      "col": 1,
-     "row": 45,
+     "row": 55,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -140,10 +150,10 @@
      "hidden": true
     },
     {
-     "id": "chronicle",
+     "id": "cards",
      "band": "grid",
      "col": 1,
-     "row": 47,
+     "row": 57,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -151,10 +161,10 @@
      "hidden": true
     },
     {
-     "id": "currency",
-     "band": "side",
+     "id": "chronicle",
+     "band": "grid",
      "col": 1,
-     "row": 49,
+     "row": 59,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -162,10 +172,10 @@
      "hidden": true
     },
     {
-     "id": "diary",
-     "band": "grid",
+     "id": "currency",
+     "band": "side",
      "col": 1,
-     "row": 51,
+     "row": 61,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -173,10 +183,10 @@
      "hidden": true
     },
     {
-     "id": "gear",
-     "band": "side",
+     "id": "diary",
+     "band": "grid",
      "col": 1,
-     "row": 53,
+     "row": 63,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -184,10 +194,10 @@
      "hidden": true
     },
     {
-     "id": "hero-vitals",
+     "id": "gear",
      "band": "side",
      "col": 1,
-     "row": 55,
+     "row": 65,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -195,10 +205,10 @@
      "hidden": true
     },
     {
-     "id": "journal",
-     "band": "grid",
+     "id": "hero-vitals",
+     "band": "side",
      "col": 1,
-     "row": 57,
+     "row": 67,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -206,10 +216,10 @@
      "hidden": true
     },
     {
-     "id": "locked",
+     "id": "journal",
      "band": "grid",
      "col": 1,
-     "row": 59,
+     "row": 69,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -217,10 +227,10 @@
      "hidden": true
     },
     {
-     "id": "map",
-     "band": "side",
+     "id": "locked",
+     "band": "grid",
      "col": 1,
-     "row": 61,
+     "row": 71,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -228,10 +238,10 @@
      "hidden": true
     },
     {
-     "id": "now",
-     "band": "grid",
+     "id": "map",
+     "band": "side",
      "col": 1,
-     "row": 63,
+     "row": 73,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -239,10 +249,10 @@
      "hidden": true
     },
     {
-     "id": "orders-map",
+     "id": "now",
      "band": "grid",
      "col": 1,
-     "row": 65,
+     "row": 75,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -250,10 +260,10 @@
      "hidden": true
     },
     {
-     "id": "quests",
+     "id": "orders-map",
      "band": "grid",
      "col": 1,
-     "row": 67,
+     "row": 77,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -261,10 +271,10 @@
      "hidden": true
     },
     {
-     "id": "queue",
+     "id": "quests",
      "band": "grid",
      "col": 1,
-     "row": 69,
+     "row": 79,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -272,10 +282,10 @@
      "hidden": true
     },
     {
-     "id": "rules",
+     "id": "queue",
      "band": "grid",
      "col": 1,
-     "row": 71,
+     "row": 81,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -283,10 +293,10 @@
      "hidden": true
     },
     {
-     "id": "spend",
+     "id": "rules",
      "band": "grid",
      "col": 1,
-     "row": 73,
+     "row": 83,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -294,10 +304,10 @@
      "hidden": true
     },
     {
-     "id": "tally",
-     "band": "side",
+     "id": "spend",
+     "band": "grid",
      "col": 1,
-     "row": 75,
+     "row": 85,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -305,10 +315,10 @@
      "hidden": true
     },
     {
-     "id": "thoughts",
-     "band": "grid",
+     "id": "tally",
+     "band": "side",
      "col": 1,
-     "row": 77,
+     "row": 87,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -316,14 +326,25 @@
      "hidden": true
     },
     {
-     "id": "why",
-     "band": "side",
+     "id": "thoughts",
+     "band": "grid",
      "col": 1,
-     "row": 79,
+     "row": 89,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
      "order": 28,
+     "hidden": true
+    },
+    {
+     "id": "why",
+     "band": "side",
+     "col": 1,
+     "row": 91,
+     "colSpan": 12,
+     "rowSpan": 2,
+     "collapsed": false,
+     "order": 29,
      "hidden": true
     }
    ]
@@ -360,7 +381,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -370,7 +392,8 @@
      "colSpan": 12,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -380,7 +403,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -390,7 +414,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "tally"
     },
     {
      "id": "journey",
@@ -403,21 +428,21 @@
      "order": 6
     },
     {
-     "id": "activity",
-     "band": "side",
+     "id": "zone-map",
+     "band": "grid",
      "col": 1,
      "row": 35,
      "colSpan": 12,
-     "rowSpan": 2,
+     "rowSpan": 12,
      "collapsed": false,
      "order": 7,
-     "hidden": true
+     "fallback": "orders-map"
     },
     {
-     "id": "alerts",
-     "band": "grid",
+     "id": "activity",
+     "band": "side",
      "col": 1,
-     "row": 37,
+     "row": 47,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -425,10 +450,10 @@
      "hidden": true
     },
     {
-     "id": "atlas",
+     "id": "alerts",
      "band": "grid",
      "col": 1,
-     "row": 39,
+     "row": 49,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -436,10 +461,10 @@
      "hidden": true
     },
     {
-     "id": "bestiary",
+     "id": "atlas",
      "band": "grid",
      "col": 1,
-     "row": 41,
+     "row": 51,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -447,10 +472,10 @@
      "hidden": true
     },
     {
-     "id": "cards",
+     "id": "bestiary",
      "band": "grid",
      "col": 1,
-     "row": 43,
+     "row": 53,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -458,10 +483,10 @@
      "hidden": true
     },
     {
-     "id": "chronicle",
+     "id": "cards",
      "band": "grid",
      "col": 1,
-     "row": 45,
+     "row": 55,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -469,10 +494,10 @@
      "hidden": true
     },
     {
-     "id": "currency",
-     "band": "side",
+     "id": "chronicle",
+     "band": "grid",
      "col": 1,
-     "row": 47,
+     "row": 57,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -480,10 +505,10 @@
      "hidden": true
     },
     {
-     "id": "diary",
-     "band": "grid",
+     "id": "currency",
+     "band": "side",
      "col": 1,
-     "row": 49,
+     "row": 59,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -491,10 +516,10 @@
      "hidden": true
     },
     {
-     "id": "gear",
-     "band": "side",
+     "id": "diary",
+     "band": "grid",
      "col": 1,
-     "row": 51,
+     "row": 61,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -502,10 +527,10 @@
      "hidden": true
     },
     {
-     "id": "hero-vitals",
+     "id": "gear",
      "band": "side",
      "col": 1,
-     "row": 53,
+     "row": 63,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -513,10 +538,10 @@
      "hidden": true
     },
     {
-     "id": "journal",
-     "band": "grid",
+     "id": "hero-vitals",
+     "band": "side",
      "col": 1,
-     "row": 55,
+     "row": 65,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -524,10 +549,10 @@
      "hidden": true
     },
     {
-     "id": "locked",
+     "id": "journal",
      "band": "grid",
      "col": 1,
-     "row": 57,
+     "row": 67,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -535,10 +560,10 @@
      "hidden": true
     },
     {
-     "id": "map",
-     "band": "side",
+     "id": "locked",
+     "band": "grid",
      "col": 1,
-     "row": 59,
+     "row": 69,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -546,10 +571,10 @@
      "hidden": true
     },
     {
-     "id": "now",
-     "band": "grid",
+     "id": "map",
+     "band": "side",
      "col": 1,
-     "row": 61,
+     "row": 71,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -557,10 +582,10 @@
      "hidden": true
     },
     {
-     "id": "orders-map",
+     "id": "now",
      "band": "grid",
      "col": 1,
-     "row": 63,
+     "row": 73,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -568,10 +593,10 @@
      "hidden": true
     },
     {
-     "id": "quests",
+     "id": "orders-map",
      "band": "grid",
      "col": 1,
-     "row": 65,
+     "row": 75,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -579,10 +604,10 @@
      "hidden": true
     },
     {
-     "id": "queue",
+     "id": "quests",
      "band": "grid",
      "col": 1,
-     "row": 67,
+     "row": 77,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -590,10 +615,10 @@
      "hidden": true
     },
     {
-     "id": "rules",
+     "id": "queue",
      "band": "grid",
      "col": 1,
-     "row": 69,
+     "row": 79,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -601,10 +626,10 @@
      "hidden": true
     },
     {
-     "id": "spend",
+     "id": "rules",
      "band": "grid",
      "col": 1,
-     "row": 71,
+     "row": 81,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -612,10 +637,10 @@
      "hidden": true
     },
     {
-     "id": "tally",
-     "band": "side",
+     "id": "spend",
+     "band": "grid",
      "col": 1,
-     "row": 73,
+     "row": 83,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -623,10 +648,10 @@
      "hidden": true
     },
     {
-     "id": "thoughts",
-     "band": "grid",
+     "id": "tally",
+     "band": "side",
      "col": 1,
-     "row": 75,
+     "row": 85,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -634,14 +659,25 @@
      "hidden": true
     },
     {
-     "id": "why",
-     "band": "side",
+     "id": "thoughts",
+     "band": "grid",
      "col": 1,
-     "row": 77,
+     "row": 87,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
      "order": 28,
+     "hidden": true
+    },
+    {
+     "id": "why",
+     "band": "side",
+     "col": 1,
+     "row": 89,
+     "colSpan": 12,
+     "rowSpan": 2,
+     "collapsed": false,
+     "order": 29,
      "hidden": true
     }
    ]
@@ -678,7 +714,8 @@
      "colSpan": 4,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -688,7 +725,8 @@
      "colSpan": 4,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -698,7 +736,8 @@
      "colSpan": 4,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -708,7 +747,8 @@
      "colSpan": 4,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "tally"
     },
     {
      "id": "journey",
@@ -721,21 +761,21 @@
      "order": 6
     },
     {
-     "id": "activity",
-     "band": "side",
+     "id": "zone-map",
+     "band": "grid",
      "col": 1,
      "row": 23,
      "colSpan": 12,
-     "rowSpan": 2,
+     "rowSpan": 12,
      "collapsed": false,
      "order": 7,
-     "hidden": true
+     "fallback": "orders-map"
     },
     {
-     "id": "alerts",
-     "band": "grid",
+     "id": "activity",
+     "band": "side",
      "col": 1,
-     "row": 25,
+     "row": 35,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -743,10 +783,10 @@
      "hidden": true
     },
     {
-     "id": "atlas",
+     "id": "alerts",
      "band": "grid",
      "col": 1,
-     "row": 27,
+     "row": 37,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -754,10 +794,10 @@
      "hidden": true
     },
     {
-     "id": "bestiary",
+     "id": "atlas",
      "band": "grid",
      "col": 1,
-     "row": 29,
+     "row": 39,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -765,10 +805,10 @@
      "hidden": true
     },
     {
-     "id": "cards",
+     "id": "bestiary",
      "band": "grid",
      "col": 1,
-     "row": 31,
+     "row": 41,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -776,10 +816,10 @@
      "hidden": true
     },
     {
-     "id": "chronicle",
+     "id": "cards",
      "band": "grid",
      "col": 1,
-     "row": 33,
+     "row": 43,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -787,10 +827,10 @@
      "hidden": true
     },
     {
-     "id": "currency",
-     "band": "side",
+     "id": "chronicle",
+     "band": "grid",
      "col": 1,
-     "row": 35,
+     "row": 45,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -798,10 +838,10 @@
      "hidden": true
     },
     {
-     "id": "diary",
-     "band": "grid",
+     "id": "currency",
+     "band": "side",
      "col": 1,
-     "row": 37,
+     "row": 47,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -809,10 +849,10 @@
      "hidden": true
     },
     {
-     "id": "gear",
-     "band": "side",
+     "id": "diary",
+     "band": "grid",
      "col": 1,
-     "row": 39,
+     "row": 49,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -820,10 +860,10 @@
      "hidden": true
     },
     {
-     "id": "hero-vitals",
+     "id": "gear",
      "band": "side",
      "col": 1,
-     "row": 41,
+     "row": 51,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -831,10 +871,10 @@
      "hidden": true
     },
     {
-     "id": "journal",
-     "band": "grid",
+     "id": "hero-vitals",
+     "band": "side",
      "col": 1,
-     "row": 43,
+     "row": 53,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -842,10 +882,10 @@
      "hidden": true
     },
     {
-     "id": "locked",
+     "id": "journal",
      "band": "grid",
      "col": 1,
-     "row": 45,
+     "row": 55,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -853,10 +893,10 @@
      "hidden": true
     },
     {
-     "id": "map",
-     "band": "side",
+     "id": "locked",
+     "band": "grid",
      "col": 1,
-     "row": 47,
+     "row": 57,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -864,10 +904,10 @@
      "hidden": true
     },
     {
-     "id": "now",
-     "band": "grid",
+     "id": "map",
+     "band": "side",
      "col": 1,
-     "row": 49,
+     "row": 59,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -875,10 +915,10 @@
      "hidden": true
     },
     {
-     "id": "orders-map",
+     "id": "now",
      "band": "grid",
      "col": 1,
-     "row": 51,
+     "row": 61,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -886,10 +926,10 @@
      "hidden": true
     },
     {
-     "id": "quests",
+     "id": "orders-map",
      "band": "grid",
      "col": 1,
-     "row": 53,
+     "row": 63,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -897,10 +937,10 @@
      "hidden": true
     },
     {
-     "id": "queue",
+     "id": "quests",
      "band": "grid",
      "col": 1,
-     "row": 55,
+     "row": 65,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -908,10 +948,10 @@
      "hidden": true
     },
     {
-     "id": "rules",
+     "id": "queue",
      "band": "grid",
      "col": 1,
-     "row": 57,
+     "row": 67,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -919,10 +959,10 @@
      "hidden": true
     },
     {
-     "id": "spend",
+     "id": "rules",
      "band": "grid",
      "col": 1,
-     "row": 59,
+     "row": 69,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -930,10 +970,10 @@
      "hidden": true
     },
     {
-     "id": "tally",
-     "band": "side",
+     "id": "spend",
+     "band": "grid",
      "col": 1,
-     "row": 61,
+     "row": 71,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -941,10 +981,10 @@
      "hidden": true
     },
     {
-     "id": "thoughts",
-     "band": "grid",
+     "id": "tally",
+     "band": "side",
      "col": 1,
-     "row": 63,
+     "row": 73,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -952,14 +992,25 @@
      "hidden": true
     },
     {
-     "id": "why",
-     "band": "side",
+     "id": "thoughts",
+     "band": "grid",
      "col": 1,
-     "row": 65,
+     "row": 75,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
      "order": 28,
+     "hidden": true
+    },
+    {
+     "id": "why",
+     "band": "side",
+     "col": 1,
+     "row": 77,
+     "colSpan": 12,
+     "rowSpan": 2,
+     "collapsed": false,
+     "order": 29,
      "hidden": true
     }
    ]
@@ -996,7 +1047,8 @@
      "colSpan": 4,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -1006,7 +1058,8 @@
      "colSpan": 4,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -1016,7 +1069,8 @@
      "colSpan": 4,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -1026,7 +1080,8 @@
      "colSpan": 4,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "tally"
     },
     {
      "id": "journey",
@@ -1039,21 +1094,21 @@
      "order": 6
     },
     {
-     "id": "activity",
-     "band": "side",
+     "id": "zone-map",
+     "band": "grid",
      "col": 1,
      "row": 23,
      "colSpan": 12,
-     "rowSpan": 2,
+     "rowSpan": 12,
      "collapsed": false,
      "order": 7,
-     "hidden": true
+     "fallback": "orders-map"
     },
     {
-     "id": "alerts",
-     "band": "grid",
+     "id": "activity",
+     "band": "side",
      "col": 1,
-     "row": 25,
+     "row": 35,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1061,10 +1116,10 @@
      "hidden": true
     },
     {
-     "id": "atlas",
+     "id": "alerts",
      "band": "grid",
      "col": 1,
-     "row": 27,
+     "row": 37,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1072,10 +1127,10 @@
      "hidden": true
     },
     {
-     "id": "bestiary",
+     "id": "atlas",
      "band": "grid",
      "col": 1,
-     "row": 29,
+     "row": 39,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1083,10 +1138,10 @@
      "hidden": true
     },
     {
-     "id": "cards",
+     "id": "bestiary",
      "band": "grid",
      "col": 1,
-     "row": 31,
+     "row": 41,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1094,10 +1149,10 @@
      "hidden": true
     },
     {
-     "id": "chronicle",
+     "id": "cards",
      "band": "grid",
      "col": 1,
-     "row": 33,
+     "row": 43,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1105,10 +1160,10 @@
      "hidden": true
     },
     {
-     "id": "currency",
-     "band": "side",
+     "id": "chronicle",
+     "band": "grid",
      "col": 1,
-     "row": 35,
+     "row": 45,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1116,10 +1171,10 @@
      "hidden": true
     },
     {
-     "id": "diary",
-     "band": "grid",
+     "id": "currency",
+     "band": "side",
      "col": 1,
-     "row": 37,
+     "row": 47,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1127,10 +1182,10 @@
      "hidden": true
     },
     {
-     "id": "gear",
-     "band": "side",
+     "id": "diary",
+     "band": "grid",
      "col": 1,
-     "row": 39,
+     "row": 49,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1138,10 +1193,10 @@
      "hidden": true
     },
     {
-     "id": "hero-vitals",
+     "id": "gear",
      "band": "side",
      "col": 1,
-     "row": 41,
+     "row": 51,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1149,10 +1204,10 @@
      "hidden": true
     },
     {
-     "id": "journal",
-     "band": "grid",
+     "id": "hero-vitals",
+     "band": "side",
      "col": 1,
-     "row": 43,
+     "row": 53,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1160,10 +1215,10 @@
      "hidden": true
     },
     {
-     "id": "locked",
+     "id": "journal",
      "band": "grid",
      "col": 1,
-     "row": 45,
+     "row": 55,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1171,10 +1226,10 @@
      "hidden": true
     },
     {
-     "id": "map",
-     "band": "side",
+     "id": "locked",
+     "band": "grid",
      "col": 1,
-     "row": 47,
+     "row": 57,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1182,10 +1237,10 @@
      "hidden": true
     },
     {
-     "id": "now",
-     "band": "grid",
+     "id": "map",
+     "band": "side",
      "col": 1,
-     "row": 49,
+     "row": 59,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1193,10 +1248,10 @@
      "hidden": true
     },
     {
-     "id": "orders-map",
+     "id": "now",
      "band": "grid",
      "col": 1,
-     "row": 51,
+     "row": 61,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1204,10 +1259,10 @@
      "hidden": true
     },
     {
-     "id": "quests",
+     "id": "orders-map",
      "band": "grid",
      "col": 1,
-     "row": 53,
+     "row": 63,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1215,10 +1270,10 @@
      "hidden": true
     },
     {
-     "id": "queue",
+     "id": "quests",
      "band": "grid",
      "col": 1,
-     "row": 55,
+     "row": 65,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1226,10 +1281,10 @@
      "hidden": true
     },
     {
-     "id": "rules",
+     "id": "queue",
      "band": "grid",
      "col": 1,
-     "row": 57,
+     "row": 67,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1237,10 +1292,10 @@
      "hidden": true
     },
     {
-     "id": "spend",
+     "id": "rules",
      "band": "grid",
      "col": 1,
-     "row": 59,
+     "row": 69,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1248,10 +1303,10 @@
      "hidden": true
     },
     {
-     "id": "tally",
-     "band": "side",
+     "id": "spend",
+     "band": "grid",
      "col": 1,
-     "row": 61,
+     "row": 71,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1259,10 +1314,10 @@
      "hidden": true
     },
     {
-     "id": "thoughts",
-     "band": "grid",
+     "id": "tally",
+     "band": "side",
      "col": 1,
-     "row": 63,
+     "row": 73,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
@@ -1270,14 +1325,25 @@
      "hidden": true
     },
     {
-     "id": "why",
-     "band": "side",
+     "id": "thoughts",
+     "band": "grid",
      "col": 1,
-     "row": 65,
+     "row": 75,
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
      "order": 28,
+     "hidden": true
+    },
+    {
+     "id": "why",
+     "band": "side",
+     "col": 1,
+     "row": 77,
+     "colSpan": 12,
+     "rowSpan": 2,
+     "collapsed": false,
+     "order": 29,
      "hidden": true
     }
    ]
