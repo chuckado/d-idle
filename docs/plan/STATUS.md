@@ -160,6 +160,7 @@
 | botmerc | proposed | - | `internal/merc/playerrevive.go`<br>`internal/merc/playerrevive_test.go`<br>`internal/watch/mercapi.go`<br>`internal/watch/mercapi_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercplayer.go`<br>`cmd/d2bot/mercplayer_test.go`<br>`docs/merc-revive.md` | - |
 | survA | proposed | - | `internal/danger/`<br>`docs/survival/decisions-2026-11-14.md`<br>`docs/survival/danger.md`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go`<br>`internal/watch/funwire.go` | - |
 | verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
+| towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
@@ -209,6 +210,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
+- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
 - 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
 - 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
 - d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
@@ -217,6 +220,4 @@
 - 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
 - a00254235 11-14 17:16 `Merge agent/uis1breview: Merge branch 'main' into TASK-447` (uis1breview)
 - 2c22ac044 11-14 17:16 `Merge agent/verifyp03p05: Merge branch 'main' into TASK-444` (verifyp03p05)
-- 6ea97f50a 11-14 17:13 `Merge branch 'main' into TASK-447` (-)
-- bea34b30f 11-14 17:13 `Merge branch 'main' into TASK-444` (-)
 <!-- statusgen:end -->

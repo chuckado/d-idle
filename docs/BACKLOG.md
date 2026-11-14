@@ -851,6 +851,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - emurun: P05/P03 game-side emulator runs (TASK-445, merged 2026-11-14, acceptance 3 of 3): P05 game column = rule on 539 of 539 (V run); P03 game vs d2d 17,195 of 34,314 differ, game = closed form on 34,314 (V run). After-side and P02 not run. Not verified live. <!--sg:agent/emurun-->
 - survA: danger profiles (survival slice S-A) (TASK-443, merged 2026-11-14, acceptance 5 of 5) <!--sg:agent/survA-->
 - botmerc: Revive mercenary as a player command (TASK-442, merged 2026-11-14, acceptance 3 of 3): built, NOT verified live (2026-11-14): merc.PlayerRevive (request, button, cooldown), GET /api/merc (watch.merc/1) and POST /api/merc/revive and /cancel, errand trip through the inventory desk's player-command hooks, the existing gold-only reviveStep does the ... <!--sg:agent/uib3-->
+- towerenv: builder builder environment (lock hygiene, light lane, gate, status, prune) (TASK-446, merged 2026-11-14, acceptance 5 of 5): Applied on the builder with no container restart: /data/bin/lockrun (flock -o, watchdog, light lane), towerctl (status, watchdog, prune), towergate; labrun --light/--gate/builder-status/builder-install. ... <!--sg:agent/towerenv-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
