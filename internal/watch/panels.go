@@ -37,9 +37,14 @@ type PanelManifest struct {
 	MergedInto string `json:"mergedInto,omitempty"`
 	// OptIn: the shell mounts the panel only when the layout in force names it (placed, not hidden), so a stored
 	// layout never gets a new tile appended the day it ships (docs/ui/redesign-2026-11-14/D-layouts.md section 1).
-	OptIn bool   `json:"optIn,omitempty"`
-	Owner string `json:"owner"`
-	Doc   string `json:"doc"`
+	OptIn bool `json:"optIn,omitempty"`
+	// Slot: the panel renders into a fixed box and may sit in a cockpit slot (layout.go LayoutSlots).
+	Slot bool `json:"slot,omitempty"`
+	// Scroll: a slot panel that holds a list longer than its box declares it; only then is a data-scroll element in the panel
+	// accepted by the fit check (tools/uishots), and it must really scroll (overflow-y auto or scroll).
+	Scroll bool   `json:"scroll,omitempty"`
+	Owner  string `json:"owner"`
+	Doc    string `json:"doc"`
 }
 
 const panelSchema = "watch.panel/1"
