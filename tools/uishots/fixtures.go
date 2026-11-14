@@ -79,7 +79,7 @@ func fxLayout(name string) map[string]any {
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
 		"slots": map[string]any{
-			"band": []string{"hero-meters"}, "stage": "video",
+			"band": []string{"statusline", "hero-meters", "needs-count"}, "stage": "video",
 			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
 			"railWide": wide, "phoneTabs": tabs,
 		},

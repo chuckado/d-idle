@@ -2,6 +2,7 @@ package watch
 
 import (
 	"encoding/json"
+	"regexp"
 	"strings"
 	"testing"
 	"time"
@@ -210,5 +211,34 @@ func TestGlanceSeries(t *testing.T) {
 	}
 	if n := len(h.Glance().Progress.XPSeries); n != glancePoints-1 {
 		t.Errorf("ring not bounded: %d", n)
+	}
+}
+
+// DOM goldens of the band panels in node: statusline (ok, warn, danger, info, loading, error, a long reason), needs-count
+// (0, 1, 3, error) and the slim form of hero-meters.
+func TestGlancePanelDOMGoldens(t *testing.T) {
+	runNode(t, "testdata/glance_dom.js", "web/panels")
+}
+
+// The band panels keep the page rules: no timers, requests or queries of their own, text through textContent, no style
+// writes, and the free-grid layouts never mount them.
+func TestGlancePanelsFollowTheContract(t *testing.T) {
+	bad := regexp.MustCompile(`setInterval|setTimeout|fetch\(|EventSource|document\.|innerHTML|\.style\b|window\.`)
+	for _, id := range []string{"statusline", "needs-count"} {
+		b, err := webFS.ReadFile("web/panels/" + id + "/panel.js")
+		if err != nil {
+			t.Fatal(err)
+		}
+		if m := bad.Find(b); m != nil {
+			t.Errorf("%s: %q breaks the panel contract", id, m)
+		}
+		mb, _ := webFS.ReadFile("web/panels/" + id + "/panel.json")
+		var m PanelManifest
+		if err := json.Unmarshal(mb, &m); err != nil {
+			t.Fatal(err)
+		}
+		if !m.OptIn || !m.Slot || !m.CockpitOnly || m.Endpoint != GlanceRoute {
+			t.Errorf("%s manifest: %+v", id, m)
+		}
 	}
 }
