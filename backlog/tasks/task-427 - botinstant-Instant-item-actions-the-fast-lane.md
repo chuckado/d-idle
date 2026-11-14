@@ -28,6 +28,7 @@ owns:
   - "internal/env/tuning_invdesk.go"
   - "docs/knobs.md"
   - "cmd/d2bot/invverbs_test.go"
+  - "internal/invdesk/usable_test.go"
 exclusive: []
 contracts: []
 result: "Fast lane built and tested offline on fakes (Paladin and Sorceress, -race): verb-capable requests run in the POST through a serialised channel shared with the bot, else queue as before; own knob invdesk.instant (default 0); closed on cursor item, open panel and safety action (Runner.SafetyBusy); a lost answer after send is final for gold and drop; view schema 9. Appends the section Instant actions to docs/inventory-actions.md only. NOT verified live (live verification list in that section)."
