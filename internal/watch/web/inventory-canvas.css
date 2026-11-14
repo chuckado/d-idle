@@ -176,8 +176,9 @@
   .cv-sel .cv-acts button[aria-disabled="true"] { color: var(--d-text-3); border-style: dashed; }
   .cv-sel .cv-acts button[data-confirm] { background: var(--d-bad); border-color: var(--d-bad); color: var(--d-on-bad); }
   .cv-sel .cv-hint { color: var(--d-text-3); }
-  @container sel (max-height: 9rem) { .cv-sel .cv-why { display: none; } }
-  @container sel (max-height: 6.5rem) { .cv-sel p { display: none; } }
+  /* a short box keeps the verdicts (can you use it, can he) and the buttons; the place line goes first, then the verdicts */
+  @container sel (max-height: 8.5rem) { .cv-sel .cv-where { display: none; } }
+  @container sel (max-height: 5.5rem) { .cv-sel .cv-why { display: none; } }
 
   .cv-side .inv-errands { flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; padding: 0; min-inline-size: 0; }
   .cv-side .inv-errands[hidden] { display: none; }

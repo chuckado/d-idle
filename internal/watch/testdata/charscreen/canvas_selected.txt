@@ -1,7 +1,7 @@
 ## item-3
 div [data-sig=1nr4yrx]
   h3.q-magic [] "War Staff" title="War Staff"
-  p [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
     p [data-tone=bad] "He: a desert cannot use that"
@@ -14,7 +14,7 @@ div [data-sig=1nr4yrx]
 ## item-4
 div [data-sig=r76i5g]
   h3.q-magic [] "Cap" title="Cap"
-  p [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad] "You: needs 47 strength (you have 30)" title="needs 47 strength (you have 30)"
     p [data-tone=bad] "You: Paladin only" title="Paladin only"
@@ -29,7 +29,7 @@ div [data-sig=r76i5g]
 ## item-5
 div [data-sig=1y9xlei]
   h3.q-magic [] "Ring A (unidentified)" title="Ring A (unidentified)"
-  p [] "In the pack · item level 10 · durability 0/20"
+  p.cv-where [] "In the pack · item level 10 · durability 0/20"
   div.cv-why []
     p [data-tone=good] "You can use it"
     p [data-tone=good] "He can use it"
@@ -44,7 +44,7 @@ div [data-sig=1y9xlei]
 ## item-90
 div [data-sig=vhosdg]
   h3.q-rare [] "Ring" title="Ring"
-  p [] "In the stash"
+  p.cv-where [] "In the stash"
   div.cv-why []
   div.cv-acts []
     button [aria-disabled=true data-act=take] "Take out" title="the stash opens only in town"
@@ -54,7 +54,7 @@ div [data-sig=vhosdg]
 ## slot-lhand
 div [data-sig=61nvzb]
   h3.q-magic [] "Buckler" title="Buckler"
-  p [] "Worn: left hand · item level 10"
+  p.cv-where [] "Worn: left hand · item level 10"
   div.cv-why []
     p [data-tone=good] "You can use it"
     p [data-tone=good] "He can use it"

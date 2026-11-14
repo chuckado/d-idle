@@ -12,7 +12,7 @@ div [data-sig=16ur44f] hidden
 ## cv-sel
 div [data-sig=4u1nsc]
   h3.q-magic [] "War Staff" title="War Staff"
-  p [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
   div.cv-acts []

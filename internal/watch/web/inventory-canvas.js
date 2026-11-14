@@ -263,7 +263,7 @@
     delete box.dataset.empty;
     var it = f.it, h = el('h3', 'q-' + (it.quality || 'normal'), (it.name || it.code || 'item') + (it.identified === false ? ' (unidentified)' : '')); h.title = h.textContent; box.appendChild(h);
     var bits = [whereWord(f)]; if (it.level) bits.push('item level ' + it.level); if (it.maxDur) bits.push('durability ' + (it.dur || 0) + '/' + it.maxDur);
-    box.appendChild(el('p', '', bits.join(' · ')));
+    box.appendChild(el('p', 'cv-where', bits.join(' · ')));
     var why = el('div', 'cv-why'), u = side(it, 'hero'), m = side(it, 'merc');
     if (u) {
       var hr = hardReasons(u);
