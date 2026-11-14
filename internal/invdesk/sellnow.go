@@ -65,7 +65,7 @@ func (d *Desk) RequestSell() (Request, error) {
 	if d.queuedLocked(0, KindSell) {
 		return Request{}, refuse("queued", "a sale is already waiting: cancel it first")
 	}
-	return d.enqueueLocked(Request{Kind: KindSell, Name: fmt.Sprintf("Sell the %d marked items", n), Count: n})
+	return d.enqueueLocked(Request{Kind: KindSell, Name: fmt.Sprintf("Sell marked items (%d)", n), Count: n})
 }
 
 // runSell performs the sale; the caller settles the request. It re-checks the marks: the player may have cleared them

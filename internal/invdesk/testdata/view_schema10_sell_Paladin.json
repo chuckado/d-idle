@@ -95,7 +95,7 @@
   {
    "id": 0,
    "kind": "sell",
-   "name": "Sell the 1 marked items",
+   "name": "Sell marked items (1)",
    "state": "queued",
    "reason": "waits until the hero is in town",
    "at": 1800000000,
@@ -106,7 +106,7 @@
   {
    "id": 0,
    "kind": "sell",
-   "name": "Sell the 1 marked items",
+   "name": "Sell marked items (1)",
    "state": "done",
    "at": 1800000000,
    "count": 1,
