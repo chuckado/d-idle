@@ -155,6 +155,7 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
+| botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
@@ -204,14 +205,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0de905134 11-14 16:51 `Merge agent/uib2: Merge branch 'main' into TASK-439` (uib2)
+- 1db6e7d36 11-14 16:50 `Merge branch 'main' into TASK-439` (-)
 - 6dece7277 11-14 16:32 `Merge agent/cut012: friends 0.1.2: installer fix, pack and set staged, drills pending` (cut012)
 - 5b3343815 11-14 16:31 `Merge branch 'main' into TASK-426` (-)
+- 93ac26318 11-14 16:29 `Merge origin/main into agent/uib2` (-)
 - 2e1e899cd 11-14 16:23 `Merge agent/decomp21: Merge branch 'main' into decomp21` (decomp21)
 - 1310bf483 11-14 16:23 `Merge origin/main into cut012` (-)
 - e7e48309b 11-14 16:23 `Merge branch 'main' into decomp21` (-)
 - 5637441d3 11-14 16:21 `Merge agent/buildhosts3: Merge branch 'main' into buildhosts3` (buildhosts3)
 - 6c748cb09 11-14 16:20 `Merge branch 'main' into buildhosts3` (-)
-- 0c5f3ec8d 11-14 15:50 `Merge agent/uidesign4: uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated` (uidesign4)
-- df05ff10c 11-14 14:58 `Merge agent/uidesign3: uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card` (uidesign3)
-- 656249fa3 11-14 12:56 `Merge agent/uib8: Merge branch 'main' into TASK-427` (uib8)
 <!-- statusgen:end -->
