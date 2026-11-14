@@ -104,12 +104,12 @@
   .cv-life i { flex: 1; background: var(--d-surface-3); border-radius: 1px; }
   .cv-life i.on { background: var(--d-life); }
   .cv-mhead .cv-kv { flex: none; }
-  .cv-mbody { flex: 1; min-block-size: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 0 var(--cv-p); align-content: start; }
-  .cv-mbody { --mu: min(var(--u), calc(100cqi / (var(--mcols) + 1.4))); }
-  .cv-mbody > .d-doll[data-owner="merc"] { --cell: var(--mu); inline-size: calc(var(--mcols) * var(--mu)); block-size: calc(5 * var(--mu));
+  /* his column: the doll (four rows) with his tiles under it; when the column is wide enough the tiles move beside a five-row doll */
+  .cv-mbody { --mu: min(var(--u), calc(100cqi / var(--mcols))); flex: 1; min-block-size: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-content: start; }
+  .cv-mbody > .d-doll[data-owner="merc"] { --cell: var(--mu); inline-size: calc(var(--mcols) * var(--mu)); block-size: calc(4 * var(--mu));
     grid-template-columns: repeat(var(--mcols), var(--mu)); grid-auto-rows: var(--mu); grid-template-rows: none; }
-  .cv .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso" ". . mtorso mtorso"; }
-  .cv .d-doll[data-owner="merc"][data-cols="6"] { grid-template-areas: "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" ". . mtorso mtorso . ."; }
+  .cv .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso"; }
+  .cv .d-doll[data-owner="merc"][data-cols="6"] { grid-template-areas: "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand"; }
   .cv .d-doll[data-owner="merc"] .d-slot2 { cursor: default; }
   .cv-mnote { margin: 0; padding: var(--d-sp-3); color: var(--d-text-2); font-size: var(--d-fs-1); }
   .cv-mnote b { display: block; color: var(--d-text); font-size: var(--d-fs-2); margin-block-end: 2px; }
@@ -133,9 +133,17 @@
   .cv-sheet b[data-tone="bad"] { color: var(--d-bad); }
   .cv-sheet b[data-tone="good"] { color: var(--d-good); }
   [data-cv=hsheet] { flex: none; grid-template-columns: repeat(var(--n, 8), minmax(0, 1fr)); grid-auto-rows: max(34px, calc(var(--u) * .66)); }
-  /* his tiles: as many columns as the room after his doll allows (at most three), one row per tile pair, filling the doll's height */
-  [data-cv=msheet] b { font-size: clamp(13px, calc(var(--u) * .28), 19px); }
-  [data-cv=msheet] { grid-template-columns: repeat(auto-fit, minmax(max(5.5rem, 32%), 1fr)); grid-auto-rows: minmax(34px, 1fr); block-size: calc(5 * var(--mu)); }
+  /* his tiles: three columns under his doll (the wide variant is in the mbox query above) */
+  [data-cv=msheet] b { font-size: clamp(12px, calc(var(--u) * .24), 19px); }
+  [data-cv=msheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); margin-block-start: 4px; }
+
+  @container mbox (min-width: 30rem) {
+    .cv-mbody { --mu: min(var(--u), calc(100cqi / (var(--mcols) + 1.4))); grid-template-columns: auto minmax(0, 1fr); grid-template-rows: none; gap: 0 var(--cv-p); }
+    .cv-mbody > .d-doll[data-owner="merc"] { block-size: calc(5 * var(--mu)); }
+    .cv .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso" ". . mtorso mtorso"; }
+    .cv .d-doll[data-owner="merc"][data-cols="6"] { grid-template-areas: "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" ". . mtorso mtorso . ."; }
+    [data-cv=msheet] { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.5rem, 32%)), 1fr)); block-size: calc(5 * var(--mu)); }
+  }
 
   .cv-log { flex: 1; min-block-size: 0; display: flex; flex-direction: column; margin-block-start: 6px; }
   .cv-log > [data-cv=queue] { flex: 1; min-block-size: 0; overflow: hidden; }
@@ -191,7 +199,7 @@
   /* ---- narrow: two tabs (hero and mercenary; pack and stash), the bar wraps ---- */
   @container cv (max-width: 700px) {
     .cv { --cv-bar: 106px; --cv-tabs: 38px; --cv-p: 8px;
-      --u: round(down, min(calc((100vw - 2 * var(--cv-g) - 2 * var(--cv-p)) / 10), calc((100dvh - var(--cv-band) - var(--cv-bar) - var(--cv-tabs) - var(--cv-g) - 2 * var(--cv-p) - 3 * var(--cv-h) - 40px) / 13))), 1px); }
+      --u: round(down, min(calc((100vw - 2 * var(--cv-g) - 2 * var(--cv-p)) / 10), calc((100dvh - var(--cv-band) - var(--cv-bar) - var(--cv-tabs) - var(--cv-g) - 2 * var(--cv-p) - 3 * var(--cv-h) - 40px) / 13)), 1px); }
     .cv > .d-band-status .d-links a:not(:first-child) { display: none; }
     .cv > .d-band-status { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand links"; grid-template-rows: 100%; }
     .cv > .d-band-status .d-band-main { display: none; }
@@ -207,7 +215,6 @@
     .cv[data-tab="hero"] .cv-slot[data-slot="store"], .cv[data-tab="pack"] .cv-slot[data-slot="who"] { display: none; }
     .cv-wear { grid-template-columns: minmax(0, 1fr); }
     .cv-hero > .d-doll { margin-inline: auto; }
-    .cv-mercbox { --mcols: 4; }
     .cv-store { grid-template-columns: calc(6 * var(--u)) minmax(0, 1fr); }
     .cv-storez { align-items: flex-start; }
   }
