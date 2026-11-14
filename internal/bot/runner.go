@@ -68,6 +68,12 @@ type Deps struct {
 	// docs/survival/power.md): the margin of the hero against the zone, for the log only. potions is the healing potion
 	// count of the kit, -1 when the belt was not read. An empty line logs nothing. It must not change any decision.
 	ZoneShadow func(s *d2.Snapshot, area int, diff string, potions int) string
+	// ZoneChoice, if set, returns log lines (separated by newline) of the survival controller's shadow choice for the
+	// plan's candidate zones of this difficulty (survival slice S-C, docs/survival/ledger.md). Log and API only: nothing
+	// reads the result. It must not block and must not change any decision.
+	ZoneChoice func(s *d2.Snapshot, area int, diff string, potions int, cands []ZoneCand) string
+	// ZoneObserve, if set, receives the hard events and the area summaries the per-zone ledger learns from. Passive.
+	ZoneObserve func(ZoneEvent)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -143,6 +149,7 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)
 	dlog           *deathLog               // guarded by obMu
 	avoid          map[int]time.Time       // areas out of play (death spiral, nav faults), guarded by obMu
