@@ -383,6 +383,7 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
+	OptIn       bool    `json:"optIn"` // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`
@@ -545,10 +546,65 @@ func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
 		if err == nil {
 			err = m.Check(known)
 		}
+		if err == nil {
+			err = checkFallbacks(m, c, panels)
+		}
 		if err != nil {
 			l.add(rel, 1, "layout-manifest", "%v", err)
 		}
 	}
+}
+
+// checkFallbacks: a fallback names something that is on the page today (a panel or a pre-shell card, or an alias of
+// one), never another not yet built tile (a reserved id), and an entry never falls back to itself.
+func checkFallbacks(m watch.LayoutManifest, c watch.LayoutConf, panels map[string]bool) error {
+	real := func(id string) bool {
+		if to, ok := c.Aliases[id]; ok {
+			id = to
+		}
+		return panels[id] || contains(c.Compat, id)
+	}
+	fb := func(where, id, to string) error {
+		switch {
+		case to == "":
+			return nil
+		case to == id:
+			return fmt.Errorf("layout %s: %q falls back to itself", where, id)
+		case !real(to):
+			return fmt.Errorf("layout %s: fallback %q of %q is not a panel or card on the page", where, to, id)
+		}
+		return nil
+	}
+	for _, e := range m.Status {
+		if err := fb("status", e.ID, e.Fallback); err != nil {
+			return err
+		}
+	}
+	for name, bp := range m.Breakpoints {
+		own := map[string]bool{}
+		for _, p := range bp.Panels {
+			own[p.ID] = p.Hidden
+		}
+		used := map[string]string{}
+		for _, p := range bp.Panels {
+			if err := fb(name, p.ID, p.Fallback); err != nil {
+				return err
+			}
+			if p.Fallback == "" {
+				continue
+			}
+			// one tile stands in for one entry (a second one plans to nothing and is lost when the layout is saved), and the
+			// target's own entry in the same breakpoint must be switched off, else it would leave its own cell
+			if other, dup := used[p.Fallback]; dup {
+				return fmt.Errorf("layout %s: %q and %q both fall back to %q", name, other, p.ID, p.Fallback)
+			}
+			used[p.Fallback] = p.ID
+			if h, named := own[p.Fallback]; named && !h {
+				return fmt.Errorf("layout %s: the target %q of the fallback of %q is also placed in its own cell (it must be hidden there)", name, p.Fallback, p.ID)
+			}
+		}
+	}
+	return nil
 }
 
 func (l *Linter) ladderIDs() map[string]bool {
