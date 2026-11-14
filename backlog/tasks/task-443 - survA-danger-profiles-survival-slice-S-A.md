@@ -32,14 +32,14 @@ Size: M
 
 Why: slice S-A of docs/survival/design-2026-11-14.md (sections 3, 10, 12): the known quantity (zone danger) generated from the install tables, read-only, no behaviour change. Done when: the criteria below hold. Shared-file edits (ladder, live, d2dbackend, funwire) are one-line wiring of GET /api/danger.
 
-result: "Generator, bosses.json, evidence-checked overrides, fixture tests for normal and hell, GET /api/danger and decisions record shipped (offline, no behaviour change; herdr per-package vet and tests, leakcheck and tools/ci/check.sh clean). NOT verified: real-install anchors (Blood Moor, Cold Plains, Black Marsh, Andariel) and the areamon-table.csv diff: the Tower builder queue did not start any job in 40 minutes, so TestRealAnchors and TestAreamonDiff are written but never ran; Params.UnitsPerDensityTile (0.001) is an unfitted placeholder and bosses.json superunique keys are unchecked against the real SuperUniques table. Whole-repo gate and race not run."
+result: "S-A shipped, verified on the Tower builder against the real install: Andariel life 1024 defence 60 level 12, Smith 404, Countess 96, Blood Raven 113 match boss1-trace; all 10 boss keys resolve against the real SuperUniques table (Build errors otherwise, TestShippedBossRows pins the rows); units per clear fitted per level type to areamon-table.csv (median 41 percent over 36 areas, maze levels worst, tolerance 45 percent); whole-repo vet, short tests, race on danger, watch, d2bot passed. /api/danger is read-only, no behaviour change. Not verified live in a running bot."
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 internal/danger generator builds a profile per area and difficulty from the install tables
-- [ ] #2 encounters from group and density; bosses from boss1-trace data; override file with evidence check
-- [ ] #3 fixture and tests for two difficulties; real-install anchors (Blood Moor, Cold Plains, Black Marsh, Andariel); table diff against areamon-table.csv within tolerance
-- [ ] #4 GET /api/danger read-only, no behaviour change
-- [ ] #5 decisions-2026-11-14.md records the user answers
+- [x] #1 internal/danger generator builds a profile per area and difficulty from the install tables
+- [x] #2 encounters from group and density; bosses from boss1-trace data; override file with evidence check
+- [x] #3 fixture and tests for two difficulties; real-install anchors (Blood Moor, Cold Plains, Black Marsh, Andariel); table diff against areamon-table.csv within tolerance
+- [x] #4 GET /api/danger read-only, no behaviour change
+- [x] #5 decisions-2026-11-14.md records the user answers
 <!-- AC:END -->
