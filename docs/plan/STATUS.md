@@ -202,6 +202,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0c5f3ec8d 11-14 15:50 `Merge agent/uidesign4: uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated` (uidesign4)
 - df05ff10c 11-14 14:58 `Merge agent/uidesign3: uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card` (uidesign3)
 - 656249fa3 11-14 12:56 `Merge agent/uib8: Merge branch 'main' into TASK-427` (uib8)
 - dc98d13a2 11-14 12:55 `Merge branch 'main' into TASK-427` (-)
@@ -211,5 +212,4 @@
 - 4a6d8d36f 11-14 12:41 `Merge agent/uib7: Merge branch 'main' into TASK-425` (uib7)
 - a57eb355f 11-14 12:40 `Merge branch 'main' into TASK-425` (-)
 - b4269b9ef 11-14 12:38 `Merge origin/main into agent/uis1` (-)
-- ee54732ef 11-14 12:32 `Merge agent/uic1: Merge branch 'main' into TASK-428` (uic1)
 <!-- statusgen:end -->
