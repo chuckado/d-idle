@@ -1,6 +1,9 @@
 package main
 
 import (
+	"context"
+	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
@@ -80,6 +83,7 @@ func wireInv(ref *runnerRef, tw *town.Town, lt *loot.Looter, lv *leveler.Leveler
 	}
 	if tw != nil {
 		d.SetServices(tw)
+		d.SetSeller(townSeller{tw})
 		d.SetTidyFor(tw.TidyWhyFor)
 		d.SetCainOpen(cainOpen(ref))
 	}
@@ -174,6 +178,7 @@ func (a invAdapter) RequestIdentify(id uint32) (any, error) {
 }
 func (a invAdapter) RequestBuyID(n int) (any, error) { return a.d.RequestBuyID(n) }
 func (a invAdapter) RequestCain() (any, error)       { return a.d.RequestCain() }
+func (a invAdapter) RequestSell() (any, error)       { return a.d.RequestSell() }
 
 func (a invAdapter) RequestStash(id uint32) (any, error) { return a.d.RequestStash(id) }
 func (a invAdapter) RequestTake(id uint32) (any, error)  { return a.d.RequestTake(id) }
@@ -199,6 +204,23 @@ func (a invAdapter) SetSetsGate(g func() (bool, string))      { a.d.SetSetsGate(
 var _ watch.InvGearDesk = invAdapter{}
 var _ watch.InvDesk = invAdapter{}
 var _ watch.InvStashDesk = invAdapter{}
+var _ watch.InvSellDesk = invAdapter{}
+
+// townSeller is the sell-now errand's sale step: the town's own sell chore, which sells only the player's marks when the
+// plan asks for nothing else (`marked > 0` enables it whatever the plan says, internal/town/chores.go). No new decision
+// about what to sell is made here.
+type townSeller struct{ t *town.Town }
+
+func (s townSeller) SellMarked(ctx context.Context) (string, error) {
+	rep, err := s.t.Chores(ctx, town.ChorePlan{})
+	if err != nil {
+		return "", err
+	}
+	if rep.Sold == 0 {
+		return "", errors.New("nothing was sold: no vendor of this act would buy the marked items")
+	}
+	return fmt.Sprintf("sold %d item(s) for %d gold", rep.Sold, rep.GoldAfter-rep.GoldBefore), nil
+}
 
 // invAPI is what newFun mounts: nil when there is no desk.
 func invAPI(d *invdesk.Desk) *watch.InvAPI {
