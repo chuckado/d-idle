@@ -237,3 +237,8 @@ func (p *PlayerRevive) Finish(ok bool, reason string, cool bool) {
 		p.coolEnd = p.now().Add(PlayerReviveCooldown)
 	}
 }
+
+// OffView is the reply while the policy is not running or nothing was read yet: no merc, the button off with why.
+func OffView(why string) PlayerView {
+	return PlayerView{Schema: ViewSchema, State: "none", Button: Button{Action: ActionNone, Label: "Revive mercenary", Reason: why}}
+}

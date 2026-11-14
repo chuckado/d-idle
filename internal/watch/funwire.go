@@ -155,6 +155,8 @@ type Fun struct {
 	Art *ArtAPI
 	// Repair mounts the gear condition and Repair now routes (repairapi.go); set it before Serve, nil: no routes.
 	Repair *RepairAPI
+	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
+	Merc *MercAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm *GoldFarmAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
@@ -712,6 +714,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 			m.Handle(p, f.Repair.Handler())
 		}
 	}
+	if f.Merc != nil {
+		for _, p := range MercRoutes {
+			m.Handle(p, f.Merc.Handler())
+		}
+	}
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.Handler())
 	}
@@ -781,6 +788,11 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {
 			m.Handle(p, f.Repair.PostHandler(o))
+		}
+	}
+	if f.Merc != nil {
+		for _, p := range MercPostRoutes {
+			m.Handle(p, f.Merc.PostHandler(o))
 		}
 	}
 	if f.GoldFarm != nil {
