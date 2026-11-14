@@ -141,7 +141,7 @@
     doll.setAttribute('role', 'group'); doll.setAttribute('aria-label', 'Mercenary paper doll');
     legal.forEach(function (s) { doll.appendChild(slot(m, s)); });
     body.appendChild(doll);
-    var sh = el('div', 'cv-sheet'); sh.id = 'msheet'; sh.setAttribute('aria-label', 'Mercenary values');
+    var sh = el('div', 'cv-sheet'); sh.id = 'msheet'; sh.dataset.cv = 'msheet'; sh.setAttribute('aria-label', 'Mercenary values');
     sh.appendChild(tile('Level', m.level || '-'));
     sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
     sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));

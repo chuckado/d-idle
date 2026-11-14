@@ -104,14 +104,14 @@ const charPage = `<!DOCTYPE html>
 <main class="cv-canvas" id="inv">
  <section class="cv-slot" data-slot="who" data-cockpit-slot="who">
   <div class="cv-zone cv-who" data-cockpit-panel data-panel="char-who" aria-label="Hero and mercenary">
-   <p class="d-note" data-sev="info" id="gearprompt" role="note" hidden></p>
+   <p class="d-note" data-sev="info" id="gearprompt" data-cv="prompt" role="note" hidden></p>
    <div class="cv-wear">
     <div class="cv-hero"><h2 id="t-equip">Hero <em id="equipmeta"></em></h2><div class="d-doll" id="equip" role="group" aria-label="Paper doll"></div></div>
     <div class="cv-mercbox"><h2>Mercenary <em id="merc-sub"></em></h2><div class="inv-merc" id="merc-doll" data-canvas hidden></div></div>
    </div>
    <div class="cv-setbar" id="cv-sets" role="group" aria-label="Gear sets"></div>
-   <div class="cv-sheet" id="hsheet" aria-label="Hero values"></div>
-   <div class="cv-log" id="cv-log"><h2 id="t-queue">Item actions</h2><div id="queue"></div></div>
+   <div class="cv-sheet" id="hsheet" data-cv="hsheet" aria-label="Hero values"></div>
+   <div class="cv-log" id="cv-log"><h2 id="t-queue">Item actions</h2><div id="queue" data-cv="queue"></div></div>
    <div class="cv-rules" id="loot-rules"><h2>Loot rules</h2><p>Your rules and the starter preset show here once the loot rules tab is built</p></div>
   </div>
  </section>
@@ -123,12 +123,12 @@ const charPage = `<!DOCTYPE html>
    <div class="cv-store">
     <div class="d-cells" id="stash"></div>
     <div class="cv-side">
-     <div class="d-cells" id="belt" aria-label="Belt"></div>
+     <div class="d-cells" id="belt" data-cv="belt" aria-label="Belt"></div>
      <div class="cv-sel" id="cv-sel" aria-live="polite"></div>
      <div class="inv-errands" id="errands" hidden></div>
      <div class="inv-errands inv-stashgold" id="stashgold" hidden></div>
      <p class="cv-lock" id="cv-lock">Stash from anywhere: locked (skips a game rule)</p>
-     <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
+     <p class="d-note" data-sev="alarm" id="msg" data-cv="msg" role="status" hidden></p>
     </div>
    </div>
   </div>

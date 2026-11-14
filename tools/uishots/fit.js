@@ -7,7 +7,8 @@ export function measure(win, opts) {
   const cs = (n) => win.getComputedStyle(n);
   // a list that scrolls on purpose: marked data-scroll, inside a panel that declares scroll, and really a scroll container
   const scroller = (n) => n.hasAttribute('data-scroll') && /^(auto|scroll)$/.test(cs(n).overflowY) && decl.has((n.closest('[data-panel]') || { dataset: {} }).dataset.panel);
-  const name = (n) => { const p = n.closest('[data-panel]'); return (p ? p.dataset.panel : '?') + ' ' + n.tagName.toLowerCase() + (n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : ''); };
+  // a few words of the element's own text name it in the verdict (a cell, a slot, a chip), so the fix is found without a debugger
+  const name = (n) => { const p = n.closest('[data-panel]'); return (p ? p.dataset.panel : '?') + ' ' + n.tagName.toLowerCase() + (n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : '') + (n.children.length < 3 && n.textContent ? ' "' + n.textContent.trim().slice(0, 16) + '"' : '') + ' [' + n.scrollHeight + '/' + n.clientHeight + ' ' + n.scrollWidth + '/' + n.clientWidth + ']'; };
   const over = [];
   const test = (n, label) => {
     if (!n.clientHeight && !n.clientWidth) return; // inline boxes and SVG parts have no client box

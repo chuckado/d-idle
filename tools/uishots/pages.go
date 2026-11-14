@@ -67,7 +67,9 @@ func usable(hero, merc bool, hwhy, mwhy string) map[string]any {
 
 func (fixtureDesk) View() any {
 	return map[string]any{
-		"schema": 10, "sellPending": 1, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
+		"schema": 10, "sellPending": 1,
+		"identify": map[string]any{"tool": "tome", "tome": 4, "tomeCap": 20, "scrolls": 0, "unid": 1, "buyDefault": 16, "buyMax": 20, "cain": "open"},
+		"stashOps": map[string]any{"depositMax": 1240, "withdrawMax": 5300}, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
 		"prompt": "No weapon equipped. Equip one on the Inventory page; the bot will not do it for you.",
 		"equipment": map[string]any{
 			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18}),
@@ -79,7 +81,7 @@ func (fixtureDesk) View() any {
 			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, nil),
 		},
 		"backpack": []any{
-			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
+			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
 			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
 			item(12, "ssd", "Short Sword", "normal", 2, 0, 1, 3, map[string]any{"mark": "sell", "canSell": true, "maxDur": 24, "dur": 3}),
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),

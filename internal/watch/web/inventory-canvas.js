@@ -213,6 +213,15 @@
     var add = el('button', 'cv-chip', '+'); add.type = 'button'; add.title = 'Save what you wear now as a set'; add.setAttribute('aria-label', 'Save a gear set');
     add.addEventListener('click', function () { pop(true); });
     bar.appendChild(add);
+    fitSets();
+  }
+  // chips that do not fit the row give way to one "+n" chip that opens the panel (the bar never overflows, never scrolls)
+  function fitSets() {
+    var bar = $('cv-sets'); if (!bar || !bar.clientWidth || bar.scrollWidth <= bar.clientWidth + 1) return;
+    var chips = Array.prototype.filter.call(bar.children, function (c) { return c.dataset && c.dataset.set; }), cut = 0, more = el('button', 'cv-chip', '');
+    more.type = 'button'; more.addEventListener('click', function () { pop(true); });
+    bar.insertBefore(more, bar.lastChild);
+    while (chips.length && bar.scrollWidth > bar.clientWidth + 1) { bar.removeChild(chips.pop()); cut++; more.textContent = '+' + cut; more.title = cut + ' more gear sets'; }
   }
   function pop(open) {
     popOpen = open; var p = $('cv-pop'); p.hidden = !open;
@@ -305,12 +314,16 @@
   function fitSlots() {
     var f = view && selKey ? locate(view, selKey) : null, it = f && f.it, host = $('equip');
     if (!host) return;
-    Array.prototype.forEach.call(host.querySelectorAll('.d-slot2'), function (n) {
-      delete n.dataset.fit; delete n.dataset.why;
+    // the reason most slots share ("does not fit that slot") is no news: a slot is marked red, with its reason, only when its
+    // reason differs from the common one (the slot the item belongs to but may not go to now)
+    var common = '', n = {}, why = (it && it.noWearSlot) || {};
+    Object.keys(why).forEach(function (k) { n[why[k]] = (n[why[k]] || 0) + 1; if (n[why[k]] > (n[common] || 0)) common = why[k]; });
+    Array.prototype.forEach.call(host.querySelectorAll('.d-slot2'), function (s) {
+      delete s.dataset.fit; delete s.dataset.why;
       if (!it || f.place === 'worn' || !(it.canWear || it.noWearSlot)) return;
-      var s = n.dataset.slot;
-      if ((it.canWear || []).indexOf(s) >= 0) n.dataset.fit = 'ok';
-      else if (it.noWearSlot && it.noWearSlot[s]) { n.dataset.fit = 'no'; n.dataset.why = it.noWearSlot[s]; }
+      var k = s.dataset.slot;
+      if ((it.canWear || []).indexOf(k) >= 0) s.dataset.fit = 'ok';
+      else if (why[k] && why[k] !== common) { s.dataset.fit = 'no'; s.dataset.why = why[k]; }
     });
   }
   // the errand buttons come from inventory-actions.js with long words; a four-cell column needs short ones (the long word stays as the title)
@@ -348,8 +361,8 @@
   }
 
   function relayout() {
-    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(function () { delete_fit(); trimQueue(); fitActs(); });
-    else { trimQueue(); fitActs(); }
+    var go = function () { delete_fit(); var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } trimQueue(); fitActs(); };
+    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go); else go();
   }
   function delete_fit() { var a = document.querySelector('#cv-sel .cv-acts'); if (a) delete a.dataset.fit; }
 
