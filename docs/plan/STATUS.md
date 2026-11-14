@@ -147,6 +147,7 @@
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
 | uiredesign2 | in-progress | - | `docs/ui/redesign-2026-11-14/` | - |
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
+| lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
@@ -196,6 +197,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 79b5bf3c 11-14 10:40 `Merge agent/lootrules: Merge branch 'main' into TASK-421` (lootrules)
+- 6c033aad 11-14 10:39 `Merge branch 'main' into TASK-421` (-)
 - cdc9152b 11-14 10:38 `Merge agent/uidesign2: Merge branch 'main' into TASK-419` (uidesign2)
 - 2603bc1f 11-14 10:37 `Merge branch 'main' into TASK-419` (-)
 - 8ab1739b 11-14 10:36 `Merge agent/decomp19: boss1: queue result line at end` (decomp19)
@@ -204,6 +207,4 @@
 - 79ee6ca6 11-14 10:22 `Merge agent/stashanywhere: stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14)` (stashanywhere)
 - 0f30f7b7 11-14 10:04 `Merge agent/prswing2: Merge branch 'main' into TASK-417` (prswing2)
 - f1fa760c 11-14 10:03 `Merge branch 'main' into TASK-417` (-)
-- 43570602 11-14 09:45 `Merge agent/uidesign: Merge branch 'main' into TASK-416` (uidesign)
-- 93e58873 11-14 09:44 `Merge branch 'main' into TASK-416` (-)
 <!-- statusgen:end -->

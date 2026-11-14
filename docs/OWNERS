@@ -222,6 +222,7 @@ docs/levelplan3.md  pro-runner  levelplan3
 docs/levelsim.md  credit-runner  levelsim
 docs/live-checks.md  credit-runner  repairtrip
 docs/locks.md  credit-runner  lockscan
+docs/lootrules.md  credit-runner  lootrules
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
@@ -419,6 +420,7 @@ internal/loot  credit-runner  goldprio
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/lootskip_test.go  credit-runner  beltfix
+internal/lootrules/**  credit-runner  lootrules
 internal/merc  credit-runner  mercrevive2
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
