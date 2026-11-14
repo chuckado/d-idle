@@ -105,13 +105,15 @@ button{font:inherit;color:inherit;cursor:pointer}
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:3px;overflow:hidden}
 .seg button{background:none;border:0;padding:1px 8px;font-size:10.5px;color:var(--text2);letter-spacing:0;text-transform:none;font-weight:400}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
-.act{position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:5px 26px}
+.act{container-type:size;position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:5px 26px}
 .act svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .act line{stroke:var(--line2);stroke-width:1.5;vector-effect:non-scaling-stroke}.act line.dun{stroke-dasharray:3 4}
 .act polyline{fill:none;stroke:var(--accent);stroke-width:2.5;vector-effect:non-scaling-stroke}
 .node{position:relative;z-index:1;background:var(--s2);border:1px solid var(--line2);border-left:3px solid var(--text3);border-radius:3px;padding:0 6px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:4px;min-width:0;font-size:11px;white-space:nowrap;overflow:hidden}
 .node:hover{background:var(--s3)}
-.node span{overflow:hidden;text-overflow:ellipsis}
+.node>span:first-child{overflow:hidden;text-overflow:ellipsis;min-width:0;line-height:1.25}
+.node em{display:none;font-style:normal;color:var(--text3);font-size:10px;overflow:hidden;text-overflow:ellipsis}
+@container (min-height:430px){.node em{display:block}}
 .node small{color:var(--text3);font:9.5px var(--num);flex:none}
 .node[data-b="in"]{border-left-color:var(--ok)}.node[data-b="above"]{border-left-color:var(--warn)}.node[data-b="hard"]{border-left-color:var(--danger)}
 .node[data-b="locked"]{border-style:dashed;color:var(--text3)}
@@ -156,9 +158,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 .demo button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-text)}
 .tabs{display:none}
 
-/* wide: the rail has room for both maps */
+/* wide: the rail has room for both maps side by side */
 @media (min-width:1700px){
-  .rail{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) minmax(0,.9fr);grid-template-areas:"needs act" "orders act" "area act"}
+  .rail{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"needs needs" "orders orders" "act area"}
   .needs{grid-area:needs}.orders{grid-area:orders}.maptile{grid-area:act}.areatile{grid-area:area;display:flex!important}
   .maptile .seg{display:none}
 }
@@ -230,6 +232,7 @@ var NODES=[['line','Monastery line',2,1,'locked',''],['oc','Outer Cloister',2,2,
 ['den','Den of Evil',1,8,'in','1-8'],['sf','Stony Field',2,8,'above','10-16'],['crypt','Crypt',3,8,'above','8-14'],['bm','Blood Moor',1,9,'below','1-8'],['cp','Cold Plains',2,9,'in','6-12'],['bg','Burial Grounds',3,9,'above','8-14'],
 ['camp','Rogue Encampment',1,10,'town','town'],['cave','Cave',2,10,'in','6-10']];
 var EDGES=[['camp','bm'],['bm','den',1],['bm','cp'],['cp','cave',1],['cp','bg'],['bg','crypt',1],['cp','sf'],['sf','up',1],['up','dw',1],['dw','bmarsh'],['bmarsh','hole',1],['bmarsh','ftw',1],['ftw','cell',1],['bmarsh','tam'],['tam','pit',1],['tam','mg'],['mg','oc'],['oc','line',1]];
+var WHY={bm:'safe first xp',den:'quest, small cave',cp:'open ground, waypoint',cave:'small, quick',bg:'Blood Raven shoots from range',crypt:'small, a chest',sf:'open ground, easy to path',up:'the way to Dark Wood',dw:'the Inifuss tree',bmarsh:'waypoint, two side dungeons',hole:'dense packs',ftw:'a long chain, no waypoint',tam:'leads to the Monastery',pit:'dense, no quest',mg:'the gate',oc:'waypoint',line:'to Andariel, not yet',cell:'the Countess, not yet',camp:'town: errands'};
 var N={};NODES.forEach(function(n){N[n[0]]={id:n[0],name:n[1],c:n[2],r:n[3],b:n[4],rg:n[5]}});
 var S={scen:'needs',gold:'enough',paused:false,here:'cp',orders:[],needs:[],seq:9,menu:null,dur:'30 min',map:'act',undo:null,timers:[]};
 var SCEN={
@@ -286,7 +289,7 @@ function act(){var a=$('act');a.textContent='';var s=document.createElementNS('h
  if(tg&&tg.z!==S.here){var pl=document.createElementNS(s.namespaceURI,'polyline');pl.setAttribute('points',pathTo(tg.z).map(function(i){return pt(N[i])}).join(' '));s.appendChild(pl)}
  a.appendChild(s);var pin=0;
  NODES.forEach(function(r){var n=N[r[0]],b=el('button','node');b.type='button';b.style.gridColumn=n.c;b.style.gridRow=n.r;b.dataset.b=n.b;if(n.id===S.here)b.setAttribute('data-here','');if(tg&&tg.z===n.id)b.setAttribute('data-target','');
-  b.appendChild(el('span','',n.name));var q=zo.filter(function(o){return o.z===n.id&&o.s!=='active'})[0];
+  var nm=el('span','',n.name);nm.appendChild(el('em','',WHY[n.id]||''));b.appendChild(nm);var q=zo.filter(function(o){return o.z===n.id&&o.s!=='active'})[0];
   if(q)b.appendChild(el('span','pin',String(++pin)));else b.appendChild(el('small','',n.id===S.here?'here':n.rg));
   b.setAttribute('aria-label',n.name+', level '+n.rg);b.addEventListener('click',function(){S.menu=n.id;menu()});a.appendChild(b)});
  menu()}

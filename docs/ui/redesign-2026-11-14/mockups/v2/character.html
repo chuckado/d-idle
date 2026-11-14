@@ -16,7 +16,7 @@
   --body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
   --g:8px;--band:44px;--bar:38px;--p:10px;--h:20px;
-  --u:min(calc((100dvh - var(--band) - var(--bar) - 3 * var(--g) - 2 * var(--p) - 2 * var(--h) - 8px) / 12), calc((100vw - 2 * var(--g) - 6 * var(--p) - 2 * var(--g) - 250px) / 18));
+  --u:min(calc((100dvh - var(--band) - var(--bar) - 3 * var(--g) - 2 * var(--p) - 2 * var(--h) - 8px) / 12), calc((100vw - 3 * var(--g) - 5 * var(--p)) / 22));
 }
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
   color-scheme:light;--bg:#e9e1d1;--s1:#f8f2e6;--s2:#efe6d4;--s3:#e3d8c1;--line:#d6c9ad;--line2:#b9a988;--cell:#e6dcc6;
@@ -56,7 +56,10 @@ button,input{font:inherit;color:inherit}button{cursor:pointer}
 .btn:hover{background:var(--s3)}.btn.p{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
 .btn.w{border-color:var(--danger);color:var(--danger)}
 
-.canvas{min-height:0;display:grid;gap:var(--g);padding:0 var(--g) var(--g);grid-template-columns:calc(8 * var(--u) + 2 * var(--p)) calc(10 * var(--u) + 2 * var(--p)) minmax(0,1fr)}
+.canvas{min-height:0;display:grid;gap:var(--g);padding:0 var(--g) var(--g);grid-template-columns:minmax(0,1fr) calc(10 * var(--u) + 2 * var(--p))}
+.wear,.sheets{display:grid;grid-template-columns:calc(8 * var(--u)) minmax(0,1fr);gap:0 var(--p);min-width:0}
+.wear{flex:none}.sheets{flex:none}
+.wear>div{min-width:0;display:flex;flex-direction:column}
 .zone{background:var(--s1);border-radius:4px;padding:var(--p);min-width:0;min-height:0;display:flex;flex-direction:column;overflow:hidden}
 h2{flex:none;height:var(--h);margin:0;font:700 10px var(--body);letter-spacing:.11em;text-transform:uppercase;color:var(--text3);display:flex;justify-content:space-between;align-items:baseline;gap:8px;white-space:nowrap}
 h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;color:var(--text2);font-size:11.5px;overflow:hidden;text-overflow:ellipsis}
@@ -83,7 +86,7 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
 .slot .why{position:absolute;left:0;right:0;bottom:0;background:var(--danger-bg);color:var(--danger);font-size:9px;text-transform:none;letter-spacing:0;padding:1px 3px;z-index:2;line-height:1.15}
 .sets{flex:none;display:flex;gap:4px;align-items:center;margin:6px 0;min-width:0;overflow:hidden}
 .sets span{font:700 10px var(--body);letter-spacing:.11em;text-transform:uppercase;color:var(--text3);margin-right:2px}
-.sheet{flex:1;min-height:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;align-content:stretch}
+.sheet{display:grid;grid-auto-rows:42px;align-content:start;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:3px;overflow:hidden;align-content:stretch}
 .sheet div{background:var(--s1);padding:3px 8px;display:flex;flex-direction:column;justify-content:center;min-width:0}
 .sheet label{font-size:10px;color:var(--text3);white-space:nowrap}
 .sheet b{font:600 13px var(--num);font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -92,23 +95,29 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
 .store{flex:1;min-height:0;display:grid;grid-template-columns:calc(6 * var(--u)) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);gap:0 var(--p)}
 .store>.grid.pack{grid-column:1/-1}
 .side{min-width:0;min-height:0;display:flex;flex-direction:column;gap:6px;overflow:hidden}
-.selbox{flex:1;min-height:0;border:1px solid var(--line);border-radius:3px;padding:7px 8px;overflow:hidden;display:flex;flex-direction:column;gap:5px}
+.selbox{flex:none;border:1px solid var(--line);border-radius:3px;padding:7px 8px;overflow:hidden;display:flex;flex-direction:column;gap:5px}
 .selbox h3{margin:0;font:700 12.5px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .selbox p{margin:0;font-size:11px;color:var(--text2)}
 .selbox .acts{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .selbox .acts .btn{padding:0 4px;overflow:hidden;text-overflow:ellipsis}
 .msg{font-size:11px;padding:4px 6px;border-radius:3px;background:var(--danger-bg)}.msg.i{background:var(--info-bg)}
-.log{flex:none;font-size:11px;color:var(--text2);border-top:1px solid var(--line);padding-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .lock{flex:none;font-size:10.5px;color:var(--text3);border:1px dashed var(--line2);border-radius:3px;padding:3px 6px}
 
 .mhead{display:flex;align-items:center;gap:8px;flex:none;margin-bottom:4px;min-width:0}
 .mhead .bar2{flex:1;height:5px;border-radius:3px;background:var(--s3);overflow:hidden;min-width:30px}.mhead .bar2 i{display:block;height:100%;background:#c8433a}
 .st{font-size:10px;padding:1px 7px;border-radius:999px;background:var(--ok-bg);color:var(--ok);text-transform:uppercase;letter-spacing:.05em}.st.dead{background:var(--danger-bg);color:var(--danger)}
-.mrow{display:flex;gap:var(--p);flex:none;min-width:0}
-.mrow .sheet{grid-template-columns:1fr 1fr;flex:1}
-.rules{flex:1;min-height:0;margin-top:8px;display:flex;flex-direction:column}
+#msheet{grid-template-columns:1fr 1fr}
+.mdollwrap{display:flex;gap:var(--p);align-items:flex-start;min-width:0}
+.mnote{font-size:11px;color:var(--text2);min-width:0;flex:1}
+.rules{flex:1;min-height:0;display:flex;flex-direction:column;margin-top:8px}
+.q{flex:1;min-height:0;display:flex;flex-direction:column}
+.q ol{list-style:none;margin:0;padding:0;flex:1;min-height:0;overflow:hidden}
+.q li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;min-height:24px;border-top:1px solid var(--line);font-size:11.5px}
+.q li span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.q li i{font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.05em;color:var(--text3)}
+.q li i.w{color:var(--info)}.q li i.d{color:var(--ok)}.q li i.f{color:var(--danger)}
 .rules ol{list-style:none;margin:0;padding:0;flex:1;min-height:0;overflow:hidden}
-.rules li{display:grid;grid-template-columns:14px minmax(0,1fr) auto 22px;gap:6px;align-items:center;height:calc(var(--u) * .5);min-height:22px;max-height:30px;border-top:1px solid var(--line);font-size:11.5px;cursor:pointer;padding:0 2px}
+.rules li{display:grid;grid-template-columns:14px minmax(0,1fr) auto 22px;gap:6px;align-items:center;height:23px;border-top:1px solid var(--line);font-size:11.5px;cursor:pointer;padding:0 2px}
 .rules li:hover,.rules li.on{background:var(--s2)}
 .rules li span:first-child{color:var(--text3);font:10px var(--num)}
 .rules li span:nth-child(2){white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -125,6 +134,8 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
 .tip .hd{font:700 9.5px var(--body);letter-spacing:.1em;text-transform:uppercase;color:#857560;margin:0 0 2px}
 .tip .cmp{color:#b9aa94}.tip .cmp b{color:#ece2cf;font-weight:600}
 .tip .k{color:#857560;margin-top:6px;font-size:10.5px}
+.tip .up{color:#7cc47e}.tip .dn{color:#ec7d6c}
+.tip .own{display:inline-block;margin-top:3px;font:700 9px var(--body);letter-spacing:.08em;text-transform:uppercase;padding:1px 6px;border-radius:2px;background:#201a14;color:#b9aa94}
 .ctx{position:fixed;z-index:21;min-width:170px;background:var(--s2);border:1px solid var(--line2);border-radius:4px;padding:4px;box-shadow:0 12px 32px rgb(0 0 0 / .55);display:grid}
 .ctx button{background:none;border:0;text-align:left;padding:5px 9px;border-radius:3px;display:flex;justify-content:space-between;gap:16px}
 .ctx button:hover{background:var(--s3)}.ctx button[disabled]{color:var(--text3);cursor:default}.ctx button[disabled]:hover{background:none}
@@ -145,7 +156,8 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
   .tabs button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
   .canvas{display:block;overflow:auto}
   .zone{display:none;overflow:visible}
-  .canvas[data-tab="hero"] .zhero,.canvas[data-tab="pack"] .zstore,.canvas[data-tab="merc"] .zmerc{display:flex}
+  .canvas[data-tab="hero"] .zwear,.canvas[data-tab="pack"] .zstore{display:flex}
+  .wear,.sheets{grid-template-columns:minmax(0,1fr)}.wear>div+div{margin-top:10px}.sheets{gap:8px}
   .store{grid-template-columns:calc(6 * var(--u)) minmax(0,1fr)}
   .btn{height:36px}.demo{display:none}
   .sheet div{padding:6px 8px}
@@ -169,11 +181,16 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
 </div>
 <div class="tabs" id="tabs"></div>
 <main class="canvas" id="canvas" data-tab="pack">
-  <section class="zone zhero">
-    <h2>Hero <em>Sorceress 7 · Str 38 · Dex 25</em></h2>
-    <div class="doll" id="hdoll" style="--c:8"></div>
+  <section class="zone zwear">
+    <div class="wear">
+      <div><h2>Hero <em>Sorceress 7 · Str 38 · Dex 25</em></h2><div class="doll" id="hdoll" style="--c:8"></div></div>
+      <div><h2>Mercenary <em>Desert Guard 14</em></h2>
+        <div class="mhead"><span class="st" id="mst"></span><span class="bar2"><i id="mlife"></i></span><span class="kv">Str <b>60</b> Dex <b>40</b></span><button class="btn p" id="rev" hidden>Revive 600 g</button></div>
+        <div class="mdollwrap"><div class="doll" id="mdoll" style="--c:4"></div><p class="mnote" id="mnote"></p></div></div>
+    </div>
     <div class="sets" id="sets"></div>
-    <div class="sheet" id="hsheet"></div>
+    <div class="sheets"><div class="sheet" id="hsheet"></div><div class="sheet" id="msheet"></div></div>
+    <div class="rules"><h2>Loot rules <em>Starter preset · click a rule to see what it matches · editing unlocks later</em></h2><ol id="rules"></ol></div>
   </section>
   <section class="zone zstore">
     <h2>Pack <em id="place"></em></h2>
@@ -182,19 +199,12 @@ h2 em{font-style:normal;font-weight:400;letter-spacing:0;text-transform:none;col
       <h2 style="grid-column:1/-1;margin-top:6px">Stash <em>gold 5,300 · <span id="chest"></span></em></h2>
       <div class="grid" id="stash" style="--c:6;--r:8"></div>
       <div class="side">
-        <h2 style="height:auto">Belt</h2>
         <div class="grid" id="belt" style="--c:4;--r:1"></div>
         <div class="selbox" id="sel"></div>
+        <div class="q"><h2>Item actions</h2><ol id="queue"></ol></div>
         <div class="lock">Stash from anywhere: locked (skips a game rule)</div>
-        <div class="log" id="log"></div>
       </div>
     </div>
-  </section>
-  <section class="zone zmerc">
-    <h2>Mercenary <em>Desert Guard 14</em></h2>
-    <div class="mhead"><span class="st" id="mst"></span><span class="bar2"><i id="mlife"></i></span><span class="kv">Str <b>60</b> Dex <b>40</b></span><button class="btn p" id="rev" hidden>Revive 600 g</button></div>
-    <div class="mrow"><div class="doll" id="mdoll" style="--c:4"></div><div class="sheet" id="msheet"></div></div>
-    <div class="rules"><h2>Loot rules <em>Starter · editing locked</em></h2><ol id="rules"></ol></div>
   </section>
 </main>
 </div>
@@ -236,7 +246,7 @@ var I=[
  {id:27,name:'Scale Mail',q:'rare',k:'armor',w:2,h:3,at:'stash',x:3,y:2,rq:{str:44,lvl:13},st:{Defense:60},tip:'Defense 60, +11% cold resistance'},
  {id:28,name:'Amulet',q:'magic',k:'amulet',w:1,h:1,at:'stash',x:5,y:2,st:{Mana:9},tip:'+9 mana'},
  {id:21,name:'Heal',q:'normal',k:'potion',w:1,h:1,at:'belt',x:1,y:1,tip:'Minor healing potion'},{id:22,name:'Heal',q:'normal',k:'potion',w:1,h:1,at:'belt',x:2,y:1,tip:'Minor healing potion'},{id:23,name:'Mana',q:'normal',k:'potion',w:1,h:1,at:'belt',x:3,y:1,tip:'Minor mana potion'}];
-var S={sel:13,q:'',chip:'',town:false,msg:null,log:'Identify Skull Cap: done, instant',rule:-1,set:''};
+var S={sel:13,q:'',chip:'',town:false,msg:null,q:[['Identify Skull Cap','done','d'],['Equip Raven Grip','done','d'],['Stash Tir Rune','done','d'],['Give Pike to mercenary','refused: dexterity','f']],rule:-1,set:''};
 var RULES=[['Runes, gems, jewels, charms','stash',function(i){return /Rune|Topaz|Charm/.test(i.name)}],['Unique and set items','stash',function(){return false}],['Rare or better','stash',function(i){return i.q==='rare'}],['Usable by mercenary, magic+','keep',function(i){return i.q!=='normal'&&wear(i)&&use(i,MERC).ok}],['Your sell marks (always win)','sell',function(i){return i.mark}],['White, not usable by anyone','sell',function(i){return i.q==='normal'&&wear(i)&&!use(i,HERO).ok&&!use(i,MERC).ok}],['Everything else','keep',function(){return true}]];
 function wear(i){return i.k!=='misc'&&i.k!=='potion'}
 function use(i,w){var r=[],q=i.rq||{},me=w===HERO;
@@ -254,30 +264,31 @@ function slots(i,L){return L.filter(function(s){return s[6].indexOf(i.k)>=0})}
 function free(p,c,r,w,h,skip){for(var y=1;y<=r-h+1;y++)for(var x=1;x<=c-w+1;x++)if(!I.some(function(o){return o!==skip&&o.at===p&&x<o.x+o.w&&o.x<x+w&&y<o.y+o.h&&o.y<y+h}))return [x,y];return null}
 function ruleOf(i){for(var k=0;k<RULES.length;k++)if(RULES[k][2](i))return k}
 function say(t,i){S.msg=[t,i]}
+function log(t,s,c){S.q.unshift([t,s,c]);S.q=S.q.slice(0,8)}
 function pend(i,f){i.pend=1;render();setTimeout(function(){i.pend=0;f();render()},360)}
 function equip(i,sid,w){var u=use(i,w);
  if(w===MERC){say(u.ok?'Giving items to the mercenary is not built yet (he meets every requirement).':'Refused: '+u.r[0][1]+'.',u.ok);render();return}
  if(!u.ok){say('Refused, nothing sent: '+u.r[0][1]+'.');render();return}
  var old=at(sid),sp=old?free('pack',10,4,old.w,old.h,i):null;if(old&&!sp){say('Refused: no room in the pack for '+old.name+'.');render();return}
- S.msg=null;pend(i,function(){if(old){old.at='pack';old.x=sp[0];old.y=sp[1]}i.at=sid;S.log='Equip '+i.name+': done, instant'})}
-function unequip(i){var sp=free('pack',10,4,i.w,i.h);if(!sp){say('Refused: no room in the pack.');render();return}S.msg=null;pend(i,function(){i.at='pack';i.x=sp[0];i.y=sp[1];S.log='Take off '+i.name+': done, instant'})}
+ S.msg=null;pend(i,function(){if(old){old.at='pack';old.x=sp[0];old.y=sp[1]}i.at=sid;log('Equip '+i.name,'done','d')})}
+function unequip(i){var sp=free('pack',10,4,i.w,i.h);if(!sp){say('Refused: no room in the pack.');render();return}S.msg=null;pend(i,function(){i.at='pack';i.x=sp[0];i.y=sp[1];log('Take off '+i.name,'done','d')})}
 function move(i,to){var c=to==='stash'?6:10,r=to==='stash'?8:4,sp=free(to,c,r,i.w,i.h);if(!sp){say('Refused: no room in the '+to+'.');render();return}
- if(!S.town){i.wait=to;say('Queued for the next town visit: the chest must be open.',1);S.log=i.name+' to the '+to+': waits for town';render();return}
- S.msg=null;pend(i,function(){i.at=to;i.x=sp[0];i.y=sp[1];i.wait=null;S.log=i.name+' to the '+to+': done, instant'})}
+ if(!S.town){i.wait=to;say('Queued for the next town visit: the chest must be open.',1);log(i.name+' to the '+to,'waits for town','w');render();return}
+ S.msg=null;pend(i,function(){i.at=to;i.x=sp[0];i.y=sp[1];i.wait=null;log(i.name+' to the '+to,'done','d')})}
 function actions(i){var a=[],uh=use(i,HERO),um=use(i,MERC),w=wear(i);
  if(i.at==='pack'){
-  if(i.unid)a.push(['Identify','Enter',function(){pend(i,function(){i.unid=0;i.name='Coral Ring';i.tip='+14% lightning resistance';i.st={'Light res':'14%'};S.log='Identify ring: done, instant'})}]);
+  if(i.unid)a.push(['Identify','Enter',function(){pend(i,function(){i.unid=0;i.name='Coral Ring';i.tip='+14% lightning resistance';i.st={'Light res':'14%'};log('Identify ring','done','d')})}]);
   else if(w)a.push(['Equip','Enter',uh.ok?function(){equip(i,slots(i,HS)[0][0],HERO)}:null,uh.ok?'':uh.r[0][1]]);
   if(w&&MERC.kinds.indexOf(i.k)>=0)a.push(['Give to mercenary','M',um.ok?function(){equip(i,'mrhand',MERC)}:null,um.ok?'':um.r[0][1]]);
   a.push([S.town?'Stash':'Stash (in town)','Ctrl',function(){move(i,'stash')}]);
   a.push([i.mark?'Clear sell mark':'Mark for sale','Alt',function(){i.mark=!i.mark;render()}]);
-  a.push(['Drop','Del',function(){I.splice(I.indexOf(i),1);S.sel=null;S.log='Drop '+i.name+': done, instant';render()}]);
+  a.push(['Drop','Del',function(){I.splice(I.indexOf(i),1);S.sel=null;log('Drop '+i.name,'done','d');render()}]);
  }else if(i.at==='stash')a.push([S.town?'Take':'Take (in town)','Ctrl',function(){move(i,'pack')}]);
- else if(i.at==='belt')a.push(['Drink','Enter',function(){S.log='The bot drinks potions by its own rules';render()}]);
+ else if(i.at==='belt')a.push(['Drink','Enter',function(){say('The bot drinks potions by its own rules.',1);render()}]);
  else if(i.at.charAt(0)==='m')a.push(['Take off','Enter',null,'not built yet for the mercenary']);
  else{a.push(['Take off','Enter',function(){unequip(i)}]);if(i.broken)a.push(['Repair now','R',function(){say('Repair is an errand: the hero walks to the smith at the next safe moment.',1);render()}])}
  if(i.wait)a.push(['Cancel queued move','',function(){i.wait=null;render()}]);return a}
-function tipFor(i,ev){var t=$('tip');t.textContent='';var h=el('h4','',i.name);h.style.color='var(--q-'+i.q+')';t.appendChild(h);t.appendChild(el('div','l',i.tip));
+function tipFor(i,ev){var t=$('tip');t.textContent='';var h=el('h4','',i.name);h.style.color='var(--q-'+i.q+')';t.appendChild(h);t.appendChild(el('div','l',i.tip));var own=i.at==='pack'?'in the pack':i.at==='stash'?'in the stash':i.at==='belt'?'on the belt':i.at.charAt(0)==='m'?'worn by the mercenary':'worn by you';t.appendChild(el('div','own',own+(i.wait?' · queued for the '+i.wait:'')));
  if(wear(i)){t.appendChild(el('hr'));
   [[HERO,'You, Sorceress 7'],[MERC,'Desert Guard 14']].forEach(function(p){var w=p[0];if(w===MERC&&MERC.kinds.indexOf(i.k)<0&&!(i.rq&&i.rq.cls))return;
    t.appendChild(el('div','hd',p[1]));var ul=el('ul'),q=i.rq||{},any=0;function row(ok,x){any=1;ul.appendChild(el('li',ok?'y':'n',(ok?'✓ ':'✗ ')+x))}
@@ -288,7 +299,7 @@ function tipFor(i,ev){var t=$('tip');t.textContent='';var h=el('h4','',i.name);h
    if(q.dex)row(q.dex<=w.dex,'Dexterity '+q.dex+'  ('+w.dex+')'+(q.dex>w.dex?'  '+(q.dex-w.dex)+' short':''));
    if(i.unid)row(false,'not identified');if(i.broken)row(false,'broken');if(!any)row(true,'no requirements');t.appendChild(ul)});
   var s=slots(i,HS)[0],worn=s&&at(s[0]);
-  if(i.at==='pack'||i.at==='stash'){if(worn&&i.st){t.appendChild(el('hr'));t.appendChild(el('div','hd','Against '+worn.name+' (worn)'));var c=el('div','cmp');Object.keys(i.st).forEach(function(k,n){if(n)c.appendChild(document.createTextNode('   '));c.appendChild(document.createTextNode(k+' '+((worn.st||{})[k]!=null?worn.st[k]+' → ':'new ')));c.appendChild(el('b','',String(i.st[k])))});t.appendChild(c)}}}
+  if(i.at==='pack'||i.at==='stash'){if(worn&&i.st){t.appendChild(el('hr'));t.appendChild(el('div','hd','Against '+worn.name+' (worn)'));var c=el('div','cmp');Object.keys(i.st).forEach(function(k){var row=el('div'),o=(worn.st||{})[k],v=i.st[k];row.appendChild(document.createTextNode(k+'  '+(o!=null?o+' → ':'')));row.appendChild(el('b','',String(v)));if(typeof v==='number'){var dl=v-(typeof o==='number'?o:0),sp=el('span',dl>=0?'up':'dn','  '+(dl>=0?'+':'')+dl);row.appendChild(sp)}else if(o==null)row.appendChild(el('span','up','  new'));c.appendChild(row)});t.appendChild(c)}}}
  var a=actions(i).filter(function(x){return x[2]})[0];t.appendChild(el('div','k',(a?'Double-click: '+a[0]+'.  ':'')+'Right-click: all actions.'));
  t.hidden=false;var r=ev.currentTarget.getBoundingClientRect(),tw=268,th=t.offsetHeight,x=r.right+8,y=r.top;
  if(x+tw>innerWidth-8)x=r.left-tw-8;if(x<8)x=8;if(y+th>innerHeight-8)y=innerHeight-th-8;t.style.left=x+'px';t.style.top=Math.max(8,y)+'px'}
@@ -323,18 +334,18 @@ function segs(id,opts,cur,fn,cls){var b=$(id);b.textContent='';opts.forEach(func
 function render(){doll('hdoll',HS,HERO);doll('mdoll',MS,MERC);grid('pack','pack');grid('stash','stash');grid('belt','belt');selbox();
  sheet('hsheet',[['Level','7'],['Strength','38'],['Dexterity','25'],['Vitality','30'],['Life','86 / 120'],['Mana','105 / 140'],['Defense','22'],['Damage','1-5','n'],['Fire res','12%'],['Cold res','30%'],['Light res','-8%','n'],['Poison res','5%'],['xp to 8','62%'],['Next level','25 min'],['Gear','1 broken','n'],['Free points','0']]);
  sheet('msheet',[['Level','14'],['Life',MERC.alive?'90%':'0%',MERC.alive?'':'n'],['Strength','60'],['Dexterity','40'],['Defense','41'],['Aura','Defiance']]);
- $('mst').textContent=MERC.alive?'alive':'dead';$('mst').className='st'+(MERC.alive?'':' dead');$('mlife').style.width=MERC.alive?'90%':'0';$('rev').hidden=MERC.alive;
+ $('mst').textContent=MERC.alive?'alive':'dead';$('mst').className='st'+(MERC.alive?'':' dead');$('mlife').style.width=MERC.alive?'90%':'0';$('rev').hidden=MERC.alive;$('mnote').textContent=MERC.alive?'Wears a helm, body armor, and a spear or polearm. Checked against his own level and stats.':'Dead. No gear change until he is revived.';
  $('place').textContent='10 by 4 · '+I.filter(function(i){return i.at==='pack'}).length+' items';$('chest').textContent=S.town?'at the chest: moves are instant':'in the field: moves wait for town';
- $('log').textContent=S.log;var n=I.filter(function(i){return i.mark}).length;$('sell').textContent='Sell marked ('+n+')';
+ var ql=$('queue');ql.textContent='';S.q.forEach(function(r){var li=el('li');li.appendChild(el('span','',r[0]));li.appendChild(el('i',r[2],r[1]));ql.appendChild(li)});var n=I.filter(function(i){return i.mark}).length;$('sell').textContent='Sell marked ('+n+')';
  segs('chips',[['hero','Usable by me'],['merc','By mercenary'],['unid','Unidentified'],['sell','Marked sell']],function(){return S.chip},function(v){S.chip=S.chip===v?'':v;render()},'fchip');
  var st=$('sets');st.textContent='';st.appendChild(el('span','','Sets'));[['fire','Fire damage'],['town','Town'],['mf','Magic find']].forEach(function(o){var b=el('button','fchip',o[1]);b.type='button';b.setAttribute('aria-pressed',String(S.set===o[0]));b.addEventListener('click',function(){S.set=S.set===o[0]?'':o[0];say(o[0]==='fire'?'Apply Fire damage: 2 items go on. Skipped, not replaced: Light Plate needs 41 strength (you have 38).':'Apply '+o[1]+': every item is already worn.',1);render()});st.appendChild(b)});st.appendChild(el('button','fchip','+'));
  var rl=$('rules');rl.textContent='';RULES.forEach(function(r,k){var li=el('li',S.rule===k?'on':'');li.appendChild(el('span','',k<RULES.length-1?String(k+1):'·'));li.appendChild(el('span','',r[0]));li.appendChild(el('span','a',r[1]));li.appendChild(el('b','',String(I.filter(function(i){return (i.at==='pack'||i.at==='stash')&&ruleOf(i)===k}).length)));li.addEventListener('click',function(){S.rule=S.rule===k?-1:k;render()});rl.appendChild(li)});
- segs('tabs',[['hero','Hero'],['pack','Pack and stash'],['merc','Mercenary']],function(){return $('canvas').dataset.tab},function(v){$('canvas').dataset.tab=v;render()});
+ segs('tabs',[['hero','Hero and mercenary'],['pack','Pack and stash']],function(){return $('canvas').dataset.tab},function(v){$('canvas').dataset.tab=v;render()});
  var d=$('demo');d.textContent='';[['Hero: '+(S.town?'in town at the chest':'in the field'),function(){S.town=!S.town;if(S.town)I.forEach(function(i){if(i.wait){var to=i.wait,sp=free(to,to==='stash'?6:10,to==='stash'?8:4,i.w,i.h);if(sp){i.at=to;i.x=sp[0];i.y=sp[1]}i.wait=null}})}],['Mercenary: '+(MERC.alive?'alive':'dead'),function(){MERC.alive=!MERC.alive}]].forEach(function(o){var b=el('button','',o[0]);b.type='button';b.addEventListener('click',function(){o[1]();render()});d.appendChild(b)})}
 $('q').addEventListener('input',function(){S.q=this.value;grid('pack','pack');grid('stash','stash')});
-$('rev').addEventListener('click',function(){MERC.alive=true;S.log='Revive mercenary: errand, walks to town';render()});
+$('rev').addEventListener('click',function(){MERC.alive=true;log('Revive mercenary','errand: walks to town','w');render()});
 $('rep').addEventListener('click',function(){say('Repair is an errand: the hero walks to the smith at the next safe moment. It shows in Orders on the watch screen.',1);render()});
-$('sell').addEventListener('click',function(){S.log='Sell marked items: errand, walks to town at the next safe moment';render()});
+$('sell').addEventListener('click',function(){log('Sell marked items','errand: next safe moment','w');render()});
 document.addEventListener('click',function(){$('ctx').hidden=true});
 document.addEventListener('keydown',function(e){if(e.key==='/'&&e.target.tagName!=='INPUT'){e.preventDefault();$('q').focus()}if(e.key==='Escape'){S.sel=null;S.msg=null;$('ctx').hidden=true;render()}});
 render();
