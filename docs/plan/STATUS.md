@@ -154,6 +154,7 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
+| uiredesign3 | in-progress | - | `docs/ui/redesign-2026-11-14/` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -202,6 +203,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- df05ff10c 11-14 14:58 `Merge agent/uidesign3: uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card` (uidesign3)
 - 656249fa3 11-14 12:56 `Merge agent/uib8: Merge branch 'main' into TASK-427` (uib8)
 - dc98d13a2 11-14 12:55 `Merge branch 'main' into TASK-427` (-)
 - f89e59de0 11-14 12:47 `Merge agent/uis1: Merge branch 'main' into TASK-424` (uis1)
@@ -211,5 +213,4 @@
 - a57eb355f 11-14 12:40 `Merge branch 'main' into TASK-425` (-)
 - b4269b9ef 11-14 12:38 `Merge origin/main into agent/uis1` (-)
 - ee54732ef 11-14 12:32 `Merge agent/uic1: Merge branch 'main' into TASK-428` (uic1)
-- ba80f60f1 11-14 12:32 `Merge branch 'main' into TASK-428` (-)
 <!-- statusgen:end -->

@@ -539,13 +539,14 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `ui/redesign-2026-11-14/`
 
 - [A-audit.md](ui/redesign-2026-11-14/A-audit.md): A. Audit: what /watch shows and how the player commands the bot today (status: design input (TASK-416, 2026-11-14). Read from the code on `origin/main` at 883770a9 and from pictures of...)
-- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: design proposal (TASK-416, 2026-11-14). It builds on `docs/ui-design-system.md` (the shell, tokens, panel...)
+- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: the rules stand; the default view of section 2 is now laid out as the cockpit of J-second-attempt.md....)
 - [C-orders.md](ui/redesign-2026-11-14/C-orders.md): C. Orders: one control surface (status: design accepted by the user's answers of 2026-11-14 (H-open-questions.md), not built. Section 8...)
-- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: accepted by the user's answers of 2026-11-14; sections 1 and 4 were rewritten for answer 4 (Standard is...)
+- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: sections 2 and 4 are SUPERSEDED by J-second-attempt.md (2026-11-14): the default view is the cockpit, a...)
 - [E-visual-system.md](ui/redesign-2026-11-14/E-visual-system.md): E. Visual system (status: design proposal (TASK-416, 2026-11-14). The identity stays: near-black warm stone, gold accent, serif...)
-- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan (status: accepted and ready to build (2026-11-14): the user answered the open questions and lifted the freeze on...)
+- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan (status: revised 2026-11-14 for the second attempt: wave 2 is on hold until the user accepts it; the table under...)
 - [H-open-questions.md](ui/redesign-2026-11-14/H-open-questions.md): H. Open questions for the user (status: ANSWERED by the user on 2026-11-14 (all twelve). The Answer column is the decision; where it differs from...)
-- [I-character-screen.md](ui/redesign-2026-11-14/I-character-screen.md): I. The character screen: hero, mercenary, pack, belt, stash on one canvas (status: design proposal (TASK-419, 2026-11-14), not built. Asked for by the user after the first pass: "the...)
+- [I-character-screen.md](ui/redesign-2026-11-14/I-character-screen.md): I. The character screen: hero, mercenary, pack, belt, stash on one canvas (status: section 3 (the canvas) and the tooltip and action placement of section 4 are SUPERSEDED by...)
+- [J-second-attempt.md](ui/redesign-2026-11-14/J-second-attempt.md): J. Second attempt: the cockpit and the character canvas (status: design proposal, second attempt (2026-11-14, branch `agent/uidesign3`), not built; waits for the user's...)
 - [redesign-2026-11-14/README.md](ui/redesign-2026-11-14/README.md): Watch UI redesign, design phase (2026-11-14) (status: ACCEPTED by the user on 2026-11-14 (twelve answers, H-open-questions.md) and extended the same day with...)
 
 `ui/redesign-2026-11-14/briefs/`
@@ -560,22 +561,35 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [B8-instant-actions.md](ui/redesign-2026-11-14/briefs/B8-instant-actions.md): Brief B8: Instant item actions: the fast lane (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
 - [B9-merc-item-verbs.md](ui/redesign-2026-11-14/briefs/B9-merc-item-verbs.md): Brief B9: Mercenary item verbs in the fork, and their bot wiring (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
 - [C1-usable-requirements.md](ui/redesign-2026-11-14/briefs/C1-usable-requirements.md): Brief C1: Item requirements and usability in the inventory view (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [C2-character-canvas.md](ui/redesign-2026-11-14/briefs/C2-character-canvas.md): Brief C2: The character screen canvas (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [C3-gestures-instant-ui.md](ui/redesign-2026-11-14/briefs/C3-gestures-instant-ui.md): Brief C3: Gestures and the instant-action feedback (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [C2-character-canvas.md](ui/redesign-2026-11-14/briefs/C2-character-canvas.md): Brief C2: The character canvas (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [C3-gestures-instant-ui.md](ui/redesign-2026-11-14/briefs/C3-gestures-instant-ui.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is C3-tooltip-menu-gestures.md.)
+- [C3-tooltip-menu-gestures.md](ui/redesign-2026-11-14/briefs/C3-tooltip-menu-gestures.md): Brief C3: The tooltip, the context menu, gestures and instant feedback (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
 - [L1-loot-rules-ui.md](ui/redesign-2026-11-14/briefs/L1-loot-rules-ui.md): Brief L1: The loot rules tab (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [briefs/README.md](ui/redesign-2026-11-14/briefs/README.md): Worker briefs for the watch UI redesign (status: ready to send (2026-11-14, after the user's answers in ../H-open-questions.md), except S8 and L1 which are...)
+- [briefs/README.md](ui/redesign-2026-11-14/briefs/README.md): Worker briefs for the watch UI redesign (status: revised 2026-11-14 for the second attempt (wave 2 on hold until the user accepts it); first written after...)
 - [S1-foundations.md](ui/redesign-2026-11-14/briefs/S1-foundations.md): Brief S1: Shell foundations and the default flip (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S2-glance-statusline.md](ui/redesign-2026-11-14/briefs/S2-glance-statusline.md): Brief S2: The glance endpoint and the status sentence (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S3-needs-health-progress.md](ui/redesign-2026-11-14/briefs/S3-needs-health-progress.md): Brief S3: Needs you, Health and Progress (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S4-orders-readonly.md](ui/redesign-2026-11-14/briefs/S4-orders-readonly.md): Brief S4: Orders, read-only (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S5-orders-write-zonemap.md](ui/redesign-2026-11-14/briefs/S5-orders-write-zonemap.md): Brief S5: Orders write path and the act map (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S6-log-map-phone.md](ui/redesign-2026-11-14/briefs/S6-log-map-phone.md): Brief S6: Log, a compact minimap, and the phone layout (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S7-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-polish-a11y.md): Brief S7: Polish and accessibility pass over the new panels (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [S1b-cockpit-template.md](ui/redesign-2026-11-14/briefs/S1b-cockpit-template.md): Brief S1b: The cockpit template in the shell, and the fit check (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S2-glance-statusline.md](ui/redesign-2026-11-14/briefs/S2-glance-statusline.md): Brief S2: The glance endpoint and the band (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S3-needs-health-progress.md](ui/redesign-2026-11-14/briefs/S3-needs-health-progress.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S3-strip-and-needs.md.)
+- [S3-strip-and-needs.md](ui/redesign-2026-11-14/briefs/S3-strip-and-needs.md): Brief S3: Needs you and the strip: Progress, Journey, Health (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S4-orders-readonly.md](ui/redesign-2026-11-14/briefs/S4-orders-readonly.md): Brief S4: Orders, read-only, as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S5-orders-write-zonemap.md](ui/redesign-2026-11-14/briefs/S5-orders-write-zonemap.md): Brief S5: Orders write path and the act map as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-areamap-drawers-phone.md](ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md): Brief S6: The area map, the drawers, and the phone arrangement (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-log-map-phone.md](ui/redesign-2026-11-14/briefs/S6-log-map-phone.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S6-areamap-drawers-phone.md.)
+- [S7-default-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-default-polish-a11y.md): Brief S7: The cockpit becomes the default; polish and access (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S7-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-polish-a11y.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S7-default-polish-a11y.md.)
 - [S8-retire-old-tiles.md](ui/redesign-2026-11-14/briefs/S8-retire-old-tiles.md): Brief S8: Retire the old tiles (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
 
 `ui/redesign-2026-11-14/`
 
 - [loot-rules-ux.md](ui/redesign-2026-11-14/loot-rules-ux.md): Loot rules: the player-facing UX and what it needs from the engine (status: UX proposal (TASK-419, 2026-11-14), not built. The ENGINE (rule language, evaluation, merging...)
+
+`ui/redesign-2026-11-14/research/`
+
+- [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
+- [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
+
+`ui/redesign-2026-11-14/`
+
 - [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
 - [unlock-alerts.md](unlock-alerts.md): Alerts and pings (TASK-162, unlockalerts)
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
