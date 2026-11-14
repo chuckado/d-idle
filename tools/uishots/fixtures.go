@@ -18,13 +18,14 @@ var fxPanels = []fxPanel{
 	{"fx-needs", "Needs you", `const n = Math.max(0, Math.min(9, +(new URLSearchParams(location.search).get('needs') ?? 2)));
   ctx.hide(n === 0);
   const rows = ['Weapon broken, repair now?', 'Go for Blood Raven? Level 9 is the guide', 'Belt is empty, buy potions', 'Mercenary is dead', 'Stash is full'];
-  for (let i = 0; i < Math.min(n, 3); i++) { const r = ctx.el('div', 'row'); r.append(ctx.el('span', 'txt', rows[i]), ctx.ui.btn('Do it', { size: 'sm' })); ctx.body.append(r); }
+  for (let i = 0; i < Math.min(n, 3); i++) { const r = ctx.el('div', 'row line'); r.append(ctx.el('span', 'txt', rows[i]), ctx.ui.btn('Do it', { size: 'sm' })); ctx.body.append(r); }
   if (n > 3) ctx.body.append(ctx.el('div', 'row', '+' + (n - 3) + ' more'));`},
 	{"fx-orders", "Orders", `ctx.body.append(ctx.el('div', 'row', 'Orders  1 open'));
   const verbs = ctx.el('div', 'row verbs');
   for (const v of ['Go to', 'Town', 'Repair', 'Pause', 'More']) verbs.append(ctx.ui.btn(v, { size: 'sm' }));
   const list = ctx.el('div', 'list'); list.dataset.scroll = '1';
-  for (let i = 0; i < 14; i++) list.append(ctx.el('div', 'row', i === 0 ? 'Farm Cold Plains 30 min  ACTIVE' : 'then: level 10, order number ' + i + ' of the plan that runs long'));
+  const n = Math.max(1, Math.min(30, +(new URLSearchParams(location.search).get('orders') ?? 4)));
+  for (let i = 0; i < n; i++) list.append(ctx.el('div', 'row', i === 0 ? 'Farm Cold Plains 30 min  ACTIVE' : 'then: level 10, order number ' + i + ' of the plan that runs long'));
   ctx.body.append(verbs, list);`},
 	{"fx-map", "Where to", `ctx.body.append(ctx.el('div', 'row', 'Where to'));
   const g = ctx.el('div', 'zones');
@@ -39,14 +40,14 @@ var fxPanels = []fxPanel{
 }
 
 const fxCSS = `@layer panels {
-  [data-panel^="fx-"] .row { display: flex; align-items: center; gap: var(--d-sp-2); min-block-size: 28px; font-size: var(--d-fs-1); }
+  [data-panel^="fx-"] .row { min-block-size: 28px; line-height: 28px; font-size: var(--d-fs-1); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  [data-panel^="fx-"] .row.line, [data-panel^="fx-"] .row.verbs { display: flex; align-items: center; gap: var(--d-sp-2); line-height: normal; }
   [data-panel^="fx-"] .row .txt { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  [data-panel^="fx-"] .row:not(.verbs) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   [data-panel="fx-orders"] .d-slotbody { display: flex; flex-direction: column; }
   [data-panel="fx-orders"] .list { overflow: auto; min-block-size: 0; }
   [data-panel="fx-map"] .d-slotbody { display: flex; flex-direction: column; }
   [data-panel="fx-map"] .zones { flex: 1 1 0; min-block-size: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(10, minmax(0, 1fr)); gap: 2px; }
-  [data-panel="fx-map"] .zone { min-block-size: 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--d-fs-0); padding: 0 var(--d-sp-1); text-align: start; }
+  [data-panel="fx-map"] .zone { min-block-size: 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--d-fs-0); line-height: 1; padding: 0 var(--d-sp-1); text-align: start; }
 }
 `
 
@@ -79,9 +80,9 @@ func mountFixturePanels(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p := r.URL.Path
 		switch {
-		case p == "/__fit":
-			fitHarness(w, r)
-		case p == "/__fit/fit.js":
+		case p == "/watch" && r.URL.Query().Get("fitrun") == "1":
+			fitRun(h, w, r)
+		case p == "/__fit/fit.js" || p == "/__fit/run.js":
 			serveFitJS(w, r)
 		case p == "/watch/layouts/cockpit-demo.json" || p == "/watch/layouts/cockpit-overflow.json":
 			js(w, fxLayout(strings.HasSuffix(p, "overflow.json")))

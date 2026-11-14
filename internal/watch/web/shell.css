@@ -122,7 +122,9 @@
   .d-shell[data-template="cockpit"] > .d-band-status { position: static; box-sizing: border-box; block-size: var(--c-band); padding-block: 0; overflow: hidden; }
   .d-shell[data-template="cockpit"] > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status .d-band-main { flex-wrap: wrap; }
-  .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline: var(--c-gap); margin: 0; z-index: var(--d-z-sheet); }
+  .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
+  .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
+  .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
   .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
     --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
     display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
@@ -169,10 +171,11 @@
   .d-cktag { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 4; display: flex; gap: var(--d-sp-1); align-items: center; padding: 1px var(--d-sp-1);
     background: var(--d-surface-3); border-end-end-radius: var(--d-r-2); font-size: var(--d-fs-0); color: var(--d-text-2); pointer-events: auto; }
   .d-cktag select { font: inherit; max-inline-size: 11rem; }
-  .d-ckdiv { position: absolute; z-index: 5; background: var(--d-accent); opacity: .55; touch-action: none; }
+  .d-cktag > span { cursor: grab; }
+  .d-ckdiv { position: absolute; inset-inline-start: var(--ck-l, 0); inset-block-start: var(--ck-t, 0); z-index: 5; background: var(--d-accent); opacity: .55; touch-action: none; }
   .d-ckdiv:hover, .d-ckdiv[data-drag] { opacity: 1; }
-  .d-ckdiv[data-axis="y"] { block-size: 6px; cursor: row-resize; }
-  .d-ckdiv[data-axis="x"] { inline-size: 6px; cursor: col-resize; }
+  .d-ckdiv[data-axis="y"] { inline-size: var(--ck-w, 0); block-size: 6px; cursor: row-resize; }
+  .d-ckdiv[data-axis="x"] { block-size: var(--ck-h, 0); inline-size: 6px; cursor: col-resize; }
 
   /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
   .d-menu { position: relative; }

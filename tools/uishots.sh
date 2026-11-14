@@ -4,15 +4,19 @@
 # nice 19 (never the user's desktop), one PNG and one DOM dump per page, width and theme, then the DOM contract check
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
+#   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
+#     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
+#     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
 	--out) out=$2; shift 2 ;;
 	--only) only=$2; shift 2 ;;
+	--fit) fit=1; shift ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
@@ -31,6 +35,29 @@ sp=$!
 timeout 600 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
 xp=$!
 sleep 2
+if [ "$fit" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/fit-*
+	# the full-screen sizes, the browser-window sizes (a window with its chrome is shorter than the screen) and the phone
+	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
+	pages="cockpit watch?layout=cockpit&theme=dark
+demo-needs0 watch?layout=cockpit-demo&theme=dark&needs=0
+demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
+demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
+demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=3&orders=20
+overflow-fixture watch?layout=cockpit-overflow&theme=dark"
+	echo "$pages" | while read -r pname pq; do
+		for sz in $sizes; do
+			w=${sz%x*} h=${sz#*x}
+			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 60 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$h" --virtual-time-budget=12000 --timeout=30000 --dump-dom "http://127.0.0.1:$port/$pq&fitrun=1" >"$out/fit-$pname-$sz.html" 2>/dev/null
+			rm -rf "${prof:?}"
+		done
+	done
+	"$bin/uishots" fit "$out"
+	exit $?
+fi
 mkdir -p "$out" && rm -f "$out"/*.png "$out"/*.html "$out"/*.log
 # name width height path?query
 shots="watch-390-dark 390 844 watch?theme=dark

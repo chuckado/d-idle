@@ -1,11 +1,13 @@
 package main
 
 import (
+	"bytes"
 	_ "embed"
 	"encoding/json"
 	"fmt"
 	"html"
 	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"regexp"
@@ -15,39 +17,48 @@ import (
 )
 
 // The fit check (docs/ui/redesign-2026-11-14/briefs/S1b-cockpit-template.md, "The fit rule"): a cockpit page must fill
-// the viewport exactly. The serve command offers /__fit?u=<page>&w=<px>&h=<px>, a harness that loads the page in an
-// iframe of exactly that size, measures it (fit.js) and prints the numbers into <pre id="fit-result">; tools/uishots.sh
-// dumps that DOM in headless Chromium and `uishots fit DIR` judges the dumps. The page is judged as it is: nothing in
-// it is touched.
+// the viewport exactly. With ?fitrun=1 the serve command adds a script that measures the page (fit.js) and prints the
+// numbers into <pre id="fit-result">; tools/uishots.sh dumps that DOM in headless Chromium at each size and
+// `uishots fit DIR` judges the dumps. The page is judged as it is: the script only reads.
 
 //go:embed fit.js
 var fitJS []byte
 
-// fitHarness is the page /__fit serves. The iframe is the viewport: its innerWidth and innerHeight are w and h, so the
-// page's own sizing (dvh, container queries, the width classes) runs as in a browser window of that size.
-func fitHarness(w http.ResponseWriter, r *http.Request) {
-	q := r.URL.Query()
-	u, ww, hh := q.Get("u"), atoi(q.Get("w")), atoi(q.Get("h"))
-	if !strings.HasPrefix(u, "/") || strings.HasPrefix(u, "//") || ww < 200 || hh < 200 || ww > 4000 || hh > 4000 {
-		http.Error(w, "u must be a path on this server; w and h 200 to 4000", http.StatusBadRequest)
-		return
+// fitRun adds the measuring script to the page's HTML when the query has fitrun=1: the pages forbid framing (CSP
+// frame-ancestors), so the page measures itself in the browser window the shell script opened at the size under test.
+// The script (fit.js plus a few lines) waits for the panels to mount and poll, then writes <pre id="fit-result">.
+func fitRun(h http.Handler, w http.ResponseWriter, r *http.Request) {
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, r)
+	for k, v := range rec.Header() {
+		w.Header()[k] = v
 	}
-	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
-<iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
-<script type="module">
-import { measure } from '/__fit/fit.js';
-const f = document.getElementById('f'), out = document.getElementById('fit-result');
-// the page needs its panels mounted and polled once: wait on the page's own timers (virtual time), then measure
-f.addEventListener('load', () => setTimeout(() => {
-  try { out.textContent = JSON.stringify(Object.assign({ page: %q }, measure(f.contentWindow))); }
-  catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
-}, 4000));
-</script></body></html>`, html.EscapeString(u), ww, hh, u)
+	body := rec.Body.Bytes()
+	if i := bytes.LastIndex(body, []byte("</body>")); i >= 0 && strings.HasPrefix(rec.Header().Get("Content-Type"), "text/html") {
+		body = append(append(append([]byte{}, body[:i]...), []byte(`<script type="module" src="/__fit/run.js"></script>`)...), body[i:]...)
+		w.Header().Del("Content-Length")
+	}
+	w.WriteHeader(rec.Code)
+	w.Write(body)
 }
+
+// fitRunJS measures one second of virtual time after the shell had time to mount, poll and place everything.
+const fitRunJS = `import { measure } from '/__fit/fit.js';
+setTimeout(() => {
+  const out = document.createElement('pre');
+  out.id = 'fit-result';
+  try { out.textContent = JSON.stringify(Object.assign({ page: location.pathname + location.search }, measure(window))); }
+  catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
+  document.body.appendChild(out);
+}, 5000);
+`
 
 func serveFitJS(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
+	if strings.HasSuffix(r.URL.Path, "run.js") {
+		w.Write([]byte(fitRunJS))
+		return
+	}
 	w.Write(fitJS)
 }
 
@@ -104,6 +115,8 @@ func (r fitResult) judge() []string {
 	return bad
 }
 
+var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)
+
 var reFitResult = regexp.MustCompile(`(?s)<pre id="fit-result">(.*?)</pre>`)
 
 // fitDir judges every fit-*.html dump of a run. A dump named fit-overflow-* is the deliberately overflowing fixture: it
@@ -136,6 +149,10 @@ func fitDir(dir string) ([]string, bool, error) {
 			continue
 		}
 		bad := r.judge()
+		// the browser window must really be the size the name says, or the numbers are for another page
+		if wh := reSize.FindStringSubmatch(name); wh != nil && (strconv.Itoa(r.VW) != wh[1] || strconv.Itoa(r.VH) != wh[2]) {
+			bad = append(bad, fmt.Sprintf("the viewport is %dx%d, not %sx%s", r.VW, r.VH, wh[1], wh[2]))
+		}
 		want := strings.HasPrefix(name, "fit-overflow-")
 		switch {
 		case want && len(bad) == 0:

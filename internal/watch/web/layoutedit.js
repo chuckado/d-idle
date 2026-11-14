@@ -295,7 +295,6 @@ export function startCockpit(api) {
   function tag(id, root) {
     const t = el('div', 'd-cktag'), grip = el('span', '', id);
     grip.title = 'Drag onto another tile to swap';
-    grip.style.cursor = 'grab';
     const sel = el('select');
     sel.setAttribute('aria-label', 'Panel in this place: ' + id);
     for (const m of api.slotPanels) {
@@ -349,6 +348,11 @@ export function startCockpit(api) {
     d.setAttribute('aria-label', label + ': arrow keys move it');
     main.appendChild(d);
   }
+  const place = (d, l, t, w, h) => { // a divider's box through custom properties (the sheet reads them)
+    d.style.setProperty('--ck-l', l + 'px'); d.style.setProperty('--ck-t', t + 'px');
+    if (w) d.style.setProperty('--ck-w', w + 'px');
+    if (h) d.style.setProperty('--ck-h', h + 'px');
+  };
   const slotEl = (n) => main.querySelector(':scope > [data-slot="' + n + '"]');
   const rel = (r) => { const m = main.getBoundingClientRect(); return { l: r.left - m.left, t: r.top - m.top, w: r.width, h: r.height, r: r.right - m.left, b: r.bottom - m.top }; };
   function paint() {
@@ -364,11 +368,11 @@ export function startCockpit(api) {
     railDiv.hidden = !rail || !stage;
     if (strip && stage) {
       const a = rel(stage.getBoundingClientRect()), b = rel(strip.getBoundingClientRect());
-      Object.assign(stripDiv.style, { left: a.l + 'px', width: a.w + 'px', top: (b.t - gap / 2 - 3) + 'px' });
+      place(stripDiv, a.l, b.t - gap / 2 - 3, a.w, 0);
     }
     if (rail && stage) {
       const a = rel(rail.getBoundingClientRect());
-      Object.assign(railDiv.style, { top: a.t + 'px', height: a.h + 'px', left: (a.l - gap / 2 - 3) + 'px' });
+      place(railDiv, a.l - gap / 2 - 3, a.t, 0, a.h);
     }
   }
   paint();
@@ -415,9 +419,9 @@ export function startCockpit(api) {
   bar.setAttribute('role', 'toolbar');
   bar.setAttribute('aria-label', 'Layout editor');
   const save = mk('Save', 'primary'), reset = mk('Reset to default'), done = mk('Done', 'ghost');
-  bar.append(el('span', 'what', 'Editing the cockpit'),
-    el('span', 'keys', 'Drag a tile\'s name onto another tile to swap them, or pick another panel from its list. Drag the gold dividers: the strip height and the rail width (arrow keys move a focused divider).'),
-    save, reset, done);
+  const keys = el('span', 'keys', 'Drag a tile\'s name onto another to swap, or pick a panel from its list; drag the gold dividers.');
+  keys.title = 'The dividers set the strip height and the rail width; arrow keys move a focused divider.';
+  bar.append(el('span', 'what', 'Editing the cockpit'), keys, save, reset, done);
   api.shell.appendChild(bar);
   main.dataset.editingCockpit = '1';
 
