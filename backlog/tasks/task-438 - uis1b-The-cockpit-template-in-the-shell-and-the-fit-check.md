@@ -23,6 +23,7 @@ owns:
   - "internal/watch/layout.go"
   - "internal/watch/layout_test.go"
   - "internal/watch/panels.go"
+  - "internal/watch/http_view.go"
   - "tools/uilint/"
   - "tools/uishots/"
   - "tools/uishots.sh"

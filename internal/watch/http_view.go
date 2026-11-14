@@ -77,7 +77,7 @@ func (h *Hub) ViewHandler() http.Handler {
 		case "/watch/shell.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/javascript; charset=utf-8")(w, r)
 		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json",
-			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json":
+			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json", "/watch/layouts/cockpit.json":
 			// the editor's three presets and the four redesign ones (classic is the pre-redesign default), for ?layout=<name>
 			// and the "..." menu (the screenshot suite renders them)
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "application/json; charset=utf-8")(w, r)

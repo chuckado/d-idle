@@ -1,0 +1,123 @@
+package main
+
+import (
+	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
+)
+
+// Fixture panels for the fit check and the cockpit pictures: the real cockpit panels (needs-you, orders, zone-map, the
+// strip) are other slices, so the fixture viewer adds stand-ins that fill the slots the way those will: fixed boxes,
+// one-line rows cut with an ellipsis, a long list that scrolls inside (data-scroll). They exist only here: panels.json
+// and /watch/layouts/cockpit-demo.json, -overflow.json are extended by this viewer and nothing else serves them.
+
+type fxPanel struct{ id, title, js string }
+
+var fxPanels = []fxPanel{
+	{"fx-needs", "Needs you", `const n = Math.max(0, Math.min(9, +(new URLSearchParams(location.search).get('needs') ?? 2)));
+  ctx.hide(n === 0);
+  const rows = ['Weapon broken, repair now?', 'Go for Blood Raven? Level 9 is the guide', 'Belt is empty, buy potions', 'Mercenary is dead', 'Stash is full'];
+  for (let i = 0; i < Math.min(n, 3); i++) { const r = ctx.el('div', 'row'); r.append(ctx.el('span', 'txt', rows[i]), ctx.ui.btn('Do it', { size: 'sm' })); ctx.body.append(r); }
+  if (n > 3) ctx.body.append(ctx.el('div', 'row', '+' + (n - 3) + ' more'));`},
+	{"fx-orders", "Orders", `ctx.body.append(ctx.el('div', 'row', 'Orders  1 open'));
+  const verbs = ctx.el('div', 'row verbs');
+  for (const v of ['Go to', 'Town', 'Repair', 'Pause', 'More']) verbs.append(ctx.ui.btn(v, { size: 'sm' }));
+  const list = ctx.el('div', 'list'); list.dataset.scroll = '1';
+  for (let i = 0; i < 14; i++) list.append(ctx.el('div', 'row', i === 0 ? 'Farm Cold Plains 30 min  ACTIVE' : 'then: level 10, order number ' + i + ' of the plan that runs long'));
+  ctx.body.append(verbs, list);`},
+	{"fx-map", "Where to", `ctx.body.append(ctx.el('div', 'row', 'Where to'));
+  const g = ctx.el('div', 'zones');
+  const names = ['Blood Moor', 'Cold Plains', 'Stony Field', 'Dark Wood', 'Black Marsh', 'Tamoe Highland', 'Den of Evil', 'Cave', 'Burial Grounds', 'Monastery Gate'];
+  for (let r = 0; r < 10; r++) for (let c = 0; c < 3; c++) g.append(ctx.el('button', 'zone', names[(r + c * 3) % 10]));
+  ctx.body.append(g);`},
+	{"fx-progress", "Progress", `ctx.body.append(ctx.el('div', 'row', 'Progress  level 7'), ctx.el('div', 'row', 'to 10 in 25 min'), ctx.el('div', 'row', 'xp/h 12.4k  gold/h 2.1k'));`},
+	{"fx-journey", "Journey", `ctx.body.append(ctx.el('div', 'row', 'Journey  chapter 3 of 9'), ctx.el('div', 'row', 'Blood Raven: too early for this hero, a long line that is cut'));`},
+	{"fx-health", "Health", `ctx.body.append(ctx.el('div', 'row', 'Health'), ctx.el('div', 'row', 'Life ok  Gear ok  Ready ok'));`},
+	// not a stand-in: a panel that overflows its box on purpose, for the fixture the fit check must fail
+	{"fx-overflow", "Overflow", `for (let i = 0; i < 60; i++) ctx.body.append(ctx.el('div', 'row', 'row ' + i + ' of a panel with no height of its own'));`},
+}
+
+const fxCSS = `@layer panels {
+  [data-panel^="fx-"] .row { display: flex; align-items: center; gap: var(--d-sp-2); min-block-size: 28px; font-size: var(--d-fs-1); }
+  [data-panel^="fx-"] .row .txt { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  [data-panel^="fx-"] .row:not(.verbs) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  [data-panel="fx-orders"] .d-slotbody { display: flex; flex-direction: column; }
+  [data-panel="fx-orders"] .list { overflow: auto; min-block-size: 0; }
+  [data-panel="fx-map"] .d-slotbody { display: flex; flex-direction: column; }
+  [data-panel="fx-map"] .zones { flex: 1 1 0; min-block-size: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(10, minmax(0, 1fr)); gap: 2px; }
+  [data-panel="fx-map"] .zone { min-block-size: 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--d-fs-0); padding: 0 var(--d-sp-1); text-align: start; }
+}
+`
+
+// fxLayout is a cockpit layout over the fixture panels; overflow puts the overflowing one in the rail.
+func fxLayout(overflow bool) map[string]any {
+	rail := []string{"fx-needs", "fx-orders", "fx-map"}
+	if overflow {
+		rail = []string{"fx-overflow"}
+	}
+	return map[string]any{
+		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
+		"slots": map[string]any{
+			"band": []string{"hero-meters"}, "stage": "video",
+			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
+			"railWide":  map[string]any{"left": []string{"fx-needs", "fx-orders"}, "right": []string{"fx-map"}},
+			"phoneTabs": map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}},
+		},
+		"sizes":       map[string]any{"strip": 112, "railMin": 400},
+		"breakpoints": map[string]any{},
+	}
+}
+
+// mountFixturePanels wraps h: it adds the fixture manifests to /watch/panels.json and serves the fixture panels and
+// layouts; everything else is h's.
+func mountFixturePanels(h http.Handler) http.Handler {
+	byID := map[string]fxPanel{}
+	for _, p := range fxPanels {
+		byID[p.id] = p
+	}
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		p := r.URL.Path
+		switch {
+		case p == "/__fit":
+			fitHarness(w, r)
+		case p == "/__fit/fit.js":
+			serveFitJS(w, r)
+		case p == "/watch/layouts/cockpit-demo.json" || p == "/watch/layouts/cockpit-overflow.json":
+			js(w, fxLayout(strings.HasSuffix(p, "overflow.json")))
+		case p == "/watch/panels.json":
+			rec := httptest.NewRecorder()
+			h.ServeHTTP(rec, r)
+			var v map[string]any
+			if err := json.Unmarshal(rec.Body.Bytes(), &v); err != nil {
+				w.WriteHeader(rec.Code)
+				w.Write(rec.Body.Bytes())
+				return
+			}
+			list, _ := v["panels"].([]any)
+			for _, f := range fxPanels {
+				list = append(list, map[string]any{"schema": "watch.panel/1", "version": 1, "id": f.id, "title": f.title, "band": "side", "size": "s",
+					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true,
+					"owner": "uishots", "doc": "docs/ui-regression-plan.md"})
+			}
+			v["panels"] = list
+			js(w, v)
+		case strings.HasPrefix(p, "/watch/panels/fx-"):
+			parts := strings.Split(strings.TrimPrefix(p, "/watch/panels/"), "/")
+			f, ok := byID[parts[0]]
+			if !ok || len(parts) != 2 {
+				http.NotFound(w, r)
+				return
+			}
+			if parts[1] == "panel.css" {
+				w.Header().Set("Content-Type", "text/css; charset=utf-8")
+				w.Write([]byte(fxCSS))
+				return
+			}
+			w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
+			w.Write([]byte("export function mount(root, ctx) {\n  " + f.js + "\n}\n"))
+		default:
+			h.ServeHTTP(w, r)
+		}
+	})
+}

@@ -36,6 +36,157 @@ type LayoutManifest struct {
 	// Status chooses the panels of the status band instead of the page's own list (optional; see LayoutStatus).
 	Status      []LayoutStatus              `json:"status,omitempty"`
 	Breakpoints map[string]LayoutBreakpoint `json:"breakpoints"`
+	// Template and Slots turn the file into a viewport-filling cockpit (docs/ui/redesign-2026-11-14/J-second-attempt.md
+	// section 3). Additive: a reader that does not know them lays out Breakpoints, and a file without a template is
+	// laid out exactly as before.
+	Template string       `json:"template,omitempty"`
+	Slots    *LayoutSlots `json:"slots,omitempty"`
+	Sizes    LayoutSizes  `json:"sizes,omitempty"`
+}
+
+const cockpitTemplate = "cockpit/1"
+
+// idList is a slot's panels: one id ("stage": "video") or a list.
+type idList []string
+
+func (l *idList) UnmarshalJSON(b []byte) error {
+	var one string
+	if err := json.Unmarshal(b, &one); err == nil {
+		*l = idList{one}
+		return nil
+	}
+	var many []string
+	if err := json.Unmarshal(b, &many); err != nil {
+		return fmt.Errorf("want a panel id or a list of ids: %w", err)
+	}
+	*l = many
+	return nil
+}
+
+// LayoutSlots are the named regions of cockpit/1. RailWide replaces Rail from 1700 px (two columns); PhoneTabs are the
+// tabs under 700 px. Unknown holds slot names this version does not have (Check refuses them, the loader ignores them).
+type LayoutSlots struct {
+	Band      idList            `json:"band"`
+	Stage     idList            `json:"stage"`
+	Strip     idList            `json:"strip"`
+	Rail      idList            `json:"rail"`
+	RailWide  *LayoutRailWide   `json:"railWide,omitempty"`
+	PhoneTabs map[string]idList `json:"phoneTabs,omitempty"`
+	Unknown   []string          `json:"-"`
+}
+
+type LayoutRailWide struct {
+	Left  idList `json:"left"`
+	Right idList `json:"right"`
+}
+
+// LayoutSizes: the strip height and the rail's least width, in px.
+type LayoutSizes struct {
+	Strip   int `json:"strip,omitempty"`
+	RailMin int `json:"railMin,omitempty"`
+}
+
+var layoutSlotNames = []string{"band", "stage", "strip", "rail", "railWide", "phoneTabs"}
+
+func (s *LayoutSlots) UnmarshalJSON(b []byte) error {
+	type plain LayoutSlots
+	if err := json.Unmarshal(b, (*plain)(s)); err != nil {
+		return err
+	}
+	var raw map[string]json.RawMessage
+	if err := json.Unmarshal(b, &raw); err != nil {
+		return err
+	}
+	s.Unknown = nil
+	for k := range raw {
+		if !containsStr(layoutSlotNames, k) {
+			s.Unknown = append(s.Unknown, k)
+		}
+	}
+	sort.Strings(s.Unknown)
+	return nil
+}
+
+// ids lists every panel id a cockpit names, in slot order.
+func (s *LayoutSlots) ids() []string {
+	var out []string
+	out = append(out, s.Band...)
+	out = append(out, s.Stage...)
+	out = append(out, s.Strip...)
+	out = append(out, s.Rail...)
+	if s.RailWide != nil {
+		out = append(out, s.RailWide.Left...)
+		out = append(out, s.RailWide.Right...)
+	}
+	tabs := make([]string, 0, len(s.PhoneTabs))
+	for n := range s.PhoneTabs {
+		tabs = append(tabs, n)
+	}
+	sort.Strings(tabs)
+	for _, n := range tabs {
+		out = append(out, s.PhoneTabs[n]...)
+	}
+	return out
+}
+
+// CheckSlots is the strict check of a cockpit file: the template is known, no unknown slot name, every id a panel
+// that fits a slot (slotOK) or an id that is not built yet (known says so, slotOK too), sizes in range. A file without
+// a template has nothing to check.
+func (l LayoutManifest) CheckSlots(slotOK func(id string) bool) error {
+	if l.Template == "" {
+		if l.Slots != nil {
+			return errors.New("layout: slots without a template")
+		}
+		return nil
+	}
+	if l.Template != cockpitTemplate {
+		return fmt.Errorf("layout: unknown template %q (this version reads %s)", l.Template, cockpitTemplate)
+	}
+	if l.Slots == nil || len(l.Slots.Stage) != 1 {
+		return errors.New("layout: a cockpit has exactly one stage panel")
+	}
+	if len(l.Slots.Unknown) > 0 {
+		return fmt.Errorf("layout: unknown slot %q (slots are %s)", l.Slots.Unknown[0], strings.Join(layoutSlotNames, ", "))
+	}
+	// three arrangements of the same panels: the page (band, stage, strip, rail), the wide page (railWide instead of
+	// rail) and the phone tabs; a panel stands once in each
+	pools := map[string][]string{"band": l.Slots.Band, "stage": l.Slots.Stage, "strip": l.Slots.Strip, "rail": l.Slots.Rail}
+	arr := map[string][]string{"page": {"band", "stage", "strip", "rail"}}
+	if rw := l.Slots.RailWide; rw != nil {
+		pools["railWide.left"], pools["railWide.right"] = rw.Left, rw.Right
+		arr["wide"] = []string{"band", "stage", "strip", "railWide.left", "railWide.right"}
+	}
+	for n, ids := range l.Slots.PhoneTabs {
+		pools["phoneTabs."+n] = ids
+		arr["tabs"] = append(arr["tabs"], "phoneTabs."+n)
+	}
+	for _, w := range sortedKeys(pools) {
+		for _, id := range pools[w] {
+			if id == "" || strings.ContainsAny(id, " /") {
+				return fmt.Errorf("layout slot %s: bad panel id %q", w, id)
+			}
+			if !slotOK(id) {
+				return fmt.Errorf("layout slot %s: %q is not a panel that fits a slot (manifest slot: true)", w, id)
+			}
+		}
+	}
+	for _, name := range sortedKeys(arr) {
+		seen := map[string]string{}
+		sort.Strings(arr[name])
+		for _, w := range arr[name] {
+			for _, id := range pools[w] {
+				if other, dup := seen[id]; dup {
+					return fmt.Errorf("layout slot %s: %q is also in %s", w, id, other)
+				}
+				seen[id] = w
+			}
+		}
+	}
+	z := l.Sizes
+	if z.Strip != 0 && (z.Strip < 48 || z.Strip > 240) || z.RailMin != 0 && (z.RailMin < 240 || z.RailMin > 800) {
+		return fmt.Errorf("layout sizes: strip %d (48 to 240) or railMin %d (240 to 800) out of range", z.Strip, z.RailMin)
+	}
+	return nil
 }
 
 // LayoutStatus is one entry of the layout's "status" list: a bare panel id, or {id, fallback}. An entry whose id is not
@@ -178,6 +329,15 @@ func (l LayoutManifest) Check(known func(id string) bool) error {
 	return nil
 }
 
+func sortedKeys[V any](m map[string]V) []string {
+	out := make([]string, 0, len(m))
+	for k := range m {
+		out = append(out, k)
+	}
+	sort.Strings(out)
+	return out
+}
+
 // checkIDFallback: an id must be known unless the entry names a fallback (a new tile that is not built yet); a
 // fallback must be known itself.
 func checkIDFallback(where, id, fallback string, known func(string) bool) error {
@@ -206,6 +366,9 @@ type LayoutConf struct {
 	Reserved []string          `json:"reserved"`
 	// Fit are the pre-shell cards whose rows follow their content (the panels say so in panel.json).
 	Fit []string `json:"fit,omitempty"`
+	// Slot are panels that fit a cockpit slot though their own panel.json does not say slot: true yet (the panel
+	// directories belong to other slices); a manifest key and this list mean the same.
+	Slot []string `json:"slot,omitempty"`
 }
 
 var shellLayoutConf = sync.OnceValues(func() (LayoutConf, error) {
