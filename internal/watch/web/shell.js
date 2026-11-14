@@ -143,7 +143,7 @@ function makeSlotRoot(m) {
   root.dataset.size = m.size;
   root.dataset.tab = m.tab;
   root.dataset.state = 'loading';
-  root.dataset.slotpanel = m.band === 'status' ? 'band' : 'slot';
+  root.dataset.cockpitPanel = m.band === 'status' ? 'band' : 'slot';
   root.setAttribute('aria-label', m.title);
   const body = el('div', 'd-slotbody'), labels = el('div', 'd-slotlabels');
   const meta = el('span', 'meta'), actions = el('span', 'd-btngroup');
@@ -175,6 +175,7 @@ function syncBand(band) {
 // In a cockpit column the last panel that shows takes the rest of the height (rows "auto, auto, 1fr"); a hidden
 // panel (Needs you with nothing to say) takes none.
 function growLast(col) {
+  if (col.dataset.nogrow) { for (const n of col.children) delete n.dataset.grow; return; }
   const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden);
   for (const n of col.children) delete n.dataset.grow;
   if (shown.length) shown[shown.length - 1].dataset.grow = '1';
@@ -478,12 +479,12 @@ const ck = { layout: null, roots: new Map(), plan: null, sig: '', tab: '', main:
 
 function ckSlot(name, cls) {
   const n = el('div', cls || '');
-  n.dataset.slot = name;
+  n.dataset.cockpitSlot = name;
   return n;
 }
 
 function applyCockpit() {
-  const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id));
+  const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id), window.innerHeight);
   if (!p) return;
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
@@ -492,10 +493,10 @@ function applyCockpit() {
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
   main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
   if (!p.tabs.some((t) => t.name === ck.tab)) ck.tab = p.tabs.length ? p.tabs[0].name : '';
-  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.rail, p.tabs, ck.tab]);
+  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.top, p.rail, p.tabs, ck.tab]);
   if (sig === ck.sig) return;
   ck.sig = sig;
-  main.querySelectorAll(':scope > [data-slot]').forEach((n) => n.remove());
+  main.querySelectorAll(':scope > [data-cockpit-slot]').forEach((n) => n.remove());
   const put = (box, ids) => ids.forEach((id) => box.appendChild(ck.roots.get(id)));
   const bandMain = shell.querySelector('.d-band-status .d-band-main');
   if (bandMain) {
@@ -504,9 +505,17 @@ function applyCockpit() {
   }
   if (p.stage) { const s = ckSlot('stage'); put(s, [p.stage]); main.appendChild(s); }
   if (p.strip.length) { const s = ckSlot('strip'); put(s, p.strip); main.appendChild(s); }
-  if (p.rail.length) {
+  if (p.rail.length || p.top.length) {
     const r = ckSlot('rail');
     r.dataset.cols = String(p.rail.length);
+    if (p.top.length) {
+      const t = el('div', 'd-slotcol d-slottop');
+      r.dataset.top = '1';
+      if (p.rail.length) t.dataset.nogrow = '1'; // the columns under it take the rest
+      put(t, p.top);
+      growLast(t);
+      r.appendChild(t);
+    }
     for (const ids of p.rail) { const c = el('div', 'd-slotcol'); put(c, ids); growLast(c); r.appendChild(c); }
     main.appendChild(r);
   }
@@ -536,7 +545,7 @@ function setupCockpit(sel, answerBase, roots, slotList) {
   if (!ck.main || !ck.shell) return;
   ck.shell.dataset.template = ck.main.dataset.template = 'cockpit';
   const head = ck.shell.querySelector('.d-band-status');
-  if (head) head.dataset.slot = 'band';
+  if (head) head.dataset.cockpitSlot = 'band';
   applyCockpit();
   window.addEventListener('resize', () => applyCockpit());
   const btn = document.getElementById('btn-layout');

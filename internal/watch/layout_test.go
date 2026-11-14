@@ -673,7 +673,7 @@ func TestTemplatelessLayoutsRenderTheSameCells(t *testing.T) {
 		if err != nil {
 			t.Fatal(err)
 		}
-		if l, err := ParseLayout(b); err != nil || l.Template != "" || l.Slots != nil {
+		if l, err := ParseLayout(b); err != nil || l.Template != "" || len(l.Slots) > 0 {
 			t.Errorf("%s: template %q slots %v err %v", f, l.Template, l.Slots, err)
 		}
 	}
@@ -716,8 +716,9 @@ func TestShippedCockpitLayout(t *testing.T) {
 	if err := l.CheckSlots(ok); err != nil {
 		t.Error(err)
 	}
-	if l.Template != "cockpit/1" || l.Slots == nil || len(l.Slots.Stage) != 1 || l.Slots.RailWide == nil || len(l.Slots.PhoneTabs) != 3 {
-		t.Errorf("cockpit.json: %+v", l)
+	sl, _, err := l.Cockpit()
+	if err != nil || l.Template != "cockpit/1" || sl == nil || len(sl.Stage) != 1 || sl.RailWide == nil || len(sl.PhoneTabs) != 3 || len(sl.RailWide.Top) != 2 {
+		t.Errorf("cockpit.json: %+v %v", sl, err)
 	}
 	if len(l.Breakpoints["wide"].Panels) == 0 || len(l.Breakpoints["phone"].Panels) == 0 {
 		t.Error("cockpit.json has no old-style breakpoints for older shells")
@@ -736,39 +737,71 @@ func TestShippedCockpitLayout(t *testing.T) {
 
 func TestParseCockpitKeys(t *testing.T) {
 	base := `{"schema":"watch.layout/1","cols":12,"rowHeight":48,"breakpoints":{},"template":"cockpit/1","sizes":{"strip":100,"railMin":420},"slots":%s}`
-	parse := func(slots string) (LayoutManifest, error) { return ParseLayout([]byte(fmt.Sprintf(base, slots))) }
-	l, err := parse(`{"band":["a"],"stage":"video","strip":["b","c"],"rail":["d"],"railWide":{"left":["d"],"right":["e"]},"phoneTabs":{"T":["d"]}}`)
-	if err != nil || l.Template != "cockpit/1" || len(l.Slots.Stage) != 1 || l.Slots.Stage[0] != "video" || len(l.Slots.Strip) != 2 || l.Sizes.RailMin != 420 || l.Slots.RailWide.Right[0] != "e" {
-		t.Fatalf("%+v %v", l, err)
+	parse := func(slots string) (LayoutManifest, *LayoutSlots, LayoutSizes, error) {
+		l, err := ParseLayout([]byte(fmt.Sprintf(base, slots)))
+		if err != nil {
+			return l, nil, LayoutSizes{}, err
+		}
+		sl, z, err := l.Cockpit()
+		return l, sl, z, err
+	}
+	l, sl, z, err := parse(`{"band":["a"],"stage":"video","strip":["b","c"],"rail":["d"],"railWide":{"top":["t"],"left":["d"],"right":["e"]},"phoneTabs":{"T":["d"]}}`)
+	if err != nil || l.Template != "cockpit/1" || len(sl.Stage) != 1 || sl.Stage[0] != "video" || len(sl.Strip) != 2 || z.RailMin != 420 || sl.RailWide.Right[0] != "e" || sl.RailWide.Top[0] != "t" {
+		t.Fatalf("%+v %v", sl, err)
 	}
 	all := func(string) bool { return true }
 	if err := l.CheckSlots(all); err != nil {
 		t.Error(err)
 	}
 	// the loader ignores a slot name it does not know (a later version), the strict check refuses it
-	l, err = parse(`{"stage":"video","dock":["x"]}`)
-	if err != nil || len(l.Slots.Unknown) != 1 {
-		t.Fatalf("%+v %v", l, err)
+	l, sl, _, err = parse(`{"stage":"video","dock":["x"]}`)
+	if err != nil || len(sl.Unknown) != 1 {
+		t.Fatalf("%+v %v", sl, err)
 	}
 	if l.CheckSlots(all) == nil {
 		t.Error("an unknown slot name passed the check")
 	}
-	// a panel that does not fit a slot, a second stage panel, a panel twice in one arrangement, a size out of range
-	l, _ = parse(`{"stage":"video","rail":["card"]}`)
+	l, _, _, _ = parse(`{"stage":"video","rail":["card"]}`)
 	if err := l.CheckSlots(func(id string) bool { return id != "card" }); err == nil || !strings.Contains(err.Error(), "card") {
 		t.Errorf("a non-slot panel: %v", err)
 	}
-	l, _ = parse(`{"stage":["video","map"]}`)
+	l, _, _, _ = parse(`{"stage":["video","map"]}`)
 	if l.CheckSlots(all) == nil {
 		t.Error("two stage panels passed")
 	}
-	l, _ = parse(`{"stage":"video","band":["a"],"strip":["a"]}`)
+	l, _, _, _ = parse(`{"stage":"video","band":["a"],"strip":["a"]}`)
 	if l.CheckSlots(all) == nil {
 		t.Error("a panel twice in the page passed")
+	}
+	l, _, _, _ = parse(`{"stage":"video","railWide":{"top":["a"],"left":["a"]}}`)
+	if l.CheckSlots(all) == nil {
+		t.Error("a panel twice in the wide page passed")
 	}
 	l, _ = ParseLayout([]byte(`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","sizes":{"strip":7},"slots":{"stage":"video"}}`))
 	if l.CheckSlots(all) == nil {
 		t.Error("strip 7 passed")
+	}
+	// a file of a later version loads, is stored and served back byte for byte; only the strict check says no
+	for _, f := range []string{
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/2","slots":{"stage":{"id":"video"}},"sizes":{"strip":"12%"}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","slots":["video"],"sizes":{"strip":"12%"}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1.2","slots":{"stage":"video","rail":[{"id":"x"}]},"future":{"a":1}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","slots":{"stage":"video","rail":[{"id":"x"}]}}`,
+	} {
+		l, err := ParseLayout([]byte(f))
+		if err != nil {
+			t.Errorf("%s: the loader refused it: %v", f, err)
+			continue
+		}
+		if l.CheckSlots(all) == nil {
+			t.Errorf("%s: the strict check passed it", f)
+		}
+		p := filepath.Join(t.TempDir(), "layout.json")
+		os.WriteFile(p, []byte(f), 0o644)
+		st := &layoutStore{path: p}
+		if got, err := st.load(); err != nil || !st.stored || string(got) != f {
+			t.Errorf("%s: a stored file of a later version was not served back as it is (stored %v, %v)", f, st.stored, err)
+		}
 	}
 	// an unknown template is read as a plain layout (ignored), refused only by the strict check
 	l, err = ParseLayout([]byte(`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/9"}`))

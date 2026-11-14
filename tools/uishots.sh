@@ -39,20 +39,28 @@ if [ "$fit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/fit-*
 	# the full-screen sizes, the browser-window sizes (a window with its chrome is shorter than the screen) and the phone
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
+	# name, query, and an optional selector to press before the second measurement (the "..." sheet must be hittable)
 	pages="cockpit watch?layout=cockpit&theme=dark
+cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 demo-needs0 watch?layout=cockpit-demo&theme=dark&needs=0
 demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
 demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
-demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=3&orders=20
+demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=0&orders=20
+demo-menu watch?layout=cockpit-demo&theme=dark #btn-more
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
-overflow-classic watch?layout=classic&theme=dark"
-	echo "$pages" | while read -r pname pq; do
+overflow-nested watch?layout=cockpit-nested&theme=dark
+overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
+overflow-classic watch?layout=classic&theme=dark
+blank-rail watch?layout=cockpit-blank&theme=dark
+tall-frame watch?layout=cockpit-tall&theme=dark"
+	echo "$pages" | while read -r pname pq pclick; do
 		for sz in $sizes; do
-			w=${sz%x*} h=${sz#*x}
+			w=${sz%x*} h=${sz#*x} ck=
+			[ -n "$pclick" ] && ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g')"
 			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h" >"$out/fit-$pname-$sz.html" 2>/dev/null
+				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >"$out/fit-$pname-$sz.html" 2>/dev/null
 			rm -rf "${prof:?}"
 		done
 	done

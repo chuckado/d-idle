@@ -23,13 +23,15 @@
       "zone-map"
     ],
     "railWide": {
-      "left": [
+      "top": [
         "needs-you",
-        "orders",
-        "area-map"
+        "orders"
+      ],
+      "left": [
+        "zone-map"
       ],
       "right": [
-        "zone-map"
+        "area-map"
       ]
     },
     "phoneTabs": {

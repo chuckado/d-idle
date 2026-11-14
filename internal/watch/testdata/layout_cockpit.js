@@ -26,7 +26,8 @@ assert.strictEqual(p.has, 'str');
 eq(p.sizes, { strip: 112, railMin: 400 });
 eq(p.tabs, []);
 p = L.cockpitPlan(file, 1920, '', all);
-eq(p.rail, [['needs-you', 'orders', 'area-map'], ['zone-map']]);
+eq(p.top, ['needs-you', 'orders']);
+eq(p.rail, [['zone-map'], ['area-map']]);
 p = L.cockpitPlan(file, 390, '', all);
 eq(p.tabs.map((t) => t.name), ['Orders', 'Map', 'Progress']);
 eq(p.strip, []); eq(p.rail, []);
@@ -42,8 +43,20 @@ p = L.cockpitPlan(file, 390, '', today);
 assert.strictEqual(p.has, 's'); eq(p.tabs, []);
 // a column that is empty on the wide page leaves the other one alone
 p = L.cockpitPlan(file, 1920, '', (id) => id === 'video' || id === 'zone-map');
-eq(p.rail, [['zone-map']]);
+eq(p.top, []); eq(p.rail, [['zone-map']]);
 assert.strictEqual(p.has, 'sr');
+// only the top panels: the rail is them alone
+p = L.cockpitPlan(file, 1920, '', (id) => id === 'video' || id === 'orders');
+eq(p.top, ['orders']); eq(p.rail, []); assert.strictEqual(p.has, 'sr');
+
+// a short window (under 760 px high, not a phone) has a strip of at most 92 px; the layout's own size is kept otherwise
+eq(L.cockpitPlan(file, 1536, '', all, 730).sizes.strip, 92);
+eq(L.cockpitPlan(file, 1280, '', all, 620).sizes.strip, 92);
+eq(L.cockpitPlan(file, 1366, '', all, 768).sizes.strip, 112);
+eq(L.cockpitPlan(file, 1440, '', all, 900).sizes.strip, 112);
+eq(L.cockpitPlan(file, 390, '', all, 600).sizes.strip, 112);
+const small = JSON.parse(JSON.stringify(file)); small.sizes.strip = 80;
+eq(L.cockpitPlan(small, 1280, '', all, 620).sizes.strip, 80, 'a strip smaller than 92 stays');
 
 // sizes: defaults, clamped to the limits, set by the editor inside them
 eq(L.cockpitSizes({}), { strip: 112, railMin: 400 });
@@ -56,7 +69,7 @@ eq(file.sizes, { strip: 112, railMin: 400 }, 'the layout it started from is not 
 let sw = L.cockpitSwap(file, 'progress', 'orders');
 eq(sw.slots.strip, ['orders', 'journey-strip', 'health']);
 eq(sw.slots.rail, ['needs-you', 'progress', 'zone-map']);
-eq(sw.slots.railWide.left, ['needs-you', 'progress', 'area-map']);
+eq(sw.slots.railWide.top, ['needs-you', 'progress']);
 eq(sw.slots.phoneTabs.Orders, ['needs-you', 'progress']);
 eq(sw.slots.phoneTabs.Progress, ['orders', 'journey-strip', 'health']);
 eq(L.cockpitSwap(sw, 'progress', 'orders'), file, 'swapping back restores the file');
@@ -79,7 +92,9 @@ eq(p.sizes, { strip: 140, railMin: 480 });
 const list = [{ id: 'video', slot: true, band: 'stage' }, { id: 'hero-meters', slot: true, band: 'status' }, { id: 'hero-status', band: 'status' }, { id: 'map', band: 'side' },
   { id: 'orders', slot: true, optIn: true, band: 'side' }, { id: 'unused', slot: true, band: 'side' }];
 eq(L.selectPanels(list, file, '').map((m) => m.id), ['video', 'hero-meters', 'orders']);
-// the OBS strip is not a cockpit: the page's own band, and the usual rules
-eq(L.selectPanels(list, file, 'overlay').map((m) => m.id), ['video', 'hero-meters', 'hero-status', 'map', 'orders', 'unused']);
+// the OBS strip is not a cockpit: under a cockpit it mounts exactly what it mounts under Classic (no opt-in panel of a slot)
+const classic = JSON.parse(fs.readFileSync(process.argv[3].replace('cockpit.json', 'classic.json'), 'utf8'));
+eq(L.selectPanels(list, file, 'overlay').map((m) => m.id), L.selectPanels(list, classic, 'overlay').map((m) => m.id));
+assert.ok(!L.selectPanels(list, file, 'overlay').some((m) => m.id === 'orders'));
 eq(L.cockpitIds(file).size > 8, true);
 console.log('layout_cockpit ok');

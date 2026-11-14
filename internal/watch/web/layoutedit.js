@@ -314,7 +314,7 @@ export function startCockpit(api) {
       grip.setPointerCapture(ev.pointerId);
       drag = { id, over: '' };
       root.dataset.ckdrag = '1';
-      const at = (e) => { const n = document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.dataset && x.dataset.slotpanel && x.dataset.panel !== id); return n ? n.dataset.panel : ''; };
+      const at = (e) => { const n = document.elementsFromPoint(e.clientX, e.clientY).find((x) => x.dataset && x.dataset.cockpitPanel && x.dataset.panel !== id); return n ? n.dataset.panel : ''; };
       const mv = (e) => {
         const o = at(e);
         if (o === drag.over) return;
@@ -353,7 +353,7 @@ export function startCockpit(api) {
     if (w) d.style.setProperty('--ck-w', w + 'px');
     if (h) d.style.setProperty('--ck-h', h + 'px');
   };
-  const slotEl = (n) => main.querySelector(':scope > [data-slot="' + n + '"]');
+  const slotEl = (n) => main.querySelector(':scope > [data-cockpit-slot="' + n + '"]');
   const rel = (r) => { const m = main.getBoundingClientRect(); return { l: r.left - m.left, t: r.top - m.top, w: r.width, h: r.height, r: r.right - m.left, b: r.bottom - m.top }; };
   function paint() {
     // tags follow the tiles: a tile that stands on the page gets one, a tile that left loses it

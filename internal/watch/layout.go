@@ -39,9 +39,32 @@ type LayoutManifest struct {
 	// Template and Slots turn the file into a viewport-filling cockpit (docs/ui/redesign-2026-11-14/J-second-attempt.md
 	// section 3). Additive: a reader that does not know them lays out Breakpoints, and a file without a template is
 	// laid out exactly as before.
-	Template string       `json:"template,omitempty"`
-	Slots    *LayoutSlots `json:"slots,omitempty"`
-	Sizes    LayoutSizes  `json:"sizes,omitempty"`
+	// Slots and Sizes stay raw: a file of a later version (other template, other shapes) must load and be stored as it
+	// is, so they are decoded only for template cockpit/1, by Cockpit (and so by the strict check, never by ParseLayout).
+	Template string          `json:"template,omitempty"`
+	Slots    json.RawMessage `json:"slots,omitempty"`
+	Sizes    json.RawMessage `json:"sizes,omitempty"`
+}
+
+// Cockpit decodes the slots and sizes of a cockpit/1 file; a file with another template has none (nil, no error).
+func (l LayoutManifest) Cockpit() (*LayoutSlots, LayoutSizes, error) {
+	var z LayoutSizes
+	if l.Template != cockpitTemplate {
+		return nil, z, nil
+	}
+	if len(l.Slots) == 0 {
+		return nil, z, nil
+	}
+	var s LayoutSlots
+	if err := json.Unmarshal(l.Slots, &s); err != nil {
+		return nil, z, fmt.Errorf("layout slots: %w", err)
+	}
+	if len(l.Sizes) > 0 {
+		if err := json.Unmarshal(l.Sizes, &z); err != nil {
+			return nil, z, fmt.Errorf("layout sizes: %w", err)
+		}
+	}
+	return &s, z, nil
 }
 
 const cockpitTemplate = "cockpit/1"
@@ -75,7 +98,10 @@ type LayoutSlots struct {
 	Unknown   []string          `json:"-"`
 }
 
+// LayoutRailWide is the rail from 1700 px (the accepted renders): Top across the whole rail, under it Left (1.7 parts) and
+// Right (1 part) side by side. Top is optional.
 type LayoutRailWide struct {
+	Top   idList `json:"top,omitempty"`
 	Left  idList `json:"left"`
 	Right idList `json:"right"`
 }
@@ -115,6 +141,7 @@ func (s *LayoutSlots) ids() []string {
 	out = append(out, s.Strip...)
 	out = append(out, s.Rail...)
 	if s.RailWide != nil {
+		out = append(out, s.RailWide.Top...)
 		out = append(out, s.RailWide.Left...)
 		out = append(out, s.RailWide.Right...)
 	}
@@ -134,7 +161,7 @@ func (s *LayoutSlots) ids() []string {
 // a template has nothing to check.
 func (l LayoutManifest) CheckSlots(slotOK func(id string) bool) error {
 	if l.Template == "" {
-		if l.Slots != nil {
+		if len(l.Slots) > 0 {
 			return errors.New("layout: slots without a template")
 		}
 		return nil
@@ -142,21 +169,25 @@ func (l LayoutManifest) CheckSlots(slotOK func(id string) bool) error {
 	if l.Template != cockpitTemplate {
 		return fmt.Errorf("layout: unknown template %q (this version reads %s)", l.Template, cockpitTemplate)
 	}
-	if l.Slots == nil || len(l.Slots.Stage) != 1 {
+	sl, z, err := l.Cockpit()
+	if err != nil {
+		return err
+	}
+	if sl == nil || len(sl.Stage) != 1 {
 		return errors.New("layout: a cockpit has exactly one stage panel")
 	}
-	if len(l.Slots.Unknown) > 0 {
-		return fmt.Errorf("layout: unknown slot %q (slots are %s)", l.Slots.Unknown[0], strings.Join(layoutSlotNames, ", "))
+	if len(sl.Unknown) > 0 {
+		return fmt.Errorf("layout: unknown slot %q (slots are %s)", sl.Unknown[0], strings.Join(layoutSlotNames, ", "))
 	}
 	// three arrangements of the same panels: the page (band, stage, strip, rail), the wide page (railWide instead of
 	// rail) and the phone tabs; a panel stands once in each
-	pools := map[string][]string{"band": l.Slots.Band, "stage": l.Slots.Stage, "strip": l.Slots.Strip, "rail": l.Slots.Rail}
+	pools := map[string][]string{"band": sl.Band, "stage": sl.Stage, "strip": sl.Strip, "rail": sl.Rail}
 	arr := map[string][]string{"page": {"band", "stage", "strip", "rail"}}
-	if rw := l.Slots.RailWide; rw != nil {
-		pools["railWide.left"], pools["railWide.right"] = rw.Left, rw.Right
-		arr["wide"] = []string{"band", "stage", "strip", "railWide.left", "railWide.right"}
+	if rw := sl.RailWide; rw != nil {
+		pools["railWide.top"], pools["railWide.left"], pools["railWide.right"] = rw.Top, rw.Left, rw.Right
+		arr["wide"] = []string{"band", "stage", "strip", "railWide.top", "railWide.left", "railWide.right"}
 	}
-	for n, ids := range l.Slots.PhoneTabs {
+	for n, ids := range sl.PhoneTabs {
 		pools["phoneTabs."+n] = ids
 		arr["tabs"] = append(arr["tabs"], "phoneTabs."+n)
 	}
@@ -182,7 +213,6 @@ func (l LayoutManifest) CheckSlots(slotOK func(id string) bool) error {
 			}
 		}
 	}
-	z := l.Sizes
 	if z.Strip != 0 && (z.Strip < 48 || z.Strip > 240) || z.RailMin != 0 && (z.RailMin < 240 || z.RailMin > 800) {
 		return fmt.Errorf("layout sizes: strip %d (48 to 240) or railMin %d (240 to 800) out of range", z.Strip, z.RailMin)
 	}

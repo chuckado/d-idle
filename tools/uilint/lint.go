@@ -383,8 +383,9 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
-	OptIn       bool    `json:"optIn"` // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
-	Slot        bool    `json:"slot"`  // renders into a fixed box and may sit in a cockpit slot (S1b)
+	OptIn       bool    `json:"optIn"`  // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	Slot        bool    `json:"slot"`   // renders into a fixed box and may sit in a cockpit slot (S1b)
+	Scroll      bool    `json:"scroll"` // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`
@@ -456,6 +457,9 @@ func (l *Linter) lintManifests(files []string) {
 		}
 		seen[m.ID] = f
 		slots[m.ID] = m.Slot
+		if m.Scroll && !m.Slot {
+			l.add(f, 1, "manifest-schema", "scroll: true on a panel that is not a slot panel")
+		}
 		lo, sz, hi := sizes[m.MinSize], sizes[m.Size], sizes[m.MaxSize]
 		if m.MinSize == "" {
 			lo = sz

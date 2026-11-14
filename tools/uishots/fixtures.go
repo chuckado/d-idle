@@ -35,15 +35,28 @@ var fxPanels = []fxPanel{
 	{"fx-progress", "Progress", `ctx.body.append(ctx.el('div', 'row', 'Progress  level 7'), ctx.el('div', 'row', 'to 10 in 25 min'), ctx.el('div', 'row', 'xp/h 12.4k  gold/h 2.1k'));`},
 	{"fx-journey", "Journey", `ctx.body.append(ctx.el('div', 'row', 'Journey  chapter 3 of 9'), ctx.el('div', 'row', 'Blood Raven: too early for this hero, a long line that is cut'));`},
 	{"fx-health", "Health", `ctx.body.append(ctx.el('div', 'row', 'Health'), ctx.el('div', 'row', 'Life ok  Gear ok  Ready ok'));`},
+	{"fx-area", "Area", `ctx.body.append(ctx.el('div', 'row', 'Area map'), ctx.el('div', 'row', 'Cold Plains, the hero is here'));`},
+	// the crafted pages the check must fail (docs/ui/redesign-2026-11-14/reviews/s1b-review.md): content cut one level below
+	// the panel root, a data-scroll that does not scroll, a slot whose only panel is hidden, a frame taller than the window
+	{"fx-nested", "Nested", `const box = ctx.el('div', 'nest'); for (let i = 0; i < 60; i++) box.append(ctx.el('div', 'row', 'row ' + i + ' in a box that cuts')); ctx.body.append(box);`},
+	{"fx-fakescroll", "Fake scroll", `const box = ctx.el('div', 'fake'); box.dataset.scroll = '1'; for (let i = 0; i < 60; i++) box.append(ctx.el('div', 'row', 'row ' + i + ' under a data-scroll that does not scroll')); ctx.body.append(box);`},
+	{"fx-blank", "Blank", `ctx.hide(true);`},
+	{"fx-tall", "Tall", `ctx.body.append(ctx.el('div', 'row', 'a frame taller than the window'));`},
 	// not a stand-in: a panel that overflows its box on purpose, for the fixture the fit check must fail
 	{"fx-overflow", "Overflow", `for (let i = 0; i < 60; i++) ctx.body.append(ctx.el('div', 'row', 'row ' + i + ' of a panel with no height of its own'));`},
 }
 
-const fxCSS = `@layer panels {
+const fxCSS = `/* unlayered on purpose: the tall-frame fixture must beat the shell's layer */
+.d-main[data-template="cockpit"]:has([data-panel="fx-tall"]) { block-size: 130dvh !important; }
+@layer panels {
   [data-panel^="fx-"] .row { min-block-size: 28px; line-height: 28px; font-size: var(--d-fs-1); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   [data-panel^="fx-"] .row.line, [data-panel^="fx-"] .row.verbs { display: flex; align-items: center; gap: var(--d-sp-2); line-height: normal; }
   [data-panel^="fx-"] .row .txt { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  [data-cockpit-slot="strip"] [data-panel^="fx-"] .row { min-block-size: 24px; line-height: 24px; }
+  [data-panel="fx-nested"] .nest { block-size: 100%; overflow: hidden; }
+  [data-panel="fx-nested"] .d-slotbody { overflow: hidden; }
   [data-panel="fx-orders"] .d-slotbody { display: flex; flex-direction: column; }
+  [data-panel="fx-orders"] .row { flex: none; }
   [data-panel="fx-orders"] .list { overflow: auto; min-block-size: 0; }
   [data-panel="fx-map"] .d-slotbody { display: flex; flex-direction: column; }
   [data-panel="fx-map"] .zones { flex: 1 1 0; min-block-size: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(10, minmax(0, 1fr)); gap: 2px; }
@@ -51,15 +64,17 @@ const fxCSS = `@layer panels {
 }
 `
 
-// fxLayout is a cockpit layout over the fixture panels; overflow puts the overflowing one in the rail.
-func fxLayout(overflow bool) map[string]any {
+// fxLayout is a cockpit layout over the fixture panels. Names: "" the demo, "overflow" the panel with no height of its own,
+// and the crafted pages of the review, each with its one panel in every arrangement so every width has the fault.
+func fxLayout(name string) map[string]any {
 	rail := []string{"fx-needs", "fx-orders", "fx-map"}
-	wide := map[string]any{"left": []string{"fx-needs", "fx-orders"}, "right": []string{"fx-map"}}
+	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"fx-area"}}
 	tabs := map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}}
-	if overflow { // the same panel in every arrangement, so every width has the overflow
-		rail = []string{"fx-overflow"}
-		wide = map[string]any{"left": []string{"fx-overflow"}, "right": []string{}}
-		tabs = map[string]any{"Overflow": []string{"fx-overflow"}}
+	if name != "" {
+		one := "fx-" + name
+		rail = []string{one}
+		wide = map[string]any{"top": []string{one}, "left": []string{}, "right": []string{}}
+		tabs = map[string]any{"Fault": []string{one}}
 	}
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
@@ -89,8 +104,16 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			framedPage(h, w, r)
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)
-		case p == "/watch/layouts/cockpit-demo.json" || p == "/watch/layouts/cockpit-overflow.json":
-			js(w, fxLayout(strings.HasSuffix(p, "overflow.json")))
+		case strings.HasPrefix(p, "/watch/layouts/cockpit-") && strings.HasSuffix(p, ".json"):
+			name := strings.TrimSuffix(strings.TrimPrefix(p, "/watch/layouts/cockpit-"), ".json")
+			if name == "demo" {
+				name = ""
+			}
+			if name != "" && byID["fx-"+name].id == "" {
+				http.NotFound(w, r)
+				return
+			}
+			js(w, fxLayout(name))
 		case p == "/watch/panels.json":
 			rec := httptest.NewRecorder()
 			h.ServeHTTP(rec, r)
@@ -103,7 +126,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			list, _ := v["panels"].([]any)
 			for _, f := range fxPanels {
 				list = append(list, map[string]any{"schema": "watch.panel/1", "version": 1, "id": f.id, "title": f.title, "band": "side", "size": "s",
-					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true,
+					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true, "scroll": f.id == "fx-orders" || f.id == "fx-fakescroll",
 					"owner": "uishots", "doc": "docs/ui-regression-plan.md"})
 			}
 			v["panels"] = list
