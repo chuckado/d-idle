@@ -79,7 +79,7 @@ const charPage = `<!DOCTYPE html>
 <link rel="stylesheet" href="/watch/tokens.css"><link rel="stylesheet" href="/watch/reset.css"><link rel="stylesheet" href="/watch/shell.css">
 <link rel="stylesheet" href="/watch/components.css"><link rel="stylesheet" href="/watch/inventory.css"><link rel="stylesheet" href="/watch/utilities.css">
 <link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/inventory-actions.css"><link rel="stylesheet" href="/watch/inventory-merc.css"><link rel="stylesheet" href="/watch/inventory-sets.css"><link rel="stylesheet" href="/watch/inventory-canvas.css">
-</head><body data-canvas>
+</head><body class="cv-root" data-canvas>
 <div class="d-shell cv" id="cv" data-tab="hero">
 <header class="top d-band-status" data-band="status" data-cockpit-slot="band">
  <div class="d-brand"><span class="d-brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>

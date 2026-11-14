@@ -13,7 +13,7 @@
     display: grid; grid-template-rows: var(--cv-band) var(--cv-bar) var(--cv-tabs) minmax(0, 1fr); gap: 0; padding: 0;
     block-size: 100dvh; min-block-size: 0; overflow: hidden; background: var(--d-bg); }
   /* the frame's width class is a container query on the page body (a container cannot restyle itself) */
-  body[data-canvas] { container: cv / size; block-size: 100dvh; margin: 0; overflow: hidden; }
+  .cv-root { container: cv / size; block-size: 100dvh; margin: 0; overflow: hidden; }
   .cv > .d-band-status { position: static; box-sizing: border-box; block-size: var(--cv-band); padding-block: 0; grid-template-rows: 100%; }
   .cv > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
   .cv > .d-band-status .d-links { flex-wrap: nowrap; }
