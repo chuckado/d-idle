@@ -42,6 +42,11 @@ if [ "$fit" = 1 ]; then
 	# name, query, and an optional selector to press before the second measurement (the "..." sheet must be hittable)
 	pages="cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
+orders-eight watch?layout=cockpit&theme=dark&cmd=eight
+orders-empty watch?layout=cockpit&theme=dark&cmd=empty
+orders-safety watch?layout=cockpit&theme=dark&cmd=safety
+orders-blocked watch?layout=cockpit&theme=dark&cmd=blocked
+orders-all watch?layout=cockpit&theme=dark&cmd=cancel-all
 demo-needs0 watch?layout=cockpit-demo&theme=dark&needs=0
 demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
 demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
