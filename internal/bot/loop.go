@@ -311,6 +311,11 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	r.safetyBusy.Add(1)
 	defer r.safetyBusy.Add(-1)
 	a = r.earlyExit(r.latest(), a)
+	if a == SafetyChicken {
+		if s := r.latest(); s != nil && s.Player != nil {
+			r.zoneObserve(ZoneEvent{Kind: ZoneEvChicken, Area: s.Player.Area, Diff: difficultyName(s.Player.Difficulty), At: r.e.Clock.Now()})
+		}
+	}
 	if a != SafetyDrinkLife && a != SafetyDrinkMana && a != SafetyDrinkRejuv {
 		if s := r.latest(); s != nil && s.Player != nil {
 			r.e.Log.Info("safety decision", append([]any{"action", a.String(), "area", s.Player.Area}, r.vitalsKV(s, s.Player)...)...)

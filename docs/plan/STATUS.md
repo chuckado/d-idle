@@ -70,8 +70,6 @@
 | amazonammo | deferred | - | `internal/combat`<br>`internal/leveler` | - |
 | t0-slice | deferred | t0-slice | `internal/decide/t0/**`<br>`internal/ladder/**`<br>`internal/env/tuning_ladder.go`<br>`internal/town/ladder_test.go`<br>`internal/drill/t0.go`<br>`internal/drill/t0_test.go`<br>`cmd/d2drill/t0_lab.go`<br>`cmd/d2drill/t0_lab_test.go`<br>`docs/probes/t0drill.md`<br>`internal/bot/thoughts.go`<br>`internal/bot/thoughts_test.go`<br>`internal/combat/thoughtshook.go`<br>`docs/t0-slice.md` | - |
 | ready-audit | proposed | - | `docs/probes/ready-audit.md` | - |
-| ready-area-table | proposed | - | `internal/readiness/areatable.go`<br>`internal/readiness/areatable_test.go` | - |
-| ready-model | proposed | - | `internal/readiness/` | - |
 | ready-wire-gates | deferred | - | `internal/bot/riskfacts.go`<br>`internal/bot/geargate.go`<br>`internal/task/gate.go` | - |
 | ready-meter | deferred | - | `internal/watch/unlockrisk.go`<br>`internal/watch/unlockrisk_test.go` | - |
 | ready-whyline | deferred | - | `internal/bot/whyline.go`<br>`internal/bot/whyline_test.go` | - |
@@ -163,7 +161,11 @@
 | towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
 | prfix2 | proposed | - | `docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/briefs/hitrec-norestart-oracle.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
+| verifyp03b | in-progress | - | `docs/upstream/verifier2-p03-2026-11-14.md` | - |
+| survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| p03posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -211,14 +213,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
-- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
-- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
-- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
-- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
-- d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
-- bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
-- aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
-- 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
+- db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
+- 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
+- 0fa102afd 11-14 18:53 `Merge branch 'main' into p03posted` (-)
+- 2a5bda25b 11-14 18:53 `Merge branch 'main' into TASK-450` (-)
+- 564879d7a 11-14 18:37 `Merge agent/survC: Merge branch 'main' into TASK-452` (survC)
+- 9773f4061 11-14 18:36 `Merge branch 'main' into TASK-452` (-)
+- ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
+- cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
+- 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
+- 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
 <!-- statusgen:end -->

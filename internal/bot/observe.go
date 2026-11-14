@@ -874,6 +874,7 @@ func (r *Runner) trackAlive(s *d2.Snapshot, now time.Time) {
 	if mc := d2.FindMerc(s); mc.Present {
 		alive := mc.Alive
 		a.merc = &alive
+		r.zoneMercEdge(p, alive, now)
 	}
 	if s.Inventory != nil {
 		for _, u := range s.Inventory.Container(d2.ContEquipment) {
@@ -963,6 +964,7 @@ func (r *Runner) recordDeath(p *d2.Player, now time.Time) {
 		msg = "Killed by " + rec.Killer + " in " + rec.AreaName
 	}
 	r.e.Log.Warn("death autopsy: "+rec.Autopsy.Summary, "area", rec.AreaName, "killer", rec.Killer, "killerType", rec.Autopsy.KillerType, "killerLevel", rec.Autopsy.KillerLevel, "hostiles", rec.Autopsy.HostilesNear, "lastSafety", rec.Autopsy.LastSafety, "bug", rec.Autopsy.Bug, "beltHP", rec.Autopsy.BeltHP)
+	r.zoneObserve(ZoneEvent{Kind: ZoneEvDeath, Area: rec.Area, Diff: difficultyName(p.Difficulty), At: now})
 	r.e.Log.Warn("character died", "area", rec.Area, "killer", rec.Killer, "x", rec.Pos.X, "y", rec.Pos.Y, "corpseValue", rec.CorpseValue,
 		"life", p.Life, "maxLife", p.MaxLife, "heal", a.kit.BeltHP+a.kit.PackHP, "beltMP", a.kit.BeltMP, "rejuv", a.kit.BeltRV, "tome", a.kit.TownPortals)
 	di := combat.DeathInfo{Area: rec.Area, Difficulty: p.Difficulty, CharLevel: p.Level, MonsterName: a.killerName, MonsterClass: rec.KillerClass,
