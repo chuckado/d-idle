@@ -135,3 +135,22 @@ Design: `docs/ui/redesign-2026-11-14/I-character-screen.md` section 8; verbs: `d
 11. POST twice quickly: one verb (a ghost queue entry is the known gap above).
 12. Kill d2d's socket for a moment: the page stays responsive, the bot reconnects, requests queue.
 13. Normal bot play with the lane idle: `writes after start: 0`; the queue path (knob on, panel open) still completes an equip, a trash and a stash job.
+
+## Sell now (botsell, API schema 10, additive)
+Design: `docs/ui/redesign-2026-11-14/C-orders.md` (`sell_now`). Tags: V verified by the offline tests named (fake sale step, Paladin and Sorceress), U unverified live. NOTHING here ran live.
+- **What it is.** A town errand that names no item (kind `sell`, like Cain): the player asks, the bot walks home at the next safe moment (`errandTripStep`, the repair trip's predicate, `Runner.safeMoment`) and the existing town sale of the items the player marked `sell` runs; the request ends when the sale step ran. In town it runs at the next tick. It is a player command in the priority ladder (after safety, before chores). Nothing new is decided about what is sold: only items marked `sell`, and `town.NeverSellReason` items stay excluded (`SellBlock`). The bot never sells an unmarked item on this path.
+- **Refusals.** Nothing marked: code `nothing`, "nothing is marked for sale" (the request is not queued). One waiting already: `queued`. No sale step on this bot: `off`. If the marks are cleared while it waits, the request fails with the same reason when it would run. V: `TestSellNowNothingMarkedIsRefused`, `TestSellNowFailsWhenTheMarksWereClearedMeanwhile`.
+- **Queue.** Persisted like the others, counts toward `MaxQueue` (8, code `full`), cancel while `queued` (`POST /api/inventory/cancel {id:0, kind:"sell"}`), a `doing` entry found at load is reported failed. V: `TestSellNowQueueLimitCancelAndDuplicate`, `TestSellNowSurvivesARestartAsQueued`.
+- **Safe moment and town.** In the field it is an errand (queue card says "waits until the hero is in town", `ErrandsWaiting`, `ErrandKind` = `sell`); a fight at click time puts it back to queued. V: `TestSellNowFromTheFieldIsAnErrandThatWaitsForTown`, `TestSellNowInTownSellsAtOnce`, `TestSellNowFailureAndPostponement`; the trip home itself is the generic `TestErrandTripGoesHomeAtASafeMoment`.
+- **Not instant.** It does not use the fast lane (no item verb sells; the vendor window is needed), see "What stays an errand" above.
+- **Sale step** (`cmd/d2bot/invwire.go`, `townSeller`): `Town.Chores` with an empty plan; its sell step runs whenever marks exist and then sells only the marks (`sellMarksOnly`). Zero sold is reported as a failed request with the reason. U live.
+- **API.** `POST /api/inventory/sellnow {}` on the answer listener (same gates; 503 `off` until the desk is bound; 409 `off` on a desk without the part; 409 with `code` and `error` on a refusal). `GET /api/inventory` is schema 10: only the request kind `sell` is new. Goldens: `internal/invdesk/testdata/view_schema10_sell_<Class>.json`, `internal/watch/testdata/inventory_sellnow_*.json`; the schema 9 golden is unchanged except for the version number.
+
+### Live checks (sell now; nothing ran live)
+21. Mark two backpack items `sell` and one `keep`; hero in the field, nothing hostile near: POST sellnow; the bot walks home, the two marked items are sold, the keep item stays, the queue card shows queued, doing, done with the result line.
+22. Same in town: the sale runs within a tick, no trip.
+23. Nothing marked: the POST answers 409 "nothing is marked for sale" and no request appears.
+24. Mark, ask, clear the mark before the bot arrives: the request fails with that reason, nothing is sold.
+25. A fight on the way: the request waits (queue card) and runs after; a chicken during the sale cancels it and it requeues.
+26. Cancel while queued; restart the bot with one queued (still queued).
+27. An act whose vendors will not buy the marked item (check the log line `sell: N marked, M sold, K not sold`): the request fails with the no-vendor reason.

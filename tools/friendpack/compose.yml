@@ -22,7 +22,10 @@ services:
       D2BOT_UPDATE_FEED: ${D2BOT_UPDATE_FEED:-}
       D2BOT_UPDATE_CHECK: ${D2BOT_UPDATE_CHECK:-on}
     volumes:
-      - ${D2_GAME_DIR:?run ./install.sh first}:/game:ro
+      - type: bind
+        source: ${D2_GAME_DIR:?run ./install.sh first}
+        target: /game
+        read_only: true
       - d2dbot-data:/data
     ports:
       - "${D2_PUBLISH:-127.0.0.1}:${D2_WATCH_PORT:-8891}:${D2_WATCH_PORT:-8891}"
