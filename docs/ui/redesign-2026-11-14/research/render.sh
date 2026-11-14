@@ -24,7 +24,7 @@ for m in watch character; do
 		set -- $s
 		name=$m-$1x$2; [ -n "${3:-}" ] && name=$name-tip
 		[ -n "${3:-}" ] && [ "$m" = watch ] && continue
-		timeout 45 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --user-data-dir="$tmp/p-$name" \
+		timeout 45 nice -n 19 "$chrome" ${HEADLESS:---headless=new} --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --user-data-dir="$tmp/p-$name" \
 			--force-device-scale-factor=1 --window-size="$1,$2" --virtual-time-budget=1500 --screenshot="$out/$name.png" "file://$tmp/$m.html${3:-}" >/dev/null 2>&1
 		echo "$name rc=$?"
 	done

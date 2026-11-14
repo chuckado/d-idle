@@ -1,6 +1,6 @@
 # J. Second attempt: the cockpit and the character canvas
 
-> status: design proposal, second attempt (TASK for branch `agent/uidesign3`, 2026-11-14), not built. It replaces the Standard and Simple presets of D-layouts.md and the canvas of I-character-screen.md section 3. It keeps: the Orders model (C), the requirement rules and instant actions (I.5 to I.10), the loot-rules needs, the compatibility promise, every answer the user gave. Tags: V = seen in a render named or read in code, U = unverified.
+> status: design proposal, second attempt (2026-11-14, branch `agent/uidesign3`), not built; waits for the user's verdict. It replaces the Standard and Simple presets of D-layouts.md and the canvas of I-character-screen.md section 3. It keeps: the Orders model (C), the requirement rules and instant actions (I.5 to I.10), the loot-rules needs, the compatibility promise, every answer the user gave. Tags: V = seen in a render named or read in code, U = unverified.
 
 ## 0. Why the first attempt failed (the user's verdict, 2026-11-14, after seeing wave 1 live)
 
@@ -123,13 +123,15 @@ One frame, one cell unit `u` derived from the viewport height (12 cells of stora
 
 | Part | Rule |
 |---|---|
-| Who wears (left, takes the spare width) | The hero's doll (8 by 7 cells) and the mercenary's (only the slots his type has) side by side under one header row; the gear set bar under both; the two stat sheets under that, the hero's four columns wide, the mercenary's two. This is where the watch screen's Hero tile went |
-| Storage (right, exactly 10 cells wide) | The pack on top; under it the stash (6 by 8) and beside the stash a 4-cell column: the belt, the selected item's toolbar, the loot rules summary, the locked "Stash from anywhere" line, the last action |
+| Who wears (left, takes the spare width) | The hero's doll (8 by 6 cells) and beside it the mercenary's (only the slots his type has) with his state chip, life bar and a six-value sheet under his doll; the gear set bar under both; the hero's stat sheet as one block of sixteen values; under that, side by side, the loot rules summary and the latest item actions. This is where the watch screen's Hero tile went |
+| Storage (right, exactly 10 cells wide) | The pack on top; under it the stash (6 by 8) and beside the stash a 4-cell column: the belt, the selected item (its requirements, comparison and its actions as buttons), the town errands (deposit and withdraw gold, buy scrolls, identify all), the locked "Stash from anywhere" line |
 | Bar | Search, four filter chips, then gold, stash gold, Repair (with the price, red when something is broken) and Sell marked as chips. No card for repair or gold |
-| Tooltip | A real floating tooltip anchored beside the hovered cell (flips to the other side at the edge, never scrolls): name in its quality colour, the game's lines, requirement rows for the hero and for the mercenary with met and unmet marks and the gap, the comparison against the worn item as old to new values, and one line of hints. On a phone the same content is a bottom sheet |
-| Actions | Right-click: the context menu with every action and its key; a refused action is listed with its reason, greyed. Double-click: the first action. The selected item's toolbar in the side column shows the same list as buttons. No form at the bottom of the page |
-| Mercenary states | none: the column shows "No mercenary" and how one is hired; dead: the state chip is red and Revive is the one primary button; unknown: header only |
-| Widths | 1366 x 768: u = 50, same arrangement. 1920 x 1080: u = 72, the left zone is wider, the mercenary's sheet sits beside his doll. 390: three tabs (Hero, Pack and stash, Mercenary), the bar wraps, the canvas scrolls inside the tab only where the stash is taller than the screen |
+| Tooltip | A real floating tooltip anchored beside the hovered cell (flips at the edge, never scrolls): name in its quality colour, the game's lines, where the item is, requirement rows for the hero and for the mercenary with met and unmet marks and the gap, the comparison against the worn item as old to new values with signed deltas, one line of hints. On a phone the same content is a bottom sheet |
+| Actions | Right-click: the context menu with every action and its key; a refused action is listed greyed with its reason. Double-click: the first action. The selected item's box shows the same list as buttons. No form at the bottom of the page |
+| Mercenary states | none: the column says so and how one is hired; dead: the state chip is red and Revive is the one primary button; unknown: header only |
+| Widths | 1366 x 768: u = 50, same arrangement. 1920 x 1080: u = 72. 390: two tabs (Hero and mercenary; Pack and stash); the bar scrolls sideways; the storage tab scrolls inside itself |
+
+The sketch above shows the first arrangement of this section; the final one is in the renders ([research/iterations/final/](research/iterations/final/)).
 
 ## 5. Visual system changes (on top of E)
 
@@ -141,7 +143,7 @@ One frame, one cell unit `u` derived from the viewport height (12 cells of stora
 
 ## 6. How it was checked
 
-Renders at 1440x900, 1920x1080, 1366x768 and 390x844 with headless Chromium on the builder (`research/render.sh`), three iterations, each looked at and criticised; the pictures and the critique are in [research/](research/README.md). The live pages the user saw are described there as measured block diagrams, not as pictures: the live screenshots contain the game's own art, which this repository and its published pages never carry.
+Renders at 1440x900, 1920x1080, 1366x768 and 390x844 with headless Chromium on the builder (`research/render.sh`), six renders in three rounds of critique; the pictures and the critique are in [research/](research/README.md). The live pages the user saw are described there as measured block diagrams, not as pictures: the live screenshots contain the game's own art, which this repository and its published pages never carry.
 
 ## 7. What this does to the plan
 

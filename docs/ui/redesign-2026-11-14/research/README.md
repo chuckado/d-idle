@@ -64,4 +64,24 @@ Inventory, 1920 px wide, **1965 px tall**:
 
 ## 4. Iterations and critique
 
-(Filled in as each iteration was rendered and looked at.)
+Six renders were made; each folder under [iterations/](iterations/) has the page it was rendered from (`src/`) and the picture at 1440x900 (the final one at all four sizes plus one with the tooltip open). All were rendered with headless Chromium at the exact window sizes. **Where:** the brief asked for the builder; its single job slot was held by other agents' gates for over an hour (three queued renders never started), so the renders were made on the head box with a headless Chromium shell and two libraries unpacked into a scratch directory, no root, a few seconds each. Nothing ran on the worker host that runs the games. `render.sh` runs unchanged on the builder when it is free.
+
+| Iteration | What changed | Critique after looking at it (V) |
+|---|---|---|
+| it1 | The cockpit as first written; the character canvas with three zones (hero, storage, mercenary) | Watch: fits and tiles, but the progress cell is bottom-heavy with clipped text, the health words are cut, zone names are cut by the level range beside them, the map's empty corner cells read as holes. Character: the mercenary is on the far side of the storage, away from the hero: the exact complaint. A third zone only to hold him |
+| it2 | Character: hero and mercenary in one frame, two zones; tooltip deltas and owner line; watch: two-line zone buttons | Character page rendered **blank**: a script error from an edit made without a render (a name used twice). Watch as it1 otherwise. Lesson kept: no edit without a render |
+| it3 | Script fixed; watch: progress and health laid out top-down, range moved to the zone's second line, legend and act switch in the map's empty corners, demo control into the band | Watch: reads well at 1440. Character: works; the mercenary's note wraps one word per line, two cells of empty space under his doll, the selected-item box is mostly empty, the item-actions list sits in the storage column |
+| it4 | Character: mercenary sheet under his doll, hero sheet as one eight-column block, loot rules and item actions side by side under it, town errands (gold, scrolls, Cain) beside the stash | Tooltip good. The mercenary sheet was squeezed beside the doll (unreadable); the bottom lists left a 110 px empty band; at 1920 the area map drawing is tiny in its box and zone names are cut |
+| it5 | Mercenary sheet as three columns under the doll, list rows share the remaining height, wider act map at 1920 | 1366x768 and 1440x900 good. Phone: the status sentence was pushed out of the band; the storage side column is too narrow on a phone |
+| final | Phone band fixed, phone storage stacked, the selected box shows the item's requirements and comparison | See "still weak" below |
+
+### Still weak (V on the final renders)
+
+1. The act map's shape leaves grid cells unused (the left and right columns have no zone in rows 6 and 7 and little in rows 1 to 3). The legend and the act switch fill the top corners; the middle gaps are the map's own shape. It is not dead tile space, but it is not perfectly dense either.
+2. Character at 1920x1080: beside the mercenary's doll about 190 by 300 px is unused, because the dolls keep the one cell size and the zone takes the spare width.
+3. Character at 1366x768: the column beside the stash is 200 px wide; two action labels are cut and the requirement block shows only its first rows.
+4. The doll slots are labelled boxes. With the player's own item art they will look different; spacing between slots has not been judged with art.
+5. The area map is an optional view at 1440x900 and below (a switch on the map tile); only 1920 wide shows both maps at once.
+6. Phone: the Orders tab has spare room under a short list; Progress, Journey and Health are one tab away, not on the first view.
+7. Everything is a static mockup with fake data. None of it has run against the real shell, real panel data or real text lengths; the fit check of slice S1b is what will hold the build to these pictures.
+8. The cockpit needs a new layout kind in the shell (slots). That is more shell work than the first attempt promised, and the tile editor becomes "swap and resize slots" on this layout instead of free placement.

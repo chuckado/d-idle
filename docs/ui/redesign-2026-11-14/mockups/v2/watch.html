@@ -48,7 +48,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .say[data-tone="warn"] .word{background:var(--warn-bg);color:var(--warn)}.say[data-tone="info"] .word{background:var(--info-bg);color:var(--info)}
 .txt{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;font-weight:600}
 .txt span{font-weight:400;color:var(--text2)}
-.vit{flex:none;display:grid;grid-template-columns:86px 30px;gap:3px 6px;align-items:center;font-size:10.5px}
+.vl{color:var(--text3);font-size:10px}
+.vit{flex:none;display:grid;grid-template-columns:auto 86px 30px;gap:3px 6px;align-items:center;font-size:10.5px}
 .bar{height:5px;border-radius:3px;background:var(--s3);overflow:hidden}.bar i{display:block;height:100%}
 .pill{flex:none;border:0;border-radius:999px;padding:4px 11px;font-weight:700;font-size:11px;background:var(--danger-bg);color:var(--danger)}
 .pill[data-n="0"]{background:var(--s2);color:var(--text3)}
@@ -64,7 +65,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .video .where{position:absolute;left:8px;bottom:8px;background:rgb(0 0 0 / .62);color:#ece2cf;padding:3px 8px;border-radius:3px;font-size:11px}
 .video .mm{position:absolute;right:8px;top:8px;display:flex;gap:4px}
 .video .mm button{background:rgb(0 0 0 / .62);border:1px solid rgb(255 255 255 / .18);color:#ece2cf;border-radius:3px;padding:2px 8px;font-size:11px}
-.strip{grid-area:strip;min-height:0;display:grid;gap:var(--g);grid-template-columns:minmax(0,1.25fr) minmax(0,1.5fr) minmax(0,1fr)}
+.strip{grid-area:strip;min-height:0;display:grid;gap:var(--g);grid-template-columns:minmax(0,1fr) minmax(0,1.25fr) minmax(0,1.1fr)}
 .rail{grid-area:rail;min-height:0;min-width:0;display:grid;gap:var(--g);grid-template-rows:auto auto minmax(0,1fr);grid-template-columns:minmax(0,1fr)}
 .tile{background:var(--s1);border-radius:4px;padding:8px 10px;min-width:0;min-height:0;overflow:hidden;display:flex;flex-direction:column}
 .tile>h2{flex:none;margin:0 0 6px;font:700 10px var(--body);letter-spacing:.11em;text-transform:uppercase;color:var(--text3);display:flex;justify-content:space-between;align-items:center;gap:8px}
@@ -105,7 +106,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 .seg{display:inline-flex;border:1px solid var(--line2);border-radius:3px;overflow:hidden}
 .seg button{background:none;border:0;padding:1px 8px;font-size:10.5px;color:var(--text2);letter-spacing:0;text-transform:none;font-weight:400}
 .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
-.act{container-type:size;position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:5px 26px}
+.act{container-type:size;position:relative;flex:1 1 auto;min-height:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(10,minmax(0,1fr));gap:5px 14px}
 .act svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 .act line{stroke:var(--line2);stroke-width:1.5;vector-effect:non-scaling-stroke}.act line.dun{stroke-dasharray:3 4}
 .act polyline{fill:none;stroke:var(--accent);stroke-width:2.5;vector-effect:non-scaling-stroke}
@@ -120,6 +121,13 @@ button{font:inherit;color:inherit;cursor:pointer}
 .node[data-here]{box-shadow:0 0 0 1.5px var(--info)}
 .node[data-target]{box-shadow:0 0 0 2px var(--accent);background:var(--s3)}
 .node .pin{background:var(--accent);color:var(--on-accent);border-radius:50%;width:14px;height:14px;display:grid;place-items:center;font:700 9px var(--num);flex:none}
+.legend{grid-column:1;grid-row:1 / span 3;display:flex;flex-direction:column;justify-content:flex-start;gap:3px;font-size:10.5px;color:var(--text3);min-width:0}
+.legend span{display:flex;align-items:center;gap:6px;white-space:nowrap}
+.legend span::before{content:"";width:3px;height:12px;background:var(--text3);flex:none}
+.legend span[data-b="in"]::before{background:var(--ok)}.legend span[data-b="above"]::before{background:var(--warn)}.legend span[data-b="hard"]::before{background:var(--danger)}
+.acts{grid-column:3;grid-row:1 / span 3;display:flex;gap:3px;align-items:flex-start;justify-content:flex-end}
+.acts button{width:26px;height:22px;background:none;border:1px solid var(--line2);border-radius:3px;font:11px var(--display);color:var(--text2);padding:0}
+.acts button[aria-pressed="true"]{background:var(--s3);color:var(--accent-text);border-color:var(--accent)}.acts button[disabled]{color:var(--text3);border-style:dashed;cursor:default}
 .area{flex:1 1 auto;min-height:0}
 .area svg{width:100%;height:100%;display:block}
 .area rect{fill:var(--s3);stroke:var(--line2)}.area .tr{fill:none;stroke:var(--info);stroke-width:2}.area .ft{fill:none;stroke:var(--danger);stroke-width:2}
@@ -130,18 +138,24 @@ button{font:inherit;color:inherit;cursor:pointer}
 .menu .d .btn[aria-pressed="true"]{background:var(--s3);border-color:var(--accent);color:var(--accent-text)}
 
 /* strip */
-.pg{display:grid;grid-template-columns:minmax(0,1.6fr) auto auto;gap:4px 16px;align-items:end;flex:1}
+.pg{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px;min-height:0}
+.pg .m{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center}
+.pg .m .meter{margin:0}
+.pg .v{display:flex;gap:14px;align-items:baseline;justify-content:space-between}
+.pg .v span{white-space:nowrap}
 .pg label{display:block;font-size:10.5px;color:var(--text2)}
 .pg strong{font:600 17px var(--num);font-variant-numeric:tabular-nums}
 .meter{height:7px;border-radius:4px;background:var(--s3);overflow:hidden;margin:5px 0 3px}.meter i{display:block;height:100%;background:var(--accent)}
 .sub{font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .spark polyline{fill:none;stroke:var(--text2);stroke-width:1.5}.spark circle{fill:var(--accent)}
-.path{display:flex;align-items:center;gap:0;margin:2px 0 6px}
+.tile.s{justify-content:flex-start}
+.jbody{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0}
+.path{display:flex;align-items:center;gap:0;margin:0 0 8px}
 .path i{flex:1;height:2px;background:var(--line2)}.path i.d{background:var(--ok)}
 .path b{flex:none;width:17px;height:17px;border-radius:50%;display:grid;place-items:center;font:700 9.5px var(--num);background:var(--s3);color:var(--text3)}
 .path b.d{background:var(--ok-bg);color:var(--ok)}.path b.c{background:var(--accent);color:var(--on-accent);width:21px;height:21px}
 .jr{display:flex;align-items:center;gap:8px;min-width:0}.jr .sub{flex:1}
-.lights{flex:1;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;align-items:center}
+.lights{flex:1;align-content:center;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:2px;align-items:center}
 .light{background:none;border:0;padding:2px;text-align:center;min-width:0;border-radius:3px}
 .light:hover{background:var(--s2)}
 .light i{display:block;width:9px;height:9px;border-radius:50%;margin:0 auto 5px;background:var(--ok)}
@@ -151,7 +165,8 @@ button{font:inherit;color:inherit;cursor:pointer}
 .pop{position:fixed;z-index:9;top:calc(var(--band) + 4px);left:120px;max-width:560px;background:var(--s2);border:1px solid var(--line2);border-radius:4px;padding:10px 12px;box-shadow:0 10px 28px rgb(0 0 0 / .5);display:grid;grid-template-columns:max-content 1fr;gap:4px 12px}
 .pop dt{color:var(--text3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;padding-top:2px}.pop dd{margin:0}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:9;background:var(--s3);border:1px solid var(--line2);border-radius:4px;padding:6px 10px;display:flex;gap:10px;align-items:center;box-shadow:0 8px 24px rgb(0 0 0 / .45)}
-.demo{position:fixed;left:8px;bottom:8px;z-index:8;font-size:10.5px;color:var(--text3)}
+.demo{position:relative;flex:none;font-size:10.5px;color:var(--text3)}
+.demo div{position:absolute;right:0;top:24px;z-index:12;width:170px}
 .demo summary{cursor:pointer;list-style:none;background:var(--s2);border:1px dashed var(--line2);border-radius:3px;padding:2px 7px;display:inline-block}
 .demo div{background:var(--s2);border:1px dashed var(--line2);border-radius:4px;padding:6px;margin-top:4px;display:grid;gap:4px}
 .demo button{background:none;border:1px solid var(--line2);border-radius:3px;padding:2px 6px;color:var(--text2);text-align:left}
@@ -160,7 +175,7 @@ button{font:inherit;color:inherit;cursor:pointer}
 
 /* wide: the rail has room for both maps side by side */
 @media (min-width:1700px){
-  .rail{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"needs needs" "orders orders" "act area"}
+  .rail{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);grid-template-rows:auto auto minmax(0,1fr);grid-template-areas:"needs needs" "orders orders" "act area"}
   .needs{grid-area:needs}.orders{grid-area:orders}.maptile{grid-area:act}.areatile{grid-area:area;display:flex!important}
   .maptile .seg{display:none}
 }
@@ -169,8 +184,9 @@ button{font:inherit;color:inherit;cursor:pointer}
 @media (max-width:700px){
   :root{--band:auto}
   .band{flex-wrap:wrap;gap:4px 10px;padding-block:6px}
-  .say{flex-basis:100%;order:3}.txt{font-size:13px;white-space:normal}
-  .nav button:nth-child(2){display:none}
+  .say{flex-basis:100%;order:3;height:auto}.txt{font-size:13px;white-space:normal}
+  .nav button:not(:last-child){display:none}
+  .brand{flex:1}
   .app{grid-template-rows:auto minmax(0,1fr)}
   .stage{display:flex;flex-direction:column}
   .video{flex:none;aspect-ratio:4/3;width:100%}
@@ -184,6 +200,7 @@ button{font:inherit;color:inherit;cursor:pointer}
   .btn,.verbs .btn{height:38px}.row{min-height:38px}.verbs kbd{display:none}
   .demo{display:none}
 }
+@media (max-width:1400px) and (min-width:701px){.jr .btn+.btn{display:none}.spark{display:none}}
 @media (prefers-reduced-motion:no-preference){.meter i,.bar i{transition:width .24s}}
 </style>
 
@@ -191,9 +208,10 @@ button{font:inherit;color:inherit;cursor:pointer}
 <header class="band">
   <div class="brand"><i></i>d.idle</div>
   <button class="say" id="say" aria-expanded="false" aria-live="polite"></button>
-  <div class="vit" aria-label="Life and mana"><span class="bar"><i style="width:72%;background:var(--life)"></i></span><span class="num">86</span><span class="bar"><i style="width:75%;background:var(--mana)"></i></span><span class="num">105</span></div>
+  <div class="vit" aria-label="Life and mana"><span class="vl">life</span><span class="bar"><i style="width:72%;background:var(--life)"></i></span><span class="num">86</span><span class="vl">mana</span><span class="bar"><i style="width:75%;background:var(--mana)"></i></span><span class="num">105</span></div>
   <button class="pill" id="pill"></button>
   <nav class="nav"><button>Character</button><button>Skills</button><button aria-label="More: layout, theme, help">...</button></nav>
+  <details class="demo"><summary>demo</summary><div id="demo"></div></details>
 </header>
 <main class="stage" id="stage" data-tab="orders">
   <section class="video" aria-label="Game"><div>Game picture<br><small>live, 4:3, about 20 frames a second</small></div>
@@ -201,18 +219,17 @@ button{font:inherit;color:inherit;cursor:pointer}
   <div class="tabs" id="tabs"></div>
   <div class="strip">
     <section class="tile s"><h2>Progress <em>level 7</em></h2>
-      <div class="pg"><div><label>to level 10</label><div class="meter"><i style="width:62%"></i></div><div class="sub">62%, about 25 min</div></div>
-      <div><label>xp / h</label><strong>12.4k</strong> <svg class="spark" width="52" height="18" viewBox="0 0 52 18" aria-hidden="true"><polyline points="0,14 7,13 14,15 21,10 28,11 35,7 42,8 50,4"/><circle cx="50" cy="4" r="2"/></svg></div>
-      <div><label>gold / h</label><strong>2.1k</strong></div></div></section>
+      <div class="pg"><div class="m"><span class="sub">to 10</span><div class="meter"><i style="width:62%"></i></div><span class="sub">62% · 25 min</span></div>
+      <div class="v"><span><strong>12.4k</strong> <label style="display:inline">xp/h</label> <svg class="spark" width="52" height="16" viewBox="0 0 52 18" aria-hidden="true"><polyline points="0,14 7,13 14,15 21,10 28,11 35,7 42,8 50,4"/><circle cx="50" cy="4" r="2"/></svg></span><span><strong>2.1k</strong> <label style="display:inline">gold/h</label></span></div></div></section>
     <section class="tile s"><h2>Journey <em>chapter 3 of 9</em></h2>
-      <div class="path" aria-hidden="true"><b class="d">1</b><i class="d"></i><b class="d">2</b><i class="d"></i><b class="c">3</b><i></i><b>4</b><i></i><b>5</b><i></i><b>6</b><i></i><b>7</b><i></i><b>8</b><i></i><b>9</b></div>
-      <div class="jr"><div class="sub"><b style="color:var(--text)">Blood Raven</b>: too early, floor is level 9</div><button class="btn" id="jgo">Go now</button><button class="btn">Hold</button></div></section>
+      <div class="jbody"><div class="path" aria-hidden="true"><b class="d">1</b><i class="d"></i><b class="d">2</b><i class="d"></i><b class="c">3</b><i></i><b>4</b><i></i><b>5</b><i></i><b>6</b><i></i><b>7</b><i></i><b>8</b><i></i><b>9</b></div>
+      <div class="jr"><div class="sub"><b style="color:var(--text)">Blood Raven</b>: too early (floor 9)</div><button class="btn" id="jgo">Go now</button><button class="btn">Hold</button></div></div></section>
     <section class="tile s"><h2>Health</h2><div class="lights" id="lights"></div></section>
   </div>
   <div class="rail">
     <section class="tile needs" id="needs" aria-label="Needs you" aria-live="polite"></section>
     <section class="tile orders"><h2>Orders <em id="oc"></em></h2><div class="verbs" id="verbs"></div><div class="rows" id="rows"></div></section>
-    <section class="tile maptile"><h2>Where to <span class="seg" id="mapseg"></span></h2>
+    <section class="tile maptile"><h2>Where to <em>click a zone to send the hero</em><span class="seg" id="mapseg"></span></h2>
       <div class="act" id="act"></div><div class="area" id="area" hidden></div><div class="menu" id="menu" hidden></div></section>
     <section class="tile areatile"><h2>Area <em>Cold Plains, explored 64%</em></h2><div class="area" id="area2"></div></section>
   </div>
@@ -220,7 +237,6 @@ button{font:inherit;color:inherit;cursor:pointer}
 </div>
 <dl class="pop" id="pop" hidden></dl>
 <div class="toast" id="toast" hidden role="status"></div>
-<details class="demo"><summary>demo</summary><div id="demo"></div></details>
 
 <script>
 (function(){
@@ -236,7 +252,7 @@ var WHY={bm:'safe first xp',den:'quest, small cave',cp:'open ground, waypoint',c
 var N={};NODES.forEach(function(n){N[n[0]]={id:n[0],name:n[1],c:n[2],r:n[3],b:n[4],rg:n[5]}});
 var S={scen:'needs',gold:'enough',paused:false,here:'cp',orders:[],needs:[],seq:9,menu:null,dur:'30 min',map:'act',undo:null,timers:[]};
 var SCEN={
- needs:['Needs you',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'}],[{k:'gear',sev:'danger',t:'Weapon broken',s:'repair is about 180 gold'},{k:'ask',sev:'warn',t:'Go for Blood Raven at level 9?',s:'the plan waits for 10'}]],
+ needs:['Needs you',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'}],[{k:'gear',sev:'danger',t:'Weapon broken',s:'repair is about 180 gold'},{k:'ask',sev:'warn',t:'Go for Blood Raven at level 9?',s:'plan waits for 10'}]],
  daily:['Quiet',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'}],[]],
  queue:['Queue, one failed',[{i:'go',z:'cp',t:'Farm Cold Plains 30 min',s:'active',r:'12 min left, 41 kills'},{i:'id',t:'Identify all (3)',s:'waiting',n:1,r:'next safe moment: 2 monsters near'},{i:'repair',t:'Repair now',s:'failed',r:'no way home; retry in 14 min'},{i:'go',z:'sf',t:'Farm Stony Field 1 h',s:'queued',r:'after Cold Plains'}],[{k:'failed',sev:'warn',t:'Repair failed: no way home',s:'buy a scroll, or retry in 14 min'}]],
  blocked:['Journey blocked',[],[{k:'blocked',sev:'warn',t:'Journey blocked: Den of Evil',s:'needs 2 healing potions, has 0'}]],
@@ -288,9 +304,11 @@ function act(){var a=$('act');a.textContent='';var s=document.createElementNS('h
  var zo=S.orders.filter(function(o){return o.z&&o.s!=='done'}),tg=zo.filter(function(o){return o.s==='active'})[0];
  if(tg&&tg.z!==S.here){var pl=document.createElementNS(s.namespaceURI,'polyline');pl.setAttribute('points',pathTo(tg.z).map(function(i){return pt(N[i])}).join(' '));s.appendChild(pl)}
  a.appendChild(s);var pin=0;
+ var lg=el('div','legend');[['in','in your range'],['above','above it'],['hard','too hard now'],['locked','not open yet']].forEach(function(r){var x=el('span','',r[1]);x.dataset.b=r[0];lg.appendChild(x)});a.appendChild(lg);
+ var ac=el('div','acts');['I','II','III','IV','V'].forEach(function(t,k){var x=el('button','',t);x.type='button';x.disabled=k>0;x.setAttribute('aria-pressed',String(k===0));x.title=k?'Act '+t+': not reached':'Act I';ac.appendChild(x)});a.appendChild(ac);
  NODES.forEach(function(r){var n=N[r[0]],b=el('button','node');b.type='button';b.style.gridColumn=n.c;b.style.gridRow=n.r;b.dataset.b=n.b;if(n.id===S.here)b.setAttribute('data-here','');if(tg&&tg.z===n.id)b.setAttribute('data-target','');
-  var nm=el('span','',n.name);nm.appendChild(el('em','',WHY[n.id]||''));b.appendChild(nm);var q=zo.filter(function(o){return o.z===n.id&&o.s!=='active'})[0];
-  if(q)b.appendChild(el('span','pin',String(++pin)));else b.appendChild(el('small','',n.id===S.here?'here':n.rg));
+  var nm=el('span','',n.name);nm.appendChild(el('em','',(n.rg&&n.rg!=='town'&&n.rg!=='wp'?n.rg+' · ':'')+(WHY[n.id]||'')));b.appendChild(nm);var q=zo.filter(function(o){return o.z===n.id&&o.s!=='active'})[0];
+  if(q)b.appendChild(el('span','pin',String(++pin)));else if(n.id===S.here)b.appendChild(el('small','','here'));
   b.setAttribute('aria-label',n.name+', level '+n.rg);b.addEventListener('click',function(){S.menu=n.id;menu()});a.appendChild(b)});
  menu()}
 function menu(){var m=$('menu');m.textContent='';if(!S.menu||S.map!=='act'){m.hidden=true;return}m.hidden=false;var n=N[S.menu];
@@ -306,13 +324,13 @@ function menu(){var m=$('menu');m.textContent='';if(!S.menu||S.map!=='act'){m.hi
  d2.appendChild(btn(n.b==='hard'?'Ask anyway':'Go now','p',function(){S.orders=S.orders.filter(function(o){return !(o.i==='go'&&o.s==='active')});done({i:'go',z:n.id,t:text,s:'active',r:'walking there'},true)}));
  d2.appendChild(btn('Loop: go, repair, repeat','',function(){done({i:'go',z:n.id,t:'Loop '+n.name+' 20 min + repair',s:'queued',r:'round 1 of 5, after the current order'})}));
  d2.appendChild(btn('Add to queue','',function(){done({i:'go',z:n.id,t:text,s:'queued',r:'after the current order'})}));m.appendChild(d2)}
-function area(id){$(id).innerHTML='<svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Local map: trail, two monsters"><rect x="10" y="20" width="90" height="50"/><rect x="100" y="36" width="80" height="18"/><rect x="180" y="14" width="110" height="70"/><rect x="210" y="84" width="24" height="30"/><rect x="150" y="114" width="140" height="28"/><polyline class="tr" points="30,46 80,44 130,45 176,45"/><polyline class="ft" points="176,45 205,48 222,60"/><circle cx="246" cy="52" r="4" style="fill:var(--danger)"/><circle cx="258" cy="66" r="4" style="fill:var(--danger)"/><rect x="217" y="55" width="10" height="10" transform="rotate(45 222 60)" style="fill:var(--accent);stroke:none"/></svg>'}
+function area(id){$(id).innerHTML='<svg viewBox="0 0 300 150" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Local map: trail, two monsters"><rect x="10" y="20" width="90" height="50"/><rect x="100" y="36" width="80" height="18"/><rect x="180" y="14" width="110" height="70"/><rect x="210" y="84" width="24" height="30"/><rect x="150" y="114" width="140" height="28"/><polyline class="tr" points="30,46 80,44 130,45 176,45"/><polyline class="ft" points="176,45 205,48 222,60"/><circle cx="246" cy="52" r="4" style="fill:var(--danger)"/><circle cx="258" cy="66" r="4" style="fill:var(--danger)"/><rect x="217" y="55" width="10" height="10" transform="rotate(45 222 60)" style="fill:var(--accent);stroke:none"/></svg>'}
 function lights(){var br=S.needs.some(function(n){return n.k==='gear'||n.k==='failed'}),L=$('lights');L.textContent='';
- [['Life','ok','86 / 120'],['Gear',br?'danger':'ok',br?'1 broken':'fine'],['Ready','warn','light res'],['Merc','ok','alive'],['Supplies','ok','4 potions']].forEach(function(r){var b=el('button','light');b.type='button';b.dataset.l=r[1];b.appendChild(el('i'));b.appendChild(el('b','',r[0]));b.appendChild(el('span','',r[2]));L.appendChild(b)})}
+ [['Life','ok','86/120'],['Gear',br?'danger':'ok',br?'broken':'fine'],['Ready','warn','risky'],['Merc','ok','alive'],['Supply','ok','4 pots']].forEach(function(r){var b=el('button','light');b.type='button';b.dataset.l=r[1];b.appendChild(el('i'));b.appendChild(el('b','',r[0]));b.appendChild(el('span','',r[2]));L.appendChild(b)})}
 function segs(id,opts,cur,fn){var b=$(id);b.textContent='';opts.forEach(function(o){var x=el('button','',o[1]);x.type='button';x.setAttribute('aria-pressed',String(cur()===o[0]));x.addEventListener('click',function(){fn(o[0])});b.appendChild(x)})}
 function render(){band();needs();orders();act();lights();area('area');area('area2');
  $('act').hidden=S.map!=='act';$('area').hidden=S.map!=='area';
- segs('mapseg',[['act','Act I'],['area','Area']],function(){return S.map},function(v){S.map=v;S.menu=null;render()});
+ segs('mapseg',[['act','Zones'],['area','Area']],function(){return S.map},function(v){S.map=v;S.menu=null;render()});
  segs('tabs',[['orders','Orders'],['map','Map'],['hero','Progress']],function(){return $('stage').dataset.tab},function(v){$('stage').dataset.tab=v;render()});
  var d=$('demo');d.textContent='';Object.keys(SCEN).forEach(function(k){var b=el('button','',SCEN[k][0]);b.type='button';b.setAttribute('aria-pressed',String(S.scen===k));b.addEventListener('click',function(){load(k)});d.appendChild(b)});
  var gb=el('button','','Gold: '+(S.gold==='enough'?'1,240 (enough)':'46 (short)'));gb.type='button';gb.addEventListener('click',function(){S.gold=S.gold==='enough'?'short':'enough';render()});d.appendChild(gb)}

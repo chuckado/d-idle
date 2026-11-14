@@ -1,62 +1,52 @@
 # Worker briefs for the watch UI redesign
 
-> status: ready to send (2026-11-14, after the user's answers in [../H-open-questions.md](../H-open-questions.md)), except S8 and L1 which are on HOLD. One file per card. Each is self-contained: goal, owned paths, steps, acceptance, the card command, the gates. The freeze on new /watch panels is lifted (answer 9). `<worker>` in a command is the worker host's labrun name.
+> status: revised 2026-11-14 for the second attempt (wave 2 on hold until the user accepts it); first written after the user's answers in [../H-open-questions.md](../H-open-questions.md)), except S8 and L1 which are on HOLD. One file per card. Each is self-contained: goal, owned paths, steps, acceptance, the card command, the gates. The freeze on new /watch panels is lifted (answer 9). `<worker>` in a command is the worker host's labrun name.
 
 Three families: **S** the watch screen (S1 to S8), **C** the character screen (C1 to C3) with **L1** the loot rules tab, **B** bot and fork cards (B1 to B9).
 
-## Order and parallelism (at most six agents at once)
+## Order and parallelism after the second attempt (2026-11-14)
+
+Wave 1 is merged or running (S1, C1, B1, B4, B7, B8). The user rejected the look of the first result; the S and C briefs from S2 on were rewritten for [../J-second-attempt.md](../J-second-attempt.md) and **wave 2 is on hold until the user accepts the second attempt**. The bot cards B2 and B3 (and B1, B4 if still open) do not depend on it and can proceed.
 
 | Wave | Send | Why then |
 |---|---|---|
-| 1 | **S1**, **C1**, **B7**, **B8**, **B1**, **B4** | S1 is the only slice that touches the shell and flips the default; C1 and the bot cards own other files. B7 and B8 are the long ones, so they start first |
-| review | Fable reviews S1 before it merges | the one place a mistake breaks a stored layout |
-| 2 | **S2, S4, S6** (after S1), **C2** (after S1 and C1), **B2, B3** | independent directories |
-| 3 | **S3** (after S2), **S5** (after S4), **C3** (after C2 and B8), **B5, B6** (after S2), **B9** (after B8 and C1) | they read what wave 2 built |
-| 4 | **S7** (after S3, S5, S6) | look and access over the watch screen |
+| 2a | **S1b** (the cockpit template and the fit check) | everything visual after it is gated by the fit check |
+| review | Fable reviews S1b before it merges | it touches the shell again; old layouts must not move |
+| 2b | **S2, S4, S6** (after S1b), **C2** (after S1b and C1) | independent directories |
+| 3 | **S3** (after S2), **S5** (after S4, B4, B7), **C3** (after C2; B8 for instant states), **B5, B6** (after S2), **B9** (after B8 and C1) | they read what wave 2b built |
+| 4 | **S7** (after S3, S5, S6): the cockpit becomes the default | every slot is filled by then |
 | hold | **L1** (needs the loot-rules engine), **S8** (needs the user's word) | |
 
 ## Merge order
 
-S1 -> C1 -> B4 -> B1 -> B2 -> B3 -> B8 -> B7 -> S2 -> S4 -> S6 -> C2 -> B5 -> B6 -> S3 -> S5 -> C3 -> B9 -> S7 -> (L1) -> (S8).
-
-Where the order is forced: C1 before B8 and C2 (`desk.go` view fields; `usable`); B8 before C3 and B9; B4 before S5 (`http_answer.go`); S2 before B5 and B6 (`glance.go` setters); S4 before S5 (`commands.go`); B7 before S5's Loop goldens are final; B7 is the only card that edits `data/unlocks/ladder.json` until L1. Everyone merges `origin/main` into their branch before queueing.
+S1b -> S2 -> S4 -> S6 -> C2 -> B5 -> B6 -> S3 -> S5 -> C3 -> B9 -> S7 -> (L1) -> (S8). Forced: S1b before every S and C slice (slots, fit check); S2 before S3, B5, B6; S4 before S5; C2 before C3; B8 before C3's instant states and B9. Everyone merges `origin/main` before queueing.
 
 ## What Fable reviews
 
 | At | Looks at |
 |---|---|
-| S1, before merge | the shell diff; that a stored layout and Classic render the same cells; the fallback rule; the default flip; the lint rule |
-| C1 merged | one validity function (no second rule); the reason vocabulary; the U list of requirement modifiers |
-| S2 + S3 merged | the first screen at 1440, 900, 390 against B.2; the sentence for every Why code; number count |
-| S4 merged | row order equals the priority ladder; state mapping; no mutex held across desks |
-| B8, before merge | the fast lane against the safety ladder and the channel ownership; what stays an errand; named runs |
-| C2 + C3 merged | the character screen against the mockup and I: no dead zones, requirement display on the 21 cases, no rule in the page, refusals never look like success |
-| S5 + B7 merged | the Orders flows against the mockup and C.4 to C.8: two clicks to an order, Undo, confirmations, locked and unlocked states of Loop and queue |
-| S7, before the user looks | the whole watch page on Standard, Simple and a stored layout; light theme; keyboard |
-| B9, L1, S8, before merge | fork commit and tests; the editor against loot-rules-ux.md; every compat fixture |
+| S1b, before merge | the shell diff; every older layout renders the same cells; the slot rules; the fit check really fails on overflow |
+| S2 + S3 merged | renders of the cockpit at the four sizes with the band and the strip filled: fit, alignment, wording of the sentence for every Why code |
+| S4 + S5 merged | Orders and the act map in the rail at 1366x768 and 1440x900: rows readable, the menu sheet, two clicks to an order, Loop and queue states, the dispatcher shares code |
+| C2 + C3 merged | the character canvas at the four sizes against the accepted renders: one unit, no dead zone, the tooltip, the 21 validity cases, refusals never look like success |
+| S7, before the default flips | the whole default page, dark and light, with empty and full data; a stored layout untouched |
+| B8, B9, L1, S8, before merge | as before |
 
 ## Files
 
-| Brief | Agent / branch | Starts after | Can run next to |
-|---|---|---|---|
-| [S1](S1-foundations.md) | `uis1` / `agent/uis1` | nothing | B1 B2 B3 B4 B7 B8 C1 |
-| [S2](S2-glance-statusline.md) | `uis2` / `agent/uis2` | S1 | S4 S6 C1 |
-| [S3](S3-needs-health-progress.md) | `uis3` / `agent/uis3` | S2 | S4 S5 S6 |
-| [S4](S4-orders-readonly.md) | `uis4` / `agent/uis4` | S1 | S2 S3 S6 |
-| [S5](S5-orders-write-zonemap.md) | `uis5` / `agent/uis5` | S4 (B4 and B7 before its goldens are final) | S3 S6 C2 |
-| [S6](S6-log-map-phone.md) | `uis6` / `agent/uis6` | S1 | S2 to S5 |
-| [S7](S7-polish-a11y.md) | `uis7` / `agent/uis7` | S3 S5 S6 | C3 L1 |
-| [S8](S8-retire-old-tiles.md) | `uis8` / `agent/uis8` | S7 and the user's go (HOLD) | - |
-| [C1](C1-usable-requirements.md) | `charreq` / `agent/charreq` | nothing | everything |
-| [C2](C2-character-canvas.md) | `charui` / `agent/charui` | S1 and C1 | S2 to S7 |
-| [C3](C3-gestures-instant-ui.md) | `chargest` / `agent/chargest` | C2 (B8 for the instant states) | S slices |
-| [L1](L1-loot-rules-ui.md) | `lootui` / `agent/lootui` | C2 and the loot-rules engine (HOLD) | S slices |
-| [B1](B1-pause.md) | `botpause` / `agent/botpause` | nothing | everything |
-| [B2](B2-sell-now.md) | `botsell` / `agent/botsell` | nothing | everything |
-| [B3](B3-revive-merc.md) | `botmerc` / `agent/botmerc` | nothing | everything |
-| [B4](B4-until-level.md) | `botuntil` / `agent/botuntil` | nothing | everything |
-| [B5](B5-merc-supplies-source.md) | `botlights` / `agent/botlights` | S2 | everything |
-| [B6](B6-journey-blocked.md) | `botblocked` / `agent/botblocked` | S2 (second half S4) | everything |
-| [B7](B7-loop-controller.md) | `botloop` / `agent/botloop` | nothing | everything (sole owner of the unlock ladder file in its wave) |
-| [B8](B8-instant-actions.md) | `botinstant` / `agent/botinstant` | nothing | everything but C1's edit of `desk.go` (merge origin/main first) |
-| [B9](B9-merc-item-verbs.md) | `forkmercverbs` / `agent/forkmercverbs` | B8 and C1 | S slices |
+| Brief | Agent / branch | State |
+|---|---|---|
+| [S1](S1-foundations.md) | `uis1` | wave 1 (sent) |
+| [S1b](S1b-cockpit-template.md) | `uis1b` | new; first of wave 2 |
+| [S2](S2-glance-statusline.md) | `uis2` | rewritten |
+| [S3](S3-strip-and-needs.md) | `uis3` | rewritten (was S3-needs-health-progress) |
+| [S4](S4-orders-readonly.md) | `uis4` | rewritten |
+| [S5](S5-orders-write-zonemap.md) | `uis5` | rewritten |
+| [S6](S6-areamap-drawers-phone.md) | `uis6` | rewritten (was S6-log-map-phone) |
+| [S7](S7-default-polish-a11y.md) | `uis7` | rewritten (was S7-polish-a11y) |
+| [S8](S8-retire-old-tiles.md) | `uis8` | hold, unchanged |
+| [C1](C1-usable-requirements.md) | `charreq` | wave 1 (sent), unchanged |
+| [C2](C2-character-canvas.md) | `charui` | rewritten |
+| [C3](C3-tooltip-menu-gestures.md) | `chargest` | rewritten (was C3-gestures-instant-ui) |
+| [L1](L1-loot-rules-ui.md) | `lootui` | hold; the rules list now sits under the stat sheets (J.4) |
+| [B1](B1-pause.md) to [B9](B9-merc-item-verbs.md) | as named in each | unchanged; B2, B3 can proceed |
