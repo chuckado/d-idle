@@ -127,6 +127,7 @@ func newFun(l ladderOptions, stateDir string, hub *watch.Hub, wallet *currency.W
 	if cfg.Strip != nil {
 		cfg.OrderQueue.Quote = cfg.Strip.Quote
 	}
+	cfg.OrderLoop = loopConfig(stateDir, halt, status, cfg.Strip)
 	if m := l.monsterTables(); m != nil {
 		cfg.Monsters = m
 		if stateDir != "" {

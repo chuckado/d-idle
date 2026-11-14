@@ -84,6 +84,8 @@ type FunConfig struct {
 	Risk *RiskConfig
 	// OrderQueue turns the order queue on (TASK-161) when the ladder has its slot rows.
 	OrderQueue *OrderQueueConfig
+	// OrderLoop turns the Loop order on (docs/loop-order.md) when the ladder has the row "orderloop".
+	OrderLoop *OrderLoopConfig
 	// Unlock turns the unlock ladder on (TASK-153): the engine of the profile (unlock.Open). nil: no ladder, no routes.
 	Unlock *unlock.Engine
 	// Affixes reads the properties of an identified item for the reveal card (TASK-157). nil: cards say they are not read.
@@ -133,6 +135,8 @@ type Fun struct {
 	Readiness http.Handler
 	// Queue is nil unless FunConfig.OrderQueue is set and the ladder has the slot rows (TASK-161).
 	Queue *OrderQueue
+	// Loop is nil unless FunConfig.OrderLoop is set and the ladder has the row "orderloop"; bind its repair desk with Loop.Bind.
+	Loop *OrderLoop
 	// Reveal is nil unless the ladder has the rows "idreveal" and "idreveal_later" (TASK-157).
 	Reveal *Reveal
 	// Bestiary is nil unless the ladder has the rows "bestiary" and "bestiary_resists" (TASK-158).
@@ -233,6 +237,17 @@ func NewFun(c FunConfig) (*Fun, error) {
 				return nil, err
 			}
 			f.Queue = oq
+		}
+		if c.OrderLoop != nil && c.Unlock.Has(OrderLoopID) {
+			lc := *c.OrderLoop
+			if f.Queue != nil {
+				lc.Waiting = f.Queue.waitingCount
+			}
+			ol, err := NewOrderLoop(f.Unlocks, c.Hub, lc)
+			if err != nil {
+				return nil, err
+			}
+			f.Loop = ol
 		}
 		if c.Risk != nil && c.Unlock.Has(RiskID) {
 			rm, err := NewRiskMeter(f.Unlocks, c.Hub, *c.Risk)
@@ -444,6 +459,9 @@ func (f *Fun) OnGoalEvent(ev goals.Event) {
 	if f.Hints != nil {
 		f.Hints.OnGoalEvent(ev)
 	}
+	if f.Loop != nil {
+		f.Loop.OnGoalEvent(ev)
+	}
 	if f.Queue != nil {
 		f.Queue.OnGoalEvent(ev)
 	}
@@ -584,7 +602,10 @@ func (f *Fun) Settle() {
 	if f.Risk != nil {
 		f.Risk.Tick()
 	}
-	if f.Queue != nil {
+	if f.Loop != nil {
+		f.Loop.Tick()
+	}
+	if f.Queue != nil && (f.Loop == nil || !f.Loop.Holding()) { // a running loop holds the place; the queue waits
 		f.Queue.Tick()
 	}
 	if f.codex == nil {
@@ -642,6 +663,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.Handler())
+	}
+	if f.Loop != nil {
+		m.Handle(OrderLoopRoute, f.Loop.Handler())
 	}
 	if f.Bestiary != nil {
 		m.Handle(BestiaryRoute, f.Bestiary.Handler())
@@ -726,6 +750,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.PostHandler(o))
+	}
+	if f.Loop != nil {
+		m.Handle(OrderLoopRoute, f.Loop.PostHandler(o))
 	}
 	if f.Reveal != nil {
 		m.Handle(RevealFlipRoute, f.Reveal.FlipHandler(o))

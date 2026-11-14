@@ -157,6 +157,8 @@ cmd/d2bot/live.go  credit-runner  maphistory
 cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
+cmd/d2bot/loopwire.go  credit-runner  uib7
+cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
@@ -179,6 +181,7 @@ cmd/d2firsthour/  live-agent  firsthour
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
 data/unlocks/ladder.json  credit-runner  gearsets
+data/unlocks/ladder.json  credit-runner  uib7
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
@@ -206,6 +209,7 @@ docs/hourfix.md  credit-runner  hourfix
 docs/hourfix2.md  credit-runner  hourfix2
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-actions.md  credit-runner  gearsets
+docs/inventory-ui.md  credit-runner  charreq
 docs/inventory-ui.md  credit-runner  nopins
 docs/knobs.md  credit-runner  exploredpct
 docs/knobs.md  credit-runner  freshstart
@@ -222,6 +226,7 @@ docs/levelplan3.md  pro-runner  levelplan3
 docs/levelsim.md  credit-runner  levelsim
 docs/live-checks.md  credit-runner  repairtrip
 docs/locks.md  credit-runner  lockscan
+docs/loop-order.md  credit-runner  uib7
 docs/lootrules.md  credit-runner  lootrules
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
@@ -410,14 +415,24 @@ internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
 internal/invdesk  credit-runner  gearsets
+internal/invdesk/desk.go  credit-runner  charreq
 internal/invdesk/desk.go  credit-runner  itemverbs2
 internal/invdesk/desk.go  credit-runner  tidy
 internal/invdesk/identify.go  credit-runner  itemverbs2
 internal/invdesk/mover.go  credit-runner  itemverbs2
 internal/invdesk/mover_test.go  credit-runner  itemverbs2
+internal/invdesk/sets.go  credit-runner  charreq
 internal/invdesk/stash.go  credit-runner  itemverbs2
+internal/invdesk/usable.go  credit-runner  charreq
+internal/invdesk/usable_test.go  credit-runner  charreq
+internal/itemreq/  credit-runner  charreq
+internal/leveler/itemreasons.go  credit-runner  charreq
+internal/leveler/judge.go  credit-runner  charreq
+internal/leveler/judge_test.go  credit-runner  charreq
+internal/leveler/playerequip.go  credit-runner  charreq
 internal/leveler/playerequip_test.go  credit-runner  gearsets
 internal/leveler/playerunequip.go  credit-runner  gearsets
+internal/leveler/score.go  credit-runner  charreq
 internal/levelplan  pro-runner  levelplan3
 internal/loot  credit-runner  goldprio
 internal/loot/fixpickup_test.go  credit-runner  beltfix
@@ -502,6 +517,9 @@ internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes
 internal/watch/onboarding.go  credit-runner  reconnectux
 internal/watch/onboarding_test.go  credit-runner  firstminutes
+internal/watch/orderloop.go  credit-runner  uib7
+internal/watch/orderloop_test.go  credit-runner  uib7
+internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/senses.go  credit-runner  maphistory
@@ -536,6 +554,7 @@ internal/watch/testdata/inventory_dom.js  credit-runner  nopins
 internal/watch/testdata/itemactions  credit-runner  gearsets
 internal/watch/testdata/itemactions/act_dom.js  credit-runner  nopins
 internal/watch/testdata/itemtip/tip_dom.js  credit-runner  nopins
+internal/watch/testdata/itemusable/  credit-runner  charreq
 internal/watch/testdata/map_panel.js  credit-runner  maphistory
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryA
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryB
@@ -544,6 +563,7 @@ internal/watch/testdata/map_panel.js  credit-runner  maphistoryD
 internal/watch/testdata/map_panel.js  credit-runner  maptrail
 internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
+internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
