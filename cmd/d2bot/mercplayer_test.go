@@ -36,6 +36,7 @@ func newPlayerRig(t *testing.T, class d2.Class, gold int, st merc.MercState) *pl
 	hero.Player.Area = 2 // Blood Moor: the field
 	r := &playerRig{w: w, rev: rev, rd: rd, clk: clk, hero: hero}
 	r.gear = mercGear{inner: &innerGear{}, snap: func() *d2.Snapshot { return r.hero }}
+	w.snapSrc = r.gear.snap // production sets it on the first tick (mercGear.request)
 	latestMerc.Store(w)
 	t.Cleanup(func() { latestMerc.Store(nil) })
 	return r
@@ -151,7 +152,7 @@ func TestPlayerReviveRoutesAreOffWithoutTheWiring(t *testing.T) {
 	if _, err := api.Request(); !errors.As(err, &ref) || ref.Code != "off" {
 		t.Errorf("%v", err)
 	}
-	if mercGear{}.Pending() != 0 || mercGear{}.ErrandsWaiting() != 0 {
+	if g := (mercGear{}); g.Pending() != 0 || g.ErrandsWaiting() != 0 {
 		t.Error("an empty gear is busy")
 	}
 }
