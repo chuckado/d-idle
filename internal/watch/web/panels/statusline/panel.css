@@ -1,5 +1,5 @@
 @layer panels {
-  [data-panel="statusline"] { flex: 1 1 0; overflow: hidden; align-self: stretch; display: flex; }
+  [data-panel="statusline"] { flex: 1 1 var(--c-sentence, 0%); overflow: hidden; align-self: stretch; display: flex; }
   [data-panel="statusline"] .say { all: unset; box-sizing: border-box; flex: 1 1 auto; min-inline-size: 0; display: flex; align-items: center; cursor: pointer; border-radius: var(--d-r-1); }
   [data-panel="statusline"] .say:focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
   [data-panel="statusline"] .line { display: flex; align-items: center; gap: var(--d-sp-2); min-inline-size: 0; }

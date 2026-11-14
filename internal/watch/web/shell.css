@@ -212,5 +212,6 @@
   .d-bandpop { position: fixed; inset-block-start: calc(var(--c-band, 44px) + var(--d-sp-1)); inset-inline-start: calc(var(--d-sp-6) * 4); z-index: var(--d-z-sheet); max-inline-size: min(560px, calc(100% - var(--d-sp-4))); }
   .d-bandpop[hidden] { display: none; }
   .d-shell[data-cmode="phone"] .d-bandpop { inset-inline: var(--d-sp-2); max-inline-size: none; }
-  .d-shell[data-cmode="phone"] .d-band-main > [data-panel="statusline"] { flex: 1 1 100%; }
+  /* the phone's band is two lines: the sentence on the first, the meters side by side and the count on the second; the band panels read these */
+  .d-shell[data-cmode="phone"] { --c-sentence: 100%; --c-meterflex: 1 1 0; --c-meterflow: column; --c-meterbar: minmax(24px, 1fr); --c-meterlbl: 2.4em; --c-metergap: var(--d-sp-5); }
 }
