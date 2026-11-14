@@ -168,8 +168,9 @@
   .cv-sel p[data-tone="bad"] { color: var(--d-bad); }
   .cv-sel p[data-tone="good"] { color: var(--d-good); }
   .cv-sel p[data-tone="prop"] { color: var(--d-q-magic, var(--d-text-2)); }
-  .cv-sel .cv-why { flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
-  .cv-sel .cv-acts { flex: 0 1 auto; margin-block-start: auto; min-block-size: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 24px; gap: 3px; align-content: start; overflow: hidden; }
+  .cv-sel .cv-why { flex: none; display: flex; flex-direction: column; gap: 1px; }
+  .cv-sel .cv-props { flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+  .cv-sel .cv-acts { flex: none; margin-block-start: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 24px; gap: 3px; align-content: start; overflow: hidden; }
   .cv-sel .cv-acts button { min-inline-size: 0; padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; font-size: clamp(9.5px, calc(var(--u) * .17), 11.5px); color: var(--d-text);
     background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); cursor: pointer; }
   .cv-sel .cv-acts button[data-primary] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
@@ -178,7 +179,6 @@
   .cv-sel .cv-hint { color: var(--d-text-3); }
   /* a short box keeps the verdicts (can you use it, can he) and the buttons; the place line goes first, then the verdicts */
   @container sel (max-height: 8.5rem) { .cv-sel .cv-where { display: none; } }
-  @container sel (max-height: 5.5rem) { .cv-sel .cv-why { display: none; } }
 
   .cv-side .inv-errands { flex: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; padding: 0; min-inline-size: 0; }
   .cv-side .inv-errands[hidden] { display: none; }

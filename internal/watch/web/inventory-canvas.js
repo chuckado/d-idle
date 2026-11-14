@@ -253,7 +253,7 @@
     var box = $('cv-sel'); if (!box) return;
     var f = view && selKey ? locate(view, selKey) : null;
     var sig = hash(JSON.stringify([f, askTrash === selKey, view && view.merc && view.merc.state]));
-    if (box.dataset.sig === sig) { fitActs(); return; }
+    if (box.dataset.sig === sig) return;
     box.dataset.sig = sig;
     clear(box);
     if (!f || !f.it) {
@@ -274,8 +274,10 @@
       var mr = hardReasons(m), p2 = el('p', '', m.ok ? 'He can use it' : 'He: ' + (mr.length ? mr[0].text : 'no')); p2.dataset.tone = m.ok ? 'good' : 'bad'; why.appendChild(p2);
     }
     if (it.why) why.appendChild(el('p', '', 'Why: ' + it.why));
-    (it.props || []).slice(0, 12).forEach(function (x) { var q = el('p', '', x); q.title = x; q.dataset.tone = 'prop'; why.appendChild(q); });
     box.appendChild(why);
+    var props = el('div', 'cv-props');
+    (it.props || []).slice(0, 12).forEach(function (x) { var q = el('p', '', x); q.title = x; q.dataset.tone = 'prop'; props.appendChild(q); });
+    box.appendChild(props);
     var acts = el('div', 'cv-acts'), a = api();
     if (a) actions(f).forEach(function (e) {
       var b = el('button', '', e.label); b.type = 'button'; b.dataset.act = e.act || ''; if (e.primary) b.dataset.primary = ''; if (e.confirm) b.dataset.confirm = '';
@@ -284,23 +286,24 @@
       acts.appendChild(b);
     });
     box.appendChild(acts);
-    fitActs();
+    fitSel();
   }
-  // a list that does not fit its box loses its tail, never scrolls; the action buttons end with More, which opens the full menu
-  function fitActs() {
-    var wy = document.querySelector && document.querySelector('#cv-sel .cv-why');
-    if (wy && wy.clientHeight) while (wy.children.length > 1 && wy.scrollHeight > wy.clientHeight + 1) wy.removeChild(wy.lastChild);
-    var acts = document.querySelector && document.querySelector('#cv-sel .cv-acts');
-    if (!acts || !acts.clientHeight || acts.dataset.fit) return;
-    var cut = 0;
-    while (acts.children.length > 1 && acts.scrollHeight > acts.clientHeight + 1) { acts.removeChild(acts.lastChild); cut++; }
-    if (cut) {
+  // The selected box never scrolls and never overruns: the properties go first, then the buttons beyond the first row (the last
+  // one left becomes "More...", which opens the full action menu), then all but one verdict line.
+  function fitSel() {
+    var box = $('cv-sel'); if (!box || !box.clientHeight) return;
+    var props = box.querySelector('.cv-props'), acts = box.querySelector('.cv-acts'), why = box.querySelector('.cv-why'), cut = 0;
+    var over = function () { return box.scrollHeight > box.clientHeight + 1; };
+    if (props) while (props.children.length && props.scrollHeight > props.clientHeight + 1) props.removeChild(props.lastChild);
+    while (over() && acts && acts.children.length > 2) { acts.removeChild(acts.lastChild); cut++; }
+    while (over() && why && why.children.length > 1) why.removeChild(why.lastChild);
+    while (over() && acts && acts.children.length > 1) { acts.removeChild(acts.lastChild); cut++; }
+    if (cut && acts && acts.lastChild) {
       acts.removeChild(acts.lastChild);
       var more = el('button', '', 'More...'); more.type = 'button'; more.dataset.act = 'more'; more.title = 'Every action for this item';
       more.addEventListener('click', function () { var a = api(); if (a && a.open && selKey) a.open(selKey); });
       acts.appendChild(more);
     }
-    acts.dataset.fit = '';
   }
   // a label that does not fit its cell or slot is cut with an ellipsis (the full name is the title): the box is never scrolled
   // or overrun. The full text is kept in data-full so a resize can cut again from the whole name.
@@ -383,9 +386,8 @@
 
   function relayout() {
     // each part runs on its own, so one failing part never leaves the others untrimmed
-    [cutLabels, delete_fit, function () { var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } }, trimQueue, fitActs].forEach(function (f) { try { f(); } catch (e) { /* a box that cannot be measured stays as it is */ } });
+    [cutLabels, function () { var b = $('cv-sel'); if (b) { b.dataset.sig = ''; drawSel(); } }, function () { var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } }, trimQueue].forEach(function (f) { try { f(); } catch (e) { /* a box that cannot be measured stays as it is */ } });
   }
-  function delete_fit() { var a = document.querySelector('#cv-sel .cv-acts'); if (a) delete a.dataset.fit; }
 
   // ---- events ----
   // the page never opens on an empty box: the first item of the pack (else the stash) is selected until the player picks one

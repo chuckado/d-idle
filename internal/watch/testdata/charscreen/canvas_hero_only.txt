@@ -15,6 +15,7 @@ div [data-sig=4u1nsc]
   p.cv-where [] "In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
+  div.cv-props []
   div.cv-acts []
     button [aria-disabled=true data-act=equip] "Equip" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
     button [data-act=stash] "To stash"
