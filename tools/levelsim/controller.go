@@ -60,12 +60,19 @@ type CtlRow struct {
 	MercDied int
 }
 
+// PayCheck compares the model's pay with the area summaries of the log (stays of at least 2 minutes): sums over the stays.
+type PayCheck struct {
+	Minutes, Kills, XP, PredKills, PredXP float64
+	Stays                                 int
+}
+
 // CtlReport is the result of one controller replay.
 type CtlReport struct {
 	Rows      []CtlRow
 	Names     map[int]string
 	KHero     float64
 	KZone     map[int]float64
+	Pay       map[int]*PayCheck
 	CandAreas []int
 	Dial      string
 	Skipped   []string
@@ -104,7 +111,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 	if err := sc.Err(); err != nil {
 		return nil, err
 	}
-	rep := &CtlReport{Names: map[int]string{}, KZone: map[int]float64{}, Dial: dialID}
+	rep := &CtlReport{Names: map[int]string{}, KZone: map[int]float64{}, Pay: map[int]*PayCheck{}, Dial: dialID}
 	for a := range areas {
 		if z, err := o.Tab.Find(a, diff); err == nil {
 			rep.CandAreas = append(rep.CandAreas, a)
@@ -242,6 +249,20 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		case "area summary":
 			a, _ := strconv.Atoi(kv["area"])
 			xp, _ := strconv.Atoi(kv["xp"])
+			if mins, _ := strconv.ParseFloat(kv["minutes"], 64); mins >= 2 && o.known(a) && hero.MaxLife > 0 {
+				z, _ := o.Tab.Find(a, diff)
+				if zm, err := o.M.Zone(hero, o.Arch, z, dialID); err == nil {
+					e := survival.Economy(z, zm, hero.Level, o.Params)
+					kills, _ := strconv.ParseFloat(kv["kills"], 64)
+					pc := rep.Pay[a]
+					if pc == nil {
+						pc = &PayCheck{}
+						rep.Pay[a] = pc
+					}
+					pc.Minutes, pc.Kills, pc.XP, pc.Stays = pc.Minutes+mins, pc.Kills+kills, pc.XP+float64(xp), pc.Stays+1
+					pc.PredKills, pc.PredXP = pc.PredKills+e.KillsPerMin*mins, pc.PredXP+e.XPPerMin*mins
+				}
+			}
 			if o.known(a) && xp > 0 {
 				led.Observe(survival.ZoneKey{Area: a, Diff: diff}, last, survival.Event{Kind: survival.EvXP, XP: float64(xp)}, pw())
 			}
@@ -367,6 +388,17 @@ func (r *CtlReport) Text() string {
 		fmt.Fprintf(&b, " %s %.2f;", r.name(a), r.KZone[a])
 	}
 	b.WriteString("\n")
+	b.WriteString("pay check (area summaries of 2+ minutes; observed against the model's Economy at the hero's level):\n")
+	fmt.Fprintf(&b, "%-22s %6s %5s %9s %9s %9s %9s\n", "area", "min", "stays", "kills/min", "pred", "xp/min", "pred")
+	var ks []int
+	for a := range r.Pay {
+		ks = append(ks, a)
+	}
+	sort.Ints(ks)
+	for _, a := range ks {
+		pc := r.Pay[a]
+		fmt.Fprintf(&b, "%-22s %6.0f %5d %9.1f %9.1f %9.0f %9.0f\n", r.name(a), pc.Minutes, pc.Stays, pc.Kills/pc.Minutes, pc.PredKills/pc.Minutes, pc.XP/pc.Minutes, pc.PredXP/pc.Minutes)
+	}
 	return b.String()
 }
 
