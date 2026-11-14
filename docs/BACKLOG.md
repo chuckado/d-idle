@@ -827,6 +827,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - prswing2: swing start PR candidate r2, the five verifier edits (fid/swing-start-r2) (TASK-417, merged 2026-11-14, acceptance 3 of 3): fid/swing-start-r2 (4a18fa9e oracle, 8626e244 claim, on upstream f9b8cfed) pushed to the private fork; held weapon = the usable one; oracle 11,270 cells 2,011 differ before, 0 after ... <!--sg:agent/prswing2-->
 - agent/stashanywhere: stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14) (merged 2026-11-14) <!--sg:agent/stashanywhere-->
 - agent/decomp19: boss1: queue result line at end (merged 2026-11-14) <!--sg:agent/decomp19-->
+- uiredesign2: watch UI redesign answers folded in, worker briefs (TASK-419, merged 2026-11-14, acceptance 7 of 7): docs only, nothing built and nothing verified live (2026-11-14): the twelve answers are recorded and folded into C, D, G and the README (Standard as the default from S1 through per-cell fallbacks; single orders, then the Loop order, then the queue ... <!--sg:agent/uidesign2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
