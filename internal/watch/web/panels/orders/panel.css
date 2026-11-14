@@ -1,6 +1,6 @@
 @layer panels {
-  /* a slot panel: the box is given, the list scrolls inside it; the panel is its content up to 45 % of the column */
-  [data-panel="orders"]:not([data-grow]) { max-block-size: 45%; }
+  /* a slot panel: the box is given, the list scrolls inside it; the panel is its content up to 45 % of a column (not in the top row of a wide rail, which sizes itself) */
+  [data-panel="orders"]:not([data-grow]):where(.d-slotcol:not(.d-slottop) > *) { max-block-size: 45%; }
   [data-panel="orders"] .d-slotbody { display: flex; flex-direction: column; min-block-size: 0; gap: var(--d-sp-1); }
   [data-panel="orders"] .o-head { flex: none; display: flex; justify-content: space-between; align-items: baseline; font-size: var(--d-fs-0); font-weight: 700;
     letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); }

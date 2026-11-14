@@ -44,7 +44,7 @@ if [ "$fit" = 1 ]; then
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 orders-eight watch?layout=cockpit&theme=dark&cmd=eight
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
-orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=3&cmd=eight
+orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=0&cmd=eight
 orders-rail-all watch?layout=cockpit-orders&theme=dark&needs=0&cmd=cancel-all
 orders-empty watch?layout=cockpit&theme=dark&cmd=empty
 orders-safety watch?layout=cockpit&theme=dark&cmd=safety

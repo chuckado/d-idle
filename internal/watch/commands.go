@@ -489,7 +489,7 @@ func BuildCommands(s CommandSources) CommandsView {
 	return v
 }
 
-var repairWord = map[string]string{"queued": "asked; waiting to be seen", "waiting": "waiting for a safe moment", "going": "going to town",
+var repairWord = map[string]string{"queued": "asked; waiting to be seen", "waiting": "safe moment first", "going": "going to town",
 	"repairing": "repairing in town", "returning": "going back", "farming": "farming gold first"}
 
 func cmdRound(f float64) float64 { return float64(int(f*1000+0.5)) / 1000 }
@@ -509,7 +509,7 @@ func activeWhy(o Order, now float64) string {
 	if o.Minutes > 0 && o.StartedAt > 0 {
 		p = append(p, fmt.Sprintf("%d min left", max(0, o.Minutes-int((now-o.StartedAt)/60))))
 	}
-	if o.Kills > 0 {
+	if len(p) == 0 && o.Kills > 0 { // the row is one line: minutes first, kills only when there are no minutes
 		p = append(p, fmt.Sprintf("%d kills", o.Kills))
 	}
 	return strings.Join(p, ", ")
@@ -548,7 +548,7 @@ func (q itemReq) row(now int64) (CommandRow, bool) {
 	case CmdQueued:
 		switch q.Wait {
 		case "safe":
-			r.State, r.Why = CmdWaiting, &CommandWhy{"player_items", "waiting for a safe moment"}
+			r.State, r.Why = CmdWaiting, &CommandWhy{"player_items", "safe moment first"}
 		case "town":
 			r.State, r.Why = CmdWaiting, &CommandWhy{"player_items", "waiting for the next town visit"}
 		default:

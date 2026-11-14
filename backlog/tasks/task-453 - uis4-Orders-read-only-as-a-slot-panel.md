@@ -18,6 +18,7 @@ owns:
   - "internal/watch/testdata/commands/"
   - "internal/watch/web/panels/orders/"
   - "internal/watch/testdata/orders_dom.js"
+  - "internal/watch/testdata/orders_dom.txt"
   - "tools/uishots/fixtures_commands.go"
 exclusive: []
 contracts: []
@@ -28,7 +29,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Why: TODO. Done when: TODO.
+Why: the Orders panel of the cockpit rail (J section 2, C-orders.md): one list of the player's commands in the bot's own order with one state vocabulary, instead of five queues in five places. Read-only: the verb row is drawn but inert (S5 adds the write side); the cancel cross posts to the route the row's own source already has. Done when: the criteria below are ticked and the result says what was verified. Based on agent/uis1b (S1b is not on main yet); one-line edits outside the owned paths are listed in the result.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
