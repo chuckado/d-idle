@@ -32,7 +32,7 @@ const cases = [];
 for (const f of files) cases.push([f.replace(/^view-|\.json$/g, ''), view(f.replace(/^view-|\.json$/g, ''))]);
 const eight = view('three-one-failed-sorceress');
 for (let i = 0; i < 5; i++) eight.rows.splice(1, 0, { id: 'order:' + (20 + i), intent: 'go', text: 'Farm Blood Moor for ' + (10 + i) + ' min', source: 'map', state: 'queued',
-  why: { code: 'order_queued', text: 'starts when the running order ends' }, can: { cancel: true, retry: false }, cancel: { path: '/api/orders/cancel', body: { id: 20 + i } } });
+  why: { code: 'order_queued', text: 'after the running order' }, can: { cancel: true, retry: false }, cancel: { path: '/api/orders/cancel', body: { id: 20 + i } } });
 cases.push(['eight-rows', eight]);
 
 let out = '';

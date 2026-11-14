@@ -40,7 +40,7 @@ func commandsFixture(class string) http.HandlerFunc {
 		if name == "eight" {
 			for i := 0; i < 5; i++ {
 				v.Rows = append(v.Rows[:1], append([]watch.CommandRow{{ID: fmt.Sprintf("order:%d", 20+i), Intent: "go", Text: fmt.Sprintf("Farm Blood Moor for %d min", 10+i),
-					Source: "map", State: "queued", Why: &watch.CommandWhy{Code: "order_queued", Text: "starts when the running order ends"},
+					Source: "map", State: "queued", Why: &watch.CommandWhy{Code: "order_queued", Text: "after the running order"},
 					Can: watch.CommandCan{Cancel: true}, Cancel: &watch.CommandCancel{Path: "/api/orders/cancel", Body: map[string]any{"id": 20 + i}}}}, v.Rows[1:]...)...)
 			}
 		}

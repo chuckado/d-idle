@@ -396,7 +396,7 @@ func BuildCommands(s CommandSources) CommandsView {
 				r.ETASeconds = &secs
 			}
 		case CmdQueued:
-			r.Why = &CommandWhy{"order_queued", "starts when the running order ends"}
+			r.Why = &CommandWhy{"order_queued", "after the running order"}
 		case CmdFailed:
 			if ov.Now-o.GivenAt > failedShowSec+float64(o.Minutes*60) {
 				continue
