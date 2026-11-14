@@ -60,6 +60,8 @@ export function mount(root, ctx) {
     pop.append(dl);
     const a = ctx.el('a', 'more', 'Open the log');
     a.href = '#log';
+    // the shell's drawer API (slice S6); before it exists the link is only the anchor
+    a.addEventListener('click', (e) => { if (ctx.openDrawer) { e.preventDefault(); open(false); ctx.openDrawer('log'); } });
     pop.append(a);
   }
   show('info', '...', '', 'waiting for the bot', []);
