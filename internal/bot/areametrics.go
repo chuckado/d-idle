@@ -28,6 +28,8 @@ func (r *Runner) noteAreaMetrics(p *d2.Player, now time.Time) {
 	if !a.known || a.id != p.Area {
 		if a.known {
 			mins := int(now.Sub(a.enteredAt).Round(time.Minute) / time.Minute)
+			r.zoneObserve(ZoneEvent{Kind: ZoneEvArea, Area: a.id, Diff: difficultyName(p.Difficulty), Kills: o.kills - a.killsAtEntry,
+				Seconds: now.Sub(a.enteredAt).Seconds(), XP: float64(a.xp), At: now})
 			r.e.Log.Info("area summary", "area", a.id, "minutes", mins, "xp", a.xp, "kills", o.kills-a.killsAtEntry, "goldPickup", a.gold)
 		}
 		*a = areaAcc{id: p.Area, killsAtEntry: o.kills, enteredAt: now, prevGold: p.Gold, prevExp: p.Exp, known: true}

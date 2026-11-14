@@ -23,6 +23,7 @@ func (k ZoneKey) String() string { return fmt.Sprintf("%d/%s", k.Area, k.Diff) }
 // Event kinds a caller reports.
 const (
 	EvFight     = "fight" // Kills, Seconds, Taken, PredTaken, PredKillSec, Potions, XP, GoldIn, GoldOut
+	EvXP        = "xp"    // XP and gold earned over a stay (area summary); adds no fight time
 	EvChicken   = "chicken"
 	EvDeath     = "death"
 	EvMercDeath = "merc_death"
@@ -151,6 +152,9 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 		s.GoldOut += e.GoldOut
 		h := decay(e.Seconds, l.P.HeroHalfLifeMinutes)
 		l.HeroSec, l.HeroPred, l.HeroKill = l.HeroSec*h+e.Seconds, l.HeroPred*h+e.PredKillSec, l.HeroKill*h+e.Kills
+	case EvXP:
+		s.XP += e.XP
+		s.GoldIn += e.GoldIn
 	case EvChicken, EvDeath, EvMercDeath:
 		mul := map[string]float64{EvChicken: l.P.ChickenMul, EvDeath: l.P.DeathMul, EvMercDeath: l.P.MercDeathMul}[e.Kind]
 		s.Hard = l.hardNow(s, now) * mul // the earlier events have relaxed by now; the new one lands in full

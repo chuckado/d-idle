@@ -85,12 +85,7 @@ func wirePower(db *data.DB) func(s *d2.Snapshot, area int, diff string, potions 
 		if err != nil {
 			return "" // a town or an area the profile does not cover: nothing to say
 		}
-		build := leveler.SelectBuild(strings.ToLower(p.Class.String()), p.Level, leveler.OwnedSkills(db, p))
-		spec, err := power.SpecFromBuild(plandata.FS, "build-"+build+".json", p.Level, classAttacks)
-		if err != nil {
-			return warn(err)
-		}
-		a, err := m.P.Resolve(spec)
+		a, err := archetypeOf(m, db, p)
 		if err != nil {
 			return warn(err)
 		}
@@ -100,4 +95,14 @@ func wirePower(db *data.DB) func(s *d2.Snapshot, area int, diff string, potions 
 		}
 		return zm.ShadowLine(p.Level)
 	}
+}
+
+// archetypeOf resolves the hero's archetype from the build the leveler picks (data, no class names here).
+func archetypeOf(m *power.Model, db *data.DB, p *d2.Player) (*power.Archetype, error) {
+	build := leveler.SelectBuild(strings.ToLower(p.Class.String()), p.Level, leveler.OwnedSkills(db, p))
+	spec, err := power.SpecFromBuild(plandata.FS, "build-"+build+".json", p.Level, classAttacks)
+	if err != nil {
+		return nil, err
+	}
+	return m.P.Resolve(spec)
 }

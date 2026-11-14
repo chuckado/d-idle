@@ -36,3 +36,10 @@ func TestWirePowerWithoutTables(t *testing.T) {
 		t.Error("no tables must give no hook")
 	}
 }
+
+func TestWireSurvivalWithoutTables(t *testing.T) {
+	c, o := wireSurvival(nil, t.TempDir()+"/ledger.json")
+	if c != nil || o != nil {
+		t.Error("no tables must give no hooks")
+	}
+}

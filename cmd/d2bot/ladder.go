@@ -273,6 +273,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		rig.Fun.Readiness = l.readiness
 		rig.Fun.Danger = l.danger
 		hub.SetHeroStatsSource(l.heroStats)
+		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
 		bindRepair(rig.Fun, l.repair, l.farm)
 		bindJourney(rig.Fun, l.journey)
