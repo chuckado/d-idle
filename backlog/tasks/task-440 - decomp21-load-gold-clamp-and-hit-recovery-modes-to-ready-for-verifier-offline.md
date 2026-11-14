@@ -1,10 +1,13 @@
 ---
 id: TASK-440
-title: 'decomp21: load-gold clamp and hit-recovery modes to ready-for-verifier (offline)'
-status: Proposed
+title: >-
+  decomp21: load-gold clamp and hit-recovery modes to ready-for-verifier
+  (offline)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:01:00Z'
+updated_date: '2026-11-14T21:28:00Z'
 labels:
   - d2d
   - upstream-pr
