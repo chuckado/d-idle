@@ -81,7 +81,7 @@ func (fixtureDesk) View() any {
 			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, nil),
 		},
 		"backpack": []any{
-			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
+			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "level": 12, "props": []string{"+2 to Charged Bolt", "+8 to Energy", "Requires Level 6"}, "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
 			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
 			item(12, "ssd", "Short Sword", "normal", 2, 0, 1, 3, map[string]any{"mark": "sell", "canSell": true, "maxDur": 24, "dur": 3}),
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
