@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-448 <!--sg:agent/prfix2-->
 - Merge branch 'main' into towerenv <!--sg:agent/towerenv-->
 - Merge branch 'main' into TASK-442 <!--sg:agent/uib3-->
 - Merge branch 'main' into TASK-443 <!--sg:agent/survA-->
