@@ -29,7 +29,7 @@ div [data-canvas=]
         span.sil [] "weapon"
         span.nm [] "Spear"
         span.broken [] "Broken"
-    div.cv-sheet [aria-label=Mercenary values]
+    div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
       div []
         label [] "Level"
         b [] "17"

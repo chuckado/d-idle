@@ -29,7 +29,7 @@ div [data-canvas=]
         span.sil [] "weapon"
       div.d-slot2 [aria-label=shield: empty data-owner=merc data-slot=mlhand] title="shield: empty"
         span.sil [] "shield"
-    div.cv-sheet [aria-label=Mercenary values]
+    div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
       div []
         label [] "Level"
         b [] "17"
