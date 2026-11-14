@@ -213,6 +213,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 79fa5b547 11-14 18:58 `Merge agent/cut012: friends 0.1.2: per-archive game mounts (no key file), checklist fixes, restaged` (cut012)
+- cbc1dd7f5 11-14 18:57 `Merge branch 'main' into TASK-439` (-)
 - db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
 - 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
 - 0fa102afd 11-14 18:53 `Merge branch 'main' into p03posted` (-)
@@ -221,6 +223,4 @@
 - 9773f4061 11-14 18:36 `Merge branch 'main' into TASK-452` (-)
 - ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
 - cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
-- 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
-- 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
 <!-- statusgen:end -->
