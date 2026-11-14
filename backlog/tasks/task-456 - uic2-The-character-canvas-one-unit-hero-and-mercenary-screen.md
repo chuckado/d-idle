@@ -23,6 +23,7 @@ owns:
   - "internal/watch/web/inventory-canvas.css"
   - "internal/watch/invui.go"
   - "internal/watch/invapi.go"
+  - "docs/inventory-ui.md"
   - "internal/watch/charscreen_test.go"
   - "internal/watch/testdata/charscreen/"
   - "tools/uishots.sh"
