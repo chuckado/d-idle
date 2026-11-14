@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-439 <!--sg:agent/uib2-->
+- friends 0.1.2: installer fix, pack and set staged, drills pending <!--sg:agent/cut012-->
 - Merge branch 'main' into decomp21 <!--sg:agent/decomp21-->
 - Merge branch 'main' into buildhosts3 <!--sg:agent/buildhosts3-->
 - uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated <!--sg:agent/uidesign4-->
