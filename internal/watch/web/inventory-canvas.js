@@ -240,8 +240,8 @@
     } else if (f.place === 'worn') add('Take off', function () { a.unequip(f.slot); }, it.noUnequip, { act: 'unequip' });
     if (it.stashOp === 'stash' || it.stashOp === 'take') add(it.stashOp === 'stash' ? 'To stash' : 'Take out', function () { (it.stashOp === 'stash' ? a.stash : a.take)(it.id); }, it.noStash, { act: it.stashOp });
     var sold = it.mark === 'sell';
-    add(sold ? 'Clear sell mark' : 'Mark for sale', function () { a.post('/api/inventory/mark', { id: it.id, mark: sold ? '' : 'sell' }); }, sold ? '' : (it.noSell || (f.place !== 'pack' ? 'only backpack items are sold' : '')), { act: 'sell' });
-    add(it.mark === 'keep' ? 'Clear keep mark' : 'Keep', function () { a.post('/api/inventory/mark', { id: it.id, mark: it.mark === 'keep' ? '' : 'keep' }); }, '', { act: 'keep' });
+    add(sold ? 'Clear sell' : 'Mark sell', function () { a.post('/api/inventory/mark', { id: it.id, mark: sold ? '' : 'sell' }); }, sold ? '' : (it.noSell || (f.place !== 'pack' ? 'only backpack items are sold' : '')), { act: 'sell' });
+    add(it.mark === 'keep' ? 'Clear keep' : 'Keep', function () { a.post('/api/inventory/mark', { id: it.id, mark: it.mark === 'keep' ? '' : 'keep' }); }, '', { act: 'keep' });
     var ask = askTrash === key;
     add(ask ? 'Confirm: trash' : 'Trash', function () { if (!ask) { askTrash = key; drawSel(); } else { askTrash = ''; a.trash(it.id); } }, it.noTrash, { confirm: ask, act: 'trash' });
     return out;
@@ -351,6 +351,7 @@
       var t = b.textContent;
       if (SHORT[t]) { b.title = b.title || t; b.textContent = SHORT[t]; }
     });
+    var g = $('sg-n'); if (g && !g.getAttribute('placeholder')) g.setAttribute('placeholder', 'gold amount');
   }
 
   // ---- hero values: /api/hero, read at most every eight seconds with the page's own poll ----
@@ -363,6 +364,7 @@
     var t = heroTiles(view, hero);
     drawSheet($('hsheet'), t, Math.max(1, Math.ceil(t.length / 2)));
     heroLabel(view, hero);
+    relayout();
   }
 
   // ---- phone tabs ----
@@ -380,8 +382,8 @@
   }
 
   function relayout() {
-    var go = function () { cutLabels(); delete_fit(); var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } trimQueue(); fitActs(); };
-    if (typeof requestAnimationFrame === 'function') requestAnimationFrame(go); else go();
+    // each part runs on its own, so one failing part never leaves the others untrimmed
+    [cutLabels, delete_fit, function () { var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } }, trimQueue, fitActs].forEach(function (f) { try { f(); } catch (e) { /* a box that cannot be measured stays as it is */ } });
   }
   function delete_fit() { var a = document.querySelector('#cv-sel .cv-acts'); if (a) delete a.dataset.fit; }
 
@@ -432,6 +434,7 @@
       if (e.key === 'Escape' && t === $('cv-q')) { $('cv-q').value = ''; F.q = ''; dim(); $('cv-q').blur(); }
     });
     window.addEventListener('resize', relayout, { passive: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(relayout);
     if (typeof ResizeObserver === 'function') {
       var ro = new ResizeObserver(relayout);
       ['cv-log', 'cv-sel'].forEach(function (id) { var n = $(id); if (n) ro.observe(n); });

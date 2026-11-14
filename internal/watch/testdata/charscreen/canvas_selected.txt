@@ -8,7 +8,7 @@ div [data-sig=1nr4yrx]
   div.cv-acts []
     button [aria-disabled=true data-act=equip] "Equip" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
     button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark for sale"
+    button [data-act=sell] "Mark sell"
     button [data-act=keep] "Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-4
@@ -23,7 +23,7 @@ div [data-sig=r76i5g]
     button [data-act=equip-lring data-primary=] "Equip (left ring)"
     button [data-act=equip-rring data-primary=] "Equip (right ring)"
     button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark for sale"
+    button [data-act=sell] "Mark sell"
     button [data-act=keep] "Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-5
@@ -38,7 +38,7 @@ div [data-sig=1y9xlei]
     button [data-act=equip-rring] "Equip (right ring)"
     button [data-act=equip-lring] "Equip (left ring)"
     button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark for sale"
+    button [data-act=sell] "Mark sell"
     button [data-act=keep] "Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-90
@@ -48,7 +48,7 @@ div [data-sig=vhosdg]
   div.cv-why []
   div.cv-acts []
     button [aria-disabled=true data-act=take] "Take out" title="the stash opens only in town"
-    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [aria-disabled=true data-act=sell] "Mark sell" title="only backpack items are sold"
     button [data-act=keep] "Keep"
     button [data-act=trash] "Trash"
 ## slot-lhand
@@ -60,6 +60,6 @@ div [data-sig=61nvzb]
     p [data-tone=good] "He can use it"
   div.cv-acts []
     button [data-act=unequip] "Take off"
-    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [aria-disabled=true data-act=sell] "Mark sell" title="only backpack items are sold"
     button [data-act=keep] "Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
