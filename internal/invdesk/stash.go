@@ -128,12 +128,12 @@ func (d *Desk) requestMove(id uint32, toStash bool) (Request, error) {
 	return d.enqueueLocked(Request{ID: id, Kind: kind, Name: name, Print: fingerprint(u)})
 }
 
-// RequestStash queues moving backpack item id into the stash.
-func (d *Desk) RequestStash(id uint32) (Request, error) { return d.requestMove(id, true) }
+// requestStash queues moving backpack item id into the stash.
+func (d *Desk) requestStash(id uint32) (Request, error) { return d.requestMove(id, true) }
 
-// RequestTake queues taking stash item id out into the backpack. Refused at once when the backpack has no free spot for
+// requestTake queues taking stash item id out into the backpack. Refused at once when the backpack has no free spot for
 // its size (the reason says to make room).
-func (d *Desk) RequestTake(id uint32) (Request, error) { return d.requestMove(id, false) }
+func (d *Desk) requestTake(id uint32) (Request, error) { return d.requestMove(id, false) }
 
 // requestStashIdentify is RequestIdentify for an item in the stash: it is read where it lies, in town.
 func (d *Desk) requestStashIdentify(id uint32, u d2.Unit, s *d2.Snapshot) (Request, error) {
@@ -155,8 +155,8 @@ func packGoldRoom(s *d2.Snapshot, packGold int) int {
 	return max(0, s.Player.Level*WithdrawPerLevel-packGold)
 }
 
-// RequestGold queues a gold move between the backpack and the stash (deposit true: into the stash).
-func (d *Desk) RequestGold(deposit bool, amount int) (Request, error) {
+// requestGold queues a gold move between the backpack and the stash (deposit true: into the stash).
+func (d *Desk) requestGold(deposit bool, amount int) (Request, error) {
 	if d.stashSv() == nil {
 		return Request{}, refuse("off", "the stash gold controls are not available on this bot")
 	}

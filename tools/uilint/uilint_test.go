@@ -206,7 +206,8 @@ func TestLayoutManifestRules(t *testing.T) {
 	p := func(id string, col, row, w, h, order int) string {
 		return fmt.Sprintf(`{"id":%q,"band":"grid","col":%d,"row":%d,"colSpan":%d,"rowSpan":%d,"collapsed":false,"order":%d}`, id, col, row, w, h, order)
 	}
-	shell := `{"status":[],"stage":[],"layout":{"aliases":{"old":"probe"},"compat":["now"],"reserved":["later"]}}`
+	fbp := func(e, to string) string { return e[:len(e)-1] + `,"fallback":"` + to + `"}` }
+	shell := `{"status":[],"stage":[],"layout":{"aliases":{"old":"probe"},"compat":["now"],"reserved":["later","later2"]}}`
 	cases := []struct {
 		name, file, body, rule string
 	}{
@@ -217,6 +218,17 @@ func TestLayoutManifestRules(t *testing.T) {
 		{"outside the columns", "layouts/x.json", lay(p("probe", 8, 1, 6, 3, 0)), "layout-manifest"},
 		{"order twice", "layout.json", lay(p("probe", 1, 1, 6, 3, 0) + "," + p("now", 7, 1, 6, 3, 0)), "layout-manifest"},
 		{"schema", "layout.json", `{"schema":"watch.layout/2"}`, "layout-manifest"},
+		// S1 keys: an unbuilt (reserved) id with a fallback to a card on the page is fine, so is a status list
+		{"fallback", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"now"}`), ""},
+		{"fallback unknown", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"nope"}`), "layout-manifest"},
+		{"fallback reserved", "layout.json", lay(p("later", 1, 1, 6, 3, 0)[:len(p("later", 1, 1, 6, 3, 0))-1] + `,"fallback":"later"}`), "layout-manifest"},
+		{"two fallbacks to one target", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + fbp(p("later2", 7, 1, 6, 3, 1), "now")), "layout-manifest"},
+		{"fallback target also placed", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + p("now", 7, 1, 6, 3, 1)), "layout-manifest"},
+		{"fallback target hidden", "layout.json", lay(fbp(p("later", 1, 1, 6, 3, 0), "now") + "," + strings.Replace(p("now", 7, 1, 6, 3, 1), `"order"`, `"hidden":true,"order"`, 1)), ""},
+		{"unknown id without fallback", "layout.json", lay(p("zz", 1, 1, 6, 3, 0)), "layout-manifest"},
+		{"status", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":["probe",{"id":"later","fallback":"now"}],"cols":12,"rowHeight"`, 1), ""},
+		{"status unknown", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":["nope"],"cols":12,"rowHeight"`, 1), "layout-manifest"},
+		{"status bad entry", "layout.json", strings.Replace(lay(p("probe", 1, 1, 6, 3, 0)), `"cols":12,"rowHeight"`, `"status":[7],"cols":12,"rowHeight"`, 1), "layout-manifest"},
 	}
 	for _, c := range cases {
 		files := good()
@@ -230,7 +242,17 @@ func TestLayoutManifestRules(t *testing.T) {
 			t.Errorf("%s: findings %v, want %q", c.name, got, c.rule)
 		}
 	}
+	// a manifest may carry optIn (and only a boolean)
 	files := good()
+	files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","optIn":true`, 1)
+	if fs := run(t, files); len(fs) != 0 {
+		t.Errorf("optIn: %v", fs)
+	}
+	files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","optIn":"yes"`, 1)
+	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "manifest-schema" {
+		t.Errorf("optIn as a string: %v", fs)
+	}
+	files = good()
 	files["shell.json"] = `{"status":[],"stage":[],"layout":{"aliases":{"old":"gone"}}}`
 	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "layout-alias" {
 		t.Errorf("an alias to nothing: %v", fs)

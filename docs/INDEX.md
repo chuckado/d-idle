@@ -405,6 +405,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [live-checks.md](live-checks.md): Live checks still open
 - [locks.md](locks.md): Lock order and rules (status: current (lock audit, 2026-11-12, after the sandbox freeze of 2026-11-12: nav.roam called done() under...)
 - [logfields.md](logfields.md): Log fields for the per-skill soak report (change logfields)
+- [loop-order.md](loop-order.md): The Loop order and its unlock (status: built offline (task uib7), not verified live. Design: `docs/ui/redesign-2026-11-14/C-orders.md` section 8....)
 - [loot-charms.md](loot-charms.md): Charms, runes and gems on a sell visit (status: current (card m1-loot, agent m1loot, 2026-10-31). Rule source: user decision D4 and the d2-sme; shared...)
 - [lootmemory.md](lootmemory.md): Loot memory (status: current (TASK-320). Code: `internal/loot/memory.go`; hooks in `internal/bot/observe.go` and `goal.go`...)
 - [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
@@ -507,6 +508,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [staletarget.md](staletarget.md): Stale target area, border-loop bans and blocked journey steps (TASK-398) (status: fix landed on branch agent/staletarget (not deployed; no live run). Tags: V verified (how is said), S...)
 - [stance.md](stance.md): Fight stance (cards stancefix, stancelever) (status: built and tested offline; NOT run in a live game. Tags: V = proven by a test in this tree or by a log...)
 - [summon.md](summon.md): Necromancer upkeep (internal/combat/necro.go)
+
+`survival/`
+
+- [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
+- [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
 - [tally-strip.md](tally-strip.md): Tally strip: credits from events, the strip, the charter sink (status: built offline 2026-11-07 and wired into the bot by TASK-140 (see Wiring), TASK-129 (fun loop, ADR 0018,...)
@@ -532,13 +539,14 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `ui/redesign-2026-11-14/`
 
 - [A-audit.md](ui/redesign-2026-11-14/A-audit.md): A. Audit: what /watch shows and how the player commands the bot today (status: design input (TASK-416, 2026-11-14). Read from the code on `origin/main` at 883770a9 and from pictures of...)
-- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: design proposal (TASK-416, 2026-11-14). It builds on `docs/ui-design-system.md` (the shell, tokens, panel...)
+- [B-principles-ia.md](ui/redesign-2026-11-14/B-principles-ia.md): B. Principles and information architecture (status: the rules stand; the default view of section 2 is now laid out as the cockpit of J-second-attempt.md....)
 - [C-orders.md](ui/redesign-2026-11-14/C-orders.md): C. Orders: one control surface (status: design accepted by the user's answers of 2026-11-14 (H-open-questions.md), not built. Section 8...)
-- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: accepted by the user's answers of 2026-11-14; sections 1 and 4 were rewritten for answer 4 (Standard is...)
+- [D-layouts.md](ui/redesign-2026-11-14/D-layouts.md): D. Layout presets, migration and rollout (status: sections 2 and 4 are SUPERSEDED by J-second-attempt.md (2026-11-14): the default view is the cockpit, a...)
 - [E-visual-system.md](ui/redesign-2026-11-14/E-visual-system.md): E. Visual system (status: design proposal (TASK-416, 2026-11-14). The identity stays: near-black warm stone, gold accent, serif...)
-- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan (status: accepted and ready to build (2026-11-14): the user answered the open questions and lifted the freeze on...)
+- [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan (status: revised 2026-11-14 for the second attempt: wave 2 is on hold until the user accepts it; the table under...)
 - [H-open-questions.md](ui/redesign-2026-11-14/H-open-questions.md): H. Open questions for the user (status: ANSWERED by the user on 2026-11-14 (all twelve). The Answer column is the decision; where it differs from...)
-- [I-character-screen.md](ui/redesign-2026-11-14/I-character-screen.md): I. The character screen: hero, mercenary, pack, belt, stash on one canvas (status: design proposal (TASK-419, 2026-11-14), not built. Asked for by the user after the first pass: "the...)
+- [I-character-screen.md](ui/redesign-2026-11-14/I-character-screen.md): I. The character screen: hero, mercenary, pack, belt, stash on one canvas (status: section 3 (the canvas) and the tooltip and action placement of section 4 are SUPERSEDED by...)
+- [J-second-attempt.md](ui/redesign-2026-11-14/J-second-attempt.md): J. Second attempt: the cockpit and the character canvas (status: design proposal, second attempt (2026-11-14, branch `agent/uidesign3`), not built; waits for the user's...)
 - [redesign-2026-11-14/README.md](ui/redesign-2026-11-14/README.md): Watch UI redesign, design phase (2026-11-14) (status: ACCEPTED by the user on 2026-11-14 (twelve answers, H-open-questions.md) and extended the same day with...)
 
 `ui/redesign-2026-11-14/briefs/`
@@ -553,22 +561,35 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [B8-instant-actions.md](ui/redesign-2026-11-14/briefs/B8-instant-actions.md): Brief B8: Instant item actions: the fast lane (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
 - [B9-merc-item-verbs.md](ui/redesign-2026-11-14/briefs/B9-merc-item-verbs.md): Brief B9: Mercenary item verbs in the fork, and their bot wiring (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
 - [C1-usable-requirements.md](ui/redesign-2026-11-14/briefs/C1-usable-requirements.md): Brief C1: Item requirements and usability in the inventory view (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [C2-character-canvas.md](ui/redesign-2026-11-14/briefs/C2-character-canvas.md): Brief C2: The character screen canvas (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [C3-gestures-instant-ui.md](ui/redesign-2026-11-14/briefs/C3-gestures-instant-ui.md): Brief C3: Gestures and the instant-action feedback (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
+- [C2-character-canvas.md](ui/redesign-2026-11-14/briefs/C2-character-canvas.md): Brief C2: The character canvas (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [C3-gestures-instant-ui.md](ui/redesign-2026-11-14/briefs/C3-gestures-instant-ui.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is C3-tooltip-menu-gestures.md.)
+- [C3-tooltip-menu-gestures.md](ui/redesign-2026-11-14/briefs/C3-tooltip-menu-gestures.md): Brief C3: The tooltip, the context menu, gestures and instant feedback (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
 - [L1-loot-rules-ui.md](ui/redesign-2026-11-14/briefs/L1-loot-rules-ui.md): Brief L1: The loot rules tab (status: ready to send (written 2026-11-14; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent...)
-- [briefs/README.md](ui/redesign-2026-11-14/briefs/README.md): Worker briefs for the watch UI redesign (status: ready to send (2026-11-14, after the user's answers in ../H-open-questions.md), except S8 and L1 which are...)
+- [briefs/README.md](ui/redesign-2026-11-14/briefs/README.md): Worker briefs for the watch UI redesign (status: revised 2026-11-14 for the second attempt (wave 2 on hold until the user accepts it); first written after...)
 - [S1-foundations.md](ui/redesign-2026-11-14/briefs/S1-foundations.md): Brief S1: Shell foundations and the default flip (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S2-glance-statusline.md](ui/redesign-2026-11-14/briefs/S2-glance-statusline.md): Brief S2: The glance endpoint and the status sentence (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S3-needs-health-progress.md](ui/redesign-2026-11-14/briefs/S3-needs-health-progress.md): Brief S3: Needs you, Health and Progress (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S4-orders-readonly.md](ui/redesign-2026-11-14/briefs/S4-orders-readonly.md): Brief S4: Orders, read-only (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S5-orders-write-zonemap.md](ui/redesign-2026-11-14/briefs/S5-orders-write-zonemap.md): Brief S5: Orders write path and the act map (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S6-log-map-phone.md](ui/redesign-2026-11-14/briefs/S6-log-map-phone.md): Brief S6: Log, a compact minimap, and the phone layout (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
-- [S7-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-polish-a11y.md): Brief S7: Polish and accessibility pass over the new panels (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
+- [S1b-cockpit-template.md](ui/redesign-2026-11-14/briefs/S1b-cockpit-template.md): Brief S1b: The cockpit template in the shell, and the fit check (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S2-glance-statusline.md](ui/redesign-2026-11-14/briefs/S2-glance-statusline.md): Brief S2: The glance endpoint and the band (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S3-needs-health-progress.md](ui/redesign-2026-11-14/briefs/S3-needs-health-progress.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S3-strip-and-needs.md.)
+- [S3-strip-and-needs.md](ui/redesign-2026-11-14/briefs/S3-strip-and-needs.md): Brief S3: Needs you and the strip: Progress, Journey, Health (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S4-orders-readonly.md](ui/redesign-2026-11-14/briefs/S4-orders-readonly.md): Brief S4: Orders, read-only, as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S5-orders-write-zonemap.md](ui/redesign-2026-11-14/briefs/S5-orders-write-zonemap.md): Brief S5: Orders write path and the act map as a slot panel (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-areamap-drawers-phone.md](ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md): Brief S6: The area map, the drawers, and the phone arrangement (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S6-log-map-phone.md](ui/redesign-2026-11-14/briefs/S6-log-map-phone.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S6-areamap-drawers-phone.md.)
+- [S7-default-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-default-polish-a11y.md): Brief S7: The cockpit becomes the default; polish and access (status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the...)
+- [S7-polish-a11y.md](ui/redesign-2026-11-14/briefs/S7-polish-a11y.md): Moved (status: superseded 2026-11-14 by the second attempt. The current brief is S7-default-polish-a11y.md.)
 - [S8-retire-old-tiles.md](ui/redesign-2026-11-14/briefs/S8-retire-old-tiles.md): Brief S8: Retire the old tiles (status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`)....)
 
 `ui/redesign-2026-11-14/`
 
 - [loot-rules-ux.md](ui/redesign-2026-11-14/loot-rules-ux.md): Loot rules: the player-facing UX and what it needs from the engine (status: UX proposal (TASK-419, 2026-11-14), not built. The ENGINE (rule language, evaluation, merging...)
+
+`ui/redesign-2026-11-14/research/`
+
+- [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
+- [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
+
+`ui/redesign-2026-11-14/`
+
 - [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
 - [unlock-alerts.md](unlock-alerts.md): Alerts and pings (TASK-162, unlockalerts)
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
@@ -585,21 +606,32 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
+- [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
+
+`upstream/briefs/`
+
+- [hitrec-interrupt.md](upstream/briefs/hitrec-interrupt.md): Brief: P04 a hit interrupts an interruptible swing (WAVE 2, blocked on drill R1)
+- [hitrec-modes.md](upstream/briefs/hitrec-modes.md): Brief: P03 hit-recovery modes (fid/hitrec-modes-r1, stacked on fid/swing-start-r2)
+- [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
+- [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
-- [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r2, ready for the SECOND independent verifier pass (prswing2, 2026-11-14). Branch `fid/swing-start-r2` on...)
+- [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
 
+- [pipeline-2026-11-14.md](upstream/pipeline-2026-11-14.md): Upstream PR pipeline: from finding to merged PR (2026-11-14) (status: current, 2026-11-14 (card TASK-422, agent prpipeline, Sonnet). User instruction 2026-11-14: run every...)
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
 - [verification-swing-start-2026-11-14.md](upstream/verification-swing-start-2026-11-14.md): Independent verification of the swing-start PR r1 (2026-11-14) (status: current, 2026-11-14 (TASK-415, agent prverify5). Verdict **NEEDS-WORK** on r1: one code edit (the held...)
+- [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
@@ -658,6 +690,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [backlog-board-nas.md](process/backlog-board-nas.md): Backlog.md web board on the NAS (read-only mirror) (status: DEPLOYED 2026-11-05 as a NAS Docker-tab template (variant B: own br0 address behind Nginx Proxy Manager...)
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
+- [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)
+- [build-hosts-stage3-2026-11-14.md](process/build-hosts-stage3-2026-11-14.md): Build hosts, stage 3 results (2026-11-14): image builds on the NAS (status: applied and drilled. Follows `docs/process/build-hosts-2026-11-14.md` (study, decision D3) and...)
 - [card-board.md](process/card-board.md): Card board: reading the user's decisions (status: current. The page is the `/cards` route of the status board (the board host name, port 8897); its code is...)
 - [card-triage-20261104.md](process/card-triage-20261104.md): Card triage and decisions without an ADR, 2026-11-04 (status: proposal for the lead, docs only (job cardtriage). Nothing was moved, edited or archived; no ADR or...)
 - [chunker.md](process/chunker.md): Roadmap chunker (status: current, APPROVED by the maintainer 2026-11-01 (card chunker). One tool, `tools/contrib/chunker.py`, keeps...)
@@ -759,6 +793,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
+- [drill-zip-2026-11-14.md](probes/drill-zip-2026-11-14.md): Friend pack 0.1.1 drilled on the user's original install zip (2026-11-14) (status: RUN 2026-11-14 on the worker host. Tags: V = run and output seen, S = read in the source or docs, U = not...)
 
 `probes/drills/`
 

@@ -147,7 +147,14 @@
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
+| prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
+| uis1 | proposed | - | `internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/layout.go`<br>`internal/watch/layout_test.go`<br>`tools/uilint/`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js` | - |
+| uib7 | proposed | - | `internal/watch/orderloop.go`<br>`internal/watch/orderloop_test.go`<br>`internal/watch/testdata/orderloop/`<br>`data/unlocks/ladder.json`<br>`internal/watch/orderqueue.json`<br>`cmd/d2bot/loopwire.go`<br>`docs/loop-order.md`<br>`cmd/d2bot/loopwire_test.go` | - |
+| botinstant | in-progress | - | `internal/invdesk/instant.go`<br>`internal/invdesk/instant_test.go`<br>`internal/invdesk/desk.go`<br>`cmd/d2bot/invverbs.go`<br>`docs/inventory-actions.md`<br>`internal/invdesk/identify.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/unequip.go`<br>`internal/invdesk/testdata/view_schema9_instant_*.json`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/playeraction_test.go`<br>`internal/env/tuning_invdesk.go`<br>`docs/knobs.md`<br>`cmd/d2bot/invverbs_test.go`<br>`internal/invdesk/usable_test.go` | - |
+| charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
+| prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
+| buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -196,14 +203,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 79b5bf3c 11-14 10:40 `Merge agent/lootrules: Merge branch 'main' into TASK-421` (lootrules)
-- 6c033aad 11-14 10:39 `Merge branch 'main' into TASK-421` (-)
-- cdc9152b 11-14 10:38 `Merge agent/uidesign2: Merge branch 'main' into TASK-419` (uidesign2)
-- 2603bc1f 11-14 10:37 `Merge branch 'main' into TASK-419` (-)
-- 8ab1739b 11-14 10:36 `Merge agent/decomp19: boss1: queue result line at end` (decomp19)
-- b63436bc 11-14 10:35 `Merge origin/main into agent/uidesign2` (-)
-- 0c212829 11-14 10:34 `Merge remote-tracking branch 'origin/main' into agent/decomp19` (-)
-- 79ee6ca6 11-14 10:22 `Merge agent/stashanywhere: stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14)` (stashanywhere)
-- 0f30f7b7 11-14 10:04 `Merge agent/prswing2: Merge branch 'main' into TASK-417` (prswing2)
-- f1fa760c 11-14 10:03 `Merge branch 'main' into TASK-417` (-)
+- 5637441d3 11-14 16:21 `Merge agent/buildhosts3: Merge branch 'main' into buildhosts3` (buildhosts3)
+- 6c748cb09 11-14 16:20 `Merge branch 'main' into buildhosts3` (-)
+- 0c5f3ec8d 11-14 15:50 `Merge agent/uidesign4: uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated` (uidesign4)
+- df05ff10c 11-14 14:58 `Merge agent/uidesign3: uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card` (uidesign3)
+- 656249fa3 11-14 12:56 `Merge agent/uib8: Merge branch 'main' into TASK-427` (uib8)
+- dc98d13a2 11-14 12:55 `Merge branch 'main' into TASK-427` (-)
+- f89e59de0 11-14 12:47 `Merge agent/uis1: Merge branch 'main' into TASK-424` (uis1)
+- f9d97a3c5 11-14 12:47 `Merge branch 'main' into TASK-424` (-)
+- 8a1cef253 11-14 12:45 `Merge origin/main into uib8 (C1 keeps schema 8, this card is 9)` (-)
+- 4a6d8d36f 11-14 12:41 `Merge agent/uib7: Merge branch 'main' into TASK-425` (uib7)
 <!-- statusgen:end -->

@@ -1,6 +1,21 @@
 # G. Build plan
 
-> status: accepted and ready to build (2026-11-14): the user answered the open questions and lifted the freeze on new /watch panels. The work is cut into cards with one ready-to-send brief each in [briefs/](briefs/README.md); that page has the wave order, the merge order and the review points. This page is the overview and says what changed after the answers. Estimates are agent runs of the usual size and are guesses.
+> status: revised 2026-11-14 for the second attempt: wave 2 is on hold until the user accepts it; the table under "Cards" below describes the first attempt's slices and is kept for the bot cards, whose briefs are unchanged. First written as: accepted and ready to build (2026-11-14): the user answered the open questions and lifted the freeze on new /watch panels. The work is cut into cards with one ready-to-send brief each in [briefs/](briefs/README.md); that page has the wave order, the merge order and the review points. This page is the overview and says what changed after the answers. Estimates are agent runs of the usual size and are guesses.
+
+## What the second attempt changed (2026-11-14)
+
+The user saw wave 1 live and rejected the result: the watch page does not fit one screen and has dead space, the inventory is a masonry of cards. Design: [J-second-attempt.md](J-second-attempt.md); research and renders: [research/](research/README.md).
+
+| Change | Effect on the cards |
+|---|---|
+| The default view is a viewport-filling cockpit (a template layout with slots), not a free-grid preset | new slice **S1b** (cockpit template in the shell, slot panels, the editor in slot mode, and a `fit` check in `tools/uishots` that fails a page that scrolls or overflows at 1440x900, 1920x1080, 1366x768) |
+| Every later slice is gated by the fit check and by looking at renders at the four sizes | added to every S and C brief |
+| The cockpit panels are new slot panels with fixed boxes; no old tile stands in for a missing one | S2 to S6 rewritten: S2 glance and band; S3 Needs you and the strip (Progress, Journey strip, Health); S4 Orders as one-line rows; S5 write path and the act map as a grid of zone buttons; S6 area map, drawers, phone tabs |
+| Standard-by-fallbacks as the default is withdrawn | S7 flips the default to the cockpit only when every slot is filled; until then the page stays as it is live now |
+| The character screen is one canvas on one cell unit, hero and mercenary in one frame, a real tooltip, a context menu | C2 and C3 rewritten |
+| Hero stats, Why, Tally, Thoughts, Gear, the logs, onboarding leave the default screen | each has a named drill-down (J.2); the Hero sheet lives on the character canvas |
+
+Cards after the change: S1 (sent), **S1b**, S2, S3, S4, S5, S6, S7, S8 (hold); C1 (sent), C2, C3; L1 (hold); B1 to B9 unchanged. Order and reviews: [briefs/README.md](briefs/README.md).
 
 ## What the answers changed
 

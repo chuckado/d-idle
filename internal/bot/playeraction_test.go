@@ -268,3 +268,22 @@ func TestStashErrandGoesHomeWithTheStashWhy(t *testing.T) {
 		g.finish()
 	}
 }
+
+// SafetyBusy is true exactly while a safety action is being carried out (the inventory desk's fast lane stays closed
+// meanwhile) and false again afterwards, also when the action fails.
+func TestSafetyBusyWhileCarryingOut(t *testing.T) {
+	for _, class := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+		g.w.set(func(w *world) { w.class, w.area = class, 2 })
+		if g.r.SafetyBusy() {
+			t.Fatalf("%v: busy before any action", class)
+		}
+		var during bool
+		g.fight.onAct = func(a SafetyAction) { during = g.r.SafetyBusy() }
+		g.fight.actErr = errors.New("boom")
+		_ = g.r.carryOut(context.Background(), SafetyDrinkLife)
+		if !during || g.r.SafetyBusy() {
+			t.Errorf("%v: during %v after %v", class, during, g.r.SafetyBusy())
+		}
+	}
+}

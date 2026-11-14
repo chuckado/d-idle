@@ -8,6 +8,20 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into buildhosts3 <!--sg:agent/buildhosts3-->
+- uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated <!--sg:agent/uidesign4-->
+- uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card <!--sg:agent/uidesign3-->
+- Merge branch 'main' into TASK-427 <!--sg:agent/uib8-->
+- Merge branch 'main' into TASK-424 <!--sg:agent/uis1-->
+- Merge branch 'main' into TASK-425 <!--sg:agent/uib7-->
+- Merge branch 'main' into TASK-428 <!--sg:agent/uic1-->
+- Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row <!--sg:agent/prpost4-->
+- buildhosts: scrub machine names for leakcheck <!--sg:agent/buildhosts-->
+- Merge branch 'main' into TASK-430 <!--sg:agent/survivaldesign-->
+- Merge branch 'main' into TASK-429 <!--sg:agent/prswing3-->
+- Merge branch 'main' into TASK-418 <!--sg:agent/prverify6-->
+- Merge branch 'main' into TASK-422 <!--sg:agent/prpipeline-->
+- Merge branch 'main' into TASK-423 <!--sg:agent/drillzip-->
 - Merge branch 'main' into TASK-421 <!--sg:agent/lootrules-->
 - Merge branch 'main' into TASK-419 <!--sg:agent/uidesign2-->
 - boss1: queue result line at end <!--sg:agent/decomp19-->

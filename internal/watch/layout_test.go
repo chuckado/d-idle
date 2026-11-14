@@ -2,7 +2,9 @@ package watch
 
 import (
 	"bytes"
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"net/http/httptest"
 	"os"
 	"os/exec"
@@ -19,7 +21,8 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, f := range []string{"web/layout.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json"} {
+	for _, f := range []string{"web/layout.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json",
+		"web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
 		b, err := webFS.ReadFile(f)
 		if err != nil {
 			t.Fatal(err)
@@ -37,20 +40,47 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 			}
 		}
 	}
-	// the default places every panel of the main area, so nothing is left to the packer
-	b, _ := webFS.ReadFile("web/layout.json")
-	l, _ := ParseLayout(b)
-	placed := map[string]bool{}
-	for _, p := range l.Breakpoints["wide"].Panels {
-		placed[p.ID] = true
+	// the default is Standard, byte for byte; classic is the pre-redesign default, frozen (docs/ui/redesign-2026-11-14/D-layouts.md section 4)
+	def, _ := webFS.ReadFile("web/layout.json")
+	std, _ := webFS.ReadFile("web/layouts/standard.json")
+	if !bytes.Equal(def, std) {
+		t.Error("web/layout.json is not web/layouts/standard.json")
 	}
+	classic, _ := webFS.ReadFile("web/layouts/classic.json")
+	if sum := fmt.Sprintf("%x", sha256.Sum256(classic)); sum != classicLayoutSHA256 {
+		t.Errorf("web/layouts/classic.json changed (sha256 %s): it is the layout of before the redesign and is only ever added to", sum)
+	}
+	// a preset names every panel of the main area (placed or switched off) and every card, so nothing is left to the packer;
+	// an opt-in panel is named only where the preset wants it
 	ms, _ := Manifests()
-	for _, m := range ms {
-		if m.Band != "status" && m.MergedInto == "" && !placed[m.ID] {
-			t.Errorf("web/layout.json does not place the panel %s", m.ID)
+	lc, _ := shellLayoutConf()
+	for _, f := range []string{"web/layout.json", "web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
+		if f == "web/layouts/stream.json" || f == "web/layouts/simple.json" {
+			continue // short presets by design: the rest is left to the packer, which never mounts an opt-in panel it does not name
+		}
+		b, _ := webFS.ReadFile(f)
+		l, _ := ParseLayout(b)
+		named := map[string]bool{}
+		for _, p := range l.Breakpoints["wide"].Panels {
+			named[p.ID] = true
+		}
+		for _, m := range ms {
+			if m.Band != "status" && m.MergedInto == "" && !m.OptIn && !named[m.ID] {
+				t.Errorf("%s does not name the panel %s", f, m.ID)
+			}
+		}
+		if f != "web/layouts/classic.json" {
+			for _, id := range lc.Compat {
+				if !named[id] {
+					t.Errorf("%s does not name the card %s", f, id)
+				}
+			}
 		}
 	}
 }
+
+// sha256 of web/layouts/classic.json, which is web/layout.json as it was before the redesign (origin/main at 2026-11-14).
+const classicLayoutSHA256 = "2e8e5c1447908cd9536800e0ecc2cc818eab94fc855a6a5f91cddf9bfc866fa0"
 
 // Check catches what the loader lets through.
 func TestLayoutCheck(t *testing.T) {
@@ -191,7 +221,9 @@ func TestLayoutAssetsAndConf(t *testing.T) {
 		}
 	}
 	for p, ctype := range map[string]string{"/watch/layout.js": "text/javascript", "/watch/layoutedit.js": "text/javascript", "/watch/layouts/mockup.json": "application/json",
-		"/watch/layouts/live.json": "application/json", "/watch/layouts/command.json": "application/json"} {
+		"/watch/layouts/live.json": "application/json", "/watch/layouts/command.json": "application/json", "/watch/layouts/classic.json": "application/json",
+		"/watch/layouts/simple.json": "application/json", "/watch/layouts/standard.json": "application/json", "/watch/layouts/stream.json": "application/json",
+		"/watch/layouts/debug.json": "application/json"} {
 		w := httptest.NewRecorder()
 		r.view.ServeHTTP(w, httptest.NewRequest("GET", p, nil))
 		if w.Code != 200 || !strings.HasPrefix(w.Header().Get("Content-Type"), ctype) {
@@ -212,6 +244,13 @@ func TestLayoutJSPatterns(t *testing.T) {
 	}
 	shell, _ := webFS.ReadFile("web/shell.js")
 	for _, want := range []string{"import('/watch/layoutedit.js')", "from '/watch/layout.js'", "'/api/layout'", "l.schema === 'watch.layout/1'"} {
+		if !bytes.Contains(shell, []byte(want)) {
+			t.Errorf("shell.js lacks %s", want)
+		}
+	}
+	// which layout loads (S1 review R2 to R4): a missing X-Layout-Source header reads as stored, a new hero has ticked nothing and
+	// is pinned to Simple, the overlay strip ignores the layout's status list
+	for _, want := range []string{"srv.source !== 'default'", "!(o.body.steps || []).some((x) => x.done)", "pref(PREF, 'simple')", "selectPanels(list, sel && sel.layout, html.dataset.mode)"} {
 		if !bytes.Contains(shell, []byte(want)) {
 			t.Errorf("shell.js lacks %s", want)
 		}
@@ -246,7 +285,7 @@ func TestLayoutPlanJS(t *testing.T) {
 		t.Skip("node not available")
 	}
 	args := []string{"testdata/layout_plan.js", "web/layout.js", "testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json",
-		"testdata/compat/layout-v1-command.json", "web/layout.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json"}
+		"testdata/compat/layout-v1-command.json", "web/layouts/classic.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json"}
 	if out, err := exec.Command(node, args...).CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
 	}
@@ -392,7 +431,8 @@ func TestVideoPictureFitsItsPanel(t *testing.T) {
 		t.Error("the video panel must declare its aspect for the editor")
 	}
 	// the default layout gives the picture rows that match 4:3 at the width of each breakpoint (within one row)
-	raw, _ := webFS.ReadFile("web/layout.json")
+	// (Standard's picture is a fit panel too: its stored span is not used, so the rule is for the layouts that predate fit)
+	raw, _ := webFS.ReadFile("web/layouts/classic.json")
 	l, err := ParseLayout(raw)
 	if err != nil {
 		t.Fatal(err)
@@ -479,5 +519,136 @@ func TestLayoutFitJS(t *testing.T) {
 	}
 	if out, err := exec.Command(node, "testdata/layout_fit.js", "web/layout.js").CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
+	}
+}
+
+// S1 in node: old layouts keep their cells (the golden is what the shell before S1 planned), Standard and Simple resolve against
+// today's panel list with every fallback in its cell, an opt-in panel stays unmounted unless named, a stand-in saves as its tile.
+func TestLayoutS1JS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("node not available")
+	}
+	out, err := exec.Command(node, "testdata/layout_s1.js", "check", "web/layout.js", "testdata/layout_cells_s1.json", "web", "testdata/compat").CombinedOutput()
+	if err != nil || !strings.Contains(string(out), "ok") {
+		t.Fatalf("%v\n%s", err, out)
+	}
+}
+
+// The compat fixtures and the old default (classic) still parse to the same placed ids and cells as before S1: the Go loader's side
+// of TestLayoutS1JS (the golden holds the node plan; here the raw entries are compared with the file).
+func TestOldLayoutsKeepTheirEntries(t *testing.T) {
+	for _, f := range []string{"testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json", "testdata/compat/layout-v1-command.json"} {
+		b, err := os.ReadFile(f)
+		if err != nil {
+			t.Fatal(err)
+		}
+		l, err := ParseLayout(b)
+		if err != nil || len(l.Status) != 0 {
+			t.Errorf("%s: %v status %v", f, err, l.Status)
+		}
+		for bp, v := range l.Breakpoints {
+			for _, p := range v.Panels {
+				if p.Fallback != "" {
+					t.Errorf("%s %s: %s has a fallback", f, bp, p.ID)
+				}
+			}
+		}
+	}
+}
+
+// The layout keys of S1: status entries are ids or {id, fallback}, an entry may name a fallback, both round-trip, and an
+// unknown id passes only with a (known) fallback.
+func TestLayoutStatusAndFallback(t *testing.T) {
+	src := `{"schema":"watch.layout/1","cols":12,"status":["a",{"id":"later","fallback":"b"}],"breakpoints":{"wide":{"cols":12,"panels":[
+		{"id":"later","col":1,"row":1,"colSpan":6,"rowSpan":3,"order":0,"fallback":"b"},{"id":"b","col":1,"row":1,"colSpan":6,"rowSpan":3,"order":1,"hidden":true}]}}}`
+	l, err := ParseLayout([]byte(src))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(l.Status) != 2 || l.Status[0] != (LayoutStatus{ID: "a"}) || l.Status[1] != (LayoutStatus{ID: "later", Fallback: "b"}) || l.Breakpoints["wide"].Panels[0].Fallback != "b" {
+		t.Fatalf("read: %+v", l)
+	}
+	known := func(id string) bool { return id == "a" || id == "b" }
+	if err := l.Check(known); err != nil {
+		t.Errorf("an unbuilt id with a known fallback: %v", err)
+	}
+	if b, _ := json.Marshal(l.Status); string(b) != `["a",{"id":"later","fallback":"b"}]` {
+		t.Errorf("status marshals as %s", b)
+	}
+	l.Breakpoints["wide"].Panels[0].Fallback = "zz"
+	if err := l.Check(known); err == nil || !strings.Contains(err.Error(), "fallback") {
+		t.Errorf("unknown fallback: %v", err)
+	}
+	l.Breakpoints["wide"].Panels[0].Fallback = ""
+	if err := l.Check(known); err == nil {
+		t.Error("an unknown id without a fallback passed")
+	}
+	if _, err := ParseLayout([]byte(`{"schema":"watch.layout/1","cols":12,"status":[7],"breakpoints":{}}`)); err == nil {
+		t.Error("a status entry that is a number was accepted")
+	}
+}
+
+// GET /api/layout says whether the layout is the hero's stored copy (the shell starts a new hero on Simple only when it is not),
+// and the panel manifest key optIn reaches /watch/panels.json.
+func TestLayoutSourceHeader(t *testing.T) {
+	r := newRig(t, "paladin")
+	path := filepath.Join(t.TempDir(), "layout-human.json")
+	r.sim.Hub.SetLayoutPath(path)
+	get := func() string {
+		w := httptest.NewRecorder()
+		r.view.ServeHTTP(w, httptest.NewRequest("GET", LayoutRoute, nil))
+		return w.Header().Get("X-Layout-Source")
+	}
+	if got := get(); got != "default" {
+		t.Errorf("no stored layout: %q", got)
+	}
+	hdr := map[string]string{"Origin": origin}
+	raw, _ := os.ReadFile("testdata/compat/layout-v1-live.json")
+	if w := r.postRaw(r.ans, LayoutRoute, `{"layout":`+string(raw)+`}`, hdr); w.Code != 200 {
+		t.Fatalf("POST: %d", w.Code)
+	}
+	if got := get(); got != "stored" {
+		t.Errorf("after a save: %q", got)
+	}
+	if w := r.postRaw(r.ans, LayoutRoute, `{"reset":true}`, hdr); w.Code != 200 {
+		t.Fatalf("reset: %d", w.Code)
+	}
+	if got := get(); got != "default" {
+		t.Errorf("after a reset: %q", got)
+	}
+	m, err := parseManifest([]byte(`{"schema":"watch.panel/1","id":"x","band":"side","optIn":true}`), "x")
+	if err != nil || !m.OptIn {
+		t.Errorf("optIn: %+v %v", m, err)
+	}
+	if ms, _ := Manifests(); len(ms) > 0 {
+		for _, m := range ms {
+			if m.OptIn {
+				t.Errorf("%s: no panel of today is opt-in", m.ID)
+			}
+		}
+	}
+}
+
+// The new tokens of the visual system (redesign E.2) exist, as aliases over the themed values, so the light theme follows.
+func TestRedesignTokens(t *testing.T) {
+	b, err := os.ReadFile("web/tokens.css")
+	if err != nil {
+		t.Fatal(err)
+	}
+	css := string(b)
+	for _, tok := range []string{"--d-ok:", "--d-danger:", "--d-muted:", "--d-state-bg-ok:", "--d-state-bg-warn:", "--d-state-bg-danger:", "--d-state-bg-info:", "--d-hit: 44px", "--d-row: 36px"} {
+		if !strings.Contains(css, tok) {
+			t.Errorf("tokens.css lacks %s", tok)
+		}
+	}
+	for _, alias := range []string{"--d-ok: var(--d-good)", "--d-danger: var(--d-bad)", "--d-muted: var(--d-text-3)"} {
+		if !strings.Contains(css, alias) {
+			t.Errorf("tokens.css lacks the alias %s", alias)
+		}
+	}
+	// no hex of its own in the aliases: the light theme redefines the base colours and the aliases resolve on the same element
+	if regexp.MustCompile(`--d-(ok|danger|muted|state-bg-[a-z]+):[^;]*#`).MatchString(css) {
+		t.Error("a new token holds a colour literal; it must follow the themed value")
 	}
 }
