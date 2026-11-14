@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-419 <!--sg:agent/uidesign2-->
+- boss1: queue result line at end <!--sg:agent/decomp19-->
+- stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14) <!--sg:agent/stashanywhere-->
 - Merge branch 'main' into TASK-417 <!--sg:agent/prswing2-->
 - Merge branch 'main' into TASK-416 <!--sg:agent/uidesign-->
 - Merge branch 'main' into TASK-415 <!--sg:agent/prverify5-->
