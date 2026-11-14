@@ -590,6 +590,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
 - [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
 
+`ui/redesign-2026-11-14/reviews/`
+
+- [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+
 `ui/redesign-2026-11-14/`
 
 - [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
