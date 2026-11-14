@@ -54,7 +54,7 @@ func Compile(rs *RuleSet, class, build string) (*Compiled, error) {
 }
 
 func why(a, reason string, it *Item) string {
-	v := map[string]string{Pickup: "Will pick up", Keep: "Kept", KeepMerc: "Kept for your mercenary", Stash: "Will stash", Sell: "Will sell", Drop: "Will drop",
+	v := map[string]string{Pickup: "Will pick up", Keep: "Kept", KeepMerc: "Kept for your mercenary", Ask: "Asking you", Stash: "Will stash", Sell: "Will sell", Drop: "Will drop",
 		Identify: "Will identify", Ignore: "Left alone"}[a]
 	if a == Sell || a == Drop {
 		return fmt.Sprintf("%s: %s, value %d", v, reason, it.Value)

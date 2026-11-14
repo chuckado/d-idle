@@ -321,3 +321,56 @@ func BenchmarkStarterGround(b *testing.B) {
 		}
 	}
 }
+
+func TestSchemaPreviewDiffShadow(t *testing.T) {
+	fs := Fields()
+	seen := map[string]bool{}
+	for _, f := range fs {
+		if seen[f.Name] || len(f.Ops) == 0 || f.Label == "" {
+			t.Fatalf("bad field def %+v", f)
+		}
+		seen[f.Name] = true
+		if _, ok := fieldOf(f.Name); !ok {
+			t.Errorf("schema lists %q but the parser does not know it", f.Name)
+		}
+	}
+	for _, a := range append(ActionsFor(PlaceGround), append(ActionsFor(PlacePack), ActionsFor(PlaceStash)...)...) {
+		if !actions[a] {
+			t.Errorf("editor action %q is not a known action", a)
+		}
+	}
+	rs := mustParse(t, `{`+hdr+`,"rules":[
+	 {"id":"all","scope":["pack"],"action":"keep","reason":"x"},
+	 {"id":"never","scope":["pack"],"action":"sell","reason":"x","when":{"f":"value","op":"ge","v":1}}]}`)
+	if sh := rs.Shadowed(); len(sh) != 1 || sh[0].Rule != "never" || sh[0].By != "all" {
+		t.Fatalf("shadow: %+v", sh)
+	}
+	a, _ := Compile(rs, "Paladin", "")
+	rs2 := mustParse(t, `{`+hdr+`,"rules":[{"id":"sell","scope":["pack"],"action":"sell","reason":"x","when":{"f":"value","op":"ge","v":1}}]}`)
+	b, _ := Compile(rs2, "Paladin", "")
+	samples := []Sample{{1, Item{Place: PlacePack, Quality: "normal", Value: 5}, Ctx{}}, {2, Item{Place: PlacePack, Quality: "normal"}, Ctx{}}}
+	if ch := Diff(a, b, samples); len(ch) != 2 || ch[0].ID != 1 || ch[0].To != Sell || ch[1].To != Ignore {
+		t.Fatalf("diff: %+v", ch)
+	}
+	counts, dec := b.Preview(samples)
+	if counts[0].Count != 1 || dec[2].Rule != "default" {
+		t.Fatalf("preview: %+v %+v", counts, dec)
+	}
+}
+
+func TestAskAndOwnedAndRuneFields(t *testing.T) {
+	rs := mustParse(t, `{`+hdr+`,"rules":[
+	 {"id":"ask","scope":["pack"],"action":"ask","reason":"rare ring: keep, stash or sell?","when":{"all":[{"f":"type","op":"in","v":["ring"]},{"f":"quality","op":"in","v":["rare"]}]}},
+	 {"id":"spare","scope":["pack"],"action":"sell","reason":"already have 6","when":{"all":[{"f":"group","op":"in","v":["javelins"]},{"f":"owned","op":"ge","v":6}]}},
+	 {"id":"hi","scope":["ground"],"action":"keep","reason":"Pul or better","when":{"f":"runeno","op":"ge","v":20}}]}`)
+	cx := Ctx{Owned: func(*Item) int { return 7 }}
+	if d := decide(t, rs, Item{Place: PlacePack, Types: []string{"ring"}, Quality: "rare"}, cx); d.Action != Ask {
+		t.Fatalf("%+v", d)
+	}
+	if d := decide(t, rs, Item{Place: PlacePack, Types: []string{"jave"}, Quality: "normal", Value: 9}, cx); d.Action != Sell {
+		t.Fatalf("%+v", d)
+	}
+	if d := decide(t, rs, Item{Place: PlaceGround, Types: []string{"rune"}, RuneNo: 21}, cx); d.Action != Pickup {
+		t.Fatalf("%+v", d)
+	}
+}

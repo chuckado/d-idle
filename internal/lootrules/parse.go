@@ -36,7 +36,7 @@ func (es Errors) Error() string {
 
 var qualities = map[string]bool{"low": true, "normal": true, "superior": true, "magic": true, "set": true, "rare": true, "unique": true, "crafted": true}
 var scopes = map[string]bool{PlaceGround: true, PlacePack: true, PlaceStash: true}
-var actions = map[string]bool{KeepMerc: true, Pickup: true, Keep: true, Stash: true, Sell: true, Drop: true, Identify: true, Ignore: true}
+var actions = map[string]bool{Ask: true, KeepMerc: true, Pickup: true, Keep: true, Stash: true, Sell: true, Drop: true, Identify: true, Ignore: true}
 var needKinds = map[string]bool{"potion": true, "scroll": true, "tome": true, "key": true, "gold": true, "gem": true, "runeword": true, "emptyslot": true, "charmroom": true}
 
 // Parse reads and validates a rule set. A syntax error carries line and column; field errors carry the path of the field.
@@ -186,11 +186,11 @@ const (
 
 func fieldOf(f string) (fieldKind, bool) {
 	switch f {
-	case "ilvl", "reqlvl", "reqstr", "reqdex", "durpct", "hero_usable_from", "merc_usable_from", "sockets", "value", "qty", "clvl", "gold", "packfull", "stashfull":
+	case "ilvl", "reqlvl", "reqstr", "reqdex", "runeno", "grade", "maxsockets", "owned", "act", "durpct", "hero_usable_from", "merc_usable_from", "sockets", "value", "qty", "clvl", "gold", "packfull", "stashfull":
 		return kNum, true
 	case "ethereal", "identified", "stackable", "quest", "broken":
 		return kBool, true
-	case "quality", "class", "build", "difficulty":
+	case "quality", "class", "build", "difficulty", "basetier":
 		return kEnum, true
 	case "type", "group", "code", "class_restricted":
 		return kList, true

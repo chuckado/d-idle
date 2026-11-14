@@ -172,6 +172,23 @@ func compileCond(c Cond, groups map[string]Group) matcher {
 		return ctxNum(func(cx *Ctx) int { return cx.PackFullPct })
 	case "stashfull":
 		return ctxNum(func(cx *Ctx) int { return cx.StashFullPct })
+	case "runeno":
+		return itemNum(func(it *Item) int { return it.RuneNo }, 0)
+	case "grade":
+		return itemNum(func(it *Item) int { return it.Grade }, 0)
+	case "maxsockets":
+		return itemNum(func(it *Item) int { return it.MaxSockets }, 0)
+	case "act":
+		return numOf(func(_ *Item, cx *Ctx) (int, bool) { return cx.Act, cx.Act == 0 })
+	case "owned":
+		return numOf(func(it *Item, cx *Ctx) (int, bool) {
+			if cx.Owned == nil {
+				return 0, false
+			}
+			return cx.Owned(it), false
+		})
+	case "basetier":
+		return enum(func(it *Item, _ *Ctx) string { return it.BaseTier }, 0)
 	case "reqstr":
 		return itemNum(func(it *Item) int { return it.ReqStr }, 0)
 	case "reqdex":

@@ -19,6 +19,7 @@ const (
 	Drop     = "drop"     // pack -> ground (gated, see invariants)
 	Identify = "identify" // pack: spend a scroll on it
 	Ignore   = "ignore"   // do nothing
+	Ask      = "ask"      // pack: raise a Needs-you question and leave the item alone until the player answers
 	KeepMerc = "keepmerc" // keep for the mercenary: a keep that the sell chore and the tidy pass leave alone (the player equips him)
 )
 
@@ -33,6 +34,7 @@ const (
 // RuleSet is the whole player-visible filter.
 type RuleSet struct {
 	Schema   string            `json:"schema"`
+	Seq      int               `json:"seq,omitempty"` // change counter, owned by the store (ignored on PUT)
 	Name     string            `json:"name"`
 	Comment  string            `json:"comment,omitempty"`
 	Limits   Limits            `json:"limits"`
@@ -105,6 +107,10 @@ type Item struct {
 	ReqDex     int
 	ClassOnly  string   // class-restricted item (orb, wand, pelt ...): the class name, "" = anyone
 	MercTypes  []string // hireling types that can wear it (Hireling.txt plus item types); nil = unknown
+	RuneNo     int      // rune number 1..33, 0 = not a rune
+	Grade      int      // gem grade 1 chipped .. 5 perfect, 0 = not a gem
+	BaseTier   string   // normal, exceptional or elite ("" = unknown)
+	MaxSockets int      // most sockets the base can have
 	Durability int      // current; MaxDur 0 = indestructible or unknown
 	MaxDur     int
 	Sockets    int
@@ -128,6 +134,8 @@ type Ctx struct {
 	// Hero and Merc are the wearers a requirement rule compares against. Merc nil = no mercenary. Level 0 = unread: a
 	// requirement predicate then answers unknown (the item is judged again when the numbers arrive, see Fingerprint).
 	Hero, Merc                *Actor
+	Act                       int             // act of the area the hero is in (0 = unknown)
+	Owned                     func(*Item) int // how many of this base the hero holds (pack plus stash); nil = 0
 	PackFullPct, StashFullPct int
 	// Needs answers the "need" condition (belt, scroll, tome, key, gold, gem, charmroom needs); nil = every need is
 	// satisfied, so a need rule never matches.
