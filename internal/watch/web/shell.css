@@ -170,8 +170,8 @@
 
   /* two maps in one rail column: a switch shows one at a time (shell.js mapSwitch); a panel switched off takes no room */
   .d-panel[data-off] { display: none; }
-  .d-mapswitch { display: flex; gap: var(--d-sp-1); flex: none; }
-  .d-mapswitch > .d-btn { flex: 1 1 0; }
+  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); z-index: 3; }
+  .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
   .d-menu-pop > [hidden] { display: none; }
 
   /* drawers: the log and the first-steps card open as a side sheet over the page (a full-width sheet on a phone) */
@@ -232,11 +232,3 @@
   :root[data-mode="overlay"] body > :not(.d-shell) { display: none; }
 }
 
-/* the cockpit's tab bar and map switch, and phone touch targets (the components layer sets 32 px for a small button, and a later layer beats a more specific rule of an
-   earlier one): 38 px for the tab bar, the map switch, the buttons inside a slot panel and the drawers */
-@layer components {
-  .d-tabbar > .d-btn[aria-selected="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
-  .d-mapswitch > .d-btn { min-block-size: 28px; padding-block: 0; } /* short: the maps keep their height */
-  .d-main[data-cmode="phone"] :is(.d-tabbar, .d-mapswitch) > .d-btn, .d-main[data-cmode="phone"] [data-cockpit-panel] .d-btn[data-size="sm"], .d-drawer .d-btn { min-block-size: 38px; }
-  .d-drawer [data-panel="log"] .row { min-block-size: 38px; }
-}

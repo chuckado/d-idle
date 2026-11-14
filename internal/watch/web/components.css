@@ -230,4 +230,10 @@
   .d-legend .lg-keep { background: var(--d-good); color: var(--d-on-good); }
   .q-magic { --q: var(--d-q-magic); } .q-rare { --q: var(--d-q-rare); } .q-set { --q: var(--d-q-set); } .q-unique { --q: var(--d-q-unique); }
   .q-crafted { --q: var(--d-q-crafted); } .q-runeword { --q: var(--d-q-runeword); } .q-low { --q: var(--d-q-low); }
+  /* the cockpit's tab bar and map switch, and phone touch targets: 38 px for the tab bar, the switch, the buttons inside a slot
+     panel and the drawers (shell.css cannot say it: this layer comes after the shell's) */
+  .d-tabbar > .d-btn[aria-selected="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
+  .d-mapswitch > .d-btn { min-block-size: 28px; padding-block: 0; }
+  .d-main[data-cmode="phone"] :is(.d-tabbar, .d-mapswitch) > .d-btn, .d-main[data-cmode="phone"] [data-cockpit-panel] .d-btn[data-size="sm"], .d-drawer .d-btn { min-block-size: 38px; }
+  .d-drawer [data-panel="log"] .row { min-block-size: 38px; }
 }

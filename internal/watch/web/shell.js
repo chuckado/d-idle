@@ -505,7 +505,7 @@ function showTab(name, focus) {
 // two-button switch shows one at a time: the rail of a 1440 window has room for one. On a wide rail they stand side by side
 // in two columns and no switch is built.
 function mapSwitch(box) {
-  box.querySelectorAll(':scope > .d-mapswitch').forEach((n) => n.remove());
+  for (const r of ck.roots.values()) r.querySelectorAll(':scope > .d-mapswitch').forEach((n) => n.remove());
   const kids = [...box.children].filter((n) => n.matches('.d-panel[data-panel]'));
   for (const n of kids) delete n.dataset.off;
   const links = (x, y) => (ck.meta.get(x.dataset.panel) || {}).switchWith === y.dataset.panel;
@@ -515,6 +515,7 @@ function mapSwitch(box) {
     if (b) { pair = kids.indexOf(a) < kids.indexOf(b) ? [a, b] : [b, a]; break; }
   }
   if (!pair) { growLast(box); return; }
+  // the switch sits on the top edge of whichever map shows, so it takes no height of its own (the zone rows need every pixel)
   const bar = el('div', 'd-mapswitch');
   bar.setAttribute('role', 'group');
   bar.setAttribute('aria-label', 'Which map');
@@ -523,15 +524,15 @@ function mapSwitch(box) {
     pair[1].dataset.off = ck.second ? '' : '1';
     pair.forEach((n) => { if (!n.dataset.off) delete n.dataset.off; });
     for (const b of bar.children) b.setAttribute('aria-pressed', String((b.dataset.view === '1') === ck.second));
+    pair[ck.second ? 1 : 0].appendChild(bar);
     growLast(box);
   };
   pair.forEach((n, i) => {
     const m = ck.meta.get(n.dataset.panel) || {}, b = ui.btn(m.switchLabel || m.title || n.dataset.panel, { size: 'sm', variant: 'ghost' });
     b.dataset.view = String(i);
-    b.addEventListener('click', () => { ck.second = i === 1; paint(); });
+    b.addEventListener('click', () => { ck.second = i === 1; paint(); const on = bar.children[i]; if (on) on.focus({ preventScroll: true }); });
     bar.appendChild(b);
   });
-  box.insertBefore(bar, pair[0]);
   paint();
 }
 

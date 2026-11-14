@@ -78,8 +78,8 @@ cockpit-tab-map watch?layout=cockpit&theme=dark&tab=Map
 demo-tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
 demo-tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
 demo-tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress
-demo-areaswitch watch?layout=cockpit-demo&theme=dark ?.d-mapswitch_[data-view=area] [data-panel=area-map]
-demo-layers watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_[data-view=area]|[data-panel=area-map]_[data-key=layers] [data-panel=area-map]_.layers,[data-panel=area-map]_[data-key=coverage]
+demo-areaswitch watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:nth-child(2) [data-panel=area-map]
+demo-layers watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:nth-child(2)|[data-panel=area-map]_[data-key=layers] [data-panel=area-map]_.layers,[data-panel=area-map]_[data-key=coverage]
 demo-drawer-log watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-alerts]
 demo-drawer-alerts watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log]|[data-key=tab-alerts] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 demo-drawer-start watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=onboarding] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
