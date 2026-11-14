@@ -134,9 +134,26 @@
 | palprofile2 | proposed | - | `internal/combat/classdata`<br>`internal/combat/lifeprice.go`<br>`docs/palprofile.md` | - |
 | beltfix | in-progress | - | `internal/town/belt`<br>`internal/town/beltfill.go`<br>`internal/town/beltrepair.go`<br>`internal/town/sim`<br>`internal/combat/packdrink.go`<br>`internal/combat/packdrink_test.go`<br>`docs/beltfix.md`<br>`internal/town/beltfix6_test.go`<br>`internal/combat/fighter.go`<br>`internal/combat/safety.go`<br>`internal/loot/fixpickup_test.go`<br>`internal/loot/lootskip_test.go`<br>`internal/town/beltfix_test.go`<br>`cmd/d2bot/beltfill_adapter.go`<br>`cmd/d2bot/wiring_test.go` | - |
 | cut011 | proposed | - | `docs/releases/0.1.1.md`<br>`docs/friend-checklist-0.1.1.md` | - |
+| staletarget | proposed | - | `internal/bot/staletarget.go`<br>`internal/bot/staletarget_test.go`<br>`internal/bot/loop.go`<br>`internal/bot/task.go`<br>`internal/bot/geargate.go`<br>`internal/bot/goal.go`<br>`internal/bot/whyline.go`<br>`internal/task/executor.go`<br>`internal/watch/whyline.json`<br>`internal/env/tuning_bot.go`<br>`docs/staletarget.md`<br>`docs/knobs.md`<br>`internal/bot/areaskip_test.go`<br>`internal/bot/runner.go`<br>`internal/bot/observe.go`<br>`internal/bot/ordersguard.go`<br>`internal/goals/runner.go`<br>`internal/watch/whyline_test.go`<br>`internal/task/executor_unpark_test.go` | - |
 | gameexe-retire-soak | deferred | gameexe-retire-soak | `docs/gameexe-retire.md` | - |
 | tpreserve-live | proposed | - | `docs/probes/tpreserve.md` | - |
+| towntests | proposed | - | `docs/towntests.md`<br>`internal/town/playerstash_test.go`<br>`internal/town/tidy_test.go`<br>`internal/town/invstash_test.go` | - |
+| swingmodel | proposed | - | `internal/resource/swing.go`<br>`internal/resource/swing_test.go`<br>`internal/resource/sim.go`<br>`internal/bot/killtime.go`<br>`internal/bot/killtime_test.go`<br>`docs/swingmodel.md` | - |
+| mercrevive2 | proposed | - | `docs/mercrevive.md`<br>`internal/merc`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercwire_test.go`<br>`docs/contracts/merc-policy.md` | - |
+| emurebuild | proposed | - | `tools/emu`<br>`docs/emu-image.md`<br>`docs/research/emu-reverify-2026-11-14.md` | - |
+| areamon | proposed | - | `docs/research/areamon-trace.md`<br>`tools/emu/am_env.sh`<br>`tools/emu/am_batch.sh`<br>`tools/emu/am_model.py`<br>`docs/research/areamon-table.csv` | - |
+| boss1 | proposed | - | `docs/research/boss1-trace.md`<br>`tools/emu/bs_spawn.sh`<br>`tools/emu/bs_model.py` | - |
+| levelsim | proposed | - | `tools/levelsim/`<br>`docs/levelsim.md` | - |
+| levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
+| stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
+| lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
+| prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
+| uis1 | proposed | - | `internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/layout.go`<br>`internal/watch/layout_test.go`<br>`tools/uilint/`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js` | - |
+| uib7 | proposed | - | `internal/watch/orderloop.go`<br>`internal/watch/orderloop_test.go`<br>`internal/watch/testdata/orderloop/`<br>`data/unlocks/ladder.json`<br>`internal/watch/orderqueue.json`<br>`cmd/d2bot/loopwire.go`<br>`docs/loop-order.md`<br>`cmd/d2bot/loopwire_test.go` | - |
+| botinstant | in-progress | - | `internal/invdesk/instant.go`<br>`internal/invdesk/instant_test.go`<br>`internal/invdesk/desk.go`<br>`cmd/d2bot/invverbs.go`<br>`docs/inventory-actions.md`<br>`internal/invdesk/identify.go`<br>`internal/invdesk/stash.go`<br>`internal/invdesk/unequip.go`<br>`internal/invdesk/testdata/view_schema9_instant_*.json`<br>`internal/bot/loop.go`<br>`internal/bot/runner.go`<br>`internal/bot/playeraction_test.go`<br>`internal/env/tuning_invdesk.go`<br>`docs/knobs.md`<br>`cmd/d2bot/invverbs_test.go`<br>`internal/invdesk/usable_test.go` | - |
+| charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
+| prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -185,14 +202,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 0a2bbedd 11-12 22:22 `Merge agent/cut011: friends release 0.1.1 built, verified, staged (not published)` (cut011)
-- a2b32a5b 11-12 22:21 `Merge branch 'main' into TASK-393` (-)
-- 52b63449 11-12 22:17 `Merge agent/decomp13: decomp13: merge main, keep both decomp-queue lines` (decomp13)
-- b4cfdc0d 11-12 21:11 `decomp13: merge main, keep both decomp-queue lines` (-)
-- 0410f449 11-12 19:39 `Merge agent/przeal: Merge branch 'main' into TASK-392` (przeal)
-- 2e6959dc 11-12 19:38 `Merge branch 'main' into TASK-392` (-)
-- c9acafb4 11-12 19:28 `Merge agent/wiring2: Merge branch 'main' into TASK-388` (wiring2)
-- 18f126bb 11-12 19:27 `Merge branch 'main' into TASK-388` (-)
-- d18e3f6c 11-12 19:21 `Merge agent/levelplan: Merge branch 'main' into TASK-386` (levelplan)
-- 66ea1d1b 11-12 19:20 `Merge branch 'main' into TASK-386` (-)
+- 0c5f3ec8d 11-14 15:50 `Merge agent/uidesign4: uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated` (uidesign4)
+- df05ff10c 11-14 14:58 `Merge agent/uidesign3: uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card` (uidesign3)
+- 656249fa3 11-14 12:56 `Merge agent/uib8: Merge branch 'main' into TASK-427` (uib8)
+- dc98d13a2 11-14 12:55 `Merge branch 'main' into TASK-427` (-)
+- f89e59de0 11-14 12:47 `Merge agent/uis1: Merge branch 'main' into TASK-424` (uis1)
+- f9d97a3c5 11-14 12:47 `Merge branch 'main' into TASK-424` (-)
+- 8a1cef253 11-14 12:45 `Merge origin/main into uib8 (C1 keeps schema 8, this card is 9)` (-)
+- 4a6d8d36f 11-14 12:41 `Merge agent/uib7: Merge branch 'main' into TASK-425` (uib7)
+- a57eb355f 11-14 12:40 `Merge branch 'main' into TASK-425` (-)
+- b4269b9ef 11-14 12:38 `Merge origin/main into agent/uis1` (-)
 <!-- statusgen:end -->

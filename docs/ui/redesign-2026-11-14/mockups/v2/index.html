@@ -1,0 +1,178 @@
+<title>d.idle Redesign Round Two</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a review page. Verdict first, then for each screen: before (measured block diagram) beside after (render),
+   then the live mockup at an exact viewport size, scaled to fit. */
+:root{
+  color-scheme:dark;
+  --bg:#0b0907;--s1:#17130f;--s2:#201a14;--line:#342b21;--line2:#4a3f31;
+  --text:#ece2cf;--text2:#b9aa94;--text3:#857560;--accent:#c7a44a;--accent-text:#e6c76f;--on-accent:#1a1408;
+  --danger:#ec7d6c;--danger-bg:#371a14;--ok:#7cc47e;--hole:#3a1712;--box:#2a231b;
+  --display:Georgia,"Iowan Old Style","Palatino Linotype",serif;--body:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;--num:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  color-scheme:light;--bg:#efe8da;--s1:#faf5ea;--s2:#f1e9d8;--line:#d6c9ad;--line2:#b9a988;--text:#231c12;--text2:#55493a;--text3:#7a6c58;
+  --accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--danger:#b23a2a;--danger-bg:#f5d9d2;--ok:#2c7a34;--hole:#f0c9c0;--box:#e3d8c1;
+}}
+:root[data-theme="light"]{
+  color-scheme:light;--bg:#efe8da;--s1:#faf5ea;--s2:#f1e9d8;--line:#d6c9ad;--line2:#b9a988;--text:#231c12;--text2:#55493a;--text3:#7a6c58;
+  --accent:#8a6a14;--accent-text:#6f540c;--on-accent:#fff8e6;--danger:#b23a2a;--danger-bg:#f5d9d2;--ok:#2c7a34;--hole:#f0c9c0;--box:#e3d8c1;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px/1.5 var(--body)}
+.wrap{max-width:1500px;margin:0 auto;padding-block:28px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1{font:700 clamp(1.5rem,1.2rem + 1.4vw,2.2rem)/1.15 var(--display);color:var(--accent-text);margin:0 0 6px;text-wrap:balance}
+h2{font:700 1.25rem/1.2 var(--display);margin:44px 0 6px;text-wrap:balance}
+h3{font:700 .72rem var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin:0 0 8px}
+p{max-width:68ch;margin:0 0 12px;color:var(--text2)}
+p b,li b{color:var(--text)}
+ul{max-width:70ch;margin:0 0 12px;padding-left:20px;color:var(--text2)}
+.lede{font-size:1.05rem;color:var(--text)}
+.crit{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin:16px 0}
+.crit div{background:var(--s1);border-left:3px solid var(--accent);padding:10px 12px;border-radius:0 4px 4px 0;font-size:.9rem;color:var(--text2)}
+.crit b{display:block;color:var(--text)}
+.ba{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;align-items:start;margin:14px 0}
+.ba figure{margin:0;min-width:0}
+.ba figcaption{font-size:.82rem;color:var(--text3);margin-top:6px}
+.ba svg,.ba img{display:block;width:100%;height:auto;border:1px solid var(--line2);border-radius:4px;background:var(--s1)}
+svg text{font:22px var(--body);fill:var(--text2)}
+svg .b{fill:var(--box);stroke:var(--line2);stroke-width:2}
+svg .h{fill:var(--hole);stroke:var(--danger);stroke-width:2;stroke-dasharray:10 8}
+svg .f{stroke:var(--accent);stroke-width:4;stroke-dasharray:18 10}
+svg .ft{fill:var(--accent-text);font-weight:700}
+svg .ht{fill:var(--danger)}
+.seg{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.seg button{font:inherit;font-size:.82rem;color:var(--text2);background:none;border:1px solid var(--line2);border-radius:4px;padding:5px 12px;cursor:pointer;min-height:32px}
+.seg button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent);font-weight:600}
+.seg button:focus-visible{outline:2px solid #8db8ff;outline-offset:2px}
+.live{border:1px solid var(--line2);border-radius:4px;overflow:hidden;background:#000;position:relative}
+.live iframe{border:0;display:block;transform-origin:0 0}
+.note{font-size:.82rem;color:var(--text3)}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:12px 0}
+.steps figure{margin:0}.steps img{display:block;width:100%;height:auto;border:1px solid var(--line2);border-radius:4px}
+.steps figcaption{font-size:.82rem;color:var(--text2);margin-top:6px}.steps figcaption b{color:var(--text)}
+.weak{background:var(--danger-bg);border-radius:4px;padding:14px 16px;margin:14px 0}
+.weak h3{color:var(--danger)}.weak ul{margin:0;color:var(--text)}
+@media (max-width:760px){.ba,.steps{grid-template-columns:minmax(0,1fr)}}
+</style>
+
+<div class="wrap">
+<h1>d.idle redesign, round two</h1>
+<p class="lede">The first attempt rearranged cards on a scrolling grid. You said it still has dead space, does not fit one screen, and the inventory is a mess. This round starts from a height budget: both screens are frames that fill the window, and every picture below is a render at an exact window size.</p>
+
+<div class="crit">
+  <div><b>Fits one screen</b>No scrolling at 1920 x 1080, 1440 x 900, 1366 x 768 and at browser-window sizes down to 1280 x 620. The phone is a designed arrangement, not an overflow.</div>
+  <div><b>Zero dead space</b>Tiles tile the frame exactly. A region with nothing to say gives its room to its neighbour.</div>
+  <div><b>One character canvas</b>Hero and mercenary in one frame, storage as one connected area, a real tooltip, a right-click menu.</div>
+</div>
+
+<h2>Watch: before and after</h2>
+<div class="ba">
+  <figure>
+    <svg viewBox="0 0 1920 2113" role="img" aria-label="Block diagram of the live watch page: 2113 pixels tall, with empty holes">
+      <rect class="b" x="0" y="0" width="1920" height="58"/><text x="16" y="38">band</text>
+      <rect class="b" x="12" y="78" width="1896" height="40"/><text x="24" y="106">voice line</text>
+      <rect class="b" x="12" y="138" width="1896" height="106"/><text x="24" y="200">Getting started: "1 of 5 done" and one button</text>
+      <rect class="b" x="12" y="258" width="940" height="764"/><text x="30" y="640">Game (title bar, padding)</text>
+      <rect class="b" x="966" y="258" width="464" height="826"/><text x="982" y="640">Map: 13 buttons,</text><text x="982" y="672">a tenth used</text>
+      <rect class="b" x="1444" y="258" width="464" height="224"/><text x="1460" y="380">Gear condition</text>
+      <rect class="b" x="1444" y="498" width="464" height="226"/><text x="1460" y="620">Hero now</text>
+      <rect class="b" x="1444" y="738" width="464" height="226"/><text x="1460" y="860">Why</text>
+      <rect class="b" x="1444" y="978" width="464" height="106"/><text x="1460" y="1040">Thoughts</text>
+      <rect class="b" x="12" y="1038" width="940" height="166"/><text x="30" y="1130">Tally: two numbers</text>
+      <rect class="b" x="966" y="1098" width="464" height="706"/><text x="982" y="1460">Where to?</text><text x="982" y="1492">(the act map)</text>
+      <rect class="h" x="1444" y="1098" width="464" height="766"/><text class="ht" x="1460" y="1490">empty</text>
+      <rect class="b" x="12" y="1218" width="940" height="286"/><text x="30" y="1370">Journey</text>
+      <rect class="h" x="12" y="1518" width="464" height="346"/><text class="ht" x="30" y="1700">empty</text>
+      <rect class="b" x="490" y="1518" width="462" height="346"/><text x="506" y="1700">Hero</text>
+      <rect class="b" x="12" y="1878" width="1896" height="222"/><text x="30" y="1996">Doing now (repeats Hero now)</text>
+      <line class="f" x1="0" y1="1080" x2="1920" y2="1080"/><text class="ft" x="1500" y="1070">1080: end of the screen</text>
+    </svg>
+    <figcaption>Before, as you saw it live at 1920 wide: 2113 px tall. Drawn as measured boxes because the live picture contains the game's own art, which these pages never carry.</figcaption>
+  </figure>
+  <figure><img id="wafter" alt="Render of the proposed watch cockpit" src="renders/watch-1920x1080.png"><figcaption>After, rendered at <span id="wsize">1920 x 1080</span>. Nothing below the edge.</figcaption>
+    <div class="seg" id="wsizes"></div></figure>
+</div>
+<ul>
+  <li><b>The picture is sized by the window's height</b>, so it is always as large as it can be and never cut.</li>
+  <li><b>One rail</b> to its right holds what you act on: Needs you, Orders, and the map you send the hero with.</li>
+  <li><b>One strip</b> under it holds what you glance at: Progress, Journey, Health.</li>
+  <li>Hero stats, Why, Tally, Thoughts, Gear condition, the logs and the onboarding card are one click away, not tiles.</li>
+</ul>
+
+<h3>After your screenshot: the zone menu no longer covers the map</h3>
+<div class="ba"><figure><img alt="Render at 1914 x 930 with the Stony Field menu open beside the map" src="renders/watch-menu.png"><figcaption>1914 x 930 (a browser window on a 1080p screen), Stony Field picked. The menu opens beside the map on a wide window and above it on a narrower one; every zone stays visible and the picked zone is outlined.</figcaption></figure>
+<div><ul><li><b>It was the menu, not the layout:</b> the zone menu opened as a sheet over the bottom rows of the map. It now never sits on a zone button.</li><li><b>The area map was cropped</b> to fill its tile. It is now scaled to fit, whole.</li><li><b>Browser-window sizes are part of the check now:</b> 1914 x 930, 1904 x 1000, 1536 x 730 and 1280 x 620, next to the full-screen sizes. On short windows the zone rows drop to one line and the strip gets shorter, so all zones always show.</li></ul></div></div>
+<h3>Try it at an exact window size</h3>
+<div class="seg" id="wlive"></div>
+<div class="live" id="wbox"><iframe id="wframe" title="Watch cockpit mockup" src="watch-app.html"></iframe></div>
+<p class="note">Fake data, placeholder shapes. Click a zone on the map, press Repair, cancel an order; the small "demo" button at the bottom left switches scenarios (quiet, a queue with a failed order, a blocked journey).</p>
+
+<h2>Character: before and after</h2>
+<div class="ba">
+  <figure>
+    <svg viewBox="0 0 1920 1965" role="img" aria-label="Block diagram of the live inventory page: 1965 pixels tall, a masonry of cards with holes">
+      <rect class="b" x="0" y="0" width="1920" height="60"/><text x="16" y="40">band</text>
+      <rect class="b" x="12" y="72" width="1896" height="36"/>
+      <rect class="b" x="12" y="122" width="1088" height="978"/><text x="30" y="150">Equipped (one card)</text>
+      <rect class="b" x="26" y="166" width="316" height="242"/><text x="40" y="300">hero doll</text>
+      <rect class="b" x="356" y="166" width="732" height="278"/><text x="372" y="310">item panel (not a tooltip)</text>
+      <rect class="b" x="26" y="556" width="466" height="298"/><text x="40" y="710">mercenary doll, "n/a" slot</text>
+      <rect class="b" x="26" y="900" width="1062" height="180"/><text x="40" y="1000">gear sets: text and a form</text>
+      <rect class="b" x="1114" y="122" width="776" height="278"/><text x="1130" y="270">Backpack (uses 480 of 776)</text>
+      <rect class="h" x="1114" y="400" width="776" height="248"/><text class="ht" x="1130" y="534">empty</text>
+      <rect class="b" x="1114" y="648" width="776" height="218"/><text x="1130" y="766">Repair: a card for one button</text>
+      <rect class="h" x="1114" y="866" width="776" height="248"/><text class="ht" x="1130" y="1000">empty</text>
+      <rect class="b" x="12" y="1114" width="1088" height="106"/><text x="30" y="1176">Belt: four cells</text>
+      <rect class="h" x="12" y="1220" width="1088" height="348"/><text class="ht" x="30" y="1404">empty</text>
+      <rect class="b" x="1114" y="1114" width="776" height="440"/><text x="1130" y="1340">Stash (uses 288 of 776)</text>
+      <rect class="b" x="12" y="1568" width="1088" height="356"/><text x="30" y="1756">Item actions: a form at the bottom</text>
+      <line class="f" x1="0" y1="1080" x2="1920" y2="1080"/><text class="ft" x="1500" y="1070">1080: end of the screen</text>
+    </svg>
+    <figcaption>Before, live at 1920 wide: 1965 px tall, about a third of it empty, the hero and the mercenary in different places.</figcaption>
+  </figure>
+  <figure><img id="cafter" alt="Render of the proposed character canvas" src="renders/character-1920x1080.png"><figcaption>After, rendered at <span id="csize">1920 x 1080</span>.</figcaption>
+    <div class="seg" id="csizes"></div></figure>
+</div>
+<ul>
+  <li><b>One cell size</b> for the dolls, the pack, the stash and the belt, taken from the window's height.</li>
+  <li><b>Hero and mercenary side by side</b>, gear sets as a bar under them, both stat sheets under that.</li>
+  <li><b>Storage is one block</b>: the pack over the stash, with the belt, the selected item's buttons and the recent item actions beside the stash.</li>
+  <li><b>A real tooltip</b> beside the cell: requirements for you and for the mercenary, and the comparison with what is worn. Right-click for every action. Gold, repair and sell are chips in the bar.</li>
+</ul>
+<h3>Try it</h3>
+<div class="seg" id="clive"></div>
+<div class="live" id="cbox"><iframe id="cframe" title="Character canvas mockup" src="character-app.html"></iframe></div>
+<p class="note">Hover an item for the tooltip, right-click for the menu, click an item and then a doll slot to equip. Light Plate is selected: the armor slot is red because the hero lacks the level and strength; the mercenary's is green.</p>
+
+<h2>Three iterations</h2>
+<p>Six renders in all; three stages are shown. Each was looked at and criticised before the next (one of them rendered blank after an unchecked edit, which is why every edit since has a render). The notes are in the repository's research folder.</p>
+<h3>Watch at 1440 x 900</h3>
+<div class="steps" id="wsteps"></div>
+<h3>Character at 1440 x 900</h3>
+<div class="steps" id="csteps"></div>
+
+<div class="weak" id="weak"></div>
+</div>
+
+<script>
+window.NOTES={w:["First cockpit: it fits and tiles, but text is cut in the strip and on the map, and the map's corners read as holes.","Strip laid out top-down, level range moved under each zone name, legend and act switch in the map's corners.","Final: phone band fixed, wider map at 1920, small fixes at 1366."],
+ c:["Three zones: the mercenary is on the far side of the storage, away from the hero. Wrong.","Hero and mercenary in one frame; but empty space under his doll and a half-empty box beside the stash.","Final: his sheet under his doll, loot rules and item actions under the hero's sheet, town errands beside the stash, the selected box shows requirements."]};
+window.WEAK=["The act map's own shape leaves some grid cells unused in its left and right columns.","Character at 1920 x 1080: about 190 by 300 px beside the mercenary's doll is unused.","Character on short windows (1536 x 730, 1280 x 620): the column beside the stash is narrow; some button labels are cut and the selected item shows its name and buttons only.","Doll slots are labelled boxes here; spacing has not been judged with your item art.","At 1440 x 900 and below the area map is a switch on the map tile; only 1920 wide shows both maps.","On a phone, Progress, Journey and Health are one tab away.","Static mockups with fake data: nothing here has run in the real shell. The build gets an automatic fit check at these window sizes.","The cockpit needs a new layout kind in the shell; on it the tile editor swaps and resizes slots instead of placing freely."];
+</script>
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)};
+var SIZES=[[1914,930],[1920,1080],[1536,730],[1440,900],[1366,768],[1280,620],[390,844]];
+function segs(box,items,cur,fn){box.textContent='';items.forEach(function(it){var b=document.createElement('button');b.type='button';b.textContent=it[0]+' x '+it[1];b.setAttribute('aria-pressed',String(cur()===it));b.addEventListener('click',function(){fn(it)});box.appendChild(b)})}
+function after(prefix,img,label,box){var cur=SIZES[0];function draw(){img.src='renders/'+prefix+'-'+cur[0]+'x'+cur[1]+'.png';label.textContent=cur[0]+' x '+cur[1];segs(box,SIZES,function(){return cur},function(s){cur=s;draw()})}draw()}
+after('watch',$('wafter'),$('wsize'),$('wsizes'));after('character',$('cafter'),$('csize'),$('csizes'));
+function live(frame,box,ctl){var cur=SIZES[3];function fit(){var w=box.clientWidth,s=Math.min(1,w/cur[0]);frame.style.width=cur[0]+'px';frame.style.height=cur[1]+'px';frame.style.transform='scale('+s+')';box.style.height=Math.round(cur[1]*s)+'px';box.style.width=cur[0]*s<w?Math.round(cur[0]*s)+'px':''}
+ function draw(){segs(ctl,SIZES,function(){return cur},function(s){cur=s;draw()});fit()}draw();addEventListener('resize',fit)}
+live($('wframe'),$('wbox'),$('wlive'));live($('cframe'),$('cbox'),$('clive'));
+var NOTES=window.NOTES||{w:['','',''],c:['','','']};
+function steps(box,prefix,notes){[1,2,3].forEach(function(n,k){var f=document.createElement('figure'),i=document.createElement('img');i.src='renders/it'+n+'-'+prefix+'-1440x900.png';i.alt='Iteration '+n;i.loading='lazy';var c=document.createElement('figcaption'),b=document.createElement('b');b.textContent='Iteration '+n+'. ';c.appendChild(b);c.appendChild(document.createTextNode(notes[k]));f.appendChild(i);f.appendChild(c);box.appendChild(f)})}
+steps($('wsteps'),'watch',NOTES.w);steps($('csteps'),'character',NOTES.c);
+var wk=$('weak'),h=document.createElement('h3');h.textContent='What is still weak';wk.appendChild(h);var ul=document.createElement('ul');(window.WEAK||[]).forEach(function(t){var li=document.createElement('li');li.textContent=t;ul.appendChild(li)});wk.appendChild(ul);
+})();
+</script>

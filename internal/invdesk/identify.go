@@ -100,10 +100,10 @@ func identifyWhy(u d2.Unit, hasTool bool) (code, why string) {
 	return "", ""
 }
 
-// RequestIdentify queues reading a Scroll or Tome of Identify on item id. Refused for an identified item, an item
+// requestIdentify queues reading a Scroll or Tome of Identify on item id. Refused for an identified item, an item
 // outside the backpack and the doll, and when the pack holds no scroll or tome (the reason names the two other
 // commands).
-func (d *Desk) RequestIdentify(id uint32) (Request, error) {
+func (d *Desk) requestIdentify(id uint32) (Request, error) {
 	sv, _ := d.services()
 	if sv == nil {
 		return Request{}, refuse("off", "identifying is not available on this bot")

@@ -28,12 +28,47 @@ const (
 
 // LayoutManifest is a watch.layout/1 file: the grid positions the layout editor exports.
 type LayoutManifest struct {
-	Schema      string                      `json:"schema"`
-	Cols        int                         `json:"cols"`
-	RowHeight   int                         `json:"rowHeight"`
-	Density     string                      `json:"density,omitempty"`
-	Theme       string                      `json:"theme,omitempty"`
+	Schema    string `json:"schema"`
+	Cols      int    `json:"cols"`
+	RowHeight int    `json:"rowHeight"`
+	Density   string `json:"density,omitempty"`
+	Theme     string `json:"theme,omitempty"`
+	// Status chooses the panels of the status band instead of the page's own list (optional; see LayoutStatus).
+	Status      []LayoutStatus              `json:"status,omitempty"`
 	Breakpoints map[string]LayoutBreakpoint `json:"breakpoints"`
+}
+
+// LayoutStatus is one entry of the layout's "status" list: a bare panel id, or {id, fallback}. An entry whose id is not
+// a mounted panel uses its fallback, else the shell skips it.
+type LayoutStatus struct {
+	ID       string
+	Fallback string
+}
+
+func (s *LayoutStatus) UnmarshalJSON(b []byte) error {
+	if err := json.Unmarshal(b, &s.ID); err == nil {
+		s.Fallback = ""
+		return nil
+	}
+	var o struct {
+		ID       string `json:"id"`
+		Fallback string `json:"fallback"`
+	}
+	if err := json.Unmarshal(b, &o); err != nil {
+		return fmt.Errorf("status entry: want an id or {id, fallback}: %w", err)
+	}
+	s.ID, s.Fallback = o.ID, o.Fallback
+	return nil
+}
+
+func (s LayoutStatus) MarshalJSON() ([]byte, error) {
+	if s.Fallback == "" {
+		return json.Marshal(s.ID)
+	}
+	return json.Marshal(struct {
+		ID       string `json:"id"`
+		Fallback string `json:"fallback"`
+	}{s.ID, s.Fallback})
 }
 
 // LayoutBreakpoint is one breakpoint of a layout manifest.
@@ -56,6 +91,9 @@ type LayoutPanel struct {
 	// Hidden is a panel the user switched off in Edit layout: it keeps its cells in the file and takes none on the
 	// page. Added after the first v1 files; absent means shown, and a loader that does not know it shows the panel.
 	Hidden bool `json:"hidden,omitempty"`
+	// Fallback: the panel or card that fills this cell while ID is not a mounted panel. The shell shows it even when
+	// the same layout lists it as hidden, and ignores the key once ID is mounted (D-layouts.md section 4).
+	Fallback string `json:"fallback,omitempty"`
 }
 
 // layoutBreakpoints are the names the shell knows.
@@ -70,6 +108,11 @@ func ParseLayout(b []byte) (LayoutManifest, error) {
 	}
 	if l.Schema != layoutSchema {
 		return l, fmt.Errorf("layout schema %q (this version reads %s)", l.Schema, layoutSchema)
+	}
+	for _, e := range l.Status {
+		if e.ID == "" || strings.ContainsAny(e.ID+e.Fallback, " /") {
+			return l, fmt.Errorf("layout status: bad entry %q", e.ID)
+		}
 	}
 	for name, bp := range l.Breakpoints {
 		cols := bp.Cols
@@ -93,14 +136,19 @@ func (l LayoutManifest) Check(known func(id string) bool) error {
 		names = append(names, n)
 	}
 	sort.Strings(names)
+	for _, e := range l.Status {
+		if err := checkIDFallback("status", e.ID, e.Fallback, known); err != nil {
+			return err
+		}
+	}
 	for _, name := range names {
 		if !containsStr(layoutBreakpoints, name) {
 			return fmt.Errorf("layout: unknown breakpoint %q", name)
 		}
 		seen, orders, cells := map[string]bool{}, map[int]string{}, map[[2]int]string{}
 		for _, p := range l.Breakpoints[name].Panels {
-			if known != nil && !known(p.ID) {
-				return fmt.Errorf("layout %s: unknown panel id %q", name, p.ID)
+			if err := checkIDFallback(name, p.ID, p.Fallback, known); err != nil {
+				return err
 			}
 			if seen[p.ID] {
 				return fmt.Errorf("layout %s: panel %q placed twice", name, p.ID)
@@ -126,6 +174,24 @@ func (l LayoutManifest) Check(known func(id string) bool) error {
 				}
 			}
 		}
+	}
+	return nil
+}
+
+// checkIDFallback: an id must be known unless the entry names a fallback (a new tile that is not built yet); a
+// fallback must be known itself.
+func checkIDFallback(where, id, fallback string, known func(string) bool) error {
+	if id == "" {
+		return fmt.Errorf("layout %s: entry without an id", where)
+	}
+	if known == nil {
+		return nil
+	}
+	if fallback != "" && !known(fallback) {
+		return fmt.Errorf("layout %s: unknown fallback id %q of %q", where, fallback, id)
+	}
+	if fallback == "" && !known(id) {
+		return fmt.Errorf("layout %s: unknown panel id %q", where, id)
 	}
 	return nil
 }
@@ -187,6 +253,9 @@ type layoutStore struct {
 	mu   sync.Mutex
 	path string
 	cur  []byte // the JSON GET serves; nil until first read
+	// stored: cur is a per-profile copy, not web/layout.json. The shell reads it from the X-Layout-Source header to
+	// tell "no layout of my own" (the default may change, a new hero starts on Simple) from a layout it must keep.
+	stored bool
 }
 
 // SetLayoutPath names the per-profile file POST /api/layout writes (cmd/d2bot: <state dir>/layout-<profile>.json).
@@ -212,7 +281,7 @@ func (s *layoutStore) load() ([]byte, error) {
 	if s.path != "" {
 		if b, err := os.ReadFile(s.path); err == nil {
 			if _, err := ParseLayout(b); err == nil {
-				s.cur = b
+				s.cur, s.stored = b, true
 				return b, nil
 			}
 		}
@@ -221,19 +290,26 @@ func (s *layoutStore) load() ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	s.cur = b
+	s.cur, s.stored = b, false
 	return b, nil
 }
 
 func (h *Hub) layoutHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		b, err := h.Layout()
+		h.layout.mu.Lock()
+		b, err := h.layout.load()
+		src := "default"
+		if h.layout.stored {
+			src = "stored"
+		}
+		h.layout.mu.Unlock()
 		if err != nil {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "no layout"})
 			return
 		}
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		w.Header().Set("Cache-Control", "no-store")
+		w.Header().Set("X-Layout-Source", src)
 		w.Write(b)
 	}
 }
@@ -262,7 +338,7 @@ func (h *Hub) postLayout(o AnswerOptions, w http.ResponseWriter, r *http.Request
 				return
 			}
 		}
-		s.cur = nil
+		s.cur, s.stored = nil, false
 	case len(b.Layout) > 0:
 		// the loader's rule only: the editor's own exports can overlap, and the shell pushes an overlap down
 		if _, err := ParseLayout(b.Layout); err != nil {
@@ -279,7 +355,7 @@ func (h *Hub) postLayout(o AnswerOptions, w http.ResponseWriter, r *http.Request
 				return
 			}
 		}
-		s.cur = b.Layout
+		s.cur, s.stored = b.Layout, true
 	default:
 		fail(http.StatusBadRequest, "body", `send {"layout": {...}} or {"reset": true}`)
 		return

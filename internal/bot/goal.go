@@ -488,6 +488,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 	town := sec(r.cfg.TownTimeoutSec)
 	t.plan.GoldFloor = r.e.Tune.Bot.GoldFloor
 	t.plan.PotionFloor = r.potionFloor(p)
+	t.plan.ReserveGold = r.mercReserve(snap)
 	if t.startGold == 0 {
 		t.startGold = p.Gold
 		t.startBasis = r.resInput(snap).Gold
@@ -706,19 +707,26 @@ func (r *Runner) banned(area int) bool {
 	return ok
 }
 
+func (r *Runner) avoidWhyOf(h int) string {
+	r.obMu.Lock()
+	defer r.obMu.Unlock()
+	return r.avoidWhy[h]
+}
+
 // routeBanned says h blocks a walk to target: banned, and not merely a nav-fault skip of another area. Such a skip
 // (whyUnreachable, whyNavStuck) is no danger, and travelTo may jump over the area by waypoint (codereview3 C1).
 func (r *Runner) routeBanned(h, target int) bool {
 	if !r.banned(h) {
 		return false
 	}
+	why := r.avoidWhyOf(h)
+	if r.questWins(h, why) {
+		return false
+	}
 	if h == target {
 		return true
 	}
-	r.obMu.Lock()
-	why := r.avoidWhy[h]
-	r.obMu.Unlock()
-	return why != whyUnreachable && why != whyNavStuck
+	return why != whyUnreachable && why != whyNavStuck && why != whyBorderLoop
 }
 
 // starterBanMax caps what is left of the ban of a first field (the way out of a town) once the character stands in
@@ -966,7 +974,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			ex[areaDenOfEvil] = true // a dungeon quest needs a potion buffer; farm the open field first
 		}
 		pick := func() (Step, bool) {
-			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty)}
+			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty), Class: planClass(p.Class), Merc: mercUp()}
 			st, ok := r.d.Plan.Pick(diff, p.Level, opts)
 			if !ok && len(farmed) > 0 {
 				// the farm is a preference: every farm area is banned or excluded, so pick among all areas again

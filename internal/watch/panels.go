@@ -35,8 +35,11 @@ type PanelManifest struct {
 	Fit bool `json:"fit,omitempty"`
 	// MergedInto: the panel now lives inside another one (its id is an alias in web/shell.json); the shell does not mount it.
 	MergedInto string `json:"mergedInto,omitempty"`
-	Owner      string `json:"owner"`
-	Doc        string `json:"doc"`
+	// OptIn: the shell mounts the panel only when the layout in force names it (placed, not hidden), so a stored
+	// layout never gets a new tile appended the day it ships (docs/ui/redesign-2026-11-14/D-layouts.md section 1).
+	OptIn bool   `json:"optIn,omitempty"`
+	Owner string `json:"owner"`
+	Doc   string `json:"doc"`
 }
 
 const panelSchema = "watch.panel/1"
