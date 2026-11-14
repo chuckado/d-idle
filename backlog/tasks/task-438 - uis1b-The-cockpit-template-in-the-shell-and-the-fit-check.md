@@ -27,6 +27,10 @@ owns:
   - "tools/uilint/"
   - "tools/uishots/"
   - "tools/uishots.sh"
+  - "internal/watch/testdata/layout_cells.js"
+  - "internal/watch/testdata/layout_cells.golden"
+  - "internal/watch/testdata/layout_cockpit.js"
+  - "internal/watch/testdata/layout_edit.js"
 exclusive: []
 contracts: []
 ---
@@ -36,7 +40,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Why: TODO. Done when: TODO.
+Why: the first attempt's free grid cannot fit a screen (content-height rows). The shell gains a second, additive kind of layout: template cockpit/1 with named slots (band, stage, strip, rail, railWide, phoneTabs) that fills the viewport, next to the unchanged free grid; tools/uishots gets the fit check that proves a page fits. Done when: the criteria below are ticked and the result says what was verified.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
