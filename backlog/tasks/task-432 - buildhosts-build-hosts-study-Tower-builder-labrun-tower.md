@@ -1,6 +1,6 @@
 ---
 id: TASK-432
-title: 'buildhosts: build hosts study (Tower builder, labrun tower)'
+title: 'buildhosts: build hosts study (the NAS builder, labrun nas)'
 status: In Progress
 assignee:
   - credit-runner
@@ -16,7 +16,7 @@ owns:
   - "docs/process/build-hosts-2026-11-14.md"
 exclusive: []
 contracts: []
-result: "Study doc written; Tower measured read-only (V), Go gate on Tower NOT trialled (U); nothing applied; not verified live."
+result: "Study doc written; the NAS measured read-only (V), Go gate on the NAS NOT trialled (U); nothing applied; not verified live."
 ---
 
 ## Description
@@ -24,7 +24,7 @@ result: "Study doc written; Tower measured read-only (V), Go gate on Tower NOT t
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: the user asked (2026-11-14) to stop builds on Orion while gaming and use Tower. Done when: the doc answers headroom, workloads, design, staged plan. Consumer: the merge queue gate host decision (D2_LABRUN_HOST).
+Why: the user asked (2026-11-14) to stop builds on the worker host while gaming and use the NAS. Done when: the doc answers headroom, workloads, design, staged plan. Consumer: the merge queue gate host decision (D2_LABRUN_HOST).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
