@@ -20,7 +20,7 @@
 3. Panel manifest key `slot: true`: the panel renders into a fixed box. The shell mounts in a slot only panels that declare it; a slot whose panel does not exist is left out and its neighbours take the room (no fallback to old tiles in a cockpit).
 4. The editor on a cockpit layout: tiles are dragged onto another slot to swap; the strip height and the rail width have drag handles with limits; a slot's panel can be changed from a list of slot panels; Save, Reset and Done as today. Free placement remains only in free-grid layouts.
 5. `web/layouts/cockpit.json` with the slots of J.3 and old-style `breakpoints` as the fallback for older shells; `?layout=cockpit` loads it. It is not the default yet.
-6. `tools/uishots`: the `fit` check described below, for `/watch?layout=cockpit` and (later) the character page; four sizes; runs on the builder.
+6. `tools/uishots`: the `fit` check described below, for `/watch?layout=cockpit` and (later) the character page; the seven desktop sizes and the phone size of the fit rule below; with the zone menu open and closed, and with zero, two and five Needs you rows; runs on the builder.
 
 ## Acceptance (also the card's boxes)
 - Every existing layout (stored, Classic, Standard, Simple, Stream, Debug, the three old presets) renders the same cells as before (the S1 compat test still passes, plus a new one for `template`-less files)
@@ -40,9 +40,9 @@ python3 -I tools/backlog/new_task.py "uis1b: The cockpit template in the shell, 
 ```
 
 ## The fit rule (binding for every cockpit and canvas slice)
-- The page must not scroll and no slot may overflow at 1440x900, 1920x1080 and 1366x768; at 390x844 it follows the phone design of J. `tools/uishots` gets (in S1b) a `fit` check that loads each page at those sizes in headless Chromium on the builder and fails when `document.scrollingElement.scrollHeight > innerHeight`, when any `[data-slot]` has `scrollHeight > clientHeight` (lists marked `data-scroll` excepted), or when the slots do not cover the frame (sum of slot areas plus gaps equals the frame, within 2 px). Run it (`labrun <builder> -- tools/uishots.sh --fit`, never on the worker host that runs the games) and put its output in the card result. A slice that fails the fit check is not done.
+- The page must not scroll and nothing may clip at the full-screen sizes 1920x1080, 1440x900, 1366x768 and at the browser-window sizes 1914x930, 1904x1000, 1536x730, 1280x620 (a window with its chrome is shorter than the screen: the user's first look was at 1914x930); at 390x844 it follows the phone design of J. `tools/uishots` gets (in S1b) a `fit` check that loads each page at those sizes in headless Chromium on the builder and fails when `document.scrollingElement.scrollHeight > innerHeight`, when any `[data-slot]` has `scrollHeight > clientHeight` (lists marked `data-scroll` excepted), or when the slots do not cover the frame (sum of slot areas plus gaps equals the frame, within 2 px). Run it (`labrun <builder> -- tools/uishots.sh --fit`, never on the worker host that runs the games) and put its output in the card result. A slice that fails the fit check is not done.
 - A slot panel has no content-driven height: it renders inside the box it is given; long text is cut with an ellipsis and the full text goes to `title` or a popover; a list longer than its box scrolls inside (`data-scroll`).
-- Look at your own renders at the four sizes and write three lines of critique in the card result (dead space, alignment, noise). Compare with `docs/ui/redesign-2026-11-14/research/iterations/it3/` (the accepted look).
+- Look at your own renders at those sizes and write three lines of critique in the card result (dead space, alignment, noise). Compare with `docs/ui/redesign-2026-11-14/research/iterations/it3/` (the accepted look).
 
 ## Every UI slice (binding)
 - Rules: `AGENTS.md`, `docs/agents/rules-short.md`. Own worktree and branch, commit often, never push, no deploy, no live game, do not touch the sandbox. Trailer `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.

@@ -20,10 +20,11 @@ for m in watch character; do
 	{ printf '%s' '<!doctype html><html data-theme="dark"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>html{color-scheme:dark}body{margin:0;font:14px system-ui}[hidden]{display:none!important}</style></head><body>'
 	  cat "$out/src/$m.html"
 	  printf '%s' '</body></html>'; } >"$tmp/$m.html"
-	for s in "1440 900 " "1920 1080 " "1366 768 " "390 844 " "1440 900 #tip"; do
+	for s in "1440 900 " "1920 1080 " "1366 768 " "390 844 " "1914 930 " "1904 1000 " "1536 730 " "1280 620 " "1440 900 #tip" "1914 930 #menu" "1440 900 #menu" "1280 620 #menu"; do
 		set -- $s
-		name=$m-$1x$2; [ -n "${3:-}" ] && name=$name-tip
-		[ -n "${3:-}" ] && [ "$m" = watch ] && continue
+		name=$m-$1x$2; [ -n "${3:-}" ] && name=$name-${3#\#}
+		[ "${3:-}" = "#tip" ] && [ "$m" = watch ] && continue
+		[ "${3:-}" = "#menu" ] && [ "$m" = character ] && continue
 		timeout 45 nice -n 19 "$chrome" ${HEADLESS:---headless=new} --no-sandbox --disable-gpu --disable-dev-shm-usage --hide-scrollbars --no-first-run --user-data-dir="$tmp/p-$name" \
 			--force-device-scale-factor=1 --window-size="$1,$2" --virtual-time-budget=1500 --screenshot="$out/$name.png" "file://$tmp/$m.html${3:-}" >/dev/null 2>&1
 		echo "$name rc=$?"

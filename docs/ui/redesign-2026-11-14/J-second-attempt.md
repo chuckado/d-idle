@@ -71,6 +71,17 @@ What left the default screen (each is one click away, none is deleted): the onbo
 
 The map is three columns by ten rows of zones (V `internal/watch/mapdata.go`: X is one of three values, Y one of ten). Drawn as a grid of one-line buttons it needs about 440 by 380 px to be readable at 11 px text, which is what the rail has. Each button: a stripe for the level band (green in range, amber above, red too hard, grey below, dashed not orderable), the name, and at the right the level range, "here", or the queue number. The route to the current target is a gold line behind the buttons. A click opens the zone menu as a sheet over the lower part of the map tile (never over the picture).
 
+### Fixes after the user's first look (2026-11-14, window about 1914x930)
+
+"Massive improvement", and: was it meant to be cut off? Two things were cut, neither by the frame:
+
+| Seen | Cause | Fix |
+|---|---|---|
+| The bottom zone rows were hidden | the zone menu opened as a sheet over the lower part of the map | the menu never covers a zone button: beside the map (in the area tile) on a two-column rail, above it (over the Orders tile) otherwise; the picked zone is outlined |
+| The area map showed only a strip of a room | the drawing was scaled to cover its tile | it is scaled to fit, whole |
+
+Supported sizes are now two lists, and the fit check uses both: full screen 1920x1080, 1440x900, 1366x768; browser windows 1914x930, 1904x1000, 1536x730, 1280x620; phone 390x844. On short windows the strip is 92 px, zone rows are one line (all ten rows always show; none under 20 px), and the strip's cells drop their second words. Renders: [research/iterations/fix/](research/iterations/fix/).
+
 ## 3. How this fits the shell (compatibility)
 
 The free grid (`watch.layout/1`, 12 columns, 48 px rows, fit rows, the editor) stays exactly as it is for every existing layout and for Classic, Debug and any layout the user made. A screen that must fit the viewport cannot be expressed in content-height rows, so the cockpit is a second, additive kind of layout:
