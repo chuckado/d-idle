@@ -25,7 +25,7 @@ watch-390-fold 390 844 watch?theme=dark
 watch-390-full 390 9000 watch?theme=dark
 watch-1440-edit 1440 3400 watch?theme=dark&edit=1
 inventory-1440 1440 1500 watch/inventory?theme=dark
-skills-1440 1440 1200 watch/skills?theme=dark"
+inventory-390 390 3600 watch/inventory?theme=dark"
 echo "$shots" | while read -r name w h q; do
 	prof=$(mktemp -d)
 	DISPLAY=$disp timeout 40 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run \
