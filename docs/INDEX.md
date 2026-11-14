@@ -507,6 +507,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [staletarget.md](staletarget.md): Stale target area, border-loop bans and blocked journey steps (TASK-398) (status: fix landed on branch agent/staletarget (not deployed; no live run). Tags: V verified (how is said), S...)
 - [stance.md](stance.md): Fight stance (cards stancefix, stancelever) (status: built and tested offline; NOT run in a live game. Tags: V = proven by a test in this tree or by a log...)
 - [summon.md](summon.md): Necromancer upkeep (internal/combat/necro.go)
+
+`survival/`
+
+- [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
+- [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
 - [tally-strip.md](tally-strip.md): Tally strip: credits from events, the strip, the charter sink (status: built offline 2026-11-07 and wired into the bot by TASK-140 (see Wiring), TASK-129 (fun loop, ADR 0018,...)

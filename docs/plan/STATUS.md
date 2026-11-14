@@ -151,6 +151,7 @@
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
 | prswing3 | proposed | - | `docs/upstream/drafts/swing-start.md`<br>`docs/upstream/pr-queue.md` | `fork-branch:fid/swing-start-r3` |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
+| survivaldesign | in-progress | - | `docs/survival/**` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -199,14 +200,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 83f36854 11-14 12:18 `Merge agent/survivaldesign: Merge branch 'main' into TASK-430` (survivaldesign)
 - 88dc84a1 11-14 12:18 `Merge agent/prswing3: Merge branch 'main' into TASK-429` (prswing3)
 - c2be81b6 11-14 12:18 `Merge agent/prverify6: Merge branch 'main' into TASK-418` (prverify6)
+- 9d5a88ec 11-14 12:14 `Merge branch 'main' into TASK-430` (-)
 - c28cbd12 11-14 12:14 `Merge branch 'main' into TASK-429` (-)
 - 5375357a 11-14 10:55 `Merge branch 'main' into TASK-418` (-)
 - ce23b781 11-14 10:54 `Merge agent/prpipeline: Merge branch 'main' into TASK-422` (prpipeline)
 - 52867423 11-14 10:53 `Merge branch 'main' into TASK-422` (-)
 - 03a655a5 11-14 10:49 `Merge agent/drillzip: Merge branch 'main' into TASK-423` (drillzip)
 - 32839f42 11-14 10:47 `Merge branch 'main' into TASK-423` (-)
-- 79b5bf3c 11-14 10:40 `Merge agent/lootrules: Merge branch 'main' into TASK-421` (lootrules)
-- 6c033aad 11-14 10:39 `Merge branch 'main' into TASK-421` (-)
 <!-- statusgen:end -->
