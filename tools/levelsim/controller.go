@@ -23,6 +23,22 @@ import (
 type CtlOpts struct {
 	ShadowOpts
 	Params *survival.Params
+	diff   string
+}
+
+// known reports whether the zone profile covers the area (events in any such zone feed the ledger, candidate or not,
+// as in the bot: the ledger is keyed by area, the planner's list only bounds the choice).
+func (o CtlOpts) known(a int) bool {
+	_, err := o.Tab.Find(a, o.diff)
+	return err == nil
+}
+
+// whereOf is the zone an event belongs to: the last entered area, or the last farm zone while the hero is in town.
+func whereOf(at, cur int) int {
+	if at <= 1 {
+		return cur
+	}
+	return at
 }
 
 // CtlRow is one decision of the replay.
@@ -68,7 +84,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 	if err != nil {
 		return nil, err
 	}
-	diff := o.Diff
+	diff := o.ShadowOpts.Diff
 	if diff == "" {
 		diff = "normal"
 	}
@@ -106,13 +122,14 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 	var (
 		hero             power.Hero
 		gold             int
-		cur, plan        int
+		cur, plan, at    int
 		last             time.Time
 		chick, dth, mdie int
 		pending          *CtlRow
 		pendingArea      int
 	)
 	hero = power.Hero{Class: "log", Potions: 6}
+	o.diff = diff
 	pw := func() float64 { return survival.PowerOf(hero) }
 	build := func(h power.Hero) ([]survival.Candidate, error) {
 		var out []survival.Candidate
@@ -194,6 +211,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 			m := hero.Merc
 			hero = heroOfEntry(kv)
 			hero.Merc.Level = m.Level
+			at = a
 			if rep.Names[a] != "" {
 				cur = a
 			}
@@ -204,33 +222,33 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		case "merc: died":
 			hero.Merc.Hired, hero.Merc.Alive = true, false
 			mdie++
-			if cur != 0 {
-				led.Observe(survival.ZoneKey{Area: cur, Diff: diff}, last, survival.Event{Kind: survival.EvMercDeath}, pw())
+			if a := whereOf(at, cur); a != 0 {
+				led.Observe(survival.ZoneKey{Area: a, Diff: diff}, last, survival.Event{Kind: survival.EvMercDeath}, pw())
 			}
 		case "safety decision":
 			if kv["action"] == "chicken" {
 				a, _ := strconv.Atoi(kv["area"])
-				if rep.Names[a] != "" {
+				if o.known(a) {
 					chick++
 					led.Observe(survival.ZoneKey{Area: a, Diff: diff}, last, survival.Event{Kind: survival.EvChicken}, pw())
 				}
 			}
 		case "character died":
 			a, _ := strconv.Atoi(kv["area"])
-			if rep.Names[a] != "" {
+			if o.known(a) {
 				dth++
 				led.Observe(survival.ZoneKey{Area: a, Diff: diff}, last, survival.Event{Kind: survival.EvDeath}, pw())
 			}
 		case "area summary":
 			a, _ := strconv.Atoi(kv["area"])
 			xp, _ := strconv.Atoi(kv["xp"])
-			if rep.Names[a] != "" && xp > 0 {
+			if o.known(a) && xp > 0 {
 				led.Observe(survival.ZoneKey{Area: a, Diff: diff}, last, survival.Event{Kind: survival.EvXP, XP: float64(xp)}, pw())
 			}
 		case "combat fight":
 			a, _ := strconv.Atoi(kv["area"])
 			k, _ := strconv.ParseFloat(kv["kills"], 64)
-			if rep.Names[a] == "" || k <= 0 || hero.MaxLife <= 0 {
+			if !o.known(a) || k <= 0 || hero.MaxLife <= 0 {
 				break
 			}
 			z, _ := o.Tab.Find(a, diff)
