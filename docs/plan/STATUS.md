@@ -148,7 +148,6 @@
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
-| drillzip | proposed | - | `docs/probes/drill-zip-2026-11-14.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |

@@ -1,10 +1,11 @@
 ---
 id: TASK-423
 title: 'drillzip: friend pack 0.1.1 drills on the user''s original install zip'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:40:00Z'
+updated_date: '2026-11-14T15:55:00Z'
 labels:
   - container
   - research
