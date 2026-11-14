@@ -54,16 +54,19 @@ const fxCSS = `@layer panels {
 // fxLayout is a cockpit layout over the fixture panels; overflow puts the overflowing one in the rail.
 func fxLayout(overflow bool) map[string]any {
 	rail := []string{"fx-needs", "fx-orders", "fx-map"}
-	if overflow {
+	wide := map[string]any{"left": []string{"fx-needs", "fx-orders"}, "right": []string{"fx-map"}}
+	tabs := map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}}
+	if overflow { // the same panel in every arrangement, so every width has the overflow
 		rail = []string{"fx-overflow"}
+		wide = map[string]any{"left": []string{"fx-overflow"}, "right": []string{}}
+		tabs = map[string]any{"Overflow": []string{"fx-overflow"}}
 	}
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
 		"slots": map[string]any{
 			"band": []string{"hero-meters"}, "stage": "video",
 			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
-			"railWide":  map[string]any{"left": []string{"fx-needs", "fx-orders"}, "right": []string{"fx-map"}},
-			"phoneTabs": map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}},
+			"railWide": wide, "phoneTabs": tabs,
 		},
 		"sizes":       map[string]any{"strip": 112, "railMin": 400},
 		"breakpoints": map[string]any{},

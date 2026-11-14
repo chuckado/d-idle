@@ -44,7 +44,8 @@ demo-needs0 watch?layout=cockpit-demo&theme=dark&needs=0
 demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
 demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
 demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=3&orders=20
-overflow-fixture watch?layout=cockpit-overflow&theme=dark"
+overflow-fixture watch?layout=cockpit-overflow&theme=dark
+overflow-classic watch?layout=classic&theme=dark"
 	echo "$pages" | while read -r pname pq; do
 		for sz in $sizes; do
 			w=${sz%x*} h=${sz#*x}
