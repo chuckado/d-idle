@@ -140,9 +140,11 @@ cmd/d2bot/d2dbackend.go  credit-runner  maphistoryA
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryC
 cmd/d2bot/d2dbackend.go  credit-runner  maptrail
 cmd/d2bot/d2dbackend.go  credit-runner  survA
+cmd/d2bot/d2dbackend.go  credit-runner  survB
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
 cmd/d2bot/dangerwire.go  credit-runner  survA
+cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
 cmd/d2bot/gearsets_test.go  credit-runner  gearsets
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
@@ -164,6 +166,7 @@ cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/live.go  credit-runner  survA
+cmd/d2bot/live.go  credit-runner  survB
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
@@ -173,6 +176,8 @@ cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
+cmd/d2bot/powerwire.go  credit-runner  survB
+cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
 cmd/d2bot/resource_test.go  credit-runner  freshstart
 cmd/d2bot/sensesfeed.go  credit-runner  maptrail
@@ -303,6 +308,7 @@ docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
+docs/survival/power.md  credit-runner  survB
 docs/swingmodel.md  credit-runner  swingmodel
 docs/t0-variants.md  credit-runner  qdensity
 docs/tester-guide.md  credit-runner  testerpack
@@ -353,6 +359,7 @@ internal/bot/goal.go  credit-runner  hourfix2
 internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
+internal/bot/goal.go  credit-runner  survB
 internal/bot/goal.go  pro-runner  levelplan3
 internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/goldprio.go  credit-runner  goldprio
@@ -396,12 +403,14 @@ internal/bot/runner.go  credit-runner  maphistoryA
 internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  staletarget
+internal/bot/runner.go  credit-runner  survB
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  staletarget
 internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/whyline.go  credit-runner  staletarget
+internal/bot/zoneshadow.go  credit-runner  survB
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/combat  credit-runner  wiring2
@@ -423,6 +432,7 @@ internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
+internal/d2/stats.go  credit-runner  survB
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
@@ -430,6 +440,10 @@ internal/d2dinput  pro-runner  bounce3
 internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
+internal/d2dsrc/gearstats.go  credit-runner  survB
+internal/d2dsrc/gearstats_test.go  credit-runner  survB
+internal/d2dsrc/player.go  credit-runner  survB
+internal/d2dsrc/source_test.go  credit-runner  survB
 internal/danger/  credit-runner  survA
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
@@ -507,6 +521,7 @@ internal/plandata/boss_levels_test.go  pro-runner  levelplan3
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
+internal/power/  credit-runner  survB
 internal/readiness/  credit-runner  ready-model
 internal/readiness/areatable.go  credit-runner  ready-area-table
 internal/readiness/areatable_test.go  credit-runner  ready-area-table
@@ -698,6 +713,9 @@ tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
+tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
+tools/levelsim/shadow.go  credit-runner  survB
+tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
