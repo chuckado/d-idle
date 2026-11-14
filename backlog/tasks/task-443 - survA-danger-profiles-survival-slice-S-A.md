@@ -32,7 +32,7 @@ Size: M
 
 Why: slice S-A of docs/survival/design-2026-11-14.md (sections 3, 10, 12): the known quantity (zone danger) generated from the install tables, read-only, no behaviour change. Done when: the criteria below hold. Shared-file edits (ladder, live, d2dbackend, funwire) are one-line wiring of GET /api/danger.
 
-result: PENDING
+result: "Generator, bosses.json, evidence-checked overrides, fixture tests for normal and hell, GET /api/danger and decisions record shipped (offline, no behaviour change; herdr per-package vet and tests, leakcheck and tools/ci/check.sh clean). NOT verified: real-install anchors (Blood Moor, Cold Plains, Black Marsh, Andariel) and the areamon-table.csv diff: the Tower builder queue did not start any job in 40 minutes, so TestRealAnchors and TestAreamonDiff are written but never ran; Params.UnitsPerDensityTile (0.001) is an unfitted placeholder and bosses.json superunique keys are unchecked against the real SuperUniques table. Whole-repo gate and race not run."
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
