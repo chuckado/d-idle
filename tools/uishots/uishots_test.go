@@ -122,6 +122,7 @@ func TestFitJudgeAndDir(t *testing.T) {
 		{"fit-cockpit-1440x900", strings.Replace(okJSON, `"slots":[{"slot":"band"},{"slot":"stage"}]`, `"slots":[]`, 1), "no [data-slot]"},
 		{"fit-cockpit-1920x1080", okJSON, "the viewport is 1440x900, not 1920x1080"},
 		{"fit-cockpit-1440x900", `{"error":"boom"}`, "the measurement failed"},
+		{"fit-cockpit-1440x900", ``, "no measurement"},
 	}
 	for _, c := range cases {
 		dir := t.TempDir()

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -17,48 +16,59 @@ import (
 )
 
 // The fit check (docs/ui/redesign-2026-11-14/briefs/S1b-cockpit-template.md, "The fit rule"): a cockpit page must fill
-// the viewport exactly. With ?fitrun=1 the serve command adds a script that measures the page (fit.js) and prints the
-// numbers into <pre id="fit-result">; tools/uishots.sh dumps that DOM in headless Chromium at each size and
-// `uishots fit DIR` judges the dumps. The page is judged as it is: the script only reads.
+// the viewport exactly. The serve command offers /__fit?u=<page>&w=<px>&h=<px> (fitHarness), which measures the page
+// (fit.js) and prints the numbers into <pre id="fit-result">; tools/uishots.sh dumps that DOM in headless Chromium at each
+// size and `uishots fit DIR` judges the dumps. The page is judged as it is: the harness only reads.
 
 //go:embed fit.js
 var fitJS []byte
 
-// fitRun adds the measuring script to the page's HTML when the query has fitrun=1: the pages forbid framing (CSP
-// frame-ancestors), so the page measures itself in the browser window the shell script opened at the size under test.
-// The script (fit.js plus a few lines) waits for the panels to mount and poll, then writes <pre id="fit-result">.
-func fitRun(h http.Handler, w http.ResponseWriter, r *http.Request) {
+// fitHarness is the page /__fit serves: the page under test in an iframe of exactly w by h (so innerWidth, innerHeight, dvh and
+// the container queries are those of a browser window of that size whatever the real window is: a headless Chromium
+// window carries browser chrome and has a least width), and the numbers of fit.js written into <pre id="fit-result">
+// once the panels have mounted and polled. The pages forbid framing (CSP frame-ancestors); framedPage relaxes that for
+// the copy this viewer serves with fitframe=1 and nothing else.
+func fitHarness(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	u, ww, hh := q.Get("u"), atoi(q.Get("w")), atoi(q.Get("h"))
+	if !strings.HasPrefix(u, "/watch") || strings.HasPrefix(u, "//") || ww < 200 || hh < 200 || ww > 4000 || hh > 4000 {
+		http.Error(w, "u must be a /watch path on this server; w and h 200 to 4000", http.StatusBadRequest)
+		return
+	}
+	sep := "?"
+	if strings.Contains(u, "?") {
+		sep = "&"
+	}
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
+<iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
+<script type="module">
+import { measure } from '/__fit/fit.js';
+const f = document.getElementById('f'), out = document.getElementById('fit-result');
+f.addEventListener('load', () => setTimeout(() => {
+  try { out.textContent = JSON.stringify(Object.assign({ page: %q }, measure(f.contentWindow))); }
+  catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
+}, 5000));
+</script></body></html>`, html.EscapeString(u+sep+"fitframe=1"), ww, hh, u)
+}
+
+// framedPage serves the page with the framing ban relaxed to this origin.
+func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 	rec := httptest.NewRecorder()
 	h.ServeHTTP(rec, r)
 	for k, v := range rec.Header() {
 		w.Header()[k] = v
 	}
-	body := rec.Body.Bytes()
-	if i := bytes.LastIndex(body, []byte("</body>")); i >= 0 && strings.HasPrefix(rec.Header().Get("Content-Type"), "text/html") {
-		body = append(append(append([]byte{}, body[:i]...), []byte(`<script type="module" src="/__fit/run.js"></script>`)...), body[i:]...)
-		w.Header().Del("Content-Length")
+	w.Header().Del("X-Frame-Options")
+	if csp := w.Header().Get("Content-Security-Policy"); csp != "" {
+		w.Header().Set("Content-Security-Policy", strings.Replace(csp, "frame-ancestors 'none'", "frame-ancestors 'self'", 1))
 	}
 	w.WriteHeader(rec.Code)
-	w.Write(body)
+	w.Write(rec.Body.Bytes())
 }
-
-// fitRunJS measures one second of virtual time after the shell had time to mount, poll and place everything.
-const fitRunJS = `import { measure } from '/__fit/fit.js';
-setTimeout(() => {
-  const out = document.createElement('pre');
-  out.id = 'fit-result';
-  try { out.textContent = JSON.stringify(Object.assign({ page: location.pathname + location.search }, measure(window))); }
-  catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
-  document.body.appendChild(out);
-}, 5000);
-`
 
 func serveFitJS(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
-	if strings.HasSuffix(r.URL.Path, "run.js") {
-		w.Write([]byte(fitRunJS))
-		return
-	}
 	w.Write(fitJS)
 }
 
@@ -97,9 +107,6 @@ func (r fitResult) judge() []string {
 	case r.VW == 0:
 		return []string{"no measurement"}
 	}
-	if len(r.Slots) == 0 {
-		bad = append(bad, "no [data-slot] on the page")
-	}
 	if r.ScrollH > r.VH {
 		bad = append(bad, fmt.Sprintf("the page scrolls: scrollHeight %d > innerHeight %d", r.ScrollH, r.VH))
 	}
@@ -108,6 +115,9 @@ func (r fitResult) judge() []string {
 	}
 	for _, o := range r.Overflow {
 		bad = append(bad, fmt.Sprintf("%s overflows its box by %d px high, %d px wide", o.El, o.DH, o.DW))
+	}
+	if len(r.Slots) == 0 {
+		bad = append(bad, "no [data-slot] on the page")
 	}
 	if r.Hole > fitGap {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
@@ -139,6 +149,11 @@ func fitDir(dir string) ([]string, bool, error) {
 		m := reFitResult.FindSubmatch(b)
 		if m == nil {
 			lines = append(lines, "FAIL "+name+": no fit result in the dump")
+			ok = false
+			continue
+		}
+		if strings.TrimSpace(html.UnescapeString(string(m[1]))) == "" {
+			lines = append(lines, "FAIL "+name+": the page gave no measurement in the time budget")
 			ok = false
 			continue
 		}

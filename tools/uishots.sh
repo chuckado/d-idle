@@ -51,8 +51,8 @@ overflow-classic watch?layout=classic&theme=dark"
 			w=${sz%x*} h=${sz#*x}
 			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
 			prof=$(mktemp -d)
-			DISPLAY=$disp timeout 60 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-				--window-size="$w,$h" --virtual-time-budget=12000 --timeout=30000 --dump-dom "http://127.0.0.1:$port/$pq&fitrun=1" >"$out/fit-$pname-$sz.html" 2>/dev/null
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h" >"$out/fit-$pname-$sz.html" 2>/dev/null
 			rm -rf "${prof:?}"
 		done
 	done

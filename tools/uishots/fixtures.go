@@ -83,9 +83,11 @@ func mountFixturePanels(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p := r.URL.Path
 		switch {
-		case p == "/watch" && r.URL.Query().Get("fitrun") == "1":
-			fitRun(h, w, r)
-		case p == "/__fit/fit.js" || p == "/__fit/run.js":
+		case p == "/__fit":
+			fitHarness(w, r)
+		case p == "/watch" && r.URL.Query().Get("fitframe") == "1":
+			framedPage(h, w, r)
+		case p == "/__fit/fit.js":
 			serveFitJS(w, r)
 		case p == "/watch/layouts/cockpit-demo.json" || p == "/watch/layouts/cockpit-overflow.json":
 			js(w, fxLayout(strings.HasSuffix(p, "overflow.json")))
