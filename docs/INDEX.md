@@ -674,6 +674,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [backlog-board-nas.md](process/backlog-board-nas.md): Backlog.md web board on the NAS (read-only mirror) (status: DEPLOYED 2026-11-05 as a NAS Docker-tab template (variant B: own br0 address behind Nginx Proxy Manager...)
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
+- [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)
 - [card-board.md](process/card-board.md): Card board: reading the user's decisions (status: current. The page is the `/cards` route of the status board (the board host name, port 8897); its code is...)
 - [card-triage-20261104.md](process/card-triage-20261104.md): Card triage and decisions without an ADR, 2026-11-04 (status: proposal for the lead, docs only (job cardtriage). Nothing was moved, edited or archived; no ADR or...)
 - [chunker.md](process/chunker.md): Roadmap chunker (status: current, APPROVED by the maintainer 2026-11-01 (card chunker). One tool, `tools/contrib/chunker.py`, keeps...)
