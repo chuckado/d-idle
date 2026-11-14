@@ -69,13 +69,24 @@ export function plan(layout, width, mode, conf, targets, edit) {
   targets.forEach((t) => { known[t.id] = t; });
   const items = [], used = {}, unknown = [], kept = [], off = [];
   let maxRow = 0, maxOrder = -1;
-  for (const e of bp.panels) {
-    const id = known[e.id] ? e.id : aliases[e.id];
-    if (!id || !known[id]) { if (!reserved.includes(e.id)) unknown.push(e.id); continue; }
+  // An entry whose id is not on the page (a new tile that is not built yet) puts its `fallback` in the same cell, and
+  // shows it even when the layout also lists that target as hidden. An id that is on the page ignores the fallback.
+  const res = (id) => (known[id] ? id : known[aliases[id]] ? aliases[id] : '');
+  const forced = new Set(), entries = bp.panels.map((e) => {
+    const fb = !res(e.id) && e.fallback ? res(e.fallback) : '';
+    if (!fb) return e;
+    forced.add(fb);
+    return Object.assign({}, e, { id: fb, hidden: false, via: e.id });
+  });
+  for (const e of entries) {
+    if (!e.via && forced.has(res(e.id))) continue; // the entry that was hidden stays hidden while it stands in
+    const id = res(e.id);
+    if (!id) { if (!reserved.includes(e.id) && !e.fallback) unknown.push(e.id); continue; }
     if (used[id]) continue; // the first entry wins when an alias and its target are both named
     used[id] = true;
     const colSpan = Math.max(1, Math.min(bp.cols, e.colSpan | 0)), col = Math.max(1, Math.min(bp.cols - colSpan + 1, e.col | 0));
     const it = { id, col, row: Math.max(1, e.row | 0), colSpan, rowSpan: Math.max(1, e.rowSpan | 0), collapsed: !!e.collapsed, order: e.order | 0, placed: true };
+    if (e.via) it.via = e.via; // saved again as the entry it stands in for (toPanels)
     // an entry with hidden: true is a panel the user switched off in the editor: no cell, and the shell hides it
     if (known[id].rows) it.rowSpan = known[id].rows; // fit content: the stored span is not used (below)
     if (e.hidden) { off.push(id); if (edit) kept.push(Object.assign(it, { hidden: true, off: true })); continue; }
@@ -111,8 +122,62 @@ export function toPanels(items, bands) {
   return items.slice().sort((a, b) => a.row - b.row || a.col - b.col).map((it, i) => {
     const o = { id: it.id, band: (bands && bands[it.id]) || 'grid', col: it.col, row: it.row, colSpan: it.colSpan, rowSpan: it.rowSpan, collapsed: !!it.collapsed, order: i };
     if (it.off) o.hidden = true; // only a switched-off panel carries the key, so other entries are as the mockup editor writes them
+    if (it.via) { o.id = it.via; o.fallback = it.id; } // a stand-in is saved as the new tile it stands in for
     return o;
   });
+}
+
+// withShadows(saved, original): the layout the editor saved, with back the entries a stand-in displaced. A fallback
+// target that the file lists as hidden is not an item of the plan while it stands in (the stand-in has its cell), so
+// the editor's own export lacks that entry; without it the target would be packed after the placed panels in the
+// stored copy. Only breakpoints the editor wrote and entries that name a fallback are looked at; the input is not changed.
+export function withShadows(saved, original) {
+  const out = JSON.parse(JSON.stringify(saved));
+  for (const [name, bp] of Object.entries(out.breakpoints || {})) {
+    const was = ((original.breakpoints || {})[name] || {}).panels || [];
+    let order = bp.panels.reduce((m, p) => Math.max(m, p.order | 0), -1);
+    for (const e of bp.panels.slice()) {
+      if (!e.fallback || bp.panels.some((p) => p.id === e.fallback)) continue;
+      const old = was.find((p) => p.id === e.fallback);
+      if (old) bp.panels.push(Object.assign({}, old, { order: ++order }));
+    }
+  }
+  return out;
+}
+
+// ---- which panels the shell mounts ----
+export const PRESETS = ['classic', 'simple', 'standard', 'stream', 'debug'];
+
+// The ids a layout names on any breakpoint (placed, not hidden) and in its status list.
+function named(layout) {
+  const ids = new Set();
+  for (const bp of Object.values((layout && layout.breakpoints) || {})) {
+    for (const e of (bp && bp.panels) || []) {
+      if (!e.hidden) { ids.add(e.id); if (e.fallback) ids.add(e.fallback); }
+    }
+  }
+  for (const e of (layout && layout.status) || []) { ids.add(typeof e === 'string' ? e : e.id); if (e.fallback) ids.add(e.fallback); }
+  return ids;
+}
+
+// statusIds(layout, list): the status band's panel ids the layout chooses, or null when it has no `status` key (the page's
+// own list then applies). list is the manifests ({id, ...}). An entry that is not a panel uses its fallback, else is skipped.
+export function statusIds(layout, list) {
+  if (!layout || !Array.isArray(layout.status)) return null;
+  const have = new Set(list.map((m) => m.id)), out = [];
+  for (const e of layout.status) {
+    const id = typeof e === 'string' ? e : e && e.id, fb = e && e.fallback;
+    const pick = have.has(id) ? id : fb && have.has(fb) ? fb : '';
+    if (pick && !out.includes(pick)) out.push(pick);
+  }
+  return out;
+}
+
+// selectPanels(list, layout): the manifests the shell mounts. An optIn panel only when the layout in force names it;
+// with a `status` key, only the status-band panels it chooses. Without a layout nothing optIn is mounted.
+export function selectPanels(list, layout) {
+  const names = named(layout), status = statusIds(layout, list);
+  return list.filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
 }
 
 // ---- the editor's move: push down, cascade, close up (a dashboard grid) ----

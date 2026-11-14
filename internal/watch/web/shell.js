@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { plan, breakpointFor, fitRows, contentHeight } from '/watch/layout.js';
+import { plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -308,16 +308,54 @@ function applyLayout(pass) {
   if ((pass || 0) < 2 && measureFit()) applyLayout((pass || 0) + 1);
 }
 
+// Which layout is in force (docs/ui/redesign-2026-11-14/D-layouts.md section 4): ?layout=<name> (a preset, or none);
+// then the preset this browser chose in the "..." menu (localStorage d2layout); then the hero's stored copy (GET
+// /api/layout says so in X-Layout-Source and it is never rewritten here); else the default: Standard, or Simple for a
+// new hero (the welcome card not dismissed). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
+// saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
+const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote';
+function pref(k, v) {
+  try {
+    if (v === undefined) return localStorage.getItem(k) || '';
+    if (v) localStorage.setItem(k, v); else localStorage.removeItem(k);
+  } catch (e) { /* storage blocked */ }
+  return '';
+}
+const asLayout = (l) => (l && l.schema === 'watch.layout/1' ? l : null); // another schema: this shell does not read it
+async function getJSON(url) {
+  try {
+    const r = await fetch(url, { cache: 'no-store', credentials: 'same-origin' });
+    return r.ok ? { body: await r.json(), source: r.headers.get('X-Layout-Source') || '' } : null;
+  } catch (e) { return null; }
+}
+const presetFile = async (name) => asLayout((await getJSON('/watch/layouts/' + name + '.json') || {}).body);
+async function newHero() {
+  const o = await getJSON('/api/onboarding');
+  return !!(o && o.body && o.body.showWelcome === true);
+}
+
+// -> { layout, preset, origin: url|choice|stored|default, hasStored } or null (no layout: the manifest places)
 async function loadLayout() {
   const want = qs.get('layout') || '';
   if (want === 'none') return null;
-  const url = /^(mockup|live|command)$/.test(want) ? '/watch/layouts/' + want + '.json' : '/api/layout';
-  try {
-    const r = await fetch(url, { cache: 'no-store', credentials: 'same-origin' });
-    if (!r.ok) return null;
-    const l = await r.json();
-    return l && l.schema === 'watch.layout/1' ? l : null; // another schema: this shell does not read it
-  } catch (e) { return null; }
+  if (PRESETS.includes(want) || /^(mockup|live|command)$/.test(want)) {
+    const l = await presetFile(want);
+    if (l) return { layout: l, preset: PRESETS.includes(want) ? want : '', origin: 'url', hasStored: false };
+  }
+  const srv = await getJSON('/api/layout');
+  const hasStored = !!srv && srv.source === 'stored';
+  const choice = pref(PREF), base = pref(BASE);
+  if (PRESETS.includes(choice)) {
+    const l = await presetFile(choice);
+    if (l) return { layout: l, preset: choice, origin: 'choice', hasStored };
+  }
+  if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
+  // no layout of the hero's own
+  let name = 'standard', origin = 'default'; // origin 'default' is the only one that shows the layout note
+  if (choice === 'saved' && PRESETS.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) { name = 'simple'; origin = 'newhero'; }
+  let l = asLayout(srv && srv.body); // web/layout.json is the Standard file
+  if (name !== 'standard' || !l) l = await presetFile(name) || l;
+  return l ? { layout: l, preset: name, origin, hasStored: false } : null;
 }
 
 function postJSON(answerBase, path, body) {
@@ -326,10 +364,12 @@ function postJSON(answerBase, path, body) {
   }).then((r) => r.json()).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; });
 }
 
-function setupLayout(conf, layout, answerBase) {
+function setupLayout(conf, sel, answerBase) {
+  const layout = sel ? sel.layout : null;
   lay.main = document.querySelector('.d-main');
   lay.conf = conf || {};
   lay.layout = layout;
+  lay.sel = sel;
   if (!lay.main) return;
   for (const id of lay.conf.fit || []) { const n = lay.main.querySelector('[data-lid="' + id + '"]'); if (n) n.dataset.fit = '1'; }
   if (layout && layout.density === 'comfortable' && !html.dataset.density) html.dataset.density = 'comfortable';
@@ -370,11 +410,87 @@ function setupLayout(conf, layout, answerBase) {
       el, toast, main: lay.main, targets: lay.targets, layout: saved, demo: qs.get('drag') || '',
       plan: () => lay.plan,
       preview(l) { lay.layout = l; applyLayout(); return lay.plan; },
-      save: (l) => postJSON(answerBase, '/api/layout', { layout: l }),
-      reset: () => postJSON(answerBase, '/api/layout', { reset: true }),
+      // the stored copy wins from now on: the preset it started from is remembered for Reset, and a stand-in's displaced entry is put back
+      async save(l) {
+        const r = await postJSON(answerBase, '/api/layout', { layout: withShadows(l, saved) });
+        if (r && r.ok) {
+          if (PRESETS.includes(lay.sel && lay.sel.preset)) pref(BASE, lay.sel.preset);
+          pref(PREF, 'saved');
+        }
+        return r;
+      },
+      // Reset removes the stored copy; the page then loads again, on the preset this browser chose (or the default)
+      async reset() {
+        const r = await postJSON(answerBase, '/api/layout', { reset: true });
+        if (r && r.ok) {
+          const b = pref(BASE);
+          pref(PREF, PRESETS.includes(b) ? b : ''); pref(BASE, '');
+          setTimeout(() => location.reload(), 700);
+        }
+        return r;
+      },
       done(l) { lay.editor = null; lay.layout = l || saved; applyLayout(); },
     });
   });
+}
+
+// ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
+// The buttons already on the page move into it (they keep their ids and listeners); the preset buttons store the choice
+// per browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
+const PRESET_LABEL = { classic: 'Classic', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
+function setupMenu(sel) {
+  const nav = document.querySelector('.d-band-status .d-links');
+  if (!nav || document.getElementById('btn-more')) return;
+  const wrap = el('span', 'd-menu'), pop = el('div', 'd-menu-pop');
+  const more = ui.btn('...', { size: 'sm', variant: 'ghost' });
+  more.id = 'btn-more';
+  more.setAttribute('aria-label', 'More: help, layout, theme');
+  more.setAttribute('aria-haspopup', 'true');
+  more.setAttribute('aria-expanded', 'false');
+  pop.hidden = true;
+  pop.id = 'menu-more';
+  more.setAttribute('aria-controls', pop.id);
+  const close = (back) => { pop.hidden = true; more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
+  more.addEventListener('click', () => {
+    pop.hidden = !pop.hidden;
+    more.setAttribute('aria-expanded', String(!pop.hidden));
+  });
+  document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
+  wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
+  pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
+  for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
+  pop.appendChild(el('div', 'd-menu-label', 'Layout'));
+  const cur = sel ? sel.preset : '';
+  const names = (sel && sel.hasStored ? ['saved'] : []).concat(PRESETS);
+  for (const name of names) {
+    const b = ui.btn(name === 'saved' ? 'Saved layout' : 'Layout: ' + PRESET_LABEL[name], { size: 'sm', variant: 'ghost' });
+    b.dataset.preset = name;
+    b.setAttribute('aria-checked', String(name === 'saved' ? !!sel && sel.origin === 'stored' : name === cur));
+    b.setAttribute('role', 'menuitemradio');
+    b.addEventListener('click', () => choosePreset(name));
+    pop.appendChild(b);
+  }
+  wrap.append(more, pop);
+  nav.appendChild(wrap);
+}
+function choosePreset(name) {
+  pref(PREF, name);
+  if (qs.has('layout')) { const u = new URL(location.href); u.searchParams.delete('layout'); history.replaceState(null, '', u); }
+  location.reload();
+}
+
+// One line for a hero who now gets the Standard default, dismissed for good in this browser.
+function layoutNote(sel) {
+  if (!sel || sel.origin !== 'default' || html.dataset.mode === 'overlay' || pref(NOTE)) return;
+  const shell = document.querySelector('.d-shell'), top = document.querySelector('.d-band-status');
+  if (!shell || !top) return;
+  const box = el('div', 'd-layoutnote');
+  box.setAttribute('role', 'note');
+  box.appendChild(el('span', '', 'The layout changed. Classic is in the menu.'));
+  const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
+  x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
+  box.appendChild(x);
+  top.after(box);
 }
 
 // ---- ctx and mounting ----
@@ -411,6 +527,9 @@ async function start() {
     list = (pv.panels || []).filter((m) => !m.mergedInto); // a merged panel's id is an alias in the layout (shell.json)
     conf = pv.layout || {};
   } catch (e) { return; }
+  // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
+  const sel = layoutReq ? await layoutReq : null;
+  if (layoutReq) list = selectPanels(list, sel && sel.layout);
   const sched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
@@ -421,7 +540,8 @@ async function start() {
     const parts = makeRoot(m);
     if (place(bands, m, parts.root)) made.push([m, parts]);
   }
-  setupLayout(conf, await layoutReq, answerBase);
+  setupLayout(conf, sel, answerBase);
+  if (layoutReq) { setupMenu(sel); layoutNote(sel); }
   for (const [m, parts] of made) {
     const css = el('link');
     css.rel = 'stylesheet'; css.href = '/watch/panels/' + m.id + '/panel.css';
