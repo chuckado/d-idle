@@ -5,8 +5,8 @@
   [data-panel="hero-meters"] .d-meter.thin .track { block-size: 6px; }
   @container panel (width < 44rem) { [data-panel="hero-meters"] .where { display: none; } }
   /* slim, in the cockpit band: label, a 5 px bar of 86 px and one number, side by side; the band's 44 px holds two of them stacked */
-  [data-panel="hero-meters"][data-slim] { display: grid; grid-template-columns: auto; grid-auto-flow: var(--c-meterflow, row); column-gap: var(--c-metergap, var(--d-sp-3)); gap: 3px; align-items: center; flex: var(--c-meterflex, 0 0 10.5rem); }
-  [data-panel="hero-meters"][data-slim] .d-meter { flex: none; grid-template-columns: var(--c-meterlbl, 2.6em) var(--c-meterbar, 86px) 3.4ch; gap: var(--d-sp-2); font-size: var(--d-fs-0); min-inline-size: 0; max-inline-size: none; --w: 3.4ch; line-height: var(--d-lh-tight); }
+  [data-panel="hero-meters"][data-slim] { display: grid; grid-template-columns: auto; grid-auto-flow: var(--c-meterflow, row); column-gap: var(--c-metergap, var(--d-sp-3)); gap: 3px; align-items: center; flex: var(--c-meterflex, 0 0 11.5rem); }
+  [data-panel="hero-meters"][data-slim] .d-meter { flex: none; grid-template-columns: var(--c-meterlbl, 3.4em) var(--c-meterbar, 86px) 3.4ch; gap: var(--d-sp-2); font-size: var(--d-fs-0); min-inline-size: 0; max-inline-size: none; --w: 3.4ch; line-height: var(--d-lh-tight); }
   [data-panel="hero-meters"][data-slim] .d-meter .lbl { color: var(--d-text-3); }
   [data-panel="hero-meters"][data-slim] .d-meter.thin .track { block-size: 5px; }
 }
