@@ -28,7 +28,7 @@ owns:
   - "docs/inventory-ui.md"
 exclusive: []
 contracts: []
-result: "req and usable (hero, merc) on the item view, one rule via leveler.Judge; invdesk and watch tests pass on herdr; the 21-case table test in internal/leveler/judge_test.go passed and on the build host; whole-repo, race, ci check passed; not verified live."
+result: "req and usable (hero, merc) on the item view, one rule via leveler.Judge; invdesk and watch tests pass on the small box; the 21-case table test in internal/leveler/judge_test.go passed on the build host; whole-repo, race, ci check passed; not verified live."
 ---
 
 ## Description
