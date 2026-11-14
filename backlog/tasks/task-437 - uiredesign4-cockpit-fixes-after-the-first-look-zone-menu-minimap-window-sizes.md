@@ -1,10 +1,13 @@
 ---
 id: TASK-437
-title: 'uiredesign4: cockpit fixes after the first look (zone menu, minimap, window sizes)'
-status: In Progress
+title: >-
+  uiredesign4: cockpit fixes after the first look (zone menu, minimap, window
+  sizes)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T20:46:00Z'
+updated_date: '2026-11-14T20:54:00Z'
 labels:
   - watch
   - research
