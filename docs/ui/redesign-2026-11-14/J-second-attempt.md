@@ -62,7 +62,7 @@ Width classes, all by rule, none by wrapping:
 |---|---|---|---|
 | 1366 x 768 | 784 x 588 | 558 | as drawn |
 | 1440 x 900 | 960 x 720 | 456 | as drawn |
-| 1920 x 1080 | 1200 x 900 | 696 | the rail is two columns: Needs you, Orders and the area map on the left, the act map full height on the right, so both maps show |
+| 1920 x 1080 | 1200 x 900 | 696 | the rail is two columns under Needs you and Orders (which span both): the act map (1.7 parts) beside the area map (1 part), so both maps show (the accepted renders; `railWide {top, left, right}`) |
 | 390 x 844 | 390 x 292 | - | band (two lines), picture, then one of three tabs fills the rest: Orders (with Needs you on top), Map, Progress (progress, journey, health). No page scroll |
 
 What left the default screen (each is one click away, none is deleted): the onboarding card (a "Getting started 1 of 5" chip in the band's menu until done, opening as a sheet), Hero sheet (on the character screen), Why as a tile (the sentence and its popover), Tally and Marks (the progress popover), Thoughts and the logs (a Log drawer from the "..." menu and from the sentence popover), the voice line (it becomes the popover's last line), Gear condition (a Needs you row and the Gear light), the map's thirteen controls (zoom and Layers on the area map only), Rules, Quests, Cain's notes, Atlas, Still locked (the Debug and Classic layouts).
@@ -94,7 +94,7 @@ The free grid (`watch.layout/1`, 12 columns, 48 px rows, fit rows, the editor) s
     "stage": "video",
     "strip": ["progress", "journey-strip", "health"],
     "rail":  ["needs-you", "orders", "zone-map"],
-    "railWide": { "left": ["needs-you", "orders", "area-map"], "right": ["zone-map"] },
+    "railWide": { "top": ["needs-you", "orders"], "left": ["zone-map"], "right": ["area-map"] },
     "phoneTabs": { "Orders": ["needs-you", "orders"], "Map": ["zone-map"], "Progress": ["progress", "journey-strip", "health"] }
   },
   "sizes": { "strip": 112, "railMin": 400 },

@@ -155,10 +155,16 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
+| uis1b | in-progress | - | `internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/layoutedit.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layouts/cockpit.json`<br>`docs/ui/redesign-2026-11-14/J-second-attempt.md`<br>`internal/watch/layout.go`<br>`internal/watch/layout_test.go`<br>`internal/watch/panels.go`<br>`internal/watch/http_view.go`<br>`tools/uilint/`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/watch/testdata/layout_cells.js`<br>`internal/watch/testdata/layout_cells.golden`<br>`internal/watch/testdata/layout_cockpit.js`<br>`internal/watch/testdata/layout_edit.js` | - |
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
+| botmerc | proposed | - | `internal/merc/playerrevive.go`<br>`internal/merc/playerrevive_test.go`<br>`internal/watch/mercapi.go`<br>`internal/watch/mercapi_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercplayer.go`<br>`cmd/d2bot/mercplayer_test.go`<br>`docs/merc-revive.md` | - |
+| survA | proposed | - | `internal/danger/`<br>`docs/survival/decisions-2026-11-14.md`<br>`docs/survival/danger.md`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go`<br>`internal/watch/funwire.go` | - |
 | verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
+| towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
+| prfix2 | proposed | - | `docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/briefs/hitrec-norestart-oracle.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -207,14 +213,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
-- 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
-- a00254235 11-14 17:16 `Merge agent/uis1breview: Merge branch 'main' into TASK-447` (uis1breview)
-- 2c22ac044 11-14 17:16 `Merge agent/verifyp03p05: Merge branch 'main' into TASK-444` (verifyp03p05)
-- 6ea97f50a 11-14 17:13 `Merge branch 'main' into TASK-447` (-)
-- bea34b30f 11-14 17:13 `Merge branch 'main' into TASK-444` (-)
-- 0de905134 11-14 16:51 `Merge agent/uib2: Merge branch 'main' into TASK-439` (uib2)
-- 1db6e7d36 11-14 16:50 `Merge branch 'main' into TASK-439` (-)
-- 6dece7277 11-14 16:32 `Merge agent/cut012: friends 0.1.2: installer fix, pack and set staged, drills pending` (cut012)
-- 5b3343815 11-14 16:31 `Merge branch 'main' into TASK-426` (-)
+- ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
+- cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
+- 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
+- 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
+- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
+- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
+- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
+- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
+- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
+- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
 <!-- statusgen:end -->

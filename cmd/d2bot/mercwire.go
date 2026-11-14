@@ -208,6 +208,10 @@ type mercWire struct {
 	quoteLogAt   time.Time       // last unreadable-quote line written (once per town visit)
 	shortFirst   bool            // the pre-shop revive was refused for gold (the chores then sell junk first)
 	waitNeed     int             // need of the last logged `merc: gold wait`; 0 = none pending
+
+	pr       *merc.PlayerRevive  // the player's Revive mercenary request (mercplayer.go)
+	lastSnap *d2.Snapshot        // newest snapshot the runner's trip poll showed us (mu)
+	snapSrc  func() *d2.Snapshot // the runner's own newest snapshot, set by mercGear (mu)
 }
 
 func newMercWire(e *env.Env, rd merc.Reader, rev Reviver, cat bot.Catalog) *mercWire {
@@ -946,6 +950,7 @@ func (t *mercTown) TakeTPBought() int {
 // NeedsTrip is polled by the runner; it doubles as the cheap tick for the once-a-minute merc line.
 func (t *mercTown) NeedsTrip(s *d2.Snapshot) (bool, string) {
 	t.w.Tick()
+	t.w.noteSnap(s)
 	return t.Townsman.NeedsTrip(s)
 }
 

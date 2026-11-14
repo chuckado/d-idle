@@ -84,7 +84,7 @@ func serve(addr, class string) error {
 		m.Handle("/", inner)
 	}
 	log.Printf("uishots: fixture viewer on http://%s/watch (%s, frozen)", addr, class)
-	return http.ListenAndServe(addr, m)
+	return http.ListenAndServe(addr, mountFixturePanels(m))
 }
 
 func js(w http.ResponseWriter, v any) {

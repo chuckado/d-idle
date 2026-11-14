@@ -276,6 +276,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
 		bindRepair(rig.Fun, l.repair, l.farm)
+		rig.Fun.Merc = mercAPI()
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
