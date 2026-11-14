@@ -7,10 +7,10 @@
 #       3. removes the context from the builder. Streams the build log.
 #   tools/imgbuild.sh save TAG OUT.tar.gz     docker save on the NAS, gzip -n here
 #   tools/imgbuild.sh rmi TAG                 remove a scratch-* tag; tools/imgbuild.sh list    the allowed images
-# Env: D2_IMGBUILD_SSH (ssh alias of the restricted key, default tower-img), D2_IMGCTX_SSH (ssh alias of the builder that
-# assembles contexts and gets cleaned, default tower-build). Run it from the repo root.
+# Env: D2_IMGBUILD_SSH (ssh alias of the restricted key, default nas-img), D2_IMGCTX_SSH (ssh alias of the builder that
+# assembles contexts and gets cleaned, default nas-build). Run it from the repo root.
 set -uo pipefail
-nas=${D2_IMGBUILD_SSH:-tower-img} ctxssh=${D2_IMGCTX_SSH:-tower-build}
+nas=${D2_IMGBUILD_SSH:-nas-img} ctxssh=${D2_IMGCTX_SSH:-nas-build}
 ctxroot=/data/ctx # the builder's view of the NAS directory the forced command builds from
 die() { echo "imgbuild: $*" >&2; exit 2; }
 verb=${1:-}; [ $# -gt 0 ] && shift
@@ -31,7 +31,7 @@ build)
 	src=/data/ctxsrc/$name
 	cmd=$(printf '%q ' "$@")
 	git ls-files -z -co --exclude-standard | tar --null -T - -cf - | ssh "$ctxssh" \
-		"rm -rf $src && mkdir -p $src && tar -x -m -C $src && cd $src && nice -n 10 $cmd $ctxroot/$name; rc=\$?; rm -rf $src; exit \$rc" || die "context step failed"
+		"rm -rf $src && mkdir -p $src && tar -x -m -C $src && cd $src && export PATH=/opt/go/bin:\$PATH GOCACHE=/data/gocache GOMODCACHE=/data/gomod GOTOOLCHAIN=local GOFLAGS=-buildvcs=false && nice -n 10 $cmd $ctxroot/$name; rc=\$?; cd /; rm -rf $src; exit \$rc" || die "context step failed"
 	ssh "$nas" "build $name $tag ${args[*]:-}" ;;
 save)
 	tag=${1:?usage: imgbuild.sh save TAG OUT.tar.gz}; out=${2:?missing OUT}
