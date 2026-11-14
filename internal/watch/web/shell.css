@@ -206,3 +206,11 @@
   :root[data-mode="overlay"] .d-band-status > .d-links { display: none; }
   :root[data-mode="overlay"] body > :not(.d-shell) { display: none; }
 }
+/* A popover of a band panel (the status sentence's): the shell owns overlays, so a panel adds the class and the shell places
+   it under the band, out of the band's clip. The phone gives it the screen's width and the whole band's two lines of room. */
+@layer shell {
+  .d-bandpop { position: fixed; inset-block-start: calc(var(--c-band, 44px) + var(--d-sp-1)); inset-inline-start: calc(var(--d-sp-6) * 4); z-index: var(--d-z-sheet); max-inline-size: min(560px, calc(100% - var(--d-sp-4))); }
+  .d-bandpop[hidden] { display: none; }
+  .d-shell[data-cmode="phone"] .d-bandpop { inset-inline: var(--d-sp-2); max-inline-size: none; }
+  .d-shell[data-cmode="phone"] .d-band-main > [data-panel="statusline"] { flex: 1 1 100%; }
+}

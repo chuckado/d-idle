@@ -624,7 +624,7 @@ func TestLayoutSourceHeader(t *testing.T) {
 	}
 	if ms, _ := Manifests(); len(ms) > 0 {
 		for _, m := range ms {
-			if m.OptIn {
+			if m.OptIn && !m.CockpitOnly {
 				t.Errorf("%s: no panel of today is opt-in", m.ID)
 			}
 		}

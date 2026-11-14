@@ -99,7 +99,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 {
   const classic = readJSON(path.join(webDir, 'layouts/classic.json'));
   assert.strictEqual(L.statusIds(classic, manifests), null);
-  eq(L.selectPanels(manifests, classic).length, manifests.length, 'classic mounts every panel');
+  eq(L.selectPanels(manifests, classic).length, manifests.filter((m) => !m.cockpitOnly).length, 'classic mounts every panel but the cockpit-only ones');
 }
 
 // 3. optIn: mounted only when the layout names it (placed, not hidden); a fixture manifest list
@@ -156,6 +156,6 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 // 6. R2: the OBS strip (overlay mode) keeps the page's own status band, whatever the layout lists
 {
   const layout = readJSON(path.join(webDir, 'layouts/standard.json'));
-  eq(L.selectPanels(manifests, layout, 'overlay').filter((m) => m.band === 'status').map((m) => m.id).sort(), manifests.filter((m) => m.band === 'status').map((m) => m.id).sort(), 'overlay band');
+  eq(L.selectPanels(manifests, layout, 'overlay').filter((m) => m.band === 'status').map((m) => m.id).sort(), manifests.filter((m) => m.band === 'status' && !m.cockpitOnly).map((m) => m.id).sort(), 'overlay band');
 }
 console.log('ok');

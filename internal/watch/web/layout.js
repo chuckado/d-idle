@@ -165,7 +165,7 @@ function named(layout) {
 // own list then applies). list is the manifests ({id, ...}). An entry that is not a panel uses its fallback, else is skipped.
 export function statusIds(layout, list) {
   if (!layout || !Array.isArray(layout.status)) return null;
-  const have = new Set(list.map((m) => m.id)), out = [];
+  const have = new Set(list.filter((m) => !m.cockpitOnly).map((m) => m.id)), out = []; // a cockpit-only panel is not there for a free grid
   for (const e of layout.status) {
     const id = typeof e === 'string' ? e : e && e.id, fb = e && e.fallback;
     const pick = have.has(id) ? id : fb && have.has(fb) ? fb : '';
@@ -179,7 +179,7 @@ export function statusIds(layout, list) {
 export function selectPanels(list, layout, mode) {
   if (isCockpit(layout) && mode !== 'overlay') { const c = cockpitIds(layout); return list.filter((m) => m.slot && c.has(m.id)); } // no old tile in a cockpit
   const names = named(layout), status = mode === 'overlay' ? null : statusIds(layout, list); // the OBS strip keeps the page's own band
-  return list.filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
+  return list.filter((m) => !m.cockpitOnly).filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
 }
 
 // ---- the editor's move: push down, cascade, close up (a dashboard grid) ----
