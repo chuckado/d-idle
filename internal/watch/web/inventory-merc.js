@@ -123,9 +123,10 @@
     }
     var h = el('div', 'cv-mhead'), st = el('span', 'cv-st', stateWord(m)); st.dataset.tone = m.state === 'dead' ? 'bad' : m.state === 'unknown' ? 'warn' : 'good';
     h.appendChild(st);
-    var life = el('span', 'cv-life'), bar = el('i'); var pct = m.state === 'dead' ? 0 : Math.max(0, Math.min(100, m.lifePct || 0));
-    if (bar.style.setProperty) bar.style.setProperty('--pct', String(pct)); else bar.style['--pct'] = String(pct);
-    life.appendChild(bar); h.appendChild(life);
+    var life = el('span', 'cv-life'), pct = m.state === 'dead' ? 0 : Math.max(0, Math.min(100, m.lifePct || 0)), on = Math.ceil(pct / 10);
+    life.setAttribute('role', 'img'); life.setAttribute('aria-label', 'life ' + pct + ' percent');
+    for (var i = 0; i < 10; i++) life.appendChild(el('i', i < on ? 'on' : ''));
+    h.appendChild(life);
     if (m.str || m.dex) { h.appendChild(kv('Str', m.str || 0)); h.appendChild(kv('Dex', m.dex || 0)); }
     if (m.state === 'dead' && m.revive && m.revive.path) { // the revive verb of the mercenary desk (card B3) fills m.revive; nothing sends it today
       var rb = el('button', 'cv-btn', 'Revive' + (m.revive.cost ? ' ' + m.revive.cost + ' g' : '')); rb.type = 'button'; rb.dataset.act = 'revive'; rb.dataset.primary = '';

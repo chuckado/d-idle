@@ -22,6 +22,8 @@
   function api() { return (typeof window !== 'undefined' && window.d2InvActions) || null; }
   function num(n) { return String(Math.round(Number(n) || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
   function setVar(n, k, v) { if (n.style && n.style.setProperty) n.style.setProperty(k, String(v)); else if (n.style) n.style[k] = String(v); }
+  // a redraw is skipped when the signature of what it shows is unchanged; the hash keeps the attribute short
+  function hash(t) { var h = 5381, i; t = String(t); for (i = 0; i < t.length; i++) h = ((h << 5) + h + t.charCodeAt(i)) | 0; return (h >>> 0).toString(36); }
   function say(t) { var a = api(); if (a && a.say) a.say(t); }
 
   // ---- the view: where an item is ----
@@ -158,7 +160,7 @@
     return t;
   }
   function drawSheet(host, tiles, cols) {
-    var sig = JSON.stringify(tiles) + cols;
+    var sig = hash(JSON.stringify(tiles) + cols);
     if (host.dataset.sig === sig) return;
     host.dataset.sig = sig;
     clear(host);
@@ -189,7 +191,7 @@
   }
   function drawSets(v) {
     var bar = $('cv-sets'), s = v.sets;
-    var sig = JSON.stringify([s, v.merc && v.merc.owned, v.backpack && v.backpack.length, popOpen]);
+    var sig = hash(JSON.stringify([s, v.merc && v.merc.owned, v.backpack, v.stash, v.equipment, popOpen]));
     if (bar.dataset.sig === sig) return;
     bar.dataset.sig = sig;
     clear(bar);
@@ -241,7 +243,7 @@
   function drawSel() {
     var box = $('cv-sel'); if (!box) return;
     var f = view && selKey ? locate(view, selKey) : null;
-    var sig = JSON.stringify([f, askTrash === selKey, view && view.merc && view.merc.state]);
+    var sig = hash(JSON.stringify([f, askTrash === selKey, view && view.merc && view.merc.state]));
     if (box.dataset.sig === sig) { fitActs(); return; }
     box.dataset.sig = sig;
     clear(box);
@@ -352,7 +354,18 @@
   function delete_fit() { var a = document.querySelector('#cv-sel .cv-acts'); if (a) delete a.dataset.fit; }
 
   // ---- events ----
+  // the page never opens on an empty box: the first item of the pack (else the stash) is selected until the player picks one
+  function ensureSel(v) {
+    if (selKey && locate(v, selKey)) return;
+    var first = (v.backpack || [])[0] || (v.stash || [])[0];
+    selKey = first ? 'item-' + first.id : ''; askTrash = '';
+  }
+  function markSel() {
+    Array.prototype.forEach.call(document.querySelectorAll('.d-slot2.sel, .item.sel'), function (n) { n.classList.remove('sel'); });
+    var n = selKey && document.querySelector('[data-key="' + selKey + '"]'); if (n) n.classList.add('sel');
+  }
   function paint(v) {
+    ensureSel(v); markSel();
     drawBar(v); drawRepair(v, repair); marks(v); dim(); drawSets(v); shorten(); fitSlots(); paintSheets();
     var g = $('gearprompt'); if (g) g.title = g.textContent;
     drawSel(); trimQueue(); loadHero();
@@ -378,7 +391,7 @@
     document.addEventListener('click', function (e) {
       var k = e.target && e.target.closest ? e.target.closest('[data-key]') : null;
       if (!k || !/^(item|slot)-/.test(k.dataset.key || '')) return;
-      selKey = k.dataset.key; askTrash = ''; if (view) { fitSlots(); drawSel(); }
+      selKey = k.dataset.key; askTrash = ''; if (view) { markSel(); fitSlots(); drawSel(); }
     });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && popOpen) { pop(false); return; }
@@ -397,7 +410,7 @@
 
   if (typeof window !== 'undefined' && window.__canvasTest) {
     window.__canvasTest({ heroTiles: heroTiles, locate: locate, marks: marks, matches: matches, actions: actions, setWarn: setWarn, reasonWord: reasonWord,
-      setView: function (v) { view = v; }, setFilter: function (k, x) { F[k] = x; }, drawBar: drawBar, drawSel: drawSel, drawSets: drawSets, select: function (k) { selKey = k; askTrash = ''; } });
+      setView: function (v) { view = v; }, setHero: function (h) { hero = h; }, setRepair: function (r) { repair = r; }, paint: paint, setFilter: function (k, x) { F[k] = x; }, drawBar: drawBar, drawSel: drawSel, drawSets: drawSets, select: function (k) { selKey = k; askTrash = ''; } });
     return;
   }
   init();

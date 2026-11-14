@@ -100,7 +100,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 		switch {
 		case p == "/__fit":
 			fitHarness(w, r)
-		case p == "/watch" && r.URL.Query().Get("fitframe") == "1":
+		case (p == "/watch" || p == "/watch/inventory") && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)

@@ -1,0 +1,65 @@
+## item-3
+div [data-sig=1nr4yrx]
+  h3.q-magic [] "War Staff" title="War Staff"
+  p [] "In the pack · item level 10"
+  div.cv-why []
+    p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
+    p [data-tone=bad] "He: a desert cannot use that"
+  div.cv-acts []
+    button [aria-disabled=true data-act=equip] "Equip" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
+    button [data-act=stash] "To stash"
+    button [data-act=sell] "Mark for sale"
+    button [data-act=keep] "Keep"
+    button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
+## item-4
+div [data-sig=r76i5g]
+  h3.q-magic [] "Cap" title="Cap"
+  p [] "In the pack · item level 10"
+  div.cv-why []
+    p [data-tone=bad] "You: needs 47 strength (you have 30)" title="needs 47 strength (you have 30)"
+    p [data-tone=bad] "You: Paladin only" title="Paladin only"
+    p [data-tone=good] "He can use it"
+  div.cv-acts []
+    button [data-act=equip-lring data-primary=] "Equip (left ring)"
+    button [data-act=equip-rring data-primary=] "Equip (right ring)"
+    button [data-act=stash] "To stash"
+    button [data-act=sell] "Mark for sale"
+    button [data-act=keep] "Keep"
+    button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
+## item-5
+div [data-sig=1y9xlei]
+  h3.q-magic [] "Ring A (unidentified)" title="Ring A (unidentified)"
+  p [] "In the pack · item level 10 · durability 0/20"
+  div.cv-why []
+    p [data-tone=good] "You can use it"
+    p [data-tone=good] "He can use it"
+  div.cv-acts []
+    button [data-act=identify data-primary=] "Identify"
+    button [data-act=equip-rring] "Equip (right ring)"
+    button [data-act=equip-lring] "Equip (left ring)"
+    button [data-act=stash] "To stash"
+    button [data-act=sell] "Mark for sale"
+    button [data-act=keep] "Keep"
+    button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
+## item-90
+div [data-sig=vhosdg]
+  h3.q-rare [] "Ring" title="Ring"
+  p [] "In the stash"
+  div.cv-why []
+  div.cv-acts []
+    button [aria-disabled=true data-act=take] "Take out" title="the stash opens only in town"
+    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [data-act=keep] "Keep"
+    button [data-act=trash] "Trash"
+## slot-lhand
+div [data-sig=61nvzb]
+  h3.q-magic [] "Buckler" title="Buckler"
+  p [] "Worn: left hand · item level 10"
+  div.cv-why []
+    p [data-tone=good] "You can use it"
+    p [data-tone=good] "He can use it"
+  div.cv-acts []
+    button [data-act=unequip] "Take off"
+    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [data-act=keep] "Keep"
+    button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"

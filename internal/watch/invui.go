@@ -112,6 +112,7 @@ const charPage = `<!DOCTYPE html>
    <div class="cv-setbar" id="cv-sets" role="group" aria-label="Gear sets"></div>
    <div class="cv-sheet" id="hsheet" aria-label="Hero values"></div>
    <div class="cv-log" id="cv-log"><h2 id="t-queue">Item actions</h2><div id="queue"></div></div>
+   <div class="cv-rules" id="loot-rules"><h2>Loot rules</h2><p>Your rules and the starter preset show here once the loot rules tab is built</p></div>
   </div>
  </section>
  <section class="cv-slot" data-slot="store" data-cockpit-slot="store">
@@ -126,7 +127,6 @@ const charPage = `<!DOCTYPE html>
      <div class="cv-sel" id="cv-sel" aria-live="polite"></div>
      <div class="inv-errands" id="errands" hidden></div>
      <div class="inv-errands inv-stashgold" id="stashgold" hidden></div>
-     <div class="cv-rules" id="loot-rules"><h2>Loot rules</h2><p>Shown here when the loot rules tab is built</p></div>
      <p class="cv-lock" id="cv-lock">Stash from anywhere: locked (skips a game rule)</p>
      <p class="d-note" data-sev="alarm" id="msg" role="status" hidden></p>
     </div>

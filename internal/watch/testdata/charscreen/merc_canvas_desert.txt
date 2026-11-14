@@ -1,0 +1,44 @@
+label: Desert Guard 17 · helm, armour, spear or polearm
+box hidden: false
+div [data-canvas=]
+  div.cv-mhead []
+    span.cv-st [data-tone=good] "alive"
+    span.cv-life [aria-label=life 81 percent role=img]
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i.on []
+      i []
+    span.cv-kv [] "Str "
+      b [] "60"
+    span.cv-kv [] "Dex "
+      b [] "50"
+  div.cv-mbody []
+    div.d-doll [aria-label=Mercenary paper doll role=group data-cols=4 data-owner=merc data-state=ready]
+      div.d-slot2.q-magic [aria-label=helm: Skull Cap data-filled= data-owner=merc data-slot=mhead] title="Skull Cap, durability 12/12, item level 12"
+        span.sil [] "helm"
+        span.nm [] "Skull Cap"
+      div.d-slot2 [aria-label=armour: empty data-owner=merc data-slot=mtorso] title="armour: empty"
+        span.sil [] "armour"
+      div.d-slot2.q-normal [aria-label=weapon: Spear data-filled= data-owner=merc data-slot=mrhand] title="Spear, durability 0/24"
+        span.sil [] "weapon"
+        span.nm [] "Spear"
+        span.broken [] "Broken"
+    div.cv-sheet [aria-label=Mercenary values]
+      div []
+        label [] "Level"
+        b [] "17"
+      div []
+        label [] "Life"
+        b [] "81%"
+      div []
+        label [] "Strength"
+        b [] "60"
+      div []
+        label [] "Dexterity"
+        b [] "50"

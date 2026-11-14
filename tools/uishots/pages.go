@@ -104,7 +104,11 @@ func (fixtureDesk) View() any {
 		"queue": []any{map[string]any{"id": 11, "slot": "rring", "name": "Ring", "state": "queued", "at": 0},
 			map[string]any{"id": 12, "kind": "unequip", "slot": "lring", "name": "Raven Grip", "state": "queued", "at": 0, "group": "a1", "groupName": "Fire damage", "seq": 1},
 			map[string]any{"id": 10, "slot": "rhand", "name": "Staff of Charged Bolt", "state": "queued", "at": 0, "group": "a1", "groupName": "Fire damage", "seq": 2}},
-		"recent": []any{},
+		"recent": []any{
+			map[string]any{"id": 31, "slot": "head", "name": "Skull Cap", "kind": "identify", "state": "done", "at": 0, "result": "Skull Cap is a Skull Cap of the Fox"},
+			map[string]any{"id": 5, "slot": "lring", "name": "Raven Grip", "state": "done", "at": 0},
+			map[string]any{"id": 19, "kind": "stash", "name": "Tir Rune", "state": "done", "at": 0},
+			map[string]any{"id": 14, "kind": "trash", "name": "Buckler", "state": "failed", "at": 0, "reason": "not in town"}},
 		"merc": map[string]any{"state": "ready", "owned": true, "alive": true, "class": 338, "kind": "desert", "level": 14, "str": 60, "dex": 40, "lifePct": 90,
 			"slots": []string{"mhead", "mtorso", "mrhand"}, "equipment": map[string]any{"mhead": item(1001, "cap", "Desert Cap", "magic", 0, 0, 2, 2, nil)},
 			"actWhy": "the bot cannot change the mercenary's gear yet: the sets you save for him are kept, and you equip him by hand"},
