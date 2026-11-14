@@ -24,7 +24,7 @@ const (
 	StatMinDmg     = 21
 	StatMaxDmg     = 22
 	StatDmgPct     = 25
-	StatArmorClass = 31
+	StatArmorClass = d2.StatArmorClass
 )
 
 // Term names, closed list: they are the keys of Hero.Quality and the codes of Result.Weakest.

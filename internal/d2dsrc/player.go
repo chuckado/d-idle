@@ -305,6 +305,12 @@ func (b *builder) playerStats(pl *d2.Player, st, p obj) {
 	for id, v := range gearStats(st) {
 		put(id, v)
 	}
+	if def, ok := st.int("defense"); ok { // the character panel's armour class (S: dump_head_late.json; live value U, docs/survival/power.md)
+		put(d2.StatArmorClass, def)
+		rp.derived("player.defense", "stats.defense of the dump as stat 31; whether it includes Dexterity and buffs is U")
+	} else {
+		rp.unknown("player.defense", "no stats.defense in the dump (older fork)")
+	}
 	rp.unknown("player.resist.magic", "panel shows 4 resists; no magic resist")
 	rp.unknown("player.stats.effective", "no effective stat vector (FCR, FRW, IAS, FHR, MF ...): Stats holds only the keys d2d gives")
 }

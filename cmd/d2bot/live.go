@@ -142,7 +142,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 		}
 	}
 	runner, err := bot.New(e, bot.Deps{Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
-		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus}, cfg)
+		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus, ZoneShadow: wirePower(db)}, cfg)
 	if err != nil {
 		return err
 	}

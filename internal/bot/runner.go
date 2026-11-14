@@ -64,6 +64,10 @@ type Deps struct {
 	// Bus, if set, receives every event the bot emits (internal/event/MIGRATION.md steps 1 and 2). The Runner then
 	// feeds Events() from its own bus subscription through event.ToGoals, so the goal manager keeps working unchanged.
 	Bus *event.Bus
+	// ZoneShadow, if set, returns the `zone shadow:` log line for the area the planner just chose (survival slice S-B,
+	// docs/survival/power.md): the margin of the hero against the zone, for the log only. potions is the healing potion
+	// count of the kit, -1 when the belt was not read. An empty line logs nothing. It must not change any decision.
+	ZoneShadow func(s *d2.Snapshot, area int, diff string, potions int) string
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).

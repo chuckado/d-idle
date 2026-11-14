@@ -133,15 +133,23 @@ func SpecFromBuild(fsys fs.FS, file string, clvl int, ca ClassAttacks) (BuildSpe
 				}
 			}
 		}
+		if s.Attack == "" && len(bands) > 0 { // nothing bought yet: the profile's own opening attack
+			if last := bands[len(bands)-1]; len(last.Attack) > 0 {
+				s.Attack = last.Attack[0]
+			}
+		}
 	}
 	return s, nil
 }
+
+// PlainAttack is the weapon swing every class has; its kind is melee.
+const PlainAttack = "Attack"
 
 // firstKnown is the first attack skill of a band the build invested in; "Attack" (the plain weapon swing) is melee by
 // definition and stays last.
 func firstKnown(attack []string, points map[string]int) string {
 	for _, a := range attack {
-		if points[a] > 0 {
+		if points[a] > 0 || a == PlainAttack {
 			return a
 		}
 	}

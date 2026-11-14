@@ -2,6 +2,7 @@
  "schema": "power.profiles/1",
  "skillKinds": {
   "Arctic Blast": "spell",
+  "Attack": "melee",
   "Bash": "melee",
   "Blessed Hammer": "spell",
   "Blizzard": "spell",
