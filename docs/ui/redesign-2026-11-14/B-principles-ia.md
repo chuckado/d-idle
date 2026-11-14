@@ -1,6 +1,6 @@
 # B. Principles and information architecture
 
-> status: design proposal (TASK-416, 2026-11-14). It builds on `docs/ui-design-system.md` (the shell, tokens, panel contract and compatibility promise stay as they are); where this page is stricter, it is meant to be.
+> status: the rules stand; the default view of section 2 is now laid out as the cockpit of [J-second-attempt.md](J-second-attempt.md). Earlier status: design proposal (TASK-416, 2026-11-14). It builds on `docs/ui-design-system.md` (the shell, tokens, panel contract and compatibility promise stay as they are); where this page is stricter, it is meant to be.
 
 ## 1. Eight rules
 

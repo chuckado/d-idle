@@ -1,42 +1,47 @@
-# Brief S2: The glance endpoint and the status sentence
+# Brief S2: The glance endpoint and the band
 
-> status: ready to send (written 2026-11-14 after the user's answers; design in `docs/ui/redesign-2026-11-14/`). Model: Sonnet. Agent `uis2`, branch `agent/uis2`, worktree `~/code/d2lod-wt/uis2` off current `origin/main`.
+> status: ready to send once the user accepts the second attempt (rewritten 2026-11-14 for J-second-attempt.md; the earlier version of this brief is void). Model: Sonnet. Agent `uis2`, branch `agent/uis2`, worktree `~/code/d2lod-wt/uis2` off current `origin/main`.
 
-**Goal.** The glance endpoint and the status sentence. `GET /api/glance` (`watch.glance/1`) with all four blocks, and the status band panel `statusline`.
+**Goal.** `GET /api/glance` (`watch.glance/1`) with sentence, needs, health, progress and journey, and the cockpit band: the status sentence with its popover, slim life and mana, the needs-you count.
 
-**Starts after:** S1 merged. **Can run next to:** S4, S6, the bot cards.
+**Starts after:** S1b merged. **Can run next to:** S4, S6, C2, the bot cards.
 
-**Read first (three):** `docs/ui/redesign-2026-11-14/B-principles-ia.md`; `docs/ui/redesign-2026-11-14/E-visual-system.md`; `internal/watch/hero.go`.
+**Read first (three):** `docs/ui/redesign-2026-11-14/J-second-attempt.md (section 2)`; `docs/ui/redesign-2026-11-14/B-principles-ia.md`; `internal/watch/hero.go`.
 
-**You own:** `internal/watch/glance.go`, `internal/watch/glance_test.go`, `internal/watch/testdata/glance/`, `internal/watch/web/panels/statusline/`.
+**You own:** `internal/watch/glance.go`, `internal/watch/glance_test.go`, `internal/watch/testdata/glance/`, `internal/watch/web/panels/statusline/`, `internal/watch/web/panels/needs-count/`.
 
-**Do not touch:** `hero.go`, `commands.go` (S4), other panels. Register the route with one line where `/api/hero` is registered and nothing else in that file.
+**Do not touch:** `hero.go`, `commands.go` (S4), other panels. Register the route with one line where `/api/hero` is registered.
 
-**Already known (do not redo):** The reply shape above is fixed so S3 can build its panels against your goldens: do not change field names after your first push of the goldens; tell the coordinator if you must.
+**Already known (do not redo):** The reply shape is fixed here so S3 can build against your goldens: do not rename fields after the first push.
 
 ## Do
-1. `GET /api/glance`: `{schema, seq, sentence{tone, word, place, reason, why{code, now, change, next}}, needs[{id, kind, sev, text, sub, actions[{label, post, body}]}], health{life, gear, readiness, merc, supplies: {light, word, detail}}, progress{level{from, to, pct, etaSeconds}, xpPerHour, xpSeries[], chapter{n, of, title, band}, goldPerHour, tally}}`. Built in the Hub from what it already holds: the hero view, `/api/why` codes and `whychange.json`, alerts of severity `alarm`, the open question, the repair view (`trip.button`), `stats.readiness`, the campaign view, the tally. Cached like `/api/hero`; no new source is polled.
-2. A source that is not wired answers `light: "unknown"` (mercenary, supplies) or is left out of `needs`; never a guess. Hub setters `SetMercSource`, `SetSuppliesSource`, `SetJourneyBlockedSource` exist and are nil by default (B5 and B6 fill them).
-3. xp per hour samples: a ring of 30 one-minute points in the Hub for `xpSeries`; gold per hour from the same clock when the gold source is bound, else null.
-4. The `needs` order: red first, then amber, then blue; at most 8 in the reply. `actions[].post` names an existing answer route (`/api/repair/request`, `/api/answer`, `/api/campaign/intent`); this slice adds no write route.
-5. Panel `statusline` (band `status`, `optIn`): dot, state word, place, reason on one line with ellipsis; a click opens Now / Would change it / Next; `aria-live="polite"` on the sentence only. Uptime and clock go to its `title`.
+1. `GET /api/glance`: `{schema, seq, sentence{tone, word, place, reason, why{code, now, change, next}, uptime, voice}, needs[{id, kind, sev, text, sub, actions[{label, post, body}]}], health{life, gear, readiness, merc, supplies: {light, word, detail}}, progress{level{from, to, pct, etaSeconds}, xpPerHour, xpSeries[], goldPerHour, tally}, journey{n, of, chapters[{id, state}], next{id, title, band, text}, actions[]}}`. Built in the Hub from what it already holds; cached like `/api/hero`; no new source is polled. A source that is not wired answers `light: "unknown"` or is left out. Hub setters `SetMercSource`, `SetSuppliesSource`, `SetJourneyBlockedSource` exist, nil by default (B5, B6).
+2. xp per hour samples: a ring of 30 one-minute points in the Hub; gold per hour from the same clock when the gold source is bound.
+3. Panel `statusline` (slot `band`): state chip, place, reason on one line with an ellipsis; a click opens the popover (Now, Would change it, Next, uptime, the voice line, a link to the log drawer). `aria-live="polite"` on the sentence only.
+4. Panel `needs-count` (slot `band`): "N need you" toned by the worst severity, "all quiet" muted at zero.
+5. The band in a cockpit shows: brand, `statusline`, `hero-meters` in its slim form (two 5 px bars, one number each: a `slot` mode of the existing panel, version raised, old mode unchanged), `needs-count`, then Character, Skills and the `...` menu.
 
 ## Acceptance (also the card's boxes)
 - Handler goldens `testdata/glance/view-{daily,needs,blocked,paused,dead,unknown}-{sorceress,paladin}.json`
 - For every code in `whychange.json` the sentence has a non-empty reason (table test)
-- The reply is cached: two requests within the cache window build once (test)
-- DOM goldens of `statusline` for tone ok, warn, danger, info, loading and error
-- Under Standard the band shows `statusline` in place of `hero-status`; under Classic nothing changed (pictures looked at)
+- DOM goldens of `statusline` (ok, warn, danger, info, loading, error; long reason cut) and `needs-count` (0, 1, 3)
+- The band is 44 px at the three desktop sizes and two lines on the phone; fit check passes
+- Classic and the other free-grid layouts are unchanged
 
 ## Card (create first, then set it In Progress)
 ```sh
-python3 -I tools/backlog/new_task.py "uis2: The glance endpoint and the status sentence" --card uis2 --owns internal/watch/glance.go --owns internal/watch/glance_test.go --owns internal/watch/testdata/glance/ --owns internal/watch/web/panels/statusline/ --component watch --kind feature --size M --assignee credit-runner \
+python3 -I tools/backlog/new_task.py "uis2: The glance endpoint and the band" --card uis2 --owns internal/watch/glance.go --owns internal/watch/glance_test.go --owns internal/watch/testdata/glance/ --owns internal/watch/web/panels/statusline/ --owns internal/watch/web/panels/needs-count/ --component watch --kind feature --size M --assignee credit-runner \
   --ac "Handler goldens `testdata/glance/view-{daily,needs,blocked,paused,dead,unknown}-{sorceress,paladin}.json`" \
   --ac "For every code in `whychange.json` the sentence has a non-empty reason (table test)" \
-  --ac "The reply is cached: two requests within the cache window build once (test)" \
-  --ac "DOM goldens of `statusline` for tone ok, warn, danger, info, loading and error" \
-  --ac "Under Standard the band shows `statusline` in place of `hero-status`; under Classic nothing changed (pictures looked at)"
+  --ac "DOM goldens of `statusline` (ok, warn, danger, info, loading, error; long reason cut) and `needs-count` (0, 1, 3)" \
+  --ac "The band is 44 px at the three desktop sizes and two lines on the phone; fit check passes" \
+  --ac "Classic and the other free-grid layouts are unchanged"
 ```
+
+## The fit rule (binding for every cockpit and canvas slice)
+- The page must not scroll and no slot may overflow at 1440x900, 1920x1080 and 1366x768; at 390x844 it follows the phone design of J. `tools/uishots` gets (in S1b) a `fit` check that loads each page at those sizes in headless Chromium on the builder and fails when `document.scrollingElement.scrollHeight > innerHeight`, when any `[data-slot]` has `scrollHeight > clientHeight` (lists marked `data-scroll` excepted), or when the slots do not cover the frame (sum of slot areas plus gaps equals the frame, within 2 px). Run it (`labrun <builder> -- tools/uishots.sh --fit`, never on the worker host that runs the games) and put its output in the card result. A slice that fails the fit check is not done.
+- A slot panel has no content-driven height: it renders inside the box it is given; long text is cut with an ellipsis and the full text goes to `title` or a popover; a list longer than its box scrolls inside (`data-scroll`).
+- Look at your own renders at the four sizes and write three lines of critique in the card result (dead space, alignment, noise). Compare with `docs/ui/redesign-2026-11-14/research/iterations/it3/` (the accepted look).
 
 ## Every UI slice (binding)
 - Rules: `AGENTS.md`, `docs/agents/rules-short.md`. Own worktree and branch, commit often, never push, no deploy, no live game, do not touch the sandbox. Trailer `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
