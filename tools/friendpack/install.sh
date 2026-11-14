@@ -50,7 +50,12 @@ fi
 ok "licence note accepted for $version"
 
 # 4 game folder: read only, the four required files by name
-if [ -z "$game" ] && [ -f .env ]; then game=$(sed -n 's/^D2_GAME_DIR=//p' .env); fi
+# .env holds the game path in single quotes (a folder name such as "Diablo II" has a space); unquote it again here
+shq() { local s=${1//\'/\'\\\'\'}; printf "'%s'" "$s"; }
+if [ -z "$game" ] && [ -f .env ]; then
+	game=$(sed -n 's/^D2_GAME_DIR=//p' .env)
+	game=${game#\'}; game=${game%\'}; game=${game//\'\\\'\'/\'}
+fi
 if [ -z "$game" ] && [ -t 0 ]; then read -r -p "Path of your own Diablo II 1.14d folder: " game; fi
 [ -n "$game" ] || stop "give your Diablo II folder: ./install.sh --game-dir /path/to/Diablo-II"
 [ -d "$game" ] || stop "$game is not a folder"
@@ -60,6 +65,19 @@ for n in d2data.mpq d2exp.mpq d2char.mpq Patch_D2.mpq; do
 	f=$(find "$game" -maxdepth 1 -iname "$n" -size +0 -print -quit)
 	[ -n "$f" ] || missing="$missing $n"
 done
+if [ -n "$missing" ]; then
+	# the unzipped download has the game one folder down ("Diablo II"): find it instead of only saying "missing"
+	hits=$(find "$game" -mindepth 2 -maxdepth 2 -iname d2data.mpq -size +0 -printf '%h\n' 2>/dev/null | sort || true)
+	if [ -n "$hits" ] && [ "$(printf '%s\n' "$hits" | wc -l)" = 1 ]; then
+		echo "note: the four files are not in $game but in $hits; using that folder."
+		game=$hits
+		missing=
+		for n in d2data.mpq d2exp.mpq d2char.mpq Patch_D2.mpq; do
+			f=$(find "$game" -maxdepth 1 -iname "$n" -size +0 -print -quit)
+			[ -n "$f" ] || missing="$missing $n"
+		done
+	fi
+fi
 [ -z "$missing" ] || stop "missing in $game:$missing. Point --game-dir at your own Diablo II folder (not a copy of this pack)."
 ok "game folder $game (mounted read-only)"
 
@@ -94,7 +112,7 @@ umask 077
 cat >.env <<ENV
 COMPOSE_PROJECT_NAME=$project
 D2_IMAGE=$image
-D2_GAME_DIR=$game
+D2_GAME_DIR=$(shq "$game")
 D2_WATCH_PORT=$port
 D2_ANSWER_PORT=$answer
 D2_PUBLISH=$publish
