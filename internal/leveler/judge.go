@@ -50,12 +50,14 @@ func mercKind(db *data.DB, b *data.ItemBase) (merc.Kind, merc.Slot) {
 		return merc.KindArmor, merc.SlotArmor
 	case db.IsA(b.Type, "shld"):
 		return merc.KindShield, merc.SlotShield
-	case b.Kind != data.KindWeapon || b.TwoHanded && !db.IsA(b.Type, "pole") && !db.IsA(b.Type, "bow"):
+	case b.Kind != data.KindWeapon || b.Stackable || db.IsA(b.Type, "jave"): // javelins and throwing weapons: U, refused
 		return merc.KindOther, merc.SlotWeapon
 	case db.IsA(b.Type, "bow") && !db.IsA(b.Type, "xbow"):
 		return merc.KindBow, merc.SlotWeapon
-	case db.IsA(b.Type, "spea"), db.IsA(b.Type, "pole"):
+	case db.IsA(b.Type, "spea"), db.IsA(b.Type, "pole"): // two-handed in the tables, and what the Desert Guard carries
 		return merc.KindSpear, merc.SlotWeapon
+	case b.TwoHanded: // two-handed swords and axes: U, refused
+		return merc.KindOther, merc.SlotWeapon
 	case db.IsA(b.Type, "swor"):
 		return merc.KindSword1H, merc.SlotWeapon
 	case db.IsA(b.Type, "axe"):

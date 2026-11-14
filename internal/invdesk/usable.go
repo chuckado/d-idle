@@ -108,3 +108,21 @@ func (v *VerbEquipper) Judge(s *d2.Snapshot, u *d2.Unit, it itemreq.Item, m *ite
 	}
 	return itemreq.Judgement{}
 }
+
+// stashBlock is the item-level refusal (class, requirements, identified) of a stash item the hero could not wear once
+// it is out of the stash; empty when nothing about the item stops him (or the equipper cannot judge). The same list
+// the view's usable.hero reports, so Apply and the page agree.
+func stashBlock(eq Equipper, s *d2.Snapshot, it status.Item) []itemreq.Reason {
+	j, ok := eq.(Judge)
+	if !ok || s == nil || s.Inventory == nil {
+		return nil
+	}
+	for _, u := range s.Inventory.Items {
+		if u.ID == it.ID {
+			u := u
+			// a stash item is judged as a pack item: the unidentified and item-level bounds apply to it the same way
+			return j.Judge(s, &u, itemreq.Item{Code: it.Code, Identified: it.Identified}, nil).Hero
+		}
+	}
+	return nil
+}
