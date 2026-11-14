@@ -7,7 +7,7 @@ Why: the route-floor design (docs/floormeasure.md) needs max life, life and poti
 | msg | writer | keys | status |
 |---|---|---|---|
 | `minute` | `minuteLine`, internal/bot/observe.go | existing keys kept; new `life`, `maxLife`, `mp`, `maxMana` | V (test) |
-| `zone entry` | `zoneEntry`, internal/bot/lifelog.go, on every area change (and the first snapshot) | `area clvl life=<n>/<n> heal=<n> mana=<n>/<n> tome=<n> merc=<alive\|dead\|none>` | V (test) |
+| `zone entry` | `zoneEntry`, internal/bot/lifelog.go, on every area change (and the first snapshot) | `area clvl life=<n>/<n> heal=<n> mana=<n>/<n> tome=<n> merc=<alive\|dead\|none> [def=<n>] [block=<n>] [dmg=<min>-<max> dmgpct=<n> ar=<n>]` (the bracketed terms since card survcal, only when the stat vector has them: the power estimator's own inputs, so a replay needs no default for them; docs/survival/calibration-2026-11-14.md) | V (test) |
 | `safety decision` | `carryOut`, internal/bot/loop.go, for every non-drink safety action (chicken, town-portal, crowd-retreat, crowd-abandon) | `action area life maxLife heal beltMP rejuv tome` | V (test of fields) |
 | `character died` | `recordDeath`, internal/bot/observe.go | existing keys + `life maxLife heal beltMP rejuv tome` (kit from the last living snapshot; `life` is 0) | U (no test of this line) |
 
