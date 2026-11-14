@@ -518,6 +518,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
 - [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)
 - [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
+- [ledger.md](survival/ledger.md): Per-zone ledger and the shadow controller (survival slice S-C) (status: current (card survC). Implements design-2026-11-14.md sections 5.3 to 5.6, 8 and 10 for slice S-C: log and...)
 - [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449). Implements design-2026-11-14.md sections 4, 5, 6, 8 and 10 as far as slice...)
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
