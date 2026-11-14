@@ -95,6 +95,8 @@ type Desk struct {
 	sv    Services
 	un    Unequipper
 	hands HandsInfo
+	fast  *FastLane      // the instant lane (instant.go); nil: every request queues
+	done  map[string]int // settled requests by how, this process (telemetry)
 	st    state
 }
 
@@ -237,6 +239,12 @@ type Request struct {
 	Group     string `json:"group,omitempty"`
 	GroupName string `json:"groupName,omitempty"`
 	Seq       int    `json:"seq,omitempty"`
+	// Schema 8 (instant actions, docs/inventory-actions.md): Wait says what a queued request waits for ("safe": the bot's
+	// next safe moment, "town": the next town visit; empty when it is not waiting, or on a desk without the fast lane);
+	// Code is the refusal code of a failed request. How is also "fast" (the instant lane) or "queue" (answer of a request
+	// that fell back to the queue).
+	Wait string `json:"wait,omitempty"`
+	Code string `json:"code,omitempty"`
 }
 
 func (r Request) kind() string {
@@ -459,11 +467,11 @@ func (d *Desk) SetMark(id uint32, mark string) error {
 	return d.saveLocked()
 }
 
-// RequestEquip queues wearing backpack item id. An empty slot lets the desk choose: the only slot that takes the item,
+// requestEquip (RequestEquip adds the fast lane, instant.go) queues wearing backpack item id. An empty slot lets the desk choose: the only slot that takes the item,
 // else the empty one (a ring goes to a free ring finger); with two worn candidates the caller must name one (code
 // "choose"). Refused with a reason when the item is not in the backpack, the slot is unknown or the requirements are
 // not met. The hero need not be in town: the bot performs it at an open opportunity (docs/inventory-actions.md).
-func (d *Desk) RequestEquip(id uint32, slot string) (Request, error) {
+func (d *Desk) requestEquip(id uint32, slot string) (Request, error) {
 	d.mu.Lock()
 	eq := d.eq
 	d.mu.Unlock()
@@ -585,9 +593,9 @@ func (d *Desk) trashWhy(u d2.Unit) (code, why string) {
 	return "", ""
 }
 
-// RequestTrash queues dropping backpack item id on the ground. confirm must be true (the page asks twice); without it
+// requestTrash queues dropping backpack item id on the ground. confirm must be true (the page asks twice); without it
 // nothing is queued (code "confirm").
-func (d *Desk) RequestTrash(id uint32, confirm bool) (Request, error) {
+func (d *Desk) requestTrash(id uint32, confirm bool) (Request, error) {
 	u, s, ok := d.unit(id)
 	if !ok {
 		return Request{}, refuse("item", "that item is not in the inventory any more")
@@ -649,6 +657,12 @@ func (d *Desk) Cancel(id uint32, kind string) error {
 }
 
 func (d *Desk) recentLocked(r Request) {
+	if r.State == StateDone && r.How != "" {
+		if d.done == nil {
+			d.done = map[string]int{}
+		}
+		d.done[r.How]++
+	}
 	d.st.Recent = append([]Request{r}, d.st.Recent...)
 	if len(d.st.Recent) > maxRecent {
 		d.st.Recent = d.st.Recent[:maxRecent]
@@ -734,6 +748,9 @@ func (d *Desk) Pending() int {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.expireStaleLocked()
+	if d.doingLocked() { // a fast-lane verb is on the channel: the bot's own click path waits for it
+		return 0
+	}
 	n := 0
 	for _, r := range d.st.Queue {
 		if r.State == StateQueued && (inTown || !r.errand()) && !d.groupBlockedLocked(r) {
@@ -753,6 +770,10 @@ func (d *Desk) RunPending(ctx context.Context) []string {
 		inTown := d.heroInTown() // the snapshot callback runs unlocked
 		d.mu.Lock()
 		d.expireStaleLocked()
+		if d.doingLocked() { // one owner of the channel at a time (instant.go)
+			d.mu.Unlock()
+			break
+		}
 		i := -1
 		for j, r := range d.st.Queue {
 			if r.State == StateQueued && d.runnableLocked(r, inTown) && (i < 0 || priority(r) < priority(d.st.Queue[i])) {
@@ -939,9 +960,9 @@ type ItemView struct {
 // optional merc block (docs/research/merc-gear.md); 5 added the optional identify block, the item field noIdentify and the
 // request kinds identify, buyid and cain with the fields count and result (the identify commands); 7 added the item fields
 // noWearSlot and noUnequip, the sets block, the request kind unequip and the request fields group, groupName and seq
-// (drag and drop, gear sets, docs/gearsets.md); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
+// (drag and drop, gear sets, docs/gearsets.md); 8 added the instant block and the request fields wait and code (the fast lane, instant.go); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
 // fields are optional.
-const ViewSchema = 7
+const ViewSchema = 8
 
 // View is the inventory page's data.
 type View struct {
@@ -964,6 +985,7 @@ type View struct {
 	StashOps    *StashOpsView        `json:"stashOps,omitempty"` // schema 6: the stash gold controls; nil = no stash backend
 	Identify    *IdentifyView        `json:"identify,omitempty"` // schema 5: the identify commands' state; nil = no town backend
 	Sets        *SetsView            `json:"sets,omitempty"`     // schema 7: the player's gear sets; nil = no inventory source
+	Instant     *InstantView         `json:"instant,omitempty"`  // schema 8: what would run at once; nil = no fast lane on this bot
 	Merc        *MercView            `json:"merc,omitempty"`     // schema 3: the hired merc and what he wears; nil = the backend cannot read a merc
 }
 
@@ -999,9 +1021,15 @@ func (d *Desk) View() View {
 	// State is copied under the lock and the callbacks run after it is released: the equip check reaches Pinned
 	// through the leveler and d.mu is not reentrant (live deadlock 2026-11-10: the whole bot froze).
 	d.mu.Lock()
-	c, eq, sv := d.c, d.eq, d.sv
+	c, eq, sv, fl := d.c, d.eq, d.sv, d.fast
 	v := View{Schema: ViewSchema, Equipment: map[string]*ItemView{}, Pins: append([]Pin{}, d.st.Pins...), Queue: append([]Request{}, d.st.Queue...), Recent: append([]Request{}, d.st.Recent...)}
 	d.mu.Unlock()
+	if fl != nil {
+		inTown := d.heroInTown()
+		for i := range v.Queue {
+			v.Queue[i].Wait = waitOf(v.Queue[i], inTown)
+		}
+	}
 	sort.Slice(v.Pins, func(i, j int) bool { return v.Pins[i].Slot < v.Pins[j].Slot })
 	if c.Inventory == nil {
 		v.Note = "inventory is not available"
@@ -1020,6 +1048,7 @@ func (d *Desk) View() View {
 	d.mu.Unlock()
 	if s != nil && s.Player != nil {
 		v.InTown, v.Class = s.Player.InTown(), s.Player.Class.String()
+		v.Instant = d.instantView(fl, s)
 	} else {
 		v.Note = "waiting for the first look at the hero"
 	}
