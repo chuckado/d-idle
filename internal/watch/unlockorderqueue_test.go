@@ -35,7 +35,9 @@ func newQueueRig(t *testing.T, class string, level int) *queueRig {
 	return q
 }
 
-func (q *queueRig) denCleared() { q.feed(questEv(task.QDen, 2, 0, 1)) }
+// denCleared opens slot one the way the strict order does now (docs/loop-order.md): three finished Loop rounds. The old
+// name stays so the tests read as before.
+func (q *queueRig) denCleared() { q.fun.Unlocks.Seen("loop_rounds_3") }
 
 func (q *queueRig) post(body string) (int, string) {
 	resp, b := q.do("POST", q.answer, OrderQueueRoute, funToken, body)
@@ -88,9 +90,10 @@ func TestOrderQueueLockedUntilTheDenAndSlotsOpenInTurn(t *testing.T) {
 			if code, b := q.post(`{"action":"add","kind":"go","area":"Blood Moor","minutes":10}`); code != http.StatusForbidden || !strings.Contains(b, `"locked"`) {
 				t.Fatalf("locked add: %d %s", code, b)
 			}
-			q.feed(questEv(task.QDen, 1, 0, 1)) // started is not cleared
+			q.feed(questEv(task.QDen, 2, 0, 1)) // the Den alone no longer opens the queue (strict order: Loop first)
+			q.fun.Unlocks.Seen("manual_repair_cycle")
 			if q.eng.Allowed(OrderQueueID) {
-				t.Fatal("the Den quest started opened the queue")
+				t.Fatal("the Den or the Loop row opened the queue")
 			}
 			q.denCleared()
 			if c := q.fun.Queue.Capacity(); c != 1 {

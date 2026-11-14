@@ -1,0 +1,7 @@
+{
+  "schema": "watch.orderloop/1",
+  "open": true,
+  "title": "Loop order",
+  "state": "idle",
+  "finished": 0
+}

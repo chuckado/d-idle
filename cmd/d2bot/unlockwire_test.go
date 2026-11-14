@@ -152,7 +152,7 @@ func TestRiskMeterWiredToTheBotFacts(t *testing.T) {
 	}
 }
 
-// The Den clears slot one; the sequencer places the orders in turn through Hub.place; a death stops it until resume.
+// Three Loop rounds open slot one; the sequencer places the orders in turn through Hub.place; a death stops it until resume.
 func TestOrderQueueWiredThroughTheOrdersPath(t *testing.T) {
 	for _, class := range []string{"Sorceress", "Paladin"} {
 		t.Run(class, func(t *testing.T) {
@@ -170,7 +170,7 @@ func TestOrderQueueWiredThroughTheOrdersPath(t *testing.T) {
 			if code := w.post(t, "/api/orderqueue", map[string]any{"action": "add", "kind": "go", "area": "Blood Moor", "minutes": 5}, nil); code != 403 {
 				t.Fatalf("add while locked: %d", code)
 			}
-			w.m.Handle(questEv(task.QDen, 2, 0)) // Den of Evil cleared: slot one
+			w.rig.Fun.Unlocks.Seen("loop_rounds_3") // three Loop rounds finished (strict order, docs/loop-order.md): slot one
 			waitUntil(t, "slot one", func() bool { w.get(t, "/api/orderqueue", &qv); return qv.Open && qv.Capacity == 1 })
 			w.m.Handle(questEv(task.QBurial, 3, 0)) // Kashya's quest done: slot two
 			waitUntil(t, "slot two", func() bool { w.get(t, "/api/orderqueue", &qv); return qv.Capacity == 2 })
