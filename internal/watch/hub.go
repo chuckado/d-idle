@@ -78,6 +78,7 @@ type Hub struct {
 	why      *Whyline                        // the reason line (whyline.go)
 	onClass  func()                          // run when the hero's class becomes known (OnClass); guarded by mu
 	stats    HeroStatsSource                 // defences for /api/hero (SetHeroStatsSource); guarded by mu
+	survival survivalHolder                  // the survival shadow choice for /api/survival (SetSurvivalSource); lock-free
 	layout   layoutStore                     // the layout manifest in force (layout.go); its own mutex
 	explored ExploredSource                  // zone coverage for /api/hero (SetExploredSource); guarded by mu
 	gold     GoldSource                      // gold for /api/hero (SetGoldSource); guarded by mu

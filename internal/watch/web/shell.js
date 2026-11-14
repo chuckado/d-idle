@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS } from '/watch/layout.js';
+import { plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -98,7 +98,8 @@ function toast(sev, text) {
 
 // ---- panel roots ----
 // Status-band panels are bare (no card); stage and grid panels are cards with a head (title, meta, actions) and body.
-function makeRoot(m) {
+function makeRoot(m, inCockpit) {
+  if (inCockpit) return makeSlotRoot(m);
   const card = m.band !== 'status';
   const root = el(card ? 'section' : 'div', card ? 'd-card d-panel' : 'd-panel');
   root.dataset.panel = m.id;
@@ -133,6 +134,24 @@ function makeRoot(m) {
   return parts;
 }
 
+// A panel in a cockpit slot is bare: no card, no title bar, its content fills the box the slot gives it. The title bar's
+// two parts (meta, actions) become small labels on the box's edge, so a panel that fills them (the picture's "Full
+// screen") works unchanged.
+function makeSlotRoot(m) {
+  const root = el('div', 'd-panel');
+  root.dataset.panel = m.id;
+  root.dataset.size = m.size;
+  root.dataset.tab = m.tab;
+  root.dataset.state = 'loading';
+  root.dataset.cockpitPanel = m.band === 'status' ? 'band' : 'slot';
+  root.setAttribute('aria-label', m.title);
+  const body = el('div', 'd-slotbody'), labels = el('div', 'd-slotlabels');
+  const meta = el('span', 'meta'), actions = el('span', 'd-btngroup');
+  labels.append(meta, actions);
+  root.append(body, labels);
+  return { root, body, head: null, meta, actions };
+}
+
 function place(bands, m, root) {
   const band = bands[m.band];
   if (!band) return false;
@@ -148,8 +167,18 @@ function place(bands, m, root) {
 
 // A band with no visible panel is hidden (the stage disappears when there is neither video nor map).
 function syncBand(band) {
+  if (band && band.matches('.d-slotcol, .d-slottabs')) { growLast(band); return; }
   if (!band || !band.matches('.d-band-stage, .d-band-side')) return;
   band.hidden = !band.querySelector(':scope > .d-panel:not([hidden])');
+}
+
+// In a cockpit column the last panel that shows takes the rest of the height (rows "auto, auto, 1fr"); a hidden
+// panel (Needs you with nothing to say) takes none.
+function growLast(col) {
+  if (col.dataset.nogrow) { for (const n of col.children) delete n.dataset.grow; return; }
+  const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden);
+  for (const n of col.children) delete n.dataset.grow;
+  if (shown.length) shown[shown.length - 1].dataset.grow = '1';
 }
 
 // Focus keeping: the focused element is found again by data-key after an update rebuilt the panel's DOM.
@@ -339,7 +368,13 @@ async function newHero() {
 async function loadLayout() {
   const want = qs.get('layout') || '';
   if (want === 'none') return null;
-  if (PRESETS.includes(want) || /^(mockup|live|command)$/.test(want)) {
+  if (want === 'cockpit') { // "the cockpit, as I have it": a stored copy that started from it wins over the shipped file
+    const srv = await getJSON('/api/layout');
+    if (srv && srv.source !== 'default' && isCockpit(asLayout(srv.body))) return { layout: srv.body, preset: '', origin: 'stored', hasStored: true };
+    const l = await presetFile('cockpit');
+    if (l) return { layout: l, preset: '', origin: 'url', hasStored: !!srv && srv.source !== 'default' };
+  }
+  if (PRESETS.includes(want) || /^(mockup|live|command|cockpit[a-z0-9-]*)$/.test(want)) {
     const l = await presetFile(want);
     if (l) return { layout: l, preset: PRESETS.includes(want) ? want : '', origin: 'url', hasStored: false };
   }
@@ -365,8 +400,9 @@ function postJSON(answerBase, path, body) {
   }).then((r) => r.json()).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; });
 }
 
-function setupLayout(conf, sel, answerBase) {
+function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
   const layout = sel ? sel.layout : null;
+  if (ckRoots) { setupCockpit(sel, answerBase, ckRoots, ckList); return; }
   lay.main = document.querySelector('.d-main');
   lay.conf = conf || {};
   lay.layout = layout;
@@ -433,6 +469,111 @@ function setupLayout(conf, sel, answerBase) {
       done(l) { lay.editor = null; lay.layout = l || saved; applyLayout(); },
     });
   });
+}
+
+// ---- the cockpit (layout template cockpit/1; layout.js cockpitPlan, shell.css) ----
+// The panels the layout names exist before the first module loads (roots, a Map by id); this puts them into the slot
+// elements by the plan of the present width and puts them again when the width crosses a mode (phone, page, wide).
+// Slot elements and the plan are rebuilt only when the arrangement changes; a size change only sets two properties.
+const ck = { layout: null, roots: new Map(), plan: null, sig: '', tab: '', main: null, shell: null, editor: null };
+
+function ckSlot(name, cls) {
+  const n = el('div', cls || '');
+  n.dataset.cockpitSlot = name;
+  return n;
+}
+
+function applyCockpit() {
+  const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id), window.innerHeight);
+  if (!p) return;
+  ck.plan = p;
+  const main = ck.main, shell = ck.shell;
+  shell.dataset.cmode = main.dataset.cmode = p.mode;
+  main.dataset.has = p.has;
+  main.style.setProperty('--c-strip', p.sizes.strip + 'px');
+  main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
+  if (!p.tabs.some((t) => t.name === ck.tab)) ck.tab = p.tabs.length ? p.tabs[0].name : '';
+  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.top, p.rail, p.tabs, ck.tab]);
+  if (sig === ck.sig) return;
+  ck.sig = sig;
+  main.querySelectorAll(':scope > [data-cockpit-slot]').forEach((n) => n.remove());
+  const put = (box, ids) => ids.forEach((id) => box.appendChild(ck.roots.get(id)));
+  const bandMain = shell.querySelector('.d-band-status .d-band-main');
+  if (bandMain) {
+    for (const r of ck.roots.values()) if (r.parentElement === bandMain) r.remove(); // a panel that left the band
+    put(bandMain, p.band);
+  }
+  if (p.stage) { const s = ckSlot('stage'); put(s, [p.stage]); main.appendChild(s); }
+  if (p.strip.length) { const s = ckSlot('strip'); put(s, p.strip); main.appendChild(s); }
+  if (p.rail.length || p.top.length) {
+    const r = ckSlot('rail');
+    r.dataset.cols = String(p.rail.length);
+    if (p.top.length) {
+      const t = el('div', 'd-slotcol d-slottop');
+      r.dataset.top = '1';
+      if (p.rail.length) t.dataset.nogrow = '1'; // the columns under it take the rest
+      put(t, p.top);
+      growLast(t);
+      r.appendChild(t);
+    }
+    for (const ids of p.rail) { const c = el('div', 'd-slotcol'); put(c, ids); growLast(c); r.appendChild(c); }
+    main.appendChild(r);
+  }
+  if (p.tabs.length) {
+    const t = ckSlot('phoneTabs'), bar = el('div', 'd-tabbar'), body = el('div', 'd-slottabs');
+    bar.setAttribute('role', 'tablist');
+    for (const tab of p.tabs) {
+      const b = ui.btn(tab.name, { size: 'sm', variant: 'ghost' });
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', String(tab.name === ck.tab));
+      b.addEventListener('click', () => { ck.tab = tab.name; applyCockpit(); });
+      bar.appendChild(b);
+    }
+    put(body, (p.tabs.find((x) => x.name === ck.tab) || p.tabs[0]).ids);
+    growLast(body);
+    t.append(bar, body);
+    main.appendChild(t);
+  }
+  if (ck.editor && ck.editor.paint) ck.editor.paint();
+}
+
+function setupCockpit(sel, answerBase, roots, slotList) {
+  ck.layout = sel.layout;
+  ck.roots = roots;
+  ck.main = document.querySelector('.d-main');
+  ck.shell = document.querySelector('.d-shell');
+  if (!ck.main || !ck.shell) return;
+  ck.shell.dataset.template = ck.main.dataset.template = 'cockpit';
+  const head = ck.shell.querySelector('.d-band-status');
+  if (head) head.dataset.cockpitSlot = 'band';
+  applyCockpit();
+  window.addEventListener('resize', () => applyCockpit());
+  const btn = document.getElementById('btn-layout');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    if (ck.editor) return;
+    if (ck.plan.mode === 'phone') { toast('info', 'Edit layout needs a window at least 700 px wide.'); return; }
+    let mod;
+    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('alarm', 'The layout editor did not load.'); return; }
+    const saved = ck.layout;
+    ck.editor = mod.startCockpit({
+      el, toast, main: ck.main, shell: ck.shell, roots: ck.roots, layout: saved, slotPanels: slotList,
+      plan: () => ck.plan,
+      preview(l) { ck.layout = l; applyCockpit(); return ck.plan; },
+      async save(l) {
+        const r = await postJSON(answerBase, '/api/layout', { layout: l });
+        if (r && r.ok) pref(PREF, 'saved');
+        return r;
+      },
+      async reset() {
+        const r = await postJSON(answerBase, '/api/layout', { reset: true });
+        if (r && r.ok) { pref(PREF, ''); pref(BASE, ''); setTimeout(() => location.reload(), 700); }
+        return r;
+      },
+      done(l) { ck.editor = null; ck.layout = l || saved; applyCockpit(); },
+    });
+  });
+  if (qs.get('edit') === '1') btn.click();
 }
 
 // ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
@@ -530,19 +671,23 @@ async function start() {
   } catch (e) { return; }
   // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
   const sel = layoutReq ? await layoutReq : null;
+  const cockpit = !!sel && isCockpit(sel.layout) && html.dataset.mode !== 'overlay';
+  // panels the layout may put in a slot: their manifest says so, or shell.json lists them until it does
+  for (const m of list) if (m.slot || (conf.slot || []).includes(m.id)) m.slot = true;
+  const slotList = list.filter((m) => m.slot).map((m) => ({ id: m.id, title: m.title }));
   if (layoutReq) list = selectPanels(list, sel && sel.layout, html.dataset.mode);
   const sched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
   if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
   // every root exists before the first module loads, so the layout places the whole page at once
-  const made = [];
+  const made = [], ckRoots = new Map();
   for (const m of list) {
-    const parts = makeRoot(m);
-    if (place(bands, m, parts.root)) made.push([m, parts]);
+    const parts = makeRoot(m, cockpit);
+    if (cockpit) { ckRoots.set(m.id, parts.root); made.push([m, parts]); } else if (place(bands, m, parts.root)) made.push([m, parts]);
   }
-  setupLayout(conf, sel, answerBase);
-  if (layoutReq) { setupMenu(sel); layoutNote(sel); }
+  setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
+  if (layoutReq) { setupMenu(sel); if (!cockpit) layoutNote(sel); }
   for (const [m, parts] of made) {
     const css = el('link');
     css.rel = 'stylesheet'; css.href = '/watch/panels/' + m.id + '/panel.css';
@@ -557,6 +702,10 @@ async function start() {
       parts.body.appendChild(el('p', 'd-empty', 'This panel failed to load.'));
       continue;
     }
+    if (cockpit) { // a slot has no title bar to fold, and a fold saved by the classic page must not blank the box
+      parts.actions.querySelectorAll('[data-key="collapse"]').forEach((n) => n.remove());
+      parts.body.hidden = false;
+    }
     if (!m.endpoint && parts.root.dataset.state === 'loading') parts.root.dataset.state = 'ready';
     sched.add({ m, root: parts.root, api });
     syncBand(parts.root.parentElement);
@@ -565,7 +714,7 @@ async function start() {
   sched.start();
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
-  if (edit && qs.get('edit') === '1') edit.click();
+  if (edit && !cockpit && qs.get('edit') === '1') edit.click();
 }
 
 start();

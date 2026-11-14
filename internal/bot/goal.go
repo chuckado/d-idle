@@ -1028,6 +1028,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			run := r.runFor(diff, step)
 			l.run = &run
 			r.e.Log.Info("planner", "level", p.Level, "difficulty", diff, "area", step.Area, "name", step.Name, "run", run.Key, "kind", run.Kind, "why", step.Purpose)
+			r.zoneShadow(s, step.Area, diff)
 		}
 		r.e.Log.Info(levelPlanLine(p.Level, step, t.LevelMargin, t.LeaveSlack))
 		l.stepArea, l.stepLevel = step.Area, p.Level
