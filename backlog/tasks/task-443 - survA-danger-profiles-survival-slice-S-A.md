@@ -17,6 +17,10 @@ owns:
   - "docs/survival/decisions-2026-11-14.md"
   - "docs/survival/danger.md"
   - "cmd/d2bot/dangerwire.go"
+  - "cmd/d2bot/ladder.go"
+  - "cmd/d2bot/live.go"
+  - "cmd/d2bot/d2dbackend.go"
+  - "internal/watch/funwire.go"
 exclusive: []
 contracts: []
 ---
@@ -26,7 +30,9 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: slice S-A of docs/survival/design-2026-11-14.md (sections 3, 10, 12): the known quantity (zone danger) generated from the install tables, read-only, no behaviour change. Done when: the criteria below hold. Shared-file edits (ladder, live, d2dbackend, funwire) are one-line wiring of GET /api/danger.
+
+result: PENDING
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
