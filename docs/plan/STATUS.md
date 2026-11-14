@@ -148,6 +148,7 @@
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
+| uis1 | proposed | - | `internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/shell.css`<br>`internal/watch/layout.go`<br>`internal/watch/layout_test.go`<br>`tools/uilint/`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js` | - |
 | uib7 | proposed | - | `internal/watch/orderloop.go`<br>`internal/watch/orderloop_test.go`<br>`internal/watch/testdata/orderloop/`<br>`data/unlocks/ladder.json`<br>`internal/watch/orderqueue.json`<br>`cmd/d2bot/loopwire.go`<br>`docs/loop-order.md`<br>`cmd/d2bot/loopwire_test.go` | - |
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
@@ -200,14 +201,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f89e59de0 11-14 12:47 `Merge agent/uis1: Merge branch 'main' into TASK-424` (uis1)
+- f9d97a3c5 11-14 12:47 `Merge branch 'main' into TASK-424` (-)
 - 4a6d8d36f 11-14 12:41 `Merge agent/uib7: Merge branch 'main' into TASK-425` (uib7)
 - a57eb355f 11-14 12:40 `Merge branch 'main' into TASK-425` (-)
+- b4269b9ef 11-14 12:38 `Merge origin/main into agent/uis1` (-)
 - ee54732ef 11-14 12:32 `Merge agent/uic1: Merge branch 'main' into TASK-428` (uic1)
 - ba80f60f1 11-14 12:32 `Merge branch 'main' into TASK-428` (-)
 - 84aaf590f 11-14 12:23 `Merge origin/main into agent/uib7` (-)
 - 0453e5922 11-14 12:22 `Merge agent/prpost4: Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row` (prpost4)
 - 97ef7c818 11-14 12:21 `Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row` (-)
-- f0835abe8 11-14 12:20 `Merge origin/main` (-)
-- 7c1ce15d9 11-14 12:18 `Merge agent/buildhosts: buildhosts: scrub machine names for leakcheck` (buildhosts)
-- 83f36854b 11-14 12:18 `Merge agent/survivaldesign: Merge branch 'main' into TASK-430` (survivaldesign)
 <!-- statusgen:end -->

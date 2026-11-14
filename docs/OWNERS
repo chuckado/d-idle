@@ -512,6 +512,8 @@ internal/watch/invapi.go  credit-runner  gearsets
 internal/watch/invapi_test.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
+internal/watch/layout.go  credit-runner  uis1
+internal/watch/layout_test.go  credit-runner  uis1
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
 internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes
@@ -585,6 +587,9 @@ internal/watch/web/inventory-tip.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  gearsets
 internal/watch/web/inventory.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  repairtrip
+internal/watch/web/layout.js  credit-runner  uis1
+internal/watch/web/layout.json  credit-runner  uis1
+internal/watch/web/layouts/  credit-runner  uis1
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
@@ -598,11 +603,15 @@ internal/watch/web/panels/map  credit-runner  maptrail
 internal/watch/web/panels/map  credit-runner  maptrail2
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
+internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  minimapfix
+internal/watch/web/shell.js  credit-runner  uis1
+internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
+internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/whyline.json  credit-runner  repairtrip
 internal/watch/whyline.json  credit-runner  staletarget
 internal/watch/whyline_test.go  credit-runner  repairtrip
@@ -628,8 +637,11 @@ tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
 tools/play-session.sh  credit-runner  playsession
 tools/tester-pack.sh  credit-runner  testerpack
+tools/uilint/  credit-runner  uis1
 tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  gearsets
+tools/uishots/genlayouts.js  credit-runner  uis1
+tools/uishots/layout-rows.json  credit-runner  uis1
 tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
 # END GENERATED OWNERS
