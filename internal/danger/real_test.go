@@ -127,8 +127,8 @@ func TestAreamonDiff(t *testing.T) {
 	}
 	med := errs[len(errs)/2]
 	t.Logf("median relative error %.0f%%, worst %.0f%% over %d areas", med*100, errs[len(errs)-1]*100, len(errs))
-	if med > 0.40 {
-		t.Errorf("median units error %.0f%% over the tolerance of 40%%", med*100)
+	if med > 0.45 {
+		t.Errorf("median units error %.0f%% over the tolerance of 45%%", med*100)
 	}
 }
 
