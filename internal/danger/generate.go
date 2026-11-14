@@ -34,7 +34,11 @@ func build(db *data.DB, p Params, ov *Overrides, bossRaw []byte) (*Table, error)
 			if d > 0 {
 				pool = l.NMon
 			}
-			if z := buildZone(db, byKey, l, pool, d, p); z != nil {
+			z, err := buildZone(db, byKey, l, pool, d, p)
+			if err != nil {
+				return nil, err
+			}
+			if z != nil {
 				t.Zones = append(t.Zones, z)
 			}
 		}
@@ -132,7 +136,7 @@ func hazardsOf(m *data.Monster, d int, p Params) []string {
 	return h
 }
 
-func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool []string, d int, p Params) *Zone {
+func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool []string, d int, p Params) (*Zone, error) {
 	mlvl := l.MonLvl[d]
 	var mons []*data.Monster
 	for _, k := range pool {
@@ -143,7 +147,7 @@ func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool 
 		mons = append(mons, m)
 	}
 	if len(mons) == 0 {
-		return nil
+		return nil, nil
 	}
 	name := l.Name
 	if name == "" {
@@ -175,8 +179,12 @@ func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool 
 		z.Monsters = append(z.Monsters, mon)
 	}
 	// density: units per clear from MonDen and the level's size, then the units on one screen.
+	k, ok := p.UnitsPerDensityGroup[l.DrlgType]
+	if !ok {
+		return nil, fmt.Errorf("danger: area %d %q: no units factor for level type %d", l.ID, name, l.DrlgType)
+	}
 	tiles := float64(l.SizeX[d] * l.SizeY[d])
-	z.Density.Units = round2(float64(l.MonDen[d]) * tiles * p.UnitsPerDensityTile)
+	z.Density.Units = round2(float64(l.MonDen[d]) * groupMean * k)
 	if tiles > 0 {
 		z.Density.PerScreen = round2(z.Density.Units / tiles * p.ScreenTiles)
 	}
@@ -193,7 +201,7 @@ func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool 
 		z.Pay.XPByClvl[fmt.Sprintf("c%d", c)] = round2(xpMean * gapFactor(c-mlvl))
 	}
 	z.Immune, z.EliteImmune = immunities(mons, d)
-	return z
+	return z, nil
 }
 
 func split(n int, ranged, melee float64) Encounter {

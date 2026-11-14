@@ -30,7 +30,7 @@ func fixtureDB() *data.DB {
 		ml[i] = scale
 	}
 	lv := func(id int, name string, mlvl [3]int, pool ...string) *data.Level {
-		l := &data.Level{ID: id, Key: name, Name: name, MonLvl: mlvl, Mon: pool, NMon: pool, MonDen: [3]int{1000, 1000, 1000},
+		l := &data.Level{ID: id, DrlgType: 3, Key: name, Name: name, MonLvl: mlvl, Mon: pool, NMon: pool, MonDen: [3]int{1000, 1000, 1000},
 			MonUMin: [3]int{1, 1, 1}, MonUMax: [3]int{3, 3, 3}}
 		l.SizeX, l.SizeY = [3]int{100, 100, 100}, [3]int{100, 100, 100}
 		return l
@@ -226,5 +226,30 @@ func TestBuildErrors(t *testing.T) {
 	}
 	if _, err := Build(fixtureDB(), Params{}, nil); err == nil {
 		t.Error("empty params")
+	}
+}
+
+func TestUnknownLevelType(t *testing.T) {
+	db := fixtureDB()
+	db.Levels[0].DrlgType = 9
+	if _, err := build(db, DefaultParams(), nil, []byte(testBosses)); err == nil || !strings.Contains(err.Error(), "level type 9") {
+		t.Errorf("unknown level type must error naming it, got %v", err)
+	}
+}
+
+func TestShippedBossRows(t *testing.T) {
+	var f bossFile
+	if err := json.Unmarshal(bossesJSON, &f); err != nil {
+		t.Fatal(err)
+	}
+	seen := map[string]bool{}
+	for _, b := range f.Bosses {
+		if b.Key == "" || seen[b.Key] || (b.Monster == "") == (b.SuperUniq == "") || b.Area == 0 {
+			t.Errorf("bad boss row %+v", b)
+		}
+		seen[b.Key] = true
+	}
+	if len(f.Bosses) != 10 {
+		t.Errorf("%d boss rows, boss1-trace lists 10", len(f.Bosses))
 	}
 }
