@@ -86,7 +86,7 @@ func TestRealAnchors(t *testing.T) {
 // so the tolerance is the median relative error and a loose per-area bound; the numbers are logged for refitting
 // Params.UnitsPerDensityTile.
 func TestAreamonDiff(t *testing.T) {
-	_, tb := realTable(t)
+	db, tb := realTable(t)
 	f, err := os.Open("../../docs/research/areamon-table.csv")
 	if err != nil {
 		t.Fatal(err)
@@ -110,6 +110,12 @@ func TestAreamonDiff(t *testing.T) {
 			t.Errorf("area %d (%s): %v", id, r[col["area"]], err)
 			continue
 		}
+		l := levelOf(db, id)
+		gm := 0.0
+		for _, m := range z.Monsters {
+			gm += m.Share * math.Max(1, float64(m.Group[0]+m.Group[1])/2)
+		}
+		t.Logf("FIT %d|%s|drlg %d|size %dx%d|den %d|groupMean %.2f|csvUnits %.1f", id, r[col["area"]], l.DrlgType, l.SizeX[0], l.SizeY[0], l.MonDen[0], gm, units)
 		rel := (z.Density.Units - units) / units
 		errs = append(errs, math.Abs(rel))
 		t.Logf("%-22s units csv %6.1f model %6.1f (%+.0f%%)  uniques csv %.1f model %.1f  mlvl csv %s model %d",
@@ -124,4 +130,13 @@ func TestAreamonDiff(t *testing.T) {
 	if med > 0.35 {
 		t.Errorf("median units error %.0f%% over the tolerance of 35%%", med*100)
 	}
+}
+
+func levelOf(db *data.DB, id int) *data.Level {
+	for _, l := range db.Levels {
+		if l.ID == id {
+			return l
+		}
+	}
+	return &data.Level{}
 }
