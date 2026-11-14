@@ -21,6 +21,7 @@ owns:
   - "tools/emu/emurun_block.sh"
 exclusive: []
 contracts: []
+result: "P05 game column = rule on 539 of 539 (V run); P03 game vs d2d 17,195 of 34,314 differ, game = closed form on 34,314 (V run). After-side and P02 not run. Not verified live."
 ---
 
 ## Description

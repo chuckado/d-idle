@@ -1,6 +1,6 @@
 set -e
 . ~/d2d-lab/emu/env.sh
-R=~/labrun/herdr/code/d2lod-wt/emurun
+R=${EMURUN_WT:?set to the synced worktree}
 W=$R/tools/emu
 cd ~/d2d-lab/emu/scratch-emurun
 export PYTHONPATH=$W:$EMU

@@ -1,6 +1,6 @@
 set -e
 . ~/d2d-lab/emu/env.sh
-W=~/labrun/herdr/code/d2lod-wt/emurun/tools/emu
+W=${EMURUN_WT:?set to the synced worktree}/tools/emu
 mkdir -p ~/d2d-lab/emu/scratch-emurun && cd ~/d2d-lab/emu/scratch-emurun
 export PYTHONPATH=$W:$EMU
 nice -n 10 $PY $W/fl_gold.py gen > gen_cases.tsv
