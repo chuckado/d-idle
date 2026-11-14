@@ -64,7 +64,7 @@ const FALLBACKS = { 'needs-you': 'gear', orders: 'now', 'zone-map': 'orders-map'
 for (const name of ['standard', 'simple', 'stream', 'debug']) {
   const layout = readJSON(path.join(webDir, 'layouts', name + '.json'));
   const targets = today(layout), have = new Set(targets.map((t) => t.id));
-  for (const t of targets) assert.ok(!['needs-you', 'orders', 'health', 'progress', 'zone-map', 'log', 'statusline', 'needs-count'].includes(t.id), name + ': no new panel exists yet');
+  for (const t of targets) assert.ok(!['needs-you', 'orders', 'health', 'progress', 'zone-map', 'log', 'statusline', 'needs-count'].includes(t.id), name + ': no new panel exists yet (log and area-map are cockpit-only)');
   for (const w of WIDTHS) {
     const p = L.plan(layout, w, '', shell, targets);
     eq(p.unknown, [], name + ' at ' + w + ': no unknown id');
@@ -99,7 +99,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 {
   const classic = readJSON(path.join(webDir, 'layouts/classic.json'));
   assert.strictEqual(L.statusIds(classic, manifests), null);
-  eq(L.selectPanels(manifests, classic).length, manifests.length, 'classic mounts every panel');
+  eq(L.selectPanels(manifests, classic).length, manifests.filter((m) => !m.cockpitOnly).length, 'classic mounts every panel but the cockpit-only ones (S6)');
 }
 
 // 3. optIn: mounted only when the layout names it (placed, not hidden); a fixture manifest list

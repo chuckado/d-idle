@@ -59,6 +59,13 @@ func serve(addr, class string) error {
 			map[string]any{"seq": 2, "t": 20, "rule": "life", "kind": "life", "severity": "alarm", "free": true, "text": "Life under 25% in Blood Moor."}},
 			"outbound": map[string]any{"enabled": false, "consent": ""}, "notifications": map[string]any{}})
 	})
+	// the first-steps card the "..." menu opens as a sheet, over the real texts; the log drawer reads the routes above
+	if ob, err := watch.NewOnboarding(watch.OnboardingConfig{Hero: func() string { return "Sorc" }}); err == nil {
+		m.Handle(watch.OnboardingRoute, ob.Handler())
+	} else {
+		log.Printf("uishots: onboarding: %v", err)
+	}
+	m.Handle(watch.LogRoute, sim.Hub.LogHandler(m))
 	if fogStage != "" {
 		pub, err := fogPublisher(fogStage)
 		if err != nil {

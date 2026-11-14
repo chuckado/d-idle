@@ -1,0 +1,23 @@
+{
+  "schema": "watch.panel/1",
+  "version": 1,
+  "id": "area-map",
+  "title": "Area map",
+  "band": "side",
+  "size": "s",
+  "priority": 20,
+  "tab": "hero",
+  "defaultOpen": true,
+  "endpoint": "/api/senses",
+  "poll": 0.5,
+  "unlock": "",
+  "skeleton": 0,
+  "slot": true,
+  "switchWith": "zone-map",
+  "switchLabel": "Area map",
+  "fit": true,
+  "optIn": true,
+  "cockpitOnly": true,
+  "owner": "uis6",
+  "doc": "docs/senses-map.md"
+}

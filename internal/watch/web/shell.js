@@ -176,7 +176,7 @@ function syncBand(band) {
 // panel (Needs you with nothing to say) takes none.
 function growLast(col) {
   if (col.dataset.nogrow) { for (const n of col.children) delete n.dataset.grow; return; }
-  const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden);
+  const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden && !n.dataset.off);
   for (const n of col.children) delete n.dataset.grow;
   if (shown.length) shown[shown.length - 1].dataset.grow = '1';
 }
@@ -197,12 +197,14 @@ function keepFocus(root, fn) {
 }
 
 // ---- the scheduler ----
+let theSched = null; // the page's scheduler (ctx.refresh and the drawers poke it)
 function makeScheduler() {
   const slots = [];
   let changed = false;
   function due(s, now) {
     if (s.stopped || s.inflight || !s.m.endpoint) return false;
     if (document.hidden && s.m.band !== 'status') return false;
+    if (s.m.drawer && s.root.dataset.open !== '1') return false; // a drawer panel polls only while its drawer is open
     if (s.m.poll === 0 && changed) return true;
     return now >= s.next;
   }
@@ -256,7 +258,7 @@ function makeScheduler() {
     const es = window.d2events || (window.d2events = new EventSource('/api/events'));
     es.addEventListener('change', () => { changed = true; });
   }
-  return { add(s) { s.next = 0; s.fails = 0; slots.push(s); }, start: tick };
+  return { add(s) { s.next = 0; s.fails = 0; slots.push(s); }, start: tick, poke(id) { slots.forEach((s) => { if (s.m.id === id) s.next = 0; }); } };
 }
 
 // ---- layout manifest (docs/ui-design-system.md section 6.4) ----
@@ -475,12 +477,62 @@ function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
 // The panels the layout names exist before the first module loads (roots, a Map by id); this puts them into the slot
 // elements by the plan of the present width and puts them again when the width crosses a mode (phone, page, wide).
 // Slot elements and the plan are rebuilt only when the arrangement changes; a size change only sets two properties.
-const ck = { layout: null, roots: new Map(), plan: null, sig: '', tab: '', main: null, shell: null, editor: null };
+const ck = { layout: null, roots: new Map(), plan: null, sig: '', tab: '', want: '', second: false, meta: new Map(), tabBar: null, tabBody: null, tabs: [], main: null, shell: null, editor: null };
 
 function ckSlot(name, cls) {
   const n = el('div', cls || '');
   n.dataset.cockpitSlot = name;
   return n;
+}
+
+// A phone tab shows one group of panels. The bar is built once per arrangement and kept, so a click moves the panels
+// and the keyboard focus stays on the tab (the first version rebuilt the bar on every click and dropped the focus).
+function showTab(name, focus) {
+  if (!ck.tabBar || !ck.tabs.length) return;
+  const tab = ck.tabs.find((x) => x.name === name) || ck.tabs[0];
+  ck.tab = tab.name;
+  for (const b of ck.tabBar.children) {
+    const on = b.dataset.tab === tab.name;
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+    if (on && focus) b.focus({ preventScroll: true });
+  }
+  ck.tabBody.replaceChildren(...tab.ids.map((id) => ck.roots.get(id)));
+  mapSwitch(ck.tabBody);
+}
+
+// Where a column (or a phone tab) holds two panels that share it (a manifest's switchWith: the act map and the area map), a
+// two-button switch shows one at a time: the rail of a 1440 window has room for one. On a wide rail they stand side by side
+// in two columns and no switch is built.
+function mapSwitch(box) {
+  box.querySelectorAll(':scope > .d-mapswitch').forEach((n) => n.remove());
+  const kids = [...box.children].filter((n) => n.matches('.d-panel[data-panel]'));
+  for (const n of kids) delete n.dataset.off;
+  const links = (x, y) => (ck.meta.get(x.dataset.panel) || {}).switchWith === y.dataset.panel;
+  let pair = null;
+  for (const a of kids) {
+    const b = kids.find((n) => n !== a && (links(a, n) || links(n, a)));
+    if (b) { pair = kids.indexOf(a) < kids.indexOf(b) ? [a, b] : [b, a]; break; }
+  }
+  if (!pair) { growLast(box); return; }
+  const bar = el('div', 'd-mapswitch');
+  bar.setAttribute('role', 'group');
+  bar.setAttribute('aria-label', 'Which map');
+  const paint = () => {
+    pair[0].dataset.off = ck.second ? '1' : '';
+    pair[1].dataset.off = ck.second ? '' : '1';
+    pair.forEach((n) => { if (!n.dataset.off) delete n.dataset.off; });
+    for (const b of bar.children) b.setAttribute('aria-pressed', String((b.dataset.view === '1') === ck.second));
+    growLast(box);
+  };
+  pair.forEach((n, i) => {
+    const m = ck.meta.get(n.dataset.panel) || {}, b = ui.btn(m.switchLabel || m.title || n.dataset.panel, { size: 'sm', variant: 'ghost' });
+    b.dataset.view = String(i);
+    b.addEventListener('click', () => { ck.second = i === 1; paint(); });
+    bar.appendChild(b);
+  });
+  box.insertBefore(bar, pair[0]);
+  paint();
 }
 
 function applyCockpit() {
@@ -492,8 +544,12 @@ function applyCockpit() {
   main.dataset.has = p.has;
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
   main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
+  if (ck.want) { // ?tab=Map opens that phone tab (the screenshot suite and the fit check look at each)
+    const w = p.tabs.find((t) => t.name.toLowerCase() === ck.want.toLowerCase());
+    if (w) { ck.tab = w.name; ck.want = ''; }
+  }
   if (!p.tabs.some((t) => t.name === ck.tab)) ck.tab = p.tabs.length ? p.tabs[0].name : '';
-  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.top, p.rail, p.tabs, ck.tab]);
+  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.top, p.rail, p.tabs]);
   if (sig === ck.sig) return;
   ck.sig = sig;
   main.querySelectorAll(':scope > [data-cockpit-slot]').forEach((n) => n.remove());
@@ -516,30 +572,38 @@ function applyCockpit() {
       growLast(t);
       r.appendChild(t);
     }
-    for (const ids of p.rail) { const c = el('div', 'd-slotcol'); put(c, ids); growLast(c); r.appendChild(c); }
+    for (const ids of p.rail) { const c = el('div', 'd-slotcol'); put(c, ids); mapSwitch(c); r.appendChild(c); }
     main.appendChild(r);
   }
   if (p.tabs.length) {
     const t = ckSlot('phoneTabs'), bar = el('div', 'd-tabbar'), body = el('div', 'd-slottabs');
     bar.setAttribute('role', 'tablist');
+    body.setAttribute('role', 'tabpanel');
+    ck.tabBar = bar; ck.tabBody = body; ck.tabs = p.tabs;
     for (const tab of p.tabs) {
       const b = ui.btn(tab.name, { size: 'sm', variant: 'ghost' });
       b.setAttribute('role', 'tab');
-      b.setAttribute('aria-selected', String(tab.name === ck.tab));
-      b.addEventListener('click', () => { ck.tab = tab.name; applyCockpit(); });
+      b.dataset.tab = tab.name;
+      b.addEventListener('click', () => showTab(tab.name));
+      b.addEventListener('keydown', (e) => { // arrow keys move between the tabs; the bar is kept, so focus stays on it
+        const i = ck.tabs.findIndex((x) => x.name === ck.tab), d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        showTab(ck.tabs[(i + d + ck.tabs.length) % ck.tabs.length].name, true);
+      });
       bar.appendChild(b);
     }
-    put(body, (p.tabs.find((x) => x.name === ck.tab) || p.tabs[0]).ids);
-    growLast(body);
     t.append(bar, body);
     main.appendChild(t);
-  }
+    showTab(ck.tab);
+  } else { ck.tabBar = ck.tabBody = null; }
   if (ck.editor && ck.editor.paint) ck.editor.paint();
 }
 
 function setupCockpit(sel, answerBase, roots, slotList) {
   ck.layout = sel.layout;
   ck.roots = roots;
+  ck.want = qs.get('tab') || '';
   ck.main = document.querySelector('.d-main');
   ck.shell = document.querySelector('.d-shell');
   if (!ck.main || !ck.shell) return;
@@ -576,6 +640,75 @@ function setupCockpit(sel, answerBase, roots, slotList) {
   if (qs.get('edit') === '1') btn.click();
 }
 
+// ---- drawers (a cockpit has no tile for the log or the first-steps card; each opens as a side sheet) ----
+// A drawer panel is mounted like any other (shell.json layout.drawer lists them) but its root lives in a sheet that is
+// hidden until it is opened, and the scheduler polls it only while it is open. The "..." menu opens them, and so does
+// ctx.openDrawer(id) (the status sentence's popover uses it).
+const dr = { boxes: new Map(), open: '', opener: null };
+
+function setupDrawers(roots, titles) {
+  if (!roots.size) return;
+  const back = el('div', 'd-drawer-back');
+  back.hidden = true;
+  back.addEventListener('click', () => closeDrawer(true));
+  document.body.appendChild(back);
+  dr.back = back;
+  for (const [id, root] of roots) {
+    const box = el('aside', 'd-drawer'), head = el('div', 'd-drawer-head'), body = el('div', 'd-drawer-body');
+    const h = el('h2', '', titles.get(id) || id), x = ui.btn('Close', { size: 'sm', variant: 'ghost' });
+    box.dataset.drawer = id;
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-label', titles.get(id) || id);
+    box.hidden = true;
+    x.dataset.key = 'drawer-close';
+    x.addEventListener('click', () => closeDrawer(true));
+    head.append(h, x);
+    const gone = el('p', 'd-drawer-empty', 'Nothing here right now.'); // shown by the CSS while the panel hides itself
+    body.append(root, gone);
+    box.append(head, body);
+    box.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closeDrawer(true); } });
+    document.body.appendChild(box);
+    dr.boxes.set(id, { box, root, gone });
+  }
+}
+
+function openDrawer(id, opener) {
+  const d = dr.boxes.get(id);
+  if (!d) return false;
+  closeDrawer(false);
+  dr.open = id;
+  dr.opener = opener || document.activeElement;
+  d.box.hidden = false;
+  if (dr.back) dr.back.hidden = false;
+  d.root.dataset.open = '1';
+  if (theSched) theSched.poke(id);
+  const x = d.box.querySelector('[data-key="drawer-close"]');
+  if (x) x.focus({ preventScroll: true });
+  return true;
+}
+
+function closeDrawer(back) {
+  const d = dr.boxes.get(dr.open);
+  if (!d) return;
+  d.box.hidden = true;
+  delete d.root.dataset.open;
+  if (dr.back) dr.back.hidden = true;
+  const o = dr.opener;
+  dr.open = ''; dr.opener = null;
+  if (back && o && o.focus && o.isConnected) o.focus({ preventScroll: true });
+}
+
+// The "Getting started 1 of 5" chip of the menu: one read of the onboarding reply whenever the menu opens (not a poll).
+async function onboardingChip(btn) {
+  try {
+    const v = await (await fetch('/api/onboarding', { cache: 'no-store', credentials: 'same-origin' })).json();
+    const total = (v.steps || []).length;
+    if (v.allDone || !total) { btn.hidden = true; return; }
+    btn.textContent = 'Getting started ' + (v.done || 0) + ' of ' + total;
+    btn.hidden = false;
+  } catch (e) { /* the chip keeps its last text */ }
+}
+
 // ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
 // The buttons already on the page move into it (they keep their ids and listeners); the preset buttons store the choice
 // per browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
@@ -595,12 +728,23 @@ function setupMenu(sel) {
   const close = (back) => { pop.hidden = true; more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
   more.addEventListener('click', () => {
     pop.hidden = !pop.hidden;
+    if (chip && !pop.hidden) onboardingChip(chip);
     more.setAttribute('aria-expanded', String(!pop.hidden));
   });
   document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
   wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
   pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
   for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
+  let chip = null;
+  for (const [id, text] of [['log', 'Log'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
+    if (!dr.boxes.has(id)) continue;
+    const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
+    b.dataset.drawerOpen = id;
+    b.addEventListener('click', () => openDrawer(id, more));
+    pop.appendChild(b);
+    if (id === 'onboarding') { chip = b; b.hidden = true; }
+  }
+  if (chip) onboardingChip(chip);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(PRESETS);
@@ -652,6 +796,8 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     state(st) { parts.root.dataset.state = st; },
     later(fn, ms) { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; },
     post: (path, body) => postJSON(answerBase, path, body),
+    refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)
+    openDrawer(id) { return openDrawer(id); },
   };
 }
 
@@ -671,23 +817,28 @@ async function start() {
   } catch (e) { return; }
   // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
   const sel = layoutReq ? await layoutReq : null;
+  ck.meta = new Map(list.map((m) => [m.id, m])); // the manifests (a cockpit's switch pairs read switchWith)
   const cockpit = !!sel && isCockpit(sel.layout) && html.dataset.mode !== 'overlay';
   // panels the layout may put in a slot: their manifest says so, or shell.json lists them until it does
   for (const m of list) if (m.slot || (conf.slot || []).includes(m.id)) m.slot = true;
+  if (cockpit) for (const m of list) if ((conf.drawer || []).includes(m.id)) m.drawer = true; // a grid layout keeps the log a plain tile
   const slotList = list.filter((m) => m.slot).map((m) => ({ id: m.id, title: m.title }));
   if (layoutReq) list = selectPanels(list, sel && sel.layout, html.dataset.mode);
-  const sched = makeScheduler();
+  const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
   if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
   // every root exists before the first module loads, so the layout places the whole page at once
-  const made = [], ckRoots = new Map();
+  const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {
     const parts = makeRoot(m, cockpit);
-    if (cockpit) { ckRoots.set(m.id, parts.root); made.push([m, parts]); } else if (place(bands, m, parts.root)) made.push([m, parts]);
+    if (cockpit && m.drawer) { drRoots.set(m.id, parts.root); drTitles.set(m.id, m.title); made.push([m, parts]); }
+    else if (cockpit) { ckRoots.set(m.id, parts.root); made.push([m, parts]); } else if (place(bands, m, parts.root)) made.push([m, parts]);
   }
   setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
+  if (cockpit) setupDrawers(drRoots, drTitles);
   if (layoutReq) { setupMenu(sel); if (!cockpit) layoutNote(sel); }
+  if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
   for (const [m, parts] of made) {
     const css = el('link');
     css.rel = 'stylesheet'; css.href = '/watch/panels/' + m.id + '/panel.css';
