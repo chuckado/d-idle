@@ -5,9 +5,15 @@
  "density": "dense",
  "theme": "dark",
  "status": [
-  "statusline",
+  {
+   "id": "statusline",
+   "fallback": "hero-status"
+  },
   "hero-meters",
-  "needs-count"
+  {
+   "id": "needs-count",
+   "fallback": "alerts-count"
+  }
  ],
  "breakpoints": {
   "phone": {
@@ -42,7 +48,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -52,7 +59,8 @@
      "colSpan": 12,
      "rowSpan": 7,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "zone-map",
@@ -62,7 +70,8 @@
      "colSpan": 12,
      "rowSpan": 12,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "orders-map"
     },
     {
      "id": "health",
@@ -72,7 +81,8 @@
      "colSpan": 12,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -82,7 +92,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 6
+     "order": 6,
+     "fallback": "tally"
     },
     {
      "id": "map",
@@ -102,7 +113,8 @@
      "colSpan": 12,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 8
+     "order": 8,
+     "fallback": "thoughts"
     },
     {
      "id": "journey",
@@ -377,7 +389,8 @@
      "colSpan": 12,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 2
+     "order": 2,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -387,7 +400,8 @@
      "colSpan": 6,
      "rowSpan": 12,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "now"
     },
     {
      "id": "zone-map",
@@ -397,7 +411,8 @@
      "colSpan": 6,
      "rowSpan": 12,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "orders-map"
     },
     {
      "id": "health",
@@ -407,7 +422,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "why"
     },
     {
      "id": "progress",
@@ -417,7 +433,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 6
+     "order": 6,
+     "fallback": "tally"
     },
     {
      "id": "map",
@@ -437,7 +454,8 @@
      "colSpan": 6,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 8
+     "order": 8,
+     "fallback": "thoughts"
     },
     {
      "id": "journey",
@@ -722,7 +740,8 @@
      "colSpan": 3,
      "rowSpan": 12,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "orders-map"
     },
     {
      "id": "needs-you",
@@ -732,7 +751,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -742,7 +762,8 @@
      "colSpan": 3,
      "rowSpan": 7,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -752,7 +773,8 @@
      "colSpan": 3,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 6
+     "order": 6,
+     "fallback": "why"
     },
     {
      "id": "log",
@@ -762,7 +784,8 @@
      "colSpan": 3,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 7
+     "order": 7,
+     "fallback": "thoughts"
     },
     {
      "id": "progress",
@@ -772,7 +795,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 8
+     "order": 8,
+     "fallback": "tally"
     },
     {
      "id": "journey",
@@ -1057,7 +1081,8 @@
      "colSpan": 3,
      "rowSpan": 12,
      "collapsed": false,
-     "order": 3
+     "order": 3,
+     "fallback": "orders-map"
     },
     {
      "id": "needs-you",
@@ -1067,7 +1092,8 @@
      "colSpan": 3,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 4
+     "order": 4,
+     "fallback": "gear"
     },
     {
      "id": "orders",
@@ -1077,7 +1103,8 @@
      "colSpan": 3,
      "rowSpan": 7,
      "collapsed": false,
-     "order": 5
+     "order": 5,
+     "fallback": "now"
     },
     {
      "id": "health",
@@ -1087,7 +1114,8 @@
      "colSpan": 3,
      "rowSpan": 2,
      "collapsed": false,
-     "order": 6
+     "order": 6,
+     "fallback": "why"
     },
     {
      "id": "log",
@@ -1097,7 +1125,8 @@
      "colSpan": 3,
      "rowSpan": 6,
      "collapsed": false,
-     "order": 7
+     "order": 7,
+     "fallback": "thoughts"
     },
     {
      "id": "progress",
@@ -1107,7 +1136,8 @@
      "colSpan": 6,
      "rowSpan": 3,
      "collapsed": false,
-     "order": 8
+     "order": 8,
+     "fallback": "tally"
     },
     {
      "id": "journey",
