@@ -18,7 +18,7 @@ var webFS embed.FS
 // Routes of the read-only side (mounted on d2dview). Every one is GET (HEAD) only. The game video routes (VideoRoutes)
 // are not in this list: d2dview has its own /stream, so only the bot's own listener (Serve) mounts them.
 var ViewRoutes = []string{"/watch", "/watch/", "/api/thoughts", "/api/journal", "/api/rules", "/api/uptime", "/api/orders", "/api/orders/map",
-	"/api/why", WhylineRoute, "/api/config", "/api/events", "/api/currency", HeroRoute, LayoutRoute}
+	"/api/why", WhylineRoute, "/api/config", "/api/events", "/api/currency", HeroRoute, LayoutRoute, SurvivalRoute}
 
 // VideoRoutes are served by ViewHandler only when a Video is set (Serve mounts them for d2bot -watch-video).
 var VideoRoutes = []string{"/stream", "/shot.jpg"}
@@ -77,7 +77,7 @@ func (h *Hub) ViewHandler() http.Handler {
 		case "/watch/shell.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/javascript; charset=utf-8")(w, r)
 		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json",
-			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json":
+			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json", "/watch/layouts/cockpit.json":
 			// the editor's three presets and the four redesign ones (classic is the pre-redesign default), for ?layout=<name>
 			// and the "..." menu (the screenshot suite renders them)
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "application/json; charset=utf-8")(w, r)
@@ -89,6 +89,7 @@ func (h *Hub) ViewHandler() http.Handler {
 	})
 	m.Handle(WhylineRoute, h.why.Handler())
 	m.HandleFunc(HeroRoute, h.heroHandler())
+	m.HandleFunc(SurvivalRoute, h.survivalHandler())
 	m.HandleFunc(LayoutRoute, h.layoutHandler())
 	m.HandleFunc("/api/thoughts", func(w http.ResponseWriter, r *http.Request) { writeJSON(w, 200, h.Thoughts()) })
 	m.HandleFunc("/api/journal", func(w http.ResponseWriter, r *http.Request) {

@@ -108,6 +108,80 @@
   .d-editbar .what { font-weight: 650; }
   .d-editbar .keys { color: var(--d-text-2); margin-inline-end: auto; }
 
+  /* the cockpit template (layout "template": "cockpit/1", shell.js mountCockpit; J-second-attempt.md section 2): a frame
+     that fills the viewport and never scrolls. Slots: band (the status header), stage (the picture, 4:3 of the height
+     left by band and strip, never wider than the rail allows), strip (cells under the picture), rail (the command
+     column; two columns on a wide window), phoneTabs (under the picture on a phone). A slot with nothing in it is not
+     built, so its neighbours take the room. Nothing in a slot has a content-driven height. */
+  .d-shell[data-template="cockpit"] { --c-band: 44px; --c-gap: 8px; --c-strip: 112px; --c-railmin: 400px; display: grid; grid-template-rows: var(--c-band) minmax(0, 1fr);
+    gap: 0; padding: 0; block-size: 100dvh; min-block-size: 0; overflow: hidden; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 84px; }
+  .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
+  .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { grid-template-rows: 36px minmax(0, 1fr); align-content: start; row-gap: 0; }
+  .d-shell[data-template="cockpit"] > .d-band-status { position: static; box-sizing: border-box; block-size: var(--c-band); padding-block: 0; } /* not clipped: the "..." menu opens out of it; .d-band-main clips the sentence */
+  .d-shell[data-template="cockpit"] > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status .d-band-main { flex-wrap: wrap; }
+  .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
+  .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
+  .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
+  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
+    --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
+    display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
+    grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "s"; }
+  .d-main[data-template="cockpit"] > :not([data-cockpit-slot], .d-ckdiv) { display: none; }
+  .d-main[data-template="cockpit"][data-has*="t"] { --c-stageh: calc(var(--c-fh) - var(--c-strip) - var(--c-gap)); }
+  .d-main[data-template="cockpit"][data-has="str"] { grid-template-columns: var(--c-left) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) var(--c-strip); grid-template-areas: "s r" "t r"; }
+  .d-main[data-template="cockpit"][data-has="sr"] { grid-template-columns: var(--c-left) minmax(0, 1fr); grid-template-areas: "s r"; }
+  .d-main[data-template="cockpit"][data-has="st"] { grid-template-rows: minmax(0, 1fr) var(--c-strip); grid-template-areas: "s" "t"; }
+  .d-main[data-template="cockpit"][data-has="tr"] { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "t r"; }
+  .d-main[data-template="cockpit"][data-has="t"] { grid-template-areas: "t"; }
+  .d-main[data-template="cockpit"][data-has="r"] { grid-template-areas: "r"; }
+  .d-main[data-template="cockpit"][data-has="sp"] { grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "s" "p"; }
+  .d-main[data-template="cockpit"][data-cmode="phone"] { grid-template-columns: minmax(0, 1fr); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot] { min-inline-size: 0; min-block-size: 0; overflow: hidden; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="stage"] { grid-area: s; container: stage / size; display: grid; place-items: center; background: var(--d-video-bg); border-radius: var(--d-r-2); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="stage"] > .d-panel { inline-size: min(100cqw, calc(100cqh * 4 / 3)); aspect-ratio: 4 / 3; position: relative; }
+  .d-main[data-template="cockpit"][data-has="sp"] > [data-cockpit-slot="stage"] { aspect-ratio: 4 / 3; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="strip"] { grid-area: t; display: flex; gap: var(--c-gap); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"] { grid-area: r; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: var(--c-gap); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"][data-cols="2"] { grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr); }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="rail"][data-top]:not([data-cols="0"]) { grid-template-rows: fit-content(40%) minmax(0, 1fr); } /* the top panels take what they need, at most 40 % of the rail */
+  .d-slottop { grid-column: 1 / -1; }
+  .d-slotcol.d-slottop > .d-panel:not([data-grow]) { max-block-size: none; }
+  .d-main[data-template="cockpit"] > [data-cockpit-slot="phoneTabs"] { grid-area: p; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: var(--c-gap); }
+  .d-slotcol { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; min-inline-size: 0; }
+  .d-slotcol > .d-panel, .d-slottabs > .d-panel { flex: 0 1 auto; min-block-size: 0; }
+  .d-slotcol > .d-panel:not([data-grow]), .d-slottabs > .d-panel:not([data-grow]) { max-block-size: 50%; } /* a panel that is not the last takes at most half the column: its list scrolls inside */
+  .d-slotcol > .d-panel[data-grow], .d-slottabs > .d-panel[data-grow] { flex: 1 1 0; }
+  [data-cockpit-slot="strip"] > .d-panel { flex: 1 1 0; min-block-size: 0; }
+  [data-cockpit-slot="strip"] > .d-panel:nth-child(2) { flex-grow: 1.25; }
+  [data-cockpit-slot="strip"] > .d-panel:nth-child(3) { flex-grow: 1.1; }
+  .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; }
+  .d-slottabs { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; }
+  .d-tabbar { display: flex; gap: var(--d-sp-1); }
+  .d-tabbar > .d-btn { flex: 1 1 0; }
+  .d-tabbar > .d-btn[aria-selected="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
+  /* a slot panel is bare: its picture or content fills the box, and its title bar actions are two small labels on the edge */
+  .d-panel[data-cockpit-panel] > .d-slotbody { block-size: 100%; min-block-size: 0; }
+  .d-panel[data-cockpit-panel] > .d-slotlabels { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; z-index: 2;
+    font-size: var(--d-fs-0); color: var(--d-video-text); }
+  .d-panel[data-cockpit-panel] > .d-slotlabels:not(:has(*)) { display: none; }
+  .d-panel[data-cockpit-panel] > .d-slotlabels .meta:empty { display: none; }
+
+  /* cockpit editor (layoutedit.js startCockpit): a handle on each tile, two dividers */
+  .d-main[data-editing-cockpit] [data-cockpit-panel] { position: relative; outline: 1px dashed var(--d-line-strong); outline-offset: -2px; cursor: grab; }
+  .d-main[data-editing-cockpit] [data-cockpit-panel][data-ckdrop] { outline: 2px solid var(--d-accent); }
+  .d-main[data-editing-cockpit] [data-cockpit-panel][data-ckdrag] { opacity: .6; }
+  .d-cktag { position: absolute; inset-block-start: 0; inset-inline-start: 0; z-index: 4; display: flex; gap: var(--d-sp-1); align-items: center; padding: 1px var(--d-sp-1);
+    background: var(--d-surface-3); border-end-end-radius: var(--d-r-2); font-size: var(--d-fs-0); color: var(--d-text-2); pointer-events: auto; }
+  .d-cktag select { font: inherit; max-inline-size: 11rem; }
+  .d-cktag > span { cursor: grab; }
+  .d-ckdiv { position: absolute; inset-inline-start: var(--ck-l, 0); inset-block-start: var(--ck-t, 0); z-index: 5; background: var(--d-accent); opacity: .55; touch-action: none; }
+  .d-ckdiv:hover, .d-ckdiv[data-drag] { opacity: 1; }
+  .d-ckdiv[data-axis="y"] { inline-size: var(--ck-w, 0); block-size: 6px; cursor: row-resize; }
+  .d-ckdiv[data-axis="x"] { block-size: var(--ck-h, 0); inline-size: 6px; cursor: col-resize; }
+
   /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
   .d-menu { position: relative; }
   .d-menu-pop { position: absolute; inset-block-start: 100%; inset-inline-end: 0; z-index: var(--d-z-sheet); display: grid; gap: var(--d-sp-1); min-inline-size: 14rem; padding: var(--d-sp-2);

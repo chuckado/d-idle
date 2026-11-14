@@ -383,7 +383,9 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
-	OptIn       bool    `json:"optIn"` // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	OptIn       bool    `json:"optIn"`  // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	Slot        bool    `json:"slot"`   // renders into a fixed box and may sit in a cockpit slot (S1b)
+	Scroll      bool    `json:"scroll"` // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`
@@ -413,7 +415,7 @@ func (l *Linter) lintManifests(files []string) {
 	ladder := l.ladderIDs()
 	seen := map[string]string{}
 	prio := map[string]map[int]string{}
-	dirs := map[string]bool{}
+	dirs, slots := map[string]bool{}, map[string]bool{}
 	for _, f := range files {
 		id := panelOf(f)
 		dirs[id] = true
@@ -454,6 +456,10 @@ func (l *Linter) lintManifests(files []string) {
 			l.add(f, 1, "manifest-id", "id %q also in %s", m.ID, other)
 		}
 		seen[m.ID] = f
+		slots[m.ID] = m.Slot
+		if m.Scroll && !m.Slot {
+			l.add(f, 1, "manifest-schema", "scroll: true on a panel that is not a slot panel")
+		}
 		lo, sz, hi := sizes[m.MinSize], sizes[m.Size], sizes[m.MaxSize]
 		if m.MinSize == "" {
 			lo = sz
@@ -517,16 +523,27 @@ func (l *Linter) lintManifests(files []string) {
 			l.add("panels/"+e.Name(), 0, "manifest-orphan", "panel directory without panel.json")
 		}
 	}
-	l.lintLayouts(shell.Layout, dirs)
+	l.lintLayouts(shell.Layout, dirs, slots)
 }
 
 // lintLayouts checks layout.json and layouts/*.json (watch.layout/1, docs/ui-design-system.md section 6.4): the file
 // parses, every id is a panel, an alias, a compat card or a reserved id of shell.json, nothing overlaps within a
-// breakpoint, spans stay inside the columns, order is unique.
-func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
+// breakpoint, spans stay inside the columns, order is unique; a cockpit file (template cockpit/1) names only known slots
+// and only panels that fit one.
+func (l *Linter) lintLayouts(c watch.LayoutConf, panels, slots map[string]bool) {
 	known := func(id string) bool {
 		_, alias := c.Aliases[id]
 		return panels[id] || alias || contains(c.Compat, id) || contains(c.Reserved, id)
+	}
+	// a cockpit slot takes a panel that fits one (manifest slot: true, or listed in shell.json "slot" until its manifest says so),
+	// or an id that is not built yet (reserved); never a card of the old page, an alias, or a panel that is not for slots
+	slotOK := func(id string) bool {
+		return slots[id] || contains(c.Slot, id) && panels[id] || !panels[id] && contains(c.Reserved, id)
+	}
+	for _, id := range c.Slot {
+		if !panels[id] {
+			l.add("shell.json", 1, "layout-slot", "slot panel %s is not a panel", id)
+		}
 	}
 	for a, to := range c.Aliases {
 		if !panels[to] && !contains(c.Compat, to) {
@@ -545,6 +562,9 @@ func (l *Linter) lintLayouts(c watch.LayoutConf, panels map[string]bool) {
 		m, err := watch.ParseLayout(b)
 		if err == nil {
 			err = m.Check(known)
+		}
+		if err == nil {
+			err = m.CheckSlots(slotOK)
 		}
 		if err == nil {
 			err = checkFallbacks(m, c, panels)

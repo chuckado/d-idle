@@ -148,7 +148,8 @@ export function withShadows(saved, original) {
 // ---- which panels the shell mounts ----
 export const PRESETS = ['classic', 'simple', 'standard', 'stream', 'debug'];
 
-// The ids a layout names on any breakpoint (placed, not hidden) and in its status list.
+// The ids a layout names on any breakpoint (placed, not hidden) and in its status list. A cockpit's slot ids are not here: the
+// cockpit mounts its own (selectPanels), and the OBS strip under a cockpit mounts what it mounts under any layout.
 function named(layout) {
   const ids = new Set();
   for (const bp of Object.values((layout && layout.breakpoints) || {})) {
@@ -176,6 +177,7 @@ export function statusIds(layout, list) {
 // selectPanels(list, layout): the manifests the shell mounts. An optIn panel only when the layout in force names it;
 // with a `status` key (not in overlay mode), only the status-band panels it chooses. Without a layout nothing optIn is mounted.
 export function selectPanels(list, layout, mode) {
+  if (isCockpit(layout) && mode !== 'overlay') { const c = cockpitIds(layout); return list.filter((m) => m.slot && c.has(m.id)); } // no old tile in a cockpit
   const names = named(layout), status = mode === 'overlay' ? null : statusIds(layout, list); // the OBS strip keeps the page's own band
   return list.filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
 }
@@ -258,4 +260,104 @@ export function contentHeight(n, cs) {
   }
   if (!any) return 0;
   return bottom - top + (parseFloat(cs.paddingBottom) || 0) + (parseFloat(cs.borderBottomWidth) || 0);
+}
+
+// ---- the cockpit template (cockpit/1; docs/ui/redesign-2026-11-14/J-second-attempt.md section 3) ----
+// A cockpit layout names panels per slot instead of cells of a grid. Everything here is pure; the shell (shell.js)
+// puts the panels into the slot elements and shell.css does the geometry.
+export const COCKPIT = 'cockpit/1';
+export const COCKPIT_WIDE = 1700;  // from this width the rail is two columns (railWide)
+export const COCKPIT_PHONE = 700;  // under this width: band, picture, tabs
+export const COCKPIT_SHORT = 760;  // under this height (not on a phone) the strip is at most 92 px (the renders)
+export const STRIP_SHORT = 92;
+export const COCKPIT_LIMITS = { strip: [48, 240], railMin: [240, 800] };
+const COCKPIT_DEFAULTS = { strip: 112, railMin: 400 };
+const idList = (v) => (Array.isArray(v) ? v : typeof v === 'string' ? [v] : []).filter((s) => typeof s === 'string' && s);
+
+export function isCockpit(layout) {
+  return !!layout && layout.schema === 'watch.layout/1' && layout.template === COCKPIT && !!layout.slots && idList(layout.slots.stage).length === 1;
+}
+
+// The pools of a cockpit's slots: [name, array] pairs (the arrays are the layout's own, so a copy can edit them).
+function pools(slots) {
+  const out = [['band', slots.band], ['stage', slots.stage], ['strip', slots.strip], ['rail', slots.rail]];
+  if (slots.railWide) out.push(['railWide.top', slots.railWide.top], ['railWide.left', slots.railWide.left], ['railWide.right', slots.railWide.right]);
+  for (const n of Object.keys(slots.phoneTabs || {})) out.push(['phoneTabs.' + n, slots.phoneTabs[n]]);
+  return out;
+}
+
+// Every panel id the cockpit names, in any arrangement.
+export function cockpitIds(layout) {
+  const out = new Set();
+  if (!isCockpit(layout)) return out;
+  for (const [, v] of pools(layout.slots)) idList(v).forEach((id) => out.add(id));
+  return out;
+}
+
+export function cockpitMode(width, mode) {
+  if (mode === 'overlay') return '';
+  return width < COCKPIT_PHONE ? 'phone' : width >= COCKPIT_WIDE ? 'wide' : 'page';
+}
+
+export function cockpitSizes(layout) {
+  const z = (layout && layout.sizes) || {}, out = {};
+  for (const k of Object.keys(COCKPIT_DEFAULTS)) {
+    const [lo, hi] = COCKPIT_LIMITS[k], v = z[k] | 0;
+    out[k] = v ? Math.max(lo, Math.min(hi, v)) : COCKPIT_DEFAULTS[k];
+  }
+  return out;
+}
+
+// cockpitPlan(layout, width, mode, mounted, height): where each mounted panel goes. mounted(id) says a slot panel of that id
+// is on the page; a name that is not mounted (not built yet, not a slot panel) is left out and its neighbours take the
+// room (no stand-in tile). -> null when the layout is no cockpit or the mode is overlay, else
+// { mode, band, stage, strip, top, rail: [[ids]], tabs: [{name, ids}], sizes, has, left }
+// rail is one column, or on a wide page the two columns of railWide (left 1.7 parts, right 1) under top, which spans both
+// (the accepted renders: Needs you and Orders across, the two maps side by side under them). has is the letters of the
+// slots that hold something ('s' stage, 't' strip, 'r' rail, 'p' phone tabs) for the CSS; left are the ids the layout
+// names that are not mounted. height (the window's, optional) shortens the strip on a short window.
+export function cockpitPlan(layout, width, mode, mounted, height) {
+  const m = cockpitMode(width, mode);
+  if (!m || !isCockpit(layout)) return null;
+  const sl = layout.slots, left = [], keep = (v) => idList(v).filter((id) => (mounted(id) ? true : (left.push(id), false)));
+  const band = keep(sl.band), stage = keep(sl.stage)[0] || '';
+  let strip = [], rail = [], top = [], tabs = [];
+  if (m === 'phone') {
+    tabs = Object.keys(sl.phoneTabs || {}).map((name) => ({ name, ids: keep(sl.phoneTabs[name]) })).filter((t) => t.ids.length);
+  } else {
+    strip = keep(sl.strip);
+    if (m === 'wide' && sl.railWide) {
+      top = keep(sl.railWide.top);
+      rail = [keep(sl.railWide.left), keep(sl.railWide.right)].filter((c) => c.length);
+    } else rail = [keep(sl.rail)].filter((c) => c.length);
+  }
+  const sizes = cockpitSizes(layout);
+  if (m !== 'phone' && height > 0 && height < COCKPIT_SHORT) sizes.strip = Math.min(sizes.strip, STRIP_SHORT);
+  const has = (stage ? 's' : '') + (strip.length ? 't' : '') + (top.length || rail.length ? 'r' : '') + (tabs.length ? 'p' : '');
+  return { mode: m, band, stage, strip, top, rail, tabs, sizes, has, left };
+}
+
+// cockpitSwap(layout, a, b): a copy of the layout with the panels a and b exchanged wherever they stand (every
+// arrangement: page, wide, phone tabs). When b is not in the layout, a is replaced by b. Same id twice: unchanged.
+export function cockpitSwap(layout, a, b) {
+  const out = JSON.parse(JSON.stringify(layout));
+  if (!isCockpit(out) || a === b) return out;
+  const sw = (id) => (id === a ? b : id === b ? a : id);
+  const s = out.slots;
+  for (const k of ['band', 'stage', 'strip', 'rail']) if (s[k] !== undefined) s[k] = Array.isArray(s[k]) ? s[k].map(sw) : sw(s[k]);
+  if (s.railWide) for (const k of ['top', 'left', 'right']) if (s.railWide[k] !== undefined) s.railWide[k] = idList(s.railWide[k]).map(sw);
+  for (const n of Object.keys(s.phoneTabs || {})) s.phoneTabs[n] = idList(s.phoneTabs[n]).map(sw);
+  return out;
+}
+
+// cockpitSize(layout, {strip, railMin}): a copy with the sizes the editor's dividers set, inside the limits.
+export function cockpitSize(layout, want) {
+  const out = JSON.parse(JSON.stringify(layout));
+  out.sizes = Object.assign({}, cockpitSizes(layout), out.sizes || {});
+  for (const k of Object.keys(COCKPIT_LIMITS)) {
+    if (want[k] === undefined) continue;
+    const [lo, hi] = COCKPIT_LIMITS[k];
+    out.sizes[k] = Math.max(lo, Math.min(hi, Math.round(want[k])));
+  }
+  return out;
 }

@@ -242,8 +242,42 @@ func TestLayoutManifestRules(t *testing.T) {
 			t.Errorf("%s: findings %v, want %q", c.name, got, c.rule)
 		}
 	}
-	// a manifest may carry optIn (and only a boolean)
+	// the cockpit template: slots take slot panels (or ids not built yet), only known slot names, sizes in range
+	ck := func(slots, extra string) string {
+		return `{"schema":"watch.layout/1","cols":12,"rowHeight":48,"template":"cockpit/1","slots":` + slots + `,"breakpoints":{}` + extra + `}`
+	}
+	ckShell := `{"status":[],"stage":[],"layout":{"aliases":{},"compat":["now"],"reserved":["later","later2","later3"],"slot":["probe"]}}`
+	for _, c := range []struct{ name, body, rule string }{
+		{"cockpit good", ck(`{"band":["later"],"stage":"probe","strip":["later2"],"rail":["later3"],"railWide":{"left":["later3"],"right":[]},"phoneTabs":{"A":["later"],"B":["later2"]}}`, `,"sizes":{"strip":112,"railMin":400}`), ""},
+		{"cockpit unknown slot", ck(`{"stage":"probe","side":["later"]}`, ""), "layout-manifest"},
+		{"cockpit card in a slot", ck(`{"stage":"probe","rail":["now"]}`, ""), "layout-manifest"},
+		{"cockpit unknown panel", ck(`{"stage":"probe","rail":["nope"]}`, ""), "layout-manifest"},
+		{"cockpit panel twice", ck(`{"stage":"probe","rail":["later","later"]}`, ""), "layout-manifest"},
+		{"cockpit no stage", ck(`{"rail":["later"]}`, ""), "layout-manifest"},
+		{"cockpit sizes", ck(`{"stage":"probe"}`, `,"sizes":{"strip":900}`), "layout-manifest"},
+		{"unknown template", strings.Replace(ck(`{"stage":"probe"}`, ""), "cockpit/1", "cockpit/9", 1), "layout-manifest"},
+	} {
+		files := good()
+		files["shell.json"] = ckShell
+		files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","slot":true`, 1)
+		files["layouts/ck.json"] = c.body
+		var got []string
+		for _, f := range run(t, files) {
+			got = append(got, f.Rule+": "+f.Msg)
+		}
+		if c.rule == "" && len(got) != 0 || c.rule != "" && (len(got) != 1 || !strings.HasPrefix(got[0], c.rule)) {
+			t.Errorf("%s: findings %v, want %q", c.name, got, c.rule)
+		}
+	}
+	// a panel that is not a slot panel cannot stand in a slot, even when the id exists
 	files := good()
+	files["shell.json"] = `{"status":[],"stage":[],"layout":{"aliases":{},"compat":[],"reserved":[]}}`
+	files["layouts/ck.json"] = ck(`{"stage":"probe"}`, "")
+	if fs := run(t, files); len(fs) != 1 || fs[0].Rule != "layout-manifest" {
+		t.Errorf("a non-slot panel in a slot: %v", fs)
+	}
+	// a manifest may carry optIn (and only a boolean)
+	files = good()
 	files["panels/probe/panel.json"] = strings.Replace(goodManifest, `"unlock":""`, `"unlock":"","optIn":true`, 1)
 	if fs := run(t, files); len(fs) != 0 {
 		t.Errorf("optIn: %v", fs)
