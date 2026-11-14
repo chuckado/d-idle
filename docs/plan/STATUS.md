@@ -147,6 +147,7 @@
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
+| prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
 | drillzip | proposed | - | `docs/probes/drill-zip-2026-11-14.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
@@ -197,6 +198,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ce23b781 11-14 10:54 `Merge agent/prpipeline: Merge branch 'main' into TASK-422` (prpipeline)
+- 52867423 11-14 10:53 `Merge branch 'main' into TASK-422` (-)
 - 03a655a5 11-14 10:49 `Merge agent/drillzip: Merge branch 'main' into TASK-423` (drillzip)
 - 32839f42 11-14 10:47 `Merge branch 'main' into TASK-423` (-)
 - 79b5bf3c 11-14 10:40 `Merge agent/lootrules: Merge branch 'main' into TASK-421` (lootrules)
@@ -205,6 +208,4 @@
 - 2603bc1f 11-14 10:37 `Merge branch 'main' into TASK-419` (-)
 - 8ab1739b 11-14 10:36 `Merge agent/decomp19: boss1: queue result line at end` (decomp19)
 - b63436bc 11-14 10:35 `Merge origin/main into agent/uidesign2` (-)
-- 0c212829 11-14 10:34 `Merge remote-tracking branch 'origin/main' into agent/decomp19` (-)
-- 79ee6ca6 11-14 10:22 `Merge agent/stashanywhere: stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14)` (stashanywhere)
 <!-- statusgen:end -->
