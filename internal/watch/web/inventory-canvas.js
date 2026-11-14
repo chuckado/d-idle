@@ -274,7 +274,7 @@
       var mr = hardReasons(m), p2 = el('p', '', m.ok ? 'He can use it' : 'He: ' + (mr.length ? mr[0].text : 'no')); p2.dataset.tone = m.ok ? 'good' : 'bad'; why.appendChild(p2);
     }
     if (it.why) why.appendChild(el('p', '', 'Why: ' + it.why));
-    if ((it.props || []).length) why.appendChild(el('p', '', it.props.slice(0, 2).join(', ')));
+    (it.props || []).slice(0, 12).forEach(function (x) { var q = el('p', '', x); q.title = x; q.dataset.tone = 'prop'; why.appendChild(q); });
     box.appendChild(why);
     var acts = el('div', 'cv-acts'), a = api();
     if (a) actions(f).forEach(function (e) {
@@ -288,6 +288,8 @@
   }
   // a list that does not fit its box loses its tail, never scrolls; the action buttons end with More, which opens the full menu
   function fitActs() {
+    var wy = document.querySelector && document.querySelector('#cv-sel .cv-why');
+    if (wy && wy.clientHeight) while (wy.children.length > 1 && wy.scrollHeight > wy.clientHeight + 1) wy.removeChild(wy.lastChild);
     var acts = document.querySelector && document.querySelector('#cv-sel .cv-acts');
     if (!acts || !acts.clientHeight || acts.dataset.fit) return;
     var cut = 0;

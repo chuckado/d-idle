@@ -43,3 +43,9 @@ div [data-canvas=]
       div []
         label [] "Dexterity"
         b [] "50"
+      div []
+        label [] "Gear"
+        b [] "1 of 4 worn"
+      div []
+        label [] "Kind"
+        b [] "Mercenary"

@@ -145,6 +145,8 @@
     sh.appendChild(tile('Level', m.level || '-'));
     sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
     sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));
+    var worn = legal.filter(function (k) { return m.equipment && m.equipment[k]; }).length;
+    sh.appendChild(tile('Gear', worn + ' of ' + legal.length + ' worn')); sh.appendChild(tile('Kind', kindName(m)));
     body.appendChild(sh);
     host.appendChild(body);
   }

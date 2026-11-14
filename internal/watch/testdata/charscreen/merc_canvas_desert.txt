@@ -42,3 +42,9 @@ div [data-canvas=]
       div []
         label [] "Dexterity"
         b [] "50"
+      div []
+        label [] "Gear"
+        b [] "2 of 3 worn"
+      div []
+        label [] "Kind"
+        b [] "Desert Guard"
