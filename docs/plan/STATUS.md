@@ -144,6 +144,7 @@
 | areamon | proposed | - | `docs/research/areamon-trace.md`<br>`tools/emu/am_env.sh`<br>`tools/emu/am_batch.sh`<br>`tools/emu/am_model.py`<br>`docs/research/areamon-table.csv` | - |
 | levelsim | proposed | - | `tools/levelsim/`<br>`docs/levelsim.md` | - |
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
+| stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
@@ -193,6 +194,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 79ee6ca6 11-14 10:22 `Merge agent/stashanywhere: stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14)` (stashanywhere)
 - 0f30f7b7 11-14 10:04 `Merge agent/prswing2: Merge branch 'main' into TASK-417` (prswing2)
 - f1fa760c 11-14 10:03 `Merge branch 'main' into TASK-417` (-)
 - 43570602 11-14 09:45 `Merge agent/uidesign: Merge branch 'main' into TASK-416` (uidesign)
@@ -202,5 +204,4 @@
 - 8d267964 11-14 08:41 `Merge agent/prswing: Merge branch 'main' into TASK-411` (prswing)
 - e598cb20 11-14 08:41 `Merge branch 'main' into TASK-411` (-)
 - 59be438e 11-14 07:58 `Merge agent/decomp18: Merge branch 'main' into TASK-408` (decomp18)
-- 600bb6e5 11-14 07:57 `Merge branch 'main' into TASK-408` (-)
 <!-- statusgen:end -->

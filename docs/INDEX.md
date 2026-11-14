@@ -538,6 +538,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [G-build-plan.md](ui/redesign-2026-11-14/G-build-plan.md): G. Build plan: slices for Sonnet workers (status: proposal (TASK-416, 2026-11-14). No slice starts before the user has reviewed the design and answered the...)
 - [H-open-questions.md](ui/redesign-2026-11-14/H-open-questions.md): H. Open questions for the user (status: waiting for answers (TASK-416, 2026-11-14). Each can be answered in a word. The recommendation is what the...)
 - [redesign-2026-11-14/README.md](ui/redesign-2026-11-14/README.md): Watch UI redesign, design phase (2026-11-14) (status: design proposal for the user's review (TASK-416, branch `agent/uidesign`). Nothing is built; no file under...)
+- [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
 - [unlock-alerts.md](unlock-alerts.md): Alerts and pings (TASK-162, unlockalerts)
 - [unlock-atlas.md](unlock-atlas.md): Waypoint atlas (TASK-160, unlockatlas)
 - [unlock-bestiary.md](unlock-bestiary.md): Cain's notes, the bestiary (TASK-158, unlockbestiary)
