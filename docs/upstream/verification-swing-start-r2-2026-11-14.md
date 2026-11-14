@@ -50,7 +50,7 @@ The game side, per cell, applies game.exe's held-weapon rule to the flags d2d ac
 
 | Cells (78,172 printed; 3,520 have no record and are skipped) | n | parent differ | r2 differ |
 |---|---|---|---|
-| reachable (wearable gear, a usable skill, single swing) | 51,056 | **18,064** | **0** |
+| reachable (wearable gear, a usable skill, single swing) | 51,056 | **18,064** (r1: 5,940) | **0** |
 | of which Amazon / Sorceress | 11,152 | 9,216 | 0 |
 | of which the other five classes | 39,904 | 8,848 | 0 |
 | of which the right hand broken or requirement-short | 28,734 | 10,326 | 0 |
@@ -59,7 +59,7 @@ The game side, per cell, applies game.exe's held-weapon rule to the flags d2d ac
 | wereform skills in human form, passives (unreachable in play) | 10,560 | 5,916 | 0 |
 | chains: Zeal, Fury, Dragon Talon (the probe times the whole chain against one swing) | 5,276 | 5,000 | 4,976 |
 
-The chain rows are a probe artefact on both trees (for example, Zeal ends at 30 ticks in d2d against one 10-tick swing in game.exe). Zeal's per-hit gaps are covered by `test_zeal_chain` (passes on both trees, V run) and by the author's `zg_grid.py` (draft, not re-run here). The r1 run of this grid is in progress at the time of writing; see the addendum.
+The chain rows are a probe artefact on both trees (for example, Zeal ends at 30 ticks in d2d against one 10-tick swing in game.exe). Zeal's per-hit gaps are covered by `test_zeal_chain` (passes on both trees, V run) and by the author's `zg_grid.py` (draft, not re-run here). On r1 (pass one's `build-pv5-c`, same probe and oracle) **5,940** of the 51,056 reachable cells differ, all of them Amazon (5,117) or Sorceress (823) cells with a broken or requirement-short item in hand: the grid sees exactly the defect edit 1 fixed, and r2 removes all of it.
 
 **The author's exclusion (V run, `pv5/cmp-r2s.txt` re-counted).** Every difference except Jab is in an Amazon or Sorceress cell holding gear d2d's `can_wear` refuses that class: Amazon with ob1/wrb/skr, Sorceress with am1/am3/am5/wrb/skr. That is 630 cells, all within those 660 class-restricted cells; the other 19,140 cells have 0 differences. The new probe's `W` lines list `can_wear` for every weapon and class. The refused set is exactly: the Amazon's am* items for every other class, the Sorceress's orbs (ob*) for every other class, and claws (katars) for every class but the Assassin. With the flags read the way the new oracle reads them, those cells also give 0 differences on r2. Whether game.exe's `FUN_0055dbc0` flags such an item is S (d2d's model). It does not matter here, since neither side can equip one.
 
