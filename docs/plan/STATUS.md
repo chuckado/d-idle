@@ -203,6 +203,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2e1e899cd 11-14 16:23 `Merge agent/decomp21: Merge branch 'main' into decomp21` (decomp21)
+- e7e48309b 11-14 16:23 `Merge branch 'main' into decomp21` (-)
 - 5637441d3 11-14 16:21 `Merge agent/buildhosts3: Merge branch 'main' into buildhosts3` (buildhosts3)
 - 6c748cb09 11-14 16:20 `Merge branch 'main' into buildhosts3` (-)
 - 0c5f3ec8d 11-14 15:50 `Merge agent/uidesign4: uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated` (uidesign4)
@@ -211,6 +213,4 @@
 - dc98d13a2 11-14 12:55 `Merge branch 'main' into TASK-427` (-)
 - f89e59de0 11-14 12:47 `Merge agent/uis1: Merge branch 'main' into TASK-424` (uis1)
 - f9d97a3c5 11-14 12:47 `Merge branch 'main' into TASK-424` (-)
-- 8a1cef253 11-14 12:45 `Merge origin/main into uib8 (C1 keeps schema 8, this card is 9)` (-)
-- 4a6d8d36f 11-14 12:41 `Merge agent/uib7: Merge branch 'main' into TASK-425` (uib7)
 <!-- statusgen:end -->
