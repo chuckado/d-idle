@@ -590,6 +590,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
 - [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
 
+`ui/redesign-2026-11-14/reviews/`
+
+- [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+
 `ui/redesign-2026-11-14/`
 
 - [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
@@ -641,6 +645,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
+- [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)

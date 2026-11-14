@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into emurun <!--sg:agent/emurun-->
+- Merge branch 'main' into TASK-447 <!--sg:agent/uis1breview-->
+- Merge branch 'main' into TASK-444 <!--sg:agent/verifyp03p05-->
 - Merge branch 'main' into TASK-439 <!--sg:agent/uib2-->
 - friends 0.1.2: installer fix, pack and set staged, drills pending <!--sg:agent/cut012-->
 - Merge branch 'main' into decomp21 <!--sg:agent/decomp21-->

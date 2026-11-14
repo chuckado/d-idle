@@ -272,6 +272,7 @@ docs/research/boss1-trace.md  credit-runner  boss1
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
+docs/research/emu-runs-2026-11-14.md  credit-runner  emurun
 docs/research/fid-poisonres-trace.md  credit-runner  fid-poison-res-diag
 docs/research/fidelity-vendor-probe.md  live-agent  fidprobe-vendor
 docs/research/mocks/return.html  credit-runner  returnmock
@@ -299,6 +300,7 @@ docs/tester-licence.md  credit-runner  testerlicence
 docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
+docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
 docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
@@ -308,6 +310,7 @@ docs/upstream/  credit-runner  prprep
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
 docs/upstream/pr-queue.md  credit-runner  prpipeline
+docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -650,8 +653,12 @@ tools/emu  credit-runner  emurebuild
 tools/emu/am_batch.sh  credit-runner  areamon
 tools/emu/am_env.sh  credit-runner  areamon
 tools/emu/am_model.py  credit-runner  areamon
+tools/emu/block_len.py  credit-runner  emurun
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
+tools/emu/emurun_block.sh  credit-runner  emurun
+tools/emu/emurun_gold.sh  credit-runner  emurun
+tools/emu/fl_gold.py  credit-runner  emurun
 tools/emu/pm_*  credit-runner  palskill-matrix
 tools/emu/pp_*  credit-runner  prpost
 tools/emu/pp_*  credit-runner  prpost2
