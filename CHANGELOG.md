@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- buildhosts: scrub machine names for leakcheck <!--sg:agent/buildhosts-->
+- Merge branch 'main' into TASK-430 <!--sg:agent/survivaldesign-->
+- Merge branch 'main' into TASK-429 <!--sg:agent/prswing3-->
+- Merge branch 'main' into TASK-418 <!--sg:agent/prverify6-->
+- Merge branch 'main' into TASK-422 <!--sg:agent/prpipeline-->
+- Merge branch 'main' into TASK-423 <!--sg:agent/drillzip-->
 - Merge branch 'main' into TASK-421 <!--sg:agent/lootrules-->
 - Merge branch 'main' into TASK-419 <!--sg:agent/uidesign2-->
 - boss1: queue result line at end <!--sg:agent/decomp19-->
