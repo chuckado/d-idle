@@ -167,6 +167,9 @@ cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
+cmd/d2bot/mercplayer.go  credit-runner  botmerc
+cmd/d2bot/mercplayer_test.go  credit-runner  botmerc
+cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
@@ -241,6 +244,7 @@ docs/live-checks.md  credit-runner  repairtrip
 docs/locks.md  credit-runner  lockscan
 docs/loop-order.md  credit-runner  uib7
 docs/lootrules.md  credit-runner  lootrules
+docs/merc-revive.md  credit-runner  botmerc
 docs/mercrevive.md  credit-runner  mercrevive2
 docs/onboarding-tour.md  credit-runner  onboardtour
 docs/onboarding.md  credit-runner  firstminutes
@@ -474,6 +478,8 @@ internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/lootskip_test.go  credit-runner  beltfix
 internal/lootrules/**  credit-runner  lootrules
 internal/merc  credit-runner  mercrevive2
+internal/merc/playerrevive.go  credit-runner  botmerc
+internal/merc/playerrevive_test.go  credit-runner  botmerc
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
@@ -551,6 +557,8 @@ internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
 internal/watch/layout.go  credit-runner  uis1
 internal/watch/layout_test.go  credit-runner  uis1
+internal/watch/mercapi.go  credit-runner  botmerc
+internal/watch/mercapi_test.go  credit-runner  botmerc
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
 internal/watch/nopins_test.go  credit-runner  nopins
 internal/watch/onboarding.go  credit-runner  firstminutes

@@ -412,6 +412,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
 - [lootskip.md](lootskip.md): LOOTSKIP: why ground potions were left (card lootskip) (status: current. Source: container log of the sandbox soak (Paladin clvl 10 to 14, build 0.0.261110171517),...)
 - [merc-farm.md](merc-farm.md): Mercenaries and post-campaign farming (research, MERCRESEARCH, 2026-10-29) (status: ARCHIVED 2026-10-31 (doctrim): superseded by docs/merc.md, docs/merc-wire.md, docs/sme/mercenary.md and...)
+- [merc-revive.md](merc-revive.md): Revive mercenary as a player command (card botmerc, API watch.merc/1) (status: built offline, NOT verified live (2026-11-14). Design: `docs/ui/redesign-2026-11-14/C-orders.md`...)
 - [merc-wire.md](merc-wire.md): Merc wiring (agent MERCWIRE)
 - [merc.md](merc.md): Mercenary policy (internal/merc)
 - [merchire.md](merchire.md): merchire: drill D8.h, paid hire at the hirer (status: current. Tags: V verified, S secondary, U unverified. Offline only: nothing here ran on the game (not...)

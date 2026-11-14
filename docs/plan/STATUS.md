@@ -157,6 +157,7 @@
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
+| botmerc | proposed | - | `internal/merc/playerrevive.go`<br>`internal/merc/playerrevive_test.go`<br>`internal/watch/mercapi.go`<br>`internal/watch/mercapi_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercplayer.go`<br>`cmd/d2bot/mercplayer_test.go`<br>`docs/merc-revive.md` | - |
 | survA | proposed | - | `internal/danger/`<br>`docs/survival/decisions-2026-11-14.md`<br>`docs/survival/danger.md`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go`<br>`internal/watch/funwire.go` | - |
 | verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
@@ -208,6 +209,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
+- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
 - d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
 - bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
 - aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
@@ -216,6 +219,4 @@
 - 2c22ac044 11-14 17:16 `Merge agent/verifyp03p05: Merge branch 'main' into TASK-444` (verifyp03p05)
 - 6ea97f50a 11-14 17:13 `Merge branch 'main' into TASK-447` (-)
 - bea34b30f 11-14 17:13 `Merge branch 'main' into TASK-444` (-)
-- c238bd787 11-14 17:00 `Merge origin/main into agent/survA` (-)
-- 0de905134 11-14 16:51 `Merge agent/uib2: Merge branch 'main' into TASK-439` (uib2)
 <!-- statusgen:end -->
