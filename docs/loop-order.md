@@ -54,3 +54,8 @@ For `/api/commands` (S4): `OrderLoop.Command()` returns one row `{id: "loop:1", 
 5. Start a loop and give a zone order with Go now: loop `cancelled`. Start one and Stop: order cancelled.
 6. Three finished rounds in all: the queue row opens.
 7. Kill the bot during a round, restart: the loop resumes at the start of the round.
+
+## Gates still open (worker host paused by the coordinator 2026-11-14)
+
+Run from inside the worktree after the merge of origin/main, when the worker host is free:
+`labrun orion -- sh -c 'go vet ./... && go test -short -count=1 -p 4 ./... && go test -race -count=1 ./internal/watch/...'`, then `python3 -I tools/contracts/check.py`, `go run ./cmd/leakcheck -mode fail`, `tools/ci/check.sh`, then `~/code/d2lod-ops/tools/mergeq.sh add agent/uib7 --card TASK-425`. Done on herdr: per-package `go vet` and `go test -p 1` of internal/watch, internal/unlock, cmd/d2bot (selected tests).
