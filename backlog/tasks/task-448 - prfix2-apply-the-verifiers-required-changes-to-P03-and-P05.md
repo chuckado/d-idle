@@ -23,7 +23,7 @@ owns:
   - "docs/upstream/pipeline-2026-11-14.md"
 exclusive: []
 contracts: []
-result: "P05 fid/load-gold-clamp-r3 d229705a and P03 fid/hitrec-modes-r2 3264d61d (block length only) verified-ready, not posted; no-restart split to fid/hitrec-norestart-r1 9169146a, BLOCKED on an Orion oracle run. All three pushed to the private fork. d2d tests and differentials V run on the NAS builder; the literal emulator diff against the new heads was not run. Not verified live."
+result: "P05 fid/load-gold-clamp-r3 d229705a and P03 fid/hitrec-modes-r2 3264d61d (block length only) verified-ready, not posted; no-restart split to fid/hitrec-norestart-r1 9169146a, BLOCKED on a worker-host oracle run. All three pushed to the private fork. d2d tests and differentials V run on the NAS builder; the literal emulator diff against the new heads was not run. Not verified live."
 ---
 
 ## Description
@@ -38,6 +38,6 @@ Why: TODO. Done when: TODO.
 <!-- AC:BEGIN -->
 - [x] #1 P05 fork branch fid/load-gold-clamp-r3 has the template body, docs row, exit-1 on an unopened case file with a test, the fresh 539/539 game run cited
 - [x] #2 P03 fork branch fid/hitrec-modes-r2 is block length only: clang-tidy clean, README and docs rows, body sections, fresh game-side proof
-- [x] #3 the no-restart change is on fid/hitrec-norestart-r1, BLOCKED, with the Orion run written down
+- [x] #3 the no-restart change is on fid/hitrec-norestart-r1, BLOCKED, with the worker-host run written down
 - [x] #4 branches pushed to the private fork remote; d2d tests rebuilt and rerun on the builder
 <!-- AC:END -->

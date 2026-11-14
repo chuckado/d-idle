@@ -11,7 +11,7 @@ Branch (private fork remote): `fid/hitrec-norestart-r1`, stacked on `fid/hitrec-
 
 ## The run the worker-host operator must do (not run yet)
 
-Everything on the worker host, the emulator image, one core, `nice -n 10`, started through `tools/agentrun.sh`. No game, no Battle.net. Idle check first: `labrun orion -- top -bn2 -d1`.
+Everything on the worker host, the emulator image, one core, `nice -n 10`, started through `tools/agentrun.sh`. No game, no Battle.net. Idle check first: the standing idle check of the rules.
 
 1. Check the image: `source ~/d2d-lab/emu/env.sh && ls $GAMEEXE` (stop if it is missing; do not rebuild).
 2. Check out `fid/hitrec-norestart-r1` of the private fork (a new worktree) and build the d2d side with the builder recipe of `docs/upstream/offline-decomp21-2026-11-14.md`: `ninja test_hit_recovery`.
