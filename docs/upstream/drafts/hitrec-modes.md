@@ -1,34 +1,31 @@
-# Draft (local, NOT posted): "A player's block holds game.exe's length, and a hit never restarts a get-hit"
+# Draft (local, NOT posted): "A player's block holds game.exe's length"
 
-> status: r1, **ready for the independent verifier, with one open item: the game-side emulator run** (card decomp21, TASK-440, 2026-11-14); not posted. Branch `fid/hitrec-modes-r1` on the private fork remote, head `2cad31d5`, three commits on upstream `f5e11693` (oracle `c7dd8ead`, block claim `5a08affb`, restart claim `2cad31d5`; numeric noreply identity, last line `Agent: Claude Code`). Not stacked on swing-start any more: that PR's content is in upstream main (`379a2916`). Trace: `docs/research/hitrec-trace.md` (branch `agent/decomp20` until merged) Q1, Q3, Q4.1, D2, D3. Body: [../bodies/hitrec-modes-body.md](../bodies/hitrec-modes-body.md).
+> status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report [../verifier-p03-p05-2026-11-14.md](../verifier-p03-p05-2026-11-14.md)); not posted, needs the user's go. The PR is now the block length ONLY. Branch `fid/hitrec-modes-r2` on the private fork remote, head `3264d61d`, two commits on upstream `a2b4f686` (oracle `371a4791`, claim `3264d61d`; the numeric noreply identity, last line `Agent: Claude Code`). Replaces `fid/hitrec-modes-r1` (three commits on `f5e11693`). The no-restart claim moved to its own branch `fid/hitrec-norestart-r1`, BLOCKED on a game-side oracle: [hitrec-norestart.md](hitrec-norestart.md), [../briefs/hitrec-norestart-oracle.md](../briefs/hitrec-norestart-oracle.md). Body: [../bodies/hitrec-modes-body.md](../bodies/hitrec-modes-body.md). Trace: `docs/research/hitrec-trace.md` Q1, Q3, D2.
 
-PR title: `A player's block holds game.exe's length, and a hit never restarts a get-hit`
+PR title: `A player's block holds game.exe's length`
 
 ## What changes
 
-Two claims of `Fight::set_pmode` / `Fight::hurt_side`, one commit each after the oracle:
+`Fight::set_pmode(BL)` held `speed_frames(frames, fbr)` x 40 ms. game.exe's block branch of `FUN_00623f50` (`0x62403d..0x624084`, a player's mode 9) takes `rate = max(speed x (50 + E(FBR) + (Holy Shield's state 0x65 ? 50 : 0)) / 100, 1)`, `E = 120 v / (120 + v)` (stat 102), and `FUN_005539b0` ends the mode `max((256 frames - 1) / rate, 1) + 1` ticks later. A Paladin's sword block (PABL1HS, 3 frames at 256) holds 6 ticks at FBR 0 in game.exe, 3 in d2d. `rules::block_rate`, `rules::block_ticks`, one line in `set_pmode`.
 
-1. **Block length** (`rules::block_rate`, `rules::block_ticks`, the BL branch of `set_pmode`). game.exe's block branch of `FUN_00623f50` (`0x62403d..0x624084`, a player's mode 9) takes `rate = max(speed x (50 + E(FBR) + (Holy Shield's state 0x65 ? 50 : 0)) / 100, 1)`, `E = 120 v / (120 + v)` (stat 102), and `FUN_005539b0` ends the mode `max((256 frames - 1) / rate, 1) + 1` ticks later (the get-hit's clock, `get_hit_ticks`). d2d used `speed_frames(frames, fbr)` x 40 ms: no 50, no Holy Shield. A Paladin's sword block (PABL1HS, 3 frames at 256) holds 6 ticks at FBR 0 in game.exe, 3 in d2d.
-2. **No restart** (`tick.cpp`, the get-hit test after a landed blow). `FUN_0057edd0` refuses GH and BL from GH and BL; d2d tested only BL, so every big hit inside a get-hit restarted the hold. The test adds `pmode != GH`.
-
-Not in this PR (see Limits): the interrupt rule for swings (the used-skill lifetime is U), the block throttle `15 + FBR/8`, Sacrifice, the knock-back path's own `set_pmode(GH)`.
+Two commits: the oracle (`tools/emu/block_len.py`, `test_hit_recovery --block-length`; builds alone, prints the parent's gap), then the claim (code, unit block, `docs/research/re/combat.md` section and the stale line in `skills.md`). The oracle commit also adds the `tools/emu/README.md` row.
 
 ## Claims
 
 | Claim | Evidence | Re-check |
 |---|---|---|
-| game.exe's block length is the closed form above | game side: S, V run by the HITREC trace's `hr_gh.py` (14,448 cells, 0 differ from the closed form, the game's own `FUN_00623f50` and `FUN_005539b0` under the emulator). **Not re-run on the new oracle file `block_len.py game`: the emulator was off limits in this card.** | `block_len.py game d2d.tsv`, then `compare` |
-| d2d's block length differed | V run (the d2d side is the real `Fight::set_pmode(BL)`): `test_hit_recovery --block-length` on the oracle commit, 34,314 cells (7 classes x main-hand weapons x FBR 0..300 x Holy Shield off / on) against the closed form (`block_len.py closed`): **17,195 differ** (16,989 of 17,157 without Holy Shield, 206 of 17,157 with it) | build the oracle commit, run the two lines of `block_len.py`'s docstring |
-| after the claim | the same 34,314 cells on `5a08affb`: **0 differ**; the unit block (Paladin breakpoints 0 / 13 / 32 / 86 -> 6 / 5 / 4 / 3 and Holy Shield 0 / 86 -> 3 / 2) | `test_hit_recovery` |
-| game.exe does not restart a get-hit | S: HITREC trace Q4.1, `hr_modeswitch.py` (`FUN_0057edd0` over every mode pair: GH and BL refused from GH, BL, DT, DD; V run, 0 differ from the table) | `hr_modeswitch.py` |
-| d2d restarted | V run: `test_hit_recovery --restart` (real `hurt_side`, two big hits on a Paladin 5 ticks apart): oracle commit and block commit print `R 10 15` (second hold ends 15 ticks after the first hit; game.exe's at 10) | build, run |
-| after the claim | `R 10 10`; `test_hit_recovery` asserts it | `test_hit_recovery` |
+| game.exe's block length is the closed form above | **V run** (card emurun, TASK-445, 2026-11-14, the emulator image on the worker host): `block_len.py game` ran game.exe's own `FUN_00623f50` block branch and `FUN_005539b0` on the 34,314 cells of d2d's oracle build: **0 of 34,314 differ from the closed form** (4 s on one core). Earlier V run of the same functions: `hr_gh.py`, 14,448 cells, 0 differ. | `block_len.py game d2d.tsv > game.tsv; block_len.py compare game.tsv d2d.tsv` |
+| d2d differed | V run, same card: `block_len.py compare` of that game column against the oracle commit's d2d column: **17,195 of 34,314 differ** (first: AMBLHTH FBR 9 to 11, game 6 ticks, d2d 3). Independent: the verifier's own checker (`check.py`, written from the rule) 17,195 on the same file | as above |
+| after the claim d2d matches | V run (card prfix2, NAS builder, release build with the game data): `test_hit_recovery --block-length` on `3264d61d` through the verifier's independent checker (`check.py`): **0 of 34,314 differ** from the closed form; the unit block asserts the Paladin breakpoints. The game column equals the closed form in every cell (row 1), so the head's `compare` is 0 by transitivity; **the literal `compare` of the emulator's `game.tsv` against the head's `d2d.tsv` was not run** (U, one command on the worker host) | `test_hit_recovery` |
+| tests | V run: `test_game`, `test_combat`, `test_rules`, `test_swing_start`, `test_hit_recovery` rc 0 on `371a4791` and `3264d61d` | |
+| lint | V run: clang-tidy-19 with the repo's `.clang-tidy` (warnings are errors) on the changed `.cpp` files of both commits: clean (the verifier's 3 findings were in the old test; the file no longer has `at` or `t0`, nor an unused header: the oracle commit alone is clean too). `pr_guard.py` 0 FAIL / 0 WARN on both branches | |
 
 ## Limits and open items
 
-- **Blocked:** `block_len.py game` (and the `hr_modeswitch.py` re-run) needs the emulator image on the worker host; until then the game column is S (the earlier V run of the same functions), not a fresh V run. The verifier should run it.
-- Negative FBR is outside the domain (the run covered 0..300): `block_rate` follows `effective_speed` and floors at 1, U for game.exe's unsigned wrap there (the get-hit branch wraps, the block branch was not run below 0).
-- A block animation plays only when no mode is set in d2d (`foe.blocked && pmode < 0`); game.exe plays it from any interruptible mode at most once per `15 + FBR/8` frames (D4, V read only): untouched, so BL after GH and the throttle stay as before.
-- The knock-back branch (`tick.cpp`, `foe.knocked_from`) also calls `set_pmode(GH)` and is not changed here.
-- Reach: blocks recover about 2x too fast in d2d without the claim (Paladin 3 vs 6 ticks), and a pack extends a flinch (15 vs 10); the cost to a Paladin in Act 1 Normal is small (HITREC Q11, under 4 percent), larger from Act 2.
-- Checks still to run on the fork checkout before posting: `python3 tools/presubmit.py --quick`, `python3 tools/pr_guard.py`, ctest equal to the parent (four known data-set failures), `tools/emu/README.md` row for `block_len.py` (not added: the upstream README is a shared file; the verifier decides).
+- The record a class and weapon pick is d2d's on both sides (the oracle reads frames and speed from d2d's output): stated in the body.
+- The block throttle `15 + FBR/8`, BL from any mode (D4) and monster / merc blocks are untouched (stated in the body): in a dense pack a d2d Paladin can sit in BL longer than game.exe.
+- Negative FBR is outside the run (0..300); `block_rate` floors at 1 (U for game.exe's unsigned wrap).
+- The struck-cue side effect of the no-restart claim is gone from this PR (it belongs to the other branch).
+- Not run here, owed before posting: the literal `compare` of a fresh `game.tsv` against the head's `d2d.tsv` (worker host), the full `tools/presubmit.py` and the whole `ctest` against the parent (the NAS builder ran the five changed-area tests, not the whole suite).
+- Reach: blocks recovered about 2x too fast in d2d (Paladin 3 vs 6 ticks); the cost to a Paladin in Act 1 Normal is small (HITREC Q11, under 4 percent), larger from Act 2.
+- Second verifier pass: needed only for what changed materially; see the pipeline row.
