@@ -44,3 +44,24 @@ Tags: V verified offline (test named), U unverified (nothing was run live or in 
 - No actions: no equip, take-off, mark or pin for the merc (stage B and C, `target: merc` in the action queue of the player-side card); the bot makes no merc equipment decision (docs/gear-policy.md). Merc items get no marks, pins or advice (V `TestViewMercBlock`).
 - Tooltips: merc items carry the base-type facts, no d2d tooltip text yet (the fork dump prints only the first text line; a verb that prints the merc item text is a follow-up, U). The slot `title` shows name, durability and item level.
 - Goldens: `internal/watch/testdata/inventory_merc_*.json` (views) and `testdata/mercdoll/merc_dom_*.txt` (DOM); `UPDATE=1 node testdata/mercdoll/merc_dom.js web/inventory-merc.js` rewrites the latter. Live by eye (docs/live-checks.md, TASK-287): the card in a real browser at phone and desktop width, light and dark, with a hired merc from the fork build.
+
+## Requirements and usability (schema 8, card charreq)
+
+Every equipment item in `watch.inventory` carries `req` (`lvl`, `str`, `dex`, `class[]`, `approx`) and `usable` (`hero` and, when a mercenary is employed, `merc`; each `{ok, reasons[]}`, a reason is `{code, stat, need, have, text, approx, warn}`). Items that are no equipment (potions, gems, charms) carry neither. A mercenary's own gear carries only `usable.merc`.
+
+**One rule.** The hero's verdict on a backpack item is `CheckPlayerEquip`'s: `ok` is true exactly when a slot takes it (`canWear` non-empty). The item-level reasons come from the list `leveler.Candidate` itself is built on (`itemReasons`, so `Why` and `Usable` are derived from it); the hands and slot refusals of `CheckPlayerEquip` carry their reasons as `itemreq.Error`. For stash, belt, cube and worn items the verdict is the item-level list. The mercenary's verdict is `merc.Allowed` plus `merc.MeetsReq` (his own level, Str and Dex), mapped to reasons; only the first failing requirement is listed for him. `leveler.Judge` is the one entry point; `invdesk` calls it through the optional `Judge` interface. Tests: `internal/leveler/judge_test.go` (the 21 cases of docs/ui/redesign-2026-11-14/I-character-screen.md section 10 bound to real table rows, plus every table row against `CheckPlayerEquip` for two classes), `internal/invdesk/usable_test.go`, goldens `internal/watch/testdata/itemusable/`.
+
+**Codes.** `class`, `requirements` (stat `lvl`, `str`, `dex`), `identified`, `twohand`, `slot`, `dead`, `merctype`, `broken`. `broken` is a warning (`warn: true`) and never changes `ok`: the game still lets a broken item be worn (U, probe below). `nospace` is not produced: the equip path has no pack-space check (U).
+
+**Texts** now carry the numbers: "needs 47 strength (you have 38)", "needs level 12 (you are 7)", "Paladin only". `noWear` and `noWearSlot` carry the same texts.
+
+**Mercenary kinds** (merc.Allowed, docs/research/merc-gear.md 2.3): Rogue bow; Desert Guard spear and polearm; Iron Wolf one-handed sword and shield; Barbarian one-handed sword; helm and armor for all. Refused and listed as U: javelins, two-handed swords and axes, Druid pelts, class-restricted helms are allowed on any mercenary (the policy's rule). Set Apply: a named item whose item-level reasons are not empty (pack, via `CheckPlayerEquip`; stash, via `Judge`) is `blocked` with `reasons` and nothing takes its place.
+
+**U list (each with the probe that settles it).**
+- Ethereal items: the game lowers strength and dexterity requirements (S); the bot reports the base number with `approx: true`. Probe: wear an ethereal item with Str exactly base minus 10 on a throwaway character.
+- "Requirements -x%" affix (stat 91): base number, `approx: true` when the stat list shows it. Same probe style.
+- Level requirement added by affixes: not readable; for magic and better unworn items the existing rule uses the item level as an upper bound and the reason says so with `approx: true` ("the game may allow it").
+- Mercenary: the game's rule for his level, Str and Dex counts his gear (V in d2d per the research doc, U live); ethereal and "requirements -x%" are ignored by d2d's mercenary rule (V note, merc-gear 2.2). His Str and Dex are 0 when the backend does not read them: then `requirements` reads "not read yet" and he is refused (fails closed).
+- Broken item wearable: probe by equipping a durability 0 item.
+- Gap found (V, tables): `slotsFor` refuses every missile weapon for every class, so an Amazon's bow reads `slot` "not equipment for this class" next to its `dex` reason. The equip behaviour was not changed (out of scope); the page should not treat that as a requirement problem.
+- Behaviour change: a low quality weapon with an unmet requirement is now refused by `CheckPlayerEquip` (before, "low quality" hid the other reasons and the player's equip let it through).

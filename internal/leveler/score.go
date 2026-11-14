@@ -7,6 +7,7 @@ import (
 
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/itemreq"
 	"d2lod-bot/internal/town/hand"
 )
 
@@ -74,7 +75,11 @@ type Cand struct {
 	// here, so no shield goes over a quiver and no melee weapon over a bow (GEARWIRE, U live).
 	Ranged bool
 	Usable bool
-	Why    string // why not usable
+	Why    string // why not usable (the text of Reasons[0], or "low quality")
+	// Reasons is every item-level refusal with numbers, in the order the rule tests them; Req the item's requirement.
+	// One rule, two views: Why and Usable are derived from the same list (docs/inventory-ui.md, "Requirements").
+	Reasons []itemreq.Reason
+	Req     itemreq.Req
 	// OffClass: a weapon type the class's preference table gives no bonus (a Spear for a caster). It may still be
 	// equipped when found, but the shop never spends gold on it.
 	OffClass bool
@@ -139,6 +144,7 @@ func Candidate(db *data.DB, p *d2.Player, u d2.Unit, st d2.Stats) Cand {
 	c := Cand{Unit: u}
 	if u.Item == nil || db == nil || u.Class < 0 || u.Class >= len(db.Items) {
 		c.Why = "unknown item"
+		c.Reasons = []itemreq.Reason{{Code: itemreq.Slot, Text: c.Why}}
 		return c
 	}
 	b := db.Items[u.Class]
@@ -148,47 +154,21 @@ func Candidate(db *data.DB, p *d2.Player, u d2.Unit, st d2.Stats) Cand {
 	}
 	c.Ranged = gear.Equipped{Weapon: b.Code}.Launcher() || gear.IsA(b.Type, "bowq") || gear.IsA(b.Type, "xboq")
 	c.Slots = slotsFor(db, b)
-	if c.Slots == nil {
-		c.Why = "not equipment for this class"
-		return c
+	c.Req, c.Reasons = itemReasons(db, p, u, b, st, c.Slots)
+	if len(c.Reasons) > 0 {
+		c.Why = c.Reasons[0].Text
 	}
-	if cl := db.ClassByName(p.Class.String()); cl != nil {
-		if rc := classOf(db, b.Type, map[string]bool{}); rc != "" && rc != cl.Code {
-			c.Why = "restricted to class " + rc
+	for _, r := range c.Reasons {
+		if r.Code == itemreq.Slot || r.Code == itemreq.Class { // not equipment, another class's, or ammo: no scoring
 			return c
 		}
-	}
-	if b.Kind == data.KindWeapon && b.Stackable {
-		// Javelins and throwing knives are ammo: Town buys them for the classes that throw (gear.StartPurchases). A
-		// vendor stack costs base cost x quantity, so the estimate was 5 for a 240 gold Javelin stack (soak WP2, V log).
-		c.Why = "throwing weapon (town owns ammo)"
-		return c
 	}
 	c.TwoHanded = b.TwoHanded && b.Kind == data.KindWeapon
 	pref := PrefsFor(p.Class.String())
 	c.AvoidTwoHanded = c.TwoHanded && pref.WantsShield
 	it := u.Item
-	switch {
-	case b.Kind == data.KindWeapon && it.Quality == d2.QualityLow:
+	if len(c.Reasons) == 0 && b.Kind == data.KindWeapon && it.Quality == d2.QualityLow {
 		c.Why = "low quality"
-	case it.Quality >= d2.QualityMagic && !worn(it) && !it.Identified():
-		// The game refuses to wear an unidentified magic or better item (VERIFIED LIVE: the equipfail logs show the town
-		// chore logging "equip: skip Quilted Armor reason=unidentified" for item 46 two seconds before this planner
-		// clicked the same item into the torso slot and the click was refused). The identify chore makes it usable.
-		c.Why = "unidentified"
-	case it.Quality >= d2.QualityMagic && !worn(it) && p.Level < it.ILvl:
-		// A magic, rare, set or unique item's required level is raised by its affixes and the game gives no way to read it
-		// from memory. The item level is an upper bound, so the item counts as unusable below it (VERIFIED LIVE: a magic Cap
-		// and a magic Wand, ilvl 7, were refused at level 2 although their bases need level 0 and 1; docs/leveler.md).
-		c.Why = fmt.Sprintf("magic item level %d above character level", it.ILvl)
-	case p.Level < b.LevelReq:
-		c.Why = fmt.Sprintf("needs level %d", b.LevelReq)
-	case p.Strength < b.ReqStr:
-		c.Why = fmt.Sprintf("needs %d strength", b.ReqStr)
-	case p.Dexterity < b.ReqDex:
-		c.Why = fmt.Sprintf("needs %d dexterity", b.ReqDex)
-	case it.Flags&d2.FlagIdentified != 0 && st != nil && st.Get(stStr) < 0 && p.Strength+int(st.Get(stStr)) < 0:
-		c.Why = "negative stats"
 	}
 	c.Usable = c.Why == ""
 	if b.Kind == data.KindWeapon && len(pref.TypeBonus) > 0 {
