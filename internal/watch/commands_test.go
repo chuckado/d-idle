@@ -17,7 +17,7 @@ type cmdClass struct{ area, item, area2 string }
 
 var cmdClasses = map[string]cmdClass{
 	"sorceress": {"Cold Plains", "Frost Rune Staff", "Blood Moor"},
-	"paladin":   {"Stony Field", "Tower Shield", "Dark Wood"},
+	"paladin":   {"Stony Field", "Kite Shield", "Dark Wood"},
 }
 
 func ordersFixture(cl cmdClass, orders ...Order) func() OrdersView {

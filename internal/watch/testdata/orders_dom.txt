@@ -63,9 +63,9 @@ div
     button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
   [div.o-safety {tone=warn}]
   div.o-list {scroll=1}
-    div.o-row {id=inv:7:equip,s=queued} title="Equip Tower Shield - queued"
+    div.o-row {id=inv:7:equip,s=queued} title="Equip Kite Shield - queued"
       span.o-ix "1"
-      span.o-t "Equip Tower Shield"
+      span.o-t "Equip Kite Shield"
       span.o-r "queued"
       span.o-chip {s=next} "next"
       button.o-x {key=x-inv:7:equip} "×"
@@ -321,9 +321,9 @@ div
     button.d-btn {inert=1,intent=more,size=sm} "More" title="Orders are given from the order card for now"
   [div.o-safety {tone=warn}]
   div.o-list {scroll=1}
-    div.o-row {id=inv:44:identify,s=waiting} title="Identify Tower Shield - waiting for a safe moment"
+    div.o-row {id=inv:44:identify,s=waiting} title="Identify Kite Shield - waiting for a safe moment"
       span.o-ix "1"
-      span.o-t "Identify Tower Shield"
+      span.o-t "Identify Kite Shield"
       span.o-r "waiting for a safe moment"
       span.o-chip {s=next} "next"
       button.o-x {key=x-inv:44:identify} "×"
