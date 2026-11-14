@@ -17,6 +17,7 @@ owns:
   - "internal/lootrules/**"
 exclusive: []
 contracts: []
+result: "Design in docs/lootrules.md plus a stdlib-only prototype internal/lootrules (strict JSON rules, 3-valued conditions, requirement predicates for hero and merc, floors, Plan, Preview/Diff/Shadowed, Starter preset). Starter pack rules equal tidy.Decide on 432 decisions (Paladin, Sorceress, Amazon); ground half translated by hand, table test vs the real pickit needs game tables (card L2). Not wired, not verified live."
 ---
 
 ## Description
@@ -24,12 +25,12 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Why: TODO. Done when: TODO.
+Why: the user wants a configurable, unlockable loot filter; today four tables decide about items and disagree at the edges. Done when: the design doc and a tested prototype exist. Consumer: loot-rules wiring cards L2 to L7 (docs/lootrules.md section 9).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/lootrules.md: fact model, rule language, migration, unlock, API, wiring cards
-- [ ] #2 internal/lootrules prototype: parse, validate, evaluate, Starter equals tidy policy on a two-class table, invariants, benchmark
-- [ ] #3 checks: gofmt, vet, test -p 1, contracts, backlog, leakcheck
+- [x] #1 docs/lootrules.md: fact model, rule language, migration, unlock, API, wiring cards
+- [x] #2 internal/lootrules prototype: parse, validate, evaluate, Starter equals tidy policy on a two-class table, invariants, benchmark
+- [x] #3 checks: gofmt, vet, test -p 1, contracts, backlog, leakcheck
 <!-- AC:END -->

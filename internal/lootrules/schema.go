@@ -92,7 +92,7 @@ func Invariants() []InvariantInfo {
 		{"invariant:start", "The starting gear stays."},
 		{"invariant:quest", "Quest items are always picked up and kept."},
 		{"invariant:supplies", "Tomes, scrolls and keys are never sold or dropped."},
-		{"invariant:valuable", "Magic or better items, runes, gems, charms and jewels are never sold or dropped unless a rule you confirmed says so."},
+		{"invariant:valuable", "Magic or better items are never dropped, and runes, gems, charms and jewels are never sold or dropped, unless a rule you confirmed says so."},
 	}
 }
 
