@@ -48,12 +48,12 @@ tools/dev-update.sh --image d2dbot:devpN --d2d <path ON THE BUILDER>     # the D
 | `tools/imgbuild.sh` (new) | client: build, save, rmi, list |
 | `tools/dev-update.sh`, `tools/dev-update-host.sh` | `--image` goes through the NAS; `--ctx-out`; `D2_SANDBOX_HOST` for the modes that need the sandbox docker |
 | `tools/friendpack/build.sh` | `--image-from-nas` |
-| ops repo `tools/merge.sh` | gate host default `tower` (was the worker host) |
-| ops repo `tools/golive-dry.sh`, `tools/tickstatus.sh` | use `$D2_LABRUN_HOST`, default `tower` (the load read in the status line is now the builder) |
+| ops repo `tools/merge.sh` | gate host default the builder (was the worker host) |
+| ops repo `tools/golive-dry.sh`, `tools/tickstatus.sh` | use `$D2_LABRUN_HOST`, default the builder (the load read in the status line is now the builder) |
 | ops repo `tools/vet-mac.sh` | no default source host: it reads the fork worktree and lab data of the user's PC, so it refuses without an explicit `VETMAC_SRC_HOST` |
-| ops repo `tools/tests/test_merge_sh.sh` | expects `tower` (69 of 69 pass) |
+| ops repo `tools/tests/test_merge_sh.sh` | expects the builder name (69 of 69 pass) |
 
-Left unchanged on purpose: the live-game tooling and the credit-runner allow list (`labrun orion -- ...` patterns), which name the PC deliberately, and `tools/smoke.sh`, `tools/firsthour.sh`, `tools/floors/extract.sh`, `tools/dev-sandbox.sh`, the emulator wrapper: they need docker of the sandbox host or a live game, so they follow `D2_LABRUN_HOST`/stage 4 (set it for one command if the user allows).
+Left unchanged on purpose: the live-game tooling and the credit-runner allow list (`labrun <PC> -- ...` patterns), which name the PC deliberately, and `tools/smoke.sh`, `tools/firsthour.sh`, `tools/floors/extract.sh`, `tools/dev-sandbox.sh`, the emulator wrapper: they need docker of the sandbox host or a live game, so they follow `D2_LABRUN_HOST`/stage 4 (set it for one command if the user allows).
 
 ## 4. Drills (V, 2026-11-14, from the head box)
 
@@ -66,14 +66,14 @@ Left unchanged on purpose: the live-game tooling and the credit-runner allow lis
 
 ## 5. Real didle image build
 
-`tools/imgbuild.sh build stage3-didle didle:scratch-stage3 --arg BUILD_JOBS=3 -- deploy/d2d-container/context.sh` (V, run through `agentrun.sh`): context assembled on the builder from the head box working tree (public fork source and pinned vendor archives fetched there), full d2d C++ build and the Go binaries inside the image build on the NAS daemon at `--cpu-shares 2 --memory 4g` while the builder was running other agents' gates (NAS load average 4 to 8): about 9 minutes wall, exit 0, image 425 MB (`list`), `save | gzip -n` 164 MB and `gzip -t` and `tar -t` clean. Then `rmi didle:scratch-stage3`: the image list is empty again and `/data/ctx` and `/data/ctxsrc` are empty. Not run: `docker run` of the image (no run verb by design); the container smoke test (`deploy/d2d-container/smoke.sh`) still needs a daemon the user is not using, so a friends release drill loads the saved tar on the NAS or the sandbox host. U: byte identity with an Orion-built image (layer timestamps differ by nature; the image id is not expected to match).
+`tools/imgbuild.sh build stage3-didle didle:scratch-stage3 --arg BUILD_JOBS=3 -- deploy/d2d-container/context.sh` (V, run through `agentrun.sh`): context assembled on the builder from the head box working tree (public fork source and pinned vendor archives fetched there), full d2d C++ build and the Go binaries inside the image build on the NAS daemon at `--cpu-shares 2 --memory 4g` while the builder was running other agents' gates (NAS load average 4 to 8): about 9 minutes wall, exit 0, image 425 MB (`list`), `save | gzip -n` 164 MB and `gzip -t` and `tar -t` clean. Then `rmi didle:scratch-stage3`: the image list is empty again and `/data/ctx` and `/data/ctxsrc` are empty. Not run: `docker run` of the image (no run verb by design); the container smoke test (`deploy/d2d-container/smoke.sh`) still needs a daemon the user is not using, so a friends release drill loads the saved tar on the NAS or the sandbox host. U: byte identity with an the user's PC-built image (layer timestamps differ by nature; the image id is not expected to match).
 
 ## 6. Not done and proposals
 
-- Stage 4 (the sandbox `d2play-*` moves to the NAS as an ordinary visible template, its own caps, a copy of the volume verified by hash, the Orion copy kept a week) is NOT started. Proposal: a card after the user's go; the image for it is built through this path and loaded with `save | docker load` on the NAS itself, so no Orion step remains.
+- Stage 4 (the sandbox `d2play-*` moves to the NAS as an ordinary visible template, its own caps, a copy of the volume verified by hash, the the user's PC copy kept a week) is NOT started. Proposal: a card after the user's go; the image for it is built through this path and loaded with `save | docker load` on the NAS itself, so no the user's PC step remains.
 - The docker.img has about 52 GB free and 85 GB of reclaimable images (V: `docker system df`); nothing was pruned (not ours). A prune of dangling build cache is the user's call.
 - The Backrest/backup side is unchanged: the new key sits in the NAS boot config, the context directory is under the builder data volume, already excluded from the backup except `ssh/`. The ctx directory is not yet in the exclude list (U): it is emptied after every build.
 
 ## 7. Rollback
 
-On the NAS (root key): `cp /boot/config/ssh/root/authorized_keys.bak-20261114-stage3 /boot/config/ssh/root/authorized_keys` removes the restricted key; `rm /mnt/cache/appdata/_unraid/imgbuild`; `rmdir /mnt/cache/appdata/d2-builder/ctx` (empty). Remove any leftover scratch image with `docker rmi didle:scratch-stage3 imgscratch:scratch-small`. On the head box: delete the `nas-img` block (backup of the file: `~/.ssh/config.bak-20261114-stage3`) and `id_ed25519_towerimg*`. Script changes: revert the branch; the old behaviour (`D2_LABRUN_HOST=<worker host>` with docker there) still works because `D2_SANDBOX_HOST` defaults to `D2_LABRUN_HOST`, except `--image`, which now always uses the NAS.
+On the NAS (root key): `cp /boot/config/ssh/root/authorized_keys.bak-20261114-stage3 /boot/config/ssh/root/authorized_keys` removes the restricted key; `rm /mnt/cache/appdata/_NAS/imgbuild`; `rmdir /mnt/cache/appdata/d2-builder/ctx` (empty). Remove any leftover scratch image with `docker rmi didle:scratch-stage3 imgscratch:scratch-small`. On the head box: delete the `nas-img` block (backup of the file: `~/.ssh/config.bak-20261114-stage3`) and `id_ed25519_towerimg*`. Script changes: revert the branch; the old behaviour (`D2_LABRUN_HOST=<worker host>` with docker there) still works because `D2_SANDBOX_HOST` defaults to `D2_LABRUN_HOST`, except `--image`, which now always uses the NAS.

@@ -12,6 +12,7 @@ dependencies: []
 priority: medium
 ordinal: 246000
 card: "buildhosts3"
+result: "Stage 3 applied: restricted forced-command key on the NAS (build, save, rmi scratch-, list), tools/imgbuild.sh client, dev-update --image and friendpack --image-from-nas use it, ops gate and status scripts default to the builder; small image 12 s and real didle image about 9 min built on the NAS into scratch tags and removed; verified live (no game, no user PC)."
 owns:
   - "docs/process/build-hosts-stage3-2026-11-14.md"
   - "deploy/nas/imgbuild.sh"
