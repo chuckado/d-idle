@@ -412,6 +412,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
 - [lootskip.md](lootskip.md): LOOTSKIP: why ground potions were left (card lootskip) (status: current. Source: container log of the sandbox soak (Paladin clvl 10 to 14, build 0.0.261110171517),...)
 - [merc-farm.md](merc-farm.md): Mercenaries and post-campaign farming (research, MERCRESEARCH, 2026-10-29) (status: ARCHIVED 2026-10-31 (doctrim): superseded by docs/merc.md, docs/merc-wire.md, docs/sme/mercenary.md and...)
+- [merc-revive.md](merc-revive.md): Revive mercenary as a player command (card botmerc, API watch.merc/1) (status: built offline, NOT verified live (2026-11-14). Design: `docs/ui/redesign-2026-11-14/C-orders.md`...)
 - [merc-wire.md](merc-wire.md): Merc wiring (agent MERCWIRE)
 - [merc.md](merc.md): Mercenary policy (internal/merc)
 - [merchire.md](merchire.md): merchire: drill D8.h, paid hire at the hirer (status: current. Tags: V verified, S secondary, U unverified. Offline only: nothing here ran on the game (not...)
@@ -514,6 +515,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `survival/`
 
 - [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
+- [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)
 - [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
@@ -590,6 +593,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [research/README.md](ui/redesign-2026-11-14/research/README.md): Research and iteration log for the second attempt (status: working record (2026-11-14, branch `agent/uidesign3`). The design it led to is ../J-second-attempt.md....)
 - [references.md](ui/redesign-2026-11-14/research/references.md): UI references for the watch screen and the character screen (status: research input dated 2026-11-14, not a design. Gathered from the web in one session: reference screenshots...)
 
+`ui/redesign-2026-11-14/reviews/`
+
+- [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+
 `ui/redesign-2026-11-14/`
 
 - [stash-anywhere.md](ui/redesign-2026-11-14/stash-anywhere.md): Stash from anywhere (backlog idea, not built) (status: backlog idea, user decision 2026-11-14. Default stays: stash and take need the hero at the chest (the...)
@@ -617,6 +624,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [hitrec-interrupt.md](upstream/briefs/hitrec-interrupt.md): Brief: P04 a hit interrupts an interruptible swing (WAVE 2, blocked on drill R1)
 - [hitrec-modes.md](upstream/briefs/hitrec-modes.md): Brief: P03 hit-recovery modes (fid/hitrec-modes-r1, stacked on fid/swing-start-r2)
+- [hitrec-norestart-oracle.md](upstream/briefs/hitrec-norestart-oracle.md): Brief: P03b "a hit never restarts a get-hit" needs a game-side oracle (BLOCKED, for the worker-host operator) (status: written 2026-11-14 (card prfix2). Nothing here was run: it needs the emulator image on the worker host...)
 - [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
 - [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
@@ -624,9 +632,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
-- [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length, and a hit never restarts a get-hit" (status: r1, **ready for the independent verifier, with one open item: the game-side emulator run** (card decomp21,...)
+- [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
+- [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted, BLOCKED): "A hit never restarts a get-hit" (status: r1, **BLOCKED on a game-side oracle** (card prfix2, 2026-11-14). Split out of the P03 PR because the...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
-- [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r2, **ready for the independent verifier** (card decomp21, TASK-440, 2026-11-14); not posted, needs the...)
+- [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
@@ -641,6 +650,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
+- [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
@@ -698,6 +708,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [baseline-runs.md](process/baseline-runs.md): Baseline runs: the extra original-game runs (card baselineruns) (status: current, PREPARED ONLY (2026-11-01). Nothing here was run live; no game was started. The launcher is...)
 - [board-cards.md](process/board-cards.md): Board cards (status: moved to the private ops repo (d2lod-ops, `docs/process/board-cards.md`). Not part of the public tree.)
 - [build-hosts-2026-11-14.md](process/build-hosts-2026-11-14.md): Build hosts: moving builds off the worker host (2026-11-14) (status: study, nothing applied. Request (user, 2026-11-14): stop building on the worker host while the user plays;...)
+- [build-hosts-env-2026-11-14.md](process/build-hosts-env-2026-11-14.md): Builder builder environment: lock hygiene, light lane, gate, status, prune (2026-11-14) (status: applied 2026-11-14 (user go: "make whatever improvements to the builder build environment that are...)
 - [build-hosts-stage3-2026-11-14.md](process/build-hosts-stage3-2026-11-14.md): Build hosts, stage 3 results (2026-11-14): image builds on the NAS (status: applied and drilled. Follows `docs/process/build-hosts-2026-11-14.md` (study, decision D3) and...)
 - [card-board.md](process/card-board.md): Card board: reading the user's decisions (status: current. The page is the `/cards` route of the status board (the board host name, port 8897); its code is...)
 - [card-triage-20261104.md](process/card-triage-20261104.md): Card triage and decisions without an ADR, 2026-11-04 (status: proposal for the lead, docs only (job cardtriage). Nothing was moved, edited or archived; no ADR or...)

@@ -157,6 +157,12 @@
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
+| botmerc | proposed | - | `internal/merc/playerrevive.go`<br>`internal/merc/playerrevive_test.go`<br>`internal/watch/mercapi.go`<br>`internal/watch/mercapi_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercplayer.go`<br>`cmd/d2bot/mercplayer_test.go`<br>`docs/merc-revive.md` | - |
+| survA | proposed | - | `internal/danger/`<br>`docs/survival/decisions-2026-11-14.md`<br>`docs/survival/danger.md`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go`<br>`internal/watch/funwire.go` | - |
+| verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
+| towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
+| uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
+| prfix2 | proposed | - | `docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/briefs/hitrec-norestart-oracle.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -205,14 +211,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 0de905134 11-14 16:51 `Merge agent/uib2: Merge branch 'main' into TASK-439` (uib2)
-- 1db6e7d36 11-14 16:50 `Merge branch 'main' into TASK-439` (-)
-- 6dece7277 11-14 16:32 `Merge agent/cut012: friends 0.1.2: installer fix, pack and set staged, drills pending` (cut012)
-- 5b3343815 11-14 16:31 `Merge branch 'main' into TASK-426` (-)
-- 93ac26318 11-14 16:29 `Merge origin/main into agent/uib2` (-)
-- 2e1e899cd 11-14 16:23 `Merge agent/decomp21: Merge branch 'main' into decomp21` (decomp21)
-- 1310bf483 11-14 16:23 `Merge origin/main into cut012` (-)
-- e7e48309b 11-14 16:23 `Merge branch 'main' into decomp21` (-)
-- 5637441d3 11-14 16:21 `Merge agent/buildhosts3: Merge branch 'main' into buildhosts3` (buildhosts3)
-- 6c748cb09 11-14 16:20 `Merge branch 'main' into buildhosts3` (-)
+- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
+- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
+- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
+- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
+- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
+- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
+- d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
+- bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
+- aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
+- 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
 <!-- statusgen:end -->
