@@ -148,7 +148,6 @@
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
-| prswing3 | proposed | - | `docs/upstream/drafts/swing-start.md`<br>`docs/upstream/pr-queue.md` | `fork-branch:fid/swing-start-r3` |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | survivaldesign | in-progress | - | `docs/survival/**` | - |
 | buildhosts | in-progress | - | `docs/process/build-hosts-2026-11-14.md` | - |

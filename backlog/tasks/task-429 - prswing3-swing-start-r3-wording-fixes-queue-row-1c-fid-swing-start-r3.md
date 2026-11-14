@@ -1,10 +1,11 @@
 ---
 id: TASK-429
 title: 'prswing3: swing start r3 wording fixes, queue row 1c (fid/swing-start-r3)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T15:55:00Z'
+updated_date: '2026-11-14T17:23:00Z'
 labels:
   - d2d
   - upstream-pr
