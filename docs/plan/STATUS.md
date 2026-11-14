@@ -155,6 +155,7 @@
 | charreq | in-progress | - | `internal/invdesk/usable.go`<br>`internal/invdesk/usable_test.go`<br>`internal/invdesk/desk.go`<br>`internal/invdesk/sets.go`<br>`internal/itemreq/`<br>`internal/leveler/score.go`<br>`internal/leveler/itemreasons.go`<br>`internal/leveler/judge.go`<br>`internal/leveler/judge_test.go`<br>`internal/leveler/playerequip.go`<br>`internal/watch/testdata/itemusable/`<br>`docs/inventory-ui.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
+| uis1b | in-progress | - | `internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/layoutedit.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layouts/cockpit.json`<br>`docs/ui/redesign-2026-11-14/J-second-attempt.md`<br>`internal/watch/layout.go`<br>`internal/watch/layout_test.go`<br>`internal/watch/panels.go`<br>`internal/watch/http_view.go`<br>`tools/uilint/`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/watch/testdata/layout_cells.js`<br>`internal/watch/testdata/layout_cells.golden`<br>`internal/watch/testdata/layout_cockpit.js`<br>`internal/watch/testdata/layout_edit.js` | - |
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
 | botmerc | proposed | - | `internal/merc/playerrevive.go`<br>`internal/merc/playerrevive_test.go`<br>`internal/watch/mercapi.go`<br>`internal/watch/mercapi_test.go`<br>`cmd/d2bot/mercwire.go`<br>`cmd/d2bot/mercplayer.go`<br>`cmd/d2bot/mercplayer_test.go`<br>`docs/merc-revive.md` | - |
@@ -212,6 +213,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
+- cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
 - 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
 - 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
 - 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
@@ -220,6 +223,4 @@
 - a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
 - 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
 - 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
-- d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
-- bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
 <!-- statusgen:end -->
