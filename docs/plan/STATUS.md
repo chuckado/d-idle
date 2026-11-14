@@ -145,6 +145,7 @@
 | boss1 | proposed | - | `docs/research/boss1-trace.md`<br>`tools/emu/bs_spawn.sh`<br>`tools/emu/bs_model.py` | - |
 | levelsim | proposed | - | `tools/levelsim/`<br>`docs/levelsim.md` | - |
 | levelplan3 | in-progress | - | `internal/levelplan`<br>`internal/plandata/levelplan-normal.json`<br>`docs/plan/data/levelplan-normal.json`<br>`docs/levelplan3.md`<br>`internal/plandata/boss_levels.go`<br>`internal/bot/plan.go`<br>`internal/bot/levelplan3_test.go`<br>`internal/bot/goal.go`<br>`internal/bot/resource.go`<br>`internal/plandata/plandata_test.go`<br>`internal/plandata/boss_levels_test.go`<br>`data/campaign/normal.json`<br>`internal/campaign/campaign_test.go`<br>`internal/task/guided_test.go`<br>`internal/boss/types.go`<br>`internal/boss/run.go`<br>`internal/boss/boss_test.go`<br>`internal/boss/fake_test.go`<br>`internal/combat/fighter.go`<br>`cmd/d2bot/boss.go`<br>`cmd/bossrun/adapter.go`<br>`docs/levelplan.md`<br>`internal/watch/testdata/campaign` | - |
+| prverify6 | proposed | - | `docs/upstream/verification-swing-start-r2-2026-11-14.md` | - |
 | stashany | proposed | - | `docs/ui/redesign-2026-11-14/stash-anywhere.md` | - |
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
@@ -197,6 +198,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c2be81b6 11-14 12:18 `Merge agent/prverify6: Merge branch 'main' into TASK-418` (prverify6)
+- 5375357a 11-14 10:55 `Merge branch 'main' into TASK-418` (-)
 - ce23b781 11-14 10:54 `Merge agent/prpipeline: Merge branch 'main' into TASK-422` (prpipeline)
 - 52867423 11-14 10:53 `Merge branch 'main' into TASK-422` (-)
 - 03a655a5 11-14 10:49 `Merge agent/drillzip: Merge branch 'main' into TASK-423` (drillzip)
@@ -205,6 +208,4 @@
 - 6c033aad 11-14 10:39 `Merge branch 'main' into TASK-421` (-)
 - cdc9152b 11-14 10:38 `Merge agent/uidesign2: Merge branch 'main' into TASK-419` (uidesign2)
 - 2603bc1f 11-14 10:37 `Merge branch 'main' into TASK-419` (-)
-- 8ab1739b 11-14 10:36 `Merge agent/decomp19: boss1: queue result line at end` (decomp19)
-- b63436bc 11-14 10:35 `Merge origin/main into agent/uidesign2` (-)
 <!-- statusgen:end -->
