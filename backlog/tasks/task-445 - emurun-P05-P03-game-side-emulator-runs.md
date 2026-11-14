@@ -1,11 +1,11 @@
 ---
 id: TASK-445
 title: 'emurun: P05/P03 game-side emulator runs'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T21:36:00Z'
-updated_date: '2026-11-14T21:37:00Z'
+updated_date: '2026-11-14T22:25:00Z'
 labels:
   - docs
   - research

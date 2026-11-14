@@ -133,6 +133,8 @@ type Fun struct {
 	Risk *RiskMeter
 	// Readiness serves GET /api/readiness (internal/readiness, TASK-218), read-only; set it before Serve, nil: no route.
 	Readiness http.Handler
+	// Danger serves GET /api/danger (internal/danger, survival slice S-A), read-only; nil: no route.
+	Danger http.Handler
 	// Queue is nil unless FunConfig.OrderQueue is set and the ladder has the slot rows (TASK-161).
 	Queue *OrderQueue
 	// Loop is nil unless FunConfig.OrderLoop is set and the ladder has the row "orderloop"; bind its repair desk with Loop.Bind.
@@ -155,6 +157,8 @@ type Fun struct {
 	Art *ArtAPI
 	// Repair mounts the gear condition and Repair now routes (repairapi.go); set it before Serve, nil: no routes.
 	Repair *RepairAPI
+	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
+	Merc *MercAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm *GoldFarmAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
@@ -663,6 +667,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Readiness != nil {
 		m.Handle("/api/readiness", f.Readiness) // readiness.Route
 	}
+	if f.Danger != nil {
+		m.Handle("/api/danger", f.Danger) // danger.Route
+	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.Handler())
 	}
@@ -712,6 +719,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
+		}
+	}
+	if f.Merc != nil {
+		for _, p := range MercRoutes {
+			m.Handle(p, f.Merc.Handler())
 		}
 	}
 	if f.GoldFarm != nil {
@@ -784,6 +796,11 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {
 			m.Handle(p, f.Repair.PostHandler(o))
+		}
+	}
+	if f.Merc != nil {
+		for _, p := range MercPostRoutes {
+			m.Handle(p, f.Merc.PostHandler(o))
 		}
 	}
 	if f.GoldFarm != nil {
