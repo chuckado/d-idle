@@ -76,6 +76,8 @@ func (d *Desk) runnableLocked(r Request, inTown bool) bool {
 		return d.sv != nil
 	case KindBuyID, KindCain:
 		return d.sv != nil && inTown
+	case KindSell:
+		return d.sell != nil && inTown
 	case KindStash, KindTake, KindGold:
 		return d.stashSvLocked() != nil && inTown
 	}
@@ -308,7 +310,7 @@ func (d *Desk) ErrandsWaiting() int {
 	defer d.mu.Unlock()
 	n := 0
 	for _, r := range d.st.Queue {
-		if r.State == StateQueued && r.errand() && d.sv != nil {
+		if r.State == StateQueued && r.errand() && (d.sv != nil || r.kind() == KindSell) {
 			n++
 		}
 	}

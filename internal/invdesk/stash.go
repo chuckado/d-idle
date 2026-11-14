@@ -70,7 +70,7 @@ func (d *Desk) stashSv() StashServices {
 // errand is true for the requests that need the hero in town: the shopping and Cain errands and every stash job.
 func (r Request) errand() bool {
 	switch r.kind() {
-	case KindBuyID, KindCain, KindStash, KindTake, KindGold:
+	case KindBuyID, KindCain, KindSell, KindStash, KindTake, KindGold:
 		return true
 	}
 	return r.kind() == KindIdentify && r.Place == PlaceStash
@@ -311,7 +311,7 @@ func (d *Desk) ErrandKind() string {
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	for _, r := range d.st.Queue {
-		if r.State == StateQueued && r.errand() && d.sv != nil {
+		if r.State == StateQueued && r.errand() && (d.sv != nil || r.kind() == KindSell) {
 			if r.isStashJob() {
 				return "stash"
 			}
