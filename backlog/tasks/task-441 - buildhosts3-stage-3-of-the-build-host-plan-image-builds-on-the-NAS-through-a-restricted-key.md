@@ -33,7 +33,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Restricted forced-command key installed on the NAS and its refusals drilled
-- [ ] #2 A real small image and a real didle image built on the NAS into scratch tags
-- [ ] #3 dev-update, friendpack and the ops scripts no longer default to the worker host
+- [x] #1 Restricted forced-command key installed on the NAS and its refusals drilled
+- [x] #2 A real small image and a real didle image built on the NAS into scratch tags
+- [x] #3 dev-update, friendpack and the ops scripts no longer default to the worker host
 <!-- AC:END -->

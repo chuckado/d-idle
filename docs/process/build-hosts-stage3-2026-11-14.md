@@ -66,7 +66,7 @@ Left unchanged on purpose: the live-game tooling and the credit-runner allow lis
 
 ## 5. Real didle image build
 
-DIDLE_RESULT
+`tools/imgbuild.sh build stage3-didle didle:scratch-stage3 --arg BUILD_JOBS=3 -- deploy/d2d-container/context.sh` (V, run through `agentrun.sh`): context assembled on the builder from the head box working tree (public fork source and pinned vendor archives fetched there), full d2d C++ build and the Go binaries inside the image build on the NAS daemon at `--cpu-shares 2 --memory 4g` while the builder was running other agents' gates (NAS load average 4 to 8): about 9 minutes wall, exit 0, image 425 MB (`list`), `save | gzip -n` 164 MB and `gzip -t` and `tar -t` clean. Then `rmi didle:scratch-stage3`: the image list is empty again and `/data/ctx` and `/data/ctxsrc` are empty. Not run: `docker run` of the image (no run verb by design); the container smoke test (`deploy/d2d-container/smoke.sh`) still needs a daemon the user is not using, so a friends release drill loads the saved tar on the NAS or the sandbox host. U: byte identity with an Orion-built image (layer timestamps differ by nature; the image id is not expected to match).
 
 ## 6. Not done and proposals
 
