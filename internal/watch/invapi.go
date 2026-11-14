@@ -20,7 +20,7 @@ var invViewTTL = 1500 * time.Millisecond
 
 var (
 	InvRoutes     = []string{"/api/inventory", "/watch/inventory", "/watch/inventory.js", "/watch/inventory-tip.js", "/watch/inventory-tip.css", "/watch/inventory-actions.js", "/watch/inventory-actions.css", "/watch/inventory-merc.js", "/watch/inventory-merc.css", "/watch/inventory-drag.js", "/watch/inventory-sets.js", "/watch/inventory-sets.css", "/api/inventory/setpreview"}
-	InvPostRoutes = []string{"/api/inventory/mark", "/api/inventory/equip", "/api/inventory/unpin", "/api/inventory/trash", "/api/inventory/cancel", "/api/inventory/identify", "/api/inventory/buyid", "/api/inventory/cain", "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold", "/api/inventory/unequip", "/api/inventory/sets/save", "/api/inventory/sets/rename", "/api/inventory/sets/delete", "/api/inventory/sets/apply", "/api/inventory/sets/cancel"}
+	InvPostRoutes = []string{"/api/inventory/mark", "/api/inventory/equip", "/api/inventory/unpin", "/api/inventory/trash", "/api/inventory/cancel", "/api/inventory/identify", "/api/inventory/buyid", "/api/inventory/cain", "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold", RouteSellNow, "/api/inventory/unequip", "/api/inventory/sets/save", "/api/inventory/sets/rename", "/api/inventory/sets/delete", "/api/inventory/sets/apply", "/api/inventory/sets/cancel"}
 )
 
 // InvDesk is what the routes need from the bot side (internal/invdesk.Desk through invAdapter in cmd/d2bot).
@@ -289,6 +289,12 @@ func (a *InvAPI) PostHandler(o AnswerOptions) http.Handler {
 			res, err = d.RequestBuyID(b.Count)
 		case "/api/inventory/cain":
 			res, err = d.RequestCain()
+		case RouteSellNow:
+			var ok bool
+			if res, err, ok = sellNow(d); !ok {
+				sellNowOff(w)
+				return
+			}
 		case "/api/inventory/stash", "/api/inventory/take", "/api/inventory/gold":
 			sd, ok := d.(InvStashDesk)
 			if !ok {

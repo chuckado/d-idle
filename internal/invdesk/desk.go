@@ -94,6 +94,7 @@ type Desk struct {
 	tr    Trasher
 	how   HowSource
 	sv    Services
+	sell  Seller // sell-now errand (sellnow.go)
 	un    Unequipper
 	hands HandsInfo
 	fast  *FastLane      // the instant lane (instant.go); nil: every request queues
@@ -800,7 +801,7 @@ func (d *Desk) RunPending(ctx context.Context) []string {
 			}
 			continue
 		}
-		r, eq, tr, sv := d.st.Queue[i], d.eq, d.tr, d.sv
+		r, eq, tr, sv, sl := d.st.Queue[i], d.eq, d.tr, d.sv, d.sell
 		d.st.Queue[i].State = StateDoing
 		_ = d.saveLocked()
 		d.mu.Unlock()
@@ -820,6 +821,8 @@ func (d *Desk) RunPending(ctx context.Context) []string {
 			result, err = sv.BuyIdentify(ctx, r.Count)
 		case KindCain:
 			result, err = sv.CainIdentify(ctx)
+		case KindSell:
+			result, err = d.runSell(ctx, sl)
 		default:
 			err = eq.PlayerEquip(ctx, r.ID, SlotBody[r.Slot])
 			if h, ok := eq.(Howser); ok {
@@ -851,7 +854,7 @@ func (d *Desk) RunPending(ctx context.Context) []string {
 			case KindTrash:
 				d.noteTrashedLocked(r, hx, hy)
 				out = append(out, fmt.Sprintf("trash %s done, on the ground and ignored by the looter", r.Name))
-			case KindBuyID, KindCain:
+			case KindBuyID, KindCain, KindSell:
 				out = append(out, fmt.Sprintf("%s done: %s", r.kind(), result))
 			case KindUnequip:
 				d.dropPinLocked(r.Slot)
@@ -966,9 +969,9 @@ type ItemView struct {
 // optional merc block (docs/research/merc-gear.md); 5 added the optional identify block, the item field noIdentify and the
 // request kinds identify, buyid and cain with the fields count and result (the identify commands); 7 added the item fields
 // noWearSlot and noUnequip, the sets block, the request kind unequip and the request fields group, groupName and seq
-// (drag and drop, gear sets, docs/gearsets.md); 8 added the item fields req and usable (docs/inventory-ui.md, "Requirements and usability"); 9 added the instant block and the request fields wait and code (the fast lane, instant.go); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
+// (drag and drop, gear sets, docs/gearsets.md); 8 added the item fields req and usable (docs/inventory-ui.md, "Requirements and usability"); 9 added the instant block and the request fields wait and code (the fast lane, instant.go); 10 added the request kind sell (sell now, sellnow.go; no field changed); 6 added the item fields stashOp and noStash, the stashOps block and the request kinds stash, take and gold (docs/inventory-actions.md, stash actions). Older readers keep working: nothing was renamed or removed, the new
 // fields are optional.
-const ViewSchema = 9
+const ViewSchema = 10
 
 // View is the inventory page's data.
 type View struct {

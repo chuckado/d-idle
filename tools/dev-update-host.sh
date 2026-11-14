@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 # The worker-host half of tools/dev-update.sh (docs/dev-update.md). Run it there, from the repo mirror; the wrapper does.
 #   dev-update-host.sh --url URL --src DIR [--to C... | --all] [--rollback] [--fault badsig|unsigned|tamper|hash|crash|stale]
-#   dev-update-host.sh --url URL --image TAG --d2d PATH [--src DIR]        make the DEV image once
+#   dev-update-host.sh --url URL --image TAG --d2d PATH [--src DIR]        make the DEV image once (needs docker on this host)
+#   dev-update-host.sh --url URL --image TAG --d2d PATH --ctx-out DIR      only assemble the DEV image context in DIR; the NAS
+#                                        builds it through the restricted key (tools/imgbuild.sh, docs/process/build-hosts-stage3-2026-11-14.md)
 #   dev-update-host.sh --pubkey                                            print the public key (one line, \n escaped)
 #   dev-update-host.sh --url URL --serve start|stop|status [--ttl SECS]
 # Result lines go to stdout, each prefixed `DEVUPDATE: `; progress goes to stderr.
@@ -16,11 +18,11 @@ keydir=${DIDLE_DEV_KEYDIR:-$HOME/.config/didle-dev}
 www=$dev/www
 port=${DIDLE_DEV_PORT:-18899}
 repo=shatteredeagle/d-idle # the path the client asks for (selfupdate.DefaultRepo); the server only imitates its releases list
-url= src=. rollback=0 fault= image= d2d= serve= ttl=28800 all=0 pubkey=0 targets=()
+url= src=. rollback=0 fault= image= d2d= ctxout= serve= ttl=28800 all=0 pubkey=0 targets=()
 while [ $# -gt 0 ]; do
 	case $1 in
 	--url) url=$2; shift 2 ;; --src) src=$2; shift 2 ;; --to) targets+=("$2"); shift 2 ;; --all) all=1; shift ;;
-	--rollback) rollback=1; shift ;; --fault) fault=$2; shift 2 ;; --image) image=$2; shift 2 ;; --d2d) d2d=$2; shift 2 ;;
+	--rollback) rollback=1; shift ;; --fault) fault=$2; shift 2 ;; --image) image=$2; shift 2 ;; --d2d) d2d=$2; shift 2 ;; --ctx-out) ctxout=$2; shift 2 ;;
 	--serve) serve=$2; shift 2 ;; --pubkey) pubkey=1; shift ;; --ttl) ttl=$2; shift 2 ;; *) echo "unknown flag $1" >&2; exit 2 ;;
 	esac
 done
@@ -51,8 +53,10 @@ esac
 
 if [ -n "$image" ]; then # the one-time image: DEV=1, the shim and this tree's bot baked in
 	[ -f "$d2d" ] || { say "ERROR --d2d must be a d2d binary (the one the running image has)"; exit 2; }
-	ctx=$(mktemp -d "$dev/ctx.XXXXXX")
-	trap 'rm -rf "$ctx"' EXIT
+	if [ -n "$ctxout" ]; then rm -rf "$ctxout"; mkdir -p "$ctxout"; ctx=$ctxout; else
+		ctx=$(mktemp -d "$dev/ctx.XXXXXX")
+		trap 'rm -rf "$ctx"' EXIT
+	fi
 	(cd "$src" && PREBUILT=$d2d nice -n 19 deploy/d2d-container/context.sh "$ctx") >&2
 	# the legacy builder runs every stage even with D2D_SRC=prebuilt: with a prebuilt d2d the source stage becomes a stub
 	python3 -I - "$ctx/Dockerfile" <<'PY'
@@ -62,6 +66,7 @@ s = open(p).read()
 s = re.sub(r"(FROM \$\{UBUNTU\} AS d2d-build\n).*?(?=# stage 1b)", r"\1RUN mkdir -p /out\n\n", s, flags=re.S)
 open(p, "w").write(s)
 PY
+	if [ -n "$ctxout" ]; then say "CONTEXT $ctx"; exit 0; fi
 	nice -n 19 docker build -q --build-arg D2D_SRC=prebuilt --build-arg DEV=1 --build-arg APP_VERSION=0.0.0 -t "$image" "$ctx" >&2
 	say "IMAGE $image built in $(( $(now) - t0 ))s (DEV=1)"
 	exit 0
