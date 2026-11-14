@@ -56,8 +56,11 @@ grep -rIl -E -i 'game\.exe|wine' "$root/compose.yml" "$root/install.sh" "$root/d
 [ -s "$w/o1" ] && bad1=1
 grep -n -E -- '--lab-verbs|D2D_LAB|LAB_VERBS' "$root/compose.yml" "$root/install.sh" "$root/didle" 2>/dev/null | grep -v -E '^\S*:\s*[0-9]+:\s*#' >"$w/o1b"
 [ -s "$w/o1b" ] && bad1=1
+# the game folder itself is never mounted (key file and the rest of the folder stay out): per-archive mounts come from install.sh
+grep -n -E 'D2_GAME_DIR|:/game(:|$)' "$root/compose.yml" 2>/dev/null >"$w/o1d"
+[ -s "$w/o1d" ] && { bad1=1; echo '  compose.yml mounts the whole game folder' >>"$w/o1"; }
 if [ -s "$layers" ] && grep -E -i '(^|/)(game\.exe|wine[0-9a-z_-]*)(/|$)|usr/lib/wine' "$layers" | head -3 >"$w/o1c" && [ -s "$w/o1c" ]; then bad1=1; fi
-if [ -n "$bad1" ]; then cat "$w"/o1 "$w"/o1b "$w"/o1c 2>/dev/null >&2; fail "1 d2d only, lab/cheat verbs off by default: wine/game.exe or a lab flag found (listed above)"
+if [ -n "$bad1" ]; then cat "$w"/o1 "$w"/o1b "$w"/o1c "$w"/o1d 2>/dev/null >&2; fail "1 d2d only, lab/cheat verbs off by default: wine/game.exe or a lab flag found (listed above)"
 else pass "1 d2d only, lab/cheat verbs not enabled in compose/install/didle$([ -s "$layers" ] || echo ' (image layers not listed: no image tar)')"; fi
 
 # 2. licence, GPL text, source offer with the exact commits
