@@ -234,7 +234,6 @@ docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
-docs/probes/drill-zip-2026-11-14.md  credit-runner  drillzip
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
@@ -289,6 +288,9 @@ docs/upstream/  credit-runner  prpost
 docs/upstream/  credit-runner  prpost2
 docs/upstream/  credit-runner  prpost3
 docs/upstream/  credit-runner  prprep
+docs/upstream/briefs/**  credit-runner  prpipeline
+docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
+docs/upstream/pr-queue.md  credit-runner  prpipeline
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
