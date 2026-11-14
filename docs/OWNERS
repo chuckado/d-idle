@@ -320,7 +320,6 @@ docs/tester-licence.md  credit-runner  testerlicence
 docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
-docs/ui/redesign-2026-11-14/J-second-attempt.md  credit-runner  uis1b
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
 docs/ui/redesign-2026-11-14/stash-anywhere.md  credit-runner  stashany
 docs/upstream/  credit-runner  prpost
@@ -578,7 +577,6 @@ internal/watch/funwire.go  credit-runner  survA
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
-internal/watch/http_view.go  credit-runner  uis1b
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/invapi.go  credit-runner  gearsets
 internal/watch/invapi_sellnow.go  credit-runner  botsell
@@ -587,9 +585,7 @@ internal/watch/invapi_test.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
 internal/watch/layout.go  credit-runner  uis1
-internal/watch/layout.go  credit-runner  uis1b
 internal/watch/layout_test.go  credit-runner  uis1
-internal/watch/layout_test.go  credit-runner  uis1b
 internal/watch/mercapi.go  credit-runner  botmerc
 internal/watch/mercapi_test.go  credit-runner  botmerc
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
@@ -600,7 +596,6 @@ internal/watch/onboarding_test.go  credit-runner  firstminutes
 internal/watch/orderloop.go  credit-runner  uib7
 internal/watch/orderloop_test.go  credit-runner  uib7
 internal/watch/orderqueue.json  credit-runner  uib7
-internal/watch/panels.go  credit-runner  uis1b
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/senses.go  credit-runner  maphistory
@@ -638,10 +633,6 @@ internal/watch/testdata/itemactions  credit-runner  gearsets
 internal/watch/testdata/itemactions/act_dom.js  credit-runner  nopins
 internal/watch/testdata/itemtip/tip_dom.js  credit-runner  nopins
 internal/watch/testdata/itemusable/  credit-runner  charreq
-internal/watch/testdata/layout_cells.golden  credit-runner  uis1b
-internal/watch/testdata/layout_cells.js  credit-runner  uis1b
-internal/watch/testdata/layout_cockpit.js  credit-runner  uis1b
-internal/watch/testdata/layout_edit.js  credit-runner  uis1b
 internal/watch/testdata/map_panel.js  credit-runner  maphistory
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryA
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryB
@@ -673,11 +664,8 @@ internal/watch/web/inventory.js  credit-runner  gearsets
 internal/watch/web/inventory.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  repairtrip
 internal/watch/web/layout.js  credit-runner  uis1
-internal/watch/web/layout.js  credit-runner  uis1b
 internal/watch/web/layout.json  credit-runner  uis1
-internal/watch/web/layoutedit.js  credit-runner  uis1b
 internal/watch/web/layouts/  credit-runner  uis1
-internal/watch/web/layouts/cockpit.json  credit-runner  uis1b
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
@@ -692,12 +680,9 @@ internal/watch/web/panels/map  credit-runner  maptrail2
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/shell.css  credit-runner  uis1
-internal/watch/web/shell.css  credit-runner  uis1b
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  uis1
-internal/watch/web/shell.js  credit-runner  uis1b
 internal/watch/web/shell.json  credit-runner  uis1
-internal/watch/web/shell.json  credit-runner  uis1b
 internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
@@ -741,11 +726,8 @@ tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
-tools/uilint/  credit-runner  uis1b
 tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  gearsets
-tools/uishots.sh  credit-runner  uis1b
-tools/uishots/  credit-runner  uis1b
 tools/uishots/genlayouts.js  credit-runner  uis1
 tools/uishots/layout-rows.json  credit-runner  uis1
 tools/uishots/serve.go  credit-runner  maphistory
