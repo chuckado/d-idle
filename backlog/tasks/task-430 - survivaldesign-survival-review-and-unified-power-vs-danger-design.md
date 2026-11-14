@@ -1,10 +1,11 @@
 ---
 id: TASK-430
 title: 'survivaldesign: survival review and unified power-vs-danger design'
-status: In Progress
+status: Done
 assignee:
   - user
 created_date: '2026-11-14T15:57:00Z'
+updated_date: '2026-11-14T17:23:00Z'
 labels:
   - bot
   - research

@@ -149,7 +149,6 @@
 | lootrules | proposed | - | `docs/lootrules.md`<br>`internal/lootrules/**` | - |
 | prpipeline | proposed | - | `docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/briefs/**`<br>`docs/upstream/pr-queue.md` | - |
 | playsession | proposed | - | `tools/play-session.sh`<br>`docs/play-session.md` | - |
-| survivaldesign | in-progress | - | `docs/survival/**` | - |
 | buildhosts | in-progress | - | `docs/process/build-hosts-2026-11-14.md` | - |
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
