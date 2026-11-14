@@ -285,6 +285,8 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
 		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+	deps.ZoneShadow = wirePower(db)                                   // shadow margin line next to the planner line, log only (survival slice S-B)
+	deps.ZoneChoice, deps.ZoneObserve = wireSurvival(db, ip.Ledger()) // shadow zone choice and ledger (slice S-C), log and API only
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter
@@ -351,6 +353,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
 	o.ladder.readiness = wireReadiness(runner, db)
+	o.ladder.danger = wireDanger(db)
 	o.ladder.heroStats = heroStats(runner)
 	o.ladder.explored = runner.Explored
 	if db != nil {

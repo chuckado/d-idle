@@ -325,7 +325,8 @@ func TestLayoutEditPreviewContract(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	js := string(b)
+	// the grid editor is the part before the cockpit's; the cockpit editor has its own contract (TestCockpitEditorContract)
+	js, _, _ := strings.Cut(string(b), "// ---- Edit layout on a cockpit")
 	for _, want := range []string{"moveItem(base, id, locked(id, rect), cols)", "prefers-reduced-motion: reduce", "k === 'Escape'", "k === 'Enter'", "'pointercancel', cancel",
 		"if (keep) commit(next); else revert();", "main.dataset.preview = id", "delete main.dataset.preview"} {
 		if !strings.Contains(js, want) {
@@ -650,5 +651,179 @@ func TestRedesignTokens(t *testing.T) {
 	// no hex of its own in the aliases: the light theme redefines the base colours and the aliases resolve on the same element
 	if regexp.MustCompile(`--d-(ok|danger|muted|state-bg-[a-z]+):[^;]*#`).MatchString(css) {
 		t.Error("a new token holds a colour literal; it must follow the themed value")
+	}
+}
+
+// The older layouts render the same cells as before the cockpit existed: every file without a template plans at five
+// widths, in the page and in the editor, and mounts the same panels, as hashed with the layout.js of before the cockpit
+// (testdata/layout_cells.golden). A cockpit file is not in this list: its template is what changes the loader.
+func TestTemplatelessLayoutsRenderTheSameCells(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("node not available")
+	}
+	args := []string{"testdata/layout_cells.js", "web/layout.js", "testdata/layout_cells.golden", "web/layout.json", "web/layouts/classic.json", "web/layouts/debug.json",
+		"web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json",
+		"testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json", "testdata/compat/layout-v1-command.json"}
+	if out, err := exec.Command(node, args...).CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+	for _, f := range args[3:] {
+		b, err := os.ReadFile(f)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if l, err := ParseLayout(b); err != nil || l.Template != "" || len(l.Slots) > 0 {
+			t.Errorf("%s: template %q slots %v err %v", f, l.Template, l.Slots, err)
+		}
+	}
+}
+
+// The cockpit's pure logic in node: plan per width, slots left out, which panels mount, swap, dividers, save and reload.
+func TestCockpitPlanJS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("node not available")
+	}
+	if out, err := exec.Command(node, "testdata/layout_cockpit.js", "web/layout.js", "web/layouts/cockpit.json").CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+}
+
+// web/layouts/cockpit.json is a valid cockpit: every id is a slot panel or an id that is not built yet, and it also
+// carries old-style breakpoints for a shell that does not know the template.
+func TestShippedCockpitLayout(t *testing.T) {
+	b, err := webFS.ReadFile("web/layouts/cockpit.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	l, err := ParseLayout(b)
+	if err != nil {
+		t.Fatal(err)
+	}
+	known, _ := LayoutKnownIDs()
+	ms, _ := Manifests()
+	lc, _ := shellLayoutConf()
+	slot, built := map[string]bool{}, map[string]bool{}
+	for _, m := range ms {
+		built[m.ID] = true
+		slot[m.ID] = m.Slot || containsStr(lc.Slot, m.ID)
+	}
+	ok := func(id string) bool { return slot[id] || !built[id] && containsStr(lc.Reserved, id) }
+	if err := l.Check(known); err != nil {
+		t.Error(err)
+	}
+	if err := l.CheckSlots(ok); err != nil {
+		t.Error(err)
+	}
+	sl, _, err := l.Cockpit()
+	if err != nil || l.Template != "cockpit/1" || sl == nil || len(sl.Stage) != 1 || sl.RailWide == nil || len(sl.PhoneTabs) != 3 || len(sl.RailWide.Top) != 2 {
+		t.Errorf("cockpit.json: %+v %v", sl, err)
+	}
+	if len(l.Breakpoints["wide"].Panels) == 0 || len(l.Breakpoints["phone"].Panels) == 0 {
+		t.Error("cockpit.json has no old-style breakpoints for older shells")
+	}
+	for _, id := range []string{"video", "hero-meters"} {
+		if !slot[id] {
+			t.Errorf("%s must fit a slot (shell.json slot list or its manifest)", id)
+		}
+	}
+	// the default layout does not change in this slice
+	def, _ := webFS.ReadFile("web/layout.json")
+	if dl, _ := ParseLayout(def); dl.Template != "" {
+		t.Error("web/layout.json is a cockpit; the default flips in S7")
+	}
+}
+
+func TestParseCockpitKeys(t *testing.T) {
+	base := `{"schema":"watch.layout/1","cols":12,"rowHeight":48,"breakpoints":{},"template":"cockpit/1","sizes":{"strip":100,"railMin":420},"slots":%s}`
+	parse := func(slots string) (LayoutManifest, *LayoutSlots, LayoutSizes, error) {
+		l, err := ParseLayout([]byte(fmt.Sprintf(base, slots)))
+		if err != nil {
+			return l, nil, LayoutSizes{}, err
+		}
+		sl, z, err := l.Cockpit()
+		return l, sl, z, err
+	}
+	l, sl, z, err := parse(`{"band":["a"],"stage":"video","strip":["b","c"],"rail":["d"],"railWide":{"top":["t"],"left":["d"],"right":["e"]},"phoneTabs":{"T":["d"]}}`)
+	if err != nil || l.Template != "cockpit/1" || len(sl.Stage) != 1 || sl.Stage[0] != "video" || len(sl.Strip) != 2 || z.RailMin != 420 || sl.RailWide.Right[0] != "e" || sl.RailWide.Top[0] != "t" {
+		t.Fatalf("%+v %v", sl, err)
+	}
+	all := func(string) bool { return true }
+	if err := l.CheckSlots(all); err != nil {
+		t.Error(err)
+	}
+	// the loader ignores a slot name it does not know (a later version), the strict check refuses it
+	l, sl, _, err = parse(`{"stage":"video","dock":["x"]}`)
+	if err != nil || len(sl.Unknown) != 1 {
+		t.Fatalf("%+v %v", sl, err)
+	}
+	if l.CheckSlots(all) == nil {
+		t.Error("an unknown slot name passed the check")
+	}
+	l, _, _, _ = parse(`{"stage":"video","rail":["card"]}`)
+	if err := l.CheckSlots(func(id string) bool { return id != "card" }); err == nil || !strings.Contains(err.Error(), "card") {
+		t.Errorf("a non-slot panel: %v", err)
+	}
+	l, _, _, _ = parse(`{"stage":["video","map"]}`)
+	if l.CheckSlots(all) == nil {
+		t.Error("two stage panels passed")
+	}
+	l, _, _, _ = parse(`{"stage":"video","band":["a"],"strip":["a"]}`)
+	if l.CheckSlots(all) == nil {
+		t.Error("a panel twice in the page passed")
+	}
+	l, _, _, _ = parse(`{"stage":"video","railWide":{"top":["a"],"left":["a"]}}`)
+	if l.CheckSlots(all) == nil {
+		t.Error("a panel twice in the wide page passed")
+	}
+	l, _ = ParseLayout([]byte(`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","sizes":{"strip":7},"slots":{"stage":"video"}}`))
+	if l.CheckSlots(all) == nil {
+		t.Error("strip 7 passed")
+	}
+	// a file of a later version loads, is stored and served back byte for byte; only the strict check says no
+	for _, f := range []string{
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/2","slots":{"stage":{"id":"video"}},"sizes":{"strip":"12%"}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","slots":["video"],"sizes":{"strip":"12%"}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1.2","slots":{"stage":"video","rail":[{"id":"x"}]},"future":{"a":1}}`,
+		`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/1","slots":{"stage":"video","rail":[{"id":"x"}]}}`,
+	} {
+		l, err := ParseLayout([]byte(f))
+		if err != nil {
+			t.Errorf("%s: the loader refused it: %v", f, err)
+			continue
+		}
+		if l.CheckSlots(all) == nil {
+			t.Errorf("%s: the strict check passed it", f)
+		}
+		p := filepath.Join(t.TempDir(), "layout.json")
+		os.WriteFile(p, []byte(f), 0o644)
+		st := &layoutStore{path: p}
+		if got, err := st.load(); err != nil || !st.stored || string(got) != f {
+			t.Errorf("%s: a stored file of a later version was not served back as it is (stored %v, %v)", f, st.stored, err)
+		}
+	}
+	// an unknown template is read as a plain layout (ignored), refused only by the strict check
+	l, err = ParseLayout([]byte(`{"schema":"watch.layout/1","breakpoints":{},"template":"cockpit/9"}`))
+	if err != nil || l.CheckSlots(all) == nil {
+		t.Errorf("template cockpit/9: %v", err)
+	}
+}
+
+// The cockpit editor stores only through Save, and every change it makes goes through one function that previews the
+// layout object it holds: the shell's own layout object is changed only by api.preview (reverted by Done).
+func TestCockpitEditorContract(t *testing.T) {
+	b, _ := webFS.ReadFile("web/layoutedit.js")
+	_, js, ok := strings.Cut(string(b), "// ---- Edit layout on a cockpit")
+	if !ok {
+		t.Fatal("no cockpit editor in layoutedit.js")
+	}
+	if n := strings.Count(js, "api.save("); n != 1 {
+		t.Errorf("api.save is called from %d places in the cockpit editor; only the Save button may store the layout", n)
+	}
+	for _, want := range []string{"cockpitSwap(layout, id, over)", "cockpitSize(", "api.done(kept)", "'pointercancel', cancel", "role', 'separator'", "'keydown'"} {
+		if !strings.Contains(js, want) {
+			t.Errorf("the cockpit editor lacks %q", want)
+		}
 	}
 }
