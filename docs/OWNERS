@@ -149,6 +149,7 @@ cmd/d2bot/invverbs.go  credit-runner  itemverbs2
 cmd/d2bot/invverbs_test.go  credit-runner  botinstant
 cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
+cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
 cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
@@ -215,6 +216,7 @@ docs/hourfix2.md  credit-runner  hourfix2
 docs/inventory-actions.md  credit-runner  botinstant
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-actions.md  credit-runner  gearsets
+docs/inventory-actions.md (a new section)  credit-runner  botsell
 docs/inventory-ui.md  credit-runner  charreq
 docs/inventory-ui.md  credit-runner  nopins
 docs/knobs.md  credit-runner  botinstant
@@ -438,6 +440,8 @@ internal/invdesk/instant.go  credit-runner  botinstant
 internal/invdesk/instant_test.go  credit-runner  botinstant
 internal/invdesk/mover.go  credit-runner  itemverbs2
 internal/invdesk/mover_test.go  credit-runner  itemverbs2
+internal/invdesk/sellnow.go  credit-runner  botsell
+internal/invdesk/sellnow_test.go  credit-runner  botsell
 internal/invdesk/sets.go  credit-runner  charreq
 internal/invdesk/stash.go  credit-runner  botinstant
 internal/invdesk/stash.go  credit-runner  itemverbs2
@@ -530,6 +534,8 @@ internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/invapi.go  credit-runner  gearsets
+internal/watch/invapi_sellnow.go  credit-runner  botsell
+internal/watch/invapi_sellnow_test.go  credit-runner  botsell
 internal/watch/invapi_test.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
