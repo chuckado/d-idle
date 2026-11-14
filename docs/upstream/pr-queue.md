@@ -46,3 +46,5 @@ On the worker host `ctest -j8` (with `D2_MPQ_DIR` and the 1.14d patch installer 
 ## 4. Reproduce on the worker host
 
 Scripts of this prep (tools/emu, prefix `pp_`): `pp_setup.sh` (worktrees from upstream main plus cherry-picks), `pp_build.sh light|cold TARGET...`, `pp_light.sh before|after SEED N`, `pp_light_all.sh`, `pp_cold.sh before|after SEED N`, `pp_cold_count.py`, `pp_cold_test.sh`, `pp_cold_check.sh`, `pp_cold_guard.sh`, `pp_cold_fix.sh`, `pp_cold_push.sh`; second round (prprep2): `pp_r3_light.sh`, `pp_light3.sh`, `pp_r4_cold.sh`, `pp_cold4.sh`, `pp_ctest.sh`, `pp_skills.sh`. Fork checkout `~/d2d-lab/fork/src`; worktrees `~/d2d-lab/wt-pp-light`, `~/d2d-lab/wt-pp-cold`; data `D2_MPQ_DIR=/tmp/ug-emu` with the 1.14d patch installer.
+
+Pipeline above this queue (every candidate from finding to merge, waves, briefs): [pipeline-2026-11-14.md](pipeline-2026-11-14.md).

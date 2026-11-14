@@ -587,6 +587,14 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 
+`upstream/briefs/`
+
+- [hitrec-interrupt.md](upstream/briefs/hitrec-interrupt.md): Brief: P04 a hit interrupts an interruptible swing (WAVE 2, blocked on drill R1)
+- [hitrec-modes.md](upstream/briefs/hitrec-modes.md): Brief: P03 hit-recovery modes (fid/hitrec-modes-r1, stacked on fid/swing-start-r2)
+- [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
+- [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
+
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
@@ -597,6 +605,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `upstream/`
 
+- [pipeline-2026-11-14.md](upstream/pipeline-2026-11-14.md): Upstream PR pipeline: from finding to merged PR (2026-11-14) (status: current, 2026-11-14 (card TASK-422, agent prpipeline, Sonnet). User instruction 2026-11-14: run every...)
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
 - [verification-swing-start-2026-11-14.md](upstream/verification-swing-start-2026-11-14.md): Independent verification of the swing-start PR r1 (2026-11-14) (status: current, 2026-11-14 (TASK-415, agent prverify5). Verdict **NEEDS-WORK** on r1: one code edit (the held...)
