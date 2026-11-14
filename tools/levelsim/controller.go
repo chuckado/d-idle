@@ -171,7 +171,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		if dead {
 			need += quote
 		}
-		in := survival.Input{Now: last, Dial: dial, Current: survival.ZoneKey{Area: cur, Diff: diff}, Power: pw(), Purse: survival.Purse{Gold: gold, Need: need}, Cands: cs, FreshAllowed: true}
+		in := survival.Input{Now: last, Dial: dial, Current: survival.ZoneKey{Area: cur, Diff: diff}, Power: pw(), Purse: survival.Purse{Gold: gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: hero.OffenceUnread()}
 		d, err := led.Choose(in)
 		if err != nil {
 			return err
@@ -320,9 +320,9 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		return nil, err
 	}
 
-	rep.KHero = led.KHero()
+	rep.KHero = led.KHeroFor(hero.OffenceUnread())
 	for _, a := range rep.CandAreas {
-		rep.KZone[a] = led.KZone(survival.ZoneKey{Area: a, Diff: diff}, last)
+		rep.KZone[a] = led.KZoneFor(survival.ZoneKey{Area: a, Diff: diff}, last, hero.OffenceUnread())
 	}
 	return rep, nil
 }

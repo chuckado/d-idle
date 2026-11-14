@@ -142,3 +142,16 @@ func TestControllerReplayNoSecondMarsh(t *testing.T) {
 		}
 	}
 }
+
+// Card survcal: the new zone entry fields turn the offence, defence and block terms from default into read.
+func TestHeroOfEntryReadsTerms(t *testing.T) {
+	old := heroOfEntry(textKV(`time=2026-11-14T15:03:31Z msg="zone entry" area=1 clvl=11 life=97/165 heal=5 mana=30/30 tome=1 merc=alive`))
+	if !old.OffenceUnread() || old.Quality[power.TermDefence] != power.Default {
+		t.Fatalf("an old log must leave the terms default: %+v", old.Quality)
+	}
+	h := heroOfEntry(textKV(`time=2026-11-14T15:03:31Z msg="zone entry" area=1 clvl=11 life=97/165 heal=5 mana=30/30 tome=1 merc=alive def=140 block=25 dmg=5-11 dmgpct=10 ar=105`))
+	if h.OffenceUnread() || h.Defence != 140 || h.BlockPct != 25 || h.DmgMin != 5 || h.DmgMax != 11 || h.DmgPct != 10 || h.AR != 105 ||
+		h.Quality[power.TermDefence] != power.Measured {
+		t.Fatalf("terms not read: %+v %+v", h, h.Quality)
+	}
+}
