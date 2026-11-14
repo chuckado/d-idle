@@ -308,6 +308,7 @@ docs/upstream/  credit-runner  prprep
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
 docs/upstream/pr-queue.md  credit-runner  prpipeline
+docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees

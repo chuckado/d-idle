@@ -157,6 +157,7 @@
 | prpost4 | proposed | - | `docs/upstream/` | `fork-branch:fid/swing-start-r3`<br>`upstream-pr:swing-start` |
 | botsell | in-progress | - | `internal/invdesk/sellnow.go`<br>`internal/invdesk/sellnow_test.go`<br>`internal/watch/invapi_sellnow.go`<br>`internal/watch/invapi_sellnow_test.go`<br>`cmd/d2bot/invwire.go (your lines only)`<br>`docs/inventory-actions.md (a new section)` | - |
 | buildhosts3 | proposed | - | `docs/process/build-hosts-stage3-2026-11-14.md`<br>`deploy/nas/imgbuild.sh`<br>`tools/imgbuild.sh`<br>`tools/dev-update.sh`<br>`tools/dev-update-host.sh`<br>`tools/friendpack/build.sh` | - |
+| verifyp03p05 | in-progress | - | `docs/upstream/verifier-p03-p05-2026-11-14.md` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -205,6 +206,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2c22ac044 11-14 17:16 `Merge agent/verifyp03p05: Merge branch 'main' into TASK-444` (verifyp03p05)
+- bea34b30f 11-14 17:13 `Merge branch 'main' into TASK-444` (-)
 - 0de905134 11-14 16:51 `Merge agent/uib2: Merge branch 'main' into TASK-439` (uib2)
 - 1db6e7d36 11-14 16:50 `Merge branch 'main' into TASK-439` (-)
 - 6dece7277 11-14 16:32 `Merge agent/cut012: friends 0.1.2: installer fix, pack and set staged, drills pending` (cut012)
@@ -213,6 +216,4 @@
 - 2e1e899cd 11-14 16:23 `Merge agent/decomp21: Merge branch 'main' into decomp21` (decomp21)
 - 1310bf483 11-14 16:23 `Merge origin/main into cut012` (-)
 - e7e48309b 11-14 16:23 `Merge branch 'main' into decomp21` (-)
-- 5637441d3 11-14 16:21 `Merge agent/buildhosts3: Merge branch 'main' into buildhosts3` (buildhosts3)
-- 6c748cb09 11-14 16:20 `Merge branch 'main' into buildhosts3` (-)
 <!-- statusgen:end -->
