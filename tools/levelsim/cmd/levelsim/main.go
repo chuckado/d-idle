@@ -18,6 +18,9 @@ import (
 	"strings"
 	"time"
 
+	"d2lod-bot/internal/danger"
+	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/power"
 	"d2lod-bot/tools/levelsim"
 )
 
@@ -38,9 +41,18 @@ func main() {
 		runs      = flag.String("runs", "", "extra runs.json to add to the embedded runs")
 		useFit    = flag.Bool("fitted", false, "use freshly fitted supply parameters instead of the defaults")
 		denRefarm = flag.Bool("den-refarm", false, "allow farming the Den again after the quest")
+		shadow    = flag.String("shadow", "", "bot log to replay through the survival margin (docs/survival/power.md); needs -install and -arch")
+		install   = flag.String("install", "", "game install directory for -shadow (the zone profile is generated from its tables)")
+		archF     = flag.String("arch", "", "archetype id for -shadow: bruiser, ranged_physical, caster, summoner or hybrid_tank_caster")
+		diffF     = flag.String("diff", "normal", "difficulty of the zones in the -shadow log")
+		dialF     = flag.String("dial", "", "risk dial for -shadow: cautious, balanced or bold (default balanced)")
 		jsonOut   = flag.Bool("json", false, "print the JSON summary on stdout (tables go to stderr)")
 	)
 	flag.Parse()
+	if *shadow != "" {
+		die(runShadow(*shadow, *install, *archF, *diffF, *dialF))
+		return
+	}
 	d, err := levelsim.Load()
 	die(err)
 	if *runs != "" {
@@ -126,6 +138,44 @@ func main() {
 	if !*calibrate && !*optimise && !*sens && *strategy == "" && *out == "" && !*jsonOut {
 		flag.Usage()
 	}
+}
+
+// runShadow replays a bot log through the power estimate against the zone profile built from the install tables.
+func runShadow(log, install, arch, diff, dial string) error {
+	if install == "" || arch == "" {
+		return fmt.Errorf("-shadow needs -install DIR and -arch ID")
+	}
+	db, err := data.LoadInstall(install)
+	if err != nil {
+		return err
+	}
+	ov, err := danger.ShippedOverrides()
+	if err != nil {
+		return err
+	}
+	tab, err := danger.Build(db, danger.DefaultParams(), ov)
+	if err != nil {
+		return err
+	}
+	m, err := power.NewModel(tab.Params)
+	if err != nil {
+		return err
+	}
+	a, err := m.P.Archetype(arch)
+	if err != nil {
+		return err
+	}
+	f, err := os.Open(log)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial})
+	if err != nil {
+		return err
+	}
+	fmt.Print(rep.Text())
+	return nil
 }
 
 func calib(d *levelsim.Data, p levelsim.Params) {

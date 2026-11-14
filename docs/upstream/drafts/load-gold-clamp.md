@@ -1,6 +1,6 @@
 # Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game"
 
-> status: r2, **ready for the independent verifier** (card decomp21, TASK-440, 2026-11-14); not posted, needs the verifier and then the user's go. Branch `fid/load-gold-clamp-r2` on the private fork remote, head `3e679d8f`, two commits on upstream `f5e11693` (oracle `1a57eb4c`, claim `3e679d8f`; the numeric noreply identity, last line `Agent: Claude Code`). Replaces `fid/load-gold-clamp-r1` (one commit on `b6b59ae9`, 143 commits stale, split now as the standard asks). Earlier draft and proof: [../../research/pr-load-gold-draft.md](../../research/pr-load-gold-draft.md), [../../probes/fid/fid-inv-limits.md](../../probes/fid/fid-inv-limits.md). Body: [../bodies/load-gold-clamp-body.md](../bodies/load-gold-clamp-body.md).
+> status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report [../verifier-p03-p05-2026-11-14.md](../verifier-p03-p05-2026-11-14.md)); not posted, needs the user's go. Branch `fid/load-gold-clamp-r3` on the private fork remote, head `d229705a`, two commits on upstream `a2b4f686` (oracle `dda1fa57`, claim `d229705a`; the numeric noreply identity, last line `Agent: Claude Code`). Replaces `fid/load-gold-clamp-r2` (`3e679d8f` on `f5e11693`) and `-r1`. Earlier draft and proof: [../../research/pr-load-gold-draft.md](../../research/pr-load-gold-draft.md), [../../probes/fid/fid-inv-limits.md](../../probes/fid/fid-inv-limits.md). Body: [../bodies/load-gold-clamp-body.md](../bodies/load-gold-clamp-body.md).
 
 PR title: `game: a saved purse or stash over its cap is 0 on entering a game`
 
@@ -8,21 +8,23 @@ PR title: `game: a saved purse or stash over its cap is 0 on entering a game`
 
 `World::take_character` keeps the saved purse (`kGold`) and stash gold (`kGoldBank`) as they are. game.exe's loader `FUN_0056b180` restores them through `FUN_0056af80` (`0x56afb4..0x56b00f`) and `FUN_0053ff00`, which sets a stat to 0 when it would pass its cap: the purse's `clvl x 10000` (`FUN_00622e70`), the stash's 2,500,000 (`FUN_00623460`). The claim commit zeroes both in `take_character` under the same two tests and adds a `test_game` block (at the cap kept, one over zeroed).
 
-Two commits: the oracle (`tools/emu/fl_gold.py`, `test_game --load-gold`; it builds alone and prints what the parent does), then the claim (`world/setup.cpp`, the unit block in `test_game`).
+Two commits: the oracle (`tools/emu/fl_gold.py`, `test_game --load-gold`, the `tools/emu/README.md` row, and now an exit 1 plus a ctest when the case file cannot be opened), then the claim (`world/setup.cpp`, the unit block, the `docs/research/re/d2s-header.md` section "Gold on load").
 
 ## Claims
 
 | Claim | Evidence | Re-check |
 |---|---|---|
-| game.exe zeroes a loaded purse over `clvl x 10000` and a stash over 2,500,000; equal values are kept | game side: V run of the real `FUN_0056b180` on 539 cases (decomp5, card TASK-203; **not re-run in this card: the emulator image is on the worker host and the host was off limits**, so the game side here is S) | `uv run python fl_gold.py game cases.tsv` |
-| d2d's `World::enter` kept an over-cap purse or stash | V run (card decomp21): `test_game --load-gold` on the parent (oracle commit `1a57eb4c`, upstream `f5e11693`, built in the NAS builder with the game data) against the rule above: **363 of 539 cases differ** (the same count as the earlier run on `b6b59ae9`) | build the parent, `test_game --load-gold cases.tsv` |
-| after the claim d2d matches | V run: the same 539 cases on `3e679d8f`: **0 differ**; full `test_game` rc 0, prints `OK: a save's gold over its cap is 0 on entering a game` | `test_game` |
+| game.exe zeroes a loaded purse over `clvl x 10000` and a stash over 2,500,000; equal values are kept | **V run** (card emurun, TASK-445, 2026-11-14, emulator image on the worker host): `fl_gold.py game` ran the real `FUN_0056b180` -> `FUN_0056af80` on the 539 cases: **the game column equals the rule in 539 of 539 cases**. This replaces the old oracle claim that rested on decomp5's 2026-11-08 run (S, output not kept); both agree | `fl_gold.py gen`, `fl_gold.py game` |
+| d2d's `World::enter` kept an over-cap purse or stash | V run (card prfix2, NAS builder, release build with the game data, oracle commit `dda1fa57`): `test_game --load-gold` on the 539 cases against the rule written out (the verifier's `check.py`): **363 of 539 differ**; equal to the verifier's count and to decomp21's | `test_game --load-gold cases.tsv` |
+| after the claim d2d matches | V run: the same cases on `d229705a`: **0 of 539 differ**; `test_game` rc 0 and prints `OK: a save's gold over its cap is 0 on entering a game`; `test_combat`, `test_rules` rc 0. As for P03, the literal `diff game.tsv d2d.tsv` of the emulator's file against the head's was not run (U, one command on the worker host); it follows from the two rows above | `test_game` |
+| a case file that cannot be opened fails | V run: `test_game --load-gold /nonexistent.tsv` exits 1 and prints `load-gold: cannot open ...` on both commits; ctest `test_game_load_gold_missing_cases` (PASS_REGULAR_EXPRESSION, skipped without game data) | |
+| lint | V run: clang-tidy-19 with the repo's `.clang-tidy` clean on `tests/game/test_game.cpp` and `world/setup.cpp`; `pr_guard.py` 0 FAIL / 0 WARN | |
 | reachability | U: needs an edited or imported save; not claimed in the PR | none |
 
-Cases: `tools/emu/fl_gold.py gen` (11 levels x 7 purse values x 7 stash values: 0, 1, cap-1, cap, cap+1, 2 cap, 2^25-1). The d2d column of this card's run was compared with the rule written out (`gold > level x 10000 -> 0`, `bank > 2,500,000 -> 0`), not with a fresh emulator run: that last step is the one open item.
+The 363 is grid arithmetic (33 of the 49 purse and stash pairs per level, 11 levels): said so in the body.
 
 ## Limits and open items
 
-- **Blocked on the worker host's emulator:** one `fl_gold.py game` run on `f5e11693`'s image to make the game column a fresh V run (the file is the one decomp5 ran; only the d2d side was rebuilt).
-- The maintainer may not want a loader that zeroes a player's gold: say in the PR that this is game.exe's rule (an over-cap save cannot come from play), ask in review.
-- Checks still to run on the fork checkout before posting: `python3 tools/presubmit.py --quick`, `python3 tools/pr_guard.py`, ctest equal to the parent (the four known data-set failures).
+- The maintainer may not want a loader that zeroes a player's gold: the body says this is game.exe's rule (an over-cap save cannot come from play) and asks in review.
+- The stash cap is a second constant next to `kStashGoldMax` in `commands.cpp`; offered in the body, not done (CodeRabbit may ask).
+- Owed before posting (worker host or the user's go): the literal `diff` above, the full `tools/presubmit.py`, the whole `ctest` against the parent (the NAS builder ran the three tests of the area).

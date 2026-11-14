@@ -237,7 +237,12 @@ func playerGear(ref *runnerRef) bot.PlayerGear {
 	if ref == nil || ref.inv == nil {
 		return nil
 	}
-	return ref.inv
+	return mercGear{inner: ref.inv, snap: func() *d2.Snapshot {
+		if r := ref.p.Load(); r != nil {
+			return r.LastSnapshot()
+		}
+		return nil
+	}} // adds the player's Revive mercenary request (mercplayer.go)
 }
 
 // setsGate is the unlock of the gear sets (ladder row `gearsets`, docs/gearsets.md): open when the row is open, when there
