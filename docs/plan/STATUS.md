@@ -165,6 +165,7 @@
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | verifyp03b | in-progress | - | `docs/upstream/verifier2-p03-2026-11-14.md` | - |
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| p03posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -212,7 +213,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
 - 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
+- 0fa102afd 11-14 18:53 `Merge branch 'main' into p03posted` (-)
 - 2a5bda25b 11-14 18:53 `Merge branch 'main' into TASK-450` (-)
 - 564879d7a 11-14 18:37 `Merge agent/survC: Merge branch 'main' into TASK-452` (survC)
 - 9773f4061 11-14 18:36 `Merge branch 'main' into TASK-452` (-)
@@ -220,6 +223,4 @@
 - cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
 - 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
 - 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
 <!-- statusgen:end -->
