@@ -182,6 +182,7 @@
 | decomp23 | proposed | - | `docs/research/warp-walk-game-trace.md`<br>`tools/emu/ww_path.py`<br>`tools/emu/ww_search.py`<br>`tools/emu/ww_used.py`<br>`tools/emu/ww_dis.py`<br>`tools/emu/ww_run.sh`<br>`tools/emu/ww_outcome.py`<br>`docs/upstream/drafts/warp-walk-plan.md`<br>`docs/upstream/bodies/warp-walk-plan-body.md`<br>`docs/upstream/briefs/verify-warp-walk-r2.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/pr-queue.md` | - |
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
+| uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -227,6 +228,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fe856ee5c 11-15 01:34 `Merge agent/uic23review: Merge branch 'main' into TASK-477` (uic23review)
+- ff2d080db 11-15 01:33 `Merge branch 'main' into TASK-477` (-)
 - 7aaeed825 11-15 01:32 `Merge agent/decomp23: Merge branch 'main' into TASK-473` (decomp23)
 - 6f1df264a 11-15 01:31 `Merge branch 'main' into TASK-473` (-)
 - 1f779e3e8 11-15 01:28 `decomp23: merge origin/main, re-apply P02/P04/P06 rows (trace facts only)` (-)
@@ -235,6 +238,4 @@
 - 5f04e555f 11-15 01:23 `Merge agent/b9fork: Merge branch 'main' into TASK-475` (b9fork)
 - 6615e1ca0 11-15 01:22 `Merge branch 'main' into TASK-475` (-)
 - e4b1c8f56 11-15 01:15 `Merge agent/uib6: Merge branch 'main' into TASK-471` (uib6)
-- 2d7f0890b 11-15 01:14 `Merge branch 'main' into TASK-471` (-)
-- 96bd31812 11-15 01:08 `Merge agent/uib5: Merge branch 'main' into TASK-470` (uib5)
 <!-- statusgen:end -->
