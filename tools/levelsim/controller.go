@@ -171,7 +171,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		if dead {
 			need += quote
 		}
-		in := survival.Input{Now: last, Dial: dial, Current: survival.ZoneKey{Area: cur, Diff: diff}, Power: pw(), Purse: survival.Purse{Gold: gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: hero.OffenceUnread()}
+		in := survival.Input{Now: last, Dial: dial, Current: survival.ZoneKey{Area: cur, Diff: diff}, Power: pw(), Purse: survival.Purse{Gold: gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: o.M.OffenceUnread(hero)}
 		d, err := led.Choose(in)
 		if err != nil {
 			return err
@@ -216,7 +216,7 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		case "zone entry":
 			a, _ := strconv.Atoi(kv["area"])
 			m := hero.Merc
-			hero = heroOfEntry(kv)
+			hero = o.heroOf(kv)
 			hero.Merc.Level = m.Level
 			at = a
 			if rep.Names[a] != "" {
@@ -320,9 +320,9 @@ func ControllerReplay(r io.Reader, o CtlOpts) (*CtlReport, error) {
 		return nil, err
 	}
 
-	rep.KHero = led.KHeroFor(hero.OffenceUnread())
+	rep.KHero = led.KHeroFor(o.M.OffenceUnread(hero))
 	for _, a := range rep.CandAreas {
-		rep.KZone[a] = led.KZoneFor(survival.ZoneKey{Area: a, Diff: diff}, last, hero.OffenceUnread())
+		rep.KZone[a] = led.KZoneFor(survival.ZoneKey{Area: a, Diff: diff}, last, o.M.OffenceUnread(hero))
 	}
 	return rep, nil
 }
