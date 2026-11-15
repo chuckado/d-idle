@@ -12,6 +12,7 @@ import (
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2map"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/gclock"
 	"d2lod-bot/internal/input"
 	"d2lod-bot/internal/nav"
 	"d2lod-bot/internal/quest"
@@ -152,7 +153,43 @@ func (o objectAdapter) Interact(ctx context.Context, name string) error {
 	return task.Errorf(task.KindTimeout, "%s: the object never changed after %d clicks", name, tries)
 }
 
+// objectExploreBudget bounds the search walk of find: the Step budget of an Interact node is 3 minutes.
+const objectExploreBudget = 100 * time.Second
+
+// find is the object of the class nearest to the character. When neither the object nor its preset is known yet it
+// explores the level until one shows up: d2d lists presets of built rooms only, so a far quest object (the Tree of
+// Inifuss in the Dark Wood) is missing on arrival (V docs/d2d-backend.md; V 2026-11-15 log: 12 "object class 30 not
+// found" within 1 s of arrival, never a walk).
 func (o objectAdapter) find(ctx context.Context, class int) (*d2.Unit, error) {
+	u, err := o.findNear(ctx, class, nil)
+	if err == nil || o.nv == nil || ctx.Err() != nil || !strings.Contains(err.Error(), "not found") {
+		return u, err
+	}
+	known := func() bool {
+		if s, err := o.e.Snapshot(); err == nil {
+			for i := range s.Objects {
+				if s.Objects[i].Class == class {
+					return true
+				}
+			}
+		}
+		if o.e.World != nil {
+			_, _ = o.e.World.Update()
+			if lm := o.e.World.Current(); lm != nil {
+				for _, p := range lm.Presets {
+					if p.Kind == d2map.PresetObject && p.ID == class {
+						return true
+					}
+				}
+			}
+		}
+		return false
+	}
+	ectx, cancel := gclock.WithTimeout(ctx, objectExploreBudget)
+	defer cancel()
+	if xerr := o.nv.Explore(ectx, known); xerr != nil && !errors.Is(xerr, nav.ErrExplored) && ctx.Err() != nil {
+		return nil, xerr
+	}
 	return o.findNear(ctx, class, nil)
 }
 
