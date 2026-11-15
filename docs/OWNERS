@@ -234,6 +234,7 @@ docs/inventory-actions.md  credit-runner  gearsets
 docs/inventory-actions.md (a new section)  credit-runner  botsell
 docs/inventory-ui.md  credit-runner  charreq
 docs/inventory-ui.md  credit-runner  nopins
+docs/inventory-ui.md  credit-runner  uic2
 docs/knobs.md  credit-runner  botinstant
 docs/knobs.md  credit-runner  exploredpct
 docs/knobs.md  credit-runner  freshstart
@@ -573,17 +574,20 @@ internal/town/tidy_test.go  credit-runner  towntests
 internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
+internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/invapi.go  credit-runner  gearsets
+internal/watch/invapi.go  credit-runner  uic2
 internal/watch/invapi_sellnow.go  credit-runner  botsell
 internal/watch/invapi_sellnow_test.go  credit-runner  botsell
 internal/watch/invapi_test.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
+internal/watch/invui.go  credit-runner  uic2
 internal/watch/layout.go  credit-runner  uis1
 internal/watch/layout_test.go  credit-runner  uis1
 internal/watch/mercapi.go  credit-runner  botmerc
@@ -620,6 +624,7 @@ internal/watch/skillsui.go  credit-runner  skilltrees
 internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/testdata/campaign  pro-runner  levelplan3
+internal/watch/testdata/charscreen/  credit-runner  uic2
 internal/watch/testdata/compat  credit-runner  repairtrip
 internal/watch/testdata/gear_farm_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.js  credit-runner  repairtrip
@@ -655,14 +660,22 @@ internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees2
 internal/watch/web/gear.js  credit-runner  repairtrip
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
 internal/watch/web/inventory-actions.js  credit-runner  nopins
+internal/watch/web/inventory-canvas.css  credit-runner  uic2
+internal/watch/web/inventory-canvas.js  credit-runner  uic2
 internal/watch/web/inventory-drag.js  credit-runner  gearsets
+internal/watch/web/inventory-merc.css  credit-runner  uic2
+internal/watch/web/inventory-merc.js  credit-runner  uic2
 internal/watch/web/inventory-sets.css  credit-runner  gearsets
+internal/watch/web/inventory-sets.css  credit-runner  uic2
 internal/watch/web/inventory-sets.js  credit-runner  gearsets
+internal/watch/web/inventory-sets.js  credit-runner  uic2
 internal/watch/web/inventory-tip.css  credit-runner  nopins
 internal/watch/web/inventory-tip.js  credit-runner  nopins
+internal/watch/web/inventory.css  credit-runner  uic2
 internal/watch/web/inventory.js  credit-runner  gearsets
 internal/watch/web/inventory.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  repairtrip
+internal/watch/web/inventory.js  credit-runner  uic2
 internal/watch/web/layout.js  credit-runner  uis1
 internal/watch/web/layout.json  credit-runner  uis1
 internal/watch/web/layouts/  credit-runner  uis1
@@ -728,8 +741,11 @@ tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  gearsets
+tools/uishots.sh  credit-runner  uic2
+tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/genlayouts.js  credit-runner  uis1
 tools/uishots/layout-rows.json  credit-runner  uis1
+tools/uishots/pages.go  credit-runner  uic2
 tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
 # END GENERATED OWNERS
