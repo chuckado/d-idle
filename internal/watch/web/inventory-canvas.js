@@ -334,7 +334,7 @@
   }
   // a label that does not fit its cell or slot is cut with an ellipsis (the full name is the title): the box is never scrolled or overrun;
   // the label itself is measured too, so a long unbreakable word in a one-row slot is cut, not clipped mid-letter (review c2c3 R10)
-  function fits(h, n) { return h.scrollHeight <= h.clientHeight + 1 && h.scrollWidth <= h.clientWidth + 1 && (!n || n.scrollWidth <= n.clientWidth + 1); }
+  function fits(h, n) { return h.scrollHeight <= h.clientHeight + 1 && h.scrollWidth <= h.clientWidth + 1 && (!n || (n.scrollWidth <= n.clientWidth + 1 && n.scrollHeight <= n.clientHeight + 1)); }
   function cutText(node, host) {
     var t = node.firstChild;
     if (!t || t.nodeType !== 3 || !host.clientHeight) return;
@@ -440,6 +440,8 @@
     Promise.resolve().then(function () { if (view === e.detail) paint(view); });
   }
   function init() {
+    // ?tab=pack opens the phone's storage tab (the fit fixtures use it); anything else keeps the hero tab
+    if (/[?&]tab=pack(&|$)/.test(location.search || '') && $('cv')) $('cv').dataset.tab = 'pack';
     chips(); tabs();
     $('cv-q').addEventListener('input', function () { F.q = $('cv-q').value.trim().toLowerCase(); dim(); });
     $('cv-sell').addEventListener('click', function () {

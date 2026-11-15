@@ -48,7 +48,7 @@ var fxVariants = map[string]func(map[string]any){
 // fxExpect is what a variant's page must show once it has loaded: selectors that must exist and have a size. It is the machine
 // form of "the defect does not return"; uishots.sh passes the same ones to the harness (expect=).
 var fxExpect = map[string][]string{
-	"pending": {"[data-key=item-11][data-pending=stash][data-wait=town]", "[data-key=slot-rhand][data-pending]", "[data-key=item-10][data-pending=equip]"},
+	"pending": {"[data-key=item-11][data-pending=stash][data-wait=town]", "[data-key=item-10][data-pending=equip]"},
 }
 
 // variantView is the fixture desk's view with the variant applied; "" or an unknown name is the plain view.

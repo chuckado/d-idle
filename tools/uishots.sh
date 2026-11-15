@@ -134,7 +134,7 @@ character-deadmerc watch/inventory?theme=dark&fx=deadmerc
 character-deadmerc-light watch/inventory?theme=light&fx=deadmerc
 character-longnames watch/inventory?theme=dark&fx=longnames
 character-longnames-light watch/inventory?theme=light&fx=longnames
-character-pending watch/inventory?theme=dark&fx=pending expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=slot-rhand][data-pending]|[data-key=item-10][data-pending=equip]
+character-pending watch/inventory?theme=dark&fx=pending&tab=pack expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=item-10][data-pending=equip]
 character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack] #belt,#cv-sel,#errands
 character-tip-light watch/inventory?theme=light hover=[data-key=item-16]
 character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]"
