@@ -198,6 +198,7 @@
 | dangerfit2 | proposed | - | `internal/danger`<br>`internal/power`<br>`docs/survival/danger.md`<br>`docs/survival/power.md` | - |
 | decomp31 | proposed | - | `docs/research/decomp31-drops.md`<br>`internal/plandata/dropmodel-normal.json`<br>`docs/plan/data/dropmodel-normal.json`<br>`tools/emu/dm_` | - |
 | decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| prfix7 | proposed | - | `docs/upstream/bodies/hitrec-interrupt-body.md`<br>`docs/upstream/drafts/hitrec-interrupt.md`<br>`docs/upstream/prfix7-p04-r3-2026-11-15.md`<br>`docs/upstream/briefs/verify2-hitrec-interrupt.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `upstream-pr:hitrec-interrupt`<br>`fork-branch:fid/hitrec-interrupt-r3` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -241,6 +242,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f40ddc57a 11-15 13:14 `Merge agent/prfix7: Merge branch 'main' into prfix7` (prfix7)
+- d4a7a770f 11-15 13:13 `Merge branch 'main' into prfix7` (-)
 - f3a866b1a 11-15 13:09 `Merge agent/dangerfit2: Merge branch 'main' into dangerfit2` (dangerfit2)
 - 25d606285 11-15 13:08 `Merge branch 'main' into dangerfit2` (-)
 - 4a07c0132 11-15 13:03 `Merge agent/uiphone: Merge branch 'main' into TASK-501` (uiphone)
@@ -248,7 +251,5 @@
 - 7791fe294 11-15 12:46 `Merge branch 'main' into dangerfit2` (-)
 - d621b6505 11-15 12:31 `Merge agent/decomp31: Merge branch 'main' into decomp31` (decomp31)
 - 5fc48d6bf 11-15 12:30 `Merge branch 'main' into decomp31` (-)
-- fb2fceb54 11-15 12:01 `Merge branch 'main' into TASK-501` (-)
-- 6e927ed5f 11-15 11:56 `Merge agent/decomp30: Merge branch 'main' into TASK-506` (decomp30)
-- de7e1fc3e 11-15 11:34 `Merge branch 'main' into TASK-506` (-)
+- 92a24f3db 11-15 12:12 `Merge remote-tracking branch 'origin/main' into agent/prfix7` (-)
 <!-- statusgen:end -->
