@@ -180,7 +180,6 @@
 | uib6 | in-progress | - | `cmd/d2bot/glancewire_blocked.go`<br>`cmd/d2bot/glancewire_blocked_test.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/funwire.go`<br>`internal/watch/commands.go` | - |
 | uib9 | in-progress | - | `internal/d2dctl/item_verbs_merc.go`<br>`internal/d2dctl/item_verbs_merc_test.go`<br>`internal/invdesk/mercverbs.go`<br>`internal/invdesk/mercverbs_test.go`<br>`internal/invdesk/sets.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go`<br>`docs/research/merc-gear.md` | - |
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
-| b9fork | in-progress | - | `docs/research/merc-gear.md`<br>`docs/inventory-actions.md` | - |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |

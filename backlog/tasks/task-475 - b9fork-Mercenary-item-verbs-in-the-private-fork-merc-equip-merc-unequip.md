@@ -1,10 +1,11 @@
 ---
 id: TASK-475
 title: 'b9fork: Mercenary item verbs in the private fork (merc-equip, merc-unequip)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T05:45:00Z'
+updated_date: '2026-11-15T06:28:00Z'
 labels:
   - d2d
   - feature

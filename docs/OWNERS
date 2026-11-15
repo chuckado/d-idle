@@ -243,7 +243,6 @@ docs/gearsets.md  credit-runner  gearsets
 docs/goldprio.md  credit-runner  goldprio
 docs/hourfix.md  credit-runner  hourfix
 docs/hourfix2.md  credit-runner  hourfix2
-docs/inventory-actions.md  credit-runner  b9fork
 docs/inventory-actions.md  credit-runner  botinstant
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-actions.md  credit-runner  gearsets
@@ -314,7 +313,6 @@ docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
 docs/research/emu-runs-2026-11-14b.md  credit-runner  decomp22
 docs/research/fid-poisonres-trace.md  credit-runner  fid-poison-res-diag
 docs/research/fidelity-vendor-probe.md  live-agent  fidprobe-vendor
-docs/research/merc-gear.md  credit-runner  b9fork
 docs/research/merc-gear.md  credit-runner  uib9
 docs/research/mocks/return.html  credit-runner  returnmock
 docs/research/pal-skill-matrix.md  credit-runner  palskill-matrix
