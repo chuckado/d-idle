@@ -283,8 +283,11 @@ export function mount(root, ctx) {
       b.title = nodeLabel(n, level()) + (n.why ? ' - ' + n.why : '');
       mark(b, n);
       if (n.id === st.sel) b.setAttribute('aria-pressed', 'true');
-      b.append(el('span', 'zm-nm', n.name), el('span', 'zm-rt', rightText(n)));
-      if (n.why) b.appendChild(el('span', 'zm-why', n.why));
+      const rt = el('span', 'zm-rt', rightText(n));
+      rt.dataset.r = (n.status || {}).here || (n.status || {}).queued || (n.status || {}).failed ? 'mark' : 'range';
+      b.append(el('span', 'zm-nm', n.name), rt);
+      const two = [n.range ? n.range.replace('clvl ', '') : '', n.why].filter(Boolean).join(' - '); // the second line, where a row has the room
+      if (two) b.appendChild(el('span', 'zm-why', two));
       b.addEventListener('click', () => open(n.id));
       b.addEventListener('keydown', (e) => {
         if (!e.key || !e.key.startsWith('Arrow')) return;
@@ -334,7 +337,6 @@ export function mount(root, ctx) {
       }
       ctx.hide(false);
       st.view = v;
-      ctx.meta.textContent = v.hero && v.hero.area ? 'you: ' + v.hero.area : '';
       draw();
       measure();
       if (st.deep && ns0(v)) { // a deep link: ?zone=<id> opens that zone's menu once
