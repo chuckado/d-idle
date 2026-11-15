@@ -21,6 +21,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -118,6 +128,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -232,6 +252,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -345,6 +375,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -454,6 +494,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -569,6 +619,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -674,6 +734,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -790,6 +860,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -904,6 +984,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1019,6 +1109,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1165,6 +1265,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1262,6 +1372,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1376,6 +1496,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1489,6 +1619,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1598,6 +1738,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1713,6 +1863,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1818,6 +1978,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -1933,6 +2103,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -2047,6 +2227,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}
@@ -2162,6 +2352,16 @@ div.d-slotbody
         line
         line
         line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
       button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
         span.zm-nm "Rogue Encampment"
         span.zm-rt {r=range}

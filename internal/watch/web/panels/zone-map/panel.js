@@ -330,7 +330,7 @@ export function mount(root, ctx) {
       lg.style.gridColumn = (c + 1) + ' / span ' + w;
       lg.style.gridRow = (r + 1) + ' / span ' + h;
       lg.style.setProperty('--zm-lc', String(w > 1 && h > 1 ? 2 : 1));
-      (h === 3 && w === 1 ? LEGEND.slice(0, 3) : LEGEND).forEach((l) => { const i = el('span', 'zm-lg'); i.setAttribute('role', 'listitem'); i.dataset.band = l[0]; i.append(el('i'), l[1]); lg.appendChild(i); });
+      (h === 3 && w === 1 ? LEGEND.slice(0, 3) : LEGEND).forEach((l) => { const i = el('span', 'zm-lg'); i.setAttribute('role', 'listitem'); i.dataset.band = l[0]; i.append(el('i'), el('span', '', l[1])); lg.appendChild(i); });
       grid.appendChild(lg);
       return;
     }
