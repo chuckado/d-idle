@@ -127,6 +127,10 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			fitHarness(w, r)
 		case (p == "/watch" || p == "/watch/inventory") && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
+		case strings.HasPrefix(p, "/__fit/defect-"):
+			if !serveDefectCSS(w, r) {
+				http.NotFound(w, r)
+			}
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)
 		case strings.HasPrefix(p, "/watch/layouts/cockpit-") && strings.HasSuffix(p, ".json"):

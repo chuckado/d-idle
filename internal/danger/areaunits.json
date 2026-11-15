@@ -3,7 +3,7 @@
  "diff": "normal",
  "tag": "V run (game.exe room population under the emulator, 12 seeds) + I (the fit)",
  "evidence": "docs/research/decomp28-trace.md, docs/survival/units-fit-2026-11-15.md, docs/research/data28/areas-input.csv",
- "note": "Not read by the generator yet (a wiring card is proposed in the trace). Prefer rows[].unitsMean for a measured area; use fit.* only for an unmeasured area (other acts, other difficulties: not measured).",
+ "note": "Read by internal/danger/areaunits.go: rows[] give units and units per screen of a measured area (Normal, Acts 1 and 2); fit.* gives units per tile, used for the per-screen density of any other area. Nightmare, Hell and Acts 3 to 5 are not measured.",
  "fit": {
   "maze": {
    "lnUnitsPerTile": -5.8175,

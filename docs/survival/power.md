@@ -50,3 +50,7 @@ The raw logs of swap7, h4 and hero14 are not in the repository (`docs/levelsim.m
 3. The pass rule has not run on real logs (not in the repo).
 4. The merc's damage and hold share are constants (hireling table not read).
 5. The shadow hook sees the leveler's default build, not an explicit `levelerBuild`.
+
+## Block and unblockable ranged attackers (card dangerfit2)
+
+`hitOn` multiplies the hit chance by `1 - block` only for the blockable share of an attacker: `Mon.Unblockable` (0 to 1, from `danger.Monster.Unblockable`) removes that share from the block factor, since game.exe cannot block a missile with no physical damage (decomp26 Q10 to Q13, V). `TestUnblockableRanged` runs it for a block-60 Paladin (margin drops) and a Sorceress (unchanged). Zone margins for caster-heavy areas (Black Marsh, Dark Wood, Catacombs) fall for shield heroes; no live check.
