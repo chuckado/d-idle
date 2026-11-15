@@ -1,0 +1,6 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "Quilted Armor"
+  div.tip-line [data-k=base] "Durability: 0 of 24 (broken)"
+  div.tip-line [data-k=prop] "Defense: 11"
+  div.tip-where [data-k=where] "Worn by you, armour"
+  div.tip-hint [] "Right-click: all actions."
