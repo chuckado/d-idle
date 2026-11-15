@@ -189,7 +189,6 @@
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
-| decomp26 | in-progress | - | `docs/research/decomp26-trace.md`<br>`docs/upstream/drafts/hitrec-interrupt.md`<br>`docs/upstream/bodies/hitrec-interrupt-body.md`<br>`docs/upstream/drafts/missile-block.md`<br>`docs/upstream/bodies/missile-block-body.md`<br>`docs/upstream/drafts/revive-mode-issue.md`<br>`docs/upstream/drafts/merc-aura-issue.md`<br>`docs/upstream/drafts/hitrec-knock-in-hit.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/briefs/verify-hitrec-interrupt.md`<br>`docs/upstream/briefs/verify-missile-block.md`<br>`docs/research/data26/*` | `upstream-pr:hitrec-interrupt`<br>`upstream-pr:missile-block`<br>`fork-branch:fid/hitrec-interrupt-r1`<br>`fork-branch:fid/missile-block-r3` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |

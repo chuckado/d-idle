@@ -1,10 +1,13 @@
 ---
 id: TASK-492
-title: 'decomp26: P04 hit interrupts, P06 missile block gate, P09/P10/P03c issue drafts'
-status: In Progress
+title: >-
+  decomp26: P04 hit interrupts, P06 missile block gate, P09/P10/P03c issue
+  drafts
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T11:51:00Z'
+updated_date: '2026-11-15T12:30:00Z'
 labels:
   - d2d
   - upstream-pr
