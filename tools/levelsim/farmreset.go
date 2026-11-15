@@ -38,6 +38,7 @@ func (e *Env) FarmRate(a *Area, cl int, o FarmOpts, H float64) (xpPerHour float6
 	base := (expTable[cl] + expTable[min(cl+1, MaxLevel)]) / 2
 	s := NewState()
 	s.XP = base
+	s.WP = e.wp // every waypoint of the route is active (the plan's way_in)
 	var gain float64
 	minF := 1 - o.Pct/100
 	for guard := 0; s.T < H && guard < 500; guard++ {
@@ -55,7 +56,10 @@ func (e *Env) FarmRate(a *Area, cl int, o FarmOpts, H float64) (xpPerHour float6
 			for s.T < H {
 				e.Farm(&s, a, Exit{MaxMin: 0.1, TMax: H}, nil)
 				hist = append(hist, smp{s.T, s.XP})
-				if e.Remaining(&s, a) <= 0.001 || 1-e.Remaining(&s, a) < o.Pct/100 {
+				if e.Remaining(&s, a) <= 0.001 {
+					break // swept empty
+				}
+				if 1-e.Remaining(&s, a) < o.Pct/100 {
 					continue
 				}
 				// the observed rate of the last window against the average of a cycle that resets now
@@ -105,7 +109,8 @@ func (e *Env) FarmReset(pcts []int, H float64) []FarmRow {
 		if a == nil {
 			continue
 		}
-		var probe State = NewState()
+		probe := NewState()
+		probe.WP = e.wp
 		w := e.Travel(&probe, a.ID)
 		r := FarmRow{Zone: a.Name, Clvl: z.Clvl, ByPct: map[int]float64{}, Rule: map[int]float64{}, Walk: w, Games: map[int]int{}}
 		r.Base, _ = e.FarmRate(a, z.Clvl, FarmOpts{Pct: 100, WalkMin: -1}, H)

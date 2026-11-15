@@ -94,12 +94,12 @@ func main() {
 	if *farmReset {
 		pcts := []int{95, 90, 85, 80, 70, 60}
 		e := levelsim.NewEnv(d, p, levelsim.ModePlan)
-		fmt.Print(levelsim.FormatFarmReset("farm loop, fitted supply (decay 0.25, floor 0.5), 60 min per zone, gain over clearing everything", e.FarmReset(pcts, 60), pcts))
+		fmt.Print(levelsim.FormatFarmReset("farm loop, fitted supply (decay 0.25, floor 0.5), 240 min per zone, gain over clearing everything", e.FarmReset(pcts, 240), pcts))
 		pp := p
 		pp.Decay, pp.Floor, pp.Yield = 1, 0.4, 0.82 // the weak prior of docs/levelsim.md section 3
-		fmt.Print(levelsim.FormatFarmReset("farm loop, prior supply (decay 1, floor 0.4, yield 0.82): tails under half the fresh rate", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 60), pcts))
+		fmt.Print(levelsim.FormatFarmReset("farm loop, prior supply (decay 1, floor 0.4, yield 0.82): tails under half the fresh rate", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 240), pcts))
 		pp.Decay, pp.Floor, pp.Yield = 1.5, 0.2, 0.9 // a steep tail (U: the bound of the argument, not a fit)
-		fmt.Print(levelsim.FormatFarmReset("farm loop, steep tail (decay 1.5, floor 0.2, yield 0.9)", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 60), pcts))
+		fmt.Print(levelsim.FormatFarmReset("farm loop, steep tail (decay 1.5, floor 0.2, yield 0.9)", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 240), pcts))
 		return
 	}
 	if *useFit {
