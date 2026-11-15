@@ -33,7 +33,7 @@ export function measure(win, opts) {
     }
   }
   // The character screen (card uic4, review c2c3 R14): checks the first fit check let through. Only on a page that has the canvas frame.
-  const cvx = d.querySelector('.cv') ? charChecks(win, d, vis, cs) : null;
+  const cvx = d.body.hasAttribute('data-canvas') ? charChecks(win, d, vis, cs) : null;
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {

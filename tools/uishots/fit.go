@@ -64,7 +64,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 f.addEventListener('load', async () => {
   await wait(5000);
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
-  for (let i = 0; i < 30 && f.contentDocument.querySelector('.cv') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild); i++) await wait(500);
+  for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
   await wait(1500);
   try {
     const pv = await (await fetch('/watch/panels.json')).json();
