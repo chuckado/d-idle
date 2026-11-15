@@ -25,14 +25,14 @@ Two commits: the oracle (`test_warp_walk --dump`, `tools/emu/warp_walk_path.py`,
 
 | Sweep (levels 1..136 with warps) | build | starts | plan = game.exe | plan differs | no path left after the tick (not compared) | in a town (not compared) | outcome differs |
 |---|---|---|---|---|---|---|---|
-| 2.5 cells, 8 directions, 30 seeds (`--dump 30`) | parent | 21,023 | 20,418 | **439** | 122 | 44 | **146** (Act 1: 30, Acts 2 to 5: 116) |
-| | claim | 21,021 | 20,885 (469 where a walk to a spot differs) | **0** | 122 | 14 | **0** |
-| 1.5 / 2.5 / 3.5 / 5 / 7 cells, 16 directions, 6 seeds (`--dump 6 --dists 1.5,2.5,3.5,5,7 --dirs 16`) | parent | 40,189 | 39,328 | **542** | 303 | 16 | 211 |
-| | claim | 40,185 | 39,862 (540 where a walk to a spot differs) | **0** | 305 | 18 | 157 (see limits: not the plan) |
+| 2.5 cells, 8 directions, 30 seeds (`--dump 30`) | parent | 21,031 | 20,424 | **436** | 124 | 47 | **145** (+2 known) |
+| | claim | 21,031 | 20,890 (466 where a walk to a spot differs) | **0** | 124 | 17 | **0** (+2 known) |
+| 1.5 / 2.5 / 3.5 / 5 / 7 cells, 16 directions, 6 seeds (`--dump 6 --dists 1.5,2.5,3.5,5,7 --dirs 16`) | parent | 40,183 | 39,318 | **537** | 306 | 22 | 53 (+158 known) |
+| | claim | 40,183 | 39,855 (537 where a walk to a spot differs) | **0** | 306 | 22 | **0** (+158 known, see limits: not the plan) |
 
-So the plan is compared, and equal, in 60,747 starts of the claim's runs (1,009 of them starts where the spot plan differs from game.exe's), and differs in none; the parent differs in 981. A plan counts as equal only when the tick's path is exactly game.exe's first path. 427 starts on the claim (122 and 305) are not compared at all: the walk ended inside the tick (game.exe's first step is blocked, or the end is within the first step), so the tick leaves no path to read. 32 (14 and 18) are in a town, where the tick's crowd holds NPCs and the oracle has none. They are counted apart, not as equal. Each dump is compared against its own game.exe column.
+So the plan is compared, and equal, in 60,745 starts of the claim's runs (1,003 of them starts where the spot plan differs from game.exe's), and differs in none; the parent differs in 973. A plan counts as equal only when the tick's path is exactly game.exe's first path. 430 starts on the claim (124 and 306) are not compared at all: the walk ended inside the tick (game.exe's first step is blocked, or the end is within the first step), so the tick leaves no path to read. In every one of them d2d's own plan for the start (the same `player_walk` call, a unit target) equals game.exe's path. 39 (17 and 22) are in a town, where the tick's crowd holds NPCs and the oracle has none. They are counted apart, not as equal. Each dump is compared against its own game.exe column.
 
-The counts are not exactly repeatable: two processes of the same binary on the same input (`--sweep 30`) differ in 13 of about 46,000 result lines (seeds 3, 13 and 21), and in the start count by 3, so rounded counts are the claim and a rerun moves the columns by a few. The source was not found (U: the level or room build of a few seeds, not the walk). The wide sweep's outcome residue is therefore given by key, not by count (`--outcome-known`, below).
+The counts repeat exactly: the dump builds and links every level before its first start (level builds run on threads and link their neighbours as they finish; without that a start near a map edge could see the area past it blocked, in about 0.1 percent of starts), and five runs of `--dump 30` on the claim are byte-identical. `--outcome-known 40:2` exempts the two level 40 (Lut Gholein) warp 2 starts where d2d does not take the warp in 600 ticks although its plan equals game.exe's one-point path (a town crowd case, the same on the parent and on the claim).
 
 The test (no argument; it needs the game data and SKIPs without) runs 8 starts of seed 1 (levels 17, 46, 52, 76, 113 and 118, where the spot plan differs; 2 and 6 as controls) and checks that the tick's path is exactly game.exe's first path (an empty path fails) and whether the warp is taken, against game.exe's answers (taken from the oracle's runs on the sweep's bits; the test runs each start alone). Built with the claim's `tick.cpp` put back to the parent's: **6 of the 8 fail, exit 1**; with the claim: 8 of 8, exit 0.
 
@@ -46,17 +46,17 @@ D2_MPQ_DIR=<game data> build/tests/test_warp_walk       # 8 of 8 on the claim; 6
 cd tools/emu && uv sync
 D2_MPQ_DIR=<game data> ../../build/tests/test_warp_walk --dump 30 /tmp/d.txt
 uv run python warp_walk_path.py game /tmp/d.txt > /tmp/g.tsv
-uv run python warp_walk_path.py compare /tmp/d.txt /tmp/g.tsv     # claim: OK, exit 0; parent: PLAN DIFFERS lines, FAIL, exit 1
+uv run python warp_walk_path.py compare /tmp/d.txt /tmp/g.tsv --outcome-known 40:2     # claim: OK, exit 0; parent: PLAN DIFFERS lines, FAIL, exit 1
 D2_MPQ_DIR=<game data> ../../build/tests/test_warp_walk --dump 6 /tmp/w.txt --dists 1.5,2.5,3.5,5,7 --dirs 16
 uv run python warp_walk_path.py game /tmp/w.txt > /tmp/wg.tsv
-uv run python warp_walk_path.py compare /tmp/w.txt /tmp/wg.tsv --outcome-known 92:0,81:0-3   # claim: OK, exit 0 (parent: FAIL, exit 1)
+uv run python warp_walk_path.py compare /tmp/w.txt /tmp/wg.tsv --outcome-known 92:0,81:0-3,40:2   # claim: OK, exit 0 (parent: FAIL, exit 1)
 ```
 
 ## Honest limits
 
 - The grid is d2d's (`Level::unit_blocked`), as is the start; the oracle has no rooms (the room lookups answer "in room"), no stamps and no NPC crowd, and the unit sizes are the player's 2 and a tile unit's 0 (`drlg.md`). The walker is the Sorceress's, at her walking speed, with no faster run/walk.
 - The oracle builds the path record with the tile unit as the target (type 5) itself; that a click becomes that walk is the read of the addresses above, not something the emulator derives. The outcome model is the read rule of `FUN_00548b00` (distance, one more walk), not a run of that function.
-- Outcome differences outside the plan remain. In the 1.5 to 7 cell sweep 157 of 40,185 starts still differ on the claim (211 on the parent): level 92 warp 0 (145 starts: d2d does not take the warp, the model takes it at distance 3) and level 81 warps 0 to 3 (12 starts: d2d takes it, the model stalls at distance 8). Their first paths equal game.exe's, so they are not this rule; candidates are an object or monster stamp near the tile unit (the oracle has none) and the per-tick reach (`warp_close` each tick, against game.exe's test when a walk ends); neither was checked (U). The 2.5 cell sweep has none.
+- Outcome differences outside the plan remain. In the 1.5 to 7 cell sweep 158 of 40,183 starts are exempted on the claim: level 92 warp 0 (145 starts: d2d does not take the warp, the model takes it at distance 3), level 81 warps 0 to 3 (12 starts: d2d takes it, the model stalls at distance 8) and one level 40 warp 2 start. Their first paths equal game.exe's, so they are not this rule; candidates are an object or monster stamp near the tile unit (the oracle has none) and the per-tick reach (`warp_close` each tick, against game.exe's test when a walk ends); neither was checked (U). The 2.5 cell sweep has only the two level 40 starts.
 - A start's state depends on the starts before it on the same level (the room walk flags fill as a level is entered), so the test's starts are ones that reproduce in isolation (level 92 warp 3 did not and is not in it); the sweeps record each start's own bits.
 - Not covered: an operated trap door's walk (`take_warp` is also set in `objects.cpp`; a walk after it is now planned as a unit walk, U), and a Pickup or Resurrect walk whose point lies in a warp's Select box (the target becomes the warp, as before).
 - Not in this PR: an item pick-up is the same unit walk with near 2 (`0x64992b`) while d2d plans it as a spot walk, and objects get near 2 or `FUN_006497d0` where `player_walk` gives near 1 to every unit; both are separate claims.
@@ -67,8 +67,8 @@ uv run python warp_walk_path.py compare /tmp/w.txt /tmp/wg.tsv --outcome-known 9
 - [x] A test in `tests/` citing the game.exe addresses, and the oracle in `tools/emu/`, in the same pull request (oracle commit first and building alone, claim second); the test fails without the fix
 - [x] The finding in `docs/research/re/collision.md`
 - [x] `python3 tools/pr_guard.py upstream/main HEAD`: 0 FAIL, 0 WARN
-- [x] `python3 tools/presubmit.py --quick --base upstream/main`: 0 FAIL, 2 WARN (build and gcc skipped by `--quick`; built, tested and run by hand)
-- [x] `ctest -j3` on a full build (game data, no patch installer): 303 tests on the branch, 301 pass or skip; `test_outdoor` (abort) and `smoke_d2d` fail, the same two as on upstream `4e054f43` (302 tests, same two); `test_game`, `test_combat` and the new `test_warp_walk` pass; each commit builds alone
+- [x] `python3 tools/presubmit.py --quick --base upstream/main`: 0 FAIL, 3 WARN (build and gcc skipped by `--quick`; built, tested and run by hand; doc-claims on the sentence of `collision.md` that says the dump builds every level, which it does)
+- [x] `ctest -j3` on a full build (run on the head before the last test line, which only builds the levels first; this head: `test_game`, `test_combat` and `test_warp_walk` rerun, rc 0) (game data, no patch installer): 303 tests on the branch, 301 pass or skip; `test_outdoor` (abort) and `smoke_d2d` fail, the same two as on upstream `4e054f43` (302 tests, same two); `test_game`, `test_combat` and the new `test_warp_walk` pass; each commit builds alone
 - [x] clang-tidy-19 and clang-format-19 on `world/tick.cpp` and `tests/game/test_warp_walk.cpp`: 0 findings, 0 format warnings
 
 ---
