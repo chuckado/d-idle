@@ -58,11 +58,15 @@ export function mount(root, ctx) {
     box.dataset.empty = '1';
   }
 
+  let sig = ''; // the last drawn journey: an identical poll leaves the dots (and a focused one) alone
   return {
     update(g) {
-      if (!g) { ctx.hide(true); return; }
+      if (!g) { sig = ''; ctx.hide(true); return; }
       ctx.hide(false);
       const j = g.journey;
+      const now = JSON.stringify(j || null);
+      if (now === sig) return;
+      sig = now;
       if (!j || !Array.isArray(j.chapters) || !j.chapters.length) { absent('not reported'); ctx.state('ready'); return; }
       delete box.dataset.empty;
       const chs = j.chapters, cur = current(chs);
@@ -100,6 +104,16 @@ export function mount(root, ctx) {
       });
       pop.append(dl);
       if (j.next && j.next.text) pop.append(ctx.el('p', 'jr-next', j.next.text));
+      // the same verbs in the popover: on a narrow cell the strip keeps only the first one (the cell is under 270 px)
+      const pa = ctx.el('span', 'jr-acts jr-pacts');
+      (j.actions || []).slice(0, 2).forEach((a, i) => {
+        const b = ctx.el('button', i === 0 ? 'jr-btn jr-p' : 'jr-btn', a.label);
+        b.type = 'button';
+        b.dataset.key = 'pact-' + i;
+        b.addEventListener('click', () => { act(a, b); if (pop.hidePopover) pop.hidePopover(); });
+        pa.append(b);
+      });
+      if (pa.children.length) pop.append(pa);
       ctx.state('ready');
     },
   };

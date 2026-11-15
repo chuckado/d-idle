@@ -15,8 +15,8 @@ export function rows(s) {
   return [
     ['Now', w.now || s.reason],
     ['Would change it', w.change],
-    ['Next', w.next],
-    ['Danger here', s.margin],
+    ['Next', (w.next || '').replace(/^Next:\s*/i, '')],
+    ['Risk here', s.margin],
     ['Uptime', s.uptime],
     ['Voice', s.voice],
   ].filter((r) => r[1]);
@@ -47,7 +47,12 @@ export function mount(root, ctx) {
   // a click or a tab outside moves the focus out of the panel: that closes it (no listener on the page)
   root.addEventListener('focusout', (e) => { if (!e.relatedTarget || !root.contains(e.relatedTarget)) open(false); });
 
+  // the last drawing: an unchanged reply redraws nothing, so the live region is not announced again and an open popover keeps its focus
+  let sig = '';
   function show(t, w, place, reason, why) {
+    const next = JSON.stringify([t, w, place, reason, why]);
+    if (next === sig) return;
+    sig = next;
     say.dataset.tone = t;
     word.textContent = w;
     txt.textContent = '';

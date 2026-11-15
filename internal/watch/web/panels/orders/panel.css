@@ -12,7 +12,7 @@
     font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   [data-panel="orders"] .o-safety[data-tone="muted"] { background: transparent; color: var(--d-text-2); }
   [data-panel="orders"] .o-list { flex: 0 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; }
-  [data-panel="orders"] .o-row { display: grid; grid-template-columns: 16px minmax(0, auto) minmax(6rem, 1fr) auto 22px; font-size: var(--d-fs-1); gap: var(--d-sp-2); align-items: center;
+  [data-panel="orders"] .o-row { display: grid; grid-template-columns: 16px minmax(0, max-content) minmax(0, 1fr) auto 22px; font-size: var(--d-fs-1); gap: var(--d-sp-2); align-items: center;
     min-block-size: 28px; padding-block: 2px; border-block-start: var(--d-bw) solid var(--d-line); }
   [data-panel="orders"] .o-list > .o-row:first-child { border-block-start: 0; }
   [data-panel="orders"] .o-plan { flex: none; }
@@ -29,6 +29,10 @@
   [data-panel="orders"] .o-chip[data-s="failed"] { background: var(--d-state-bg-danger); color: var(--d-bad); }
   [data-panel="orders"] .o-x { background: none; border: 0; padding: 0; color: var(--d-text-3); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 22px; min-block-size: 22px; }
   [data-panel="orders"] .o-x:hover { color: var(--d-danger); }
+  /* the reason gives way first (the minutes in the title are what tells two orders apart); on the phone it lives in the row's title only, and the rows are thumb-sized */
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-row { grid-template-columns: 16px minmax(0, 1fr) auto var(--c-touch, 22px); min-block-size: var(--c-touch, 28px); }
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-r { display: none; }
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-x { min-inline-size: var(--c-touch, 22px); min-block-size: var(--c-touch, 22px); }
   [data-panel="orders"] .o-empty { padding-block: var(--d-sp-2); color: var(--d-text-2); font-size: var(--d-fs-1); }
   [data-panel="orders"] .o-verbs .d-btn:disabled { opacity: .5; cursor: not-allowed; }
   [data-panel="orders"] .o-why { flex: none; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

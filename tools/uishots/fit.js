@@ -77,8 +77,15 @@ export function measure(win, opts) {
   const zones = { n: zb.length, rows: tops.size, minH: zb.length ? Math.round(Math.min(...zb.map((x) => x[1].height))) : 0,
     cut: zb.filter((x) => { const nm = x[0].querySelector('.zm-nm'); return nm && nm.clientWidth < 24; }).length, menu: !!sr, host: sheet ? sheet.dataset.host : '',
     overlap: sr ? zb.filter((x) => x[1].left < sr.right - 1 && x[1].right > sr.left + 1 && x[1].top < sr.bottom - 1 && x[1].bottom > sr.top + 1).length : 0 };
+  // the map switch (Act / Area) sits on the top edge of a map tile and covers no zone button; an order title is never cut while its reason still shows
+  const sw = d.querySelector('.d-mapswitch'), swr = sw && vis(sw);
+  zones.switchOverlap = swr ? zb.filter((x) => x[1].left < swr.right - 1 && x[1].right > swr.left + 1 && x[1].top < swr.bottom - 1 && x[1].bottom > swr.top + 1).length : 0;
+  const orderCut = [...d.querySelectorAll('[data-panel="orders"] .o-row:not(.o-plan)')].filter((r) => {
+    const t = r.querySelector('.o-t:not(.o-wide)'), re = r.querySelector('.o-r');
+    return t && vis(t) && t.scrollWidth > t.clientWidth + 1 && re && re.clientWidth > 0;
+  }).length;
   return {
-    zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, empty, unready, slots,
+    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }

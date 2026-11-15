@@ -50,3 +50,6 @@
         <dt> "9"
         <dd> "ch9 (to come)"
       <p class="jr-next"> "The path is blocked."
+      <span class="jr-acts jr-pacts">
+        <button class="jr-btn jr-p" data-key="pact-0" type="button"> "Go now"
+        <button class="jr-btn" data-key="pact-1" type="button"> "Hold"

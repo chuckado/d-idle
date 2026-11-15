@@ -6,7 +6,7 @@
 // From a zone click to an accepted order is two clicks (the zone, then Go now). Orders go through POST /api/commands, the
 // client of the Orders panel (sendCommand), so the Loop and the queue share the one dispatcher. Survival margin is never
 // drawn as a number: the menu shows the guard's own words. textContent only.
-import { sendCommand } from '../orders/panel.js';
+import { sendCommand, replacing } from '../orders/panel.js';
 
 export const DURS = [['10 min', 10], ['20 min', 20], ['30 min', 30], ['1 h', 60], ['Until I cancel', 0]];
 export const REPAIR = [['damaged', 'Repair when worn'], ['always', 'Repair every round']];
@@ -113,11 +113,15 @@ export function mount(root, ctx) {
   const sheet = ctx.tileSheet('beside'), menu = sheet.el;
   menu.setAttribute('role', 'dialog');
   const place = () => sheet.place();
+  // Focus: opening a zone moves it to the menu's first button, closing (Esc, the cross, an accepted order) returns it to the zone's button.
+  const inside = () => typeof document !== 'undefined' && !!document.activeElement && menu.contains(document.activeElement);
   function close() {
+    const back = !menu.hidden && (inside() || (document.activeElement || {}).tagName === 'BODY') ? st.sel : '';
     st.sel = ''; st.charter = null; st.err = ''; st.loop.open = false;
     menu.hidden = true;
     st.sig = '';
     if (st.view) draw();
+    if (back && grid.querySelector) { const z = grid.querySelector('[data-key="z-' + back + '"]'); if (z && z.focus) z.focus(); }
   }
   function open(id) {
     st.sel = id; st.charter = null; st.err = ''; st.loop.open = false;
@@ -126,6 +130,8 @@ export function mount(root, ctx) {
     menu.hidden = false;
     st.sig = '';
     draw();
+    const f = menu.querySelector && (menu.querySelector('[data-primary]') || menu.querySelector('button, select'));
+    if (f && f.focus) f.focus();
   }
 
   // ---- orders ----
@@ -177,9 +183,16 @@ export function mount(root, ctx) {
     return s;
   }
   function drawMenu() {
+    // a redraw (a duration chip, the Loop form) must not drop the focus the user is on
+    const keep = inside() && document.activeElement.dataset ? document.activeElement.dataset.key : '';
+    drawMenuBody();
+    if (keep && menu.querySelector) { const f = menu.querySelector('[data-key="' + keep + '"]'); if (f && f.focus) f.focus(); }
+  }
+  function drawMenuBody() {
     ctx.ui.clear(menu);
     const n = node(st.sel);
     if (!n) { menu.hidden = true; return; }
+    menu.setAttribute('aria-label', 'Order for ' + n.name);
     const s = n.status || {}, lad = (st.view && st.view.ladder) || null;
     menu.dataset.kind = n.kind;
     menu.dataset.sel = n.id;
@@ -211,7 +224,10 @@ export function mount(root, ctx) {
     if (s.here) {
       col.append(btn('Stay and fight', 'stay', true, stay), btn('Back to town', 'town', false, () => errand('town')));
     } else {
-      col.appendChild(btn(hard ? 'Ask anyway' : 'Go now', 'go', true, () => go(n)));
+      const rep = replacing();
+      const goBtn = btn(hard ? 'Ask anyway' : rep ? 'Go now (replaces ' + rep + (rep === 1 ? ' order)' : ' orders)') : 'Go now', 'go', !hard, () => go(n));
+      if (rep) goBtn.title = 'Go now cancels ' + rep + ' open ' + (rep === 1 ? 'order' : 'orders') + ' first; Add to queue keeps them';
+      col.appendChild(goBtn);
       if (lad) { // Loop and the queue: the control once open, else one muted teaser line
         if (lad.loopOpen) {
           col.appendChild(btn(st.loop.open ? 'Loop: close' : 'Loop...', 'loop', false, () => { st.loop.open = !st.loop.open; drawMenu(); }));
@@ -273,6 +289,7 @@ export function mount(root, ctx) {
       svg.appendChild(l);
     });
     grid.appendChild(svg);
+    legend(ns, g);
     const cur = ns.find((n) => n.id === st.sel) || ns.find((n) => (n.status || {}).here) || ns.find((n) => n.orderable) || ns[0];
     ns.forEach((n) => {
       const p = g.at(n), b = el('button', 'zm-n'), bd = band(n, level());
@@ -299,6 +316,26 @@ export function mount(root, ctx) {
       grid.appendChild(b);
     });
   }
+  // The legend of the stripe colours, in the empty cells at the top of the grid (the colours alone say nothing): the first free block of
+  // 2x2, 3x2, 1x4 or 2x3 cells, top first. A grid with no free block (a short window) keeps the same words in the title of the grid.
+  const LEGEND = [['in', 'in your range'], ['above', 'above it'], ['hard', 'too hard now'], ['no', 'not open yet']];
+  grid.title = 'Stripe at the left of a zone: ' + LEGEND.map((l) => l[1]).join(', ');
+  function legend(ns, g) {
+    const used = new Set(ns.map((n) => { const p = g.at(n); return p.c + ',' + p.r; }));
+    const free = (c, r, w, h) => { for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) if (c + i >= g.cols || r + j >= g.rows || used.has((c + i) + ',' + (r + j))) return false; return true; };
+    for (let r = 0; r < g.rows; r++) for (let c = 0; c < g.cols; c++) for (const [w, h] of [[2, 2], [3, 2], [1, 4], [2, 3], [1, 3]]) {
+      if (!free(c, r, w, h)) continue;
+      const lg = el('div', 'zm-legend');
+      lg.setAttribute('role', 'list');
+      lg.style.gridColumn = (c + 1) + ' / span ' + w;
+      lg.style.gridRow = (r + 1) + ' / span ' + h;
+      lg.style.setProperty('--zm-lc', String(w > 1 && h > 1 ? 2 : 1));
+      (h === 3 && w === 1 ? LEGEND.slice(0, 3) : LEGEND).forEach((l) => { const i = el('span', 'zm-lg'); i.setAttribute('role', 'listitem'); i.dataset.band = l[0]; i.append(el('i'), el('span', '', l[1])); lg.appendChild(i); });
+      grid.appendChild(lg);
+      return;
+    }
+  }
+
   // An act without map data: the orderable areas as a list in the same box (each opens the same Go now through a plain order).
   function drawList(v) {
     const areas = v.areas || [];

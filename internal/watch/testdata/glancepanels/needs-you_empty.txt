@@ -4,5 +4,4 @@
       <span> "Needs you"
       <button class="n-dots" data-key="menu" aria-haspopup="true" aria-label="All needs and notification setting" type="button"> "..."
     <div class="n-list">
-    <button class="n-more" data-key="more" aria-haspopup="true" type="button" hidden>
     <div class="n-pop" aria-label="Everything that needs you" popover="auto" role="dialog">
