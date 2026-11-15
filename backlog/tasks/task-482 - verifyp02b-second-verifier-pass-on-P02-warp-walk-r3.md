@@ -15,6 +15,7 @@ card: "verifyp02b"
 owns:
   - "docs/upstream/verifier2-p02-2026-11-15.md"
 exclusive: []
+result: "P02 r3 (fork fid/warp-walk-r3 d442f595) PASS WITH CHANGES: the first pass's required changes hold (test 8/8, mutant 6 FAIL rc 1; compare parent rc 1 / claim rc 0; ctest same as upstream; tidy 0); remaining: compare and the test count an empty tick path as equal (~211 starts), counts vary by a few between runs, --outcome-max 157 has no headroom. Offline, not live."
 contracts: []
 ---
 
@@ -28,5 +29,5 @@ Why: second independent verifier pass on upstream PR candidate P02 r3 (fork `fid
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/upstream/verifier2-p02-2026-11-15.md with verdict and exact required changes
+- [x] #1 docs/upstream/verifier2-p02-2026-11-15.md with verdict and exact required changes
 <!-- AC:END -->
