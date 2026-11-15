@@ -30,3 +30,7 @@ V: `UPDATED d2play-20261108 0.0.261115105052 -> 0.0.261115113025`. The first two
 ## Redeploy 3, origin/main c2cf0e03c
 
 V: `UPDATED d2play-20261108 0.0.261115113025 -> 0.0.261115182828 in 23s` (no DNS problem this time). Healthy, new version in `d2bot start`, 0 error/panic lines in 5 minutes, hero clvl 16 alive, xp 230392 -> 231257, deaths 0, no watchdog lines. `zone entry` fields present: `def` only. No `zone shadow:`, `zone choice:`, `planning blocked` or park lines in the window (U: the park rule was not exercised). No token used. Rollback: `dev-update.sh --rollback --to d2play-20261108`.
+
+## Redeploy 4, origin/main 8cbe1eac5 (Reset button, power-model wiring, farm loop)
+
+V: image devp8 untouched; `UPDATED d2play-20261108 0.0.261115182828 -> 0.0.261115193109 in 17s`. Note: run dev-update from a checkout at current main (an older checkout lacks `D2_SANDBOX_HOST` and fails with "is not running"). Healthy, new version in `d2bot start`, 0 error/panic/watchdog lines in 5 minutes, hero clvl 16 alive, xp 240003 -> 240214, deaths 0. `zone entry` now has def, block, dmg, dmgpct and ar. No `zone shadow:`, `zone choice:`, `planning blocked` or park lines in the window. No POST, no token. Rollback: `dev-update.sh --rollback --to d2play-20261108`.
