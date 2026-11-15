@@ -14,7 +14,8 @@ export function measure(win, opts) {
     if (!n.clientHeight && !n.clientWidth) return; // inline boxes and SVG parts have no client box
     const dh = n.scrollHeight - n.clientHeight, dw = n.scrollWidth - n.clientWidth;
     const ell = cs(n).textOverflow === 'ellipsis'; // one line cut with an ellipsis: width only, by design
-    const bad = (dh > 1 && !scroller(n)) || (dw > 1 && !ell && !scroller(n));
+    const clamp = cs(n).webkitLineClamp && cs(n).webkitLineClamp !== 'none'; // a text cut to N lines with an ellipsis: by design
+    const bad = (dh > 1 && !scroller(n) && !clamp) || (dw > 1 && !ell && !scroller(n));
     if (bad) over.push({ el: label, dh: dh > 1 ? dh : 0, dw: dw > 1 && !ell ? dw : 0 });
   };
   for (const n of d.querySelectorAll('[data-cockpit-slot]')) if (vis(n)) test(n, 'slot ' + n.dataset.cockpitSlot);
@@ -55,7 +56,7 @@ export function measure(win, opts) {
     slots.push({ slot: n.dataset.cockpitSlot, x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) });
     if (n.dataset.cockpitSlot === 'band' || n.dataset.cockpitSlot === 'stage') mark(r);
   }
-  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar')) { const r = vis(n); if (r) mark(r); }
+  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar, .update-banner')) { const r = vis(n); if (r) mark(r); } // the update banner takes its strip off the frame (--d-banner-h): covered, not dead
   let covered = 0;
   for (let i = 0; i < cov.length; i++) covered += cov[i];
   let best = 0, bx = 0, by = 0, prev = new Int16Array(cols + 1), cur = new Int16Array(cols + 1);

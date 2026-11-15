@@ -29,6 +29,7 @@ export function mount(root, ctx) {
   dots.setAttribute('aria-haspopup', 'true');
   head.append(ctx.el('span', '', 'Needs you'), dots);
   const list = ctx.el('div', 'n-list');
+  list.setAttribute('data-scroll', ''); // a long question or five answers on a short box scroll inside the list
   const pop = ctx.el('div', 'n-pop');
   pop.setAttribute('popover', 'auto');
   pop.setAttribute('role', 'dialog');
@@ -67,7 +68,7 @@ export function mount(root, ctx) {
     const e = ctx.el('div', 'n-row');
     e.dataset.sev = sevOf(n);
     e.dataset.id = n.id;
-    if (n.kind === 'question') e.dataset.q = '1'; // two lines of text, the answers on a line of their own
+    if (n.kind === 'question') e.dataset.q = ctx.short && ctx.short() ? 's' : '1'; // two lines of text (one on a short window), the answers on a line of their own
     e.title = n.text + (n.sub ? ' - ' + n.sub : '');
     const t = ctx.el('span', 'n-t');
     t.append(ctx.el('b', '', n.text));
