@@ -59,7 +59,7 @@
   function model(f) {
     var it = f.it, v = view;
     var reqs = requestsFor(it.id), trashQ = reqs.some(function (r) { return kindOf(r) === 'trash'; });
-    var m = { target: 'hero', /* the menu structure is per target: the mercenary stage adds its own entries */ title: it.name || it.code || 'item', cls: 'q-' + (it.quality || 'normal'), id: it.id, rows: [], entries: [] };
+    var m = { target: 'hero', /* the menu structure is per target: the mercenary stage adds its own entries */ title: it.name || it.code || 'item', cls: 'q-' + (it.quality || 'normal'), id: it.id, key: f.place === 'worn' ? 'slot-' + f.slot : 'item-' + it.id, rows: [], entries: [] };
     reqs.forEach(function (r) {
       var row = { text: verb(r), state: r.state, kind: kindOf(r), cancel: r.state === 'queued' };
       if (r.state === 'queued' && (r.place === 'stash' || kindOf(r) === 'stash' || kindOf(r) === 'take') && r.reason) row.text += ' (' + TRIP + ')';
@@ -181,8 +181,8 @@
     switch (e.act) {
       case 'equip': closeMenu(true); equip(m.id, e.slot); return;
       case 'unequip': closeMenu(true); unequip(e.slot); return;
-      case 'sell': { var it = find(openKey).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: it.mark === 'sell' ? '' : 'sell' }); return; }
-      case 'keep': { var k = find(openKey).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: k.mark === 'keep' ? '' : 'keep' }); return; }
+      case 'sell': { var it = find(m.key).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: it.mark === 'sell' ? '' : 'sell' }); return; }
+      case 'keep': { var k = find(m.key).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: k.mark === 'keep' ? '' : 'keep' }); return; }
       case 'identify': closeMenu(true); identify(m.id); return;
       case 'stash': closeMenu(true); stash(m.id); return;
       case 'take': closeMenu(true); take(m.id); return;

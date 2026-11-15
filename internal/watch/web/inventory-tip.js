@@ -114,7 +114,7 @@
 
   // One row of a requirement block: ok is true only for a requirement the view says is met. A refusal (hard reason) is
   // never ok; a warning (broken) is neither: tone 'warn'.
-  function reqRows(it, side) {
+  function reqRows(it, side, merc) {
     var rows = [], reasons = side && side.reasons || [], req = it.req || {}, used = {};
     function gap(r) { var n = Number(r.need), h = Number(r.have); return n > 0 && h >= 0 && n > h ? n - h : 0; }
     reasons.forEach(function (r, i) {
@@ -127,7 +127,7 @@
       if (i === undefined) rows.push({ ok: true, text: STATWORD[k] + ' ' + req[k] });
       else { var g = gap(reasons[i]); rows.push({ ok: false, text: STATWORD[k] + ' ' + req[k] + ' (' + (reasons[i].have === undefined ? '?' : reasons[i].have) + ')' + (g ? '  ' + g + ' short' : '') + (reasons[i].approx ? ' (about)' : '') }); }
     });
-    if (req.class && req.class.length) {
+    if (req.class && req.class.length && !merc) { // a class requirement is the hero's; the mercenary's verdict carries his own reasons
       if (used.class === undefined) rows.push({ ok: true, text: req.class.join(', ') + ' only' });
       else rows.push({ ok: false, text: reasons[used.class].text || (req.class.join(', ') + ' only') });
     }
@@ -141,7 +141,7 @@
   function who(it, merc) {
     var u = it.usable || {}, out = [];
     if (u.hero) out.push({ who: 'hero', head: 'You', ok: u.hero.ok, rows: reqRows(it, u.hero) });
-    if (u.merc && merc) out.push({ who: 'merc', head: (MERCKIND[merc.kind] || 'Mercenary') + (merc.level ? ' ' + merc.level : ''), ok: u.merc.ok, rows: reqRows(it, u.merc) });
+    if (u.merc && merc) out.push({ who: 'merc', head: (MERCKIND[merc.kind] || 'Mercenary') + (merc.level ? ' ' + merc.level : ''), ok: u.merc.ok, rows: reqRows(it, u.merc, true) });
     return out;
   }
 

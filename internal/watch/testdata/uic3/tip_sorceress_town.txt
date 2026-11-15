@@ -1,0 +1,6 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "Jade Amulet"
+  div.tip-line [data-k=prop] "+9 Mana"
+  div.tip-where [data-k=where] "In the stash · queued: Take out of the stash (waits for town)"
+    span.tip-badge [data-badge=town] "TOWN"
+  div.tip-hint [] "Right-click: all actions."
