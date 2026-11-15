@@ -194,6 +194,7 @@
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
 | verifyp04 | in-progress | - | `docs/upstream/verifier-p04-2026-11-15.md` | - |
 | p06posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| decomp29 | proposed | - | `docs/research/decomp29-skilldamage.md`<br>`internal/power/skilldamage.json`<br>`tools/emu/dc29_` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -237,6 +238,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 8b503ea96 11-15 11:26 `Merge agent/decomp29: Merge branch 'main' into decomp29` (decomp29)
+- 7799e8d82 11-15 11:25 `Merge branch 'main' into decomp29` (-)
 - 7c68cb8d9 11-15 11:24 `Merge agent/verifyp04: Merge branch 'main' into TASK-500` (verifyp04)
 - e87f5367d 11-15 11:24 `Merge agent/p06posted: Merge branch 'main' into TASK-502` (p06posted)
 - 4677774c9 11-15 11:22 `Merge branch 'main' into TASK-500` (-)
@@ -245,6 +248,4 @@
 - 9b623b789 11-15 11:05 `Merge branch 'main' into TASK-497` (-)
 - 193099d9a 11-15 10:45 `Merge agent/portalguard: portalguard: default mode 0, generous bounds, R3 recipe and flip rule` (portalguard)
 - 709927cee 11-15 10:38 `Merge branch 'main' into TASK-502` (-)
-- b8c97de0d 11-15 10:10 `Merge branch 'main' into TASK-497` (-)
-- 59fb7c540 11-15 10:08 `Merge agent/decomp28: Merge branch 'main' into decomp28` (decomp28)
 <!-- statusgen:end -->
