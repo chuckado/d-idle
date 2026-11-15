@@ -117,8 +117,6 @@
     gap: 0; padding: 0; block-size: 100dvh; min-block-size: 0; overflow: hidden; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 100px; }
   .d-shell[data-cmode="phone"] .d-links .d-wide { display: none; } /* "Return", not "Return screen": the links stay on one line */
-  .d-shell[data-cmode="phone"] [data-panel="statusline"] .txt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
-  .d-shell[data-cmode="phone"] [data-panel="statusline"] .line { align-items: flex-start; }
   .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
   .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { grid-template-rows: 36px minmax(0, 1fr); align-content: start; row-gap: 0; }
