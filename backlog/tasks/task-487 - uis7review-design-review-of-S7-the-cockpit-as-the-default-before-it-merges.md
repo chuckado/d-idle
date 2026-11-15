@@ -1,10 +1,11 @@
 ---
 id: TASK-487
 title: 'uis7review: design review of S7 (the cockpit as the default) before it merges'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T09:38:00Z'
+updated_date: '2026-11-15T09:57:00Z'
 labels:
   - watch
   - research
