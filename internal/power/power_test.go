@@ -38,7 +38,7 @@ func zone(mlvl, melee, ranged int, life, dmg float64) *danger.Zone {
 
 func paladin() Hero {
 	h := Hero{Class: "Paladin", Level: 8, MaxLife: 160, MaxMana: 40, Defence: 80, BlockPct: 30, AR: 90, DmgMin: 6, DmgMax: 12, DmgPct: 20,
-		Potions: 6, Resist: [4]int{10, 10, 10, 10}}
+		Potions: 6, Resist: [4]int{10, 10, 10, 10}, Attack: Attack{WeaponClass: "1HS"}}
 	for _, term := range []string{TermLife, TermDefence, TermBlock, TermResist, TermOffence, TermPotions} {
 		h.SetQuality(term, Measured)
 	}

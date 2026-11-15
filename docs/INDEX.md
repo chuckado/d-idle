@@ -486,6 +486,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0.1.2-drills.md](releases/0.1.2-drills.md): friends 0.1.2 pre-release drills (2026-11-14) (status: RUN, all four drills PASS. Tags: V = run and seen, S = read in source, U = not run. Run on the worker host...)
 - [0.1.2.md](releases/0.1.2.md): d.idle friends release 0.1.2 (status: BUILT AND STAGED 2026-11-14, NOT PUBLISHED, and the live drills have NOT run (they need docker with real...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
+- [reset.md](reset.md): Reset: leave the game and rejoin (status: current (botreset, 2026-11-15). Offline tested only; not verified live (checklist at the end).)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
 - [restloop.md](restloop.md): restloop (archived)
 - [retreatdrill.md](retreatdrill.md): retreatdrill: the P29 retreat action executed live (designed, offline-tested, not run)
@@ -528,7 +529,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
 - [herostats-2026-11-15.md](survival/herostats-2026-11-15.md): Hero stats in the d2d dump (card herostats, TASK-493) (status: current. Fork branch `sandbox-herostats` (private fork, tip `02ceea54`, pushed to the private forge, not...)
 - [ledger.md](survival/ledger.md): Per-zone ledger and the shadow controller (survival slice S-C) (status: current (card survC). Implements design-2026-11-14.md sections 5.3 to 5.6, 8 and 10 for slice S-C: log and...)
-- [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449). Implements design-2026-11-14.md sections 4, 5, 6, 8 and 10 as far as slice...)
+- [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449; skill damage wired by card powerwire, TASK-508, section "Skill damage...)
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [units-fit-2026-11-15.md](survival/units-fit-2026-11-15.md): Units per clear: the danger generator against game.exe's room population (Acts 1 and 2, Normal) (status: current (2026-11-15, card decomp28). Tags: V run (game.exe's room population and room list under the...)
 - [wiring-2026-11-15.md](survival/wiring-2026-11-15.md): Survival shadow lines missing in the sandbox (diagnosis 2026-11-15)
@@ -687,6 +688,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
+- [verifier-p03c-2026-11-15.md](upstream/verifier-p03c-2026-11-15.md): Verifier: P03c a knocking hit does not start a knockback in a get-hit (2026-11-15) (status: current, 2026-11-15 (card verifyp03c2, TASK-513, Opus, singly). All runs finished before this report;...)
 - [verifier-p04-2026-11-15.md](upstream/verifier-p04-2026-11-15.md): Verifier: P04 a hit interrupts a swing or cast whose skill allows it (2026-11-15) (status: current, 2026-11-15 (card verifyp04, TASK-500, Opus, singly). All runs finished before this report;...)
 - [verifier-p06-2026-11-15.md](upstream/verifier-p06-2026-11-15.md): Verifier: P06 a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06, TASK-494, Opus, singly). Nothing posted, nothing pushed to the fork....)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
@@ -855,6 +857,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
+- [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)
 - [drill-zip-2026-11-14.md](probes/drill-zip-2026-11-14.md): Friend pack 0.1.1 drilled on the user's original install zip (2026-11-14) (status: RUN 2026-11-14 on the worker host. Tags: V = run and output seen, S = read in the source or docs, U = not...)
 
 `probes/drills/`

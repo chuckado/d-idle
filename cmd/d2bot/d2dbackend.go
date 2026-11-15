@@ -351,6 +351,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.art = artSource(o.gameDir, o.data, db)
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
 	o.ladder.pause = pauseDesk(runner, ip.State())
+	o.ladder.reset = resetDesk(runner, ip.State())
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts

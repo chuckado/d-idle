@@ -99,6 +99,9 @@ func (r *Runner) step(ctx context.Context) bool {
 	if r.loop.rec != nil {
 		return r.finishRecovery(ctx, snap, c)
 	}
+	if r.resetStep(ctx, snap, c) {
+		return true
+	}
 	if c.goal == nil {
 		return r.noGoal(ctx, snap, c)
 	}

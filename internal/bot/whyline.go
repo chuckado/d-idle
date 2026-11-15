@@ -32,6 +32,7 @@ const (
 	WhyDeathCorpse    = "after_death_corpse"
 	WhyDeathGold      = "after_death_gold"
 	WhyPlayerItems    = "player_items"    // none (the item actions the player queued on the inventory page)
+	WhyPlayerReset    = "player_reset"    // none (the player pressed Reset: leave the game and rejoin)
 	WhyRepairWait     = "repair_wait"     // why (the repair trip waits for a safe moment, or loots first)
 	WhyRepairTrip     = "repair_trip"     // step (going home, repairing, returning)
 	WhyRepairFarm     = "repair_farm"     // area, have, want (Farm until repair)
@@ -41,7 +42,7 @@ const (
 
 // whyCodes lists every code above (a test compares it with the template table).
 var whyCodes = []string{WhyQuestStep, WhyWalk, WhyFight, WhyTownTrip, WhyTownChores, WhyHealTrip, WhyWaitHeal, WhyClaimTrip,
-	WhyBackToField, WhyToTown, WhyAreaDone, WhyGuardExit, WhyFarmRuns, WhyFarmGold, WhyFarmUser, WhySavingFor, WhyAfterDeath, WhyDeathCorpse, WhyDeathGold, WhyPlayerItems, WhyRepairWait, WhyRepairTrip, WhyRepairFarm, WhyFarmReset, WhyJourneyBlocked}
+	WhyBackToField, WhyToTown, WhyAreaDone, WhyGuardExit, WhyFarmRuns, WhyFarmGold, WhyFarmUser, WhySavingFor, WhyAfterDeath, WhyDeathCorpse, WhyDeathGold, WhyPlayerItems, WhyPlayerReset, WhyRepairWait, WhyRepairTrip, WhyRepairFarm, WhyFarmReset, WhyJourneyBlocked}
 
 // setWhy announces the reason for the activity the next setLocked sets. Parameters are key, value pairs.
 func (r *Runner) setWhy(code string, kv ...string) {

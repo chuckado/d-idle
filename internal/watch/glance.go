@@ -144,6 +144,8 @@ type GlanceSources struct {
 	Survival func() json.RawMessage            // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
 	Voice    func() string                     // the hero's latest voice line
 	Paused   func() (paused bool, text string) // a pause the player asked for (card B1)
+	// Resetting is a Reset the player pressed that has not finished (docs/reset.md); the band says Resetting with the text.
+	Resetting func() (on bool, text string)
 }
 
 // glanceState is the Hub's part: the sources and the ring of samples.
@@ -284,6 +286,14 @@ func glanceSentence(hv HeroView, up UptimeView, src GlanceSources) GlanceSentenc
 	if src.Paused != nil {
 		if p, text := src.Paused(); p {
 			s.Tone, s.Word = "info", "Paused"
+			if t := safeText(text, glanceTextMax); t != "" {
+				reason = t
+			}
+		}
+	}
+	if src.Resetting != nil {
+		if on, text := src.Resetting(); on {
+			s.Tone, s.Word = "info", "Resetting"
 			if t := safeText(text, glanceTextMax); t != "" {
 				reason = t
 			}

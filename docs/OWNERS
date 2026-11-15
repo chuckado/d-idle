@@ -157,6 +157,7 @@ cmd/d2bot/glancewire_blocked.go  credit-runner  uib6
 cmd/d2bot/glancewire_blocked_test.go  credit-runner  uib6
 cmd/d2bot/glancewire_pause.go  credit-runner  uifix1
 cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
+cmd/d2bot/glancewire_reset.go  credit-runner  botreset
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/invverbs.go  credit-runner  botinstant
@@ -194,12 +195,15 @@ cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
+cmd/d2bot/powerwire.go  credit-runner  powerwire
 cmd/d2bot/powerwire.go  credit-runner  survB
 cmd/d2bot/powerwire.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
 cmd/d2bot/readywire.go  credit-runner  uic3
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
+cmd/d2bot/resetwire.go  credit-runner  botreset
+cmd/d2bot/resetwire_test.go  credit-runner  botreset
 cmd/d2bot/resource_test.go  credit-runner  freshstart
 cmd/d2bot/sensesfeed.go  credit-runner  maptrail
 cmd/d2bot/sensesfeed_test.go  credit-runner  maptrail
@@ -211,6 +215,7 @@ cmd/d2bot/senseshistory_test.go  credit-runner  maphistory
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryA
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryC
 cmd/d2bot/skillswire.go  credit-runner  skilltrees
+cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
@@ -289,6 +294,7 @@ docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
+docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
@@ -331,6 +337,7 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/research/warp-walk-trace.md  credit-runner  decomp22
+docs/reset.md  credit-runner  botreset
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -349,6 +356,7 @@ docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
 docs/survival/ledger.md  credit-runner  survC
 docs/survival/power.md  credit-runner  dangerfit2
+docs/survival/power.md  credit-runner  powerwire
 docs/survival/power.md  credit-runner  survB
 docs/survival/units-fit-2026-11-15.md  pro-runner  decomp28
 docs/swingmodel.md  credit-runner  swingmodel
@@ -380,10 +388,12 @@ docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix3
 docs/upstream/drafts/load-gold-clamp.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp22
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp30
+docs/upstream/pipeline-2026-11-14.md  credit-runner  p04posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p06posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix3
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
+docs/upstream/pr-queue.md  credit-runner  p04posted
 docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
@@ -391,6 +401,7 @@ docs/upstream/pr-queue.md  credit-runner  prpipeline
 docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/upstream/verifier-p03b-2026-11-14.md  live-agent  verifyp03c
+docs/upstream/verifier-p03c-2026-11-15.md  credit-runner  verifyp03c2
 docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
@@ -459,6 +470,8 @@ internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
 internal/bot/playerpause.go  credit-runner  uib1
 internal/bot/playerpause_test.go  credit-runner  uib1
+internal/bot/playerreset.go  credit-runner  botreset
+internal/bot/playerreset_test.go  credit-runner  botreset
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
@@ -611,6 +624,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/power  credit-runner  dangerfit2
+internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
 internal/resource/recovery.go  live-agent  recoverypace
@@ -709,6 +723,9 @@ internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
+internal/watch/resetapi.go  credit-runner  botreset
+internal/watch/resetapi_test.go  credit-runner  botreset
+internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
 internal/watch/senses.go  credit-runner  maphistoryB
@@ -767,6 +784,7 @@ internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
 internal/watch/testdata/pause/  credit-runner  uib1
+internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
@@ -854,6 +872,7 @@ internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
+internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
@@ -914,6 +933,7 @@ tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
+tools/levelsim/  credit-runner  powerwire
 tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
 tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  survB

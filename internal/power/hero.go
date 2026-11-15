@@ -25,6 +25,8 @@ const (
 	StatMaxDmg     = 22
 	StatDmgPct     = 25
 	StatArmorClass = d2.StatArmorClass
+	StatIAS        = 93  // item_fasterattackrate (ItemStatCost id: S, the same list as above; read when the vector has it)
+	StatFCR        = 105 // item_fastercastrate (S)
 )
 
 // Term names, closed list: they are the keys of Hero.Quality and the codes of Result.Weakest.
@@ -57,6 +59,7 @@ type Hero struct {
 	Sustain     float64 // life per second from regeneration and auras
 	MeasuredDPS float64 // kill speed observed against this monster class over about 20 kills, 0 = none
 	Merc        Merc
+	Attack      Attack // main attack skill and gear speed for the data estimate; Attack.Skill "" = no build known
 	Quality     map[string]Quality
 }
 
@@ -118,6 +121,12 @@ func HeroFromPlayer(p *d2.Player, merc *d2.MercSheet, potions int) Hero {
 		h.DmgPct = int(st.Get(StatDmgPct))
 		h.AR = int(st.Get(StatToHit)) + (p.Dexterity-7)*5
 		h.set(TermOffence, Derived)
+	}
+	if st.Has(StatFCR) {
+		h.Attack.FCR, h.Attack.FCRKnown = int(st.Get(StatFCR)), true
+	}
+	if st.Has(StatIAS) {
+		h.Attack.IAS, h.Attack.IASKnown = int(st.Get(StatIAS)), true
 	}
 	if potions >= 0 {
 		h.Potions = potions

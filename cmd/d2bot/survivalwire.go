@@ -107,11 +107,10 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 	w.mu.Lock()
 	defer w.mu.Unlock()
 	p := s.Player
-	a, err := archetypeOf(w.m, w.db, p)
+	hero, a, err := heroOf(w.m, w.db, s, potions, w.warn)
 	if err != nil {
 		return w.warn(err)
 	}
-	hero := power.HeroFromPlayer(p, s.Merc, potions)
 	dial, err := w.m.P.Dial(w.m.P.DefaultDial)
 	if err != nil {
 		return w.warn(err)
@@ -153,7 +152,7 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 	}
 	w.power, w.lastDiff = survival.PowerOf(hero), diff
 	in := survival.Input{Now: time.Now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
-		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: hero.OffenceUnread()}
+		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
 	d, err := w.led.Choose(in)
 	if err != nil {
 		return w.warn(err)

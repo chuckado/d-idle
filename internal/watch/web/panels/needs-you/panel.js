@@ -44,6 +44,7 @@ export function mount(root, ctx) {
   dots.addEventListener('click', toggle);
 
   function act(a, btn) {
+    if (a.post === '/api/reset') { ctx.askReset(btn); return; } // the confirm sheet decides
     btn.disabled = true;
     ctx.post(a.post, a.body).then((j) => {
       if (j && j.ok === false) ctx.toast('warn', j.error || 'could not do that');
