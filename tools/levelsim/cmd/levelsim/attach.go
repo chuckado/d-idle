@@ -14,7 +14,7 @@ import (
 // Replay inputs a bot log does not carry (docs/survival/power.md, card powerwire): the build whose attack skill the hero
 // plays at each log line's clvl, and an ASSUMED weapon. The weapon flags are a sensitivity input (U), never a reading.
 var (
-	replayBuild  = flag.String("build", "", "plandata build name (e.g. paladin_normal30) whose main attack and skill level at each clvl feed the skill damage estimate in -shadow and -controller")
+	replayBuild  = flag.String("build", "", "plandata build name (e.g. paladin-normal30) whose main attack and skill level at each clvl feed the skill damage estimate in -shadow and -controller")
 	replayWeapon = flag.String("weapon", "", "ASSUMED weapon damage MIN-MAX for the replay hero (U: the log has none; needed by weapon skills)")
 	replayAR     = flag.Int("ar", 0, "ASSUMED attack rating for the replay hero when -weapon is set (U)")
 )
