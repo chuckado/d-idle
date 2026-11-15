@@ -242,6 +242,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ff42d6f5f 11-15 13:28 `Merge agent/verifyp04b: Merge branch 'main' into TASK-512` (verifyp04b)
+- 4d1027508 11-15 13:27 `Merge branch 'main' into TASK-512` (-)
 - f89d5b557 11-15 13:19 `Merge agent/farmloop: Merge branch 'main' into farmloop` (farmloop)
 - 1139d706b 11-15 13:18 `Merge branch 'main' into farmloop` (-)
 - f40ddc57a 11-15 13:14 `Merge agent/prfix7: Merge branch 'main' into prfix7` (prfix7)
@@ -250,6 +252,4 @@
 - 25d606285 11-15 13:08 `Merge branch 'main' into dangerfit2` (-)
 - 4a07c0132 11-15 13:03 `Merge agent/uiphone: Merge branch 'main' into TASK-501` (uiphone)
 - 9198536fa 11-15 13:02 `Merge branch 'main' into TASK-501` (-)
-- 7791fe294 11-15 12:46 `Merge branch 'main' into dangerfit2` (-)
-- d621b6505 11-15 12:31 `Merge agent/decomp31: Merge branch 'main' into decomp31` (decomp31)
 <!-- statusgen:end -->
