@@ -1,0 +1,15 @@
+@layer panels {
+  [data-panel="zoneclear"] .d-slotbody { display: flex; flex-direction: column; gap: var(--d-sp-1); min-block-size: 0; }
+  [data-panel="zoneclear"] .zc-head { flex: none; display: flex; justify-content: space-between; align-items: baseline; font-size: var(--d-fs-0); font-weight: 700;
+    letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); }
+  [data-panel="zoneclear"] .zc-head em { font-style: normal; font-weight: 400; letter-spacing: 0; text-transform: none; font-size: var(--d-fs-1); }
+  [data-panel="zoneclear"] .zc-line { flex: none; font-size: var(--d-fs-1); color: var(--d-text-2); }
+  [data-panel="zoneclear"] .zc-row { flex: none; display: grid; grid-template-columns: minmax(64px, max-content) minmax(0, 1fr) 4ch; align-items: center; gap: var(--d-sp-2); min-block-size: 44px; }
+  [data-panel="zoneclear"] .zc-lab { font-size: var(--d-fs-1); font-weight: 600; white-space: nowrap; }
+  [data-panel="zoneclear"] .zc-range { inline-size: 100%; min-block-size: 44px; accent-color: var(--d-accent); cursor: pointer; }
+  [data-panel="zoneclear"] .zc-val { font-family: var(--d-font-num); font-size: var(--d-fs-1); text-align: end; }
+  [data-panel="zoneclear"] .zc-toggle { flex: none; align-items: center; }
+  [data-panel="zoneclear"] .zc-acts { flex: none; display: flex; gap: var(--d-sp-2); }
+  [data-panel="zoneclear"] .zc-acts .d-btn { flex: 1 1 0; align-items: center; }
+  [data-panel="zoneclear"] .zc-msg { flex: none; min-block-size: 1.2em; font-size: var(--d-fs-1); color: var(--d-warn); }
+}
