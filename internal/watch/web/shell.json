@@ -6,6 +6,7 @@
     "compat": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "cards", "locked", "bestiary", "atlas", "alerts"],
     "reserved": ["risk", "statusline", "needs-count", "needs-you", "orders", "health", "progress", "zone-map", "log", "journey-strip", "area-map"],
     "fit": ["now", "queue", "orders-map", "thoughts", "rules", "journal", "spend", "chronicle", "diary", "quests", "cards", "locked", "bestiary", "atlas", "alerts"],
-    "slot": ["video", "hero-meters"]
+    "slot": ["video", "hero-meters"],
+    "drawer": ["log", "onboarding"]
   }
 }
