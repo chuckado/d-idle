@@ -166,7 +166,71 @@ func (r *Runner) journeyBlocked(ctx context.Context, snap *d2.Snapshot, c contro
 // journeyOK forgets the block once a quest step ran.
 func (r *Runner) journeyOK() {
 	r.loop.task.bj = blockedJourney{}
-	r.noteJourneyBlocked("")
+	r.noteJourneyBlocked(r.parkReason())
+}
+
+// parkedGroup is a quest group parked after repeated planning blocks of one of its steps.
+type parkedGroup struct {
+	until time.Time
+	why   string
+}
+
+// parkStep counts a not-found planning block per quest step; at the parkAfter-th the step's group is parked for
+// parkMinutes (the executor then plans the level plan's farming, the existing fallback) and the reason is shown as
+// journeyBlocked. Another step's blocks are counted on their own. It reports whether the block was handled.
+func (r *Runner) parkStep(res task.Result) bool {
+	t := r.e.Tune.Bot
+	l := &r.loop.task
+	rest, ok := strings.CutPrefix(res.StepID, "quest.")
+	group, _, _ := strings.Cut(rest, "/")
+	if t.ParkAfter <= 0 || !ok || group == "" || res.Kind != task.KindNotFound || l.ex == nil {
+		return false
+	}
+	if l.pb == nil {
+		l.pb = map[string]int{}
+	}
+	l.pb[res.StepID]++
+	if l.pb[res.StepID] < t.ParkAfter {
+		return false
+	}
+	delete(l.pb, res.StepID)
+	title := l.stepTitle
+	if title == "" {
+		title = res.StepID
+	}
+	mins := max(t.ParkMinutes, 1)
+	why := fmt.Sprintf("Can't do %q yet (%v): parked %d min", title, res.Err, mins)
+	if l.parked == nil {
+		l.parked = map[string]parkedGroup{}
+	}
+	l.parked[group] = parkedGroup{until: r.e.Clock.Now().Add(time.Duration(mins) * time.Minute), why: why}
+	l.ex.Park(group, res.StepID+": "+why)
+	r.e.Log.Warn("quest step parked after repeated planning blocks", "step", res.StepID, "group", group, "minutes", mins, "err", res.Err)
+	r.noteJourneyBlocked(why)
+	return true
+}
+
+// parkReason is the journeyBlocked text while a park is active ("" when none).
+func (r *Runner) parkReason() string {
+	for _, p := range r.loop.task.parked {
+		return p.why
+	}
+	return ""
+}
+
+// unparkDue lifts the parks that ran out so the planner offers the quest again.
+func (r *Runner) unparkDue(ex *task.Executor) {
+	l := &r.loop.task
+	now := r.e.Clock.Now()
+	for g, p := range l.parked {
+		if now.Before(p.until) {
+			continue
+		}
+		ex.Unpark(g)
+		delete(l.parked, g)
+		r.e.Log.Info("quest step unparked", "group", g)
+		r.noteJourneyBlocked(r.parkReason())
+	}
 }
 
 func (r *Runner) noteJourneyBlocked(why string) {
