@@ -563,7 +563,12 @@ function mapSwitch(box) {
   ck.showMap = (id) => { const i = pair.findIndex((n) => n.dataset.panel === id); if (i >= 0 && ck.second !== (i === 1)) { ck.second = i === 1; paint(); } };
   paint();
 }
-document.addEventListener('d2:showmap', (e) => { if (ck.showMap) ck.showMap(e.detail); }); // the Go to verb asks for the act map
+// the Go to verb asks for the act map: its phone tab opens, and the switch shows it
+document.addEventListener('d2:showmap', (e) => {
+  const t = (ck.tabs || []).find((x) => x.ids.includes(e.detail));
+  if (t && t.name !== ck.tab) showTab(t.name);
+  if (ck.showMap) ck.showMap(e.detail);
+});
 
 function applyCockpit() {
   const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id), window.innerHeight);

@@ -318,9 +318,7 @@ export function mount(root, ctx) {
   // Go to (g, the verb): focus the hero's zone and make this map the one that shows
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('d2:goto', () => {
-      if (root.dataset && root.dataset.off) { // the area map shows: ask the shell's switch (it listens) for this map
-        document.dispatchEvent(new CustomEvent('d2:showmap', { detail: 'zone-map' }));
-      }
+      document.dispatchEvent(new CustomEvent('d2:showmap', { detail: 'zone-map' })); // the shell opens this map's phone tab and switch
       const t = grid.querySelector && grid.querySelector('.zm-n[tabindex="0"]');
       if (t && t.focus) t.focus();
     });

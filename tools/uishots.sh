@@ -44,6 +44,11 @@ if [ "$cockpit" = 1 ]; then
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
 	pages="demo watch?layout=cockpit-demo&theme=dark
 real watch?layout=cockpit&theme=dark
+zone watch?layout=cockpit&theme=dark&zone=cp
+zone-loop watch?layout=cockpit&theme=dark&zone=cp&loop=1
+zone-hard watch?layout=cockpit&theme=dark&zone=ftw
+zone-town watch?layout=cockpit&theme=dark&zone=camp
+zone-phone watch?layout=cockpit&theme=dark&tab=Map&zone=cp
 light watch?layout=cockpit-demo&theme=light
 tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
 tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
