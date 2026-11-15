@@ -1,10 +1,11 @@
 ---
 id: TASK-478
 title: 'prfix4: P02 r3, real test, oracle in the PR, plan claim'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T06:34:00Z'
+updated_date: '2026-11-15T07:59:00Z'
 labels:
   - d2d
   - upstream-pr

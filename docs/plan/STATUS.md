@@ -183,7 +183,6 @@
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
-| prfix4 | proposed | - | `docs/upstream/bodies/warp-walk-plan-body.md`<br>`docs/upstream/drafts/warp-walk-plan.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/warp-walk-r3` |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
