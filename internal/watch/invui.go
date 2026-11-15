@@ -89,11 +89,13 @@ const charPage = `<!DOCTYPE html>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/skills">Skills</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
+  <details class="cv-more" id="cv-more"><summary class="d-btn" data-size="sm" data-variant="ghost" aria-label="Pages">Pages</summary>
+   <div class="cv-morelist" role="group" aria-label="Pages"><a href="/watch/inventory" aria-current="page">Inventory</a><a href="/watch/skills">Skills</a><a href="/watch/policy">Policy</a><a href="/watch/return">Return</a></div></details>
  </nav>
 </header>
 <div class="cv-bar" id="cv-bar" role="toolbar" aria-label="Search, filters, gold and errands" data-cockpit-slot="band" data-fit-deep>
  <input class="cv-q" id="cv-q" type="search" placeholder="Search pack and stash  /" aria-label="Search pack and stash" autocomplete="off">
- <span class="cv-chips" id="cv-chips"></span>
+ <span class="cv-chips" id="cv-chips" data-hscroll></span>
  <span class="cv-sp"></span>
  <span class="cv-kv">Gold <b id="cv-gold">-</b></span>
  <span class="cv-kv cv-opt">Stash <b id="cv-stashgold">-</b></span>
@@ -101,7 +103,7 @@ const charPage = `<!DOCTYPE html>
  <button class="cv-btn" id="cv-sell" type="button" aria-disabled="true">Sell marked (0)</button>
 </div>
 <div class="cv-tabbar" id="cv-tabbar" role="group" aria-label="Page part" data-cockpit-slot="band"></div>
-<main class="cv-canvas" id="inv">
+<main class="cv-canvas" id="inv" data-vscroll>
  <section class="cv-slot" data-slot="who" data-cockpit-slot="who">
   <div class="cv-zone cv-who" data-cockpit-panel data-panel="char-who" aria-label="Hero and mercenary">
    <p class="d-note" data-sev="info" id="gearprompt" data-cv="prompt" role="note" hidden></p>
@@ -123,10 +125,14 @@ const charPage = `<!DOCTYPE html>
    <div class="cv-store">
     <div class="d-cells" id="stash"></div>
     <div class="cv-side">
+     <h2 class="cv-beltlabel" id="t-belt">Belt</h2>
      <div class="d-cells" id="belt" data-cv="belt" aria-label="Belt"></div>
      <div class="cv-sel" id="cv-sel" aria-live="polite"></div>
-     <div class="inv-errands" id="errands" hidden></div>
-     <div class="inv-errands inv-stashgold" id="stashgold" hidden></div>
+     <div class="cv-errwrap" id="cv-errwrap">
+      <button class="cv-errtoggle" id="cv-errtoggle" type="button" aria-expanded="false" aria-controls="errands stashgold">Town errands</button>
+      <div class="inv-errands" id="errands" hidden></div>
+      <div class="inv-errands inv-stashgold" id="stashgold" hidden></div>
+     </div>
      <p class="cv-lock" id="cv-lock">Stash from anywhere: locked (skips a game rule)</p>
      <p class="d-note" data-sev="alarm" id="msg" data-cv="msg" role="status" hidden></p>
     </div>

@@ -56,7 +56,7 @@
     $('cv-gold').textContent = num(v.gold);
     $('cv-stashgold').textContent = v.stashGold || v.stashGold === 0 ? num(v.stashGold) : '-';
     var n = v.sellPending || 0, b = $('cv-sell');
-    b.textContent = 'Sell marked (' + n + ')';
+    b.textContent = 'Sell marked (' + n + ')'; b.dataset.s = 'Sell (' + n + ')'; // the phone shows data-s (CSS), the full words stay the accessible name
     if (n > 0) b.removeAttribute('aria-disabled'); else b.setAttribute('aria-disabled', 'true');
     b.title = n > 0 ? 'Walk home and sell the items marked for sale' : 'Nothing is marked for sale';
   }
@@ -70,7 +70,7 @@
     b.textContent = bt.action === 'cancel' ? 'Cancel repair' : 'Repair' + (est ? ' ' + num(est) + ' g' : '');
     var broken = brokenCount(v) > 0;
     if (broken) b.dataset.danger = ''; else delete b.dataset.danger;
-    b.dataset.action = bt.action;
+    b.dataset.action = bt.action; b.dataset.s = bt.action === 'cancel' ? 'Cancel' : b.textContent;
     if (!bt.enabled || bt.action === 'none') b.setAttribute('aria-disabled', 'true'); else b.removeAttribute('aria-disabled');
     var tip = [];
     if (r.worst) tip.push(r.worst);
@@ -258,7 +258,9 @@
       box.dataset.empty = ''; return;
     }
     delete box.dataset.empty;
-    var it = f.it, h = el('h3', 'q-' + (it.quality || 'normal'), (it.name || it.code || 'item') + (it.identified === false ? ' (unidentified)' : '')); h.title = h.textContent; box.appendChild(h);
+    var it = f.it, h = el('h3', 'q-' + (it.quality || 'normal'), (it.name || it.code || 'item') + (it.identified === false ? ' (unidentified)' : '')); h.title = h.textContent;
+    var x = el('button', 'cv-selx', '\u00d7'); x.type = 'button'; x.setAttribute('aria-label', 'Close the item card'); x.addEventListener('click', function () { sheet(false); });
+    h.appendChild(x); box.appendChild(h); // on a phone the box is a bottom sheet; the close button is hidden on a wide page
     var bits = [rich ? rich.where.text : whereWord(f)];
     if (it.level) bits.push('item level ' + it.level); if (it.maxDur) bits.push('durability ' + (it.dur || 0) + '/' + it.maxDur);
     var wp = el('p', 'cv-where', bits.join(' · ')); wp.title = wp.textContent;
@@ -308,6 +310,12 @@
     box.appendChild(acts);
     fitSel();
   }
+  // the phone layout (inventory-canvas.css, container query on the page body): the storage tab scrolls, the selected item is a bottom sheet
+  function phone() { return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(max-width: 700px)').matches; }
+  function sheet(open) {
+    var c = $('cv'); if (!c) return;
+    if (open) c.dataset.sheet = 'open'; else delete c.dataset.sheet;
+  }
   function coarse() { return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(pointer: coarse)').matches; }
   function moreButton() {
     var more = el('button', '', 'All actions'); more.type = 'button'; more.dataset.act = 'more'; more.title = 'Every action for this item';
@@ -317,7 +325,7 @@
   // The selected box never scrolls and never overruns. What goes first: the comparison, then the properties, the verdict lines beyond
   // the first, then the buttons beyond the first row (the last one left becomes "More...", which opens the full action menu).
   function fitSel() {
-    var box = $('cv-sel'); if (!box || !box.clientHeight) return;
+    var box = $('cv-sel'); if (!box || !box.clientHeight || phone()) return; // a phone's sheet scrolls inside itself with its buttons pinned: nothing is trimmed
     var props = box.querySelector('.cv-props'), acts = box.querySelector('.cv-acts'), why = box.querySelector('.cv-why'), cmp = box.querySelector('.cv-cmp'), qr = box.querySelector('.cv-qrows'), cut = 0;
     var over = function () { return box.scrollHeight > box.clientHeight + 1; };
     if (props) while (props.children.length && props.scrollHeight > props.clientHeight + 1) props.removeChild(props.lastChild);
@@ -451,6 +459,9 @@
   function init() {
     // ?tab=pack opens the phone's storage tab (the fit fixtures use it); anything else keeps the hero tab
     if (/[?&]tab=pack(&|$)/.test(location.search || '') && $('cv')) $('cv').dataset.tab = 'pack';
+    // ?sheet=1 opens the phone's item sheet and ?errands=1 the town errands (the fit fixtures use them)
+    if (/[?&]sheet=1(&|$)/.test(location.search || '') && phone()) sheet(true);
+    if (/[?&]errands=1(&|$)/.test(location.search || '')) { $('cv-errwrap').setAttribute('data-open', ''); $('cv-errtoggle').setAttribute('aria-expanded', 'true'); }
     chips(); tabs();
     $('cv-q').addEventListener('input', function () { F.q = $('cv-q').value.trim().toLowerCase(); dim(); });
     $('cv-sell').addEventListener('click', function () {
@@ -463,7 +474,17 @@
     document.addEventListener('d2:inventory', onView);
     document.addEventListener('d2:inventory-fresh', function (e) { view = e.detail; drawBar(view); drawSel(); });
     document.addEventListener('d2:repair', function (e) { repair = e.detail; if (view) drawRepair(view, repair); });
-    function select(key) { selKey = key; if (view) { markSel(); fitSlots(); drawSel(); } }
+    function select(key) { selKey = key; if (view) { markSel(); fitSlots(); drawSel(); } if (phone()) sheet(true); }
+    $('cv-errtoggle').addEventListener('click', function () {
+      var w = $('cv-errwrap'), on = !w.hasAttribute('data-open');
+      if (on) w.setAttribute('data-open', ''); else w.removeAttribute('data-open');
+      $('cv-errtoggle').setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) { // a tap anywhere else on the page puts the sheet away (an item or the sheet itself keeps it)
+      var c = $('cv'), t = e.target;
+      if (!c || !c.dataset.sheet || !t || !t.closest) return;
+      if (!t.closest('#cv-sel, [data-key], .cv-pop, #inv-act, #inv-tip')) sheet(false);
+    });
     document.addEventListener('click', function (e) {
       var k = e.target && e.target.closest ? e.target.closest('[data-key]') : null;
       if (!k || !/^(item|slot)-/.test(k.dataset.key || '')) return;
@@ -472,6 +493,7 @@
     document.addEventListener('d2:select', function (e) { if (/^(item|slot)-/.test(e.detail || '')) select(e.detail); }); // a right-click selects too
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && popOpen) { pop(false); return; }
+      if (e.key === 'Escape' && $('cv') && $('cv').dataset.sheet) { sheet(false); return; }
       var t = e.target, typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA');
       if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); $('cv-q').focus({ preventScroll: true }); }
       if (e.key === 'Escape' && t === $('cv-q')) { $('cv-q').value = ''; F.q = ''; dim(); $('cv-q').blur(); }

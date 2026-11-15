@@ -13,7 +13,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0 pq=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -29,6 +29,7 @@ while [ $# -gt 0 ]; do
 	--theme) theme=$2; shift 2 ;;
 	--fx) fx=$2; shift 2 ;;
 	--tag) tag=$2-; shift 2 ;;
+	--pq) pq="$pq%26$(printf %s "$2" | sed 's/&/%26/g')"; shift 2 ;;
 	--click) extra="$extra&click=$(printf %s "$2" | sed 's/_/ /g; s/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')"; shift 2 ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
@@ -84,7 +85,7 @@ if [ "$char" = 1 ]; then
 		w=${sz%x*} h=${sz#*x}
 		prof=$(mktemp -d)
 		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}&w=$w&h=$h$extra" >/dev/null 2>&1
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}$pq&w=$w&h=$h$extra" >/dev/null 2>&1
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
