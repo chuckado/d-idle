@@ -27,6 +27,11 @@ owns:
   - "internal/bot/heroattrs_test.go"
   - "cmd/d2bot/readywire.go"
   - "tools/uishots/"
+  - "tools/uishots.sh"
+  - "internal/watch/uic3_test.go"
+  - "internal/watch/web/inventory-sets.css"
+  - "docs/inventory-ui.md"
+  - "docs/ui-design-system.md"
 exclusive: []
 contracts: []
 ---
@@ -36,7 +41,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Why: TODO. Done when: TODO.
+Why: the character canvas (uic2) still opened the old click popover, had no real tooltip with requirements and comparison, and its hero stat tiles were blank. Done when: a floating tooltip with signed deltas, a right-click menu with keys and gestures, instant-action states and the missing hero values work and pass the fit check at the eight sizes with the tooltip and the menu open. Brief: docs/ui/redesign-2026-11-14/briefs/C3-tooltip-menu-gestures.md.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
