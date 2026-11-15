@@ -8,8 +8,8 @@ import (
 )
 
 // eliteDmgMult scales the damage of a unique, champion or minion: extra strong and the other damage affixes are not
-// read per monster, so the base row is doubled (U, deliberately high: it can only make the guard block more).
-const eliteDmgMult = 2
+// read per monster, so the base row is tripled (U, deliberately high: it can only make the guard block more).
+const eliteDmgMult = 3
 
 // MonsterDps is the damage per second one monster deals when every swing lands (hit chance 1, no block, no
 // resistance: an upper bound, U), from the monstats columns of the character's difficulty: the strongest of attack 1,

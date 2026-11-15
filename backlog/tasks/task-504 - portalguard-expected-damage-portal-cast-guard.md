@@ -21,7 +21,7 @@ owns:
   - "tools/knobdump/main.go"
 exclusive: []
 contracts: []
-result: "bot.portalGuard (default 1): resource.CastGuard + combat.castGuard; offline tests on Sorceress and Paladin pass; NOT verified live, drill R3 must measure cast+walk seconds and damage (knobs are U defaults 2000+1000 ms, 50 percent of life)."
+result: "bot.portalGuard (default 0 until drill R3; mode 1 behind the knob): resource.CastGuard + combat.castGuard; offline tests on Sorceress and Paladin pass; NOT verified live, drill R3 must measure cast+walk seconds and damage (knobs are generous U bounds 3000+3000 ms, hit 700 ms, elite x3, 50 percent of life)."
 ---
 
 ## Description

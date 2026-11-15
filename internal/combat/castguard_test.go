@@ -31,7 +31,7 @@ func portalDecision(cls d2.Class, mode, life int, hs []Target) (SafetyAction, Sa
 	p := &d2.Player{Class: cls, Difficulty: d2.Normal}
 	var belt Belt
 	belt.Cols[0] = BeltColumn{PotionHealing, 3, 2, false}
-	in := SafetyInput{Life: life, Max: 200, Belt: belt, InFight: true, HasPortal: true, HealReady: true, Tune: ct}
+	in := SafetyInput{Life: life, Max: 400, Belt: belt, InFight: true, HasPortal: true, HealReady: true, Tune: ct}
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(ct.CrowdAdjacent))
 	in.CastGuard = castGuard(bt, ct, p, hs)
 	// no healing potion in the belt for the base decision: it opens a portal (decideBase), the guard may refuse it
@@ -42,7 +42,7 @@ func portalDecision(cls d2.Class, mode, life int, hs []Target) (SafetyAction, Sa
 
 func TestPortalGuardTwoBuilds(t *testing.T) {
 	for _, cls := range []d2.Class{d2.Sorceress, d2.Paladin} {
-		weak, boss := guardMon(4), guardMon(120)
+		weak, boss := guardMon(3), guardMon(120)
 		cases := []struct {
 			name string
 			life int
@@ -50,13 +50,13 @@ func TestPortalGuardTwoBuilds(t *testing.T) {
 			mode int
 			want SafetyAction
 		}{
-			{"3 weak, old rule blocks", 100, guardTargets(3, weak, false), 0, Chicken},
-			{"3 weak, new rule allows", 100, guardTargets(3, weak, false), 1, TownPortal},
-			{"1 strong boss, old rule allows", 100, guardTargets(1, boss, true), 0, TownPortal},
-			{"1 strong boss, new rule blocks", 100, guardTargets(1, boss, true), 1, Chicken},
-			{"3 weak at very low life, new blocks", 20, guardTargets(3, weak, false), 1, Chicken},
-			{"unknown damage, 3 adjacent: old rule", 100, append(guardTargets(2, weak, false), Target{Dist: 3}), 1, Chicken},
-			{"unknown damage, 1 adjacent: old rule allows", 100, []Target{{Dist: 3}}, 1, TownPortal},
+			{"3 weak, old rule blocks", 200, guardTargets(3, weak, false), 0, Chicken},
+			{"3 weak, new rule allows", 200, guardTargets(3, weak, false), 1, TownPortal},
+			{"1 strong boss, old rule allows", 200, guardTargets(1, boss, true), 0, TownPortal},
+			{"1 strong boss, new rule blocks", 200, guardTargets(1, boss, true), 1, Chicken},
+			{"3 weak at low life, new blocks", 120, guardTargets(3, weak, false), 1, Chicken},
+			{"unknown damage, 3 adjacent: old rule", 200, append(guardTargets(2, weak, false), Target{Dist: 3}), 1, Chicken},
+			{"unknown damage, 1 adjacent: old rule allows", 200, []Target{{Dist: 3}}, 1, TownPortal},
 		}
 		for _, c := range cases {
 			a, in := portalDecision(cls, c.mode, c.life, c.hs)
@@ -81,7 +81,7 @@ func TestPortalGuardNeverLooserWithoutTerms(t *testing.T) {
 }
 
 func TestPortalGuardReason(t *testing.T) {
-	_, in := portalDecision(d2.Sorceress, 1, 100, guardTargets(1, guardMon(120), true))
+	_, in := portalDecision(d2.Sorceress, 1, 200, guardTargets(1, guardMon(120), true))
 	if b, why := in.castBlocked(); !b || !strings.Contains(why, "expected damage") {
 		t.Fatalf("blocked=%v why=%q", b, why)
 	}
