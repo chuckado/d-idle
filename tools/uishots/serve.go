@@ -51,6 +51,7 @@ func serve(addr, class string) error {
 		w.Header().Set("Content-Type", "image/jpeg")
 		w.Write(frame())
 	})
+	m.HandleFunc(watch.CommandsRoute, commandsFixture(class))
 	m.HandleFunc("/api/repair", func(w http.ResponseWriter, r *http.Request) { js(w, repairFixture) })
 	m.HandleFunc("/api/tally", func(w http.ResponseWriter, r *http.Request) { js(w, tallyFixture) })
 	if b, err := os.ReadFile("internal/watch/testdata/currency-" + class + ".json"); err == nil {

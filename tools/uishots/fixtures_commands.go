@@ -1,0 +1,49 @@
+package main
+
+import (
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"net/url"
+	"os"
+	"path/filepath"
+
+	"d2lod-bot/internal/watch"
+)
+
+// commandsFixture serves /api/commands for the Orders panel from the handler goldens of internal/watch/testdata/commands.
+// Which one comes from the page's own query (the poll carries it as the Referer): cmd=empty|three-one-failed|blocked|paused|
+// safety|cancel-all (default three-one-failed) or cmd=eight, the three-one-failed list with five more waiting orders, for
+// the fit check of a list longer than its box.
+func commandsFixture(class string) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		name := "three-one-failed"
+		if ref, err := url.Parse(r.Referer()); err == nil {
+			if c := ref.Query().Get("cmd"); c != "" {
+				name = c
+			}
+		}
+		file := name
+		if name == "eight" {
+			file = "three-one-failed"
+		}
+		b, err := os.ReadFile(filepath.Join("internal/watch/testdata/commands", "view-"+file+"-"+class+".json"))
+		if err != nil {
+			http.Error(w, "no such fixture: "+name, http.StatusNotFound)
+			return
+		}
+		var v watch.CommandsView
+		if err := json.Unmarshal(b, &v); err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		if name == "eight" {
+			for i := 0; i < 5; i++ {
+				v.Rows = append(v.Rows[:1], append([]watch.CommandRow{{ID: fmt.Sprintf("order:%d", 20+i), Intent: "go", Text: fmt.Sprintf("Farm Blood Moor for %d min", 10+i),
+					Source: "map", State: "queued", Why: &watch.CommandWhy{Code: "order_queued", Text: "after the running order"},
+					Can: watch.CommandCan{Cancel: true}, Cancel: &watch.CommandCancel{Path: "/api/orders/cancel", Body: map[string]any{"id": 20 + i}}}}, v.Rows[1:]...)...)
+			}
+		}
+		js(w, v)
+	}
+}

@@ -61,10 +61,11 @@ function today(layout) {
   return mounted.filter((m) => m.band !== 'status').map((m) => ({ id: m.id, size: m.size, hidden: false })).concat(shell.compat.map((id) => ({ id, size: 'm' })));
 }
 const FALLBACKS = { 'needs-you': 'gear', orders: 'now', 'zone-map': 'orders-map', health: 'why', progress: 'tally', log: 'thoughts' }; // D.4
+const built = (id) => manifests.some((m) => m.id === id); // a slice that ships a panel takes it off the fallback list (S4: orders)
 for (const name of ['standard', 'simple', 'stream', 'debug']) {
   const layout = readJSON(path.join(webDir, 'layouts', name + '.json'));
   const targets = today(layout), have = new Set(targets.map((t) => t.id));
-  for (const t of targets) assert.ok(!['needs-you', 'orders', 'health', 'progress', 'zone-map', 'log', 'statusline', 'needs-count'].includes(t.id), name + ': no new panel exists yet');
+  for (const t of targets) assert.ok(!['needs-you', 'orders', 'health', 'progress', 'zone-map', 'log', 'statusline', 'needs-count'].filter((id) => !built(id)).includes(t.id), name + ': no new panel exists yet');
   for (const w of WIDTHS) {
     const p = L.plan(layout, w, '', shell, targets);
     eq(p.unknown, [], name + ' at ' + w + ': no unknown id');
@@ -83,7 +84,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
       if (!p.flow && !e.collapsed) assert.strictEqual(it.row, e.row, name + ' ' + p.name + ': ' + e.id + ' keeps its row');
     }
     if (name === 'standard' || name === 'simple') for (const [id, fb] of Object.entries(FALLBACKS)) {
-      if (!bp.some((e) => e.id === id && !e.hidden)) continue;
+      if (!bp.some((e) => e.id === id && !e.hidden) || built(id)) continue;
       const it = p.items.find((i) => i.via === id);
       assert.ok(it && it.id === fb, name + ' ' + p.name + ': ' + id + ' shows ' + fb);
       assert.ok(!p.items.some((i) => i.id === fb && !i.via), name + ': ' + fb + ' is not placed twice');
@@ -99,7 +100,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
 {
   const classic = readJSON(path.join(webDir, 'layouts/classic.json'));
   assert.strictEqual(L.statusIds(classic, manifests), null);
-  eq(L.selectPanels(manifests, classic).length, manifests.filter((m) => !m.cockpitOnly).length, 'classic mounts every panel but the cockpit-only ones');
+  eq(L.selectPanels(manifests, classic).length, manifests.filter((m) => !m.cockpitOnly && !m.optIn).length, 'classic mounts every panel but the cockpit-only and opt-in ones');
 }
 
 // 3. optIn: mounted only when the layout names it (placed, not hidden); a fixture manifest list
@@ -132,6 +133,7 @@ for (const name of ['standard', 'simple', 'stream', 'debug']) {
   assert.strictEqual(JSON.stringify(out.status), JSON.stringify(layout.status), 'the status key survives');
   const w = out.breakpoints.wide.panels;
   for (const [id, fb] of Object.entries(FALLBACKS)) {
+    if (built(id)) continue; // a built panel is no stand-in
     const e = w.find((x) => x.id === id), g = w.find((x) => x.id === fb);
     assert.ok(e && e.fallback === fb && !e.hidden, id + ' is saved as itself with its fallback');
     assert.ok(g && g.hidden, fb + ' keeps its hidden entry');
