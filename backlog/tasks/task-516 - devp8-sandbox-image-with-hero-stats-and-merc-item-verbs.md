@@ -1,10 +1,11 @@
 ---
 id: TASK-516
 title: 'devp8: sandbox image with hero stats and merc item verbs'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T19:16:00Z'
+updated_date: '2026-11-15T19:32:00Z'
 labels:
   - container
   - chore
