@@ -236,6 +236,7 @@ const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
     assert.strictEqual(p.h.first('item-3').act, 'equip'); assert.match(p.h.first('item-3').reason, /strength/);
     assert.strictEqual(p.h.first('item-6').act, 'identify');
     assert.strictEqual(p.h.first('item-20').act, 'take');
+    assert.strictEqual(p.h.first('item-30'), null, 'a potion has no double-click action');
     assert.ok(p.h.entryFor('slot-torso', 'repair'), 'a broken worn item offers repair');
     assert.ok(!p.h.entryFor('slot-rhand', 'repair'));
   }

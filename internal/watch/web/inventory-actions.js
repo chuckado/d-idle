@@ -434,10 +434,13 @@
   }
   // ---- gestures of the canvas ----
   // entryFor: the first entry of the menu (what Enter and a double-click run), or the one for an act; {e, m} or null.
+  // Without an act it is the first entry that moves the item (identify, equip, take off, stash, take out): marks and the
+  // trash are never what a double-click does, so an item with none of those has no double-click action.
+  var PRIMARY = { identify: 1, equip: 1, unequip: 1, stash: 1, take: 1 };
   function entryFor(key, act) {
     var f = find(key); if (!f || !f.it) return null;
     var m = model(f), hit = null;
-    m.entries.forEach(function (e) { if (!hit && (act ? e.act === act : true)) hit = e; });
+    m.entries.forEach(function (e) { if (!hit && (act ? e.act === act : PRIMARY[e.act])) hit = e; });
     return hit ? { e: hit, m: m } : null;
   }
   // do: run an entry from a gesture. A refused one says why at the item and in the message line and sends nothing.

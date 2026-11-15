@@ -95,7 +95,7 @@ character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
 			hover=* | ctx=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
 			?*) ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g')" ;;
 			esac
-			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
 				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >"$out/fit-$pname-$sz.html" 2>/dev/null

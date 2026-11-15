@@ -23,7 +23,8 @@
 /* The character canvas tooltip (card uic3): a fixed 270 px column beside the cell, left aligned, with the where line, one block
    per wearer (met and unmet rows), the comparison and a hint. On a phone or after a tap it is a bottom (or top) sheet. */
 @layer components {
-  .inv-tip[data-rich] { inline-size: 270px; max-inline-size: calc(100% - 2 * var(--d-sp-2)); max-block-size: calc(100% - 2 * var(--d-sp-2)); overflow: hidden; text-align: start; font-size: var(--d-fs-0); }
+  .inv-tip[data-rich] { inline-size: 270px; max-inline-size: calc(100% - 2 * var(--d-sp-2)); max-block-size: calc(100% - 2 * var(--d-sp-2)); overflow: hidden; text-align: start; font-size: var(--d-fs-0); font-family: var(--d-font-body);
+    background: linear-gradient(var(--d-tip-bg), var(--d-tip-bg)), var(--d-surface-0); } /* opaque: the grid under it must not show through the text */
   .inv-tip[data-rich] .tip-name { font-size: var(--d-fs-1); }
   .inv-tip[data-rich] .tip-where { margin-block-start: var(--d-sp-1); padding-block-start: var(--d-sp-1); border-block-start: var(--d-bw) solid var(--d-tip-line); color: var(--d-tip-dim); font-weight: 600; text-transform: none; }
   .inv-tip[data-rich] .tip-where .tip-badge { margin-inline-start: var(--d-sp-2); background: var(--d-info); color: var(--d-on-info, var(--d-tip-text)); }
