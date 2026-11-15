@@ -169,7 +169,10 @@ function charChecks(win, d, vis, cs) {
     }
     if (best * cell > inner.size) inner = { size: best * cell, at: [Math.round(pr.left + (bx - best + 1) * cell), Math.round(pr.top + (by - best + 1) * cell)], panel: panel.dataset.panel || '?' };
   }
-  return { zero, cut, tiles, inner };
+  // what the page had done when it was measured: a hole on a page that was not finished loading says so
+  const g = (id) => d.getElementById(id), diag = [d.readyState, 'keys ' + d.querySelectorAll('[data-key]').length, 'sub "' + ((g('merc-sub') || {}).textContent || '') + '"', 'hs ' + ((g('hsheet') || { children: [] }).children.length),
+    'mercbox ' + (g('merc-doll') ? g('merc-doll').parentNode.getBoundingClientRect().width | 0 : -1), win.d2InvActions ? 'act' : 'no-act', win.d2InvTip ? 'tip' : 'no-tip', win.d2InvMerc ? 'merc' : 'no-merc'].join(', ');
+  return { zero, cut, tiles, inner, diag };
 }
 
 // The elements a page says must be on it, with a size (opts.expect): the machine form of "this state is drawn".
