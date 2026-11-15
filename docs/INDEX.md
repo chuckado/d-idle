@@ -189,6 +189,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [potion-policy.md](sme/potion-policy.md): Potion and belt policy (d2-sme review, 2026-10-29)
 - [snaplib.md](snaplib.md): Snapshot library (d2restore)
 - [spec-skip-audit.md](spec-skip-audit.md): Audit of earlier behavioural skip_specs cards (status: audit of card spec-skip-audit (2026-10-31). Nothing here is a spec; the needs-spec rows are a backlog for...)
+
+`survival/`
+
+- [replay-2026-11-14.md](survival/replay-2026-11-14.md): Replay of the sandbox hero's log through the survival shadow and controller (2026-11-14) (status: current (card survreplay, TASK-458). First run of the S-B margin and the S-C ledger/controller on a REAL...)
 - [timescale.md](timescale.md): Bot time scale (D2BOT_TIMESCALE) (status: offline only (card `botclock`); not verified live. Background: docs/research/lockstep-p3.md.)
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
