@@ -189,6 +189,7 @@
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
+| prfix6 | proposed | - | `docs/upstream/bodies/missile-block-body.md`<br>`docs/upstream/drafts/missile-block.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `upstream-pr:missile-block`<br>`fork-branch:fid/missile-block-r4` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -232,6 +233,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- eb24483e5 11-15 09:11 `Merge agent/prfix6: Merge branch 'main' into prfix6` (prfix6)
+- 86236b4b2 11-15 09:10 `Merge branch 'main' into prfix6` (-)
 - abc82a480 11-15 08:23 `Merge agent/verifyp06: Merge branch 'main' into TASK-494` (verifyp06)
 - 2f35b2f3f 11-15 08:22 `Merge branch 'main' into TASK-494` (-)
 - 1cd8c6ab2 11-15 07:25 `Merge agent/decomp26: Merge branch 'main' into decomp26` (decomp26)
@@ -240,6 +243,4 @@
 - bc985d7ff 11-15 06:40 `Merge agent/survwire: survwire: card result` (survwire)
 - b2a72e8ed 11-15 06:04 `Merge agent/uic4: Merge origin/main into uic4` (uic4)
 - 0ebf55048 11-15 05:49 `Merge origin/main into uic4` (-)
-- dc792e7ec 11-15 05:39 `Merge agent/p03bposted: Merge branch 'main' into p03bposted` (p03bposted)
-- 95f866485 11-15 05:38 `Merge branch 'main' into p03bposted` (-)
 <!-- statusgen:end -->
