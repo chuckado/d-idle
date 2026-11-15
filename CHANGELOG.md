@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-497 <!--sg:agent/botstuck2-->
+- portalguard: default mode 0, generous bounds, R3 recipe and flip rule <!--sg:agent/portalguard-->
 - Merge branch 'main' into decomp28 <!--sg:agent/decomp28-->
 - decomp27: monster melee block matches game.exe (oracle tools/emu/mel_block.py); a knocking hit in a get-hit is refused in game.exe (FUN_0057edd0 new mode 0x13), fork claim built, verifier brief written <!--sg:agent/decomp27-->
 - Merge branch 'main' into TASK-496 <!--sg:agent/verifyp06b-->
