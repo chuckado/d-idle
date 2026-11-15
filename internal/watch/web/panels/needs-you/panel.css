@@ -2,7 +2,7 @@
   /* a bare list of at most three 32 px rows; the panel hides itself when empty and the map below grows. It never shrinks: the Orders list under it scrolls instead */
   [data-panel="needs-you"] { flex-shrink: 0; }
   [data-panel="needs-you"] .d-slotbody { display: flex; flex-direction: column; gap: var(--d-sp-1); min-block-size: 0; }
-  [data-panel="needs-you"] .n-head { flex: none; display: flex; justify-content: space-between; align-items: center; font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); min-block-size: 18px; }
+  [data-panel="needs-you"] .n-head { flex: none; display: flex; justify-content: space-between; align-items: center; font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); min-block-size: 18px; }
   [data-panel="needs-you"] .n-head .n-dots { min-block-size: 18px; min-inline-size: 28px; font-weight: 400; }
   [data-panel="needs-you"] .n-dots[data-more="1"] { letter-spacing: 0; text-transform: none; font-size: var(--d-fs-0); color: var(--d-text-2); padding-inline: var(--d-sp-2); }
   [data-panel="needs-you"] .n-list { display: flex; flex-direction: column; gap: var(--d-sp-1); flex: none; }
@@ -22,7 +22,7 @@
   [data-panel="needs-you"] .n-btn:hover { background: var(--d-surface-3); }
   [data-panel="needs-you"] .n-btn.n-p { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 600; }
   [data-panel="needs-you"] .n-btn:disabled { opacity: .5; cursor: default; }
-  [data-panel="needs-you"] .n-dots, [data-panel="needs-you"] .n-more { background: none; border: 0; padding: 0; color: var(--d-text-3); font: inherit; cursor: pointer; }
+  [data-panel="needs-you"] .n-dots, [data-panel="needs-you"] .n-more { background: none; border: 0; padding: 0; color: var(--d-text-2); font: inherit; cursor: pointer; }
   [data-panel="needs-you"] .n-dots { letter-spacing: .08em; }
   [data-panel="needs-you"] .n-dots:hover, [data-panel="needs-you"] .n-more:hover { color: var(--d-text); }
   [data-panel="needs-you"] .n-more { flex: none; align-self: flex-start; font-size: var(--d-fs-0); color: var(--d-text-2); padding-inline: var(--d-sp-2); min-block-size: 20px; }
@@ -40,6 +40,6 @@
   [data-panel="needs-you"] .n-pop .n-t { white-space: normal; }
   [data-panel="needs-you"] .n-sw { min-block-size: 0; display: flex; justify-content: space-between; gap: var(--d-sp-3); align-items: center; background: none; border: 0; border-block-start: var(--d-bw) solid var(--d-line);
     padding: var(--d-sp-2) var(--d-sp-1) 0; color: var(--d-text-2); font: inherit; font-size: var(--d-fs-0); cursor: pointer; text-align: start; }
-  [data-panel="needs-you"] .n-sw em { font-style: normal; font-weight: 700; padding: 1px var(--d-sp-2); border-radius: var(--d-r-round); background: var(--d-surface-3); color: var(--d-text-3); }
+  [data-panel="needs-you"] .n-sw em { font-style: normal; font-weight: 700; padding: 1px var(--d-sp-2); border-radius: var(--d-r-round); background: var(--d-surface-3); color: var(--d-text-2); }
   [data-panel="needs-you"] .n-sw[data-on="1"] em { background: var(--d-accent); color: var(--d-on-accent); }
 }

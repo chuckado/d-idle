@@ -3,7 +3,7 @@
   [data-panel="progress"] .d-slotbody { display: flex; }
   [data-panel="progress"] .pg-btn { all: unset; box-sizing: border-box; flex: 1 1 auto; min-inline-size: 0; display: flex; flex-direction: column; gap: var(--d-sp-1); justify-content: space-between; cursor: pointer; border-radius: var(--d-r-1); }
   [data-panel="progress"] .pg-btn:focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
-  [data-panel="progress"] .pg-h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--d-sp-2); font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); white-space: nowrap; }
+  [data-panel="progress"] .pg-h { display: flex; justify-content: space-between; align-items: baseline; gap: var(--d-sp-2); font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); white-space: nowrap; }
   [data-panel="progress"] .pg-h em { font-style: normal; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--d-text-2); font-size: var(--d-fs-0); overflow: hidden; text-overflow: ellipsis; }
   [data-panel="progress"] .pg-m { display: grid; grid-template-columns: auto minmax(2rem, 1fr) auto; gap: var(--d-sp-2); align-items: center; min-inline-size: 0; font-size: var(--d-fs-0); color: var(--d-text-2); }
   [data-panel="progress"] .pg-to, [data-panel="progress"] .pg-said { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
@@ -14,7 +14,7 @@
   [data-panel="progress"] .pg-v { display: flex; justify-content: space-between; align-items: baseline; gap: var(--d-sp-3); min-inline-size: 0; white-space: nowrap; }
   [data-panel="progress"] .pg-xp, [data-panel="progress"] .pg-gold { display: inline-flex; align-items: baseline; gap: var(--d-sp-1); min-inline-size: 0; }
   [data-panel="progress"] .pg-v strong { font-family: var(--d-font-num); font-variant-numeric: tabular-nums; font-size: var(--d-fs-3); font-weight: 600; color: var(--d-text); }
-  [data-panel="progress"] .pg-v strong[data-wait] { color: var(--d-text-3); }
+  [data-panel="progress"] .pg-v strong[data-wait] { color: var(--d-text-2); }
   [data-panel="progress"] .pg-v label { font-size: var(--d-fs-0); color: var(--d-text-2); }
   [data-panel="progress"] .pg-spark { inline-size: 60px; block-size: 16px; align-self: center; margin-inline-start: var(--d-sp-1); flex: none; overflow: visible; }
   [data-panel="progress"] .pg-spark polyline { fill: none; stroke: var(--d-text-2); stroke-width: 1.5; stroke-linejoin: round; stroke-linecap: round; }
@@ -29,6 +29,6 @@
   [data-panel="progress"] .pg-pop:popover-open { display: block; }
   @supports (anchor-name: --a) { [data-panel="progress"] .pg-pop { position-anchor: --pg-anchor; inset-block-end: anchor(top); inset-inline-start: anchor(left); margin-block-end: var(--d-sp-1); } }
   [data-panel="progress"] .pg-rows { margin: 0; display: grid; grid-template-columns: max-content 1fr; gap: var(--d-sp-1) var(--d-sp-3); }
-  [data-panel="progress"] .pg-rows dt { color: var(--d-text-3); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .08em; padding-block-start: 2px; }
+  [data-panel="progress"] .pg-rows dt { color: var(--d-text-2); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .08em; padding-block-start: 2px; }
   [data-panel="progress"] .pg-rows dd { margin: 0; }
 }
