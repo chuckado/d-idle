@@ -164,6 +164,7 @@
 | survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| uis4 | proposed | - | `internal/watch/commands.go`<br>`internal/watch/commands_test.go`<br>`internal/watch/testdata/commands/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/testdata/orders_dom.js`<br>`internal/watch/testdata/orders_dom.txt`<br>`tools/uishots/fixtures_commands.go` | - |
 | uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | p05cr | proposed | - | `docs/upstream/` | `upstream-pr:load-gold-clamp` |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
@@ -214,14 +215,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 776d705fa 11-14 20:46 `Merge agent/uis4: Merge branch 'main' into TASK-453` (uis4)
+- 49d8571e5 11-14 20:46 `Merge branch 'main' into TASK-453` (-)
 - c531b5422 11-14 20:44 `Merge agent/p05cr: Merge branch 'main' into TASK-459` (p05cr)
 - 99005156e 11-14 20:44 `Merge branch 'main' into TASK-459` (-)
 - 4769c8dc2 11-14 20:34 `Merge agent/toastfix: toastfix: stack toast text readable in dark theme, contrast test` (toastfix)
+- 1cbf7b792 11-14 20:33 `Merge origin/main into agent/uis4 (S1b, C2, S2 on main)` (-)
 - cc7f8016a 11-14 20:32 `Merge origin/main into agent/p05cr; P05 row edits re-applied` (-)
 - 2dd560602 11-14 20:03 `Merge agent/uis2: Merge origin/main into agent/uis2` (uis2)
 - e65e71841 11-14 19:54 `Merge origin/main into agent/uis2` (-)
 - de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
-- bbee6b240 11-14 19:20 `Merge branch 'main' into survcal` (-)
-- 79993ee9a 11-14 19:15 `Merge agent/uic2: Merge branch 'main' into TASK-456` (uic2)
-- a63baa338 11-14 19:14 `Merge branch 'main' into TASK-456` (-)
 <!-- statusgen:end -->
