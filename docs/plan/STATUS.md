@@ -194,7 +194,6 @@
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
 | verifyp04 | in-progress | - | `docs/upstream/verifier-p04-2026-11-15.md` | - |
 | p06posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
-| decomp29 | proposed | - | `docs/research/decomp29-skilldamage.md`<br>`internal/power/skilldamage.json`<br>`tools/emu/dc29_` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
