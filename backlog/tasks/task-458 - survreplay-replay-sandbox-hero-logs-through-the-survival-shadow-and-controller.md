@@ -1,10 +1,13 @@
 ---
 id: TASK-458
-title: 'survreplay: replay sandbox hero logs through the survival shadow and controller'
-status: Proposed
+title: >-
+  survreplay: replay sandbox hero logs through the survival shadow and
+  controller
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T23:08:00Z'
+updated_date: '2026-11-15T00:20:00Z'
 labels:
   - bot
   - model-check
