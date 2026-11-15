@@ -277,10 +277,12 @@
   }
 }
 
-/* outside the layers so it wins over the panels' own layer: this page's band is one line (review c2c3 R8); the meters are tiles on the page */
-.cv > .d-band-status [data-panel="hero-meters"] { display: none; }
-.cv > .d-band-status .d-band-main { max-block-size: var(--cv-band); }
-.cv > .d-band-status .d-band-main > .d-panel, .cv > .d-band-status [data-panel="statusline"] .say { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-block-size: var(--cv-band); }
-.cv > .d-band-status [data-panel="statusline"] .say { display: block; max-inline-size: 100%; }
-.cv > .d-band-status [data-panel="hero-status"] { flex-wrap: nowrap; }
-.cv > .d-band-status [data-panel="hero-status"] .clock { display: none; } /* the clock is on the live screen; the one line keeps the state and where */
+@layer utilities {
+  /* the last layer, so it wins over the panels' own layer: this page's band is one line (review c2c3 R8); the meters are tiles on the page */
+  .cv > .d-band-status [data-panel="hero-meters"] { display: none; }
+  .cv > .d-band-status .d-band-main { max-block-size: var(--cv-band); }
+  .cv > .d-band-status .d-band-main > .d-panel, .cv > .d-band-status [data-panel="statusline"] .say { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-block-size: var(--cv-band); }
+  .cv > .d-band-status [data-panel="statusline"] .say { display: block; max-inline-size: 100%; }
+  .cv > .d-band-status [data-panel="hero-status"] { flex-wrap: nowrap; }
+  .cv > .d-band-status [data-panel="hero-status"] .clock { display: none; } /* the clock is on the live screen; the one line keeps the state and where */
+}

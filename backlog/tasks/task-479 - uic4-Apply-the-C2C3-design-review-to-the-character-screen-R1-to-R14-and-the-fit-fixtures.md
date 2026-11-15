@@ -49,5 +49,5 @@ Why: TODO. Done when: TODO.
 - [x] #1 R1 to R13 of docs/ui/redesign-2026-11-14/reviews/c2c3-review.md applied
 - [x] #2 R14 fit fixtures: no mercenary, dead merc, phone storage tab, long names, pending state, light tooltip fail the fit check or tests when the defect returns
 - [x] #3 tools/uishots.sh --fit passes at the eight sizes and the renders were looked at
-- [x] #4 gate (labrun tower --gate) passes
+- [x] #4 the whole-repo gate passes on the builder
 <!-- AC:END -->
