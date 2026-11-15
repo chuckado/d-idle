@@ -593,6 +593,7 @@ func (f *Fun) flush() {
 // Settle updates Codex entries whose thought closed and delivers the edges that waited for the class (call it from
 // the loop that polls the status).
 func (f *Fun) Settle() {
+	f.Hub.TickOrders()
 	if f.Hall != nil {
 		f.Hub.setHeroTitle(f.Hall.Title())
 	}
