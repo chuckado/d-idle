@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-502 <!--sg:agent/p06posted-->
 - Merge branch 'main' into TASK-497 <!--sg:agent/botstuck2-->
 - portalguard: default mode 0, generous bounds, R3 recipe and flip rule <!--sg:agent/portalguard-->
 - Merge branch 'main' into decomp28 <!--sg:agent/decomp28-->
