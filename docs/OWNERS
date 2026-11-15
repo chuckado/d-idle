@@ -577,6 +577,8 @@ internal/town/town.go  credit-runner  tidy
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/gearsets_test.go  credit-runner  gearsets
+internal/watch/glance.go  credit-runner  uis2
+internal/watch/glance_test.go  credit-runner  uis2
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  exploredpct
@@ -630,6 +632,9 @@ internal/watch/testdata/gear_farm_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.js  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gearsets  credit-runner  gearsets
+internal/watch/testdata/glance/  credit-runner  uis2
+internal/watch/testdata/glance_dom.js  credit-runner  uis2
+internal/watch/testdata/glance_dom_*.txt  credit-runner  uis2
 internal/watch/testdata/history-export.json  credit-runner  maphistoryD
 internal/watch/testdata/history-heat.json  credit-runner  maphistoryB
 internal/watch/testdata/history.json  credit-runner  maphistoryA
@@ -683,6 +688,7 @@ internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/gear  credit-runner  repairtrip
+internal/watch/web/panels/hero-meters/  credit-runner  uis2
 internal/watch/web/panels/map  credit-runner  maphistory
 internal/watch/web/panels/map  credit-runner  maphistoryA
 internal/watch/web/panels/map  credit-runner  maphistoryB
@@ -690,8 +696,10 @@ internal/watch/web/panels/map  credit-runner  maphistoryC
 internal/watch/web/panels/map  credit-runner  maphistoryD
 internal/watch/web/panels/map  credit-runner  maptrail
 internal/watch/web/panels/map  credit-runner  maptrail2
+internal/watch/web/panels/needs-count/  credit-runner  uis2
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
+internal/watch/web/panels/statusline/  credit-runner  uis2
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  uis1
