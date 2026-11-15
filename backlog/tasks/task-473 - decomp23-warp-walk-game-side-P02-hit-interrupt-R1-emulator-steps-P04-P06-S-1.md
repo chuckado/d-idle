@@ -1,10 +1,13 @@
 ---
 id: TASK-473
-title: 'decomp23: warp walk game side (P02), hit interrupt R1 emulator steps (P04), P06 S-1'
-status: Proposed
+title: >-
+  decomp23: warp walk game side (P02), hit interrupt R1 emulator steps (P04),
+  P06 S-1
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T05:01:00Z'
+updated_date: '2026-11-15T06:36:00Z'
 labels:
   - d2d
   - research
