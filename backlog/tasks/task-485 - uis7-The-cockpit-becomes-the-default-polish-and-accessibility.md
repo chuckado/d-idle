@@ -32,6 +32,8 @@ owns:
   - "internal/watch/glance_questions_test.go"
   - "tools/uishots/fit.js"
   - "internal/watch/web/update.js"
+  - "internal/watch/web/panels/needs-you/panel.json"
+  - "internal/watch/testdata/glancepanels/"
   - "internal/watch/web/panels/needs-you/panel.js"
   - "tools/uishots/fixtures_update.go"
   - "tools/uishots/fixtures_glance.go"
