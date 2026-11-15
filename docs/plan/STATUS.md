@@ -170,6 +170,7 @@
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
 | uib1 | in-progress | - | `internal/bot/playerpause.go`<br>`internal/bot/playerpause_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/testdata/pause/`<br>`cmd/d2bot/pausewire.go`<br>`docs/pause.md`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go` | - |
+| drills012 | in-progress | - | `docs/releases/0.1.2-drills.md` | - |
 | uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
@@ -218,6 +219,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c57af20e0 11-15 00:24 `Merge agent/drills012: Merge branch 'main' into drills012` (drills012)
+- 09439c883 11-15 00:22 `Merge branch 'main' into drills012` (-)
 - bb8b822a1 11-14 23:58 `Merge agent/uib4: Merge branch 'main' into uib4` (uib4)
 - a1d8354d6 11-14 23:57 `Merge branch 'main' into uib4` (-)
 - d4dd67300 11-14 23:45 `Merge agent/uib1: Merge branch 'main' into TASK-464` (uib1)
@@ -226,6 +229,4 @@
 - f48e7b3a8 11-14 23:41 `Merge branch 'main' into decomp22` (-)
 - c04a271a8 11-14 23:39 `Merge origin/main into agent/uib4` (-)
 - fc4f96218 11-14 23:35 `Merge branch 'main' into TASK-464` (-)
-- 4dad0901b 11-14 23:29 `Merge agent/uis6: uis6: minBlock 250` (uis6)
-- 3b1fbaa90 11-14 23:08 `Merge origin/main into agent/uis6; minBlock for the act map in the rail` (-)
 <!-- statusgen:end -->

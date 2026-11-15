@@ -482,6 +482,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [0.1.0.md](releases/0.1.0.md): d.idle friends release 0.1.0 (status: RE-CUT 2026-11-12 (TASK-359, agent/cut010b) from main 0f049a66 with the lock-ordering fix (TASK-358); the...)
 - [0.1.1.md](releases/0.1.1.md): d.idle friends release 0.1.1 (status: BUILT AND VERIFIED on the worker host 2026-11-12 (card cut011, TASK-393), staged, NOT published, NOT sent....)
+- [0.1.2-drills.md](releases/0.1.2-drills.md): friends 0.1.2 pre-release drills (2026-11-14) (status: RUN, all four drills PASS. Tags: V = run and seen, S = read in source, U = not run. Run on the worker host...)
 - [0.1.2.md](releases/0.1.2.md): d.idle friends release 0.1.2 (status: BUILT AND STAGED 2026-11-14, NOT PUBLISHED, and the live drills have NOT run (they need docker with real...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
