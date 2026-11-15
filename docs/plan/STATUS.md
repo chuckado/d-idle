@@ -229,6 +229,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a66d9ba4a 11-15 03:40 `Merge agent/prfix5: Merge branch 'main' into prfix5` (prfix5)
+- d5a355255 11-15 03:39 `Merge branch 'main' into prfix5` (-)
 - 0d5377d2a 11-15 03:30 `Merge agent/uifix1: Merge branch 'main' into uifix1` (uifix1)
 - 7f26ca27e 11-15 03:29 `Merge branch 'main' into uifix1` (-)
 - 2ca371d0d 11-15 03:23 `Merge origin/main into agent/uifix1` (-)
@@ -237,6 +239,4 @@
 - 413ea36c9 11-15 03:08 `Merge origin/main into agent/uifix1` (-)
 - 2526e1bb4 11-15 02:55 `Merge agent/prfix4: Merge branch 'main' into prfix4` (prfix4)
 - cd11ae55d 11-15 02:54 `Merge branch 'main' into prfix4` (-)
-- 61a98c0a9 11-15 02:51 `Merge origin/main into agent/uifix1` (-)
-- 4bc0a4927 11-15 02:23 `Merge agent/cockpitreview: cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders)` (cockpitreview)
 <!-- statusgen:end -->
