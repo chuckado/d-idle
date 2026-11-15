@@ -870,6 +870,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - uib1: Pause and resume as player commands (TASK-464, merged 2026-11-14, acceptance 4 of 4) <!--sg:agent/uib1-->
 - uib4: Until-level for zone orders (TASK-466, merged 2026-11-14, acceptance 2 of 2) <!--sg:agent/uib4-->
 - drills012: friends 0.1.2 pre-release drills with real game files (TASK-465, merged 2026-11-15, acceptance 5 of 5): All four drills PASS, verified live with the user's backup zip as game source: install shows only the nine archives in /game, 21 min health run (0 restarts, 0 panics, 0 deaths, 0 bounce loops, Den entered x3), update 0.1.1 to 0.1.2 through the real client ... <!--sg:agent/drills012-->
+- verifyp03c: independent verifier for upstream candidate P03b (hit never restarts a get-hit) (TASK-468, merged 2026-11-15, acceptance 5 of 5): PASS WITH CHANGES for P03b (fid/hitrec-norestart-r2): the GH-from-GH claim holds (FUN_0057edd0 read + emulator rerun, 1 vs 0 of 12 differ, mutant aborts, full build/tidy/ctest on main+#541) ... <!--sg:agent/verifyp03c-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

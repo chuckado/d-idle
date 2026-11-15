@@ -173,6 +173,7 @@
 | drills012 | in-progress | - | `docs/releases/0.1.2-drills.md` | - |
 | uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| verifyp03c | proposed | - | `docs/upstream/verifier-p03b-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
@@ -219,7 +220,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9ddb9dbf3 11-15 00:24 `Merge agent/verifyp03c: Merge branch 'main' into TASK-468` (verifyp03c)
 - c57af20e0 11-15 00:24 `Merge agent/drills012: Merge branch 'main' into drills012` (drills012)
+- bf8749b78 11-15 00:22 `Merge branch 'main' into TASK-468` (-)
 - 09439c883 11-15 00:22 `Merge branch 'main' into drills012` (-)
 - bb8b822a1 11-14 23:58 `Merge agent/uib4: Merge branch 'main' into uib4` (uib4)
 - a1d8354d6 11-14 23:57 `Merge branch 'main' into uib4` (-)
@@ -227,6 +230,4 @@
 - c8643df88 11-14 23:44 `Merge branch 'main' into TASK-464` (-)
 - 9913f36ec 11-14 23:42 `Merge agent/decomp22: Merge branch 'main' into decomp22` (decomp22)
 - f48e7b3a8 11-14 23:41 `Merge branch 'main' into decomp22` (-)
-- c04a271a8 11-14 23:39 `Merge origin/main into agent/uib4` (-)
-- fc4f96218 11-14 23:35 `Merge branch 'main' into TASK-464` (-)
 <!-- statusgen:end -->
