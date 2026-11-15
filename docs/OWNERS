@@ -233,6 +233,7 @@ docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
+docs/farmloop.md  credit-runner  farmloop
 docs/first-hour.md  live-agent  firsthour
 docs/first-session.md  credit-runner  testerreport
 docs/fresh-start-pace.md  credit-runner  freshstart
@@ -409,6 +410,8 @@ internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
+internal/bot/farmreset.go  credit-runner  farmloop
+internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/geargate.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  exploredpct
 internal/bot/goal.go  credit-runner  goldprio
@@ -849,6 +852,7 @@ internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
+internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -876,6 +880,8 @@ internal/watch/whyline.json  credit-runner  uifix1
 internal/watch/whyline_test.go  credit-runner  repairtrip
 internal/watch/whyline_test.go  credit-runner  staletarget
 internal/watch/whyline_test.go  credit-runner  uifix1
+internal/watch/zoneclear.go  credit-runner  farmloop
+internal/watch/zoneclear_test.go  credit-runner  farmloop
 tools/bounce3  pro-runner  bounce3
 tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
@@ -909,6 +915,7 @@ tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
 tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
+tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
@@ -934,6 +941,7 @@ tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
 tools/uishots/fixtures_update.go  credit-runner  uis7
+tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
 tools/uishots/genlayouts.js  credit-runner  uis1
 tools/uishots/genlayouts.js  credit-runner  uis7
 tools/uishots/layout-rows.json  credit-runner  uis1
