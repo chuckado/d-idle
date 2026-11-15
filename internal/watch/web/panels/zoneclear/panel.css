@@ -1,4 +1,8 @@
 @layer panels {
+  /* a slot panel: the box is given, the settings scroll inside it; at most 45 % of a rail column so the panels above keep their room */
+  [data-panel="zoneclear"]:not([data-grow]):where(.d-slotcol:not(.d-slottop) > *) { max-block-size: 45%; }
+  [data-panel="zoneclear"] .zc-scroll { flex: 0 1 auto; min-block-size: 0; overflow-y: auto; overscroll-behavior: contain; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  [data-panel="zoneclear"] .zc-scroll:focus-visible { outline: 2px solid var(--d-focus, var(--d-accent)); outline-offset: -2px; }
   [data-panel="zoneclear"] .d-slotbody { display: flex; flex-direction: column; gap: var(--d-sp-1); min-block-size: 0; }
   [data-panel="zoneclear"] .zc-head { flex: none; display: flex; justify-content: space-between; align-items: baseline; font-size: var(--d-fs-0); font-weight: 700;
     letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); }

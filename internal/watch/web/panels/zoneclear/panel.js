@@ -73,7 +73,12 @@ export function mount(root, ctx) {
   acts.append(save, reset);
   const msg = ctx.el('div', 'zc-msg');
   msg.setAttribute('aria-live', 'polite');
-  ctx.body.append(head, line, ex.row, toggle, rs.row, acts, msg);
+  // the settings scroll inside the box the slot gives (a short rail cell holds the head and part of them); Save stays reachable
+  const sc = ctx.el('div', 'zc-scroll');
+  sc.dataset.scroll = '1'; sc.tabIndex = 0;
+  sc.setAttribute('aria-label', 'Zone clear settings');
+  sc.append(line, ex.row, toggle, rs.row, acts, msg);
+  ctx.body.append(head, sc);
 
   let live = null, cur = null, busy = false;
   function draw() {
