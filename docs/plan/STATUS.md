@@ -188,6 +188,7 @@
 | uis7 | proposed | - | `internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/components.css`<br>`internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/layout_test.go`<br>`internal/watch/testdata/layout_default.js`<br>`internal/watch/testdata/layout_cells.golden`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js`<br>`tools/uishots.sh`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/tokens.css`<br>`internal/watch/glance.go`<br>`internal/watch/glance_questions.go`<br>`internal/watch/glance_questions_test.go`<br>`tools/uishots/fit.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/panels/needs-you/panel.json`<br>`internal/watch/testdata/glancepanels/`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`tools/uishots/fixtures_update.go`<br>`tools/uishots/fixtures_glance.go`<br>`tools/uishots/serve.go` | - |
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
+| p03bposted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/bodies/hitrec-norestart-body.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -232,6 +233,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dc792e7ec 11-15 05:39 `Merge agent/p03bposted: Merge branch 'main' into p03bposted` (p03bposted)
+- 95f866485 11-15 05:38 `Merge branch 'main' into p03bposted` (-)
 - 0d160ecd4 11-15 05:24 `Merge agent/uis7: Merge branch 'main' into TASK-485` (uis7)
 - 845529a15 11-15 05:23 `Merge branch 'main' into TASK-485` (-)
 - 2fbc7bf94 11-15 05:22 `Merge agent/verifyp03d: Merge branch 'main' into TASK-488` (verifyp03d)
@@ -240,6 +243,4 @@
 - 75c5015a8 11-15 04:56 `Merge agent/p02posted: Merge branch 'main' into p02posted` (p02posted)
 - cc8ebbad0 11-15 04:56 `Merge origin/main` (-)
 - 0e1966552 11-15 04:55 `Merge branch 'main' into p02posted` (-)
-- e4b41b884 11-15 04:54 `Merge agent/uis7review: uis7review: design review of S7 (cockpit default) before merge: approve with changes` (uis7review)
-- be9ac3373 11-15 04:25 `Merge origin/main into agent/uis7` (-)
 <!-- statusgen:end -->
