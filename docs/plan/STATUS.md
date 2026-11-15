@@ -247,6 +247,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 96ae5b38b 11-15 14:37 `Merge agent/deploycockpit4: Merge branch 'main' into deploycockpit` (deploycockpit4)
+- 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
 - cc88747b3 11-15 14:28 `Merge agent/devp8: Merge branch 'main' into devp8` (devp8)
 - 8252907ea 11-15 14:27 `Merge branch 'main' into devp8` (-)
 - 568260e7f 11-15 14:11 `Merge agent/p03cposted: Merge branch 'main' into p03cposted` (p03cposted)
@@ -255,6 +257,4 @@
 - b965b4243 11-15 14:01 `Merge branch 'main' into botreset` (-)
 - 64660bcd8 11-15 14:00 `Merge agent/verifyp03c: Merge branch 'main' into TASK-513` (verifyp03c)
 - 8aa8fd28c 11-15 14:00 `Merge agent/p04posted: Merge branch 'main' into p04posted` (p04posted)
-- 02f99ea00 11-15 14:00 `Merge agent/deploycockpit: Merge branch 'main' into deploycockpit` (deploycockpit)
-- 022e10c78 11-15 13:56 `Merge branch 'main' into TASK-513` (-)
 <!-- statusgen:end -->

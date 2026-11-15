@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into deploycockpit <!--sg:agent/deploycockpit4-->
 - Merge branch 'main' into devp8 <!--sg:agent/devp8-->
 - Merge branch 'main' into p03cposted <!--sg:agent/p03cposted-->
 - Merge branch 'main' into botreset <!--sg:agent/botreset-->
