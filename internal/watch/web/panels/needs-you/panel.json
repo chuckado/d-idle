@@ -15,6 +15,7 @@
   "optIn": true,
   "fit": true,
   "slot": true,
+  "scroll": true,
   "cockpitOnly": true,
   "owner": "uis3",
   "doc": "docs/ui/redesign-2026-11-14/briefs/S3-strip-and-needs.md"
