@@ -199,6 +199,7 @@
 | decomp31 | proposed | - | `docs/research/decomp31-drops.md`<br>`internal/plandata/dropmodel-normal.json`<br>`docs/plan/data/dropmodel-normal.json`<br>`tools/emu/dm_` | - |
 | decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
+| verifyp04b | in-progress | - | `docs/upstream/verifier2-p04-2026-11-15.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -242,6 +243,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ff42d6f5f 11-15 13:28 `Merge agent/verifyp04b: Merge branch 'main' into TASK-512` (verifyp04b)
+- 4d1027508 11-15 13:27 `Merge branch 'main' into TASK-512` (-)
 - f89d5b557 11-15 13:19 `Merge agent/farmloop: Merge branch 'main' into farmloop` (farmloop)
 - 1139d706b 11-15 13:18 `Merge branch 'main' into farmloop` (-)
 - f40ddc57a 11-15 13:14 `Merge agent/prfix7: Merge branch 'main' into prfix7` (prfix7)
@@ -250,6 +253,4 @@
 - 25d606285 11-15 13:08 `Merge branch 'main' into dangerfit2` (-)
 - 4a07c0132 11-15 13:03 `Merge agent/uiphone: Merge branch 'main' into TASK-501` (uiphone)
 - 9198536fa 11-15 13:02 `Merge branch 'main' into TASK-501` (-)
-- 7791fe294 11-15 12:46 `Merge branch 'main' into dangerfit2` (-)
-- d621b6505 11-15 12:31 `Merge agent/decomp31: Merge branch 'main' into decomp31` (decomp31)
 <!-- statusgen:end -->
