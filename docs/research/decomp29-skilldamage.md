@@ -14,7 +14,7 @@ Tags: **V run** = game.exe 1.14d's own code run in the emulator this card (`tool
 ## 1. Method (oracle first)
 
 1. `tools/emu/mpq-table.sh skills|missiles` (D): the Skills.txt and Missiles.txt of the patched stack; `d9_animdata.sh` + a parser in `dc29_build.py` (D): AnimData frame counts per class, mode and weapon class (the parse consumes the file exactly: 570,304 bytes).
-2. `tools/emu/dc29_skill.py all 1 30` (V run): boots `skill_tips.boot()` (game.exe under unicorn, as `skill_damage.py`), hooks only the stat getter FUN_00625480 (stat 0xc = clvl 30, masteries 0, else 0), the unit's skill record FUN_00643810 and its level FUN_006442a0, and calls game.exe's own FUN_00644d50 / e40 / f20 (element, flag 1), FUN_00647bc0 / d00 (physical) and FUN_00646ca0 on `calc1..4` for every skill id 6..280 and level 1..30 (8,250 pairs x 3 synergy sets), plus ids 0..5 at level 1. 8 seconds of game CPU per 1,000 pairs.
+2. `tools/emu/dc29_skill.py all 1 30` (V run): boots `skill_tips.boot()` (game.exe under unicorn, as `skill_damage.py`), hooks only the stat getter FUN_00625480 (stat 0xc = clvl 30, masteries 0, else 0), the unit's skill record FUN_00643810 and its level FUN_006442a0, and calls game.exe's own FUN_00644d50 / e40 / f20 (element, flag 1), FUN_00647bc0 / d00 (physical) and FUN_00646ca0 on `calc1..4` for every skill id 6..280 and level 1..30 (8,250 pairs x 3 synergy sets), plus ids 0..5 at level 1.
 3. `dc29_skill.py mana 1 30` (V run): the real check FUN_0056c160 and payment FUN_0056bfe0 with a huge mana pool (sk_mana.py's rig); `paid` / 256 is the cost.
 4. `tools/emu/dc29_rate.py` (V run): FUN_00623f50's attack branch (mode 7, AnimData speed 256, IAS 0..200 x WSM 0, -10, -20, +10, +20, +30) and cast branch (mode 10, FCR 0..200) in the skiasgame2 rig (stat getters hooked, the rate arithmetic is game.exe's).
 5. `tools/emu/dc29_cmp.sh` (V run, d2d side): `dc29_cases.py` writes 24,750 cases; `skill_damage.py game` and the fork's `test_game --skill-damage` run them; `diff` counts the mismatches (0). Reproduce: `D2_LABRUN_HOST=<worker host> tools/emu/run-on-worker.sh --ttl 900 dc29_cmp.sh`. md5 (first 8): cases 8e185b79, game side 4f0d5661.
@@ -217,7 +217,7 @@ Per-class calc / physical sources (S): Paladin palskill-trace.md (40,720 cases),
 
 | B | Finding |
 |---|---|
-| B1 | `internal/power/profiles.json:270` `swingSeconds` 1.28 (tag U) is used for every hero with a readable weapon (`internal/power/margin.go:133`, `hit * mean / pr.SwingSeconds`). Real: Paladin 1HS 15 ticks = 0.60 s, Sorceress staff 18 ticks = 0.72 s, Barbarian 1HS 16 ticks = 0.64 s at 0 IAS (T4). Offence is understated by about 2x at 0 IAS and the gap grows with IAS. |
+| B1 | `internal/power/profiles.json:270` `swingSeconds` 1.28 (tag U) is used for every hero with a readable weapon (`internal/power/margin.go:139`, `hit * mean / pr.SwingSeconds`). Real: Paladin 1HS 15 ticks = 0.60 s, Sorceress staff 18 ticks = 0.72 s, Barbarian 1HS 16 ticks = 0.64 s at 0 IAS (T4). Offence is understated by about 2x at 0 IAS and the gap grows with IAS. |
 | B2 | `profiles.json:271` `defaultDpsPerClvl` 2.5 (`margin.go:141`, `* h.Level`): a clvl-24 Sorceress gets 60 dps; Fire Bolt 20 with no synergy deals 102 dps (T1 + T3, I) and Fire Ball 20 about 410. The spell side is not modelled at all, so any caster margin is dominated by the default flag. |
 | B3 | `profiles.json` `manaPerSecond` 4.0 (U): Fire Bolt costs 2.5 mana per 13 ticks = 4.8 mana per second (0 FCR); Frost Nova 17 at L1; Blizzard 44 (delay-bound, so 23 to 81 / 1.8 s). One number for all spells hides a factor of 10. |
 | B4 | The power model has no skill-delay term (Blizzard 45, Meteor 30 ticks); a delay-bound skill is `max(delay, cast ticks)` per cast (I). |
@@ -255,7 +255,7 @@ Examples (I; one target, no resist, 0 FCR, no synergy, `dc29_doc.py` arithmetic)
 - U3: hit share of multi-bolt skills (Charged Bolt, Lightning Fury, Strafe) against one target: needs the missile flight (SKMISS, S) and the monster size; the table gives per-bolt damage and the count.
 - U4: whether the druid's cast speed 208 enters Skills `anim` for all druid casts (formula linear in speed, V read skiasgame2 Q2; the rig ran speed 256 only): T3's Druid row is I.
 - U5: the physical min / max and calc slots were run through game.exe this card but only compared with d2d in earlier cards (0-diff per class cards, S); no new differential for them.
-- Dead end: the NAS builder container has no emulator image (`labrun tower`: no `~/d2d-lab/emu`), so the run used the worker host under `tools/emu/run-on-worker.sh` (a niced single process, well under 4 cores, `agentreap` list empty at the end).
+- Dead end: the builder container has no emulator image (no `~/d2d-lab/emu` there), so the run used the worker host under `tools/emu/run-on-worker.sh` (a niced single process, well under 4 cores, `agentreap` list empty at the end).
 
 ## 9. PR candidates
 
@@ -263,9 +263,11 @@ No PR candidate: the element differential is 0 mismatches before and after (noth
 
 ## 10. Drill recipe (lab, one hidden slot, `docs/forkdbg.md`, `docs/forkcheats.md`; do not run while the user plays)
 
-1. Fresh Sorceress with Fire Bolt at level N: `debug cast 36 near` (forkdbg) against `debug mon set <id> life 5000 maxlife 5000 res fire 0`; read the target's life before and after one cast through `dump monsters`: the loss in 256ths must lie in `elem.none` min..max of the JSON at level N (U confirm; the d2d side is already 0-diff, this checks the fork build the bot runs).
+(Verb names are those of docs/forkdbg.md; the exact dump fields read below are U until the first run.)
+
+1. Fresh Sorceress with Fire Bolt at level N: `debug cast 36 near` against a monster set with `debug mon set <id> life 5000 maxlife 5000 res fire 0`; read the target's life before and after one cast from the monster dump: the loss in 256ths must lie in `elem.none` min..max of the JSON at level N (U confirm; the d2d side is already 0-diff, this checks the fork build the bot runs).
 2. Cast period: 20 casts of `debug cast 36` with the d2d tick counter (`dump stats` frame field); `ticks per cast` must be 13 at FCR 0 (T3), 12 with FCR 9.
-3. Paladin swing: `debug cast 0` with a one-hand sword; ticks per swing 15 at IAS 0 (T4).
+3. Paladin swing: a plain attack at a monster with a one-hand sword (the `debug cast` verb with skill 0 is U); ticks per swing 15 at IAS 0 (T4).
 4. Mana: `debug mana full` then one cast; `mana before - after` = `mana[level]` of the JSON.
 5. Synergy: `debug points <skill id> 20` on the named synergy skills; the next cast's damage must lie in `elem.all20` range (the points command is lab-only, forkcheats).
 
