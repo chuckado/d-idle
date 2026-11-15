@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -35,7 +36,6 @@ var fxPanels = []fxPanel{
 	{"fx-progress", "Progress", `ctx.body.append(ctx.el('div', 'row', 'Progress  level 7'), ctx.el('div', 'row', 'to 10 in 25 min'), ctx.el('div', 'row', 'xp/h 12.4k  gold/h 2.1k'));`},
 	{"fx-journey", "Journey", `ctx.body.append(ctx.el('div', 'row', 'Journey  chapter 3 of 9'), ctx.el('div', 'row', 'Blood Raven: too early for this hero, a long line that is cut'));`},
 	{"fx-health", "Health", `ctx.body.append(ctx.el('div', 'row', 'Health'), ctx.el('div', 'row', 'Life ok  Gear ok  Ready ok'));`},
-	{"fx-area", "Area", `ctx.body.append(ctx.el('div', 'row', 'Area map'), ctx.el('div', 'row', 'Cold Plains, the hero is here'));`},
 	// the crafted pages the check must fail (docs/ui/redesign-2026-11-14/reviews/s1b-review.md): content cut one level below
 	// the panel root, a data-scroll that does not scroll, a slot whose only panel is hidden, a frame taller than the window
 	{"fx-nested", "Nested", `const box = ctx.el('div', 'nest'); for (let i = 0; i < 60; i++) box.append(ctx.el('div', 'row', 'row ' + i + ' in a box that cuts')); ctx.body.append(box);`},
@@ -64,21 +64,45 @@ const fxCSS = `/* unlayered on purpose: the tall-frame fixture must beat the she
 }
 `
 
+// orderedTabs marshals as a JSON object in the order given (a Go map would sort the tab names).
+type orderedTabs []struct {
+	Name string
+	IDs  []string
+}
+
+func (t orderedTabs) MarshalJSON() ([]byte, error) {
+	var b bytes.Buffer
+	b.WriteByte('{')
+	for i, x := range t {
+		if i > 0 {
+			b.WriteByte(',')
+		}
+		k, _ := json.Marshal(x.Name)
+		v, _ := json.Marshal(x.IDs)
+		b.Write(k)
+		b.WriteByte(':')
+		b.Write(v)
+	}
+	b.WriteByte('}')
+	return b.Bytes(), nil
+}
+
 // fxLayout is a cockpit layout over the fixture panels. Names: "" the demo, "overflow" the panel with no height of its own,
 // and the crafted pages of the review, each with its one panel in every arrangement so every width has the fault.
 func fxLayout(name string) map[string]any {
-	rail := []string{"fx-needs", "fx-orders", "fx-map"}
-	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"fx-area"}}
-	tabs := map[string]any{"Orders": []string{"fx-needs", "fx-orders"}, "Map": []string{"fx-map"}, "Progress": []string{"fx-progress", "fx-journey", "fx-health"}}
+	// the area map is the real panel (S6); the rest stand in for the slices that are not built
+	rail := []string{"fx-needs", "fx-orders", "fx-map", "area-map"}
+	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"area-map"}}
+	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"fx-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-journey", "fx-health"}}}
 	if name == "orders" { // the demo with the real Orders panel (fed by commandsFixture) in place of its stand-in
-		rail = []string{"fx-needs", "orders", "fx-map"}
+		rail = []string{"fx-needs", "orders", "fx-map", "area-map"}
 		wide["top"] = []string{"fx-needs", "orders"}
-		tabs["Orders"] = []string{"fx-needs", "orders"}
+		tabs[0].IDs = []string{"fx-needs", "orders"}
 	} else if name != "" {
 		one := "fx-" + name
 		rail = []string{one}
 		wide = map[string]any{"top": []string{one}, "left": []string{}, "right": []string{}}
-		tabs = map[string]any{"Fault": []string{one}}
+		tabs = orderedTabs{{"Fault", []string{one}}}
 	}
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
@@ -129,9 +153,13 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			}
 			list, _ := v["panels"].([]any)
 			for _, f := range fxPanels {
-				list = append(list, map[string]any{"schema": "watch.panel/1", "version": 1, "id": f.id, "title": f.title, "band": "side", "size": "s",
+				man := map[string]any{"schema": "watch.panel/1", "version": 1, "id": f.id, "title": f.title, "band": "side", "size": "s",
 					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true, "scroll": f.id == "fx-orders" || f.id == "fx-fakescroll",
-					"owner": "uishots", "doc": "docs/ui-regression-plan.md"})
+					"owner": "uishots", "doc": "docs/ui-regression-plan.md"}
+				if f.id == "fx-map" {
+					man["switchWith"], man["switchLabel"], man["minBlock"] = "area-map", "Act map", 250 // the stand-in for zone-map shares its column with the area map
+				}
+				list = append(list, man)
 			}
 			v["panels"] = list
 			js(w, v)
