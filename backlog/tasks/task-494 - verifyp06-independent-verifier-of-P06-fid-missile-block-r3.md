@@ -1,10 +1,11 @@
 ---
 id: TASK-494
 title: 'verifyp06: independent verifier of P06 fid/missile-block-r3'
-status: In Progress
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T12:25:00Z'
+updated_date: '2026-11-15T13:27:00Z'
 labels:
   - d2d
   - research
