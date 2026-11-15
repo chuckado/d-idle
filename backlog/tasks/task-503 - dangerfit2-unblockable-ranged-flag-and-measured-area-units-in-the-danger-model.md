@@ -19,6 +19,7 @@ owns:
   - "docs/survival/power.md"
 exclusive: []
 contracts: []
+result: "B4 unblockable flag and B5 measured area units wired (shadow only); offline tests, not verified live"
 ---
 
 ## Description
