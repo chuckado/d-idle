@@ -21,6 +21,7 @@ owns:
 exclusive:
   - "fork-branch:fid/hitrec-norestart-r3"
 contracts: []
+result: "Fork branch fid/hitrec-norestart-r3 (b18acf7e, pushed to the private fork) built and rerun: oracle modes 0..19, 13 cells, 0 differ (r2 claim: 1 differ in the knockback), strict compare, PR body written; verified in the emulator and on the builder, not live; second verifier pass needed, post after PR 541 merges."
 ---
 
 ## Description
