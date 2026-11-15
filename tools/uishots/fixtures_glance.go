@@ -33,6 +33,9 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 		}
 		v.Needs = fixtureNeeds(n)
 		words := strings.Split(q.Get("glance"), ",")
+		if qn, _ := strconv.Atoi(q.Get("question")); qn > 0 { // question=N: a hero question with N answers heads the rows
+			v.Needs = append([]watch.GlanceNeed{fixtureQuestion(qn)}, v.Needs...)
+		}
 		variant := words[0]
 		has := func(w string) bool {
 			for _, x := range words {
@@ -134,4 +137,15 @@ func fixtureNeeds(n int) []watch.GlanceNeed {
 		n = len(all)
 	}
 	return all[:n]
+}
+
+// fixtureQuestion is one open hero question with n answers, as the Hub builds it (kind question, every answer a button).
+func fixtureQuestion(n int) watch.GlanceNeed {
+	labels := []string{"Drink a potion", "Retreat to town", "Keep fighting", "Use a scroll", "Ask the mercenary", "Wait here", "Skip", "Go back"}
+	need := watch.GlanceNeed{ID: "thought:41", Kind: "question", Sev: "warn",
+		Text: "My life is low and the monsters here hit hard; should I drink, retreat or keep fighting?", Sub: "If you do nothing I decide in under a minute.", Actions: []watch.GlanceVerb{}}
+	for i := 0; i < n && i < len(labels); i++ {
+		need.Actions = append(need.Actions, watch.GlanceVerb{Label: labels[i], Post: "/api/answer", Body: json.RawMessage(fmt.Sprintf(`{"thought":41,"answer":"a%d"}`, i))})
+	}
+	return need
 }

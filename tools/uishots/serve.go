@@ -74,6 +74,8 @@ func serve(addr, class string) error {
 		w.Write(frame())
 	})
 	m.HandleFunc(watch.CommandsRoute, commandsFixture(class))
+	m.HandleFunc("/api/update/status", updateStatusFixture)
+	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))
 	m.HandleFunc(watch.GlanceRoute, glanceFixture(sim.Hub))
 	m.HandleFunc("/api/repair", func(w http.ResponseWriter, r *http.Request) { js(w, repairFixture) })
 	m.HandleFunc("/api/tally", func(w http.ResponseWriter, r *http.Request) { js(w, tallyFixture) })
@@ -121,7 +123,7 @@ func serve(addr, class string) error {
 		m.Handle("/", inner)
 	}
 	log.Printf("uishots: fixture viewer on http://%s/watch (%s, frozen)", addr, class)
-	return http.ListenAndServe(addr, mountFixturePanels(m))
+	return http.ListenAndServe(addr, withUpdateScript(mountFixturePanels(m)))
 }
 
 func js(w http.ResponseWriter, v any) {
