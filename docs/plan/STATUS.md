@@ -204,7 +204,6 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
-| devp8 | proposed | - | `docs/probes/devp8-2026-11-15.md` | `fork-branch:sandbox-devp8` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
