@@ -78,9 +78,8 @@ func TestPlayerResetWithoutCyclerFails(t *testing.T) {
 	if g.r.ResetView().Reason == "" {
 		t.Fatal("no reason")
 	}
-	g.r.PlayerReset(false) // a failed reset can be pressed again
-	if g.resetState() != ResetResetting {
-		t.Fatalf("after the second press: %s", g.resetState())
+	if v := g.r.PlayerReset(false); v.Already || v.State != ResetResetting { // a failed reset can be pressed again
+		t.Fatalf("after the second press: %+v", v)
 	}
 	g.finish()
 }

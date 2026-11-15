@@ -867,6 +867,7 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     state(st) { parts.root.dataset.state = st; },
     later(fn, ms) { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; },
     post: (path, body) => postJSON(answerBase, path, body),
+    askReset(from) { document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from } })); }, // the Reset confirm sheet (resetui.js)
     refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)
     openDrawer(id) { return openDrawer(id); },
     short() { return !!ck.plan && ck.plan.mode !== 'phone' && window.innerHeight < COCKPIT_SHORT; }, // a short cockpit window (the panels trim their lists)
