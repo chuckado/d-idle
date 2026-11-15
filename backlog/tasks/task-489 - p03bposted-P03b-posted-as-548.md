@@ -1,10 +1,11 @@
 ---
 id: TASK-489
 title: 'p03bposted: P03b posted as #548'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T10:26:00Z'
+updated_date: '2026-11-15T10:44:00Z'
 labels:
   - docs
   - upstream-pr
