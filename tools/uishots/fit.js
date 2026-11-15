@@ -6,7 +6,8 @@ export function measure(win, opts) {
   const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
   const cs = (n) => win.getComputedStyle(n);
   // a list that scrolls on purpose: marked data-scroll, inside a panel that declares scroll, and really a scroll container
-  const scroller = (n) => n.hasAttribute('data-scroll') && /^(auto|scroll)$/.test(cs(n).overflowY) && decl.has((n.closest('[data-panel]') || { dataset: {} }).dataset.panel);
+  // data-vscroll: a region of the page that scrolls on purpose (the phone's storage canvas, the item sheet); it only counts while the browser really scrolls it
+  const scroller = (n) => (n.hasAttribute('data-scroll') && /^(auto|scroll)$/.test(cs(n).overflowY) && decl.has((n.closest('[data-panel]') || { dataset: {} }).dataset.panel)) || (n.hasAttribute('data-vscroll') && /^(auto|scroll)$/.test(cs(n).overflowY));
   // a few words of the element's own text name it in the verdict (a cell, a slot, a chip), so the fix is found without a debugger
   const name = (n) => { const p = n.closest('[data-panel]'); return (p ? p.dataset.panel : '?') + ' ' + n.tagName.toLowerCase() + (n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : '') + (n.children.length < 3 && n.textContent ? ' "' + n.textContent.trim().slice(0, 16) + '"' : '') + ' [' + n.scrollHeight + '/' + n.clientHeight + ' ' + n.scrollWidth + '/' + n.clientWidth + ']'; };
   const over = [];
@@ -24,7 +25,8 @@ export function measure(win, opts) {
     test(root, root.dataset.fitDeep !== undefined ? 'band' : 'panel ' + (root.dataset.panel || '?'));
     // every descendant too: content cut one level below the root is still cut. A scroll container's own children are its business.
     for (const n of root.querySelectorAll('*')) {
-      if (!vis(n) || n.closest('[data-scroll]') && n.closest('[data-scroll]') !== n && scroller(n.closest('[data-scroll]'))) continue;
+      const sc = n.closest('[data-scroll],[data-vscroll]');
+      if (!vis(n) || sc && sc !== n && root.contains(sc) && scroller(sc)) continue;
       test(n, name(n));
       // the deep band: a part that reaches out of the band's box is named (the band is not clipped itself, so only its parts can say what is cut)
       if (root.dataset.fitDeep !== undefined) {
@@ -38,7 +40,7 @@ export function measure(win, opts) {
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
-    const r = n.closest('.d-drawer') ? null : vis(n);
+    const r = n.closest('.d-drawer') || (n.closest('[data-vscroll]') && scroller(n.closest('[data-vscroll]'))) ? null : vis(n);
     if (r && (r.right > vw + 1 || r.bottom > vh + 1 || r.left < -1 || r.top < -1)) out.push({ el: n.dataset.cockpitSlot ? 'slot ' + n.dataset.cockpitSlot : 'panel ' + (n.dataset.panel || '?'), right: Math.round(r.right), bottom: Math.round(r.bottom) });
   }
   // a slot (the band and the stage apart) that shows no panel is a blank hole, and a panel still loading or failed is not a fit
@@ -180,7 +182,82 @@ function charChecks(win, d, vis, cs) {
   // what the page had done when it was measured: a hole on a page that was not finished loading says so
   const g = (id) => d.getElementById(id), diag = [d.readyState, 'keys ' + d.querySelectorAll('[data-key]').length, 'sub "' + ((g('merc-sub') || {}).textContent || '') + '"', 'hs ' + ((g('hsheet') || { children: [] }).children.length),
     'mercbox ' + (g('merc-doll') ? g('merc-doll').parentNode.getBoundingClientRect().width | 0 : -1), win.d2InvActions ? 'act' : 'no-act', win.d2InvTip ? 'tip' : 'no-tip', win.d2InvMerc ? 'merc' : 'no-merc', 'errors [' + (win.d2CvErrors || []).join(' | ') + ']'].join(', ');
-  return { zero, cut, tiles, inner, diag };
+  return { zero, cut, tiles, inner, diag, phone: phoneChecks(win, d, vis, cs) };
+}
+
+// The phone's storage tab and the art cells (card uiphone, the bug report of 2026-11-15, a 412 px screen). Each list names what the user saw:
+//  artLabel: a name painted over the picture of a cell (any width)
+//  bar:      a toolbar part cut at the bar's edge or covered (the Sell chip); a chip row that is no scroller is cut
+//  acts:     the sheet's buttons clipped, covered, under 44 px, or the sheet running off the window
+//  lock:     the "Stash from anywhere" line cut with an ellipsis, or missing on the storage tab
+//  hover:    something wider than the scrolling canvas (a sideways scroll)
+//  grids:    a cell under 32 px, or a grid that leaves its box's width unused
+function phoneChecks(win, d, vis, cs) {
+  const o = { artLabel: [], bar: [], acts: [], lock: [], hover: [], grids: [], phone: win.innerWidth <= 700 };
+  const nm = (n) => n.tagName.toLowerCase() + (n.id ? '#' + n.id : typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || '').trim().slice(0, 14) + '"';
+  for (const n of d.querySelectorAll('.cv .d-cells .item[data-shown]')) {
+    if (!vis(n)) continue;
+    const own = [...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim());
+    if (own && parseFloat(cs(n).fontSize) > 0.5) o.artLabel.push(nm(n) + ' font ' + cs(n).fontSize);
+  }
+  if (!o.phone) return o;
+  const bar = d.getElementById('cv-bar'), br = bar && vis(bar);
+  if (br) {
+    const hs = (n) => n.hasAttribute('data-hscroll') && /^(auto|scroll)$/.test(cs(n).overflowX);
+    for (const n of bar.querySelectorAll('*')) {
+      const r = vis(n);
+      if (!r || n.closest('[hidden]')) continue;
+      const sc = n.closest('[data-hscroll]');
+      if (sc && sc !== n && hs(sc)) continue; // a chip inside a row that scrolls: cut at the edge by design
+      if (r.right > br.right + 0.5 || r.left < br.left - 0.5 || r.bottom > br.bottom + 0.5 || r.top < br.top - 0.5) o.bar.push(nm(n) + ' ends outside the bar [' + Math.round(r.left) + '..' + Math.round(r.right) + ' of ' + Math.round(br.left) + '..' + Math.round(br.right) + ']');
+      else if (n.matches('button, input')) {
+        const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+        if (!at || !(at === n || n.contains(at))) o.bar.push(nm(n) + ' is covered');
+      }
+    }
+    const ch = d.getElementById('cv-chips');
+    if (ch && vis(ch) && ch.scrollWidth > ch.clientWidth + 1 && !hs(ch)) o.bar.push('the chip row is cut and does not scroll [' + ch.scrollWidth + '/' + ch.clientWidth + ']');
+  }
+  const sel = d.getElementById('cv-sel'), sr = sel && vis(sel), acts = sel && sel.querySelector('.cv-acts');
+  if (sr && acts) {
+    const ar = acts.getBoundingClientRect(), vh = win.innerHeight;
+    if (sr.bottom > vh + 1 || sr.right > win.innerWidth + 1) o.acts.push('the sheet runs off the window [' + Math.round(sr.bottom) + '/' + vh + ']');
+    if (acts.scrollHeight > acts.clientHeight + 1) o.acts.push('the button row is cut [' + acts.scrollHeight + '/' + acts.clientHeight + ']');
+    for (const b of acts.querySelectorAll('button')) {
+      const r = vis(b);
+      if (!r) continue;
+      if (r.bottom > ar.bottom + 1 || r.bottom > vh + 1 || r.top < sr.top - 1) o.acts.push(nm(b) + ' is clipped');
+      else if (r.height < 43.5) o.acts.push(nm(b) + ' is ' + Math.round(r.height) + ' px high (least 44)');
+      else if (b.scrollWidth > b.clientWidth + 1 || b.scrollHeight > b.clientHeight + 1) o.acts.push(nm(b) + ' text is cut');
+      else { const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2); if (!at || !(at === b || b.contains(at))) o.acts.push(nm(b) + ' is covered'); }
+    }
+  }
+  const pack = d.getElementById('cv') && d.getElementById('cv').dataset.tab === 'pack';
+  if (pack) {
+    const lock = d.getElementById('cv-lock'), lr = lock && vis(lock);
+    if (!lr) o.lock.push('the lock line is not on the storage tab');
+    else if (lock.scrollWidth > lock.clientWidth + 1 || lock.scrollHeight > lock.clientHeight + 1 || (cs(lock).textOverflow === 'ellipsis' && cs(lock).whiteSpace === 'nowrap')) o.lock.push('the lock line is cut [' + lock.scrollWidth + '/' + lock.clientWidth + ' ' + lock.scrollHeight + '/' + lock.clientHeight + ']');
+    const cv = d.getElementById('inv'), cr = cv && vis(cv);
+    if (cr) {
+      if (cv.scrollWidth > cv.clientWidth + 1) o.hover.push('the canvas scrolls sideways [' + cv.scrollWidth + '/' + cv.clientWidth + ']');
+      for (const n of cv.querySelectorAll('.cv-storez *')) {
+        const r = vis(n);
+        if (r && !n.closest('[hidden]') && (r.right > cr.right + 1 || r.left < cr.left - 1)) { o.hover.push(nm(n) + ' reaches past the canvas'); break; }
+      }
+      const z = d.querySelector('.cv-storez'), zr = z && vis(z);
+      if (zr) {
+        const pad = parseFloat(cs(z).paddingLeft) + parseFloat(cs(z).paddingRight);
+        for (const id of ['pack', 'belt', 'stash']) {
+          const g = d.getElementById(id), r = g && vis(g);
+          if (!r) { o.grids.push('#' + id + ' is not on the storage tab'); continue; }
+          if (r.width < zr.width - pad - 14) o.grids.push('#' + id + ' is ' + Math.round(r.width) + ' px wide in a box of ' + Math.round(zr.width - pad));
+          const c = g.querySelector('.cell'), cw = c && c.getBoundingClientRect().width;
+          if (c && id !== 'belt' && cw < 32) o.grids.push('#' + id + ' cells are ' + Math.round(cw) + ' px (least 32)');
+        }
+      }
+    }
+  }
+  return o;
 }
 
 // The elements a page says must be on it, with a size (opts.expect): the machine form of "this state is drawn".

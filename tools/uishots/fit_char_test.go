@@ -107,7 +107,63 @@ func TestFitPagesListVariants(t *testing.T) {
 			}
 		}
 	}
-	if !strings.Contains(sh, "character-phonepack") || !strings.Contains(sh, "#belt,#cv-sel,#errands") {
-		t.Error("the phone's storage tab has no fit page that must hit the belt, the selected box and the errands")
+	if !strings.Contains(sh, "character-phonepack") || !strings.Contains(sh, "#belt,#cv-sel") {
+		t.Error("the phone's storage tab has no fit page that must hit the belt and the selected box (the errands have their own phone page)")
+	}
+	for _, p := range []string{"character-phone ", "character-phone-sheet ", "character-phone-errands ", "character-phone-menu ", "character-phonehero ", "phonedefect-label ", "phonedefect-acts ", "phonedefect-cutchips ", "phonedefect-lock ", "phonedefect-hover ", "phonedefect-narrow "} {
+		if !strings.Contains(sh, "\n"+p) {
+			t.Errorf("tools/uishots.sh has no fit page %q (the phone sizes of card uiphone)", p)
+		}
+	}
+	for _, sz := range []string{"412x780", "393x700", "360x640", "412x890"} {
+		if !strings.Contains(sh, sz) {
+			t.Errorf("tools/uishots.sh does not run the phone size %s", sz)
+		}
 	}
 }
+
+// The phone's storage tab (card uiphone): each defect of the 2026-11-15 screenshot is a verdict. The numbers are what fit.js measures in
+// phoneChecks; the live pages phonedefect-* put the same defects back and must fail with these words.
+func TestFitPhoneRules(t *testing.T) {
+	ok := `{"vw":412,"vh":780,"scrollH":780,"scrollW":412,"overflow":[],"slots":[{"slot":"band"}],"covered":96,"hole":8,"holeAt":[0,44],"cv":{"zero":[],"cut":[],"tiles":[],"inner":{"size":60,"at":[0,0],"panel":"char-store"},"phone":{%s}}}`
+	cases := []struct{ name, phone, want string }{
+		{"a clean phone page", "", ""},
+		{"a name painted over the art (the screenshot's 'Chipp ed')", `"artLabel":["button.item \"Chipped\" font 8.5px"]`, "label over art"},
+		{"the Sell chip cut at the right edge", `"bar":["button#cv-sell \"Sell\" ends outside the bar [380..440 of 0..412]"]`, "toolbar cut"},
+		{"the selected card's buttons clipped to a sliver", `"acts":["the button row is cut [60/10]"]`, "action buttons"},
+		{"a button under 44 px", `"acts":["button \"Equip\" is 22 px high (least 44)"]`, "action buttons"},
+		{"the lock line ends in an ellipsis", `"lock":["the lock line is cut [320/212 17/17]"]`, "lock line"},
+		{"the canvas scrolls sideways", `"hover":["the canvas scrolls sideways [470/396]"]`, "horizontal overflow"},
+		{"cells of 20 px", `"grids":["#pack cells are 20 px (least 32)"]`, "grid"},
+		{"the stash at half the width", `"grids":["#stash is 190 px wide in a box of 380"]`, "grid"},
+	}
+	for _, c := range cases {
+		dir := t.TempDir()
+		n, body := fitDir0(strings.Replace(ok, "%s", c.phone, 1))
+		if err := os.WriteFile(filepath.Join(dir, n+".html"), []byte(body), 0o644); err != nil {
+			t.Fatal(err)
+		}
+		lines, good, err := fitDir(dir)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if c.want == "" && !good || c.want != "" && (good || !strings.Contains(strings.Join(lines, "\n"), c.want)) {
+			t.Errorf("%s: ok=%v %v, want %q", c.name, good, lines, c.want)
+		}
+	}
+	sh, _ := os.ReadFile("../uishots.sh")
+	for name := range defectCSS {
+		if !strings.Contains(string(sh), "\nphonedefect-"+name+" ") {
+			t.Errorf("no fit page phonedefect-%s", name)
+		}
+		found := false
+		for k := range mustFail {
+			found = found || k == "fit-phonedefect-"+name+"-"
+		}
+		if !found {
+			t.Errorf("mustFail has no entry for phonedefect-%s", name)
+		}
+	}
+}
+
+func fitDir0(j string) (string, string) { return fitDump("fit-character-phone-412x780", j) }

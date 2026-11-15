@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -103,11 +104,16 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 		w.Header()[k] = v
 	}
 	w.Header().Del("X-Frame-Options")
+	body := rec.Body.Bytes()
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+		body = bytes.Replace(body, []byte("</head>"), []byte(`<link rel="stylesheet" href="/__fit/defect-`+d+`.css"></head>`), 1)
+		w.Header().Del("Content-Length")
+	}
 	if csp := w.Header().Get("Content-Security-Policy"); csp != "" {
 		w.Header().Set("Content-Security-Policy", strings.Replace(csp, "frame-ancestors 'none'", "frame-ancestors 'self'", 1))
 	}
 	w.WriteHeader(rec.Code)
-	w.Write(rec.Body.Bytes())
+	w.Write(body)
 }
 
 func serveFitJS(w http.ResponseWriter, r *http.Request) {
@@ -150,6 +156,14 @@ type fitResult struct {
 		Cut   []string `json:"cut"`
 		Tiles []string `json:"tiles"`
 		Diag  string   `json:"diag"`
+		Phone struct {
+			ArtLabel []string `json:"artLabel"`
+			Bar      []string `json:"bar"`
+			Acts     []string `json:"acts"`
+			Lock     []string `json:"lock"`
+			Hover    []string `json:"hover"`
+			Grids    []string `json:"grids"`
+		} `json:"phone"`
 		Inner struct {
 			Size  int    `json:"size"`
 			At    [2]int `json:"at"`
@@ -239,6 +253,16 @@ func (r fitResult) judge() []string {
 		for _, t := range r.CV.Tiles {
 			bad = append(bad, "a values tile is stretched: "+t)
 		}
+		// the phone's storage tab and the art cells (card uiphone): what the 2026-11-15 screenshot showed
+		for _, p := range []struct {
+			what string
+			list []string
+		}{{"label over art: ", r.CV.Phone.ArtLabel}, {"toolbar cut: ", r.CV.Phone.Bar}, {"action buttons: ", r.CV.Phone.Acts}, {"lock line: ", r.CV.Phone.Lock},
+			{"horizontal overflow: ", r.CV.Phone.Hover}, {"grid: ", r.CV.Phone.Grids}} {
+			for _, x := range p.list {
+				bad = append(bad, p.what+x)
+			}
+		}
 		lim := fitInner
 		if r.VW <= 480 {
 			lim = fitInnerPhone
@@ -314,6 +338,13 @@ var mustFail = map[string]string{
 	"fit-overflow-classic-":    "the page scrolls",
 	"fit-blank-rail-":          "holds no visible panel",
 	"fit-tall-frame-":          "ends outside the window",
+	// the phone's storage tab (card uiphone): the real page with one defect of the 2026-11-15 screenshot put back (defectCSS in fixtures_phone.go)
+	"fit-phonedefect-label-":    "label over art",
+	"fit-phonedefect-acts-":     "action buttons: ",
+	"fit-phonedefect-cutchips-": "toolbar cut: ",
+	"fit-phonedefect-lock-":     "lock line: ",
+	"fit-phonedefect-hover-":    "horizontal overflow: ",
+	"fit-phonedefect-narrow-":   "grid: ",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)

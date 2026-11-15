@@ -89,7 +89,7 @@ const charPage = `<!DOCTYPE html>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/skills">Skills</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
-  <details class="cv-more" id="cv-more"><summary class="d-btn" data-size="sm" data-variant="ghost" aria-label="Pages">Pages</summary>
+  <details class="cv-more" id="cv-more"><summary class="d-btn" data-size="sm" data-variant="ghost" aria-label="More pages">&hellip;</summary>
    <div class="cv-morelist" role="group" aria-label="Pages"><a href="/watch/inventory" aria-current="page">Inventory</a><a href="/watch/skills">Skills</a><a href="/watch/policy">Policy</a><a href="/watch/return">Return</a></div></details>
  </nav>
 </header>
@@ -127,7 +127,7 @@ const charPage = `<!DOCTYPE html>
     <div class="cv-side">
      <h2 class="cv-beltlabel" id="t-belt">Belt</h2>
      <div class="d-cells" id="belt" data-cv="belt" aria-label="Belt"></div>
-     <div class="cv-sel" id="cv-sel" aria-live="polite"></div>
+     <div class="cv-sel" id="cv-sel" aria-live="polite" data-vscroll></div>
      <div class="cv-errwrap" id="cv-errwrap">
       <button class="cv-errtoggle" id="cv-errtoggle" type="button" aria-expanded="false" aria-controls="errands stashgold">Town errands</button>
       <div class="inv-errands" id="errands" hidden></div>

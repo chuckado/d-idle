@@ -265,9 +265,8 @@
     .cv > .d-band-status { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand links"; grid-template-rows: 100%; }
     .cv > .d-band-status .d-band-main { display: none; }
     .cv-more { display: block; position: relative; }
-    .cv-more > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-block-size: 36px; }
+    .cv-more > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; min-block-size: 36px; min-inline-size: 44px; justify-content: center; white-space: nowrap; }
     .cv-more > summary::-webkit-details-marker { display: none; }
-    .cv-more > summary::after { content: "\2026"; margin-inline-start: 2px; }
     .cv-morelist { position: fixed; z-index: var(--d-z-sheet); inset-block-start: calc(var(--cv-band) + 4px); inset-inline-end: var(--cv-g); display: flex; flex-direction: column; min-inline-size: 11rem; padding: 4px;
       background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-2); }
     .cv-morelist a { display: flex; align-items: center; min-block-size: 44px; padding: 0 var(--d-sp-4); color: var(--d-text); text-decoration: none; border-radius: var(--d-r-1); }
@@ -303,7 +302,7 @@
 
     /* the storage tab: one scrolling column */
     .cv[data-tab="pack"] .cv-canvas { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; align-content: start; grid-auto-rows: max-content; scrollbar-width: thin; }
-    .cv[data-sheet="open"][data-tab="pack"] .cv-canvas { padding-block-end: calc(52dvh + var(--cv-g)); }
+    .cv[data-sheet="open"][data-tab="pack"] .cv-canvas { padding-block-end: calc(48dvh + var(--cv-g)); }
     .cv-storez { --gw: calc(100cqi - 2 * var(--cv-p)); overflow: visible; padding-block-end: 12px; }
     .cv-store, .cv-side { display: contents; container: none; }
     .cv-storez > h2 { margin-block-start: 8px; }
@@ -332,7 +331,7 @@
 
     /* the selected item: a bottom sheet, opened by a tap on a cell or a slot, closed by its cross, Escape or a tap elsewhere */
     .cv .cv-sel { display: none; }
-    .cv[data-sheet="open"] .cv-sel { display: flex; position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-sheet); box-sizing: border-box; max-block-size: 52dvh; padding: 6px 14px 0; gap: 6px;
+    .cv[data-sheet="open"] .cv-sel { display: flex; position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-sheet); box-sizing: border-box; max-block-size: 48dvh; padding: 6px 14px 0; gap: 6px;
       overflow-y: auto; overscroll-behavior: contain; container: none; background: var(--d-surface-2); border: 0; border-block-start: var(--d-bw) solid var(--d-line-strong); border-radius: 16px 16px 0 0; box-shadow: var(--d-shadow-2); }
     .cv-sel h3 { position: sticky; inset-block-start: 0; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin: 0 -14px; padding: 2px 14px 4px; white-space: normal; overflow: visible; text-overflow: clip;
       font-size: var(--d-fs-3); background: var(--d-surface-2); overflow-wrap: anywhere; }

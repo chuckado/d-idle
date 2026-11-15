@@ -128,3 +128,24 @@ func artFor(w http.ResponseWriter, r *http.Request) bool {
 	artAPI.ServeHTTP(w, r)
 	return true
 }
+
+// defectCSS is, per name, the one defect of the 2026-11-15 screenshot put back on the phone page, unlayered so it wins over the page's own
+// rules. The fit pages phonedefect-NAME must FAIL with the verdict mustFail names (fit.go); a pass there means the check is blind to it.
+var defectCSS = map[string]string{
+	"label":    `.cv .d-cells .item[data-shown] { font-size: 12px !important; }`,
+	"acts":     `.cv .cv-sel .cv-acts { max-block-size: 30px !important; overflow: hidden !important; }`,
+	"cutchips": `.cv .cv-bar { display: flex !important; flex-wrap: nowrap; overflow: hidden; } .cv .cv-bar > * { flex: none !important; } .cv .cv-chips { overflow: visible !important; mask-image: none !important; }`,
+	"lock":     `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
+	"hover":    `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
+	"narrow":   `.cv #pack, .cv #stash { --u: 20px !important; }`,
+}
+
+func serveDefectCSS(w http.ResponseWriter, r *http.Request) bool {
+	n, ok := strings.CutSuffix(strings.TrimPrefix(r.URL.Path, "/__fit/defect-"), ".css")
+	if !ok || defectCSS[n] == "" {
+		return false
+	}
+	w.Header().Set("Content-Type", "text/css; charset=utf-8")
+	w.Write([]byte(defectCSS[n]))
+	return true
+}
