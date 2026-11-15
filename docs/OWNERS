@@ -151,7 +151,9 @@ cmd/d2bot/gearsets_test.go  credit-runner  gearsets
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/invverbs.go  credit-runner  botinstant
 cmd/d2bot/invverbs.go  credit-runner  itemverbs2
+cmd/d2bot/invverbs.go  credit-runner  uib9
 cmd/d2bot/invverbs_test.go  credit-runner  botinstant
+cmd/d2bot/invverbs_test.go  credit-runner  uib9
 cmd/d2bot/invwire.go  credit-runner  gearsets
 cmd/d2bot/invwire.go  credit-runner  tidy
 cmd/d2bot/invwire.go (your lines only)  credit-runner  botsell
@@ -300,6 +302,7 @@ docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
 docs/research/emu-runs-2026-11-14b.md  credit-runner  decomp22
 docs/research/fid-poisonres-trace.md  credit-runner  fid-poison-res-diag
 docs/research/fidelity-vendor-probe.md  live-agent  fidprobe-vendor
+docs/research/merc-gear.md  credit-runner  uib9
 docs/research/mocks/return.html  credit-runner  returnmock
 docs/research/pal-skill-matrix.md  credit-runner  palskill-matrix
 docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
@@ -457,6 +460,8 @@ internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
 internal/d2/stats.go  credit-runner  survB
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
+internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
+internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
 internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
 internal/d2dinput  pro-runner  bounce3
@@ -498,11 +503,14 @@ internal/invdesk/identify.go  credit-runner  botinstant
 internal/invdesk/identify.go  credit-runner  itemverbs2
 internal/invdesk/instant.go  credit-runner  botinstant
 internal/invdesk/instant_test.go  credit-runner  botinstant
+internal/invdesk/mercverbs.go  credit-runner  uib9
+internal/invdesk/mercverbs_test.go  credit-runner  uib9
 internal/invdesk/mover.go  credit-runner  itemverbs2
 internal/invdesk/mover_test.go  credit-runner  itemverbs2
 internal/invdesk/sellnow.go  credit-runner  botsell
 internal/invdesk/sellnow_test.go  credit-runner  botsell
 internal/invdesk/sets.go  credit-runner  charreq
+internal/invdesk/sets.go  credit-runner  uib9
 internal/invdesk/stash.go  credit-runner  botinstant
 internal/invdesk/stash.go  credit-runner  itemverbs2
 internal/invdesk/testdata/view_schema9_instant_*.json  credit-runner  botinstant
