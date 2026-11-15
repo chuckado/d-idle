@@ -185,6 +185,7 @@
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | uifix1 | proposed | - | `internal/watch/web/panels/statusline/`<br>`internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/web/panels/area-map/panel.json`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/whyline.json`<br>`internal/watch/whychange.json`<br>`internal/watch/whyline_test.go`<br>`internal/watch/testdata/`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/glancewire_pause_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/bot/whyline_test.go` | - |
+| p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | uis7review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s7-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/s7/` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -230,6 +231,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 75c5015a8 11-15 04:56 `Merge agent/p02posted: Merge branch 'main' into p02posted` (p02posted)
+- 0e1966552 11-15 04:55 `Merge branch 'main' into p02posted` (-)
 - e4b41b884 11-15 04:54 `Merge agent/uis7review: uis7review: design review of S7 (cockpit default) before merge: approve with changes` (uis7review)
 - 5b13309c5 11-15 04:23 `Merge agent/verifyp02c: Merge branch 'main' into verifyp02c` (verifyp02c)
 - 59eebd86d 11-15 04:22 `Merge branch 'main' into verifyp02c` (-)
@@ -238,6 +241,4 @@
 - 0d5377d2a 11-15 03:30 `Merge agent/uifix1: Merge branch 'main' into uifix1` (uifix1)
 - 7f26ca27e 11-15 03:29 `Merge branch 'main' into uifix1` (-)
 - 2ca371d0d 11-15 03:23 `Merge origin/main into agent/uifix1` (-)
-- 0acd68c0c 11-15 03:21 `Merge agent/verifyp02b: Merge branch 'main' into verifyp02b` (verifyp02b)
-- eeeb6e910 11-15 03:20 `Merge branch 'main' into verifyp02b` (-)
 <!-- statusgen:end -->
