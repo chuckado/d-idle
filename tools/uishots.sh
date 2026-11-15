@@ -39,9 +39,9 @@ cd "$(dirname "$0")/.." || exit 2
 bin=$(mktemp -d)
 trap 'kill $sp $xp 2>/dev/null; rm -rf "${bin:?}"' EXIT INT TERM
 go build -o "$bin/uishots" ./tools/uishots || exit 2
-timeout 600 nice -n 19 "$bin/uishots" serve -addr 127.0.0.1:$port >"$bin/serve.log" 2>&1 &
+timeout 2400 nice -n 19 "$bin/uishots" serve -addr 127.0.0.1:$port >"$bin/serve.log" 2>&1 &
 sp=$!
-timeout 600 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
+timeout 2400 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
 xp=$!
 sleep 2
 if [ "$cockpit" = 1 ]; then

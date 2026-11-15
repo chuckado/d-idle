@@ -24,6 +24,8 @@
   [data-panel="progress"] .d-slotbody { container: pg / inline-size; }
   @container pg (max-width: 250px) { [data-panel="progress"] .pg-spark { display: none; } }
   @container pg (max-width: 200px) { [data-panel="progress"] .pg-v { gap: var(--d-sp-2); } [data-panel="progress"] .pg-v strong { font-size: var(--d-fs-1); } [data-panel="progress"] .pg-to { display: none; } [data-panel="progress"] .pg-m { grid-template-columns: minmax(2rem, 1fr) auto; } }
+  /* a window between the phone and the wide cockpit (700 to 900 px) leaves the strip cell about 120 px: the unit words go, the numbers stay */
+  @container pg (max-width: 150px) { [data-panel="progress"] .pg-v label { display: none; } [data-panel="progress"] .pg-v { gap: var(--d-sp-1); } }
   [data-panel="progress"] .pg-pop { inset: auto; margin: 0; inset-block-end: calc(var(--c-strip, 112px) + 2 * var(--c-gap, 8px)); inset-inline-start: var(--c-gap, 8px);
     inline-size: min(380px, 95%); background: var(--d-surface-2); color: var(--d-text); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); padding: var(--d-sp-3); box-shadow: var(--d-shadow-2); display: none; font-size: var(--d-fs-1); }
   [data-panel="progress"] .pg-pop:popover-open { display: block; }
