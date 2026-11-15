@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 
 	"d2lod-bot/internal/watch"
 )
@@ -16,7 +17,9 @@ import (
 //
 //	needs=N     how many rows Needs you shows (0 to 9, default 2)
 //	glance=     full (default), measuring (rates still building), unknown (mercenary and supplies not reported),
-//	            gearbroken, ch1, ch9, blocked (the journey is held), nojourney
+//	            gearbroken, ch1, ch9, blocked (the journey is held), nojourney; further words after commas add a state:
+//	            paused (the player pause on the band), mercdead (the mercenary is dead), supplieslow (belt low),
+//	            nopotions (no mercenary and no potions), e.g. glance=full,paused,mercdead
 func glanceFixture(h *watch.Hub) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		q := url.Values{}
@@ -29,7 +32,16 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 			n, _ = strconv.Atoi(s)
 		}
 		v.Needs = fixtureNeeds(n)
-		variant := q.Get("glance")
+		words := strings.Split(q.Get("glance"), ",")
+		variant := words[0]
+		has := func(w string) bool {
+			for _, x := range words {
+				if x == w {
+					return true
+				}
+			}
+			return false
+		}
 		pctOf := func(f float64) *float64 { return &f }
 		xp, gold := 12400.0, 2100.0
 		eta := 1500
@@ -84,6 +96,19 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 			v.Health.Gear = light("bad", "broken", "The weapon is broken; a repair is about 180 gold.")
 		case "unknown":
 			v.Health.Merc, v.Health.Supplies = light("unknown", "unknown", ""), light("unknown", "unknown", "")
+		}
+		if has("mercdead") {
+			v.Health.Merc = light("bad", "Dead", "The mercenary is dead and the hero fights without him")
+		}
+		if has("supplieslow") {
+			v.Health.Supplies = light("warn", "Low", "healing 2 of 4, mana 1 of 4, portal yes")
+		}
+		if has("nopotions") {
+			v.Health.Merc = light("warn", "None", "No mercenary is hired")
+			v.Health.Supplies = light("bad", "No potions", "healing 0 of 4, mana 0 of 4, portal yes")
+		}
+		if has("paused") { // what glancewire_pause.go gives for the going-home state
+			v.Sentence.Tone, v.Sentence.Word, v.Sentence.Reason = "info", "Paused", "paused by you, going home first"
 		}
 		js(w, v)
 	}
