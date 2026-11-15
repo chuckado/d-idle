@@ -30,6 +30,8 @@ func TestFindMerc(t *testing.T) {
 			Unit{Class: 271, ID: 1, Mode: MonModeDead, X: 100, Y: 100},
 			Unit{Class: 271, ID: 2, Mode: MonModeStand, X: 190, Y: 100, Monster: mon(100)}),
 			Merc{Present: true, Alive: true, Class: 271, ID: 2, X: 190, Y: 100, LifePct: 100}},
+		{"percent over 100 is clamped", mercSnap(Unit{Class: 271, ID: 3, Mode: MonModeStand, X: 101, Y: 100, Monster: mon(4200)}),
+			Merc{Present: true, Alive: true, Class: 271, ID: 3, X: 101, Y: 100, LifePct: 100}},
 	}
 	for _, c := range cases {
 		if got := FindMerc(c.s); got != c.want {

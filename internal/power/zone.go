@@ -37,6 +37,9 @@ func meanMon(z *danger.Zone, ranged bool) (Mon, bool) {
 		out.Def += mo.Share * float64(mo.Def)
 		out.ToHit += mo.Share * float64(mo.ToHit)
 		out.Dmg += mo.Share * mo.Dmg
+		if mo.Unblockable {
+			out.Unblockable += mo.Share
+		}
 		for _, h := range mo.Hazards {
 			if !seen[h] {
 				seen[h] = true
@@ -48,6 +51,7 @@ func meanMon(z *danger.Zone, ranged bool) (Mon, bool) {
 		return Mon{}, false
 	}
 	out.Life, out.Def, out.ToHit, out.Dmg = out.Life/w, out.Def/w, out.ToHit/w, out.Dmg/w
+	out.Unblockable /= w
 	out.Ranged = ranged
 	sort.Strings(out.Hazards)
 	return out, true
@@ -145,9 +149,9 @@ func (z ZoneMargin) Weakest() string {
 // developers; the UI shows Word only.
 func (z ZoneMargin) ShadowLine(clvl int) string {
 	f := func(v float64) string { return fmt.Sprintf("%.2f", math.Round(v*100)/100) }
-	return fmt.Sprintf("zone shadow: area=%d name=%q diff=%s clvl=%d arch=%s dial=%s word=%s bad=%s low=%s typical=%s elite=%s need=%s stay=%s perKill=%.1fs potions=%.1f weakest=%s",
+	return fmt.Sprintf("zone shadow: area=%d name=%q diff=%s clvl=%d arch=%s dial=%s word=%s bad=%s low=%s typical=%s elite=%s need=%s stay=%s perKill=%.1fs potions=%.1f weakest=%s dps=%.1f src=%s",
 		z.Area, z.Name, z.Diff, clvl, z.Archetype, z.Dial, z.Word(), f(z.Bad.Best), f(z.Bad.Low), f(z.Typical.Best), f(z.Elite.Best),
-		f(z.Enter), f(z.Stay), z.Bad.Terms.PerKill, z.Bad.Terms.Potions, orNone(z.Weakest()))
+		f(z.Enter), f(z.Stay), z.Bad.Terms.PerKill, z.Bad.Terms.Potions, orNone(z.Weakest()), z.Bad.Terms.HeroDPS, z.Bad.Terms.Offence)
 }
 
 func orNone(s string) string {

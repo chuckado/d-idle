@@ -13,11 +13,12 @@
   var QUAL = /^[a-z]{1,12}$/;
   var SLOTART = { mhead: 'helm', mtorso: 'armor', mrhand: 'weapon', mlhand: 'weapon' }; // existing /watch/art ghost keys
   var ART_NAME = /^[a-z0-9_]{1,16}$/;
-  var host = null, fold = null, body = null, drawn = '', lastView = null, art = { on: false, probed: false };
+  var exAll = [], host = null, fold = null, body = null, drawn = '', lastView = null, art = { on: false, probed: false };
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
   function name(it) { return (it.name || it.code) + (it.ethereal ? ' (eth)' : '') + (it.identified ? '' : ' (unidentified)'); }
+  function lifePct(m) { return Math.max(0, Math.min(100, Math.round(Number(m.lifePct) || 0))); }
   function kindName(m) { return KIND[m.kind] || 'Mercenary'; }
   function slotLabel(m, s) { return s === 'mrhand' && WEAPON[m.kind] ? 'weapon: ' + WEAPON[m.kind] : LABEL[s]; }
 
@@ -74,7 +75,7 @@
     var bits = [];
     if (m.level) bits.push('level ' + m.level);
     if (m.str || m.dex) bits.push('Str ' + (m.str || 0) + ', Dex ' + (m.dex || 0));
-    if (m.owned && m.state !== 'dead') bits.push('life ' + (m.lifePct || 0) + '%');
+    if (m.owned && m.state !== 'dead') bits.push('life ' + lifePct(m) + '%');
     if (bits.length) h.appendChild(el('span', 'meta', bits.join(', ')));
     return h;
   }
@@ -118,20 +119,25 @@
     clear(host);
     var sub = document.getElementById('merc-sub'); if (sub) sub.textContent = canvasSub(m);
     if (m.state === 'none') {
-      var n = el('p', 'cv-mnote'); n.appendChild(el('b', '', 'No mercenary hired')); n.appendChild(document.createTextNode('Hire one in Act 1 (free after Blood Raven) or Act 2.'));
-      host.appendChild(n); return;
+      host.appendChild(el('p', 'cv-mnote', 'Hire one in Act 1 (free after Blood Raven) or Act 2.'));
+      return;
     }
     var h = el('div', 'cv-mhead'), st = el('span', 'cv-st', stateWord(m)); st.dataset.tone = m.state === 'dead' ? 'bad' : m.state === 'unknown' ? 'warn' : 'good';
     h.appendChild(st);
-    var life = el('span', 'cv-life'), pct = m.state === 'dead' ? 0 : Math.max(0, Math.min(100, m.lifePct || 0)), on = Math.ceil(pct / 10);
-    life.setAttribute('role', 'img'); life.setAttribute('aria-label', 'life ' + pct + ' percent');
-    for (var i = 0; i < 10; i++) life.appendChild(el('i', i < on ? 'on' : ''));
-    h.appendChild(life);
-    if (m.str || m.dex) { h.appendChild(kv('Str', m.str || 0)); h.appendChild(kv('Dex', m.dex || 0)); }
-    if (m.state === 'dead' && m.revive && m.revive.path) { // the revive verb of the mercenary desk (card B3) fills m.revive; nothing sends it today
-      var rb = el('button', 'cv-btn', 'Revive' + (m.revive.cost ? ' ' + m.revive.cost + ' g' : '')); rb.type = 'button'; rb.dataset.act = 'revive'; rb.dataset.primary = '';
-      rb.addEventListener('click', function () { var a = window.d2InvActions; if (a && a.post) a.post(m.revive.path, {}); });
-      h.appendChild(rb);
+    if (m.state === 'dead') {
+      // a dead header is the chip and the revive button with its price, nothing else (the life bar, Str and Dex are in the tiles); the
+      // revive verb of the mercenary desk (card B3) fills m.revive, nothing sends it today
+      if (m.revive && m.revive.path) {
+        var rb = el('button', 'cv-btn', 'Revive' + (m.revive.cost ? ' ' + m.revive.cost + ' g' : '')); rb.type = 'button'; rb.dataset.act = 'revive'; rb.dataset.primary = '';
+        rb.addEventListener('click', function () { var a = window.d2InvActions; if (a && a.post) a.post(m.revive.path, {}); });
+        h.appendChild(rb);
+      }
+    } else {
+      var life = el('span', 'cv-life'), pct = lifePct(m), on = Math.ceil(pct / 10);
+      life.setAttribute('role', 'img'); life.setAttribute('aria-label', 'life ' + pct + ' percent');
+      for (var i = 0; i < 10; i++) life.appendChild(el('i', i < on ? 'on' : ''));
+      h.appendChild(life);
+      if (m.str || m.dex) { h.appendChild(kv('Str', m.str || 0)); h.appendChild(kv('Dex', m.dex || 0)); }
     }
     host.appendChild(h);
     if (m.state === 'unknown') { host.appendChild(el('p', 'cv-mnote', m.note || 'Equipment unreadable on this backend.')); return; }
@@ -141,14 +147,41 @@
     doll.setAttribute('role', 'group'); doll.setAttribute('aria-label', 'Mercenary paper doll');
     legal.forEach(function (s) { doll.appendChild(slot(m, s)); });
     body.appendChild(doll);
+    var side = el('div', 'cv-mside');
     var sh = el('div', 'cv-sheet'); sh.id = 'msheet'; sh.dataset.cv = 'msheet'; sh.setAttribute('aria-label', 'Mercenary values');
     sh.appendChild(tile('Level', m.level || '-'));
-    sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
+    sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : lifePct(m) + '%', m.state === 'dead' ? 'bad' : ''));
     sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));
     var worn = legal.filter(function (k) { return m.equipment && m.equipment[k]; }).length;
-    sh.appendChild(tile('Gear', worn + ' of ' + legal.length + ' worn')); sh.appendChild(tile('Kind', kindName(m)));
-    body.appendChild(sh);
+    sh.appendChild(tile('Worn', worn + ' of ' + legal.length)); // his kind is in the label row above: one more tile would be cut to a few letters
+    side.appendChild(sh);
+    // what he wears by name, and why the bot does not dress him: the room under his values is used, never stretched tiles
+    var ex = el('div', 'cv-mextra'); ex.dataset.cv = 'mextra';
+    legal.forEach(function (k) {
+      var it = m.equipment && m.equipment[k], p = el('p', 'cv-mworn', LABEL[k] + ': ' + (it ? name(it) : 'empty')); p.title = p.textContent; if (!it) p.dataset.tone = 'dim'; ex.appendChild(p);
+    });
+    if (m.actWhy) { var w = el('p', 'cv-mwhy', m.actWhy); w.title = m.actWhy; ex.appendChild(w); }
+    exAll = Array.prototype.slice.call(ex.children);
+    side.appendChild(ex);
+    body.appendChild(side);
     host.appendChild(body);
+  }
+  // his extra lines never overrun the room he has: from the end, one by one, then all (fit check: nothing is cut by overflow)
+  function fitExtra() {
+    var ex = document.querySelector && document.querySelector('[data-cv=mextra]');
+    if (!ex || !ex.clientHeight) return;
+    var over = function () { return ex.scrollHeight > ex.clientHeight + 1; };
+    clear(ex); exAll.forEach(function (n) { ex.appendChild(n); }); // a window that grew gets its lines back
+    while (over() && ex.children.length) ex.removeChild(ex.lastChild);
+  }
+  // Without a mercenary to draw (none hired, no block in the view, unreadable) the column beside the hero's doll takes the set bar and
+  // the hero's values instead of standing empty (review c2c3 R3); with one they sit under both dolls again.
+  function solo(on) {
+    var box = host && host.parentNode, wear = box && box.parentNode, doc = document, sets = doc.getElementById('cv-sets'), sheet = doc.getElementById('hsheet'), log = doc.getElementById('cv-log');
+    if (!wear || !wear.dataset || !sets || !sheet || !log || !log.parentNode) return;
+    if (on === (wear.dataset.solo !== undefined)) return;
+    if (on) { wear.dataset.solo = ''; box.appendChild(sets); box.appendChild(sheet); }
+    else { delete wear.dataset.solo; log.parentNode.insertBefore(sets, log); log.parentNode.insertBefore(sheet, log); }
   }
 
   function render(v) {
@@ -156,11 +189,13 @@
     lastView = v;
     var m = v && v.merc;
     var canvas = !!(host.dataset && host.dataset.canvas !== undefined);
-    if (!m) { host.hidden = true; if (canvas && host.parentNode) host.parentNode.hidden = true; drawn = ''; return; }
+    if (!m && canvas) m = { state: 'none' }; // an older backend sends no block: the canvas shows it as nobody hired, never as a hole (review c2c3 R3)
+    if (!m) { host.hidden = true; drawn = ''; return; }
     var sig = JSON.stringify(m); if (sig === drawn) return; // unchanged: leave the DOM, the fold and scroll alone
     drawn = sig;
-    if (canvas) { // the canvas: no fold, the box around the host (its label row) shows with it
+    if (canvas) { // the canvas: no fold, the box around the host (its label row) shows with it, with or without a mercenary
       host.hidden = false; if (host.parentNode) host.parentNode.hidden = false;
+      solo(m.state === 'none' || m.state === 'unknown');
       canvasFill(m); artProbe(); return;
     }
     if (!fold) {
@@ -176,9 +211,10 @@
   }
 
   if (typeof window !== 'undefined' && window.__mercTest) {
-    window.__mercTest({ render: render, setArt: function (on) { art.on = !!on; art.probed = true; drawn = ''; },
+    window.__mercTest({ render: render, fit: fitExtra, setArt: function (on) { art.on = !!on; art.probed = true; drawn = ''; },
       reset: function () { host = fold = body = null; drawn = ''; lastView = null; art = { on: false, probed: false }; } });
     return;
   }
+  if (typeof window !== 'undefined') window.d2InvMerc = { fit: fitExtra };
   document.addEventListener('d2:inventory', function (e) { render(e.detail); });
 })();

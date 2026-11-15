@@ -18,7 +18,7 @@ import (
 func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 	inv := watch.NewInvAPI()
 	inv.Bind(fixtureDesk{})
-	ih := inv.Handler()
+	ih := withVariants(inv.Handler())
 	for _, p := range watch.InvRoutes {
 		m.Handle(p, ih)
 	}
@@ -34,6 +34,13 @@ func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 			}
 		}
 	}
+	artH := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !artFor(w, r) {
+			http.NotFound(w, r)
+		}
+	})
+	m.Handle("/api/art", artH)
+	m.Handle("/watch/art/", artH)
 	mountDemos(m)
 	rc := watch.ReturnConfig{Hub: sim.Hub, Events: watch.NewAwayLog(nil), Visit: watch.NewVisit("", func() time.Time { return time.Unix(1700000000, 0) }), Speed: 1}
 	rh := rc.ReturnHandler(nil)

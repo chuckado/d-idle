@@ -33,6 +33,8 @@ type Monster struct {
 	Speed   int      `json:"speed"` // run velocity from monstats
 	Group   [2]int   `json:"group"` // min, max pack members
 	Hazards []string `json:"hazards"`
+	// Unblockable: a ranged attacker whose missile has no physical damage, so a shield cannot block it (V, unblockable.json).
+	Unblockable bool `json:"unblockable,omitempty"`
 }
 
 // Encounter is a reference pack: n monsters of which melee and ranged reach the hero.

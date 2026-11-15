@@ -18,6 +18,10 @@ type BotTuning struct {
 	PortalSettleMs  int // wait in town after chores before returning to the field
 	ClearRadius     int // radius of one clear sweep
 	ExploredPct     int // percent of a level's roam coverage points that must be visited before a clear run counts the area as explored (100 = all, docs/exploredpct.md)
+	// The farm loop (docs/farmloop.md): in a leveling zone at FarmResetPct coverage the hero takes a fresh game and comes back to the same zone when that pays.
+	FarmReset            int // 1 = on
+	FarmResetPct         int // coverage percent from which a reset is considered
+	FarmResetCooldownMin int // least minutes between two farm resets
 
 	// Death policy (PLAN.md "Death is normal"; docs/bot.md "Death").
 	CorpseValueMin      int // estimated gold value of the lost gear below which the corpse is abandoned
@@ -29,6 +33,8 @@ type BotTuning struct {
 	StallExitMin        int // virtual minutes still without progress after the fresh game before the bot exits for a supervisor restart
 	AreaIdleSec         int // longest wait in town for area bans that are not a death streak before the least bad area is farmed anyway
 	QuestBlockedFarmMin int // minutes a quest step may stay blocked before the hero farms the level plan and retries the step with a growing wait (staletarget)
+	ParkAfter           int // identical "planning blocked" results of one quest step before the step is parked (0 = rule off)
+	ParkMinutes         int // minutes a parked quest step stays parked while the hero farms the level plan
 	StarterBanMin       int // longest ban of the first field of an act once the character stands in town because of it
 	RepeatSiteBanMin    int // minutes a repeat-site death keeps the character out of the area (0 = rule off)
 	RepeatSiteEscalate  int // 1: the second repeat-site ban in one area within 12 h lasts 4x, the third 12x (cap 6 h)
@@ -102,6 +108,14 @@ type BotTuning struct {
 	RecoveryDryKills   int
 	RecoveryDrySkipMin int
 
+	// Town portal cast guard (internal/resource/castguard.go, card portalguard). A hit does not interrupt a Town Portal cast
+	// (V run, decomp28 Q5); the risk is the damage taken during the cast and the walk into the portal.
+	PortalGuard   int // 0 = old rule (3 adjacent block the cast), 1 = expected damage over the exposure (falls back to the old rule when a damage term is missing)
+	PortalCastMs  int // cast time of the scroll or tome read (U until drill R3)
+	PortalWalkMs  int // walk into the portal after the cast (U until drill R3)
+	PortalHitMs   int // assumed time between two hits of one monster (every swing lands: an upper bound)
+	PortalLifePct int // block the cast when the expected damage reaches this % of current life
+
 	// Mercenary chore (docs/merc-farm.md). Hiring clicks a verified dialog; reviving clicks an UNVERIFIED one, so it is off.
 	MercRetryMin         int  // minutes between merc chore attempts (a failed hire or revive is not retried sooner)
 	MercHireMinGold      int  // gold in Act 2 town below which no hire is attempted
@@ -117,17 +131,28 @@ type BotTuning struct {
 func DefaultBotTuning() BotTuning {
 	return BotTuning{
 		TickMs: 100, WatchMs: 50, ReactionMs: 0, ResupplyPotions: 2, InvFullPct: 85,
-		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100,
-		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
+		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5,
+		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
+		PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
 }
 
 func botKnobs() []Knob {
 	return []Knob{
+		{Key: "bot.portalGuard", Label: "Portal cast guard", Unit: "mode", Default: 0, Min: 0, Max: 1, HigherIsBetter: true, NoHandicap: true,
+			Desc: "0 (default until drill R3, docs/fixportalmelee.md): three or more adjacent attackers block a town portal cast (the old count rule). 1: block it when the expected damage of the adjacent attackers over the cast and the walk reaches bot.portalLifePct of current life; with any damage term missing the count rule applies. A hit does not interrupt the cast (V run, decomp28), so the risk is damage taken, not a cut."},
+		{Key: "bot.portalCastMs", Label: "Portal cast time", Unit: "ms", Default: 3000, Min: 500, Max: 5000,
+			Desc: "Time of the town portal scroll or tome read used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts."},
+		{Key: "bot.portalWalkMs", Label: "Portal walk time", Unit: "ms", Default: 3000, Min: 0, Max: 5000,
+			Desc: "Walk from the cast spot into the portal used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts."},
+		{Key: "bot.portalHitMs", Label: "Portal guard hit interval", Unit: "ms", Default: 700, Min: 300, Max: 3000, HigherIsBetter: true,
+			Desc: "Assumed time between two hits of one adjacent monster in the guard (its strongest attack lands every time: an upper bound, U). Shorter blocks more casts."},
+		{Key: "bot.portalLifePct", Label: "Portal guard life share", Unit: "%", Default: 50, Min: 10, Max: 100, HigherIsBetter: true,
+			Desc: "The guard blocks a portal cast when the expected damage over the exposure reaches this share of current life. Lower blocks more casts."},
 		{Key: "bot.tickMs", Label: "Decision period", Unit: "ms", Default: 100, Min: 100, Max: 1000,
 			Desc: "How often the bot re-plans between actions. Slower means more idle gaps."},
 		{Key: "bot.watchMs", Label: "Watch period", Unit: "ms", Default: 50, Min: 50, Max: 300,
@@ -150,6 +175,12 @@ func botKnobs() []Knob {
 			Desc: "Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival)."},
 		{Key: "bot.exploredPct", Label: "Explored share to move on", Unit: "%", Default: 100, Min: 30, Max: 100, HigherIsBetter: false, NoHandicap: true,
 			Desc: "Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md."},
+		{Key: "bot.farmReset", Label: "Farm loop", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
+			Desc: "1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md."},
+		{Key: "bot.farmResetPct", Label: "Farm reset at explored share", Unit: "%", Default: 85, Min: 50, Max: 100, NoHandicap: true,
+			Desc: "Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset."},
+		{Key: "bot.farmResetCooldownMin", Label: "Farm reset cooldown", Unit: "min", Default: 5, Min: 1, Max: 60, NoHandicap: true,
+			Desc: "Least minutes between two farm resets: a reset that did not pay cannot repeat at once."},
 		{Key: "bot.corpseValueMin", Label: "Corpse value threshold", Unit: "gold", Default: 1000, Min: 1, Max: 20000,
 			Desc: "Estimated value of the gear on the corpse below which it is abandoned. Higher abandons more."},
 		{Key: "bot.spiralDeaths", Label: "Spiral breaker deaths", Unit: "deaths", Default: 4, Min: 3, Max: 8,
@@ -174,6 +205,10 @@ func botKnobs() []Knob {
 			Desc: "When every candidate area is skipped or banned, the bot waits this long in town at most, then farms the least bad area anyway (a death streak waits at least the starter ban cap)."},
 		{Key: "bot.questBlockedFarmMin", Label: "Blocked quest step: farm after", Unit: "min", Default: 10, Min: 1, Max: 120,
 			Desc: "A quest step the guards refuse is waited out this long; then the hero farms the best leveling area of the level plan and retries the step after this wait, doubling each time (cap x64). Shown as journeyBlocked in the status."},
+		{Key: "bot.parkAfter", Label: "Park a quest step after blocks", Unit: "blocks", Default: 2, Min: 0, Max: 10,
+			Desc: "A quest step that fails with 'not found' this many times (planning blocked, the same step) is parked: the hero farms the level plan instead of waiting in town. 0 turns the rule off."},
+		{Key: "bot.parkMinutes", Label: "Parked quest step: retry after", Unit: "min", Default: 15, Min: 1, Max: 240,
+			Desc: "How long a parked quest step stays parked before the planner offers it again. The reason shows as journeyBlocked in the status."},
 		{Key: "bot.stallWarnMin", Label: "Campaign stall: warn and fresh game", Unit: "min", Default: 30, Min: 0, Max: 240,
 			Desc: "Virtual minutes without campaign progress (no kill or xp, no non-town area entered, no purchase, no quest step) before the bot logs 'campaign stalled' and starts a fresh game. 0 turns the stall ladder off. Longest legitimate stretch in the navsoak logs: 19 min."},
 		{Key: "bot.stallExitMin", Label: "Campaign stall: exit window", Unit: "min", Default: 30, Min: 5, Max: 240,

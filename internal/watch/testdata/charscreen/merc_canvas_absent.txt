@@ -1,3 +1,4 @@
-label: 
-box hidden: true
-div [data-canvas=] hidden
+label: not hired
+box hidden: false
+div [data-canvas=]
+  p.cv-mnote [] "Hire one in Act 1 (free after Blood Raven) or Act 2."

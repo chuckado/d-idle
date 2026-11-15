@@ -30,6 +30,7 @@ func main() {
 		horizon   = flag.String("horizon", "60,120,240", "comma list of horizons in minutes")
 		calibrate = flag.Bool("calibrate", false, "replay the logged runs, fit the supply parameters, print the errors")
 		optimise  = flag.Bool("optimise", false, "beam search the best strategy per horizon and compare it with today's plan")
+		farmReset = flag.Bool("farmreset", false, "farm loop: XP per hour of each plan farm zone with and without a fresh game at 95..60 percent cleared (docs/farmloop.md)")
 		sens      = flag.Bool("sens", false, "sensitivity table (kill rate, overhead, restart cost, XP, supply, Den refarm)")
 		strategy  = flag.String("strategy", "", "JSON policy file to simulate (see docs/levelsim.md)")
 		extract   = flag.String("extract", "", "bot log to reduce to a runs.json entry (printed)")
@@ -89,6 +90,17 @@ func main() {
 	}
 	if *calibrate {
 		calib(d, p)
+	}
+	if *farmReset {
+		pcts := []int{95, 90, 85, 80, 70, 60}
+		e := levelsim.NewEnv(d, p, levelsim.ModePlan)
+		fmt.Print(levelsim.FormatFarmReset("farm loop, fitted supply (decay 0.25, floor 0.5), 240 min per zone, gain over clearing everything", e.FarmReset(pcts, 240), pcts))
+		pp := p
+		pp.Decay, pp.Floor, pp.Yield = 1, 0.4, 0.82 // the weak prior of docs/levelsim.md section 3
+		fmt.Print(levelsim.FormatFarmReset("farm loop, prior supply (decay 1, floor 0.4, yield 0.82): tails under half the fresh rate", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 240), pcts))
+		pp.Decay, pp.Floor, pp.Yield = 1.5, 0.2, 0.9 // a steep tail (U: the bound of the argument, not a fit)
+		fmt.Print(levelsim.FormatFarmReset("farm loop, steep tail (decay 1.5, floor 0.2, yield 0.9)", levelsim.NewEnv(d, pp, levelsim.ModePlan).FarmReset(pcts, 240), pcts))
+		return
 	}
 	if *useFit {
 		p = levelsim.Calibrate(d, p, d.Runs).Best.P
@@ -176,7 +188,11 @@ func runShadow(log, install, arch, diff, dial string) error {
 		return err
 	}
 	defer f.Close()
-	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial})
+	at, err := attachFor(m)
+	if err != nil {
+		return err
+	}
+	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial, Attach: at})
 	if err != nil {
 		return err
 	}
@@ -259,7 +275,11 @@ func runController(log, install, arch, diff, dial string) error {
 	if err != nil {
 		return err
 	}
-	so := levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial}
+	at, err := attachFor(m)
+	if err != nil {
+		return err
+	}
+	so := levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial, Attach: at}
 	f, err := os.Open(log)
 	if err != nil {
 		return err

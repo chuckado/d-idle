@@ -85,7 +85,10 @@ type taskState struct {
 	refused    map[string]bool // refusals already logged (noteStepRefused)
 	andyLine   string          // last Andariel gate line logged (noteAndariel)
 	andyRowErr string          // last class-row error logged by fillAndariel (once per text)
-	bj         blockedJourney  // blocked quest step: spin guard and farm fallback (staletarget.go)
+	pb         map[string]int  // planning blocks per quest step id, see parkStep
+	parked     map[string]parkedGroup
+	stepTitle  string         // title of the step the tick runs (the park reason names it)
+	bj         blockedJourney // blocked quest step: spin guard and farm fallback (staletarget.go)
 }
 
 type taskReport struct {
@@ -182,6 +185,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	// A target area left over from the leveling slice must not make the guard cancel the quest step (hero14 log: 1,906
 	// re-plans); a step that clears sets its own target.
 	r.setTargetArea(0)
+	r.unparkDue(ex)
 	plan := camp.Plan(w, ex)
 	r.noteAndariel(w)
 	if isBlockedPlan(plan) || !l.task.bj.retryAt.IsZero() {
@@ -202,6 +206,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	if hasStep {
 		st, act = phaseState(step.Phase)
 		act += " (" + step.Title + ")"
+		l.task.stepTitle = step.Title
 	}
 	if plan.Done {
 		return r.campaignFinished(ctx, snap, c, w)
@@ -233,6 +238,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 			return res.Err
 		case task.OutRan, task.OutDone, task.OutSkipped:
 			l.task.blocks = 0
+			delete(l.task.pb, res.StepID)
 		}
 		return nil
 	})
@@ -909,6 +915,9 @@ func (a taskActs) LevelTo(ctx context.Context, n int) error {
 		return task.Errorf(task.KindUI, "not in a game")
 	}
 	r.syncGames() // a fresh game forgets its predecessor's cleared areas, else freshGameToLevel restarts in a loop
+	if done, err := r.farmResetStep(ctx, s); done {
+		return a.tag(err)
+	}
 	c := a.c
 	c.spec = goalSpec{kind: goals.ReachLevel, level: n, label: fmt.Sprintf("reach level %d", n)}
 	// the planner reads the goal's level through c.goal.Params.Level
@@ -999,7 +1008,14 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 	}
 	r.e.Log.Info("leveling: everything worth farming is cleared, starting a fresh game", "level", s.Player.Level, "cleared", len(r.loop.cleared),
 		"noGainRestarts", r.loop.freshNoGain, "reason", "no area left to pick")
-	err = r.newGameRun(func(ctx context.Context) error {
+	return true, r.startFreshGame(ctx, s)
+}
+
+// startFreshGame is the one place a planned fresh game starts from town: leave, enter a new game of the hero's
+// difficulty, forget what the old game cleared. The farm loop and the leveling slice share it (the Reset button's
+// route can too). The caller checked the holds (freshHold, freshAllowed) and that the hero stands in town.
+func (r *Runner) startFreshGame(ctx context.Context, s *d2.Snapshot) error {
+	err := r.newGameRun(func(ctx context.Context) error {
 		return r.d.Cycler.NewGame(ctx, difficultyName(s.Player.Difficulty))
 	})(ctx)
 	if err == nil {
@@ -1007,7 +1023,7 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 		// after 38 fresh games) and syncGames cannot forget: the cleared set belongs to the old game.
 		r.forgetGame()
 	}
-	return true, err
+	return err
 }
 
 // freshAllowed is the progress check in front of a fresh game. It compares the experience with the one at the previous
@@ -1179,6 +1195,9 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		}
 		r.setState(StateInTown, w)
 		r.pause(ctx, 5*time.Second)
+		return nil
+	}
+	if r.parkStep(res) {
 		return nil
 	}
 	l.task.blocks++

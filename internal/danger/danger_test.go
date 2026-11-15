@@ -2,7 +2,9 @@ package danger
 
 import (
 	"encoding/json"
+	"math"
 	"net/http/httptest"
+	"sort"
 	"strings"
 	"testing"
 	"time"
@@ -251,5 +253,39 @@ func TestShippedBossRows(t *testing.T) {
 	}
 	if len(f.Bosses) != 10 {
 		t.Errorf("%d boss rows, boss1-trace lists 10", len(f.Bosses))
+	}
+}
+
+func TestAreaUnitsFile(t *testing.T) {
+	u, err := LoadAreaUnits()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, _, ok := u.Row(2, "normal"); !ok {
+		t.Error("Blood Moor not measured")
+	}
+	if _, _, ok := u.Row(2, "hell"); ok {
+		t.Error("hell must not be measured")
+	}
+	if _, err := u.Rate(9, 600); err == nil {
+		t.Error("unknown level type must be an error")
+	}
+	// the tiles fit against the measured rows (in sample; the report says 16%)
+	var errs []float64
+	for _, r := range u.rows {
+		rate, err := u.Rate(r.DrlgType, r.MonDen)
+		if err != nil {
+			t.Fatal(err)
+		}
+		errs = append(errs, math.Abs(rate*float64(r.Tiles)-r.UnitsMean)/r.UnitsMean)
+	}
+	sort.Float64s(errs)
+	if med := errs[len(errs)/2]; med > 0.22 {
+		t.Errorf("tiles fit median error %.0f%% over the 22%% bound", med*100)
+	} else {
+		t.Logf("tiles fit median error %.1f%% over %d areas", med*100, len(errs))
+	}
+	if !unblockable["fallenshaman1"] || !unblockable["radament"] || unblockable["sk_archer1"] {
+		t.Error("unblockable table wrong")
 	}
 }

@@ -29,22 +29,24 @@ div [data-canvas=]
         span.sil [] "weapon"
         span.nm [] "Spear"
         span.broken [] "Broken"
-    div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
-      div []
-        label [] "Level"
-        b [] "17"
-      div []
-        label [] "Life"
-        b [] "81%"
-      div []
-        label [] "Strength"
-        b [] "60"
-      div []
-        label [] "Dexterity"
-        b [] "50"
-      div []
-        label [] "Gear"
-        b [] "2 of 3 worn"
-      div []
-        label [] "Kind"
-        b [] "Desert Guard"
+    div.cv-mside []
+      div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
+        div []
+          label [] "Level"
+          b [] "17"
+        div []
+          label [] "Life"
+          b [] "81%"
+        div []
+          label [] "Strength"
+          b [] "60"
+        div []
+          label [] "Dexterity"
+          b [] "50"
+        div []
+          label [] "Worn"
+          b [] "2 of 3"
+      div.cv-mextra [data-cv=mextra]
+        p.cv-mworn [] "helm: Skull Cap" title="helm: Skull Cap"
+        p.cv-mworn [data-tone=dim] "armour: empty" title="armour: empty"
+        p.cv-mworn [] "weapon: Spear" title="weapon: Spear"

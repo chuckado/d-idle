@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	_ "embed"
 	"encoding/json"
 	"fmt"
@@ -47,12 +48,12 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	}
 	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
 	// menu it opens must lie inside the window and, beside a cell, not cover it
-	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "ctx": q.Get("ctx")})
+	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "ctx": q.Get("ctx"), "expect": strings.Split(q.Get("expect"), "|")})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits } from '/__fit/fit.js';
+import { measure, hits, expects } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -63,6 +64,9 @@ const o = %s, f = document.getElementById('f'), out = document.getElementById('f
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 f.addEventListener('load', async () => {
   await wait(5000);
+  // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
+  for (let i = 0; i < 30 && f.contentDocument.body.hasAttribute('data-canvas') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild && f.contentDocument.getElementById('hsheet').children.length > 4); i++) await wait(500);
+  if (f.contentDocument.body.hasAttribute('data-canvas')) await wait(1500);
   try {
     const pv = await (await fetch('/watch/panels.json')).json();
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
@@ -84,6 +88,8 @@ f.addEventListener('load', async () => {
       }
       m.hits = hits(f.contentWindow, o.hit);
     }
+    const ex = (o.expect || []).filter(Boolean);
+    if (ex.length) m.expect = expects(f.contentWindow, ex);
     out.textContent = JSON.stringify(m);
   } catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
 });
@@ -98,11 +104,16 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 		w.Header()[k] = v
 	}
 	w.Header().Del("X-Frame-Options")
+	body := rec.Body.Bytes()
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+		body = bytes.Replace(body, []byte("</head>"), []byte(`<link rel="stylesheet" href="/__fit/defect-`+d+`.css"></head>`), 1)
+		w.Header().Del("Content-Length")
+	}
 	if csp := w.Header().Get("Content-Security-Policy"); csp != "" {
 		w.Header().Set("Content-Security-Policy", strings.Replace(csp, "frame-ancestors 'none'", "frame-ancestors 'self'", 1))
 	}
 	w.WriteHeader(rec.Code)
-	w.Write(rec.Body.Bytes())
+	w.Write(body)
 }
 
 func serveFitJS(w http.ResponseWriter, r *http.Request) {
@@ -139,6 +150,26 @@ type fitResult struct {
 		Covers bool   `json:"covers"`
 		Sheet  any    `json:"sheet"`
 	} `json:"pop"`
+	Expect map[string]bool `json:"expect"`
+	CV     *struct {
+		Zero  []string `json:"zero"`
+		Cut   []string `json:"cut"`
+		Tiles []string `json:"tiles"`
+		Diag  string   `json:"diag"`
+		Phone struct {
+			ArtLabel []string `json:"artLabel"`
+			Bar      []string `json:"bar"`
+			Acts     []string `json:"acts"`
+			Lock     []string `json:"lock"`
+			Hover    []string `json:"hover"`
+			Grids    []string `json:"grids"`
+		} `json:"phone"`
+		Inner struct {
+			Size  int    `json:"size"`
+			At    [2]int `json:"at"`
+			Panel string `json:"panel"`
+		} `json:"inner"`
+	} `json:"cv"`
 	Clicked string          `json:"clicked"`
 	Missing string          `json:"missing"`
 	Hits    map[string]bool `json:"hits"`
@@ -161,6 +192,14 @@ type fitResult struct {
 	Hole     int    `json:"hole"`
 	HoleAt   [2]int `json:"holeAt"`
 }
+
+// fitInner is the largest empty square inside a panel of the character screen that still reads as a layout gap (px). The first
+// review's dead zones were 330 px (no mercenary) and 145 px (the selected box).
+const fitInner = 135
+
+// fitInnerPhone: the same on a phone, where a tall screen leaves the storage tab spare height under the stash (the cells are
+// limited by the width, ten of them) that no layout can fill with anything but more boxes.
+const fitInnerPhone = 180
 
 // fitGap is the widest empty strip between slots that is not dead space: the cockpit gap (8 px) and two pixels.
 const fitGap = 10
@@ -203,6 +242,44 @@ func (r fitResult) judge() []string {
 	}
 	if r.Hole > fitGap {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
+	}
+	if r.CV != nil {
+		for _, z := range r.CV.Zero {
+			bad = append(bad, "content with no width: "+z)
+		}
+		for _, c := range r.CV.Cut {
+			bad = append(bad, "a values tile is cut: "+c)
+		}
+		for _, t := range r.CV.Tiles {
+			bad = append(bad, "a values tile is stretched: "+t)
+		}
+		// the phone's storage tab and the art cells (card uiphone): what the 2026-11-15 screenshot showed
+		for _, p := range []struct {
+			what string
+			list []string
+		}{{"label over art: ", r.CV.Phone.ArtLabel}, {"toolbar cut: ", r.CV.Phone.Bar}, {"action buttons: ", r.CV.Phone.Acts}, {"lock line: ", r.CV.Phone.Lock},
+			{"horizontal overflow: ", r.CV.Phone.Hover}, {"grid: ", r.CV.Phone.Grids}} {
+			for _, x := range p.list {
+				bad = append(bad, p.what+x)
+			}
+		}
+		lim := fitInner
+		if r.VW <= 480 {
+			lim = fitInnerPhone
+		}
+		if r.CV.Inner.Size > lim {
+			bad = append(bad, fmt.Sprintf("dead space inside %s: a %d px square is empty at %d,%d", r.CV.Inner.Panel, r.CV.Inner.Size, r.CV.Inner.At[0], r.CV.Inner.At[1])+" ["+r.CV.Diag+"]")
+		}
+	}
+	exp := make([]string, 0, len(r.Expect))
+	for sel, ok := range r.Expect {
+		if !ok {
+			exp = append(exp, sel)
+		}
+	}
+	sort.Strings(exp)
+	for _, sel := range exp {
+		bad = append(bad, "expected "+sel+" on the page: it is absent or has no size")
 	}
 	if z := r.Zones; z.N > 0 {
 		if z.Rows < 10 {
@@ -261,6 +338,13 @@ var mustFail = map[string]string{
 	"fit-overflow-classic-":    "the page scrolls",
 	"fit-blank-rail-":          "holds no visible panel",
 	"fit-tall-frame-":          "ends outside the window",
+	// the phone's storage tab (card uiphone): the real page with one defect of the 2026-11-15 screenshot put back (defectCSS in fixtures_phone.go)
+	"fit-phonedefect-label-":    "label over art",
+	"fit-phonedefect-acts-":     "action buttons: ",
+	"fit-phonedefect-cutchips-": "toolbar cut: ",
+	"fit-phonedefect-lock-":     "lock line: ",
+	"fit-phonedefect-hover-":    "horizontal overflow: ",
+	"fit-phonedefect-narrow-":   "grid: ",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)

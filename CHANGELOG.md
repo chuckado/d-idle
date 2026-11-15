@@ -8,6 +8,29 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-508 <!--sg:agent/powerwire-->
+- Merge branch 'main' into TASK-512 <!--sg:agent/verifyp04b-->
+- Merge branch 'main' into farmloop <!--sg:agent/farmloop-->
+- Merge branch 'main' into prfix7 <!--sg:agent/prfix7-->
+- Merge branch 'main' into dangerfit2 <!--sg:agent/dangerfit2-->
+- Merge branch 'main' into TASK-501 <!--sg:agent/uiphone-->
+- Merge branch 'main' into decomp31 <!--sg:agent/decomp31-->
+- Merge branch 'main' into TASK-506 <!--sg:agent/decomp30-->
+- Merge branch 'main' into decomp29 <!--sg:agent/decomp29-->
+- Merge branch 'main' into TASK-500 <!--sg:agent/verifyp04-->
+- Merge branch 'main' into TASK-502 <!--sg:agent/p06posted-->
+- Merge branch 'main' into TASK-497 <!--sg:agent/botstuck2-->
+- portalguard: default mode 0, generous bounds, R3 recipe and flip rule <!--sg:agent/portalguard-->
+- Merge branch 'main' into decomp28 <!--sg:agent/decomp28-->
+- decomp27: monster melee block matches game.exe (oracle tools/emu/mel_block.py); a knocking hit in a get-hit is refused in game.exe (FUN_0057edd0 new mode 0x13), fork claim built, verifier brief written <!--sg:agent/decomp27-->
+- Merge branch 'main' into TASK-496 <!--sg:agent/verifyp06b-->
+- d2bot: object finder explores until the object or its preset shows up (Inifuss tree); task card <!--sg:agent/botstuck-->
+- Merge branch 'main' into prfix6 <!--sg:agent/prfix6-->
+- Merge branch 'main' into TASK-494 <!--sg:agent/verifyp06-->
+- Merge branch 'main' into decomp26 <!--sg:agent/decomp26-->
+- herostats: card result, verification notes <!--sg:agent/herostats-->
+- survwire: card result <!--sg:agent/survwire-->
+- Merge origin/main into uic4 <!--sg:agent/uic4-->
 - Merge branch 'main' into p03bposted <!--sg:agent/p03bposted-->
 - Merge branch 'main' into TASK-485 <!--sg:agent/uis7-->
 - Merge branch 'main' into TASK-488 <!--sg:agent/verifyp03d-->

@@ -8,7 +8,7 @@ const (
 	statMinDmg = 21
 	statMaxDmg = 22
 	statDmgPct = 25
-	statBlock  = 20 // gear block chance only: the class and shield base is not in the dump (U)
+	statBlock  = 20 // gear block chance; with the dump's "hero" object (sandbox-herostats) the whole block chance, shield and class base included
 )
 
 // gearStats turns the lab2-stats additions of dump stats ("gear" sums per stat and param, "weapons" base damage per
@@ -43,5 +43,29 @@ func gearStats(st obj) map[int]int {
 			out[statMinDmg], out[statMaxDmg] = lo+sum[statMinDmg], hi+sum[statMaxDmg]
 		}
 	}
+	heroStats(st.sub("hero"), out)
 	return out
+}
+
+// heroStats overlays the fork's "hero" object (branch sandbox-herostats, docs/survival/power.md): the block chance as the
+// fight code computes it (shield base, class BlockFactor, Dexterity; no skills or auras) replaces the gear-only sum, and
+// the right-hand weapon's range with its own enhanced damage replaces base plus gear flats. A missing or null "hero"
+// (an older fork) changes nothing.
+func heroStats(h obj, out map[int]int) {
+	if h == nil {
+		return
+	}
+	if b, ok := h.int("block"); ok {
+		out[statBlock] = b
+	}
+	for _, w := range h.list("hands") {
+		if slot, _ := w.int("slot"); slot != d2.BodyRHand {
+			continue
+		}
+		lo, lok := w.int("min")
+		hi, hok := w.int("max")
+		if lok && hok {
+			out[statMinDmg], out[statMaxDmg] = lo, hi
+		}
+	}
 }
