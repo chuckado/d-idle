@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/verifier2-p03b-2026-11-15.md"
 exclusive: []
 contracts: []
+result: "PASS WITH CHANGES (offline, not live): r4 a5bdd467 = r3 rebased on upstream fb6d799d, pushed to the private fork; builds, tests, compare 0 differ, mutant rc 134, ctest same as upstream, tidy 0, pr_guard 0/0. Required before posting: oracle needs EMU/GAMEEXE env (re-check fails), knock from a real get-hit still restarts the hold (FUN_00580a70 asks FUN_0057edd0)."
 ---
 
 ## Description
@@ -28,6 +29,6 @@ Why: second independent check of upstream candidate P03b after #541 merged; the 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 verdict doc docs/upstream/verifier2-p03b-2026-11-15.md with rebased r4 head
-- [ ] #2 rebased branch built and tested on the NAS builder, pushed to the private fork only
+- [x] #1 verdict doc docs/upstream/verifier2-p03b-2026-11-15.md with rebased r4 head
+- [x] #2 rebased branch built and tested on the NAS builder, pushed to the private fork only
 <!-- AC:END -->
