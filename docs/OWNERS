@@ -148,8 +148,12 @@ cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
+cmd/d2bot/funwire.go  credit-runner  uib6
 cmd/d2bot/gearsets_test.go  credit-runner  gearsets
 cmd/d2bot/glancewire.go  credit-runner  uib5
+cmd/d2bot/glancewire.go  credit-runner  uib6
+cmd/d2bot/glancewire_blocked.go  credit-runner  uib6
+cmd/d2bot/glancewire_blocked_test.go  credit-runner  uib6
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/invverbs.go  credit-runner  botinstant
@@ -614,6 +618,7 @@ internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/charscreen_test.go  credit-runner  uic2
+internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
 internal/watch/commands_test.go  credit-runner  uis4
 internal/watch/funwire.go  credit-runner  survA
