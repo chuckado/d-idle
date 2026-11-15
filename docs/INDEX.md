@@ -624,6 +624,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
+- [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
@@ -642,7 +643,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
 - [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
-- [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted, BLOCKED): "A hit never restarts a get-hit" (status: r1, **BLOCKED on a game-side oracle** (card prfix2, 2026-11-14). Split out of the P03 PR because the...)
+- [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted): "A hit never restarts a get-hit" (r3) (status: r3 2026-11-15 (card prfix3). Superseded by the PR body bodies/hitrec-norestart-body.md; this page is the...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
