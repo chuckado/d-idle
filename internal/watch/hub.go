@@ -463,7 +463,32 @@ type OrderRequest struct {
 	Area    string
 	Minutes int
 	Forever bool // no time limit
-	Replace bool // "Go now" in slice 1: every open order is cancelled first
+	// UntilLevel (go and fight only, with no minutes and no Forever) ends the order done at that hero level.
+	UntilLevel int
+	Replace    bool // "Go now" in slice 1: every open order is cancelled first
+}
+
+// TickOrders ends every open until-level order whose level the hero has reached: the bot is told to stop (as a cancel)
+// and the order ends done. Fun.Settle calls it; the queue's own entries are placed without a level and end in OrderQueue.Tick.
+func (h *Hub) TickOrders() {
+	lvl := h.heroNow().Level
+	if lvl <= 0 {
+		return
+	}
+	h.mu.Lock()
+	var ids []int
+	for _, o := range h.orders {
+		if (o.State == OrderQueued || o.State == OrderActive) && o.UntilLevel > 0 && lvl >= o.UntilLevel {
+			ids = append(ids, o.ID)
+		}
+	}
+	h.mu.Unlock()
+	for _, id := range ids {
+		if h.cfg.Orders != nil {
+			_ = h.cfg.Orders.Cancel(id)
+		}
+		h.OrderState(id, OrderDone, fmt.Sprintf("reached level %d", lvl))
+	}
 }
 
 // GiveOrder is Give for a timed order that queues like before.
@@ -474,9 +499,19 @@ func (h *Hub) GiveOrder(kind, area string, minutes int) (Order, error) {
 // Give validates and records an order, then hands it to the bot's OrderSink. The order only asks: the hero's own guard
 // still decides when the walk starts, and a refusal ends the order failed with the guard's reason (OrderState).
 func (h *Hub) Give(r OrderRequest) (Order, error) {
+	if r.UntilLevel != 0 {
+		var err error
+		if r, err = h.withUntilLevel(r); err != nil {
+			return Order{Kind: r.Kind}, err
+		}
+	}
 	o, err := validateOrder(r.Kind, r.Area, r.Minutes, r.Forever, h.cfg.Areas)
 	if err != nil {
 		return o, err
+	}
+	if r.UntilLevel != 0 {
+		o.UntilLevel = r.UntilLevel
+		o.Text = strings.Replace(o.Text, "until you cancel", fmt.Sprintf("until level %d", r.UntilLevel), 1)
 	}
 	if r.Replace {
 		for _, id := range h.openIDs() {

@@ -113,3 +113,17 @@ func (a coder) GoldStash(ctx context.Context, amount int, deposit bool) (int, in
 	b, c, err := a.ItemVerbs.GoldStash(ctx, amount, deposit)
 	return b, c, refusal(err)
 }
+
+// MercEquip and MercUnequip are the player's mercenary item verbs (B9). The fork lists them in "caps" only when it has
+// them; until then invdesk.Desk keeps refusing with code "merc". Rule refusals keep their code (merctype, dead, ...).
+func (a coder) MercEquip(ctx context.Context, id uint32) (bool, error) {
+	n, err := a.ItemVerbs.MercEquip(ctx, id)
+	return n, refusal(err)
+}
+
+func (a coder) MercUnequip(ctx context.Context, slot string) (bool, error) {
+	n, err := a.ItemVerbs.MercUnequip(ctx, slot)
+	return n, refusal(err)
+}
+
+var _ invdesk.MercVerbs = coder{}

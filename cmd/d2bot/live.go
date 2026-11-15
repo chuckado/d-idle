@@ -170,6 +170,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(gameDir, o.data, db)
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
+	o.ladder.pause = pauseDesk(runner, ip.State())
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
@@ -188,6 +189,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, bh.combat, ldir, log)
 	useSenses(lrig, e, bh.combat, log)
 	useSensesCoverage(lrig, e, bh.Mover)

@@ -44,7 +44,7 @@ func (r *Runner) playerDue(s *d2.Snapshot, now time.Time) bool {
 	if last := r.playerCancelNs.Load(); last != 0 && now.UnixNano()-last < int64(playerCancelGap) {
 		return false
 	}
-	due := r.playerPending(s, now) || r.repairDue(s, now)
+	due := r.pauseDue(s, now) || r.playerPending(s, now) || r.repairDue(s, now)
 	if due {
 		r.playerCancelNs.Store(now.UnixNano())
 	}

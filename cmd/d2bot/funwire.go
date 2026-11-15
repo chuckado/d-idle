@@ -141,6 +141,7 @@ func newFun(l ladderOptions, stateDir string, hub *watch.Hub, wallet *currency.W
 		return nil, err
 	}
 	fun = f
+	f.Cmd.Blocked = journeyBlockedHook(status)
 	for _, e := range f.Errors() {
 		slog.Warn("fun: " + e)
 	}
