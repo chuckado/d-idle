@@ -35,6 +35,12 @@ func serve(addr, class string) error {
 		return watch.HeroStats{Resists: watch.HeroResists{Fire: 12, Cold: 30, Light: -8, Poison: 5},
 			Readiness: &watch.HeroReadiness{Light: "amber", Area: "Blood Moor", Reason: "Lightning resistance is under the line for this area."}}, true
 	})
+	// what /api/glance shows in the band: two things need the player, like the accepted mockup
+	sim.Hub.SetGlanceSources(watch.GlanceSources{Needs: func() []watch.GlanceNeed {
+		return []watch.GlanceNeed{
+			{ID: "gear", Kind: "gear", Sev: "danger", Text: "Weapon broken", Sub: "repair is about 180 gold", Actions: []watch.GlanceVerb{{Label: "Repair now", Post: "/api/repair"}}},
+			{ID: "raven", Kind: "proposal", Sev: "warn", Text: "Go for Blood Raven at level 9?", Actions: []watch.GlanceVerb{{Label: "Go now", Post: "/api/orders"}}}}
+	}})
 	view := sim.Hub.ViewHandler()
 	m := http.NewServeMux()
 	m.Handle("/", view)

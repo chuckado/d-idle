@@ -1,0 +1,22 @@
+<div>
+  <button class="say" data-key="say" data-tone="warn" aria-expanded="false" aria-haspopup="true" title="Cold Plains · town chores">
+    <span class="line" aria-live="polite">
+      <span class="word"> "Waiting"
+      <span class="txt">
+        <b class="place"> "Cold Plains"
+        <span class="reason"> " · town chores"
+  <div class="pop d-bandpop" aria-label="Why the hero does this" role="dialog" hidden>
+    <dl class="rows">
+      <dt> "Now"
+      <dd> "Fighting in Cold Plains, my life is 72%."
+      <dt> "Would change it"
+      <dd> "Life under my retreat line sends me to town."
+      <dt> "Next"
+      <dd> "Next: Farm Blood Moor."
+      <dt> "Danger here"
+      <dd> "risky"
+      <dt> "Uptime"
+      <dd> "94% of the time making progress"
+      <dt> "Voice"
+      <dd> "Another day, another cow."
+    <a class="more" href="#log"> "Open the log"
