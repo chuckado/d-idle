@@ -1,0 +1,168 @@
+diff --git a/tools/review-shots.sh b/tools/review-shots.sh
+new file mode 100755
+index 000000000..4e2b1dddc
+--- /dev/null
++++ b/tools/review-shots.sh
+@@ -0,0 +1,30 @@
++#!/bin/sh
++# review driver: reads "name WxH mode url" lines from $1 (mode: png|dom), writes $2/name-WxH.{png,html}
++set -u
++list=$1 out=$2
++chrome=$(command -v google-chrome-stable || command -v chromium || command -v chromium-browser) || exit 2
++port=${UISHOTS_PORT:-18947} disp=${UISHOTS_DISPLAY:-:247}
++cd "$(dirname "$0")/.." || exit 2
++bin=$(mktemp -d)
++trap 'kill $sp $xp 2>/dev/null; rm -rf "${bin:?}"' EXIT INT TERM
++go build -o "$bin/uishots" ./tools/uishots || exit 2
++timeout 2400 nice -n 19 "$bin/uishots" serve -addr 127.0.0.1:$port >"$bin/serve.log" 2>&1 &
++sp=$!
++timeout 2400 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
++xp=$!
++sleep 3
++mkdir -p "$out"
++while read -r name sz mode u; do
++	[ -n "$name" ] || continue
++	w=${sz%x*} h=${sz#*x}
++	prof=$(mktemp -d)
++	if [ "$mode" = dom ]; then
++		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
++			--window-size="$w,$h" --virtual-time-budget=15000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/$u" >"$out/$name-$sz.html" 2>/dev/null
++	else
++		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
++			--window-size="$w,$h" --virtual-time-budget=15000 --timeout=40000 --screenshot="$out/$name-$sz.png" "http://127.0.0.1:$port/$u" >/dev/null 2>&1
++	fi
++	rm -rf "${prof:?}"
++done <"$list"
++ls "$out" | wc -l
+diff --git a/tools/uishots/review_fx.go b/tools/uishots/review_fx.go
+new file mode 100644
+index 000000000..24bcb6cf7
+--- /dev/null
++++ b/tools/uishots/review_fx.go
+@@ -0,0 +1,113 @@
++package main
++
++// Review-only fixtures (S7 review, not for merge): states the suite does not have, picked by cookies so that module
++// imports carry them too. /__ls?ls=k=v;k=v&ck=k=v;k=v&u=/watch... sets localStorage and cookies, then opens u.
++import (
++	"bytes"
++	"encoding/json"
++	"net/http"
++	"net/http/httptest"
++	"os"
++	"strings"
++)
++
++func ck(r *http.Request, k string) string {
++	if c, err := r.Cookie(k); err == nil {
++		return c.Value
++	}
++	return ""
++}
++
++func reviewFx(h http.Handler) http.Handler {
++	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
++		p := r.URL.Path
++		pass := func() *httptest.ResponseRecorder { rec := httptest.NewRecorder(); h.ServeHTTP(rec, r); return rec }
++		switch {
++		case p == "/__ls":
++			w.Header().Set("Content-Type", "text/html; charset=utf-8")
++			b, _ := json.Marshal(map[string]string{"ls": r.URL.Query().Get("ls"), "ck": r.URL.Query().Get("ck"), "u": r.URL.Query().Get("u")})
++			w.Write([]byte(`<!doctype html><script>const a=` + string(b) + `;for(const kv of a.ls.split(';')){if(!kv)continue;const i=kv.indexOf('=');localStorage.setItem(kv.slice(0,i),kv.slice(i+1));}for(const kv of a.ck.split(';')){if(kv)document.cookie=kv+';path=/';}location.replace(a.u);</script>`))
++		case p == "/watch" && ck(r, "rvupdate") != "":
++			rec := pass()
++			for k, v := range rec.Header() {
++				w.Header()[k] = v
++			}
++			w.Header().Del("Content-Length")
++			w.Write(bytes.Replace(rec.Body.Bytes(), []byte("</body>"), []byte(`<script src="/watch/update.js"></script></body>`), 1))
++		case p == "/watch/unlockui.js" && ck(r, "rvreveal") != "":
++			b, _ := os.ReadFile("internal/watch/web/unlockui.js")
++			w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
++			w.Write(b)
++		case p == "/watch/update.js":
++			b, _ := os.ReadFile("internal/watch/web/update.js")
++			w.Header().Set("Content-Type", "text/javascript; charset=utf-8")
++			w.Write(b)
++		case p == "/api/update/status":
++			if ck(r, "rvupdate") == "ready" {
++				js(w, map[string]any{"state": "ready", "available": map[string]any{"version": "0.1.2", "notes": "The cockpit is the new default layout; Classic stays in the menu. Fixes for the mercenary and the belt."}})
++			} else if ck(r, "rvupdate") != "" {
++				js(w, map[string]any{"state": "idle", "available": map[string]any{"version": "0.1.2", "notes": "The cockpit is the new default layout; Classic stays in the menu."}})
++			} else {
++				js(w, map[string]any{"state": "idle"})
++			}
++		case p == "/api/unlocks" && ck(r, "rvreveal") != "":
++			js(w, map[string]any{"schema": "watch.unlocks/1", "open": []any{map[string]any{"id": "idreveal", "open": true}}, "locked": []any{}})
++		case p == "/api/reveal" && ck(r, "rvreveal") != "":
++			js(w, map[string]any{"schema": "watch.reveal/1", "open": true, "title": "Identify", "face": "Unidentified item", "faceText": "Something glints in the pack. Flip the card to see what the hero found.", "later": false,
++				"cards": []any{map[string]any{"id": "c1", "n": 1, "revealed": false}}})
++		case p == "/api/glance" && ck(r, "rvq") != "":
++			rec := pass()
++			var v map[string]any
++			if json.Unmarshal(rec.Body.Bytes(), &v) != nil {
++				w.Write(rec.Body.Bytes())
++				return
++			}
++			qs := []any{
++				map[string]any{"id": "thought:7", "kind": "question", "sev": "warn", "text": "My life is low and the fight is not over. What should I do?", "sub": "If you say nothing I drink a potion and keep fighting.",
++					"actions": []any{map[string]any{"label": "Drink a potion", "post": "/api/answer", "body": map[string]any{"thought": 7, "answer": "drink"}}, map[string]any{"label": "Run away", "post": "/api/answer", "body": map[string]any{"thought": 7, "answer": "run"}}}},
++				map[string]any{"id": "thought:8", "kind": "question", "sev": "warn", "text": "Charsi offers to imbue one item. Which one?", "sub": "If you say nothing I keep the reward for later.",
++					"actions": []any{map[string]any{"label": "A weapon", "post": "/api/answer", "body": map[string]any{"thought": 8, "answer": "weapon"}}, map[string]any{"label": "An armor", "post": "/api/answer", "body": map[string]any{"thought": 8, "answer": "armor"}}}},
++				map[string]any{"id": "thought:9", "kind": "question", "sev": "warn", "text": "I learned that you sell white items. Always?", "sub": "",
++					"actions": []any{map[string]any{"label": "Yes", "post": "/api/confirm", "body": map[string]any{"thought": 9, "yes": true}}, map[string]any{"label": "No", "post": "/api/confirm", "body": map[string]any{"thought": 9, "yes": false}}}},
++			}
++			n := 1
++			if ck(r, "rvq") == "3" {
++				n = 3
++			}
++			old, _ := v["needs"].([]any)
++			v["needs"] = append(append([]any{}, qs[:n]...), old...)
++			js(w, v)
++		case strings.HasPrefix(p, "/watch/panels/") && strings.HasSuffix(p, "/panel.js") && ck(r, "rvfail") != "" && strings.Contains(p, "/"+ck(r, "rvfail")+"/"):
++			http.NotFound(w, r)
++		case p == "/watch/panels.json" && ck(r, "rvmissing") != "":
++			rec := pass()
++			var v map[string]any
++			json.Unmarshal(rec.Body.Bytes(), &v)
++			var out []any
++			for _, m := range v["panels"].([]any) {
++				if mm, _ := m.(map[string]any); mm["id"] != ck(r, "rvmissing") {
++					out = append(out, m)
++				}
++			}
++			v["panels"] = out
++			js(w, v)
++		case p == "/api/layout" && r.Method == "GET" && ck(r, "rvstored") != "":
++			b, err := os.ReadFile("internal/watch/web/layouts/" + ck(r, "rvstored") + ".json")
++			if err != nil {
++				http.NotFound(w, r)
++				return
++			}
++			w.Header().Set("Content-Type", "application/json; charset=utf-8")
++			w.Header().Set("X-Layout-Source", "stored")
++			w.Write(b)
++		case p == "/api/onboarding" && r.Method == "GET" && ck(r, "rvold") != "":
++			rec := pass()
++			var v map[string]any
++			json.Unmarshal(rec.Body.Bytes(), &v)
++			v["showWelcome"] = false
++			js(w, v)
++		default:
++			h.ServeHTTP(w, r)
++		}
++	})
++}
+diff --git a/tools/uishots/serve.go b/tools/uishots/serve.go
+index a7f88e3b5..061e4f9b1 100644
+--- a/tools/uishots/serve.go
++++ b/tools/uishots/serve.go
+@@ -121,7 +121,7 @@ func serve(addr, class string) error {
+ 		m.Handle("/", inner)
+ 	}
+ 	log.Printf("uishots: fixture viewer on http://%s/watch (%s, frozen)", addr, class)
+-	return http.ListenAndServe(addr, mountFixturePanels(m))
++	return http.ListenAndServe(addr, reviewFx(mountFixturePanels(m)))
+ }
+ 
+ func js(w http.ResponseWriter, v any) {
