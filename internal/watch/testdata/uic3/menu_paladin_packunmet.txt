@@ -1,0 +1,14 @@
+div.inv-act [aria-label=Actions for Light Plate role=menu data-mode=pop]
+  div.act-title.q-normal [] "Light Plate"
+  button.act [aria-disabled=true role=menuitem data-act=equip data-off=] "Equip"
+    kbd [] "Enter"
+  div.act-why [data-for=equip] "needs 41 strength (you have 38)"
+  button.act [aria-disabled=true role=menuitem data-act=merc data-off=] "Give to mercenary"
+    kbd [] "M"
+  div.act-why [data-for=merc] "the bot cannot change the mercenary's gear yet"
+  button.act [role=menuitem data-act=sell] "Mark for sale"
+    kbd [] "Alt+click"
+  button.act [role=menuitem data-act=keep] "Keep"
+  button.act [role=menuitem data-act=trash data-danger=] "Trash"
+    kbd [] "Del"
+  div.act-note [role=status]

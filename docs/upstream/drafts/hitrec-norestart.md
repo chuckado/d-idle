@@ -1,6 +1,6 @@
-# Draft (local, NOT posted, BLOCKED): "A hit never restarts a get-hit"
+# Draft (local, NOT posted): "A hit never restarts a get-hit" (r3)
 
-> status: r1, **BLOCKED on a game-side oracle** (card prfix2, 2026-11-14). Split out of the P03 PR because the verifier found no committed game.exe oracle for it (upstream AGENTS.md section 5: "a claim whose oracle isn't committed can't be re-checked"). Branch `fid/hitrec-norestart-r1` on the private fork remote, head `9169146a`, stacked on `fid/hitrec-modes-r2` (`3264d61d`): probe `d8d35ca9`, claim `9169146a`. The run the worker-host operator must do: [../briefs/hitrec-norestart-oracle.md](../briefs/hitrec-norestart-oracle.md). Post only after the block PR merged (the branch is stacked on it) and the oracle exists. Needs a second verifier pass then (the claim is new material to it).
+> status: r3 2026-11-15 (card prfix3). Superseded by the PR body [bodies/hitrec-norestart-body.md](../bodies/hitrec-norestart-body.md); this page is the r1 history. The r2 verifier (`docs/upstream/verifier-p03b-2026-11-14.md` on branch `agent/verifyp03c`, agent/verifyp03c) found the claim also refused a big hit during a knockback slide, which game.exe allows (FUN_0057edd0 allows mode 4 from 0x13); r3 fixes that, extends the oracle to modes 0..19 with a knocked-back player, makes `compare` fail on missing or malformed lines, and fixes two stale comments. Fork branch `fid/hitrec-norestart-r3`: probe `530d8df9`, oracle `c3cc0993`, claim `b18acf7e`, stacked on `fid/hitrec-modes-r2` (#541, open: post only after it merges, then a second verifier pass).
 
 PR title (when unblocked): `A hit never restarts a get-hit`
 
