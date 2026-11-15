@@ -109,7 +109,7 @@ func HeroFromPlayer(p *d2.Player, merc *d2.MercSheet, potions int) Hero {
 	}
 	if st.Has(StatBlock) {
 		h.BlockPct = int(st.Get(StatBlock))
-		h.set(TermBlock, Derived) // gear sum only: the class block base, Dexterity and the shield skill are not added
+		h.set(TermBlock, Derived) // gear sum only on an older fork; with the "hero" dump the fight model total (no skills, auras)
 	}
 	h.Resist = [4]int{p.Resist.Fire, p.Resist.Cold, p.Resist.Lightning, p.Resist.Poison}
 	h.set(TermResist, Derived) // the penalty basis of the d2d panel value is U (TASK-216)
