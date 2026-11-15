@@ -30,9 +30,9 @@
   [data-panel="orders"] .o-x { background: none; border: 0; padding: 0; color: var(--d-text-3); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 22px; min-block-size: 22px; }
   [data-panel="orders"] .o-x:hover { color: var(--d-danger); }
   /* the reason gives way first (the minutes in the title are what tells two orders apart); on the phone it lives in the row's title only, and the rows are thumb-sized */
-  .d-shell[data-cmode="phone"] [data-panel="orders"] .o-row { grid-template-columns: 16px minmax(0, 1fr) auto var(--c-touch, 22px); min-block-size: var(--c-touch, 28px); }
-  .d-shell[data-cmode="phone"] [data-panel="orders"] .o-r { display: none; }
-  .d-shell[data-cmode="phone"] [data-panel="orders"] .o-x { min-inline-size: var(--c-touch, 22px); min-block-size: var(--c-touch, 22px); }
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-row { grid-template-columns: 16px minmax(0, 1fr) auto var(--c-touch, 22px); min-block-size: var(--c-touch, 28px); }
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-r { display: none; }
+  [data-panel="orders"]:is([data-cmode="phone"] *) .o-x { min-inline-size: var(--c-touch, 22px); min-block-size: var(--c-touch, 22px); }
   [data-panel="orders"] .o-empty { padding-block: var(--d-sp-2); color: var(--d-text-2); font-size: var(--d-fs-1); }
   [data-panel="orders"] .o-verbs .d-btn:disabled { opacity: .5; cursor: not-allowed; }
   [data-panel="orders"] .o-why { flex: none; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

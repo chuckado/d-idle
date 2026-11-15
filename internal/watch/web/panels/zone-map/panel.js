@@ -116,7 +116,7 @@ export function mount(root, ctx) {
   // Focus: opening a zone moves it to the menu's first button, closing (Esc, the cross, an accepted order) returns it to the zone's button.
   const inside = () => typeof document !== 'undefined' && !!document.activeElement && menu.contains(document.activeElement);
   function close() {
-    const back = !menu.hidden && (inside() || document.activeElement === document.body) ? st.sel : '';
+    const back = !menu.hidden && (inside() || (document.activeElement || {}).tagName === 'BODY') ? st.sel : '';
     st.sel = ''; st.charter = null; st.err = ''; st.loop.open = false;
     menu.hidden = true;
     st.sig = '';

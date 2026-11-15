@@ -32,6 +32,7 @@ owns:
   - "cmd/d2bot/glancewire_pause_test.go"
   - "tools/uishots/"
   - "tools/uishots.sh"
+  - "internal/bot/whyline_test.go"
 exclusive: []
 contracts: []
 ---

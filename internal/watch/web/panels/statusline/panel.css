@@ -16,6 +16,6 @@
   [data-panel="statusline"] dd { margin: 0; color: var(--d-text); }
   [data-panel="statusline"] .more { display: inline-block; margin-block-start: var(--d-sp-2); color: var(--d-accent-text); font-size: var(--d-fs-0); }
   /* the phone's band gives the sentence two lines, so the reason is not cut after eight characters */
-  .d-shell[data-cmode="phone"] [data-panel="statusline"] .line { align-items: flex-start; }
-  .d-shell[data-cmode="phone"] [data-panel="statusline"] .txt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+  [data-panel="statusline"]:is([data-cmode="phone"] *) .line { align-items: flex-start; }
+  [data-panel="statusline"]:is([data-cmode="phone"] *) .txt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 }
