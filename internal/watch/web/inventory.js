@@ -278,12 +278,12 @@
     }, function (e) { $('repair').textContent = e.message; });
     getJSON('/api/inventory').then(draw, function (e) { say(e.message); });
   }
+  if (document.addEventListener) document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
+  // the page's own request got its answer and the view with it (inventory-actions.js refresh): the grids follow at once, not at the next poll
+  if (document.addEventListener) document.addEventListener('d2:inventory-fresh', function (e) { if (e.detail) draw(e.detail); });
   if (typeof window !== 'undefined' && window.__invTest) {
-    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
+    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, draw: draw, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
     return;
   }
-  document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
-  // the page's own request got its answer and the view with it (inventory-actions.js refresh): the grids follow at once, not at the next poll
-  document.addEventListener('d2:inventory-fresh', function (e) { if (e.detail) draw(e.detail); });
   load(); artProbe(); setInterval(load, 4000);
 })();

@@ -293,9 +293,10 @@
       });
       box.appendChild(qr);
     }
-    var acts = el('div', 'cv-acts');
+    var acts = el('div', 'cv-acts'), fe = m && a.first ? a.first(selKey) : null; // the entry a double-click or Enter runs is the primary button
     if (m) m.entries.forEach(function (e) {
       var b = el('button', '', e.label); b.type = 'button'; b.dataset.act = e.act + (e.slot ? '-' + e.slot : '');
+      if (fe && !fe.reason && fe.label === e.label) b.dataset.primary = '';
       if (e.act === 'trash' && !e.reason) b.dataset.danger = '';
       if (e.confirm) b.dataset.confirm = '';
       if (e.reason) { b.setAttribute('aria-disabled', 'true'); b.title = e.reason; } else b.title = e.key ? e.label + ' (' + e.key + ')' : e.label;
