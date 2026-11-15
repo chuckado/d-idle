@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- survwire: card result <!--sg:agent/survwire-->
 - Merge origin/main into uic4 <!--sg:agent/uic4-->
 - Merge branch 'main' into p03bposted <!--sg:agent/p03bposted-->
 - Merge branch 'main' into TASK-485 <!--sg:agent/uis7-->
