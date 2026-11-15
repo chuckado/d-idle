@@ -1,10 +1,11 @@
 ---
 id: TASK-459
 title: 'p05cr: CodeRabbit round on upstream #539 and P05 posted rows'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T23:15:00Z'
+updated_date: '2026-11-15T01:51:00Z'
 labels:
   - d2d
   - upstream-pr
