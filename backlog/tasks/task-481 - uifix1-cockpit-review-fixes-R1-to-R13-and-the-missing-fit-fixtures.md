@@ -46,7 +46,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 R1 to R13 of docs/ui/redesign-2026-11-14/reviews/cockpit-review.md fixed
-- [ ] #2 Fixtures for paused, Loop row, dead mercenary, low supplies and the live picture tile; tools/uishots.sh --fit passes at the eight sizes
-- [ ] #3 Renders at 1280x620, 1366x768, 1440x900, 1914x930 and the phone looked at
+- [x] #1 R1 to R13 of docs/ui/redesign-2026-11-14/reviews/cockpit-review.md fixed
+- [x] #2 Fixtures for paused, Loop row, dead mercenary, low supplies and the live picture tile; tools/uishots.sh --fit passes at the eight sizes
+- [x] #3 Renders at 1280x620, 1366x768, 1440x900, 1914x930 and the phone looked at
 <!-- AC:END -->

@@ -22,7 +22,7 @@
   /* a narrow cell: no text under 10 px; a light that is fine shows its name, one that is not shows its word in the state colour (the name stays in the title), so a red dot is never colour alone */
   @container h (max-width: 230px) { [data-panel="health"] .h-lights { gap: 0; } [data-panel="health"] .h-light b, [data-panel="health"] .h-light span { font-size: 10px; letter-spacing: -.01em; }
     [data-panel="health"] .h-light span { display: none; } [data-panel="health"] .h-light i { margin-bottom: 4px; }
-    [data-panel="health"] .h-light:not([data-l="ok"]) b { display: none; } [data-panel="health"] .h-light:not([data-l="ok"]) span { display: block; white-space: normal; line-height: 1.1; max-block-size: 2.2em; font-weight: 600; }
+    [data-panel="health"] .h-light:not([data-l="ok"]) b { display: none; } [data-panel="health"] .h-light:not([data-l="ok"]) span { display: block; white-space: normal; line-height: 1.1; max-block-size: 2.2em; font-weight: 500; letter-spacing: -.04em; text-overflow: clip; }
     [data-panel="health"] .h-light[data-l="warn"] span { color: var(--d-warn); } [data-panel="health"] .h-light[data-l="bad"] span { color: var(--d-danger); } }
   [data-panel="health"] .h-pop { inset: auto; margin: 0; inset-block-end: calc(var(--c-strip, 112px) + 2 * var(--c-gap, 8px)); inset-inline-end: var(--c-gap, 8px);
     inline-size: min(380px, 95%); background: var(--d-surface-2); color: var(--d-text); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); padding: var(--d-sp-3); box-shadow: var(--d-shadow-2); display: none; font-size: var(--d-fs-1); }
