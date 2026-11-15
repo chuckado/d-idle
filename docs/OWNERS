@@ -157,6 +157,7 @@ cmd/d2bot/glancewire_blocked.go  credit-runner  uib6
 cmd/d2bot/glancewire_blocked_test.go  credit-runner  uib6
 cmd/d2bot/glancewire_pause.go  credit-runner  uifix1
 cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
+cmd/d2bot/glancewire_reset.go  credit-runner  botreset
 cmd/d2bot/glancewire_test.go  credit-runner  uib5
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/invverbs.go  credit-runner  botinstant
@@ -201,6 +202,8 @@ cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
 cmd/d2bot/readywire.go  credit-runner  uic3
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
+cmd/d2bot/resetwire.go  credit-runner  botreset
+cmd/d2bot/resetwire_test.go  credit-runner  botreset
 cmd/d2bot/resource_test.go  credit-runner  freshstart
 cmd/d2bot/sensesfeed.go  credit-runner  maptrail
 cmd/d2bot/sensesfeed_test.go  credit-runner  maptrail
@@ -334,6 +337,7 @@ docs/research/pal-zeal-trace.md  credit-runner  palskill-matrix
 docs/research/return-screen.md  credit-runner  returnmock
 docs/research/upstream-next.md  credit-runner  upstream-next
 docs/research/warp-walk-trace.md  credit-runner  decomp22
+docs/reset.md  credit-runner  botreset
 docs/senses-map.md  credit-runner  maphistory
 docs/senses-map.md  credit-runner  maphistoryA
 docs/senses-map.md  credit-runner  maphistoryB
@@ -466,6 +470,8 @@ internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
 internal/bot/playerpause.go  credit-runner  uib1
 internal/bot/playerpause_test.go  credit-runner  uib1
+internal/bot/playerreset.go  credit-runner  botreset
+internal/bot/playerreset_test.go  credit-runner  botreset
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
@@ -717,6 +723,9 @@ internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
+internal/watch/resetapi.go  credit-runner  botreset
+internal/watch/resetapi_test.go  credit-runner  botreset
+internal/watch/resetui_test.go  credit-runner  botreset
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
 internal/watch/senses.go  credit-runner  maphistoryB
@@ -775,6 +784,7 @@ internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
 internal/watch/testdata/pause/  credit-runner  uib1
+internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
@@ -862,6 +872,7 @@ internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
+internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6

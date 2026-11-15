@@ -200,6 +200,7 @@
 | decomp31 | proposed | - | `docs/research/decomp31-drops.md`<br>`internal/plandata/dropmodel-normal.json`<br>`docs/plan/data/dropmodel-normal.json`<br>`tools/emu/dm_` | - |
 | decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | powerwire | in-progress | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/survivalwire.go` | - |
+| botreset | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`cmd/d2bot/glancewire_reset.go`<br>`docs/reset.md`<br>`internal/watch/testdata/reset` | - |
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
@@ -246,14 +247,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- cab78c992 11-15 14:02 `Merge agent/botreset: Merge branch 'main' into botreset` (botreset)
+- b965b4243 11-15 14:01 `Merge branch 'main' into botreset` (-)
 - 64660bcd8 11-15 14:00 `Merge agent/verifyp03c: Merge branch 'main' into TASK-513` (verifyp03c)
 - 8aa8fd28c 11-15 14:00 `Merge agent/p04posted: Merge branch 'main' into p04posted` (p04posted)
 - 02f99ea00 11-15 14:00 `Merge agent/deploycockpit: Merge branch 'main' into deploycockpit` (deploycockpit)
 - 022e10c78 11-15 13:56 `Merge branch 'main' into TASK-513` (-)
 - 0829dfa1d 11-15 13:56 `Merge branch 'main' into p04posted` (-)
 - 6b9830c9c 11-15 13:56 `Merge branch 'main' into deploycockpit` (-)
+- 04f4d5def 11-15 13:54 `Merge origin/main into botreset` (-)
 - 7977cd99a 11-15 13:37 `Merge agent/powerwire: Merge branch 'main' into TASK-508` (powerwire)
-- 43f30a8e0 11-15 13:36 `Merge branch 'main' into TASK-508` (-)
-- ff42d6f5f 11-15 13:28 `Merge agent/verifyp04b: Merge branch 'main' into TASK-512` (verifyp04b)
-- 57218017f 11-15 13:28 `powerwire: merge origin/main, unblockable x skill offence test` (powerwire)
 <!-- statusgen:end -->
