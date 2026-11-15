@@ -1,10 +1,11 @@
 ---
 id: TASK-491
 title: 'survwire: survival shadow lines not in sandbox logs (diagnosis)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T11:37:00Z'
+updated_date: '2026-11-15T11:43:00Z'
 labels:
   - bot
   - bug
