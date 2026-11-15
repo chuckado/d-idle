@@ -486,6 +486,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0.1.2-drills.md](releases/0.1.2-drills.md): friends 0.1.2 pre-release drills (2026-11-14) (status: RUN, all four drills PASS. Tags: V = run and seen, S = read in source, U = not run. Run on the worker host...)
 - [0.1.2.md](releases/0.1.2.md): d.idle friends release 0.1.2 (status: BUILT AND STAGED 2026-11-14, NOT PUBLISHED, and the live drills have NOT run (they need docker with real...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
+- [reset.md](reset.md): Reset: leave the game and rejoin (status: current (botreset, 2026-11-15). Offline tested only; not verified live (checklist at the end).)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
 - [restloop.md](restloop.md): restloop (archived)
 - [retreatdrill.md](retreatdrill.md): retreatdrill: the P29 retreat action executed live (designed, offline-tested, not run)
@@ -634,6 +635,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
 - [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
+- [knock-in-gethit-body.md](upstream/bodies/knock-in-gethit-body.md): knock-in-gethit-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body

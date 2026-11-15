@@ -248,3 +248,21 @@
   /* S7: under a coarse pointer the controls outside the fixed frame (the "..." menu, the drawers, the layout note) are 44 px; the frame's own rows use --c-touch */
   @media (pointer: coarse) { .d-menu-pop .d-btn, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; } }
 }
+
+@layer shell {
+  /* Reset (resetui.js): the confirm sheet over the page and the progress strip; the sheet is a card at any size */
+  .d-reset-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-reset-sheet[hidden], .d-reset-strip[hidden] { display: none; }
+  .d-reset-card { inline-size: min(100%, 24rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-reset-card h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-reset-card p { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); }
+  .d-reset-card .d-reset-err { color: var(--d-bad); }
+  .d-reset-card .d-reset-err[hidden] { display: none; }
+  .d-reset-row { display: flex; gap: var(--d-sp-2); justify-content: flex-end; }
+  .d-reset-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-reset-card > .d-btn { min-block-size: 44px; align-items: center; }
+  .d-reset-card > .d-btn[hidden] { display: none; }
+  .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));
+    padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1); }
+}

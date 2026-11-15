@@ -161,6 +161,8 @@ type Fun struct {
 	Repair *RepairAPI
 	// Pause mounts GET and POST /api/pause (pauseapi.go); nil: no routes.
 	Pause *PauseAPI
+	// Reset mounts GET and POST /api/reset (resetapi.go); nil: no routes.
+	Reset *ResetAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
@@ -727,6 +729,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Pause != nil {
 		m.Handle(PauseRoute, f.Pause.Handler())
 	}
+	if f.Reset != nil {
+		m.Handle(ResetRoute, f.Reset.Handler())
+	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
@@ -812,6 +817,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Pause != nil {
 		m.Handle(PauseRoute, f.Pause.PostHandler(o))
+	}
+	if f.Reset != nil {
+		m.Handle(ResetRoute, f.Reset.PostHandler(o))
 	}
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {

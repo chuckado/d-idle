@@ -183,6 +183,7 @@ type Runner struct {
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
 	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int
 	panicTimes     []time.Time // recovered panics inside PanicWindow, guarded by mu

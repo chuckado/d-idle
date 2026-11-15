@@ -149,6 +149,11 @@ default-update watch?first=0&theme=dark&needs=2&update=available
 default-update-light watch?first=0&theme=light&needs=2&update=ready
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
+reset-confirm watch?first=0&theme=dark&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
+reset-confirm-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
+reset-more watch?first=0&theme=dark&needs=0 [data-key=verb-more]|[data-key=more-reset] #reset-confirm,#reset-go
+reset-resetting watch?first=0&theme=dark&needs=0&reset=resetting expect=#reset-progress
+reset-resetting-light watch?first=0&theme=light&needs=0&reset=rejoining expect=#reset-progress
 default-firstrun watch?theme=dark&needs=2 ?#none .d-drawer:not([hidden])_[data-key=drawer-close]
 cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
@@ -255,6 +260,7 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		szs=$sizes
 		case $pname in
 		default | default-light) szs="$sizes $midsizes" ;;
+		reset-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
 		character-phone*) szs="$phonesizes" ;;
