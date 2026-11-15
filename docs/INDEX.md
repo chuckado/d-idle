@@ -629,6 +629,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
+- [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
 `upstream/briefs/`
 
@@ -637,6 +638,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hitrec-norestart-oracle.md](upstream/briefs/hitrec-norestart-oracle.md): Brief: P03b "a hit never restarts a get-hit" needs a game-side oracle (BLOCKED, for the worker-host operator) (status: written 2026-11-14 (card prfix2). Nothing here was run: it needs the emulator image on the worker host...)
 - [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
 - [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
@@ -648,6 +650,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
+- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r2, **ready for the independent verifier** (card decomp23, 2026-11-15). Branch `fid/warp-walk-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
@@ -660,6 +663,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
+- [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
