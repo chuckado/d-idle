@@ -40,12 +40,20 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 		sep = "&"
 	}
 	// click: a selector to press before the second measurement (the "..." menu); the sheet it opens must be hittable
-	opts, _ := json.Marshal(map[string]string{"page": u, "click": q.Get("click")})
+	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
+	// menu it opens must lie inside the window and, beside a cell, not cover it
+	opts, _ := json.Marshal(map[string]string{"page": u, "click": q.Get("click"), "hover": q.Get("hover"), "ctx": q.Get("ctx")})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
 import { measure, hits } from '/__fit/fit.js';
+const pop = (d, sel, c) => {
+  const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
+  if (!r || !r.width) return { open: false, sel };
+  const vw = d.defaultView.innerWidth, vh = d.defaultView.innerHeight, ov = !(r.right <= c.left || r.left >= c.right || r.bottom <= c.top || r.top >= c.bottom);
+  return { open: true, sel, left: Math.round(r.left), top: Math.round(r.top), right: Math.round(r.right), bottom: Math.round(r.bottom), vw, vh, inside: r.left >= 0 && r.top >= 0 && r.right <= vw && r.bottom <= vh, covers: ov, sheet: n.dataset.sheet || n.dataset.mode === 'sheet' || '' };
+};
 const o = %s, f = document.getElementById('f'), out = document.getElementById('fit-result');
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 f.addEventListener('load', async () => {
@@ -54,6 +62,14 @@ f.addEventListener('load', async () => {
     const pv = await (await fetch('/watch/panels.json')).json();
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
     m.page = o.page;
+    if (o.hover || o.ctx) {
+      const t = f.contentDocument.querySelector(o.hover || o.ctx), r = t.getBoundingClientRect(), w = f.contentWindow;
+      const ev = (type, init) => new w.MouseEvent(type, Object.assign({ bubbles: true, cancelable: true, clientX: r.left + r.width / 2, clientY: r.top + r.height / 2 }, init));
+      if (o.hover) t.dispatchEvent(new w.PointerEvent('pointerover', { bubbles: true, pointerType: 'mouse', clientX: r.left + 4, clientY: r.top + 4 }));
+      else t.dispatchEvent(ev('contextmenu', {}));
+      await wait(600);
+      m.pop = pop(f.contentDocument, o.hover ? '#inv-tip' : '#inv-act', r);
+    }
     if (o.click) {
       const b = f.contentDocument.querySelector(o.click);
       m.clicked = o.click;
@@ -106,8 +122,15 @@ type fitResult struct {
 		Right  int    `json:"right"`
 		Bottom int    `json:"bottom"`
 	} `json:"outside"`
-	Empty   []string        `json:"empty"`
-	Unready []string        `json:"unready"`
+	Empty   []string `json:"empty"`
+	Unready []string `json:"unready"`
+	Pop     *struct {
+		Open   bool   `json:"open"`
+		Sel    string `json:"sel"`
+		Inside bool   `json:"inside"`
+		Covers bool   `json:"covers"`
+		Sheet  any    `json:"sheet"`
+	} `json:"pop"`
 	Clicked string          `json:"clicked"`
 	Hits    map[string]bool `json:"hits"`
 	Slots   []struct {
@@ -159,6 +182,16 @@ func (r fitResult) judge() []string {
 	}
 	if r.Hole > fitGap {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
+	}
+	if r.Pop != nil {
+		switch {
+		case !r.Pop.Open:
+			bad = append(bad, r.Pop.Sel+" did not open")
+		case !r.Pop.Inside:
+			bad = append(bad, r.Pop.Sel+" is not inside the window")
+		case r.Pop.Covers && r.Pop.Sheet == "" && r.Pop.Sel == "#inv-tip":
+			bad = append(bad, r.Pop.Sel+" covers the cell it belongs to")
+		}
 	}
 	if r.Clicked != "" {
 		for _, sel := range []string{"#menu-more", "#btn-layout"} {

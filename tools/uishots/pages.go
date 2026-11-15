@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -54,16 +55,23 @@ func item(id int, code, name, q string, x, y, w, h int, extra map[string]any) ma
 	return it
 }
 
-// usable is the schema 8 verdict of an item: the hero's and the mercenary's, each with the reason texts the page shows.
-func usable(hero, merc bool, hwhy, mwhy string) map[string]any {
-	side := func(ok bool, why string) map[string]any {
-		if ok {
-			return map[string]any{"ok": true}
+// usable is the schema 8 verdict of an item: the hero's and the mercenary's, each a list of reasons (none: usable).
+func usable(hero, merc []any) map[string]any {
+	side := func(rs []any) map[string]any {
+		if len(rs) == 0 {
+			return map[string]any{"ok": true, "reasons": []any{}}
 		}
-		return map[string]any{"ok": false, "reasons": []any{map[string]any{"code": "requirements", "stat": "str", "text": why}}}
+		return map[string]any{"ok": false, "reasons": rs}
 	}
-	return map[string]any{"hero": side(hero, hwhy), "merc": side(merc, mwhy)}
+	return map[string]any{"hero": side(hero), "merc": side(merc)}
 }
+
+// need is a requirement reason in the server's words ("needs 41 strength (you have 38)").
+func need(stat string, n, have int, what string) any {
+	return map[string]any{"code": "requirements", "stat": stat, "need": n, "have": have, "text": fmt.Sprintf("needs %s (you have %d)", what, have)}
+}
+
+func why(code, text string) any { return map[string]any{"code": code, "text": text} }
 
 func (fixtureDesk) View() any {
 	return map[string]any{
@@ -72,24 +80,24 @@ func (fixtureDesk) View() any {
 		"stashOps": map[string]any{"depositMax": 1240, "withdrawMax": 5300}, "inTown": true, "class": "Sorceress", "gold": 1240, "stashGold": 5300,
 		"prompt": "No weapon equipped. Equip one on the Inventory page; the bot will not do it for you.",
 		"equipment": map[string]any{
-			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18}),
+			"rhand":  item(1, "sst", "Short Staff", "normal", 0, 0, 1, 3, map[string]any{"maxDur": 18, "props": []string{"Two-Hand Damage: 1 to 5"}}),
 			"head":   item(2, "cap", "Cap", "normal", 0, 0, 2, 2, map[string]any{"dur": 8, "maxDur": 12}),
-			"torso":  item(3, "qui", "Sturdy Quilted Armor", "magic", 0, 0, 2, 3, map[string]any{"dur": 5, "maxDur": 24, "why": "you put it on at 12:50"}),
+			"torso":  item(3, "qui", "Sturdy Quilted Armor", "magic", 0, 0, 2, 3, map[string]any{"dur": 5, "maxDur": 24, "why": "you put it on at 12:50", "props": []string{"Defense: 11", "Fire Resist +4%"}}),
 			"gloves": item(4, "lgl", "Leather Gloves", "normal", 0, 0, 2, 2, map[string]any{"dur": 11, "maxDur": 12}),
 			"belt":   item(5, "lbl", "Sash", "normal", 0, 0, 2, 1, map[string]any{"dur": 12, "maxDur": 12}),
 			"feet":   item(6, "lbt", "Boots", "normal", 0, 0, 2, 2, map[string]any{"dur": 10, "maxDur": 12}),
-			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, nil),
+			"lring":  item(7, "rin", "Raven Grip", "rare", 0, 0, 1, 1, map[string]any{"props": []string{"Fire Resist +8%", "+6 Life"}}),
 		},
 		"backpack": []any{
-			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "level": 12, "props": []string{"+2 to Charged Bolt", "+8 to Energy", "Requires Level 6"}, "usable": usable(true, false, "", "a Desert Guard wears helm, armor, spear or polearm")}),
-			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
+			item(10, "8ss", "Staff of Charged Bolt", "magic", 0, 0, 1, 3, map[string]any{"canSell": true, "canWear": []string{"rhand"}, "noWearSlot": noSlot("rhand"), "stashOp": "stash", "level": 12, "props": []string{"Two-Hand Damage: 2 to 8", "+2 to Charged Bolt", "+8 to Energy", "Requires Level 6"}, "req": map[string]any{"lvl": 6}, "usable": usable(nil, []any{why("merctype", "a Desert Guard wears helm, armor, spear or polearm")})}),
+			item(11, "rin", "Ring", "rare", 1, 0, 1, 1, map[string]any{"props": []string{"Fire Resist +11%", "+12 Life", "+3 Dexterity"}, "canWear": []string{"lring", "rring"}, "noWearSlot": noSlot("lring", "rring")}),
 			item(12, "ssd", "Short Sword", "normal", 2, 0, 1, 3, map[string]any{"mark": "sell", "canSell": true, "maxDur": 24, "dur": 3}),
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 			item(14, "isc", "Scroll of Identify", "normal", 4, 0, 1, 1, nil),
 			item(15, "tbk", "Tome of Town Portal", "normal", 3, 1, 1, 2, nil),
-			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "usable": usable(false, true, "needs 41 strength (you have 38)", ""), "noWear": "needs 41 strength (you have 38)"}),
-			item(18, "tar", "Targe", "magic", 5, 0, 2, 2, map[string]any{"usable": usable(false, false, "needs 16 strength (you have 38) and is a Paladin shield", "a Desert Guard wears helm, armor, spear or polearm"), "noWear": "Paladin only"}),
-			item(19, "pik", "Pike", "normal", 7, 0, 2, 4, map[string]any{"usable": usable(false, false, "needs level 9 (you are 7)", "needs 45 dexterity (he has 40)")}),
+			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "req": map[string]any{"str": 41, "lvl": 9}, "usable": usable([]any{need("str", 41, 38, "41 strength")}, nil), "noWear": "needs 41 strength (you have 38)"}),
+			item(18, "tar", "Targe", "magic", 5, 0, 2, 2, map[string]any{"req": map[string]any{"str": 16, "class": []string{"Paladin"}}, "usable": usable([]any{why("class", "only a Paladin can use it")}, []any{why("merctype", "a Desert Guard wears helm, armor, spear or polearm")}), "noWear": "Paladin only"}),
+			item(19, "pik", "Pike", "normal", 7, 0, 2, 4, map[string]any{"req": map[string]any{"lvl": 9, "str": 60, "dex": 45}, "usable": usable([]any{need("lvl", 9, 7, "level 9"), need("str", 60, 38, "60 strength")}, []any{need("dex", 45, 40, "45 dexterity")})}),
 			item(17, "box", "Horadric Cube", "unique", 5, 2, 2, 2, map[string]any{"mark": "keep"}),
 		},
 		"belt": []any{
