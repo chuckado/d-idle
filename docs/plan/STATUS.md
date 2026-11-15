@@ -190,7 +190,7 @@
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | verifyp06b | proposed | - | `docs/upstream/verifier2-p06-2026-11-15.md` | - |
-| botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go` | - |
+| botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/task.go`<br>`internal/bot/parkstep_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/task/executor.go`<br>`docs/knobs.md` | - |
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
 | portalguard | proposed | - | `internal/resource/`<br>`internal/combat/`<br>`internal/env/tuning_bot.go`<br>`docs/fixportalmelee.md`<br>`docs/knobs.md`<br>`tools/knobdump/main.go` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -236,14 +236,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0e92de896 11-15 11:06 `Merge agent/botstuck2: Merge branch 'main' into TASK-497` (botstuck2)
+- 9b623b789 11-15 11:05 `Merge branch 'main' into TASK-497` (-)
 - 193099d9a 11-15 10:45 `Merge agent/portalguard: portalguard: default mode 0, generous bounds, R3 recipe and flip rule` (portalguard)
+- b8c97de0d 11-15 10:10 `Merge branch 'main' into TASK-497` (-)
 - 59fb7c540 11-15 10:08 `Merge agent/decomp28: Merge branch 'main' into decomp28` (decomp28)
 - b34a92d40 11-15 10:08 `Merge branch 'main' into decomp28` (-)
 - 1cb0880ef 11-15 10:03 `Merge agent/decomp27: Merge branch 'main' into decomp27` (decomp27)
 - 514808400 11-15 10:02 `Merge branch 'main' into decomp27` (-)
 - 699f8b837 11-15 10:00 `Merge agent/verifyp06b: Merge branch 'main' into TASK-496` (verifyp06b)
 - ba1eba19e 11-15 09:59 `Merge branch 'main' into TASK-496` (-)
-- 8197492d2 11-15 09:46 `Merge agent/botstuck: d2bot: object finder explores until the object or its preset shows up (Inifuss tree); task card` (botstuck)
-- eb24483e5 11-15 09:11 `Merge agent/prfix6: Merge branch 'main' into prfix6` (prfix6)
-- 86236b4b2 11-15 09:10 `Merge branch 'main' into prfix6` (-)
 <!-- statusgen:end -->

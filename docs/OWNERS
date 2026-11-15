@@ -257,6 +257,7 @@ docs/inventory-ui.md  credit-runner  nopins
 docs/inventory-ui.md  credit-runner  uic2
 docs/inventory-ui.md  credit-runner  uic3
 docs/knobs.md  credit-runner  botinstant
+docs/knobs.md  credit-runner  botstuck
 docs/knobs.md  credit-runner  exploredpct
 docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
@@ -442,6 +443,7 @@ internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
+internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
@@ -461,8 +463,10 @@ internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  staletarget
 internal/bot/runner.go  credit-runner  survB
 internal/bot/runner.go  credit-runner  uib1
+internal/bot/staletarget.go  credit-runner  botstuck
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
+internal/bot/task.go  credit-runner  botstuck
 internal/bot/task.go  credit-runner  hourfix
 internal/bot/task.go  credit-runner  staletarget
 internal/bot/whyline.go  credit-runner  repairtrip
@@ -515,6 +519,7 @@ internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
 internal/env  credit-runner  wiring2
+internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
@@ -614,6 +619,7 @@ internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
 internal/survival/  credit-runner  survC
 internal/task/campaign.go  credit-runner  campaign1
+internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
 internal/task/executor_unpark_test.go  credit-runner  staletarget
 internal/task/guided.go  credit-runner  campaign1
