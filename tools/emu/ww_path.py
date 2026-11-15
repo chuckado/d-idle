@@ -133,10 +133,11 @@ def game(dump):
         row = [seed, level, warp, d]
         walks = []
         taken = 0
+        first = []
         for walk in (1, 2):
-            rig.place(fx, fy, v) if walk == 1 else None
+            if walk == 1: rig.place(fx, fy, v)
             n, pts = rig.request()
-            first = pts if walk == 1 else first
+            if walk == 1: first = pts
             steps = rig.frames() if n else 0
             fx, fy = rig.pos()
             dist = rig.distance()
