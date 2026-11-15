@@ -185,6 +185,7 @@
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | uifix1 | proposed | - | `internal/watch/web/panels/statusline/`<br>`internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/web/panels/area-map/panel.json`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/whyline.json`<br>`internal/watch/whychange.json`<br>`internal/watch/whyline_test.go`<br>`internal/watch/testdata/`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/glancewire_pause_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/bot/whyline_test.go` | - |
+| prfix5 | proposed | - | `docs/upstream/bodies/warp-walk-plan-body.md`<br>`docs/upstream/drafts/warp-walk-plan.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/warp-walk-r3` |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -229,6 +230,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a66d9ba4a 11-15 03:40 `Merge agent/prfix5: Merge branch 'main' into prfix5` (prfix5)
+- d5a355255 11-15 03:39 `Merge branch 'main' into prfix5` (-)
 - 0d5377d2a 11-15 03:30 `Merge agent/uifix1: Merge branch 'main' into uifix1` (uifix1)
 - 7f26ca27e 11-15 03:29 `Merge branch 'main' into uifix1` (-)
 - 2ca371d0d 11-15 03:23 `Merge origin/main into agent/uifix1` (-)
@@ -237,6 +240,4 @@
 - 413ea36c9 11-15 03:08 `Merge origin/main into agent/uifix1` (-)
 - 2526e1bb4 11-15 02:55 `Merge agent/prfix4: Merge branch 'main' into prfix4` (prfix4)
 - cd11ae55d 11-15 02:54 `Merge branch 'main' into prfix4` (-)
-- 61a98c0a9 11-15 02:51 `Merge origin/main into agent/uifix1` (-)
-- 4bc0a4927 11-15 02:23 `Merge agent/cockpitreview: cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders)` (cockpitreview)
 <!-- statusgen:end -->

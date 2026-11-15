@@ -652,7 +652,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
-- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3, **needs the second verifier pass** (card prfix4, 2026-11-15; the first, verifyp02, asked for the...)
+- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3b, **recheck of two items by the verifier** (the second pass, verifier2-p02-2026-11-15.md, asked: an...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
