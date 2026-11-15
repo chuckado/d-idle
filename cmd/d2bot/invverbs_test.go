@@ -1,9 +1,12 @@
 package main
 
 import (
+	"errors"
 	"testing"
 
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/invdesk"
 )
 
 // The instant lane stays closed while something else owns the hands: a cursor item, an open panel (vendor, stash, NPC
@@ -41,5 +44,17 @@ func TestInputHeldClosesTheLane(t *testing.T) {
 		if hold(snap()) == "" {
 			t.Errorf("%v: safety action did not close the lane", class)
 		}
+	}
+}
+
+// The client adapter carries the merc verbs and keeps the fork's refusal codes for the desk (B9).
+func TestCoderMercVerbRefusalCodes(t *testing.T) {
+	err := refusal(&d2dctl.ItemRefused{Code: d2dctl.ItemErrMercType, Why: "a Desert Guard does not carry a bow"})
+	var vr *invdesk.VerbRefusal
+	if !errors.As(err, &vr) || vr.Code != "merctype" {
+		t.Fatalf("%v", err)
+	}
+	if d2dctl.CapItemMercEquip != invdesk.CapItemMercEquip || d2dctl.CapItemMercUnequip != invdesk.CapItemMercUnequip {
+		t.Error("capability names of the client and the desk differ")
 	}
 }
