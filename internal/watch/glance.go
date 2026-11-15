@@ -223,6 +223,11 @@ func (h *Hub) Glance() GlanceView {
 	if src.Survival != nil {
 		v.Survival = h.glanceSurvival(&v.Sentence, hv, src.Survival())
 	}
+	for _, n := range h.questionNeeds() { // a question that waits for the player comes first: it fades
+		if len(v.Needs) < glanceMaxNeed {
+			v.Needs = append(v.Needs, cleanNeed(n))
+		}
+	}
 	if src.Needs != nil {
 		for _, n := range src.Needs() {
 			if len(v.Needs) < glanceMaxNeed {

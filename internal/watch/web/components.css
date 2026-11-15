@@ -260,3 +260,6 @@
 @media (prefers-reduced-motion: reduce) {
   .d-shell[data-template="cockpit"] *, .d-drawer *, .d-layoutnote, .d-toasts * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* The old message bar (role=alert text of app.js) of a cockpit floats under the band; nothing else in the frame moves (S7). */
+.banner[data-float] { position: fixed; inset-block-start: 48px; inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); margin: 0; max-inline-size: min(94vw, 40rem); }

@@ -652,6 +652,9 @@ function setupCockpit(sel, answerBase, roots, slotList) {
   ck.shell.dataset.template = ck.main.dataset.template = 'cockpit';
   const head = ck.shell.querySelector('.d-band-status');
   if (head) head.dataset.cockpitSlot = 'band';
+  // the old page's message bar ("the viewer is not reachable", a refused answer) lives in the hidden card area: it floats over the frame instead
+  const mb = document.getElementById('msgbar');
+  if (mb) { mb.dataset.float = '1'; document.body.appendChild(mb); }
   applyCockpit();
   window.addEventListener('resize', () => applyCockpit());
   const btn = document.getElementById('btn-layout');
