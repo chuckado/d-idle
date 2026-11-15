@@ -18,6 +18,7 @@
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
   function name(it) { return (it.name || it.code) + (it.ethereal ? ' (eth)' : '') + (it.identified ? '' : ' (unidentified)'); }
+  function lifePct(m) { return Math.max(0, Math.min(100, Math.round(Number(m.lifePct) || 0))); }
   function kindName(m) { return KIND[m.kind] || 'Mercenary'; }
   function slotLabel(m, s) { return s === 'mrhand' && WEAPON[m.kind] ? 'weapon: ' + WEAPON[m.kind] : LABEL[s]; }
 
@@ -74,7 +75,7 @@
     var bits = [];
     if (m.level) bits.push('level ' + m.level);
     if (m.str || m.dex) bits.push('Str ' + (m.str || 0) + ', Dex ' + (m.dex || 0));
-    if (m.owned && m.state !== 'dead') bits.push('life ' + (m.lifePct || 0) + '%');
+    if (m.owned && m.state !== 'dead') bits.push('life ' + lifePct(m) + '%');
     if (bits.length) h.appendChild(el('span', 'meta', bits.join(', ')));
     return h;
   }
@@ -132,7 +133,7 @@
         h.appendChild(rb);
       }
     } else {
-      var life = el('span', 'cv-life'), pct = Math.max(0, Math.min(100, m.lifePct || 0)), on = Math.ceil(pct / 10);
+      var life = el('span', 'cv-life'), pct = lifePct(m), on = Math.ceil(pct / 10);
       life.setAttribute('role', 'img'); life.setAttribute('aria-label', 'life ' + pct + ' percent');
       for (var i = 0; i < 10; i++) life.appendChild(el('i', i < on ? 'on' : ''));
       h.appendChild(life);
@@ -149,7 +150,7 @@
     var side = el('div', 'cv-mside');
     var sh = el('div', 'cv-sheet'); sh.id = 'msheet'; sh.dataset.cv = 'msheet'; sh.setAttribute('aria-label', 'Mercenary values');
     sh.appendChild(tile('Level', m.level || '-'));
-    sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
+    sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : lifePct(m) + '%', m.state === 'dead' ? 'bad' : ''));
     sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));
     var worn = legal.filter(function (k) { return m.equipment && m.equipment[k]; }).length;
     sh.appendChild(tile('Worn', worn + ' of ' + legal.length)); // his kind is in the label row above: one more tile would be cut to a few letters

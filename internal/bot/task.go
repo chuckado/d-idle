@@ -85,7 +85,10 @@ type taskState struct {
 	refused    map[string]bool // refusals already logged (noteStepRefused)
 	andyLine   string          // last Andariel gate line logged (noteAndariel)
 	andyRowErr string          // last class-row error logged by fillAndariel (once per text)
-	bj         blockedJourney  // blocked quest step: spin guard and farm fallback (staletarget.go)
+	pb         map[string]int  // planning blocks per quest step id, see parkStep
+	parked     map[string]parkedGroup
+	stepTitle  string         // title of the step the tick runs (the park reason names it)
+	bj         blockedJourney // blocked quest step: spin guard and farm fallback (staletarget.go)
 }
 
 type taskReport struct {
@@ -182,6 +185,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	// A target area left over from the leveling slice must not make the guard cancel the quest step (hero14 log: 1,906
 	// re-plans); a step that clears sets its own target.
 	r.setTargetArea(0)
+	r.unparkDue(ex)
 	plan := camp.Plan(w, ex)
 	r.noteAndariel(w)
 	if isBlockedPlan(plan) || !l.task.bj.retryAt.IsZero() {
@@ -202,6 +206,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 	if hasStep {
 		st, act = phaseState(step.Phase)
 		act += " (" + step.Title + ")"
+		l.task.stepTitle = step.Title
 	}
 	if plan.Done {
 		return r.campaignFinished(ctx, snap, c, w)
@@ -233,6 +238,7 @@ func (r *Runner) taskStep(ctx context.Context, snap *d2.Snapshot, c control) boo
 			return res.Err
 		case task.OutRan, task.OutDone, task.OutSkipped:
 			l.task.blocks = 0
+			delete(l.task.pb, res.StepID)
 		}
 		return nil
 	})
@@ -1179,6 +1185,9 @@ func (r *Runner) planningBlock(ctx context.Context, res task.Result) error {
 		}
 		r.setState(StateInTown, w)
 		r.pause(ctx, 5*time.Second)
+		return nil
+	}
+	if r.parkStep(res) {
 		return nil
 	}
 	l.task.blocks++
