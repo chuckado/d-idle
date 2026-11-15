@@ -155,3 +155,40 @@ func TestHeroOfEntryReadsTerms(t *testing.T) {
 		t.Fatalf("terms not read: %+v %+v", h, h.Quality)
 	}
 }
+
+// TestShadowReplayAttachHook: the build's attack at the log's clvl moves the estimate off the constants for a Sorceress
+// (Fire Bolt, no weapon needed) and, for a Paladin (Zeal), only once a weapon is assumed; the stays keep their flags.
+func TestShadowReplayAttachHook(t *testing.T) {
+	m, err := power.NewModel(danger.DefaultParams())
+	if err != nil {
+		t.Fatal(err)
+	}
+	run := func(arch string, at func(*power.Hero)) *ShadowReport {
+		a, _ := m.P.Archetype(arch)
+		rep, err := ShadowReplay(strings.NewReader(shadowLog()), ShadowOpts{Tab: shadowTab(), M: m, Arch: a, Diff: "normal", Attach: at})
+		if err != nil {
+			t.Fatal(err)
+		}
+		return rep
+	}
+	sor := func(h *power.Hero) {
+		h.Class = "Sorceress"
+		h.Attack = power.Attack{Skill: "Fire Bolt", Level: 9, SynergyPoints: -1}
+	}
+	pal := func(h *power.Hero) {
+		h.Class = "Paladin"
+		h.Attack = power.Attack{Skill: "Zeal", Level: 1, SynergyPoints: -1}
+	}
+	base, withSor := run("caster", nil), run("caster", sor)
+	if base.Stays[0].Margin.Bad.Terms.Offence != "default" || withSor.Stays[0].Margin.Bad.Terms.Offence != "skill" {
+		t.Errorf("sorceress sources: %q then %q", base.Stays[0].Margin.Bad.Terms.Offence, withSor.Stays[0].Margin.Bad.Terms.Offence)
+	}
+	nw := run("bruiser", pal)
+	if nw.Stays[0].Margin.Bad.Terms.Offence != "default" {
+		t.Errorf("paladin without a weapon must keep the constants, got %q", nw.Stays[0].Margin.Bad.Terms.Offence)
+	}
+	withW := run("bruiser", func(h *power.Hero) { pal(h); h.DmgMin, h.DmgMax, h.AR = 6, 12, 150; h.SetQuality(power.TermOffence, power.Derived) })
+	if withW.Stays[0].Margin.Bad.Terms.Offence != "skill" {
+		t.Errorf("paladin with an assumed weapon: %q", withW.Stays[0].Margin.Bad.Terms.Offence)
+	}
+}

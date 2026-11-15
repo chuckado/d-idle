@@ -330,6 +330,15 @@ func (m *Model) swing(h Hero) (float64, bool) {
 	return s, err == nil
 }
 
+// OffenceUnread is true when neither a read weapon nor a build's skill data gives the hero a kill speed, so the
+// constants stand in (the survival ledger then caps k_hero).
+func (m *Model) OffenceUnread(h Hero) bool {
+	if est, err := m.estimate(&h); err == nil && est.Known() {
+		return false
+	}
+	return h.OffenceUnread()
+}
+
 // Attach puts the build's main attack on the hero for the data estimate, keeping the gear speeds the hero read. A skill
 // the data does not know is an error naming it and the hero keeps the constants (flagged); a build that has spent no
 // point on its attack yet (nothing to estimate) is not an error.

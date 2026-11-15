@@ -152,7 +152,7 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 	}
 	w.power, w.lastDiff = survival.PowerOf(hero), diff
 	in := survival.Input{Now: time.Now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
-		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: hero.OffenceUnread()}
+		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
 	d, err := w.led.Choose(in)
 	if err != nil {
 		return w.warn(err)
