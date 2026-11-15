@@ -185,6 +185,7 @@
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | uifix1 | proposed | - | `internal/watch/web/panels/statusline/`<br>`internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/web/panels/area-map/panel.json`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/whyline.json`<br>`internal/watch/whychange.json`<br>`internal/watch/whyline_test.go`<br>`internal/watch/testdata/`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/glancewire_pause_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/bot/whyline_test.go` | - |
+| uis7 | proposed | - | `internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/components.css`<br>`internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/layout_test.go`<br>`internal/watch/testdata/layout_default.js`<br>`internal/watch/testdata/layout_cells.golden`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js`<br>`tools/uishots.sh`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/tokens.css`<br>`internal/watch/glance.go`<br>`internal/watch/glance_questions.go`<br>`internal/watch/glance_questions_test.go`<br>`tools/uishots/fit.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/panels/needs-you/panel.json`<br>`internal/watch/testdata/glancepanels/`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`tools/uishots/fixtures_update.go`<br>`tools/uishots/fixtures_glance.go`<br>`tools/uishots/serve.go` | - |
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
@@ -231,14 +232,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0d160ecd4 11-15 05:24 `Merge agent/uis7: Merge branch 'main' into TASK-485` (uis7)
+- 845529a15 11-15 05:23 `Merge branch 'main' into TASK-485` (-)
 - 2fbc7bf94 11-15 05:22 `Merge agent/verifyp03d: Merge branch 'main' into TASK-488` (verifyp03d)
 - 131cb0fd9 11-15 05:21 `Merge branch 'main' into TASK-488` (-)
+- 5dff8b076 11-15 05:16 `Merge origin/main` (-)
 - 75c5015a8 11-15 04:56 `Merge agent/p02posted: Merge branch 'main' into p02posted` (p02posted)
+- cc8ebbad0 11-15 04:56 `Merge origin/main` (-)
 - 0e1966552 11-15 04:55 `Merge branch 'main' into p02posted` (-)
 - e4b41b884 11-15 04:54 `Merge agent/uis7review: uis7review: design review of S7 (cockpit default) before merge: approve with changes` (uis7review)
-- 5b13309c5 11-15 04:23 `Merge agent/verifyp02c: Merge branch 'main' into verifyp02c` (verifyp02c)
-- 59eebd86d 11-15 04:22 `Merge branch 'main' into verifyp02c` (-)
-- a66d9ba4a 11-15 03:40 `Merge agent/prfix5: Merge branch 'main' into prfix5` (prfix5)
-- d5a355255 11-15 03:39 `Merge branch 'main' into prfix5` (-)
-- 0d5377d2a 11-15 03:30 `Merge agent/uifix1: Merge branch 'main' into uifix1` (uifix1)
+- be9ac3373 11-15 04:25 `Merge origin/main into agent/uis7` (-)
 <!-- statusgen:end -->
