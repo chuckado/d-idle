@@ -85,11 +85,11 @@ func wirePower(db *data.DB) func(s *d2.Snapshot, area int, diff string, potions 
 		if err != nil {
 			return "" // a town or an area the profile does not cover: nothing to say
 		}
-		a, err := archetypeOf(m, db, p)
+		hero, a, err := heroOf(m, db, s, potions, warn)
 		if err != nil {
 			return warn(err)
 		}
-		zm, err := m.Zone(power.HeroFromPlayer(p, s.Merc, potions), a, z, m.P.DefaultDial)
+		zm, err := m.Zone(hero, a, z, m.P.DefaultDial)
 		if err != nil {
 			return warn(err)
 		}
@@ -97,12 +97,27 @@ func wirePower(db *data.DB) func(s *d2.Snapshot, area int, diff string, potions 
 	}
 }
 
+// heroOf reads the hero and puts the build's main attack on it for the skill damage estimate. An attack the data does
+// not know is reported through note and leaves the constants in place (flagged by the estimate).
+func heroOf(m *power.Model, db *data.DB, s *d2.Snapshot, potions int, note func(error) string) (power.Hero, *power.Archetype, error) {
+	a, spec, err := archetypeOf(m, db, s.Player)
+	if err != nil {
+		return power.Hero{}, nil, err
+	}
+	hero := power.HeroFromPlayer(s.Player, s.Merc, potions)
+	if err := m.Attach(&hero, spec); err != nil {
+		note(err)
+	}
+	return hero, a, nil
+}
+
 // archetypeOf resolves the hero's archetype from the build the leveler picks (data, no class names here).
-func archetypeOf(m *power.Model, db *data.DB, p *d2.Player) (*power.Archetype, error) {
+func archetypeOf(m *power.Model, db *data.DB, p *d2.Player) (*power.Archetype, power.BuildSpec, error) {
 	build := leveler.SelectBuild(strings.ToLower(p.Class.String()), p.Level, leveler.OwnedSkills(db, p))
 	spec, err := power.SpecFromBuild(plandata.FS, "build-"+build+".json", p.Level, classAttacks)
 	if err != nil {
-		return nil, err
+		return nil, spec, err
 	}
-	return m.P.Resolve(spec)
+	a, err := m.P.Resolve(spec)
+	return a, spec, err
 }

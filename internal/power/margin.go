@@ -329,3 +329,20 @@ func (m *Model) swing(h Hero) (float64, bool) {
 	s, err := m.SD.SwingSeconds(h.Class, wc, h.Attack.WSM)
 	return s, err == nil
 }
+
+// Attach puts the build's main attack on the hero for the data estimate, keeping the gear speeds the hero read. A skill
+// the data does not know is an error naming it and the hero keeps the constants (flagged); a build that has spent no
+// point on its attack yet (nothing to estimate) is not an error.
+func (m *Model) Attach(h *Hero, s BuildSpec) error {
+	if m.SD == nil || s.Attack == "" || s.AttackLevel <= 0 {
+		return nil
+	}
+	if _, err := m.SD.Skill(s.Attack); err != nil {
+		return err
+	}
+	a := AttackOf(s)
+	a.FCR, a.FCRKnown, a.IAS, a.IASKnown = h.Attack.FCR, h.Attack.FCRKnown, h.Attack.IAS, h.Attack.IASKnown
+	a.WeaponClass, a.WSM = h.Attack.WeaponClass, h.Attack.WSM
+	h.Attack = a
+	return nil
+}

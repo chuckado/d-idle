@@ -145,9 +145,9 @@ func (z ZoneMargin) Weakest() string {
 // developers; the UI shows Word only.
 func (z ZoneMargin) ShadowLine(clvl int) string {
 	f := func(v float64) string { return fmt.Sprintf("%.2f", math.Round(v*100)/100) }
-	return fmt.Sprintf("zone shadow: area=%d name=%q diff=%s clvl=%d arch=%s dial=%s word=%s bad=%s low=%s typical=%s elite=%s need=%s stay=%s perKill=%.1fs potions=%.1f weakest=%s",
+	return fmt.Sprintf("zone shadow: area=%d name=%q diff=%s clvl=%d arch=%s dial=%s word=%s bad=%s low=%s typical=%s elite=%s need=%s stay=%s perKill=%.1fs potions=%.1f weakest=%s dps=%.1f src=%s",
 		z.Area, z.Name, z.Diff, clvl, z.Archetype, z.Dial, z.Word(), f(z.Bad.Best), f(z.Bad.Low), f(z.Typical.Best), f(z.Elite.Best),
-		f(z.Enter), f(z.Stay), z.Bad.Terms.PerKill, z.Bad.Terms.Potions, orNone(z.Weakest()))
+		f(z.Enter), f(z.Stay), z.Bad.Terms.PerKill, z.Bad.Terms.Potions, orNone(z.Weakest()), z.Bad.Terms.HeroDPS, z.Bad.Terms.Offence)
 }
 
 func orNone(s string) string {
