@@ -1,10 +1,11 @@
 ---
 id: TASK-498
 title: 'decomp27: P07 monster melee block gate, P03c knock in a get-hit'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T14:52:00Z'
+updated_date: '2026-11-15T15:08:00Z'
 labels:
   - d2d
   - upstream-pr
