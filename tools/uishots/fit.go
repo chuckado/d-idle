@@ -39,10 +39,15 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	if strings.Contains(u, "?") {
 		sep = "&"
 	}
-	// click: a selector to press before the second measurement (the "..." menu); the sheet it opens must be hittable
+	// click: selectors to press, in order, before the second measurement (the "..." menu, then an entry of it; separated by
+	// "|"); hit: the selectors that must be hittable afterwards (default: the menu and the Edit layout button)
+	hit := q.Get("hit")
+	if hit == "" {
+		hit = "#menu-more,#btn-layout"
+	}
 	// hover and ctx: a selector to hover (pointerover, as a mouse does) or to right-click before the measurement; the tooltip or the
 	// menu it opens must lie inside the window and, beside a cell, not cover it
-	opts, _ := json.Marshal(map[string]string{"page": u, "click": q.Get("click"), "hover": q.Get("hover"), "ctx": q.Get("ctx")})
+	opts, _ := json.Marshal(map[string]any{"page": u, "click": strings.Split(q.Get("click"), "|"), "hit": strings.Split(hit, ","), "hover": q.Get("hover"), "ctx": q.Get("ctx")})
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
@@ -70,11 +75,14 @@ f.addEventListener('load', async () => {
       await wait(600);
       m.pop = pop(f.contentDocument, o.hover ? '#inv-tip' : '#inv-act', r);
     }
-    if (o.click) {
-      const b = f.contentDocument.querySelector(o.click);
-      m.clicked = o.click;
-      if (b) { b.click(); await wait(500); }
-      m.hits = hits(f.contentWindow, ['#menu-more', '#btn-layout']);
+    const steps = (o.click || []).filter(Boolean);
+    if (steps.length) {
+      m.clicked = steps.join(' then ');
+      for (const raw of steps) {
+        const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
+        if (b) { b.click(); await wait(500); } else if (!opt) { m.missing = sel; break; }
+      }
+      m.hits = hits(f.contentWindow, o.hit);
     }
     out.textContent = JSON.stringify(m);
   } catch (e) { out.textContent = JSON.stringify({ error: String(e) }); }
@@ -132,6 +140,7 @@ type fitResult struct {
 		Sheet  any    `json:"sheet"`
 	} `json:"pop"`
 	Clicked string          `json:"clicked"`
+	Missing string          `json:"missing"`
 	Hits    map[string]bool `json:"hits"`
 	Slots   []struct {
 		Slot string `json:"slot"`
@@ -193,8 +202,16 @@ func (r fitResult) judge() []string {
 			bad = append(bad, r.Pop.Sel+" covers the cell it belongs to")
 		}
 	}
+	if r.Missing != "" {
+		bad = append(bad, "there is nothing to press at "+r.Missing+" (the page lacks it)")
+	}
 	if r.Clicked != "" {
-		for _, sel := range []string{"#menu-more", "#btn-layout"} {
+		sels := make([]string, 0, len(r.Hits))
+		for sel := range r.Hits {
+			sels = append(sels, sel)
+		}
+		sort.Strings(sels)
+		for _, sel := range sels {
 			if !r.Hits[sel] {
 				bad = append(bad, "after pressing "+r.Clicked+", "+sel+" is not hittable (the sheet is clipped or covered)")
 			}

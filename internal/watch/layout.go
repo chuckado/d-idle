@@ -399,6 +399,9 @@ type LayoutConf struct {
 	// Slot are panels that fit a cockpit slot though their own panel.json does not say slot: true yet (the panel
 	// directories belong to other slices); a manifest key and this list mean the same.
 	Slot []string `json:"slot,omitempty"`
+	// Drawer are panels a cockpit opens as a side sheet (the "..." menu, ctx.openDrawer) instead of placing in a slot; the shell
+	// mounts them in every cockpit and polls them only while open.
+	Drawer []string `json:"drawer,omitempty"`
 }
 
 var shellLayoutConf = sync.OnceValues(func() (LayoutConf, error) {

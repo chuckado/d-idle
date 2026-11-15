@@ -4,6 +4,7 @@
 # nice 19 (never the user's desktop), one PNG and one DOM dump per page, width and theme, then the DOM contract check
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
+#   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
 #   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL] [--sizes 'WxH ...']   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
@@ -11,13 +12,14 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 char=0 extra= sizes_only=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
 	--out) out=$2; shift 2 ;;
 	--only) only=$2; shift 2 ;;
 	--fit) fit=1; shift ;;
+	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--ctx) extra="$extra&ctx=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
@@ -40,6 +42,31 @@ sp=$!
 timeout 600 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
 xp=$!
 sleep 2
+if [ "$cockpit" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/ck-*
+	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
+	pages="demo watch?layout=cockpit-demo&theme=dark
+real watch?layout=cockpit&theme=dark
+light watch?layout=cockpit-demo&theme=light
+tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
+tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
+tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress
+drawer-log watch?layout=cockpit-demo&theme=dark&drawer=log
+drawer-start watch?layout=cockpit-demo&theme=dark&drawer=onboarding"
+	echo "$pages" | while read -r pname pq; do
+		[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+		for sz in $sizes; do
+			w=${sz%x*} h=${sz#*x}
+			case $pname in tab-*|drawer-*) [ "$sz" = 390x844 ] || [ "${pname#drawer}" != "$pname" ] || continue ;; esac
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 60 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--force-prefers-reduced-motion --window-size="$w,$h" --virtual-time-budget=12000 --timeout=30000 --screenshot="$out/ck-$pname-$sz.png" "http://127.0.0.1:$port/$pq" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out" | wc -l
+	exit 0
+fi
 if [ "$char" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/char-*
 	for sz in ${sizes_only:-1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844}; do
@@ -72,6 +99,15 @@ demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
 demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
 demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=0&orders=20
 demo-menu watch?layout=cockpit-demo&theme=dark #btn-more
+cockpit-tab-map watch?layout=cockpit&theme=dark&tab=Map
+demo-tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
+demo-tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
+demo-tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress
+demo-areaswitch watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:nth-child(2) [data-panel=area-map]
+demo-layers watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:nth-child(2)|[data-panel=area-map]_[data-key=layers] [data-panel=area-map]_.layers,[data-panel=area-map]_[data-key=coverage]
+demo-drawer-log watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-alerts]
+demo-drawer-alerts watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log]|[data-key=tab-alerts] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+demo-drawer-start watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=onboarding] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
 overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
@@ -88,13 +124,17 @@ character-tip-plate watch/inventory?theme=dark hover=[data-key=item-16]
 character-menu-pack watch/inventory?theme=dark ctx=[data-key=item-10]
 character-menu-worn watch/inventory?theme=dark ctx=[data-key=slot-torso]
 character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
-	echo "$pages" | while read -r pname pq pclick; do
+	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
+	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
+	echo "$pages" | while read -r pname pq pclick phit; do
 		for sz in $sizes; do
 			w=${sz%x*} h=${sz#*x} ck=
+			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
 			case $pclick in
 			hover=* | ctx=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
-			?*) ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g')" ;;
+			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
+			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
 			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
