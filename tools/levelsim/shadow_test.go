@@ -187,7 +187,11 @@ func TestShadowReplayAttachHook(t *testing.T) {
 	if nw.Stays[0].Margin.Bad.Terms.Offence != "default" {
 		t.Errorf("paladin without a weapon must keep the constants, got %q", nw.Stays[0].Margin.Bad.Terms.Offence)
 	}
-	withW := run("bruiser", func(h *power.Hero) { pal(h); h.DmgMin, h.DmgMax, h.AR = 6, 12, 150; h.SetQuality(power.TermOffence, power.Derived) })
+	withW := run("bruiser", func(h *power.Hero) {
+		pal(h)
+		h.DmgMin, h.DmgMax, h.AR = 6, 12, 150
+		h.SetQuality(power.TermOffence, power.Derived)
+	})
 	if withW.Stays[0].Margin.Bad.Terms.Offence != "skill" {
 		t.Errorf("paladin with an assumed weapon: %q", withW.Stays[0].Margin.Bad.Terms.Offence)
 	}
