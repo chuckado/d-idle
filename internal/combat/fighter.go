@@ -258,6 +258,7 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 	}
 	in.Walking = f.walking.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
+	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {
 		if in.Crowd >= t.CrowdN {
 			in.CanRetreat = f.canRetreat(snap, hs)
@@ -267,6 +268,9 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		in.HasPortal = f.portalItem(snap) != nil
 	}
 	a := Decide(in)
+	if b, why := in.castBlocked(); b && a != TownPortal && in.InFight && decideBase(in) == TownPortal {
+		f.noteCastRefused(why, in)
+	}
 	if a == SafetyNone && f.packDrinkWanted(snap, in) {
 		a = DrinkLife // the belt is empty: drink() falls back to the pack (packdrink.go)
 	}
@@ -744,7 +748,7 @@ func (f *Fighter) watchCast(ctx context.Context, d time.Duration) (cut bool, err
 // fightBuff is the buff check of the fight loop (SKARMOR B1, card fixbuff): Buff otherwise runs only on need-buff
 // edges, so inside one long clear an armor with a real duration (Frozen Armor 120 s) lapsed. It is a clock comparison
 // per tick on the snapshot the loop already has. Casting is skipped where the portal cast is already refused: with
-// crowdAdjacentMax or more attackers in reach a hit cuts the cast (meleeCastGuard's rule, U).
+// crowdAdjacentMax or more attackers in reach the buff cast is cut (a hit interrupts a buff, V run decomp28 Q6; the TP cast is not, so this count is a buff rule only).
 func (f *Fighter) fightBuff(ctx context.Context, snap *d2.Snapshot, hs []Target) (bool, error) {
 	if len(f.profileFor(snap.Player).Buffs) == 0 {
 		return false, nil
@@ -939,4 +943,19 @@ func (f *Fighter) noteDrinkSkip(why string, in SafetyInput) {
 	f.skipWhy, f.skipAt = why, now
 	f.diagMu.Unlock()
 	f.log().Info(fmt.Sprintf("potion: not drinking because %s life=%d%% belt=%s", why, pct(in.Life, in.Max), in.Belt))
+}
+
+// noteCastRefused logs, at most every 2 s per reason, that the portal guard refused a town portal cast (the survival
+// action then is a potion or leaving the game).
+func (f *Fighter) noteCastRefused(why string, in SafetyInput) {
+	why = "portal cast refused: " + why
+	now := f.now()
+	f.diagMu.Lock()
+	if why == f.skipWhy && now.Sub(f.skipAt) < 2*time.Second {
+		f.diagMu.Unlock()
+		return
+	}
+	f.skipWhy, f.skipAt = why, now
+	f.diagMu.Unlock()
+	f.log().Info(fmt.Sprintf("%s life=%d%% mode=%d", why, pct(in.Life, in.Max), in.CastGuard.Mode))
 }
