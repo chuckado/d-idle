@@ -283,5 +283,7 @@
     return;
   }
   document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
+  // the page's own request got its answer and the view with it (inventory-actions.js refresh): the grids follow at once, not at the next poll
+  document.addEventListener('d2:inventory-fresh', function (e) { if (e.detail) draw(e.detail); });
   load(); artProbe(); setInterval(load, 4000);
 })();

@@ -123,7 +123,17 @@ character-tip-worn watch/inventory?theme=dark hover=[data-key=slot-rhand]
 character-tip-plate watch/inventory?theme=dark hover=[data-key=item-16]
 character-menu-pack watch/inventory?theme=dark ctx=[data-key=item-10]
 character-menu-worn watch/inventory?theme=dark ctx=[data-key=slot-torso]
-character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
+character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]
+character-nomerc watch/inventory?theme=dark&fx=nomerc
+character-absentmerc watch/inventory?theme=dark&fx=absentmerc
+character-deadmerc watch/inventory?theme=dark&fx=deadmerc
+character-deadmerc-light watch/inventory?theme=light&fx=deadmerc
+character-longnames watch/inventory?theme=dark&fx=longnames
+character-longnames-light watch/inventory?theme=light&fx=longnames
+character-pending watch/inventory?theme=dark&fx=pending expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=slot-rhand][data-pending]|[data-key=item-10][data-pending=equip]
+character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack] #belt,#cv-sel,#errands
+character-tip-light watch/inventory?theme=light hover=[data-key=item-16]
+character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -131,7 +141,7 @@ character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
 			case $pclick in
-			hover=* | ctx=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
+			hover=* | ctx=* | expect=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')" ;;
 			?*) ck="&click=$(enc "$pclick")" ;;
 			esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"

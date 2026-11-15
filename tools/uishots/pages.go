@@ -18,7 +18,7 @@ import (
 func mountPages(m *http.ServeMux, sim *watch.Sim, class string) {
 	inv := watch.NewInvAPI()
 	inv.Bind(fixtureDesk{})
-	ih := inv.Handler()
+	ih := withVariants(inv.Handler())
 	for _, p := range watch.InvRoutes {
 		m.Handle(p, ih)
 	}

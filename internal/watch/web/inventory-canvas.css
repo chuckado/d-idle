@@ -17,6 +17,11 @@
   .cv > .d-band-status { position: static; box-sizing: border-box; block-size: var(--cv-band); padding-block: 0; grid-template-rows: 100%; }
   .cv > .d-band-status .d-band-main { flex-wrap: nowrap; overflow: hidden; }
   .cv > .d-band-status .d-links { flex-wrap: nowrap; }
+  /* one line at every width (review c2c3 R8): the hero's life and mana are tiles on this page, so the two-line meters give way; the rest is one nowrap line each */
+  .cv > .d-band-status [data-panel="hero-meters"] { display: none; }
+  .cv > .d-band-status .d-band-main > .d-panel { flex: 0 1 auto; min-inline-size: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cv > .d-band-status .d-band-main > [data-panel="statusline"] { flex: 1 1 0; }
+  .cv > .d-band-status [data-panel="hero-status"] { flex-wrap: nowrap; }
 
   /* ---- the bar: search, four filters, gold, repair, sell ---- */
   .cv-bar { display: flex; align-items: center; gap: var(--cv-g); padding: 0 var(--cv-g); min-inline-size: 0; overflow: hidden; background: var(--d-bg); }
@@ -35,6 +40,7 @@
   .cv-btn { box-sizing: border-box; block-size: 28px; padding: 0 var(--d-sp-3); font: inherit; font-size: var(--d-fs-1); color: var(--d-text); background: var(--d-surface-2); cursor: pointer; white-space: nowrap;
     border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
   .cv-btn:hover { border-color: var(--d-text-3); }
+  .cv-btn[data-primary] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
   .cv-btn[data-danger] { border-color: var(--d-bad); color: var(--d-bad); }
   .cv-btn[aria-disabled="true"], .cv-btn:disabled { color: var(--d-text-3); border-style: dashed; cursor: default; }
   .cv :focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
@@ -75,7 +81,7 @@
   .cv .d-slot2 .sil { font-size: clamp(7px, calc(var(--u) * .14), 10px); letter-spacing: .04em; text-transform: uppercase; font-family: var(--d-font-body); overflow: hidden; }
   .cv .d-slot2[data-slot="neck"] .sil, .cv .d-slot2[data-slot="lring"] .sil, .cv .d-slot2[data-slot="rring"] .sil { text-transform: none; letter-spacing: 0; font-size: clamp(6.5px, calc(var(--u) * .12), 9px); }
   .cv .d-slot2[data-slot="neck"] .dur, .cv .d-slot2[data-slot="lring"] .dur, .cv .d-slot2[data-slot="rring"] .dur, .cv .d-slot2[data-slot="belt"] .dur { display: none; }
-  .cv .d-slot2 .nm { display: block; overflow-wrap: break-word; }
+  .cv .d-slot2 .nm { display: block; min-inline-size: 0; max-inline-size: 100%; overflow: hidden; overflow-wrap: anywhere; }
   .cv .d-slot2 .broken { transform: none; font-size: .64rem; letter-spacing: .06em; }
   .cv .d-slot2[data-slot="neck"] .nm, .cv .d-slot2[data-slot="lring"] .nm, .cv .d-slot2[data-slot="rring"] .nm { font-size: .85em; }
   .cv .d-slot2[data-fit="ok"] { border-color: var(--d-good); background: var(--d-state-bg-ok); }
@@ -104,8 +110,14 @@
   .cv-life i { flex: 1; background: var(--d-surface-3); border-radius: 1px; }
   .cv-life i.on { background: var(--d-life); }
   .cv-mhead .cv-kv { flex: none; }
+  .cv-mhead .cv-btn { flex: none; block-size: 22px; padding-inline: var(--d-sp-2); font-size: var(--d-fs-0); }
   /* his column: the doll (four rows) with his tiles under it; when the column is wide enough the tiles move beside a five-row doll */
   .cv-mbody { --mu: min(var(--u), calc(100cqi / var(--mcols))); flex: 1; min-block-size: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); align-content: start; }
+  .cv-mside { min-block-size: 0; min-inline-size: 0; display: flex; flex-direction: column; gap: 4px; margin-block-start: 4px; overflow: hidden; }
+  .cv-mextra { flex: 1 1 0; min-block-size: 0; overflow: hidden; display: flex; flex-direction: column; gap: 1px; }
+  .cv-mworn { margin: 0; flex: none; font-size: var(--d-fs-0); line-height: 1.3; color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cv-mworn[data-tone="dim"] { color: var(--d-text-3); }
+  .cv-mwhy { margin: 3px 0 0; flex: none; font-size: var(--d-fs-0); line-height: 1.3; color: var(--d-text-3); }
   .cv-mbody > .d-doll[data-owner="merc"] { --cell: var(--mu); inline-size: calc(var(--mcols) * var(--mu)); block-size: calc(4 * var(--mu));
     grid-template-columns: repeat(var(--mcols), var(--mu)); grid-auto-rows: var(--mu); grid-template-rows: none; }
   .cv .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso"; }
@@ -114,6 +126,13 @@
   .cv-mnote { margin: 0; padding: var(--d-sp-3); color: var(--d-text-2); font-size: var(--d-fs-1); }
   .cv-mnote b { display: block; color: var(--d-text); font-size: var(--d-fs-2); margin-block-end: 2px; }
 
+  /* no mercenary to draw (none hired, no block, unreadable): the column beside the hero's doll holds the set bar and the hero's values, four by four */
+  .cv-wear[data-solo] .cv-mercbox { gap: 4px; }
+  .cv-wear[data-solo] .inv-merc { flex: none; }
+  .cv-wear[data-solo] .cv-mnote { padding: 0 0 2px; }
+  .cv-wear[data-solo] .cv-setbar { margin-block: 0; }
+  .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max(34px, calc((6 * var(--u) - 74px) / 4)); }
+  .cv-wear[data-solo] [data-cv=hsheet] b { font-size: clamp(var(--d-fs-1), calc(var(--u) * .27), 1.35rem); }
   .cv-setbar { flex: none; display: flex; align-items: center; gap: 4px; margin-block: 6px; min-inline-size: 0; overflow: hidden; block-size: 26px; }
   .cv-setbar > * { flex: none; }
   .cv-setbar .cv-lab { font: 700 .64rem/1 var(--d-font-body); letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); margin-inline-end: 4px; }
@@ -135,14 +154,15 @@
   [data-cv=hsheet] { flex: none; grid-template-columns: repeat(var(--n, 8), minmax(0, 1fr)); grid-auto-rows: max(34px, calc(var(--u) * .66)); }
   /* his tiles: three columns under his doll (the wide variant is in the mbox query above) */
   [data-cv=msheet] b { font-size: clamp(12px, calc(var(--u) * .24), 19px); }
-  [data-cv=msheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); margin-block-start: 4px; }
+  [data-cv=msheet] { flex: none; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: max(34px, calc(var(--u) * .66)); }
 
   @container mbox (min-width: 30rem) {
     .cv-mbody { --mu: min(var(--u), calc(100cqi / (var(--mcols) + 1.4))); grid-template-columns: auto minmax(0, 1fr); grid-template-rows: none; gap: 0 var(--cv-p); }
     .cv-mbody > .d-doll[data-owner="merc"] { block-size: calc(5 * var(--mu)); }
     .cv .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso" ". . mtorso mtorso"; }
     .cv .d-doll[data-owner="merc"][data-cols="6"] { grid-template-areas: "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mhead mhead mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" "mrhand mrhand mtorso mtorso mlhand mlhand" ". . mtorso mtorso . ."; }
-    [data-cv=msheet] { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.5rem, 32%)), 1fr)); block-size: calc(5 * var(--mu)); }
+    [data-cv=msheet] { grid-template-columns: repeat(auto-fit, minmax(min(100%, max(5.5rem, 32%)), 1fr)); }
+    .cv-mside { margin-block-start: 0; }
   }
 
   .cv-log { flex: 1; min-block-size: 0; display: flex; flex-direction: column; container: clog / size; }
@@ -169,7 +189,18 @@
   .cv-sel p[data-tone="good"] { color: var(--d-good); }
   .cv-sel p[data-tone="prop"] { color: var(--d-q-magic, var(--d-text-2)); }
   .cv-sel .cv-why { flex: none; display: flex; flex-direction: column; gap: 1px; }
-  .cv-sel .cv-props { flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+  .cv-sel .cv-why p, .cv-sel .cv-qrows p { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }
+  .cv-sel .cv-cmp { flex: none; display: flex; flex-direction: column; gap: 1px; padding-block-start: 2px; border-block-start: var(--d-bw) solid var(--d-line); }
+  .cv-sel .cv-cmp p[data-tone="dim"] { color: var(--d-text-3); font-weight: 600; }
+  .cv-sel .cv-cmp p[data-tone="up"] { color: var(--d-good); }
+  .cv-sel .cv-cmp p[data-tone="dn"] { color: var(--d-bad); }
+  .cv-sel .cv-qrows { flex: none; display: flex; flex-direction: column; gap: 2px; }
+  .cv-sel .cv-qrows p { display: flex; align-items: center; gap: 4px; color: var(--d-info); }
+  .cv-sel .cv-qrows p .t { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .cv-sel .cv-qrows p button { flex: none; margin-inline-start: auto; padding: 0 6px; block-size: 18px; font: inherit; font-size: var(--d-fs-0); color: var(--d-text); background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); cursor: pointer; }
+  .cv-sel .cv-town { margin-inline-start: 6px; padding: 0 5px; border-radius: 2px; font: 700 .55rem/1.5 var(--d-font-body); letter-spacing: .05em; background: var(--d-state-bg-info); color: var(--d-info); }
+  .cv-sel .cv-props { flex: 0 1 auto; min-block-size: 0; display: flex; flex-direction: column; gap: 1px; overflow: hidden; }
+  .cv-sel .cv-acts button[data-danger] { border-color: var(--d-bad); color: var(--d-bad); }
   .cv-sel .cv-acts { flex: none; margin-block-start: auto; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 22px; gap: 2px; align-content: start; overflow: hidden; }
   .cv-sel .cv-acts button { min-inline-size: 0; padding: 0 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font: inherit; font-size: clamp(9.5px, calc(var(--u) * .17), 11.5px); color: var(--d-text);
     background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); cursor: pointer; }
@@ -219,7 +250,7 @@
     .cv[data-tab="hero"] .cv-slot[data-slot="store"], .cv[data-tab="pack"] .cv-slot[data-slot="who"] { display: none; }
     .cv-wear { grid-template-columns: minmax(0, 1fr); }
     .cv-hero > .d-doll { margin-inline: auto; }
-    .cv-store { grid-template-columns: calc(6 * var(--u)) minmax(0, 1fr); }
-    .cv-storez { align-items: flex-start; }
+    .cv-store { grid-template-columns: calc(6 * var(--u)) minmax(0, 1fr); inline-size: 100%; }
+    [data-cv=hsheet], .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 34px; }
   }
 }

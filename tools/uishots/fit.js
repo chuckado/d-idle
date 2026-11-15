@@ -18,15 +18,17 @@ export function measure(win, opts) {
     if (bad) over.push({ el: label, dh: dh > 1 ? dh : 0, dw: dw > 1 && !ell ? dw : 0 });
   };
   for (const n of d.querySelectorAll('[data-cockpit-slot]')) if (vis(n)) test(n, 'slot ' + n.dataset.cockpitSlot);
-  for (const root of d.querySelectorAll('[data-cockpit-panel]')) {
+  for (const root of d.querySelectorAll('[data-cockpit-panel], [data-fit-deep]')) {
     if (!vis(root)) continue;
-    test(root, 'panel ' + (root.dataset.panel || '?'));
+    test(root, root.dataset.fitDeep !== undefined ? 'band' : 'panel ' + (root.dataset.panel || '?'));
     // every descendant too: content cut one level below the root is still cut. A scroll container's own children are its business.
     for (const n of root.querySelectorAll('*')) {
       if (!vis(n) || n.closest('[data-scroll]') && n.closest('[data-scroll]') !== n && scroller(n.closest('[data-scroll]'))) continue;
       test(n, name(n));
     }
   }
+  // The character screen (card uic4, review c2c3 R14): checks the first fit check let through. Only on a page that has the canvas frame.
+  const cvx = d.querySelector('.cv') ? charChecks(win, d, vis, cs) : null;
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
@@ -70,7 +72,7 @@ export function measure(win, opts) {
     [prev, cur] = [cur, prev];
   }
   return {
-    vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, empty, unready, slots,
+    vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
@@ -83,6 +85,86 @@ export function hits(win, selectors) {
     if (!r || !r.width) { out[sel] = false; continue; }
     const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
     out[sel] = !!at && (at === n || n.contains(at));
+  }
+  return out;
+}
+
+// What the first fit check missed on the character screen (review c2c3, R1 R2 R3 R4 R8 R10 R13):
+//  zero:  a box with content and no width (the storage side column on a phone: 0 px wide, nothing says so)
+//  cut:   a value or label of a values tile that an ellipsis cut ("L...", "3..."): a number never reads cut
+//  tiles: a values tile far taller than what it holds (148 by 157 px for "Level 14")
+//  inner: the largest empty square inside a panel, where painted things are text, controls, cells, tiles, lists
+function charChecks(win, d, vis, cs) {
+  const zero = [], cut = [], tiles = [];
+  const label = (n) => { const p = n.closest('[data-panel]'); return (p ? p.dataset.panel : '?') + ' ' + n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : ''); };
+  for (const panel of d.querySelectorAll('[data-cockpit-panel]')) {
+    const pr = vis(panel);
+    if (!pr) continue;
+    for (const n of panel.querySelectorAll('*')) {
+      if (n.closest('[hidden]')) continue;
+      const st = cs(n);
+      if (st.display === 'none' || st.display === 'contents' || st.visibility === 'hidden' || /^(SCRIPT|STYLE|OPTION|TEMPLATE)$/.test(n.tagName)) continue;
+      const r = n.getBoundingClientRect();
+      if (r.width < 1 && r.height > 4 && (n.children.length || (n.textContent || '').trim())) zero.push(label(n));
+    }
+  }
+  for (const n of d.querySelectorAll('.cv-sheet label, .cv-sheet b')) {
+    if (vis(n) && n.scrollWidth > n.clientWidth + 1) cut.push(label(n) + ' "' + (n.textContent || '').trim().slice(0, 14) + '" [' + n.scrollWidth + '/' + n.clientWidth + ']');
+  }
+  for (const t of d.querySelectorAll('.cv-sheet > div')) {
+    const r = vis(t);
+    if (!r) continue;
+    const need = [...t.children].reduce((h, c) => h + c.getBoundingClientRect().height, 0);
+    if (r.height > 2.4 * need + 6 && r.height > 60) tiles.push(label(t) + ' ' + Math.round(r.width) + 'x' + Math.round(r.height) + ' holds ' + Math.round(need) + ' px');
+  }
+  // dead space inside the panels: the largest empty square among what is painted (4 px cells)
+  const cell = 4;
+  let inner = { size: 0, at: [0, 0], panel: '' };
+  for (const panel of d.querySelectorAll('[data-cockpit-panel]')) {
+    const pr = vis(panel);
+    if (!pr) continue;
+    const cols = Math.ceil(pr.width / cell), rows = Math.ceil(pr.height / cell), cov = new Uint8Array(cols * rows);
+    const mark = (r) => {
+      for (let y = Math.max(0, Math.floor((r.top - pr.top) / cell)); y < Math.min(rows, Math.ceil((r.bottom - pr.top) / cell)); y++) {
+        for (let x = Math.max(0, Math.floor((r.left - pr.left) / cell)); x < Math.min(cols, Math.ceil((r.right - pr.left) / cell)); x++) cov[y * cols + x] = 1;
+      }
+    };
+    // the panel's own padding is not empty space: the border of the zone
+    mark({ left: pr.left, right: pr.right, top: pr.top, bottom: pr.top + 12 }); mark({ left: pr.left, right: pr.right, top: pr.bottom - 12, bottom: pr.bottom });
+    mark({ left: pr.left, right: pr.left + 12, top: pr.top, bottom: pr.bottom }); mark({ left: pr.right - 12, right: pr.right, top: pr.top, bottom: pr.bottom });
+    for (const n of panel.querySelectorAll('.d-cells, .d-doll, .cv-sheet > div, .cv-log, .cv-rules, .cv-pop, button, input, img, li, .cv-life, .cv-st, .cv-setbar > *')) {
+      if (n.closest('[hidden]')) continue;
+      const r = vis(n);
+      if (r) mark(r);
+    }
+    const walker = d.createTreeWalker(panel, 4); // text nodes: where the words are, not the box they sit in
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+      if (!(t.nodeValue || '').trim() || (t.parentNode.closest && t.parentNode.closest('[hidden]'))) continue;
+      const rg = d.createRange(); rg.selectNodeContents(t);
+      for (const r of rg.getClientRects()) if (r.width > 0 && r.height > 0) mark(r);
+    }
+    let best = 0, bx = 0, by = 0, prev = new Int16Array(cols + 1), cur = new Int16Array(cols + 1);
+    for (let y = 0; y < rows; y++) {
+      cur.fill(0);
+      for (let x = 0; x < cols; x++) {
+        if (cov[y * cols + x]) continue;
+        const sq = Math.min(prev[x], prev[x + 1], cur[x]) + 1;
+        cur[x + 1] = sq;
+        if (sq > best) { best = sq; bx = x; by = y; }
+      }
+      [prev, cur] = [cur, prev];
+    }
+    if (best * cell > inner.size) inner = { size: best * cell, at: [Math.round(pr.left + (bx - best + 1) * cell), Math.round(pr.top + (by - best + 1) * cell)], panel: panel.dataset.panel || '?' };
+  }
+  return { zero, cut, tiles, inner };
+}
+
+// The elements a page says must be on it, with a size (opts.expect): the machine form of "this state is drawn".
+export function expects(win, selectors) {
+  const d = win.document, out = {};
+  for (const sel of selectors) {
+    const n = d.querySelector(sel), r = n && n.getBoundingClientRect();
+    out[sel] = !!r && r.width > 0 && r.height > 0;
   }
   return out;
 }
