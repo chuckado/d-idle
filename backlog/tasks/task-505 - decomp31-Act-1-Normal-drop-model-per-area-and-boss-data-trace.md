@@ -15,6 +15,7 @@ card: "decomp31"
 owns:
   - "docs/research/decomp31-drops.md"
   - "internal/plandata/dropmodel-normal.json"
+  - "docs/plan/data/dropmodel-normal.json"
   - "tools/emu/dm_"
 exclusive: []
 contracts: []
