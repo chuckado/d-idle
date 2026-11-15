@@ -475,10 +475,15 @@
     document.addEventListener('d2:inventory-fresh', function (e) { view = e.detail; drawBar(view); drawSel(); });
     document.addEventListener('d2:repair', function (e) { repair = e.detail; if (view) drawRepair(view, repair); });
     function select(key) { selKey = key; if (view) { markSel(); fitSlots(); drawSel(); } if (phone()) sheet(true); }
+    $('cv-more').addEventListener('click', function () { var l = $('cv-morelist'); l.hidden = !l.hidden; $('cv-more').setAttribute('aria-expanded', l.hidden ? 'false' : 'true'); });
     $('cv-errtoggle').addEventListener('click', function () {
       var w = $('cv-errwrap'), on = !w.hasAttribute('data-open');
       if (on) w.setAttribute('data-open', ''); else w.removeAttribute('data-open');
       $('cv-errtoggle').setAttribute('aria-expanded', on ? 'true' : 'false');
+    });
+    document.addEventListener('click', function (e) { // the pages menu closes with a tap outside it
+      var l = $('cv-morelist'), t = e.target;
+      if (l && !l.hidden && t && t.closest && !t.closest('#cv-more, #cv-morelist')) { l.hidden = true; $('cv-more').setAttribute('aria-expanded', 'false'); }
     });
     document.addEventListener('click', function (e) { // a tap anywhere else on the page puts the sheet away (an item or the sheet itself keeps it)
       var c = $('cv'), t = e.target;
@@ -493,6 +498,7 @@
     document.addEventListener('d2:select', function (e) { if (/^(item|slot)-/.test(e.detail || '')) select(e.detail); }); // a right-click selects too
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && popOpen) { pop(false); return; }
+      if (e.key === 'Escape' && $('cv-morelist') && !$('cv-morelist').hidden) { $('cv-morelist').hidden = true; $('cv-more').setAttribute('aria-expanded', 'false'); return; }
       if (e.key === 'Escape' && $('cv') && $('cv').dataset.sheet) { sheet(false); return; }
       var t = e.target, typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA');
       if (e.key === '/' && !typing && !e.ctrlKey && !e.metaKey && !e.altKey) { e.preventDefault(); $('cv-q').focus({ preventScroll: true }); }

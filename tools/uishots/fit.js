@@ -8,6 +8,8 @@ export function measure(win, opts) {
   // a list that scrolls on purpose: marked data-scroll, inside a panel that declares scroll, and really a scroll container
   // data-vscroll: a region of the page that scrolls on purpose (the phone's storage canvas, the item sheet); it only counts while the browser really scrolls it
   const scroller = (n) => (n.hasAttribute('data-scroll') && /^(auto|scroll)$/.test(cs(n).overflowY) && decl.has((n.closest('[data-panel]') || { dataset: {} }).dataset.panel)) || (n.hasAttribute('data-vscroll') && /^(auto|scroll)$/.test(cs(n).overflowY));
+  // data-hscroll: a row that scrolls sideways on purpose (the phone's chip row)
+  const hscroller = (n) => n.hasAttribute('data-hscroll') && /^(auto|scroll)$/.test(cs(n).overflowX);
   // a few words of the element's own text name it in the verdict (a cell, a slot, a chip), so the fix is found without a debugger
   const name = (n) => { const p = n.closest('[data-panel]'); return (p ? p.dataset.panel : '?') + ' ' + n.tagName.toLowerCase() + (n.className && typeof n.className === 'string' ? '.' + n.className.trim().split(/\s+/)[0] : '') + (n.children.length < 3 && n.textContent ? ' "' + n.textContent.trim().slice(0, 16) + '"' : '') + ' [' + n.scrollHeight + '/' + n.clientHeight + ' ' + n.scrollWidth + '/' + n.clientWidth + ']'; };
   const over = [];
@@ -16,7 +18,7 @@ export function measure(win, opts) {
     const dh = n.scrollHeight - n.clientHeight, dw = n.scrollWidth - n.clientWidth;
     const ell = cs(n).textOverflow === 'ellipsis'; // one line cut with an ellipsis: width only, by design
     const clamp = cs(n).webkitLineClamp && cs(n).webkitLineClamp !== 'none'; // a text cut to N lines with an ellipsis: by design
-    const bad = (dh > 1 && !scroller(n) && !clamp) || (dw > 1 && !ell && !scroller(n));
+    const bad = (dh > 1 && !scroller(n) && !clamp) || (dw > 1 && !ell && !scroller(n) && !hscroller(n));
     if (bad) over.push({ el: label, dh: dh > 1 ? dh : 0, dw: dw > 1 && !ell ? dw : 0 });
   };
   for (const n of d.querySelectorAll('[data-cockpit-slot]')) if (vis(n)) test(n, 'slot ' + n.dataset.cockpitSlot);
@@ -25,8 +27,8 @@ export function measure(win, opts) {
     test(root, root.dataset.fitDeep !== undefined ? 'band' : 'panel ' + (root.dataset.panel || '?'));
     // every descendant too: content cut one level below the root is still cut. A scroll container's own children are its business.
     for (const n of root.querySelectorAll('*')) {
-      const sc = n.closest('[data-scroll],[data-vscroll]');
-      if (!vis(n) || sc && sc !== n && root.contains(sc) && scroller(sc)) continue;
+      const sc = n.closest('[data-scroll],[data-vscroll],[data-hscroll]');
+      if (!vis(n) || sc && sc !== n && root.contains(sc) && (scroller(sc) || hscroller(sc))) continue;
       test(n, name(n));
       // the deep band: a part that reaches out of the band's box is named (the band is not clipped itself, so only its parts can say what is cut)
       if (root.dataset.fitDeep !== undefined) {
@@ -104,7 +106,9 @@ export function measure(win, opts) {
 export function hits(win, selectors) {
   const d = win.document, out = {};
   for (const sel of selectors) {
-    const n = d.querySelector(sel), r = n && n.getBoundingClientRect();
+    const n = d.querySelector(sel);
+    if (n && n.scrollIntoView && !n.closest('.cv-sel')) n.scrollIntoView({ block: 'start' }); // a target below the fold of a scrolling page is reached by scrolling, as a thumb does
+    const r = n && n.getBoundingClientRect();
     if (!r || !r.width) { out[sel] = false; continue; }
     const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
     out[sel] = !!at && (at === n || n.contains(at));

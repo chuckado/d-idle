@@ -89,8 +89,8 @@ const charPage = `<!DOCTYPE html>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/skills">Skills</a>
   <a class="d-btn" data-size="sm" data-variant="ghost" href="/watch/policy">Policy</a>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
-  <details class="cv-more" id="cv-more"><summary class="d-btn" data-size="sm" data-variant="ghost" aria-label="More pages">&hellip;</summary>
-   <div class="cv-morelist" role="group" aria-label="Pages"><a href="/watch/inventory" aria-current="page">Inventory</a><a href="/watch/skills">Skills</a><a href="/watch/policy">Policy</a><a href="/watch/return">Return</a></div></details>
+  <button class="d-btn cv-morebtn" data-size="sm" data-variant="ghost" id="cv-more" type="button" aria-label="More pages" aria-expanded="false" aria-controls="cv-morelist">&hellip;</button>
+  <div class="cv-morelist" id="cv-morelist" role="group" aria-label="Pages" hidden><a href="/watch/inventory" aria-current="page">Inventory</a><a href="/watch/skills">Skills</a><a href="/watch/policy">Policy</a><a href="/watch/return">Return</a></div>
  </nav>
 </header>
 <div class="cv-bar" id="cv-bar" role="toolbar" aria-label="Search, filters, gold and errands" data-cockpit-slot="band" data-fit-deep>
