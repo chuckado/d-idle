@@ -1,10 +1,13 @@
 ---
 id: TASK-479
-title: 'uic4: Apply the C2C3 design review to the character screen (R1 to R14) and the fit fixtures'
-status: Proposed
+title: >-
+  uic4: Apply the C2C3 design review to the character screen (R1 to R14) and the
+  fit fixtures
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T06:38:00Z'
+updated_date: '2026-11-15T11:15:00Z'
 labels:
   - watch
   - bug
