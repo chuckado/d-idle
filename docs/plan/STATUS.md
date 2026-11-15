@@ -176,6 +176,7 @@
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | verifyp03c | proposed | - | `docs/upstream/verifier-p03b-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
+| uib5 | in-progress | - | `cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_test.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | uib9 | in-progress | - | `internal/d2dctl/item_verbs_merc.go`<br>`internal/d2dctl/item_verbs_merc_test.go`<br>`internal/invdesk/mercverbs.go`<br>`internal/invdesk/mercverbs_test.go`<br>`internal/invdesk/sets.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go`<br>`docs/research/merc-gear.md` | - |
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -223,6 +224,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 96bd31812 11-15 01:08 `Merge agent/uib5: Merge branch 'main' into TASK-470` (uib5)
+- d8ac2116a 11-15 01:08 `Merge branch 'main' into TASK-470` (-)
 - 76d17a905 11-15 00:50 `Merge agent/uic3: Merge branch 'main' into TASK-463` (uic3)
 - 70eb65784 11-15 00:50 `Merge branch 'main' into TASK-463` (-)
 - 8e955fe5a 11-15 00:48 `Merge agent/prfix3: Merge branch 'main' into prfix3` (prfix3)
@@ -231,6 +234,4 @@
 - c895fcf74 11-15 00:26 `Merge agent/uib9: Merge branch 'main' into TASK-472` (uib9)
 - feba09175 11-15 00:25 `Merge branch 'main' into TASK-472` (-)
 - 9ddb9dbf3 11-15 00:24 `Merge agent/verifyp03c: Merge branch 'main' into TASK-468` (verifyp03c)
-- c57af20e0 11-15 00:24 `Merge agent/drills012: Merge branch 'main' into drills012` (drills012)
-- bf8749b78 11-15 00:22 `Merge branch 'main' into TASK-468` (-)
 <!-- statusgen:end -->

@@ -142,12 +142,15 @@ cmd/d2bot/d2dbackend.go  credit-runner  maptrail
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
 cmd/d2bot/d2dbackend.go  credit-runner  uib1
+cmd/d2bot/d2dbackend.go  credit-runner  uib5
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
 cmd/d2bot/dangerwire.go  credit-runner  survA
 cmd/d2bot/dangerwire.go  credit-runner  survB
 cmd/d2bot/funwire.go  credit-runner  maphistoryA
 cmd/d2bot/gearsets_test.go  credit-runner  gearsets
+cmd/d2bot/glancewire.go  credit-runner  uib5
+cmd/d2bot/glancewire_test.go  credit-runner  uib5
 cmd/d2bot/goldfarmwire_test.go  credit-runner  repairtrip
 cmd/d2bot/invverbs.go  credit-runner  botinstant
 cmd/d2bot/invverbs.go  credit-runner  itemverbs2
@@ -172,6 +175,7 @@ cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/live.go  credit-runner  survB
 cmd/d2bot/live.go  credit-runner  uib1
+cmd/d2bot/live.go  credit-runner  uib5
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
