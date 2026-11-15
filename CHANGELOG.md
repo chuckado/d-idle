@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into agent/uis5 <!--sg:agent/uis5-->
 - Merge branch 'main' into TASK-477 <!--sg:agent/uic23review-->
 - Merge branch 'main' into TASK-473 <!--sg:agent/decomp23-->
 - Merge branch 'main' into TASK-476 <!--sg:agent/verifyp02-->

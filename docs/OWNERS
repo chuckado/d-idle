@@ -623,6 +623,9 @@ internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
+internal/watch/commands.go  credit-runner  uis5
+internal/watch/commands_post.go  credit-runner  uis5
+internal/watch/commands_post_test.go  credit-runner  uis5
 internal/watch/commands_test.go  credit-runner  uis4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
@@ -648,6 +651,7 @@ internal/watch/layout.go  credit-runner  uis6
 internal/watch/layout_test.go  credit-runner  uis1
 internal/watch/logtab.go  credit-runner  uis6
 internal/watch/logtab_test.go  credit-runner  uis6
+internal/watch/mapview.go  credit-runner  uis5
 internal/watch/mercapi.go  credit-runner  botmerc
 internal/watch/mercapi_test.go  credit-runner  botmerc
 internal/watch/minimapfix_test.go  credit-runner  minimapfix
@@ -715,7 +719,9 @@ internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
+internal/watch/testdata/orders_dom.js  credit-runner  uis5
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
+internal/watch/testdata/orders_dom.txt  credit-runner  uis5
 internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
@@ -728,6 +734,7 @@ internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees2
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees2
 internal/watch/testdata/uic3/  credit-runner  uic3
+internal/watch/testdata/zonemap/  credit-runner  uis5
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
 internal/watch/web/app.css  credit-runner  toastfix
@@ -781,10 +788,14 @@ internal/watch/web/panels/map/  credit-runner  uis6
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uis4
+internal/watch/web/panels/orders/  credit-runner  uis5
+internal/watch/web/panels/zone-map/  credit-runner  uis5
 internal/watch/web/shell.css  credit-runner  uis1
+internal/watch/web/shell.css  credit-runner  uis5
 internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  uis1
+internal/watch/web/shell.js  credit-runner  uis5
 internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/shell.json  credit-runner  uis6
@@ -797,6 +808,7 @@ internal/watch/whyline.json  credit-runner  repairtrip
 internal/watch/whyline.json  credit-runner  staletarget
 internal/watch/whyline_test.go  credit-runner  repairtrip
 internal/watch/whyline_test.go  credit-runner  staletarget
+internal/watch/zonemap_test.go  credit-runner  uis5
 tools/bounce3  pro-runner  bounce3
 tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
@@ -840,6 +852,7 @@ tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots/  credit-runner  uic3
+tools/uishots/  credit-runner  uis5
 tools/uishots/  credit-runner  uis6
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures_commands.go  credit-runner  uis4

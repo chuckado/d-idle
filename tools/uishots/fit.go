@@ -145,6 +145,15 @@ type fitResult struct {
 	Slots   []struct {
 		Slot string `json:"slot"`
 	} `json:"slots"`
+	Zones struct {
+		N       int    `json:"n"`
+		Rows    int    `json:"rows"`
+		MinH    int    `json:"minH"`
+		Cut     int    `json:"cut"`
+		Menu    bool   `json:"menu"`
+		Host    string `json:"host"`
+		Overlap int    `json:"overlap"`
+	} `json:"zones"`
 	Covered int    `json:"covered"`
 	Hole    int    `json:"hole"`
 	HoleAt  [2]int `json:"holeAt"`
@@ -191,6 +200,20 @@ func (r fitResult) judge() []string {
 	}
 	if r.Hole > fitGap {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
+	}
+	if z := r.Zones; z.N > 0 {
+		if z.Rows < 10 {
+			bad = append(bad, fmt.Sprintf("the zone map shows %d rows of its 10", z.Rows))
+		}
+		if z.MinH < 20 {
+			bad = append(bad, fmt.Sprintf("a zone row is %d px high (least 20)", z.MinH))
+		}
+		if z.Cut > 0 {
+			bad = append(bad, fmt.Sprintf("%d zone names have no room (under 24 px wide)", z.Cut))
+		}
+		if z.Overlap > 0 && !(z.Host == "self" && r.VW <= 480) { // the phone's sheet replaces the map (J: a zone tap swaps the sheet)
+			bad = append(bad, fmt.Sprintf("the zone menu (in %s) covers %d zone buttons", z.Host, z.Overlap))
+		}
 	}
 	if r.Pop != nil {
 		switch {
@@ -303,7 +326,14 @@ func fitDir(dir string) ([]string, bool, error) {
 			lines = append(lines, "FAIL "+name+": "+strings.Join(bad, "; "))
 			ok = false
 		default:
-			lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d slots, largest gap %d px", name, r.VW, r.VH, len(r.Slots), r.Hole))
+			extra := ""
+			if r.Zones.N > 0 {
+				extra = fmt.Sprintf(", %d zones in %d rows (least %d px)", r.Zones.N, r.Zones.Rows, r.Zones.MinH)
+				if r.Zones.Menu {
+					extra += ", menu open in " + r.Zones.Host
+				}
+			}
+			lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d slots, largest gap %d px%s", name, r.VW, r.VH, len(r.Slots), r.Hole, extra))
 		}
 	}
 	return lines, ok, nil

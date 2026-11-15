@@ -222,6 +222,9 @@
   .d-layoutnote[hidden] { display: none; }
 
   /* the shell's toast stack (ctx.toast); the old toasts share the element until their panels move */
+  /* a sheet over one tile (ctx.tileSheet): fills the tile it is in, scrolls inside, never leaves it */
+  .d-tilesheet { position: absolute; inset: 0; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--d-surface-2); border-radius: var(--d-r-2); }
+  .d-tilesheet[hidden] { display: none; }
   .d-toasts { position: fixed; inset-block-start: var(--d-sp-3); inset-inline-end: var(--d-sp-3); z-index: var(--d-z-toast); display: grid; gap: var(--d-sp-2); max-inline-size: min(92vw, 380px); }
 
   /* overlay mode (?mode=overlay, user 2026-11-09: the stream overlay is a mode of this shell): the status band alone on

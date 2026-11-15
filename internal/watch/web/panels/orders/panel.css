@@ -6,7 +6,7 @@
     letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); }
   [data-panel="orders"] .o-head em { font-style: normal; font-weight: 400; letter-spacing: 0; text-transform: none; color: var(--d-text-2); font-size: var(--d-fs-1); }
   [data-panel="orders"] .o-verbs { flex: none; display: flex; gap: var(--d-sp-1); }
-  [data-panel="orders"] .o-verbs .d-btn { flex: 1 1 0; min-inline-size: 0; min-block-size: 28px; justify-content: center; padding-inline: var(--d-sp-1); cursor: default; font-size: var(--d-fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; text-align: center; line-height: 26px; block-size: 28px; padding-block: 0; }
+  [data-panel="orders"] .o-verbs .d-btn { flex: 1 1 0; min-inline-size: 0; min-block-size: 28px; justify-content: center; padding-inline: var(--d-sp-1); cursor: pointer; font-size: var(--d-fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; text-align: center; line-height: 26px; block-size: 28px; padding-block: 0; }
   [data-panel="orders"] .o-verbs .d-btn:first-child { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
   [data-panel="orders"] .o-safety { flex: none; padding: 2px var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-state-bg-warn); color: var(--d-warn);
     font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -30,4 +30,13 @@
   [data-panel="orders"] .o-x { background: none; border: 0; padding: 0; color: var(--d-text-3); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 22px; min-block-size: 22px; }
   [data-panel="orders"] .o-x:hover { color: var(--d-danger); }
   [data-panel="orders"] .o-empty { padding-block: var(--d-sp-2); color: var(--d-text-2); font-size: var(--d-fs-1); }
+  [data-panel="orders"] .o-verbs .d-btn:disabled { opacity: .5; cursor: not-allowed; }
+  [data-panel="orders"] .o-why { flex: none; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-panel="orders"] .o-list:focus-visible { outline: 2px solid var(--d-focus, var(--d-accent)); outline-offset: -2px; }
+  /* the More sheet is the shell's tile sheet (ctx.tileSheet): it fills this tile */
+  [data-panel="orders"] .o-sheethead { display: flex; justify-content: space-between; align-items: center; font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-3); }
+  [data-panel="orders"] .o-filter { flex: none; min-block-size: 28px; padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-bg); color: var(--d-text); font-size: var(--d-fs-1); }
+  [data-panel="orders"] .o-items { flex: 1 1 0; min-block-size: 0; overflow-y: auto; display: grid; align-content: start; }
+  [data-panel="orders"] .o-item { text-align: start; min-block-size: 28px; padding: 0 var(--d-sp-2); background: none; border: 0; border-block-start: var(--d-bw) solid var(--d-line); color: var(--d-text); font-size: var(--d-fs-1); cursor: pointer; }
+  [data-panel="orders"] .o-item:hover, [data-panel="orders"] .o-item:focus-visible { background: var(--d-surface-3); }
 }

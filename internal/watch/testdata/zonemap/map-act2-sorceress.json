@@ -1,0 +1,70 @@
+{
+ "schema": "watch.ordersmap/1",
+ "seq": 8,
+ "act": 2,
+ "acts": [
+  {
+   "act": 1,
+   "populated": true
+  },
+  {
+   "act": 2,
+   "populated": false
+  },
+  {
+   "act": 3,
+   "populated": false
+  },
+  {
+   "act": 4,
+   "populated": false
+  },
+  {
+   "act": 5,
+   "populated": false
+  }
+ ],
+ "populated": false,
+ "box": {
+  "x": 0,
+  "y": 0,
+  "w": 0,
+  "h": 0
+ },
+ "hero": {
+  "class": "sorceress",
+  "clvl": 7,
+  "area": "Blood Moor",
+  "areaId": 2,
+  "known": true
+ },
+ "nodes": [],
+ "edges": [],
+ "openOrders": 3,
+ "maxOpenOrders": 5,
+ "ladder": {
+  "loopOpen": true,
+  "queueOpen": true,
+  "queueTeaser": "Clear the Den of Evil for a second slot.",
+  "queueSlots": 2,
+  "queueWaiting": 1
+ },
+ "areas": [
+  "Blood Moor",
+  "Den of Evil",
+  "Cold Plains",
+  "Cave Level 1",
+  "Burial Grounds",
+  "Crypt",
+  "Stony Field",
+  "Underground Passage 1",
+  "Dark Wood",
+  "Black Marsh",
+  "Hole Level 1",
+  "Forgotten Tower",
+  "Tamoe Highland",
+  "Pit Level 1",
+  "Monastery Gate",
+  "Outer Cloister"
+ ]
+}
