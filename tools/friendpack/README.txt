@@ -13,4 +13,5 @@ Full guide: guide/friend-guide.md. Source code and licences: src/ and licenses/.
 `sha256sum -c SHA256SUMS`.
 
 Not affiliated with or endorsed by Blizzard Entertainment. Bring your own legally owned Diablo II 1.14d game files.
+Only the data archives (*.mpq) of your game folder are mounted into the container, read-only, one file each; your key file and the rest of the folder are never visible to it.
 Offline only (no Battle.net). GPL-3.0-or-later (licenses/GPL-3.0.txt, source in src/). No warranty.

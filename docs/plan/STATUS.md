@@ -164,6 +164,7 @@
 | survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| survreplay | proposed | - | `docs/survival/replay-2026-11-14.md`<br>`internal/survival/testdata`<br>`tools/levelsim/controller.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -211,14 +212,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d098d1799 11-14 19:08 `Merge agent/survreplay: Merge branch 'main' into TASK-458` (survreplay)
+- ae3074631 11-14 19:07 `Merge branch 'main' into TASK-458` (-)
+- 79fa5b547 11-14 18:58 `Merge agent/cut012: friends 0.1.2: per-archive game mounts (no key file), checklist fixes, restaged` (cut012)
+- cbc1dd7f5 11-14 18:57 `Merge branch 'main' into TASK-439` (-)
+- db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
+- 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
+- 0fa102afd 11-14 18:53 `Merge branch 'main' into p03posted` (-)
+- 2a5bda25b 11-14 18:53 `Merge branch 'main' into TASK-450` (-)
 - 564879d7a 11-14 18:37 `Merge agent/survC: Merge branch 'main' into TASK-452` (survC)
 - 9773f4061 11-14 18:36 `Merge branch 'main' into TASK-452` (-)
-- ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
-- cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
-- 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
-- 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
-- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
-- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
 <!-- statusgen:end -->
