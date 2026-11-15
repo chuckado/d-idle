@@ -172,7 +172,8 @@
 
   /* two maps in one rail column: a switch shows one at a time (shell.js mapSwitch); a panel switched off takes no room */
   .d-panel[data-off] { display: none; }
-  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); z-index: 3; }
+  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: 0; z-index: 3; background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
+  .d-mapswitch > .d-btn { min-inline-size: 0; padding-inline: var(--d-sp-2); }
   .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
   .d-menu-pop > [hidden] { display: none; }
 

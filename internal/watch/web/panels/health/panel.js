@@ -38,11 +38,15 @@ export function mount(root, ctx) {
   ctx.body.append(btn, pop);
   btn.addEventListener('click', () => { if (pop.togglePopover) pop.togglePopover(); });
 
+  let sig = ''; // the last drawn health: an identical poll redraws nothing
   return {
     update(g) {
       const h = g && g.health;
-      if (!h) { ctx.hide(true); return; }
+      if (!h) { sig = ''; ctx.hide(true); return; }
       ctx.hide(false);
+      const now = JSON.stringify(h);
+      if (now === sig) return;
+      sig = now;
       ctx.ui.clear(lights);
       ctx.ui.clear(pop);
       ctx.ui.clear(detail);

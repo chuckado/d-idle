@@ -558,6 +558,7 @@ function mapSwitch(box) {
   pair.forEach((n, i) => {
     const m = ck.meta.get(n.dataset.panel) || {}, b = ui.btn(m.switchLabel || m.title || n.dataset.panel, { size: 'sm', variant: 'ghost' });
     b.dataset.view = String(i);
+    if (m.title) { b.title = m.title; b.setAttribute('aria-label', m.title); }
     b.addEventListener('click', () => { ck.second = i === 1; paint(); const on = bar.children[i]; if (on) on.focus({ preventScroll: true }); });
     bar.appendChild(b);
   });

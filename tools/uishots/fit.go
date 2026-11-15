@@ -153,10 +153,13 @@ type fitResult struct {
 		Menu    bool   `json:"menu"`
 		Host    string `json:"host"`
 		Overlap int    `json:"overlap"`
+		// SwitchOverlap is how many zone buttons the Act/Area switch lies on.
+		SwitchOverlap int `json:"switchOverlap"`
 	} `json:"zones"`
-	Covered int    `json:"covered"`
-	Hole    int    `json:"hole"`
-	HoleAt  [2]int `json:"holeAt"`
+	OrderCut int    `json:"orderCut"` // order rows whose title is cut while the reason beside it still shows
+	Covered  int    `json:"covered"`
+	Hole     int    `json:"hole"`
+	HoleAt   [2]int `json:"holeAt"`
 }
 
 // fitGap is the widest empty strip between slots that is not dead space: the cockpit gap (8 px) and two pixels.
@@ -214,6 +217,12 @@ func (r fitResult) judge() []string {
 		if z.Overlap > 0 && !(z.Host == "self" && r.VW <= 480) { // the phone's sheet replaces the map (J: a zone tap swaps the sheet)
 			bad = append(bad, fmt.Sprintf("the zone menu (in %s) covers %d zone buttons", z.Host, z.Overlap))
 		}
+	}
+	if r.Zones.SwitchOverlap > 0 {
+		bad = append(bad, fmt.Sprintf("the map switch covers %d zone buttons", r.Zones.SwitchOverlap))
+	}
+	if r.OrderCut > 0 {
+		bad = append(bad, fmt.Sprintf("%d order titles are cut while their reason shows", r.OrderCut))
 	}
 	if r.Pop != nil {
 		switch {
