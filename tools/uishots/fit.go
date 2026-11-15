@@ -241,7 +241,7 @@ func (r fitResult) judge() []string {
 			lim = fitInnerPhone
 		}
 		if r.CV.Inner.Size > lim {
-			bad = append(bad, fmt.Sprintf("dead space inside %s: a %d px square is empty at %d,%d", r.CV.Inner.Panel, r.CV.Inner.Size, r.CV.Inner.At[0], r.CV.Inner.At[1]) + " [" + r.CV.Diag + "]")
+			bad = append(bad, fmt.Sprintf("dead space inside %s: a %d px square is empty at %d,%d", r.CV.Inner.Panel, r.CV.Inner.Size, r.CV.Inner.At[0], r.CV.Inner.At[1])+" ["+r.CV.Diag+"]")
 		}
 	}
 	exp := make([]string, 0, len(r.Expect))
