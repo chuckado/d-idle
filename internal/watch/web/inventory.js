@@ -199,7 +199,7 @@
     cells('stash', v.stash || [], 6, 8);
     gearPrompt(v.prompt);
     $('packmeta').textContent = '10 by 4';
-    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + v.stashGold : '');
+    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + String(v.stashGold).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '');
     $('note').textContent = (v.note || '') + (v.class ? v.class + ', gold on the hero ' + v.gold : '') +
       (v.sellPending ? (v.class ? ', ' : '') + v.sellPending + ' marked for sale, sold at the next town visit' : '');
     detail(v);
@@ -278,10 +278,16 @@
     }, function (e) { $('repair').textContent = e.message; });
     getJSON('/api/inventory').then(draw, function (e) { say(e.message); });
   }
+  if (document.addEventListener) document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
+  // the page's own request got its answer and the view with it (inventory-actions.js refresh): the grids follow at once, not at the next poll
+  if (document.addEventListener) document.addEventListener('d2:inventory-fresh', function (e) { if (e.detail) draw(e.detail); });
   if (typeof window !== 'undefined' && window.__invTest) {
-    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
+    window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, draw: draw, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
     return;
   }
-  document.addEventListener('d2:dragend', function () { if (held) { var v = held; held = null; draw(v); } });
-  load(); artProbe(); setInterval(load, 4000);
+  // The first request waits until every script of the page has run (window load): the view is handed to the other scripts by an event,
+  // and one that answered before the tooltip, menu, mercenary and canvas scripts had registered left them with nothing to draw until
+  // the view changed (found by the fit check as a half-drawn page, review c2c3 R14).
+  function start() { load(); artProbe(); setInterval(load, 4000); }
+  if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();

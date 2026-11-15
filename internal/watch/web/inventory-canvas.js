@@ -9,7 +9,7 @@
 (function () {
   'use strict';
   var $ = function (id) { return document.getElementById(id); };
-  var view = null, hero = null, repair = null, selKey = '', askTrash = '', heroAt = 0, drawnSheet = '', popOpen = false;
+  var view = null, hero = null, repair = null, selKey = '', heroAt = 0, drawnSheet = '', popOpen = false;
   var F = { q: '', usable: false, merc: false, unid: false, sell: false };
   var FILTERS = [['usable', 'Usable by me', 'Mine'], ['merc', 'By mercenary', 'Merc'], ['unid', 'Unidentified', 'Unid'], ['sell', 'Marked sell', 'Sell']];
   var SLOTWORD = { head: 'helm', neck: 'amulet', torso: 'armour', rhand: 'right hand', lhand: 'left hand', rring: 'right ring', lring: 'left ring', belt: 'belt', feet: 'boots', gloves: 'gloves' };
@@ -152,11 +152,11 @@
     if (h && h.maxLife) t.push(tile('Life', num(h.life) + '/' + num(h.maxLife), h.life <= 0 ? 'bad' : ''));
     if (h && h.maxMana) t.push(tile('Mana', num(h.mana) + '/' + num(h.maxMana)));
     if (st && st.defense !== undefined && st.defense !== null) t.push(tile('Defense', num(st.defense), '', 'Defense as the game counts it'));
-    if (st && st.damage) t.push(tile('Damage', st.damage.min + '-' + st.damage.max, '', 'Damage from items and skills; the weapon\'s own base damage is not in it'));
+    if (st && st.damage) t.push(tile('Bonus dmg', st.damage.min + '-' + st.damage.max, '', 'Damage from items and skills (stats 21 and 22); the weapon\'s own base damage is not in it'));
     if (r) [['Fire res', 'fire'], ['Cold res', 'cold'], ['Light res', 'light'], ['Poison res', 'poison']].forEach(function (k) { t.push(tile(k[0], r[k[1]] + '%', r[k[1]] < 0 ? 'bad' : '')); });
     if (h && h.xpNext > 0) {
       var left = h.xpNext - h.xp;
-      t.push(tile('xp to next', h.xpPct === null || h.xpPct === undefined ? '-' : Math.floor(h.xpPct) + '%'));
+      t.push(tile('xp this level', h.xpPct === null || h.xpPct === undefined ? '-' : Math.floor(h.xpPct) + '%'));
       t.push(tile('xp left', left > 0 ? num(left) : '0'));
     }
     var b = brokenCount(v);
@@ -232,96 +232,120 @@
     if (open) { var f = p.querySelector('button, input'); if (f && f.focus) f.focus({ preventScroll: true }); }
   }
 
-  // ---- the selected item: its facts and its actions as buttons (the list of the action menu) ----
-  function actions(f) {
-    var it = f.it, a = api(), out = [], key = (f.place === 'worn' ? 'slot-' + f.slot : 'item-' + it.id);
-    function add(label, fn, reason, o) { out.push({ label: label, fn: fn, reason: reason || '', primary: o && o.primary, confirm: o && o.confirm, act: o && o.act }); }
-    if (it.identified === false) add('Identify', function () { a.identify(it.id); }, it.noIdentify, { primary: true, act: 'identify' });
-    if (f.place === 'pack') {
-      var can = it.canWear || [];
-      if (!can.length) add('Equip', null, it.noWear || 'it cannot be worn right now', { act: 'equip' });
-      else can.forEach(function (s) { add(can.length > 1 ? 'Equip (' + (SLOTWORD[s] || s) + ')' : 'Equip', function () { a.equip(it.id, s); }, '', { primary: it.identified !== false, act: 'equip-' + s }); });
-    } else if (f.place === 'worn') add('Take off', function () { a.unequip(f.slot); }, it.noUnequip, { act: 'unequip' });
-    if (it.stashOp === 'stash' || it.stashOp === 'take') add(it.stashOp === 'stash' ? 'To stash' : 'Take out', function () { (it.stashOp === 'stash' ? a.stash : a.take)(it.id); }, it.noStash, { act: it.stashOp });
-    var sold = it.mark === 'sell';
-    add(sold ? 'Clear sell' : 'Mark sell', function () { a.post('/api/inventory/mark', { id: it.id, mark: sold ? '' : 'sell' }); }, sold ? '' : (it.noSell || (f.place !== 'pack' ? 'only backpack items are sold' : '')), { act: 'sell' });
-    add(it.mark === 'keep' ? 'Clear keep' : 'Keep', function () { a.post('/api/inventory/mark', { id: it.id, mark: it.mark === 'keep' ? '' : 'keep' }); }, '', { act: 'keep' });
-    var ask = askTrash === key;
-    add(ask ? 'Confirm: trash' : 'Trash', function () { if (!ask) { askTrash = key; drawSel(); } else { askTrash = ''; a.trash(it.id); } }, it.noTrash, { confirm: ask, act: 'trash' });
-    return out;
-  }
+  // ---- the selected item: its facts, who can wear it, the comparison, its queued requests and its actions ----
+  // One model (review c2c3 R5): the facts and the verdict rows come from the tooltip (window.d2InvTip.rich), the buttons and the queued
+  // rows from the action menu (window.d2InvActions.entries), so this box, the tooltip, the menu and the double-click cannot disagree.
+  // Nothing here decides anything: a refused entry is drawn disabled with the server's reason, and pressing it says why.
   function whereWord(f) {
     return f.place === 'worn' ? 'Worn: ' + (SLOTWORD[f.slot] || f.slot) : f.place === 'pack' ? 'In the pack' : f.place === 'stash' ? 'In the stash' : f.place === 'belt' ? 'On the belt' : 'In the cube';
   }
+  function line(text, tone, full) { var p = el('p', '', text); if (tone) p.dataset.tone = tone; p.title = full || text; return p; }
+  function whoLine(x) {
+    var bad = x.rows.filter(function (r) { return !r.ok && !r.warn; }), warn = x.rows.filter(function (r) { return r.warn; });
+    var text = x.head + ': ' + (x.ok ? 'can use it' : bad.length ? bad.map(function (r) { return r.text; }).join(', ') : 'cannot use it') + (warn.length ? ' (' + warn[0].text + ')' : '');
+    var p = line(text, x.ok ? 'good' : 'bad'); p.dataset.who = x.who; return p;
+  }
   function drawSel() {
     var box = $('cv-sel'); if (!box) return;
-    var f = view && selKey ? locate(view, selKey) : null;
-    var sig = hash(JSON.stringify([f, askTrash === selKey, view && view.merc && view.merc.state]));
+    var f = view && selKey ? locate(view, selKey) : null, a = api(), tp = typeof window !== 'undefined' && window.d2InvTip;
+    var m = f && a && a.entries ? a.entries(selKey) : null, rich = f && tp && tp.rich ? tp.rich(selKey) : null;
+    var sig = hash(JSON.stringify([f, m, rich, view && view.merc && view.merc.state, coarse()]));
     if (box.dataset.sig === sig) return;
     box.dataset.sig = sig;
     clear(box);
     if (!f || !f.it) {
-      box.appendChild(el('p', 'cv-hint', 'Pick an item or a slot to see it here.'));
+      box.appendChild(el('p', 'cv-hint', 'Pick an item or a slot.'));
       box.dataset.empty = ''; return;
     }
     delete box.dataset.empty;
     var it = f.it, h = el('h3', 'q-' + (it.quality || 'normal'), (it.name || it.code || 'item') + (it.identified === false ? ' (unidentified)' : '')); h.title = h.textContent; box.appendChild(h);
-    var bits = [whereWord(f)]; if (it.level) bits.push('item level ' + it.level); if (it.maxDur) bits.push('durability ' + (it.dur || 0) + '/' + it.maxDur);
-    box.appendChild(el('p', 'cv-where', bits.join(' · ')));
-    var why = el('div', 'cv-why'), u = side(it, 'hero'), m = side(it, 'merc');
-    if (u) {
-      var hr = hardReasons(u);
-      if (hr.length) hr.forEach(function (r) { var p = el('p', '', 'You: ' + r.text); p.dataset.tone = 'bad'; p.title = r.text; why.appendChild(p); });
-      else { var ok = el('p', '', 'You can use it'); ok.dataset.tone = 'good'; why.appendChild(ok); }
+    var bits = [rich ? rich.where.text : whereWord(f)];
+    if (it.level) bits.push('item level ' + it.level); if (it.maxDur) bits.push('durability ' + (it.dur || 0) + '/' + it.maxDur);
+    var wp = el('p', 'cv-where', bits.join(' · ')); wp.title = wp.textContent;
+    if (rich && rich.where.badge) { var tb = el('span', 'cv-town', rich.where.badge); wp.appendChild(tb); }
+    box.appendChild(wp);
+    var why = el('div', 'cv-why');
+    if (rich && rich.who.length) rich.who.forEach(function (x) { why.appendChild(whoLine(x)); });
+    else {
+      var u = side(it, 'hero'), mm = side(it, 'merc');
+      if (u) { var hr = hardReasons(u); why.appendChild(line(hr.length ? 'You: ' + hr[0].text : 'You: can use it', hr.length ? 'bad' : 'good')); }
+      if (mm) { var mr = hardReasons(mm); why.appendChild(line(mm.ok ? 'He: can use it' : 'He: ' + (mr.length ? mr[0].text : 'no'), mm.ok ? 'good' : 'bad')); }
     }
-    if (m) {
-      var mr = hardReasons(m), p2 = el('p', '', m.ok ? 'He can use it' : 'He: ' + (mr.length ? mr[0].text : 'no')); p2.dataset.tone = m.ok ? 'good' : 'bad'; why.appendChild(p2);
-    }
-    if (it.why) why.appendChild(el('p', '', 'Why: ' + it.why));
+    if (it.why) why.appendChild(line('Why: ' + it.why));
     box.appendChild(why);
+    if (rich && rich.against.length) {
+      var cmp = el('div', 'cv-cmp');
+      rich.against.forEach(function (c) {
+        cmp.appendChild(line('Against ' + c.name + ' (' + (SLOTWORD[c.slot] || c.slot) + ')', 'dim'));
+        c.rows.forEach(function (r) { var q = el('p', '', r.label + '  ' + r.old + ' → ' + r.now + '  ' + r.delta); q.dataset.tone = r.tone; q.title = q.textContent; cmp.appendChild(q); });
+      });
+      box.appendChild(cmp);
+    }
     var props = el('div', 'cv-props');
     (it.props || []).slice(0, 12).forEach(function (x) { var q = el('p', '', x); q.title = x; q.dataset.tone = 'prop'; props.appendChild(q); });
     box.appendChild(props);
-    var acts = el('div', 'cv-acts'), a = api();
-    if (a) actions(f).forEach(function (e) {
-      var b = el('button', '', e.label); b.type = 'button'; b.dataset.act = e.act || ''; if (e.primary) b.dataset.primary = ''; if (e.confirm) b.dataset.confirm = '';
-      if (e.reason) { b.setAttribute('aria-disabled', 'true'); b.title = e.reason; }
-      b.addEventListener('click', function () { if (e.reason) { say(e.reason); return; } if (e.fn) e.fn(); });
+    if (m && m.rows.length) {
+      var qr = el('div', 'cv-qrows');
+      m.rows.forEach(function (r) {
+        var row = el('p'); row.appendChild(el('span', 't', r.state + ': ' + r.text)); row.dataset.state = r.state; row.title = r.state + ': ' + r.text;
+        if (r.cancel) { var c = el('button', '', 'Cancel'); c.type = 'button'; c.dataset.act = 'cancel'; c.addEventListener('click', function () { if (a.cancelRow) a.cancelRow(selKey, r.kind); }); row.appendChild(c); }
+        qr.appendChild(row);
+      });
+      box.appendChild(qr);
+    }
+    var acts = el('div', 'cv-acts'), fe = m && a.first ? a.first(selKey) : null; // the entry a double-click or Enter runs is the primary button
+    if (m) m.entries.forEach(function (e) {
+      var b = el('button', '', e.label); b.type = 'button'; b.dataset.act = e.act + (e.slot ? '-' + e.slot : '');
+      if (fe && !fe.reason && fe.label === e.label) b.dataset.primary = '';
+      if (e.act === 'trash' && !e.reason) b.dataset.danger = '';
+      if (e.confirm) b.dataset.confirm = '';
+      if (e.reason) { b.setAttribute('aria-disabled', 'true'); b.title = e.reason; } else b.title = e.key ? e.label + ' (' + e.key + ')' : e.label;
+      b.addEventListener('click', function () { if (a.runEntry) a.runEntry(selKey, e.act, e.slot); });
       acts.appendChild(b);
     });
+    // a touch screen has no right-click: the full menu is always one press away (a held finger is a drag)
+    if (m && coarse() && a.open) acts.appendChild(moreButton());
     box.appendChild(acts);
     fitSel();
   }
-  // The selected box never scrolls and never overruns: the properties go first, then the buttons beyond the first row (the last
-  // one left becomes "More...", which opens the full action menu), then all but one verdict line.
+  function coarse() { return typeof window !== 'undefined' && !!window.matchMedia && window.matchMedia('(pointer: coarse)').matches; }
+  function moreButton() {
+    var more = el('button', '', 'All actions'); more.type = 'button'; more.dataset.act = 'more'; more.title = 'Every action for this item';
+    more.addEventListener('click', function () { var a = api(); if (a && a.open && selKey) a.open(selKey); });
+    return more;
+  }
+  // The selected box never scrolls and never overruns. What goes first: the comparison, then the properties, the verdict lines beyond
+  // the first, then the buttons beyond the first row (the last one left becomes "More...", which opens the full action menu).
   function fitSel() {
     var box = $('cv-sel'); if (!box || !box.clientHeight) return;
-    var props = box.querySelector('.cv-props'), acts = box.querySelector('.cv-acts'), why = box.querySelector('.cv-why'), cut = 0;
+    var props = box.querySelector('.cv-props'), acts = box.querySelector('.cv-acts'), why = box.querySelector('.cv-why'), cmp = box.querySelector('.cv-cmp'), qr = box.querySelector('.cv-qrows'), cut = 0;
     var over = function () { return box.scrollHeight > box.clientHeight + 1; };
     if (props) while (props.children.length && props.scrollHeight > props.clientHeight + 1) props.removeChild(props.lastChild);
-    while (over() && acts && acts.children.length > 2) { acts.removeChild(acts.lastChild); cut++; }
+    while (cmp && over() && cmp.children.length > 2) cmp.removeChild(cmp.lastChild);
+    if (cmp && over()) { box.removeChild(cmp); cmp = null; }
+    while (over() && qr && qr.children.length > 1) qr.removeChild(qr.lastChild);
+    while (over() && acts && acts.children.length > 4) { acts.removeChild(acts.lastChild); cut++; }
     while (over() && why && why.children.length > 1) why.removeChild(why.lastChild);
-    while (over() && acts && acts.children.length > 1) { acts.removeChild(acts.lastChild); cut++; }
-    if (cut && acts && acts.lastChild) {
+    while (over() && acts && acts.children.length > 2) { acts.removeChild(acts.lastChild); cut++; }
+    if (cut && acts && acts.lastChild && !acts.querySelector('[data-act=more]')) {
       acts.removeChild(acts.lastChild);
-      var more = el('button', '', 'More...'); more.type = 'button'; more.dataset.act = 'more'; more.title = 'Every action for this item';
-      more.addEventListener('click', function () { var a = api(); if (a && a.open && selKey) a.open(selKey); });
-      acts.appendChild(more);
+      acts.appendChild(moreButton());
     }
   }
-  // a label that does not fit its cell or slot is cut with an ellipsis (the full name is the title): the box is never scrolled
-  // or overrun. The full text is kept in data-full so a resize can cut again from the whole name.
-  function fits(h) { return h.scrollHeight <= h.clientHeight + 1 && h.scrollWidth <= h.clientWidth + 1; }
+  // a label that does not fit its cell or slot is cut with an ellipsis (the full name is the title): the box is never scrolled or overrun;
+  // the label itself is measured too, so a long unbreakable word in a one-row slot is cut, not clipped mid-letter (review c2c3 R10)
+  function fits(h, n) { return h.scrollHeight <= h.clientHeight + 1 && h.scrollWidth <= h.clientWidth + 1 && (!n || (n.scrollWidth <= n.clientWidth + 1 && n.scrollHeight <= n.clientHeight + 1)); }
   function cutText(node, host) {
     var t = node.firstChild;
     if (!t || t.nodeType !== 3 || !host.clientHeight) return;
     if (node.dataset.full === undefined) node.dataset.full = t.nodeValue;
     var full = node.dataset.full;
     t.nodeValue = full;
-    if (fits(host)) return;
+    if (fits(host, node)) return;
     var lo = 0, hi = full.length - 1;
-    while (lo < hi) { var mid = (lo + hi + 1) >> 1; t.nodeValue = full.slice(0, mid).trim() + '\u2026'; if (fits(host)) lo = mid; else hi = mid - 1; }
+    while (lo < hi) { var mid = (lo + hi + 1) >> 1; t.nodeValue = full.slice(0, mid).trim() + '\u2026'; if (fits(host, node)) lo = mid; else hi = mid - 1; }
     t.nodeValue = lo ? full.slice(0, lo).trim() + '\u2026' : '\u2026';
+    if (!node.title && node.parentNode && node.parentNode.title) node.title = node.parentNode.title;
   }
   function cutLabels() {
     Array.prototype.forEach.call(document.querySelectorAll('.cv .d-cells .item'), function (n) { if (n.dataset.shown === undefined) cutText(n, n); });
@@ -390,7 +414,7 @@
 
   function relayout() {
     // each part runs on its own, so one failing part never leaves the others untrimmed
-    [cutLabels, function () { var b = $('cv-sel'); if (b) { b.dataset.sig = ''; drawSel(); } }, function () { var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } }, trimQueue].forEach(function (f) { try { f(); } catch (e) { /* a box that cannot be measured stays as it is */ } });
+    [cutLabels, function () { if (window.d2InvMerc) window.d2InvMerc.fit(); }, function () { var b = $('cv-sel'); if (b) { b.dataset.sig = ''; drawSel(); } }, function () { var b = $('cv-sets'); if (b) { b.dataset.sig = ''; if (view) drawSets(view); } }, trimQueue].forEach(function (f) { try { f(); } catch (e) { /* a box that cannot be measured stays as it is */ } });
   }
 
   // ---- events ----
@@ -398,17 +422,26 @@
   function ensureSel(v) {
     if (selKey && locate(v, selKey)) return;
     var first = (v.backpack || [])[0] || (v.stash || [])[0];
-    selKey = first ? 'item-' + first.id : ''; askTrash = '';
+    selKey = first ? 'item-' + first.id : '';
   }
   function markSel() {
     Array.prototype.forEach.call(document.querySelectorAll('.d-slot2.sel, .item.sel'), function (n) { n.classList.remove('sel'); });
     var n = selKey && document.querySelector('[data-key="' + selKey + '"]'); if (n) n.classList.add('sel');
   }
+  // each part of the paint runs on its own: one that throws is recorded (window.d2CvErrors, read by the fit check) and never leaves the
+  // rest of the page undrawn
+  function part(name, f) { try { f(); } catch (e) { if (typeof window !== 'undefined') (window.d2CvErrors = window.d2CvErrors || []).push(name + ': ' + (e && e.message)); } }
   function paint(v) {
-    ensureSel(v); markSel();
-    drawBar(v); drawRepair(v, repair); marks(v); dim(); drawSets(v); shorten(); fitSlots(); paintSheets();
-    var g = $('gearprompt'); if (g) g.title = g.textContent;
-    drawSel(); cutLabels(); trimQueue(); loadHero();
+    part('select', function () { ensureSel(v); markSel(); });
+    part('bar', function () { drawBar(v); drawRepair(v, repair); });
+    part('marks', function () { marks(v); dim(); });
+    part('sets', function () { drawSets(v); });
+    part('shorten', function () { shorten(); fitSlots(); });
+    part('sheets', function () { paintSheets(); });
+    part('prompt', function () { var g = $('gearprompt'); if (g) g.title = g.textContent; });
+    part('sel', function () { drawSel(); });
+    part('trim', function () { cutLabels(); trimQueue(); });
+    part('hero', function () { loadHero(); if (window.d2InvMerc) window.d2InvMerc.fit(); });
   }
   function onView(e) {
     view = e.detail;
@@ -416,6 +449,8 @@
     Promise.resolve().then(function () { if (view === e.detail) paint(view); });
   }
   function init() {
+    // ?tab=pack opens the phone's storage tab (the fit fixtures use it); anything else keeps the hero tab
+    if (/[?&]tab=pack(&|$)/.test(location.search || '') && $('cv')) $('cv').dataset.tab = 'pack';
     chips(); tabs();
     $('cv-q').addEventListener('input', function () { F.q = $('cv-q').value.trim().toLowerCase(); dim(); });
     $('cv-sell').addEventListener('click', function () {
@@ -428,7 +463,7 @@
     document.addEventListener('d2:inventory', onView);
     document.addEventListener('d2:inventory-fresh', function (e) { view = e.detail; drawBar(view); drawSel(); });
     document.addEventListener('d2:repair', function (e) { repair = e.detail; if (view) drawRepair(view, repair); });
-    function select(key) { selKey = key; askTrash = ''; if (view) { markSel(); fitSlots(); drawSel(); } }
+    function select(key) { selKey = key; if (view) { markSel(); fitSlots(); drawSel(); } }
     document.addEventListener('click', function (e) {
       var k = e.target && e.target.closest ? e.target.closest('[data-key]') : null;
       if (!k || !/^(item|slot)-/.test(k.dataset.key || '')) return;
@@ -452,8 +487,8 @@
   }
 
   if (typeof window !== 'undefined' && window.__canvasTest) {
-    window.__canvasTest({ heroTiles: heroTiles, locate: locate, marks: marks, matches: matches, actions: actions, setWarn: setWarn, reasonWord: reasonWord,
-      setView: function (v) { view = v; }, setHero: function (h) { hero = h; }, setRepair: function (r) { repair = r; }, paint: paint, setFilter: function (k, x) { F[k] = x; }, drawBar: drawBar, drawSel: drawSel, drawSets: drawSets, select: function (k) { selKey = k; askTrash = ''; } });
+    window.__canvasTest({ heroTiles: heroTiles, locate: locate, marks: marks, matches: matches, setWarn: setWarn, reasonWord: reasonWord,
+      setView: function (v) { view = v; }, setHero: function (h) { hero = h; }, setRepair: function (r) { repair = r; }, paint: paint, setFilter: function (k, x) { F[k] = x; }, drawBar: drawBar, drawSel: drawSel, drawSets: drawSets, select: function (k) { selKey = k; } });
     return;
   }
   init();

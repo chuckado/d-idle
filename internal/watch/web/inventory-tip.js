@@ -195,6 +195,7 @@
   function hintFor(f) {
     var a = typeof window !== 'undefined' && window.d2InvActions && window.d2InvActions.first;
     var k = f.place === 'worn' ? 'slot-' + f.slot : 'item-' + (f.it && f.it.id), e = a ? a(k) : null;
+    if (lastType === 'touch' || lastType === 'pen') return 'Tap an item to select it; "All actions" in the box shows every action.'; // a touch screen has no double-click and no right-click
     return (e ? 'Double-click: ' + e.label + (e.reason ? ' (refused, see above)' : '') + '. ' : '') + 'Right-click: all actions.';
   }
 
@@ -326,6 +327,9 @@
     window.addEventListener('resize', function () { if (openKey) position(openKey); });
   }
 
+  // the selected box of the canvas (inventory-canvas.js) draws the same facts as the tooltip: the where line, who can wear it and the
+  // comparison. One computation, so the two can no longer disagree (review c2c3 R5).
+  if (typeof window !== 'undefined') window.d2InvTip = { rich: function (key) { var f = find(key); return f && f.it ? richOf(f.it, f) : null; } };
   if (typeof window !== 'undefined' && window.__tipTest) {
     window.__tipTest({ build: build, richOf: richOf, reqRows: reqRows, compare: compare, parseLine: parseLine, sheetEdge: sheetEdge, place: place, nameClass: nameClass, onView: onView, show: show, hide: hide, init: init, state: function () { return { key: openKey, mode: mode, node: node }; } });
     return;

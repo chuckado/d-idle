@@ -1,4 +1,4 @@
-[{"l":"Level","v":7,"t":"","k":""},{"l":"Life","v":"86/120","t":"","k":""},{"l":"Mana","v":"105/140","t":"","k":""},{"l":"Fire res","v":"12%","t":"","k":""},{"l":"Cold res","v":"30%","t":"","k":""},{"l":"Light res","v":"-8%","t":"bad","k":""},{"l":"Poison res","v":"5%","t":"","k":""},{"l":"xp to next","v":"62%","t":"","k":""},{"l":"xp left","v":"500","t":"","k":""},{"l":"Gear","v":"ok","t":"good","k":""}]
+[{"l":"Level","v":7,"t":"","k":""},{"l":"Life","v":"86/120","t":"","k":""},{"l":"Mana","v":"105/140","t":"","k":""},{"l":"Fire res","v":"12%","t":"","k":""},{"l":"Cold res","v":"30%","t":"","k":""},{"l":"Light res","v":"-8%","t":"bad","k":""},{"l":"Poison res","v":"5%","t":"","k":""},{"l":"xp this level","v":"62%","t":"","k":""},{"l":"xp left","v":"500","t":"","k":""},{"l":"Gear","v":"ok","t":"good","k":""}]
 ## cv-gold
 div [] "1,240"
 ## cv-stashgold
@@ -10,17 +10,17 @@ div [data-action=request] "Repair 180 g" title="Short Staff is broken."
 ## cv-sets
 div [data-sig=16ur44f] hidden
 ## cv-sel
-div [data-sig=4u1nsc]
+div [data-sig=wp7oms]
   h3.q-magic [] "War Staff" title="War Staff"
-  p.cv-where [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
-    p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
+    p [data-tone=bad data-who=hero] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="You: a two-handed weapon and a shield cannot be worn together; take the other one off first"
   div.cv-props []
   div.cv-acts []
     button [aria-disabled=true data-act=equip] "Equip" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
-    button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark sell"
-    button [data-act=keep] "Keep"
+    button [data-act=stash] "Move to stash" title="Move to stash (Ctrl+click)"
+    button [data-act=sell] "Mark for sale" title="Mark for sale (Alt+click)"
+    button [data-act=keep] "Keep" title="Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 pack item-3 usable=no who= badge=SLOT/bad/a two-handed weapon and a shield cannot be worn together; take the other one off first title=War Staff - a two-handed weapon and a shield cannot be worn together; take the other one off first
 pack item-4 usable=no who= badge=STR/bad/needs 47 strength (you have 30) title=Cap - needs 47 strength (you have 30)

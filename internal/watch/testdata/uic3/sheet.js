@@ -9,7 +9,7 @@ vm.runInNewContext(src, { document, window: { __canvasTest: (x) => { h = x; }, d
 const base = { level: 7, life: 86, maxLife: 120, mana: 105, maxMana: 140, xp: 900, xpNext: 1400, xpPct: 62.4 };
 const labels = (hero) => h.heroTiles({ equipment: {} }, hero).map((t) => t.l + '=' + t.v);
 const full = Object.assign({}, base, { stats: { resists: { fire: 12, cold: 30, light: -8, poison: 5 }, attrs: { str: 38, dex: 25, vit: 30, energy: 22 }, defense: 214, damage: { min: 4, max: 9 } } });
-assert.strictEqual(labels(full).join('|'), ['Level=7', 'Strength=38', 'Dexterity=25', 'Vitality=30', 'Energy=22', 'Life=86/120', 'Mana=105/140', 'Defense=214', 'Damage=4-9', 'Fire res=12%', 'Cold res=30%', 'Light res=-8%', 'Poison res=5%', 'xp to next=62%', 'xp left=500', 'Gear=ok'].join('|'));
+assert.strictEqual(labels(full).join('|'), ['Level=7', 'Strength=38', 'Dexterity=25', 'Vitality=30', 'Energy=22', 'Life=86/120', 'Mana=105/140', 'Defense=214', 'Bonus dmg=4-9', 'Fire res=12%', 'Cold res=30%', 'Light res=-8%', 'Poison res=5%', 'xp this level=62%', 'xp left=500', 'Gear=ok'].join('|'));
 // nothing read beyond the resistances: no attribute, defence or damage tile
 const part = Object.assign({}, base, { stats: { resists: { fire: 1, cold: 2, light: 3, poison: 4 } } });
 assert.ok(!labels(part).some((l) => /^(Strength|Dexterity|Vitality|Energy|Defense|Damage)=/.test(l)), labels(part).join('|'));

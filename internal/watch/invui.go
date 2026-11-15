@@ -81,7 +81,7 @@ const charPage = `<!DOCTYPE html>
 <link rel="stylesheet" href="/watch/inventory-tip.css"><link rel="stylesheet" href="/watch/inventory-actions.css"><link rel="stylesheet" href="/watch/inventory-merc.css"><link rel="stylesheet" href="/watch/inventory-sets.css"><link rel="stylesheet" href="/watch/inventory-canvas.css">
 </head><body class="cv-root" data-canvas>
 <div class="d-shell cv" id="cv" data-tab="hero">
-<header class="top d-band-status" data-band="status" data-cockpit-slot="band">
+<header class="top d-band-status" data-band="status" data-cockpit-slot="band" data-fit-deep>
  <div class="d-brand"><span class="d-brand-mark" aria-hidden="true"></span><h1>d.idle</h1></div>
  <div class="d-band-main"></div>
  <nav class="d-links" aria-label="Other pages">
@@ -91,7 +91,7 @@ const charPage = `<!DOCTYPE html>
   <button class="d-btn" data-size="sm" data-variant="ghost" id="btn-theme" type="button" aria-label="Switch colour theme">Theme: dark</button>
  </nav>
 </header>
-<div class="cv-bar" id="cv-bar" role="toolbar" aria-label="Search, filters, gold and errands" data-cockpit-slot="band">
+<div class="cv-bar" id="cv-bar" role="toolbar" aria-label="Search, filters, gold and errands" data-cockpit-slot="band" data-fit-deep>
  <input class="cv-q" id="cv-q" type="search" placeholder="Search pack and stash  /" aria-label="Search pack and stash" autocomplete="off">
  <span class="cv-chips" id="cv-chips"></span>
  <span class="cv-sp"></span>

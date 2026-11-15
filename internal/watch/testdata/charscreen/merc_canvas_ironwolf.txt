@@ -28,22 +28,25 @@ div [data-canvas=]
         span.sil [] "weapon"
       div.d-slot2 [aria-label=shield: empty data-owner=merc data-slot=mlhand] title="shield: empty"
         span.sil [] "shield"
-    div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
-      div []
-        label [] "Level"
-        b [] "23"
-      div []
-        label [] "Life"
-        b [] "100%"
-      div []
-        label [] "Strength"
-        b [] "80"
-      div []
-        label [] "Dexterity"
-        b [] "70"
-      div []
-        label [] "Gear"
-        b [] "0 of 4 worn"
-      div []
-        label [] "Kind"
-        b [] "Iron Wolf"
+    div.cv-mside []
+      div.cv-sheet [aria-label=Mercenary values data-cv=msheet]
+        div []
+          label [] "Level"
+          b [] "23"
+        div []
+          label [] "Life"
+          b [] "100%"
+        div []
+          label [] "Strength"
+          b [] "80"
+        div []
+          label [] "Dexterity"
+          b [] "70"
+        div []
+          label [] "Worn"
+          b [] "0 of 4"
+      div.cv-mextra [data-cv=mextra]
+        p.cv-mworn [data-tone=dim] "helm: empty" title="helm: empty"
+        p.cv-mworn [data-tone=dim] "armour: empty" title="armour: empty"
+        p.cv-mworn [data-tone=dim] "weapon: empty" title="weapon: empty"
+        p.cv-mworn [data-tone=dim] "shield: empty" title="shield: empty"

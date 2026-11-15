@@ -6,6 +6,7 @@ const fs = require('fs'), vm = require('vm'), path = require('path');
 const { mk, ser } = require('./stub.js');
 const dir = __dirname, data = path.join(dir, '..');
 const src = fs.readFileSync(process.argv[2], 'utf8');
+const web = path.join(dir, '..', '..', 'web'), tipSrc = fs.readFileSync(path.join(web, 'inventory-tip.js'), 'utf8'), actSrc = fs.readFileSync(path.join(web, 'inventory-actions.js'), 'utf8');
 
 function page(view) {
   const ids = {};
@@ -15,11 +16,15 @@ function page(view) {
   (view.backpack || []).forEach((it) => { const n = mk('button'); n.dataset.key = 'item-' + it.id; n.title = it.name; ids.pack.appendChild(n); });
   (view.stash || []).forEach((it) => { const n = mk('button'); n.dataset.key = 'item-' + it.id; n.title = it.name; ids.stash.appendChild(n); });
   Object.keys(view.equipment || {}).forEach((s) => { const n = mk('button'); n.className = 'd-slot2'; n.dataset.slot = s; n.dataset.key = 'slot-' + s; ids.equip.appendChild(n); });
-  const document = { getElementById: get, createElement: mk, addEventListener() {}, querySelector: () => null, querySelectorAll: () => [], createTextNode: (t) => ({ textContent: t }) };
-  let h = null;
-  const window = { __canvasTest: (x) => { h = x; }, d2InvActions: { say() {}, post() {}, equip() {}, unequip() {}, stash() {}, take() {}, identify() {}, trash() {}, open() {} } };
+  const document = { body: { dataset: { canvas: '' } }, documentElement: { clientWidth: 1000, clientHeight: 700 }, getElementById: get, createElement: mk, addEventListener() {}, querySelector: () => null, querySelectorAll: () => [], createTextNode: (t) => ({ textContent: t }) };
+  let h = null, A = null, T = null;
+  const window = { __canvasTest: (x) => { h = x; }, __actTest: (x) => { A = x; }, __tipTest: (x) => { T = x; }, addEventListener() {} };
   const ctx = { document, window, JSON, Math, Object, Array, String, Number, RegExp, Date, console, Promise, fetch: () => new Promise(() => {}) };
+  // the selected box draws the menu's entries and the tooltip's rows (one model): the real scripts run in the same page
+  vm.runInNewContext(tipSrc, ctx); vm.runInNewContext(actSrc, ctx);
   vm.runInNewContext(src, ctx);
+  const setView = h.setView;
+  h.setView = (v) => { setView(v); A.onView(v); T.onView(v); };
   return { h, ids };
 }
 let bad = 0;

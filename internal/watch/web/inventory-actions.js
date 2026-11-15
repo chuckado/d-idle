@@ -16,7 +16,7 @@
   var MENU_ID = 'inv-act';
   var TRIP = 'waiting for a trip home'; // the stash is reached only in town: the bot walks home at the next safe moment
   var LABEL = { head: 'helm', neck: 'amulet', torso: 'armour', rhand: 'right hand', lhand: 'left hand', rring: 'right ring', lring: 'left ring', belt: 'belt', feet: 'boots', gloves: 'gloves' };
-  var view = null, menu = null, scrim = null, openKey = '', openSig = '', confirming = false, kbd = false, sheet = false, openAt = null;
+  var lastPtr = 'mouse', view = null, menu = null, scrim = null, openKey = '', openSig = '', confirming = false, kbd = false, sheet = false, openAt = null;
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
@@ -158,8 +158,9 @@
   }
   function refresh() {
     return fetch('/api/inventory', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
-      onView(v);
-      // the poll of inventory.js is every 4 s; our own change shows at once in the modules that listen (drag, sets)
+      onView(v, true);
+      // the poll of inventory.js is every 4 s; our own change shows at once in the modules that listen (drag, sets) and
+      // inventory.js repaints the grids on this event, so the cell the answer is about is the cell on the page
       if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:inventory-fresh', { detail: v }));
     }, function () {});
   }
@@ -254,7 +255,9 @@
     render(m); openSig = sig;
     menu.dataset.mode = sheet ? 'sheet' : 'pop'; menu.hidden = false; scrim.hidden = !sheet;
     var list = focusables(), target = null;
-    for (var i = 0; i < list.length; i++) if (act && list[i].dataset.act === act) target = list[i];
+    // on the confirm step the focus is on "Keep it": a second Enter or Space must never be the one that trashes (review c2c3 R12)
+    if (confirming) for (var c = 0; c < list.length; c++) if (list[c].dataset.act === 'back') target = list[c];
+    for (var i = 0; !target && i < list.length; i++) if (act && list[i].dataset.act === act) target = list[i];
     if (keepFocus && !target) for (var j = 0; j < list.length; j++) if (!list[j].hasAttribute('aria-disabled')) { target = list[j]; break; }
     if (target) target.focus({ preventScroll: true });
     position();
@@ -285,7 +288,7 @@
     var t = document.getElementById('t-queue'); if (t) t.textContent = 'Item actions';
     clear(q);
     var rows = (view.queue || []).concat(view.recent || []);
-    if (!rows.length) { q.appendChild(el('p', 'd-hint', 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
+    if (!rows.length) { q.appendChild(el('p', 'd-hint', canvasMode() ? 'Nothing queued. Double-click an item to run its first action; right-click shows all of them.' : 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
     var ul = el('ul', 'd-list');
     rows.forEach(function (r) {
       var li = el('li'); li.dataset.state = r.state;
@@ -420,12 +423,13 @@
   }
 
   // ---- events ----
-  function onView(v) {
+  function onView(v, fresh) {
     view = v;
-    ageFeedback();
+    if (!fresh) ageFeedback();
     markPending();
-    // inventory.js redraws the queue card right after it hands the view over; redraw ours once that call has returned
-    Promise.resolve().then(function () { renderQueue(); renderErrands(); renderGold(); });
+    // inventory.js hands the view over BEFORE it rebuilds the doll and the cells and redraws the queue card: the marks and our
+    // own card are drawn once that call has returned, on the cells that are on the page then (review c2c3 R6)
+    Promise.resolve().then(function () { if (view !== v) return; markPending(); renderQueue(); renderErrands(); renderGold(); });
     if (openKey) draw(true);
   }
   function keyOf(target) {
@@ -452,11 +456,35 @@
     run(h.e, h.m);
     return true;
   }
+  // entries(key): the menu's own model of one item (its queued rows with their Cancel, its entries with the reasons they are refused), for
+  // the selected box of the canvas: one list, so the box, the menu and the double-click can no longer disagree
+  function entries(key) {
+    var f = find(key); if (!f || !f.it) return null;
+    var m = model(f);
+    return { id: m.id, rows: m.rows.map(function (r) { return { text: r.text, state: r.state, kind: r.kind, cancel: r.cancel }; }),
+      entries: m.entries.map(function (e) { return { act: e.act, slot: e.slot || '', label: e.label, reason: e.reason || '', key: e.key || '', confirm: !!e.confirm }; }) };
+  }
+  // runEntry: the box's button press; a refused entry says why (at the item and in the message line) and sends nothing, a trash
+  // opens the menu on its confirm step (the same two steps as everywhere)
+  function runEntry(key, act, slot) {
+    var f = find(key); if (!f || !f.it) return false;
+    var m = model(f), hit = null;
+    m.entries.forEach(function (e) { if (!hit && e.act === act && (!slot || e.slot === slot)) hit = e; });
+    if (!hit) return false;
+    if (hit.reason) { refuse(f.it.id, hit.reason); return true; }
+    if (hit.act === 'trash') { trashConfirm(key); return true; }
+    run(hit, m);
+    return true;
+  }
+  function cancelRow(key, kind) { var f = find(key); if (f && f.it) cancel(f.it.id, kind); }
   function first(key) { var h = entryFor(key); return h ? { act: h.e.act, label: h.e.label, reason: h.e.reason || '' } : null; }
   function gestures() {
     document.addEventListener('contextmenu', function (e) {
       var key = keyOf(e.target); if (!key || !find(key)) return;
       e.preventDefault();
+      // a held finger is a drag (inventory-drag.js); Android's long-press contextmenu must not open a sheet under it, and iOS sends none:
+      // a touch screen opens the menu from the selected box's "All actions" button instead
+      if (document.body.hasAttribute('data-dragging') || lastPtr === 'touch') return;
       if (typeof CustomEvent === 'function') document.dispatchEvent(new CustomEvent('d2:select', { detail: key }));
       openMenu(key, { x: e.clientX, y: e.clientY });
     });
@@ -494,7 +522,7 @@
         e.preventDefault(); list[n].focus({ preventScroll: true });
       }
     });
-    document.addEventListener('pointerdown', function () { kbd = false; });
+    document.addEventListener('pointerdown', function (e) { kbd = false; lastPtr = e.pointerType || 'mouse'; });
     document.addEventListener('pointerdown', function (e) {
       if (openKey && menu && !menu.contains(e.target) && keyOf(e.target) !== openKey) closeMenu(false);
     });
@@ -513,7 +541,7 @@
   // trashConfirm opens the item's menu already on the confirm step (the drag of a tile outside every grid): the same two
   // clicks as the menu, so a drop alone never trashes.
   function trashConfirm(key) { openMenu(key); if (!openKey) return; var f = find(key); if (f && f.it && !f.it.noTrash) { confirming = true; draw(true); } }
-  var api = { post: post, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, first: first, gesture: gesture, refuse: refuse, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
+  var api = { post: post, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, first: first, entries: entries, runEntry: runEntry, cancelRow: cancelRow, gesture: gesture, refuse: refuse, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
   if (typeof window !== 'undefined') window.d2InvActions = api;
   if (typeof window !== 'undefined' && window.__actTest) {
     window.__actTest({ init: init, onView: onView, model: model, entryFor: entryFor, gesture: gesture, first: first, fb: function () { return fb; }, post: post,  find: find, open: openMenu, close: closeMenu, place: place,

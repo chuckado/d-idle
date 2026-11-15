@@ -1,70 +1,72 @@
 ## item-3
-div [data-sig=1nr4yrx]
+div [data-sig=ga6xwb]
   h3.q-magic [] "War Staff" title="War Staff"
-  p.cv-where [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
-    p [data-tone=bad] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
-    p [data-tone=bad] "He: a desert cannot use that"
+    p [data-tone=bad data-who=hero] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="You: a two-handed weapon and a shield cannot be worn together; take the other one off first"
+    p [data-tone=bad data-who=merc] "Desert Guard 14: a desert cannot use that" title="Desert Guard 14: a desert cannot use that"
   div.cv-props []
   div.cv-acts []
     button [aria-disabled=true data-act=equip] "Equip" title="a two-handed weapon and a shield cannot be worn together; take the other one off first"
-    button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark sell"
-    button [data-act=keep] "Keep"
+    button [aria-disabled=true data-act=merc] "Give to mercenary" title="a desert cannot use that"
+    button [data-act=stash] "Move to stash" title="Move to stash (Ctrl+click)"
+    button [data-act=sell] "Mark for sale" title="Mark for sale (Alt+click)"
+    button [data-act=keep] "Keep" title="Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-4
-div [data-sig=r76i5g]
+div [data-sig=8g7aeg]
   h3.q-magic [] "Cap" title="Cap"
-  p.cv-where [] "In the pack · item level 10"
+  p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
-    p [data-tone=bad] "You: needs 47 strength (you have 30)" title="needs 47 strength (you have 30)"
-    p [data-tone=bad] "You: Paladin only" title="Paladin only"
-    p [data-tone=good] "He can use it"
+    p [data-tone=bad data-who=hero] "You: Strength 20 (30)  17 short, Paladin only" title="You: Strength 20 (30)  17 short, Paladin only"
+    p [data-tone=good data-who=merc] "Desert Guard 14: can use it" title="Desert Guard 14: can use it"
   div.cv-props []
   div.cv-acts []
-    button [data-act=equip-lring data-primary=] "Equip (left ring)"
-    button [data-act=equip-rring data-primary=] "Equip (right ring)"
-    button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark sell"
-    button [data-act=keep] "Keep"
+    button [data-act=equip-lring data-primary=] "Equip (left ring)" title="Equip (left ring) (Enter)"
+    button [data-act=equip-rring] "Equip (right ring)" title="Equip (right ring) (Enter)"
+    button [aria-disabled=true data-act=merc] "Give to mercenary" title="the bot cannot change the mercenary's gear yet: the sets you save for him are kept, and you equip him by hand"
+    button [data-act=stash] "Move to stash" title="Move to stash (Ctrl+click)"
+    button [data-act=sell] "Mark for sale" title="Mark for sale (Alt+click)"
+    button [data-act=keep] "Keep" title="Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-5
-div [data-sig=1y9xlei]
+div [data-sig=b5045q]
   h3.q-magic [] "Ring A (unidentified)" title="Ring A (unidentified)"
-  p.cv-where [] "In the pack · item level 10 · durability 0/20"
+  p.cv-where [] "In the pack · item level 10 · durability 0/20" title="In the pack · item level 10 · durability 0/20"
   div.cv-why []
-    p [data-tone=good] "You can use it"
-    p [data-tone=good] "He can use it"
+    p [data-tone=good data-who=hero] "You: can use it (broken: it does nothing until repaired)" title="You: can use it (broken: it does nothing until repaired)"
+    p [data-tone=good data-who=merc] "Desert Guard 14: can use it" title="Desert Guard 14: can use it"
   div.cv-props []
   div.cv-acts []
-    button [data-act=identify data-primary=] "Identify"
-    button [data-act=equip-rring] "Equip (right ring)"
-    button [data-act=equip-lring] "Equip (left ring)"
-    button [data-act=stash] "To stash"
-    button [data-act=sell] "Mark sell"
-    button [data-act=keep] "Keep"
+    button [data-act=identify data-primary=] "Identify" title="Identify (Enter)"
+    button [data-act=equip-rring] "Equip (right ring)" title="Equip (right ring) (Enter)"
+    button [data-act=equip-lring] "Equip (left ring)" title="Equip (left ring) (Enter)"
+    button [aria-disabled=true data-act=merc] "Give to mercenary" title="the bot cannot change the mercenary's gear yet: the sets you save for him are kept, and you equip him by hand"
+    button [data-act=stash] "Move to stash" title="Move to stash (Ctrl+click)"
+    button [data-act=sell] "Mark for sale" title="Mark for sale (Alt+click)"
+    button [data-act=keep] "Keep" title="Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
 ## item-90
-div [data-sig=vhosdg]
+div [data-sig=u96she]
   h3.q-rare [] "Ring" title="Ring"
-  p.cv-where [] "In the stash"
+  p.cv-where [] "In the stash" title="In the stash"
   div.cv-why []
   div.cv-props []
   div.cv-acts []
     button [aria-disabled=true data-act=take] "Take out" title="the stash opens only in town"
-    button [aria-disabled=true data-act=sell] "Mark sell" title="only backpack items are sold"
-    button [data-act=keep] "Keep"
-    button [data-act=trash] "Trash"
+    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [data-act=keep] "Keep" title="Keep"
+    button [data-act=trash data-danger=] "Trash" title="Trash (Del)"
 ## slot-lhand
-div [data-sig=61nvzb]
+div [data-sig=1n4kzjw]
   h3.q-magic [] "Buckler" title="Buckler"
-  p.cv-where [] "Worn: left hand · item level 10"
+  p.cv-where [] "Worn by you, left hand · item level 10" title="Worn by you, left hand · item level 10"
   div.cv-why []
-    p [data-tone=good] "You can use it"
-    p [data-tone=good] "He can use it"
+    p [data-tone=good data-who=hero] "You: can use it" title="You: can use it"
+    p [data-tone=good data-who=merc] "Desert Guard 14: can use it" title="Desert Guard 14: can use it"
   div.cv-props []
   div.cv-acts []
-    button [data-act=unequip] "Take off"
-    button [aria-disabled=true data-act=sell] "Mark sell" title="only backpack items are sold"
-    button [data-act=keep] "Keep"
+    button [data-act=unequip-lhand data-primary=] "Take off" title="Take off (Enter)"
+    button [aria-disabled=true data-act=sell] "Mark for sale" title="only backpack items are sold"
+    button [data-act=keep] "Keep" title="Keep"
     button [aria-disabled=true data-act=trash] "Trash" title="trashing is not available on this bot"
