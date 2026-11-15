@@ -1,10 +1,11 @@
 ---
 id: TASK-483
 title: 'prfix5: P02 r3b, empty path not equal, repeatability'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T08:30:00Z'
+updated_date: '2026-11-15T08:44:00Z'
 labels:
   - d2d
   - upstream-pr
