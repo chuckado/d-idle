@@ -1,0 +1,58 @@
+@layer panels {
+  /* the box is given: the ten zone rows share its height (never under 20 px), names are cut with an ellipsis */
+  [data-panel="zone-map"] .d-slotbody { display: flex; flex-direction: column; min-block-size: 0; }
+  [data-panel="zone-map"] .zm { position: relative; flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; }
+  [data-panel="zone-map"] .zm-grid { position: relative; flex: 1 1 0; min-block-size: 0; display: grid; gap: 2px; }
+  [data-panel="zone-map"] .zm-grid[hidden], [data-panel="zone-map"] .zm-list[hidden], [data-panel="zone-map"] .zm-empty[hidden] { display: none; }
+  [data-panel="zone-map"] .zm-lines { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; }
+  [data-panel="zone-map"] .zm-edge { stroke: var(--d-line-strong); stroke-width: 1; vector-effect: non-scaling-stroke; }
+  [data-panel="zone-map"] .zm-dash { stroke-dasharray: 3 3; }
+  [data-panel="zone-map"] .zm-way { stroke: var(--d-gold, var(--d-warn)); stroke-width: 2.5; vector-effect: non-scaling-stroke; }
+  [data-panel="zone-map"] .zm-n { position: relative; min-block-size: 0; min-inline-size: 0; display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: var(--d-sp-1);
+    padding: 0 var(--d-sp-1) 0 calc(var(--d-sp-1) + 3px); overflow: hidden; text-align: start; font-size: var(--d-fs-0); line-height: 1.1; color: var(--d-text);
+    background: var(--d-surface-2, var(--d-surface-1)); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); cursor: pointer; }
+  [data-panel="zone-map"] .zm-n::before { content: ""; position: absolute; inset-block: 0; inset-inline-start: 0; inline-size: 3px; background: var(--d-text-3); }
+  [data-panel="zone-map"] .zm-n[data-band="in"]::before { background: var(--d-ok); }
+  [data-panel="zone-map"] .zm-n[data-band="above"]::before { background: var(--d-warn); }
+  [data-panel="zone-map"] .zm-n[data-band="hard"]::before { background: var(--d-bad); }
+  [data-panel="zone-map"] .zm-n[data-band="below"]::before { background: var(--d-text-3); }
+  [data-panel="zone-map"] .zm-n[data-band="no"] { border-style: dashed; color: var(--d-text-2); }
+  [data-panel="zone-map"] .zm-n[data-band="no"]::before { background: transparent; }
+  [data-panel="zone-map"] .zm-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+  [data-panel="zone-map"] .zm-rt { font-family: var(--d-font-num); color: var(--d-text-2); white-space: nowrap; }
+  [data-panel="zone-map"] .zm-why { display: none; grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--d-text-3); }
+  [data-panel="zone-map"] .zm-grid[data-tall="1"] .zm-why { display: block; }
+  [data-panel="zone-map"] .zm-n[data-here] { border-color: var(--d-accent); }
+  [data-panel="zone-map"] .zm-n[data-here] .zm-rt { color: var(--d-accent); font-weight: 700; }
+  [data-panel="zone-map"] .zm-n[data-target] { box-shadow: inset 0 0 0 1px var(--d-gold, var(--d-warn)); }
+  [data-panel="zone-map"] .zm-n[data-pin] .zm-rt { color: var(--d-info); font-weight: 700; }
+  [data-panel="zone-map"] .zm-n[data-failed] .zm-rt { color: var(--d-bad); font-weight: 700; }
+  [data-panel="zone-map"] .zm-n[aria-pressed="true"] { outline: 2px solid var(--d-text); outline-offset: -2px; }
+  [data-panel="zone-map"] .zm-n:focus-visible { outline: 2px solid var(--d-focus, var(--d-accent)); outline-offset: -2px; }
+  [data-panel="zone-map"] .zm-list { flex: 1 1 0; min-block-size: 0; overflow-y: auto; display: grid; align-content: start; gap: 2px; }
+  [data-panel="zone-map"] .zm-row { min-block-size: 28px; display: block; }
+  [data-panel="zone-map"] .zm-empty { padding: var(--d-sp-2); color: var(--d-text-2); font-size: var(--d-fs-1); }
+
+  /* the zone menu lives in ANOTHER tile (beside the map, or over Orders), so it is styled by class, not by panel */
+  .zm-menu { position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain;
+    background: var(--d-surface-2, var(--d-surface-1)); border-radius: var(--d-r-2); font-size: var(--d-fs-1); color: var(--d-text); }
+  .zm-menu[hidden] { display: none; }
+  .zm-menu .zm-mh { flex: none; display: flex; justify-content: space-between; align-items: center; gap: var(--d-sp-2); }
+  .zm-menu .zm-mt { font-size: var(--d-fs-2, var(--d-fs-1)); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .zm-menu .zm-x { background: none; border: 0; color: var(--d-text-3); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 28px; min-block-size: 28px; }
+  .zm-menu .zm-x:hover { color: var(--d-danger, var(--d-bad)); }
+  .zm-menu .zm-l { flex: none; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  .zm-menu .zm-sub, .zm-menu .zm-route, .zm-menu .zm-note, .zm-menu .zm-teaser { color: var(--d-text-2); font-size: var(--d-fs-0); }
+  .zm-menu .zm-l[data-tone="warn"] { color: var(--d-warn); }
+  .zm-menu .zm-l[data-tone="bad"] { color: var(--d-bad); }
+  .zm-menu .zm-chips { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); }
+  .zm-menu .zm-chips .d-btn[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); }
+  .zm-menu .zm-col { flex: none; display: grid; gap: var(--d-sp-1); justify-items: start; }
+  .zm-menu .zm-col .d-btn { min-block-size: 28px; }
+  .zm-menu .d-btn[data-primary] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
+  .zm-menu .d-btn:disabled { opacity: .5; cursor: not-allowed; }
+  .zm-menu .zm-loop { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; }
+  .zm-menu .zm-ll { color: var(--d-text-2); font-size: var(--d-fs-0); }
+  .zm-menu .zm-sel { min-block-size: 28px; background: var(--d-bg); color: var(--d-text); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); font-size: var(--d-fs-1); }
+  .zm-menu .zm-charter { flex: none; display: grid; gap: var(--d-sp-1); justify-items: start; }
+}
