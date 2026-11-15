@@ -291,6 +291,7 @@ docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
+docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict

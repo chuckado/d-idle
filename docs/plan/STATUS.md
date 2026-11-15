@@ -189,6 +189,7 @@
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
+| deploycockpit | proposed | - | `docs/probes/deploy-cockpit-2026-11-15.md` | - |
 | verifyp06b | proposed | - | `docs/upstream/verifier2-p06-2026-11-15.md` | - |
 | botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/task.go`<br>`internal/bot/parkstep_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/task/executor.go`<br>`docs/knobs.md` | - |
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
@@ -243,6 +244,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 02f99ea00 11-15 14:00 `Merge agent/deploycockpit: Merge branch 'main' into deploycockpit` (deploycockpit)
+- 6b9830c9c 11-15 13:56 `Merge branch 'main' into deploycockpit` (-)
 - 7977cd99a 11-15 13:37 `Merge agent/powerwire: Merge branch 'main' into TASK-508` (powerwire)
 - 43f30a8e0 11-15 13:36 `Merge branch 'main' into TASK-508` (-)
 - ff42d6f5f 11-15 13:28 `Merge agent/verifyp04b: Merge branch 'main' into TASK-512` (verifyp04b)
@@ -251,6 +254,4 @@
 - f89d5b557 11-15 13:19 `Merge agent/farmloop: Merge branch 'main' into farmloop` (farmloop)
 - 1139d706b 11-15 13:18 `Merge branch 'main' into farmloop` (-)
 - f40ddc57a 11-15 13:14 `Merge agent/prfix7: Merge branch 'main' into prfix7` (prfix7)
-- d4a7a770f 11-15 13:13 `Merge branch 'main' into prfix7` (-)
-- f3a866b1a 11-15 13:09 `Merge agent/dangerfit2: Merge branch 'main' into dangerfit2` (dangerfit2)
 <!-- statusgen:end -->
