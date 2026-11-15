@@ -166,6 +166,7 @@
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
 | uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
+| survcal | proposed | - | `docs/survival/calibration-2026-11-14.md`<br>`internal/survival`<br>`internal/power/hero.go`<br>`internal/bot/lifelog.go`<br>`internal/bot/lifelog_test.go`<br>`docs/lifelog.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/controller.go`<br>`tools/levelsim/shadow_test.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
@@ -212,6 +213,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
+- bbee6b240 11-14 19:20 `Merge branch 'main' into survcal` (-)
 - 79993ee9a 11-14 19:15 `Merge agent/uic2: Merge branch 'main' into TASK-456` (uic2)
 - a63baa338 11-14 19:14 `Merge branch 'main' into TASK-456` (-)
 - d098d1799 11-14 19:08 `Merge agent/survreplay: Merge branch 'main' into TASK-458` (survreplay)
@@ -220,6 +223,4 @@
 - cbc1dd7f5 11-14 18:57 `Merge branch 'main' into TASK-439` (-)
 - db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
 - 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
-- 52dc2ad18 11-14 18:54 `Merge remote-tracking branch 'origin/main' into agent/uic2` (-)
-- 0fa102afd 11-14 18:53 `Merge branch 'main' into p03posted` (-)
 <!-- statusgen:end -->
