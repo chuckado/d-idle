@@ -115,6 +115,8 @@ type Fun struct {
 	Return ReturnConfig
 	Strip  *TallyStrip
 	Policy *PolicySheet // nil: the sheet is off
+	// ZoneClear is the zone clear settings API (zoneclear.go); nil: off.
+	ZoneClear *ZoneClear
 	// Proposals is nil when zone proposals are off.
 	Proposals *ProposalDesk
 	// Unlocks is nil when the unlock ladder is off.
@@ -741,6 +743,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Campaign != nil {
 		m.Handle(CampaignRoute, f.Campaign.Handler())
 	}
+	if f.ZoneClear != nil {
+		m.Handle(ZoneClearRoute, f.ZoneClear.Handler())
+	}
 	if f.Policy != nil {
 		ph := f.Policy.PolicyHandler()
 		for _, p := range PolicyRoutes {
@@ -823,6 +828,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignIntentRoute, f.Campaign.PostHandler(o))
+	}
+	if f.ZoneClear != nil {
+		m.Handle(ZoneClearRoute, f.ZoneClear.PostHandler(o))
 	}
 	if f.Policy != nil {
 		m.Handle(PolicyPostRoute, f.Policy.PolicyAnswerHandler(o))
