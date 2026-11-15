@@ -1,0 +1,5 @@
+A click on a warp is a walk to a unit target in game.exe (`FUN_00548a50` -> `FUN_00580a70` mode 3, target type 5): `FUN_00649970` takes the path end from the tile unit (`FUN_006498a0`, near 1) and plans a type 7 path with the unit-target rules. `World::tick` planned it as a walk to a spot. The change plans it as a unit walk (`plan_unit`), nothing else; the client's re-issue still does not apply to a warp.
+
+Evidence (commit 1 is the oracle and builds alone; run it on the parent first): `test_warp_walk --dump N FILE` writes d2d's blocked bits, d2d's first path and the real sweep result for every warp start; `tools/emu/warp_walk_path.py game` runs game.exe's own `FUN_00649970`, `FUN_00650840` and `FUN_00641530` on the same bits. Parent: outcome differs in 30 of 5,857 starts (one start of 324 distinct ones: level 17 warp 0 from direction 3), the spot plan's path in 31. After: 0 and 0.
+
+Not covered: the grid is d2d's, the oracle has no rooms, and the walk uses the Sorceress's walking speed.
