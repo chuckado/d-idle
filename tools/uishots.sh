@@ -168,7 +168,7 @@ journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel
 needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
 zoneclear-rail watch?layout=cockpit-zoneclear&theme=dark&needs=2
-zoneclear-rail-light watch?layout=cockpit-zoneclear&theme=light&needs=0
+zoneclear-rail-light watch?layout=cockpit-zoneclear&theme=light&needs=2
 orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=0&cmd=eight
 orders-rail-all watch?layout=cockpit-orders&theme=dark&needs=0&cmd=cancel-all
 orders-empty watch?layout=cockpit&theme=dark&cmd=empty
