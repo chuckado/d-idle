@@ -169,6 +169,7 @@
 | uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
+| uib1 | in-progress | - | `internal/bot/playerpause.go`<br>`internal/bot/playerpause_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/testdata/pause/`<br>`cmd/d2bot/pausewire.go`<br>`docs/pause.md`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -216,14 +217,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d4dd67300 11-14 23:45 `Merge agent/uib1: Merge branch 'main' into TASK-464` (uib1)
+- c8643df88 11-14 23:44 `Merge branch 'main' into TASK-464` (-)
 - 9913f36ec 11-14 23:42 `Merge agent/decomp22: Merge branch 'main' into decomp22` (decomp22)
 - f48e7b3a8 11-14 23:41 `Merge branch 'main' into decomp22` (-)
+- fc4f96218 11-14 23:35 `Merge branch 'main' into TASK-464` (-)
 - 4dad0901b 11-14 23:29 `Merge agent/uis6: uis6: minBlock 250` (uis6)
 - 3b1fbaa90 11-14 23:08 `Merge origin/main into agent/uis6; minBlock for the act map in the rail` (-)
 - 776d705fa 11-14 20:46 `Merge agent/uis4: Merge branch 'main' into TASK-453` (uis4)
 - 49d8571e5 11-14 20:46 `Merge branch 'main' into TASK-453` (-)
 - c531b5422 11-14 20:44 `Merge agent/p05cr: Merge branch 'main' into TASK-459` (p05cr)
-- 99005156e 11-14 20:44 `Merge branch 'main' into TASK-459` (-)
-- 4769c8dc2 11-14 20:34 `Merge agent/toastfix: toastfix: stack toast text readable in dark theme, contrast test` (toastfix)
-- 1cbf7b792 11-14 20:33 `Merge origin/main into agent/uis4 (S1b, C2, S2 on main)` (-)
 <!-- statusgen:end -->
