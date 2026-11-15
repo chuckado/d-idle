@@ -64,7 +64,7 @@ function view(cls) {
       { id: 8, code: 'stf', name: 'War Staff', quality: 'magic', identified: true, w: 1, h: 3, canWear: ['rhand'], props: ['Two-Hand Damage: 2 to 8', '+2 to Charged Bolt'], req: { lvl: 6 }, stashOp: 'stash', usable: { hero: side(true), merc: side(true) } },
       { id: 9, code: 'rin', name: 'Gold Ring', quality: 'rare', identified: true, w: 1, h: 1, canWear: ['lring', 'rring'], props: ['Fire Resist +11%', '+12 Life', '+3 Dexterity'], stashOp: 'stash', usable: { hero: side(true), merc: side(true) } },
     ],
-    stash: [{ id: 20, code: 'amu', name: 'Jade Amulet', quality: 'magic', identified: true, w: 1, h: 1, stashOp: 'take', props: ['+9 Mana'] }],
+    stash: [{ id: 20, code: 'amu', name: 'Topaz Amulet', quality: 'magic', identified: true, w: 1, h: 1, stashOp: 'take', props: ['+9 Mana'] }],
     belt: [{ id: 30, code: 'hp1', name: 'Minor Healing Potion', quality: 'normal', identified: true, w: 1, h: 1 }],
   };
   return v;
@@ -99,7 +99,7 @@ for (const cls of ['Sorceress', 'Paladin']) {
     check('tip_' + cls.toLowerCase() + '_' + name, ser(p.h.state().node, 0));
   }
   // a queued move for town shows the TOWN badge and its wait
-  const q = JSON.parse(JSON.stringify(v)); q.queue = [{ id: 20, kind: 'take', state: 'queued', wait: 'town', name: 'Jade Amulet' }];
+  const q = JSON.parse(JSON.stringify(v)); q.queue = [{ id: 20, kind: 'take', state: 'queued', wait: 'town', name: 'Topaz Amulet' }];
   const p = tipPage(tipSrc); p.h.init(); p.h.onView(q); p.h.show('item-20', 'hover');
   check('tip_' + cls.toLowerCase() + '_town', ser(p.h.state().node, 0));
 }
@@ -297,7 +297,7 @@ const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
   {
     const v = view('Sorceress'), p = actPage(actSrc, v); p.h.init(); p.h.onView(v);
     p.setReply({ status: 200, body: { ok: true, request: { id: 20, kind: 'take', state: 'queued', how: 'queue', wait: 'town' } } });
-    const q = JSON.parse(JSON.stringify(v)); q.queue = [{ id: 20, kind: 'take', state: 'queued', wait: 'town', name: 'Jade Amulet' }];
+    const q = JSON.parse(JSON.stringify(v)); q.queue = [{ id: 20, kind: 'take', state: 'queued', wait: 'town', name: 'Topaz Amulet' }];
     p.setView(q);
     p.fire('click', p.ev(p.getA('item-20'), { ctrlKey: true }));
     await flush(); await flush(); await flush(); await flush();

@@ -1,5 +1,5 @@
-div.inv-act [aria-label=Actions for Jade Amulet role=menu data-mode=pop]
-  div.act-title.q-magic [] "Jade Amulet"
+div.inv-act [aria-label=Actions for Topaz Amulet role=menu data-mode=pop]
+  div.act-title.q-magic [] "Topaz Amulet"
   button.act [role=menuitem data-act=take] "Take out"
     kbd [] "Ctrl+click"
   button.act [aria-disabled=true role=menuitem data-act=sell data-off=] "Mark for sale"
