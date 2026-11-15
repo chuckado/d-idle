@@ -343,9 +343,11 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
+docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
 docs/survival/ledger.md  credit-runner  survC
+docs/survival/power.md  credit-runner  dangerfit2
 docs/survival/power.md  credit-runner  survB
 docs/survival/units-fit-2026-11-15.md  pro-runner  decomp28
 docs/swingmodel.md  credit-runner  swingmodel
@@ -517,6 +519,7 @@ internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  survB
+internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
@@ -604,6 +607,7 @@ internal/plandata/dropmodel-normal.json  credit-runner  decomp31
 internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
+internal/power  credit-runner  dangerfit2
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
 internal/resource/recovery.go  live-agent  recoverypace
