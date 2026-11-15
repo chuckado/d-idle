@@ -1,11 +1,11 @@
 ---
 id: TASK-455
 title: 'uis2: The glance endpoint and the band'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T22:39:00Z'
-updated_date: '2026-11-14T22:39:00Z'
+updated_date: '2026-11-15T01:14:00Z'
 labels:
   - watch
   - feature
