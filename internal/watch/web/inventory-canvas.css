@@ -233,6 +233,9 @@
   .cv-side > [data-cv=msg][hidden] { display: none; }
   @container side (max-height: 14rem) { .cv-lock { display: none; } }
 
+  /* his column is narrow beside a big hero doll: three values across, not four cut ones */
+  @container mbox (max-width: 26rem) { .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 34px; } }
+
   /* ---- narrow: two tabs (hero and mercenary; pack and stash), the bar wraps ---- */
   @container cv (max-width: 700px) {
     .cv { --cv-bar: 106px; --cv-tabs: 38px; --cv-p: 8px;
@@ -267,3 +270,5 @@
 .cv > .d-band-status .d-band-main { max-block-size: var(--cv-band); }
 .cv > .d-band-status .d-band-main > .d-panel, .cv > .d-band-status [data-panel="statusline"] .say { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-block-size: var(--cv-band); }
 .cv > .d-band-status [data-panel="statusline"] .say { display: block; max-inline-size: 100%; }
+.cv > .d-band-status [data-panel="hero-status"] { flex-wrap: nowrap; }
+.cv > .d-band-status [data-panel="hero-status"] .clock { display: none; } /* the clock is on the live screen; the one line keeps the state and where */
