@@ -198,7 +198,6 @@
 | dangerfit2 | proposed | - | `internal/danger`<br>`internal/power`<br>`docs/survival/danger.md`<br>`docs/survival/power.md` | - |
 | decomp31 | proposed | - | `docs/research/decomp31-drops.md`<br>`internal/plandata/dropmodel-normal.json`<br>`docs/plan/data/dropmodel-normal.json`<br>`tools/emu/dm_` | - |
 | decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
-| prfix7 | proposed | - | `docs/upstream/bodies/hitrec-interrupt-body.md`<br>`docs/upstream/drafts/hitrec-interrupt.md`<br>`docs/upstream/prfix7-p04-r3-2026-11-15.md`<br>`docs/upstream/briefs/verify2-hitrec-interrupt.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `upstream-pr:hitrec-interrupt`<br>`fork-branch:fid/hitrec-interrupt-r3` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
