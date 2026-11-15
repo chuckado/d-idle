@@ -20,6 +20,12 @@ owns:
   - "internal/watch/web/panels/zone-map/"
   - "internal/watch/testdata/zonemap/"
   - "tools/uishots/"
+  - "internal/watch/zonemap_test.go"
+  - "internal/watch/testdata/orders_dom.js"
+  - "internal/watch/testdata/orders_dom.txt"
+  - "internal/watch/mapview.go"
+  - "internal/watch/web/shell.js"
+  - "internal/watch/web/shell.css"
 exclusive: []
 contracts: []
 ---
@@ -29,7 +35,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: L
 
-Why: TODO. Done when: TODO.
+Why: the Orders panel and the act map were read-only; the player needs two clicks from a zone to an order. Done when: POST /api/commands dispatches over the old routes, the verb row, More sheet, Undo and keys are live, the zone-map slot panel draws the act and its menu opens beside the map (never over a zone button), and the fit check passes at all eight sizes with the menu open.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
