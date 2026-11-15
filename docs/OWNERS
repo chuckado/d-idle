@@ -194,6 +194,7 @@ cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
+cmd/d2bot/powerwire.go  credit-runner  powerwire
 cmd/d2bot/powerwire.go  credit-runner  survB
 cmd/d2bot/powerwire.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survB
@@ -211,6 +212,7 @@ cmd/d2bot/senseshistory_test.go  credit-runner  maphistory
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryA
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryC
 cmd/d2bot/skillswire.go  credit-runner  skilltrees
+cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
@@ -349,6 +351,7 @@ docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
 docs/survival/ledger.md  credit-runner  survC
 docs/survival/power.md  credit-runner  dangerfit2
+docs/survival/power.md  credit-runner  powerwire
 docs/survival/power.md  credit-runner  survB
 docs/survival/units-fit-2026-11-15.md  pro-runner  decomp28
 docs/swingmodel.md  credit-runner  swingmodel
@@ -611,6 +614,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/power  credit-runner  dangerfit2
+internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
 internal/resource/recovery.go  live-agent  recoverypace
@@ -914,6 +918,7 @@ tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
 tools/levelsim/  credit-runner  levelsim
+tools/levelsim/  credit-runner  powerwire
 tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
 tools/levelsim/farmreset.go  credit-runner  farmloop
 tools/levelsim/shadow.go  credit-runner  survB
