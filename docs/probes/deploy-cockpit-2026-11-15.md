@@ -26,3 +26,7 @@ Before: bot 0.0.261114180251, image devp7, container healthy. Rollback: `tools/d
 ## Redeploy 2, origin/main 16e3e3225 (character-screen fixes)
 
 V: `UPDATED d2play-20261108 0.0.261115105052 -> 0.0.261115113025`. The first two attempts were REJECTED because the container's DNS could not resolve the sandbox host after the host woke; `docker restart` of the container fixed it, then the update applied. Container healthy, `d2bot start` shows the new version, hero alive (xp 205565 -> 205947, deaths 0). `zone entry` fields present: `def` only (dmg, block, dmgpct, ar absent). No `zone shadow:` or `zone choice:` lines in 6 minutes. No watch token used. Rollback: `dev-update.sh --rollback --to d2play-20261108`.
+
+## Redeploy 3, origin/main c2cf0e03c
+
+V: `UPDATED d2play-20261108 0.0.261115113025 -> 0.0.261115182828 in 23s` (no DNS problem this time). Healthy, new version in `d2bot start`, 0 error/panic lines in 5 minutes, hero clvl 16 alive, xp 230392 -> 231257, deaths 0, no watchdog lines. `zone entry` fields present: `def` only. No `zone shadow:`, `zone choice:`, `planning blocked` or park lines in the window (U: the park rule was not exercised). No token used. Rollback: `dev-update.sh --rollback --to d2play-20261108`.
