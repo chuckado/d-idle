@@ -631,6 +631,7 @@ internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
 internal/watch/funwire.go  credit-runner  uib4
 internal/watch/gearsets_test.go  credit-runner  gearsets
+internal/watch/glancepanels_test.go  credit-runner  uis3
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/hero.go  credit-runner  uic3
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
@@ -700,6 +701,7 @@ internal/watch/testdata/gear_farm_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.js  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gearsets  credit-runner  gearsets
+internal/watch/testdata/glancepanels/  credit-runner  uis3
 internal/watch/testdata/history-export.json  credit-runner  maphistoryD
 internal/watch/testdata/history-heat.json  credit-runner  maphistoryB
 internal/watch/testdata/history.json  credit-runner  maphistoryA
@@ -776,6 +778,8 @@ internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/area-map/  credit-runner  uis6
 internal/watch/web/panels/gear  credit-runner  repairtrip
+internal/watch/web/panels/health/  credit-runner  uis3
+internal/watch/web/panels/journey-strip/  credit-runner  uis3
 internal/watch/web/panels/log/  credit-runner  uis6
 internal/watch/web/panels/map  credit-runner  maphistory
 internal/watch/web/panels/map  credit-runner  maphistoryA
@@ -785,10 +789,12 @@ internal/watch/web/panels/map  credit-runner  maphistoryD
 internal/watch/web/panels/map  credit-runner  maptrail
 internal/watch/web/panels/map  credit-runner  maptrail2
 internal/watch/web/panels/map/  credit-runner  uis6
+internal/watch/web/panels/needs-you/  credit-runner  uis3
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/orders/  credit-runner  uis5
+internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/zone-map/  credit-runner  uis5
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis5
@@ -850,8 +856,10 @@ tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
+tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots/  credit-runner  uic3
+tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis5
 tools/uishots/  credit-runner  uis6
 tools/uishots/fixtures.go  credit-runner  uic2

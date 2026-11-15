@@ -169,6 +169,7 @@
 | uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
+| uis3 | proposed | - | `internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/progress/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/testdata/glancepanels/`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/watch/glancepanels_test.go` | - |
 | uic3 | proposed | - | `internal/watch/web/inventory-tip.js`<br>`internal/watch/web/inventory-tip.css`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/web/inventory-drag.js`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/testdata/uic3/`<br>`internal/watch/herosheet_test.go`<br>`internal/watch/hero.go`<br>`internal/bot/heroattrs.go`<br>`internal/bot/heroattrs_test.go`<br>`cmd/d2bot/readywire.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/watch/uic3_test.go`<br>`internal/watch/web/inventory-sets.css`<br>`docs/inventory-ui.md`<br>`docs/ui-design-system.md` | - |
 | uib1 | in-progress | - | `internal/bot/playerpause.go`<br>`internal/bot/playerpause_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/testdata/pause/`<br>`cmd/d2bot/pausewire.go`<br>`docs/pause.md`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go` | - |
 | drills012 | in-progress | - | `docs/releases/0.1.2-drills.md` | - |
@@ -228,6 +229,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ce0a0e9f2 11-15 01:51 `Merge agent/uis3: Merge branch 'main' into TASK-462` (uis3)
+- 069647906 11-15 01:50 `Merge branch 'main' into TASK-462` (-)
+- 24cf4fd0f 11-15 01:43 `Merge origin/main into agent/uis3` (-)
 - fccb4bc7f 11-15 01:42 `Merge agent/uis5: Merge origin/main into agent/uis5` (uis5)
 - 0301cd509 11-15 01:40 `Merge origin/main into agent/uis5` (-)
 - fe856ee5c 11-15 01:34 `Merge agent/uic23review: Merge branch 'main' into TASK-477` (uic23review)
@@ -235,7 +239,4 @@
 - 7aaeed825 11-15 01:32 `Merge agent/decomp23: Merge branch 'main' into TASK-473` (decomp23)
 - 6f1df264a 11-15 01:31 `Merge branch 'main' into TASK-473` (-)
 - 1f779e3e8 11-15 01:28 `decomp23: merge origin/main, re-apply P02/P04/P06 rows (trace facts only)` (-)
-- e88587d08 11-15 01:26 `Merge agent/verifyp02: Merge branch 'main' into TASK-476` (verifyp02)
-- e76f1ceac 11-15 01:26 `Merge origin/main into agent/uis5` (-)
-- bf3537215 11-15 01:25 `Merge branch 'main' into TASK-476` (-)
 <!-- statusgen:end -->
