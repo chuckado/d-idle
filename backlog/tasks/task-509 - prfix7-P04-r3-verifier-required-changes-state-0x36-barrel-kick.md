@@ -1,10 +1,11 @@
 ---
 id: TASK-509
 title: 'prfix7: P04 r3 (verifier required changes: state 0x36, barrel kick)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:56:00Z'
+updated_date: '2026-11-15T18:18:00Z'
 labels:
   - d2d
   - upstream-pr

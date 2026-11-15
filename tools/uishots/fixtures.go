@@ -90,6 +90,11 @@ func fxLayout(name string) map[string]any {
 		rail = []string{"fx-needs", "orders", "zone-map", "area-map"}
 		wide["top"] = []string{"fx-needs", "orders"}
 		tabs[0].IDs = []string{"fx-needs", "orders"}
+	} else if name == "zoneclear" { // the real Zone clear panel (fed by zoneClearFixture) with the needs panel above it, the slot it will be dropped into
+		rail = []string{"fx-needs", "zoneclear", "zone-map", "area-map"}
+		wide["top"] = []string{"fx-needs"} // the top row sizes itself: a 300 px panel belongs in a column
+		wide["left"] = []string{"zoneclear", "zone-map"}
+		tabs[0].IDs = []string{"fx-needs", "zoneclear"}
 	} else if name != "" {
 		one := "fx-" + name
 		rail = []string{one}
@@ -133,7 +138,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			if name == "demo" {
 				name = ""
 			}
-			if name != "" && name != "orders" && byID["fx-"+name].id == "" {
+			if name != "" && name != "orders" && name != "zoneclear" && byID["fx-"+name].id == "" {
 				http.NotFound(w, r)
 				return
 			}

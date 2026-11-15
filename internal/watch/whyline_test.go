@@ -36,7 +36,7 @@ func TestWhyTemplates(t *testing.T) {
 		"quest_step": p("step", "Clear the Den of Evil", "level", "6"), "walk": p("area", "Blood Moor", "level", "6"),
 		"fight": p("area", "Cold Plains", "life", "80"), "town_trip": p("why", "2 potions left (I go at 3)"),
 		"town_chores": p("why", "selling"), "heal_trip": p("life", "40", "line", "50"), "wait_heal": p("why", "no potion"),
-		"guard_exit": p("why", "too many"), "farm_runs": p("area", "Mausoleum"), "farm_gold": p("level", "9"), "saving_for": p("area", "Blood Moor", "item", "healing potions", "need", "40"),
+		"guard_exit": p("why", "too many"), "farm_runs": p("area", "Mausoleum"), "farm_reset": p("area", "Blood Moor", "pct", "85"), "farm_gold": p("level", "9"), "saving_for": p("area", "Blood Moor", "item", "healing potions", "need", "40"),
 		"farm_user":   p("area", "Stony Field", "have", "40", "want", "190"),
 		"repair_wait": p("why", "finishing the pack first, 12 s of 60"), "repair_trip": p("step", "repairing in town"),
 		"repair_farm": p("area", "Stony Field", "have", "140", "want", "300"), "journey_blocked": p("why", "area skipped"),

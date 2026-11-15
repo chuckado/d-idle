@@ -2,6 +2,7 @@ package power
 
 import (
 	"fmt"
+	"maps"
 	"math"
 	"slices"
 
@@ -29,6 +30,7 @@ type Pack struct {
 type Model struct {
 	P  *Profiles
 	DP danger.Params
+	SD *SkillData // decomp29 skill damage and rate data; nil: every offence term is the constants of Params (flagged)
 }
 
 // NewModel loads the shipped profiles.
@@ -37,7 +39,11 @@ func NewModel(dp danger.Params) (*Model, error) {
 	if err != nil {
 		return nil, err
 	}
-	return &Model{P: p, DP: dp}, nil
+	sd, err := LoadSkillData()
+	if err != nil {
+		return nil, err
+	}
+	return &Model{P: p, DP: dp, SD: sd}, nil
 }
 
 // Terms are the numbers behind one margin, for the log and the API (design 8.1).
@@ -46,6 +52,8 @@ type Terms struct {
 	Taken       float64 `json:"taken"`       // life the encounter takes while the hero kills it
 	KillSeconds float64 `json:"killSeconds"` // time to kill the whole pack
 	PerKill     float64 `json:"perKill"`     // seconds per monster
+	HeroDPS     float64 `json:"heroDps"`     // the hero's own kill speed against the first monster of the pack
+	Offence     string  `json:"offence"`     // where HeroDPS comes from: measured, skill (data), weapon (constant swing), default
 	Potions     float64 `json:"potions"`     // healing potions the fight is expected to cost
 }
 
@@ -66,14 +74,36 @@ func (m *Model) Margin(h Hero, arch *Archetype, pk Pack) (Result, error) {
 	if arch == nil {
 		return Result{}, fmt.Errorf("power: no archetype")
 	}
-	best := m.margin(h, arch, pk, false)
-	low := m.margin(h, arch, pk, true)
+	est, err := m.estimate(&h)
+	if err != nil {
+		return Result{}, err
+	}
+	h.Quality = maps.Clone(h.Quality)
+	if est.Known() && est.Quality > h.q(TermOffence) {
+		h.set(TermOffence, est.Quality)
+	}
+	best := m.margin(h, arch, pk, false, est)
+	low := m.margin(h, arch, pk, true, est)
 	best.Low = low.Best
-	best.Flags = m.flags(h, arch)
+	best.Flags = m.flags(h, arch, est)
 	return best, nil
 }
 
-func (m *Model) flags(h Hero, arch *Archetype) []string {
+// estimate runs the skill data for the hero's main attack. No attack named or no data loaded: the zero estimate (the
+// constants stand in, flagged). An unknown skill or class is an error naming it.
+func (m *Model) estimate(h *Hero) (OffenceDPS, error) {
+	if m.SD == nil || h.Attack.Skill == "" {
+		return OffenceDPS{}, nil
+	}
+	a := h.Attack
+	if h.DmgMax > 0 {
+		a.WeaponAvg = float64(h.DmgMin+h.DmgMax) / 2
+		a.DmgPct = float64(h.DmgPct)
+	}
+	return m.SD.Estimate(h.Class, a)
+}
+
+func (m *Model) flags(h Hero, arch *Archetype, est OffenceDPS) []string {
 	var f []string
 	add := func(term string) {
 		if q := h.q(term); q < Measured {
@@ -85,6 +115,19 @@ func (m *Model) flags(h Hero, arch *Archetype) []string {
 		add(TermBlock)
 	}
 	add(TermOffence)
+	for _, fl := range est.Flags {
+		f = append(f, "offence_"+fl)
+	}
+	if !est.Known() && h.DmgMax > 0 { // the weapon branch: swing from the rate data or the constant
+		if _, ok := m.swing(h); !ok {
+			f = append(f, "offence_swing_default")
+		} else if h.Attack.WeaponClass == "" {
+			f = append(f, "offence_"+FlagWeaponDefault)
+		}
+	}
+	if arch.Offence.Mode == "mana_burst" && !est.Known() {
+		f = append(f, "offence_mana_default")
+	}
 	add(TermResist)
 	add(TermPotions)
 	if h.Merc.Hired {
@@ -104,7 +147,7 @@ func discount(a *Archetype, q Quality) float64 {
 	return a.Uncertainty.Default
 }
 
-func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool) Result {
+func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool, est OffenceDPS) Result {
 	pr := m.P.Params
 	d := func(term string) float64 {
 		if !low {
@@ -132,16 +175,37 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool) Result {
 		}
 		qm = float64(lvl) * pr.MercDpsPerLevel * d(TermMerc)
 	}
+	swing := pr.SwingSeconds
+	if s, ok := m.swing(h); ok {
+		swing = s
+	}
+	source := "default"
+	hitOf := func(mo Mon) float64 {
+		return float64(resource.HitChance(h.AR, 0, int(mo.Def), h.Level, pk.MLvl)) / 100
+	}
 	heroDPS := func(mo Mon) float64 {
 		switch {
 		case h.MeasuredDPS > 0:
+			source = "measured"
 			return h.MeasuredDPS
+		case est.Known():
+			source = "skill"
+			v := est.DPS
+			if est.NeedsHit {
+				v *= hitOf(mo)
+			}
+			return v * d(TermOffence)
 		case h.DmgMax > 0:
-			hit := float64(resource.HitChance(h.AR, 0, int(mo.Def), h.Level, pk.MLvl)) / 100
+			source = "weapon"
 			mean := float64(h.DmgMin+h.DmgMax) / 2 * (1 + float64(h.DmgPct)/100)
-			return hit * mean / pr.SwingSeconds * d(TermOffence)
+			return hitOf(mo) * mean / swing * d(TermOffence)
 		}
+		source = "default"
 		return pr.DefaultDpsPerClvl * float64(h.Level) * d(TermOffence)
+	}
+	manaPerSec := pr.ManaPerSecond
+	if est.Known() && est.ManaPerSec > 0 {
+		manaPerSec = est.ManaPerSec
 	}
 	kill := make([]float64, len(order))
 	var t0 float64
@@ -151,7 +215,7 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool) Result {
 	}
 	// a mana-gated attack slows down once the pool is empty (design 4: kill speed is the lesser of burst and mana income)
 	if a.Offence.Mode == "mana_burst" && h.MaxMana > 0 && t0 > 0 {
-		sec := float64(h.MaxMana) / pr.ManaPerSecond
+		sec := float64(h.MaxMana) / manaPerSec
 		if t0 > sec {
 			f := (sec + (t0-sec)*pr.ManaFloor) / t0
 			for i := range kill {
@@ -238,7 +302,10 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool) Result {
 	pool := float64(h.MaxLife) * (1 - pr.ChickenPct)
 	potions := math.Min(float64(h.Potions)*heal*d(TermPotions), heal/pr.PotionEffectSeconds*el)
 	budget := pool + potions + h.Sustain*el
-	r := Result{Terms: Terms{Budget: budget, Taken: taken, KillSeconds: el}}
+	r := Result{Terms: Terms{Budget: budget, Taken: taken, KillSeconds: el, Offence: source}}
+	if len(order) > 0 {
+		r.Terms.HeroDPS = heroDPS(order[0])
+	}
 	if len(order) > 0 {
 		r.Terms.PerKill = el / float64(len(order))
 	}
@@ -250,4 +317,44 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool) Result {
 		r.Best = math.Min(pr.MaxMargin, budget/taken)
 	}
 	return r
+}
+
+// swing is the weapon swing of the hero's class from the rate data (replaces the constant Params.SwingSeconds); false
+// when the class or the weapon class is not read, so the constant stands in.
+func (m *Model) swing(h Hero) (float64, bool) {
+	if m.SD == nil || h.Class == "" {
+		return 0, false
+	}
+	wc := h.Attack.WeaponClass
+	if wc == "" {
+		wc = "1HS" // flagged by flags
+	}
+	s, err := m.SD.SwingSeconds(h.Class, wc, h.Attack.WSM)
+	return s, err == nil
+}
+
+// OffenceUnread is true when neither a read weapon nor a build's skill data gives the hero a kill speed, so the
+// constants stand in (the survival ledger then caps k_hero).
+func (m *Model) OffenceUnread(h Hero) bool {
+	if est, err := m.estimate(&h); err == nil && est.Known() {
+		return false
+	}
+	return h.OffenceUnread()
+}
+
+// Attach puts the build's main attack on the hero for the data estimate, keeping the gear speeds the hero read. A skill
+// the data does not know is an error naming it and the hero keeps the constants (flagged); a build that has spent no
+// point on its attack yet (nothing to estimate) is not an error.
+func (m *Model) Attach(h *Hero, s BuildSpec) error {
+	if m.SD == nil || s.Attack == "" || s.AttackLevel <= 0 {
+		return nil
+	}
+	if _, err := m.SD.Skill(s.Attack); err != nil {
+		return err
+	}
+	a := AttackOf(s)
+	a.FCR, a.FCRKnown, a.IAS, a.IASKnown = h.Attack.FCR, h.Attack.FCRKnown, h.Attack.IAS, h.Attack.IASKnown
+	a.WeaponClass, a.WSM = h.Attack.WeaponClass, h.Attack.WSM
+	h.Attack = a
+	return nil
 }

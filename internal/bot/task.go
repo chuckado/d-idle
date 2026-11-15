@@ -915,6 +915,9 @@ func (a taskActs) LevelTo(ctx context.Context, n int) error {
 		return task.Errorf(task.KindUI, "not in a game")
 	}
 	r.syncGames() // a fresh game forgets its predecessor's cleared areas, else freshGameToLevel restarts in a loop
+	if done, err := r.farmResetStep(ctx, s); done {
+		return a.tag(err)
+	}
 	c := a.c
 	c.spec = goalSpec{kind: goals.ReachLevel, level: n, label: fmt.Sprintf("reach level %d", n)}
 	// the planner reads the goal's level through c.goal.Params.Level
@@ -1005,7 +1008,14 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 	}
 	r.e.Log.Info("leveling: everything worth farming is cleared, starting a fresh game", "level", s.Player.Level, "cleared", len(r.loop.cleared),
 		"noGainRestarts", r.loop.freshNoGain, "reason", "no area left to pick")
-	err = r.newGameRun(func(ctx context.Context) error {
+	return true, r.startFreshGame(ctx, s)
+}
+
+// startFreshGame is the one place a planned fresh game starts from town: leave, enter a new game of the hero's
+// difficulty, forget what the old game cleared. The farm loop and the leveling slice share it (the Reset button's
+// route can too). The caller checked the holds (freshHold, freshAllowed) and that the hero stands in town.
+func (r *Runner) startFreshGame(ctx context.Context, s *d2.Snapshot) error {
+	err := r.newGameRun(func(ctx context.Context) error {
 		return r.d.Cycler.NewGame(ctx, difficultyName(s.Player.Difficulty))
 	})(ctx)
 	if err == nil {
@@ -1013,7 +1023,7 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 		// after 38 fresh games) and syncGames cannot forget: the cleared set belongs to the old game.
 		r.forgetGame()
 	}
-	return true, err
+	return err
 }
 
 // freshAllowed is the progress check in front of a fresh game. It compares the experience with the one at the previous
