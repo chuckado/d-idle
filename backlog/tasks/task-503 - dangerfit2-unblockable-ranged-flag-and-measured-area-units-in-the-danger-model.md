@@ -34,5 +34,5 @@ Why: TODO. Done when: TODO.
 <!-- AC:BEGIN -->
 - [x] #1 Unblockable flag skips block for shaman/Radament-type attackers (two builds tested)
 - [x] #2 areaunits.json wired: measured rows, fitted per-screen for the rest, formula fallback
-- [x] #3 Gate: labrun tower danger/power/survival/d2bot green
+- [x] #3 Gate: labrun the builder danger/power/survival/d2bot green
 <!-- AC:END -->
