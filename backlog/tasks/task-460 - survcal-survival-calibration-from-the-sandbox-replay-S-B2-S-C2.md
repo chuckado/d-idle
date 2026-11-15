@@ -1,10 +1,11 @@
 ---
 id: TASK-460
 title: 'survcal: survival calibration from the sandbox replay (S-B2/S-C2)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T23:55:00Z'
+updated_date: '2026-11-15T00:33:00Z'
 labels:
   - bot
   - model-check
