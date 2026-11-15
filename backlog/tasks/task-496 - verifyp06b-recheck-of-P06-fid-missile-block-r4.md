@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/verifier2-p06-2026-11-15.md"
 exclusive: []
 contracts: []
+result: "P06 r4 recheck: PASS, post fid/missile-block-r4 3ca8ee32 (not verified live; NAS builder + one emulator launch run). All 5 required and 3 recommended fixes in; maul game record 2,560-5,120 can-block 1; old ordering 15 differ and aborts test_carried_missile. docs/upstream/verifier2-p06-2026-11-15.md"
 ---
 
 ## Description
@@ -28,7 +29,7 @@ Why: recheck of the P06 r4 head after verifier-p06. Consumer: decomp26 (P06 upst
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 r4 rebuilt and rerun on the NAS builder: oracle, skill compare, carried test with the old ordering, ctest
-- [ ] #2 All five required and three recommended fixes of verifier-p06 checked
-- [ ] #3 Verdict and exact head written
+- [x] #1 r4 rebuilt and rerun on the NAS builder: oracle, skill compare, carried test with the old ordering, ctest
+- [x] #2 All five required and three recommended fixes of verifier-p06 checked
+- [x] #3 Verdict and exact head written
 <!-- AC:END -->
