@@ -197,3 +197,12 @@ func (r *Runner) farmReturn(s *d2.Snapshot, c control, a int) int {
 	}
 	return rt
 }
+
+// FarmResetShare is the coverage percent at which the farm loop resets a zone, 0 while the loop is off (the watch's
+// Hero now line shows it next to the explored share).
+func (r *Runner) FarmResetShare() int {
+	if t := r.e.Tune.Bot; t.FarmReset == 1 {
+		return max(t.FarmResetPct, 50)
+	}
+	return 0
+}

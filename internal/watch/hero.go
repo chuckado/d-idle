@@ -61,10 +61,15 @@ type HeroExplored struct {
 	Total     int `json:"total"`
 	Pct       int `json:"pct"`
 	Threshold int `json:"threshold"`
+	// Reset is the share at which the farm loop takes a fresh game (bot.farmResetPct); absent while the loop is off.
+	Reset int `json:"reset,omitempty"`
 }
 
 // ExploredSource reads the zone coverage for /api/hero (ok false: none).
 type ExploredSource func() (visited, total, pct, threshold int, ok bool)
+
+// SetFarmResetSource sets where /api/hero reads the farm loop's reset share from (0 or nil: off, the key is left out).
+func (h *Hub) SetFarmResetSource(f func() int) { h.mu.Lock(); h.farmReset = f; h.mu.Unlock() }
 
 // SetExploredSource sets where /api/hero reads the explored share from (nil: the key is left out).
 func (h *Hub) SetExploredSource(f ExploredSource) { h.mu.Lock(); h.explored = f; h.mu.Unlock() }
@@ -162,7 +167,7 @@ func (h *Hub) Hero() HeroView {
 	up := h.Uptime()
 	ov := h.OrdersView()
 	h.mu.Lock()
-	hi, gold, stats, expl := h.hero, h.gold, h.stats, h.explored
+	hi, gold, stats, expl, fr := h.hero, h.gold, h.stats, h.explored, h.farmReset
 	from, fromT, seen, now := h.xpFrom, h.xpFromT, h.xpSeen, h.cfg.Clock.Now()
 	h.mu.Unlock()
 	v := HeroView{Schema: heroSchema, Known: hi.Known || hi.Class != "", Name: safeText(hi.Name, 40), Class: hi.Class, Level: hi.Level,
@@ -202,6 +207,9 @@ func (h *Hub) Hero() HeroView {
 	if expl != nil {
 		if vis, tot, pct, th, ok := expl(); ok && tot > 0 {
 			v.Explored = &HeroExplored{Visited: vis, Total: tot, Pct: pct, Threshold: th}
+			if fr != nil {
+				v.Explored.Reset = fr()
+			}
 		}
 	}
 	for _, o := range ov.Orders {
