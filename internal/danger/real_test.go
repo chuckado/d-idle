@@ -20,6 +20,10 @@ func realInstall() string {
 }
 
 func realTable(t *testing.T) (*data.DB, *Table) {
+	return realTableWith(t, DefaultParams())
+}
+
+func realTableWith(t *testing.T, p Params) (*data.DB, *Table) {
 	t.Helper()
 	if _, err := os.Stat(realInstall() + "/d2data.mpq"); err != nil {
 		t.Skip("no real install at " + realInstall())
@@ -32,7 +36,7 @@ func realTable(t *testing.T) (*data.DB, *Table) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	tb, err := Build(db, DefaultParams(), ov)
+	tb, err := Build(db, p, ov)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -86,7 +90,9 @@ func TestRealAnchors(t *testing.T) {
 // so the tolerance is the median relative error over all 36 areas (fit: outdoor 20%, preset 18%, maze 55%, worst single area several times off); the numbers are logged for refitting
 // Params.UnitsPerDensityTile.
 func TestAreamonDiff(t *testing.T) {
-	db, tb := realTable(t)
+	p := DefaultParams()
+	p.AreaUnits = nil // the formula alone: the measured rows would make this comparison circular
+	db, tb := realTableWith(t, p)
 	f, err := os.Open("../../docs/research/areamon-table.csv")
 	if err != nil {
 		t.Fatal(err)
@@ -139,4 +145,25 @@ func levelOf(db *data.DB, id int) *data.Level {
 		}
 	}
 	return &data.Level{}
+}
+
+// TestAreaUnitsWired: a measured area (Normal, Acts 1 and 2) takes game.exe's units and units per screen; an area the
+// file lacks (Hell here) keeps the formula units and gets the fitted per-screen density, which is 10 to 22 in mazes
+// where the Levels.txt size gave 0.4 to 3 (docs/survival/units-fit-2026-11-15.md).
+func TestAreaUnitsWired(t *testing.T) {
+	_, tb := realTable(t)
+	z, err := tb.Find(35, "normal") // Catacombs 2, maze, measured: 96 units, 12.8 per screen
+	if err != nil {
+		t.Fatal(err)
+	}
+	if math.Abs(z.Density.Units-96) > 3 || z.Density.PerScreen < 10 || z.Density.PerScreen > 15 {
+		t.Errorf("catacombs 2 normal: %+v", z.Density)
+	}
+	h, err := tb.Find(35, "hell")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if h.Density.PerScreen < 5 || h.Density.PerScreen > 40 {
+		t.Errorf("catacombs 2 hell per screen %.1f, want the fitted 5 to 40", h.Density.PerScreen)
+	}
 }

@@ -1,0 +1,15 @@
+{
+ "schema": "danger.unblockable/1",
+ "tag": "V run (game.exe record of every monster missile row, docs/research/monster-missile-trace.md Q4 'blockable: no'); shooter keys from the 'shooters' column",
+ "rule": "a ranged attack is unblockable when its missile launches with a zero physical record (min and max both over 0 is the blockable case)",
+ "note": "A ranged species missing here is treated as blockable. Radament's bolt and the unraveler bolts, Fallen Shaman fire, the vampire meteor and the summoner's nova are in; Blood Raven and Andariel are blockable (physical part).",
+ "keys": [
+  "bighead1", "bighead2", "bighead3", "bighead4",
+  "fallenshaman1", "fallenshaman2", "fallenshaman3", "fallenshaman4",
+  "unraveler1", "unraveler2", "unraveler3", "radament",
+  "summoner", "skmage_pois3", "skmage_cold4",
+  "skmage_fire1", "skmage_fire2", "skmage_fire3", "skmage_fire4",
+  "skmage_ltng1", "skmage_ltng2", "skmage_ltng3", "skmage_ltng4",
+  "vampire1", "slinger6", "corruptrogue3"
+ ]
+}
