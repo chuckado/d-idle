@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-459 <!--sg:agent/p05cr-->
 - toastfix: stack toast text readable in dark theme, contrast test <!--sg:agent/toastfix-->
 - Merge origin/main into agent/uis2 <!--sg:agent/uis2-->
 - Merge branch 'main' into survcal <!--sg:agent/survcal-->
