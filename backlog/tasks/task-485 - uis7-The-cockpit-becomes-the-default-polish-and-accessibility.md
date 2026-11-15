@@ -32,6 +32,7 @@ owns:
   - "internal/watch/glance_questions_test.go"
   - "tools/uishots/fit.js"
 exclusive: []
+result: "Cockpit is the default (web/layout.json = layouts/cockpit.json, Standard kept in layouts/standard.json). Choice rule: a stored layout or a menu choice is never changed; a Simple pinned by an older shell (no d2layoutpick marker) follows the default; a new hero gets the cockpit, no pin. Cockpit entry in the Layout menu (Classic is the way back); layout note floats in a cockpit; first-run opens the Getting started drawer once; startup self-check falls back to Standard when a slot panel is missing; OBS strip keeps Standard. Open hero questions are now Needs you rows (the old Thoughts card is hidden in a cockpit). Old message bar floats. Contrast: text-3 text became text-2, light ok/warn chips 4.58:1. Fit check on the default page passes at the 8 sizes plus 1024x768, 900x700, 1279x720 (see commit log for the last run). Renders looked at: 1440x900, 1920x1080, 1366x768, 1280x620, 390x844, dark and light, empty and full. Not verified live (fixture viewer only): live stream tile, update banner, unlock reveal sheet (fixed overlays, not rendered), screen reader, real phone, Electron window."
 contracts: []
 ---
 
@@ -45,8 +46,8 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Fit check passes for the default page (no layout param) at the eight sizes, dark and light, with zero, two and five needs rows and with one and eight orders
-- [ ] #2 A stored layout is untouched (test); an auto-pinned Simple follows the default; the Layout menu has Cockpit and returns to every older layout
-- [ ] #3 Renders at 1440x900, 1920x1080, 1366x768, 1280x620 and the phone looked at, dark and light, empty and full data
-- [ ] #4 Tab order follows reading order; every control reachable by keyboard; contrast 4.5:1; reduced motion
+- [x] #1 Fit check passes for the default page (no layout param) at the eight sizes, dark and light, with zero, two and five needs rows and with one and eight orders
+- [x] #2 A stored layout is untouched (test); an auto-pinned Simple follows the default; the Layout menu has Cockpit and returns to every older layout
+- [x] #3 Renders at 1440x900, 1920x1080, 1366x768, 1280x620 and the phone looked at, dark and light, empty and full data
+- [x] #4 Tab order follows reading order; every control reachable by keyboard; contrast 4.5:1; reduced motion
 <!-- AC:END -->
