@@ -383,9 +383,10 @@ type Manifest struct {
 	Unlock      string  `json:"unlock"`
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
-	OptIn       bool    `json:"optIn"`  // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
-	Slot        bool    `json:"slot"`   // renders into a fixed box and may sit in a cockpit slot (S1b)
-	Scroll      bool    `json:"scroll"` // holds a list that scrolls inside the box (data-scroll); needs slot
+	OptIn       bool    `json:"optIn"`       // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	Slot        bool    `json:"slot"`        // renders into a fixed box and may sit in a cockpit slot (S1b)
+	CockpitOnly bool    `json:"cockpitOnly"` // belongs to the cockpit template alone: a free-grid layout keeps its fallback (uis2)
+	Scroll      bool    `json:"scroll"`      // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
 	Doc         string  `json:"doc"`

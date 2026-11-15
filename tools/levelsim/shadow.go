@@ -167,6 +167,24 @@ func heroOfEntry(kv map[string]string) power.Hero {
 	if _, mx, ok := strings.Cut(kv["mana"], "/"); ok {
 		h.MaxMana, _ = strconv.Atoi(mx)
 	}
+	// terms of the zone entry line since card survcal (docs/survival/replay-2026-11-14.md); older logs lack them and stay default
+	if v, err := strconv.Atoi(kv["def"]); err == nil {
+		h.Defence = v
+		h.SetQuality(power.TermDefence, power.Measured)
+	}
+	if v, err := strconv.Atoi(kv["block"]); err == nil {
+		h.BlockPct = v
+		h.SetQuality(power.TermBlock, power.Derived)
+	}
+	if lo, hi, ok := strings.Cut(kv["dmg"], "-"); ok {
+		h.DmgMin, _ = strconv.Atoi(lo)
+		h.DmgMax, _ = strconv.Atoi(hi)
+		h.DmgPct, _ = strconv.Atoi(kv["dmgpct"])
+		h.AR, _ = strconv.Atoi(kv["ar"])
+		if h.DmgMax > 0 {
+			h.SetQuality(power.TermOffence, power.Derived)
+		}
+	}
 	if n, err := strconv.Atoi(kv["heal"]); err == nil {
 		h.Potions = n
 		h.SetQuality(power.TermPotions, power.Derived)

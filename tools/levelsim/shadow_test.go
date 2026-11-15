@@ -8,6 +8,7 @@ import (
 
 	"d2lod-bot/internal/danger"
 	"d2lod-bot/internal/power"
+	"d2lod-bot/internal/survival"
 )
 
 // shadowTab has an easy field (area 2) and a hard marsh (area 6); the numbers are made up, like the log below.
@@ -98,5 +99,59 @@ func TestShadowReplayFails(t *testing.T) {
 	}
 	if v := rep.Verdict(); v != "FAIL" {
 		t.Errorf("verdict %s\n%s", v, rep.Text())
+	}
+}
+
+// ControllerReplay on the synthetic table: the merc dies twice in the marsh, the hero chickens, and the controller
+// must not name the marsh again at unchanged power (design 10, swap7 shape).
+func TestControllerReplayNoSecondMarsh(t *testing.T) {
+	m, err := power.NewModel(danger.DefaultParams())
+	if err != nil {
+		t.Fatal(err)
+	}
+	a, _ := m.P.Archetype("bruiser")
+	o := ShadowOpts{Tab: shadowTab(), M: m, Arch: a, Diff: "normal"}
+	sp, err := survival.LoadParams()
+	if err != nil {
+		t.Fatal(err)
+	}
+	t0 := time.Date(2026, 11, 10, 12, 0, 0, 0, time.UTC)
+	var b strings.Builder
+	at := func(min int) string { return t0.Add(time.Duration(min) * time.Minute).Format(time.RFC3339) }
+	fmt.Fprintf(&b, "time=%s msg=planner area=2\ntime=%s msg=planner area=6\n", at(0), at(0))
+	fmt.Fprintf(&b, "time=%s msg=\"zone entry\" area=6 clvl=10 life=150/150 heal=4 mana=40/40 tome=1 merc=alive\n", at(1))
+	for i := 2; i < 40; i++ {
+		switch i {
+		case 5, 7:
+			fmt.Fprintf(&b, "time=%s msg=\"merc: died\"\n", at(i))
+		case 9:
+			fmt.Fprintf(&b, "time=%s msg=\"safety decision\" action=chicken area=6\n", at(i))
+		}
+		fmt.Fprintf(&b, "time=%s msg=minute area=6 clvl=10 maxLife=150 potions=4 gold=900\n", at(i))
+	}
+	rep, err := ControllerReplay(strings.NewReader(b.String()), CtlOpts{ShadowOpts: o, Params: sp})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(rep.Rows) == 0 || !strings.Contains(rep.Text(), "controller replay") {
+		t.Fatal("no rows")
+	}
+	for _, r := range rep.Rows {
+		if r.T.After(t0.Add(12*time.Minute)) && r.Shadow == 6 {
+			t.Fatalf("shadow names the marsh again at %s: %+v", r.T.Format("15:04"), r)
+		}
+	}
+}
+
+// Card survcal: the new zone entry fields turn the offence, defence and block terms from default into read.
+func TestHeroOfEntryReadsTerms(t *testing.T) {
+	old := heroOfEntry(textKV(`time=2026-11-14T15:03:31Z msg="zone entry" area=1 clvl=11 life=97/165 heal=5 mana=30/30 tome=1 merc=alive`))
+	if !old.OffenceUnread() || old.Quality[power.TermDefence] != power.Default {
+		t.Fatalf("an old log must leave the terms default: %+v", old.Quality)
+	}
+	h := heroOfEntry(textKV(`time=2026-11-14T15:03:31Z msg="zone entry" area=1 clvl=11 life=97/165 heal=5 mana=30/30 tome=1 merc=alive def=140 block=25 dmg=5-11 dmgpct=10 ar=105`))
+	if h.OffenceUnread() || h.Defence != 140 || h.BlockPct != 25 || h.DmgMin != 5 || h.DmgMax != 11 || h.DmgPct != 10 || h.AR != 105 ||
+		h.Quality[power.TermDefence] != power.Measured {
+		t.Fatalf("terms not read: %+v %+v", h, h.Quality)
 	}
 }

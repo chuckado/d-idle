@@ -29,8 +29,11 @@ type Params struct {
 	DeathMul            float64             `json:"deathMul"`
 	KMin                float64             `json:"kMin"`
 	KMax                float64             `json:"kMax"`
+	KHeroUnreadMax      float64             `json:"kHeroUnreadMax"`
+	PredTakenFloor      float64             `json:"predTakenFloorPerKill"`
 	PowerChange         float64             `json:"powerChange"`
 	WindowMinutes       float64             `json:"windowMinutes"`
+	MercWindowMinutes   float64             `json:"mercWindowMinutes"`
 	NoReviveMinutes     float64             `json:"noReviveMinutes"`
 	SwitchMargin        float64             `json:"switchMargin"`
 	StayMinutes         float64             `json:"stayMinutes"`
@@ -53,10 +56,13 @@ func LoadParams() (*Params, error) {
 	}
 	for name, v := range map[string]float64{"halfLifeMinutes": p.HalfLifeMinutes, "heroHalfLifeMinutes": p.HeroHalfLifeMinutes,
 		"hardHalfLifeMinutes": p.HardHalfLifeMinutes, "shrinkKills": p.ShrinkKills, "windowMinutes": p.WindowMinutes,
-		"stayMinutes": p.StayMinutes, "kMax": p.KMax, "kMin": p.KMin} {
+		"stayMinutes": p.StayMinutes, "kMax": p.KMax, "kHeroUnreadMax": p.KHeroUnreadMax, "mercWindowMinutes": p.MercWindowMinutes, "kMin": p.KMin} {
 		if v <= 0 {
 			return nil, fmt.Errorf("survival: params: %s must be positive", name)
 		}
+	}
+	if p.PredTakenFloor < 0 {
+		return nil, fmt.Errorf("survival: params: predTakenFloorPerKill must not be negative")
 	}
 	for _, d := range []string{"cautious", "balanced", "bold"} {
 		if _, ok := p.Dials[d]; !ok {

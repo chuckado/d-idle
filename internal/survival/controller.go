@@ -35,6 +35,8 @@ type Input struct {
 	Purse        Purse
 	Cands        []Candidate
 	FreshAllowed bool
+	// OffenceUnread is true when the hero's weapon terms were not read (power quality default): k_hero is then capped.
+	OffenceUnread bool
 }
 
 // Alt is one zone that was not chosen, with the reason in words (API) and with numbers (log only).
@@ -108,7 +110,7 @@ func lambda(p *Params, pu Purse) float64 {
 func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 	l.Refresh(c.Key, in.Power)
 	v := verdict{c: c}
-	v.k = l.KZone(c.Key, in.Now) * l.KHero()
+	v.k = l.KZoneFor(c.Key, in.Now, in.OffenceUnread) * l.KHeroFor(in.OffenceUnread)
 	v.best, v.low = c.ZM.Bad.Best/v.k, c.ZM.Bad.Low/v.k
 	enter, stay := in.Dial.Enter, in.Dial.Stay
 	cur := c.Key == in.Current

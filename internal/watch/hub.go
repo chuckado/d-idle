@@ -82,6 +82,7 @@ type Hub struct {
 	layout   layoutStore                     // the layout manifest in force (layout.go); its own mutex
 	explored ExploredSource                  // zone coverage for /api/hero (SetExploredSource); guarded by mu
 	gold     GoldSource                      // gold for /api/hero (SetGoldSource); guarded by mu
+	gl       glanceState                     // sources and sample ring of /api/glance (glance.go); its own mutex
 
 	mu      sync.Mutex
 	seq     uint64

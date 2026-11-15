@@ -4,19 +4,21 @@
 # nice 19 (never the user's desktop), one PNG and one DOM dump per page, width and theme, then the DOM contract check
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
+#   tools/uishots.sh --char [--out DIR] [--only theme=light]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 char=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
 	--out) out=$2; shift 2 ;;
 	--only) only=$2; shift 2 ;;
 	--fit) fit=1; shift ;;
+	--char) char=1; shift ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
@@ -35,6 +37,18 @@ sp=$!
 timeout 600 Xvfb $disp -screen 0 1920x1200x24 -nolisten tcp >/dev/null 2>&1 &
 xp=$!
 sleep 2
+if [ "$char" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/char-*
+	for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
+		w=${sz%x*} h=${sz#*x}
+		prof=$(mktemp -d)
+		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=dark&w=$w&h=$h" >/dev/null 2>&1
+		rm -rf "${prof:?}"
+	done
+	ls "$out"/char-*
+	exit 0
+fi
 if [ "$fit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/fit-*
 	# the full-screen sizes, the browser-window sizes (a window with its chrome is shorter than the screen) and the phone
@@ -52,7 +66,9 @@ overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
 overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
-tall-frame watch?layout=cockpit-tall&theme=dark"
+tall-frame watch?layout=cockpit-tall&theme=dark
+character watch/inventory?theme=dark
+character-light watch/inventory?theme=light"
 	echo "$pages" | while read -r pname pq pclick; do
 		for sz in $sizes; do
 			w=${sz%x*} h=${sz#*x} ck=

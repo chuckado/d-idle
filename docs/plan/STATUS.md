@@ -164,6 +164,7 @@
 | survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -211,14 +212,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 564879d7a 11-14 18:37 `Merge agent/survC: Merge branch 'main' into TASK-452` (survC)
-- 9773f4061 11-14 18:36 `Merge branch 'main' into TASK-452` (-)
-- ebccd017a 11-14 18:23 `Merge agent/uis1b: Merge branch 'main' into TASK-438` (uis1b)
-- cb58d4416 11-14 18:22 `Merge branch 'main' into TASK-438` (-)
-- 046cab808 11-14 17:59 `Merge agent/survB: Merge branch 'main' into survB` (survB)
-- 617ccb170 11-14 17:58 `Merge branch 'main' into survB` (-)
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
-- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
-- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
+- 2dd560602 11-14 20:03 `Merge agent/uis2: Merge origin/main into agent/uis2` (uis2)
+- e65e71841 11-14 19:54 `Merge origin/main into agent/uis2` (-)
+- de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
+- bbee6b240 11-14 19:20 `Merge branch 'main' into survcal` (-)
+- 79993ee9a 11-14 19:15 `Merge agent/uic2: Merge branch 'main' into TASK-456` (uic2)
+- a63baa338 11-14 19:14 `Merge branch 'main' into TASK-456` (-)
+- d098d1799 11-14 19:08 `Merge agent/survreplay: Merge branch 'main' into TASK-458` (survreplay)
+- ae3074631 11-14 19:07 `Merge branch 'main' into TASK-458` (-)
+- 79fa5b547 11-14 18:58 `Merge agent/cut012: friends 0.1.2: per-archive game mounts (no key file), checklist fixes, restaged` (cut012)
+- cbc1dd7f5 11-14 18:57 `Merge branch 'main' into TASK-439` (-)
 <!-- statusgen:end -->
