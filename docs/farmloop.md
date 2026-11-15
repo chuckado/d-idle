@@ -18,18 +18,18 @@ Guards (V: `TestFarmResetDueAndGuards`, two classes): knob on, leveling slice on
 
 | zone | clvl | walk min | fitted (decay 0.25, floor 0.5) fixed/rule | prior (decay 1, floor 0.4, yield 0.82) | steep (decay 1.5, floor 0.2, yield 0.9) |
 |---|---|---|---|---|---|
-| Blood Moor | 2 | 0.2 | +2.5% / +2.5% | +8.1% / +8.1% | +16.7% / +16.7% |
-| Cold Plains | 5 | 0.3 | +2.4% / +2.4% | +7.8% / +7.8% | +15.7% / +15.7% |
-| Stony Field | 7 | 0.3 | +2.6% / +2.6% | +7.7% / +7.7% | +15.9% / +15.9% |
-| Cave 1 | 8 | 0.8 | +17.3% / +16.8% (unexplained, I suspect a model artefact) | +8.0% / +8.0% | +17.6% / +17.6% |
-| Cave 2 | 8 | 1.1 | -0.3% / 0.0% | +5.8% / +2.5% | +14.1% / +14.1% |
-| Black Marsh | 9 | 0.3 | +2.4% / +2.4% | +7.8% / +7.8% | +15.7% / +15.7% |
-| Dark Wood | 10 | 0.3 | +2.5% / +2.4% | +7.8% / +7.8% | +15.6% / +15.6% |
-| Tamoe Highland | 11 | 1.9 | +0.6% / 0.0% | +5.2% / +5.2% | +13.6% / +13.6% |
-| Jail 1 | 13 | 0.3 | +2.7% / +2.4% | +7.9% / +7.9% | +14.8% / +14.8% |
-| Catacombs 2 | 15 | 0.3 | +2.5% / +2.5% | +8.0% / +8.0% | +16.9% / +16.9% |
+| Blood Moor | 2 | 0.2 | +2.6% / +2.6% | +7.9% / +7.9% | +17.7% / +17.7% |
+| Cold Plains | 5 | 0.3 | +3.2% / +3.2% | +8.9% / +8.9% | +18.5% / +18.5% |
+| Stony Field | 7 | 0.3 | +2.8% / +2.8% | +8.2% / +8.2% | +18.0% / +18.0% |
+| Cave 1 | 8 | 0.8 | +2.5% / +2.3% | +7.9% / +7.9% | +17.4% / +17.4% |
+| Cave 2 | 8 | 1.1 | +0.1% / +0.0% | +5.1% / +1.8% | +14.6% / +14.6% |
+| Black Marsh | 9 | 0.3 | +3.0% / +3.0% | +8.7% / +8.7% | +18.2% / +18.2% |
+| Dark Wood | 10 | 0.3 | +3.5% / +3.5% | +9.2% / +9.2% | +18.7% / +18.7% |
+| Tamoe Highland | 11 | 1.9 | +0.7% / +0.0% | +5.6% / +5.6% | +15.4% / +15.4% |
+| Jail 1 | 13 | 0.3 | +2.4% / +2.1% | +7.8% / +7.8% | +17.3% / +17.3% |
+| Catacombs 2 | 15 | 0.3 | +2.7% / +2.7% | +8.2% / +8.2% | +17.8% / +17.8% |
 
-XP per hour against clearing everything, reset at 85 percent. The value rule never loses more than 1 percent against clearing everything on any supply (V: `TestFarmResetGain`). Lower reset shares gain more in the model (up to +3.6 / +19 / +47 percent at 60 for the three supplies) but the model has no cost for the unmodelled parts of a restart (belt refill, buffs, waypoint state) and the rule would not fire early anyway.
+XP per hour against clearing everything, reset at 85 percent. The value rule never loses more than 1 percent against clearing everything on any supply (V: `TestFarmResetGain`). A first table had Cave 1 at +17 percent: the simulation kept a level that one cycle crossed into the next cycles (fixed; the level goes back with the XP now). Lower reset shares gain more in the model (up to +3.6 / +19 / +47 percent at 60 for the three supplies) but the model has no cost for the unmodelled parts of a restart (belt refill, buffs, waypoint state) and the rule would not fire early anyway.
 
 **Default: OFF.** The calibrated supply (two logged runs, held-out error 4 to 12 percent on XP) gains 2.5 percent: not clear. The prior from hour 4 (Cold Plains tails under half the fresh rate) gains 8 percent and an unmeasured steep tail up to 17 percent, never a loss. A live A/B decides: run a leveling hour with `bot.farmReset` 1 and read the `farm reset:` lines (rate vs fresh) against an hour without.
 

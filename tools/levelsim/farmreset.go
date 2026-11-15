@@ -37,9 +37,9 @@ func (e *Env) FarmRate(a *Area, cl int, o FarmOpts, H float64) (xpPerHour float6
 	}
 	base := (expTable[cl] + expTable[min(cl+1, MaxLevel)]) / 2
 	s := NewState()
-	s.XP = base
+	s.XP, s.cl = base, cl
 	s.WP = e.wp // every waypoint of the route is active (the plan's way_in)
-	var gain float64
+	var gain, done float64
 	minF := 1 - o.Pct/100
 	for guard := 0; s.T < H && guard < 500; guard++ {
 		walk := e.Travel(&s, a.ID) // town to the zone (waypoint hop or walk, graph minutes)
@@ -79,15 +79,19 @@ func (e *Env) FarmRate(a *Area, cl int, o FarmOpts, H float64) (xpPerHour float6
 				}
 			}
 		}
-		gain += s.XP - base
-		s.XP = base
-		if s.T >= H {
+		if s.T >= H { // a cycle cut by the horizon is left out: counting it makes long cycles jump by a whole cycle
 			break
 		}
+		gain += s.XP - base
+		s.XP, s.cl = base, cl // the level goes back with the XP: a cycle that crossed a level must not carry it into the next
 		e.Restart(&s)
+		done = s.T
 		cycles++
 	}
-	return gain / H * 60, cycles
+	if done == 0 { // not one full cycle fits the horizon: the partial one is all there is
+		return (s.XP - base) / s.T * 60, 0
+	}
+	return gain / done * 60, cycles
 }
 
 // FarmRow is one zone of the comparison.
