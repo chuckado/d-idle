@@ -211,7 +211,7 @@ function actPage(src, v) {
   };
   vm.runInNewContext(src, { document, window, JSON, Math, Object, Array, String, Number, RegExp, Promise, console, fetch, location: { protocol: 'http:', hostname: 'h' }, CustomEvent: function (t, o) { this.type = t; this.detail = o && o.detail; } });
   const fire = (t, e) => (docL[t] || []).forEach((f) => f(e));
-  return { h, document, body, getA, docL, boxes, fetched, fire, setReply: (r) => { reply = r; }, setView: (x) => { current = x; }, prevented, ev: (target, extra) => Object.assign({ target, preventDefault() { prevented.push(1); }, stopPropagation() {}, clientX: 120, clientY: 130 }, extra) };
+  return { h, window, document, body, getA, docL, boxes, fetched, fire, setReply: (r) => { reply = r; }, setView: (x) => { current = x; }, prevented, ev: (target, extra) => Object.assign({ target, preventDefault() { prevented.push(1); }, stopPropagation() {}, clientX: 120, clientY: 130 }, extra) };
 }
 const flush = () => new Promise((r) => setTimeout(r, 0));
 const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
@@ -389,6 +389,28 @@ const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
       });
     }
     assert.strictEqual(n, 2 * C.length);
+  }
+
+  // ---- every kind of action shows its pending, done, refused and queued state the same way (api calls, as the buttons and the drag make them)
+  {
+    const kinds = [['equip', (a) => a.equip(1, 'lring'), ['item-1', 'slot-lring']], ['unequip', (a) => a.unequip('rhand'), ['slot-rhand']], ['trash', (a) => a.trash(2), ['item-2']],
+      ['identify', (a) => a.identify(6), ['item-6']], ['stash', (a) => a.stash(1), ['item-1']], ['take', (a) => a.take(20), ['item-20']], ['mark', (a) => a.post('/api/inventory/mark', { id: 2, mark: 'sell' }), ['item-2']]];
+    for (const [kind, call, keys] of kinds) {
+      const v = view('Paladin'), p = actPage(actSrc, v); p.h.init(); p.h.onView(v);
+      const at = (st) => keys.forEach((k) => st(p.getA(k).dataset));
+      // pending while the answer is awaited, never the done look
+      p.setReply({ status: 200, body: { ok: true, request: { id: 1, state: 'done', how: 'fast' } } });
+      let pr = call(p.window.d2InvActions); at((d) => { assert.ok('sending' in d, kind + ': dashed while sending'); assert.ok(!('result' in d), kind + ': pending looks done'); });
+      await pr; at((d) => { assert.strictEqual(d.result, 'done', kind); assert.ok(!('sending' in d)); });
+      // refused: the server's reason and code, red, nothing marked done
+      p.setReply({ status: 409, body: { code: 'cursor', error: 'something is held on the cursor' } });
+      pr = call(p.window.d2InvActions); await pr; at((d) => assert.strictEqual(d.result, 'refused', kind));
+      assert.match(p.boxes.msg.textContent, /cursor/, kind);
+      // queued: neither done nor refused; the view's queue entry supplies the dashed outline
+      p.setReply({ status: 200, body: { ok: true, request: { id: 1, state: 'queued', how: 'queue', wait: 'safe' } } });
+      p.h.onView(v); p.h.onView(v); p.h.onView(v);
+      pr = call(p.window.d2InvActions); await pr; at((d) => { assert.ok(!('result' in d), kind + ': queued shown as a result'); });
+    }
   }
   // the cards page keeps its click menu
   {
