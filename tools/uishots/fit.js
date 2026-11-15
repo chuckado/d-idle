@@ -145,7 +145,7 @@ function charChecks(win, d, vis, cs) {
     // the panel's own padding is not empty space: the border of the zone
     mark({ left: pr.left, right: pr.right, top: pr.top, bottom: pr.top + 12 }); mark({ left: pr.left, right: pr.right, top: pr.bottom - 12, bottom: pr.bottom });
     mark({ left: pr.left, right: pr.left + 12, top: pr.top, bottom: pr.bottom }); mark({ left: pr.right - 12, right: pr.right, top: pr.top, bottom: pr.bottom });
-    for (const n of panel.querySelectorAll('.d-cells, .d-doll, .cv-sheet > div, .cv-log, .cv-rules, .cv-pop, button, input, img, li, .cv-life, .cv-st, .cv-setbar > *')) {
+    for (const n of panel.querySelectorAll('.d-cells, .d-doll, .cv-sheet > div, .cv-log, .cv-rules, .cv-pop, .cv-mextra, button, input, img, li, .cv-life, .cv-st, .cv-setbar > *')) {
       if (n.closest('[hidden]')) continue;
       const r = vis(n);
       if (r) mark(r);
