@@ -482,6 +482,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [0.1.0.md](releases/0.1.0.md): d.idle friends release 0.1.0 (status: RE-CUT 2026-11-12 (TASK-359, agent/cut010b) from main 0f049a66 with the lock-ordering fix (TASK-358); the...)
 - [0.1.1.md](releases/0.1.1.md): d.idle friends release 0.1.1 (status: BUILT AND VERIFIED on the worker host 2026-11-12 (card cut011, TASK-393), staged, NOT published, NOT sent....)
+- [0.1.2-drills.md](releases/0.1.2-drills.md): friends 0.1.2 pre-release drills (2026-11-14) (status: RUN, all four drills PASS. Tags: V = run and seen, S = read in source, U = not run. Run on the worker host...)
 - [0.1.2.md](releases/0.1.2.md): d.idle friends release 0.1.2 (status: BUILT AND STAGED 2026-11-14, NOT PUBLISHED, and the live drills have NOT run (they need docker with real...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
@@ -659,6 +660,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
+- [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
