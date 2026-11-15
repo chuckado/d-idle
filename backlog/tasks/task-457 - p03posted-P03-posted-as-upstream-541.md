@@ -1,10 +1,11 @@
 ---
 id: TASK-457
 title: 'p03posted: P03 posted as upstream 541'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-14T23:07:00Z'
+updated_date: '2026-11-15T00:04:00Z'
 labels:
   - docs
   - upstream-pr
