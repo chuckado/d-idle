@@ -15,7 +15,7 @@
 
 `survival.Input.OffenceUnread` carries the quality flag from the hero (`power.Hero.OffenceUnread`, quality default); the bot wiring (`cmd/d2bot/survivalwire.go`) and the replay set it. `levelsim` reads the new fields when a log has them (offence derived, defence measured, block derived) and otherwise stays default and capped.
 
-## Replay before and after (V: `levelsim -controller` on the committed fixture, the Tower builder, one job; before from the survreplay output file, after in the new `.out.txt`)
+## Replay before and after (V: `levelsim -controller` on the committed fixture, the worker builder, one job; before from the survreplay output file, after in the new `.out.txt`)
 
 | Balanced dial | Before | After |
 |---|---|---|

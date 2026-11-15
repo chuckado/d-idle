@@ -25,7 +25,7 @@ owns:
   - "cmd/d2bot/survivalwire.go"
 exclusive: []
 contracts: []
-result: "Offline, not live. Constants as data (predTakenFloorPerKill 1, kMax 3, mercPriorMinutes 25, mercWindowMinutes 120 for the either row, kHeroUnreadMax 2) with tests on Paladin and Sorceress; zone entry now logs def, block, dmg, dmgpct, ar (logging only). Replay on the Tower builder, balanced: k_hero 6.2 to 2.0, Cave Level 1 chosen 163 to 17 of 445 minutes, risky 249 to 86, planner agreement 2 to 5 of 45, structural checks unchanged. S-B pass rule still FAILS 6 of 14 (unchanged until logs carry the new fields); n=1, not tuned to pass."
+result: "Offline, not live. Constants as data (predTakenFloorPerKill 1, kMax 3, mercPriorMinutes 25, mercWindowMinutes 120 for the either row, kHeroUnreadMax 2) with tests on Paladin and Sorceress; zone entry now logs def, block, dmg, dmgpct, ar (logging only). Replay on the worker builder, balanced: k_hero 6.2 to 2.0, Cave Level 1 chosen 163 to 17 of 445 minutes, risky 249 to 86, planner agreement 2 to 5 of 45, structural checks unchanged. S-B pass rule still FAILS 6 of 14 (unchanged until logs carry the new fields); n=1, not tuned to pass."
 ---
 
 ## Description
