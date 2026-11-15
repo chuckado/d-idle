@@ -154,3 +154,14 @@ Design: `docs/ui/redesign-2026-11-14/C-orders.md` (`sell_now`). Tags: V verified
 25. A fight on the way: the request waits (queue card) and runs after; a chicken during the sale cancels it and it requeues.
 26. Cancel while queued; restart the bot with one queued (still queued).
 27. An act whose vendors will not buy the marked item (check the log line `sell: N marked, M sold, K not sold`): the request fails with the no-vendor reason.
+
+## Mercenary verbs: the fork half (b9fork, 2026-11-15; appended, nothing above changes)
+The two verbs the desk's merc route waits for now exist in the private fork (branch `sandbox-mercverbs`, head `c2549842`, behaviour and tests in `docs/research/merc-gear.md` section 9). What this page needs to know:
+- `caps` of a fork build with `--item-verbs` lists `item.merc-equip` and `item.merc-unequip` (the names `internal/d2dctl/item_verbs_merc.go` expects). An older fork or stock d2d does not, so the route keeps answering code `merc` there. Nothing is deployed by this card; the sandbox gets the verbs with the next fork image.
+- Refusal codes the desk will see besides the hero ones (`item cursor place slot identified requirements nospace`): `merc`, `dead`, `merctype`, `broken`. Rule refusals, never retried through the click path. `class` and `twohand` do not occur for a mercenary.
+- Not rejected by the fork, so the desk's own rules decide: town only, the ethereal and requirements-reduced items (the fork follows the server rule and may refuse what the real game would accept).
+### Live checks (mercenary verbs; nothing ran live)
+28. Hire a Rogue, hero in town, `invdesk.verbs 1` `invdesk.instant 1`: give a bow and a helm from the page; both show under `merc.equipment`, the pack loses them; a spear is refused `merctype`, an unidentified item `identified`.
+29. Take the helm off from the page: it lands in the pack where the answer said; the bow is untouched. Offer a second helm over the first: the old one returns to the pack.
+30. Kill the mercenary: any merc verb is refused `dead`; revive him, the verbs work again; fill the pack: take-off is refused `nospace`.
+31. Run once with a stock d2d or an older fork image: the route answers `merc`, the page keeps its "not built yet" line.
