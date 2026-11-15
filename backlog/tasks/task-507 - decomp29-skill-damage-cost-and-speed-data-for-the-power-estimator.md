@@ -1,10 +1,11 @@
 ---
 id: TASK-507
 title: 'decomp29: skill damage, cost and speed data for the power estimator'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:45:00Z'
+updated_date: '2026-11-15T16:33:00Z'
 labels:
   - d2d
   - oracle

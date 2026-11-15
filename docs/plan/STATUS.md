@@ -194,7 +194,7 @@
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
 | verifyp04 | in-progress | - | `docs/upstream/verifier-p04-2026-11-15.md` | - |
 | p06posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
-| decomp29 | proposed | - | `docs/research/decomp29-skilldamage.md`<br>`internal/power/skilldamage.json`<br>`tools/emu/dc29_` | - |
+| decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -238,6 +238,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6e927ed5f 11-15 11:56 `Merge agent/decomp30: Merge branch 'main' into TASK-506` (decomp30)
+- de7e1fc3e 11-15 11:34 `Merge branch 'main' into TASK-506` (-)
 - 8b503ea96 11-15 11:26 `Merge agent/decomp29: Merge branch 'main' into decomp29` (decomp29)
 - 7799e8d82 11-15 11:25 `Merge branch 'main' into decomp29` (-)
 - 7c68cb8d9 11-15 11:24 `Merge agent/verifyp04: Merge branch 'main' into TASK-500` (verifyp04)
@@ -246,6 +248,4 @@
 - ce3e0d5a8 11-15 11:22 `Merge branch 'main' into TASK-502` (-)
 - 0e92de896 11-15 11:06 `Merge agent/botstuck2: Merge branch 'main' into TASK-497` (botstuck2)
 - 9b623b789 11-15 11:05 `Merge branch 'main' into TASK-497` (-)
-- 193099d9a 11-15 10:45 `Merge agent/portalguard: portalguard: default mode 0, generous bounds, R3 recipe and flip rule` (portalguard)
-- 709927cee 11-15 10:38 `Merge branch 'main' into TASK-502` (-)
 <!-- statusgen:end -->
