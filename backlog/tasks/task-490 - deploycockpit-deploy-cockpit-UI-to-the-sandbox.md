@@ -12,6 +12,7 @@ dependencies: []
 priority: medium
 ordinal: 273000
 card: "deploycockpit"
+result: "Bot 0.0.261114180251 -> 0.0.261115105052 deployed to the sandbox with dev-update (image devp7 unchanged); container healthy, no errors, hero alive. Watch HTTP and screenshots NOT verified (token use refused). Verified live for the bot half."
 owns:
   - "docs/probes/deploy-cockpit-2026-11-15.md"
 exclusive: []
@@ -28,6 +29,6 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Bot/watch build from origin/main deployed with dev-update, rollback state recorded
-- [ ] #2 Sanity checks recorded (health, logs, hero progress)
+- [x] #1 Bot/watch build from origin/main deployed with dev-update, rollback state recorded
+- [x] #2 Sanity checks recorded (health, logs, hero progress)
 <!-- AC:END -->
