@@ -324,6 +324,72 @@ const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
     yes.listeners.click[0](); await flush(); await flush();
     assert.match(post(p).pop().u, /\/trash$/);
   }
+
+  // ---- the 21 validity cases of I.10, as the server states them (usable.hero / usable.merc, req, noWear): the tooltip rows and the
+  // menu entries must follow the verdict, and a refusal is never drawn as a met requirement or an offered action
+  {
+    const R = (code, text, extra) => Object.assign({ code, text }, extra || {});
+    const rq = (stat, need, have, what) => R('requirements', 'needs ' + what + ' (you have ' + have + ')', { stat, need, have });
+    const merc = { state: 'ready', owned: true, alive: true, kind: 'desert', level: 14, actWhy: 'the bot cannot change the mercenary\'s gear yet' };
+    // [no, wearer, item name, req, hero reasons, merc reasons (null: no mercenary), item extras, expect]
+    const C = [
+      [1, 'Sorceress 7', 'Sabre', { str: 30 }, [], [], { canWear: ['rhand'] }, { equip: 'ok', hero: [/^✓ Strength 30$/] }],
+      [2, 'Sorceress 7', 'War Staff', { str: 47 }, [rq('str', 47, 38, '47 strength')], [], { noWear: 'needs 47 strength (you have 38)' }, { equip: 'refused', hero: [/^✗ Strength 47 \(38\)\s+9 short$/] }],
+      [3, 'Sorceress 7', 'Helm', { lvl: 12 }, [rq('lvl', 12, 7, 'level 12')], [], { noWear: 'needs level 12 (you have 7)' }, { equip: 'refused', hero: [/^✗ Level 12 \(7\)\s+5 short$/] }],
+      [4, 'Sorceress', 'Paladin shield', { class: ['Paladin'] }, [R('class', 'only a Paladin can use it')], [], { noWear: 'Paladin only' }, { equip: 'refused', hero: [/^✗ only a Paladin can use it$/] }],
+      [5, 'Paladin', 'Paladin shield', { class: ['Paladin'] }, [], [], { canWear: ['lhand'] }, { equip: 'ok', hero: [/^✓ Paladin only$/] }],
+      [6, 'Paladin', 'Sorceress orb', { class: ['Sorceress'] }, [R('class', 'only a Sorceress can use it')], [], { noWear: 'Sorceress only' }, { equip: 'refused', hero: [/^✗ only a Sorceress can use it$/] }],
+      [7, 'Amazon', 'Long Bow', { dex: 60 }, [rq('dex', 60, 40, '60 dexterity')], [], { noWear: 'needs 60 dexterity (you have 40)' }, { equip: 'refused', hero: [/^✗ Dexterity 60 \(40\)\s+20 short$/] }],
+      [8, 'Barbarian', 'Primal Helm', { class: ['Barbarian'] }, [], [], { canWear: ['head'] }, { equip: 'ok', hero: [/^✓ Barbarian only$/] }],
+      [8.5, 'Druid', 'Primal Helm', { class: ['Barbarian'] }, [R('class', 'only a Barbarian can use it')], [], { noWear: 'Barbarian only' }, { equip: 'refused', hero: [/^✗ only a Barbarian can use it$/] }],
+      [9, 'Necromancer', 'Wand', { class: ['Necromancer'] }, [], [], { canWear: ['rhand'] }, { equip: 'ok', hero: [/^✓ Necromancer only$/] }],
+      [9.5, 'Assassin', 'Claw', { class: ['Assassin'] }, [R('class', 'only an Assassin can use it')], [], { noWear: 'Assassin only' }, { equip: 'refused', hero: [/^✗ only an Assassin can use it$/] }],
+      [10, 'any', 'Ring', {}, [R('identified', 'it is not identified')], [], { identified: false, noWear: 'it is not identified' }, { equip: 'refused', identify: 'ok', hero: [/^✗ it is not identified$/] }],
+      [11, 'any', 'Broken Sword', {}, [R('broken', 'it is broken: repair it', { warn: true })], [], { canWear: ['rhand'], maxDur: 24, dur: 0 }, { equip: 'ok', hero: [/^! it is broken: repair it$/] }],
+      [12, 'any', 'Great Axe', {}, [R('twohand', 'a two-handed weapon and a shield cannot be worn together; take the other one off first')], [], { noWear: 'a two-handed weapon and a shield cannot be worn together; take the other one off first' }, { equip: 'refused', hero: [/^✗ a two-handed weapon and a shield/] }],
+      [12.5, 'any', 'Great Axe, pack full', {}, [R('nospace', 'there is no room in the pack for the shield')], [], { noWear: 'there is no room in the pack for the shield' }, { equip: 'refused', hero: [/^✗ there is no room/] }],
+      [13, 'any', 'Ring, both fingers full', {}, [], [], { canWear: ['lring', 'rring'] }, { equip: 'ok', cmp: ['lring', 'rring'], hero: [/^✓ no requirements$/] }],
+      [14, 'hero after a stat change', 'Worn Plate', { str: 60 }, [rq('str', 60, 55, '60 strength')], [], { noWear: 'needs 60 strength (you have 55)' }, { equip: 'refused', hero: [/^✗ Strength 60 \(55\)\s+5 short$/] }],
+      [15, 'Desert Guard 14, Str 60', 'Spear', { str: 40 }, [], [], { canWear: ['rhand'] }, { equip: 'ok', merc: [/^✓ Strength 40$/], mercEntry: 'bot' }],
+      [15.5, 'Desert Guard 14, Str 60', 'Polearm', { str: 80 }, [], [rq('str', 80, 60, '80 strength')], { canWear: ['rhand'] }, { equip: 'ok', merc: [/^✗ Strength 80 \(60\)\s+20 short$/], mercEntry: 'verdict' }],
+      [15.6, 'Desert Guard 14', 'Bow', {}, [], [R('merctype', 'a Desert Guard wears helm, armor, spear or polearm')], { canWear: ['rhand'] }, { equip: 'ok', merc: [/^✗ a Desert Guard wears/], mercEntry: 'verdict' }],
+      [19, 'any mercenary, dead', 'Helm', {}, [], [R('dead', 'he is dead')], { canWear: ['head'] }, { equip: 'ok', merc: [/^✗ he is dead$/], mercEntry: 'verdict' }],
+      [20, 'no mercenary', 'Helm', {}, [], null, { canWear: ['head'] }, { equip: 'ok', noMerc: true }],
+      [21, 'any', 'Ethereal Sword (U: which number the server enforces)', { str: 25, approx: true }, [rq('str', 25, 20, '25 strength')], [], { noWear: 'needs 25 strength (you have 20)' }, { equip: 'refused', hero: [/^✗ Strength 25 \(20\)\s+5 short$/] }],
+    ];
+    let n = 0;
+    for (const cls of ['Sorceress', 'Paladin']) {
+      C.forEach(([no, who, name, req, hr, mr, extra, exp]) => {
+        const v = view(cls); v.merc = mr === null ? { state: 'none', owned: false } : merc;
+        const it = Object.assign({ id: 700, code: 'x', name, quality: 'magic', identified: true, w: 1, h: 2, stashOp: 'stash', req, usable: { hero: { ok: !hr.some((r) => !r.warn), reasons: hr } } }, extra);
+        if (mr !== null) it.usable.merc = { ok: !mr.some((r) => !r.warn), reasons: mr };
+        v.backpack = [it];
+        const tp = tipPage(tipSrc); tp.h.init(); tp.h.onView(v);
+        const rich = tp.h.richOf(it, { it, slot: '', place: 'pack' }), where = no + ' ' + who + ' ' + name;
+        const heroRows = (rich.who.find((w) => w.who === 'hero') || { rows: [] }).rows.map((r) => (r.ok ? '✓ ' : r.warn ? '! ' : '✗ ') + r.text);
+        const mercRows = (rich.who.find((w) => w.who === 'merc') || { rows: [] }).rows.map((r) => (r.ok ? '✓ ' : r.warn ? '! ' : '✗ ') + r.text);
+        (exp.hero || []).forEach((re) => assert.ok(heroRows.some((r) => re.test(r)), where + ': hero rows ' + JSON.stringify(heroRows)));
+        (exp.merc || []).forEach((re) => assert.ok(mercRows.some((r) => re.test(r)), where + ': merc rows ' + JSON.stringify(mercRows)));
+        // a refused hard reason is never a met row
+        hr.filter((r) => !r.warn).forEach((r) => assert.ok(!heroRows.some((x) => x.startsWith('✓') && x.includes(r.text)), where + ': refusal shown as met'));
+        if (exp.noMerc) assert.ok(!rich.who.some((w) => w.who === 'merc'), where + ': merc block without a mercenary');
+        if (exp.cmp) assert.strictEqual(JSON.stringify(rich.against.map((a) => a.slot)), JSON.stringify(exp.cmp), where);
+        const ap = actPage(actSrc, v); ap.h.init(); ap.h.onView(v);
+        const eq = ap.h.entryFor('item-700', 'equip');
+        if (exp.equip === 'ok') assert.ok(!eq.e.reason, where + ': equip must be offered'); else assert.ok(eq.e.reason, where + ': equip must be refused with a reason');
+        if (exp.identify === 'ok') assert.ok(!ap.h.entryFor('item-700', 'identify').e.reason, where + ': identify offered');
+        else assert.ok(!ap.h.entryFor('item-700', 'identify'), where + ': identify offered on an identified item');
+        const me = ap.h.entryFor('item-700', 'merc');
+        if (exp.noMerc) assert.ok(!me, where + ': merc entry without a mercenary');
+        else if (exp.mercEntry === 'verdict') assert.ok(me.e.reason && me.e.reason === mr.filter((r) => !r.warn)[0].text, where + ': merc entry carries his verdict ' + (me && me.e.reason));
+        else if (exp.mercEntry === 'bot') assert.match(me.e.reason, /cannot change the mercenary/, where);
+        // a refused equip sent as a gesture never reaches the network
+        if (exp.equip !== 'ok' && !exp.identify) { const before = post(ap).length; ap.fire('dblclick', ap.ev(ap.getA('item-700'))); assert.strictEqual(post(ap).length, before, where + ': a refused equip was sent'); assert.strictEqual(ap.getA('item-700').dataset.result, 'refused', where); }
+        n++;
+      });
+    }
+    assert.strictEqual(n, 2 * C.length);
+  }
   // the cards page keeps its click menu
   {
     const v = view('Sorceress'), p = actPage(actSrc, v); delete p.body.dataset.canvas; p.h.init(); p.h.onView(v);
