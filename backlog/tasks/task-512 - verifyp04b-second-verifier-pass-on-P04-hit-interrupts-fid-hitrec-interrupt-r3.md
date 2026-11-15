@@ -1,10 +1,13 @@
 ---
 id: TASK-512
-title: 'verifyp04b: second verifier pass on P04 hit interrupts (fid/hitrec-interrupt-r3)'
-status: In Progress
+title: >-
+  verifyp04b: second verifier pass on P04 hit interrupts
+  (fid/hitrec-interrupt-r3)
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-15T17:18:00Z'
+updated_date: '2026-11-15T18:32:00Z'
 labels:
   - d2d
   - research
