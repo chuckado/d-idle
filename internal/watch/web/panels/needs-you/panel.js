@@ -52,7 +52,8 @@ export function mount(root, ctx) {
 
   function acts(n) {
     const box = ctx.el('span', 'n-acts');
-    (n.actions || []).slice(0, 2).forEach((a, i) => {
+    // a hero question shows every answer (some points have five); the other needs keep their two buttons
+    (n.actions || []).slice(0, n.kind === 'question' ? 8 : 2).forEach((a, i) => {
       const b = ctx.el('button', i === 0 ? 'n-btn n-p' : 'n-btn', a.label);
       b.type = 'button';
       b.dataset.key = 'act-' + n.id + '-' + i;
@@ -66,6 +67,7 @@ export function mount(root, ctx) {
     const e = ctx.el('div', 'n-row');
     e.dataset.sev = sevOf(n);
     e.dataset.id = n.id;
+    if (n.kind === 'question') e.dataset.q = '1'; // two lines of text, the answers on a line of their own
     e.title = n.text + (n.sub ? ' - ' + n.sub : '');
     const t = ctx.el('span', 'n-t');
     t.append(ctx.el('b', '', n.text));
@@ -93,6 +95,13 @@ export function mount(root, ctx) {
     return b;
   }
 
+  let seenQ = null; // question ids of the last reply: a new one is announced once, like a new red row
+  function pingQuestions(needs) {
+    const now = new Set(needs.filter((n) => n.kind === 'question').map((n) => n.id));
+    if (seenQ) for (const n of needs) if (n.kind === 'question' && !seenQ.has(n.id)) ctx.toast('info', 'The hero asks: ' + n.text);
+    seenQ = now;
+  }
+
   function ping(needs) {
     const now = new Set(needs.filter((n) => n.sev === 'danger').map((n) => n.id));
     if (seen && on && typeof Notification !== 'undefined' && Notification.permission === 'granted') {
@@ -106,6 +115,7 @@ export function mount(root, ctx) {
       if (!v || !Array.isArray(v.needs)) { sig = ''; ctx.hide(true); return; }
       const needs = ordered(v.needs);
       ping(needs);
+      pingQuestions(needs);
       const shown = ctx.short && ctx.short() ? SHOWN_SHORT : SHOWN; // a short window shows two rows: Orders keeps its room
       const now = JSON.stringify([needs, shown]);
       if (now === sig) return;

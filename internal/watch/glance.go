@@ -402,15 +402,21 @@ func cleanNeed(n GlanceNeed) GlanceNeed {
 	default:
 		n.Sev = "info"
 	}
-	n.Actions = cleanVerbs(n.Actions)
+	if n.Kind == "question" {
+		n.Actions = cleanVerbsMax(n.Actions, 8) // every answer of a hero question
+	} else {
+		n.Actions = cleanVerbs(n.Actions)
+	}
 	return n
 }
 
 // cleanVerbs keeps at most three buttons and only those that post to an API route of this server.
-func cleanVerbs(in []GlanceVerb) []GlanceVerb {
+func cleanVerbs(in []GlanceVerb) []GlanceVerb { return cleanVerbsMax(in, 3) }
+
+func cleanVerbsMax(in []GlanceVerb, max int) []GlanceVerb {
 	out := []GlanceVerb{}
 	for _, a := range in {
-		if len(out) == 3 || !strings.HasPrefix(a.Post, "/api/") || strings.Contains(a.Post, "//") {
+		if len(out) == max || !strings.HasPrefix(a.Post, "/api/") || strings.Contains(a.Post, "//") {
 			continue
 		}
 		a.Label = safeText(a.Label, 24)

@@ -101,7 +101,11 @@ default-worst-light first=0&theme=light&needs=5&cmd=eight&glance=full,mercdead,s
 default-paused first=0&theme=dark&needs=2&cmd=paused&glance=full,paused
 default-loop first=0&theme=dark&needs=2&cmd=loop
 default-live first=0&theme=dark&needs=2&stream=live
-default-zone first=0&theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
+default-zone first=0&theme=dark&needs=2&zone=cp&cmd=loop
+default-update first=0&theme=dark&needs=2&update=available
+default-update-light first=0&theme=light&needs=2&update=ready
+default-question3 first=0&theme=dark&needs=1&question=3
+default-question5-light first=0&theme=light&needs=2&question=5" | while read -r pname pq; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
 			w=${sz%x*} h=${sz#*x}
@@ -135,6 +139,10 @@ default-phone-progress watch?first=0&theme=dark&needs=2&tab=Progress
 default-phone-map watch?first=0&theme=dark&needs=2&tab=Map
 default-zone watch?first=0&theme=dark&zone=cp
 default-drawer-log watch?first=0&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+default-update watch?first=0&theme=dark&needs=2&update=available
+default-update-light watch?first=0&theme=light&needs=2&update=ready
+default-question3 watch?first=0&theme=dark&needs=1&question=3
+default-question5-light watch?first=0&theme=light&needs=2&question=5
 default-firstrun watch?theme=dark&needs=2 ?#none .d-drawer:not([hidden])_[data-key=drawer-close]
 cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more

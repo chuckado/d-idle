@@ -16,9 +16,14 @@
   [data-panel="needs-you"] .n-shape { inline-size: 10px; block-size: 10px; background: var(--d-info); border-radius: 50%; }
   [data-panel="needs-you"] [data-sev="warn"] > .n-shape { background: var(--d-warn); border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
   [data-panel="needs-you"] [data-sev="danger"] > .n-shape { background: var(--d-danger); border-radius: 0; clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); }
+  /* a hero question: the text may take two lines (the full text is in the title and the popover), every answer is a button on the line below */
+  [data-panel="needs-you"] .n-row[data-q] { grid-template-columns: 12px minmax(0, 1fr); align-items: start; }
+  [data-panel="needs-you"] .n-row[data-q] .n-t { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+  [data-panel="needs-you"] .n-row[data-q] .n-acts { grid-column: 2; flex-wrap: wrap; }
   [data-panel="needs-you"] .n-acts { display: flex; gap: var(--d-sp-1); }
   [data-panel="needs-you"] .n-btn { block-size: 26px; min-block-size: 26px; padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-surface-2); color: var(--d-text);
     font: inherit; font-size: var(--d-fs-0); white-space: nowrap; cursor: pointer; }
+  [data-panel="needs-you"]:is([data-cmode="phone"] *) .n-btn { block-size: 44px; min-block-size: 44px; }
   [data-panel="needs-you"] .n-btn:hover { background: var(--d-surface-3); }
   [data-panel="needs-you"] .n-btn.n-p { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 600; }
   [data-panel="needs-you"] .n-btn:disabled { opacity: .5; cursor: default; }

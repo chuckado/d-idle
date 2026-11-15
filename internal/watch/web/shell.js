@@ -373,7 +373,7 @@ function applyLayout(pass) {
 // for a new hero too (S7: nothing pins Simple any more; a browser an older shell pinned has no d2layoutpick, see chosen()),
 // or Standard when a startup self-check finds a cockpit slot without its panel (start()). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
 // saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
-const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
+const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote2', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
 const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default, Classic is the way back
 const chosen = () => effectiveChoice(pref(PREF), pref(PICK)); // layout.js: an auto-pinned Simple is not a choice
 function pref(k, v) {
@@ -819,11 +819,28 @@ function layoutNote(sel, floating) {
   const box = el('div', 'd-layoutnote');
   box.setAttribute('role', 'note');
   if (floating) box.dataset.float = '1';
-  box.appendChild(el('span', '', floating ? 'The layout changed. The old ones are in the menu.' : 'The layout changed. Classic is in the menu.'));
+  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is Standard. Classic is in the menu.' : floating ? 'The layout changed. Classic is in the menu.' : 'The layout changed. Classic is in the menu.'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);
   if (floating) document.body.appendChild(box); else top.after(box);
+}
+
+// A slot panel of the cockpit that fails to load leaves a hole: say so once, with the way back one click away.
+let failedShown = false;
+function failedNote() {
+  if (failedShown) return;
+  failedShown = true;
+  const box = el('div', 'd-layoutnote');
+  box.setAttribute('role', 'alert');
+  box.dataset.float = '1';
+  box.appendChild(el('span', '', 'Part of this layout did not load.'));
+  const go = ui.btn('Use Classic', { size: 'sm', variant: 'primary' });
+  go.addEventListener('click', () => choosePreset('classic'));
+  const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
+  x.addEventListener('click', () => box.remove());
+  box.append(go, x);
+  document.body.appendChild(box);
 }
 
 // ---- ctx and mounting ----
@@ -858,7 +875,7 @@ async function selfCheck(sel, list, conf0) {
   if (!missing.length) return sel;
   console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Standard');
   const l = await presetFile('standard');
-  return l ? { layout: l, preset: 'standard', origin: sel.origin, hasStored: false } : sel;
+  return l ? { layout: l, preset: 'standard', origin: sel.origin, hasStored: false, fell: true } : sel;
 }
 
 async function start() {
@@ -914,6 +931,7 @@ async function start() {
     } catch (e) {
       parts.root.dataset.state = 'error';
       parts.body.appendChild(el('p', 'd-empty', 'This panel failed to load.'));
+      if (cockpit && sel.origin !== 'url') failedNote();
       continue;
     }
     if (cockpit) { // a slot has no title bar to fold, and a fold saved by the classic page must not blank the box
