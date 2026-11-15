@@ -4,7 +4,7 @@
 
 ## Questions
 
-**Q1. Is the stall fixed on current upstream?** NO (V run). Harness: new test `tests/game/test_warp_walk.cpp --sweep N` (fork branch `fid/warp-walk-r1` `d7151557`, on upstream `4e054f43`; Forgejo `jesse/d2d-fork`): for every level 1..39 with warps and every warp, 8 starts 2.5 cells off the warp's tile unit, a click at the centre of the warp's Select box (`World::warp_clicked` accepts it), through the real `World::apply` and `World::tick`, monsters cleared every tick, 600 ticks, taken = the level changed. 30 seeds, 12,480 starts; 6,623 start cells are on a blocked subtile and are not run (listed `-1`), 5,857 are run.
+**Q1. Is the stall fixed on current upstream?** NO (V run). Harness: new test `tests/game/test_warp_walk.cpp --sweep N` (fork branch `fid/warp-walk-r1` `d7151557`, on upstream `4e054f43`; the private fork remote): for every level 1..39 with warps and every warp, 8 starts 2.5 cells off the warp's tile unit, a click at the centre of the warp's Select box (`World::warp_clicked` accepts it), through the real `World::apply` and `World::tick`, monsters cleared every tick, 600 ticks, taken = the level changed. 30 seeds, 12,480 starts; 6,623 start cells are on a blocked subtile and are not run (listed `-1`), 5,857 are run.
 
 | Build | warp taken | of | share |
 |---|---|---|---|
