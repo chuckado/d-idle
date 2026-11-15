@@ -12,7 +12,9 @@ For every Skills.txt row and every attack-like player mode, with that skill as t
      event queue and mode-set callees hooked; FUN_0057f020 (the NU start) and FUN_00620210 (set the
      used skill) run for real. After it: unit mode = 1 (NU), used skill = 0.
   C. after: the gate (same call) answers "allowed" for every row.
-  D. FUN_0057f020 and the walk start path FUN_0057f090 clear the same field (walk modes 2 and 3).
+  D. FUN_0057f020 (the NU start) clears the same field from any current mode.
+  E. the walk starters (the table entries for modes 2 and 3, FUN_0057f190 -> FUN_0057f090, with the path
+     calls hooked to "a path was found") clear it too, so a Paladin who walks off after Zeal flinches.
 Hooks (inputs, not claims): FUN_00639df0 (state test: 0), FUN_00553990 (clear events), FUN_00553570
 (set mode: writes unit +0x10), FUN_00580310 / FUN_00580380 (after-skill extras), FUN_00620bb0 (unit
 room: 0).
@@ -87,7 +89,22 @@ def main():
             e.call(0x57f020, 1, 0, 0, ecx=game, edx=unit)
             if e.r32(skill_list + 0x10) != 0: d_bad += 1
     print(f"D. FUN_0057f020 (NU start) clears the used skill from modes A1/WL/RN/DT/NU: failed {d_bad} of {count * 5}")
-    return a_bad + b_bad + c_bad + d_bad
+    e.hook(0x648dc0, lambda x: 0, 1)           # the path type reset
+    e.hook(0x649970, lambda x: 5, 3)           # a path was found
+    e.hook(0x648780, lambda x: 1, 1)           # it has points
+    e.hook(0x553f00, lambda x: 0, 0)
+    e_bad = 0
+    target = e.alloc(0x100)
+    for sid in range(count):
+        for mode in (2, 3):
+            reset(A1, sid)
+            e.mu.mem_write(skill_list + 0x10, struct.pack("<I", skills[sid]))
+            path = e.alloc(0x200)
+            e.w32(unit + 0x2c, path)
+            e.call(0x57f190, mode, target, ecx=game, edx=unit)
+            if e.r32(skill_list + 0x10) != 0: e_bad += 1
+    print(f"E. the walk starters for modes 2 and 3 clear the used skill: failed {e_bad} of {count * 2}")
+    return a_bad + b_bad + c_bad + d_bad + e_bad
 
 
 if __name__ == "__main__":

@@ -23,7 +23,10 @@ or less); out of reach it makes ONE more walk (pending +0x150), then goes idle.
 import struct
 import sys
 
-import emu
+try:
+    import emu
+except ImportError:     # compare mode needs no emulator
+    emu = None
 
 W = 64                                   # the dump's window: 129 x 129 subtiles round the tile unit
 SIDE = 2 * W + 1
@@ -108,7 +111,9 @@ def parse(path):
     for line in open(path):
         f = line.split()
         if not f: continue
-        if f[0] == "G": grids[tuple(f[1:4])] = (int(f[4]), int(f[5]), int(f[6]), f[7])
+        if f[0] == "G":
+            raw = bin(int("1" + f[8], 16))[3:][:SIDE * SIDE]     # hex digits, 4 blocked bits each (a leading 1 keeps the zeros)
+            grids[tuple(f[1:5])] = (int(f[5]), int(f[6]), int(f[7]), raw)
         elif f[0] == "D": starts.append(f)
         elif f[0] == "W": pass
     return grids, starts
@@ -119,7 +124,7 @@ def game(dump):
     rig = Rig()
     for f in starts:
         seed, level, warp, d = f[1:5]
-        ux, uy, vel, bits = grids[(seed, level, warp)]
+        ux, uy, vel, bits = grids[(seed, level, warp, d)]
         sx, sy = int(f[5]), int(f[6])        # 16.16 subtiles, absolute
         rig.setup(bits)
         rig.outside = 0

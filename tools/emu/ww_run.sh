@@ -3,4 +3,4 @@
 source ~/d2d-lab/emu/env.sh
 export GAMEEXE EMU D2_MPQ_DIR
 cd "$(dirname "$0")"
-PYTHONPATH="$EMU" exec nice -n 10 "$PY" "$@"
+PYTHONPATH="$EMU${WW_PYPATH:+:$WW_PYPATH}" exec nice -n 10 "$PY" "$@"
