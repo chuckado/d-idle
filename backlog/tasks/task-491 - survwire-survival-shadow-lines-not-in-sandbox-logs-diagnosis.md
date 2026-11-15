@@ -16,6 +16,7 @@ owns:
   - "docs/survival/wiring-2026-11-15.md"
 exclusive: []
 contracts: []
+result: "No wiring bug: shadow lines fire only after a planner line (none since the 11:30 restart); block/dmg need stats.gear/weapons in the fork dump (U). Docs only, not live-verified."
 ---
 
 ## Description
@@ -28,5 +29,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Cause documented: no wiring bug
+- [x] #1 Cause documented: no wiring bug
 <!-- AC:END -->
