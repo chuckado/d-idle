@@ -15,7 +15,7 @@ import (
 // (combat.crowdN, crowdPortalPct, crowdDrinkPct, crowdAbandonN); the radii below are U (judgment, not measured).
 const (
 	crowdRadius      = 8                        // subtiles: a hostile this close counts to the crowd
-	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: a 2 s portal cast fails (U)
+	crowdAdjacentMax = resource.CastAdjacentMax // this many adjacent monsters or more: the portal cast and walk are too exposed (U; a hit does not cut it)
 	crowdRetreatDist = 20                       // subtiles an abandon retreat goes before the portal
 	crowdMaxSteps    = 8                        // retreat steps of one abandon
 )
@@ -63,7 +63,7 @@ func crowdDecide(in SafetyInput, lp int, heal, rejuv bool) (SafetyAction, bool) 
 			return CrowdRetreat, true
 		}
 	}
-	if lp <= t.CrowdPortalPct && in.HasPortal && !surrounded {
+	if blocked, _ := in.castBlocked(); lp <= t.CrowdPortalPct && in.HasPortal && !blocked {
 		return TownPortal, true
 	}
 	if lp < t.CrowdDrinkPct {
