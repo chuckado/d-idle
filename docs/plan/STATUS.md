@@ -191,6 +191,7 @@
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | verifyp06b | proposed | - | `docs/upstream/verifier2-p06-2026-11-15.md` | - |
 | botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go` | - |
+| decomp27 | proposed | - | `docs/research/decomp27-trace.md`<br>`tools/emu/mel_block.py`<br>`docs/upstream/briefs/verify-knock-gethit.md`<br>`docs/upstream/briefs/verify-melee-block.md`<br>`docs/upstream/drafts/hitrec-knock-in-hit.md`<br>`docs/upstream/bodies/hitrec-knock-in-hit-body.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -234,6 +235,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 1cb0880ef 11-15 10:03 `Merge agent/decomp27: Merge branch 'main' into decomp27` (decomp27)
+- 514808400 11-15 10:02 `Merge branch 'main' into decomp27` (-)
 - 699f8b837 11-15 10:00 `Merge agent/verifyp06b: Merge branch 'main' into TASK-496` (verifyp06b)
 - ba1eba19e 11-15 09:59 `Merge branch 'main' into TASK-496` (-)
 - 8197492d2 11-15 09:46 `Merge agent/botstuck: d2bot: object finder explores until the object or its preset shows up (Inifuss tree); task card` (botstuck)
@@ -242,6 +245,4 @@
 - abc82a480 11-15 08:23 `Merge agent/verifyp06: Merge branch 'main' into TASK-494` (verifyp06)
 - 2f35b2f3f 11-15 08:22 `Merge branch 'main' into TASK-494` (-)
 - 1cd8c6ab2 11-15 07:25 `Merge agent/decomp26: Merge branch 'main' into decomp26` (decomp26)
-- b531f007d 11-15 07:25 `Merge branch 'main' into decomp26` (-)
-- 50f3e1808 11-15 07:11 `Merge agent/herostats: herostats: card result, verification notes` (herostats)
 <!-- statusgen:end -->

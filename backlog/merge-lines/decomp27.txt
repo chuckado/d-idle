@@ -1,3 +1,0 @@
-BACKLOG: decomp27 (TASK-498): P07 monster melee block gate = no deviation (180/180 cells, no PR); P03c knock in a get-hit proven, fork branch fid/knock-in-gethit-r1 ready for the Opus verifier (docs/research/decomp27-trace.md)
-CHANGELOG: decomp27: monster melee block matches game.exe (oracle tools/emu/mel_block.py); a knocking hit in a get-hit is refused in game.exe (FUN_0057edd0 new mode 0x13), fork claim built, verifier brief written
-INDEX: docs/research/decomp27-trace.md - P07 melee block (no deviation) and P03c knock in a get-hit (card decomp27)
