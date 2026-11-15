@@ -204,6 +204,7 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| devp8 | proposed | - | `docs/probes/devp8-2026-11-15.md` | `fork-branch:sandbox-devp8` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -247,6 +248,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- cc88747b3 11-15 14:28 `Merge agent/devp8: Merge branch 'main' into devp8` (devp8)
+- 8252907ea 11-15 14:27 `Merge branch 'main' into devp8` (-)
 - 568260e7f 11-15 14:11 `Merge agent/p03cposted: Merge branch 'main' into p03cposted` (p03cposted)
 - 8c1a024b7 11-15 14:10 `Merge branch 'main' into p03cposted` (-)
 - cab78c992 11-15 14:02 `Merge agent/botreset: Merge branch 'main' into botreset` (botreset)
@@ -255,6 +258,4 @@
 - 8aa8fd28c 11-15 14:00 `Merge agent/p04posted: Merge branch 'main' into p04posted` (p04posted)
 - 02f99ea00 11-15 14:00 `Merge agent/deploycockpit: Merge branch 'main' into deploycockpit` (deploycockpit)
 - 022e10c78 11-15 13:56 `Merge branch 'main' into TASK-513` (-)
-- 0829dfa1d 11-15 13:56 `Merge branch 'main' into p04posted` (-)
-- 6b9830c9c 11-15 13:56 `Merge branch 'main' into deploycockpit` (-)
 <!-- statusgen:end -->
