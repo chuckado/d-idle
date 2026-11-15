@@ -1,0 +1,6 @@
+label: not hired
+box hidden: false
+div [data-canvas=]
+  p.cv-mnote []
+    b [] "No mercenary hired"
+    #text [] "Hire one in Act 1 (free after Blood Raven) or Act 2."

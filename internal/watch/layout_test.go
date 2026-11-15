@@ -473,6 +473,9 @@ func TestLayoutHiddenEntry(t *testing.T) {
 
 // Fit content: every panel of the main area and every pre-shell card declares it, so no card keeps a stored span
 // taller than what it shows; the manifest key is additive (a manifest without it loads, with the stored spans).
+// cockpitPanels are the opt-in panels the redesign slices have shipped so far (a slice adds its id here).
+var cockpitPanels = map[string]bool{"orders": true}
+
 func TestPanelsFitTheirContent(t *testing.T) {
 	ms, err := Manifests()
 	if err != nil {
@@ -624,7 +627,7 @@ func TestLayoutSourceHeader(t *testing.T) {
 	}
 	if ms, _ := Manifests(); len(ms) > 0 {
 		for _, m := range ms {
-			if m.OptIn && !strings.Contains(" area-map log ", " "+m.ID+" ") { // the panels of the cockpit slices are opt-in (S6: area-map, log)
+			if m.OptIn && !m.CockpitOnly && !cockpitPanels[m.ID] {
 				t.Errorf("%s: no panel of today is opt-in", m.ID)
 			}
 		}

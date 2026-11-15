@@ -8,6 +8,18 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-453 <!--sg:agent/uis4-->
+- Merge branch 'main' into TASK-459 <!--sg:agent/p05cr-->
+- toastfix: stack toast text readable in dark theme, contrast test <!--sg:agent/toastfix-->
+- Merge origin/main into agent/uis2 <!--sg:agent/uis2-->
+- Merge branch 'main' into survcal <!--sg:agent/survcal-->
+- Merge branch 'main' into TASK-456 <!--sg:agent/uic2-->
+- Merge branch 'main' into TASK-458 <!--sg:agent/survreplay-->
+- Merge branch 'main' into p03posted <!--sg:agent/p03posted-->
+- Merge branch 'main' into TASK-450 <!--sg:agent/verifyp03b-->
+- Merge branch 'main' into TASK-452 <!--sg:agent/survC-->
+- Merge branch 'main' into TASK-438 <!--sg:agent/uis1b-->
+- Merge branch 'main' into survB <!--sg:agent/survB-->
 - Merge branch 'main' into TASK-448 <!--sg:agent/prfix2-->
 - Merge branch 'main' into towerenv <!--sg:agent/towerenv-->
 - Merge branch 'main' into TASK-442 <!--sg:agent/uib3-->

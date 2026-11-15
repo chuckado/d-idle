@@ -18,6 +18,10 @@ import (
 	"strings"
 	"time"
 
+	"d2lod-bot/internal/danger"
+	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/power"
+	"d2lod-bot/internal/survival"
 	"d2lod-bot/tools/levelsim"
 )
 
@@ -38,9 +42,23 @@ func main() {
 		runs      = flag.String("runs", "", "extra runs.json to add to the embedded runs")
 		useFit    = flag.Bool("fitted", false, "use freshly fitted supply parameters instead of the defaults")
 		denRefarm = flag.Bool("den-refarm", false, "allow farming the Den again after the quest")
+		shadow    = flag.String("shadow", "", "bot log to replay through the survival margin (docs/survival/power.md); needs -install and -arch")
+		install   = flag.String("install", "", "game install directory for -shadow (the zone profile is generated from its tables)")
+		archF     = flag.String("arch", "", "archetype id for -shadow: bruiser, ranged_physical, caster, summoner or hybrid_tank_caster")
+		diffF     = flag.String("diff", "normal", "difficulty of the zones in the -shadow log")
+		ctlF      = flag.String("controller", "", "bot log to replay through the survival ledger and shadow controller (docs/survival/ledger.md); needs -install and -arch")
+		dialF     = flag.String("dial", "", "risk dial for -shadow: cautious, balanced or bold (default balanced)")
 		jsonOut   = flag.Bool("json", false, "print the JSON summary on stdout (tables go to stderr)")
 	)
 	flag.Parse()
+	if *ctlF != "" {
+		die(runController(*ctlF, *install, *archF, *diffF, *dialF))
+		return
+	}
+	if *shadow != "" {
+		die(runShadow(*shadow, *install, *archF, *diffF, *dialF))
+		return
+	}
 	d, err := levelsim.Load()
 	die(err)
 	if *runs != "" {
@@ -128,6 +146,44 @@ func main() {
 	}
 }
 
+// runShadow replays a bot log through the power estimate against the zone profile built from the install tables.
+func runShadow(log, install, arch, diff, dial string) error {
+	if install == "" || arch == "" {
+		return fmt.Errorf("-shadow needs -install DIR and -arch ID")
+	}
+	db, err := data.LoadInstall(install)
+	if err != nil {
+		return err
+	}
+	ov, err := danger.ShippedOverrides()
+	if err != nil {
+		return err
+	}
+	tab, err := danger.Build(db, danger.DefaultParams(), ov)
+	if err != nil {
+		return err
+	}
+	m, err := power.NewModel(tab.Params)
+	if err != nil {
+		return err
+	}
+	a, err := m.P.Archetype(arch)
+	if err != nil {
+		return err
+	}
+	f, err := os.Open(log)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial})
+	if err != nil {
+		return err
+	}
+	fmt.Print(rep.Text())
+	return nil
+}
+
 func calib(d *levelsim.Data, p levelsim.Params) {
 	fmt.Println("== replay with the default parameters ==")
 	fmt.Print(levelsim.CalibReport(d, p))
@@ -172,4 +228,58 @@ func die(err error) {
 		fmt.Fprintln(os.Stderr, "levelsim:", err)
 		os.Exit(1)
 	}
+}
+
+// runController replays a bot log through the ledger and the shadow controller (shadow output first, then the controller).
+func runController(log, install, arch, diff, dial string) error {
+	if install == "" || arch == "" {
+		return fmt.Errorf("-controller needs -install DIR and -arch ID")
+	}
+	db, err := data.LoadInstall(install)
+	if err != nil {
+		return err
+	}
+	ov, err := danger.ShippedOverrides()
+	if err != nil {
+		return err
+	}
+	tab, err := danger.Build(db, danger.DefaultParams(), ov)
+	if err != nil {
+		return err
+	}
+	m, err := power.NewModel(tab.Params)
+	if err != nil {
+		return err
+	}
+	a, err := m.P.Archetype(arch)
+	if err != nil {
+		return err
+	}
+	sp, err := survival.LoadParams()
+	if err != nil {
+		return err
+	}
+	so := levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial}
+	f, err := os.Open(log)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	rep, err := levelsim.ShadowReplay(f, so)
+	if err != nil {
+		return err
+	}
+	fmt.Print(rep.Text())
+	if _, err := f.Seek(0, 0); err != nil {
+		return err
+	}
+	cr, err := levelsim.ControllerReplay(f, levelsim.CtlOpts{ShadowOpts: so, Params: sp})
+	if err != nil {
+		return err
+	}
+	fmt.Print(cr.Text())
+	if os.Getenv("LEVELSIM_ROWS") != "" {
+		fmt.Print("\n== rows ==\n", cr.TSV())
+	}
+	return nil
 }

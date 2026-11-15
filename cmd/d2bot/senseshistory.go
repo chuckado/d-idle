@@ -117,6 +117,9 @@ func useSensesHistory(ctx context.Context, rig *ladderRig, e *env.Env, f *combat
 			}
 		}
 		f.OnSummary = func(s combat.FightSummary) {
+			if sf := survFight.Load(); sf != nil {
+				(*sf)(s) // survival shadow ledger (survivalwire.go), passive
+			}
 			fi := fightInfo(s)
 			pub.AddEvent(senses.EvFight, fmt.Sprintf("Fight: %d kills in %.1f s, end=%s, life min %d%%", s.Kills, s.Sec, s.End, s.MinLifePct), false, fi)
 			switch s.Left {

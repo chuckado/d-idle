@@ -94,7 +94,11 @@ func fxLayout(name string) map[string]any {
 	rail := []string{"fx-needs", "fx-orders", "fx-map", "area-map"}
 	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"area-map"}}
 	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"fx-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-journey", "fx-health"}}}
-	if name != "" {
+	if name == "orders" { // the demo with the real Orders panel (fed by commandsFixture) in place of its stand-in
+		rail = []string{"fx-needs", "orders", "fx-map", "area-map"}
+		wide["top"] = []string{"fx-needs", "orders"}
+		tabs[0].IDs = []string{"fx-needs", "orders"}
+	} else if name != "" {
 		one := "fx-" + name
 		rail = []string{one}
 		wide = map[string]any{"top": []string{one}, "left": []string{}, "right": []string{}}
@@ -103,7 +107,7 @@ func fxLayout(name string) map[string]any {
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
 		"slots": map[string]any{
-			"band": []string{"hero-meters"}, "stage": "video",
+			"band": []string{"statusline", "hero-meters", "needs-count"}, "stage": "video",
 			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
 			"railWide": wide, "phoneTabs": tabs,
 		},
@@ -124,7 +128,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 		switch {
 		case p == "/__fit":
 			fitHarness(w, r)
-		case p == "/watch" && r.URL.Query().Get("fitframe") == "1":
+		case (p == "/watch" || p == "/watch/inventory") && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)
@@ -133,7 +137,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 			if name == "demo" {
 				name = ""
 			}
-			if name != "" && byID["fx-"+name].id == "" {
+			if name != "" && name != "orders" && byID["fx-"+name].id == "" {
 				http.NotFound(w, r)
 				return
 			}
@@ -153,7 +157,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true, "scroll": f.id == "fx-orders" || f.id == "fx-fakescroll",
 					"owner": "uishots", "doc": "docs/ui-regression-plan.md"}
 				if f.id == "fx-map" {
-					man["switchWith"], man["switchLabel"] = "area-map", "Act map" // the stand-in for zone-map shares its column with the area map
+					man["switchWith"], man["switchLabel"], man["minBlock"] = "area-map", "Act map", 300 // the stand-in for zone-map shares its column with the area map
 				}
 				list = append(list, man)
 			}

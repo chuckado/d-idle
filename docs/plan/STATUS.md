@@ -70,8 +70,6 @@
 | amazonammo | deferred | - | `internal/combat`<br>`internal/leveler` | - |
 | t0-slice | deferred | t0-slice | `internal/decide/t0/**`<br>`internal/ladder/**`<br>`internal/env/tuning_ladder.go`<br>`internal/town/ladder_test.go`<br>`internal/drill/t0.go`<br>`internal/drill/t0_test.go`<br>`cmd/d2drill/t0_lab.go`<br>`cmd/d2drill/t0_lab_test.go`<br>`docs/probes/t0drill.md`<br>`internal/bot/thoughts.go`<br>`internal/bot/thoughts_test.go`<br>`internal/combat/thoughtshook.go`<br>`docs/t0-slice.md` | - |
 | ready-audit | proposed | - | `docs/probes/ready-audit.md` | - |
-| ready-area-table | proposed | - | `internal/readiness/areatable.go`<br>`internal/readiness/areatable_test.go` | - |
-| ready-model | proposed | - | `internal/readiness/` | - |
 | ready-wire-gates | deferred | - | `internal/bot/riskfacts.go`<br>`internal/bot/geargate.go`<br>`internal/task/gate.go` | - |
 | ready-meter | deferred | - | `internal/watch/unlockrisk.go`<br>`internal/watch/unlockrisk_test.go` | - |
 | ready-whyline | deferred | - | `internal/bot/whyline.go`<br>`internal/bot/whyline_test.go` | - |
@@ -163,8 +161,13 @@
 | towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
 | prfix2 | proposed | - | `docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/briefs/hitrec-norestart-oracle.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
+| survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| uis4 | proposed | - | `internal/watch/commands.go`<br>`internal/watch/commands_test.go`<br>`internal/watch/testdata/commands/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/testdata/orders_dom.js`<br>`internal/watch/testdata/orders_dom.txt`<br>`tools/uishots/fixtures_commands.go` | - |
+| uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
+| toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
@@ -211,14 +214,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
-- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
-- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
-- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
-- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
-- d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
-- bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
-- aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
-- 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
+- 776d705fa 11-14 20:46 `Merge agent/uis4: Merge branch 'main' into TASK-453` (uis4)
+- 49d8571e5 11-14 20:46 `Merge branch 'main' into TASK-453` (-)
+- c531b5422 11-14 20:44 `Merge agent/p05cr: Merge branch 'main' into TASK-459` (p05cr)
+- 99005156e 11-14 20:44 `Merge branch 'main' into TASK-459` (-)
+- 4769c8dc2 11-14 20:34 `Merge agent/toastfix: toastfix: stack toast text readable in dark theme, contrast test` (toastfix)
+- 1cbf7b792 11-14 20:33 `Merge origin/main into agent/uis4 (S1b, C2, S2 on main)` (-)
+- cc7f8016a 11-14 20:32 `Merge origin/main into agent/p05cr; P05 row edits re-applied` (-)
+- 2dd560602 11-14 20:03 `Merge agent/uis2: Merge origin/main into agent/uis2` (uis2)
+- e65e71841 11-14 19:54 `Merge origin/main into agent/uis2` (-)
+- de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
 <!-- statusgen:end -->

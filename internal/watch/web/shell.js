@@ -179,6 +179,10 @@ function growLast(col) {
   const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden && !n.dataset.off);
   for (const n of col.children) delete n.dataset.grow;
   if (shown.length) shown[shown.length - 1].dataset.grow = '1';
+  // the growing panel's least height (manifest minBlock, px): the panels above it give way (shell.css, data-growmin) so the act map
+  // keeps its ten readable rows on a short window
+  const min = shown.length ? (ck.meta.get(shown[shown.length - 1].dataset.panel) || {}).minBlock | 0 : 0;
+  if (min > 0) { col.dataset.growmin = '1'; col.style.setProperty('--c-growmin', min + 'px'); } else { delete col.dataset.growmin; col.style.removeProperty('--c-growmin'); }
 }
 
 // Focus keeping: the focused element is found again by data-key after an update rebuilt the panel's DOM.

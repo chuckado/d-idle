@@ -153,7 +153,9 @@
   .d-slotcol { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; min-inline-size: 0; }
   .d-slotcol > .d-panel, .d-slottabs > .d-panel { flex: 0 1 auto; min-block-size: 0; }
   .d-slotcol > .d-panel:not([data-grow]), .d-slottabs > .d-panel:not([data-grow]) { max-block-size: 50%; } /* a panel that is not the last takes at most half the column: its list scrolls inside */
+  .d-slotcol[data-growmin] > .d-panel:not([data-grow]) { max-block-size: min(50%, calc((100% - var(--c-growmin) - 2 * var(--c-gap)) / 2)); } /* the last panel keeps its minimum; the ones above it scroll inside */
   .d-slotcol > .d-panel[data-grow], .d-slottabs > .d-panel[data-grow] { flex: 1 1 0; }
+  .d-slotcol > .d-panel[data-grow] { min-block-size: var(--c-growmin, 0px); }
   [data-cockpit-slot="strip"] > .d-panel { flex: 1 1 0; min-block-size: 0; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(2) { flex-grow: 1.25; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(3) { flex-grow: 1.1; }
@@ -231,4 +233,12 @@
   :root[data-mode="overlay"] .d-band-status > .d-links { display: none; }
   :root[data-mode="overlay"] body > :not(.d-shell) { display: none; }
 }
-
+/* A popover of a band panel (the status sentence's): the shell owns overlays, so a panel adds the class and the shell places
+   it under the band, out of the band's clip. The phone gives it the screen's width and the whole band's two lines of room. */
+@layer shell {
+  .d-bandpop { position: fixed; inset-block-start: calc(var(--c-band, 44px) + var(--d-sp-1)); inset-inline-start: calc(var(--d-sp-6) * 4); z-index: var(--d-z-sheet); max-inline-size: min(560px, calc(100% - var(--d-sp-4))); }
+  .d-bandpop[hidden] { display: none; }
+  .d-shell[data-cmode="phone"] .d-bandpop { inset-inline: var(--d-sp-2); max-inline-size: none; }
+  /* the phone's band is two lines: the sentence on the first, the meters side by side and the count on the second; the band panels read these */
+  .d-shell[data-cmode="phone"] { --c-sentence: 100%; --c-meterflex: 1 1 0; --c-meterflow: column; --c-meterbar: minmax(24px, 1fr); --c-meterlbl: 3.4em; --c-metergap: var(--d-sp-5); }
+}

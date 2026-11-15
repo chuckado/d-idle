@@ -164,6 +164,8 @@ type Fun struct {
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	Campaign   *CampaignAPI // the guided journey (campaign.go); nil: no routes
+	// Cmd are the optional facts of GET /api/commands (commands.go): the pause desk and the journey-blocked reason.
+	Cmd CommandHooks
 	// OnView is called for every request that passed the viewer's gate (the presence signal for away safety); nil: none.
 	OnView func()
 
@@ -741,6 +743,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		}
 	}
 	m.Handle(OnboardingRoute, f.Onboarding.Handler())
+	m.Handle(CommandsRoute, f.CommandsHandler())
 }
 
 // owns says whether a ViewRoutes entry is served by mountView instead (the landing redirect and the look tracking).

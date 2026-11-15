@@ -384,10 +384,11 @@ type Manifest struct {
 	Skeleton    int     `json:"skeleton"`
 	Fit         bool    `json:"fit"`
 	OptIn       bool    `json:"optIn"`       // mounted only when the layout in force names the panel (S1, D-layouts.md section 1)
+	MinBlock    int     `json:"minBlock"`    // least height in px as the last panel of a rail column (S6)
 	SwitchWith  string  `json:"switchWith"`  // shares a column with that panel under a switch (S6)
 	SwitchLabel string  `json:"switchLabel"` // the switch button text
-	CockpitOnly bool    `json:"cockpitOnly"` // mounted only by a cockpit layout (S6: area-map, log)
 	Slot        bool    `json:"slot"`        // renders into a fixed box and may sit in a cockpit slot (S1b)
+	CockpitOnly bool    `json:"cockpitOnly"` // belongs to the cockpit template alone: a free-grid layout keeps its fallback (uis2)
 	Scroll      bool    `json:"scroll"`      // holds a list that scrolls inside the box (data-scroll); needs slot
 	MergedInto  string  `json:"mergedInto"`
 	Owner       string  `json:"owner"`
