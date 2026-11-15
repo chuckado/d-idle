@@ -237,3 +237,7 @@
   .d-main[data-cmode="phone"] :is(.d-tabbar, .d-mapswitch) > .d-btn, .d-main[data-cmode="phone"] [data-cockpit-panel] .d-btn[data-size="sm"], .d-drawer .d-btn { min-block-size: 38px; }
   .d-drawer [data-panel="log"] .row { min-block-size: 38px; }
 }
+
+/* The one-time layout note of a cockpit floats over the frame (the frame fills the window, so it has no row of its own) (S7). */
+.d-layoutnote[data-float] { position: fixed; inset-block-end: var(--d-sp-3); inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-toast);
+  max-inline-size: min(94vw, 34rem); margin: 0; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); color: var(--d-text-1); }

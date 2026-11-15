@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
+import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, cockpitIds } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -369,10 +369,19 @@ function applyLayout(pass) {
 
 // Which layout is in force (docs/ui/redesign-2026-11-14/D-layouts.md section 4): ?layout=<name> (a preset, or none);
 // then the preset this browser chose in the "..." menu (localStorage d2layout); then the hero's stored copy (GET
-// /api/layout says so in X-Layout-Source and it is never rewritten here); else the default: Standard, or Simple for a
-// new hero (the welcome card not dismissed). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
+// /api/layout says so in X-Layout-Source and it is never rewritten here); else the default: the cockpit (web/layout.json),
+// for a new hero too (S7: nothing pins Simple any more; a browser an older shell pinned has no d2layoutpick, see chosen()),
+// or Standard when a startup self-check finds a cockpit slot without its panel (start()). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
 // saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
-const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote';
+const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
+const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default, Classic is the way back
+// The layout this browser chose. Only a choice made in the menu counts (it also sets PICK): a Simple that an older shell pinned
+// by itself for a new hero has no PICK, so that hero follows the new default. A browser that holds any other preset, or
+// 'saved', chose it in the menu (nothing else wrote it), so it is kept.
+function chosen() {
+  const c = pref(PREF);
+  return c === 'simple' && !pref(PICK) ? '' : c;
+}
 function pref(k, v) {
   try {
     if (v === undefined) return localStorage.getItem(k) || '';
@@ -410,17 +419,17 @@ async function loadLayout() {
   }
   const srv = await getJSON('/api/layout');
   const hasStored = !!srv && srv.source !== 'default'; // a missing header (a proxy) reads as stored: never replace a stored layout by guess
-  const choice = pref(PREF), base = pref(BASE);
-  if (PRESETS.includes(choice)) {
+  const choice = chosen(), base = pref(BASE);
+  if (MENU.includes(choice)) {
     const l = await presetFile(choice);
     if (l) return { layout: l, preset: choice, origin: 'choice', hasStored };
   }
   if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
-  // no layout of the hero's own
-  let name = 'standard', origin = 'default'; // origin 'default' is the only one that shows the layout note
-  if (choice === 'saved' && PRESETS.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) { name = 'simple'; origin = 'newhero'; pref(PREF, 'simple'); } // pinned: the page does not move to Standard by itself
-  let l = asLayout(srv && srv.body); // web/layout.json is the Standard file
-  if (name !== 'standard' || !l) l = await presetFile(name) || l;
+  // no layout of the hero's own: the default is the cockpit (web/layout.json). A new hero meets it without the layout note.
+  let name = 'cockpit', origin = 'default'; // origin 'default' is the only one that shows the layout note
+  if (choice === 'saved' && MENU.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) origin = 'newhero';
+  let l = asLayout(srv && srv.body); // web/layout.json is the cockpit file
+  if (name !== 'cockpit' || !l) l = await presetFile(name) || l;
   return l ? { layout: l, preset: name, origin, hasStored: false } : null;
 }
 
@@ -481,8 +490,8 @@ function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
       async save(l) {
         const r = await postJSON(answerBase, '/api/layout', { layout: withShadows(l, saved) });
         if (r && r.ok) {
-          if (PRESETS.includes(lay.sel && lay.sel.preset)) pref(BASE, lay.sel.preset);
-          pref(PREF, 'saved');
+          if (MENU.includes(lay.sel && lay.sel.preset)) pref(BASE, lay.sel.preset);
+          pref(PREF, 'saved'); pref(PICK, '1');
         }
         return r;
       },
@@ -491,7 +500,7 @@ function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
         const r = await postJSON(answerBase, '/api/layout', { reset: true });
         if (r && r.ok) {
           const b = pref(BASE);
-          pref(PREF, PRESETS.includes(b) ? b : ''); pref(BASE, '');
+          pref(PREF, MENU.includes(b) ? b : ''); pref(BASE, '');
           setTimeout(() => location.reload(), 700);
         }
         return r;
@@ -665,7 +674,7 @@ function setupCockpit(sel, answerBase, roots, slotList) {
       preview(l) { ck.layout = l; applyCockpit(); return ck.plan; },
       async save(l) {
         const r = await postJSON(answerBase, '/api/layout', { layout: l });
-        if (r && r.ok) pref(PREF, 'saved');
+        if (r && r.ok) { pref(PREF, 'saved'); pref(PICK, '1'); }
         return r;
       },
       async reset() {
@@ -751,7 +760,7 @@ async function onboardingChip(btn) {
 // ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
 // The buttons already on the page move into it (they keep their ids and listeners); the preset buttons store the choice
 // per browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
-const PRESET_LABEL = { classic: 'Classic', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
+const PRESET_LABEL = { cockpit: 'Cockpit', classic: 'Classic', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
 function setupMenu(sel) {
   const nav = document.querySelector('.d-band-status .d-links');
   if (!nav || document.getElementById('btn-more')) return;
@@ -786,7 +795,7 @@ function setupMenu(sel) {
   if (chip) onboardingChip(chip);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
-  const names = (sel && sel.hasStored ? ['saved'] : []).concat(PRESETS);
+  const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
   for (const name of names) {
     const b = ui.btn(name === 'saved' ? 'Saved layout' : 'Layout: ' + PRESET_LABEL[name], { size: 'sm', variant: 'ghost' });
     b.dataset.preset = name;
@@ -799,23 +808,25 @@ function setupMenu(sel) {
   nav.appendChild(wrap);
 }
 function choosePreset(name) {
-  pref(PREF, name);
+  pref(PREF, name); pref(PICK, '1');
   if (qs.has('layout')) { const u = new URL(location.href); u.searchParams.delete('layout'); history.replaceState(null, '', u); }
   location.reload();
 }
 
-// One line for a hero who now gets the Standard default, dismissed for good in this browser.
-function layoutNote(sel) {
+// One line for a hero who now gets the cockpit by default, dismissed for good in this browser. A cockpit has no row for it
+// (the frame fills the window), so there it floats over the page like a toast; the old page keeps it under the band.
+function layoutNote(sel, floating) {
   if (!sel || sel.origin !== 'default' || html.dataset.mode === 'overlay' || pref(NOTE)) return;
   const shell = document.querySelector('.d-shell'), top = document.querySelector('.d-band-status');
   if (!shell || !top) return;
   const box = el('div', 'd-layoutnote');
   box.setAttribute('role', 'note');
-  box.appendChild(el('span', '', 'The layout changed. Classic is in the menu.'));
+  if (floating) box.dataset.float = '1';
+  box.appendChild(el('span', '', floating ? 'The layout changed. The old ones are in the menu.' : 'The layout changed. Classic is in the menu.'));
   const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
   x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
   box.appendChild(x);
-  top.after(box);
+  if (floating) document.body.appendChild(box); else top.after(box);
 }
 
 // ---- ctx and mounting ----
@@ -842,6 +853,18 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
   };
 }
 
+// The default flips to the cockpit only while every slot has its panel: when the manifest lacks one (a half-updated install) the
+// page falls back to Standard instead of showing a hole. A layout the hero picked or stored is never second-guessed.
+async function selfCheck(sel, list, conf0) {
+  if (!sel || sel.origin !== 'default' && sel.origin !== 'newhero' || !isCockpit(sel.layout) || sel.preset !== 'cockpit') return sel;
+  const have = new Set(list.filter((m) => m.slot || (conf0.slot || []).includes(m.id)).map((m) => m.id));
+  const missing = [...cockpitIds(sel.layout)].filter((id) => !have.has(id));
+  if (!missing.length) return sel;
+  console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Standard');
+  const l = await presetFile('standard');
+  return l ? { layout: l, preset: 'standard', origin: sel.origin, hasStored: false } : sel;
+}
+
 async function start() {
   setupTheme();
   const bands = {};
@@ -857,7 +880,8 @@ async function start() {
     conf = pv.layout || {};
   } catch (e) { return; }
   // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
-  const sel = layoutReq ? await layoutReq : null;
+  let sel = layoutReq ? await layoutReq : null;
+  sel = await selfCheck(sel, list, conf);
   ck.meta = new Map(list.map((m) => [m.id, m])); // the manifests (a cockpit's switch pairs read switchWith)
   const cockpit = !!sel && isCockpit(sel.layout) && html.dataset.mode !== 'overlay';
   // panels the layout may put in a slot: their manifest says so, or shell.json lists them until it does
@@ -878,7 +902,9 @@ async function start() {
   }
   setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
   if (cockpit) setupDrawers(drRoots, drTitles);
-  if (layoutReq) { setupMenu(sel); if (!cockpit) layoutNote(sel); }
+  if (layoutReq) { setupMenu(sel); layoutNote(sel, cockpit); }
+  // a new hero meets the first-steps card once, without opening a menu
+  if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer')) { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
   for (const [m, parts] of made) {
     const css = el('link');

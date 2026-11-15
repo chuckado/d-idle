@@ -40,11 +40,11 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 			}
 		}
 	}
-	// the default is Standard, byte for byte; classic is the pre-redesign default, frozen (docs/ui/redesign-2026-11-14/D-layouts.md section 4)
+	// the default is the cockpit, byte for byte (S7); Standard keeps its own file; classic is the pre-redesign default, frozen (docs/ui/redesign-2026-11-14/D-layouts.md section 4)
 	def, _ := webFS.ReadFile("web/layout.json")
-	std, _ := webFS.ReadFile("web/layouts/standard.json")
-	if !bytes.Equal(def, std) {
-		t.Error("web/layout.json is not web/layouts/standard.json")
+	ck, _ := webFS.ReadFile("web/layouts/cockpit.json")
+	if !bytes.Equal(def, ck) {
+		t.Error("web/layout.json is not web/layouts/cockpit.json")
 	}
 	classic, _ := webFS.ReadFile("web/layouts/classic.json")
 	if sum := fmt.Sprintf("%x", sha256.Sum256(classic)); sum != classicLayoutSHA256 {
@@ -54,7 +54,7 @@ func TestShippedLayoutsAreValid(t *testing.T) {
 	// an opt-in panel is named only where the preset wants it
 	ms, _ := Manifests()
 	lc, _ := shellLayoutConf()
-	for _, f := range []string{"web/layout.json", "web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
+	for _, f := range []string{"web/layouts/classic.json", "web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/debug.json"} {
 		if f == "web/layouts/stream.json" || f == "web/layouts/simple.json" {
 			continue // short presets by design: the rest is left to the packer, which never mounts an opt-in panel it does not name
 		}
@@ -312,7 +312,7 @@ func TestLayoutMoveJS(t *testing.T) {
 	if err != nil {
 		t.Skip("node not available")
 	}
-	if out, err := exec.Command(node, "testdata/layout_move.js", "web/layout.js", "web/layout.json").CombinedOutput(); err != nil {
+	if out, err := exec.Command(node, "testdata/layout_move.js", "web/layout.js", "web/layouts/standard.json").CombinedOutput(); err != nil {
 		t.Fatalf("%v\n%s", err, out)
 	}
 }
@@ -665,7 +665,7 @@ func TestTemplatelessLayoutsRenderTheSameCells(t *testing.T) {
 	if err != nil {
 		t.Skip("node not available")
 	}
-	args := []string{"testdata/layout_cells.js", "web/layout.js", "testdata/layout_cells.golden", "web/layout.json", "web/layouts/classic.json", "web/layouts/debug.json",
+	args := []string{"testdata/layout_cells.js", "web/layout.js", "testdata/layout_cells.golden", "web/layouts/classic.json", "web/layouts/debug.json",
 		"web/layouts/simple.json", "web/layouts/standard.json", "web/layouts/stream.json", "web/layouts/mockup.json", "web/layouts/live.json", "web/layouts/command.json",
 		"testdata/compat/layout-v1-mockup.json", "testdata/compat/layout-v1-live.json", "testdata/compat/layout-v1-command.json"}
 	if out, err := exec.Command(node, args...).CombinedOutput(); err != nil {
@@ -731,10 +731,10 @@ func TestShippedCockpitLayout(t *testing.T) {
 			t.Errorf("%s must fit a slot (shell.json slot list or its manifest)", id)
 		}
 	}
-	// the default layout does not change in this slice
+	// the default is the cockpit since S7
 	def, _ := webFS.ReadFile("web/layout.json")
-	if dl, _ := ParseLayout(def); dl.Template != "" {
-		t.Error("web/layout.json is a cockpit; the default flips in S7")
+	if dl, _ := ParseLayout(def); dl.Template != "cockpit/1" {
+		t.Error("web/layout.json is not the cockpit")
 	}
 }
 
