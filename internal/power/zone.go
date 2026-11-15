@@ -37,6 +37,9 @@ func meanMon(z *danger.Zone, ranged bool) (Mon, bool) {
 		out.Def += mo.Share * float64(mo.Def)
 		out.ToHit += mo.Share * float64(mo.ToHit)
 		out.Dmg += mo.Share * mo.Dmg
+		if mo.Unblockable {
+			out.Unblockable += mo.Share
+		}
 		for _, h := range mo.Hazards {
 			if !seen[h] {
 				seen[h] = true
@@ -48,6 +51,7 @@ func meanMon(z *danger.Zone, ranged bool) (Mon, bool) {
 		return Mon{}, false
 	}
 	out.Life, out.Def, out.ToHit, out.Dmg = out.Life/w, out.Def/w, out.ToHit/w, out.Dmg/w
+	out.Unblockable /= w
 	out.Ranged = ranged
 	sort.Strings(out.Hazards)
 	return out, true

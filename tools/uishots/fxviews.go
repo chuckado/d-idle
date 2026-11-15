@@ -63,6 +63,9 @@ func variantView(name string) any {
 // withVariants answers /api/inventory from the variant the page's address names, and passes everything else on.
 func withVariants(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if artFor(w, r) {
+			return
+		}
 		if r.URL.Path == "/api/inventory" && r.Method == http.MethodGet {
 			if ref, err := url.Parse(r.Referer()); err == nil {
 				if name := ref.Query().Get("fx"); fxVariants[name] != nil {

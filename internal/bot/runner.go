@@ -212,6 +212,7 @@ type loopState struct {
 	trip             *trip
 	stuckAt          time.Time
 	cleared          map[int]bool // areas fully explored in this game
+	farm             farmLoop     // the farm loop's visit, pending reset and return zone (farmreset.go)
 	freshAt          time.Time    // when the last fresh game started (survives forgetGame: it is the cross-game progress check)
 	freshExp         uint32       // experience at that moment
 	freshNoGain      int          // fresh games in a row that gained under Route.FreshMinXP

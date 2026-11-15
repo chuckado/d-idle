@@ -83,3 +83,7 @@ The log has no skill levels and no weapon, so `levelsim` got `-build paladin-nor
 Reading: with a modelled weapon the estimate makes the hero kill faster, the bad packs look safer and the pass rule moves further from passing; k_hero 3.00 (the observed kill time is about three times the model's) says the real fights are slower than the skill period predicts (walking, hits that miss, monsters out of reach, the merc taking the kill; one-strike Zeal). n = 1 hero, one build, an assumed weapon: nothing was tuned to pass, no default was changed. The Sorceress is covered by unit tests only (no Sorceress log exists).
 
 Next: put the weapon, AR, IAS and FCR into the `zone entry` line (a one-line bot change) so a replay needs no assumption; then the 3x kill-time gap is a measurement, not a sensitivity.
+
+## Block and unblockable ranged attackers (card dangerfit2)
+
+`hitOn` multiplies the hit chance by `1 - block` only for the blockable share of an attacker: `Mon.Unblockable` (0 to 1, from `danger.Monster.Unblockable`) removes that share from the block factor, since game.exe cannot block a missile with no physical damage (decomp26 Q10 to Q13, V). `TestUnblockableRanged` runs it for a block-60 Paladin (margin drops) and a Sorceress (unchanged). Zone margins for caster-heavy areas (Black Marsh, Dark Wood, Catacombs) fall for shield heroes; no live check.

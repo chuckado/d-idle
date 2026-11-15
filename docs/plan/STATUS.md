@@ -190,8 +190,15 @@
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | verifyp06b | proposed | - | `docs/upstream/verifier2-p06-2026-11-15.md` | - |
-| botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go` | - |
+| botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/task.go`<br>`internal/bot/parkstep_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/task/executor.go`<br>`docs/knobs.md` | - |
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
+| verifyp04 | in-progress | - | `docs/upstream/verifier-p04-2026-11-15.md` | - |
+| uiphone | proposed | - | `internal/watch/web/inventory-canvas.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory.js`<br>`internal/watch/invui.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots/`<br>`tools/uishots.sh` | - |
+| p06posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| dangerfit2 | proposed | - | `internal/danger`<br>`internal/power`<br>`docs/survival/danger.md`<br>`docs/survival/power.md` | - |
+| decomp31 | proposed | - | `docs/research/decomp31-drops.md`<br>`internal/plandata/dropmodel-normal.json`<br>`docs/plan/data/dropmodel-normal.json`<br>`tools/emu/dm_` | - |
+| decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -235,14 +242,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 59fb7c540 11-15 10:08 `Merge agent/decomp28: Merge branch 'main' into decomp28` (decomp28)
-- b34a92d40 11-15 10:08 `Merge branch 'main' into decomp28` (-)
-- 1cb0880ef 11-15 10:03 `Merge agent/decomp27: Merge branch 'main' into decomp27` (decomp27)
-- 514808400 11-15 10:02 `Merge branch 'main' into decomp27` (-)
-- 699f8b837 11-15 10:00 `Merge agent/verifyp06b: Merge branch 'main' into TASK-496` (verifyp06b)
-- ba1eba19e 11-15 09:59 `Merge branch 'main' into TASK-496` (-)
-- 8197492d2 11-15 09:46 `Merge agent/botstuck: d2bot: object finder explores until the object or its preset shows up (Inifuss tree); task card` (botstuck)
-- eb24483e5 11-15 09:11 `Merge agent/prfix6: Merge branch 'main' into prfix6` (prfix6)
-- 86236b4b2 11-15 09:10 `Merge branch 'main' into prfix6` (-)
-- abc82a480 11-15 08:23 `Merge agent/verifyp06: Merge branch 'main' into TASK-494` (verifyp06)
+- f89d5b557 11-15 13:19 `Merge agent/farmloop: Merge branch 'main' into farmloop` (farmloop)
+- 1139d706b 11-15 13:18 `Merge branch 'main' into farmloop` (-)
+- f40ddc57a 11-15 13:14 `Merge agent/prfix7: Merge branch 'main' into prfix7` (prfix7)
+- d4a7a770f 11-15 13:13 `Merge branch 'main' into prfix7` (-)
+- f3a866b1a 11-15 13:09 `Merge agent/dangerfit2: Merge branch 'main' into dangerfit2` (dangerfit2)
+- 25d606285 11-15 13:08 `Merge branch 'main' into dangerfit2` (-)
+- 4a07c0132 11-15 13:03 `Merge agent/uiphone: Merge branch 'main' into TASK-501` (uiphone)
+- 9198536fa 11-15 13:02 `Merge branch 'main' into TASK-501` (-)
+- 7791fe294 11-15 12:46 `Merge branch 'main' into dangerfit2` (-)
+- d621b6505 11-15 12:31 `Merge agent/decomp31: Merge branch 'main' into decomp31` (decomp31)
 <!-- statusgen:end -->

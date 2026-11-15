@@ -216,3 +216,34 @@ func TestAttackOfBuild(t *testing.T) {
 		t.Logf("%s: clvl 6 %s L%d, clvl %d %s L%d", c.file, lo.Attack, lo.AttackLevel, c.clvl, hi.Attack, hi.AttackLevel)
 	}
 }
+
+// TestSkillOffenceComposesWithUnblockable: with the skill estimate in charge of the kill speed, the unblockable share of
+// a ranged attacker still skips the shield's block, and block still helps against the blockable one.
+func TestSkillOffenceComposesWithUnblockable(t *testing.T) {
+	m := model(t)
+	a := arch(t, m, "bruiser")
+	h := paladin()
+	h.Attack = Attack{Skill: "Zeal", Level: 5, SynergyPoints: 0, WeaponClass: "1HS"}
+	h.BlockPct = 50
+	pack := func(unbl float64) Pack {
+		return Pack{MLvl: 8, Mons: []Mon{{Life: 60, Def: 30, ToHit: 100, Dmg: 10},
+			{Life: 60, Def: 30, ToHit: 100, Dmg: 10, Ranged: true, Unblockable: unbl}}}
+	}
+	blockable, err := m.Margin(h, a, pack(0))
+	if err != nil {
+		t.Fatal(err)
+	}
+	free, _ := m.Margin(h, a, pack(1))
+	if blockable.Terms.Offence != "skill" || free.Terms.Offence != "skill" {
+		t.Fatalf("offence sources %q %q", blockable.Terms.Offence, free.Terms.Offence)
+	}
+	if free.Terms.Taken <= blockable.Terms.Taken || free.Best >= blockable.Best {
+		t.Errorf("unblockable must take more: taken %.1f vs %.1f, margin %.2f vs %.2f", free.Terms.Taken, blockable.Terms.Taken, free.Best, blockable.Best)
+	}
+	h.BlockPct = 0
+	nb, _ := m.Margin(h, a, pack(0))
+	nf, _ := m.Margin(h, a, pack(1))
+	if !near(nb.Terms.Taken, nf.Terms.Taken, 1e-9) {
+		t.Errorf("with no block the share is irrelevant: %.3f vs %.3f", nb.Terms.Taken, nf.Terms.Taken)
+	}
+}

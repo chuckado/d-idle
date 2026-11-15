@@ -15,11 +15,17 @@ type Params struct {
 	BadScreens           float64         `json:"badScreens"` // bad pack = typical + this many screens of units (I)
 	FastRun              int             `json:"fastRun"`    // run velocity from which a monster is flagged fast (U)
 	ClvlBands            []int           `json:"clvlBands"`  // clvl columns of Pay.XPByClvl (as areamon-table.csv)
+	// AreaUnits is the measured population (areaunits.json); nil keeps the Levels.txt formula for everything.
+	AreaUnits *AreaUnits `json:"-"`
 }
 
 // DefaultParams is the shipped parameter set.
 func DefaultParams() Params {
-	return Params{
+	u, err := LoadAreaUnits()
+	if err != nil {
+		panic(err) // embedded file, covered by a test
+	}
+	return Params{AreaUnits: u,
 		FPS: 25, AttackFrames: 32, RefDefense: 60, ScreenTiles: 280,
 		UnitsPerDensityGroup: map[int]float64{1: 0.0453, 2: 0.0272, 3: 0.1735}, BadScreens: 1, FastRun: 10,
 		ClvlBands: []int{1, 3, 5, 8, 12, 16},

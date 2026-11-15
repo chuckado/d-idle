@@ -3,6 +3,7 @@ package power
 import (
 	"encoding/json"
 	"fmt"
+	"math"
 	"os"
 	"sort"
 	"strings"
@@ -410,5 +411,36 @@ func TestHeroFromPlayer(t *testing.T) {
 	var r Reader = Fake{H: h}
 	if got, err := r.Hero(); err != nil || got.Level != 9 {
 		t.Errorf("fake reader: %v %v", got, err)
+	}
+}
+
+// TestUnblockableRanged: a shield blocks a blockable ranged attacker but not one whose missile has no physical damage
+// (Fallen Shaman fire, Radament's bolt); a hero with no block is unaffected by the flag.
+func TestUnblockableRanged(t *testing.T) {
+	m := model(t)
+	flagged := func(share float64) *danger.Zone {
+		z := zone(8, 1, 3, 60, 10)
+		z.Monsters[1].Unblockable = share > 0
+		z.Monsters[1].Share = 0.5
+		return z
+	}
+	pal := paladin()
+	pal.BlockPct = 60
+	ab, as := arch(t, m, "bruiser"), arch(t, m, "caster")
+	blockable, fire := marginOf(t, m, pal, ab, flagged(0)), marginOf(t, m, pal, ab, flagged(1))
+	if fire >= blockable {
+		t.Errorf("paladin block 60: unblockable ranged margin %.3f is not under the blockable %.3f", fire, blockable)
+	}
+	sor := sorceress()
+	if a, b := marginOf(t, m, sor, as, flagged(0)), marginOf(t, m, sor, as, flagged(1)); math.Abs(a-b) > 1e-9 {
+		t.Errorf("sorceress (no block): flag changed the margin %.3f -> %.3f", a, b)
+	}
+	// the zone mean carries the share of unblockable ranged spawns
+	z := zone(8, 1, 3, 60, 10)
+	z.Monsters = append(z.Monsters, z.Monsters[1])
+	z.Monsters[1].Unblockable = true
+	z.Monsters[1].Share, z.Monsters[2].Share = 0.25, 0.75
+	if mm, ok := meanMon(z, true); !ok || math.Abs(mm.Unblockable-0.25/1.0) > 1e-9 {
+		t.Errorf("meanMon unblockable share %v, want 0.25", mm.Unblockable)
 	}
 }

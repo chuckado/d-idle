@@ -323,6 +323,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [exploredpct.md](exploredpct.md): Explored share: when a zone counts as explored (bot.exploredPct) (status: CURRENT. Tags: V = read from the code in this worktree and covered by a unit test, U = not run in a live game.)
 - [farm.md](farm.md): Farm runs (FARMRUNS, 2026-10-29)
 - [farmfallback.md](farmfallback.md): farmfallback: the gold farm as data, with a fallback
+- [farmloop.md](farmloop.md): The farm loop: reset a mostly cleared leveling zone with a fresh game (status: current (2026-11-15, agent farmloop). Shipped OFF (`bot.farmReset` 0): the simulation shows a small gain...)
 - [first-hour.md](first-hour.md): First hour: the daily table tool
 - [first-session.md](first-session.md): First play session guide (TASK-134) (status: written 2026-11-08 from docs on main only. Nothing here was run for this guide. Tags: V verified live (as...)
 - [fixbank.md](fixbank.md): FIXBANK: gold deposit and repair gold (card fix-bank) (status: current. Findings of the D3 drills (docs/probes/drills/2026-10-31-d3.txt); live proof is a drill rerun.)
@@ -652,12 +653,13 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verify-melee-block.md](upstream/briefs/verify-melee-block.md): Verifier brief: fid/melee-block-r1 (P07, a negative result), for the independent reviewer (Opus, singly)
 - [verify-missile-block.md](upstream/briefs/verify-missile-block.md): Verifier brief: fid/missile-block-r3 (P06), for the independent reviewer (Opus, singly)
 - [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
+- [verify2-hitrec-interrupt.md](upstream/briefs/verify2-hitrec-interrupt.md): Verifier brief, second pass: fid/hitrec-interrupt-r3 (P04), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
-- [hitrec-interrupt.md](upstream/drafts/hitrec-interrupt.md): Draft (local, NOT posted): "A hit interrupts a swing or cast whose skill allows it" (P04) (status: 2026-11-15 (card decomp26). Fork branch `fid/hitrec-interrupt-r1` (private fork remote), two commits on...)
+- [hitrec-interrupt.md](upstream/drafts/hitrec-interrupt.md): Draft (local, NOT posted): "A hit interrupts a swing or cast whose skill allows it" (P04) (status: 2026-11-15 (card prfix7, TASK-509). Fork branch `fid/hitrec-interrupt-r3` (private fork remote only), two...)
 - [hitrec-knock-in-hit.md](upstream/drafts/hitrec-knock-in-hit.md): Draft (local, NOT posted): "A knocking hit does not start a knockback in a get-hit" (P03c) (status: 2026-11-15 (card decomp27, supersedes the decomp26 candidate note). Fork branch `fid/knock-in-gethit-r1`...)
 - [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted): "A hit never restarts a get-hit" (r3) (status: r3 2026-11-15 (card prfix3). Superseded by the PR body bodies/hitrec-norestart-body.md; this page is the...)
@@ -676,6 +678,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [offline-decomp21-2026-11-14.md](upstream/offline-decomp21-2026-11-14.md): Offline upstream work, 2026-11-14 (card decomp21, TASK-440, Sonnet) (status: current. Two pipeline items taken to "ready for the verifier" while the worker host was off limits (no...)
 - [pipeline-2026-11-14.md](upstream/pipeline-2026-11-14.md): Upstream PR pipeline: from finding to merged PR (2026-11-14) (status: current, 2026-11-14 (card TASK-422, agent prpipeline, Sonnet). User instruction 2026-11-14: run every...)
 - [pr-queue.md](upstream/pr-queue.md): Upstream PR queue (d2d fidelity fixes against game.exe 1.14d) (status: current, 2026-11-11 (card TASK-332, agent prprep). Audit of every local candidate against upstream main...)
+- [prfix7-p04-r3-2026-11-15.md](upstream/prfix7-p04-r3-2026-11-15.md): P04 r3: the first verifier's required changes applied (2026-11-15, card prfix7, TASK-509) (status: current. Private fork branch `fid/hitrec-interrupt-r3` (private remote only, never force-pushed): oracle...)
 - [verification-2026-11-11.md](upstream/verification-2026-11-11.md): Independent verification of upstream PR candidates 1 and 2 (2026-11-11) (status: current, 2026-11-11 (TASK-340, agent prverify). Both candidates NEEDS-WORK; nothing is cleared for posting...)
 - [verification-swing-start-2026-11-14.md](upstream/verification-swing-start-2026-11-14.md): Independent verification of the swing-start PR r1 (2026-11-14) (status: current, 2026-11-14 (TASK-415, agent prverify5). Verdict **NEEDS-WORK** on r1: one code edit (the held...)
 - [verification-swing-start-r2-2026-11-14.md](upstream/verification-swing-start-r2-2026-11-14.md): Independent verification of the swing-start PR r2 (2026-11-14) (status: current, 2026-11-14 (TASK-418, agent prverify6). Verdict **NEEDS-WORK, text only**: the code, the test and...)
@@ -684,6 +687,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
+- [verifier-p04-2026-11-15.md](upstream/verifier-p04-2026-11-15.md): Verifier: P04 a hit interrupts a swing or cast whose skill allows it (2026-11-15) (status: current, 2026-11-15 (card verifyp04, TASK-500, Opus, singly). All runs finished before this report;...)
 - [verifier-p06-2026-11-15.md](upstream/verifier-p06-2026-11-15.md): Verifier: P06 a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06, TASK-494, Opus, singly). Nothing posted, nothing pushed to the fork....)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)

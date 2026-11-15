@@ -14,7 +14,10 @@ import (
 type Mon struct {
 	Life, Def, ToHit, Dmg float64
 	Ranged                bool
-	Hazards               []string
+	// Unblockable is the damage share (0 to 1) of this attacker that a shield cannot block: a missile with no
+	// physical record (Fallen Shaman fire, Radament, vampires; danger.Monster.Unblockable). 0 for melee and arrows.
+	Unblockable float64
+	Hazards     []string
 }
 
 // Pack is a reference encounter: monsters killed in order, melee first (they are nearest), then the ranged ones.
@@ -242,7 +245,7 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool, est OffenceDPS) 
 		}
 		c = math.Min(0.95, math.Max(0.05, c))
 		if a.Exposure.DefenceCounts {
-			c *= 1 - math.Min(75, float64(h.BlockPct))/100
+			c *= 1 - math.Min(75, float64(h.BlockPct))/100*(1-mo.Unblockable)
 		}
 		return c
 	}

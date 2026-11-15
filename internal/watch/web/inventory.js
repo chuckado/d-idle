@@ -117,6 +117,19 @@
     });
   }
 
+  // The belt is four columns wide and up to four rows high. A live belt item may carry its slot number as x (0..15, y 0): the cell is the
+  // slot's column and row, so a seventh potion lands in row two instead of a fifth column that is not there (the phone screenshot of
+  // 2026-11-15 showed three cut slivers beside the four cells). An item that already sits inside the 4 by 4 keeps its x and y.
+  function beltCells(items) {
+    var rows = 1, out = items.map(function (it) {
+      var i = it.x >= 4 ? it.x + 4 * (it.y || 0) : (it.x || 0) + 4 * (it.y || 0), c = {};
+      Object.keys(it).forEach(function (k) { c[k] = it[k]; });
+      c.x = i % 4; c.y = Math.floor(i / 4); rows = Math.min(4, Math.max(rows, c.y + (it.h || 1)));
+      return c;
+    });
+    return { items: out, rows: rows };
+  }
+
   // select moves the highlight and redraws the detail card only. draw() skips an unchanged view (its signature ignores
   // the selection), and a full paint would rebuild the grids and lose focus and scroll for a click.
   function select(next) {
@@ -195,7 +208,8 @@
     if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:inventory', { detail: v }));
     doll(v);
     cells('pack', v.backpack || [], 10, 4);
-    cells('belt', v.belt || [], 4, 1);
+    var bl = beltCells(v.belt || []);
+    cells('belt', bl.items, 4, bl.rows);
     cells('stash', v.stash || [], 6, 8);
     gearPrompt(v.prompt);
     $('packmeta').textContent = '10 by 4';
