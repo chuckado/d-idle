@@ -4,7 +4,10 @@
 // UPDATE=1 rewrites testdata/orders_dom.txt. Usage: node orders_dom.js path/to/panel.js
 const assert = require('assert'), fs = require('fs'), path = require('path');
 const { load, shellCtx } = require('./panel_harness.js');
-const P = load(process.argv[2]);
+const listeners = {};
+const doc = { addEventListener(t, f) { (listeners[t] = listeners[t] || []).push(f); }, removeEventListener(t, f) { listeners[t] = (listeners[t] || []).filter((x) => x !== f); },
+  dispatchEvent(e) { (listeners[e.type] || []).forEach((f) => f(e)); }, documentElement: { dataset: {} } };
+const P = load(process.argv[2], { document: doc, CustomEvent: class { constructor(type, o) { this.type = type; this.detail = o && o.detail; } } });
 const dir = path.join(__dirname, 'commands');
 const files = fs.readdirSync(dir).filter((f) => /^view-.*\.json$/.test(f)).sort();
 assert.ok(files.length >= 12, 'the handler goldens are missing: ' + files.length);
@@ -14,9 +17,13 @@ function mount(post) {
   const { root, c } = shellCtx({}, {}, []);
 
   c.ui = { btn: (t, o) => { const b = c.el('button', 'd-btn', t); b.dataset = Object.assign({}, o); return b; }, chip: (t) => c.el('span', 'd-chip', t), clear(n) { n.children.length = 0; } };
-  c.post = (p, b) => { post.push(p + ' ' + JSON.stringify(b)); return Promise.resolve({ ok: true }); };
+  c.post = (p, b) => { post.push(p + ' ' + JSON.stringify(b)); return Promise.resolve(c.reply || { ok: true }); };
+  const sheet = c.el('div', 'd-tilesheet');
+  sheet.hidden = true;
+  c.tileSheet = () => ({ el: sheet, place() {} });
+  c.later = () => 0;
   c.toasts = [];
-  c.toast = (s, t) => c.toasts.push(s + ': ' + t);
+  c.toast = (s, t, a) => c.toasts.push(s + ': ' + t + (a ? ' [' + a.label + ' ' + a.ms + ']' : ''));
   return { c, inst: P.mount(root, c) };
 }
 // every element as tag.class, its data and text, indented; hidden ones in brackets
@@ -82,8 +89,43 @@ setImmediate(() => {
   let xs = 0;
   (function walk(e) { if (e.className === 'o-x' && e.tag === 'button') xs++; e.children.forEach(walk); })(c2.body);
   assert.strictEqual(xs, none.rows.filter((r) => r.can.cancel).length);
+  // the verb row is live: every button posts one command to the one door; the toast carries Undo for five seconds
+  const vp = [], vm = mount(vp), vv = view('three-one-failed-sorceress');
+  vm.c.reply = { ok: true, order: { text: 'Fight here for 20 min' }, undo: { path: '/api/commands/cancel', body: { id: 'order:9' } } };
+  vm.inst.update(vv);
+  const vb = {};
+  (function walk(e) { if (e.tag === 'button' && e.dataset && e.dataset.key && e.dataset.key.startsWith('verb-')) vb[e.dataset.intent] = e; e.children.forEach(walk); })(vm.c.body);
+  assert.deepStrictEqual(Object.keys(vb).sort(), ['go', 'more', 'pause', 'repair', 'town'].sort(), 'the five verbs');
+  vb.town.fire('click'); vb.repair.fire('click'); vb.pause.fire('click');
+  let gotGo = 0; doc.addEventListener('d2:goto', () => gotGo++);
+  vb.go.fire('click');
+  setImmediate(() => {
+    assert.deepStrictEqual(vp, ['/api/commands {"intent":"town","args":{}}', '/api/commands {"intent":"repair","args":{}}', '/api/commands {"intent":"pause","args":{}}']);
+    assert.strictEqual(gotGo, 1, 'Go to asks the zone map');
+    assert.ok(vm.c.toasts.every((t) => /\[Undo 5000\]$/.test(t)), 'each accepted command shows Undo for five seconds: ' + vm.c.toasts);
+    // z undoes the last one; keys g t r p work, and are off while typing
+    vp.length = 0;
+    doc.dispatchEvent({ type: 'keydown', key: 'z', target: {}, preventDefault() {} });
+    doc.dispatchEvent({ type: 'keydown', key: 't', target: { tagName: 'INPUT' }, preventDefault() {} });
+    doc.dispatchEvent({ type: 'keydown', key: 't', target: {}, preventDefault() {} });
+    setImmediate(() => {
+      assert.deepStrictEqual(vp, ['/api/commands/cancel {"id":"order:9"}', '/api/commands {"intent":"town","args":{}}']);
+      // a refused command says why in words, and the paused view reads Resume
+      const rp = [], rm = mount(rp);
+      rm.c.reply = { ok: false, code: 'locked', error: 'not unlocked yet' };
+      rm.inst.update(vv);
+      let tb; (function walk(e) { if (e.dataset && e.dataset.key === 'verb-town') tb = e; e.children.forEach(walk); })(rm.c.body);
+      tb.fire('click');
+      setImmediate(() => {
+        assert.ok(rm.c.toasts.some((t) => /warn: not unlocked yet/.test(t)), 'refusal in words: ' + rm.c.toasts);
+        finish();
+      });
+    });
+  });
+});
+function finish() {
   const golden = path.join(__dirname, 'orders_dom.txt');
   if (process.env.UPDATE) fs.writeFileSync(golden, out);
   assert.strictEqual(out, fs.readFileSync(golden, 'utf8'));
   console.log('ok');
-});
+}
