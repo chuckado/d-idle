@@ -607,6 +607,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [c2c3-review.md](ui/redesign-2026-11-14/reviews/c2c3-review.md): Review of the merged character screen: C2 (canvas) and C3 (tooltip, menu, gestures, feedback) (status: review of `origin/main` at `4996d53af` (cards TASK-456 uic2 and TASK-463 uic3, both merged), 2026-11-15....)
 - [cockpit-review.md](ui/redesign-2026-11-14/reviews/cockpit-review.md): Review of the merged watch cockpit (S1b to S6, B1, B4 to B6), before S7 makes it the default (status: review, 2026-11-15, of `origin/main` at `0caf89220` (`?layout=cockpit`). Reviewer: the design reviewer of...)
 - [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+- [s7-review.md](ui/redesign-2026-11-14/reviews/s7-review.md): Review of S7 (the cockpit becomes the default), before it merges (status: review of branch `agent/uis7` at `be9ac3373` (2026-11-15), done before the merge. Nothing here was checked...)
 
 `ui/redesign-2026-11-14/`
 
