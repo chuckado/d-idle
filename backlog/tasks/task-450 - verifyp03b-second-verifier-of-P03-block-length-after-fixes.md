@@ -1,10 +1,11 @@
 ---
 id: TASK-450
 title: 'verifyp03b: second verifier of P03 block length after fixes'
-status: In Progress
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-14T22:22:00Z'
+updated_date: '2026-11-15T00:03:00Z'
 labels:
   - d2d
   - research
