@@ -1,0 +1,13 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "Targe"
+  div.tip-line [data-k=note] "Magic properties are not read on this backend."
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=n data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=y] "✓ Strength 16"
+    div.tip-req [data-ok=n] "✗ only a Paladin can use it"
+  div.tip-sec [data-ok=n data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=y] "✓ Strength 16"
+    div.tip-req [data-ok=n] "✗ a Desert Guard wears helm, armor, spear or polearm"
+  div.tip-hint [] "Right-click: all actions."

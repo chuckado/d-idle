@@ -1,0 +1,8 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-rare.tip-name [] "Ring"
+  div.tip-line [data-k=bad] "Unidentified"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=n data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=n] "✗ it is not identified"
+  div.tip-hint [] "Right-click: all actions."

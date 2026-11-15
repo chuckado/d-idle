@@ -1,0 +1,13 @@
+div.inv-act [aria-label=Actions for Ring role=menu data-mode=pop]
+  div.act-title.q-rare [] "Ring"
+  button.act [role=menuitem data-act=identify] "Identify"
+    kbd [] "Enter"
+  button.act [aria-disabled=true role=menuitem data-act=equip data-off=] "Equip"
+    kbd [] "Enter"
+  div.act-why [data-for=equip] "it cannot be worn right now"
+  button.act [role=menuitem data-act=sell] "Mark for sale"
+    kbd [] "Alt+click"
+  button.act [role=menuitem data-act=keep] "Keep"
+  button.act [role=menuitem data-act=trash data-danger=] "Trash"
+    kbd [] "Del"
+  div.act-note [role=status]

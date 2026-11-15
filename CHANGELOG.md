@@ -8,6 +8,12 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-463 <!--sg:agent/uic3-->
+- Merge branch 'main' into prfix3 <!--sg:agent/prfix3-->
+- Merge branch 'main' into TASK-472 <!--sg:agent/uib9-->
+- Merge branch 'main' into TASK-468 <!--sg:agent/verifyp03c-->
+- Merge branch 'main' into drills012 <!--sg:agent/drills012-->
+- Merge branch 'main' into uib4 <!--sg:agent/uib4-->
 - Merge branch 'main' into TASK-464 <!--sg:agent/uib1-->
 - Merge branch 'main' into decomp22 <!--sg:agent/decomp22-->
 - uis6: minBlock 250 <!--sg:agent/uis6-->
