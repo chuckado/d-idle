@@ -1,10 +1,11 @@
 ---
 id: TASK-517
 title: 'cut013: friends release 0.1.3 built, drilled and staged (not published)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T22:54:00Z'
+updated_date: '2026-11-15T23:45:00Z'
 labels:
   - container
   - chore
