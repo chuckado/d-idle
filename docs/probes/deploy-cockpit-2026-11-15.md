@@ -6,7 +6,7 @@
 
 - Bot and watch build from origin/main 7dde87e96 (cockpit default, S7, all slices, bot cards B1-B9 Go halves) with `tools/dev-update.sh --commit origin/main --to d2play-20261108` (the sandbox host is selected with `D2_SANDBOX_HOST`; the builder host is not the sandbox host since the build-hosts change). V: `UPDATED d2play-20261108 0.0.261114180251 -> 0.0.261115105052 in 17s`.
 - Image unchanged (devp7): the new private fork merc item verbs are optional, the Go client degrades without the capability. No image build or swap was done.
-- The sandbox host was asleep and was woken with `labrun wake orion` (the container restarted with the host).
+- The sandbox host was asleep and was woken with the labrun wake command (the container restarted with the host).
 
 ## Rollback state
 
