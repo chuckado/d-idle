@@ -191,6 +191,7 @@ cmd/d2bot/mercplayer_test.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
+cmd/d2bot/objects.go  credit-runner  botstuck
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/powerwire.go  credit-runner  survB
@@ -567,6 +568,8 @@ internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
 internal/nav/exit.go  credit-runner  pursuers
 internal/nav/explore.go  credit-runner  pursuers
+internal/nav/fixmouth4_test.go  credit-runner  botstuck
+internal/nav/mouthgate.go  credit-runner  botstuck
 internal/nav/nav.go  credit-runner  maphistoryC
 internal/nav/nav.go  credit-runner  pursuers
 internal/nav/pursuit.go  credit-runner  pursuers
@@ -574,6 +577,7 @@ internal/nav/pursuit_test.go  credit-runner  pursuers
 internal/nav/roam.go  credit-runner  maphistoryC
 internal/nav/roam.go  credit-runner  maptrail
 internal/nav/roam.go  credit-runner  pursuers
+internal/nav/walk.go  credit-runner  botstuck
 internal/nav/walk.go  credit-runner  pursuers
 internal/plandata/boss_levels.go  pro-runner  levelplan3
 internal/plandata/boss_levels_test.go  pro-runner  levelplan3
