@@ -57,6 +57,7 @@ type Hero struct {
 	Sustain     float64 // life per second from regeneration and auras
 	MeasuredDPS float64 // kill speed observed against this monster class over about 20 kills, 0 = none
 	Merc        Merc
+	Attack      Attack // main attack skill and gear speed for the data estimate; Attack.Skill "" = no build known
 	Quality     map[string]Quality
 }
 
