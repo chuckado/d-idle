@@ -314,6 +314,7 @@ docs/research/data22  credit-runner  decomp22
 docs/research/data24  credit-runner  prfix3
 docs/research/data28  pro-runner  decomp28
 docs/research/decomp28-trace.md  pro-runner  decomp28
+docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -373,6 +374,7 @@ docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix3
 docs/upstream/drafts/load-gold-clamp.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp22
+docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp30
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p06posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix3
@@ -497,6 +499,8 @@ internal/combat/packdrink_test.go  credit-runner  beltfix
 internal/combat/reach.go  credit-runner  maphistoryC
 internal/combat/safety.go  credit-runner  beltfix
 internal/combat/types.go  credit-runner  goldprio
+internal/d2/merc.go  credit-runner  decomp30
+internal/d2/merc_test.go  credit-runner  decomp30
 internal/d2/stats.go  credit-runner  survB
 internal/d2dctl/item_verbs.go  credit-runner  itemverbs2
 internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
@@ -779,6 +783,7 @@ internal/watch/web/inventory-canvas.js  credit-runner  uic3
 internal/watch/web/inventory-drag.js  credit-runner  gearsets
 internal/watch/web/inventory-drag.js  credit-runner  uic3
 internal/watch/web/inventory-merc.css  credit-runner  uic2
+internal/watch/web/inventory-merc.js  credit-runner  decomp30
 internal/watch/web/inventory-merc.js  credit-runner  uic2
 internal/watch/web/inventory-sets.css  credit-runner  gearsets
 internal/watch/web/inventory-sets.css  credit-runner  uic2
