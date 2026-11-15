@@ -1,0 +1,38 @@
+---
+id: TASK-497
+title: 'botstuck: Dark Wood tree search and Forgotten Tower stairs stall'
+status: Proposed
+assignee:
+  - credit-runner
+created_date: '2026-11-15T14:37:00Z'
+labels:
+  - bot
+  - bug
+dependencies: []
+priority: medium
+ordinal: 276000
+card: "botstuck"
+owns:
+  - "internal/nav/mouthgate.go"
+  - "internal/nav/walk.go"
+  - "internal/nav/fixmouth4_test.go"
+  - "cmd/d2bot/objects.go"
+exclusive: []
+contracts: []
+result: "Offline only, not verified live. nav: the mouth gate skips an unwanted exit within mouthTriggerR of a wanted exit (test TestGateSkipsMouthBesideWantedExit). d2bot objectAdapter.find explores up to 100 s until the object or its preset appears. Build-neutral (no class data)."
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Size: M
+
+Why: the sandbox hero (clvl 15) loops: the Inifuss tree step fails 'object class 30 not found' within 1 s of Dark Wood arrival (12 times in 3 h; d2d lists presets of built rooms only, nothing explores), and in the Forgotten Tower the mouth gate refuses every click to the cellar stairs (they lie inside the Black Marsh mouth's 15-subtile disc), 12 minutes standing twice. Done when: both fixed offline with tests; live check ticked later.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [x] #1 Tree of Inifuss step explores the level until the tree or its preset shows up instead of failing in 1 s
+- [x] #2 Mouth gate no longer refuses clicks toward a wanted exit that lies inside an unwanted exit's disc
+- [ ] #3 Live check: Doofer reaches the Inifuss tree and the Tower Cellar stairs
+<!-- AC:END -->
