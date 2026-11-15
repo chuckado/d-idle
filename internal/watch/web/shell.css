@@ -115,7 +115,7 @@
      built, so its neighbours take the room. Nothing in a slot has a content-driven height. */
   .d-shell[data-template="cockpit"] { --c-band: 44px; --c-gap: 8px; --c-strip: 112px; --c-railmin: 400px; display: grid; grid-template-rows: var(--c-band) minmax(0, 1fr);
     gap: 0; padding: 0; block-size: 100dvh; min-block-size: 0; overflow: hidden; }
-  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 84px; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 104px; }
   .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
   .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { grid-template-rows: 36px minmax(0, 1fr); align-content: start; row-gap: 0; }
@@ -172,7 +172,8 @@
 
   /* two maps in one rail column: a switch shows one at a time (shell.js mapSwitch); a panel switched off takes no room */
   .d-panel[data-off] { display: none; }
-  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); z-index: 3; }
+  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: 0; z-index: 3; background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); }
+  .d-mapswitch > .d-btn { min-inline-size: 0; padding-inline: var(--d-sp-2); }
   .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
   .d-menu-pop > [hidden] { display: none; }
 

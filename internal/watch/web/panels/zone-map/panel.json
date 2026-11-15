@@ -18,7 +18,7 @@
   "optIn": true,
   "cockpitOnly": true,
   "switchWith": "area-map",
-  "switchLabel": "Act map",
+  "switchLabel": "Act",
   "minBlock": 250,
   "owner": "uis5",
   "doc": "docs/ui/redesign-2026-11-14/C-orders.md"

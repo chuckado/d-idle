@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"image"
 	"image/color"
 	"image/jpeg"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"time"
 
@@ -64,6 +66,10 @@ func serve(addr, class string) error {
 	// never does; the pages fall back to their polls
 	m.HandleFunc("/api/events", http.NotFound)
 	m.HandleFunc("/stream", func(w http.ResponseWriter, r *http.Request) {
+		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("stream") == "live" {
+			liveStream(w, r)
+			return
+		}
 		w.Header().Set("Content-Type", "image/jpeg")
 		w.Write(frame())
 	})
@@ -141,6 +147,35 @@ func frame() []byte {
 	var b bytes.Buffer
 	jpeg.Encode(&b, img, &jpeg.Options{Quality: 80})
 	return b.Bytes()
+}
+
+// liveStream is a multipart MJPEG stream of the one frame, a part every 300 ms for at most 25 s: the picture tile as it looks with
+// a game running (page query stream=live). The reader of the page drops it at the end like any stream.
+func liveStream(w http.ResponseWriter, r *http.Request) {
+	f := frame()
+	w.Header().Set("Content-Type", "multipart/x-mixed-replace; boundary=d2frame")
+	w.Header().Set("Cache-Control", "no-store")
+	fl, _ := w.(http.Flusher)
+	end := time.After(25 * time.Second)
+	t := time.NewTicker(300 * time.Millisecond)
+	defer t.Stop()
+	for {
+		if _, err := fmt.Fprintf(w, "--d2frame\r\nContent-Type: image/jpeg\r\nContent-Length: %d\r\n\r\n", len(f)); err != nil {
+			return
+		}
+		w.Write(f)
+		w.Write([]byte("\r\n"))
+		if fl != nil {
+			fl.Flush()
+		}
+		select {
+		case <-r.Context().Done():
+			return
+		case <-end:
+			return
+		case <-t.C:
+		}
+	}
 }
 
 func abs(v int) int {

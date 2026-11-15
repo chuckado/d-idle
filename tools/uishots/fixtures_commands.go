@@ -14,7 +14,7 @@ import (
 // commandsFixture serves /api/commands for the Orders panel from the handler goldens of internal/watch/testdata/commands.
 // Which one comes from the page's own query (the poll carries it as the Referer): cmd=empty|three-one-failed|blocked|paused|
 // safety|cancel-all (default three-one-failed) or cmd=eight, the three-one-failed list with five more waiting orders, for
-// the fit check of a list longer than its box.
+// the fit check of a list longer than its box; cmd=loop is the same list with a Loop row on top (round 2 of 5).
 func commandsFixture(class string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		name := "three-one-failed"
@@ -24,7 +24,7 @@ func commandsFixture(class string) http.HandlerFunc {
 			}
 		}
 		file := name
-		if name == "eight" {
+		if name == "eight" || name == "loop" {
 			file = "three-one-failed"
 		}
 		b, err := os.ReadFile(filepath.Join("internal/watch/testdata/commands", "view-"+file+"-"+class+".json"))
@@ -43,6 +43,12 @@ func commandsFixture(class string) http.HandlerFunc {
 					Source: "map", State: "queued", Why: &watch.CommandWhy{Code: "order_queued", Text: "after the running order"},
 					Can: watch.CommandCan{Cancel: true}, Cancel: &watch.CommandCancel{Path: "/api/orders/cancel", Body: map[string]any{"id": 20 + i}}}}, v.Rows[1:]...)...)
 			}
+		}
+		if name == "loop" {
+			lp := watch.CommandRow{ID: "loop:1", Intent: "loop", Text: "Loop: Cold Plains, round 2 of 5, 20 min each", Source: "loop", State: "active", Phase: "farming",
+				Why: &watch.CommandWhy{Code: "loop_wait", Text: "repair after each round"}, Can: watch.CommandCan{Cancel: true},
+				Cancel: &watch.CommandCancel{Path: "/api/orderloop", Body: map[string]any{"action": "stop"}}}
+			v.Rows = append([]watch.CommandRow{lp}, v.Rows...)
 		}
 		js(w, v)
 	}

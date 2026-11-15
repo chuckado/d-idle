@@ -76,6 +76,9 @@
     "hold": {"params": ["question"], "say": [
       "Hold: waiting for your yes about {question}.",
       "Waiting for your answer about {question}."]},
+    "player_pause": {"params": ["step"], "say": [
+      "Paused by you: {step}.",
+      "You paused me: {step}."]},
     "activity": {"params": ["activity"], "say": [
       "Now: {activity}.",
       "Busy with: {activity}."]}
