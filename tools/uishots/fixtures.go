@@ -92,7 +92,8 @@ func fxLayout(name string) map[string]any {
 		tabs[0].IDs = []string{"fx-needs", "orders"}
 	} else if name == "zoneclear" { // the real Zone clear panel (fed by zoneClearFixture) with the needs panel above it, the slot it will be dropped into
 		rail = []string{"fx-needs", "zoneclear", "zone-map", "area-map"}
-		wide["top"] = []string{"fx-needs", "zoneclear"}
+		wide["top"] = []string{"fx-needs"} // the top row sizes itself: a 300 px panel belongs in a column
+		wide["left"] = []string{"zoneclear", "zone-map"}
 		tabs[0].IDs = []string{"fx-needs", "zoneclear"}
 	} else if name != "" {
 		one := "fx-" + name
