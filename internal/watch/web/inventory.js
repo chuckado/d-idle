@@ -285,5 +285,9 @@
     window.__invTest({ select: select, dur: dur, level: level, lines: lines, paint: paint, draw: draw, say: say, setArt: function (on) { art.on = !!on; }, drawRepair: drawRepair });
     return;
   }
-  load(); artProbe(); setInterval(load, 4000);
+  // The first request waits until every script of the page has run (window load): the view is handed to the other scripts by an event,
+  // and one that answered before the tooltip, menu, mercenary and canvas scripts had registered left them with nothing to draw until
+  // the view changed (found by the fit check as a half-drawn page, review c2c3 R14).
+  function start() { load(); artProbe(); setInterval(load, 4000); }
+  if (document.readyState === 'complete') start(); else window.addEventListener('load', start);
 })();
