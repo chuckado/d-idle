@@ -678,6 +678,7 @@ internal/watch/invapi_test.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  gearsets
 internal/watch/invui.go  credit-runner  nopins
 internal/watch/invui.go  credit-runner  uic2
+internal/watch/invui.go  credit-runner  uiphone
 internal/watch/layout.go  credit-runner  uis1
 internal/watch/layout.go  credit-runner  uis6
 internal/watch/layout_test.go  credit-runner  uis1
@@ -727,6 +728,7 @@ internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
 internal/watch/testdata/charscreen/  credit-runner  uic2
+internal/watch/testdata/charscreen/  credit-runner  uiphone
 internal/watch/testdata/commands/  credit-runner  uis4
 internal/watch/testdata/compat  credit-runner  repairtrip
 internal/watch/testdata/gear_farm_dom.txt  credit-runner  repairtrip
@@ -781,8 +783,10 @@ internal/watch/web/inventory-actions.js  credit-runner  nopins
 internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
 internal/watch/web/inventory-canvas.css  credit-runner  uic3
+internal/watch/web/inventory-canvas.css  credit-runner  uiphone
 internal/watch/web/inventory-canvas.js  credit-runner  uic2
 internal/watch/web/inventory-canvas.js  credit-runner  uic3
+internal/watch/web/inventory-canvas.js  credit-runner  uiphone
 internal/watch/web/inventory-drag.js  credit-runner  gearsets
 internal/watch/web/inventory-drag.js  credit-runner  uic3
 internal/watch/web/inventory-merc.css  credit-runner  uic2
@@ -802,6 +806,7 @@ internal/watch/web/inventory.js  credit-runner  gearsets
 internal/watch/web/inventory.js  credit-runner  nopins
 internal/watch/web/inventory.js  credit-runner  repairtrip
 internal/watch/web/inventory.js  credit-runner  uic2
+internal/watch/web/inventory.js  credit-runner  uiphone
 internal/watch/web/layout.js  credit-runner  uis1
 internal/watch/web/layout.js  credit-runner  uis6
 internal/watch/web/layout.js  credit-runner  uis7
@@ -911,11 +916,13 @@ tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifix1
+tools/uishots.sh  credit-runner  uiphone
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
 tools/uishots.sh  credit-runner  uis7
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifix1
+tools/uishots/  credit-runner  uiphone
 tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis6
 tools/uishots/fit.js  credit-runner  uis7
