@@ -104,6 +104,14 @@ type BotTuning struct {
 	RecoveryDryKills   int
 	RecoveryDrySkipMin int
 
+	// Town portal cast guard (internal/resource/castguard.go, card portalguard). A hit does not interrupt a Town Portal cast
+	// (V run, decomp28 Q5); the risk is the damage taken during the cast and the walk into the portal.
+	PortalGuard   int // 0 = old rule (3 adjacent block the cast), 1 = expected damage over the exposure (falls back to the old rule when a damage term is missing)
+	PortalCastMs  int // cast time of the scroll or tome read (U until drill R3)
+	PortalWalkMs  int // walk into the portal after the cast (U until drill R3)
+	PortalHitMs   int // assumed time between two hits of one monster (every swing lands: an upper bound)
+	PortalLifePct int // block the cast when the expected damage reaches this % of current life
+
 	// Mercenary chore (docs/merc-farm.md). Hiring clicks a verified dialog; reviving clicks an UNVERIFIED one, so it is off.
 	MercRetryMin         int  // minutes between merc chore attempts (a failed hire or revive is not retried sooner)
 	MercHireMinGold      int  // gold in Act 2 town below which no hire is attempted
@@ -124,12 +132,23 @@ func DefaultBotTuning() BotTuning {
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
+		PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
 }
 
 func botKnobs() []Knob {
 	return []Knob{
+		{Key: "bot.portalGuard", Label: "Portal cast guard", Unit: "mode", Default: 0, Min: 0, Max: 1, HigherIsBetter: true, NoHandicap: true,
+			Desc: "0 (default until drill R3, docs/fixportalmelee.md): three or more adjacent attackers block a town portal cast (the old count rule). 1: block it when the expected damage of the adjacent attackers over the cast and the walk reaches bot.portalLifePct of current life; with any damage term missing the count rule applies. A hit does not interrupt the cast (V run, decomp28), so the risk is damage taken, not a cut."},
+		{Key: "bot.portalCastMs", Label: "Portal cast time", Unit: "ms", Default: 3000, Min: 500, Max: 5000,
+			Desc: "Time of the town portal scroll or tome read used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts."},
+		{Key: "bot.portalWalkMs", Label: "Portal walk time", Unit: "ms", Default: 3000, Min: 0, Max: 5000,
+			Desc: "Walk from the cast spot into the portal used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts."},
+		{Key: "bot.portalHitMs", Label: "Portal guard hit interval", Unit: "ms", Default: 700, Min: 300, Max: 3000, HigherIsBetter: true,
+			Desc: "Assumed time between two hits of one adjacent monster in the guard (its strongest attack lands every time: an upper bound, U). Shorter blocks more casts."},
+		{Key: "bot.portalLifePct", Label: "Portal guard life share", Unit: "%", Default: 50, Min: 10, Max: 100, HigherIsBetter: true,
+			Desc: "The guard blocks a portal cast when the expected damage over the exposure reaches this share of current life. Lower blocks more casts."},
 		{Key: "bot.tickMs", Label: "Decision period", Unit: "ms", Default: 100, Min: 100, Max: 1000,
 			Desc: "How often the bot re-plans between actions. Slower means more idle gaps."},
 		{Key: "bot.watchMs", Label: "Watch period", Unit: "ms", Default: 50, Min: 50, Max: 300,
