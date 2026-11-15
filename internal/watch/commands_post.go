@@ -20,7 +20,6 @@ const (
 	CommandsCancelRoute = CommandsRoute + "/cancel"
 	cmdModeNow          = "now"
 	cmdModeQueue        = "queue"
-	cmdPauseRoute       = "/api/pause" // pauseapi.go (B1)
 )
 
 type commandBody struct {
@@ -141,9 +140,9 @@ func (b commandBody) translate() (cmdReq, string) {
 		}
 		return cmdReq{GoldFarmRoute, map[string]any{"on": on}}, ""
 	case "pause":
-		return cmdReq{cmdPauseRoute, map[string]any{"on": true}}, ""
+		return cmdReq{PauseRoute, map[string]any{"on": true}}, ""
 	case "resume":
-		return cmdReq{cmdPauseRoute, map[string]any{"on": false}}, ""
+		return cmdReq{PauseRoute, map[string]any{"on": false}}, ""
 	case "sell_now":
 		return cmdReq{RouteSellNow, a}, ""
 	case "revive_merc":

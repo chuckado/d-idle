@@ -97,6 +97,13 @@ demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
 demo-orders20 watch?layout=cockpit-demo&theme=dark&needs=0&orders=20
 demo-menu watch?layout=cockpit-demo&theme=dark #btn-more
 cockpit-tab-map watch?layout=cockpit&theme=dark&tab=Map
+zone-menu watch?layout=cockpit&theme=dark&zone=cp
+zone-menu-phone watch?layout=cockpit&theme=dark&tab=Map&zone=cp
+zone-menu-loop watch?layout=cockpit&theme=dark&zone=cp&loop=1
+zone-menu-town watch?layout=cockpit&theme=dark&zone=camp
+zone-menu-hard watch?layout=cockpit&theme=dark&zone=ftw
+zone-menu-here watch?layout=cockpit&theme=dark&zone=bm
+zone-menu-demo watch?layout=cockpit-demo&theme=dark&zone=cp
 demo-tab-orders watch?layout=cockpit-demo&theme=dark&tab=Orders
 demo-tab-map watch?layout=cockpit-demo&theme=dark&tab=Map
 demo-tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress

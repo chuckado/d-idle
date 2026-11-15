@@ -26,9 +26,23 @@ func serve(addr, class string) error {
 	}
 	sim.Hub.SetFrameURL("/stream")
 	sim.Step(30 * time.Second) // one step so the hero, the map and the feed have something, then the clock stays
-	if _, err := sim.Hub.GiveOrder(watch.OrderGo, "Cold Plains", 30); err != nil {
+	// the act map shows a target (Cold Plains, running), two pins and a failed mark, and the Loop and the queue are open
+	if o, err := sim.Hub.GiveOrder(watch.OrderGo, "Cold Plains", 30); err != nil {
 		log.Printf("uishots: fixture order: %v", err)
+	} else {
+		sim.Hub.OrderState(o.ID, watch.OrderActive, "")
 	}
+	for _, a := range []string{"Stony Field", "Dark Wood"} {
+		if _, err := sim.Hub.GiveOrder(watch.OrderGo, a, 20); err != nil {
+			log.Printf("uishots: fixture pin: %v", err)
+		}
+	}
+	if o, err := sim.Hub.GiveOrder(watch.OrderGo, "Burial Grounds", 20); err == nil {
+		sim.Hub.OrderState(o.ID, watch.OrderFailed, "the hero's guard turned it down")
+	}
+	sim.Hub.SetMapLadder(func() *watch.MapLadder {
+		return &watch.MapLadder{LoopOpen: true, QueueOpen: true, QueueSlots: 2, QueueWaiting: 1, QueueTeaser: "Clear the Den of Evil for a second slot."}
+	})
 	sim.Hub.Whyline().Observe(goals.Why{Code: "fight", Params: map[string]string{"area": "Blood Moor", "life": "72"}}, "Fighting in Blood Moor", "g1", "")
 	sim.Hub.SetGoldSource(func() (int, int, bool) { return 1240, 5300, true })
 	sim.Hub.SetHeroStatsSource(func() (watch.HeroStats, bool) {

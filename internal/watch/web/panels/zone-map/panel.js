@@ -341,7 +341,10 @@ export function mount(root, ctx) {
       measure();
       if (st.deep && ns0(v)) { // a deep link: ?zone=<id> opens that zone's menu once
         st.deep = false;
-        try { const z = new URLSearchParams(location.search).get('zone'); if (z && node(z)) open(z); } catch (e) { /* no location */ }
+        try { // ?zone=<id>[&loop=1]: the page opens with that zone's menu (a link, and the fit check's pictures)
+          const q = new URLSearchParams(location.search), z = q.get('zone');
+          if (z && node(z)) { open(z); if (q.get('loop') === '1' && st.view.ladder && st.view.ladder.loopOpen) { st.loop.open = true; drawMenu(); } }
+        } catch (e) { /* no location */ }
       }
       if (!menu.hidden) {
         const sig = JSON.stringify([st.sel, node(st.sel), v.ladder, v.edges && v.edges.length, st.charter && st.charter.price, st.err]);
