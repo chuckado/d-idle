@@ -170,8 +170,12 @@
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
 | uib1 | in-progress | - | `internal/bot/playerpause.go`<br>`internal/bot/playerpause_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/testdata/pause/`<br>`cmd/d2bot/pausewire.go`<br>`docs/pause.md`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go` | - |
+| drills012 | in-progress | - | `docs/releases/0.1.2-drills.md` | - |
+| uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| verifyp03c | proposed | - | `docs/upstream/verifier-p03b-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
+| uib9 | in-progress | - | `internal/d2dctl/item_verbs_merc.go`<br>`internal/d2dctl/item_verbs_merc_test.go`<br>`internal/invdesk/mercverbs.go`<br>`internal/invdesk/mercverbs_test.go`<br>`internal/invdesk/sets.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go`<br>`docs/research/merc-gear.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -217,14 +221,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c895fcf74 11-15 00:26 `Merge agent/uib9: Merge branch 'main' into TASK-472` (uib9)
+- feba09175 11-15 00:25 `Merge branch 'main' into TASK-472` (-)
+- 9ddb9dbf3 11-15 00:24 `Merge agent/verifyp03c: Merge branch 'main' into TASK-468` (verifyp03c)
+- c57af20e0 11-15 00:24 `Merge agent/drills012: Merge branch 'main' into drills012` (drills012)
+- bf8749b78 11-15 00:22 `Merge branch 'main' into TASK-468` (-)
+- 09439c883 11-15 00:22 `Merge branch 'main' into drills012` (-)
+- 58ebdfbe4 11-15 00:00 `Merge remote-tracking branch 'origin/main' into agent/uib9` (-)
+- bb8b822a1 11-14 23:58 `Merge agent/uib4: Merge branch 'main' into uib4` (uib4)
+- a1d8354d6 11-14 23:57 `Merge branch 'main' into uib4` (-)
 - d4dd67300 11-14 23:45 `Merge agent/uib1: Merge branch 'main' into TASK-464` (uib1)
-- c8643df88 11-14 23:44 `Merge branch 'main' into TASK-464` (-)
-- 9913f36ec 11-14 23:42 `Merge agent/decomp22: Merge branch 'main' into decomp22` (decomp22)
-- f48e7b3a8 11-14 23:41 `Merge branch 'main' into decomp22` (-)
-- fc4f96218 11-14 23:35 `Merge branch 'main' into TASK-464` (-)
-- 4dad0901b 11-14 23:29 `Merge agent/uis6: uis6: minBlock 250` (uis6)
-- 3b1fbaa90 11-14 23:08 `Merge origin/main into agent/uis6; minBlock for the act map in the rail` (-)
-- 776d705fa 11-14 20:46 `Merge agent/uis4: Merge branch 'main' into TASK-453` (uis4)
-- 49d8571e5 11-14 20:46 `Merge branch 'main' into TASK-453` (-)
-- c531b5422 11-14 20:44 `Merge agent/p05cr: Merge branch 'main' into TASK-459` (p05cr)
 <!-- statusgen:end -->
