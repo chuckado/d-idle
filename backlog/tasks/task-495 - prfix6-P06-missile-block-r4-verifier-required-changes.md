@@ -1,10 +1,11 @@
 ---
 id: TASK-495
 title: 'prfix6: P06 missile block r4 (verifier required changes)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T13:17:00Z'
+updated_date: '2026-11-15T14:15:00Z'
 labels:
   - d2d
   - upstream-pr
