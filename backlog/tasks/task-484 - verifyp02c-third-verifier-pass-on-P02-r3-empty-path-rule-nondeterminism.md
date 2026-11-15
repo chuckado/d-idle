@@ -15,6 +15,7 @@ card: "verifyp02c"
 owns:
   - "docs/upstream/verifier3-p02-2026-11-15.md"
 exclusive: []
+result: "P02 r3 head 5464877b PASS: empty tick path no longer a match (426 not-compared starts all have d2d unit plan = game.exe); claim 0 plan differ on every run incl. a deterministic one. Nondeterminism source: async level builds (GameData::want_level std::async) link neighbours late, so edge bits vary; prebuilding all levels makes runs byte-identical; ASan/UBSan clean. Recommended: prebuild line in test_warp_walk (+ known pair 40:2). Offline, not live."
 contracts: []
 ---
 
@@ -28,5 +29,5 @@ Why: recheck of P02 r3 head 5464877b after verifier 2. Consumer: prfix5. Done wh
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/upstream/verifier3-p02-2026-11-15.md with verdict and the nondeterminism source or bound
+- [x] #1 docs/upstream/verifier3-p02-2026-11-15.md with verdict and the nondeterminism source or bound
 <!-- AC:END -->
