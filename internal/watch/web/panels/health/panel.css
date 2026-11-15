@@ -18,7 +18,7 @@
   [data-panel="health"] .h-detail dt { color: var(--d-text-3); text-transform: uppercase; letter-spacing: .08em; }
   [data-panel="health"] .h-detail dd { margin: 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   [data-panel="health"] .h-detail dd[data-l="unknown"] { color: var(--d-text-3); }
-  @container h (min-height: 150px) { [data-panel="health"] .h-detail { display: grid; } [data-panel="health"] .h-lights { flex: none; } [data-panel="health"] .h-btn { justify-content: flex-start; gap: var(--d-sp-3); } }
+  @container h (min-height: 150px) { [data-panel="health"] .h-detail { display: grid; } [data-panel="health"] .h-lights { flex: none; } [data-panel="health"] .h-btn { justify-content: flex-start; gap: var(--d-sp-2); } [data-panel="health"] .h-detail { gap: 2px var(--d-sp-3); padding-block-start: var(--d-sp-1); } }
   /* a narrow cell: no text under 10 px; a light that is fine shows its name, one that is not shows its word in the state colour (the name stays in the title), so a red dot is never colour alone */
   @container h (max-width: 230px) { [data-panel="health"] .h-lights { gap: 0; } [data-panel="health"] .h-light b, [data-panel="health"] .h-light span { font-size: 10px; letter-spacing: -.01em; }
     [data-panel="health"] .h-light span { display: none; } [data-panel="health"] .h-light i { margin-bottom: 4px; }

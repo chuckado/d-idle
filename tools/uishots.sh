@@ -135,7 +135,7 @@ no-merc-no-potions watch?layout=cockpit&theme=dark&needs=2&glance=full,nopotions
 live-stream watch?layout=cockpit&theme=dark&needs=2&stream=live
 live-stream-light watch?layout=cockpit&theme=light&needs=2&stream=live
 sentence-popover watch?layout=cockpit&theme=dark&needs=2&glance=full,paused [data-key=say] .d-bandpop:not([hidden])
-journey-popover watch?layout=cockpit&theme=dark&needs=2 [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
+journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
 needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
 orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=0&cmd=eight
