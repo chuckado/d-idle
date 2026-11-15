@@ -107,4 +107,23 @@ for k, b in sorted(dm["bosses"].items()):
     out["bosses"][k] = e
 for k, d in dm["chests"].items():
     out["chests"][k] = {il: rd(summary(v), 4) for il, v in d.items()}
-json.dump(out, open(sys.argv[3], "w"), indent=1)
+# one line per area / monster / boss / chest: reviewable diffs, well under the 256 KB data limit of the gamecode guard
+def dump(o, f):
+    f.write("{\n")
+    keys = list(o)
+    for i, k in enumerate(keys):
+        v = o[k]
+        if k in ("areas", "monsters", "bosses", "chests"):
+            f.write(f' {json.dumps(k)}: {{\n')
+            sub = list(v)
+            for j, kk in enumerate(sub):
+                f.write(f'  {json.dumps(kk)}: {json.dumps(v[kk], separators=(",", ":"))}{"," if j < len(sub) - 1 else ""}\n')
+            f.write(" }")
+        else:
+            f.write(f' {json.dumps(k)}: {json.dumps(v)}')
+        f.write(",\n" if i < len(keys) - 1 else "\n")
+    f.write("}\n")
+
+
+with open(sys.argv[3], "w") as f:
+    dump(out, f)
