@@ -134,3 +134,17 @@ func TestResetRouteGoldens(t *testing.T) {
 		t.Errorf("refusal golden: %v\nwant %s\ngot  %s", err, want, w.Body)
 	}
 }
+
+// The band says Resetting with the bot's own text while a reset runs, and goes back afterwards.
+func TestGlanceSentenceSaysResetting(t *testing.T) {
+	on := true
+	src := GlanceSources{Resetting: func() (bool, string) { return on, "reset: leaving the game and rejoining" }}
+	s := glanceSentence(HeroView{Known: true}, UptimeView{State: KindProgress}, src)
+	if s.Word != "Resetting" || s.Tone != "info" || !strings.Contains(s.Reason, "rejoining") {
+		t.Fatalf("%+v", s)
+	}
+	on = false
+	if s := glanceSentence(HeroView{Known: true}, UptimeView{State: KindProgress}, src); s.Word == "Resetting" {
+		t.Fatalf("still resetting: %+v", s)
+	}
+}

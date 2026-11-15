@@ -53,3 +53,22 @@ func commandsFixture(class string) http.HandlerFunc {
 		js(w, v)
 	}
 }
+
+// resetFixture serves /api/reset for the Reset strip (internal/watch/web/resetui.js): the page's query reset=resetting|
+// rejoining|failed picks the state (the poll carries it as the Referer), else the hero is idle. The shapes are the
+// goldens of internal/watch/testdata/reset.
+func resetFixture(w http.ResponseWriter, r *http.Request) {
+	name := "idle"
+	if ref, err := url.Parse(r.Referer()); err == nil {
+		if c := ref.Query().Get("reset"); c == "resetting" || c == "rejoining" || c == "failed" {
+			name = c
+		}
+	}
+	b, err := os.ReadFile(filepath.Join("internal/watch/testdata/reset", "view-"+name+".json"))
+	if err != nil {
+		http.Error(w, "no such fixture: "+name, http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}

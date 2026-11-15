@@ -27,8 +27,16 @@ func resetDesk(r *bot.Runner, stateDir string) watch.ResetDesk {
 	return &resetAdapter{r: r, exit: os.Exit, measured: os.Getenv("D2BOT_RUN") != "", hardOff: os.Getenv("D2BOT_HARD_RESET") == "0"}
 }
 
+// resetRunner is the part of bot.Runner the adapter uses.
+type resetRunner interface {
+	ResetView() bot.ResetView
+	CanSoftReset() bool
+	PlayerReset(force bool) bot.ResetView
+	BeginHardReset() bot.ResetView
+}
+
 type resetAdapter struct {
-	r        *bot.Runner
+	r        resetRunner
 	exit     func(int)
 	measured bool
 	hardOff  bool
