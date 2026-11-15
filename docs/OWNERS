@@ -379,6 +379,7 @@ docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
+docs/upstream/bodies/knock-in-gethit-body.md  credit-runner  p03cposted
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/briefs/hitrec-norestart-oracle.md  credit-runner  prfix2
@@ -388,11 +389,13 @@ docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix3
 docs/upstream/drafts/load-gold-clamp.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp22
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp30
+docs/upstream/pipeline-2026-11-14.md  credit-runner  p03cposted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p04posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p06posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix3
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
+docs/upstream/pr-queue.md  credit-runner  p03cposted
 docs/upstream/pr-queue.md  credit-runner  p04posted
 docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2

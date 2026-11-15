@@ -635,6 +635,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
 - [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
+- [knock-in-gethit-body.md](upstream/bodies/knock-in-gethit-body.md): knock-in-gethit-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
