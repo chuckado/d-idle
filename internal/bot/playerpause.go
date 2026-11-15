@@ -30,10 +30,10 @@ const pauseHomeBackoff = 30 * time.Second
 
 // PlayerPauseView is what GET /api/pause shows.
 type PlayerPauseView struct {
-	Schema string    `json:"schema"`
-	State  string    `json:"state"`
-	Since  time.Time `json:"since,omitempty"`
-	Reason string    `json:"reason,omitempty"`
+	Schema string     `json:"schema"`
+	State  string     `json:"state"`
+	Since  *time.Time `json:"since,omitempty"`
+	Reason string     `json:"reason,omitempty"`
 }
 
 type playerPause struct {
@@ -101,7 +101,8 @@ func (r *Runner) pauseViewLocked() PlayerPauseView {
 		v.State = PauseGoingHome
 	}
 	if p.want {
-		v.Since, v.Reason = p.since, p.reason
+		since := p.since
+		v.Since, v.Reason = &since, p.reason
 	}
 	return v
 }

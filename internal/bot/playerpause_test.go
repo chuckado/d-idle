@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"encoding/json"
 	"path/filepath"
 	"testing"
 	"time"
@@ -141,3 +142,20 @@ func TestPlayerPauseSurvivesARestart(t *testing.T) {
 		t.Fatalf("resume was not persisted: %s", g3.pauseState())
 	}
 }
+
+// The view keeps the shape the route and its goldens show.
+func TestPlayerPauseViewShape(t *testing.T) {
+	g := pauseRig(t, d2.Sorceress, 1)
+	b, _ := json.Marshal(g.r.PlayerPauseView())
+	if string(b) != `{"schema":"watch.pause/1","state":"running"}` {
+		t.Fatalf("running: %s", b)
+	}
+	v := g.r.PlayerPause(true)
+	b, _ = json.Marshal(v)
+	want := `{"schema":"watch.pause/1","state":"going_home","since":` + mustJSON(v.Since) + `,"reason":"waiting for a safe moment to go home"}`
+	if string(b) != want {
+		t.Fatalf("going_home: %s", b)
+	}
+}
+
+func mustJSON(v any) string { b, _ := json.Marshal(v); return string(b) }
