@@ -45,31 +45,20 @@ export function ack(intent, j) {
 }
 
 let lastUndo = null, keysOff = null;
-// A toast with Undo that stays five seconds. Undo posts the request the dispatcher named; z does the same.
+// A toast with Undo that stays five seconds (the shell's toast with an action). Undo posts the request the dispatcher named;
+// the key z does the same while the toast is up.
 export function toastUndo(ctx, text, undo) {
-  const box = typeof document !== 'undefined' && document.getElementById ? document.getElementById('toasts') : null;
-  if (!box) { ctx.toast('good', text); return null; }
-  const t = ctx.el('div', 'd-toast o-undo'), msg = ctx.el('span', '', text);
-  t.dataset.sev = 'good';
-  t.appendChild(msg);
-  const gone = () => { if (t.remove) t.remove(); if (lastUndo && lastUndo.el === t) lastUndo = null; };
-  if (undo) {
-    const b = ctx.el('button', 'd-btn', 'Undo');
-    b.type = 'button'; b.dataset.size = 'sm'; b.dataset.key = 'undo';
-    b.addEventListener('click', () => doUndo(ctx));
-    t.appendChild(b);
-    lastUndo = { el: t, undo };
-  }
-  box.appendChild(t);
-  ctx.later(gone, UNDO_MS);
-  return t;
+  if (!undo) { ctx.toast('good', text); return; }
+  const mine = { undo };
+  lastUndo = mine;
+  ctx.toast('good', text, { label: 'Undo', ms: UNDO_MS, run: () => { if (lastUndo === mine) doUndo(ctx); } });
+  ctx.later(() => { if (lastUndo === mine) lastUndo = null; }, UNDO_MS);
 }
 
 export function doUndo(ctx) {
   const u = lastUndo;
   if (!u) return Promise.resolve(false);
   lastUndo = null;
-  if (u.el.remove) u.el.remove();
   return ctx.post(u.undo.path, u.undo.body).then((j) => {
     if (j && j.ok === false) ctx.toast('warn', refusal(j));
     else ctx.toast('info', 'Undone');
@@ -122,7 +111,7 @@ export function mount(root, ctx) {
   let view = null, down = false;
 
   // the More sheet: the errands as a list with a filter ("/" focuses it), inside this tile, over the list
-  const sheet = ctx.el('div', 'o-sheet'), filter = ctx.el('input', 'o-filter'), items = ctx.el('div', 'o-items');
+  const ts = ctx.tileSheet('self'), sheet = ts.el, filter = ctx.el('input', 'o-filter'), items = ctx.el('div', 'o-items');
   sheet.hidden = true;
   filter.type = 'search'; filter.placeholder = 'Type to find a command'; filter.setAttribute('aria-label', 'Find a command');
   items.dataset.scroll = '1';
@@ -131,7 +120,7 @@ export function mount(root, ctx) {
   sx.type = 'button'; sx.setAttribute('aria-label', 'Close'); sx.addEventListener('click', closeSheet);
   sheetHead.appendChild(sx);
   sheet.append(sheetHead, filter, items);
-  root.appendChild(sheet);
+  ts.place();
   function drawItems() {
     ctx.ui.clear(items);
     const q = (filter.value || '').toLowerCase();

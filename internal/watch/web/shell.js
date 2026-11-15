@@ -81,19 +81,42 @@ const ui = {
 };
 
 // ---- toasts ----
-function toast(sev, text) {
+// act ({label, run, ms}): a toast with one action button (Undo) that stays ms (default 8000); the action runs once.
+function toast(sev, text, act) {
   const box = document.getElementById('toasts');
-  if (!box) return;
+  if (!box) return null;
   const t = el('div', 'd-toast');
   t.dataset.sev = sev || 'info';
   t.appendChild(el('span', '', text));
-  const b = el('button', 'd-btn', 'Dismiss');
+  const b = el('button', 'd-btn', act ? act.label : 'Dismiss');
   b.type = 'button'; b.dataset.size = 'sm'; b.dataset.variant = 'ghost';
-  b.addEventListener('click', () => t.remove());
+  b.addEventListener('click', () => { t.remove(); if (act) act.run(); });
   t.appendChild(b);
   box.appendChild(t);
   while (box.children.length > 4) box.firstChild.remove();
-  setTimeout(() => t.remove(), 8000);
+  setTimeout(() => t.remove(), (act && act.ms) || 8000);
+  return t;
+}
+
+// A sheet over a tile: the shell owns overlays. where 'self' covers the panel's own tile; 'beside' is the area-map tile when it
+// stands to the right of this one on the same rows (a two-column rail), else the Orders tile above this one, else the own tile
+// (a phone tab). place() moves the sheet to where it belongs now; the zone menu uses it so it never covers the zone buttons.
+// The sheet carries data-panel of its panel, so that panel's own selectors style what it holds.
+function tileSheet(id, root, where) {
+  const sheet = el('div', 'd-tilesheet');
+  sheet.dataset.panel = id;
+  sheet.hidden = true;
+  const shows = (t) => { if (!t || t.hidden || t.dataset.off || t === root) return null; const r = t.getBoundingClientRect(); return r.width > 40 && r.height > 40 ? r : null; };
+  const host = () => {
+    if (where !== 'beside') return root;
+    const me = root.getBoundingClientRect(), side = document.querySelector('.d-panel[data-panel="area-map"]'), sr = shows(side);
+    if (sr && sr.left >= me.right - 4 && sr.top < me.bottom && sr.bottom > me.top) return side;
+    const up = document.querySelector('.d-panel[data-panel="orders"]'), ur = shows(up);
+    if (ur && ur.bottom <= me.top + 4) return up;
+    return root;
+  };
+  const place = () => { const h = host(); if (sheet.parentElement !== h) h.appendChild(sheet); sheet.dataset.host = h === root ? 'self' : h.dataset.panel; return sheet.dataset.host; };
+  return { el: sheet, place };
 }
 
 // ---- panel roots ----
@@ -518,7 +541,7 @@ function mapSwitch(box) {
     const b = kids.find((n) => n !== a && (links(a, n) || links(n, a)));
     if (b) { pair = kids.indexOf(a) < kids.indexOf(b) ? [a, b] : [b, a]; break; }
   }
-  if (!pair) { growLast(box); return; }
+  if (!pair) { growLast(box); ck.showMap = null; return; }
   // the switch sits on the top edge of whichever map shows, so it takes no height of its own (the zone rows need every pixel)
   const bar = el('div', 'd-mapswitch');
   bar.setAttribute('role', 'group');
@@ -537,8 +560,10 @@ function mapSwitch(box) {
     b.addEventListener('click', () => { ck.second = i === 1; paint(); const on = bar.children[i]; if (on) on.focus({ preventScroll: true }); });
     bar.appendChild(b);
   });
+  ck.showMap = (id) => { const i = pair.findIndex((n) => n.dataset.panel === id); if (i >= 0 && ck.second !== (i === 1)) { ck.second = i === 1; paint(); } };
   paint();
 }
+document.addEventListener('d2:showmap', (e) => { if (ck.showMap) ck.showMap(e.detail); }); // the Go to verb asks for the act map
 
 function applyCockpit() {
   const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id), window.innerHeight);
@@ -797,6 +822,7 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     id: m.id, config: cfg, token: qs.get('t') || '',
     body: parts.body, meta: parts.meta, actions: parts.actions,
     el, ui, store, toast,
+    tileSheet(where) { return tileSheet(m.id, parts.root, where); },
     hide(on) { parts.root.hidden = !!on; syncBand(parts.root.parentElement); },
     state(st) { parts.root.dataset.state = st; },
     later(fn, ms) { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; },

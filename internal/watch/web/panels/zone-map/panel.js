@@ -18,9 +18,10 @@ export function gridOf(nodes) {
   return { cols: xs.length, rows: ys.length, at };
 }
 
-// The level band of a zone for this hero: no (not orderable), hard (the guard says no), above, in, below.
+// The level band of a zone for this hero: town, no (not orderable), hard (the guard says no), above, in, below.
 export function band(n, level) {
   if (!n.orderable) return 'no';
+  if (n.kind === 'town') return 'town';
   if (n.status && n.status.hard) return 'hard';
   const m = /clvl (\d+)(?:-(\d+)|\+)?/.exec(n.range || '');
   if (!m || !level) return 'in';
@@ -102,31 +103,16 @@ export function mount(root, ctx) {
   ctx.body.append(box);
   const durStore = ctx.store('dur');
   const st = { view: null, sel: '', dur: lastDur(durStore), charter: null, loop: { minutes: 20, repair: 'damaged', rounds: 5, open: false }, err: '', sig: '', msig: '', deep: true };
-  const menu = el('div', 'zm-menu');
-  menu.hidden = true;
-  menu.setAttribute('role', 'dialog');
 
   const nodes = () => (st.view && st.view.nodes) || [];
   const node = (id) => nodes().find((n) => n.id === id);
   const level = () => (st.view && st.view.hero && st.view.hero.clvl) || 0;
 
   // ---- where the menu opens ----
-  // A tile counts when it is on the page, not switched off and has a box; beside = to the right of this tile on the same rows.
-  function visible(t) { if (!t || t.hidden || (t.dataset && t.dataset.off) || !t.getBoundingClientRect) return null; const r = t.getBoundingClientRect(); return r.width > 40 && r.height > 40 ? r : null; }
-  function hostTile() {
-    if (typeof document === 'undefined' || !document.querySelector) return root;
-    const me = root.getBoundingClientRect ? root.getBoundingClientRect() : { right: 0, top: 0, bottom: 0 };
-    const side = document.querySelector('.d-panel[data-panel="area-map"]'), sr = visible(side);
-    if (sr && sr.left >= me.right - 4 && sr.top < me.bottom && sr.bottom > me.top) return side; // beside the map
-    const ord = document.querySelector('.d-panel[data-panel="orders"]'), or = visible(ord);
-    if (or && or.bottom <= me.top + 4) return ord; // above it
-    return root; // a phone sheet or a page without those tiles: the menu is this tile's own sheet
-  }
-  function place() {
-    const h = hostTile();
-    if (menu.parentElement !== h) h.appendChild(menu);
-    menu.dataset.host = h === root ? 'self' : h.dataset.panel;
-  }
+  // The shell's tile sheet: beside the map in a two-column rail, over the Orders tile above it otherwise, never over a zone button.
+  const sheet = ctx.tileSheet('beside'), menu = sheet.el;
+  menu.setAttribute('role', 'dialog');
+  const place = () => sheet.place();
   function close() {
     st.sel = ''; st.charter = null; st.err = ''; st.loop.open = false;
     menu.hidden = true;
@@ -269,8 +255,8 @@ export function mount(root, ctx) {
     empty.hidden = true;
     if (grid.hidden) { drawList(v); return; }
     const g = gridOf(ns);
-    grid.style.gridTemplateColumns = 'repeat(' + g.cols + ', minmax(0, 1fr))';
-    grid.style.gridTemplateRows = 'repeat(' + g.rows + ', minmax(20px, 1fr))';
+    grid.style.setProperty('--zm-cols', String(g.cols));
+    grid.style.setProperty('--zm-rows', String(g.rows));
     grid.dataset.cols = String(g.cols); grid.dataset.rows = String(g.rows);
     // edges and the gold route as an underlay in grid units
     const svg = document.createElementNS ? document.createElementNS(SVGNS, 'svg') : el('svg', 'zm-lines');
@@ -332,10 +318,8 @@ export function mount(root, ctx) {
   // Go to (g, the verb): focus the hero's zone and make this map the one that shows
   if (typeof document !== 'undefined' && document.addEventListener) {
     document.addEventListener('d2:goto', () => {
-      if (root.dataset && root.dataset.off) { // the area map shows: its switch has the button of this map
-        const b = document.querySelector('.d-mapswitch [data-view]');
-        const mine = [...document.querySelectorAll('.d-mapswitch [data-view]')].find((x) => x.textContent === 'Act map');
-        (mine || b) && (mine || b).click();
+      if (root.dataset && root.dataset.off) { // the area map shows: ask the shell's switch (it listens) for this map
+        document.dispatchEvent(new CustomEvent('d2:showmap', { detail: 'zone-map' }));
       }
       const t = grid.querySelector && grid.querySelector('.zm-n[tabindex="0"]');
       if (t && t.focus) t.focus();
