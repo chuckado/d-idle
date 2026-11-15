@@ -578,6 +578,8 @@ function applyCockpit() {
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
   shell.dataset.cmode = main.dataset.cmode = p.mode;
+  const back = document.getElementById('returnlink'); // one word on the phone: the links stay on one line
+  if (back) back.textContent = p.mode === 'phone' ? 'Return' : 'Return screen';
   main.dataset.has = p.has;
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
   main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
