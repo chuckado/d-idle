@@ -188,11 +188,8 @@
     lastView = v;
     var m = v && v.merc;
     var canvas = !!(host.dataset && host.dataset.canvas !== undefined);
-    if (!m) {
-      host.hidden = true; drawn = '';
-      if (canvas) { solo(true); var sub = document.getElementById('merc-sub'); if (sub) sub.textContent = 'not hired'; }
-      return;
-    }
+    if (!m && canvas) m = { state: 'none' }; // an older backend sends no block: the canvas shows it as nobody hired, never as a hole (review c2c3 R3)
+    if (!m) { host.hidden = true; drawn = ''; return; }
     var sig = JSON.stringify(m); if (sig === drawn) return; // unchanged: leave the DOM, the fold and scroll alone
     drawn = sig;
     if (canvas) { // the canvas: no fold, the box around the host (its label row) shows with it, with or without a mercenary

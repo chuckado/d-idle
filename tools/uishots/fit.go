@@ -64,7 +64,7 @@ const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 f.addEventListener('load', async () => {
   await wait(5000);
   // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
-  for (let i = 0; i < 30 && f.contentDocument.querySelector('.cv') && !f.contentDocument.querySelector('#equip .d-slot2'); i++) await wait(500);
+  for (let i = 0; i < 30 && f.contentDocument.querySelector('.cv') && !(f.contentDocument.querySelector('#equip .d-slot2') && f.contentDocument.querySelector('#pack [data-key]') && f.contentDocument.getElementById('merc-sub').textContent && f.contentDocument.getElementById('cv-sel').firstChild); i++) await wait(500);
   await wait(1500);
   try {
     const pv = await (await fetch('/watch/panels.json')).json();
@@ -179,6 +179,10 @@ type fitResult struct {
 // review's dead zones were 330 px (no mercenary) and 145 px (the selected box).
 const fitInner = 135
 
+// fitInnerPhone: the same on a phone, where a tall screen leaves the storage tab spare height under the stash (the cells are
+// limited by the width, ten of them) that no layout can fill with anything but more boxes.
+const fitInnerPhone = 180
+
 // fitGap is the widest empty strip between slots that is not dead space: the cockpit gap (8 px) and two pixels.
 const fitGap = 10
 
@@ -231,7 +235,11 @@ func (r fitResult) judge() []string {
 		for _, t := range r.CV.Tiles {
 			bad = append(bad, "a values tile is stretched: "+t)
 		}
-		if r.CV.Inner.Size > fitInner {
+		lim := fitInner
+		if r.VW <= 480 {
+			lim = fitInnerPhone
+		}
+		if r.CV.Inner.Size > lim {
 			bad = append(bad, fmt.Sprintf("dead space inside %s: a %d px square is empty at %d,%d", r.CV.Inner.Panel, r.CV.Inner.Size, r.CV.Inner.At[0], r.CV.Inner.At[1]))
 		}
 	}
