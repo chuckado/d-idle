@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders) <!--sg:agent/cockpitreview-->
 - Merge branch 'main' into TASK-462 <!--sg:agent/uis3-->
 - Merge origin/main into agent/uis5 <!--sg:agent/uis5-->
 - Merge branch 'main' into TASK-477 <!--sg:agent/uic23review-->
