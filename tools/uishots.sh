@@ -239,7 +239,7 @@ character-phone-light watch/inventory?theme=light&fx=phone&tab=pack
 character-phone-sheet watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
 character-phone-sheet-light watch/inventory?theme=light&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
 character-phone-errands watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-errtoggle #errands,#stashgold
-character-phone-menu watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-more>summary .cv-morelist_a
+character-phone-menu watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-more .cv-morelist_a
 character-phonehero watch/inventory?theme=dark
 phonedefect-label watch/inventory?theme=dark&fx=phone&tab=pack&defect=label
 phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=acts

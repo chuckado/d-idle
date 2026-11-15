@@ -285,7 +285,7 @@
     .cv-bar .cv-btn[data-s]::before { content: attr(data-s); font-size: var(--d-fs-1); }
     .cv-chip .f { display: none; } .cv-chip .s { display: inline; }
     .cv-tabbar { display: flex; gap: var(--cv-g); padding: 0 var(--cv-g) var(--cv-g); }
-    .cv-tabbar button { flex: 1; block-size: calc(var(--cv-tabs) - var(--cv-g)); font: inherit; font-size: var(--d-fs-1); color: var(--d-text-2); background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; }
+    .cv-tabbar button { flex: 1; block-size: calc(var(--cv-tabs) - var(--cv-g)); font: inherit; font-size: var(--d-fs-1); color: var(--d-text-2); background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .cv-tabbar button[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
     .cv-canvas { grid-template-columns: minmax(0, 1fr); container: cvc / inline-size; }
     .cv-rules { display: none; }
@@ -349,7 +349,8 @@
       overflow: visible; background: var(--d-surface-2); border-block-start: var(--d-bw) solid var(--d-line); }
     .cv-sel .cv-acts button { font-size: var(--d-fs-1); white-space: normal; overflow: visible; text-overflow: clip; padding: 4px 8px; min-block-size: 44px; }
   }
-  @container cv (max-width: 430px) { .cv > .d-band-status .d-brand h1 { display: none; } .cv > .d-band-status .d-brand { padding-inline: 4px; } }
+  @container cv (max-width: 400px) { .cv-tabbar button { font-size: var(--d-fs-0); padding: 0 4px; } [data-cv=hsheet], .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @container cv (max-width: 430px) { .cv > .d-band-status .d-brand h1 { display: none; } .cv > .d-band-status .d-brand { padding: 3px 4px; } }
 }
 
 @layer utilities {
