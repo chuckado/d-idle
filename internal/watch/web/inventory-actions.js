@@ -288,7 +288,7 @@
     var t = document.getElementById('t-queue'); if (t) t.textContent = 'Item actions';
     clear(q);
     var rows = (view.queue || []).concat(view.recent || []);
-    if (!rows.length) { q.appendChild(el('p', 'd-hint', 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
+    if (!rows.length) { q.appendChild(el('p', 'd-hint', canvasMode() ? 'Nothing queued. Double-click an item to run its first action; right-click shows all of them.' : 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
     var ul = el('ul', 'd-list');
     rows.forEach(function (r) {
       var li = el('li'); li.dataset.state = r.state;

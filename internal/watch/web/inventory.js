@@ -199,7 +199,7 @@
     cells('stash', v.stash || [], 6, 8);
     gearPrompt(v.prompt);
     $('packmeta').textContent = '10 by 4';
-    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + v.stashGold : '');
+    $('stashmeta').textContent = (v.stashGold || v.stashGold === 0 ? 'gold ' + String(v.stashGold).replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '');
     $('note').textContent = (v.note || '') + (v.class ? v.class + ', gold on the hero ' + v.gold : '') +
       (v.sellPending ? (v.class ? ', ' : '') + v.sellPending + ' marked for sale, sold at the next town visit' : '');
     detail(v);

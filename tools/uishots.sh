@@ -5,14 +5,14 @@
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
-#   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL] [--sizes 'WxH ...']   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL | --click SEL] [--sizes 'WxH ...'] [--theme dark|light] [--fx VARIANT] [--tag NAME]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -24,6 +24,10 @@ while [ $# -gt 0 ]; do
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--ctx) extra="$extra&ctx=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--sizes) sizes_only=$2; shift 2 ;;
+	--theme) theme=$2; shift 2 ;;
+	--fx) fx=$2; shift 2 ;;
+	--tag) tag=$2-; shift 2 ;;
+	--click) extra="$extra&click=$(printf %s "$2" | sed 's/_/ /g; s/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')"; shift 2 ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
@@ -68,12 +72,12 @@ drawer-start watch?layout=cockpit-demo&theme=dark&drawer=onboarding"
 	exit 0
 fi
 if [ "$char" = 1 ]; then
-	mkdir -p "$out" && rm -f "$out"/char-*
+	mkdir -p "$out" && rm -f "$out"/char-${tag}*
 	for sz in ${sizes_only:-1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844}; do
 		w=${sz%x*} h=${sz#*x}
 		prof=$(mktemp -d)
 		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=dark&w=$w&h=$h$extra" >/dev/null 2>&1
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}&w=$w&h=$h$extra" >/dev/null 2>&1
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*

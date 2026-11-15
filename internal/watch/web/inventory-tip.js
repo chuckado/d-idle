@@ -195,6 +195,7 @@
   function hintFor(f) {
     var a = typeof window !== 'undefined' && window.d2InvActions && window.d2InvActions.first;
     var k = f.place === 'worn' ? 'slot-' + f.slot : 'item-' + (f.it && f.it.id), e = a ? a(k) : null;
+    if (lastType === 'touch' || lastType === 'pen') return 'Tap an item to select it; "All actions" in the box shows every action.'; // a touch screen has no double-click and no right-click
     return (e ? 'Double-click: ' + e.label + (e.reason ? ' (refused, see above)' : '') + '. ' : '') + 'Right-click: all actions.';
   }
 
