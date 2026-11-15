@@ -186,6 +186,7 @@
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | uifix1 | proposed | - | `internal/watch/web/panels/statusline/`<br>`internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/web/panels/area-map/panel.json`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/whyline.json`<br>`internal/watch/whychange.json`<br>`internal/watch/whyline_test.go`<br>`internal/watch/testdata/`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/glancewire_pause_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/bot/whyline_test.go` | - |
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
+| verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -230,6 +231,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2fbc7bf94 11-15 05:22 `Merge agent/verifyp03d: Merge branch 'main' into TASK-488` (verifyp03d)
+- 131cb0fd9 11-15 05:21 `Merge branch 'main' into TASK-488` (-)
 - 75c5015a8 11-15 04:56 `Merge agent/p02posted: Merge branch 'main' into p02posted` (p02posted)
 - 0e1966552 11-15 04:55 `Merge branch 'main' into p02posted` (-)
 - e4b41b884 11-15 04:54 `Merge agent/uis7review: uis7review: design review of S7 (cockpit default) before merge: approve with changes` (uis7review)
@@ -238,6 +241,4 @@
 - a66d9ba4a 11-15 03:40 `Merge agent/prfix5: Merge branch 'main' into prfix5` (prfix5)
 - d5a355255 11-15 03:39 `Merge branch 'main' into prfix5` (-)
 - 0d5377d2a 11-15 03:30 `Merge agent/uifix1: Merge branch 'main' into uifix1` (uifix1)
-- 7f26ca27e 11-15 03:29 `Merge branch 'main' into uifix1` (-)
-- 2ca371d0d 11-15 03:23 `Merge origin/main into agent/uifix1` (-)
 <!-- statusgen:end -->
