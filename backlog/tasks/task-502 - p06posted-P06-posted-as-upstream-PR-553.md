@@ -17,6 +17,7 @@ owns:
   - "docs/upstream/pipeline-2026-11-14.md"
 exclusive: []
 contracts: []
+result: "P06 posted as https://github.com/psi29a/d2decomped/pull/553 (docs only; not verified live)"
 ---
 
 ## Description
