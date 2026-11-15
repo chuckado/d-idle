@@ -183,6 +183,7 @@
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
+| prfix4 | proposed | - | `docs/upstream/bodies/warp-walk-plan-body.md`<br>`docs/upstream/drafts/warp-walk-plan.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/warp-walk-r3` |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -228,6 +229,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2526e1bb4 11-15 02:55 `Merge agent/prfix4: Merge branch 'main' into prfix4` (prfix4)
+- cd11ae55d 11-15 02:54 `Merge branch 'main' into prfix4` (-)
 - 4bc0a4927 11-15 02:23 `Merge agent/cockpitreview: cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders)` (cockpitreview)
 - ce0a0e9f2 11-15 01:51 `Merge agent/uis3: Merge branch 'main' into TASK-462` (uis3)
 - 069647906 11-15 01:50 `Merge branch 'main' into TASK-462` (-)
@@ -236,6 +239,4 @@
 - 0301cd509 11-15 01:40 `Merge origin/main into agent/uis5` (-)
 - fe856ee5c 11-15 01:34 `Merge agent/uic23review: Merge branch 'main' into TASK-477` (uic23review)
 - ff2d080db 11-15 01:33 `Merge branch 'main' into TASK-477` (-)
-- 7aaeed825 11-15 01:32 `Merge agent/decomp23: Merge branch 'main' into TASK-473` (decomp23)
-- 6f1df264a 11-15 01:31 `Merge branch 'main' into TASK-473` (-)
 <!-- statusgen:end -->
