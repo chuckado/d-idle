@@ -323,14 +323,14 @@ export function mount(root, ctx) {
   function legend(ns, g) {
     const used = new Set(ns.map((n) => { const p = g.at(n); return p.c + ',' + p.r; }));
     const free = (c, r, w, h) => { for (let i = 0; i < w; i++) for (let j = 0; j < h; j++) if (c + i >= g.cols || r + j >= g.rows || used.has((c + i) + ',' + (r + j))) return false; return true; };
-    for (let r = 0; r < g.rows; r++) for (let c = 0; c < g.cols; c++) for (const [w, h] of [[2, 2], [3, 2], [1, 4], [2, 3]]) {
+    for (let r = 0; r < g.rows; r++) for (let c = 0; c < g.cols; c++) for (const [w, h] of [[2, 2], [3, 2], [1, 4], [2, 3], [1, 3]]) {
       if (!free(c, r, w, h)) continue;
       const lg = el('div', 'zm-legend');
       lg.setAttribute('role', 'list');
       lg.style.gridColumn = (c + 1) + ' / span ' + w;
       lg.style.gridRow = (r + 1) + ' / span ' + h;
       lg.style.setProperty('--zm-lc', String(w > 1 && h > 1 ? 2 : 1));
-      LEGEND.forEach((l) => { const i = el('span', 'zm-lg'); i.setAttribute('role', 'listitem'); i.dataset.band = l[0]; i.append(el('i'), l[1]); lg.appendChild(i); });
+      (h === 3 && w === 1 ? LEGEND.slice(0, 3) : LEGEND).forEach((l) => { const i = el('span', 'zm-lg'); i.setAttribute('role', 'listitem'); i.dataset.band = l[0]; i.append(el('i'), l[1]); lg.appendChild(i); });
       grid.appendChild(lg);
       return;
     }

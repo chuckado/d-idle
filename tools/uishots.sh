@@ -95,7 +95,13 @@ cockpit-measuring layout=cockpit&theme=dark&needs=0&glance=measuring
 cockpit-blocked layout=cockpit&theme=dark&needs=1&glance=blocked
 cockpit-unknown layout=cockpit&theme=dark&needs=0&glance=unknown
 cockpit-light layout=cockpit&theme=light&needs=2
-cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress" | while read -r pname pq; do
+cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress
+cockpit-worst layout=cockpit&theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+cockpit-worst-light layout=cockpit&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+cockpit-paused layout=cockpit&theme=dark&needs=2&cmd=paused&glance=full,paused
+cockpit-loop layout=cockpit&theme=dark&needs=2&cmd=loop
+cockpit-live layout=cockpit&theme=dark&needs=2&stream=live
+cockpit-zone layout=cockpit&theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
 			w=${sz%x*} h=${sz#*x}
