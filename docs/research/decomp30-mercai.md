@@ -1,6 +1,6 @@
 # Mercenary AI and the survival data it gives the bot (agent decomp30, 2026-11-15)
 
-> status: research, current (card decomp30, TASK-506; consumers: docs/survival/design-2026-11-14.md section 5.5, docs/mercrevive.md, internal/merc policy, hire policy). Offline, docs plus one display guard. **No new emulator run in this card**: the emulator image and the read-only game.exe copy live on the Orion worker, which was down, and waking it needs the user's go; the NAS builder has neither. So every V below is a V run or V read of an EARLIER card, cited by name (tag S for this card); what this card adds is new reading of those results for the bot (tag I or D) and the open questions with a drill recipe. Nothing pushed, posted or filed.
+> status: research, current (card decomp30, TASK-506; consumers: docs/survival/design-2026-11-14.md section 5.5, docs/mercrevive.md, internal/merc policy, hire policy). Offline, docs plus one display guard. **No new emulator run in this card**: the emulator image and the read-only game.exe copy live on the heavy worker, which was down, and waking it needs the user's go; the NAS builder has neither. So every V below is a V run or V read of an EARLIER card, cited by name (tag S for this card); what this card adds is new reading of those results for the bot (tag I or D) and the open questions with a drill recipe. Nothing pushed, posted or filed.
 >
 > Tags: V run (game.exe's own code under the emulator against an oracle, an earlier card), V read (disassembly), D (derived from tables and formulas of those cards), S (earlier proof, named), I (inferred), U (unverified).
 
@@ -109,4 +109,4 @@ No PR candidate: D1 is rule level only (no patched d2d build), D2 and D3 are eff
 
 ## Not done
 
-No emulator run (Orion down, user's go needed to wake it); no check of the dump source; the table in Q6 is arithmetic on already run formulas.
+No emulator run (the heavy worker down, user's go needed to wake it); no check of the dump source; the table in Q6 is arithmetic on already run formulas.
