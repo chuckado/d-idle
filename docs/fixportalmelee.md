@@ -3,7 +3,7 @@
 > status: current. Offline fix from the Gate 1 soak 2 death analysis ([probes/postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md) section 3). Tags: VERIFIED OFFLINE = a test in this change; UNVERIFIED LIVE = needs the recipe below.
 
 ## The death timeline (from the soak log, VERIFIED in the analysis)
-clvl 4, maximum life about 40, Burial Grounds, 3 to 5 undead adjacent. The belt held 4 healing potions at entry (not empty, the soak report's F1 wording is wrong). All 4 were drunk in about 16 virtual s. At 34% life with the belt empty the bot chose the town portal; the cast takes about 1.3 s, melee hits cut it, the scroll was spent, the character died 22 ms (wall) later.
+clvl 4, maximum life about 40, Burial Grounds, 3 to 5 undead adjacent. The belt held 4 healing potions at entry (not empty, the soak report's F1 wording is wrong). All 4 were drunk in about 16 virtual s. At 34% life with the belt empty the bot chose the town portal; the cast takes about 1.3 s, the attackers kept hitting through the cast and the walk (a hit does NOT cut a Town Portal cast, V run decomp28 Q5; the first reading here, "melee cuts it", was wrong), the scroll was spent, the character died 22 ms (wall) later.
 
 ## The escape logic (read)
 - `combat.Decide` (internal/combat/safety.go) is the survival decision per tick: chicken at or under the chicken line, crowd rule, then below the drink line: potion, else `TownPortal` when no potion is left.
@@ -23,3 +23,7 @@ Code: `meleeCastGuard` wraps `Decide`; `castCut` in AbortFight; `Adjacent` is no
 That d2d cuts a cast on a hit and how long a cut cast takes (drill D2.d, cut cast, is BLOCKED); that 3 subtiles is the right adjacency for the monsters met.
 ## Live recipe (hidden slot)
 `debug spawn` 3 or more melee monsters next to the character, `debug stat` life to about 34% of maximum, no potions in the belt, one scroll in the pack. Expect the bot log `chicken` (leaves the game) and the scroll unspent; with one monster adjacent expect the portal as before.
+
+## Refinement: portalguard (2026-11-15, user popup 'Expected-damage rule')
+
+The three-adjacent count stays as the fallback and as `bot.portalGuard` 0. With `bot.portalGuard` 1 (default) the cast is refused when the summed damage of the adjacent monsters over the exposure (`bot.portalCastMs` + `bot.portalWalkMs`, 3 s, U until drill R3) reaches `bot.portalLifePct` (50) of current life. Per monster: the strongest of A1, A2, S1 and the elemental slots of its monstats row at the character's difficulty, every swing landing, one swing per `bot.portalHitMs` (1 s), doubled for uniques and champions (all U: an upper bound). Any adjacent monster without a damage term means the count rule decides. Code: `resource.CastGuard`, `combat.castGuard`; tests `TestPortalGuardTwoBuilds`, `TestCastGuardBlocked`. Live drill R3 (decomp28 section 8) must measure cast plus walk seconds and the damage taken to replace the U defaults.

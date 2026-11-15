@@ -268,6 +268,9 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 		in.HasPortal = f.portalItem(snap) != nil
 	}
 	a := Decide(in)
+	if b, why := in.castBlocked(); b && a != TownPortal && in.InFight && decideBase(in) == TownPortal {
+		f.noteCastRefused(why, in)
+	}
 	if a == SafetyNone && f.packDrinkWanted(snap, in) {
 		a = DrinkLife // the belt is empty: drink() falls back to the pack (packdrink.go)
 	}
@@ -940,4 +943,19 @@ func (f *Fighter) noteDrinkSkip(why string, in SafetyInput) {
 	f.skipWhy, f.skipAt = why, now
 	f.diagMu.Unlock()
 	f.log().Info(fmt.Sprintf("potion: not drinking because %s life=%d%% belt=%s", why, pct(in.Life, in.Max), in.Belt))
+}
+
+// noteCastRefused logs, at most every 2 s per reason, that the portal guard refused a town portal cast (the survival
+// action then is a potion or leaving the game).
+func (f *Fighter) noteCastRefused(why string, in SafetyInput) {
+	why = "portal cast refused: " + why
+	now := f.now()
+	f.diagMu.Lock()
+	if why == f.skipWhy && now.Sub(f.skipAt) < 2*time.Second {
+		f.diagMu.Unlock()
+		return
+	}
+	f.skipWhy, f.skipAt = why, now
+	f.diagMu.Unlock()
+	f.log().Info(fmt.Sprintf("%s life=%d%% mode=%d", why, pct(in.Life, in.Max), in.CastGuard.Mode))
 }
