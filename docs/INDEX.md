@@ -628,10 +628,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/bodies/`
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
 - [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
+- [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
@@ -643,16 +645,23 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hitrec-norestart-oracle.md](upstream/briefs/hitrec-norestart-oracle.md): Brief: P03b "a hit never restarts a get-hit" needs a game-side oracle (BLOCKED, for the worker-host operator) (status: written 2026-11-14 (card prfix2). Nothing here was run: it needs the emulator image on the worker host...)
 - [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
 - [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [verify-hitrec-interrupt.md](upstream/briefs/verify-hitrec-interrupt.md): Verifier brief: fid/hitrec-interrupt-r1 (P04), for the independent reviewer (Opus, singly)
+- [verify-missile-block.md](upstream/briefs/verify-missile-block.md): Verifier brief: fid/missile-block-r3 (P06), for the independent reviewer (Opus, singly)
 - [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
+- [hitrec-interrupt.md](upstream/drafts/hitrec-interrupt.md): Draft (local, NOT posted): "A hit interrupts a swing or cast whose skill allows it" (P04) (status: 2026-11-15 (card decomp26). Fork branch `fid/hitrec-interrupt-r1` (private fork remote), two commits on...)
+- [hitrec-knock-in-hit.md](upstream/drafts/hitrec-knock-in-hit.md): Candidate note (local, NOT posted): P03c, a knocking hit inside a get-hit (status: candidate 2026-11-15 (card decomp26). Nothing built, nothing posted. Follows P03b (#548: a big hit does...)
 - [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted): "A hit never restarts a get-hit" (r3) (status: r3 2026-11-15 (card prfix3). Superseded by the PR body bodies/hitrec-norestart-body.md; this page is the...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
+- [merc-aura-issue.md](upstream/drafts/merc-aura-issue.md): Issue draft (local, NOT posted): the merc's own life regeneration (stat 0x4a); friendly auras on the merc... (status: draft 2026-11-15 (card decomp26, P10). Nothing posted. Source: `docs/research/merc2-trace.md` D1 to D3,...)
+- [missile-block.md](upstream/drafts/missile-block.md): Draft (local, NOT posted): "A monster missile with no physical damage cannot be blocked" (P06) (status: 2026-11-15 (card decomp26). Fork branch `fid/missile-block-r3` (private fork remote), two commits on...)
+- [revive-mode-issue.md](upstream/drafts/revive-mode-issue.md): Issue draft (local, NOT posted): a raised monster plays its ResurrectMode, d2d puts it in NU (status: draft 2026-11-15 (card decomp26, P09). Nothing posted, no fork branch. Source:...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
 - [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3b, **recheck of two items by the verifier** (the second pass, verifier2-p02-2026-11-15.md, asked: an...)
