@@ -6,13 +6,14 @@
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
 #   tools/uishots.sh --char [--out DIR] [--only theme=light]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 pics=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -21,6 +22,7 @@ while [ $# -gt 0 ]; do
 	--fit) fit=1; shift ;;
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
+	--pics) pics=1; shift ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
@@ -51,7 +53,7 @@ tab-progress watch?layout=cockpit-demo&theme=dark&tab=Progress
 drawer-log watch?layout=cockpit-demo&theme=dark&drawer=log
 drawer-start watch?layout=cockpit-demo&theme=dark&drawer=onboarding"
 	echo "$pages" | while read -r pname pq; do
-		[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in $sizes; do
 			w=${sz%x*} h=${sz#*x}
 			case $pname in tab-*|drawer-*) [ "$sz" = 390x844 ] || [ "${pname#drawer}" != "$pname" ] || continue ;; esac
@@ -76,6 +78,28 @@ if [ "$char" = 1 ]; then
 	ls "$out"/char-*
 	exit 0
 fi
+if [ "$pics" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/pic-*
+	echo "cockpit layout=cockpit&theme=dark&needs=2
+cockpit-needs0 layout=cockpit&theme=dark&needs=0
+cockpit-needs5 layout=cockpit&theme=dark&needs=5
+cockpit-measuring layout=cockpit&theme=dark&needs=0&glance=measuring
+cockpit-blocked layout=cockpit&theme=dark&needs=1&glance=blocked
+cockpit-unknown layout=cockpit&theme=dark&needs=0&glance=unknown
+cockpit-light layout=cockpit&theme=light&needs=2
+cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress" | while read -r pname pq; do
+		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
+		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
+			w=${sz%x*} h=${sz#*x}
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/pic-$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch%3F$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out"/pic-* | head -80
+	exit 0
+fi
 if [ "$fit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/fit-*
 	# the full-screen sizes, the browser-window sizes (a window with its chrome is shorter than the screen) and the phone
@@ -91,6 +115,18 @@ orders-empty watch?layout=cockpit&theme=dark&cmd=empty
 orders-safety watch?layout=cockpit&theme=dark&cmd=safety
 orders-blocked watch?layout=cockpit&theme=dark&cmd=blocked
 orders-all watch?layout=cockpit&theme=dark&cmd=cancel-all
+strip-needs0 watch?layout=cockpit&theme=dark&needs=0
+strip-needs2 watch?layout=cockpit&theme=dark&needs=2
+strip-needs5 watch?layout=cockpit&theme=dark&needs=5
+strip-needs9 watch?layout=cockpit&theme=dark&needs=9
+strip-measuring watch?layout=cockpit&theme=dark&needs=0&glance=measuring
+strip-blocked watch?layout=cockpit&theme=dark&needs=3&glance=blocked
+strip-ch9 watch?layout=cockpit&theme=dark&needs=2&glance=ch9
+strip-gearbroken watch?layout=cockpit&theme=dark&needs=2&glance=gearbroken
+strip-unknown watch?layout=cockpit&theme=dark&needs=0&glance=unknown
+strip-nojourney watch?layout=cockpit&theme=dark&needs=2&glance=nojourney
+strip-light watch?layout=cockpit&theme=light&needs=2
+strip-phonetab watch?layout=cockpit&theme=dark&needs=2&tab=Progress
 demo-needs0 watch?layout=cockpit-demo&theme=dark&needs=0
 demo-needs2 watch?layout=cockpit-demo&theme=dark&needs=2
 demo-needs5 watch?layout=cockpit-demo&theme=dark&needs=5
@@ -120,7 +156,7 @@ character-light watch/inventory?theme=light"
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
 			[ -n "$pclick" ] && ck="&click=$(enc "$pclick")"
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
-			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+			case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
 				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >"$out/fit-$pname-$sz.html" 2>/dev/null
