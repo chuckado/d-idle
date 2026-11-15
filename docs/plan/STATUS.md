@@ -192,7 +192,6 @@
 | verifyp06b | proposed | - | `docs/upstream/verifier2-p06-2026-11-15.md` | - |
 | botstuck | proposed | - | `internal/nav/mouthgate.go`<br>`internal/nav/walk.go`<br>`internal/nav/fixmouth4_test.go`<br>`cmd/d2bot/objects.go`<br>`internal/bot/staletarget.go`<br>`internal/bot/task.go`<br>`internal/bot/parkstep_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/task/executor.go`<br>`docs/knobs.md` | - |
 | decomp28 | proposed | - | `docs/research/decomp28-trace.md`<br>`docs/research/data28`<br>`docs/survival/units-fit-2026-11-15.md`<br>`internal/danger/areaunits.json`<br>`tools/emu/dc28_` | - |
-| portalguard | proposed | - | `internal/resource/`<br>`internal/combat/`<br>`internal/env/tuning_bot.go`<br>`docs/fixportalmelee.md`<br>`docs/knobs.md`<br>`tools/knobdump/main.go` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |

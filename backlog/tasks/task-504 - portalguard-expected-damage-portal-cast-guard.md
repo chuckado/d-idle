@@ -1,10 +1,11 @@
 ---
 id: TASK-504
 title: 'portalguard: expected-damage portal cast guard'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T15:18:00Z'
+updated_date: '2026-11-15T16:22:00Z'
 labels:
   - bot
   - bot-fix

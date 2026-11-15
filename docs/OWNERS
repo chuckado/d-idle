@@ -235,7 +235,6 @@ docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
 docs/first-hour.md  live-agent  firsthour
 docs/first-session.md  credit-runner  testerreport
-docs/fixportalmelee.md  credit-runner  portalguard
 docs/fresh-start-pace.md  credit-runner  freshstart
 docs/friend-checklist-0.1.0.md  credit-runner  cut010b
 docs/friend-checklist-0.1.0.md  credit-runner  cut010d
@@ -263,7 +262,6 @@ docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
 docs/knobs.md  credit-runner  goldprio
 docs/knobs.md  credit-runner  hourfix
-docs/knobs.md  credit-runner  portalguard
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  tidy
@@ -478,7 +476,6 @@ internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/combat  credit-runner  wiring2
-internal/combat/  credit-runner  portalguard
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata  credit-runner  palprofile2
 internal/combat/fight.go  credit-runner  goldprio
@@ -523,7 +520,6 @@ internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
 internal/env/tuning_bot.go  credit-runner  hourfix
-internal/env/tuning_bot.go  credit-runner  portalguard
 internal/env/tuning_bot.go  credit-runner  staletarget
 internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
@@ -600,7 +596,6 @@ internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
-internal/resource/  credit-runner  portalguard
 internal/resource/recovery.go  live-agent  recoverypace
 internal/resource/recovery_test.go  live-agent  recoverypace
 internal/resource/sim.go  credit-runner  swingmodel
@@ -891,7 +886,6 @@ tools/friendpack/pack_test.go  credit-runner  cut012
 tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
-tools/knobdump/main.go  credit-runner  portalguard
 tools/levelsim/  credit-runner  levelsim
 tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
 tools/levelsim/shadow.go  credit-runner  survB
