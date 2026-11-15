@@ -26,6 +26,7 @@ owns:
   - "internal/watch/testdata/reset"
 exclusive: []
 contracts: []
+result: "Reset built and tested offline, NOT verified live: GET/POST /api/reset (watch.reset/1, goldens, refusals measured_run/hard_off, idempotent double press), soft level through the runner Cycler new game, hard level = process exit with exitStorm like the watchdog, state file kept across the restart, player_reset why code and a Resetting band word, cockpit confirm sheet + strip (menu, Orders More, Needs you Reset chip when stuck), fit fixtures reset-* incl. 412x780 and 360x640. The soft level has one fresh-game call site to swap for startFreshGame when agent/farmloop merges. Live checklist in docs/reset.md."
 ---
 
 ## Description
@@ -38,9 +39,9 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 GET/POST /api/reset with goldens, refusals, double press
-- [ ] #2 soft and hard levels, state kept across a reset
-- [ ] #3 cockpit confirm sheet, strip, menu, More item, Needs you chip
-- [ ] #4 fit fixtures at 8 sizes and the real phone sizes
-- [ ] #5 docs/reset.md with the live checklist
+- [x] #1 GET/POST /api/reset with goldens, refusals, double press
+- [x] #2 soft and hard levels, state kept across a reset
+- [x] #3 cockpit confirm sheet, strip, menu, More item, Needs you chip
+- [x] #4 fit fixtures at 8 sizes and the real phone sizes
+- [x] #5 docs/reset.md with the live checklist
 <!-- AC:END -->
