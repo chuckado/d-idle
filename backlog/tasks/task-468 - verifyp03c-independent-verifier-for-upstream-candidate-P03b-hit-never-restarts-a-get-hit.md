@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/verifier-p03b-2026-11-14.md"
 exclusive: []
 contracts: []
+result: "PASS WITH CHANGES for P03b (fid/hitrec-norestart-r2): the GH-from-GH claim holds (FUN_0057edd0 read + emulator rerun, 1 vs 0 of 12 differ, mutant aborts, full build/tidy/ctest on main+#541); required: allow a get-hit during a knockback slide (d2d draws KB 0x13 as GH, game.exe allows GH from 0x13), oracle modes 0..19 + knocked probe cell, strict compare, stale comments, PR body. Offline, not live."
 ---
 
 ## Description
@@ -28,9 +29,9 @@ Why: upstream PR candidate P03b (fork branch fid/hitrec-norestart-r2) needs an i
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Verifier doc with verdict and required changes
-- [ ] #2 Builds and tests rerun on the NAS builder, mutant check
-- [ ] #3 Emulator oracle rerun and FUN_0057edd0 read
-- [ ] #4 Stacking with and without #541 checked
-- [ ] #5 PR hygiene checked
+- [x] #1 Verifier doc with verdict and required changes
+- [x] #2 Builds and tests rerun on the NAS builder, mutant check
+- [x] #3 Emulator oracle rerun and FUN_0057edd0 read
+- [x] #4 Stacking with and without #541 checked
+- [x] #5 PR hygiene checked
 <!-- AC:END -->
