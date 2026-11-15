@@ -157,7 +157,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true, "scroll": f.id == "fx-orders" || f.id == "fx-fakescroll",
 					"owner": "uishots", "doc": "docs/ui-regression-plan.md"}
 				if f.id == "fx-map" {
-					man["switchWith"], man["switchLabel"], man["minBlock"] = "area-map", "Act map", 300 // the stand-in for zone-map shares its column with the area map
+					man["switchWith"], man["switchLabel"], man["minBlock"] = "area-map", "Act map", 270 // the stand-in for zone-map shares its column with the area map
 				}
 				list = append(list, man)
 			}
