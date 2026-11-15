@@ -114,6 +114,9 @@ func (h *Hub) Serve(ctx context.Context, o ServeOptions) (Served, error) {
 			m.Handle(p, h.ViewHandler())
 		}
 	}
+	for _, p := range LogRoutes {
+		m.Handle(p, h.LogHandler(m)) // reads the routes above, so it comes after them
+	}
 	var viewH http.Handler = m
 	if o.Update != nil {
 		uh := UpdateHandler(o.Update)

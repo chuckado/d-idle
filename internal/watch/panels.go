@@ -38,6 +38,12 @@ type PanelManifest struct {
 	// OptIn: the shell mounts the panel only when the layout in force names it (placed, not hidden), so a stored
 	// layout never gets a new tile appended the day it ships (docs/ui/redesign-2026-11-14/D-layouts.md section 1).
 	OptIn bool `json:"optIn,omitempty"`
+	// SwitchWith: the id of a panel this one shares a rail column or phone tab with, one shown at a time under a two-button switch
+	// (the act map and the area map); SwitchLabel is the button's text (the title when empty). Either panel may carry the key.
+	// MinBlock: the least height in px this panel keeps when it is the last in a rail column (the act map: ten readable rows).
+	MinBlock    int    `json:"minBlock,omitempty"`
+	SwitchWith  string `json:"switchWith,omitempty"`
+	SwitchLabel string `json:"switchLabel,omitempty"`
 	// Slot: the panel renders into a fixed box and may sit in a cockpit slot (layout.go LayoutSlots).
 	Slot bool `json:"slot,omitempty"`
 	// CockpitOnly: the panel belongs to the cockpit template alone (its band is the cockpit's); a free-grid layout that names it

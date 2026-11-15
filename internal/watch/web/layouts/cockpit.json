@@ -20,7 +20,8 @@
     "rail": [
       "needs-you",
       "orders",
-      "zone-map"
+      "zone-map",
+      "area-map"
     ],
     "railWide": {
       "top": [
@@ -40,7 +41,8 @@
         "orders"
       ],
       "Map": [
-        "zone-map"
+        "zone-map",
+        "area-map"
       ],
       "Progress": [
         "progress",
