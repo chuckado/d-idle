@@ -867,6 +867,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - uis4: Orders, read-only, as a slot panel (TASK-453, merged 2026-11-14, acceptance 5 of 5): GET /api/commands (watch.commands/1, commands.go) joins the watch orders, the order queue, the loop, the repair desk, the item queue, the gold farm and the plan into rows with one state vocabulary, the bot's ladder order, one next mark, a cancel route per ... <!--sg:agent/uis4-->
 - uis6: The area map, the drawers, and the phone arrangement (TASK-454, merged 2026-11-14, acceptance 3 of 4): Built, NOT verified live. Fit check (labrun tower, tools/uishots.sh --fit): 176 of 176 ok = 22 pages x 8 sizes (1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844) incl. ... <!--sg:agent/uis6-->
 - decomp22: no-restart oracle (P03b) and warp walk sweep (P02) (TASK-467, merged 2026-11-14, acceptance 2 of 2): P03b game side CONFIRMS the claim (V run: parent 1 of 12 cells differ, claim 0; fork branch fid/hitrec-norestart-r2 ready for the verifier). ... <!--sg:agent/decomp22-->
+- uib1: Pause and resume as player commands (TASK-464, merged 2026-11-14, acceptance 4 of 4) <!--sg:agent/uib1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

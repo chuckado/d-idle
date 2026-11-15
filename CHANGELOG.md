@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-464 <!--sg:agent/uib1-->
 - Merge branch 'main' into decomp22 <!--sg:agent/decomp22-->
 - uis6: minBlock 250 <!--sg:agent/uis6-->
 - Merge branch 'main' into TASK-453 <!--sg:agent/uis4-->
