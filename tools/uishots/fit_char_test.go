@@ -167,3 +167,47 @@ func TestFitPhoneRules(t *testing.T) {
 }
 
 func fitDir0(j string) (string, string) { return fitDump("fit-character-phone-412x780", j) }
+
+// The phone fixture is a real-looking hero (card uiphone): its grids hold what they say (no item leaves the pack or the stash, none sits on
+// another), the belt carries slot numbers as x, and every cell has art.
+func TestFitPhoneFixture(t *testing.T) {
+	v := variantView("phone").(map[string]any)
+	grid := func(name string, cols, rows int) {
+		used := map[[2]int]bool{}
+		for _, x := range v[name].([]any) {
+			it := x.(map[string]any)
+			if it["art"] == nil || it["art"] == "" {
+				t.Errorf("%s: %v has no art", name, it["name"])
+			}
+			x0, y0, w, h := it["x"].(int), it["y"].(int), it["w"].(int), it["h"].(int)
+			if x0+w > cols || y0+h > rows {
+				t.Errorf("%s: %v leaves the %dx%d grid", name, it["name"], cols, rows)
+			}
+			for dx := 0; dx < w; dx++ {
+				for dy := 0; dy < h; dy++ {
+					if used[[2]int{x0 + dx, y0 + dy}] {
+						t.Errorf("%s: %v overlaps another item at %d,%d", name, it["name"], x0+dx, y0+dy)
+					}
+					used[[2]int{x0 + dx, y0 + dy}] = true
+				}
+			}
+		}
+	}
+	grid("backpack", 10, 4)
+	grid("stash", 6, 8)
+	var big23, big24 bool
+	for _, x := range v["backpack"].([]any) {
+		it := x.(map[string]any)
+		big23 = big23 || it["w"] == 2 && it["h"] == 3
+		big24 = big24 || it["w"] == 2 && it["h"] == 4
+	}
+	if !big23 || !big24 {
+		t.Error("the pack holds no 2x3 and 2x4 item")
+	}
+	if b := v["belt"].([]any); len(b) < 5 || b[len(b)-1].(map[string]any)["x"].(int) < 4 {
+		t.Errorf("the belt has more than four potions with slot numbers as x: %v", b)
+	}
+	if png, err := (fixtureArt{}).PNG("item-8ss"); err != nil || len(png) < 50 {
+		t.Errorf("fixture art: %v", err)
+	}
+}
