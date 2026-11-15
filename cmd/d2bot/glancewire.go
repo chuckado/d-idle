@@ -7,6 +7,7 @@ import (
 	"d2lod-bot/internal/combat"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/data"
+	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/leveler"
 	"d2lod-bot/internal/merc"
 	"d2lod-bot/internal/resource"
@@ -18,10 +19,16 @@ import (
 // Other cards add their own source (the Needs rows of B6) through glanceExtra, so one SetGlanceSources call serves all.
 
 // glanceExtra lets a card extend the sources without editing this file (B6 appends in an init func).
-var glanceExtra []func(*watch.GlanceSources, *bot.Runner)
+var glanceExtra []func(*watch.GlanceSources, glanceDeps)
+
+// glanceDeps is what an extension may read: the runner status and the chapter the journey heads for now ("" when unknown).
+type glanceDeps struct {
+	Status  func() goals.Status
+	Chapter func() string
+}
 
 // useGlance binds the bot's sources to the Hub. No rig, no Hub or no runner: nothing (the lights stay "unknown").
-func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string) {
+func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, ref *runnerRef) {
 	if rig == nil || rig.Hub == nil || r == nil {
 		return
 	}
@@ -33,8 +40,9 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string) 
 		Merc:     glanceMerc(mercAPIAdapter{}.view),
 		Supplies: glanceSupplies(r.LastSnapshot, cat, db, levelerBuild),
 	}
+	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) }}
 	for _, f := range glanceExtra {
-		f(&src, r)
+		f(&src, deps)
 	}
 	rig.Hub.SetGlanceSources(src)
 }

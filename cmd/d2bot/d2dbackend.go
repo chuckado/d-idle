@@ -368,7 +368,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
-	useGlance(lrig, runner, db, cfg.LevelerBuild)
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, feedFighter, ldir, log)
 	useSenses(lrig, be.Env, feedFighter, log)
 	useSensesCoverage(lrig, be.Env, nv)

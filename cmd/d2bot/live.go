@@ -189,7 +189,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
-	useGlance(lrig, runner, db, cfg.LevelerBuild)
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, bh.combat, ldir, log)
 	useSenses(lrig, e, bh.combat, log)
 	useSensesCoverage(lrig, e, bh.Mover)
