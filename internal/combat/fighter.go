@@ -258,6 +258,7 @@ func (f *Fighter) Safety(snap *d2.Snapshot) SafetyAction {
 	}
 	in.Walking = f.walking.Load()
 	in.Crowd, in.Adjacent = Crowd(p, hs, float64(t.CrowdAdjacent))
+	in.CastGuard = castGuard(f.e.Tune.Bot, t, p, hs)
 	if t.CrowdN > 0 {
 		if in.Crowd >= t.CrowdN {
 			in.CanRetreat = f.canRetreat(snap, hs)
@@ -744,7 +745,7 @@ func (f *Fighter) watchCast(ctx context.Context, d time.Duration) (cut bool, err
 // fightBuff is the buff check of the fight loop (SKARMOR B1, card fixbuff): Buff otherwise runs only on need-buff
 // edges, so inside one long clear an armor with a real duration (Frozen Armor 120 s) lapsed. It is a clock comparison
 // per tick on the snapshot the loop already has. Casting is skipped where the portal cast is already refused: with
-// crowdAdjacentMax or more attackers in reach a hit cuts the cast (meleeCastGuard's rule, U).
+// crowdAdjacentMax or more attackers in reach the buff cast is cut (a hit interrupts a buff, V run decomp28 Q6; the TP cast is not, so this count is a buff rule only).
 func (f *Fighter) fightBuff(ctx context.Context, snap *d2.Snapshot, hs []Target) (bool, error) {
 	if len(f.profileFor(snap.Player).Buffs) == 0 {
 		return false, nil
