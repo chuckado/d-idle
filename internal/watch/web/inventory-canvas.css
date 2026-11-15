@@ -131,7 +131,7 @@
   .cv-wear[data-solo] .inv-merc { flex: none; }
   .cv-wear[data-solo] .cv-mnote { padding: 0 0 2px; }
   .cv-wear[data-solo] .cv-setbar { margin-block: 0; }
-  .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max(34px, min(calc((6 * var(--u) - 74px) / 4), calc(var(--u) * 1.1))); }
+  .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: max(34px, min(calc((6 * var(--u) - 74px) / 4), calc(var(--u) * .9))); }
   .cv-wear[data-solo] [data-cv=hsheet] b { font-size: clamp(var(--d-fs-1), calc(var(--u) * .22), 1.15rem); }
   .cv-wear[data-solo] .cv-sheet > div { padding-inline: var(--d-sp-2); }
   .cv-setbar { flex: none; display: flex; align-items: center; gap: 4px; margin-block: 6px; min-inline-size: 0; overflow: hidden; block-size: 26px; }

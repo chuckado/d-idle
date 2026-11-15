@@ -63,6 +63,9 @@ const o = %s, f = document.getElementById('f'), out = document.getElementById('f
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 f.addEventListener('load', async () => {
   await wait(5000);
+  // the character screen draws from its first view: measure only once its grids hold cells (a slow first answer is a late page, not a fit result)
+  for (let i = 0; i < 30 && f.contentDocument.querySelector('.cv') && !f.contentDocument.querySelector('#equip .d-slot2'); i++) await wait(500);
+  await wait(1500);
   try {
     const pv = await (await fetch('/watch/panels.json')).json();
     const m = measure(f.contentWindow, { scroll: (pv.panels || []).filter((p) => p.scroll).map((p) => p.id) });
