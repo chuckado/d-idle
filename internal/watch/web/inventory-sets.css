@@ -40,7 +40,7 @@
     box-shadow: var(--d-shadow-2); color: var(--d-text); font-size: var(--d-fs-0); will-change: transform; }
   .inv-ghost[data-state="ok"] { border-color: var(--d-good); }
   .inv-ghost[data-state="no"] { border-color: var(--d-bad); }
-  .inv-fp { position: fixed; inset: 0 auto auto 0; z-index: calc(var(--d-z-sheet) + 1); box-sizing: border-box; pointer-events: none; border-radius: 2px; background: color-mix(in srgb, var(--d-surface-3) 40%, transparent); }
+  .inv-fp { position: fixed; inset: 0 auto auto 0; z-index: calc(var(--d-z-sheet) + 1); box-sizing: border-box; pointer-events: none; border-radius: 2px; background: var(--d-state-bg-info); inline-size: var(--fw, 0); block-size: var(--fh, 0); }
   .inv-fp[hidden] { display: none; }
   .inv-fp[data-state="ok"] { outline: 2px solid var(--d-good); outline-offset: -2px; }
   .inv-fp[data-state="no"] { outline: 2px dashed var(--d-bad); outline-offset: -2px; }

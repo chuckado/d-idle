@@ -15,6 +15,7 @@
   var view = null, pend = null, drag = null, swallowUntil = 0, ghost = null, lastKey = '', scrollGuard = null, fp = null;
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
+  function setVar(n, k, v) { if (n.style.setProperty) n.style.setProperty(k, v); else n.style[k] = v; }
   function nameOf(it) { return (it.name || it.code || 'item'); }
 
   // ---- model (pure) ----
@@ -132,7 +133,7 @@
     var r = n.getBoundingClientRect(), cs = r.width / cols, rows = Math.max(1, Math.round(r.height / cs));
     var c = Math.max(0, Math.min(cols - it.w, Math.floor((x - r.left) / cs))), q = Math.max(0, Math.min(rows - it.h, Math.floor((y - r.top) / cs)));
     fp.hidden = false; fp.dataset.state = kind;
-    fp.style.width = Math.round(it.w * cs) + 'px'; fp.style.height = Math.round(it.h * cs) + 'px';
+    setVar(fp, '--fw', Math.round(it.w * cs) + 'px'); setVar(fp, '--fh', Math.round(it.h * cs) + 'px');
     fp.style.transform = 'translate(' + Math.round(r.left + c * cs) + 'px, ' + Math.round(r.top + q * cs) + 'px)';
   }
   function move(x, y) {
