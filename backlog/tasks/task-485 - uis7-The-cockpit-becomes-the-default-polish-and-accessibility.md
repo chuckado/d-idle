@@ -25,6 +25,12 @@ owns:
   - "tools/uishots/layout-rows.json"
   - "tools/uishots/genlayouts.js"
   - "tools/uishots.sh"
+  - "internal/watch/web/shell.css"
+  - "internal/watch/web/tokens.css"
+  - "internal/watch/glance.go"
+  - "internal/watch/glance_questions.go"
+  - "internal/watch/glance_questions_test.go"
+  - "tools/uishots/fit.js"
 exclusive: []
 contracts: []
 ---

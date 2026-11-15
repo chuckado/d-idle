@@ -238,28 +238,17 @@
   .d-drawer [data-panel="log"] .row { min-block-size: 38px; }
 }
 
-/* The one-time layout note of a cockpit floats over the frame (the frame fills the window, so it has no row of its own) (S7). */
-.d-layoutnote[data-float] { position: fixed; inset-block-end: var(--d-sp-3); inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-toast);
-  max-inline-size: min(94vw, 34rem); margin: 0; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); color: var(--d-text); }
-
-/* Light theme: the ok and warn chips are 4.17:1 on a 14 % tint; a 7 % tint keeps the word above 4.5:1 (S7). */
-:root[data-theme="light"] .d-shell[data-template="cockpit"], :root[data-theme="light"] .d-drawer, :root[data-theme="light"] .d-bandpop {
-  --d-state-bg-ok: color-mix(in srgb, var(--d-good) 7%, var(--d-surface-1));
-  --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 7%, var(--d-surface-1));
+@layer components {
+  /* The one-time layout note of a cockpit floats over the frame (the frame fills the window, so it has no row of its own) (S7). */
+  .d-layoutnote[data-float] { position: fixed; inset-block-end: var(--d-sp-3); inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-toast);
+    max-inline-size: min(94vw, 34rem); margin: 0; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); color: var(--d-text); }
+  
+  /* Accessibility of the cockpit (S7): one 2 px focus ring on every control that has none of its own (the phone tabs, the
+     menu, the drawers, the notes), targets of 44 px under a coarse pointer where they are outside the frame (menu, drawer,
+     note; the frame's own rows use --c-touch), and no motion when the reader asks for none (the duration tokens are 0 under prefers-reduced-motion; the cockpit has no animation of its own). */
+  .d-shell[data-template="cockpit"] :is(a, button, input, select, textarea, [tabindex]):focus-visible,
+  .d-drawer :is(a, button, input, select, textarea, [tabindex]):focus-visible,
+  .d-layoutnote :is(a, button):focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
+  /* The old message bar (role=alert text of app.js) of a cockpit floats under the band; nothing else in the frame moves (S7). */
+  .banner[data-float] { position: fixed; inset-block-start: 48px; inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); margin: 0; max-inline-size: min(94vw, 40rem); }
 }
-
-/* Accessibility of the cockpit (S7): one 2 px focus ring on every control that has none of its own (the phone tabs, the
-   menu, the drawers, the notes), targets of 44 px under a coarse pointer where they are outside the frame (menu, drawer,
-   note; the frame's own rows use --c-touch), and no motion when the reader asks for none. */
-.d-shell[data-template="cockpit"] :is(a, button, input, select, textarea, [tabindex]):focus-visible,
-.d-drawer :is(a, button, input, select, textarea, [tabindex]):focus-visible,
-.d-layoutnote :is(a, button):focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
-@media (pointer: coarse) {
-  .d-menu-pop .d-btn, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .d-shell[data-template="cockpit"] *, .d-drawer *, .d-layoutnote, .d-toasts * { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-}
-
-/* The old message bar (role=alert text of app.js) of a cockpit floats under the band; nothing else in the frame moves (S7). */
-.banner[data-float] { position: fixed; inset-block-start: 48px; inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); margin: 0; max-inline-size: min(94vw, 40rem); }
