@@ -1,10 +1,11 @@
 ---
 id: TASK-515
 title: 'p03cposted: P03c knock in get-hit posted as upstream PR 559'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T18:55:00Z'
+updated_date: '2026-11-15T19:14:00Z'
 labels:
   - docs
   - upstream-pr
