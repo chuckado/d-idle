@@ -115,7 +115,7 @@
      built, so its neighbours take the room. Nothing in a slot has a content-driven height. */
   .d-shell[data-template="cockpit"] { --c-band: 44px; --c-gap: 8px; --c-strip: 112px; --c-railmin: 400px; display: grid; grid-template-rows: var(--c-band) minmax(0, 1fr);
     gap: 0; padding: 0; block-size: 100dvh; min-block-size: 0; overflow: hidden; }
-  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 100px; }
+  .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 104px; }
   .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
   .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] > .d-band-status { grid-template-rows: 36px minmax(0, 1fr); align-content: start; row-gap: 0; }
