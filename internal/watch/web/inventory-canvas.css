@@ -325,7 +325,7 @@
     .cv-errtoggle::after { content: "+"; font-size: 1.3rem; }
     .cv-errtoggle[aria-expanded="true"]::after { content: "\2212"; }
     .cv-errwrap:not(:has(.inv-errands:not([hidden]))) .cv-errtoggle { display: none; }
-    .cv-errwrap:not([data-open]) .inv-errands { display: none !important; }
+    .cv .cv-errwrap:not([data-open]) .inv-errands.inv-errands.inv-errands { display: none; }
     .cv .cv-side .inv-errands { gap: 8px; padding-block: 8px 0; }
     .cv .cv-side .inv-errands .err-n, .cv .cv-side .inv-errands .act { block-size: 44px; font-size: var(--d-fs-1); padding: 0 8px; }
 

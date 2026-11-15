@@ -325,7 +325,7 @@
   // The selected box never scrolls and never overruns. What goes first: the comparison, then the properties, the verdict lines beyond
   // the first, then the buttons beyond the first row (the last one left becomes "More...", which opens the full action menu).
   function fitSel() {
-    var box = $('cv-sel'); if (!box || !box.clientHeight || phone()) return; // a phone's sheet scrolls inside itself with its buttons pinned: nothing is trimmed
+    var box = $('cv-sel'); if (!box || !box.clientHeight || phone()) return; // a phone's sheet scrolls inside itself with its buttons kept in view: nothing is trimmed
     var props = box.querySelector('.cv-props'), acts = box.querySelector('.cv-acts'), why = box.querySelector('.cv-why'), cmp = box.querySelector('.cv-cmp'), qr = box.querySelector('.cv-qrows'), cut = 0;
     var over = function () { return box.scrollHeight > box.clientHeight + 1; };
     if (props) while (props.children.length && props.scrollHeight > props.clientHeight + 1) props.removeChild(props.lastChild);
