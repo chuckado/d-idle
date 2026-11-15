@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, cockpitIds } from '/watch/layout.js';
+import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -375,13 +375,7 @@ function applyLayout(pass) {
 // saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
 const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
 const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default, Classic is the way back
-// The layout this browser chose. Only a choice made in the menu counts (it also sets PICK): a Simple that an older shell pinned
-// by itself for a new hero has no PICK, so that hero follows the new default. A browser that holds any other preset, or
-// 'saved', chose it in the menu (nothing else wrote it), so it is kept.
-function chosen() {
-  const c = pref(PREF);
-  return c === 'simple' && !pref(PICK) ? '' : c;
-}
+const chosen = () => effectiveChoice(pref(PREF), pref(PICK)); // layout.js: an auto-pinned Simple is not a choice
 function pref(k, v) {
   try {
     if (v === undefined) return localStorage.getItem(k) || '';
@@ -857,8 +851,7 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
 // page falls back to Standard instead of showing a hole. A layout the hero picked or stored is never second-guessed.
 async function selfCheck(sel, list, conf0) {
   if (!sel || sel.origin !== 'default' && sel.origin !== 'newhero' || !isCockpit(sel.layout) || sel.preset !== 'cockpit') return sel;
-  const have = new Set(list.filter((m) => m.slot || (conf0.slot || []).includes(m.id)).map((m) => m.id));
-  const missing = [...cockpitIds(sel.layout)].filter((id) => !have.has(id));
+  const missing = missingSlots(sel.layout, list.filter((m) => m.slot || (conf0.slot || []).includes(m.id)).map((m) => m.id));
   if (!missing.length) return sel;
   console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Standard');
   const l = await presetFile('standard');

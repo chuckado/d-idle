@@ -249,8 +249,8 @@ func TestLayoutJSPatterns(t *testing.T) {
 		}
 	}
 	// which layout loads (S1 review R2 to R4): a missing X-Layout-Source header reads as stored, a new hero has ticked nothing and
-	// is pinned to Simple, the overlay strip ignores the layout's status list
-	for _, want := range []string{"srv.source !== 'default'", "!(o.body.steps || []).some((x) => x.done)", "pref(PREF, 'simple')", "selectPanels(list, sel && sel.layout, html.dataset.mode)"} {
+	// meets the cockpit (S7: nothing pins Simple; the menu marks a choice with d2layoutpick), the overlay strip ignores the layout's status list
+	for _, want := range []string{"srv.source !== 'default'", "!(o.body.steps || []).some((x) => x.done)", "effectiveChoice(pref(PREF), pref(PICK))", "selectPanels(list, sel && sel.layout, html.dataset.mode)"} {
 		if !bytes.Contains(shell, []byte(want)) {
 			t.Errorf("shell.js lacks %s", want)
 		}
@@ -827,6 +827,41 @@ func TestCockpitEditorContract(t *testing.T) {
 	for _, want := range []string{"cockpitSwap(layout, id, over)", "cockpitSize(", "api.done(kept)", "'pointercancel', cancel", "role', 'separator'", "'keydown'"} {
 		if !strings.Contains(js, want) {
 			t.Errorf("the cockpit editor lacks %q", want)
+		}
+	}
+}
+
+// S7: the default is the cockpit; an auto-pinned Simple is no choice; a missing slot panel is named by the self-check.
+func TestDefaultLayoutChoiceJS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("node not available")
+	}
+	if out, err := exec.Command(node, "testdata/layout_default.js", "web/layout.js", "web/layout.json").CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+}
+
+// Every panel a cockpit slot names has a manifest that says it fits a slot (the Go side of the startup self-check).
+func TestDefaultCockpitSlotsHavePanels(t *testing.T) {
+	b, _ := webFS.ReadFile("web/layout.json")
+	var l struct {
+		Slots struct {
+			Band, Strip, Rail []string
+			Stage             string
+		}
+	}
+	if err := json.Unmarshal(b, &l); err != nil || len(l.Slots.Rail) == 0 {
+		t.Fatalf("default: %v", err)
+	}
+	ms, _ := Manifests()
+	have := map[string]bool{}
+	for _, m := range ms {
+		have[m.ID] = true
+	}
+	for _, id := range append(append(append([]string{l.Slots.Stage}, l.Slots.Band...), l.Slots.Strip...), l.Slots.Rail...) {
+		if !have[id] {
+			t.Errorf("the default cockpit names %s, which has no panel manifest", id)
 		}
 	}
 }
