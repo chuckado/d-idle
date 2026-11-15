@@ -99,8 +99,8 @@ const charPage = `<!DOCTYPE html>
  <span class="cv-sp"></span>
  <span class="cv-kv">Gold <b id="cv-gold">-</b></span>
  <span class="cv-kv cv-opt">Stash <b id="cv-stashgold">-</b></span>
- <button class="cv-btn" id="cv-repair" type="button" hidden></button>
- <button class="cv-btn" id="cv-sell" type="button" aria-disabled="true">Sell marked (0)</button>
+ <button class="cv-btn cv-repair" id="cv-repair" type="button" hidden></button>
+ <button class="cv-btn cv-sell" id="cv-sell" type="button" aria-disabled="true">Sell marked (0)</button>
 </div>
 <div class="cv-tabbar" id="cv-tabbar" role="group" aria-label="Page part" data-cockpit-slot="band"></div>
 <main class="cv-canvas" id="inv" data-vscroll>
@@ -119,11 +119,11 @@ const charPage = `<!DOCTYPE html>
  </section>
  <section class="cv-slot" data-slot="store" data-cockpit-slot="store">
   <div class="cv-zone cv-storez" data-cockpit-panel data-panel="char-store" aria-label="Pack and stash">
-   <h2 id="t-pack">Pack <em id="packmeta"></em></h2>
-   <div class="d-cells" id="pack"></div>
-   <h2 id="t-stash">Stash <em id="stashmeta"></em></h2>
+   <h2 id="t-pack" class="cv-hpack">Pack <em id="packmeta"></em></h2>
+   <div class="d-cells" id="pack" data-cv="pack"></div>
+   <h2 id="t-stash" class="cv-hstash">Stash <em id="stashmeta"></em></h2>
    <div class="cv-store">
-    <div class="d-cells" id="stash"></div>
+    <div class="d-cells" id="stash" data-cv="stash"></div>
     <div class="cv-side">
      <h2 class="cv-beltlabel" id="t-belt">Belt</h2>
      <div class="d-cells" id="belt" data-cv="belt" aria-label="Belt"></div>

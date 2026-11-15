@@ -278,8 +278,8 @@
     .cv-bar > .cv-chips { grid-column: 1; grid-row: 2; display: flex; align-items: center; gap: 6px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
       mask-image: linear-gradient(to right, currentcolor calc(100% - 18px), transparent); }
     .cv-bar .cv-chip { flex: none; block-size: 36px; padding: 0 14px; font-size: var(--d-fs-1); }
-    .cv-bar > #cv-repair { grid-column: 2; grid-row: 2; }
-    .cv-bar > #cv-sell { grid-column: 3; grid-row: 2; }
+    .cv-bar > .cv-repair { grid-column: 2; grid-row: 2; }
+    .cv-bar > .cv-sell { grid-column: 3; grid-row: 2; }
     .cv-bar .cv-btn { block-size: 36px; }
     .cv-bar .cv-btn[data-s] { font-size: 0; padding: 0 12px; }
     .cv-bar .cv-btn[data-s]::before { content: attr(data-s); font-size: var(--d-fs-1); }
@@ -309,15 +309,15 @@
     .cv-storez { --gw: calc(100cqi - 2 * var(--cv-p)); overflow: visible; padding-block-end: 12px; }
     .cv-store, .cv-side { display: contents; container: none; }
     .cv-storez > h2 { margin-block-start: 12px; }
-    #t-pack { order: 1; margin-block-start: 0; } #pack { order: 2; }
-    .cv .cv-beltlabel { display: flex; order: 3; } #belt { order: 4; }
-    #t-stash { order: 5; } #stash { order: 6; }
+    .cv-hpack { order: 1; margin-block-start: 0; } [data-cv=pack] { order: 2; }
+    .cv .cv-beltlabel { display: flex; order: 3; } [data-cv=belt] { order: 4; }
+    .cv-hstash { order: 5; } [data-cv=stash] { order: 6; }
     .cv-errwrap { display: block; order: 7; }
     .cv .cv-side > .cv-lock { display: block; order: 8; margin-block-start: 8px; padding: 6px 8px; font-size: var(--d-fs-1); white-space: normal; overflow: visible; text-overflow: clip; }
     .cv .cv-side > [data-cv=msg] { order: 9; white-space: normal; overflow: visible; text-overflow: clip; margin-block-start: 8px; }
     .cv-storez .d-cells { margin-inline: auto; }
-    #pack { --u: round(down, calc(var(--gw) / 10), 1px); }
-    #stash { --u: round(down, calc(var(--gw) / 6), 1px); }
+    [data-cv=pack] { --u: round(down, calc(var(--gw) / 10), 1px); }
+    [data-cv=stash] { --u: round(down, calc(var(--gw) / 6), 1px); }
     .cv .cv-side > [data-cv=belt] { inline-size: var(--gw); --cell-size: 44px; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 44px; }
     .cv .cv-side > [data-cv=belt] .item { font-size: var(--d-fs-0); }
     .cv .cv-side > [data-cv=belt] .item[data-shown] { font-size: 0; }
