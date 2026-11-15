@@ -23,6 +23,7 @@ exclusive:
   - "upstream-pr:hitrec-interrupt"
   - "fork-branch:fid/hitrec-interrupt-r3"
 contracts: []
+result: "P04 r3: fork branch fid/hitrec-interrupt-r3 pushed (private fork remote only): oracle 113ab0d7, claim 5fa67510 on upstream 77990456. The first verifier required changes applied: state 0x36 (Leap Attack in flight) and the barrel kick (Kick) refuse; the oracle has a unit-state dimension. Compare 5,711 cells and the barrel kick: parent 2,811 differ, r2 claim 2,681 (2,680 state 0x36 and the barrel), claim 0; both mutants abort; selftest 16 of 16; ctest same two failures as upstream; pr_guard 0/0, presubmit --quick 0 FAIL. Concentration aura (20 percent) stated as a limit. A second verifier pass is needed before posting; nothing posted. Verified live: no."
 ---
 
 ## Description
@@ -35,7 +36,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 fid/hitrec-interrupt-r3 pushed to the private fork only (oracle first): state 0x36 and the barrel kick refuse
-- [ ] #2 differential extended with the unit-state dimension: parent differs, claim 0, mutant aborts
-- [ ] #3 body, draft, queue and pipeline rows updated; second verifier pass needed, nothing posted
+- [x] #1 fid/hitrec-interrupt-r3 pushed to the private fork only (oracle first): state 0x36 and the barrel kick refuse
+- [x] #2 differential extended with the unit-state dimension: parent differs, claim 0, mutant aborts
+- [x] #3 body, draft, queue and pipeline rows updated; second verifier pass needed, nothing posted
 <!-- AC:END -->
