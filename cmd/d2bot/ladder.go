@@ -78,6 +78,7 @@ type ladderOptions struct {
 	inv           *watch.InvAPI        // the inventory page routes (invwire.go); nil: none
 	skills        *watch.SkillsAPI     // the skill tree page routes (skillswire.go); nil: none
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
+	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
@@ -276,6 +277,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
 		bindRepair(rig.Fun, l.repair, l.farm)
+		if l.pause != nil {
+			rig.Fun.Pause = watch.NewPauseAPI()
+			rig.Fun.Pause.Bind(l.pause)
+		}
 		rig.Fun.Merc = mercAPI()
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
