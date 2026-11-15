@@ -46,7 +46,9 @@ func serve(addr, class string) error {
 	sim.Hub.Whyline().Observe(goals.Why{Code: "fight", Params: map[string]string{"area": "Blood Moor", "life": "72"}}, "Fighting in Blood Moor", "g1", "")
 	sim.Hub.SetGoldSource(func() (int, int, bool) { return 1240, 5300, true })
 	sim.Hub.SetHeroStatsSource(func() (watch.HeroStats, bool) {
+		def := 214
 		return watch.HeroStats{Resists: watch.HeroResists{Fire: 12, Cold: 30, Light: -8, Poison: 5},
+			Attrs: &watch.HeroAttrs{Str: 38, Dex: 25, Vit: 30, Energy: 22}, Defense: &def, Damage: &watch.HeroDamage{Min: 4, Max: 9},
 			Readiness: &watch.HeroReadiness{Light: "amber", Area: "Blood Moor", Reason: "Lightning resistance is under the line for this area."}}, true
 	})
 	// what /api/glance shows in the band: two things need the player, like the accepted mockup

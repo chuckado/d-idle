@@ -359,7 +359,7 @@ func BuildCommands(s CommandSources) CommandsView {
 		}
 	}
 	if s.Hooks.Blocked != nil {
-		if b := s.Hooks.Blocked(); b != "" {
+		if b := s.Hooks.Blocked(); b != "" && !hasBlocked(v.Blocked, "journey:blocked") { // the loop row may have said it
 			v.Blocked = append(v.Blocked, blockedRow(b))
 		}
 	}
@@ -513,6 +513,15 @@ func activeWhy(o Order, now float64) string {
 		p = append(p, fmt.Sprintf("%d kills", o.Kills))
 	}
 	return strings.Join(p, ", ")
+}
+
+func hasBlocked(rows []CommandBlocked, id string) bool {
+	for _, r := range rows {
+		if r.ID == id {
+			return true
+		}
+	}
+	return false
 }
 
 func blockedRow(text string) CommandBlocked {

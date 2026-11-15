@@ -1,0 +1,10 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-normal.tip-name [] "Light Plate"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=n data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=n] "✗ Strength 41 (38)  3 short"
+  div.tip-sec [data-ok=y data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=y] "✓ Strength 41"
+  div.tip-hint [] "Right-click: all actions."
