@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published) <!--sg:agent/cut013-->
 - Merge branch 'main' into deploycockpit <!--sg:agent/deploycockpit4-->
 - Merge branch 'main' into devp8 <!--sg:agent/devp8-->
 - Merge branch 'main' into p03cposted <!--sg:agent/p03cposted-->
