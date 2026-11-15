@@ -495,3 +495,116 @@ func TestUnknownDialIsAnError(t *testing.T) {
 		t.Fatal("no data cannot force out")
 	}
 }
+
+// Card survcal: a near-zero prediction must not inflate k_zone (sandbox replay: 0.3 to 3 life per kill observed).
+func TestPredTakenFloor(t *testing.T) {
+	p := params(t)
+	k := ZoneKey{2, "normal"}
+	l := NewLedger(p)
+	// predicted 0.05 life per kill, observed 0.5: the raw ratio is 10 and would sit on the clamp
+	l.Observe(k, t0, Event{Kind: EvFight, Kills: 300, Seconds: 600, Taken: 150, PredTaken: 15, PredKillSec: 600}, 100)
+	if v := l.KZone(k, t0); v > 1 {
+		t.Fatalf("k_zone %.2f: a trivial zone must not read as a hazard", v)
+	}
+	if got := l.peek(k).PredTaken; got != 300*p.PredTakenFloor {
+		t.Fatalf("predicted %.0f, want the floor %.0f", got, 300*p.PredTakenFloor)
+	}
+	// a fight without any prediction adds none (no ratio to form)
+	l2 := NewLedger(p)
+	l2.Observe(k, t0, Event{Kind: EvFight, Kills: 50, Seconds: 60, Taken: 20}, 100)
+	if l2.peek(k).PredTaken != 0 {
+		t.Fatal("no prediction must stay no prediction")
+	}
+}
+
+func TestKHeroUnreadIsBounded(t *testing.T) {
+	p := params(t)
+	k := ZoneKey{2, "normal"}
+	l := NewLedger(p)
+	// the model's default kill speed is 5 times too slow for this hero
+	l.Observe(k, t0, Event{Kind: EvFight, Kills: 600, Seconds: 3000, Taken: 600, PredTaken: 600, PredKillSec: 600}, 100)
+	if v := l.KHeroFor(false); v < 2.5 || v > p.KMax {
+		t.Fatalf("a read weapon keeps the full correction up to kMax: %.2f", v)
+	}
+	if v := l.KHeroFor(true); v != p.KHeroUnreadMax {
+		t.Fatalf("an unread weapon is capped at %.1f, got %.2f", p.KHeroUnreadMax, v)
+	}
+	if v := l.KHero(); v > p.KMax {
+		t.Fatalf("k_hero %.2f above kMax %.1f", v, p.KMax)
+	}
+}
+
+// Both builds: a log without weapon terms must degrade to the plan tables (a zone the hero clears easily is not "too hard").
+func TestUnreadOffenceDoesNotShutEveryZone(t *testing.T) {
+	for _, tc := range []struct {
+		name, arch string
+		hero       func(int) power.Hero
+	}{{"paladin", "bruiser", paladin}, {"sorceress", "caster", sorceress}} {
+		t.Run(tc.name, func(t *testing.T) {
+			e := newEnv(t, tc.arch)
+			h := tc.hero(14)
+			h.MeasuredDPS, h.DmgMin, h.DmgMax = 0, 0, 0
+			h.SetQuality(power.TermOffence, power.Default)
+			if !h.OffenceUnread() {
+				t.Fatal("quality default must read as unread")
+			}
+			l := NewLedger(e.p)
+			k := ZoneKey{2, "normal"}
+			// observed kill time 6 times the default model's: all of it the missing weapon
+			l.Observe(k, t0, Event{Kind: EvFight, Kills: 600, Seconds: 3600, Taken: 400, PredTaken: 400, PredKillSec: 600}, PowerOf(h))
+			in := e.input(h, ZoneKey{}, t0.Add(time.Minute))
+			in.OffenceUnread = true
+			capped, err := l.Choose(in)
+			if err != nil {
+				t.Fatal(err)
+			}
+			in2 := e.input(h, ZoneKey{}, t0.Add(time.Minute))
+			uncapped, err := l.Choose(in2)
+			if err != nil {
+				t.Fatal(err)
+			}
+			if capped.Hole && !uncapped.Hole {
+				t.Fatal("the cap made it worse")
+			}
+			if kc, ku := l.KHeroFor(true), l.KHeroFor(false); kc > ku || kc > e.p.KHeroUnreadMax {
+				t.Fatalf("capped %.2f uncapped %.2f", kc, ku)
+			}
+		})
+	}
+}
+
+// swap: merc deaths 40 minutes apart count for the `either` row (window mercWindowMinutes), chickens do not.
+func TestMercDeathsAcrossTheWideWindow(t *testing.T) {
+	p := params(t)
+	k := ZoneKey{3, "normal"}
+	l := NewLedger(p)
+	l.Observe(k, t0, Event{Kind: EvMercDeath}, 100)
+	l.Observe(k, t0.Add(40*time.Minute), Event{Kind: EvMercDeath}, 100)
+	if out, why := l.ForcedOut(k, "balanced", t0.Add(41*time.Minute)); !out || why != "hard_events" {
+		t.Fatalf("two merc deaths 40 minutes apart must close the zone: %v %q", out, why)
+	}
+	if l.NoReviveNow(k, t0.Add(41*time.Minute)) {
+		t.Fatal("the revive rule keeps its own short window")
+	}
+	if out, _ := l.ForcedOut(k, "balanced", t0.Add(3*time.Hour)); out {
+		t.Fatal("three hours later the zone is open again")
+	}
+	l2 := NewLedger(p)
+	l2.Observe(k, t0, Event{Kind: EvChicken}, 100)
+	l2.Observe(k, t0.Add(40*time.Minute), Event{Kind: EvChicken}, 100)
+	if out, _ := l2.ForcedOut(k, "balanced", t0.Add(41*time.Minute)); out {
+		t.Fatal("chickens keep the 30 minute window")
+	}
+}
+
+func TestParamsCalibration(t *testing.T) {
+	p := params(t)
+	if p.KMax != 3 || p.MercPriorMinutes != 25 || p.MercWindowMinutes < p.WindowMinutes || p.PredTakenFloor <= 0 || p.KHeroUnreadMax > p.KMax {
+		t.Fatalf("calibration constants: %+v", p)
+	}
+	for _, k := range []string{"kMax", "kHeroUnreadMax", "predTakenFloorPerKill", "mercWindowMinutes", "mercPriorMinutes"} {
+		if p.Tags[k] == "" {
+			t.Errorf("no tag for %s", k)
+		}
+	}
+}

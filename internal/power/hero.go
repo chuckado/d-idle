@@ -89,6 +89,9 @@ func (h *Hero) set(term string, q Quality) {
 	h.Quality[term] = q
 }
 
+// OffenceUnread is true when the weapon terms were not read, so the kill speed is a named constant (quality default).
+func (h *Hero) OffenceUnread() bool { return h.q(TermOffence) == Default }
+
 // SetQuality is for callers that fill a Hero by hand.
 func (h *Hero) SetQuality(term string, q Quality) { h.set(term, q) }
 

@@ -145,7 +145,7 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 		s.Kills += e.Kills
 		s.Seconds += e.Seconds
 		s.Taken += e.Taken
-		s.PredTaken += e.PredTaken
+		s.PredTaken += l.floored(e)
 		s.Potions += e.Potions
 		s.XP += e.XP
 		s.GoldIn += e.GoldIn
@@ -177,6 +177,16 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 	}
 }
 
+// floored is the predicted damage of a fight with the per-kill floor applied: a prediction near zero says nothing about
+// the ratio taken/predicted, and on a trivial zone the ratio of two tiny numbers hit the clamp (card survcal, replay). A
+// fight with no prediction at all (0) stays 0.
+func (l *Ledger) floored(e Event) float64 {
+	if e.PredTaken <= 0 {
+		return 0
+	}
+	return math.Max(e.PredTaken, e.Kills*l.P.PredTakenFloor)
+}
+
 // refresh drops what was learned about a different hero: when the power moved by more than PowerChange since the row
 // was learned, the average relaxes (sums reset) and the hard multiplier goes back to 1 (design 5.4).
 func (l *Ledger) refresh(s *ZoneStats, power float64) {
@@ -202,9 +212,8 @@ func (l *Ledger) Refresh(k ZoneKey, power float64) {
 // count is the number of events of the kinds in the window ending at now ("" counts chickens and merc deaths).
 func (l *Ledger) count(s *ZoneStats, now time.Time, kinds ...string) int {
 	n := 0
-	w := time.Duration(l.P.WindowMinutes * float64(time.Minute))
 	for _, e := range s.Recent {
-		if now.Sub(e.T) > w {
+		if now.Sub(e.T) > time.Duration(l.P.WindowMinutes*float64(time.Minute)) {
 			continue
 		}
 		for _, k := range kinds {
@@ -216,9 +225,35 @@ func (l *Ledger) count(s *ZoneStats, now time.Time, kinds ...string) int {
 	return n
 }
 
+// costCount is the number the `either` row compares: chickens in the window plus merc deaths in the longer merc window
+// (a merc that dies every 30 to 60 minutes in one zone never put two deaths inside 30).
+func (l *Ledger) costCount(s *ZoneStats, now time.Time) int {
+	n := l.count(s, now, EvChicken)
+	w := time.Duration(math.Max(l.P.MercWindowMinutes, l.P.WindowMinutes) * float64(time.Minute))
+	for _, e := range s.Recent {
+		if e.Kind == EvMercDeath && now.Sub(e.T) <= w {
+			n++
+		}
+	}
+	return n
+}
+
 // KHero is the offence correction pooled over all zones: observed kill seconds over predicted, shrunk toward 1 with few
 // kills. It is 1 with no data.
-func (l *Ledger) KHero() float64 {
+func (l *Ledger) KHero() float64 { return l.KHeroFor(false) }
+
+// KHeroFor is KHero for a hero whose offence was or was not read. With the weapon unread the model's kill speed is a
+// named constant, the ratio only measures how wrong that constant is, and it is capped at KHeroUnreadMax so a missing
+// term cannot turn every zone into "too hard" (the plan tables decide instead).
+func (l *Ledger) KHeroFor(offenceUnread bool) float64 {
+	k := l.khero()
+	if offenceUnread {
+		k = math.Min(k, l.P.KHeroUnreadMax)
+	}
+	return k
+}
+
+func (l *Ledger) khero() float64 {
 	if l.HeroPred <= 0 || l.HeroKill <= 0 {
 		return 1
 	}
@@ -228,7 +263,10 @@ func (l *Ledger) KHero() float64 {
 
 // KZone multiplies the zone's predicted damage taken (design 5.4): the observed ratio net of KHero (which already
 // carries the offence error), shrunk with few kills, times the hard-event multiplier relaxed by time away.
-func (l *Ledger) KZone(k ZoneKey, now time.Time) float64 {
+func (l *Ledger) KZone(k ZoneKey, now time.Time) float64 { return l.KZoneFor(k, now, false) }
+
+// KZoneFor is KZone net of the KHeroFor of the same hero.
+func (l *Ledger) KZoneFor(k ZoneKey, now time.Time, offenceUnread bool) float64 {
 	s := l.peek(k)
 	if s == nil {
 		return 1
@@ -236,7 +274,7 @@ func (l *Ledger) KZone(k ZoneKey, now time.Time) float64 {
 	soft := 1.0
 	if s.PredTaken > 0 && s.Kills > 0 {
 		w := s.Kills / (s.Kills + l.P.ShrinkKills)
-		soft = 1 + w*((s.Taken/s.PredTaken)/l.KHero()-1)
+		soft = 1 + w*((s.Taken/s.PredTaken)/l.KHeroFor(offenceUnread)-1)
 	}
 	return l.clamp(soft * l.hardNow(s, now))
 }
@@ -254,7 +292,7 @@ func (l *Ledger) ForcedOut(k ZoneKey, dial string, now time.Time) (bool, string)
 	if row.Deaths > 0 && l.count(s, now, EvDeath) >= row.Deaths {
 		return true, "died"
 	}
-	if row.Either > 0 && l.count(s, now, EvChicken, EvMercDeath) >= row.Either {
+	if row.Either > 0 && l.costCount(s, now) >= row.Either {
 		return true, "hard_events"
 	}
 	return false, ""
