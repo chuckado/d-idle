@@ -98,13 +98,71 @@
     }
   }
 
+
+  // ---- the character canvas (inventory-canvas.css): the host carries data-canvas. No fold, no n/a box: only the slots his
+  // kind has, a header with his state chip, life bar, Str and Dex, the doll, and a four-tile sheet (card uic2). ----
+  function kv(label, v) { var s = el('span', 'cv-kv', label + ' '); s.appendChild(el('b', '', String(v))); return s; }
+  function tile(label, value, tone) {
+    var d = el('div'); d.appendChild(el('label', '', label));
+    var b = el('b', '', String(value)); if (tone) b.dataset.tone = tone; d.appendChild(b);
+    return d;
+  }
+  function stateWord(m) { return m.state === 'dead' ? 'dead' : m.state === 'unknown' ? 'unknown' : 'alive'; }
+  function canvasSub(m) {
+    if (m.state === 'none') return 'not hired';
+    var bits = [kindName(m)]; if (m.level) bits[0] += ' ' + m.level;
+    if (WEAPON[m.kind]) bits.push('helm, armour, ' + WEAPON[m.kind]);
+    return bits.join(' \u00b7 ');
+  }
+  function canvasFill(m) {
+    clear(host);
+    var sub = document.getElementById('merc-sub'); if (sub) sub.textContent = canvasSub(m);
+    if (m.state === 'none') {
+      var n = el('p', 'cv-mnote'); n.appendChild(el('b', '', 'No mercenary hired')); n.appendChild(document.createTextNode('Hire one in Act 1 (free after Blood Raven) or Act 2.'));
+      host.appendChild(n); return;
+    }
+    var h = el('div', 'cv-mhead'), st = el('span', 'cv-st', stateWord(m)); st.dataset.tone = m.state === 'dead' ? 'bad' : m.state === 'unknown' ? 'warn' : 'good';
+    h.appendChild(st);
+    var life = el('span', 'cv-life'), pct = m.state === 'dead' ? 0 : Math.max(0, Math.min(100, m.lifePct || 0)), on = Math.ceil(pct / 10);
+    life.setAttribute('role', 'img'); life.setAttribute('aria-label', 'life ' + pct + ' percent');
+    for (var i = 0; i < 10; i++) life.appendChild(el('i', i < on ? 'on' : ''));
+    h.appendChild(life);
+    if (m.str || m.dex) { h.appendChild(kv('Str', m.str || 0)); h.appendChild(kv('Dex', m.dex || 0)); }
+    if (m.state === 'dead' && m.revive && m.revive.path) { // the revive verb of the mercenary desk (card B3) fills m.revive; nothing sends it today
+      var rb = el('button', 'cv-btn', 'Revive' + (m.revive.cost ? ' ' + m.revive.cost + ' g' : '')); rb.type = 'button'; rb.dataset.act = 'revive'; rb.dataset.primary = '';
+      rb.addEventListener('click', function () { var a = window.d2InvActions; if (a && a.post) a.post(m.revive.path, {}); });
+      h.appendChild(rb);
+    }
+    host.appendChild(h);
+    if (m.state === 'unknown') { host.appendChild(el('p', 'cv-mnote', m.note || 'Equipment unreadable on this backend.')); return; }
+    var body = el('div', 'cv-mbody');
+    var legal = SLOTS.filter(function (s) { return !m.slots || !m.slots.length || m.slots.indexOf(s) >= 0; });
+    var doll = el('div', 'd-doll'); doll.dataset.owner = 'merc'; doll.dataset.state = m.state; doll.dataset.cols = legal.indexOf('mlhand') >= 0 ? '6' : '4';
+    doll.setAttribute('role', 'group'); doll.setAttribute('aria-label', 'Mercenary paper doll');
+    legal.forEach(function (s) { doll.appendChild(slot(m, s)); });
+    body.appendChild(doll);
+    var sh = el('div', 'cv-sheet'); sh.id = 'msheet'; sh.dataset.cv = 'msheet'; sh.setAttribute('aria-label', 'Mercenary values');
+    sh.appendChild(tile('Level', m.level || '-'));
+    sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
+    sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));
+    var worn = legal.filter(function (k) { return m.equipment && m.equipment[k]; }).length;
+    sh.appendChild(tile('Gear', worn + ' of ' + legal.length + ' worn')); sh.appendChild(tile('Kind', kindName(m)));
+    body.appendChild(sh);
+    host.appendChild(body);
+  }
+
   function render(v) {
     if (!host) { host = document.getElementById('merc-doll'); if (!host) return; }
     lastView = v;
     var m = v && v.merc;
-    if (!m) { host.hidden = true; drawn = ''; return; }
+    var canvas = !!(host.dataset && host.dataset.canvas !== undefined);
+    if (!m) { host.hidden = true; if (canvas && host.parentNode) host.parentNode.hidden = true; drawn = ''; return; }
     var sig = JSON.stringify(m); if (sig === drawn) return; // unchanged: leave the DOM, the fold and scroll alone
     drawn = sig;
+    if (canvas) { // the canvas: no fold, the box around the host (its label row) shows with it
+      host.hidden = false; if (host.parentNode) host.parentNode.hidden = false;
+      canvasFill(m); artProbe(); return;
+    }
     if (!fold) {
       fold = el('details', 'inv-merc-fold'); fold.dataset.remember = 'merc-doll';
       var sum = el('summary', '', 'Mercenary'); fold.appendChild(sum);

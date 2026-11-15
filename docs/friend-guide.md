@@ -10,7 +10,7 @@ This is a private beta for a few friends. The pack is a single file, `didle-frie
 
 - Linux on x86-64 (the image is amd64 only), 3 GB of free disk space, 4 GB of RAM to spare.
 - Docker Engine with the compose plugin (`docker compose version` must work) and permission to run `docker` without sudo.
-- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it.
+- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it. Only the data archives (`*.mpq`) are mounted into the container, read-only and one file at a time: your key file, the game program and your saves are never visible to it.
 
 ## Licence note (read before you install)
 

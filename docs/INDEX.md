@@ -189,6 +189,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [potion-policy.md](sme/potion-policy.md): Potion and belt policy (d2-sme review, 2026-10-29)
 - [snaplib.md](snaplib.md): Snapshot library (d2restore)
 - [spec-skip-audit.md](spec-skip-audit.md): Audit of earlier behavioural skip_specs cards (status: audit of card spec-skip-audit (2026-10-31). Nothing here is a spec; the needs-spec rows are a backlog for...)
+
+`survival/`
+
+- [replay-2026-11-14.md](survival/replay-2026-11-14.md): Replay of the sandbox hero's log through the survival shadow and controller (2026-11-14) (status: current (card survreplay, TASK-458). First run of the S-B margin and the S-C ledger/controller on a REAL...)
 - [timescale.md](timescale.md): Bot time scale (D2BOT_TIMESCALE) (status: offline only (card `botclock`); not verified live. Background: docs/research/lockstep-p3.md.)
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
@@ -515,9 +519,12 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `survival/`
 
 - [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [calibration-2026-11-14.md](survival/calibration-2026-11-14.md): Survival calibration from the sandbox replay (card survcal, 2026-11-14) (status: current (TASK-460). Acts on the findings of docs/survival/replay-2026-11-14.md. Tags: V verified (how), S...)
 - [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
 - [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)
 - [design-2026-11-14.md](survival/design-2026-11-14.md): Survival design: character power against zone danger (2026-11-14) (status: design proposal, docs only (TASK-430, agent survivaldesign). Nothing here is implemented or decided. It...)
+- [ledger.md](survival/ledger.md): Per-zone ledger and the shadow controller (survival slice S-C) (status: current (card survC). Implements design-2026-11-14.md sections 5.3 to 5.6, 8 and 10 for slice S-C: log and...)
+- [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449). Implements design-2026-11-14.md sections 4, 5, 6, 8 and 10 as far as slice...)
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
@@ -651,6 +658,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
+- [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)

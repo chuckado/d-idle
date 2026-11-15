@@ -22,11 +22,8 @@ services:
       D2BOT_UPDATE_FEED: ${D2BOT_UPDATE_FEED:-}
       D2BOT_UPDATE_CHECK: ${D2BOT_UPDATE_CHECK:-on}
     volumes:
-      - type: bind
-        source: ${D2_GAME_DIR:?run ./install.sh first}
-        target: /game
-        read_only: true
       - d2dbot-data:/data
+      # the game archives (one read-only file each) come from compose.game.yml, written by ./install.sh
     ports:
       - "${D2_PUBLISH:-127.0.0.1}:${D2_WATCH_PORT:-8891}:${D2_WATCH_PORT:-8891}"
       - "${D2_PUBLISH:-127.0.0.1}:${D2_ANSWER_PORT:-8892}:${D2_ANSWER_PORT:-8892}"

@@ -70,8 +70,6 @@
 | amazonammo | deferred | - | `internal/combat`<br>`internal/leveler` | - |
 | t0-slice | deferred | t0-slice | `internal/decide/t0/**`<br>`internal/ladder/**`<br>`internal/env/tuning_ladder.go`<br>`internal/town/ladder_test.go`<br>`internal/drill/t0.go`<br>`internal/drill/t0_test.go`<br>`cmd/d2drill/t0_lab.go`<br>`cmd/d2drill/t0_lab_test.go`<br>`docs/probes/t0drill.md`<br>`internal/bot/thoughts.go`<br>`internal/bot/thoughts_test.go`<br>`internal/combat/thoughtshook.go`<br>`docs/t0-slice.md` | - |
 | ready-audit | proposed | - | `docs/probes/ready-audit.md` | - |
-| ready-area-table | proposed | - | `internal/readiness/areatable.go`<br>`internal/readiness/areatable_test.go` | - |
-| ready-model | proposed | - | `internal/readiness/` | - |
 | ready-wire-gates | deferred | - | `internal/bot/riskfacts.go`<br>`internal/bot/geargate.go`<br>`internal/task/gate.go` | - |
 | ready-meter | deferred | - | `internal/watch/unlockrisk.go`<br>`internal/watch/unlockrisk_test.go` | - |
 | ready-whyline | deferred | - | `internal/bot/whyline.go`<br>`internal/bot/whyline_test.go` | - |
@@ -163,7 +161,10 @@
 | towerenv | proposed | - | `docs/process/build-hosts-env-2026-11-14.md` | `fork-branch:none` |
 | uis1breview | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/s1b-review.md` | - |
 | prfix2 | proposed | - | `docs/upstream/drafts/hitrec-modes.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/upstream/drafts/load-gold-clamp.md`<br>`docs/upstream/bodies/hitrec-modes-body.md`<br>`docs/upstream/bodies/load-gold-clamp-body.md`<br>`docs/upstream/briefs/hitrec-norestart-oracle.md`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| survB | proposed | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/shadow.go`<br>`tools/levelsim/shadow_test.go`<br>`tools/levelsim/cmd/levelsim/main.go`<br>`cmd/d2bot/powerwire.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/d2dsrc/player.go`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/dangerwire.go`<br>`cmd/d2bot/powerwire_test.go`<br>`internal/d2/stats.go`<br>`internal/d2dsrc/source_test.go` | - |
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
+| survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
+| uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
@@ -211,14 +212,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 073531563 11-14 17:57 `Merge agent/prfix2: Merge branch 'main' into TASK-448` (prfix2)
-- 839aea3fc 11-14 17:57 `Merge agent/towerenv: Merge branch 'main' into towerenv` (towerenv)
-- c518b900a 11-14 17:54 `Merge branch 'main' into TASK-448` (-)
-- a37c23528 11-14 17:54 `Merge branch 'main' into towerenv` (-)
-- 31f6c865c 11-14 17:46 `Merge agent/uib3: Merge branch 'main' into TASK-442` (uib3)
-- 51687809c 11-14 17:44 `Merge branch 'main' into TASK-442` (-)
-- d80e4cb8e 11-14 17:27 `Merge agent/survA: Merge branch 'main' into TASK-443` (survA)
-- bd97847fe 11-14 17:26 `Merge branch 'main' into TASK-443` (-)
-- aa1a0321f 11-14 17:18 `Merge agent/emurun: Merge branch 'main' into emurun` (emurun)
-- 923bd4d39 11-14 17:17 `Merge branch 'main' into emurun` (-)
+- de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
+- bbee6b240 11-14 19:20 `Merge branch 'main' into survcal` (-)
+- 79993ee9a 11-14 19:15 `Merge agent/uic2: Merge branch 'main' into TASK-456` (uic2)
+- a63baa338 11-14 19:14 `Merge branch 'main' into TASK-456` (-)
+- d098d1799 11-14 19:08 `Merge agent/survreplay: Merge branch 'main' into TASK-458` (survreplay)
+- ae3074631 11-14 19:07 `Merge branch 'main' into TASK-458` (-)
+- 79fa5b547 11-14 18:58 `Merge agent/cut012: friends 0.1.2: per-archive game mounts (no key file), checklist fixes, restaged` (cut012)
+- cbc1dd7f5 11-14 18:57 `Merge branch 'main' into TASK-439` (-)
+- db23d7b67 11-14 18:56 `Merge agent/p03posted: Merge branch 'main' into p03posted` (p03posted)
+- 8484d3bb7 11-14 18:56 `Merge agent/verifyp03b: Merge branch 'main' into TASK-450` (verifyp03b)
 <!-- statusgen:end -->
