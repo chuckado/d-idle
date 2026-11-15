@@ -228,12 +228,11 @@ func (r *Runner) resetStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		return false
 	}
 	r.setResetState(ResetRejoining, "leaving the game and rejoining")
-	diff := difficultyName(snap.Player.Difficulty)
 	r.setWhy(WhyPlayerReset)
-	// ONE call site of the fresh game: once agent/farmloop merges (startFreshGame, internal/bot/farmreset.go) this closure becomes that call.
-	ok := r.do(ctx, c, StateRecovering, "Reset: leaving the game and rejoining", 5*time.Minute, "reset", r.newGameRun(func(ctx context.Context) error {
-		return r.d.Cycler.NewGame(ctx, diff)
-	}))
+	// the shared fresh-game call (task.go); it works from the field too, NewGame saves and leaves wherever the hero stands
+	ok := r.do(ctx, c, StateRecovering, "Reset: leaving the game and rejoining", 5*time.Minute, "reset", func(ctx context.Context) error {
+		return r.startFreshGame(ctx, snap)
+	})
 	switch {
 	case ok:
 		r.finishReset("done", "left the game and rejoined")

@@ -63,6 +63,8 @@
     background: var(--d-surface-0); outline: var(--d-bw) solid var(--d-line); }
   .cv .d-cells .cell { background: transparent; border-radius: 0; box-shadow: inset 0 0 0 var(--d-bw) var(--d-line); }
   .cv .d-cells .item { margin: 2px; border-radius: 2px; display: block; font-size: clamp(8.5px, calc(var(--u) * .19), 12px); line-height: 1.12; padding: 1px 2px; overflow-wrap: break-word; }
+  /* game art in the cell: the picture is the label (components.css sets font-size 0 for it, the cell font above must not win); the name is the tooltip */
+  .cv .d-cells .item[data-shown] { font-size: 0; padding: 0; }
   .cv .d-cells .item[data-usable="no"] { background: var(--d-surface-1); border-block-start-style: dotted; color: var(--d-text-3); }
   .cv .d-cells .item[data-who="merc"] { box-shadow: inset 0 0 0 1px var(--d-info); }
   .cv .d-cells .item[data-dim], .cv .d-slot2[data-dim] { opacity: .22; }
@@ -248,22 +250,44 @@
   /* his column is narrow beside a big hero doll: three values across, not four cut ones */
   @container mbox (max-width: 26rem) { .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); grid-auto-rows: 34px; } }
 
-  /* ---- narrow: two tabs (hero and mercenary; pack and stash), the bar wraps ---- */
+  .cv .cv-morebtn, .cv-morelist, .cv-errtoggle, .cv-selx, .cv .cv-beltlabel { display: none; }
+  .cv-errwrap { display: contents; }
+
+  /* ---- narrow: two tabs (hero and mercenary; pack and stash) ----
+     The hero tab is the fixed frame. The storage tab is a phone page (card uiphone, bug report 2026-11-15, a 412 px screen): the frame keeps
+     the header, the bar and the tabs, and the canvas under them scrolls with the thumb. Every grid takes the full width (the cell is the
+     width over the columns, never under 32 px), art cells show only the picture, the selected item is a bottom sheet with 44 px buttons,
+     the errands fold into one row, the bar is two rows (search and gold; a chip row that scrolls beside Repair and Sell). */
   @container cv (max-width: 700px) {
-    .cv { --cv-bar: 106px; --cv-tabs: 38px; --cv-p: 8px;
-      --u: round(down, min(calc((100vw - 2 * var(--cv-g) - 2 * var(--cv-p)) / 10), calc((100dvh - var(--cv-band) - var(--cv-bar) - var(--cv-tabs) - var(--cv-g) - 2 * var(--cv-p) - 3 * var(--cv-h) - 40px) / 13)), 1px); }
-    .cv > .d-band-status .d-links a:not(:first-child) { display: none; }
+    .cv { --cv-bar: 88px; --cv-tabs: 44px; --cv-p: 8px;
+      --u: round(down, calc((100vw - 2 * var(--cv-g) - 2 * var(--cv-p)) / 10), 1px); } /* the width sets the cell: both tabs scroll, so the height no longer limits it */
+    .cv > .d-band-status .d-links > a:not(:first-child) { display: none; }
     .cv > .d-band-status { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand links"; grid-template-rows: 100%; }
     .cv > .d-band-status .d-band-main { display: none; }
-    .cv-bar { flex-wrap: wrap; align-content: center; gap: 6px var(--cv-g); }
-    .cv-bar .cv-q { flex: 1 1 8rem; }
+    .cv .cv-morebtn { display: inline-flex; align-items: center; justify-content: center; min-inline-size: 44px; min-block-size: 36px; white-space: nowrap; }
+    .cv-morelist:not([hidden]) { display: flex; position: fixed; z-index: var(--d-z-sheet); inset-block-start: calc(var(--cv-band) + 4px); inset-inline-end: var(--cv-g); flex-direction: column; min-inline-size: 11rem; padding: 4px;
+      background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-2); }
+    .cv-morelist a { display: flex; align-items: center; min-block-size: 44px; padding: 0 var(--d-sp-4); color: var(--d-text); text-decoration: none; border-radius: var(--d-r-1); }
+    .cv-morelist a[aria-current] { color: var(--d-accent); font-weight: 650; }
+    .cv-morelist a:hover { background: var(--d-surface-3); }
+    .cv-bar { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; grid-template-rows: 36px 36px; align-content: center; gap: 6px var(--cv-g); }
+    .cv-bar > * { min-inline-size: 0; }
+    .cv-bar > .cv-q { grid-column: 1 / 3; grid-row: 1; inline-size: auto; block-size: 36px; font-size: var(--d-fs-1); }
+    .cv-bar > .cv-kv { grid-column: 3; grid-row: 1; justify-self: end; }
+    .cv-bar > .cv-sp, .cv-bar > .cv-opt { display: none; }
+    .cv-bar > .cv-chips { grid-column: 1; grid-row: 2; display: flex; align-items: center; gap: 6px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none;
+      mask-image: linear-gradient(to right, currentcolor calc(100% - 18px), transparent); }
+    .cv-bar .cv-chip { flex: none; block-size: 36px; padding: 0 14px; font-size: var(--d-fs-1); }
+    .cv-bar > .cv-repair { grid-column: 2; grid-row: 2; }
+    .cv-bar > .cv-sell { grid-column: 3; grid-row: 2; }
+    .cv-bar .cv-btn { block-size: 36px; }
+    .cv-bar .cv-btn[data-s] { font-size: 0; padding: 0 12px; }
+    .cv-bar .cv-btn[data-s]::before { content: attr(data-s); font-size: var(--d-fs-1); }
     .cv-chip .f { display: none; } .cv-chip .s { display: inline; }
-    .cv-bar .cv-opt { display: none; }
-    .cv-bar .cv-sp { display: none; }
     .cv-tabbar { display: flex; gap: var(--cv-g); padding: 0 var(--cv-g) var(--cv-g); }
-    .cv-tabbar button { flex: 1; block-size: 30px; font: inherit; font-size: var(--d-fs-1); color: var(--d-text-2); background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; }
+    .cv-tabbar button { flex: 1; block-size: calc(var(--cv-tabs) - var(--cv-g)); font: inherit; font-size: var(--d-fs-1); color: var(--d-text-2); background: var(--d-surface-0); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-2); cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .cv-tabbar button[aria-pressed="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
-    .cv-canvas { grid-template-columns: minmax(0, 1fr); }
+    .cv-canvas { grid-template-columns: minmax(0, 1fr); container: cvc / inline-size; }
     .cv-rules { display: none; }
     .cv[data-tab="hero"] .cv-slot[data-slot="store"], .cv[data-tab="pack"] .cv-slot[data-slot="who"] { display: none; }
     .cv-wear { grid-template-columns: minmax(0, 1fr); }
@@ -272,9 +296,61 @@
     .cv-mside { margin-block-start: 0; }
     [data-cv=msheet] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     [data-cv=msheet] > div:last-child:nth-child(3n+2) { grid-column: auto; }
-    .cv-store { grid-template-columns: calc(6 * var(--u)) minmax(0, 1fr); inline-size: 100%; }
     [data-cv=hsheet], .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 34px; }
+
+    /* the storage tab: one scrolling column */
+    .cv-canvas { overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; align-content: start; grid-auto-rows: max-content; scrollbar-width: none; }
+    .cv-zone { flex: 1 1 auto; overflow: visible; }
+    .cv-log { container: none; flex: none; }
+    .cv-log > [data-cv=queue] { flex: none; overflow: visible; }
+    .inv-merc, .cv-mbody, .cv-mextra { flex: none; min-block-size: auto; overflow: visible; }
+    .cv-mbody { grid-template-rows: auto auto; }
+    .cv[data-sheet="open"][data-tab="pack"] .cv-canvas { padding-block-end: calc(48dvh + var(--cv-g)); }
+    .cv-storez { --gw: calc(100cqi - 2 * var(--cv-p)); overflow: visible; padding-block-end: 12px; }
+    .cv-store, .cv-side { display: contents; container: none; }
+    .cv-storez > h2 { margin-block-start: 12px; }
+    .cv-hpack { order: 1; margin-block-start: 0; } [data-cv=pack] { order: 2; }
+    .cv .cv-beltlabel { display: flex; order: 3; } [data-cv=belt] { order: 4; }
+    .cv-hstash { order: 5; } [data-cv=stash] { order: 6; }
+    .cv-errwrap { display: block; order: 7; }
+    .cv .cv-side > .cv-lock { display: block; order: 8; margin-block-start: 8px; padding: 6px 8px; font-size: var(--d-fs-1); white-space: normal; overflow: visible; text-overflow: clip; }
+    .cv .cv-side > [data-cv=msg] { order: 9; white-space: normal; overflow: visible; text-overflow: clip; margin-block-start: 8px; }
+    .cv-storez .d-cells { margin-inline: auto; }
+    [data-cv=pack] { --u: round(down, calc(var(--gw) / 10), 1px); }
+    [data-cv=stash] { --u: round(down, calc(var(--gw) / 6), 1px); }
+    .cv .cv-side > [data-cv=belt] { inline-size: var(--gw); --cell-size: 44px; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: 44px; }
+    .cv .cv-side > [data-cv=belt] .item { font-size: var(--d-fs-0); }
+    .cv .cv-side > [data-cv=belt] .item[data-shown] { font-size: 0; }
+
+    /* town errands: one folded row, then two columns of 44 px controls */
+    .cv-errtoggle { display: flex; align-items: center; justify-content: space-between; box-sizing: border-box; inline-size: 100%; block-size: 44px; margin-block-start: 8px; padding: 0 14px; font: inherit; font-size: var(--d-fs-1);
+      color: var(--d-text); background: var(--d-surface-1); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); cursor: pointer; }
+    .cv-errtoggle::after { content: "+"; font-size: 1.3rem; }
+    .cv-errtoggle[aria-expanded="true"]::after { content: "\2212"; }
+    .cv-errwrap:not(:has(.inv-errands:not([hidden]))) .cv-errtoggle { display: none; }
+    .cv .cv-errwrap:not([data-open]) .inv-errands.inv-errands.inv-errands { display: none; }
+    .cv .cv-side .inv-errands { gap: 8px; padding-block: 8px 0; }
+    .cv .cv-side .inv-errands .err-n, .cv .cv-side .inv-errands .act { block-size: 44px; font-size: var(--d-fs-1); padding: 0 8px; }
+
+    /* the selected item: a bottom sheet, opened by a tap on a cell or a slot, closed by its cross, Escape or a tap elsewhere */
+    .cv .cv-sel { display: none; }
+    .cv[data-sheet="open"] .cv-sel { display: flex; position: fixed; inset-inline: 0; inset-block-end: 0; z-index: var(--d-z-sheet); box-sizing: border-box; max-block-size: 48dvh; padding: 6px 14px 0; gap: 6px;
+      overflow-y: auto; overscroll-behavior: contain; container: none; background: var(--d-surface-2); border: 0; border-block-start: var(--d-bw) solid var(--d-line-strong); border-radius: 16px 16px 0 0; box-shadow: var(--d-shadow-2); }
+    .cv-sel h3 { position: sticky; inset-block-start: 0; z-index: 1; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin: 0 -14px; padding: 2px 14px 4px; white-space: normal; overflow: visible; text-overflow: clip;
+      font-size: var(--d-fs-3); background: var(--d-surface-2); overflow-wrap: anywhere; }
+    .cv-selx { display: inline-flex; align-items: center; justify-content: center; flex: none; inline-size: 44px; block-size: 44px; margin: -4px -8px -4px 0; padding: 0; font: inherit; font-size: 1.7rem; line-height: 1; color: var(--d-text-2);
+      background: transparent; border: 0; cursor: pointer; }
+    .cv-sel p { white-space: normal; overflow: visible; text-overflow: clip; font-size: var(--d-fs-1); }
+    .cv-sel .cv-why p, .cv-sel .cv-qrows p { display: block; -webkit-line-clamp: none; line-clamp: none; }
+    .cv-sel .cv-qrows p { display: flex; }
+    .cv-sel .cv-props { flex: none; overflow: visible; }
+    .cv-sel .cv-qrows p button { block-size: 36px; padding: 0 12px; }
+    .cv-sel .cv-acts { position: sticky; inset-block-end: 0; z-index: 1; grid-template-columns: repeat(auto-fit, minmax(7rem, 1fr)); grid-auto-rows: minmax(44px, auto); gap: 8px; margin: auto -14px 0; padding: 8px 14px max(8px, env(safe-area-inset-bottom));
+      overflow: visible; background: var(--d-surface-2); border-block-start: var(--d-bw) solid var(--d-line); }
+    .cv-sel .cv-acts button { font-size: var(--d-fs-1); white-space: normal; overflow: visible; text-overflow: clip; padding: 4px 8px; min-block-size: 44px; }
   }
+  @container cv (max-width: 400px) { .cv-tabbar button { font-size: var(--d-fs-0); padding: 0 4px; } [data-cv=hsheet], .cv-wear[data-solo] [data-cv=hsheet] { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @container cv (max-width: 430px) { .cv > .d-band-status .d-brand h1 { display: none; } .cv > .d-band-status .d-brand { padding: 3px 4px; } }
 }
 
 @layer utilities {

@@ -87,10 +87,12 @@ type ladderOptions struct {
 	// for the bestiary; nil (no game tables): flavour-only cards.
 	riskFacts                              func(zone string) watch.RiskFacts
 	monsters                               watch.MonsterTables
-	readiness                              http.Handler          // GET /api/readiness (readywire.go); nil: none
-	danger                                 http.Handler          // GET /api/danger (dangerwire.go); nil: none
-	explored                               watch.ExploredSource  // the explored share of /api/hero (Runner.Explored); nil: none
-	heroStats                              watch.HeroStatsSource // the stats block of /api/hero (readywire.go); nil: none
+	readiness                              http.Handler // GET /api/readiness (readywire.go); nil: none
+	danger                                 http.Handler // GET /api/danger (dangerwire.go); nil: none
+	farmReset                              func() int
+	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
+	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
 	awayMin, repeatCooldownMin, quietAfter int
 }
 
@@ -277,6 +279,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		hub.SetHeroStatsSource(l.heroStats)
 		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
+		hub.SetFarmResetSource(l.farmReset)
+		if l.knobs != nil && l.knobValue != nil {
+			rig.Fun.ZoneClear = &watch.ZoneClear{Value: l.knobValue, Set: l.knobs}
+		}
 		bindRepair(rig.Fun, l.repair, l.farm)
 		if l.pause != nil {
 			rig.Fun.Pause = watch.NewPauseAPI()

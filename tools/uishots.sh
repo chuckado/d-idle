@@ -13,7 +13,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0 pq=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -29,6 +29,7 @@ while [ $# -gt 0 ]; do
 	--theme) theme=$2; shift 2 ;;
 	--fx) fx=$2; shift 2 ;;
 	--tag) tag=$2-; shift 2 ;;
+	--pq) pq="$pq%26$(printf %s "$2" | sed 's/&/%26/g')"; shift 2 ;;
 	--click) extra="$extra&click=$(printf %s "$2" | sed 's/_/ /g; s/#/%23/g; s/\[/%5B/g; s/\]/%5D/g; s/|/%7C/g')"; shift 2 ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
@@ -84,7 +85,7 @@ if [ "$char" = 1 ]; then
 		w=${sz%x*} h=${sz#*x}
 		prof=$(mktemp -d)
 		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}&w=$w&h=$h$extra" >/dev/null 2>&1
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}$pq&w=$w&h=$h$extra" >/dev/null 2>&1
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
@@ -128,6 +129,7 @@ if [ "$fit" = 1 ]; then
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
 	# the default page also at the window sizes between the phone and the wide cockpit (the Electron viewer opens /watch in any of them)
 	midsizes="1024x768 900x700 1279x720"
+	phonesizes="412x780 393x700 360x640 412x890 390x844"
 	# name, query, and an optional selector to press before the second measurement (the "..." sheet must be hittable)
 	pages="default watch?first=0&theme=dark
 default-light watch?first=0&theme=light
@@ -172,6 +174,8 @@ sentence-popover watch?layout=cockpit&theme=dark&needs=2&glance=full,paused [dat
 journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
 needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
+zoneclear-rail watch?layout=cockpit-zoneclear&theme=dark&needs=2
+zoneclear-rail-light watch?layout=cockpit-zoneclear&theme=light&needs=2
 orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=0&cmd=eight
 orders-rail-all watch?layout=cockpit-orders&theme=dark&needs=0&cmd=cancel-all
 orders-empty watch?layout=cockpit&theme=dark&cmd=empty
@@ -234,9 +238,22 @@ character-deadmerc-light watch/inventory?theme=light&fx=deadmerc
 character-longnames watch/inventory?theme=dark&fx=longnames
 character-longnames-light watch/inventory?theme=light&fx=longnames
 character-pending watch/inventory?theme=dark&fx=pending&tab=pack expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=item-10][data-pending=equip]
-character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack] #belt,#cv-sel,#errands
+character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack]|?#pack_[data-key=item-10] #belt,#cv-sel
 character-tip-light watch/inventory?theme=light hover=[data-key=item-16]
-character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]"
+character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]
+character-phone watch/inventory?theme=dark&fx=phone&tab=pack
+character-phone-light watch/inventory?theme=light&fx=phone&tab=pack
+character-phone-sheet watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
+character-phone-sheet-light watch/inventory?theme=light&fx=phone&tab=pack&sheet=1 expect=.cv-acts>button
+character-phone-errands watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-errtoggle #errands,#stashgold
+character-phone-menu watch/inventory?theme=dark&fx=phone&tab=pack ?#cv-more .cv-morelist_a
+character-phonehero watch/inventory?theme=dark
+phonedefect-label watch/inventory?theme=dark&fx=phone&tab=pack&defect=label
+phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=acts
+phonedefect-cutchips watch/inventory?theme=dark&fx=phone&tab=pack&defect=cutchips
+phonedefect-lock watch/inventory?theme=dark&fx=phone&tab=pack&defect=lock
+phonedefect-hover watch/inventory?theme=dark&fx=phone&tab=pack&defect=hover
+phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -244,6 +261,9 @@ character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=
 		case $pname in
 		default | default-light) szs="$sizes $midsizes" ;;
 		reset-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
+		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
+		phonedefect-*) szs="412x780 360x640" ;;
+		character-phone*) szs="$phonesizes" ;;
 		esac
 		for sz in $szs; do
 			w=${sz%x*} h=${sz#*x} ck=

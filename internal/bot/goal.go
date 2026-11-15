@@ -164,6 +164,7 @@ func (r *Runner) forgetGame() {
 	l.needBuff = true
 	l.stepArea = 0
 	l.waitNote = false
+	l.farm.forgetVisit()
 	// F1: a belt refusal from the last game (sticky belt-full mark) does not hold in the new one
 	if bf, ok := r.d.Town.(interface{ ForgetBelt() }); ok {
 		bf.ForgetBelt()
@@ -808,6 +809,9 @@ func difficultyName(d d2.Difficulty) string {
 // target returns the area to work in (and publishes it for the guard).
 func (r *Runner) target(s *d2.Snapshot, c control) (int, bool) {
 	a, ok := r.target0(s, c)
+	if ok {
+		a = r.farmReturn(s, c, a)
+	}
 	// A target whose walk crosses a banned area is no target: skip it until that ban ends and pick the next best one.
 	for try := 0; ok && try < 8; try++ {
 		b, until := r.routeBan(s, a)
@@ -1282,6 +1286,9 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 	radius := r.e.Tune.Bot.ClearRadius
 	name := r.areaName(area)
 	r.noteArea(area)
+	if l.levelSlice {
+		r.farmNote(area)
+	}
 	if l.needBuff {
 		l.needBuff = false
 		if err := r.d.Fighter.Buff(ctx); err != nil {
@@ -1346,7 +1353,7 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 		// shows up on the way ends the leg too (goldprio): the next pass picks it up before the roam goes on.
 		goldStop := false
 		if err := r.d.Mover.Explore(ctx, func() bool {
-			if hostile() || r.emptyAreaLeave(area) || r.exploredEnough(area) {
+			if hostile() || r.emptyAreaLeave(area) || r.farmResetDue(area) || r.exploredEnough(area) {
 				return true
 			}
 			goldStop = r.goldInReach(radius)
@@ -1357,6 +1364,9 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 				return nil
 			}
 			return fmt.Errorf("explore: %w", err)
+		}
+		if l.farm.pending == area {
+			return nil // the farm loop ends the roam: LevelTo takes the fresh game next
 		}
 		if goldStop && !hostile() {
 			return nil // the sweep is called again and its pickup takes the pile

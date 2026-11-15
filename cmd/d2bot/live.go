@@ -166,6 +166,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	o.ladder.knobs = knobSetter(tuner)
+	o.ladder.knobValue = tuner.Value
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(gameDir, o.data, db)
@@ -179,6 +180,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.danger = wireDanger(db)
 	o.ladder.heroStats = heroStats(runner)
 	o.ladder.explored = runner.Explored
+	o.ladder.farmReset = runner.FarmResetShare
 	if db != nil {
 		o.ladder.monsters = db
 	}
