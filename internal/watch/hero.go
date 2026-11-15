@@ -70,10 +70,30 @@ type ExploredSource func() (visited, total, pct, threshold int, ok bool)
 func (h *Hub) SetExploredSource(f ExploredSource) { h.mu.Lock(); h.explored = f; h.mu.Unlock() }
 
 // HeroStats are the hero's defences: the resistances as the game shows them and, when the readiness model is on, its
-// light for the area the hero is in. No defence rating: the bot does not read one.
+// light for the area the hero is in. Defense and damage are optional (uic3).
 type HeroStats struct {
 	Resists   HeroResists    `json:"resists"`
 	Readiness *HeroReadiness `json:"readiness"`
+	// The four fields below are additive (uic3) and each is absent when the backend does not read it; a value is never
+	// made up. Defense is stat 31 (U live: docs/survival/power.md), Damage the stat 21/22 sum of the items and skills
+	// (the weapon's own base damage is not in it).
+	Attrs   *HeroAttrs  `json:"attrs,omitempty"`
+	Defense *int        `json:"defense,omitempty"`
+	Damage  *HeroDamage `json:"damage,omitempty"`
+}
+
+// HeroAttrs are the four attributes as the character panel shows them (base plus gear).
+type HeroAttrs struct {
+	Str    int `json:"str"`
+	Dex    int `json:"dex"`
+	Vit    int `json:"vit"`
+	Energy int `json:"energy"`
+}
+
+// HeroDamage is the damage range the stat list carries (min and max, both from stats 21 and 22).
+type HeroDamage struct {
+	Min int `json:"min"`
+	Max int `json:"max"`
 }
 
 // HeroResists are the four resistances in percent.

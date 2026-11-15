@@ -1,0 +1,11 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "War Cap"
+  div.tip-line [data-k=prop] "Defense: 14"
+  div.tip-where [data-k=where] "In the pack"
+  div.tip-sec [data-ok=n data-who=hero]
+    div.tip-hd [] "You"
+    div.tip-req [data-ok=n] "✗ Level 9 (7)  2 short"
+  div.tip-sec [data-ok=y data-who=merc]
+    div.tip-hd [] "Desert Guard 14"
+    div.tip-req [data-ok=y] "✓ Level 9"
+  div.tip-hint [] "Right-click: all actions."
