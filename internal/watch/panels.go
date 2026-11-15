@@ -40,6 +40,9 @@ type PanelManifest struct {
 	OptIn bool `json:"optIn,omitempty"`
 	// Slot: the panel renders into a fixed box and may sit in a cockpit slot (layout.go LayoutSlots).
 	Slot bool `json:"slot,omitempty"`
+	// CockpitOnly: the panel belongs to the cockpit template alone (its band is the cockpit's); a free-grid layout that names it
+	// keeps the panel it names as fallback, so those layouts render as they did before the panel existed (web/layout.js).
+	CockpitOnly bool `json:"cockpitOnly,omitempty"`
 	// Scroll: a slot panel that holds a list longer than its box declares it; only then is a data-scroll element in the panel
 	// accepted by the fit check (tools/uishots), and it must really scroll (overflow-y auto or scroll).
 	Scroll bool   `json:"scroll,omitempty"`

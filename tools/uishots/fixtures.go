@@ -83,7 +83,7 @@ func fxLayout(name string) map[string]any {
 	return map[string]any{
 		"schema": "watch.layout/1", "cols": 12, "rowHeight": 48, "density": "dense", "theme": "dark", "template": "cockpit/1",
 		"slots": map[string]any{
-			"band": []string{"hero-meters"}, "stage": "video",
+			"band": []string{"statusline", "hero-meters", "needs-count"}, "stage": "video",
 			"strip": []string{"fx-progress", "fx-journey", "fx-health"}, "rail": rail,
 			"railWide": wide, "phoneTabs": tabs,
 		},
@@ -104,7 +104,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 		switch {
 		case p == "/__fit":
 			fitHarness(w, r)
-		case p == "/watch" && r.URL.Query().Get("fitframe") == "1":
+		case (p == "/watch" || p == "/watch/inventory") && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
 		case p == "/__fit/fit.js":
 			serveFitJS(w, r)

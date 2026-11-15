@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log/slog"
 	"net/http"
 
 	"d2lod-bot/internal/danger"
@@ -14,14 +13,8 @@ func wireDanger(db *data.DB) http.Handler {
 	if db == nil {
 		return nil
 	}
-	ov, err := danger.ShippedOverrides()
-	if err != nil {
-		slog.Warn("danger: bad overrides", "err", err)
-		return nil
-	}
-	t, err := danger.Build(db, danger.DefaultParams(), ov)
-	if err != nil {
-		slog.Warn("danger: no profile", "err", err)
+	t := dangerTable(db)
+	if t == nil {
 		return nil
 	}
 	return danger.Handler(t)

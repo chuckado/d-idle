@@ -1,0 +1,53 @@
+{
+  "health": {
+    "gear": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "life": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "merc": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "readiness": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "supplies": {
+      "light": "unknown",
+      "word": "unknown"
+    }
+  },
+  "needs": [],
+  "progress": {
+    "goldPerHour": null,
+    "goldSeries": [],
+    "level": {
+      "etaSeconds": null,
+      "from": 0,
+      "pct": null,
+      "to": 0
+    },
+    "xpPerHour": null,
+    "xpSeries": []
+  },
+  "schema": "watch.glance/1",
+  "sentence": {
+    "place": "",
+    "reason": "for the bot's first report",
+    "tone": "info",
+    "uptime": "",
+    "voice": "",
+    "why": {
+      "change": "Life under my retreat line sends me to town; an order from you ends the fight sooner.",
+      "code": "fight",
+      "next": "No order from you: the hero follows its own plan.",
+      "now": "Fighting in Cold Plains, my life is 72%."
+    },
+    "word": "Waiting"
+  },
+  "seq": 3
+}

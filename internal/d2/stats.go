@@ -25,6 +25,7 @@ const (
 	StatColdRes    = 43
 	StatPoisonRes  = 45
 	StatMagicRes   = 37
+	StatArmorClass = 31 // defence, stat id of ItemStatCost "armorclass" (S: D2BS list; read via the d2d dump stats.defense, U live)
 	StatDmgReduce  = 36
 	StatMagicFind  = 80
 )
