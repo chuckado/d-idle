@@ -152,7 +152,7 @@ export function mount(root, ctx) {
   }
 
   // ---- the menu ----
-  const line = (cls, text, tone) => { const e = el('div', 'zm-l ' + cls, text); if (tone) e.dataset.tone = tone; return e; };
+  const line = (cls, text, tone) => { const e = el('div', 'zm-l ' + cls, text); e.title = text; if (tone) e.dataset.tone = tone; return e; };
   const btn = (text, key, primary, fn) => {
     const b = ctx.ui.btn(text, { size: 'sm' });
     b.dataset.key = key;
@@ -186,10 +186,10 @@ export function mount(root, ctx) {
     const head = el('div', 'zm-mh'), x = el('button', 'zm-x', '×');
     x.type = 'button'; x.setAttribute('aria-label', 'Close the zone menu'); x.dataset.key = 'menu-close';
     x.addEventListener('click', close);
-    head.append(el('b', 'zm-mt', n.name), x);
+    const mt = el('b', 'zm-mt', n.name);
+    mt.title = [n.name, n.range ? n.range.replace('clvl', 'level') : '', n.why].filter(Boolean).join(' - ');
+    head.append(mt, el('span', 'zm-rg', n.range ? n.range.replace('clvl', 'level') : ''), x);
     menu.appendChild(head);
-    const sub = [n.range ? n.range.replace('clvl', 'level') : '', n.why].filter(Boolean).join(' - ');
-    if (sub) menu.appendChild(line('zm-sub', sub));
     const route = routeTo(nodes(), st.view.edges || [], st.view.town, n.id).map((id) => (node(id) || {}).name).filter(Boolean);
     if (route.length > 1) menu.appendChild(line('zm-route', 'Route: ' + route.join(' > ')));
     if (s.failed) menu.appendChild(line('zm-warn', 'The last order here failed' + (s.failedWhy ? ': ' + s.failedWhy : ''), 'bad'));
@@ -204,7 +204,7 @@ export function mount(root, ctx) {
       return;
     }
     const hard = !!s.hard;
-    if (hard) menu.appendChild(line('zm-warn', 'Too hard now: ' + (s.hardWhy || 'the hero says no') + '. The hero keeps the last word.', 'warn'));
+    if (hard) menu.appendChild(line('zm-warn', 'Too hard now: ' + (s.hardWhy || 'the hero says no'), 'warn'));
     else if (n.advice) menu.appendChild(line('zm-warn', n.advice, 'warn'));
     menu.appendChild(chips(drawMenu));
     const col = el('div', 'zm-col');

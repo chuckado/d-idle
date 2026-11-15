@@ -105,6 +105,7 @@ function toast(sev, text, act) {
 function tileSheet(id, root, where) {
   const sheet = el('div', 'd-tilesheet');
   sheet.dataset.panel = id;
+  sheet.dataset.scroll = '1'; // a sheet taller than its tile scrolls inside it
   sheet.hidden = true;
   const shows = (t) => { if (!t || t.hidden || t.dataset.off || t === root) return null; const r = t.getBoundingClientRect(); return r.width > 40 && r.height > 40 ? r : null; };
   const host = () => {

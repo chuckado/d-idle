@@ -195,10 +195,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -309,10 +309,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -422,7 +422,8 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=town,sel=camp}
   div.zm-mh
-    b.zm-mt "Rogue Encampment"
+    b.zm-mt "Rogue Encampment" title="Rogue Encampment"
+    span.zm-rg
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
   div.zm-col
     button.d-btn {key=town,primary=1,size=sm} "Rest in town"
@@ -530,11 +531,11 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
   div.zm-mh
-    b.zm-mt "Forgotten Tower"
+    b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
+    span.zm-rg "level 15-22"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 15-22 - the Countess' runes; a long chain, no waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
-  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15. The hero keeps the last word."
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
+  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15" title="Too hard now: no mercenary and clvl 7 is below 15"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -645,11 +646,11 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
   div.zm-mh
-    b.zm-mt "Tower Cellars 1-5"
+    b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
+    span.zm-rg "level 15-22"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 15-22 - the Countess is on level 5"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
-  div.zm-l.zm-note "Not orderable yet."
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
+  div.zm-l.zm-note "Not orderable yet." title="Not orderable yet."
 == menu-failed sorceress
 div.d-slotbody
   div.zm
@@ -750,12 +751,12 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bg}
   div.zm-mh
-    b.zm-mt "Burial Grounds"
+    b.zm-mt "Burial Grounds" title="Burial Grounds - level 8-14 - Blood Raven and her archers shoot from range"
+    span.zm-rg "level 8-14"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 8-14 - Blood Raven and her archers shoot from range"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds"
-  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down"
-  div.zm-l.zm-warn {tone=warn} "Advice, not a guard: veterans go here from clvl 8."
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds"
+  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down" title="The last order here failed: the hero's guard turned it down"
+  div.zm-l.zm-warn {tone=warn} "Advice, not a guard: veterans go here from clvl 8." title="Advice, not a guard: veterans go here from clvl 8."
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -866,10 +867,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -878,8 +879,8 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
     button.d-btn {key=dur-0,size=sm} "Until I cancel"
   div.zm-col
     button.d-btn {key=go,primary=1,size=sm} "Go now"
-    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once."
-    div.zm-l.zm-teaser "Queue: Finish three loop rounds."
+    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once." title="Loop: Send the hero out, then repair its gear yourself once."
+    div.zm-l.zm-teaser "Queue: Finish three loop rounds." title="Queue: Finish three loop rounds."
 == menu-queue-full sorceress
 div.d-slotbody
   div.zm
@@ -980,10 +981,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -994,7 +995,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
     button.d-btn {key=go,primary=1,size=sm} "Go now"
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue" disabled=true
-    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil."
+    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil." title="2 of 2 waiting; the next slot: Clear the Den of Evil."
 == menu-no-ladder sorceress
 div.d-slotbody
   div.zm
@@ -1095,10 +1096,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -1110,10 +1111,10 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
 == menu-loop-open sorceress
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -1338,10 +1339,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -1452,10 +1453,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=sf}
   div.zm-mh
-    b.zm-mt "Stony Field"
+    b.zm-mt "Stony Field" title="Stony Field - level 10-16 - open ground, easy to path"
+    span.zm-rg "level 10-16"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 10-16 - open ground, easy to path"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -1565,7 +1566,8 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=town,sel=camp}
   div.zm-mh
-    b.zm-mt "Rogue Encampment"
+    b.zm-mt "Rogue Encampment" title="Rogue Encampment"
+    span.zm-rg
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
   div.zm-col
     button.d-btn {key=town,primary=1,size=sm} "Rest in town"
@@ -1673,11 +1675,11 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
   div.zm-mh
-    b.zm-mt "Forgotten Tower"
+    b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
+    span.zm-rg "level 15-22"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 15-22 - the Countess' runes; a long chain, no waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
-  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15. The hero keeps the last word."
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
+  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15" title="Too hard now: no mercenary and clvl 7 is below 15"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -1788,11 +1790,11 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
   div.zm-mh
-    b.zm-mt "Tower Cellars 1-5"
+    b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
+    span.zm-rg "level 15-22"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 15-22 - the Countess is on level 5"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
-  div.zm-l.zm-note "Not orderable yet."
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
+  div.zm-l.zm-note "Not orderable yet." title="Not orderable yet."
 == menu-failed paladin
 div.d-slotbody
   div.zm
@@ -1893,11 +1895,11 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=dungeon,sel=crypt}
   div.zm-mh
-    b.zm-mt "Crypt"
+    b.zm-mt "Crypt" title="Crypt - level 8-14 - small, a chest"
+    span.zm-rg "level 8-14"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 8-14 - small, a chest"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds > Crypt"
-  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds > Crypt" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds > Crypt"
+  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down" title="The last order here failed: the hero's guard turned it down"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2008,10 +2010,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2020,8 +2022,8 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
     button.d-btn {key=dur-0,size=sm} "Until I cancel"
   div.zm-col
     button.d-btn {key=go,primary=1,size=sm} "Go now"
-    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once."
-    div.zm-l.zm-teaser "Queue: Finish three loop rounds."
+    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once." title="Loop: Send the hero out, then repair its gear yourself once."
+    div.zm-l.zm-teaser "Queue: Finish three loop rounds." title="Queue: Finish three loop rounds."
 == menu-queue-full paladin
 div.d-slotbody
   div.zm
@@ -2122,10 +2124,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2136,7 +2138,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
     button.d-btn {key=go,primary=1,size=sm} "Go now"
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue" disabled=true
-    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil."
+    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil." title="2 of 2 waiting; the next slot: Clear the Den of Evil."
 == menu-no-ladder paladin
 div.d-slotbody
   div.zm
@@ -2237,10 +2239,10 @@ div.d-slotbody
 -- menu
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2252,10 +2254,10 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == menu-loop-open paladin
 div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-mh
-    b.zm-mt "Blood Moor"
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 1-8 - safe first xp"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2308,10 +2310,10 @@ div.d-slotbody
 == menu-charter
 div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-mh
-    b.zm-mt "Cold Plains"
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
     button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
-  div.zm-l.zm-sub "level 6-12 - open ground, waypoint"
-  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
   div.zm-chips
     button.d-btn {key=dur-10,size=sm} "10 min"
     button.d-btn {key=dur-20,size=sm} "20 min"
@@ -2323,5 +2325,5 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue"
   div.zm-charter
-    div.zm-l.zm-warn {tone=warn} "Above your range. Charter: 20 tally. Above range."
+    div.zm-l.zm-warn {tone=warn} "Above your range. Charter: 20 tally. Above range." title="Above your range. Charter: 20 tally. Above range."
     button.d-btn {key=charter,primary=1,size=sm} "Pay and go"

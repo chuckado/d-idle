@@ -14,6 +14,7 @@
   "skeleton": 0,
   "slot": true,
   "fit": true,
+  "scroll": true,
   "optIn": true,
   "cockpitOnly": true,
   "switchWith": "area-map",
