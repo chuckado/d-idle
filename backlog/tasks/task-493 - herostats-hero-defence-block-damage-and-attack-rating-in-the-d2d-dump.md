@@ -1,10 +1,11 @@
 ---
 id: TASK-493
 title: 'herostats: hero defence, block, damage and attack rating in the d2d dump'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T11:53:00Z'
+updated_date: '2026-11-15T12:21:00Z'
 labels:
   - bot
   - feature
