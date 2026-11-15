@@ -4,14 +4,15 @@ div [] "1,240"
 ## cv-stashgold
 div [] "5,300"
 ## cv-sell
-div [] "Sell marked (2)" title="Walk home and sell the items marked for sale"
+div [data-s=Sell (2)] "Sell marked (2)" title="Walk home and sell the items marked for sale"
 ## cv-repair
-div [data-action=request] "Repair 180 g" title="Short Staff is broken."
+div [data-action=request data-s=Repair 180 g] "Repair 180 g" title="Short Staff is broken."
 ## cv-sets
 div [data-sig=16ur44f] hidden
 ## cv-sel
 div [data-sig=wp7oms]
   h3.q-magic [] "War Staff" title="War Staff"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad data-who=hero] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="You: a two-handed weapon and a shield cannot be worn together; take the other one off first"

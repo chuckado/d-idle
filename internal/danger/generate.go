@@ -170,6 +170,7 @@ func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool 
 			Dps: round2(dmg * hc / period), Reach: "melee", Speed: m.Run, Group: [2]int{m.MinGrp, m.MaxGrp}, Hazards: hazardsOf(m, d, p)}
 		if m.Ranged {
 			mon.Reach = "ranged"
+			mon.Unblockable = unblockable[strings.ToLower(m.Key)]
 			rangedShare += mon.Share
 		} else {
 			meleeShare += mon.Share
@@ -183,9 +184,19 @@ func buildZone(db *data.DB, byKey map[string]*data.Monster, l *data.Level, pool 
 	if !ok {
 		return nil, fmt.Errorf("danger: area %d %q: no units factor for level type %d", l.ID, name, l.DrlgType)
 	}
-	tiles := float64(l.SizeX[d] * l.SizeY[d])
 	z.Density.Units = round2(float64(l.MonDen[d]) * groupMean * k)
-	if tiles > 0 {
+	if u, ps, ok := p.AreaUnits.Row(l.ID, DiffNames[d]); ok {
+		z.Density.Units, z.Density.PerScreen = round2(u), round2(ps)
+		z.Source["density"] = TagV
+	} else if p.AreaUnits != nil {
+		// Levels.txt sizes are not the real areas (200 x 200 for every maze): the per-screen density comes from the
+		// fitted units per tile instead. Not measured outside Normal Acts 1 and 2 (U there).
+		ps, err := p.AreaUnits.PerScreen(l.DrlgType, l.MonDen[d])
+		if err != nil {
+			return nil, fmt.Errorf("danger: area %d %q: %w", l.ID, name, err)
+		}
+		z.Density.PerScreen = round2(ps)
+	} else if tiles := float64(l.SizeX[d] * l.SizeY[d]); tiles > 0 {
 		z.Density.PerScreen = round2(z.Density.Units / tiles * p.ScreenTiles)
 	}
 	typ := max(1, int(math.Round(groupMean)))

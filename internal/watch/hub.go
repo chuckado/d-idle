@@ -70,20 +70,21 @@ type extra struct {
 // Hub is safe for concurrent use. Lock order: the store's lock, then the Hub's (store events call in), so no Hub
 // method holds its own lock while it calls the store.
 type Hub struct {
-	cfg      Config
-	base     time.Duration
-	video    *Video                            // nil: no game video
-	cur      atomic.Pointer[currency.Wallet]   // nil: no currencies (vanilla; internal/watch/currency.go)
-	placer   atomic.Pointer[placerBox]         // nil: orders go straight to Give (no charter sink)
-	why      *Whyline                          // the reason line (whyline.go)
-	onClass  func()                            // run when the hero's class becomes known (OnClass); guarded by mu
-	stats    HeroStatsSource                   // defences for /api/hero (SetHeroStatsSource); guarded by mu
-	survival survivalHolder                    // the survival shadow choice for /api/survival (SetSurvivalSource); lock-free
-	layout   layoutStore                       // the layout manifest in force (layout.go); its own mutex
-	explored ExploredSource                    // zone coverage for /api/hero (SetExploredSource); guarded by mu
-	gold     GoldSource                        // gold for /api/hero (SetGoldSource); guarded by mu
-	ladder   atomic.Pointer[func() *MapLadder] // the Loop and queue state the act map shows (SetMapLadder)
-	gl       glanceState                       // sources and sample ring of /api/glance (glance.go); its own mutex
+	cfg       Config
+	base      time.Duration
+	video     *Video                            // nil: no game video
+	cur       atomic.Pointer[currency.Wallet]   // nil: no currencies (vanilla; internal/watch/currency.go)
+	placer    atomic.Pointer[placerBox]         // nil: orders go straight to Give (no charter sink)
+	why       *Whyline                          // the reason line (whyline.go)
+	onClass   func()                            // run when the hero's class becomes known (OnClass); guarded by mu
+	stats     HeroStatsSource                   // defences for /api/hero (SetHeroStatsSource); guarded by mu
+	survival  survivalHolder                    // the survival shadow choice for /api/survival (SetSurvivalSource); lock-free
+	layout    layoutStore                       // the layout manifest in force (layout.go); its own mutex
+	farmReset func() int                        // the farm loop's reset share for /api/hero (SetFarmResetSource); guarded by mu
+	explored  ExploredSource                    // zone coverage for /api/hero (SetExploredSource); guarded by mu
+	gold      GoldSource                        // gold for /api/hero (SetGoldSource); guarded by mu
+	ladder    atomic.Pointer[func() *MapLadder] // the Loop and queue state the act map shows (SetMapLadder)
+	gl        glanceState                       // sources and sample ring of /api/glance (glance.go); its own mutex
 
 	mu      sync.Mutex
 	seq     uint64
