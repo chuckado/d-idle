@@ -15,4 +15,7 @@
   [data-panel="statusline"] dt { color: var(--d-text-3); font-size: var(--d-fs-0); text-transform: uppercase; letter-spacing: .08em; padding-block-start: 2px; }
   [data-panel="statusline"] dd { margin: 0; color: var(--d-text); }
   [data-panel="statusline"] .more { display: inline-block; margin-block-start: var(--d-sp-2); color: var(--d-accent-text); font-size: var(--d-fs-0); }
+  /* the phone's band gives the sentence two lines, so the reason is not cut after eight characters */
+  [data-panel="statusline"]:is([data-cmode="phone"] *) .line { align-items: flex-start; }
+  [data-panel="statusline"]:is([data-cmode="phone"] *) .txt { white-space: normal; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
 }

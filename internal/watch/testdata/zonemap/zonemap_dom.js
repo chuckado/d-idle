@@ -9,7 +9,7 @@ const dir = process.argv[2];
 const calls = [];
 let reply = { ok: true };
 const sendCommand = (ctx, intent, args, mode) => { calls.push({ intent, args, mode }); return Promise.resolve(reply); };
-const P = load(path.join(dir, 'zone-map', 'panel.js'), { sendCommand, document: { addEventListener() {} }, ResizeObserver: undefined });
+const P = load(path.join(dir, 'zone-map', 'panel.js'), { sendCommand, replacing: () => 0, document: { addEventListener() {} }, ResizeObserver: undefined });
 const fx = (n) => JSON.parse(fs.readFileSync(path.join(__dirname, n), 'utf8'));
 
 function node(tag, cls, text) {

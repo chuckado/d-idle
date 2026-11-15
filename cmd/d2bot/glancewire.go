@@ -25,6 +25,7 @@ var glanceExtra []func(*watch.GlanceSources, glanceDeps)
 type glanceDeps struct {
 	Status  func() goals.Status
 	Chapter func() string
+	Pause   func() string // the player pause state (bot.PauseRunning, PauseGoingHome, PausePaused)
 }
 
 // useGlance binds the bot's sources to the Hub. No rig, no Hub or no runner: nothing (the lights stay "unknown").
@@ -40,7 +41,8 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, 
 		Merc:     glanceMerc(mercAPIAdapter{}.view),
 		Supplies: glanceSupplies(r.LastSnapshot, cat, db, levelerBuild),
 	}
-	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) }}
+	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) },
+		Pause: func() string { return r.PlayerPauseView().State }}
 	for _, f := range glanceExtra {
 		f(&src, deps)
 	}

@@ -14,7 +14,7 @@
   "skeleton": 0,
   "slot": true,
   "switchWith": "zone-map",
-  "switchLabel": "Area map",
+  "switchLabel": "Area",
   "fit": true,
   "optIn": true,
   "cockpitOnly": true,

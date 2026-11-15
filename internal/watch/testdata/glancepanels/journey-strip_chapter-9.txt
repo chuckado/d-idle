@@ -50,3 +50,6 @@
         <dt> "9"
         <dd> "ch9 (current)"
       <p class="jr-next"> "Level 7 is under the floor of 9."
+      <span class="jr-acts jr-pacts">
+        <button class="jr-btn jr-p" data-key="pact-0" type="button"> "Go now"
+        <button class="jr-btn" data-key="pact-1" type="button"> "Hold"
