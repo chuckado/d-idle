@@ -182,6 +182,7 @@ type Runner struct {
 	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
+	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int
 	panicTimes     []time.Time // recovered panics inside PanicWindow, guarded by mu
@@ -482,6 +483,10 @@ func (r *Runner) Resume() error {
 		r.selfStop, r.message = false, ""
 	}
 	r.autoResumeAt = time.Time{}
+	if r.plp.want { // the manager's Resume ends the player's pause too
+		r.plp.want, r.plp.held, r.plp.reason, r.plp.since = false, false, "", time.Time{}
+		r.plp.save()
+	}
 	return nil
 }
 
