@@ -22,3 +22,7 @@ Before: bot 0.0.261114180251, image devp7, container healthy. Rollback: `tools/d
 ## Not done
 
 - Watch UI HTTP checks (/watch layouts, X-Layout-Source, /api/*) and the screenshots at 1914x930, 1280x620 and 390x844: the watch screen needs its access token, even on loopback, and using that token was refused by the permission system. U. Ready-to-run list for a session with the token: GET /watch (cockpit/1), ?layout=classic|standard|simple|overlay (200 plus X-Layout-Source), /api/glance, commands, pause, survival, merc, hero, inventory, danger; then headless chromium screenshots on the builder at the three sizes. GET only.
+
+## Redeploy 2, origin/main 16e3e3225 (character-screen fixes)
+
+V: `UPDATED d2play-20261108 0.0.261115105052 -> 0.0.261115113025`. The first two attempts were REJECTED because the container's DNS could not resolve the sandbox host after the host woke; `docker restart` of the container fixed it, then the update applied. Container healthy, `d2bot start` shows the new version, hero alive (xp 205565 -> 205947, deaths 0). `zone entry` fields present: `def` only (dmg, block, dmgpct, ar absent). No `zone shadow:` or `zone choice:` lines in 6 minutes. No watch token used. Rollback: `dev-update.sh --rollback --to d2play-20261108`.
