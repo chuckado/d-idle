@@ -25,6 +25,11 @@ export function measure(win, opts) {
     for (const n of root.querySelectorAll('*')) {
       if (!vis(n) || n.closest('[data-scroll]') && n.closest('[data-scroll]') !== n && scroller(n.closest('[data-scroll]'))) continue;
       test(n, name(n));
+      // the deep band: a part that reaches out of the band's box is named (the band is not clipped itself, so only its parts can say what is cut)
+      if (root.dataset.fitDeep !== undefined) {
+        const rr = root.getBoundingClientRect(), nr = n.getBoundingClientRect();
+        if (nr.bottom > rr.bottom + 1 || nr.top < rr.top - 1) over.push({ el: 'band part ' + name(n), dh: Math.round(Math.max(nr.bottom - rr.bottom, rr.top - nr.top)), dw: 0 });
+      }
     }
   }
   // The character screen (card uic4, review c2c3 R14): checks the first fit check let through. Only on a page that has the canvas frame.

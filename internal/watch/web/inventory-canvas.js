@@ -152,7 +152,7 @@
     if (h && h.maxLife) t.push(tile('Life', num(h.life) + '/' + num(h.maxLife), h.life <= 0 ? 'bad' : ''));
     if (h && h.maxMana) t.push(tile('Mana', num(h.mana) + '/' + num(h.maxMana)));
     if (st && st.defense !== undefined && st.defense !== null) t.push(tile('Defense', num(st.defense), '', 'Defense as the game counts it'));
-    if (st && st.damage) t.push(tile('Bonus damage', st.damage.min + '-' + st.damage.max, '', 'Damage from items and skills (stats 21 and 22); the weapon\'s own base damage is not in it'));
+    if (st && st.damage) t.push(tile('Bonus dmg', st.damage.min + '-' + st.damage.max, '', 'Damage from items and skills (stats 21 and 22); the weapon\'s own base damage is not in it'));
     if (r) [['Fire res', 'fire'], ['Cold res', 'cold'], ['Light res', 'light'], ['Poison res', 'poison']].forEach(function (k) { t.push(tile(k[0], r[k[1]] + '%', r[k[1]] < 0 ? 'bad' : '')); });
     if (h && h.xpNext > 0) {
       var left = h.xpNext - h.xp;

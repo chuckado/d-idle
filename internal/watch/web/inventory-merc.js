@@ -152,7 +152,7 @@
     sh.appendChild(tile('Life', m.state === 'dead' ? 'dead' : (m.lifePct || 0) + '%', m.state === 'dead' ? 'bad' : ''));
     sh.appendChild(tile('Strength', m.str || '-')); sh.appendChild(tile('Dexterity', m.dex || '-'));
     var worn = legal.filter(function (k) { return m.equipment && m.equipment[k]; }).length;
-    sh.appendChild(tile('Gear', worn + ' of ' + legal.length + ' worn')); sh.appendChild(tile('Kind', kindName(m)));
+    sh.appendChild(tile('Worn', worn + ' of ' + legal.length)); // his kind is in the label row above: one more tile would be cut to a few letters
     side.appendChild(sh);
     // what he wears by name, and why the bot does not dress him: the room under his values is used, never stretched tiles
     var ex = el('div', 'cv-mextra'); ex.dataset.cv = 'mextra';

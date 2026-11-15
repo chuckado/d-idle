@@ -29,11 +29,8 @@ div [data-canvas=]
           label [] "Dexterity"
           b [] "50"
         div []
-          label [] "Gear"
-          b [] "1 of 4 worn"
-        div []
-          label [] "Kind"
-          b [] "Mercenary"
+          label [] "Worn"
+          b [] "1 of 4"
       div.cv-mextra [data-cv=mextra]
         p.cv-mworn [data-tone=dim] "helm: empty" title="helm: empty"
         p.cv-mworn [] "armour: Leather Armor" title="armour: Leather Armor"

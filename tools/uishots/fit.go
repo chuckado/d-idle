@@ -165,7 +165,7 @@ type fitResult struct {
 
 // fitInner is the largest empty square inside a panel of the character screen that still reads as a layout gap (px). The first
 // review's dead zones were 330 px (no mercenary) and 145 px (the selected box).
-const fitInner = 120
+const fitInner = 135
 
 // fitGap is the widest empty strip between slots that is not dead space: the cockpit gap (8 px) and two pixels.
 const fitGap = 10

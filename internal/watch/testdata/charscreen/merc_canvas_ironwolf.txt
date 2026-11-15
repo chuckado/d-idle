@@ -43,11 +43,8 @@ div [data-canvas=]
           label [] "Dexterity"
           b [] "70"
         div []
-          label [] "Gear"
-          b [] "0 of 4 worn"
-        div []
-          label [] "Kind"
-          b [] "Iron Wolf"
+          label [] "Worn"
+          b [] "0 of 4"
       div.cv-mextra [data-cv=mextra]
         p.cv-mworn [data-tone=dim] "helm: empty" title="helm: empty"
         p.cv-mworn [data-tone=dim] "armour: empty" title="armour: empty"

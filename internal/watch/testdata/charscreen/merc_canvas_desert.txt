@@ -44,11 +44,8 @@ div [data-canvas=]
           label [] "Dexterity"
           b [] "50"
         div []
-          label [] "Gear"
-          b [] "2 of 3 worn"
-        div []
-          label [] "Kind"
-          b [] "Desert Guard"
+          label [] "Worn"
+          b [] "2 of 3"
       div.cv-mextra [data-cv=mextra]
         p.cv-mworn [] "helm: Skull Cap" title="helm: Skull Cap"
         p.cv-mworn [data-tone=dim] "armour: empty" title="armour: empty"
