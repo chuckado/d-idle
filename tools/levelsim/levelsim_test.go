@@ -267,3 +267,23 @@ func TestSensitivityScenariosApply(t *testing.T) {
 		t.Errorf("kill rate -20%% did not lower the optimum: %v vs %v", slow, base)
 	}
 }
+
+// The farm loop table: every zone of FarmZones exists, a reset at 85 percent under the weak-prior supply gains on every zone,
+// and the value rule never loses more than a percent against clearing everything.
+func TestFarmResetGain(t *testing.T) {
+	d, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := DefaultParams()
+	p.Decay, p.Floor, p.Yield = 1, 0.4, 0.82
+	rows := NewEnv(d, p, ModePlan).FarmReset([]int{85}, 240)
+	if len(rows) != len(FarmZones) {
+		t.Fatalf("%d rows for %d zones", len(rows), len(FarmZones))
+	}
+	for _, r := range rows {
+		if r.ByPct[85] <= r.Base || r.Rule[85] < r.Base*0.99 {
+			t.Errorf("%s: base %.0f, 85%% %.0f, rule %.0f", r.Zone, r.Base, r.ByPct[85], r.Rule[85])
+		}
+	}
+}

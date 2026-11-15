@@ -76,6 +76,7 @@ type observer struct {
 	real          uint64    // progress that resets the failsafe ladder
 	killXPAt      time.Time // last kill or xp gain (drought watchdog); fieldSince: entry into the current non-town area
 	fieldSince    time.Time
+	townLeftAt    time.Time   // last departure from a town area (the farm loop measures the walk back from it)
 	droughtAt     time.Time   // last drought action (drought.go)
 	killTimes     []time.Time // recent kills for the slow-field rule (drought.go)
 	droughtStage  int         // consecutive drought actions with no kill or XP gain in between
@@ -515,6 +516,9 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 		o.mons = map[uint32]monTrack{}
 		o.bump(now)
 		o.fieldSince = time.Time{}
+		if !r.d.Plan.IsTown(p.Area) && o.fromTown {
+			o.townLeftAt = now
+		}
 		if !r.d.Plan.IsTown(p.Area) {
 			o.campaignAt = now
 			o.fieldSince = now

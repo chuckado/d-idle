@@ -37,6 +37,9 @@
     "area_done": {"params": [], "say": [
       "Heading home: nothing useful is left in this area.",
       "This area is done, so I am returning to town."]},
+    "farm_reset": {"params": ["area", "pct"], "say": [
+      "Resetting the zone: {area} is {pct}% cleared, a fresh game refills it.",
+      "{area} is {pct}% cleared, so I am taking a fresh game and coming back."]},
     "guard_exit": {"params": ["why"], "say": [
       "Leaving a dangerous area: {why}.",
       "Getting out of here first: {why}."]},
