@@ -1,7 +1,7 @@
 == grid sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -98,7 +98,7 @@ div.d-slotbody
 == menu-field sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -193,7 +193,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"
@@ -212,7 +212,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
 == menu-here sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -307,7 +307,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -325,7 +325,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == menu-town sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -420,7 +420,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=town,sel=camp}
+div.d-tilesheet {host=area-map,kind=town,sel=camp} aria="Order for Rogue Encampment"
   div.zm-mh
     b.zm-mt "Rogue Encampment" title="Rogue Encampment"
     span.zm-rg
@@ -434,7 +434,7 @@ div.d-tilesheet {host=area-map,kind=town,sel=camp}
 == menu-hard sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -529,7 +529,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
+div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw} aria="Order for Forgotten Tower"
   div.zm-mh
     b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
     span.zm-rg "level 15-22"
@@ -543,13 +543,13 @@ div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
     button.d-btn {key=dur-60,size=sm} "1 h"
     button.d-btn {key=dur-0,size=sm} "Until I cancel"
   div.zm-col
-    button.d-btn {key=go,primary=1,size=sm} "Ask anyway"
+    button.d-btn {key=go,size=sm} "Ask anyway"
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue"
 == menu-not-orderable sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -644,7 +644,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
+div.d-tilesheet {host=area-map,kind=dungeon,sel=cell} aria="Order for Tower Cellars 1-5"
   div.zm-mh
     b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
     span.zm-rg "level 15-22"
@@ -654,7 +654,7 @@ div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
 == menu-failed sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -749,7 +749,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bg}
+div.d-tilesheet {host=area-map,kind=field,sel=bg} aria="Order for Burial Grounds"
   div.zm-mh
     b.zm-mt "Burial Grounds" title="Burial Grounds - level 8-14 - Blood Raven and her archers shoot from range"
     span.zm-rg "level 8-14"
@@ -770,7 +770,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bg}
 == menu-locked sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -865,7 +865,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"
@@ -884,7 +884,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
 == menu-queue-full sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -979,7 +979,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"
@@ -999,7 +999,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
 == menu-no-ladder sorceress
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1094,7 +1094,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"
@@ -1109,7 +1109,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
   div.zm-col
     button.d-btn {key=go,primary=1,size=sm} "Go now"
 == menu-loop-open sorceress
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"
@@ -1145,7 +1145,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp}
 == grid paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1242,7 +1242,7 @@ div.d-slotbody
 == menu-field paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1337,7 +1337,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -1356,7 +1356,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == menu-here paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1451,7 +1451,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=sf}
+div.d-tilesheet {host=area-map,kind=field,sel=sf} aria="Order for Stony Field"
   div.zm-mh
     b.zm-mt "Stony Field" title="Stony Field - level 10-16 - open ground, easy to path"
     span.zm-rg "level 10-16"
@@ -1469,7 +1469,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=sf}
 == menu-town paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1564,7 +1564,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=town,sel=camp}
+div.d-tilesheet {host=area-map,kind=town,sel=camp} aria="Order for Rogue Encampment"
   div.zm-mh
     b.zm-mt "Rogue Encampment" title="Rogue Encampment"
     span.zm-rg
@@ -1578,7 +1578,7 @@ div.d-tilesheet {host=area-map,kind=town,sel=camp}
 == menu-hard paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1673,7 +1673,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
+div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw} aria="Order for Forgotten Tower"
   div.zm-mh
     b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
     span.zm-rg "level 15-22"
@@ -1687,13 +1687,13 @@ div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw}
     button.d-btn {key=dur-60,size=sm} "1 h"
     button.d-btn {key=dur-0,size=sm} "Until I cancel"
   div.zm-col
-    button.d-btn {key=go,primary=1,size=sm} "Ask anyway"
+    button.d-btn {key=go,size=sm} "Ask anyway"
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue"
 == menu-not-orderable paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1788,7 +1788,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
+div.d-tilesheet {host=area-map,kind=dungeon,sel=cell} aria="Order for Tower Cellars 1-5"
   div.zm-mh
     b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
     span.zm-rg "level 15-22"
@@ -1798,7 +1798,7 @@ div.d-tilesheet {host=area-map,kind=dungeon,sel=cell}
 == menu-failed paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -1893,7 +1893,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=dungeon,sel=crypt}
+div.d-tilesheet {host=area-map,kind=dungeon,sel=crypt} aria="Order for Crypt"
   div.zm-mh
     b.zm-mt "Crypt" title="Crypt - level 8-14 - small, a chest"
     span.zm-rg "level 8-14"
@@ -1913,7 +1913,7 @@ div.d-tilesheet {host=area-map,kind=dungeon,sel=crypt}
 == menu-locked paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -2008,7 +2008,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -2027,7 +2027,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == menu-queue-full paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -2122,7 +2122,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -2142,7 +2142,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == menu-no-ladder paladin
 div.d-slotbody
   div.zm
-    div.zm-grid {cols=3,rows=10}
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
       svg.zm-lines
         line
         line
@@ -2237,7 +2237,7 @@ div.d-slotbody
     [div.zm-list {scroll=1}]
     [div.zm-empty]
 -- menu
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -2252,7 +2252,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
   div.zm-col
     button.d-btn {key=go,primary=1,size=sm} "Go now"
 == menu-loop-open paladin
-div.d-tilesheet {host=area-map,kind=field,sel=bm}
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
   div.zm-mh
     b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
     span.zm-rg "level 1-8"
@@ -2288,7 +2288,7 @@ div.d-tilesheet {host=area-map,kind=field,sel=bm}
 == no-map-act
 div.d-slotbody
   div.zm
-    [div.zm-grid]
+    [div.zm-grid title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"]
     div.zm-list {scroll=1}
       button.zm-n.zm-row {key=area-Blood Moor} "Blood Moor" type="button"
       button.zm-n.zm-row {key=area-Den of Evil} "Den of Evil" type="button"
@@ -2308,7 +2308,7 @@ div.d-slotbody
       button.zm-n.zm-row {key=area-Outer Cloister} "Outer Cloister" type="button"
     [div.zm-empty]
 == menu-charter
-div.d-tilesheet {host=area-map,kind=field,sel=cp}
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
   div.zm-mh
     b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
     span.zm-rg "level 6-12"

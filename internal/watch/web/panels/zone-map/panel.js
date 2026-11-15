@@ -121,7 +121,7 @@ export function mount(root, ctx) {
     menu.hidden = true;
     st.sig = '';
     if (st.view) draw();
-    if (back) { const z = grid.querySelector('[data-key="z-' + back + '"]'); if (z && z.focus) z.focus(); }
+    if (back && grid.querySelector) { const z = grid.querySelector('[data-key="z-' + back + '"]'); if (z && z.focus) z.focus(); }
   }
   function open(id) {
     st.sel = id; st.charter = null; st.err = ''; st.loop.open = false;
@@ -130,7 +130,7 @@ export function mount(root, ctx) {
     menu.hidden = false;
     st.sig = '';
     draw();
-    const f = menu.querySelector('[data-primary]') || menu.querySelector('button, select');
+    const f = menu.querySelector && (menu.querySelector('[data-primary]') || menu.querySelector('button, select'));
     if (f && f.focus) f.focus();
   }
 
@@ -186,7 +186,7 @@ export function mount(root, ctx) {
     // a redraw (a duration chip, the Loop form) must not drop the focus the user is on
     const keep = inside() && document.activeElement.dataset ? document.activeElement.dataset.key : '';
     drawMenuBody();
-    if (keep) { const f = menu.querySelector('[data-key="' + keep + '"]'); if (f && f.focus) f.focus(); }
+    if (keep && menu.querySelector) { const f = menu.querySelector('[data-key="' + keep + '"]'); if (f && f.focus) f.focus(); }
   }
   function drawMenuBody() {
     ctx.ui.clear(menu);

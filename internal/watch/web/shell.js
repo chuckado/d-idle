@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
+import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -836,6 +836,7 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     post: (path, body) => postJSON(answerBase, path, body),
     refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)
     openDrawer(id) { return openDrawer(id); },
+    short() { return !!ck.plan && ck.plan.mode !== 'phone' && window.innerHeight < COCKPIT_SHORT; }, // a short cockpit window (the panels trim their lists)
   };
 }
 

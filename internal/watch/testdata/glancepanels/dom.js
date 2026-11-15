@@ -79,13 +79,12 @@ for (const [st, needs] of Object.entries(NY)) {
   const rows = r.root.children[0].children[1].children;
   assert.strictEqual(rows.length, 3, 'three rows');
   assert.deepStrictEqual(rows.map((x) => x.dataset.id), ['gear', 'raven', 'merc'], 'worst first, then the order of the reply');
-  const more = r.root.children[0].children[2];
+  const more = r.root.children[0].children[0].children[1]; // the header's button: "+2 more" in place of the "..."
   assert.strictEqual(more.textContent, '+2 more');
-  assert.strictEqual(more.hidden, false);
   more.fire('click');
-  assert.ok(r.root.children[0].children[3].popOpen, 'the line opens the popover');
-  assert.strictEqual(r.root.children[0].children[3].children[0].children.length, 5, 'the popover lists all five');
-  assert.strictEqual(render('needs-you', glance({ needs: [gear] })).root.children[0].children[2].hidden, true, 'no overflow line for one row');
+  assert.ok(r.root.children[0].children[2].popOpen, 'the header button opens the popover');
+  assert.strictEqual(r.root.children[0].children[2].children[0].children.length, 5, 'the popover lists all five');
+  assert.strictEqual(render('needs-you', glance({ needs: [gear] })).root.children[0].children[0].children[1].textContent, '...', 'the dots when nothing overflows');
 }
 { // a button posts exactly the post and body the reply names, and nothing else
   const r = render('needs-you', glance({ needs: [raven] }));
@@ -121,7 +120,7 @@ for (const [st, needs] of Object.entries(NY)) {
   api.update(glance({ needs: [gear] }));
   api.update(glance({ needs: [gear, need('life', 'danger', 'Life is low')] }));
   assert.deepStrictEqual(sent, [], 'off by default');
-  const pop = root.children[0].children[3];
+  const pop = root.children[0].children[2];
   const sw = pop.children[1];
   assert.strictEqual(sw.attrs.role, 'switch');
   assert.strictEqual(sw.attrs['aria-checked'], 'false');
