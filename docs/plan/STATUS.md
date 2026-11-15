@@ -183,6 +183,7 @@
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
 | uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
+| uic4 | proposed | - | `internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/web/inventory-tip.css`<br>`internal/watch/web/inventory-tip.js`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/web/inventory-drag.js`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory.js`<br>`internal/watch/web/tokens.css`<br>`internal/watch/invui.go`<br>`internal/watch/tipcontrast_test.go`<br>`internal/watch/uic4_test.go`<br>`internal/watch/testdata/uic4/`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots/`<br>`tools/uishots.sh` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | uifix1 | proposed | - | `internal/watch/web/panels/statusline/`<br>`internal/watch/web/panels/needs-you/`<br>`internal/watch/web/panels/health/`<br>`internal/watch/web/panels/journey-strip/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/web/panels/area-map/panel.json`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/watch.html`<br>`internal/watch/whyline.json`<br>`internal/watch/whychange.json`<br>`internal/watch/whyline_test.go`<br>`internal/watch/testdata/`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/glancewire_pause_test.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`internal/bot/whyline_test.go` | - |
 | uis7 | proposed | - | `internal/watch/web/layout.json`<br>`internal/watch/web/layouts/`<br>`internal/watch/web/components.css`<br>`internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/layout.js`<br>`internal/watch/layout_test.go`<br>`internal/watch/testdata/layout_default.js`<br>`internal/watch/testdata/layout_cells.golden`<br>`tools/uishots/layout-rows.json`<br>`tools/uishots/genlayouts.js`<br>`tools/uishots.sh`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/tokens.css`<br>`internal/watch/glance.go`<br>`internal/watch/glance_questions.go`<br>`internal/watch/glance_questions_test.go`<br>`tools/uishots/fit.js`<br>`internal/watch/web/update.js`<br>`internal/watch/web/panels/needs-you/panel.json`<br>`internal/watch/testdata/glancepanels/`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`tools/uishots/fixtures_update.go`<br>`tools/uishots/fixtures_glance.go`<br>`tools/uishots/serve.go` | - |
@@ -232,14 +233,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b2a72e8ed 11-15 06:04 `Merge agent/uic4: Merge origin/main into uic4` (uic4)
+- 0ebf55048 11-15 05:49 `Merge origin/main into uic4` (-)
 - dc792e7ec 11-15 05:39 `Merge agent/p03bposted: Merge branch 'main' into p03bposted` (p03bposted)
 - 95f866485 11-15 05:38 `Merge branch 'main' into p03bposted` (-)
+- ed281de24 11-15 05:36 `Merge origin/main into uic4` (-)
 - 0d160ecd4 11-15 05:24 `Merge agent/uis7: Merge branch 'main' into TASK-485` (uis7)
 - 845529a15 11-15 05:23 `Merge branch 'main' into TASK-485` (-)
+- 93268564d 11-15 05:23 `Merge origin/main into uic4` (-)
 - 2fbc7bf94 11-15 05:22 `Merge agent/verifyp03d: Merge branch 'main' into TASK-488` (verifyp03d)
 - 131cb0fd9 11-15 05:21 `Merge branch 'main' into TASK-488` (-)
-- 5dff8b076 11-15 05:16 `Merge origin/main` (-)
-- 75c5015a8 11-15 04:56 `Merge agent/p02posted: Merge branch 'main' into p02posted` (p02posted)
-- cc8ebbad0 11-15 04:56 `Merge origin/main` (-)
-- 0e1966552 11-15 04:55 `Merge branch 'main' into p02posted` (-)
 <!-- statusgen:end -->
