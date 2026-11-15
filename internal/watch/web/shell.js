@@ -2,6 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
+import { mountReset } from '/watch/resetui.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
@@ -790,6 +791,11 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
+  const rb = ui.btn('Reset...', { size: 'sm', variant: 'ghost' });
+  rb.dataset.key = 'reset-open';
+  rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
+  rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
+  pop.appendChild(rb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
@@ -944,6 +950,9 @@ async function start() {
   }
   Object.values(bands).forEach(syncBand);
   sched.start();
+  mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+    post: (path, body) => postJSON(answerBase, path, body),
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();

@@ -96,6 +96,7 @@ export function moreItems(rows) {
     { intent: 'sell_now', label: 'Sell now' },
     { intent: 'revive_merc', label: 'Revive mercenary' },
     { intent: 'farm_gold', label: farming ? 'Stop farming gold' : 'Farm gold', args: { on: !farming } },
+    { intent: 'reset', label: 'Reset (leave the game and rejoin)', ask: true },
   ];
 }
 
@@ -137,7 +138,11 @@ export function mount(root, ctx) {
     moreItems(view && view.rows).filter((m) => m.label.toLowerCase().includes(q)).forEach((m) => {
       const b = ctx.el('button', 'o-item', m.label);
       b.type = 'button'; b.dataset.key = 'more-' + m.intent;
-      b.addEventListener('click', () => { closeSheet(); sendCommand(ctx, m.intent, m.args); });
+      b.addEventListener('click', () => {
+        closeSheet();
+        if (m.ask) document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: b } })); // its own route and confirm sheet (resetui.js)
+        else sendCommand(ctx, m.intent, m.args);
+      });
       items.appendChild(b);
     });
   }
