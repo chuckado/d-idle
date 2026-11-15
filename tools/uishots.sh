@@ -5,14 +5,14 @@
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
-#   tools/uishots.sh --char [--out DIR] [--only theme=light]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL] [--sizes 'WxH ...']   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
 #     may overflow, no dead space; the deliberately overflowing fixture must FAIL. No pictures, no golden set.
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -21,6 +21,9 @@ while [ $# -gt 0 ]; do
 	--fit) fit=1; shift ;;
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
+	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
+	--ctx) extra="$extra&ctx=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
+	--sizes) sizes_only=$2; shift 2 ;;
 	*) echo "uishots: unknown argument $1" >&2; exit 2 ;;
 	esac
 done
@@ -66,11 +69,11 @@ drawer-start watch?layout=cockpit-demo&theme=dark&drawer=onboarding"
 fi
 if [ "$char" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/char-*
-	for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
+	for sz in ${sizes_only:-1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844}; do
 		w=${sz%x*} h=${sz#*x}
 		prof=$(mktemp -d)
 		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=dark&w=$w&h=$h" >/dev/null 2>&1
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=dark&w=$w&h=$h$extra" >/dev/null 2>&1
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
@@ -112,15 +115,27 @@ overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
 character watch/inventory?theme=dark
-character-light watch/inventory?theme=light"
-	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail)
+character-light watch/inventory?theme=light
+character-tip-stash watch/inventory?theme=dark hover=[data-key=item-31]
+character-tip-pack watch/inventory?theme=dark hover=[data-key=item-10]
+character-tip-ring watch/inventory?theme=dark hover=[data-key=item-11]
+character-tip-worn watch/inventory?theme=dark hover=[data-key=slot-rhand]
+character-tip-plate watch/inventory?theme=dark hover=[data-key=item-16]
+character-menu-pack watch/inventory?theme=dark ctx=[data-key=item-10]
+character-menu-worn watch/inventory?theme=dark ctx=[data-key=slot-torso]
+character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
+	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
+	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
 		for sz in $sizes; do
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
-			[ -n "$pclick" ] && ck="&click=$(enc "$pclick")"
+			case $pclick in
+			hover=* | ctx=*) ck="&$(printf %s "$pclick" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')" ;;
+			?*) ck="&click=$(enc "$pclick")" ;;
+			esac
 			[ -n "$phit" ] && ck="$ck&hit=$(enc "$phit" | sed 's/%7C/|/g')"
-			[ -n "$only" ] && [ "$only" != "$pname" ] && continue
+			if [ -n "$only" ]; then case $pname in $only) ;; *) continue ;; esac; fi
 			prof=$(mktemp -d)
 			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
 				--window-size="$w,$h" --virtual-time-budget=25000 --timeout=40000 --dump-dom "http://127.0.0.1:$port/__fit?u=/$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >"$out/fit-$pname-$sz.html" 2>/dev/null

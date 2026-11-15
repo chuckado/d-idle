@@ -760,11 +760,7 @@ func (d *Desk) RequestEquipFor(id uint32, slot, target string) (Request, error) 
 	case "", TargetHero:
 		return d.RequestEquip(id, slot)
 	case TargetMerc:
-		var data status.InventoryData
-		if d.c.Inventory != nil {
-			data = d.c.Inventory()
-		}
-		return Request{}, refuse("merc", "%s", d.mercWhy(data))
+		return d.mercVerb(true, id, slot) // refuses with code "merc" until the backend offers the merc verbs (mercverbs.go)
 	}
 	return Request{}, refuse("target", "a target is the hero or the merc")
 }
@@ -775,7 +771,7 @@ func (d *Desk) RequestUnequipFor(slot, target string) (Request, error) {
 	case "", TargetHero:
 		return d.RequestUnequip(slot)
 	case TargetMerc:
-		return d.RequestEquipFor(0, slot, target)
+		return d.mercVerb(false, 0, slot)
 	}
 	return Request{}, refuse("target", "a target is the hero or the merc")
 }
