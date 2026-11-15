@@ -625,6 +625,18 @@ func CommandsHandler(src func() CommandSources) http.Handler {
 // at the next one.
 func (f *Fun) CommandSources() CommandSources {
 	s := CommandSources{Orders: f.Hub.OrdersView, Hooks: f.Cmd}
+	if f.Pause != nil && s.Hooks.Paused == nil { // the pause desk (B1) gives the Pause verb and the paused flag
+		s.Hooks.Paused = func() bool {
+			d := f.Pause.desk()
+			if d == nil {
+				return false
+			}
+			var v struct {
+				State string `json:"state"`
+			}
+			return decode(marshal(d.View()), &v) && v.State == "paused"
+		}
+	}
 	s.Safety = func() CommandSafety {
 		switch f.Hub.Uptime().State {
 		case KindDeath, KindRecovery:

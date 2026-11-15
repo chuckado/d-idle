@@ -604,6 +604,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `ui/redesign-2026-11-14/reviews/`
 
+- [c2c3-review.md](ui/redesign-2026-11-14/reviews/c2c3-review.md): Review of the merged character screen: C2 (canvas) and C3 (tooltip, menu, gestures, feedback) (status: review of `origin/main` at `4996d53af` (cards TASK-456 uic2 and TASK-463 uic3, both merged), 2026-11-15....)
 - [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
 
 `ui/redesign-2026-11-14/`
@@ -629,6 +630,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
+- [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
 `upstream/briefs/`
 
@@ -637,6 +639,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [hitrec-norestart-oracle.md](upstream/briefs/hitrec-norestart-oracle.md): Brief: P03b "a hit never restarts a get-hit" needs a game-side oracle (BLOCKED, for the worker-host operator) (status: written 2026-11-14 (card prfix2). Nothing here was run: it needs the emulator image on the worker host...)
 - [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
 - [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
+- [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
 
 `upstream/drafts/`
@@ -648,6 +651,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
+- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r2, **ready for the independent verifier** (card decomp23, 2026-11-15). Branch `fid/warp-walk-r2` on the...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`

@@ -8,8 +8,8 @@ import (
 	"strings"
 )
 
-// Fixture panels for the fit check and the cockpit pictures: the real cockpit panels (needs-you, orders, zone-map, the
-// strip) are other slices, so the fixture viewer adds stand-ins that fill the slots the way those will: fixed boxes,
+// Fixture panels for the fit check and the cockpit pictures: the real cockpit panels (orders, zone-map, area-map) are used as they
+// are; needs-you and the strip are other slices, so the fixture viewer adds stand-ins that fill the slots the way those will: fixed boxes,
 // one-line rows cut with an ellipsis, a long list that scrolls inside (data-scroll). They exist only here: panels.json
 // and /watch/layouts/cockpit-demo.json, -overflow.json are extended by this viewer and nothing else serves them.
 
@@ -28,11 +28,6 @@ var fxPanels = []fxPanel{
   const n = Math.max(1, Math.min(30, +(new URLSearchParams(location.search).get('orders') ?? 4)));
   for (let i = 0; i < n; i++) list.append(ctx.el('div', 'row', i === 0 ? 'Farm Cold Plains 30 min  ACTIVE' : 'then: level 10, order number ' + i + ' of the plan that runs long'));
   ctx.body.append(verbs, list);`},
-	{"fx-map", "Where to", `ctx.body.append(ctx.el('div', 'row', 'Where to'));
-  const g = ctx.el('div', 'zones');
-  const names = ['Blood Moor', 'Cold Plains', 'Stony Field', 'Dark Wood', 'Black Marsh', 'Tamoe Highland', 'Den of Evil', 'Cave', 'Burial Grounds', 'Monastery Gate'];
-  for (let r = 0; r < 10; r++) for (let c = 0; c < 3; c++) g.append(ctx.el('button', 'zone', names[(r + c * 3) % 10]));
-  ctx.body.append(g);`},
 	{"fx-progress", "Progress", `ctx.body.append(ctx.el('div', 'row', 'Progress  level 7'), ctx.el('div', 'row', 'to 10 in 25 min'), ctx.el('div', 'row', 'xp/h 12.4k  gold/h 2.1k'));`},
 	{"fx-journey", "Journey", `ctx.body.append(ctx.el('div', 'row', 'Journey  chapter 3 of 9'), ctx.el('div', 'row', 'Blood Raven: too early for this hero, a long line that is cut'));`},
 	{"fx-health", "Health", `ctx.body.append(ctx.el('div', 'row', 'Health'), ctx.el('div', 'row', 'Life ok  Gear ok  Ready ok'));`},
@@ -58,9 +53,6 @@ const fxCSS = `/* unlayered on purpose: the tall-frame fixture must beat the she
   [data-panel="fx-orders"] .d-slotbody { display: flex; flex-direction: column; }
   [data-panel="fx-orders"] .row { flex: none; }
   [data-panel="fx-orders"] .list { overflow: auto; min-block-size: 0; }
-  [data-panel="fx-map"] .d-slotbody { display: flex; flex-direction: column; }
-  [data-panel="fx-map"] .zones { flex: 1 1 0; min-block-size: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: repeat(10, minmax(0, 1fr)); gap: 2px; }
-  [data-panel="fx-map"] .zone { min-block-size: 0; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: var(--d-fs-0); line-height: 1; padding: 0 var(--d-sp-1); text-align: start; }
 }
 `
 
@@ -91,11 +83,11 @@ func (t orderedTabs) MarshalJSON() ([]byte, error) {
 // and the crafted pages of the review, each with its one panel in every arrangement so every width has the fault.
 func fxLayout(name string) map[string]any {
 	// the area map is the real panel (S6); the rest stand in for the slices that are not built
-	rail := []string{"fx-needs", "fx-orders", "fx-map", "area-map"}
-	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"fx-map"}, "right": []string{"area-map"}}
-	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"fx-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-journey", "fx-health"}}}
+	rail := []string{"fx-needs", "fx-orders", "zone-map", "area-map"}
+	wide := map[string]any{"top": []string{"fx-needs", "fx-orders"}, "left": []string{"zone-map"}, "right": []string{"area-map"}}
+	tabs := orderedTabs{{"Orders", []string{"fx-needs", "fx-orders"}}, {"Map", []string{"zone-map", "area-map"}}, {"Progress", []string{"fx-progress", "fx-journey", "fx-health"}}}
 	if name == "orders" { // the demo with the real Orders panel (fed by commandsFixture) in place of its stand-in
-		rail = []string{"fx-needs", "orders", "fx-map", "area-map"}
+		rail = []string{"fx-needs", "orders", "zone-map", "area-map"}
 		wide["top"] = []string{"fx-needs", "orders"}
 		tabs[0].IDs = []string{"fx-needs", "orders"}
 	} else if name != "" {
@@ -156,7 +148,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 				man := map[string]any{"schema": "watch.panel/1", "version": 1, "id": f.id, "title": f.title, "band": "side", "size": "s",
 					"priority": 50, "tab": "hero", "defaultOpen": true, "endpoint": "", "poll": 0, "unlock": "", "skeleton": 0, "slot": true, "scroll": f.id == "fx-orders" || f.id == "fx-fakescroll",
 					"owner": "uishots", "doc": "docs/ui-regression-plan.md"}
-				if f.id == "fx-map" {
+				if f.id == "zone-map" {
 					man["switchWith"], man["switchLabel"], man["minBlock"] = "area-map", "Act map", 250 // the stand-in for zone-map shares its column with the area map
 				}
 				list = append(list, man)

@@ -175,12 +175,14 @@
 | uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | verifyp03c | proposed | - | `docs/upstream/verifier-p03b-2026-11-14.md` | - |
+| uis5 | proposed | - | `internal/watch/commands.go`<br>`internal/watch/commands_post.go`<br>`internal/watch/commands_post_test.go`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/testdata/zonemap/`<br>`tools/uishots/`<br>`internal/watch/zonemap_test.go`<br>`internal/watch/testdata/orders_dom.js`<br>`internal/watch/testdata/orders_dom.txt`<br>`internal/watch/mapview.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | uib5 | in-progress | - | `cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_test.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | uib6 | in-progress | - | `cmd/d2bot/glancewire_blocked.go`<br>`cmd/d2bot/glancewire_blocked_test.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/funwire.go`<br>`internal/watch/commands.go` | - |
 | uib9 | in-progress | - | `internal/d2dctl/item_verbs_merc.go`<br>`internal/d2dctl/item_verbs_merc_test.go`<br>`internal/invdesk/mercverbs.go`<br>`internal/invdesk/mercverbs_test.go`<br>`internal/invdesk/sets.go`<br>`cmd/d2bot/invverbs.go`<br>`cmd/d2bot/invverbs_test.go`<br>`docs/research/merc-gear.md` | - |
 | prfix3 | proposed | - | `docs/upstream/bodies/hitrec-norestart-body.md`<br>`docs/upstream/drafts/hitrec-norestart.md`<br>`docs/research/data24`<br>`docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | `fork-branch:fid/hitrec-norestart-r3` |
 | verifyp02 | proposed | - | `docs/upstream/verifier-p02-2026-11-14.md` | - |
+| uic23review | in-progress | - | `docs/ui/redesign-2026-11-14/reviews/c2c3-review.md`<br>`docs/ui/redesign-2026-11-14/reviews/c2c3/` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -226,14 +228,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- fccb4bc7f 11-15 01:42 `Merge agent/uis5: Merge origin/main into agent/uis5` (uis5)
+- 0301cd509 11-15 01:40 `Merge origin/main into agent/uis5` (-)
+- fe856ee5c 11-15 01:34 `Merge agent/uic23review: Merge branch 'main' into TASK-477` (uic23review)
+- ff2d080db 11-15 01:33 `Merge branch 'main' into TASK-477` (-)
+- 7aaeed825 11-15 01:32 `Merge agent/decomp23: Merge branch 'main' into TASK-473` (decomp23)
+- 6f1df264a 11-15 01:31 `Merge branch 'main' into TASK-473` (-)
+- 1f779e3e8 11-15 01:28 `decomp23: merge origin/main, re-apply P02/P04/P06 rows (trace facts only)` (-)
 - e88587d08 11-15 01:26 `Merge agent/verifyp02: Merge branch 'main' into TASK-476` (verifyp02)
+- e76f1ceac 11-15 01:26 `Merge origin/main into agent/uis5` (-)
 - bf3537215 11-15 01:25 `Merge branch 'main' into TASK-476` (-)
-- 5f04e555f 11-15 01:23 `Merge agent/b9fork: Merge branch 'main' into TASK-475` (b9fork)
-- 6615e1ca0 11-15 01:22 `Merge branch 'main' into TASK-475` (-)
-- e4b1c8f56 11-15 01:15 `Merge agent/uib6: Merge branch 'main' into TASK-471` (uib6)
-- 2d7f0890b 11-15 01:14 `Merge branch 'main' into TASK-471` (-)
-- 96bd31812 11-15 01:08 `Merge agent/uib5: Merge branch 'main' into TASK-470` (uib5)
-- d8ac2116a 11-15 01:08 `Merge branch 'main' into TASK-470` (-)
-- 76d17a905 11-15 00:50 `Merge agent/uic3: Merge branch 'main' into TASK-463` (uic3)
-- 70eb65784 11-15 00:50 `Merge branch 'main' into TASK-463` (-)
 <!-- statusgen:end -->

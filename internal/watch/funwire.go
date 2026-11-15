@@ -673,6 +673,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Danger != nil {
 		m.Handle("/api/danger", f.Danger) // danger.Route
 	}
+	if f.Queue != nil || f.Loop != nil {
+		f.Hub.SetMapLadder(f.mapLadder)
+	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.Handler())
 	}
@@ -769,6 +772,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Unlocks != nil {
 		m.Handle(UnlocksBuyRoute, f.Unlocks.BuyHandler(o))
 	}
+	cp := CommandsPostHandler(o, m, f.CommandSources)
+	m.Handle(CommandsRoute, cp)
+	m.Handle(CommandsCancelRoute, cp)
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.PostHandler(o))
 	}
@@ -880,4 +886,24 @@ func QuietSection(h *Hub) ReturnSection {
 		}
 		return &SectionView{ID: "quiet", Title: "Stopped asking", Lines: lines}
 	})
+}
+
+// mapLadder is the Loop and queue state of the zone menu, read from the two desks on every map request.
+func (f *Fun) mapLadder() *MapLadder {
+	l := &MapLadder{}
+	if f.Loop != nil {
+		v := f.Loop.View()
+		l.LoopOpen, l.LoopTeaser = v.Open, v.Teaser
+		l.LoopActive = v.State == LoopActive
+	}
+	if f.Queue != nil {
+		v := f.Queue.View()
+		l.QueueOpen, l.QueueTeaser, l.QueueSlots = v.Open, v.Teaser, v.Capacity
+		for _, e := range v.Entries {
+			if e.State == QueueWaiting {
+				l.QueueWaiting++
+			}
+		}
+	}
+	return l
 }

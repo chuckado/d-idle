@@ -76,8 +76,16 @@ export function measure(win, opts) {
     }
     [prev, cur] = [cur, prev];
   }
+  // the zone map (S5): every zone row keeps 20 px and a readable name, all rows are on show, and the open zone menu (a sheet in
+  // another tile) covers none of the zone buttons
+  const zb = [...d.querySelectorAll('[data-panel="zone-map"] .zm-n:not(.zm-row)')].map((n) => [n, vis(n)]).filter((x) => x[1]);
+  const sheet = d.querySelector('.d-tilesheet[data-panel="zone-map"]:not([hidden])'), sr = sheet && vis(sheet);
+  const tops = new Set(zb.map((x) => Math.round(x[1].top)));
+  const zones = { n: zb.length, rows: tops.size, minH: zb.length ? Math.round(Math.min(...zb.map((x) => x[1].height))) : 0,
+    cut: zb.filter((x) => { const nm = x[0].querySelector('.zm-nm'); return nm && nm.clientWidth < 24; }).length, menu: !!sr, host: sheet ? sheet.dataset.host : '',
+    overlap: sr ? zb.filter((x) => x[1].left < sr.right - 1 && x[1].right > sr.left + 1 && x[1].top < sr.bottom - 1 && x[1].bottom > sr.top + 1).length : 0 };
   return {
-    vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, empty, unready, slots,
+    zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
