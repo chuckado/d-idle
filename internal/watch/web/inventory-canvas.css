@@ -160,8 +160,10 @@
 
   @container mbox (min-width: 20rem) {
     .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .cv-mbody { --mu: min(var(--u), calc(100cqi / (var(--mcols) + 1.7))); grid-template-columns: auto minmax(0, 1fr); grid-template-rows: none; gap: 0 var(--cv-p); }
-    .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .cv-mbody > .d-doll[data-owner="merc"] { block-size: calc(5 * var(--mu)); }
-    .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso" ". . mtorso mtorso"; }
+    @container cv (min-width: 701px) { /* the phone keeps a four-row doll */
+      .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .cv-mbody > .d-doll[data-owner="merc"] { block-size: calc(5 * var(--mu)); }
+      .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .d-doll[data-owner="merc"][data-cols="4"] { grid-template-areas: "mrhand mrhand mhead mhead" "mrhand mrhand mhead mhead" "mrhand mrhand mtorso mtorso" "mrhand mrhand mtorso mtorso" ". . mtorso mtorso"; }
+    }
     .cv-mercbox:not(:has(.d-doll[data-cols="6"])) .cv-mside { margin-block-start: 0; }
     .cv-mercbox:not(:has(.d-doll[data-cols="6"])) [data-cv=msheet] { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: max(34px, calc(var(--u) * .9)); }
     .cv-mercbox:not(:has(.d-doll[data-cols="6"])) [data-cv=msheet] > div:last-child:nth-child(3n+2) { grid-column: auto; }
