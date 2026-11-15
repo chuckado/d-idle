@@ -10,12 +10,15 @@ import (
 // BuildSpec is what the resolver needs to know about a build (design 6.3). Attack is the skill the build plays at the
 // level in question; Points are the skill points the build spends in total (for the summoner share).
 type BuildSpec struct {
-	Class   string
-	Build   string
-	Attack  string
-	Points  map[string]int
-	Contact bool   // the class's combat profile has a melee block: the hero stands in the pack
-	Named   string // an explicit archetype in the build file wins
+	Class  string
+	Build  string
+	Attack string
+	Points map[string]int
+	// AttackLevel is the level of Attack with the points the build has spent by the clvl asked for (items and quest
+	// points are not counted); 0 when none were spent. The plain weapon swing is level 1.
+	AttackLevel int
+	Contact     bool   // the class's combat profile has a melee block: the hero stands in the pack
+	Named       string // an explicit archetype in the build file wins
 }
 
 // Resolve places a build on an archetype by the rule of design 6.3, in data and with no class names: more than a third
@@ -73,6 +76,7 @@ type buildFile struct {
 		Skill string `json:"skill"`
 	} `json:"main_attack"`
 	Rows []struct {
+		Clvl   int `json:"clvl"`
 		Skills []struct {
 			Skill  string `json:"skill"`
 			Points int    `json:"points"`
@@ -111,6 +115,15 @@ func SpecFromBuild(fsys fs.FS, file string, clvl int, ca ClassAttacks) (BuildSpe
 			s.Points[sk.Skill] += max(sk.Points, 1)
 		}
 	}
+	spent := map[string]int{}
+	for _, r := range b.Rows {
+		if r.Clvl > clvl {
+			continue
+		}
+		for _, sk := range r.Skills {
+			spent[sk.Skill] += max(sk.Points, 1)
+		}
+	}
 	if s.Class == "" {
 		return s, fmt.Errorf("power: build file %q has no class (a class-less fallback table is not a build)", file)
 	}
@@ -139,7 +152,17 @@ func SpecFromBuild(fsys fs.FS, file string, clvl int, ca ClassAttacks) (BuildSpe
 			}
 		}
 	}
+	s.AttackLevel = spent[s.Attack]
+	if s.Attack == PlainAttack {
+		s.AttackLevel = 1
+	}
 	return s, nil
+}
+
+// AttackOf is the main attack of a resolved build in the estimator's terms. Synergy points and the gear speed are not
+// known from a build file (flagged by the estimate); the caller adds what it reads.
+func AttackOf(s BuildSpec) Attack {
+	return Attack{Skill: s.Attack, Level: s.AttackLevel, SynergyPoints: -1}
 }
 
 // PlainAttack is the weapon swing every class has; its kind is melee.

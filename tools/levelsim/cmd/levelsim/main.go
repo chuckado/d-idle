@@ -188,7 +188,11 @@ func runShadow(log, install, arch, diff, dial string) error {
 		return err
 	}
 	defer f.Close()
-	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial})
+	at, err := attachFor(m)
+	if err != nil {
+		return err
+	}
+	rep, err := levelsim.ShadowReplay(f, levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial, Attach: at})
 	if err != nil {
 		return err
 	}
@@ -271,7 +275,11 @@ func runController(log, install, arch, diff, dial string) error {
 	if err != nil {
 		return err
 	}
-	so := levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial}
+	at, err := attachFor(m)
+	if err != nil {
+		return err
+	}
+	so := levelsim.ShadowOpts{Tab: tab, M: m, Arch: a, Diff: diff, Dial: dial, Attach: at}
 	f, err := os.Open(log)
 	if err != nil {
 		return err
