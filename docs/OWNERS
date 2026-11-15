@@ -141,6 +141,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  maphistoryC
 cmd/d2bot/d2dbackend.go  credit-runner  maptrail
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
+cmd/d2bot/d2dbackend.go  credit-runner  uib1
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
 cmd/d2bot/d2dwire.go  credit-runner  itemverbs2
 cmd/d2bot/dangerwire.go  credit-runner  survA
@@ -158,6 +159,7 @@ cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
 cmd/d2bot/ladder.go  credit-runner  survA
+cmd/d2bot/ladder.go  credit-runner  uib1
 cmd/d2bot/ladder.go  live-agent  recoverypace
 cmd/d2bot/live.go  credit-runner  campaign1
 cmd/d2bot/live.go  credit-runner  exploredpct
@@ -167,6 +169,7 @@ cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/live.go  credit-runner  survB
+cmd/d2bot/live.go  credit-runner  uib1
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
@@ -175,6 +178,7 @@ cmd/d2bot/mercplayer_test.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
+cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/powerwire.go  credit-runner  survB
 cmd/d2bot/powerwire.go  credit-runner  survC
@@ -261,6 +265,7 @@ docs/onboarding.md  credit-runner  reconnectux
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
+docs/pause.md  credit-runner  uib1
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
@@ -369,6 +374,7 @@ internal/bot/goal.go  credit-runner  maphistoryA
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
+internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  pro-runner  levelplan3
 internal/bot/goldfarm.go  credit-runner  repairtrip
 internal/bot/goldprio.go  credit-runner  goldprio
@@ -399,7 +405,10 @@ internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/plan.go  pro-runner  levelplan3
+internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
+internal/bot/playerpause.go  credit-runner  uib1
+internal/bot/playerpause_test.go  credit-runner  uib1
 internal/bot/repairtrip.go  credit-runner  repairtrip
 internal/bot/repairtrip_test.go  credit-runner  repairtrip
 internal/bot/resource.go  pro-runner  levelplan3
@@ -413,6 +422,7 @@ internal/bot/runner.go  credit-runner  passagebounce
 internal/bot/runner.go  credit-runner  repairtrip
 internal/bot/runner.go  credit-runner  staletarget
 internal/bot/runner.go  credit-runner  survB
+internal/bot/runner.go  credit-runner  uib1
 internal/bot/staletarget.go  credit-runner  staletarget
 internal/bot/staletarget_test.go  credit-runner  staletarget
 internal/bot/task.go  credit-runner  hourfix
@@ -583,6 +593,7 @@ internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uis4
 internal/watch/commands_test.go  credit-runner  uis4
 internal/watch/funwire.go  credit-runner  survA
+internal/watch/funwire.go  credit-runner  uib1
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
@@ -611,6 +622,8 @@ internal/watch/orderloop.go  credit-runner  uib7
 internal/watch/orderloop_test.go  credit-runner  uib7
 internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/panels.go  credit-runner  uis6
+internal/watch/pauseapi.go  credit-runner  uib1
+internal/watch/pauseapi_test.go  credit-runner  uib1
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/senses.go  credit-runner  maphistory
@@ -664,6 +677,7 @@ internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
+internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail
 internal/watch/testdata/senses-coverage.json  credit-runner  maptrail2
 internal/watch/testdata/senses-failures.json  credit-runner  maphistoryC
