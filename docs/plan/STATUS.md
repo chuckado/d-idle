@@ -201,6 +201,7 @@
 | decomp30 | proposed | - | `docs/research/decomp30-mercai.md`<br>`internal/d2/merc.go`<br>`internal/d2/merc_test.go`<br>`internal/watch/web/inventory-merc.js`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | powerwire | in-progress | - | `internal/power/`<br>`docs/survival/power.md`<br>`tools/levelsim/`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
+| verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -245,14 +246,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 64660bcd8 11-15 14:00 `Merge agent/verifyp03c: Merge branch 'main' into TASK-513` (verifyp03c)
 - 8aa8fd28c 11-15 14:00 `Merge agent/p04posted: Merge branch 'main' into p04posted` (p04posted)
 - 02f99ea00 11-15 14:00 `Merge agent/deploycockpit: Merge branch 'main' into deploycockpit` (deploycockpit)
+- 022e10c78 11-15 13:56 `Merge branch 'main' into TASK-513` (-)
 - 0829dfa1d 11-15 13:56 `Merge branch 'main' into p04posted` (-)
 - 6b9830c9c 11-15 13:56 `Merge branch 'main' into deploycockpit` (-)
 - 7977cd99a 11-15 13:37 `Merge agent/powerwire: Merge branch 'main' into TASK-508` (powerwire)
 - 43f30a8e0 11-15 13:36 `Merge branch 'main' into TASK-508` (-)
 - ff42d6f5f 11-15 13:28 `Merge agent/verifyp04b: Merge branch 'main' into TASK-512` (verifyp04b)
 - 57218017f 11-15 13:28 `powerwire: merge origin/main, unblockable x skill offence test` (powerwire)
-- 4d1027508 11-15 13:27 `Merge branch 'main' into TASK-512` (-)
-- f89d5b557 11-15 13:19 `Merge agent/farmloop: Merge branch 'main' into farmloop` (farmloop)
 <!-- statusgen:end -->
