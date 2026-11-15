@@ -261,7 +261,7 @@
   @container cv (max-width: 700px) {
     .cv { --cv-bar: 88px; --cv-tabs: 44px; --cv-p: 8px;
       --u: round(down, calc((100vw - 2 * var(--cv-g) - 2 * var(--cv-p)) / 10), 1px); } /* the width sets the cell: both tabs scroll, so the height no longer limits it */
-    .cv > .d-band-status .d-links a:not(:first-child) { display: none; }
+    .cv > .d-band-status .d-links > a:not(:first-child) { display: none; }
     .cv > .d-band-status { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: "brand links"; grid-template-rows: 100%; }
     .cv > .d-band-status .d-band-main { display: none; }
     .cv .cv-morebtn { display: inline-flex; align-items: center; justify-content: center; min-inline-size: 44px; min-block-size: 36px; white-space: nowrap; }
