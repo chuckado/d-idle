@@ -79,6 +79,9 @@
     "player_pause": {"params": ["step"], "say": [
       "Paused by you: {step}.",
       "You paused me: {step}."]},
+    "player_reset": {"params": [], "say": [
+      "You pressed Reset, so I am leaving the game and rejoining.",
+      "Resetting at your request: out of the game and back in."]},
     "activity": {"params": ["activity"], "say": [
       "Now: {activity}.",
       "Busy with: {activity}."]}
