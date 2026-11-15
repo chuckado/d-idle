@@ -19,7 +19,7 @@ export function measure(win, opts) {
   };
   for (const n of d.querySelectorAll('[data-cockpit-slot]')) if (vis(n)) test(n, 'slot ' + n.dataset.cockpitSlot);
   for (const root of d.querySelectorAll('[data-cockpit-panel]')) {
-    if (!vis(root)) continue;
+    if (!vis(root) || root.closest('.d-drawer')) continue; // a drawer is a side sheet that scrolls inside itself, not part of the frame
     test(root, 'panel ' + (root.dataset.panel || '?'));
     // every descendant too: content cut one level below the root is still cut. A scroll container's own children are its business.
     for (const n of root.querySelectorAll('*')) {
@@ -30,7 +30,7 @@ export function measure(win, opts) {
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
-    const r = vis(n);
+    const r = n.closest('.d-drawer') ? null : vis(n);
     if (r && (r.right > vw + 1 || r.bottom > vh + 1 || r.left < -1 || r.top < -1)) out.push({ el: n.dataset.cockpitSlot ? 'slot ' + n.dataset.cockpitSlot : 'panel ' + (n.dataset.panel || '?'), right: Math.round(r.right), bottom: Math.round(r.bottom) });
   }
   // a slot (the band and the stage apart) that shows no panel is a blank hole, and a panel still loading or failed is not a fit

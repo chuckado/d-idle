@@ -900,7 +900,7 @@ async function start() {
   if (cockpit) setupDrawers(drRoots, drTitles);
   if (layoutReq) { setupMenu(sel); layoutNote(sel, cockpit); }
   // a new hero meets the first-steps card once, without opening a menu
-  if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer')) { pref(FIRST, '1'); openDrawer('onboarding'); }
+  if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
   if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
   for (const [m, parts] of made) {
     const css = el('link');

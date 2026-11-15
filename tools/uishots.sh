@@ -88,20 +88,20 @@ if [ "$char" = 1 ]; then
 fi
 if [ "$pics" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/pic-*
-	echo "default theme=dark&needs=2
-default-needs0 theme=dark&needs=0
-default-needs5 theme=dark&needs=5
-default-measuring theme=dark&needs=0&glance=measuring
-default-blocked theme=dark&needs=1&glance=blocked
-default-unknown theme=dark&needs=0&glance=unknown
-default-light theme=light&needs=2
-default-progresstab theme=dark&needs=2&tab=Progress
-default-worst theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
-default-worst-light theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
-default-paused theme=dark&needs=2&cmd=paused&glance=full,paused
-default-loop theme=dark&needs=2&cmd=loop
-default-live theme=dark&needs=2&stream=live
-default-zone theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
+	echo "default first=0&theme=dark&needs=2
+default-needs0 first=0&theme=dark&needs=0
+default-needs5 first=0&theme=dark&needs=5
+default-measuring first=0&theme=dark&needs=0&glance=measuring
+default-blocked first=0&theme=dark&needs=1&glance=blocked
+default-unknown first=0&theme=dark&needs=0&glance=unknown
+default-light first=0&theme=light&needs=2
+default-progresstab first=0&theme=dark&needs=2&tab=Progress
+default-worst first=0&theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-worst-light first=0&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-paused first=0&theme=dark&needs=2&cmd=paused&glance=full,paused
+default-loop first=0&theme=dark&needs=2&cmd=loop
+default-live first=0&theme=dark&needs=2&stream=live
+default-zone first=0&theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
 			w=${sz%x*} h=${sz#*x}
@@ -121,20 +121,21 @@ if [ "$fit" = 1 ]; then
 	# the default page also at the window sizes between the phone and the wide cockpit (the Electron viewer opens /watch in any of them)
 	midsizes="1024x768 900x700 1279x720"
 	# name, query, and an optional selector to press before the second measurement (the "..." sheet must be hittable)
-	pages="default watch?theme=dark
-default-light watch?theme=light
-default-menu watch?theme=dark #btn-more
-default-needs0 watch?theme=dark&needs=0
-default-needs5-orders8 watch?theme=dark&needs=5&cmd=eight
-default-needs5-orders8-light watch?theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
-default-empty watch?theme=dark&needs=0&cmd=empty
-default-live-stream watch?theme=dark&needs=2&stream=live
-default-live-stream-light watch?theme=light&needs=2&stream=live
-default-paused watch?theme=dark&needs=2&cmd=paused&glance=full,paused
-default-phone-progress watch?theme=dark&needs=2&tab=Progress
-default-phone-map watch?theme=dark&needs=2&tab=Map
-default-zone watch?theme=dark&zone=cp
-default-drawer-log watch?theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+	pages="default watch?first=0&theme=dark
+default-light watch?first=0&theme=light
+default-menu watch?first=0&theme=dark #btn-more
+default-needs0 watch?first=0&theme=dark&needs=0
+default-needs5-orders8 watch?first=0&theme=dark&needs=5&cmd=eight
+default-needs5-orders8-light watch?first=0&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-empty watch?first=0&theme=dark&needs=0&cmd=empty
+default-live-stream watch?first=0&theme=dark&needs=2&stream=live
+default-live-stream-light watch?first=0&theme=light&needs=2&stream=live
+default-paused watch?first=0&theme=dark&needs=2&cmd=paused&glance=full,paused
+default-phone-progress watch?first=0&theme=dark&needs=2&tab=Progress
+default-phone-map watch?first=0&theme=dark&needs=2&tab=Map
+default-zone watch?first=0&theme=dark&zone=cp
+default-drawer-log watch?first=0&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+default-firstrun watch?theme=dark&needs=2 ?#none .d-drawer:not([hidden])_[data-key=drawer-close]
 cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 orders-eight watch?layout=cockpit&theme=dark&cmd=eight
