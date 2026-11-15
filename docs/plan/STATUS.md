@@ -189,6 +189,7 @@
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
+| herostats | proposed | - | `docs/survival/herostats-2026-11-15.md`<br>`internal/d2dsrc/gearstats.go`<br>`internal/d2dsrc/gearstats_test.go`<br>`internal/power/hero.go`<br>`docs/survival/power.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -232,6 +233,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 50f3e1808 11-15 07:11 `Merge agent/herostats: herostats: card result, verification notes` (herostats)
 - bc985d7ff 11-15 06:40 `Merge agent/survwire: survwire: card result` (survwire)
 - b2a72e8ed 11-15 06:04 `Merge agent/uic4: Merge origin/main into uic4` (uic4)
 - 0ebf55048 11-15 05:49 `Merge origin/main into uic4` (-)
@@ -241,5 +243,4 @@
 - 0d160ecd4 11-15 05:24 `Merge agent/uis7: Merge branch 'main' into TASK-485` (uis7)
 - 845529a15 11-15 05:23 `Merge branch 'main' into TASK-485` (-)
 - 93268564d 11-15 05:23 `Merge origin/main into uic4` (-)
-- 2fbc7bf94 11-15 05:22 `Merge agent/verifyp03d: Merge branch 'main' into TASK-488` (verifyp03d)
 <!-- statusgen:end -->
