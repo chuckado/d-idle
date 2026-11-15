@@ -228,6 +228,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4bc0a4927 11-15 02:23 `Merge agent/cockpitreview: cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders)` (cockpitreview)
 - ce0a0e9f2 11-15 01:51 `Merge agent/uis3: Merge branch 'main' into TASK-462` (uis3)
 - 069647906 11-15 01:50 `Merge branch 'main' into TASK-462` (-)
 - 24cf4fd0f 11-15 01:43 `Merge origin/main into agent/uis3` (-)
@@ -237,5 +238,4 @@
 - ff2d080db 11-15 01:33 `Merge branch 'main' into TASK-477` (-)
 - 7aaeed825 11-15 01:32 `Merge agent/decomp23: Merge branch 'main' into TASK-473` (decomp23)
 - 6f1df264a 11-15 01:31 `Merge branch 'main' into TASK-473` (-)
-- 1f779e3e8 11-15 01:28 `decomp23: merge origin/main, re-apply P02/P04/P06 rows (trace facts only)` (-)
 <!-- statusgen:end -->

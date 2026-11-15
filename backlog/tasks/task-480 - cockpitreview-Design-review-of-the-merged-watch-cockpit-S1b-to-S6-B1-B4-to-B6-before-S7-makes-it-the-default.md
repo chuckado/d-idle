@@ -1,10 +1,13 @@
 ---
 id: TASK-480
-title: 'cockpitreview: Design review of the merged watch cockpit (S1b to S6, B1, B4 to B6) before S7 makes it the default'
-status: In Progress
+title: >-
+  cockpitreview: Design review of the merged watch cockpit (S1b to S6, B1, B4 to
+  B6) before S7 makes it the default
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T07:12:00Z'
+updated_date: '2026-11-15T07:27:00Z'
 labels:
   - watch
   - research
