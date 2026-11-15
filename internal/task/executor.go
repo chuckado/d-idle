@@ -153,6 +153,9 @@ func (e *Executor) Reset() {
 	e.kitBlocks = nil
 }
 
+// Park blocks group g with a reason so the planner moves on to the level plan; the bot Unparks it later.
+func (e *Executor) Park(g, why string) { e.blocked[g] = why }
+
 // Unpark lifts the block, strikes and failure counts of group g so the planner offers it again (the bot's retry after a
 // blocked journey: the hero farmed meanwhile and the world may have changed).
 func (e *Executor) Unpark(g string) {
