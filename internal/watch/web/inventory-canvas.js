@@ -143,12 +143,16 @@
 
   // ---- stat sheets ----
   function tile(label, value, tone, title) { return { l: label, v: value, t: tone || '', k: title || '' }; }
+  // The sheet reads /api/hero. A value the backend does not read is absent from the reply (stats.attrs, .defense, .damage) and
+  // so has no tile: nothing is shown as a zero that was never read.
   function heroTiles(v, h) {
-    var t = [];
+    var t = [], st = h && h.stats, a = st && st.attrs, r = st && st.resists;
     if (h && h.level) t.push(tile('Level', h.level));
+    if (a) { t.push(tile('Strength', a.str)); t.push(tile('Dexterity', a.dex)); t.push(tile('Vitality', a.vit)); t.push(tile('Energy', a.energy)); }
     if (h && h.maxLife) t.push(tile('Life', num(h.life) + ' / ' + num(h.maxLife), h.life <= 0 ? 'bad' : ''));
     if (h && h.maxMana) t.push(tile('Mana', num(h.mana) + ' / ' + num(h.maxMana)));
-    var r = h && h.stats && h.stats.resists;
+    if (st && st.defense !== undefined && st.defense !== null) t.push(tile('Defense', num(st.defense), '', 'Defense as the game counts it'));
+    if (st && st.damage) t.push(tile('Damage', st.damage.min + '-' + st.damage.max, '', 'Damage from items and skills; the weapon\'s own base damage is not in it'));
     if (r) [['Fire res', 'fire'], ['Cold res', 'cold'], ['Light res', 'light'], ['Poison res', 'poison']].forEach(function (k) { t.push(tile(k[0], r[k[1]] + '%', r[k[1]] < 0 ? 'bad' : '')); });
     if (h && h.xpNext > 0) {
       var left = h.xpNext - h.xp;
@@ -424,11 +428,13 @@
     document.addEventListener('d2:inventory', onView);
     document.addEventListener('d2:inventory-fresh', function (e) { view = e.detail; drawBar(view); drawSel(); });
     document.addEventListener('d2:repair', function (e) { repair = e.detail; if (view) drawRepair(view, repair); });
+    function select(key) { selKey = key; askTrash = ''; if (view) { markSel(); fitSlots(); drawSel(); } }
     document.addEventListener('click', function (e) {
       var k = e.target && e.target.closest ? e.target.closest('[data-key]') : null;
       if (!k || !/^(item|slot)-/.test(k.dataset.key || '')) return;
-      selKey = k.dataset.key; askTrash = ''; if (view) { markSel(); fitSlots(); drawSel(); }
+      select(k.dataset.key);
     });
+    document.addEventListener('d2:select', function (e) { if (/^(item|slot)-/.test(e.detail || '')) select(e.detail); }); // a right-click selects too
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && popOpen) { pop(false); return; }
       var t = e.target, typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA');
