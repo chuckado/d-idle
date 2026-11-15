@@ -1,6 +1,7 @@
 ## item-3
 div [data-sig=ga6xwb]
   h3.q-magic [] "War Staff" title="War Staff"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad data-who=hero] "You: a two-handed weapon and a shield cannot be worn together; take the other one off first" title="You: a two-handed weapon and a shield cannot be worn together; take the other one off first"
@@ -16,6 +17,7 @@ div [data-sig=ga6xwb]
 ## item-4
 div [data-sig=8g7aeg]
   h3.q-magic [] "Cap" title="Cap"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "In the pack · item level 10" title="In the pack · item level 10"
   div.cv-why []
     p [data-tone=bad data-who=hero] "You: Strength 20 (30)  17 short, Paladin only" title="You: Strength 20 (30)  17 short, Paladin only"
@@ -32,6 +34,7 @@ div [data-sig=8g7aeg]
 ## item-5
 div [data-sig=b5045q]
   h3.q-magic [] "Ring A (unidentified)" title="Ring A (unidentified)"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "In the pack · item level 10 · durability 0/20" title="In the pack · item level 10 · durability 0/20"
   div.cv-why []
     p [data-tone=good data-who=hero] "You: can use it (broken: it does nothing until repaired)" title="You: can use it (broken: it does nothing until repaired)"
@@ -49,6 +52,7 @@ div [data-sig=b5045q]
 ## item-90
 div [data-sig=u96she]
   h3.q-rare [] "Ring" title="Ring"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "In the stash" title="In the stash"
   div.cv-why []
   div.cv-props []
@@ -60,6 +64,7 @@ div [data-sig=u96she]
 ## slot-lhand
 div [data-sig=1n4kzjw]
   h3.q-magic [] "Buckler" title="Buckler"
+    button.cv-selx [aria-label=Close the item card] "×"
   p.cv-where [] "Worn by you, left hand · item level 10" title="Worn by you, left hand · item level 10"
   div.cv-why []
     p [data-tone=good data-who=hero] "You: can use it" title="You: can use it"
