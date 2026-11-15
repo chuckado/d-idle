@@ -3,7 +3,7 @@
     <div class="n-head">
       <span> "Needs you"
       <button class="n-dots" data-key="menu" data-more="" aria-haspopup="true" aria-label="All needs and notification setting" type="button"> "..."
-    <div class="n-list">
+    <div class="n-list" data-scroll="">
       <div class="n-row" data-id="gear" data-sev="danger" title="Weapon broken - repair is about 180 gold">
         <span class="n-shape">
         <span class="n-t">

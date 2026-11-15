@@ -114,7 +114,7 @@
      column; two columns on a wide window), phoneTabs (under the picture on a phone). A slot with nothing in it is not
      built, so its neighbours take the room. Nothing in a slot has a content-driven height. */
   .d-shell[data-template="cockpit"] { --c-band: 44px; --c-gap: 8px; --c-strip: 112px; --c-railmin: 400px; display: grid; grid-template-rows: var(--c-band) minmax(0, 1fr);
-    gap: 0; padding: 0; block-size: 100dvh; min-block-size: 0; overflow: hidden; }
+    gap: 0; padding: 0; block-size: calc(100dvh - var(--d-banner-h, 0px)); min-block-size: 0; overflow: hidden; }
   .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-band: 104px; }
   .d-shell[data-template="cockpit"] > .d-band-status { grid-template-rows: 100%; }
   .d-shell[data-template="cockpit"] > .d-band-status .d-links { flex-wrap: nowrap; }
@@ -125,7 +125,7 @@
   .d-shell[data-template="cockpit"] > .d-editbar { position: fixed; inset-block-end: var(--c-gap); inset-inline-start: 50%; transform: translateX(-50%); max-inline-size: calc(100% - 2 * var(--c-gap)); margin: 0; flex-wrap: nowrap; z-index: var(--d-z-sheet); }
   .d-shell[data-template="cockpit"] > .d-editbar :is(.what, .d-btn) { white-space: nowrap; }
   .d-shell[data-template="cockpit"] > .d-editbar .keys { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-inline-size: 0; }
-  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
+  .d-main[data-template="cockpit"] { --c-fh: calc(100dvh - var(--d-banner-h, 0px) - var(--c-band) - 2 * var(--c-gap)); --c-stageh: var(--c-fh);
     --c-left: minmax(0, min(calc(var(--c-stageh) * 4 / 3), calc(100% - var(--c-railmin) - var(--c-gap))));
     display: grid; gap: var(--c-gap); padding: var(--c-gap); min-block-size: 0; min-inline-size: 0; align-items: stretch; position: relative;
     grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); grid-template-areas: "s"; }
@@ -245,4 +245,6 @@
   .d-shell[data-cmode="phone"] .d-bandpop { inset-inline: var(--d-sp-2); max-inline-size: none; }
   /* the phone's band is two lines: the sentence on the first, the meters side by side and the count on the second; the band panels read these */
   .d-shell[data-cmode="phone"] { --c-sentence: 100%; --c-meterflex: 1 1 0; --c-meterflow: column; --c-meterbar: minmax(24px, 1fr); --c-meterlbl: 3.4em; --c-metergap: var(--d-sp-5); }
+  /* S7: under a coarse pointer the controls outside the fixed frame (the "..." menu, the drawers, the layout note) are 44 px; the frame's own rows use --c-touch */
+  @media (pointer: coarse) { .d-menu-pop .d-btn, .d-drawer-head .d-btn, .d-layoutnote .d-btn { min-block-size: 44px; } }
 }

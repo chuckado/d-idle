@@ -20,7 +20,7 @@
   [data-panel="zone-map"] .zm-n[data-band="no"]::before { background: transparent; }
   [data-panel="zone-map"] .zm-nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
   [data-panel="zone-map"] .zm-rt { font-family: var(--d-font-num); color: var(--d-text-2); white-space: nowrap; }
-  [data-panel="zone-map"] .zm-why { display: none; grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--d-text-3); }
+  [data-panel="zone-map"] .zm-why { display: none; grid-column: 1 / -1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--d-text-2); }
   [data-panel="zone-map"] .zm-grid[data-tall="1"] .zm-why { display: block; }
   [data-panel="zone-map"] .zm-grid[data-tall="1"] .zm-rt[data-r="range"] { display: none; } /* a tall row has the range on its second line, so the name keeps the width */
   [data-panel="zone-map"] .zm-n[data-here] { border-color: var(--d-accent); }
@@ -47,7 +47,7 @@
   [data-panel="zone-map"] .zm-mh { flex: none; display: flex; align-items: center; gap: var(--d-sp-2); }
   [data-panel="zone-map"] .zm-mt { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   [data-panel="zone-map"] .zm-rg { flex: 1 1 auto; color: var(--d-text-2); font-size: var(--d-fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  [data-panel="zone-map"] .zm-x { flex: none; background: none; border: 0; color: var(--d-text-3); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 28px; min-block-size: 24px; }
+  [data-panel="zone-map"] .zm-x { flex: none; background: none; border: 0; color: var(--d-text-2); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 28px; min-block-size: 24px; }
   [data-panel="zone-map"] .zm-x:hover { color: var(--d-danger); }
   /* every line is one line, cut with an ellipsis (the full text is its title): the sheet is as short as a 189 px tile */
   [data-panel="zone-map"] .zm-l { flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

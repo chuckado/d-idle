@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into p03bposted <!--sg:agent/p03bposted-->
+- Merge branch 'main' into TASK-485 <!--sg:agent/uis7-->
 - Merge branch 'main' into TASK-488 <!--sg:agent/verifyp03d-->
 - Merge branch 'main' into p02posted <!--sg:agent/p02posted-->
 - uis7review: design review of S7 (cockpit default) before merge: approve with changes <!--sg:agent/uis7review-->

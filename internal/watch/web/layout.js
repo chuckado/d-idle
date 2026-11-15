@@ -294,6 +294,19 @@ export function cockpitIds(layout) {
   return out;
 }
 
+// The layout name a browser's stored preference stands for (S7). Only a choice made in the menu counts (picked: the menu also
+// writes d2layoutpick); a Simple that an older shell pinned by itself for a new hero was never a choice, so it follows the
+// default. Every other value could only have come from the menu and is kept ('saved' = the stored copy).
+export function effectiveChoice(pref, picked) {
+  return pref === 'simple' && !picked ? '' : pref || '';
+}
+
+// The cockpit's slot panels that the manifests do not offer (the startup self-check: a missing one sends the page to Standard).
+export function missingSlots(layout, haveIds) {
+  const have = new Set(haveIds);
+  return [...cockpitIds(layout)].filter((id) => !have.has(id));
+}
+
 export function cockpitMode(width, mode) {
   if (mode === 'overlay') return '';
   return width < COCKPIT_PHONE ? 'phone' : width >= COCKPIT_WIDE ? 'wide' : 'page';

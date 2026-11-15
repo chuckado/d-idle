@@ -4,5 +4,5 @@
     background: var(--d-state-bg-danger); color: var(--d-danger); }
   [data-panel="needs-count"] .pill[data-tone="warn"] { background: var(--d-state-bg-warn); color: var(--d-warn); }
   [data-panel="needs-count"] .pill[data-tone="info"] { background: var(--d-state-bg-info); color: var(--d-info); }
-  [data-panel="needs-count"] .pill[data-tone="none"] { background: var(--d-surface-2); color: var(--d-text-3); font-weight: 500; }
+  [data-panel="needs-count"] .pill[data-tone="none"] { background: var(--d-surface-2); color: var(--d-text-2); font-weight: 500; }
 }

@@ -14,12 +14,13 @@ export function measure(win, opts) {
     if (!n.clientHeight && !n.clientWidth) return; // inline boxes and SVG parts have no client box
     const dh = n.scrollHeight - n.clientHeight, dw = n.scrollWidth - n.clientWidth;
     const ell = cs(n).textOverflow === 'ellipsis'; // one line cut with an ellipsis: width only, by design
-    const bad = (dh > 1 && !scroller(n)) || (dw > 1 && !ell && !scroller(n));
+    const clamp = cs(n).webkitLineClamp && cs(n).webkitLineClamp !== 'none'; // a text cut to N lines with an ellipsis: by design
+    const bad = (dh > 1 && !scroller(n) && !clamp) || (dw > 1 && !ell && !scroller(n));
     if (bad) over.push({ el: label, dh: dh > 1 ? dh : 0, dw: dw > 1 && !ell ? dw : 0 });
   };
   for (const n of d.querySelectorAll('[data-cockpit-slot]')) if (vis(n)) test(n, 'slot ' + n.dataset.cockpitSlot);
   for (const root of d.querySelectorAll('[data-cockpit-panel], [data-fit-deep]')) {
-    if (!vis(root)) continue;
+    if (!vis(root) || root.closest('.d-drawer')) continue; // a drawer is a side sheet that scrolls inside itself, not part of the frame
     test(root, root.dataset.fitDeep !== undefined ? 'band' : 'panel ' + (root.dataset.panel || '?'));
     // every descendant too: content cut one level below the root is still cut. A scroll container's own children are its business.
     for (const n of root.querySelectorAll('*')) {
@@ -37,7 +38,7 @@ export function measure(win, opts) {
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
-    const r = vis(n);
+    const r = n.closest('.d-drawer') ? null : vis(n);
     if (r && (r.right > vw + 1 || r.bottom > vh + 1 || r.left < -1 || r.top < -1)) out.push({ el: n.dataset.cockpitSlot ? 'slot ' + n.dataset.cockpitSlot : 'panel ' + (n.dataset.panel || '?'), right: Math.round(r.right), bottom: Math.round(r.bottom) });
   }
   // a slot (the band and the stage apart) that shows no panel is a blank hole, and a panel still loading or failed is not a fit
@@ -62,7 +63,7 @@ export function measure(win, opts) {
     slots.push({ slot: n.dataset.cockpitSlot, x: Math.round(r.left), y: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) });
     if (n.dataset.cockpitSlot === 'band' || n.dataset.cockpitSlot === 'stage') mark(r);
   }
-  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar')) { const r = vis(n); if (r) mark(r); }
+  for (const n of d.querySelectorAll('[data-cockpit-panel], .d-tabbar, .update-banner')) { const r = vis(n); if (r) mark(r); } // the update banner takes its strip off the frame (--d-banner-h): covered, not dead
   let covered = 0;
   for (let i = 0; i < cov.length; i++) covered += cov[i];
   let best = 0, bx = 0, by = 0, prev = new Int16Array(cols + 1), cur = new Int16Array(cols + 1);

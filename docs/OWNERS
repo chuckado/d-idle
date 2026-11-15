@@ -634,6 +634,9 @@ internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
 internal/watch/funwire.go  credit-runner  uib4
 internal/watch/gearsets_test.go  credit-runner  gearsets
+internal/watch/glance.go  credit-runner  uis7
+internal/watch/glance_questions.go  credit-runner  uis7
+internal/watch/glance_questions_test.go  credit-runner  uis7
 internal/watch/glancepanels_test.go  credit-runner  uis3
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/hero.go  credit-runner  uic3
@@ -653,6 +656,7 @@ internal/watch/invui.go  credit-runner  uic2
 internal/watch/layout.go  credit-runner  uis1
 internal/watch/layout.go  credit-runner  uis6
 internal/watch/layout_test.go  credit-runner  uis1
+internal/watch/layout_test.go  credit-runner  uis7
 internal/watch/logtab.go  credit-runner  uis6
 internal/watch/logtab_test.go  credit-runner  uis6
 internal/watch/mercapi.go  credit-runner  botmerc
@@ -705,6 +709,7 @@ internal/watch/testdata/gear_repairtrip_dom.js  credit-runner  repairtrip
 internal/watch/testdata/gear_repairtrip_dom.txt  credit-runner  repairtrip
 internal/watch/testdata/gearsets  credit-runner  gearsets
 internal/watch/testdata/glancepanels/  credit-runner  uis3
+internal/watch/testdata/glancepanels/  credit-runner  uis7
 internal/watch/testdata/history-export.json  credit-runner  maphistoryD
 internal/watch/testdata/history-heat.json  credit-runner  maphistoryB
 internal/watch/testdata/history.json  credit-runner  maphistoryA
@@ -713,6 +718,8 @@ internal/watch/testdata/itemactions  credit-runner  gearsets
 internal/watch/testdata/itemactions/act_dom.js  credit-runner  nopins
 internal/watch/testdata/itemtip/tip_dom.js  credit-runner  nopins
 internal/watch/testdata/itemusable/  credit-runner  charreq
+internal/watch/testdata/layout_cells.golden  credit-runner  uis7
+internal/watch/testdata/layout_default.js  credit-runner  uis7
 internal/watch/testdata/logpanel/  credit-runner  uis6
 internal/watch/testdata/map_panel.js  credit-runner  maphistory
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryA
@@ -741,6 +748,7 @@ internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/components.css  credit-runner  uis6
+internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
 internal/watch/web/inventory-actions.css  credit-runner  uic3
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
@@ -770,8 +778,11 @@ internal/watch/web/inventory.js  credit-runner  repairtrip
 internal/watch/web/inventory.js  credit-runner  uic2
 internal/watch/web/layout.js  credit-runner  uis1
 internal/watch/web/layout.js  credit-runner  uis6
+internal/watch/web/layout.js  credit-runner  uis7
 internal/watch/web/layout.json  credit-runner  uis1
+internal/watch/web/layout.json  credit-runner  uis7
 internal/watch/web/layouts/  credit-runner  uis1
+internal/watch/web/layouts/  credit-runner  uis7
 internal/watch/web/layouts/cockpit.json  credit-runner  uis6
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
@@ -794,6 +805,8 @@ internal/watch/web/panels/map  credit-runner  maptrail2
 internal/watch/web/panels/map/  credit-runner  uis6
 internal/watch/web/panels/needs-you/  credit-runner  uifix1
 internal/watch/web/panels/needs-you/  credit-runner  uis3
+internal/watch/web/panels/needs-you/panel.js  credit-runner  uis7
+internal/watch/web/panels/needs-you/panel.json  credit-runner  uis7
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uifix1
@@ -801,13 +814,16 @@ internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
+internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
+internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
+internal/watch/web/shell.js  credit-runner  uis7
 internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/shell.json  credit-runner  uis6
 internal/watch/web/skills.css  credit-runner  skilltrees
@@ -815,6 +831,8 @@ internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
 internal/watch/web/tokens.css  credit-runner  uis1
+internal/watch/web/tokens.css  credit-runner  uis7
+internal/watch/web/update.js  credit-runner  uis7
 internal/watch/web/watch.html  credit-runner  uifix1
 internal/watch/whychange.json  credit-runner  uifix1
 internal/watch/whyline.json  credit-runner  repairtrip
@@ -867,15 +885,22 @@ tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifix1
 tools/uishots.sh  credit-runner  uis3
 tools/uishots.sh  credit-runner  uis6
+tools/uishots.sh  credit-runner  uis7
 tools/uishots/  credit-runner  uic3
 tools/uishots/  credit-runner  uifix1
 tools/uishots/  credit-runner  uis3
 tools/uishots/  credit-runner  uis6
+tools/uishots/fit.js  credit-runner  uis7
 tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures_commands.go  credit-runner  uis4
+tools/uishots/fixtures_glance.go  credit-runner  uis7
+tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/genlayouts.js  credit-runner  uis1
+tools/uishots/genlayouts.js  credit-runner  uis7
 tools/uishots/layout-rows.json  credit-runner  uis1
+tools/uishots/layout-rows.json  credit-runner  uis7
 tools/uishots/pages.go  credit-runner  uic2
 tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
+tools/uishots/serve.go  credit-runner  uis7
 # END GENERATED OWNERS
