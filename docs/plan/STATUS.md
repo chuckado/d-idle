@@ -176,7 +176,6 @@
 | uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
 | decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | verifyp03c | proposed | - | `docs/upstream/verifier-p03b-2026-11-14.md` | - |
-| uis5 | proposed | - | `internal/watch/commands.go`<br>`internal/watch/commands_post.go`<br>`internal/watch/commands_post_test.go`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/web/panels/zone-map/`<br>`internal/watch/testdata/zonemap/`<br>`tools/uishots/`<br>`internal/watch/zonemap_test.go`<br>`internal/watch/testdata/orders_dom.js`<br>`internal/watch/testdata/orders_dom.txt`<br>`internal/watch/mapview.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | uib5 | in-progress | - | `cmd/d2bot/glancewire.go`<br>`cmd/d2bot/glancewire_test.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/d2dbackend.go` | - |
 | uib6 | in-progress | - | `cmd/d2bot/glancewire_blocked.go`<br>`cmd/d2bot/glancewire_blocked_test.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/funwire.go`<br>`internal/watch/commands.go` | - |

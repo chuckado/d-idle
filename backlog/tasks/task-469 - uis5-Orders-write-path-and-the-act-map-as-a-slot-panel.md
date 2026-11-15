@@ -1,10 +1,11 @@
 ---
 id: TASK-469
 title: 'uis5: Orders write path and the act map as a slot panel'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T04:50:00Z'
+updated_date: '2026-11-15T06:56:00Z'
 labels:
   - watch
   - feature
