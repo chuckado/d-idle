@@ -45,6 +45,14 @@ export function ack(intent, j) {
 }
 
 let lastUndo = null, keysOff = null;
+let lastRows = [];
+
+// replacing is how many open orders "Go now" would cancel first (the hub's replace mode closes every open order, queued or running;
+// queue entries, the repair, the farm and the Loop are not orders in that sense).
+export function replacing() {
+  return lastRows.filter((r) => /^order:/.test(r.id || '') && (r.state === 'queued' || r.state === 'active' || r.state === 'waiting')).length;
+}
+const REPLACES = ['go', 'fight_here', 'town'];
 // A toast with Undo that stays five seconds (the shell's toast with an action). Undo posts the request the dispatcher named;
 // the key z does the same while the toast is up.
 export function toastUndo(ctx, text, undo) {
@@ -71,8 +79,10 @@ export function doUndo(ctx) {
 export function sendCommand(ctx, intent, args, mode, quiet) {
   const body = { intent, args: args || {} };
   if (mode) body.mode = mode;
+  // Undo takes back only the new order, so the toast says what Go now cancelled before it
+  const gone = REPLACES.includes(intent) && mode !== 'queue' ? replacing() : 0;
   return ctx.post(COMMANDS, body).then((j) => {
-    if (j && j.ok) { toastUndo(ctx, ack(intent, j), j.undo); if (ctx.refresh) ctx.refresh(); return j; }
+    if (j && j.ok) { toastUndo(ctx, ack(intent, j) + (gone ? '; ' + gone + ' earlier ' + (gone === 1 ? 'order' : 'orders') + ' cancelled' : ''), j.undo); if (ctx.refresh) ctx.refresh(); return j; }
     if (!quiet) ctx.toast('warn', refusal(j));
     return j || { ok: false };
   });
@@ -216,6 +226,7 @@ export function mount(root, ctx) {
       down = false;
       view = v;
       const rows = v.rows || [];
+      lastRows = rows;
       count.textContent = openCount(rows) + ' open';
       ctx.ui.clear(verbs);
       const whys = [];

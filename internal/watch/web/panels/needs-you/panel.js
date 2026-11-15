@@ -5,6 +5,7 @@
 // /api/glance (needs). A button posts exactly the `post` and `body` of its action. textContent only.
 const RANK = { danger: 3, warn: 2, info: 1 };
 const SHOWN = 3;
+const SHOWN_SHORT = 2; // a short window (the cockpit's COCKPIT_SHORT, not a phone): Orders keeps its room
 
 // ordered is the needs, worst first (stable inside a severity); a severity this page does not know counts as info.
 export function ordered(needs) {
@@ -12,7 +13,7 @@ export function ordered(needs) {
   return (needs || []).map((n, i) => [n, i]).sort((a, b) => r(b[0]) - r(a[0]) || a[1] - b[1]).map((x) => x[0]);
 }
 
-export function overflow(needs) { return Math.max(0, (needs || []).length - SHOWN); }
+export function overflow(needs, shown = SHOWN) { return Math.max(0, (needs || []).length - shown); }
 
 export function sevOf(n) { return RANK[n.sev] ? n.sev : 'info'; }
 
@@ -28,23 +29,17 @@ export function mount(root, ctx) {
   dots.setAttribute('aria-haspopup', 'true');
   head.append(ctx.el('span', '', 'Needs you'), dots);
   const list = ctx.el('div', 'n-list');
-  const more = ctx.el('button', 'n-more');
-  more.type = 'button';
-  more.dataset.key = 'more';
-  more.setAttribute('aria-haspopup', 'true');
-  more.hidden = true;
   const pop = ctx.el('div', 'n-pop');
   pop.setAttribute('popover', 'auto');
   pop.setAttribute('role', 'dialog');
   pop.setAttribute('aria-label', 'Everything that needs you');
-  ctx.body.append(head, list, more, pop);
+  ctx.body.append(head, list, pop);
 
   const notify = ctx.store('notify');
   let on = notify.get() === '1';
   let sig = ''; // the last drawn reply: an identical poll leaves the rows (and a focused button) alone
   let seen = null; // red ids of the last reply; null until the first one (a page that opens on a red row does not ping)
   const toggle = () => { if (pop.togglePopover) pop.togglePopover(); };
-  more.addEventListener('click', toggle);
   dots.addEventListener('click', toggle);
 
   function act(a, btn) {
@@ -111,17 +106,19 @@ export function mount(root, ctx) {
       if (!v || !Array.isArray(v.needs)) { sig = ''; ctx.hide(true); return; }
       const needs = ordered(v.needs);
       ping(needs);
-      const now = JSON.stringify(needs);
+      const shown = ctx.short && ctx.short() ? SHOWN_SHORT : SHOWN; // a short window shows two rows: Orders keeps its room
+      const now = JSON.stringify([needs, shown]);
       if (now === sig) return;
       sig = now;
       ctx.ui.clear(list);
       ctx.ui.clear(pop);
-      if (!needs.length) { ctx.hide(true); more.hidden = true; ctx.state('ready'); return; }
+      if (!needs.length) { ctx.hide(true); ctx.state('ready'); return; }
       ctx.hide(false);
-      needs.slice(0, SHOWN).forEach((n) => list.append(row(n)));
-      const extra = overflow(needs);
-      more.hidden = !extra;
-      more.textContent = extra ? '+' + extra + ' more' : '';
+      needs.slice(0, shown).forEach((n) => list.append(row(n)));
+      // the "+N more" link takes the place of the "..." in the header: the same popover, no line of its own
+      const extra = overflow(needs, shown);
+      dots.textContent = extra ? '+' + extra + ' more' : '...';
+      dots.dataset.more = extra ? '1' : '';
       const all = ctx.el('div', 'n-all');
       needs.forEach((n) => all.append(row(n)));
       pop.append(all, sw());

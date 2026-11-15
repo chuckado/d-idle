@@ -99,7 +99,13 @@ cockpit-measuring layout=cockpit&theme=dark&needs=0&glance=measuring
 cockpit-blocked layout=cockpit&theme=dark&needs=1&glance=blocked
 cockpit-unknown layout=cockpit&theme=dark&needs=0&glance=unknown
 cockpit-light layout=cockpit&theme=light&needs=2
-cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress" | while read -r pname pq; do
+cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress
+cockpit-worst layout=cockpit&theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+cockpit-worst-light layout=cockpit&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+cockpit-paused layout=cockpit&theme=dark&needs=2&cmd=paused&glance=full,paused
+cockpit-loop layout=cockpit&theme=dark&needs=2&cmd=loop
+cockpit-live layout=cockpit&theme=dark&needs=2&stream=live
+cockpit-zone layout=cockpit&theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
 			w=${sz%x*} h=${sz#*x}
@@ -120,6 +126,21 @@ if [ "$fit" = 1 ]; then
 	pages="cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 orders-eight watch?layout=cockpit&theme=dark&cmd=eight
+strip-needs5-orders8 watch?layout=cockpit&theme=dark&needs=5&cmd=eight
+strip-needs5-orders8-light watch?layout=cockpit&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+paused watch?layout=cockpit&theme=dark&needs=2&cmd=paused&glance=full,paused
+paused-light watch?layout=cockpit&theme=light&needs=2&cmd=paused&glance=full,paused
+loop-row watch?layout=cockpit&theme=dark&needs=2&cmd=loop
+loop-row-light watch?layout=cockpit&theme=light&needs=2&cmd=loop
+merc-dead watch?layout=cockpit&theme=dark&needs=4&glance=full,mercdead
+low-supplies watch?layout=cockpit&theme=dark&needs=2&glance=full,supplieslow
+merc-dead-low-supplies-light watch?layout=cockpit&theme=light&needs=4&glance=full,mercdead,supplieslow
+no-merc-no-potions watch?layout=cockpit&theme=dark&needs=2&glance=full,nopotions
+live-stream watch?layout=cockpit&theme=dark&needs=2&stream=live
+live-stream-light watch?layout=cockpit&theme=light&needs=2&stream=live
+sentence-popover watch?layout=cockpit&theme=dark&needs=2&glance=full,paused [data-key=say] .d-bandpop:not([hidden])
+journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
+needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
 orders-rail watch?layout=cockpit-orders&theme=dark&needs=2
 orders-rail-eight watch?layout=cockpit-orders&theme=dark&needs=0&cmd=eight
 orders-rail-all watch?layout=cockpit-orders&theme=dark&needs=0&cmd=cancel-all

@@ -2,7 +2,7 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
+import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -558,6 +558,7 @@ function mapSwitch(box) {
   pair.forEach((n, i) => {
     const m = ck.meta.get(n.dataset.panel) || {}, b = ui.btn(m.switchLabel || m.title || n.dataset.panel, { size: 'sm', variant: 'ghost' });
     b.dataset.view = String(i);
+    if (m.title) { b.title = m.title; b.setAttribute('aria-label', m.title); }
     b.addEventListener('click', () => { ck.second = i === 1; paint(); const on = bar.children[i]; if (on) on.focus({ preventScroll: true }); });
     bar.appendChild(b);
   });
@@ -577,6 +578,8 @@ function applyCockpit() {
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
   shell.dataset.cmode = main.dataset.cmode = p.mode;
+  const back = document.getElementById('returnlink'); // one word on the phone: the links stay on one line
+  if (back) back.textContent = p.mode === 'phone' ? 'Return' : 'Return screen';
   main.dataset.has = p.has;
   main.style.setProperty('--c-strip', p.sizes.strip + 'px');
   main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
@@ -835,6 +838,7 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     post: (path, body) => postJSON(answerBase, path, body),
     refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)
     openDrawer(id) { return openDrawer(id); },
+    short() { return !!ck.plan && ck.plan.mode !== 'phone' && window.innerHeight < COCKPIT_SHORT; }, // a short cockpit window (the panels trim their lists)
   };
 }
 

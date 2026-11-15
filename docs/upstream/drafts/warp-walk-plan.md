@@ -1,6 +1,6 @@
 # Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit"
 
-> status: r3, **needs the second verifier pass** (card prfix4, 2026-11-15; the first, verifyp02, asked for the changes applied here). Branch `fid/warp-walk-r3` on the private fork remote, head `d442f595`, two commits on upstream `4e054f43`: the oracle `c6f5b409` (builds alone; its `compare` fails on the parent), then the claim `d442f595`. Backup of r2 before the squash: `fid/warp-walk-r2-pre-squash` (`3b4439b3`). Not pushed to GitHub; posting waits for the verifier and the user's go. Body for the PR: [../bodies/warp-walk-plan-body.md](../bodies/warp-walk-plan-body.md) (same text, below only the verifier map).
+> status: r3b, **recheck of two items by the verifier** (the second pass, verifier2-p02-2026-11-15.md, asked: an empty tick path is not equal, and the counts' repeatability; both done, backup of r3 `fid/warp-walk-r3-pre2` d442f595) (card prfix4, 2026-11-15; the first, verifyp02, asked for the changes applied here). Branch `fid/warp-walk-r3` on the private fork remote, head `5464877b`, two commits on upstream `4e054f43`: the oracle `2933a572` (builds alone; its `compare` fails on the parent), then the claim `5464877b`. Backup of r2 before the squash: `fid/warp-walk-r2-pre-squash` (`3b4439b3`). Not pushed to GitHub; posting waits for the verifier and the user's go. Body for the PR: [../bodies/warp-walk-plan-body.md](../bodies/warp-walk-plan-body.md) (same text, below only the verifier map).
 
 PR title: `A clicked warp's walk is planned to its tile unit`
 
@@ -15,6 +15,9 @@ PR title: `A clicked warp's walk is planned to its tile unit`
 | 5 commit order | oracle, then claim; 9 commits squashed to 2 |
 | 6 body a sketch | below |
 | 7 collision.md numbers | rewritten with the new counts |
+
+| second pass 1 and 2 (empty path counted equal; test matcher) | `compare` counts an empty tick path as not compared (427 starts) and an equal plan as exactly game.exe's path; the test needs a non-empty, exactly equal path; 8 of 8 on the claim, 6 of 8 fail on the mutant (V run) |
+| second pass 3 (counts move; zero headroom) | not deterministic across processes (same binary, 13 of 46,000 lines differ, U source); counts rounded, the wide residue is given by key: `--outcome-known 92:0,81:0-3` |
 
 ---
 
@@ -41,16 +44,20 @@ Two commits: the oracle (`test_warp_walk --dump`, `tools/emu/warp_walk_path.py`,
 
 ## Counted differentials (tree = upstream `4e054f43` plus the branch)
 
-`test_warp_walk --dump SEEDS FILE` clicks the centre of each warp's Select box through the real `World::apply` and `World::tick`, from a start a given distance off the warp's tile unit, and writes d2d's blocked bits round the unit, the path the tick planned, and whether the warp was taken (600 ticks, no monsters). `warp_walk_path.py game` runs game.exe's `FUN_00649970` (with `FUN_006498a0`, `FUN_00648120`, `FUN_00648050`, the type 7 pather `FUN_00679ed0`), the walker's frames `FUN_00650840` and the distance `FUN_00641530` under the emulator on those bits: its first path, and the outcome of its walk model (a walk, the distance test, one more walk, idle). `compare` judges every start: the plan the tick made against game.exe's first path, and the outcome against the model; it exits 1 on a plan that differs, on a start missing or listed twice, on a start that leaves the oracle's window, and on more outcome differences than `--outcome-max` (default 0).
+`test_warp_walk --dump SEEDS FILE` clicks the centre of each warp's Select box through the real `World::apply` and `World::tick`, from a start a given distance off the warp's tile unit, and writes d2d's blocked bits round the unit, the path the tick planned, and whether the warp was taken (600 ticks, no monsters). `warp_walk_path.py game` runs game.exe's `FUN_00649970` (with `FUN_006498a0`, `FUN_00648120`, `FUN_00648050`, the type 7 pather `FUN_00679ed0`), the walker's frames `FUN_00650840` and the distance `FUN_00641530` under the emulator on those bits: its first path, and the outcome of its walk model (a walk, the distance test, one more walk, idle). `compare` judges every start: the plan the tick made against game.exe's first path, and the outcome against the model; it exits 1 on a plan that differs, on a start missing or listed twice, on a start that leaves the oracle's window, and on any outcome difference beyond `--outcome-max` (default 0) that is not at a `--outcome-known level:warp` pair.
 
-| Sweep (levels 1..136 with warps) | starts | plan = game.exe, parent | plan = game.exe, claim | outcome differs, parent | outcome differs, claim |
-|---|---|---|---|---|---|
-| 2.5 cells, 8 directions, 30 seeds (`--dump 30`) | 21,023 parent, 21,021 claim | 20,507, **439 differ** | 20,974, **0 differ** | **146** (Act 1: 30, Acts 2 to 5: 116) | **0** |
-| 1.5 / 2.5 / 3.5 / 5 / 7 cells, 16 directions, 6 seeds (`--dump 6 --dists 1.5,2.5,3.5,5,7 --dirs 16`) | 40,189 parent, 40,185 claim | 39,446, **542 differ** | 39,981, **0 differ** | 211 | 157 (see limits: not the plan) |
+| Sweep (levels 1..136 with warps) | build | starts | plan = game.exe | plan differs | no path left after the tick (not compared) | in a town (not compared) | outcome differs |
+|---|---|---|---|---|---|---|---|
+| 2.5 cells, 8 directions, 30 seeds (`--dump 30`) | parent | 21,023 | 20,418 | **439** | 122 | 44 | **146** (Act 1: 30, Acts 2 to 5: 116) |
+| | claim | 21,021 | 20,885 (469 where a walk to a spot differs) | **0** | 122 | 14 | **0** |
+| 1.5 / 2.5 / 3.5 / 5 / 7 cells, 16 directions, 6 seeds (`--dump 6 --dists 1.5,2.5,3.5,5,7 --dirs 16`) | parent | 40,189 | 39,328 | **542** | 303 | 16 | 211 |
+| | claim | 40,185 | 39,862 (540 where a walk to a spot differs) | **0** | 305 | 18 | 157 (see limits: not the plan) |
 
-The two builds are two runs, so a start's neighbours differ a little (a level's walk flags fill room by room): each dump is compared against its own game.exe column, and the start counts differ by a few. Of the starts not counted as "equal": 219 on the claim (33 and 186) are starts where game.exe's first step is blocked and d2d's walk ends in the same tick, which clears the path, so the tick's plan is not visible; 32 on the claim (60 on the parent) are in a town, where the tick's crowd holds NPCs and the oracle has none. They do not fail the check; they are counted apart. The path the tick leaves after its first tick can lack the first point or two that the walker passed in that tick; `compare` accepts that and prints how many (0 points for 60,747 starts, 1 for 59, 2 for 149).
+So the plan is compared, and equal, in 60,747 starts of the claim's runs (1,009 of them starts where the spot plan differs from game.exe's), and differs in none; the parent differs in 981. A plan counts as equal only when the tick's path is exactly game.exe's first path. 427 starts on the claim (122 and 305) are not compared at all: the walk ended inside the tick (game.exe's first step is blocked, or the end is within the first step), so the tick leaves no path to read. 32 (14 and 18) are in a town, where the tick's crowd holds NPCs and the oracle has none. They are counted apart, not as equal. Each dump is compared against its own game.exe column.
 
-The test (no argument; it needs the game data and SKIPs without) runs 8 starts of seed 1 (levels 17, 46, 52, 76, 113 and 118, where the spot plan differs; 2 and 6 as controls) and checks the tick's path and whether the warp is taken against game.exe's answers (taken from the oracle). Built with the claim's `tick.cpp` put back to the parent's: **6 of the 8 fail, exit 1**; with the claim: 8 of 8, exit 0.
+The counts are not exactly repeatable: two processes of the same binary on the same input (`--sweep 30`) differ in 13 of about 46,000 result lines (seeds 3, 13 and 21), and in the start count by 3, so rounded counts are the claim and a rerun moves the columns by a few. The source was not found (U: the level or room build of a few seeds, not the walk). The wide sweep's outcome residue is therefore given by key, not by count (`--outcome-known`, below).
+
+The test (no argument; it needs the game data and SKIPs without) runs 8 starts of seed 1 (levels 17, 46, 52, 76, 113 and 118, where the spot plan differs; 2 and 6 as controls) and checks that the tick's path is exactly game.exe's first path (an empty path fails) and whether the warp is taken, against game.exe's answers (taken from the oracle's runs on the sweep's bits; the test runs each start alone). Built with the claim's `tick.cpp` put back to the parent's: **6 of the 8 fail, exit 1**; with the claim: 8 of 8, exit 0.
 
 ## How to re-check
 
@@ -65,7 +72,7 @@ uv run python warp_walk_path.py game /tmp/d.txt > /tmp/g.tsv
 uv run python warp_walk_path.py compare /tmp/d.txt /tmp/g.tsv     # claim: OK, exit 0; parent: PLAN DIFFERS lines, FAIL, exit 1
 D2_MPQ_DIR=<game data> ../../build/tests/test_warp_walk --dump 6 /tmp/w.txt --dists 1.5,2.5,3.5,5,7 --dirs 16
 uv run python warp_walk_path.py game /tmp/w.txt > /tmp/wg.tsv
-uv run python warp_walk_path.py compare /tmp/w.txt /tmp/wg.tsv --outcome-max 157   # claim: OK (its plan line: 0 differ)
+uv run python warp_walk_path.py compare /tmp/w.txt /tmp/wg.tsv --outcome-known 92:0,81:0-3   # claim: OK, exit 0 (parent: FAIL, exit 1)
 ```
 
 ## Honest limits

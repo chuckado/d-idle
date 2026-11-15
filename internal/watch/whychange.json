@@ -21,6 +21,12 @@
     "after_death_gold": "Once the spot is checked I return to the plan.",
     "player_items": "Once the queued item actions are done I go back to the plan; you can cancel a queued one on the inventory page.",
     "hold": "Your answer, yes or no, lets me go on.",
+    "player_pause": "Resume and I go back to the plan; orders you give now wait until then.",
+    "journey_blocked": "A level up or better gear opens the path; Go now in Journey makes me try at once.",
+    "farm_user": "Reaching the amount, or your cancel in Orders, ends it.",
+    "repair_wait": "The next safe moment starts the trip; cancel it in Orders.",
+    "repair_trip": "Once the gear is repaired I go back to what I did.",
+    "repair_farm": "Enough gold starts the repair; cancel it in Orders.",
     "activity": "An order from you changes what I do next."
   }
 }

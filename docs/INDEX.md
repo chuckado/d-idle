@@ -607,6 +607,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [c2c3-review.md](ui/redesign-2026-11-14/reviews/c2c3-review.md): Review of the merged character screen: C2 (canvas) and C3 (tooltip, menu, gestures, feedback) (status: review of `origin/main` at `4996d53af` (cards TASK-456 uic2 and TASK-463 uic3, both merged), 2026-11-15....)
 - [cockpit-review.md](ui/redesign-2026-11-14/reviews/cockpit-review.md): Review of the merged watch cockpit (S1b to S6, B1, B4 to B6), before S7 makes it the default (status: review, 2026-11-15, of `origin/main` at `0caf89220` (`?layout=cockpit`). Reviewer: the design reviewer of...)
 - [s1b-review.md](ui/redesign-2026-11-14/reviews/s1b-review.md): Review of slice S1b: the cockpit template in the shell, and the fit check (status: review of branch `agent/uis1b` at `d9389fc56` (card TASK-438) against `origin/main` at `f050a6fab`,...)
+- [s7-review.md](ui/redesign-2026-11-14/reviews/s7-review.md): Review of S7 (the cockpit becomes the default), before it merges (status: review of branch `agent/uis7` at `be9ac3373` (2026-11-15), done before the merge. Nothing here was checked...)
 
 `ui/redesign-2026-11-14/`
 
@@ -652,7 +653,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp.md](upstream/drafts/load-gold-clamp.md): Draft (local, NOT posted): "game: a saved purse or stash over its cap is 0 on entering a game" (status: r3, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [swing-start.md](upstream/drafts/swing-start.md): Draft (local, NOT posted): "A player's swing starts at its weapon's start frame and strikes on game.exe's... (status: r3, **verified PASS after wording fixes (second pass, TASK-418:...)
 - [warp-arrival.md](upstream/drafts/warp-arrival.md): Draft (local, NOT posted): "A warp lands on the free subtile nearest its unit, as FUN_005550b0" (status: r2, ready for the second verifier pass (prwarp, TASK-372, 2026-11-12). Branch `fid/warp-arrival-r2` on the...)
-- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3, **needs the second verifier pass** (card prfix4, 2026-11-15; the first, verifyp02, asked for the...)
+- [warp-walk-plan.md](upstream/drafts/warp-walk-plan.md): Draft (local, NOT posted): "A clicked warp's walk is planned to its tile unit" (status: r3b, **recheck of two items by the verifier** (the second pass, verifier2-p02-2026-11-15.md, asked: an...)
 - [zeal-gap.md](upstream/drafts/zeal-gap.md): Draft (local, NOT posted): Zeal strike gap, FUN_00553b10 (SUPERSEDED upstream, one residual) (status: 2026-11-12 (TASK-392, agent przeal). **The PR this card was to build is not needed: upstream main...)
 
 `upstream/`
@@ -670,6 +671,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
+- [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
