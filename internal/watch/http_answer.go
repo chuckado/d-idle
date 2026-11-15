@@ -33,7 +33,8 @@ type answerBody struct {
 	Kind    string `json:"kind"`
 	Area    string `json:"area"`
 	Minutes int    `json:"minutes"`
-	Until   string `json:"until"`   // orders: "" or "minutes" (timed) or "forever"; "level" arrives with slice 2
+	Until   string `json:"until"`   // orders: "" or "minutes" (timed), "forever" or "level" (with Level)
+	Level   int    `json:"level"`   // orders: the hero level an until-level order ends at
 	Replace bool   `json:"replace"` // orders: cancel the open orders first ("Go now")
 	ID      *int   `json:"id"`
 	Approve bool   `json:"approve"` // orders above the zone range: pay the charter (docs/tally-strip.md)
@@ -225,8 +226,16 @@ func (h *Hub) postOrder(b answerBody) (int, reply) {
 	case "", "minutes":
 	case "forever":
 		r.Forever = true
+	case "level":
+		r.UntilLevel = b.Level
+		if r.UntilLevel == 0 {
+			return status(fmt.Errorf("%w: until level needs a level", ErrBadOrder))
+		}
 	default:
-		return status(fmt.Errorf("%w: until must be minutes or forever (until-level comes later)", ErrBadOrder))
+		return status(fmt.Errorf("%w: until must be minutes, forever or level", ErrBadOrder))
+	}
+	if b.Level != 0 && b.Until != "level" {
+		return status(fmt.Errorf("%w: level goes with until: level", ErrBadOrder))
 	}
 	o, ch, err := h.place(r, b.Approve)
 	if err != nil {

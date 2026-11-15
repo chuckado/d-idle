@@ -165,9 +165,13 @@
 | upstream-next | proposed | - | `docs/research/upstream-next.md` | - |
 | survC | in-progress | - | `internal/survival/`<br>`internal/watch/survivalapi.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/survival/ledger.md`<br>`internal/danger/gapexport.go`<br>`internal/watch/survivalapi_test.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zoneshadow_test.go`<br>`cmd/d2bot/powerwire.go`<br>`cmd/d2bot/powerwire_test.go` | - |
 | uis4 | proposed | - | `internal/watch/commands.go`<br>`internal/watch/commands_test.go`<br>`internal/watch/testdata/commands/`<br>`internal/watch/web/panels/orders/`<br>`internal/watch/testdata/orders_dom.js`<br>`internal/watch/testdata/orders_dom.txt`<br>`tools/uishots/fixtures_commands.go` | - |
+| uis6 | proposed | - | `internal/watch/web/panels/area-map/`<br>`internal/watch/web/panels/log/`<br>`internal/watch/web/panels/map/`<br>`internal/watch/testdata/areamap/`<br>`internal/watch/testdata/logpanel/`<br>`internal/watch/logtab.go`<br>`internal/watch/logtab_test.go`<br>`internal/watch/areamap_test.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/components.css`<br>`internal/watch/web/layout.js`<br>`internal/watch/web/shell.json`<br>`internal/watch/web/layouts/cockpit.json`<br>`internal/watch/layout.go`<br>`internal/watch/panels.go`<br>`internal/watch/serve.go`<br>`tools/uishots/`<br>`tools/uishots.sh`<br>`tools/uilint/lint.go` | - |
 | uic2 | proposed | - | `internal/watch/web/inventory.js`<br>`internal/watch/web/inventory.css`<br>`internal/watch/web/inventory-merc.js`<br>`internal/watch/web/inventory-merc.css`<br>`internal/watch/web/inventory-sets.js`<br>`internal/watch/web/inventory-sets.css`<br>`internal/watch/web/inventory-canvas.js`<br>`internal/watch/web/inventory-canvas.css`<br>`internal/watch/invui.go`<br>`internal/watch/invapi.go`<br>`docs/inventory-ui.md`<br>`internal/watch/charscreen_test.go`<br>`internal/watch/testdata/charscreen/`<br>`tools/uishots.sh`<br>`tools/uishots/pages.go`<br>`tools/uishots/fixtures.go` | - |
 | statusrefresh | proposed | - | `docs/plan/STATUS.md` | - |
 | toastfix | proposed | - | `internal/watch/web/app.css`<br>`internal/watch/toastcontrast_test.go` | - |
+| uib1 | in-progress | - | `internal/bot/playerpause.go`<br>`internal/bot/playerpause_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/testdata/pause/`<br>`cmd/d2bot/pausewire.go`<br>`docs/pause.md`<br>`internal/bot/runner.go`<br>`internal/bot/goal.go`<br>`internal/bot/playeraction.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go` | - |
+| uib4 | in-progress | - | `internal/watch/orders.go`<br>`internal/watch/orders_untillevel_test.go`<br>`internal/watch/hub.go`<br>`internal/watch/http_answer.go`<br>`internal/watch/funwire.go` | - |
+| decomp22 | proposed | - | `docs/research/emu-runs-2026-11-14b.md`<br>`docs/research/warp-walk-trace.md`<br>`docs/research/data22`<br>`tools/emu/mode_switch.py`<br>`tools/emu/dc22_dis.py`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | ordersux3 | deferred | - | `internal/watch/mapdata.go`<br>`internal/watch/web/**`<br>`docs/orders-slice3.md` | - |
 | onboardtour | proposed | - | `internal/watch/web/onboarding.js`<br>`internal/watch/web/onboarding.css`<br>`docs/onboarding-tour.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
@@ -214,14 +218,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 776d705fa 11-14 20:46 `Merge agent/uis4: Merge branch 'main' into TASK-453` (uis4)
-- 49d8571e5 11-14 20:46 `Merge branch 'main' into TASK-453` (-)
-- c531b5422 11-14 20:44 `Merge agent/p05cr: Merge branch 'main' into TASK-459` (p05cr)
-- 99005156e 11-14 20:44 `Merge branch 'main' into TASK-459` (-)
-- 4769c8dc2 11-14 20:34 `Merge agent/toastfix: toastfix: stack toast text readable in dark theme, contrast test` (toastfix)
-- 1cbf7b792 11-14 20:33 `Merge origin/main into agent/uis4 (S1b, C2, S2 on main)` (-)
-- cc7f8016a 11-14 20:32 `Merge origin/main into agent/p05cr; P05 row edits re-applied` (-)
-- 2dd560602 11-14 20:03 `Merge agent/uis2: Merge origin/main into agent/uis2` (uis2)
-- e65e71841 11-14 19:54 `Merge origin/main into agent/uis2` (-)
-- de4d0c9e8 11-14 19:21 `Merge agent/survcal: Merge branch 'main' into survcal` (survcal)
+- bb8b822a1 11-14 23:58 `Merge agent/uib4: Merge branch 'main' into uib4` (uib4)
+- a1d8354d6 11-14 23:57 `Merge branch 'main' into uib4` (-)
+- d4dd67300 11-14 23:45 `Merge agent/uib1: Merge branch 'main' into TASK-464` (uib1)
+- c8643df88 11-14 23:44 `Merge branch 'main' into TASK-464` (-)
+- 9913f36ec 11-14 23:42 `Merge agent/decomp22: Merge branch 'main' into decomp22` (decomp22)
+- f48e7b3a8 11-14 23:41 `Merge branch 'main' into decomp22` (-)
+- c04a271a8 11-14 23:39 `Merge origin/main into agent/uib4` (-)
+- fc4f96218 11-14 23:35 `Merge branch 'main' into TASK-464` (-)
+- 4dad0901b 11-14 23:29 `Merge agent/uis6: uis6: minBlock 250` (uis6)
+- 3b1fbaa90 11-14 23:08 `Merge origin/main into agent/uis6; minBlock for the act map in the rail` (-)
 <!-- statusgen:end -->

@@ -153,21 +153,48 @@
   .d-slotcol { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; min-inline-size: 0; }
   .d-slotcol > .d-panel, .d-slottabs > .d-panel { flex: 0 1 auto; min-block-size: 0; }
   .d-slotcol > .d-panel:not([data-grow]), .d-slottabs > .d-panel:not([data-grow]) { max-block-size: 50%; } /* a panel that is not the last takes at most half the column: its list scrolls inside */
+  .d-slotcol[data-growmin] > .d-panel:not([data-grow]) { max-block-size: min(50%, calc((100% - var(--c-growmin) - 2 * var(--c-gap)) / 2)); } /* the last panel keeps its minimum; the ones above it scroll inside */
   .d-slotcol > .d-panel[data-grow], .d-slottabs > .d-panel[data-grow] { flex: 1 1 0; }
+  .d-slotcol > .d-panel[data-grow] { min-block-size: var(--c-growmin, 0px); }
   [data-cockpit-slot="strip"] > .d-panel { flex: 1 1 0; min-block-size: 0; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(2) { flex-grow: 1.25; }
   [data-cockpit-slot="strip"] > .d-panel:nth-child(3) { flex-grow: 1.1; }
-  .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; }
+  .d-slotcol > .d-panel, .d-slottabs > .d-panel, [data-cockpit-slot="strip"] > .d-panel { background: var(--d-surface-1); border-radius: var(--d-r-2); padding: var(--d-sp-2); overflow: hidden; box-sizing: border-box; position: relative; }
   .d-slottabs { display: flex; flex-direction: column; gap: var(--c-gap); min-block-size: 0; }
   .d-tabbar { display: flex; gap: var(--d-sp-1); }
   .d-tabbar > .d-btn { flex: 1 1 0; }
-  .d-tabbar > .d-btn[aria-selected="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
   /* a slot panel is bare: its picture or content fills the box, and its title bar actions are two small labels on the edge */
   .d-panel[data-cockpit-panel] > .d-slotbody { block-size: 100%; min-block-size: 0; }
   .d-panel[data-cockpit-panel] > .d-slotlabels { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; z-index: 2;
     font-size: var(--d-fs-0); color: var(--d-video-text); }
   .d-panel[data-cockpit-panel] > .d-slotlabels:not(:has(*)) { display: none; }
   .d-panel[data-cockpit-panel] > .d-slotlabels .meta:empty { display: none; }
+
+  /* two maps in one rail column: a switch shows one at a time (shell.js mapSwitch); a panel switched off takes no room */
+  .d-panel[data-off] { display: none; }
+  .d-mapswitch { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); z-index: 3; }
+  .d-panel:has(> .d-mapswitch) > .d-slotlabels { inset-inline-end: auto; inset-inline-start: var(--d-sp-2); inset-block-start: calc(var(--d-sp-1) + 5px); } /* the zone label makes room for the switch */
+  .d-menu-pop > [hidden] { display: none; }
+
+  /* drawers: the log and the first-steps card open as a side sheet over the page (a full-width sheet on a phone) */
+  .d-drawer-back { position: fixed; inset: 0; z-index: calc(var(--d-z-sheet) + 1); background: var(--d-scrim); }
+  .d-drawer-back[hidden], .d-drawer[hidden] { display: none; }
+  .d-drawer { position: fixed; inset-block: 0; inset-inline-end: 0; z-index: calc(var(--d-z-sheet) + 2); inline-size: min(440px, 100vw); box-sizing: border-box; display: flex; flex-direction: column;
+    background: var(--d-surface-2); border-inline-start: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); }
+  .d-drawer-head { display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); padding: var(--d-sp-2) var(--d-sp-3); flex: none; }
+  .d-drawer-head h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-drawer-body { flex: 1 1 0; min-block-size: 0; padding: 0 var(--d-sp-3) var(--d-sp-3); display: flex; flex-direction: column; }
+  .d-drawer-body > .d-panel { flex: 1 1 0; min-block-size: 0; position: relative; overflow: auto; }
+  .d-drawer-body > .d-panel[hidden] { display: none; }
+  .d-drawer-empty { display: none; margin: 0; color: var(--d-text-2); }
+  .d-drawer-body > .d-panel[hidden] ~ .d-drawer-empty { display: block; }
+  .d-drawer-body > .d-panel { display: flex; flex-direction: column; }
+  .d-drawer .d-panel[data-cockpit-panel] > .d-slotlabels { position: static; order: -1; justify-content: flex-end; color: var(--d-text-2); }
+  .d-drawer .d-slotbody { flex: 1 1 auto; min-block-size: 0; block-size: auto; }
+
+  /* phone: tall touch targets in the tab bar, the map switch and the drawer's close */
+  .d-shell[data-template="cockpit"][data-cmode="phone"] ~ .d-drawer, .d-shell[data-template="cockpit"][data-cmode="phone"] { --c-touch: 38px; }
+  .d-slottabs { overflow: hidden; }
 
   /* cockpit editor (layoutedit.js startCockpit): a handle on each tile, two dividers */
   .d-main[data-editing-cockpit] [data-cockpit-panel] { position: relative; outline: 1px dashed var(--d-line-strong); outline-offset: -2px; cursor: grab; }

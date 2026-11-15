@@ -21,7 +21,7 @@ let p = L.cockpitPlan(file, 1440, '', all);
 eq(p.band, ['statusline', 'hero-meters', 'needs-count']);
 assert.strictEqual(p.stage, 'video');
 eq(p.strip, ['progress', 'journey-strip', 'health']);
-eq(p.rail, [['needs-you', 'orders', 'zone-map']]);
+eq(p.rail, [['needs-you', 'orders', 'zone-map', 'area-map']]);
 assert.strictEqual(p.has, 'str');
 eq(p.sizes, { strip: 112, railMin: 400 });
 eq(p.tabs, []);
@@ -68,7 +68,7 @@ eq(file.sizes, { strip: 112, railMin: 400 }, 'the layout it started from is not 
 // swap: two panels trade places in every arrangement; one that is not in the layout replaces
 let sw = L.cockpitSwap(file, 'progress', 'orders');
 eq(sw.slots.strip, ['orders', 'journey-strip', 'health']);
-eq(sw.slots.rail, ['needs-you', 'progress', 'zone-map']);
+eq(sw.slots.rail, ['needs-you', 'progress', 'zone-map', 'area-map']);
 eq(sw.slots.railWide.top, ['needs-you', 'progress']);
 eq(sw.slots.phoneTabs.Orders, ['needs-you', 'progress']);
 eq(sw.slots.phoneTabs.Progress, ['orders', 'journey-strip', 'health']);
@@ -85,7 +85,7 @@ const edited = L.cockpitSize(L.cockpitSwap(file, 'health', 'zone-map'), { strip:
 const reloaded = JSON.parse(JSON.stringify(edited));
 for (const w of [390, 1440, 1920]) eq(L.cockpitPlan(reloaded, w, '', all), L.cockpitPlan(edited, w, '', all), 'same arrangement at ' + w);
 p = L.cockpitPlan(reloaded, 1440, '', all);
-eq(p.strip, ['progress', 'journey-strip', 'zone-map']); eq(p.rail, [['needs-you', 'orders', 'health']]);
+eq(p.strip, ['progress', 'journey-strip', 'zone-map']); eq(p.rail, [['needs-you', 'orders', 'health', 'area-map']]);
 eq(p.sizes, { strip: 140, railMin: 480 });
 
 // which panels mount: a cockpit mounts only slot panels it names, whatever else the page has; other layouts as before
@@ -97,4 +97,14 @@ const classic = JSON.parse(fs.readFileSync(process.argv[3].replace('cockpit.json
 eq(L.selectPanels(list, file, 'overlay').map((m) => m.id), L.selectPanels(list, classic, 'overlay').map((m) => m.id));
 assert.ok(!L.selectPanels(list, file, 'overlay').some((m) => m.id === 'orders'));
 eq(L.cockpitIds(file).size > 8, true);
+// S6: a drawer panel mounts in every cockpit (it is a sheet, not a tile); a cockpit-only panel mounts in no other layout
+const withDrawer = list.concat([{ id: 'log', slot: true, optIn: true, cockpitOnly: true, drawer: true, band: 'side' }, { id: 'area-map', slot: true, optIn: true, cockpitOnly: true, band: 'side' }]);
+eq(L.selectPanels(withDrawer, file, '').map((m) => m.id), ['video', 'hero-meters', 'orders', 'log', 'area-map']);
+eq(L.selectPanels(withDrawer, classic, '').map((m) => m.id), L.selectPanels(list, classic, '').map((m) => m.id), 'Classic never mounts a cockpit-only panel');
+const naming = JSON.parse(JSON.stringify(classic)); naming.breakpoints.wide.panels.push({ id: 'log', col: 1, row: 20, colSpan: 4, rowSpan: 2, order: 99 });
+eq(L.selectPanels(withDrawer, naming, '').some((m) => m.id === 'log'), false, 'a grid layout that names log still mounts nothing for it');
+// the map tab holds both maps; the wide rail has them in two columns, the page rail in one (the shell switches between them)
+p = L.cockpitPlan(file, 390, '', all); eq(p.tabs.find((t) => t.name === 'Map').ids, ['zone-map', 'area-map']);
+p = L.cockpitPlan(file, 1440, '', all); eq(p.rail[0].slice(-2), ['zone-map', 'area-map']);
+p = L.cockpitPlan(file, 1920, '', all); eq(p.rail, [['zone-map'], ['area-map']]);
 console.log('layout_cockpit ok');

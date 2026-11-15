@@ -157,6 +157,8 @@ type Fun struct {
 	Art *ArtAPI
 	// Repair mounts the gear condition and Repair now routes (repairapi.go); set it before Serve, nil: no routes.
 	Repair *RepairAPI
+	// Pause mounts GET and POST /api/pause (pauseapi.go); nil: no routes.
+	Pause *PauseAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
@@ -593,6 +595,7 @@ func (f *Fun) flush() {
 // Settle updates Codex entries whose thought closed and delivers the edges that waited for the class (call it from
 // the loop that polls the status).
 func (f *Fun) Settle() {
+	f.Hub.TickOrders()
 	if f.Hall != nil {
 		f.Hub.setHeroTitle(f.Hall.Title())
 	}
@@ -716,6 +719,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 			m.Handle(p, f.Art.Handler())
 		}
 	}
+	if f.Pause != nil {
+		m.Handle(PauseRoute, f.Pause.Handler())
+	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
@@ -792,6 +798,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 		for _, p := range SkillsPostRoutes {
 			m.Handle(p, f.Skills.PostHandler(o))
 		}
+	}
+	if f.Pause != nil {
+		m.Handle(PauseRoute, f.Pause.PostHandler(o))
 	}
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {

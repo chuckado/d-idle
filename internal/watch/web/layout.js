@@ -177,7 +177,7 @@ export function statusIds(layout, list) {
 // selectPanels(list, layout): the manifests the shell mounts. An optIn panel only when the layout in force names it;
 // with a `status` key (not in overlay mode), only the status-band panels it chooses. Without a layout nothing optIn is mounted.
 export function selectPanels(list, layout, mode) {
-  if (isCockpit(layout) && mode !== 'overlay') { const c = cockpitIds(layout); return list.filter((m) => m.slot && c.has(m.id)); } // no old tile in a cockpit
+  if (isCockpit(layout) && mode !== 'overlay') { const c = cockpitIds(layout); return list.filter((m) => (m.slot && c.has(m.id)) || m.drawer); } // no old tile in a cockpit; a drawer panel is a sheet, not a tile
   const names = named(layout), status = mode === 'overlay' ? null : statusIds(layout, list); // the OBS strip keeps the page's own band
   return list.filter((m) => !m.cockpitOnly).filter((m) => (!m.optIn || names.has(m.id)) && (m.band !== 'status' || status === null || status.includes(m.id)));
 }
