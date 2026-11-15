@@ -1,0 +1,39 @@
+# P06 missile_block.py compare, 2026-11-15, 30,000 mm_diff cases (seed 20261115), game side on the worker host, d2d on the NAS builder
+## parent (oracle commit 4ec10d22 code: no gate)
+DIFF case 1 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 287 of 400
+DIFF case 8 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 276 of 400
+DIFF case 12 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 305 of 400
+DIFF case 14 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 290 of 400
+DIFF case 21 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 310 of 400
+DIFF case 31 (physical 0..0, rolled 0): game.exe can-block 0, d2d blocked 298 of 400
+...
+29421 cases, 4550 differ (4550 unblockable in game.exe); 579 excluded (Blood Raven: her record carries her weapon's random damage)
+## claim (3662230e)
+29421 cases, 0 differ (4550 unblockable in game.exe); 579 excluded (Blood Raven: her record carries her weapon's random damage)
+## game.exe can-block by physical pair (lo hi count)
+0 0 0 4543
+0 0 30720 1
+0 0 3840 1
+0 0 39680 1
+0 0 50432 1
+0 0 55296 1
+0 0 59904 1
+0 0 7936 1
+1 256000 384000 1695
+1 65280 65536 1680
+1 768 1280 1669
+1 32512 32512 1657
+1 256 512 1656
+1 256 256 1651
+1 32768 33024 1623
+1 98560 106240 55
+1 121600 129280 50
+1 17920 25600 50
+1 44800 52480 49
+1 56320 64000 49
+1 6400 14080 49
+1 71680 79360 49
+1 90880 98560 49
+1 102400 110080 48
+1 110080 117760 48
+can_block 0 pairs distinct: 8
