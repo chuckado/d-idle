@@ -25,6 +25,8 @@ New `MonStats::unblockable`, set by `monster_shot_stats` for the MissA / MissS1 
 
 `compare` exits 1 on any difference, on zero compared cases and on a missing, repeated or malformed line on either side (`missile_block.py selftest`, 12 checks, no emulator). The carried path (a row with a Skill: the Death Mauler's maul) is covered by both the oracle's skill cases (game.exe: can-block 1 on the launch record 2,560 to 5,120, normal difficulty) and a unit case in `tests/game/test_carried_missile.cpp` (row physical 0 with a carried physical: blockable; carried physical 0 with a row physical: unblockable; no Skill and no physical: unblockable; 400 shots through the real `monster_blow`); the case fails when `andariel_missile` sets `unblockable` before the swap (checked: abort).
 
+Other checks (NAS builder, Release, tests and tools on): full `ctest` of the claim and of upstream `aaa17aee` fail the same two tests (`smoke_d2d`, `test_outdoor`, of 309; both unrelated to this change); a mutant (the claim with the `monster_blow` gate removed) aborts `test_monster_missile` and `test_carried_missile`; `clang-tidy-19` on the three touched C++ files and `clang-format-19`: 0 warnings (the selected set also reports `std::erase_if` include errors in files this PR does not touch, present on upstream); `tools/pr_guard.py upstream/main`: 0 FAIL, 0 WARN.
+
 ## How to re-check
 
 ```sh

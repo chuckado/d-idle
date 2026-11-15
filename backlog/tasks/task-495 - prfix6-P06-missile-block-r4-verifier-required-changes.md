@@ -33,7 +33,7 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Death Mauler ordering fix with test, oracle rerun 0 differ
-- [ ] #2 r4 branch built, tested, pushed to the fork remote only
-- [ ] #3 body, draft, queue rows updated; not posted
+- [x] #1 Death Mauler ordering fix with test, oracle rerun 0 differ
+- [x] #2 r4 branch built, tested, pushed to the fork remote only
+- [x] #3 body, draft, queue rows updated; not posted
 <!-- AC:END -->
