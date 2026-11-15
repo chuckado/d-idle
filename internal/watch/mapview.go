@@ -137,6 +137,28 @@ type MapView struct {
 	Edges     []MapEdgeView `json:"edges"`
 	OpenOrder int           `json:"openOrders"`
 	MaxOpen   int           `json:"maxOpenOrders"`
+	// Ladder is the state of the Loop and queue slots the zone menu offers; absent when neither desk is bound.
+	Ladder *MapLadder `json:"ladder,omitempty"`
+}
+
+// MapLadder is what the zone menu needs to offer Loop and Add to queue, or their teaser when still locked.
+type MapLadder struct {
+	LoopOpen     bool   `json:"loopOpen"`
+	LoopActive   bool   `json:"loopActive,omitempty"`
+	LoopTeaser   string `json:"loopTeaser,omitempty"`
+	QueueOpen    bool   `json:"queueOpen"`
+	QueueTeaser  string `json:"queueTeaser,omitempty"`
+	QueueSlots   int    `json:"queueSlots,omitempty"`   // places the queue has
+	QueueWaiting int    `json:"queueWaiting,omitempty"` // entries waiting now
+}
+
+// SetMapLadder sets where GET /api/orders/map reads the Loop and queue state from (nil: the field is left out).
+func (h *Hub) SetMapLadder(f func() *MapLadder) {
+	if f == nil {
+		h.ladder.Store(nil)
+		return
+	}
+	h.ladder.Store(&f)
 }
 
 const nodeW, nodeH = 104, 44
@@ -159,9 +181,13 @@ func (h *Hub) OrdersMap(act int) MapView {
 			}
 		}
 	}
+	var ladder *MapLadder
+	if f := h.ladder.Load(); f != nil {
+		ladder = (*f)()
+	}
 	h.mu.Lock()
 	defer h.mu.Unlock()
-	v := MapView{Schema: mapSchema, Seq: h.seq, Act: am.Act, Populated: len(am.Nodes) > 0, Town: am.Town, Hero: h.hero,
+	v := MapView{Ladder: ladder, Schema: mapSchema, Seq: h.seq, Act: am.Act, Populated: len(am.Nodes) > 0, Town: am.Town, Hero: h.hero,
 		Nodes: []MapNodeView{}, Edges: []MapEdgeView{}, MaxOpen: MaxOpenOrders}
 	for a := 1; a <= 5; a++ {
 		v.Acts = append(v.Acts, MapActView{Act: a, Populated: len(Maps[a].Nodes) > 0})
