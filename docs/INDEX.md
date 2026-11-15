@@ -529,6 +529,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [ledger.md](survival/ledger.md): Per-zone ledger and the shadow controller (survival slice S-C) (status: current (card survC). Implements design-2026-11-14.md sections 5.3 to 5.6, 8 and 10 for slice S-C: log and...)
 - [power.md](survival/power.md): Power estimate and margin, shadow (survival slice S-B) (status: current (card survB, TASK-449). Implements design-2026-11-14.md sections 4, 5, 6, 8 and 10 as far as slice...)
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
+- [units-fit-2026-11-15.md](survival/units-fit-2026-11-15.md): Units per clear: the danger generator against game.exe's room population (Acts 1 and 2, Normal) (status: current (2026-11-15, card decomp28). Tags: V run (game.exe's room population and room list under the...)
 - [wiring-2026-11-15.md](survival/wiring-2026-11-15.md): Survival shadow lines missing in the sandbox (diagnosis 2026-11-15)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
@@ -629,6 +630,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
+- [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
 - [hitrec-norestart-body.md](upstream/bodies/hitrec-norestart-body.md): hitrec-norestart-body
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
@@ -646,6 +648,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp.md](upstream/briefs/load-gold-clamp.md): Brief: P05 saved gold over its cap is 0 on entering a game (fid/load-gold-clamp-r2)
 - [missile-block-gate.md](upstream/briefs/missile-block-gate.md): Brief: P06 a monster missile is blocked only when it has physical damage (fid/missile-block-gate-r1)
 - [verify-hitrec-interrupt.md](upstream/briefs/verify-hitrec-interrupt.md): Verifier brief: fid/hitrec-interrupt-r1 (P04), for the independent reviewer (Opus, singly)
+- [verify-knock-gethit.md](upstream/briefs/verify-knock-gethit.md): Verifier brief: fid/knock-in-gethit-r1 (P03c), for the independent reviewer (Opus, singly)
+- [verify-melee-block.md](upstream/briefs/verify-melee-block.md): Verifier brief: fid/melee-block-r1 (P07, a negative result), for the independent reviewer (Opus, singly)
 - [verify-missile-block.md](upstream/briefs/verify-missile-block.md): Verifier brief: fid/missile-block-r3 (P06), for the independent reviewer (Opus, singly)
 - [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
@@ -654,7 +658,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length.md](upstream/drafts/cold-enchanted-length.md): Draft (local, NOT posted): "Cold Enchanted chills for its level x 5 + 100 frames (FUN_005a1c70)" (status: r4, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/cold-enchanted-length-r4` on...)
 - [hitrec-interrupt.md](upstream/drafts/hitrec-interrupt.md): Draft (local, NOT posted): "A hit interrupts a swing or cast whose skill allows it" (P04) (status: 2026-11-15 (card decomp26). Fork branch `fid/hitrec-interrupt-r1` (private fork remote), two commits on...)
-- [hitrec-knock-in-hit.md](upstream/drafts/hitrec-knock-in-hit.md): Candidate note (local, NOT posted): P03c, a knocking hit inside a get-hit (status: candidate 2026-11-15 (card decomp26). Nothing built, nothing posted. Follows P03b (#548: a big hit does...)
+- [hitrec-knock-in-hit.md](upstream/drafts/hitrec-knock-in-hit.md): Draft (local, NOT posted): "A knocking hit does not start a knockback in a get-hit" (P03c) (status: 2026-11-15 (card decomp27, supersedes the decomp26 candidate note). Fork branch `fid/knock-in-gethit-r1`...)
 - [hitrec-modes.md](upstream/drafts/hitrec-modes.md): Draft (local, NOT posted): "A player's block holds game.exe's length" (status: r2, **all required changes of the verifier done** (card prfix2, 2026-11-14; verifier report...)
 - [hitrec-norestart.md](upstream/drafts/hitrec-norestart.md): Draft (local, NOT posted): "A hit never restarts a get-hit" (r3) (status: r3 2026-11-15 (card prfix3). Superseded by the PR body bodies/hitrec-norestart-body.md; this page is the...)
 - [lightning-last-unit.md](upstream/drafts/lightning-last-unit.md): Draft (local, NOT posted): "Lightning hits one unit a frame and skips the last (FUN_005ae1f0)" (status: r3, ready for the verifier's second pass (prprep2, 2026-11-11). Branch `fid/missile-last-unit-r3` on the...)
@@ -684,6 +688,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
 - [verifier2-p03b-2026-11-15.md](upstream/verifier2-p03b-2026-11-15.md): Verifier 2: P03b "a get-hit is not restarted by a hit", rebased r4 (2026-11-15) (status: current, 2026-11-15 (card verifyp03d, TASK-488, Opus, second independent pass after...)
+- [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
 - [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)

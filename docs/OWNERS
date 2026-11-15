@@ -311,6 +311,8 @@ docs/research/areamon-trace.md  credit-runner  areamon
 docs/research/boss1-trace.md  credit-runner  boss1
 docs/research/data22  credit-runner  decomp22
 docs/research/data24  credit-runner  prfix3
+docs/research/data28  pro-runner  decomp28
+docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -341,6 +343,7 @@ docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
 docs/survival/ledger.md  credit-runner  survC
 docs/survival/power.md  credit-runner  survB
+docs/survival/units-fit-2026-11-15.md  pro-runner  decomp28
 docs/swingmodel.md  credit-runner  swingmodel
 docs/t0-variants.md  credit-runner  qdensity
 docs/tester-guide.md  credit-runner  testerpack
@@ -379,6 +382,7 @@ docs/upstream/verifier-p02-2026-11-14.md  credit-runner  verifyp02
 docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/upstream/verifier-p03b-2026-11-14.md  live-agent  verifyp03c
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
+docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -501,6 +505,7 @@ internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/player.go  credit-runner  survB
 internal/d2dsrc/source_test.go  credit-runner  survB
 internal/danger/  credit-runner  survA
+internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
@@ -855,6 +860,7 @@ tools/emu/am_model.py  credit-runner  areamon
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/dc22_dis.py  credit-runner  decomp22
+tools/emu/dc28_  pro-runner  decomp28
 tools/emu/mode_switch.py  credit-runner  decomp22
 tools/emu/pm_*  credit-runner  palskill-matrix
 tools/emu/pp_*  credit-runner  prpost
