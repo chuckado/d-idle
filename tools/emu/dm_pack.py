@@ -34,6 +34,8 @@ def summary(v):
     for gr in ("chipped", "flawed", "standard", "flawless", "perfect"):
         if g(f"gem_{gr}"): s[f"gem_{gr}"] = g(f"gem_{gr}")
     s["gem"], s["rune"] = g("gem"), g("rune")
+    for k in v:
+        if k.startswith("rune_r"): s[k] = v[k]
     s["rune_low"] = sum(g(f"rune_r{i:02d}") for i in range(1, 11))
     s["rune_high"] = s["rune"] - s["rune_low"]
     # gear (weapons + armor), jewelry, jewels, charms: magic or better
@@ -54,6 +56,15 @@ def summary(v):
             if g(f"gear_{b}_{q}"): s[f"gear_{b}_{q}"] = g(f"gear_{b}_{q}")
     s["gear_usable25_magic_plus"] = sum(g(f"gear_{b}_{q}") for b in ("early", "mid") for q in ("magic", "rare", "set", "unique"))
     return {k: v for k, v in s.items() if v}
+
+
+CORE = ("potion_hp", "potion_mp", "potion_rejuv", "potion_other", "scroll_town_portal", "scroll_identify", "tome", "key", "gem", "rune", "rune_low",
+        "rune_high", "magic_plus", "rare_plus", "set_unique", "gear_usable25_magic_plus", "gear_plain", "gear_superior", "gear_magic", "gear_rare", "gear_set",
+        "gear_unique") + tuple(f"potion_hp{i}" for i in range(1, 6)) + tuple(f"potion_mp{i}" for i in range(1, 6))
+
+
+def core(d):
+    return {k: v for k, v in d.items() if k in CORE}
 
 
 def rd(d, nd=4):
@@ -83,12 +94,12 @@ for name, a in sorted(dm["areas"].items(), key=lambda x: x[1]["lid"]):
            "per_clear": rd(pc, 3), "per_1000_kills": rd({k: v / units * 1000 for k, v in pc.items()}, 2)}
     if cm:
         ent["per_min"] = rd({k: v / cm for k, v in pc.items()}, 4)
-    ent["per_clear_by_kind"] = {k: rd(summary(v), 3) for k, v in a["per_clear_by_kind"].items()}
+    ent["per_clear_by_kind"] = {k: rd(core(summary(v)), 3) for k, v in a["per_clear_by_kind"].items()}
     if a.get("units_without_treasure_class"):
         ent["units_without_treasure_class"] = a["units_without_treasure_class"]
     out["areas"][name] = ent
 for k, m in sorted(dm["monsters"].items()):
-    out["monsters"][k] = {"tc": m["tc"], "observed": m["observed"], "ilvl_mean": m["ilvl_mean"], "per_1000_kills": rd({a: b * 1000 for a, b in summary(m["per_kill"]).items()}, 2)}
+    out["monsters"][k] = {"tc": m["tc"], "observed": m["observed"], "ilvl_mean": m["ilvl_mean"], "per_1000_kills": rd({a: b * 1000 for a, b in core(summary(m["per_kill"])).items()}, 2)}
 for k, b in sorted(dm["bosses"].items()):
     e = {"area": b["area"], "class": b["class"], "tc": b["tc"], "ilvl": b["ilvl"], "drops": b["drops"], "per_kill": rd(summary(b["per_kill"]), 4)}
     if "first_kill" in b:
