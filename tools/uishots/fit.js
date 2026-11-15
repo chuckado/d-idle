@@ -171,7 +171,7 @@ function charChecks(win, d, vis, cs) {
   }
   // what the page had done when it was measured: a hole on a page that was not finished loading says so
   const g = (id) => d.getElementById(id), diag = [d.readyState, 'keys ' + d.querySelectorAll('[data-key]').length, 'sub "' + ((g('merc-sub') || {}).textContent || '') + '"', 'hs ' + ((g('hsheet') || { children: [] }).children.length),
-    'mercbox ' + (g('merc-doll') ? g('merc-doll').parentNode.getBoundingClientRect().width | 0 : -1), win.d2InvActions ? 'act' : 'no-act', win.d2InvTip ? 'tip' : 'no-tip', win.d2InvMerc ? 'merc' : 'no-merc'].join(', ');
+    'mercbox ' + (g('merc-doll') ? g('merc-doll').parentNode.getBoundingClientRect().width | 0 : -1), win.d2InvActions ? 'act' : 'no-act', win.d2InvTip ? 'tip' : 'no-tip', win.d2InvMerc ? 'merc' : 'no-merc', 'errors [' + (win.d2CvErrors || []).join(' | ') + ']'].join(', ');
   return { zero, cut, tiles, inner, diag };
 }
 

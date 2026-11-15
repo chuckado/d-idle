@@ -428,11 +428,20 @@
     Array.prototype.forEach.call(document.querySelectorAll('.d-slot2.sel, .item.sel'), function (n) { n.classList.remove('sel'); });
     var n = selKey && document.querySelector('[data-key="' + selKey + '"]'); if (n) n.classList.add('sel');
   }
+  // each part of the paint runs on its own: one that throws is recorded (window.d2CvErrors, read by the fit check) and never leaves the
+  // rest of the page undrawn
+  function part(name, f) { try { f(); } catch (e) { if (typeof window !== 'undefined') (window.d2CvErrors = window.d2CvErrors || []).push(name + ': ' + (e && e.message)); } }
   function paint(v) {
-    ensureSel(v); markSel();
-    drawBar(v); drawRepair(v, repair); marks(v); dim(); drawSets(v); shorten(); fitSlots(); paintSheets();
-    var g = $('gearprompt'); if (g) g.title = g.textContent;
-    drawSel(); cutLabels(); trimQueue(); loadHero(); if (window.d2InvMerc) window.d2InvMerc.fit();
+    part('select', function () { ensureSel(v); markSel(); });
+    part('bar', function () { drawBar(v); drawRepair(v, repair); });
+    part('marks', function () { marks(v); dim(); });
+    part('sets', function () { drawSets(v); });
+    part('shorten', function () { shorten(); fitSlots(); });
+    part('sheets', function () { paintSheets(); });
+    part('prompt', function () { var g = $('gearprompt'); if (g) g.title = g.textContent; });
+    part('sel', function () { drawSel(); });
+    part('trim', function () { cutLabels(); trimQueue(); });
+    part('hero', function () { loadHero(); if (window.d2InvMerc) window.d2InvMerc.fit(); });
   }
   function onView(e) {
     view = e.detail;
