@@ -33,7 +33,7 @@ func (f *fakePause) Set(on bool) any {
 	return f.body()
 }
 
-func TestPauseRouteGatesAnd503UntilBound(t *testing.T) {
+func TestPauseRouteGates(t *testing.T) {
 	api := NewPauseAPI()
 	o := AnswerOptions{Token: "tok", Origins: []string{"http://ok.test"}}
 	post, get := api.PostHandler(o), api.Handler()
