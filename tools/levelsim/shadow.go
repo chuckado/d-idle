@@ -72,6 +72,17 @@ type ShadowOpts struct {
 	Arch *power.Archetype
 	Diff string
 	Dial string
+	// Attach, when set, runs on every hero rebuilt from a log line: it puts the build's attack (and any assumed gear)
+	// on it. A log has no skill levels, so a replay without it keeps the constants (flagged).
+	Attach func(h *power.Hero)
+}
+
+func (o ShadowOpts) heroOf(kv map[string]string) power.Hero {
+	h := heroOfEntry(kv)
+	if o.Attach != nil {
+		o.Attach(&h)
+	}
+	return h
 }
 
 // ShadowReplay reads a bot log (text key=value or JSON lines) and evaluates every stay.
@@ -108,7 +119,7 @@ func ShadowReplay(r io.Reader, o ShadowOpts) (*ShadowReport, error) {
 		case msg == "zone entry":
 			closeStay(last)
 			area, _ := strconv.Atoi(kv["area"])
-			hero = heroOfEntry(kv)
+			hero = o.heroOf(kv)
 			cur = &Stay{Area: area, Clvl: hero.Level, Start: last}
 			z, err := o.Tab.Find(area, o.Diff)
 			switch {
