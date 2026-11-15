@@ -95,7 +95,7 @@ func (fixtureDesk) View() any {
 			item(13, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 			item(14, "isc", "Scroll of Identify", "normal", 4, 0, 1, 1, nil),
 			item(15, "tbk", "Tome of Town Portal", "normal", 3, 1, 1, 2, nil),
-			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "req": map[string]any{"str": 41, "lvl": 9}, "usable": usable([]any{need("str", 41, 38, "41 strength")}, nil), "noWear": "needs 41 strength (you have 38)"}),
+			item(16, "ltp", "Light Plate", "normal", 0, 3, 2, 1, map[string]any{"mark": "keep", "maxDur": 60, "dur": 60, "req": map[string]any{"str": 41, "lvl": 9}, "usable": usable([]any{need("lvl", 9, 7, "level 9"), need("str", 41, 38, "41 strength")}, nil), "noWear": "needs 41 strength (you have 38)"}),
 			item(18, "tar", "Targe", "magic", 5, 0, 2, 2, map[string]any{"req": map[string]any{"str": 16, "class": []string{"Paladin"}}, "usable": usable([]any{why("class", "only a Paladin can use it")}, []any{why("merctype", "a Desert Guard wears helm, armor, spear or polearm")}), "noWear": "Paladin only"}),
 			item(19, "pik", "Pike", "normal", 7, 0, 2, 4, map[string]any{"req": map[string]any{"lvl": 9, "str": 60, "dex": 45}, "usable": usable([]any{need("lvl", 9, 7, "level 9"), need("str", 60, 38, "60 strength")}, []any{need("dex", 45, 40, "45 dexterity")})}),
 			item(17, "box", "Horadric Cube", "unique", 5, 2, 2, 2, map[string]any{"mark": "keep"}),
@@ -107,7 +107,7 @@ func (fixtureDesk) View() any {
 		},
 		"stash": []any{
 			item(30, "rin", "Ring", "magic", 0, 0, 1, 1, nil),
-			item(31, "ltp", "Light Plate", "magic", 1, 0, 2, 3, nil),
+			item(31, "ltp", "Light Plate", "magic", 1, 0, 2, 3, map[string]any{"stashOp": "take", "props": []string{"Defense: 60", "Cold Resist +11%"}}),
 			item(32, "tsc", "Scroll of Town Portal", "normal", 3, 0, 1, 1, nil),
 		},
 		"pins": []any{map[string]any{"slot": "lring", "id": 7, "name": "Raven Grip", "since": 0}},

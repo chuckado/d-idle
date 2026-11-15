@@ -195,7 +195,7 @@
   function hintFor(f) {
     var a = typeof window !== 'undefined' && window.d2InvActions && window.d2InvActions.first;
     var k = f.place === 'worn' ? 'slot-' + f.slot : 'item-' + (f.it && f.it.id), e = a ? a(k) : null;
-    return (e ? 'Double-click: ' + e.label + (e.reason ? ' (' + e.reason + ')' : '') + '. ' : '') + 'Right-click: all actions.';
+    return (e ? 'Double-click: ' + e.label + (e.reason ? ' (refused, see above)' : '') + '. ' : '') + 'Right-click: all actions.';
   }
 
   function ensure() {
