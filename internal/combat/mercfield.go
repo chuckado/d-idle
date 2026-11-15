@@ -49,7 +49,7 @@ func (f *Fighter) mercDownLeave(snap *d2.Snapshot, in SafetyInput) SafetyAction 
 	}
 	var a SafetyAction
 	switch {
-	case in.HasPortal && in.Adjacent < crowdAdjacentMax:
+	case in.HasPortal && !castBlockedBool(in):
 		a = TownPortal
 	case in.CanRetreat && !f.runnerClose(snap, snap.Player, float64(t.KiteDistance)):
 		a = CrowdRetreat
@@ -123,3 +123,5 @@ func (f *Fighter) mercPotion(snap *d2.Snapshot, hs []Target) bool {
 	f.log().Info(fmt.Sprintf("%sgave healing potion col=%d merc_life=%d", merc.Prefix, col+1, st.LifePct))
 	return true
 }
+
+func castBlockedBool(in SafetyInput) bool { b, _ := in.castBlocked(); return b }
