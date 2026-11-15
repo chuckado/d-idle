@@ -420,7 +420,7 @@ async function loadLayout() {
   }
   if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
   // no layout of the hero's own: the default is the cockpit (web/layout.json). A new hero meets it without the layout note.
-  let name = 'cockpit', origin = 'default'; // origin 'default' is the only one that shows the layout note
+  let name = html.dataset.mode === 'overlay' ? 'standard' : 'cockpit', origin = 'default'; // origin 'default' shows the layout note; the OBS strip keeps the layout it always had
   if (choice === 'saved' && MENU.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) origin = 'newhero';
   let l = asLayout(srv && srv.body); // web/layout.json is the cockpit file
   if (name !== 'cockpit' || !l) l = await presetFile(name) || l;

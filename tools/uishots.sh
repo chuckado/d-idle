@@ -88,20 +88,20 @@ if [ "$char" = 1 ]; then
 fi
 if [ "$pics" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/pic-*
-	echo "cockpit layout=cockpit&theme=dark&needs=2
-cockpit-needs0 layout=cockpit&theme=dark&needs=0
-cockpit-needs5 layout=cockpit&theme=dark&needs=5
-cockpit-measuring layout=cockpit&theme=dark&needs=0&glance=measuring
-cockpit-blocked layout=cockpit&theme=dark&needs=1&glance=blocked
-cockpit-unknown layout=cockpit&theme=dark&needs=0&glance=unknown
-cockpit-light layout=cockpit&theme=light&needs=2
-cockpit-progresstab layout=cockpit&theme=dark&needs=2&tab=Progress
-cockpit-worst layout=cockpit&theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
-cockpit-worst-light layout=cockpit&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
-cockpit-paused layout=cockpit&theme=dark&needs=2&cmd=paused&glance=full,paused
-cockpit-loop layout=cockpit&theme=dark&needs=2&cmd=loop
-cockpit-live layout=cockpit&theme=dark&needs=2&stream=live
-cockpit-zone layout=cockpit&theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
+	echo "default theme=dark&needs=2
+default-needs0 theme=dark&needs=0
+default-needs5 theme=dark&needs=5
+default-measuring theme=dark&needs=0&glance=measuring
+default-blocked theme=dark&needs=1&glance=blocked
+default-unknown theme=dark&needs=0&glance=unknown
+default-light theme=light&needs=2
+default-progresstab theme=dark&needs=2&tab=Progress
+default-worst theme=dark&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-worst-light theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-paused theme=dark&needs=2&cmd=paused&glance=full,paused
+default-loop theme=dark&needs=2&cmd=loop
+default-live theme=dark&needs=2&stream=live
+default-zone theme=dark&needs=2&zone=cp&cmd=loop" | while read -r pname pq; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		for sz in 1914x930 1536x730 1280x620 1440x900 1920x1080 1366x768 1904x1000 390x844; do
 			w=${sz%x*} h=${sz#*x}
@@ -118,8 +118,24 @@ if [ "$fit" = 1 ]; then
 	mkdir -p "$out" && rm -f "$out"/fit-*
 	# the full-screen sizes, the browser-window sizes (a window with its chrome is shorter than the screen) and the phone
 	sizes="1920x1080 1440x900 1366x768 1914x930 1904x1000 1536x730 1280x620 390x844"
+	# the default page also at the window sizes between the phone and the wide cockpit (the Electron viewer opens /watch in any of them)
+	midsizes="1024x768 900x700 1279x720"
 	# name, query, and an optional selector to press before the second measurement (the "..." sheet must be hittable)
-	pages="cockpit watch?layout=cockpit&theme=dark
+	pages="default watch?theme=dark
+default-light watch?theme=light
+default-menu watch?theme=dark #btn-more
+default-needs0 watch?theme=dark&needs=0
+default-needs5-orders8 watch?theme=dark&needs=5&cmd=eight
+default-needs5-orders8-light watch?theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
+default-empty watch?theme=dark&needs=0&cmd=empty
+default-live-stream watch?theme=dark&needs=2&stream=live
+default-live-stream-light watch?theme=light&needs=2&stream=live
+default-paused watch?theme=dark&needs=2&cmd=paused&glance=full,paused
+default-phone-progress watch?theme=dark&needs=2&tab=Progress
+default-phone-map watch?theme=dark&needs=2&tab=Map
+default-zone watch?theme=dark&zone=cp
+default-drawer-log watch?theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
 orders-eight watch?layout=cockpit&theme=dark&cmd=eight
 strip-needs5-orders8 watch?layout=cockpit&theme=dark&needs=5&cmd=eight
@@ -196,7 +212,9 @@ character-menu-stash watch/inventory?theme=dark ctx=[data-key=item-31]"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
-		for sz in $sizes; do
+		szs=$sizes
+		case $pname in default | default-light) szs="$sizes $midsizes" ;; esac
+		for sz in $szs; do
 			w=${sz%x*} h=${sz#*x} ck=
 			enc() { printf %s "$1" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g'; }
 			case $pclick in
@@ -227,6 +245,11 @@ watch-1920-dark 1920 1080 watch?theme=dark
 watch-1920full-dark 1920 2400 watch?theme=dark
 watch-1280full-dark 1280 2800 watch?theme=dark
 watch-768full-dark 768 5000 watch?theme=dark
+watch-1440-classic 1440 2600 watch?theme=dark&layout=classic
+watch-1440-simple 1440 2600 watch?theme=dark&layout=simple
+watch-1440-standard 1440 2600 watch?theme=dark&layout=standard
+watch-390-classic 390 844 watch?theme=dark&layout=classic
+watch-390-simple 390 844 watch?theme=dark&layout=simple
 watch-1440-nolayout 1440 2600 watch?theme=dark&layout=none
 watch-1920-mockup 1920 2400 watch?theme=dark&layout=mockup
 watch-1920-live 1920 2800 watch?theme=dark&layout=live
