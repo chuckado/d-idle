@@ -1,10 +1,11 @@
 ---
 id: TASK-484
 title: 'verifyp02c: third verifier pass on P02 r3 (empty-path rule, nondeterminism)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T08:35:00Z'
+updated_date: '2026-11-15T09:27:00Z'
 labels:
   - d2d
   - research
