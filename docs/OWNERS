@@ -594,10 +594,13 @@ internal/watch/commands.go  credit-runner  uis4
 internal/watch/commands_test.go  credit-runner  uis4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
+internal/watch/funwire.go  credit-runner  uib4
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/hero.go  credit-runner  exploredpct
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
+internal/watch/http_answer.go  credit-runner  uib4
 internal/watch/hub.go  credit-runner  exploredpct
+internal/watch/hub.go  credit-runner  uib4
 internal/watch/invapi.go  credit-runner  gearsets
 internal/watch/invapi.go  credit-runner  uic2
 internal/watch/invapi_sellnow.go  credit-runner  botsell
@@ -621,6 +624,8 @@ internal/watch/onboarding_test.go  credit-runner  firstminutes
 internal/watch/orderloop.go  credit-runner  uib7
 internal/watch/orderloop_test.go  credit-runner  uib7
 internal/watch/orderqueue.json  credit-runner  uib7
+internal/watch/orders.go  credit-runner  uib4
+internal/watch/orders_untillevel_test.go  credit-runner  uib4
 internal/watch/panels.go  credit-runner  uis6
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
