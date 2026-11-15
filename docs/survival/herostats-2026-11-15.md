@@ -1,6 +1,6 @@
 # Hero stats in the d2d dump (card herostats, TASK-493)
 
-> status: current. Fork branch `sandbox-herostats` (private fork, not upstream: a lab/dump feature). Tags: V verified (how), S read in source, U unverified. Not deployed and not run against a live game.
+> status: current. Fork branch `sandbox-herostats` (private fork, tip `02ceea54`, pushed to the private forge, not upstream: a lab/dump feature). Tags: V verified (how), S read in source, U unverified. Not deployed and not run against a live game.
 
 ## Finding (S: fork source read)
 
@@ -23,7 +23,8 @@ The sandbox lineage `didle/rebase-20261114b` has `stats.defense` but NOT `stats.
 | Claim | Tag |
 |---|---|
 | The sandbox branch lacks `gear` / `weapons` (file list of the branch tip) | V: `git ls-tree` on `didle/rebase-20261114b`, no gear_stats.hpp |
-| `test_hero_stats`: Paladin-like worked example (block 61, ar 275, sword 4-19, pct 80) and no-shield, nothing-worn, unknown-class cases | V as arithmetic of the fork's `make_fighter` formulas (run on the NAS builder); NOT V against game.exe or the character panel |
+| `test_hero_stats`: Paladin-like worked example (block 61, ar 275, sword 4-19, pct 80) and no-shield, nothing-worn, unknown-class cases | V as arithmetic of the fork's `make_fighter` formulas (built and run on the NAS builder, `OK`, rc 0; fork commit 02ceea54); NOT V against game.exe or the character panel |
+| `apps/d2d/main.cpp` (the dump verb) compiles with the change | V (ninja step on the builder); the full `d2d` link was not finished: two unrelated translation units were killed for memory while another job ran, so no binary was produced or deployed |
 | `test_gear_stats` (sums per stat and param) still passes after switching to `gear_props` | V (same run) |
 | `defense` equals the panel's Defence number | U (docs/survival/power.md checklist step 1) |
 | Item bonuses to strength and dexterity feed block, attack rating and the strength damage bonus | U: `make_fighter` reads the character's base stats only, as the fork's fight code does; gear with +dexterity would make `block` and `ar` low |
