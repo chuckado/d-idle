@@ -189,6 +189,7 @@
 | p02posted | proposed | - | `docs/upstream/` | `upstream-pr:warp-walk` |
 | verifyp03d | in-progress | - | `docs/upstream/verifier2-p03b-2026-11-15.md` | - |
 | onboardctl | deferred | - | `internal/watch/control.go`<br>`internal/watch/control_test.go`<br>`docs/onboarding-controls.md` | - |
+| verifyp06 | in-progress | - | `docs/upstream/verifier-p06-2026-11-15.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -232,6 +233,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- abc82a480 11-15 08:23 `Merge agent/verifyp06: Merge branch 'main' into TASK-494` (verifyp06)
+- 2f35b2f3f 11-15 08:22 `Merge branch 'main' into TASK-494` (-)
 - 1cd8c6ab2 11-15 07:25 `Merge agent/decomp26: Merge branch 'main' into decomp26` (decomp26)
 - b531f007d 11-15 07:25 `Merge branch 'main' into decomp26` (-)
 - 50f3e1808 11-15 07:11 `Merge agent/herostats: herostats: card result, verification notes` (herostats)
@@ -240,6 +243,4 @@
 - 0ebf55048 11-15 05:49 `Merge origin/main into uic4` (-)
 - dc792e7ec 11-15 05:39 `Merge agent/p03bposted: Merge branch 'main' into p03bposted` (p03bposted)
 - 95f866485 11-15 05:38 `Merge branch 'main' into p03bposted` (-)
-- ed281de24 11-15 05:36 `Merge origin/main into uic4` (-)
-- 0d160ecd4 11-15 05:24 `Merge agent/uis7: Merge branch 'main' into TASK-485` (uis7)
 <!-- statusgen:end -->
