@@ -1,6 +1,7 @@
 package watch
 
 import (
+	"net/http/httptest"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -79,5 +80,33 @@ console.log(JSON.stringify(out));
 		if !strings.Contains(got, want) {
 			t.Errorf("missing %s in\n%s", want, got)
 		}
+	}
+}
+
+// Every module the shell imports from /watch/ is served: a missing route blanks the whole page (the fit check caught it once).
+func TestShellImportsAreServed(t *testing.T) {
+	js, _ := webFS.ReadFile("web/shell.js")
+	sim, err := NewSim("sorceress", 1)
+	if err != nil {
+		t.Skip(err)
+	}
+	h := sim.Hub.ViewHandler()
+	n := 0
+	for _, line := range strings.Split(string(js), "\n") {
+		i := strings.Index(line, "from '/watch/")
+		if !strings.HasPrefix(line, "import ") || i < 0 {
+			continue
+		}
+		p := line[i+len("from '"):]
+		p = p[:strings.Index(p, "'")]
+		w := httptest.NewRecorder()
+		h.ServeHTTP(w, httptest.NewRequest("GET", p, nil))
+		if w.Code != 200 {
+			t.Errorf("%s: %d", p, w.Code)
+		}
+		n++
+	}
+	if n < 2 {
+		t.Fatalf("found %d imports", n)
 	}
 }
