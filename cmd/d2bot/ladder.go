@@ -323,6 +323,12 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 	}
 	rig.Video = vid
 	so := watch.ServeOptions{ViewAddr: l.viewAddr, AnswerAddr: l.answerAddr, Token: watchTok, Origins: l.origins, Video: vid, Fun: rig.Fun}
+	if pal, err := l.palFeed(vid != nil); err != nil {
+		ladder.Install(nil)
+		return nil, err
+	} else {
+		so.PalFeed = pal
+	}
 	if l.sensesTier >= 1 {
 		rig.Senses = &senses.Publisher{}
 		adj, err := senses.ShippedAdjacency()
@@ -628,6 +634,22 @@ func (l ladderOptions) newVideo() (*watch.Video, error) {
 		return nil, err
 	}
 	return watch.NewVideo(watch.VideoOptions{Capture: capture})
+}
+
+// palFeed relays the tap's lossless picture feed (docs/video-feed.md) when the knob watch.paletteFeed or D2_PALETTE_FEED=1
+// is on and the video comes from the tap; nil otherwise (MJPEG only).
+func (l ladderOptions) palFeed(hasVideo bool) (*watch.PalFeed, error) {
+	if !hasVideo || l.videoSource != videoTap {
+		return nil, nil
+	}
+	var knob float64
+	if l.knobValue != nil {
+		knob, _, _ = l.knobValue("watch.paletteFeed")
+	}
+	if !env.PaletteFeedOn(knob) {
+		return nil, nil
+	}
+	return watch.PalFeedRelay(l.tapURL, os.Getenv("D2DVIEW_TOKEN"))
 }
 
 const (
