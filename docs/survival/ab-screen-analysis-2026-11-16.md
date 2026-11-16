@@ -4,7 +4,7 @@
 
 ## 1. Harness fix (V, `go test -p 1 ./tools/survival/...`)
 `abreport` read the horizon XP from `XPAt[120]`, which a 2 h run (at most 119 intervals) never has, and fell back to minute 90. Now: a run that covers 95 percent of the horizon reports its last minute line; a pair is compared at one minute (the shorter run's last), the column is labelled `xp@<minute>=`, and the XP statistic line names the rule. Tests: a 119-interval synthetic log (`TestHorizonUsesLastMinute`: readings 30/60/90/last), a pair ending 3 minutes apart (`TestPairComparedAtOneMinute`). Re-run on the screen's logs (`abreport -death-slack 1 -chicken-slack 1`):
-- Paladin: XP ratio at the end **1.09** (was read at minute 90: 1.10 in the screen's own table, so the verdict is unchanged: FAIL on chickens 4 vs 1 plus slack 1).
+- Paladin: XP ratio at the end **1.09** (interval [-14388, +19436] per seed); the verdict is unchanged: FAIL on chickens 4 vs 1 plus slack 1.
 - Sorceress: ratio **0.76**, interval [-10154, +4104] per seed, INCONCLUSIVE, unchanged.
 
 ## 2. Root cause 1: the controller never learned in lockstep (V)
@@ -26,7 +26,7 @@ Merc deaths at minutes 4 (before the first revive, same in both arms), 34, 47, 9
 - The margin arm sent the hero to **Burial Grounds / Crypt** (areas 17 and 18) for 27+15 minutes (legacy 4): predicted 152 xp/min (143 for Mausoleum), realized **34 xp/min** over the 41 minutes (3, 5, 69 in Burial Grounds; 107, 48 in Crypt), against 188 to 313 xp/min realized in Stony Field. The same prediction (152) appears for Burial Grounds, Crypt and Mausoleum because the Economy is `XPPerKill x gap x 60/(perKill + moveSecondsPerKill)` with perKill 2.3 s (`dps=11.5 src=skill`): it models density as unlimited.
 - Why the hero did not get there (V, log): `combat: watchdog cannot cast (no affordable, ready, unblocked attack skill)` 26 times in seed 101 margin (13 legacy); fights end `error`/`timeout` with `mana=0..5`; 1 to 3.5 kills per minute. The caster archetype is `mana_burst` with `manaFloor` 0.35 (35 percent of the burst rate once the pool is empty); the observed floor is 0 until mana regenerates. Zone `Stony Field` is judged `margin_low` (0.9, low 0.6, need 1.5, `dps=11.5`) although the legacy arm farmed it 25 to 34 minutes per seed at 17.6 to 33.5 life/min without a death: the model is too cautious exactly where the data say the hero does fine, and too bold where the hero cannot kill.
 - Balanced dial: the need line (1.5) is not the issue by itself; the two errors above are (per-kill time in a sparse, mana-starved zone, and the Stony Field margin). Power estimate: the OffenceDPS for the Sorceress (11.5 at clvl 12, `internal/power/skilldamage.json` for the attack the harness attaches) is plausible as a burst; what is missing is sustained, mana-limited and density-limited yield.
-- Deficit arithmetic: 41 minutes at 34 xp/min instead of about 230 is about 8000 XP over three seeds against a per-seed shortfall of 3025 XP (about 9000 over three): the whole gap.
+- Deficit arithmetic (I): 41 minutes at 34 instead of about 230 xp/min is about 8000 XP over the three seeds; the pooled gap is 9075 XP (3025 per seed), so these minutes explain most of it.
 
 ## 6. Proposed fixes
 Done in this card: (a) abreport horizon (section 1); (b) one clock in the survival wiring (section 2).
