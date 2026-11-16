@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into survab8 <!--sg:agent/survab8-->
+- leech PR body per verifier L1-L6 <!--sg:agent/leechbody-->
 - Merge branch 'main' into TASK-564 <!--sg:agent/verifydecomp35-->
 - Merge branch 'main' into flakefix <!--sg:agent/flakefix-->
 - Merge branch 'main' into TASK-566 <!--sg:agent/survledger-->
