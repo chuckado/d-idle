@@ -279,6 +279,8 @@ func (r *Runner) resetStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.finishReset("done", "left the game and rejoined")
 	case ctx.Err() == nil:
 		r.finishReset("failed", "the game did not come back")
+	default: // stopped mid-way: the request is consumed either way, never left armed
+		r.finishReset("failed", "the bot was stopped")
 	}
 	return true
 }

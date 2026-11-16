@@ -193,3 +193,43 @@ func TestEscalateResetNeedsAnUnansweredLoop(t *testing.T) {
 		t.Fatal("escalated although the loop answered")
 	}
 }
+
+// One press is ONE leave, however long the loop keeps ticking afterwards, in town and in the field (live 2026-11-15: five
+// cycles 4 s apart after one press). The request is consumed when the leave starts.
+func TestPlayerResetOnePressOneLeave(t *testing.T) {
+	for _, area := range []int{1, 2} {
+		g := resetRig(t, d2.Sorceress, area, true)
+		g.run()
+		g.r.Start(reach(10))
+		g.waitFor("running", func() bool { return g.w.snaps.Load() > 3 })
+		g.r.PlayerReset(false)
+		g.waitFor("done", func() bool { v := g.r.ResetView(); return v.State == ResetIdle && v.Last != nil })
+		n := g.w.snaps.Load()
+		g.waitFor("many more ticks", func() bool { return g.w.snaps.Load() > n+60 })
+		if c := g.w.count("newgame normal"); c != 1 {
+			t.Fatalf("area %d: %d leaves for one press (%v)", area, c, g.w.calls)
+		}
+		if g.r.rst.state != ResetIdle {
+			t.Fatalf("area %d: request still armed: %+v", area, g.r.rst)
+		}
+		g.finish()
+	}
+}
+
+// A fresh game asked for while one is in flight, or right after one, is a no-op (the one guard of the farm loop, the
+// leveling slice and Reset).
+func TestStartFreshGameIsGuarded(t *testing.T) {
+	g := resetRig(t, d2.Sorceress, 1, true)
+	s := &d2.Snapshot{Player: &d2.Player{Difficulty: d2.Normal, Area: 1}}
+	ctx := t.Context()
+	if err := g.r.startFreshGame(ctx, s); err != nil {
+		t.Fatal(err)
+	}
+	if err := g.r.startFreshGame(ctx, s); err != nil || g.w.count("newgame normal") != 1 {
+		t.Fatalf("a second call right after ran: %v %v", err, g.w.calls)
+	}
+	g.clock.Sleep(freshDebounce + time.Second)
+	if err := g.r.startFreshGame(ctx, s); err != nil || g.w.count("newgame normal") != 2 {
+		t.Fatalf("a later call was refused: %v %v", err, g.w.calls)
+	}
+}
