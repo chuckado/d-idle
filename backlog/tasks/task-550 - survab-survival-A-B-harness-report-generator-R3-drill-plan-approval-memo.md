@@ -1,10 +1,11 @@
 ---
 id: TASK-550
 title: 'survab: survival A/B harness, report generator, R3 drill plan, approval memo'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:30:00Z'
+updated_date: '2026-11-16T16:50:00Z'
 labels:
   - bot
   - feature
