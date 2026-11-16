@@ -103,6 +103,7 @@ type Looter struct {
 	build string // leveler build name; with the snapshot's difficulty it picks the belt columns (SetBuild)
 
 	shadow *Shadow // the loot rules shadow stage (lootshadow.go); nil = off
+	engine *Engine // the loot rules engine stages (rulesengine.go), switched by loot.rulesEngine
 
 	// Seams for tests.
 	snap  func() (*d2.Snapshot, error)
@@ -114,7 +115,7 @@ const GemKeep = 6
 
 // New builds a Looter with the built-in starter pickit.
 func New(e *env.Env, mv Mover) *Looter {
-	l := &Looter{e: e, mv: mv, pk: Starter(), hand: hand.New(e), snap: e.Snapshot, shadow: DefaultShadow}
+	l := &Looter{e: e, mv: mv, pk: Starter(), hand: hand.New(e), snap: e.Snapshot, shadow: DefaultShadow, engine: DefaultEngine}
 	if e.Read != nil {
 		l.stats = e.Read.UnitStats
 	}

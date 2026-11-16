@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sort"
 	"sync"
 	"time"
 
@@ -102,6 +103,7 @@ func (t *Town) tidyPlan(s *d2.Snapshot) ([]tidy.Entry, map[uint32]d2.Unit, tidy.
 	t.ReconcileMarks(s)
 	var items []tidy.Item
 	byID := map[uint32]d2.Unit{}
+	decided := map[uint32]tidy.Decision{}
 	maxBuy := loot.MaxBuyOf(s.Player)
 	sp := t.shadowPass(s, c.PackFullPct, c.StashFullPct) // shadow stage: log-only, nil when off
 	for _, u := range s.Inventory.Container(d2.ContInventory) {
@@ -111,11 +113,48 @@ func (t *Town) tidyPlan(s *d2.Snapshot) ([]tidy.Entry, map[uint32]d2.Unit, tidy.
 		f := t.TidyFacts(u, maxBuy, t.markOf(u))
 		items = append(items, tidy.Item{ID: u.ID, Facts: f})
 		byID[u.ID] = u
+		old := p.Decide(f, c)
 		if sp != nil {
-			sp.Observe(loot.ShadowTidy, u, string(p.Decide(f, c).Action), f.Mark, t.neverSellUnit(u), nil)
+			sp.Observe(loot.ShadowTidy, u, string(old.Action), f.Mark, t.neverSellUnit(u), nil)
+		}
+		if a, rule, why, ok := sp.TidyDecision(u, f.Mark, t.neverSellUnit(u)); ok { // loot.rulesEngine >= 2
+			decided[u.ID] = tidy.Decision{Action: tidy.Action(a), Rule: rule, Why: why}
 		}
 	}
-	return p.Plan(items, c, t.tune().TidyMaxActions), byID, c, nil
+	if len(decided) == 0 {
+		return p.Plan(items, c, t.tune().TidyMaxActions), byID, c, nil
+	}
+	return planDecided(items, decided, p, c, t.tune().TidyMaxActions), byID, c, nil
+}
+
+// planDecided is tidy.Policy.Plan with some decisions already made (the engine's); the rest come from the policy. Same
+// ordering and cap: stash first, best value first, then drops, cheapest first, at most max.
+func planDecided(items []tidy.Item, decided map[uint32]tidy.Decision, p *tidy.Policy, c tidy.Ctx, max int) []tidy.Entry {
+	var st, dr []tidy.Entry
+	val := map[uint32]int{}
+	for _, it := range items {
+		d, ok := decided[it.ID]
+		if !ok {
+			d = p.Decide(it.Facts, c)
+		}
+		val[it.ID] = it.Facts.SellValue
+		switch d.Action {
+		case tidy.Stash:
+			st = append(st, tidy.Entry{ID: it.ID, Decision: d})
+		case tidy.Drop:
+			dr = append(dr, tidy.Entry{ID: it.ID, Decision: d})
+		}
+	}
+	sort.SliceStable(st, func(i, j int) bool { return val[st[i].ID] > val[st[j].ID] })
+	sort.SliceStable(dr, func(i, j int) bool { return val[dr[i].ID] < val[dr[j].ID] })
+	out := append(st, dr...)
+	if max < 0 {
+		max = 0
+	}
+	if len(out) > max {
+		out = out[:max]
+	}
+	return out
 }
 
 func (t *Town) needTidy(s *d2.Snapshot) bool {

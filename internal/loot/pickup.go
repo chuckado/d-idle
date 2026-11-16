@@ -417,6 +417,9 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 			c.Stats, _ = l.stats(u.Addr) // the read EvaluateWith would make, kept for the shadow
 		}
 		v := l.EvaluateWith(u, c)
+		if ev, ok := sp.GroundVerdict(u, c.Stats); ok {
+			v = ev // loot.rulesEngine >= 1: the engine decides; the filters below stay today's
+		}
 		if namedItem(o.Names, name, b) {
 			v = Verdict{Action: Keep, Tier: "S", Prio: 100, Rule: "named", Reason: "asked for by name"}
 		}

@@ -210,6 +210,7 @@
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
 | resetinstant | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`internal/watch/web/reset.css`<br>`internal/watch/testdata/reset`<br>`docs/reset.md`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/state.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_phone.go`<br>`tools/uishots/fit.go` | - |
+| charui | proposed | - | `internal/watch/web/characters.html`<br>`internal/watch/web/characters.js`<br>`internal/watch/web/characters.css`<br>`internal/watch/web/characters.json`<br>`internal/watch/charactersui_test.go`<br>`internal/charsel/rules.go`<br>`tools/uishots/fixtures_chars.go`<br>`docs/charselect-ui.md` | - |
 | idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
 | intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
@@ -221,6 +222,9 @@
 | decomp34 | proposed | - | `docs/research/decomp34-fallen-flee.md`<br>`tools/emu/dc34_ring.py`<br>`tools/emu/dc34_flee.py`<br>`tools/emu/dc34_cmp.py`<br>`tools/emu/dc34_telemana.py`<br>`tools/emu/dc34_tmcmp.py`<br>`docs/upstream/bodies/`<br>`backlog/merge-lines/decomp34.txt` | `fork-branch:fid/tele-refund-r1` |
 | charsup | proposed | - | `deploy/d2d-container/entrypoint.sh`<br>`deploy/d2d-container/tester_image_test.go`<br>`internal/charsel`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go`<br>`docs/charselect.md` | - |
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
+| farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
+| lootwire3 | proposed | - | `internal/lootrules`<br>`internal/loot/rulesengine.go`<br>`internal/loot/rulespreview.go`<br>`internal/loot/rulespreview_test.go`<br>`internal/watch/lootrulestools_test.go`<br>`internal/charsel/lootrulesstate_test.go`<br>`internal/loot/rulesengine_test.go`<br>`internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/loot/rulesadapt.go`<br>`internal/town/shop.go`<br>`internal/watch/lootrulesapi.go`<br>`internal/watch/lootrulesapi_test.go`<br>`internal/watch/lootrulesui_test.go`<br>`internal/watch/web/lootrulesui.js`<br>`internal/watch/web/shell.css`<br>`internal/charsel/perchar.json`<br>`cmd/d2bot/lootruleswire.go`<br>`cmd/d2bot/lootruleswire_test.go`<br>`tools/uishots`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/env/tuning_loot.go` | - |
+| seqfollow | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -264,14 +268,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 4055fc1ee 11-16 12:08 `Merge agent/survsd: Merge branch 'main' into survsd` (survsd)
-- 4cb76cea4 11-16 12:07 `Merge branch 'main' into survsd` (-)
-- 443e30a81 11-16 11:39 `Merge agent/survab: Merge branch 'main' into survab` (survab)
-- c3b2466e3 11-16 11:38 `Merge branch 'main' into survab` (-)
-- d3d309ee5 11-16 11:36 `Merge agent/decomp34: Merge branch 'main' into 547` (decomp34)
-- 86a304804 11-16 11:35 `Merge branch 'main' into 547` (-)
-- 12f63c431 11-16 11:21 `Merge agent/charsup: Merge branch 'main' into charsup` (charsup)
-- 66a3b7b64 11-16 11:21 `Merge branch 'main' into charsup` (-)
-- 31909255a 11-16 11:10 `Merge agent/pause: Pause freezes the game via the lockstep switch, loop/clock wiring, menu button, banner, Space` (pause)
-- 33011e216 11-16 11:06 `Merge origin/main into agent/pause` (pause)
+- 78ee7b4b7 11-16 13:53 `Merge agent/telebody: Merge branch 'main' into telebody` (telebody)
+- d4e1da3bb 11-16 13:52 `Merge branch 'main' into telebody` (-)
+- ad5c46990 11-16 13:46 `Merge agent/seqfollowup: Merge branch 'main' into seqfollow` (seqfollowup)
+- f0c0ac1e8 11-16 13:46 `Merge agent/verifyp13: Merge branch 'main' into TASK-551` (verifyp13)
+- 1b19181ea 11-16 13:44 `Merge branch 'main' into seqfollow` (-)
+- 269400e76 11-16 13:44 `Merge branch 'main' into TASK-551` (-)
+- e1fd1124c 11-16 13:38 `Merge agent/charui: Merge branch 'main' into TASK-530` (charui)
+- 5c5382a96 11-16 13:37 `Merge branch 'main' into TASK-530` (-)
+- 5ca1b88db 11-16 13:31 `Merge origin/main into charui` (-)
+- a691c3066 11-16 13:31 `Merge agent/lootwire3: Merge branch 'main' into lootwire3` (lootwire3)
 <!-- statusgen:end -->

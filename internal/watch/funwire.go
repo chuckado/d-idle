@@ -171,6 +171,8 @@ type Fun struct {
 	Merc *MercAPI
 	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
 	LootShadow *LootShadowAPI
+	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
+	LootRules *LootRulesAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm *GoldFarmAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
@@ -747,6 +749,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
+		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
 	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
@@ -756,6 +759,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.LootShadow != nil {
 		for _, p := range LootShadowRoutes {
 			m.Handle(p, f.LootShadow.Handler())
+		}
+	}
+	if f.LootRules != nil {
+		for _, p := range LootRulesRoutes {
+			m.Handle(p, f.LootRules.Handler())
 		}
 	}
 	if f.Merc != nil {
@@ -859,6 +867,14 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Merc != nil {
 		for _, p := range MercPostRoutes {
 			m.Handle(p, f.Merc.PostHandler(o))
+		}
+	}
+	if f.LootRules != nil {
+		for _, p := range LootRulesPutRoutes {
+			m.Handle(p, f.LootRules.PutHandler(o))
+		}
+		for _, p := range LootRulesPostRoutes {
+			m.Handle(p, f.LootRules.PostHandler(o))
 		}
 	}
 	if f.GoldFarm != nil {
