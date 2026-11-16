@@ -4,7 +4,7 @@
 
 ## Setup (V)
 - Binary: `d2bot` built from main at the survfix merge (one clock, `be.Clock.Now`), one binary for both arms; the arms differ only in `bot.zoneModel` 0 vs 1, `bot.portalGuard` 0 in both. Same seeds (101, 103, 107), class Paladin (`AB_CLASS=2`), 2 virtual hours, `AB_MAX=4`, as the first screen. The harness hero still has no attack skill attached (the proposal of the analysis is not part of this run).
-- `AB_CLASS=2 AB_MAX=4 tools/survival/ab.sh 2 101 103 107` under `tools/agentrun.sh --ttl`; about 38 minutes wall for the six runs on four slots (orion load 12 to 22 on 16 cores during the run, idle plus nice 68 percent at the start; the user's sandbox container and volume untouched). The legacy run of seed 103 hit its wall limit at 111 minutes (host load), so it was rerun alone (`AB_SPEED=5`, longer wall cap, same seed): lockstep made the rerun identical in outcome (0 deaths, 0 chickens, 1 merc death, as in the first screen).
+- `AB_CLASS=2 AB_MAX=4 tools/survival/ab.sh 2 101 103 107` under `tools/agentrun.sh --ttl`; about 38 minutes wall for the six runs on four slots (worker host load 12 to 22 on 16 cores during the run, idle plus nice 68 percent at the start; the user's sandbox container and volume untouched). The legacy run of seed 103 hit its wall limit at 111 minutes (host load), so it was rerun alone (`AB_SPEED=5`, longer wall cap, same seed): lockstep made the rerun identical in outcome (0 deaths, 0 chickens, 1 merc death, as in the first screen).
 - Every log ends `writes after start: 0` (6 of 6); none CHEATED, none excluded.
 - Report: `abreport -base legacy -arm margin -death-slack 1 -chicken-slack 1` (XP is now read at the last minute line of the pair, labelled `xp@N`).
 
