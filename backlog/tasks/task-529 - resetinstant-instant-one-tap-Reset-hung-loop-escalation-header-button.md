@@ -26,6 +26,7 @@ owns:
   - "docs/reset.md"
 exclusive: []
 contracts: []
+result: "Soft Reset is instant (cancels the running action, 150 ms on the fake clock), escalates to the hard path after 3 s without a loop tick, POST answers 202 with a wait opt-in; one-tap header button with cooldown, no soft confirm; startFreshGame guarded (in flight, 5 s debounce). Offline only, not verified live; fit renders not viewed (Tower queue)."
 ---
 
 ## Description
@@ -38,10 +39,10 @@ Break-glass Reset must be instant (user 2026-11-15). Done when the criteria are 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 soft reset never waits (wait opt-in), starts on the next tick
-- [ ] #2 3 s unacknowledged soft reset escalates to hard
-- [ ] #3 POST /api/reset answers 202; goldens updated
-- [ ] #4 one-tap header Reset button, no confirm for soft, 3 s cooldown
+- [x] #1 soft reset never waits (wait opt-in), starts on the next tick
+- [x] #2 3 s unacknowledged soft reset escalates to hard
+- [x] #3 POST /api/reset answers 202; goldens updated
+- [x] #4 one-tap header Reset button, no confirm for soft, 3 s cooldown
 - [ ] #5 fit fixtures for the header at all sizes viewed
-- [ ] #6 docs/reset.md updated
+- [x] #6 docs/reset.md updated
 <!-- AC:END -->
