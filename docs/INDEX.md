@@ -877,6 +877,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [drills/README.md](probes/drills/README.md): Live primitive drills (card m1-liveproof, harness cmd/d2drill + internal/drill) (status: DRILLS5 (2026-10-31, last section): live proofs of the merged fixes (fix-bank, fix-obj, fix-price,...)
 - [hover-audit.md](probes/drills/hover-audit.md): Hover blind-spot audit (agent DRILLS3, 2026-10-31, card m1-liveproof) (status: current. Why: under the lab's `--lockstep` d2d resolves "what is under the cursor" only while it draws a...)
 
+`probes/`
+
+- [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
+- [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
+
 `probes/fid/`
 
 - [batch5.md](probes/fid/batch5.md): Decomp batch 5 (agent decomp9, 2026-11-11): summary (status: finished, offline (emulator on the worker host; no game, no live d2d, nothing pushed or posted, no fork...)
