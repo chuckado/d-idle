@@ -218,6 +218,8 @@
     background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
   .d-menu-pop[hidden] { display: none; }
   .d-menu-pop > .d-btn { inline-size: 100%; }
+  .d-menu-pair { display: grid; grid-template-columns: auto 1fr; gap: var(--d-sp-1); }
+  .d-menu-pair > .d-btn { inline-size: 100%; white-space: nowrap; }
   .d-menu-pop .d-menu-label { margin: var(--d-sp-1) var(--d-sp-1) 0; font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
   .d-menu-pop .d-btn[aria-checked="true"] { border-color: var(--d-accent); color: var(--d-accent-text); font-weight: 650; }
   .d-layoutnote { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-2) var(--d-sp-3); margin-inline: var(--d-gap); padding: var(--d-sp-2) var(--d-sp-3);
@@ -290,6 +292,37 @@
   .d-sup-alt { display: flex; flex-wrap: wrap; gap: var(--d-sp-3); align-items: center; justify-content: space-between; }
   .d-sup-link { display: inline-flex; align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); color: var(--d-accent-text); }
   .d-sup-alt .d-btn { min-block-size: 44px; }
+  /* Loot rules (lootrulesui.js): the same card family as the support sheet, wider, one scroll inside the card */
+  .d-lr-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-lr-sheet[hidden], .d-lr-card [hidden] { display: none; }
+  .d-lr-card { inline-size: min(100%, 38rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box; align-content: start;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-lr-card h2, .d-lr-card h3 { margin: 0; font-size: var(--d-fs-3); }
+  .d-lr-card h3 { font-size: var(--d-fs-2); }
+  .d-lr-card p, .d-lr-card li { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; min-inline-size: 0; }
+  .d-lr-card .d-lr-err { color: var(--d-bad); }
+  .d-lr-card .d-lr-note { font-size: var(--d-fs-0); }
+  .d-lr-modes { display: flex; gap: var(--d-sp-2); }
+  .d-lr-modes .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-lr-modes .d-btn[aria-pressed="true"] { border-color: var(--d-accent-text); color: var(--d-text); }
+  .d-lr-simple, .d-lr-custom, .d-lr-why, .d-lr-prot { display: grid; gap: var(--d-sp-2); }
+  .d-lr-simple { grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); align-items: end; }
+  .d-lr-simple .d-btn { grid-column: 1 / -1; min-block-size: 44px; align-items: center; }
+  .d-lr-field { display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); }
+  .d-lr-field select, .d-lr-field input { min-block-size: 44px; box-sizing: border-box; inline-size: 100%; font: inherit; }
+  .d-lr-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
+  .d-lr-check input { inline-size: 24px; block-size: 24px; flex: none; }
+  .d-lr-rules, .d-lr-plist, .d-lr-recent { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
+  .d-lr-rules { max-block-size: 16rem; overflow-y: auto; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .d-lr-rule { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--d-sp-2); align-items: center; padding: var(--d-sp-1) var(--d-sp-2); border-block-end: var(--d-bw) solid var(--d-line); }
+  .d-lr-rule input { inline-size: 24px; block-size: 24px; }
+  .d-lr-rule.is-off .d-lr-text { text-decoration: line-through; opacity: 0.6; }
+  .d-lr-act { display: flex; gap: var(--d-sp-1); }
+  .d-lr-act .d-btn, .d-lr-why .d-btn, .d-lr-prot .d-btn { min-block-size: 44px; align-items: center; }
+  .d-lr-recent { max-block-size: 12rem; overflow-y: auto; }
+  .d-lr-dec[data-differs="1"] { color: var(--d-text); border-inline-start: 3px solid var(--d-accent-text); padding-inline-start: var(--d-sp-2); }
+  .d-lr-row { display: flex; justify-content: flex-end; }
+  .d-lr-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
   .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));
     padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1);
     display: flex; align-items: center; gap: var(--d-sp-2); }

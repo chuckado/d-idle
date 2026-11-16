@@ -5,6 +5,7 @@
 import { mountReset } from '/watch/resetui.js';
 import { mountPause } from '/watch/pauseui.js';
 import { mountSupport } from '/watch/supportui.js';
+import { mountLootRules } from '/watch/lootrulesui.js';
 import { overlays } from '/watch/overlay.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
@@ -824,12 +825,19 @@ function setupMenu(sel) {
   rb.dataset.key = 'reset-open';
   rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
-  pop.appendChild(rb);
+  const pair = el('div', 'd-menu-pair'); // Reset and Loot rules share a row: the menu must fit a 620 px high window (fit check)
+  pair.appendChild(rb);
+  pop.appendChild(pair);
   const sb = ui.btn('Send support bundle...', { size: 'sm', variant: 'ghost' });
   sb.dataset.key = 'support-open';
   sb.setAttribute('aria-label', 'Help: send a support bundle to the owner');
   sb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:support-ask', { detail: { from: more } })));
   pop.appendChild(sb);
+  const lb = ui.btn('Loot rules...', { size: 'sm', variant: 'ghost' });
+  lb.dataset.key = 'lootrules-open';
+  lb.setAttribute('aria-label', 'Loot rules: what the bot picks up, stashes and sells');
+  lb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:lootrules-ask', { detail: { from: more } })));
+  pair.appendChild(lb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
@@ -1000,6 +1008,10 @@ async function start() {
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   const rc = document.getElementById('reset-confirm');
   if (rc) overlays.register('reset', rc); // the modal confirm: opening it closes the menu it came from
+  mountLootRules({ ui, toast, doc: document, overlays,
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
+    put: (path, body) => fetch(answerBase + path, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; }) });
   mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted

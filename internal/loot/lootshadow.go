@@ -30,6 +30,7 @@ const (
 	shadowLines  = 50 // lines kept for the report
 	shadowPerMin = 20 // log lines per minute at most; the rest is only counted
 	shadowTop    = 10 // rules listed in the report
+	shadowRecent = 40 // decisions kept for the Loot Rules tab
 )
 
 // ShadowRule is one row of the "top disagreements by rule" table.
@@ -74,6 +75,7 @@ type Shadow struct {
 	byRule map[string]*ShadowRule
 	scopes map[string]*ShadowScope
 	last   []string
+	recent []lootrules.Recent // every decision, newest last, repeats of the same item and rule collapsed
 	logged []time.Time
 	errs   int
 	total  ShadowScope
@@ -174,6 +176,7 @@ func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item
 	if fold != nil {
 		rules = fold(d)
 	}
+	s.remember(lootrules.Recent{Scope: scope, Item: nameOf(it), Today: today, Rules: rules, Rule: d.Rule, Why: d.Why})
 	if rules == today {
 		return
 	}
@@ -195,6 +198,38 @@ func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item
 		rr.Example = line
 	}
 	s.note(line)
+}
+
+func nameOf(it *lootrules.Item) string {
+	if it.Name != "" {
+		return it.Name
+	}
+	return it.Code
+}
+
+// remember keeps the decision for the Loot Rules tab; the same item, rule and answer seen again within the last ten is
+// not repeated (a ground item is judged on every pickup pass). The caller holds mu.
+func (s *Shadow) remember(r lootrules.Recent) {
+	for i := len(s.recent) - 1; i >= 0 && i >= len(s.recent)-10; i-- {
+		if s.recent[i] == r {
+			return
+		}
+	}
+	s.recent = append(s.recent, r)
+	if len(s.recent) > shadowRecent {
+		s.recent = s.recent[len(s.recent)-shadowRecent:]
+	}
+}
+
+// Recent returns the last decisions, newest first.
+func (s *Shadow) Recent() []lootrules.Recent {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	out := make([]lootrules.Recent, 0, len(s.recent))
+	for i := len(s.recent) - 1; i >= 0; i-- {
+		out = append(out, s.recent[i])
+	}
+	return out
 }
 
 // note keeps the line for the report and logs it unless the per-minute budget is spent. The caller holds mu.
@@ -258,6 +293,7 @@ func (s *Shadow) Reset() {
 	defer s.mu.Unlock()
 	s.seen, s.byRule, s.scopes, s.last, s.logged = map[string]bool{}, map[string]*ShadowRule{}, map[string]*ShadowScope{}, nil, nil
 	s.errs, s.total, s.nanos, s.maxNs = 0, ShadowScope{}, 0, 0
+	s.recent = nil
 }
 
 // SetShadow replaces the looter's shadow (tests); nil switches the shadow stage off for this looter.
@@ -268,7 +304,7 @@ func (l *Looter) Shadow() *Shadow { return l.shadow }
 
 // ShadowEnabled is the knob bot.lootShadow.
 func (l *Looter) ShadowEnabled() bool {
-	return l.shadow != nil && l.e.Tune != nil && l.e.Tune.Bot.LootShadow != 0
+	return l != nil && l.shadow != nil && l.e.Tune != nil && l.e.Tune.Bot.LootShadow != 0
 }
 
 // ShadowPass is one snapshot's shadow state: the context is built once, then every decision point of the pass calls
@@ -282,6 +318,8 @@ type ShadowPass struct {
 	// ground: today's strictness knob and low-gold mode, which filter by tier after the verdict (passes in pickup.go).
 	strict  int
 	lowGold bool
+	shadow  bool // Observe records (bot.lootShadow); a pass made only for the engine does not
+	stage   int  // loot.rulesEngine at the start of the pass
 }
 
 // SetGround tells the pass the strictness and low-gold mode of the pickup being judged, so the rule's tier is filtered
@@ -310,25 +348,31 @@ func (p *ShadowPass) groundFold(d lootrules.Decision) string {
 }
 
 // ShadowPass starts the pass for snapshot s. packPct and stashPct are the grid fill the caller measured (0 when it did
-// not). Returns nil when the stage is off, the snapshot has no player or the data tables are missing.
+// not). Returns nil when neither the shadow nor an engine stage is on, the snapshot has no player or the data tables
+// are missing. The pass shadows when bot.lootShadow is on and serves the engine when loot.rulesEngine is above 0.
 func (l *Looter) ShadowPass(s *d2.Snapshot, packPct, stashPct int) (p *ShadowPass) {
-	if l == nil || !l.ShadowEnabled() || s == nil || s.Player == nil || s.Inventory == nil || l.e.Data == nil {
+	shadow, stage := l.ShadowEnabled(), l.EngineStage()
+	if !shadow && stage == 0 || s == nil || s.Player == nil || s.Inventory == nil || l.e.Data == nil {
 		return nil
 	}
 	defer func() {
 		if recover() != nil {
 			p = nil
-			l.shadow.countError()
+			if shadow {
+				l.shadow.countError()
+			}
 		}
 	}()
-	if l.shadow.log == nil {
-		l.shadow.Use(l.e.Log, nil)
-	}
-	if l.shadow.now == nil && l.e.Clock != nil {
-		l.shadow.Use(nil, l.e.Clock.Now)
+	if shadow {
+		if l.shadow.log == nil {
+			l.shadow.Use(l.e.Log, nil)
+		}
+		if l.shadow.now == nil && l.e.Clock != nil {
+			l.shadow.Use(nil, l.e.Clock.Now)
+		}
 	}
 	a := l.Rules()
-	return &ShadowPass{l: l, a: a, cx: a.Ctx(s, l.build, packPct, stashPct), area: s.Player.Area, max: MaxBuyOf(s.Player)}
+	return &ShadowPass{l: l, a: a, cx: a.Ctx(s, l.build, packPct, stashPct), area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
 }
 
 func (s *Shadow) countError() { s.mu.Lock(); s.errs++; s.mu.Unlock() }
@@ -336,7 +380,7 @@ func (s *Shadow) countError() { s.mu.Lock(); s.errs++; s.mu.Unlock() }
 // Observe records one decision. stats is the unit's stat list when the caller already read it (nil: read here, or
 // unreadable). neverSell marks the town's never-sell list. today is the old decision in the vocabulary of the scope.
 func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverSell bool, stats d2.Stats) {
-	if p == nil || u.Item == nil {
+	if p == nil || !p.shadow || u.Item == nil {
 		return
 	}
 	defer func() {
@@ -345,6 +389,24 @@ func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverS
 		}
 	}()
 	t0 := p.l.shadow.wall()
+	it, err := p.item(scope, u, mark, neverSell, stats)
+	if err != nil {
+		p.l.shadow.countError()
+		return
+	}
+	name := it.Name
+	if name == "" {
+		name = it.Code
+	}
+	var fold func(lootrules.Decision) string
+	if scope == ShadowGround {
+		fold = p.groundFold
+	}
+	p.l.shadow.observe(scope, p.area, name, &it, p.cx, today, p.l.shadow.wall().Sub(t0), fold)
+}
+
+// item builds the rule facts of one unit for the scope (shared by the shadow and the engine).
+func (p *ShadowPass) item(scope string, u d2.Unit, mark string, neverSell bool, stats d2.Stats) (lootrules.Item, error) {
 	needs := p.needsStats(u)
 	if stats == nil && needs && p.l.stats != nil && u.Addr != 0 {
 		stats, _ = p.l.stats(u.Addr)
@@ -364,20 +426,7 @@ func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverS
 	case !needs:
 		o.Stats = d2.Stats{} // a plain item has no stat list worth reading: readable and empty
 	}
-	it, err := p.a.Item(u, o)
-	if err != nil {
-		p.l.shadow.countError()
-		return
-	}
-	name := it.Name
-	if name == "" {
-		name = it.Code
-	}
-	var fold func(lootrules.Decision) string
-	if scope == ShadowGround {
-		fold = p.groundFold
-	}
-	p.l.shadow.observe(scope, p.area, name, &it, p.cx, today, p.l.shadow.wall().Sub(t0), fold)
+	return p.a.Item(u, o)
 }
 
 // needsStats says whether a unit's stat list can matter to a rule: gold (the pile), magic or better (affixes), and the

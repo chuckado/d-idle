@@ -80,6 +80,7 @@ func serve(addr, class string) error {
 	m.HandleFunc(watch.PauseRoute, pauseFixture)
 	m.HandleFunc(watch.SupportRoute, supportFixture)
 	m.HandleFunc(watch.SupportBundleRoute, supportFixture)
+	m.HandleFunc("/api/lootrules", lootRulesFixture)
 	m.Handle(watch.ZoneClearRoute, zoneClearFixture())
 	m.HandleFunc("/api/update/status", updateStatusFixture)
 	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))

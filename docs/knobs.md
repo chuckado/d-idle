@@ -220,6 +220,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.goldSafeDist | 8 | 2..30 | subtiles | 2 | 0 | A mid-fight grab needs every hostile at least this far from the hero. |
 | loot.goldMaxDanger | 0 | 0..3 | level | 0 | 0 | Highest pack danger (0 none, 1 champions or shamans, 2 elite, 3 deadly) at which a mid-fight grab is still made. |
 | loot.goldMinLifePct | 60 | 0..100 | percent | 100 | 0 | Below this life percent gold is ignored (survival comes first). |
+| loot.rulesEngine | 0 | 0..3 | stage | 3 | 1 | 0: today's pickit and tidy table decide (default). 1: the loot rules engine (docs/lootrules.md) decides what to pick up from the ground, with today's strictness, minimum priority, per-cell and small-gold filters still applied on top. 2: ground and the tidy chore's stash and drop decisions. 3 is reserved for the sell chore and is NOT implemented (needs a user decision on five sell kinds, docs/lootrules.md Wave 2a): it behaves like 2. If the engine errors or panics, that one decision falls back to today's code and is logged once. |
 | loot.goldRetries | 4 | 1..10 | count | 1 | 4 | Failed pickups of one pile, over all calls, before it is given up. |
 | loot.memCap | 64 | 4..512 | count | 4 | 2 | Remembered drops kept at most; the lowest value is evicted. |
 

@@ -265,6 +265,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 95a00a504 11-16 12:37 `Merge agent/lootwire2: Merge branch 'main' into TASK-549` (lootwire2)
+- d9acac08f 11-16 12:36 `Merge branch 'main' into TASK-549` (-)
 - a77be292c 11-16 12:34 `Merge agent/farmlive: Merge branch 'main' into farmlive` (farmlive)
 - c6a600d40 11-16 12:33 `Merge branch 'main' into farmlive` (-)
 - 4055fc1ee 11-16 12:08 `Merge agent/survsd: Merge branch 'main' into survsd` (survsd)
@@ -273,6 +275,4 @@
 - c3b2466e3 11-16 11:38 `Merge branch 'main' into survab` (-)
 - d3d309ee5 11-16 11:36 `Merge agent/decomp34: Merge branch 'main' into 547` (decomp34)
 - 86a304804 11-16 11:35 `Merge branch 'main' into 547` (-)
-- 12f63c431 11-16 11:21 `Merge agent/charsup: Merge branch 'main' into charsup` (charsup)
-- 66a3b7b64 11-16 11:21 `Merge branch 'main' into charsup` (-)
 <!-- statusgen:end -->
