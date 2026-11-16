@@ -57,6 +57,10 @@ func (t *Town) identifyNeeded(s *d2.Snapshot) bool {
 	if _, have := t.idTool(s); have {
 		return true
 	}
+	if t.tune().IdentifyTome == 0 {
+		t.logNoIDTool()
+		return false
+	}
 	return t.idScrollWanted(s)
 }
 
@@ -227,4 +231,12 @@ func (t *Town) withdrawAmount(ctx context.Context, a *Act, s *d2.Snapshot, amoun
 		first = err
 	}
 	return first
+}
+
+// logNoIDTool is the reason when the identify chore has no tool and may not buy one (town.identifyTome 0); once per visit.
+func (t *Town) logNoIDTool() {
+	if !t.idTomeLogged {
+		t.idTomeLogged = true
+		t.e.Log.Info("town: identify skipped", "reason", "no scroll/tome (buy on request)")
+	}
 }

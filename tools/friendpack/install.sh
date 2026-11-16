@@ -139,6 +139,8 @@ D2_WATCH_ORIGIN=$origin
 D2_SHOWN_URL=$shown
 D2BOT_UPDATE_FEED=$(cat UPDATE_FEED 2>/dev/null || true)
 D2BOT_UPDATE_CHECK=on
+D2BOT_SUPPORT_URL=$(cat SUPPORT_URL 2>/dev/null || true)
+D2BOT_SUPPORT_TOKEN=$(cat SUPPORT_TOKEN 2>/dev/null || true)
 ENV
 docker compose up -d || stop "docker compose could not start the container (output above)"
 

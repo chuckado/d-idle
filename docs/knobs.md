@@ -142,6 +142,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
 | town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 2 | Buy a Tome of Town Portal when gold is at least this. |
 | town.idScrollTarget | 2 | 0..20 | count | 0 | 4 | Scrolls to hold when no tome is owned. |
+| town.identifyTome | 0 | 0..1 | bool | 0 | 1 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
+| town.identifyTopUpBelow | 10 | 1..20 | count | 1 | 1 | With identifyTome on, refill the Tome of Identify to full when it holds fewer scrolls than this. |
 | town.minGoldReserve | 100 | 0..1e+04 | gold | 1e+04 | 5 | Optional purchases never spend below this. |
 | town.keyTarget | 0 | 0..12 | count | 0 | 6 | Keys to hold; 0 never buys keys. |
 | town.repairBelowPct | 30 | 0..90 | % | 0 | 3 | Repair when any equipped item is below this durability. |

@@ -523,6 +523,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [staletarget.md](staletarget.md): Stale target area, border-loop bans and blocked journey steps (TASK-398) (status: fix landed on branch agent/staletarget (not deployed; no live run). Tags: V verified (how is said), S...)
 - [stance.md](stance.md): Fight stance (cards stancefix, stancelever) (status: built and tested offline; NOT run in a live game. Tags: V = proven by a test in this tree or by a log...)
 - [summon.md](summon.md): Necromancer upkeep (internal/combat/necro.go)
+- [support-bundle.md](support-bundle.md): Support bundle: the "Send support bundle" button (status: new (card `support`, task 542). Code: `internal/support` (build, redact, scan, send),...)
 
 `survival/`
 

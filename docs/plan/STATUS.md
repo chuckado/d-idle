@@ -216,6 +216,7 @@
 | viewerfps | proposed | - | `internal/watch/video.go`<br>`internal/watch/videofps_test.go`<br>`internal/watch/web/mjpeg.js`<br>`internal/watch/web/panels/video`<br>`docs/probes/viewer-fps-2026-11-15.md`<br>`internal/watch/glance.go`<br>`internal/watch/videoresume_test.go`<br>`internal/watch/testdata/video_panel.js`<br>`docs/knobs.md` | - |
 | friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
 | videofeed | proposed | - | `internal/watch/palfeed`<br>`internal/watch/web/palfeed.js`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`tools/videofeed` | - |
+| idtome | proposed | - | `internal/town/idtome_test.go` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -259,14 +260,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2b3b4a9ce 11-16 09:21 `Merge agent/idtome: Merge branch 'main' into idtome` (idtome)
+- 6133c7f1a 11-16 09:20 `Merge branch 'main' into idtome` (-)
+- 4d49fe871 11-16 09:13 `Merge agent/support: Merge origin/main into agent/support (keep both sides)` (support)
+- 082062b55 11-16 08:53 `Merge origin/main into agent/support (keep both sides)` (support)
+- bc06722e8 11-16 08:45 `merge origin/main` (-)
 - d3d33e6d4 11-16 00:50 `Merge agent/farmloop2: Merge branch 'main' into farmloop2` (farmloop2)
 - 2ebf453c7 11-16 00:49 `Merge branch 'main' into farmloop2` (-)
+- ff59b1cb2 11-16 00:45 `Merge branch 'main' into idtome` (-)
 - 856701761 11-16 00:40 `Merge agent/verifyp18: Merge branch 'main' into TASK-528` (verifyp18)
 - bb198e845 11-16 00:39 `Merge branch 'main' into TASK-528` (-)
-- 999100bfe 11-16 00:31 `Merge agent/videofeed: Merge branch 'main' into videofeed` (videofeed)
-- 5ca87e732 11-16 00:30 `Merge branch 'main' into videofeed` (-)
-- 81cb2fefb 11-16 00:24 `Merge agent/overlayfix: Merge branch 'main' into TASK-526` (overlayfix)
-- 32874d3b8 11-16 00:23 `Merge branch 'main' into TASK-526` (-)
-- ddf2fbf5c 11-16 00:16 `Merge origin/main into farmloop2: one startFreshGame guard (debounce, busy, cap, caller log)` (farmloop2)
-- 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
 <!-- statusgen:end -->
