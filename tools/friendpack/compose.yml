@@ -26,6 +26,8 @@ services:
       # live game picture: both empty = the defaults (docs/friend-guide.md "The game picture is choppy")
       D2BOT_WATCH_VIDEO_FPS: ${D2_VIDEO_FPS:-}
       D2DVIEW_FLAGS: ${D2_VIEW_FLAGS:-}
+      # 1: also serve the lossless picture feed (needs the frame feed above; docs/video-feed.md); empty: off
+      D2_PALETTE_FEED: ${D2_PALETTE_FEED:-}
     volumes:
       - d2dbot-data:/data
       # the game archives (one read-only file each) come from compose.game.yml, written by ./install.sh

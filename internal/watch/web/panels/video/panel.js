@@ -17,13 +17,16 @@ export function mount(root, ctx) {
   shot.alt = 'live game window';
   shot.width = 800; shot.height = 600;
   shot.hidden = true;
+  const cv = ctx.el('canvas', 'shot pal'); // the lossless feed draws here (docs/video-feed.md); hidden until it delivers
+  cv.hidden = true; cv.width = 800; cv.height = 600;
+  cv.setAttribute('aria-label', 'live game window');
   const wait = ctx.el('p', 'd-empty', 'Waiting for the game picture...');
   const badge = ctx.el('span', 'badge', '');
   badge.hidden = true;
   badge.setAttribute('role', 'status');
   const retry = ctx.el('button', 'd-btn', 'Retry');
   retry.type = 'button'; retry.dataset.size = 'sm'; retry.hidden = true;
-  frame.append(shot, wait, badge, retry);
+  frame.append(shot, cv, wait, badge, retry);
   ctx.body.append(frame);
 
   const full = ctx.el('button', 'd-btn', 'Full screen');
@@ -93,12 +96,63 @@ export function mount(root, ctx) {
     ctx.later(watchRate, 1000);
   }
 
-  function src() {
+  function src(base) {
     const q = [];
     if (ctx.token) q.push('t=' + encodeURIComponent(ctx.token));
     if (low.get() === '1') q.push('fps=' + LOW_FPS); // the server skips parts for this viewer only
     q.push('r=' + Date.now());
-    return url + '?' + q.join('&');
+    return (base || url) + '?' + q.join('&');
+  }
+
+  // Lossless feed (docs/video-feed.md): used only when /api/config offers palFeedUrl, /api/glance lists "palfeed" under
+  // stream.formats and the capability probe answers; every failure keeps (or returns to) the MJPEG path below, logged
+  // to the console only. mode is read by the controller's open() on each (re)connect.
+  let mode = 'mjpeg', palFails = 0, player = null, ro = null;
+  const palUrl = ctx.config && ctx.config.palFeedUrl;
+  const PF = () => (typeof window !== 'undefined' && window.PalFeed) || null;
+  const log = (m) => { if (typeof console !== 'undefined' && console.info) console.info('video: ' + m); };
+  function palFit() {
+    const P = PF();
+    if (!P || !P.fit || mode !== 'pal' || !frame.clientWidth) return;
+    const r = P.fit(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
+    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px'); // whole device pixels per frame pixel: sharp at any zoom
+  }
+  function toMjpeg(why) {
+    if (mode === 'mjpeg') return;
+    log('falling back to MJPEG: ' + why);
+    mode = 'mjpeg'; palFails = 0;
+    cv.hidden = true;
+    ctl.reconnect();
+  }
+  function openPal(onFrame, onEnd) {
+    const P = PF();
+    player = new P.Player({
+      canvas: cv, url: src(palUrl),
+      onFrame: () => { palFails = 0; if (cv.hidden) { cv.hidden = false; shot.hidden = true; wait.hidden = true; palFit(); } onFrame(); },
+      onBytes: (n) => bytes.push([Date.now(), n]),
+      log,
+      onEnd: (e) => {
+        if (e && e.fatal) { toMjpeg(e.message); return; }
+        if (++palFails >= 3) { toMjpeg('feed failed ' + palFails + ' times'); return; }
+        onEnd(e);
+      },
+    });
+    player.start();
+    const p = player;
+    return () => { p.stop(); if (player === p) player = null; };
+  }
+  async function tryPal() {
+    if (!palUrl || typeof fetch !== 'function') return;
+    try {
+      if (!PF()) await import('../../palfeed.js');
+      const P = PF();
+      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed: this browser cannot decode it'); return; }
+      const d = await P.negotiate(fetch, ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '');
+      if (!d) return; // not offered (glance without palfeed) or not ready: MJPEG stays
+      mode = 'pal';
+      if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(palFit); ro.observe(frame); }
+      ctl.reconnect();
+    } catch (e) { log('lossless feed not used: ' + (e && e.message || e)); }
   }
 
   // fetch path: each part becomes an object URL on the <img>; while one decodes only the newest waits (latest wins)
@@ -144,8 +198,8 @@ export function mount(root, ctx) {
   const timers = new Map();
   let tick = 0;
   const ctl = videoController({
-    stall: () => (streaming ? 3000 : 0),
-    open: (onFrame, onEnd) => (streaming ? openFetch(onFrame, onEnd) : openImg(onFrame, onEnd)),
+    stall: () => (streaming || mode === 'pal' ? 3000 : 0),
+    open: (onFrame, onEnd) => (mode === 'pal' ? openPal(onFrame, onEnd) : streaming ? openFetch(onFrame, onEnd) : openImg(onFrame, onEnd)),
     later(fn, ms) { const id = ++tick; timers.set(id, true); ctx.later(() => { if (timers.delete(id)) fn(); }, ms); return id; },
     cancel(id) { timers.delete(id); },
     now: () => Date.now(),
@@ -169,5 +223,6 @@ export function mount(root, ctx) {
   }
   registerVideo(ctl);
   ctl.start();
+  tryPal();
   return {};
 }
