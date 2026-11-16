@@ -1,10 +1,11 @@
 ---
 id: TASK-526
 title: 'overlayfix: one overlay at a time, sheet text wraps'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:22:00Z'
+updated_date: '2026-11-16T05:39:00Z'
 labels:
   - watch
   - bug

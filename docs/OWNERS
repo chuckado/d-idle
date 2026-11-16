@@ -387,7 +387,6 @@ docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
-docs/ui-overlays.md  credit-runner  overlayfix
 docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
@@ -754,7 +753,6 @@ internal/watch/hero.go  credit-runner  uic3
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/herosheet_test.go  credit-runner  uic3
 internal/watch/http_answer.go  credit-runner  uib4
-internal/watch/http_view.go  credit-runner  overlayfix
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  uib4
 internal/watch/invapi.go  credit-runner  gearsets
@@ -798,7 +796,6 @@ internal/watch/resetapi.go  credit-runner  resetinstant
 internal/watch/resetapi_test.go  credit-runner  botreset
 internal/watch/resetapi_test.go  credit-runner  resetinstant
 internal/watch/resetui_test.go  credit-runner  botreset
-internal/watch/resetui_test.go  credit-runner  overlayfix
 internal/watch/resetui_test.go  credit-runner  resetinstant
 internal/watch/senses.go  credit-runner  maphistory
 internal/watch/senses.go  credit-runner  maphistoryA
@@ -860,7 +857,6 @@ internal/watch/testdata/onboarding_dom.txt  credit-runner  friendfb
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
-internal/watch/testdata/overlay_dom.mjs  credit-runner  overlayfix
 internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
@@ -930,7 +926,6 @@ internal/watch/web/layouts/cockpit.json  credit-runner  uis6
 internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
-internal/watch/web/overlay.js  credit-runner  overlayfix
 internal/watch/web/palfeed.js  credit-runner  videofeed
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/area-map/  credit-runner  uis6
@@ -962,14 +957,12 @@ internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/video  credit-runner  viewerfps
-internal/watch/web/panels/zone-map  credit-runner  overlayfix
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
-internal/watch/web/shell.css  credit-runner  overlayfix
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -977,7 +970,6 @@ internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
-internal/watch/web/shell.js  credit-runner  overlayfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
@@ -990,7 +982,6 @@ internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
-internal/watch/web/tokens.css  credit-runner  overlayfix
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
@@ -1048,10 +1039,8 @@ tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
-tools/uishots  credit-runner  overlayfix
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
-tools/uishots.sh  credit-runner  overlayfix
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
