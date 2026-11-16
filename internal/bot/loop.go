@@ -58,6 +58,9 @@ func (r *Runner) pause(ctx context.Context, d time.Duration) {
 
 // step runs one decision and at most one action. It reports whether an action ran (false: the caller sleeps a tick).
 func (r *Runner) step(ctx context.Context) bool {
+	if r.frozenStep() {
+		return false // the game is frozen: nothing is read, nothing acts, no clock runs (freeze.go)
+	}
 	r.applySettings()
 	snap := r.poll()
 	r.pumpLadder()

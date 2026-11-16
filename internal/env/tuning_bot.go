@@ -51,6 +51,7 @@ type BotTuning struct {
 	PotionBurstHostiles int // hostiles within the fight radius the burst rule needs
 
 	PauseDeathsPerHour int // deaths in the last hour (any area) after which the bot pauses itself
+	PauseCapMin        int // minutes a player Pause (frozen game) lasts before it resumes by itself (docs/pause.md); 0 = no cap
 	PovertyTier        int // gear tier bought when rebuilding from vendors after an abandoned corpse: 0 cheapest viable
 	GoldFloor          int // gold the town visit must not spend, kept for rebuying gear
 
@@ -132,7 +133,7 @@ func DefaultBotTuning() BotTuning {
 	return BotTuning{
 		TickMs: 100, WatchMs: 50, ReactionMs: 0, ResupplyPotions: 2, InvFullPct: 85,
 		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5,
-		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
+		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
@@ -217,6 +218,8 @@ func botKnobs() []Knob {
 			Desc: "Window in which the deaths are counted. Shorter forgets sooner."},
 		{Key: "bot.pauseDeathsPerHour", Label: "Pause after deaths per hour", Unit: "deaths", Default: 8, Min: 8, Max: 20,
 			Desc: "Deaths in the last hour after which the bot pauses itself and asks the user."},
+		{Key: "bot.pauseCapMin", Label: "Player Pause: resume after", Unit: "min", Default: 60, Min: 0, Max: 720,
+			Desc: "A Pause the player asked for (the frozen game) ends by itself after this many wall minutes and a Needs you row says how long it was. 0 = no cap."},
 		{Key: "bot.stalePackHostiles", Label: "Stale pack size", Unit: "count", Default: 4, Min: 0, Max: 12,
 			Desc: "Hostiles near the hero when it left a field by chicken, town portal or crowd exit that make the area a stale pack: no return by portal and no planner pick of that area until bot.stalePackMinutes pass or the kit is rebuilt. 0 turns the rule off. Seed 13 of Gate 2 g2f died 2 s after re-entering a 12-hostile pack at clvl 4."},
 		{Key: "bot.stalePackMinutes", Label: "Stale pack hold", Unit: "min", Default: 10, Min: 1, Max: 60,

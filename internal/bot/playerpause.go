@@ -30,10 +30,16 @@ const pauseHomeBackoff = 30 * time.Second
 
 // PlayerPauseView is what GET /api/pause shows.
 type PlayerPauseView struct {
-	Schema string     `json:"schema"`
-	State  string     `json:"state"`
-	Since  *time.Time `json:"since,omitempty"`
-	Reason string     `json:"reason,omitempty"`
+	Schema    string      `json:"schema"`
+	State     string      `json:"state"`
+	Since     *time.Time  `json:"since,omitempty"`
+	Reason    string      `json:"reason,omitempty"`
+	Frozen    bool        `json:"frozen,omitempty"`     // the game itself is stopped (freeze.go); State is then "paused"
+	CanFreeze bool        `json:"can_freeze,omitempty"` // this backend can freeze the game: the page shows Pause
+	CapMin    int         `json:"cap_min,omitempty"`    // minutes until a frozen pause ends by itself
+	EndsAt    *time.Time  `json:"ends_at,omitempty"`
+	Ended     *PauseEnded `json:"ended,omitempty"` // a frozen pause that just ended (Needs you info row)
+	Error     string      `json:"error,omitempty"` // why the last press did nothing
 }
 
 type playerPause struct {
@@ -64,8 +70,40 @@ func (r *Runner) SetPausePath(path string) {
 	}
 }
 
-// PlayerPause sets or clears the player's pause request and returns the new view.
-func (r *Runner) PlayerPause(on bool) PlayerPauseView {
+// PlayerPause sets or clears the player's pause request and returns the new view. With a backend that can freeze the
+// game the pause is the frozen one (freeze.go); otherwise it goes home first.
+func (r *Runner) PlayerPause(on bool) PlayerPauseView { return r.PlayerPauseMode(on, nil) }
+
+// PlayerPauseMode is PlayerPause with the mode chosen: freeze nil means "freeze when the backend can", false the older
+// walk-home pause, true a freeze that is refused (view.Error) when the backend cannot.
+func (r *Runner) PlayerPauseMode(on bool, freeze *bool) PlayerPauseView {
+	if !on {
+		if r.Frozen() {
+			if err := r.freezeOff(false, false); err != nil {
+				v := r.PlayerPauseView()
+				v.Error = "could not resume: " + err.Error()
+				return v
+			}
+		}
+	} else if freeze == nil || *freeze {
+		if r.canFreeze() {
+			if err := r.freezeOn(); err != nil {
+				v := r.PlayerPauseView()
+				v.Error = "could not freeze the game: " + err.Error()
+				return v
+			}
+			return r.PlayerPauseView()
+		}
+		if freeze != nil {
+			v := r.PlayerPauseView()
+			v.Error = "this game cannot be frozen here"
+			return v
+		}
+	}
+	return r.playerPauseWalk(on)
+}
+
+func (r *Runner) playerPauseWalk(on bool) PlayerPauseView {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	p := &r.plp
@@ -86,9 +124,12 @@ func (r *Runner) PlayerPause(on bool) PlayerPauseView {
 
 // PlayerPauseView reports the state.
 func (r *Runner) PlayerPauseView() PlayerPauseView {
+	can := r.canFreeze()
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	return r.pauseViewLocked()
+	v := r.pauseViewLocked()
+	v.CanFreeze = can
+	return v
 }
 
 func (r *Runner) pauseViewLocked() PlayerPauseView {
@@ -104,6 +145,7 @@ func (r *Runner) pauseViewLocked() PlayerPauseView {
 		since := p.since
 		v.Since, v.Reason = &since, p.reason
 	}
+	r.frozenViewLocked(&v)
 	return v
 }
 

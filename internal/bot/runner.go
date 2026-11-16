@@ -27,6 +27,8 @@ import (
 // Deps are the collaborators of a Runner. Mover, Fighter and Town are required; the rest are optional and each
 // missing one has a documented fallback (docs/bot.md).
 type Deps struct {
+	// Freezer stops the game itself for the player's Pause (freeze.go); nil: Pause walks home and stops the bot only.
+	Freezer Freezer
 	Mover   Mover
 	Fighter Fighter
 	Town    Townsman
@@ -183,6 +185,8 @@ type Runner struct {
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
 	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
+	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
 	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int
@@ -478,6 +482,9 @@ func (r *Runner) Pause() error {
 
 // Resume implements goals.Runner.
 func (r *Runner) Resume() error {
+	if r.d.Freezer != nil && r.Frozen() {
+		r.freezeOff(false, false) // a Resume from any source ends a frozen pause too (a failed thaw is logged and retried by the next press)
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.paused = false

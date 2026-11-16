@@ -96,6 +96,7 @@ func (r *Runner) CanSoftReset() bool { return r.d.Cycler != nil }
 
 // PlayerReset starts a soft reset. A press while one runs changes nothing (Already). force skips the wait for a safe moment.
 func (r *Runner) PlayerReset(force bool) ResetView {
+	r.ForceThaw() // break glass: a frozen game thaws first (freeze.go)
 	r.mu.Lock()
 	p := &r.rst
 	if p.state == ResetResetting || p.state == ResetRejoining {
@@ -119,6 +120,7 @@ func (r *Runner) PlayerReset(force bool) ResetView {
 
 // BeginHardReset records a hard reset the caller is about to carry out (the process exits next). It is idempotent.
 func (r *Runner) BeginHardReset() ResetView {
+	r.ForceThaw()
 	r.mu.Lock()
 	p := &r.rst
 	if p.state == ResetResetting || p.state == ResetRejoining {
@@ -246,7 +248,7 @@ func (r *Runner) resetStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 // clock, observe.go lastProgress), and 0 when it is not stuck. The loop's heartbeat age (LastStep) covers a hung loop.
 func (r *Runner) StuckFor() time.Duration {
 	r.mu.Lock()
-	st, goal, paused := r.st, r.goal, r.paused
+	st, goal, paused := r.st, r.goal, r.paused || r.frz.on
 	r.mu.Unlock()
 	if goal == nil || paused || skippedState(st, goal.Type == goals.Idle) {
 		return 0
