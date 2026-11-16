@@ -62,7 +62,8 @@ type Frames struct {
 	Pal *palfeed.Hub
 
 	mu      sync.RWMutex
-	palSeen int64 // wall unix nanos of the last TouchPal
+	palSeen int64     // wall unix nanos of the last TouchPal
+	jpegAt  time.Time // last JPEG encode (sampler goroutine only)
 	cur     Frame
 	seen    int64 // wall unix nanos of the last Touch
 	last    int64 // mux ticks at the previous frame
@@ -114,11 +115,32 @@ func (f *Frames) watching() bool {
 // TouchPal is the lossless feed's Touch: its clients keep the ring lease and the sampler alive.
 func (f *Frames) TouchPal() { f.mu.Lock(); f.palSeen = time.Now().UnixNano(); f.mu.Unlock() }
 
-// jpegWanted is false while only the lossless feed has viewers: the JPEG encode (8 ms a frame) is skipped.
+// palPeriod is the ring period asked for while the lossless feed has a viewer (30 fps).
+const palPeriod = time.Second / 30
+
+func (f *Frames) palActive() bool {
+	f.mu.RLock()
+	defer f.mu.RUnlock()
+	return f.Pal != nil && time.Since(time.Unix(0, f.palSeen)) < 5*time.Second
+}
+
+// jpegWanted is false while only the lossless feed has viewers: the JPEG encode (8 ms a frame) is skipped. With both
+// kinds of viewer the JPEG is encoded at its own cadence (the -fps target, stretched by the back-off), not at every
+// ring frame, so the lossless feed's higher rate does not raise the JPEG's cost.
 func (f *Frames) jpegWanted() bool {
 	f.mu.RLock()
 	defer f.mu.RUnlock()
-	return f.Pal == nil || time.Since(time.Unix(0, f.seen)) < 5*time.Second
+	if f.Pal == nil {
+		return true
+	}
+	if time.Since(time.Unix(0, f.seen)) >= 5*time.Second {
+		return false
+	}
+	if f.palSeen == 0 || time.Since(time.Unix(0, f.palSeen)) >= 5*time.Second {
+		return true
+	}
+	gap := max(time.Duration(float64(time.Second)/f.fps), time.Duration(f.Backoff*float64(f.costEMA)))
+	return time.Since(f.jpegAt) >= gap*9/10
 }
 
 func (f *Frames) Current() Frame { f.mu.RLock(); defer f.mu.RUnlock(); return f.cur }
@@ -237,6 +259,13 @@ func (f *Frames) feedLease(ctx context.Context) error {
 // 25 fps would alternate 33 and 50 ms of game time, which reads as judder). A change needs two renewals in a row.
 func (f *Frames) divisor() int {
 	target := max(time.Duration(float64(time.Second)/f.fps), time.Duration(f.Backoff*float64(f.costEMA)))
+	if f.palActive() {
+		// The lossless feed's cost is a ring read and a 0.5 to 3 ms encode in the hub, not the JPEG the back-off was built for,
+		// and its viewers want the render rate: a 33 ms period (60 Hz draws -> every 2nd = 30 fps), whatever -fps says (the
+		// old target of 40 ms rounded UP to every 3rd draw = 20 fps, and -fps 15 gave 15). JPEG viewers keep their own
+		// cadence (jpegDue), so a mixed audience costs the JPEG nothing extra.
+		target = palPeriod
+	}
 	k := max(1, int(math.Ceil(0.95*float64(target)/float64(f.srcPeriod))))
 	if f.every == 0 {
 		return k
@@ -305,6 +334,7 @@ func (f *Frames) grabRing() (cost time.Duration, fresh bool, err error) {
 	if err != nil {
 		return time.Since(t0), false, err
 	}
+	f.jpegAt = time.Now()
 	f.publish(data, "image/jpeg", read, int64(h.GameMS))
 	if c := time.Since(t0); f.costEMA == 0 {
 		f.costEMA = c

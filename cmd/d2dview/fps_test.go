@@ -376,3 +376,54 @@ func TestGrabRingFeedsPalHubAndSkipsJPEGWithoutMJPEGViewer(t *testing.T) {
 		t.Fatal("no JPEG for the MJPEG viewer")
 	}
 }
+
+// The 14-15 fps cap (docs/video-feed.md section 11): the ring divisor followed the JPEG's -fps target and back-off, so -fps 15
+// gave every 4th draw and -fps 25 every 3rd (20 fps). With a lossless-feed viewer it asks for every 2nd draw (30 fps).
+func TestDivisorFollowsRenderRateForPalViewers(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 15)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.srcPeriod = time.Second / 60
+	fr.costEMA = 9 * time.Millisecond // a JPEG encode
+	if k := fr.divisor(); k != 4 {
+		t.Fatalf("-fps 15 without a pal viewer: every %d, want 4 (unchanged)", k)
+	}
+	fr.fps = 25
+	fr.every = 0
+	if k := fr.divisor(); k != 3 {
+		t.Fatalf("-fps 25: every %d, want 3 (unchanged)", k)
+	}
+	fr.Pal = palfeed.NewHub()
+	fr.TouchPal()
+	fr.every = 0
+	if k := fr.divisor(); k != 2 {
+		t.Fatalf("pal viewer: every %d, want 2 (30 fps)", k)
+	}
+	fr.srcPeriod = 33 * time.Millisecond // a d2d that draws at 30 Hz: every draw
+	fr.every = 0
+	if k := fr.divisor(); k != 1 {
+		t.Fatalf("30 Hz source: every %d, want 1", k)
+	}
+}
+
+func TestJPEGRunsAtItsOwnCadenceNextToTheFeed(t *testing.T) {
+	mux, _, _, view := rig(t)
+	fr, err := NewFrames(view, mux, t.TempDir(), 10)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.Pal = palfeed.NewHub()
+	fr.Touch()
+	fr.TouchPal()
+	fr.costEMA = time.Millisecond
+	fr.jpegAt = time.Now()
+	if fr.jpegWanted() {
+		t.Fatal("a JPEG right after the last one at -fps 10")
+	}
+	fr.jpegAt = time.Now().Add(-120 * time.Millisecond)
+	if !fr.jpegWanted() {
+		t.Fatal("no JPEG due after 120 ms at -fps 10")
+	}
+}

@@ -426,3 +426,49 @@ func TestHeartbeatWhileNothingChanges(t *testing.T) {
 		t.Fatalf("heartbeat does not apply: %v", err)
 	}
 }
+
+// A source at 30 Hz is delivered at 30 Hz: the pace is a schedule, so the loop's own work never skips a frame.
+func TestDeliversEveryFrameOfA30HzSource(t *testing.T) {
+	h := NewHub()
+	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }}))
+	defer srv.Close()
+	base := synth(96, 64, 1, 1)
+	h.Publish(base, 0)
+	resp, err := http.Get(srv.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	stop := make(chan struct{})
+	const frames = 90
+	go func() {
+		tk := time.NewTicker(time.Second / 30)
+		defer tk.Stop()
+		for i := 2; i < 2+frames; i++ {
+			select {
+			case <-tk.C:
+				f := base
+				f.Pix = append([]byte(nil), base.Pix...)
+				f.Pix[(i*37)%len(f.Pix)] ^= 0xFF
+				f.Seq = uint32(i)
+				h.Publish(f, 0)
+			case <-stop:
+				return
+			}
+		}
+	}()
+	defer close(stop)
+	br := bufio.NewReader(resp.Body)
+	var dec Decoder
+	got := 0
+	deadline := time.Now().Add(5 * time.Second)
+	for dec.Frame.Seq < frames+1 && time.Now().Before(deadline) {
+		if err := dec.Apply(readMsg(t, br)); err != nil {
+			t.Fatal(err)
+		}
+		got++
+	}
+	if got < frames-3 {
+		t.Fatalf("%d of %d frames delivered at 30 Hz (the pace skipped frames)", got, frames)
+	}
+}
