@@ -19,7 +19,7 @@ func (c *Compiled) Preview(samples []Sample) (counts []RuleCount, decisions map[
 	decisions = map[uint32]Decision{}
 	idx := map[string]int{}
 	var order []string
-	for _, sc := range []string{PlaceGround, PlacePack, PlaceStash} {
+	for _, sc := range []string{PlaceGround, PlacePack, PlaceStash, PlaceSell} {
 		for _, r := range c.rules[sc] {
 			if _, ok := idx[r.ID]; !ok {
 				idx[r.ID] = len(order)

@@ -81,6 +81,7 @@ type Shadow struct {
 	total  ShadowScope
 	nanos  int64
 	maxNs  int64
+	class  string // the hero class of the last pass (the per-hero store falls back to its class preset)
 }
 
 // DefaultShadow is the process-wide shadow every Looter starts with.
@@ -142,7 +143,7 @@ func norm(scope, a string) string {
 
 // observe decides the item with the shadow's rules and records a difference. today is the action of the old code in the
 // vocabulary of the scope (ground: pickup or ignore; tidy: keep, stash, sell, drop, ignore; sell: sell or keep).
-func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item, cx *lootrules.Ctx, today string, took time.Duration, fold func(lootrules.Decision) string) {
+func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item, cx *lootrules.Ctx, today string, took time.Duration, fold func(lootrules.Decision) string, sell *SellCtx) {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	defer func() {
@@ -161,7 +162,13 @@ func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item
 	if it.Place == "" {
 		it.Place = lootrules.PlacePack
 	}
-	d := c.Decide(it, cx)
+	var d lootrules.Decision
+	var sold bool
+	if sell != nil {
+		sold, d = decideSell(c, it, cx, *sell)
+	} else {
+		d = c.Decide(it, cx)
+	}
 	took += s.wall().Sub(t0)
 	s.nanos += int64(took)
 	s.maxNs = max(s.maxNs, int64(took))
@@ -175,6 +182,9 @@ func (s *Shadow) observe(scope string, area int, name string, it *lootrules.Item
 	rules := norm(scope, d.Action)
 	if fold != nil {
 		rules = fold(d)
+	}
+	if sell != nil {
+		rules = map[bool]string{true: lootrules.Sell, false: lootrules.Keep}[sold]
 	}
 	s.remember(lootrules.Recent{Scope: scope, Item: nameOf(it), Today: today, Rules: rules, Rule: d.Rule, Why: d.Why})
 	if rules == today {
@@ -372,14 +382,27 @@ func (l *Looter) ShadowPass(s *d2.Snapshot, packPct, stashPct int) (p *ShadowPas
 		}
 	}
 	a := l.Rules()
-	return &ShadowPass{l: l, a: a, cx: a.Ctx(s, l.build, packPct, stashPct), area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
+	cx := a.Ctx(s, l.build, packPct, stashPct)
+	if l.shadow != nil {
+		l.shadow.mu.Lock()
+		l.shadow.class = cx.Class
+		l.shadow.mu.Unlock()
+	}
+	return &ShadowPass{l: l, a: a, cx: cx, area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
+}
+
+// LastHeroClass is the class of the hero the last pass was made for ("" before the first pass).
+func LastHeroClass() string {
+	DefaultShadow.mu.Lock()
+	defer DefaultShadow.mu.Unlock()
+	return DefaultShadow.class
 }
 
 func (s *Shadow) countError() { s.mu.Lock(); s.errs++; s.mu.Unlock() }
 
 // Observe records one decision. stats is the unit's stat list when the caller already read it (nil: read here, or
 // unreadable). neverSell marks the town's never-sell list. today is the old decision in the vocabulary of the scope.
-func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverSell bool, stats d2.Stats) {
+func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverSell bool, stats d2.Stats, sc ...SellCtx) {
 	if p == nil || !p.shadow || u.Item == nil {
 		return
 	}
@@ -402,7 +425,19 @@ func (p *ShadowPass) Observe(scope string, u d2.Unit, today, mark string, neverS
 	if scope == ShadowGround {
 		fold = p.groundFold
 	}
-	p.l.shadow.observe(scope, p.area, name, &it, p.cx, today, p.l.shadow.wall().Sub(t0), fold)
+	p.l.shadow.observe(scope, p.area, name, &it, p.cx, today, p.l.shadow.wall().Sub(t0), fold, p.sellOf(scope, sc))
+}
+
+// sellOf is the sell context only for the sell scope.
+func (p *ShadowPass) sellOf(scope string, sc []SellCtx) *SellCtx {
+	if scope != ShadowSell {
+		return nil
+	}
+	c := SellCtx{ValuableMinPr: p.l.e.Tune.Loot.ValuableMinPrio}
+	if len(sc) > 0 {
+		c = sc[0]
+	}
+	return &c
 }
 
 // item builds the rule facts of one unit for the scope (shared by the shadow and the engine).
