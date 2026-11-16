@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 // Per-character bot state (docs/charselect.md section "State"): the bot keeps it per INSTANCE, not per character, so a
@@ -132,4 +133,37 @@ func unpark(inst, src string) ([]string, error) {
 		return nil, err
 	}
 	return moved, nil
+}
+
+// ActiveFile names the file in the instance dir that holds the character the supervisor last switched to. A container
+// restart (entrypoint.sh) reads it, so it does not fall back to the name in its environment and start the wrong hero.
+const ActiveFile = "active-char"
+
+// WriteActive records name as the active character, atomically (temp file, then rename).
+func WriteActive(inst, name string) error {
+	if err := ValidName(name); err != nil {
+		return err
+	}
+	tmp := filepath.Join(inst, ActiveFile+".tmp")
+	if err := os.WriteFile(tmp, []byte(name+"\n"), 0o600); err != nil {
+		return err
+	}
+	if err := os.Rename(tmp, filepath.Join(inst, ActiveFile)); err != nil {
+		_ = os.Remove(tmp)
+		return err
+	}
+	return nil
+}
+
+// ReadActive returns the recorded active character, or "" when there is none or it is not a valid name.
+func ReadActive(inst string) string {
+	b, err := os.ReadFile(filepath.Join(inst, ActiveFile))
+	if err != nil {
+		return ""
+	}
+	n := strings.TrimSpace(string(b))
+	if ValidName(n) != nil {
+		return ""
+	}
+	return n
 }
