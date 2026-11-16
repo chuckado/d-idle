@@ -901,17 +901,14 @@ internal/watch/views.go  credit-runner  friendfb
 internal/watch/views.go  credit-runner  videofeed2
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web/app.css  credit-runner  toastfix
-internal/watch/web/components.css  credit-runner  resetfit
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
 internal/watch/web/inventory-actions.css  credit-runner  idfast
-internal/watch/web/inventory-actions.css  credit-runner  resetfit
 internal/watch/web/inventory-actions.css  credit-runner  uic3
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
 internal/watch/web/inventory-actions.js  credit-runner  idfast
 internal/watch/web/inventory-actions.js  credit-runner  nopins
-internal/watch/web/inventory-actions.js  credit-runner  resetfit
 internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
 internal/watch/web/inventory-canvas.css  credit-runner  uic3
@@ -988,9 +985,7 @@ internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
-internal/watch/web/resetui.js  credit-runner  resetfit
 internal/watch/web/resetui.js  credit-runner  resetinstant
-internal/watch/web/shell.css  credit-runner  resetfit
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -998,7 +993,6 @@ internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
-internal/watch/web/shell.js  credit-runner  resetfit
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
@@ -1072,7 +1066,6 @@ tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
-tools/uishots.sh  credit-runner  resetfit
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3

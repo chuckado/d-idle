@@ -1,10 +1,11 @@
 ---
 id: TASK-545
 title: 'resetfit: header Reset fit fixes'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T14:43:00Z'
+updated_date: '2026-11-16T15:53:00Z'
 labels:
   - watch
   - bug
