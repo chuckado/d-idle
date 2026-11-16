@@ -362,6 +362,7 @@ docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
 docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
+docs/research/decomp35-combat.md  credit-runner  decomp35
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -420,6 +421,7 @@ docs/upstream/  credit-runner  prpost3
 docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/  credit-runner  decomp34
+docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
@@ -1074,6 +1076,7 @@ tools/emu/am_env.sh  credit-runner  areamon
 tools/emu/am_model.py  credit-runner  areamon
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
+tools/emu/d35_  credit-runner  decomp35
 tools/emu/dc22_dis.py  credit-runner  decomp22
 tools/emu/dc28_  pro-runner  decomp28
 tools/emu/dc34_cmp.py  credit-runner  decomp34
