@@ -2,6 +2,7 @@
   <div class="d-slotbody">
     <div class="lg">
       <div class="tabs" role="tablist">
+        <button class="d-btn" data-key="tab-items" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Items"
         <button class="d-btn" data-key="tab-now" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Now"
         <button class="d-btn" data-key="tab-journal" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Journal"
         <button class="d-btn" data-key="tab-story" data-size="sm" aria-selected="false" role="tab" tabindex=-1> "Story"

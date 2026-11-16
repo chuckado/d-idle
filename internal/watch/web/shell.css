@@ -268,5 +268,13 @@
   .d-reset-card > .d-btn { min-block-size: 44px; align-items: center; }
   .d-reset-card > .d-btn[hidden] { display: none; }
   .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));
-    padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1); }
+    padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1);
+    display: flex; align-items: center; gap: var(--d-sp-2); }
+  .d-reset-strip .d-reset-text { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .d-reset-strip .d-btn { flex: none; min-block-size: 36px; }
+  .d-reset-strip .d-btn[hidden] { display: none; }
+  /* the header Reset: one tap, never wider than its busy label, a 44 px hit area on a 32 px button */
+  .d-reset-btn { position: relative; flex: none; min-inline-size: 5.5rem; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
+  .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
+  .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
 }

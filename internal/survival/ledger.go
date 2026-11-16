@@ -22,8 +22,9 @@ func (k ZoneKey) String() string { return fmt.Sprintf("%d/%s", k.Area, k.Diff) }
 
 // Event kinds a caller reports.
 const (
-	EvFight     = "fight" // Kills, Seconds, Taken, PredTaken, PredKillSec, Potions, XP, GoldIn, GoldOut
-	EvXP        = "xp"    // XP and gold earned over a stay (area summary); adds no fight time
+	EvFight     = "fight"  // Kills, Seconds, Taken, PredTaken, PredKillSec, Potions, XP, GoldIn, GoldOut
+	EvIntake    = "intake" // LifeLost over Seconds of a stay (observed intake, not the fight-only Taken); adds no fight time
+	EvXP        = "xp"     // XP and gold earned over a stay (area summary); adds no fight time
 	EvChicken   = "chicken"
 	EvDeath     = "death"
 	EvMercDeath = "merc_death"
@@ -35,6 +36,7 @@ type Event struct {
 	Kind                                          string
 	Kills, Seconds, Taken, PredTaken, PredKillSec float64
 	Potions, XP, GoldIn, GoldOut                  float64
+	LifeLost                                      float64 // EvIntake
 }
 
 // Ev is one hard event kept for the step-down rule and the revive rule.
@@ -56,6 +58,10 @@ type ZoneStats struct {
 	XP         float64 `json:"xp"`
 	GoldIn     float64 `json:"goldIn"`
 	GoldOut    float64 `json:"goldOut"`
+	// IntakeLife and IntakeSec are the observed life lost over the observed stay seconds (decayed together, additive in
+	// the file: an old ledger reads 0 and a newer one loads in an older build). See IntakePerMin.
+	IntakeLife float64 `json:"intakeLife,omitempty"`
+	IntakeSec  float64 `json:"intakeSec,omitempty"`
 
 	Hard      float64   `json:"hard"` // product of the hard-event multipliers, relaxing with time away (>= 1; 0 = 1)
 	HardAt    time.Time `json:"hardAt"`
@@ -152,6 +158,9 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 		s.GoldOut += e.GoldOut
 		h := decay(e.Seconds, l.P.HeroHalfLifeMinutes)
 		l.HeroSec, l.HeroPred, l.HeroKill = l.HeroSec*h+e.Seconds, l.HeroPred*h+e.PredKillSec, l.HeroKill*h+e.Kills
+	case EvIntake:
+		f := decay(e.Seconds, l.P.HalfLifeMinutes)
+		s.IntakeLife, s.IntakeSec = s.IntakeLife*f+e.LifeLost, s.IntakeSec*f+e.Seconds
 	case EvXP:
 		s.XP += e.XP
 		s.GoldIn += e.GoldIn
@@ -329,4 +338,14 @@ func (l *Ledger) MercMinutes(k ZoneKey) float64 {
 		return math.Max(1, s.Seconds/60/s.MercDeaths)
 	}
 	return l.P.MercPriorMinutes
+}
+
+// IntakePerMin is the observed life lost per minute in a zone over its decayed stays, with the stay seconds it rests on
+// (0, 0 when the zone has no intake data). Observed only: the model's Taken stays the separate fight-only ratio.
+func (l *Ledger) IntakePerMin(k ZoneKey) (perMin, seconds float64) {
+	s := l.peek(k)
+	if s == nil || s.IntakeSec <= 0 {
+		return 0, 0
+	}
+	return s.IntakeLife / (s.IntakeSec / 60), s.IntakeSec
 }

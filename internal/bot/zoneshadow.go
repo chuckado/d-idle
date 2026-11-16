@@ -23,13 +23,14 @@ const (
 
 // ZoneEvent is one observation for the per-zone ledger. Diff is the lowercase difficulty name.
 type ZoneEvent struct {
-	Kind    string
-	Area    int
-	Diff    string
-	Kills   int
-	Seconds float64
-	XP      float64
-	At      time.Time
+	Kind     string
+	Area     int
+	Diff     string
+	Kills    int
+	Seconds  float64
+	XP       float64
+	LifeLost int // life lost over the stay (ZoneEvArea), net of max-life changes
+	At       time.Time
 }
 
 // zoneMerc remembers the last merc reading so a death is reported once, at the edge.

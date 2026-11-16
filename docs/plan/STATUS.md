@@ -204,6 +204,17 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| verifyp17 | proposed | - | `docs/upstream/verifier-p17-2026-11-15.md` | - |
+| charselect | proposed | - | `internal/charsel`<br>`docs/charselect.md`<br>`internal/watch/charactersapi.go`<br>`internal/watch/charactersapi_test.go`<br>`internal/watch/testdata/characters`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go` | - |
+| lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
+| lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
+| lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
+| resetinstant | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`internal/watch/web/reset.css`<br>`internal/watch/testdata/reset`<br>`docs/reset.md`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/state.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_phone.go`<br>`tools/uishots/fit.go` | - |
+| idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
+| intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
+| dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
+| viewerfps | proposed | - | `internal/watch/video.go`<br>`internal/watch/videofps_test.go`<br>`internal/watch/web/mjpeg.js`<br>`internal/watch/web/panels/video`<br>`docs/probes/viewer-fps-2026-11-15.md`<br>`internal/watch/glance.go`<br>`internal/watch/videoresume_test.go`<br>`internal/watch/testdata/video_panel.js`<br>`docs/knobs.md` | - |
+| friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -247,14 +258,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- e3a036f54 11-15 21:11 `Merge agent/sandboxfresh: Merge branch 'main' into sandboxfresh` (sandboxfresh)
-- 4e06914b5 11-15 21:10 `Merge branch 'main' into sandboxfresh` (-)
-- fef83e97d 11-15 21:02 `Merge agent/gamedata: gamedata: private friends game-data bundle record (no URL)` (gamedata)
-- f1b698db8 11-15 20:32 `Merge agent/decomp33: decomp33: P17 and P18 ready for the verifier, P19 no PR; rows, card, merge lines` (decomp33)
-- 2cd4accc0 11-15 20:27 `Merge origin/main into agent/decomp33` (-)
-- 967e2e965 11-15 18:41 `Merge agent/cut013: friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published)` (cut013)
-- 96ae5b38b 11-15 14:37 `Merge agent/deploycockpit4: Merge branch 'main' into deploycockpit` (deploycockpit4)
-- 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
-- cc88747b3 11-15 14:28 `Merge agent/devp8: Merge branch 'main' into devp8` (devp8)
-- 8252907ea 11-15 14:27 `Merge branch 'main' into devp8` (-)
+- 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
+- 79bfaf3fa 11-16 00:11 `Merge branch 'main' into viewerfps` (-)
+- 6d51a62b0 11-16 00:05 `Merge agent/friendfb: Merge branch 'main' into TASK-537` (friendfb)
+- 66d410786 11-16 00:03 `Merge origin/main into agent/viewerfps (glance: keep stream and intake)` (-)
+- 3b4eec79b 11-16 00:03 `Merge branch 'main' into TASK-537` (-)
+- 419058708 11-15 23:48 `Merge agent/resetinstant: Merge branch 'main' into 529` (resetinstant)
+- 08f81fd90 11-15 23:47 `Merge branch 'main' into 529` (-)
+- b064994f1 11-15 23:40 `Merge agent/sandbox2: Merge branch 'main' into sandbox2` (sandbox2)
+- 75e7bc6dc 11-15 23:39 `Merge branch 'main' into sandbox2` (-)
+- 19cbcfdc0 11-15 23:29 `Merge agent/idfast: Merge branch 'main' into idfast` (idfast)
 <!-- statusgen:end -->

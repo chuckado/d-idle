@@ -80,6 +80,7 @@ type ladderOptions struct {
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
 	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
 	reset         watch.ResetDesk      // the player's Reset command (resetwire.go); nil: none
+	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
@@ -110,7 +111,7 @@ func ladderFlags(fs *flag.FlagSet, l *ladderOptions) {
 	fs.BoolVar(&l.video, "watch-video", envBool("D2BOT_WATCH_VIDEO"), "with --watch: live video of this instance's private game display on the viewer (/stream, /shot.jpg), captured only while someone watches (env D2BOT_WATCH_VIDEO; default off)")
 	fs.StringVar(&l.videoSource, "watch-video-source", envOr("D2BOT_WATCH_VIDEO_SOURCE", videoX11), "with --watch-video: where frames come from, x11 (the instance's private display, ffmpeg or import) or tap (the d2d view tap's /frame, for --backend d2d; token from env D2DVIEW_TOKEN) (env D2BOT_WATCH_VIDEO_SOURCE; default x11)")
 	fs.StringVar(&l.tapURL, "watch-tap-url", envOr("D2BOT_WATCH_TAP_URL", "http://127.0.0.1:8893"), "with --watch-video-source tap: base URL of the d2dview tap (env D2BOT_WATCH_TAP_URL)")
-	fs.IntVar(&l.videoFPS, "watch-video-fps", envInt("D2BOT_WATCH_VIDEO_FPS", 0), "with --watch-video: frames per second of the shared capture (x11: 1 to 15, default 8; tap: a cap of 1 to 30, default none: the tap's own rate)")
+	fs.IntVar(&l.videoFPS, "watch-video-fps", envInt("D2BOT_WATCH_VIDEO_FPS", 0), "with --watch-video: frames per second of the shared capture (x11: 1 to 30, default 15; tap: a cap of 1 to 30, default none: the tap's own rate)")
 	fs.IntVar(&l.videoQuality, "watch-video-quality", envInt("D2BOT_WATCH_VIDEO_QUALITY", 5), "with --watch-video: JPEG quality as ffmpeg -q:v, 2 (best, big) to 31 (small)")
 }
 
@@ -292,7 +293,12 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			rig.Fun.Reset = watch.NewResetAPI()
 			rig.Fun.Reset.Bind(l.reset)
 		}
+		if l.characters != nil {
+			rig.Fun.Characters = watch.NewCharactersAPI()
+			rig.Fun.Characters.Bind(l.characters)
+		}
 		rig.Fun.Merc = mercAPI()
+		rig.Fun.LootShadow = lootShadowAPI(l.knobValue)
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
