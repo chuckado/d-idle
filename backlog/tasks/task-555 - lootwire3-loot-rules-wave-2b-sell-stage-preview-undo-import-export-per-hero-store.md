@@ -15,6 +15,10 @@ card: "lootwire3"
 owns:
   - "internal/lootrules"
   - "internal/loot/rulesengine.go"
+  - "internal/loot/rulespreview.go"
+  - "internal/loot/rulespreview_test.go"
+  - "internal/watch/lootrulestools_test.go"
+  - "internal/charsel/lootrulesstate_test.go"
   - "internal/loot/rulesengine_test.go"
   - "internal/loot/lootshadow.go"
   - "internal/loot/lootshadow_test.go"
@@ -34,6 +38,7 @@ owns:
   - "internal/env/tuning_loot.go"
 exclusive: []
 contracts: []
+result: "knob loot.rulesEngine 3 = ground+tidy+sell: the five sell decisions (user 2026-11-16) as sell-scope Starter rules (jewelry vs Tome of Identify) plus engine behaviour (ground rules judge the rest as the pickit does today, marks and identify requests first, per-item fallback guard); shadow test pins kinds 1-4 at zero disagreements and kind 5 at exactly two documented forms. Dry-run preview, undo, import and export routes, per-hero store (per-character state, class-preset fallback), Loot Rules sheet controls and sell-kind text. Default OFF, offline only, NOT verified live."
 ---
 
 ## Description
@@ -46,8 +51,8 @@ Why: the user accepted all five sell recommendations (2026-11-16); wave 2a left 
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 loot.rulesEngine 3 = ground+tidy+sell with the five sell decisions as rules and engine behaviour, fallback guard, shadow test that fails on any new disagreement
-- [ ] #2 preview (dry run), undo, import/export routes, per-hero store
-- [ ] #3 Loot Rules sheet controls and plain-language sell kinds, fit pictures looked at
-- [ ] #4 docs/lootrules.md Wave 2b, tests and gates
+- [x] #1 loot.rulesEngine 3 = ground+tidy+sell with the five sell decisions as rules and engine behaviour, fallback guard, shadow test that fails on any new disagreement
+- [x] #2 preview (dry run), undo, import/export routes, per-hero store
+- [x] #3 Loot Rules sheet controls and plain-language sell kinds, fit pictures looked at
+- [x] #4 docs/lootrules.md Wave 2b, tests and gates
 <!-- AC:END -->
