@@ -41,6 +41,8 @@ type RuleSet struct {
 	Groups   map[string]Group  `json:"groups,omitempty"`   // adds to the built-in groups
 	Defaults map[string]string `json:"defaults,omitempty"` // scope -> action when no rule matches; absent = ignore
 	Ack      []string          `json:"ack,omitempty"`      // the player's explicit acknowledgements ("drop-valuable")
+	Preset   string            `json:"preset,omitempty"`   // the preset this set was made from ("starter", "class:<Name>"); "" or "custom" = hand-edited
+	Options  *Options          `json:"options,omitempty"`  // the simple editor's knobs; with Preset the store rebuilds Rules from them on PUT
 	Rules    []Rule            `json:"rules"`
 }
 
