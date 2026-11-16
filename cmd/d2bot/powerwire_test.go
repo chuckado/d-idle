@@ -38,14 +38,14 @@ func TestWirePowerWithoutTables(t *testing.T) {
 }
 
 func TestWireSurvivalWithoutTables(t *testing.T) {
-	c, o := wireSurvival(nil, t.TempDir()+"/ledger.json")
+	c, o := wireSurvival(nil, t.TempDir()+"/ledger.json", nil)
 	if c != nil || o != nil {
 		t.Error("no tables must give no hooks")
 	}
 }
 
 func TestWireSurvivalModelWithoutTables(t *testing.T) {
-	c, o, d, b := wireSurvivalModel(nil, t.TempDir()+"/ledger.json")
+	c, o, d, b := wireSurvivalModel(nil, t.TempDir()+"/ledger.json", nil)
 	if c != nil || o != nil || d != nil || b != nil {
 		t.Error("no tables must give no hooks: the planner then keeps the plan tables")
 	}
