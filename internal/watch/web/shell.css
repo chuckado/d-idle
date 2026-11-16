@@ -212,7 +212,9 @@
 
   /* the "..." menu of the status band (Help, Edit layout, Theme, Layout) and the one-time layout note */
   .d-menu { position: relative; }
-  .d-menu-pop { position: absolute; inset-block-start: 100%; inset-inline-end: 0; z-index: var(--d-z-sheet); display: grid; gap: var(--d-sp-1); min-inline-size: 14rem; padding: var(--d-sp-2);
+  /* a top-layer popover (shell.js setupMenu): above every tile, sheet and stacking context; placed by --menu-top / --menu-end */
+  .d-menu-pop { position: fixed; inset: auto; inset-block-start: var(--menu-top, 48px); inset-inline-end: var(--menu-end, 8px); margin: 0; z-index: var(--d-z-sheet); display: grid; gap: var(--d-sp-1); min-inline-size: 14rem; max-inline-size: calc(100vw - 16px);
+    max-block-size: calc(100dvh - var(--menu-top, 48px) - 8px); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; padding: var(--d-sp-2); color: var(--d-text);
     background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
   .d-menu-pop[hidden] { display: none; }
   .d-menu-pop > .d-btn { inline-size: 100%; }
@@ -224,7 +226,7 @@
 
   /* the shell's toast stack (ctx.toast); the old toasts share the element until their panels move */
   /* a sheet over one tile (ctx.tileSheet): fills the tile it is in, scrolls inside, never leaves it */
-  .d-tilesheet { position: absolute; inset: 0; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--d-surface-2); border-radius: var(--d-r-2); }
+  .d-tilesheet { position: absolute; inset: 0; min-inline-size: 0; overflow-x: hidden; overflow-wrap: anywhere; z-index: var(--d-z-sheet); display: flex; flex-direction: column; gap: var(--d-sp-1); padding: var(--d-sp-2); overflow-y: auto; overscroll-behavior: contain; box-sizing: border-box; background: var(--d-surface-2); border-radius: var(--d-r-2); }
   .d-tilesheet[hidden] { display: none; }
   .d-toasts { position: fixed; inset-block-start: var(--d-sp-3); inset-inline-end: var(--d-sp-3); z-index: var(--d-z-toast); display: grid; gap: var(--d-sp-2); max-inline-size: min(92vw, 380px); }
 

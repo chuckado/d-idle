@@ -45,12 +45,13 @@
   /* the zone menu is the shell's tile sheet (ctx.tileSheet), which carries data-panel="zone-map": it opens in ANOTHER tile */
   [data-panel="zone-map"].d-tilesheet { font-size: var(--d-fs-1); color: var(--d-text); }
   [data-panel="zone-map"] .zm-mh { flex: none; display: flex; align-items: center; gap: var(--d-sp-2); }
-  [data-panel="zone-map"] .zm-mt { flex: 0 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  [data-panel="zone-map"] .zm-rg { flex: 1 1 auto; color: var(--d-text-2); font-size: var(--d-fs-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-panel="zone-map"] .zm-mh { flex-wrap: wrap; min-inline-size: 0; }
+  [data-panel="zone-map"] .zm-mt { flex: 0 1 auto; min-inline-size: 0; overflow-wrap: anywhere; }
+  [data-panel="zone-map"] .zm-rg { flex: 1 1 auto; min-inline-size: 0; color: var(--d-text-2); font-size: var(--d-fs-0); overflow-wrap: anywhere; }
   [data-panel="zone-map"] .zm-x { flex: none; background: none; border: 0; color: var(--d-text-2); font-size: var(--d-fs-3); line-height: 1; cursor: pointer; min-inline-size: 28px; min-block-size: 24px; }
   [data-panel="zone-map"] .zm-x:hover { color: var(--d-danger); }
-  /* every line is one line, cut with an ellipsis (the full text is its title): the sheet is as short as a 189 px tile */
-  [data-panel="zone-map"] .zm-l { flex: none; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* a line WRAPS (never clipped, 2026-11-15 bug: "A charter c" was cut); the sheet scrolls inside its tile when the lines are taller than it */
+  [data-panel="zone-map"] .zm-l { flex: none; min-inline-size: 0; white-space: normal; overflow-wrap: anywhere; }
   [data-panel="zone-map"] .zm-route, [data-panel="zone-map"] .zm-note, [data-panel="zone-map"] .zm-teaser { color: var(--d-text-2); font-size: var(--d-fs-0); }
   [data-panel="zone-map"] .zm-l[data-tone="warn"] { color: var(--d-warn); }
   [data-panel="zone-map"] .zm-l[data-tone="bad"] { color: var(--d-bad); }
@@ -65,5 +66,7 @@
   [data-panel="zone-map"] .zm-loop { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; }
   [data-panel="zone-map"] .zm-ll { color: var(--d-text-2); font-size: var(--d-fs-0); }
   [data-panel="zone-map"] .zm-sel { min-block-size: 26px; background: var(--d-bg); color: var(--d-text); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); font-size: var(--d-fs-0); }
-  [data-panel="zone-map"] .zm-charter { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; }
+  /* the charter line and its button stay at the bottom of the scrolling sheet: "Pay and go" is never below the fold */
+  [data-panel="zone-map"] .zm-charter .zm-l { flex: 1 1 100%; }
+  [data-panel="zone-map"] .zm-charter { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; position: sticky; inset-block-end: 0; padding-block: var(--d-sp-1); background: var(--d-surface-2); }
 }
