@@ -98,3 +98,60 @@ test('player: draws once per animation frame with the newest state (latest wins)
   assert.ok(rgbEqual(p.dec.pix, rd('b.rgba')));
   p.stop();
 });
+
+function fakeBody(chunks) {
+  return { getReader: () => { let n = 0; return { read: () => n < chunks.length ? Promise.resolve({ done: false, value: new Uint8Array(chunks[n++]) }) : new Promise(() => {}) }; } };
+}
+const settle = async (cond) => { for (let i = 0; i < 40 && !cond(); i++) await new Promise((r) => setTimeout(r, 5)); };
+
+test('player: a delta after a draw stays a dirty rect (one ImageData per decoder buffer)', async () => {
+  const puts = [], rafs = [];
+  global.ImageData = function (d, w, h) { this.data = d; this.width = w; this.height = h; };
+  const canvas = { width: 0, height: 0, getContext: () => ({ putImageData: (...a) => puts.push(a.slice(3)) }) };
+  const p = new PF.Player({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body: fakeBody([Buffer.concat([lenp(rd('key.pf')), rd('key.pf')])]) }),
+    raf: (cb) => rafs.push(cb), inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)) });
+  p.start();
+  await settle(() => p.frames === 1);
+  rafs.shift()();
+  p._got(p.dec.apply(PF.parseHeader(rd('delta.pf')), new Uint8Array(zlib.inflateRawSync(rd('delta.pf').subarray(PF.HEADER)))));
+  rafs.shift()();
+  assert.deepStrictEqual(puts[0], [0, 0, 96, 70]);
+  assert.ok(puts[1][2] < 96 || puts[1][3] < 70, 'second draw is a sub-rectangle, got ' + puts[1]);
+  p.stop();
+});
+
+test('player with onEnd: errors go to the caller, bad streams are fatal, onFrame and onBytes count', async () => {
+  global.ImageData = function (d, w, h) { this.data = d; };
+  const canvas = { width: 0, height: 0, getContext: () => ({ putImageData() {} }) };
+  const run = async (wire) => {
+    const ev = { frames: 0, bytes: 0, end: null, logs: [] };
+    const p = new PF.Player({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body: fakeBody([wire]) }), raf: () => {},
+      inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)), onFrame: () => ev.frames++, onBytes: (n) => (ev.bytes += n),
+      onEnd: (e) => { ev.end = e; }, log: (m) => ev.logs.push(m) });
+    p.start();
+    await settle(() => ev.end);
+    p.stop();
+    return ev;
+  };
+  let ev = await run(Buffer.concat([lenp(rd('key.pf')), rd('key.pf')]).subarray(0, 4)); // only a length: stream ends later; no error yet
+  assert.strictEqual(ev.end, null);
+  ev = await run(Buffer.concat([lenp(rd('delta.pf')), rd('delta.pf')])); // a delta first: needs a key, reconnect helps
+  assert.ok(ev.end && ev.end.needKey && !ev.end.fatal);
+  const junk = Buffer.alloc(40, 7);
+  ev = await run(Buffer.concat([lenp(junk), junk])); // garbage: header check fails, a retry cannot help
+  assert.ok(ev.end && ev.end.fatal, 'garbage is fatal');
+  assert.ok(ev.logs.length === 1 && /palfeed/.test(ev.logs[0]));
+  ev = await run(Buffer.concat([lenp(rd('key.pf')), rd('key.pf'), lenp(junk), junk]));
+  assert.ok(ev.frames === 1 && ev.bytes > 0 && ev.end.fatal);
+});
+
+test('negotiate needs palfeed in glance stream.formats and a ready probe', async () => {
+  const mk = (formats, probe) => (u) => Promise.resolve(u.indexOf('/api/glance') === 0
+    ? { ok: true, json: () => Promise.resolve({ stream: { formats } }) }
+    : { ok: probe === 200, json: () => Promise.resolve({ paletteFeed: true, version: 1 }) });
+  assert.ok(await PF.negotiate(mk(['mjpeg', 'palfeed'], 200), '?t=x', 1));
+  assert.strictEqual(await PF.negotiate(mk(['mjpeg'], 200), '', 1), null);
+  assert.strictEqual(await PF.negotiate(mk(undefined, 200), '', 1), null);
+  assert.strictEqual(await PF.negotiate(mk(['mjpeg', 'palfeed'], 503), '', 1), null, 'probe not ready after the tries');
+  assert.strictEqual(await PF.negotiate(() => Promise.reject(new Error('net')), '', 1), null);
+});

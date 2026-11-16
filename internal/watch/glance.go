@@ -255,8 +255,12 @@ func (h *Hub) Glance() GlanceView {
 			}
 		}
 	}
-	if h.video != nil {
-		st := h.video.Stats()
+	if h.video != nil || h.palFeedURL() != "" {
+		var st StreamStats
+		if h.video != nil {
+			st = h.video.Stats()
+		}
+		st.Formats = h.streamFormats()
 		v.Stream = &st
 	}
 	v.Health = glanceHealth(hv, src)

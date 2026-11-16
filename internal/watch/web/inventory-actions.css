@@ -59,7 +59,7 @@
   [data-pending][data-wait="safe"][data-waiting]::after { content: attr(data-waiting); }
   @keyframes inv-doing { from { outline-color: var(--d-focus); } to { outline-color: transparent; } }
   .inv-errands [data-offer] { outline: 2px solid var(--d-focus); outline-offset: 2px; }
-  .inv-errands .err-instant { margin: 0; color: var(--d-good); font-size: var(--d-fs-0); }
+  .inv-errands .err-instant { margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--d-good); font-size: var(--d-fs-0); }
   [data-pending][data-wait="town"]::after { content: "TOWN"; position: absolute; inset-block-end: 1px; inset-inline-end: 1px; padding: 0 3px; border-radius: 2px;
     font: 700 .52rem/1.35 var(--d-font-num); background: var(--d-state-bg-info); color: var(--d-info); pointer-events: none; }
   [data-result="done"] { outline: 2px solid var(--d-good); outline-offset: -2px; animation: inv-done 2.4s ease-out forwards; }
@@ -70,4 +70,9 @@
   .inv-act .act[aria-disabled="true"] kbd { opacity: .6; }
   .inv-act[data-mode="pop"] { min-inline-size: 14rem; }
   .inv-act[data-mode="sheet"] .act kbd { display: none; }
+}
+
+@layer components {
+  /* the lane line was five wrapped lines in the narrow errands column and squeezed the selected card to 10 px (fit, 1280x620) */
+  .err-instant { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 }

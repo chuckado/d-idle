@@ -70,6 +70,8 @@ type StreamStats struct {
 	KBps    float64 `json:"kBps"`   // bytes written to all viewers per second, in KB
 	Same    int64   `json:"skippedSame"`
 	Missed  int64   `json:"missed"` // frames a slow viewer never got (latest wins)
+	// Formats lists what the page may use: "mjpeg" always, "palfeed" while the lossless feed is on (palfeed.go).
+	Formats []string `json:"formats,omitempty"`
 }
 
 // Stats returns the counters and the rates over the last whole second or more.
