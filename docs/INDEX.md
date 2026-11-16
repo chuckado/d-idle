@@ -539,6 +539,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
 - [ab-harness.md](survival/ab-harness.md): Survival A/B harness, S-D readiness audit and drill R3 plan (card survab, 2026-11-16) (status: current (TASK-550). Offline: nothing here ran against a live game; the report tool ran on synthetic logs...)
+- [ab-screen-analysis-2026-11-16.md](survival/ab-screen-analysis-2026-11-16.md): A/B screen analysis and fixes (card survfix), 2026-11-16 (status: current. Reads the screen (TASK-554) and its worker-host logs (`survab/ab-pal`, `survab/ab`, seeds 101 and...)
 - [calibration-2026-11-14.md](survival/calibration-2026-11-14.md): Survival calibration from the sandbox replay (card survcal, 2026-11-14) (status: current (TASK-460). Acts on the findings of docs/survival/replay-2026-11-14.md. Tags: V verified (how), S...)
 - [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
 - [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)

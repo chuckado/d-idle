@@ -148,6 +148,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  maphistoryC
 cmd/d2bot/d2dbackend.go  credit-runner  maptrail
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
+cmd/d2bot/d2dbackend.go  credit-runner  survfix
 cmd/d2bot/d2dbackend.go  credit-runner  uib1
 cmd/d2bot/d2dbackend.go  credit-runner  uib5
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
@@ -192,6 +193,7 @@ cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/live.go  credit-runner  survB
+cmd/d2bot/live.go  credit-runner  survfix
 cmd/d2bot/live.go  credit-runner  uib1
 cmd/d2bot/live.go  credit-runner  uib5
 cmd/d2bot/loopwire.go  credit-runner  uib7
@@ -213,6 +215,7 @@ cmd/d2bot/powerwire.go  credit-runner  survB
 cmd/d2bot/powerwire.go  credit-runner  survC
 cmd/d2bot/powerwire_test.go  credit-runner  survB
 cmd/d2bot/powerwire_test.go  credit-runner  survC
+cmd/d2bot/powerwire_test.go  credit-runner  survfix
 cmd/d2bot/readywire.go  credit-runner  uic3
 cmd/d2bot/repairwire.go  credit-runner  repairtrip
 cmd/d2bot/resetwire.go  credit-runner  botreset
@@ -233,6 +236,7 @@ cmd/d2bot/skillswire.go  credit-runner  skilltrees
 cmd/d2bot/survivalwire.go  credit-runner  intake
 cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
+cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
@@ -392,6 +396,7 @@ docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
 docs/survival  credit-runner  survsd
+docs/survival/ab-screen-analysis-2026-11-16.md  credit-runner  survfix
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
@@ -740,6 +745,7 @@ internal/skilltree  credit-runner  skilltrees2
 internal/survival  credit-runner  survsd
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
+internal/survival/survival_test.go  credit-runner  survfix
 internal/task/campaign.go  credit-runner  campaign1
 internal/task/executor.go  credit-runner  botstuck
 internal/task/executor.go  credit-runner  staletarget
@@ -1120,6 +1126,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/survival/abreport  credit-runner  survfix
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
