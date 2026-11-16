@@ -654,6 +654,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/bodies/`
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
+- [gamble-price-body.md](upstream/bodies/gamble-price-body.md): gamble-price-body
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
@@ -667,6 +669,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
+- [umod-multishot-body.md](upstream/bodies/umod-multishot-body.md): umod-multishot-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
@@ -724,6 +727,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p13-2026-11-16.md](upstream/verifier-p13-2026-11-16.md): Verifier: P13, a refused Teleport costs no mana (2026-11-16) (status: current, 2026-11-16 (card verifyp13, TASK-551, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier-p17-2026-11-15.md](upstream/verifier-p17-2026-11-15.md): Verifier: P17, a player's attack sequence runs 30 points slower (2026-11-15) (status: current, 2026-11-15 (card verifyp17, TASK-519, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier-p18-2026-11-15.md](upstream/verifier-p18-2026-11-15.md): Verifier: P18, Smite's range takes stat 111 and a point of width (2026-11-15) (status: current, 2026-11-16 (card verifyp18, TASK-528, Opus, singly; independent verifier before posting). Nothing...)
+- [verifier-seq-followup-2026-11-16.md](upstream/verifier-seq-followup-2026-11-16.md): Verifier: #565 follow-up, seq-rate fails on a missing D2_PATCH_INSTALLER (2026-11-16) (status: current, 2026-11-16 (card verifyseqfollow, TASK-559, Opus, singly; independent verifier before posting)....)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
 - [verifier2-p03b-2026-11-15.md](upstream/verifier2-p03b-2026-11-15.md): Verifier 2: P03b "a get-hit is not restarted by a hit", rebased r4 (2026-11-15) (status: current, 2026-11-15 (card verifyp03d, TASK-488, Opus, second independent pass after...)
