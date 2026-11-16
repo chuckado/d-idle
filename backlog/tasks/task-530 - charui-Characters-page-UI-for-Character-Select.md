@@ -24,6 +24,7 @@ owns:
   - "docs/charselect-ui.md"
 exclusive: []
 contracts: []
+result: "Characters page built; fit green; not verified live."
 ---
 
 ## Description
@@ -36,8 +37,8 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Page /watch/characters: cards, switch, create, delete (typed name), restore, switching strip
-- [ ] #2 Entry points: the ... menu, Orders More, ?view=characters
-- [ ] #3 Fit fixtures at all sizes plus must-fail defects, node DOM test, goldens
-- [ ] #4 Gate and uishots fit green on the worker host
+- [x] #1 Page /watch/characters: cards, switch, create, delete (typed name), restore, switching strip
+- [x] #2 Entry points: the ... menu, Orders More, ?view=characters
+- [x] #3 Fit fixtures at all sizes plus must-fail defects, node DOM test, goldens
+- [x] #4 Gate and uishots fit green on the worker host
 <!-- AC:END -->
