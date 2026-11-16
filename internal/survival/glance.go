@@ -10,6 +10,7 @@ type Glance struct {
 	Merc         *Why       `json:"merc,omitempty"` // why he stays dead, for the Status sentence
 	Fresh        bool       `json:"fresh,omitempty"`
 	NeedsYou     bool       `json:"needsYou,omitempty"`
+	Model        bool       `json:"model,omitempty"` // the choice is in effect (bot.zoneModel 1), not a shadow
 }
 
 // GlanceZone is the zone the shadow controller would farm.

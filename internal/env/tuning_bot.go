@@ -112,6 +112,10 @@ type BotTuning struct {
 
 	// Town portal cast guard (internal/resource/castguard.go, card portalguard). A hit does not interrupt a Town Portal cast
 	// (V run, decomp28 Q5); the risk is the damage taken during the cast and the walk into the portal.
+	// Survival slice S-D (docs/survival/design-2026-11-14.md section 10, docs/survival/zonemodel.md).
+	ZoneModel int // 0 = plan tables choose the zone (legacy), 1 = the survival controller's power-vs-danger margin decides, the plan tables stay candidates and fallback
+	ZoneDial  int // risk dial of the margin model: 0 cautious, 1 balanced, 2 bold
+
 	PortalGuard   int // 0 = old rule (3 adjacent block the cast), 1 = expected damage over the exposure (falls back to the old rule when a damage term is missing)
 	PortalCastMs  int // cast time of the scroll or tome read (U until drill R3)
 	PortalWalkMs  int // walk into the portal after the cast (U until drill R3)
@@ -138,13 +142,17 @@ func DefaultBotTuning() BotTuning {
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
-		PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
+		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
 		MercRetryMin: 10, MercHireMinGold: 400, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
 }
 
 func botKnobs() []Knob {
 	return []Knob{
+		{Key: "bot.zoneModel", Label: "Zone choice model", Unit: "mode", Default: 0, Min: 0, Max: 1, HigherIsBetter: false, NoHandicap: true,
+			Desc: "0 (default until the A/B of docs/survival/ab-harness.md passes): the plan tables choose the leveling zone. 1: the survival controller chooses among the plan's zones by power-vs-danger margin and expected value (docs/survival/zonemodel.md); any controller error falls back to the plan tables with a log line. Also lets the margin replace the Andariel level floor when boss margin data exists, may leave a dead merc dead, and may ask for a fresh game when the best zone is cleared."},
+		{Key: "bot.zoneDial", Label: "Zone risk dial", Unit: "mode", Default: 1, Min: 0, Max: 2, HigherIsBetter: false, NoHandicap: true,
+			Desc: "Risk setting of the margin model (bot.zoneModel 1): 0 cautious, 1 balanced, 2 bold. Moves the enter and stay lines of the margin; read only by the model."},
 		{Key: "bot.portalGuard", Label: "Portal cast guard", Unit: "mode", Default: 0, Min: 0, Max: 1, HigherIsBetter: true, NoHandicap: true,
 			Desc: "0 (default until drill R3, docs/fixportalmelee.md): three or more adjacent attackers block a town portal cast (the old count rule). 1: block it when the expected damage of the adjacent attackers over the cast and the walk reaches bot.portalLifePct of current life; with any damage term missing the count rule applies. A hit does not interrupt the cast (V run, decomp28), so the risk is damage taken, not a cut."},
 		{Key: "bot.portalCastMs", Label: "Portal cast time", Unit: "ms", Default: 3000, Min: 500, Max: 5000,

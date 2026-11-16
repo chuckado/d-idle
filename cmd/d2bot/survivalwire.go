@@ -58,19 +58,38 @@ type survivalShadow struct {
 // wireSurvival returns the ZoneChoice and ZoneObserve hooks; both nil without game tables or a loadable model. A ledger
 // file that cannot be read starts empty (and a file from a newer build is left alone: saves are skipped).
 func wireSurvival(db *data.DB, ledgerPath string) (func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, func(bot.ZoneEvent)) {
+	w := newSurvivalShadow(db, ledgerPath)
+	if w == nil {
+		return nil, nil
+	}
+	return w.choice, w.observe
+}
+
+// wireSurvivalModel is wireSurvival plus the S-D hooks: the zone decision (bot.zoneModel 1) and the boss margin. All nil
+// without game tables or a loadable model.
+func wireSurvivalModel(db *data.DB, ledgerPath string) (choice func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, observe func(bot.ZoneEvent),
+	decide func(*d2.Snapshot, int, string, int, string, []bot.ZoneCand) (bot.ZoneVerdict, error), boss func(*d2.Snapshot, string, string, string) (string, bool)) {
+	w := newSurvivalShadow(db, ledgerPath)
+	if w == nil {
+		return nil, nil, nil, nil
+	}
+	return w.choice, w.observe, w.decide, w.bossMargin
+}
+
+func newSurvivalShadow(db *data.DB, ledgerPath string) *survivalShadow {
 	tab := dangerTable(db)
 	if tab == nil {
-		return nil, nil
+		return nil
 	}
 	m, err := power.NewModel(tab.Params)
 	if err != nil {
 		slog.Warn("survival: no power model", "err", err)
-		return nil, nil
+		return nil
 	}
 	p, err := survival.LoadParams()
 	if err != nil {
 		slog.Warn("survival: no params", "err", err)
-		return nil, nil
+		return nil
 	}
 	w := &survivalShadow{db: db, m: m, tab: tab, p: p, path: ledgerPath, pred: map[predKey]shadowPred{}, warned: map[string]bool{}}
 	led, _, err := survival.LoadLedger(ledgerPath, p)
@@ -81,7 +100,7 @@ func wireSurvival(db *data.DB, ledgerPath string) (func(*d2.Snapshot, int, strin
 	w.led = led
 	f := w.fight
 	survFight.Store(&f)
-	return w.choice, w.observe
+	return w
 }
 
 func (w *survivalShadow) warn(err error) string {
@@ -102,18 +121,62 @@ func (w *survivalShadow) save() {
 	}
 }
 
-// choice is the bot.Deps.ZoneChoice hook: judge every candidate, pick, log, and publish the words-only block.
+// choice is the bot.Deps.ZoneChoice hook: the shadow choice at the default dial, as log lines. Shadow only.
 func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions int, cands []bot.ZoneCand) string {
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	p := s.Player
-	hero, a, err := heroOf(w.m, w.db, s, potions, w.warn)
+	v, err := w.judge(s, area, diff, potions, "", cands, false)
 	if err != nil {
 		return w.warn(err)
 	}
-	dial, err := w.m.P.Dial(w.m.P.DefaultDial)
+	return v.Line
+}
+
+// decide is the bot.Deps.ZoneDecide hook (slice S-D): the same judgement at the knob's dial, returned to the planner.
+// The caller falls back to the plan tables on an error.
+func (w *survivalShadow) decide(s *d2.Snapshot, area int, diff string, potions int, dial string, cands []bot.ZoneCand) (bot.ZoneVerdict, error) {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	return w.judge(s, area, diff, potions, dial, cands, true)
+}
+
+// bossMargin is the bot.Deps.BossMargin hook: the word of the hero's margin against a boss, ok false without data.
+func (w *survivalShadow) bossMargin(s *d2.Snapshot, key, diff, dial string) (string, bool) {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	if s == nil || s.Player == nil {
+		return "", false
+	}
+	b, err := w.tab.FindBoss(key, diff)
 	if err != nil {
-		return w.warn(err)
+		return "", false
+	}
+	hero, a, err := heroOf(w.m, w.db, s, -1, w.warn)
+	if err != nil {
+		return "", false
+	}
+	word, _, err := w.m.BossWord(hero, a, b, dial)
+	if err != nil {
+		w.warn(err)
+		return "", false
+	}
+	return word, true
+}
+
+// judge is one controller decision. dial "" is the profile default (the shadow); model true publishes the glance as the
+// deciding block.
+func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions int, dialID string, cands []bot.ZoneCand, model bool) (bot.ZoneVerdict, error) {
+	p := s.Player
+	hero, a, err := heroOf(w.m, w.db, s, potions, w.warn)
+	if err != nil {
+		return bot.ZoneVerdict{}, err
+	}
+	if dialID == "" {
+		dialID = w.m.P.DefaultDial
+	}
+	dial, err := w.m.P.Dial(dialID)
+	if err != nil {
+		return bot.ZoneVerdict{}, err
 	}
 	build := func(h power.Hero) ([]survival.Candidate, error) {
 		var out []survival.Candidate
@@ -140,7 +203,7 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 	}
 	cs, err := build(hero)
 	if err != nil {
-		return w.warn(err)
+		return bot.ZoneVerdict{}, err
 	}
 	need := 0
 	if potions >= 0 && potions < shadowKitPotions {
@@ -155,9 +218,10 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
 	d, err := w.led.Choose(in)
 	if err != nil {
-		return w.warn(err)
+		return bot.ZoneVerdict{}, err
 	}
 	lines := d.Line()
+	v := bot.ZoneVerdict{Area: d.Area, Fresh: d.Fresh, Hole: d.Hole, Margin: d.Margin, Why: d.Why.Text}
 	var merc *survival.ReviveDecision
 	if mercDead {
 		alive := hero
@@ -166,11 +230,15 @@ func (w *survivalShadow) choice(s *d2.Snapshot, area int, diff string, potions i
 		if err1 == nil {
 			rd := w.led.Revive(survival.ReviveInput{Base: in, With: with, Without: cs, Quote: shadowReviveQuote, Reserve: shadowKitPotions * int(w.p.PotionPrice), Gold: p.Gold})
 			merc = &rd
+			v.MercDead, v.MercRevive, v.MercWhy = true, rd.Revive, rd.Why.Text
 			lines += "\nzone revive: " + rd.Why.Code + ": " + rd.Why.Text
 		}
 	}
-	survGlance.Store(survival.GlanceOf(d, dial.ID, merc))
-	return lines
+	g := survival.GlanceOf(d, dial.ID, merc)
+	g.Model = model
+	survGlance.Store(g)
+	v.Line = lines
+	return v, nil
 }
 
 // observe is the bot.Deps.ZoneObserve hook.
