@@ -1,10 +1,11 @@
 ---
 id: TASK-535
 title: 'sandbox2: devp9 sandbox image on upstream main plus carried patches'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-16T03:19:00Z'
+updated_date: '2026-11-16T04:47:00Z'
 labels:
   - d2d
   - chore
