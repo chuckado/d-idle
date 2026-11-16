@@ -1,10 +1,11 @@
 ---
 id: TASK-543
 title: 'supportreview: security review of the support bundle upload'
-status: Proposed
+status: Done
 assignee:
   - user
 created_date: '2026-11-16T04:30:00Z'
+updated_date: '2026-11-16T15:00:00Z'
 labels:
   - docs
   - readonly
