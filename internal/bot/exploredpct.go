@@ -39,6 +39,10 @@ func (r *Runner) Explored() (visited, total, pct, threshold int, ok bool) {
 	if !has {
 		return 0, 0, 0, 0, false
 	}
+	// the coverage belongs to the last zone roamed: in town it is not this place's (the minute line showed 100 percent there)
+	if s := r.latest(); s == nil || s.Player == nil || s.Player.InTown() {
+		return 0, 0, 0, 0, false
+	}
 	visited, total = c.Coverage()
 	if total <= 0 {
 		return 0, 0, 0, 0, false

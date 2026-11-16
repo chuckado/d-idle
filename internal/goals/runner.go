@@ -82,6 +82,8 @@ type Status struct {
 	Message  string      `json:"message,omitempty"`
 	// JourneyBlocked says why the quest step is refused while the hero farms the level plan meanwhile ("" = not blocked).
 	JourneyBlocked string    `json:"journeyBlocked,omitempty"`
+	// FarmResetOff says why the farm loop switched itself off for this session ("" = not off): too many resets in a short time.
+	FarmResetOff string `json:"farmResetOff,omitempty"`
 	Character      Character `json:"character"`
 	Updated        time.Time `json:"updated"`
 }

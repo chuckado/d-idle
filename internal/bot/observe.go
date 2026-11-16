@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"math"
+	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 	"time"
@@ -286,7 +288,10 @@ func (r *Runner) oogRun(f func(context.Context) error) func(context.Context) err
 // newGames never moves there. Save points are planned and use oogRun directly.
 func (r *Runner) newGameRun(f func(context.Context) error) func(context.Context) error {
 	run := r.oogRun(f)
+	_, file, line, _ := runtime.Caller(1) // who asked: every Save and Exit in the d2d log is told apart by this line
+	from := fmt.Sprintf("%s:%d", filepath.Base(file), line)
 	return func(ctx context.Context) error {
+		r.e.Log.Info("new game requested", "from", from)
 		err := run(ctx)
 		if err == nil {
 			r.noteRecycle()

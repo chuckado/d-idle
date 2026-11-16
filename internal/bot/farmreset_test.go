@@ -133,3 +133,107 @@ func TestFarmResetStepAndReturn(t *testing.T) {
 		t.Fatalf("a cleared zone is not returned to, got %d", got)
 	}
 }
+
+// A due reset, then the loop's own step runs five ticks in a row (the sandbox burst: five leaves in 20 s): one fresh game.
+func TestFarmResetFiveTicksOneGame(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Sorceress, d2.Paladin} {
+		t.Run(cl.String(), func(t *testing.T) {
+			g := farmLoopRig(t, cl, 90)
+			g.farmAdvance(6*time.Minute, 60)
+			g.farmAdvance(4*time.Minute, 3)
+			if !g.r.farmResetDue(2) {
+				t.Fatal("not due")
+			}
+			g.w.set(func(w *world) { w.area = 1 })
+			g.r.poll()
+			for i := 0; i < 5; i++ {
+				g.clock.Sleep(4 * time.Second)
+				g.r.poll()
+				g.r.farmResetStep(context.Background(), g.r.latest())
+				g.r.farmNote(1)
+			}
+			if n := g.w.count("newgame"); n != 1 {
+				t.Fatalf("%d fresh games in five ticks, want 1", n)
+			}
+		})
+	}
+}
+
+// In town or in another zone the trigger never fires, and a stale 100 percent coverage is not read in town.
+func TestFarmResetNeverInTownOrOtherZone(t *testing.T) {
+	g := farmLoopRig(t, d2.Sorceress, 100)
+	g.farmAdvance(6*time.Minute, 60)
+	g.farmAdvance(4*time.Minute, 3)
+	g.r.loop.farm.pending = 2 // even a stale pending must not act
+	g.w.set(func(w *world) { w.area = 1 })
+	g.r.poll()
+	if g.r.farmResetDue(2) {
+		t.Fatal("fired in town")
+	}
+	if _, _, _, _, ok := g.r.Explored(); ok {
+		t.Fatal("coverage is read in town")
+	}
+	g.w.set(func(w *world) { w.area = 3 })
+	g.r.poll()
+	if g.r.farmResetDue(2) {
+		t.Fatal("fired in another zone")
+	}
+}
+
+// Cap: three fresh games of any source in 30 minutes switch the loop off for the session, with the log line and the
+// status text; flipping the knob off and on starts clean.
+func TestFarmResetThrashCap(t *testing.T) {
+	g := farmLoopRig(t, d2.Paladin, 90)
+	g.r.e.Tune.Bot.FarmResetCooldownMin = 1
+	now := g.clock.Now()
+	g.r.loop.farm.fresh = []time.Time{now.Add(-20 * time.Minute), now.Add(-12 * time.Minute), now.Add(-6 * time.Minute)}
+	g.farmAdvance(6*time.Minute, 60)
+	g.farmAdvance(4*time.Minute, 3)
+	if g.r.farmResetDue(2) {
+		t.Fatal("the cap must refuse")
+	}
+	if g.r.farmOffWhy() == "" {
+		t.Fatal("no off reason")
+	}
+	if g.r.Status().FarmResetOff == "" {
+		t.Fatal("the Needs you row has no source")
+	}
+	g.r.e.Tune.Bot.FarmReset = 0
+	g.r.farmNote(2)
+	g.r.e.Tune.Bot.FarmReset = 1
+	g.r.farmNote(2)
+	if g.r.farmOffWhy() != "" || len(g.r.loop.farm.fresh) != 0 {
+		t.Fatal("a knob flip must start clean")
+	}
+}
+
+// The cooldown starts at the fresh game, whoever took it, and a new game starts a new visit (no carried clear time).
+func TestFarmResetCooldownFromFreshGame(t *testing.T) {
+	g := farmLoopRig(t, d2.Sorceress, 90)
+	g.farmAdvance(6*time.Minute, 60)
+	g.farmAdvance(4*time.Minute, 3)
+	g.r.loop.farm.fresh = []time.Time{g.clock.Now().Add(-time.Minute)}
+	if g.r.farmResetDue(2) {
+		t.Fatal("a fresh game a minute ago holds the loop")
+	}
+	if err := g.r.startFreshGame(context.Background(), g.r.latest()); err != nil {
+		t.Fatal(err)
+	}
+	if g.r.loop.farm.area != 0 || len(g.r.loop.farm.smp) != 0 {
+		t.Fatal("the visit and the rate samples must not survive a new game")
+	}
+}
+
+// A second call while one runs is a no-op, and a fresh game forgets what the old one cleared.
+func TestStartFreshGameGuard(t *testing.T) {
+	g := farmLoopRig(t, d2.Sorceress, 50)
+	g.r.loop.cleared = map[int]bool{2: true}
+	g.r.freshBusy.Store(true)
+	if err := g.r.startFreshGame(context.Background(), g.r.latest()); err != nil || g.w.count("newgame") != 0 {
+		t.Fatal("a call while one is in flight must do nothing")
+	}
+	g.r.freshBusy.Store(false)
+	if err := g.r.startFreshGame(context.Background(), g.r.latest()); err != nil || g.w.count("newgame") != 1 || len(g.r.loop.cleared) != 0 {
+		t.Fatalf("one game and a forgotten cleared set: %d %v", g.w.count("newgame"), g.r.loop.cleared)
+	}
+}
