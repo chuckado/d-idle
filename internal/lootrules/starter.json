@@ -56,6 +56,8 @@
   {"id":"t-magic-jewelry","scope":["pack"],"when":{"all":[{"f":"type","op":"in","v":["ring","amul"]},{"f":"quality","op":"in","v":["magic"]}]},"action":"stash","reason":"magic jewelry (identify it from the menu)","name":"magic jewelry"},
   {"id":"t-sockets","scope":["pack"],"when":{"all":[{"f":"sockets","op":"ge","v":4},{"f":"quality","op":"in","v":["normal","superior"]}]},"action":"stash","reason":"4+ socket base","name":"socketed bases"},
   {"id":"t-junk","scope":["pack"],"when":{"all":[{"f":"value","op":"lt","v":20},{"f":"packfull","op":"ge","v":85},{"f":"quality","op":"in","v":["low","normal","superior"]}]},"action":"drop","reason":"worth under 20 gold and the pack is full","name":"pure junk"},
-  {"id":"t-sell","scope":["pack"],"when":{"f":"value","op":"ge","v":20},"action":"sell","reason":"vendor junk","name":"sellable"}
+  {"id":"t-sell","scope":["pack"],"when":{"f":"value","op":"ge","v":20},"action":"sell","reason":"vendor junk","name":"sellable"},
+  {"id":"s-jewelry-stash","scope":["sell"],"when":{"all":[{"f":"type","op":"in","v":["ring","amul","circ"]},{"f":"quality","op":"in","v":["magic","rare","crafted"]},{"f":"idtome","op":"ge","v":1}]},"action":"stash","reason":"you own a Tome of Identify: identify the jewelry and stash it, do not sell it","name":"jewelry with a tome"},
+  {"id":"s-jewelry-sell","scope":["sell"],"when":{"all":[{"f":"type","op":"in","v":["ring","amul","circ"]},{"f":"quality","op":"in","v":["magic","rare","crafted"]},{"f":"identified","op":"eq","v":false},{"f":"idtome","op":"eq","v":0}]},"action":"sell","reason":"unidentified jewelry and no Tome of Identify: sold as it is","name":"jewelry without a tome"}
  ]
 }

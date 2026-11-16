@@ -28,6 +28,10 @@ const (
 	PlaceGround = "ground"
 	PlacePack   = "pack"
 	PlaceStash  = "stash"
+	// PlaceSell is the vendor visit: a pack item asked "sell it or not" by the sell chore (wave 2b, loot.rulesEngine 3).
+	// Its rules are the few sell-only decisions; an item no rule of this scope catches is judged by the ground rules, the
+	// way the pickit judges today (loot.SellDecision).
+	PlaceSell = "sell"
 	// Everything else (equipment, belt, cube, cursor, vendor) is never decided: Decide answers ignore.
 )
 
@@ -41,6 +45,8 @@ type RuleSet struct {
 	Groups   map[string]Group  `json:"groups,omitempty"`   // adds to the built-in groups
 	Defaults map[string]string `json:"defaults,omitempty"` // scope -> action when no rule matches; absent = ignore
 	Ack      []string          `json:"ack,omitempty"`      // the player's explicit acknowledgements ("drop-valuable")
+	Preset   string            `json:"preset,omitempty"`   // the preset this set was made from ("starter", "class:<Name>"); "" or "custom" = hand-edited
+	Options  *Options          `json:"options,omitempty"`  // the simple editor's knobs; with Preset the store rebuilds Rules from them on PUT
 	Rules    []Rule            `json:"rules"`
 }
 
@@ -137,6 +143,7 @@ type Ctx struct {
 	Act                       int             // act of the area the hero is in (0 = unknown)
 	Owned                     func(*Item) int // how many of this base the hero holds (pack plus stash); nil = 0
 	PackFullPct, StashFullPct int
+	IDTome                    bool // a Tome of Identify is in the pack (the field idtome)
 	// Needs answers the "need" condition (belt, scroll, tome, key, gold, gem, charmroom needs); nil = every need is
 	// satisfied, so a need rule never matches.
 	Needs func(kind string, it *Item) bool

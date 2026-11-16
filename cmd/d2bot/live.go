@@ -141,8 +141,8 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 			restart = func(ctx context.Context) error { return rc.Recycle(ctx, "failsafe restart") }
 		}
 	}
-	zoneChoice, zoneObserve := wireSurvival(db, ip.Ledger()) // shadow zone choice and ledger (slice S-C), log and API only
-	runner, err := bot.New(e, bot.Deps{ZoneChoice: zoneChoice, ZoneObserve: zoneObserve, Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
+	zoneChoice, zoneObserve, zoneDecide, bossMargin := wireSurvivalModel(db, ip.Ledger()) // shadow choice and ledger (S-C); the decision hooks act only with bot.zoneModel 1 (S-D)
+	runner, err := bot.New(e, bot.Deps{ZoneChoice: zoneChoice, ZoneObserve: zoneObserve, ZoneDecide: zoneDecide, BossMargin: bossMargin, Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
 		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus, ZoneShadow: wirePower(db)}, cfg)
 	if err != nil {
 		return err

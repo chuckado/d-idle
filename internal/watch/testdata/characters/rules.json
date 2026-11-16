@@ -1,0 +1,1 @@
+{"schema":"watch.characters.rules/1","classes":[{"id":"amazon","name":"Amazon"},{"id":"sorceress","name":"Sorceress"},{"id":"necromancer","name":"Necromancer"},{"id":"paladin","name":"Paladin"},{"id":"barbarian","name":"Barbarian"},{"id":"druid","name":"Druid"},{"id":"assassin","name":"Assassin"}],"name":{"min":2,"max":15,"separators":"-_","foldCase":true},"hardcore":false}

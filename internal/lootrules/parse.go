@@ -35,7 +35,7 @@ func (es Errors) Error() string {
 }
 
 var qualities = map[string]bool{"low": true, "normal": true, "superior": true, "magic": true, "set": true, "rare": true, "unique": true, "crafted": true}
-var scopes = map[string]bool{PlaceGround: true, PlacePack: true, PlaceStash: true}
+var scopes = map[string]bool{PlaceGround: true, PlacePack: true, PlaceStash: true, PlaceSell: true}
 var actions = map[string]bool{Ask: true, KeepMerc: true, Pickup: true, Keep: true, Stash: true, Sell: true, Drop: true, Identify: true, Ignore: true}
 var needKinds = map[string]bool{"potion": true, "scroll": true, "tome": true, "key": true, "gold": true, "gem": true, "runeword": true, "emptyslot": true, "charmroom": true}
 
@@ -155,6 +155,8 @@ func legal(a, scope string) bool {
 		return a != Pickup
 	case PlaceStash:
 		return a == Keep || a == Sell || a == Ignore
+	case PlaceSell:
+		return a == Keep || a == Sell || a == Stash || a == Ignore
 	}
 	return false
 }
@@ -186,7 +188,7 @@ const (
 
 func fieldOf(f string) (fieldKind, bool) {
 	switch f {
-	case "ilvl", "reqlvl", "reqstr", "reqdex", "runeno", "grade", "maxsockets", "owned", "act", "durpct", "hero_usable_from", "merc_usable_from", "sockets", "value", "qty", "clvl", "gold", "packfull", "stashfull":
+	case "ilvl", "reqlvl", "reqstr", "reqdex", "runeno", "grade", "maxsockets", "owned", "act", "durpct", "hero_usable_from", "merc_usable_from", "sockets", "value", "qty", "clvl", "gold", "packfull", "stashfull", "idtome":
 		return kNum, true
 	case "ethereal", "identified", "stackable", "quest", "broken":
 		return kBool, true

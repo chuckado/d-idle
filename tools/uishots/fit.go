@@ -53,7 +53,7 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects, overlayState } from '/__fit/fit.js';
+import { measure, hits, expects, overlayState, charsNow } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -89,6 +89,7 @@ f.addEventListener('load', async () => {
     }
     m.ov = overlayState(f.contentWindow);
     if (steps.length) m.hits = hits(f.contentWindow, o.hit);
+    if (steps.length && f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
     const ex = (o.expect || []).filter(Boolean);
     if (ex.length) m.expect = expects(f.contentWindow, ex);
     out.textContent = JSON.stringify(m);
@@ -159,6 +160,7 @@ type fitResult struct {
 		Sheet  any    `json:"sheet"`
 	} `json:"pop"`
 	Expect map[string]bool `json:"expect"`
+	Chars  *fitChars       `json:"chars"`
 	Ov     *struct {
 		Open    []string `json:"open"`
 		Menu    []string `json:"menu"`
@@ -252,10 +254,13 @@ func (r fitResult) judge() []string {
 	for _, u := range r.Unready {
 		bad = append(bad, "panel "+u+" is not ready")
 	}
-	if len(r.Slots) == 0 {
+	if len(r.Slots) == 0 && r.Chars == nil {
 		bad = append(bad, "no [data-cockpit-slot] on the page")
 	}
-	if r.Hole > fitGap {
+	if c := r.Chars; c != nil {
+		bad = append(bad, c.judge(r.VW)...)
+	}
+	if r.Hole > fitGap && r.Chars == nil {
 		bad = append(bad, fmt.Sprintf("dead space: a %d px square is covered by no slot at %d,%d", r.Hole, r.HoleAt[0], r.HoleAt[1]))
 	}
 	if r.CV != nil {
@@ -361,6 +366,62 @@ func (r fitResult) judge() []string {
 	return bad
 }
 
+// fitChars is what fit.js returns for the Characters page (charsPage).
+type fitChars struct {
+	Clipped []string `json:"clipped"`
+	Small   []string `json:"small"`
+	Covered []string `json:"covered"`
+	Outside []string `json:"outside"`
+	Under   string   `json:"under"`
+	Sheet   string   `json:"sheet"`
+	Hole    int      `json:"hole"`
+	HoleAt  [2]int   `json:"holeAt"`
+	Cards   int      `json:"cards"`
+	Loading bool     `json:"loading"`
+	Open    bool     `json:"open"`
+}
+
+// fitCharsHole is the largest empty square inside the Characters list that is not a gap (px): a missing card in a row of cards is as high as a
+// card (about 190 px); the phone's single column has none. fitCharsHolePhone is the same on a phone.
+const (
+	fitCharsHole      = 300
+	fitCharsHolePhone = 240
+)
+
+// judge is what is wrong with a measured Characters page (docs/charselect-ui.md); vw tells the phone from the desk.
+func (c *fitChars) judge(vw int) []string {
+	var bad []string
+	if c.Loading {
+		bad = append(bad, "the Characters page is still loading")
+	}
+	for _, x := range c.Clipped {
+		bad = append(bad, "clipped text: "+x)
+	}
+	for _, x := range c.Small {
+		bad = append(bad, "target under 44 px: "+x)
+	}
+	for _, x := range c.Covered {
+		bad = append(bad, "covered control: "+x)
+	}
+	for _, x := range c.Outside {
+		bad = append(bad, "ends outside the window: "+x)
+	}
+	if c.Under != "" {
+		bad = append(bad, "under the header: "+c.Under)
+	}
+	if c.Sheet != "" {
+		bad = append(bad, "sheet cut: "+c.Sheet)
+	}
+	lim := fitCharsHole
+	if vw <= 480 {
+		lim = fitCharsHolePhone
+	}
+	if c.Hole > lim {
+		bad = append(bad, fmt.Sprintf("dead space in the list: a %d px square is empty at %d,%d", c.Hole, c.HoleAt[0], c.HoleAt[1]))
+	}
+	return bad
+}
+
 // mustFail names, by file prefix, the pages that must FAIL and the verdict each must fail with. Another verdict, or a
 // broken measurement, does not count: only the reason the fixture was built for.
 var mustFail = map[string]string{
@@ -383,6 +444,14 @@ var mustFail = map[string]string{
 	"fit-phonedefect-hover-":     "horizontal overflow: ",
 	"fit-phonedefect-narrow-":    "grid: ",
 	"fit-phonedefect-resetclip-": "#btn-reset is not hittable",
+	// the Characters page (docs/charselect-ui.md): one defect each, put back by defectCSS in fixtures_chars.go
+	"fit-charsdefect-clip-":    "clipped text",
+	"fit-charsdefect-wide-":    "ends outside the window",
+	"fit-charsdefect-under-":   "under the header",
+	"fit-charsdefect-small-":   "target under 44 px",
+	"fit-charsdefect-hole-":    "dead space in the list",
+	"fit-charsdefect-sheet-":   "sheet cut",
+	"fit-charsdefect-covered-": "covered control",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)
@@ -463,6 +532,10 @@ func fitDir(dir string) ([]string, bool, error) {
 				if r.Zones.Menu {
 					extra += ", menu open in " + r.Zones.Host
 				}
+			}
+			if c := r.Chars; c != nil {
+				lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d cards, largest empty square %d px", name, r.VW, r.VH, c.Cards, c.Hole))
+				continue
 			}
 			lines = append(lines, fmt.Sprintf("ok   %s: %dx%d, no scroll, %d slots, largest gap %d px%s", name, r.VW, r.VH, len(r.Slots), r.Hole, extra))
 		}

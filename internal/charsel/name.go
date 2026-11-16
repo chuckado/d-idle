@@ -8,8 +8,8 @@ import (
 // ValidName applies the Diablo II character name rule: 2 to 15 letters, at most one hyphen or underscore, never first or
 // last (S: the game's own rule). Duplicates are checked by the Store, because they need the folder.
 func ValidName(n string) error {
-	if len(n) < 2 || len(n) > 15 {
-		return fmt.Errorf("a character name has 2 to 15 characters")
+	if len(n) < NameMin || len(n) > NameMax {
+		return fmt.Errorf("a character name has %d to %d characters", NameMin, NameMax)
 	}
 	sep := 0
 	for i, r := range n {

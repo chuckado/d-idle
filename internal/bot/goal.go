@@ -959,7 +959,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 		if l.stepArea == areaDenOfEvil && p.Difficulty == d2.Normal && r.questClaimed("den_of_evil") {
 			l.stepArea = 0 // the cached Den pick outlived its claim: 2026-11-12 17:34 walked back into the Den after the reward (hourfix2)
 		}
-		if l.stepArea != 0 && l.stepLevel == p.Level && !l.cleared[l.stepArea] && !r.banned(l.stepArea) {
+		if l.stepArea != 0 && l.stepLevel == p.Level && !l.cleared[l.stepArea] && !r.banned(l.stepArea) && !r.zoneRecheckDue() {
 			return l.stepArea, true
 		}
 		ex, cleared := map[int]bool{}, map[int]bool{}
@@ -984,7 +984,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			ex[areaDenOfEvil] = true // a dungeon quest needs a potion buffer; farm the open field first
 		}
 		pick := func() (Step, bool) {
-			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty), Class: planClass(p.Class), Merc: mercUp()}
+			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty), Class: planClass(p.Class), Merc: mercUp(), Model: r.zoneModelPick(s, diff, cleared)}
 			st, ok := r.d.Plan.Pick(diff, p.Level, opts)
 			if !ok && len(farmed) > 0 {
 				// the farm is a preference: every farm area is banned or excluded, so pick among all areas again

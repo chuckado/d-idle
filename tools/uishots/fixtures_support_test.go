@@ -53,3 +53,43 @@ func TestSupportFixtureVariants(t *testing.T) {
 		t.Errorf("nosend: %v", m)
 	}
 }
+
+func TestLootRulesFitPages(t *testing.T) {
+	b, err := os.ReadFile("../uishots.sh")
+	if err != nil {
+		t.Fatal(err)
+	}
+	sh := string(b)
+	for _, p := range []string{"lootrules-sheet ", "lootrules-sheet-light ", "lootrules-custom ", "lootrules-custom-light ", "lootrules-empty ", "lootrules-error ", "lootrules-preview ", "lootrules-preview-light ", "lootrules-sellkinds ", "lootrules-sellkinds-light "} {
+		if !strings.Contains(sh, "\n"+p) {
+			t.Errorf("no fit page %q", p)
+		}
+	}
+	if !strings.Contains(sh, `lootrules-*) szs="$sizes 412x780 360x640"`) {
+		t.Error("the loot rules pages do not run the phone sizes")
+	}
+}
+
+func TestLootRulesFixtureVariants(t *testing.T) {
+	get := func(method, q string) (int, map[string]any) {
+		r := httptest.NewRequest(method, "/api/lootrules", nil)
+		r.Header.Set("Referer", "http://x/watch?"+q)
+		w := httptest.NewRecorder()
+		lootRulesFixture(w, r)
+		var m map[string]any
+		_ = json.Unmarshal(w.Body.Bytes(), &m)
+		return w.Code, m
+	}
+	if c, m := get("GET", ""); c != 200 || m["schema"] != "watch.lootrules/1" || len(m["recent"].([]any)) == 0 {
+		t.Errorf("default: %d %v", c, m["schema"])
+	}
+	if _, m := get("GET", "lootrules=custom"); m["active"].(map[string]any)["preset"] != "custom" {
+		t.Error("custom variant")
+	}
+	if _, m := get("GET", "lootrules=empty"); len(m["recent"].([]any)) != 0 {
+		t.Error("empty variant")
+	}
+	if c, m := get("PUT", ""); c != 400 || m["code"] != "invalid" {
+		t.Errorf("put: %d %v", c, m)
+	}
+}
