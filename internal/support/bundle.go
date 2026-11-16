@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"sort"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -27,7 +28,7 @@ const (
 var Allowed = map[string]bool{
 	"version.json": true, "system.json": true, "knobs.json": true, "status.json": true, "glance.json": true,
 	"decisions.json": true, "deaths.json": true, "readiness.json": true, "danger.json": true,
-	"streamstats.json": true, "log.txt": true, "errors.txt": true,
+	"streamstats.json": true, "ledger.json": true, "log.txt": true, "errors.txt": true,
 }
 
 // Optional files, only with their option on.
@@ -57,10 +58,14 @@ type Inputs struct {
 	LogHours int
 }
 
-// File is one line of the preview.
+// File is one line of the preview. Excerpt is the whole redacted text of a small file, else its first and last
+// lines; Redactions counts what was replaced in it (the whole text is paged through Bundle.Page).
 type File struct {
-	Name string `json:"name"`
-	Size int    `json:"size"`
+	Name       string `json:"name"`
+	Size       int    `json:"size"`
+	Lines      int    `json:"lines,omitempty"`
+	Redactions int    `json:"redactions,omitempty"`
+	Excerpt    string `json:"excerpt,omitempty"`
 }
 
 // Bundle is a built, scanned bundle. Zip is only sent when Findings is empty.
@@ -74,6 +79,23 @@ type Bundle struct {
 	Options    Options   `json:"options"`
 	ZipSize    int       `json:"zipSize"`
 	Zip        []byte    `json:"-"`
+	text       map[string]string
+}
+
+// PageSize is the size of one page of Bundle.Page.
+const PageSize = 16 << 10
+
+// Page returns one page of a text file of the bundle exactly as it is in the zip, and whether more follows.
+func (b *Bundle) Page(name string, page int) (string, bool, bool) {
+	t, ok := b.text[name]
+	if !ok || page < 0 || page*PageSize > len(t) {
+		return "", false, false
+	}
+	end := (page + 1) * PageSize
+	if end >= len(t) {
+		return t[page*PageSize:], false, true
+	}
+	return t[page*PageSize : end], true, true
 }
 
 // Sendable is the fail-closed test: no finding, a zip, within the cap.
@@ -87,7 +109,9 @@ func Build(in Inputs, o Options) (*Bundle, error) {
 	if in.Now.IsZero() {
 		in.Now = time.Now()
 	}
-	b := &Bundle{Created: in.Now.UTC(), Options: o}
+	b := &Bundle{Created: in.Now.UTC(), Options: o, text: map[string]string{}}
+	lits := NewLiterals(in.Extra)
+	counts := map[string]int{}
 	var idb [8]byte
 	if _, err := rand.Read(idb[:]); err != nil {
 		return nil, err
@@ -102,12 +126,14 @@ func Build(in Inputs, o Options) (*Bundle, error) {
 	for _, f := range in.Files {
 		switch {
 		case Allowed[f.Name]:
-			txt := prepare(f.Name, f.Data, in)
+			txt, n := prepare(f.Name, f.Data, in, lits)
 			if len(txt) > MaxTextFile {
 				txt = txt[len(txt)-MaxTextFile:]
 			}
 			out = append(out, entry{f.Name, txt})
-			b.Findings = append(b.Findings, Scan(f.Name, string(txt), in.Extra...)...)
+			counts[f.Name] = n
+			b.text[f.Name] = string(txt)
+			b.Findings = append(b.Findings, ScanL(f.Name, string(txt), lits)...)
 		case f.Name == ShotName && o.IncludeScreenshot:
 			if !isImage(f.Data) || len(f.Data) > MaxShot {
 				b.Dropped = append(b.Dropped, f.Name+" (not an image or too large)")
@@ -135,9 +161,14 @@ func Build(in Inputs, o Options) (*Bundle, error) {
 	}
 	sort.Slice(out, func(i, j int) bool { return out[i].name < out[j].name })
 	manifest := manifestText(o, in.Now)
+	b.text["MANIFEST.txt"] = manifest
 	out = append([]entry{{"MANIFEST.txt", []byte(manifest)}}, out...)
 	for _, e := range out {
-		b.Files = append(b.Files, File{e.name, len(e.data)})
+		f := File{Name: e.name, Size: len(e.data)}
+		if t, ok := b.text[e.name]; ok {
+			f.Lines, f.Redactions, f.Excerpt = strings.Count(t, "\n")+1, counts[e.name], excerpt(t)
+		}
+		b.Files = append(b.Files, f)
 		if e.name == "log.txt" {
 			b.LogPreview = tail(string(e.data), PreviewLines)
 		}
@@ -166,22 +197,61 @@ func Build(in Inputs, o Options) (*Bundle, error) {
 	return b, nil
 }
 
-// prepare redacts one allowlisted file: JSON is parsed and stripped of secret-named keys first (a value-only
-// export), then everything goes through Redact; text is time-filtered (logs) and redacted.
-func prepare(name string, data []byte, in Inputs) []byte {
+// prepare redacts one allowlisted file and returns the number of replacements. JSON is parsed, loses every
+// secret-named key, has each string value redacted before it is marshalled (so escaping such as \u0026 never hides a
+// shape) and goes through the text pass once more; text is time-filtered (logs) and redacted.
+func prepare(name string, data []byte, in Inputs, lits Literals) ([]byte, int) {
 	if strings.HasSuffix(name, ".json") {
 		var v any
 		if json.Unmarshal(data, &v) != nil {
-			return []byte("{\"error\": \"not valid JSON, omitted\"}\n")
+			return []byte("{\"error\": \"not valid JSON, omitted\"}\n"), 0
 		}
-		data, _ = json.MarshalIndent(dropSecretKeys(v), "", "  ")
-		return []byte(Redact(string(data), in.Extra...) + "\n")
+		total := 0
+		v = redactStrings(dropSecretKeys(v), lits, &total)
+		var buf bytes.Buffer
+		enc := json.NewEncoder(&buf)
+		enc.SetEscapeHTML(false)
+		enc.SetIndent("", "  ")
+		enc.Encode(v)
+		s, n := RedactN(buf.String(), lits)
+		return []byte(s), total + n
 	}
 	s := string(data)
 	if name == "log.txt" || name == "errors.txt" {
 		s = recent(s, in.Now, in.LogHours)
 	}
-	return []byte(Redact(s, in.Extra...))
+	s, n := RedactN(s, lits)
+	return []byte(s), n
+}
+
+func redactStrings(v any, lits Literals, n *int) any {
+	switch x := v.(type) {
+	case string:
+		s, c := RedactN(x, lits)
+		*n += c
+		return s
+	case map[string]any:
+		for k, e := range x {
+			x[k] = redactStrings(e, lits, n)
+		}
+	case []any:
+		for i, e := range x {
+			x[i] = redactStrings(e, lits, n)
+		}
+	}
+	return v
+}
+
+// excerpt is the whole text of a small file, else its first and last 12 lines.
+func excerpt(t string) string {
+	if len(t) <= 4096 {
+		return t
+	}
+	l := strings.Split(strings.TrimRight(t, "\n"), "\n")
+	if len(l) <= 24 {
+		return strings.Join(l, "\n")
+	}
+	return strings.Join(l[:12], "\n") + "\n... (" + strconv.Itoa(len(l)-24) + " lines not shown here; open the file to read them) ...\n" + strings.Join(l[len(l)-12:], "\n")
 }
 
 func dropSecretKeys(v any) any {

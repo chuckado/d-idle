@@ -21,7 +21,7 @@ var seeded = map[string]string{
 	"ip":      "peer 192.168.4.20 and 8.8.4.4",
 	"ip6":     "peer fe80:0:0:0:1:2:3:4",
 	"email":   "owner jane.doe@example.org wrote",
-	"host":    "fetch https://updates.birbhub.com/x and nas.lan",
+	"host":    "fetch https://updates.example-owner.test/x and nas.lan",
 	"bearer":  "Authorization: Bearer abcdef0123456789",
 	"kv":      `watch_token=hunter2hunter2 and "passphrase": "open sesame"`,
 	"query":   "GET /watch?token=ZZtopSecret99",
@@ -36,7 +36,7 @@ var seeded = map[string]string{
 }
 
 func TestRedactSeeded(t *testing.T) {
-	needles := []string{"alice", "Bob", "192.168", "8.8.4.4", "fe80", "jane.doe", "birbhub", "nas.lan", "abcdef0123456789", "hunter2", "sesame", "ZZtopSecret", "Abcdef0123456789xyz",
+	needles := []string{"alice", "Bob", "192.168", "8.8.4.4", "fe80", "jane.doe", "example-owner", "nas.lan", "abcdef0123456789", "hunter2", "sesame", "ZZtopSecret", "Abcdef0123456789xyz",
 		"123e4567", "ABCD1-2EFGH", "default.key", "my.key", "Mychar", "MIIEvQ", "Xk3jD9sLq2Wv8Zr1Tn5Yb7Hc4Gf6Mp0QaUe", "0123456789abcdef0123456789abcdef0123"}
 	var all []string
 	for _, v := range seeded {
@@ -54,7 +54,7 @@ func TestRedactSeeded(t *testing.T) {
 }
 
 func TestRedactKeepsDiagnostics(t *testing.T) {
-	s := "12:00:01 area=Blood Moor life=212/300 hit 40-hex 0123456789abcdef0123456789abcdef01234567 monsters=7"
+	s := "12:00:01 area=Blood Moor life=212/300 hit monsters=7 path=internal/watch/supportapi.go"
 	if got := Redact(s); got != s {
 		t.Errorf("harmless line changed: %q", got)
 	}
@@ -224,5 +224,102 @@ func TestSenderAuthAndCodes(t *testing.T) {
 	defer red.Close()
 	if _, err = (Sender{URL: red.URL, Token: "t"}).Send(context.Background(), []byte("PK")); err == nil {
 		t.Fatal("redirect")
+	}
+}
+
+// Every input of the security review (M1): Redact must remove the secret and Scan must see it when it is left in.
+func TestReviewClasses(t *testing.T) {
+	rows := []struct{ in, secret string }{
+		{"passphrase: correct horse battery staple", "horse battery"},
+		{"password = hunter two words", "two words"},
+		{"pass=hunter2 pwd=hunter3 PW: hunter4", "hunter4"},
+		{"key ABCD1234EFGH5678", "ABCD1234EFGH5678"},
+		{`path="C:\\Users\\alice\\x"`, "alice"},
+		{`Z:\home\alice\.wine\drive_c\game.exe`, "alice"},
+		{`C:/users/alice/Saved Games/x`, "alice"},
+		{`C:\Users\John Smith\AppData`, "Smith"},
+		{"peer fe80::1 and 2001:db8::42", "db8"},
+		{"http://alice-pc:8891/watch", "alice-pc"},
+		{"myhouse.duckdns.org and nas.fritz.box", "myhouse"},
+		{"build 0123456789abcdef0123456789abcdef01234567", "0123456789abcdef0123456789abcdef01234567"},
+		{"tok AbCdEfGhIjKlMnOpQrStUvWxYz_-AbCd", "AbCdEfGhIjKlMnOpQrStUvWxYz"},
+		{"tok AbCdEfGh1jKlMnOpQrStUvWxYz_-AbC", "AbCdEfGh1jKlMnOpQrStUvWxYz"},
+		{"cd KJ8H2N4P6Q9RTVWXY3Z5ABCDEF", "KJ8H2N4P6Q9R"},
+		{"cd KJ8H2N4P6Q9RTVWX", "KJ8H2N4P6Q9R"},
+		{"/x?f=%2Fhome%2Falice%2Fsave", "alice"},
+		{"user:pw1234567@host.example-owner.test", "pw1234567"},
+	}
+	for _, r := range rows {
+		out := Redact(r.in)
+		if strings.Contains(out, r.secret) {
+			t.Errorf("not redacted %q -> %q", r.in, out)
+		}
+		if f := Scan("f", r.in); len(f) == 0 {
+			t.Errorf("scan did not see %q", r.in)
+		}
+		if f := Scan("f", out); len(f) != 0 {
+			t.Errorf("redacted %q still scans dirty: %+v", out, f)
+		}
+	}
+}
+
+// JSON escapes & as \u0026 and doubles backslashes; neither may hide a shape.
+func TestJSONShapes(t *testing.T) {
+	b, _ := Build(inputs(Input{"status.json", []byte(`{"link":"http://h.example-owner.test:8891/watch?x=1&t=abcd1234efgh","path":"C:\\Users\\alice\\AppData\\x","pp":"passphrase: a b c d"}`)}), Options{})
+	if !b.Sendable() {
+		t.Fatalf("%+v", b.Findings)
+	}
+	s := unzip(t, b.Zip)["status.json"]
+	for _, bad := range []string{"abcd1234efgh", "alice", "example-owner", "a b c d", `\u0026`} {
+		if strings.Contains(s, bad) {
+			t.Errorf("%q in %s", bad, s)
+		}
+	}
+}
+
+// What Redact cannot see by shape, the known literals remove, and the scan blocks when one is left.
+func TestKnownSecretsAsLiterals(t *testing.T) {
+	tok := "plainlowercasetokenwithnodigitsatall" // no shape rule fires on it
+	in := Inputs{Now: now, Extra: []string{tok, "/srv/home/kid", `C:\Users\kid`}, Files: []Input{{"log.txt", []byte("auth ok " + tok + " in /srv/home/kid and C:\\\\Users\\\\kid\\\\x\n")}}}
+	b, _ := Build(in, Options{})
+	log := unzip(t, b.Zip)["log.txt"]
+	if !b.Sendable() || strings.Contains(log, tok) || strings.Contains(log, "kid") {
+		t.Fatalf("%v %q", b.Findings, log)
+	}
+	if f := Scan("x", "leak "+tok, tok); len(f) != 1 || f[0].Class != "local" {
+		t.Fatalf("%+v", f)
+	}
+}
+
+func TestPreviewCoversEveryFile(t *testing.T) {
+	big := strings.Repeat("a line of ordinary text\n", 2000)
+	b, _ := Build(inputs(Input{"log.txt", []byte(big + "pass=hunter9\n")}, Input{"errors.txt", []byte("ERROR small\n")}), Options{})
+	for _, f := range b.Files {
+		if f.Name != "MANIFEST.txt" && (f.Excerpt == "" || f.Lines == 0) {
+			t.Errorf("no excerpt for %s", f.Name)
+		}
+		if f.Name == "log.txt" && (f.Redactions != 1 || !strings.Contains(f.Excerpt, "not shown")) {
+			t.Errorf("log: %+v", f)
+		}
+		if f.Name == "errors.txt" && f.Excerpt != "ERROR small\n" {
+			t.Errorf("small file is shown whole: %q", f.Excerpt)
+		}
+	}
+	var all strings.Builder
+	for p := 0; ; p++ {
+		s, more, ok := b.Page("log.txt", p)
+		if !ok {
+			t.Fatal("page", p)
+		}
+		all.WriteString(s)
+		if !more {
+			break
+		}
+	}
+	if all.String() != unzip(t, b.Zip)["log.txt"] {
+		t.Error("the pages are not the file that is in the zip")
+	}
+	if _, _, ok := b.Page("nope", 0); ok {
+		t.Error("unknown file")
 	}
 }
