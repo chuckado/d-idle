@@ -26,7 +26,7 @@ const (
 // other name is ignored and the name is reported as dropped.
 var Allowed = map[string]bool{
 	"version.json": true, "system.json": true, "knobs.json": true, "status.json": true, "glance.json": true,
-	"summary-minute.json": true, "summary-area.json": true, "summary-ledger.json": true, "d2d-trace.json": true,
+	"decisions.json": true, "deaths.json": true, "readiness.json": true, "danger.json": true,
 	"streamstats.json": true, "log.txt": true, "errors.txt": true,
 }
 
