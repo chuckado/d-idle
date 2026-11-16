@@ -287,3 +287,24 @@ func TestSafetyBusyWhileCarryingOut(t *testing.T) {
 		}
 	}
 }
+
+// A request that ran leaves no pause behind: the next click in the field runs at the next loop tick, not after the 10 s
+// gap that only a postponed attempt needs (user report 2026-11-15: identify felt slow).
+func TestSecondPlayerCommandDoesNotWaitOutTheGap(t *testing.T) {
+	g := newRig(t, func(c *Config, d *Deps, tu *env.Tuning) {})
+	pg := &fakePlayerGear{w: g.w}
+	pg.pending.Store(1)
+	g.r.d.PlayerGear = pg
+	g.mover.exploreFn = blockExplore
+	g.run()
+	defer g.finish()
+	g.r.Start(reach(10))
+	g.waitFor("first run", func() bool { return pg.runs.Load() == 1 })
+	g.waitFor("in the field", func() bool { return g.w.count("explore") > 0 })
+	t0 := time.Now()
+	pg.pending.Store(1)
+	g.waitFor("second run", func() bool { return pg.runs.Load() >= 2 })
+	if d := time.Since(t0); d >= playerActionGap/2 {
+		t.Fatalf("second command waited %v: the gap must only follow a postponed attempt", d)
+	}
+}

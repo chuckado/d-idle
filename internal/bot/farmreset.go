@@ -13,6 +13,9 @@ import (
 // The farm loop (docs/farmloop.md): monsters respawn only in a new game, so a leveling zone that is mostly cleared pays
 // less per minute than a fresh one. At bot.farmResetPct coverage, and only when the value rule says a fresh game pays,
 // the hero goes home, takes a fresh game and returns to the same zone.
+// freshDebounce: see startFreshGameDiff.
+const freshDebounce = 5 * time.Second
+
 const (
 	farmWindow          = 3 * time.Minute  // the span of the observed XP rate
 	farmSampleEvery     = 10 * time.Second // XP samples are kept this far apart
@@ -278,6 +281,12 @@ func (r *Runner) startFreshGameDiff(ctx context.Context, diff string) error {
 		return nil
 	}
 	defer r.freshBusy.Store(false)
+	// the least time between the end of one fresh game and the start of the next (a real one costs 15 s)
+	if last := r.freshEnd.Load(); last != 0 && r.e.Clock.Now().Sub(time.Unix(0, last)) < freshDebounce {
+		r.e.Log.Warn("fresh game ignored: the last one ended moments ago", "debounce", freshDebounce)
+		return nil
+	}
+	defer func() { r.freshEnd.Store(r.e.Clock.Now().UnixNano()) }()
 	r.loop.farm.fresh = append(r.loop.farm.fresh, r.e.Clock.Now())
 	err := r.newGameRun(func(ctx context.Context) error {
 		return r.d.Cycler.NewGame(ctx, diff)

@@ -339,12 +339,13 @@ var mustFail = map[string]string{
 	"fit-blank-rail-":          "holds no visible panel",
 	"fit-tall-frame-":          "ends outside the window",
 	// the phone's storage tab (card uiphone): the real page with one defect of the 2026-11-15 screenshot put back (defectCSS in fixtures_phone.go)
-	"fit-phonedefect-label-":    "label over art",
-	"fit-phonedefect-acts-":     "action buttons: ",
-	"fit-phonedefect-cutchips-": "toolbar cut: ",
-	"fit-phonedefect-lock-":     "lock line: ",
-	"fit-phonedefect-hover-":    "horizontal overflow: ",
-	"fit-phonedefect-narrow-":   "grid: ",
+	"fit-phonedefect-label-":     "label over art",
+	"fit-phonedefect-acts-":      "action buttons: ",
+	"fit-phonedefect-cutchips-":  "toolbar cut: ",
+	"fit-phonedefect-lock-":      "lock line: ",
+	"fit-phonedefect-hover-":     "horizontal overflow: ",
+	"fit-phonedefect-narrow-":    "grid: ",
+	"fit-phonedefect-resetclip-": "#btn-reset is not hittable",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)

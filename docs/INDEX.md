@@ -490,7 +490,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [0.1.3-drills.md](releases/0.1.3-drills.md): friends 0.1.3 pre-release drills (2026-11-15) (status: RUN, all drills PASS. Tags: V = run and seen, U = not run. Run on the worker host in its own docker...)
 - [0.1.3.md](releases/0.1.3.md): d.idle friends release 0.1.3 (status: BUILT, DRILLED AND STAGED 2026-11-15 (card cut013), NOT PUBLISHED. It supersedes 0.1.2, which was built...)
 - [repair.md](repair.md): Manual repair (TASK-226, repairmanual) and the repair trip (TASK-303, repairtrip) (status: since 2026-11-11 "Repair now" is a TRIP, not a wait for the next town visit (user decision, section "The...)
-- [reset.md](reset.md): Reset: leave the game and rejoin (status: current (botreset, 2026-11-15). Offline tested only; not verified live (checklist at the end).)
+- [reset.md](reset.md): Reset: leave the game and rejoin (status: current (botreset + resetinstant, 2026-11-15). Offline tested only; not verified live (checklist at the end).)
 - [resource.md](resource.md): Resource policy: internal/resource (agent RESOURCE)
 - [restloop.md](restloop.md): restloop (archived)
 - [retreatdrill.md](retreatdrill.md): retreatdrill: the P29 retreat action executed live (designed, offline-tested, not run)
@@ -558,6 +558,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [townwedge.md](townwedge.md): townwedge: the permanent town-exit wedge (status: fix merged with card townwedge. Tags: VERIFIED = log line or test, INFERRED = reading. Evidence:...)
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
+
+`ui/`
+
+- [friend-feedback-2026-11-15.md](ui/friend-feedback-2026-11-15.md): Friend feedback, release 0.1.3 (2026-11-15): what each remark became (status: current. UI and docs only; the bot's behaviour is unchanged. Tags: V verified (named test or picture), S...)
 
 `ui/redesign-2026-11-14/`
 
@@ -801,6 +805,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
+- [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04

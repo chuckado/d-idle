@@ -8,6 +8,14 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-537 <!--sg:agent/friendfb-->
+- Merge branch 'main' into 529 <!--sg:agent/resetinstant-->
+- Merge branch 'main' into sandbox2 <!--sg:agent/sandbox2-->
+- Merge branch 'main' into idfast <!--sg:agent/idfast-->
+- observed life lost per minute (lifeLost) in minute line, glance, ledger, levelsim <!--sg:agent/intake-->
+- docs: damage intake of a surrounded hero in the Den (docs/research/damage-intake-2026-11-15.md). <!--sg:agent/dmgcheck-->
+- Merge branch 'main' into p17posted <!--sg:agent/p17posted-->
+- Merge branch 'main' into farmloopon <!--sg:agent/farmloopon2-->
 - Merge branch 'main' into lootwireL4 <!--sg:agent/lootwire1-->
 - Merge branch 'main' into farmloopon <!--sg:agent/farmloopon-->
 - Merge branch 'main' into TASK-519 <!--sg:agent/verifyp17-->
