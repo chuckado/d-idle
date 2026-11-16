@@ -23,6 +23,7 @@ owns:
   - "cmd/d2bot/charwire_test.go"
 exclusive: []
 contracts: []
+result: "Phase A built offline, not verified live. d2d has no list/create/delete verb; list, delete and restore are save-folder operations, create and switch are a relaunch with --start-class or --char under the supervisor (exit code 6), so no fork verb is needed. State is per instance, not per character: a switch parks and unparks the per-character files (internal/charsel/perchar.json). Routes GET and POST /api/characters (watch.characters/1) with goldens; archive then delete with typed name; active delete and measured-run refused. Live checklist and the Phase B UI plan in docs/charselect.md."
 ---
 
 ## Description
@@ -35,9 +36,9 @@ Phase A of the Character Select screen (user request 2026-11-15). No UI here (Ph
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/charselect.md: feasibility, design, live checklist
-- [ ] #2 internal/charsel: header reader, name rules, store with archive and restore, state parking, manager
-- [ ] #3 watch.characters/1 routes with goldens and gates
-- [ ] #4 d2bot wiring: Deps.Characters hook, supervisor switch (exit 6)
-- [ ] #5 tests on Paladin and Sorceress; gate batch green
+- [x] #1 docs/charselect.md: feasibility, design, live checklist
+- [x] #2 internal/charsel: header reader, name rules, store with archive and restore, state parking, manager
+- [x] #3 watch.characters/1 routes with goldens and gates
+- [x] #4 d2bot wiring: Deps.Characters hook, supervisor switch (exit 6)
+- [x] #5 tests on Paladin and Sorceress; gate batch green
 <!-- AC:END -->

@@ -52,6 +52,22 @@ func ReadIntent(inst string) (Intent, bool) {
 	return in, true
 }
 
+// staleAfter: an intent whose bot never exited (a crash between the write and the exit) must not block every verb.
+const staleAfter = 5 * time.Minute
+
+// pending is ReadIntent that drops a stale intent.
+func (m *Manager) pending() (Intent, bool) {
+	in, ok := ReadIntent(m.Inst)
+	if !ok {
+		return in, false
+	}
+	if t, err := time.Parse(time.RFC3339, in.At); err != nil || m.now().Sub(t) > staleAfter {
+		ClearIntent(m.Inst)
+		return Intent{}, false
+	}
+	return in, true
+}
+
 // ClearIntent removes it (the supervisor does, after it has swapped the state).
 func ClearIntent(inst string) { _ = os.Remove(filepath.Join(inst, intentFile)) }
 
@@ -172,7 +188,7 @@ func (m *Manager) List() (any, *Refusal) {
 		del = []ArchiveRef{}
 	}
 	v := ListView{Schema: ListSchema, Active: m.active(), Caps: m.caps(), Characters: es, Deleted: del}
-	if in, ok := ReadIntent(m.Inst); ok {
+	if in, ok := m.pending(); ok {
 		v.Switch = &SwitchView{From: in.From, To: in.To, Creating: in.Create, Since: in.At}
 	}
 	return v, nil
@@ -183,7 +199,7 @@ func (m *Manager) gate() *Refusal {
 	if m.Measured {
 		return no(409, "measured_run", "a measured run never changes characters (D2BOT_RUN is set)")
 	}
-	if _, ok := ReadIntent(m.Inst); ok {
+	if _, ok := m.pending(); ok {
 		return no(409, "switch_in_progress", "a switch is already under way")
 	}
 	return nil

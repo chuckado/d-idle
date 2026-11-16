@@ -341,3 +341,16 @@ func TestSwapStateParksAndRestoresPerCharacter(t *testing.T) {
 		t.Error("a failed swap must leave the live state in place")
 	}
 }
+
+func TestStaleIntentIsDropped(t *testing.T) {
+	r := newRig(t)
+	if err := writeIntent(r.m.Inst, Intent{Schema: IntentSchema, From: "Holy", To: "Zapp", ClassIndex: -1, At: "2026-11-15T11:00:00Z"}); err != nil {
+		t.Fatal(err)
+	}
+	if _, ref := r.m.Delete("Zapp", "Zapp"); ref != nil { // the clock says 12:00, the intent is an hour old
+		t.Errorf("a stale intent blocked a delete: %v", ref)
+	}
+	if _, ok := ReadIntent(r.m.Inst); ok {
+		t.Error("stale intent not removed")
+	}
+}
