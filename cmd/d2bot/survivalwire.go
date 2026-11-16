@@ -191,6 +191,9 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 		w.led.Observe(k, now, survival.Event{Kind: survival.EvMercDeath}, w.power)
 	case bot.ZoneEvArea:
 		w.led.Observe(k, now, survival.Event{Kind: survival.EvXP, XP: ev.XP}, w.power)
+		if ev.Seconds > 0 {
+			w.led.Observe(k, now, survival.Event{Kind: survival.EvIntake, LifeLost: float64(ev.LifeLost), Seconds: ev.Seconds}, w.power)
+		}
 	default:
 		return
 	}

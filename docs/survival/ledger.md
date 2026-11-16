@@ -36,3 +36,15 @@
 3. S-B limits stay (defence, block and spell damage unverified, merc constants).
 4. Gold side: real revive quote and potion price are not read (constants).
 5. `levelsim -controller` mode and the abmerc A/B harness for the knob `bot.zoneModel`.
+
+## Observed intake (card intake)
+
+Why: the watch screen showed a hero that "does not take damage" and nothing recorded how much it takes. The model's `Taken` is fight-only and predicted; this is what the poll actually saw. Log and API only, no behaviour change, no knob (always on).
+
+- Source: `internal/bot/hpfields.go` `noteHP`, called on every alive poll of the observer (V by unit test, not live). `lifeLost` is the sum of life decreases between consecutive polls; gains (potions, regeneration) are ignored. A poll where `MaxLife` changed (level-up, gear swap, aura) is only rebased and counts as 0, so a max-life change is never damage. A death sample (life 0) counts as the drop it is. The older `dmgTaken` running counter is unchanged (it does count a max-life drop).
+- `minute` line, additive keys: `lifeLost` (this minute), `hitsTaken` (polls that saw a drop), `hpPolls` (samples in the minute). `area summary` carries `lifeLost` of the stay. `d2dsoakstat.Minute` reads them (`HasIntake` false for old logs); `levelsim -shadow` sums them per stay and prints `intake N/min` in the note column when present.
+- Under-count (S, by construction): the poll rate is the loop tick, so two hits landing between two polls give one drop, and a heal landing in the same interval as a hit nets out. `lifeLost` is a lower bound and `hitsTaken` a lower bound of the hits; `hpPolls` per minute tells how coarse the sample was (a slow tick under-counts more). Potion heals between hits are not netted, they are ignored, so the sum is not "damage minus healing".
+- `/api/glance` field `intake` `{lifeLostPerMin, window}`: mean `lifeLost` over the last `window` (up to 5) completed minute lines, one decimal; absent until the first minute line or without a source. It is a number for developers; the cockpit maps it to light, moderate or heavy against max life later (thresholds not decided here). Town minutes dilute it.
+- Ledger: `ZoneStats.intakeLife` and `intakeSec` (decayed together with the same half-life as the fight sums; `omitempty`, ledger version stays 1, an old file reads 0). Fed by `EvIntake` from the area summary of each stay; `Ledger.IntakePerMin(zone)` gives life lost per minute and the seconds it rests on. It is separate from `Taken`/`k_zone`, which stay the model-vs-fight comparison; the danger/power margin can use it as the observed intake.
+- Potion versus regeneration split: not done (needs the heal source per poll; `potionsUsed` per minute is already on the line).
+- Tests: `go test -p 1 ./internal/bot -run Intake`, `./internal/survival -run LedgerIntake`, `./internal/watch -run GlanceIntake`, `./tools/levelsim -run Intake` (series with decreases, heals, level-up and max-life drop, potion; Paladin and Sorceress). Not run live.

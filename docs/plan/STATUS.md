@@ -209,7 +209,13 @@
 | lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
-| p17posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/bodies/seq-ias-body.md` | - |
+| overlayfix | proposed | - | `internal/watch/web/overlay.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/panels/zone-map`<br>`internal/watch/testdata/overlay_dom.mjs`<br>`internal/watch/resetui_test.go`<br>`internal/watch/http_view.go`<br>`tools/uishots.sh`<br>`tools/uishots`<br>`docs/ui-overlays.md` | - |
+| resetinstant | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`internal/watch/web/reset.css`<br>`internal/watch/testdata/reset`<br>`docs/reset.md`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/state.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_phone.go`<br>`tools/uishots/fit.go` | - |
+| idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
+| intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
+| dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
+| viewerfps | proposed | - | `internal/watch/video.go`<br>`internal/watch/videofps_test.go`<br>`internal/watch/web/mjpeg.js`<br>`internal/watch/web/panels/video`<br>`docs/probes/viewer-fps-2026-11-15.md`<br>`internal/watch/glance.go`<br>`internal/watch/videoresume_test.go`<br>`internal/watch/testdata/video_panel.js`<br>`docs/knobs.md` | - |
+| friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -253,14 +259,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- fb4b33670 11-15 22:43 `Merge agent/p17posted: Merge branch 'main' into p17posted` (p17posted)
-- 4ca827ea0 11-15 22:42 `Merge agent/farmloopon2: Merge branch 'main' into farmloopon` (farmloopon2)
-- c55c2bcba 11-15 22:40 `Merge branch 'main' into p17posted` (-)
-- 72423887c 11-15 22:40 `Merge branch 'main' into farmloopon` (-)
-- f5f948090 11-15 21:51 `Merge agent/lootwire1: Merge branch 'main' into lootwireL4` (lootwire1)
-- d88e5bf55 11-15 21:50 `Merge branch 'main' into lootwireL4` (-)
-- 81c197064 11-15 21:43 `Merge agent/farmloopon: Merge branch 'main' into farmloopon` (farmloopon)
-- 2c4dd9336 11-15 21:43 `Merge branch 'main' into farmloopon` (-)
-- 6385d9b1a 11-15 21:41 `Merge agent/verifyp17: Merge branch 'main' into TASK-519` (verifyp17)
-- 5fca901bd 11-15 21:40 `Merge branch 'main' into TASK-519` (-)
+- 81cb2fefb 11-16 00:24 `Merge agent/overlayfix: Merge branch 'main' into TASK-526` (overlayfix)
+- 32874d3b8 11-16 00:23 `Merge branch 'main' into TASK-526` (-)
+- 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
+- 79bfaf3fa 11-16 00:11 `Merge branch 'main' into viewerfps` (-)
+- 6d51a62b0 11-16 00:05 `Merge agent/friendfb: Merge branch 'main' into TASK-537` (friendfb)
+- 66d410786 11-16 00:03 `Merge origin/main into agent/viewerfps (glance: keep stream and intake)` (-)
+- 3b4eec79b 11-16 00:03 `Merge branch 'main' into TASK-537` (-)
+- 419058708 11-15 23:48 `Merge agent/resetinstant: Merge branch 'main' into 529` (resetinstant)
+- 08f81fd90 11-15 23:47 `Merge branch 'main' into 529` (-)
+- b064994f1 11-15 23:40 `Merge agent/sandbox2: Merge branch 'main' into sandbox2` (sandbox2)
 <!-- statusgen:end -->

@@ -43,6 +43,18 @@ type GlanceView struct {
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
+	// Stream is the server side of the game picture (rates since the last read); absent without -watch-video. A friend can
+	// screenshot it next to the page's own fps line.
+	Stream *StreamStats `json:"stream,omitempty"`
+	// Intake is the observed damage intake (docs/survival/ledger.md "Observed intake"); absent while no source is bound or
+	// before the first minute line. Additive: the cockpit turns it into light, moderate or heavy later.
+	Intake *GlanceIntake `json:"intake,omitempty"`
+}
+
+// GlanceIntake is the life lost per minute averaged over Window minute lines.
+type GlanceIntake struct {
+	LifeLostPerMin float64 `json:"lifeLostPerMin"`
+	Window         int     `json:"window"`
 }
 
 // GlanceSentence is the line of the band: a state chip (Word), the Place, and the Reason, with the popover's content.
@@ -141,9 +153,10 @@ type GlanceSources struct {
 	Gear     func() (GlanceLight, bool)
 	Merc     func() (GlanceLight, bool)
 	Supplies func() (GlanceLight, bool)
-	Survival func() json.RawMessage            // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
-	Voice    func() string                     // the hero's latest voice line
-	Paused   func() (paused bool, text string) // a pause the player asked for (card B1)
+	Intake   func() (perMin float64, window int, ok bool) // observed life lost per minute (bot.Runner.Intake)
+	Survival func() json.RawMessage                       // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
+	Voice    func() string                                // the hero's latest voice line
+	Paused   func() (paused bool, text string)            // a pause the player asked for (card B1)
 	// Resetting is a Reset the player pressed that has not finished (docs/reset.md); the band says Resetting with the text.
 	Resetting func() (on bool, text string)
 }
@@ -225,6 +238,11 @@ func (h *Hub) Glance() GlanceView {
 	if src.Survival != nil {
 		v.Survival = h.glanceSurvival(&v.Sentence, hv, src.Survival())
 	}
+	if src.Intake != nil {
+		if pm, w, ok := src.Intake(); ok {
+			v.Intake = &GlanceIntake{LifeLostPerMin: float64(int(pm*10+0.5)) / 10, Window: w}
+		}
+	}
 	for _, n := range h.questionNeeds() { // a question that waits for the player comes first: it fades
 		if len(v.Needs) < glanceMaxNeed {
 			v.Needs = append(v.Needs, cleanNeed(n))
@@ -236,6 +254,10 @@ func (h *Hub) Glance() GlanceView {
 				v.Needs = append(v.Needs, cleanNeed(n))
 			}
 		}
+	}
+	if h.video != nil {
+		st := h.video.Stats()
+		v.Stream = &st
 	}
 	v.Health = glanceHealth(hv, src)
 	v.Progress = h.glanceProgress(hv)
