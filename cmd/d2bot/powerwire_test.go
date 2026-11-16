@@ -43,3 +43,10 @@ func TestWireSurvivalWithoutTables(t *testing.T) {
 		t.Error("no tables must give no hooks")
 	}
 }
+
+func TestWireSurvivalModelWithoutTables(t *testing.T) {
+	c, o, d, b := wireSurvivalModel(nil, t.TempDir()+"/ledger.json")
+	if c != nil || o != nil || d != nil || b != nil {
+		t.Error("no tables must give no hooks: the planner then keeps the plan tables")
+	}
+}
