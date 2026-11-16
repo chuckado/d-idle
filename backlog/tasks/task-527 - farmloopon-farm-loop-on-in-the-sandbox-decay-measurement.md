@@ -1,10 +1,11 @@
 ---
 id: TASK-527
 title: 'farmloopon: farm loop on in the sandbox, decay measurement'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:26:00Z'
+updated_date: '2026-11-16T02:50:00Z'
 labels:
   - docs
   - chore

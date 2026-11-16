@@ -206,7 +206,6 @@
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
 | verifyp17 | proposed | - | `docs/upstream/verifier-p17-2026-11-15.md` | - |
 | charselect | proposed | - | `internal/charsel`<br>`docs/charselect.md`<br>`internal/watch/charactersapi.go`<br>`internal/watch/charactersapi_test.go`<br>`internal/watch/testdata/characters`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go` | - |
-| farmloopon | proposed | - | `docs/probes/farmloop-on-20261115.md`<br>`docs/probes/farmloop-measure.md`<br>`tools/farmloop/measure.py` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |

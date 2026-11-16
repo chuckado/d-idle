@@ -298,8 +298,6 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
-docs/probes/farmloop-measure.md  credit-runner  farmloopon
-docs/probes/farmloop-on-20261115.md  credit-runner  farmloopon
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
@@ -930,7 +928,6 @@ tools/emu/pp_*  credit-runner  prpost2
 tools/emu/pp_*  credit-runner  prprep
 tools/emu/zd_*  credit-runner  palskill-matrix
 tools/emu/zd_*  credit-runner  zealdiff
-tools/farmloop/measure.py  credit-runner  farmloopon
 tools/firsthour.sh  live-agent  firsthour
 tools/friendpack/README.txt  credit-runner  cut012
 tools/friendpack/build.sh  credit-runner  buildhosts3
