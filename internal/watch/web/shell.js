@@ -16,6 +16,8 @@ const MAX_FAILS = 5;      // 404 or 401 this often in a row: the route is not mo
 
 const html = document.documentElement;
 const qs = new URLSearchParams(location.search);
+const CHARS_URL = '/watch/characters' + (/^(dark|light|auto)$/.test(qs.get('theme') || '') ? '?theme=' + qs.get('theme') : '');
+if (qs.get('view') === 'characters') location.replace(CHARS_URL); // /watch?view=characters is the Characters page (docs/charselect-ui.md)
 
 function el(tag, cls, text) {
   const e = document.createElement(tag);
@@ -812,6 +814,11 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
+  const cb = el('a', 'd-btn', 'Characters'); // a link: it opens the Characters page (docs/charselect-ui.md)
+  cb.dataset.size = 'sm'; cb.dataset.variant = 'ghost'; cb.dataset.key = 'characters-open';
+  cb.href = CHARS_URL;
+  cb.setAttribute('aria-label', 'Characters: switch, create or delete a hero');
+  pop.appendChild(cb);
   // the band drops its Return screen link on a narrow window (components.css): the menu always has it
   if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; pop.appendChild(menuReturn); }
   const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });

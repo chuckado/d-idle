@@ -749,6 +749,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
+		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
 	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {

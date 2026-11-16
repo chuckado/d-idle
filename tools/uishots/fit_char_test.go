@@ -156,6 +156,15 @@ func TestFitPhoneRules(t *testing.T) {
 		if strings.HasPrefix(name, "ov-") {
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "chars-"); ok { // the Characters page: charsdefect-NAME (fixtures_chars.go)
+			if !strings.Contains(string(sh), "\ncharsdefect-"+rest+" ") {
+				t.Errorf("no fit page charsdefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-charsdefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for charsdefect-%s", rest)
+			}
+			continue
+		}
 		if !strings.Contains(string(sh), "\nphonedefect-"+name+" ") {
 			t.Errorf("no fit page phonedefect-%s", name)
 		}

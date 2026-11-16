@@ -97,6 +97,7 @@ export function moreItems(rows) {
     { intent: 'revive_merc', label: 'Revive mercenary' },
     { intent: 'farm_gold', label: farming ? 'Stop farming gold' : 'Farm gold', args: { on: !farming } },
     { intent: 'reset', label: 'Reset (leave the game and rejoin)', ask: true },
+    { intent: 'characters', label: 'Characters (switch, create, delete)', go: '/watch/characters' }, // its own page (docs/charselect-ui.md)
   ];
 }
 
@@ -140,7 +141,8 @@ export function mount(root, ctx) {
       b.type = 'button'; b.dataset.key = 'more-' + m.intent;
       b.addEventListener('click', () => {
         closeSheet();
-        if (m.ask) document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: b } })); // its own route and confirm sheet (resetui.js)
+        if (m.go) location.assign(m.go + (/^(dark|light|auto)$/.test(new URLSearchParams(location.search).get('theme') || '') ? '?theme=' + new URLSearchParams(location.search).get('theme') : ''));
+        else if (m.ask) document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: b } })); // its own route and confirm sheet (resetui.js)
         else sendCommand(ctx, m.intent, m.args);
       });
       items.appendChild(b);

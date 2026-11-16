@@ -75,6 +75,8 @@ func serve(addr, class string) error {
 	})
 	m.HandleFunc(watch.CommandsRoute, commandsFixture(class))
 	m.HandleFunc(watch.ResetRoute, resetFixture)
+	m.HandleFunc(watch.CharactersRoute, charsFixture)
+	m.Handle(watch.CharactersRulesRoute, charsRules)
 	m.HandleFunc(watch.PauseRoute, pauseFixture)
 	m.HandleFunc(watch.SupportRoute, supportFixture)
 	m.HandleFunc(watch.SupportBundleRoute, supportFixture)
