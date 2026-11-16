@@ -608,3 +608,30 @@ func TestParamsCalibration(t *testing.T) {
 		}
 	}
 }
+
+// Observed intake per zone: decayed life lost over decayed stay seconds; no data is 0; the row round-trips (additive keys).
+func TestLedgerIntake(t *testing.T) {
+	l := NewLedger(params(t))
+	k := ZoneKey{Area: 2, Diff: "normal"}
+	if pm, sec := l.IntakePerMin(k); pm != 0 || sec != 0 {
+		t.Fatalf("empty ledger: %v %v", pm, sec)
+	}
+	l.Observe(k, t0, Event{Kind: EvIntake, LifeLost: 120, Seconds: 600}, 100)
+	if pm, sec := l.IntakePerMin(k); pm < 11.9 || pm > 12.1 || sec != 600 {
+		t.Errorf("per min %v over %v s, want 12", pm, sec)
+	}
+	if s := l.peek(k); s.Seconds != 0 || s.Taken != 0 {
+		t.Error("intake must not touch the fight sums")
+	}
+	path := filepath.Join(t.TempDir(), "ledger.json")
+	if err := l.Save(path); err != nil {
+		t.Fatal(err)
+	}
+	l2, _, err := LoadLedger(path, params(t))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if pm, _ := l2.IntakePerMin(k); pm < 11.9 || pm > 12.1 {
+		t.Errorf("reloaded per min %v", pm)
+	}
+}

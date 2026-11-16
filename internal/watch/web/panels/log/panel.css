@@ -11,6 +11,12 @@
   [data-panel="log"] .row .txt { font-size: var(--d-fs-1); overflow-wrap: anywhere; }
   [data-panel="log"] .row[data-level="warn"] .txt { color: var(--d-warn); }
   [data-panel="log"] .row[data-level="alarm"] .txt { color: var(--d-bad); }
+  [data-panel="log"] .row[data-quality] .txt { color: var(--d-q-normal); font-weight: 600; }
+  [data-panel="log"] .row[data-quality="magic"] .txt { color: var(--d-q-magic); }
+  [data-panel="log"] .row[data-quality="rare"] .txt { color: var(--d-q-rare); }
+  [data-panel="log"] .row[data-quality="set"] .txt { color: var(--d-q-set); }
+  [data-panel="log"] .row[data-quality="unique"] .txt { color: var(--d-q-unique); }
+  [data-panel="log"] .row[data-quality="crafted"] .txt { color: var(--d-q-crafted); }
   [data-panel="log"] .note { margin: 0; color: var(--d-text-2); font-size: var(--d-fs-1); flex: none; }
   [data-panel="log"] .note:empty { display: none; }
 }
