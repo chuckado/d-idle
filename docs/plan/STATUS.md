@@ -259,14 +259,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d3d33e6d4 11-16 00:50 `Merge agent/farmloop2: Merge branch 'main' into farmloop2` (farmloop2)
+- 2ebf453c7 11-16 00:49 `Merge branch 'main' into farmloop2` (-)
 - 856701761 11-16 00:40 `Merge agent/verifyp18: Merge branch 'main' into TASK-528` (verifyp18)
 - bb198e845 11-16 00:39 `Merge branch 'main' into TASK-528` (-)
 - 999100bfe 11-16 00:31 `Merge agent/videofeed: Merge branch 'main' into videofeed` (videofeed)
 - 5ca87e732 11-16 00:30 `Merge branch 'main' into videofeed` (-)
 - 81cb2fefb 11-16 00:24 `Merge agent/overlayfix: Merge branch 'main' into TASK-526` (overlayfix)
 - 32874d3b8 11-16 00:23 `Merge branch 'main' into TASK-526` (-)
+- ddf2fbf5c 11-16 00:16 `Merge origin/main into farmloop2: one startFreshGame guard (debounce, busy, cap, caller log)` (farmloop2)
 - 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
-- 79bfaf3fa 11-16 00:11 `Merge branch 'main' into viewerfps` (-)
-- 6d51a62b0 11-16 00:05 `Merge agent/friendfb: Merge branch 'main' into TASK-537` (friendfb)
-- 66d410786 11-16 00:03 `Merge origin/main into agent/viewerfps (glance: keep stream and intake)` (-)
 <!-- statusgen:end -->
