@@ -69,9 +69,26 @@ func (a *PauseAPI) PostHandler(o AnswerOptions) http.Handler {
 			return
 		}
 		if md, ok := d.(PauseModeDesk); ok && b.Freeze != nil {
-			writeJSON(w, 200, md.SetMode(*b.On, b.Freeze))
+			writeJSON(w, 200, pauseAnswer(md.SetMode(*b.On, b.Freeze)))
 			return
 		}
-		writeJSON(w, 200, d.Set(*b.On))
+		writeJSON(w, 200, pauseAnswer(d.Set(*b.On)))
 	})
+}
+
+// pauseAnswer adds the "ok" flag every command route's reply carries: the Orders panel (POST /api/commands relays this
+// reply) reads "ok" to tell an accepted command from a refusal, and a view without it was shown as "could not do that"
+// although the game had frozen (live bug 2026-11-16). ok is false only when the view carries an error; the view's own
+// fields stay as they were.
+func pauseAnswer(v any) any {
+	var m map[string]any
+	if !decode(marshal(v), &m) || m == nil {
+		return v
+	}
+	e, _ := m["error"].(string)
+	m["ok"] = e == ""
+	if e != "" {
+		m["code"] = "pause_refused"
+	}
+	return m
 }

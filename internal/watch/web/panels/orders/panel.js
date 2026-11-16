@@ -30,6 +30,7 @@ const UNDO_MS = 5000;
 // Words of a refusal: the dispatcher's own reply, never a status code.
 export function refusal(j) {
   if (!j) return 'no answer from the hero';
+  if (j.error) return j.code === 'off' ? 'not available on this hero yet' : j.error; // a specific reason is always shown as it is
   if (j.code === 'off') return 'not available on this hero yet';
   if (j.code === 'locked') return j.error || 'not unlocked yet';
   return j.error || 'could not do that';
@@ -82,6 +83,7 @@ export function sendCommand(ctx, intent, args, mode, quiet) {
   // Undo takes back only the new order, so the toast says what Go now cancelled before it
   const gone = REPLACES.includes(intent) && mode !== 'queue' ? replacing() : 0;
   return ctx.post(COMMANDS, body).then((j) => {
+    if (j && !j.error && j.schema === 'watch.pause/1') j = Object.assign({}, j, { ok: true }); // a pause view without the flag is an accepted press
     if (j && j.ok) { toastUndo(ctx, ack(intent, j) + (gone ? '; ' + gone + ' earlier ' + (gone === 1 ? 'order' : 'orders') + ' cancelled' : ''), j.undo); if (ctx.refresh) ctx.refresh(); return j; }
     if (!quiet) ctx.toast('warn', refusal(j));
     return j || { ok: false };
