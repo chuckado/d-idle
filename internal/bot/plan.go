@@ -483,6 +483,10 @@ type PickOptions struct {
 	// and Cave Level 1 were open). A negative value means the estimate is unknown (no monster level for the area): such a
 	// step ranks after every known one, and when no step is known the plan order stands. Ties go to the later step.
 	XP func(Step) float64
+	// Model, if set, is the survival margin model (bot.zoneModel 1, docs/survival/zonemodel.md). It is shown the eligible
+	// steps and names the area to farm (ok), asks for a fresh game (fresh: Pick reports nothing eligible, the caller
+	// takes the guarded fresh game) or declines (neither: the plan rule below decides, so an error never stalls).
+	Model func(eligible []Step) (area int, fresh, ok bool)
 }
 
 // Pick chooses the area to level in for difficulty diff at character level. Rule: among steps (in progression order)
@@ -490,6 +494,23 @@ type PickOptions struct {
 // (the most advanced area that is still worth it); if the character is past every window, the last eligible step; if
 // below every entry level, the first eligible step. ok is false when nothing is eligible.
 func (p *Plan) Pick(diff string, level int, o PickOptions) (Step, bool) {
+	if o.Model != nil {
+		model := o.Model
+		o.Model = nil
+		if el := p.eligible(diff, level, o, false); len(el) > 0 {
+			area, fresh, ok := model(el)
+			if fresh {
+				return Step{}, false
+			}
+			if ok {
+				for i := len(el) - 1; i >= 0; i-- { // the most advanced window of the area
+					if el[i].Area == area {
+						return el[i], true
+					}
+				}
+			}
+		}
+	}
 	xpFallback := false // the preferred step is excluded: the fallback runs, thin-kit steps stay out of it
 	if o.XP != nil && len(o.Exclude) > 0 {
 		free := o
@@ -501,19 +522,7 @@ func (p *Plan) Pick(diff string, level int, o PickOptions) (Step, bool) {
 			}
 		}
 	}
-	var eligible []Step
-	for _, s := range p.stepsFor(diff, o.Class) {
-		if p.IsTown(s.Area) || o.Exclude[s.Area] {
-			continue
-		}
-		if (s.KitLvl > level || xpFallback && s.FallbackKit) && !o.FullKit {
-			continue
-		}
-		if o.Acts != nil && !o.Acts[p.Act(s.Area)] {
-			continue
-		}
-		eligible = append(eligible, s)
-	}
+	eligible := p.eligible(diff, level, o, xpFallback)
 	if len(eligible) == 0 {
 		return Step{}, false
 	}
@@ -551,6 +560,25 @@ func (p *Plan) Pick(diff string, level int, o PickOptions) (Step, bool) {
 		}
 	}
 	return eligible[0], true
+}
+
+// eligible lists the steps of the class's plan that the character may be sent to: not a town, not excluded, kit and
+// act allowed (the first filter of Pick).
+func (p *Plan) eligible(diff string, level int, o PickOptions, xpFallback bool) []Step {
+	var out []Step
+	for _, s := range p.stepsFor(diff, o.Class) {
+		if p.IsTown(s.Area) || o.Exclude[s.Area] {
+			continue
+		}
+		if (s.KitLvl > level || xpFallback && s.FallbackKit) && !o.FullKit {
+			continue
+		}
+		if o.Acts != nil && !o.Acts[p.Act(s.Area)] {
+			continue
+		}
+		out = append(out, s)
+	}
+	return out
 }
 
 // pickByXP is the fallback of Pick: among the eligible steps whose window holds the level (else all that the level may

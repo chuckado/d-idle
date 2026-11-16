@@ -289,7 +289,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
 	}
 	deps.ZoneShadow = wirePower(db)                                   // shadow margin line next to the planner line, log only (survival slice S-B)
-	deps.ZoneChoice, deps.ZoneObserve = wireSurvival(db, ip.Ledger()) // shadow zone choice and ledger (slice S-C), log and API only
+	deps.ZoneChoice, deps.ZoneObserve, deps.ZoneDecide, deps.BossMargin = wireSurvivalModel(db, ip.Ledger()) // shadow choice and ledger (S-C); the decision hooks act only with bot.zoneModel 1 (S-D)
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter

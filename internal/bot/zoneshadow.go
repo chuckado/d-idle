@@ -51,7 +51,7 @@ func (r *Runner) zoneShadow(s *d2.Snapshot, area int, diff string) {
 			r.e.Log.Info(line)
 		}
 	}
-	if r.d.ZoneChoice == nil {
+	if r.d.ZoneChoice == nil || r.zoneModelOn() { // the model logs its own `zone choice:` line when it decides
 		return
 	}
 	seen := map[int]bool{}
