@@ -208,6 +208,9 @@ func (h *Hub) Capability(o Options) http.Handler {
 			http.Error(w, "unauthorized", http.StatusUnauthorized)
 			return
 		}
+		if o.Touch != nil {
+			o.Touch() // a probe keeps the ring awake, so the first frame can arrive
+		}
 		cur, _ := h.latest()
 		if cur == nil {
 			http.Error(w, "no frame yet", http.StatusServiceUnavailable)

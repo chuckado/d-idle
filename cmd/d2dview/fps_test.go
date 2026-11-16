@@ -7,11 +7,15 @@ import (
 	"image/color"
 	"image/jpeg"
 	"image/png"
+	"net/http"
+	"net/http/httptest"
 	"os"
 	"path/filepath"
 	"strconv"
 	"testing"
 	"time"
+
+	"d2lod-bot/internal/watch/palfeed"
 )
 
 // testFrame is a busy 800x600 picture (gradients and noise-like stripes), opaque like d2d's frames.
@@ -329,5 +333,46 @@ func TestHideCursorVerb(t *testing.T) {
 	fr.cursorOld = false
 	if _, err := fr.sample(ctx); err != nil {
 		t.Logf("sample: %v (the fake has no picture; the cursor verb must not be the cause)", err)
+	}
+}
+
+// The lossless feed gets every ring frame; the JPEG is encoded only while an MJPEG viewer touched the frames lately.
+func TestGrabRingFeedsPalHubAndSkipsJPEGWithoutMJPEGViewer(t *testing.T) {
+	mux, _, _, view := rig(t)
+	dir := t.TempDir()
+	fr, err := NewFrames(view, mux, dir, 25)
+	if err != nil {
+		t.Fatal(err)
+	}
+	fr.Feed = filepath.Join(dir, "frames.ring")
+	fr.Pal = palfeed.NewHub()
+	w, err := os.OpenFile(fr.Feed, os.O_RDWR|os.O_CREATE, 0o600)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer w.Close()
+	fr.TouchPal() // only the lossless feed has a viewer
+	if !fr.watching() {
+		t.Fatal("a pal viewer must keep the sampler awake")
+	}
+	writeRing(w, 64, 48, testFrame(64, 48), 1, 40)
+	if _, fresh, err := fr.grabRing(); !fresh || err != nil {
+		t.Fatalf("fresh=%v err=%v", fresh, err)
+	}
+	if fr.Current().Data != nil {
+		t.Fatal("JPEG encoded with no MJPEG viewer")
+	}
+	srv := httptest.NewServer(fr.Pal.Capability(palfeed.Options{Auth: func(*http.Request) bool { return true }}))
+	defer srv.Close()
+	resp, err := http.Get(srv.URL)
+	if err != nil || resp.StatusCode != 200 {
+		t.Fatalf("capability %v %v", resp, err)
+	}
+	resp.Body.Close()
+	fr.Touch() // an MJPEG viewer joins
+	writeRing(w, 64, 48, testFrame(64, 48), 2, 80)
+	fr.grabRing()
+	if fr.Current().Data == nil {
+		t.Fatal("no JPEG for the MJPEG viewer")
 	}
 }

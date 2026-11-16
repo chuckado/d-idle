@@ -86,8 +86,8 @@
   }
 
   // detect asks the host whether the feed exists; anything but a 200 with paletteFeed:true keeps the MJPEG img.
-  function detect(fetchFn, base, headers) {
-    return fetchFn(base + '/api/palfeed', { headers: headers || {}, cache: 'no-store' })
+  function detect(fetchFn, base, headers, query) {
+    return fetchFn(base + '/api/palfeed' + (query || ''), { headers: headers || {}, cache: 'no-store' })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { return j && j.paletteFeed === true && j.version === 1 ? j : null; })
       .catch(function () { return null; });
