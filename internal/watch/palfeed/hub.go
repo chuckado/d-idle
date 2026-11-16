@@ -65,6 +65,10 @@ func (h *Hub) Stream(o Options) http.Handler {
 		w.Header().Set("Content-Type", "application/x-palfeed")
 		w.Header().Set("Cache-Control", "no-store")
 		enc := &Encoder{Tile: o.Tile}
+		fps := o.MaxFPS
+		if v, err := strconv.Atoi(r.URL.Query().Get("fps")); err == nil && v >= 1 && v < fps { // the page's Low rate toggle
+			fps = v
+		}
 		var base *Frame
 		deltas := 0
 		var next time.Time
@@ -106,7 +110,7 @@ func (h *Hub) Stream(o Options) http.Handler {
 			fl.Flush()
 			base = cur
 			deltas++
-			next = time.Now().Add(time.Second / time.Duration(o.MaxFPS))
+			next = time.Now().Add(time.Second / time.Duration(fps))
 		}
 	})
 }

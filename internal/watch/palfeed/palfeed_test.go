@@ -9,6 +9,7 @@ import (
 	"math/rand"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 	"time"
 )
@@ -202,6 +203,41 @@ func TestCapability(t *testing.T) {
 		(&Hub{}).Capability(Options{}).ServeHTTP(w, httptest.NewRequest("GET", "/", nil))
 		if w.Code != 401 {
 			t.Fatalf("nil Auth must refuse, got %d", w.Code)
+		}
+	}
+}
+
+// TestFixtures keeps testdata/ (read by tools/videofeed/palfeed.test.js, the JS decoder's byte-compat test) in step
+// with the encoder: it fails if the files differ, and rewrites them with D2FEED_WRITE_FIXTURES=1.
+func TestFixtures(t *testing.T) {
+	a := synth(96, 70, 11, 1)
+	b := synth(96, 70, 11, 2)
+	b.Pix = append([]byte(nil), a.Pix...)
+	for y := 20; y < 41; y++ {
+		for x := 33; x < 70; x++ {
+			b.Pix[(y*96+x)*4] ^= 0x3c
+		}
+	}
+	enc := &Encoder{Tile: 16}
+	files := map[string][]byte{
+		"a.rgba": a.Pix, "b.rgba": b.Pix,
+		"key.pf":   mustEnc(t, enc, nil, &a),
+		"delta.pf": mustEnc(t, enc, &a, &b),
+	}
+	for name, want := range files {
+		p := "testdata/" + name
+		if os.Getenv("D2FEED_WRITE_FIXTURES") == "1" {
+			if err := os.MkdirAll("testdata", 0o755); err != nil {
+				t.Fatal(err)
+			}
+			if err := os.WriteFile(p, want, 0o644); err != nil {
+				t.Fatal(err)
+			}
+			continue
+		}
+		got, err := os.ReadFile(p)
+		if err != nil || !bytes.Equal(got, want) {
+			t.Errorf("%s is stale or missing (%v): run D2FEED_WRITE_FIXTURES=1 go test ./internal/watch/palfeed", p, err)
 		}
 	}
 }
