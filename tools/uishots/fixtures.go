@@ -125,7 +125,7 @@ func mountFixturePanels(h http.Handler) http.Handler {
 		switch {
 		case p == "/__fit":
 			fitHarness(w, r)
-		case (p == "/watch" || p == "/watch/inventory") && r.URL.Query().Get("fitframe") == "1":
+		case (p == "/watch" || p == "/watch/inventory" || p == "/watch/characters") && r.URL.Query().Get("fitframe") == "1":
 			framedPage(h, w, r)
 		case strings.HasPrefix(p, "/__fit/defect-"):
 			if !serveDefectCSS(w, r) && !serveDefectJS(w, r) {

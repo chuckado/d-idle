@@ -19,7 +19,7 @@ func (c *Compiled) Preview(samples []Sample) (counts []RuleCount, decisions map[
 	decisions = map[uint32]Decision{}
 	idx := map[string]int{}
 	var order []string
-	for _, sc := range []string{PlaceGround, PlacePack, PlaceStash} {
+	for _, sc := range []string{PlaceGround, PlacePack, PlaceStash, PlaceSell} {
 		for _, r := range c.rules[sc] {
 			if _, ok := idx[r.ID]; !ok {
 				idx[r.ID] = len(order)
@@ -114,3 +114,41 @@ func sameCond(a, b *Cond) bool {
 	y, _ := jsonOf(*b)
 	return x == y
 }
+
+// PreviewSchema is the version of the answer of POST /api/lootrules/preview.
+const PreviewSchema = "watch.lootpreview/1"
+
+// PreviewAct is one decision with its rule and reason in plain words.
+type PreviewAct struct {
+	Action string `json:"action"` // pack: keep stash sell drop identify ask keepmerc ignore; sell visit: sell or keep
+	Rule   string `json:"rule"`
+	Why    string `json:"why"`
+}
+
+// PreviewRow is one item of the dry run.
+type PreviewRow struct {
+	ID      uint32      `json:"id"`
+	Name    string      `json:"name"`
+	Place   string      `json:"place"`          // pack or stash
+	Tidy    PreviewAct  `json:"tidy"`           // what the tidy chore would do with the candidate set
+	Sell    *PreviewAct `json:"sell,omitempty"` // what the sell chore would do (pack items only)
+	WasTidy string      `json:"wasTidy"`        // the action under the active set
+	WasSell string      `json:"wasSell,omitempty"`
+	Changed bool        `json:"changed"`
+}
+
+// PreviewDoc is the dry run: what a rule set would do to the pack and stash as they are now. It decides and counts; it never
+// acts, and it does not know the player's marks (a marked item keeps its mark whatever the rules say).
+type PreviewDoc struct {
+	Schema    string         `json:"schema"`
+	Name      string         `json:"name"`
+	Items     []PreviewRow   `json:"items"`
+	Totals    map[string]int `json:"totals"`  // by outcome: sold, stashed, dropped, kept
+	Changed   int            `json:"changed"` // items whose answer differs from the active set
+	Capped    bool           `json:"capped,omitempty"`
+	Note      string         `json:"note,omitempty"`
+	AsOfItems int            `json:"asOfItems"` // items looked at
+}
+
+// PreviewCap is the most rows a preview returns.
+const PreviewCap = 150

@@ -39,8 +39,10 @@ func TestStoreDefaultsToStarterAndSavesWithBackup(t *testing.T) {
 	if err != nil || rs.Seq != 2 || seen != rs {
 		t.Fatalf("put: %v %+v", err, rs)
 	}
-	if _, err := os.Stat(p + ".bak"); err == nil {
-		t.Error("first save has nothing to back up")
+	if b, err := os.ReadFile(p + ".bak"); err != nil {
+		t.Error("the first save keeps the preset it replaced, so Undo can go back to it")
+	} else if old, err := Parse(b); err != nil || old.Seq != 1 || old.Rules[0].Off {
+		t.Errorf("first backup is not the starting set: %v", err)
 	}
 	in2 := *rs
 	in2.Rules = append([]Rule(nil), rs.Rules...)

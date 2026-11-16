@@ -236,6 +236,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [capabilities.md](capabilities.md): What the current build can and cannot do (status: refreshed 2026-11-01 (card capdocs, docs only; first written by card readmedocs; nothing here was run...)
 - [champions.md](champions.md): Champions are elite, not bosses (status: the "G1/G2 check" obligation for shared code is retired (ADR 0013, amended by ADR 0015); verify on d2d...)
 - [chargedbolt.md](chargedbolt.md): Charged Bolt per-bolt damage on d2d (card chargedbolt, 2026-11-04) (status: current. Evidence: docs/probes/sksmoke/2026-11-04-SK-cb.txt, .json, -raw.txt. Tag: compared to table on...)
+- [charselect-ui.md](charselect-ui.md): Character Select, Phase B: the Characters page (status: BUILT offline (card charui, 2026-11-15). Backend and routes: docs/charselect.md (card charselect). Tags: V...)
 - [charselect.md](charselect.md): Character Select: list, create, switch, delete (archive first), restore (status: Phase A BUILT offline (card charselect, 2026-11-15): backend and routes with fakes and temp dirs; no UI,...)
 - [cheats.md](cheats.md): Cheats: logged test cheats (agent CHEAT)
 - [classchores.md](classchores.md): Per-class chore defaults (TASK-146, card classchores) (status: built and tested offline; not run against a live bot. Tags: V = proven by a test in this tree, EXP =...)
@@ -656,6 +657,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
+- [seq-ias-followup-body.md](upstream/bodies/seq-ias-followup-body.md): test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
@@ -713,6 +715,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p03c-2026-11-15.md](upstream/verifier-p03c-2026-11-15.md): Verifier: P03c a knocking hit does not start a knockback in a get-hit (2026-11-15) (status: current, 2026-11-15 (card verifyp03c2, TASK-513, Opus, singly). All runs finished before this report;...)
 - [verifier-p04-2026-11-15.md](upstream/verifier-p04-2026-11-15.md): Verifier: P04 a hit interrupts a swing or cast whose skill allows it (2026-11-15) (status: current, 2026-11-15 (card verifyp04, TASK-500, Opus, singly). All runs finished before this report;...)
 - [verifier-p06-2026-11-15.md](upstream/verifier-p06-2026-11-15.md): Verifier: P06 a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06, TASK-494, Opus, singly). Nothing posted, nothing pushed to the fork....)
+- [verifier-p13-2026-11-16.md](upstream/verifier-p13-2026-11-16.md): Verifier: P13, a refused Teleport costs no mana (2026-11-16) (status: current, 2026-11-16 (card verifyp13, TASK-551, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier-p17-2026-11-15.md](upstream/verifier-p17-2026-11-15.md): Verifier: P17, a player's attack sequence runs 30 points slower (2026-11-15) (status: current, 2026-11-15 (card verifyp17, TASK-519, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier-p18-2026-11-15.md](upstream/verifier-p18-2026-11-15.md): Verifier: P18, Smite's range takes stat 111 and a point of width (2026-11-15) (status: current, 2026-11-16 (card verifyp18, TASK-528, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
@@ -972,6 +975,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)
 - [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
+- [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
