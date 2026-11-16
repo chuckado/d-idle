@@ -791,9 +791,9 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
-  const rb = ui.btn('Reset...', { size: 'sm', variant: 'ghost' });
+  const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
-  rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
+  rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
   pop.appendChild(rb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
@@ -808,7 +808,12 @@ function setupMenu(sel) {
     pop.appendChild(b);
   }
   wrap.append(more, pop);
-  nav.appendChild(wrap);
+  // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
+  const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
+  rbtn.id = 'btn-reset';
+  rbtn.classList.add('d-reset-btn');
+  rbtn.dataset.key = 'reset-header';
+  nav.append(rbtn, wrap);
 }
 function choosePreset(name) {
   pref(PREF, name); pref(PICK, '1');
@@ -951,7 +956,7 @@ async function start() {
   }
   Object.values(bands).forEach(syncBand);
   sched.start();
-  mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+  mountReset({ ui, toast, doc: document, button: document.getElementById('btn-reset'), later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
