@@ -32,18 +32,19 @@ const (
 var codeRx = regexp.MustCompile(`^[A-Z2-9]{8}$`)
 
 type config struct {
-	dir        string        // inbox, NOT served by any web server
-	tokensFile string        // one line per token: <sha256 hex> [label]; delete the line to revoke
-	quota      int64         // total bytes in dir; the oldest files go first
-	maxFiles   int           // and at most this many files
-	tokenRate  int           // uploads per hour per token
-	ipRate     int           // requests per hour per client address
-	failRate   int           // failed authentications per hour per client address
-	trustProxy bool          // the client address is the tunnel's CF-Connecting-IP; a request without a valid one is refused
-	globalRate int           // all requests per hour together (the cap that holds when per-address keys are forged)
-	minAge     time.Duration // a bundle younger than this is never purged; a full inbox then refuses uploads (507)
-	maxBusy    int           // uploads read and stored at once
-	now        func() time.Time
+	dir         string        // inbox, NOT served by any web server
+	tokensFile  string        // one line per token: <sha256 hex> [label]; delete the line to revoke
+	quota       int64         // total bytes in dir; the oldest files go first
+	maxFiles    int           // and at most this many files
+	tokenRate   int           // uploads per hour per token
+	ipRate      int           // requests per hour per client address
+	failRate    int           // failed authentications per hour per client address
+	trustProxy  bool          // the client address is the tunnel's CF-Connecting-IP; a request without a valid one is refused
+	proxySecret string        // with trustProxy: the header X-Support-Proxy must carry it, or CF-Connecting-IP is not believed
+	globalRate  int           // all requests per hour together (the cap that holds when per-address keys are forged)
+	minAge      time.Duration // a bundle younger than this is never purged; a full inbox then refuses uploads (507)
+	maxBusy     int           // uploads read and stored at once
+	now         func() time.Time
 }
 
 type server struct {
@@ -143,6 +144,10 @@ func (s *server) tokenOK(tok string) (string, bool) {
 // valid one did not come through the tunnel and is refused (false), never counted under the proxy's own address.
 func (s *server) clientIP(r *http.Request) (string, bool) {
 	if s.cfg.trustProxy {
+		// the header is believed only when the request carries the secret nginx adds after checking the tunnel's own
+		if sec := s.cfg.proxySecret; sec == "" || subtle.ConstantTimeCompare([]byte(r.Header.Get("X-Support-Proxy")), []byte(sec)) != 1 {
+			return "", false
+		}
 		ip := net.ParseIP(strings.TrimSpace(r.Header.Get("CF-Connecting-IP")))
 		if ip == nil {
 			return "", false
@@ -181,6 +186,24 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		reply(w, http.StatusBadRequest, map[string]string{"error": "bad request"})
 		return
 	}
+	// authenticate first: an unauthenticated request only ever spends its own source's small fail budget, never the
+	// global or the per-token budget, so a flood from outside cannot reduce what a valid token may do
+	s.loadTokens()
+	bearer := ""
+	if h := r.Header.Get("Authorization"); strings.HasPrefix(h, "Bearer ") {
+		bearer = strings.TrimSpace(strings.TrimPrefix(h, "Bearer"))
+	}
+	th, authed := s.tokenOK(bearer)
+	if !authed {
+		over := !s.allow(s.failN, ip, s.cfg.failRate)
+		s.mu.Unlock()
+		if over {
+			reply(w, http.StatusTooManyRequests, map[string]string{"error": "rate limit"})
+			return
+		}
+		reply(w, http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
+		return
+	}
 	if gl := s.cfg.globalRate; gl > 0 {
 		now := s.cfg.now()
 		if now.Sub(s.glob.start) >= time.Hour {
@@ -195,22 +218,6 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	if !s.allow(s.ipN, ip, s.cfg.ipRate) {
 		s.mu.Unlock()
 		reply(w, http.StatusTooManyRequests, map[string]string{"error": "rate limit"})
-		return
-	}
-	s.loadTokens()
-	bearer := strings.TrimSpace(strings.TrimPrefix(r.Header.Get("Authorization"), "Bearer"))
-	if !strings.HasPrefix(r.Header.Get("Authorization"), "Bearer ") {
-		bearer = ""
-	}
-	th, ok := s.tokenOK(bearer)
-	if !ok {
-		over := !s.allow(s.failN, ip, s.cfg.failRate)
-		s.mu.Unlock()
-		if over {
-			reply(w, http.StatusTooManyRequests, map[string]string{"error": "rate limit"})
-			return
-		}
-		reply(w, http.StatusUnauthorized, map[string]string{"error": "unauthorized"})
 		return
 	}
 	if !s.allow(s.tokN, th, s.cfg.tokenRate) {

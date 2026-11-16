@@ -10,4 +10,4 @@ FROM scratch
 COPY --from=build /d2supportrecv /d2supportrecv
 USER 99:100
 EXPOSE 8899
-ENTRYPOINT ["/d2supportrecv", "-listen", ":8899", "-dir", "/data/inbox", "-tokens", "/data/tokens", "-trust-proxy"]
+ENTRYPOINT ["/d2supportrecv", "-listen", ":8899", "-dir", "/data/inbox", "-tokens", "/data/tokens", "-trust-proxy", "-proxy-secret-file", "/data/proxy-secret"]

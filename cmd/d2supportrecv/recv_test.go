@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+const psec = "proxy-secret-0123456789"
 const tok = "a-long-random-upload-token-123456"
 
 func mkZip(t *testing.T, names ...string) []byte {
@@ -219,13 +220,14 @@ func TestQuotaPurgeOldestFirst(t *testing.T) {
 }
 
 func TestProxyAddress(t *testing.T) {
-	s, _ := setup(t, func(c *config) { c.trustProxy = true; c.ipRate = 1 })
+	s, _ := setup(t, func(c *config) { c.trustProxy, c.proxySecret = true, psec; c.ipRate = 1 })
 	z := mkZip(t, "a")
 	mk := func(ip string) *httptest.ResponseRecorder {
 		r := httptest.NewRequest("POST", "/", bytes.NewReader(z))
 		r.Header.Set("Authorization", "Bearer "+tok)
 		r.Header.Set("Content-Type", "application/zip")
 		r.Header.Set("CF-Connecting-IP", ip)
+		r.Header.Set("X-Support-Proxy", psec)
 		w := httptest.NewRecorder()
 		s.ServeHTTP(w, r)
 		return w
@@ -244,13 +246,14 @@ func TestNoLogging(t *testing.T) {
 }
 
 func TestProxyWithoutHeaderRefused(t *testing.T) {
-	s, c := setup(t, func(c *config) { c.trustProxy = true })
+	s, c := setup(t, func(c *config) { c.trustProxy, c.proxySecret = true, psec })
 	z := mkZip(t, "a")
 	for _, h := range []string{"", "not-an-ip", "999.1.1.1"} {
 		r := httptest.NewRequest("POST", "/", bytes.NewReader(z))
 		r.Header.Set("Authorization", "Bearer "+tok)
 		r.Header.Set("Content-Type", "application/zip")
 		r.Header.Set("X-Forwarded-For", "198.51.100.9") // never trusted
+		r.Header.Set("X-Support-Proxy", psec)
 		if h != "" {
 			r.Header.Set("CF-Connecting-IP", h)
 		}
@@ -266,10 +269,12 @@ func TestProxyWithoutHeaderRefused(t *testing.T) {
 }
 
 func TestGlobalCap(t *testing.T) {
-	s, _ := setup(t, func(c *config) { c.globalRate = 3; c.trustProxy = true })
-	for i, want := range []int{401, 401, 401, 429} { // forged per-request addresses still share one cap
-		r := httptest.NewRequest("POST", "/", bytes.NewReader(nil))
+	s, _ := setup(t, func(c *config) { c.globalRate = 3; c.trustProxy, c.proxySecret = true, psec })
+	for i, want := range []int{200, 200, 200, 429} { // authenticated uploads from forged addresses still share one cap
+		r := httptest.NewRequest("POST", "/", bytes.NewReader(mkZip(t, "a")))
+		r.Header.Set("Authorization", "Bearer "+tok)
 		r.Header.Set("CF-Connecting-IP", "198.51.100."+string(rune('1'+i)))
+		r.Header.Set("X-Support-Proxy", psec)
 		r.Header.Set("Content-Type", "application/zip")
 		w := httptest.NewRecorder()
 		s.ServeHTTP(w, r)
@@ -299,5 +304,58 @@ func TestBusyLimit(t *testing.T) {
 	s.busy <- struct{}{} // one upload in flight
 	if w := post(s, mkZip(t, "a"), "Bearer "+tok, "application/zip"); w.Code != 503 {
 		t.Fatal(w.Code)
+	}
+}
+
+// A request that did not come through the tunnel (no proxy secret) gets no say about its address.
+func TestProxyHeaderNeedsSecret(t *testing.T) {
+	s, _ := setup(t, func(c *config) { c.trustProxy, c.proxySecret = true, psec })
+	for _, sec := range []string{"", "wrong-secret-0123456789"} {
+		r := httptest.NewRequest("POST", "/", bytes.NewReader(mkZip(t, "a")))
+		r.Header.Set("Authorization", "Bearer "+tok)
+		r.Header.Set("Content-Type", "application/zip")
+		r.Header.Set("CF-Connecting-IP", "198.51.100.7")
+		if sec != "" {
+			r.Header.Set("X-Support-Proxy", sec)
+		}
+		w := httptest.NewRecorder()
+		s.ServeHTTP(w, r)
+		if w.Code != 400 {
+			t.Errorf("secret %q: %d", sec, w.Code)
+		}
+	}
+}
+
+// An unauthenticated flood (even from many addresses) must not reduce what a valid token may do.
+func TestUnauthFloodDoesNotStarveValidToken(t *testing.T) {
+	s, _ := setup(t, func(c *config) {
+		c.trustProxy, c.proxySecret = true, psec
+		c.globalRate = 3
+		c.ipRate = 3
+		c.failRate = 2
+	})
+	mk := func(ip, auth string) int {
+		r := httptest.NewRequest("POST", "/", bytes.NewReader(mkZip(t, "a")))
+		r.Header.Set("Content-Type", "application/zip")
+		r.Header.Set("CF-Connecting-IP", ip)
+		r.Header.Set("X-Support-Proxy", psec)
+		if auth != "" {
+			r.Header.Set("Authorization", auth)
+		}
+		w := httptest.NewRecorder()
+		s.ServeHTTP(w, r)
+		return w.Code
+	}
+	for i := 0; i < 200; i++ {
+		mk("203.0.113."+string(rune('0'+i%10))+string(rune('0'+i/10%10)), "Bearer bad")
+		mk("198.51.100.99", "") // one source hammering
+	}
+	for i := 0; i < 3; i++ {
+		if c := mk("198.51.100.20", "Bearer "+tok); c != 200 {
+			t.Fatalf("valid upload %d refused after a flood: %d", i, c)
+		}
+	}
+	if c := mk("198.51.100.20", "Bearer "+tok); c != 429 {
+		t.Fatalf("the global cap still holds for authenticated uploads: %d", c)
 	}
 }

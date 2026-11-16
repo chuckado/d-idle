@@ -29,6 +29,7 @@ func main() {
 	flag.IntVar(&c.globalRate, "global-rate", 200, "all requests per hour together (0: off)")
 	flag.IntVar(&c.maxBusy, "max-busy", 3, "uploads handled at once")
 	minAge := flag.Int("min-age-hours", 24, "never purge a bundle younger than this; a full inbox then refuses uploads")
+	secretFile := flag.String("proxy-secret-file", "", "with -trust-proxy: file holding the secret nginx sends in X-Support-Proxy (CF-Connecting-IP is believed only with it)")
 	hash := flag.Bool("hash", false, "read one token from stdin and print its token-file line, then exit")
 	flag.Parse()
 	if *hash {
@@ -48,6 +49,14 @@ func main() {
 	if c.dir == "" || c.tokensFile == "" {
 		fmt.Fprintln(os.Stderr, "-dir and -tokens are required")
 		os.Exit(2)
+	}
+	if c.trustProxy {
+		b, err := os.ReadFile(*secretFile)
+		c.proxySecret = strings.TrimSpace(string(b))
+		if err != nil || len(c.proxySecret) < 16 {
+			fmt.Fprintln(os.Stderr, "-trust-proxy needs -proxy-secret-file with at least 16 characters")
+			os.Exit(2)
+		}
 	}
 	c.quota <<= 20
 	c.minAge = time.Duration(*minAge) * time.Hour
