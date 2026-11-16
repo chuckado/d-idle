@@ -27,6 +27,9 @@ func glanceFixture(h *watch.Hub) http.HandlerFunc {
 			q = ref.Query()
 		}
 		v := h.Glance()
+		if q.Get("pal") != "1" {
+			v.Stream = nil // the lossless feed is offered only to pages that ask (pal=1), so every other picture keeps its MJPEG card
+		}
 		n := 2
 		if s := q.Get("needs"); s != "" {
 			n, _ = strconv.Atoi(s)
