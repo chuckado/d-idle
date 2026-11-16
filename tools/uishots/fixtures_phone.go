@@ -132,13 +132,21 @@ func artFor(w http.ResponseWriter, r *http.Request) bool {
 // defectCSS is, per name, the one defect of the 2026-11-15 screenshot put back on the phone page, unlayered so it wins over the page's own
 // rules. The fit pages phonedefect-NAME must FAIL with the verdict mustFail names (fit.go); a pass there means the check is blind to it.
 var defectCSS = map[string]string{
-	"label":     `.cv .d-cells .item[data-shown] { font-size: 12px !important; }`,
-	"acts":      `.cv .cv-sel .cv-acts { max-block-size: 30px !important; overflow: hidden !important; }`,
-	"cutchips":  `.cv .cv-bar { display: flex !important; flex-wrap: nowrap; overflow: hidden; } .cv .cv-bar > * { flex: none !important; } .cv .cv-chips { overflow: visible !important; mask-image: none !important; }`,
-	"lock":      `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
-	"hover":     `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
-	"resetclip": `#btn-reset { position: absolute !important; inset-inline-start: -300px !important; }`, // the header Reset pushed out of the window (card resetinstant)
-	"narrow":    `.cv #pack, .cv #stash { --u: 20px !important; }`,
+	"label":    `.cv .d-cells .item[data-shown] { font-size: 12px !important; }`,
+	"acts":     `.cv .cv-sel .cv-acts { max-block-size: 30px !important; overflow: hidden !important; }`,
+	"cutchips": `.cv .cv-bar { display: flex !important; flex-wrap: nowrap; overflow: hidden; } .cv .cv-bar > * { flex: none !important; } .cv .cv-chips { overflow: visible !important; mask-image: none !important; }`,
+	"lock":     `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
+	"hover":    `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
+	"narrow":   `.cv #pack, .cv #stash { --u: 20px !important; }`,
+	// the Characters page (fixtures_chars.go)
+	"chars-clip":    `.cs-name { overflow: hidden !important; white-space: nowrap !important; max-inline-size: 3ch !important; text-overflow: ellipsis !important; }`,
+	"chars-wide":    `.cs-card { min-inline-size: 130vw !important; }`,
+	"chars-under":   `.cs-main { position: fixed !important; inset: 0 !important; }`,
+	"chars-small":   `.cs-card .d-btn { min-block-size: 28px !important; block-size: 28px !important; }`,
+	"chars-hole":    `.cs-card { min-block-size: 440px !important; }`,
+	"chars-sheet":   `.cs-sheet-card { max-block-size: 160px !important; overflow: hidden !important; }`,
+	"chars-covered": `.cs-head { position: fixed !important; inset: 0 0 auto 0 !important; block-size: 300px !important; z-index: 99; background: var(--d-surface-3) !important; }`,
+	"resetclip":     `#btn-reset { position: absolute !important; inset-inline-start: -300px !important; }`, // the header Reset pushed out of the window (card resetinstant)
 }
 
 func serveDefectCSS(w http.ResponseWriter, r *http.Request) bool {

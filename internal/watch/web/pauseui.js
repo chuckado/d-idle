@@ -87,12 +87,22 @@ export function mountPause(d) {
   function toggle() {
     if (busy || !cur.shown) return Promise.resolve();
     busy = true; btn.disabled = go.disabled = true;
-    return d.post(ROUTE, { on: !cur.paused }).then((j) => {
-      busy = false; btn.disabled = go.disabled = false;
+    const want = !cur.paused;
+    const done = () => { busy = false; btn.disabled = go.disabled = false; };
+    return d.post(ROUTE, { on: want }).then((j) => {
       if (j && j.schema === 'watch.pause/1') {
-        draw(j);
-        if (j.error) d.toast('warn', j.error);
-      } else d.toast('warn', 'Pause did not go through');
+        done(); draw(j);
+        if (j.error) d.toast('warn', j.error); // the reason the desk gave, as it is
+        return;
+      }
+      // an odd or missing answer is not a verdict: read the state back and judge by that (the game may have frozen anyway)
+      return d.get(ROUTE).then((v) => {
+        done();
+        if (v && v.schema === 'watch.pause/1') {
+          draw(v);
+          if (phase(v).paused !== want) d.toast('warn', (j && j.error) || 'Pause did not go through');
+        } else d.toast('warn', (j && j.error) || 'no answer from the hero');
+      });
     });
   }
   function poll() {

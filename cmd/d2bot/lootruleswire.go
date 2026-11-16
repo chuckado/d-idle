@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"path/filepath"
 	"strings"
 
@@ -24,8 +25,28 @@ func (d lootRulesDesk) View() any {
 			stage = int(v)
 		}
 	}
-	return d.st.View(stage, loot.DefaultShadow.Recent())
+	hero := loot.LastHeroClass()
+	d.st.UseClassFallback(hero) // a hero without a saved set starts from the preset of its class
+	v := d.st.View(stage, loot.DefaultShadow.Recent())
+	v.Hero = hero
+	return v
 }
+
+// Preview is the dry run of the sheet: the body is a PUT body (or empty for the active set); nothing is saved.
+func (d lootRulesDesk) Preview(body []byte) (any, error) {
+	var cand *lootrules.RuleSet
+	if t := bytes.TrimSpace(body); len(t) > 0 && string(t) != "{}" {
+		var err error
+		if cand, err = d.st.Build(body); err != nil {
+			return nil, err
+		}
+	}
+	return loot.PreviewRules(cand)
+}
+
+func (d lootRulesDesk) Undo(seq int) (any, error)             { return d.st.Undo(seq) }
+func (d lootRulesDesk) Import(b []byte, seq int) (any, error) { return d.st.Import(b, seq) }
+func (d lootRulesDesk) Export() ([]byte, error)               { return d.st.Export() }
 
 func (d lootRulesDesk) Put(b []byte) (any, error) {
 	rs, err := d.st.Put(b)

@@ -53,12 +53,13 @@ type survivalShadow struct {
 	lastDiff string
 	pred     map[predKey]shadowPred
 	warned   map[string]bool
+	now      func() time.Time // the bot clock: virtual (Unix epoch plus game time) under lockstep, wall otherwise
 }
 
 // wireSurvival returns the ZoneChoice and ZoneObserve hooks; both nil without game tables or a loadable model. A ledger
 // file that cannot be read starts empty (and a file from a newer build is left alone: saves are skipped).
-func wireSurvival(db *data.DB, ledgerPath string) (func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, func(bot.ZoneEvent)) {
-	w := newSurvivalShadow(db, ledgerPath)
+func wireSurvival(db *data.DB, ledgerPath string, now func() time.Time) (func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, func(bot.ZoneEvent)) {
+	w := newSurvivalShadow(db, ledgerPath, now)
 	if w == nil {
 		return nil, nil
 	}
@@ -67,16 +68,22 @@ func wireSurvival(db *data.DB, ledgerPath string) (func(*d2.Snapshot, int, strin
 
 // wireSurvivalModel is wireSurvival plus the S-D hooks: the zone decision (bot.zoneModel 1) and the boss margin. All nil
 // without game tables or a loadable model.
-func wireSurvivalModel(db *data.DB, ledgerPath string) (choice func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, observe func(bot.ZoneEvent),
+func wireSurvivalModel(db *data.DB, ledgerPath string, now func() time.Time) (choice func(*d2.Snapshot, int, string, int, []bot.ZoneCand) string, observe func(bot.ZoneEvent),
 	decide func(*d2.Snapshot, int, string, int, string, []bot.ZoneCand) (bot.ZoneVerdict, error), boss func(*d2.Snapshot, string, string, string) (string, bool)) {
-	w := newSurvivalShadow(db, ledgerPath)
+	w := newSurvivalShadow(db, ledgerPath, now)
 	if w == nil {
 		return nil, nil, nil, nil
 	}
 	return w.choice, w.observe, w.decide, w.bossMargin
 }
 
-func newSurvivalShadow(db *data.DB, ledgerPath string) *survivalShadow {
+// newSurvivalShadow: now must be the clock the runner stamps its events with (Env.Clock.Now). Mixing it with time.Now made
+// every lockstep event 56 years old to the ledger (the Pacer counts from the Unix epoch), so chickens, deaths and merc
+// deaths never counted (docs/survival/ab-screen-analysis-2026-11-16.md). nil means the wall clock.
+func newSurvivalShadow(db *data.DB, ledgerPath string, now func() time.Time) *survivalShadow {
+	if now == nil {
+		now = time.Now
+	}
 	tab := dangerTable(db)
 	if tab == nil {
 		return nil
@@ -91,7 +98,7 @@ func newSurvivalShadow(db *data.DB, ledgerPath string) *survivalShadow {
 		slog.Warn("survival: no params", "err", err)
 		return nil
 	}
-	w := &survivalShadow{db: db, m: m, tab: tab, p: p, path: ledgerPath, pred: map[predKey]shadowPred{}, warned: map[string]bool{}}
+	w := &survivalShadow{db: db, m: m, tab: tab, p: p, path: ledgerPath, pred: map[predKey]shadowPred{}, warned: map[string]bool{}, now: now}
 	led, _, err := survival.LoadLedger(ledgerPath, p)
 	if err != nil {
 		slog.Warn("survival: ledger not loaded, starting empty and not saving", "err", err)
@@ -214,7 +221,7 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 		need += shadowReviveQuote
 	}
 	w.power, w.lastDiff = survival.PowerOf(hero), diff
-	in := survival.Input{Now: time.Now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
+	in := survival.Input{Now: w.now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
 		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
 	d, err := w.led.Choose(in)
 	if err != nil {
@@ -248,7 +255,7 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 	k := survival.ZoneKey{Area: ev.Area, Diff: ev.Diff}
 	now := ev.At
 	if now.IsZero() {
-		now = time.Now()
+		now = w.now()
 	}
 	switch ev.Kind {
 	case bot.ZoneEvChicken:
@@ -278,6 +285,6 @@ func (w *survivalShadow) fight(fs combat.FightSummary) {
 		return
 	}
 	n := float64(fs.Kills)
-	w.led.Observe(survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}, time.Now(), survival.Event{Kind: survival.EvFight, Kills: n, Seconds: fs.Sec,
+	w.led.Observe(survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}, w.now(), survival.Event{Kind: survival.EvFight, Kills: n, Seconds: fs.Sec,
 		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions)}, w.power)
 }

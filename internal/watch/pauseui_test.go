@@ -72,6 +72,18 @@ const later2 = (fn) => { later2.q.push(fn); }; later2.q = [];
 view = null; const m2 = mountPause({ ui, toast() {}, doc: doc2, later: later2, post: () => Promise.resolve(null), get: () => Promise.resolve(null) });
 await new Promise((r) => setTimeout(r, 5));
 out.noDesk = all(doc2.body).find((n) => n.id === 'pause-banner').hidden && later2.q.length === 0;
+// read-back: an answer that is not a pause view (the live bug: the freeze worked, the reply was odd) is judged by GET
+const html3 = mk('html'), doc3 = { ...doc, getElementById: () => null, body: mk('body'), documentElement: html3 }, t3 = [], later3 = (fn) => {};
+let v3 = { schema: 'watch.pause/1', state: 'running', can_freeze: true };
+const m3 = mountPause({ ui, toast: (s, t) => t3.push(s + ':' + t), doc: doc3, later: later3, post: () => { v3 = frozen; return Promise.resolve({ ok: true }); }, get: () => Promise.resolve(v3) });
+await new Promise((r) => setTimeout(r, 5));
+await m3.toggle();
+out.readbackOK = html3.dataset.paused === '1' && t3.length === 0;
+const t4 = [], html4 = mk('html'), doc4 = { ...doc, getElementById: () => null, body: mk('body'), documentElement: html4 };
+const m4 = mountPause({ ui, toast: (s, t) => t4.push(s + ':' + t), doc: doc4, later: later3, post: () => Promise.resolve(null), get: () => Promise.resolve({ schema: 'watch.pause/1', state: 'running', can_freeze: true }) });
+await new Promise((r) => setTimeout(r, 5));
+await m4.toggle();
+out.readbackFail = t4.join('|');
 console.log(JSON.stringify(out));
 `
 	f := filepath.Join(dir, "h.mjs")
@@ -86,7 +98,7 @@ console.log(JSON.stringify(out));
 		`"banner":"Paused since 10:00 (resumes by itself after 60 min). Monsters are near."`, `"plain":"Paused"`, `"clock":"10:05","clockBad":""`,
 		`"sp":[true,false,false,false,false,false,false,false]`, `"inMenu":true`, `"hiddenWithoutCan":true`, `"shown":true`,
 		`"posted":["/api/pause {\"on\":true}"]`, `"paused":"1"`, `"bannerOn":true`, `"label":"Resume"`, `"resumed":["/api/pause {\"on\":false}"]`,
-		`"dimGone":true`, `"space":["/api/pause {\"on\":true}"]`, `"prevented":true`, `warn:could not freeze the game: x`, `"noDesk":true`,
+		`"dimGone":true`, `"space":["/api/pause {\"on\":true}"]`, `"prevented":true`, `warn:could not freeze the game: x`, `"noDesk":true`, `"readbackOK":true`, `"readbackFail":"warn:Pause did not go through"`,
 	} {
 		if !strings.Contains(got, want) {
 			t.Errorf("missing %s in\n%s", want, got)

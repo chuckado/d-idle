@@ -749,6 +749,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
+		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
 	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
@@ -871,6 +872,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.LootRules != nil {
 		for _, p := range LootRulesPutRoutes {
 			m.Handle(p, f.LootRules.PutHandler(o))
+		}
+		for _, p := range LootRulesPostRoutes {
+			m.Handle(p, f.LootRules.PostHandler(o))
 		}
 	}
 	if f.GoldFarm != nil {

@@ -189,3 +189,42 @@ func TestDeathSlack(t *testing.T) {
 		t.Fatalf("slack 1: %s %v", got.Verdict, got.Reasons)
 	}
 }
+
+// A 2 h run has 119 intervals: the horizon XP is the last minute line, not the 90 minute checkpoint.
+func TestHorizonUsesLastMinute(t *testing.T) {
+	dir := t.TempDir()
+	writeArm(t, dir, "legacy", 1, synth(119, 10, 0, 0, 1))
+	writeArm(t, dir, "margin", 1, synth(119, 20, 0, 0, 1))
+	b, _, _ := Load(dir, "legacy")
+	m, _, _ := Load(dir, "margin")
+	r := b[0]
+	if r.Minutes != 119 || r.XPAt[30] != 300 || r.XPAt[60] != 600 || r.XPAt[90] != 900 || r.XPEnd != 1190 {
+		t.Fatalf("%+v", r)
+	}
+	if _, ok := r.XPAt[120]; ok {
+		t.Fatal("no minute 120 expected")
+	}
+	if got := xpAtHorizon(r, 120); got != 1190 {
+		t.Fatalf("horizon xp %v, want the last minute 1190", got)
+	}
+	s := Compare(b, m, gate)
+	if s.XPRatio != 2 || len(s.Pairs) != 1 {
+		t.Fatalf("ratio %v pairs %d", s.XPRatio, len(s.Pairs))
+	}
+	if out := s.Format(); !strings.Contains(out, "xp@119=1190") {
+		t.Fatalf("label missing:\n%s", out)
+	}
+}
+
+// Runs that end a few minutes apart are compared at the same minute.
+func TestPairComparedAtOneMinute(t *testing.T) {
+	dir := t.TempDir()
+	writeArm(t, dir, "legacy", 1, synth(119, 10, 0, 0, 1))
+	writeArm(t, dir, "margin", 1, synth(116, 10, 0, 0, 1))
+	b, _, _ := Load(dir, "legacy")
+	m, _, _ := Load(dir, "margin")
+	s := Compare(b, m, gate)
+	if len(s.Pairs) != 1 || s.XPRatio != 1 || s.XPDiff.Mean != 0 {
+		t.Fatalf("equal xp per minute must compare equal at minute 116: ratio %v diff %v", s.XPRatio, s.XPDiff.Mean)
+	}
+}

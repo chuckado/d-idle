@@ -15,7 +15,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq= cs=0
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -25,6 +25,7 @@ while [ $# -gt 0 ]; do
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
 	--pics) pics=1; shift ;;
+	--cs) cs=1; shift ;;
 	--skills) skills=1; shift ;;
 	--url) charu=$(printf %s "$2" | sed 's/&/%26/g; s/?/%3F/g'); shift 2 ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
@@ -93,6 +94,35 @@ if [ "$char" = 1 ]; then
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
+	exit 0
+fi
+if [ "$cs" = 1 ]; then
+	# pictures of the Characters page (docs/charselect-ui.md): name, query, optional click selector; cs-NAME-WxH.png, in the fit harness
+	mkdir -p "$out" && rm -f "$out"/cs-*
+	echo "c1 chars=1&theme=dark
+c3 chars=3&theme=dark
+c3l chars=3&theme=light
+c8 chars=8&theme=dark
+c8l chars=8&theme=light
+clong chars=long&theme=dark
+cdel chars=deleted&theme=dark
+cswitch chars=switching&theme=dark
+coff chars=off&theme=dark
+cnew chars=3&theme=dark [data-key=new-top]
+cnewl chars=3&theme=light [data-key=new-top]
+cdelete chars=8&theme=dark [data-key=delete-Zapp]
+cdeletel chars=8&theme=light [data-key=delete-Zapp]" | while read -r pname pq pclick; do
+		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
+		for sz in ${sizes_only:-1914x930 1366x768 1280x620 412x780 360x640}; do
+			w=${sz%x*} h=${sz#*x}
+			ck=; [ -n "$pclick" ] && ck="&click=$(printf %s "$pclick" | sed 's/#/%23/g')"
+			prof=$(mktemp -d)
+			DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+				--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/cs-$pname-$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/characters%3F$(printf %s "$pq" | sed 's/&/%26/g')&w=$w&h=$h$ck" >/dev/null 2>&1
+			rm -rf "${prof:?}"
+		done
+	done
+	ls "$out"/cs-* | wc -l
 	exit 0
 fi
 if [ "$skills" = 1 ]; then
@@ -196,6 +226,10 @@ lootrules-sheet-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=loot
 lootrules-custom watch?first=0&theme=dark&needs=0&lootrules=custom #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-save],[data-key=lr-close]
 lootrules-custom-light watch?first=0&theme=light&needs=0&lootrules=custom #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-mode-starter],[data-key=lr-save],[data-key=lr-close]
 lootrules-empty watch?first=0&theme=dark&needs=0&lootrules=empty #btn-more|[data-key=lootrules-open] #lootrules-sheet,[data-key=lr-close]
+lootrules-preview watch?first=0&theme=dark&needs=0 #btn-more|[data-key=lootrules-open]|[data-key=lr-preview] #lootrules-sheet,[data-key=lr-preview],[data-key=lr-undo],[data-key=lr-import],[data-key=lr-close]
+lootrules-preview-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=lootrules-open]|[data-key=lr-preview] #lootrules-sheet,[data-key=lr-preview],[data-key=lr-undo],[data-key=lr-import],[data-key=lr-close]
+lootrules-sellkinds watch?first=0&theme=dark&needs=0 #btn-more|[data-key=lootrules-open]|[data-key=lr-sellkinds] #lootrules-sheet,[data-key=lr-sellkinds],[data-key=lr-close]
+lootrules-sellkinds-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=lootrules-open]|[data-key=lr-sellkinds] #lootrules-sheet,[data-key=lr-sellkinds],[data-key=lr-close]
 lootrules-error watch?first=0&theme=dark&needs=0 #btn-more|[data-key=lootrules-open]|#lr-apply #lootrules-sheet,[data-key=lr-close]
 support-blocked watch?first=0&theme=dark&needs=0&support=blocked #btn-more|[data-key=support-open]|#support-build #support-sheet,[data-key=support-back],[data-key=support-cancel]
 support-nosend watch?first=0&theme=dark&needs=0&support=nosend #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-save-file,[data-key=support-back]
@@ -274,6 +308,32 @@ overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
 overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
+chars-1 watch/characters?theme=dark&chars=1
+chars-1-light watch/characters?theme=light&chars=1
+chars-3 watch/characters?theme=dark&chars=3
+chars-3-light watch/characters?theme=light&chars=3
+chars-8 watch/characters?theme=dark&chars=8
+chars-8-light watch/characters?theme=light&chars=8
+chars-long watch/characters?theme=dark&chars=long
+chars-long-light watch/characters?theme=light&chars=long
+chars-deleted watch/characters?theme=dark&chars=deleted
+chars-deleted-light watch/characters?theme=light&chars=deleted
+chars-switching watch/characters?theme=dark&chars=switching
+chars-switching-light watch/characters?theme=light&chars=creating
+chars-measured watch/characters?theme=dark&chars=measured
+chars-empty watch/characters?theme=dark&chars=empty
+chars-off watch/characters?theme=dark&chars=off
+chars-off-light watch/characters?theme=light&chars=off
+chars-nosave watch/characters?theme=dark&chars=nosave
+chars-new watch/characters?theme=dark&chars=3 [data-key=new-top] #cs-sheet,#cs-name,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-new-light watch/characters?theme=light&chars=8 [data-key=new-top] #cs-sheet,#cs-name,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-switch-sheet watch/characters?theme=dark&chars=3 [data-key=switch-Zapp] #cs-sheet,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete watch/characters?theme=dark&chars=8 [data-key=delete-Zapp] #cs-sheet,#cs-typed,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete-light watch/characters?theme=light&chars=long [data-key=delete-Zzzzzzzzzzzzzzz] #cs-sheet,#cs-typed,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete-active watch/characters?theme=dark&chars=3 [data-key=delete-Holy] #cs-sheet,[data-key=sheet-cancel]
+chars-restore watch/characters?theme=dark&chars=deleted .cs-delrow_.d-btn #cs-sheet,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=characters-open]
+chars-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-characters]
 overlay-menu-over-zone watch?first=0&theme=dark&zone=cp&tab=Map #btn-more #btn-more
 overlay-menu-over-zone-light watch?first=0&theme=light&zone=cp&tab=Map #btn-more #btn-more
 overlay-menu-over-zone-cockpit watch?layout=cockpit&theme=dark&zone=cp&tab=Map #btn-more #btn-more
@@ -322,7 +382,14 @@ phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=act
 phonedefect-cutchips watch/inventory?theme=dark&fx=phone&tab=pack&defect=cutchips
 phonedefect-lock watch/inventory?theme=dark&fx=phone&tab=pack&defect=lock
 phonedefect-hover watch/inventory?theme=dark&fx=phone&tab=pack&defect=hover
-phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
+phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow
+charsdefect-clip watch/characters?theme=dark&chars=long&defect=chars-clip
+charsdefect-wide watch/characters?theme=dark&chars=3&defect=chars-wide
+charsdefect-under watch/characters?theme=dark&chars=3&defect=chars-under
+charsdefect-small watch/characters?theme=dark&chars=3&defect=chars-small
+charsdefect-hole watch/characters?theme=dark&chars=1&defect=chars-hole
+charsdefect-sheet watch/characters?theme=dark&chars=3&defect=chars-sheet [data-key=delete-Zapp] #cs-sheet,[data-key=sheet-go]
+charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -334,6 +401,8 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		lootrules-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		phonedefect-*) szs="412x780 360x640" ;;
+		charsdefect-*) szs="1280x620 412x780 360x640" ;;
+		chars-*) szs="$sizes 412x780 360x640" ;;
 		overlaydefect-two) szs="1366x768" ;; # the other tiles are not on screen on a phone: nothing to show
 		overlaydefect-*) szs="1366x768 412x780" ;;
 		overlay-*) szs="$sizes 412x780" ;;

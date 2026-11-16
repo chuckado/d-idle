@@ -49,7 +49,7 @@ func Fields() []FieldDef {
 		{Name: "need", Kind: "need", Ops: []string{"eq"}, Label: "The bot needs more of it", Values: sortedKeys(needKinds)},
 		e("class", "Hero class"), e("build", "Build"), e("difficulty", "Difficulty", "Normal", "Nightmare", "Hell"),
 		n("clvl", "Hero level", "", ""), n("gold", "Gold on hand", "gold", ""), n("act", "Act", "", ""),
-		n("packfull", "Pack fullness", "%", ""), n("stashfull", "Stash fullness", "%", ""),
+		n("packfull", "Pack fullness", "%", ""), n("idtome", "Tomes of Identify in the pack (0 or 1)", "", ""), n("stashfull", "Stash fullness", "%", ""),
 	}
 	for s := range statNames {
 		fs = append(fs, FieldDef{Name: "stat:" + s, Kind: "number", Ops: numOps, Label: "Property " + s, Hides: "unidentified"})
@@ -77,6 +77,8 @@ func ActionsFor(scope string) []string {
 		return []string{Keep, KeepMerc, Stash, Sell, Drop, Identify, Ask, Ignore}
 	case PlaceStash:
 		return []string{Keep, Sell, Ignore}
+	case PlaceSell:
+		return []string{Keep, Sell, Stash, Ignore}
 	}
 	return nil
 }
