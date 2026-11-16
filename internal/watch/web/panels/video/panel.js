@@ -17,13 +17,16 @@ export function mount(root, ctx) {
   shot.alt = 'live game window';
   shot.width = 800; shot.height = 600;
   shot.hidden = true;
+  const cv = ctx.el('canvas', 'shot pal'); // the lossless feed draws here (docs/video-feed.md); hidden until it delivers
+  cv.hidden = true; cv.width = 800; cv.height = 600;
+  cv.setAttribute('aria-label', 'live game window');
   const wait = ctx.el('p', 'd-empty', 'Waiting for the game picture...');
   const badge = ctx.el('span', 'badge', '');
   badge.hidden = true;
   badge.setAttribute('role', 'status');
   const retry = ctx.el('button', 'd-btn', 'Retry');
   retry.type = 'button'; retry.dataset.size = 'sm'; retry.hidden = true;
-  frame.append(shot, wait, badge, retry);
+  frame.append(shot, cv, wait, badge, retry);
   ctx.body.append(frame);
 
   const full = ctx.el('button', 'd-btn', 'Full screen');
@@ -47,11 +50,109 @@ export function mount(root, ctx) {
     else if (root.requestFullscreen) root.requestFullscreen();
   });
 
-  function src() {
+  // Low-rate mode (per browser): the server sends this page at most LOW_FPS parts a second, so a slow main thread or
+  // graphics path (software compositing, a busy tab) spends less on decoding and drawing. The hint offers it when the page
+  // measures under HINT_FPS for HINT_AFTER ms.
+  const LOW_FPS = 8, HINT_FPS = 15, HINT_AFTER = 6000;
+  const low = ctx.store('lowrate');
+  const lowBtn = ctx.el('button', 'd-btn', 'Low rate');
+  lowBtn.type = 'button'; lowBtn.dataset.size = 'sm'; lowBtn.dataset.key = 'lowrate';
+  lowBtn.setAttribute('aria-pressed', String(low.get() === '1'));
+  lowBtn.title = 'Smoother on a slow screen: about ' + LOW_FPS + ' pictures a second';
+  ctx.actions.append(lowBtn);
+  const hint = ctx.el('p', 'd-empty', '');
+  hint.hidden = true; hint.setAttribute('role', 'status');
+  ctx.body.append(hint);
+  let slowSince = 0, bytes = [];
+  function setLow(on) {
+    low.set(on ? '1' : '0');
+    lowBtn.setAttribute('aria-pressed', String(on));
+    hint.hidden = true; slowSince = 0;
+    ctl.reconnect();
+  }
+  lowBtn.addEventListener('click', () => setLow(low.get() !== '1'));
+  // measured here and shown in the card head (also read by window.d2video.stats(): a friend can screenshot it)
+  function stats() {
+    const now = Date.now();
+    while (bytes.length && now - bytes[0][0] > 2000) bytes.shift();
+    const kb = bytes.reduce((a, b) => a + b[1], 0) / 2 / 1024;
+    return { fps: Math.round(ctl.fps() * 10) / 10, kBps: Math.round(kb), low: low.get() === '1' };
+  }
+  function watchRate() {
+    const st = stats();
+    if (ctl.state === 'live' && st.fps < HINT_FPS && !st.low) {
+      if (!slowSince) slowSince = Date.now();
+      if (Date.now() - slowSince >= HINT_AFTER && hint.hidden) {
+        hint.textContent = 'The picture runs at ' + Math.round(st.fps) + ' fps here. Low-rate mode may look smoother. ';
+        const b = ctx.el('button', 'd-btn', 'Use low-rate mode'); b.type = 'button'; b.dataset.size = 'sm';
+        b.addEventListener('click', () => setLow(true));
+        hint.append(b); hint.hidden = false;
+      }
+    } else { slowSince = 0; if (!hint.hidden && st.fps >= HINT_FPS) hint.hidden = true; }
+    // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
+    const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
+    const text = (dbg || (ctl.state === 'live' && st.fps < HINT_FPS)) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.low ? ', low rate' : '') : '';
+    if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
+    ctx.later(watchRate, 1000);
+  }
+
+  function src(base) {
     const q = [];
     if (ctx.token) q.push('t=' + encodeURIComponent(ctx.token));
+    if (low.get() === '1') q.push('fps=' + LOW_FPS); // the server skips parts for this viewer only
     q.push('r=' + Date.now());
-    return url + '?' + q.join('&');
+    return (base || url) + '?' + q.join('&');
+  }
+
+  // Lossless feed (docs/video-feed.md): used only when /api/config offers palFeedUrl, /api/glance lists "palfeed" under
+  // stream.formats and the capability probe answers; every failure keeps (or returns to) the MJPEG path below, logged
+  // to the console only. mode is read by the controller's open() on each (re)connect.
+  let mode = 'mjpeg', palFails = 0, player = null, ro = null;
+  const palUrl = ctx.config && ctx.config.palFeedUrl;
+  const PF = () => (typeof window !== 'undefined' && window.PalFeed) || null;
+  const log = (m) => { if (typeof console !== 'undefined' && console.info) console.info('video: ' + m); };
+  function palFit() {
+    const P = PF();
+    if (!P || !P.fit || mode !== 'pal' || !frame.clientWidth) return;
+    const r = P.fit(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
+    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px'); // whole device pixels per frame pixel: sharp at any zoom
+  }
+  function toMjpeg(why) {
+    if (mode === 'mjpeg') return;
+    log('falling back to MJPEG: ' + why);
+    mode = 'mjpeg'; palFails = 0;
+    cv.hidden = true;
+    ctl.reconnect();
+  }
+  function openPal(onFrame, onEnd) {
+    const P = PF();
+    player = new P.Player({
+      canvas: cv, url: src(palUrl),
+      onFrame: () => { palFails = 0; if (cv.hidden) { cv.hidden = false; shot.hidden = true; wait.hidden = true; palFit(); } onFrame(); },
+      onBytes: (n) => bytes.push([Date.now(), n]),
+      log,
+      onEnd: (e) => {
+        if (e && e.fatal) { toMjpeg(e.message); return; }
+        if (++palFails >= 3) { toMjpeg('feed failed ' + palFails + ' times'); return; }
+        onEnd(e);
+      },
+    });
+    player.start();
+    const p = player;
+    return () => { p.stop(); if (player === p) player = null; };
+  }
+  async function tryPal() {
+    if (!palUrl || typeof fetch !== 'function') return;
+    try {
+      if (!PF()) await import('../../palfeed.js');
+      const P = PF();
+      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed: this browser cannot decode it'); return; }
+      const d = await P.negotiate(fetch, ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '');
+      if (!d) return; // not offered (glance without palfeed) or not ready: MJPEG stays
+      mode = 'pal';
+      if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(palFit); ro.observe(frame); }
+      ctl.reconnect();
+    } catch (e) { log('lossless feed not used: ' + (e && e.message || e)); }
   }
 
   // fetch path: each part becomes an object URL on the <img>; while one decodes only the newest waits (latest wins)
@@ -70,7 +171,7 @@ export function mount(root, ctx) {
     if (pending) { const p = pending; pending = null; show(p[0], p[1]); }
   }
   function openFetch(onFrame, onEnd) {
-    return openStream(src(), (bytes, type) => { show(bytes, type); onFrame(); }, onEnd);
+    return openStream(src(), (b, type) => { bytes.push([Date.now(), b.length]); show(b, type); onFrame(); }, onEnd);
   }
   // <img> fallback: the browser plays the MJPEG itself; 'error' (refused, ended) is the only end signal
   let imgEnd = null, imgFrame = null;
@@ -97,8 +198,8 @@ export function mount(root, ctx) {
   const timers = new Map();
   let tick = 0;
   const ctl = videoController({
-    stall: () => (streaming ? 3000 : 0),
-    open: (onFrame, onEnd) => (streaming ? openFetch(onFrame, onEnd) : openImg(onFrame, onEnd)),
+    stall: () => (streaming || mode === 'pal' ? 3000 : 0),
+    open: (onFrame, onEnd) => (mode === 'pal' ? openPal(onFrame, onEnd) : streaming ? openFetch(onFrame, onEnd) : openImg(onFrame, onEnd)),
     later(fn, ms) { const id = ++tick; timers.set(id, true); ctx.later(() => { if (timers.delete(id)) fn(); }, ms); return id; },
     cancel(id) { timers.delete(id); },
     now: () => Date.now(),
@@ -110,11 +211,8 @@ export function mount(root, ctx) {
     },
   });
   retry.addEventListener('click', () => ctl.reconnect());
-  // a tiny rate line in the card head, only with ?debug in the page address
-  if (typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '')) {
-    const rate = () => { ctx.meta.textContent = 'stream: ' + Math.round(ctl.fps()) + ' fps'; ctx.later(rate, 1000); };
-    rate();
-  }
+  ctl.stats = stats;
+  watchRate();
   if (typeof document.addEventListener === 'function') {
     document.addEventListener('visibilitychange', () => ctl.visibility(document.visibilityState === 'hidden'));
   }
@@ -125,5 +223,6 @@ export function mount(root, ctx) {
   }
   registerVideo(ctl);
   ctl.start();
+  tryPal();
   return {};
 }

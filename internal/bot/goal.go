@@ -36,6 +36,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if r.pointsStep(ctx, snap, c) {
 		return true
 	}
+	if r.playerPauseStep(ctx, snap, c) {
+		return true
+	}
 	if r.playerActionStep(ctx, snap, c) || r.errandTripStep(ctx, snap, c) {
 		return true
 	}
@@ -161,6 +164,10 @@ func (r *Runner) forgetGame() {
 	l.needBuff = true
 	l.stepArea = 0
 	l.waitNote = false
+	l.farm.forgetVisit()
+	if fc, ok := r.d.Mover.(interface{ ForgetCoverage() }); ok {
+		fc.ForgetCoverage() // a new game is a new zone: no visited point of the old one counts
+	}
 	// F1: a belt refusal from the last game (sticky belt-full mark) does not hold in the new one
 	if bf, ok := r.d.Town.(interface{ ForgetBelt() }); ok {
 		bf.ForgetBelt()
@@ -488,6 +495,7 @@ func (r *Runner) advanceTrip(ctx context.Context, snap *d2.Snapshot, c control) 
 	town := sec(r.cfg.TownTimeoutSec)
 	t.plan.GoldFloor = r.e.Tune.Bot.GoldFloor
 	t.plan.PotionFloor = r.potionFloor(p)
+	t.plan.ReserveGold = r.mercReserve(snap)
 	if t.startGold == 0 {
 		t.startGold = p.Gold
 		t.startBasis = r.resInput(snap).Gold
@@ -706,19 +714,26 @@ func (r *Runner) banned(area int) bool {
 	return ok
 }
 
+func (r *Runner) avoidWhyOf(h int) string {
+	r.obMu.Lock()
+	defer r.obMu.Unlock()
+	return r.avoidWhy[h]
+}
+
 // routeBanned says h blocks a walk to target: banned, and not merely a nav-fault skip of another area. Such a skip
 // (whyUnreachable, whyNavStuck) is no danger, and travelTo may jump over the area by waypoint (codereview3 C1).
 func (r *Runner) routeBanned(h, target int) bool {
 	if !r.banned(h) {
 		return false
 	}
+	why := r.avoidWhyOf(h)
+	if r.questWins(h, why) {
+		return false
+	}
 	if h == target {
 		return true
 	}
-	r.obMu.Lock()
-	why := r.avoidWhy[h]
-	r.obMu.Unlock()
-	return why != whyUnreachable && why != whyNavStuck
+	return why != whyUnreachable && why != whyNavStuck && why != whyBorderLoop
 }
 
 // starterBanMax caps what is left of the ban of a first field (the way out of a town) once the character stands in
@@ -797,6 +812,9 @@ func difficultyName(d d2.Difficulty) string {
 // target returns the area to work in (and publishes it for the guard).
 func (r *Runner) target(s *d2.Snapshot, c control) (int, bool) {
 	a, ok := r.target0(s, c)
+	if ok {
+		a = r.farmReturn(s, c, a)
+	}
 	// A target whose walk crosses a banned area is no target: skip it until that ban ends and pick the next best one.
 	for try := 0; ok && try < 8; try++ {
 		b, until := r.routeBan(s, a)
@@ -941,7 +959,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 		if l.stepArea == areaDenOfEvil && p.Difficulty == d2.Normal && r.questClaimed("den_of_evil") {
 			l.stepArea = 0 // the cached Den pick outlived its claim: 2026-11-12 17:34 walked back into the Den after the reward (hourfix2)
 		}
-		if l.stepArea != 0 && l.stepLevel == p.Level && !l.cleared[l.stepArea] && !r.banned(l.stepArea) {
+		if l.stepArea != 0 && l.stepLevel == p.Level && !l.cleared[l.stepArea] && !r.banned(l.stepArea) && !r.zoneRecheckDue() {
 			return l.stepArea, true
 		}
 		ex, cleared := map[int]bool{}, map[int]bool{}
@@ -966,7 +984,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			ex[areaDenOfEvil] = true // a dungeon quest needs a potion buffer; farm the open field first
 		}
 		pick := func() (Step, bool) {
-			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty)}
+			opts := PickOptions{Margin: t.LevelMargin, Slack: t.LeaveSlack, Acts: r.allowedActs(s), Exclude: ex, Cleared: cleared, Floor: worthFloor, FullKit: r.fullKit(s), Melee: MeleeTank(p.Class), XP: r.stepXP(p.Level, p.Difficulty), Class: planClass(p.Class), Merc: mercUp(), Model: r.zoneModelPick(s, diff, cleared)}
 			st, ok := r.d.Plan.Pick(diff, p.Level, opts)
 			if !ok && len(farmed) > 0 {
 				// the farm is a preference: every farm area is banned or excluded, so pick among all areas again
@@ -1020,6 +1038,7 @@ func (r *Runner) target0(s *d2.Snapshot, c control) (int, bool) {
 			run := r.runFor(diff, step)
 			l.run = &run
 			r.e.Log.Info("planner", "level", p.Level, "difficulty", diff, "area", step.Area, "name", step.Name, "run", run.Key, "kind", run.Kind, "why", step.Purpose)
+			r.zoneShadow(s, step.Area, diff)
 		}
 		r.e.Log.Info(levelPlanLine(p.Level, step, t.LevelMargin, t.LeaveSlack))
 		l.stepArea, l.stepLevel = step.Area, p.Level
@@ -1114,9 +1133,14 @@ func (r *Runner) noTarget(ctx context.Context, s *d2.Snapshot, c control) bool {
 			return false
 		}
 		diff := c.spec.difficulty
-		return r.do(ctx, c, StateInTown, "Starting a fresh game", sec(r.cfg.TownTimeoutSec), "new game", r.newGameRun(func(ctx context.Context) error {
-			return r.d.Cycler.NewGame(ctx, diff)
-		}))
+		if !r.freshAllowed(ctx, s) {
+			return false
+		}
+		// startFreshGameDiff forgets the old game: without it the cleared set stayed, the next tick found nothing to
+		// do in town again and started another game every few seconds (d2d has no menu poll to forget it)
+		return r.do(ctx, c, StateInTown, "Starting a fresh game", sec(r.cfg.TownTimeoutSec), "new game", func(ctx context.Context) error {
+			return r.startFreshGameDiff(ctx, diff)
+		})
 	}
 	if w := r.banWait(); w != "" {
 		if r.idleBreak(false) {
@@ -1270,6 +1294,9 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 	radius := r.e.Tune.Bot.ClearRadius
 	name := r.areaName(area)
 	r.noteArea(area)
+	if l.levelSlice {
+		r.farmNote(area)
+	}
 	if l.needBuff {
 		l.needBuff = false
 		if err := r.d.Fighter.Buff(ctx); err != nil {
@@ -1334,7 +1361,7 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 		// shows up on the way ends the leg too (goldprio): the next pass picks it up before the roam goes on.
 		goldStop := false
 		if err := r.d.Mover.Explore(ctx, func() bool {
-			if hostile() || r.emptyAreaLeave(area) || r.exploredEnough(area) {
+			if hostile() || r.emptyAreaLeave(area) || r.farmResetDue(area) || r.exploredEnough(area) {
 				return true
 			}
 			goldStop = r.goldInReach(radius)
@@ -1345,6 +1372,9 @@ func (r *Runner) sweepPass(ctx context.Context, area int) error {
 				return nil
 			}
 			return fmt.Errorf("explore: %w", err)
+		}
+		if l.farm.pending == area {
+			return nil // the farm loop ends the roam: LevelTo takes the fresh game next
 		}
 		if goldStop && !hostile() {
 			return nil // the sweep is called again and its pickup takes the pile

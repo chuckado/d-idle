@@ -8,6 +8,160 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-530 <!--sg:agent/charui-->
+- Merge branch 'main' into lootwire3 <!--sg:agent/lootwire3-->
+- Merge branch 'main' into TASK-549 <!--sg:agent/lootwire2-->
+- Merge branch 'main' into farmlive <!--sg:agent/farmlive-->
+- Merge branch 'main' into survsd <!--sg:agent/survsd-->
+- Merge branch 'main' into survab <!--sg:agent/survab-->
+- Merge branch 'main' into 547 <!--sg:agent/decomp34-->
+- Merge branch 'main' into charsup <!--sg:agent/charsup-->
+- Pause freezes the game via the lockstep switch, loop/clock wiring, menu button, banner, Space <!--sg:agent/pause-->
+- Merge branch 'main' into idwaitfit <!--sg:agent/idwaitfit-->
+- Merge branch 'main' into resetfit <!--sg:agent/resetfit-->
+- Merge branch 'main' into supportreview <!--sg:agent/supportreview-->
+- videofeed2: lossless feed mounted behind watch.paletteFeed (off), canvas player, guard, walking measurement <!--sg:agent/videofeed2-->
+- Merge branch 'main' into idtome <!--sg:agent/idtome-->
+- Merge origin/main into agent/support (keep both sides) <!--sg:agent/support-->
+- Merge branch 'main' into farmloop2 <!--sg:agent/farmloop2-->
+- Merge branch 'main' into TASK-528 <!--sg:agent/verifyp18-->
+- Merge branch 'main' into videofeed <!--sg:agent/videofeed-->
+- Merge branch 'main' into TASK-526 <!--sg:agent/overlayfix-->
+- Merge branch 'main' into viewerfps <!--sg:agent/viewerfps-->
+- Merge branch 'main' into TASK-537 <!--sg:agent/friendfb-->
+- Merge branch 'main' into 529 <!--sg:agent/resetinstant-->
+- Merge branch 'main' into sandbox2 <!--sg:agent/sandbox2-->
+- Merge branch 'main' into idfast <!--sg:agent/idfast-->
+- observed life lost per minute (lifeLost) in minute line, glance, ledger, levelsim <!--sg:agent/intake-->
+- docs: damage intake of a surrounded hero in the Den (docs/research/damage-intake-2026-11-15.md). <!--sg:agent/dmgcheck-->
+- Merge branch 'main' into p17posted <!--sg:agent/p17posted-->
+- Merge branch 'main' into farmloopon <!--sg:agent/farmloopon2-->
+- Merge branch 'main' into lootwireL4 <!--sg:agent/lootwire1-->
+- Merge branch 'main' into farmloopon <!--sg:agent/farmloopon-->
+- Merge branch 'main' into TASK-519 <!--sg:agent/verifyp17-->
+- Merge branch 'main' into TASK-521 <!--sg:agent/charselect-->
+- Merge branch 'main' into sandboxfresh <!--sg:agent/sandboxfresh-->
+- gamedata: private friends game-data bundle record (no URL) <!--sg:agent/gamedata-->
+- Research: P17 and P18 upstream candidates proven and staged for the verifier, P19 closed as matching (docs/research/decomp33-p17-p19.md) <!--sg:agent/decomp33-->
+- friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published) <!--sg:agent/cut013-->
+- Merge branch 'main' into deploycockpit <!--sg:agent/deploycockpit4-->
+- Merge branch 'main' into devp8 <!--sg:agent/devp8-->
+- Merge branch 'main' into p03cposted <!--sg:agent/p03cposted-->
+- Merge branch 'main' into botreset <!--sg:agent/botreset-->
+- Merge branch 'main' into p04posted <!--sg:agent/p04posted-->
+- Merge branch 'main' into deploycockpit <!--sg:agent/deploycockpit-->
+- Merge branch 'main' into TASK-508 <!--sg:agent/powerwire-->
+- Merge branch 'main' into TASK-512 <!--sg:agent/verifyp04b-->
+- Merge branch 'main' into farmloop <!--sg:agent/farmloop-->
+- Merge branch 'main' into prfix7 <!--sg:agent/prfix7-->
+- Merge branch 'main' into dangerfit2 <!--sg:agent/dangerfit2-->
+- Merge branch 'main' into TASK-501 <!--sg:agent/uiphone-->
+- Merge branch 'main' into decomp31 <!--sg:agent/decomp31-->
+- Merge branch 'main' into TASK-506 <!--sg:agent/decomp30-->
+- Merge branch 'main' into decomp29 <!--sg:agent/decomp29-->
+- Merge branch 'main' into TASK-500 <!--sg:agent/verifyp04-->
+- Merge branch 'main' into TASK-502 <!--sg:agent/p06posted-->
+- Merge branch 'main' into TASK-497 <!--sg:agent/botstuck2-->
+- portalguard: default mode 0, generous bounds, R3 recipe and flip rule <!--sg:agent/portalguard-->
+- Merge branch 'main' into decomp28 <!--sg:agent/decomp28-->
+- decomp27: monster melee block matches game.exe (oracle tools/emu/mel_block.py); a knocking hit in a get-hit is refused in game.exe (FUN_0057edd0 new mode 0x13), fork claim built, verifier brief written <!--sg:agent/decomp27-->
+- Merge branch 'main' into TASK-496 <!--sg:agent/verifyp06b-->
+- d2bot: object finder explores until the object or its preset shows up (Inifuss tree); task card <!--sg:agent/botstuck-->
+- Merge branch 'main' into prfix6 <!--sg:agent/prfix6-->
+- Merge branch 'main' into TASK-494 <!--sg:agent/verifyp06-->
+- Merge branch 'main' into decomp26 <!--sg:agent/decomp26-->
+- herostats: card result, verification notes <!--sg:agent/herostats-->
+- survwire: card result <!--sg:agent/survwire-->
+- Merge origin/main into uic4 <!--sg:agent/uic4-->
+- Merge branch 'main' into p03bposted <!--sg:agent/p03bposted-->
+- Merge branch 'main' into TASK-485 <!--sg:agent/uis7-->
+- Merge branch 'main' into TASK-488 <!--sg:agent/verifyp03d-->
+- Merge branch 'main' into p02posted <!--sg:agent/p02posted-->
+- uis7review: design review of S7 (cockpit default) before merge: approve with changes <!--sg:agent/uis7review-->
+- Merge branch 'main' into verifyp02c <!--sg:agent/verifyp02c-->
+- Merge branch 'main' into prfix5 <!--sg:agent/prfix5-->
+- Merge branch 'main' into uifix1 <!--sg:agent/uifix1-->
+- Merge branch 'main' into verifyp02b <!--sg:agent/verifyp02b-->
+- Merge branch 'main' into prfix4 <!--sg:agent/prfix4-->
+- cockpitreview: design review of the merged watch cockpit before S7 (verdict, 13 required changes, S7 checklist, 6 renders) <!--sg:agent/cockpitreview-->
+- Merge branch 'main' into TASK-462 <!--sg:agent/uis3-->
+- Merge origin/main into agent/uis5 <!--sg:agent/uis5-->
+- Merge branch 'main' into TASK-477 <!--sg:agent/uic23review-->
+- Merge branch 'main' into TASK-473 <!--sg:agent/decomp23-->
+- Merge branch 'main' into TASK-476 <!--sg:agent/verifyp02-->
+- Merge branch 'main' into TASK-475 <!--sg:agent/b9fork-->
+- Merge branch 'main' into TASK-471 <!--sg:agent/uib6-->
+- Merge branch 'main' into TASK-470 <!--sg:agent/uib5-->
+- Merge branch 'main' into TASK-463 <!--sg:agent/uic3-->
+- Merge branch 'main' into prfix3 <!--sg:agent/prfix3-->
+- Merge branch 'main' into TASK-472 <!--sg:agent/uib9-->
+- Merge branch 'main' into TASK-468 <!--sg:agent/verifyp03c-->
+- Merge branch 'main' into drills012 <!--sg:agent/drills012-->
+- Merge branch 'main' into uib4 <!--sg:agent/uib4-->
+- Merge branch 'main' into TASK-464 <!--sg:agent/uib1-->
+- Merge branch 'main' into decomp22 <!--sg:agent/decomp22-->
+- uis6: minBlock 250 <!--sg:agent/uis6-->
+- Merge branch 'main' into TASK-453 <!--sg:agent/uis4-->
+- Merge branch 'main' into TASK-459 <!--sg:agent/p05cr-->
+- toastfix: stack toast text readable in dark theme, contrast test <!--sg:agent/toastfix-->
+- Merge origin/main into agent/uis2 <!--sg:agent/uis2-->
+- Merge branch 'main' into survcal <!--sg:agent/survcal-->
+- Merge branch 'main' into TASK-456 <!--sg:agent/uic2-->
+- Merge branch 'main' into TASK-458 <!--sg:agent/survreplay-->
+- Merge branch 'main' into p03posted <!--sg:agent/p03posted-->
+- Merge branch 'main' into TASK-450 <!--sg:agent/verifyp03b-->
+- Merge branch 'main' into TASK-452 <!--sg:agent/survC-->
+- Merge branch 'main' into TASK-438 <!--sg:agent/uis1b-->
+- Merge branch 'main' into survB <!--sg:agent/survB-->
+- Merge branch 'main' into TASK-448 <!--sg:agent/prfix2-->
+- Merge branch 'main' into towerenv <!--sg:agent/towerenv-->
+- Merge branch 'main' into TASK-442 <!--sg:agent/uib3-->
+- Merge branch 'main' into TASK-443 <!--sg:agent/survA-->
+- Merge branch 'main' into emurun <!--sg:agent/emurun-->
+- Merge branch 'main' into TASK-447 <!--sg:agent/uis1breview-->
+- Merge branch 'main' into TASK-444 <!--sg:agent/verifyp03p05-->
+- Merge branch 'main' into TASK-439 <!--sg:agent/uib2-->
+- friends 0.1.2: installer fix, pack and set staged, drills pending <!--sg:agent/cut012-->
+- Merge branch 'main' into decomp21 <!--sg:agent/decomp21-->
+- Merge branch 'main' into buildhosts3 <!--sg:agent/buildhosts3-->
+- uiredesign4: zone menu off the map, area map letterboxed, browser-window sizes in renders and fit rule, briefs and J updated <!--sg:agent/uidesign4-->
+- uiredesign3: second attempt: cockpit and character canvas mockups, six renders with critique, review page, revised briefs and plan, card <!--sg:agent/uidesign3-->
+- Merge branch 'main' into TASK-427 <!--sg:agent/uib8-->
+- Merge branch 'main' into TASK-424 <!--sg:agent/uis1-->
+- Merge branch 'main' into TASK-425 <!--sg:agent/uib7-->
+- Merge branch 'main' into TASK-428 <!--sg:agent/uic1-->
+- Merge origin/main into prpost4: take main's pr-queue, re-add the swing-start PR 530 row <!--sg:agent/prpost4-->
+- buildhosts: scrub machine names for leakcheck <!--sg:agent/buildhosts-->
+- Merge branch 'main' into TASK-430 <!--sg:agent/survivaldesign-->
+- Merge branch 'main' into TASK-429 <!--sg:agent/prswing3-->
+- Merge branch 'main' into TASK-418 <!--sg:agent/prverify6-->
+- Merge branch 'main' into TASK-422 <!--sg:agent/prpipeline-->
+- Merge branch 'main' into TASK-423 <!--sg:agent/drillzip-->
+- Merge branch 'main' into TASK-421 <!--sg:agent/lootrules-->
+- Merge branch 'main' into TASK-419 <!--sg:agent/uidesign2-->
+- boss1: queue result line at end <!--sg:agent/decomp19-->
+- stashany: backlog card and note for an unlockable stash-from-anywhere feature (user decision 2026-11-14) <!--sg:agent/stashanywhere-->
+- Merge branch 'main' into TASK-417 <!--sg:agent/prswing2-->
+- Merge branch 'main' into TASK-416 <!--sg:agent/uidesign-->
+- Merge branch 'main' into TASK-415 <!--sg:agent/prverify5-->
+- Merge branch 'main' into TASK-411 <!--sg:agent/prswing-->
+- Merge branch 'main' into TASK-408 <!--sg:agent/decomp18-->
+- Merge branch 'main' into TASK-404 <!--sg:agent/swingmodel-->
+- Merge branch 'main' into TASK-412 <!--sg:agent/warpclick-->
+- Merge branch 'main' into TASK-413 <!--sg:agent/levelsim-->
+- levelplan3: watch campaign goldens for the new Smith and Andariel rows <!--sg:agent/levelplan3-->
+- Merge branch 'main' into TASK-407 <!--sg:agent/hour4-->
+- Merge branch 'main' into TASK-406 <!--sg:agent/emurebuild-->
+- Research: shrine trace for Act 1 (about 4.4 shrines per wilderness level, Experience shrine worth 1 to 4 percent of hour 1, bot has no shrine logic) <!--sg:agent/decomp17-->
+- mercrevive2: revive on gold alone, empty belt shops first, failure backoff <!--sg:agent/mercrevive-->
+- Merge branch 'main' into TASK-400 <!--sg:agent/decomp16-->
+- Merge origin/main into agent/towntests <!--sg:agent/towntests-->
+- Merge branch 'main' into TASK-398 <!--sg:agent/staletarget-->
+- Merge origin/main into agent/sellskip <!--sg:agent/sellskip-->
+- hero14: leakcheck wording <!--sg:agent/hero14-->
+- Merge branch 'main' into TASK-396 <!--sg:agent/botadapt-->
+- Merge branch 'main' into TASK-395 <!--sg:agent/forkrebase-->
+- target: recalibrate first-hour headline target (floor 5 / target 7 / stretch 8-9); SME 13-15 retired <!--sg:agent/target-->
 - friends release 0.1.1 built, verified, staged (not published) <!--sg:agent/cut011-->
 - decomp13: merge main, keep both decomp-queue lines <!--sg:agent/decomp13-->
 - Merge branch 'main' into TASK-392 <!--sg:agent/przeal-->

@@ -56,6 +56,7 @@ type Town struct {
 	judge Judge
 	h     *hand.Hand
 
+	reserveGold   int            // ChorePlan.ReserveGold of the visit under way: optional shop buys stay above it
 	sellMarksOnly bool           // set while a visit sells the player's marks but not the pickit's junk
 	marks         ItemMarks      // the player's sell and keep marks (SetItemMarks)
 	pinned        func(int) bool // the player's slot pins (SetPinned)
@@ -88,6 +89,7 @@ type Town struct {
 	emptyStreak      int                                      // town visits in a row that began with portalEmpty (FIXPROGRESS watchdog)
 	tscQuietUntil    time.Time                                // no "no town portal scroll" trip before this (FIXPROGRESS watchdog)
 	choreDeadline    time.Time                                // end of the current Chores call's time budget (zero outside Chores)
+	idTomeLogged     bool                                     // "identify tome skipped" already logged for this Chores call
 	budgetLogged     bool                                     // "resupply budget hit" already logged for this Chores call
 	futile           map[string]futileMark                    // trip reason -> when and with how much gold a visit left it unfixed
 	presetsFn        func() []d2map.Preset                    // test seam: preset units of the current level
@@ -250,6 +252,7 @@ type ChorePlan struct {
 	Ammo                                                        bool // ammo and ranged gear (ammo.go); no-op for classes without a launcher
 	Insure                                                      bool // also stash valuables (see loot.Valuables) before a dangerous trip
 	Force                                                       bool
+	ReserveGold                                                 int            // > 0: the shop leaves this much for the merc revive (tome, spare scrolls and mana potions only buy above it)
 	PotionFloor                                                 int            // > 0: buy healing potions only up to this many in the belt, no mana or rejuvenation (recovery keeps the gold for the kit)
 	Cube                                                        bool           // gem and rune cube upgrades (cubejobs.go); the Tuning.Bot.CubeJobs knob decides in the adapter
 	CubeKeep                                                    map[string]int // item codes the cube chore must not consume

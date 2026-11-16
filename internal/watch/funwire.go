@@ -84,6 +84,8 @@ type FunConfig struct {
 	Risk *RiskConfig
 	// OrderQueue turns the order queue on (TASK-161) when the ladder has its slot rows.
 	OrderQueue *OrderQueueConfig
+	// OrderLoop turns the Loop order on (docs/loop-order.md) when the ladder has the row "orderloop".
+	OrderLoop *OrderLoopConfig
 	// Unlock turns the unlock ladder on (TASK-153): the engine of the profile (unlock.Open). nil: no ladder, no routes.
 	Unlock *unlock.Engine
 	// Affixes reads the properties of an identified item for the reveal card (TASK-157). nil: cards say they are not read.
@@ -113,6 +115,8 @@ type Fun struct {
 	Return ReturnConfig
 	Strip  *TallyStrip
 	Policy *PolicySheet // nil: the sheet is off
+	// ZoneClear is the zone clear settings API (zoneclear.go); nil: off.
+	ZoneClear *ZoneClear
 	// Proposals is nil when zone proposals are off.
 	Proposals *ProposalDesk
 	// Unlocks is nil when the unlock ladder is off.
@@ -131,8 +135,12 @@ type Fun struct {
 	Risk *RiskMeter
 	// Readiness serves GET /api/readiness (internal/readiness, TASK-218), read-only; set it before Serve, nil: no route.
 	Readiness http.Handler
+	// Danger serves GET /api/danger (internal/danger, survival slice S-A), read-only; nil: no route.
+	Danger http.Handler
 	// Queue is nil unless FunConfig.OrderQueue is set and the ladder has the slot rows (TASK-161).
 	Queue *OrderQueue
+	// Loop is nil unless FunConfig.OrderLoop is set and the ladder has the row "orderloop"; bind its repair desk with Loop.Bind.
+	Loop *OrderLoop
 	// Reveal is nil unless the ladder has the rows "idreveal" and "idreveal_later" (TASK-157).
 	Reveal *Reveal
 	// Bestiary is nil unless the ladder has the rows "bestiary" and "bestiary_resists" (TASK-158).
@@ -151,11 +159,27 @@ type Fun struct {
 	Art *ArtAPI
 	// Repair mounts the gear condition and Repair now routes (repairapi.go); set it before Serve, nil: no routes.
 	Repair *RepairAPI
+	// Pause mounts GET and POST /api/pause (pauseapi.go); nil: no routes.
+	Pause *PauseAPI
+	// Reset mounts GET and POST /api/reset (resetapi.go); nil: no routes.
+	Reset *ResetAPI
+	// Support mounts the support bundle routes (supportapi.go, docs/support-bundle.md); nil: no routes.
+	Support *SupportAPI
+	// Characters mounts GET /api/characters and the four POST routes (charactersapi.go, docs/charselect.md); nil: no routes.
+	Characters *CharactersAPI
+	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
+	Merc *MercAPI
+	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
+	LootShadow *LootShadowAPI
+	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
+	LootRules *LootRulesAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm *GoldFarmAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
 	Onboarding *Onboarding
 	Campaign   *CampaignAPI // the guided journey (campaign.go); nil: no routes
+	// Cmd are the optional facts of GET /api/commands (commands.go): the pause desk and the journey-blocked reason.
+	Cmd CommandHooks
 	// OnView is called for every request that passed the viewer's gate (the presence signal for away safety); nil: none.
 	OnView func()
 
@@ -233,6 +257,17 @@ func NewFun(c FunConfig) (*Fun, error) {
 				return nil, err
 			}
 			f.Queue = oq
+		}
+		if c.OrderLoop != nil && c.Unlock.Has(OrderLoopID) {
+			lc := *c.OrderLoop
+			if f.Queue != nil {
+				lc.Waiting = f.Queue.waitingCount
+			}
+			ol, err := NewOrderLoop(f.Unlocks, c.Hub, lc)
+			if err != nil {
+				return nil, err
+			}
+			f.Loop = ol
 		}
 		if c.Risk != nil && c.Unlock.Has(RiskID) {
 			rm, err := NewRiskMeter(f.Unlocks, c.Hub, *c.Risk)
@@ -444,6 +479,9 @@ func (f *Fun) OnGoalEvent(ev goals.Event) {
 	if f.Hints != nil {
 		f.Hints.OnGoalEvent(ev)
 	}
+	if f.Loop != nil {
+		f.Loop.OnGoalEvent(ev)
+	}
 	if f.Queue != nil {
 		f.Queue.OnGoalEvent(ev)
 	}
@@ -569,6 +607,7 @@ func (f *Fun) flush() {
 // Settle updates Codex entries whose thought closed and delivers the edges that waited for the class (call it from
 // the loop that polls the status).
 func (f *Fun) Settle() {
+	f.Hub.TickOrders()
 	if f.Hall != nil {
 		f.Hub.setHeroTitle(f.Hall.Title())
 	}
@@ -584,7 +623,10 @@ func (f *Fun) Settle() {
 	if f.Risk != nil {
 		f.Risk.Tick()
 	}
-	if f.Queue != nil {
+	if f.Loop != nil {
+		f.Loop.Tick()
+	}
+	if f.Queue != nil && (f.Loop == nil || !f.Loop.Holding()) { // a running loop holds the place; the queue waits
 		f.Queue.Tick()
 	}
 	if f.codex == nil {
@@ -610,6 +652,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	for _, p := range ReturnRoutes {
 		m.Handle(p, rh)
 	}
+	m.Handle(DropsRoute, DropsHandler(f.Away, func() float64 { return f.Hub.rel(f.Hub.cfg.Clock.Now()) }))
 	if f.Strip != nil {
 		m.Handle("/api/tally", f.Strip.Handler())
 	} else {
@@ -640,8 +683,17 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Readiness != nil {
 		m.Handle("/api/readiness", f.Readiness) // readiness.Route
 	}
+	if f.Danger != nil {
+		m.Handle("/api/danger", f.Danger) // danger.Route
+	}
+	if f.Queue != nil || f.Loop != nil {
+		f.Hub.SetMapLadder(f.mapLadder)
+	}
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.Handler())
+	}
+	if f.Loop != nil {
+		m.Handle(OrderLoopRoute, f.Loop.Handler())
 	}
 	if f.Bestiary != nil {
 		m.Handle(BestiaryRoute, f.Bestiary.Handler())
@@ -683,9 +735,40 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 			m.Handle(p, f.Art.Handler())
 		}
 	}
+	if f.Pause != nil {
+		m.Handle(PauseRoute, f.Pause.Handler())
+	}
+	if f.Reset != nil {
+		m.Handle(ResetRoute, f.Reset.Handler())
+	}
+	if f.Support != nil {
+		f.Support.setLocal(m)
+		m.Handle(SupportRoute, f.Support.Handler())
+		m.Handle(SupportDownloadRoute, f.Support.Handler())
+		m.Handle(SupportFileRoute, f.Support.Handler())
+	}
+	if f.Characters != nil {
+		m.Handle(CharactersRoute, f.Characters.Handler())
+		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
+	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
+		}
+	}
+	if f.LootShadow != nil {
+		for _, p := range LootShadowRoutes {
+			m.Handle(p, f.LootShadow.Handler())
+		}
+	}
+	if f.LootRules != nil {
+		for _, p := range LootRulesRoutes {
+			m.Handle(p, f.LootRules.Handler())
+		}
+	}
+	if f.Merc != nil {
+		for _, p := range MercRoutes {
+			m.Handle(p, f.Merc.Handler())
 		}
 	}
 	if f.GoldFarm != nil {
@@ -693,6 +776,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignRoute, f.Campaign.Handler())
+	}
+	if f.ZoneClear != nil {
+		m.Handle(ZoneClearRoute, f.ZoneClear.Handler())
 	}
 	if f.Policy != nil {
 		ph := f.Policy.PolicyHandler()
@@ -705,6 +791,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		}
 	}
 	m.Handle(OnboardingRoute, f.Onboarding.Handler())
+	m.Handle(CommandsRoute, f.CommandsHandler())
 }
 
 // owns says whether a ViewRoutes entry is served by mountView instead (the landing redirect and the look tracking).
@@ -724,8 +811,14 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	if f.Unlocks != nil {
 		m.Handle(UnlocksBuyRoute, f.Unlocks.BuyHandler(o))
 	}
+	cp := CommandsPostHandler(o, m, f.CommandSources)
+	m.Handle(CommandsRoute, cp)
+	m.Handle(CommandsCancelRoute, cp)
 	if f.Queue != nil {
 		m.Handle(OrderQueueRoute, f.Queue.PostHandler(o))
+	}
+	if f.Loop != nil {
+		m.Handle(OrderLoopRoute, f.Loop.PostHandler(o))
 	}
 	if f.Reveal != nil {
 		m.Handle(RevealFlipRoute, f.Reveal.FlipHandler(o))
@@ -751,9 +844,37 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 			m.Handle(p, f.Skills.PostHandler(o))
 		}
 	}
+	if f.Pause != nil {
+		m.Handle(PauseRoute, f.Pause.PostHandler(o))
+	}
+	if f.Reset != nil {
+		m.Handle(ResetRoute, f.Reset.PostHandler(o))
+	}
+	if f.Support != nil {
+		m.Handle(SupportBundleRoute, f.Support.BundleHandler(o))
+		m.Handle(SupportSendRoute, f.Support.SendHandler(o))
+	}
+	if f.Characters != nil {
+		for _, p := range CharactersPostRoutes {
+			m.Handle(p, f.Characters.PostHandler(o, p))
+		}
+	}
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {
 			m.Handle(p, f.Repair.PostHandler(o))
+		}
+	}
+	if f.Merc != nil {
+		for _, p := range MercPostRoutes {
+			m.Handle(p, f.Merc.PostHandler(o))
+		}
+	}
+	if f.LootRules != nil {
+		for _, p := range LootRulesPutRoutes {
+			m.Handle(p, f.LootRules.PutHandler(o))
+		}
+		for _, p := range LootRulesPostRoutes {
+			m.Handle(p, f.LootRules.PostHandler(o))
 		}
 	}
 	if f.GoldFarm != nil {
@@ -761,6 +882,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Campaign != nil {
 		m.Handle(CampaignIntentRoute, f.Campaign.PostHandler(o))
+	}
+	if f.ZoneClear != nil {
+		m.Handle(ZoneClearRoute, f.ZoneClear.PostHandler(o))
 	}
 	if f.Policy != nil {
 		m.Handle(PolicyPostRoute, f.Policy.PolicyAnswerHandler(o))
@@ -824,4 +948,24 @@ func QuietSection(h *Hub) ReturnSection {
 		}
 		return &SectionView{ID: "quiet", Title: "Stopped asking", Lines: lines}
 	})
+}
+
+// mapLadder is the Loop and queue state of the zone menu, read from the two desks on every map request.
+func (f *Fun) mapLadder() *MapLadder {
+	l := &MapLadder{}
+	if f.Loop != nil {
+		v := f.Loop.View()
+		l.LoopOpen, l.LoopTeaser = v.Open, v.Teaser
+		l.LoopActive = v.State == LoopActive
+	}
+	if f.Queue != nil {
+		v := f.Queue.View()
+		l.QueueOpen, l.QueueTeaser, l.QueueSlots = v.Open, v.Teaser, v.Capacity
+		for _, e := range v.Entries {
+			if e.State == QueueWaiting {
+				l.QueueWaiting++
+			}
+		}
+	}
+	return l
 }

@@ -11,7 +11,7 @@ import (
 func TestWhyCodesMatchTemplates(t *testing.T) {
 	got := slices.Clone(whyCodes)
 	slices.Sort(got)
-	want := slices.DeleteFunc(watch.WhyCodes(), func(c string) bool { return c == "hold" || c == "activity" }) // watch-only codes
+	want := slices.DeleteFunc(watch.WhyCodes(), func(c string) bool { return c == "hold" || c == "activity" || c == "player_pause" }) // watch-only codes (the band reads the pause desk, not a bot reason)
 	if !slices.Equal(got, want) {
 		t.Errorf("bot codes %v\ntemplate codes %v", got, want)
 	}

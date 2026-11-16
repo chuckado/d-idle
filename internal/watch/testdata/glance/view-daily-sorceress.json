@@ -1,0 +1,55 @@
+{
+  "health": {
+    "gear": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "life": {
+      "light": "ok",
+      "word": "86/120"
+    },
+    "merc": {
+      "light": "unknown",
+      "word": "unknown"
+    },
+    "readiness": {
+      "detail": "Lightning resistance is under the line.",
+      "light": "warn",
+      "word": "risky"
+    },
+    "supplies": {
+      "light": "unknown",
+      "word": "unknown"
+    }
+  },
+  "needs": [],
+  "progress": {
+    "goldPerHour": null,
+    "goldSeries": [],
+    "level": {
+      "etaSeconds": 67,
+      "from": 7,
+      "pct": 50,
+      "to": 8
+    },
+    "xpPerHour": 272160,
+    "xpSeries": []
+  },
+  "schema": "watch.glance/1",
+  "sentence": {
+    "margin": "risky",
+    "place": "Cold Plains",
+    "reason": "you ordered it, 30 min left",
+    "tone": "ok",
+    "uptime": "100% of the time making progress",
+    "voice": "",
+    "why": {
+      "change": "Life under my retreat line sends me to town; an order from you ends the fight sooner.",
+      "code": "fight",
+      "next": "After this order (about 30 min left) the plan takes over again.",
+      "now": "Fighting in Cold Plains, my life is 72%."
+    },
+    "word": "Fighting"
+  },
+  "seq": 9
+}

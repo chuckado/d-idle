@@ -7,6 +7,7 @@
   [data-panel="onboarding"] h3 { margin: 0; font: 600 var(--d-fs-2)/var(--d-lh-tight) var(--d-font-display); }
   [data-panel="onboarding"] .lines { margin: 0; padding-inline-start: var(--d-sp-4); display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); }
   [data-panel="onboarding"] .btnrow, [data-panel="onboarding"] .help-card { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  [data-panel="onboarding"] .what { flex: 1 1 100%; display: grid; gap: var(--d-sp-2); }
   [data-panel="onboarding"] .welcome-card, [data-panel="onboarding"] .check { display: grid; gap: var(--d-sp-2); }
   [data-panel="onboarding"] .check-head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-3); }
   [data-panel="onboarding"] .check-head .meta { color: var(--d-text-2); font-size: var(--d-fs-1); margin-inline-end: auto; }

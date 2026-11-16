@@ -283,8 +283,13 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if o.managed {
 		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
 	}
-	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
+	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
 		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+	if os.Getenv("D2BOT_RUN") == "" { // a measured run is never paused (docs/pause.md)
+		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
+	}
+	deps.ZoneShadow = wirePower(db)                                                                          // shadow margin line next to the planner line, log only (survival slice S-B)
+	deps.ZoneChoice, deps.ZoneObserve, deps.ZoneDecide, deps.BossMargin = wireSurvivalModel(db, ip.Ledger()) // shadow choice and ledger (S-C); the decision hooks act only with bot.zoneModel 1 (S-D)
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
 	// drops never reached the goal manager, summary 0 kills). Give them a forwarder bound to the runner later.
 	var feedFighter *combat.Fighter
@@ -343,16 +348,31 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	o.ladder.knobs = knobSetter(tuner)
+	o.ladder.knobValue = tuner.Value
+	o.ladder.supportKnobs, o.ladder.supportLayout = func() any { return tuner.Snapshot().Values }, o.layout
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(o.gameDir, o.data, db)
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
+	o.ladder.pause = pauseDesk(runner, ip.State())
+	o.ladder.reset = resetDesk(runner, ip.State())
+	var leave func(context.Context) error
+	if o.managed { // the bot owns this d2d: Save and Exit it (not Cycler.LeaveGame, which would re-enter the old character)
+		leave = be.Proc.SaveExit
+	}
+	saveRoots := []string{filepath.Join(ip.Dir(), "d2d")}
+	if x := os.Getenv("XDG_DATA_HOME"); x != "" {
+		saveRoots = append(saveRoots, x)
+	}
+	o.ladder.characters = charactersDesk(ip, func() string { return charName }, saveRoots, runner, leave)
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
 	o.ladder.readiness = wireReadiness(runner, db)
+	o.ladder.danger = wireDanger(db)
 	o.ladder.heroStats = heroStats(runner)
 	o.ladder.explored = runner.Explored
+	o.ladder.farmReset = runner.FarmResetShare
 	if db != nil {
 		o.ladder.monsters = db
 	}
@@ -364,6 +384,7 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, feedFighter, ldir, log)
 	useSenses(lrig, be.Env, feedFighter, log)
 	useSensesCoverage(lrig, be.Env, nv)

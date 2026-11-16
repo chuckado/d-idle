@@ -10,7 +10,7 @@ This is a private beta for a few friends. The pack is a single file, `didle-frie
 
 - Linux on x86-64 (the image is amd64 only), 3 GB of free disk space, 4 GB of RAM to spare.
 - Docker Engine with the compose plugin (`docker compose version` must work) and permission to run `docker` without sudo.
-- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it.
+- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it. Only the data archives (`*.mpq`) are mounted into the container, read-only and one file at a time: your key file, the game program and your saves are never visible to it.
 
 ## Licence note (read before you install)
 
@@ -23,7 +23,7 @@ The pack carries the GPL-3.0 program d2d and the bot that drives it, with their 
 ```
 tar xzf didle-friends-<version>.tar.gz
 cd didle-friends-<version>
-./install.sh --game-dir /path/to/your/Diablo-II
+./install.sh --game-dir '/path/to/Diablo II'
 ```
 
 It checks Docker, the download (`SHA256SUMS`), your game folder and free ports, loads the image, starts the container, waits for the page and prints one address, for example:
@@ -52,11 +52,23 @@ Open the watch page (`./didle status` prints the address). A welcome card explai
 
 Update with the hero standing in town: the bot is stopped to swap the release, and an update while the hero fights has not been tested. An update is only installed when its signature matches the key built into the image; a failed start rolls back to the previous release automatically. Your hero and token are never part of a release. The only network call the bot makes is the update check to the source set in `.env` (`D2BOT_UPDATE_FEED`); `D2BOT_UPDATE_CHECK=off` in `.env` (then `./didle stop && ./didle start`) switches it off.
 
+## Sending a support bundle
+
+When something is wrong and the owner asks for details: open the page, press the "..." button, then "Send support bundle...". The sheet asks two questions, both off unless you tick them: a screenshot of the game view, and your character save file (that is your character, its items and its name; leave it off unless you are asked for it). "Preview" shows the list of files with sizes and the end of the log exactly as it would be sent. Home paths, your user and computer name, addresses, e-mail addresses and every key or token are removed before you see it, and if anything private-looking is still left the bundle is blocked and nothing is sent. Press "Send": you get a short code (eight characters); tell the owner the code. Nothing is ever sent without that press. "Save to file instead" downloads the same zip so you can send it by hand; that is also what you get when your pack has no upload address set. It works from a phone. `./didle report` (above) still works when the bot is not running.
+
+## The game picture is choppy
+
+First try the **Low rate** button in the video card (smoother on a slow browser or screen; remembered per browser). The card head shows `stream: N fps` when it is under 15; send that line and `about:support` (Graphics section) with a report.
+
+Two settings in `.env` (then `./didle stop && ./didle start`): `D2_VIDEO_FPS=N` caps or sets the capture rate of the picture (1 to 30; the `d2bot play` / ffmpeg capture default is 15 since 2026-11-15, was 8); `D2_VIEW_FLAGS="-fps 25 -feed /dev/shm/d2dview/frames.ring"` switches the in-container view tap to the d2d frame feed (about 20 fps instead of 4 to 6; U: only works when the image's d2d has the frame feed, see viewer-fps.md section 6; it also needs `shm_size: 128m` on the service). Measured cost of the ffmpeg capture (800x600, one core, 10 s, V on the builder box): 8 fps 0.47 s CPU, 15 fps 1.1 s, 24 fps 1.2 s, 30 fps 1.5 s (about 5, 11, 12, 15 percent of a core).
+
+Lossless picture (optional, off by default, U until the sandbox A/B has run): with `D2_PALETTE_FEED=1` in `.env` next to the `D2_VIEW_FLAGS` line above, the page draws the game on a canvas from a lossless tile-delta feed (no JPEG blur, about a third of the bytes of the JPEG picture, less CPU in the container) and falls back to the normal picture by itself on any trouble. It needs the same frame feed as above, so with the image of this release (its d2d predates the frame feed, docs/video-feed.md section 7) it does nothing and the page keeps the normal picture.
+
 ## When something goes wrong
 
 | Symptom | Do this |
 |---|---|
-| `STOP: missing in ...` | point `--game-dir` at your own Diablo II folder with the four files |
+| `STOP: missing in ...` | point `--game-dir` at your own Diablo II folder with the four files (if you unzipped a download that holds a `Diablo II` folder, the installer finds it one level down by itself) |
 | `port 8891 is in use` | `./install.sh --port 9100` |
 | page says 401 | open the address from `./didle status` (it carries the token) |
 | answering a card gives 403 | you opened the page under another name than the printed one; use the printed address, or reinstall with `--host NAME` |

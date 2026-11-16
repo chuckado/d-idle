@@ -6,7 +6,7 @@ Written 2026-10-29 from master `6b920b0`. Regenerate the tables between the `kno
 
 ## 1. How knobs are set (V)
 
-- Every knob has a dotted key `group.name` (groups: `nav combat town loot bot boss merc resource ladder`) and a range. All writes are clamped to `[min, max]` and rounded for int fields (`bot.SetKnob`).
+- Every knob has a dotted key `group.name` (groups: `nav combat town loot bot boss merc resource ladder senses watch`) and a range. All writes are clamped to `[min, max]` and rounded for int fields (`bot.SetKnob`).
 - Order of precedence at start: defaults (optimal) -> handicap profile -> `"tuning"` overrides in config.json. At run time: `PUT /api/v1/instances/{id}/knobs` with `{profile?, overrides?: {key: number|null}}` (null resets to the profile value; the edit is all-or-nothing). `GET` returns every knob with its current value. Doc: docs/api.md.
 - config.json (`D2BOT_CONFIG`, default `<data>/config.json`, the `"bot"` object or the whole file; unknown keys are errors): `profile`, `custom` {Name, Desc, Level, Per}, `tuning` {"bot.clearRadius": 20}. Doc: docs/bot.md "Tuning and handicap profiles".
 - The "worst" column is the end of the range a profile moves toward (the end the bot is least efficient at). Knobs where the default already sits on that end do not change under any profile (list in section 7).
@@ -44,8 +44,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | nav.exitPush | 8 | 3..20 | subtiles | 3 | 1 | How far past a border gap or exit tile the walk continues to trigger the level change. |
 | nav.loadWaitSec | 20 | 5..90 | s | 5 | accessor | How long to wait through a loading screen. |
 | nav.panelWaitMs | 2500 | 800..8000 | ms | 800 | accessor | How long to wait for a clicked panel (waypoint) to open. |
-| nav.useWaypoints | 1 | 0..1 | bool | 1 | 5 | 1: travel, the corpse run and the way back from town take an activated waypoint instead of walking (saves minutes and walking deaths; the route guard still applies to every area on the way). 0 walks everything. |
-| nav.wpMinDistance | 2 | 2..8 | levels | 2 | 3 | A waypoint trip is taken only when it skips at least this many level hops; shorter routes walk. 2 is the shortest trip that saves a level. |
+| nav.useWaypoints | 1 | 0..1 | bool | 1 | 6 | 1: travel, the corpse run and the way back from town take an activated waypoint instead of walking (saves minutes and walking deaths; the route guard still applies to every area on the way). 0 walks everything. |
+| nav.wpMinDistance | 2 | 2..8 | levels | 2 | 4 | A waypoint trip is taken only when it skips at least this many level hops; shorter routes walk. 2 is the shortest trip that saves a level. |
 | nav.wpCooldownSec | 0 | 0..20 | s | 0 | 2 | Deprecated, default 0 (no wait): game.exe has no arrival cooldown in single player (docs/research/waypoint-trace.md) and d2d dropped its own in #153. A value above 0 makes the bot wait this long (plus 1 s) after arriving before clicking a row, for an old d2d binary. |
 | nav.badEdgeTTLSec | 300 | 0..3600 | s | 300 | 2 | A level link or gate that a walk failed on is routed around for this long (game time), and forgotten at once when the game is re-entered; a link the level map itself shows is never marked. 0 restores the old behaviour: marks last for the rest of the run, and a character cut off from a gate it can see is not walked out of its pocket (townwedge). |
 | nav.cautionRadius | 20 | 8..40 | subtiles | 8 | 1 | A corpse run stops and reports when a living monster comes this close; its paths avoid monsters at twice the usual radius. |
@@ -64,7 +64,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | combat.drinkLifePct | 55 | 35..80 | % | 35 | 4 | Life percent that triggers a healing potion. |
-| combat.drinkRejuvPct | 35 | 20..60 | % | 20 | 2 | Life percent that triggers a rejuvenation potion. |
+| combat.drinkRejuvPct | 35 | 20..60 | % | 20 | 5 | Life percent that triggers a rejuvenation potion. |
 | combat.drinkRejuvBossPct | 50 | 0..70 | % | 0 | 0 | Life percent that triggers a rejuvenation potion in a fight against champions, uniques or bosses (danger 1+); 0 = off. SME advice, EXP. |
 | combat.championEarlyPct | 10 | 0..25 | pp | 0 | 0 | Percentage points added to the healing potion line and the rejuvenation (boss) line while champions (not bosses) are in range, in Normal below character level 15. Champions have about 3x life and +50% damage. 0 = off. SME rule of thumb, EXP. |
 | combat.chickenPct | 25 | 15..45 | % | 15 | 2 | Life percent at or below which the bot leaves the game (Normal, Nightmare). |
@@ -74,7 +74,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.crowdN | 8 | 0..20 | count | 20 | 8 | Hostiles within 8 subtiles that make a crowd: below it the normal drink and chicken rules apply alone. 0 turns the crowd rule off. |
 | combat.crowdPortalPct | 70 | 40..90 | % | 40 | 3 | In a crowd, open a town portal at or below this life percent when a scroll exists and fewer than 3 monsters are adjacent (a 2 s cast fails when surrounded). |
 | combat.crowdDrinkPct | 65 | 40..85 | % | 40 | 2 | In a crowd, drink a healing potion below this life percent (the portal cannot be cast when surrounded); the normal rule drinks at 55. |
-| combat.crowdAdjacent | 8 | 3..12 | subtiles | 12 | 5 | A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters. |
+| combat.crowdAdjacent | 8 | 3..12 | subtiles | 12 | 6 | A hostile within this distance (centre to centre) is in melee reach and counts as adjacent: three or more make a town portal cast a non-escape (potion, else leave the game) and a crowd 'surrounded'. Default 8 from the live zombie reads (drills11), UNVERIFIED for other monsters. |
 | combat.crowdAbandonN | 15 | 0..30 | count | 30 | 2 | Hostiles within 8 subtiles on a travel or quest walk that make the bot abandon the walk at once, retreat 20+ subtiles and open a portal. 0 turns it off. |
 | combat.potionGapMs | 1000 | 900..3000 | ms | 3000 | 4 | Minimum time between healing or mana potions. |
 | combat.potionEmergencyPct | 30 | 10..50 | % | 10 | 2 | Below this life percent a healing potion is drunk even while an earlier one is still working. Above it the bot drinks again only for a higher tier: the game adds a same-tier drink to the running effect (longer, not faster; fid-potions.md Q5). |
@@ -101,7 +101,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | combat.novaManaFloor | 25 | 0..60 | mana | 60 | 1 | Frost Nova on a crowd of 3 or more is not cast with less mana than this, so the mana stays for the bolts. |
 | combat.kiteEnabled | 1 | 0..1 | bool | 0 | 2 | 1 backs away from melee monsters that get close. |
 | combat.kiteDistance | 10 | 4..20 | subtiles | 4 | 3 | Back away when a melee monster is closer than this. |
-| combat.kiteLifePct | 60 | 40..100 | % | 40 | 0 | Step back from a single melee monster only below this life percent (and falling). |
+| combat.kiteLifePct | 60 | 40..100 | % | 40 | 2 | Step back from a single melee monster only below this life percent (and falling). |
 | combat.kiteMaxSteps | 6 | 0..12 | count | 0 | 4 | Retreat steps per target before standing to fight. |
 | combat.kiteRetreat | 12 | 6..20 | subtiles | 6 | 10 | Length of one retreat step. |
 | combat.dodgeRadius | 4 | 0..8 | subtiles | 0 | 7 | Step away from hostile missiles closer than this. |
@@ -142,6 +142,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
 | town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 2 | Buy a Tome of Town Portal when gold is at least this. |
 | town.idScrollTarget | 2 | 0..20 | count | 0 | 4 | Scrolls to hold when no tome is owned. |
+| town.identifyTome | 0 | 0..1 | bool | 0 | 1 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
+| town.identifyTopUpBelow | 10 | 1..20 | count | 1 | 1 | With identifyTome on, refill the Tome of Identify to full when it holds fewer scrolls than this. |
 | town.minGoldReserve | 100 | 0..1e+04 | gold | 1e+04 | 5 | Optional purchases never spend below this. |
 | town.keyTarget | 0 | 0..12 | count | 0 | 6 | Keys to hold; 0 never buys keys. |
 | town.repairBelowPct | 30 | 0..90 | % | 0 | 3 | Repair when any equipped item is below this durability. |
@@ -169,6 +171,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tidyEnabled | 1 | 0..1 | 0/1 | 1 | 2 | 1: the Tidy chore stashes by the tidy policy table and drops pure junk from a full pack; it never touches equipment or marked items (docs/tidy.md). |
 | town.tidyMaxActions | 12 | 1..40 | count | 40 | 1 | Most stash and drop actions of one tidy pass (safety valve). |
 | town.tidyMinPackPct | 60 | 20..100 | % | 100 | 1 | A tidy pass drops junk only when the backpack is at least this full. |
+| town.mercReserve | 1 | 0..1 | 0/1 | 0 | 2 | 1: while the merc is dead the shop keeps its revive price back from the tome, spare town portal scrolls and mana potions (hero14: 950 gold went to a tome and scrolls, then 600 for the revive was missing). Healing potions and the first portal scroll still come first. 0 = off. |
 | town.spareKeep | 4 | 0..30 | count | 0 | 1 | A full pack sells spare potions and identify scrolls beyond this many per kind (they fill the pack but are never belted). |
 | town.sellMaxS | 60 | 15..300 | s | 15 | 2 | Time the sell chore alone may take before it is cut off. |
 | town.potionsFirst | 1 | 0..1 | bool | 0 | 2 | 1 buys the kit potions before the first town portal scroll, which then needs gold for the scroll plus tpScrollPotions potions (d2-sme order, decision D3). 0 = scroll first (old). |
@@ -217,6 +220,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.goldSafeDist | 8 | 2..30 | subtiles | 2 | 0 | A mid-fight grab needs every hostile at least this far from the hero. |
 | loot.goldMaxDanger | 0 | 0..3 | level | 0 | 0 | Highest pack danger (0 none, 1 champions or shamans, 2 elite, 3 deadly) at which a mid-fight grab is still made. |
 | loot.goldMinLifePct | 60 | 0..100 | percent | 100 | 0 | Below this life percent gold is ignored (survival comes first). |
+| loot.rulesEngine | 0 | 0..3 | stage | 3 | 1 | 0: today's pickit and tidy table decide (default). 1: the loot rules engine (docs/lootrules.md) decides what to pick up from the ground, with today's strictness, minimum priority, per-cell and small-gold filters still applied on top. 2: ground and the tidy chore's stash and drop decisions. 3: plus the sell chore (the five sell decisions of docs/lootrules.md section 13: marks first, then the sell rules, then the ground rules as the pickit judges today). If the engine errors or panics, that one decision falls back to today's code and is logged once. |
 | loot.goldRetries | 4 | 1..10 | count | 1 | 4 | Failed pickups of one pile, over all calls, before it is given up. |
 | loot.memCap | 64 | 4..512 | count | 4 | 2 | Remembered drops kept at most; the lowest value is evicted. |
 
@@ -224,17 +228,28 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| bot.zoneModel | 0 | 0..1 | mode | 0 | 1 | 0 (default until the A/B of docs/survival/ab-harness.md passes): the plan tables choose the leveling zone. 1: the survival controller chooses among the plan's zones by power-vs-danger margin and expected value (docs/survival/zonemodel.md); any controller error falls back to the plan tables with a log line. Also lets the margin replace the Andariel level floor when boss margin data exists, may leave a dead merc dead, and may ask for a fresh game when the best zone is cleared. |
+| bot.zoneDial | 1 | 0..2 | mode | 1 | 1 | Risk setting of the margin model (bot.zoneModel 1): 0 cautious, 1 balanced, 2 bold. Moves the enter and stay lines of the margin; read only by the model. |
+| bot.portalGuard | 0 | 0..1 | mode | 0 | 1 | 0 (default until drill R3, docs/fixportalmelee.md): three or more adjacent attackers block a town portal cast (the old count rule). 1: block it when the expected damage of the adjacent attackers over the cast and the walk reaches bot.portalLifePct of current life; with any damage term missing the count rule applies. A hit does not interrupt the cast (V run, decomp28), so the risk is damage taken, not a cut. |
+| bot.portalCastMs | 3000 | 500..5000 | ms | 5000 | 1 | Time of the town portal scroll or tome read used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts. |
+| bot.portalWalkMs | 3000 | 0..5000 | ms | 5000 | 1 | Walk from the cast spot into the portal used by the guard (generous upper bound, U, drill R3 measures it). Longer blocks more casts. |
+| bot.portalHitMs | 700 | 300..3000 | ms | 300 | 1 | Assumed time between two hits of one adjacent monster in the guard (its strongest attack lands every time: an upper bound, U). Shorter blocks more casts. |
+| bot.portalLifePct | 50 | 10..100 | % | 10 | 1 | The guard blocks a portal cast when the expected damage over the exposure reaches this share of current life. Lower blocks more casts. |
 | bot.tickMs | 100 | 100..1000 | ms | 1000 | 3 | How often the bot re-plans between actions. Slower means more idle gaps. |
 | bot.watchMs | 50 | 50..300 | ms | 300 | 5 | How often events, hazards and death are checked while an action runs. Above 300 the bot dies on Hell packs. |
 | bot.reactionMs | 0 | 0..300 | ms | 300 | 1 | Extra delay before reacting to low life or a chicken condition. |
 | bot.resupplyPotions | 2 | 2..4 | potions | 4 | 2 | Healing potions left in the belt that trigger a town trip. Higher means more trips. |
 | bot.invFullPct | 85 | 40..85 | % | 40 | 2 | Share of occupied inventory cells that triggers a town trip. Lower means more trips. |
-| bot.levelMargin | 0 | 0..8 | levels | 8 | 9 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
-| bot.leaveSlack | 0 | 0..6 | levels | 6 | 7 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
+| bot.levelMargin | 0 | 0..8 | levels | 8 | 10 | Levels above a step's enter level the planner requires. Higher is safer but slower. |
+| bot.leaveSlack | 0 | 0..6 | levels | 6 | 8 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 21 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 23 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
+| bot.farmReset | 0 | 0..1 | bool | 0 | 1 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
+| bot.farmResetPct | 85 | 50..100 | % | 85 | 1 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
+| bot.farmResetCooldownMin | 5 | 1..60 | min | 5 | 1 | Least minutes between two farm resets: a reset that did not pay cannot repeat at once. |
+| bot.lootShadow | 1 | 0..1 | bool | 1 | 1 | 1: the loot rules engine (docs/lootrules.md) judges every ground pickup, tidy and sell decision next to today's code and logs the differences as `loot shadow: ...` lines (read-only report at /api/lootrules/shadow). Log only: it never changes what the bot does. 0 turns it off. |
 | bot.corpseValueMin | 1000 | 1..2e+04 | gold | 2e+04 | 4 | Estimated value of the gear on the corpse below which it is abandoned. Higher abandons more. |
 | bot.spiralDeaths | 4 | 3..8 | deaths | 8 | 4 | Deaths in one area within the spiral window that make the bot avoid that area (one fewer when the area is clearly too high for the level or the character died with no potions and no gold). Dying is normal: the default allows three deaths on the same goal. Higher tolerates more. |
 | bot.dangerBanMin | 20 | 5..120 | min | 120 | 1 | How long the spiral breaker keeps the character out of an area. Longer stalls the goal more. |
@@ -246,10 +261,14 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.corpseMinValue | 50 | 0..5000 | gold | 5000 | 3 | Below this estimated gold value the in-field corpse run is skipped entirely (the stricter bot.corpseValueMin still applies above it). |
 | bot.navSkipSec | 150 | 30..900 | s | 900 | 1 | How long a navigation fault (stuck, no exit to the area) keeps the planner out of an area. Short on purpose: it is a bot fault, not danger. |
 | bot.areaIdleSec | 60 | 15..600 | s | 600 | 1 | When every candidate area is skipped or banned, the bot waits this long in town at most, then farms the least bad area anyway (a death streak waits at least the starter ban cap). |
+| bot.questBlockedFarmMin | 10 | 1..120 | min | 120 | 1 | A quest step the guards refuse is waited out this long; then the hero farms the best leveling area of the level plan and retries the step after this wait, doubling each time (cap x64). Shown as journeyBlocked in the status. |
+| bot.parkAfter | 2 | 0..10 | blocks | 10 | 2 | A quest step that fails with 'not found' this many times (planning blocked, the same step) is parked: the hero farms the level plan instead of waiting in town. 0 turns the rule off. |
+| bot.parkMinutes | 15 | 1..240 | min | 240 | 1 | How long a parked quest step stays parked before the planner offers it again. The reason shows as journeyBlocked in the status. |
 | bot.stallWarnMin | 30 | 0..240 | min | 240 | 1 | Virtual minutes without campaign progress (no kill or xp, no non-town area entered, no purchase, no quest step) before the bot logs 'campaign stalled' and starts a fresh game. 0 turns the stall ladder off. Longest legitimate stretch in the navsoak logs: 19 min. |
 | bot.stallExitMin | 30 | 5..240 | min | 240 | 1 | Virtual minutes still without campaign progress after the fresh game before the bot exits (status 5) so the supervisor restarts the whole process. |
 | bot.spiralMinutes | 15 | 5..15 | min | 5 | 5 | Window in which the deaths are counted. Shorter forgets sooner. |
 | bot.pauseDeathsPerHour | 8 | 8..20 | deaths | 20 | 2 | Deaths in the last hour after which the bot pauses itself and asks the user. |
+| bot.pauseCapMin | 60 | 0..720 | min | 720 | 2 | A Pause the player asked for (the frozen game) ends by itself after this many wall minutes and a Needs you row says how long it was. 0 = no cap. |
 | bot.stalePackHostiles | 4 | 0..12 | count | 12 | 3 | Hostiles near the hero when it left a field by chicken, town portal or crowd exit that make the area a stale pack: no return by portal and no planner pick of that area until bot.stalePackMinutes pass or the kit is rebuilt. 0 turns the rule off. Seed 13 of Gate 2 g2f died 2 s after re-entering a 12-hostile pack at clvl 4. |
 | bot.stalePackMinutes | 10 | 1..60 | min | 60 | 1 | How long a stale pack keeps its area closed. Monsters of a live game stay where they are (U), so the hold is a guess at the time the kit needs to be rebuilt. |
 | bot.stalePackMinHP | 5 | 1..8 | count | 8 | 1 | Healing potions (belt and pack) that lift the stale-pack hold early, together with bot.stalePackMinTier. |
@@ -455,7 +474,14 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | invdesk.verbs | 0 | 0..1 | bool | 0 | 1 | 1: a player's equip command goes through the private fork's item verbs (the server's own item handlers) when the connected d2d advertises them in caps; the click path stays the fallback and the oracle. 0 (default): always the click path. Off until the user has seen it work live (docs/design/item-verbs.md). |
+| invdesk.instant | 0 | 0..1 | bool | 0 | 1 | 1: with invdesk.verbs on and a backend that advertises the verbs, an item action the player gives (equip, unequip, drop, identify, and stash, take and gold at the chest) runs at once through the verbs instead of waiting for the bot's next safe moment. 0 (default): every action queues. Off until the user has seen the fast lane work live (docs/inventory-actions.md, Instant actions). |
 | invdesk.maxSets | 8 | 1..20 | sets | 8 | 1 | How many named gear sets the player may save per hero on the inventory page (docs/gearsets.md). A set is applied only when the player clicks Apply; the bot never chooses one. |
+
+### watch.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| watch.paletteFeed | 0 | 0..1 | bool | 0 | env.PaletteFeedOn | 1: the viewer (d2dview, and the watch screen through the tap relay) also serves the lossless RGBA tile-delta feed of the game picture (/stream.pfeed; measured 0.4 to 0.7 MB/s against 1.8 MB/s of JPEG q72, docs/probes/video-feed-2026-11-15.md) and the page draws it on a canvas when the glance reply lists it; any decode trouble falls back to MJPEG. Needs the d2d framefeed ring. d2dview and the friends pack read the environment switch D2_PALETTE_FEED=1 (same meaning; the d2dview process has no tuning file). 0 (default): MJPEG only, nothing changes. Off until the live A/B has run (docs/video-feed.md section 9). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
@@ -583,3 +609,11 @@ d2cheat (cmd/d2cheat, docs/cheats.md): `d2cheat [--reason TEXT] [--actor NAME] [
 
 ## 8. Save point (bot.savePointMin)
 The game writes the .d2s only on Save and Exit (V: SAVECHECK, docs/soak-analysis.md 6c). `internal/bot/savepoint.go`: in town, no trip, no panel, life >= 50%, no death in the last 2 minutes, no per-game quest memory pending, and `bot.savePointMin` minutes since the last game entry, the bot calls `Cycler.NewGame` (Save and Exit, re-enter the same character and difficulty) under `oogRun`. Every game entry (first start, recycle, farm NewGame, fresh-game leveling, crash re-entry) restarts the timer and resets the xpRisk/XPLOSS baseline. Planned entries are not counted as `restarts` in the minute line, do not feed `noteReentry` or the failsafe ladder; a failure backs off 5 minutes. 0 = off. Offline tests only (U live).
+
+## 9. Game picture on the watch page (card viewerfps, 2026-11-15)
+
+Not tuning knobs; settings of the watch screen's video (docs/probes/viewer-fps-2026-11-15.md).
+- `GET /stream?fps=N` (1 to 30): this viewer gets at most N parts a second, newest frame wins; other viewers and the capture are untouched. The page sets `fps=8` in "Low rate" mode (button in the video card, remembered per browser in local storage key `d2videolowrate`; the "Performance" hint offers it after 6 s under 15 fps). Absent: every frame.
+- Identical consecutive frames (a still scene) are withheld for up to 1 s, then one is sent anyway (the page's stall watchdog is 3 s).
+- `/api/glance` field `stream` (only with `-watch-video`): `viewers`, `fpsIn` (capture), `fpsOut` (all viewers summed), `kBps`, `skippedSame`, `missed` (frames a slow viewer never got). The page shows its own `stream: N fps, K KB/s` in the video card head when under 15 fps or with `?debug`; `window.d2video.stats()` returns it.
+- Existing: `--watch-video-fps` (x11: 1 to 30, default 15; tap: cap 1 to 30), `--watch-video-quality` (ffmpeg -q:v, default 5), 3 viewers, 512 KiB frame cap.

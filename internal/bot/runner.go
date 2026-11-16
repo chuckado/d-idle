@@ -27,6 +27,8 @@ import (
 // Deps are the collaborators of a Runner. Mover, Fighter and Town are required; the rest are optional and each
 // missing one has a documented fallback (docs/bot.md).
 type Deps struct {
+	// Freezer stops the game itself for the player's Pause (freeze.go); nil: Pause walks home and stops the bot only.
+	Freezer Freezer
 	Mover   Mover
 	Fighter Fighter
 	Town    Townsman
@@ -64,6 +66,22 @@ type Deps struct {
 	// Bus, if set, receives every event the bot emits (internal/event/MIGRATION.md steps 1 and 2). The Runner then
 	// feeds Events() from its own bus subscription through event.ToGoals, so the goal manager keeps working unchanged.
 	Bus *event.Bus
+	// ZoneShadow, if set, returns the `zone shadow:` log line for the area the planner just chose (survival slice S-B,
+	// docs/survival/power.md): the margin of the hero against the zone, for the log only. potions is the healing potion
+	// count of the kit, -1 when the belt was not read. An empty line logs nothing. It must not change any decision.
+	ZoneShadow func(s *d2.Snapshot, area int, diff string, potions int) string
+	// ZoneChoice, if set, returns log lines (separated by newline) of the survival controller's shadow choice for the
+	// plan's candidate zones of this difficulty (survival slice S-C, docs/survival/ledger.md). Log and API only: nothing
+	// reads the result. It must not block and must not change any decision.
+	ZoneChoice func(s *d2.Snapshot, area int, diff string, potions int, cands []ZoneCand) string
+	// ZoneObserve, if set, receives the hard events and the area summaries the per-zone ledger learns from. Passive.
+	ZoneObserve func(ZoneEvent)
+	// ZoneDecide, if set and bot.zoneModel is 1, is asked for the leveling zone (survival slice S-D): the controller's
+	// choice among cands with the dial id (cautious, balanced, bold). An error makes the planner use the plan tables.
+	ZoneDecide func(s *d2.Snapshot, area int, diff string, potions int, dial string, cands []ZoneCand) (ZoneVerdict, error)
+	// BossMargin, if set and bot.zoneModel is 1, says whether the hero's margin against a boss exists and its word; ok is
+	// false without margin data for that boss (the legacy level floor then stays).
+	BossMargin func(s *d2.Snapshot, key, diff, dial string) (word string, ok bool)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -139,6 +157,8 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	zst            zoneState               // the last zone model verdict (zonemodel.go)
+	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)
 	dlog           *deathLog               // guarded by obMu
 	avoid          map[int]time.Time       // areas out of play (death spiral, nav faults), guarded by obMu
@@ -164,10 +184,21 @@ type Runner struct {
 	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)
 	why            goals.Why            // reason of the current activity (whyline.go); guarded by mu
 	pendingWhy     goals.Why            // announced by setWhy, taken by the next setLocked; guarded by mu
+	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
+	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
+	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
+	farmOff        string               // why the farm loop is off for this session (mu)
 	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off
+	safetyBusy     atomic.Int32         // safety actions in flight (carryOut); the item fast lane stays closed meanwhile (SafetyBusy)
 	bossStart      map[string]time.Time // start of the last unfinished boss run by name (taskActs.KillBoss, loop goroutine only)
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
+	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
+	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
+	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
+	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
+	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int
 	panicTimes     []time.Time // recovered panics inside PanicWindow, guarded by mu
@@ -197,6 +228,7 @@ type loopState struct {
 	trip             *trip
 	stuckAt          time.Time
 	cleared          map[int]bool // areas fully explored in this game
+	farm             farmLoop     // the farm loop's visit, pending reset and return zone (farmreset.go)
 	freshAt          time.Time    // when the last fresh game started (survives forgetGame: it is the cross-game progress check)
 	freshExp         uint32       // experience at that moment
 	freshNoGain      int          // fresh games in a row that gained under Route.FreshMinXP
@@ -461,6 +493,9 @@ func (r *Runner) Pause() error {
 
 // Resume implements goals.Runner.
 func (r *Runner) Resume() error {
+	if r.d.Freezer != nil && r.Frozen() {
+		r.freezeOff(false, false) // a Resume from any source ends a frozen pause too (a failed thaw is logged and retried by the next press)
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.paused = false
@@ -468,6 +503,10 @@ func (r *Runner) Resume() error {
 		r.selfStop, r.message = false, ""
 	}
 	r.autoResumeAt = time.Time{}
+	if r.plp.want { // the manager's Resume ends the player's pause too
+		r.plp.want, r.plp.held, r.plp.reason, r.plp.since = false, false, "", time.Time{}
+		r.plp.save()
+	}
 	return nil
 }
 
@@ -501,7 +540,7 @@ func (r *Runner) Stop() error {
 func (r *Runner) Status() goals.Status {
 	r.mu.Lock()
 	defer r.mu.Unlock()
-	s := goals.Status{Activity: r.activity, Why: r.why, Message: r.message, Character: r.char, Updated: r.updated}
+	s := goals.Status{Activity: r.activity, Why: r.why, Message: r.message, Character: r.char, Updated: r.updated, JourneyBlocked: r.journeyWhy, FarmResetOff: r.farmOff}
 	if r.goal != nil {
 		s.GoalID = r.goal.ID
 	}

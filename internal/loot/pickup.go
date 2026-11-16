@@ -380,6 +380,12 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 	}
 	lowGold := s.Player.Gold < t.LowGoldBelow
 	maxBuy := MaxBuyOf(s.Player)
+	packPct := 0
+	if u, ok := occ.(interface{ UsedPct() int }); ok {
+		packPct = u.UsedPct()
+	}
+	sp := l.ShadowPass(s, packPct, 0) // shadow stage: log-only, nil when off (lootshadow.go)
+	sp.SetGround(strict, lowGold)
 	for _, u := range s.Ground {
 		if u.Item == nil || u.Mode != d2.ItemModeGround {
 			continue
@@ -407,15 +413,24 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 				c.Stats = st
 			}
 		}
+		if sp != nil && c.Stats == nil && l.stats != nil && u.Addr != 0 {
+			c.Stats, _ = l.stats(u.Addr) // the read EvaluateWith would make, kept for the shadow
+		}
 		v := l.EvaluateWith(u, c)
+		if ev, ok := sp.GroundVerdict(u, c.Stats); ok {
+			v = ev // loot.rulesEngine >= 1: the engine decides; the filters below stay today's
+		}
 		if namedItem(o.Names, name, b) {
 			v = Verdict{Action: Keep, Tier: "S", Prio: 100, Rule: "named", Reason: "asked for by name"}
 		}
+		shadow := func(today string) { sp.Observe(ShadowGround, u, today, "", false, c.Stats) }
 		if !passes(v, strict, lowGold) {
+			shadow("ignore")
 			skip("filtered: " + v.String())
 			continue
 		}
 		if v.Prio < o.MinPrio {
+			shadow("ignore")
 			skip("below min prio")
 			continue
 		}
@@ -427,10 +442,12 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 			// recovering: anything worth the PoorMinSell line is gold, the per-cell bar is for a character that can afford to wait
 			if l.recovering.Load() {
 				if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy) < t.PoorMinSell {
+					shadow("ignore")
 					skip("not worth selling")
 					continue
 				}
 			} else if strict == 1 && v.Rule != poorRule && SellValue(l.e.Data, b, u.Item, maxBuy)/cells < t.MinValuePerCell {
+				shadow("ignore")
 				skip("not worth selling")
 				continue
 			}
@@ -438,12 +455,15 @@ func (l *Looter) candidates(s *d2.Snapshot, o PickOpts, failed map[uint32]int) (
 		if b != nil && b.Type == "gold" {
 			// A broke character takes every pile: small piles are most of what Normal drops, and it needs the gold.
 			if amt := c.Stats.Get(d2.StatGold); c.Stats != nil && int(amt) < l.goldBar(s) && s.Player.Gold >= l.poorBelow() {
+				shadow("ignore")
 				skip("small gold pile")
 				continue
 			}
+			shadow("pickup")
 			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})
 			continue
 		}
+		shadow("pickup") // every filter above said yes; pack room below is not a loot decision
 		// Potions the belt will take (a same-kind column with room or an empty column, B2) do not need pack space.
 		if k := belt.PotionKind(b); k != belt.None && belt.WillBelt(l.e.Data, s.Inventory, k) {
 			out = append(out, cand{u, v, d, name, s.Player.Gold, l.heldOf(s.Inventory, u.Class)})

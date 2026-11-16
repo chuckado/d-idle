@@ -70,17 +70,22 @@ type extra struct {
 // Hub is safe for concurrent use. Lock order: the store's lock, then the Hub's (store events call in), so no Hub
 // method holds its own lock while it calls the store.
 type Hub struct {
-	cfg      Config
-	base     time.Duration
-	video    *Video                          // nil: no game video
-	cur      atomic.Pointer[currency.Wallet] // nil: no currencies (vanilla; internal/watch/currency.go)
-	placer   atomic.Pointer[placerBox]       // nil: orders go straight to Give (no charter sink)
-	why      *Whyline                        // the reason line (whyline.go)
-	onClass  func()                          // run when the hero's class becomes known (OnClass); guarded by mu
-	stats    HeroStatsSource                 // defences for /api/hero (SetHeroStatsSource); guarded by mu
-	layout   layoutStore                     // the layout manifest in force (layout.go); its own mutex
-	explored ExploredSource                  // zone coverage for /api/hero (SetExploredSource); guarded by mu
-	gold     GoldSource                      // gold for /api/hero (SetGoldSource); guarded by mu
+	cfg       Config
+	base      time.Duration
+	video     *Video                            // nil: no game video
+	pal       *PalFeed                          // nil: MJPEG only (palfeed.go)
+	cur       atomic.Pointer[currency.Wallet]   // nil: no currencies (vanilla; internal/watch/currency.go)
+	placer    atomic.Pointer[placerBox]         // nil: orders go straight to Give (no charter sink)
+	why       *Whyline                          // the reason line (whyline.go)
+	onClass   func()                            // run when the hero's class becomes known (OnClass); guarded by mu
+	stats     HeroStatsSource                   // defences for /api/hero (SetHeroStatsSource); guarded by mu
+	survival  survivalHolder                    // the survival shadow choice for /api/survival (SetSurvivalSource); lock-free
+	layout    layoutStore                       // the layout manifest in force (layout.go); its own mutex
+	farmReset func() int                        // the farm loop's reset share for /api/hero (SetFarmResetSource); guarded by mu
+	explored  ExploredSource                    // zone coverage for /api/hero (SetExploredSource); guarded by mu
+	gold      GoldSource                        // gold for /api/hero (SetGoldSource); guarded by mu
+	ladder    atomic.Pointer[func() *MapLadder] // the Loop and queue state the act map shows (SetMapLadder)
+	gl        glanceState                       // sources and sample ring of /api/glance (glance.go); its own mutex
 
 	mu      sync.Mutex
 	seq     uint64
@@ -461,7 +466,32 @@ type OrderRequest struct {
 	Area    string
 	Minutes int
 	Forever bool // no time limit
-	Replace bool // "Go now" in slice 1: every open order is cancelled first
+	// UntilLevel (go and fight only, with no minutes and no Forever) ends the order done at that hero level.
+	UntilLevel int
+	Replace    bool // "Go now" in slice 1: every open order is cancelled first
+}
+
+// TickOrders ends every open until-level order whose level the hero has reached: the bot is told to stop (as a cancel)
+// and the order ends done. Fun.Settle calls it; the queue's own entries are placed without a level and end in OrderQueue.Tick.
+func (h *Hub) TickOrders() {
+	lvl := h.heroNow().Level
+	if lvl <= 0 {
+		return
+	}
+	h.mu.Lock()
+	var ids []int
+	for _, o := range h.orders {
+		if (o.State == OrderQueued || o.State == OrderActive) && o.UntilLevel > 0 && lvl >= o.UntilLevel {
+			ids = append(ids, o.ID)
+		}
+	}
+	h.mu.Unlock()
+	for _, id := range ids {
+		if h.cfg.Orders != nil {
+			_ = h.cfg.Orders.Cancel(id)
+		}
+		h.OrderState(id, OrderDone, fmt.Sprintf("reached level %d", lvl))
+	}
 }
 
 // GiveOrder is Give for a timed order that queues like before.
@@ -472,9 +502,19 @@ func (h *Hub) GiveOrder(kind, area string, minutes int) (Order, error) {
 // Give validates and records an order, then hands it to the bot's OrderSink. The order only asks: the hero's own guard
 // still decides when the walk starts, and a refusal ends the order failed with the guard's reason (OrderState).
 func (h *Hub) Give(r OrderRequest) (Order, error) {
+	if r.UntilLevel != 0 {
+		var err error
+		if r, err = h.withUntilLevel(r); err != nil {
+			return Order{Kind: r.Kind}, err
+		}
+	}
 	o, err := validateOrder(r.Kind, r.Area, r.Minutes, r.Forever, h.cfg.Areas)
 	if err != nil {
 		return o, err
+	}
+	if r.UntilLevel != 0 {
+		o.UntilLevel = r.UntilLevel
+		o.Text = strings.Replace(o.Text, "until you cancel", fmt.Sprintf("until level %d", r.UntilLevel), 1)
 	}
 	if r.Replace {
 		for _, id := range h.openIDs() {

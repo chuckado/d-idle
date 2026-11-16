@@ -18,7 +18,7 @@ var webFS embed.FS
 // Routes of the read-only side (mounted on d2dview). Every one is GET (HEAD) only. The game video routes (VideoRoutes)
 // are not in this list: d2dview has its own /stream, so only the bot's own listener (Serve) mounts them.
 var ViewRoutes = []string{"/watch", "/watch/", "/api/thoughts", "/api/journal", "/api/rules", "/api/uptime", "/api/orders", "/api/orders/map",
-	"/api/why", WhylineRoute, "/api/config", "/api/events", "/api/currency", HeroRoute, LayoutRoute}
+	"/api/why", WhylineRoute, "/api/config", "/api/events", "/api/currency", HeroRoute, GlanceRoute, LayoutRoute, SurvivalRoute}
 
 // VideoRoutes are served by ViewHandler only when a Video is set (Serve mounts them for d2bot -watch-video).
 var VideoRoutes = []string{"/stream", "/shot.jpg"}
@@ -72,12 +72,18 @@ func (h *Hub) ViewHandler() http.Handler {
 			http.Redirect(w, r, "/watch"+queryOf(r), http.StatusFound)
 		case "/watch/app.js":
 			asset("app.js", "text/javascript; charset=utf-8")(w, r)
-		case "/watch/app.css", "/watch/tokens.css", "/watch/reset.css", "/watch/shell.css", "/watch/components.css", "/watch/utilities.css", "/watch/inventory.css":
+		case "/watch/characters": // the Characters page (docs/charselect-ui.md); the script and the texts are plain assets
+			asset("characters.html", "text/html; charset=utf-8")(w, r)
+		case "/watch/characters.json":
+			asset("characters.json", "application/json; charset=utf-8")(w, r)
+		case "/watch/app.css", "/watch/tokens.css", "/watch/reset.css", "/watch/pause.css", "/watch/shell.css", "/watch/components.css", "/watch/utilities.css", "/watch/inventory.css", "/watch/characters.css":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/css; charset=utf-8")(w, r)
-		case "/watch/shell.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js":
+		case "/watch/shell.js", "/watch/resetui.js", "/watch/pauseui.js", "/watch/supportui.js", "/watch/lootrulesui.js", "/watch/overlay.js", "/watch/characters.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js", "/watch/palfeed.js":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/javascript; charset=utf-8")(w, r)
-		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json":
-			// the editor's three presets, for ?layout=<name> (the screenshot suite renders them)
+		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json",
+			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json", "/watch/layouts/cockpit.json":
+			// the editor's three presets and the four redesign ones (classic is the pre-redesign default), for ?layout=<name>
+			// and the "..." menu (the screenshot suite renders them)
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "application/json; charset=utf-8")(w, r)
 		default:
 			if !servePanels(w, r, asset) {
@@ -87,6 +93,8 @@ func (h *Hub) ViewHandler() http.Handler {
 	})
 	m.Handle(WhylineRoute, h.why.Handler())
 	m.HandleFunc(HeroRoute, h.heroHandler())
+	m.HandleFunc(GlanceRoute, h.glanceHandler())
+	m.HandleFunc(SurvivalRoute, h.survivalHandler())
 	m.HandleFunc(LayoutRoute, h.layoutHandler())
 	m.HandleFunc("/api/thoughts", func(w http.ResponseWriter, r *http.Request) { writeJSON(w, 200, h.Thoughts()) })
 	m.HandleFunc("/api/journal", func(w http.ResponseWriter, r *http.Request) {
@@ -138,6 +146,14 @@ func (h *Hub) ViewHandler() http.Handler {
 	}
 	m.HandleFunc("/stream", video((*Video).handleStream))
 	m.HandleFunc("/shot.jpg", video((*Video).handleShot))
+	if h.pal != nil {
+		if h.pal.Stream != nil {
+			m.Handle(PalFeedStreamRoute, h.pal.Stream)
+		}
+		if h.pal.Capability != nil {
+			m.Handle(PalFeedCapRoute, h.pal.Capability)
+		}
+	}
 	return readOnly(m)
 }
 
