@@ -12,6 +12,7 @@ dependencies: []
 priority: medium
 ordinal: 286000
 card: "idtome"
+result: "Optional idtome chore behind town.identifyTome (default 0, bot never auto-buys); the manual Buy scrolls errand already buys the tome and fills it; pickup stops at a full tome (existing). Tests skip without extracted tables; not verified live."
 owns:
   - "internal/town/idtome_test.go"
 exclusive: []
