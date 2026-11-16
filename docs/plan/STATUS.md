@@ -273,6 +273,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d5151ba8b 11-16 16:06 `Merge agent/survrescreen: Merge branch 'main' into survrescreen` (survrescreen)
+- fa812710d 11-16 16:05 `Merge branch 'main' into survrescreen` (-)
 - 33dd65c36 11-16 15:16 `Merge agent/survfix2: Merge branch 'main' into TASK-562` (survfix2)
 - 702813fc7 11-16 15:15 `Merge branch 'main' into TASK-562` (-)
 - 35ba067f1 11-16 15:06 `Merge agent/seqbody: seqbody: seq-ias follow-up PR body per verifier` (seqbody)
@@ -281,6 +283,4 @@
 - 937224b96 11-16 14:37 `Merge branch 'main' into TASK-559` (-)
 - 993773c54 11-16 14:35 `Merge agent/decomp36: Merge branch 'main' into decomp36` (decomp36)
 - 1b01f90de 11-16 14:34 `Merge branch 'main' into decomp36` (-)
-- 51af5dec2 11-16 14:29 `Merge agent/survfix: Merge branch 'main' into survfix` (survfix)
-- 69cba35be 11-16 14:28 `Merge branch 'main' into survfix` (-)
 <!-- statusgen:end -->
