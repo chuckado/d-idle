@@ -216,6 +216,7 @@
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
 | viewerfps | proposed | - | `internal/watch/video.go`<br>`internal/watch/videofps_test.go`<br>`internal/watch/web/mjpeg.js`<br>`internal/watch/web/panels/video`<br>`docs/probes/viewer-fps-2026-11-15.md`<br>`internal/watch/glance.go`<br>`internal/watch/videoresume_test.go`<br>`internal/watch/testdata/video_panel.js`<br>`docs/knobs.md` | - |
 | friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
+| videofeed | proposed | - | `internal/watch/palfeed`<br>`internal/watch/web/palfeed.js`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`tools/videofeed` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -259,6 +260,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 999100bfe 11-16 00:31 `Merge agent/videofeed: Merge branch 'main' into videofeed` (videofeed)
+- 5ca87e732 11-16 00:30 `Merge branch 'main' into videofeed` (-)
 - 81cb2fefb 11-16 00:24 `Merge agent/overlayfix: Merge branch 'main' into TASK-526` (overlayfix)
 - 32874d3b8 11-16 00:23 `Merge branch 'main' into TASK-526` (-)
 - 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
@@ -267,6 +270,4 @@
 - 66d410786 11-16 00:03 `Merge origin/main into agent/viewerfps (glance: keep stream and intake)` (-)
 - 3b4eec79b 11-16 00:03 `Merge branch 'main' into TASK-537` (-)
 - 419058708 11-15 23:48 `Merge agent/resetinstant: Merge branch 'main' into 529` (resetinstant)
-- 08f81fd90 11-15 23:47 `Merge branch 'main' into 529` (-)
-- b064994f1 11-15 23:40 `Merge agent/sandbox2: Merge branch 'main' into sandbox2` (sandbox2)
 <!-- statusgen:end -->

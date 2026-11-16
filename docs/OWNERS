@@ -317,6 +317,7 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
+docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -427,6 +428,7 @@ docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
 docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
+docs/video-feed.md  credit-runner  videofeed
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -785,6 +787,7 @@ internal/watch/orderloop_test.go  credit-runner  uib7
 internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/orders.go  credit-runner  uib4
 internal/watch/orders_untillevel_test.go  credit-runner  uib4
+internal/watch/palfeed  credit-runner  videofeed
 internal/watch/panels.go  credit-runner  uis6
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
@@ -928,6 +931,7 @@ internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/overlay.js  credit-runner  overlayfix
+internal/watch/web/palfeed.js  credit-runner  videofeed
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/area-map/  credit-runner  uis6
 internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
@@ -1080,4 +1084,5 @@ tools/uishots/serve.go  credit-runner  friendfb
 tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
 tools/uishots/serve.go  credit-runner  uis7
+tools/videofeed  credit-runner  videofeed
 # END GENERATED OWNERS

@@ -713,6 +713,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
 - [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
+- [video-feed.md](video-feed.md): Lossless delta frame feed for the watch video (card videofeed, 2026-11-15)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
 - [watch-origin.md](watch-origin.md): Same-origin rule for state-changing requests (watch login, setup wizard)
@@ -963,6 +964,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
 - [viewer-fps-2026-11-15.md](probes/viewer-fps-2026-11-15.md): Viewer game picture, fps report (2026-11-15)
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)
 - [warp-sandbox-2026-11-12.md](probes/warp-sandbox-2026-11-12.md): Warp-arrival fix on the play sandbox (devp4), 2026-11-12
