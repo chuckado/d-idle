@@ -82,7 +82,9 @@ func TestZoneModelFallsBackOnErrorAndOff(t *testing.T) {
 		t.Errorf("asked %d times", *calls)
 	}
 	// an area the plan does not offer: also the plan rule
-	g.r.d.ZoneDecide = func(*d2.Snapshot, int, string, int, string, []ZoneCand) (ZoneVerdict, error) { return ZoneVerdict{Area: 9999}, nil }
+	g.r.d.ZoneDecide = func(*d2.Snapshot, int, string, int, string, []ZoneCand) (ZoneVerdict, error) {
+		return ZoneVerdict{Area: 9999}, nil
+	}
 	if st, _ := g.modelPick(12, nil); st.Area != want.Area {
 		t.Errorf("unknown area: got %d", st.Area)
 	}
