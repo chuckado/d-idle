@@ -165,6 +165,9 @@ func (r *Runner) forgetGame() {
 	l.stepArea = 0
 	l.waitNote = false
 	l.farm.forgetVisit()
+	if fc, ok := r.d.Mover.(interface{ ForgetCoverage() }); ok {
+		fc.ForgetCoverage() // a new game is a new zone: no visited point of the old one counts
+	}
 	// F1: a belt refusal from the last game (sticky belt-full mark) does not hold in the new one
 	if bf, ok := r.d.Town.(interface{ ForgetBelt() }); ok {
 		bf.ForgetBelt()
@@ -1130,9 +1133,14 @@ func (r *Runner) noTarget(ctx context.Context, s *d2.Snapshot, c control) bool {
 			return false
 		}
 		diff := c.spec.difficulty
-		return r.do(ctx, c, StateInTown, "Starting a fresh game", sec(r.cfg.TownTimeoutSec), "new game", r.newGameRun(func(ctx context.Context) error {
-			return r.d.Cycler.NewGame(ctx, diff)
-		}))
+		if !r.freshAllowed(ctx, s) {
+			return false
+		}
+		// startFreshGameDiff forgets the old game: without it the cleared set stayed, the next tick found nothing to
+		// do in town again and started another game every few seconds (d2d has no menu poll to forget it)
+		return r.do(ctx, c, StateInTown, "Starting a fresh game", sec(r.cfg.TownTimeoutSec), "new game", func(ctx context.Context) error {
+			return r.startFreshGameDiff(ctx, diff)
+		})
 	}
 	if w := r.banWait(); w != "" {
 		if r.idleBreak(false) {

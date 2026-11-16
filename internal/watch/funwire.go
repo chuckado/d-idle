@@ -650,6 +650,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	for _, p := range ReturnRoutes {
 		m.Handle(p, rh)
 	}
+	m.Handle(DropsRoute, DropsHandler(f.Away, func() float64 { return f.Hub.rel(f.Hub.cfg.Clock.Now()) }))
 	if f.Strip != nil {
 		m.Handle("/api/tally", f.Strip.Handler())
 	} else {

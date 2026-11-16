@@ -39,6 +39,10 @@ func (r *Runner) Explored() (visited, total, pct, threshold int, ok bool) {
 	if !has {
 		return 0, 0, 0, 0, false
 	}
+	// the coverage belongs to the last zone roamed: in town it is not this place's (the minute line showed 100 percent there)
+	if r.inTown.Load() { // an atomic: the minute line calls this while the runner's lock is held
+		return 0, 0, 0, 0, false
+	}
 	visited, total = c.Coverage()
 	if total <= 0 {
 		return 0, 0, 0, 0, false

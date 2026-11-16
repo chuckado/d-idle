@@ -56,6 +56,12 @@ Update with the hero standing in town: the bot is stopped to swap the release, a
 
 When something is wrong and the owner asks for details: open the page, press the "..." button, then "Send support bundle...". The sheet asks two questions, both off unless you tick them: a screenshot of the game view, and your character save file (that is your character, its items and its name; leave it off unless you are asked for it). "Preview" shows the list of files with sizes and the end of the log exactly as it would be sent. Home paths, your user and computer name, addresses, e-mail addresses and every key or token are removed before you see it, and if anything private-looking is still left the bundle is blocked and nothing is sent. Press "Send": you get a short code (eight characters); tell the owner the code. Nothing is ever sent without that press. "Save to file instead" downloads the same zip so you can send it by hand; that is also what you get when your pack has no upload address set. It works from a phone. `./didle report` (above) still works when the bot is not running.
 
+## The game picture is choppy
+
+First try the **Low rate** button in the video card (smoother on a slow browser or screen; remembered per browser). The card head shows `stream: N fps` when it is under 15; send that line and `about:support` (Graphics section) with a report.
+
+Two settings in `.env` (then `./didle stop && ./didle start`): `D2_VIDEO_FPS=N` caps or sets the capture rate of the picture (1 to 30; the `d2bot play` / ffmpeg capture default is 15 since 2026-11-15, was 8); `D2_VIEW_FLAGS="-fps 25 -feed /dev/shm/d2dview/frames.ring"` switches the in-container view tap to the d2d frame feed (about 20 fps instead of 4 to 6; U: only works when the image's d2d has the frame feed, see viewer-fps.md section 6; it also needs `shm_size: 128m` on the service). Measured cost of the ffmpeg capture (800x600, one core, 10 s, V on the builder box): 8 fps 0.47 s CPU, 15 fps 1.1 s, 24 fps 1.2 s, 30 fps 1.5 s (about 5, 11, 12, 15 percent of a core).
+
 ## When something goes wrong
 
 | Symptom | Do this |
