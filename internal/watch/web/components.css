@@ -253,16 +253,12 @@
   .banner[data-float] { position: fixed; inset-block-start: 48px; inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); margin: 0; max-inline-size: min(94vw, 40rem); }
 }
 
-/* the components layer comes after shell, so the header link rules of a narrow band (they must beat .d-btn) live here */
 @layer components {
-  /* a band under 1000 px has no room for every link: the pictures at 900x700 and 360x640 showed the sentence squeezed to 76 px
-     and the links overlapping. The Return screen link goes (the page stays reachable by its address), the rest get tighter. */
-  @media (max-width: 62.49rem) {
-    .d-band-status .d-links { gap: var(--d-sp-1); }
-    .d-band-status .d-links > .d-btn { padding-inline: var(--d-sp-2); }
-    .d-band-status .d-links > a[href="/watch/return"] { display: none; }
-  }
-  @media (max-width: 39.99rem) {
-    .d-band-status .d-links > .d-btn { padding-inline: 5px; font-size: var(--d-fs-0); }
-  }
+  /* a cockpit band under 1000 px has no room for every link (pictures at 900x700 and 360x640: the sentence squeezed to 76 px,
+     the links overlapping). shell.js sets data-narrow on the shell (mid or phone); the Return screen link goes (its address
+     still works) and the rest get tighter. */
+  .d-shell[data-narrow] .d-band-status .d-links { gap: var(--d-sp-1); }
+  .d-shell[data-narrow] .d-band-status .d-links > .d-btn { padding-inline: var(--d-sp-2); }
+  .d-shell[data-narrow] .d-band-status .d-links > a[href="/watch/return"] { display: none; }
+  .d-shell[data-narrow="phone"] .d-band-status .d-links > .d-btn { padding-inline: 5px; font-size: var(--d-fs-0); }
 }
