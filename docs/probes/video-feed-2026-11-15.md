@@ -97,7 +97,7 @@ single frames comparable (11 against 9 ms). On the sandbox's one core that moves
 
 ## Walking-heavy recording and the honest bandwidth comparison (2026-11-16, user challenge: "walking is most of the game")
 
-Tags: V = measured here. Setup: `tools/videofeed/run2.sh` on the builder (`labrun tower`, one locked job, 8 min; not Orion,
+Tags: V = measured here. Setup: `tools/videofeed/run2.sh` on the builder (one locked job, 8 min; not the user desktop,
 not the sandbox): `record2.py` steps a lockstep lab d2d (`lab3-labverbs` f75816c6, `--lab-verbs --no-save --seed 7`,
 fresh throwaway level 1 Sorceress, 25 Hz, one PNG per 40 ms tick) through 2860 frames: town idle 100, a 20 s town walk
 (20 clicks at random points of the encampment, 500 frames), `debug goto 2` (Blood Moor) + 60 idle, a 72 s field walk

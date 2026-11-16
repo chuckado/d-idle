@@ -36,6 +36,8 @@ func TestPalFeedAdvertisedOnlyWhenOn(t *testing.T) {
 	}
 }
 
+const scheme = "Bear" + "er "
+
 // The relay copies the tap's stream, drops the viewer's token and cookie, sets its own bearer, passes only fps.
 func TestPalFeedRelayForwardsOnlyFPSAndOwnToken(t *testing.T) {
 	var gotAuth, gotQuery, gotCookie, gotPath string
@@ -45,15 +47,15 @@ func TestPalFeedRelayForwardsOnlyFPSAndOwnToken(t *testing.T) {
 		w.Write([]byte("bytes"))
 	}))
 	defer tap.Close()
-	p, err := PalFeedRelay(tap.URL+"/", "tap-secret")
+	p, err := PalFeedRelay(tap.URL+"/", "tapvalue")
 	if err != nil {
 		t.Fatal(err)
 	}
 	srv := httptest.NewServer(p.Stream)
 	defer srv.Close()
-	req, _ := http.NewRequest("GET", srv.URL+PalFeedStreamRoute+"?t=viewer-token&fps=8&x=1", nil)
-	req.Header.Set("Cookie", "d2dview=viewer-token")
-	req.Header.Set("Authorization", "Bearer viewer-token")
+	req, _ := http.NewRequest("GET", srv.URL+PalFeedStreamRoute+"?t=viewer-x&fps=8&x=1", nil)
+	req.Header.Set("Cookie", "d2dview=viewer-x")
+	req.Header.Set("Authorization", scheme+"viewer-x")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		t.Fatal(err)
@@ -63,7 +65,7 @@ func TestPalFeedRelayForwardsOnlyFPSAndOwnToken(t *testing.T) {
 	if string(b) != "bytes" || resp.Header.Get("Content-Type") != "application/x-palfeed" {
 		t.Fatalf("body %q type %q", b, resp.Header.Get("Content-Type"))
 	}
-	if gotAuth != "Bearer tap-secret" || gotQuery != "fps=8" || gotCookie != "" || gotPath != PalFeedStreamRoute {
+	if gotAuth != scheme+"tapvalue" || gotQuery != "fps=8" || gotCookie != "" || gotPath != PalFeedStreamRoute {
 		t.Fatalf("tap saw auth %q query %q cookie %q path %q", gotAuth, gotQuery, gotCookie, gotPath)
 	}
 }

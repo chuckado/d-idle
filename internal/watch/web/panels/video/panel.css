@@ -4,7 +4,7 @@
   [data-panel="video"] .frame { aspect-ratio: 4 / 3; min-block-size: 0; display: grid; place-items: center; background: var(--d-video-bg); color: var(--d-video-text); border-radius: var(--d-r-2); overflow: hidden; }
   [data-panel="video"] .shot { inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: contain; object-position: center; }
   /* the lossless feed's canvas: hard pixel edges, never smoothed; the page sets whole device pixels per frame pixel (palFit) */
-  [data-panel="video"] canvas.shot { image-rendering: pixelated; image-rendering: crisp-edges; }
+  [data-panel="video"] canvas.shot { image-rendering: pixelated; image-rendering: crisp-edges; inline-size: var(--pal-w, 100%); block-size: var(--pal-h, 100%); }
   [data-panel="video"] canvas.shot[hidden] { display: none; }
   /* connection state over the picture: reconnecting, paused, stream down (with Retry); never a silent frozen frame */
   [data-panel="video"] .frame { position: relative; }

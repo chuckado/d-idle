@@ -9,7 +9,7 @@ const tick = (ms) => new Promise((r) => setTimeout(r, ms || 5));
 function env(formats, detectOK) {
   const players = [], urls = [];
   const PalFeed = {
-    detect: () => Promise.resolve(detectOK ? { paletteFeed: true, version: 1 } : null),
+    negotiate: () => Promise.resolve(detectOK && formats.indexOf('palfeed') >= 0 ? { paletteFeed: true, version: 1 } : null),
     fit: () => ({ cssW: 800, cssH: 600, scale: 1 }),
     Player: function (o) { this.o = o; this.stopped = false; players.push(this); urls.push(o.url); this.start = () => {}; this.stop = () => { this.stopped = true; }; },
   };

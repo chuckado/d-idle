@@ -115,7 +115,7 @@ export function mount(root, ctx) {
     const P = PF();
     if (!P || !P.fit || mode !== 'pal' || !frame.clientWidth) return;
     const r = P.fit(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
-    cv.style.inlineSize = r.cssW + 'px'; cv.style.blockSize = r.cssH + 'px'; // whole device pixels per frame pixel: sharp at any zoom
+    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px'); // whole device pixels per frame pixel: sharp at any zoom
   }
   function toMjpeg(why) {
     if (mode === 'mjpeg') return;
@@ -144,16 +144,11 @@ export function mount(root, ctx) {
   async function tryPal() {
     if (!palUrl || typeof fetch !== 'function') return;
     try {
-      const tq = ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '';
-      const g = await fetch('/api/glance' + tq, { cache: 'no-store', credentials: 'same-origin' });
-      const fm = g.ok ? ((await g.json()).stream || {}).formats : null;
-      if (!fm || fm.indexOf('palfeed') < 0) return;
       if (!PF()) await import('../../palfeed.js');
       const P = PF();
-      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed offered, this browser cannot decode it'); return; }
-      let d = null; // 503 until the first frame: the probe itself wakes the ring, so ask again a few times
-      for (let i = 0; i < 5 && !d; i++) { if (i) await new Promise((r) => setTimeout(r, 1000)); d = await P.detect(fetch, '', {}, tq); }
-      if (!d) { log('lossless feed offered but not ready, staying on MJPEG'); return; }
+      if (!P || typeof DecompressionStream !== 'function' || typeof ImageData !== 'function') { log('lossless feed: this browser cannot decode it'); return; }
+      const d = await P.negotiate(fetch, ctx.token ? '?t=' + encodeURIComponent(ctx.token) : '');
+      if (!d) return; // not offered (glance without palfeed) or not ready: MJPEG stays
       mode = 'pal';
       if (typeof ResizeObserver === 'function') { ro = new ResizeObserver(palFit); ro.observe(frame); }
       ctl.reconnect();

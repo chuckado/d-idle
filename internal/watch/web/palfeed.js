@@ -93,6 +93,27 @@
       .catch(function () { return null; });
   }
 
+  // negotiate: does this host offer the feed to this page? /api/glance must list "palfeed" under stream.formats and the
+  // capability probe must answer (it is 503 until the first frame, and the probe wakes the ring, so ask up to `tries`
+  // times a second apart). Resolves to the probe reply or null; never rejects. tq is the query string with the token.
+  function negotiate(fetchFn, tq, tries) {
+    tq = tq || '';
+    return fetchFn('/api/glance' + tq, { cache: 'no-store', credentials: 'same-origin' })
+      .then(function (g) { return g.ok ? g.json() : null; })
+      .then(function (j) {
+        var fm = j && j.stream && j.stream.formats;
+        if (!fm || fm.indexOf('palfeed') < 0) return null;
+        var n = 0;
+        return (function ask() {
+          return detect(fetchFn, '', {}, tq).then(function (d) {
+            if (d || ++n >= (tries || 5)) return d;
+            return new Promise(function (r) { setTimeout(r, 1000); }).then(ask);
+          });
+        })();
+      })
+      .catch(function () { return null; });
+  }
+
   function browserInflate(bytes) {
     var ds = new DecompressionStream('deflate-raw');
     return new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer().then(function (a) { return new Uint8Array(a); });
@@ -172,6 +193,6 @@
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   }
 
-  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, detect: detect, Player: Player, HEADER: HEADER };
+  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, detect: detect, negotiate: negotiate, Player: Player, HEADER: HEADER };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.PalFeed = api;
 })(typeof window !== 'undefined' ? window : globalThis);

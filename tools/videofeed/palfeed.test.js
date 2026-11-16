@@ -144,3 +144,14 @@ test('player with onEnd: errors go to the caller, bad streams are fatal, onFrame
   ev = await run(Buffer.concat([lenp(rd('key.pf')), rd('key.pf'), lenp(junk), junk]));
   assert.ok(ev.frames === 1 && ev.bytes > 0 && ev.end.fatal);
 });
+
+test('negotiate needs palfeed in glance stream.formats and a ready probe', async () => {
+  const mk = (formats, probe) => (u) => Promise.resolve(u.indexOf('/api/glance') === 0
+    ? { ok: true, json: () => Promise.resolve({ stream: { formats } }) }
+    : { ok: probe === 200, json: () => Promise.resolve({ paletteFeed: true, version: 1 }) });
+  assert.ok(await PF.negotiate(mk(['mjpeg', 'palfeed'], 200), '?t=x', 1));
+  assert.strictEqual(await PF.negotiate(mk(['mjpeg'], 200), '', 1), null);
+  assert.strictEqual(await PF.negotiate(mk(undefined, 200), '', 1), null);
+  assert.strictEqual(await PF.negotiate(mk(['mjpeg', 'palfeed'], 503), '', 1), null, 'probe not ready after the tries');
+  assert.strictEqual(await PF.negotiate(() => Promise.reject(new Error('net')), '', 1), null);
+});
