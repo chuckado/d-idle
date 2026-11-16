@@ -111,7 +111,7 @@ func TestPauseAssets(t *testing.T) {
 			}
 		}
 	}
-	if strings.Count(s, "var(--d-hit)") < 3 || !strings.Contains(s, `html[data-paused] [data-panel="video"] .frame::after`) {
+	if strings.Count(s, "var(--d-hit)") < 3 || !strings.Contains(s, `:root[data-paused] [data-panel="video"] .frame::after`) {
 		t.Error("the 44 px targets or the dimmed game view are missing")
 	}
 	sim, err := NewSim("sorceress", 1)
