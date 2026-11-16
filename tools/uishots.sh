@@ -315,6 +315,7 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		szs=$sizes
 		case $pname in
 		default | default-light) szs="$sizes $midsizes" ;;
+		reset-return-menu*) szs="$sizes 900x700 412x780 360x640" ;; # the Return screen link lives in the menu on every width
 		reset-* | support-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
