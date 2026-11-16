@@ -1,10 +1,11 @@
 ---
 id: TASK-570
 title: 'leechbody: apply verifier L1-L6 to the decomp35 leech PR body'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T22:54:00Z'
+updated_date: '2026-11-16T23:12:00Z'
 labels:
   - docs
   - upstream-pr

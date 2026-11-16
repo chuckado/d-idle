@@ -232,7 +232,6 @@
 | pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
 | survfix2 | in-progress | - | `internal/survival`<br>`internal/combat/castfirst.go`<br>`internal/combat/fight.go`<br>`internal/combat/fightend.go`<br>`internal/combat/dodge.go`<br>`internal/bot/zonemodel.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zonemodel_test.go`<br>`internal/env/tuning_bot.go`<br>`cmd/d2bot/survivalwire.go`<br>`tools/ab/prep`<br>`tools/survival/abrun.sh`<br>`docs/survival/ab-harness.md`<br>`docs/survival/ledger.md`<br>`docs/knobs.md` | - |
 | flakefix | proposed | - | `internal/bot/failsafe_test.go` | - |
-| leechbody | proposed | - | `docs/upstream/bodies/decomp35-leech-body.md` | `upstream-pr:decomp35-leech` |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
