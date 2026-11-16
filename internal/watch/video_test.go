@@ -338,7 +338,7 @@ func TestExecCaptureChoosesToolAndNamesWhatIsMissing(t *testing.T) {
 	}
 	f := <-ch
 	line := strings.Join(args, " ")
-	if name != "ffmpeg" || !strings.Contains(line, "-i :105") || !strings.Contains(line, "-framerate 15") || !strings.Contains(line, "-q:v 7") || len(f) != 6 {
+	if name != "ffmpeg" || !strings.Contains(line, "-i :105") || !strings.Contains(line, "-framerate 30") || !strings.Contains(line, "-q:v 7") || len(f) != 6 {
 		t.Fatalf("%s %s frame %v", name, line, f)
 	}
 	// the no-ffmpeg path

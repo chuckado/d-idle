@@ -133,3 +133,22 @@ func TestShellImportsAreServed(t *testing.T) {
 		t.Fatalf("found %d imports", n)
 	}
 }
+
+// overlay.js in a stub DOM (node, skipped without it): one overlay open at a time for every pair of kinds, Escape and the focus return.
+func TestOverlayManagerJS(t *testing.T) {
+	node, err := exec.LookPath("node")
+	if err != nil {
+		t.Skip("no node")
+	}
+	js, err := webFS.ReadFile("web/overlay.js")
+	if err != nil {
+		t.Fatal(err)
+	}
+	p := filepath.Join(t.TempDir(), "overlay.mjs")
+	if err := os.WriteFile(p, js, 0o600); err != nil {
+		t.Fatal(err)
+	}
+	if out, err := exec.Command(node, "testdata/overlay_dom.mjs", p).CombinedOutput(); err != nil {
+		t.Fatalf("%v\n%s", err, out)
+	}
+}

@@ -12,16 +12,21 @@ import (
 )
 
 // pumpCapture sends a frame every gap until ctx ends.
-func pumpCapture(frame []byte, gap time.Duration) CaptureFunc {
+func pumpCapture(frame []byte, gap time.Duration, same ...bool) CaptureFunc {
 	return func(ctx context.Context) (<-chan []byte, error) {
 		ch := make(chan []byte, 1)
 		go func() {
 			defer close(ch)
-			for {
+			for n := byte(0); ; n++ {
+				f := frame
+				if len(same) == 0 && len(frame) > 2 { // distinct frames: identical ones are skipped by the pump
+					f = append([]byte(nil), frame...)
+					f[1] = n
+				}
 				select {
 				case <-ctx.Done():
 					return
-				case ch <- frame:
+				case ch <- f:
 				}
 				if gap > 0 {
 					time.Sleep(gap)

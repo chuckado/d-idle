@@ -76,6 +76,8 @@
     --d-row-pad: var(--d-sp-1);
     --d-shadow-1: 0 1px 2px rgb(0 0 0 / .4);
     --d-shadow-2: 0 8px 24px rgb(0 0 0 / .45);
+    /* the layer scale (docs/ui-overlays.md): band < tile sheets and drawers (sheet, sheet+1, sheet+2) < toasts < banners and the Reset confirm.
+       The "..." menu is a top-layer popover: above all of them, and only one overlay is open at a time (overlay.js). */
     --d-z-band: 10; --d-z-sheet: 20; --d-z-toast: 30; --d-z-banner: 40;
     --d-banner-h: 0px; /* the height the update banner takes from the fixed cockpit frame; update.js sets it */
     --d-dur-1: 120ms; --d-dur-2: 240ms; --d-dur-3: 600ms; --d-ease: cubic-bezier(.2, 0, 0, 1);
