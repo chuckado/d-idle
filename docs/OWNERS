@@ -142,6 +142,7 @@ cmd/d2bot/d2dbackend.go  credit-runner  maphistory
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryA
 cmd/d2bot/d2dbackend.go  credit-runner  maphistoryC
 cmd/d2bot/d2dbackend.go  credit-runner  maptrail
+cmd/d2bot/d2dbackend.go  credit-runner  support
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
 cmd/d2bot/d2dbackend.go  credit-runner  uib1
@@ -176,6 +177,7 @@ cmd/d2bot/journeywire.go  credit-runner  campaign1
 cmd/d2bot/ladder.go  credit-runner  exploredpct
 cmd/d2bot/ladder.go  credit-runner  gearsets
 cmd/d2bot/ladder.go  credit-runner  lootwireL4
+cmd/d2bot/ladder.go  credit-runner  support
 cmd/d2bot/ladder.go  credit-runner  survA
 cmd/d2bot/ladder.go  credit-runner  uib1
 cmd/d2bot/ladder.go  live-agent  recoverypace
@@ -185,6 +187,7 @@ cmd/d2bot/live.go  credit-runner  maphistory
 cmd/d2bot/live.go  credit-runner  maphistoryA
 cmd/d2bot/live.go  credit-runner  maphistoryC
 cmd/d2bot/live.go  credit-runner  maptrail
+cmd/d2bot/live.go  credit-runner  support
 cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/live.go  credit-runner  survB
 cmd/d2bot/live.go  credit-runner  uib1
@@ -223,12 +226,15 @@ cmd/d2bot/senseshistory_test.go  credit-runner  maphistory
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryA
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryC
 cmd/d2bot/skillswire.go  credit-runner  skilltrees
+cmd/d2bot/supportwire.go  credit-runner  support
+cmd/d2bot/supportwire_test.go  credit-runner  support
 cmd/d2bot/survivalwire.go  credit-runner  intake
 cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2firsthour/  live-agent  firsthour
+cmd/d2supportrecv  credit-runner  support
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
@@ -258,6 +264,7 @@ docs/friend-checklist-0.1.0.md  credit-runner  cut010d
 docs/friend-checklist-0.1.1.md  credit-runner  cut011
 docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
+docs/friend-guide.md  credit-runner  support
 docs/gear-policy.md  credit-runner  gearsets
 docs/gear-policy.md  credit-runner  nopins
 docs/gearsets.md  credit-runner  gearsets
@@ -321,6 +328,7 @@ docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
+docs/process/leakcheck-allow.txt  credit-runner  support
 docs/process/queuespeed.md  credit-runner  queuespeed
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
@@ -370,6 +378,7 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
+docs/support-bundle.md  credit-runner  support
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
@@ -693,6 +702,7 @@ internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
+internal/support  credit-runner  support
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
 internal/task/campaign.go  credit-runner  campaign1
@@ -738,6 +748,7 @@ internal/watch/dropsfeed.go  credit-runner  friendfb
 internal/watch/dropsfeed_test.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  lootwireL4
+internal/watch/funwire.go  credit-runner  support
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
 internal/watch/funwire.go  credit-runner  uib4
@@ -753,6 +764,7 @@ internal/watch/hero.go  credit-runner  uic3
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/herosheet_test.go  credit-runner  uic3
 internal/watch/http_answer.go  credit-runner  uib4
+internal/watch/http_view.go  credit-runner  support
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  uib4
 internal/watch/invapi.go  credit-runner  gearsets
@@ -817,6 +829,9 @@ internal/watch/skillsapi.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees2
 internal/watch/skillsui.go  credit-runner  skilltrees
+internal/watch/supportapi.go  credit-runner  support
+internal/watch/supportapi_test.go  credit-runner  support
+internal/watch/supportui_test.go  credit-runner  support
 internal/watch/survivalapi.go  credit-runner  survC
 internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/testdata/  credit-runner  uifix1
@@ -964,6 +979,7 @@ internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  resetinstant
+internal/watch/web/shell.css  credit-runner  support
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
@@ -971,6 +987,7 @@ internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
+internal/watch/web/shell.js  credit-runner  support
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
 internal/watch/web/shell.js  credit-runner  uis6
@@ -982,6 +999,7 @@ internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
 internal/watch/web/skills.js  credit-runner  skilltrees2
+internal/watch/web/supportui.js  credit-runner  support
 internal/watch/web/tokens.css  credit-runner  uis1
 internal/watch/web/tokens.css  credit-runner  uis7
 internal/watch/web/update.js  credit-runner  uis7
@@ -1021,8 +1039,10 @@ tools/friendpack/build.sh  credit-runner  buildhosts3
 tools/friendpack/checklist.sh  credit-runner  cut010b
 tools/friendpack/checklist.sh  credit-runner  cutfix
 tools/friendpack/compose.yml  credit-runner  cut012
+tools/friendpack/compose.yml  credit-runner  support
 tools/friendpack/didle  credit-runner  cut012
 tools/friendpack/install.sh  credit-runner  cut012
+tools/friendpack/install.sh  credit-runner  support
 tools/friendpack/pack_test.go  credit-runner  cut012
 tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
@@ -1039,9 +1059,11 @@ tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
+tools/uishots  credit-runner  support
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  resetinstant
+tools/uishots.sh  credit-runner  support
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
 tools/uishots.sh  credit-runner  uifix1

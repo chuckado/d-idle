@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge origin/main into agent/support (keep both sides) <!--sg:agent/support-->
 - Merge branch 'main' into farmloop2 <!--sg:agent/farmloop2-->
 - Merge branch 'main' into TASK-528 <!--sg:agent/verifyp18-->
 - Merge branch 'main' into videofeed <!--sg:agent/videofeed-->
