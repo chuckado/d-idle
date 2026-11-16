@@ -224,6 +224,7 @@
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
 | farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
 | lootwire3 | proposed | - | `internal/lootrules`<br>`internal/loot/rulesengine.go`<br>`internal/loot/rulespreview.go`<br>`internal/loot/rulespreview_test.go`<br>`internal/watch/lootrulestools_test.go`<br>`internal/charsel/lootrulesstate_test.go`<br>`internal/loot/rulesengine_test.go`<br>`internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/loot/rulesadapt.go`<br>`internal/town/shop.go`<br>`internal/watch/lootrulesapi.go`<br>`internal/watch/lootrulesapi_test.go`<br>`internal/watch/lootrulesui_test.go`<br>`internal/watch/web/lootrulesui.js`<br>`internal/watch/web/shell.css`<br>`internal/charsel/perchar.json`<br>`cmd/d2bot/lootruleswire.go`<br>`cmd/d2bot/lootruleswire_test.go`<br>`tools/uishots`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/env/tuning_loot.go` | - |
+| decomp35 | proposed | - | `docs/research/decomp35-combat.md`<br>`tools/emu/d35_`<br>`docs/upstream/bodies/decomp35-` | - |
 | seqfollow | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -268,6 +269,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- d3c0def97 11-16 14:05 `Merge agent/decomp35: Merge branch 'main' into decomp35` (decomp35)
+- d329871ec 11-16 14:04 `Merge branch 'main' into decomp35` (-)
 - 0d0437214 11-16 13:56 `Merge agent/survabscreen: Merge branch 'main' into survabscreen` (survabscreen)
 - c58e73e4c 11-16 13:55 `Merge branch 'main' into survabscreen` (-)
 - 78ee7b4b7 11-16 13:53 `Merge agent/telebody: Merge branch 'main' into telebody` (telebody)
@@ -276,6 +279,4 @@
 - f0c0ac1e8 11-16 13:46 `Merge agent/verifyp13: Merge branch 'main' into TASK-551` (verifyp13)
 - 1b19181ea 11-16 13:44 `Merge branch 'main' into seqfollow` (-)
 - 269400e76 11-16 13:44 `Merge branch 'main' into TASK-551` (-)
-- e1fd1124c 11-16 13:38 `Merge agent/charui: Merge branch 'main' into TASK-530` (charui)
-- 5c5382a96 11-16 13:37 `Merge branch 'main' into TASK-530` (-)
 <!-- statusgen:end -->

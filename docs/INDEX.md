@@ -194,6 +194,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [replay-2026-11-14.md](survival/replay-2026-11-14.md): Replay of the sandbox hero's log through the survival shadow and controller (2026-11-14) (status: current (card survreplay, TASK-458). First run of the S-B margin and the S-C ledger/controller on a REAL...)
 - [timescale.md](timescale.md): Bot time scale (D2BOT_TIMESCALE) (status: offline only (card `botclock`); not verified live. Background: docs/research/lockstep-p3.md.)
+
+`upstream/bodies/`
+
+- [decomp35-crush-body.md](upstream/bodies/decomp35-crush-body.md): decomp35-crush-body
+- [decomp35-leech-body.md](upstream/bodies/decomp35-leech-body.md): decomp35-leech-body
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
 
