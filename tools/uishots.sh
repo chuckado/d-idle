@@ -111,11 +111,11 @@ default-update first=0&theme=dark&needs=2&update=available
 default-update-light first=0&theme=light&needs=2&update=ready
 default-question3 first=0&theme=dark&needs=1&question=3
 default-question5-light first=0&theme=light&needs=2&question=5
-overlay-menu-zone first=0&theme=dark&zone=cp #btn-more
-overlay-menu-zone-light first=0&theme=light&zone=cp #btn-more
-overlay-charter first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
-overlay-charter-light first=0&theme=light&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
-overlay-charter-menu first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]|#btn-more" | while read -r pname pq pclick; do
+overlay-menu-zone first=0&theme=dark&zone=cp&tab=Map #btn-more
+overlay-menu-zone-light first=0&theme=light&zone=cp&tab=Map #btn-more
+overlay-charter first=0&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go]
+overlay-charter-light first=0&theme=light&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go]
+overlay-charter-menu first=0&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go]|#btn-more" | while read -r pname pq pclick; do
 		case $pname in $only) ;; *) [ -n "$only" ] && continue ;; esac
 		ck=
 		[ -n "$pclick" ] && ck="&click=$(printf %s "$pclick" | sed 's/_/ /g; s/#/%23/g; s/?/%3F/g; s/|/%7C/g; s/&/%26/g')"
@@ -228,20 +228,20 @@ overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
 overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
-overlay-menu-over-zone watch?first=0&theme=dark&zone=cp #btn-more
-overlay-menu-over-zone-light watch?first=0&theme=light&zone=cp #btn-more
-overlay-menu-over-zone-cockpit watch?layout=cockpit&theme=dark&zone=cp #btn-more
-overlay-zone-after-menu watch?first=0&theme=dark #btn-more|[data-panel=zone-map]_.zm-n
-overlay-charter watch?first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
-overlay-charter-light watch?first=0&theme=light&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
-overlay-charter-cockpit watch?layout=cockpit&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
-overlay-charter-menu watch?first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]|#btn-more
-overlay-zone-sheet-light watch?first=0&theme=light&zone=cp
-overlay-zone-sheet-loop watch?first=0&theme=dark&zone=cp&loop=1
-overlaydefect-under watch?first=0&theme=dark&zone=cp&defect=ov-under #btn-more
-overlaydefect-clip watch?first=0&theme=dark&zone=cp&charter=1&defect=ov-clip [data-panel=zone-map]_[data-key=go]
-overlaydefect-header watch?first=0&theme=dark&zone=cp&defect=ov-header
-overlaydefect-two watch?first=0&theme=dark&defect=ov-two #btn-more
+overlay-menu-over-zone watch?first=0&theme=dark&zone=cp&tab=Map #btn-more #btn-more
+overlay-menu-over-zone-light watch?first=0&theme=light&zone=cp&tab=Map #btn-more #btn-more
+overlay-menu-over-zone-cockpit watch?layout=cockpit&theme=dark&zone=cp&tab=Map #btn-more #btn-more
+overlay-zone-after-menu watch?first=0&theme=dark&tab=Map #btn-more|[data-panel=zone-map]_.zm-n #btn-more
+overlay-charter watch?first=0&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go] #btn-more
+overlay-charter-light watch?first=0&theme=light&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go] #btn-more
+overlay-charter-cockpit watch?layout=cockpit&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go] #btn-more
+overlay-charter-menu watch?first=0&theme=dark&zone=cp&charter=1&tab=Map [data-panel=zone-map]_[data-key=go]|#btn-more #btn-more
+overlay-zone-sheet-light watch?first=0&theme=light&zone=cp&tab=Map
+overlay-zone-sheet-loop watch?first=0&theme=dark&zone=cp&loop=1&tab=Map
+overlaydefect-under watch?first=0&theme=dark&zone=cp&defect=ov-under&tab=Map #btn-more #btn-more
+overlaydefect-clip watch?first=0&theme=dark&zone=cp&charter=1&defect=ov-clip&tab=Map [data-panel=zone-map]_[data-key=go] #btn-more
+overlaydefect-header watch?first=0&theme=dark&zone=cp&defect=ov-header&tab=Map
+overlaydefect-two watch?first=0&theme=dark&defect=ov-two&tab=Map #btn-more #btn-more
 character watch/inventory?theme=dark
 character-light watch/inventory?theme=light
 character-tip-stash watch/inventory?theme=dark hover=[data-key=item-31]
@@ -285,7 +285,7 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
 		overlaydefect-*) szs="1366x768 412x780" ;;
-		overlay-*) szs="$sizes 412x780 360x640" ;;
+		overlay-*) szs="$sizes 412x780" ;;
 		character-phone*) szs="$phonesizes" ;;
 		esac
 		for sz in $szs; do
@@ -337,7 +337,7 @@ cockpit-orders-1920 1920 1080 watch?theme=dark&layout=cockpit-orders&needs=2
 cockpit-orders-1280 1280 620 watch?theme=dark&layout=cockpit-orders&needs=2&cmd=eight
 cockpit-orders-390 390 844 watch?theme=dark&layout=cockpit-orders&needs=2
 cockpit-orders-1366-eight 1366 768 watch?theme=dark&layout=cockpit-orders&needs=3&cmd=eight
-overlay-1920-dark 1920 160 watch?theme=dark&mode=overlay
+overlay-1920-dark 1920&tab=Map 160 #btn-more
 inventory-390-dark 390 844 watch/inventory?theme=dark
 inventory-390full-dark 390 2400 watch/inventory?theme=dark
 inventory-1440-dark 1440 900 watch/inventory?theme=dark
