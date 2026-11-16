@@ -18,9 +18,19 @@ type Hub struct {
 
 func NewHub() *Hub { return &Hub{wake: make(chan struct{})} }
 
-// Publish stores a copy of f as the newest frame. Safe from the one goroutine that reads the d2d ring.
-func (h *Hub) Publish(f Frame) {
-	c := Frame{W: f.W, H: f.H, Pix: append([]byte(nil), f.Pix...), Seq: f.Seq, GameMS: f.GameMS}
+// Publish stores a copy of f as the newest frame. Safe from the one goroutine that reads the d2d ring. stride is the
+// source's bytes per row (the ring header's stride; 0 or 4*W: packed); rows are repacked when it is larger.
+func (h *Hub) Publish(f Frame, stride int) {
+	pix := f.Pix
+	if stride > 4*f.W && len(pix) >= stride*(f.H-1)+4*f.W {
+		pix = make([]byte, 4*f.W*f.H)
+		for y := 0; y < f.H; y++ {
+			copy(pix[y*4*f.W:(y+1)*4*f.W], f.Pix[y*stride:])
+		}
+	} else {
+		pix = append([]byte(nil), pix...)
+	}
+	c := Frame{W: f.W, H: f.H, Pix: pix, Seq: f.Seq, GameMS: f.GameMS}
 	h.mu.Lock()
 	h.cur = &c
 	w := h.wake

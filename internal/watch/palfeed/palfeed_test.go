@@ -155,7 +155,7 @@ func TestStreamLatestFrameWinsAndAuth(t *testing.T) {
 	resp.Body.Close()
 
 	f1 := synth(96, 64, 1, 1)
-	h.Publish(f1)
+	h.Publish(f1, 0)
 	req, _ := http.NewRequest("GET", srv.URL, nil)
 	req.Header.Set("Authorization", "Bearer ok")
 	resp, err = http.DefaultClient.Do(req)
@@ -171,8 +171,8 @@ func TestStreamLatestFrameWinsAndAuth(t *testing.T) {
 	}
 	// two frames published back to back: the client may see 2 and 3 or only 3, but ends on 3 and every message applies
 	f2, f3 := synth(96, 64, 2, 2), synth(96, 64, 3, 3)
-	h.Publish(f2)
-	h.Publish(f3)
+	h.Publish(f2, 0)
+	h.Publish(f3, 0)
 	deadline := time.Now().Add(3 * time.Second)
 	for dec.Frame.Seq != 3 && time.Now().Before(deadline) {
 		if err := dec.Apply(readMsg(t, br)); err != nil {
@@ -195,7 +195,7 @@ func TestCapability(t *testing.T) {
 	if w := get(); w.Code != 503 {
 		t.Fatalf("before a frame: %d", w.Code)
 	}
-	h.Publish(synth(800, 600, 1, 1))
+	h.Publish(synth(800, 600, 1, 1), 0)
 	if w := get(); w.Code != 200 || w.Body.String() != `{"paletteFeed":true,"version":1,"width":800,"height":600}` {
 		t.Fatalf("%d %s", w.Code, w.Body)
 	}
@@ -239,5 +239,20 @@ func TestFixtures(t *testing.T) {
 		if err != nil || !bytes.Equal(got, want) {
 			t.Errorf("%s is stale or missing (%v): run D2FEED_WRITE_FIXTURES=1 go test ./internal/watch/palfeed", p, err)
 		}
+	}
+}
+
+func TestPublishRepacksStride(t *testing.T) {
+	h := NewHub()
+	src := make([]byte, 20*3)
+	for y := 0; y < 3; y++ {
+		for x := 0; x < 4; x++ {
+			src[y*20+x*4] = byte(y*10 + x)
+		}
+	}
+	h.Publish(Frame{W: 4, H: 3, Pix: src, Seq: 1}, 20)
+	cur, _ := h.latest()
+	if len(cur.Pix) != 48 || cur.Pix[2*16+3*4] != 23 {
+		t.Fatalf("repack: len %d", len(cur.Pix))
 	}
 }
