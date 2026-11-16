@@ -298,6 +298,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			rig.Fun.Characters.Bind(l.characters)
 		}
 		rig.Fun.Merc = mercAPI()
+		rig.Fun.LootShadow = lootShadowAPI(l.knobValue)
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself
