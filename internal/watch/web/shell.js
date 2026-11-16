@@ -811,6 +811,7 @@ function setupMenu(sel) {
   // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
   const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rbtn.id = 'btn-reset';
+  rbtn.classList.add('d-reset-btn');
   rbtn.dataset.key = 'reset-header';
   nav.append(rbtn, wrap);
 }
