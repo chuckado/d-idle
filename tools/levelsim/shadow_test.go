@@ -196,3 +196,29 @@ func TestShadowReplayAttachHook(t *testing.T) {
 		t.Errorf("paladin with an assumed weapon: %q", withW.Stays[0].Margin.Bad.Terms.Offence)
 	}
 }
+
+func TestShadowReplayReadsIntake(t *testing.T) {
+	m, err := power.NewModel(danger.DefaultParams())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for _, id := range []string{"bruiser", "caster"} { // two builds
+		a, _ := m.P.Archetype(id)
+		opts := ShadowOpts{Tab: shadowTab(), M: m, Arch: a, Diff: "normal"}
+		old, err := ShadowReplay(strings.NewReader(shadowLog()), opts)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if old.Stays[0].HasIntake {
+			t.Errorf("%s: a log without lifeLost must not claim intake", id)
+		}
+		log := strings.Replace(shadowLog(), "\n", "\ntime=2026-11-10T12:05:00Z level=INFO msg=minute area=2 lifeLost=30\ntime=2026-11-10T12:06:00Z level=INFO msg=minute area=2 lifeLost=18\n", 1)
+		rep, err := ShadowReplay(strings.NewReader(log), opts)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if s := rep.Stays[0]; !s.HasIntake || s.LifeLost != 48 || !strings.Contains(rep.Text(), "intake 4/min") {
+			t.Errorf("%s: stay %+v\n%s", id, s, rep.Text())
+		}
+	}
+}
