@@ -557,6 +557,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [towntests.md](towntests.md): Table-dependent tests that rotted (TASK-401)
 - [townwedge.md](townwedge.md): townwedge: the permanent town-exit wedge (status: fix merged with card townwedge. Tags: VERIFIED = log line or test, INFERRED = reading. Evidence:...)
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
+- [ui-overlays.md](ui-overlays.md): Watch UI overlays: one at a time, one layer scale
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
 
 `ui/`

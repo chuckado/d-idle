@@ -209,6 +209,7 @@
 | lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
+| overlayfix | proposed | - | `internal/watch/web/overlay.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/web/tokens.css`<br>`internal/watch/web/panels/zone-map`<br>`internal/watch/testdata/overlay_dom.mjs`<br>`internal/watch/resetui_test.go`<br>`internal/watch/http_view.go`<br>`tools/uishots.sh`<br>`tools/uishots`<br>`docs/ui-overlays.md` | - |
 | resetinstant | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`internal/watch/web/reset.css`<br>`internal/watch/testdata/reset`<br>`docs/reset.md`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/state.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_phone.go`<br>`tools/uishots/fit.go` | - |
 | idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
 | intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
@@ -258,6 +259,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 81cb2fefb 11-16 00:24 `Merge agent/overlayfix: Merge branch 'main' into TASK-526` (overlayfix)
+- 32874d3b8 11-16 00:23 `Merge branch 'main' into TASK-526` (-)
 - 055bdfc1f 11-16 00:13 `Merge agent/viewerfps: Merge branch 'main' into viewerfps` (viewerfps)
 - 79bfaf3fa 11-16 00:11 `Merge branch 'main' into viewerfps` (-)
 - 6d51a62b0 11-16 00:05 `Merge agent/friendfb: Merge branch 'main' into TASK-537` (friendfb)
@@ -266,6 +269,4 @@
 - 419058708 11-15 23:48 `Merge agent/resetinstant: Merge branch 'main' into 529` (resetinstant)
 - 08f81fd90 11-15 23:47 `Merge branch 'main' into 529` (-)
 - b064994f1 11-15 23:40 `Merge agent/sandbox2: Merge branch 'main' into sandbox2` (sandbox2)
-- 75e7bc6dc 11-15 23:39 `Merge branch 'main' into sandbox2` (-)
-- 19cbcfdc0 11-15 23:29 `Merge agent/idfast: Merge branch 'main' into idfast` (idfast)
 <!-- statusgen:end -->
