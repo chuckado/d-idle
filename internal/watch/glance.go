@@ -46,6 +46,9 @@ type GlanceView struct {
 	// Paused: the game itself is frozen by the player's Pause (docs/pause.md); PausedSince is the RFC 3339 time it began.
 	Paused      bool   `json:"paused,omitempty"`
 	PausedSince string `json:"pausedSince,omitempty"`
+	// Stream is the server side of the game picture (rates since the last read); absent without -watch-video. A friend can
+	// screenshot it next to the page's own fps line.
+	Stream *StreamStats `json:"stream,omitempty"`
 	// Intake is the observed damage intake (docs/survival/ledger.md "Observed intake"); absent while no source is bound or
 	// before the first minute line. Additive: the cockpit turns it into light, moderate or heavy later.
 	Intake *GlanceIntake `json:"intake,omitempty"`
@@ -261,6 +264,10 @@ func (h *Hub) Glance() GlanceView {
 		if since, on := src.Frozen(); on {
 			v.Paused, v.PausedSince = true, since.UTC().Format(time.RFC3339)
 		}
+	}
+	if h.video != nil {
+		st := h.video.Stats()
+		v.Stream = &st
 	}
 	v.Health = glanceHealth(hv, src)
 	v.Progress = h.glanceProgress(hv)

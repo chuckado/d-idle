@@ -251,6 +251,7 @@ export function mount(root, ctx) {
     }
     if (st.charter) {
       const c = el('div', 'zm-charter');
+      c.dataset.pin = 'end';
       c.append(line('zm-warn', 'Above your range. Charter: ' + st.charter.price + ' tally. ' + (st.charter.text || ''), 'warn'), btn('Pay and go', 'charter', true, () => st.charter.again()));
       menu.appendChild(c);
     } else if (st.err) menu.appendChild(line('zm-warn', st.err, 'bad'));

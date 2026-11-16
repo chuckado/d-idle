@@ -103,3 +103,4 @@ Closing rule: a card closes when merged with offline acceptance proven; every op
 | TASK-320 lootmemory | #4 | Live check: after a pack fight on d2d, the hero walks back for a pile dropped beyond 30 subtiles (loot_memory log line) | live drill on the sandbox, fresh hero, per the card result | open |
 | TASK-110 run4h | #1 | One 4-hour realtime run without a restart loop; record from the session record card; writes after start 0 | live drill on the sandbox, fresh hero, per the card result (driftfix 2026-11-11) | open |
 | TASK-110 run4h | #2 | If it cannot finish, the smoke card is what fixes it; result says so | live drill on the sandbox, fresh hero, per the card result (driftfix 2026-11-11) | open |
+| TASK-538 farmloop2 | #3 | Live check: loop on in the sandbox with the new-game-requested log (not run) | live drill on the sandbox, fresh hero, per the card result | open |

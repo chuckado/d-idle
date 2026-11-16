@@ -598,3 +598,11 @@ d2cheat (cmd/d2cheat, docs/cheats.md): `d2cheat [--reason TEXT] [--actor NAME] [
 
 ## 8. Save point (bot.savePointMin)
 The game writes the .d2s only on Save and Exit (V: SAVECHECK, docs/soak-analysis.md 6c). `internal/bot/savepoint.go`: in town, no trip, no panel, life >= 50%, no death in the last 2 minutes, no per-game quest memory pending, and `bot.savePointMin` minutes since the last game entry, the bot calls `Cycler.NewGame` (Save and Exit, re-enter the same character and difficulty) under `oogRun`. Every game entry (first start, recycle, farm NewGame, fresh-game leveling, crash re-entry) restarts the timer and resets the xpRisk/XPLOSS baseline. Planned entries are not counted as `restarts` in the minute line, do not feed `noteReentry` or the failsafe ladder; a failure backs off 5 minutes. 0 = off. Offline tests only (U live).
+
+## 9. Game picture on the watch page (card viewerfps, 2026-11-15)
+
+Not tuning knobs; settings of the watch screen's video (docs/probes/viewer-fps-2026-11-15.md).
+- `GET /stream?fps=N` (1 to 30): this viewer gets at most N parts a second, newest frame wins; other viewers and the capture are untouched. The page sets `fps=8` in "Low rate" mode (button in the video card, remembered per browser in local storage key `d2videolowrate`; the "Performance" hint offers it after 6 s under 15 fps). Absent: every frame.
+- Identical consecutive frames (a still scene) are withheld for up to 1 s, then one is sent anyway (the page's stall watchdog is 3 s).
+- `/api/glance` field `stream` (only with `-watch-video`): `viewers`, `fpsIn` (capture), `fpsOut` (all viewers summed), `kBps`, `skippedSame`, `missed` (frames a slow viewer never got). The page shows its own `stream: N fps, K KB/s` in the video card head when under 15 fps or with `?debug`; `window.d2video.stats()` returns it.
+- Existing: `--watch-video-fps` (x11: 1 to 30, default 15; tap: cap 1 to 30), `--watch-video-quality` (ffmpeg -q:v, default 5), 3 viewers, 512 KiB frame cap.

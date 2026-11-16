@@ -17,6 +17,14 @@ import (
 // the fit check of a list longer than its box; cmd=loop is the same list with a Loop row on top (round 2 of 5).
 func commandsFixture(class string) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodPost { // charter=1: a Go now above the hero's range asks for a charter (the long reason line of the zone sheet)
+			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("charter") == "1" {
+				w.Header().Set("Content-Type", "application/json")
+				w.WriteHeader(http.StatusPaymentRequired)
+				fmt.Fprint(w, `{"ok":false,"code":"charter-needed","charter":{"price":20,"text":"I am level 4 and Cold Plains is meant for level 6 to 12. A charter pays for the supplies and the risk of dying on the way, so you pay it once and the hero goes."}}`)
+				return
+			}
+		}
 		name := "three-one-failed"
 		if ref, err := url.Parse(r.Referer()); err == nil {
 			if c := ref.Query().Get("cmd"); c != "" {
