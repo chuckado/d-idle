@@ -24,6 +24,15 @@ owns:
   - "internal/watch/web/reset.css"
   - "internal/watch/testdata/reset"
   - "docs/reset.md"
+  - "internal/bot/task.go"
+  - "internal/bot/runner.go"
+  - "internal/bot/loop.go"
+  - "internal/bot/state.go"
+  - "internal/watch/web/shell.js"
+  - "internal/watch/web/shell.css"
+  - "tools/uishots.sh"
+  - "tools/uishots/fixtures_phone.go"
+  - "tools/uishots/fit.go"
 exclusive: []
 contracts: []
 result: "Soft Reset is instant (cancels the running action, 150 ms on the fake clock), escalates to the hard path after 3 s without a loop tick, POST answers 202 with a wait opt-in; one-tap header button with cooldown, no soft confirm; startFreshGame guarded (in flight, 5 s debounce). Offline only, not verified live; fit renders not viewed (Tower queue)."
