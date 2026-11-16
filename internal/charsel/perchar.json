@@ -1,0 +1,4 @@
+{
+  "note": "Per-character bot state, globs relative to the instance dir (cmd/d2bot: ip.Goals, Deaths, Routes, Ledger, State()). U: the journey file name is a glob guess. Everything else (onboarding.json is keyed by hero, visit.json, currency, ladder, sessions, layout-*, proposals-*, bestiary-* are profile level) stays shared.",
+  "paths": ["goals.json", "deaths.json", "routes.json", "ledger.json", "state/tuning.json", "state/merc.json", "state/playerpause.json", "state/orderloop.json", "state/pacts-state.json", "state/hardcore.json", "state/away-spool.jsonl", "state/journey*"]
+}

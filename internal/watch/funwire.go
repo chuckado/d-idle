@@ -163,6 +163,8 @@ type Fun struct {
 	Pause *PauseAPI
 	// Reset mounts GET and POST /api/reset (resetapi.go); nil: no routes.
 	Reset *ResetAPI
+	// Characters mounts GET /api/characters and the four POST routes (charactersapi.go, docs/charselect.md); nil: no routes.
+	Characters *CharactersAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
 	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
@@ -734,6 +736,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Reset != nil {
 		m.Handle(ResetRoute, f.Reset.Handler())
 	}
+	if f.Characters != nil {
+		m.Handle(CharactersRoute, f.Characters.Handler())
+	}
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
@@ -827,6 +832,11 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Reset != nil {
 		m.Handle(ResetRoute, f.Reset.PostHandler(o))
+	}
+	if f.Characters != nil {
+		for _, p := range CharactersPostRoutes {
+			m.Handle(p, f.Characters.PostHandler(o, p))
+		}
 	}
 	if f.Repair != nil {
 		for _, p := range RepairPostRoutes {

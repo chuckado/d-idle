@@ -352,6 +352,15 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	o.ladder.reset = resetDesk(runner, ip.State())
+	var leave func(context.Context) error
+	if o.managed { // the bot owns this d2d: Save and Exit it (not Cycler.LeaveGame, which would re-enter the old character)
+		leave = be.Proc.SaveExit
+	}
+	saveRoots := []string{filepath.Join(ip.Dir(), "d2d")}
+	if x := os.Getenv("XDG_DATA_HOME"); x != "" {
+		saveRoots = append(saveRoots, x)
+	}
+	o.ladder.characters = charactersDesk(ip, func() string { return charName }, saveRoots, runner, leave)
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
