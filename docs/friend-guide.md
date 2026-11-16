@@ -58,6 +58,8 @@ First try the **Low rate** button in the video card (smoother on a slow browser 
 
 Two settings in `.env` (then `./didle stop && ./didle start`): `D2_VIDEO_FPS=N` caps or sets the capture rate of the picture (1 to 30; the `d2bot play` / ffmpeg capture default is 15 since 2026-11-15, was 8); `D2_VIEW_FLAGS="-fps 25 -feed /dev/shm/d2dview/frames.ring"` switches the in-container view tap to the d2d frame feed (about 20 fps instead of 4 to 6; U: only works when the image's d2d has the frame feed, see viewer-fps.md section 6; it also needs `shm_size: 128m` on the service). Measured cost of the ffmpeg capture (800x600, one core, 10 s, V on the builder box): 8 fps 0.47 s CPU, 15 fps 1.1 s, 24 fps 1.2 s, 30 fps 1.5 s (about 5, 11, 12, 15 percent of a core).
 
+Lossless picture (optional, off by default, U until the sandbox A/B has run): with `D2_PALETTE_FEED=1` in `.env` next to the `D2_VIEW_FLAGS` line above, the page draws the game on a canvas from a lossless tile-delta feed (no JPEG blur, about a third of the bytes of the JPEG picture, less CPU in the container) and falls back to the normal picture by itself on any trouble. It needs the same frame feed as above, so with the image of this release (its d2d predates the frame feed, docs/video-feed.md section 7) it does nothing and the page keeps the normal picture.
+
 ## When something goes wrong
 
 | Symptom | Do this |

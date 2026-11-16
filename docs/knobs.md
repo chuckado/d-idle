@@ -6,7 +6,7 @@ Written 2026-10-29 from master `6b920b0`. Regenerate the tables between the `kno
 
 ## 1. How knobs are set (V)
 
-- Every knob has a dotted key `group.name` (groups: `nav combat town loot bot boss merc resource ladder`) and a range. All writes are clamped to `[min, max]` and rounded for int fields (`bot.SetKnob`).
+- Every knob has a dotted key `group.name` (groups: `nav combat town loot bot boss merc resource ladder senses watch`) and a range. All writes are clamped to `[min, max]` and rounded for int fields (`bot.SetKnob`).
 - Order of precedence at start: defaults (optimal) -> handicap profile -> `"tuning"` overrides in config.json. At run time: `PUT /api/v1/instances/{id}/knobs` with `{profile?, overrides?: {key: number|null}}` (null resets to the profile value; the edit is all-or-nothing). `GET` returns every knob with its current value. Doc: docs/api.md.
 - config.json (`D2BOT_CONFIG`, default `<data>/config.json`, the `"bot"` object or the whole file; unknown keys are errors): `profile`, `custom` {Name, Desc, Level, Per}, `tuning` {"bot.clearRadius": 20}. Doc: docs/bot.md "Tuning and handicap profiles".
 - The "worst" column is the end of the range a profile moves toward (the end the bot is least efficient at). Knobs where the default already sits on that end do not change under any profile (list in section 7).
@@ -470,6 +470,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | invdesk.verbs | 0 | 0..1 | bool | 0 | 1 | 1: a player's equip command goes through the private fork's item verbs (the server's own item handlers) when the connected d2d advertises them in caps; the click path stays the fallback and the oracle. 0 (default): always the click path. Off until the user has seen it work live (docs/design/item-verbs.md). |
 | invdesk.instant | 0 | 0..1 | bool | 0 | 1 | 1: with invdesk.verbs on and a backend that advertises the verbs, an item action the player gives (equip, unequip, drop, identify, and stash, take and gold at the chest) runs at once through the verbs instead of waiting for the bot's next safe moment. 0 (default): every action queues. Off until the user has seen the fast lane work live (docs/inventory-actions.md, Instant actions). |
 | invdesk.maxSets | 8 | 1..20 | sets | 8 | 1 | How many named gear sets the player may save per hero on the inventory page (docs/gearsets.md). A set is applied only when the player clicks Apply; the bot never chooses one. |
+
+### watch.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| watch.paletteFeed | 0 | 0..1 | bool | 0 | env.PaletteFeedOn | 1: the viewer (d2dview, and the watch screen through the tap relay) also serves the lossless RGBA tile-delta feed of the game picture (/stream.pfeed; measured 0.4 to 0.7 MB/s against 1.8 MB/s of JPEG q72, docs/probes/video-feed-2026-11-15.md) and the page draws it on a canvas when the glance reply lists it; any decode trouble falls back to MJPEG. Needs the d2d framefeed ring. d2dview and the friends pack read the environment switch D2_PALETTE_FEED=1 (same meaning; the d2dview process has no tuning file). 0 (default): MJPEG only, nothing changes. Off until the live A/B has run (docs/video-feed.md section 9). |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)
