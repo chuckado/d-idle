@@ -262,6 +262,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b64aadd1d 11-16 10:46 `Merge agent/resetfit: Merge main` (resetfit)
+- a1e4907d0 11-16 10:43 `Merge main` (-)
 - 848d83a91 11-16 10:41 `Merge agent/resetfit: Merge main (take main's lane line fix)` (resetfit)
 - c2254ac83 11-16 10:39 `Merge main (take main's lane line fix)` (-)
 - 045ad5ef7 11-16 10:10 `Merge agent/idwaitfit: Merge branch 'main' into idwaitfit` (idwaitfit)
@@ -270,6 +272,4 @@
 - a245aed2e 11-16 10:03 `Merge agent/resetfit: Merge branch 'main' into resetfit` (resetfit)
 - d19afb569 11-16 10:03 `Merge branch 'main' into resetfit` (-)
 - 299bfda30 11-16 10:00 `Merge main` (-)
-- 584961adb 11-16 09:56 `Merge agent/supportreview: Merge branch 'main' into supportreview` (supportreview)
-- 938ee4308 11-16 09:55 `Merge branch 'main' into supportreview` (-)
 <!-- statusgen:end -->
