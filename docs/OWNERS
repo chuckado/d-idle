@@ -845,8 +845,10 @@ internal/watch/palfeed  credit-runner  videofeed2
 internal/watch/palfeed.go  credit-runner  videofeed2
 internal/watch/palfeed_test.go  credit-runner  videofeed2
 internal/watch/panels.go  credit-runner  uis6
+internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
+internal/watch/pausefix_test.go  credit-runner  pausefix
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  botreset
@@ -1024,6 +1026,7 @@ internal/watch/web/panels/onboarding  credit-runner  friendfb
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
+internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/video  credit-runner  videofeed2
@@ -1031,6 +1034,7 @@ internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
+internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant

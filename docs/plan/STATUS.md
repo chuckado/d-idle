@@ -227,6 +227,7 @@
 | decomp35 | proposed | - | `docs/research/decomp35-combat.md`<br>`tools/emu/d35_`<br>`docs/upstream/bodies/decomp35-` | - |
 | seqfollow | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
+| pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -269,6 +270,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e3aa9757d 11-16 14:20 `Merge agent/pausefix: Merge branch 'main' into pausefix` (pausefix)
+- 0882e97a3 11-16 14:20 `Merge branch 'main' into pausefix` (-)
 - d3c0def97 11-16 14:05 `Merge agent/decomp35: Merge branch 'main' into decomp35` (decomp35)
 - d329871ec 11-16 14:04 `Merge branch 'main' into decomp35` (-)
 - 0d0437214 11-16 13:56 `Merge agent/survabscreen: Merge branch 'main' into survabscreen` (survabscreen)
@@ -277,6 +280,4 @@
 - d4e1da3bb 11-16 13:52 `Merge branch 'main' into telebody` (-)
 - ad5c46990 11-16 13:46 `Merge agent/seqfollowup: Merge branch 'main' into seqfollow` (seqfollowup)
 - f0c0ac1e8 11-16 13:46 `Merge agent/verifyp13: Merge branch 'main' into TASK-551` (verifyp13)
-- 1b19181ea 11-16 13:44 `Merge branch 'main' into seqfollow` (-)
-- 269400e76 11-16 13:44 `Merge branch 'main' into TASK-551` (-)
 <!-- statusgen:end -->
