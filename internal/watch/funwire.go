@@ -742,6 +742,7 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 		f.Support.setLocal(m)
 		m.Handle(SupportRoute, f.Support.Handler())
 		m.Handle(SupportDownloadRoute, f.Support.Handler())
+		m.Handle(SupportFileRoute, f.Support.Handler())
 	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())

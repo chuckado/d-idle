@@ -6,6 +6,7 @@ export const ROUTE = '/api/support';
 export const BUNDLE = '/api/support/bundle';
 export const SEND = '/api/support/send';
 export const DOWNLOAD = '/api/support/download';
+export const FILE = '/api/support/file';
 export const ASK = 'd2:support-ask';
 export const SCHEMA = 'watch.support/1';
 export const INTRO = 'This collects the bot log of the last hours, settings, health and version numbers, with home paths, addresses, names and keys removed. You see everything before anything is sent.';
@@ -55,6 +56,7 @@ export function mountSupport(d) {
   const files = el('ul', 'd-sup-files');
   const logH = el('p', 'd-sup-note', 'The end of the log, as it will be sent:');
   const log = el('pre', 'd-sup-log');
+  log.id = 'support-log';
   const blocked = el('div', 'd-sup-blocked');
   prev.append(files, logH, log, blocked);
 
@@ -116,12 +118,43 @@ export function mountSupport(d) {
   };
   const fail = (m) => { err.hidden = false; err.textContent = m; };
 
+  // one file: its name, size, line and replacement counts, a Show button for the excerpt (the whole text of a small
+  // file, else its first and last lines) and, for a file with text, "Read it all" that pages the file as the zip holds it
+  function fileRow(bid, f) {
+    const li = el('li', 'd-sup-file');
+    const extra = f.lines ? '  ' + f.lines + ' lines' + (f.redactions ? ', ' + f.redactions + ' replaced' : '') : '';
+    const head = el('span', 'd-sup-fhead', f.name + '  ' + size(f.size) + extra);
+    li.appendChild(head);
+    if (!f.excerpt) return li;
+    const pre = el('pre', 'd-sup-log', f.excerpt);
+    pre.hidden = true;
+    const show = d.ui.btn('Show', { size: 'sm', variant: 'ghost' });
+    show.dataset.key = 'support-show';
+    const all = d.ui.btn('Read it all', { size: 'sm', variant: 'ghost' });
+    all.dataset.key = 'support-readall';
+    all.hidden = true;
+    show.addEventListener('click', () => { pre.hidden = !pre.hidden; all.hidden = pre.hidden; show.textContent = pre.hidden ? 'Show' : 'Hide'; });
+    let page = 0;
+    all.addEventListener('click', () => {
+      all.disabled = true;
+      d.get(FILE + '?id=' + encodeURIComponent(bid) + '&name=' + encodeURIComponent(f.name) + '&page=' + page).then((j) => {
+        all.disabled = false;
+        if (!j || j.schema !== SCHEMA) { fail(refusal(j)); return; }
+        pre.textContent = page === 0 ? j.text : pre.textContent + j.text;
+        page++;
+        if (j.more) all.textContent = 'More'; else all.hidden = true;
+      });
+    });
+    li.append(show, all, pre);
+    return li;
+  }
+
   function draw(p) {
     id = p.id;
     state.canSend = !!p.canSend;
     state.canSave = !!p.canSave;
     files.textContent = '';
-    for (const f of p.files || []) files.appendChild(el('li', '', f.name + '  ' + size(f.size)));
+    for (const f of p.files || []) files.appendChild(fileRow(p.id, f));
     log.textContent = p.logPreview || '(no log lines)';
     blocked.textContent = '';
     const fs = p.findings || [];
@@ -134,6 +167,7 @@ export function mountSupport(d) {
       blocked.appendChild(el('p', 'd-sup-note', 'Uploading is not set up on this install. Save the file and send it to the owner yourself.'));
     }
     if (p.dropped && p.dropped.length) files.appendChild(el('li', 'd-sup-note', 'Left out: ' + p.dropped.join(', ')));
+    blocked.hidden = blocked.hidden && !!(fs.length === 0 && p.configured);
     saveBtn.setAttribute('href', DOWNLOAD + '?id=' + encodeURIComponent(p.id));
     saveBtn.setAttribute('download', '');
     show('prev');

@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"sync"
 	"time"
 
@@ -20,6 +21,7 @@ const (
 	SupportBundleRoute   = "/api/support/bundle"
 	SupportSendRoute     = "/api/support/send"
 	SupportDownloadRoute = "/api/support/download"
+	SupportFileRoute     = "/api/support/file"
 	supportSchema        = "watch.support/1"
 	supportKeep          = 15 * time.Minute
 )
@@ -34,16 +36,17 @@ type SupportDesk interface {
 
 // SupportAPI holds the desk and the last built bundles (in memory, a quarter of an hour).
 type SupportAPI struct {
-	mu    sync.Mutex
-	d     SupportDesk
-	local http.Handler
-	last  map[string]*support.Bundle
-	now   func() time.Time
-	build sync.Mutex // one build or send at a time
+	mu      sync.Mutex
+	d       SupportDesk
+	local   http.Handler
+	last    map[string]*support.Bundle
+	now     func() time.Time
+	build   sync.Mutex      // one build or send at a time
+	sending map[string]bool // ids with an upload in flight (a second press is refused)
 }
 
 func NewSupportAPI() *SupportAPI {
-	return &SupportAPI{last: map[string]*support.Bundle{}, now: time.Now}
+	return &SupportAPI{last: map[string]*support.Bundle{}, sending: map[string]bool{}, now: time.Now}
 }
 
 func (a *SupportAPI) Bind(d SupportDesk) { a.mu.Lock(); a.d = d; a.mu.Unlock() }
@@ -108,6 +111,22 @@ func (a *SupportAPI) Handler() http.Handler {
 			return
 		}
 		w.Header().Set("Cache-Control", "no-store")
+		if r.URL.Path == SupportFileRoute {
+			// one page of one file exactly as the zip holds it: the sheet's "open the file"
+			pg, _ := strconv.Atoi(r.URL.Query().Get("page"))
+			b := a.get(r.URL.Query().Get("id"))
+			if b == nil {
+				writeJSON(w, http.StatusNotFound, policyReply{Code: "gone", Error: "build the bundle again"})
+				return
+			}
+			txt, more, ok := b.Page(r.URL.Query().Get("name"), pg)
+			if !ok {
+				writeJSON(w, http.StatusNotFound, policyReply{Code: "file", Error: "no such file or page"})
+				return
+			}
+			writeJSON(w, 200, map[string]any{"schema": supportSchema, "name": r.URL.Query().Get("name"), "page": pg, "more": more, "text": txt})
+			return
+		}
 		if r.URL.Path == SupportDownloadRoute {
 			b := a.get(r.URL.Query().Get("id"))
 			if b == nil || len(b.Zip) == 0 {
@@ -133,6 +152,10 @@ func (a *SupportAPI) BundleHandler(o AnswerOptions) http.Handler {
 		d := a.desk()
 		if d == nil {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "support bundles are not available"})
+			return
+		}
+		if o.Token == "" && !containsStr(o.Origins, r.Header.Get("Origin")) {
+			writeJSON(w, http.StatusForbidden, policyReply{Code: "token", Error: "building needs the watch page itself"})
 			return
 		}
 		a.build.Lock()
@@ -179,7 +202,25 @@ func (a *SupportAPI) SendHandler(o AnswerOptions) http.Handler {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "support bundles are not available"})
 			return
 		}
+		// with no token configured the gate lets any local process in; an upload then needs the page's own origin
+		if o.Token == "" && !containsStr(o.Origins, r.Header.Get("Origin")) {
+			writeJSON(w, http.StatusForbidden, policyReply{Code: "token", Error: "sending needs the watch page itself"})
+			return
+		}
 		b := a.get(body.ID)
+		a.mu.Lock()
+		busy := b != nil && a.sending[b.ID]
+		if b != nil && !busy {
+			a.sending[b.ID] = true
+		}
+		a.mu.Unlock()
+		if busy {
+			writeJSON(w, http.StatusConflict, policyReply{Code: "busy", Error: "this bundle is already being sent"})
+			return
+		}
+		if b != nil {
+			defer func() { a.mu.Lock(); delete(a.sending, b.ID); a.mu.Unlock() }()
+		}
 		switch {
 		case b == nil:
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "gone", Error: "build the bundle again, then send"})

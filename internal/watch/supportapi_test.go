@@ -5,8 +5,10 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"strings"
 	"testing"
+	"time"
 
 	"d2lod-bot/internal/support"
 )
@@ -159,5 +161,80 @@ func TestSupportKeepsTwoBundles(t *testing.T) {
 	}
 	if api.get(ids[0]) != nil || api.get(ids[2]) == nil {
 		t.Fatal("memory is bounded: the oldest goes")
+	}
+}
+
+func TestSupportNoTokenNeedsOrigin(t *testing.T) {
+	api, _, _, done := supportRig(t, []support.Input{{Name: "log.txt", Data: []byte("x")}}, http.NotFoundHandler())
+	defer done()
+	o := AnswerOptions{Origins: []string{"http://ok.test"}} // no token: loopback mode
+	if w := invPost(api.BundleHandler(o), SupportBundleRoute, `{}`, nil); w.Code != 403 {
+		t.Fatalf("a bare local post builds: %d", w.Code)
+	}
+	if w := invPost(api.SendHandler(o), SupportSendRoute, `{"id":"x"}`, nil); w.Code != 403 {
+		t.Fatalf("a bare local post sends: %d", w.Code)
+	}
+	if w := invPost(api.BundleHandler(o), SupportBundleRoute, `{}`, map[string]string{"Origin": "http://ok.test"}); w.Code != 200 {
+		t.Fatalf("the page itself is refused: %d", w.Code)
+	}
+}
+
+func TestSupportDoubleSendAndFilePages(t *testing.T) {
+	gate, hit := make(chan struct{}), 0
+	api, _, o, done := supportRig(t, []support.Input{{Name: "log.txt", Data: []byte(strings.Repeat("0123456789 plain text\n", 3000))}},
+		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			hit++
+			<-gate
+			io.WriteString(w, `{"code":"ABCD2345"}`)
+		}))
+	defer done()
+	var p SupportPreview
+	json.Unmarshal(invPost(api.BundleHandler(o), SupportBundleRoute, `{}`, supportAuth).Body.Bytes(), &p)
+	first := make(chan int)
+	go func() { first <- invPost(api.SendHandler(o), SupportSendRoute, `{"id":"`+p.ID+`"}`, supportAuth).Code }()
+	for i := 0; i < 200; i++ { // wait until the first upload is in flight
+		api.mu.Lock()
+		n := len(api.sending)
+		api.mu.Unlock()
+		if n > 0 {
+			break
+		}
+		time.Sleep(5 * time.Millisecond)
+	}
+	if w := invPost(api.SendHandler(o), SupportSendRoute, `{"id":"`+p.ID+`"}`, supportAuth); w.Code != 409 || !strings.Contains(w.Body.String(), "busy") {
+		t.Fatalf("second press: %d %s", w.Code, w.Body)
+	}
+	close(gate)
+	if c := <-first; c != 200 || hit != 1 {
+		t.Fatalf("first %d, uploads %d", c, hit)
+	}
+	// the page route serves the file the zip holds, page by page
+	api2, _, o2, done2 := supportRig(t, []support.Input{{Name: "log.txt", Data: []byte(strings.Repeat("0123456789 plain text\n", 3000))}}, http.NotFoundHandler())
+	defer done2()
+	json.Unmarshal(invPost(api2.BundleHandler(o2), SupportBundleRoute, `{}`, supportAuth).Body.Bytes(), &p)
+	var all strings.Builder
+	for pg := 0; pg < 20; pg++ {
+		g := httptest.NewRecorder()
+		api2.Handler().ServeHTTP(g, httptest.NewRequest("GET", SupportFileRoute+"?id="+p.ID+"&name=log.txt&page="+strconv.Itoa(pg), nil))
+		var r struct {
+			Text string `json:"text"`
+			More bool   `json:"more"`
+		}
+		json.Unmarshal(g.Body.Bytes(), &r)
+		if g.Code != 200 {
+			t.Fatal(g.Code)
+		}
+		all.WriteString(r.Text)
+		if !r.More {
+			break
+		}
+	}
+	if all.Len() != 22*3000 {
+		t.Fatalf("pages cover %d bytes", all.Len())
+	}
+	g := httptest.NewRecorder()
+	api2.Handler().ServeHTTP(g, httptest.NewRequest("GET", SupportFileRoute+"?id="+p.ID+"&name=..%2Fx&page=0", nil))
+	if g.Code != 404 {
+		t.Fatalf("unknown name: %d", g.Code)
 	}
 }

@@ -960,7 +960,8 @@ async function start() {
   mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
-  mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body) });
+  mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();
