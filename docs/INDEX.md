@@ -498,6 +498,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [retreatlive.md](retreatlive.md): retreatlive: RT.drink and RT.portal run live on d2d (2026-11-04)
 - [retreatlive2.md](retreatlive2.md): retreatlive2: RT.drink and RT.portal rerun after retreatfix (2026-11-04)
 - [return-screen.md](return-screen.md): The return screen (TASK-127) (status: first slice, built and tested on fixtures and now WIRED into the bot (TASK-140,...)
+
+`reviews/`
+
+- [support-bundle-security-2026-11-15.md](reviews/support-bundle-security-2026-11-15.md): Security review: support bundle upload (branch agent/support, tip 88eecae7b) (status: review of task 542 / card `support` before merge (mergeq #811). Reviewer: Opus, single, offline. Nothing...)
 - [roamleg.md](roamleg.md): ROAMLEG: a mouth-gate hold is not a failed roam target (status: offline fix, tests pass, verified live in DRILLS23 (docs/probes/drills/README.md): 0 failed legs (was 50),...)
 - [roamspacing.md](roamspacing.md): Roam coverage spacing (TASK-301) (status: CURRENT. Tags: V = measured (log read-only, or the simulator run in this worktree on the worker host), S =...)
 - [running.md](running.md): How to run d.idle (status: current as of 2026-11-01 (card readmedocs; Teleport and `--build` note added by card capdocs). Every...)
