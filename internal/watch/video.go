@@ -42,6 +42,7 @@ type Video struct {
 	last   []byte
 	timer  *time.Timer
 	starts int
+	born   time.Time
 	lastAt time.Time // when the last frame was fanned out (a duplicate is skipped only within dupKeep of it)
 
 	st videoStats
@@ -78,7 +79,10 @@ func (v *Video) Stats() StreamStats {
 	s.mu.Lock()
 	defer s.mu.Unlock()
 	now := time.Now()
-	if d := now.Sub(s.at); s.at.IsZero() || d > 30*time.Second {
+	if s.at.IsZero() {
+		s.at = v.born
+	}
+	if d := now.Sub(s.at); d > 30*time.Second {
 		s.fpsIn, s.fpsOut, s.kBps = 0, 0, 0
 		s.at, s.pIn, s.pSent, s.pBytes = now, s.in.Load(), s.sent.Load(), s.bytesOut.Load()
 	} else if d >= time.Second {
@@ -110,7 +114,7 @@ func NewVideo(o VideoOptions) (*Video, error) {
 	if o.WriteTimeout <= 0 {
 		o.WriteTimeout = 10 * time.Second
 	}
-	return &Video{o: o, subs: map[chan []byte]struct{}{}}, nil
+	return &Video{o: o, subs: map[chan []byte]struct{}{}, born: time.Now()}, nil
 }
 
 // Running reports whether a capture is active; Viewers the number of joined viewers; Starts how often a capture started.
