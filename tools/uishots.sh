@@ -229,6 +229,8 @@ demo-layers watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:
 demo-drawer-log watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-alerts]
 demo-drawer-alerts watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log]|[data-key=tab-alerts] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 demo-drawer-start watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=onboarding] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+demo-drawer-items watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-items]
+demo-help watch?layout=cockpit-demo&theme=dark #btn-more|#btn-help .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
 overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
