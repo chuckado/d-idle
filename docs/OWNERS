@@ -901,14 +901,17 @@ internal/watch/views.go  credit-runner  friendfb
 internal/watch/views.go  credit-runner  videofeed2
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web/app.css  credit-runner  toastfix
+internal/watch/web/components.css  credit-runner  resetfit
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
 internal/watch/web/inventory-actions.css  credit-runner  idfast
+internal/watch/web/inventory-actions.css  credit-runner  resetfit
 internal/watch/web/inventory-actions.css  credit-runner  uic3
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
 internal/watch/web/inventory-actions.js  credit-runner  idfast
 internal/watch/web/inventory-actions.js  credit-runner  nopins
+internal/watch/web/inventory-actions.js  credit-runner  resetfit
 internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
 internal/watch/web/inventory-canvas.css  credit-runner  uic3
@@ -995,6 +998,7 @@ internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
 internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
+internal/watch/web/shell.js  credit-runner  resetfit
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
 internal/watch/web/shell.js  credit-runner  uis1
