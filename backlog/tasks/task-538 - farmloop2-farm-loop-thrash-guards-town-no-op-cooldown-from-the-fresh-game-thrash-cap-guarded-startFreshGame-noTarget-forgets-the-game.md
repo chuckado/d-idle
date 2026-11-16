@@ -1,10 +1,13 @@
 ---
 id: TASK-538
-title: 'farmloop2: farm loop thrash guards (town no-op, cooldown from the fresh game, thrash cap, guarded startFreshGame, noTarget forgets the game)'
-status: Proposed
+title: >-
+  farmloop2: farm loop thrash guards (town no-op, cooldown from the fresh game,
+  thrash cap, guarded startFreshGame, noTarget forgets the game)
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T03:40:00Z'
+updated_date: '2026-11-16T06:03:00Z'
 labels:
   - bot
   - bot-fix
