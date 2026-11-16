@@ -930,6 +930,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - verifyp17: independent verifier for upstream candidate P17 (sequence -30 attack rate, fid/seq-ias-r1) (TASK-519, merged 2026-11-15, acceptance 4 of 4): PASS WITH CHANGES (not verified live; offline on the NAS builder). r2 fid/seq-ias-r2 (oracle 2b22bee5, claim f6fc6a52) rebased on upstream 485fe535 reproduces every count: parent 6,941 of 7,600 differ, claim 0; bad inputs exit 1; both mutants abort ... <!--sg:agent/verifyp17-->
 - farmloopon: farm loop on in the sandbox, decay measurement (TASK-527, merged 2026-11-15, acceptance 2 of 2): bot.farmReset=1 set in the sandbox tuning file (backup kept) and the bot restarted; healthy, hero alive, verified from logs; no farm reset line yet. Measurement script and recipe added with a baseline run. <!--sg:agent/farmloopon-->
 - agent/lootwire1: Merge branch 'main' into lootwireL4 (merged 2026-11-15) <!--sg:agent/lootwire1-->
+- agent/farmloopon2: Merge branch 'main' into farmloopon (merged 2026-11-15) <!--sg:agent/farmloopon2-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.

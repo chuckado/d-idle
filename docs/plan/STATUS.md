@@ -252,6 +252,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 4ca827ea0 11-15 22:42 `Merge agent/farmloopon2: Merge branch 'main' into farmloopon` (farmloopon2)
+- 72423887c 11-15 22:40 `Merge branch 'main' into farmloopon` (-)
 - f5f948090 11-15 21:51 `Merge agent/lootwire1: Merge branch 'main' into lootwireL4` (lootwire1)
 - d88e5bf55 11-15 21:50 `Merge branch 'main' into lootwireL4` (-)
 - 81c197064 11-15 21:43 `Merge agent/farmloopon: Merge branch 'main' into farmloopon` (farmloopon)
@@ -260,6 +262,4 @@
 - 5fca901bd 11-15 21:40 `Merge branch 'main' into TASK-519` (-)
 - d81e495e1 11-15 21:22 `Merge agent/charselect: Merge branch 'main' into TASK-521` (charselect)
 - 53f033e9a 11-15 21:21 `Merge branch 'main' into TASK-521` (-)
-- e3a036f54 11-15 21:11 `Merge agent/sandboxfresh: Merge branch 'main' into sandboxfresh` (sandboxfresh)
-- 4e06914b5 11-15 21:10 `Merge branch 'main' into sandboxfresh` (-)
 <!-- statusgen:end -->
