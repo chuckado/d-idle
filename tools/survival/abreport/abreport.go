@@ -156,9 +156,13 @@ func PairedStat(d []float64) Stat {
 
 // Options of Compare.
 type Options struct {
-	Horizon  int     // virtual minutes each run must cover (95 percent of it)
-	XPFloor  float64 // the test arm's XP at the horizon must reach this share of the base arm's (1.0 = at least equal)
-	MinSeeds int     // pairs below this are INCONCLUSIVE when nothing failed (the gate says 3; docs/ab-design.md says 8 for a claim)
+	Horizon int     // virtual minutes each run must cover (95 percent of it)
+	XPFloor float64 // the test arm's XP at the horizon must reach this share of the base arm's (1.0 = at least equal)
+	// DeathSlack and ChickenSlack are the pooled extra deaths or chickens the test arm may have (0 = the gate as worded: no more).
+	// Two equal engines fail the strict reading about one time in three at 6 virtual hours per arm (Poisson), so a slack is the
+	// user's decision (docs/survival/ab-harness.md).
+	DeathSlack, ChickenSlack int
+	MinSeeds                 int // pairs below this are INCONCLUSIVE when nothing failed (the gate says 3; docs/ab-design.md says 8 for a claim)
 }
 
 // Compare pairs the runs by seed and applies the S-D gate: the margin arm has no more deaths and no more chickens (pooled over
@@ -225,13 +229,13 @@ func Compare(base, test []Run, o Options) Summary {
 		return s
 	}
 	fail := false
-	if td > bd {
+	if td > bd+o.DeathSlack {
 		fail = true
-		s.Reasons = append(s.Reasons, fmt.Sprintf("deaths %d > %d", td, bd))
+		s.Reasons = append(s.Reasons, fmt.Sprintf("deaths %d > %d (+%d slack)", td, bd, o.DeathSlack))
 	}
-	if tc > bc {
+	if tc > bc+o.ChickenSlack {
 		fail = true
-		s.Reasons = append(s.Reasons, fmt.Sprintf("chickens %d > %d", tc, bc))
+		s.Reasons = append(s.Reasons, fmt.Sprintf("chickens %d > %d (+%d slack)", tc, bc, o.ChickenSlack))
 	}
 	floorDiff := (o.XPFloor - 1) * bxp / float64(len(s.Pairs)) // per-seed XP shortfall the floor allows
 	switch {

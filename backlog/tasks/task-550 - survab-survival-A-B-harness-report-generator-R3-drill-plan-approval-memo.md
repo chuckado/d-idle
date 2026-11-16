@@ -17,6 +17,7 @@ owns:
   - "docs/survival/ab-harness.md"
 exclusive: []
 contracts: []
+result: "docs/survival/ab-harness.md (audit: S-A..S-C done, S-D bot.zoneModel MISSING; lockstep-slot A/B design, gate wording decision, R3 plan, approval memo) and tools/survival/{abreport,abrun.sh,ab.sh}; abreport tested on synthetic logs, scripts only bash -n; NOT verified live."
 ---
 
 ## Description
@@ -29,6 +30,6 @@ Size: M. Why: the S-D gate needs a paired A/B harness and report. Done when: des
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 docs/survival/ab-harness.md: audit S-A..S-D, harness design, R3 plan, memo
-- [ ] #2 tools/survival/abreport with unit tests on synthetic minute logs
+- [x] #1 docs/survival/ab-harness.md: audit S-A..S-D, harness design, R3 plan, memo
+- [x] #2 tools/survival/abreport with unit tests on synthetic minute logs
 <!-- AC:END -->

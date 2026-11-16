@@ -14,6 +14,8 @@ func main() {
 	horizon := flag.Int("horizon", 120, "virtual minutes each run must cover")
 	floor := flag.Float64("xp-floor", 1.0, "share of the base arm's XP at the horizon the test arm must reach")
 	minSeeds := flag.Int("min-seeds", 3, "pairs needed for PASS (the gate says 3; docs/ab-design.md says 8 for a claimed effect)")
+	dslack := flag.Int("death-slack", 0, "pooled extra deaths the test arm may have")
+	cslack := flag.Int("chicken-slack", 0, "pooled extra chickens the test arm may have")
 	flag.Parse()
 	if flag.NArg() != 1 {
 		fmt.Fprintln(os.Stderr, "usage: abreport [flags] DIR   (DIR/<arm>/<seed>.log)")
@@ -37,7 +39,7 @@ func main() {
 	for _, n := range append(nb, nt...) {
 		fmt.Println("note:", n)
 	}
-	s := Compare(b, t, Options{Horizon: *horizon, XPFloor: *floor, MinSeeds: *minSeeds})
+	s := Compare(b, t, Options{Horizon: *horizon, XPFloor: *floor, MinSeeds: *minSeeds, DeathSlack: *dslack, ChickenSlack: *cslack})
 	fmt.Print(s.Format())
 	switch s.Verdict {
 	case "PASS":

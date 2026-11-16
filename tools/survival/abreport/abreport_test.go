@@ -169,3 +169,23 @@ func TestPairedStat(t *testing.T) {
 		t.Fatalf("%+v", one)
 	}
 }
+
+func TestDeathSlack(t *testing.T) {
+	dir := t.TempDir()
+	for s := 1; s <= 3; s++ {
+		d := 0
+		if s == 1 {
+			d = 1
+		}
+		writeArm(t, dir, "legacy", s, synth(120, 10, 0, 0, 3))
+		writeArm(t, dir, "margin", s, synth(120, 10, 0, d, 3))
+	}
+	if got := run(t, dir, gate); got.Verdict != "FAIL" {
+		t.Fatalf("strict: %s", got.Verdict)
+	}
+	o := gate
+	o.DeathSlack = 1
+	if got := run(t, dir, o); got.Verdict != "PASS" {
+		t.Fatalf("slack 1: %s %v", got.Verdict, got.Reasons)
+	}
+}
