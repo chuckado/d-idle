@@ -3,7 +3,7 @@ id: TASK-519
 title: 'verifyp17: independent verifier for upstream candidate P17 (sequence -30 attack rate, fid/seq-ias-r1)'
 status: Proposed
 assignee:
-  - credit-runner
+  - verifyp17
 created_date: '2026-11-16T01:31:00Z'
 labels:
   - d2d
@@ -23,7 +23,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: P17 (fid/seq-ias-r1) must pass an independent verifier before it is posted upstream. Done when: the verdict doc names the exact head to post. Consumer: the upstream PR queue (P17 row).
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
