@@ -53,7 +53,7 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects } from '/__fit/fit.js';
+import { measure, hits, expects, overlayState } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -86,8 +86,9 @@ f.addEventListener('load', async () => {
         const opt = raw[0] === '?', sel = opt ? raw.slice(1) : raw, b = f.contentDocument.querySelector(sel);
         if (b) { b.click(); await wait(500); } else if (!opt) { m.missing = sel; break; }
       }
-      m.hits = hits(f.contentWindow, o.hit);
     }
+    m.ov = overlayState(f.contentWindow);
+    if (steps.length) m.hits = hits(f.contentWindow, o.hit);
     const ex = (o.expect || []).filter(Boolean);
     if (ex.length) m.expect = expects(f.contentWindow, ex);
     out.textContent = JSON.stringify(m);
@@ -105,8 +106,15 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Del("X-Frame-Options")
 	body := rec.Body.Bytes()
-	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
-		body = bytes.Replace(body, []byte("</head>"), []byte(`<link rel="stylesheet" href="/__fit/defect-`+d+`.css"></head>`), 1)
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+		add := ""
+		if defectCSS[d] != "" {
+			add += `<link rel="stylesheet" href="/__fit/defect-` + d + `.css">`
+		}
+		if overlayJS[d] != "" {
+			add += `<script src="/__fit/defect-` + d + `.js"></script>`
+		}
+		body = bytes.Replace(body, []byte("</head>"), []byte(add+"</head>"), 1)
 		w.Header().Del("Content-Length")
 	}
 	if csp := w.Header().Get("Content-Security-Policy"); csp != "" {
@@ -151,7 +159,14 @@ type fitResult struct {
 		Sheet  any    `json:"sheet"`
 	} `json:"pop"`
 	Expect map[string]bool `json:"expect"`
-	CV     *struct {
+	Ov     *struct {
+		Open    []string `json:"open"`
+		Menu    []string `json:"menu"`
+		Cut     []string `json:"cut"`
+		Under   []string `json:"under"`
+		Charter []string `json:"charter"`
+	} `json:"ov"`
+	CV *struct {
 		Zero  []string `json:"zero"`
 		Cut   []string `json:"cut"`
 		Tiles []string `json:"tiles"`
@@ -311,6 +326,23 @@ func (r fitResult) judge() []string {
 			bad = append(bad, r.Pop.Sel+" covers the cell it belongs to")
 		}
 	}
+	if o := r.Ov; o != nil {
+		if len(o.Open) > 1 {
+			bad = append(bad, "more than one overlay is open at once: "+strings.Join(o.Open, ", "))
+		}
+		for _, x := range o.Menu {
+			bad = append(bad, "menu item "+x+" is covered by another layer")
+		}
+		for _, x := range o.Cut {
+			bad = append(bad, "sheet text is cut, not wrapped: "+x)
+		}
+		for _, x := range o.Under {
+			bad = append(bad, "a sheet leaves the free area (under the header or past the window): "+x)
+		}
+		for _, x := range o.Charter {
+			bad = append(bad, "sheet: "+x)
+		}
+	}
 	if r.Missing != "" {
 		bad = append(bad, "there is nothing to press at "+r.Missing+" (the page lacks it)")
 	}
@@ -338,13 +370,19 @@ var mustFail = map[string]string{
 	"fit-overflow-classic-":    "the page scrolls",
 	"fit-blank-rail-":          "holds no visible panel",
 	"fit-tall-frame-":          "ends outside the window",
+	// the overlay policy (card overlayfix): the real page with one defect put back (fixtures_overlay.go)
+	"fit-overlaydefect-under-":  "covered by another layer",
+	"fit-overlaydefect-clip-":   "sheet text is cut",
+	"fit-overlaydefect-header-": "leaves the free area",
+	"fit-overlaydefect-two-":    "more than one overlay is open",
 	// the phone's storage tab (card uiphone): the real page with one defect of the 2026-11-15 screenshot put back (defectCSS in fixtures_phone.go)
-	"fit-phonedefect-label-":    "label over art",
-	"fit-phonedefect-acts-":     "action buttons: ",
-	"fit-phonedefect-cutchips-": "toolbar cut: ",
-	"fit-phonedefect-lock-":     "lock line: ",
-	"fit-phonedefect-hover-":    "horizontal overflow: ",
-	"fit-phonedefect-narrow-":   "grid: ",
+	"fit-phonedefect-label-":     "label over art",
+	"fit-phonedefect-acts-":      "action buttons: ",
+	"fit-phonedefect-cutchips-":  "toolbar cut: ",
+	"fit-phonedefect-lock-":      "lock line: ",
+	"fit-phonedefect-hover-":     "horizontal overflow: ",
+	"fit-phonedefect-narrow-":    "grid: ",
+	"fit-phonedefect-resetclip-": "#btn-reset is not hittable",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)

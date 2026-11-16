@@ -153,6 +153,9 @@ func TestFitPhoneRules(t *testing.T) {
 	}
 	sh, _ := os.ReadFile("../uishots.sh")
 	for name := range defectCSS {
+		if strings.HasPrefix(name, "ov-") {
+			continue
+		}
 		if !strings.Contains(string(sh), "\nphonedefect-"+name+" ") {
 			t.Errorf("no fit page phonedefect-%s", name)
 		}
@@ -209,5 +212,31 @@ func TestFitPhoneFixture(t *testing.T) {
 	}
 	if png, err := (fixtureArt{}).PNG("item-8ss"); err != nil || len(png) < 50 {
 		t.Errorf("fixture art: %v", err)
+	}
+}
+
+// Every overlay defect has a fit page and a mustFail verdict, and the defect fires only for its own name.
+func TestOverlayDefectsHavePages(t *testing.T) {
+	sh, _ := os.ReadFile("../uishots.sh")
+	names := map[string]bool{}
+	for n := range defectCSS {
+		if strings.HasPrefix(n, "ov-") {
+			names[n] = true
+		}
+	}
+	for n := range overlayJS {
+		names[n] = true
+	}
+	if len(names) != 4 {
+		t.Errorf("want 4 overlay defects, have %d", len(names))
+	}
+	for n := range names {
+		short := strings.TrimPrefix(n, "ov-")
+		if !strings.Contains(string(sh), "\noverlaydefect-"+short+" ") {
+			t.Errorf("no fit page overlaydefect-%s", short)
+		}
+		if _, ok := mustFail["fit-overlaydefect-"+short+"-"]; !ok {
+			t.Errorf("mustFail has no entry for overlaydefect-%s", short)
+		}
 	}
 }

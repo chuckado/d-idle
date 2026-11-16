@@ -2524,6 +2524,6 @@ div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
     button.d-btn {key=go,primary=1,size=sm} "Go now"
     button.d-btn {key=loop,size=sm} "Loop..."
     button.d-btn {key=queue,size=sm} "Add to queue"
-  div.zm-charter
+  div.zm-charter {pin=end}
     div.zm-l.zm-warn {tone=warn} "Above your range. Charter: 20 tally. Above range." title="Above your range. Charter: 20 tally. Above range."
     button.d-btn {key=charter,primary=1,size=sm} "Pay and go"

@@ -43,6 +43,9 @@ type GlanceView struct {
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
+	// Stream is the server side of the game picture (rates since the last read); absent without -watch-video. A friend can
+	// screenshot it next to the page's own fps line.
+	Stream *StreamStats `json:"stream,omitempty"`
 	// Intake is the observed damage intake (docs/survival/ledger.md "Observed intake"); absent while no source is bound or
 	// before the first minute line. Additive: the cockpit turns it into light, moderate or heavy later.
 	Intake *GlanceIntake `json:"intake,omitempty"`
@@ -251,6 +254,10 @@ func (h *Hub) Glance() GlanceView {
 				v.Needs = append(v.Needs, cleanNeed(n))
 			}
 		}
+	}
+	if h.video != nil {
+		st := h.video.Stats()
+		v.Stream = &st
 	}
 	v.Health = glanceHealth(hv, src)
 	v.Progress = h.glanceProgress(hv)

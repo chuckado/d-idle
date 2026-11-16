@@ -99,7 +99,18 @@ func serve(addr, class string) error {
 	} else {
 		log.Printf("uishots: onboarding: %v", err)
 	}
+	// the Items tab of the log drawer: quality colours, a long name and an area, newest first
+	drops := sim.Hub.AwayLog()
+	for i, d := range []watch.AwayEvent{
+		{Item: "Short Staff", Quality: "normal", Area: "Blood Moor"}, {Item: "Leather Gloves of the Fox", Quality: "magic", Area: "Cold Plains"},
+		{Item: "Rune of Tir", Quality: "normal", Area: "Cold Plains"}, {Item: "Stormshield, a very long unique shield name for the long names row", Quality: "unique", Area: "Den of Evil"},
+		{Item: "Civerb's Ward", Quality: "set", Area: "Burial Grounds"}, {Item: "Gloom Plate", Quality: "rare", Area: "Black Marsh"}} {
+		d.Kind, d.T = watch.AwayDrop, float64(100+i*40)
+		drops.Add(d)
+	}
+	m.Handle(watch.DropsRoute, watch.DropsHandler(drops, func() float64 { return 400 }))
 	m.Handle(watch.LogRoute, sim.Hub.LogHandler(m))
+	mountSkills(m)
 	if fogStage != "" {
 		pub, err := fogPublisher(fogStage)
 		if err != nil {

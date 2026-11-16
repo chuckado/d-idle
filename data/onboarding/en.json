@@ -19,7 +19,19 @@
   "help": {
     "label": "Help",
     "showWelcome": "Show the welcome card again",
-    "showChecklist": "Show the first 30 minutes list again"
+    "showChecklist": "Show the first 30 minutes list again",
+    "whatLabel": "What does the bot do for me?",
+    "what": {
+      "title": "What does the bot do for me?",
+      "lines": [
+        "It fights, picks up loot and walks town by itself. You do not need to play.",
+        "Potions: it drinks them from the belt on its own and buys more in town. Keep some gold for refills.",
+        "Safety: it leaves a fight or goes back to town when life gets low. A hero can still die in a hard spot.",
+        "Gear: the bot never equips or swaps gear for you. Equip upgrades yourself on the Inventory page (it only suggests). If you equip or take off something, the bot leaves it alone.",
+        "Items: it picks up by its loot rules and sells or stashes only what you marked or the rules say. The Items tab of the log shows what it picked up.",
+        "What drives it: hand-written rules in Go that read the game state. There is no trained model and no AI service, and it runs offline on your machine."
+      ]
+    }
   },
   "checklist": {
     "title": "Your first 30 minutes",
