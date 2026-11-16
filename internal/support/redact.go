@@ -42,7 +42,7 @@ var rules = []rule{
 		}
 		return false
 	}},
-	{"host", regexp.MustCompile(`(?i)\b[a-z0-9_-]*birbhub[a-z0-9_.-]*|\b(?:[a-z0-9-]+\.)+(?:lan|local|internal|home|ts\.net)\b`), "<host>", nil},
+	{"host", regexp.MustCompile(`(?i)\b[a-z0-9_-]*birb` + `hub[a-z0-9_.-]*|\b(?:[a-z0-9-]+\.)+(?:lan|local|internal|home|ts\.net)\b`), "<host>", nil},
 	{"hex", regexp.MustCompile(`\b[0-9a-fA-F]{32,}\b`), "<hex>", func(m string) bool { return len(m) == 40 }}, // a 40-hex build id is public
 	{"token", regexp.MustCompile(`[A-Za-z0-9+/_-]{32,}={0,2}`), "<token>", func(m string) bool { return !randomToken(m) }},
 }

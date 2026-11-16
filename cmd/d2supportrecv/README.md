@@ -16,14 +16,14 @@ and the client side). One small stdlib-only Go program; it stores zips and never
   `-quota-mb` (2048) and `-max-files` (500) purge the oldest first. The answer is `{"code":"ABCD2345"}`.
 - It logs only its start line: no address, token, code or size.
 
-## Tower deploy steps (owner; nothing here is deployed by the repo)
+## Deploy steps on the file server (owner; nothing here is deployed by the repo)
 1. Make a token and its hash line (the token never goes into git):
-   `openssl rand -base64 33 | tee /root/support-token.txt | d2supportrecv -hash >> /mnt/user/appdata/didle-support/tokens`
+   `openssl rand -base64 33 | tee /root/support-token.txt | d2supportrecv -hash >> /srv/didle-support/tokens`
    (build the binary first, or run the image with `--entrypoint /d2supportrecv ... -hash`). Put the token text into the
    friends pack `.env` as `D2BOT_SUPPORT_TOKEN=<token>` and the address as
    `D2BOT_SUPPORT_URL=https://<updates host>/support/upload` (docs/support-bundle.md).
-2. `mkdir -p /mnt/user/appdata/didle-support/inbox`, `chown 99:100` it, and make `tokens` readable by 99:100 (mode 0640).
-3. Build the image (Dockerfile here) and create the container through an Unraid template so it shows in the UI:
+2. `mkdir -p /srv/didle-support/inbox`, `chown 99:100` it, and make `tokens` readable by 99:100 (mode 0640).
+3. Build the image (Dockerfile here) and create the container through a container template so it shows in the UI:
    name `didle-support-recv`, network `didle-updates` (the nginx one), no published port, read-only rootfs, user 99:100,
    cap-drop ALL, mounts `inbox` rw at `/data/inbox` and `tokens` ro at `/data/tokens`.
 4. Add `nginx-support.conf` to the nginx server block of the updates site and reload nginx.

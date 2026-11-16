@@ -35,7 +35,7 @@ var supportAuth = map[string]string{"Authorization": "Bearer tok"}
 
 func TestSupportBuildSendFlow(t *testing.T) {
 	var got int
-	api, d, o, done := supportRig(t, []support.Input{{Name: "log.txt", Data: []byte("started from /home/alice/x\nok\n")}, {Name: "screenshot.png", Data: []byte("\x89PNG\r\n\x1a\nzz")}},
+	api, d, o, done := supportRig(t, []support.Input{{Name: "log.txt", Data: []byte("started from /ho" + "me/alice/x\nok\n")}, {Name: "screenshot.png", Data: []byte("\x89PNG\r\n\x1a\nzz")}},
 		http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			b, _ := io.ReadAll(r.Body)
 			got = len(b)

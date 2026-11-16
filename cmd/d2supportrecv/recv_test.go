@@ -70,7 +70,7 @@ func TestUploadOK(t *testing.T) {
 func TestAuth(t *testing.T) {
 	s, c := setup(t, nil)
 	z := mkZip(t, "a.txt")
-	for _, a := range []string{"", "Bearer ", "Bearer wrong-token", "Basic " + tok, tok} {
+	for _, a := range []string{"", "Bearer ", "Bearer nope", "Basic " + tok, tok} {
 		if w := post(s, z, a, "application/zip"); w.Code != 401 {
 			t.Errorf("auth %q: %d", a, w.Code)
 		}
