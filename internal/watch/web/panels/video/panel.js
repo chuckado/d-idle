@@ -47,9 +47,56 @@ export function mount(root, ctx) {
     else if (root.requestFullscreen) root.requestFullscreen();
   });
 
+  // Low-rate mode (per browser): the server sends this page at most LOW_FPS parts a second, so a slow main thread or
+  // graphics path (software compositing, a busy tab) spends less on decoding and drawing. The hint offers it when the page
+  // measures under HINT_FPS for HINT_AFTER ms.
+  const LOW_FPS = 8, HINT_FPS = 15, HINT_AFTER = 6000;
+  const low = ctx.store('lowrate');
+  const lowBtn = ctx.el('button', 'd-btn', 'Low rate');
+  lowBtn.type = 'button'; lowBtn.dataset.size = 'sm'; lowBtn.dataset.key = 'lowrate';
+  lowBtn.setAttribute('aria-pressed', String(low.get() === '1'));
+  lowBtn.title = 'Smoother on a slow screen: about ' + LOW_FPS + ' pictures a second';
+  ctx.actions.append(lowBtn);
+  const hint = ctx.el('p', 'd-empty', '');
+  hint.hidden = true; hint.setAttribute('role', 'status');
+  ctx.body.append(hint);
+  let slowSince = 0, bytes = [];
+  function setLow(on) {
+    low.set(on ? '1' : '0');
+    lowBtn.setAttribute('aria-pressed', String(on));
+    hint.hidden = true; slowSince = 0;
+    ctl.reconnect();
+  }
+  lowBtn.addEventListener('click', () => setLow(low.get() !== '1'));
+  // measured here and shown in the card head (also read by window.d2video.stats(): a friend can screenshot it)
+  function stats() {
+    const now = Date.now();
+    while (bytes.length && now - bytes[0][0] > 2000) bytes.shift();
+    const kb = bytes.reduce((a, b) => a + b[1], 0) / 2 / 1024;
+    return { fps: Math.round(ctl.fps() * 10) / 10, kBps: Math.round(kb), low: low.get() === '1' };
+  }
+  function watchRate() {
+    const st = stats();
+    if (ctl.state === 'live' && st.fps < HINT_FPS && !st.low) {
+      if (!slowSince) slowSince = Date.now();
+      if (Date.now() - slowSince >= HINT_AFTER && hint.hidden) {
+        hint.textContent = 'The picture runs at ' + Math.round(st.fps) + ' fps here. Low-rate mode may look smoother. ';
+        const b = ctx.el('button', 'd-btn', 'Use low-rate mode'); b.type = 'button'; b.dataset.size = 'sm';
+        b.addEventListener('click', () => setLow(true));
+        hint.append(b); hint.hidden = false;
+      }
+    } else { slowSince = 0; if (!hint.hidden && st.fps >= HINT_FPS) hint.hidden = true; }
+    // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
+    const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
+    const text = (dbg || (ctl.state === 'live' && st.fps < HINT_FPS)) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.low ? ', low rate' : '') : '';
+    if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
+    ctx.later(watchRate, 1000);
+  }
+
   function src() {
     const q = [];
     if (ctx.token) q.push('t=' + encodeURIComponent(ctx.token));
+    if (low.get() === '1') q.push('fps=' + LOW_FPS); // the server skips parts for this viewer only
     q.push('r=' + Date.now());
     return url + '?' + q.join('&');
   }
@@ -70,7 +117,7 @@ export function mount(root, ctx) {
     if (pending) { const p = pending; pending = null; show(p[0], p[1]); }
   }
   function openFetch(onFrame, onEnd) {
-    return openStream(src(), (bytes, type) => { show(bytes, type); onFrame(); }, onEnd);
+    return openStream(src(), (b, type) => { bytes.push([Date.now(), b.length]); show(b, type); onFrame(); }, onEnd);
   }
   // <img> fallback: the browser plays the MJPEG itself; 'error' (refused, ended) is the only end signal
   let imgEnd = null, imgFrame = null;
@@ -110,11 +157,8 @@ export function mount(root, ctx) {
     },
   });
   retry.addEventListener('click', () => ctl.reconnect());
-  // a tiny rate line in the card head, only with ?debug in the page address
-  if (typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '')) {
-    const rate = () => { ctx.meta.textContent = 'stream: ' + Math.round(ctl.fps()) + ' fps'; ctx.later(rate, 1000); };
-    rate();
-  }
+  ctl.stats = stats;
+  watchRate();
   if (typeof document.addEventListener === 'function') {
     document.addEventListener('visibilitychange', () => ctl.visibility(document.visibilityState === 'hidden'));
   }

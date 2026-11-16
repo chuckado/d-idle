@@ -7,33 +7,40 @@ export function backoff(tries) { return Math.min(10000, 1000 * Math.pow(2, Math.
 // partParser splits a multipart MJPEG byte stream (parts carrying Content-Length, as d2dview and the watch relay
 // send) and calls onPart(bytes, type) for each complete part. push takes Uint8Array chunks of any size.
 export function partParser(onPart) {
-  let buf = new Uint8Array(0);
+  // One growing buffer with a read offset: a chunk is copied once, not once per chunk plus once per part (the old
+  // concatenation re-copied everything pending on every 16 to 64 KB chunk, which a busy Firefox main thread felt).
+  let buf = new Uint8Array(1 << 17), off = 0, end = 0;
   function headerEnd() {
-    for (let i = 0; i + 3 < buf.length; i++) {
+    for (let i = off; i + 3 < end; i++) {
       if (buf[i] === 13 && buf[i + 1] === 10 && buf[i + 2] === 13 && buf[i + 3] === 10) return i;
     }
     return -1;
   }
   return {
     push(chunk) {
-      const next = new Uint8Array(buf.length + chunk.length);
-      next.set(buf); next.set(chunk, buf.length);
-      buf = next;
+      if (end + chunk.length > buf.length) {
+        const live = end - off, need = live + chunk.length;
+        const next = need > buf.length ? new Uint8Array(Math.max(need, buf.length * 2)) : buf;
+        next.set(buf.subarray(off, end), 0);
+        buf = next; off = 0; end = live;
+      }
+      buf.set(chunk, end); end += chunk.length;
       for (;;) {
         const h = headerEnd();
         if (h < 0) {
-          if (buf.length > 65536) throw new Error('stream: no part header');
+          if (end - off > 65536) throw new Error('stream: no part header');
           return;
         }
         let text = '';
-        for (let i = 0; i < h; i++) text += String.fromCharCode(buf[i]);
+        for (let i = off; i < h; i++) text += String.fromCharCode(buf[i]);
         const len = /content-length:\s*(\d+)/i.exec(text);
         if (!len) throw new Error('stream: part without Content-Length');
         const n = Number(len[1]), start = h + 4;
-        if (buf.length < start + n) return;
+        if (end < start + n) return;
         const type = (/content-type:\s*([^\r\n;]+)/i.exec(text) || [])[1] || 'image/jpeg';
         onPart(buf.slice(start, start + n), type.trim());
-        buf = buf.slice(start + n);
+        off = start + n;
+        if (off === end) off = end = 0;
       }
     },
   };
@@ -142,5 +149,5 @@ export function openStream(url, onPart, onEnd) {
 // registerVideo publishes the page hook: window.d2video.reconnect(), state(), fps().
 export function registerVideo(ctl) {
   if (typeof window === 'undefined') return;
-  window.d2video = { reconnect: () => ctl.reconnect(), state: () => ctl.state, fps: () => ctl.fps() };
+  window.d2video = { reconnect: () => ctl.reconnect(), state: () => ctl.state, fps: () => ctl.fps(), stats: () => (ctl.stats ? ctl.stats() : {}) };
 }

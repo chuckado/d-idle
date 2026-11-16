@@ -76,4 +76,28 @@ full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
   assert.deepStrictEqual(parts, [['AAAAA', 'image/jpeg'], ['BBB', 'image/png']]);
   assert.throws(() => M.partParser(() => {}).push(new Uint8Array(Buffer.from('--f\r\nContent-Type: image/jpeg\r\n\r\nxx'))), /Content-Length/);
 }
+// the parser keeps its place across many parts and odd chunk sizes without losing bytes (growing buffer)
+{
+  const parts = [];
+  const p = M.partParser((b) => parts.push(b.length));
+  const body = 'x'.repeat(90000);
+  let msg = '';
+  for (let i = 0; i < 40; i++) msg += '--f\r\nContent-Type: image/jpeg\r\nContent-Length: ' + body.length + '\r\n\r\n' + body + '\r\n';
+  const bytes = Buffer.from(msg);
+  for (let i = 0; i < bytes.length; i += 16384) p.push(new Uint8Array(bytes.subarray(i, i + 16384)));
+  assert.strictEqual(parts.length, 40); assert.ok(parts.every((n) => n === 90000));
+}
+// low-rate mode: the toggle persists per browser and asks the server for fewer parts
+{
+  const t = [], st = {};
+  const s2 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s2.root, s2.c);
+  const img = s2.c.body.children[0].children[0];
+  const btn = s2.c.actions.children.find((b) => b.dataset && b.dataset.key === 'lowrate');
+  assert.ok(btn, 'low rate button');
+  assert.ok(!/fps=/.test(img.src), 'default asks for every frame');
+  btn.fire('click');
+  assert.strictEqual(st.lowrate, '1'); assert.ok(/fps=8/.test(img.src), 'low rate src ' + img.src);
+  const s3 = shellCtx({ frameUrl: '/stream' }, { lowrate: '1' }, []); P.mount(s3.root, s3.c);
+  assert.ok(/fps=8/.test(s3.c.body.children[0].children[0].src), 'remembered');
+}
 console.log('ok');

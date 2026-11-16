@@ -3,6 +3,7 @@
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
 import { mountReset } from '/watch/resetui.js';
+import { overlays } from '/watch/overlay.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
@@ -110,6 +111,7 @@ function tileSheet(id, root, where) {
   sheet.dataset.panel = id;
   sheet.dataset.scroll = '1'; // a sheet taller than its tile scrolls inside it
   sheet.hidden = true;
+  overlays.register('sheet-' + id, sheet);
   const shows = (t) => { if (!t || t.hidden || t.dataset.off || t === root) return null; const r = t.getBoundingClientRect(); return r.width > 40 && r.height > 40 ? r : null; };
   const host = () => {
     if (where !== 'beside') return root;
@@ -716,6 +718,7 @@ function setupDrawers(roots, titles) {
     box.append(head, body);
     box.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closeDrawer(true); } });
     document.body.appendChild(box);
+    overlays.register('drawer-' + id, box, () => { if (dr.open === id) closeDrawer(false); else box.hidden = true; });
     dr.boxes.set(id, { box, root, gone });
   }
 }
@@ -773,12 +776,24 @@ function setupMenu(sel) {
   pop.hidden = true;
   pop.id = 'menu-more';
   more.setAttribute('aria-controls', pop.id);
-  const close = (back) => { pop.hidden = true; more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
+  // A top-layer popover: it paints above every tile and sheet whatever their stacking contexts (the 2026-11-15 bug: a zone sheet
+  // covered the menu). Placed under the button by JS (the top layer has no containing block), scrolls inside when the window is short.
+  pop.setAttribute('popover', 'manual');
+  const place = () => {
+    const r = more.getBoundingClientRect();
+    pop.style.setProperty('--menu-top', Math.round(r.bottom + 4) + 'px');
+    pop.style.setProperty('--menu-end', Math.max(8, Math.round(window.innerWidth - r.right)) + 'px');
+  };
+  const shown = (on) => { try { if (on && !pop.matches(':popover-open')) pop.showPopover(); if (!on && pop.matches(':popover-open')) pop.hidePopover(); } catch (e) { /* no popover support: the z-index layer stands in */ } };
+  const close = (back) => { pop.hidden = true; shown(false); more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
   more.addEventListener('click', () => {
     pop.hidden = !pop.hidden;
+    if (!pop.hidden) { place(); shown(true); } else shown(false);
     if (chip && !pop.hidden) onboardingChip(chip);
     more.setAttribute('aria-expanded', String(!pop.hidden));
   });
+  window.addEventListener('resize', () => { if (!pop.hidden) place(); });
+  overlays.register('menu', pop, () => close(false));
   document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
   wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
   pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
@@ -798,9 +813,9 @@ function setupMenu(sel) {
   cb.href = CHARS_URL;
   cb.setAttribute('aria-label', 'Characters: switch, create or delete a hero');
   pop.appendChild(cb);
-  const rb = ui.btn('Reset...', { size: 'sm', variant: 'ghost' });
+  const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
-  rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
+  rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
   pop.appendChild(rb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
@@ -815,7 +830,12 @@ function setupMenu(sel) {
     pop.appendChild(b);
   }
   wrap.append(more, pop);
-  nav.appendChild(wrap);
+  // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
+  const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
+  rbtn.id = 'btn-reset';
+  rbtn.classList.add('d-reset-btn');
+  rbtn.dataset.key = 'reset-header';
+  nav.append(rbtn, wrap);
 }
 function choosePreset(name) {
   pref(PREF, name); pref(PICK, '1');
@@ -919,7 +939,9 @@ async function start() {
   const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
-  if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
+  // in the cockpit the panel lives in a drawer: open it; the panel opens its Help on every d2help while it sits in a drawer, so a
+  // second event after its first poll (it may not have mounted yet) does no harm
+  if (helpBtn) helpBtn.addEventListener('click', () => { openDrawer('onboarding', helpBtn); window.dispatchEvent(new Event('d2help')); setTimeout(() => window.dispatchEvent(new Event('d2help')), 900); });
   // every root exists before the first module loads, so the layout places the whole page at once
   const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {
@@ -958,9 +980,11 @@ async function start() {
   }
   Object.values(bands).forEach(syncBand);
   sched.start();
-  mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+  mountReset({ ui, toast, doc: document, button: document.getElementById('btn-reset'), later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
+  const rc = document.getElementById('reset-confirm');
+  if (rc) overlays.register('reset', rc); // the modal confirm: opening it closes the menu it came from
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();

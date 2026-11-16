@@ -13,15 +13,24 @@ type fakeResetRunner struct {
 	soft         bool
 	state        string
 	softN, hardN int
-	lastForce    bool
+	lastWait     bool
+	unacked      bool
+	escN         int
 }
 
 func (f *fakeResetRunner) ResetView() bot.ResetView {
 	return bot.ResetView{Schema: bot.ResetSchema, State: f.state}
 }
 func (f *fakeResetRunner) CanSoftReset() bool { return f.soft }
-func (f *fakeResetRunner) PlayerReset(force bool) bot.ResetView {
-	f.softN, f.lastForce, f.state = f.softN+1, force, bot.ResetResetting
+func (f *fakeResetRunner) EscalateReset() (bot.ResetView, bool) {
+	if !f.unacked {
+		return f.ResetView(), false
+	}
+	f.escN++
+	return bot.ResetView{Schema: bot.ResetSchema, State: bot.ResetResetting, Hard: true}, true
+}
+func (f *fakeResetRunner) PlayerReset(wait bool) bot.ResetView {
+	f.softN, f.lastWait, f.state = f.softN+1, wait, bot.ResetResetting
 	return f.ResetView()
 }
 func (f *fakeResetRunner) BeginHardReset() bot.ResetView {
@@ -34,11 +43,11 @@ func TestResetAdapterLevels(t *testing.T) {
 	exit := func(c int) { code.Store(int32(c)) }
 	mk := func(soft bool) (*resetAdapter, *fakeResetRunner) {
 		f := &fakeResetRunner{soft: soft, state: bot.ResetIdle}
-		return &resetAdapter{r: f, exit: exit}, f
+		return &resetAdapter{r: f, exit: exit, after: time.AfterFunc}, f
 	}
 	// soft: no process exit
 	a, f := mk(true)
-	if _, no := a.Set(false, true); no != nil || f.softN != 1 || !f.lastForce || f.hardN != 0 {
+	if _, no := a.Set(false, false); no != nil || f.softN != 1 || f.lastWait || f.hardN != 0 {
 		t.Fatalf("soft: %+v %v", f, no)
 	}
 	// a second press: the running view, nothing started
@@ -72,7 +81,7 @@ func TestResetAdapterRefusals(t *testing.T) {
 	if _, no := a.Set(false, false); no == nil || no.Code != "measured_run" || f.softN+f.hardN != 0 {
 		t.Fatalf("measured: %+v %v", f, no)
 	}
-	a = &resetAdapter{r: f, exit: func(int) { t.Error("exit") }, hardOff: true}
+	a = &resetAdapter{r: f, exit: func(int) { t.Error("exit") }, after: func(time.Duration, func()) *time.Timer { return nil }, hardOff: true}
 	if _, no := a.Set(true, false); no == nil || no.Code != "hard_off" || f.hardN != 0 {
 		t.Fatalf("hard off: %+v %v", f, no)
 	}
@@ -104,5 +113,41 @@ func TestStuckNeedAndBand(t *testing.T) {
 	}
 	if on, text := src.Resetting(); !on || len(text) > 60 || text == "" {
 		t.Errorf("band: %v %q", on, text)
+	}
+}
+
+// A soft press arms the 3 s check; when the loop never answered, the process exits like the watchdog's path; when it
+// did, nothing happens.
+func TestResetEscalatesWhenTheLoopIsHung(t *testing.T) {
+	for _, hung := range []bool{true, false} {
+		var delays []time.Duration
+		var fns []func()
+		var code atomic.Int32
+		f := &fakeResetRunner{soft: true, state: bot.ResetIdle, unacked: hung}
+		a := &resetAdapter{r: f, exit: func(c int) { code.Store(int32(c)) }, after: func(d time.Duration, fn func()) *time.Timer {
+			delays, fns = append(delays, d), append(fns, fn)
+			return nil
+		}}
+		if _, no := a.Set(false, false); no != nil || f.softN != 1 || len(delays) != 1 || delays[0] != bot.ResetAckWithin || bot.ResetAckWithin != 3*time.Second {
+			t.Fatalf("press: %+v %v %v", f, no, delays)
+		}
+		fns[0]() // the 3 s check fires
+		if hung {
+			if f.escN != 1 || len(fns) != 2 || delays[1] != hardResetDelay {
+				t.Fatalf("hung loop not escalated: %+v %v", f, delays)
+			}
+			fns[1]()
+			if code.Load() != exitStorm {
+				t.Fatalf("exit code %d", code.Load())
+			}
+		} else if f.escN != 0 || len(fns) != 1 || code.Load() != 0 {
+			t.Fatalf("a live loop was escalated: %+v", f)
+		}
+	}
+	f := &fakeResetRunner{soft: true, state: bot.ResetIdle, unacked: true}
+	a := &resetAdapter{r: f, exit: func(int) {}, after: func(time.Duration, func()) *time.Timer { return nil }, hardOff: true}
+	a.escalate()
+	if f.escN != 0 {
+		t.Fatal("escalated with D2BOT_HARD_RESET=0")
 	}
 }

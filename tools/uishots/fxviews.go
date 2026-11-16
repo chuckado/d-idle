@@ -40,8 +40,17 @@ var fxVariants = map[string]func(map[string]any){
 		v["queue"] = []any{
 			map[string]any{"id": 11, "kind": "stash", "slot": "", "name": "Ring", "state": "queued", "at": 0, "wait": "town", "reason": "waiting for a trip home"},
 			map[string]any{"id": 10, "slot": "rhand", "name": "Staff of Charged Bolt", "state": "queued", "at": 0},
-			map[string]any{"id": 16, "kind": "identify", "name": "Light Plate", "state": "queued", "at": 0},
+			map[string]any{"id": 16, "kind": "identify", "name": "Light Plate", "state": "queued", "at": 0, "wait": "safe"},
 		}
+	},
+	// idfast: an identify that waits with its reason on the item, one that runs now, and the lane indicator on the errands strip
+	"idwait": func(v map[string]any) {
+		v["queue"] = []any{map[string]any{"id": 16, "kind": "identify", "name": "Light Plate", "state": "queued", "at": 0, "wait": "safe"}}
+		v["instant"] = map[string]any{"enabled": true, "why": "a panel is open"}
+	},
+	"iddoing": func(v map[string]any) {
+		v["queue"] = []any{map[string]any{"id": 16, "kind": "identify", "name": "Light Plate", "state": "doing", "at": 0}}
+		v["instant"] = map[string]any{"enabled": true}
 	},
 }
 
@@ -49,6 +58,8 @@ var fxVariants = map[string]func(map[string]any){
 // form of "the defect does not return"; uishots.sh passes the same ones to the harness (expect=).
 var fxExpect = map[string][]string{
 	"pending": {"[data-key=item-11][data-pending=stash][data-wait=town]", "[data-key=item-10][data-pending=equip]"},
+	"idwait":  {"[data-key=item-16][data-pending=identify][data-waiting]"},
+	"iddoing": {"[data-key=item-16][data-pending=identify]"},
 }
 
 // variantView is the fixture desk's view with the variant applied; "" or an unknown name is the plain view.

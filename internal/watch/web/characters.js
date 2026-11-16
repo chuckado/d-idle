@@ -425,6 +425,8 @@ export function mountCharacters(d) {
   }
   newTop.addEventListener('click', () => openCreate(newTop));
 
+  if (d.overlays) d.overlays.register('characters-sheet', sheetWrap, closeSheet); // the page's one modal: Escape and the one-at-a-time rule are the manager's (docs/ui-overlays.md)
+
   async function start() {
     draw();
     await Promise.all([loadRules(), refresh()]);
@@ -451,6 +453,8 @@ async function boot() {
   const root = doc.getElementById('cs-root');
   if (!texts || !root) { if (root) root.textContent = 'The Characters page could not load its texts.'; return; }
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
-  mountCharacters({ doc, root, get, post, later: (f, ms) => setTimeout(f, ms), texts, now: Date.now, backHref: back }).start();
+  let overlays = null;
+  try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
+  mountCharacters({ doc, root, overlays, get, post, later: (f, ms) => setTimeout(f, ms), texts, now: Date.now, backHref: back }).start();
 }
 if (typeof document !== 'undefined' && document.body && document.body.dataset && document.body.dataset.chars !== undefined) boot();

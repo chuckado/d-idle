@@ -146,6 +146,7 @@ var defectCSS = map[string]string{
 	"chars-hole":    `.cs-card { min-block-size: 440px !important; }`,
 	"chars-sheet":   `.cs-sheet-card { max-block-size: 160px !important; overflow: hidden !important; }`,
 	"chars-covered": `.cs-head { position: fixed !important; inset: 0 0 auto 0 !important; block-size: 300px !important; z-index: 99; background: var(--d-surface-3) !important; }`,
+	"resetclip":     `#btn-reset { position: absolute !important; inset-inline-start: -300px !important; }`, // the header Reset pushed out of the window (card resetinstant)
 }
 
 func serveDefectCSS(w http.ResponseWriter, r *http.Request) bool {
