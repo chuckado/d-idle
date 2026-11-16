@@ -20,6 +20,9 @@ func (f *fakeReset) body() map[string]any {
 	m := map[string]any{"schema": "watch.reset/1", "state": f.state}
 	if f.state != "idle" {
 		m["since"], m["reason"] = "2026-11-15T10:00:00Z", f.reason
+		if strings.Contains(f.reason, "restarting") { // the escalated reset is a hard one
+			m["hard"] = true
+		}
 	}
 	if f.last != nil {
 		m["last"] = f.last
@@ -27,8 +30,8 @@ func (f *fakeReset) body() map[string]any {
 	return m
 }
 func (f *fakeReset) View() any { return f.body() }
-func (f *fakeReset) Set(hard, force bool) (any, *ResetRefusal) {
-	f.sets = append(f.sets, [2]bool{hard, force})
+func (f *fakeReset) Set(hard, wait bool) (any, *ResetRefusal) {
+	f.sets = append(f.sets, [2]bool{hard, wait})
 	if f.refuse != nil {
 		return nil, f.refuse
 	}
@@ -37,7 +40,7 @@ func (f *fakeReset) Set(hard, force bool) (any, *ResetRefusal) {
 		m["already"] = true // a double press
 		return m, nil
 	}
-	f.state, f.reason = "resetting", "waiting for a safe moment to leave the game"
+	f.state, f.reason = "resetting", "leaving the game"
 	return f.body(), nil
 }
 
@@ -57,11 +60,11 @@ func TestResetRouteGates(t *testing.T) {
 	}
 	f := &fakeReset{state: "idle"}
 	api.Bind(f)
-	if w := invPost(post, ResetRoute, `{"hard":false}`, auth); w.Code != 200 || len(f.sets) != 1 || f.sets[0] != [2]bool{false, false} {
+	if w := invPost(post, ResetRoute, `{"hard":false}`, auth); w.Code != 202 || len(f.sets) != 1 || f.sets[0] != [2]bool{false, false} {
 		t.Errorf("soft: %d %s %v", w.Code, w.Body, f.sets)
 	}
-	// the second press reaches the desk, which says it is already running; the route answers 200 either way
-	if w := invPost(post, ResetRoute, `{"hard":true,"force":true}`, auth); w.Code != 200 || !strings.Contains(w.Body.String(), `"already":true`) {
+	// the second press reaches the desk, which says it is already running; the route answers 202 either way
+	if w := invPost(post, ResetRoute, `{"hard":true,"wait":true}`, auth); w.Code != 202 || !strings.Contains(w.Body.String(), `"already":true`) {
 		t.Errorf("double press: %d %s", w.Code, w.Body)
 	}
 	f.refuse = &ResetRefusal{Code: "measured_run", Error: "a measured run never resets"}
@@ -78,6 +81,7 @@ func TestResetRouteGates(t *testing.T) {
 		"foreign":       {`{}`, map[string]string{"Authorization": "Bearer tok", "Origin": "http://evil.test"}, 403},
 		"unknown field": {`{"x":1}`, auth, 400},
 		"wrong type":    {`{"hard":"yes"}`, auth, 400},
+		"old force":     {`{"force":true}`, auth, 400},
 	} {
 		if w := invPost(post, ResetRoute, c.body, c.hdr); w.Code != c.want {
 			t.Errorf("%s: %d", name, w.Code)
@@ -104,6 +108,8 @@ func TestResetRouteGoldens(t *testing.T) {
 		{"idle-after-done", "idle", "", done},
 		{"resetting", "resetting", "waiting for a safe moment to leave the game", nil},
 		{"rejoining", "rejoining", "leaving the game and rejoining", nil},
+		{"resetting-instant", "resetting", "leaving the game", nil},
+		{"resetting-escalated", "resetting", "the bot was stuck, restarting it", nil},
 		{"failed", "failed", "the game did not come back", map[string]any{"result": "failed", "at": "2026-11-15T10:01:00Z", "reason": "the game did not come back"}},
 	} {
 		api := NewResetAPI()

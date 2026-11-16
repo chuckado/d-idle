@@ -165,11 +165,17 @@ default-update watch?first=0&theme=dark&needs=2&update=available
 default-update-light watch?first=0&theme=light&needs=2&update=ready
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
-reset-confirm watch?first=0&theme=dark&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
-reset-confirm-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
-reset-more watch?first=0&theme=dark&needs=0 [data-key=verb-more]|[data-key=more-reset] #reset-confirm,#reset-go
+reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
+reset-header-light watch?first=0&theme=light&needs=2 #btn-reset #btn-reset
+reset-pressed watch?first=0&theme=dark&needs=0&reset=resetting #btn-reset #btn-reset,#reset-progress
+reset-pressed-light watch?first=0&theme=light&needs=0&reset=rejoining #btn-reset #btn-reset,#reset-progress
+reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=reset-open] #reset-progress
+reset-more watch?first=0&theme=dark&needs=0&reset=resetting [data-key=verb-more]|[data-key=more-reset] #reset-progress
+reset-hard-confirm watch?first=0&theme=dark&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
+reset-hard-confirm-light watch?first=0&theme=light&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
 reset-resetting watch?first=0&theme=dark&needs=0&reset=resetting expect=#reset-progress
 reset-resetting-light watch?first=0&theme=light&needs=0&reset=rejoining expect=#reset-progress
+phonedefect-resetclip watch?first=0&theme=dark&needs=0&defect=resetclip #btn-reset #btn-reset
 default-firstrun watch?theme=dark&needs=2 ?#none .d-drawer:not([hidden])_[data-key=drawer-close]
 cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
@@ -257,6 +263,8 @@ character-longnames watch/inventory?theme=dark&fx=longnames
 character-longnames-light watch/inventory?theme=light&fx=longnames
 character-pending watch/inventory?theme=dark&fx=pending&tab=pack expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=item-10][data-pending=equip]
 character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack]|?#pack_[data-key=item-10] #belt,#cv-sel
+character-idwait watch/inventory?theme=dark&fx=idwait&tab=pack expect=[data-key=item-16][data-pending=identify][data-waiting]
+character-iddoing watch/inventory?theme=dark&fx=iddoing&tab=pack expect=[data-key=item-16][data-pending=identify]
 character-tip-light watch/inventory?theme=light hover=[data-key=item-16]
 character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]
 character-phone watch/inventory?theme=dark&fx=phone&tab=pack

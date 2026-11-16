@@ -167,6 +167,8 @@ type Fun struct {
 	Characters *CharactersAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
 	Merc *MercAPI
+	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
+	LootShadow *LootShadowAPI
 	// GoldFarm mounts the Farm gold order routes (goldfarmapi.go); set it before Serve, nil: no routes.
 	GoldFarm *GoldFarmAPI
 	// Onboarding is the welcome card, first-30-minutes checklist and reconnect data (onboarding.go); always set by NewFun.
@@ -741,6 +743,11 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Repair != nil {
 		for _, p := range RepairRoutes {
 			m.Handle(p, f.Repair.Handler())
+		}
+	}
+	if f.LootShadow != nil {
+		for _, p := range LootShadowRoutes {
+			m.Handle(p, f.LootShadow.Handler())
 		}
 	}
 	if f.Merc != nil {

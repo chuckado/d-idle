@@ -383,12 +383,27 @@ func (d *Desk) MarkOf(u d2.Unit) string {
 	}
 	d.mu.Lock()
 	defer d.mu.Unlock()
+	// An identify the player asked for protects the item like a keep mark until it is done or cancelled (user report
+	// 2026-11-15: the sell chore sold a hand axe and an armour that waited for identification). It wins over a sell mark.
+	if d.identifyPendingLocked(u.ID) {
+		return MarkKeep
+	}
 	for _, m := range d.st.Marks {
 		if m.ID == u.ID && markFits(m, u) {
 			return m.Mark
 		}
 	}
 	return ""
+}
+
+// identifyPendingLocked: a queued or running identify request names the item.
+func (d *Desk) identifyPendingLocked(id uint32) bool {
+	for _, q := range d.st.Queue {
+		if q.ID == id && q.kind() == KindIdentify && (q.State == StateQueued || q.State == StateDoing) {
+			return true
+		}
+	}
+	return false
 }
 
 // Pinned says whether the player pinned the body slot (leveler.Options.Pinned, town.SetPinned). Nil desk: no.
@@ -747,6 +762,7 @@ func (d *Desk) Pending() int {
 		return 0
 	}
 	inTown := d.heroInTown()
+	d.reapLost()
 	d.mu.Lock()
 	defer d.mu.Unlock()
 	d.expireStaleLocked()
@@ -770,6 +786,7 @@ func (d *Desk) RunPending(ctx context.Context) []string {
 	var out []string
 	for ctx.Err() == nil {
 		inTown := d.heroInTown() // the snapshot callback runs unlocked
+		d.reapLost()
 		d.mu.Lock()
 		d.expireStaleLocked()
 		if d.doingLocked() { // one owner of the channel at a time (instant.go)
