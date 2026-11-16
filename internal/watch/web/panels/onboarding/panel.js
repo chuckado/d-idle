@@ -148,6 +148,14 @@ export function mount(root, ctx) {
       const box = el('div', 'help-card');
       box.setAttribute('role', 'group');
       box.setAttribute('aria-label', h.label);
+      if (h.what) { // the plain answer to "what does the bot do for me": informational, no buttons
+        const w = el('section', 'what');
+        w.setAttribute('aria-label', h.what.title);
+        const ul = el('ul', 'lines');
+        (h.what.lines || []).forEach((l) => ul.append(el('li', '', l)));
+        w.append(el('h3', '', h.what.title), ul);
+        box.append(w);
+      }
       box.append(btn(h.showWelcome, 'help-welcome', () => { view.showWelcome = true; helpOpen = false; paint(); act('show_welcome'); }));
       box.append(btn(h.showChecklist, 'help-list', () => { view.showList = true; view.collapsed = false; helpOpen = false; paint(); act('show_list'); }));
       box.append(btn('Close', 'help-close', () => { helpOpen = false; paint(); }, 'ghost'));
