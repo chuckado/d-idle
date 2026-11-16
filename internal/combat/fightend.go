@@ -53,6 +53,7 @@ type FightSummary struct {
 	Kites      int
 	Approaches int
 	Dodges     int
+	Starved    int // watchdog lines where an attack was too dear for the mana pool
 	Sec        float64
 	Left       string
 }
@@ -62,7 +63,7 @@ func (f *Fighter) noteSummary(ft *FightTelemetry, res ClearResult, err error) {
 		return
 	}
 	s := FightSummary{Area: ft.Area, End: ft.End, Kills: res.Kills, Remaining: ft.Remaining, Damage: ft.Damage, MinLifePct: ft.MinLifePct,
-		LifePct: ft.LifePct, Potions: res.Potions, Casts: ft.Casts, Kites: ft.Kites, Approaches: ft.Approaches, Dodges: ft.Dodges, Sec: res.Elapsed.Seconds()}
+		LifePct: ft.LifePct, Potions: res.Potions, Casts: ft.Casts, Kites: ft.Kites, Approaches: ft.Approaches, Dodges: ft.Dodges, Starved: ft.Starved, Sec: res.Elapsed.Seconds()}
 	switch {
 	case errors.Is(err, ErrChicken):
 		s.Left = "chicken"

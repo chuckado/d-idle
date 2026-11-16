@@ -133,7 +133,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tripMinHPPotions | 2 | 0..8 | count | 0 | 1 | Go to town when fewer healing potions remain (belt and pack). |
 | town.tripMinMPPotions | 1 | 0..8 | count | 0 | 1 | Go to town when fewer mana potions remain (only if the belt plan has a mana column). |
 | town.tripBeltColumnPct | 50 | 0..100 | % | 0 | 2 | Go to town when a planned belt column is filled below this. |
-| town.tripPackUsedPct | 80 | 40..100 | % | 100 | 4 | Go to town when the backpack is this full. |
+| town.tripPackUsedPct | 80 | 40..100 | % | 100 | 5 | Go to town when the backpack is this full. |
 | town.tripRepairPct | 20 | 0..60 | % | 0 | 1 | Go to town when an equipped item is below this durability. |
 | town.beltFillPct | 100 | 25..100 | % | 25 | 1 | Refill each potion type to this share of its planned columns. |
 | town.equipKindFails | 2 | 1..10 | count | 10 | 1 | Failed equips of one item kind (base class) into one slot before that kind is skipped until the character gains a level. The memory is by kind, so a fresh game (new item ids) does not repeat the same refused swap (g2g E1: Cap to head failed in every game). |
@@ -142,7 +142,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.tpMinGold | 0 | 0..1000 | gold | 1000 | 1 | Below this gold the first town portal scroll is not bought and a missing scroll is no trip reason, so a poor character puts its gold into potions first (XPGAP: 62% of the gold of a fresh d2d character went to scrolls). 0 = always buy at the scroll price. |
 | town.tpTomeMinGold | 450 | 0..5000 | gold | 5000 | 2 | Buy a Tome of Town Portal when gold is at least this. |
 | town.idScrollTarget | 2 | 0..20 | count | 0 | 4 | Scrolls to hold when no tome is owned. |
-| town.identifyTome | 0 | 0..1 | bool | 0 | 1 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
+| town.identifyTome | 0 | 0..1 | bool | 0 | 5 | 1 lets the town chore buy a Tome of Identify and fill it to 20 (before identify and sell, only from gold above the repair, kit and merc reserves; a logged reason when short). 0 (default) = the bot never buys it by itself; the watch UI Buy scrolls errand always works and ignores this knob. |
 | town.identifyTopUpBelow | 10 | 1..20 | count | 1 | 1 | With identifyTome on, refill the Tome of Identify to full when it holds fewer scrolls than this. |
 | town.minGoldReserve | 100 | 0..1e+04 | gold | 1e+04 | 5 | Optional purchases never spend below this. |
 | town.keyTarget | 0 | 0..12 | count | 0 | 6 | Keys to hold; 0 never buys keys. |
@@ -169,7 +169,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | town.futileGoldStep | 100 | 0..5000 | gold | 5000 | 4 | After a town visit could not fix a trip reason, do not ask again until gold grew by this. |
 | town.futileMinutes | 10 | 0..120 | min | 120 | 3 | A trip reason a visit left unfixed is not raised again for this long. |
 | town.tidyEnabled | 1 | 0..1 | 0/1 | 1 | 2 | 1: the Tidy chore stashes by the tidy policy table and drops pure junk from a full pack; it never touches equipment or marked items (docs/tidy.md). |
-| town.tidyMaxActions | 12 | 1..40 | count | 40 | 1 | Most stash and drop actions of one tidy pass (safety valve). |
+| town.tidyMaxActions | 12 | 1..40 | count | 40 | 2 | Most stash and drop actions of one tidy pass (safety valve). |
 | town.tidyMinPackPct | 60 | 20..100 | % | 100 | 1 | A tidy pass drops junk only when the backpack is at least this full. |
 | town.mercReserve | 1 | 0..1 | 0/1 | 0 | 2 | 1: while the merc is dead the shop keeps its revive price back from the tome, spare town portal scrolls and mana potions (hero14: 950 gold went to a tome and scrolls, then 600 for the revive was missing). Healing potions and the first portal scroll still come first. 0 = off. |
 | town.spareKeep | 4 | 0..30 | count | 0 | 1 | A full pack sells spare potions and identify scrolls beyond this many per kind (they fill the pack but are never belted). |
@@ -202,11 +202,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.freeCellsKeep | 2 | 0..12 | cells | 0 | 1 | Inventory cells that must stay free after a pickup. |
 | loot.potionBuffer | 4 | 0..10 | count | 0 | 1 | Extra healing potions carried in the pack beyond the belt (SME EXP, docs/levelplan.md: 4). |
 | loot.potionBufferMana | 2 | 0..10 | count | 0 | 1 | Extra mana potions carried in the pack beyond the belt. |
-| loot.rejuvSpare | 3 | 0..6 | count | 0 | 4 | Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them. |
+| loot.rejuvSpare | 3 | 0..6 | count | 0 | 5 | Rejuvenation potions carried in total (belt plus pack); more are left on the ground or sold, Full Rejuvenation preferred over regular. Pack ones are moved to a free belt slot in town so the belt hotkey can drink them. |
 | loot.lowGoldBelow | 2000 | 0..1e+05 | gold | 1e+05 | 3 | Below this gold, also pick items worth selling. |
 | loot.minValuePerCell | 100 | 0..5000 | gold | 5000 | 1 | Sell value per cell an item needs to be picked in low-gold mode. |
 | loot.valuableMinGold | 1500 | 100..1e+05 | gold | 1e+05 | 4 | Unequipped items worth at least this are valuables (stash before dangerous trips). |
-| loot.valuableMinPrio | 70 | 1..100 | prio | 100 | 5 | Items whose pickit rule prio is at least this are valuables. |
+| loot.valuableMinPrio | 70 | 1..100 | prio | 100 | 8 | Items whose pickit rule prio is at least this are valuables. |
 | loot.carryValuables | 0 | 0..20 | count | 0 | 1 | Valuables allowed in the pack outside town (insurance: the rest stay in the stash). |
 | loot.poorGoldBelow | 300 | 0..1e+04 | gold | 1e+04 | 1 | Below this gold every gold pile and junk weapon or armor worth selling is picked. |
 | loot.poorMinSell | 20 | 0..500 | gold | 500 | 2 | Estimated sell value a junk item needs to be picked in poor mode. |
@@ -244,11 +244,11 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.leaveSlack | 0 | 0..6 | levels | 6 | 8 | Levels past a step's leave level before moving to the next area. Higher wastes time in easy areas. |
 | bot.corpseRetries | 1 | 0..1 | count | 0 | 1 | Max attempts to recover the corpse after a softcore death. 0 abandons the gear. |
 | bot.portalSettleMs | 600 | 600..4500 | ms | 4500 | 1 | Pause in town after chores before going back out. |
-| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 23 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
+| bot.clearRadius | 30 | 12..45 | subtiles | 12 | 27 | Reach of one clear sweep: how far away a monster is noticed and fought. Smaller means more walking between sweeps; above 30 is the Aggressive stance (UNVERIFIED survival). |
 | bot.exploredPct | 100 | 30..100 | % | 100 | 2 | Share of a zone's roam coverage points the hero must have visited before a clear run calls the zone explored and moves on (the planner then takes the next area or a fresh game). 100 visits every point (the old behaviour). Quest and boss runs always explore everything. Needs a roaming (fully known map) backend; others ignore it. docs/exploredpct.md. |
-| bot.farmReset | 0 | 0..1 | bool | 0 | 1 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
-| bot.farmResetPct | 85 | 50..100 | % | 85 | 1 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
-| bot.farmResetCooldownMin | 5 | 1..60 | min | 5 | 1 | Least minutes between two farm resets: a reset that did not pay cannot repeat at once. |
+| bot.farmReset | 0 | 0..1 | bool | 0 | 3 | 1: in a leveling zone, once its coverage reaches bot.farmResetPct and a fresh game pays (the zone's current XP per minute is below what a reset yields after the 15 s restart and the walk back, measured in this run), the hero goes home, takes a fresh game (monsters respawn) and returns to the same zone. Never during a fight, a quest step, a boss run, a named run, a recovery or within 180 s of one. docs/farmloop.md. |
+| bot.farmResetPct | 85 | 50..100 | % | 85 | 2 | Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset. |
+| bot.farmResetCooldownMin | 5 | 1..60 | min | 5 | 2 | Least minutes between two farm resets: a reset that did not pay cannot repeat at once. |
 | bot.lootShadow | 1 | 0..1 | bool | 1 | 1 | 1: the loot rules engine (docs/lootrules.md) judges every ground pickup, tidy and sell decision next to today's code and logs the differences as `loot shadow: ...` lines (read-only report at /api/lootrules/shadow). Log only: it never changes what the bot does. 0 turns it off. |
 | bot.corpseValueMin | 1000 | 1..2e+04 | gold | 2e+04 | 4 | Estimated value of the gear on the corpse below which it is abandoned. Higher abandons more. |
 | bot.spiralDeaths | 4 | 3..8 | deaths | 8 | 4 | Deaths in one area within the spiral window that make the bot avoid that area (one fewer when the area is clearly too high for the level or the character died with no potions and no gold). Dying is normal: the default allows three deaths on the same goal. Higher tolerates more. |
@@ -306,6 +306,8 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.mercRetryMin | 10 | 1..60 | min | 10 | 1 | Minutes between merc chore attempts; a failed hire or revive is not retried sooner. |
 | bot.mercHireMinGold | 400 | 0..2000 | gold | 400 | 1 | Gold in Act 2 town below which no hire is attempted. |
 | bot.mercReviveUnverified | 0 | 0..1 | bool | 0 | 3 | 1 lets the town visit click the revive dialog, which is UNVERIFIED live (docs/merc-farm.md). Off until a live probe. |
+| bot.mercReviveLoopN | 3 | 0..10 | count | 3 | 3 | Only with bot.zoneModel 1. After this many revives that each ended in the merc's death within bot.mercReviveLoopMin minutes in the same zone, the model stops reviving him while that zone is its plan (it stays closed for the survival noReviveMinutes, 60). A death after a longer life resets the count. 0 turns the breaker off. Every revive and every death logs the merc's time to death either way. |
+| bot.mercReviveLoopMin | 10 | 1..120 | min | 10 | 2 | A merc who dies within this many minutes of a revive counts toward bot.mercReviveLoopN (seed 103 of the screen: 4 revives, each lived about a minute). |
 | bot.cubeJobs | 0 | 0..1 | bool | 0 | 3 | 1 runs the gold-free gem and rune upgrade chore in town. UNVERIFIED live (docs/items.md), so off. |
 | bot.cubeMaxJobs | 6 | 1..12 | count | 6 | 1 | Transmutes per town visit when the cube chore is on. |
 | bot.cubeRuneCap | 10 | 1..10 | rune | 10 | 1 | Highest rune number the chore produces (10 = Thul; Dol to Hel and above are ladder-flagged, docs/items.md Q1). |
