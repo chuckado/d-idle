@@ -44,11 +44,19 @@ One message per frame, little endian, then a payload of raw DEFLATE (RFC 1951, G
 ```
 0  "PF"  2 u8 version=1  3 u8 flags (bit0 key frame; other bits reserved: bit1 indexed payload, bit2 palette change)
 4  u16 width  6 u16 height  8 u8 tile edge (16)  9 u8 0  10 u32 seq  14 u32 base seq (0 for a key frame)
-18 u32 game ms  22 u32 payload length  26 payload
-payload (inflated): dirty-tile bitmap (row-major, bit 0 first), then per dirty tile its RGB bytes, row by row
-  key frame : every tile; each row left-neighbour filtered (byte minus the byte 3 to the left, first pixel raw)
-  delta     : only tiles that differ from the base frame; each byte is XOR with the base frame's byte
+18 u32 game ms  22 u32 payload length  26 i8 dx  27 i8 dy (scroll found by the encoder)  28 payload
+payload (inflated)
+  key frame : every tile's RGB bytes, row-major tiles; each row left-neighbour filtered (byte minus the byte 3 to the left)
+  delta     : 2 bits per tile (row-major, 4 tiles per byte): 0 same as the base, 1 base XOR data, 2 shifted base XOR data,
+              3 exactly the shifted base; then the RGB bytes of every mode 1 and 2 tile. "Shifted base" = the base pixel at
+              (x-dx, y-dy), black outside the frame.
 ```
+
+Why the scroll modes (V, measured on real frames, probe doc): while the hero walks the whole isometric view moves a few
+pixels per frame, so a plain frame-to-frame XOR changes nearly every pixel (about 480 to 540 KB per delta, as large as a
+key frame). The encoder looks for one global integer shift within +-16 px (`EstimateShift`: a sparse sample lattice, the
+previous frame's shift first, then a coarse search refined on a finer lattice) and codes each tile against whichever of
+"same place" or "shifted" leaves fewer differing pixels; the HUD, which does not scroll, stays on mode 0 or 1.
 
 - "Palette change flag": not needed for RGB; the reserved bits describe the indexed variant (a palette of N RGB triples
   ahead of the bitmap, tile bytes become indices) for a future source that really has indices. Not implemented (U).

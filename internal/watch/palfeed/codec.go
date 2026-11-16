@@ -35,7 +35,7 @@ const (
 	FlagKey    = 1
 
 	// MaxShift is the largest scroll per frame the encoder looks for, in pixels per axis.
-	MaxShift = 16
+	MaxShift = 32
 )
 
 // ErrNeedKey: the message is a delta against a frame this decoder does not hold; reconnect or ask for a key frame.
