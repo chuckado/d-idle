@@ -1,10 +1,13 @@
 ---
 id: TASK-539
-title: 'pause: Pause freezes the game (lockstep on/off), safe loop wiring, banner and Space'
-status: In Progress
+title: >-
+  pause: Pause freezes the game (lockstep on/off), safe loop wiring, banner and
+  Space
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T03:42:00Z'
+updated_date: '2026-11-16T16:27:00Z'
 labels:
   - bot
   - feature
