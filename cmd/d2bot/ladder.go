@@ -296,7 +296,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			rig.Fun.Reset = watch.NewResetAPI()
 			rig.Fun.Reset.Bind(l.reset)
 		}
-		rig.Fun.Support = newSupportAPI(l, stateDir)
+		rig.Fun.Support = newSupportAPI(l, stateDir, watchTok, apiToken)
 		if l.characters != nil {
 			rig.Fun.Characters = watch.NewCharactersAPI()
 			rig.Fun.Characters.Bind(l.characters)

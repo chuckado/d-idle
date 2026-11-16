@@ -25,6 +25,7 @@ str openspec@1.15.0
 str .forgejo/ISSUE
 # code that handles tokens by reference (HTTP header names in clients, servers and tests; no token value is in the repo)
 str Authorization
+str $http_authorization
 str authorization keys
 str Bearer "+
 str Bearer realm=

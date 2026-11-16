@@ -32,14 +32,17 @@ const (
 var codeRx = regexp.MustCompile(`^[A-Z2-9]{8}$`)
 
 type config struct {
-	dir        string // inbox, NOT served by any web server
-	tokensFile string // one line per token: <sha256 hex> [label]; delete the line to revoke
-	quota      int64  // total bytes in dir; the oldest files go first
-	maxFiles   int    // and at most this many files
-	tokenRate  int    // uploads per hour per token
-	ipRate     int    // requests per hour per client address
-	failRate   int    // failed authentications per hour per client address
-	trustProxy bool   // read the client address from CF-Connecting-IP / X-Forwarded-For (behind the tunnel)
+	dir        string        // inbox, NOT served by any web server
+	tokensFile string        // one line per token: <sha256 hex> [label]; delete the line to revoke
+	quota      int64         // total bytes in dir; the oldest files go first
+	maxFiles   int           // and at most this many files
+	tokenRate  int           // uploads per hour per token
+	ipRate     int           // requests per hour per client address
+	failRate   int           // failed authentications per hour per client address
+	trustProxy bool          // the client address is the tunnel's CF-Connecting-IP; a request without a valid one is refused
+	globalRate int           // all requests per hour together (the cap that holds when per-address keys are forged)
+	minAge     time.Duration // a bundle younger than this is never purged; a full inbox then refuses uploads (507)
+	maxBusy    int           // uploads read and stored at once
 	now        func() time.Time
 }
 
@@ -51,6 +54,8 @@ type server struct {
 	ipN    map[string]*window
 	failN  map[string]*window
 	tokN   map[string]*window
+	glob   window
+	busy   chan struct{}
 }
 
 type window struct {
@@ -62,7 +67,10 @@ func newServer(c config) *server {
 	if c.now == nil {
 		c.now = time.Now
 	}
-	return &server{cfg: c, ipN: map[string]*window{}, failN: map[string]*window{}, tokN: map[string]*window{}}
+	if c.maxBusy <= 0 {
+		c.maxBusy = 3
+	}
+	return &server{cfg: c, ipN: map[string]*window{}, failN: map[string]*window{}, tokN: map[string]*window{}, busy: make(chan struct{}, c.maxBusy)}
 }
 
 // allow counts one event in a one-hour window; false when over limit.
@@ -131,20 +139,21 @@ func (s *server) tokenOK(tok string) (string, bool) {
 	return got, ok
 }
 
-func (s *server) clientIP(r *http.Request) string {
+// clientIP is the address the limits count. Behind the tunnel it is the header the tunnel sets; a request without a
+// valid one did not come through the tunnel and is refused (false), never counted under the proxy's own address.
+func (s *server) clientIP(r *http.Request) (string, bool) {
 	if s.cfg.trustProxy {
-		if v := r.Header.Get("CF-Connecting-IP"); v != "" {
-			return v
+		ip := net.ParseIP(strings.TrimSpace(r.Header.Get("CF-Connecting-IP")))
+		if ip == nil {
+			return "", false
 		}
-		if v := r.Header.Get("X-Forwarded-For"); v != "" {
-			return strings.TrimSpace(strings.Split(v, ",")[0])
-		}
+		return ip.String(), true
 	}
 	h, _, err := net.SplitHostPort(r.RemoteAddr)
 	if err != nil {
-		return r.RemoteAddr
+		return r.RemoteAddr, true
 	}
-	return h
+	return h, true
 }
 
 func reply(w http.ResponseWriter, code int, v any) {
@@ -166,7 +175,23 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.mu.Lock()
-	ip := s.clientIP(r)
+	ip, ok := s.clientIP(r)
+	if !ok {
+		s.mu.Unlock()
+		reply(w, http.StatusBadRequest, map[string]string{"error": "bad request"})
+		return
+	}
+	if gl := s.cfg.globalRate; gl > 0 {
+		now := s.cfg.now()
+		if now.Sub(s.glob.start) >= time.Hour {
+			s.glob = window{start: now}
+		}
+		if s.glob.n++; s.glob.n > gl {
+			s.mu.Unlock()
+			reply(w, http.StatusTooManyRequests, map[string]string{"error": "rate limit"})
+			return
+		}
+	}
 	if !s.allow(s.ipN, ip, s.cfg.ipRate) {
 		s.mu.Unlock()
 		reply(w, http.StatusTooManyRequests, map[string]string{"error": "rate limit"})
@@ -197,6 +222,13 @@ func (s *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	if mt, _, err := mime.ParseMediaType(r.Header.Get("Content-Type")); err != nil || (mt != "application/zip" && mt != "application/x-zip-compressed") {
 		reply(w, http.StatusUnsupportedMediaType, map[string]string{"error": "send application/zip"})
+		return
+	}
+	select {
+	case s.busy <- struct{}{}:
+		defer func() { <-s.busy }()
+	default:
+		reply(w, http.StatusServiceUnavailable, map[string]string{"error": "busy"})
 		return
 	}
 	if r.ContentLength > maxZip {
@@ -284,7 +316,10 @@ func (s *server) store(b []byte) (string, error) {
 			os.Remove(f.Name())
 			return "", werr
 		}
-		s.purge(code + ".zip")
+		if !s.purge(code + ".zip") { // still over quota with nothing old enough to delete
+			os.Remove(f.Name())
+			return "", errString("inbox full")
+		}
 		return code, nil
 	}
 	return "", errString("no free code")
@@ -302,11 +337,13 @@ func newCode() (string, error) {
 	return string(out), nil
 }
 
-// purge deletes the oldest .zip files until the inbox fits the quota and the file limit; keep is never removed.
-func (s *server) purge(keep string) {
+// purge deletes the oldest .zip files until the inbox fits the quota and the file limit. keep is never removed, and
+// neither is a file younger than minAge (a flood of uploads cannot evict real bundles). It reports whether the inbox
+// fits afterwards.
+func (s *server) purge(keep string) bool {
 	ents, err := os.ReadDir(s.cfg.dir)
 	if err != nil {
-		return
+		return true
 	}
 	type fi struct {
 		name string
@@ -326,11 +363,12 @@ func (s *server) purge(keep string) {
 	}
 	sort.Slice(fs, func(i, j int) bool { return fs[i].mod.Before(fs[j].mod) })
 	n := len(fs)
+	now := s.cfg.now()
 	for _, f := range fs {
 		if total <= s.cfg.quota && n <= s.cfg.maxFiles {
 			break
 		}
-		if f.name == keep {
+		if f.name == keep || now.Sub(f.mod) < s.cfg.minAge {
 			continue
 		}
 		if os.Remove(filepath.Join(s.cfg.dir, f.name)) == nil {
@@ -338,4 +376,5 @@ func (s *server) purge(keep string) {
 			n--
 		}
 	}
+	return total <= s.cfg.quota && n <= s.cfg.maxFiles
 }

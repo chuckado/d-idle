@@ -7,6 +7,7 @@ import (
 	"bufio"
 	"flag"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -24,7 +25,10 @@ func main() {
 	flag.IntVar(&c.tokenRate, "token-rate", 20, "uploads per hour per token")
 	flag.IntVar(&c.ipRate, "ip-rate", 10, "requests per hour per client address")
 	flag.IntVar(&c.failRate, "fail-rate", 5, "failed authentications per hour per client address")
-	flag.BoolVar(&c.trustProxy, "trust-proxy", false, "take the client address from CF-Connecting-IP / X-Forwarded-For (only behind your own proxy)")
+	flag.BoolVar(&c.trustProxy, "trust-proxy", false, "client address from CF-Connecting-IP (set by the tunnel); a request without it is refused. Only behind your own proxy")
+	flag.IntVar(&c.globalRate, "global-rate", 200, "all requests per hour together (0: off)")
+	flag.IntVar(&c.maxBusy, "max-busy", 3, "uploads handled at once")
+	minAge := flag.Int("min-age-hours", 24, "never purge a bundle younger than this; a full inbox then refuses uploads")
 	hash := flag.Bool("hash", false, "read one token from stdin and print its token-file line, then exit")
 	flag.Parse()
 	if *hash {
@@ -34,7 +38,11 @@ func main() {
 			fmt.Fprintln(os.Stderr, "token too short (use at least 24 random characters)")
 			os.Exit(2)
 		}
-		fmt.Println(hashToken(tok), "pack")
+		label := "pack"
+		if flag.NArg() > 0 {
+			label = flag.Arg(0)
+		}
+		fmt.Println(hashToken(tok), label)
 		return
 	}
 	if c.dir == "" || c.tokensFile == "" {
@@ -42,7 +50,8 @@ func main() {
 		os.Exit(2)
 	}
 	c.quota <<= 20
-	srv := &http.Server{Addr: *listen, Handler: newServer(c), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 2 * time.Minute, WriteTimeout: time.Minute, MaxHeaderBytes: 16 << 10}
+	c.minAge = time.Duration(*minAge) * time.Hour
+	srv := &http.Server{Addr: *listen, Handler: newServer(c), ReadHeaderTimeout: 10 * time.Second, ReadTimeout: 2 * time.Minute, WriteTimeout: time.Minute, MaxHeaderBytes: 16 << 10, ErrorLog: log.New(io.Discard, "", 0)} // net/http would log the address of a request that panics
 	log.Printf("d2supportrecv listening on %s", *listen)
 	log.Fatal(srv.ListenAndServe())
 }

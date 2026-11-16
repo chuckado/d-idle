@@ -242,3 +242,62 @@ func TestNoLogging(t *testing.T) {
 	}
 	var _ http.Handler = (*server)(nil)
 }
+
+func TestProxyWithoutHeaderRefused(t *testing.T) {
+	s, c := setup(t, func(c *config) { c.trustProxy = true })
+	z := mkZip(t, "a")
+	for _, h := range []string{"", "not-an-ip", "999.1.1.1"} {
+		r := httptest.NewRequest("POST", "/", bytes.NewReader(z))
+		r.Header.Set("Authorization", "Bearer "+tok)
+		r.Header.Set("Content-Type", "application/zip")
+		r.Header.Set("X-Forwarded-For", "198.51.100.9") // never trusted
+		if h != "" {
+			r.Header.Set("CF-Connecting-IP", h)
+		}
+		w := httptest.NewRecorder()
+		s.ServeHTTP(w, r)
+		if w.Code != 400 {
+			t.Errorf("header %q: %d", h, w.Code)
+		}
+	}
+	if ents, _ := os.ReadDir(c.dir); len(ents) != 0 {
+		t.Fatal("stored")
+	}
+}
+
+func TestGlobalCap(t *testing.T) {
+	s, _ := setup(t, func(c *config) { c.globalRate = 3; c.trustProxy = true })
+	for i, want := range []int{401, 401, 401, 429} { // forged per-request addresses still share one cap
+		r := httptest.NewRequest("POST", "/", bytes.NewReader(nil))
+		r.Header.Set("CF-Connecting-IP", "198.51.100."+string(rune('1'+i)))
+		r.Header.Set("Content-Type", "application/zip")
+		w := httptest.NewRecorder()
+		s.ServeHTTP(w, r)
+		if w.Code != want {
+			t.Errorf("request %d: %d want %d", i, w.Code, want)
+		}
+	}
+}
+
+func TestYoungBundlesNeverPurged(t *testing.T) {
+	s, c := setup(t, func(c *config) { c.maxFiles = 2; c.minAge = 24 * time.Hour })
+	z := mkZip(t, "a")
+	codes := []int{}
+	for i := 0; i < 4; i++ {
+		codes = append(codes, post(s, z, "Bearer "+tok, "application/zip").Code)
+	}
+	if codes[0] != 200 || codes[1] != 200 || codes[2] != 507 || codes[3] != 507 {
+		t.Fatal(codes)
+	}
+	if ents, _ := os.ReadDir(c.dir); len(ents) != 2 {
+		t.Fatalf("a refused upload left a file or a real bundle went: %d", len(ents))
+	}
+}
+
+func TestBusyLimit(t *testing.T) {
+	s, _ := setup(t, func(c *config) { c.maxBusy = 1 })
+	s.busy <- struct{}{} // one upload in flight
+	if w := post(s, mkZip(t, "a"), "Bearer "+tok, "application/zip"); w.Code != 503 {
+		t.Fatal(w.Code)
+	}
+}

@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
+	"os/user"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -29,12 +31,49 @@ type supportDesk struct {
 	l        ladderOptions
 	stateDir string
 	client   *http.Client
+	secrets  []string // tokens in use: scrubbed as literals whatever their shape
 }
 
-func newSupportAPI(l ladderOptions, stateDir string) *watch.SupportAPI {
+func newSupportAPI(l ladderOptions, stateDir string, tokens ...string) *watch.SupportAPI {
 	a := watch.NewSupportAPI()
-	a.Bind(&supportDesk{l: l, stateDir: stateDir, client: &http.Client{Timeout: 5 * time.Second}})
+	a.Bind(&supportDesk{l: l, stateDir: stateDir, client: &http.Client{Timeout: 5 * time.Second}, secrets: tokens})
 	return a
+}
+
+// knownLiterals are the strings that must never reach the bundle whatever shape they have: the tokens in use, the home
+// directory and user names, this machine's name and the configured host names and URLs (the update feed URL carries
+// the pack path).
+func (d *supportDesk) knownLiterals() []string {
+	out := append([]string(nil), d.secrets...)
+	for _, k := range []string{"D2DVIEW_TOKEN", support.EnvToken, "HOME", "USER", "LOGNAME", "USERNAME"} {
+		out = append(out, os.Getenv(k))
+	}
+	if h, err := os.UserHomeDir(); err == nil {
+		out = append(out, h)
+	}
+	if u, err := user.Current(); err == nil {
+		out = append(out, u.Username)
+	}
+	if h, err := os.Hostname(); err == nil {
+		out = append(out, h)
+	}
+	for _, k := range []string{support.EnvURL, "D2BOT_UPDATE_FEED", "D2BOT_WATCH_ORIGIN", "D2BOT_WATCH_TAP_URL"} {
+		for _, v := range strings.Split(os.Getenv(k), ",") {
+			v = strings.TrimSpace(v)
+			out = append(out, v)
+			if u, err := url.Parse(v); err == nil && u.Host != "" {
+				out = append(out, u.Hostname(), strings.Trim(u.Path, "/"))
+			}
+		}
+	}
+	out = append(out, d.l.supportLayout.Root, d.stateDir, d.l.currencyDir)
+	var keep []string
+	for _, s := range out {
+		if s = strings.TrimSpace(s); len(s) >= 3 && s != "/" {
+			keep = append(keep, s)
+		}
+	}
+	return keep
 }
 
 func (d *supportDesk) Sender() support.Sender {
@@ -49,14 +88,7 @@ func (d *supportDesk) Collect(o support.Options, local http.Handler) (support.In
 			in.Files = append(in.Files, support.Input{Name: name, Data: b})
 		}
 	}
-	// what to scrub as literals: this machine's name, the user, the data directory
-	if h, err := os.Hostname(); err == nil {
-		in.Extra = append(in.Extra, h)
-	}
-	if u := os.Getenv("USER"); u != "" {
-		in.Extra = append(in.Extra, u)
-	}
-	in.Extra = append(in.Extra, d.l.supportLayout.Root, d.stateDir)
+	in.Extra = d.knownLiterals()
 
 	ver, _ := json.Marshal(map[string]string{"version": buildinfo.Current(), "image": os.Getenv("D2BOT_IMAGE_TAG"), "instance": d.l.instance})
 	add("version.json", ver)
@@ -89,6 +121,7 @@ func (d *supportDesk) Collect(o support.Options, local http.Handler) (support.In
 	}
 	add("errors.txt", []byte(strings.Join(errs, "\n")))
 	add("decisions.json", jsonlTail(filepath.Join(d.stateDir, "decisions.jsonl"), supportTailJSON))
+	add("ledger.json", jsonlTail(filepath.Join(d.l.currencyDir, "ledger.jsonl"), supportTailJSON))
 	add("deaths.json", jsonlTail(filepath.Join(d.stateDir, "deaths.jsonl"), supportTailJSON))
 
 	if o.IncludeScreenshot {
