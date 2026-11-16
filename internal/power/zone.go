@@ -160,3 +160,24 @@ func orNone(s string) string {
 	}
 	return s
 }
+
+// BossPack is the reference encounter of a boss: the boss alone as one melee monster. Its minions and mods are not in the
+// pack (U: a boss with escorts reads safer than it is; the mods are folded into the generator's Dmg and Life).
+func BossPack(b *danger.Boss) Pack {
+	return Pack{MLvl: b.Level, Mons: []Mon{{Life: float64(b.Life), Def: float64(b.Def), ToHit: float64(b.ToHit), Dmg: b.Dmg}}}
+}
+
+// BossWord judges the hero against a boss under the dial: "safe", "risky" or "too hard" by the same lines as a zone's
+// bad pack, and the result behind it. An error (unreadable hero, unknown dial) means no word.
+func (m *Model) BossWord(h Hero, a *Archetype, b *danger.Boss, dial string) (string, Result, error) {
+	dl, err := m.P.Dial(dial)
+	if err != nil {
+		return "", Result{}, err
+	}
+	r, err := m.Margin(h, a, BossPack(b))
+	if err != nil {
+		return "", r, err
+	}
+	zm := ZoneMargin{Enter: dl.Enter, Stay: dl.Stay, Bad: r}
+	return zm.Word(), r, nil
+}

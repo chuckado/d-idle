@@ -76,6 +76,12 @@ type Deps struct {
 	ZoneChoice func(s *d2.Snapshot, area int, diff string, potions int, cands []ZoneCand) string
 	// ZoneObserve, if set, receives the hard events and the area summaries the per-zone ledger learns from. Passive.
 	ZoneObserve func(ZoneEvent)
+	// ZoneDecide, if set and bot.zoneModel is 1, is asked for the leveling zone (survival slice S-D): the controller's
+	// choice among cands with the dial id (cautious, balanced, bold). An error makes the planner use the plan tables.
+	ZoneDecide func(s *d2.Snapshot, area int, diff string, potions int, dial string, cands []ZoneCand) (ZoneVerdict, error)
+	// BossMargin, if set and bot.zoneModel is 1, says whether the hero's margin against a boss exists and its word; ok is
+	// false without margin data for that boss (the legacy level floor then stays).
+	BossMargin func(s *d2.Snapshot, key, diff, dial string) (word string, ok bool)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -151,6 +157,7 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)
 	dlog           *deathLog               // guarded by obMu

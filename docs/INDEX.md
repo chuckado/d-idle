@@ -532,6 +532,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `survival/`
 
 - [survival/README.md](survival/README.md): Survival: review and design (2026-11-14) (status: proposal, docs only (TASK-430). Nothing is implemented. Read this page; the detail is in...)
+- [ab-harness.md](survival/ab-harness.md): Survival A/B harness, S-D readiness audit and drill R3 plan (card survab, 2026-11-16) (status: current (TASK-550). Offline: nothing here ran against a live game; the report tool ran on synthetic logs...)
 - [calibration-2026-11-14.md](survival/calibration-2026-11-14.md): Survival calibration from the sandbox replay (card survcal, 2026-11-14) (status: current (TASK-460). Acts on the findings of docs/survival/replay-2026-11-14.md. Tags: V verified (how), S...)
 - [danger.md](survival/danger.md): Danger profile (survival slice S-A) (status: current (card survA). Implements design-2026-11-14.md section 3. Read-only, no behaviour change. Tags: V...)
 - [decisions-2026-11-14.md](survival/decisions-2026-11-14.md): Survival: user answers to the open questions (2026-11-14) (status: current. Records the user's answers to docs/survival/design-2026-11-14.md section 12, given 2026-11-14 in...)
@@ -542,6 +543,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [review-2026-11-14.md](survival/review-2026-11-14.md): Survival and zone-choice review: every mechanism, and why we keep going in circles (2026-11-14) (status: review, docs only (TASK-430, agent survivaldesign). No code, no game, no sandbox change. The design that...)
 - [units-fit-2026-11-15.md](survival/units-fit-2026-11-15.md): Units per clear: the danger generator against game.exe's room population (Acts 1 and 2, Normal) (status: current (2026-11-15, card decomp28). Tags: V run (game.exe's room population and room list under the...)
 - [wiring-2026-11-15.md](survival/wiring-2026-11-15.md): Survival shadow lines missing in the sandbox (diagnosis 2026-11-15)
+- [zonemodel.md](survival/zonemodel.md): Survival slice S-D: bot.zoneModel (card survsd, 2026-11-16) (status: current (TASK-552). Offline: nothing here ran against a live game. Tags: V verified (how), S secondary (a...)
 - [swingmodel.md](swingmodel.md): Swing model of the resource simulator (TASK-404)
 - [t0-slice.md](t0-slice.md): T0 slice (TASK-21, phase A3: offline) (status: phase A3 is code and tests only (A3 wires the four T0 fight-time points on top of the five T1 points of...)
 - [tally-strip.md](tally-strip.md): Tally strip: credits from events, the strip, the charter sink (status: built offline 2026-11-07 and wired into the bot by TASK-140 (see Wiring), TASK-129 (fun loop, ADR 0018,...)
@@ -656,6 +658,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
+- [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
@@ -892,6 +895,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [farmloop-live-20261116.md](probes/farmloop-live-20261116.md): Farm loop live check in the sandbox, 2026-11-16 (status: record. Task farmlive (TASK-553). Tags: V = verified in this run (container logs, read only), U = not...)
 - [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
 - [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
 
