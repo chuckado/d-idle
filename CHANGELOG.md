@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-566 <!--sg:agent/survledger-->
 - Merge branch 'main' into survrescreen <!--sg:agent/survrescreen-->
 - Merge branch 'main' into TASK-562 <!--sg:agent/survfix2-->
 - seqbody: seq-ias follow-up PR body per verifier <!--sg:agent/seqbody-->
