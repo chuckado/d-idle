@@ -16,6 +16,7 @@ owns:
   - "docs/probes/farmloop-live-20261116.md"
 exclusive: []
 contracts: []
+result: "Farm loop ON in the sandbox, 45 min clean: 0 farm resets (loop never fired), 8 normal cleared-zone fresh games, 0 deaths, 0 errors; kept ON; verified live from container logs (docs/probes/farmloop-live-20261116.md)"
 ---
 
 ## Description
