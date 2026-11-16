@@ -170,6 +170,13 @@ func compileCond(c Cond, groups map[string]Group) matcher {
 		return ctxNum(func(cx *Ctx) int { return cx.Gold })
 	case "packfull":
 		return ctxNum(func(cx *Ctx) int { return cx.PackFullPct })
+	case "idtome":
+		return ctxNum(func(cx *Ctx) int {
+			if cx.IDTome {
+				return 1
+			}
+			return 0
+		})
 	case "stashfull":
 		return ctxNum(func(cx *Ctx) int { return cx.StashFullPct })
 	case "runeno":

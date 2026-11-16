@@ -244,5 +244,12 @@ func (a *RulesAdapter) Ctx(s *d2.Snapshot, build string, packPct, stashPct int) 
 		}
 	}
 	cx.Owned = func(it *lootrules.Item) int { return owned[it.Code] }
+	if s.Inventory != nil {
+		for _, u := range s.Inventory.Container(d2.ContInventory) {
+			if b := a.l.base(u.Class); b != nil && b.Code == "ibk" {
+				cx.IDTome = true
+			}
+		}
+	}
 	return cx
 }

@@ -179,57 +179,87 @@ func TestShadowStarterGroundLabelEquivalence(t *testing.T) {
 }
 
 // sellToday mirrors the sell chore's own test (town.sellableIf, the part that does not need a Town): the pickit verdict
-// sells it, or drops it while the pack is full and the tier is not S.
-func sellToday(l *Looter, s *d2.Snapshot, u d2.Unit, st d2.Stats, full bool) string {
+// sells it, or drops it while the pack is full and the tier is not S; an unidentified item the pickit wants identified
+// waits unless the pack is full or the town calls it not worth a scroll.
+func sellToday(l *Looter, s *d2.Snapshot, u d2.Unit, st d2.Stats, sc SellCtx) string {
 	c := l.ctxFrom(s)
 	c.Stats = st
 	v := l.EvaluateWith(u, c)
-	if v.Action == Sell || v.Action == Drop && full && v.Tier != "S" {
+	if v.NeedID && !u.Item.Identified() {
+		if (sc.Full || sc.SellUnid) && v.Prio < sc.ValuableMinPr {
+			return lootrules.Sell
+		}
+		return lootrules.Keep
+	}
+	if v.Action == Sell || v.Action == Drop && sc.Full && v.Tier != "S" {
 		return lootrules.Sell
 	}
 	return lootrules.Keep
 }
 
-// The sell stage is where the four tables disagree (docs/sellskip.md section 1): the chore sells what the pickit calls
-// junk or sellable, the Starter pack rules sell value >= 20 (the tidy row). The number and the kinds are the findings of
-// docs/lootrules.md; the test pins the totals so a change of either side shows.
-func TestShadowSellStageFindings(t *testing.T) {
+// The sell stage (wave 2b, docs/lootrules.md section 13). The user settled the five kinds the rules and the chore
+// disagreed on (wave 1: 250 of 840 decisions): 1 good gear the pickit wants stays, 2 cheap junk with no rule sells,
+// 3 surplus low gems sell, 4 plain junk sells in town, 5 jewelry sells unidentified until a Tome of Identify is owned
+// and is stashed after. Kinds 1 to 4 are today's behaviour, so the engine and the chore must agree on them (allowed
+// count 0); kind 5 is the only change from today and has exactly two forms. ANY other disagreement fails the test.
+var sellAllowed = map[string]string{
+	"today=sell rules=keep rule=s-jewelry-stash": "kind 5: jewelry is stashed, not sold, once a Tome of Identify is owned",
+	"today=keep rules=sell rule=s-jewelry-sell":  "kind 5: unidentified jewelry is sold at once, the chore waited for a full pack or a scroll",
+}
+
+func TestShadowSellStageDisagreementsAreTheFiveKinds(t *testing.T) {
 	l, db := synthLooter(t)
 	a := l.Rules()
 	items := shadowFixtures(t, db)
 	byKind := map[string]int{}
-	n, total := 0, 0
-	for _, full := range []bool{false, true} {
-		pack := map[bool]int{false: 40, true: 90}[full]
-		s := &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Class: d2.Sorceress, Level: 12, Gold: 500, Strength: 25, Dexterity: 25, Area: 2}, Inventory: &d2.Inventory{}}
-		cx := a.Ctx(s, "", pack, 10)
-		c, err := lootrules.Compile(lootrules.Starter(), cx.Class, "")
-		if err != nil {
-			t.Fatal(err)
-		}
-		for _, f := range items {
-			it, err := a.Item(f.u, ItemOpts{Place: lootrules.PlacePack, Stats: f.st})
-			if err != nil {
-				t.Fatal(err)
-			}
-			d := c.Decide(&it, cx)
-			rules, today := norm(ShadowSell, d.Action), sellToday(l, s, f.u, f.st, full)
-			n++
-			if rules != today {
-				total++
-				byKind[fmt.Sprintf("today=%s rules=%s rule=%s", today, rules, d.Rule)]++
+	n := 0
+	for _, cls := range []d2.Class{d2.Sorceress, d2.Amazon} {
+		for _, tome := range []bool{false, true} {
+			for _, full := range []bool{false, true} {
+				for _, unid := range []bool{false, true} {
+					pack := map[bool]int{false: 40, true: 90}[full]
+					s := &d2.Snapshot{State: d2.StateInGame, Player: &d2.Player{Class: cls, Level: 12, Gold: 500, Strength: 25, Dexterity: 25, Area: 2}, Inventory: &d2.Inventory{}}
+					cx := a.Ctx(s, "", pack, 10)
+					cx.IDTome = tome
+					c, err := lootrules.Compile(lootrules.Starter(), cx.Class, "")
+					if err != nil {
+						t.Fatal(err)
+					}
+					sc := SellCtx{Full: full, SellUnid: unid, ValuableMinPr: l.e.Tune.Loot.ValuableMinPrio}
+					for _, f := range items {
+						it, err := a.Item(f.u, ItemOpts{Place: lootrules.PlacePack, Stats: f.st})
+						if err != nil {
+							t.Fatal(err)
+						}
+						sold, d := decideSell(c, &it, cx, sc)
+						rules := map[bool]string{true: lootrules.Sell, false: lootrules.Keep}[sold]
+						today := sellToday(l, s, f.u, f.st, sc)
+						n++
+						if rules != today {
+							byKind[fmt.Sprintf("today=%s rules=%s rule=%s", today, rules, d.Rule)]++
+						}
+					}
+				}
 			}
 		}
 	}
-	t.Logf("%d sell decisions, %d disagreements", n, total)
 	kinds := make([]string, 0, len(byKind))
 	for k := range byKind {
 		kinds = append(kinds, k)
 	}
 	sort.Strings(kinds)
 	for _, k := range kinds {
-		t.Logf("%4d  %s", byKind[k], k)
+		t.Logf("%5d  %s", byKind[k], k)
+		if _, ok := sellAllowed[k]; !ok {
+			t.Errorf("NEW sell disagreement (%d): %s", byKind[k], k)
+		}
 	}
+	for k, why := range sellAllowed {
+		if byKind[k] == 0 {
+			t.Errorf("documented disagreement never shows (%s): %s", k, why)
+		}
+	}
+	t.Logf("%d sell decisions", n)
 }
 
 // The shadow costs well under a millisecond a decision on the fixture set (the brief's budget), logs one line per

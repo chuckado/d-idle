@@ -1011,6 +1011,8 @@ async function start() {
   mountLootRules({ ui, toast, doc: document, overlays,
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null),
     put: (path, body) => fetch(answerBase + path, { method: 'PUT', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; }),
+    post: (path, body) => fetch(answerBase + path, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
       .then((r) => r.json().then((j) => ({ status: r.status, j }))).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; }) });
   mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });

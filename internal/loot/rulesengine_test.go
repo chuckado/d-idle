@@ -164,3 +164,44 @@ func TestSetActiveRulesReachesEngineAndShadow(t *testing.T) {
 		t.Error("active rules not propagated")
 	}
 }
+
+// Stage 3 (the sell chore): off below 3, a sell mark or a keep mark is never overridden, jewelry follows the tome, a
+// broken rule set falls back and the knob clamps at 3.
+func TestEngineSellStage(t *testing.T) {
+	l, db := synthLooter(t)
+	ring := synthUnit(t, db, 21, "rin", d2.QualityRare, 0, d2.ContInventory) // unidentified rare ring
+	sc := SellCtx{ValuableMinPr: 70}
+	for _, st := range []int{StageGround, StageTidy} {
+		p, _ := enginePass(t, l, d2.Sorceress, 500, st)
+		if _, _, _, ok := p.SellDecision(ring, "", false, sc); ok {
+			t.Errorf("stage %d must not decide the sell chore", st)
+		}
+	}
+	p, _ := enginePass(t, l, d2.Sorceress, 500, 9)
+	if l.EngineStage() != StageSell {
+		t.Fatalf("knob 9 clamps to %d, got %d", StageSell, l.EngineStage())
+	}
+	sell, rule, _, ok := p.SellDecision(ring, "", false, sc)
+	if !ok || !sell || rule != "s-jewelry-sell" {
+		t.Errorf("no tome: unidentified jewelry sells (rule s-jewelry-sell), got %v %v %s", ok, sell, rule)
+	}
+	if sell, _, _, _ := p.SellDecision(ring, "keep", false, sc); sell {
+		t.Error("a keep mark (identify request, player mark) is never sold by the engine")
+	}
+	if sell, _, _, _ := p.SellDecision(ring, "", true, sc); sell {
+		t.Error("a never-sell unit is never sold by the engine")
+	}
+	if sell, _, _, _ := p.SellDecision(ring, "sell", false, sc); !sell {
+		t.Error("a sell mark sells")
+	}
+	// a Tome of Identify in the pack: the ring is stashed (kept in the pack for the tidy chore), not sold
+	p.cx.IDTome = true
+	if sell, rule, _, ok := p.SellDecision(ring, "", false, sc); !ok || sell || rule != "s-jewelry-stash" {
+		t.Errorf("with a tome: stash not sell, got %v %v %s", ok, sell, rule)
+	}
+	// a broken rule set: no decision, today's code answers
+	l.SetEngine(NewEngine(&lootrules.RuleSet{Schema: "lootrules/99"}))
+	if _, _, _, ok := p.SellDecision(ring, "", false, sc); ok {
+		t.Error("a broken rule set must fall back")
+	}
+}
