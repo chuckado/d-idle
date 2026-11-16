@@ -23,8 +23,8 @@ func Scan(file string, text string, extra ...string) []Finding {
 	var out []Finding
 	for i, line := range strings.Split(text, "\n") {
 		for _, e := range extra {
-			if len(e) >= 3 && strings.Contains(line, e) {
-				out = append(out, Finding{file, i + 1, "local", ctx(strings.ReplaceAll(line, e, "[***]"), extra)})
+			if rx := literalRx(e); rx != nil && rx.MatchString(line) {
+				out = append(out, Finding{file, i + 1, "local", ctx(rx.ReplaceAllString(line, "[***]"), extra)})
 			}
 		}
 		for _, r := range rules {

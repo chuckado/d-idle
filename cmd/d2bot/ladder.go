@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"d2lod-bot/internal/campaign"
+	"d2lod-bot/internal/paths"
 	"encoding/base64"
 	"errors"
 	"flag"
@@ -91,6 +92,8 @@ type ladderOptions struct {
 	readiness                              http.Handler // GET /api/readiness (readywire.go); nil: none
 	danger                                 http.Handler // GET /api/danger (dangerwire.go); nil: none
 	farmReset                              func() int
+	supportKnobs                           func() any                            // the tuner's values for the support bundle (supportwire.go); nil: none
+	supportLayout                          paths.Layout                          // data directory layout of the support bundle's logs and saves
 	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
 	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
 	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
@@ -293,6 +296,7 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			rig.Fun.Reset = watch.NewResetAPI()
 			rig.Fun.Reset.Bind(l.reset)
 		}
+		rig.Fun.Support = newSupportAPI(l, stateDir)
 		if l.characters != nil {
 			rig.Fun.Characters = watch.NewCharactersAPI()
 			rig.Fun.Characters.Bind(l.characters)

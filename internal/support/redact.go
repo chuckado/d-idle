@@ -67,8 +67,8 @@ func randomToken(s string) bool {
 // machine (host name, user name, data directory) that go too.
 func Redact(s string, extra ...string) string {
 	for _, e := range extra {
-		if len(e) >= 3 {
-			s = strings.ReplaceAll(s, e, "<local>")
+		if rx := literalRx(e); rx != nil {
+			s = rx.ReplaceAllString(s, "<local>")
 		}
 	}
 	for _, r := range rules {
@@ -80,4 +80,19 @@ func Redact(s string, extra ...string) string {
 		})
 	}
 	return s
+}
+
+var wordLit = regexp.MustCompile(`^[\w-]+$`)
+
+// literalRx matches a literal of this machine; a plain word (user or host name) only as a whole word, so a short
+// name does not eat the middle of other words. nil for literals shorter than 3 characters.
+func literalRx(e string) *regexp.Regexp {
+	if len(e) < 3 {
+		return nil
+	}
+	q := regexp.QuoteMeta(e)
+	if wordLit.MatchString(e) {
+		q = `(?i)\b` + q + `\b`
+	}
+	return regexp.MustCompile(q)
 }
