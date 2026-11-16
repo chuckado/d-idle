@@ -177,6 +177,7 @@ type Runner struct {
 	pendingWhy     goals.Why            // announced by setWhy, taken by the next setLocked; guarded by mu
 	journeyWhy     string               // why the quest journey is blocked now, guarded by mu (staletarget.go)
 	questTravel    atomic.Bool          // a quest step is walking: a border-loop ban does not stop it (staletarget.go)
+	inTown         atomic.Bool          // the hero stands in a town area (observe.go): the roam coverage is not read there
 	freshBusy      atomic.Bool          // a fresh game is being taken (startFreshGame is a no-op meanwhile)
 	farmOff        string               // why the farm loop is off for this session (mu)
 	bossRun        atomic.Bool          // a boss script is running (Deps.Task.Boss): routine town trips wait, the guard's re-plan cancels are off

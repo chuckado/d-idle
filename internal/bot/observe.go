@@ -517,6 +517,7 @@ func (r *Runner) observe(s *d2.Snapshot, now time.Time) {
 		o.fromTown = o.area != 0 && r.d.Plan.IsTown(o.area)
 		o.crossArea = 0
 		o.area = p.Area
+		r.inTown.Store(r.d.Plan.IsTown(p.Area))
 		o.noteRoute(p.Area)
 		o.mons = map[uint32]monTrack{}
 		o.bump(now)
