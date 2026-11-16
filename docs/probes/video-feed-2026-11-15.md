@@ -5,8 +5,8 @@ Tags: V = measured here (how is said), S = from another doc, U = not measured. D
 ## Method (V)
 
 - Source: a lab d2d (container-pin build `lab3-labverbs` f75816c6, `--lockstep --no-save --seed 7`, fresh level 1
-  sorceress `Vfeed`, Rogue Encampment, throwaway, nothing written to any save, no cheat writes) on the Tower builder
-  (`labrun tower`, nothing on Orion, not the sandbox hero). `tools/videofeed/record.py` steps ONE 40 ms world tick with
+  sorceress `Vfeed`, Rogue Encampment, throwaway, nothing written to any save, no cheat writes) on the worker host (builder)
+  (a locked builder job, nothing on the user desktop, not the sandbox hero). `tools/videofeed/record.py` steps ONE 40 ms world tick with
   `step 1 render` and takes a `screenshot` PNG after each, so consecutive files are consecutive 25 Hz frames (the rate of
   the sandbox feed, docs/viewer-fps.md section 6). The pinned build has no `framefeed` verb, so the PNGs (800x600 RGBA)
   stand in for the ring's RGBA slots: the same pixels, `readRing` gives the same layout.
@@ -15,7 +15,7 @@ Tags: V = measured here (how is said), S = from another doc, U = not measured. D
 - Replay: `internal/watch/palfeed/replay_test.go` (`TestReplay`) encodes each frame against the previous one (a 25 fps
   client) or against the frame 2 or 3 earlier (a client taking every 2nd or 3rd frame), decodes it, and FAILS unless the
   decoded RGB equals the recorded frame (V: lossless on all 630 frames, all configurations). Run:
-  `labrun tower -- sh tools/videofeed/run.sh` (record + replay + node + headless Chromium; `VF_REUSE=1` keeps the frames).
+  `labrun <builder> -- sh tools/videofeed/run.sh` (record + replay + node + headless Chromium; `VF_REUSE=1` keeps the frames).
   Frames stay on the builder in /tmp and are never committed.
 - Timing caveat: the builder is a shared container (6 CPU cap, load 2 to 5 while this ran), Go 1.27 and node 20 on one
   thread each. Read ms as a loaded-host figure, not a sandbox one. The sandbox has ONE core for d2d, d2dview and d2bot.
