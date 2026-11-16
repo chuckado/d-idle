@@ -38,7 +38,7 @@ owns:
   - "internal/env/tuning_loot.go"
 exclusive: []
 contracts: []
-result: "knob loot.rulesEngine 3 = ground+tidy+sell: the five sell decisions (user 2026-11-16) as sell-scope Starter rules (jewelry vs Tome of Identify) plus engine behaviour (ground rules judge the rest as the pickit does today, marks and identify requests first, per-item fallback guard); shadow test pins kinds 1-4 at zero disagreements and kind 5 at exactly two documented forms. Dry-run preview, undo, import and export routes, per-hero store (per-character state, class-preset fallback), Loot Rules sheet controls and sell-kind text. Default OFF, offline only, NOT verified live."
+result: "knob loot.rulesEngine 3 = ground+tidy+sell: the five sell decisions (user 2026-11-16) as sell-scope Starter rules (jewelry vs Tome of Identify) plus engine behaviour (ground rules judge the rest as the pickit does today, marks and identify requests first, per-item fallback guard); shadow test pins kinds 1-4 at zero disagreements and kind 5 at exactly two documented forms. Dry-run preview, undo, import and export routes, per-hero store (per-character state, class-preset fallback), Loot Rules sheet controls and sell-kind text. Default OFF, offline only, NOT verified live. Fit pages checked on the worker host (1351 ok) and the sheet pictures (dark, light, 1366x768, 412x780, 360x640) looked at."
 ---
 
 ## Description
