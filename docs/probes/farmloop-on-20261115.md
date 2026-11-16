@@ -19,3 +19,7 @@ Container healthy, one `d2bot start`, 0 error/panic/fatal and 0 watchdog lines i
 ## Rollback
 
 Set the knob back to 0 and restore the backup: `docker exec -u d2 d2play-20261108 cp -p <state dir>/tuning.json.bak-farmloopon <state dir>/tuning.json` then `docker restart d2play-20261108`. The data volume is never deleted.
+
+## Rolled back: thrash (2026-11-16 02:44Z)
+
+The loop thrashed. `Save and Exit requested` lines at 02:16, 02:23, 02:27 and 02:34 (about every 7 minutes, one fresh game each), then a burst of 5 leave/re-enter cycles in 20 seconds at 02:42:31 to 02:42:47 (area 8, explored 100 percent, town, and straight out again). The user reported the bot flaking out. Rolled back the same way it was set: current file saved as `tuning.json.bak-thrash`, `tuning.json.bak-farmloopon` copied over `tuning.json` (no `bot.farmReset` entry, default 0), `docker restart d2play-20261108`. V after 3.5 minutes: healthy, no `Save and Exit requested` apart from the restart itself, 0 error lines, hero alive, clvl 5 to 6, xp 13996 -> 14275, 0 deaths. Cause is for the farm loop card: the guards (cooldown 5 minutes, "no fresh game within 180 s") did not stop the burst at 100 percent coverage (U which guard failed).
