@@ -16,6 +16,7 @@ const (
 	CharactersSwitchRoute  = "/api/characters/switch"
 	CharactersDeleteRoute  = "/api/characters/delete"
 	CharactersRestoreRoute = "/api/characters/restore"
+	CharactersRulesRoute   = "/api/characters/rules" // GET: the class table and the name rule (no desk needed)
 )
 
 // CharactersDesk is what the routes need from the backend (charsel.Manager implements it; fakes in tests).
@@ -57,6 +58,14 @@ func (a *CharactersAPI) Handler() http.Handler {
 		}
 		v, no := d.List()
 		charReply(w, v, no)
+	}))
+}
+
+// RulesHandler serves the page's rules; they are static, so it answers even before a desk is bound.
+func (a *CharactersAPI) RulesHandler() http.Handler {
+	return readOnly(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Cache-Control", "no-store")
+		writeJSON(w, 200, charsel.Rules())
 	}))
 }
 
