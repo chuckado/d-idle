@@ -159,6 +159,7 @@ cmd/d2bot/glancewire.go  credit-runner  uib6
 cmd/d2bot/glancewire.go  credit-runner  uifix1
 cmd/d2bot/glancewire_blocked.go  credit-runner  uib6
 cmd/d2bot/glancewire_blocked_test.go  credit-runner  uib6
+cmd/d2bot/glancewire_pause.go  credit-runner  pause
 cmd/d2bot/glancewire_pause.go  credit-runner  uifix1
 cmd/d2bot/glancewire_pause_test.go  credit-runner  uifix1
 cmd/d2bot/glancewire_reset.go  credit-runner  botreset
@@ -200,6 +201,7 @@ cmd/d2bot/mercwire.go  credit-runner  botmerc
 cmd/d2bot/mercwire.go  credit-runner  mercrevive2
 cmd/d2bot/mercwire_test.go  credit-runner  mercrevive2
 cmd/d2bot/objects.go  credit-runner  botstuck
+cmd/d2bot/pausewire.go  credit-runner  pause
 cmd/d2bot/pausewire.go  credit-runner  uib1
 cmd/d2bot/playertuning_test.go  live-agent  recoverypace
 cmd/d2bot/powerwire.go  credit-runner  powerwire
@@ -307,6 +309,7 @@ docs/onboarding.md  credit-runner  reconnectux
 docs/palprofile.md  credit-runner  palprofile2
 docs/passagebounce.md  credit-runner  arrivalsettle
 docs/passagebounce.md  credit-runner  passagebounce
+docs/pause.md  credit-runner  pause
 docs/pause.md  credit-runner  uib1
 docs/plan/STATUS.md  credit-runner  statusrefresh
 docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
@@ -453,6 +456,8 @@ internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
+internal/bot/freeze.go  credit-runner  pause
+internal/bot/freeze_test.go  credit-runner  pause
 internal/bot/geargate.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  exploredpct
 internal/bot/goal.go  credit-runner  goldprio
@@ -503,6 +508,7 @@ internal/bot/playeraction.go  credit-runner  idfast
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
 internal/bot/playeraction_test.go  credit-runner  idfast
+internal/bot/playerpause.go  credit-runner  pause
 internal/bot/playerpause.go  credit-runner  uib1
 internal/bot/playerpause_test.go  credit-runner  uib1
 internal/bot/playerreset.go  credit-runner  botreset
@@ -569,6 +575,8 @@ internal/d2dctl/item_verbs_merc.go  credit-runner  uib9
 internal/d2dctl/item_verbs_merc_test.go  credit-runner  uib9
 internal/d2dctl/item_verbs_test.go  credit-runner  itemverbs2
 internal/d2dctl/verbs.go  credit-runner  arrivalsettle
+internal/d2denv/freeze.go  credit-runner  pause
+internal/d2denv/freeze_test.go  credit-runner  pause
 internal/d2dinput  pro-runner  bounce3
 internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
@@ -605,6 +613,7 @@ internal/env/tuning_resource.go  live-agent  recoverypace
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_watch.go  credit-runner  videofeed2
 internal/fidvendor  live-agent  fidprobe-vendor
+internal/gclock/gclock_test.go  credit-runner  pause
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
 internal/invdesk  credit-runner  gearsets
@@ -802,8 +811,11 @@ internal/watch/palfeed  credit-runner  videofeed2
 internal/watch/palfeed.go  credit-runner  videofeed2
 internal/watch/palfeed_test.go  credit-runner  videofeed2
 internal/watch/panels.go  credit-runner  uis6
+internal/watch/pauseapi.go  credit-runner  pause
 internal/watch/pauseapi.go  credit-runner  uib1
+internal/watch/pauseapi_test.go  credit-runner  pause
 internal/watch/pauseapi_test.go  credit-runner  uib1
+internal/watch/pauseui_test.go  credit-runner  pause
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  botreset
@@ -874,6 +886,7 @@ internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
 internal/watch/testdata/panel_harness.js  credit-runner  videofeed2
+internal/watch/testdata/pause  credit-runner  pause
 internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
@@ -983,6 +996,8 @@ internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
+internal/watch/web/pause.css  credit-runner  pause
+internal/watch/web/pauseui.js  credit-runner  pause
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
