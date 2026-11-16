@@ -186,7 +186,7 @@ func TestFarmResetThrashCap(t *testing.T) {
 	g := farmLoopRig(t, d2.Paladin, 90)
 	g.r.e.Tune.Bot.FarmResetCooldownMin = 1
 	now := g.clock.Now()
-	g.r.loop.farm.fresh = []time.Time{now.Add(-20 * time.Minute), now.Add(-12 * time.Minute), now.Add(-6 * time.Minute)}
+	g.r.loop.farm.fresh = []time.Time{now.Add(-8 * time.Minute), now.Add(-5 * time.Minute), now.Add(-2 * time.Minute)}
 	g.farmAdvance(6*time.Minute, 60)
 	g.farmAdvance(4*time.Minute, 3)
 	if g.r.farmResetDue(2) {
