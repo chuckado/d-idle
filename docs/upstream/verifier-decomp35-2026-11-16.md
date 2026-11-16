@@ -65,7 +65,7 @@ Builder container, Release, GCC, tests and tools on, `-j2` under the builder's l
 
 The stack adds no ctest entry (its tests are asserts in `test_combat`); the per-test difference to upstream is none. The oracle commits change only `tools/emu/`, which is not in the CMake build, so each commit builds as its parent does.
 
-TIDY_PENDING
+clang-tidy-19 over the 274 units `tools/tidy-pr-select.py` picks for the stack's changed files (`combat.hpp`, `ai.hpp`, `strike.cpp`, `gamedata.hpp`, `gamedata_load.cpp`, `test_combat.cpp`) in the claim tip's build: 5 findings, all upstream's `std::erase_if` include-cleaner errors in files the stack does not touch (`debug_hero.cpp` twice, `test_akara_decipher.cpp`, `test_gibbet_portal.cpp`, `test_khalim_chest.cpp`; P13, P17 and P18 saw the same); 0 in the stack's files. Positive control: `--checks=-*,readability-magic-numbers` reports in `test_combat.cpp`, so the file is parsed. The harnesses are not in the CMake build, so tidy does not see them (their includes were read by hand).
 
 ## RNG luck
 
