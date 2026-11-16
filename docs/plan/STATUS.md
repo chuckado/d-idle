@@ -268,6 +268,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 78ee7b4b7 11-16 13:53 `Merge agent/telebody: Merge branch 'main' into telebody` (telebody)
+- d4e1da3bb 11-16 13:52 `Merge branch 'main' into telebody` (-)
 - ad5c46990 11-16 13:46 `Merge agent/seqfollowup: Merge branch 'main' into seqfollow` (seqfollowup)
 - f0c0ac1e8 11-16 13:46 `Merge agent/verifyp13: Merge branch 'main' into TASK-551` (verifyp13)
 - 1b19181ea 11-16 13:44 `Merge branch 'main' into seqfollow` (-)
@@ -276,6 +278,4 @@
 - 5c5382a96 11-16 13:37 `Merge branch 'main' into TASK-530` (-)
 - 5ca1b88db 11-16 13:31 `Merge origin/main into charui` (-)
 - a691c3066 11-16 13:31 `Merge agent/lootwire3: Merge branch 'main' into lootwire3` (lootwire3)
-- ebd636503 11-16 13:30 `Merge branch 'main' into lootwire3` (-)
-- 5ed5553e7 11-16 12:45 `Merge origin/main into charui` (-)
 <!-- statusgen:end -->
