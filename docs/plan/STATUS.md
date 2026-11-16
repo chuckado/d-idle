@@ -218,6 +218,7 @@
 | videofeed | proposed | - | `internal/watch/palfeed`<br>`internal/watch/web/palfeed.js`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`tools/videofeed` | - |
 | idtome | proposed | - | `internal/town/idtome_test.go` | - |
 | videofeed2 | proposed | - | `internal/watch/palfeed`<br>`internal/watch/palfeed.go`<br>`internal/watch/web/palfeed.js`<br>`internal/watch/web/panels/video`<br>`internal/env/tuning_watch.go`<br>`cmd/d2dview`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`internal/env/tuning.go`<br>`internal/watch/serve.go`<br>`internal/watch/hub.go`<br>`internal/watch/views.go`<br>`internal/watch/glance.go`<br>`internal/watch/video.go`<br>`internal/watch/http_view.go`<br>`internal/watch/palfeed_test.go`<br>`internal/watch/watchlayout_test.go`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js`<br>`cmd/d2bot/ladder.go`<br>`tools/knobdump/main.go`<br>`docs/knobs.md`<br>`docs/friend-guide.md`<br>`tools/friendpack/compose.yml` | - |
+| resetfit | proposed | - | `internal/watch/web/resetui.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -261,6 +262,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a245aed2e 11-16 10:03 `Merge agent/resetfit: Merge branch 'main' into resetfit` (resetfit)
+- d19afb569 11-16 10:03 `Merge branch 'main' into resetfit` (-)
+- 299bfda30 11-16 10:00 `Merge main` (-)
 - 584961adb 11-16 09:56 `Merge agent/supportreview: Merge branch 'main' into supportreview` (supportreview)
 - 938ee4308 11-16 09:55 `Merge branch 'main' into supportreview` (-)
 - 0619198a0 11-16 09:45 `Merge agent/videofeed2: videofeed2: lossless feed mounted behind watch.paletteFeed (off), canvas player, guard, walking measurement` (videofeed2)
@@ -268,7 +272,4 @@
 - 2b3b4a9ce 11-16 09:21 `Merge agent/idtome: Merge branch 'main' into idtome` (idtome)
 - 6133c7f1a 11-16 09:20 `Merge branch 'main' into idtome` (-)
 - 4d49fe871 11-16 09:13 `Merge agent/support: Merge origin/main into agent/support (keep both sides)` (support)
-- 082062b55 11-16 08:53 `Merge origin/main into agent/support (keep both sides)` (support)
-- 82f016a74 11-16 08:45 `Merge origin/main into videofeed2` (-)
-- bc06722e8 11-16 08:45 `merge origin/main` (-)
 <!-- statusgen:end -->

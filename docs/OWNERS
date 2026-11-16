@@ -985,7 +985,9 @@ internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
+internal/watch/web/resetui.js  credit-runner  resetfit
 internal/watch/web/resetui.js  credit-runner  resetinstant
+internal/watch/web/shell.css  credit-runner  resetfit
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -1066,6 +1068,7 @@ tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
+tools/uishots.sh  credit-runner  resetfit
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  uic2
 tools/uishots.sh  credit-runner  uic3
