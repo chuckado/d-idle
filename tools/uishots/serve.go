@@ -79,6 +79,9 @@ func serve(addr, class string) error {
 	m.HandleFunc(watch.SupportRoute, supportFixture)
 	m.HandleFunc(watch.SupportBundleRoute, supportFixture)
 	m.HandleFunc("/api/lootrules", lootRulesFixture)
+	for _, p := range []string{"preview", "undo", "import", "export"} {
+		m.HandleFunc("/api/lootrules/"+p, lootRulesFixture)
+	}
 	m.Handle(watch.ZoneClearRoute, zoneClearFixture())
 	m.HandleFunc("/api/update/status", updateStatusFixture)
 	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))

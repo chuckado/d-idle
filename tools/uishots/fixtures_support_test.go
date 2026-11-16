@@ -60,7 +60,7 @@ func TestLootRulesFitPages(t *testing.T) {
 		t.Fatal(err)
 	}
 	sh := string(b)
-	for _, p := range []string{"lootrules-sheet ", "lootrules-sheet-light ", "lootrules-custom ", "lootrules-custom-light ", "lootrules-empty ", "lootrules-error "} {
+	for _, p := range []string{"lootrules-sheet ", "lootrules-sheet-light ", "lootrules-custom ", "lootrules-custom-light ", "lootrules-empty ", "lootrules-error ", "lootrules-preview ", "lootrules-preview-light ", "lootrules-sellkinds ", "lootrules-sellkinds-light "} {
 		if !strings.Contains(sh, "\n"+p) {
 			t.Errorf("no fit page %q", p)
 		}
