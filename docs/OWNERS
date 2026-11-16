@@ -231,6 +231,7 @@ cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2firsthour/  live-agent  firsthour
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
+data/onboarding/en.json  credit-runner  friendfb
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
@@ -383,6 +384,7 @@ docs/tidy.md  credit-runner  tidy
 docs/towntests.md  credit-runner  towntests
 docs/ui-design-system.md  credit-runner  nopins
 docs/ui-design-system.md  credit-runner  uic3
+docs/ui/friend-feedback-2026-11-15.md  credit-runner  friendfb
 docs/ui/redesign-2026-11-14/reviews/c2c3-review.md  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/c2c3/  credit-runner  uic23review
 docs/ui/redesign-2026-11-14/reviews/s1b-review.md  credit-runner  uis1breview
@@ -570,6 +572,7 @@ internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
 internal/danger/gapexport.go  credit-runner  survC
+internal/decide/firsts_act1.json  credit-runner  friendfb
 internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
@@ -720,12 +723,16 @@ internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/watch/areamap_test.go  credit-runner  uis6
+internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
 internal/watch/charactersapi_test.go  credit-runner  charselect
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
 internal/watch/commands_test.go  credit-runner  uis4
+internal/watch/dropsfeed.go  credit-runner  friendfb
+internal/watch/dropsfeed_test.go  credit-runner  friendfb
+internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  lootwireL4
 internal/watch/funwire.go  credit-runner  survA
 internal/watch/funwire.go  credit-runner  uib1
@@ -756,6 +763,7 @@ internal/watch/layout.go  credit-runner  uis1
 internal/watch/layout.go  credit-runner  uis6
 internal/watch/layout_test.go  credit-runner  uis1
 internal/watch/layout_test.go  credit-runner  uis7
+internal/watch/logtab.go  credit-runner  friendfb
 internal/watch/logtab.go  credit-runner  uis6
 internal/watch/logtab_test.go  credit-runner  uis6
 internal/watch/lootshadowapi.go  credit-runner  lootwireL4
@@ -829,6 +837,7 @@ internal/watch/testdata/itemtip/tip_dom.js  credit-runner  nopins
 internal/watch/testdata/itemusable/  credit-runner  charreq
 internal/watch/testdata/layout_cells.golden  credit-runner  uis7
 internal/watch/testdata/layout_default.js  credit-runner  uis7
+internal/watch/testdata/logpanel  credit-runner  friendfb
 internal/watch/testdata/logpanel/  credit-runner  uis6
 internal/watch/testdata/map_panel.js  credit-runner  maphistory
 internal/watch/testdata/map_panel.js  credit-runner  maphistoryA
@@ -838,6 +847,7 @@ internal/watch/testdata/map_panel.js  credit-runner  maphistoryD
 internal/watch/testdata/map_panel.js  credit-runner  maptrail
 internal/watch/testdata/map_panel.js  credit-runner  maptrail2
 internal/watch/testdata/onboarding_dom.js  credit-runner  firstminutes
+internal/watch/testdata/onboarding_dom.txt  credit-runner  friendfb
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
@@ -858,6 +868,7 @@ internal/watch/testdata/uic3  credit-runner  idfast
 internal/watch/testdata/uic3/  credit-runner  uic3
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/views.go  credit-runner  friendfb
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
@@ -912,6 +923,7 @@ internal/watch/web/panels/health/  credit-runner  uifix1
 internal/watch/web/panels/health/  credit-runner  uis3
 internal/watch/web/panels/journey-strip/  credit-runner  uifix1
 internal/watch/web/panels/journey-strip/  credit-runner  uis3
+internal/watch/web/panels/log  credit-runner  friendfb
 internal/watch/web/panels/log/  credit-runner  uis6
 internal/watch/web/panels/map  credit-runner  maphistory
 internal/watch/web/panels/map  credit-runner  maphistoryA
@@ -926,6 +938,7 @@ internal/watch/web/panels/needs-you/  credit-runner  uis3
 internal/watch/web/panels/needs-you/panel.js  credit-runner  uis7
 internal/watch/web/panels/needs-you/panel.json  credit-runner  uis7
 internal/watch/web/panels/onboarding  credit-runner  firstminutes
+internal/watch/web/panels/onboarding  credit-runner  friendfb
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
@@ -942,6 +955,7 @@ internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
 internal/watch/web/shell.css  credit-runner  uis6
 internal/watch/web/shell.css  credit-runner  uis7
+internal/watch/web/shell.js  credit-runner  friendfb
 internal/watch/web/shell.js  credit-runner  minimapfix
 internal/watch/web/shell.js  credit-runner  resetinstant
 internal/watch/web/shell.js  credit-runner  uifix1
@@ -950,6 +964,7 @@ internal/watch/web/shell.js  credit-runner  uis6
 internal/watch/web/shell.js  credit-runner  uis7
 internal/watch/web/shell.json  credit-runner  uis1
 internal/watch/web/shell.json  credit-runner  uis6
+internal/watch/web/skills.css  credit-runner  friendfb
 internal/watch/web/skills.css  credit-runner  skilltrees
 internal/watch/web/skills.css  credit-runner  skilltrees2
 internal/watch/web/skills.js  credit-runner  skilltrees
@@ -1011,6 +1026,7 @@ tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
+tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  resetinstant
 tools/uishots.sh  credit-runner  uic2
@@ -1031,6 +1047,7 @@ tools/uishots/fixtures.go  credit-runner  uic2
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
 tools/uishots/fixtures_phone.go  credit-runner  resetinstant
+tools/uishots/fixtures_skills.go  credit-runner  friendfb
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
 tools/uishots/fxviews.go  credit-runner  idfast
@@ -1039,6 +1056,7 @@ tools/uishots/genlayouts.js  credit-runner  uis7
 tools/uishots/layout-rows.json  credit-runner  uis1
 tools/uishots/layout-rows.json  credit-runner  uis7
 tools/uishots/pages.go  credit-runner  uic2
+tools/uishots/serve.go  credit-runner  friendfb
 tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
 tools/uishots/serve.go  credit-runner  uis7

@@ -559,6 +559,10 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [ui-design-system.md](ui-design-system.md): d.idle watch UI design system (TASK-228, uidesign) (status: accepted design (user decisions 2026-11-09 in section 13), being implemented in small PRs (section 15)....)
 - [ui-regression-plan.md](ui-regression-plan.md): Watch UI regression tests and migration plan (TASK-228, uidesign) (status: proposal (2026-11-09); built so far: see ui-design-system.md section 15 (row 14 `uilayout` is section...)
 
+`ui/`
+
+- [friend-feedback-2026-11-15.md](ui/friend-feedback-2026-11-15.md): Friend feedback, release 0.1.3 (2026-11-15): what each remark became (status: current. UI and docs only; the bot's behaviour is unchanged. Tags: V verified (named test or picture), S...)
+
 `ui/redesign-2026-11-14/`
 
 - [A-audit.md](ui/redesign-2026-11-14/A-audit.md): A. Audit: what /watch shows and how the player commands the bot today (status: design input (TASK-416, 2026-11-14). Read from the code on `origin/main` at 883770a9 and from pictures of...)

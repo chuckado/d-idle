@@ -213,6 +213,7 @@
 | idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
 | intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
+| friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -256,6 +257,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6d51a62b0 11-16 00:05 `Merge agent/friendfb: Merge branch 'main' into TASK-537` (friendfb)
+- 3b4eec79b 11-16 00:03 `Merge branch 'main' into TASK-537` (-)
 - 419058708 11-15 23:48 `Merge agent/resetinstant: Merge branch 'main' into 529` (resetinstant)
 - 08f81fd90 11-15 23:47 `Merge branch 'main' into 529` (-)
 - b064994f1 11-15 23:40 `Merge agent/sandbox2: Merge branch 'main' into sandbox2` (sandbox2)
@@ -264,6 +267,4 @@
 - 5710467b2 11-15 23:28 `Merge branch 'main' into idfast` (-)
 - f0a904fdf 11-15 22:57 `Merge origin/main into resetinstant` (-)
 - 9946174dc 11-15 22:52 `Merge agent/intake: observed life lost per minute (lifeLost) in minute line, glance, ledger, levelsim` (intake)
-- 93ff39d61 11-15 22:51 `Merge branch 'main' into intake` (-)
-- eea0efdc3 11-15 22:46 `Merge agent/dmgcheck: Merge branch 'main' into dmgcheck` (dmgcheck)
 <!-- statusgen:end -->
