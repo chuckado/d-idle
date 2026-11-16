@@ -48,7 +48,7 @@ func TestPreviewShowsTheChangeAndTouchesNothing(t *testing.T) {
 				ringRow = &doc.Items[i]
 			}
 		}
-		if ringRow == nil || !ringRow.Changed || ringRow.WasSell != lootrules.Sell || ringRow.Sell.Action != lootrules.Keep || !strings.Contains(ringRow.Name, "Ring") && ringRow.Name == "" {
+		if ringRow == nil || !ringRow.Changed || ringRow.WasSell != lootrules.Sell || ringRow.Sell == nil || ringRow.Sell.Action != lootrules.Keep || !strings.Contains(ringRow.Name, "Ring") && ringRow.Name == "" {
 			t.Errorf("%v: ring row %+v", cls, ringRow)
 		}
 		if doc.Changed < 1 || doc.Items[0].Changed == false {

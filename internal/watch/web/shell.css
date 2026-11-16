@@ -312,7 +312,7 @@
   .d-lr-field select, .d-lr-field input { min-block-size: 44px; box-sizing: border-box; inline-size: 100%; font: inherit; }
   .d-lr-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
   .d-lr-check input { inline-size: 24px; block-size: 24px; flex: none; }
-  .d-lr-rules, .d-lr-plist, .d-lr-recent { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
+  .d-lr-rules, .d-lr-plist, .d-lr-recent, .d-lr-pv { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
   .d-lr-rules { max-block-size: 16rem; overflow-y: auto; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
   .d-lr-rule { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--d-sp-2); align-items: center; padding: var(--d-sp-1) var(--d-sp-2); border-block-end: var(--d-bw) solid var(--d-line); }
   .d-lr-rule input { inline-size: 24px; block-size: 24px; }

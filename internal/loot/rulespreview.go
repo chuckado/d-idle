@@ -60,13 +60,13 @@ func (s *Shadow) Preview(cand, active *lootrules.RuleSet) (doc lootrules.Preview
 			if place.where == lootrules.PlacePack {
 				cs, csd := decideSell(cc, &it, p.cx, sc)
 				as, _ := decideSell(ac, &it, p.cx, sc)
-				row.Sell = lootrules.PreviewAct{Action: sellWord(cs), Rule: csd.Rule, Why: csd.Why}
+				row.Sell = &lootrules.PreviewAct{Action: sellWord(cs), Rule: csd.Rule, Why: csd.Why}
 				row.WasSell = sellWord(as)
 				if cs {
 					outcome = lootrules.Sell
 				}
 			}
-			row.Changed = row.Tidy.Action != row.WasTidy || row.Sell.Action != row.WasSell
+			row.Changed = row.Tidy.Action != row.WasTidy || row.Sell != nil && row.Sell.Action != row.WasSell
 			switch outcome {
 			case lootrules.Sell:
 				doc.Totals["sold"]++

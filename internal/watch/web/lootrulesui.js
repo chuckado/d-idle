@@ -93,7 +93,7 @@ export function mountLootRules(d) {
   previewBox.hidden = true;
   const previewHead = el('p', 'd-lr-note', '');
   previewHead.id = 'lr-preview-head';
-  const previewList = el('ul', 'd-lr-recent');
+  const previewList = el('ul', 'd-lr-pv');
   previewList.id = 'lr-preview-list';
   previewBox.append(previewHead, previewList);
 

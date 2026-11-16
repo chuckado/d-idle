@@ -127,14 +127,14 @@ type PreviewAct struct {
 
 // PreviewRow is one item of the dry run.
 type PreviewRow struct {
-	ID      uint32     `json:"id"`
-	Name    string     `json:"name"`
-	Place   string     `json:"place"`          // pack or stash
-	Tidy    PreviewAct `json:"tidy"`           // what the tidy chore would do with the candidate set
-	Sell    PreviewAct `json:"sell,omitempty"` // what the sell chore would do (pack items)
-	WasTidy string     `json:"wasTidy"`        // the action under the active set
-	WasSell string     `json:"wasSell,omitempty"`
-	Changed bool       `json:"changed"`
+	ID      uint32      `json:"id"`
+	Name    string      `json:"name"`
+	Place   string      `json:"place"`          // pack or stash
+	Tidy    PreviewAct  `json:"tidy"`           // what the tidy chore would do with the candidate set
+	Sell    *PreviewAct `json:"sell,omitempty"` // what the sell chore would do (pack items only)
+	WasTidy string      `json:"wasTidy"`        // the action under the active set
+	WasSell string      `json:"wasSell,omitempty"`
+	Changed bool        `json:"changed"`
 }
 
 // PreviewDoc is the dry run: what a rule set would do to the pack and stash as they are now. It decides and counts; it never
