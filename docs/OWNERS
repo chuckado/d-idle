@@ -284,6 +284,7 @@ docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  viewerfps
 docs/knobs.md  credit-runner  wiring2
 docs/knobs.md  live-agent  recoverypace
 docs/levelplan.md  pro-runner  levelplan3
@@ -316,6 +317,7 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
+docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/queuespeed.md  credit-runner  queuespeed
@@ -740,6 +742,7 @@ internal/watch/funwire.go  credit-runner  uib4
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/glance.go  credit-runner  intake
 internal/watch/glance.go  credit-runner  uis7
+internal/watch/glance.go  credit-runner  viewerfps
 internal/watch/glance_questions.go  credit-runner  uis7
 internal/watch/glance_questions_test.go  credit-runner  uis7
 internal/watch/glancepanels_test.go  credit-runner  uis3
@@ -866,8 +869,12 @@ internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees2
 internal/watch/testdata/uic3  credit-runner  idfast
 internal/watch/testdata/uic3/  credit-runner  uic3
+internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/video.go  credit-runner  viewerfps
+internal/watch/videofps_test.go  credit-runner  viewerfps
+internal/watch/videoresume_test.go  credit-runner  viewerfps
 internal/watch/views.go  credit-runner  friendfb
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/components.css  credit-runner  uis6
@@ -913,6 +920,7 @@ internal/watch/web/layout.json  credit-runner  uis7
 internal/watch/web/layouts/  credit-runner  uis1
 internal/watch/web/layouts/  credit-runner  uis7
 internal/watch/web/layouts/cockpit.json  credit-runner  uis6
+internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
@@ -944,6 +952,7 @@ internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
+internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
