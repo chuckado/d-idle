@@ -324,3 +324,76 @@ func TestScrollIsFoundAndCheap(t *testing.T) {
 		prev = cur
 	}
 }
+
+// The guard: a key-sized message holds the client back (BigGap), bytes/s is capped, Touch and the client count work.
+func TestGuardPacesBigMessagesAndCountsClients(t *testing.T) {
+	h := NewHub()
+	touched := make(chan struct{}, 8)
+	o := Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, BigMsg: 1 << 10, BigGap: 150 * time.Millisecond,
+		MaxBytesPerSec: -1, Touch: func() {
+			select {
+			case touched <- struct{}{}:
+			default:
+			}
+		}}
+	srv := httptest.NewServer(h.Stream(o))
+	defer srv.Close()
+	h.Publish(synth(96, 64, 1, 1), 0)
+	resp, err := http.Get(srv.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	br := bufio.NewReader(resp.Body)
+	t0 := time.Now()
+	readMsg(t, br) // the key frame (random pixels: well above BigMsg)
+	select {
+	case <-touched:
+	default:
+		t.Fatal("Touch not called on connect")
+	}
+	if h.Clients() != 1 {
+		t.Fatalf("clients %d", h.Clients())
+	}
+	h.Publish(synth(96, 64, 2, 2), 0) // a noise frame: key-sized delta, must wait out BigGap
+	readMsg(t, br)
+	if d := time.Since(t0); d < 130*time.Millisecond {
+		t.Fatalf("second big message after %v, want >= BigGap", d)
+	}
+	if _, _, big, _ := h.Stats(); big < 2 {
+		t.Fatalf("big %d", big)
+	}
+	resp.Body.Close()
+	deadline := time.Now().Add(2 * time.Second)
+	for h.Clients() != 0 && time.Now().Before(deadline) {
+		time.Sleep(10 * time.Millisecond)
+	}
+	if h.Clients() != 0 {
+		t.Fatal("client not released")
+	}
+}
+
+func TestGuardByteCapSlowsClient(t *testing.T) {
+	h := NewHub()
+	o := Options{Auth: func(*http.Request) bool { return true }, MaxFPS: 1000, BigMsg: 1 << 30, MaxBytesPerSec: 50 << 10}
+	srv := httptest.NewServer(h.Stream(o))
+	defer srv.Close()
+	h.Publish(synth(96, 64, 1, 1), 0)
+	resp, err := http.Get(srv.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	br := bufio.NewReader(resp.Body)
+	t0 := time.Now()
+	m := readMsg(t, br)
+	h.Publish(synth(96, 64, 2, 2), 0)
+	readMsg(t, br)
+	want := time.Duration(len(m)) * time.Second / (50 << 10)
+	if d := time.Since(t0); d < want*8/10 {
+		t.Fatalf("second message after %v, cap wants about %v", d, want)
+	}
+	if _, _, _, slow := h.Stats(); slow == 0 {
+		t.Fatal("guard pause not counted")
+	}
+}
