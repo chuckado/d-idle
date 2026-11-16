@@ -39,8 +39,8 @@ Server side, local loopback, fake 90 KB frames every 40 ms (V, ad-hoc test, 5 s 
 | 3 | `?fps=8` | 43 each | 8.6 |
 
 NOT measured (U): browser fps in Chromium or Firefox, frame bytes at 1280x720, 1914x930, 412x780, CPU throttling, cockpit vs classic.
-The Tower builder was saturated (load 15.8 on 16 cores, 3 GB free) and did not run even a `which` probe within 100 s, and the brief
-bans Orion and herdr for this. Checklist once a builder is free: start `d2bot --watch --watch-video` against the fake capture, load
+The builder was saturated (load 15.8 on 16 cores, 3 GB free) and did not run even a `which` probe within 100 s, and the brief
+bans the desktop and the head box for this. Checklist once a builder is free: start `d2bot --watch --watch-video` against the fake capture, load
 `/watch` in headless Chromium (CDP `Emulation.setCPUThrottlingRate 4`) and Firefox (Playwright), read `window.d2video.stats()` for 30 s.
 
 ## Ask the friend
