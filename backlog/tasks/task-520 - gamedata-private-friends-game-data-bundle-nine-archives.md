@@ -1,10 +1,11 @@
 ---
 id: TASK-520
 title: 'gamedata: private friends game-data bundle (nine archives)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T01:57:00Z'
+updated_date: '2026-11-16T02:06:00Z'
 labels:
   - ops
   - chore
