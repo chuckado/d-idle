@@ -656,6 +656,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
+- [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
