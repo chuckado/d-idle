@@ -80,6 +80,7 @@ type ladderOptions struct {
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
 	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
 	reset         watch.ResetDesk      // the player's Reset command (resetwire.go); nil: none
+	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
@@ -291,6 +292,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		if l.reset != nil {
 			rig.Fun.Reset = watch.NewResetAPI()
 			rig.Fun.Reset.Bind(l.reset)
+		}
+		if l.characters != nil {
+			rig.Fun.Characters = watch.NewCharactersAPI()
+			rig.Fun.Characters.Bind(l.characters)
 		}
 		rig.Fun.Merc = mercAPI()
 		bindJourney(rig.Fun, l.journey)
