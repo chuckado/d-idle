@@ -1,0 +1,3 @@
+BACKLOG: - DMGCHECK: surrounded-hero zero damage in the Den: no regression found, sandbox build lacks PRs #515-#557, Fallen flee rule explains quiet fights (docs/research/damage-intake-2026-11-15.md)
+INDEX: - docs/research/damage-intake-2026-11-15.md: Den of Evil damage intake, build ancestry, flee rule, drill recipe
+CHANGELOG: - docs: damage intake of a surrounded hero in the Den (docs/research/damage-intake-2026-11-15.md).
