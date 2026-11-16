@@ -423,6 +423,7 @@ docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
+docs/upstream/bodies/seq-ias-followup-body.md  credit-runner  seqfollow
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/briefs/hitrec-norestart-oracle.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-modes.md  credit-runner  prfix2

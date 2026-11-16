@@ -959,6 +959,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - lootwire3: loot rules wave 2b (sell stage, preview, undo, import/export, per-hero store) (TASK-555, merged 2026-11-16, acceptance 4 of 4): knob loot.rulesEngine 3 = ground+tidy+sell: the five sell decisions (user 2026-11-16) as sell-scope Starter rules (jewelry vs Tome of Identify) plus engine behaviour (ground rules judge the rest as the pickit does today, marks and identify requests first ... <!--sg:agent/lootwire3-->
 - charui: Characters page (UI for Character Select) (TASK-530, merged 2026-11-16, acceptance 4 of 4): Characters page built; fit green; not verified live. <!--sg:agent/charui-->
 - verifyp13: independent verifier of P13 refused Teleport mana (fid/tele-refund-r1) (TASK-551, merged 2026-11-16, acceptance 4 of 4): PASS WITH CHANGES (offline, NAS builder; not live). Rule re-derived (FUN_0056f7f0 0x56fa3d exit before FUN_0056bfe0; do 27 and FUN_00554ea0 return 0 only when nothing moved). ... <!--sg:agent/verifyp13-->
+- agent/seqfollowup: Merge branch 'main' into seqfollow (merged 2026-11-16) <!--sg:agent/seqfollowup-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
