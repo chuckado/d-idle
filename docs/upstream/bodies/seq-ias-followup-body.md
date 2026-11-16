@@ -1,12 +1,12 @@
 # test: seq-rate fails when D2_PATCH_INSTALLER names a file that is not there
 
-Follows up #565 (P17 seq rate, merged at 46b1108e). One review comment from CodeRabbit on that PR was addressed after the PR head stopped following the branch, so it never landed: a `D2_PATCH_INSTALLER` that names a file that does not exist was treated like "no patch set" and the test skipped (exit 0, or 77 with `--seq-rate`), which hides a broken fixture. The other review follow-ups (case-insensitive `d2data.mpq` lookup, skip when there is no 1.14d patch, partial skip returns 0 and 77 only with `--seq-rate`, `catch` binding `error`, a data set that does not load fails, the Double Throw limits note) were already in the merged #565 and are not touched here.
+Follows up #565 (P17 seq rate, merged at 46b1108e). One review comment from CodeRabbit on that PR was addressed after the PR head stopped following the branch, so it never landed: a `D2_PATCH_INSTALLER` that names a file that does not exist was ignored: with `patch_d2.mpq` or `LODPatch_114d.exe` in the data folder the test ran on that and passed, without one it skipped (exit 0, or 77 with `--seq-rate`). Either way a broken fixture path went unnoticed. Our reply on [that review thread](https://github.com/psi29a/d2decomped/pull/565#discussion_r4587634015) says it was done in `310ff43d`; that commit never reached the merged head, and this PR carries the same change. The other review follow-ups (case-insensitive `d2data.mpq` lookup, skip when there is no 1.14d patch, partial skip returns 0 and 77 only with `--seq-rate`, `catch` binding `error`, a data set that does not load fails, the Double Throw limits note) were already in the merged #565 and are not touched here.
 
 ## What changes
 
 One file, `tests/game/test_seq_rate.cpp`, test hardening only. No change to any claim, to `components/`, or to `tools/emu/seq_rate.py`.
 
-- `D2_PATCH_INSTALLER` set and non-empty but not an existing path: print `test_seq_rate: D2_PATCH_INSTALLER <path> does not exist` and return 1 (before: silent skip).
+- `D2_PATCH_INSTALLER` set and non-empty but not an existing path: print `test_seq_rate: D2_PATCH_INSTALLER <path> does not exist` and return 1 (before: ignored, see above).
 - `D2_PATCH_INSTALLER` unset or empty: unchanged (skip unless `patch_d2.mpq` or `lodpatch_114d.exe` is in the data folder).
 
 ## Evidence (container build of this branch on current main b6e6940d, real 1.14d data)
