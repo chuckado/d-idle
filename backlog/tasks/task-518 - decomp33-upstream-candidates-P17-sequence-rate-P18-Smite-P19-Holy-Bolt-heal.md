@@ -1,10 +1,11 @@
 ---
 id: TASK-518
 title: 'decomp33: upstream candidates P17 sequence rate, P18 Smite, P19 Holy Bolt heal'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-15T23:59:00Z'
+updated_date: '2026-11-16T01:35:00Z'
 labels:
   - d2d
   - upstream-pr

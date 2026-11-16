@@ -204,7 +204,6 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
-| decomp33 | in-progress | - | `docs/research/decomp33-p17-p19.md`<br>`tools/emu/dc33_seqrate.py`<br>`tools/emu/dc33_smite.py`<br>`tools/emu/dc33_holybolt.py`<br>`docs/upstream/bodies/seq-ias-body.md`<br>`docs/upstream/bodies/smite-range-body.md`<br>`docs/upstream/briefs/verify-seq-ias.md`<br>`docs/upstream/briefs/verify-smite-range.md`<br>`backlog/merge-lines/decomp33.txt`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/pr-queue.md`<br>`docs/decomp-queue.md` | `fork-branch:fid/seq-ias-r1`<br>`fork-branch:fid/smite-r1`<br>`fork-branch:fid/holybolt-heal-r1` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
