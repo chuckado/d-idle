@@ -60,3 +60,25 @@ func TestIDTomeChoreBuysFillsAndSkips(t *testing.T) {
 		}
 	}
 }
+
+// No game tables needed: with town.identifyTome 0 (default) the chores never buy identify scrolls or a tome by themselves.
+func TestNoAutoIdentifyBuyWithoutTables(t *testing.T) {
+	r := newRig(t)
+	r.W.Player.Gold = 5000
+	r.W.Add("tsc", d2.ContInventory, 9, 3)
+	if r.Env.Tune.Town.IdentifyTome != 0 {
+		t.Fatal("town.identifyTome must default to 0")
+	}
+	rep, err := r.T.Chores(context.Background(), townPlan())
+	if err != nil {
+		t.Fatal(err)
+	}
+	for name, n := range rep.Bought {
+		if n > 0 && (name == "Scroll of Identify" || name == "Tome of Identify" || name == "Tome of Identify top-up") {
+			t.Fatalf("auto-bought %s x%d with the knob off", name, n)
+		}
+	}
+	if idTomeQty(r) != -1 {
+		t.Fatal("a tome appeared")
+	}
+}

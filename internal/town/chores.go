@@ -193,7 +193,7 @@ func (t *Town) needScrolls(s *d2.Snapshot) bool {
 	if t.tune().KeyTarget > 0 && t.keyCount(s) < t.tune().KeyTarget {
 		return true
 	}
-	if t.tune().IDScrollTarget > 0 && t.idScrollWanted(s) {
+	if t.tune().IdentifyTome != 0 && t.tune().IDScrollTarget > 0 && t.idScrollWanted(s) {
 		if n, _ := t.scrollCount(s, "isc", "ibk"); n < t.tune().IDScrollTarget {
 			return true
 		}
