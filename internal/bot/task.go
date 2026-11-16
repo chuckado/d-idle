@@ -1011,37 +1011,6 @@ func (r *Runner) freshGameToLevel(ctx context.Context, s *d2.Snapshot) (done boo
 	return true, r.startFreshGame(ctx, s)
 }
 
-// freshDebounce is the least time between the end of one fresh game and the start of the next (a real one costs 15 s).
-const freshDebounce = 5 * time.Second
-
-// startFreshGame is the one place a planned fresh game starts from town: leave, enter a new game of the hero's
-// difficulty, forget what the old game cleared. The farm loop and the leveling slice share it (the Reset button's
-// route can too). The caller checked the holds (freshHold, freshAllowed) and that the hero stands in town.
-//
-// It is also the single guard against a fresh-game thrash (live 2026-11-15: five leave/rejoin cycles 4 s apart after one
-// Reset press): a call while one is in flight, or within freshDebounce of the previous one's end, does nothing.
-func (r *Runner) startFreshGame(ctx context.Context, s *d2.Snapshot) error {
-	if !r.freshBusy.CompareAndSwap(false, true) {
-		r.e.Log.Warn("fresh game already in flight, ignoring the second call")
-		return nil
-	}
-	defer r.freshBusy.Store(false)
-	if last := r.freshEnd.Load(); last != 0 && r.e.Clock.Now().Sub(time.Unix(0, last)) < freshDebounce {
-		r.e.Log.Warn("fresh game ignored: the last one ended moments ago", "debounce", freshDebounce)
-		return nil
-	}
-	defer func() { r.freshEnd.Store(r.e.Clock.Now().UnixNano()) }()
-	err := r.newGameRun(func(ctx context.Context) error {
-		return r.d.Cycler.NewGame(ctx, difficultyName(s.Player.Difficulty))
-	})(ctx)
-	if err == nil {
-		// d2d restarts the process without a menu poll, so the observer's newGames never moves (live: restarts 0
-		// after 38 fresh games) and syncGames cannot forget: the cleared set belongs to the old game.
-		r.forgetGame()
-	}
-	return err
-}
-
 // freshAllowed is the progress check in front of a fresh game. It compares the experience with the one at the previous
 // restart: a cycle that gained Route.FreshMinXP resets the no-gain count, a cycle that did not counts. A restart after
 // a no-gain cycle waits Route.FreshGapSec; once Route.FreshMaxNoGain no-gain cycles in a row are reached the bot is
