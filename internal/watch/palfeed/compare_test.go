@@ -138,6 +138,11 @@ func TestCompare(t *testing.T) {
 		}
 		seen[name] = true
 		sc := scrolling[name]
+		if name == "ALL" {
+			for _, c := range scrolling {
+				sc[0] += c[0]
+			}
+		}
 		fmt.Fprintf(&out, "\n%s (n %d, frames with a scroll found %d)\n", name, len(a.b["jpeg q72"]), sc[0])
 		for _, m := range methods {
 			v := a.b[m]
