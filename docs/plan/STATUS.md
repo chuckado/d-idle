@@ -220,6 +220,7 @@
 | videofeed2 | proposed | - | `internal/watch/palfeed`<br>`internal/watch/palfeed.go`<br>`internal/watch/web/palfeed.js`<br>`internal/watch/web/panels/video`<br>`internal/env/tuning_watch.go`<br>`cmd/d2dview`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`internal/env/tuning.go`<br>`internal/watch/serve.go`<br>`internal/watch/hub.go`<br>`internal/watch/views.go`<br>`internal/watch/glance.go`<br>`internal/watch/video.go`<br>`internal/watch/http_view.go`<br>`internal/watch/palfeed_test.go`<br>`internal/watch/watchlayout_test.go`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js`<br>`cmd/d2bot/ladder.go`<br>`tools/knobdump/main.go`<br>`docs/knobs.md`<br>`docs/friend-guide.md`<br>`tools/friendpack/compose.yml` | - |
 | decomp34 | proposed | - | `docs/research/decomp34-fallen-flee.md`<br>`tools/emu/dc34_ring.py`<br>`tools/emu/dc34_flee.py`<br>`tools/emu/dc34_cmp.py`<br>`tools/emu/dc34_telemana.py`<br>`tools/emu/dc34_tmcmp.py`<br>`docs/upstream/bodies/`<br>`backlog/merge-lines/decomp34.txt` | `fork-branch:fid/tele-refund-r1` |
 | charsup | proposed | - | `deploy/d2d-container/entrypoint.sh`<br>`deploy/d2d-container/tester_image_test.go`<br>`internal/charsel`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go`<br>`docs/charselect.md` | - |
+| lootwire2 | proposed | - | `internal/lootrules`<br>`internal/loot/rulesengine.go`<br>`internal/loot/rulesengine_test.go`<br>`internal/watch/lootrulesapi.go`<br>`internal/watch/lootrulesapi_test.go`<br>`internal/loot/lootshadow.go`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/tidyengine_test.go`<br>`internal/env/tuning_loot.go`<br>`internal/watch/lootrulesui_test.go`<br>`internal/watch/web/lootrulesui.js`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`internal/watch/funwire.go`<br>`internal/watch/http_view.go`<br>`cmd/d2bot/lootruleswire.go`<br>`cmd/d2bot/lootruleswire_test.go`<br>`cmd/d2bot/ladder.go`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`docs/knobs.md`<br>`docs/lootrules.md` | - |
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
 | farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -265,6 +266,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 95a00a504 11-16 12:37 `Merge agent/lootwire2: Merge branch 'main' into TASK-549` (lootwire2)
+- d9acac08f 11-16 12:36 `Merge branch 'main' into TASK-549` (-)
 - a77be292c 11-16 12:34 `Merge agent/farmlive: Merge branch 'main' into farmlive` (farmlive)
 - c6a600d40 11-16 12:33 `Merge branch 'main' into farmlive` (-)
 - 4055fc1ee 11-16 12:08 `Merge agent/survsd: Merge branch 'main' into survsd` (survsd)
@@ -273,6 +276,4 @@
 - c3b2466e3 11-16 11:38 `Merge branch 'main' into survab` (-)
 - d3d309ee5 11-16 11:36 `Merge agent/decomp34: Merge branch 'main' into 547` (decomp34)
 - 86a304804 11-16 11:35 `Merge branch 'main' into 547` (-)
-- 12f63c431 11-16 11:21 `Merge agent/charsup: Merge branch 'main' into charsup` (charsup)
-- 66a3b7b64 11-16 11:21 `Merge branch 'main' into charsup` (-)
 <!-- statusgen:end -->
