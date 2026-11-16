@@ -17,4 +17,23 @@ Base 485fe535 contains every merged PR of ours as of today, newest first: 557 (b
 
 ## Build and image
 
-See the section below (filled in after the run).
+- d2d: `tools/ops.sh run build-fork.sh didle/rebase-20261115 --tests` (the NAS builder, d2-builder container, `ccache`, jobs 6; about 7 minutes cold). d2d sha256 prefix a74efecd, 17,678,096 bytes. V (script output).
+- Builder tests (`ctest -R` of the 8 built binaries inside the builder): test_rules, test_combat, test_monsters, test_protocol pass; test_armor_hit, test_freeze_resume, test_game and test_next_hit are Skipped there (no game data on the builder). The data-backed oracle runs were not done: running the test binaries on the worker host was refused by the permission classifier and the brief says nothing runs there but the deploy. Not run: U. The 8 targets do not include the new fork-only tests (hero stats, merc verbs); they were built in the earlier lineage and not re-run here (U).
+- Image: `tools/dev-update.sh --image d2dbot:devp9 --d2d /data/build/didle/rebase-20261115-fabae935-d2d/apps/d2d/d2d` with `D2_LABRUN_HOST=orion` (context on the builder, build on the NAS through `tools/imgbuild.sh`, one DEV=1 image, a few seconds because d2d is prebuilt). Moved with `tools/imgbuild.sh save d2dbot:devp9 OUT.tar.gz` then `docker load` on the sandbox host (166 MB). V.
+
+## Deploy
+
+Same compose set as the devp8 swap (project `play-build-20261108`: compose.yml, override.yml, dev.yml, feed.yml, iv/iv.yml for `D2BOT_ARGS=--d2d-args --item-verbs`), `--no-deps d2dbot`, `D2_IMAGE=d2dbot:devp9`:
+1. `docker stop -t 60 d2play-20261108` (the bot saves the hero on TERM).
+2. Volume backup (read only, after the stop so the save is consistent): `docker run --rm --user 0 -v d2play-data:/data:ro --entrypoint tar d2dbot:devp9 czf - -C /data .` into `~/play-build-20261108/bak-devp8/d2play-data-pre-devp9.tgz` (79.7 MB, 1568 entries) on the sandbox host. Restore of a backup: stop, `tar xzf` back into the volume the same way. The `dev-sandbox.sh restore` tool only restores its own reset archives, so it was not usable for a plain backup (S: read in docs/dev-reset.md).
+3. `docker compose -p play-build-20261108 -f compose.yml -f override.yml -f dev.yml -f feed.yml -f iv/iv.yml up -d --no-deps d2dbot`. The volume `d2play-data` and the game mount are untouched.
+4. `tools/dev-update.sh --serve start`, then `tools/dev-update.sh --commit origin/main --to d2play-20261108` with `D2_LABRUN_HOST=orion` (and the values of `local.env` loaded: without `D2_WORKER_HOST` the update is REJECTED with a placeholder host): `UPDATED ... 0.0.261115193109 -> 0.0.261116033250 in 15s`. `bot.farmReset` was not touched (tuning.json unchanged).
+
+## Rollback
+
+- Bot only: `D2_LABRUN_HOST=orion tools/dev-update.sh --rollback --to d2play-20261108`.
+- Image: on the sandbox host in `~/play-build-20261108` run the swap command of step 3 with `D2_IMAGE=d2dbot:devp8` (the image stays loaded; the exports are in the step 3 line and the update URL and key are read from the container). Data back to before: restore `bak-devp8/d2play-data-pre-devp9.tgz`.
+
+## Verification
+
+See the result section of the task card.
