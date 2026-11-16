@@ -6,6 +6,7 @@
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
 #   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL | --click SEL] [--sizes 'WxH ...'] [--theme dark|light] [--fx VARIANT] [--tag NAME]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --skills [--out DIR] [--sizes 'WxH ...'] [--tag NAME]   pictures of the Skills page (/watch/skills, fake trees) at a few sizes
 #   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
@@ -13,7 +14,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0 pq=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 extra= sizes_only= theme=dark fx= tag= pics=0 pq=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -23,6 +24,7 @@ while [ $# -gt 0 ]; do
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
 	--pics) pics=1; shift ;;
+	--skills) skills=1; shift ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--ctx) extra="$extra&ctx=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--sizes) sizes_only=$2; shift 2 ;;
@@ -89,6 +91,18 @@ if [ "$char" = 1 ]; then
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
+	exit 0
+fi
+if [ "$skills" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/skills-*
+	for sz in ${sizes_only:-1914x930 1366x768 1024x768 390x844}; do
+		w=${sz%x*} h=${sz#*x}
+		prof=$(mktemp -d)
+		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+			--window-size="$w,$h" --virtual-time-budget=12000 --timeout=30000 --screenshot="$out/skills-$tag$sz.png" "http://127.0.0.1:$port/watch/skills?theme=$theme" >/dev/null 2>&1
+		rm -rf "${prof:?}"
+	done
+	ls "$out"/skills-*
 	exit 0
 fi
 if [ "$pics" = 1 ]; then
