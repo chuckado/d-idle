@@ -1,0 +1,6 @@
+{
+ "rogue":     {"helm": {"types": ["helm", "circ"], "not": ["pelt"]}, "tors": {"types": ["tors"]}, "weapon": {"types": ["bow"], "not": ["xbow"]}},
+ "desert":    {"helm": {"types": ["helm", "circ"], "not": ["pelt"]}, "tors": {"types": ["tors"]}, "weapon": {"types": ["spea", "pole"]}},
+ "ironwolf":  {"helm": {"types": ["helm", "circ"], "not": ["pelt"]}, "tors": {"types": ["tors"]}, "shield": {"types": ["shld"]}, "weapon": {"types": ["swor"], "oneHanded": true}},
+ "barbarian": {"helm": {"types": ["helm", "circ"], "not": ["pelt"]}, "tors": {"types": ["tors"]}, "weapon": {"types": ["swor"], "oneHanded": true}}
+}

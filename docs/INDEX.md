@@ -416,7 +416,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [loop-order.md](loop-order.md): The Loop order and its unlock (status: built offline (task uib7), not verified live. Design: `docs/ui/redesign-2026-11-14/C-orders.md` section 8....)
 - [loot-charms.md](loot-charms.md): Charms, runes and gems on a sell visit (status: current (card m1-loot, agent m1loot, 2026-10-31). Rule source: user decision D4 and the d2-sme; shared...)
 - [lootmemory.md](lootmemory.md): Loot memory (status: current (TASK-320). Code: `internal/loot/memory.go`; hooks in `internal/bot/observe.go` and `goal.go`...)
-- [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
+- [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus the PROTOTYPE (`internal/lootrules/`) WIRED IN SHADOW since wave 1 (cards lootwire-L2 to L4,...)
 - [lootskip.md](lootskip.md): LOOTSKIP: why ground potions were left (card lootskip) (status: current. Source: container log of the sandbox soak (Paladin clvl 10 to 14, build 0.0.261110171517),...)
 - [merc-farm.md](merc-farm.md): Mercenaries and post-campaign farming (research, MERCRESEARCH, 2026-10-29) (status: ARCHIVED 2026-10-31 (doctrim): superseded by docs/merc.md, docs/merc-wire.md, docs/sme/mercenary.md and...)
 - [merc-revive.md](merc-revive.md): Revive mercenary as a player command (card botmerc, API watch.merc/1) (status: built offline, NOT verified live (2026-11-14). Design: `docs/ui/redesign-2026-11-14/C-orders.md`...)
@@ -876,6 +876,11 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [drills/README.md](probes/drills/README.md): Live primitive drills (card m1-liveproof, harness cmd/d2drill + internal/drill) (status: DRILLS5 (2026-10-31, last section): live proofs of the merged fixes (fix-bank, fix-obj, fix-price,...)
 - [hover-audit.md](probes/drills/hover-audit.md): Hover blind-spot audit (agent DRILLS3, 2026-10-31, card m1-liveproof) (status: current. Why: under the lab's `--lockstep` d2d resolves "what is under the cursor" only while it draws a...)
+
+`probes/`
+
+- [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
+- [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
 
 `probes/fid/`
 
