@@ -21,6 +21,9 @@ services:
       # optional signed-update feed of the person who sent you this pack; empty = the default source. Keys are baked in the image.
       D2BOT_UPDATE_FEED: ${D2BOT_UPDATE_FEED:-}
       D2BOT_UPDATE_CHECK: ${D2BOT_UPDATE_CHECK:-on}
+      # live game picture: both empty = the defaults (docs/friend-guide.md "The game picture is choppy")
+      D2BOT_WATCH_VIDEO_FPS: ${D2_VIDEO_FPS:-}
+      D2DVIEW_FLAGS: ${D2_VIEW_FLAGS:-}
     volumes:
       - d2dbot-data:/data
       # the game archives (one read-only file each) come from compose.game.yml, written by ./install.sh

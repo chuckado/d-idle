@@ -192,7 +192,7 @@ for (const cls of ['Sorceress', 'Paladin']) {
 
 // ---- the menu and the gestures
 function actPage(src, v) {
-  const anchors = {}, docL = {}, winL = {}, boxes = {}, fetched = [], body = mk('body'), prevented = [];
+  const anchors = {}, docL = {}, winL = {}, boxes = {}, fetched = [], body = mk('body'), prevented = [], timers = [];
   body.dataset.canvas = '';
   const getA = (key) => {
     if (!anchors[key]) { const a = mk('button'); a.dataset.key = key; a.closest = () => a; a.getBoundingClientRect = () => ({ left: 100, top: 100, right: 150, bottom: 140 }); anchors[key] = a; }
@@ -209,9 +209,9 @@ function actPage(src, v) {
     if (/inventory$/.test(u)) return Promise.resolve({ ok: true, json: () => Promise.resolve(current) });
     return Promise.resolve({ ok: reply.status < 300, status: reply.status, json: () => Promise.resolve(reply.body) });
   };
-  vm.runInNewContext(src, { document, window, JSON, Math, Object, Array, String, Number, RegExp, Promise, console, fetch, location: { protocol: 'http:', hostname: 'h' }, CustomEvent: function (t, o) { this.type = t; this.detail = o && o.detail; } });
+  vm.runInNewContext(src, { setTimeout: (f, ms) => { timers.push({ f, ms }); return timers.length; }, document, window, JSON, Math, Object, Array, String, Number, RegExp, Promise, console, fetch, location: { protocol: 'http:', hostname: 'h' }, CustomEvent: function (t, o) { this.type = t; this.detail = o && o.detail; } });
   const fire = (t, e) => (docL[t] || []).forEach((f) => f(e));
-  return { h, window, document, body, getA, docL, boxes, fetched, fire, setReply: (r) => { reply = r; }, setView: (x) => { current = x; }, prevented, ev: (target, extra) => Object.assign({ target, preventDefault() { prevented.push(1); }, stopPropagation() {}, clientX: 120, clientY: 130 }, extra) };
+  return { h, window, document, body, getA, docL, boxes, fetched, timers, fire, setReply: (r) => { reply = r; }, setView: (x) => { current = x; }, prevented, ev: (target, extra) => Object.assign({ target, preventDefault() { prevented.push(1); }, stopPropagation() {}, clientX: 120, clientY: 130 }, extra) };
 }
 const flush = () => new Promise((r) => setTimeout(r, 0));
 const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
@@ -411,6 +411,54 @@ const post = (p) => p.fetched.filter((f) => !/config$|inventory$/.test(f.u));
       p.h.onView(v); p.h.onView(v); p.h.onView(v);
       pr = call(p.window.d2InvActions); await pr; at((d) => { assert.ok(!('result' in d), kind + ': queued shown as a result'); });
     }
+  }
+  // ---- idfast: Identify feels instant. Optimistic state, the fast poll, the 2 s highlight, the revert with the reason, the wait reason
+  for (const cls of ['Sorceress', 'Paladin']) {
+    const v = view(cls), p = actPage(actSrc, v); p.h.init(); p.h.onView(v);
+    const cell = p.getA('item-6');
+    // the click shows "Identifying..." in the same tick, before any answer; the button of the menu is not offered twice
+    p.fire('keydown', { key: 'Enter', target: cell, preventDefault() {} });
+    assert.ok('sending' in cell.dataset, 'optimistic state at once');
+    assert.strictEqual(cell.dataset.doing, 'Identifying...');
+    // success: the read-back view is what ends it; the highlight is done for 2 s by the clock
+    p.setReply({ status: 200, body: { ok: true, request: { id: 6, kind: 'identify', state: 'done', how: 'fast' } } });
+    await flush(); await flush(); await flush(); await flush();
+    assert.strictEqual(cell.dataset.result, 'done'); assert.ok(!('sending' in cell.dataset) && !('doing' in cell.dataset));
+    const exp = p.timers.filter((t) => t.ms === 2000); assert.strictEqual(exp.length, 1, 'one 2 s expiry for the highlight');
+    exp[0].f(); assert.ok(!('result' in cell.dataset), 'highlight gone after 2 s');
+    // refused by the server: reverts with the reason, never shown as done
+    p.setReply({ status: 409, body: { code: 'requirements', error: 'nothing to read it with' } });
+    p.fire('keydown', { key: 'Enter', target: cell, preventDefault() {} });
+    await flush(); await flush(); await flush(); await flush();
+    assert.strictEqual(cell.dataset.result, 'refused'); assert.match(cell.attrs['data-why'], /nothing/);
+    assert.match(p.boxes.msg.textContent, /nothing/);
+    // queued: the item says what it waits for; the poll runs at 200 ms while a request is pending and stops when none is
+    const q = JSON.parse(JSON.stringify(v)); q.queue = [{ id: 6, kind: 'identify', state: 'queued', wait: 'safe', name: 'Ring' }];
+    p.timers.length = 0; p.h.onView(q);
+    assert.strictEqual(cell.dataset.waiting, 'waiting: a safe moment (no monster near)');
+    assert.strictEqual(p.timers.filter((t) => t.ms === 200).length, 1, 'fast poll scheduled');
+    q.instant = { enabled: true, why: 'a panel is open' }; p.h.onView(q);
+    assert.strictEqual(cell.dataset.waiting, 'waiting: a panel is open');
+    const q2 = JSON.parse(JSON.stringify(v)); q2.queue = []; p.timers.length = 0; p.h.onView(q2);
+    assert.strictEqual(p.timers.filter((t) => t.ms === 200).length, 0, 'no poll with nothing pending');
+    assert.ok(!('waiting' in cell.dataset));
+    // a request that failed on its own (the item was sold) is said once, not dropped
+    const lost = JSON.parse(JSON.stringify(v)); lost.recent = [{ id: 6, kind: 'identify', state: 'failed', code: 'lost', at: 5, reason: 'Identify request for Hand Axe lost: the item was sold, dropped or moved' }];
+    p.boxes.msg.textContent = ''; p.h.onView(lost);
+    assert.match(p.boxes.msg.textContent, /Hand Axe lost/);
+    // the indicator of the lane
+    const on = JSON.parse(JSON.stringify(v)); on.identify = { tome: 3, tomeCap: 20, scrolls: 0, unid: 2, buyDefault: 5, buyMax: 20, cain: 'open' }; on.instant = { enabled: true };
+    p.h.onView(on); await flush(); await flush();
+    const er = p.h.errands(); assert.strictEqual(er.instant.hidden, false); assert.strictEqual(er.instant.textContent, 'Instant actions: on');
+    on.instant = { enabled: false }; p.h.onView(on); await flush(); await flush(); assert.strictEqual(p.h.errands().instant.hidden, true);
+    // Identify all: progress from the view's own count, waiting text before it starts
+    const c1 = JSON.parse(JSON.stringify(on)); c1.instant = { enabled: true }; c1.queue = [{ id: 0, kind: 'cain', state: 'doing' }]; p.h.onView(on); p.h.onView(c1); await flush(); await flush();
+    const c2 = JSON.parse(JSON.stringify(c1)); c2.identify.unid = 1; p.h.onView(c2); await flush(); await flush();
+    assert.strictEqual(p.h.errands().hint.textContent, 'Identified 1 of 2');
+    // no tome: the click is refused at once (nothing sent) and the Buy button is offered
+    const nt = JSON.parse(JSON.stringify(v)); nt.backpack.forEach((it) => { if (it.id === 6) it.noIdentify = 'no scroll or tome: buy identify scrolls'; }); nt.identify = on.identify; p.h.onView(nt); await flush();
+    const sent = post(p).length; p.fire('keydown', { key: 'Enter', target: cell, preventDefault() {} });
+    assert.strictEqual(post(p).length, sent); assert.ok('offer' in p.h.errands().buy.dataset, 'Buy identify scrolls offered');
   }
   // the cards page keeps its click menu
   {
