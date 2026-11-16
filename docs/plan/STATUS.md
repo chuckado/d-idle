@@ -215,6 +215,7 @@
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
 | viewerfps | proposed | - | `internal/watch/video.go`<br>`internal/watch/videofps_test.go`<br>`internal/watch/web/mjpeg.js`<br>`internal/watch/web/panels/video`<br>`docs/probes/viewer-fps-2026-11-15.md`<br>`internal/watch/glance.go`<br>`internal/watch/videoresume_test.go`<br>`internal/watch/testdata/video_panel.js`<br>`docs/knobs.md` | - |
 | friendfb | proposed | - | `internal/watch/dropsfeed.go`<br>`internal/watch/dropsfeed_test.go`<br>`internal/watch/logtab.go`<br>`internal/watch/cardtext.go`<br>`internal/watch/web/skills.css`<br>`internal/watch/web/panels/log`<br>`internal/watch/web/panels/onboarding`<br>`data/onboarding/en.json`<br>`docs/ui/friend-feedback-2026-11-15.md`<br>`tools/uishots/fixtures_skills.go`<br>`tools/uishots/serve.go`<br>`tools/uishots.sh`<br>`internal/watch/views.go`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/testdata/logpanel`<br>`internal/watch/testdata/onboarding_dom.txt`<br>`internal/decide/firsts_act1.json` | - |
+| pause | in-progress | - | `docs/pause.md`<br>`internal/bot/freeze.go`<br>`internal/bot/freeze_test.go`<br>`internal/bot/playerpause.go`<br>`internal/d2denv/freeze.go`<br>`internal/d2denv/freeze_test.go`<br>`internal/watch/pauseapi.go`<br>`internal/watch/pauseapi_test.go`<br>`internal/watch/pauseui_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/pause.css`<br>`internal/watch/testdata/pause`<br>`cmd/d2bot/glancewire_pause.go`<br>`cmd/d2bot/pausewire.go`<br>`internal/gclock/gclock_test.go` | - |
 | videofeed | proposed | - | `internal/watch/palfeed`<br>`internal/watch/web/palfeed.js`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`tools/videofeed` | - |
 | idtome | proposed | - | `internal/town/idtome_test.go` | - |
 | videofeed2 | proposed | - | `internal/watch/palfeed`<br>`internal/watch/palfeed.go`<br>`internal/watch/web/palfeed.js`<br>`internal/watch/web/panels/video`<br>`internal/env/tuning_watch.go`<br>`cmd/d2dview`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`internal/env/tuning.go`<br>`internal/watch/serve.go`<br>`internal/watch/hub.go`<br>`internal/watch/views.go`<br>`internal/watch/glance.go`<br>`internal/watch/video.go`<br>`internal/watch/http_view.go`<br>`internal/watch/palfeed_test.go`<br>`internal/watch/watchlayout_test.go`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js`<br>`cmd/d2bot/ladder.go`<br>`tools/knobdump/main.go`<br>`docs/knobs.md`<br>`docs/friend-guide.md`<br>`tools/friendpack/compose.yml` | - |
@@ -261,6 +262,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 31909255a 11-16 11:10 `Merge agent/pause: Pause freezes the game via the lockstep switch, loop/clock wiring, menu button, banner, Space` (pause)
+- 33011e216 11-16 11:06 `Merge origin/main into agent/pause` (pause)
 - b64aadd1d 11-16 10:46 `Merge agent/resetfit: Merge main` (resetfit)
 - a1e4907d0 11-16 10:43 `Merge main` (-)
 - 848d83a91 11-16 10:41 `Merge agent/resetfit: Merge main (take main's lane line fix)` (resetfit)
@@ -269,6 +272,4 @@
 - dc557c51f 11-16 10:10 `Merge main` (-)
 - ac7beca22 11-16 10:09 `Merge branch 'main' into idwaitfit` (-)
 - a245aed2e 11-16 10:03 `Merge agent/resetfit: Merge branch 'main' into resetfit` (resetfit)
-- d19afb569 11-16 10:03 `Merge branch 'main' into resetfit` (-)
-- 299bfda30 11-16 10:00 `Merge main` (-)
 <!-- statusgen:end -->

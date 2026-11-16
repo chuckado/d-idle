@@ -48,6 +48,17 @@ func (r *runnerRef) beat() {
 	}
 }
 
+// frozen reports whether the player's Pause has the game frozen (the health monitor stops reading the stopped game's
+// counters as a hang).
+func (r *runnerRef) frozen() bool {
+	if r != nil {
+		if run := r.p.Load(); run != nil {
+			return run.Frozen()
+		}
+	}
+	return false
+}
+
 func (r *runnerRef) pause(reason string) {
 	if r != nil {
 		if run := r.p.Load(); run != nil {

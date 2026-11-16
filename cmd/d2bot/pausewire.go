@@ -27,5 +27,11 @@ type pauseAdapter struct{ r *bot.Runner }
 
 func (a pauseAdapter) View() any       { return a.r.PlayerPauseView() }
 func (a pauseAdapter) Set(on bool) any { return a.r.PlayerPause(on) }
+func (a pauseAdapter) SetMode(on bool, freeze *bool) any {
+	return a.r.PlayerPauseMode(on, freeze)
+}
 
-var _ watch.PauseDesk = pauseAdapter{}
+var (
+	_ watch.PauseDesk     = pauseAdapter{}
+	_ watch.PauseModeDesk = pauseAdapter{}
+)

@@ -43,6 +43,9 @@ type GlanceView struct {
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
+	// Paused: the game itself is frozen by the player's Pause (docs/pause.md); PausedSince is the RFC 3339 time it began.
+	Paused      bool   `json:"paused,omitempty"`
+	PausedSince string `json:"pausedSince,omitempty"`
 	// Stream is the server side of the game picture (rates since the last read); absent without -watch-video. A friend can
 	// screenshot it next to the page's own fps line.
 	Stream *StreamStats `json:"stream,omitempty"`
@@ -157,6 +160,8 @@ type GlanceSources struct {
 	Survival func() json.RawMessage                       // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
 	Voice    func() string                                // the hero's latest voice line
 	Paused   func() (paused bool, text string)            // a pause the player asked for (card B1)
+	// Frozen: the game is stopped (the frozen Pause) and since when.
+	Frozen func() (since time.Time, on bool)
 	// Resetting is a Reset the player pressed that has not finished (docs/reset.md); the band says Resetting with the text.
 	Resetting func() (on bool, text string)
 }
@@ -253,6 +258,11 @@ func (h *Hub) Glance() GlanceView {
 			if len(v.Needs) < glanceMaxNeed {
 				v.Needs = append(v.Needs, cleanNeed(n))
 			}
+		}
+	}
+	if src.Frozen != nil {
+		if since, on := src.Frozen(); on {
+			v.Paused, v.PausedSince = true, since.UTC().Format(time.RFC3339)
 		}
 	}
 	if h.video != nil || h.palFeedURL() != "" {
