@@ -178,9 +178,11 @@ default-pause-menu watch?first=0&theme=dark&needs=2&pause=can #btn-more
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
-reset-header-light watch?first=0&theme=light&needs=2 #btn-reset #btn-reset
+reset-header-light watch?first=0&theme=light&needs=0 #btn-reset #btn-reset
 reset-pressed watch?first=0&theme=dark&needs=0&reset=resetting #btn-reset #btn-reset,#reset-progress
 reset-pressed-light watch?first=0&theme=light&needs=0&reset=rejoining #btn-reset #btn-reset,#reset-progress
+reset-return-menu watch?first=0&theme=dark&needs=0 #btn-more [data-key=menu-return]
+reset-return-menu-light watch?first=0&theme=light&needs=0 #btn-more [data-key=menu-return]
 reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=reset-open] #reset-progress
 reset-more watch?first=0&theme=dark&needs=0&reset=resetting [data-key=verb-more]|[data-key=more-reset] #reset-progress
 reset-hard-confirm watch?first=0&theme=dark&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
@@ -321,6 +323,7 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		szs=$sizes
 		case $pname in
 		default | default-light) szs="$sizes $midsizes" ;;
+		reset-return-menu*) szs="$sizes 900x700 412x780 360x640" ;; # the Return screen link lives in the menu on every width
 		reset-* | support-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;

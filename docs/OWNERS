@@ -178,6 +178,7 @@ cmd/d2bot/ladder.go  credit-runner  gearsets
 cmd/d2bot/ladder.go  credit-runner  lootwireL4
 cmd/d2bot/ladder.go  credit-runner  survA
 cmd/d2bot/ladder.go  credit-runner  uib1
+cmd/d2bot/ladder.go  credit-runner  videofeed2
 cmd/d2bot/ladder.go  live-agent  recoverypace
 cmd/d2bot/live.go  credit-runner  campaign1
 cmd/d2bot/live.go  credit-runner  exploredpct
@@ -228,6 +229,7 @@ cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
+cmd/d2dview  credit-runner  videofeed2
 cmd/d2firsthour/  live-agent  firsthour
 data/campaign/normal.json  pro-runner  levelplan3
 data/onboarding  credit-runner  firstminutes
@@ -258,6 +260,7 @@ docs/friend-checklist-0.1.0.md  credit-runner  cut010d
 docs/friend-checklist-0.1.1.md  credit-runner  cut011
 docs/friend-checklist-0.1.2.md  credit-runner  cut012
 docs/friend-guide.md  credit-runner  cut012
+docs/friend-guide.md  credit-runner  videofeed2
 docs/gear-policy.md  credit-runner  gearsets
 docs/gear-policy.md  credit-runner  nopins
 docs/gearsets.md  credit-runner  gearsets
@@ -284,6 +287,7 @@ docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
 docs/knobs.md  credit-runner  tidy
+docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
 docs/knobs.md  credit-runner  wiring2
 docs/knobs.md  live-agent  recoverypace
@@ -318,6 +322,7 @@ docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
+docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
 docs/probes/viewer-fps-2026-11-15.md  credit-runner  viewerfps
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
@@ -428,6 +433,7 @@ docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/video-feed.md  credit-runner  videofeed
+docs/video-feed.md  credit-runner  videofeed2
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -582,6 +588,7 @@ internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
 internal/env  credit-runner  wiring2
+internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
 internal/env/tuning_bot.go  credit-runner  exploredpct
 internal/env/tuning_bot.go  credit-runner  freshstart
@@ -596,6 +603,7 @@ internal/env/tuning_nav.go  credit-runner  pursuers
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/env/tuning_town.go  credit-runner  tidy
+internal/env/tuning_watch.go  credit-runner  videofeed2
 internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
@@ -745,6 +753,7 @@ internal/watch/funwire.go  credit-runner  uib4
 internal/watch/gearsets_test.go  credit-runner  gearsets
 internal/watch/glance.go  credit-runner  intake
 internal/watch/glance.go  credit-runner  uis7
+internal/watch/glance.go  credit-runner  videofeed2
 internal/watch/glance.go  credit-runner  viewerfps
 internal/watch/glance_questions.go  credit-runner  uis7
 internal/watch/glance_questions_test.go  credit-runner  uis7
@@ -754,8 +763,10 @@ internal/watch/hero.go  credit-runner  uic3
 internal/watch/heroexplored_test.go  credit-runner  exploredpct
 internal/watch/herosheet_test.go  credit-runner  uic3
 internal/watch/http_answer.go  credit-runner  uib4
+internal/watch/http_view.go  credit-runner  videofeed2
 internal/watch/hub.go  credit-runner  exploredpct
 internal/watch/hub.go  credit-runner  uib4
+internal/watch/hub.go  credit-runner  videofeed2
 internal/watch/invapi.go  credit-runner  gearsets
 internal/watch/invapi.go  credit-runner  uic2
 internal/watch/invapi_sellnow.go  credit-runner  botsell
@@ -787,6 +798,9 @@ internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/orders.go  credit-runner  uib4
 internal/watch/orders_untillevel_test.go  credit-runner  uib4
 internal/watch/palfeed  credit-runner  videofeed
+internal/watch/palfeed  credit-runner  videofeed2
+internal/watch/palfeed.go  credit-runner  videofeed2
+internal/watch/palfeed_test.go  credit-runner  videofeed2
 internal/watch/panels.go  credit-runner  uis6
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
@@ -814,6 +828,7 @@ internal/watch/senses_test.go  credit-runner  maphistoryD
 internal/watch/senses_test.go  credit-runner  maptrail
 internal/watch/senses_test.go  credit-runner  maptrail2
 internal/watch/serve.go  credit-runner  uis6
+internal/watch/serve.go  credit-runner  videofeed2
 internal/watch/skillsapi.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees
 internal/watch/skillsapi_test.go  credit-runner  skilltrees2
@@ -858,6 +873,7 @@ internal/watch/testdata/onboarding_dom.txt  credit-runner  friendfb
 internal/watch/testdata/orderloop/  credit-runner  uib7
 internal/watch/testdata/orders_dom.js  credit-runner  uis4
 internal/watch/testdata/orders_dom.txt  credit-runner  uis4
+internal/watch/testdata/panel_harness.js  credit-runner  videofeed2
 internal/watch/testdata/pause/  credit-runner  uib1
 internal/watch/testdata/reset  credit-runner  botreset
 internal/watch/testdata/reset  credit-runner  resetinstant
@@ -873,13 +889,17 @@ internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees2
 internal/watch/testdata/uic3  credit-runner  idfast
 internal/watch/testdata/uic3/  credit-runner  uic3
+internal/watch/testdata/video_pal_panel.js  credit-runner  videofeed2
 internal/watch/testdata/video_panel.js  credit-runner  viewerfps
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
+internal/watch/video.go  credit-runner  videofeed2
 internal/watch/video.go  credit-runner  viewerfps
 internal/watch/videofps_test.go  credit-runner  viewerfps
 internal/watch/videoresume_test.go  credit-runner  viewerfps
 internal/watch/views.go  credit-runner  friendfb
+internal/watch/views.go  credit-runner  videofeed2
+internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
@@ -928,6 +948,7 @@ internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/palfeed.js  credit-runner  videofeed
+internal/watch/web/palfeed.js  credit-runner  videofeed2
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/area-map/  credit-runner  uis6
 internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
@@ -957,6 +978,7 @@ internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
+internal/watch/web/panels/video  credit-runner  videofeed2
 internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
@@ -1022,12 +1044,14 @@ tools/friendpack/build.sh  credit-runner  buildhosts3
 tools/friendpack/checklist.sh  credit-runner  cut010b
 tools/friendpack/checklist.sh  credit-runner  cutfix
 tools/friendpack/compose.yml  credit-runner  cut012
+tools/friendpack/compose.yml  credit-runner  videofeed2
 tools/friendpack/didle  credit-runner  cut012
 tools/friendpack/install.sh  credit-runner  cut012
 tools/friendpack/pack_test.go  credit-runner  cut012
 tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
+tools/knobdump/main.go  credit-runner  videofeed2
 tools/levelsim/  credit-runner  levelsim
 tools/levelsim/  credit-runner  powerwire
 tools/levelsim/cmd/levelsim/main.go  credit-runner  survB
@@ -1075,4 +1099,5 @@ tools/uishots/serve.go  credit-runner  maphistory
 tools/uishots/serve.go  credit-runner  maptrail
 tools/uishots/serve.go  credit-runner  uis7
 tools/videofeed  credit-runner  videofeed
+tools/videofeed  credit-runner  videofeed2
 # END GENERATED OWNERS

@@ -404,7 +404,9 @@
     errBox.hidden = !id;
     var ins = view.instant;
     errInstantEl.hidden = !(ins && ins.enabled);
-    errInstantEl.textContent = ins && ins.enabled ? 'Instant actions: on' + (ins.why ? ' (closed now: ' + ins.why + ')' : '') : '';
+    // one short line (the strip sits in a column that has no room for a wrapped one); the closed rule is the tooltip
+    errInstantEl.textContent = ins && ins.enabled ? 'Instant actions: on' + (ins.why ? ' (closed now)' : '') : '';
+    if (ins && ins.why) errInstantEl.setAttribute('title', ins.why); else errInstantEl.removeAttribute('title');
     if (!id) return;
     // "Identify all" shows read-back progress: the unidentified count the view reports, never a guess
     var cainReq = id.cain !== 'locked' && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && (r.state === 'queued' || r.state === 'doing'); });

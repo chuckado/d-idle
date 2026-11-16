@@ -94,7 +94,7 @@ console.log(JSON.stringify(out));
 	got := string(b)
 	for _, want := range []string{
 		`"copy":true`, `"label":true`, `"startHidden":true`,
-		`"instant":{"sheetHidden":true,"label":"Resetting...","strip":"Resetting... leaving the game","toast":["info:Reset sent"],"posted":["/api/reset {}"]}`,
+		`"instant":{"sheetHidden":true,"label":"Resetting...","strip":"Reset sent. Resetting... leaving the game","toast":[],"posted":["/api/reset {}"]}`,
 		`"cooldownPosts":1`, `"busyLabel":"Resetting..."`, `"stripGone":true`, `"labelBack":"Reset"`, "good:Reset done",
 		`"afterCooldown":2`, `"refused":{"label":"Reset","toast":"warn:A measured run is never reset","strip":true}`, `"retryAfterRefusal":4`,
 		`"failedStrip":"Reset failed: the game did not come back"`, `"hardSheet":true`, `"hardPosted":"/api/reset {\"hard\":true}"`, `"hardClosed":true`,
