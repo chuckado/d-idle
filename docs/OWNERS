@@ -382,6 +382,7 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
+docs/survival/ab-harness.md  credit-runner  survab
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
@@ -1074,6 +1075,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/survival/  credit-runner  survab
 tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
