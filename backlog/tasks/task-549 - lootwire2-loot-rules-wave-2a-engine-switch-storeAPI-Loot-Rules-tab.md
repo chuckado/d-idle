@@ -1,10 +1,11 @@
 ---
 id: TASK-549
 title: 'lootwire2: loot rules wave 2a (engine switch, store+API, Loot Rules tab)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:30:00Z'
+updated_date: '2026-11-16T17:52:00Z'
 labels:
   - bot
   - feature
