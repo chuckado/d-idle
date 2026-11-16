@@ -263,6 +263,26 @@
   .d-reset-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
   .d-reset-card > .d-btn { min-block-size: 44px; align-items: center; }
   .d-reset-card > .d-btn[hidden] { display: none; }
+  /* Support bundle (supportui.js): the same card as Reset, taller, scrolling inside itself so it fits every size */
+  .d-sup-sheet { position: fixed; inset: 0; z-index: var(--d-z-banner); display: grid; place-items: center; padding: var(--d-sp-3); background: var(--d-scrim); box-sizing: border-box; }
+  .d-sup-sheet[hidden], .d-sup-card [hidden] { display: none; }
+  .d-sup-card { inline-size: min(100%, 30rem); max-block-size: 100%; overflow-y: auto; display: grid; gap: var(--d-sp-3); padding: var(--d-sp-4); box-sizing: border-box;
+    background: var(--d-surface-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  .d-sup-card h2 { margin: 0; font-size: var(--d-fs-3); }
+  .d-sup-card p { margin: 0; font-size: var(--d-fs-1); color: var(--d-text-2); overflow-wrap: anywhere; }
+  .d-sup-card .d-sup-err { color: var(--d-bad); }
+  .d-sup-card .d-sup-note { font-size: var(--d-fs-0, var(--d-fs-1)); }
+  .d-sup-card .d-sup-code { font-size: var(--d-fs-3); font-family: var(--d-font-mono, monospace); letter-spacing: 0.15em; color: var(--d-text); user-select: all; }
+  .d-sup-form, .d-sup-prev, .d-sup-done { display: grid; gap: var(--d-sp-2); }
+  .d-sup-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
+  .d-sup-check input { inline-size: 24px; block-size: 24px; flex: none; }
+  .d-sup-files { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); font-size: var(--d-fs-1); font-family: var(--d-font-mono, monospace); overflow-wrap: anywhere; }
+  .d-sup-log { margin: 0; max-block-size: 10rem; overflow: auto; padding: var(--d-sp-2); white-space: pre-wrap; overflow-wrap: anywhere; font-size: var(--d-fs-1); background: var(--d-surface-1, var(--d-bg)); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1, var(--d-r-2)); }
+  .d-sup-row { display: flex; gap: var(--d-sp-2); justify-content: flex-end; }
+  .d-sup-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
+  .d-sup-alt { display: flex; flex-wrap: wrap; gap: var(--d-sp-3); align-items: center; justify-content: space-between; }
+  .d-sup-link { display: inline-flex; align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); color: var(--d-accent-text); }
+  .d-sup-alt .d-btn { min-block-size: 44px; }
   .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));
     padding: var(--d-sp-2) var(--d-sp-3); background: var(--d-state-bg-info); color: var(--d-text); border-radius: var(--d-r-2); font-size: var(--d-fs-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; box-shadow: var(--d-shadow-1); }
 }

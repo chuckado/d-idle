@@ -3,6 +3,7 @@
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
 import { mountReset } from '/watch/resetui.js';
+import { mountSupport } from '/watch/supportui.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
@@ -796,6 +797,11 @@ function setupMenu(sel) {
   rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
   pop.appendChild(rb);
+  const sb = ui.btn('Send support bundle...', { size: 'sm', variant: 'ghost' });
+  sb.dataset.key = 'support-open';
+  sb.setAttribute('aria-label', 'Help: send a support bundle to the owner');
+  sb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:support-ask', { detail: { from: more } })));
+  pop.appendChild(sb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
@@ -954,6 +960,7 @@ async function start() {
   mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
+  mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();
