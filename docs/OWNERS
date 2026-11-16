@@ -316,7 +316,6 @@ docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/process/build-hosts-env-2026-11-14.md  credit-runner  towerenv
 docs/process/build-hosts-stage3-2026-11-14.md  credit-runner  buildhosts3
 docs/process/queuespeed.md  credit-runner  queuespeed
-docs/process/sandbox-devp9.md  live-agent  sandbox2
 docs/pursuers.md  credit-runner  pursuers
 docs/quest-givers.md  credit-runner  campaign1
 docs/quest-hints.md  live-agent  questdrill
