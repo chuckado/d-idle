@@ -129,6 +129,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
+cmd/d2bot/adapters.go  credit-runner  idfast
 cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
@@ -263,6 +264,7 @@ docs/hourfix2.md  credit-runner  hourfix2
 docs/inventory-actions.md  credit-runner  botinstant
 docs/inventory-actions.md  credit-runner  campaign1
 docs/inventory-actions.md  credit-runner  gearsets
+docs/inventory-actions.md  credit-runner  idfast
 docs/inventory-actions.md (a new section)  credit-runner  botsell
 docs/inventory-ui.md  credit-runner  charreq
 docs/inventory-ui.md  credit-runner  nopins
@@ -481,8 +483,10 @@ internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
 internal/bot/plan.go  pro-runner  levelplan3
+internal/bot/playeraction.go  credit-runner  idfast
 internal/bot/playeraction.go  credit-runner  uib1
 internal/bot/playeraction_test.go  credit-runner  botinstant
+internal/bot/playeraction_test.go  credit-runner  idfast
 internal/bot/playerpause.go  credit-runner  uib1
 internal/bot/playerpause_test.go  credit-runner  uib1
 internal/bot/playerreset.go  credit-runner  botreset
@@ -580,6 +584,7 @@ internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
 internal/invdesk  credit-runner  gearsets
+internal/invdesk  credit-runner  idfast
 internal/invdesk/desk.go  credit-runner  botinstant
 internal/invdesk/desk.go  credit-runner  charreq
 internal/invdesk/desk.go  credit-runner  itemverbs2
@@ -687,6 +692,7 @@ internal/town/beltfill.go  credit-runner  beltfix
 internal/town/beltfix6_test.go  credit-runner  beltfix
 internal/town/beltfix_test.go  credit-runner  beltfix
 internal/town/beltrepair.go  credit-runner  beltfix
+internal/town/chores.go  credit-runner  idfast
 internal/town/chores.go  credit-runner  repairtrip
 internal/town/chores.go  credit-runner  tidy
 internal/town/invstash_test.go  credit-runner  towntests
@@ -835,6 +841,7 @@ internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees
 internal/watch/testdata/skills_paladin.json  credit-runner  skilltrees2
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees
 internal/watch/testdata/skills_sorceress.json  credit-runner  skilltrees2
+internal/watch/testdata/uic3  credit-runner  idfast
 internal/watch/testdata/uic3/  credit-runner  uic3
 internal/watch/toastcontrast_test.go  credit-runner  toastfix
 internal/watch/uic3_test.go  credit-runner  uic3
@@ -842,8 +849,10 @@ internal/watch/web/app.css  credit-runner  toastfix
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
+internal/watch/web/inventory-actions.css  credit-runner  idfast
 internal/watch/web/inventory-actions.css  credit-runner  uic3
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
+internal/watch/web/inventory-actions.js  credit-runner  idfast
 internal/watch/web/inventory-actions.js  credit-runner  nopins
 internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
@@ -1004,6 +1013,7 @@ tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
+tools/uishots/fxviews.go  credit-runner  idfast
 tools/uishots/genlayouts.js  credit-runner  uis1
 tools/uishots/genlayouts.js  credit-runner  uis7
 tools/uishots/layout-rows.json  credit-runner  uis1

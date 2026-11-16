@@ -209,6 +209,7 @@
 | lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
+| idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
 | intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -254,6 +255,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 19cbcfdc0 11-15 23:29 `Merge agent/idfast: Merge branch 'main' into idfast` (idfast)
+- 5710467b2 11-15 23:28 `Merge branch 'main' into idfast` (-)
 - 9946174dc 11-15 22:52 `Merge agent/intake: observed life lost per minute (lifeLost) in minute line, glance, ledger, levelsim` (intake)
 - 93ff39d61 11-15 22:51 `Merge branch 'main' into intake` (-)
 - eea0efdc3 11-15 22:46 `Merge agent/dmgcheck: Merge branch 'main' into dmgcheck` (dmgcheck)
@@ -262,6 +265,4 @@
 - 4ca827ea0 11-15 22:42 `Merge agent/farmloopon2: Merge branch 'main' into farmloopon` (farmloopon2)
 - c55c2bcba 11-15 22:40 `Merge branch 'main' into p17posted` (-)
 - 72423887c 11-15 22:40 `Merge branch 'main' into farmloopon` (-)
-- f5f948090 11-15 21:51 `Merge agent/lootwire1: Merge branch 'main' into lootwireL4` (lootwire1)
-- d88e5bf55 11-15 21:50 `Merge branch 'main' into lootwireL4` (-)
 <!-- statusgen:end -->
