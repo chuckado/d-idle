@@ -126,6 +126,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+backlog/merge-lines/decomp33.txt  credit-runner  decomp33
 cmd/bossrun/adapter.go  pro-runner  levelplan3
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
@@ -235,6 +236,7 @@ docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
+docs/decomp-queue.md  credit-runner  decomp33
 docs/design/item-verbs.md  credit-runner  itemverbs2
 docs/emu-image.md  credit-runner  emurebuild
 docs/exploredpct.md  credit-runner  exploredpct
@@ -324,6 +326,7 @@ docs/research/data28  pro-runner  decomp28
 docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
+docs/research/decomp33-p17-p19.md  credit-runner  decomp33
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -380,19 +383,25 @@ docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
+docs/upstream/bodies/seq-ias-body.md  credit-runner  decomp33
+docs/upstream/bodies/smite-range-body.md  credit-runner  decomp33
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/briefs/hitrec-norestart-oracle.md  credit-runner  prfix2
+docs/upstream/briefs/verify-seq-ias.md  credit-runner  decomp33
+docs/upstream/briefs/verify-smite-range.md  credit-runner  decomp33
 docs/upstream/drafts/hitrec-modes.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-norestart.md  credit-runner  prfix3
 docs/upstream/drafts/load-gold-clamp.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp22
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp30
+docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp33
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p04posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p06posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix3
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
+docs/upstream/pr-queue.md  credit-runner  decomp33
 docs/upstream/pr-queue.md  credit-runner  p04posted
 docs/upstream/pr-queue.md  credit-runner  p06posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
@@ -912,6 +921,9 @@ tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/dc22_dis.py  credit-runner  decomp22
 tools/emu/dc28_  pro-runner  decomp28
+tools/emu/dc33_holybolt.py  credit-runner  decomp33
+tools/emu/dc33_seqrate.py  credit-runner  decomp33
+tools/emu/dc33_smite.py  credit-runner  decomp33
 tools/emu/dm_  credit-runner  decomp31
 tools/emu/mode_switch.py  credit-runner  decomp22
 tools/emu/pm_*  credit-runner  palskill-matrix

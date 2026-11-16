@@ -1,3 +1,0 @@
-BACKLOG: decomp33: P17 sequence rate and P18 Smite range proven against upstream (fork branches fid/seq-ias-r1, fid/smite-r1, ready for the verifier); P19 Holy Bolt heal needs no PR
-INDEX: docs/research/decomp33-p17-p19.md | P17 sequence -30 rate, P18 Smite range, P19 Holy Bolt heal re-derived against upstream main (V run)
-CHANGELOG: Research: P17 and P18 upstream candidates proven and staged for the verifier, P19 closed as matching (docs/research/decomp33-p17-p19.md)

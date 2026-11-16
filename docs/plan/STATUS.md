@@ -204,6 +204,7 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| decomp33 | in-progress | - | `docs/research/decomp33-p17-p19.md`<br>`tools/emu/dc33_seqrate.py`<br>`tools/emu/dc33_smite.py`<br>`tools/emu/dc33_holybolt.py`<br>`docs/upstream/bodies/seq-ias-body.md`<br>`docs/upstream/bodies/smite-range-body.md`<br>`docs/upstream/briefs/verify-seq-ias.md`<br>`docs/upstream/briefs/verify-smite-range.md`<br>`backlog/merge-lines/decomp33.txt`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/pr-queue.md`<br>`docs/decomp-queue.md` | `fork-branch:fid/seq-ias-r1`<br>`fork-branch:fid/smite-r1`<br>`fork-branch:fid/holybolt-heal-r1` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -247,6 +248,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f1b698db8 11-15 20:32 `Merge agent/decomp33: decomp33: P17 and P18 ready for the verifier, P19 no PR; rows, card, merge lines` (decomp33)
+- 2cd4accc0 11-15 20:27 `Merge origin/main into agent/decomp33` (-)
 - 967e2e965 11-15 18:41 `Merge agent/cut013: friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published)` (cut013)
 - 96ae5b38b 11-15 14:37 `Merge agent/deploycockpit4: Merge branch 'main' into deploycockpit` (deploycockpit4)
 - 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
@@ -255,6 +258,4 @@
 - 568260e7f 11-15 14:11 `Merge agent/p03cposted: Merge branch 'main' into p03cposted` (p03cposted)
 - 8c1a024b7 11-15 14:10 `Merge branch 'main' into p03cposted` (-)
 - cab78c992 11-15 14:02 `Merge agent/botreset: Merge branch 'main' into botreset` (botreset)
-- b965b4243 11-15 14:01 `Merge branch 'main' into botreset` (-)
-- 64660bcd8 11-15 14:00 `Merge agent/verifyp03c: Merge branch 'main' into TASK-513` (verifyp03c)
 <!-- statusgen:end -->

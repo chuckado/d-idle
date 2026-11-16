@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Research: P17 and P18 upstream candidates proven and staged for the verifier, P19 closed as matching (docs/research/decomp33-p17-p19.md) <!--sg:agent/decomp33-->
 - friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published) <!--sg:agent/cut013-->
 - Merge branch 'main' into deploycockpit <!--sg:agent/deploycockpit4-->
 - Merge branch 'main' into devp8 <!--sg:agent/devp8-->

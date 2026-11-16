@@ -642,6 +642,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [lightning-last-unit-body.md](upstream/bodies/lightning-last-unit-body.md): lightning-last-unit-body
 - [load-gold-clamp-body.md](upstream/bodies/load-gold-clamp-body.md): load-gold-clamp-body
 - [missile-block-body.md](upstream/bodies/missile-block-body.md): missile-block-body
+- [seq-ias-body.md](upstream/bodies/seq-ias-body.md): seq-ias-body
+- [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
@@ -657,6 +659,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verify-knock-gethit.md](upstream/briefs/verify-knock-gethit.md): Verifier brief: fid/knock-in-gethit-r1 (P03c), for the independent reviewer (Opus, singly)
 - [verify-melee-block.md](upstream/briefs/verify-melee-block.md): Verifier brief: fid/melee-block-r1 (P07, a negative result), for the independent reviewer (Opus, singly)
 - [verify-missile-block.md](upstream/briefs/verify-missile-block.md): Verifier brief: fid/missile-block-r3 (P06), for the independent reviewer (Opus, singly)
+- [verify-seq-ias.md](upstream/briefs/verify-seq-ias.md): Verifier brief: fid/seq-ias-r1 (P17), for the independent reviewer (Opus, singly)
+- [verify-smite-range.md](upstream/briefs/verify-smite-range.md): Verifier brief: fid/smite-r1 (P18), for the independent reviewer (Opus, singly)
 - [verify-warp-walk-r2.md](upstream/briefs/verify-warp-walk-r2.md): Verifier brief: fid/warp-walk-r2 (P02), for the independent reviewer (Opus, singly)
 - [verify2-hitrec-interrupt.md](upstream/briefs/verify2-hitrec-interrupt.md): Verifier brief, second pass: fid/hitrec-interrupt-r3 (P04), for the independent reviewer (Opus, singly)
 - [warp-walk.md](upstream/briefs/warp-walk.md): Brief: P02 warp walk-stall (fid/warp-walk-r1)
