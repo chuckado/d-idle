@@ -339,7 +339,9 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
+docs/probes/survival-ab-rescreen-2026-11-16.md  live-agent  survrescreen
 docs/probes/test-characters.md  live-agent  fid-fixtures
+docs/probes/test-characters.md  live-agent  survrescreen
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed2
