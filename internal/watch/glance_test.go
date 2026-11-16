@@ -267,3 +267,27 @@ func TestGlanceSurvival(t *testing.T) {
 		t.Error("garbage got through")
 	}
 }
+
+// The intake block is absent until a source reports, then carries the rate and its window (additive field).
+func TestGlanceIntake(t *testing.T) {
+	for _, build := range []string{"paladin", "sorceress"} {
+		r := glanceRig(t, build, "daily")
+		h := r.sim.Hub
+		if v := h.Glance(); v.Intake != nil {
+			t.Errorf("%s: intake without a source: %+v", build, v.Intake)
+		}
+		ok := false
+		h.SetGlanceSources(GlanceSources{Intake: func() (float64, int, bool) { return 12.34, 5, ok }})
+		if v := h.Glance(); v.Intake != nil {
+			t.Errorf("%s: intake before the first minute: %+v", build, v.Intake)
+		}
+		ok = true
+		v := h.Glance()
+		if v.Intake == nil || v.Intake.LifeLostPerMin != 12.3 || v.Intake.Window != 5 {
+			t.Errorf("%s: intake %+v", build, v.Intake)
+		}
+		if b, _ := json.Marshal(v.Intake); !strings.Contains(string(b), `"lifeLostPerMin":12.3`) || !strings.Contains(string(b), `"window":5`) {
+			t.Errorf("json %s", b)
+		}
+	}
+}

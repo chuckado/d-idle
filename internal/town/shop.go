@@ -639,8 +639,8 @@ func (t *Town) sellable(s *d2.Snapshot, lay *panel.Layout) []d2.Unit {
 }
 
 // sellableIf is sellable with the "pack is full" decision made by the caller (MakeRoom forces it).
-func (t *Town) sellableIf(s *d2.Snapshot, full bool) []d2.Unit {
-	var out []d2.Unit
+func (t *Town) sellableIf(s *d2.Snapshot, full bool) (out []d2.Unit) {
+	defer func() { t.shadowSell(s, out) }()
 	t.ReconcileMarks(s)
 	kept := map[string]int{}
 	rvOver := t.rejuvOverCap(s)
@@ -1034,4 +1034,27 @@ func (t *Town) tomeCost(find func(string) (d2.Unit, bool)) int {
 		}
 	}
 	return 0
+}
+
+// shadowSell feeds the loot rules shadow stage (bot.lootShadow, log only) with what the sell chore decided: sold or not.
+func (t *Town) shadowSell(s *d2.Snapshot, sold []d2.Unit) {
+	if s == nil || s.Player == nil || s.Inventory == nil {
+		return
+	}
+	c := t.tidyCtx(s)
+	sp := t.shadowPass(s, c.PackFullPct, c.StashFullPct)
+	if sp == nil {
+		return
+	}
+	isSold := map[uint32]bool{}
+	for _, u := range sold {
+		isSold[u.ID] = true
+	}
+	for _, u := range s.Inventory.Container(d2.ContInventory) {
+		today := "keep"
+		if isSold[u.ID] {
+			today = "sell"
+		}
+		sp.Observe(loot.ShadowSell, u, today, t.markOf(u), t.neverSellUnit(u), nil)
+	}
 }
