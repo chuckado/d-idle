@@ -405,6 +405,7 @@
     var ins = view.instant;
     errInstantEl.hidden = !(ins && ins.enabled);
     errInstantEl.textContent = ins && ins.enabled ? 'Instant actions: on' + (ins.why ? ' (closed now: ' + ins.why + ')' : '') : '';
+    errInstantEl.title = errInstantEl.textContent; // one line in the narrow errands column; the whole text on hover
     if (!id) return;
     // "Identify all" shows read-back progress: the unidentified count the view reports, never a guess
     var cainReq = id.cain !== 'locked' && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && (r.state === 'queued' || r.state === 'doing'); });

@@ -71,3 +71,8 @@
   .inv-act[data-mode="pop"] { min-inline-size: 14rem; }
   .inv-act[data-mode="sheet"] .act kbd { display: none; }
 }
+
+@layer components {
+  /* the lane line was five wrapped lines in the narrow errands column and squeezed the selected card to 10 px (fit, 1280x620) */
+  .err-instant { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+}
