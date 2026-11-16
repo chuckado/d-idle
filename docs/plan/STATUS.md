@@ -221,6 +221,7 @@
 | decomp34 | proposed | - | `docs/research/decomp34-fallen-flee.md`<br>`tools/emu/dc34_ring.py`<br>`tools/emu/dc34_flee.py`<br>`tools/emu/dc34_cmp.py`<br>`tools/emu/dc34_telemana.py`<br>`tools/emu/dc34_tmcmp.py`<br>`docs/upstream/bodies/`<br>`backlog/merge-lines/decomp34.txt` | `fork-branch:fid/tele-refund-r1` |
 | charsup | proposed | - | `deploy/d2d-container/entrypoint.sh`<br>`deploy/d2d-container/tester_image_test.go`<br>`internal/charsel`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go`<br>`docs/charselect.md` | - |
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
+| farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -264,6 +265,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a77be292c 11-16 12:34 `Merge agent/farmlive: Merge branch 'main' into farmlive` (farmlive)
+- c6a600d40 11-16 12:33 `Merge branch 'main' into farmlive` (-)
 - 4055fc1ee 11-16 12:08 `Merge agent/survsd: Merge branch 'main' into survsd` (survsd)
 - 4cb76cea4 11-16 12:07 `Merge branch 'main' into survsd` (-)
 - 443e30a81 11-16 11:39 `Merge agent/survab: Merge branch 'main' into survab` (survab)
@@ -272,6 +275,4 @@
 - 86a304804 11-16 11:35 `Merge branch 'main' into 547` (-)
 - 12f63c431 11-16 11:21 `Merge agent/charsup: Merge branch 'main' into charsup` (charsup)
 - 66a3b7b64 11-16 11:21 `Merge branch 'main' into charsup` (-)
-- 31909255a 11-16 11:10 `Merge agent/pause: Pause freezes the game via the lockstep switch, loop/clock wiring, menu button, banner, Space` (pause)
-- 33011e216 11-16 11:06 `Merge origin/main into agent/pause` (pause)
 <!-- statusgen:end -->

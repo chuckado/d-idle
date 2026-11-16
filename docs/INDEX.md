@@ -895,6 +895,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [farmloop-live-20261116.md](probes/farmloop-live-20261116.md): Farm loop live check in the sandbox, 2026-11-16 (status: record. Task farmlive (TASK-553). Tags: V = verified in this run (container logs, read only), U = not...)
 - [farmloop-measure.md](probes/farmloop-measure.md): Recipe: kills per minute against coverage (farm loop decay curve) (status: current. Tool `tools/farmloop/measure.py` (stdlib Python, reads stdin). Tags: V = ran once...)
 - [farmloop-on-20261115.md](probes/farmloop-on-20261115.md): Farm loop switched on in the sandbox, 2026-11-15 (status: record. Task farmloopon. Tags: V = verified in this run, U = not verified.)
 
