@@ -18,8 +18,15 @@ owns:
   - "internal/watch/glance.go"
   - "tools/levelsim/shadow.go"
   - "docs/survival/ledger.md"
+  - "internal/bot/observe.go"
+  - "internal/bot/areametrics.go"
+  - "internal/bot/zoneshadow.go"
+  - "internal/d2dsoakstat/minute.go"
+  - "cmd/d2bot/glancewire.go"
+  - "cmd/d2bot/survivalwire.go"
 exclusive: []
 contracts: []
+result: "minute line lifeLost/hitsTaken/hpPolls, glance intake, ledger intakeLife per zone, levelsim and d2dsoakstat readers; offline tests only, not verified live"
 ---
 
 ## Description
