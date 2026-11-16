@@ -66,7 +66,7 @@
   [data-panel="zone-map"] .zm-loop { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; }
   [data-panel="zone-map"] .zm-ll { color: var(--d-text-2); font-size: var(--d-fs-0); }
   [data-panel="zone-map"] .zm-sel { min-block-size: 26px; background: var(--d-bg); color: var(--d-text); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); font-size: var(--d-fs-0); }
-  /* the charter line and its button stay at the bottom of the scrolling sheet: "Pay and go" is never below the fold */
+  /* the charter line and its button stay at the bottom of the scrolling sheet (data-pin="end", the shell's sheet rule): "Pay and go" is never below the fold */
   [data-panel="zone-map"] .zm-charter .zm-l { flex: 1 1 100%; }
-  [data-panel="zone-map"] .zm-charter { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; position: sticky; inset-block-end: 0; padding-block: var(--d-sp-1); background: var(--d-surface-2); }
+  [data-panel="zone-map"] .zm-charter { flex: none; display: flex; flex-wrap: wrap; gap: var(--d-sp-1); align-items: center; }
 }
