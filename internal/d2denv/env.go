@@ -12,6 +12,7 @@ import (
 	"runtime/pprof"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -174,6 +175,10 @@ type LateClock struct {
 	c   *d2dctl.Client
 	ctx context.Context
 	p   atomic.Pointer[d2dinput.Pacer]
+
+	fmu      sync.Mutex // the frozen Pause (freeze.go): the wall clock stands still between SetFrozen(true) and (false)
+	frozenAt time.Time
+	offset   time.Duration
 }
 
 // Detect looks at "clock": lockstep gives the Pacer. Returns whether lockstep is on.
@@ -212,7 +217,7 @@ func (l *LateClock) Now() time.Time {
 	if p := l.p.Load(); p != nil {
 		return p.Now()
 	}
-	return time.Now()
+	return l.wall()
 }
 
 // Watch is the Pacer's Watch under lockstep (the runner's guard runs on the acting goroutine, docs/d2d-determinism.md);

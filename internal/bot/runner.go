@@ -27,6 +27,8 @@ import (
 // Deps are the collaborators of a Runner. Mover, Fighter and Town are required; the rest are optional and each
 // missing one has a documented fallback (docs/bot.md).
 type Deps struct {
+	// Freezer stops the game itself for the player's Pause (freeze.go); nil: Pause walks home and stops the bot only.
+	Freezer Freezer
 	Mover   Mover
 	Fighter Fighter
 	Town    Townsman
@@ -74,6 +76,12 @@ type Deps struct {
 	ZoneChoice func(s *d2.Snapshot, area int, diff string, potions int, cands []ZoneCand) string
 	// ZoneObserve, if set, receives the hard events and the area summaries the per-zone ledger learns from. Passive.
 	ZoneObserve func(ZoneEvent)
+	// ZoneDecide, if set and bot.zoneModel is 1, is asked for the leveling zone (survival slice S-D): the controller's
+	// choice among cands with the dial id (cautious, balanced, bold). An error makes the planner use the plan tables.
+	ZoneDecide func(s *d2.Snapshot, area int, diff string, potions int, dial string, cands []ZoneCand) (ZoneVerdict, error)
+	// BossMargin, if set and bot.zoneModel is 1, says whether the hero's margin against a boss exists and its word; ok is
+	// false without margin data for that boss (the legacy level floor then stays).
+	BossMargin func(s *d2.Snapshot, key, diff, dial string) (word string, ok bool)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -149,6 +157,7 @@ type Runner struct {
 	healthMu       sync.Mutex // serialises Health.Step, which runs outside obMu (see healthProbe)
 	tpBuyMin       int        // scrolls bought this minute, set by tpDiag under obMu for failsafeKV
 	ob             observer
+	zst            zoneState               // the last zone model verdict (zonemodel.go)
 	zmerc          zoneMerc                // merc alive/dead edge detection for ZoneObserve (zoneshadow.go)
 	deathW         combat.DeathWeights     // lessons of Nightmare/Hell deaths, guarded by obMu (deathweights.go)
 	dlog           *deathLog               // guarded by obMu
@@ -185,6 +194,8 @@ type Runner struct {
 	levelerPaused  bool                 // selfStop came from the leveler (LevelerPause), guarded by mu
 	autoResumeAt   time.Time            // a failsafe self pause ends by itself at this time (zero: waits for Resume), guarded by mu
 	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
+	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
+	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
 	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
 	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
 	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
@@ -482,6 +493,9 @@ func (r *Runner) Pause() error {
 
 // Resume implements goals.Runner.
 func (r *Runner) Resume() error {
+	if r.d.Freezer != nil && r.Frozen() {
+		r.freezeOff(false, false) // a Resume from any source ends a frozen pause too (a failed thaw is logged and retried by the next press)
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 	r.paused = false

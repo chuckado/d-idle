@@ -126,7 +126,9 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-minutes.jsonl.gz  gaterun  gat
 docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate2multi-20261107-1811-g2h
 
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
+backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
+cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
@@ -135,7 +137,9 @@ cmd/d2bot/behaviors.go  credit-runner  gearsets
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  pro-runner  levelplan3
 cmd/d2bot/charwire.go  credit-runner  charselect
+cmd/d2bot/charwire.go  credit-runner  charsup
 cmd/d2bot/charwire_test.go  credit-runner  charselect
+cmd/d2bot/charwire_test.go  credit-runner  charsup
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  exploredpct
 cmd/d2bot/d2dbackend.go  credit-runner  maphistory
@@ -236,7 +240,9 @@ data/onboarding  credit-runner  firstminutes
 data/onboarding/en.json  credit-runner  friendfb
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
+deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
+deploy/d2d-container/tester_image_test.go  credit-runner  charsup
 deploy/nas/imgbuild.sh  credit-runner  buildhosts3
 docs/aggression.md  credit-runner  wiring2
 docs/archive  credit-runner  dietarchive
@@ -246,6 +252,7 @@ docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
 docs/charselect.md  credit-runner  charselect
+docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/design/item-verbs.md  credit-runner  itemverbs2
@@ -286,6 +293,7 @@ docs/knobs.md  credit-runner  hourfix
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
+docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
@@ -314,6 +322,7 @@ docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
+docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
 docs/probes/firsthour.md  live-agent  firsthour
 docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
@@ -347,6 +356,7 @@ docs/research/data28  pro-runner  decomp28
 docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
+docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -375,6 +385,7 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
+docs/survival  credit-runner  survsd
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
@@ -403,6 +414,7 @@ docs/upstream/  credit-runner  prpost2
 docs/upstream/  credit-runner  prpost3
 docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
+docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
@@ -442,6 +454,7 @@ internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/types.go  pro-runner  levelplan3
+internal/bot  credit-runner  survsd
 internal/bot  credit-runner  wiring2
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
@@ -542,6 +555,7 @@ internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
+internal/charsel  credit-runner  charsup
 internal/combat  credit-runner  wiring2
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata  credit-runner  palprofile2
@@ -587,6 +601,7 @@ internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
+internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
@@ -682,6 +697,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/power  credit-runner  dangerfit2
+internal/power  credit-runner  survsd
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
@@ -701,6 +717,7 @@ internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
+internal/survival  credit-runner  survsd
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
 internal/task/campaign.go  credit-runner  campaign1
@@ -1029,6 +1046,11 @@ tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
 tools/emu/dc22_dis.py  credit-runner  decomp22
 tools/emu/dc28_  pro-runner  decomp28
+tools/emu/dc34_cmp.py  credit-runner  decomp34
+tools/emu/dc34_flee.py  credit-runner  decomp34
+tools/emu/dc34_ring.py  credit-runner  decomp34
+tools/emu/dc34_telemana.py  credit-runner  decomp34
+tools/emu/dc34_tmcmp.py  credit-runner  decomp34
 tools/emu/dm_  credit-runner  decomp31
 tools/emu/dmg_model.py  credit-runner  dmgcheck
 tools/emu/mode_switch.py  credit-runner  decomp22
@@ -1051,6 +1073,7 @@ tools/friendpack/pack_test.go  credit-runner  cut012
 tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
+tools/knobdump  credit-runner  survsd
 tools/knobdump/main.go  credit-runner  videofeed2
 tools/levelsim/  credit-runner  levelsim
 tools/levelsim/  credit-runner  powerwire

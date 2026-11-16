@@ -339,7 +339,7 @@ func (m *mercState) observe(mc d2.Merc, inTown bool, now time.Time) bool {
 // ladder installed the legacy verdict is put to point t2.mercenary (askMerc) after the merc lock is released.
 func (r *Runner) mercWanted(s *d2.Snapshot) string {
 	what := r.mercLegacy(s)
-	if what == "" {
+	if what == "" || what == "revive" && r.zoneLeaveMercDead() {
 		return ""
 	}
 	merc := "none"

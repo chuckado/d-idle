@@ -7,6 +7,7 @@
 #                        realtime clock, game tables from $D2D_DATA. TESTER=1 turns `bot` into `tester`.
 #   entrypoint.sh CMD..  anything else is exec'd (shell, d2dsoak, ...)
 # Env (all optional): D2D_MODE lockstep|realtime|timescale:N  D2D_SEED  D2D_CLASS (d2d UI order, 1 = Necromancer)
+#   D2BOT_SUPERVISE (tester: default 1, bot: 0; 1 = d2bot runs under its own supervisor, needed for Character Select switches)
 #   D2D_NAME  D2D_NOSAVE=1  D2D_BIN D2D_DATA D2D_SOCK  D2BOT_RUN_HOURS  D2BOT_GOALS  D2BOT_ADDR  D2D_VIEW_ADDR  D2D_ARGS
 # Tester profile: D2BOT_WATCH_ORIGIN (page origin(s) the tester opens), D2BOT_WATCH_ADDR/_ANSWER_ADDR, D2BOT_WATCH_TOKEN_FILE,
 #   D2DVIEW_TOKEN (tap token, generated per start when unset). Table: docs/d2d-container/README.md.
@@ -38,6 +39,21 @@ case $mode in bot | d2d | tester) ;; *) exec "$@" ;; esac
 dry=${ENTRYPOINT_DRYRUN:-0}
 XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-/data/config}
 XDG_DATA_HOME=${XDG_DATA_HOME:-/data/share}
+# Character Select (docs/charselect.md): after an in-game switch the supervisor records the hero it switched to in
+# <data>/instances/<inst>/active-char. That file wins over D2D_NAME on a container restart (the env still names the first
+# hero). Only a plain valid name with an existing save counts; anything else is ignored and the env name is used.
+for f in "${D2BOT_DATA:-/data}"/instances/*/active-char; do
+	[ -f "$f" ] || continue
+	n=$(head -n 1 "$f" 2>/dev/null | tr -d '\r')
+	case $n in
+	'' | *[!A-Za-z_-]* | [-_]* | *[-_]) continue ;;
+	esac
+	[ ${#n} -ge 2 ] && [ ${#n} -le 15 ] || continue
+	for sv in "${D2BOT_DATA:-/data}"/instances/*/d2d/config/d2d/save/"$n".d2s "$XDG_CONFIG_HOME/d2d/save/$n.d2s"; do
+		if [ -f "$sv" ]; then name=$n; break; fi
+	done
+done
+
 
 tapjpeg=
 if [ "$mode" = tester ]; then
@@ -48,6 +64,8 @@ if [ "$mode" = tester ]; then
 	export D2BOT_LADDER=1 D2BOT_WATCH=1 D2BOT_WATCH_VIDEO=1 D2BOT_WATCH_VIDEO_SOURCE=tap
 	export D2BOT_WATCH_ADDR=${D2BOT_WATCH_ADDR:-0.0.0.0:8891} D2BOT_WATCH_ANSWER_ADDR=${D2BOT_WATCH_ANSWER_ADDR:-0.0.0.0:8892}
 	export D2BOT_WATCH_ORIGIN D2BOT_GOALS
+	# the supervisor makes the Character Select switch possible (exit code 6, docs/charselect.md); 0 turns it off. Plain bot mode keeps today's no-supervisor default.
+	export D2BOT_SUPERVISE=${D2BOT_SUPERVISE:-1}
 	export D2BOT_WATCH_TOKEN_FILE=${D2BOT_WATCH_TOKEN_FILE:-/data/watch.token} D2BOT_LADDER_STORE=${D2BOT_LADDER_STORE:-shared}
 	export D2BOT_GAMEDIR=${D2BOT_GAMEDIR:-$D2D_DATA} D2DVIEW_ADDR=${D2D_VIEW_ADDR:-127.0.0.1:8893}
 	export D2BOT_WATCH_TAP_URL=${D2BOT_WATCH_TAP_URL:-http://$D2DVIEW_ADDR}
