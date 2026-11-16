@@ -28,7 +28,7 @@
 | S-A | danger profile generator, overrides, tests | no |
 | S-B | archetypes, power estimate, margin; shadow log next to every planner line; replay tool; validated against the swap7, hour 4 and hero14 logs | no |
 | S-C | ledger and controller in shadow, "why" line, API fields for the UI | no |
-| S-D | zone choice switches behind `bot.zoneModel` (default off); A/B on the sandbox | behind a knob |
+| S-D | zone choice switches behind `bot.zoneModel` (default off); A/B on the sandbox | behind a knob; built, see [zonemodel.md](zonemodel.md) (A/B not run) |
 | S-E | retire old rules one group at a time with the evidence: recovery, poverty and kit gate; plan level bands; stale-pack and death bans; boss and route floors; trip triggers | yes |
 | S-F | optional: the same margin for per-pack engage and retreat | behind a knob |
 
