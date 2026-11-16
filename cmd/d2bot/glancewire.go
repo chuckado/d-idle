@@ -28,6 +28,7 @@ type glanceDeps struct {
 	Status  func() goals.Status
 	Chapter func() string
 	Pause   func() string // the player pause state (bot.PauseRunning, PauseGoingHome, PausePaused)
+	PauseV  func() bot.PlayerPauseView
 	Reset   func() bot.ResetView
 	Stuck   func() time.Duration // how long the bot made no progress (the stall detector), 0 = not stuck
 	Beat    func() time.Time     // the loop's last finished iteration
@@ -47,7 +48,7 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, 
 		Supplies: glanceSupplies(r.LastSnapshot, cat, db, levelerBuild),
 	}
 	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) },
-		Pause: func() string { return r.PlayerPauseView().State },
+		Pause: func() string { return r.PlayerPauseView().State }, PauseV: r.PlayerPauseView,
 		Reset: r.ResetView, Stuck: r.StuckFor, Beat: r.LastStep}
 	for _, f := range glanceExtra {
 		f(&src, deps)

@@ -101,3 +101,40 @@ func TestPauseRouteGoldens(t *testing.T) {
 		}
 	}
 }
+
+// modePause is a desk that also takes the mode.
+type modePause struct {
+	fakePause
+	modes []string
+}
+
+func (m *modePause) SetMode(on bool, freeze *bool) any {
+	m.modes = append(m.modes, map[bool]string{true: "on", false: "off"}[on]+":"+map[bool]string{true: "freeze", false: "walk"}[*freeze])
+	return m.fakePause.Set(on)
+}
+
+// {"on":true,"freeze":true|false} reaches a desk that takes a mode; a desk without it (or no freeze field) gets Set.
+func TestPauseRouteFreezeField(t *testing.T) {
+	api := NewPauseAPI()
+	o := AnswerOptions{Token: "tok", Origins: []string{"http://ok.test"}}
+	post := api.PostHandler(o)
+	auth := map[string]string{"Authorization": "Bearer tok"}
+	m := &modePause{fakePause: fakePause{state: "running"}}
+	api.Bind(m)
+	for _, body := range []string{`{"on":true,"freeze":true}`, `{"on":true,"freeze":false}`, `{"on":false}`} {
+		if w := invPost(post, PauseRoute, body, auth); w.Code != 200 {
+			t.Fatalf("%s: %d %s", body, w.Code, w.Body)
+		}
+	}
+	if len(m.modes) != 2 || m.modes[0] != "on:freeze" || m.modes[1] != "on:walk" || len(m.sets) != 3 {
+		t.Errorf("modes %v sets %v", m.modes, m.sets)
+	}
+	if w := invPost(post, PauseRoute, `{"on":true,"freeze":"yes"}`, auth); w.Code != 400 {
+		t.Errorf("a non-boolean freeze: %d", w.Code)
+	}
+	plain := &fakePause{state: "running"}
+	api.Bind(plain)
+	if w := invPost(post, PauseRoute, `{"on":true,"freeze":true}`, auth); w.Code != 200 || len(plain.sets) != 1 {
+		t.Errorf("plain desk: %d %v", w.Code, plain.sets)
+	}
+}

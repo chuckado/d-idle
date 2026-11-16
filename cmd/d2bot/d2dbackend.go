@@ -283,8 +283,11 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	if o.managed {
 		savedExp = d2dSavedExp(filepath.Join(ip.Dir(), "d2d"), func() string { return charName })
 	}
-	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, be.Clock.Lockstep, be.Clock.LastStep, log),
+	deps := bot.Deps{SavedExp: savedExp, Mover: moverAdapter{nv}, Cycler: be.Cycler, Catalog: cat, Health: d2dHealth(be.Proc, be.Beat, func() bool { return be.Clock.Lockstep() || ref.frozen() }, be.Clock.LastStep, log),
 		OnSnapshot: disp.OnSnapshot, Bus: bus, Restart: func(ctx context.Context) error { return be.Cycler.NewGame(ctx, "") }}
+	if os.Getenv("D2BOT_RUN") == "" { // a measured run is never paused (docs/pause.md)
+		deps.Freezer = d2denv.NewFreezer(be.Client, be.Clock)
+	}
 	deps.ZoneShadow = wirePower(db)                                   // shadow margin line next to the planner line, log only (survival slice S-B)
 	deps.ZoneChoice, deps.ZoneObserve = wireSurvival(db, ip.Ledger()) // shadow zone choice and ledger (slice S-C), log and API only
 	// Rig and town copy the Env by value, before bot.New installs Env.Emit: they would emit into nothing (kills, potions,
