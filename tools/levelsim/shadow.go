@@ -21,16 +21,18 @@ import (
 
 // Stay is one stay in a zone, from one `zone entry` line to the next.
 type Stay struct {
-	Area     int
-	Clvl     int
-	Start    time.Time
-	Minutes  float64
-	Potions  int
-	Chickens int
-	Deaths   int
-	MercLost bool
-	Margin   power.ZoneMargin
-	Skipped  string // why no margin was computed ("area not in the profile", ...)
+	Area      int
+	Clvl      int
+	Start     time.Time
+	Minutes   float64
+	Potions   int
+	Chickens  int
+	Deaths    int
+	MercLost  bool
+	LifeLost  int  // sum of the `lifeLost` of the stay's minute lines (observed intake)
+	HasIntake bool // at least one minute line of the stay carried lifeLost (older logs: false)
+	Margin    power.ZoneMargin
+	Skipped   string // why no margin was computed ("area not in the profile", ...)
 }
 
 // Class of a stay for the pass rule.
@@ -137,6 +139,11 @@ func ShadowReplay(r io.Reader, o ShadowOpts) (*ShadowReport, error) {
 			cur.Chickens++
 		case msg == "character died":
 			cur.Deaths++
+		case msg == "minute":
+			if v, err := strconv.Atoi(kv["lifeLost"]); err == nil {
+				cur.LifeLost += v
+				cur.HasIntake = true
+			}
 		case msg == "combat potion":
 			cur.Potions++
 		case strings.Contains(strings.ToLower(msg), "merc") && strings.Contains(strings.ToLower(msg), "died"):
@@ -220,6 +227,9 @@ func (r *ShadowReport) Text() string {
 		note := s.Skipped
 		if note == "" && s.MercLost {
 			note = "merc lost"
+		}
+		if s.HasIntake && s.Minutes > 0 {
+			note = strings.TrimSpace(fmt.Sprintf("%s intake %.0f/min", note, float64(s.LifeLost)/s.Minutes))
 		}
 		if s.Skipped != "" {
 			fmt.Fprintf(&b, "%-8s %5d %4d %7.1f %5d %5d %5d %7s %6s %6s %-9s %s\n", s.Start.Format("15:04:05"), s.Area, s.Clvl, s.Minutes, s.Potions, s.Chickens, s.Deaths, s.Class(), "-", "-", "-", note)

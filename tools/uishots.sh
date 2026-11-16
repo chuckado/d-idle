@@ -5,7 +5,9 @@
 # and a pixel diff against the golden set kept on the worker host (not in git: pictures change with every UI PR).
 #   tools/uishots.sh [--update] [--out DIR] [--only NAME]   --update makes this run the golden set
 #   tools/uishots.sh --cockpit [--out DIR] [--only NAME]     pictures of the cockpit pages at the supported sizes (ck-NAME-WxH.png), no check, no golden set
+#   tools/uishots.sh --char --url '/watch?layout=cockpit-demo&theme=dark' --click '#btn-more|#btn-help' --sizes '1366x768 390x844' --tag NAME   the same for any /watch page (a cockpit sheet or drawer), after the clicks
 #   tools/uishots.sh --char [--out DIR] [--hover SEL | --ctx SEL | --click SEL] [--sizes 'WxH ...'] [--theme dark|light] [--fx VARIANT] [--tag NAME]   pictures of the character canvas (/watch/inventory) at the eight fit sizes, in the fit harness
+#   tools/uishots.sh --skills [--out DIR] [--sizes 'WxH ...'] [--tag NAME]   pictures of the Skills page (/watch/skills, fake trees) at a few sizes
 #   tools/uishots.sh --pics [--out DIR] [--only GLOB]   pictures of the cockpit (strip and Needs you variants) at the eight fit sizes, in the fit harness
 #   tools/uishots.sh --fit [--out DIR]                       the cockpit fit check (tools/uishots/fit.go), on the builder:
 #     every cockpit page at the supported sizes loads in an iframe of exactly that size; the page must not scroll, no slot
@@ -13,7 +15,7 @@
 # Exit: 0 ok, 1 a check failed, 2 a tool is missing. Every process has a hard limit; one run per port at a time (flock).
 # UISHOTS_PORT and UISHOTS_DISPLAY pick another port and private display; UISHOTS_GOLDEN another golden directory.
 set -u
-update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 extra= sizes_only= theme=dark fx= tag= pics=0 pq=
+update=0 out=${TMPDIR:-/tmp}/uishots-$(id -u)/run only= fit=0 cockpit=0 char=0 skills=0 charu= extra= sizes_only= theme=dark fx= tag= pics=0 pq=
 while [ $# -gt 0 ]; do
 	case $1 in
 	--update) update=1; shift ;;
@@ -23,6 +25,8 @@ while [ $# -gt 0 ]; do
 	--cockpit) cockpit=1; shift ;;
 	--char) char=1; shift ;;
 	--pics) pics=1; shift ;;
+	--skills) skills=1; shift ;;
+	--url) charu=$(printf %s "$2" | sed 's/&/%26/g; s/?/%3F/g'); shift 2 ;;
 	--hover) extra="$extra&hover=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--ctx) extra="$extra&ctx=$(printf %s "$2" | sed 's/#/%23/g; s/\[/%5B/g; s/\]/%5D/g')"; shift 2 ;;
 	--sizes) sizes_only=$2; shift 2 ;;
@@ -85,10 +89,22 @@ if [ "$char" = 1 ]; then
 		w=${sz%x*} h=${sz#*x}
 		prof=$(mktemp -d)
 		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
-			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}$pq&w=$w&h=$h$extra" >/dev/null 2>&1
+			--window-size="$w,$((h + 40))" --virtual-time-budget=25000 --timeout=40000 --screenshot="$out/char-$tag$sz.png" "http://127.0.0.1:$port/__fit?u=${charu:-/watch/inventory%3Ftheme=$theme${fx:+%26fx=$fx}$pq}&w=$w&h=$h$extra" >/dev/null 2>&1
 		rm -rf "${prof:?}"
 	done
 	ls "$out"/char-*
+	exit 0
+fi
+if [ "$skills" = 1 ]; then
+	mkdir -p "$out" && rm -f "$out"/skills-*
+	for sz in ${sizes_only:-1914x930 1366x768 1024x768 390x844}; do
+		w=${sz%x*} h=${sz#*x}
+		prof=$(mktemp -d)
+		DISPLAY=$disp timeout 90 nice -n 19 "$chrome" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --no-first-run --user-data-dir="$prof" --force-device-scale-factor=1 \
+			--window-size="$w,$h" --virtual-time-budget=12000 --timeout=30000 --screenshot="$out/skills-$tag$sz.png" "http://127.0.0.1:$port/watch/skills?theme=$theme" >/dev/null 2>&1
+		rm -rf "${prof:?}"
+	done
+	ls "$out"/skills-*
 	exit 0
 fi
 if [ "$pics" = 1 ]; then
@@ -154,11 +170,17 @@ default-frozen-light watch?first=0&theme=light&needs=2&pause=frozen&glance=full,
 default-pause-menu watch?first=0&theme=dark&needs=2&pause=can #btn-more
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
-reset-confirm watch?first=0&theme=dark&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
-reset-confirm-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=reset-open] #reset-confirm,#reset-go,[data-key=reset-cancel]
-reset-more watch?first=0&theme=dark&needs=0 [data-key=verb-more]|[data-key=more-reset] #reset-confirm,#reset-go
+reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
+reset-header-light watch?first=0&theme=light&needs=2 #btn-reset #btn-reset
+reset-pressed watch?first=0&theme=dark&needs=0&reset=resetting #btn-reset #btn-reset,#reset-progress
+reset-pressed-light watch?first=0&theme=light&needs=0&reset=rejoining #btn-reset #btn-reset,#reset-progress
+reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=reset-open] #reset-progress
+reset-more watch?first=0&theme=dark&needs=0&reset=resetting [data-key=verb-more]|[data-key=more-reset] #reset-progress
+reset-hard-confirm watch?first=0&theme=dark&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
+reset-hard-confirm-light watch?first=0&theme=light&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
 reset-resetting watch?first=0&theme=dark&needs=0&reset=resetting expect=#reset-progress
 reset-resetting-light watch?first=0&theme=light&needs=0&reset=rejoining expect=#reset-progress
+phonedefect-resetclip watch?first=0&theme=dark&needs=0&defect=resetclip #btn-reset #btn-reset
 default-firstrun watch?theme=dark&needs=2 ?#none .d-drawer:not([hidden])_[data-key=drawer-close]
 cockpit watch?layout=cockpit&theme=dark
 cockpit-menu watch?layout=cockpit&theme=dark #btn-more
@@ -223,6 +245,8 @@ demo-layers watch?layout=cockpit-demo&theme=dark&tab=Map ?.d-mapswitch_>_.d-btn:
 demo-drawer-log watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-alerts]
 demo-drawer-alerts watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log]|[data-key=tab-alerts] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 demo-drawer-start watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=onboarding] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
+demo-drawer-items watch?layout=cockpit-demo&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close],.d-drawer:not([hidden])_[data-key=tab-items]
+demo-help watch?layout=cockpit-demo&theme=dark #btn-more|#btn-help .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 overflow-fixture watch?layout=cockpit-overflow&theme=dark
 overflow-nested watch?layout=cockpit-nested&theme=dark
 overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
@@ -247,6 +271,8 @@ character-longnames watch/inventory?theme=dark&fx=longnames
 character-longnames-light watch/inventory?theme=light&fx=longnames
 character-pending watch/inventory?theme=dark&fx=pending&tab=pack expect=[data-key=item-11][data-pending=stash][data-wait=town]|[data-key=item-10][data-pending=equip]
 character-phonepack watch/inventory?theme=dark ?#cv-tabbar_[data-tab=pack]|?#pack_[data-key=item-10] #belt,#cv-sel
+character-idwait watch/inventory?theme=dark&fx=idwait&tab=pack expect=[data-key=item-16][data-pending=identify][data-waiting]
+character-iddoing watch/inventory?theme=dark&fx=iddoing&tab=pack expect=[data-key=item-16][data-pending=identify]
 character-tip-light watch/inventory?theme=light hover=[data-key=item-16]
 character-tip-plate-nomerc watch/inventory?theme=dark&fx=nomerc hover=[data-key=item-16]
 character-phone watch/inventory?theme=dark&fx=phone&tab=pack

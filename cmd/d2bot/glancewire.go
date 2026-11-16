@@ -46,6 +46,10 @@ func useGlance(rig *ladderRig, r *bot.Runner, db *data.DB, levelerBuild string, 
 	src := watch.GlanceSources{
 		Merc:     glanceMerc(mercAPIAdapter{}.view),
 		Supplies: glanceSupplies(r.LastSnapshot, cat, db, levelerBuild),
+		Intake: func() (float64, int, bool) {
+			in, ok := r.Intake()
+			return in.LifeLostPerMin, in.WindowMinutes, ok
+		},
 	}
 	deps := glanceDeps{Status: r.Status, Chapter: func() string { return journeyChapter(ref) },
 		Pause: func() string { return r.PlayerPauseView().State }, PauseV: r.PlayerPauseView,

@@ -187,6 +187,8 @@ type Runner struct {
 	plp            playerPause          // the player's Pause command (playerpause.go), guarded by mu
 	frz            freezeState          // the frozen Pause (freeze.go), guarded by mu
 	wall           func() time.Time     // wall clock of the pause cap and its display; nil: time.Now (tests set it)
+	freshBusy      atomic.Bool          // startFreshGame is running (task.go)
+	freshEnd       atomic.Int64         // clock nanos when the last startFreshGame ended
 	rst            playerReset          // the player's Reset command (playerreset.go), guarded by mu
 	lastSelfPause  time.Time            // for the self pause backoff, guarded by mu
 	pauseStreak    int

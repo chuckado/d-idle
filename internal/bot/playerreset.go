@@ -29,9 +29,14 @@ const (
 // ResetSchema is the schema field of the watch route's reply.
 const ResetSchema = "watch.reset/1"
 
-// resetPatience is how long a soft reset waits for nothing hostile near before it leaves anyway: a logout is itself an
-// escape, so danger never blocks it for long, and `force` skips the wait.
+// resetPatience is how long a soft reset that asked to wait (wait:true, programmatic callers only) holds for nothing
+// hostile near before it leaves anyway. The player's press never waits: Reset is a break-glass control and a logout is
+// itself the escape (user feedback 2026-11-15).
 const resetPatience = 20 * time.Second
+
+// ResetAckWithin is how long the loop has to notice a soft reset before the wire escalates to the hard path (the process
+// exits like the watchdog's), the failure the watchdog itself only catches after 600 s.
+const ResetAckWithin = 3 * time.Second
 
 // ResetResult is the last finished reset.
 type ResetResult struct {
@@ -58,6 +63,7 @@ type playerReset struct {
 	reason    string
 	hard      bool
 	force     bool
+	acked     bool // the loop has seen this request (a tick ran after the press)
 	restarted bool // a hard reset: this is the process that came back
 	last      *ResetResult
 	path      string
@@ -94,9 +100,11 @@ func (r *Runner) SetResetPath(path string) {
 // CanSoftReset says the runner can leave and rejoin the game itself (a Cycler is wired).
 func (r *Runner) CanSoftReset() bool { return r.d.Cycler != nil }
 
-// PlayerReset starts a soft reset. A press while one runs changes nothing (Already). force skips the wait for a safe moment.
-func (r *Runner) PlayerReset(force bool) ResetView {
+// PlayerReset starts a soft reset that begins on the very next loop tick: the running action is cancelled at once. A press
+// while one runs changes nothing (Already). wait:true (never the player's press) holds for a safe moment, at most resetPatience.
+func (r *Runner) PlayerReset(wait bool) ResetView {
 	r.ForceThaw() // break glass: a frozen game thaws first (freeze.go)
+	force := !wait
 	r.mu.Lock()
 	p := &r.rst
 	if p.state == ResetResetting || p.state == ResetRejoining {
@@ -106,16 +114,49 @@ func (r *Runner) PlayerReset(force bool) ResetView {
 		return v
 	}
 	now := r.e.Clock.Now()
-	p.state, p.since, p.hard, p.force, p.restarted = ResetResetting, now, false, force, false
+	p.state, p.since, p.hard, p.force, p.restarted, p.acked = ResetResetting, now, false, force, false, false
 	p.reason = "waiting for a safe moment to leave the game"
 	if force {
 		p.reason = "leaving the game"
+		r.cancelLocked(errReset)
 	}
 	p.save()
 	v := r.resetViewLocked()
 	r.mu.Unlock()
-	r.e.Log.Info("reset requested", "hard", false, "force", force)
+	r.e.Log.Info("reset requested", "hard", false, "wait", wait)
 	return v
+}
+
+// ResetUnacked says a soft reset is waiting and no loop tick has seen it yet (the loop may be hung).
+func (r *Runner) ResetUnacked() bool {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	return r.rst.state == ResetResetting && !r.rst.hard && !r.rst.acked
+}
+
+// EscalateReset turns an unacknowledged soft reset into a hard one: the caller exits the process next. It reports
+// whether it did (false: the loop answered in time, or the reset ended).
+func (r *Runner) EscalateReset() (ResetView, bool) {
+	r.mu.Lock()
+	p := &r.rst
+	if p.state != ResetResetting || p.hard || p.acked {
+		v := r.resetViewLocked()
+		r.mu.Unlock()
+		return v, false
+	}
+	p.hard, p.reason = true, "the bot was stuck, restarting it"
+	p.save()
+	v := r.resetViewLocked()
+	r.mu.Unlock()
+	r.e.Log.Warn("reset escalated: loop unresponsive")
+	return v, true
+}
+
+// ackReset marks the request as seen; the first thing a loop tick does.
+func (r *Runner) ackReset() {
+	r.mu.Lock()
+	r.rst.acked = true
+	r.mu.Unlock()
 }
 
 // BeginHardReset records a hard reset the caller is about to carry out (the process exits next). It is idempotent.
@@ -217,7 +258,7 @@ func (r *Runner) resetStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.finishReset("done", "the bot restarted and rejoined")
 		return false
 	}
-	if p.state != ResetResetting {
+	if p.state != ResetResetting || p.hard {
 		return false
 	}
 	if r.d.Cycler == nil {
@@ -240,6 +281,8 @@ func (r *Runner) resetStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		r.finishReset("done", "left the game and rejoined")
 	case ctx.Err() == nil:
 		r.finishReset("failed", "the game did not come back")
+	default: // stopped mid-way: the request is consumed either way, never left armed
+		r.finishReset("failed", "the bot was stopped")
 	}
 	return true
 }

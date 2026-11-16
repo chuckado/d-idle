@@ -58,6 +58,7 @@ func (r *Runner) pause(ctx context.Context, d time.Duration) {
 
 // step runs one decision and at most one action. It reports whether an action ran (false: the caller sleeps a tick).
 func (r *Runner) step(ctx context.Context) bool {
+	r.ackReset()
 	if r.frozenStep() {
 		return false // the game is frozen: nothing is read, nothing acts, no clock runs (freeze.go)
 	}
@@ -417,7 +418,7 @@ func (r *Runner) do(ctx context.Context, c control, st State, activity string, t
 		r.setLastTrip(r.e.Clock.Now())
 	case errors.Is(err, ErrLeftGame):
 		// the menus are handled by the next step
-	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errPlayer), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
+	case errors.Is(cause, errNewGoal), errors.Is(cause, errStop), errors.Is(cause, errPause), errors.Is(cause, errTripDue), errors.Is(cause, errPoints), errors.Is(cause, errPlayer), errors.Is(cause, errReset), errors.Is(cause, errReplan), errors.Is(cause, errDied), errors.Is(cause, errLeftGame):
 		// the next step re-reads control and the snapshot
 	case errors.Is(cause, errStuck):
 		if !l.inLadder {

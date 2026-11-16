@@ -46,6 +46,15 @@ type GlanceView struct {
 	// Paused: the game itself is frozen by the player's Pause (docs/pause.md); PausedSince is the RFC 3339 time it began.
 	Paused      bool   `json:"paused,omitempty"`
 	PausedSince string `json:"pausedSince,omitempty"`
+	// Intake is the observed damage intake (docs/survival/ledger.md "Observed intake"); absent while no source is bound or
+	// before the first minute line. Additive: the cockpit turns it into light, moderate or heavy later.
+	Intake *GlanceIntake `json:"intake,omitempty"`
+}
+
+// GlanceIntake is the life lost per minute averaged over Window minute lines.
+type GlanceIntake struct {
+	LifeLostPerMin float64 `json:"lifeLostPerMin"`
+	Window         int     `json:"window"`
 }
 
 // GlanceSentence is the line of the band: a state chip (Word), the Place, and the Reason, with the popover's content.
@@ -144,9 +153,10 @@ type GlanceSources struct {
 	Gear     func() (GlanceLight, bool)
 	Merc     func() (GlanceLight, bool)
 	Supplies func() (GlanceLight, bool)
-	Survival func() json.RawMessage            // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
-	Voice    func() string                     // the hero's latest voice line
-	Paused   func() (paused bool, text string) // a pause the player asked for (card B1)
+	Intake   func() (perMin float64, window int, ok bool) // observed life lost per minute (bot.Runner.Intake)
+	Survival func() json.RawMessage                       // the `survival` object of /api/survival, nil result: none yet (the feature flag is the binding)
+	Voice    func() string                                // the hero's latest voice line
+	Paused   func() (paused bool, text string)            // a pause the player asked for (card B1)
 	// Frozen: the game is stopped (the frozen Pause) and since when.
 	Frozen func() (since time.Time, on bool)
 	// Resetting is a Reset the player pressed that has not finished (docs/reset.md); the band says Resetting with the text.
@@ -229,6 +239,11 @@ func (h *Hub) Glance() GlanceView {
 	v.Sentence = glanceSentence(hv, up, src)
 	if src.Survival != nil {
 		v.Survival = h.glanceSurvival(&v.Sentence, hv, src.Survival())
+	}
+	if src.Intake != nil {
+		if pm, w, ok := src.Intake(); ok {
+			v.Intake = &GlanceIntake{LifeLostPerMin: float64(int(pm*10+0.5)) / 10, Window: w}
+		}
 	}
 	for _, n := range h.questionNeeds() { // a question that waits for the player comes first: it fades
 		if len(v.Needs) < glanceMaxNeed {

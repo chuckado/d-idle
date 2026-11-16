@@ -264,7 +264,7 @@ func TestFreezeResetThaws(t *testing.T) {
 	g, fc, _ := freezeRig(t, d2.Sorceress, 1, fz)
 	g.r.d.Cycler = fakeCycler{g.w}
 	g.r.PlayerPause(true)
-	v := g.r.PlayerReset(true)
+	v := g.r.PlayerReset(false)
 	if g.r.Frozen() || fc.frozen || v.State != ResetResetting {
 		t.Fatalf("frozen %v clock %v reset %+v", g.r.Frozen(), fc.frozen, v)
 	}

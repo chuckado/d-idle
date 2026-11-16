@@ -22,6 +22,7 @@ type BotTuning struct {
 	FarmReset            int // 1 = on
 	FarmResetPct         int // coverage percent from which a reset is considered
 	FarmResetCooldownMin int // least minutes between two farm resets
+	LootShadow           int // 1: the loot rules engine also judges every item decision and logs where it differs from today's code (docs/lootrules.md); log only, never acts
 
 	// Death policy (PLAN.md "Death is normal"; docs/bot.md "Death").
 	CorpseValueMin      int // estimated gold value of the lost gear below which the corpse is abandoned
@@ -132,7 +133,7 @@ type BotTuning struct {
 func DefaultBotTuning() BotTuning {
 	return BotTuning{
 		TickMs: 100, WatchMs: 50, ReactionMs: 0, ResupplyPotions: 2, InvFullPct: 85,
-		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5,
+		LevelMargin: 0, LeaveSlack: 0, CorpseRetries: 1, PortalSettleMs: 600, ClearRadius: 30, ExploredPct: 100, FarmReset: 0, FarmResetPct: 85, FarmResetCooldownMin: 5, LootShadow: 1,
 		CorpseValueMin: 1000, SpiralDeaths: 4, SpiralMinutes: 15, DangerBanMin: 20, StarterBanMin: 3, QuestBlockedFarmMin: 10, ParkAfter: 2, ParkMinutes: 15, RepeatSiteBanMin: 30, RepeatSiteEscalate: 1, RepeatSiteWindowMin: 30, RepeatSiteGapSec: 180, CorpseMinValue: 50, NavSkipSec: 150, AreaIdleSec: 60, StallWarnMin: 30, StallExitMin: 30, PauseDeathsPerHour: 8, PauseCapMin: 60, StalePackHostiles: 4, StalePackMinutes: 10, StalePackMinHP: 5, StalePackMinTier: 2, PotionBurstN: 5, PotionBurstSec: 20, PotionBurstHostiles: 3, PovertyTier: 0, GoldFloor: 2000,
 		PointsRetrySec: 30, GearCheckSec: 60, GearMinGold: 150, GearBudgetPct: 70, GearReserve: 100,
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
@@ -182,6 +183,8 @@ func botKnobs() []Knob {
 			Desc: "Share of a zone's roam coverage points that must be visited before the farm loop may reset it (bot.farmReset). Keep it at or above bot.exploredPct, which would end the clear first. A zone below this share is never reset."},
 		{Key: "bot.farmResetCooldownMin", Label: "Farm reset cooldown", Unit: "min", Default: 5, Min: 1, Max: 60, NoHandicap: true,
 			Desc: "Least minutes between two farm resets: a reset that did not pay cannot repeat at once."},
+		{Key: "bot.lootShadow", Label: "Loot rules shadow", Unit: "bool", Default: 1, Min: 0, Max: 1, HigherIsBetter: false, NoHandicap: true,
+			Desc: "1: the loot rules engine (docs/lootrules.md) judges every ground pickup, tidy and sell decision next to today's code and logs the differences as `loot shadow: ...` lines (read-only report at /api/lootrules/shadow). Log only: it never changes what the bot does. 0 turns it off."},
 		{Key: "bot.corpseValueMin", Label: "Corpse value threshold", Unit: "gold", Default: 1000, Min: 1, Max: 20000,
 			Desc: "Estimated value of the gear on the corpse below which it is abandoned. Higher abandons more."},
 		{Key: "bot.spiralDeaths", Label: "Spiral breaker deaths", Unit: "deaths", Default: 4, Min: 3, Max: 8,
