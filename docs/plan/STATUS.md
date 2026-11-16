@@ -230,6 +230,7 @@
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | survfix | in-progress | - | `docs/survival/ab-screen-analysis-2026-11-16.md`<br>`tools/survival/abreport`<br>`cmd/d2bot/survivalwire.go`<br>`internal/survival/survival_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/powerwire_test.go` | - |
 | pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
+| survfix2 | in-progress | - | `internal/survival`<br>`internal/combat/castfirst.go`<br>`internal/combat/fight.go`<br>`internal/combat/fightend.go`<br>`internal/combat/dodge.go`<br>`internal/bot/zonemodel.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zonemodel_test.go`<br>`internal/env/tuning_bot.go`<br>`cmd/d2bot/survivalwire.go`<br>`tools/ab/prep`<br>`tools/survival/abrun.sh`<br>`docs/survival/ab-harness.md`<br>`docs/survival/ledger.md`<br>`docs/knobs.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -272,6 +273,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 33dd65c36 11-16 15:16 `Merge agent/survfix2: Merge branch 'main' into TASK-562` (survfix2)
+- 702813fc7 11-16 15:15 `Merge branch 'main' into TASK-562` (-)
 - 35ba067f1 11-16 15:06 `Merge agent/seqbody: seqbody: seq-ias follow-up PR body per verifier` (seqbody)
 - 6f69cf4e3 11-16 15:05 `Merge branch 'main' into seqbody` (-)
 - 98ff27df5 11-16 14:38 `Merge agent/verifyseqfollow: Merge branch 'main' into TASK-559` (verifyseqfollow)
@@ -280,6 +283,4 @@
 - 1b01f90de 11-16 14:34 `Merge branch 'main' into decomp36` (-)
 - 51af5dec2 11-16 14:29 `Merge agent/survfix: Merge branch 'main' into survfix` (survfix)
 - 69cba35be 11-16 14:28 `Merge branch 'main' into survfix` (-)
-- e3aa9757d 11-16 14:20 `Merge agent/pausefix: Merge branch 'main' into pausefix` (pausefix)
-- 0882e97a3 11-16 14:20 `Merge branch 'main' into pausefix` (-)
 <!-- statusgen:end -->
