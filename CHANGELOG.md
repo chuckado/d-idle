@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-519 <!--sg:agent/verifyp17-->
 - Merge branch 'main' into TASK-521 <!--sg:agent/charselect-->
 - Merge branch 'main' into sandboxfresh <!--sg:agent/sandboxfresh-->
 - gamedata: private friends game-data bundle record (no URL) <!--sg:agent/gamedata-->

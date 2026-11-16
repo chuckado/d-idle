@@ -204,6 +204,7 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| verifyp17 | proposed | - | `docs/upstream/verifier-p17-2026-11-15.md` | - |
 | charselect | proposed | - | `internal/charsel`<br>`docs/charselect.md`<br>`internal/watch/charactersapi.go`<br>`internal/watch/charactersapi_test.go`<br>`internal/watch/testdata/characters`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -248,6 +249,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 6385d9b1a 11-15 21:41 `Merge agent/verifyp17: Merge branch 'main' into TASK-519` (verifyp17)
+- 5fca901bd 11-15 21:40 `Merge branch 'main' into TASK-519` (-)
 - d81e495e1 11-15 21:22 `Merge agent/charselect: Merge branch 'main' into TASK-521` (charselect)
 - 53f033e9a 11-15 21:21 `Merge branch 'main' into TASK-521` (-)
 - e3a036f54 11-15 21:11 `Merge agent/sandboxfresh: Merge branch 'main' into sandboxfresh` (sandboxfresh)
@@ -256,6 +259,4 @@
 - f1b698db8 11-15 20:32 `Merge agent/decomp33: decomp33: P17 and P18 ready for the verifier, P19 no PR; rows, card, merge lines` (decomp33)
 - 2cd4accc0 11-15 20:27 `Merge origin/main into agent/decomp33` (-)
 - 967e2e965 11-15 18:41 `Merge agent/cut013: friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published)` (cut013)
-- 96ae5b38b 11-15 14:37 `Merge agent/deploycockpit4: Merge branch 'main' into deploycockpit` (deploycockpit4)
-- 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
 <!-- statusgen:end -->
