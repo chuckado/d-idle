@@ -25,6 +25,7 @@ owns:
   - "cmd/d2bot/adapters.go"
 exclusive: []
 contracts: []
+result: "Diagnosed: lane off by default, 10 s player gap after every attempt (fixed), 4 s page poll, no feedback. UI: optimistic Identifying state, 200 ms poll while pending, 2 s highlight, refusal revert with reason, wait reason on the item, lost/failed toast, Cain progress, no-tome offer, Instant actions: on indicator. Backend: identify request implies keep (sell/tidy/stash skip it), lost requests reported, chore skip reasons logged. V offline (node c3.js, Go tests, Paladin and Sorceress). NOT verified live; coordinator sets invdesk.instant via tuning.json (docs/inventory-actions.md)."
 ---
 
 ## Description
