@@ -173,7 +173,7 @@ default-update-light watch?first=0&theme=light&needs=2&update=ready
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
-reset-header-light watch?first=0&theme=light&needs=2 #btn-reset #btn-reset
+reset-header-light watch?first=0&theme=light&needs=0 #btn-reset #btn-reset
 reset-pressed watch?first=0&theme=dark&needs=0&reset=resetting #btn-reset #btn-reset,#reset-progress
 reset-pressed-light watch?first=0&theme=light&needs=0&reset=rejoining #btn-reset #btn-reset,#reset-progress
 reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=reset-open] #reset-progress
