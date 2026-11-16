@@ -144,3 +144,38 @@ func TestCharactersDeskGates(t *testing.T) {
 		t.Errorf("%v", no)
 	}
 }
+
+func TestSwitcherRecordsActiveCharacterAndRollsBack(t *testing.T) {
+	w, dir := switchRig(t)
+	os.MkdirAll(filepath.Join(dir, "characters", "Zapp"), 0o755)
+	writeIntentFor(t, dir, charsel.Intent{From: "Holy", To: "Zapp", ClassIndex: -1})
+	if !w.apply() || charsel.ReadActive(dir) != "Zapp" {
+		t.Fatalf("active %q", charsel.ReadActive(dir))
+	}
+	// a bad target (path-like) is refused: nothing changes, the record keeps the old hero
+	writeIntentFor(t, dir, charsel.Intent{From: "Zapp", To: "../evil", ClassIndex: -1})
+	if w.apply() {
+		t.Fatal("bad target accepted")
+	}
+	if got := charsel.ReadActive(dir); got != "Zapp" {
+		t.Errorf("active after a refused switch %q", got)
+	}
+	if _, ok := charsel.ReadIntent(dir); ok {
+		t.Error("intent of a refused switch not cleared")
+	}
+	// no intent at all: exit 6 without a request restarts the old character
+	if w.apply() {
+		t.Error("apply without intent")
+	}
+}
+
+func TestActiveFileRejectsBadNames(t *testing.T) {
+	d := t.TempDir()
+	if charsel.WriteActive(d, "a/b") == nil || charsel.ReadActive(d) != "" {
+		t.Error("bad name recorded")
+	}
+	os.WriteFile(filepath.Join(d, charsel.ActiveFile), []byte("../x\n"), 0o600)
+	if charsel.ReadActive(d) != "" {
+		t.Error("bad file content accepted")
+	}
+}

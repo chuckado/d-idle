@@ -171,7 +171,19 @@ func (w *switcher) apply() bool {
 	}
 	defer charsel.ClearIntent(dir)
 	_, noGoals := os.Stat(filepath.Join(dir, "characters", in.To, "goals.json"))
+	// the active-char file goes first and is put back when the swap fails, so a container restart never loads a hero
+	// whose state was not swapped in
+	prev := charsel.ReadActive(dir)
+	if err := charsel.WriteActive(dir, in.To); err != nil {
+		w.log.Error("supervise: cannot record the active character, staying on the old one", "to", in.To, "err", err)
+		return false
+	}
 	if err := charsel.SwapState(dir, in.From, in.To); err != nil {
+		if prev != "" {
+			_ = charsel.WriteActive(dir, prev)
+		} else {
+			_ = os.Remove(filepath.Join(dir, charsel.ActiveFile))
+		}
 		w.log.Error("supervise: character switch failed, staying on the old character", "from", in.From, "to", in.To, "err", err)
 		return false
 	}
