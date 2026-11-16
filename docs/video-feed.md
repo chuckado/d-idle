@@ -2,10 +2,12 @@
 
 Tags: V = verified (read in source or run, how is said), S = secondary (read in docs), U = unverified.
 Numbers: `docs/probes/video-feed-2026-11-15.md` (real d2d frames, section 5 below); this page is the design and the status.
-User go 2026-11-15: design and prototype a better feed than ffmpeg x11grab / the container tap. NOT deployed, nothing wired
-into a page or a server: `internal/watch/palfeed` (codec, hub, handlers) and `internal/watch/web/palfeed.js` (player) are
-additive and unused until a host mounts them; knob name reserved: `watch.paletteFeed` (default off, not registered: the
-knob registry is not this card's).
+> status: mounted behind the knob `watch.paletteFeed` (default OFF) by card videofeed2 (2026-11-16); not deployed. Sections
+> 9 and 10 below are the current state; the bandwidth verdict is in docs/probes/video-feed-2026-11-15.md (walking-heavy
+> recording).
+
+User go 2026-11-15: design and prototype a better feed than ffmpeg x11grab / the container tap. User go 2026-11-15 "keep
+working till everything is fully implemented": videofeed2 mounts it (section 9). Nothing is deployed.
 
 ## 1. The frame source: what d2d really holds (the premise needs a correction)
 
@@ -131,7 +133,14 @@ so a hostile or broken stream cannot make the page allocate unboundedly. The rin
 
 ## 7. Friends pack impact
 
-None until wired. When wired: no new binary, no new dependency, no new port; `cmd/d2dview` and the watch viewer grow by
+PLAINLY: the friends image (pin `lab3-labverbs` f75816c6, `deploy/d2d-container/context.sh`) does NOT have the `framefeed`
+verb (V: the probe recorded with that exact build had to use `screenshot` PNGs), so with the current friends image the feed
+cannot run: `D2_PALETTE_FEED=1` there logs "needs -feed" or finds no ring and the page keeps MJPEG. A friends release needs
+a newer d2d pin that contains the lineage of fork commit 80cc7adc (framefeed + nocursor) AND the user's go to move the pin;
+then `D2_VIEW_FLAGS="-fps 25 -feed /dev/shm/d2dview/frames.ring"` (+ `shm_size: 128m`) and `D2_PALETTE_FEED=1` in `.env` turn it on
+(docs/friend-guide.md).
+
+(Written before the mount) None until wired. When wired: no new binary, no new dependency, no new port; `cmd/d2dview` and the watch viewer grow by
 the package (about 400 lines of Go) and one 200-line JS file in the embedded web tree; the d2d image is unchanged (it
 already carries `framefeed`, the pinned container ref predates it: the friends container needs the `d2d.lab3-framefeed`
 build that the sandbox runs, or the feed falls back to MJPEG from screenshots, which cannot feed this codec at full rate).
@@ -143,6 +152,67 @@ Prototyped (V, tests): codec both ways, hub, stream and capability handlers, aut
 byte-compatible with Go (shared fixtures), splitter, fit, detect, player draw pacing; replay and measurement tooling
 (`tools/videofeed/run.sh`). Only designed: mounting in d2dview and the watch viewer, ring-client counting, per-write
 deadline, the `watch.paletteFeed` knob and page switch, indexed payload.
+(Done by videofeed2: item (1) below and the client polish; see section 9. The A/B, item (2), is section 10.)
 Next: (1) wire behind the flag in d2dview + `watch.Video` relay (one card, `cmd/d2dview` and `internal/watch` owners);
 (2) sandbox A/B against MJPEG with the coordinator's `ab.sh`: fps, d2dview CPU, bytes, bot pace; (3) a real-browser pass on
 the user's devices (dpr 1 to 3).
+
+## 9. Mounted (card videofeed2, 2026-11-16; offline tests only, nothing deployed)
+
+Turn it on (default OFF, nothing changes without it): the environment switch `D2_PALETTE_FEED=1` (friends pack: a line in
+`.env`, passed through `tools/friendpack/compose.yml`) or the knob `watch.paletteFeed` = 1 (docs/knobs.md; `env.PaletteFeedOn`
+is the one rule: `D2_PALETTE_FEED=0` forces off, `1` forces on, else the knob). d2dview also has `-palette-feed` (default from that
+rule). It needs the framefeed ring (`-feed ...`, `-fps > 0`): without it d2dview logs one line and the feed stays off.
+
+- d2dview: `Frames.Pal` receives every ring frame (`palfeed.Hub.Publish`); `/stream.pfeed` and `/api/palfeed` are mounted next
+  to `/stream.mjpg` behind the same token middleware (`server.auth`); `Frames.TouchPal` (the hub's `Options.Touch`, called on
+  connect, on a probe and about once a second) keeps the ring lease and the sampler alive, so the feed alone drives d2d's
+  ring. The JPEG is encoded only while an MJPEG viewer touched the frames in the last 5 s (`jpegWanted`): a canvas-only
+  viewer saves the 8 ms encode.
+- Watch screen: `Hub.SetPalFeed` (internal/watch/palfeed.go) makes `/api/config` carry `palFeedUrl` and `/api/glance` list
+  `stream.formats` = `["mjpeg","palfeed"]` (absent feed: no `formats`, the page stays MJPEG). In d2dview the routes are
+  mounted by d2dview itself; for the d2bot watch viewer `watch.PalFeedRelay(tapURL, token)` is a reverse proxy to the tap
+  (bytes copied, not decoded; the viewer's token and cookie are NOT forwarded, the tap gets its own bearer, only `fps` passes), wired in
+  `cmd/d2bot/ladder.go` (`palFeed`) when `--watch-video-source tap` and the switch is on.
+- Page (`web/panels/video/panel.js`): asks `/api/glance` `stream.formats`; with `palfeed` listed it loads `palfeed.js`, probes
+  `/api/palfeed` (503 until the first frame, so up to 5 tries a second apart; the probe itself wakes the ring) and then
+  uses a `<canvas>` player; the controller (backoff, 3 s stall watchdog, hidden-tab pause, Retry, the fps and KB/s stat,
+  Low rate which adds `fps=8` to the feed's URL too) is the same one MJPEG uses. A fatal stream error (bad header,
+  short payload), 3 failures in a row with no frame between, a browser without `DecompressionStream` or `ImageData`, or a
+  glance without `palfeed` all leave or return to MJPEG, logged with `console.info` only (no toast). A need-key error (a
+  delta without its base) is an ordinary failure: reconnect = key frame.
+- Client polish: integer device-pixel scaling with `devicePixelRatio` (`PalFeed.fit`, applied by a `ResizeObserver`;
+  without it the CSS `object-fit: contain` fits), `image-rendering: pixelated`, one draw per `requestAnimationFrame` with the
+  union of the dirty rectangles (latest frame wins), one `ImageData` per decoder buffer so a delta stays a dirty rectangle,
+  `desynchronized: true` context. Rejoin after a hiccup = reconnect = key frame. `putImageData` was kept over a WebGL texture
+  upload (probe doc: 0.2 ms against 0.4 ms for a full frame in software GL; Firefox not measured, U).
+- Server guard (`palfeed.Options`): per client `MaxBytesPerSec` 2 MiB/s (after a message of n bytes the next waits n/cap, so
+  a heavy stretch lowers that client's rate and the next delta is built from the newest frame), key-sized messages
+  (`BigMsg` 200 KB) are followed by at least `BigGap` 400 ms (a panel flickering open and shut cannot send 700 KB 25 times a
+  second), a per-write deadline (`WriteTimeout` 10 s) drops a client that stopped reading, a heartbeat (an empty delta of a few
+  dozen bytes) after 1 s without a new frame keeps the page's stall watchdog quiet in a paused game.
+  `Hub.Stats()` has the counters (messages, bytes, big messages, guard pauses); not yet on `/api/glance` (U).
+- Not built: a hybrid JPEG fallback per frame (it makes things worse, probe doc), the indexed payload, a WebSocket.
+
+## 10. Live A/B checklist for the sandbox (NOT run; do not deploy from this card)
+
+Prerequisites: a sandbox d2d with the `framefeed` verb (fork 80cc7adc, already there) and d2dview with `-fps 25 -feed
+/dev/shm/d2dview/frames.ring` (docs/viewer-fps.md section 6). Friends images do not qualify (section 7).
+
+1. Baseline (switch off): note `/api/glance` `stream` (fpsOut, kBps, viewers), d2dview CPU (`top` on the container) and the
+   page's card head with `?debug` for 2 min while the hero walks and 2 min while it fights. Screenshot the card.
+2. `D2_PALETTE_FEED=1` on d2dview (restart the tap only), reload the page: expect d2dview's log line
+   `lossless picture feed on /stream.pfeed`, `GET /api/glance` `stream.formats` = `["mjpeg","palfeed"]`, the card
+   showing a canvas (devtools: `canvas.shot`), `console.info` quiet. Check `kBps` in the card head against the baseline
+   (expect 0.4 to 0.8 MB/s walking, 0.15 to 0.25 standing) and the fps (expect 25 or the ring's rate).
+3. d2dview CPU while one canvas viewer only (expect lower than baseline: no JPEG), then with an MJPEG viewer added
+   (`curl -N .../stream.mjpg?t=...`): both work, CPU about the baseline plus the feed's 0.5 ms a frame.
+4. Bot pace: compare ticks per wall second and kills per hour of the same 10 min window on and off (expect no change; the
+   encoder is in d2dview, d2d does one memcpy as before).
+5. Fault checks: `curl -N /stream.pfeed?t=...` without a token gives 401; kill d2d (the page stalls, then reconnects with a
+   key frame); stop reading (a paused tab): the server drops the client after the write deadline and the lease runs out.
+6. Panel open and close ten times in a minute: the feed's bytes stay under about 2 MiB/s per client (the guard), no tear.
+7. Devices: dpr 1 desktop, dpr 2 laptop, a phone: the canvas is sharp (no blur at 100 percent zoom), Low rate works on
+   the canvas, the card falls back to MJPEG with a blocked `DecompressionStream` (devtools override) and stays up. Waterfox.
+8. Verdict: keep the switch off (default), or ask the user to turn it on for the sandbox. Record the numbers in
+   docs/probes/video-feed-<date>.md.

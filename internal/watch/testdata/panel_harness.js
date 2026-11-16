@@ -4,7 +4,7 @@ const fs = require('fs'), vm = require('vm');
 function mk(tag) {
   const listeners = {}, attrs = {};
   const e = {
-    tag, hidden: false, dataset: {}, children: [], textContent: '', width: 0, height: 0, clientWidth: 320,
+    tag, hidden: false, dataset: {}, style: { setProperty(k, v) { this[k] = v; } }, children: [], textContent: '', width: 0, height: 0, clientWidth: 320,
     setAttribute(k, v) { attrs[k] = String(v); }, getAttribute(k) { return attrs[k]; }, removeAttribute(k) { delete attrs[k]; }, attrs,
     addEventListener(t, f) { (listeners[t] = listeners[t] || []).push(f); },
     fire(t, ev) { (listeners[t] || []).forEach((f) => f(Object.assign({ preventDefault() {}, clientX: 0, clientY: 0, pointerId: 1 }, ev))); },

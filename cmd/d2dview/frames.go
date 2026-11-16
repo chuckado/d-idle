@@ -15,6 +15,7 @@ import (
 	"time"
 
 	"d2lod-bot/internal/d2dctl"
+	"d2lod-bot/internal/watch/palfeed"
 )
 
 // Frame is one sampled picture of the d2d window.
@@ -56,13 +57,17 @@ type Frames struct {
 	// rests mid-screen; docs/viewer-fps.md section 8). A d2d without the verb is left alone, silently.
 	HideCursor bool
 	Stats      *frameStats
+	// Pal, when set, also receives every ring frame (the lossless tile-delta feed, docs/video-feed.md). Its clients keep
+	// the sampler awake through TouchPal; the JPEG is encoded only while an MJPEG viewer is there too.
+	Pal *palfeed.Hub
 
-	mu   sync.RWMutex
-	cur  Frame
-	seen int64 // wall unix nanos of the last Touch
-	last int64 // mux ticks at the previous frame
-	Dur  time.Duration
-	Got  int64
+	mu      sync.RWMutex
+	palSeen int64 // wall unix nanos of the last TouchPal
+	cur     Frame
+	seen    int64 // wall unix nanos of the last Touch
+	last    int64 // mux ticks at the previous frame
+	Dur     time.Duration
+	Got     int64
 
 	// sampler goroutine only
 	enc       bytes.Buffer
@@ -103,7 +108,17 @@ func (f *Frames) Touch() { f.mu.Lock(); f.seen = time.Now().UnixNano(); f.mu.Unl
 func (f *Frames) watching() bool {
 	f.mu.RLock()
 	defer f.mu.RUnlock()
-	return time.Since(time.Unix(0, f.seen)) < 5*time.Second
+	return time.Since(time.Unix(0, f.seen)) < 5*time.Second || time.Since(time.Unix(0, f.palSeen)) < 5*time.Second
+}
+
+// TouchPal is the lossless feed's Touch: its clients keep the ring lease and the sampler alive.
+func (f *Frames) TouchPal() { f.mu.Lock(); f.palSeen = time.Now().UnixNano(); f.mu.Unlock() }
+
+// jpegWanted is false while only the lossless feed has viewers: the JPEG encode (8 ms a frame) is skipped.
+func (f *Frames) jpegWanted() bool {
+	f.mu.RLock()
+	defer f.mu.RUnlock()
+	return f.Pal == nil || time.Since(time.Unix(0, f.seen)) < 5*time.Second
 }
 
 func (f *Frames) Current() Frame { f.mu.RLock(); defer f.mu.RUnlock(); return f.cur }
@@ -278,6 +293,13 @@ func (f *Frames) grabRing() (cost time.Duration, fresh bool, err error) {
 	}
 	f.ringSeq, f.ringMS, f.ringAt = h.Seq, h.GameMS, time.Now()
 	read := time.Since(t0)
+	if f.Pal != nil {
+		f.Pal.Publish(palfeed.Frame{W: h.W, H: h.H, Pix: pix, Seq: uint32(h.Seq), GameMS: uint32(h.GameMS)}, h.Stride)
+	}
+	if !f.jpegWanted() {
+		f.Stats.add("framefeed-pal", read, 0, 0, h.W, h.H)
+		return time.Since(t0), true, nil
+	}
 	img := &image.RGBA{Pix: pix, Stride: h.Stride, Rect: image.Rect(0, 0, h.W, h.H)}
 	data, err := encodeJPEG(&f.enc, img, f.Half, f.Quality)
 	if err != nil {
