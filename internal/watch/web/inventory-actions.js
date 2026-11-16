@@ -407,7 +407,7 @@
     errInstantEl.textContent = ins && ins.enabled ? 'Instant actions: on' + (ins.why ? ' (closed now: ' + ins.why + ')' : '') : '';
     if (!id) return;
     // "Identify all" shows read-back progress: the unidentified count the view reports, never a guess
-    var cainReq = (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && (r.state === 'queued' || r.state === 'doing'); });
+    var cainReq = id.cain !== 'locked' && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && (r.state === 'queued' || r.state === 'doing'); });
     if (cainReq && cainStart < 0) cainStart = id.unid;
     if (!cainReq) cainStart = -1;
     var prog = cainReq ? (cainReq && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && r.state === 'doing'; })
