@@ -92,3 +92,6 @@ loop touching nothing, stall/stuck on a standing-still and a running clock, the 
 7. Pause, queue an order: it is accepted and starts only after Resume.
 8. Restart the bot while frozen (managed d2d): the new process starts a fresh d2d, not frozen. Attach mode (bot restarts, d2d lives on): U, the new bot reads `lockstep=1` and treats it as a lab run: run `lockstep off` by hand.
 9. Friends build: repeat 1; if no button appears check `d2dprobe raw 'lockstep off'` for `unknown verb`.
+
+### Fix 2026-11-16: "could not do that" after a successful freeze (card pausefix)
+Root cause (V by test `TestCommandsPauseReplyCarriesOK` failing before the fix): the Orders Pause verb posts to `/api/commands`, which relays `POST /api/pause`; that reply was the bare view without the `ok` flag every command route sends, and the Orders panel treats a reply without `ok` as a refusal and showed its generic line. Now every `POST /api/pause` reply carries `ok` (false with `code: pause_refused` and the reason in `error` when the desk refused), the Orders panel accepts a `watch.pause/1` view, and `pauseui.js` judges an odd answer by reading `GET /api/pause` back. A double press and Resume are idempotent (tested).

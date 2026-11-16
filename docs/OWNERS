@@ -333,8 +333,6 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
-docs/probes/survival-ab-screen-2026-11-16.md  credit-runner  survabscreen
-docs/probes/test-characters.md  credit-runner  survabscreen
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
@@ -364,6 +362,7 @@ docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
 docs/research/decomp34-fallen-flee.md  credit-runner  decomp34
+docs/research/decomp35-combat.md  credit-runner  decomp35
 docs/research/design-brief-v1.md  credit-runner  designbrief
 docs/research/earlydeath13.md  pro-runner  earlydeath13
 docs/research/emu-reverify-2026-11-14.md  credit-runner  emurebuild
@@ -422,6 +421,7 @@ docs/upstream/  credit-runner  prpost3
 docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/  credit-runner  decomp34
+docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
@@ -845,8 +845,10 @@ internal/watch/palfeed  credit-runner  videofeed2
 internal/watch/palfeed.go  credit-runner  videofeed2
 internal/watch/palfeed_test.go  credit-runner  videofeed2
 internal/watch/panels.go  credit-runner  uis6
+internal/watch/pauseapi.go  credit-runner  pausefix
 internal/watch/pauseapi.go  credit-runner  uib1
 internal/watch/pauseapi_test.go  credit-runner  uib1
+internal/watch/pausefix_test.go  credit-runner  pausefix
 internal/watch/repairapi.go  credit-runner  repairtrip
 internal/watch/repairapi_test.go  credit-runner  repairtrip
 internal/watch/resetapi.go  credit-runner  botreset
@@ -1024,6 +1026,7 @@ internal/watch/web/panels/onboarding  credit-runner  friendfb
 internal/watch/web/panels/onboarding  credit-runner  reconnectux
 internal/watch/web/panels/orders/  credit-runner  uifix1
 internal/watch/web/panels/orders/  credit-runner  uis4
+internal/watch/web/panels/orders/panel.js  credit-runner  pausefix
 internal/watch/web/panels/progress/  credit-runner  uis3
 internal/watch/web/panels/statusline/  credit-runner  uifix1
 internal/watch/web/panels/video  credit-runner  videofeed2
@@ -1031,6 +1034,7 @@ internal/watch/web/panels/video  credit-runner  viewerfps
 internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
+internal/watch/web/pauseui.js  credit-runner  pausefix
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
@@ -1076,6 +1080,7 @@ tools/emu/am_env.sh  credit-runner  areamon
 tools/emu/am_model.py  credit-runner  areamon
 tools/emu/bs_model.py  credit-runner  boss1
 tools/emu/bs_spawn.sh  credit-runner  boss1
+tools/emu/d35_  credit-runner  decomp35
 tools/emu/dc22_dis.py  credit-runner  decomp22
 tools/emu/dc28_  pro-runner  decomp28
 tools/emu/dc34_cmp.py  credit-runner  decomp34

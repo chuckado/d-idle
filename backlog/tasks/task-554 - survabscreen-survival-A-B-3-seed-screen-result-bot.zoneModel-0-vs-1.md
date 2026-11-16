@@ -1,10 +1,11 @@
 ---
 id: TASK-554
 title: 'survabscreen: survival A/B 3-seed screen result (bot.zoneModel 0 vs 1)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T17:38:00Z'
+updated_date: '2026-11-16T19:00:00Z'
 labels:
   - bot
   - d2d-measure
