@@ -244,7 +244,7 @@
   // _tick runs on an animation frame: decode what is due, in order, draw once. A decode error ends the stream like a fetch error.
   Player.prototype._tick = function (ts) {
     if (this.stopped) return;
-    var q = this.q, applied = 0, newest = null;
+    var q = this.q, applied = 0, shown = 0, newest = null;
     if (ts === undefined) ts = this.now();
     var w0 = this.now();
     // the head may only be applied when its payload is inflated; later ones wait behind it (strict order)
@@ -258,15 +258,14 @@
         if (this.dec.needsKey(e.h)) throw Object.assign(new Error('need key'), { needKey: true });
         var d = this.dec.apply(e.h, e.raw);
         this.decoded++; applied++; newest = e;
-        if (d) this.pending = this.pending ? union(this.pending, d) : d;
+        if (d) { this.pending = this.pending ? union(this.pending, d) : d; shown++; }
       } catch (err) { this._fail(err); return; }
     }
     if (applied) {
       this.frames += applied;
       this.failures = 0;
       if (this.o.onFrame) this.o.onFrame();
-      if (this.pending) { this._draw(ts, applied, newest); }
-      else this.dropped += applied;   // unchanged picture (heartbeat): nothing to show
+      if (this.pending) this._draw(ts, shown, newest);   // an empty delta (a heartbeat) changes nothing: it is not a dropped picture
     }
     this.work += (this.now() - w0 - this.work) * 0.05;
     if (q.length) this._kick();   // more to present later; an idle player sleeps until the next message
@@ -289,7 +288,7 @@
     if (!img) { img = new ImageData(d.pix, d.w, d.h); imgs.push(img); if (imgs.length > 4) imgs.shift(); }
     this.ctx.putImageData(img, 0, 0, p.x, p.y, p.w, p.h);
     this.drawn++;
-    this.dropped += applied - 1;
+    this.dropped += Math.max(0, applied - 1);
     this.lat += ((ts - newest.at) - this.lat) * 0.1;
     if (this.lastDraw >= 0) { this.ivs.push(ts - this.lastDraw); if (this.ivs.length > 120) this.ivs.shift(); }
     this.lastDraw = ts;
