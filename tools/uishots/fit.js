@@ -39,6 +39,7 @@ export function measure(win, opts) {
   }
   // The character screen (card uic4, review c2c3 R14): checks the first fit check let through. Only on a page that has the canvas frame.
   const cvx = d.body.hasAttribute('data-canvas') ? charChecks(win, d, vis, cs) : null;
+  const chx = d.body.hasAttribute('data-chars') ? charsPage(win, d, vis, cs) : null; // the Characters page (docs/charselect-ui.md)
   // boxes that end outside the window: a frame taller or wider than the viewport that something clips
   const out = [];
   for (const n of d.querySelectorAll('[data-cockpit-slot], [data-cockpit-panel]')) {
@@ -97,7 +98,7 @@ export function measure(win, opts) {
     return t && vis(t) && t.scrollWidth > t.clientWidth + 1 && re && re.clientWidth > 0;
   }).length;
   return {
-    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, empty, unready, slots,
+    orderCut, zones, vw, vh, scrollH: se.scrollHeight, scrollW: se.scrollWidth, overflow: over, outside: out, cv: cvx, chars: chx, empty, unready, slots,
     covered: Math.round((covered * 100) / (cols * rows)), hole: best * cs2, holeAt: [(bx - best + 1) * cs2, (by - best + 1) * cs2],
   };
 }
@@ -272,4 +273,94 @@ export function expects(win, selectors) {
     out[sel] = !!r && r.width > 0 && r.height > 0;
   }
   return out;
+}
+
+// The Characters page (docs/charselect-ui.md, brief J-second-attempt.md): what the cockpit checks cannot see on a page that is one header and one
+// list that scrolls inside the window. Lists, each naming what a person would see:
+//  clipped:  text cut by its own box (an ellipsis or overflow), or sticking out of the card, row, sheet or bar that holds it
+//  small:    a control under 44 px high
+//  covered:  a control with something else at its centre (the header over the list, a sheet over a button)
+//  outside:  a header, list, card or sheet that ends outside the window
+//  under:    the list starting under the header
+//  sheet:    an open sheet that scrolls or is cut (its buttons may be out of reach)
+//  hole:     the largest empty square inside the list, above the end of its content (what follows the last card is the end of a list, not a gap)
+function charsPage(win, d, vis, cs) {
+  const vw = win.innerWidth, vh = win.innerHeight;
+  const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', hole: 0, holeAt: [0, 0], cards: 0, loading: false, open: false };
+  const nm = (n) => n.tagName.toLowerCase() + (typeof n.className === 'string' && n.className ? '.' + n.className.trim().split(/\s+/)[0] : '') + ' "' + (n.textContent || '').trim().slice(0, 16) + '"';
+  const root = d.getElementById('cs-root'), main = d.getElementById('cs-main'), head = root && root.querySelector('.cs-head');
+  if (!root || !main || !head) { o.clipped.push('the page has no header or list'); return o; }
+  const sheet = d.getElementById('cs-sheet'), open = !!sheet && !sheet.hidden && !!vis(sheet);
+  o.open = open;
+  o.cards = d.querySelectorAll('.cs-card').length;
+  o.loading = [...d.querySelectorAll('.cs-state p')].some((p) => /^Loading/.test(p.textContent));
+  const live = (n) => vis(n) && !n.closest('[hidden]');
+  const box = 'cs-card,.cs-delrow,.cs-state,.cs-sheet-card,.cs-note,.cs-strip,.cs-head';
+  for (const n of root.querySelectorAll('*')) {
+    if (!live(n) || !([...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim()))) continue;
+    if (n.clientWidth && (n.scrollWidth > n.clientWidth + 1 || (/^(hidden|clip|auto|scroll)$/.test(cs(n).overflowY) && n.scrollHeight > n.clientHeight + 1))) { o.clipped.push(nm(n) + ' [' + n.scrollWidth + '/' + n.clientWidth + ' ' + n.scrollHeight + '/' + n.clientHeight + ']'); continue; }
+    const c = n.closest('.' + box);
+    if (!c) continue;
+    const rg = d.createRange();
+    rg.selectNodeContents(n);
+    const r = rg.getBoundingClientRect(), cr = c.getBoundingClientRect();
+    if (r.width && (r.right > cr.right + 1 || r.left < cr.left - 1)) o.clipped.push(nm(n) + ' sticks out of ' + (typeof c.className === 'string' ? c.className.split(/\s+/)[0] : 'its box'));
+  }
+  const ctl = [...root.querySelectorAll('button, a.d-btn, input:not([type=radio]), label.cs-chipbtn')].filter(live);
+  for (const n of ctl) { const r = n.getBoundingClientRect(); if (r.height < 43.5) o.small.push(nm(n) + ' is ' + Math.round(r.height) + ' px high'); }
+  const mr = main.getBoundingClientRect(), hr = head.getBoundingClientRect();
+  if (mr.top < hr.bottom - 1) o.under = 'the list starts at ' + Math.round(mr.top) + ' px, under the header that ends at ' + Math.round(hr.bottom);
+  for (const n of ctl) {
+    const r = n.getBoundingClientRect(), inSheet = !!n.closest('#cs-sheet'), inMain = main.contains(n);
+    if (open !== inSheet) continue; // an open sheet: only its own controls; behind the scrim is by design
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    if (cx < 0 || cy < 0 || cx > vw || cy > vh || (inMain && (cy < mr.top || cy > mr.bottom))) continue; // scrolled out of the list: a thumb scrolls to it
+    const at = d.elementFromPoint(cx, cy);
+    if (!at || !(at === n || n.contains(at) || at.contains(n))) o.covered.push(nm(n));
+  }
+  for (const n of root.querySelectorAll('.cs-head, .cs-main, .cs-strip, .cs-card, .cs-delrow, .cs-sheet-card')) {
+    if (!live(n)) continue;
+    const r = n.getBoundingClientRect(), tall = n.matches('.cs-head, .cs-main, .cs-sheet-card');
+    if (r.right > vw + 1 || r.left < -1 || (tall && (r.bottom > vh + 1 || r.top < -1))) o.outside.push(nm(n) + ' right ' + Math.round(r.right) + ' bottom ' + Math.round(r.bottom));
+  }
+  const card = d.querySelector('.cs-sheet-card');
+  if (open && card && (card.scrollHeight > card.clientHeight + 1)) o.sheet = 'the sheet scrolls or is cut [' + card.scrollHeight + '/' + card.clientHeight + ']';
+  if (!open) {
+    const cell = 4, cols = Math.ceil(mr.width / cell);
+    let bottom = mr.top;
+    for (const n of main.querySelectorAll('.cs-card, .cs-delrow, .cs-state, .cs-sec > *')) { const r = vis(n); if (r && !n.closest('[hidden]')) bottom = Math.max(bottom, r.bottom); }
+    bottom = Math.min(bottom, mr.bottom, vh);
+    const rows = Math.max(0, Math.ceil((bottom - mr.top) / cell)), cov = new Uint8Array(Math.max(1, cols * rows));
+    const mark = (r) => {
+      for (let y = Math.max(0, Math.floor((r.top - mr.top) / cell)); y < Math.min(rows, Math.ceil((r.bottom - mr.top) / cell)); y++) {
+        for (let x = Math.max(0, Math.floor((r.left - mr.left) / cell)); x < Math.min(cols, Math.ceil((r.right - mr.left) / cell)); x++) cov[y * cols + x] = 1;
+      }
+    };
+    for (const n of main.querySelectorAll('.cs-delrow, .cs-state, h2, button, a.d-btn, .cs-chip, .cs-mark, .cs-badge')) { const r = vis(n); if (r && !n.closest('[hidden]')) mark(r); }
+    for (const n of main.querySelectorAll('.cs-card')) { // a card's own padding is its border, not a gap; what it holds is painted by the parts above and the words below
+      const r = vis(n);
+      if (!r) continue;
+      mark({ left: r.left, right: r.right, top: r.top, bottom: r.top + 12 }); mark({ left: r.left, right: r.right, top: r.bottom - 12, bottom: r.bottom });
+      mark({ left: r.left, right: r.left + 12, top: r.top, bottom: r.bottom }); mark({ left: r.right - 12, right: r.right, top: r.top, bottom: r.bottom });
+    }
+    const walker = d.createTreeWalker(main, 4);
+    for (let t = walker.nextNode(); t; t = walker.nextNode()) {
+      if (!(t.nodeValue || '').trim() || (t.parentNode.closest && t.parentNode.closest('[hidden]'))) continue;
+      const rg = d.createRange(); rg.selectNodeContents(t);
+      for (const r of rg.getClientRects()) if (r.width > 0 && r.height > 0) mark(r);
+    }
+    let best = 0, bx = 0, by = 0, prev = new Int16Array(cols + 1), cur = new Int16Array(cols + 1);
+    for (let y = 0; y < rows; y++) {
+      cur.fill(0);
+      for (let x = 0; x < cols; x++) {
+        if (cov[y * cols + x]) continue;
+        const sq = Math.min(prev[x], prev[x + 1], cur[x]) + 1;
+        cur[x + 1] = sq;
+        if (sq > best) { best = sq; bx = x; by = y; }
+      }
+      [prev, cur] = [cur, prev];
+    }
+    o.hole = best * cell; o.holeAt = [Math.round(mr.left + (bx - best + 1) * cell), Math.round(mr.top + (by - best + 1) * cell)];
+  }
+  return o;
 }

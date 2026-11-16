@@ -221,6 +221,32 @@ overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
 overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
+chars-1 watch/characters?theme=dark&chars=1
+chars-1-light watch/characters?theme=light&chars=1
+chars-3 watch/characters?theme=dark&chars=3
+chars-3-light watch/characters?theme=light&chars=3
+chars-8 watch/characters?theme=dark&chars=8
+chars-8-light watch/characters?theme=light&chars=8
+chars-long watch/characters?theme=dark&chars=long
+chars-long-light watch/characters?theme=light&chars=long
+chars-deleted watch/characters?theme=dark&chars=deleted
+chars-deleted-light watch/characters?theme=light&chars=deleted
+chars-switching watch/characters?theme=dark&chars=switching
+chars-switching-light watch/characters?theme=light&chars=creating
+chars-measured watch/characters?theme=dark&chars=measured
+chars-empty watch/characters?theme=dark&chars=empty
+chars-off watch/characters?theme=dark&chars=off
+chars-off-light watch/characters?theme=light&chars=off
+chars-nosave watch/characters?theme=dark&chars=nosave
+chars-new watch/characters?theme=dark&chars=3 [data-key=new-top] #cs-sheet,#cs-name,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-new-light watch/characters?theme=light&chars=8 [data-key=new-top] #cs-sheet,#cs-name,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-switch-sheet watch/characters?theme=dark&chars=3 [data-key=switch-Zapp] #cs-sheet,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete watch/characters?theme=dark&chars=8 [data-key=delete-Zapp] #cs-sheet,#cs-typed,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete-light watch/characters?theme=light&chars=long [data-key=delete-Zzzzzzzzzzzzzzz] #cs-sheet,#cs-typed,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-delete-active watch/characters?theme=dark&chars=3 [data-key=delete-Holy] #cs-sheet,[data-key=sheet-cancel]
+chars-restore watch/characters?theme=dark&chars=deleted .cs-delrow_.d-btn #cs-sheet,[data-key=sheet-go],[data-key=sheet-cancel]
+chars-menu-entry watch?first=0&theme=dark&needs=0 #btn-more [data-key=characters-open]
+chars-more-entry watch?first=0&theme=dark&needs=0 [data-key=verb-more] [data-key=more-characters]
 character watch/inventory?theme=dark
 character-light watch/inventory?theme=light
 character-tip-stash watch/inventory?theme=dark hover=[data-key=item-31]
@@ -253,7 +279,14 @@ phonedefect-acts watch/inventory?theme=dark&fx=phone&tab=pack&sheet=1&defect=act
 phonedefect-cutchips watch/inventory?theme=dark&fx=phone&tab=pack&defect=cutchips
 phonedefect-lock watch/inventory?theme=dark&fx=phone&tab=pack&defect=lock
 phonedefect-hover watch/inventory?theme=dark&fx=phone&tab=pack&defect=hover
-phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
+phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow
+charsdefect-clip watch/characters?theme=dark&chars=long&defect=chars-clip
+charsdefect-wide watch/characters?theme=dark&chars=3&defect=chars-wide
+charsdefect-under watch/characters?theme=dark&chars=3&defect=chars-under
+charsdefect-small watch/characters?theme=dark&chars=3&defect=chars-small
+charsdefect-hole watch/characters?theme=dark&chars=1&defect=chars-hole
+charsdefect-sheet watch/characters?theme=dark&chars=3&defect=chars-sheet [data-key=delete-Zapp] #cs-sheet,[data-key=sheet-go]
+charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered"
 	# in a click or hit selector "_" stands for a space and a leading "?" makes a step optional (no switch on a wide rail);
 	# a third column hover=SEL or ctx=SEL hovers or right-clicks that cell before the measurement (the tooltip, the menu)
 	echo "$pages" | while read -r pname pq pclick phit; do
@@ -263,6 +296,8 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		reset-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
+		charsdefect-*) szs="1280x620 412x780 360x640" ;;
+		chars-*) szs="$sizes 412x780 360x640" ;;
 		character-phone*) szs="$phonesizes" ;;
 		esac
 		for sz in $szs; do

@@ -138,6 +138,14 @@ var defectCSS = map[string]string{
 	"lock":     `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
 	"hover":    `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
 	"narrow":   `.cv #pack, .cv #stash { --u: 20px !important; }`,
+	// the Characters page (fixtures_chars.go)
+	"chars-clip":    `.cs-name { overflow: hidden !important; white-space: nowrap !important; max-inline-size: 3ch !important; text-overflow: ellipsis !important; }`,
+	"chars-wide":    `.cs-card { min-inline-size: 130vw !important; }`,
+	"chars-under":   `.cs-main { position: fixed !important; inset: 0 !important; }`,
+	"chars-small":   `.cs-card .d-btn { min-block-size: 28px !important; block-size: 28px !important; }`,
+	"chars-hole":    `.cs-card { min-block-size: 440px !important; }`,
+	"chars-sheet":   `.cs-sheet-card { max-block-size: 160px !important; overflow: hidden !important; }`,
+	"chars-covered": `.cs-head { position: fixed !important; inset: 0 0 auto 0 !important; block-size: 300px !important; z-index: 99; background: var(--d-surface-3) !important; }`,
 }
 
 func serveDefectCSS(w http.ResponseWriter, r *http.Request) bool {
