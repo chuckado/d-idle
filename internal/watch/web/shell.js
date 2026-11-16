@@ -917,7 +917,9 @@ async function start() {
   const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
-  if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
+  // in the cockpit the panel lives in a drawer: open it; the panel opens its Help on every d2help while it sits in a drawer, so a
+  // second event after its first poll (it may not have mounted yet) does no harm
+  if (helpBtn) helpBtn.addEventListener('click', () => { openDrawer('onboarding', helpBtn); window.dispatchEvent(new Event('d2help')); setTimeout(() => window.dispatchEvent(new Event('d2help')), 900); });
   // every root exists before the first module loads, so the layout places the whole page at once
   const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {

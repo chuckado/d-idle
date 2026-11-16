@@ -1,8 +1,8 @@
-// The log drawer's content (docs/ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md): four tabs, Now, Journal, Story,
+// The log drawer's content (docs/ui/redesign-2026-11-14/briefs/S6-areamap-drawers-phone.md): five tabs, Items, Now, Journal, Story,
 // Alerts, one fetched at a time through GET /api/log?tab= (the shell's poll carries the tab in query(); the drawer only polls
 // while it is open). Rows arrive newest first with "seconds ago"; the time shown is the viewer's own clock and zone.
 // An open question is a Needs you row, not a log line, so this panel never shows one.
-export const TABS = [['now', 'Now'], ['journal', 'Journal'], ['story', 'Story'], ['alerts', 'Alerts']];
+export const TABS = [['items', 'Items'], ['now', 'Now'], ['journal', 'Journal'], ['story', 'Story'], ['alerts', 'Alerts']];
 
 // "14:03:22" in the viewer's zone for a row that is `ago` seconds old; past half a day the date is added.
 export function when(ago, nowMs, lang) {
@@ -13,7 +13,7 @@ export function when(ago, nowMs, lang) {
 
 export function mount(root, ctx) {
   const el = ctx.el, store = ctx.store('tab');
-  let tab = 'now';
+  let tab = 'items'; // Items first: what the hero picked up (GET /api/drops), the answer to "did I miss a drop"
   try { const v = store.get(); if (TABS.some((t) => t[0] === v)) tab = v; } catch (e) { /* storage blocked */ }
   const wrap = el('div', 'lg'), bar = el('div', 'tabs'), list = el('div', 'rows'), note = el('p', 'note');
   bar.setAttribute('role', 'tablist');
@@ -44,6 +44,7 @@ export function mount(root, ctx) {
       const row = el('div', 'row');
       row.dataset.kind = r.kind || '';
       if (r.level) row.dataset.level = r.level;
+      if (r.quality) row.dataset.quality = r.quality;
       row.append(el('span', 'when', when(r.ago, now)), el('span', 'txt', r.text));
       list.appendChild(row);
     });
