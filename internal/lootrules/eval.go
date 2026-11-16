@@ -79,7 +79,7 @@ func (c *Compiled) Decide(it *Item, cx *Ctx) Decision {
 		return Decision{Action: Ignore, Rule: "invariant:mark", Why: "Will sell: you marked it for sale"}
 	case it.StartItem:
 		return Decision{Action: Keep, Rule: "invariant:start", Why: "Kept: starting gear"}
-	case it.Quest && sc == PlacePack:
+	case it.Quest && (sc == PlacePack || sc == PlaceSell):
 		return Decision{Action: Keep, Rule: "invariant:quest", Why: "Kept: quest item"}
 	case it.Quest:
 		return Decision{Action: Ignore, Rule: "invariant:quest", Why: "Left alone: quest item"}

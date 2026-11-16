@@ -872,6 +872,9 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 		for _, p := range LootRulesPutRoutes {
 			m.Handle(p, f.LootRules.PutHandler(o))
 		}
+		for _, p := range LootRulesPostRoutes {
+			m.Handle(p, f.LootRules.PostHandler(o))
+		}
 	}
 	if f.GoldFarm != nil {
 		m.Handle(GoldFarmRoute, f.GoldFarm.PostHandler(o))

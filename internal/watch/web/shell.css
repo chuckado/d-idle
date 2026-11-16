@@ -312,7 +312,7 @@
   .d-lr-field select, .d-lr-field input { min-block-size: 44px; box-sizing: border-box; inline-size: 100%; font: inherit; }
   .d-lr-check { display: flex; gap: var(--d-sp-2); align-items: center; min-block-size: 44px; font-size: var(--d-fs-1); }
   .d-lr-check input { inline-size: 24px; block-size: 24px; flex: none; }
-  .d-lr-rules, .d-lr-plist, .d-lr-recent { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
+  .d-lr-rules, .d-lr-plist, .d-lr-recent, .d-lr-pv { margin: 0; padding: 0; list-style: none; display: grid; gap: var(--d-sp-1); }
   .d-lr-rules { max-block-size: 16rem; overflow-y: auto; border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
   .d-lr-rule { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: var(--d-sp-2); align-items: center; padding: var(--d-sp-1) var(--d-sp-2); border-block-end: var(--d-bw) solid var(--d-line); }
   .d-lr-rule input { inline-size: 24px; block-size: 24px; }
@@ -321,6 +321,10 @@
   .d-lr-act .d-btn, .d-lr-why .d-btn, .d-lr-prot .d-btn { min-block-size: 44px; align-items: center; }
   .d-lr-recent { max-block-size: 12rem; overflow-y: auto; }
   .d-lr-dec[data-differs="1"] { color: var(--d-text); border-inline-start: 3px solid var(--d-accent-text); padding-inline-start: var(--d-sp-2); }
+  .d-lr-tools { display: flex; flex-wrap: wrap; gap: var(--d-sp-2); }
+  .d-lr-tools .d-btn { flex: 1 1 6rem; min-block-size: 44px; align-items: center; justify-content: center; text-align: center; }
+  .d-lr-preview { display: grid; gap: var(--d-sp-2); padding: var(--d-sp-2); border: var(--d-bw) solid var(--d-line); border-radius: var(--d-r-1); }
+  .d-lr-plist strong { color: var(--d-text); }
   .d-lr-row { display: flex; justify-content: flex-end; }
   .d-lr-row .d-btn { flex: 1 1 0; min-block-size: 44px; align-items: center; }
   .d-reset-strip { position: fixed; inset-inline: var(--d-sp-3); inset-block-end: var(--d-sp-3); z-index: var(--d-z-banner); margin-inline: auto; inline-size: fit-content; max-inline-size: calc(100% - 2 * var(--d-sp-3));

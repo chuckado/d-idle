@@ -15,7 +15,7 @@ var opWords = map[string]string{"eq": "is", "ne": "is not", "ge": "at least", "g
 
 // Describe is the rule as one plain sentence for the Loot Rules tab: where it applies, what it does, and when.
 func Describe(r Rule) string {
-	where := map[string]string{PlaceGround: "On the ground", PlacePack: "In the pack", PlaceStash: "In the stash"}
+	where := map[string]string{PlaceGround: "On the ground", PlacePack: "In the pack", PlaceStash: "In the stash", PlaceSell: "At the vendor"}
 	var sc []string
 	for _, s := range r.effScope() {
 		sc = append(sc, where[s])

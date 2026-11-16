@@ -3,6 +3,7 @@ package loot
 import (
 	"fmt"
 	"log/slog"
+	"strings"
 	"sync"
 
 	"d2lod-bot/internal/d2"
@@ -10,8 +11,8 @@ import (
 )
 
 // Wave 2a of the loot rules engine (docs/lootrules.md "Wave 2a"): per-stage switch-over behind loot.rulesEngine.
-// 0 off, 1 the ground stage, 2 ground and tidy. 3 is reserved for the sell chore, which needs a user decision on five
-// kinds and stays on today's code at every value. The engine only ever replaces ONE decision at a time and falls back
+// 0 off, 1 the ground stage, 2 ground and tidy, 3 plus the sell chore (wave 2b, after the user's decision on the five
+// sell kinds, docs/lootrules.md section 13). The engine only ever replaces ONE decision at a time and falls back
 // to today's answer for that decision when it errors or panics (logged once per message): a bug here must never lose
 // an item.
 
@@ -20,6 +21,7 @@ const (
 	StageOff    = 0
 	StageGround = 1
 	StageTidy   = 2
+	StageSell   = 3
 )
 
 // Engine holds the active rule set and its compiled forms per hero class and build.
@@ -105,12 +107,12 @@ func (e *Engine) fallback(log *slog.Logger, err error) {
 	}
 }
 
-// EngineStage is the knob loot.rulesEngine clamped to what is implemented (3 acts as 2: the sell stage is not built).
+// EngineStage is the knob loot.rulesEngine clamped to the stages that exist.
 func (l *Looter) EngineStage() int {
 	if l == nil || l.engine == nil || l.e == nil || l.e.Tune == nil {
 		return StageOff
 	}
-	return min(max(l.e.Tune.Loot.RulesEngine, 0), StageTidy)
+	return min(max(l.e.Tune.Loot.RulesEngine, 0), StageSell)
 }
 
 // SetEngine replaces the looter's engine (tests); nil switches every engine stage off for this looter.
@@ -170,4 +172,84 @@ func (p *ShadowPass) TidyDecision(u d2.Unit, mark string, neverSell bool) (actio
 	}
 	p.l.engine.fallback(p.l.e.Log, err)
 	return "", "", "", false
+}
+
+// SellCtx is what the sell chore knows and the rules do not: the pack is full (today's trip threshold, or a forced room
+// make), an unidentified plain item may be sold as it is, and the priority from which a ground rule's keeper counts as
+// valuable (loot.valuableMinPrio).
+type SellCtx struct {
+	Full          bool
+	SellUnid      bool
+	ValuableMinPr int
+}
+
+// decideSell is the sell stage for one pack item: sell or keep, with the rule and the reason.
+//
+// 1. The player's mark and the invariants come first (Compiled.Decide, scope sell: a keep mark, the starting kit, quest
+// and never-sell items stay; a sell mark sells unless the item is never-sell).
+// 2. The rules of scope sell decide the kinds the user settled on 2026-11-16 (docs/lootrules.md section 13): unidentified
+// jewelry is sold while no Tome of Identify is in the pack and stashed (left in the pack for the tidy chore) once one is.
+// 3. Everything else is judged the way the pickit judges today, with the ground rules of the same set: what they would
+// pick up is KEPT (decision 1: good gear picked up on purpose), a rule that only sells (low gems, magic and rare gear)
+// SELLS, and what they would leave on the floor (cheap junk with no rule, plain junk, gems the build does not need)
+// SELLS when the pack is full (decisions 2 to 4; the tidy drop rule keeps the full pack away from town). An unidentified
+// item whose answer waits for identification sells only when the pack is full or the town says it is not worth a scroll.
+func decideSell(c *lootrules.Compiled, it *lootrules.Item, cx *lootrules.Ctx, sc SellCtx) (sell bool, d lootrules.Decision) {
+	it.Place = lootrules.PlaceSell
+	if it.Mark == "sell" && !it.Quest {
+		return true, lootrules.Decision{Action: lootrules.Sell, Rule: "invariant:mark", Why: "Will sell: you marked it for sale"}
+	}
+	d = c.Decide(it, cx)
+	if d.Rule != "default" {
+		return d.Action == lootrules.Sell, d
+	}
+	g := *it
+	g.Place = lootrules.PlaceGround
+	gd := c.Decide(&g, cx)
+	needID := gd.Pending && (gd.Action == lootrules.Pickup || gd.Fate == lootrules.Sell)
+	switch {
+	case needID && !it.Identified:
+		sell = (sc.Full || sc.SellUnid) && gd.Prio < sc.ValuableMinPr
+	case gd.Action == lootrules.Pickup:
+		sell = false
+	case gd.Action == lootrules.Ignore && gd.Fate == lootrules.Sell:
+		sell = true
+	default:
+		sell = sc.Full && gd.Tier != "S"
+	}
+	if sell {
+		gd.Why = strings.Replace(gd.Why, "Left alone", "Will sell", 1)
+	}
+	return sell, gd
+}
+
+// SellDecision is the sell stage (loot.rulesEngine 3): whether to sell one unmarked pack unit, or ok=false when the
+// stage is off or the engine failed (then the caller keeps today's answer).
+func (p *ShadowPass) SellDecision(u d2.Unit, mark string, neverSell bool, sc SellCtx) (sell bool, rule, why string, ok bool) {
+	if p == nil || p.stage < StageSell || u.Item == nil {
+		return false, "", "", false
+	}
+	it, err := p.item(ShadowSell, u, mark, neverSell, nil)
+	if err == nil {
+		sell, rule, why, err = p.l.engine.decideSell(&it, p.cx, sc)
+		if err == nil {
+			return sell, rule, why, true
+		}
+	}
+	p.l.engine.fallback(p.l.e.Log, err)
+	return false, "", "", false
+}
+
+func (e *Engine) decideSell(it *lootrules.Item, cx *lootrules.Ctx, sc SellCtx) (sell bool, rule, why string, err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("loot rules engine panic: %v", r)
+		}
+	}()
+	c, err := e.compiled(cx.Class, cx.Build)
+	if err != nil {
+		return false, "", "", fmt.Errorf("loot rules engine: compile for class %q build %q: %w", cx.Class, cx.Build, err)
+	}
+	s, d := decideSell(c, it, cx, sc)
+	return s, d.Rule, d.Why, nil
 }
