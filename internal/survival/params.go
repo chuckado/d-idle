@@ -17,6 +17,13 @@ type StepDown struct {
 	Deaths int `json:"deaths"`
 }
 
+// ArchTune overrides the yield and starvation constants for one archetype (profile id); 0 keeps the global value. Data,
+// so a class or build is tuned in params.json and never in Go.
+type ArchTune struct {
+	YieldShrinkMinutes float64 `json:"yieldShrinkMinutes"`
+	StarveCasts        float64 `json:"starveCasts"`
+}
+
 // Params are the controller constants; every one is tagged in Tags (all U today).
 type Params struct {
 	Schema              string              `json:"schema"`
@@ -44,6 +51,12 @@ type Params struct {
 	MercPriorMinutes    float64             `json:"mercPriorMinutes"`
 	FreshRatio          float64             `json:"freshRatio"`
 	FreshMinutes        float64             `json:"freshMinutes"`
+	YieldMinMinutes     float64             `json:"yieldMinMinutes"`
+	YieldShrinkMinutes  float64             `json:"yieldShrinkMinutes"`
+	YieldMaxWeight      float64             `json:"yieldMaxWeight"`
+	StarveCasts         float64             `json:"starveCasts"`
+	StarveValueMul      float64             `json:"starveValueMul"`
+	Archetypes          map[string]ArchTune `json:"archetypes"`
 	Dials               map[string]StepDown `json:"dials"`
 	Tags                map[string]string   `json:"tags"`
 }
@@ -64,6 +77,9 @@ func LoadParams() (*Params, error) {
 	if p.PredTakenFloor < 0 {
 		return nil, fmt.Errorf("survival: params: predTakenFloorPerKill must not be negative")
 	}
+	if p.YieldShrinkMinutes <= 0 || p.StarveCasts <= 0 || p.YieldMaxWeight < 0 || p.YieldMaxWeight > 1 || p.StarveValueMul <= 0 || p.StarveValueMul > 1 {
+		return nil, fmt.Errorf("survival: params: yield and starvation constants out of range")
+	}
 	for _, d := range []string{"cautious", "balanced", "bold"} {
 		if _, ok := p.Dials[d]; !ok {
 			return nil, fmt.Errorf("survival: params: no step-down row for dial %q", d)
@@ -79,4 +95,19 @@ func (p *Params) stepDown(dial string) (StepDown, error) {
 		return StepDown{}, fmt.Errorf("survival: unknown dial %q", dial)
 	}
 	return s, nil
+}
+
+// yieldShrink and starveCasts are the constants of an archetype ("" and unknown ids use the global ones).
+func (p *Params) yieldShrink(arch string) float64 {
+	if a := p.Archetypes[arch]; a.YieldShrinkMinutes > 0 {
+		return a.YieldShrinkMinutes
+	}
+	return p.YieldShrinkMinutes
+}
+
+func (p *Params) starveLimit(arch string) float64 {
+	if a := p.Archetypes[arch]; a.StarveCasts > 0 {
+		return a.StarveCasts
+	}
+	return p.StarveCasts
 }

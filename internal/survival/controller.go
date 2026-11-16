@@ -37,6 +37,11 @@ type Input struct {
 	FreshAllowed bool
 	// OffenceUnread is true when the hero's weapon terms were not read (power quality default): k_hero is then capped.
 	OffenceUnread bool
+	// Active is true when the controller decides (bot.zoneModel 1), not when it only shadows: only then do the realized
+	// yield, the mana floor and the fresh-game guard act (card survfix2). The log lines are the same either way.
+	Active    bool
+	Archetype string // power profile id: selects the archetype row of params (data)
+	MercDead  bool   // the hired merc is dead
 }
 
 // Alt is one zone that was not chosen, with the reason in words (API) and with numbers (log only).
@@ -50,18 +55,20 @@ type Alt struct {
 
 // Decision is the shadow choice: what the controller would farm, and why.
 type Decision struct {
-	Area     int
-	Name     string
-	Diff     string
-	Margin   string // word
-	Why      Why
-	Stay     bool // the choice is the current zone
-	Fresh    bool // restart the game and farm the same zone again
-	Hole     bool // nothing is safe: first field, the hero needs help
-	Alts     []Alt
-	Lambda   float64
-	NeedsYou bool
-	line     string
+	Area   int
+	Name   string
+	Diff   string
+	Margin string // word
+	Why    Why
+	Stay   bool // the choice is the current zone
+	Fresh  bool // restart the game and farm the same zone again
+	// FreshRefused is the reason a fresh game was not taken although the numbers asked for it ("" = not refused).
+	FreshRefused string
+	Hole         bool // nothing is safe: first field, the hero needs help
+	Alts         []Alt
+	Lambda       float64
+	NeedsYou     bool
+	line         string
 }
 
 // Line is the one log line per decision (design 8.1).
@@ -87,6 +94,9 @@ type verdict struct {
 	word     string
 	why      Why
 	value    float64
+	xp       float64 // xp/min the value rests on (model prior, or the blend with the realized one)
+	realized float64 // the realized xp/min behind the blend, 0 = the prior stands
+	starving bool
 }
 
 func word(best, low, enter, stay float64) string {
@@ -140,7 +150,15 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		}
 	}
 	stayMin := l.P.StayMinutes
-	v.value = (c.Eco.XPPerMin + lam*c.Eco.Net()) * stayMin / (stayMin + c.TravelMin)
+	v.xp = c.Eco.XPPerMin
+	if in.Active {
+		v.xp, v.realized = l.BlendYield(c.Key, c.Eco.XPPerMin, in.Archetype)
+		v.starving = l.Starving(c.Key, in.Archetype)
+	}
+	v.value = (v.xp + lam*c.Eco.Net()) * stayMin / (stayMin + c.TravelMin)
+	if v.starving {
+		v.value *= l.P.StarveValueMul // the hero cannot cast here for want of mana: the model's kill speed is a fiction
+	}
 	return v
 }
 
@@ -192,6 +210,13 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 			}
 			fresh := in.FreshAllowed && l.P.FreshRatio > 0 &&
 				(next == nil || next.value < l.P.FreshRatio*pick.value*l.P.StayMinutes/(l.P.StayMinutes+l.P.FreshMinutes))
+			if fresh && in.Active && (in.OffenceUnread || in.MercDead) {
+				fresh = false // a fresh game is a bet on the model's kill speed: not with an unread weapon or no merc
+				d.FreshRefused = "offence unread"
+				if in.MercDead {
+					d.FreshRefused = "merc dead"
+				}
+			}
 			switch {
 			case fresh:
 				d.Fresh = true
@@ -218,6 +243,12 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 		}
 		a := Alt{Area: v.c.Key.Area, Name: v.c.Name, Margin: v.word, Why: v.why,
 			detail: fmt.Sprintf("margin %.1f (low %.1f, need %.1f, k %.2f)", v.best, v.low, in.Dial.Enter, v.k)}
+		if v.realized > 0 || v.starving {
+			a.detail += fmt.Sprintf(" xp/min %.0f", v.xp)
+			if v.starving {
+				a.detail += " mana-starved"
+			}
+		}
 		if v.eligible {
 			a.Why = Why{WhyBestPay, "safe, but pays less"}
 			a.detail = fmt.Sprintf("margin %.1f, value %.0f < %.0f", v.best, v.value, pick.value)
@@ -231,9 +262,18 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 func decisionLine(d Decision, p *verdict, in Input) string {
 	var b strings.Builder
 	fmt.Fprintf(&b, "zone choice: %s  margin %.1f (need %.1f; low %.1f)  xp/min %.0f  gold/min %+.0f  dial %s  why: %s (%s)",
-		d.Name, p.best, in.Dial.Enter, p.low, p.c.Eco.XPPerMin, p.c.Eco.Net(), in.Dial.ID, d.Why.Code, d.Why.Text)
+		d.Name, p.best, in.Dial.Enter, p.low, p.xp, p.c.Eco.Net(), in.Dial.ID, d.Why.Code, d.Why.Text)
+	if p.realized > 0 {
+		fmt.Fprintf(&b, "  realized %.0f (model %.0f)", p.realized, p.c.Eco.XPPerMin)
+	}
+	if p.starving {
+		b.WriteString("  mana-starved")
+	}
 	if d.Fresh {
 		b.WriteString("  fresh game")
+	}
+	if d.FreshRefused != "" {
+		b.WriteString("  fresh game refused: " + d.FreshRefused)
 	}
 	for _, a := range d.Alts {
 		fmt.Fprintf(&b, "  | not %s: %s, %s", a.Name, a.Why.Code, a.detail)

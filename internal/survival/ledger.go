@@ -24,7 +24,7 @@ func (k ZoneKey) String() string { return fmt.Sprintf("%d/%s", k.Area, k.Diff) }
 const (
 	EvFight     = "fight"  // Kills, Seconds, Taken, PredTaken, PredKillSec, Potions, XP, GoldIn, GoldOut
 	EvIntake    = "intake" // LifeLost over Seconds of a stay (observed intake, not the fight-only Taken); adds no fight time
-	EvXP        = "xp"     // XP and gold earned over a stay (area summary); adds no fight time
+	EvXP        = "xp"     // XP and gold earned over a stay (area summary); adds no fight time; with Seconds it also feeds the realized yield
 	EvChicken   = "chicken"
 	EvDeath     = "death"
 	EvMercDeath = "merc_death"
@@ -35,6 +35,7 @@ const (
 type Event struct {
 	Kind                                          string
 	Kills, Seconds, Taken, PredTaken, PredKillSec float64
+	Starved                                       float64 // EvFight: watchdog lines where no attack was affordable (mana)
 	Potions, XP, GoldIn, GoldOut                  float64
 	LifeLost                                      float64 // EvIntake
 }
@@ -62,6 +63,12 @@ type ZoneStats struct {
 	// the file: an old ledger reads 0 and a newer one loads in an older build). See IntakePerMin.
 	IntakeLife float64 `json:"intakeLife,omitempty"`
 	IntakeSec  float64 `json:"intakeSec,omitempty"`
+	// YieldXP and YieldSec are the XP earned over the stay seconds that earned it (decayed together, additive in the file):
+	// the realized xp/min the Economy blends with the model's prior (card survfix2). Starved counts the watchdog lines
+	// that found every attack too dear for the mana pool (decayed with the fights).
+	YieldXP  float64 `json:"yieldXP,omitempty"`
+	YieldSec float64 `json:"yieldSec,omitempty"`
+	Starved  float64 `json:"starved,omitempty"`
 
 	Hard      float64   `json:"hard"` // product of the hard-event multipliers, relaxing with time away (>= 1; 0 = 1)
 	HardAt    time.Time `json:"hardAt"`
@@ -148,6 +155,7 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 		s.Kills, s.Seconds, s.Taken, s.PredTaken = s.Kills*f, s.Seconds*f, s.Taken*f, s.PredTaken*f
 		s.Potions, s.XP, s.GoldIn, s.GoldOut = s.Potions*f, s.XP*f, s.GoldIn*f, s.GoldOut*f
 		s.Chickens, s.MercDeaths, s.Deaths = s.Chickens*f, s.MercDeaths*f, s.Deaths*f
+		s.Starved = s.Starved*f + e.Starved
 		s.Kills += e.Kills
 		s.Seconds += e.Seconds
 		s.Taken += e.Taken
@@ -164,6 +172,10 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 	case EvXP:
 		s.XP += e.XP
 		s.GoldIn += e.GoldIn
+		if e.Seconds > 0 {
+			f := decay(e.Seconds, l.P.HalfLifeMinutes)
+			s.YieldXP, s.YieldSec = s.YieldXP*f+e.XP, s.YieldSec*f+e.Seconds
+		}
 	case EvChicken, EvDeath, EvMercDeath:
 		mul := map[string]float64{EvChicken: l.P.ChickenMul, EvDeath: l.P.DeathMul, EvMercDeath: l.P.MercDeathMul}[e.Kind]
 		s.Hard = l.hardNow(s, now) * mul // the earlier events have relaxed by now; the new one lands in full
@@ -348,4 +360,34 @@ func (l *Ledger) IntakePerMin(k ZoneKey) (perMin, seconds float64) {
 		return 0, 0
 	}
 	return s.IntakeLife / (s.IntakeSec / 60), s.IntakeSec
+}
+
+// RealizedXPPerMin is the observed XP per minute of a zone over its decayed stays, with the stay seconds it rests on
+// (0, 0 without data).
+func (l *Ledger) RealizedXPPerMin(k ZoneKey) (perMin, seconds float64) {
+	s := l.peek(k)
+	if s == nil || s.YieldSec <= 0 {
+		return 0, 0
+	}
+	return s.YieldXP / (s.YieldSec / 60), s.YieldSec
+}
+
+// BlendYield moves the zone's xp/min from the model's prior to the realized one as minutes accumulate: weight
+// m/(m+shrink) capped at YieldMaxWeight, and none below YieldMinMinutes (the trust floor: one bad minute never poisons the
+// value). arch picks the archetype's shrink (data). The second result is the realized value used, 0 when the prior stands.
+func (l *Ledger) BlendYield(k ZoneKey, prior float64, arch string) (blended, realized float64) {
+	obs, sec := l.RealizedXPPerMin(k)
+	m := sec / 60
+	if m < l.P.YieldMinMinutes || m <= 0 {
+		return prior, 0
+	}
+	w := math.Min(l.P.YieldMaxWeight, m/(m+l.P.yieldShrink(arch)))
+	return prior*(1-w) + obs*w, obs
+}
+
+// Starving reports whether the hero repeatedly could not cast in the zone: the decayed count of mana-starved watchdog
+// lines reached the archetype's limit.
+func (l *Ledger) Starving(k ZoneKey, arch string) bool {
+	s := l.peek(k)
+	return s != nil && s.Starved >= l.P.starveLimit(arch)
 }
