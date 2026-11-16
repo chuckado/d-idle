@@ -227,6 +227,7 @@
 | decomp35 | proposed | - | `docs/research/decomp35-combat.md`<br>`tools/emu/d35_`<br>`docs/upstream/bodies/decomp35-` | - |
 | seqfollow | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | decomp36 | proposed | - | `docs/research/dc36-lane-b.md`<br>`tools/emu/dc36_death.py`<br>`tools/emu/dc36_gamble.py`<br>`tools/emu/dc36_umod.py`<br>`tools/emu/dc36_cmp.py`<br>`docs/upstream/bodies/` | `fork-branch:fid/death-corpse-exp-r1`<br>`fork-branch:fid/gamble-price-r1`<br>`fork-branch:fid/umod-can-take-r1` |
+| verifyseqfollow | proposed | - | `docs/upstream/verifier-seq-followup-2026-11-16.md` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | survfix | in-progress | - | `docs/survival/ab-screen-analysis-2026-11-16.md`<br>`tools/survival/abreport`<br>`cmd/d2bot/survivalwire.go`<br>`internal/survival/survival_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/powerwire_test.go` | - |
 | pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
@@ -272,6 +273,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 98ff27df5 11-16 14:38 `Merge agent/verifyseqfollow: Merge branch 'main' into TASK-559` (verifyseqfollow)
+- 937224b96 11-16 14:37 `Merge branch 'main' into TASK-559` (-)
 - 993773c54 11-16 14:35 `Merge agent/decomp36: Merge branch 'main' into decomp36` (decomp36)
 - 1b01f90de 11-16 14:34 `Merge branch 'main' into decomp36` (-)
 - 51af5dec2 11-16 14:29 `Merge agent/survfix: Merge branch 'main' into survfix` (survfix)
@@ -280,6 +283,4 @@
 - 0882e97a3 11-16 14:20 `Merge branch 'main' into pausefix` (-)
 - d3c0def97 11-16 14:05 `Merge agent/decomp35: Merge branch 'main' into decomp35` (decomp35)
 - d329871ec 11-16 14:04 `Merge branch 'main' into decomp35` (-)
-- 0d0437214 11-16 13:56 `Merge agent/survabscreen: Merge branch 'main' into survabscreen` (survabscreen)
-- c58e73e4c 11-16 13:55 `Merge branch 'main' into survabscreen` (-)
 <!-- statusgen:end -->
