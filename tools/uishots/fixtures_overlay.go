@@ -11,7 +11,7 @@ import (
 // mustFail names (fit.go).
 func init() {
 	defectCSS["ov-clip"] = `[data-panel="zone-map"] .zm-l { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`
-	defectCSS["ov-header"] = `.d-tilesheet { inset-block-start: -90px !important; }`
+	defectCSS["ov-header"] = `.d-tilesheet { inset-block-start: -600px !important; }`
 	defectCSS["ov-two"] = `.d-tilesheet[hidden] { display: flex !important; }`
 }
 

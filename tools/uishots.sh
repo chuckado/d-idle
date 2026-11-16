@@ -225,10 +225,14 @@ overlay-menu-over-zone watch?first=0&theme=dark&zone=cp #btn-more
 overlay-menu-over-zone-light watch?first=0&theme=light&zone=cp #btn-more
 overlay-menu-over-zone-cockpit watch?layout=cockpit&theme=dark&zone=cp #btn-more
 overlay-zone-after-menu watch?first=0&theme=dark #btn-more|[data-panel=zone-map]_.zm-n
+overlay-charter watch?first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
+overlay-charter-light watch?first=0&theme=light&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
+overlay-charter-cockpit watch?layout=cockpit&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]
+overlay-charter-menu watch?first=0&theme=dark&zone=cp&charter=1 [data-panel=zone-map]_[data-key=go]|#btn-more
 overlay-zone-sheet-light watch?first=0&theme=light&zone=cp
 overlay-zone-sheet-loop watch?first=0&theme=dark&zone=cp&loop=1
 overlaydefect-under watch?first=0&theme=dark&zone=cp&defect=ov-under #btn-more
-overlaydefect-clip watch?first=0&theme=dark&zone=cp&defect=ov-clip
+overlaydefect-clip watch?first=0&theme=dark&zone=cp&charter=1&defect=ov-clip [data-panel=zone-map]_[data-key=go]
 overlaydefect-header watch?first=0&theme=dark&zone=cp&defect=ov-header
 overlaydefect-two watch?first=0&theme=dark&defect=ov-two #btn-more
 character watch/inventory?theme=dark
