@@ -262,6 +262,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 045ad5ef7 11-16 10:10 `Merge agent/idwaitfit: Merge branch 'main' into idwaitfit` (idwaitfit)
+- ac7beca22 11-16 10:09 `Merge branch 'main' into idwaitfit` (-)
 - a245aed2e 11-16 10:03 `Merge agent/resetfit: Merge branch 'main' into resetfit` (resetfit)
 - d19afb569 11-16 10:03 `Merge branch 'main' into resetfit` (-)
 - 299bfda30 11-16 10:00 `Merge main` (-)
@@ -270,6 +272,4 @@
 - 0619198a0 11-16 09:45 `Merge agent/videofeed2: videofeed2: lossless feed mounted behind watch.paletteFeed (off), canvas player, guard, walking measurement` (videofeed2)
 - 52f2a852f 11-16 09:41 `Merge origin/main into videofeed2` (-)
 - 2b3b4a9ce 11-16 09:21 `Merge agent/idtome: Merge branch 'main' into idtome` (idtome)
-- 6133c7f1a 11-16 09:20 `Merge branch 'main' into idtome` (-)
-- 4d49fe871 11-16 09:13 `Merge agent/support: Merge origin/main into agent/support (keep both sides)` (support)
 <!-- statusgen:end -->
