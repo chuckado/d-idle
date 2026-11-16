@@ -215,3 +215,16 @@ func TestHorizonUsesLastMinute(t *testing.T) {
 		t.Fatalf("label missing:\n%s", out)
 	}
 }
+
+// Runs that end a few minutes apart are compared at the same minute.
+func TestPairComparedAtOneMinute(t *testing.T) {
+	dir := t.TempDir()
+	writeArm(t, dir, "legacy", 1, synth(119, 10, 0, 0, 1))
+	writeArm(t, dir, "margin", 1, synth(116, 10, 0, 0, 1))
+	b, _, _ := Load(dir, "legacy")
+	m, _, _ := Load(dir, "margin")
+	s := Compare(b, m, gate)
+	if len(s.Pairs) != 1 || s.XPRatio != 1 || s.XPDiff.Mean != 0 {
+		t.Fatalf("equal xp per minute must compare equal at minute 116: ratio %v diff %v", s.XPRatio, s.XPDiff.Mean)
+	}
+}
