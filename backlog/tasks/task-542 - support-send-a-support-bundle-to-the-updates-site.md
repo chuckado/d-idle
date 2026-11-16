@@ -1,10 +1,11 @@
 ---
 id: TASK-542
 title: 'support: send a support bundle to the updates site'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T04:02:00Z'
+updated_date: '2026-11-16T14:26:00Z'
 labels:
   - watch
   - feature
