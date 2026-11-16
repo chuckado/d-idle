@@ -3,8 +3,10 @@ package palfeed
 import (
 	"bufio"
 	"bytes"
+	"crypto/sha256"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io"
 	"math/rand"
 	"net/http"
@@ -219,10 +221,15 @@ func TestFixtures(t *testing.T) {
 		}
 	}
 	enc := &Encoder{Tile: 16}
+	wa, wb := world(100, 100, 1), world(105, 97, 2)
 	files := map[string][]byte{
 		"a.rgba": a.Pix, "b.rgba": b.Pix,
 		"key.pf":   mustEnc(t, enc, nil, &a),
 		"delta.pf": mustEnc(t, enc, &a, &b),
+		// the scrolled pair: modes 2 and 3 in the delta; wb.sha256 is the SHA-256 of b's RGB bytes
+		"wkey.pf":   mustEnc(t, enc, nil, &wa),
+		"wdelta.pf": mustEnc(t, enc, &wa, &wb),
+		"wb.sha256": []byte(fmt.Sprintf("%x\n", sha256.Sum256(rgbOnly(wb.Pix)))),
 	}
 	for name, want := range files {
 		p := "testdata/" + name
@@ -254,5 +261,66 @@ func TestPublishRepacksStride(t *testing.T) {
 	cur, _ := h.latest()
 	if len(cur.Pix) != 48 || cur.Pix[2*16+3*4] != 23 {
 		t.Fatalf("repack: len %d", len(cur.Pix))
+	}
+}
+
+// world draws the view at scroll (ox, oy) of a fixed textured world, with a static HUD strip at the bottom, so a scroll
+// moves everything except the HUD.
+func world(ox, oy int, seq uint32) Frame {
+	const w, h, hud = 240, 160, 24
+	pix := make([]byte, w*h*4)
+	for y := 0; y < h; y++ {
+		for x := 0; x < w; x++ {
+			o := (y*w + x) * 4
+			if y >= h-hud {
+				pix[o], pix[o+1], pix[o+2], pix[o+3] = byte(x), 200, byte(y), 255
+				continue
+			}
+			wx, wy := x+ox, y+oy
+			v := uint32(wx/3)*2654435761 ^ uint32(wy/3)*40503
+			pix[o], pix[o+1], pix[o+2], pix[o+3] = byte(v>>8), byte(v>>16), byte(v>>24), 255
+		}
+	}
+	return Frame{W: w, H: h, Pix: pix, Seq: seq, GameMS: seq * 40}
+}
+
+func TestScrollIsFoundAndCheap(t *testing.T) {
+	a, b := world(100, 100, 1), world(105, 97, 2) // the view moved right 5 and up 3: content shifts by (-5, +3)
+	if dx, dy := EstimateShift(&a, &b); dx != -5 || dy != 3 {
+		t.Fatalf("shift %d,%d, want -5,3", dx, dy)
+	}
+	var withShift, without int
+	for _, noShift := range []bool{false, true} {
+		enc := &Encoder{NoShift: noShift}
+		var dec Decoder
+		if err := dec.Apply(mustEnc(t, enc, nil, &a)); err != nil {
+			t.Fatal(err)
+		}
+		m := mustEnc(t, enc, &a, &b)
+		if err := dec.Apply(m); err != nil || !bytes.Equal(rgbOnly(dec.Frame.Pix), rgbOnly(b.Pix)) {
+			t.Fatalf("noShift=%v: mismatch, err %v", noShift, err)
+		}
+		if noShift {
+			without = len(m)
+		} else {
+			withShift = len(m)
+		}
+	}
+	if withShift*5 > without {
+		t.Errorf("scroll coding saves too little: %d B with, %d B without", withShift, without)
+	}
+	// and a chain of scrolls keeps decoding exactly (the decoder swaps buffers)
+	enc := &Encoder{}
+	var dec Decoder
+	prev := world(0, 0, 1)
+	if err := dec.Apply(mustEnc(t, enc, nil, &prev)); err != nil {
+		t.Fatal(err)
+	}
+	for i := 1; i <= 12; i++ {
+		cur := world(i*4, i*2, uint32(i+1))
+		if err := dec.Apply(mustEnc(t, enc, &prev, &cur)); err != nil || !bytes.Equal(rgbOnly(dec.Frame.Pix), rgbOnly(cur.Pix)) {
+			t.Fatalf("scroll %d: %v", i, err)
+		}
+		prev = cur
 	}
 }

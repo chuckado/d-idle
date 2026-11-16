@@ -93,9 +93,15 @@ func TestReplay(t *testing.T) {
 		bytes        []int
 		encMs, decMs []float64
 	}
-	for _, tile := range []int{8, 16, 32} {
-		for _, step := range []int{1, 2} { // 25 fps client, and a client that only takes every second frame (12.5 fps)
-			enc := &Encoder{Tile: tile}
+	type cfg struct {
+		tile, step int
+		noShift    bool
+	}
+	// step: 1 = a 25 fps client, 2 = every second frame (12.5 fps), 3 = every third (8.3 fps)
+	for _, c := range []cfg{{16, 1, false}, {16, 1, true}, {8, 1, false}, {32, 1, false}, {16, 2, false}, {16, 2, true}, {16, 3, false}} {
+		tile, step := c.tile, c.step
+		{
+			enc := &Encoder{Tile: tile, NoShift: c.noShift}
 			var dec Decoder
 			rows := map[string]*row{}
 			var order []string
@@ -141,11 +147,15 @@ func TestReplay(t *testing.T) {
 					add("ALL", len(m), ms(e), ms(d))
 				}
 			}
-			fmt.Fprintf(w, "\ntile %d, every %d frame(s) (%g fps): key frame %d B\n", tile, step, 25/float64(step), keyBytes)
-			fmt.Fprintf(w, "  %-18s %6s %9s %9s %9s %9s %9s %9s\n", "scene", "n", "B p50", "B p95", "B max", "enc p50", "enc p95", "dec p95")
+			fmt.Fprintf(w, "\ntile %d, every %d frame(s) (%.1f fps), scroll search %v: key frame %d B\n", tile, step, 25/float64(step), !c.noShift, keyBytes)
+			fmt.Fprintf(w, "  %-18s %6s %9s %9s %9s %9s %9s %9s %9s\n", "scene", "n", "B p50", "B p95", "B max", "enc p50", "enc p95", "dec p95", "MB/s")
 			for _, s := range append(order[:0:0], order...) {
 				r := rows[s]
-				fmt.Fprintf(w, "  %-18s %6d %9d %9d %9d %8.2fms %8.2fms %8.2fms\n", r.name, len(r.bytes), pi(r.bytes, 50), pi(r.bytes, 95), pi(r.bytes, 100), pf(r.encMs, 50), pf(r.encMs, 95), pf(r.decMs, 95))
+				sum := 0
+				for _, b := range r.bytes {
+					sum += b
+				}
+				fmt.Fprintf(w, "  %-18s %6d %9d %9d %9d %8.2fms %8.2fms %8.2fms %9.2f\n", r.name, len(r.bytes), pi(r.bytes, 50), pi(r.bytes, 95), pi(r.bytes, 100), pf(r.encMs, 50), pf(r.encMs, 95), pf(r.decMs, 95), float64(sum)/float64(len(r.bytes))*25/float64(step)/1e6)
 			}
 		}
 	}

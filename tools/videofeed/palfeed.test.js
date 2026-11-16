@@ -21,6 +21,18 @@ test('decodes the Go key frame and delta byte for byte', () => {
   assert.strictEqual(dec.seq, 2);
 });
 
+test('decodes a scrolled delta (modes 2 and 3) to the exact frame', () => {
+  const dec = new PF.Decoder();
+  apply(dec, rd('wkey.pf'));
+  const m = rd('wdelta.pf'), h = PF.parseHeader(m);
+  assert.deepStrictEqual([h.dx, h.dy], [-5, 3]);
+  apply(dec, m);
+  const rgb = Buffer.alloc(dec.pix.length / 4 * 3);
+  for (let i = 0, o = 0; i < dec.pix.length; i += 4, o += 3) { rgb[o] = dec.pix[i]; rgb[o + 1] = dec.pix[i + 1]; rgb[o + 2] = dec.pix[i + 2]; }
+  const want = fs.readFileSync(path.join(dir, 'wb.sha256'), 'utf8').trim();
+  assert.strictEqual(require('node:crypto').createHash('sha256').update(rgb).digest('hex'), want);
+});
+
 test('a delta without its base asks for a key frame', () => {
   const dec = new PF.Decoder();
   assert.throws(() => apply(dec, rd('delta.pf')), (e) => e.needKey === true);

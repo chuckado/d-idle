@@ -3,7 +3,7 @@
    the Go fixtures). Pure functions first (node-testable), the DOM player last. */
 (function (root) {
   'use strict';
-  var HEADER = 26, KEY = 1;
+  var HEADER = 28, KEY = 1;
 
   function u16(b, o) { return b[o] | (b[o + 1] << 8); }
   function u32(b, o) { return (b[o] | (b[o + 1] << 8) | (b[o + 2] << 16) | (b[o + 3] << 24)) >>> 0; }
@@ -12,38 +12,49 @@
   function parseHeader(m) {
     if (m.length < HEADER || m[0] !== 0x50 || m[1] !== 0x46 || m[2] !== 1) throw new Error('palfeed: bad header');
     var h = { key: (m[3] & KEY) !== 0, w: u16(m, 4), h: u16(m, 6), tile: m[8], seq: u32(m, 10), base: u32(m, 14),
-              gameMs: u32(m, 18), n: u32(m, 22) };
+              gameMs: u32(m, 18), n: u32(m, 22), dx: (m[26] << 24) >> 24, dy: (m[27] << 24) >> 24 };
     if (!h.w || !h.h || !h.tile || m.length !== HEADER + h.n) throw new Error('palfeed: bad message');
     return h;
   }
 
   // Decoder keeps the RGBA frame a canvas shows. apply(header, raw) takes the INFLATED payload (the caller inflates:
-  // zlib.inflateRawSync in node, DecompressionStream('deflate-raw') in a browser).
-  function Decoder() { this.w = 0; this.h = 0; this.seq = 0; this.have = false; this.pix = null; this.dirty = null; }
+  // zlib.inflateRawSync in node, DecompressionStream('deflate-raw') in a browser). Two buffers alternate, so a scroll
+  // tile can read the old frame while the new one is written; `pix` is always the newest.
+  function Decoder() { this.w = 0; this.h = 0; this.seq = 0; this.have = false; this.pix = null; this.spare = null; this.dirty = null; }
   Decoder.prototype.needsKey = function (h) { return !h.key && (!this.have || this.w !== h.w || this.h !== h.h || this.seq !== h.base); };
   Decoder.prototype.apply = function (h, raw) {
     if (this.needsKey(h)) { var e = new Error('palfeed: need key'); e.needKey = true; throw e; }
-    var w = h.w, ht = h.h, t = h.tile, tx = Math.ceil(w / t), ty = Math.ceil(ht / t), nb = (tx * ty + 7) >> 3;
-    if (raw.length < nb) throw new Error('palfeed: short payload');
-    if (h.key || !this.pix || this.pix.length !== w * ht * 4) this.pix = new Uint8ClampedArray(w * ht * 4);
-    var pix = this.pix, pos = nb, x0min = w, y0min = ht, x1max = 0, y1max = 0;
+    var w = h.w, ht = h.h, t = h.tile, tx = Math.ceil(w / t), ty = Math.ceil(ht / t), key = h.key, pos = 0, old = this.pix;
+    var out, nm = key ? 0 : (tx * ty + 3) >> 2;
+    if (raw.length < nm) throw new Error('palfeed: short payload');
+    pos = nm;
+    if (key) out = new Uint8ClampedArray(w * ht * 4);
+    else { out = this.spare && this.spare.length === w * ht * 4 ? this.spare : new Uint8ClampedArray(w * ht * 4); out.set(old); }
+    var x0min = w, y0min = ht, x1max = 0, y1max = 0, dx = h.dx, dy = h.dy;
     for (var j = 0; j < ty; j++) for (var i = 0; i < tx; i++) {
-      var k = j * tx + i;
-      if (!(raw[k >> 3] & (1 << (k & 7)))) continue;
+      var mode = 1;
+      if (!key) { var k = j * tx + i; mode = (raw[k >> 2] >> (2 * (k & 3))) & 3; if (mode === 0) continue; }
       var x0 = i * t, y0 = j * t, tw = Math.min(t, w - x0), th = Math.min(t, ht - y0);
-      if (pos + tw * th * 3 > raw.length) throw new Error('palfeed: short payload');
+      if (mode !== 3 && pos + tw * th * 3 > raw.length) throw new Error('palfeed: short payload');
       for (var y = y0; y < y0 + th; y++) {
-        var o = (y * w + x0) * 4, pr = 0, pg = 0, pb = 0;
-        for (var x = 0; x < tw; x++, o += 4, pos += 3) {
-          if (h.key) { pr = (pr + raw[pos]) & 255; pg = (pg + raw[pos + 1]) & 255; pb = (pb + raw[pos + 2]) & 255; pix[o] = pr; pix[o + 1] = pg; pix[o + 2] = pb; }
-          else { pix[o] ^= raw[pos]; pix[o + 1] ^= raw[pos + 1]; pix[o + 2] ^= raw[pos + 2]; }
-          pix[o + 3] = 255;
+        var o = (y * w + x0) * 4, pr = 0, pg = 0, pb = 0, sy = y - dy;
+        for (var x = 0; x < tw; x++, o += 4) {
+          var r = 0, g = 0, b = 0;
+          if (mode >= 2) {   // shifted reference, black outside the frame
+            var sx = x0 + x - dx;
+            if (sy >= 0 && sy < ht && sx >= 0 && sx < w) { var so = (sy * w + sx) * 4; r = old[so]; g = old[so + 1]; b = old[so + 2]; }
+            if (mode === 3) { out[o] = r; out[o + 1] = g; out[o + 2] = b; out[o + 3] = 255; continue; }
+          } else if (!key) { r = old[o]; g = old[o + 1]; b = old[o + 2]; }
+          if (key) { pr = (pr + raw[pos]) & 255; pg = (pg + raw[pos + 1]) & 255; pb = (pb + raw[pos + 2]) & 255; out[o] = pr; out[o + 1] = pg; out[o + 2] = pb; }
+          else { out[o] = r ^ raw[pos]; out[o + 1] = g ^ raw[pos + 1]; out[o + 2] = b ^ raw[pos + 2]; }
+          out[o + 3] = 255; pos += 3;
         }
       }
       x0min = Math.min(x0min, x0); y0min = Math.min(y0min, y0); x1max = Math.max(x1max, x0 + tw); y1max = Math.max(y1max, y0 + th);
     }
+    this.spare = key ? null : old; this.pix = out;
     this.w = w; this.h = ht; this.seq = h.seq; this.have = true;
-    this.dirty = h.key ? { x: 0, y: 0, w: w, h: ht } : (x1max > x0min ? { x: x0min, y: y0min, w: x1max - x0min, h: y1max - y0min } : null);
+    this.dirty = key ? { x: 0, y: 0, w: w, h: ht } : (x1max > x0min ? { x: x0min, y: y0min, w: x1max - x0min, h: y1max - y0min } : null);
     return this.dirty;
   };
 
@@ -137,7 +148,7 @@
     this.pending = null;
     var c = this.o.canvas;
     if (c.width !== d.w || c.height !== d.h) { c.width = d.w; c.height = d.h; this.img = null; p = { x: 0, y: 0, w: d.w, h: d.h }; }
-    if (!this.img || this.img.data.buffer !== d.pix.buffer) this.img = new ImageData(d.pix, d.w, d.h);
+    if (!this.img || this.img.data !== d.pix) this.img = new ImageData(d.pix, d.w, d.h);
     this.ctx.putImageData(this.img, 0, 0, p.x, p.y, p.w, p.h);
     this.drawn++;
   };
