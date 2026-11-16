@@ -76,7 +76,12 @@ export function mount(root, ctx) {
     const now = Date.now();
     while (bytes.length && now - bytes[0][0] > 2000) bytes.shift();
     const kb = bytes.reduce((a, b) => a + b[1], 0) / 2 / 1024;
-    return { fps: Math.round(ctl.fps() * 10) / 10, kBps: Math.round(kb), low: low.get() === '1' };
+    const out = { fps: Math.round(ctl.fps() * 10) / 10, kBps: Math.round(kb), low: low.get() === '1' };
+    if (mode === 'pal' && player && player.stats) {
+      const ps = player.stats();   // shown = draws, dropped = decoded and merged into a later draw, jitter = sd of the draw intervals
+      Object.assign(out, { shown: Math.round(ps.presentFps * 10) / 10, dropped: ps.dropped, jitterMs: Math.round(ps.jitterMs * 10) / 10, latencyMs: Math.round(ps.latencyMs), lossless: true });
+    }
+    return out;
   }
   function watchRate() {
     const st = stats();
@@ -91,7 +96,7 @@ export function mount(root, ctx) {
     } else { slowSince = 0; if (!hint.hidden && st.fps >= HINT_FPS) hint.hidden = true; }
     // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
     const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
-    const text = (dbg || (ctl.state === 'live' && st.fps < HINT_FPS)) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.low ? ', low rate' : '') : '';
+    const text = (dbg || (ctl.state === 'live' && st.fps < HINT_FPS)) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
     if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
     ctx.later(watchRate, 1000);
   }
@@ -111,24 +116,39 @@ export function mount(root, ctx) {
   const palUrl = ctx.config && ctx.config.palFeedUrl;
   const PF = () => (typeof window !== 'undefined' && window.PalFeed) || null;
   const log = (m) => { if (typeof console !== 'undefined' && console.info) console.info('video: ' + m); };
+  // The canvas fills the frame box (contain, 4:3 kept) at ANY scale, rounded to whole device pixels. Sharp pixels off (the
+  // default): nearest-neighbour only at a whole-number scale of 1x or more, smooth otherwise (a fractional scale with
+  // nearest-neighbour shimmers while the picture scrolls); on: always nearest-neighbour.
+  const sharp = ctx.store('sharp');
+  const sharpBtn = ctx.el('button', 'd-btn', 'Sharp pixels');
+  sharpBtn.type = 'button'; sharpBtn.dataset.size = 'sm'; sharpBtn.dataset.key = 'sharp';
+  sharpBtn.setAttribute('aria-pressed', String(sharp.get() === '1'));
+  sharpBtn.title = 'Hard pixel edges instead of smooth scaling (lossless picture only)';
+  sharpBtn.hidden = true; // shown while the lossless picture is on
+  ctx.actions.append(sharpBtn);
+  sharpBtn.addEventListener('click', () => {
+    const on = sharp.get() !== '1';
+    sharp.set(on ? '1' : '0'); sharpBtn.setAttribute('aria-pressed', String(on)); palFit();
+  });
   function palFit() {
     const P = PF();
-    if (!P || !P.fit || mode !== 'pal' || !frame.clientWidth) return;
-    const r = P.fit(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
-    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px'); // whole device pixels per frame pixel: sharp at any zoom
+    if (!P || !P.fitFill || mode !== 'pal' || !frame.clientWidth) return;
+    const r = P.fitFill(cv.width, cv.height, frame.clientWidth, frame.clientHeight, (typeof window !== 'undefined' && window.devicePixelRatio) || 1);
+    cv.style.setProperty('--pal-w', r.cssW + 'px'); cv.style.setProperty('--pal-h', r.cssH + 'px');
+    cv.dataset.smooth = (sharp.get() !== '1' && !(r.integer && r.scale >= 1)) ? '1' : '0';
   }
   function toMjpeg(why) {
     if (mode === 'mjpeg') return;
     log('falling back to MJPEG: ' + why);
     mode = 'mjpeg'; palFails = 0;
-    cv.hidden = true;
+    cv.hidden = true; sharpBtn.hidden = true;
     ctl.reconnect();
   }
   function openPal(onFrame, onEnd) {
     const P = PF();
     player = new P.Player({
       canvas: cv, url: src(palUrl),
-      onFrame: () => { palFails = 0; if (cv.hidden) { cv.hidden = false; shot.hidden = true; wait.hidden = true; palFit(); } onFrame(); },
+      onFrame: () => { palFails = 0; if (cv.hidden) { cv.hidden = false; shot.hidden = true; wait.hidden = true; sharpBtn.hidden = false; palFit(); } onFrame(); },
       onBytes: (n) => bytes.push([Date.now(), n]),
       log,
       onEnd: (e) => {

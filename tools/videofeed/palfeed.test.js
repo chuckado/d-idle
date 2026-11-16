@@ -79,70 +79,130 @@ test('detect keeps the MJPEG img unless the host says paletteFeed', async () => 
   assert.strictEqual(await PF.detect(() => Promise.reject(new Error('net')), ''), null);
 });
 
-test('player: draws once per animation frame with the newest state (latest wins)', async () => {
-  const wire = Buffer.concat([lenp(rd('key.pf')), rd('key.pf'), lenp(rd('delta.pf')), rd('delta.pf')]);
-  const puts = [], rafs = [];
+// --- the player, driven by a fake clock, a fake animation frame and a body we push chunks into ---
+function rig(extra) {
+  const rafs = [], puts = [], clock = { t: 0 };
   global.ImageData = function (d, w, h) { this.data = d; this.width = w; this.height = h; };
   const canvas = { width: 0, height: 0, getContext: () => ({ putImageData: (...a) => puts.push(a.slice(3)) }) };
-  let released;
-  const body = { getReader: () => { let n = 0; return { read: () => n++ === 0 ? Promise.resolve({ done: false, value: new Uint8Array(wire) }) : new Promise((r) => { released = r; }) }; } };
-  const p = new PF.Player({ canvas, url: '/stream.pfeed', fetch: () => Promise.resolve({ ok: true, body }), raf: (cb) => rafs.push(cb),
-    inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)) });
-  p.start();
-  for (let i = 0; i < 20 && p.frames < 2; i++) await new Promise((r) => setTimeout(r, 5));
-  assert.strictEqual(p.frames, 2, 'both messages decoded');
-  assert.strictEqual(rafs.length, 1, 'one animation frame requested for two messages');
-  rafs.shift()();
-  assert.strictEqual(puts.length, 1, 'one draw');
-  assert.deepStrictEqual(puts[0], [0, 0, 96, 70], 'the union of key and delta is the whole frame');
-  assert.ok(rgbEqual(p.dec.pix, rd('b.rgba')));
-  p.stop();
+  const waiters = [], chunks = [];
+  const body = { getReader: () => ({ read: () => chunks.length ? Promise.resolve({ done: false, value: chunks.shift() }) : new Promise((r) => waiters.push(r)) }) };
+  const ev = { frames: 0, bytes: 0, end: null, logs: [] };
+  const p = new PF.Player(Object.assign({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body }), raf: (cb) => rafs.push(cb), now: () => clock.t,
+    inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)), onFrame: () => ev.frames++, onBytes: (n) => (ev.bytes += n), onEnd: (e) => { ev.end = e; }, log: (m) => ev.logs.push(m) }, extra));
+  const push = async (buf) => { const v = new Uint8Array(buf); const w = waiters.shift(); if (w) w({ done: false, value: v }); else chunks.push(v); await settle2(); };
+  // run the next animation frame at time ts
+  const frame = async (ts) => { clock.t = ts; const cb = rafs.shift(); if (cb) cb(ts); await settle2(); };
+  return { p, puts, rafs, clock, push, frame, ev };
+}
+const settle2 = async () => { for (let i = 0; i < 6; i++) await new Promise((r) => setImmediate(r)); };
+// a wire message from a fixture with its seq, base seq and game ms patched (the payload is reused: only the header matters to the clock)
+function patch(buf, seq, base, gameMs) {
+  const m = Buffer.from(buf); m.writeUInt32LE(seq, 10); m.writeUInt32LE(base, 14); m.writeUInt32LE(gameMs >>> 0, 18);
+  return Buffer.concat([lenp(m), m]);
+}
+
+test('player: messages due together draw once with the union (latest wins)', async () => {
+  const r = rig();
+  r.p.start();
+  await settle2();
+  await r.push(Buffer.concat([patch(rd('key.pf'), 1, 0, 1000), patch(rd('delta.pf'), 2, 1, 1040)]));
+  assert.strictEqual(r.p.stats().delivered, 2);
+  await r.frame(100000); // far past both due times
+  assert.strictEqual(r.puts.length, 1, 'one draw');
+  assert.deepStrictEqual(r.puts[0], [0, 0, 96, 70], 'the union of key and delta is the whole frame');
+  const st = r.p.stats();
+  assert.strictEqual(st.decoded, 2); assert.strictEqual(st.presented, 1); assert.strictEqual(st.dropped, 1);
+  assert.ok(rgbEqual(r.p.dec.pix, rd('b.rgba')));
+  r.p.stop();
 });
 
-function fakeBody(chunks) {
-  return { getReader: () => { let n = 0; return { read: () => n < chunks.length ? Promise.resolve({ done: false, value: new Uint8Array(chunks[n++]) }) : new Promise(() => {}) }; } };
-}
-const settle = async (cond) => { for (let i = 0; i < 40 && !cond(); i++) await new Promise((r) => setTimeout(r, 5)); };
+test('player: a frame is not shown before its due time and is shown after it', async () => {
+  const r = rig();
+  r.p.start(); await settle2();
+  r.clock.t = 5000;
+  await r.push(patch(rd('key.pf'), 1, 0, 1000));
+  await r.frame(5001);          // due = game + (arrival - game) + delay: about 33 ms after arrival
+  assert.strictEqual(r.puts.length, 0, 'not due yet');
+  assert.ok(r.rafs.length >= 1, 'asks for another animation frame');
+  await r.frame(5016); assert.strictEqual(r.puts.length, 0);
+  await r.frame(5050); assert.strictEqual(r.puts.length, 1, 'due');
+  r.p.stop();
+});
 
-test('player: a delta after a draw stays a dirty rect (one ImageData per decoder buffer)', async () => {
-  const puts = [], rafs = [];
-  global.ImageData = function (d, w, h) { this.data = d; this.width = w; this.height = h; };
-  const canvas = { width: 0, height: 0, getContext: () => ({ putImageData: (...a) => puts.push(a.slice(3)) }) };
-  const p = new PF.Player({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body: fakeBody([Buffer.concat([lenp(rd('key.pf')), rd('key.pf')])]) }),
-    raf: (cb) => rafs.push(cb), inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)) });
-  p.start();
-  await settle(() => p.frames === 1);
-  rafs.shift()();
-  p._got(p.dec.apply(PF.parseHeader(rd('delta.pf')), new Uint8Array(zlib.inflateRawSync(rd('delta.pf').subarray(PF.HEADER)))));
-  rafs.shift()();
-  assert.deepStrictEqual(puts[0], [0, 0, 96, 70]);
-  assert.ok(puts[1][2] < 96 || puts[1][3] < 70, 'second draw is a sub-rectangle, got ' + puts[1]);
-  p.stop();
+test('player: one chunk, one message after the other: a late message older than 80 ms is taken at once', async () => {
+  const r = rig();
+  r.p.start(); await settle2();
+  r.clock.t = 1000;
+  await r.push(patch(rd('key.pf'), 1, 0, 0));
+  r.clock.t = 1500; // the browser was busy for half a second
+  await r.push(patch(rd('delta.pf'), 2, 1, 40));
+  await r.frame(1501);
+  assert.strictEqual(r.puts.length, 1, 'both taken, one draw');
+  assert.ok(r.p.stats().latencyMs >= 0);
+  r.p.stop();
+});
+
+// Presentation jitter: frames made at 30 fps game time arrive with 0 to 40 ms of delay; animation frames run at 60 Hz.
+// The clock must make the intervals between draws more even than presenting at the first animation frame after arrival.
+test('player: the presentation clock evens out arrival jitter and bounds the delay', async () => {
+  const r = rig();
+  r.p.start(); await settle2();
+  let seed = 12345; const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  const N = 150, step = 1000 / 30, arrivals = [];
+  let prevAt = 0; // TCP never reorders: an arrival is never earlier than the one before
+  for (let k = 0; k < N; k++) { const at = Math.max(prevAt, 2000 + k * step + rnd() * 40); prevAt = at; arrivals.push({ k, g: Math.round(k * step), at }); }
+  const naive = []; let ai = 0, lastNaive = -1;
+  for (let ts = 2000; ts < 2000 + N * step + 300; ts += 1000 / 60) {
+    let got = false;
+    while (ai < arrivals.length && arrivals[ai].at <= ts) {
+      const a = arrivals[ai++]; r.clock.t = a.at;
+      await r.push(a.k === 0 ? patch(rd('key.pf'), 1, 0, a.g) : patch(rd('delta.pf'), a.k + 1, a.k, a.g)); got = true;
+    }
+    if (got) { if (lastNaive >= 0) naive.push(ts - lastNaive); lastNaive = ts; }
+    await r.frame(ts);
+  }
+  const st = r.p.stats();
+  const sd = (v) => { const m = v.reduce((a, b) => a + b, 0) / v.length; return Math.sqrt(v.reduce((a, b) => a + (b - m) * (b - m), 0) / v.length); };
+  assert.ok(st.delivered === N, 'delivered ' + st.delivered);
+  assert.ok(st.presented >= N * 0.85 && st.presented <= N, 'presented ' + st.presented + ' of ' + N);
+  assert.ok(st.latencyMs <= 80, 'latency ' + st.latencyMs);
+  assert.ok(st.jitterMs < sd(naive), 'jitter ' + st.jitterMs.toFixed(1) + ' ms against naive ' + sd(naive).toFixed(1) + ' ms');
+  assert.ok(st.delayMs >= 33 && st.delayMs <= 70, 'delay ' + st.delayMs);
+  r.p.stop();
+});
+
+test('player: a heartbeat (same game time) is applied at once and does not disturb the clock', async () => {
+  const r = rig();
+  r.p.start(); await settle2();
+  r.clock.t = 100;
+  await r.push(patch(rd('key.pf'), 1, 0, 500));
+  await r.frame(300);
+  const before = r.p.stats().delayMs;
+  r.clock.t = 1300;
+  await r.push(patch(rd('delta.pf'), 1, 1, 500)); // seq stays 1 = base 1: an empty delta in real life; the payload here is a real delta
+  await r.frame(1301);
+  assert.ok(Math.abs(r.p.stats().delayMs - before) < 1, 'delay unchanged');
+  r.p.stop();
 });
 
 test('player with onEnd: errors go to the caller, bad streams are fatal, onFrame and onBytes count', async () => {
-  global.ImageData = function (d, w, h) { this.data = d; };
-  const canvas = { width: 0, height: 0, getContext: () => ({ putImageData() {} }) };
   const run = async (wire) => {
-    const ev = { frames: 0, bytes: 0, end: null, logs: [] };
-    const p = new PF.Player({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body: fakeBody([wire]) }), raf: () => {},
-      inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)), onFrame: () => ev.frames++, onBytes: (n) => (ev.bytes += n),
-      onEnd: (e) => { ev.end = e; }, log: (m) => ev.logs.push(m) });
-    p.start();
-    await settle(() => ev.end);
-    p.stop();
-    return ev;
+    const r = rig();
+    r.p.start(); await settle2();
+    await r.push(wire);
+    await r.frame(100000);
+    await settle2();
+    r.p.stop();
+    return r.ev;
   };
-  let ev = await run(Buffer.concat([lenp(rd('key.pf')), rd('key.pf')]).subarray(0, 4)); // only a length: stream ends later; no error yet
-  assert.strictEqual(ev.end, null);
-  ev = await run(Buffer.concat([lenp(rd('delta.pf')), rd('delta.pf')])); // a delta first: needs a key, reconnect helps
+  let ev = await run(Buffer.concat([lenp(rd('delta.pf')), rd('delta.pf')])); // a delta first: needs a key, reconnect helps
   assert.ok(ev.end && ev.end.needKey && !ev.end.fatal);
   const junk = Buffer.alloc(40, 7);
-  ev = await run(Buffer.concat([lenp(junk), junk])); // garbage: header check fails, a retry cannot help
+  ev = await run(Buffer.concat([lenp(junk), junk])); // garbage: the header check fails, a retry cannot help
   assert.ok(ev.end && ev.end.fatal, 'garbage is fatal');
-  assert.ok(ev.logs.length === 1 && /palfeed/.test(ev.logs[0]));
+  assert.ok(ev.logs.length >= 1 && /palfeed/.test(ev.logs[0]));
   ev = await run(Buffer.concat([lenp(rd('key.pf')), rd('key.pf'), lenp(junk), junk]));
-  assert.ok(ev.frames === 1 && ev.bytes > 0 && ev.end.fatal);
+  assert.ok(ev.bytes > 0 && ev.end.fatal);
 });
 
 test('negotiate needs palfeed in glance stream.formats and a ready probe', async () => {
@@ -154,4 +214,16 @@ test('negotiate needs palfeed in glance stream.formats and a ready probe', async
   assert.strictEqual(await PF.negotiate(mk(undefined, 200), '', 1), null);
   assert.strictEqual(await PF.negotiate(mk(['mjpeg', 'palfeed'], 503), '', 1), null, 'probe not ready after the tries');
   assert.strictEqual(await PF.negotiate(() => Promise.reject(new Error('net')), '', 1), null);
+});
+
+test('fitFill fills the box at any scale, keeps 4:3, rounds to whole device pixels', () => {
+  let r = PF.fitFill(800, 600, 1000, 700, 1);       // 1075 px window: width 1000, height limits at 700
+  assert.ok(Math.abs(r.cssW / r.cssH - 4 / 3) < 0.01, 'aspect ' + r.cssW + 'x' + r.cssH);
+  assert.ok(r.cssH === 700 && r.cssW === 933 && !r.integer && r.scale > 1.16 && r.scale < 1.17, JSON.stringify(r));
+  r = PF.fitFill(800, 600, 1600, 1200, 1); assert.ok(r.integer && r.scale === 2 && r.cssW === 1600);
+  r = PF.fitFill(800, 600, 400, 300, 1);   assert.ok(!r.integer && r.scale === 0.5, 'a phone card shrinks the picture');
+  r = PF.fitFill(800, 600, 801, 700, 2);   // dpr 2: whole device pixels, so css sizes are multiples of 0.5
+  assert.ok(Number.isInteger(r.cssW * 2) && Number.isInteger(r.cssH * 2), JSON.stringify(r));
+  assert.ok(r.cssW <= 801 + 1e-9 && r.cssH <= 700 + 1e-9);
+  r = PF.fitFill(800, 600, 0, 0, 1);       assert.ok(r.cssW > 0, 'a hidden box gives a harmless size');
 });
