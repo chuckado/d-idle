@@ -149,7 +149,6 @@ cmd/d2bot/d2dbackend.go  credit-runner  maptrail
 cmd/d2bot/d2dbackend.go  credit-runner  survA
 cmd/d2bot/d2dbackend.go  credit-runner  survB
 cmd/d2bot/d2dbackend.go  credit-runner  survfix
-cmd/d2bot/d2dbackend.go  credit-runner  survledger
 cmd/d2bot/d2dbackend.go  credit-runner  uib1
 cmd/d2bot/d2dbackend.go  credit-runner  uib5
 cmd/d2bot/d2dwire.go  credit-runner  gearsets
@@ -195,7 +194,6 @@ cmd/d2bot/live.go  credit-runner  maptrail
 cmd/d2bot/live.go  credit-runner  survA
 cmd/d2bot/live.go  credit-runner  survB
 cmd/d2bot/live.go  credit-runner  survfix
-cmd/d2bot/live.go  credit-runner  survledger
 cmd/d2bot/live.go  credit-runner  uib1
 cmd/d2bot/live.go  credit-runner  uib5
 cmd/d2bot/loopwire.go  credit-runner  uib7
@@ -231,7 +229,6 @@ cmd/d2bot/senseshistory.go  credit-runner  maphistory
 cmd/d2bot/senseshistory.go  credit-runner  maphistoryA
 cmd/d2bot/senseshistory.go  credit-runner  maphistoryB
 cmd/d2bot/senseshistory.go  credit-runner  maphistoryC
-cmd/d2bot/senseshistory.go  credit-runner  survledger
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistory
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryA
 cmd/d2bot/senseshistory_test.go  credit-runner  maphistoryC
@@ -241,7 +238,6 @@ cmd/d2bot/survivalwire.go  credit-runner  powerwire
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
-cmd/d2bot/survivalwire.go  credit-runner  survledger
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/wiring_test.go  credit-runner  beltfix
 cmd/d2dview  credit-runner  videofeed2
@@ -761,7 +757,6 @@ internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
 internal/survival  credit-runner  survfix2
-internal/survival  credit-runner  survledger
 internal/survival  credit-runner  survsd
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
