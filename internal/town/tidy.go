@@ -103,12 +103,17 @@ func (t *Town) tidyPlan(s *d2.Snapshot) ([]tidy.Entry, map[uint32]d2.Unit, tidy.
 	var items []tidy.Item
 	byID := map[uint32]d2.Unit{}
 	maxBuy := loot.MaxBuyOf(s.Player)
+	sp := t.shadowPass(s, c.PackFullPct, c.StashFullPct) // shadow stage: log-only, nil when off
 	for _, u := range s.Inventory.Container(d2.ContInventory) {
 		if u.Item == nil || t.stashRefused[u.ID] {
 			continue
 		}
-		items = append(items, tidy.Item{ID: u.ID, Facts: t.TidyFacts(u, maxBuy, t.markOf(u))})
+		f := t.TidyFacts(u, maxBuy, t.markOf(u))
+		items = append(items, tidy.Item{ID: u.ID, Facts: f})
 		byID[u.ID] = u
+		if sp != nil {
+			sp.Observe(loot.ShadowTidy, u, string(p.Decide(f, c).Action), f.Mark, t.neverSellUnit(u), nil)
+		}
 	}
 	return p.Plan(items, c, t.tune().TidyMaxActions), byID, c, nil
 }
@@ -307,4 +312,19 @@ func (t *Town) TidyDropped(u d2.Unit) bool {
 		return false
 	}
 	return t.tidyDrops.Ignored(u.ID, tidyPrint(u), u.X, u.Y)
+}
+
+// neverSellUnit is the town's own never-sell list (quest items, the Cube, keys) for the shadow stage's item facts.
+func (t *Town) neverSellUnit(u d2.Unit) bool {
+	b := t.base(u)
+	return b != nil && (neverSell[b.Code] || b.Type == "key")
+}
+
+// shadowPass starts the loot rules shadow pass on the looter that judges (nil when the judge is something else or the
+// stage is off).
+func (t *Town) shadowPass(s *d2.Snapshot, packPct, stashPct int) *loot.ShadowPass {
+	if l, ok := t.judge.(*loot.Looter); ok {
+		return l.ShadowPass(s, packPct, stashPct)
+	}
+	return nil
 }
