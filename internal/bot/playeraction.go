@@ -171,6 +171,11 @@ func (r *Runner) playerActionStep(ctx context.Context, snap *d2.Snapshot, c cont
 		}
 		return ctx.Err()
 	})
+	// The pause after an attempt is for a POSTPONED request (a monster came close); a request that ran leaves nothing
+	// behind, so the next click does not wait out the gap (user report 2026-11-15: identify felt slow).
+	if pg.Pending() == 0 {
+		l.playerActAt = time.Time{}
+	}
 	return true
 }
 

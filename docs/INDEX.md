@@ -801,6 +801,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
+- [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04

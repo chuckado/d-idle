@@ -119,23 +119,40 @@
   // the server has not answered (the instant lane waits up to four seconds); 'done' and 'refused' stay for two views. The item
   // is never moved on the page before the view says so: a refusal leaves everything where it was.
   var fb = {};
+  // What the cell says while the request runs (within one frame of the click: setFb runs before the POST is sent).
+  var DOING = { identify: 'Identifying...', equip: 'Equipping...', unequip: 'Taking off...', stash: 'Stashing...', take: 'Taking...', trash: 'Dropping...', gold: 'Moving gold...', cain: 'Identifying...' };
+  var DONE_MS = 2000, FAST_MS = 200, timer = 0;
   function targetOf(path, body) {
     body = body || {};
     return { id: body.id === undefined ? 0 : body.id, slot: body.slot || '', kind: String(path).replace(/^.*\//, '') };
   }
   function setFb(t, state, code, text) {
     if (!t.id && !t.slot) return;
-    fb[t.id || t.slot] = { state: state, id: t.id, slot: t.slot, kind: t.kind, code: code || '', text: text || '', seen: 0 };
+    var k = t.id || t.slot;
+    fb[k] = { state: state, id: t.id, slot: t.slot, kind: t.kind, code: code || '', text: text || '', seen: 0 };
     markFeedback();
+    // the success highlight lasts two seconds by the clock, not by the number of views (the poll is fast now)
+    if (state === 'done' && typeof setTimeout === 'function') {
+      var mine = fb[k];
+      setTimeout(function () { if (fb[k] === mine) { delete fb[k]; markFeedback(); } }, DONE_MS);
+    }
   }
   function refuse(id, text, code) { setFb({ id: id, slot: '', kind: '' }, 'refused', code, text); if (text) say(text); }
+  // No scroll or tome: refuse at once and point at the way out, never wait (the button gets a ring for a few seconds).
+  function offerBuy() {
+    if (!ensureErrands() || !errBuy) return;
+    errBuy.dataset.offer = '';
+    if (typeof setTimeout === 'function') setTimeout(function () { delete errBuy.dataset.offer; }, 8000);
+    errNote('No identify scroll or tome: use "Buy identify scrolls".');
+  }
+  function noToolText(t) { return /scroll|tome/i.test(t || ''); }
   function markFeedback() {
-    Array.prototype.forEach.call(document.querySelectorAll ? document.querySelectorAll('[data-result], [data-sending]') : [], function (n) { delete n.dataset.result; delete n.dataset.sending; n.removeAttribute('data-why'); });
+    Array.prototype.forEach.call(document.querySelectorAll ? document.querySelectorAll('[data-result], [data-sending]') : [], function (n) { delete n.dataset.result; delete n.dataset.sending; delete n.dataset.doing; n.removeAttribute('data-why'); });
     Object.keys(fb).forEach(function (k) {
       var x = fb[k];
       [x.id ? 'item-' + x.id : '', x.slot ? 'slot-' + x.slot : ''].forEach(function (key) {
         var a = key && anchorOf(key); if (!a || !a.dataset) return;
-        if (x.state === 'sending') a.dataset.sending = '';
+        if (x.state === 'sending') { a.dataset.sending = x.kind || ''; a.dataset.doing = DOING[x.kind] || 'Working...'; }
         else { a.dataset.result = x.state; if (x.text) a.setAttribute('data-why', x.text); }
       });
     });
@@ -154,7 +171,7 @@
         var q = j && j.request, st = q && q.state;
         if (st === 'done') setFb(t, 'done', '', q.result || ''); else if (st === 'failed') setFb(t, 'refused', q.code || '', q.reason || ''); else delete fb[t.id || t.slot];
         return refresh();
-      }, function (e) { say(e.message); setNote(e.message); errNote(e.message); setFb(t, 'refused', e.code, e.message); return refresh(); });
+      }, function (e) { say(e.message); setNote(e.message); errNote(e.message); setFb(t, 'refused', e.code, e.message); if (t.kind === 'identify' && noToolText(e.message)) offerBuy(); return refresh(); });
   }
   function refresh() {
     return fetch('/api/inventory', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
@@ -177,7 +194,7 @@
   function gold(op, n) { return post('/api/inventory/gold', { op: op, count: n }); }
 
   function run(e, m) {
-    if (e.reason) { setNote(e.reason); refuse(m.id, e.reason); return; }
+    if (e.reason) { setNote(e.reason); refuse(m.id, e.reason); if (e.act === 'identify' && noToolText(e.reason)) offerBuy(); return; }
     if (e.act !== 'trash') confirming = false;
     switch (e.act) {
       case 'equip': closeMenu(true); equip(m.id, e.slot); return;
@@ -347,7 +364,7 @@
   }
 
   // ---- town errands (above the queue) ----
-  var errBox = null, errNoteEl = null, errCount = null, errBuy = null, errBuyHint = null, errCainWrap = null, errCain = null, errCainHint = null, errDirty = false, errSig = '';
+  var errBox = null, errNoteEl = null, errCount = null, errBuy = null, errBuyHint = null, errCainWrap = null, errCain = null, errCainHint = null, errInstantEl = null, errDirty = false, errSig = '', cainStart = -1;
   function errNote(t) { if (errNoteEl) errNoteEl.textContent = t || ''; }
   function offBtn(b, reason) { if (reason) { b.setAttribute('aria-disabled', 'true'); b.dataset.off = ''; } else { b.removeAttribute('aria-disabled'); delete b.dataset.off; } }
   function ensureErrands() {
@@ -376,7 +393,8 @@
     });
     errCainHint = el('p', 'd-hint err-hint teaser'); errCainWrap.appendChild(errCain); errCainWrap.appendChild(errCainHint);
     errNoteEl = el('p', 'd-hint err-note'); errNoteEl.setAttribute('role', 'status');
-    box.appendChild(buy); box.appendChild(errCainWrap); box.appendChild(errNoteEl);
+    errInstantEl = el('p', 'd-hint err-instant'); errInstantEl.hidden = true;
+    box.appendChild(errInstantEl); box.appendChild(buy); box.appendChild(errCainWrap); box.appendChild(errNoteEl);
     return box;
   }
   // renderErrands updates the strip in place (no rebuild: a number being typed must survive the 4 s poll).
@@ -384,8 +402,17 @@
     var id = view && view.identify;
     if (!ensureErrands()) return;
     errBox.hidden = !id;
+    var ins = view.instant;
+    errInstantEl.hidden = !(ins && ins.enabled);
+    errInstantEl.textContent = ins && ins.enabled ? 'Instant actions: on' + (ins.why ? ' (closed now: ' + ins.why + ')' : '') : '';
     if (!id) return;
-    var sig = JSON.stringify(id) + (view.stashOps ? 's' : '');
+    // "Identify all" shows read-back progress: the unidentified count the view reports, never a guess
+    var cainReq = id.cain !== 'locked' && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && (r.state === 'queued' || r.state === 'doing'); });
+    if (cainReq && cainStart < 0) cainStart = id.unid;
+    if (!cainReq) cainStart = -1;
+    var prog = cainReq ? (cainReq && (view.queue || []).some(function (r) { return kindOf(r) === 'cain' && r.state === 'doing'; })
+      ? 'Identified ' + Math.max(cainStart - id.unid, 0) + ' of ' + cainStart : 'waiting: not in town') : '';
+    var sig = JSON.stringify(id) + (view.stashOps ? 's' : '') + prog;
     if (sig === errSig) return;
     errSig = sig;
     errCount.setAttribute('placeholder', id.tome >= 0 ? 'fill (' + id.buyDefault + ')' : 'fill');
@@ -403,30 +430,66 @@
       errCainHint.textContent = id.cainWhy || (id.unid + ' unidentified item' + (id.unid === 1 ? '' : 's') + ' carried. Free: no scroll is used.');
       offBtn(errCain, id.cainWhy);
     }
+    if (prog) errCainHint.textContent = prog;
     // with the stash backend: say what Cain's Identify covers (S: the decomp finding, docs/inventory-actions.md)
-    if (view.stashOps && id.cain) errCainHint.textContent += ' Covers the backpack, cube and worn items, not the stash: identify a stash item from its own menu.';
+    if (!prog && view.stashOps && id.cain) errCainHint.textContent += ' Covers the backpack, cube and worn items, not the stash: identify a stash item from its own menu.';
   }
 
   // markPending flags the grid cells of items that wait in the queue (a stash move, a take-out, an identify): the cell gets
   // data-pending=<kind>, styled as a dashed outline in inventory-actions.css. Cells of settled requests are cleared.
   var pendingKeys = [];
   function markPending() {
-    pendingKeys.forEach(function (k) { var a = anchorOf(k); if (a && a.dataset) { delete a.dataset.pending; delete a.dataset.wait; } });
+    pendingKeys.forEach(function (k) { var a = anchorOf(k); if (a && a.dataset) { delete a.dataset.pending; delete a.dataset.wait; delete a.dataset.waiting; } });
     pendingKeys = [];
     ((view && view.queue) || []).forEach(function (r) {
       if (!r.id || (r.state !== 'queued' && r.state !== 'doing')) return;
       var k = 'item-' + r.id, a = anchorOf(k);
-      if (a && a.dataset) { a.dataset.pending = kindOf(r); if (r.wait) a.dataset.wait = r.wait; else delete a.dataset.wait; pendingKeys.push(k); }
+      if (a && a.dataset) {
+        a.dataset.pending = kindOf(r); if (r.wait) a.dataset.wait = r.wait; else delete a.dataset.wait;
+        var w = waitText(r); if (w) { a.dataset.waiting = w; a.setAttribute('data-why', w); } else delete a.dataset.waiting;
+        pendingKeys.push(k);
+      }
       if (r.slot && kindOf(r) === 'equip') { var sa = anchorOf('slot-' + r.slot); if (sa && sa.dataset) { sa.dataset.pending = kindOf(r); pendingKeys.push('slot-' + r.slot); } }
     });
     markFeedback();
   }
 
   // ---- events ----
+  // Short polling while a request is waiting or running: the page learns of a finished request within FAST_MS, not at the next
+  // 4 s poll of inventory.js. It stops by itself when nothing is pending or sending.
+  function busy() {
+    if (Object.keys(fb).some(function (k) { return fb[k].state === 'sending'; })) return true;
+    return ((view && view.queue) || []).some(function (r) { return r.state === 'queued' || r.state === 'doing'; });
+  }
+  function schedulePoll() {
+    if (timer || typeof setTimeout !== 'function' || !busy()) return;
+    timer = setTimeout(function () { timer = 0; if (busy()) refresh(); }, FAST_MS);
+  }
+  // A request that failed without the player pressing anything (lost item, no safe moment, ...) is said once, at the item and in
+  // the message line: it never just disappears from the queue. The first view only learns what is old.
+  var announced = null;
+  function announceFailures(v) {
+    var fresh = (v.recent || []).filter(function (r) { return r.state === 'failed'; });
+    if (announced === null) { announced = {}; fresh.forEach(function (r) { announced[r.id + ':' + r.at] = 1; }); return; }
+    fresh.forEach(function (r) {
+      var key = r.id + ':' + r.at;
+      if (announced[key]) return;
+      announced[key] = 1;
+      if (r.reason) { say(r.reason); if (r.id) setFb({ id: r.id, slot: '', kind: '' }, 'refused', r.code, r.reason); }
+    });
+  }
+  function waitText(r) {
+    if (r.state !== 'queued') return '';
+    if (r.wait === 'town') return 'waiting: not in town';
+    var ins = view && view.instant;
+    return 'waiting: ' + ((ins && ins.why) || 'a safe moment (no monster near)');
+  }
   function onView(v, fresh) {
     view = v;
     if (!fresh) ageFeedback();
+    announceFailures(v);
     markPending();
+    schedulePoll();
     // inventory.js hands the view over BEFORE it rebuilds the doll and the cells and redraws the queue card: the marks and our
     // own card are drawn once that call has returned, on the cells that are on the page then (review c2c3 R6)
     Promise.resolve().then(function () { if (view !== v) return; markPending(); renderQueue(); renderErrands(); renderGold(); });
@@ -451,7 +514,7 @@
   function gesture(key, act) {
     var h = entryFor(key, act), f = find(key);
     if (!h || !f) return false;
-    if (h.e.reason) { refuse(f.it.id, h.e.reason); return true; }
+    if (h.e.reason) { refuse(f.it.id, h.e.reason); if (h.e.act === 'identify' && noToolText(h.e.reason)) offerBuy(); return true; }
     if (h.e.act === 'trash') { trashConfirm(key); return true; }
     run(h.e, h.m);
     return true;
@@ -541,11 +604,11 @@
   // trashConfirm opens the item's menu already on the confirm step (the drag of a tile outside every grid): the same two
   // clicks as the menu, so a drop alone never trashes.
   function trashConfirm(key) { openMenu(key); if (!openKey) return; var f = find(key); if (f && f.it && !f.it.noTrash) { confirming = true; draw(true); } }
-  var api = { post: post, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, first: first, entries: entries, runEntry: runEntry, cancelRow: cancelRow, gesture: gesture, refuse: refuse, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
+  var api = { post: post, offerBuy: offerBuy, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, first: first, entries: entries, runEntry: runEntry, cancelRow: cancelRow, gesture: gesture, refuse: refuse, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
   if (typeof window !== 'undefined') window.d2InvActions = api;
   if (typeof window !== 'undefined' && window.__actTest) {
-    window.__actTest({ init: init, onView: onView, model: model, entryFor: entryFor, gesture: gesture, first: first, fb: function () { return fb; }, post: post,  find: find, open: openMenu, close: closeMenu, place: place,
-      state: function () { return { key: openKey, node: menu, confirming: confirming, sheet: sheet }; }, renderQueue: renderQueue, renderErrands: renderErrands, renderGold: renderGold, goldBox: function () { return { box: gBox, amt: gAmt, dep: gDep, wd: gWd, hint: gHint }; }, errands: function () { return { box: errBox, count: errCount, buy: errBuy, cain: errCain, wrap: errCainWrap, note: errNoteEl }; }, setSheet: function (s) { sheet = !!s; } });
+    window.__actTest({ poll: function () { return timer; }, announce: announceFailures, init: init, onView: onView, model: model, entryFor: entryFor, gesture: gesture, first: first, fb: function () { return fb; }, post: post,  find: find, open: openMenu, close: closeMenu, place: place,
+      state: function () { return { key: openKey, node: menu, confirming: confirming, sheet: sheet }; }, renderQueue: renderQueue, renderErrands: renderErrands, renderGold: renderGold, goldBox: function () { return { box: gBox, amt: gAmt, dep: gDep, wd: gWd, hint: gHint }; }, errands: function () { return { instant: errInstantEl, hint: errCainHint, box: errBox, count: errCount, buy: errBuy, cain: errCain, wrap: errCainWrap, note: errNoteEl }; }, setSheet: function (s) { sheet = !!s; } });
     return;
   }
   init();

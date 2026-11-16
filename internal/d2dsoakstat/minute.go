@@ -27,6 +27,9 @@ type Minute struct {
 	// V (by unit test, not live): the bot minute line emits both since change minutefields; HasHP is false for older logs that lack both keys.
 	DmgTaken, HPMinPct int
 	HasHP              bool
+	// LifeLost and HitsTaken are the minute's observed intake (additive keys lifeLost, hitsTaken, hpPolls; HasIntake false in older logs).
+	LifeLost, HitsTaken, HPPolls int
+	HasIntake                    bool
 	// PackHP is the healing potions in the pack, BeltBoxes the belt column contents ("0:Minor_Healing_Potion ...");
 	// HasBelt is false for logs that carry neither key (Game.exe era), which then have no belt window.
 	PackHP    int
@@ -91,6 +94,12 @@ func minuteFromKV(kv map[string]string) (Minute, bool) {
 		m.PotionsUsed, _ = strconv.Atoi(v)
 	} else {
 		m.PotionsUsed, _ = strconv.Atoi(kv["potions"])
+	}
+	if v, has := kv["lifeLost"]; has {
+		m.LifeLost, _ = strconv.Atoi(v)
+		m.HitsTaken, _ = strconv.Atoi(kv["hitsTaken"])
+		m.HPPolls, _ = strconv.Atoi(kv["hpPolls"])
+		m.HasIntake = true
 	}
 	if a, ok1 := kv["dmgTaken"]; ok1 {
 		if b, ok2 := kv["hpMinPct"]; ok2 {

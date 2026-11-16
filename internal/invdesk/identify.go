@@ -369,3 +369,36 @@ func (d *Desk) runIdentifyBatch(ctx context.Context, sv Services, out *[]string)
 	_ = d.saveLocked()
 	return stop
 }
+
+// CodeLost is the Code of an identify request whose item left the character before the request ran.
+const CodeLost = "lost"
+
+// reapLost fails every queued identify request whose item is no longer carried or stored (sold, dropped, moved by
+// something else), with a reason the page shows: a request never just disappears (user report 2026-11-15). Without a
+// snapshot nothing is judged. The snapshot callback runs unlocked.
+func (d *Desk) reapLost() {
+	s := d.snap()
+	if s == nil || s.Inventory == nil {
+		return
+	}
+	have := map[uint32]bool{}
+	for _, u := range s.Inventory.Items {
+		have[u.ID] = true
+	}
+	d.mu.Lock()
+	defer d.mu.Unlock()
+	q := d.st.Queue[:0:0]
+	for _, r := range d.st.Queue {
+		if r.kind() == KindIdentify && r.State == StateQueued && !have[r.ID] {
+			r.State, r.Code = StateFailed, CodeLost
+			r.Reason = fmt.Sprintf("Identify request for %s lost: the item was sold, dropped or moved", r.Name)
+			d.recentLocked(r)
+			continue
+		}
+		q = append(q, r)
+	}
+	if len(q) != len(d.st.Queue) {
+		d.st.Queue = q
+		_ = d.saveLocked()
+	}
+}

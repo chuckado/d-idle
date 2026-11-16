@@ -367,6 +367,9 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 	// step runs one chore if its need check says so (or Force).
 	step := func(name string, enabled bool, need func(*d2.Snapshot) bool, run func() error) error {
 		if !enabled {
+			if name == "identify" || name == "sell" {
+				rep.add(name, false, "not planned for this visit", nil)
+			}
 			return nil
 		}
 		if err := ctx.Err(); err != nil {
@@ -379,7 +382,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		// the player's repair policy is not overridden by a Force plan
 		force := plan.Force && !(name == "repair" && t.repairGate != nil)
 		if !force && !need(cur) {
-			rep.add(name, false, "not needed", nil)
+			rep.add(name, false, t.skipWhy(name, cur), nil)
 			return nil
 		}
 		if !t.e.Clock.Now().Before(deadline) {
@@ -883,4 +886,16 @@ func (t *Town) logBudget(goldIn int, delta map[string]int, reserve int) {
 		}
 	}
 	t.e.Log.Info("town budget", "in", goldIn, "sold", delta["sell"], "earned", earned, "spent", spent, "byChore", delta, "left", left, "mercReserve", reserve)
+}
+
+// skipWhy names why a chore that was planned found nothing to do (the "chores done" log line); only identify has a
+// reason of its own, the rest keep "not needed".
+func (t *Town) skipWhy(name string, s *d2.Snapshot) string {
+	if name != "identify" {
+		return "not needed"
+	}
+	if len(t.needIdentify(s)) == 0 {
+		return "nothing to identify"
+	}
+	return "no scroll or tome and none to buy"
 }
