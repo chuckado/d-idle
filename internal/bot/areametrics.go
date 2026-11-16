@@ -14,6 +14,7 @@ type areaAcc struct {
 	id           int
 	xp, gold     int64
 	killsAtEntry int
+	lostAtEntry  int // hp.lost at entry
 	enteredAt    time.Time
 	prevGold     int
 	prevExp      uint32
@@ -29,10 +30,10 @@ func (r *Runner) noteAreaMetrics(p *d2.Player, now time.Time) {
 		if a.known {
 			mins := int(now.Sub(a.enteredAt).Round(time.Minute) / time.Minute)
 			r.zoneObserve(ZoneEvent{Kind: ZoneEvArea, Area: a.id, Diff: difficultyName(p.Difficulty), Kills: o.kills - a.killsAtEntry,
-				Seconds: now.Sub(a.enteredAt).Seconds(), XP: float64(a.xp), At: now})
-			r.e.Log.Info("area summary", "area", a.id, "minutes", mins, "xp", a.xp, "kills", o.kills-a.killsAtEntry, "goldPickup", a.gold)
+				Seconds: now.Sub(a.enteredAt).Seconds(), XP: float64(a.xp), LifeLost: o.hp.lost - a.lostAtEntry, At: now})
+			r.e.Log.Info("area summary", "area", a.id, "minutes", mins, "xp", a.xp, "kills", o.kills-a.killsAtEntry, "goldPickup", a.gold, "lifeLost", o.hp.lost-a.lostAtEntry)
 		}
-		*a = areaAcc{id: p.Area, killsAtEntry: o.kills, enteredAt: now, prevGold: p.Gold, prevExp: p.Exp, known: true}
+		*a = areaAcc{id: p.Area, killsAtEntry: o.kills, lostAtEntry: o.hp.lost, enteredAt: now, prevGold: p.Gold, prevExp: p.Exp, known: true}
 		return
 	}
 	if p.Exp > a.prevExp {
