@@ -419,7 +419,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		run     func() error
 	}{
 		// optional (town.identifyTome, off by default): a Tome of Identify bought and filled before identify and sell
-		{"idtome", plan.Scrolls || plan.Identify, t.needIDTome, func() error { return t.buyIDTome(ctx, &rep) }},
+		{"idtome", plan.Scrolls && t.tune().IdentifyTome != 0, t.needIDTome, func() error { return t.buyIDTome(ctx, &rep) }},
 		{"identify", plan.Identify, t.identifyNeeded, func() error { return t.identify(ctx, a, &rep) }},
 		// before sell: a naked character wears what it found instead of selling it (G1 attempt 6)
 		{"equip", true, t.needEquipFound, func() error { _, err := t.EquipFound(ctx); return err }},
