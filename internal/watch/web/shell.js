@@ -790,6 +790,7 @@ function setupMenu(sel) {
     pop.hidden = !pop.hidden;
     if (!pop.hidden) { place(); shown(true); } else shown(false);
     if (chip && !pop.hidden) onboardingChip(chip);
+    if (menuReturn) menuReturn.hidden = !!(retLink && retLink.hidden); // the band link is hidden while the bot has no return screen
     more.setAttribute('aria-expanded', String(!pop.hidden));
   });
   window.addEventListener('resize', () => { if (!pop.hidden) place(); });
@@ -798,7 +799,8 @@ function setupMenu(sel) {
   wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
   pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
   for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
-  let chip = null;
+  let chip = null, menuReturn = null;
+  const retLink = document.getElementById('returnlink');
   for (const [id, text] of [['log', 'Log'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
     if (!dr.boxes.has(id)) continue;
     const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
@@ -808,6 +810,8 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
+  // the band drops its Return screen link on a narrow window (components.css): the menu always has it
+  if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; pop.appendChild(menuReturn); }
   const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
   rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
