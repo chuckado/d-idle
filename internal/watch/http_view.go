@@ -74,7 +74,7 @@ func (h *Hub) ViewHandler() http.Handler {
 			asset("app.js", "text/javascript; charset=utf-8")(w, r)
 		case "/watch/app.css", "/watch/tokens.css", "/watch/reset.css", "/watch/shell.css", "/watch/components.css", "/watch/utilities.css", "/watch/inventory.css":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/css; charset=utf-8")(w, r)
-		case "/watch/shell.js", "/watch/resetui.js", "/watch/overlay.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js":
+		case "/watch/shell.js", "/watch/resetui.js", "/watch/supportui.js", "/watch/overlay.js", "/watch/layout.js", "/watch/layoutedit.js", "/watch/mjpeg.js":
 			asset(strings.TrimPrefix(r.URL.Path, "/watch/"), "text/javascript; charset=utf-8")(w, r)
 		case "/watch/layouts/mockup.json", "/watch/layouts/live.json", "/watch/layouts/command.json",
 			"/watch/layouts/classic.json", "/watch/layouts/simple.json", "/watch/layouts/standard.json", "/watch/layouts/stream.json", "/watch/layouts/debug.json", "/watch/layouts/cockpit.json":
