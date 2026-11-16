@@ -223,6 +223,7 @@
 | charsup | proposed | - | `deploy/d2d-container/entrypoint.sh`<br>`deploy/d2d-container/tester_image_test.go`<br>`internal/charsel`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go`<br>`docs/charselect.md` | - |
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
 | farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
+| survabscreen | proposed | - | `docs/probes/survival-ab-screen-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
 | lootwire3 | proposed | - | `internal/lootrules`<br>`internal/loot/rulesengine.go`<br>`internal/loot/rulespreview.go`<br>`internal/loot/rulespreview_test.go`<br>`internal/watch/lootrulestools_test.go`<br>`internal/charsel/lootrulesstate_test.go`<br>`internal/loot/rulesengine_test.go`<br>`internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/loot/rulesadapt.go`<br>`internal/town/shop.go`<br>`internal/watch/lootrulesapi.go`<br>`internal/watch/lootrulesapi_test.go`<br>`internal/watch/lootrulesui_test.go`<br>`internal/watch/web/lootrulesui.js`<br>`internal/watch/web/shell.css`<br>`internal/charsel/perchar.json`<br>`cmd/d2bot/lootruleswire.go`<br>`cmd/d2bot/lootruleswire_test.go`<br>`tools/uishots`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/env/tuning_loot.go` | - |
 | seqfollow | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
@@ -268,6 +269,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 0d0437214 11-16 13:56 `Merge agent/survabscreen: Merge branch 'main' into survabscreen` (survabscreen)
+- c58e73e4c 11-16 13:55 `Merge branch 'main' into survabscreen` (-)
 - 78ee7b4b7 11-16 13:53 `Merge agent/telebody: Merge branch 'main' into telebody` (telebody)
 - d4e1da3bb 11-16 13:52 `Merge branch 'main' into telebody` (-)
 - ad5c46990 11-16 13:46 `Merge agent/seqfollowup: Merge branch 'main' into seqfollow` (seqfollowup)
@@ -276,6 +279,4 @@
 - 269400e76 11-16 13:44 `Merge branch 'main' into TASK-551` (-)
 - e1fd1124c 11-16 13:38 `Merge agent/charui: Merge branch 'main' into TASK-530` (charui)
 - 5c5382a96 11-16 13:37 `Merge branch 'main' into TASK-530` (-)
-- 5ca1b88db 11-16 13:31 `Merge origin/main into charui` (-)
-- a691c3066 11-16 13:31 `Merge agent/lootwire3: Merge branch 'main' into lootwire3` (lootwire3)
 <!-- statusgen:end -->
