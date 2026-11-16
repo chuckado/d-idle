@@ -387,6 +387,7 @@ docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
+docs/upstream/bodies/seq-ias-body.md  credit-runner  p17posted
 docs/upstream/briefs/**  credit-runner  prpipeline
 docs/upstream/briefs/hitrec-norestart-oracle.md  credit-runner  prfix2
 docs/upstream/drafts/hitrec-modes.md  credit-runner  prfix2
@@ -397,11 +398,13 @@ docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp22
 docs/upstream/pipeline-2026-11-14.md  credit-runner  decomp30
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p04posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  p06posted
+docs/upstream/pipeline-2026-11-14.md  credit-runner  p17posted
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix2
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prfix3
 docs/upstream/pipeline-2026-11-14.md  credit-runner  prpipeline
 docs/upstream/pr-queue.md  credit-runner  p04posted
 docs/upstream/pr-queue.md  credit-runner  p06posted
+docs/upstream/pr-queue.md  credit-runner  p17posted
 docs/upstream/pr-queue.md  credit-runner  prfix2
 docs/upstream/pr-queue.md  credit-runner  prfix3
 docs/upstream/pr-queue.md  credit-runner  prpipeline

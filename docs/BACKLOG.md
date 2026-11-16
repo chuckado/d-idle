@@ -931,6 +931,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - farmloopon: farm loop on in the sandbox, decay measurement (TASK-527, merged 2026-11-15, acceptance 2 of 2): bot.farmReset=1 set in the sandbox tuning file (backup kept) and the bot restarted; healthy, hero alive, verified from logs; no farm reset line yet. Measurement script and recipe added with a baseline run. <!--sg:agent/farmloopon-->
 - agent/lootwire1: Merge branch 'main' into lootwireL4 (merged 2026-11-15) <!--sg:agent/lootwire1-->
 - agent/farmloopon2: Merge branch 'main' into farmloopon (merged 2026-11-15) <!--sg:agent/farmloopon2-->
+- p17posted: P17 sequence attack rate posted upstream as #565 (TASK-533, merged 2026-11-15, acceptance 1 of 1): P17 posted as https://github.com/psi29a/d2decomped/pull/565 (head fid/seq-ias-r3, oracle 6b6b9166, claim 5742abd1, upstream 485fe535); compare 7,600 cells 6,941 differ before, 0 after, clang-tidy-19 0 in test_seq_rate.cpp (V run on the NAS builder) ... <!--sg:agent/p17posted-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
