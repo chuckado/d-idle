@@ -416,7 +416,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [loop-order.md](loop-order.md): The Loop order and its unlock (status: built offline (task uib7), not verified live. Design: `docs/ui/redesign-2026-11-14/C-orders.md` section 8....)
 - [loot-charms.md](loot-charms.md): Charms, runes and gems on a sell visit (status: current (card m1-loot, agent m1loot, 2026-10-31). Rule source: user decision D4 and the d2-sme; shared...)
 - [lootmemory.md](lootmemory.md): Loot memory (status: current (TASK-320). Code: `internal/loot/memory.go`; hooks in `internal/bot/observe.go` and `goal.go`...)
-- [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus a PROTOTYPE (`internal/lootrules/`, stdlib only, tested offline, NOT wired into the bot, no...)
+- [lootrules.md](lootrules.md): Loot rules: one engine for every item decision (TASK-421) (status: design plus the PROTOTYPE (`internal/lootrules/`) WIRED IN SHADOW since wave 1 (cards lootwire-L2 to L4,...)
 - [lootskip.md](lootskip.md): LOOTSKIP: why ground potions were left (card lootskip) (status: current. Source: container log of the sandbox soak (Paladin clvl 10 to 14, build 0.0.261110171517),...)
 - [merc-farm.md](merc-farm.md): Mercenaries and post-campaign farming (research, MERCRESEARCH, 2026-10-29) (status: ARCHIVED 2026-10-31 (doctrim): superseded by docs/merc.md, docs/merc-wire.md, docs/sme/mercenary.md and...)
 - [merc-revive.md](merc-revive.md): Revive mercenary as a player command (card botmerc, API watch.merc/1) (status: built offline, NOT verified live (2026-11-14). Design: `docs/ui/redesign-2026-11-14/C-orders.md`...)
@@ -801,6 +801,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [public-split.md](process/public-split.md): Public split: rules going forward (change `pubsplit`) (status: cut done 2026-10-31: GitHub `main` is primary; the the private forge steps below are the historical plan.)
 - [queuespeed.md](process/queuespeed.md): Queue speed changes (TASK-312) (status: current. Source: docs/research/merge-queue-profile-2026-11-11.md. Code lives in the ops repo...)
 - [retired-terms-20261104.md](process/retired-terms-20261104.md): Retired-terms banner pass (2026-11-04)
+- [sandbox-devp9.md](process/sandbox-devp9.md): Sandbox d2d build devp9 (2026-11-15) (status: current. Task: TASK-535 (sandbox2). Tags: V = verified in this run (how said), S = read from a tool or...)
 - [spdx.md](process/spdx.md): SPDX header policy (ADR 0010)
 - [spec-apply-a-20261104.md](process/spec-apply-a-20261104.md): Spec apply A, 2026-11-04
 - [spec-apply-b-20261104.md](process/spec-apply-b-20261104.md): Spec apply B, 2026-11-04
