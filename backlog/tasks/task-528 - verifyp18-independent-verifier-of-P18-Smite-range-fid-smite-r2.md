@@ -1,11 +1,11 @@
 ---
 id: TASK-528
 title: 'verifyp18: independent verifier of P18 Smite range (fid/smite-r2)'
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:30:00Z'
-updated_date: '2026-11-16T05:11:00Z'
+updated_date: '2026-11-16T05:45:00Z'
 labels:
   - d2d
   - research
