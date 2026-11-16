@@ -18,6 +18,12 @@ type PauseDesk interface {
 	Set(on bool) any
 }
 
+// PauseModeDesk is the optional second face of a desk: SetMode picks between the frozen pause and the older walk-home
+// pause (freeze nil: the desk decides, freeze when it can). A desk without it only takes Set.
+type PauseModeDesk interface {
+	SetMode(on bool, freeze *bool) any
+}
+
 // PauseAPI holds the desk once it exists.
 type PauseAPI struct {
 	mu sync.Mutex
@@ -47,7 +53,8 @@ func (a *PauseAPI) Handler() http.Handler {
 func (a *PauseAPI) PostHandler(o AnswerOptions) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var b struct {
-			On *bool `json:"on"`
+			On     *bool `json:"on"`
+			Freeze *bool `json:"freeze"` // optional: true freeze (refused where the game cannot freeze), false walk home first
 		}
 		if !policyGate(o, w, r, &b) {
 			return
@@ -59,6 +66,10 @@ func (a *PauseAPI) PostHandler(o AnswerOptions) http.Handler {
 		d := a.desk()
 		if d == nil {
 			writeJSON(w, http.StatusServiceUnavailable, policyReply{Code: "off", Error: "pause is not available"})
+			return
+		}
+		if md, ok := d.(PauseModeDesk); ok && b.Freeze != nil {
+			writeJSON(w, 200, md.SetMode(*b.On, b.Freeze))
 			return
 		}
 		writeJSON(w, 200, d.Set(*b.On))

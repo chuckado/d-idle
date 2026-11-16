@@ -125,6 +125,8 @@ default-live first=0&theme=dark&needs=2&stream=live
 default-zone first=0&theme=dark&needs=2&zone=cp&cmd=loop
 default-update first=0&theme=dark&needs=2&update=available
 default-update-light first=0&theme=light&needs=2&update=ready
+default-frozen first=0&theme=dark&needs=2&pause=frozen&glance=full,paused
+default-frozen-light first=0&theme=light&needs=2&pause=frozen&glance=full,paused
 default-question3 first=0&theme=dark&needs=1&question=3
 default-question5-light first=0&theme=light&needs=2&question=5
 overlay-menu-zone first=0&theme=dark&zone=cp&tab=Map #btn-more
@@ -170,6 +172,9 @@ default-zone watch?first=0&theme=dark&zone=cp
 default-drawer-log watch?first=0&theme=dark #btn-more|[data-drawer-open=log] .d-drawer:not([hidden]),.d-drawer:not([hidden])_[data-key=drawer-close]
 default-update watch?first=0&theme=dark&needs=2&update=available
 default-update-light watch?first=0&theme=light&needs=2&update=ready
+default-frozen watch?first=0&theme=dark&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
+default-frozen-light watch?first=0&theme=light&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
+default-pause-menu watch?first=0&theme=dark&needs=2&pause=can #btn-more
 default-question3 watch?first=0&theme=dark&needs=1&question=3
 default-question5-light watch?first=0&theme=light&needs=2&question=5
 reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
@@ -199,6 +204,9 @@ strip-needs5-orders8 watch?layout=cockpit&theme=dark&needs=5&cmd=eight
 strip-needs5-orders8-light watch?layout=cockpit&theme=light&needs=5&cmd=eight&glance=full,mercdead,supplieslow
 paused watch?layout=cockpit&theme=dark&needs=2&cmd=paused&glance=full,paused
 paused-light watch?layout=cockpit&theme=light&needs=2&cmd=paused&glance=full,paused
+frozen watch?layout=cockpit&theme=dark&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
+frozen-light watch?layout=cockpit&theme=light&needs=2&pause=frozen&glance=full,paused expect=#pause-banner
+frozen-menu watch?layout=cockpit&theme=dark&needs=2&pause=can #btn-more
 loop-row watch?layout=cockpit&theme=dark&needs=2&cmd=loop
 loop-row-light watch?layout=cockpit&theme=light&needs=2&cmd=loop
 merc-dead watch?layout=cockpit&theme=dark&needs=4&glance=full,mercdead
