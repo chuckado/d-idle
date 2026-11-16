@@ -905,9 +905,11 @@ internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
 internal/watch/web/inventory-actions.css  credit-runner  idfast
+internal/watch/web/inventory-actions.css  credit-runner  idwaitfit
 internal/watch/web/inventory-actions.css  credit-runner  uic3
 internal/watch/web/inventory-actions.js  credit-runner  gearsets
 internal/watch/web/inventory-actions.js  credit-runner  idfast
+internal/watch/web/inventory-actions.js  credit-runner  idwaitfit
 internal/watch/web/inventory-actions.js  credit-runner  nopins
 internal/watch/web/inventory-actions.js  credit-runner  uic3
 internal/watch/web/inventory-canvas.css  credit-runner  uic2
