@@ -1,10 +1,11 @@
 ---
 id: TASK-566
 title: 'survledger: merc deaths, fight kills and k in the survival ledger'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T21:08:00Z'
+updated_date: '2026-11-16T21:53:00Z'
 labels:
   - bot
   - bot-fix
