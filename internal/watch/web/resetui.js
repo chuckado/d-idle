@@ -1,7 +1,6 @@
 // The Reset control (docs/reset.md): a break-glass, so ONE TAP. The always-visible header button, the "..." menu entry, the
 // Orders More entry and the Needs you chip (the last three dispatch d2:reset-ask) all send the soft reset at once: no
-// confirm, feedback within 100 ms (the button says Resetting..., the strip shows the bot's reason, a toast says Reset
-// sent), a 3 s cooldown against a double press. A confirm sheet exists only for the hard variant (restart the process),
+// confirm, feedback within 100 ms (the button says Resetting..., the strip says Reset sent and then shows the bot's reason), a 3 s cooldown against a double press. A confirm sheet exists only for the hard variant (restart the process),
 // reached from the strip after a failed reset. textContent only.
 export const ROUTE = '/api/reset';
 export const ASK = 'd2:reset-ask';
@@ -118,10 +117,9 @@ export function mountReset(d) {
     lastPress = t;
     sending = true;
     label(true);
-    stripText.textContent = 'Resetting... leaving the game';
+    stripText.textContent = 'Reset sent. Resetting... leaving the game'; // no toast: toasts sit top right, over this very button (fit caught it)
     strip.hidden = false;
     hard.hidden = true;
-    d.toast('info', 'Reset sent');
     d.post(ROUTE, {}).then((j) => {
       sending = false;
       if (j && j.schema === 'watch.reset/1') { draw(j); kick(); return; }
