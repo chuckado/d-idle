@@ -1,21 +1,28 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Life and mana leech of a player's melee blow: game.exe 1.14d's own code (FUN_0057c6c0 -> FUN_0057c420) vs d2d (card decomp35).
+"""A player's life and mana leech of a melee blow, by game.exe's own code: the oracle for `player_blow`'s `Blow::life` / `Blow::mana`.
 
-    python d35_leech.py gen N SEED > cases.tsv        # id diff steal_life steal_mana drain phys life
-    python d35_leech.py game cases.tsv > game.tsv     # game.exe under the emulator: id life256 mana256 phys256_after
-    python d35_leech.py d2dmodel cases.tsv > d2d.tsv  # d2d's rule as written (rules::player_blow + Fight::land)  [the real build: d35_leech_test.cpp]
-    python d35_leech.py cmp cases.tsv game.tsv d2d.tsv
+    cd <d2decomped>/tools/emu
+    uv run python d35_leech.py gen 20000 7 > cases.tsv
+    uv run python d35_leech.py game cases.tsv > game.tsv
+    g++ -O2 -std=c++23 -I<d2d>/components/rules -I<d2d>/components -I<d2d>/components/d2s -I<d2d>/components/txt \\
+        -o d35_leech_harness d35_leech_harness.cpp && ./d35_leech_harness < cases.tsv > d2d.tsv
+    uv run python d35_leech.py compare cases.tsv game.tsv d2d.tsv        # exit 1 on a mismatch
 
-Columns: diff 0/1/2 (game +0x6d), steal_life / steal_mana = the attacker's stats 60 / 62 (percent), drain = the defender's
-MonStats Drain of that difficulty (percent; 0 = none), phys = the record's physical damage in 256ths (record +8), life =
-the defender's current life in 256ths (stat 6). Output: game.exe's life / mana credited to the attacker, in 256ths.
-Domain: a player attacker, a monster defender (class 60), flags apply + hit. Tags: V run.
+A case line is `id diff steal_life steal_mana drain phys life`: diff 0 / 1 / 2 (the game's difficulty, byte +0x6d),
+steal_life / steal_mana the attacker's stats 60 / 62 (percent), drain the defender's MonStats Drain of that difficulty
+(percent), phys the record's physical damage in 256ths (record +8), life the defender's current life in 256ths (stat 6).
+
+`game` runs FUN_0057c6c0 on game.exe natively for a player attacker and a monster defender (class 60); FUN_0057c420 raises
+the leech, FUN_0057a980 (life) and FUN_0057aa00 (mana) receive it in 256ths: printed as `id life mana physical_after`.
+`selfcheck` re-derives the rule from the disassembly (physical cut to the defender's life, the steal % << 6 over the
+difficulty's LifeStealDivisor / ManaStealDivisor, MulDiv by the physical, MulDiv by Drain unless 100, / 64 toward zero) and
+compares it with the game column. `d2d.tsv` is `id life mana physical` in 256ths, the leech d2d credits.
 """
 import random, sys
 
 M32 = 0xFFFFFFFF
-LIFE_DIV = {0: 1, 1: 2, 2: 3}          # DifficultyLevels LifeStealDivisor / ManaStealDivisor (D, filled by the table dump; see game())
+LIFE_DIV = {0: 1, 1: 2, 2: 3}          # DifficultyLevels LifeStealDivisor / ManaStealDivisor, read from the table in game()
 COLS = "id diff sl sm drain phys life".split()
 
 
@@ -76,7 +83,6 @@ def game(exe, path):
     diffrow = [e.alloc(0x80) for _ in range(3)]
     for d in range(3):
         e.w32(diffrow[d] + 0x28, div[d][0]); e.w32(diffrow[d] + 0x2c, div[d][1])
-    cur = {"d": 0}
     e.hook(0x625480, lambda e_: st.get((e_.arg(0), e_.arg(1)), 0), 3)
     e.hook(0x627260, lambda e_: st.__setitem__((e_.arg(0), e_.arg(1)), s32(e_.arg(2))) or 0, 4)
     e.hook(0x625d10, lambda e_: 1 << 30, 1)
@@ -101,7 +107,6 @@ def game(exe, path):
         st.clear()
         out["life"] = out["mana"] = 0
         e.w32(game_ptr + 0x6c, c["diff"] << 8)
-        e.w8 = getattr(e, "w8", None)
         e.w32(row + 0xa0, 0); e.w32(row + 0xa4, 0)
         e.mu.mem_write(row + 0xa0 + c["diff"], bytes([c["drain"] & 0xff]))
         st[(target, 6)] = st[(target, 7)] = c["life"]
@@ -150,22 +155,13 @@ def game_model(c):
     return out[0], out[1]
 
 
-def d2d_rule(c):
-    """d2d at main b6e6940d, as written: rules::player_blow `blow.life = phys * steal * drain / 10000` in whole points of the
-    physical after the hit (no cap at the defender's life, no difficulty divisor), credited as `blow.life << 8` (Fight::land)."""
-    whole = c["phys"] >> 8
-    return (whole * c["sl"] * c["drain"] // 10000) << 8, (whole * c["sm"] * c["drain"] // 10000) << 8
-
-
-def cmp(cpath, gpath, dpath):
+def compare(cpath, gpath, dpath):
     cases = list(read_cases(cpath))
     g = [list(map(int, l.split())) for l in open(gpath) if not l.startswith("#")]
     d = [list(map(int, l.split())) for l in open(dpath) if not l.startswith("#")]
     assert len(cases) == len(g) == len(d)
-    model_bad = 0
     cat = {}
     for c, gl, dl in zip(cases, g, d):
-        if game_model(c) != (gl[1], gl[2]): model_bad += 1
         factors = []
         if c["diff"] > 0 and (c["sl"] or c["sm"]): factors.append("divisor")
         if c["life"] < c["phys"]: factors.append("overkill")
@@ -176,21 +172,29 @@ def cmp(cpath, gpath, dpath):
         r[1] += diff
         r[2] += gl[1] - dl[1]; r[3] += gl[2] - dl[2]
         r[4] += (gl[1] > 0 and dl[1] == 0)
-    print(f"model (the rule read from the code) vs game.exe: {model_bad} of {len(cases)} differ")
     tot = 0
     for k, r in sorted(cat.items()):
         print(f"  {k}: {r[0]} cases, d2d differs in {r[1]} (game credits life where d2d credits 0: {r[4]}); mean game - d2d life {r[2] / max(r[0], 1) / 256:+.3f} hp, mana {r[3] / max(r[0], 1) / 256:+.3f}")
         tot += r[1]
-    print(f"total: {len(cases)} cases, d2d differs from game.exe in {tot}")
+    print(f"compare: {len(cases)} cases, d2d differs from game.exe in {tot}")
+    return 0 if tot == 0 else 1
+
+
+def selfcheck(cpath, gpath):
+    cases = list(read_cases(cpath))
+    g = [list(map(int, l.split())) for l in open(gpath) if not l.startswith("#")]
+    bad = sum(game_model(c) != (gl[1], gl[2]) for c, gl in zip(cases, g))
+    print(f"selfcheck: {len(cases)} cases, the rule read from the code differs from game.exe in {bad}")
+    return 0 if bad == 0 else 1
 
 
 if __name__ == "__main__":
     argv, exe = sys.argv[1:], None
     if "--exe" in argv:
         k = argv.index("--exe"); exe = argv[k + 1]; del argv[k:k + 2]
+    if not argv: raise SystemExit(__doc__)
     if argv[0] == "gen": gen(int(argv[1]), int(argv[2]))
     elif argv[0] == "game": game(exe, argv[1])
-    elif argv[0] == "d2dmodel":
-        for c in read_cases(argv[1]):
-            l, m = d2d_rule(c); print(c["id"], l, m, c["phys"])
-    elif argv[0] == "cmp": cmp(argv[1], argv[2], argv[3])
+    elif argv[0] == "selfcheck": sys.exit(selfcheck(argv[1], argv[2]))
+    elif argv[0] == "compare": sys.exit(compare(argv[1], argv[2], argv[3]))
+    else: raise SystemExit(__doc__)

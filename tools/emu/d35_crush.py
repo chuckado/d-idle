@@ -1,15 +1,24 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: GPL-3.0-or-later
-"""Crushing Blow of a player's melee blow: game.exe 1.14d's own code (FUN_005bffc0 and the order inside FUN_0057c6c0) (card decomp35).
+"""A player's Crushing Blow, by game.exe's own code: the oracle for `player_blow`'s crush (FUN_005bffc0, the order in FUN_0057c6c0).
 
-    python d35_crush.py gen N SEED > cases.tsv        # id life phys res div
-    python d35_crush.py game cases.tsv > game.tsv     # id crush_taken life_at_event life_after   (all 256ths)
-life = the defender's current life (256ths), phys = the record's total damage (+0x4c, 256ths), res = the defender's
-stat 0x24 (percent), div = 4 (a plain monster), 8 (boss or unique), 10 (hireling): which FUN_005bffc0 branch.
-`game` runs FUN_0057c6c0 natively with FUN_0057c1e0's reduction left out (the record is the input) and the state-event
-dispatcher FUN_005c0c30 replaced: at event 5 (the attacker's melee strike) it records the defender's life (stat 6) as the
-handler would read it, and the handler FUN_005bffc0 is run on the same unit by a second call after FUN_0057c6c0 returned,
-in the order the code shows. The claim of this file is the ORDER and the amount, not the dispatcher.
+    cd <d2decomped>/tools/emu
+    uv run python d35_crush.py gen 2000 7 > cases.tsv
+    uv run python d35_crush.py game cases.tsv > game.tsv       # id crush life_at_event life_after, 256ths
+    uv run python d35_crush.py order cases.tsv > order.tsv     # FUN_0057c6c0: the life the strike events see, and after the damage
+    g++ -O2 -std=c++23 -I<d2d>/components/rules -I<d2d>/components -I<d2d>/components/d2s -I<d2d>/components/txt \\
+        -o d35_crush_harness d35_crush_harness.cpp && ./d35_crush_harness < cases.tsv > d2d.tsv
+    uv run python d35_crush.py compare cases.tsv game.tsv d2d.tsv        # exit 1 on a mismatch
+
+A case line is `id life phys res div`: life = the defender's current life (256ths), phys = the record's damage (256ths), res
+= the defender's stat 0x24 (percent), div = 4 (a plain monster), 8 (boss or unique), 10 (hireling): the branch of FUN_005bffc0.
+
+`game` runs FUN_005bffc0 natively (event 5: a melee strike) on a defender whose stat 6 is `life`: the handler takes
+life / divisor (256ths, whole division), less MulDiv(that, min(res, 100), 100) when res > 0, and sets stat 6 (a life that
+reaches 0 sets the kill bit). `order` runs FUN_0057c6c0 natively (melee: its second argument 0) with the state-event
+dispatcher FUN_005c0c30 replaced by a recorder: the defender's life at events 5 and 1 is the life BEFORE the record's damage,
+which LAB_0057c852 takes after them (end life = life - damage, 0 under one point). So the handler's `life` is the life
+before the hit. (Which events the item property registers the handler on is FUN_005bffc0's own test: event 6 doubles the divisor.)
 """
 import random, sys
 
@@ -47,7 +56,6 @@ def game(exe, path):
     import emu
     e = emu.Emu(exe) if exe else emu.Emu()
     st = {}
-    seen = {}
     attacker = e.alloc(0x100)
     target = e.alloc(0x200); e.w32(target, 1); e.w32(target + 4, 60)
     rec = e.alloc(0x100)
@@ -70,7 +78,7 @@ def game(exe, path):
         st[(target, 100)] = 1
         e.w32(attacker + 0x20, 12345); e.w32(attacker + 0x24, 678)
         e.w32(rec + 4, 1)
-        life_event = st[(target, 6)]                                               # what a handler at the event reads: the life before FUN_0057c852 takes the damage
+        life_event = st[(target, 6)]                                               # what a handler at the event reads: the life before LAB_0057c852 takes the damage
         ok = e.call(0x5bffc0, attacker, target, rec, (136 << 16) | 0, edx=5)
         crushed = life_event - st[(target, 6)] if ok else 0
         print(c["id"], crushed, life_event, st[(target, 6)])
@@ -80,7 +88,7 @@ def game(exe, path):
 
 def order(exe, path):
     """FUN_0057c6c0 natively (hooks as d35_leech.py): the defender's life as FUN_005c0c30's event 5 (the attacker's melee strike,
-    where the crushing blow handler runs) sees it, and after the call. phys = the record's +0x4c, the damage FUN_0057c852 takes."""
+    where the crushing blow handler runs) sees it, and after the call. phys = the record's +0x4c, the damage LAB_0057c852 takes."""
     import emu
     e = emu.Emu(exe) if exe else emu.Emu()
     st, seen = {}, []
@@ -120,6 +128,25 @@ def order(exe, path):
         print(c["id"], ev.get(5, -1), ev.get(1, -1), st[(target, 6)])
 
 
+def compare(cpath, gpath, dpath):
+    cases = list(read_cases(cpath))
+    g = [list(map(int, l.split())) for l in open(gpath) if not l.startswith("#")]
+    d = [list(map(int, l.split())) for l in open(dpath) if not l.startswith("#")]
+    assert len(cases) == len(g) == len(d)
+    cat, tot = {}, 0
+    for c, gl, dl in zip(cases, g, d):
+        key = "res %s" % ("0" if c["res"] == 0 else "<0" if c["res"] < 0 else ">0")
+        r = cat.setdefault(key, [0, 0, 0])
+        r[0] += 1
+        r[1] += gl[1] != dl[1]
+        r[2] += gl[1] - dl[1]
+        tot += gl[1] != dl[1]
+    for k, r in sorted(cat.items()):
+        print(f"  {k}: {r[0]} cases, d2d differs in {r[1]}, mean game - d2d crush {r[2] / max(r[0], 1) / 256:+.3f} hp")
+    print(f"compare: {len(cases)} cases, d2d differs from game.exe in {tot}")
+    return 0 if tot == 0 else 1
+
+
 if __name__ == "__main__":
     argv, exe = sys.argv[1:], None
     if "--exe" in argv:
@@ -127,3 +154,5 @@ if __name__ == "__main__":
     if argv[0] == "gen": gen(int(argv[1]), int(argv[2]))
     elif argv[0] == "game": game(exe, argv[1])
     elif argv[0] == "order": order(exe, argv[1])
+    elif argv[0] == "compare": sys.exit(compare(argv[1], argv[2], argv[3]))
+    else: raise SystemExit(__doc__)
