@@ -111,6 +111,24 @@ func newSurvivalShadow(db *data.DB, ledgerPath string, now func() time.Time) *su
 	return w
 }
 
+// chainSurvFight puts the ledger's fight hook on the fighter's OnSummary. It must run before useSensesHistory, which
+// chains whatever is there but returns early without a senses rig: the d2d harness has none, so fights never reached
+// the ledger and kills and seconds stayed 0 in every zone (rescreen 2026-11-16).
+func chainSurvFight(f *combat.Fighter) {
+	if f == nil {
+		return
+	}
+	prev := f.OnSummary
+	f.OnSummary = func(s combat.FightSummary) {
+		if prev != nil {
+			prev(s)
+		}
+		if sf := survFight.Load(); sf != nil {
+			(*sf)(s)
+		}
+	}
+}
+
 func (w *survivalShadow) warn(err error) string {
 	if k := err.Error(); !w.warned[k] {
 		w.warned[k] = true
@@ -279,12 +297,12 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 }
 
 // fight feeds one finished fight (the fighter's OnSummary) with the model's prediction for the same kills, which is
-// what k_zone and k_hero compare against. Without a prediction for the zone (no decision yet) the fight is skipped.
+// what k_zone and k_hero compare against. Without a prediction for the zone the fight adds kills and seconds only.
 func (w *survivalShadow) fight(fs combat.FightSummary) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	pr, ok := w.pred[survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}]
-	if !ok || fs.Kills <= 0 {
+	pr := w.pred[survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}] // zero when the model made no prediction: kills and time still count
+	if fs.Kills <= 0 || w.lastDiff == "" {
 		return
 	}
 	n := float64(fs.Kills)

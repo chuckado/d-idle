@@ -158,14 +158,21 @@ func (l *Ledger) Observe(k ZoneKey, now time.Time, e Event, power float64) {
 		s.Starved = s.Starved*f + e.Starved
 		s.Kills += e.Kills
 		s.Seconds += e.Seconds
-		s.Taken += e.Taken
-		s.PredTaken += l.floored(e)
+		// A fight the model made no prediction for still counts as kills and time (exposure, yield), but its damage
+		// stays out of the taken/predicted ratio and its seconds out of the offence pool: both would read as a model error.
+		predicted := e.PredTaken > 0 || e.PredKillSec > 0
+		if predicted {
+			s.Taken += e.Taken
+			s.PredTaken += l.floored(e)
+		}
 		s.Potions += e.Potions
 		s.XP += e.XP
 		s.GoldIn += e.GoldIn
 		s.GoldOut += e.GoldOut
-		h := decay(e.Seconds, l.P.HeroHalfLifeMinutes)
-		l.HeroSec, l.HeroPred, l.HeroKill = l.HeroSec*h+e.Seconds, l.HeroPred*h+e.PredKillSec, l.HeroKill*h+e.Kills
+		if predicted {
+			h := decay(e.Seconds, l.P.HeroHalfLifeMinutes)
+			l.HeroSec, l.HeroPred, l.HeroKill = l.HeroSec*h+e.Seconds, l.HeroPred*h+e.PredKillSec, l.HeroKill*h+e.Kills
+		}
 	case EvIntake:
 		f := decay(e.Seconds, l.P.HalfLifeMinutes)
 		s.IntakeLife, s.IntakeSec = s.IntakeLife*f+e.LifeLost, s.IntakeSec*f+e.Seconds

@@ -74,14 +74,11 @@ type Decision struct {
 // Line is the one log line per decision (design 8.1).
 func (d Decision) Line() string { return d.line }
 
-// PowerOf is the scalar the 10 percent power-change rule compares: max life, with a living merc counted as a quarter
-// more (I, U). It deliberately ignores the belt, which moves by the minute.
+// PowerOf is the scalar the 10 percent power-change rule compares: max life. It ignores the belt, which moves by the
+// minute, and the merc: his death or revive moved this scalar by 20 percent, which reset every learned row (sums and the
+// hard multiplier) right after the event the row had just recorded (card survledger).
 func PowerOf(h power.Hero) float64 {
-	v := float64(h.MaxLife)
-	if h.Merc.Hired && h.Merc.Alive {
-		v *= 1.25
-	}
-	return v
+	return float64(h.MaxLife)
 }
 
 // verdict is a candidate judged against the dial and the ledger.
@@ -261,8 +258,8 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 
 func decisionLine(d Decision, p *verdict, in Input) string {
 	var b strings.Builder
-	fmt.Fprintf(&b, "zone choice: %s  margin %.1f (need %.1f; low %.1f)  xp/min %.0f  gold/min %+.0f  dial %s  why: %s (%s)",
-		d.Name, p.best, in.Dial.Enter, p.low, p.xp, p.c.Eco.Net(), in.Dial.ID, d.Why.Code, d.Why.Text)
+	fmt.Fprintf(&b, "zone choice: %s  margin %.1f (need %.1f; low %.1f)  k %.2f  xp/min %.0f  gold/min %+.0f  dial %s  why: %s (%s)",
+		d.Name, p.best, in.Dial.Enter, p.low, p.k, p.xp, p.c.Eco.Net(), in.Dial.ID, d.Why.Code, d.Why.Text)
 	if p.realized > 0 {
 		fmt.Fprintf(&b, "  realized %.0f (model %.0f)", p.realized, p.c.Eco.XPPerMin)
 	}
