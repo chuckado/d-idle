@@ -119,8 +119,13 @@ func (h *Hub) Thoughts() ThoughtsView {
 			it.Learn = fmt.Sprintf("From now on I will always \"%s\" here (%s). OK?", h.pointAnswerLabel(info.Point, info.Answer), it.Context)
 			it.Choices = []ChoiceView{{"yes", "Yes, always", ""}, {"no", "No", ""}}
 		} else {
+			fl := firstLabels(info)
 			for _, c := range info.Choices {
-				it.Choices = append(it.Choices, ChoiceView{c.ID, c.Label, card.Does[c.ID]})
+				lbl := c.Label
+				if fl[c.ID] != "" {
+					lbl = fl[c.ID]
+				}
+				it.Choices = append(it.Choices, ChoiceView{c.ID, lbl, card.Does[c.ID]})
 			}
 			it.Choices = append(it.Choices, ChoiceView{decide.NotSure, "Not sure, you decide", "let the hero decide this time; nothing is learned"})
 		}

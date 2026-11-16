@@ -38,8 +38,9 @@ function dump(e, ind) {
   for (const k of e.children) s += dump(k, ind + '  ');
   return s;
 }
-const row = (id, ago, kind, text, level) => Object.assign({ id, ago, kind, text }, level ? { level } : {});
+const row = (id, ago, kind, text, level, quality) => Object.assign({ id, ago, kind, text }, level ? { level } : {}, quality ? { quality } : {});
 const replies = {
+  items: { tab: 'items', rows: [row('d2', 8, 'drop', 'picked up Stormshield (Blood Moor)', '', 'unique'), row('d1', 70, 'drop', 'picked up Short Staff (Cold Plains)', '', 'normal')] },
   now: { tab: 'now', rows: [row('f2', 5, 'order', 'Order changed: farm Cold Plains.'), row('f1', 30, 'story', 'A quiet moor.')] },
   journal: { tab: 'journal', rows: [row('j2', 20, 'learned', 'It will remember that.'), row('j1', 90, 'answer', 'You said yes to the Den of Evil.')] },
   story: { tab: 'story', rows: [], note: 'The story opens at level 5.' },
@@ -67,9 +68,9 @@ if (bad) process.exit(1);
 // picking a tab: the next poll asks for it at once, a reply for the tab just left is ignored
 {
   const store = {}, { root, c, calls } = make(store), api = P.mount(root, c);
-  assert.strictEqual(api.query(), '?tab=now', 'first tab is Now');
+  assert.strictEqual(api.query(), '?tab=items', 'first tab is Items');
   const bar = root.children[0].children[0].children[0];
-  bar.children[2].fire('click');
+  bar.children[3].fire('click');
   assert.strictEqual(api.query(), '?tab=story');
   assert.strictEqual(calls.refresh, 1, 'asks the shell to poll now');
   assert.strictEqual(store.tab, 'story', 'remembered per viewer');
@@ -77,7 +78,7 @@ if (bad) process.exit(1);
   assert.strictEqual(root.children[0].children[0].children[1].children.length, 0, 'a late reply of the old tab is not drawn');
   api.update(replies.story);
   assert.ok(/opens at level 5/.test(root.children[0].children[0].children[2].textContent));
-  bar.children[2].fire('keydown', { key: 'ArrowRight' });
+  bar.children[3].fire('keydown', { key: 'ArrowRight' });
   assert.strictEqual(api.query(), '?tab=alerts', 'arrow keys move between tabs');
 }
 // times are the viewer's: 20 s ago at 14:00:30 UTC is 14:00:10; an old row carries its date

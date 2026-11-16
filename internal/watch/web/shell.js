@@ -791,9 +791,9 @@ function setupMenu(sel) {
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
-  const rb = ui.btn('Reset...', { size: 'sm', variant: 'ghost' });
+  const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
-  rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
+  rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
   pop.appendChild(rb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
@@ -808,7 +808,12 @@ function setupMenu(sel) {
     pop.appendChild(b);
   }
   wrap.append(more, pop);
-  nav.appendChild(wrap);
+  // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
+  const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
+  rbtn.id = 'btn-reset';
+  rbtn.classList.add('d-reset-btn');
+  rbtn.dataset.key = 'reset-header';
+  nav.append(rbtn, wrap);
 }
 function choosePreset(name) {
   pref(PREF, name); pref(PICK, '1');
@@ -912,7 +917,9 @@ async function start() {
   const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
-  if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
+  // in the cockpit the panel lives in a drawer: open it; the panel opens its Help on every d2help while it sits in a drawer, so a
+  // second event after its first poll (it may not have mounted yet) does no harm
+  if (helpBtn) helpBtn.addEventListener('click', () => { openDrawer('onboarding', helpBtn); window.dispatchEvent(new Event('d2help')); setTimeout(() => window.dispatchEvent(new Event('d2help')), 900); });
   // every root exists before the first module loads, so the layout places the whole page at once
   const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {
@@ -951,7 +958,7 @@ async function start() {
   }
   Object.values(bands).forEach(syncBand);
   sched.start();
-  mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+  mountReset({ ui, toast, doc: document, button: document.getElementById('btn-reset'), later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
