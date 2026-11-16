@@ -303,14 +303,14 @@ func TestShadowLogLineDedupRateAndKnob(t *testing.T) {
 	}
 	var nilPass *ShadowPass
 	nilPass.Observe(ShadowTidy, rune1, "keep", "", false, nil) // must not panic
-	// An unknown class is an error that names it, counted, never a decision.
+	// A rule set the engine rejects is an error that names the class, counted, never a decision.
 	l.e.Tune.Bot.LootShadow = 1
-	s.Player.Class = d2.Class(42)
-	sh.Reset()
+	bad := NewShadow(&lootrules.RuleSet{Schema: "lootrules/99"})
+	l.SetShadow(bad)
 	if sp = l.ShadowPass(s, 0, 0); sp != nil {
 		sp.Observe(ShadowTidy, rune1, "keep", "", false, d2.Stats{})
 	}
-	if r = sh.Report(true); r.Errors != 1 || len(r.Last) != 1 || !strings.Contains(r.Last[0], "Class(42)") {
-		t.Errorf("unknown class: %+v", r)
+	if r = bad.Report(true); r.Errors != 1 || r.Decisions != 0 || len(r.Last) != 1 || !strings.Contains(r.Last[0], `class "Amazon"`) {
+		t.Errorf("bad rule set: %+v", r)
 	}
 }
