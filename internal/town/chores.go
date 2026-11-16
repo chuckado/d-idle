@@ -327,7 +327,7 @@ func (t *Town) repairEstimate(s *d2.Snapshot) int {
 
 // vendorStep names the chores that work inside a vendor's trade window. One window serves consecutive chores of the
 // same NPC; any other chore closes it first.
-var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "beltbuy": true, "repair": true}
+var vendorStep = map[string]bool{"sell": true, "ammo": true, "shop": true, "idtome": true, "beltbuy": true, "repair": true}
 
 // Chores runs the town chores in the order: identify, equip, sell, ammo, belt, repair (all at the repair vendor,
 // one visit), belt fill, potions and scrolls (the shop NPC, who also heals on opening: one visit), heal, stash, gold.
@@ -352,7 +352,7 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 	wasEmpty := t.portalEmpty
 	lowAtStart := plan.Heal && t.needHeal(s)
 	deadline := t.e.Clock.Now().Add(time.Duration(t.tune().ChoreBudgetS) * time.Second)
-	t.choreDeadline, t.budgetLogged = deadline, false
+	t.choreDeadline, t.budgetLogged, t.idTomeLogged = deadline, false, false
 	defer func() { t.choreDeadline = time.Time{} }()
 	defer func() {
 		if s, err := t.current(); err == nil {
@@ -415,6 +415,8 @@ func (t *Town) Chores(ctx context.Context, plan ChorePlan) (rep ChoreReport, _ e
 		need    func(*d2.Snapshot) bool
 		run     func() error
 	}{
+		// optional (town.identifyTome, off by default): a Tome of Identify bought and filled before identify and sell
+		{"idtome", plan.Scrolls || plan.Identify, t.needIDTome, func() error { return t.buyIDTome(ctx, &rep) }},
 		{"identify", plan.Identify, t.identifyNeeded, func() error { return t.identify(ctx, a, &rep) }},
 		// before sell: a naked character wears what it found instead of selling it (G1 attempt 6)
 		{"equip", true, t.needEquipFound, func() error { _, err := t.EquipFound(ctx); return err }},
