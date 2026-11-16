@@ -299,15 +299,5 @@
   /* the header Reset: one tap, never wider than its busy label, a 44 px hit area on a 32 px button */
   .d-reset-btn { position: relative; flex: none; min-inline-size: 0; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
   .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
-  /* a band under 1000 px has no room for every link: the pictures at 900x700 and 360x640 showed the sentence squeezed to 76 px
-     and the links overlapping. The Return screen link goes (the page stays reachable by its address), the rest get tighter. */
-  @media (max-width: 62.49rem) {
-    .d-band-status .d-links { gap: var(--d-sp-1); }
-    .d-band-status .d-links > .d-btn { padding-inline: var(--d-sp-2); }
-    .d-band-status .d-links > a[href="/watch/return"] { display: none; }
-  }
-  @media (max-width: 39.99rem) {
-    .d-band-status .d-links > .d-btn { padding-inline: 5px; font-size: var(--d-fs-0); }
-  }
   .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
 }
