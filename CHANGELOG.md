@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into resetfit <!--sg:agent/resetfit-->
 - Merge branch 'main' into supportreview <!--sg:agent/supportreview-->
 - videofeed2: lossless feed mounted behind watch.paletteFeed (off), canvas player, guard, walking measurement <!--sg:agent/videofeed2-->
 - Merge branch 'main' into idtome <!--sg:agent/idtome-->
