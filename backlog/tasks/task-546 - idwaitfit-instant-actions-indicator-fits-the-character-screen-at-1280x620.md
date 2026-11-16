@@ -1,10 +1,11 @@
 ---
 id: TASK-546
 title: 'idwaitfit: instant-actions indicator fits the character screen at 1280x620'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T15:06:00Z'
+updated_date: '2026-11-16T15:19:00Z'
 labels:
   - watch
   - bug

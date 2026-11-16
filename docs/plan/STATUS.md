@@ -219,7 +219,6 @@
 | idtome | proposed | - | `internal/town/idtome_test.go` | - |
 | videofeed2 | proposed | - | `internal/watch/palfeed`<br>`internal/watch/palfeed.go`<br>`internal/watch/web/palfeed.js`<br>`internal/watch/web/panels/video`<br>`internal/env/tuning_watch.go`<br>`cmd/d2dview`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`docs/probes/video-feed-2026-11-15.md`<br>`internal/env/tuning.go`<br>`internal/watch/serve.go`<br>`internal/watch/hub.go`<br>`internal/watch/views.go`<br>`internal/watch/glance.go`<br>`internal/watch/video.go`<br>`internal/watch/http_view.go`<br>`internal/watch/palfeed_test.go`<br>`internal/watch/watchlayout_test.go`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js`<br>`cmd/d2bot/ladder.go`<br>`tools/knobdump/main.go`<br>`docs/knobs.md`<br>`docs/friend-guide.md`<br>`tools/friendpack/compose.yml` | - |
 | resetfit | proposed | - | `internal/watch/web/resetui.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh` | - |
-| idwaitfit | proposed | - | `internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
