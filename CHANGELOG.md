@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into TASK-530 <!--sg:agent/charui-->
 - Merge branch 'main' into lootwire3 <!--sg:agent/lootwire3-->
 - Merge branch 'main' into TASK-549 <!--sg:agent/lootwire2-->
 - Merge branch 'main' into farmlive <!--sg:agent/farmlive-->

@@ -210,6 +210,7 @@
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
 | resetinstant | proposed | - | `internal/bot/playerreset.go`<br>`internal/bot/playerreset_test.go`<br>`cmd/d2bot/resetwire.go`<br>`cmd/d2bot/resetwire_test.go`<br>`internal/watch/resetapi.go`<br>`internal/watch/resetapi_test.go`<br>`internal/watch/resetui_test.go`<br>`internal/watch/web/resetui.js`<br>`internal/watch/web/reset.css`<br>`internal/watch/testdata/reset`<br>`docs/reset.md`<br>`internal/bot/task.go`<br>`internal/bot/runner.go`<br>`internal/bot/loop.go`<br>`internal/bot/state.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/web/shell.css`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_phone.go`<br>`tools/uishots/fit.go` | - |
+| charui | proposed | - | `internal/watch/web/characters.html`<br>`internal/watch/web/characters.js`<br>`internal/watch/web/characters.css`<br>`internal/watch/web/characters.json`<br>`internal/watch/charactersui_test.go`<br>`internal/charsel/rules.go`<br>`tools/uishots/fixtures_chars.go`<br>`docs/charselect-ui.md` | - |
 | idfast | proposed | - | `internal/invdesk`<br>`internal/watch/web/inventory-actions.js`<br>`internal/watch/web/inventory-actions.css`<br>`internal/watch/testdata/uic3`<br>`tools/uishots/fxviews.go`<br>`docs/inventory-actions.md`<br>`internal/bot/playeraction.go`<br>`internal/bot/playeraction_test.go`<br>`internal/town/chores.go`<br>`cmd/d2bot/adapters.go` | - |
 | intake | proposed | - | `internal/bot/hpfields.go`<br>`internal/survival/ledger.go`<br>`internal/watch/glance.go`<br>`tools/levelsim/shadow.go`<br>`docs/survival/ledger.md`<br>`internal/bot/observe.go`<br>`internal/bot/areametrics.go`<br>`internal/bot/zoneshadow.go`<br>`internal/d2dsoakstat/minute.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/survivalwire.go` | - |
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
@@ -266,14 +267,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e1fd1124c 11-16 13:38 `Merge agent/charui: Merge branch 'main' into TASK-530` (charui)
+- 5c5382a96 11-16 13:37 `Merge branch 'main' into TASK-530` (-)
+- 5ca1b88db 11-16 13:31 `Merge origin/main into charui` (-)
 - a691c3066 11-16 13:31 `Merge agent/lootwire3: Merge branch 'main' into lootwire3` (lootwire3)
 - ebd636503 11-16 13:30 `Merge branch 'main' into lootwire3` (-)
+- 5ed5553e7 11-16 12:45 `Merge origin/main into charui` (-)
 - 95a00a504 11-16 12:37 `Merge agent/lootwire2: Merge branch 'main' into TASK-549` (lootwire2)
 - d9acac08f 11-16 12:36 `Merge branch 'main' into TASK-549` (-)
 - a77be292c 11-16 12:34 `Merge agent/farmlive: Merge branch 'main' into farmlive` (farmlive)
 - c6a600d40 11-16 12:33 `Merge branch 'main' into farmlive` (-)
-- 4055fc1ee 11-16 12:08 `Merge agent/survsd: Merge branch 'main' into survsd` (survsd)
-- 4cb76cea4 11-16 12:07 `Merge branch 'main' into survsd` (-)
-- 443e30a81 11-16 11:39 `Merge agent/survab: Merge branch 'main' into survab` (survab)
-- c3b2466e3 11-16 11:38 `Merge branch 'main' into survab` (-)
 <!-- statusgen:end -->

@@ -253,6 +253,7 @@ docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
+docs/charselect-ui.md  credit-runner  charui
 docs/charselect.md  credit-runner  charselect
 docs/charselect.md  credit-runner  charsup
 docs/contracts/decision-queue.md  credit-runner  qqueue
@@ -562,6 +563,7 @@ internal/charsel  credit-runner  charselect
 internal/charsel  credit-runner  charsup
 internal/charsel/lootrulesstate_test.go  credit-runner  lootwire3
 internal/charsel/perchar.json  credit-runner  lootwire3
+internal/charsel/rules.go  credit-runner  charui
 internal/combat  credit-runner  wiring2
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata  credit-runner  palprofile2
@@ -772,6 +774,7 @@ internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
 internal/watch/charactersapi.go  credit-runner  charselect
 internal/watch/charactersapi_test.go  credit-runner  charselect
+internal/watch/charactersui_test.go  credit-runner  charui
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
@@ -938,6 +941,10 @@ internal/watch/views.go  credit-runner  friendfb
 internal/watch/views.go  credit-runner  videofeed2
 internal/watch/watchlayout_test.go  credit-runner  videofeed2
 internal/watch/web/app.css  credit-runner  toastfix
+internal/watch/web/characters.css  credit-runner  charui
+internal/watch/web/characters.html  credit-runner  charui
+internal/watch/web/characters.js  credit-runner  charui
+internal/watch/web/characters.json  credit-runner  charui
 internal/watch/web/components.css  credit-runner  uis6
 internal/watch/web/components.css  credit-runner  uis7
 internal/watch/web/gear.js  credit-runner  repairtrip
@@ -1128,6 +1135,7 @@ tools/uishots/  credit-runner  uis6
 tools/uishots/fit.go  credit-runner  resetinstant
 tools/uishots/fit.js  credit-runner  uis7
 tools/uishots/fixtures.go  credit-runner  uic2
+tools/uishots/fixtures_chars.go  credit-runner  charui
 tools/uishots/fixtures_commands.go  credit-runner  uis4
 tools/uishots/fixtures_glance.go  credit-runner  uis7
 tools/uishots/fixtures_phone.go  credit-runner  resetinstant
