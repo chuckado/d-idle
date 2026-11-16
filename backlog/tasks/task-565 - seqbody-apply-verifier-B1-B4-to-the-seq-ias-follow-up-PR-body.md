@@ -17,6 +17,7 @@ owns:
 exclusive:
   - "upstream-pr:seq-ias-followup"
 contracts: []
+result: "PR body edited per verifier B1-B4 and the evidence rerun on upstream c3dc51c3 (builder: 36 cells, compare 7600 same, rc1 on a missing installer); docs only, not live."
 ---
 
 ## Description
@@ -29,5 +30,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Body edited per verifier B1 to B4 and the rebased evidence
+- [x] #1 Body edited per verifier B1 to B4 and the rebased evidence
 <!-- AC:END -->
