@@ -506,7 +506,7 @@ func (t *Town) buyScrolls(ctx context.Context, npc d2.Unit, rep *ChoreReport) er
 		target       int
 	}
 	for _, j := range []job{{"tsc", "tbk", t.tune().TPScrollTarget}, {"isc", "ibk", t.tune().IDScrollTarget}} {
-		if j.target <= 0 {
+		if j.target <= 0 || j.scroll == "isc" && t.tune().IdentifyTome == 0 { // identify scrolls are bought on request only
 			continue
 		}
 		cur, err := t.current()
