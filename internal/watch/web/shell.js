@@ -912,7 +912,8 @@ async function start() {
   const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
-  if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
+  // in the cockpit the panel lives in a drawer: open it, and leave a flag for a panel that is not mounted yet (it reads it on mount)
+if (helpBtn) helpBtn.addEventListener('click', () => { window.d2helpWanted = true; window.dispatchEvent(new Event('d2help')); openDrawer('onboarding', helpBtn); });
   // every root exists before the first module loads, so the layout places the whole page at once
   const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {

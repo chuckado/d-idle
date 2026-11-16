@@ -226,9 +226,11 @@ export function mount(root, ctx) {
 
   // the Help button of the page header (web/shell.js) sends this event, so the panel can open its Help entries even
   // when it is otherwise hidden
+  if (typeof window !== 'undefined' && window.d2helpWanted) { window.d2helpWanted = false; helpOpen = true; paint(); } // Help pressed before this panel mounted
   if (typeof window !== 'undefined' && window.addEventListener) {
     window.addEventListener('d2help', () => {
-      helpOpen = !helpOpen;
+      window.d2helpWanted = false;
+      helpOpen = root.closest && root.closest('.d-drawer') ? true : !helpOpen; // in a drawer the button opens it, so never toggles off
       paint();
       if (helpOpen && root.scrollIntoView) root.scrollIntoView({ block: 'nearest' });
     });
