@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/verifier-seq-followup-2026-11-16.md"
 exclusive: []
 contracts: []
+result: "INTERIM: read checks pass; builder runs not done (OOM). Provisional PASS WITH CHANGES, body B1-B4. Not live."
 ---
 
 ## Description
