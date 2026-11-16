@@ -297,7 +297,7 @@
   .d-reset-strip .d-btn { flex: none; min-block-size: 36px; }
   .d-reset-strip .d-btn[hidden] { display: none; }
   /* the header Reset: one tap, never wider than its busy label, a 44 px hit area on a 32 px button */
-  .d-reset-btn { position: relative; flex: none; min-inline-size: 5.5rem; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
+  .d-reset-btn { position: relative; flex: none; min-inline-size: 0; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
   .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
   .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
 }
