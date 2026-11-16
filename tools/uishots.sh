@@ -176,6 +176,8 @@ reset-header watch?first=0&theme=dark&needs=0 #btn-reset #btn-reset
 reset-header-light watch?first=0&theme=light&needs=0 #btn-reset #btn-reset
 reset-pressed watch?first=0&theme=dark&needs=0&reset=resetting #btn-reset #btn-reset,#reset-progress
 reset-pressed-light watch?first=0&theme=light&needs=0&reset=rejoining #btn-reset #btn-reset,#reset-progress
+reset-return-menu watch?first=0&theme=dark&needs=0 #btn-more [data-key=menu-return]
+reset-return-menu-light watch?first=0&theme=light&needs=0 #btn-more [data-key=menu-return]
 reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=reset-open] #reset-progress
 reset-more watch?first=0&theme=dark&needs=0&reset=resetting [data-key=verb-more]|[data-key=more-reset] #reset-progress
 reset-hard-confirm watch?first=0&theme=dark&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
