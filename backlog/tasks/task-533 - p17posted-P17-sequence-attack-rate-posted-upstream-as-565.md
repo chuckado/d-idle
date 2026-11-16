@@ -1,10 +1,11 @@
 ---
 id: TASK-533
 title: 'p17posted: P17 sequence attack rate posted upstream as #565'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T03:05:00Z'
+updated_date: '2026-11-16T03:48:00Z'
 labels:
   - docs
   - upstream-pr

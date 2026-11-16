@@ -209,7 +209,6 @@
 | lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
 | lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
 | lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
-| p17posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md`<br>`docs/upstream/bodies/seq-ias-body.md` | - |
 | dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
