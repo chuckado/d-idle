@@ -43,7 +43,7 @@ Size: M
 
 Why: friends (release 0.1.3) found the firsts popup unclear, the Skills page oversized, no drop list, no explanation of what the bot does. Done when: see docs/ui/friend-feedback-2026-11-15.md (a to f), the checklist is ticked and the fit pages pass on the builder.
 
-result: Firsts card reads as information with the first's own question, answers and a nothing-is-required footer; Skills board capped (pictures viewed at 1914x930 and 390x844); Items tab (GET /api/drops, default tab of the log drawer); Help card "What does the bot do for me?" (the bot never equips: gear-policy; no model, offline); Help opens the onboarding drawer in the cockpit. Verified offline (Go and node tests, tower gate, fit pass incl. the new demo-items and demo-help pages at all sizes, pictures of Items and Help viewed); not verified live.
+result: Firsts card reads as information with the first's own question, answers and a nothing-is-required footer; Skills board capped (pictures viewed at 1914x930 and 390x844); Items tab (GET /api/drops, default tab of the log drawer); Help card "What does the bot do for me?" (the bot never equips: gear-policy; no model, offline); Help opens the onboarding drawer in the cockpit. Verified offline (Go and node tests, the builder gate, fit pass incl. the new demo-items and demo-help pages at all sizes, pictures of Items and Help viewed); not verified live.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
