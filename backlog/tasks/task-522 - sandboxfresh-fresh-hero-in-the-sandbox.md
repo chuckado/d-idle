@@ -1,10 +1,11 @@
 ---
 id: TASK-522
 title: 'sandboxfresh: fresh hero in the sandbox'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T02:06:00Z'
+updated_date: '2026-11-16T02:15:00Z'
 labels:
   - docs
   - chore
