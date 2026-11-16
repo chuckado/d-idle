@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into decomp36 <!--sg:agent/decomp36-->
 - Merge branch 'main' into survfix <!--sg:agent/survfix-->
 - Merge branch 'main' into pausefix <!--sg:agent/pausefix-->
 - docs: decomp35 trace of a player's melee riders (leech difficulty divisor, Crushing Blow order) with two upstream PR candidates (docs/research/decomp35-combat.md) <!--sg:agent/decomp35-->

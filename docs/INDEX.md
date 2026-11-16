@@ -654,6 +654,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 `upstream/bodies/`
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
+- [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
+- [gamble-price-body.md](upstream/bodies/gamble-price-body.md): gamble-price-body
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
@@ -667,6 +669,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
+- [umod-multishot-body.md](upstream/bodies/umod-multishot-body.md): umod-multishot-body
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
