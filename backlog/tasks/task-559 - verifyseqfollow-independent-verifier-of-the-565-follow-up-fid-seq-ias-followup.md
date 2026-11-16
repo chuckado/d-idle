@@ -1,10 +1,13 @@
 ---
 id: TASK-559
-title: 'verifyseqfollow: independent verifier of the #565 follow-up fid/seq-ias-followup'
-status: Proposed
+title: >-
+  verifyseqfollow: independent verifier of the #565 follow-up
+  fid/seq-ias-followup
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T18:54:00Z'
+updated_date: '2026-11-16T19:43:00Z'
 labels:
   - d2d
   - research
