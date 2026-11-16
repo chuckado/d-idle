@@ -46,16 +46,26 @@ decomp35's numbers reproduce exactly on the rebased tree (17,097, 50,626, 2,223)
 
 | Mutant (on `fid/crush-r2`) | leech seed 7 / seed 1 | crush | pair seed 7 / 1 (all) | `test_combat` |
 |---|---|---|---|---|
-| no difficulty divisor | 11,620 / 34,295 | 0 | 1,824 / 13,166 | TC_NODIV |
-| no cut to the life | 3,133 / 9,216 | 0 | 1,074 / 6,619 | TC_NOCLAMP |
-| whole points | 17,068 / 50,579 | | | TC_WHOLE |
-| no Drain term | 8,376 / 25,023 | | | TC_NODRAIN |
-| crush from the life after the hit (r1's parent rule) | | 2,241 | 2,809 / 20,796 | TC_CRUSHAFTER |
+| no difficulty divisor | 11,620 / 34,295 | 0 | 1,824 / 13,166 | aborts (`leech_fine(..) == 320 && .. == 213`) |
+| no cut to the life | 3,133 / 9,216 | 0 | 1,074 / 6,619 | aborts (`nearly_dead` 256) |
+| whole points | 17,068 / 50,579 | | | aborts (`blow.life == 640`) |
+| no Drain term | 8,376 / 25,023 | | | aborts (`blow.life == 640`) |
+| crush from the life after the hit (r1's parent rule) | | 2,241 | 2,809 / 20,796 | aborts (`damage == 50 + 0 + 50`) |
 | leech cut before the crush (crush r1) | | 0 | 1,068 / 6,589 | TC_C1X |
 
 ## Build, ctest, tidy
 
-BUILD_ROWS_PENDING
+Builder container, Release, GCC, tests and tools on, `-j2` under the builder's lane lock (V run).
+
+| Tree | Build | ctest | test_combat, test_game |
+|---|---|---|---|
+| `fid/crush-r2` tree (claim tip; `vd35-c2c`, equal except two `from None` lines in the oracle scripts) | full, rc 0 | 2 of 342 fail: `test_outdoor`, `smoke_d2d` | ok, rc 0 |
+| upstream main `c3dc51c3` | full, rc 0 | the same 2 of 342 fail | not run alone |
+| `fid/leech-r2` tree (`vd35-l2c`) | test_combat, test_game | not run (the stack tip covers it) | ok, rc 0 |
+
+The stack adds no ctest entry (its tests are asserts in `test_combat`); the per-test difference to upstream is none. The oracle commits change only `tools/emu/`, which is not in the CMake build, so each commit builds as its parent does.
+
+TIDY_PENDING
 
 ## RNG luck
 
