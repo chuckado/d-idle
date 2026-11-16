@@ -207,3 +207,54 @@ func TestZoneKnobsDefault(t *testing.T) {
 		t.Fatalf("defaults zoneModel %d zoneDial %d, want 0 and 1 until the A/B passes", d.ZoneModel, d.ZoneDial)
 	}
 }
+
+// The revive loop breaker: three quick merc deaths in the planned zone close it to reviving even though the model says
+// "revive"; a long life resets; the knob 0 turns it off. Same rule for both classes.
+func TestZoneMercReviveLoopBreaker(t *testing.T) {
+	for _, cl := range []d2.Class{d2.Paladin, d2.Sorceress} {
+		t.Run(cl.String(), func(t *testing.T) {
+			g, _ := modelRig(t, cl, func(int, []ZoneCand) (ZoneVerdict, error) {
+				return ZoneVerdict{Area: 2, MercDead: true, MercRevive: true, MercWhy: "worth reviving"}, nil
+			})
+			g.modelPick(8, nil)
+			p := g.r.latest().Player
+			p.Area = 2
+			edge := func(alive bool) { g.r.zoneMercEdge(p, alive, g.r.e.Clock.Now()) }
+			quickDeath := func() { // revived, lives a minute, dies
+				edge(false)
+				g.clock.Sleep(time.Second)
+				edge(true)
+				g.clock.Sleep(time.Minute)
+				edge(false)
+			}
+			edge(true)
+			quickDeath() // each call: the previous death, a revive, a minute of life, the next death (the first has no revive before it)
+			quickDeath()
+			if g.r.zoneLeaveMercDead() {
+				t.Fatal("two quick deaths are below the limit")
+			}
+			quickDeath()
+			if !g.r.zoneLeaveMercDead() {
+				t.Fatal("three quick deaths must stop the revive")
+			}
+			g.clock.Sleep(61 * time.Minute)
+			g.modelPick(8, nil) // fresh verdict (the old one went stale)
+			if g.r.zoneLeaveMercDead() {
+				t.Fatal("the closure expires")
+			}
+		})
+	}
+	g, _ := modelRig(t, d2.Paladin, func(int, []ZoneCand) (ZoneVerdict, error) { return ZoneVerdict{Area: 2}, nil })
+	g.r.e.Tune.Bot.MercReviveLoopN = 0
+	p := g.r.latest().Player
+	p.Area = 2
+	for i := 0; i < 5; i++ {
+		g.r.zoneMercEdge(p, true, g.r.e.Clock.Now())
+		g.r.zoneMercEdge(p, false, g.r.e.Clock.Now())
+		g.r.zoneMercEdge(p, true, g.r.e.Clock.Now())
+		g.clock.Sleep(time.Second)
+	}
+	if g.r.mercLoop().BlockedArea(0, g.r.e.Clock.Now()) {
+		t.Fatal("N 0 is off")
+	}
+}

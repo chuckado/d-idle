@@ -24,6 +24,15 @@
  "mercPriorMinutes": 25,
  "freshRatio": 0.5,
  "freshMinutes": 1.5,
+ "yieldMinMinutes": 3,
+ "yieldShrinkMinutes": 10,
+ "yieldMaxWeight": 0.9,
+ "starveCasts": 5,
+ "starveValueMul": 0.5,
+ "archetypes": {
+  "caster": {"yieldShrinkMinutes": 6, "starveCasts": 3},
+  "bruiser": {"starveCasts": 8}
+ },
  "dials": {
   "cautious": {"either": 1, "deaths": 1},
   "balanced": {"either": 2, "deaths": 1},
@@ -54,6 +63,12 @@
   "mercPriorMinutes": "S: field minutes a merc lives when the ledger has no death there; 25 = median of 11 intervals of one hero (card survreplay), 40 before, U",
   "freshRatio": "I: a fresh game beats walking to a zone worth less than this share of the depleted best, U",
   "freshMinutes": "I: time a fresh game costs (leave, create, walk back), U",
+  "yieldMinMinutes": "I: observed stay minutes a zone needs before its realized xp/min counts at all (trust floor: one bad minute never moves the value), U",
+  "yieldShrinkMinutes": "I: realized weight = minutes / (minutes + this), capped by yieldMaxWeight; the model prior fades as the zone is farmed (card survfix2, seed 101 margin: predicted 152, realized 34 xp/min), U",
+  "yieldMaxWeight": "I: the model prior never fades completely, U",
+  "starveCasts": "I: decayed count of mana-starved watchdog lines in a zone that lowers its value (26 lines in 41 minutes in the screen), U",
+  "starveValueMul": "I: value multiplier of a zone whose starvation count reached starveCasts, U",
+  "archetypes": "I: per-archetype overrides (power profile id) of yieldShrinkMinutes and starveCasts; 0 = the global value, U",
   "dials": "design 5.2 'observed cost that forces a step down': either = chickens plus merc deaths in the window, deaths = deaths in the window; 0 turns the row off. U"
  }
 }

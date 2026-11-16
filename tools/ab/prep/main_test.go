@@ -16,3 +16,15 @@ func TestVerbs(t *testing.T) {
 		t.Errorf("no merc: %v", v)
 	}
 }
+
+func TestVerbsWeapon(t *testing.T) {
+	v := Verbs(Setup{Clvl: 12, MercType: 0, Weapon: "hax"})
+	if v[len(v)-2] != "debug equip hax 4" || v[len(v)-1] != "debug merc hire 0" {
+		t.Errorf("weapon is worn before the merc is hired: %v", v)
+	}
+	for _, x := range Verbs(Setup{Clvl: 12, MercType: -1}) {
+		if len(x) > 11 && x[:11] == "debug equip" {
+			t.Errorf("no weapon asked, but %q", x)
+		}
+	}
+}

@@ -123,8 +123,12 @@ type BotTuning struct {
 	PortalLifePct int // block the cast when the expected damage reaches this % of current life
 
 	// Mercenary chore (docs/merc-farm.md). Hiring clicks a verified dialog; reviving clicks an UNVERIFIED one, so it is off.
-	MercRetryMin         int  // minutes between merc chore attempts (a failed hire or revive is not retried sooner)
-	MercHireMinGold      int  // gold in Act 2 town below which no hire is attempted
+	MercRetryMin    int // minutes between merc chore attempts (a failed hire or revive is not retried sooner)
+	MercHireMinGold int // gold in Act 2 town below which no hire is attempted
+	// Merc revive loop breaker (survival controller, bot.zoneModel 1 only): after MercReviveLoopN revives that each ended
+	// in his death within MercReviveLoopMin minutes in the same zone, no revive while that zone is the plan. 0 = off.
+	MercReviveLoopN      int
+	MercReviveLoopMin    int
 	MercReviveUnverified bool // allow town.Revive to click the unverified revive dialog (live probe only)
 
 	// Cube chore (internal/cubejobs): gold-free gem and rune upgrades in town. UNVERIFIED live, so it is off.
@@ -143,7 +147,7 @@ func DefaultBotTuning() BotTuning {
 		SellMinItems: 4, DifficultyBanMin: 60, SavePointMin: 20, HeapLimitMB: 4096, FailsafeRung3Max: 6, FailsafePauseMaxSec: 3600,
 		Rung3WindowMax: 3, Rung3WindowMin: 20, DroughtMin: 8, EmptyFieldSec: 150, ClearIdleMin: 3, NoPortalWaitSec: 20, DroughtStage2Min: 2, DroughtSlowMin: 10, DroughtSlowKills: 3, DroughtSlowMaxLevel: 10, FreshAfterRecoverySec: 180, RecoveryDryMin: 5, RecoveryDryKills: 5, RecoveryDrySkipMin: 15,
 		ZoneModel: 0, ZoneDial: 1, PortalGuard: 0, PortalCastMs: 3000, PortalWalkMs: 3000, PortalHitMs: 700, PortalLifePct: 50,
-		MercRetryMin: 10, MercHireMinGold: 400, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
+		MercRetryMin: 10, MercHireMinGold: 400, MercReviveLoopN: 3, MercReviveLoopMin: 10, CubeMaxJobs: 6, CubeRuneCap: 10, CubeGemCap: 2,
 	}
 }
 
@@ -306,6 +310,10 @@ func botKnobs() []Knob {
 			Desc: "Gold in Act 2 town below which no hire is attempted."},
 		{Key: "bot.mercReviveUnverified", Label: "Merc revive (unverified)", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1 lets the town visit click the revive dialog, which is UNVERIFIED live (docs/merc-farm.md). Off until a live probe."},
+		{Key: "bot.mercReviveLoopN", Label: "Merc revive loop limit", Unit: "count", Default: 3, Min: 0, Max: 10, NoHandicap: true,
+			Desc: "Only with bot.zoneModel 1. After this many revives that each ended in the merc's death within bot.mercReviveLoopMin minutes in the same zone, the model stops reviving him while that zone is its plan (it stays closed for the survival noReviveMinutes, 60). A death after a longer life resets the count. 0 turns the breaker off. Every revive and every death logs the merc's time to death either way."},
+		{Key: "bot.mercReviveLoopMin", Label: "Merc revive loop window", Unit: "min", Default: 10, Min: 1, Max: 120, NoHandicap: true,
+			Desc: "A merc who dies within this many minutes of a revive counts toward bot.mercReviveLoopN (seed 103 of the screen: 4 revives, each lived about a minute)."},
 		{Key: "bot.cubeJobs", Label: "Cube chore", Unit: "bool", Default: 0, Min: 0, Max: 1, NoHandicap: true,
 			Desc: "1 runs the gold-free gem and rune upgrade chore in town. UNVERIFIED live (docs/items.md), so off."},
 		{Key: "bot.cubeMaxJobs", Label: "Cube jobs per visit", Unit: "count", Default: 6, Min: 1, Max: 12, HigherIsBetter: true, NoHandicap: true,

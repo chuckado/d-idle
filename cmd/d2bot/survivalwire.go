@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"sync"
 	"sync/atomic"
@@ -222,7 +223,8 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 	}
 	w.power, w.lastDiff = survival.PowerOf(hero), diff
 	in := survival.Input{Now: w.now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
-		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
+		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero),
+		Active: model, Archetype: a.ID, MercDead: mercDead}
 	d, err := w.led.Choose(in)
 	if err != nil {
 		return bot.ZoneVerdict{}, err
@@ -238,7 +240,8 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 			rd := w.led.Revive(survival.ReviveInput{Base: in, With: with, Without: cs, Quote: shadowReviveQuote, Reserve: shadowKitPotions * int(w.p.PotionPrice), Gold: p.Gold})
 			merc = &rd
 			v.MercDead, v.MercRevive, v.MercWhy = true, rd.Revive, rd.Why.Text
-			lines += "\nzone revive: " + rd.Why.Code + ": " + rd.Why.Text
+			v.MercGain, v.MercCost, v.MercZone = rd.Gain, rd.Cost, rd.Zone
+			lines += fmt.Sprintf("\nzone revive: %s: %s (zone %s, gain %.0f, cost %.0f)", rd.Why.Code, rd.Why.Text, rd.Zone, rd.Gain, rd.Cost)
 		}
 	}
 	g := survival.GlanceOf(d, dial.ID, merc)
@@ -265,7 +268,7 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 	case bot.ZoneEvMercDied:
 		w.led.Observe(k, now, survival.Event{Kind: survival.EvMercDeath}, w.power)
 	case bot.ZoneEvArea:
-		w.led.Observe(k, now, survival.Event{Kind: survival.EvXP, XP: ev.XP}, w.power)
+		w.led.Observe(k, now, survival.Event{Kind: survival.EvXP, XP: ev.XP, Seconds: ev.Seconds}, w.power)
 		if ev.Seconds > 0 {
 			w.led.Observe(k, now, survival.Event{Kind: survival.EvIntake, LifeLost: float64(ev.LifeLost), Seconds: ev.Seconds}, w.power)
 		}
@@ -286,5 +289,5 @@ func (w *survivalShadow) fight(fs combat.FightSummary) {
 	}
 	n := float64(fs.Kills)
 	w.led.Observe(survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}, w.now(), survival.Event{Kind: survival.EvFight, Kills: n, Seconds: fs.Sec,
-		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions)}, w.power)
+		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions), Starved: float64(fs.Starved)}, w.power)
 }
