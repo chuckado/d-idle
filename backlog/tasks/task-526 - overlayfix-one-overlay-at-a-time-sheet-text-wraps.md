@@ -18,7 +18,10 @@ owns:
   - "internal/watch/web/shell.css"
   - "internal/watch/web/tokens.css"
   - "internal/watch/web/panels/zone-map"
-  - "internal/watch/testdata/overlay_dom.js"
+  - "internal/watch/testdata/overlay_dom.mjs"
+  - "internal/watch/resetui_test.go"
+  - "internal/watch/http_view.go"
+  - "tools/uishots.sh"
   - "tools/uishots"
   - "docs/ui-overlays.md"
 exclusive: []
@@ -30,7 +33,7 @@ contracts: []
 <!-- SECTION:DESCRIPTION:BEGIN -->
 Size: M
 
-Why: TODO. Done when: TODO.
+Why: user bug report 2026-11-15, a zone sheet painted over the "..." menu and its charter line was cut at the right edge. Cause and policy: docs/ui-overlays.md. Done when: the menu is above every sheet, one overlay is open at a time, sheet text wraps, and the fit suite proves it with must-fail defects.
 <!-- SECTION:DESCRIPTION:END -->
 
 ## Acceptance Criteria
