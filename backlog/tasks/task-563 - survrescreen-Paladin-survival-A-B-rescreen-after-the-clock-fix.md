@@ -1,10 +1,11 @@
 ---
 id: TASK-563
 title: 'survrescreen: Paladin survival A/B rescreen after the clock fix'
-status: Proposed
+status: Done
 assignee:
   - live-agent
 created_date: '2026-11-16T19:40:00Z'
+updated_date: '2026-11-16T21:10:00Z'
 labels:
   - bot
   - d2d-measure
