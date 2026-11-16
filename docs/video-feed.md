@@ -272,4 +272,4 @@ frames drawn).
 
 A/B additions to section 10: with `?debug` the card head must show ~30 fps (not 14 to 15) and `dropped` near 0 while walking;
 `jitter` below 12 ms; the window must be filled (no black bars at 1075 px); the Sharp pixels button must appear only with the feed;
-`D2VIEW` `-fps` is no longer the cap while a canvas viewer is connected.
+the d2dview `-fps` flag is no longer the cap while a canvas viewer is connected.
