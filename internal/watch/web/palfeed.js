@@ -5,15 +5,17 @@
   'use strict';
   var HEADER = 28, KEY = 1;
 
+  // an error a retry cannot help: the stream itself is broken (the player then falls back to MJPEG)
+  function fatal(msg) { var e = new Error(msg); e.fatal = true; return e; }
   function u16(b, o) { return b[o] | (b[o + 1] << 8); }
   function u32(b, o) { return (b[o] | (b[o + 1] << 8) | (b[o + 2] << 16) | (b[o + 3] << 24)) >>> 0; }
 
   // parseHeader reads a message's fixed header; throws on anything that is not version 1.
   function parseHeader(m) {
-    if (m.length < HEADER || m[0] !== 0x50 || m[1] !== 0x46 || m[2] !== 1) throw new Error('palfeed: bad header');
+    if (m.length < HEADER || m[0] !== 0x50 || m[1] !== 0x46 || m[2] !== 1) throw fatal('palfeed: bad header');
     var h = { key: (m[3] & KEY) !== 0, w: u16(m, 4), h: u16(m, 6), tile: m[8], seq: u32(m, 10), base: u32(m, 14),
               gameMs: u32(m, 18), n: u32(m, 22), dx: (m[26] << 24) >> 24, dy: (m[27] << 24) >> 24 };
-    if (!h.w || !h.h || !h.tile || m.length !== HEADER + h.n) throw new Error('palfeed: bad message');
+    if (!h.w || !h.h || !h.tile || m.length !== HEADER + h.n) throw fatal('palfeed: bad message');
     return h;
   }
 
@@ -26,7 +28,7 @@
     if (this.needsKey(h)) { var e = new Error('palfeed: need key'); e.needKey = true; throw e; }
     var w = h.w, ht = h.h, t = h.tile, tx = Math.ceil(w / t), ty = Math.ceil(ht / t), key = h.key, pos = 0, old = this.pix;
     var out, nm = key ? 0 : (tx * ty + 3) >> 2;
-    if (raw.length < nm) throw new Error('palfeed: short payload');
+    if (raw.length < nm) throw fatal('palfeed: short payload');
     pos = nm;
     if (key) out = new Uint8ClampedArray(w * ht * 4);
     else { out = this.spare && this.spare.length === w * ht * 4 ? this.spare : new Uint8ClampedArray(w * ht * 4); out.set(old); }
@@ -35,7 +37,7 @@
       var mode = 1;
       if (!key) { var k = j * tx + i; mode = (raw[k >> 2] >> (2 * (k & 3))) & 3; if (mode === 0) continue; }
       var x0 = i * t, y0 = j * t, tw = Math.min(t, w - x0), th = Math.min(t, ht - y0);
-      if (mode !== 3 && pos + tw * th * 3 > raw.length) throw new Error('palfeed: short payload');
+      if (mode !== 3 && pos + tw * th * 3 > raw.length) throw fatal('palfeed: short payload');
       for (var y = y0; y < y0 + th; y++) {
         var o = (y * w + x0) * 4, pr = 0, pg = 0, pb = 0, sy = y - dy;
         for (var x = 0; x < tw; x++, o += 4) {
@@ -65,7 +67,7 @@
     b.set(this.buf, 0); b.set(chunk, this.buf.length);
     while (b.length - p >= 4) {
       var n = u32(b, p);
-      if (n > (16 << 20)) throw new Error('palfeed: message too large');
+      if (n > (16 << 20)) throw fatal('palfeed: message too large');
       if (b.length - p - 4 < n) break;
       out.push(b.subarray(p + 4, p + 4 + n)); p += 4 + n;
     }
@@ -97,22 +99,27 @@
   }
 
   // Player: fetch the stream, decode in order, draw only the newest state once per animation frame (latest wins).
-  // o: {canvas, url, headers, fetch, inflate, raf, onFallback(reason), onStats(s)}
+  // o: {canvas, url, headers, fetch, inflate, raf, onFrame(), onBytes(n), onEnd(err), onFallback(reason), log(msg)}
+  // With onEnd the caller owns reconnects (the video panel's controller: backoff, stall watchdog, hidden tabs); without
+  // it the player retries itself 3 times (a reconnect is a new key frame) and then calls onFallback.
+  // An error carries .fatal when a retry cannot help (a broken stream: bad header, short payload, oversized message).
   function Player(o) {
-    this.o = o; this.dec = new Decoder(); this.ctx = o.canvas.getContext('2d', { alpha: false }); this.img = null;
+    this.o = o; this.dec = new Decoder(); this.ctx = o.canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.stopped = false; this.pending = null; this.raf = o.raf || (root.requestAnimationFrame && root.requestAnimationFrame.bind(root));
-    this.frames = 0; this.drawn = 0; this.bytes = 0; this.failures = 0; this.lowRate = false; this.ctl = null;
+    this.frames = 0; this.drawn = 0; this.bytes = 0; this.failures = 0; this.lowRate = false; this.ctl = null; this.gen = 0; this.imgs = [];
   }
-  Player.prototype.setLowRate = function (on) { this.lowRate = !!on; if (this.ctl) this.ctl.abort(); };
-  Player.prototype.stop = function () { this.stopped = true; if (this.ctl) this.ctl.abort(); };
+  Player.prototype.setLowRate = function (on) { this.lowRate = !!on; this._abort(); };
+  Player.prototype._abort = function () { if (this.ctl) this.ctl.abort(); };
+  Player.prototype.stop = function () { this.stopped = true; this.gen++; this._abort(); };
   Player.prototype.start = function () { this._run(); };
   Player.prototype._run = function () {
-    var self = this, o = this.o, inflate = o.inflate || browserInflate, sp = new Splitter();
+    var self = this, o = this.o, inflate = o.inflate || browserInflate, sp = new Splitter(), gen = ++this.gen;
+    this.dec = new Decoder(); this.pending = null; // a new connection starts from a key frame
     this.ctl = typeof AbortController === 'function' ? new AbortController() : { abort: function () {} };
     var url = o.url + (this.lowRate ? (o.url.indexOf('?') < 0 ? '?' : '&') + 'fps=10' : '');
     var chain = Promise.resolve();   // messages are applied strictly in order
     var f = o.fetch || root.fetch.bind(root);
-    f(url, { headers: o.headers || {}, signal: this.ctl.signal, cache: 'no-store' }).then(function (r) {
+    f(url, { headers: o.headers || {}, signal: this.ctl.signal, cache: 'no-store', credentials: 'same-origin' }).then(function (r) {
       if (!r.ok || !r.body) throw new Error('status ' + r.status);
       var rd = r.body.getReader();
       return (function pump() {
@@ -120,25 +127,30 @@
           if (c.done) throw new Error('ended');
           sp.push(c.value).forEach(function (m) {
             self.bytes += m.length + 4;
+            if (o.onBytes) o.onBytes(m.length + 4);
             chain = chain.then(function () {
+              if (gen !== self.gen) return;
               var h = parseHeader(m);
               if (self.dec.needsKey(h)) throw Object.assign(new Error('need key'), { needKey: true });
-              return Promise.resolve(inflate(m.subarray(HEADER))).then(function (raw) { self._got(self.dec.apply(h, raw)); });
+              return Promise.resolve(inflate(m.subarray(HEADER))).then(function (raw) { if (gen === self.gen) self._got(self.dec.apply(h, raw)); });
             });
           });
           return chain.then(pump);
         });
       })();
     }).catch(function (e) {
-      if (self.stopped) return;
-      if (e && e.name === 'AbortError') { if (!self.stopped) self._run(); return; }   // low-rate switch: reconnect
+      if (self.stopped || gen !== self.gen && !(e && e.name === 'AbortError')) return;
+      if (e && e.name === 'AbortError') { if (!self.stopped && gen === self.gen) self._run(); return; }   // low-rate switch: reconnect
+      if (o.log) o.log('palfeed: ' + (e && e.message || e));
+      if (o.onEnd) { o.onEnd(e); return; }
       self.failures++;
-      if (self.failures >= 3) { if (o.onFallback) o.onFallback(String(e && e.message || e)); return; }
+      if (e && e.fatal || self.failures >= 3) { if (o.onFallback) o.onFallback(String(e && e.message || e)); return; }
       setTimeout(function () { if (!self.stopped) self._run(); }, 500 * self.failures);   // reconnect = new key frame
     });
   };
   Player.prototype._got = function (dirty) {
     this.failures = 0; this.frames++;
+    if (this.o.onFrame) this.o.onFrame();
     if (dirty) this.pending = this.pending ? union(this.pending, dirty) : dirty;
     if (this.raf && !this.rafOn) { var self = this; this.rafOn = true; this.raf(function () { self.rafOn = false; self._draw(); }); }
   };
@@ -147,9 +159,12 @@
     if (!p || !d.have) return;
     this.pending = null;
     var c = this.o.canvas;
-    if (c.width !== d.w || c.height !== d.h) { c.width = d.w; c.height = d.h; this.img = null; p = { x: 0, y: 0, w: d.w, h: d.h }; }
-    if (!this.img || this.img.data !== d.pix) this.img = new ImageData(d.pix, d.w, d.h);
-    this.ctx.putImageData(this.img, 0, 0, p.x, p.y, p.w, p.h);
+    if (c.width !== d.w || c.height !== d.h) { c.width = d.w; c.height = d.h; this.imgs = []; p = { x: 0, y: 0, w: d.w, h: d.h }; }
+    // the decoder alternates two pixel buffers: one ImageData per buffer, made once (a dirty rect then stays a dirty rect)
+    var imgs = this.imgs || (this.imgs = []), img = null;
+    for (var i = 0; i < imgs.length; i++) if (imgs[i].data === d.pix) img = imgs[i];
+    if (!img) { img = new ImageData(d.pix, d.w, d.h); imgs.push(img); if (imgs.length > 4) imgs.shift(); }
+    this.ctx.putImageData(img, 0, 0, p.x, p.y, p.w, p.h);
     this.drawn++;
   };
   function union(a, b) {

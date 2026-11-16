@@ -144,8 +144,12 @@ func (h *Hub) Stream(o Options) http.Handler {
 				select {
 				case <-wake:
 					continue
-				case <-time.After(time.Second): // a still game publishes nothing: keep the lease and check the client
-					continue
+				case <-time.After(time.Second):
+					// A paused game publishes nothing: an empty delta (the same frame again, a few dozen bytes) is the
+					// heartbeat that keeps the page's stall watchdog quiet and the write deadline honest.
+					if cur == nil || base == nil {
+						continue
+					}
 				case <-r.Context().Done():
 					return
 				}

@@ -397,3 +397,32 @@ func TestGuardByteCapSlowsClient(t *testing.T) {
 		t.Fatal("guard pause not counted")
 	}
 }
+
+func TestHeartbeatWhileNothingChanges(t *testing.T) {
+	h := NewHub()
+	srv := httptest.NewServer(h.Stream(Options{Auth: func(*http.Request) bool { return true }}))
+	defer srv.Close()
+	f := synth(96, 64, 1, 1)
+	h.Publish(f, 0)
+	resp, err := http.Get(srv.URL)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	br := bufio.NewReader(resp.Body)
+	var dec Decoder
+	if err := dec.Apply(readMsg(t, br)); err != nil {
+		t.Fatal(err)
+	}
+	t0 := time.Now()
+	m := readMsg(t, br) // no new frame: the heartbeat comes after about a second
+	if d := time.Since(t0); d < 800*time.Millisecond || d > 3*time.Second {
+		t.Fatalf("heartbeat after %v", d)
+	}
+	if m[3]&FlagKey != 0 || len(m) > 200 {
+		t.Fatalf("heartbeat is %d bytes, key %v", len(m), m[3]&FlagKey != 0)
+	}
+	if err := dec.Apply(m); err != nil || !bytes.Equal(dec.Frame.Pix, f.Pix) {
+		t.Fatalf("heartbeat does not apply: %v", err)
+	}
+}
