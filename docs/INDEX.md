@@ -781,6 +781,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [dispatcher-brief.md](process/dispatcher-brief.md): Dispatcher brief (status: moved to the private ops repo (d2lod-ops, `docs/process/dispatcher-brief.md`). Not part of the public tree.)
 - [doc-audit.md](process/doc-audit.md): Doc audit (2026-10-30)
 - [feed-after-events.md](process/feed-after-events.md): Feed after events (status: current rule (card feeds, 2026-11-01). The helper is `tools/discord/feed.py`; details in...)
+- [friends-gamedata-2026-11-15.md](process/friends-gamedata-2026-11-15.md): Friends game-data bundle (2026-11-15)
 - [gamecode-guard.md](process/gamecode-guard.md): Game-code guard, labpath class, path scrubber
 - [grill-agent.md](process/grill-agent.md): The grill agent: one command to be interviewed
 - [grill-queue-2026-11-11.md](process/grill-queue-2026-11-11.md): Grill queue 2026-11-11: paste-ready decisions, ADR drafts and glossary text (status: input for the user's next grill session (TASK-342). Docs only. Nothing here is written to...)
@@ -945,6 +946,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [postfix-soak2-analysis.md](probes/postfix-soak2-analysis.md): postfix-soak2 analysis: root causes of F1 to F6, the walking share and a ranked fix-card list (card... (status: current. Offline study of the finished Gate 1 soak 2 (postfix-soak2.md, origin/main 0b0bdb2, one seed, 2 h...)
 - [postfix-soak2.md](probes/postfix-soak2.md): postfix-soak2: Gate 1 of the d2d gate ladder on current main (2026-10-31) (status: current. One finished hidden d2d soak (exit 0, 120 wall min, one injected d2d kill), n=1 seed, not a...)
 - [ptrclick.md](probes/ptrclick.md): ptrclick: is d2d's click-targeting a deviation from game.exe, or only our harness? (TASK-179) (status: plan, nothing run live. Tags: V verified (how stated), S read in code, U unverified. Card:...)
+- [sandbox-fresh-20261115.md](probes/sandbox-fresh-20261115.md): Sandbox reset to a fresh hero, 2026-11-15 (status: record. Task sandboxfresh. Tags: V = verified in this run, U = not verified.)
 - [shortdrills.md](probes/shortdrills.md): Short live drills for the g2e/g2f fixes (card shortdrills) (status: current (2026-11-06). Tags: V = run live on the worker host, S = secondary, U = unverified.)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)

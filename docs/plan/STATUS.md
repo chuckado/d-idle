@@ -247,6 +247,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- e3a036f54 11-15 21:11 `Merge agent/sandboxfresh: Merge branch 'main' into sandboxfresh` (sandboxfresh)
+- 4e06914b5 11-15 21:10 `Merge branch 'main' into sandboxfresh` (-)
+- fef83e97d 11-15 21:02 `Merge agent/gamedata: gamedata: private friends game-data bundle record (no URL)` (gamedata)
 - f1b698db8 11-15 20:32 `Merge agent/decomp33: decomp33: P17 and P18 ready for the verifier, P19 no PR; rows, card, merge lines` (decomp33)
 - 2cd4accc0 11-15 20:27 `Merge origin/main into agent/decomp33` (-)
 - 967e2e965 11-15 18:41 `Merge agent/cut013: friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published)` (cut013)
@@ -254,7 +257,4 @@
 - 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
 - cc88747b3 11-15 14:28 `Merge agent/devp8: Merge branch 'main' into devp8` (devp8)
 - 8252907ea 11-15 14:27 `Merge branch 'main' into devp8` (-)
-- 568260e7f 11-15 14:11 `Merge agent/p03cposted: Merge branch 'main' into p03cposted` (p03cposted)
-- 8c1a024b7 11-15 14:10 `Merge branch 'main' into p03cposted` (-)
-- cab78c992 11-15 14:02 `Merge agent/botreset: Merge branch 'main' into botreset` (botreset)
 <!-- statusgen:end -->
