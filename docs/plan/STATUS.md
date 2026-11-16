@@ -230,6 +230,7 @@
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | survfix | in-progress | - | `docs/survival/ab-screen-analysis-2026-11-16.md`<br>`tools/survival/abreport`<br>`cmd/d2bot/survivalwire.go`<br>`internal/survival/survival_test.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/powerwire_test.go` | - |
 | pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
+| seqbody | proposed | - | `docs/upstream/bodies/seq-ias-followup-body.md` | `upstream-pr:seq-ias-followup` |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -272,6 +273,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 35ba067f1 11-16 15:06 `Merge agent/seqbody: seqbody: seq-ias follow-up PR body per verifier` (seqbody)
+- 6f69cf4e3 11-16 15:05 `Merge branch 'main' into seqbody` (-)
 - 98ff27df5 11-16 14:38 `Merge agent/verifyseqfollow: Merge branch 'main' into TASK-559` (verifyseqfollow)
 - 937224b96 11-16 14:37 `Merge branch 'main' into TASK-559` (-)
 - 993773c54 11-16 14:35 `Merge agent/decomp36: Merge branch 'main' into decomp36` (decomp36)
@@ -280,6 +283,4 @@
 - 69cba35be 11-16 14:28 `Merge branch 'main' into survfix` (-)
 - e3aa9757d 11-16 14:20 `Merge agent/pausefix: Merge branch 'main' into pausefix` (pausefix)
 - 0882e97a3 11-16 14:20 `Merge branch 'main' into pausefix` (-)
-- d3c0def97 11-16 14:05 `Merge agent/decomp35: Merge branch 'main' into decomp35` (decomp35)
-- d329871ec 11-16 14:04 `Merge branch 'main' into decomp35` (-)
 <!-- statusgen:end -->
