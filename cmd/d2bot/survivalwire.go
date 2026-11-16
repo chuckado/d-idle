@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log/slog"
 	"sync"
 	"sync/atomic"
@@ -108,6 +109,24 @@ func newSurvivalShadow(db *data.DB, ledgerPath string, now func() time.Time) *su
 	f := w.fight
 	survFight.Store(&f)
 	return w
+}
+
+// chainSurvFight puts the ledger's fight hook on the fighter's OnSummary. It must run before useSensesHistory, which
+// chains whatever is there but returns early without a senses rig: the d2d harness has none, so fights never reached
+// the ledger and kills and seconds stayed 0 in every zone (rescreen 2026-11-16).
+func chainSurvFight(f *combat.Fighter) {
+	if f == nil {
+		return
+	}
+	prev := f.OnSummary
+	f.OnSummary = func(s combat.FightSummary) {
+		if prev != nil {
+			prev(s)
+		}
+		if sf := survFight.Load(); sf != nil {
+			(*sf)(s)
+		}
+	}
 }
 
 func (w *survivalShadow) warn(err error) string {
@@ -222,7 +241,8 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 	}
 	w.power, w.lastDiff = survival.PowerOf(hero), diff
 	in := survival.Input{Now: w.now(), Dial: dial, Current: survival.ZoneKey{Area: area, Diff: diff}, Power: w.power,
-		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero)}
+		Purse: survival.Purse{Gold: p.Gold, Need: need}, Cands: cs, FreshAllowed: true, OffenceUnread: w.m.OffenceUnread(hero),
+		Active: model, Archetype: a.ID, MercDead: mercDead}
 	d, err := w.led.Choose(in)
 	if err != nil {
 		return bot.ZoneVerdict{}, err
@@ -238,7 +258,8 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 			rd := w.led.Revive(survival.ReviveInput{Base: in, With: with, Without: cs, Quote: shadowReviveQuote, Reserve: shadowKitPotions * int(w.p.PotionPrice), Gold: p.Gold})
 			merc = &rd
 			v.MercDead, v.MercRevive, v.MercWhy = true, rd.Revive, rd.Why.Text
-			lines += "\nzone revive: " + rd.Why.Code + ": " + rd.Why.Text
+			v.MercGain, v.MercCost, v.MercZone = rd.Gain, rd.Cost, rd.Zone
+			lines += fmt.Sprintf("\nzone revive: %s: %s (zone %s, gain %.0f, cost %.0f)", rd.Why.Code, rd.Why.Text, rd.Zone, rd.Gain, rd.Cost)
 		}
 	}
 	g := survival.GlanceOf(d, dial.ID, merc)
@@ -265,7 +286,7 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 	case bot.ZoneEvMercDied:
 		w.led.Observe(k, now, survival.Event{Kind: survival.EvMercDeath}, w.power)
 	case bot.ZoneEvArea:
-		w.led.Observe(k, now, survival.Event{Kind: survival.EvXP, XP: ev.XP}, w.power)
+		w.led.Observe(k, now, survival.Event{Kind: survival.EvXP, XP: ev.XP, Seconds: ev.Seconds}, w.power)
 		if ev.Seconds > 0 {
 			w.led.Observe(k, now, survival.Event{Kind: survival.EvIntake, LifeLost: float64(ev.LifeLost), Seconds: ev.Seconds}, w.power)
 		}
@@ -276,15 +297,15 @@ func (w *survivalShadow) observe(ev bot.ZoneEvent) {
 }
 
 // fight feeds one finished fight (the fighter's OnSummary) with the model's prediction for the same kills, which is
-// what k_zone and k_hero compare against. Without a prediction for the zone (no decision yet) the fight is skipped.
+// what k_zone and k_hero compare against. Without a prediction for the zone the fight adds kills and seconds only.
 func (w *survivalShadow) fight(fs combat.FightSummary) {
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	pr, ok := w.pred[survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}]
-	if !ok || fs.Kills <= 0 {
+	pr := w.pred[survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}] // zero when the model made no prediction: kills and time still count
+	if fs.Kills <= 0 || w.lastDiff == "" {
 		return
 	}
 	n := float64(fs.Kills)
 	w.led.Observe(survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}, w.now(), survival.Event{Kind: survival.EvFight, Kills: n, Seconds: fs.Sec,
-		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions)}, w.power)
+		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions), Starved: float64(fs.Starved)}, w.power)
 }

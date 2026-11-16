@@ -22,7 +22,14 @@ import (
 // Setup is the declared starting state, identical for both arms.
 type Setup struct {
 	Clvl, Gold, Stash, MercType int
+	// Weapon is the item code worn in the right hand (body slot 4, S: inventory body locations, 8 is the belt of
+	// docs/cheats.md); "" wears none. Without a weapon a melee class has no damage stat and the power model reads its
+	// offence as the default constant (src=default), so the survival A/B hero of a melee class gets one. Declared SETUP.
+	Weapon string
 }
+
+// WeaponSlot is the right-hand body slot of `debug equip` (U until the first run reads the weapon damage stat back).
+const WeaponSlot = 4
 
 // Verbs returns the debug verbs for s in the order they are sent: points follow the level like the build drill
 // (5 stat and 1 skill point per level gained, all unspent so the bot's own leveler spends them).
@@ -35,6 +42,9 @@ func Verbs(s Setup) []string {
 		fmt.Sprintf("debug skillpts %d", s.Clvl-1),
 		fmt.Sprintf("debug stat 14 %d", s.Gold),
 		fmt.Sprintf("debug stat 15 %d", s.Stash),
+	}
+	if s.Weapon != "" {
+		v = append(v, fmt.Sprintf("debug equip %s %d", s.Weapon, WeaponSlot))
 	}
 	if s.MercType >= 0 {
 		v = append(v, fmt.Sprintf("debug merc hire %d", s.MercType))
@@ -70,6 +80,7 @@ func run() error {
 	flag.IntVar(&s.Gold, "gold", 500, "purse gold")
 	flag.IntVar(&s.Stash, "stash", 0, "stash gold")
 	flag.IntVar(&s.MercType, "merc", 0, "hireling.txt Id to hire for free (the Act 1 Rogue is 0, docs/cheats.md); -1 none")
+	flag.StringVar(&s.Weapon, "weapon", "", "item code worn in the right hand (SETUP), e.g. hax for a melee class; empty = none")
 	flag.Parse()
 	if *home == "" || *name == "" || *sock == "" || *bin == "" {
 		return fmt.Errorf("needs --home, --name, --sock and --bin (or D2D_BIN, D2D_SOCK)")

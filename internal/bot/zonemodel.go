@@ -27,6 +27,9 @@ type ZoneVerdict struct {
 	MercDead   bool   // the merc is dead and the controller judged the revive
 	MercRevive bool   // reviving pays; false with MercDead: leave him dead
 	MercWhy    string
+	MercGain   float64 // value the revive adds until he dies again (same units as MercCost)
+	MercCost   float64
+	MercZone   string // the zone the gain is measured in
 }
 
 // zoneState is the last verdict, for the merc policy and the Status word.
@@ -109,6 +112,9 @@ func (r *Runner) zoneModelPick(s *d2.Snapshot, diff string, cleared map[int]bool
 		for _, line := range splitLines(v.Line) {
 			r.e.Log.Info(line)
 		}
+		if v.MercDead { // every revive decision, with the numbers (the plain `zone revive:` line has the words)
+			r.e.Log.Info("merc revive: decision", "revive", v.MercRevive, "zone", v.MercZone, "gain", int(v.MercGain), "cost", int(v.MercCost), "why", v.MercWhy)
+		}
 		if v.Fresh {
 			if r.d.Cycler == nil || len(cleared) == 0 {
 				return 0, false, false // no way to take a fresh game: the plan rule decides
@@ -128,6 +134,17 @@ func (r *Runner) zoneLeaveMercDead() bool {
 	z := &r.zst
 	z.mu.Lock()
 	defer z.mu.Unlock()
+	now := r.e.Clock.Now()
+	area := 0 // the zone the model plans (0: any closed zone counts)
+	if z.have {
+		area = z.v.Area
+	}
+	if r.mercLoop().BlockedArea(area, now) {
+		if m := &r.zmerc; m.blockNoted.CompareAndSwap(false, true) {
+			r.e.Log.Info("merc: left dead by the revive loop breaker", "area", area, "limit", r.e.Tune.Bot.MercReviveLoopN)
+		}
+		return true
+	}
 	if !z.have || !z.v.MercDead || z.v.MercRevive || r.e.Clock.Now().Sub(z.at) > 4*zoneRecheck {
 		return false
 	}
