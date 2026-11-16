@@ -17,6 +17,7 @@ owns:
 exclusive:
   - "upstream-pr:decomp35-leech"
 contracts: []
+result: "Body edited per verifier L1-L6; evidence rerun on upstream def80df7 on the builder (leech compare 0 of 20,351 and 0 of 60,351, parent 17,097 and 50,626, test_combat and test_game ok); docs only, not live."
 ---
 
 ## Description
@@ -29,5 +30,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Body edited per verifier L1 to L6 and the rebased evidence
+- [x] #1 Body edited per verifier L1 to L6 and the rebased evidence
 <!-- AC:END -->
