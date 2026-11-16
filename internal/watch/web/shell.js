@@ -585,6 +585,7 @@ function applyCockpit() {
   ck.plan = p;
   const main = ck.main, shell = ck.shell;
   shell.dataset.cmode = main.dataset.cmode = p.mode;
+  if (p.mode === 'phone') shell.dataset.narrow = 'phone'; else if (window.innerWidth < 1000) shell.dataset.narrow = 'mid'; else delete shell.dataset.narrow; // the header links (components.css)
   const back = document.getElementById('returnlink'); // one word on the phone: the links stay on one line
   if (back) back.textContent = p.mode === 'phone' ? 'Return' : 'Return screen';
   main.dataset.has = p.has;
