@@ -635,3 +635,18 @@ func TestLedgerIntake(t *testing.T) {
 		t.Errorf("reloaded per min %v", pm)
 	}
 }
+
+// The ledger compares event stamps with the caller's now: both must come from one clock. Under lockstep the bot clock
+// counts from the Unix epoch; a wall-clock now made every event look 56 years old (survfix, 2026-11-16).
+func TestLedgerNeedsOneClock(t *testing.T) {
+	l := NewLedger(params(t))
+	k := ZoneKey{3, "normal"}
+	virtual := time.Unix(0, 0).Add(10 * time.Minute)
+	l.Observe(k, virtual, Event{Kind: EvDeath}, 100)
+	if out, _ := l.ForcedOut(k, "balanced", virtual.Add(time.Minute)); !out {
+		t.Error("same clock: a death a minute ago must force the zone out")
+	}
+	if out, _ := l.ForcedOut(k, "balanced", time.Now()); out {
+		t.Error("mixed clocks: the event reads as ancient (this is the failure the wiring must avoid)")
+	}
+}
