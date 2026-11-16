@@ -1,10 +1,13 @@
 ---
 id: TASK-564
-title: 'verifydecomp35: independent verifier of the decomp35 leech and crush PR candidates'
-status: In Progress
+title: >-
+  verifydecomp35: independent verifier of the decomp35 leech and crush PR
+  candidates
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T19:40:00Z'
+updated_date: '2026-11-16T22:49:00Z'
 labels:
   - d2d
   - research
