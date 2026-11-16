@@ -45,4 +45,4 @@ Do not run the 8-seed confirmation yet: it is a pass-to-confirm step and the scr
 `abreport` reads the XP at minute 120 from `XPAt[120]`, but a 2 h run has 119 to 120 minute lines, so `Minutes` is at most 119 and the 120 checkpoint is absent; `xpAtHorizon` then silently falls back to the 90-minute value (the `xp120=` column equals `xp90` above, and the printed XP ratio and interval are for minute 90). The XP columns in this doc come from the last minute line instead. Fix for the harness owner: record the last minute as the horizon value when `Minutes >= 0.95 * horizon`, and say the minute used. The chicken counts used here are `abreport`'s (my own grep missed them).
 
 ## Provenance
-Heroes `SaHero-101`, `SaHero-103`, `SaHero-107` (Paladin and Sorceress, 12 runs): logged in [test-characters](test-characters.md). Logs: worker host `~/d2d-lab/survab/ab-pal` (Paladin) and `ab` (Sorceress).
+Heroes `SaHero-101`, `SaHero-103`, `SaHero-107` (Paladin and Sorceress, 12 runs): logged in [test-characters](test-characters.md). Logs: the worker host survab run folder (`ab-pal` Paladin, `ab` Sorceress).
