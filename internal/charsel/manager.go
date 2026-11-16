@@ -114,6 +114,7 @@ type Manager struct {
 	ExitCode   int
 	ExitDelay  time.Duration
 	Now        func() time.Time
+	SaveDir    func() string           // resolves the save folder each call (a d2d finds it after its first save); nil keeps Store.SaveDir
 	Verify     func(path string) error // the save check at switch time; nil = saves.VerifyFile (checksum, sections)
 
 	mu sync.Mutex
@@ -141,6 +142,13 @@ func (m *Manager) caps() Caps {
 	return c
 }
 
+// sync takes the resolved save folder into the Store; callers hold mu.
+func (m *Manager) sync() {
+	if m.SaveDir != nil {
+		m.Store.SaveDir = m.SaveDir()
+	}
+}
+
 func (m *Manager) active() string {
 	if m.Active == nil {
 		return ""
@@ -150,6 +158,9 @@ func (m *Manager) active() string {
 
 // List is GET /api/characters.
 func (m *Manager) List() (any, *Refusal) {
+	m.mu.Lock()
+	defer m.mu.Unlock()
+	m.sync()
 	es, del, err := m.Store.List(m.active())
 	if err != nil {
 		if errors.Is(err, ErrNoSave) {
@@ -195,6 +206,7 @@ func (m *Manager) gateSwitch() *Refusal {
 func (m *Manager) Create(name, class string, hardcore bool) (any, *Refusal) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	m.sync()
 	if r := m.gateSwitch(); r != nil {
 		return nil, r
 	}
@@ -223,6 +235,7 @@ func (m *Manager) Create(name, class string, hardcore bool) (any, *Refusal) {
 func (m *Manager) Switch(name string) (any, *Refusal) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	m.sync()
 	if r := m.gateSwitch(); r != nil {
 		return nil, r
 	}
@@ -274,6 +287,7 @@ func (m *Manager) leave(in Intent, action string) (any, *Refusal) {
 func (m *Manager) Delete(name, confirm string) (any, *Refusal) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	m.sync()
 	if r := m.gate(); r != nil {
 		return nil, r
 	}
@@ -301,6 +315,7 @@ func (m *Manager) Delete(name, confirm string) (any, *Refusal) {
 func (m *Manager) Restore(archive string) (any, *Refusal) {
 	m.mu.Lock()
 	defer m.mu.Unlock()
+	m.sync()
 	if r := m.gate(); r != nil {
 		return nil, r
 	}
