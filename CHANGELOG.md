@@ -8,6 +8,13 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into farmloop2 <!--sg:agent/farmloop2-->
+- Merge branch 'main' into TASK-528 <!--sg:agent/verifyp18-->
+- Merge branch 'main' into videofeed <!--sg:agent/videofeed-->
+- Merge branch 'main' into TASK-526 <!--sg:agent/overlayfix-->
+- Merge branch 'main' into viewerfps <!--sg:agent/viewerfps-->
+- Merge branch 'main' into TASK-537 <!--sg:agent/friendfb-->
+- Merge branch 'main' into 529 <!--sg:agent/resetinstant-->
 - Merge branch 'main' into sandbox2 <!--sg:agent/sandbox2-->
 - Merge branch 'main' into idfast <!--sg:agent/idfast-->
 - observed life lost per minute (lifeLost) in minute line, glance, ledger, levelsim <!--sg:agent/intake-->

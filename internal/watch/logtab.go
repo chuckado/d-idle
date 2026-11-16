@@ -24,6 +24,7 @@ var LogRoutes = []string{LogRoute}
 
 // logSource names the existing route each tab reads.
 var logSource = map[string]string{
+	"items":   DropsRoute,
 	"now":     "/api/thoughts",
 	"journal": "/api/journal?limit=80",
 	"story":   "/api/chronicle",
@@ -31,7 +32,7 @@ var logSource = map[string]string{
 }
 
 // LogTabs lists the tabs in the order the drawer shows them.
-var LogTabs = []string{"now", "journal", "story", "alerts"}
+var LogTabs = []string{"items", "now", "journal", "story", "alerts"}
 
 // LogRow is one line of a tab.
 type LogRow struct {
@@ -39,7 +40,8 @@ type LogRow struct {
 	Ago   float64 `json:"ago"` // seconds before the reply
 	Kind  string  `json:"kind"`
 	Text  string  `json:"text"`
-	Level string  `json:"level,omitempty"` // alerts: the severity
+	Level string  `json:"level,omitempty"`   // alerts: the severity
+	Q     string  `json:"quality,omitempty"` // items: the quality of the pickup
 }
 
 // LogView is the reply. Rows are newest first. Note says why a tab has no rows (not unlocked, not built into this run).
@@ -92,6 +94,20 @@ func logFill(v *LogView, tab string, b []byte, now float64) {
 		return 0
 	}
 	switch tab {
+	case "items":
+		var d DropsView
+		if json.Unmarshal(b, &d) == nil {
+			for _, x := range d.Rows {
+				t := "picked up " + x.Item
+				if x.Area != "" {
+					t += " (" + x.Area + ")"
+				}
+				v.Rows = append(v.Rows, LogRow{ID: x.ID, Ago: x.Ago, Kind: "drop", Text: t, Q: x.Quality})
+			}
+			if len(d.Rows) == 0 {
+				v.Note = "No items picked up yet."
+			}
+		}
 	case "now":
 		var t ThoughtsView
 		if json.Unmarshal(b, &t) == nil {

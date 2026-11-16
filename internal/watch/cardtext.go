@@ -228,6 +228,9 @@ type Card struct {
 // BuildCard writes the card of a thought. def is the answer id the hero takes meanwhile ("" = the catalogue default).
 func (h *Hub) BuildCard(info decide.ThoughtInfo, def string) Card {
 	c := Card{Rule: "Rule applies when: " + PlainContext(info.Key) + ".", WhyNow: whyNow(info.Key)}
+	if info.Point == decide.FirstsPoint && info.Sit["question"] != "" {
+		return h.firstCard(info, def, c)
+	}
 	t, ok := cardTexts[info.Point]
 	if !ok { // a point added to the catalogue without a card: the catalogue's own question
 		c.Headline = info.Question
@@ -279,4 +282,28 @@ func situationLine(info decide.ThoughtInfo) string {
 	}
 	s, _ := renderHeadline(t.Headline, info.Sit)
 	return s
+}
+
+// firstLabels are the answer labels a first carries in its situation (the catalogue point only has placeholders).
+func firstLabels(info decide.ThoughtInfo) map[string]string {
+	if info.Point != decide.FirstsPoint || info.Sit["yes"] == "" || info.Sit["no"] == "" {
+		return nil
+	}
+	return map[string]string{"yes": info.Sit["yes"], "no": info.Sit["no"]}
+}
+
+// firstCard words a "first" as information: what happened, the hero's usual answer, and that nothing is required.
+func (h *Hub) firstCard(info decide.ThoughtInfo, def string, c Card) Card {
+	lab := firstLabels(info)
+	c.Headline, c.Specific = "First time for this hero: "+info.Sit["question"], true
+	c.Does = lab
+	if def == "" {
+		def = h.defaultFor(info.Key)
+	}
+	if d := lab[def]; d != "" {
+		c.IfNothing = fmt.Sprintf("Nothing is required of you. If you do nothing, the hero will %s after %d s.", d, h.cfg.Cat.Config.FadeSec)
+	} else {
+		c.IfNothing = "Nothing is required of you. If you do nothing, the hero decides by its usual rules."
+	}
+	return c
 }
