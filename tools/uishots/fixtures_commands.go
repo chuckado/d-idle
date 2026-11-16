@@ -72,3 +72,29 @@ func resetFixture(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
 }
+
+// pauseFixture serves /api/pause for the Pause control (internal/watch/web/pauseui.js): the page's query pause=can|frozen
+// picks the view (the goldens of internal/watch/testdata/pause); without it the route answers 503 like a hero with no pause
+// desk, so no button is drawn and the older pages are unchanged.
+func pauseFixture(w http.ResponseWriter, r *http.Request) {
+	name := ""
+	if ref, err := url.Parse(r.Referer()); err == nil {
+		switch ref.Query().Get("pause") {
+		case "can":
+			name = "canfreeze"
+		case "frozen":
+			name = "frozen"
+		}
+	}
+	if name == "" {
+		http.Error(w, `{"code":"off","error":"pause is not available"}`, http.StatusServiceUnavailable)
+		return
+	}
+	b, err := os.ReadFile(filepath.Join("internal/watch/testdata/pause", "view-"+name+".json"))
+	if err != nil {
+		http.Error(w, "no such fixture: "+name, http.StatusNotFound)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(b)
+}

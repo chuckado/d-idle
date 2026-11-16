@@ -3,6 +3,7 @@
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
 import { mountReset } from '/watch/resetui.js';
+import { mountPause } from '/watch/pauseui.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
@@ -952,6 +953,9 @@ async function start() {
   Object.values(bands).forEach(syncBand);
   sched.start();
   mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+    post: (path, body) => postJSON(answerBase, path, body),
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
+  mountPause({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
     post: (path, body) => postJSON(answerBase, path, body),
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted

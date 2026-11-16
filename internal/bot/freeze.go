@@ -41,6 +41,7 @@ type freezeState struct {
 	can     bool      // last capability answer
 	probeAt time.Time // when it was taken (zero: never)
 	ended   *PauseEnded
+	near    bool // monsters were within the clear radius when the game was frozen (info only)
 }
 
 func (r *Runner) wallNow() time.Time {
@@ -90,6 +91,10 @@ func (r *Runner) setClockFrozen(on bool) {
 
 // freezeOn freezes the game. On a backend error nothing changes and the error is returned.
 func (r *Runner) freezeOn() error {
+	near := false
+	if s := r.latest(); s != nil && s.Player != nil && !s.Player.InTown() {
+		near = r.hostileNear(s, r.e.Tune.Bot.ClearRadius) > 0 || r.hostileWithin(s, r.e.Tune.Bot.ClearRadius) > 0
+	}
 	r.mu.Lock()
 	if r.frz.on {
 		r.mu.Unlock()
@@ -101,7 +106,7 @@ func (r *Runner) freezeOn() error {
 	}
 	r.plp.want, r.plp.held, r.plp.reason, r.plp.since = false, false, "", time.Time{}
 	r.plp.save()
-	r.frz.on, r.frz.since, r.frz.ended = true, r.wallNow(), nil
+	r.frz.on, r.frz.since, r.frz.ended, r.frz.near = true, r.wallNow(), nil, near
 	r.cancelLocked(errPause) // the running action ends now; the loop parks at its next step
 	r.mu.Unlock()
 	r.setClockFrozen(true)
@@ -188,7 +193,7 @@ func (r *Runner) frozenViewLocked(v *PlayerPauseView) {
 	f := &r.frz
 	if f.on {
 		since := f.since
-		v.State, v.Frozen, v.Since, v.Reason = PausePaused, true, &since, "the game is frozen"
+		v.State, v.Frozen, v.Since, v.Reason, v.MonstersNear = PausePaused, true, &since, "the game is frozen", f.near
 		if c := r.e.Tune.Bot.PauseCapMin; c > 0 {
 			v.CapMin = c
 			end := since.Add(time.Duration(c) * time.Minute)

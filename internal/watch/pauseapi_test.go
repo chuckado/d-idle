@@ -138,3 +138,34 @@ func TestPauseRouteFreezeField(t *testing.T) {
 		t.Errorf("plain desk: %d %v", w.Code, plain.sets)
 	}
 }
+
+// mapPause serves a fixed view (the frozen pause's fields).
+type mapPause struct{ v map[string]any }
+
+func (m mapPause) View() any    { return m.v }
+func (m mapPause) Set(bool) any { return m.v }
+
+// Goldens of the frozen pause: the fit fixtures of tools/uishots serve these two files, so a change of shape shows here.
+func TestPauseRouteFrozenGoldens(t *testing.T) {
+	for name, v := range map[string]map[string]any{
+		"canfreeze": {"schema": "watch.pause/1", "state": "running", "can_freeze": true},
+		"frozen": {"schema": "watch.pause/1", "state": "paused", "since": "2026-11-14T10:00:00Z", "reason": "the game is frozen", "frozen": true,
+			"can_freeze": true, "cap_min": 60, "ends_at": "2026-11-14T11:00:00Z", "monsters_near": true},
+	} {
+		api := NewPauseAPI()
+		api.Bind(mapPause{v})
+		w := httptest.NewRecorder()
+		api.Handler().ServeHTTP(w, httptest.NewRequest("GET", PauseRoute, nil))
+		path := filepath.Join("testdata", "pause", "view-"+name+".json")
+		if _, err := os.Stat(path); err != nil && os.Getenv("UPDATE_GOLDEN") != "" {
+			os.WriteFile(path, w.Body.Bytes(), 0o644)
+		}
+		want, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if string(want) != w.Body.String() {
+			t.Errorf("%s:\nwant %s\ngot  %s", name, want, w.Body)
+		}
+	}
+}

@@ -30,16 +30,17 @@ const pauseHomeBackoff = 30 * time.Second
 
 // PlayerPauseView is what GET /api/pause shows.
 type PlayerPauseView struct {
-	Schema    string      `json:"schema"`
-	State     string      `json:"state"`
-	Since     *time.Time  `json:"since,omitempty"`
-	Reason    string      `json:"reason,omitempty"`
-	Frozen    bool        `json:"frozen,omitempty"`     // the game itself is stopped (freeze.go); State is then "paused"
-	CanFreeze bool        `json:"can_freeze,omitempty"` // this backend can freeze the game: the page shows Pause
-	CapMin    int         `json:"cap_min,omitempty"`    // minutes until a frozen pause ends by itself
-	EndsAt    *time.Time  `json:"ends_at,omitempty"`
-	Ended     *PauseEnded `json:"ended,omitempty"` // a frozen pause that just ended (Needs you info row)
-	Error     string      `json:"error,omitempty"` // why the last press did nothing
+	Schema       string      `json:"schema"`
+	State        string      `json:"state"`
+	Since        *time.Time  `json:"since,omitempty"`
+	Reason       string      `json:"reason,omitempty"`
+	Frozen       bool        `json:"frozen,omitempty"`     // the game itself is stopped (freeze.go); State is then "paused"
+	CanFreeze    bool        `json:"can_freeze,omitempty"` // this backend can freeze the game: the page shows Pause
+	CapMin       int         `json:"cap_min,omitempty"`    // minutes until a frozen pause ends by itself
+	EndsAt       *time.Time  `json:"ends_at,omitempty"`
+	Ended        *PauseEnded `json:"ended,omitempty"`         // a frozen pause that just ended (Needs you info row)
+	Error        string      `json:"error,omitempty"`         // why the last press did nothing
+	MonstersNear bool        `json:"monsters_near,omitempty"` // the hero stood near monsters when the game froze (info only)
 }
 
 type playerPause struct {

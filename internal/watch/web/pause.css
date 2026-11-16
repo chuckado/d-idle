@@ -1,0 +1,12 @@
+/* The Pause control (docs/pause.md): the banner, the dimmed game view and the glyph. Tokens only. */
+@layer components {
+  .d-pause-banner { position: fixed; inset-block-end: var(--d-sp-3); inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); display: flex; align-items: center; gap: var(--d-sp-3); box-sizing: border-box; max-inline-size: calc(100vw - 2 * var(--d-sp-4)); min-block-size: var(--d-hit); padding: var(--d-sp-1) var(--d-sp-2) var(--d-sp-1) var(--d-sp-4); border: var(--d-bw) solid var(--d-info); border-radius: var(--d-r-2); background: var(--d-state-bg-info); color: var(--d-text); box-shadow: var(--d-inset-deep); }
+  .d-pause-banner[hidden] { display: none; }
+  .d-pause-glyph { color: var(--d-info); letter-spacing: -.15em; }
+  .d-pause-line { min-inline-size: 0; overflow-wrap: anywhere; }
+  .d-pause-resume { flex: none; align-items: center; min-block-size: var(--d-hit); min-inline-size: var(--d-hit); }
+  .d-pause-btn { min-block-size: var(--d-hit); min-inline-size: var(--d-hit); }
+  /* the frozen picture stays visible, dimmed, with a pause glyph; the stream keeps running, the game does not */
+  html[data-paused] [data-panel="video"] .frame::after { content: "\275A\275A"; position: absolute; inset: 0; display: grid; place-items: center; background: color-mix(in srgb, var(--d-mask) 55%, transparent); color: var(--d-text); font-size: 3rem; letter-spacing: -.15em; pointer-events: none; }
+  @media (prefers-reduced-motion: no-preference) { html[data-paused] [data-panel="video"] .frame::after { transition: opacity .2s; } }
+}
