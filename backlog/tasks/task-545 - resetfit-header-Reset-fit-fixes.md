@@ -18,6 +18,7 @@ owns:
   - "tools/uishots.sh"
 exclusive: []
 contracts: []
+result: "reset* fit pages green (toast over the header button removed, fixture needs=0). default-900x700 statusline overflow (87 of 76 px) is unchanged with the Reset button at 88, 66 or 32 px wide, so it is not from the button; not fixed here."
 ---
 
 ## Description
@@ -30,5 +31,5 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 reset* and default* fit pages green
+- [x] #1 reset* and default* fit pages green
 <!-- AC:END -->

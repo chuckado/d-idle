@@ -299,9 +299,5 @@
   /* the header Reset: one tap, never wider than its busy label, a 44 px hit area on a 32 px button */
   .d-reset-btn { position: relative; flex: none; min-inline-size: 0; justify-content: center; white-space: nowrap; border-color: var(--d-line-strong); }
   .d-reset-btn::after { content: ""; position: absolute; inset: -6px -2px; }
-  @media (max-width: 62.49rem) { /* a mid-width band has no room for the word: an arrow, the aria-label still says what it does */
-    .d-reset-btn { font-size: 0; padding-inline: var(--d-sp-1); }
-    .d-reset-btn::before { content: "\21BB"; font-size: var(--d-fs-3); line-height: 1; }
-  }
   .d-reset-btn[data-busy="1"] { color: var(--d-accent-text); border-color: var(--d-accent); }
 }
