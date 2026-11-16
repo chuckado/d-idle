@@ -128,6 +128,7 @@ docs/probes/soak-logs/gate2-s17-20261107-1008-g2h-extras.jsonl.gz  gaterun  gate
 # BEGIN GENERATED OWNERS (tools/sharedgen/sharedgen.py from the owns: keys of open tasks; do not edit between the markers)
 backlog/merge-lines/decomp34.txt  credit-runner  decomp34
 cmd/bossrun/adapter.go  pro-runner  levelplan3
+cmd/d2bot  credit-runner  survsd
 cmd/d2bot  credit-runner  wiring2
 cmd/d2bot/adapters.go  credit-runner  goldprio
 cmd/d2bot/adapters.go  credit-runner  idfast
@@ -292,6 +293,7 @@ docs/knobs.md  credit-runner  hourfix
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
+docs/knobs.md  credit-runner  survsd
 docs/knobs.md  credit-runner  tidy
 docs/knobs.md  credit-runner  videofeed2
 docs/knobs.md  credit-runner  viewerfps
@@ -382,6 +384,7 @@ docs/skilltrees.md  credit-runner  skilltrees2
 docs/soaks/recoverypace.md  live-agent  recoverypace
 docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
+docs/survival  credit-runner  survsd
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
 docs/survival/decisions-2026-11-14.md  credit-runner  survA
@@ -450,6 +453,7 @@ internal/boss/boss_test.go  pro-runner  levelplan3
 internal/boss/fake_test.go  pro-runner  levelplan3
 internal/boss/run.go  pro-runner  levelplan3
 internal/boss/types.go  pro-runner  levelplan3
+internal/bot  credit-runner  survsd
 internal/bot  credit-runner  wiring2
 internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
@@ -596,6 +600,7 @@ internal/decide/queue.go  credit-runner  qqueue
 internal/decide/queue_test.go  credit-runner  qqueue
 internal/decide/variants.go  credit-runner  qdensity
 internal/decide/variants_test.go  credit-runner  qdensity
+internal/env  credit-runner  survsd
 internal/env  credit-runner  wiring2
 internal/env/tuning.go  credit-runner  videofeed2
 internal/env/tuning_bot.go  credit-runner  botstuck
@@ -691,6 +696,7 @@ internal/plandata/levelplan-normal.json  pro-runner  levelplan3
 internal/plandata/plandata_test.go  pro-runner  levelplan3
 internal/plandata/progression-normal.json  credit-runner  hourfix
 internal/power  credit-runner  dangerfit2
+internal/power  credit-runner  survsd
 internal/power/  credit-runner  powerwire
 internal/power/  credit-runner  survB
 internal/repair  credit-runner  repairtrip
@@ -710,6 +716,7 @@ internal/senses/coverage.go  credit-runner  maptrail2
 internal/senses/trail_test.go  credit-runner  maptrail2
 internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
+internal/survival  credit-runner  survsd
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
 internal/task/campaign.go  credit-runner  campaign1
@@ -1065,6 +1072,7 @@ tools/friendpack/pack_test.go  credit-runner  cut012
 tools/imgbuild.sh  credit-runner  buildhosts3
 tools/itemverbs/compare_items.py  credit-runner  itemverbs2
 tools/itemverbs/diff_d2d.py  credit-runner  itemverbs2
+tools/knobdump  credit-runner  survsd
 tools/knobdump/main.go  credit-runner  videofeed2
 tools/levelsim/  credit-runner  levelsim
 tools/levelsim/  credit-runner  powerwire
