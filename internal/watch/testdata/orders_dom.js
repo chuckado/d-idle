@@ -118,7 +118,21 @@ setImmediate(() => {
       tb.fire('click');
       setImmediate(() => {
         assert.ok(rm.c.toasts.some((t) => /warn: not unlocked yet/.test(t)), 'refusal in words: ' + rm.c.toasts);
-        finish();
+        // live bug 2026-11-16: a pause view without "ok" (the game had frozen) must not read as "could not do that"; a reason is shown as given
+        const pp = [], pm = mount(pp);
+        pm.c.reply = { schema: 'watch.pause/1', state: 'paused', frozen: true, undo: { path: '/api/commands', body: { intent: 'resume' } } };
+        pm.inst.update(vv);
+        let pb; (function walk(e) { if (e.dataset && e.dataset.key === 'verb-pause') pb = e; e.children.forEach(walk); })(pm.c.body);
+        pb.fire('click');
+        setImmediate(() => {
+          assert.ok(pm.c.toasts.length === 1 && !/could not do that/.test(pm.c.toasts[0]) && /^info:|^good:|Paused/.test(pm.c.toasts[0]), 'an accepted pause: ' + pm.c.toasts);
+          pm.c.toasts.length = 0; pm.c.reply = { ok: false, code: 'pause_refused', error: 'could not freeze the game: x' };
+          pb.fire('click');
+          setImmediate(() => {
+            assert.ok(pm.c.toasts.some((t) => /warn: could not freeze the game: x/.test(t)), 'the reason, not a generic line: ' + pm.c.toasts);
+            finish();
+          });
+        });
       });
     });
   });

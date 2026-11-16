@@ -3,11 +3,11 @@ id: TASK-551
 title: >-
   verifyp13: independent verifier of P13 refused Teleport mana
   (fid/tele-refund-r1)
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T16:43:00Z'
-updated_date: '2026-11-16T18:32:00Z'
+updated_date: '2026-11-16T18:50:00Z'
 labels:
   - d2d
   - research

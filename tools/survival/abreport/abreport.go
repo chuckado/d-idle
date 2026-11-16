@@ -32,6 +32,8 @@ type Run struct {
 	ClvlStart  int
 	ClvlEnd    int
 	XPAt       map[int]float64 // checkpoint minute -> xp gained since the first minute line (absent: run shorter)
+	XPEnd      float64         // xp gained at the last minute line (minute Minutes)
+	XPLine     []float64       // xp gained at every minute line, indexed by minute
 	Intake     map[int]*Intake // area id -> life lost and minutes (only minutes that carry the intake keys)
 	HasIntake  bool
 }
@@ -62,6 +64,10 @@ func Analyse(arm string, seed int, lines []string, mins []d2dsoakstat.Minute) (R
 	r.Potions = l.PotionsUsed - f.PotionsUsed
 	r.Gold = l.Gold + l.StashGold - f.Gold - f.StashGold
 	r.ClvlStart, r.ClvlEnd = f.Clvl, l.Clvl
+	r.XPEnd = float64(l.XP) - float64(f.XP)
+	for _, m := range mins {
+		r.XPLine = append(r.XPLine, float64(m.XP)-float64(f.XP))
+	}
 	for _, c := range Checkpoints {
 		if c <= r.Minutes {
 			r.XPAt[c] = float64(mins[c].XP) - float64(f.XP)
@@ -216,6 +222,9 @@ func Compare(base, test []Run, o Options) Summary {
 		bd, td = bd+p.Base.Deaths, td+p.Test.Deaths
 		bc, tc = bc+p.Base.Chickens, tc+p.Test.Chickens
 		x0, x1 := xpAtHorizon(p.Base, o.Horizon), xpAtHorizon(p.Test, o.Horizon)
+		if hm := PairMinute(p.Base, p.Test, o.Horizon); hm < o.Horizon && hm < len(p.Base.XPLine) && hm < len(p.Test.XPLine) {
+			x0, x1 = p.Base.XPLine[hm], p.Test.XPLine[hm] // one minute for both arms: the runs end a few minutes apart
+		}
 		bxp, txp = bxp+x0, txp+x1
 		diffs = append(diffs, x1-x0)
 	}
@@ -259,9 +268,14 @@ func Compare(base, test []Run, o Options) Summary {
 	return s
 }
 
+// xpAtHorizon is the XP at minute h. A 2 h run has at most 119 intervals, so a run that covers 95 percent of the horizon
+// (the pairing rule) but lacks minute h reports its last minute line instead; xpHorizonMinute says which minute that was.
 func xpAtHorizon(r Run, h int) float64 {
 	if v, ok := r.XPAt[h]; ok {
 		return v
+	}
+	if r.Minutes >= int(math.Ceil(0.95*float64(h))) {
+		return r.XPEnd
 	}
 	best, bm := 0.0, -1
 	for m, v := range r.XPAt {
@@ -270,6 +284,17 @@ func xpAtHorizon(r Run, h int) float64 {
 		}
 	}
 	return best
+}
+
+// PairMinute is the minute both arms of a pair reach: the horizon, or the shorter run's last minute line.
+func PairMinute(a, b Run, h int) int { return min(h, a.Minutes, b.Minutes) }
+
+// xpHorizonMinute is the minute whose XP xpAtHorizon returned.
+func xpHorizonMinute(r Run, h int) int {
+	if _, ok := r.XPAt[h]; ok || r.Minutes < int(math.Ceil(0.95*float64(h))) {
+		return min(h, r.Minutes)
+	}
+	return r.Minutes
 }
 
 // Format is the text report.
@@ -282,11 +307,11 @@ func (s Summary) Format() string {
 	fmt.Fprintf(&b, "%-5s %-8s %6s %6s %6s %6s %6s %6s %6s %7s %7s\n", "seed", "arm", "clvl", "death", "chick", "mdeath", "potion", "gold", "xp30", "xp60", "xp90")
 	for _, p := range s.Pairs {
 		for _, r := range []Run{p.Base, p.Test} {
-			fmt.Fprintf(&b, "%-5d %-8s %2d-%-3d %6d %6d %6d %6d %6d %6.0f %7.0f %7.0f  xp%d=%.0f\n", r.Seed, r.Arm, r.ClvlStart, r.ClvlEnd, r.Deaths, r.Chickens,
-				r.MercDeaths, r.Potions, r.Gold, r.XPAt[30], r.XPAt[60], r.XPAt[90], s.Horizon, xpAtHorizon(r, s.Horizon))
+			fmt.Fprintf(&b, "%-5d %-8s %2d-%-3d %6d %6d %6d %6d %6d %6.0f %7.0f %7.0f  xp@%d=%.0f\n", r.Seed, r.Arm, r.ClvlStart, r.ClvlEnd, r.Deaths, r.Chickens,
+				r.MercDeaths, r.Potions, r.Gold, r.XPAt[30], r.XPAt[60], r.XPAt[90], xpHorizonMinute(r, s.Horizon), xpAtHorizon(r, s.Horizon))
 		}
 	}
-	fmt.Fprintf(&b, "XP at %d min, test-base per seed: mean %.0f sd %.0f", s.Horizon, s.XPDiff.Mean, s.XPDiff.SD)
+	fmt.Fprintf(&b, "XP at the horizon (minute %d, or the shorter run's last minute line of a pair), test-base per seed: mean %.0f sd %.0f", s.Horizon, s.XPDiff.Mean, s.XPDiff.SD)
 	if s.XPDiff.IntervalOK {
 		fmt.Fprintf(&b, " 95%% [%.0f, %.0f]", s.XPDiff.Lo, s.XPDiff.Hi)
 	}
