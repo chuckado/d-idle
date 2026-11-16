@@ -1,0 +1,12 @@
+{
+  "note": "d2s = the class byte at 0x28 of a .d2s (V: Sorceress 1 and Paladin 3 read from the repo's own d2s tests, others S: published format); d2d_index = d2d --start-class UI order (V docs/d2d-fidelity.md, cmd/d2dsetup/tables.json carries the same numbers).",
+  "classes": [
+    {"id": "amazon", "name": "Amazon", "d2s": 0, "d2d_index": 3},
+    {"id": "sorceress", "name": "Sorceress", "d2s": 1, "d2d_index": 4},
+    {"id": "necromancer", "name": "Necromancer", "d2s": 2, "d2d_index": 1},
+    {"id": "paladin", "name": "Paladin", "d2s": 3, "d2d_index": 2},
+    {"id": "barbarian", "name": "Barbarian", "d2s": 4, "d2d_index": 0},
+    {"id": "druid", "name": "Druid", "d2s": 5, "d2d_index": 5},
+    {"id": "assassin", "name": "Assassin", "d2s": 6, "d2d_index": 6}
+  ]
+}
