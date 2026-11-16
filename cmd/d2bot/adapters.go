@@ -176,7 +176,11 @@ func (a townAdapter) Chores(ctx context.Context, p bot.ChorePlan) (bot.ChoreRepo
 		case s.Ran:
 			out.Done = append(out.Done, s.Name)
 		default:
-			out.Skipped = append(out.Skipped, s.Name)
+			if s.Detail != "" {
+				out.Skipped = append(out.Skipped, s.Name+" ("+s.Detail+")")
+			} else {
+				out.Skipped = append(out.Skipped, s.Name)
+			}
 		}
 	}
 	if err == nil && p.Poverty {
