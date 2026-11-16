@@ -89,6 +89,7 @@ type Town struct {
 	emptyStreak      int                                      // town visits in a row that began with portalEmpty (FIXPROGRESS watchdog)
 	tscQuietUntil    time.Time                                // no "no town portal scroll" trip before this (FIXPROGRESS watchdog)
 	choreDeadline    time.Time                                // end of the current Chores call's time budget (zero outside Chores)
+	idTomeLogged     bool                                     // "identify tome skipped" already logged for this Chores call
 	budgetLogged     bool                                     // "resupply budget hit" already logged for this Chores call
 	futile           map[string]futileMark                    // trip reason -> when and with how much gold a visit left it unfixed
 	presetsFn        func() []d2map.Preset                    // test seam: preset units of the current level

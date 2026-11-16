@@ -77,6 +77,8 @@ func serve(addr, class string) error {
 	m.HandleFunc(watch.ResetRoute, resetFixture)
 	m.HandleFunc(watch.CharactersRoute, charsFixture)
 	m.Handle(watch.CharactersRulesRoute, charsRules)
+	m.HandleFunc(watch.SupportRoute, supportFixture)
+	m.HandleFunc(watch.SupportBundleRoute, supportFixture)
 	m.Handle(watch.ZoneClearRoute, zoneClearFixture())
 	m.HandleFunc("/api/update/status", updateStatusFixture)
 	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))

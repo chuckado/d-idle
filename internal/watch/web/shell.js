@@ -3,6 +3,7 @@
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
 import { mountReset } from '/watch/resetui.js';
+import { mountSupport } from '/watch/supportui.js';
 import { overlays } from '/watch/overlay.js';
 import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
@@ -818,6 +819,11 @@ function setupMenu(sel) {
   rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
   pop.appendChild(rb);
+  const sb = ui.btn('Send support bundle...', { size: 'sm', variant: 'ghost' });
+  sb.dataset.key = 'support-open';
+  sb.setAttribute('aria-label', 'Help: send a support bundle to the owner');
+  sb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:support-ask', { detail: { from: more } })));
+  pop.appendChild(sb);
   pop.appendChild(el('div', 'd-menu-label', 'Layout'));
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
@@ -985,6 +991,8 @@ async function start() {
     get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   const rc = document.getElementById('reset-confirm');
   if (rc) overlays.register('reset', rc); // the modal confirm: opening it closes the menu it came from
+  mountSupport({ ui, toast, doc: document, post: (path, body) => postJSON(answerBase, path, body),
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
   if (edit && !cockpit && qs.get('edit') === '1') edit.click();

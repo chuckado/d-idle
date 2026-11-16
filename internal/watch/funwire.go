@@ -163,6 +163,8 @@ type Fun struct {
 	Pause *PauseAPI
 	// Reset mounts GET and POST /api/reset (resetapi.go); nil: no routes.
 	Reset *ResetAPI
+	// Support mounts the support bundle routes (supportapi.go, docs/support-bundle.md); nil: no routes.
+	Support *SupportAPI
 	// Characters mounts GET /api/characters and the four POST routes (charactersapi.go, docs/charselect.md); nil: no routes.
 	Characters *CharactersAPI
 	// Merc mounts the mercenary state and Revive mercenary routes (mercapi.go); set it before Serve, nil: no routes.
@@ -737,6 +739,12 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 	if f.Reset != nil {
 		m.Handle(ResetRoute, f.Reset.Handler())
 	}
+	if f.Support != nil {
+		f.Support.setLocal(m)
+		m.Handle(SupportRoute, f.Support.Handler())
+		m.Handle(SupportDownloadRoute, f.Support.Handler())
+		m.Handle(SupportFileRoute, f.Support.Handler())
+	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
 		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
@@ -834,6 +842,10 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 	}
 	if f.Reset != nil {
 		m.Handle(ResetRoute, f.Reset.PostHandler(o))
+	}
+	if f.Support != nil {
+		m.Handle(SupportBundleRoute, f.Support.BundleHandler(o))
+		m.Handle(SupportSendRoute, f.Support.SendHandler(o))
 	}
 	if f.Characters != nil {
 		for _, p := range CharactersPostRoutes {

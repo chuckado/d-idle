@@ -52,6 +52,10 @@ Open the watch page (`./didle status` prints the address). A welcome card explai
 
 Update with the hero standing in town: the bot is stopped to swap the release, and an update while the hero fights has not been tested. An update is only installed when its signature matches the key built into the image; a failed start rolls back to the previous release automatically. Your hero and token are never part of a release. The only network call the bot makes is the update check to the source set in `.env` (`D2BOT_UPDATE_FEED`); `D2BOT_UPDATE_CHECK=off` in `.env` (then `./didle stop && ./didle start`) switches it off.
 
+## Sending a support bundle
+
+When something is wrong and the owner asks for details: open the page, press the "..." button, then "Send support bundle...". The sheet asks two questions, both off unless you tick them: a screenshot of the game view, and your character save file (that is your character, its items and its name; leave it off unless you are asked for it). "Preview" shows the list of files with sizes and the end of the log exactly as it would be sent. Home paths, your user and computer name, addresses, e-mail addresses and every key or token are removed before you see it, and if anything private-looking is still left the bundle is blocked and nothing is sent. Press "Send": you get a short code (eight characters); tell the owner the code. Nothing is ever sent without that press. "Save to file instead" downloads the same zip so you can send it by hand; that is also what you get when your pack has no upload address set. It works from a phone. `./didle report` (above) still works when the bot is not running.
+
 ## The game picture is choppy
 
 First try the **Low rate** button in the video card (smoother on a slow browser or screen; remembered per browser). The card head shows `stream: N fps` when it is under 15; send that line and `about:support` (Graphics section) with a report.

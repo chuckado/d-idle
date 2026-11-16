@@ -210,6 +210,12 @@ reset-menu watch?first=0&theme=dark&needs=0&reset=resetting #btn-more|[data-key=
 reset-more watch?first=0&theme=dark&needs=0&reset=resetting [data-key=verb-more]|[data-key=more-reset] #reset-progress
 reset-hard-confirm watch?first=0&theme=dark&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
 reset-hard-confirm-light watch?first=0&theme=light&needs=0&reset=failed [data-key=reset-hard] #reset-confirm,#reset-go,[data-key=reset-cancel]
+support-sheet watch?first=0&theme=dark&needs=0 #btn-more|[data-key=support-open] #support-sheet,#support-build,[data-key=support-cancel],#support-shot,#support-save
+support-sheet-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=support-open] #support-sheet,#support-build,[data-key=support-cancel],#support-shot,#support-save
+support-preview watch?first=0&theme=dark&needs=0 #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-send,#support-save-file,[data-key=support-back],[data-key=support-cancel]
+support-preview-light watch?first=0&theme=light&needs=0 #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-send,#support-save-file,[data-key=support-back],[data-key=support-cancel]
+support-blocked watch?first=0&theme=dark&needs=0&support=blocked #btn-more|[data-key=support-open]|#support-build #support-sheet,[data-key=support-back],[data-key=support-cancel]
+support-nosend watch?first=0&theme=dark&needs=0&support=nosend #btn-more|[data-key=support-open]|#support-build #support-sheet,#support-save-file,[data-key=support-back]
 reset-resetting watch?first=0&theme=dark&needs=0&reset=resetting expect=#reset-progress
 reset-resetting-light watch?first=0&theme=light&needs=0&reset=rejoining expect=#reset-progress
 phonedefect-resetclip watch?first=0&theme=dark&needs=0&defect=resetclip #btn-reset #btn-reset
@@ -370,7 +376,7 @@ charsdefect-covered watch/characters?theme=dark&chars=3&defect=chars-covered"
 		szs=$sizes
 		case $pname in
 		default | default-light) szs="$sizes $midsizes" ;;
-		reset-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
+		reset-* | support-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
 		charsdefect-*) szs="1280x620 412x780 360x640" ;;
