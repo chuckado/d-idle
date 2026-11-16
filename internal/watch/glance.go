@@ -43,6 +43,9 @@ type GlanceView struct {
 	// Survival is the block of GET /api/survival (docs/survival/ledger.md, slice S-C) as the bot gave it, words only; absent
 	// while no source is bound (an old bot, S-C not merged).
 	Survival json.RawMessage `json:"survival,omitempty"`
+	// Stream is the server side of the game picture (rates since the last read); absent without -watch-video. A friend can
+	// screenshot it next to the page's own fps line.
+	Stream *StreamStats `json:"stream,omitempty"`
 }
 
 // GlanceSentence is the line of the band: a state chip (Word), the Place, and the Reason, with the popover's content.
@@ -236,6 +239,10 @@ func (h *Hub) Glance() GlanceView {
 				v.Needs = append(v.Needs, cleanNeed(n))
 			}
 		}
+	}
+	if h.video != nil {
+		st := h.video.Stats()
+		v.Stream = &st
 	}
 	v.Health = glanceHealth(hv, src)
 	v.Progress = h.glanceProgress(hv)

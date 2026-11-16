@@ -6,7 +6,9 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"strconv"
 	"sync"
+	"sync/atomic"
 	"time"
 )
 
@@ -40,6 +42,53 @@ type Video struct {
 	last   []byte
 	timer  *time.Timer
 	starts int
+	lastAt time.Time // when the last frame was fanned out (a duplicate is skipped only within dupKeep of it)
+
+	st videoStats
+}
+
+// dupKeep is how long an identical frame (a still town, a paused game) is withheld; after it one is sent anyway so the
+// page's stall watchdog (3 s) never sees silence.
+const dupKeep = time.Second
+
+// videoStats are cumulative counters; Stats turns them into rates between two calls.
+type videoStats struct {
+	in, dup, over, sent atomic.Int64 // frames taken from the capture, skipped duplicates, frames a slow viewer missed, parts written
+	bytesOut            atomic.Int64
+	mu                  sync.Mutex
+	at                  time.Time
+	pIn, pSent, pBytes  int64
+	fpsIn, fpsOut, kBps float64
+}
+
+// StreamStats is what /api/glance shows under "stream" (docs/probes/viewer-fps-2026-11-15.md): the server side of the picture.
+type StreamStats struct {
+	Viewers int     `json:"viewers"`
+	FPSIn   float64 `json:"fpsIn"`  // frames the capture delivered per second
+	FPSOut  float64 `json:"fpsOut"` // parts written to all viewers per second, summed
+	KBps    float64 `json:"kBps"`   // bytes written to all viewers per second, in KB
+	Same    int64   `json:"skippedSame"`
+	Missed  int64   `json:"missed"` // frames a slow viewer never got (latest wins)
+}
+
+// Stats returns the counters and the rates over the last whole second or more.
+func (v *Video) Stats() StreamStats {
+	n := v.Viewers()
+	s := &v.st
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	now := time.Now()
+	if d := now.Sub(s.at); s.at.IsZero() || d > 30*time.Second {
+		s.fpsIn, s.fpsOut, s.kBps = 0, 0, 0
+		s.at, s.pIn, s.pSent, s.pBytes = now, s.in.Load(), s.sent.Load(), s.bytesOut.Load()
+	} else if d >= time.Second {
+		sec := d.Seconds()
+		s.fpsIn = float64(s.in.Load()-s.pIn) / sec
+		s.fpsOut = float64(s.sent.Load()-s.pSent) / sec
+		s.kBps = float64(s.bytesOut.Load()-s.pBytes) / sec / 1024
+		s.at, s.pIn, s.pSent, s.pBytes = now, s.in.Load(), s.sent.Load(), s.bytesOut.Load()
+	}
+	return StreamStats{Viewers: n, FPSIn: round1(s.fpsIn), FPSOut: round1(s.fpsOut), KBps: round1(s.kBps), Same: s.dup.Load(), Missed: s.over.Load()}
 }
 
 var errVideoFull = errors.New("video: viewer limit reached")
@@ -124,14 +173,22 @@ func (v *Video) pump(frames <-chan []byte, gen int) {
 		if len(f) == 0 || len(f) > v.o.MaxFrame {
 			continue
 		}
+		v.st.in.Add(1)
 		v.mu.Lock()
-		v.last = f
+		now := time.Now()
+		if bytes.Equal(f, v.last) && now.Sub(v.lastAt) < dupKeep {
+			v.mu.Unlock()
+			v.st.dup.Add(1)
+			continue
+		}
+		v.last, v.lastAt = f, now
 		for ch := range v.subs {
 			select {
 			case ch <- f:
 			default:
 				select {
 				case <-ch:
+					v.st.over.Add(1)
 				default:
 				}
 				select {
@@ -178,7 +235,20 @@ func (v *Video) handleStream(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fl.Flush() // headers now: the page sees the stream open before the first frame exists
 	rc := http.NewResponseController(w)
+	// ?fps=N (1 to 30) is the page's low-rate mode: this viewer gets at most N parts a second (the newest frame wins, the
+	// rest are skipped); the capture and the other viewers are untouched.
+	var minGap time.Duration
+	if n, err := strconv.Atoi(r.URL.Query().Get("fps")); err == nil && n >= 1 && n <= 30 {
+		minGap = time.Second / time.Duration(n)
+	}
+	var wrote time.Time
 	write := func(f []byte) bool {
+		if minGap > 0 && time.Since(wrote) < minGap-minGap/10 {
+			return true
+		}
+		wrote = time.Now()
+		v.st.sent.Add(1)
+		v.st.bytesOut.Add(int64(len(f)))
 		rc.SetWriteDeadline(time.Now().Add(v.o.WriteTimeout))
 		var b bytes.Buffer
 		fmt.Fprintf(&b, "--%s\r\nContent-Type: image/jpeg\r\nContent-Length: %d\r\n\r\n", boundary, len(f))
