@@ -133,6 +133,8 @@ cmd/d2bot/behaviors.go  credit-runner  campaign1
 cmd/d2bot/behaviors.go  credit-runner  gearsets
 cmd/d2bot/beltfill_adapter.go  credit-runner  beltfix
 cmd/d2bot/boss.go  pro-runner  levelplan3
+cmd/d2bot/charwire.go  credit-runner  charselect
+cmd/d2bot/charwire_test.go  credit-runner  charselect
 cmd/d2bot/d2dbackend.go  credit-runner  campaign1
 cmd/d2bot/d2dbackend.go  credit-runner  exploredpct
 cmd/d2bot/d2dbackend.go  credit-runner  maphistory
@@ -233,6 +235,7 @@ docs/backlog-howto.md  credit-runner  dietrule
 docs/beltfix.md  credit-runner  beltfix
 docs/bounce3.md  pro-runner  bounce3
 docs/campaign.md  credit-runner  campaign1
+docs/charselect.md  credit-runner  charselect
 docs/contracts/decision-queue.md  credit-runner  qqueue
 docs/contracts/merc-policy.md  credit-runner  mercrevive2
 docs/design/item-verbs.md  credit-runner  itemverbs2
@@ -403,6 +406,7 @@ docs/upstream/verifier-p03-p05-2026-11-14.md  credit-runner  verifyp03p05
 docs/upstream/verifier-p03b-2026-11-14.md  live-agent  verifyp03c
 docs/upstream/verifier-p03c-2026-11-15.md  credit-runner  verifyp03c2
 docs/upstream/verifier-p04-2026-11-15.md  live-agent  verifyp04
+docs/upstream/verifier-p17-2026-11-15.md  credit-runner  verifyp17
 docs/upstream/verifier2-p03b-2026-11-15.md  live-agent  verifyp03d
 docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/wiring.md  credit-runner  wiring2
@@ -500,6 +504,7 @@ internal/bot/zoneshadow.go  credit-runner  survC
 internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
+internal/charsel  credit-runner  charselect
 internal/combat  credit-runner  wiring2
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata  credit-runner  palprofile2
@@ -672,6 +677,8 @@ internal/town/town.go  credit-runner  itemverbs2
 internal/town/town.go  credit-runner  repairtrip
 internal/town/town.go  credit-runner  tidy
 internal/watch/areamap_test.go  credit-runner  uis6
+internal/watch/charactersapi.go  credit-runner  charselect
+internal/watch/charactersapi_test.go  credit-runner  charselect
 internal/watch/charscreen_test.go  credit-runner  uic2
 internal/watch/commands.go  credit-runner  uib6
 internal/watch/commands.go  credit-runner  uis4
@@ -751,6 +758,7 @@ internal/watch/survivalapi_test.go  credit-runner  survC
 internal/watch/testdata/  credit-runner  uifix1
 internal/watch/testdata/areamap/  credit-runner  uis6
 internal/watch/testdata/campaign  pro-runner  levelplan3
+internal/watch/testdata/characters  credit-runner  charselect
 internal/watch/testdata/charscreen/  credit-runner  uic2
 internal/watch/testdata/charscreen/  credit-runner  uiphone
 internal/watch/testdata/commands/  credit-runner  uis4

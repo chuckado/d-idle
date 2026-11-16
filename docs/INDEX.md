@@ -236,6 +236,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [capabilities.md](capabilities.md): What the current build can and cannot do (status: refreshed 2026-11-01 (card capdocs, docs only; first written by card readmedocs; nothing here was run...)
 - [champions.md](champions.md): Champions are elite, not bosses (status: the "G1/G2 check" obligation for shared code is retired (ADR 0013, amended by ADR 0015); verify on d2d...)
 - [chargedbolt.md](chargedbolt.md): Charged Bolt per-bolt damage on d2d (card chargedbolt, 2026-11-04) (status: current. Evidence: docs/probes/sksmoke/2026-11-04-SK-cb.txt, .json, -raw.txt. Tag: compared to table on...)
+- [charselect.md](charselect.md): Character Select: list, create, switch, delete (archive first), restore (status: Phase A BUILT offline (card charselect, 2026-11-15): backend and routes with fakes and temp dirs; no UI,...)
 - [cheats.md](cheats.md): Cheats: logged test cheats (agent CHEAT)
 - [classchores.md](classchores.md): Per-class chore defaults (TASK-146, card classchores) (status: built and tested offline; not run against a live bot. Tags: V = proven by a test in this tree, EXP =...)
 
@@ -699,6 +700,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier-p03c-2026-11-15.md](upstream/verifier-p03c-2026-11-15.md): Verifier: P03c a knocking hit does not start a knockback in a get-hit (2026-11-15) (status: current, 2026-11-15 (card verifyp03c2, TASK-513, Opus, singly). All runs finished before this report;...)
 - [verifier-p04-2026-11-15.md](upstream/verifier-p04-2026-11-15.md): Verifier: P04 a hit interrupts a swing or cast whose skill allows it (2026-11-15) (status: current, 2026-11-15 (card verifyp04, TASK-500, Opus, singly). All runs finished before this report;...)
 - [verifier-p06-2026-11-15.md](upstream/verifier-p06-2026-11-15.md): Verifier: P06 a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06, TASK-494, Opus, singly). Nothing posted, nothing pushed to the fork....)
+- [verifier-p17-2026-11-15.md](upstream/verifier-p17-2026-11-15.md): Verifier: P17, a player's attack sequence runs 30 points slower (2026-11-15) (status: current, 2026-11-15 (card verifyp17, TASK-519, Opus, singly; independent verifier before posting). Nothing...)
 - [verifier2-p02-2026-11-15.md](upstream/verifier2-p02-2026-11-15.md): Verifier 2: P02 r3 "a clicked warp's walk is planned to its tile unit" (2026-11-15) (status: current, 2026-11-15 (card verifyp02b, TASK-482, Opus, second independent pass after...)
 - [verifier2-p03-2026-11-14.md](upstream/verifier2-p03-2026-11-14.md): Verifier 2: P03 block length after the fixes (2026-11-14) (status: current, 2026-11-14 (card verifyp03b, TASK-450, Opus, independent of the author prfix2 and of the first...)
 - [verifier2-p03b-2026-11-15.md](upstream/verifier2-p03b-2026-11-15.md): Verifier 2: P03b "a get-hit is not restarted by a hit", rebased r4 (2026-11-15) (status: current, 2026-11-15 (card verifyp03d, TASK-488, Opus, second independent pass after...)
