@@ -204,6 +204,12 @@
 | farmloop | proposed | - | `internal/bot/farmreset.go`<br>`internal/bot/farmreset_test.go`<br>`internal/watch/zoneclear.go`<br>`internal/watch/zoneclear_test.go`<br>`internal/watch/web/panels/zoneclear`<br>`tools/levelsim/farmreset.go`<br>`tools/uishots/fixtures_zoneclear.go`<br>`docs/farmloop.md` | - |
 | verifyp03c2 | in-progress | - | `docs/upstream/verifier-p03c-2026-11-15.md` | - |
 | p04posted | proposed | - | `docs/upstream/pr-queue.md`<br>`docs/upstream/pipeline-2026-11-14.md` | - |
+| verifyp17 | proposed | - | `docs/upstream/verifier-p17-2026-11-15.md` | - |
+| charselect | proposed | - | `internal/charsel`<br>`docs/charselect.md`<br>`internal/watch/charactersapi.go`<br>`internal/watch/charactersapi_test.go`<br>`internal/watch/testdata/characters`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go` | - |
+| lootwireL2 | proposed | - | `internal/merc/wear.go`<br>`internal/merc/wear.json`<br>`internal/merc/wear_test.go` | - |
+| lootwireL3 | proposed | - | `internal/loot/rulesadapt.go`<br>`internal/loot/rulesadapt_test.go`<br>`internal/loot/rulesfix_test.go` | - |
+| lootwireL4 | proposed | - | `internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/watch/lootshadowapi.go`<br>`internal/watch/lootshadowapi_test.go`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/loot/pickup.go`<br>`internal/loot/loot.go`<br>`internal/town/tidy.go`<br>`internal/town/shop.go`<br>`internal/town/tidy_test.go`<br>`internal/env/tuning_bot.go`<br>`internal/watch/funwire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/lootshadowwire.go` | - |
+| dmgcheck | in-progress | - | `docs/research/damage-intake-2026-11-15.md`<br>`tools/emu/dmg_model.py` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -247,14 +253,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- e3a036f54 11-15 21:11 `Merge agent/sandboxfresh: Merge branch 'main' into sandboxfresh` (sandboxfresh)
-- 4e06914b5 11-15 21:10 `Merge branch 'main' into sandboxfresh` (-)
-- fef83e97d 11-15 21:02 `Merge agent/gamedata: gamedata: private friends game-data bundle record (no URL)` (gamedata)
-- f1b698db8 11-15 20:32 `Merge agent/decomp33: decomp33: P17 and P18 ready for the verifier, P19 no PR; rows, card, merge lines` (decomp33)
-- 2cd4accc0 11-15 20:27 `Merge origin/main into agent/decomp33` (-)
-- 967e2e965 11-15 18:41 `Merge agent/cut013: friends 0.1.3: cockpit default, Reset, installer and key-free mounts; built, drilled, staged (not published)` (cut013)
-- 96ae5b38b 11-15 14:37 `Merge agent/deploycockpit4: Merge branch 'main' into deploycockpit` (deploycockpit4)
-- 73e44c98d 11-15 14:36 `Merge branch 'main' into deploycockpit` (-)
-- cc88747b3 11-15 14:28 `Merge agent/devp8: Merge branch 'main' into devp8` (devp8)
-- 8252907ea 11-15 14:27 `Merge branch 'main' into devp8` (-)
+- eea0efdc3 11-15 22:46 `Merge agent/dmgcheck: Merge branch 'main' into dmgcheck` (dmgcheck)
+- fa18bdb08 11-15 22:45 `Merge branch 'main' into dmgcheck` (-)
+- fb4b33670 11-15 22:43 `Merge agent/p17posted: Merge branch 'main' into p17posted` (p17posted)
+- 4ca827ea0 11-15 22:42 `Merge agent/farmloopon2: Merge branch 'main' into farmloopon` (farmloopon2)
+- c55c2bcba 11-15 22:40 `Merge branch 'main' into p17posted` (-)
+- 72423887c 11-15 22:40 `Merge branch 'main' into farmloopon` (-)
+- f5f948090 11-15 21:51 `Merge agent/lootwire1: Merge branch 'main' into lootwireL4` (lootwire1)
+- d88e5bf55 11-15 21:50 `Merge branch 'main' into lootwireL4` (-)
+- 81c197064 11-15 21:43 `Merge agent/farmloopon: Merge branch 'main' into farmloopon` (farmloopon)
+- 2c4dd9336 11-15 21:43 `Merge branch 'main' into farmloopon` (-)
 <!-- statusgen:end -->

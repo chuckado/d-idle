@@ -8,6 +8,13 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- docs: damage intake of a surrounded hero in the Den (docs/research/damage-intake-2026-11-15.md). <!--sg:agent/dmgcheck-->
+- Merge branch 'main' into p17posted <!--sg:agent/p17posted-->
+- Merge branch 'main' into farmloopon <!--sg:agent/farmloopon2-->
+- Merge branch 'main' into lootwireL4 <!--sg:agent/lootwire1-->
+- Merge branch 'main' into farmloopon <!--sg:agent/farmloopon-->
+- Merge branch 'main' into TASK-519 <!--sg:agent/verifyp17-->
+- Merge branch 'main' into TASK-521 <!--sg:agent/charselect-->
 - Merge branch 'main' into sandboxfresh <!--sg:agent/sandboxfresh-->
 - gamedata: private friends game-data bundle record (no URL) <!--sg:agent/gamedata-->
 - Research: P17 and P18 upstream candidates proven and staged for the verifier, P19 closed as matching (docs/research/decomp33-p17-p19.md) <!--sg:agent/decomp33-->
