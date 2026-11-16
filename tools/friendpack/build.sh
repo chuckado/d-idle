@@ -2,6 +2,7 @@
 # Build the private friends pack (docs/friend-guide.md, docs/research/friend-build.md section 1). It never publishes
 # and never touches the real signing key; it writes ONE tarball and a checksum file next to it.
 #   tools/friendpack/build.sh --version 0.1.0 --image NAME:TAG --d2d-src FILE --d2d-commit SHA --out DIR
+#       [--image-from-nas]   take the image from the NAS daemon where it was built (tools/imgbuild.sh save), not from local docker
 #       [--image-tar FILE]   a ready `docker save` file (default: docker save NAME:TAG | gzip -n)
 #       [--pubkey FILE]      public key shown in the pack (default: every key baked into the image tree, pubkeys/*.pub; with this flag only FILE, as beta.pub)
 #       [--feed URL]         https update feed written into the pack (empty: the image default)
@@ -11,12 +12,12 @@
 # Reproducible: sorted names, zero mtime, root owner, gzip -n. Needs GNU tar, git, sha256sum.
 set -euo pipefail
 
-version= image= imgtar= d2dsrc= d2dcommit= out= pubkey= feed= botref=HEAD force=
+version= image= imgtar= d2dsrc= d2dcommit= out= pubkey= feed= botref=HEAD force= imgnas=0
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--version) version=${2:?}; shift 2 ;; --image) image=${2:?}; shift 2 ;; --image-tar) imgtar=${2:?}; shift 2 ;;
 	--d2d-src) d2dsrc=${2:?}; shift 2 ;; --d2d-commit) d2dcommit=${2:?}; shift 2 ;; --out) out=${2:?}; shift 2 ;;
-	--pubkey) pubkey=${2:?}; shift 2 ;; --feed) feed=${2:-}; shift 2 ;; --bot-ref) botref=${2:?}; shift 2 ;; --force) force=1; shift ;;
+	--pubkey) pubkey=${2:?}; shift 2 ;; --feed) feed=${2:-}; shift 2 ;; --bot-ref) botref=${2:?}; shift 2 ;; --force) force=1; shift ;; --image-from-nas) imgnas=1; shift ;;
 	*) echo "unknown flag $1" >&2; exit 2 ;;
 	esac
 done
@@ -64,6 +65,8 @@ install -m 0644 "$repo/docs/friend-guide.md" "$root/guide/friend-guide.md"
 if [ -n "$imgtar" ]; then
 	[ -f "$imgtar" ] || { echo "image tar not found: $imgtar" >&2; exit 2; }
 	case "$imgtar" in *.gz) cp "$imgtar" "$root/image/didle-image.tar.gz" ;; *) gzip -nc "$imgtar" >"$root/image/didle-image.tar.gz" ;; esac
+elif [ "$imgnas" = 1 ]; then
+	"$repo/tools/imgbuild.sh" save "$image" "$root/image/didle-image.tar.gz"
 else
 	docker save "$image" | gzip -n >"$root/image/didle-image.tar.gz"
 fi

@@ -3,12 +3,14 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"image"
 	"image/color"
 	"image/jpeg"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"os"
 	"time"
 
@@ -26,15 +28,37 @@ func serve(addr, class string) error {
 	}
 	sim.Hub.SetFrameURL("/stream")
 	sim.Step(30 * time.Second) // one step so the hero, the map and the feed have something, then the clock stays
-	if _, err := sim.Hub.GiveOrder(watch.OrderGo, "Cold Plains", 30); err != nil {
+	// the act map shows a target (Cold Plains, running), two pins and a failed mark, and the Loop and the queue are open
+	if o, err := sim.Hub.GiveOrder(watch.OrderGo, "Cold Plains", 30); err != nil {
 		log.Printf("uishots: fixture order: %v", err)
+	} else {
+		sim.Hub.OrderState(o.ID, watch.OrderActive, "")
 	}
+	for _, a := range []string{"Stony Field", "Dark Wood"} {
+		if _, err := sim.Hub.GiveOrder(watch.OrderGo, a, 20); err != nil {
+			log.Printf("uishots: fixture pin: %v", err)
+		}
+	}
+	if o, err := sim.Hub.GiveOrder(watch.OrderGo, "Burial Grounds", 20); err == nil {
+		sim.Hub.OrderState(o.ID, watch.OrderFailed, "the hero's guard turned it down")
+	}
+	sim.Hub.SetMapLadder(func() *watch.MapLadder {
+		return &watch.MapLadder{LoopOpen: true, QueueOpen: true, QueueSlots: 2, QueueWaiting: 1, QueueTeaser: "Clear the Den of Evil for a second slot."}
+	})
 	sim.Hub.Whyline().Observe(goals.Why{Code: "fight", Params: map[string]string{"area": "Blood Moor", "life": "72"}}, "Fighting in Blood Moor", "g1", "")
 	sim.Hub.SetGoldSource(func() (int, int, bool) { return 1240, 5300, true })
 	sim.Hub.SetHeroStatsSource(func() (watch.HeroStats, bool) {
+		def := 214
 		return watch.HeroStats{Resists: watch.HeroResists{Fire: 12, Cold: 30, Light: -8, Poison: 5},
+			Attrs: &watch.HeroAttrs{Str: 38, Dex: 25, Vit: 30, Energy: 22}, Defense: &def, Damage: &watch.HeroDamage{Min: 4, Max: 9},
 			Readiness: &watch.HeroReadiness{Light: "amber", Area: "Blood Moor", Reason: "Lightning resistance is under the line for this area."}}, true
 	})
+	// what /api/glance shows in the band: two things need the player, like the accepted mockup
+	sim.Hub.SetGlanceSources(watch.GlanceSources{Needs: func() []watch.GlanceNeed {
+		return []watch.GlanceNeed{
+			{ID: "gear", Kind: "gear", Sev: "danger", Text: "Weapon broken", Sub: "repair is about 180 gold", Actions: []watch.GlanceVerb{{Label: "Repair now", Post: "/api/repair"}}},
+			{ID: "raven", Kind: "proposal", Sev: "warn", Text: "Go for Blood Raven at level 9?", Actions: []watch.GlanceVerb{{Label: "Go now", Post: "/api/orders"}}}}
+	}})
 	view := sim.Hub.ViewHandler()
 	m := http.NewServeMux()
 	m.Handle("/", view)
@@ -42,9 +66,19 @@ func serve(addr, class string) error {
 	// never does; the pages fall back to their polls
 	m.HandleFunc("/api/events", http.NotFound)
 	m.HandleFunc("/stream", func(w http.ResponseWriter, r *http.Request) {
+		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("stream") == "live" {
+			liveStream(w, r)
+			return
+		}
 		w.Header().Set("Content-Type", "image/jpeg")
 		w.Write(frame())
 	})
+	m.HandleFunc(watch.CommandsRoute, commandsFixture(class))
+	m.HandleFunc(watch.ResetRoute, resetFixture)
+	m.Handle(watch.ZoneClearRoute, zoneClearFixture())
+	m.HandleFunc("/api/update/status", updateStatusFixture)
+	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))
+	m.HandleFunc(watch.GlanceRoute, glanceFixture(sim.Hub))
 	m.HandleFunc("/api/repair", func(w http.ResponseWriter, r *http.Request) { js(w, repairFixture) })
 	m.HandleFunc("/api/tally", func(w http.ResponseWriter, r *http.Request) { js(w, tallyFixture) })
 	if b, err := os.ReadFile("internal/watch/testdata/currency-" + class + ".json"); err == nil {
@@ -59,6 +93,13 @@ func serve(addr, class string) error {
 			map[string]any{"seq": 2, "t": 20, "rule": "life", "kind": "life", "severity": "alarm", "free": true, "text": "Life under 25% in Blood Moor."}},
 			"outbound": map[string]any{"enabled": false, "consent": ""}, "notifications": map[string]any{}})
 	})
+	// the first-steps card the "..." menu opens as a sheet, over the real texts; the log drawer reads the routes above
+	if ob, err := watch.NewOnboarding(watch.OnboardingConfig{Hero: func() string { return "Sorc" }}); err == nil {
+		m.Handle(watch.OnboardingRoute, ob.Handler())
+	} else {
+		log.Printf("uishots: onboarding: %v", err)
+	}
+	m.Handle(watch.LogRoute, sim.Hub.LogHandler(m))
 	if fogStage != "" {
 		pub, err := fogPublisher(fogStage)
 		if err != nil {
@@ -84,7 +125,7 @@ func serve(addr, class string) error {
 		m.Handle("/", inner)
 	}
 	log.Printf("uishots: fixture viewer on http://%s/watch (%s, frozen)", addr, class)
-	return http.ListenAndServe(addr, m)
+	return http.ListenAndServe(addr, withUpdateScript(mountFixturePanels(m)))
 }
 
 func js(w http.ResponseWriter, v any) {
@@ -110,6 +151,35 @@ func frame() []byte {
 	var b bytes.Buffer
 	jpeg.Encode(&b, img, &jpeg.Options{Quality: 80})
 	return b.Bytes()
+}
+
+// liveStream is a multipart MJPEG stream of the one frame, a part every 300 ms for at most 25 s: the picture tile as it looks with
+// a game running (page query stream=live). The reader of the page drops it at the end like any stream.
+func liveStream(w http.ResponseWriter, r *http.Request) {
+	f := frame()
+	w.Header().Set("Content-Type", "multipart/x-mixed-replace; boundary=d2frame")
+	w.Header().Set("Cache-Control", "no-store")
+	fl, _ := w.(http.Flusher)
+	end := time.After(25 * time.Second)
+	t := time.NewTicker(300 * time.Millisecond)
+	defer t.Stop()
+	for {
+		if _, err := fmt.Fprintf(w, "--d2frame\r\nContent-Type: image/jpeg\r\nContent-Length: %d\r\n\r\n", len(f)); err != nil {
+			return
+		}
+		w.Write(f)
+		w.Write([]byte("\r\n"))
+		if fl != nil {
+			fl.Flush()
+		}
+		select {
+		case <-r.Context().Done():
+			return
+		case <-end:
+			return
+		case <-t.C:
+		}
+	}
 }
 
 func abs(v int) int {

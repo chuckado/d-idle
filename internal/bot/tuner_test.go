@@ -99,3 +99,48 @@ func TestTunerPostSurvivesReloadAndEdit(t *testing.T) {
 		t.Fatal("without a hook the saved ladder.enabled=0 must stay")
 	}
 }
+
+// The zone clear settings: a change applies to the live tuning at once (no restart), its source is "dashboard",
+// it survives a restart through tuning.json, and a reset goes back to "default".
+func TestTunerZoneClearLiveSourcePersist(t *testing.T) {
+	path := filepath.Join(t.TempDir(), "tuning.json")
+	var tune env.Tuning
+	cfg := Config{Tuning: map[string]float64{"bot.exploredPct": 90}}
+	tn, err := NewTuner(&tune, cfg, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, src, _ := tn.Value("bot.exploredPct"); src != "config" {
+		t.Fatalf("source %q, want config", src)
+	}
+	if _, src, _ := tn.Value("bot.farmResetPct"); src != "default" {
+		t.Fatalf("source %q, want default", src)
+	}
+	x, on := 75.0, 1.0
+	if err := tn.Edit(api.TuneEdit{Overrides: map[string]*float64{"bot.exploredPct": &x, "bot.farmReset": &on}}); err != nil {
+		t.Fatal(err)
+	}
+	if tune.Bot.ExploredPct != 75 || tune.Bot.FarmReset != 1 {
+		t.Fatalf("the live tuning did not change: %+v", tune.Bot)
+	}
+	if v, src, _ := tn.Value("bot.exploredPct"); v != 75 || src != "dashboard" {
+		t.Fatalf("%v %q", v, src)
+	}
+	var tune2 env.Tuning
+	tn2, err := NewTuner(&tune2, Config{}, path)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if v, src, _ := tn2.Value("bot.exploredPct"); v != 75 || src != "dashboard" || tune2.Bot.FarmReset != 1 {
+		t.Fatalf("after a restart: %v %q", v, src)
+	}
+	if err := tn2.Edit(api.TuneEdit{Overrides: map[string]*float64{"bot.exploredPct": nil}}); err != nil {
+		t.Fatal(err)
+	}
+	if v, src, _ := tn2.Value("bot.exploredPct"); v != 100 || src != "default" {
+		t.Fatalf("reset: %v %q", v, src)
+	}
+	if _, _, err := tn2.Value("bot.nope"); err == nil {
+		t.Fatal("an unknown knob must be an error")
+	}
+}

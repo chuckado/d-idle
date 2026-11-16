@@ -78,6 +78,9 @@ type ladderOptions struct {
 	inv           *watch.InvAPI        // the inventory page routes (invwire.go); nil: none
 	skills        *watch.SkillsAPI     // the skill tree page routes (skillswire.go); nil: none
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
+	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
+	reset         watch.ResetDesk      // the player's Reset command (resetwire.go); nil: none
+	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
 	farm          *goldfarm.Controller // the Farm gold order (repairwire.go); nil: none
 	journey       *campaign.Controller // the guided journey (journeywire.go); nil: none
@@ -85,9 +88,12 @@ type ladderOptions struct {
 	// for the bestiary; nil (no game tables): flavour-only cards.
 	riskFacts                              func(zone string) watch.RiskFacts
 	monsters                               watch.MonsterTables
-	readiness                              http.Handler          // GET /api/readiness (readywire.go); nil: none
-	explored                               watch.ExploredSource  // the explored share of /api/hero (Runner.Explored); nil: none
-	heroStats                              watch.HeroStatsSource // the stats block of /api/hero (readywire.go); nil: none
+	readiness                              http.Handler // GET /api/readiness (readywire.go); nil: none
+	danger                                 http.Handler // GET /api/danger (dangerwire.go); nil: none
+	farmReset                              func() int
+	knobValue                              func(string) (float64, string, error) // the tuner's Value: the zone clear settings read through it
+	explored                               watch.ExploredSource                  // the explored share of /api/hero (Runner.Explored); nil: none
+	heroStats                              watch.HeroStatsSource                 // the stats block of /api/hero (readywire.go); nil: none
 	awayMin, repeatCooldownMin, quietAfter int
 }
 
@@ -270,9 +276,28 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		rig.Fun.Skills = l.skills
 		rig.Fun.Art = artAPI(l.art)
 		rig.Fun.Readiness = l.readiness
+		rig.Fun.Danger = l.danger
 		hub.SetHeroStatsSource(l.heroStats)
+		hub.SetSurvivalSource(survivalGlance)
 		hub.SetExploredSource(l.explored)
+		hub.SetFarmResetSource(l.farmReset)
+		if l.knobs != nil && l.knobValue != nil {
+			rig.Fun.ZoneClear = &watch.ZoneClear{Value: l.knobValue, Set: l.knobs}
+		}
 		bindRepair(rig.Fun, l.repair, l.farm)
+		if l.pause != nil {
+			rig.Fun.Pause = watch.NewPauseAPI()
+			rig.Fun.Pause.Bind(l.pause)
+		}
+		if l.reset != nil {
+			rig.Fun.Reset = watch.NewResetAPI()
+			rig.Fun.Reset.Bind(l.reset)
+		}
+		if l.characters != nil {
+			rig.Fun.Characters = watch.NewCharactersAPI()
+			rig.Fun.Characters.Bind(l.characters)
+		}
+		rig.Fun.Merc = mercAPI()
 		bindJourney(rig.Fun, l.journey)
 		if src == nil {
 			src = hub // a person answers: the Hub never answers by itself

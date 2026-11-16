@@ -1,0 +1,13 @@
+<div>
+  <button class="say" data-key="say" data-tone="info" aria-expanded="false" aria-haspopup="true" title="walking home first">
+    <span class="line" aria-live="polite">
+      <span class="word"> "Paused"
+      <span class="txt">
+        <span class="reason"> "walking home first"
+  <div class="pop d-bandpop" aria-label="Why the hero does this" role="dialog" hidden>
+    <dl class="rows">
+      <dt> "Now"
+      <dd> "Walking home."
+      <dt> "Voice"
+      <dd> "Another day, another cow."
+    <a class="more" href="#log"> "Open the log"

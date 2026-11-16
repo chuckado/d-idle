@@ -2,7 +2,8 @@
 // fetch scheduler (the SSE change event plus per-panel polls), focus keeping across updates, and the ctx a panel gets.
 // Text only through textContent; no inline styles (the page CSP is style-src 'self').
 
-import { plan, breakpointFor, fitRows, contentHeight } from '/watch/layout.js';
+import { mountReset } from '/watch/resetui.js';
+import { COCKPIT_SHORT, plan, breakpointFor, fitRows, contentHeight, selectPanels, withShadows, PRESETS, isCockpit, cockpitPlan, effectiveChoice, missingSlots } from '/watch/layout.js';
 
 const SAFETY_POLL = 5000; // a missed SSE event costs at most this long
 const FAIL_WAIT = 4000;   // after a failed fetch
@@ -81,24 +82,49 @@ const ui = {
 };
 
 // ---- toasts ----
-function toast(sev, text) {
+// act ({label, run, ms}): a toast with one action button (Undo) that stays ms (default 8000); the action runs once.
+function toast(sev, text, act) {
   const box = document.getElementById('toasts');
-  if (!box) return;
+  if (!box) return null;
   const t = el('div', 'd-toast');
   t.dataset.sev = sev || 'info';
   t.appendChild(el('span', '', text));
-  const b = el('button', 'd-btn', 'Dismiss');
+  const b = el('button', 'd-btn', act ? act.label : 'Dismiss');
   b.type = 'button'; b.dataset.size = 'sm'; b.dataset.variant = 'ghost';
-  b.addEventListener('click', () => t.remove());
+  b.addEventListener('click', () => { t.remove(); if (act) act.run(); });
   t.appendChild(b);
   box.appendChild(t);
   while (box.children.length > 4) box.firstChild.remove();
-  setTimeout(() => t.remove(), 8000);
+  setTimeout(() => t.remove(), (act && act.ms) || 8000);
+  return t;
+}
+
+// A sheet over a tile: the shell owns overlays. where 'self' covers the panel's own tile; 'beside' is the area-map tile when it
+// stands to the right of this one on the same rows (a two-column rail), else the Orders tile above this one, else the own tile
+// (a phone tab). place() moves the sheet to where it belongs now; the zone menu uses it so it never covers the zone buttons.
+// The sheet carries data-panel of its panel, so that panel's own selectors style what it holds.
+function tileSheet(id, root, where) {
+  const sheet = el('div', 'd-tilesheet');
+  sheet.dataset.panel = id;
+  sheet.dataset.scroll = '1'; // a sheet taller than its tile scrolls inside it
+  sheet.hidden = true;
+  const shows = (t) => { if (!t || t.hidden || t.dataset.off || t === root) return null; const r = t.getBoundingClientRect(); return r.width > 40 && r.height > 40 ? r : null; };
+  const host = () => {
+    if (where !== 'beside') return root;
+    const me = root.getBoundingClientRect(), side = document.querySelector('.d-panel[data-panel="area-map"]'), sr = shows(side);
+    if (sr && sr.left >= me.right - 4 && sr.top < me.bottom && sr.bottom > me.top) return side;
+    const up = document.querySelector('.d-panel[data-panel="orders"]'), ur = shows(up);
+    if (ur && ur.bottom <= me.top + 4) return up;
+    return root;
+  };
+  const place = () => { const h = host(); if (sheet.parentElement !== h) h.appendChild(sheet); sheet.dataset.host = h === root ? 'self' : h.dataset.panel; return sheet.dataset.host; };
+  return { el: sheet, place };
 }
 
 // ---- panel roots ----
 // Status-band panels are bare (no card); stage and grid panels are cards with a head (title, meta, actions) and body.
-function makeRoot(m) {
+function makeRoot(m, inCockpit) {
+  if (inCockpit) return makeSlotRoot(m);
   const card = m.band !== 'status';
   const root = el(card ? 'section' : 'div', card ? 'd-card d-panel' : 'd-panel');
   root.dataset.panel = m.id;
@@ -133,6 +159,24 @@ function makeRoot(m) {
   return parts;
 }
 
+// A panel in a cockpit slot is bare: no card, no title bar, its content fills the box the slot gives it. The title bar's
+// two parts (meta, actions) become small labels on the box's edge, so a panel that fills them (the picture's "Full
+// screen") works unchanged.
+function makeSlotRoot(m) {
+  const root = el('div', 'd-panel');
+  root.dataset.panel = m.id;
+  root.dataset.size = m.size;
+  root.dataset.tab = m.tab;
+  root.dataset.state = 'loading';
+  root.dataset.cockpitPanel = m.band === 'status' ? 'band' : 'slot';
+  root.setAttribute('aria-label', m.title);
+  const body = el('div', 'd-slotbody'), labels = el('div', 'd-slotlabels');
+  const meta = el('span', 'meta'), actions = el('span', 'd-btngroup');
+  labels.append(meta, actions);
+  root.append(body, labels);
+  return { root, body, head: null, meta, actions };
+}
+
 function place(bands, m, root) {
   const band = bands[m.band];
   if (!band) return false;
@@ -148,8 +192,22 @@ function place(bands, m, root) {
 
 // A band with no visible panel is hidden (the stage disappears when there is neither video nor map).
 function syncBand(band) {
+  if (band && band.matches('.d-slotcol, .d-slottabs')) { growLast(band); return; }
   if (!band || !band.matches('.d-band-stage, .d-band-side')) return;
   band.hidden = !band.querySelector(':scope > .d-panel:not([hidden])');
+}
+
+// In a cockpit column the last panel that shows takes the rest of the height (rows "auto, auto, 1fr"); a hidden
+// panel (Needs you with nothing to say) takes none.
+function growLast(col) {
+  if (col.dataset.nogrow) { for (const n of col.children) delete n.dataset.grow; return; }
+  const shown = [...col.children].filter((n) => n.matches('.d-panel') && !n.hidden && !n.dataset.off);
+  for (const n of col.children) delete n.dataset.grow;
+  if (shown.length) shown[shown.length - 1].dataset.grow = '1';
+  // the growing panel's least height (manifest minBlock, px): the panels above it give way (shell.css, data-growmin) so the act map
+  // keeps its ten readable rows on a short window
+  const min = shown.length ? (ck.meta.get(shown[shown.length - 1].dataset.panel) || {}).minBlock | 0 : 0;
+  if (min > 0) { col.dataset.growmin = '1'; col.style.setProperty('--c-growmin', min + 'px'); } else { delete col.dataset.growmin; col.style.removeProperty('--c-growmin'); }
 }
 
 // Focus keeping: the focused element is found again by data-key after an update rebuilt the panel's DOM.
@@ -168,12 +226,14 @@ function keepFocus(root, fn) {
 }
 
 // ---- the scheduler ----
+let theSched = null; // the page's scheduler (ctx.refresh and the drawers poke it)
 function makeScheduler() {
   const slots = [];
   let changed = false;
   function due(s, now) {
     if (s.stopped || s.inflight || !s.m.endpoint) return false;
     if (document.hidden && s.m.band !== 'status') return false;
+    if (s.m.drawer && s.root.dataset.open !== '1') return false; // a drawer panel polls only while its drawer is open
     if (s.m.poll === 0 && changed) return true;
     return now >= s.next;
   }
@@ -227,7 +287,7 @@ function makeScheduler() {
     const es = window.d2events || (window.d2events = new EventSource('/api/events'));
     es.addEventListener('change', () => { changed = true; });
   }
-  return { add(s) { s.next = 0; s.fails = 0; slots.push(s); }, start: tick };
+  return { add(s) { s.next = 0; s.fails = 0; slots.push(s); }, start: tick, poke(id) { slots.forEach((s) => { if (s.m.id === id) s.next = 0; }); } };
 }
 
 // ---- layout manifest (docs/ui-design-system.md section 6.4) ----
@@ -308,16 +368,64 @@ function applyLayout(pass) {
   if ((pass || 0) < 2 && measureFit()) applyLayout((pass || 0) + 1);
 }
 
+// Which layout is in force (docs/ui/redesign-2026-11-14/D-layouts.md section 4): ?layout=<name> (a preset, or none);
+// then the preset this browser chose in the "..." menu (localStorage d2layout); then the hero's stored copy (GET
+// /api/layout says so in X-Layout-Source and it is never rewritten here); else the default: the cockpit (web/layout.json),
+// for a new hero too (S7: nothing pins Simple any more; a browser an older shell pinned has no d2layoutpick, see chosen()),
+// or Standard when a startup self-check finds a cockpit slot without its panel (start()). 'saved' in d2layout means "the stored copy"; d2layoutbase is the preset a
+// saved layout was started from, which Reset returns to. Every read of localStorage is guarded: it may be blocked.
+const PREF = 'd2layout', BASE = 'd2layoutbase', NOTE = 'd2layoutnote2', PICK = 'd2layoutpick', FIRST = 'd2firstrun';
+const MENU = ['cockpit'].concat(PRESETS); // what the Layout menu offers; the cockpit is the default, Classic is the way back
+const chosen = () => effectiveChoice(pref(PREF), pref(PICK)); // layout.js: an auto-pinned Simple is not a choice
+function pref(k, v) {
+  try {
+    if (v === undefined) return localStorage.getItem(k) || '';
+    if (v) localStorage.setItem(k, v); else localStorage.removeItem(k);
+  } catch (e) { /* storage blocked */ }
+  return '';
+}
+const asLayout = (l) => (l && l.schema === 'watch.layout/1' ? l : null); // another schema: this shell does not read it
+async function getJSON(url) {
+  try {
+    const r = await fetch(url, { cache: 'no-store', credentials: 'same-origin' });
+    return r.ok ? { body: await r.json(), source: r.headers.get('X-Layout-Source') || '' } : null;
+  } catch (e) { return null; }
+}
+const presetFile = async (name) => asLayout((await getJSON('/watch/layouts/' + name + '.json') || {}).body);
+async function newHero() {
+  const o = await getJSON('/api/onboarding');
+  // new = the welcome card is up and no checklist step has ticked; an old hero who never dismissed it is not new
+  return !!(o && o.body && o.body.showWelcome === true && !(o.body.steps || []).some((x) => x.done));
+}
+
+// -> { layout, preset, origin: url|choice|stored|default, hasStored } or null (no layout: the manifest places)
 async function loadLayout() {
   const want = qs.get('layout') || '';
   if (want === 'none') return null;
-  const url = /^(mockup|live|command)$/.test(want) ? '/watch/layouts/' + want + '.json' : '/api/layout';
-  try {
-    const r = await fetch(url, { cache: 'no-store', credentials: 'same-origin' });
-    if (!r.ok) return null;
-    const l = await r.json();
-    return l && l.schema === 'watch.layout/1' ? l : null; // another schema: this shell does not read it
-  } catch (e) { return null; }
+  if (want === 'cockpit') { // "the cockpit, as I have it": a stored copy that started from it wins over the shipped file
+    const srv = await getJSON('/api/layout');
+    if (srv && srv.source !== 'default' && isCockpit(asLayout(srv.body))) return { layout: srv.body, preset: '', origin: 'stored', hasStored: true };
+    const l = await presetFile('cockpit');
+    if (l) return { layout: l, preset: '', origin: 'url', hasStored: !!srv && srv.source !== 'default' };
+  }
+  if (PRESETS.includes(want) || /^(mockup|live|command|cockpit[a-z0-9-]*)$/.test(want)) {
+    const l = await presetFile(want);
+    if (l) return { layout: l, preset: PRESETS.includes(want) ? want : '', origin: 'url', hasStored: false };
+  }
+  const srv = await getJSON('/api/layout');
+  const hasStored = !!srv && srv.source !== 'default'; // a missing header (a proxy) reads as stored: never replace a stored layout by guess
+  const choice = chosen(), base = pref(BASE);
+  if (MENU.includes(choice)) {
+    const l = await presetFile(choice);
+    if (l) return { layout: l, preset: choice, origin: 'choice', hasStored };
+  }
+  if (hasStored && asLayout(srv.body)) return { layout: srv.body, preset: '', origin: 'stored', hasStored };
+  // no layout of the hero's own: the default is the cockpit (web/layout.json). A new hero meets it without the layout note.
+  let name = html.dataset.mode === 'overlay' ? 'standard' : 'cockpit', origin = 'default'; // origin 'default' shows the layout note; the OBS strip keeps the layout it always had
+  if (choice === 'saved' && MENU.includes(base)) { name = base; origin = 'choice'; } else if (await newHero()) origin = 'newhero';
+  let l = asLayout(srv && srv.body); // web/layout.json is the cockpit file
+  if (name !== 'cockpit' || !l) l = await presetFile(name) || l;
+  return l ? { layout: l, preset: name, origin, hasStored: false } : null;
 }
 
 function postJSON(answerBase, path, body) {
@@ -326,10 +434,13 @@ function postJSON(answerBase, path, body) {
   }).then((r) => r.json()).catch(() => { toast('alarm', 'the answer route is not reachable'); return null; });
 }
 
-function setupLayout(conf, layout, answerBase) {
+function setupLayout(conf, sel, answerBase, ckRoots, ckList) {
+  const layout = sel ? sel.layout : null;
+  if (ckRoots) { setupCockpit(sel, answerBase, ckRoots, ckList); return; }
   lay.main = document.querySelector('.d-main');
   lay.conf = conf || {};
   lay.layout = layout;
+  lay.sel = sel;
   if (!lay.main) return;
   for (const id of lay.conf.fit || []) { const n = lay.main.querySelector('[data-lid="' + id + '"]'); if (n) n.dataset.fit = '1'; }
   if (layout && layout.density === 'comfortable' && !html.dataset.density) html.dataset.density = 'comfortable';
@@ -370,11 +481,372 @@ function setupLayout(conf, layout, answerBase) {
       el, toast, main: lay.main, targets: lay.targets, layout: saved, demo: qs.get('drag') || '',
       plan: () => lay.plan,
       preview(l) { lay.layout = l; applyLayout(); return lay.plan; },
-      save: (l) => postJSON(answerBase, '/api/layout', { layout: l }),
-      reset: () => postJSON(answerBase, '/api/layout', { reset: true }),
+      // the stored copy wins from now on: the preset it started from is remembered for Reset, and a stand-in's displaced entry is put back
+      async save(l) {
+        const r = await postJSON(answerBase, '/api/layout', { layout: withShadows(l, saved) });
+        if (r && r.ok) {
+          if (MENU.includes(lay.sel && lay.sel.preset)) pref(BASE, lay.sel.preset);
+          pref(PREF, 'saved'); pref(PICK, '1');
+        }
+        return r;
+      },
+      // Reset removes the stored copy; the page then loads again, on the preset this browser chose (or the default)
+      async reset() {
+        const r = await postJSON(answerBase, '/api/layout', { reset: true });
+        if (r && r.ok) {
+          const b = pref(BASE);
+          pref(PREF, MENU.includes(b) ? b : ''); pref(BASE, '');
+          setTimeout(() => location.reload(), 700);
+        }
+        return r;
+      },
       done(l) { lay.editor = null; lay.layout = l || saved; applyLayout(); },
     });
   });
+}
+
+// ---- the cockpit (layout template cockpit/1; layout.js cockpitPlan, shell.css) ----
+// The panels the layout names exist before the first module loads (roots, a Map by id); this puts them into the slot
+// elements by the plan of the present width and puts them again when the width crosses a mode (phone, page, wide).
+// Slot elements and the plan are rebuilt only when the arrangement changes; a size change only sets two properties.
+const ck = { layout: null, roots: new Map(), plan: null, sig: '', tab: '', want: '', second: false, meta: new Map(), tabBar: null, tabBody: null, tabs: [], main: null, shell: null, editor: null };
+
+function ckSlot(name, cls) {
+  const n = el('div', cls || '');
+  n.dataset.cockpitSlot = name;
+  return n;
+}
+
+// A phone tab shows one group of panels. The bar is built once per arrangement and kept, so a click moves the panels
+// and the keyboard focus stays on the tab (the first version rebuilt the bar on every click and dropped the focus).
+function showTab(name, focus) {
+  if (!ck.tabBar || !ck.tabs.length) return;
+  const tab = ck.tabs.find((x) => x.name === name) || ck.tabs[0];
+  ck.tab = tab.name;
+  for (const b of ck.tabBar.children) {
+    const on = b.dataset.tab === tab.name;
+    b.setAttribute('aria-selected', String(on));
+    b.tabIndex = on ? 0 : -1;
+    if (on && focus) b.focus({ preventScroll: true });
+  }
+  ck.tabBody.replaceChildren(...tab.ids.map((id) => ck.roots.get(id)));
+  mapSwitch(ck.tabBody);
+}
+
+// Where a column (or a phone tab) holds two panels that share it (a manifest's switchWith: the act map and the area map), a
+// two-button switch shows one at a time: the rail of a 1440 window has room for one. On a wide rail they stand side by side
+// in two columns and no switch is built.
+function mapSwitch(box) {
+  for (const r of ck.roots.values()) r.querySelectorAll(':scope > .d-mapswitch').forEach((n) => n.remove());
+  const kids = [...box.children].filter((n) => n.matches('.d-panel[data-panel]'));
+  for (const n of kids) delete n.dataset.off;
+  const links = (x, y) => (ck.meta.get(x.dataset.panel) || {}).switchWith === y.dataset.panel;
+  let pair = null;
+  for (const a of kids) {
+    const b = kids.find((n) => n !== a && (links(a, n) || links(n, a)));
+    if (b) { pair = kids.indexOf(a) < kids.indexOf(b) ? [a, b] : [b, a]; break; }
+  }
+  if (!pair) { growLast(box); ck.showMap = null; return; }
+  // the switch sits on the top edge of whichever map shows, so it takes no height of its own (the zone rows need every pixel)
+  const bar = el('div', 'd-mapswitch');
+  bar.setAttribute('role', 'group');
+  bar.setAttribute('aria-label', 'Which map');
+  const paint = () => {
+    pair[0].dataset.off = ck.second ? '1' : '';
+    pair[1].dataset.off = ck.second ? '' : '1';
+    pair.forEach((n) => { if (!n.dataset.off) delete n.dataset.off; });
+    for (const b of bar.children) b.setAttribute('aria-pressed', String((b.dataset.view === '1') === ck.second));
+    pair[ck.second ? 1 : 0].appendChild(bar);
+    growLast(box);
+  };
+  pair.forEach((n, i) => {
+    const m = ck.meta.get(n.dataset.panel) || {}, b = ui.btn(m.switchLabel || m.title || n.dataset.panel, { size: 'sm', variant: 'ghost' });
+    b.dataset.view = String(i);
+    if (m.title) { b.title = m.title; b.setAttribute('aria-label', m.title); }
+    b.addEventListener('click', () => { ck.second = i === 1; paint(); const on = bar.children[i]; if (on) on.focus({ preventScroll: true }); });
+    bar.appendChild(b);
+  });
+  ck.showMap = (id) => { const i = pair.findIndex((n) => n.dataset.panel === id); if (i >= 0 && ck.second !== (i === 1)) { ck.second = i === 1; paint(); } };
+  paint();
+}
+// the Go to verb asks for the act map: its phone tab opens, and the switch shows it
+document.addEventListener('d2:showmap', (e) => {
+  const t = (ck.tabs || []).find((x) => x.ids.includes(e.detail));
+  if (t && t.name !== ck.tab) showTab(t.name);
+  if (ck.showMap) ck.showMap(e.detail);
+});
+
+function applyCockpit() {
+  const p = cockpitPlan(ck.layout, window.innerWidth, html.dataset.mode || '', (id) => ck.roots.has(id), window.innerHeight);
+  if (!p) return;
+  ck.plan = p;
+  const main = ck.main, shell = ck.shell;
+  shell.dataset.cmode = main.dataset.cmode = p.mode;
+  const back = document.getElementById('returnlink'); // one word on the phone: the links stay on one line
+  if (back) back.textContent = p.mode === 'phone' ? 'Return' : 'Return screen';
+  main.dataset.has = p.has;
+  main.style.setProperty('--c-strip', p.sizes.strip + 'px');
+  main.style.setProperty('--c-railmin', p.sizes.railMin + 'px');
+  if (ck.want) { // ?tab=Map opens that phone tab (the screenshot suite and the fit check look at each)
+    const w = p.tabs.find((t) => t.name.toLowerCase() === ck.want.toLowerCase());
+    if (w) { ck.tab = w.name; ck.want = ''; }
+  }
+  if (!p.tabs.some((t) => t.name === ck.tab)) ck.tab = p.tabs.length ? p.tabs[0].name : '';
+  const sig = JSON.stringify([p.mode, p.band, p.stage, p.strip, p.top, p.rail, p.tabs]);
+  if (sig === ck.sig) return;
+  ck.sig = sig;
+  main.querySelectorAll(':scope > [data-cockpit-slot]').forEach((n) => n.remove());
+  const put = (box, ids) => ids.forEach((id) => box.appendChild(ck.roots.get(id)));
+  const bandMain = shell.querySelector('.d-band-status .d-band-main');
+  if (bandMain) {
+    for (const r of ck.roots.values()) if (r.parentElement === bandMain) r.remove(); // a panel that left the band
+    put(bandMain, p.band);
+  }
+  if (p.stage) { const s = ckSlot('stage'); put(s, [p.stage]); main.appendChild(s); }
+  if (p.strip.length) { const s = ckSlot('strip'); put(s, p.strip); main.appendChild(s); }
+  if (p.rail.length || p.top.length) {
+    const r = ckSlot('rail');
+    r.dataset.cols = String(p.rail.length);
+    if (p.top.length) {
+      const t = el('div', 'd-slotcol d-slottop');
+      r.dataset.top = '1';
+      if (p.rail.length) t.dataset.nogrow = '1'; // the columns under it take the rest
+      put(t, p.top);
+      growLast(t);
+      r.appendChild(t);
+    }
+    for (const ids of p.rail) { const c = el('div', 'd-slotcol'); put(c, ids); mapSwitch(c); r.appendChild(c); }
+    main.appendChild(r);
+  }
+  if (p.tabs.length) {
+    const t = ckSlot('phoneTabs'), bar = el('div', 'd-tabbar'), body = el('div', 'd-slottabs');
+    bar.setAttribute('role', 'tablist');
+    body.setAttribute('role', 'tabpanel');
+    ck.tabBar = bar; ck.tabBody = body; ck.tabs = p.tabs;
+    for (const tab of p.tabs) {
+      const b = ui.btn(tab.name, { size: 'sm', variant: 'ghost' });
+      b.setAttribute('role', 'tab');
+      b.dataset.tab = tab.name;
+      b.addEventListener('click', () => showTab(tab.name));
+      b.addEventListener('keydown', (e) => { // arrow keys move between the tabs; the bar is kept, so focus stays on it
+        const i = ck.tabs.findIndex((x) => x.name === ck.tab), d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        showTab(ck.tabs[(i + d + ck.tabs.length) % ck.tabs.length].name, true);
+      });
+      bar.appendChild(b);
+    }
+    t.append(bar, body);
+    main.appendChild(t);
+    showTab(ck.tab);
+  } else { ck.tabBar = ck.tabBody = null; }
+  if (ck.editor && ck.editor.paint) ck.editor.paint();
+}
+
+function setupCockpit(sel, answerBase, roots, slotList) {
+  ck.layout = sel.layout;
+  ck.roots = roots;
+  ck.want = qs.get('tab') || '';
+  ck.main = document.querySelector('.d-main');
+  ck.shell = document.querySelector('.d-shell');
+  if (!ck.main || !ck.shell) return;
+  ck.shell.dataset.template = ck.main.dataset.template = 'cockpit';
+  const head = ck.shell.querySelector('.d-band-status');
+  if (head) head.dataset.cockpitSlot = 'band';
+  // the old page's message bar ("the viewer is not reachable", a refused answer) lives in the hidden card area: it floats over the frame instead
+  const mb = document.getElementById('msgbar');
+  if (mb) { mb.dataset.float = '1'; document.body.appendChild(mb); }
+  applyCockpit();
+  window.addEventListener('resize', () => applyCockpit());
+  const btn = document.getElementById('btn-layout');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    if (ck.editor) return;
+    if (ck.plan.mode === 'phone') { toast('info', 'Edit layout needs a window at least 700 px wide.'); return; }
+    let mod;
+    try { mod = await import('/watch/layoutedit.js'); } catch (e) { toast('alarm', 'The layout editor did not load.'); return; }
+    const saved = ck.layout;
+    ck.editor = mod.startCockpit({
+      el, toast, main: ck.main, shell: ck.shell, roots: ck.roots, layout: saved, slotPanels: slotList,
+      plan: () => ck.plan,
+      preview(l) { ck.layout = l; applyCockpit(); return ck.plan; },
+      async save(l) {
+        const r = await postJSON(answerBase, '/api/layout', { layout: l });
+        if (r && r.ok) { pref(PREF, 'saved'); pref(PICK, '1'); }
+        return r;
+      },
+      async reset() {
+        const r = await postJSON(answerBase, '/api/layout', { reset: true });
+        if (r && r.ok) { pref(PREF, ''); pref(BASE, ''); setTimeout(() => location.reload(), 700); }
+        return r;
+      },
+      done(l) { ck.editor = null; ck.layout = l || saved; applyCockpit(); },
+    });
+  });
+  if (qs.get('edit') === '1') btn.click();
+}
+
+// ---- drawers (a cockpit has no tile for the log or the first-steps card; each opens as a side sheet) ----
+// A drawer panel is mounted like any other (shell.json layout.drawer lists them) but its root lives in a sheet that is
+// hidden until it is opened, and the scheduler polls it only while it is open. The "..." menu opens them, and so does
+// ctx.openDrawer(id) (the status sentence's popover uses it).
+const dr = { boxes: new Map(), open: '', opener: null };
+
+function setupDrawers(roots, titles) {
+  if (!roots.size) return;
+  const back = el('div', 'd-drawer-back');
+  back.hidden = true;
+  back.addEventListener('click', () => closeDrawer(true));
+  document.body.appendChild(back);
+  dr.back = back;
+  for (const [id, root] of roots) {
+    const box = el('aside', 'd-drawer'), head = el('div', 'd-drawer-head'), body = el('div', 'd-drawer-body');
+    const h = el('h2', '', titles.get(id) || id), x = ui.btn('Close', { size: 'sm', variant: 'ghost' });
+    box.dataset.drawer = id;
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-label', titles.get(id) || id);
+    box.hidden = true;
+    x.dataset.key = 'drawer-close';
+    x.addEventListener('click', () => closeDrawer(true));
+    head.append(h, x);
+    const gone = el('p', 'd-drawer-empty', 'Nothing here right now.'); // shown by the CSS while the panel hides itself
+    body.append(root, gone);
+    box.append(head, body);
+    box.addEventListener('keydown', (e) => { if (e.key === 'Escape') { e.preventDefault(); closeDrawer(true); } });
+    document.body.appendChild(box);
+    dr.boxes.set(id, { box, root, gone });
+  }
+}
+
+function openDrawer(id, opener) {
+  const d = dr.boxes.get(id);
+  if (!d) return false;
+  closeDrawer(false);
+  dr.open = id;
+  dr.opener = opener || document.activeElement;
+  d.box.hidden = false;
+  if (dr.back) dr.back.hidden = false;
+  d.root.dataset.open = '1';
+  if (theSched) theSched.poke(id);
+  const x = d.box.querySelector('[data-key="drawer-close"]');
+  if (x) x.focus({ preventScroll: true });
+  return true;
+}
+
+function closeDrawer(back) {
+  const d = dr.boxes.get(dr.open);
+  if (!d) return;
+  d.box.hidden = true;
+  delete d.root.dataset.open;
+  if (dr.back) dr.back.hidden = true;
+  const o = dr.opener;
+  dr.open = ''; dr.opener = null;
+  if (back && o && o.focus && o.isConnected) o.focus({ preventScroll: true });
+}
+
+// The "Getting started 1 of 5" chip of the menu: one read of the onboarding reply whenever the menu opens (not a poll).
+async function onboardingChip(btn) {
+  try {
+    const v = await (await fetch('/api/onboarding', { cache: 'no-store', credentials: 'same-origin' })).json();
+    const total = (v.steps || []).length;
+    if (v.allDone || !total) { btn.hidden = true; return; }
+    btn.textContent = 'Getting started ' + (v.done || 0) + ' of ' + total;
+    btn.hidden = false;
+  } catch (e) { /* the chip keeps its last text */ }
+}
+
+// ---- the "..." menu of the status band: Help, Edit layout, Theme and the layout presets ----
+// The buttons already on the page move into it (they keep their ids and listeners); the preset buttons store the choice
+// per browser and load the page again, because which panels are mounted (opt-in panels, the status band) follows the layout.
+const PRESET_LABEL = { cockpit: 'Cockpit', classic: 'Classic', simple: 'Simple', standard: 'Standard', stream: 'Stream', debug: 'Debug' };
+function setupMenu(sel) {
+  const nav = document.querySelector('.d-band-status .d-links');
+  if (!nav || document.getElementById('btn-more')) return;
+  const wrap = el('span', 'd-menu'), pop = el('div', 'd-menu-pop');
+  const more = ui.btn('...', { size: 'sm', variant: 'ghost' });
+  more.id = 'btn-more';
+  more.setAttribute('aria-label', 'More: help, layout, theme');
+  more.setAttribute('aria-haspopup', 'true');
+  more.setAttribute('aria-expanded', 'false');
+  pop.hidden = true;
+  pop.id = 'menu-more';
+  more.setAttribute('aria-controls', pop.id);
+  const close = (back) => { pop.hidden = true; more.setAttribute('aria-expanded', 'false'); if (back) more.focus({ preventScroll: true }); };
+  more.addEventListener('click', () => {
+    pop.hidden = !pop.hidden;
+    if (chip && !pop.hidden) onboardingChip(chip);
+    more.setAttribute('aria-expanded', String(!pop.hidden));
+  });
+  document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
+  wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
+  pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
+  for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
+  let chip = null;
+  for (const [id, text] of [['log', 'Log'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
+    if (!dr.boxes.has(id)) continue;
+    const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
+    b.dataset.drawerOpen = id;
+    b.addEventListener('click', () => openDrawer(id, more));
+    pop.appendChild(b);
+    if (id === 'onboarding') { chip = b; b.hidden = true; }
+  }
+  if (chip) onboardingChip(chip);
+  const rb = ui.btn('Reset...', { size: 'sm', variant: 'ghost' });
+  rb.dataset.key = 'reset-open';
+  rb.setAttribute('aria-label', 'Reset: leave the game and rejoin');
+  rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
+  pop.appendChild(rb);
+  pop.appendChild(el('div', 'd-menu-label', 'Layout'));
+  const cur = sel ? sel.preset : '';
+  const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
+  for (const name of names) {
+    const b = ui.btn(name === 'saved' ? 'Saved layout' : 'Layout: ' + PRESET_LABEL[name], { size: 'sm', variant: 'ghost' });
+    b.dataset.preset = name;
+    b.setAttribute('aria-checked', String(name === 'saved' ? !!sel && sel.origin === 'stored' : name === cur));
+    b.setAttribute('role', 'menuitemradio');
+    b.addEventListener('click', () => choosePreset(name));
+    pop.appendChild(b);
+  }
+  wrap.append(more, pop);
+  nav.appendChild(wrap);
+}
+function choosePreset(name) {
+  pref(PREF, name); pref(PICK, '1');
+  if (qs.has('layout')) { const u = new URL(location.href); u.searchParams.delete('layout'); history.replaceState(null, '', u); }
+  location.reload();
+}
+
+// One line for a hero who now gets the cockpit by default, dismissed for good in this browser. A cockpit has no row for it
+// (the frame fills the window), so there it floats over the page like a toast; the old page keeps it under the band.
+function layoutNote(sel, floating) {
+  if (!sel || sel.origin !== 'default' || html.dataset.mode === 'overlay' || pref(NOTE)) return;
+  const shell = document.querySelector('.d-shell'), top = document.querySelector('.d-band-status');
+  if (!shell || !top) return;
+  const box = el('div', 'd-layoutnote');
+  box.setAttribute('role', 'note');
+  if (floating) box.dataset.float = '1';
+  box.appendChild(el('span', '', sel.fell ? 'The new layout could not load, so this is Standard. Classic is in the menu.' : floating ? 'The layout changed. Classic is in the menu.' : 'The layout changed. Classic is in the menu.'));
+  const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
+  x.addEventListener('click', () => { pref(NOTE, '1'); box.remove(); });
+  box.appendChild(x);
+  if (floating) document.body.appendChild(box); else top.after(box);
+}
+
+// A slot panel of the cockpit that fails to load leaves a hole: say so once, with the way back one click away.
+let failedShown = false;
+function failedNote() {
+  if (failedShown) return;
+  failedShown = true;
+  const box = el('div', 'd-layoutnote');
+  box.setAttribute('role', 'alert');
+  box.dataset.float = '1';
+  box.appendChild(el('span', '', 'Part of this layout did not load.'));
+  const go = ui.btn('Use Classic', { size: 'sm', variant: 'primary' });
+  go.addEventListener('click', () => choosePreset('classic'));
+  const x = ui.btn('Dismiss', { size: 'sm', variant: 'ghost' });
+  x.addEventListener('click', () => box.remove());
+  box.append(go, x);
+  document.body.appendChild(box);
 }
 
 // ---- ctx and mounting ----
@@ -390,11 +862,27 @@ function makeCtx(m, parts, cfg, answerBase, timers) {
     id: m.id, config: cfg, token: qs.get('t') || '',
     body: parts.body, meta: parts.meta, actions: parts.actions,
     el, ui, store, toast,
+    tileSheet(where) { return tileSheet(m.id, parts.root, where); },
     hide(on) { parts.root.hidden = !!on; syncBand(parts.root.parentElement); },
     state(st) { parts.root.dataset.state = st; },
     later(fn, ms) { const t = setTimeout(() => { timers.delete(t); fn(); }, ms); timers.add(t); return t; },
     post: (path, body) => postJSON(answerBase, path, body),
+    askReset(from) { document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from } })); }, // the Reset confirm sheet (resetui.js)
+    refresh() { if (theSched) theSched.poke(m.id); }, // poll this panel now (a drawer's tab changed)
+    openDrawer(id) { return openDrawer(id); },
+    short() { return !!ck.plan && ck.plan.mode !== 'phone' && window.innerHeight < COCKPIT_SHORT; }, // a short cockpit window (the panels trim their lists)
   };
+}
+
+// The default flips to the cockpit only while every slot has its panel: when the manifest lacks one (a half-updated install) the
+// page falls back to Standard instead of showing a hole. A layout the hero picked or stored is never second-guessed.
+async function selfCheck(sel, list, conf0) {
+  if (!sel || sel.origin !== 'default' && sel.origin !== 'newhero' || !isCockpit(sel.layout) || sel.preset !== 'cockpit') return sel;
+  const missing = missingSlots(sel.layout, list.filter((m) => m.slot || (conf0.slot || []).includes(m.id)).map((m) => m.id));
+  if (!missing.length) return sel;
+  console.warn('d2lod: cockpit slot panel missing (' + missing.join(', ') + '), using Standard');
+  const l = await presetFile('standard');
+  return l ? { layout: l, preset: 'standard', origin: sel.origin, hasStored: false, fell: true } : sel;
 }
 
 async function start() {
@@ -411,17 +899,33 @@ async function start() {
     list = (pv.panels || []).filter((m) => !m.mergedInto); // a merged panel's id is an alias in the layout (shell.json)
     conf = pv.layout || {};
   } catch (e) { return; }
-  const sched = makeScheduler();
+  // the layout decides which panels mount (opt-in panels, the status band's list), so it is read before any root exists
+  let sel = layoutReq ? await layoutReq : null;
+  sel = await selfCheck(sel, list, conf);
+  ck.meta = new Map(list.map((m) => [m.id, m])); // the manifests (a cockpit's switch pairs read switchWith)
+  const cockpit = !!sel && isCockpit(sel.layout) && html.dataset.mode !== 'overlay';
+  // panels the layout may put in a slot: their manifest says so, or shell.json lists them until it does
+  for (const m of list) if (m.slot || (conf.slot || []).includes(m.id)) m.slot = true;
+  if (cockpit) for (const m of list) if ((conf.drawer || []).includes(m.id)) m.drawer = true; // a grid layout keeps the log a plain tile
+  const slotList = list.filter((m) => m.slot).map((m) => ({ id: m.id, title: m.title }));
+  if (layoutReq) list = selectPanels(list, sel && sel.layout, html.dataset.mode);
+  const sched = theSched = makeScheduler();
   // the Help button opens the onboarding panel's Help entries (panels/onboarding), which listens for this event
   const helpBtn = document.getElementById('btn-help');
   if (helpBtn) helpBtn.addEventListener('click', () => window.dispatchEvent(new Event('d2help')));
   // every root exists before the first module loads, so the layout places the whole page at once
-  const made = [];
+  const made = [], ckRoots = new Map(), drRoots = new Map(), drTitles = new Map();
   for (const m of list) {
-    const parts = makeRoot(m);
-    if (place(bands, m, parts.root)) made.push([m, parts]);
+    const parts = makeRoot(m, cockpit);
+    if (cockpit && m.drawer) { drRoots.set(m.id, parts.root); drTitles.set(m.id, m.title); made.push([m, parts]); }
+    else if (cockpit) { ckRoots.set(m.id, parts.root); made.push([m, parts]); } else if (place(bands, m, parts.root)) made.push([m, parts]);
   }
-  setupLayout(conf, await layoutReq, answerBase);
+  setupLayout(conf, sel, answerBase, cockpit ? ckRoots : null, slotList);
+  if (cockpit) setupDrawers(drRoots, drTitles);
+  if (layoutReq) { setupMenu(sel); layoutNote(sel, cockpit); }
+  // a new hero meets the first-steps card once, without opening a menu
+  if (cockpit && sel.origin === 'newhero' && !pref(FIRST) && dr.boxes.has('onboarding') && !qs.has('drawer') && qs.get('first') !== '0') { pref(FIRST, '1'); openDrawer('onboarding'); }
+  if (cockpit && qs.get('drawer')) openDrawer(qs.get('drawer')); // a link (and the screenshot suite) can open a drawer
   for (const [m, parts] of made) {
     const css = el('link');
     css.rel = 'stylesheet'; css.href = '/watch/panels/' + m.id + '/panel.css';
@@ -434,7 +938,12 @@ async function start() {
     } catch (e) {
       parts.root.dataset.state = 'error';
       parts.body.appendChild(el('p', 'd-empty', 'This panel failed to load.'));
+      if (cockpit && sel.origin !== 'url') failedNote();
       continue;
+    }
+    if (cockpit) { // a slot has no title bar to fold, and a fold saved by the classic page must not blank the box
+      parts.actions.querySelectorAll('[data-key="collapse"]').forEach((n) => n.remove());
+      parts.body.hidden = false;
     }
     if (!m.endpoint && parts.root.dataset.state === 'loading') parts.root.dataset.state = 'ready';
     sched.add({ m, root: parts.root, api });
@@ -442,9 +951,12 @@ async function start() {
   }
   Object.values(bands).forEach(syncBand);
   sched.start();
+  mountReset({ ui, toast, doc: document, later: (fn, ms) => setTimeout(fn, ms),
+    post: (path, body) => postJSON(answerBase, path, body),
+    get: (path) => fetch(path, { cache: 'no-store' }).then((r) => (r.ok ? r.json() : null)).catch(() => null) });
   // a link (and the screenshot suite) can open the page in Edit layout, once every panel is mounted
   const edit = document.getElementById('btn-layout');
-  if (edit && qs.get('edit') === '1') edit.click();
+  if (edit && !cockpit && qs.get('edit') === '1') edit.click();
 }
 
 start();

@@ -230,4 +230,25 @@
   .d-legend .lg-keep { background: var(--d-good); color: var(--d-on-good); }
   .q-magic { --q: var(--d-q-magic); } .q-rare { --q: var(--d-q-rare); } .q-set { --q: var(--d-q-set); } .q-unique { --q: var(--d-q-unique); }
   .q-crafted { --q: var(--d-q-crafted); } .q-runeword { --q: var(--d-q-runeword); } .q-low { --q: var(--d-q-low); }
+  /* the cockpit's tab bar and map switch, and phone touch targets: 38 px for the tab bar, the switch, the buttons inside a slot
+     panel and the drawers (shell.css cannot say it: this layer comes after the shell's) */
+  .d-tabbar > .d-btn[aria-selected="true"] { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 650; }
+  .d-mapswitch > .d-btn { min-block-size: 28px; padding-block: 0; }
+  .d-main[data-cmode="phone"] :is(.d-tabbar, .d-mapswitch) > .d-btn, .d-main[data-cmode="phone"] [data-cockpit-panel] .d-btn[data-size="sm"], .d-drawer .d-btn { min-block-size: 38px; }
+  .d-drawer [data-panel="log"] .row { min-block-size: 38px; }
+}
+
+@layer components {
+  /* The one-time layout note of a cockpit floats over the frame (the frame fills the window, so it has no row of its own) (S7). */
+  .d-layoutnote[data-float] { position: fixed; inset-block-end: var(--d-sp-3); inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-toast);
+    max-inline-size: min(94vw, 34rem); margin: 0; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); box-shadow: var(--d-shadow-1); color: var(--d-text); }
+  
+  /* Accessibility of the cockpit (S7): one 2 px focus ring on every control that has none of its own (the phone tabs, the
+     menu, the drawers, the notes), targets of 44 px under a coarse pointer where they are outside the frame (menu, drawer,
+     note; the frame's own rows use --c-touch), and no motion when the reader asks for none (the duration tokens are 0 under prefers-reduced-motion; the cockpit has no animation of its own). */
+  .d-shell[data-template="cockpit"] :is(a, button, input, select, textarea, [tabindex]):focus-visible,
+  .d-drawer :is(a, button, input, select, textarea, [tabindex]):focus-visible,
+  .d-layoutnote :is(a, button):focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
+  /* The old message bar (role=alert text of app.js) of a cockpit floats under the band; nothing else in the frame moves (S7). */
+  .banner[data-float] { position: fixed; inset-block-start: 48px; inset-inline-start: 50%; transform: translateX(-50%); z-index: var(--d-z-banner); margin: 0; max-inline-size: min(94vw, 40rem); }
 }

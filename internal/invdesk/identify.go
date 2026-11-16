@@ -76,6 +76,8 @@ func (d *Desk) runnableLocked(r Request, inTown bool) bool {
 		return d.sv != nil
 	case KindBuyID, KindCain:
 		return d.sv != nil && inTown
+	case KindSell:
+		return d.sell != nil && inTown
 	case KindStash, KindTake, KindGold:
 		return d.stashSvLocked() != nil && inTown
 	}
@@ -100,10 +102,10 @@ func identifyWhy(u d2.Unit, hasTool bool) (code, why string) {
 	return "", ""
 }
 
-// RequestIdentify queues reading a Scroll or Tome of Identify on item id. Refused for an identified item, an item
+// requestIdentify queues reading a Scroll or Tome of Identify on item id. Refused for an identified item, an item
 // outside the backpack and the doll, and when the pack holds no scroll or tome (the reason names the two other
 // commands).
-func (d *Desk) RequestIdentify(id uint32) (Request, error) {
+func (d *Desk) requestIdentify(id uint32) (Request, error) {
 	sv, _ := d.services()
 	if sv == nil {
 		return Request{}, refuse("off", "identifying is not available on this bot")
@@ -308,7 +310,7 @@ func (d *Desk) ErrandsWaiting() int {
 	defer d.mu.Unlock()
 	n := 0
 	for _, r := range d.st.Queue {
-		if r.State == StateQueued && r.errand() && d.sv != nil {
+		if r.State == StateQueued && r.errand() && (d.sv != nil || r.kind() == KindSell) {
 			n++
 		}
 	}

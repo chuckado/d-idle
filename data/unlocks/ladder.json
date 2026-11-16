@@ -320,9 +320,14 @@
       "reveal": {"title": "Always repair", "text": "The hero repairs damaged gear at every town visit. Policy sheet, row Repair gear.", "teaser": "Costs tally."}
     },
     {
+      "id": "orderloop", "group": "ui",
+      "trigger": {"kind": "seen", "args": {"what": "manual_repair_cycle"}},
+      "reveal": {"title": "Loop order", "text": "Send the hero to an area for a set time, home to repair, and out again, as many rounds as you say. One loop at a time; it stops when the hero dies or the repair cannot be paid.", "teaser": "Send the hero out, then repair its gear yourself once."}
+    },
+    {
       "id": "orderqueue", "group": "ui",
-      "trigger": {"kind": "quest_stage", "args": {"quest": "den_of_evil", "min": 2}},
-      "reveal": {"title": "Order queue, first slot", "text": "One order may now wait behind the running one: give an order and the hero goes on to the next when it ends. A queue never overrides the hero's own guard and stops when the hero dies.", "teaser": "Clear the Den of Evil."}
+      "trigger": {"kind": "seen", "args": {"what": "loop_rounds_3"}},
+      "reveal": {"title": "Order queue, first slot", "text": "One order may now wait behind the running one: give an order and the hero goes on to the next when it ends. A queue never overrides the hero's own guard and stops when the hero dies.", "teaser": "Finish three rounds of a Loop order."}
     },
     {
       "id": "orderqueue2", "group": "ui",

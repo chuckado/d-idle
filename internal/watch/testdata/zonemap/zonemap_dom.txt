@@ -1,0 +1,2529 @@
+== grid sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+== menu-field sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-here sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=stay,primary=1,size=sm} "Stay and fight"
+    button.d-btn {key=town,size=sm} "Back to town"
+== menu-town sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=town,sel=camp} aria="Order for Rogue Encampment"
+  div.zm-mh
+    b.zm-mt "Rogue Encampment" title="Rogue Encampment"
+    span.zm-rg
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-col
+    button.d-btn {key=town,primary=1,size=sm} "Rest in town"
+    button.d-btn {key=repair,size=sm} "Repair"
+    button.d-btn {key=identify,size=sm} "Identify all"
+    button.d-btn {key=sell_now,size=sm} "Sell now"
+    button.d-btn {key=revive_merc,size=sm} "Revive mercenary"
+== menu-hard sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=hard,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, too hard now - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, too hard now"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw} aria="Order for Forgotten Tower"
+  div.zm-mh
+    b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
+    span.zm-rg "level 15-22"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
+  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15" title="Too hard now: no mercenary and clvl 7 is below 15"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,size=sm} "Ask anyway"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-not-orderable sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=dungeon,sel=cell} aria="Order for Tower Cellars 1-5"
+  div.zm-mh
+    b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
+    span.zm-rg "level 15-22"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
+  div.zm-l.zm-note "Not orderable yet." title="Not orderable yet."
+== menu-failed sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bg} aria="Order for Burial Grounds"
+  div.zm-mh
+    b.zm-mt "Burial Grounds" title="Burial Grounds - level 8-14 - Blood Raven and her archers shoot from range"
+    span.zm-rg "level 8-14"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds"
+  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down" title="The last order here failed: the hero's guard turned it down"
+  div.zm-l.zm-warn {tone=warn} "Advice, not a guard: veterans go here from clvl 8." title="Advice, not a guard: veterans go here from clvl 8."
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-locked sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once." title="Loop: Send the hero out, then repair its gear yourself once."
+    div.zm-l.zm-teaser "Queue: Finish three loop rounds." title="Queue: Finish three loop rounds."
+== menu-queue-full sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue" disabled=true
+    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil." title="2 of 2 waiting; the next slot: Clear the Den of Evil."
+== menu-no-ladder sorceress
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,here=1,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, in range, you are here - safe first xp" type="button" aria="Blood Moor, level 1-8, in range, you are here"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=in,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, in range - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, in range"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,target=1} title="Cold Plains, level 6-12, in range, current order - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, current order"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=range} "6-12"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=in,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, in range - small, quick" type="button" aria="Cave 1 to 2, level 6-10, in range"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=above,failed=1,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, above your level, the last order failed - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, above your level, the last order failed"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=above,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, above your level - small, a chest" type="button" aria="Crypt, level 8-14, above your level"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=above,id=sf,key=z-sf,kind=field,pin=1} title="Stony Field, level 10-16, above your level, queued, place 1 - open ground, easy to path" type="button" aria="Stony Field, level 10-16, above your level, queued, place 1"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=above,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, above your level - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, above your level"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=above,id=dw,key=z-dw,kind=field,pin=2} title="Dark Wood, level 10-16, above your level, queued, place 2 - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, above your level, queued, place 2"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=above,id=bmarsh,key=z-bmarsh,kind=field} title="Black Marsh, level 12-18, above your level - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, above your level"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=range} "12-18"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=above,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, above your level - dense packs" type="button" aria="Hole 1 to 2, level 12+, above your level"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+== menu-loop-open sorceress
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop: close"
+    button.d-btn {key=queue,size=sm} "Add to queue"
+  div.zm-loop
+    span.zm-ll "Each round"
+    select.zm-sel {key=loop-min}
+      option "10 min"
+      option "20 min"
+      option "30 min"
+      option "1 h"
+    select.zm-sel {key=loop-repair}
+      option "Repair when worn"
+      option "Repair every round"
+    select.zm-sel {key=loop-rounds}
+      option "3 rounds"
+      option "5 rounds"
+      option "10 rounds"
+      option "20 rounds"
+      option "until I stop it"
+    button.d-btn {key=loop-start,primary=1,size=sm} "Start loop"
+== grid paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+== menu-field paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-here paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=sf} aria="Order for Stony Field"
+  div.zm-mh
+    b.zm-mt "Stony Field" title="Stony Field - level 10-16 - open ground, easy to path"
+    span.zm-rg "level 10-16"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=stay,primary=1,size=sm} "Stay and fight"
+    button.d-btn {key=town,size=sm} "Back to town"
+== menu-town paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=town,sel=camp} aria="Order for Rogue Encampment"
+  div.zm-mh
+    b.zm-mt "Rogue Encampment" title="Rogue Encampment"
+    span.zm-rg
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-col
+    button.d-btn {key=town,primary=1,size=sm} "Rest in town"
+    button.d-btn {key=repair,size=sm} "Repair"
+    button.d-btn {key=identify,size=sm} "Identify all"
+    button.d-btn {key=sell_now,size=sm} "Sell now"
+    button.d-btn {key=revive_merc,size=sm} "Revive mercenary"
+== menu-hard paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=hard,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, too hard now - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, too hard now"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=dungeon,sel=ftw} aria="Order for Forgotten Tower"
+  div.zm-mh
+    b.zm-mt "Forgotten Tower" title="Forgotten Tower - level 15-22 - the Countess' runes; a long chain, no waypoint"
+    span.zm-rg "level 15-22"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower"
+  div.zm-l.zm-warn {tone=warn} "Too hard now: no mercenary and clvl 7 is below 15" title="Too hard now: no mercenary and clvl 7 is below 15"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,size=sm} "Ask anyway"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-not-orderable paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=dungeon,sel=cell} aria="Order for Tower Cellars 1-5"
+  div.zm-mh
+    b.zm-mt "Tower Cellars 1-5" title="Tower Cellars 1-5 - level 15-22 - the Countess is on level 5"
+    span.zm-rg "level 15-22"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Stony Field > Underground Pass > Dark Wood > Black Marsh > Forgotten Tower > Tower Cellars 1-5"
+  div.zm-l.zm-note "Not orderable yet." title="Not orderable yet."
+== menu-failed paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=dungeon,sel=crypt} aria="Order for Crypt"
+  div.zm-mh
+    b.zm-mt "Crypt" title="Crypt - level 8-14 - small, a chest"
+    span.zm-rg "level 8-14"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds > Crypt" title="Route: Rogue Encampment > Blood Moor > Cold Plains > Burial Grounds > Crypt"
+  div.zm-l.zm-warn {tone=bad} "The last order here failed: the hero's guard turned it down" title="The last order here failed: the hero's guard turned it down"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+== menu-locked paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    div.zm-l.zm-teaser "Loop: Send the hero out, then repair its gear yourself once." title="Loop: Send the hero out, then repair its gear yourself once."
+    div.zm-l.zm-teaser "Queue: Finish three loop rounds." title="Queue: Finish three loop rounds."
+== menu-queue-full paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue" disabled=true
+    div.zm-l.zm-teaser "2 of 2 waiting; the next slot: Clear the Den of Evil." title="2 of 2 waiting; the next slot: Clear the Den of Evil."
+== menu-no-ladder paladin
+div.d-slotbody
+  div.zm
+    div.zm-grid {cols=3,rows=10} title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"
+      svg.zm-lines
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+        line
+      div.zm-legend
+        span.zm-lg {band=in}
+          i
+          span "in your range"
+        span.zm-lg {band=above}
+          i
+          span "above it"
+        span.zm-lg {band=hard}
+          i
+          span "too hard now"
+      button.zm-n {band=town,id=camp,key=z-camp,kind=town} title="Rogue Encampment" type="button" aria="Rogue Encampment"
+        span.zm-nm "Rogue Encampment"
+        span.zm-rt {r=range}
+      button.zm-n {band=below,id=bm,key=z-bm,kind=field} title="Blood Moor, level 1-8, below your level - safe first xp" type="button" aria="Blood Moor, level 1-8, below your level"
+        span.zm-nm "Blood Moor"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - safe first xp"
+      button.zm-n {band=below,id=den,key=z-den,kind=dungeon} title="Den of Evil, level 1-8, below your level - quest; many monsters in a small cave, no waypoint" type="button" aria="Den of Evil, level 1-8, below your level"
+        span.zm-nm "Den of Evil"
+        span.zm-rt {r=range} "1-8"
+        span.zm-why "1-8 - quest; many monsters in a small cave, no waypoint"
+      button.zm-n {band=in,id=cp,key=z-cp,kind=field,pin=2} title="Cold Plains, level 6-12, in range, queued, place 2 - open ground, waypoint" type="button" aria="Cold Plains, level 6-12, in range, queued, place 2"
+        span.zm-nm "Cold Plains"
+        span.zm-rt {r=mark} "#2"
+        span.zm-why "6-12 - open ground, waypoint"
+      button.zm-n {band=below,id=cave,key=z-cave,kind=dungeon} title="Cave 1 to 2, level 6-10, below your level - small, quick" type="button" aria="Cave 1 to 2, level 6-10, below your level"
+        span.zm-nm "Cave 1 to 2"
+        span.zm-rt {r=range} "6-10"
+        span.zm-why "6-10 - small, quick"
+      button.zm-n {band=in,id=bg,key=z-bg,kind=field} title="Burial Grounds, level 8-14, in range - Blood Raven and her archers shoot from range" type="button" aria="Burial Grounds, level 8-14, in range"
+        span.zm-nm "Burial Grounds"
+        span.zm-rt {r=range} "8-14"
+        span.zm-why "8-14 - Blood Raven and her archers shoot from range"
+      button.zm-n {band=in,failed=1,id=crypt,key=z-crypt,kind=dungeon} title="Crypt, level 8-14, in range, the last order failed - small, a chest" type="button" aria="Crypt, level 8-14, in range, the last order failed"
+        span.zm-nm "Crypt"
+        span.zm-rt {r=mark} "!"
+        span.zm-why "8-14 - small, a chest"
+      button.zm-n {band=in,here=1,id=sf,key=z-sf,kind=field} title="Stony Field, level 10-16, in range, you are here - open ground, easy to path" type="button" aria="Stony Field, level 10-16, in range, you are here"
+        span.zm-nm "Stony Field"
+        span.zm-rt {r=mark} "here"
+        span.zm-why "10-16 - open ground, easy to path"
+      button.zm-n {band=in,id=up,key=z-up,kind=dungeon} title="Underground Pass, level 10-16, in range - the way to Dark Wood" type="button" aria="Underground Pass, level 10-16, in range"
+        span.zm-nm "Underground Pass"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the way to Dark Wood"
+      button.zm-n {band=in,id=dw,key=z-dw,kind=field,target=1} title="Dark Wood, level 10-16, in range, current order - the Inifuss tree is here" type="button" aria="Dark Wood, level 10-16, in range, current order"
+        span.zm-nm "Dark Wood"
+        span.zm-rt {r=range} "10-16"
+        span.zm-why "10-16 - the Inifuss tree is here"
+      button.zm-n {band=in,id=bmarsh,key=z-bmarsh,kind=field,pin=1} title="Black Marsh, level 12-18, in range, queued, place 1 - waypoint, branches to the Hole and the Forgotten Tower" type="button" aria="Black Marsh, level 12-18, in range, queued, place 1"
+        span.zm-nm "Black Marsh"
+        span.zm-rt {r=mark} "#1"
+        span.zm-why "12-18 - waypoint, branches to the Hole and the Forgotten Tower"
+      button.zm-n {band=in,id=hole,key=z-hole,kind=dungeon} title="Hole 1 to 2, level 12+, in range - dense packs" type="button" aria="Hole 1 to 2, level 12+, in range"
+        span.zm-nm "Hole 1 to 2"
+        span.zm-rt {r=range} "12+"
+        span.zm-why "12+ - dense packs"
+      button.zm-n {band=above,id=ftw,key=z-ftw,kind=dungeon} title="Forgotten Tower, level 15-22, above your level - the Countess' runes; a long chain, no waypoint" type="button" aria="Forgotten Tower, level 15-22, above your level"
+        span.zm-nm "Forgotten Tower"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess' runes; a long chain, no waypoint"
+      button.zm-n {band=no,id=cell,key=z-cell,kind=dungeon} title="Tower Cellars 1-5, not orderable yet - the Countess is on level 5" type="button" aria="Tower Cellars 1-5, not orderable yet"
+        span.zm-nm "Tower Cellars 1-5"
+        span.zm-rt {r=range} "15-22"
+        span.zm-why "15-22 - the Countess is on level 5"
+      button.zm-n {band=above,id=tam,key=z-tam,kind=field} title="Tamoe Highland, level 14-20, above your level - leads on to the Monastery" type="button" aria="Tamoe Highland, level 14-20, above your level"
+        span.zm-nm "Tamoe Highland"
+        span.zm-rt {r=range} "14-20"
+        span.zm-why "14-20 - leads on to the Monastery"
+      button.zm-n {band=above,id=pit,key=z-pit,kind=dungeon} title="Pit 1 to 2, level 16-24, above your level - dense, no quest" type="button" aria="Pit 1 to 2, level 16-24, above your level"
+        span.zm-nm "Pit 1 to 2"
+        span.zm-rt {r=range} "16-24"
+        span.zm-why "16-24 - dense, no quest"
+      button.zm-n {band=in,id=mg,key=z-mg,kind=field} title="Monastery Gate, in range" type="button" aria="Monastery Gate, in range"
+        span.zm-nm "Monastery Gate"
+        span.zm-rt {r=range}
+      button.zm-n {band=in,id=oc,key=z-oc,kind=field} title="Outer Cloister, in range" type="button" aria="Outer Cloister, in range"
+        span.zm-nm "Outer Cloister"
+        span.zm-rt {r=range}
+      button.zm-n {band=no,id=line,key=z-line,kind=dungeon} title="Monastery line, not orderable yet" type="button" aria="Monastery line, not orderable yet"
+        span.zm-nm "Monastery line"
+        span.zm-rt {r=range}
+    [div.zm-list {scroll=1}]
+    [div.zm-empty]
+-- menu
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+== menu-loop-open paladin
+div.d-tilesheet {host=area-map,kind=field,sel=bm} aria="Order for Blood Moor"
+  div.zm-mh
+    b.zm-mt "Blood Moor" title="Blood Moor - level 1-8 - safe first xp"
+    span.zm-rg "level 1-8"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor" title="Route: Rogue Encampment > Blood Moor"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop: close"
+    button.d-btn {key=queue,size=sm} "Add to queue"
+  div.zm-loop
+    span.zm-ll "Each round"
+    select.zm-sel {key=loop-min}
+      option "10 min"
+      option "20 min"
+      option "30 min"
+      option "1 h"
+    select.zm-sel {key=loop-repair}
+      option "Repair when worn"
+      option "Repair every round"
+    select.zm-sel {key=loop-rounds}
+      option "3 rounds"
+      option "5 rounds"
+      option "10 rounds"
+      option "20 rounds"
+      option "until I stop it"
+    button.d-btn {key=loop-start,primary=1,size=sm} "Start loop"
+== no-map-act
+div.d-slotbody
+  div.zm
+    [div.zm-grid title="Stripe at the left of a zone: in your range, above it, too hard now, not open yet"]
+    div.zm-list {scroll=1}
+      button.zm-n.zm-row {key=area-Blood Moor} "Blood Moor" type="button"
+      button.zm-n.zm-row {key=area-Den of Evil} "Den of Evil" type="button"
+      button.zm-n.zm-row {key=area-Cold Plains} "Cold Plains" type="button"
+      button.zm-n.zm-row {key=area-Cave Level 1} "Cave Level 1" type="button"
+      button.zm-n.zm-row {key=area-Burial Grounds} "Burial Grounds" type="button"
+      button.zm-n.zm-row {key=area-Crypt} "Crypt" type="button"
+      button.zm-n.zm-row {key=area-Stony Field} "Stony Field" type="button"
+      button.zm-n.zm-row {key=area-Underground Passage 1} "Underground Passage 1" type="button"
+      button.zm-n.zm-row {key=area-Dark Wood} "Dark Wood" type="button"
+      button.zm-n.zm-row {key=area-Black Marsh} "Black Marsh" type="button"
+      button.zm-n.zm-row {key=area-Hole Level 1} "Hole Level 1" type="button"
+      button.zm-n.zm-row {key=area-Forgotten Tower} "Forgotten Tower" type="button"
+      button.zm-n.zm-row {key=area-Tamoe Highland} "Tamoe Highland" type="button"
+      button.zm-n.zm-row {key=area-Pit Level 1} "Pit Level 1" type="button"
+      button.zm-n.zm-row {key=area-Monastery Gate} "Monastery Gate" type="button"
+      button.zm-n.zm-row {key=area-Outer Cloister} "Outer Cloister" type="button"
+    [div.zm-empty]
+== menu-charter
+div.d-tilesheet {host=area-map,kind=field,sel=cp} aria="Order for Cold Plains"
+  div.zm-mh
+    b.zm-mt "Cold Plains" title="Cold Plains - level 6-12 - open ground, waypoint"
+    span.zm-rg "level 6-12"
+    button.zm-x {key=menu-close} "×" type="button" aria="Close the zone menu"
+  div.zm-l.zm-route "Route: Rogue Encampment > Blood Moor > Cold Plains" title="Route: Rogue Encampment > Blood Moor > Cold Plains"
+  div.zm-chips
+    button.d-btn {key=dur-10,size=sm} "10 min"
+    button.d-btn {key=dur-20,size=sm} "20 min"
+    button.d-btn {key=dur-30,size=sm} "30 min"
+    button.d-btn {key=dur-60,size=sm} "1 h"
+    button.d-btn {key=dur-0,size=sm} "Until I cancel"
+  div.zm-col
+    button.d-btn {key=go,primary=1,size=sm} "Go now"
+    button.d-btn {key=loop,size=sm} "Loop..."
+    button.d-btn {key=queue,size=sm} "Add to queue"
+  div.zm-charter
+    div.zm-l.zm-warn {tone=warn} "Above your range. Charter: 20 tally. Above range." title="Above your range. Charter: 20 tally. Above range."
+    button.d-btn {key=charter,primary=1,size=sm} "Pay and go"

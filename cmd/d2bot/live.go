@@ -141,8 +141,9 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 			restart = func(ctx context.Context) error { return rc.Recycle(ctx, "failsafe restart") }
 		}
 	}
-	runner, err := bot.New(e, bot.Deps{Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
-		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus}, cfg)
+	zoneChoice, zoneObserve := wireSurvival(db, ip.Ledger()) // shadow zone choice and ledger (slice S-C), log and API only
+	runner, err := bot.New(e, bot.Deps{ZoneChoice: zoneChoice, ZoneObserve: zoneObserve, Recycle: recycleDep(rc), RecycleDue: recycleDue(rc), Restart: restart, Mover: bh.Mover, Fighter: bh.Fighter, Town: bh.Town, Loot: bh.Loot, Cycler: bh.Cycler, Leveler: bh.Leveler, Gear: bh.Gear, PlayerGear: playerGear(ref), Quester: bh.Quester, Task: bh.Task, SavedExp: savedExpDep(saveDirOf(ctx, o), charName), Prepare: bh.prepare, Catalog: cat,
+		Health: g.health, OnSnapshot: disp.OnSnapshot, Bus: bus, ZoneShadow: wirePower(db)}, cfg)
 	if err != nil {
 		return err
 	}
@@ -165,16 +166,21 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 		return err
 	}
 	o.ladder.knobs = knobSetter(tuner)
+	o.ladder.knobValue = tuner.Value
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(gameDir, o.data, db)
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
+	o.ladder.pause = pauseDesk(runner, ip.State())
+	o.ladder.reset = resetDesk(runner, ip.State())
 	o.ladder.sensesTier = tune.Senses.Tier
 	o.ladder.proposalFacts = runner.ProposalFacts
 	o.ladder.riskFacts = runner.RiskFacts
 	o.ladder.readiness = wireReadiness(runner, db)
+	o.ladder.danger = wireDanger(db)
 	o.ladder.heroStats = heroStats(runner)
 	o.ladder.explored = runner.Explored
+	o.ladder.farmReset = runner.FarmResetShare
 	if db != nil {
 		o.ladder.monsters = db
 	}
@@ -186,6 +192,7 @@ func runLive(ctx context.Context, o options, log *slog.Logger) error {
 	}
 	defer lrig.StopRec()
 	useFun(lrig, runner, runID())
+	useGlance(lrig, runner, db, cfg.LevelerBuild, ref)
 	useFightFeed(lrig, bh.combat, ldir, log)
 	useSenses(lrig, e, bh.combat, log)
 	useSensesCoverage(lrig, e, bh.Mover)

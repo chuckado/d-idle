@@ -1,0 +1,15 @@
+@layer panels {
+  /* the drawing fills the box the slot gives it and is scaled to fit whole (never cropped); the controls sit on top of it */
+  [data-panel="area-map"] .am { position: relative; inline-size: 100%; block-size: 100%; min-block-size: 0; }
+  [data-panel="area-map"] .cv { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; display: block; background: var(--d-bg); border-radius: var(--d-r-2); touch-action: none; cursor: grab; }
+  [data-panel="area-map"] .ctl { position: absolute; inset-block-end: var(--d-sp-1); inset-inline-end: var(--d-sp-1); display: flex; gap: var(--d-sp-1); align-items: center; }
+  [data-panel="area-map"] .ctl .d-btn { min-inline-size: 28px; min-block-size: 28px; }
+  [data-panel="area-map"] .empty { position: absolute; inset: 0; display: grid; place-items: center; color: var(--d-text-2); font-size: var(--d-fs-1); text-align: center; padding: var(--d-sp-3); }
+  [data-panel="area-map"] .empty[hidden] { display: none; }
+  [data-panel="area-map"] .layers { position: absolute; inset-block-end: calc(28px + 2 * var(--d-sp-1)); inset-inline-end: var(--d-sp-1); display: grid; gap: var(--d-sp-1);
+    padding: var(--d-sp-2); max-block-size: calc(100% - 28px - 3 * var(--d-sp-1)); overflow: auto; background: var(--d-surface-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-2); box-shadow: var(--d-shadow-1); }
+  [data-panel="area-map"] .layers[hidden] { display: none; }
+  [data-panel="area-map"] .layers .lbl { font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .06em; }
+  [data-panel="area-map"] .layers .row { display: flex; flex-wrap: wrap; gap: var(--d-sp-1); }
+  [data-panel="area-map"] [aria-pressed="true"] { background: var(--d-accent); color: var(--d-accent-text); }
+}

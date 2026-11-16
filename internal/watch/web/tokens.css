@@ -38,6 +38,13 @@
     --d-warn: #e3a93a; --d-on-warn: #1a1204;
     --d-bad: #ec7d6c; --d-on-bad: #1c0806;
     --d-info: #7ab0e8; --d-on-info: #06111c;
+    /* the meaning in the name (redesign E.2): aliases over the values above, so the light theme follows without a copy */
+    --d-ok: var(--d-good); --d-danger: var(--d-bad); --d-muted: var(--d-text-3);
+    --d-state-bg-ok: color-mix(in srgb, var(--d-good) 14%, var(--d-surface-1));
+    --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 14%, var(--d-surface-1));
+    --d-state-bg-danger: color-mix(in srgb, var(--d-bad) 14%, var(--d-surface-1));
+    --d-state-bg-info: color-mix(in srgb, var(--d-info) 14%, var(--d-surface-1));
+    --d-hit: 44px; --d-row: 36px; /* least touch target; dense list row (44 on coarse pointers, by the panel) */
 
     --d-life: #d2453a; --d-mana: #4f7fe0; --d-xp: var(--d-gold-9); --d-stamina: #c9b26a;
 
@@ -45,7 +52,7 @@
     --d-q-set: #62c070; --d-q-unique: #d6ad5a; --d-q-crafted: #f0a040; --d-q-runeword: #d6ad5a;
 
     /* item tooltip (inventory page): a black translucent panel in every theme, so its text colours do not follow the theme */
-    --d-tip-bg: rgb(0 0 0 / .9); --d-tip-line: #5a5242; --d-tip-text: #e6ddc8; --d-tip-dim: #9d968a; --d-tip-bad: #ec7d6c;
+    --d-tip-bg: rgb(0 0 0 / .9); --d-tip-line: #5a5242; --d-tip-text: #e6ddc8; --d-tip-dim: #9d968a; --d-tip-bad: #ec7d6c; --d-tip-good: #7cc47e; --d-tip-warn: #e3a93a;
     --d-tip-q-normal: #f4efe2; --d-tip-q-low: #9d968a; --d-tip-q-magic: #7f9fff; --d-tip-q-rare: #f0dc5a;
     --d-tip-q-set: #62c070; --d-tip-q-unique: #d6ad5a; --d-tip-q-crafted: #f0a040;
 
@@ -70,6 +77,7 @@
     --d-shadow-1: 0 1px 2px rgb(0 0 0 / .4);
     --d-shadow-2: 0 8px 24px rgb(0 0 0 / .45);
     --d-z-band: 10; --d-z-sheet: 20; --d-z-toast: 30; --d-z-banner: 40;
+    --d-banner-h: 0px; /* the height the update banner takes from the fixed cockpit frame; update.js sets it */
     --d-dur-1: 120ms; --d-dur-2: 240ms; --d-dur-3: 600ms; --d-ease: cubic-bezier(.2, 0, 0, 1);
     color-scheme: dark;
   }
@@ -80,6 +88,7 @@
     --d-accent: #9a6407; --d-accent-text: #7a4f00; --d-on-accent: #fff; --d-focus: #1f5fd6; --d-ornament: #b5760f;
     --d-good: #2f7d3a; --d-on-good: #fff; --d-warn: #9a6200; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
     --d-info: #2a63a8; --d-on-info: #fff; --d-life: #c0352b; --d-mana: #2f62c9; --d-xp: #b5760f;
+    --d-state-bg-ok: color-mix(in srgb, var(--d-good) 7%, var(--d-surface-1)); --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 7%, var(--d-surface-1)); /* 4.5:1 for the word on its chip (S7) */
     --d-q-normal: #3a3328; --d-q-low: #7d7669; --d-q-magic: #2f55c9; --d-q-rare: #8a6d00; --d-q-set: #2f8a3f;
     --d-q-unique: #8a5a10; --d-q-crafted: #b24a10; --d-q-runeword: #8a5a10;
     --d-shadow-1: 0 1px 2px rgb(40 30 10 / .08), 0 4px 14px rgb(40 30 10 / .06);
@@ -92,6 +101,7 @@
       --d-accent: #9a6407; --d-accent-text: #7a4f00; --d-on-accent: #fff; --d-focus: #1f5fd6; --d-ornament: #b5760f;
       --d-good: #2f7d3a; --d-on-good: #fff; --d-warn: #9a6200; --d-on-warn: #fff; --d-bad: #b3342a; --d-on-bad: #fff;
       --d-info: #2a63a8; --d-on-info: #fff; --d-life: #c0352b; --d-mana: #2f62c9; --d-xp: #b5760f;
+    --d-state-bg-ok: color-mix(in srgb, var(--d-good) 7%, var(--d-surface-1)); --d-state-bg-warn: color-mix(in srgb, var(--d-warn) 7%, var(--d-surface-1)); /* 4.5:1 for the word on its chip (S7) */
       --d-q-normal: #3a3328; --d-q-low: #7d7669; --d-q-magic: #2f55c9; --d-q-rare: #8a6d00; --d-q-set: #2f8a3f;
       --d-q-unique: #8a5a10; --d-q-crafted: #b24a10; --d-q-runeword: #8a5a10;
       --d-shadow-1: 0 1px 2px rgb(40 30 10 / .08), 0 4px 14px rgb(40 30 10 / .06);

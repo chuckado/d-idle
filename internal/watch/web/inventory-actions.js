@@ -16,12 +16,16 @@
   var MENU_ID = 'inv-act';
   var TRIP = 'waiting for a trip home'; // the stash is reached only in town: the bot walks home at the next safe moment
   var LABEL = { head: 'helm', neck: 'amulet', torso: 'armour', rhand: 'right hand', lhand: 'left hand', rring: 'right ring', lring: 'left ring', belt: 'belt', feet: 'boots', gloves: 'gloves' };
-  var view = null, menu = null, scrim = null, openKey = '', openSig = '', confirming = false, kbd = false, sheet = false;
+  var lastPtr = 'mouse', view = null, menu = null, scrim = null, openKey = '', openSig = '', confirming = false, kbd = false, sheet = false, openAt = null;
 
   function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x !== undefined) e.textContent = x; return e; }
   function clear(n) { while (n.firstChild) n.removeChild(n.firstChild); }
   function say(t) { var m = document.getElementById('msg'); if (!m) return; m.textContent = t || ''; m.hidden = !t; }
   function slotLabel(s) { return LABEL[s] || s; }
+  // the character canvas (body[data-canvas], card uic3): a click only selects, the menu is the right-click menu with a key on every
+  // entry, and the gestures (double-click, Enter, Ctrl-click, Alt-click, Delete) run actions. The cards page keeps its click menu.
+  function canvasMode() { return !!(document.body && document.body.dataset && document.body.dataset.canvas !== undefined); }
+  var KEYHINT = { identify: 'Enter', equip: 'Enter', unequip: 'Enter', take: 'Ctrl+click', stash: 'Ctrl+click', sell: 'Alt+click', trash: 'Del', merc: 'M', repair: 'R' };
 
   // ---- data ----
   function find(key) {
@@ -55,7 +59,7 @@
   function model(f) {
     var it = f.it, v = view;
     var reqs = requestsFor(it.id), trashQ = reqs.some(function (r) { return kindOf(r) === 'trash'; });
-    var m = { target: 'hero', /* the menu structure is per target: the mercenary stage adds its own entries */ title: it.name || it.code || 'item', cls: 'q-' + (it.quality || 'normal'), id: it.id, rows: [], entries: [] };
+    var m = { target: 'hero', /* the menu structure is per target: the mercenary stage adds its own entries */ title: it.name || it.code || 'item', cls: 'q-' + (it.quality || 'normal'), id: it.id, key: f.place === 'worn' ? 'slot-' + f.slot : 'item-' + it.id, rows: [], entries: [] };
     reqs.forEach(function (r) {
       var row = { text: verb(r), state: r.state, kind: kindOf(r), cancel: r.state === 'queued' };
       if (r.state === 'queued' && (r.place === 'stash' || kindOf(r) === 'stash' || kindOf(r) === 'take') && r.reason) row.text += ' (' + TRIP + ')';
@@ -66,6 +70,7 @@
       var idQ = reqs.some(function (r) { return kindOf(r) === 'identify'; });
       m.entries.push({ act: 'identify', label: 'Identify', reason: it.noIdentify || (idQ ? 'it is already queued to be identified' : '') || (trashQ ? 'it is queued to be trashed: cancel that first' : '') });
     }
+    var cv = canvasMode();
     // equip
     if (f.place === 'pack') {
       var can = it.canWear || [];
@@ -74,12 +79,17 @@
         m.entries.push({ act: 'equip', slot: s, label: can.length > 1 ? 'Equip (' + slotLabel(s) + ')' : 'Equip', reason: trashQ ? 'it is queued to be trashed: cancel that first' : '' });
       });
     } else {
-      m.entries.push({ act: 'equip', label: 'Equip', reason: f.place === 'worn' ? 'it is already worn' : (it.noWear || 'move it to the backpack first') });
+      if (!cv) m.entries.push({ act: 'equip', label: 'Equip', reason: f.place === 'worn' ? 'it is already worn' : (it.noWear || 'move it to the backpack first') });
       if (f.place === 'worn') { // schema 7: take it off into the backpack (also what dragging it onto the pack does)
         var offQ = reqs.some(function (r) { return kindOf(r) === 'unequip'; });
         m.entries.push({ act: 'unequip', slot: f.slot, label: 'Take off', reason: it.noUnequip || (offQ ? 'it is already queued to come off' : '') });
       }
     }
+    if (cv && f.place === 'pack' && it.usable && it.usable.merc) { // the mercenary's side: his verdict first, then whether the bot can dress him at all
+      var mu = it.usable.merc, mh = (mu.reasons || []).filter(function (r) { return !r.warn; })[0];
+      m.entries.push({ act: 'merc', label: 'Give to mercenary', reason: !mu.ok ? (mh ? mh.text : 'he cannot use it') : (v.merc && v.merc.actWhy) || '' });
+    }
+    if (cv && f.place === 'worn' && it.maxDur && !(it.dur > 0)) m.entries.push({ act: 'repair', label: 'Repair now', reason: '' });
     // stash moves (schema 6): "Move to stash" for a backpack item, "Take out" for a stash item. A stash job of the item is
     // queued once; an identify of a stash item runs in place, so it needs no take-out.
     if (it.stashOp === 'stash' || it.stashOp === 'take') {
@@ -94,6 +104,7 @@
     var tr = { act: 'trash', label: confirming ? 'Confirm: trash it' : 'Trash', reason: it.noTrash || (trashQ ? 'it is already queued to be trashed' : '') };
     if (confirming && !tr.reason) tr.confirm = true;
     m.entries.push(tr);
+    if (cv) m.entries.forEach(function (e) { if (KEYHINT[e.act]) e.key = KEYHINT[e.act]; });
     return m;
   }
 
@@ -103,16 +114,53 @@
       return c.answerBase ? c.answerBase : location.protocol + '//' + location.hostname + ':' + c.answerPort;
     });
   }
+  // ---- what the page shows while and after a request (card uic3) ----
+  // fb[id] = {state: 'sending' | 'done' | 'refused', slot, code, text, seen}. 'sending' is the dashed outline of a request
+  // the server has not answered (the instant lane waits up to four seconds); 'done' and 'refused' stay for two views. The item
+  // is never moved on the page before the view says so: a refusal leaves everything where it was.
+  var fb = {};
+  function targetOf(path, body) {
+    body = body || {};
+    return { id: body.id === undefined ? 0 : body.id, slot: body.slot || '', kind: String(path).replace(/^.*\//, '') };
+  }
+  function setFb(t, state, code, text) {
+    if (!t.id && !t.slot) return;
+    fb[t.id || t.slot] = { state: state, id: t.id, slot: t.slot, kind: t.kind, code: code || '', text: text || '', seen: 0 };
+    markFeedback();
+  }
+  function refuse(id, text, code) { setFb({ id: id, slot: '', kind: '' }, 'refused', code, text); if (text) say(text); }
+  function markFeedback() {
+    Array.prototype.forEach.call(document.querySelectorAll ? document.querySelectorAll('[data-result], [data-sending]') : [], function (n) { delete n.dataset.result; delete n.dataset.sending; n.removeAttribute('data-why'); });
+    Object.keys(fb).forEach(function (k) {
+      var x = fb[k];
+      [x.id ? 'item-' + x.id : '', x.slot ? 'slot-' + x.slot : ''].forEach(function (key) {
+        var a = key && anchorOf(key); if (!a || !a.dataset) return;
+        if (x.state === 'sending') a.dataset.sending = '';
+        else { a.dataset.result = x.state; if (x.text) a.setAttribute('data-why', x.text); }
+      });
+    });
+  }
+  function ageFeedback() {
+    Object.keys(fb).forEach(function (k) { if (fb[k].state !== 'sending' && ++fb[k].seen > 2) delete fb[k]; });
+  }
   function post(path, body) {
+    var t = targetOf(path, body);
+    setFb(t, 'sending');
     return base().then(function (u) {
       return fetch(u + path, { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || ('error ' + r.status)); return j; }); })
-      .then(function () { say(''); errNote(''); return refresh(); }, function (e) { say(e.message); setNote(e.message); errNote(e.message); });
+    }).then(function (r) { return r.json().then(function (j) { if (!r.ok) { var e = new Error(j.error || ('error ' + r.status)); e.code = j.code || ''; throw e; } return j; }); })
+      .then(function (j) {
+        say(''); errNote('');
+        var q = j && j.request, st = q && q.state;
+        if (st === 'done') setFb(t, 'done', '', q.result || ''); else if (st === 'failed') setFb(t, 'refused', q.code || '', q.reason || ''); else delete fb[t.id || t.slot];
+        return refresh();
+      }, function (e) { say(e.message); setNote(e.message); errNote(e.message); setFb(t, 'refused', e.code, e.message); return refresh(); });
   }
   function refresh() {
     return fetch('/api/inventory', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
-      onView(v);
-      // the poll of inventory.js is every 4 s; our own change shows at once in the modules that listen (drag, sets)
+      onView(v, true);
+      // the poll of inventory.js is every 4 s; our own change shows at once in the modules that listen (drag, sets) and
+      // inventory.js repaints the grids on this event, so the cell the answer is about is the cell on the page
       if (typeof CustomEvent === 'function' && document.dispatchEvent) document.dispatchEvent(new CustomEvent('d2:inventory-fresh', { detail: v }));
     }, function () {});
   }
@@ -129,16 +177,18 @@
   function gold(op, n) { return post('/api/inventory/gold', { op: op, count: n }); }
 
   function run(e, m) {
-    if (e.reason) { setNote(e.reason); return; }
+    if (e.reason) { setNote(e.reason); refuse(m.id, e.reason); return; }
     if (e.act !== 'trash') confirming = false;
     switch (e.act) {
       case 'equip': closeMenu(true); equip(m.id, e.slot); return;
       case 'unequip': closeMenu(true); unequip(e.slot); return;
-      case 'sell': { var it = find(openKey).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: it.mark === 'sell' ? '' : 'sell' }); return; }
-      case 'keep': { var k = find(openKey).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: k.mark === 'keep' ? '' : 'keep' }); return; }
+      case 'sell': { var it = find(m.key).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: it.mark === 'sell' ? '' : 'sell' }); return; }
+      case 'keep': { var k = find(m.key).it; closeMenu(true); post('/api/inventory/mark', { id: m.id, mark: k.mark === 'keep' ? '' : 'keep' }); return; }
       case 'identify': closeMenu(true); identify(m.id); return;
       case 'stash': closeMenu(true); stash(m.id); return;
       case 'take': closeMenu(true); take(m.id); return;
+      case 'merc': closeMenu(true); equip(m.id, '', 'merc'); return;
+      case 'repair': closeMenu(true); post('/api/repair/request', {}); return;
       case 'trash':
         if (!e.confirm) { confirming = true; draw(true); return; } // the first click only asks
         closeMenu(true); trash(m.id); return;
@@ -172,6 +222,7 @@
     m.entries.forEach(function (e) {
       var b = el('button', 'act', e.label); b.type = 'button'; b.dataset.act = e.act + (e.slot ? '-' + e.slot : '');
       b.setAttribute('role', 'menuitem');
+      if (e.key) b.appendChild(el('kbd', '', e.key));
       if (e.act === 'trash') b.dataset.danger = '';
       if (e.confirm) b.dataset.confirm = '';
       if (e.reason) { b.setAttribute('aria-disabled', 'true'); b.dataset.off = ''; }
@@ -190,8 +241,8 @@
   function anchorOf(key) { return document.querySelector('[data-key="' + key + '"]'); }
   function position() {
     if (sheet) { menu.style.transform = ''; return; }
-    var a = anchorOf(openKey); if (!a) { closeMenu(false); return; }
-    var p = place(a.getBoundingClientRect(), menu.offsetWidth, menu.offsetHeight, document.documentElement.clientWidth, document.documentElement.clientHeight);
+    var a = openAt ? null : anchorOf(openKey); if (!a && !openAt) { closeMenu(false); return; }
+    var p = place(openAt ? { left: openAt.x, right: openAt.x, top: openAt.y, bottom: openAt.y } : a.getBoundingClientRect(), menu.offsetWidth, menu.offsetHeight, document.documentElement.clientWidth, document.documentElement.clientHeight);
     menu.style.transform = 'translate(' + p.x + 'px, ' + p.y + 'px)';
   }
   function focusables() { return menu ? menu.querySelectorAll('button.act') : []; }
@@ -204,16 +255,18 @@
     render(m); openSig = sig;
     menu.dataset.mode = sheet ? 'sheet' : 'pop'; menu.hidden = false; scrim.hidden = !sheet;
     var list = focusables(), target = null;
-    for (var i = 0; i < list.length; i++) if (act && list[i].dataset.act === act) target = list[i];
+    // on the confirm step the focus is on "Keep it": a second Enter or Space must never be the one that trashes (review c2c3 R12)
+    if (confirming) for (var c = 0; c < list.length; c++) if (list[c].dataset.act === 'back') target = list[c];
+    for (var i = 0; !target && i < list.length; i++) if (act && list[i].dataset.act === act) target = list[i];
     if (keepFocus && !target) for (var j = 0; j < list.length; j++) if (!list[j].hasAttribute('aria-disabled')) { target = list[j]; break; }
     if (target) target.focus({ preventScroll: true });
     position();
   }
-  function openMenu(key) {
+  function openMenu(key, at) {
     var f = find(key);
     if (!f || !f.it) return;
     ensure();
-    confirming = false; openKey = key; openSig = '';
+    confirming = false; openKey = key; openSig = ''; openAt = at || null;
     if (window.matchMedia) sheet = window.matchMedia('(pointer: coarse)').matches || window.matchMedia('(max-width: 40rem)').matches;
     menu.hidden = true;
     var a = anchorOf(key); if (a) a.setAttribute('aria-haspopup', 'menu');
@@ -223,7 +276,7 @@
   }
   function closeMenu(refocus) {
     var key = openKey;
-    openKey = ''; openSig = ''; confirming = false;
+    openKey = ''; openSig = ''; confirming = false; openAt = null;
     if (menu) menu.hidden = true;
     if (scrim) scrim.hidden = true;
     if (refocus && key) { var a = anchorOf(key); if (a && a.focus) a.focus({ preventScroll: true }); }
@@ -235,13 +288,13 @@
     var t = document.getElementById('t-queue'); if (t) t.textContent = 'Item actions';
     clear(q);
     var rows = (view.queue || []).concat(view.recent || []);
-    if (!rows.length) { q.appendChild(el('p', 'd-hint', 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
+    if (!rows.length) { q.appendChild(el('p', 'd-hint', canvasMode() ? 'Nothing queued. Double-click an item to run its first action; right-click shows all of them.' : 'Nothing queued. Click an item to equip, sell, identify or trash it.')); return; }
     var ul = el('ul', 'd-list');
     rows.forEach(function (r) {
       var li = el('li'); li.dataset.state = r.state;
       li.appendChild(el('span', 't', r.state));
       li.appendChild(el('span', 'txt', verb(r)));
-      if (r.reason) li.appendChild(el('span', 'sub', r.reason));
+      if (r.reason) li.appendChild(el('span', 'sub', r.reason + (r.state === 'failed' && r.code ? ' [' + r.code + ']' : '')));
       if (r.state === 'queued' && r.reason && isStashJob(r)) { li.dataset.trip = 'home'; li.appendChild(el('span', 'sub', TRIP)); }
       if (r.result) li.appendChild(el('span', 'sub', r.result));
       if (r.state === 'queued') {
@@ -358,28 +411,105 @@
   // data-pending=<kind>, styled as a dashed outline in inventory-actions.css. Cells of settled requests are cleared.
   var pendingKeys = [];
   function markPending() {
-    pendingKeys.forEach(function (k) { var a = anchorOf(k); if (a && a.dataset) delete a.dataset.pending; });
+    pendingKeys.forEach(function (k) { var a = anchorOf(k); if (a && a.dataset) { delete a.dataset.pending; delete a.dataset.wait; } });
     pendingKeys = [];
     ((view && view.queue) || []).forEach(function (r) {
       if (!r.id || (r.state !== 'queued' && r.state !== 'doing')) return;
       var k = 'item-' + r.id, a = anchorOf(k);
-      if (a && a.dataset) { a.dataset.pending = kindOf(r); pendingKeys.push(k); }
+      if (a && a.dataset) { a.dataset.pending = kindOf(r); if (r.wait) a.dataset.wait = r.wait; else delete a.dataset.wait; pendingKeys.push(k); }
+      if (r.slot && kindOf(r) === 'equip') { var sa = anchorOf('slot-' + r.slot); if (sa && sa.dataset) { sa.dataset.pending = kindOf(r); pendingKeys.push('slot-' + r.slot); } }
     });
+    markFeedback();
   }
 
   // ---- events ----
-  function onView(v) {
+  function onView(v, fresh) {
     view = v;
+    if (!fresh) ageFeedback();
     markPending();
-    // inventory.js redraws the queue card right after it hands the view over; redraw ours once that call has returned
-    Promise.resolve().then(function () { renderQueue(); renderErrands(); renderGold(); });
+    // inventory.js hands the view over BEFORE it rebuilds the doll and the cells and redraws the queue card: the marks and our
+    // own card are drawn once that call has returned, on the cells that are on the page then (review c2c3 R6)
+    Promise.resolve().then(function () { if (view !== v) return; markPending(); renderQueue(); renderErrands(); renderGold(); });
     if (openKey) draw(true);
   }
   function keyOf(target) {
     var a = target && target.closest ? target.closest('[data-key]') : null;
     return a && a.dataset.key && /^(item|slot)-/.test(a.dataset.key) ? a.dataset.key : '';
   }
+  // ---- gestures of the canvas ----
+  // entryFor: the first entry of the menu (what Enter and a double-click run), or the one for an act; {e, m} or null.
+  // Without an act it is the first entry that moves the item (identify, equip, take off, stash, take out): marks and the
+  // trash are never what a double-click does, so an item with none of those has no double-click action.
+  var PRIMARY = { identify: 1, equip: 1, unequip: 1, stash: 1, take: 1 };
+  function entryFor(key, act) {
+    var f = find(key); if (!f || !f.it) return null;
+    var m = model(f), hit = null;
+    m.entries.forEach(function (e) { if (!hit && (act ? e.act === act : PRIMARY[e.act])) hit = e; });
+    return hit ? { e: hit, m: m } : null;
+  }
+  // do: run an entry from a gesture. A refused one says why at the item and in the message line and sends nothing.
+  function gesture(key, act) {
+    var h = entryFor(key, act), f = find(key);
+    if (!h || !f) return false;
+    if (h.e.reason) { refuse(f.it.id, h.e.reason); return true; }
+    if (h.e.act === 'trash') { trashConfirm(key); return true; }
+    run(h.e, h.m);
+    return true;
+  }
+  // entries(key): the menu's own model of one item (its queued rows with their Cancel, its entries with the reasons they are refused), for
+  // the selected box of the canvas: one list, so the box, the menu and the double-click can no longer disagree
+  function entries(key) {
+    var f = find(key); if (!f || !f.it) return null;
+    var m = model(f);
+    return { id: m.id, rows: m.rows.map(function (r) { return { text: r.text, state: r.state, kind: r.kind, cancel: r.cancel }; }),
+      entries: m.entries.map(function (e) { return { act: e.act, slot: e.slot || '', label: e.label, reason: e.reason || '', key: e.key || '', confirm: !!e.confirm }; }) };
+  }
+  // runEntry: the box's button press; a refused entry says why (at the item and in the message line) and sends nothing, a trash
+  // opens the menu on its confirm step (the same two steps as everywhere)
+  function runEntry(key, act, slot) {
+    var f = find(key); if (!f || !f.it) return false;
+    var m = model(f), hit = null;
+    m.entries.forEach(function (e) { if (!hit && e.act === act && (!slot || e.slot === slot)) hit = e; });
+    if (!hit) return false;
+    if (hit.reason) { refuse(f.it.id, hit.reason); return true; }
+    if (hit.act === 'trash') { trashConfirm(key); return true; }
+    run(hit, m);
+    return true;
+  }
+  function cancelRow(key, kind) { var f = find(key); if (f && f.it) cancel(f.it.id, kind); }
+  function first(key) { var h = entryFor(key); return h ? { act: h.e.act, label: h.e.label, reason: h.e.reason || '' } : null; }
+  function gestures() {
+    document.addEventListener('contextmenu', function (e) {
+      var key = keyOf(e.target); if (!key || !find(key)) return;
+      e.preventDefault();
+      // a held finger is a drag (inventory-drag.js); Android's long-press contextmenu must not open a sheet under it, and iOS sends none:
+      // a touch screen opens the menu from the selected box's "All actions" button instead
+      if (document.body.hasAttribute('data-dragging') || lastPtr === 'touch') return;
+      if (typeof CustomEvent === 'function') document.dispatchEvent(new CustomEvent('d2:select', { detail: key }));
+      openMenu(key, { x: e.clientX, y: e.clientY });
+    });
+    document.addEventListener('dblclick', function (e) {
+      var key = keyOf(e.target); if (key && find(key)) { e.preventDefault(); gesture(key, ''); }
+    });
+    document.addEventListener('click', function (e) {
+      if (menu && menu.contains(e.target)) return;
+      var key = keyOf(e.target); if (!key || !find(key)) return;
+      if (e.ctrlKey || e.metaKey) { var f = find(key); gesture(key, f.place === 'stash' ? 'take' : 'stash'); }
+      else if (e.altKey) gesture(key, 'sell');
+    });
+    document.addEventListener('keydown', function (e) {
+      var t = e.target, typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.tagName === 'SELECT');
+      var key = keyOf(t); if (!key || typing || openKey || !find(key)) return;
+      if (e.key === 'Enter' && !e.ctrlKey && !e.altKey) { e.preventDefault(); gesture(key, ''); }
+      else if (e.key === 'Delete') { e.preventDefault(); gesture(key, 'trash'); }
+      else if (e.key === 'ContextMenu' || (e.key === 'F10' && e.shiftKey)) { e.preventDefault(); openMenu(key); }
+      else if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) { var h = entryFor(key, 'merc'); if (h) { e.preventDefault(); gesture(key, 'merc'); } }
+      else if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey) { var r = entryFor(key, 'repair'); if (r) { e.preventDefault(); gesture(key, 'repair'); } }
+    });
+  }
+
   function init() {
+    if (canvasMode()) gestures();
     document.addEventListener('d2:inventory', function (e) { onView(e.detail); });
     document.addEventListener('keydown', function (e) {
       kbd = true;
@@ -392,7 +522,7 @@
         e.preventDefault(); list[n].focus({ preventScroll: true });
       }
     });
-    document.addEventListener('pointerdown', function () { kbd = false; });
+    document.addEventListener('pointerdown', function (e) { kbd = false; lastPtr = e.pointerType || 'mouse'; });
     document.addEventListener('pointerdown', function (e) {
       if (openKey && menu && !menu.contains(e.target) && keyOf(e.target) !== openKey) closeMenu(false);
     });
@@ -400,6 +530,7 @@
       if (menu && menu.contains(e.target)) return;
       var key = keyOf(e.target);
       if (!key || !find(key)) return;
+      if (canvasMode()) { if (openKey) closeMenu(false); return; } // the canvas: a click selects (inventory-canvas.js), the menu is the right-click menu
       if (key === openKey) { closeMenu(true); return; }
       openMenu(key);
     });
@@ -410,10 +541,10 @@
   // trashConfirm opens the item's menu already on the confirm step (the drag of a tile outside every grid): the same two
   // clicks as the menu, so a drop alone never trashes.
   function trashConfirm(key) { openMenu(key); if (!openKey) return; var f = find(key); if (f && f.it && !f.it.noTrash) { confirming = true; draw(true); } }
-  var api = { post: post, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
+  var api = { post: post, base: base, refresh: refresh, stash: stash, take: take, gold: gold, equip: equip, unequip: unequip, trashConfirm: trashConfirm, say: say, note: setNote, trash: trash, cancel: cancel, first: first, entries: entries, runEntry: runEntry, cancelRow: cancelRow, gesture: gesture, refuse: refuse, identify: identify, buyIdentify: buyIdentify, cainIdentify: cainIdentify, open: openMenu, close: function () { closeMenu(false); } };
   if (typeof window !== 'undefined') window.d2InvActions = api;
   if (typeof window !== 'undefined' && window.__actTest) {
-    window.__actTest({ init: init, onView: onView, model: model, find: find, open: openMenu, close: closeMenu, place: place,
+    window.__actTest({ init: init, onView: onView, model: model, entryFor: entryFor, gesture: gesture, first: first, fb: function () { return fb; }, post: post,  find: find, open: openMenu, close: closeMenu, place: place,
       state: function () { return { key: openKey, node: menu, confirming: confirming, sheet: sheet }; }, renderQueue: renderQueue, renderErrands: renderErrands, renderGold: renderGold, goldBox: function () { return { box: gBox, amt: gAmt, dep: gDep, wd: gWd, hint: gHint }; }, errands: function () { return { box: errBox, count: errCount, buy: errBuy, cain: errCain, wrap: errCainWrap, note: errNoteEl }; }, setSheet: function (s) { sheet = !!s; } });
     return;
   }

@@ -1,0 +1,5 @@
+div.inv-tip [role=tooltip data-rich=]
+  div.q-magic.tip-name [] "Topaz Amulet"
+  div.tip-line [data-k=prop] "+9 Mana"
+  div.tip-where [data-k=where] "In the stash"
+  div.tip-hint [] "Right-click: all actions."

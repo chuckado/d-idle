@@ -61,19 +61,44 @@ type HeroExplored struct {
 	Total     int `json:"total"`
 	Pct       int `json:"pct"`
 	Threshold int `json:"threshold"`
+	// Reset is the share at which the farm loop takes a fresh game (bot.farmResetPct); absent while the loop is off.
+	Reset int `json:"reset,omitempty"`
 }
 
 // ExploredSource reads the zone coverage for /api/hero (ok false: none).
 type ExploredSource func() (visited, total, pct, threshold int, ok bool)
 
+// SetFarmResetSource sets where /api/hero reads the farm loop's reset share from (0 or nil: off, the key is left out).
+func (h *Hub) SetFarmResetSource(f func() int) { h.mu.Lock(); h.farmReset = f; h.mu.Unlock() }
+
 // SetExploredSource sets where /api/hero reads the explored share from (nil: the key is left out).
 func (h *Hub) SetExploredSource(f ExploredSource) { h.mu.Lock(); h.explored = f; h.mu.Unlock() }
 
 // HeroStats are the hero's defences: the resistances as the game shows them and, when the readiness model is on, its
-// light for the area the hero is in. No defence rating: the bot does not read one.
+// light for the area the hero is in. Defense and damage are optional (uic3).
 type HeroStats struct {
 	Resists   HeroResists    `json:"resists"`
 	Readiness *HeroReadiness `json:"readiness"`
+	// The four fields below are additive (uic3) and each is absent when the backend does not read it; a value is never
+	// made up. Defense is stat 31 (U live: docs/survival/power.md), Damage the stat 21/22 sum of the items and skills
+	// (the weapon's own base damage is not in it).
+	Attrs   *HeroAttrs  `json:"attrs,omitempty"`
+	Defense *int        `json:"defense,omitempty"`
+	Damage  *HeroDamage `json:"damage,omitempty"`
+}
+
+// HeroAttrs are the four attributes as the character panel shows them (base plus gear).
+type HeroAttrs struct {
+	Str    int `json:"str"`
+	Dex    int `json:"dex"`
+	Vit    int `json:"vit"`
+	Energy int `json:"energy"`
+}
+
+// HeroDamage is the damage range the stat list carries (min and max, both from stats 21 and 22).
+type HeroDamage struct {
+	Min int `json:"min"`
+	Max int `json:"max"`
 }
 
 // HeroResists are the four resistances in percent.
@@ -142,7 +167,7 @@ func (h *Hub) Hero() HeroView {
 	up := h.Uptime()
 	ov := h.OrdersView()
 	h.mu.Lock()
-	hi, gold, stats, expl := h.hero, h.gold, h.stats, h.explored
+	hi, gold, stats, expl, fr := h.hero, h.gold, h.stats, h.explored, h.farmReset
 	from, fromT, seen, now := h.xpFrom, h.xpFromT, h.xpSeen, h.cfg.Clock.Now()
 	h.mu.Unlock()
 	v := HeroView{Schema: heroSchema, Known: hi.Known || hi.Class != "", Name: safeText(hi.Name, 40), Class: hi.Class, Level: hi.Level,
@@ -182,6 +207,9 @@ func (h *Hub) Hero() HeroView {
 	if expl != nil {
 		if vis, tot, pct, th, ok := expl(); ok && tot > 0 {
 			v.Explored = &HeroExplored{Visited: vis, Total: tot, Pct: pct, Threshold: th}
+			if fr != nil {
+				v.Explored.Reset = fr()
+			}
 		}
 	}
 	for _, o := range ov.Orders {

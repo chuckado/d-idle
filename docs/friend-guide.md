@@ -10,7 +10,7 @@ This is a private beta for a few friends. The pack is a single file, `didle-frie
 
 - Linux on x86-64 (the image is amd64 only), 3 GB of free disk space, 4 GB of RAM to spare.
 - Docker Engine with the compose plugin (`docker compose version` must work) and permission to run `docker` without sudo.
-- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it.
+- Your own copy of Diablo II: Lord of Destruction, patched to 1.14d. The installer needs these four files in one folder: `d2data.mpq`, `d2exp.mpq`, `d2char.mpq`, `Patch_D2.mpq` (case does not matter). The folder is mounted read-only; nothing is written to it. Only the data archives (`*.mpq`) are mounted into the container, read-only and one file at a time: your key file, the game program and your saves are never visible to it.
 
 ## Licence note (read before you install)
 
@@ -23,7 +23,7 @@ The pack carries the GPL-3.0 program d2d and the bot that drives it, with their 
 ```
 tar xzf didle-friends-<version>.tar.gz
 cd didle-friends-<version>
-./install.sh --game-dir /path/to/your/Diablo-II
+./install.sh --game-dir '/path/to/Diablo II'
 ```
 
 It checks Docker, the download (`SHA256SUMS`), your game folder and free ports, loads the image, starts the container, waits for the page and prints one address, for example:
@@ -56,7 +56,7 @@ Update with the hero standing in town: the bot is stopped to swap the release, a
 
 | Symptom | Do this |
 |---|---|
-| `STOP: missing in ...` | point `--game-dir` at your own Diablo II folder with the four files |
+| `STOP: missing in ...` | point `--game-dir` at your own Diablo II folder with the four files (if you unzipped a download that holds a `Diablo II` folder, the installer finds it one level down by itself) |
 | `port 8891 is in use` | `./install.sh --port 9100` |
 | page says 401 | open the address from `./didle status` (it carries the token) |
 | answering a card gives 403 | you opened the page under another name than the printed one; use the printed address, or reinstall with `--host NAME` |
