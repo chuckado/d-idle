@@ -102,6 +102,43 @@ export function measure(win, opts) {
   };
 }
 
+// The overlay policy (docs/ui-overlays.md): what is open now, and what is wrong with it.
+//  open:  the names of the visible transient overlays (the "..." menu, tile sheets, drawers, the Reset confirm); at most one
+//  menu:  menu items whose centre is not the item or inside it (covered by a sheet or clipped)
+//  cut:   text in a tile sheet that is wider than its box (a line that is cut, not wrapped)
+//  under: a sheet whose top is above the header's bottom, or whose bottom is past the window
+//  charter: the "Pay and go" button of the zone sheet when it is not visible inside the sheet
+export function overlayState(win) {
+  const d = win.document, vis = (n) => { if (!n) return null; const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+  const open = [], menu = [], cut = [], under = [], charter = [];
+  const band = d.querySelector('.d-band-status'), bandBottom = band ? band.getBoundingClientRect().bottom : 0;
+  const pop = d.getElementById('menu-more');
+  if (vis(pop)) {
+    open.push('menu');
+    for (const n of pop.querySelectorAll(':scope > button, :scope > .d-btn')) {
+      const r = vis(n);
+      if (!r) continue;
+      const at = d.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      if (!at || !(at === n || n.contains(at))) menu.push((n.textContent || n.id || '?').trim().slice(0, 20));
+    }
+  }
+  for (const sh of d.querySelectorAll('.d-tilesheet')) {
+    const r = vis(sh);
+    if (!r) continue;
+    open.push('sheet:' + (sh.dataset.panel || '?'));
+    if (r.top < bandBottom - 1 || r.bottom > win.innerHeight + 1) under.push((sh.dataset.panel || '?') + ' top ' + Math.round(r.top) + ' bottom ' + Math.round(r.bottom) + ' (header ends ' + Math.round(bandBottom) + ', window ' + win.innerHeight + ')');
+    for (const n of sh.querySelectorAll('*')) {
+      if (/^(SELECT|INPUT|OPTION)$/.test(n.tagName) || !vis(n)) continue;
+      if (n.scrollWidth - n.clientWidth > 1 && n.clientWidth > 0) cut.push((n.className || n.tagName) + ' "' + (n.textContent || '').trim().slice(0, 24) + '" ' + n.scrollWidth + '/' + n.clientWidth);
+    }
+    const sb = sh.querySelector('.zm-charter .d-btn'), sr = sb && vis(sb);
+    if (sb && !(sr && sr.top >= r.top - 1 && sr.bottom <= r.bottom + 1 && sr.left >= r.left - 1 && sr.right <= r.right + 1)) charter.push('Pay and go is outside the sheet');
+  }
+  for (const n of d.querySelectorAll('.d-drawer')) if (vis(n)) open.push('drawer:' + (n.dataset.drawer || '?'));
+  if (vis(d.getElementById('reset-confirm'))) open.push('reset');
+  return { open, menu, cut, under, charter };
+}
+
 // An opened sheet must be hittable: the element at the centre of each target is the target or inside it.
 export function hits(win, selectors) {
   const d = win.document, out = {};

@@ -221,6 +221,16 @@ overflow-fakescroll watch?layout=cockpit-fakescroll&theme=dark
 overflow-classic watch?layout=classic&theme=dark
 blank-rail watch?layout=cockpit-blank&theme=dark
 tall-frame watch?layout=cockpit-tall&theme=dark
+overlay-menu-over-zone watch?first=0&theme=dark&zone=cp #btn-more
+overlay-menu-over-zone-light watch?first=0&theme=light&zone=cp #btn-more
+overlay-menu-over-zone-cockpit watch?layout=cockpit&theme=dark&zone=cp #btn-more
+overlay-zone-after-menu watch?first=0&theme=dark #btn-more|[data-panel=zone-map]_.zm-n
+overlay-zone-sheet-light watch?first=0&theme=light&zone=cp
+overlay-zone-sheet-loop watch?first=0&theme=dark&zone=cp&loop=1
+overlaydefect-under watch?first=0&theme=dark&zone=cp&defect=ov-under #btn-more
+overlaydefect-clip watch?first=0&theme=dark&zone=cp&defect=ov-clip
+overlaydefect-header watch?first=0&theme=dark&zone=cp&defect=ov-header
+overlaydefect-two watch?first=0&theme=dark&defect=ov-two #btn-more
 character watch/inventory?theme=dark
 character-light watch/inventory?theme=light
 character-tip-stash watch/inventory?theme=dark hover=[data-key=item-31]
@@ -263,6 +273,8 @@ phonedefect-narrow watch/inventory?theme=dark&fx=phone&tab=pack&defect=narrow"
 		reset-*) szs="$sizes 412x780 360x640" ;; # the real phone sizes too
 		# the real phone sizes (visible area of Chrome with its URL bar; the first fixtures were 390x844 only and missed the 2026-11-15 bug)
 		phonedefect-*) szs="412x780 360x640" ;;
+		overlaydefect-*) szs="1366x768 412x780" ;;
+		overlay-*) szs="$sizes 412x780 360x640" ;;
 		character-phone*) szs="$phonesizes" ;;
 		esac
 		for sz in $szs; do
