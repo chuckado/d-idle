@@ -53,7 +53,14 @@
 /* Instant-action feedback and the right-click menu of the character canvas (card uic3). The outline states never use the look of
    another state: pending is dashed, done is solid green and fades, refused is solid red with the reason in data-why. */
 @layer components {
-  [data-sending] { outline: 2px dashed var(--d-focus); outline-offset: -2px; }
+  [data-sending] { outline: 2px dashed var(--d-focus); outline-offset: -2px; animation: inv-doing 0.9s ease-in-out infinite alternate; }
+  [data-sending][data-doing]::after, [data-pending][data-wait="safe"][data-waiting]::after { content: attr(data-doing); position: absolute; inset-inline: 1px; inset-block-end: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    padding: 0 3px; border-radius: 2px; font: 700 .52rem/1.35 var(--d-font-num); background: var(--d-state-bg-info); color: var(--d-info); pointer-events: none; }
+  [data-pending][data-wait="safe"][data-waiting]::after { content: attr(data-waiting); }
+  @keyframes inv-doing { from { outline-color: var(--d-focus); } to { outline-color: transparent; } }
+  .inv-errands [data-offer] { outline: 2px solid var(--d-focus); outline-offset: 2px; }
+  .inv-errands .err-instant { margin: 0; color: var(--d-good); font-size: var(--d-fs-0); }
+  @media (prefers-reduced-motion: reduce) { [data-sending] { animation: none; } }
   [data-pending][data-wait="town"]::after { content: "TOWN"; position: absolute; inset-block-end: 1px; inset-inline-end: 1px; padding: 0 3px; border-radius: 2px;
     font: 700 .52rem/1.35 var(--d-font-num); background: var(--d-state-bg-info); color: var(--d-info); pointer-events: none; }
   [data-result="done"] { outline: 2px solid var(--d-good); outline-offset: -2px; animation: inv-done 2.4s ease-out forwards; }

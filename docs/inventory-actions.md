@@ -136,6 +136,38 @@ Design: `docs/ui/redesign-2026-11-14/I-character-screen.md` section 8; verbs: `d
 12. Kill d2d's socket for a moment: the page stays responsive, the bot reconnects, requests queue.
 13. Normal bot play with the lane idle: `writes after start: 0`; the queue path (knob on, panel open) still completes an equip, a trash and a stash job.
 
+## Identify feels instant (idfast, 2026-11-15; user: "click identify then sit and wait feels bad")
+Tags: V offline tests named, U live (NOTHING here ran live).
+
+**Diagnosis (V by reading the code and the tests).** The wait had four sources, in this order of size:
+1. The fast lane is OFF by default (`invdesk.instant` 0), so every click QUEUED and ran at the bot's next goal step (`playerActionStep`, or the walk interrupt `playerDue`).
+2. After EVERY attempt `playerActAt` held the player's commands for `playerActionGap` (10 s), also after a request that RAN: a second click inside 10 s waited it out. The gap is only meant for a postponed attempt (a monster came close). Fixed: the gap is cleared when nothing is pending afterwards (`TestSecondPlayerCommandDoesNotWaitOutTheGap`). The loop polls the queue on every guard tick, so a ready request starts on the next tick; a town trip in progress and a fight still hold it (safety first).
+3. The page polled every 4 s and showed nothing until then: the lane's POST waits for the verb, the queue path showed only a dashed outline. The cast itself (the verb) is one action; it is not the slow part.
+4. A queued request said nothing about WHY it waited.
+
+**What changed.**
+- UI (`inventory-actions.js`/`.css`): the cell shows "Identifying..." (pulsing outline, `data-sending`/`data-doing`) in the same tick as the click, before the POST is sent; success is the green highlight for 2 s by the clock (`DONE_MS`), only after the answer or the read-back view says done; a refusal reverts with the reason on the item and in the message line (never shown as done); while a request is sending, queued or doing the page re-reads `/api/inventory` every 200 ms (`FAST_MS`) and stops when nothing is pending; a queued request shows "waiting: not in town", "waiting: a safe moment (no monster near)" or the lane's closed rule (`instant.why`) on the item; a request that failed on its own (lost item, no safe moment) is said once in the message line and at the item; "Identify all (Cain)" shows `Identified k of N` from the view's own unidentified count; with no scroll or tome the click is refused at once and "Buy identify scrolls" gets a ring and a hint (never a wait); the errands strip shows "Instant actions: on" (with the closed rule when the lane is closed right now) when `view.instant.enabled`.
+- Backend: the sell and identify-protect rule below, lost-request reporting, the pause fix above. The cheap single-item verbs already use the lane whenever it is open (TASK-427); nothing about the lane's closed-lane rules changed.
+- V: node `testdata/uic3/c3.js` (optimistic state, 2 s highlight, refusal revert with reason, poll start and stop, wait text, lost toast, indicator, Cain progress, no-tome offer, both classes), Go `TestSecondPlayerCommandDoesNotWaitOutTheGap`, fit fixtures `character-idwait`, `character-iddoing` (uishots `--fit`).
+
+**Identify requests protect the item (user report: the bot SOLD the hand axe and the armour that waited for identification; the identify chore was skipped on every trip).** `Desk.MarkOf` (town.ItemMarks, read by the sell chore, the tidy pass, the stash-away and the shop) answers `keep` for any item with a queued or running identify request, over a sell mark, until the request is done or cancelled (`TestIdentifyRequestProtectsTheItemFromTheSellChore`, Paladin and Sorceress). The player's identify request runs through `RunPending`, not through the town chore (that one is the bot's own NeedID rule), which is why it was skipped: "chores done ... skipped: [identify ...]" now names the reason per chore (`identify (nothing to identify)`, `identify (no scroll or tome and none to buy)`, `identify (not planned for this visit)`; `sell (not planned ...)`). A queued identify whose item left the character (sold, dropped, moved) fails at once with code `lost` and "Identify request for <name> lost: the item was sold, dropped or moved", in `recent`, and the page says it once (`TestLostIdentifyRequestIsReportedNotDropped`). A request that waits longer than 60 s without a safe moment still fails with its reason (unchanged), never silently. The pack-full line "loot: pack full, item left on the ground" is about ground items the bot could not pick up; it never evicts a pack item (V by reading `loot/pickup.go`: no eviction path), so a marked item cannot end up on the ground that way. Not done: running the player's identify requests inside the town visit before the sell chore (the protection above makes the order moot; U whether the user wants identify before sell for the bot's own NeedID items, it already is first in the chore list).
+
+### Turning the lane on (sandbox hero)
+`invdesk.instant` stays 0 for the friends release. For the sandbox hero the coordinator sets, in `<data>/instances/<id>/state/tuning.json` (or `PUT knobs` with overrides), with `invdesk.verbs` also 1:
+```json
+{"overrides": {"invdesk.verbs": 1, "invdesk.instant": 1}}
+```
+The page shows "Instant actions: on" in the errands strip; it needs the fork build with `--item-verbs` (cap `item.identify`).
+
+### Live checklist (identify)
+1. Lane on, hero in the field with a tome: Identify on a pack item: the cell says "Identifying..." at once, the item reads identified within about a second, green highlight for 2 s.
+2. Same in town.
+3. Monster near: lane open (a verb moves nothing in the world); record whether it still runs; with the lane OFF it shows "waiting: a safe moment" and runs when the monster is gone.
+4. Vendor panel open (bot visit): the request shows "waiting: <the lane's rule>", nothing is sold, it runs after the visit; the item is NOT sold meanwhile (protected).
+5. No scroll and no tome: refused at once, "Buy identify scrolls" ringed, nothing queued.
+6. Queue an identify on a rare, send the bot on a town trip with the sell chore: the item is still there afterwards; sell an item by hand during the wait: the page says the request is lost.
+7. Identify all (Cain): the hint counts "Identified k of N" from the item list.
+
 ## Sell now (botsell, API schema 10, additive)
 Design: `docs/ui/redesign-2026-11-14/C-orders.md` (`sell_now`). Tags: V verified by the offline tests named (fake sale step, Paladin and Sorceress), U unverified live. NOTHING here ran live.
 - **What it is.** A town errand that names no item (kind `sell`, like Cain): the player asks, the bot walks home at the next safe moment (`errandTripStep`, the repair trip's predicate, `Runner.safeMoment`) and the existing town sale of the items the player marked `sell` runs; the request ends when the sale step ran. In town it runs at the next tick. It is a player command in the priority ladder (after safety, before chores). Nothing new is decided about what is sold: only items marked `sell`, and `town.NeverSellReason` items stay excluded (`SellBlock`). The bot never sells an unmarked item on this path.
