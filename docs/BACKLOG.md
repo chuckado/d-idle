@@ -924,6 +924,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/deploycockpit4: Merge branch 'main' into deploycockpit (merged 2026-11-15) <!--sg:agent/deploycockpit4-->
 - cut013: friends release 0.1.3 built, drilled and staged (not published) (TASK-517, merged 2026-11-15, acceptance 3 of 3): Friends beta 0.1.3 built from main dfdc3d29e (supersedes the unpublished 0.1.2) and staged, NOT published. For friends: the new watch cockpit is the default (way back: /watch?layout=classic or Menu, Layout, Classic), phone layout and character screen, a Reset ... <!--sg:agent/cut013-->
 - decomp33: P17 sequence rate and P18 Smite range proven against upstream (fork branches fid/seq-ias-r1, fid/smite-r1, ready for the verifier); P19 Holy Bolt heal needs no PR <!--sg:agent/decomp33-->
+- gamedata: private friends game-data bundle (nine archives) (TASK-520, merged 2026-11-15, acceptance 1 of 1): Bundle (nine .mpq, keys-free) built on the NAS builder, validated with the installer check, uploaded behind a private token path, verified by curl and one full sha256 download; verified live. Doc: docs/process/friends-gamedata-2026-11-15.md (no URL). <!--sg:agent/gamedata-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
