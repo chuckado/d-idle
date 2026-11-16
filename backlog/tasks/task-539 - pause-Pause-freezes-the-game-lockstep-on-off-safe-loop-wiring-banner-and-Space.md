@@ -27,6 +27,7 @@ owns:
   - "internal/watch/testdata/pause"
   - "cmd/d2bot/glancewire_pause.go"
   - "cmd/d2bot/pausewire.go"
+  - "internal/gclock/gclock_test.go"
 exclusive: []
 contracts: []
 result: "Pause freezes the game through the fork's runtime lockstep switch (no new verb); the loop, clocks, health probe, Reset and Resume are wired and tested offline on two classes; menu button, banner, dimmed view and Space are in; fit fixtures added but not run. NOT verified live: checklist in docs/pause.md. Small edits outside owns: bot runner.go loop.go playerreset.go, env tuning_bot.go (bot.pauseCapMin), d2denv env.go, d2dctl/fake, watch glance.go http_view.go shell.js watch.html, cmd/d2bot d2dbackend.go behaviors.go glancewire.go, tools/uishots, docs/knobs.md."
