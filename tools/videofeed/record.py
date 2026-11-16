@@ -18,15 +18,17 @@ sock_path = os.path.join(out, "ctl.sock")
 if os.path.exists(sock_path):
     os.unlink(sock_path)
 p = subprocess.Popen([d2d, "--data", data, "--headless", "--devctl", sock_path, "--no-video", "--lockstep", "--no-save",
-                      "--seed", "7", "--start-screen", "ingame", "--start-class", "sorceress", "--start-name", "Vfeed"],
+                      "--seed", "7", "--start-screen", "ingame", "--start-class", "1", "--start-name", "Vfeed"],
                      stdout=open(os.path.join(out, "d2d.log"), "w"), stderr=subprocess.STDOUT)
 try:
     for _ in range(300):
-        if os.path.exists(sock_path):
+        if os.path.exists(sock_path) or p.poll() is not None:
             break
         time.sleep(0.2)
+    if not os.path.exists(sock_path):
+        raise SystemExit("no control socket; d2d exit %s; log tail:\n%s" % (p.poll(), open(os.path.join(out, "d2d.log")).read()[-1500:]))
     s = socket.socket(socket.AF_UNIX)
-    s.settimeout(60)
+    s.settimeout(180)
     s.connect(sock_path)
     f = s.makefile("rw", newline="\n")
 
@@ -50,6 +52,12 @@ try:
             break
         time.sleep(0.5)
     print("clock:", do("clock")[0])
+    for _ in range(40):  # wait until the hero is in the world (state answers ok)
+        r, ls = do("state")
+        if r.startswith("ok"):
+            break
+        time.sleep(1)
+    print("state:", r, ls[:2])
     do("step 75")  # let the town settle (3 s of game time)
     n = 0
     scenes = []
@@ -66,7 +74,7 @@ try:
 
     frames("town idle", 100)
     for name, x, y in [("walk east", 700, 330), ("walk north", 420, 120), ("walk west", 100, 330), ("walk south", 400, 520)]:
-        do("click %d %d" % (x, y))
+        print(name, do("click %d %d" % (x, y))[0])
         frames(name, 100)
     do("key i")
     frames("inventory open", 40)
