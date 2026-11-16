@@ -48,6 +48,7 @@ type Store struct {
 	path     string
 	classes  []string
 	cur      *RuleSet
+	fresh    bool // nothing saved yet and nothing loaded: the default set is active
 	onChange func(*RuleSet)
 	// LoadErr is why the file on disk was not used at open, "" when it was fine or absent.
 	LoadErr string
@@ -60,6 +61,7 @@ func OpenStore(path string, classes []string) *Store {
 	s.cur.Seq, s.cur.Preset = 1, PresetStarter
 	b, err := os.ReadFile(path)
 	if errors.Is(err, os.ErrNotExist) {
+		s.fresh = true
 		return s
 	}
 	if err == nil {
@@ -160,6 +162,7 @@ func (s *Store) Put(body []byte) (*RuleSet, error) {
 		return nil, err
 	}
 	s.cur = next
+	s.fresh = false
 	if s.onChange != nil {
 		s.onChange(next)
 	}
@@ -236,4 +239,147 @@ func (s *Store) write(rs *RuleSet) error {
 		return err
 	}
 	return nil
+}
+
+// Limits of an imported set: a file from outside is data to check, not trusted.
+const (
+	maxImportRules   = 400
+	maxImportString  = 600
+	maxImportGroups  = 60
+	maxImportListLen = 400
+)
+
+// ErrNoUndo means there is no previous version to go back to.
+var ErrNoUndo = errors.New("there is no earlier version to go back to")
+
+// Export is the canonical JSON of the active set (the same bytes the store writes; the set holds no secrets, no paths and
+// no host names, only rules, groups and knobs).
+func (s *Store) Export() ([]byte, error) { return s.Active().Marshal() }
+
+// checkImport refuses a set that is valid JSON but unreasonably large or odd; Parse already validated the rules.
+func checkImport(rs *RuleSet) Errors {
+	var es Errors
+	add := func(p, f string, a ...any) { es = append(es, Error{Path: p, Msg: fmt.Sprintf(f, a...)}) }
+	long := func(p, v string) {
+		if len(v) > maxImportString {
+			add(p, "longer than %d characters", maxImportString)
+		}
+	}
+	if len(rs.Rules) > maxImportRules {
+		add("rules", "more than %d rules", maxImportRules)
+	}
+	if len(rs.Groups) > maxImportGroups {
+		add("groups", "more than %d groups", maxImportGroups)
+	}
+	long("name", rs.Name)
+	long("comment", rs.Comment)
+	for i, r := range rs.Rules {
+		p := fmt.Sprintf("rules[%d]", i)
+		long(p+".id", r.ID)
+		long(p+".name", r.Name)
+		long(p+".reason", r.Reason)
+		if r.When != nil {
+			if b, err := json.Marshal(r.When); err == nil && len(b) > 8*maxImportString {
+				add(p+".when", "condition too large")
+			}
+		}
+	}
+	for k, g := range rs.Groups {
+		if len(g.Types)+len(g.TypePrefixes)+len(g.Codes) > maxImportListLen {
+			add("groups."+k, "more than %d entries", maxImportListLen)
+		}
+	}
+	return es
+}
+
+// Import replaces the active set with the file's: strict parse (unknown keys refused, every rule validated, a compile
+// check), size checks, then saved like a custom edit (the previous version goes to .bak, so Undo works). seq is the
+// version the client was looking at (409 when the stored set moved on). The file's own seq and preset are ignored.
+func (s *Store) Import(body []byte, seq int) (*RuleSet, error) {
+	rs, err := Parse(body)
+	if err != nil {
+		return nil, err
+	}
+	if es := checkImport(rs); len(es) > 0 {
+		return nil, es
+	}
+	if _, err := Compile(rs, "", ""); err != nil {
+		return nil, Errors{{Path: "$", Msg: err.Error()}}
+	}
+	rs.Preset, rs.Options = PresetCustom, nil
+	return s.replace(rs, seq)
+}
+
+// Undo goes back to the previous saved version (the .bak file). The undone version becomes the new .bak, so a second
+// Undo is a redo. seq is the version the client was looking at.
+func (s *Store) Undo(seq int) (*RuleSet, error) {
+	s.mu.Lock()
+	path := s.path
+	s.mu.Unlock()
+	b, err := os.ReadFile(path + ".bak")
+	if errors.Is(err, os.ErrNotExist) {
+		return nil, ErrNoUndo
+	}
+	if err != nil {
+		return nil, err
+	}
+	rs, err := Parse(b)
+	if err != nil {
+		return nil, Errors{{Path: "$", Msg: "the earlier version is damaged: " + err.Error()}}
+	}
+	return s.replace(rs, seq)
+}
+
+// replace saves next as the new active set when the client's seq is current.
+func (s *Store) replace(next *RuleSet, seq int) (*RuleSet, error) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if seq != s.cur.Seq {
+		return nil, ErrConflict{Seq: s.cur.Seq}
+	}
+	next.Seq = s.cur.Seq + 1
+	if err := s.write(next); err != nil {
+		return nil, err
+	}
+	s.cur = next
+	s.fresh = false
+	if s.onChange != nil {
+		s.onChange(next)
+	}
+	return next, nil
+}
+
+// HasUndo says whether an earlier version exists.
+func (s *Store) HasUndo() bool {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	_, err := os.Stat(s.path + ".bak")
+	return err == nil
+}
+
+// UseClassFallback is the per-hero default: a hero whose store file was never saved starts from the preset of its class
+// (the Starter reduced to that class) instead of the plain Starter. A saved set, a damaged file or an unknown class are
+// left alone. Returns whether the active set changed.
+func (s *Store) UseClassFallback(class string) bool {
+	s.mu.Lock()
+	if !s.fresh || class == "" || !has(s.classes, class) || s.cur.Preset != PresetStarter {
+		s.mu.Unlock()
+		return false
+	}
+	s.mu.Unlock()
+	rs, err := s.Preset("class:" + class)
+	if err != nil {
+		return false
+	}
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if !s.fresh {
+		return false
+	}
+	rs.Seq = s.cur.Seq
+	s.cur = rs
+	if s.onChange != nil {
+		s.onChange(rs)
+	}
+	return true
 }

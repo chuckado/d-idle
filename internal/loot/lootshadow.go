@@ -65,23 +65,24 @@ type ShadowReport struct {
 // Shadow collects the disagreements. One per process is shared by the looter and the town chores (DefaultShadow);
 // tests make their own. Safe for concurrent use.
 type Shadow struct {
-	mu     sync.Mutex
-	log    *slog.Logger
-	now    func() time.Time // the game clock for the log rate
-	wall   func() time.Time // host clock on purpose: the cost of a decision, not game time
-	rs     *lootrules.RuleSet
-	comp   map[string]*lootrules.Compiled
-	seen   map[string]bool
-	byRule map[string]*ShadowRule
-	scopes map[string]*ShadowScope
-	last   []string
-	recent []lootrules.Recent // every decision, newest last, repeats of the same item and rule collapsed
-	logged []time.Time
-	errs   int
-	total  ShadowScope
-	nanos  int64
-	maxNs  int64
-	class  string // the hero class of the last pass (the per-hero store falls back to its class preset)
+	mu       sync.Mutex
+	log      *slog.Logger
+	now      func() time.Time // the game clock for the log rate
+	wall     func() time.Time // host clock on purpose: the cost of a decision, not game time
+	rs       *lootrules.RuleSet
+	comp     map[string]*lootrules.Compiled
+	seen     map[string]bool
+	byRule   map[string]*ShadowRule
+	scopes   map[string]*ShadowScope
+	last     []string
+	recent   []lootrules.Recent // every decision, newest last, repeats of the same item and rule collapsed
+	logged   []time.Time
+	errs     int
+	total    ShadowScope
+	nanos    int64
+	maxNs    int64
+	lastPass *ShadowPass // the last pass made, for the dry run (Preview)
+	class    string      // the hero class of the last pass (the per-hero store falls back to its class preset)
 }
 
 // DefaultShadow is the process-wide shadow every Looter starts with.
@@ -321,6 +322,7 @@ func (l *Looter) ShadowEnabled() bool {
 // Observe. A nil pass (shadow off, snapshot unusable) makes Observe a no-op.
 type ShadowPass struct {
 	l    *Looter
+	snap *d2.Snapshot // read only: the dry run reads its pack and stash
 	a    *RulesAdapter
 	cx   *lootrules.Ctx
 	area int
@@ -388,7 +390,13 @@ func (l *Looter) ShadowPass(s *d2.Snapshot, packPct, stashPct int) (p *ShadowPas
 		l.shadow.class = cx.Class
 		l.shadow.mu.Unlock()
 	}
-	return &ShadowPass{l: l, a: a, cx: cx, area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
+	p = &ShadowPass{l: l, a: a, cx: cx, snap: s, area: s.Player.Area, max: MaxBuyOf(s.Player), shadow: shadow, stage: stage}
+	if l.shadow != nil {
+		l.shadow.mu.Lock()
+		l.shadow.lastPass = p
+		l.shadow.mu.Unlock()
+	}
+	return p
 }
 
 // LastHeroClass is the class of the hero the last pass was made for ("" before the first pass).
