@@ -1,7 +1,7 @@
 # Lossless delta frame feed for the watch video (card videofeed, 2026-11-15)
 
 Tags: V = verified (read in source or run, how is said), S = secondary (read in docs), U = unverified.
-Numbers are in `docs/probes/video-feed-2026-11-15.md` (real d2d frames); this page is the design and the status.
+Numbers: `docs/probes/video-feed-2026-11-15.md` (real d2d frames, section 5 below); this page is the design and the status.
 User go 2026-11-15: design and prototype a better feed than ffmpeg x11grab / the container tap. NOT deployed, nothing wired
 into a page or a server: `internal/watch/palfeed` (codec, hub, handlers) and `internal/watch/web/palfeed.js` (player) are
 additive and unused until a host mounts them; knob name reserved: `watch.paletteFeed` (default off, not registered: the
@@ -54,7 +54,7 @@ payload (inflated)
 
 Why the scroll modes (V, measured on real frames, probe doc): while the hero walks the whole isometric view moves a few
 pixels per frame, so a plain frame-to-frame XOR changes nearly every pixel (about 480 to 540 KB per delta, as large as a
-key frame). The encoder looks for one global integer shift within +-16 px (`EstimateShift`: a sparse sample lattice, the
+key frame). The encoder looks for one global integer shift within +-32 px (`EstimateShift`: a sparse sample lattice, the
 previous frame's shift first, then a coarse search refined on a finer lattice) and codes each tile against whichever of
 "same place" or "shifted" leaves fewer differing pixels; the HUD, which does not scroll, stays on mode 0 or 1.
 
@@ -107,13 +107,21 @@ previous frame's shift first, then a coarse search refined on a finer lattice) a
 - GPU palette lookup is not needed: the stream is RGB, `putImageData` is the whole draw cost (probe numbers). A WebGL
   texture upload would only matter at dpr 3 full-screen scaling; U.
 
-## 5. CPU, bytes, fps
+## 5. CPU, bytes, fps (V, 630 real d2d frames, docs/probes/video-feed-2026-11-15.md)
 
-See the probe for the measured table (real recorded d2d frames: bytes per frame p50/p95 per scene, encoder ms, decoder
-ms in node and in headless Chromium, JPEG q72 and whole-frame XOR as references). Sandbox context (V, docs/viewer-fps.md
-section 6): one CPU for the whole container, JPEG q72 of a full frame costs about 10 ms and 77 to 90 KB, 21.6 fps
-delivered at 1.9 MB/s. The delta feed has no per-frame cost on d2d, and in d2dview the encoder replaces the JPEG encode
-(the comparison is in the probe, measured on a loaded builder core, so read it as an upper bound).
+- Lossless on every frame and every configuration (the replay fails otherwise). Real frames hold 340 colours on average
+  (max 656, all over 256): a per-frame 8-bit palette would be lossy, so the wire is RGB.
+- Bytes per frame at 25 fps, tile 16: still town 5.7 KB p50; walking 10 to 38 KB p50, 53 to 63 KB p95; whole recording
+  p50 9.7 KB, p95 55 KB, mean 0.49 MB/s (3.9 Mbit/s). JPEG q72 of the same frames: 69 KB p50, 103 KB p95, about 1.7 MB/s.
+  Without the scroll modes walking costs 484 KB per frame (6.6 MB/s): they are what makes the idea work.
+- Key frame 480 KB; panel open or a level change is one key-sized delta (375 to 737 KB), rare.
+- CPU: encode 0.5 ms p50 (3 ms while walking, 11 ms worst) against 8.1 ms for the JPEG it would replace; decode 1.2 ms p50,
+  4.4 ms p95 in headless Chromium, 0.2 ms to put the dirty rect. d2d: nothing new (the ring's memcpy).
+- fps: the codec is not the limit at 25 fps (the budget per frame is 40 ms); 60 fps is possible on the encode side
+  (the ring publishes at the draw rate) but the sandbox tap is configured for 25, and 60 would double the bytes.
+  A slow client skips frames and costs fewer bytes per second (0.37 MB/s at 12.5 fps).
+- Sandbox context (V, docs/viewer-fps.md section 6): one CPU for the whole container, JPEG q72 about 10 ms and 77 to 90 KB
+  per frame, 21.6 fps delivered at 1.9 MB/s.
 
 ## 6. Security
 
