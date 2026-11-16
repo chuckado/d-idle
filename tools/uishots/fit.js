@@ -364,3 +364,9 @@ function charsPage(win, d, vis, cs) {
   }
   return o;
 }
+
+// The Characters page measured again after the harness pressed something (an open sheet is judged as it stands).
+export function charsNow(win) {
+  const vis = (n) => { const r = n.getBoundingClientRect(); return r.width > 0 && r.height > 0 ? r : null; };
+  return charsPage(win, win.document, vis, (n) => win.getComputedStyle(n));
+}

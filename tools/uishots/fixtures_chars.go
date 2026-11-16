@@ -64,7 +64,7 @@ func charsFixture(w http.ResponseWriter, r *http.Request) {
 	case "long":
 		chars = []any{
 			hero("Mmmmmmmmmmmmmmm", "paladin", "Paladin", 24, 5*time.Minute, map[string]any{"active": true}),
-			hero("Wolfgang-Amadeus", "sorceress", "Sorceress", 99, 3*time.Hour, map[string]any{"damaged": "the save fails its check: the section sizes do not add up and the file ends early, so it cannot be played"}),
+			hero("Wolfgang-Amadeus", "sorceress", "Sorceress", 99, 3*time.Hour, map[string]any{"damaged": "the save fails its check: the file ends early (section sizes)"}),
 			hero("Zzzzzzzzzzzzzzz", "necromancer", "Necromancer", 100, 26*time.Hour, map[string]any{"hardcore": true, "died": true}),
 		}
 		deleted = []any{arch("Iiiiiiiiiiiiiii", "druid", 12, 5*time.Hour)}

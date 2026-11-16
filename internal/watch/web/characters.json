@@ -1,9 +1,10 @@
 {
   "schema": "watch.characters.texts/1",
   "title": "Characters",
-  "back": "Back to the hero",
+  "back": "Back",
+  "backLabel": "Back to the hero",
   "loading": "Loading the characters...",
-  "playing": "Playing now",
+  "playing": "Playing",
   "playingNow": "Playing now: {name}",
   "newHero": "New hero",
   "newTile": "New hero",

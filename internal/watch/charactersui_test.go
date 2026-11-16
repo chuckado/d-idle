@@ -149,7 +149,7 @@ const page = mountCharacters({ doc, get, post, later, texts: T, now: () => clock
 await page.start(); await tick();
 
 ok(all(doc.body).filter((n) => n.className === 'cs-card' || n.className.startsWith('cs-card')).length === 3, 'two heroes and the new tile');
-ok(!!find('badge-active') && find('switch-Holy').disabled && !find('switch-Zapp').disabled, 'active badge, no switch on the active hero');
+ok(!!find('badge-active') && !find('switch-Holy') && !find('switch-Zapp').disabled, 'active badge, no switch on the active hero');
 ok(has('Level 24 Paladin') && has('Playing now: Holy') && has('Nothing deleted'), 'card text');
 
 // switch: the sheet words, then the press, then the strip from the read-back

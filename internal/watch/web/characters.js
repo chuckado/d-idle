@@ -77,7 +77,7 @@ export function mountCharacters(d) {
   const root = d.root || doc.body;
   const head = el('header', 'cs-head');
   const back = el('a', 'd-btn', T.back);
-  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.href = d.backHref || '/watch'; back.dataset.key = 'back';
+  back.dataset.variant = 'ghost'; back.dataset.size = 'md'; back.href = d.backHref || '/watch'; back.dataset.key = 'back'; back.setAttribute('aria-label', T.backLabel);
   const title = el('h1', '', T.title);
   const nowEl = el('span', 'cs-now', '');
   const newTop = btn(T.newHero, { variant: 'primary', key: 'new-top' });
@@ -137,16 +137,20 @@ export function mountCharacters(d) {
     const w = when(c.lastPlayed, now());
     const last = el('p', 'cs-last', w ? fmt(T.lastPlayed, { when: w }) : T.lastUnknown);
     const acts = el('div', 'cs-acts');
-    const sw = btn(c.active ? T.playing : T.switch, { variant: 'primary', key: 'switch-' + c.name });
-    sw.setAttribute('aria-label', c.active ? T.playing + ': ' + c.name : fmt(T.switchTo, { name: c.name }));
-    sw.disabled = !!c.active || !caps().switch || !!c.damaged || busy();
     const del = btn(T.delete, { variant: 'danger', key: 'delete-' + c.name });
     del.setAttribute('aria-label', T.delete + ' ' + c.name);
     del.disabled = busy() && !c.active;
-    sw.addEventListener('click', () => openSwitch(c, sw));
     del.addEventListener('click', () => openDelete(c, del));
-    S.keys[sw.dataset.key] = sw; S.keys[del.dataset.key] = del;
-    acts.append(sw, del);
+    S.keys[del.dataset.key] = del;
+    if (!c.active) { // the hero in the game has the badge instead of a Switch
+      const sw = btn(T.switch, { variant: 'primary', key: 'switch-' + c.name });
+      sw.setAttribute('aria-label', fmt(T.switchTo, { name: c.name }));
+      sw.disabled = !caps().switch || !!c.damaged || busy();
+      sw.addEventListener('click', () => openSwitch(c, sw));
+      S.keys[sw.dataset.key] = sw;
+      acts.appendChild(sw);
+    }
+    acts.appendChild(del);
     li.append(top, chips, last);
     if (c.damaged) li.appendChild(el('p', 'cs-warn', c.damaged));
     li.appendChild(acts);
@@ -221,6 +225,7 @@ export function mountCharacters(d) {
       kids.push(del);
     }
     main.replaceChildren(...kids);
+    newTop.hidden = !v;
     newTop.disabled = !v || !S.rules || !caps().create || busy();
     S.keys['new-top'] = newTop;
     const st = strip(v, S.pend, now(), T);

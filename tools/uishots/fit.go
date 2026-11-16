@@ -53,7 +53,7 @@ func fitHarness(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `<!doctype html><html><head><meta charset="utf-8"><title>fit</title></head><body style="margin:0;background:#888">
 <iframe id="f" src="%s" width="%d" height="%d" style="border:0;display:block"></iframe><pre id="fit-result"></pre>
 <script type="module">
-import { measure, hits, expects } from '/__fit/fit.js';
+import { measure, hits, expects, charsNow } from '/__fit/fit.js';
 const pop = (d, sel, c) => {
   const n = d.querySelector(sel), r = n && !n.hidden ? n.getBoundingClientRect() : null;
   if (!r || !r.width) return { open: false, sel };
@@ -87,6 +87,7 @@ f.addEventListener('load', async () => {
         if (b) { b.click(); await wait(500); } else if (!opt) { m.missing = sel; break; }
       }
       m.hits = hits(f.contentWindow, o.hit);
+      if (f.contentDocument.body.hasAttribute('data-chars')) m.chars = charsNow(f.contentWindow); // the page with its sheet open
     }
     const ex = (o.expect || []).filter(Boolean);
     if (ex.length) m.expect = expects(f.contentWindow, ex);
