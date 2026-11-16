@@ -197,6 +197,8 @@ cmd/d2bot/live.go  credit-runner  uib5
 cmd/d2bot/loopwire.go  credit-runner  uib7
 cmd/d2bot/loopwire_test.go  credit-runner  uib7
 cmd/d2bot/looteradapter_test.go  credit-runner  goldprio
+cmd/d2bot/lootruleswire.go  credit-runner  lootwire3
+cmd/d2bot/lootruleswire_test.go  credit-runner  lootwire3
 cmd/d2bot/lootshadowwire.go  credit-runner  lootwireL4
 cmd/d2bot/mercplayer.go  credit-runner  botmerc
 cmd/d2bot/mercplayer_test.go  credit-runner  botmerc
@@ -290,6 +292,7 @@ docs/knobs.md  credit-runner  freshstart
 docs/knobs.md  credit-runner  gearsets
 docs/knobs.md  credit-runner  goldprio
 docs/knobs.md  credit-runner  hourfix
+docs/knobs.md  credit-runner  lootwire3
 docs/knobs.md  credit-runner  lootwireL4
 docs/knobs.md  credit-runner  pursuers
 docs/knobs.md  credit-runner  staletarget
@@ -306,6 +309,7 @@ docs/live-checks.md  credit-runner  repairtrip
 docs/locks.md  credit-runner  lockscan
 docs/loop-order.md  credit-runner  uib7
 docs/lootrules.md  credit-runner  lootrules
+docs/lootrules.md  credit-runner  lootwire3
 docs/lootrules.md  credit-runner  lootwireL4
 docs/merc-revive.md  credit-runner  botmerc
 docs/mercrevive.md  credit-runner  mercrevive2
@@ -556,6 +560,8 @@ internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
 internal/charsel  credit-runner  charsup
+internal/charsel/lootrulesstate_test.go  credit-runner  lootwire3
+internal/charsel/perchar.json  credit-runner  lootwire3
 internal/combat  credit-runner  wiring2
 internal/combat/castfirst.go  credit-runner  maphistoryC
 internal/combat/classdata  credit-runner  palprofile2
@@ -614,6 +620,7 @@ internal/env/tuning_invdesk.go  credit-runner  botinstant
 internal/env/tuning_invdesk.go  credit-runner  gearsets
 internal/env/tuning_loot.go  credit-runner  goldprio
 internal/env/tuning_loot.go  credit-runner  hourfix
+internal/env/tuning_loot.go  credit-runner  lootwire3
 internal/env/tuning_nav.go  credit-runner  pursuers
 internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
@@ -660,13 +667,21 @@ internal/loot  credit-runner  goldprio
 internal/loot/fixpickup_test.go  credit-runner  beltfix
 internal/loot/ignore_test.go  credit-runner  tidy
 internal/loot/loot.go  credit-runner  lootwireL4
+internal/loot/lootshadow.go  credit-runner  lootwire3
 internal/loot/lootshadow.go  credit-runner  lootwireL4
+internal/loot/lootshadow_test.go  credit-runner  lootwire3
 internal/loot/lootshadow_test.go  credit-runner  lootwireL4
 internal/loot/lootskip_test.go  credit-runner  beltfix
 internal/loot/pickup.go  credit-runner  lootwireL4
+internal/loot/rulesadapt.go  credit-runner  lootwire3
 internal/loot/rulesadapt.go  credit-runner  lootwireL3
 internal/loot/rulesadapt_test.go  credit-runner  lootwireL3
+internal/loot/rulesengine.go  credit-runner  lootwire3
+internal/loot/rulesengine_test.go  credit-runner  lootwire3
 internal/loot/rulesfix_test.go  credit-runner  lootwireL3
+internal/loot/rulespreview.go  credit-runner  lootwire3
+internal/loot/rulespreview_test.go  credit-runner  lootwire3
+internal/lootrules  credit-runner  lootwire3
 internal/lootrules/**  credit-runner  lootrules
 internal/merc  credit-runner  mercrevive2
 internal/merc/playerrevive.go  credit-runner  botmerc
@@ -742,6 +757,7 @@ internal/town/playerid.go  credit-runner  itemverbs2
 internal/town/playerstash.go  credit-runner  itemverbs2
 internal/town/playerstash_test.go  credit-runner  towntests
 internal/town/repairtrip_test.go  credit-runner  repairtrip
+internal/town/shop.go  credit-runner  lootwire3
 internal/town/shop.go  credit-runner  lootwireL4
 internal/town/sim  credit-runner  beltfix
 internal/town/tidy.go  credit-runner  lootwireL4
@@ -800,6 +816,10 @@ internal/watch/layout_test.go  credit-runner  uis7
 internal/watch/logtab.go  credit-runner  friendfb
 internal/watch/logtab.go  credit-runner  uis6
 internal/watch/logtab_test.go  credit-runner  uis6
+internal/watch/lootrulesapi.go  credit-runner  lootwire3
+internal/watch/lootrulesapi_test.go  credit-runner  lootwire3
+internal/watch/lootrulestools_test.go  credit-runner  lootwire3
+internal/watch/lootrulesui_test.go  credit-runner  lootwire3
 internal/watch/lootshadowapi.go  credit-runner  lootwireL4
 internal/watch/lootshadowapi_test.go  credit-runner  lootwireL4
 internal/watch/mercapi.go  credit-runner  botmerc
@@ -961,6 +981,7 @@ internal/watch/web/layout.json  credit-runner  uis7
 internal/watch/web/layouts/  credit-runner  uis1
 internal/watch/web/layouts/  credit-runner  uis7
 internal/watch/web/layouts/cockpit.json  credit-runner  uis6
+internal/watch/web/lootrulesui.js  credit-runner  lootwire3
 internal/watch/web/mjpeg.js  credit-runner  viewerfps
 internal/watch/web/onboarding.css  credit-runner  onboardtour
 internal/watch/web/onboarding.js  credit-runner  onboardtour
@@ -1003,6 +1024,7 @@ internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
+internal/watch/web/shell.css  credit-runner  lootwire3
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
@@ -1087,6 +1109,7 @@ tools/tester-pack.sh  credit-runner  testerpack
 tools/uilint/  credit-runner  uis1
 tools/uilint/lint.go  credit-runner  uis6
 tools/uishots  credit-runner  gearsets
+tools/uishots  credit-runner  lootwire3
 tools/uishots.sh  credit-runner  friendfb
 tools/uishots.sh  credit-runner  gearsets
 tools/uishots.sh  credit-runner  resetinstant

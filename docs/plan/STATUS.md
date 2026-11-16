@@ -222,6 +222,7 @@
 | charsup | proposed | - | `deploy/d2d-container/entrypoint.sh`<br>`deploy/d2d-container/tester_image_test.go`<br>`internal/charsel`<br>`cmd/d2bot/charwire.go`<br>`cmd/d2bot/charwire_test.go`<br>`docs/charselect.md` | - |
 | survsd | proposed | - | `internal/survival`<br>`internal/bot`<br>`internal/power`<br>`internal/env`<br>`cmd/d2bot`<br>`docs/survival`<br>`docs/knobs.md`<br>`tools/knobdump` | - |
 | farmlive | proposed | - | `docs/probes/farmloop-live-20261116.md` | - |
+| lootwire3 | proposed | - | `internal/lootrules`<br>`internal/loot/rulesengine.go`<br>`internal/loot/rulespreview.go`<br>`internal/loot/rulespreview_test.go`<br>`internal/watch/lootrulestools_test.go`<br>`internal/charsel/lootrulesstate_test.go`<br>`internal/loot/rulesengine_test.go`<br>`internal/loot/lootshadow.go`<br>`internal/loot/lootshadow_test.go`<br>`internal/loot/rulesadapt.go`<br>`internal/town/shop.go`<br>`internal/watch/lootrulesapi.go`<br>`internal/watch/lootrulesapi_test.go`<br>`internal/watch/lootrulesui_test.go`<br>`internal/watch/web/lootrulesui.js`<br>`internal/watch/web/shell.css`<br>`internal/charsel/perchar.json`<br>`cmd/d2bot/lootruleswire.go`<br>`cmd/d2bot/lootruleswire_test.go`<br>`tools/uishots`<br>`docs/lootrules.md`<br>`docs/knobs.md`<br>`internal/env/tuning_loot.go` | - |
 | fidprobe-vendor | proposed | - | `internal/fidvendor`<br>`docs/research/fidelity-vendor-probe.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
@@ -265,6 +266,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a691c3066 11-16 13:31 `Merge agent/lootwire3: Merge branch 'main' into lootwire3` (lootwire3)
+- ebd636503 11-16 13:30 `Merge branch 'main' into lootwire3` (-)
 - 95a00a504 11-16 12:37 `Merge agent/lootwire2: Merge branch 'main' into TASK-549` (lootwire2)
 - d9acac08f 11-16 12:36 `Merge branch 'main' into TASK-549` (-)
 - a77be292c 11-16 12:34 `Merge agent/farmlive: Merge branch 'main' into farmlive` (farmlive)
@@ -273,6 +276,4 @@
 - 4cb76cea4 11-16 12:07 `Merge branch 'main' into survsd` (-)
 - 443e30a81 11-16 11:39 `Merge agent/survab: Merge branch 'main' into survab` (survab)
 - c3b2466e3 11-16 11:38 `Merge branch 'main' into survab` (-)
-- d3d309ee5 11-16 11:36 `Merge agent/decomp34: Merge branch 'main' into 547` (decomp34)
-- 86a304804 11-16 11:35 `Merge branch 'main' into 547` (-)
 <!-- statusgen:end -->
