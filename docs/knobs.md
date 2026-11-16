@@ -262,6 +262,7 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | bot.stallExitMin | 30 | 5..240 | min | 240 | 1 | Virtual minutes still without campaign progress after the fresh game before the bot exits (status 5) so the supervisor restarts the whole process. |
 | bot.spiralMinutes | 15 | 5..15 | min | 5 | 5 | Window in which the deaths are counted. Shorter forgets sooner. |
 | bot.pauseDeathsPerHour | 8 | 8..20 | deaths | 20 | 2 | Deaths in the last hour after which the bot pauses itself and asks the user. |
+| bot.pauseCapMin | 60 | 0..720 | min | 720 | 2 | A Pause the player asked for (the frozen game) ends by itself after this many wall minutes and a Needs you row says how long it was. 0 = no cap. |
 | bot.stalePackHostiles | 4 | 0..12 | count | 12 | 3 | Hostiles near the hero when it left a field by chicken, town portal or crowd exit that make the area a stale pack: no return by portal and no planner pick of that area until bot.stalePackMinutes pass or the kit is rebuilt. 0 turns the rule off. Seed 13 of Gate 2 g2f died 2 s after re-entering a 12-hostile pack at clvl 4. |
 | bot.stalePackMinutes | 10 | 1..60 | min | 60 | 1 | How long a stale pack keeps its area closed. Monsters of a live game stay where they are (U), so the hold is a guess at the time the kit needs to be rebuilt. |
 | bot.stalePackMinHP | 5 | 1..8 | count | 8 | 1 | Healing potions (belt and pack) that lift the stale-pack hold early, together with bot.stalePackMinTier. |
