@@ -483,6 +483,7 @@ internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/drought.go  credit-runner  freshstart
 internal/bot/exploredpct.go  credit-runner  exploredpct
 internal/bot/exploredpct_test.go  credit-runner  exploredpct
+internal/bot/failsafe_test.go  credit-runner  flakefix
 internal/bot/farmreset.go  credit-runner  farmloop
 internal/bot/farmreset_test.go  credit-runner  farmloop
 internal/bot/geargate.go  credit-runner  staletarget
