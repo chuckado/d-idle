@@ -134,6 +134,24 @@ func (s *Store) Put(body []byte) (*RuleSet, error) {
 	if in.Seq != s.cur.Seq {
 		return nil, ErrConflict{Seq: s.cur.Seq}
 	}
+	next, err := s.build(in)
+	if err != nil {
+		return nil, err
+	}
+	next.Seq = s.cur.Seq + 1
+	if err := s.write(next); err != nil {
+		return nil, err
+	}
+	s.cur = next
+	s.fresh = false
+	if s.onChange != nil {
+		s.onChange(next)
+	}
+	return next, nil
+}
+
+// build turns a body into the set it would save (preset and options applied, validated, compiled) without saving it.
+func (s *Store) build(in *RuleSet) (*RuleSet, error) {
 	next := in
 	if in.Preset != "" && in.Preset != PresetCustom {
 		base, err := s.preset(in.Preset)
@@ -157,16 +175,18 @@ func (s *Store) Put(body []byte) (*RuleSet, error) {
 	if _, err := Compile(next, "", ""); err != nil {
 		return nil, Errors{{Path: "$", Msg: err.Error()}}
 	}
-	next.Seq = s.cur.Seq + 1
-	if err := s.write(next); err != nil {
+	return next, nil
+}
+
+// Build is build for a request body (the preview route): nothing is saved and the seq is not checked.
+func (s *Store) Build(body []byte) (*RuleSet, error) {
+	in, err := parseLoose(body)
+	if err != nil {
 		return nil, err
 	}
-	s.cur = next
-	s.fresh = false
-	if s.onChange != nil {
-		s.onChange(next)
-	}
-	return next, nil
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	return s.build(in)
 }
 
 func (s *Store) preset(id string) (*RuleSet, error) { return s.Preset(id) }
@@ -213,7 +233,12 @@ func (s *Store) write(rs *RuleSet) error {
 	if err := os.MkdirAll(filepath.Dir(s.path), 0o755); err != nil {
 		return err
 	}
-	if old, err := os.ReadFile(s.path); err == nil {
+	old, err := os.ReadFile(s.path)
+	if errors.Is(err, os.ErrNotExist) && s.cur != nil {
+		// the first save of a hero: the set it replaces (the preset it started with) is the version Undo goes back to
+		old, err = s.cur.Marshal()
+	}
+	if err == nil {
 		if err := os.WriteFile(s.path+".bak", old, 0o600); err != nil {
 			return err
 		}

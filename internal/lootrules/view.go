@@ -27,6 +27,8 @@ type ViewDoc struct {
 	Recent    []Recent          `json:"recent"`
 	Stage     int               `json:"stage"` // knob loot.rulesEngine now
 	LoadError string            `json:"loadError,omitempty"`
+	CanUndo   bool              `json:"canUndo"`        // an earlier saved version exists
+	Hero      string            `json:"hero,omitempty"` // the hero class the per-hero store last saw
 }
 
 // View assembles the answer from the store, the live stage and the recent decisions.
@@ -45,5 +47,5 @@ func (s *Store) View(stage int, recent []Recent) ViewDoc {
 		recent = []Recent{}
 	}
 	return ViewDoc{Schema: ViewSchema, Seq: rs.Seq, Active: rs, Plain: pl, Protected: Invariants(), Presets: s.Presets(),
-		Classes: cl, Options: o.normalized(), Shadowed: rs.Shadowed(), Recent: recent, Stage: stage, LoadError: s.LoadErr}
+		Classes: cl, Options: o.normalized(), Shadowed: rs.Shadowed(), Recent: recent, Stage: stage, LoadError: s.LoadErr, CanUndo: s.HasUndo()}
 }
