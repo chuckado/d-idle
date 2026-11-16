@@ -51,7 +51,7 @@ decomp35's numbers reproduce exactly on the rebased tree (17,097, 50,626, 2,223)
 | whole points | 17,068 / 50,579 | | | aborts (`blow.life == 640`) |
 | no Drain term | 8,376 / 25,023 | | | aborts (`blow.life == 640`) |
 | crush from the life after the hit (r1's parent rule) | | 2,241 | 2,809 / 20,796 | aborts (`damage == 50 + 0 + 50`) |
-| leech cut before the crush (crush r1) | | 0 | 1,068 / 6,589 | TC_C1X |
+| leech cut before the crush (crush r1) | | 0 | 1,068 / 6,589 | aborts (`blow.life == 1920`); r1's own test_combat passes it |
 
 ## Build, ctest, tidy
 
@@ -69,7 +69,7 @@ TIDY_PENDING
 
 ## RNG luck
 
-BUILD_RESEED_PENDING
+`test_combat` with its `Rng rng{ 5 }` replaced by `VD35_SEED` (local mutants `vd35-reseed` on the claim tip, `vd35-upreseed` on upstream main), seeds 1 to 200 (V run): the claim tip fails **1 of 200** (seed 95, `blocked >= 15`, an upstream block-rate assert); upstream main fails the same seed at the same assert, 1 of 200. The stack's own asserts pass on all 200: the leech values do not depend on a draw, the crush draw is under 100 percent, and the new crush-and-leech assert has its own `Rng`.
 
 ## Stacking: two PRs, in order
 
