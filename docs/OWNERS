@@ -441,7 +441,6 @@ docs/research/data22  credit-runner  decomp22
 docs/research/data24  credit-runner  prfix3
 docs/research/data28  pro-runner  decomp28
 docs/research/dc36-lane-b.md  credit-runner  decomp36
-docs/research/dc38-lane-d.md  credit-runner  decomp38
 docs/research/decomp28-trace.md  pro-runner  decomp28
 docs/research/decomp30-mercai.md  credit-runner  decomp30
 docs/research/decomp31-drops.md  credit-runner  decomp31
@@ -511,7 +510,6 @@ docs/upstream/  credit-runner  prpost4
 docs/upstream/  credit-runner  prprep
 docs/upstream/bodies/  credit-runner  decomp34
 docs/upstream/bodies/  credit-runner  decomp36
-docs/upstream/bodies/  credit-runner  decomp38
 docs/upstream/bodies/decomp35-  credit-runner  decomp35
 docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
@@ -1363,8 +1361,6 @@ tools/emu/dc36_cmp.py  credit-runner  decomp36
 tools/emu/dc36_death.py  credit-runner  decomp36
 tools/emu/dc36_gamble.py  credit-runner  decomp36
 tools/emu/dc36_umod.py  credit-runner  decomp36
-tools/emu/dc38_burn.py  credit-runner  decomp38
-tools/emu/dc38_shrine.py  credit-runner  decomp38
 tools/emu/dm_  credit-runner  decomp31
 tools/emu/dmg_model.py  credit-runner  dmgcheck
 tools/emu/mode_switch.py  credit-runner  decomp22
