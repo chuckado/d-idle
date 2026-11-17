@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into botcpu <!--sg:agent/botcpu-->
 - Merge branch 'main' into task-582 <!--sg:agent/botcpulive-->
 - Merge branch 'main' into vaultv0 <!--sg:agent/vaultv0-->
 - palfeedflaky: deterministic palfeed guard tests (main CI red) <!--sg:agent/palfeedflaky-->

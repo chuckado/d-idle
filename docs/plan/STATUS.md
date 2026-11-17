@@ -239,6 +239,7 @@
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | vaultv0 | proposed | - | `docs/probes/vault-spike-2026-11-16.md` | `fork-branch:didle/vault-spike` |
+| botcpu | proposed | - | `docs/probes/bot-cpu-2026-11-16.md`<br>`internal/senses`<br>`cmd/d2bot/sensesfeed.go`<br>`cmd/d2bot/sensesfeed_test.go`<br>`internal/nav/cpuprobe_test.go`<br>`internal/d2dsrc/cpuprobe_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/srv_test.go` | - |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -283,6 +284,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 51d8a1840 11-16 22:52 `Merge agent/botcpu: Merge branch 'main' into botcpu` (botcpu)
+- 020724c2c 11-16 22:51 `Merge branch 'main' into botcpu` (-)
 - c0acda8d2 11-16 22:50 `Merge agent/botcpulive: Merge branch 'main' into task-582` (botcpulive)
 - 92e27b85d 11-16 22:50 `Merge agent/vaultv0: Merge branch 'main' into vaultv0` (vaultv0)
 - 3c827471f 11-16 22:48 `Merge branch 'main' into task-582` (-)
@@ -291,6 +294,4 @@
 - 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
 - cdc624907 11-16 22:03 `Merge agent/quests1: Merge branch 'main' into quests1` (quests1)
 - 1cb530a5e 11-16 22:02 `Merge branch 'main' into quests1` (-)
-- f6a131582 11-16 21:52 `Merge agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc)` (survtune2)
-- f2c1f6e8f 11-16 21:51 `Merge branch 'main' into survtune` (-)
 <!-- statusgen:end -->

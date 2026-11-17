@@ -223,7 +223,9 @@ cmd/d2bot/resetwire.go  credit-runner  resetinstant
 cmd/d2bot/resetwire_test.go  credit-runner  botreset
 cmd/d2bot/resetwire_test.go  credit-runner  resetinstant
 cmd/d2bot/resource_test.go  credit-runner  freshstart
+cmd/d2bot/sensesfeed.go  credit-runner  botcpu
 cmd/d2bot/sensesfeed.go  credit-runner  maptrail
+cmd/d2bot/sensesfeed_test.go  credit-runner  botcpu
 cmd/d2bot/sensesfeed_test.go  credit-runner  maptrail
 cmd/d2bot/senseshistory.go  credit-runner  maphistory
 cmd/d2bot/senseshistory.go  credit-runner  maphistoryA
@@ -336,6 +338,7 @@ docs/plan/data/dropmodel-normal.json  credit-runner  decomp31
 docs/plan/data/levelplan-normal.json  pro-runner  levelplan3
 docs/plan/data/progression-normal.json  credit-runner  hourfix
 docs/play-session.md  credit-runner  playsession
+docs/probes/bot-cpu-2026-11-16.md  credit-runner  botcpu
 docs/probes/bot-cpu-live-2026-11-16.md  credit-runner  botcpulive
 docs/probes/deploy-cockpit-2026-11-15.md  credit-runner  deploycockpit
 docs/probes/farmloop-live-20261116.md  credit-runner  farmlive
@@ -633,10 +636,13 @@ internal/d2dinput/controller.go  credit-runner  arrivalsettle
 internal/d2dinput/controller_test.go  credit-runner  arrivalsettle
 internal/d2dinput/run_test.go  credit-runner  arrivalsettle
 internal/d2dsoakstat/minute.go  credit-runner  intake
+internal/d2dsrc/cpuprobe_test.go  credit-runner  botcpu
 internal/d2dsrc/gearstats.go  credit-runner  survB
 internal/d2dsrc/gearstats_test.go  credit-runner  survB
 internal/d2dsrc/player.go  credit-runner  survB
+internal/d2dsrc/source_test.go  credit-runner  botcpu
 internal/d2dsrc/source_test.go  credit-runner  survB
+internal/d2dsrc/srv_test.go  credit-runner  botcpu
 internal/danger  credit-runner  dangerfit2
 internal/danger/  credit-runner  survA
 internal/danger/areaunits.json  pro-runner  decomp28
@@ -732,6 +738,7 @@ internal/merc/wear_test.go  credit-runner  lootwireL2
 internal/nav/covview.go  credit-runner  maptrail
 internal/nav/covview_test.go  credit-runner  maphistoryC
 internal/nav/covview_test.go  credit-runner  maptrail
+internal/nav/cpuprobe_test.go  credit-runner  botcpu
 internal/nav/exit.go  credit-runner  pursuers
 internal/nav/explore.go  credit-runner  pursuers
 internal/nav/fixmouth4_test.go  credit-runner  botstuck
@@ -764,6 +771,7 @@ internal/resource/swing.go  credit-runner  swingmodel
 internal/resource/swing_test.go  credit-runner  swingmodel
 internal/resource/tuning.go  credit-runner  freshstart
 internal/resource/tuning.go  live-agent  recoverypace
+internal/senses  credit-runner  botcpu
 internal/senses  credit-runner  maphistory
 internal/senses  credit-runner  maphistoryA
 internal/senses  credit-runner  maphistoryB
