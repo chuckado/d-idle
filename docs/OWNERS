@@ -410,6 +410,7 @@ docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
 docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
+docs/probes/survival-ab-recovery-2026-11-17.md  credit-runner  survrecover
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
@@ -572,6 +573,7 @@ internal/bot/areametrics.go  credit-runner  intake
 internal/bot/areaskip_test.go  credit-runner  passagebounce
 internal/bot/areaskip_test.go  credit-runner  staletarget
 internal/bot/areaskip_test.go  pro-runner  bounce3
+internal/bot/broke.go  credit-runner  survrecover
 internal/bot/catalog.go  credit-runner  botcpu2
 internal/bot/contracts.go  credit-runner  goldprio
 internal/bot/contracts.go  credit-runner  vaultv5
@@ -591,6 +593,7 @@ internal/bot/goal.go  credit-runner  quests3
 internal/bot/goal.go  credit-runner  repairtrip
 internal/bot/goal.go  credit-runner  staletarget
 internal/bot/goal.go  credit-runner  survB
+internal/bot/goal.go  credit-runner  survrecover
 internal/bot/goal.go  credit-runner  uib1
 internal/bot/goal.go  credit-runner  vaultv5
 internal/bot/goal.go  pro-runner  levelplan3
@@ -617,6 +620,7 @@ internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
 internal/bot/loop.go  credit-runner  survreask
+internal/bot/loop.go  credit-runner  survrecover
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
@@ -627,6 +631,7 @@ internal/bot/observe.go  credit-runner  lockscan
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
 internal/bot/observe.go  credit-runner  survreask
+internal/bot/observe.go  credit-runner  survrecover
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -691,13 +696,16 @@ internal/bot/whyline.go  credit-runner  staletarget
 internal/bot/whyline_test.go  credit-runner  uifix1
 internal/bot/zonemodel.go  credit-runner  survfix2
 internal/bot/zonemodel.go  credit-runner  survreask
+internal/bot/zonemodel.go  credit-runner  survrecover
 internal/bot/zonemodel_test.go  credit-runner  survfix2
 internal/bot/zonereask_test.go  credit-runner  survreask
+internal/bot/zonerecover_test.go  credit-runner  survrecover
 internal/bot/zoneshadow.go  credit-runner  intake
 internal/bot/zoneshadow.go  credit-runner  survB
 internal/bot/zoneshadow.go  credit-runner  survC
 internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow.go  credit-runner  survreask
+internal/bot/zoneshadow.go  credit-runner  survrecover
 internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
