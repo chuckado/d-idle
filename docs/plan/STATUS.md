@@ -288,14 +288,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ebde85899 11-17 00:29 `Merge agent/survtune3: survtune3: 8-seed rerun, holdout and Sorceress screen, recommendation (not yet)` (survtune3)
+- b0127c811 11-17 00:28 `Merge branch 'main' into survtune` (-)
 - 74aa84a91 11-17 00:11 `Merge agent/quests3: Merge branch 'main' into quests3` (quests3)
 - 212add0db 11-17 00:10 `Merge branch 'main' into quests3` (-)
+- 736ec54f7 11-16 23:50 `Merge origin/main into survtune3 (test-characters rows kept)` (-)
 - ce672cdf4 11-16 23:49 `Merge agent/vaultv3: Merge branch 'main' into TASK-589` (vaultv3)
 - 64a916a73 11-16 23:48 `quests3: merge main` (-)
 - 4aaf84700 11-16 23:48 `Merge branch 'main' into TASK-589` (-)
 - e36453db0 11-16 23:34 `Merge agent/botcpu2: Merge branch 'main' into botcpu2` (botcpu2)
 - 2724bde25 11-16 23:33 `Merge branch 'main' into botcpu2` (-)
-- fe68b9807 11-16 23:28 `Merge agent/quests2: Merge branch 'main' into quests2` (quests2)
-- 511aec3a9 11-16 23:27 `Merge branch 'main' into quests2` (-)
-- 845438e37 11-16 23:22 `Merge agent/vaultv2: Merge branch 'main' into vaultv2` (vaultv2)
 <!-- statusgen:end -->
