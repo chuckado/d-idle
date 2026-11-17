@@ -264,7 +264,10 @@
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
-| verifydecomp37 | in-progress | - | `docs/upstream/verifier-decomp37-2026-11-17.md` | - |
+| labels | proposed | - | `internal/d2dctl/labels.go`<br>`internal/d2dctl/labels_test.go`<br>`internal/watch/labelsapi.go`<br>`internal/watch/labelsapi_test.go`<br>`cmd/d2bot/labelswire.go`<br>`cmd/d2bot/labelswire_test.go`<br>`internal/watch/web/panels/video`<br>`internal/watch/testdata/video_labels_panel.js`<br>`tools/uishots/fixtures_commands.go`<br>`docs/video-feed.md`<br>`internal/watch/funwire.go`<br>`internal/watch/web/shell.js`<br>`internal/watch/watchlayout_test.go`<br>`tools/uishots/serve.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`tools/uishots.sh` | - |
+| morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
+| owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
+| questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -305,14 +308,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
-- 10dbc7735 11-17 09:51 `Merge agent/verifydecomp37: Merge branch 'main' into TASK-613` (verifydecomp37)
-- 6150eaf4e 11-17 09:50 `Merge branch 'main' into TASK-613` (-)
-- 4d6c263fd 11-17 08:16 `Merge agent/manaburnbody: Merge branch 'main' into TASK-614` (manaburnbody)
-- 8def47cdd 11-17 08:08 `Merge branch 'main' into TASK-614` (-)
-- b18e3627a 11-17 08:06 `Merge agent/vaultphone: Merge branch 'main' into vaultphone` (vaultphone)
-- 6d2cea9a8 11-17 08:05 `Merge branch 'main' into vaultphone` (-)
-- 1ca425356 11-17 08:04 `Merge agent/verifydecomp38: Merge branch 'main' into TASK-608` (verifydecomp38)
-- cedb3f753 11-17 07:59 `Merge branch 'main' into TASK-608` (-)
-- 104d37580 11-17 07:48 `Merge agent/menufit2: Merge branch 'main' into menufit2` (menufit2)
-- ae8632feb 11-17 07:47 `Merge branch 'main' into menufit2` (-)
+- b4e8a38ee 11-17 13:06 `Merge agent/questrun: Merge branch 'main' into TASK-619` (questrun)
+- 7b41d2c16 11-17 13:05 `Merge branch 'main' into TASK-619` (-)
+- 0e336ab05 11-17 12:59 `Merge agent/labels: Merge branch 'main' into TASK-615` (labels)
+- bd9bd1d06 11-17 12:58 `Merge branch 'main' into TASK-615` (-)
+- a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
+- 152abf8d7 11-17 12:39 `Merge branch 'main' into gowhole` (-)
+- 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
+- 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
+- 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
+- 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
 <!-- statusgen:end -->

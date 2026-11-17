@@ -82,6 +82,7 @@ type ladderOptions struct {
 	skills        *watch.SkillsAPI     // the skill tree page routes (skillswire.go); nil: none
 	art           watch.ArtSource      // the game art of the install (artwire.go); nil: /api/art says available:false
 	pause         watch.PauseDesk      // the player's Pause command (pausewire.go); nil: none
+	labels        watch.LabelsDesk     // the item labels toggle (labelswire.go); nil: none
 	reset         watch.ResetDesk      // the player's Reset command (resetwire.go); nil: none
 	characters    watch.CharactersDesk // the Character Select backend (charwire.go, docs/charselect.md); nil: no routes (the Game.exe backend is not wired yet)
 	repair        *repair.Controller   // the repair policy (repairwire.go); nil: none
@@ -296,6 +297,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 		if l.pause != nil {
 			rig.Fun.Pause = watch.NewPauseAPI()
 			rig.Fun.Pause.Bind(l.pause)
+		}
+		if l.labels != nil {
+			rig.Fun.Labels = watch.NewLabelsAPI()
+			rig.Fun.Labels.Bind(l.labels)
 		}
 		if l.reset != nil {
 			rig.Fun.Reset = watch.NewResetAPI()

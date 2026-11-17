@@ -315,7 +315,7 @@ func (e *Exec) acceptLocked(vs []QuestView, plan Plan, diff int, quest, chunk st
 		return err
 	}
 	delete(e.rs, ChunkKey(quest, chunk)) // a fresh start: no old counters or park
-	e.o.Log("quest accepted", "quest", quest, "chunk", chunk)
+	e.o.Log("quest board: accepted "+ChunkKey(quest, chunk), "quest", quest, "chunk", chunk)
 	return nil
 }
 
@@ -504,7 +504,7 @@ func (e *Exec) Report(d Decision, res StepResult) {
 		rs.lastWhy = res.Why
 		if rs.failures >= e.o.MaxFailures {
 			rs.blocked = fmt.Sprintf("gave up after %d tries: %s", rs.failures, nonEmpty(res.Why, "the step kept failing"))
-			e.o.Log("quest chunk parked", "chunk", k, "why", rs.blocked)
+			e.o.Log("quest board: parked "+k, "chunk", k, "why", rs.blocked)
 		}
 	case StepDied:
 		rs.started = true
@@ -512,7 +512,7 @@ func (e *Exec) Report(d Decision, res StepResult) {
 		rs.lastWhy = nonEmpty(res.Why, "died")
 		if rs.deaths >= e.o.MaxDeaths {
 			rs.blocked = fmt.Sprintf("died %d times on this part: %s", rs.deaths, rs.lastWhy)
-			e.o.Log("quest chunk parked", "chunk", k, "why", rs.blocked)
+			e.o.Log("quest board: parked "+k, "chunk", k, "why", rs.blocked)
 		}
 	}
 }
@@ -619,7 +619,7 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 		res.Attempts++
 		if err := e.act.HandIn(ctx, q, c); err != nil {
 			last = err.Error()
-			e.o.Log("quest hand-in failed", "quest", quest, "chunk", chunk, "attempt", res.Attempts, "err", err)
+			e.o.Log("quest board: hand-in failed "+ChunkKey(quest, chunk), "quest", quest, "chunk", chunk, "attempt", res.Attempts, "err", err)
 			continue
 		}
 		e.mu.Lock()
@@ -635,7 +635,7 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 			e.mu.Lock()
 			delete(e.rs, ChunkKey(quest, chunk))
 			e.mu.Unlock()
-			e.o.Log("quest handed in", "quest", quest, "chunk", chunk, "outcome", res.Outcome, "tier", cv.Tier.String())
+			e.o.Log("quest board: handed in "+ChunkKey(quest, chunk), "quest", quest, "chunk", chunk, "outcome", res.Outcome, "tier", cv.Tier.String())
 			return res, nil
 		}
 		last = "the reward did not register after the dialogue"
@@ -645,7 +645,7 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 	e.mu.Lock()
 	e.state(ChunkKey(quest, chunk)).blocked = res.Why
 	e.mu.Unlock()
-	e.o.Log("quest chunk parked", "chunk", ChunkKey(quest, chunk), "why", res.Why)
+	e.o.Log("quest board: parked "+ChunkKey(quest, chunk), "chunk", ChunkKey(quest, chunk), "why", res.Why)
 	return res, nil
 }
 
