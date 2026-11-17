@@ -24,7 +24,30 @@ type questRig struct {
 
 var questAuth = map[string]string{"Authorization": "Bearer tok"}
 
+// ledgerFake is the account wallet in memory: a key pays once.
+type ledgerFake map[string]int
+
+func (l ledgerFake) k(q, c, d string) string {
+	if c == "" {
+		c = "-"
+	}
+	return "quest/" + q + "/" + c + "/" + d
+}
+func (l ledgerFake) Earn(q, c, d string, n int) (questboard.LedgerResult, error) {
+	k := l.k(q, c, d)
+	if _, dup := l[k]; dup {
+		return questboard.LedgerResult{Key: k, Already: true}, nil
+	}
+	l[k] = n
+	return questboard.LedgerResult{Key: k, Credited: n}, nil
+}
+func (l ledgerFake) Paid(q, c, d string) (int, bool) { n, ok := l[l.k(q, c, d)]; return n, ok }
+
 func newQuestRig(t *testing.T, class string, clvl int) *questRig {
+	return newQuestRigWith(t, class, clvl, nil)
+}
+
+func newQuestRigWith(t *testing.T, class string, clvl int, led questboard.Ledger) *questRig {
 	t.Helper()
 	b, err := questboard.Load()
 	if err != nil {
@@ -35,7 +58,7 @@ func newQuestRig(t *testing.T, class string, clvl int) *questRig {
 		t.Fatal(err)
 	}
 	f := questboard.NewFake(b, class, clvl)
-	x := questboard.NewExec(b, st, f, f, questboard.Options{Enabled: true})
+	x := questboard.NewExec(b, st, f, f, questboard.Options{Enabled: true, Ledger: func() questboard.Ledger { return led }})
 	r := &questRig{t: t, f: f, x: x, api: NewQuestsAPI(), now: time.Date(2026, 11, 17, 12, 0, 0, 0, time.UTC)}
 	r.desk = questboard.NewDesk(b, questboard.DeskConfig{
 		Exec:  func() (*questboard.Exec, *questboard.Store) { return x, st },
@@ -90,6 +113,41 @@ func TestQuestsRouteGoldens(t *testing.T) {
 		golden(t, "quests/running-"+c.name, r.get())
 		r.tick(3)
 		golden(t, "quests/awaiting-"+c.name, r.get())
+	}
+}
+
+// With a wallet the offers carry `pays`, the hand-in reports `awarded` once and `already` on a repeat; without one
+// neither field appears (the goldens above).
+func TestQuestsRouteEtherGoldens(t *testing.T) {
+	for _, c := range []struct{ class, name string }{{"Paladin", "paladin"}, {"Sorceress", "sorceress"}} {
+		r := newQuestRigWith(t, c.class, 6, ledgerFake{})
+		golden(t, "quests/offers-ether-"+c.name, r.get())
+		r.do("/api/quests/den_of_evil/start", `{}`)
+		r.tick(4)
+		w := r.do("/api/quests/den_of_evil/handin", `{}`)
+		if w.Code != 202 {
+			t.Fatalf("handin: %d %s", w.Code, w.Body)
+		}
+		var done string
+		for i := 0; i < 200 && done == ""; i++ {
+			time.Sleep(10 * time.Millisecond)
+			if g := r.get(); strings.Contains(g, `"state":"done"`) && strings.Contains(g, `"awarded"`) {
+				done = g
+			}
+		}
+		if done == "" {
+			t.Fatal("hand-in never paid")
+		}
+		for _, want := range []string{`"awarded":[{"kind":"ether","amount":2,"key":"quest/den_of_evil/-/normal"}]`, `"paid":[{"kind":"ether","amount":2`} {
+			if !strings.Contains(done, want) {
+				t.Fatalf("hand-in view lacks %s", want)
+			}
+		}
+		w = r.do("/api/quests/den_of_evil/handin", `{}`)
+		golden(t, "quests/reply-handin-again-"+c.name, w.Body.String())
+		if !strings.Contains(w.Body.String(), `"already":true`) || strings.Contains(w.Body.String(), "awarded") {
+			t.Fatalf("repeat: %s", w.Body)
+		}
 	}
 }
 
