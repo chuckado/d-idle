@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/bodies/decomp37-open-wounds-body.md"
 exclusive: []
 contracts: []
+result: "body updated with W1 to W7 (docs only, not verified live)"
 ---
 
 ## Description
