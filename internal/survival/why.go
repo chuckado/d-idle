@@ -10,6 +10,7 @@ type Why struct {
 // The closed list of codes (one file, design 8.1).
 const (
 	WhyBestPay      = "best_pay_eligible" // the zone pays most among the safe ones
+	WhyRiskPaid     = "pays_for_risk"     // a little riskier than the safe zones, and it pays clearly more
 	WhyStay         = "stay_current"      // another zone pays more, but not by enough to leave
 	WhyDepleted     = "depleted_next"     // the best zone is cleared; the next safe one
 	WhyFresh        = "fresh_game"        // the best zone is cleared and a new game beats walking to a poor one
@@ -25,5 +26,5 @@ const (
 )
 
 // Codes lists every code, for the UI's phrase table and the tests.
-var Codes = []string{WhyBestPay, WhyStay, WhyDepleted, WhyFresh, WhyHole, WhyMarginLow, WhyStayLine, WhyCost, WhyDied,
+var Codes = []string{WhyBestPay, WhyRiskPaid, WhyStay, WhyDepleted, WhyFresh, WhyHole, WhyMarginLow, WhyStayLine, WhyCost, WhyDied,
 	WhyLeftForCost, WhyMercDead, WhyMercRevive, WhyMercNoRevive}

@@ -232,6 +232,8 @@
 | pausefix | proposed | - | `internal/watch/pauseapi.go`<br>`internal/watch/pausefix_test.go`<br>`internal/watch/web/pauseui.js`<br>`internal/watch/web/panels/orders/panel.js` | - |
 | survfix2 | in-progress | - | `internal/survival`<br>`internal/combat/castfirst.go`<br>`internal/combat/fight.go`<br>`internal/combat/fightend.go`<br>`internal/combat/dodge.go`<br>`internal/bot/zonemodel.go`<br>`internal/bot/zoneshadow.go`<br>`internal/bot/zonemodel_test.go`<br>`internal/env/tuning_bot.go`<br>`cmd/d2bot/survivalwire.go`<br>`tools/ab/prep`<br>`tools/survival/abrun.sh`<br>`docs/survival/ab-harness.md`<br>`docs/survival/ledger.md`<br>`docs/knobs.md` | - |
 | flakefix | proposed | - | `internal/bot/failsafe_test.go` | - |
+| survab8 | proposed | - | `docs/probes/survival-ab-8seed-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
+| survtune | proposed | - | `internal/survival`<br>`tools/ab/prep`<br>`tools/survival`<br>`docs/survival/ab-harness.md`<br>`docs/probes/survival-ab-8seed-rerun-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -274,14 +276,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- dbec78bb7 11-16 19:23 `Merge agent/survtune: survtune: weapon readback in prep, pay-for-risk dial route, abq driver` (survtune)
+- cec708e7f 11-16 19:22 `Merge branch 'main' into survtune` (-)
+- 75ec8348b 11-16 18:51 `Merge agent/videofeed3: videofeed3: lossless feed at 30 fps (ring divisor), presentation clock, fill-the-card fit` (videofeed3)
+- b0ad05793 11-16 18:48 `Merge remote-tracking branch 'origin/main' into agent/videofeed3` (-)
+- de151d37f 11-16 18:32 `Merge agent/survab8: Merge branch 'main' into survab8` (survab8)
+- 2aa3e5331 11-16 18:31 `Merge branch 'main' into survab8` (-)
+- 81cadbc15 11-16 18:08 `Merge agent/leechbody: leech PR body per verifier L1-L6` (leechbody)
 - 5f4d4a959 11-16 17:45 `Merge agent/verifydecomp35: Merge branch 'main' into TASK-564` (verifydecomp35)
 - 9df96fd85 11-16 17:44 `Merge branch 'main' into TASK-564` (-)
 - f972f9707 11-16 17:05 `Merge agent/flakefix: Merge branch 'main' into flakefix` (flakefix)
-- 07ab5b25e 11-16 17:04 `Merge branch 'main' into flakefix` (-)
-- 14e155b0f 11-16 16:37 `Merge agent/survledger: Merge branch 'main' into TASK-566` (survledger)
-- f62adefc9 11-16 16:36 `Merge branch 'main' into TASK-566` (-)
-- d5151ba8b 11-16 16:06 `Merge agent/survrescreen: Merge branch 'main' into survrescreen` (survrescreen)
-- fa812710d 11-16 16:05 `Merge branch 'main' into survrescreen` (-)
-- 33dd65c36 11-16 15:16 `Merge agent/survfix2: Merge branch 'main' into TASK-562` (survfix2)
-- 702813fc7 11-16 15:15 `Merge branch 'main' into TASK-562` (-)
 <!-- statusgen:end -->

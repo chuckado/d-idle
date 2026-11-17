@@ -11,6 +11,7 @@ function env(formats, detectOK) {
   const PalFeed = {
     negotiate: () => Promise.resolve(detectOK && formats.indexOf('palfeed') >= 0 ? { paletteFeed: true, version: 1 } : null),
     fit: () => ({ cssW: 800, cssH: 600, scale: 1 }),
+    fitFill: (w, h, aw, ah) => ({ cssW: 933, cssH: 700, scale: 1.1667, integer: false }),
     Player: function (o) { this.o = o; this.stopped = false; players.push(this); urls.push(o.url); this.start = () => {}; this.stop = () => { this.stopped = true; }; },
   };
   const fetch = (u) => Promise.resolve({ ok: true, json: () => Promise.resolve({ stream: { formats } }) });
@@ -34,6 +35,12 @@ async function mount(formats, detectOK, cfg, store) {
   assert.strictEqual(m.cv.hidden, true);
   m.players[0].o.onFrame();
   assert.strictEqual(m.cv.hidden, false); assert.strictEqual(m.shot.hidden, true); assert.strictEqual(m.s.c.st, 'ready');
+  // the canvas fills the box (fractional scale, smooth) and Sharp pixels switches to hard edges; the button shows with the feed only
+  const sharpBtn = m.s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'sharp');
+  assert.ok(sharpBtn && sharpBtn.hidden === false, 'sharp button shown with the feed');
+  assert.strictEqual(m.cv.style['--pal-w'], '933px'); assert.strictEqual(m.cv.dataset.smooth, '1');
+  sharpBtn.fire('click'); assert.strictEqual(m.cv.dataset.smooth, '0'); assert.strictEqual(sharpBtn.attrs['aria-pressed'], 'true');
+  sharpBtn.fire('click'); assert.strictEqual(m.cv.dataset.smooth, '1');
   // a fatal stream error returns to MJPEG: the canvas hides and the next open is the fetch stream
   m.players[0].o.onEnd(Object.assign(new Error('palfeed: bad header'), { fatal: true }));
   assert.strictEqual(m.cv.hidden, true);

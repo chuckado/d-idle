@@ -339,6 +339,10 @@ docs/probes/h1-baseline.md  user  h1baseline
 docs/probes/h3-verdict.md  user  h3verdict
 docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
+docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
+docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
+docs/probes/test-characters.md  credit-runner  survab8
+docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
 docs/probes/tpreserve.md  live-agent  tpreserve-live
 docs/probes/video-feed-2026-11-15.md  credit-runner  videofeed
@@ -400,6 +404,7 @@ docs/staletarget.md  credit-runner  staletarget
 docs/stance.md  credit-runner  wiring2
 docs/survival  credit-runner  survsd
 docs/survival/ab-harness.md  credit-runner  survfix2
+docs/survival/ab-harness.md  credit-runner  survtune
 docs/survival/ab-screen-analysis-2026-11-16.md  credit-runner  survfix
 docs/survival/danger.md  credit-runner  dangerfit2
 docs/survival/danger.md  credit-runner  survA
@@ -759,6 +764,7 @@ internal/skilltree  credit-runner  skilltrees
 internal/skilltree  credit-runner  skilltrees2
 internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survsd
+internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
@@ -1094,6 +1100,7 @@ internal/watch/whyline_test.go  credit-runner  uifix1
 internal/watch/zoneclear.go  credit-runner  farmloop
 internal/watch/zoneclear_test.go  credit-runner  farmloop
 tools/ab/prep  credit-runner  survfix2
+tools/ab/prep  credit-runner  survtune
 tools/bounce3  pro-runner  bounce3
 tools/dev-update-host.sh  credit-runner  buildhosts3
 tools/dev-update.sh  credit-runner  buildhosts3
@@ -1147,6 +1154,7 @@ tools/levelsim/shadow.go  credit-runner  intake
 tools/levelsim/shadow.go  credit-runner  survB
 tools/levelsim/shadow_test.go  credit-runner  survB
 tools/play-session.sh  credit-runner  playsession
+tools/survival  credit-runner  survtune
 tools/survival/abreport  credit-runner  survfix
 tools/survival/abrun.sh  credit-runner  survfix2
 tools/tester-pack.sh  credit-runner  testerpack

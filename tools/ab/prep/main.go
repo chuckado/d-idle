@@ -134,5 +134,75 @@ func run() error {
 		_ = p.Stop()
 		return err
 	}
+	// Read the weapon back like the bot does (dump stats "weapons"/"hero"): an equip verb that answered ok but left the
+	// right hand empty would otherwise only show up as src=default hours later. Read-only, so not a write.
+	r, err := c.Do(ctx, "dump stats")
+	if err != nil {
+		_ = p.Stop()
+		return fmt.Errorf("dump stats: %w", err)
+	}
+	line := strings.TrimSpace(r.Rest)
+	for _, l := range r.Lines {
+		if strings.TrimSpace(l) != "" {
+			line = l
+			break
+		}
+	}
+	rb, rerr := WeaponReadback(line, s.Weapon)
+	_ = enc.Encode(ledgerLine{Time: time.Now().Format(time.RFC3339), Verb: "dump stats", Reason: "READ-ONLY readback of the SETUP weapon", Reply: rb})
+	if rerr != nil {
+		if len(line) > 3000 {
+			line = line[:3000]
+		}
+		fmt.Fprintln(os.Stderr, "prep: raw dump stats:", line)
+		_ = p.Stop()
+		return rerr
+	}
 	return p.SaveExit(ctx)
+}
+
+// WeaponReadback checks the "dump stats" reply for the SETUP weapon and returns a one-line summary for the ledger.
+// With want == "" it only summarises. It errors when a weapon was asked for and the right hand (slot 4) shows none, or
+// when the dump has no "weapons" key at all (a d2d binary older than the lab2-stats branch: the bot could not read it
+// either, so the A/B would run on the default offence).
+func WeaponReadback(dump, want string) (string, error) {
+	var d struct {
+		Stats struct {
+			Weapons []struct {
+				Code   string `json:"code"`
+				Slot   int    `json:"slot"`
+				MinDam int    `json:"mindam"`
+				MaxDam int    `json:"maxdam"`
+			} `json:"weapons"`
+			Hero struct {
+				Hands []struct {
+					Slot int `json:"slot"`
+					Min  int `json:"min"`
+					Max  int `json:"max"`
+				} `json:"hands"`
+			} `json:"hero"`
+		} `json:"stats"`
+	}
+	if err := json.Unmarshal([]byte(dump), &d); err != nil {
+		return "", fmt.Errorf("dump stats readback: %w", err)
+	}
+	var parts []string
+	found := false
+	for _, w := range d.Stats.Weapons {
+		parts = append(parts, fmt.Sprintf("weapon %s slot %d base %d-%d", w.Code, w.Slot, w.MinDam, w.MaxDam))
+		if w.Slot == WeaponSlot && (want == "" || w.Code == want) {
+			found = true
+		}
+	}
+	for _, h := range d.Stats.Hero.Hands {
+		parts = append(parts, fmt.Sprintf("hero hand slot %d dmg %d-%d", h.Slot, h.Min, h.Max))
+	}
+	sum := strings.Join(parts, "; ")
+	if sum == "" {
+		sum = "no weapons in dump"
+	}
+	if want != "" && !found {
+		return sum, fmt.Errorf("SETUP weapon %q is not in the right hand after the equip verb (%s): the binary may predate the lab2-stats dump or the slot is wrong", want, sum)
+	}
+	return sum, nil
 }

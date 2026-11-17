@@ -190,3 +190,52 @@ func TestCompare(t *testing.T) {
 		_ = os.WriteFile(p, out.Bytes(), 0o644)
 	}
 }
+
+// TestWriteWire writes the length-prefixed message stream of the first D2FEED_MAX recorded frames (25 Hz stamps, tile 16)
+// for the browser pacing bench (tools/videofeed/stream3.js). D2FEED_FRAMES=dir D2FEED_MSGS=file D2FEED_MAX=500.
+func TestWriteWire(t *testing.T) {
+	dir, out := os.Getenv("D2FEED_FRAMES"), os.Getenv("D2FEED_MSGS")
+	if dir == "" || out == "" {
+		t.Skip("D2FEED_FRAMES and D2FEED_MSGS not set")
+	}
+	files, _ := filepath.Glob(filepath.Join(dir, "f*.png"))
+	sort.Strings(files)
+	n := len(files)
+	if v := os.Getenv("D2FEED_MAX"); v != "" {
+		fmt.Sscanf(v, "%d", &n)
+	}
+	var wire bytes.Buffer
+	enc := &Encoder{Tile: 16}
+	var prev *Frame
+	for i := 0; i < n && i < len(files); i++ {
+		fr, err := os.Open(files[i])
+		if err != nil {
+			t.Fatal(err)
+		}
+		img, err := png.Decode(fr)
+		fr.Close()
+		if err != nil {
+			t.Fatal(err)
+		}
+		b := img.Bounds()
+		pix := make([]byte, b.Dx()*b.Dy()*4)
+		for y := 0; y < b.Dy(); y++ {
+			for x := 0; x < b.Dx(); x++ {
+				r, g, bl, _ := img.At(b.Min.X+x, b.Min.Y+y).RGBA()
+				o := (y*b.Dx() + x) * 4
+				pix[o], pix[o+1], pix[o+2], pix[o+3] = byte(r>>8), byte(g>>8), byte(bl>>8), 255
+			}
+		}
+		cur := &Frame{W: b.Dx(), H: b.Dy(), Pix: pix, Seq: uint32(i + 1), GameMS: uint32(i * 40)}
+		m, err := enc.Encode(prev, cur)
+		if err != nil {
+			t.Fatal(err)
+		}
+		wire.Write([]byte{byte(len(m)), byte(len(m) >> 8), byte(len(m) >> 16), byte(len(m) >> 24)})
+		wire.Write(m)
+		prev = cur
+	}
+	if err := os.WriteFile(out, wire.Bytes(), 0o644); err != nil {
+		t.Fatal(err)
+	}
+}

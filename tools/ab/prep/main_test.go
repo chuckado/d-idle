@@ -28,3 +28,20 @@ func TestVerbsWeapon(t *testing.T) {
 		}
 	}
 }
+
+func TestWeaponReadback(t *testing.T) {
+	ok := `{"v":1,"stats":{"weapons":[{"code":"hax","slot":4,"mindam":3,"maxdam":6}],"hero":{"hands":[{"slot":4,"min":3,"max":6}]}}}`
+	if s, err := WeaponReadback(ok, "hax"); err != nil || s == "" {
+		t.Errorf("worn weapon: %q, %v", s, err)
+	}
+	if _, err := WeaponReadback(ok, "swd"); err == nil {
+		t.Error("another code must fail")
+	}
+	old := `{"v":1,"stats":{"base":{"str":25}}}`
+	if _, err := WeaponReadback(old, "hax"); err == nil {
+		t.Error("a dump without weapons must fail when one was asked for")
+	}
+	if _, err := WeaponReadback(old, ""); err != nil {
+		t.Errorf("no weapon asked: %v", err)
+	}
+}

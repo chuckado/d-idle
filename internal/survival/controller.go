@@ -94,6 +94,7 @@ type verdict struct {
 	xp       float64 // xp/min the value rests on (model prior, or the blend with the realized one)
 	realized float64 // the realized xp/min behind the blend, 0 = the prior stands
 	starving bool
+	riskPaid bool // eligible only through the dial's pay-for-risk route
 }
 
 func word(best, low, enter, stay float64) string {
@@ -134,10 +135,15 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 			}
 			break
 		}
+		row, _ := l.P.stepDown(in.Dial.ID) // an unknown dial has no risk route; ForcedOut above already named it
+		typ := c.ZM.Typical.Low / v.k
+		riskOK := row.TypicalEnter > 0 && typ >= row.TypicalEnter && v.best >= row.BadFloor
 		if cur && v.best >= stay {
 			v.eligible = true
 		} else if !cur && v.low >= enter {
 			v.eligible = true
+		} else if riskOK {
+			v.eligible, v.riskPaid = true, true
 		} else if cur {
 			v.why = Why{WhyStayLine, "no longer safe enough to stay"}
 		} else if v.best >= stay {
@@ -153,6 +159,10 @@ func (l *Ledger) judge(in Input, c Candidate, lam float64) verdict {
 		v.starving = l.Starving(c.Key, in.Archetype)
 	}
 	v.value = (v.xp + lam*c.Eco.Net()) * stayMin / (stayMin + c.TravelMin)
+	if v.riskPaid {
+		row, _ := l.P.stepDown(in.Dial.ID)
+		v.value *= row.RiskValueMul
+	}
 	if v.starving {
 		v.value *= l.P.StarveValueMul // the hero cannot cast here for want of mana: the model's kill speed is a fiction
 	}
@@ -197,6 +207,9 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 	default:
 		pick = elig[0]
 		d.Why = Why{WhyBestPay, "best pay among the safe zones"}
+		if pick.riskPaid {
+			d.Why = Why{WhyRiskPaid, "a little riskier than the safe zones, and it pays clearly more"}
+		}
 		if pick.c.Depleted {
 			var next *verdict
 			for _, e := range elig {
@@ -248,6 +261,9 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 		}
 		if v.eligible {
 			a.Why = Why{WhyBestPay, "safe, but pays less"}
+			if v.riskPaid {
+				a.Why = Why{WhyRiskPaid, "a little risky, and pays less"}
+			}
 			a.detail = fmt.Sprintf("margin %.1f, value %.0f < %.0f", v.best, v.value, pick.value)
 		}
 		d.Alts = append(d.Alts, a)

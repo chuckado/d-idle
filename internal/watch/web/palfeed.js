@@ -60,18 +60,27 @@
     return this.dirty;
   };
 
-  // splitter turns arbitrary chunks of the u32-length-prefixed body into whole messages.
-  function Splitter() { this.buf = new Uint8Array(0); }
+  // splitter turns arbitrary chunks of the u32-length-prefixed body into whole messages. One growing buffer with a read
+  // offset: a chunk is copied once and no array is built per chunk (the old concatenation allocated the whole backlog
+  // per 16 to 64 KB chunk, which a busy main thread felt as GC pauses). The returned views are valid until the next push:
+  // the caller must consume them (parse, hand to inflate: a Blob copies at once) before pushing again.
+  function Splitter() { this.buf = new Uint8Array(1 << 16); this.off = 0; this.end = 0; }
   Splitter.prototype.push = function (chunk) {
-    var b = new Uint8Array(this.buf.length + chunk.length), out = [], p = 0;
-    b.set(this.buf, 0); b.set(chunk, this.buf.length);
-    while (b.length - p >= 4) {
-      var n = u32(b, p);
-      if (n > (16 << 20)) throw fatal('palfeed: message too large');
-      if (b.length - p - 4 < n) break;
-      out.push(b.subarray(p + 4, p + 4 + n)); p += 4 + n;
+    if (this.end + chunk.length > this.buf.length) {
+      var live = this.end - this.off, need = live + chunk.length;
+      var next = need > this.buf.length ? new Uint8Array(Math.max(need, this.buf.length * 2)) : this.buf;
+      next.set(this.buf.subarray(this.off, this.end), 0);
+      this.buf = next; this.off = 0; this.end = live;
     }
-    this.buf = b.subarray(p);
+    this.buf.set(chunk, this.end); this.end += chunk.length;
+    var out = [], b = this.buf;
+    while (this.end - this.off >= 4) {
+      var n = u32(b, this.off);
+      if (n > (16 << 20)) throw fatal('palfeed: message too large');
+      if (this.end - this.off - 4 < n) break;
+      out.push(b.subarray(this.off + 4, this.off + 4 + n)); this.off += 4 + n;
+    }
+    if (this.off === this.end) this.off = this.end = 0;
     return out;
   };
 
@@ -83,6 +92,18 @@
     if (s >= 1) return { cssW: frameW * s / dpr, cssH: frameH * s / dpr, scale: s };
     var f = Math.min(availCssW / frameW, availCssH / frameH);
     return { cssW: frameW * f, cssH: frameH * f, scale: f * dpr };
+  }
+
+  // fitFill is the canvas CSS size that fills the box: the largest size that keeps the frame's aspect (contain), at
+  // any fractional scale, rounded to whole DEVICE pixels so the edges stay clean. `integer` says the scale is a whole
+  // number of device pixels per frame pixel (then nearest-neighbour is as sharp as it can be; at a fractional scale
+  // nearest-neighbour shimmers when the picture scrolls, so the page smooths there unless Sharp pixels is on).
+  function fitFill(frameW, frameH, availCssW, availCssH, dpr) {
+    dpr = dpr || 1;
+    var s = Math.min(availCssW * dpr / frameW, availCssH * dpr / frameH);
+    if (!(s > 0)) return { cssW: frameW, cssH: frameH, scale: 1, integer: true };
+    var devW = Math.max(1, Math.round(frameW * s)), devH = Math.max(1, Math.round(frameH * s));
+    return { cssW: devW / dpr, cssH: devH / dpr, scale: s, integer: Math.abs(s - Math.round(s)) < 0.005 };
   }
 
   // detect asks the host whether the feed exists; anything but a 200 with paletteFeed:true keeps the MJPEG img.
@@ -119,26 +140,68 @@
     return new Response(new Blob([bytes]).stream().pipeThrough(ds)).arrayBuffer().then(function (a) { return new Uint8Array(a); });
   }
 
-  // Player: fetch the stream, decode in order, draw only the newest state once per animation frame (latest wins).
-  // o: {canvas, url, headers, fetch, inflate, raf, onFrame(), onBytes(n), onEnd(err), onFallback(reason), log(msg)}
-  // With onEnd the caller owns reconnects (the video panel's controller: backoff, stall watchdog, hidden tabs); without
-  // it the player retries itself 3 times (a reconnect is a new key frame) and then calls onFallback.
-  // An error carries .fatal when a retry cannot help (a broken stream: bad header, short payload, oversized message).
+  // Player: fetch the stream, inflate each message as it arrives, and PRESENT on requestAnimationFrame by a presentation
+  // clock (below). o: {canvas, url, headers, fetch, inflate, raf, now, onFrame(), onBytes(n), onEnd(err), onFallback(reason),
+  // log(msg)}. With onEnd the caller owns reconnects (the video panel's controller: backoff, stall watchdog, hidden tabs);
+  // without it the player retries itself 3 times (a reconnect is a new key frame) and then calls onFallback. An error
+  // carries .fatal when a retry cannot help (a broken stream: bad header, short payload, oversized message).
+  //
+  // Presentation clock (docs/video-feed.md section 11). Messages arrive with network and GC jitter; showing each at its own
+  // arrival moment makes steady motion look uneven. Every message carries the d2d game time of its frame. The player keeps
+  // the smallest (arrival - gameMs) of the last 2 s, which is the transit of the least delayed message, and presents the
+  // frame of game time g at g + that + D, with D one frame interval plus 1.5 times the measured jitter, clamped to 1..2 frames
+  // (never above MAX_DELAY ms). A message that is due is decoded in order and ONE draw shows the newest of them (latest wins);
+  // a message older than MAX_AGE ms at presentation time is never waited for. When the game clock does not track the wall
+  // clock (a fast-forwarded lockstep game) the due time is capped at arrival + D, which is "present on the next animation
+  // frame". Counters: delivered messages, decoded, presented draws, dropped (decoded but never drawn on their own: merged
+  // into a later draw), and the standard deviation of the intervals between draws.
+  var MAX_DELAY = 70, MAX_AGE = 80, WINDOW_MS = 2000;
   function Player(o) {
     this.o = o; this.dec = new Decoder(); this.ctx = o.canvas.getContext('2d', { alpha: false, desynchronized: true });
     this.stopped = false; this.pending = null; this.raf = o.raf || (root.requestAnimationFrame && root.requestAnimationFrame.bind(root));
+    this.now = o.now || (root.performance && root.performance.now.bind(root.performance)) || Date.now;
     this.frames = 0; this.drawn = 0; this.bytes = 0; this.failures = 0; this.lowRate = false; this.ctl = null; this.gen = 0; this.imgs = [];
+    this.q = []; this.transits = []; this.jit = 0; this.step = 33; this.lastGame = -1; this.lastDraw = -1; this.ivs = [];
+    this.work = 0; this.delivered = 0; this.decoded = 0; this.dropped = 0; this.lat = 0; this.rafOn = false;
   }
   Player.prototype.setLowRate = function (on) { this.lowRate = !!on; this._abort(); };
   Player.prototype._abort = function () { if (this.ctl) this.ctl.abort(); };
   Player.prototype.stop = function () { this.stopped = true; this.gen++; this._abort(); };
   Player.prototype.start = function () { this._run(); };
+  // stats: counters since the connection started; fps are over the last 2 s of presented draws and arrivals
+  Player.prototype.stats = function () {
+    var n = this.ivs.length, mean = 0, sd = 0, i;
+    for (i = 0; i < n; i++) mean += this.ivs[i];
+    if (n) mean /= n;
+    for (i = 0; i < n; i++) sd += (this.ivs[i] - mean) * (this.ivs[i] - mean);
+    return { delivered: this.delivered, decoded: this.decoded, presented: this.drawn, dropped: this.dropped, queue: this.q.length,
+             presentFps: mean ? 1000 / mean : 0, jitterMs: n ? Math.sqrt(sd / n) : 0, latencyMs: this.lat, delayMs: this._delay(), workMs: this.work };
+  };
+  Player.prototype._delay = function () { return Math.max(this.step, Math.min(MAX_DELAY, this.step + 1.5 * this.jit)); };
+  // _arrive stamps a message with its due time. g is the frame's game time in ms.
+  Player.prototype._arrive = function (h, at) {
+    var g = h.gameMs, T = this.transits;
+    if (this.o.noClock) return at;   // measurement only: present at the first animation frame after arrival (the old behaviour)
+    if (this.lastGame >= 0 && g === this.lastGame) return at;   // a heartbeat repeats the last frame's time: nothing to schedule
+    if (this.lastGame >= 0) {
+      if (g < this.lastGame - 1000) { T.length = 0; this.jit = 0; }   // a restarted d2d: a new clock
+      else if (g > this.lastGame) { var d = g - this.lastGame; if (d < 200) this.step += (Math.min(d, 70) - this.step) * 0.1; }
+    }
+    if (g > this.lastGame) this.lastGame = g;
+    var tr = at - g;
+    T.push([at, tr]);
+    while (T.length && at - T[0][0] > WINDOW_MS) T.shift();
+    var m = tr;
+    for (var i = 0; i < T.length; i++) if (T[i][1] < m) m = T[i][1];
+    this.jit += (Math.abs(tr - m) - this.jit) * 0.05;
+    var due = g + m + this._delay();
+    return Math.min(due, at + MAX_DELAY);   // a game clock that does not follow the wall clock: present on the next frame
+  };
   Player.prototype._run = function () {
     var self = this, o = this.o, inflate = o.inflate || browserInflate, sp = new Splitter(), gen = ++this.gen;
-    this.dec = new Decoder(); this.pending = null; // a new connection starts from a key frame
+    this.dec = new Decoder(); this.pending = null; this.q = []; this.transits = []; this.lastGame = -1; // a new connection starts from a key frame
     this.ctl = typeof AbortController === 'function' ? new AbortController() : { abort: function () {} };
     var url = o.url + (this.lowRate ? (o.url.indexOf('?') < 0 ? '?' : '&') + 'fps=10' : '');
-    var chain = Promise.resolve();   // messages are applied strictly in order
     var f = o.fetch || root.fetch.bind(root);
     f(url, { headers: o.headers || {}, signal: this.ctl.signal, cache: 'no-store', credentials: 'same-origin' }).then(function (r) {
       if (!r.ok || !r.body) throw new Error('status ' + r.status);
@@ -146,17 +209,17 @@
       return (function pump() {
         return rd.read().then(function (c) {
           if (c.done) throw new Error('ended');
-          sp.push(c.value).forEach(function (m) {
-            self.bytes += m.length + 4;
+          var msgs = sp.push(c.value), at = self.now();
+          for (var i = 0; i < msgs.length; i++) {
+            var m = msgs[i], h = parseHeader(m), e = { h: h, at: at, due: self._arrive(h, at), raw: null, err: null };
+            self.bytes += m.length + 4; self.delivered++;
             if (o.onBytes) o.onBytes(m.length + 4);
-            chain = chain.then(function () {
-              if (gen !== self.gen) return;
-              var h = parseHeader(m);
-              if (self.dec.needsKey(h)) throw Object.assign(new Error('need key'), { needKey: true });
-              return Promise.resolve(inflate(m.subarray(HEADER))).then(function (raw) { if (gen === self.gen) self._got(self.dec.apply(h, raw)); });
-            });
-          });
-          return chain.then(pump);
+            // inflate at once (a Blob copies the bytes synchronously, so the splitter may reuse its buffer); decoding waits for the due time
+            self._inflate(e, inflate(m.subarray(HEADER)));
+            self.q.push(e);
+          }
+          self._kick();
+          return pump();
         });
       })();
     }).catch(function (e) {
@@ -169,30 +232,72 @@
       setTimeout(function () { if (!self.stopped) self._run(); }, 500 * self.failures);   // reconnect = new key frame
     });
   };
-  Player.prototype._got = function (dirty) {
-    this.failures = 0; this.frames++;
-    if (this.o.onFrame) this.o.onFrame();
-    if (dirty) this.pending = this.pending ? union(this.pending, dirty) : dirty;
-    if (this.raf && !this.rafOn) { var self = this; this.rafOn = true; this.raf(function () { self.rafOn = false; self._draw(); }); }
+  Player.prototype._inflate = function (e, result) {
+    var self = this;
+    Promise.resolve(result).then(function (raw) { e.raw = raw; self._kick(); }, function (err) { e.err = err; self._kick(); });
   };
-  Player.prototype._draw = function () {
+  Player.prototype._kick = function () {
+    if (this.rafOn || !this.raf || this.stopped) return;
+    var self = this; this.rafOn = true;
+    this.raf(function (ts) { self.rafOn = false; self._tick(ts); });
+  };
+  // _tick runs on an animation frame: decode what is due, in order, draw once. A decode error ends the stream like a fetch error.
+  Player.prototype._tick = function (ts) {
+    if (this.stopped) return;
+    var q = this.q, applied = 0, shown = 0, newest = null;
+    if (ts === undefined) ts = this.now();
+    var w0 = this.now();
+    // the head may only be applied when its payload is inflated; later ones wait behind it (strict order)
+    while (q.length && (q[0].raw || q[0].err)) {
+      var e = q[0];
+      var late = ts - e.at > MAX_AGE;   // too old to wait for: take everything that is ready
+      if (!late && e.due > ts) break;
+      q.shift();
+      if (e.err) { this._fail(e.err); return; }
+      try {
+        if (this.dec.needsKey(e.h)) throw Object.assign(new Error('need key'), { needKey: true });
+        var d = this.dec.apply(e.h, e.raw);
+        this.decoded++; applied++; newest = e;
+        if (d) { this.pending = this.pending ? union(this.pending, d) : d; shown++; }
+      } catch (err) { this._fail(err); return; }
+    }
+    if (applied) {
+      this.frames += applied;
+      this.failures = 0;
+      if (this.o.onFrame) this.o.onFrame();
+      if (this.pending) this._draw(ts, shown, newest);   // an empty delta (a heartbeat) changes nothing: it is not a dropped picture
+    }
+    this.work += (this.now() - w0 - this.work) * 0.05;
+    if (q.length) this._kick();   // more to present later; an idle player sleeps until the next message
+  };
+  Player.prototype._fail = function (err) {
+    this.q = [];
+    if (this.o.log) this.o.log('palfeed: ' + (err && err.message || err));
+    this.gen++; this._abort();   // this connection is over; the caller reconnects (a key frame) or falls back
+    if (this.o.onEnd) this.o.onEnd(err);
+    else if (this.o.onFallback) this.o.onFallback(String(err && err.message || err));
+  };
+  Player.prototype._draw = function (ts, applied, newest) {
     var d = this.dec, p = this.pending;
-    if (!p || !d.have) return;
     this.pending = null;
     var c = this.o.canvas;
     if (c.width !== d.w || c.height !== d.h) { c.width = d.w; c.height = d.h; this.imgs = []; p = { x: 0, y: 0, w: d.w, h: d.h }; }
     // the decoder alternates two pixel buffers: one ImageData per buffer, made once (a dirty rect then stays a dirty rect)
-    var imgs = this.imgs || (this.imgs = []), img = null;
+    var imgs = this.imgs, img = null;
     for (var i = 0; i < imgs.length; i++) if (imgs[i].data === d.pix) img = imgs[i];
     if (!img) { img = new ImageData(d.pix, d.w, d.h); imgs.push(img); if (imgs.length > 4) imgs.shift(); }
     this.ctx.putImageData(img, 0, 0, p.x, p.y, p.w, p.h);
     this.drawn++;
+    this.dropped += Math.max(0, applied - 1);
+    this.lat += ((ts - newest.at) - this.lat) * 0.1;
+    if (this.lastDraw >= 0) { this.ivs.push(ts - this.lastDraw); if (this.ivs.length > 120) this.ivs.shift(); }
+    this.lastDraw = ts;
   };
   function union(a, b) {
     var x0 = Math.min(a.x, b.x), y0 = Math.min(a.y, b.y), x1 = Math.max(a.x + a.w, b.x + b.w), y1 = Math.max(a.y + a.h, b.y + b.h);
     return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
   }
 
-  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, detect: detect, negotiate: negotiate, Player: Player, HEADER: HEADER };
+  var api = { parseHeader: parseHeader, Decoder: Decoder, Splitter: Splitter, fit: fit, fitFill: fitFill, detect: detect, negotiate: negotiate, Player: Player, HEADER: HEADER };
   if (typeof module !== 'undefined' && module.exports) module.exports = api; else root.PalFeed = api;
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -5,10 +5,10 @@
 # with a d2d WITHOUT --lab-verbs (gated debug verbs are refused, so no gameplay write after the start) and plays HOURS virtual
 # hours under the arm's knobs. The only difference between the arms is bot.zoneModel (0 legacy, 1 margin); bot.portalGuard is 0 in both.
 # Logs land in $W/ab/<arm>/<seed>.log, the layout tools/survival/abreport reads.
-# Env: AB_CLASS (d2d class index, 2 Paladin, 4 Sorceress; default 2), AB_CLVL (12), AB_GOLD (500), AB_WEAPON (item code worn in the right hand as SETUP; default hax for the Paladin, none otherwise: without a weapon a melee hero has no damage stat and the model reads src=default), AB_SPEED (8), D2D_BIN (lab binary with --lab-verbs).
+# Env: AB_CLASS (d2d class index, 2 Paladin, 4 Sorceress; default 2), AB_CLVL (12), AB_GOLD (500), AB_WEAPON (item code worn in the right hand as SETUP; default hax for the Paladin, none otherwise: without a weapon a melee hero has no damage stat and the model reads src=default), AB_SPEED (8), D2D_BIN (lab binary with --lab-verbs AND the dump "weapons"/"hero" keys: build the fork branch didle/rebase-20261115 or later; the Nov 6 lab3-labverbs build has neither and prep now refuses it), AB_DIR (work dir, default ~/d2d-lab/survab).
 # Ship to ~/d2d-lab/survab/bin first: d2bot.survab (built from the branch that has bot.zoneModel), prep.abmerc, d2dslot.sh, agentrun.sh.
 set -u
-W=$HOME/d2d-lab/survab; cd "$W" || exit 2
+W=${AB_DIR:-$HOME/d2d-lab/survab}; cd "$W" || exit 2
 ARM=${1:-} SEED=${2:-} H=${3:-} SLOT=${4:-}
 case $ARM in legacy) ZM=0 ;; margin) ZM=1 ;; *) echo "abrun: arm must be legacy or margin" >&2; exit 64 ;; esac
 [ -n "$SEED" ] && [ -n "$H" ] || { echo "usage: abrun.sh ARM SEED HOURS [SLOT]" >&2; exit 64; }
@@ -21,7 +21,7 @@ WALLMIN=$(awk -v h="$H" -v v="${AB_SPEED:-8}" 'BEGIN{print int(h*60/v*1.6+10)}')
 exec "$W/bin/d2dslot.sh" run ${SLOT:+-n $SLOT} -w 3000 -- bash -c '
 cd '$W'; ARM='$ARM' S='$SEED' H='$H' ZM='$ZM'
 export D2BOT_INSTANCE=sa-$ARM$S D2DSOAK_HOURS=$H D2D_RUN=on
-export D2D_BIN=${D2D_BIN:-$HOME/d2d-lab/fork/bin/d2d.lab3-labverbs-f75816c6-linuxbuild} D2D_DATA=$HOME/d2d-lab/data
+export D2D_BIN=${D2D_BIN:?set D2D_BIN to a lab d2d with the dump weapons key} D2D_DATA=$HOME/d2d-lab/data
 mkdir -p logs ab/$ARM; rm -rf data-$ARM$S; mkdir -p data-$ARM$S
 inst=data-$ARM$S/instances/sa-$ARM$S; home=$inst/d2d; mkdir -p $inst/state
 echo "{\"version\":1,\"data\":{\"overrides\":{\"bot.zoneModel\":$ZM,\"bot.portalGuard\":0}}}" > $inst/state/tuning.json

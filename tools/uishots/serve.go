@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"image"
 	"image/color"
+	"image/draw"
 	"image/jpeg"
 	"log"
 	"net/http"
@@ -16,6 +18,7 @@ import (
 
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/watch"
+	"d2lod-bot/internal/watch/palfeed"
 )
 
 // serve runs the watch view on a frozen simulated runner (speed 0, so the clock and every list hold still) plus
@@ -27,6 +30,8 @@ func serve(addr, class string) error {
 		return err
 	}
 	sim.Hub.SetFrameURL("/stream")
+	pal := palFixture() // the lossless feed, offered only to pages that ask with pal=1 (see glanceFixture)
+	sim.Hub.SetPalFeed(pal)
 	sim.Step(30 * time.Second) // one step so the hero, the map and the feed have something, then the clock stays
 	// the act map shows a target (Cold Plains, running), two pins and a failed mark, and the Loop and the queue are open
 	if o, err := sim.Hub.GiveOrder(watch.OrderGo, "Cold Plains", 30); err != nil {
@@ -152,6 +157,38 @@ func js(w http.ResponseWriter, v any) {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.Header().Set("Cache-Control", "no-store")
 	json.NewEncoder(w).Encode(v)
+}
+
+// palFixture serves the lossless feed of the fixture picture: the real hub and handlers, a frame with a bright 6 px border so
+// the pictures show whether the canvas fills the card, and a bounded stream (25 s, like liveStream) so headless Chrome's
+// network-idle wait ends.
+func palFixture() *watch.PalFeed {
+	hub := palfeed.NewHub()
+	pix := make([]byte, 800*600*4)
+	img := &image.RGBA{Pix: pix, Stride: 800 * 4, Rect: image.Rect(0, 0, 800, 600)}
+	if src, err := jpeg.Decode(bytes.NewReader(frame())); err != nil {
+		log.Printf("uishots: pal fixture: %v", err)
+	} else {
+		draw.Draw(img, img.Rect, src, image.Point{}, draw.Src)
+	}
+	for y := 0; y < 600; y++ {
+		for x := 0; x < 800; x++ {
+			if x < 6 || y < 6 || x >= 794 || y >= 594 {
+				img.Set(x, y, color.RGBA{230, 170, 40, 255})
+			}
+		}
+	}
+	hub.Publish(palfeed.Frame{W: 800, H: 600, Pix: pix, Seq: 1}, 0)
+	o := palfeed.Options{Auth: func(*http.Request) bool { return true }}
+	stream := hub.Stream(o)
+	return &watch.PalFeed{
+		Capability: hub.Capability(o),
+		Stream: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx, cancel := context.WithTimeout(r.Context(), 25*time.Second)
+			defer cancel()
+			stream.ServeHTTP(w, r.WithContext(ctx))
+		}),
+	}
 }
 
 // frame is a fixed 800x600 picture standing in for the game window: a dark field with a lit diamond.
