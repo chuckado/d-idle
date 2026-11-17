@@ -142,12 +142,12 @@ func TestGoldenBoardNeedsPositiveEvidence(t *testing.T) {
 		t.Fatalf("alkor ready = %+v", f)
 	}
 	// the figurine in the pack: Meshif can run, in town; in the field a trip home is spliced in
-	jade := w0(3, map[string]int{task.ItemJade: 1}, nil)
-	if f := meshif.Ready(jade); f != nil {
+	figurine := w0(3, map[string]int{task.ItemJade: 1}, nil)
+	if f := meshif.Ready(figurine); f != nil {
 		t.Fatalf("meshif with the figurine = %+v", f)
 	}
-	jade.InTown = false
-	if f := meshif.Ready(jade); f == nil || len(f.Insert) != 1 {
+	figurine.InTown = false
+	if f := meshif.Ready(figurine); f == nil || len(f.Insert) != 1 {
 		t.Fatalf("meshif in the field = %+v", f)
 	}
 	// the bird made: Meshif is done, Alkor can run
