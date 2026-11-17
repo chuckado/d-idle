@@ -12,9 +12,18 @@ var paramsJSON []byte
 
 // StepDown is the observed cost that forces a zone out under one dial (design 5.2): that many chickens plus merc
 // deaths, or that many deaths, within the window. 0 turns a row off.
+//
+// TypicalEnter, BadFloor and RiskValueMul are the pay-for-risk route of the dial (card survtune): a zone the bad-pack
+// margin calls too tight to enter can still be entered when the typical pack is comfortable (typical margin at least
+// TypicalEnter) and even the bad pack is not lost (best margin at least BadFloor, after the ledger correction). The hero
+// then takes the occasional chicken for the pay; the zone's value is multiplied by RiskValueMul so a safe zone that pays
+// about the same still wins. TypicalEnter 0 turns the route off for that dial.
 type StepDown struct {
-	Either int `json:"either"`
-	Deaths int `json:"deaths"`
+	Either       int     `json:"either"`
+	Deaths       int     `json:"deaths"`
+	TypicalEnter float64 `json:"typicalEnter"`
+	BadFloor     float64 `json:"badFloor"`
+	RiskValueMul float64 `json:"riskValueMul"`
 }
 
 // ArchTune overrides the yield and starvation constants for one archetype (profile id); 0 keeps the global value. Data,
@@ -81,8 +90,12 @@ func LoadParams() (*Params, error) {
 		return nil, fmt.Errorf("survival: params: yield and starvation constants out of range")
 	}
 	for _, d := range []string{"cautious", "balanced", "bold"} {
-		if _, ok := p.Dials[d]; !ok {
+		r, ok := p.Dials[d]
+		if !ok {
 			return nil, fmt.Errorf("survival: params: no step-down row for dial %q", d)
+		}
+		if r.TypicalEnter < 0 || r.BadFloor < 0 || (r.TypicalEnter > 0 && (r.BadFloor <= 0 || r.RiskValueMul <= 0 || r.RiskValueMul > 1)) {
+			return nil, fmt.Errorf("survival: params: dial %q: the risk route needs badFloor > 0 and riskValueMul in (0,1]", d)
 		}
 	}
 	return &p, nil
