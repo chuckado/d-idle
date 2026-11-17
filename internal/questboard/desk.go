@@ -459,7 +459,10 @@ func (d *Desk) run(a Active) RunView {
 	rv := RunView{Quest: a.Quest, Chunk: a.Chunk, State: a.State, Step: a.Step, Why: a.Why, Failures: a.Failures, Deaths: a.Deaths}
 	if c, err := d.b.Chunk(a.Quest, a.Chunk); err == nil && len(c.Steps) > 0 {
 		cur := a.StepIdx
-		if a.State == Awaiting || cur < 0 || cur > len(c.Steps) {
+		switch {
+		case a.State == Accepted:
+			cur = 0 // nothing has run yet
+		case a.State == Awaiting || cur < 0 || cur > len(c.Steps):
 			cur = len(c.Steps) // every step is done: the hero waits at the NPC
 		}
 		rv.StepCount = len(c.Steps)
