@@ -344,7 +344,7 @@ func (e *Exec) autoHandIn(r Ref) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 	defer cancel()
 	res, err := e.HandIn(ctx, r.Quest, r.Chunk)
-	ev := AutoEvent{At: e.o.Now().UTC(), Quest: r.Quest, Chunk: r.Chunk, Kind: EvAutoHandIn, Away: true}
+	ev := AutoEvent{At: e.o.Now().UTC(), Quest: r.Quest, Chunk: r.Chunk, Kind: EvAutoHandIn, Away: true, Awarded: res.Awarded}
 	switch {
 	case err != nil:
 		ev.Kind, ev.Note = EvAutoHandInFailed, cleanErr(err)

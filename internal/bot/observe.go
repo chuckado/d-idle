@@ -975,7 +975,7 @@ func (r *Runner) recordDeath(p *d2.Player, now time.Time) {
 	}
 	r.e.Log.Warn("death autopsy: "+rec.Autopsy.Summary, "area", rec.AreaName, "killer", rec.Killer, "killerType", rec.Autopsy.KillerType, "killerLevel", rec.Autopsy.KillerLevel, "hostiles", rec.Autopsy.HostilesNear, "lastSafety", rec.Autopsy.LastSafety, "bug", rec.Autopsy.Bug, "beltHP", rec.Autopsy.BeltHP)
 	r.zoneObserve(ZoneEvent{Kind: ZoneEvDeath, Area: rec.Area, Diff: difficultyName(p.Difficulty), At: now})
-	r.zoneCost("death")
+	r.zoneCostAt("death", rec.Area)
 	r.e.Log.Warn("character died", "area", rec.Area, "killer", rec.Killer, "x", rec.Pos.X, "y", rec.Pos.Y, "corpseValue", rec.CorpseValue,
 		"life", p.Life, "maxLife", p.MaxLife, "heal", a.kit.BeltHP+a.kit.PackHP, "beltMP", a.kit.BeltMP, "rejuv", a.kit.BeltRV, "tome", a.kit.TownPortals)
 	di := combat.DeathInfo{Area: rec.Area, Difficulty: p.Difficulty, CharLevel: p.Level, MonsterName: a.killerName, MonsterClass: rec.KillerClass,

@@ -48,6 +48,8 @@ type AutoEvent struct {
 	Kind  string    `json:"kind"`
 	Away  bool      `json:"away,omitempty"` // no watch client had been seen for quests.awayMin
 	Note  string    `json:"note,omitempty"`
+	// Awarded is the Ether the auto hand-in booked ("while you were away" shows it).
+	Awarded []Pay `json:"awarded,omitempty"`
 }
 
 // Auto event kinds.
@@ -69,6 +71,28 @@ type Plan struct {
 	Mode     string       `json:"mode,omitempty"` // the between-chunks mode the player picked (S4 stores it, S6 acts on it)
 	AutoLog  []AutoEvent  `json:"autoLog,omitempty"`
 	AwaySeen time.Time    `json:"awaySeen,omitempty"` // the player dismissed the "while you were away" card at this time
+	// Based lists the difficulties whose done quests were recorded when the board first saw the hero; Baseline holds
+	// those award keys. A key in Baseline never pays (user decision 2026-11-16: no backfill for old saves).
+	Based    []string `json:"based,omitempty"`
+	Baseline []string `json:"baseline,omitempty"`
+}
+
+func (p Plan) based(diff int) bool {
+	for _, d := range p.Based {
+		if d == Difficulties[diff] {
+			return true
+		}
+	}
+	return false
+}
+
+func (p Plan) inBaseline(key string) bool {
+	for _, k := range p.Baseline {
+		if k == key {
+			return true
+		}
+	}
+	return false
 }
 
 // Modes are the between-chunks modes (user decision 2026-11-16); the default is Train.
@@ -365,6 +389,23 @@ func (s *Store) MarkSeen(key string) error {
 			}
 		}
 		p.Seen = append(p.Seen, key)
+		return nil
+	})
+}
+
+// RecordBaseline stores the award keys of everything already done in the difficulty, once. A second call for the same
+// difficulty changes nothing.
+func (s *Store) RecordBaseline(diff int, keys []string) error {
+	return s.update(func(p *Plan) error {
+		if p.based(diff) {
+			return nil
+		}
+		p.Based = append(p.Based, Difficulties[diff])
+		for _, k := range keys {
+			if !p.inBaseline(k) {
+				p.Baseline = append(p.Baseline, k)
+			}
+		}
 		return nil
 	})
 }

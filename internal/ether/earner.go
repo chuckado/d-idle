@@ -113,3 +113,14 @@ func (e *Earner) Reached(h Hero) {
 		e.earn("milestone", "diff_hell", "")
 	}
 }
+
+// Paid reports what a credit key paid (the full key, for example quest/den_of_evil/-/normal); false when it is not booked.
+func (w *Wallet) Paid(key string) (int, bool) {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	i, ok := w.keys[key]
+	if !ok || i < 0 || i >= len(w.entries) {
+		return 0, false
+	}
+	return w.entries[i].Amount, true
+}

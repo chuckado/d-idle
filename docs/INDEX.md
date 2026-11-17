@@ -200,6 +200,8 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [decomp35-crush-body.md](upstream/bodies/decomp35-crush-body.md): decomp35-crush-body
 - [decomp35-leech-body.md](upstream/bodies/decomp35-leech-body.md): decomp35-leech-body
+- [decomp37-gear-absorb-body.md](upstream/bodies/decomp37-gear-absorb-body.md): decomp37-gear-absorb-body
+- [decomp37-open-wounds-body.md](upstream/bodies/decomp37-open-wounds-body.md): decomp37-open-wounds-body
 - [upstreamsync.md](upstreamsync.md): Upstream sync after #152 and #153 merged (2026-11-01) (status: current (card upstreamsync, 2026-11-01). Read-only measurement plus local rebases on the worker host;...)
 - [viewport.md](viewport.md): Viewport: capture and stream library (agent VIEWPORT)
 

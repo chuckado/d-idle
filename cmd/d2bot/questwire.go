@@ -8,6 +8,7 @@ import (
 
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/d2"
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/watch"
 )
@@ -54,6 +55,7 @@ func wireQuestBoard(stateDir string, ref *runnerRef, r *bot.Runner, logf func(ms
 		return b, st, err
 	})
 	r.SetQuestMargin(questMargin)
+	r.SetQuestLedger(questLedger(currencyDirFor(stateDir)))
 	d := questboard.NewDesk(b, questboard.DeskConfig{
 		Exec:    r.QuestBoard,
 		Paused:  func() bool { return r.PlayerPauseView().State != bot.PauseRunning },
@@ -122,4 +124,34 @@ func questNeeds(rows []questboard.NeedRow) []watch.GlanceNeed {
 		out = append(out, g)
 	}
 	return out
+}
+
+// questLedger is the board's view of the account wallet (slice S10). The wallet is looked up on every call: it appears when
+// loot.vault turns on and is nil (the whole hook inert) while it is 0. Quest keys are quest/<quest>/<chunk or ->/<difficulty>.
+func questLedger(currencyDir string) func() questboard.Ledger {
+	return func() questboard.Ledger {
+		w := etherFor(currencyDir, "", nil, nil).Wallet()
+		if w == nil {
+			return nil
+		}
+		return walletLedger{w}
+	}
+}
+
+type walletLedger struct{ w *ether.Wallet }
+
+func chunkWord(chunk string) string {
+	if chunk == "" {
+		return "-"
+	}
+	return chunk
+}
+
+func (l walletLedger) Earn(quest, chunk, diff string, amount int) (questboard.LedgerResult, error) {
+	r, err := l.w.Earn("quest", quest+"/"+chunkWord(chunk), diff, amount)
+	return questboard.LedgerResult{Key: r.Key, Credited: r.Credited, Already: r.Already}, err
+}
+
+func (l walletLedger) Paid(quest, chunk, diff string) (int, bool) {
+	return l.w.Paid("quest/" + quest + "/" + chunkWord(chunk) + "/" + diff)
 }

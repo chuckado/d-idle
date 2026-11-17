@@ -19,8 +19,9 @@ const (
 // ResistPenalty is the resistance penalty of a difficulty: 0 / -40 / -100 (S, common D2 knowledge; U live on this install).
 func ResistPenalty(diff int) int { return d2.Difficulty(clamp(diff, 0, 2)).ResistPenalty() }
 
-// MaxResist is the usual 75 cap; the character shows (raw + penalty) capped at it.
-const MaxResist = 75
+// MaxResist is the base cap (d2.ResistTable); the character shows (raw + penalty) capped at it, so the raw total
+// that reaches the cap is MaxResist - penalty (already the game.exe order).
+var MaxResist = d2.ResistTable.BaseCap
 
 // overflow is the share of a point above the cap that still counts (curse and sunder buffer).
 const overflow = 0.1

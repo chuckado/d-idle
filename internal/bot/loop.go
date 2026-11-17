@@ -321,7 +321,7 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	if a == SafetyChicken {
 		if s := r.latest(); s != nil && s.Player != nil {
 			r.zoneObserve(ZoneEvent{Kind: ZoneEvChicken, Area: s.Player.Area, Diff: difficultyName(s.Player.Difficulty), At: r.e.Clock.Now()})
-			r.zoneCost("chicken")
+			r.zoneCostAt("chicken", s.Player.Area)
 		}
 	}
 	if a == SafetyDrinkRejuv {
@@ -944,7 +944,7 @@ func (r *Runner) antidotesWanted() int {
 		return 0
 	}
 	if p := s.Player; p.Difficulty == d2.Hell { // docs/difficulty.md item 25: keep antidotes while poison resist is low
-		pr := combat.PlayerResists{Fire: p.Resist.Fire, Cold: p.Resist.Cold, Lightning: p.Resist.Lightning, Poison: p.Resist.Poison}
+		pr := combat.ResistsOf(p)
 		return resource.AntidotesToCarry(p.Difficulty, pr.Effective(p.Difficulty).Poison)
 	}
 	if s.Player.Difficulty != d2.Normal || s.Player.Level < r.andarielLow(s.Player.Class)-2 || r.killedBoss(task.BossAndy) {
