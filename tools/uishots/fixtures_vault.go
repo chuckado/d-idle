@@ -177,6 +177,22 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
+	// the answer routes too (same origin here), so a press shows the real reply and the page reads the state back
+	for _, p := range watch.VaultPostRoutes {
+		route := p
+		m.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+			mode := "pop"
+			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
+				mode = ref.Query().Get("vault")
+			}
+			api := vaultAPIs[mode]
+			if api == nil {
+				http.Error(w, "no such fixture", http.StatusNotFound)
+				return
+			}
+			api.PostHandler(watch.AnswerOptions{}, route).ServeHTTP(w, r)
+		})
+	}
 }
 
 // vaultDefect is, per name, the one defect put back on the Vault page. The fit pages vaultdefect-NAME must FAIL with the verdict
