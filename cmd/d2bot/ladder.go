@@ -330,6 +330,13 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 	}
 	rig.Video = vid
 	so := watch.ServeOptions{ViewAddr: l.viewAddr, AnswerAddr: l.answerAddr, Token: watchTok, Origins: l.origins, Video: vid, Fun: rig.Fun}
+	if os.Getenv("D2BOT_PPROF_HTTP") == "1" {
+		dir := stateDir
+		if dir == "" {
+			dir = os.TempDir()
+		}
+		so.Profiler = &watch.Profiler{Dir: filepath.Join(dir, "pprof")}
+	}
 	if pal, err := l.palFeed(vid != nil); err != nil {
 		ladder.Install(nil)
 		return nil, err

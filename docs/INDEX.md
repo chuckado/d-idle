@@ -114,6 +114,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [d2d-spike.md](d2d-spike.md): d2d feasibility spike (agent D2DSPIKE, 2026-10-30) (status: spike answered: d2d is the primary backend (ADR 0009, 2026-10-30; docs/plan/STATUS.md). Numbers here are...)
 - [d2d-tick-rate.md](d2d-tick-rate.md): d2d tick rate versus the 25 fps original (agent PROBES-D2D, 2026-10-30)
 - [d2d-town.md](d2d-town.md): Town layer on the d2d backend (agent D2DTOWN, 2026-10-30) (status: "Game.exe stays the acceptance target" is partly superseded: d2d is the product and game.exe the oracle;...)
+- [d2d-vault-verbs.md](d2d-vault-verbs.md): Vault verbs (d2d fork) and the d2dctl client, slice V1 (status: current, 2026-11-16 (task TASK-584). Design: `docs/design/loot-vault-2026-11-16.md`; V0 spike result:...)
 - [d2d-view.md](d2d-view.md): d2dview: watching the sped-up d2d bot (agent D2DVIEW, 2026-10-30) (status: demo ran 2026-10-30 16:18-16:33 EDT and was stopped; rerun `tools/d2dview-demo.sh --minutes 15 [--watch]`...)
 - [d2d-walk.md](d2d-walk.md): d2d end-to-end walk: cmd/d2dwalk (agent D2DWALK, 2026-10-30)
 - [d2d-wire.md](d2d-wire.md): Whole bot on d2d (agent D2DWIRE, 2026-10-30)
@@ -485,6 +486,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest-givers.md](quest-givers.md): Quest givers in town (TASK-243) (status: decision logic, table and fixtures built and tested offline; the live part is U (checklist below). Tags:...)
 - [quest-hints.md](quest-hints.md): Quest hints in town (TASK-197) (status: built and tested offline (fixtures, no game). Tags: V verified by the tests named, SRC read in the repo,...)
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
+- [questboard.md](questboard.md): Quest board model (slice S1) (status: built and tested offline (card quests1, TASK-577); not wired: no bot code imports it until slice S3....)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)
@@ -739,6 +741,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
 - [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
+- [vault.md](vault.md): Ethereal Vault store (internal/vault) and its file formats (status: BUILT offline (slice V2 of docs/design/loot-vault-2026-11-16.md). Additive and unused until V3 (rules...)
 - [video-feed.md](video-feed.md): Lossless delta frame feed for the watch video (card videofeed, 2026-11-15) (status: mounted behind the knob `watch.paletteFeed` (default OFF) by card videofeed2 (2026-11-16); not deployed....)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
@@ -899,6 +902,9 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 `probes/`
 
+- [bot-cpu-2026-11-16.md](probes/bot-cpu-2026-11-16.md): Bot CPU bursts in town walks (card botcpu, 2026-11-16) (status: partial. Offline profile only; the live repair-trip profile is a checklist (section 4). Trigger:...)
+- [bot-cpu-fix-2026-11-16.md](probes/bot-cpu-fix-2026-11-16.md): Bot CPU fixes after the live calm-window profile (2026-11-16) (status: current. Follows docs/probes/bot-cpu-live-2026-11-16.md (Ledger.load 30 percent, DB.IsA 14.5 percent). All...)
+- [bot-cpu-live-2026-11-16.md](probes/bot-cpu-live-2026-11-16.md): Bot CPU on the sandbox, live profile (card botcpulive, 2026-11-16) (status: partial. Calm-window profile captured (V); NO profile inside a burst (the built-in profiler is one-shot,...)
 - [classpacing.md](probes/classpacing.md): classpacing probe (status: see `docs/soaks/classpacing.md` (the result doc of TASK-147); scripts and per-minute data are in...)
 - [currency1.md](probes/currency1.md): Probe: currency slice 1, the Raven's Mark rows (TASK-63) (status: UNVERIFIED live, 2026-11-06. Offline checks passed; the live run was not started because Gate 2 seeds were...)
 - [deploy-cockpit-2026-11-15.md](probes/deploy-cockpit-2026-11-15.md): Deploy record: cockpit UI to the sandbox, 2026-11-15 (status: record. Task TASK-490. Tags: V = verified in this run (command named), U = not verified.)
@@ -994,6 +1000,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [survival-ab-screen-2026-11-16.md](probes/survival-ab-screen-2026-11-16.md): Survival A/B screen, bot.zoneModel 0 vs 1 (3 seeds, Paladin and Sorceress), 2026-11-16 (status: current (TASK-554). Harness: ab-harness. Tags: V verified (the run logs and `abreport` output of this...)
 - [t0drill.md](probes/t0drill.md): T0 drill: phase B commands (NOT run in phase A)
 - [test-characters.md](probes/test-characters.md): Test characters created by agents (provenance log) (status: current. One line per character an agent created on a lab slot or in a container (PROVENANCE RULE of the...)
+- [vault-spike-2026-11-16.md](probes/vault-spike-2026-11-16.md): Ethereal Vault V0 spike: capture and create on the d2d fork (result) (status: RESULT, 2026-11-16 (task TASK-578). Design: `docs/design/loot-vault-2026-11-16.md` section 1.7. Tags: V =...)
 - [video-feed-2026-11-15.md](probes/video-feed-2026-11-15.md): Probe: lossless delta feed on real d2d frames (card videofeed, 2026-11-15)
 - [viewer-fps-2026-11-15.md](probes/viewer-fps-2026-11-15.md): Viewer game picture, fps report (2026-11-15)
 - [waits-audit.md](probes/waits-audit.md): Waits audit: wall-clock waits for the game (card waits-audit) (status: current. Offline audit of every wait in the bot, the d2d wiring and the d2d backends; fixes in the same...)

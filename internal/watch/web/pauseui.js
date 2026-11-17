@@ -58,7 +58,9 @@ export function mountPause(d) {
   btn.setAttribute('aria-label', 'Pause the game');
   const menu = doc.getElementById && doc.getElementById('menu-more');
   const links = doc.querySelector && doc.querySelector('.d-band-status .d-links');
-  if (menu) menu.insertBefore(btn, menu.firstChild);
+  const pair = menu && menu.querySelector && menu.querySelector('.d-menu-pair'); // shares the Reset row: the menu must fit a 620 px high window
+  if (pair) pair.insertBefore(btn, pair.firstChild);
+  else if (menu) menu.insertBefore(btn, menu.firstChild);
   else if (links) links.appendChild(btn);
   const banner = el('div', 'd-pause-banner');
   banner.id = 'pause-banner';
