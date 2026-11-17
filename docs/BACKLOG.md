@@ -983,6 +983,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - questdesign: Quest board design (quests as events) (TASK-575, merged 2026-11-16, acceptance 2 of 2): Design doc docs/design/quest-board-2026-11-16.md written; docs only, nothing verified live. <!--sg:agent/questdesign-->
 - agent/vaultdesign: Merge branch 'main' into vault (merged 2026-11-16) <!--sg:agent/vaultdesign-->
 - agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc) (merged 2026-11-16) <!--sg:agent/survtune2-->
+- quests1: Quest board S1, internal/questboard definitions, states, derive, plan records (TASK-577, merged 2026-11-16, acceptance 5 of 5): S1 built offline: internal/questboard (schema, loader, validation, nine states, derive, plan store) and Act 1+2 data in data/questboard; not wired until S3; NOT verified live (no game used). <!--sg:agent/quests1-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
