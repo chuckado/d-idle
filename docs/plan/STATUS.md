@@ -239,6 +239,7 @@
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | botcpu | proposed | - | `docs/probes/bot-cpu-2026-11-16.md`<br>`internal/senses`<br>`cmd/d2bot/sensesfeed.go`<br>`cmd/d2bot/sensesfeed_test.go`<br>`internal/nav/cpuprobe_test.go`<br>`internal/d2dsrc/cpuprobe_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/srv_test.go` | - |
+| pausemenufit | proposed | - | `internal/watch/web/pauseui.js`<br>`internal/watch/web/shell.css` | - |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
@@ -283,6 +284,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 2c31eefaf 11-16 23:07 `Merge agent/pausemenufit: Merge branch 'main' into pausemenufit` (pausemenufit)
+- a0b01f790 11-16 23:06 `Merge branch 'main' into pausemenufit` (-)
 - 51d8a1840 11-16 22:52 `Merge agent/botcpu: Merge branch 'main' into botcpu` (botcpu)
 - 020724c2c 11-16 22:51 `Merge branch 'main' into botcpu` (-)
 - c0acda8d2 11-16 22:50 `Merge agent/botcpulive: Merge branch 'main' into task-582` (botcpulive)
@@ -291,6 +294,4 @@
 - 9fd2f6066 11-16 22:48 `Merge branch 'main' into vaultv0` (-)
 - ba3a37a72 11-16 22:47 `Merge agent/palfeedflaky: palfeedflaky: deterministic palfeed guard tests (main CI red)` (palfeedflaky)
 - 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
-- cdc624907 11-16 22:03 `Merge agent/quests1: Merge branch 'main' into quests1` (quests1)
-- 1cb530a5e 11-16 22:02 `Merge branch 'main' into quests1` (-)
 <!-- statusgen:end -->

@@ -1092,10 +1092,12 @@ internal/watch/web/panels/zone-map/  credit-runner  uifix1
 internal/watch/web/panels/zoneclear  credit-runner  farmloop
 internal/watch/web/panels/{statusline,needs-count,needs-you,orders,zone-map,area-map,progress,journey-strip,health,log}/panel.css  credit-runner  uis7
 internal/watch/web/pauseui.js  credit-runner  pausefix
+internal/watch/web/pauseui.js  credit-runner  pausemenufit
 internal/watch/web/reset.css  credit-runner  resetinstant
 internal/watch/web/resetui.js  credit-runner  botreset
 internal/watch/web/resetui.js  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  lootwire3
+internal/watch/web/shell.css  credit-runner  pausemenufit
 internal/watch/web/shell.css  credit-runner  resetinstant
 internal/watch/web/shell.css  credit-runner  uifix1
 internal/watch/web/shell.css  credit-runner  uis1
