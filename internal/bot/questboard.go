@@ -71,6 +71,8 @@ func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero s
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
 		Log:     func(msg string, kv ...any) { r.e.Log.Info(msg, kv...) },
+		Now:     r.e.Clock.Now,
+		Auto:    r.questAutoOptions(),
 	})
 	if m, err := st.Mode(); err == nil {
 		rt.exec.SetMode(m)
@@ -117,6 +119,7 @@ func (r *Runner) boardRTFor() *boardRT {
 	}
 	if rt != nil {
 		rt.exec.SetEnabled(r.questBoardOn())
+		rt.exec.SetAutoOptions(r.questAutoOptions())
 	}
 	return rt
 }
@@ -563,9 +566,16 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 		return r.boardTrain(ctx, snap, c)
 	}
 	rt.exec.SetEnabled(true)
+	rt.exec.SetAutoOptions(r.questAutoOptions())
 	r.parkedBoard.Store(false)
 	if r.boardServeHandIn(ctx, snap, c) {
 		return true
+	}
+	// Opt-in auto-start (slice S8, questauto.go): counts a safe offer down and starts it, or hands in what it started.
+	if act, err := rt.exec.AutoTick(questboard.AutoInput{Paused: r.PlayerPauseView().State != PauseRunning, Calm: r.safeToPause(snap)}); err != nil {
+		r.boardNote("auto", "quest board: auto-start: "+err.Error())
+	} else if act.Kind == questboard.AutoStarted {
+		r.boardNote("auto start "+act.Quest+"/"+act.Chunk, fmt.Sprintf("quest board: %s/%s started by itself", act.Quest, act.Chunk))
 	}
 	d, err := rt.exec.Next()
 	if err != nil {

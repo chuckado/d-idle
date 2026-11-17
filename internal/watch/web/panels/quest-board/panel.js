@@ -21,6 +21,34 @@ export function humanize(id) {
   return s ? s[0].toUpperCase() + s.slice(1) : '';
 }
 
+const NUM = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen', 'seventeen', 'eighteen', 'nineteen', 'twenty'];
+
+// levelsText words the level gap of a training target ("two levels to go"); the API sends the count, the page never shows it as
+// a digit. Empty when there is no gap.
+export function levelsText(n) {
+  if (!(n > 0)) return '';
+  const w = n < NUM.length ? NUM[n] : 'many';
+  return w + (n === 1 ? ' level' : ' levels') + ' to go';
+}
+
+// secondsText words the countdown of an auto-start ("12 seconds", "1 second").
+export function secondsText(n) {
+  const k = Math.max(0, Math.round(n || 0));
+  return k + (k === 1 ? ' second' : ' seconds');
+}
+
+// stepText is "step 2 of 4" from a run; empty for a chunk of one step or without a step list.
+export function stepText(r) {
+  return r && r.stepCount > 1 && r.stepNo > 0 ? 'step ' + r.stepNo + ' of ' + r.stepCount : '';
+}
+
+// timeText is "14:20  " for an ISO time; empty when it does not parse.
+export function timeText(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0') + '  ';
+}
+
 export function minutesText(m) {
   if (!Array.isArray(m) || !m[0]) return '';
   return m[1] && m[1] !== m[0] ? 'about ' + m[0] + ' to ' + m[1] + ' min' : 'about ' + m[0] + ' min';
@@ -107,9 +135,14 @@ export function stripModel(v, local = shared, now = Date.now()) {
   }
   if (run) {
     const step = run.step ? humanize(run.step) : 'Starting';
-    const sub = [step, run.npc ? 'next: ' + run.npc : ''].filter(Boolean).join(', ');
+    const sub = [stepText(run), step, run.npc ? 'next: ' + run.npc : '', run.auto ? 'started by itself' : ''].filter(Boolean).join(', ');
     return { kind: 'running', label: 'Running', quest: run.quest, chunk: run.chunk, head: 'Running: ' + run.questTitle, sub: sub || run.title,
       primary: btn('Stop', 'cancel', run, { confirm: true }), secondary: null };
+  }
+  const cd = v.autoStart && v.autoStart.countdown;
+  if (cd) { // an opted-in offer counts down: the player can still stop it
+    return { kind: 'countdown', label: 'Starting', quest: cd.quest, chunk: cd.chunk, head: cd.questTitle + ' starts by itself in ' + secondsText(cd.secondsLeft),
+      sub: 'It is safe for your hero. Cancel to wait for your own tap', primary: btn('Cancel', 'cancel', cd), secondary: null };
   }
   const offers = v.offers || [];
   const ok = offers.filter((o) => o.startable);
@@ -123,7 +156,9 @@ export function stripModel(v, local = shared, now = Date.now()) {
   const hard = offers[0];
   if (hard && v.mode !== 'idle') {
     const why = ((hard.reasons || [])[0] || {}).text || hard.why || hard.sentence || '';
-    return { kind: 'training', label: modeLine(v.mode), head: (v.mode === 'farm' ? 'Farming before ' : 'Training toward ') + hard.questTitle, sub: why || 'Not ready for it yet', primary: null, secondary: null };
+    const mt = v.meter && v.meter.target === hard.quest ? v.meter.levelsToGo : 0;
+    const lv = levelsText(mt || hard.levelsToGo);
+    return { kind: 'training', label: modeLine(v.mode), head: (v.mode === 'farm' ? 'Farming before ' : 'Training toward ') + hard.questTitle, sub: lv || why || 'Not ready for it yet', primary: null, secondary: null };
   }
   return { kind: 'idle', label: modeLine(v.mode), head: modeLine(v.mode), sub: offers.length ? 'Quests wait for you in the board' : 'No quest is on offer right now', primary: null, secondary: null };
 }
@@ -163,9 +198,9 @@ export function settle(v, local = shared, now = Date.now()) {
 // It returns the reply (or null when the route is unreachable; ctx.post has said so already).
 export async function act(ctx, verb, quest, chunk, local = shared, redraw = null) {
   const mode = verb === 'mode';
-  const path = mode ? '/api/quests/mode' : '/api/quests/' + encodeURIComponent(quest) + '/' + verb;
-  // the auto toggle (slice S8, route not built yet) sends {auto: bool} in the place of a chunk
-  const body = mode ? { mode: chunk } : verb === 'auto' ? { auto: !!chunk } : chunk ? { chunk } : {};
+  const path = mode ? '/api/quests/mode' : verb === 'dismiss' ? '/api/quests/away/dismiss' : '/api/quests/' + encodeURIComponent(quest) + '/' + verb;
+  // the auto switch (slice S8, POST /api/quests/<id>/auto) sends {on: bool} in the place of a chunk
+  const body = mode ? { mode: chunk } : verb === 'auto' ? { on: !!chunk } : chunk ? { chunk } : {};
   if (verb === 'handin') { local.handing = { quest, chunk, at: Date.now() }; local.error = null; if (redraw) redraw(); }
   const j = await ctx.post(path, body);
   if (j && j.ok === false) {
@@ -194,20 +229,22 @@ export function boardModel(v, local = shared, now = Date.now()) {
       const o = offerOf(q.id, c.id);
       const w = wordOf(c.readiness || (o && o.readiness));
       const reason = (o && (o.sentence || ((o.reasons || [])[0] || {}).text)) || c.why || '';
-      return { id: c.id, title: c.title, state: c.state, word: w, reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
+      const lv = o && o.readiness !== 'safe' ? levelsText(o.levelsToGo) : '';
+      return { id: c.id, title: c.title, state: c.state, word: w, reason: lv || reason, minutes: o ? minutesText(o.minutes) : '', startable: !!(o && o.startable), why: o && !o.startable ? o.why : '', pays: o ? paysText(o.pays) : '' };
     });
     const g = GROUP_OF(q.state);
     if (!acts.has(q.act)) acts.set(q.act, []);
-    acts.get(q.act).push({ id: q.id, title: q.title, act: q.act, state: q.state, group: g, auto: !!q.auto, chunks });
+    acts.get(q.act).push({ id: q.id, title: q.title, act: q.act, state: q.state, group: g, auto: !!q.auto, autoOk: q.autoOk !== false, chunks });
   }
   const order = (g) => (g === 'now' ? -1 : GROUPS.findIndex((x) => x[0] === g));
   const list = [...acts.keys()].sort((a, b) => a - b).map((n) => ({ act: n, name: actName(n), rows: acts.get(n).sort((a, b) => order(a.group) - order(b.group)) }));
   const cur = stripModel(v, local, now);
-  const nowRow = ['running', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed'].includes(cur.kind) ? cur : null;
+  const nowRow = ['running', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed', 'countdown'].includes(cur.kind) ? cur : null;
+  const away = v.whileAway && (v.whileAway.events || []).length ? { events: v.whileAway.events.map((e) => ({ at: e.at, text: e.text })) } : null;
   const hist = (v.history || []).slice(0, 5).map((h) => ({ title: h.title, text: (h.confirmed ? 'handed in' : 'started') + (paysText(h.pays) ? ', ' + paysText(h.pays) : '') }));
   const open = list.find((a) => a.rows.some((r) => r.group !== 'done' && r.group !== 'skipped'));
   return { acts: list, now: nowRow, history: hist, mode: v.mode || 'train', modeActs: !!v.modeActs, actLabel: (open ? open.name : list.length ? list[list.length - 1].name : 'Quests') + ', ' + humanize(v.difficulty || 'normal'),
-    auto: v.autoStart || { available: false, note: '' }, paused: !!v.paused, empty: list.length ? '' : 'No quests to show yet' };
+    auto: v.autoStart || { available: false, note: '' }, away, paused: !!v.paused, empty: list.length ? '' : 'No quests to show yet' };
 }
 
 // mount builds the drawer panel; renderInto is shared with quest-list (the phone's Quests tab).
@@ -261,8 +298,14 @@ export function mountBoard(root, ctx, tab) {
     const c = ctx.el('span', 'qb-auto');
     if (!m.auto.available) {
       c.dataset.off = '1';
-      c.append(ctx.el('span', '', 'auto: coming'));
-      c.title = m.auto.note || 'Starting by itself when you are away arrives in a later update';
+      c.append(ctx.el('span', '', 'auto: off'));
+      c.title = m.auto.note || 'The quest board is off';
+      return c;
+    }
+    if (row.autoOk === false) {
+      c.dataset.off = '1';
+      c.append(ctx.el('span', '', 'auto: always you'));
+      c.title = 'This quest always needs you, so it never starts by itself';
       return c;
     }
     const on = !!row.auto;
@@ -270,8 +313,19 @@ export function mountBoard(root, ctx, tab) {
     b.setAttribute('role', 'switch');
     b.setAttribute('aria-checked', String(on));
     b.dataset.on = on ? '1' : '0';
-    b.title = 'When you are away, start this by itself when it is safe';
+    b.title = 'Start this by itself when it is safe. It counts down first; you can cancel';
     c.append(b);
+    return c;
+  }
+
+  // "While you were away": what the board did by itself, until the player says they have seen it.
+  function awayCard(a) {
+    const c = ctx.el('div', 'qb-away');
+    const t = ctx.el('span', 'qb-t');
+    t.append(ctx.el('b', '', 'While you were away'));
+    for (const e of a.events.slice(0, 4)) t.append(ctx.el('span', 'qb-r', timeText(e.at) + e.text));
+    if (a.events.length > 4) t.append(ctx.el('span', 'qb-r', '+' + (a.events.length - 4) + ' more'));
+    c.append(t, btn('Got it', 'qb-btn', 'away-dismiss', (b) => { b.disabled = true; act(ctx, 'dismiss', '', '', local, redraw).then(() => { b.disabled = false; }); }));
     return c;
   }
 
@@ -331,6 +385,7 @@ export function mountBoard(root, ctx, tab) {
     }
     const list = ctx.el('div', 'qb-list');
     list.setAttribute('data-scroll', '');
+    if (m.away) list.append(awayCard(m.away)); // inside the list: a short phone scrolls it instead of losing the rows
     for (const a of m.acts) {
       const sec = ctx.el('section', 'qb-act-sec');
       sec.append(ctx.el('h3', '', a.name));

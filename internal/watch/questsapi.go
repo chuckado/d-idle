@@ -15,6 +15,8 @@ import (
 //	POST /api/quests/<id>/handin      the hand-in tap (202: the dialogue runs on the bot loop; read the result from GET)
 //	POST /api/quests/<id>/cancel      stop an accepted chunk
 //	POST /api/quests/<id>/retry       clear the park of a blocked chunk
+//	POST /api/quests/<id>/auto        {"on": true|false} the opt-in to start this quest by itself when it is safe (slice S8)
+//	POST /api/quests/away/dismiss     clear the "while you were away" card
 //	POST /api/quests/mode             {"mode":"train|idle|farm"} (stored; the modes act from slice S6)
 //
 // The POSTs sit on the answer listener behind the same gate as every control route (policyGate: origin list, token,
@@ -35,6 +37,8 @@ type QuestsDesk interface {
 	Cancel(quest, chunk string) questboard.Reply
 	Retry(quest, chunk string) questboard.Reply
 	SetMode(mode string) questboard.Reply
+	SetAuto(quest string, on bool) questboard.Reply
+	DismissAway() questboard.Reply
 }
 
 // QuestsAPI holds the desk once it exists (it is late-bound like the other desks).
@@ -69,6 +73,7 @@ func (a *QuestsAPI) Handler() http.Handler {
 type questBody struct {
 	Chunk string `json:"chunk"`
 	Mode  string `json:"mode"`
+	On    *bool  `json:"on"`
 }
 
 // PostHandler serves the actions under /api/quests/.
@@ -77,13 +82,14 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 		rest := strings.TrimPrefix(r.URL.Path, QuestsPrefix)
 		parts := strings.Split(rest, "/")
 		isMode := rest == "mode"
-		if !isMode && (len(parts) != 2 || parts[0] == "" || parts[1] == "") {
+		isAway := rest == "away/dismiss"
+		if !isMode && !isAway && (len(parts) != 2 || parts[0] == "" || parts[1] == "") {
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "route", Error: "no such quest route"})
 			return
 		}
-		if !isMode {
+		if !isMode && !isAway {
 			switch parts[1] {
-			case "start", "handin", "cancel", "retry":
+			case "start", "handin", "cancel", "retry", "auto":
 			default:
 				writeJSON(w, http.StatusNotFound, policyReply{Code: "route", Error: "no such quest action"})
 				return
@@ -106,6 +112,14 @@ func (a *QuestsAPI) PostHandler(o AnswerOptions) http.Handler {
 				return
 			}
 			rep = d.SetMode(b.Mode)
+		case isAway:
+			rep = d.DismissAway()
+		case parts[1] == "auto":
+			if b.On == nil {
+				writeJSON(w, http.StatusBadRequest, policyReply{Code: "body", Error: `send {"on": true} or {"on": false}`})
+				return
+			}
+			rep = d.SetAuto(parts[0], *b.On)
 		case parts[1] == "start":
 			rep = d.Start(parts[0], b.Chunk)
 		case parts[1] == "handin":
