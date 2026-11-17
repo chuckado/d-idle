@@ -256,6 +256,7 @@
 | quests7 | proposed | - | `data/questboard`<br>`internal/questboard`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md`<br>`internal/watch/testdata/quests` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | vaultv6 | in-progress | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultact_test.go`<br>`internal/loot/vault.go`<br>`internal/loot/pickup.go`<br>`internal/loot/vault_test.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js` | - |
+| quests7b | proposed | - | `internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`data/questboard`<br>`docs/questboard.md`<br>`internal/task/world.go`<br>`internal/task/s7b_test.go`<br>`internal/task/testdata`<br>`internal/talk/tables.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -296,14 +297,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a61219899 11-17 04:10 `Merge agent/quests7b: Merge branch 'main' into quests7b` (quests7b)
+- 5995b3eae 11-17 04:09 `Merge branch 'main' into quests7b` (-)
+- f30cfbd69 11-17 03:48 `Merge origin/main into agent/quests7b` (-)
+- ae5256b97 11-17 03:35 `Merge agent/vaultv5verify: Merge branch 'main' into vaultv5verify` (vaultv5verify)
+- b784cf67e 11-17 03:34 `Merge branch 'main' into vaultv5verify` (-)
 - 09094d83f 11-17 03:28 `Merge agent/vaultv6: Merge origin/main into agent/vaultv6` (vaultv6)
 - 657fd78b5 11-17 03:25 `Merge origin/main into agent/vaultv6` (vaultv6)
+- 8949232a1 11-17 03:12 `Merge origin/main into agent/vaultv5verify` (-)
 - 30634d75a 11-17 03:07 `Merge agent/quests7: Merge branch 'main' into quests7` (quests7)
 - 314405c9b 11-17 03:06 `Merge branch 'main' into quests7` (-)
-- ac2efcb0a 11-17 03:00 `Merge agent/quests5: Merge branch 'main' into quests5` (quests5)
-- 7f956136f 11-17 02:59 `Merge branch 'main' into quests5` (-)
-- 49bb8f3c7 11-17 02:50 `Merge agent/vaultv7b: Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 74abd9cc3 11-17 02:48 `Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 5bfc5ea2f 11-17 02:47 `Merge origin/main into quests5` (-)
-- f06eea089 11-17 02:32 `Merge agent/vaultv5: Merge origin/main into agent/vaultv5` (vaultv5)
 <!-- statusgen:end -->

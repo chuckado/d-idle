@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into quests7b <!--sg:agent/quests7b-->
+- Merge branch 'main' into vaultv5verify <!--sg:agent/vaultv5verify-->
 - Merge origin/main into agent/vaultv6 <!--sg:agent/vaultv6-->
 - Merge branch 'main' into quests7 <!--sg:agent/quests7-->
 - Merge branch 'main' into quests5 <!--sg:agent/quests5-->

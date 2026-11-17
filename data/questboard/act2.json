@@ -245,7 +245,11 @@
       "transmute",
       "talk_cain"
      ],
-     "unsupported": "no Cain hand-in step: internal/task staffNodes assembles the Staff and places it in the Canyon but never gives it to Deckard Cain (the quest word needs that talk)"
+     "nodes": [
+      "assemble"
+     ],
+     "handInStep": "cain",
+     "handler": "horadric_staff_board"
     }
    ],
    "minutes": [
@@ -256,7 +260,7 @@
    "autoStart": "allowed",
    "tags": {
     "requires": "S docs/goals/execution.md s3 (scroll gates the quest, V per that table)",
-    "chunks": "V internal/task/act2.go (cube, staff_of_kings, viper_amulet groups); assemble chunk U: no handler step for the Cain hand-in",
+    "chunks": "V internal/task/act2.go (cube, staff_of_kings, viper_amulet groups); assemble chunk: group horadric_staff_board added in S7b (U: that Cain's talk sets the quest word, and the row)",
     "steps": "V docs/goals/execution.md s3",
     "handin.pick": "U",
     "minutes": "I",

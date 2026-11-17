@@ -217,7 +217,7 @@
       "kill_infector"
      ],
      "risk": "hazard",
-     "unsupported": "internal/task diabloNodes runs the seals and the seal bosses inside the one Diablo kill (boss.RunDiablo): there is no per-seal entry point, and leaving the game mid-seals may reset them (U)"
+     "unsupported": "seal progress has no durable evidence (no quest word, no save field: the seals and the seal bosses are per game, U), so a seals-only chunk could not be re-derived after a restart; boss.OpenSeals resumes only inside one game and ends by waking Diablo. The diablo chunk runs the seals itself (spike plan in docs/questboard.md)"
     },
     {
      "id": "diablo",
