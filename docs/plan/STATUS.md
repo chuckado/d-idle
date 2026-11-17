@@ -296,14 +296,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ae5256b97 11-17 03:35 `Merge agent/vaultv5verify: Merge branch 'main' into vaultv5verify` (vaultv5verify)
+- b784cf67e 11-17 03:34 `Merge branch 'main' into vaultv5verify` (-)
 - 09094d83f 11-17 03:28 `Merge agent/vaultv6: Merge origin/main into agent/vaultv6` (vaultv6)
 - 657fd78b5 11-17 03:25 `Merge origin/main into agent/vaultv6` (vaultv6)
+- 8949232a1 11-17 03:12 `Merge origin/main into agent/vaultv5verify` (-)
 - 30634d75a 11-17 03:07 `Merge agent/quests7: Merge branch 'main' into quests7` (quests7)
 - 314405c9b 11-17 03:06 `Merge branch 'main' into quests7` (-)
 - ac2efcb0a 11-17 03:00 `Merge agent/quests5: Merge branch 'main' into quests5` (quests5)
 - 7f956136f 11-17 02:59 `Merge branch 'main' into quests5` (-)
 - 49bb8f3c7 11-17 02:50 `Merge agent/vaultv7b: Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 74abd9cc3 11-17 02:48 `Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet)` (vaultv7b)
-- 5bfc5ea2f 11-17 02:47 `Merge origin/main into quests5` (-)
-- f06eea089 11-17 02:32 `Merge agent/vaultv5: Merge origin/main into agent/vaultv5` (vaultv5)
 <!-- statusgen:end -->

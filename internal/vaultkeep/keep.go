@@ -435,6 +435,17 @@ func (k *Keeper) runKeep(ctx context.Context) []string {
 		if made >= k.perVisit() || !k.now().Before(deadline) {
 			break
 		}
+		// the kill switch and the safe moment are judged again before every create, not only at the start
+		if !k.enabled() {
+			k.setWaiting(ReasonOff)
+			break
+		}
+		if k.Ready != nil {
+			if why := k.Ready(); why != "" {
+				k.setWaiting(why)
+				break
+			}
+		}
 		if !k.backupOnce(ctx, &lines) {
 			stop = true
 			break

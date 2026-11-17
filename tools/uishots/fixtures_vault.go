@@ -192,6 +192,29 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	return api
 }
 
+var (
+	vaultModeMu   sync.Mutex
+	vaultModeLast = "pop"
+)
+
+// vaultModeOf is the state the page asked for. The page rewrites its own query when a filter changes (history.replaceState)
+// and then drops vault=, so a request without it keeps the last state seen (one page at a time per harness run).
+func vaultModeOf(r *http.Request) string {
+	mode := r.URL.Query().Get("vault")
+	if mode == "" {
+		if ref, err := url.Parse(r.Referer()); err == nil {
+			mode = ref.Query().Get("vault")
+		}
+	}
+	vaultModeMu.Lock()
+	defer vaultModeMu.Unlock()
+	if mode == "" {
+		return vaultModeLast
+	}
+	vaultModeLast = mode
+	return mode
+}
+
 // vaultFixture serves the Vault page's routes for the state the page asks for.
 func vaultFixture() http.Handler {
 	vaultOnce.Do(func() {
@@ -204,13 +227,7 @@ func vaultFixture() http.Handler {
 		}
 	})
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		mode := "pop"
-		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-			mode = ref.Query().Get("vault")
-		}
-		if v := r.URL.Query().Get("vault"); v != "" {
-			mode = v
-		}
+		mode := vaultModeOf(r)
 		if mode == "error" && strings.HasPrefix(r.URL.Path, "/api/vault") {
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusInternalServerError)
@@ -230,41 +247,34 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
-	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Get() }))
-	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Upgrade(watch.AnswerOptions{}) }))
-	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Downgrade(watch.AnswerOptions{}) }))
+	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI, _ watch.AnswerOptions) http.Handler { return a.Get() }))
+	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI, o watch.AnswerOptions) http.Handler { return a.Upgrade(o) }))
+	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI, o watch.AnswerOptions) http.Handler { return a.Downgrade(o) }))
 	// the answer routes too (same origin here), so a press shows the real reply and the page reads the state back
 	for _, p := range watch.VaultPostRoutes {
 		route := p
 		m.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
-			mode := "pop"
-			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-				mode = ref.Query().Get("vault")
-			}
+			mode := vaultModeOf(r)
 			api := vaultAPIs[mode]
 			if api == nil {
 				http.Error(w, "no such fixture", http.StatusNotFound)
 				return
 			}
-			api.PostHandler(watch.AnswerOptions{}, route).ServeHTTP(w, r)
+			api.PostHandler(watch.AnswerOptions{Origins: []string{"http://" + r.Host}}, route).ServeHTTP(w, r)
 		})
 	}
 }
 
 // etherFixture routes the wallet calls of the page to the wallet of its state (the Referer's vault=); a state without a wallet answers
 // the way a bot with loot.vault 0 does (enabled false, and 409 off on a press).
-func etherFixture(h func(*watch.EtherAPI) http.Handler) http.Handler {
+func etherFixture(h func(*watch.EtherAPI, watch.AnswerOptions) http.Handler) http.Handler {
 	vaultFixture() // builds the states
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		mode := "pop"
-		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-			mode = ref.Query().Get("vault")
-		}
-		a := vaultEthers[mode]
+		a := vaultEthers[vaultModeOf(r)]
 		if a == nil {
 			a = &watch.EtherAPI{}
 		}
-		h(a).ServeHTTP(w, r)
+		h(a, watch.AnswerOptions{Origins: []string{"http://" + r.Host}}).ServeHTTP(w, r)
 	})
 }
 
@@ -294,6 +304,10 @@ type fixtureKeeper struct {
 
 // preset puts a row in every Keep state: two queued, one creating, one failed with a real reason and two kept.
 func (k *fixtureKeeper) preset(ids []string) {
+	// Newest first lists the last added items first: put the states there, so they are on the first screen of every picture
+	for i, j := 0, len(ids)-1; i < j; i, j = i+1, j-1 {
+		ids[i], ids[j] = ids[j], ids[i]
+	}
 	for _, i := range []int{1, 2, 4, 6} {
 		_ = k.st.KeepTo(ids[i], "")
 	}
