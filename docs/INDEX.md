@@ -664,6 +664,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
 - [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
+- [gear-absorb-body.md](upstream/bodies/gear-absorb-body.md): gear-absorb-body
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body

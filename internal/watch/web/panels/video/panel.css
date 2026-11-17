@@ -9,6 +9,19 @@
   [data-panel="video"] canvas.shot { image-rendering: pixelated; image-rendering: crisp-edges; inline-size: var(--pal-w, 100%); block-size: var(--pal-h, 100%); }
   [data-panel="video"] canvas.shot[hidden] { display: none; }
   [data-panel="video"] canvas.shot[data-smooth="1"] { image-rendering: auto; }
+  /* the controls: a toolbar under the picture (never over it), wrapping, so a new button never overflows; the card's body is a column
+     whose picture takes what the toolbar leaves */
+  [data-panel="video"] .d-slotbody, [data-panel="video"] > .d-body { display: flex; flex-direction: column; min-block-size: 0; }
+  [data-panel="video"] .frame { flex: 1 1 auto; }
+  [data-panel="video"] .vtools { flex: none; display: flex; flex-wrap: nowrap; align-items: center; gap: var(--d-sp-1); padding-block-start: var(--d-sp-1); overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+  [data-panel="video"] .vtools > .d-btn { flex: none; }
+  /* one line each, an ellipsis, never taller than a line: the rate line and the low-fps hint take no more of the picture than this */
+  [data-panel="video"] .vstat { flex: 1 0 auto; max-inline-size: 22rem; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-panel="video"] .vstat[hidden] { display: none; }
+  [data-panel="video"] .vhint { flex: none; display: flex; align-items: center; gap: var(--d-sp-1); min-inline-size: 0; margin: 0; padding-block-start: var(--d-sp-1); font-size: var(--d-fs-0); color: var(--d-text-2); }
+  [data-panel="video"] .vhint[hidden] { display: none; }
+  [data-panel="video"] .vhint-t { flex: 1 1 auto; min-inline-size: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  [data-panel="video"] .vhint > .d-btn { flex: none; }
   /* the stream monitor: bottom-left (the buttons are at the top and wrap over it on a phone), never takes a click; it is a diagnostic, off by default, and may cover part of the game's HUD while it is on */
   [data-panel="video"] canvas.statsov { position: absolute; inset-block-end: var(--d-sp-2); inset-inline-start: var(--d-sp-2); inline-size: var(--ov-w, 360px); block-size: var(--ov-h, 266px); pointer-events: none; border-radius: var(--d-r-2); }
   [data-panel="video"] canvas.statsov[hidden] { display: none; }
@@ -19,8 +32,10 @@
   [data-panel="video"] .badge[hidden], [data-panel="video"] .frame > .d-btn[hidden] { display: none; }
   [data-panel="video"]:fullscreen { overflow: auto; }
   [data-panel="video"]:fullscreen .frame { block-size: calc(100% - 3rem); aspect-ratio: auto; }
-  /* the quest caption: top-left of the picture, one line, no clicks; the game's HUD is at the bottom and the minimap at the top right */
+  /* the quest caption: top-left of the picture, one line, a tap opens it; the game's HUD is at the bottom and the minimap at the top right */
   [data-panel="video"] .qcap { position: absolute; inset-block-start: var(--d-sp-1); inset-inline-start: var(--d-sp-1); max-inline-size: 58%; padding: 1px var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-video-bg); color: var(--d-video-text);
-    font-size: var(--d-fs-0); opacity: .88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none; }
+    font-size: var(--d-fs-0); opacity: .88; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; }
+  /* a tap (or Enter) shows the whole line, wrapped, over the top of the picture until the next tap */
+  [data-panel="video"] .qcap[data-open="1"] { max-inline-size: calc(100% - 2 * var(--d-sp-1)); white-space: normal; overflow: auto; max-block-size: 45%; opacity: .96; }
   [data-panel="video"] .qcap[hidden] { display: none; }
 }

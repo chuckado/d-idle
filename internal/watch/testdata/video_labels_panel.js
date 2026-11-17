@@ -2,7 +2,7 @@
 // the state the game read back, a click POSTs the opposite and shows the answer, a refusal shows a toast and keeps the state.
 // Usage: node video_labels_panel.js path/to/panel.js
 const assert = require('assert'), path = require('path');
-const { load, shellCtx } = require('./panel_harness.js');
+const { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
 const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
 const S = load(path.join(path.dirname(process.argv[2]), '../../streamstats.js'));
@@ -19,7 +19,7 @@ async function mount(get) {
   s.c.toast = (k, t) => toasts.push([k, t]);
   P.mount(s.root, s.c);
   await tick(20);
-  const btn = s.c.actions.children.find((b) => b.dataset && b.dataset.key === 'labels');
+  const btn = controlsOf(s.c).find((b) => b.dataset && b.dataset.key === 'labels');
   return { s, btn, posts, toasts, timers };
 }
 

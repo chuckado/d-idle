@@ -360,3 +360,21 @@ Watch UI: a `Labels` toggle (`aria-pressed`, `data-key="labels"`) on the video c
 Does it break the bot (V by code reading)? The bot on d2d reads `ground`, `dump` and memory-like verbs, never the picture: the only `Screenshot` caller is `cmd/d2dview` (the feed). In the fork `alt_held` is read in exactly one place, the draw call; clicks are not label-aware (only the label under the mouse becomes the hovered unit for the name tooltip), so a click lands where it did. U live: a click on a label while it is shown, in game.exe it picks the item up, in d2d no change is expected.
 
 No knob: the feature exists only when the d2d answers `caps` with `ui.labels`, and the default is off. Live checklist (NOT run): start a sandbox d2d with `--item-verbs` from the `didle/labels-verb` build, drop an item (`debug`), open the watch page, tap Labels: names appear in the lossless and the MJPEG picture, the button stays pressed after a reload; restart the d2d: the label is back on when the bot is in game; switch hero: off for a hero that never set it.
+
+## 15. Video controls moved out of the picture (card videoctl, 2026-11-17)
+
+User screenshot (Android Chrome, 412 px): the card's buttons (Full screen, Low rate, Stats, Sharp pixels, ...) lay over the TOP of the
+picture and hid the quest caption (`Running: Dark Wood > Tree of Inifuss...` showed as "The Sea" and "ke" between the buttons).
+Cause: the controls were the card's title-bar actions, which a cockpit slot paints in the top-right corner over the picture and wraps
+leftwards when there are many.
+- The controls are a toolbar BELOW the picture (`.vtools`, a wrapping row; `role="toolbar"`), in flow, never over it. Only Collapse stays
+  in the title bar. The rate line (was the card head's meta text) is the toolbar's last item. The picture takes what the toolbar leaves.
+- The button set is data: `window.d2video.controls.add({key, label, title, onClick, pressed})` adds a button to the toolbar (the Labels
+  toggle of agent/labels uses it); the row wraps, so a new button never overflows.
+- The caption keeps its corner (top-left, one line, ellipsis, at most 58 percent of the width) and a tap or Enter shows the whole line,
+  wrapped, over the picture until the next tap; `title` has the full text.
+- The stats overlay stays bottom-left over the picture: it is a diagnostic the user turns on (off by default) and may cover part of the
+  game's HUD while on.
+- Fit check (`tools/uishots/fit.js` `video`, judged in `fit.go`): FAIL when any button box of the video card touches the caption or any
+  other text element of the card ("video control covers text"); fixture `quests=runlong` carries the long caption; the page
+  `viddefect-ctl` puts the toolbar back over the caption and must fail with that verdict (`defectCSS vid-ctl`).

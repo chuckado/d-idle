@@ -1,6 +1,6 @@
 // Runs web/panels/video/panel.js against a stub DOM: shown only with a stream, reconnect backoff, collapse memory,
 // full screen on the panel. Usage: node video_panel.js path/to/panel.js
-const assert = require('assert'), { load, shellCtx } = require('./panel_harness.js');
+const assert = require('assert'), { load, shellCtx, controlsOf } = require('./panel_harness.js');
 const path = require('path');
 const M0 = load(path.join(path.dirname(process.argv[2]), '../../mjpeg.js'));
 const B = load(path.join(path.dirname(process.argv[2]), 'brightness.js'));
@@ -12,7 +12,7 @@ const P = load(process.argv[2], M);
 const store = {}, timers = [];
 const { root, c } = shellCtx({ frameUrl: '/stream' }, store, timers);
 P.mount(root, c);
-const shot = c.body.children[0].children[0], [full, col] = c.actions.children;
+const shot = c.body.children[0].children[0], full = controlsOf(c).find((b) => b.dataset && b.dataset.key === 'full'), col = controlsOf(c).find((b) => b.dataset && b.dataset.key === 'collapse');
 assert.notStrictEqual(c.hidden, true, 'shown when the server offers a stream');
 assert.ok(/^\/stream\?t=tok&r=\d+$/.test(shot.src), 'src ' + shot.src);
 const waits = [];
@@ -33,7 +33,7 @@ full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
 {
   const st = {}, t = [];
   const s3 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s3.root, s3.c);
-  const fr = s3.c.body.children[0], b = s3.c.actions.children.find((x) => x.dataset.key === 'brightness');
+  const fr = s3.c.body.children[0], b = s3.c.body.children.flatMap((e) => e.children || []).find((x) => x.dataset && x.dataset.key === 'brightness');
   assert.ok(b, 'a Brightness button'); assert.strictEqual(b.textContent, 'Brightness: Default'); assert.strictEqual(fr.dataset.bright, '100');
   assert.strictEqual(fr.style['--vid-bright'], '1'); assert.strictEqual(st.brightness, undefined, 'default is not stored');
   b.fire('click'); assert.strictEqual(fr.dataset.bright, '115'); assert.strictEqual(fr.style['--vid-bright'], '1.15'); assert.strictEqual(st.brightness, '115');
@@ -111,12 +111,22 @@ full.fire('click'); assert.ok(root.fullscreen, 'full screen asks the panel');
   const t = [], st = {};
   const s2 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s2.root, s2.c);
   const img = s2.c.body.children[0].children[0];
-  const btn = s2.c.actions.children.find((b) => b.dataset && b.dataset.key === 'lowrate');
+  const btn = controlsOf(s2.c).find((b) => b.dataset && b.dataset.key === 'lowrate');
   assert.ok(btn, 'low rate button');
   assert.ok(!/fps=/.test(img.src), 'default asks for every frame');
   btn.fire('click');
   assert.strictEqual(st.lowrate, '1'); assert.ok(/fps=8/.test(img.src), 'low rate src ' + img.src);
   const s3 = shellCtx({ frameUrl: '/stream' }, { lowrate: '1' }, []); P.mount(s3.root, s3.c);
   assert.ok(/fps=8/.test(s3.c.body.children[0].children[0].src), 'remembered');
+}
+// the controls are a toolbar below the picture, never over it: only Collapse stays in the title bar; a control added later lands in the toolbar
+{
+  const t = [], st = {};
+  const s4 = shellCtx({ frameUrl: '/stream' }, st, t); P.mount(s4.root, s4.c);
+  const keys = (list) => list.map((b) => b.dataset && b.dataset.key);
+  assert.deepStrictEqual(keys(s4.c.actions.children), ['collapse'], 'title bar holds Collapse only');
+  const bar = s4.c.body.children.find((e) => e.attrs && e.attrs.role === 'toolbar');
+  assert.ok(bar, 'toolbar exists in the body'); assert.ok(s4.c.body.children.indexOf(bar) > s4.c.body.children.indexOf(s4.c.body.children[0]), 'toolbar comes after the picture frame');
+  for (const k of ['full', 'lowrate', 'stats']) assert.ok(keys(bar.children).includes(k), k + ' in the toolbar');
 }
 console.log('ok');

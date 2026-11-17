@@ -209,6 +209,11 @@ type fitResult struct {
 		// SwitchOverlap is how many zone buttons the Act/Area switch lies on.
 		SwitchOverlap int `json:"switchOverlap"`
 	} `json:"zones"`
+	// Video: the video card's controls and the controls that touch its caption or another text (card videoctl)
+	Video struct {
+		Controls int      `json:"controls"`
+		Overlap  []string `json:"overlap"`
+	} `json:"video"`
 	OrderCut int    `json:"orderCut"` // order rows whose title is cut while the reason beside it still shows
 	Covered  int    `json:"covered"`
 	Hole     int    `json:"hole"`
@@ -325,6 +330,9 @@ func (r fitResult) judge() []string {
 	}
 	if r.Zones.SwitchOverlap > 0 {
 		bad = append(bad, fmt.Sprintf("the map switch covers %d zone buttons", r.Zones.SwitchOverlap))
+	}
+	if len(r.Video.Overlap) > 0 {
+		bad = append(bad, "video control covers text: "+strings.Join(r.Video.Overlap, "; "))
 	}
 	if r.OrderCut > 0 {
 		bad = append(bad, fmt.Sprintf("%d order titles are cut while their reason shows", r.OrderCut))
@@ -524,6 +532,8 @@ var mustFail = map[string]string{
 	"fit-phonedefect-hover-":     "horizontal overflow: ",
 	"fit-phonedefect-narrow-":    "grid: ",
 	"fit-phonedefect-resetclip-": "#btn-reset is not hittable",
+	// the video card (card videoctl): the toolbar put back over the caption (defectCSS vid-ctl in fixtures_phone.go)
+	"fit-viddefect-ctl-": "video control covers text",
 	// the Characters page (docs/charselect-ui.md): one defect each, put back by defectCSS in fixtures_chars.go
 	"fit-charsdefect-clip-":    "clipped text",
 	"fit-charsdefect-wide-":    "ends outside the window",

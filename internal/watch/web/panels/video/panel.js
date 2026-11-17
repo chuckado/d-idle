@@ -32,15 +32,41 @@ export function mount(root, ctx) {
   const cap = ctx.el('div', 'qcap'); // the quest board's current step as a small caption on the picture's top-left edge (never over the HUD at the bottom)
   cap.hidden = true;
   cap.setAttribute('role', 'status');
+  cap.tabIndex = 0; cap.setAttribute('aria-expanded', 'false');
+  const capToggle = () => { const on = cap.dataset.open !== '1'; cap.dataset.open = on ? '1' : '0'; cap.setAttribute('aria-expanded', String(on)); };
+  cap.addEventListener('click', capToggle);
+  cap.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); capToggle(); } });
   frame.append(shot, cv, wait, badge, retry, cap);
   ctx.body.append(frame);
+  // The controls are a toolbar BELOW the picture, never over it (a phone's five buttons wrapped across the top of the picture and
+  // covered the quest caption and the game's own text; the fit check now fails any control that touches a caption or other text of
+  // the card). It wraps, so a button added later never overflows: add one with window.d2video.controls.add({key, label, title,
+  // onClick, pressed}) (the Labels toggle uses it). Only Collapse stays in the card's title bar actions.
+  const bar = ctx.el('div', 'vtools');
+  bar.setAttribute('role', 'toolbar'); bar.setAttribute('aria-label', 'Video controls');
+  bar.setAttribute('data-hscroll', ''); // one row that scrolls sideways when the card is narrow: the picture keeps its height
+  ctx.body.append(bar);
+  const statLine = ctx.el('span', 'vstat', ''); // the rate line (was the card head's meta text, which sat over the picture)
+  statLine.setAttribute('role', 'status'); statLine.hidden = true;
+  function addControl(def) {
+    const b = ctx.el('button', 'd-btn', def.label);
+    b.type = 'button'; b.dataset.size = 'sm'; b.dataset.key = def.key;
+    if (def.title) b.title = def.title;
+    if (def.pressed !== undefined) b.setAttribute('aria-pressed', String(!!def.pressed));
+    if (def.onClick) b.addEventListener('click', def.onClick);
+    bar.insertBefore ? bar.insertBefore(b, statLine) : bar.append(b);
+    return b;
+  }
+  bar.append(statLine);
+
 
   const full = ctx.el('button', 'd-btn', 'Full screen');
   full.type = 'button'; full.dataset.size = 'sm'; full.dataset.key = 'full';
   full.setAttribute('aria-label', 'Full screen');
   const col = ctx.el('button', 'd-btn', 'Collapse');
   col.type = 'button'; col.dataset.size = 'sm'; col.dataset.key = 'collapse';
-  ctx.actions.append(full, col);
+  bar.insertBefore ? bar.insertBefore(full, statLine) : bar.append(full);
+  ctx.actions.append(col);
 
   const saved = ctx.store('collapsed');
   function collapse(on, remember) {
@@ -65,10 +91,14 @@ export function mount(root, ctx) {
   lowBtn.type = 'button'; lowBtn.dataset.size = 'sm'; lowBtn.dataset.key = 'lowrate';
   lowBtn.setAttribute('aria-pressed', String(low.get() === '1'));
   lowBtn.title = 'Smoother on a slow screen: about ' + LOW_FPS + ' pictures a second';
-  ctx.actions.append(lowBtn);
-  mountBrightness(ctx, frame);
-  const hint = ctx.el('p', 'd-empty', '');
+  bar.insertBefore ? bar.insertBefore(lowBtn, statLine) : bar.append(lowBtn);
+  mountBrightness(ctx, frame, (b) => (bar.insertBefore ? bar.insertBefore(b, statLine) : bar.append(b)));
+  // the low-fps hint: ONE line under the toolbar (text with an ellipsis, the button never cut), so it cannot squeeze the picture
+  const hint = ctx.el('div', 'vhint', '');
+  const hintT = ctx.el('span', 'vhint-t', '');
+  const hintBtn = ctx.el('button', 'd-btn', 'Use low-rate mode'); hintBtn.type = 'button'; hintBtn.dataset.size = 'sm';
   hint.hidden = true; hint.setAttribute('role', 'status');
+  hint.append(hintT, hintBtn);
   ctx.body.append(hint);
   let bytes = [];
   const mon = new StreamMonitor(); // the 30 s record the Stats overlay draws; both players feed it
@@ -79,6 +109,7 @@ export function mount(root, ctx) {
     ctl.reconnect();
   }
   lowBtn.addEventListener('click', () => setLow(low.get() !== '1'));
+  hintBtn.addEventListener('click', () => setLow(true));
   // measured here and shown in the card head (also read by window.d2video.stats(): a friend can screenshot it)
   function stats() {
     const now = Date.now();
@@ -107,16 +138,14 @@ export function mount(root, ctx) {
     }
     if (slow && !st.low) {
       if (Date.now() - slowAt >= 3000 && hint.hidden) {
-        hint.textContent = 'The picture runs at ' + Math.round(f) + ' fps here. Low-rate mode may look smoother. ';
-        const b = ctx.el('button', 'd-btn', 'Use low-rate mode'); b.type = 'button'; b.dataset.size = 'sm';
-        b.addEventListener('click', () => setLow(true));
-        hint.append(b); hint.hidden = false;
+        hintT.textContent = 'Runs at ' + Math.round(f) + ' fps here. Low rate may look smoother.';
+        hint.hidden = false;
       }
     } else if (!hint.hidden && !slow) hint.hidden = true;
     // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
     const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
     const text = !ovOn && (dbg || slow) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
-    if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
+    if (statLine.textContent !== text) { statLine.textContent = text; statLine.hidden = !text; }
     ctx.later(watchRate, 1000);
   }
 
@@ -144,7 +173,8 @@ export function mount(root, ctx) {
   const copyBtn = ctx.el('button', 'd-btn', 'Copy 30 s');
   copyBtn.type = 'button'; copyBtn.dataset.size = 'sm'; copyBtn.dataset.key = 'statscopy'; copyBtn.hidden = true;
   copyBtn.title = 'Copy the last 30 seconds as JSON (times, fps, kB/s, gaps, events, server numbers)';
-  ctx.actions.append(statsBtn, copyBtn);
+  bar.insertBefore ? bar.insertBefore(statsBtn, statLine) : bar.append(statsBtn);
+  bar.insertBefore ? bar.insertBefore(copyBtn, statLine) : bar.append(copyBtn);
   const ov = ctx.el('canvas', 'statsov'); ov.hidden = true; ov.setAttribute('role', 'img');
   ov.setAttribute('aria-label', 'stream statistics of the last 30 seconds');
   frame.append(ov, badge, retry); // appended last: the badge and Retry stay above the overlay
@@ -205,7 +235,7 @@ export function mount(root, ctx) {
   sharpBtn.setAttribute('aria-pressed', String(sharp.get() === '1'));
   sharpBtn.title = 'Hard pixel edges instead of smooth scaling (lossless picture only)';
   sharpBtn.hidden = true; // shown while the lossless picture is on
-  ctx.actions.append(sharpBtn);
+  bar.insertBefore ? bar.insertBefore(sharpBtn, statLine) : bar.append(sharpBtn);
   sharpBtn.addEventListener('click', () => {
     const on = sharp.get() !== '1';
     sharp.set(on ? '1' : '0'); sharpBtn.setAttribute('aria-pressed', String(on)); palFit();
@@ -330,7 +360,7 @@ export function mount(root, ctx) {
   labelsBtn.type = 'button'; labelsBtn.dataset.size = 'sm'; labelsBtn.dataset.key = 'labels'; labelsBtn.hidden = true;
   labelsBtn.title = 'Show the names of the items lying on the ground, as with Alt held in the game';
   labelsBtn.setAttribute('aria-pressed', 'false');
-  ctx.actions.append(labelsBtn);
+  bar.insertBefore ? bar.insertBefore(labelsBtn, statLine) : bar.append(labelsBtn);
   let labelsOn = false, labelsBusy = false;
   function labelsShow(j) {
     if (!j || j.available !== true) { labelsBtn.hidden = true; return false; }
@@ -349,13 +379,14 @@ export function mount(root, ctx) {
   });
   if (typeof ctx.get === 'function') (function labelsLoop() { labelsRead().then(() => ctx.later(labelsLoop, 20000)); })();
   registerVideo(ctl);
+  if (typeof window !== 'undefined' && window.d2video) window.d2video.controls = { add: addControl };
   ctl.start();
   tryPal();
   if (pfdebug || statsMem.get() === '1') setStats(true, false);
   // the quest caption: quest-strip (the quest board's tile) publishes the text, this panel only shows it; without the tile (or in a
   // page where the import is not there) the caption stays empty
   if (typeof questCaption !== 'undefined') {
-    const show = (t) => { if (cap.textContent !== t) cap.textContent = t; cap.hidden = !t; };
+    const show = (t) => { if (cap.textContent !== t) { cap.textContent = t; cap.title = t; cap.dataset.open = '0'; } cap.hidden = !t; };
     questCaption.subs.add(show);
     show(questCaption.text);
   }
