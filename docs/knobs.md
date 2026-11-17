@@ -537,6 +537,7 @@ Exactly one of `--sim`, `--attach`, `--managed` is required. Flags with an env f
 | `--soak-dir` | `D2BOT_SOAK_DIR` | off | dashboard shows the newest soak run read-only |
 | `--supervise` / `--supervise-max N` | `D2BOT_SUPERVISE` | off / 10 | restart as a child with backoff; give up after N restarts per hour |
 | `--clean-start` | - | off | managed: stop a leftover game first (set by --supervise on restarts) |
+| - | `D2BOT_PPROF_HTTP` | off | `1` mounts the on-demand CPU profile routes on the answer listener (docs/probes/bot-cpu-fix-2026-11-16.md) |
 | `--version` | - | - | print version |
 
 Boolean env values are true only for `1`, `true`, `yes`, `on` (`envBool`). Other env vars read elsewhere in the code (V):
