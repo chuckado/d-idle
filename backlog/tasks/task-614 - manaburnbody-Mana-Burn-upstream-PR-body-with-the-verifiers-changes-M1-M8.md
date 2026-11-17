@@ -16,6 +16,7 @@ owns:
   - "docs/upstream/bodies/mana-burn-amount-body.md"
 exclusive: []
 contracts: []
+result: "Mana Burn r3 PR body updated with verifier changes M1-M8 (docs only, offline, not verified live)"
 ---
 
 ## Description
