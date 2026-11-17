@@ -13,6 +13,11 @@ priority: medium
 ordinal: 299000
 card: "videofeed4"
 owns:
+  - "internal/watch/palfeed.go"
+  - "internal/watch/palfeed_test.go"
+  - "internal/watch/views.go"
+  - "internal/watch/testdata/panel_harness.js"
+  - "internal/watch/testdata/video_pal_panel.js"
   - "internal/watch/web/palfeed.js"
   - "internal/watch/web/streamstats.js"
   - "internal/watch/web/panels/video"
@@ -27,6 +32,7 @@ owns:
   - "tools/uishots.sh"
 exclusive: []
 contracts: []
+result: "Measured cause (read-only samples in the sandbox container): the 1-core CPU quota is saturated by the bot's own bursts (10-47 s at 64-71 percent of the core, 67-87 s apart), the container is throttled in 7-10 of 10 periods, d2d starves from 33 to 18-22 ticks/s in 2-7 s runs every 3-16 s. Added: stream monitor overlay (30 s charts, time axis, JSON copy, both players), host numbers in /api/palfeed, SlowGate hysteresis for the low-fps hint, a stable deeper presentation clock (66-200 ms) with a synthetic stall regression test, rate halved while throttled, pooled hub frames. Verified offline and in headless Chromium; not on the sandbox."
 ---
 
 ## Description
@@ -39,8 +45,8 @@ Why: TODO. Done when: TODO.
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 measured cause of the hitching documented (container cgroup throttle, bot CPU bursts) with sandbox read-only samples
-- [ ] #2 on-page stream monitor (30 s rolling charts, JSON copy, both players), off by default
-- [ ] #3 presentation clock stable (no oscillation) and deep enough to hide 100 ms stalls; regression test with a synthetic stall trace
-- [ ] #4 d2dview feed CPU reduced (no per-frame allocation) and server stats in the capability reply
+- [x] #1 measured cause of the hitching documented (container cgroup throttle, bot CPU bursts) with sandbox read-only samples
+- [x] #2 on-page stream monitor (30 s rolling charts, JSON copy, both players), off by default
+- [x] #3 presentation clock stable (no oscillation) and deep enough to hide 100 ms stalls; regression test with a synthetic stall trace
+- [x] #4 d2dview feed CPU reduced (no per-frame allocation) and server stats in the capability reply
 <!-- AC:END -->

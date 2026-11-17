@@ -109,7 +109,7 @@ export function mount(root, ctx) {
     } else if (!hint.hidden && !slow) hint.hidden = true;
     // the rate line shows while slow or with ?debug; a steady line elsewhere would only repaint the head
     const dbg = typeof location !== 'undefined' && /[?&]debug\b/.test(location.search || '');
-    const text = (dbg || slow) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
+    const text = !ovOn && (dbg || slow) ? 'stream: ' + st.fps + ' fps, ' + st.kBps + ' KB/s' + (st.lossless ? ', shown ' + st.shown + ', dropped ' + st.dropped + ', jitter ' + st.jitterMs + ' ms, delay ' + st.latencyMs + ' ms' : '') + (st.low ? ', low rate' : '') : '';
     if (ctx.meta.textContent !== text) ctx.meta.textContent = text;
     ctx.later(watchRate, 1000);
   }
@@ -141,7 +141,7 @@ export function mount(root, ctx) {
   ctx.actions.append(statsBtn, copyBtn);
   const ov = ctx.el('canvas', 'statsov'); ov.hidden = true; ov.setAttribute('role', 'img');
   ov.setAttribute('aria-label', 'stream statistics of the last 30 seconds');
-  frame.append(ov);
+  frame.append(ov, badge, retry); // appended last: the badge and Retry stay above the overlay
   const scratch = { deliv: new Array(30).fill(0), shown: new Array(30).fill(0), drop: new Array(30).fill(0), kB: new Array(30).fill(0), keys: new Array(30).fill(0),
     delay: new Array(30).fill(NaN), thr: new Array(30).fill(NaN), cpu: new Array(30).fill(NaN), ring: new Array(30).fill(NaN), endSec: 0 };
   const pfdebug = typeof location !== 'undefined' && /[?&]pfdebug\b/.test(location.search || '');
