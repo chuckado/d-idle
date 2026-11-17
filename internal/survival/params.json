@@ -66,6 +66,7 @@
   "yieldMinMinutes": "I: observed stay minutes a zone needs before its realized xp/min counts at all (trust floor: one bad minute never moves the value), U",
   "yieldShrinkMinutes": "I: realized weight = minutes / (minutes + this), capped by yieldMaxWeight; the model prior fades as the zone is farmed (card survfix2, seed 101 margin: predicted 152, realized 34 xp/min), U",
   "yieldMaxWeight": "I: the model prior never fades completely, U",
+  "freshNeedsMerc": "I: true refuses a fresh game while the merc is left dead (survfix2); false (card survtune): the margin already counts the dead merc, so a pick that is eligible without him is as safe in a fresh game of the same zone, and the refusal kept the margin arm farming 24 xp/min zones for an hour while the legacy arm recycled the game (the rerun of seed 113: 27k xp against 52k), U",
   "starveCasts": "I: decayed count of mana-starved watchdog lines in a zone that lowers its value (26 lines in 41 minutes in the screen), U",
   "starveValueMul": "I: value multiplier of a zone whose starvation count reached starveCasts, U",
   "archetypes": "I: per-archetype overrides (power profile id) of yieldShrinkMinutes and starveCasts; 0 = the global value, U",
