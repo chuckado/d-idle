@@ -1,0 +1,35 @@
+---
+id: TASK-578
+title: 'vaultv0: Ethereal Vault V0 spike (ground full + item create, lab drill)'
+status: Proposed
+assignee:
+  - credit-runner
+created_date: '2026-11-17T02:42:00Z'
+labels:
+  - d2d
+  - research
+dependencies: []
+priority: medium
+ordinal: 300000
+card: "vaultv0"
+owns:
+  - "docs/probes/vault-spike-2026-11-16.md"
+exclusive:
+  - "fork-branch:didle/vault-spike"
+contracts: []
+---
+
+## Description
+
+<!-- SECTION:DESCRIPTION:BEGIN -->
+Size: M
+
+Why: prove the vault capture and create path (design docs/design/loot-vault-2026-11-16.md section 1.7) before any bot change. Consumer: vault V1 (fork verbs and Go client). Done when: the drill numbers and a go/no-go are in the probe doc.
+<!-- SECTION:DESCRIPTION:END -->
+
+## Acceptance Criteria
+<!-- AC:BEGIN -->
+- [ ] #1 fork stub ground full / item full / item create behind --vault-verbs pushed to the private remote
+- [ ] #2 lab drill on the builder with numbers (items, bytes equal, reload equal, failures)
+- [ ] #3 report docs/probes/vault-spike-2026-11-16.md with verb shapes and go/no-go for V1
+<!-- AC:END -->
