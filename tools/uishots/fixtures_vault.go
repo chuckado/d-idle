@@ -37,6 +37,8 @@ type vaultSet struct {
 	balance, owned int
 	keep           string // "": no Keep queue; ok, dead (the gate refuses: the hero is dead), full (a queue waiting for stash room)
 	preset         bool   // queued, creating, kept and failed rows are put in the store
+	act            string // "": no Reveal or Sell; ok (3 charges), none (no scroll), cain (free), dead (the gate refuses)
+	actPreset      bool   // reveal and sell rows in every state, and the "short on gold" prompt
 }
 
 var vaultModes = map[string]vaultSet{
@@ -48,6 +50,12 @@ var vaultModes = map[string]vaultSet{
 	"keeppress": {n: 140, capacity: 400, on: true, keep: "ok"},
 	"keepdead":  {n: 140, capacity: 400, on: true, keep: "dead"},
 	"keepfull":  {n: 140, capacity: 400, on: true, keep: "full", preset: true},
+	// Reveal and Sell (slice V6)
+	"revealing":   {n: 140, capacity: 400, on: true, keep: "ok", act: "ok", actPreset: true},
+	"revealpress": {n: 140, capacity: 400, on: true, keep: "ok", act: "ok"},
+	"revealnone":  {n: 140, capacity: 400, on: true, keep: "ok", act: "none"},
+	"revealcain":  {n: 140, capacity: 400, on: true, keep: "ok", act: "cain"},
+	"revealdead":  {n: 140, capacity: 400, on: true, keep: "ok", act: "dead"},
 	// the wallet states (V7b): enough Ether to buy, short, one step owned (the refund fits), one step owned and the vault too full for the lower tier, every step owned
 	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
 	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
@@ -171,6 +179,13 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 			k.preset(ids)
 		}
 		desk.Keep = k
+	}
+	if set.act != "" {
+		a := &fixtureActor{st: s, mode: set.act}
+		if set.actPreset {
+			a.preset(ids)
+		}
+		desk.Act = a
 	}
 	desk.Store = func() *vault.Store { return s }
 	api.Bind(desk)
@@ -337,6 +352,143 @@ func (k *fixtureKeeper) Progress() watch.VaultKeepView {
 		v.Line = fmt.Sprintf("Keeping %d items: the stash is full, free space or upgrade", n)
 	default:
 		v.Line = fmt.Sprintf("Keeping %d items: arrives at your next town visit", n)
+	}
+	return v
+}
+
+// fixtureActor is Reveal and Sell of the fixture: it queues through the real store like internal/vaultkeep does; nothing
+// identifies or sells here (the executors are exercised in internal/vaultkeep with the fake game).
+type fixtureActor struct {
+	st     *vault.Store
+	mode   string
+	prompt []string
+}
+
+// preset puts a row in every state: two reveals queued, one failed with a real reason, two sales queued, one sold, one refused.
+func (a *fixtureActor) preset(ids []string) {
+	for _, i := range []int{1, 7} {
+		_ = a.st.RevealWant(ids[i])
+	}
+	_ = a.st.RevealWant(ids[13])
+	_ = a.st.RevealFail(ids[13], "reveal: no scroll; buy on request")
+	for _, i := range []int{2, 4} {
+		_ = a.st.MarkSell(ids[i])
+	}
+	_ = a.st.MarkSell(ids[5])
+	_ = a.st.Sold(ids[5], 120)
+	_ = a.st.MarkSell(ids[6])
+	_ = a.st.FailSell(ids[6], "sell: no vendor of this act would buy it")
+	a.prompt = []string{ids[9], ids[10]}
+}
+
+func (a *fixtureActor) charges() int {
+	switch a.mode {
+	case "none", "dead":
+		return 0
+	case "cain":
+		return 0
+	}
+	return 3
+}
+
+func (a *fixtureActor) GateReveal(context.Context) (bool, string, string) {
+	if a.mode == "dead" {
+		return false, "dead", "The hero is dead; Reveal works again once it is alive and in town."
+	}
+	return true, "", ""
+}
+
+func (a *fixtureActor) GateSell(ctx context.Context) (bool, string, string) { return a.GateReveal(ctx) }
+
+func (a *fixtureActor) EnqueueReveal(_ context.Context, ids []string, _ bool) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, id := range ids {
+		rec, ok := a.st.Get(id)
+		switch {
+		case !ok:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "missing", Why: "no such item"})
+		case rec.RevQ:
+			out = append(out, watch.VaultKeepResult{ID: id, OK: true, Already: true})
+		case rec.Identified:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "state", Why: "it is identified already"})
+		case a.mode != "cain" && a.charges() == 0:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "noscroll", Why: "no scroll; buy on request"})
+		default:
+			if err := a.st.RevealWant(id); err != nil {
+				out = append(out, watch.VaultKeepResult{ID: id, Code: "state", Why: err.Error()})
+			} else {
+				out = append(out, watch.VaultKeepResult{ID: id, OK: true})
+			}
+		}
+	}
+	return out
+}
+
+func (a *fixtureActor) EnqueueSell(_ context.Context, ids []string, _ bool) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, id := range ids {
+		switch err := a.st.MarkSell(id); {
+		case err == nil:
+			out = append(out, watch.VaultKeepResult{ID: id, OK: true})
+		case err == vault.ErrPinned:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "pinned", Why: err.Error()})
+		default:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "state", Why: err.Error()})
+		}
+	}
+	return out
+}
+
+func (a *fixtureActor) Cancel(ids []string) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, id := range ids {
+		err := a.st.CancelSell(id)
+		if err != nil {
+			err = a.st.RevealCancel(id)
+		}
+		out = append(out, watch.VaultKeepResult{ID: id, OK: err == nil, Code: "state", Why: "nothing is queued for it"})
+	}
+	return out
+}
+
+func (a *fixtureActor) DismissOffer() { a.prompt = nil }
+
+func (a *fixtureActor) Act(ctx context.Context) watch.VaultActView {
+	v := watch.VaultActView{
+		Reveal: watch.VaultRevealView{Charges: a.charges(), Free: a.mode == "cain", PerItem: 1},
+		Sell:   watch.VaultSellView{},
+	}
+	v.Reveal.Enabled, v.Reveal.Code, v.Reveal.Why = a.GateReveal(ctx)
+	if v.Reveal.Enabled {
+		v.Reveal.Code, v.Reveal.Why = "", ""
+		if a.mode == "none" {
+			v.Reveal.Enabled, v.Reveal.Code, v.Reveal.Why = false, "noscroll", "no scroll; buy on request"
+		}
+	}
+	v.Sell.Enabled, v.Sell.Code, v.Sell.Why = a.GateSell(ctx)
+	for _, r := range a.st.RevealQueued() {
+		if r.Stage != "" {
+			v.Reveal.Working++
+		} else {
+			v.Reveal.Queued++
+		}
+	}
+	v.Sell.Queued = len(a.st.SellQueued())
+	if n := v.Reveal.Queued; n > 0 {
+		v.Reveal.Line = fmt.Sprintf("Revealing %d items: at your next town visit", n)
+	}
+	if n := v.Sell.Queued; n > 0 {
+		v.Sell.Line = fmt.Sprintf("Selling %d items: at your next town visit", n)
+	}
+	if len(a.prompt) > 0 {
+		gold := 0
+		var names []string
+		for _, id := range a.prompt {
+			if r, ok := a.st.Get(id); ok {
+				gold, names = gold+r.Value, append(names, r.Name)
+			}
+		}
+		v.Prompt = &watch.VaultPrompt{Short: 140, IDs: a.prompt, Gold: gold, Names: names}
 	}
 	return v
 }
