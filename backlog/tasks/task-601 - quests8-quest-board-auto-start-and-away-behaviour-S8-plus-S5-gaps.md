@@ -1,7 +1,7 @@
 ---
 id: TASK-601
 title: 'quests8: quest board auto-start and away behaviour (S8) plus S5 gaps'
-status: Proposed
+status: In Progress
 assignee:
   - credit-runner
 created_date: '2026-11-17T08:08:00Z'
@@ -40,6 +40,7 @@ owns:
   - "internal/watch/web/utilities.css"
 exclusive: []
 contracts: []
+result: "S8 built offline behind quests.board: per-quest auto flag and POST /api/quests/<id>/auto {on}, safe-only auto-start with countdown/Cancel, hold after pause or reset, gap and day cap, away detection, auto hand-in only for board-started chunks while away, while-you-were-away log, card and Needs row; S5 gaps closed (step list, levels to go in words, offer Needs row, 360x640 Needs overflow). Gate PASS, fit quest* all sizes incl 360x640. NOT verified live (checklist in docs/questboard.md)."
 ---
 
 ## Description
@@ -52,8 +53,8 @@ Why: opt-in auto-start when away (design S8, user decisions 2026-11-16). Done wh
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 Auto flag route, executor rule (safe only, countdown, rate limits, away), away log and API field
-- [ ] #2 S5 gaps: step list, levels to go, offer Needs row, 360x640 Needs overflow
-- [ ] #3 UI: auto toggle with countdown and Cancel, while-you-were-away card, fit fixtures, node tests
-- [ ] #4 Tests on two classes with fake clocks; knob 0 identical; docs and live checklist
+- [x] #1 Auto flag route, executor rule (safe only, countdown, rate limits, away), away log and API field
+- [x] #2 S5 gaps: step list, levels to go, offer Needs row, 360x640 Needs overflow
+- [x] #3 UI: auto toggle with countdown and Cancel, while-you-were-away card, fit fixtures, node tests
+- [x] #4 Tests on two classes with fake clocks; knob 0 identical; docs and live checklist
 <!-- AC:END -->
