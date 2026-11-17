@@ -298,6 +298,7 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- cb71eb0d8 11-17 06:26 `Merge agent/survreask2: survreask: doc counts` (survreask2)
 - 0a70f03ef 11-17 05:17 `Merge agent/decomp38: Merge branch 'main' into TASK-606` (decomp38)
 - 14a222172 11-17 05:16 `Merge branch 'main' into TASK-606` (-)
 - 67b200297 11-17 04:53 `Merge agent/vaultv6verify: Merge branch 'main' into vaultv6verify` (vaultv6verify)
@@ -307,5 +308,4 @@
 - ab7bc89b5 11-17 04:30 `Merge branch 'main' into TASK-601` (-)
 - a61219899 11-17 04:10 `Merge agent/quests7b: Merge branch 'main' into quests7b` (quests7b)
 - 5995b3eae 11-17 04:09 `Merge branch 'main' into quests7b` (-)
-- c875fa0bb 11-17 03:49 `Merge origin/main into agent/quests8` (-)
 <!-- statusgen:end -->
