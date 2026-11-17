@@ -1,10 +1,11 @@
 ---
 id: TASK-626
 title: 'verifygearabsorb3: verifier of the gear absorb r3 PR (fid/gear-absorb-r3)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T18:37:00Z'
+updated_date: '2026-11-17T20:33:00Z'
 labels:
   - d2d
   - readonly
