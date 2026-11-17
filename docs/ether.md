@@ -21,13 +21,13 @@ The `tally` ledger (`internal/currency`, [tally-strip.md](tally-strip.md)) is ha
 
 | source | key | pays | note |
 |---|---|---|---|
-| `quest` | `quest/<quest>/<difficulty>` | the caller's amount, 0..100 (`maxHook`) | HOOK for the Quest board (S10): the `meta` column value for that difficulty. Account-wide: once per quest and difficulty |
+| `quest` | `quest/<quest>/<difficulty>` | the caller's amount, 0..100 (`maxHook`) | HOOK for the Quest board (S10, built): sub key `<quest>/<chunk or ->`, the `meta` column value for that difficulty. Account-wide: once per quest (or chunk) and difficulty; the board settles it in `Exec.HandIn`, see [questboard.md](questboard.md) section Ether |
 | `first` | `first/<hero>/<kind>/<name>` | 5 U | "a first for this hero": the first kill of a monster kind (`monster`) and the first visit to a field area (`area`); a second hero earns its own |
 | `boss` | `boss/<name>/<difficulty>` | 10 / 15 / 25 U | normal / nm / hell; once per account (a second hero does not earn it again) |
 | `milestone` | `milestone/<id>` | per row U | `clvl10, clvl20, clvl30, clvl50, diff_nm, diff_hell`; an id not in the table is refused. `clvlN` pays when a hero reaches level N or more (the thresholds are the table's keys); `diff_nm` and `diff_hell` pay when a hero is playing that difficulty (reached, not cleared). Once per account |
 | `kills` | `kills/<local day>/<k>` | 1 U per `per` (25 U) kills | capped at 10 per LOCAL day (`dailyCap`); `Wallet.Trickle` books the next free `<k>` of today, so a restart never rewrites a key and the cap holds; the unpaid kill count of a run is not saved (a restart starts the count again) |
 
-`Wallet.Earn(source, sub, difficulty, hookAmount)` returns `{credited, key, already, capped}`. A repeated key pays nothing (`already`), so a journal replay books nothing (V `TestEarnIdempotentAndReplay`). Unknown source, missing or unknown difficulty, over-limit hook amount: an error naming it (V `TestEarnErrors`). Pressing Keep never earns. The Quest board hand-in (S10) is the one call site still missing: it will call `Earn("quest", <quest>, <difficulty>, <meta column>)`.
+`Wallet.Earn(source, sub, difficulty, hookAmount)` returns `{credited, key, already, capped}`. A repeated key pays nothing (`already`), so a journal replay books nothing (V `TestEarnIdempotentAndReplay`). Unknown source, missing or unknown difficulty, over-limit hook amount: an error naming it (V `TestEarnErrors`). Pressing Keep never earns. The Quest board hand-in (S10) is wired: it calls `Earn("quest", "<quest>/<chunk or ->", <difficulty>, <meta column>)` and reads `Paid(key)` for the pay chips (V `TestQuestLedgerOverWallet`, `TestEtherAwardOnceAndRepeat`).
 
 ## Capacity tiers and spending
 

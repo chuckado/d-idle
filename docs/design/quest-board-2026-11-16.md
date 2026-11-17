@@ -399,7 +399,7 @@ Sizes S/M/L as in the backlog scheme. Each slice is one PR family, offline-testa
 | S7 (DONE offline, card quests7, docs/questboard.md "Chunked quests") | Chunked quests: Cain chain, Staff pieces, Khalim's pieces, Terror's End seals; data plus handlers per chunk (handlers largely exist as quest steps, V `internal/task/act2*.go`, `act3*.go`) | L | S3 | per-chunk drills in Acts 2 and 3 (hard to reach: needs a character at Act 2/3, lab-created with the cheat ledger and tagged CHEATED for evidence use, V private rules) |
 | S8 | Opt-in auto-start and away behaviour (DONE offline 2026-11-17, card quests8; live run pending, docs/questboard.md "Auto-start and away") | S | S3, S5 | one overnight style run with one opt-in quest, writes after start 0 |
 | S9 | Retire: remove Journey panels, spine, charter on quests, compatibility API, archive docs | M | S5, S7 | grep for removed strings in the fit run |
-| S10 | Meta currency hooks wired (needs the wallet from the vault design) | S | S1, S4, vault wallet | ledger replay test; one live hand-in awards once |
+| S10 | Ether hooks wired (DONE offline 2026-11-17, quests10; live drill open) | S | S1, S4, vault wallet | ledger replay test; one live hand-in awards once |
 
 Order: S1 -> S2/S3 -> S4 -> S5 -> S6 -> S7 -> S8 -> S9 (S10 when the wallet exists).
 
@@ -408,6 +408,8 @@ S1 is DONE (2026-11-16, card quests1, TASK-577): built offline, see [docs/questb
 S3 is DONE offline (2026-11-16, card quests3, TASK-585): executor, hand-in action, retry/park/resume and the knob `quests.board` (default 0), see docs/questboard.md section Executor; the live drill is written there and NOT run (slice S3 acceptance stays open until it has).
 
 ## 7. Meta currency hooks
+
+S10 is DONE offline (2026-11-17, card quests10): the currency is Ether, the hook is built as described below with these changes: the API field is `kind: "ether"` (not `meta`), the key is the wallet's `quest/<quest>/<chunk or ->/<difficulty>`, a baseline stored in the plan file replaces the `source: backfill` rows, and the no-backfill and once-per-account answers to question 7 are the user's decisions. See [docs/questboard.md](../questboard.md) section Ether. The live drill is open.
 
 User add (2026-11-16): an account-level meta currency (persists across heroes and runs, not hero gold) that upgrades things like the loot vault capacity (data-driven tiers). The wallet and its tiers are designed in the vault doc (agent/vaultdesign); this section is only the hook where quests earn it.
 

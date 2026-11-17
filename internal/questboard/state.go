@@ -351,12 +351,28 @@ func awards(q Quest, v QuestView, in Input) []Award {
 	var out []Award
 	d := Difficulties[in.Diff]
 	for i, c := range q.Chunks {
-		if v.Chunks[i].State == Done && v.Chunks[i].Confirmed && c.Meta[d] > 0 {
-			out = append(out, Award{AwardKey(q.ID, c.ID, in.Diff), c.Meta[d]})
+		if k := AwardKey(q.ID, c.ID, in.Diff); v.Chunks[i].State == Done && v.Chunks[i].Confirmed && c.Meta[d] > 0 && !in.Plan.inBaseline(k) {
+			out = append(out, Award{k, c.Meta[d]})
 		}
 	}
-	if v.State == Done && v.Confirmed && q.Meta[d] > 0 {
-		out = append(out, Award{AwardKey(q.ID, "", in.Diff), q.Meta[d]})
+	if k := AwardKey(q.ID, "", in.Diff); v.State == Done && v.Confirmed && q.Meta[d] > 0 && !in.Plan.inBaseline(k) {
+		out = append(out, Award{k, q.Meta[d]})
+	}
+	return out
+}
+
+// doneKeys are the award keys of every chunk and quest that reads Done, with or without a column: the baseline.
+func doneKeys(vs []QuestView, diff int) []string {
+	var out []string
+	for _, v := range vs {
+		for _, c := range v.Chunks {
+			if c.State == Done {
+				out = append(out, AwardKey(v.ID, c.ID, diff))
+			}
+		}
+		if v.State == Done {
+			out = append(out, AwardKey(v.ID, "", diff))
+		}
 	}
 	return out
 }

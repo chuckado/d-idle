@@ -240,6 +240,10 @@ quest-needs3 first=0&theme=dark&needs=2&quests=awaiting
 quest-countdown first=0&theme=dark&needs=0&quests=countdown
 quest-countdown-sorceress first=0&theme=dark&needs=0&quests=countdown&class=sorceress
 quest-away first=0&theme=dark&needs=0&quests=away
+quest-ether-offer first=0&theme=dark&needs=0&quests=ether
+quest-ether-paid first=0&theme=dark&needs=0&quests=paid
+quest-ether-offer-light first=0&theme=light&needs=0&quests=ether
+quest-ether-offer-sorceress first=0&theme=dark&needs=0&quests=ether&class=sorceress
 quest-away-light first=0&theme=light&needs=0&quests=away
 quest-phone-tab-away first=0&theme=dark&needs=0&quests=away&tab=Quests
 quest-phone-tab first=0&theme=dark&needs=0&quests=offer&tab=Quests
@@ -258,6 +262,8 @@ quest-sheet-light first=0&theme=light&needs=0&quests=offer #btn-more|[data-drawe
 quest-sheet-auto-light first=0&theme=light&needs=0&quests=auto #btn-more|[data-drawer-open=quest-board]
 quest-sheet-countdown first=0&theme=dark&needs=0&quests=countdown #btn-more|[data-drawer-open=quest-board]
 quest-sheet-away first=0&theme=dark&needs=0&quests=away #btn-more|[data-drawer-open=quest-board]
+quest-sheet-ether first=0&theme=dark&needs=0&quests=ether #btn-more|[data-drawer-open=quest-board]
+quest-sheet-ether-paid first=0&theme=dark&needs=0&quests=paid #btn-more|[data-drawer-open=quest-board]
 quest-sheet-away-sorceress first=0&theme=dark&needs=0&quests=away&class=sorceress #btn-more|[data-drawer-open=quest-board]
 quest-sheet-sorceress first=0&theme=dark&needs=0&quests=offer&class=sorceress #btn-more|[data-drawer-open=quest-board]
 overlay-menu-zone first=0&theme=dark&zone=cp&tab=Map #btn-more

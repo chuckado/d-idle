@@ -258,6 +258,8 @@
 | vaultv6 | in-progress | - | `internal/vaultkeep`<br>`internal/vault`<br>`internal/d2dctl/vault_fake.go`<br>`internal/watch/vaultapi.go`<br>`internal/watch/vaultapi_test.go`<br>`internal/watch/vaultui_test.go`<br>`internal/watch/web/vault.js`<br>`internal/watch/web/vault-logic.js`<br>`internal/watch/web/vault.json`<br>`internal/watch/web/vault.css`<br>`internal/watch/testdata/vault_logic.mjs`<br>`cmd/d2bot/vaultkeep.go`<br>`cmd/d2bot/vaultpage.go`<br>`cmd/d2bot/vaultact_test.go`<br>`internal/loot/vault.go`<br>`internal/loot/pickup.go`<br>`internal/loot/vault_test.go`<br>`internal/env/tuning_loot.go`<br>`docs/knobs.md`<br>`docs/vault.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`tools/uishots.sh`<br>`tools/uishots/fixtures_vault.go`<br>`tools/uishots/fit.js` | - |
 | quests8 | in-progress | - | `internal/questboard`<br>`internal/bot/questboard.go`<br>`internal/bot/questauto.go`<br>`internal/bot/questauto_test.go`<br>`internal/env/tuning_quests.go`<br>`internal/watch/questsapi.go`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/questui_test.go`<br>`internal/watch/web/panels/quest-strip`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/testdata/questui`<br>`tools/uishots/fixtures_quests.go`<br>`tools/uishots/fixtures_quests_test.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md`<br>`docs/knobs.md`<br>`internal/bot/playerpause.go`<br>`internal/bot/playerreset.go`<br>`internal/watch/testdata/quests`<br>`internal/watch/web/panels/quest-list`<br>`internal/watch/web/panels/needs-you`<br>`internal/watch/web/panels/orders`<br>`tools/uishots.sh`<br>`internal/watch/web/utilities.css` | - |
 | quests7b | proposed | - | `internal/task/act1.go`<br>`internal/task/act2.go`<br>`internal/task/act3.go`<br>`data/questboard`<br>`docs/questboard.md`<br>`internal/task/world.go`<br>`internal/task/s7b_test.go`<br>`internal/task/testdata`<br>`internal/talk/tables.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_s7b_test.go`<br>`internal/questboard/chunks_test.go`<br>`internal/questboard/state_test.go` | - |
+| boardmoderace | proposed | - | `internal/bot/task.go`<br>`internal/bot/waypoints.go` | - |
+| quests10 | in-progress | - | `internal/questboard`<br>`internal/ether/earner.go`<br>`cmd/d2bot/questwire.go`<br>`internal/bot/questboard.go`<br>`internal/bot/runner.go`<br>`internal/watch/web/panels/quest-board`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/testdata/quests`<br>`internal/watch/testdata/questui`<br>`tools/uishots/fixtures_quests.go`<br>`tools/uishots.sh`<br>`docs/questboard.md`<br>`docs/ether.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -298,14 +300,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 099e85f75 11-17 07:19 `Merge agent/quests10: Merge branch 'main' into quests10` (quests10)
+- 5429873f9 11-17 07:18 `Merge branch 'main' into quests10` (-)
+- 078468d0d 11-17 07:14 `Merge agent/decomp37: Merge branch 'main' into decomp37` (decomp37)
+- f81201d84 11-17 07:13 `Merge branch 'main' into decomp37` (-)
+- 2c0e0487d 11-17 06:28 `Merge agent/boardmoderace: Merge branch 'main' into boardmoderace` (boardmoderace)
+- 6f32f71d2 11-17 06:27 `Merge branch 'main' into boardmoderace` (-)
+- cb71eb0d8 11-17 06:26 `Merge agent/survreask2: survreask: doc counts` (survreask2)
+- 0cd9d150f 11-17 05:25 `Merge branch 'main' into decomp37` (-)
 - 0a70f03ef 11-17 05:17 `Merge agent/decomp38: Merge branch 'main' into TASK-606` (decomp38)
 - 14a222172 11-17 05:16 `Merge branch 'main' into TASK-606` (-)
-- 67b200297 11-17 04:53 `Merge agent/vaultv6verify: Merge branch 'main' into vaultv6verify` (vaultv6verify)
-- 752da914f 11-17 04:52 `Merge branch 'main' into vaultv6verify` (-)
-- c6e0d04c7 11-17 04:33 `Merge origin/main` (-)
-- 90f2f0f27 11-17 04:31 `Merge agent/quests8: Merge branch 'main' into TASK-601` (quests8)
-- ab7bc89b5 11-17 04:30 `Merge branch 'main' into TASK-601` (-)
-- a61219899 11-17 04:10 `Merge agent/quests7b: Merge branch 'main' into quests7b` (quests7b)
-- 5995b3eae 11-17 04:09 `Merge branch 'main' into quests7b` (-)
-- c875fa0bb 11-17 03:49 `Merge origin/main into agent/quests8` (-)
 <!-- statusgen:end -->

@@ -63,6 +63,7 @@ type Options struct {
 	Log         func(msg string, kv ...any)
 	Now         func() time.Time // the clock of the auto-start controller (default time.Now); tests pass a fake
 	Auto        AutoOptions      // the auto-start limits (auto.go); the zero value never starts anything by itself
+	Ledger      func() Ledger    // the account wallet (ledger.go); nil, or a nil result, makes the Ether hook inert
 }
 
 func (o Options) norm() Options {
@@ -178,6 +179,14 @@ func (e *Exec) derive() ([]QuestView, Plan, int, error) {
 		}
 	}
 	vs, err := Derive(e.b, in)
+	if err == nil && !plan.based(diff) {
+		// First sight of this hero in this difficulty: whatever is done now never pays (no backfill).
+		if berr := e.st.RecordBaseline(diff, doneKeys(vs, diff)); berr != nil {
+			e.o.Log("quest baseline not saved", "err", berr)
+			return vs, plan, diff, nil
+		}
+		return e.derive()
+	}
 	return vs, plan, diff, err
 }
 
@@ -556,6 +565,7 @@ type HandInResult struct {
 	Attempts int
 	Why      string
 	Awards   []Award
+	Awarded  []Pay // what the ledger credited now (empty on a repeat, for T3 and without a wallet)
 }
 
 // HandIn is the player's tap: it needs the chunk Awaiting, performs the dialogue and verifies by read-back.
@@ -580,7 +590,7 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 		e.mu.Unlock()
 		return HandInResult{}, errors.New("questboard: a hand-in is already running")
 	}
-	vs, _, _, err := e.derive()
+	vs, _, diff, err := e.derive()
 	if err != nil {
 		e.mu.Unlock()
 		return HandInResult{}, err
@@ -589,7 +599,8 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 	switch {
 	case cv.State == Done:
 		e.mu.Unlock()
-		return HandInResult{Outcome: confirmOutcome(cv), Already: true, Awards: chunkAwards(qv, quest, chunk)}, nil
+		aw := chunkAwards(qv, quest, chunk)
+		return HandInResult{Outcome: confirmOutcome(cv), Already: true, Awards: aw, Awarded: e.settle(aw, diff)}, nil
 	case cv.State != Awaiting:
 		e.mu.Unlock()
 		return HandInResult{}, fmt.Errorf("questboard: %s/%s is %s, not awaiting hand-in%s", quest, chunk, cv.State, because(cv.Why))
@@ -620,6 +631,7 @@ func (e *Exec) HandIn(ctx context.Context, quest, chunk string) (HandInResult, e
 		qv, cv, _ := chunkView(vs, quest, chunk)
 		if cv.State == Done {
 			res.Outcome, res.Awards = confirmOutcome(cv), chunkAwards(qv, quest, chunk)
+			res.Awarded = e.settle(res.Awards, diff)
 			e.mu.Lock()
 			delete(e.rs, ChunkKey(quest, chunk))
 			e.mu.Unlock()
