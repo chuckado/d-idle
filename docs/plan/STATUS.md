@@ -266,6 +266,7 @@
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
+| sandbox3 | proposed | - | `docs/process/sandbox-devp10.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -306,6 +307,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
+- 83379c803 11-17 11:50 `Merge branch 'main' into sandbox3` (-)
 - bc63d4199 11-17 11:13 `Merge agent/morefit: Merge branch 'main' into morefit` (morefit)
 - 19962e32b 11-17 11:12 `Merge branch 'main' into morefit` (-)
 - 81261627e 11-17 10:56 `Merge agent/owbody: Merge branch 'main' into TASK-618` (owbody)
@@ -314,6 +317,4 @@
 - cd5b642fe 11-17 09:53 `Merge origin/main into agent/morefit` (-)
 - 10dbc7735 11-17 09:51 `Merge agent/verifydecomp37: Merge branch 'main' into TASK-613` (verifydecomp37)
 - 6150eaf4e 11-17 09:50 `Merge branch 'main' into TASK-613` (-)
-- 4d6c263fd 11-17 08:16 `Merge agent/manaburnbody: Merge branch 'main' into TASK-614` (manaburnbody)
-- 8def47cdd 11-17 08:08 `Merge branch 'main' into TASK-614` (-)
 <!-- statusgen:end -->
