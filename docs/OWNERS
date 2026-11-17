@@ -522,7 +522,6 @@ docs/upstream/bodies/gamble-price-body.md  credit-runner  decomp36bodies
 docs/upstream/bodies/hitrec-modes-body.md  credit-runner  prfix2
 docs/upstream/bodies/hitrec-norestart-body.md  credit-runner  prfix3
 docs/upstream/bodies/load-gold-clamp-body.md  credit-runner  prfix2
-docs/upstream/bodies/mana-burn-amount-body.md  credit-runner  manaburnbody
 docs/upstream/bodies/seq-ias-followup-body.md  credit-runner  seqfollow
 docs/upstream/bodies/umod-multishot-body.md  credit-runner  decomp36bodies
 docs/upstream/briefs/**  credit-runner  prpipeline

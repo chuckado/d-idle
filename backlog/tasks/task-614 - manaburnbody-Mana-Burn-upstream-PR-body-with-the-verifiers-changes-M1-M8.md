@@ -1,10 +1,11 @@
 ---
 id: TASK-614
 title: 'manaburnbody: Mana Burn upstream PR body with the verifier''s changes M1-M8'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T13:06:00Z'
+updated_date: '2026-11-17T13:20:00Z'
 labels:
   - docs
   - upstream-pr
