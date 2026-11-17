@@ -494,7 +494,15 @@ export function mountVault(d) {
     if (d.later) d.later(poll, POLL_MS);
     return S;
   }
-  return { start, reload, draw, state: S, changed, openDiscard, closeSheet, act, main, grid };
+  // the tooltip script wires the grid by its id when it loads, so it loads once the grid exists, then gets the rows again
+  function loadTip() {
+    if (!doc.createElement || !doc.body) return;
+    const sc = doc.createElement('script');
+    sc.src = '/watch/inventory-tip.js';
+    sc.onload = () => { if (S.tip && typeof CustomEvent !== 'undefined') doc.dispatchEvent(new CustomEvent('d2:inventory', { detail: S.tip.view })); };
+    doc.body.appendChild(sc);
+  }
+  return { start, reload, draw, state: S, changed, openDiscard, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----
@@ -515,7 +523,9 @@ async function boot() {
   if (!texts || !root) { if (root) root.textContent = 'The Ethereal Vault page could not load its texts.'; return; }
   const f = fromQuery(location.search);
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
-  mountVault({ doc, root, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
-    later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) }).start();
+  const vt = mountVault({ doc, root, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
+    later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
+  vt.loadTip();
+  vt.start();
 }
 if (typeof document !== 'undefined' && document.body && document.body.dataset && document.body.dataset.vault !== undefined) boot();

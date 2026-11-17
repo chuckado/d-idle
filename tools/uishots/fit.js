@@ -435,7 +435,7 @@ function vaultPage(win, d, vis, cs) {
   o.meter = !!d.querySelector('.vt-meter[role="meter"][aria-valuenow]');
   const box = 'vt-card,.vt-sheet-card,.vt-banner,.vt-head,.vt-dcard,.vt-cell,.vt-bar';
   for (const n of root.querySelectorAll('*')) {
-    if (!live(n) || !([...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim()))) continue;
+    if (!live(n) || n.closest('.d-sr-only') || !([...n.childNodes].some((c) => c.nodeType === 3 && c.nodeValue.trim()))) continue; // screen-reader-only text is clipped to a pixel on purpose
     const c0 = cs(n);
     const by = c0.textOverflow === 'ellipsis' || (c0.webkitLineClamp && c0.webkitLineClamp !== 'none'); // cut with an ellipsis or a clamp: by design
     if (n.clientWidth && !by && (n.scrollWidth > n.clientWidth + 1 || (/^(hidden|clip|auto|scroll)$/.test(c0.overflowY) && n.scrollHeight > n.clientHeight + 1))) { o.clipped.push(nm(n) + ' [' + n.scrollWidth + '/' + n.clientWidth + ' ' + n.scrollHeight + '/' + n.clientHeight + ']'); continue; }

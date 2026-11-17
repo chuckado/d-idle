@@ -446,7 +446,7 @@ vault-none watch/vault?theme=dark&vault=none
 vault-off watch/vault?theme=dark&vault=off
 vault-error watch/vault?theme=dark&vault=error
 vault-big watch/vault?theme=dark&vault=big
-vault-filters watch/vault?theme=dark&vault=pop [data-key=filters-toggle] [data-key=filters-toggle],[data-key=search]
+vault-filters watch/vault?theme=dark&vault=pop [data-key=filters-toggle] [data-key=q-7],[data-key=search]
 vault-select watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|.vt-cell:nth-child(3) [data-key=select-toggle],[data-key=pin],[data-key=discard]
 vault-sheet watch/vault?theme=dark&vault=pop [data-key=select-toggle]|.vt-cell|[data-key=discard] .vt-sheet-card,[data-key=sheet-go],[data-key=sheet-cancel]
 vault-sheet-typed watch/vault?theme=dark&vault=pop [data-key=select-toggle]|[data-key=select-all]|[data-key=discard] .vt-sheet-card,[data-key=sheet-typed],[data-key=sheet-cancel]

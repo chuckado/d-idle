@@ -76,12 +76,15 @@ func TestVaultPageServedAndTexts(t *testing.T) {
 	}
 	// the tooltip script finds the grid by this id; the page loads it and its style
 	page, _ := webFS.ReadFile("web/vault.html")
-	for _, want := range []string{"/watch/inventory-tip.js", "/watch/inventory-tip.css", "/watch/vault.js"} {
+	for _, want := range []string{"/watch/inventory-tip.css", "/watch/vault.js"} {
 		if !strings.Contains(string(page), want) {
 			t.Errorf("vault.html does not load %s", want)
 		}
 	}
 	js, _ := webFS.ReadFile("web/vault.js")
+	if !strings.Contains(string(js), "/watch/inventory-tip.js") { // loaded by the script once the grid exists (the tip wires #pack at load)
+		t.Error("vault.js does not load the tooltip script")
+	}
 	if !strings.Contains(string(js), "grid.id = 'pack'") {
 		t.Error("the grid is not id pack, so inventory-tip.js would not wire it")
 	}
