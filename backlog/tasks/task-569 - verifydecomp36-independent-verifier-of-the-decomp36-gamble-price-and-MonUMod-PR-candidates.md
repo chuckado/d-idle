@@ -3,11 +3,11 @@ id: TASK-569
 title: >-
   verifydecomp36: independent verifier of the decomp36 gamble price and MonUMod
   PR candidates
-status: In Progress
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T22:52:00Z'
-updated_date: '2026-11-17T01:56:00Z'
+updated_date: '2026-11-17T02:05:00Z'
 labels:
   - d2d
   - readonly
