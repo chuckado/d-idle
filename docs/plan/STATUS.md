@@ -306,6 +306,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
+- 152abf8d7 11-17 12:39 `Merge branch 'main' into gowhole` (-)
 - 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
 - 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
 - 9924f480c 11-17 11:51 `Merge agent/sandbox3: Merge branch 'main' into sandbox3` (sandbox3)
@@ -314,6 +316,4 @@
 - 19962e32b 11-17 11:12 `Merge branch 'main' into morefit` (-)
 - 81261627e 11-17 10:56 `Merge agent/owbody: Merge branch 'main' into TASK-618` (owbody)
 - 1d62e4d88 11-17 10:55 `Merge branch 'main' into TASK-618` (-)
-- 7f46b2185 11-17 10:27 `Merge origin/main into agent/morefit` (-)
-- cd5b642fe 11-17 09:53 `Merge origin/main into agent/morefit` (-)
 <!-- statusgen:end -->
