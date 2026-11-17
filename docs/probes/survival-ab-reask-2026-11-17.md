@@ -1,6 +1,6 @@
 # Survival A/B with the cost-event re-ask, Paladin 8 seeds, holdout, Sorceress screen, 2026-11-17
 
-> status: current (TASK-595, card survreask). Follows [the 8-seed rerun](survival-ab-8seed-rerun-2026-11-16.md). Tags: V verified (run logs, `abreport -death-slack 1 -chicken-slack 1`), I inferred, U unverified. Lockstep d2d only, heroes CHEATED for provenance (SETUP clvl 12, 500 gold, free Rogue, weapon `hax`): a relative A/B, not evidence about game behaviour. Every one of the 40 logs ends `writes after start: 0` (V).
+> status: current (TASK-595, card survreask). Follows [the 8-seed rerun](survival-ab-8seed-rerun-2026-11-16.md). Tags: V verified (run logs, `abreport -death-slack 1 -chicken-slack 1`), I inferred, U unverified. Lockstep d2d only, heroes CHEATED for provenance (SETUP clvl 12, 500 gold, free Rogue, weapon `hax`): a relative A/B, not evidence about game behaviour. Every one of the 30 logs ends `writes after start: 0` (V).
 
 ## What changed (V: merged, `go test -p 1`, race gate on the worker host)
 A cost event now makes the next leveling pick ask the zone model again instead of waiting for the 3 minute dwell (`internal/bot/zonemodel.go`, `bot.zoneModel` 1 only; knob 0 records nothing, tested):
@@ -18,7 +18,7 @@ Not covered: hard hit events from the ledger as a trigger (the ledger folds thos
 | Sorceress 101 103 (107 short in both arms) | 2 | 0.700 | [-13692, 2127] | 0 / 0 | 1 / 0 | INCONCLUSIVE (2 pairs, under the 3 minimum) |
 
 Pooled over the 12 Paladin seeds: deaths 1 / 1, chickens 16 / 5, mean XP difference about -550 per run (ratio about 0.99). Potions, merc deaths (5 a run in both arms, as before: the controller does nothing for the mercenary) and clvl are in the `abreport` output of the logs (worker host `d2d-lab/survreask`, `d2d-lab/survreask-sorc`).
-Re-asks in the 20 margin runs: 5 lines (4 chicken, 1 potion crisis), 4 of them left the zone. k behaviour: it rises after the event (1.64 to 3.58, 1.17 to 1.52) and the model then moves to a lower zone; on seed 149 k read 3.31 at the event and 2.43 after the area change (the zone left had the large correction).
+Re-asks in the 15 margin runs: 5 lines (4 chicken, 1 potion crisis), 4 of them left the zone. k behaviour: it rises after the event (1.64 to 3.58, 1.17 to 1.52) and the model then moves to a lower zone; on seed 149 k read 3.31 at the event and 2.43 after the area change (the zone left had the large correction).
 
 ## What this says about the legacy arm
 With `AB_SPEED` 5 the legacy arm was NOT safe on this batch: seed 101 four chickens and a death, seed 127 ten chickens (the 8-seed rerun at speed 3 had 4 chickens over 8 seeds). The controller arm had 1 and 0 on the same seeds. So the pair now shows a safety gain on the tuning seeds (15 chickens against 2), but the legacy spread over runs is the larger effect (0 to 10 on one seed), the speed was not the same as in the earlier batch, and 8 seeds cannot separate the two (U). Do not read it as proven.
