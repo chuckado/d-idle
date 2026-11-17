@@ -264,7 +264,6 @@
 | menufit2 | proposed | - | `internal/watch/web/shell.css`<br>`tools/uishots/fixtures_menu.go`<br>`docs/ui-overlays.md` | - |
 | resistorder | proposed | - | `docs/research/resistorder.md`<br>`internal/d2/resist.go`<br>`internal/combat/rules.go`<br>`internal/readiness/model.go`<br>`internal/power/margin.go` | - |
 | vaultphone | proposed | - | `internal/watch/web/vault.js`<br>`tools/uishots.sh` | - |
-| verifydecomp37 | in-progress | - | `docs/upstream/verifier-decomp37-2026-11-17.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
