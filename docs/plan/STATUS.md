@@ -268,6 +268,7 @@
 | morefit | proposed | - | `internal/watch/web/panels/orders/panel.css`<br>`tools/uishots/fixtures_menu.go` | - |
 | owbody | proposed | - | `docs/upstream/bodies/decomp37-open-wounds-body.md` | - |
 | questrun | proposed | - | `internal/bot/questboard.go`<br>`internal/bot/questboard_goal_test.go`<br>`internal/bot/goal.go`<br>`internal/questboard/desk.go`<br>`internal/questboard/desk_test.go`<br>`internal/questboard/exec.go`<br>`cmd/d2bot/questwire.go`<br>`docs/questboard.md`<br>`internal/bot/routeguard.go`<br>`internal/bot/ladder_t0_test.go`<br>`internal/watch/web/panels/needs-you/panel.js`<br>`internal/watch/web/panels/needs-you/panel.css` | - |
+| videoctl | proposed | - | `internal/watch/web/panels/video`<br>`tools/uishots`<br>`tools/uishots.sh`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/panel_harness.js` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
 | fid-probe-readers | deferred | - | `docs/probes/fid/fid-probe-readers.md` | - |
@@ -308,6 +309,9 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f7c45a10b 11-17 13:28 `Merge agent/videoctl: videoctl: video controls out of the picture, caption never covered, fit rule` (videoctl)
+- bb49a0c07 11-17 13:27 `Merge branch 'main' into videoctl` (-)
+- 193c9b9f1 11-17 13:25 `Merge origin/main into videoctl; the Labels button joins the toolbar` (-)
 - 46f8198c6 11-17 13:24 `Merge agent/gearabsorb3: Merge branch 'main' into TASK-621` (gearabsorb3)
 - 91b85cadf 11-17 13:23 `Merge branch 'main' into TASK-621` (-)
 - b4e8a38ee 11-17 13:06 `Merge agent/questrun: Merge branch 'main' into TASK-619` (questrun)
@@ -315,7 +319,4 @@
 - 0e336ab05 11-17 12:59 `Merge agent/labels: Merge branch 'main' into TASK-615` (labels)
 - bd9bd1d06 11-17 12:58 `Merge branch 'main' into TASK-615` (-)
 - a926509f9 11-17 12:40 `Merge agent/gowhole: Merge branch 'main' into gowhole` (gowhole)
-- 152abf8d7 11-17 12:39 `Merge branch 'main' into gowhole` (-)
-- 8f92bbf9b 11-17 11:58 `Merge agent/decomp39: decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point rule; docs only` (decomp39)
-- 5c7c7dce0 11-17 11:57 `Merge branch 'main' into TASK-624` (-)
 <!-- statusgen:end -->
