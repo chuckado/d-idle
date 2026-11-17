@@ -25,9 +25,6 @@ func (r *Runner) questBoardOn() bool { return r.e.Tune.Quests.Board != 0 }
 // so without a gap a gear gate would park it in three seconds). U: judgment.
 const boardFailGap = 15 * time.Second
 
-// boardHandInWait bounds a HandIn tap that the loop has not picked up (a town trip, a death).
-const boardHandInWait = 6 * time.Minute
-
 type boardHandInReq struct {
 	q    questboard.Quest
 	c    questboard.Chunk
@@ -235,7 +232,7 @@ func (e boardEnv) Ready(q questboard.Quest, c questboard.Chunk) questboard.Readi
 type boardActions struct{ rt *boardRT }
 
 // HandIn hands the tap to the runner loop (the dialogue must run on the loop's goroutine, inside its guard) and
-// waits for the result.
+// waits for the result. The caller bounds the wait with ctx (a town trip or a death delays the pick-up); S4 sets it.
 func (a boardActions) HandIn(ctx context.Context, q questboard.Quest, c questboard.Chunk) error {
 	req := boardHandInReq{q: q, c: c, done: make(chan error, 1)}
 	select {
@@ -250,8 +247,6 @@ func (a boardActions) HandIn(ctx context.Context, q questboard.Quest, c questboa
 		return err
 	case <-ctx.Done():
 		return ctx.Err()
-	case <-time.After(boardHandInWait):
-		return errors.New("the bot did not pick up the hand-in in time (busy, dead or away from town)")
 	}
 }
 
