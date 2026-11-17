@@ -290,14 +290,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- b577b5c9c 11-17 01:23 `Merge agent/survtune4: survtune4: badFloor 0.55, holdout and fresh-seed addendum` (survtune4)
+- 4ea8d2466 11-17 01:22 `Merge branch 'main' into survtune` (-)
 - 3de5eeed7 11-17 01:14 `Merge agent/quests4: Merge branch 'main' into quests4` (quests4)
 - 08d2a0f92 11-17 01:13 `Merge branch 'main' into quests4` (-)
 - 3b40bbb8c 11-17 01:08 `Merge agent/vaultv4: Ethereal Vault V4: read API and /watch/vault page (filters, grid and list, multi-select, pin/unpin/discard, capacity meter, entry points)` (vaultv4)
 - 194a9f499 11-17 01:07 `Merge branch 'main' into vaultv4` (-)
+- ed9e947f1 11-17 00:56 `Merge remote-tracking branch 'origin/main' into agent/survtune4` (-)
 - 68632e714 11-17 00:38 `Merge origin/main into vaultv4: share V3's per-hero Store with the Vault page` (TASK-588)
 - 82babbc16 11-17 00:32 `Merge agent/videofeed5: videofeed5: presentation stall fix (one clock, fallback timer, inflate watchdog) and build id stamp` (videofeed5)
 - 3e1e041a6 11-17 00:31 `Merge branch 'main' into videofeed5` (-)
-- ebde85899 11-17 00:29 `Merge agent/survtune3: survtune3: 8-seed rerun, holdout and Sorceress screen, recommendation (not yet)` (survtune3)
-- b0127c811 11-17 00:28 `Merge branch 'main' into survtune` (-)
-- 74aa84a91 11-17 00:11 `Merge agent/quests3: Merge branch 'main' into quests3` (quests3)
 <!-- statusgen:end -->
