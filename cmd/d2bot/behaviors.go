@@ -26,6 +26,7 @@ import (
 	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/repair"
 	"d2lod-bot/internal/town"
+	"d2lod-bot/internal/vaultkeep"
 )
 
 var errNeedTables = errors.New("live play needs the game tables (data.Open failed): set --gamedir / D2BOT_GAMEDIR")
@@ -38,6 +39,7 @@ type runnerRef struct {
 	rep *repair.Controller        // the repair policy and request (repairwire.go); nil until newRepair
 	tw  atomic.Pointer[town.Town] // set by wireRepair, read by the gear readings
 	jc  *campaign.Controller      // the guided journey (journeywire.go); nil until wireJourney
+	vk  *vaultkeep.Keeper         // the vault Keep queue (vaultkeep.go); nil until wireVaultKeep
 	qd  *questboard.Desk          // the quest board desk (questwire.go); nil until wireQuestBoard
 }
 

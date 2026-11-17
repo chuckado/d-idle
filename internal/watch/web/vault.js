@@ -1,7 +1,8 @@
 // The Ethereal Vault page (docs/vault.md, UI section; design docs/design/loot-vault-2026-11-16.md section 6, slice V4).
-// Read side plus Pin, Unpin and Discard: GET /api/vault (watch.vault/1, paged, filtered on the server), GET /api/vault/item/<id>,
-// POST /api/vault/{pin,unpin,discard} on the answer listener. Keep, Reveal and Sell are not here (V5, V6): the Keep button is
-// drawn disabled with its reason. The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
+// Read side plus Pin, Unpin, Discard and Keep (slice V5): GET /api/vault (watch.vault/1, paged, filtered on the server), GET
+// /api/vault/item/<id>, POST /api/vault/{pin,unpin,discard,keep} on the answer listener. Keep only QUEUES: the bot creates the item
+// at its next town visit, so the page shows the states queued, creating, kept and failed from the GET, never from the reply.
+// Reveal and Sell are not here (V6). The grid and the tooltip are the inventory page's (components.css cells, inventory-tip.js,
 // fed the rows as an inventory view); every text comes from /watch/vault.json or the API and goes in through textContent.
 // Every press is read back: the list is fetched again and what it says is what the page shows.
 import { PAGE, QUALITY, SORTS, activeCount, capacityView, createSelection, defaultFilters, fromQuery, toQuery, toTipView, when } from '/watch/vault-logic.js';
@@ -25,7 +26,7 @@ export function mountVault(d) {
     if (o && o.key) b.dataset.key = o.key;
     return b;
   };
-  const S = { f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
+  const S = { eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
     detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
   const root = d.root || doc.body;
 
@@ -41,10 +42,14 @@ export function mountVault(d) {
   const fill = el('span', 'vt-fill'); meter.appendChild(fill);
   const meterText = el('span', 'vt-count');
   const pinsText = el('span', 'vt-pins');
+  const wallet = el('span', 'vt-wallet'); wallet.dataset.key = 'wallet'; wallet.hidden = true; // the account's Ether balance (GET /api/ether), absent while loot.vault is 0
   const upgrade = btn(T.upgrade, { size: 'md', key: 'upgrade' });
   upgrade.setAttribute('aria-disabled', 'true'); upgrade.setAttribute('aria-describedby', 'vt-upgrade-why');
   const upgradeWhy = el('span', 'vt-upgrade-why', T.upgradeWhy); upgradeWhy.id = 'vt-upgrade-why';
-  meterBox.append(meterLabel, meter, meterText, pinsText, upgrade, upgradeWhy);
+  const downgrade = btn(T.downgrade, { size: 'md', key: 'downgrade', variant: 'ghost' }); downgrade.hidden = true;
+  downgrade.setAttribute('aria-describedby', 'vt-down-why');
+  const downWhy = el('span', 'vt-down-why'); downWhy.id = 'vt-down-why';
+  meterBox.append(meterLabel, meter, meterText, pinsText, wallet, upgrade, downgrade, upgradeWhy, downWhy);
   head.append(back, h1, heroName, meterBox);
 
   const banner = el('p', 'vt-banner'); banner.hidden = true; banner.setAttribute('role', 'status');
@@ -70,6 +75,9 @@ export function mountVault(d) {
     });
     qbtn[id] = b; chips.appendChild(b);
   });
+  const keptChip = btn(T.chipKept, { key: 'chip-kept', variant: 'ghost' }); keptChip.classList.add('vt-chip'); keptChip.setAttribute('aria-pressed', 'false');
+  keptChip.addEventListener('click', () => { S.f.state = S.f.state === 'kept' ? '' : 'kept'; changed(); });
+  chips.appendChild(keptChip);
   const sel = (key, label) => { const s = el('select', 'vt-input'); s.setAttribute('aria-label', label); s.dataset.key = key; return s; };
   const kindSel = sel('kind', T.kindLabel), typeSel = sel('type', T.typeLabel), sockSel = sel('sockets', T.socketsLabel);
   const num = (key, label, hold) => { const i = el('input', 'vt-input vt-num'); i.type = 'number'; i.min = '0'; i.max = '200'; i.inputMode = 'numeric'; i.placeholder = hold || label; i.setAttribute('aria-label', label); i.dataset.key = key; return i; };
@@ -90,10 +98,13 @@ export function mountVault(d) {
   const selText = el('span', 'vt-seltext'); selText.setAttribute('aria-live', 'polite');
   const selAll = btn(T.selectAll, { key: 'select-all', variant: 'ghost' });
   const pinB = btn(T.pin, { key: 'pin' }), unpinB = btn(T.unpin, { key: 'unpin' }), discB = btn(T.discard, { key: 'discard', variant: 'danger' });
-  const keepB = btn(T.keep, { key: 'keep' }); keepB.setAttribute('aria-disabled', 'true'); keepB.setAttribute('aria-describedby', 'vt-keep-why');
-  const keepWhy = el('span', 'vt-keep-why', T.keepNote); keepWhy.id = 'vt-keep-why';
-  const acts = el('div', 'vt-acts'); acts.append(pinB, unpinB, discB);
-  bar.append(selBtn, selText, selAll, acts, keepB, keepWhy);
+  const keepB = btn(T.keep, { key: 'keep' });
+  const acts = el('div', 'vt-acts'); acts.append(keepB, pinB, unpinB, discB);
+  bar.append(selBtn, selText, selAll, acts);
+  const keepRow = el('div', 'vt-keeprow'); keepRow.hidden = true;
+  const keepLine = el('span', 'vt-keepline'); keepLine.setAttribute('role', 'status');
+  const keepNowB = btn(T.keepNow, { key: 'keep-now', variant: 'ghost' }); keepNowB.title = T.keepNowWhy;
+  keepRow.append(keepLine, keepNowB);
   const msg = el('p', 'vt-msg'); msg.hidden = true; msg.setAttribute('role', 'status');
 
   // ---- the list and the card ----
@@ -113,7 +124,7 @@ export function mountVault(d) {
   sheetWrap.appendChild(sheetCard);
 
   const page = el('div', 'vt-page');
-  page.append(head, banner, filters, bar, msg, body);
+  page.append(head, banner, filters, bar, keepRow, msg, body);
   root.replaceChildren ? root.replaceChildren(page, sheetWrap) : (root.appendChild(page), root.appendChild(sheetWrap));
 
   // ---- loading ----
@@ -127,7 +138,7 @@ export function mountVault(d) {
   async function reload(keep) {
     S.loading = !S.view; S.err = false;
     const limit = keep ? Math.min(Math.max(S.items.length, PAGE), MAX_LOADED) : PAGE;
-    const j = await fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length);
+    const [j] = await Promise.all([fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length), refreshEther()]);
     if (!j) { S.err = true; S.loading = false; draw(); return; }
     let items = j.items;
     if (limit > 200) { // a reload that keeps a long list fetches it in pages of 200
@@ -156,11 +167,12 @@ export function mountVault(d) {
     const have = new Set(order());
     absorb(j, j.items.filter((i) => !have.has(i.id)), false);
   }
-  const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins);
+  const sig = (j) => j.total + '|' + (j.capacity && j.capacity.count) + '|' + (j.items[0] && j.items[0].id) + '|' + j.mode + '|' + (j.capacity && j.capacity.pins) + '|' + (j.keep ? j.keep.queued + ',' + j.keep.creating + ',' + j.keep.done + ',' + j.keep.line : '');
   async function poll() {
     if (!S.sheet) {
       const j = await d.get(ROUTE + toQuery(S.f, { limit: 1 }));
       if (j && j.schema === 'watch.vault/1' && sig(j) !== S.sig) await reload(true);
+      else if (await refreshEther()) drawHead(); // the balance moves with earning, not with the list
     }
     if (d.later) d.later(poll, POLL_MS);
   }
@@ -187,6 +199,7 @@ export function mountVault(d) {
     if (doc.activeElement !== hi) hi.value = S.f.ilvlMax;
     ethC.c.setAttribute('aria-pressed', String(S.f.eth)); unidC.c.setAttribute('aria-pressed', String(S.f.unid)); pinC.c.setAttribute('aria-pressed', String(S.f.pinned));
     stateSel.value = S.f.state;
+    keptChip.setAttribute('aria-pressed', String(S.f.state === 'kept'));
     const n = activeCount(S.f);
     ftoggle.textContent = n ? fmt(T.filtersN, { n }) : T.filters;
     ftoggle.setAttribute('aria-expanded', String(S.fopen));
@@ -208,13 +221,48 @@ export function mountVault(d) {
     fill.style.setProperty('--vt-pct', cv.pct + '%');
     meterText.textContent = cv.text;
     pinsText.textContent = c && c.pinLimit ? fmt(T.pinnedOf, { n: c.pins, max: c.pinLimit }) : '';
-    const u = v && v.upgrade;
-    if (u && u.next) upgrade.textContent = fmt(T.upgradeFor, { add: u.next.add, price: u.next.price, cur: u.currency });
-    else upgrade.textContent = u && !u.next && v.capacity.capacity ? T.upgradeMax : T.upgrade;
-    upgradeWhy.textContent = u && u.reason ? u.reason : T.upgradeWhy;
+    drawEther(v);
     let b = cv.banner;
     if (v && v.mode === 'off') b = T.offBanner;
     banner.hidden = !b; banner.textContent = b || ''; banner.dataset.level = v && v.mode === 'off' ? 'info' : cv.level;
+  }
+  // The Upgrade and Refund buttons and the wallet chip. With the wallet (GET /api/ether enabled) the buttons are real: a press opens
+  // the confirm sheet. A short balance or a vault that does not fit the lower tier keeps the button aria-disabled and says why;
+  // without the wallet (loot.vault 0) the old placeholder stands, with the server's reason.
+  function drawEther(v) {
+    const e = S.eth && S.eth.enabled ? S.eth : null, u = v && v.upgrade;
+    wallet.hidden = !e; wallet.textContent = e ? e.chip : '';
+    wallet.setAttribute('aria-label', e ? fmt(T.walletLabel, { chip: e.chip }) : '');
+    if (!e) {
+      if (u && u.next) upgrade.textContent = fmt(T.upgradeFor, { add: u.next.add, price: u.next.price, cur: u.currency });
+      else upgrade.textContent = u && !u.next && v.capacity.capacity ? T.upgradeMax : T.upgrade;
+      upgrade.setAttribute('aria-disabled', 'true');
+      upgradeWhy.textContent = u && u.reason ? u.reason : T.upgradeWhy;
+      downgrade.hidden = true; downWhy.textContent = '';
+      return;
+    }
+    const n = e.next;
+    if (n) {
+      upgrade.textContent = fmt(T.upgradeFor, { add: n.add, price: n.price, cur: e.currency });
+      upgrade.setAttribute('aria-disabled', String(!n.canAfford));
+      upgradeWhy.textContent = n.canAfford ? '' : fmt(T.upgradeShort, { n: n.short, cur: e.currency });
+    } else {
+      upgrade.textContent = T.upgradeMax; upgrade.setAttribute('aria-disabled', 'true'); upgradeWhy.textContent = '';
+    }
+    const dn = e.downgrade, owned = e.owned && e.owned.length > 0;
+    downgrade.hidden = !owned;
+    if (owned) {
+      downgrade.textContent = fmt(T.downgradeFor, { refund: dn.refund, cur: e.currency });
+      downgrade.setAttribute('aria-disabled', String(!dn.available));
+      downWhy.textContent = dn.available ? '' : (dn.reason || '');
+    } else downWhy.textContent = '';
+  }
+  async function refreshEther() {
+    const j = await d.get('/api/ether');
+    const next = j && j.schema === 'watch.ether/1' ? j : null;
+    const changed = JSON.stringify(next) !== JSON.stringify(S.eth);
+    S.eth = next;
+    return changed;
   }
   function drawBar() {
     const n = S.sel.size, ro = !S.view || S.view.mode === 'off';
@@ -224,6 +272,14 @@ export function mountVault(d) {
     selAll.hidden = !S.sel.mode || !S.items.length;
     acts.hidden = !n;
     for (const b of [pinB, unpinB, discB]) { b.disabled = ro; }
+    const k = S.view && S.view.keep;
+    keepB.textContent = fmt(T.keepSel, { n });
+    keepB.disabled = ro || !k;
+    keepB.title = !k ? T.keepNote : (!k.enabled && k.why ? k.why : '');
+    keepRow.hidden = !(k && k.line);
+    keepLine.textContent = k && k.line ? k.line : '';
+    keepNowB.hidden = !(k && (k.queued + k.creating) > 0);
+    keepNowB.disabled = ro || !k || !k.enabled;
   }
 
   function cellLabel(it) {
@@ -231,7 +287,8 @@ export function mountVault(d) {
     if (!it.identified) bits.push(T.unidTag);
     if (it.pin) bits.push(T.pinTag);
     if (it.ethereal) bits.push(T.ethTag);
-    if (it.state !== 'recorded') bits.push(it.state);
+    if (it.keep) bits.push(T.keepStates[it.keep] + (it.keep === 'failed' && it.reason ? ': ' + it.reason : ''));
+    else if (it.state !== 'recorded') bits.push(it.state);
     return bits.join(', ');
   }
   function cell(it, n) {
@@ -247,16 +304,23 @@ export function mountVault(d) {
     if (!it.identified) { const t = el('b', 'vt-tag', '?'); t.dataset.tag = 'unid'; tags.appendChild(t); }
     if (it.pin) { const t = el('b', 'vt-tag', 'P'); t.dataset.tag = 'pin'; tags.appendChild(t); }
     if (it.ethereal) { const t = el('b', 'vt-tag', 'E'); t.dataset.tag = 'eth'; tags.appendChild(t); }
-    if (it.state !== 'recorded') { const t = el('b', 'vt-tag', it.state.slice(0, 1).toUpperCase()); t.dataset.tag = 'state'; tags.appendChild(t); }
+    if (it.keep) { const t = el('b', 'vt-tag', { queued: 'Q', creating: '...', kept: 'K', failed: '!' }[it.keep] || 'K'); t.dataset.tag = 'keep-' + it.keep; tags.appendChild(t); }
+    else if (it.state !== 'recorded') { const t = el('b', 'vt-tag', it.state.slice(0, 1).toUpperCase()); t.dataset.tag = 'state'; tags.appendChild(t); }
     b.appendChild(tags);
     if (S.sel.has(it.id)) b.appendChild(el('span', 'vt-check-mark', '✓'));
     if (S.mode === 'list') {
       const meta = [T.qualities[it.q] || it.quality, fmt(T.ilvl, { n: it.ilvl })];
       if (it.area) meta.push(it.area);
       if (it.found) meta.push(when(it.found, now()));
+      if (it.keep) meta.push(keepHint(it));
       b.appendChild(el('span', 'vt-meta', meta.join(' · ')));
     }
     return b;
+  }
+  function keepHint(it) {
+    return it.keep === 'queued' ? T.keepQueuedHint : it.keep === 'creating' ? T.keepCreatingHint
+      : it.keep === 'kept' ? fmt(T.keepKeptHint, { where: it.reason || (it.where === 'inv' ? 'backpack' : 'stash') })
+      : fmt(T.keepFailedHint, { why: it.reason || '' });
   }
   function drawList() {
     const tv = toTipView(S.items);
@@ -315,6 +379,7 @@ export function mountVault(d) {
     card.appendChild(nm);
     const st = el('p', 'vt-dstate', (T.qualities[it.q] || it.quality) + ' · ' + it.status);
     card.appendChild(st);
+    if (it.keep) { const kp = el('p', 'vt-dkeep', T.keepStates[it.keep] + ': ' + keepHint(it)); kp.dataset.keep = it.keep; kp.setAttribute('role', 'status'); card.appendChild(kp); }
     const ul = el('ul', 'vt-dlines');
     lines(it, det).forEach((l) => ul.appendChild(el('li', '', l)));
     card.appendChild(ul);
@@ -326,8 +391,7 @@ export function mountVault(d) {
     const mk = (label, key, a, fn, variant) => { const b = btn(label, { key: 'd-' + key, variant }); if (!a || !a.ok) { b.setAttribute('aria-disabled', 'true'); if (a && a.reason) b.title = a.reason; } b.addEventListener('click', () => { if (a && a.ok) fn(); }); return b; };
     row.append(it.pin ? mk(T.unpin, 'unpin', act.unpin, () => act1('/api/vault/unpin', [it.id])) : mk(T.pin, 'pin', act.pin, () => act1('/api/vault/pin', [it.id])),
       mk(T.discard, 'discard', act.discard, () => openDiscard([it.id], row.lastChild), 'danger'));
-    const keep = btn(T.keep, { key: 'd-keep' }); keep.setAttribute('aria-disabled', 'true'); keep.title = T.keepNote;
-    row.appendChild(keep);
+    row.appendChild(mk(T.keep, 'keep', act.keep, () => keepAct([it.id], false)));
     card.appendChild(row);
     aside.appendChild(card);
   }
@@ -412,22 +476,31 @@ export function mountVault(d) {
 
   // ---- presses ----
   const CHUNK = 150; // the answer body is capped at 4 KiB: the server takes this many ids at a time
-  async function act(route, ids, confirm) {
+  async function act(route, ids, confirm, opts) {
     let j = null;
-    const failed = [], done = [];
+    const failed = [], done = [], already = [];
     for (let i = 0; i < ids.length; i += CHUNK) {
-      const r = await d.post(route, confirm ? { ids: ids.slice(i, i + CHUNK), confirm: true } : { ids: ids.slice(i, i + CHUNK) });
+      const body = { ids: ids.slice(i, i + CHUNK) };
+      if (confirm) body.confirm = true;
+      if (opts && opts.now) body.now = true;
+      const r = await d.post(route, body);
       if (!r) { j = null; break; }
       j = r;
       (r.done || []).forEach((x) => done.push(x));
       (r.failed || []).forEach((x) => failed.push(x));
-      if (!r.done && !r.failed) break; // a refusal of the whole request (read only, bad body)
+      (r.already || []).forEach((x) => already.push(x));
+      if (!r.done && !r.failed) { if (r.error && route.endsWith('/keep')) failed.push(r); break; } // a refusal of the whole request (read only, bad body)
     }
     if (!j) { setMsg('bad', T.noAnswer); await reload(true); return false; }
-    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : T.okDiscard;
-    if (!failed.length && j.ok) setMsg('good', fmt(word, { n: done.length }));
-    else {
-      const why = failed.length ? (T.refusals[failed[0].code] || failed[0].error) : (T.refusals[j.code] || j.error || T.noAnswer);
+    const isKeep = route.endsWith('/keep');
+    const word = route.endsWith('/pin') ? T.okPin : route.endsWith('/unpin') ? T.okUnpin : isKeep ? (opts && opts.now ? T.okKeepNow : T.okKeep) : T.okDiscard;
+    if (!failed.length && j.ok) {
+      const al = already.length;
+      setMsg('good', al && al === done.length ? fmt(T.okKeepAlready, { n: al }) : fmt(word, { n: done.length - al }) + (al ? ' ' + fmt(T.okKeepAlready, { n: al }) : ''));
+    } else {
+      // Keep names the real cause (the server's sentence); the other routes use the short texts of vault.json
+      const say = (x) => (isKeep && x.error) || T.refusals[x.code] || x.error;
+      const why = failed.length ? say(failed[0]) : (say(j) || T.noAnswer);
       setMsg('bad', done.length ? fmt(T.partial, { done: done.length, failed: failed.length, why }) : why);
     }
     S.sel.clear(); if (route.endsWith('/discard') && done.includes(S.detailId)) S.detailId = '';
@@ -436,9 +509,17 @@ export function mountVault(d) {
     return done.length > 0;
   }
   const act1 = (route, ids) => act(route, ids, false);
+  const keepAct = (ids, now) => act('/api/vault/keep', ids, false, { now });
   pinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/pin', S.sel.ids()); });
   unpinB.addEventListener('click', () => { if (S.sel.size) act1('/api/vault/unpin', S.sel.ids()); });
   discB.addEventListener('click', () => { if (S.sel.size) openDiscard(S.sel.ids(), discB); });
+  keepB.addEventListener('click', () => { if (S.sel.size && !keepB.disabled) keepAct(S.sel.ids(), false); });
+  keepNowB.addEventListener('click', async () => { // any queued id will do: the server only needs one that is queued to ask for the trip
+    const q = S.items.find((i) => i.keep === 'queued' || i.keep === 'creating');
+    const j = q ? null : await d.get(ROUTE + '?state=keepq&limit=1');
+    const id = q ? q.id : j && j.items && j.items[0] && j.items[0].id;
+    if (id) keepAct([id], true); else setMsg('info', T.keepAlready);
+  });
 
   // ---- the discard sheet: a modal with the count, a typed number above ten items, Escape and a focus loop ----
   function openDiscard(ids, opener) {
@@ -480,7 +561,58 @@ export function mountVault(d) {
     }
   });
   // keep the disabled look from the aria-disabled placeholders: a press says why instead of doing nothing
-  for (const [b, why] of [[upgrade, () => upgradeWhy.textContent], [keepB, () => T.keepNote]]) b.addEventListener('click', () => setMsg('info', why()));
+  upgrade.addEventListener('click', () => {
+    const e = S.eth && S.eth.enabled ? S.eth : null;
+    if (!e || !e.next || !e.next.canAfford) { setMsg('info', upgradeWhy.textContent || T.upgradeMax); return; }
+    openConfirm('upgrade', upgrade);
+  });
+  downgrade.addEventListener('click', () => {
+    const e = S.eth && S.eth.enabled ? S.eth : null;
+    if (!e || !e.downgrade.available) { setMsg('info', downWhy.textContent); return; }
+    openConfirm('downgrade', downgrade);
+  });
+
+  // ---- the Ether sheets: confirm, press, read back ----
+  function openConfirm(kind, opener) {
+    const e = S.eth;
+    if (!e || !e.enabled) return;
+    const up = kind === 'upgrade', n = e.next, dn = e.downgrade;
+    if (up ? !n : !dn.available) return;
+    sheetCard.replaceChildren();
+    const title = up ? T.upgradeTitle : T.downgradeTitle;
+    sheetCard.setAttribute('aria-label', title);
+    sheetCard.appendChild(el('h2', '', title));
+    const cap = S.view && S.view.capacity ? S.view.capacity.capacity : e.capacity;
+    const body = up
+      ? fmt(T.upgradeBody, { add: n.add, from: e.capacity, to: n.capacity, price: n.price, cur: e.currency, bal: e.balance, after: e.balance - n.price })
+      : fmt(T.downgradeBody, { step: dn.step, refund: dn.refund, cur: e.currency, bal: e.balance, after: e.balance + dn.refund, from: e.capacity, count: S.view && S.view.capacity ? S.view.capacity.count : 0, cap });
+    sheetCard.appendChild(el('p', '', body));
+    const go = btn(up ? fmt(T.upgradeGo, { price: n.price, cur: e.currency }) : fmt(T.downgradeGo, { refund: dn.refund, cur: e.currency }), { key: 'sheet-go', variant: up ? undefined : 'danger' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { if (go.disabled) return; go.disabled = true; closeSheet(true); await pressEther(kind, up ? n.id : dn.step); });
+    cancel.focus();
+  }
+  // The text of a refusal, with its numbers: the code decides, the numbers come from the answer.
+  function etherWhy(r) {
+    if (!r) return T.noAnswer;
+    const t = T.refusals[r.code];
+    if (!t) return r.error || T.noAnswer;
+    return fmt(t, { need: r.need, count: r.count, fits: r.fitsTier, over: (r.count || 0) - (r.fitsTier || 0), cur: S.eth && S.eth.currency || '' });
+  }
+  async function pressEther(kind, step) {
+    const r = await d.post(kind === 'upgrade' ? '/api/vault/upgrade' : '/api/vault/downgrade', { step });
+    await reload(true); // the page shows what the wallet and the vault say now, not what the press hoped for
+    if (r && r.ok) {
+      const cur = S.eth && S.eth.currency || '';
+      if (r.already) setMsg('info', T.etherAlready);
+      else setMsg('good', fmt(kind === 'upgrade' ? T.okUpgrade : T.okDowngrade, { capacity: r.capacity, balance: r.balance, price: r.price, cur }));
+    } else setMsg('bad', etherWhy(r));
+    return r;
+  }
 
   async function start() {
     syncFilters(); fillTypes(); draw();
@@ -502,7 +634,8 @@ export function mountVault(d) {
     sc.onload = () => { if (S.tip && typeof CustomEvent !== 'undefined') doc.dispatchEvent(new CustomEvent('d2:inventory', { detail: S.tip.view })); };
     doc.body.appendChild(sc);
   }
-  return { start, reload, draw, state: S, changed, openDiscard, closeSheet, act, main, grid, loadTip };
+  if (d.overlays) d.overlays.register('vault-sheet', sheetWrap, closeSheet); // the page's one modal: Escape and the one-at-a-time rule are the manager's (docs/ui-overlays.md)
+  return { start, reload, draw, state: S, changed, openDiscard, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----
@@ -523,7 +656,9 @@ async function boot() {
   if (!texts || !root) { if (root) root.textContent = 'The Ethereal Vault page could not load its texts.'; return; }
   const f = fromQuery(location.search);
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
-  const vt = mountVault({ doc, root, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
+  let overlays = null;
+  try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
+  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
     later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
   vt.loadTip();
   vt.start();

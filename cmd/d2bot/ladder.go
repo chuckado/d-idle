@@ -24,6 +24,7 @@ import (
 	"d2lod-bot/internal/currency"
 	"d2lod-bot/internal/decide"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/goldfarm"
 	"d2lod-bot/internal/ladder"
@@ -211,6 +212,7 @@ type ladderRig struct {
 	Video  *watch.Video
 	Pacts  *pactHolder       // the Pacts return section (pactwire.go); nil when Pacts are off
 	Senses *senses.Publisher // side-panel minimap source (sensesfeed.go); nil when senses.tier is 0
+	Ether  *etherHome        // the account's ETHER wallet (etherwire.go); nil without a vault root or an account ledger
 }
 
 // StopRec ends the session record (summary written); safe on a nil rig and to call twice.
@@ -310,8 +312,14 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 			rig.Fun.LootRules = lootRulesAPI(stateDir, l.storeProfile(), l.knobValue)
 		}
 		if l.vaultRoot != "" {
-			if rig.Fun.Vault, err = vaultAPI(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }); err != nil {
+			eh := etherFor(l.currencyDir, l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name })
+			if rig.Fun.Vault, err = vaultAPIWith(l.vaultRoot, vaultKnobOn(l.knobValue), func() string { return hub.Hero().Name }, eh); err != nil {
 				return nil, nil, err
+			}
+			if eh != nil {
+				rig.Fun.Ether = &watch.EtherAPI{Src: eh.Wallet}
+				rig.Ether = eh
+				hub.SetEtherSource(eh.chip)
 			}
 		}
 		bindJourney(rig.Fun, l.journey)
@@ -383,6 +391,10 @@ func startLadder(ctx context.Context, l ladderOptions, apiToken, stateDir string
 	ch, unsub := m.Subscribe() // subscribed before startLadder returns: the first events of the run are not lost
 	go feedHub(ctx, rig.Hub, orders, rig.Fun, rig.Rec, ch, unsub, status)
 	startPacts(ctx, l, rig, m, status, stateDir, os.Getenv)
+	startEther(ctx, rig.Ether, m, func() ether.Hero {
+		h := rig.Hub.Hero()
+		return ether.Hero{Name: h.Name, Difficulty: etherDifficulty(h.Difficulty)}
+	}, func(s string) { slog.Warn(s) })
 	return rig, nil
 }
 

@@ -1,6 +1,7 @@
 package watch
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -24,6 +25,7 @@ const (
 	VaultPinRoute     = "/api/vault/pin"
 	VaultUnpinRoute   = "/api/vault/unpin"
 	VaultDiscardRoute = "/api/vault/discard"
+	VaultKeepRoute    = "/api/vault/keep"
 	vaultSchema       = "watch.vault/1"
 
 	vaultPageLimit = 60  // rows per page when the client names none
@@ -34,7 +36,7 @@ const (
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
 	VaultRoutes     = []string{VaultRoute, VaultItemRoute, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -44,6 +46,35 @@ type VaultDesk struct {
 	Store func() *vault.Store // the active hero's vault, nil while there is none
 	Tiers *vault.Tiers        // the capacity table, for the tier line
 	Owned func() []string     // purchased capacity steps (V7); nil: none
+	Keep  VaultKeeper         // the Keep queue (V5); nil: Keep is not part of this bot
+}
+
+// VaultKeeper is the Keep queue as the routes see it (cmd/d2bot/vaultkeep.go adapts internal/vaultkeep).
+type VaultKeeper interface {
+	// Gate says whether a press can be queued; code is a short word (off, dead, verbs, stopped) the page can branch on.
+	Gate(ctx context.Context) (ok bool, code, why string)
+	Enqueue(ctx context.Context, ids []string, target string, now bool) []VaultKeepResult
+	Progress() VaultKeepView
+}
+
+// VaultKeepResult is the outcome of queueing one id.
+type VaultKeepResult struct {
+	ID      string
+	OK      bool
+	Already bool
+	Code    string
+	Why     string
+}
+
+// VaultKeepView is the queue's state in GET /api/vault: counts, the progress sentence, and why nothing moves.
+type VaultKeepView struct {
+	Enabled  bool   `json:"enabled"`
+	Why      string `json:"why,omitempty"` // when not enabled: the reason, shown on the button
+	Queued   int    `json:"queued"`
+	Creating int    `json:"creating"`
+	Done     int    `json:"done"`
+	Full     bool   `json:"full,omitempty"`
+	Line     string `json:"line,omitempty"`
 }
 
 type VaultAPI struct {
@@ -123,7 +154,11 @@ type VaultItem struct {
 	Found      string `json:"found,omitempty"` // RFC 3339
 	Area       string `json:"area,omitempty"`
 	Reason     string `json:"reason,omitempty"`
+	Keep       string `json:"keep,omitempty"` // queued, creating, kept or failed: the Keep queue's word for the row
+	Where      string `json:"where,omitempty"`
 }
+
+const keepReasonPrefix = "keep: " // vaultkeep stores failure reasons with this prefix; the row shows the sentence
 
 func vaultRow(r *vault.Rec) VaultItem {
 	name := r.Name
@@ -135,6 +170,19 @@ func vaultRow(r *vault.Rec) VaultItem {
 		Value: r.Value, Area: r.Found.Area, Reason: r.Reason}
 	if !r.Found.Time.IsZero() {
 		v.Found = r.Found.Time.UTC().Format(time.RFC3339)
+	}
+	switch {
+	case r.State == vault.KeepQ && r.InFlight:
+		v.Keep = "creating"
+	case r.State == vault.KeepQ:
+		v.Keep = "queued"
+	case r.State == vault.Kept:
+		v.Keep = "kept"
+	case r.State == vault.Recorded && strings.HasPrefix(r.Reason, keepReasonPrefix):
+		v.Keep = "failed"
+	}
+	if v.Keep != "" {
+		v.Reason, v.Where = strings.TrimPrefix(r.Reason, keepReasonPrefix), r.Where
 	}
 	return v
 }
@@ -182,19 +230,20 @@ type vaultFacet struct {
 
 // VaultView is the reply of GET /api/vault.
 type VaultView struct {
-	Schema    string        `json:"schema"`
-	Mode      string        `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
-	Exists    bool          `json:"exists"` // a vault is on disk for the hero
-	Hero      string        `json:"hero,omitempty"`
-	Total     int           `json:"total"`
-	Offset    int           `json:"offset"`
-	Limit     int           `json:"limit"`
-	Items     []VaultItem   `json:"items"`
-	Capacity  VaultCapacity `json:"capacity"`
-	Upgrade   VaultUpgrade  `json:"upgrade"`
-	Kinds     []vaultKind   `json:"kinds,omitempty"`
-	Types     []vaultFacet  `json:"types,omitempty"`
-	Anomalies int           `json:"anomalies,omitempty"`
+	Schema    string         `json:"schema"`
+	Mode      string         `json:"mode"`   // "on", or "off" while loot.vault is 0 (read only)
+	Exists    bool           `json:"exists"` // a vault is on disk for the hero
+	Hero      string         `json:"hero,omitempty"`
+	Total     int            `json:"total"`
+	Offset    int            `json:"offset"`
+	Limit     int            `json:"limit"`
+	Items     []VaultItem    `json:"items"`
+	Capacity  VaultCapacity  `json:"capacity"`
+	Upgrade   VaultUpgrade   `json:"upgrade"`
+	Kinds     []vaultKind    `json:"kinds,omitempty"`
+	Types     []vaultFacet   `json:"types,omitempty"`
+	Anomalies int            `json:"anomalies,omitempty"`
+	Keep      *VaultKeepView `json:"keep,omitempty"` // schema additive: absent when the bot has no Keep queue
 }
 
 type vaultQuery struct {
@@ -342,6 +391,26 @@ func intersect(a, b []int) []int {
 	return out
 }
 
+// keepAction is the card's Keep button: possible for a live recorded item while the queue accepts presses.
+func (d *VaultDesk) keepAction(ctx context.Context, r *vault.Rec) VaultAction {
+	switch {
+	case d.Keep == nil:
+		return VaultAction{Reason: "this bot has no Keep queue"}
+	case !d.on():
+		return VaultAction{Reason: "the vault is read only while loot.vault is 0"}
+	case r.State == vault.KeepQ:
+		return VaultAction{Reason: "already queued: arrives at your next town visit"}
+	case r.State == vault.Kept:
+		return VaultAction{Reason: "already in your stash"}
+	case r.State != vault.Recorded:
+		return VaultAction{Reason: "the item is " + string(r.State)}
+	}
+	if ok, _, why := d.Keep.Gate(ctx); !ok {
+		return VaultAction{Reason: why}
+	}
+	return VaultAction{OK: true}
+}
+
 func (d *VaultDesk) on() bool { return d.On == nil || d.On() }
 
 func (d *VaultDesk) store() *vault.Store {
@@ -354,7 +423,7 @@ func (d *VaultDesk) store() *vault.Store {
 // upgradeOf is the placeholder of the capacity meter: the next tier's gain and price from the table, never available until the
 // Ether wallet exists (V7).
 func (d *VaultDesk) upgradeOf() VaultUpgrade {
-	u := VaultUpgrade{Currency: "Ether", Reason: "arrives with the Ether wallet (V7)"}
+	u := VaultUpgrade{Currency: "Ether", Reason: "needs the vault switched on (loot.vault) for the Ether wallet"}
 	if d.Tiers == nil {
 		return u
 	}
@@ -378,6 +447,13 @@ func (d *VaultDesk) view(q vaultQuery, kinds vaultTexts) VaultView {
 	}
 	if q.facets {
 		v.Kinds = kinds.Kinds
+	}
+	if d.Keep != nil {
+		kv := d.Keep.Progress()
+		if !d.on() {
+			kv.Enabled, kv.Why = false, "the vault is read only while loot.vault is 0"
+		}
+		v.Keep = &kv
 	}
 	st := d.store()
 	if st == nil {
@@ -430,7 +506,7 @@ type VaultAction struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-func detailOf(r *vault.Rec, readOnly bool) VaultDetail {
+func detailOf(r *vault.Rec, readOnly bool, keep VaultAction) VaultDetail {
 	it := vaultRow(r)
 	var lines []string
 	if !it.Identified {
@@ -472,7 +548,7 @@ func detailOf(r *vault.Rec, readOnly bool) VaultDetail {
 		"pin":     off(!r.Pin, "already pinned"),
 		"unpin":   off(r.Pin, "not pinned"),
 		"discard": off(true, ""),
-		"keep":    {Reason: "arrives with the Keep queue (V5)"},
+		"keep":    keep,
 		"reveal":  {Reason: "arrives with Reveal (V6)"},
 	}}
 }
@@ -510,7 +586,7 @@ func (a *VaultAPI) Handler() http.Handler {
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "missing", Error: "no such item"})
 			return
 		}
-		writeJSON(w, 200, detailOf(&rec, !d.on()))
+		writeJSON(w, 200, detailOf(&rec, !d.on(), d.keepAction(r.Context(), &rec)))
 	})
 	static := func(path, file, ctype string) {
 		m.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
@@ -534,6 +610,8 @@ func (a *VaultAPI) Handler() http.Handler {
 type vaultBody struct {
 	IDs     []string `json:"ids"`
 	Confirm bool     `json:"confirm"`
+	Target  string   `json:"target,omitempty"` // keep: stash (default) or inv
+	Now     bool     `json:"now,omitempty"`    // keep: also ask the bot to walk home for it
 }
 
 type vaultFail struct {
@@ -543,9 +621,10 @@ type vaultFail struct {
 }
 
 type vaultReply struct {
-	OK     bool        `json:"ok"`
-	Done   []string    `json:"done"`
-	Failed []vaultFail `json:"failed,omitempty"`
+	OK      bool        `json:"ok"`
+	Done    []string    `json:"done"`
+	Already []string    `json:"already,omitempty"` // keep: pressed before, nothing changed
+	Failed  []vaultFail `json:"failed,omitempty"`
 }
 
 func vaultCode(err error) string {
@@ -586,6 +665,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "discard needs confirm: true"})
 			return
 		}
+		if route == VaultKeepRoute {
+			a.keep(w, r, d, &b)
+			return
+		}
 		rep := vaultReply{Done: []string{}}
 		for _, id := range b.IDs {
 			var err error
@@ -610,4 +693,39 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		writeJSON(w, code, rep)
 	})
+}
+
+// keep queues the ids (idempotent: a second press answers "already"), after the gate. The reply names the real reason of every
+// failure; the page reads the state back from GET, so a toast never says more than what the store holds.
+func (a *VaultAPI) keep(w http.ResponseWriter, r *http.Request, d *VaultDesk, b *vaultBody) {
+	if d.Keep == nil {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot has no Keep queue"})
+		return
+	}
+	if b.Target != "" && b.Target != vault.WhereStash && b.Target != vault.WhereInv {
+		writeJSON(w, http.StatusBadRequest, policyReply{Code: "target", Error: "target is stash or inv"})
+		return
+	}
+	if ok, code, why := d.Keep.Gate(r.Context()); !ok {
+		writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+		return
+	}
+	rep := vaultReply{Done: []string{}}
+	for _, res := range d.Keep.Enqueue(r.Context(), b.IDs, b.Target, b.Now) {
+		switch {
+		case res.OK && res.Already:
+			rep.Already = append(rep.Already, res.ID)
+			rep.Done = append(rep.Done, res.ID)
+		case res.OK:
+			rep.Done = append(rep.Done, res.ID)
+		default:
+			rep.Failed = append(rep.Failed, vaultFail{ID: res.ID, Code: res.Code, Error: res.Why})
+		}
+	}
+	rep.OK = len(rep.Failed) == 0
+	code := 200
+	if len(rep.Done) == 0 {
+		code = http.StatusConflict
+	}
+	writeJSON(w, code, rep)
 }

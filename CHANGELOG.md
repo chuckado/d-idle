@@ -8,6 +8,9 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into quests5 <!--sg:agent/quests5-->
+- Merge origin/main into vaultv7b (Keep UI and fixtures kept beside the wallet) <!--sg:agent/vaultv7b-->
+- Merge origin/main into agent/vaultv5 <!--sg:agent/vaultv5-->
 - Merge branch 'main' into quests6 <!--sg:agent/quests6-->
 - Merge branch 'main' into survreask <!--sg:agent/survreask-->
 - Merge branch 'main' into TASK-591 <!--sg:agent/vaultv7-->

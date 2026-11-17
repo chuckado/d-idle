@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -10,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"d2lod-bot/internal/ether"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/watch"
 )
@@ -30,13 +32,30 @@ type vaultSet struct {
 	n, capacity, shrinkTo int
 	on                    bool
 	none                  bool
+	// the Ether wallet of the page (the eth-* states): the balance left after buying `owned` steps. eth false: no wallet, the old placeholder
+	eth            bool
+	balance, owned int
+	keep           string // "": no Keep queue; ok, dead (the gate refuses: the hero is dead), full (a queue waiting for stash room)
+	preset         bool   // queued, creating, kept and failed rows are put in the store
 }
 
 var vaultModes = map[string]vaultSet{
 	"pop": {n: 140, capacity: 400, on: true}, "warn": {n: 140, capacity: 160, on: true}, "full": {n: 140, capacity: 140, on: true},
 	"over": {n: 140, capacity: 400, shrinkTo: 100, on: true}, "empty": {n: 0, capacity: 400, on: true}, "none": {none: true, on: true},
 	"off": {n: 140, capacity: 400, on: false}, "big": {n: 1200, capacity: 2400, on: true},
+	// the Keep queue (slice V5): its own stores, so a press on one page never changes another
+	"keeping":   {n: 140, capacity: 400, on: true, keep: "ok", preset: true},
+	"keeppress": {n: 140, capacity: 400, on: true, keep: "ok"},
+	"keepdead":  {n: 140, capacity: 400, on: true, keep: "dead"},
+	"keepfull":  {n: 140, capacity: 400, on: true, keep: "full", preset: true},
+	// the wallet states (V7b): enough Ether to buy, short, one step owned (the refund fits), one step owned and the vault too full for the lower tier, every step owned
+	"eth": {n: 140, on: true, eth: true, balance: 35}, "eth-short": {n: 140, on: true, eth: true, balance: 5},
+	"eth-owned": {n: 140, on: true, eth: true, balance: 15, owned: 1}, "eth-nofit": {n: 450, on: true, eth: true, balance: 15, owned: 1},
+	"eth-max": {n: 140, on: true, eth: true, balance: 12, owned: 6},
 }
+
+// vaultEthers holds the wallet of each wallet state, keyed like vaultAPIs; they answer /api/ether and the two POST routes.
+var vaultEthers = map[string]*watch.EtherAPI{}
 
 // vaultName makes the i-th drop: a base and a quality that cycle, with a few fixed long and awkward names among them.
 func vaultItem(i int, now time.Time) vault.Item {
@@ -98,8 +117,35 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	if set.shrinkTo > 0 {
 		capacity = 1000
 	}
+	var wal *ether.Wallet
+	var s *vault.Store
+	if set.eth {
+		var err error
+		if wal, err = ether.Open(dir+"-ether", ether.Options{Tiers: tiers, Content: func() int { return s.Status().Count }}); err != nil {
+			log.Fatalf("uishots: ether %s: %v", mode, err)
+		}
+		earned := set.balance
+		for i := 0; i < set.owned; i++ {
+			earned += tiers.Steps[i].Price
+		}
+		for i := 0; earned > 0; i++ { // the hook pays at most 100 per quest
+			n := min(earned, 100)
+			if _, err := wal.Earn("quest", fmt.Sprintf("q%d", i), "normal", n); err != nil {
+				log.Fatalf("uishots: ether %s earn: %v", mode, err)
+			}
+			earned -= n
+		}
+		for i := 0; i < set.owned; i++ {
+			if _, err := wal.Upgrade(""); err != nil {
+				log.Fatalf("uishots: ether %s upgrade: %v", mode, err)
+			}
+		}
+		capacity = wal.Capacity(0)
+		desk.Owned = func() []string { o, _ := wal.OwnedSteps(); return o }
+		vaultEthers[mode] = &watch.EtherAPI{W: wal}
+	}
 	now := time.Now()
-	s, err := vault.OpenHero(dir, "Sorc", vault.Options{Capacity: func() int { return capacity }, NoSync: true})
+	s, err = vault.OpenHero(dir, "Sorc", vault.Options{Capacity: func() int { return capacity }, NoSync: true})
 	if err != nil {
 		log.Fatalf("uishots: vault %s: %v", mode, err)
 	}
@@ -118,6 +164,13 @@ func newVaultFor(mode string, dir string) *watch.VaultAPI {
 	}
 	if set.shrinkTo > 0 {
 		capacity = set.shrinkTo
+	}
+	if set.keep != "" {
+		k := &fixtureKeeper{st: s, mode: set.keep}
+		if set.preset {
+			k.preset(ids)
+		}
+		desk.Keep = k
 	}
 	desk.Store = func() *vault.Store { return s }
 	api.Bind(desk)
@@ -162,6 +215,42 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
+	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Get() }))
+	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Upgrade(watch.AnswerOptions{}) }))
+	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Downgrade(watch.AnswerOptions{}) }))
+	// the answer routes too (same origin here), so a press shows the real reply and the page reads the state back
+	for _, p := range watch.VaultPostRoutes {
+		route := p
+		m.HandleFunc(route, func(w http.ResponseWriter, r *http.Request) {
+			mode := "pop"
+			if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
+				mode = ref.Query().Get("vault")
+			}
+			api := vaultAPIs[mode]
+			if api == nil {
+				http.Error(w, "no such fixture", http.StatusNotFound)
+				return
+			}
+			api.PostHandler(watch.AnswerOptions{}, route).ServeHTTP(w, r)
+		})
+	}
+}
+
+// etherFixture routes the wallet calls of the page to the wallet of its state (the Referer's vault=); a state without a wallet answers
+// the way a bot with loot.vault 0 does (enabled false, and 409 off on a press).
+func etherFixture(h func(*watch.EtherAPI) http.Handler) http.Handler {
+	vaultFixture() // builds the states
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		mode := "pop"
+		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
+			mode = ref.Query().Get("vault")
+		}
+		a := vaultEthers[mode]
+		if a == nil {
+			a = &watch.EtherAPI{}
+		}
+		h(a).ServeHTTP(w, r)
+	})
 }
 
 // vaultDefect is, per name, the one defect put back on the Vault page. The fit pages vaultdefect-NAME must FAIL with the verdict
@@ -176,6 +265,78 @@ func init() {
 	defectCSS["vault-sheet"] = `.vt-sheet-card { max-block-size: 120px !important; overflow: hidden !important; }`
 	vaultJS["vault-noname"] = `new MutationObserver(function () { document.querySelectorAll('.vt [aria-label]').forEach(function (e) { e.removeAttribute('aria-label'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 	vaultJS["vault-enabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { e.removeAttribute('aria-disabled'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
+	vaultJS["vault-ethenabled"] = `new MutationObserver(function () { document.querySelectorAll('[data-key="upgrade"]').forEach(function (e) { if (e.getAttribute('aria-disabled') !== 'false') e.setAttribute('aria-disabled', 'false'); }); }).observe(document, { subtree: true, childList: true, attributes: true });`
 }
 
 var vaultJS = map[string]string{}
+
+// fixtureKeeper is the Keep queue of the fixture: it queues through the real store like internal/vaultkeep does; nothing creates
+// items here (the executor is exercised in internal/vaultkeep with the fake game).
+type fixtureKeeper struct {
+	st   *vault.Store
+	mode string
+}
+
+// preset puts a row in every Keep state: two queued, one creating, one failed with a real reason and two kept.
+func (k *fixtureKeeper) preset(ids []string) {
+	for _, i := range []int{1, 2, 4, 6} {
+		_ = k.st.KeepTo(ids[i], "")
+	}
+	_ = k.st.BeginKeep(ids[4])
+	if k.mode == "full" {
+		_ = k.st.RetryKeep(ids[1], "keep: the stash is full: free space or upgrade")
+	}
+	_ = k.st.FailKeep(ids[6], "keep: the game does not accept this item's data")
+	for _, i := range []int{9, 10} {
+		_ = k.st.KeepTo(ids[i], "")
+		_ = k.st.BeginKeep(ids[i])
+		_ = k.st.CompleteKeepAt(ids[i], "stash 2,3")
+	}
+}
+
+func (k *fixtureKeeper) Gate(context.Context) (bool, string, string) {
+	if k.mode == "dead" {
+		return false, "dead", "The hero is dead; Keep works again once it is alive and in town."
+	}
+	return true, "", ""
+}
+
+func (k *fixtureKeeper) Enqueue(_ context.Context, ids []string, target string, _ bool) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, id := range ids {
+		rec, ok := k.st.Get(id)
+		switch {
+		case !ok:
+			out = append(out, watch.VaultKeepResult{ID: id, Code: "missing", Why: "no such item"})
+		case rec.State == vault.KeepQ || rec.State == vault.Kept:
+			out = append(out, watch.VaultKeepResult{ID: id, OK: true, Already: true})
+		default:
+			if err := k.st.KeepTo(id, target); err != nil {
+				out = append(out, watch.VaultKeepResult{ID: id, Code: "state", Why: err.Error()})
+			} else {
+				out = append(out, watch.VaultKeepResult{ID: id, OK: true})
+			}
+		}
+	}
+	return out
+}
+
+func (k *fixtureKeeper) Progress() watch.VaultKeepView {
+	q := k.st.KeepQueued()
+	v := watch.VaultKeepView{Enabled: k.mode != "dead", Full: k.mode == "full"}
+	for _, r := range q {
+		if r.InFlight {
+			v.Creating++
+		} else {
+			v.Queued++
+		}
+	}
+	switch n := v.Queued + v.Creating; {
+	case n == 0:
+	case v.Full:
+		v.Line = fmt.Sprintf("Keeping %d items: the stash is full, free space or upgrade", n)
+	default:
+		v.Line = fmt.Sprintf("Keeping %d items: arrives at your next town visit", n)
+	}
+	return v
+}

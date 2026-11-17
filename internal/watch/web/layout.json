@@ -15,6 +15,7 @@
     "strip": [
       "progress",
       "journey-strip",
+      "quest-strip",
       "health"
     ],
     "rail": [
@@ -43,6 +44,10 @@
       "Map": [
         "zone-map",
         "area-map"
+      ],
+      "Quests": [
+        "quest-strip",
+        "quest-list"
       ],
       "Progress": [
         "progress",

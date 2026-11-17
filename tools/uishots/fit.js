@@ -136,9 +136,26 @@ export function overlayState(win) {
     const sb = sh.querySelector('.zm-charter .d-btn'), sr = sb && vis(sb);
     if (sb && !(sr && sr.top >= r.top - 1 && sr.bottom <= r.bottom + 1 && sr.left >= r.left - 1 && sr.right <= r.right + 1)) charter.push('Pay and go is outside the sheet');
   }
-  for (const n of d.querySelectorAll('.d-drawer')) if (vis(n)) open.push('drawer:' + (n.dataset.drawer || '?'));
+  for (const n of d.querySelectorAll('.d-drawer')) {
+    if (!vis(n)) continue;
+    open.push('drawer:' + (n.dataset.drawer || '?'));
+    if (n.dataset.drawer !== 'quest-board') continue;
+    for (const x of n.querySelectorAll('*')) { // the quest sheet wraps its text; nothing in it may be wider than its box
+      if (/^(SELECT|INPUT|OPTION)$/.test(x.tagName) || !vis(x)) continue;
+      if (x.scrollWidth - x.clientWidth > 1 && x.clientWidth > 0) cut.push((x.className || x.tagName) + ' "' + (x.textContent || '').trim().slice(0, 24) + '" ' + x.scrollWidth + '/' + x.clientWidth);
+    }
+  }
+  // the quest panels (strip tile, sheet, phone tab): touch targets on a phone and the words the design forbids (a chapter counter, a number for the margin)
+  const small = [], words = [];
+  for (const p of d.querySelectorAll('[data-panel^="quest-"]')) {
+    if (!vis(p)) continue;
+    if (win.innerWidth <= 480) for (const b of p.querySelectorAll('button')) { const r = vis(b); if (r && r.height < 43.5) small.push((b.dataset.key || b.textContent || '?').trim().slice(0, 20) + ' ' + Math.round(r.height) + ' px'); }
+    const t = p.textContent || '';
+    const m = t.match(/chapter\s*\d+\s*of\s*\d+|margin\D{0,8}\d|\d+(\.\d+)?\s*%/i);
+    if (m) words.push(p.dataset.panel + ': "' + m[0] + '"');
+  }
   if (vis(d.getElementById('reset-confirm'))) open.push('reset');
-  return { open, menu, cut, under, charter };
+  return { open, menu, cut, under, charter, small, words };
 }
 
 // An opened sheet must be hittable: the element at the centre of each target is the target or inside it.
@@ -418,7 +435,7 @@ export function charsNow(win) {
 //  under:    the list starting under the header, filters or bar
 //  sheet:    an open sheet that scrolls or is cut
 //  unnamed:  a control a screen reader would announce with no name
-//  holes:    the Upgrade and Keep placeholders that are not disabled (they do nothing until V7 and V5)
+//  holes:    an Upgrade without a wallet that is not disabled, an Upgrade that is enabled while it says the balance is short, a missing Keep button (Keep is real since V5)
 function vaultPage(win, d, vis, cs) {
   const vw = win.innerWidth, vh = win.innerHeight;
   const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', unnamed: [], holes: [], cells: 0, state: '', open: false, meter: false, mode: '' };
@@ -476,10 +493,18 @@ function vaultPage(win, d, vis, cs) {
     const name = (n.getAttribute('aria-label') || byId || (/^(button|a)$/i.test(n.tagName) ? text(n) : '') || lab || n.getAttribute('title') || '').trim();
     if (!name) o.unnamed.push(nm(n));
   }
-  for (const k of ['upgrade', 'keep']) {
-    const b = root.querySelector('[data-key="' + k + '"]');
-    if (!b) o.holes.push(k + ' button is missing');
-    else if (b.getAttribute('aria-disabled') !== 'true') o.holes.push(k + ' is enabled');
+  // Keep is real since V5 and only has to exist; Upgrade is a placeholder until the wallet answers (no visible wallet chip), and with a
+  // wallet it may be enabled only when nothing says the balance is short
+  const chip = root.querySelector('[data-key="wallet"]'), walletOn = !!chip && live(chip);
+  if (!root.querySelector('[data-key="keep"]')) o.holes.push('keep button is missing');
+  {
+    const b = root.querySelector('[data-key="upgrade"]');
+    if (!b) o.holes.push('upgrade button is missing');
+    const off = !b || b.getAttribute('aria-disabled') === 'true';
+    if (b && walletOn) {
+      const why = root.querySelector('.vt-upgrade-why');
+      if (!off && why && why.textContent.trim()) o.holes.push('upgrade is enabled while it says "' + why.textContent.trim().slice(0, 30) + '"');
+    } else if (b && !off) o.holes.push('upgrade is enabled');
   }
   return o;
 }

@@ -15,6 +15,9 @@
   [data-panel="needs-you"] .n-t { min-inline-size: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   [data-panel="needs-you"] .n-t b { font-weight: 600; }
   [data-panel="needs-you"] .n-s { color: var(--d-text-2); }
+  /* a quest waits for the player (hand in): the accent, not an alarm colour */
+  [data-panel="needs-you"] .n-row[data-sev="event"] { background: var(--d-state-bg-info); box-shadow: inset 3px 0 0 var(--d-accent); }
+  [data-panel="needs-you"] [data-sev="event"] > .n-shape { background: var(--d-accent); border-radius: 2px; transform: rotate(45deg); inline-size: 8px; block-size: 8px; }
   [data-panel="needs-you"] .n-shape { inline-size: 10px; block-size: 10px; background: var(--d-info); border-radius: 50%; }
   [data-panel="needs-you"] [data-sev="warn"] > .n-shape { background: var(--d-warn); border-radius: 0; clip-path: polygon(50% 0, 100% 100%, 0 100%); }
   [data-panel="needs-you"] [data-sev="danger"] > .n-shape { background: var(--d-danger); border-radius: 0; clip-path: polygon(30% 0, 70% 0, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0 70%, 0 30%); }
