@@ -126,6 +126,21 @@ function tileSheet(id, root, where) {
     return root;
   };
   const place = () => { const h = host(); if (sheet.parentElement !== h) h.appendChild(sheet); sheet.dataset.host = h === root ? 'self' : h.dataset.panel; return sheet.dataset.host; };
+  // A tile that a short window leaves only a few rows cannot hold its sheet (the Orders More list showed one row at 870x520, card
+  // morefit): the sheet then floats over the page at the tile's top-left (position: fixed is not clipped by the tile), at least
+  // FLOAT_MIN tall and never past the window; it keeps the tile's width. A tall enough tile keeps the sheet inside it.
+  const FLOAT_MIN = 232;
+  const fit = () => {
+    if (sheet.hidden) { sheet.removeAttribute('data-float'); sheet.style.removeProperty('--ts-top'); return; }
+    const r = sheet.parentElement ? sheet.parentElement.getBoundingClientRect() : null;
+    if (!r || r.height >= FLOAT_MIN) { sheet.removeAttribute('data-float'); return; }
+    const h = Math.min(FLOAT_MIN, window.innerHeight - 8), top = Math.max(0, Math.min(r.top, window.innerHeight - h - 4));
+    sheet.dataset.float = '1';
+    sheet.style.setProperty('--ts-top', Math.round(top) + 'px'); sheet.style.setProperty('--ts-left', Math.round(r.left) + 'px');
+    sheet.style.setProperty('--ts-w', Math.round(r.width) + 'px'); sheet.style.setProperty('--ts-h', Math.round(h) + 'px');
+  };
+  new MutationObserver(fit).observe(sheet, { attributes: true, attributeFilter: ['hidden'] });
+  window.addEventListener('resize', fit);
   return { el: sheet, place };
 }
 

@@ -38,10 +38,12 @@
   [data-panel="orders"] .o-verbs .d-btn:disabled { opacity: .5; cursor: not-allowed; }
   [data-panel="orders"] .o-why { flex: none; font-size: var(--d-fs-0); color: var(--d-text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   [data-panel="orders"] .o-list:focus-visible { outline: 2px solid var(--d-focus, var(--d-accent)); outline-offset: -2px; }
+  [data-panel="orders"] .d-slotbody[data-scroll] { overflow-y: auto; }
   /* the More sheet is the shell's tile sheet (ctx.tileSheet): it fills this tile */
   [data-panel="orders"] .o-sheethead { display: flex; justify-content: space-between; align-items: center; font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); }
   [data-panel="orders"] .o-filter { flex: none; min-block-size: 28px; padding: 0 var(--d-sp-2); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-bg); color: var(--d-text); font-size: var(--d-fs-1); }
-  [data-panel="orders"] .o-items { flex: 1 1 0; min-block-size: 0; overflow-y: auto; display: grid; align-content: start; }
+  /* the list never shrinks below five rows: a short window scrolls the SHEET (shell.css .d-tilesheet), it does not clip the list (card morefit) */
+  [data-panel="orders"] .o-items { flex: 1 0 auto; min-block-size: calc(5 * 28px); overflow-y: auto; scrollbar-gutter: stable; display: grid; align-content: start; }
   [data-panel="orders"] .o-item { text-align: start; min-block-size: 28px; padding: 0 var(--d-sp-2); background: none; border: 0; border-block-start: var(--d-bw) solid var(--d-line); color: var(--d-text); font-size: var(--d-fs-1); cursor: pointer; }
   [data-panel="orders"] .o-item:hover, [data-panel="orders"] .o-item:focus-visible { background: var(--d-surface-3); }
 }
