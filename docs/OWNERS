@@ -1318,7 +1318,6 @@ internal/watch/web/vault-logic.js  credit-runner  vaultv6
 internal/watch/web/vault.css  credit-runner  vaultv4
 internal/watch/web/vault.css  credit-runner  vaultv5
 internal/watch/web/vault.css  credit-runner  vaultv6
-internal/watch/web/vault.css  credit-runner  vaultv6verify
 internal/watch/web/vault.css  credit-runner  vaultv7b
 internal/watch/web/vault.html  credit-runner  vaultv4
 internal/watch/web/vault.js  credit-runner  vaultv4
@@ -1328,7 +1327,6 @@ internal/watch/web/vault.js  credit-runner  vaultv7b
 internal/watch/web/vault.json  credit-runner  vaultv4
 internal/watch/web/vault.json  credit-runner  vaultv5
 internal/watch/web/vault.json  credit-runner  vaultv6
-internal/watch/web/vault.json  credit-runner  vaultv6verify
 internal/watch/web/vault.json  credit-runner  vaultv7b
 internal/watch/web/watch.html  credit-runner  uifix1
 internal/watch/whychange.json  credit-runner  uifix1
@@ -1450,7 +1448,6 @@ tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_vault.go  credit-runner  vaultv4
 tools/uishots/fixtures_vault.go  credit-runner  vaultv5
 tools/uishots/fixtures_vault.go  credit-runner  vaultv6
-tools/uishots/fixtures_vault.go  credit-runner  vaultv6verify
 tools/uishots/fixtures_vault.go  credit-runner  vaultv7b
 tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
 tools/uishots/fxviews.go  credit-runner  idfast
