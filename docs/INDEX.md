@@ -741,7 +741,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verifier2-p06-2026-11-15.md](upstream/verifier2-p06-2026-11-15.md): Verifier 2: P06 r4 recheck, a monster missile with no physical damage cannot be blocked (2026-11-15) (status: current, 2026-11-15 (card verifyp06b, TASK-496, Opus, singly; second pass after...)
 - [verifier3-p02-2026-11-15.md](upstream/verifier3-p02-2026-11-15.md): Verifier 3: P02 r3 recheck: the empty-path rule and the nondeterminism (2026-11-15) (status: current, 2026-11-15 (card verifyp02c, TASK-484, Opus; third pass after verifier2-p02-2026-11-15.md and...)
 - [usage.md](usage.md): Usage view (`tools/usage/usage.py`) (status: current (TASK-309; source: docs/research/project-review-2026-11-10.md section 6.1 and 6.3 item 5).)
-- [vault.md](vault.md): Ethereal Vault store (internal/vault) and its file formats (status: V2 store BUILT offline, V3 bot wiring BUILT offline (section 'Bot wiring (V3)' at the end) (slice V2 of...)
+- [vault.md](vault.md): Ethereal Vault store (internal/vault) and its file formats (status: V2 store BUILT offline, V3 bot wiring BUILT offline (section 'Bot wiring (V3)'), V4 read API and page...)
 - [video-feed.md](video-feed.md): Lossless delta frame feed for the watch video (card videofeed, 2026-11-15) (status: mounted behind the knob `watch.paletteFeed` (default OFF) by card videofeed2 (2026-11-16); not deployed....)
 - [viewer-fps.md](viewer-fps.md): Viewer game video at 12.5 to 25 fps (card viewerfps1, TASK-293, 2026-11-10)
 - [walksmooth.md](walksmooth.md): walksmooth: the stop-and-go walk (TASK-188) (status: offline fix merged-ready, NOT proven live. Tags: V verified (how stated), S read in code, U unverified.)
