@@ -1016,6 +1016,7 @@ Why this first: the SME read the poverty loop (about 54 % of time farming gold) 
 - agent/survreask2: survreask: doc counts (merged 2026-11-17) <!--sg:agent/survreask2-->
 - boardmoderace: fix the data race on the task waypoint map in the quest board tests (TASK-604, merged 2026-11-17, acceptance 0 of 2) <!--sg:agent/boardmoderace-->
 - decomp37: combat and skills lane C, a player''s gear absorb, Open Wounds and the magic resist (elemental pipeline) (TASK-607, merged 2026-11-17, acceptance 3 of 3): Elemental pipeline lane C, three topics against game.exe 1.14d: (T1) a player's gear absorb (stats 142..149, FUN_0057bf10 after the resistance: percent capped at 40, then flat): d2d read none ... <!--sg:agent/decomp37-->
+- quests10: Ether hook in the quest board hand-in (S10) (TASK-605, merged 2026-11-17, acceptance 3 of 3): Ether hook built offline (Exec.HandIn/Settle, plan-file baseline, pays/awarded/already, UI, goldens); tests on Paladin and Sorceress; NOT verified live <!--sg:agent/quests10-->
 
 ## 3. Needs the user (also the board's Waiting-on-you panel, `tools/needs-you.sh list`)
 - The five decisions in [plan/STATUS.md](plan/STATUS.md): licence/GPL review, public character names, grill 0003 (merc and Act 2), upstream PR follow-ups (post the Lut Gholein PR; cast follow-ups wait for the maintainer), stream and ports.
