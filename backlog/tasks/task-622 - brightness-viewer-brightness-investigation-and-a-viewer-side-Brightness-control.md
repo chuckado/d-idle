@@ -19,6 +19,7 @@ owns:
   - "internal/watch/web/panels/video/panel.js"
   - "internal/watch/testdata/video_panel.js"
   - "internal/watch/testdata/video_pal_panel.js"
+  - "internal/watch/testdata/video_labels_panel.js"
   - "internal/watch/palfeed/luma_test.go"
   - "tools/videofeed/gamma_frames.py"
   - "tools/videofeed/lumastat/"
