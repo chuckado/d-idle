@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"d2lod-bot/internal/boss"
@@ -74,7 +75,8 @@ type TaskDeps struct {
 type taskState struct {
 	ex         *task.Executor
 	gen        uint64
-	err        error // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	err        error      // sentinel error an action hit (portal opened, left the game ...) for r.do to react to
+	mu         sync.Mutex // guards wp and the per-game resets of syncTaskGame: the quest board builds the world off the loop goroutine
 	wp         map[int]bool
 	killed     map[string]bool
 	scene      int            // number of new games seen when killed/wp were last reset
@@ -391,9 +393,11 @@ func (e taskEnv) World(ctx context.Context) (task.World, error) {
 	}
 	r.syncGames() // the cleared set read below belongs to this game (the task path never passes runGoal)
 	r.syncTaskGame()
+	l.task.mu.Lock()
 	for a, on := range l.task.wp {
 		w.WPs[task.Area(a)] = w.WPs[task.Area(a)] || on
 	}
+	l.task.mu.Unlock()
 	l.wp.init()
 	r.drainTouched(s)
 	for k := range l.wp.touched {
@@ -433,6 +437,8 @@ func (r *Runner) syncTaskGame() {
 	n := r.ob.newGames
 	r.obMu.Unlock()
 	t := &r.loop.task
+	t.mu.Lock()
+	defer t.mu.Unlock()
 	if t.wp == nil || t.killed == nil || t.scene != n {
 		if t.scene != n {
 			if t.ex != nil {
@@ -899,7 +905,9 @@ func (a taskActs) ActivateWaypoint(ctx context.Context, ar task.Area) error {
 		return a.tag(err)
 	}
 	r.syncTaskGame()
+	r.loop.task.mu.Lock()
 	r.loop.task.wp[int(ar)] = true
+	r.loop.task.mu.Unlock()
 	return nil
 }
 

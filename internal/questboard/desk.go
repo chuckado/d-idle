@@ -91,7 +91,8 @@ type Reply struct {
 	Chunk   string `json:"chunk,omitempty"`
 	State   string `json:"state,omitempty"` // the chunk's state after the call
 	Mode    string `json:"mode,omitempty"`
-	Status  int    `json:"-"` // HTTP status the route uses
+	Awarded []Pay  `json:"awarded,omitempty"` // a hand-in that finished at once (already done) booked this now
+	Status  int    `json:"-"`                 // HTTP status the route uses
 }
 
 func refuse(status int, code, format string, a ...any) Reply {
@@ -156,12 +157,8 @@ type AwayEvent struct {
 	QuestTitle string    `json:"questTitle"`
 	Chunk      string    `json:"chunk"`
 	Kind       string    `json:"kind"` // started, handedIn, handInFailed
+	Awarded    []Pay     `json:"awarded,omitempty"`
 	Text       string    `json:"text"`
-}
-
-// Pays is the meta payout of an offer; omitted until the vault wallet exists (slice S10).
-type Pays struct {
-	Meta int `json:"meta"`
 }
 
 // OfferView is one chunk that raises an offer.
@@ -182,7 +179,7 @@ type OfferView struct {
 	Auto        bool     `json:"auto"`
 	AutoOK      bool     `json:"autoOk"`               // the quest may be started by itself (autoStart data is not `never`)
 	LevelsToGo  int      `json:"levelsToGo,omitempty"` // by the legacy clvl floor; the page words it ("two levels to go"), never a number
-	Pays        *Pays    `json:"pays,omitempty"`
+	Pays        []Pay    `json:"pays,omitempty"`       // what Hand in will pay; omitted without a wallet or when nothing is left to earn
 }
 
 // QuestRow is one quest of the difficulty with its chunks (the board sheet).
@@ -194,6 +191,7 @@ type QuestRow struct {
 	Auto   bool       `json:"auto"`
 	AutoOK bool       `json:"autoOk"` // false: the data says this quest always needs the player (hazard); the toggle is greyed
 	Chunks []ChunkRow `json:"chunks"`
+	Paid   []Pay      `json:"paid,omitempty"` // the Ether the quest and its chunks booked so far (shown under the reward line)
 }
 
 // ChunkRow is one part of a quest.
@@ -238,6 +236,7 @@ type HandInView struct {
 	Reason  string `json:"reason,omitempty"`
 	Attempt int    `json:"attempts,omitempty"`
 	At      string `json:"at,omitempty"`
+	Awarded []Pay  `json:"awarded,omitempty"` // the Ether this hand-in booked (the payoff toast and the row read it)
 }
 
 // HistoryRow is a chunk the board ran and that is done now.
@@ -247,6 +246,7 @@ type HistoryRow struct {
 	Title     string    `json:"title"`
 	Accepted  time.Time `json:"accepted"`
 	Confirmed bool      `json:"confirmed"`
+	Paid      []Pay     `json:"paid,omitempty"` // what the ledger booked for it (omitted without a wallet)
 }
 
 // Verb is a button on a need row.
@@ -321,6 +321,7 @@ func (d *Desk) build() View {
 		v.Reason = "No hero is loaded yet."
 		return v
 	}
+	x.Settle() // a hand-in the board saw only as T3 pays once T1/T2 confirm it; a booked key pays nothing twice
 	if m, err := st.Mode(); err == nil {
 		v.Mode = m
 	}
@@ -355,6 +356,7 @@ func (d *Desk) build() View {
 	v.Difficulty = Difficulties[status.Diff]
 	plan, _, _ := st.Load()
 	busy := status.Active != nil
+	l := x.Ledger()
 	class := ""
 	if d.cfg.Class != nil {
 		class = d.cfg.Class()
@@ -370,12 +372,19 @@ func (d *Desk) build() View {
 			if cerr != nil {
 				continue
 			}
+			if l != nil {
+				row.Paid = append(row.Paid, paidFor(q, c, status.Diff, l)...)
+			}
 			row.Chunks = append(row.Chunks, ChunkRow{ID: cv.ID, Title: c.Title, State: cv.State, Readiness: cv.Reason, Why: cv.Why, Confirmed: cv.Confirmed})
 			if cv.State == Ready {
-				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused))
+				v.Offers = append(v.Offers, d.offer(q, c, cv, plan.AutoStart(status.Diff, qv.ID), !busy, class, level, v.Paused, status.Diff, l))
 			}
 			if cv.State == Done && plan.accepted(status.Diff, qv.ID, cv.ID) {
-				v.History = append(v.History, HistoryRow{Quest: qv.ID, Chunk: cv.ID, Title: c.Title, Accepted: acceptedAt(plan, status.Diff, qv.ID, cv.ID), Confirmed: cv.Confirmed})
+				h := HistoryRow{Quest: qv.ID, Chunk: cv.ID, Title: c.Title, Accepted: acceptedAt(plan, status.Diff, qv.ID, cv.ID), Confirmed: cv.Confirmed}
+				if l != nil {
+					h.Paid = paidFor(q, c, status.Diff, l)
+				}
+				v.History = append(v.History, h)
 			}
 		}
 		v.Quests = append(v.Quests, row)
@@ -420,7 +429,7 @@ func acceptedAt(p Plan, diff int, quest, chunk string) time.Time {
 	return time.Time{}
 }
 
-func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class string, level int, paused bool) OfferView {
+func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class string, level int, paused bool, diff int, l Ledger) OfferView {
 	risk := c.Risk
 	if risk == "" {
 		risk = q.Risk
@@ -445,6 +454,9 @@ func (d *Desk) offer(q Quest, c Chunk, cv ChunkView, auto, startable bool, class
 	}
 	if cv.Reason != ReadySafe && o.LegacyFloor > level && level > 0 {
 		o.LevelsToGo = o.LegacyFloor - level
+	}
+	if l != nil {
+		o.Pays = payFor(q, c, diff, l)
 	}
 	switch {
 	case paused:
@@ -573,7 +585,7 @@ func (d *Desk) awayCard(x *Exec) *AwayCard {
 		case EvAutoStart:
 			a.Kind, a.Text = "started", "Started "+t+" by itself"
 		case EvAutoHandIn:
-			a.Kind, a.Text = "handedIn", "Handed in "+t
+			a.Kind, a.Text, a.Awarded = "handedIn", "Handed in "+t, ev.Awarded
 			if ev.Note != "" {
 				a.Text += " (" + ev.Note + ")"
 			}
@@ -790,7 +802,10 @@ func (d *Desk) HandIn(quest, chunk string) Reply {
 		base.OK, base.Already, base.Pending, base.Status, base.Reason = true, true, true, http.StatusAccepted, "The hand-in is already running."
 		return base
 	case state == Done:
-		base.OK, base.Already, base.Status, base.Reason = true, true, http.StatusOK, d.title(quest)+" is already handed in."
+		// The evidence says done: settle (a crash between the read and the ledger write pays here) and say so.
+		base.OK, base.Status, base.Reason = true, http.StatusOK, d.title(quest)+" is already handed in."
+		base.Awarded = x.settleChunk(quest, chunk)
+		base.Already = len(base.Awarded) == 0
 		return base
 	case state != Awaiting:
 		return withBase(base, refuse(http.StatusConflict, CodeNotAwait, "%s is not waiting for the hand-in%s.", d.title(quest), whyState(state)))
@@ -816,7 +831,7 @@ func (d *Desk) runHandIn(x *Exec, quest, chunk, k string) {
 	case err != nil:
 		hv.State, hv.Reason = "failed", cleanErr(err)
 	case res.Outcome == HandInDone:
-		hv.State = "done"
+		hv.State, hv.Awarded = "done", res.Awarded
 	case res.Outcome == HandInConfirming:
 		hv.State, hv.Reason = "confirming", "The reward was seen; waiting for the game to confirm it."
 	default:

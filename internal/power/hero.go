@@ -50,6 +50,7 @@ type Hero struct {
 	Defence     int // armour class including gear and Dexterity
 	BlockPct    int
 	Resist      [4]int // fire, cold, lightning, poison
+	ResistMax   [4]int // max-resist bonus per element (cap 75 + this, d2.ResistTable); absorb is already folded into Resist
 	AR          int    // attack rating before percent (stat 19 plus the dexterity share), 0 = not read
 	DmgMin      int    // weapon base damage with enhanced damage (stats 21 and 22), 0 = not read
 	DmgMax      int
@@ -114,7 +115,12 @@ func HeroFromPlayer(p *d2.Player, merc *d2.MercSheet, potions int) Hero {
 		h.BlockPct = int(st.Get(StatBlock))
 		h.set(TermBlock, Derived) // gear sum only on an older fork; with the "hero" dump the fight model total (no skills, auras)
 	}
-	h.Resist = [4]int{p.Resist.Fire, p.Resist.Cold, p.Resist.Lightning, p.Resist.Poison}
+	// the panel value is read as shown (penalty and cap in it, U TASK-216), so only the absorb is folded here; it acts
+	// after the resistance in game.exe (decomp37 Q5) and is zero when the stat is absent
+	rt := d2.ResistTable
+	h.Resist = [4]int{rt.Intake(p.Resist.Fire, p.Absorb.FirePct), rt.Intake(p.Resist.Cold, p.Absorb.ColdPct),
+		rt.Intake(p.Resist.Lightning, p.Absorb.LightningPct), p.Resist.Poison}
+	h.ResistMax = [4]int{p.MaxResist.Fire, p.MaxResist.Cold, p.MaxResist.Lightning, p.MaxResist.Poison}
 	h.set(TermResist, Derived) // the penalty basis of the d2d panel value is U (TASK-216)
 	if st.Has(StatMinDmg) && st.Has(StatMaxDmg) && st.Get(StatMaxDmg) > 0 {
 		h.DmgMin, h.DmgMax = int(st.Get(StatMinDmg)), int(st.Get(StatMaxDmg))

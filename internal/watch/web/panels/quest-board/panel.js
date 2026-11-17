@@ -54,9 +54,19 @@ export function minutesText(m) {
   return m[1] && m[1] !== m[0] ? 'about ' + m[0] + ' to ' + m[1] + ' min' : 'about ' + m[0] + ' min';
 }
 
-// paysText is the meta payout in words; empty until the vault wallet exists (the API omits `pays`, slice S10).
+// The Ether the API reports as [{kind, amount}]: `pays` on an offer (what Hand in will pay), `awarded` / `paid` after it.
+// Empty while the API omits them (no wallet, or nothing left to earn).
+function etherSum(p) {
+  return Array.isArray(p) ? p.reduce((n, x) => n + (x && x.kind === 'ether' && x.amount > 0 ? x.amount : 0), 0) : 0;
+}
 export function paysText(p) {
-  return p && p.meta > 0 ? '+' + p.meta + ' meta' : '';
+  const n = etherSum(p);
+  return n ? 'pays ' + n + ' Ether' : '';
+}
+// awardText is the payoff: '+N Ether' in the toast and under the reward line of a done quest.
+export function awardText(p) {
+  const n = etherSum(p);
+  return n ? '+' + n + ' Ether' : '';
 }
 
 export function modeLine(mode) {
@@ -184,7 +194,7 @@ export function settle(v, local = shared, now = Date.now()) {
     const k = key(local.last.quest, local.last.chunk);
     if (!local.paid.has(k)) {
       local.paid.add(k);
-      const pays = paysText(v.handIn && handFor(v, local.last) ? v.handIn.pays : null);
+      const pays = awardText(v.handIn && handFor(v, local.last) ? v.handIn.awarded : null);
       out = { title: local.last.title, text: 'Done: ' + local.last.title + (pays ? '   ' + pays : '') };
     }
     local.last = null;
@@ -234,14 +244,14 @@ export function boardModel(v, local = shared, now = Date.now()) {
     });
     const g = GROUP_OF(q.state);
     if (!acts.has(q.act)) acts.set(q.act, []);
-    acts.get(q.act).push({ id: q.id, title: q.title, act: q.act, state: q.state, group: g, auto: !!q.auto, autoOk: q.autoOk !== false, chunks });
+    acts.get(q.act).push({ id: q.id, title: q.title, act: q.act, state: q.state, group: g, auto: !!q.auto, autoOk: q.autoOk !== false, paid: awardText(q.paid), chunks });
   }
   const order = (g) => (g === 'now' ? -1 : GROUPS.findIndex((x) => x[0] === g));
   const list = [...acts.keys()].sort((a, b) => a - b).map((n) => ({ act: n, name: actName(n), rows: acts.get(n).sort((a, b) => order(a.group) - order(b.group)) }));
   const cur = stripModel(v, local, now);
   const nowRow = ['running', 'awaiting', 'blocked', 'handingin', 'confirming', 'failed', 'countdown'].includes(cur.kind) ? cur : null;
-  const away = v.whileAway && (v.whileAway.events || []).length ? { events: v.whileAway.events.map((e) => ({ at: e.at, text: e.text })) } : null;
-  const hist = (v.history || []).slice(0, 5).map((h) => ({ title: h.title, text: (h.confirmed ? 'handed in' : 'started') + (paysText(h.pays) ? ', ' + paysText(h.pays) : '') }));
+  const away = v.whileAway && (v.whileAway.events || []).length ? { events: v.whileAway.events.map((e) => ({ at: e.at, text: e.text + (awardText(e.awarded) ? ', ' + awardText(e.awarded) : '') })) } : null;
+  const hist = (v.history || []).slice(0, 5).map((h) => ({ title: h.title, text: (h.confirmed ? 'handed in' : 'started') + (awardText(h.paid) ? ', ' + awardText(h.paid) : '') }));
   const open = list.find((a) => a.rows.some((r) => r.group !== 'done' && r.group !== 'skipped'));
   return { acts: list, now: nowRow, history: hist, mode: v.mode || 'train', modeActs: !!v.modeActs, actLabel: (open ? open.name : list.length ? list[list.length - 1].name : 'Quests') + ', ' + humanize(v.difficulty || 'normal'),
     auto: v.autoStart || { available: false, note: '' }, away, paused: !!v.paused, empty: list.length ? '' : 'No quests to show yet' };
@@ -406,6 +416,7 @@ export function mountBoard(root, ctx, tab) {
         const rows = done ? [] : multi ? row.chunks : row.chunks.slice(0, 1);
         rows.forEach((c, i) => inner.append(chunkLine(m, row, c, multi, i)));
         if (inner.children.length) li.append(inner);
+        if (row.paid && done) { const pd = ctx.el('span', 'qb-m qb-paid', row.paid); pd.title = 'Ether this quest paid'; li.append(pd); }
         ul.append(li);
       }
       sec.append(ul);
