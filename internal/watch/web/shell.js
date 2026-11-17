@@ -805,6 +805,13 @@ function setupMenu(sel) {
   pop.addEventListener('click', (e) => { if (e.target.closest('button:not(.d-menu-gh)')) close(false); }); // a group header folds, it does not close the menu
   const tools = [], hero = [], presets = []; // the menu's groups (groupMenu): Hero, Tools and the layout presets
   for (const id of ['btn-layout', 'btn-help', 'btn-theme']) { const b = document.getElementById(id); if (b) tools.push(b); }
+  const labelsItem = ui.btn('Item labels', { size: 'sm', variant: 'ghost' }); // the video tile's Labels button, so a tile in a drawer or a phone tab is still one tap away
+  labelsItem.dataset.key = 'labels-menu';
+  labelsItem.setAttribute('aria-label', 'Item labels: show or hide the names of items on the ground');
+  labelsItem.hidden = true;
+  labelsItem.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); if (b && !b.hidden) b.click(); });
+  more.addEventListener('click', () => { const b = document.querySelector('[data-key="labels"]'); labelsItem.hidden = !b || b.hidden; if (b) labelsItem.setAttribute('aria-pressed', b.getAttribute('aria-pressed') || 'false'); });
+  tools.push(labelsItem);
   let chip = null, menuReturn = null;
   const retLink = document.getElementById('returnlink');
   for (const [id, text] of [['log', 'Log'], ['quest-board', 'Quests'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
