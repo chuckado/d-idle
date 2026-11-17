@@ -81,18 +81,20 @@ test('detect keeps the MJPEG img unless the host says paletteFeed', async () => 
 
 // --- the player, driven by a fake clock, a fake animation frame and a body we push chunks into ---
 function rig(extra) {
-  const rafs = [], puts = [], clock = { t: 0 };
+  const rafs = [], puts = [], clock = { t: 0 }, timers = [];
   global.ImageData = function (d, w, h) { this.data = d; this.width = w; this.height = h; };
   const canvas = { width: 0, height: 0, getContext: () => ({ putImageData: (...a) => puts.push(a.slice(3)) }) };
   const waiters = [], chunks = [];
   const body = { getReader: () => ({ read: () => chunks.length ? Promise.resolve({ done: false, value: chunks.shift() }) : new Promise((r) => waiters.push(r)) }) };
   const ev = { frames: 0, bytes: 0, end: null, logs: [] };
-  const p = new PF.Player(Object.assign({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body }), raf: (cb) => rafs.push(cb), now: () => clock.t,
+  const p = new PF.Player(Object.assign({ canvas, url: '/s', fetch: () => Promise.resolve({ ok: true, body }), raf: (cb) => rafs.push(cb), timer: (fn) => timers.push(fn), now: () => clock.t,
     inflate: (b) => new Uint8Array(zlib.inflateRawSync(b)), onFrame: () => ev.frames++, onBytes: (n) => (ev.bytes += n), onEnd: (e) => { ev.end = e; }, log: (m) => ev.logs.push(m) }, extra));
   const push = async (buf) => { const v = new Uint8Array(buf); const w = waiters.shift(); if (w) w({ done: false, value: v }); else chunks.push(v); await settle2(); };
   // run the next animation frame at time ts
-  const frame = async (ts) => { clock.t = ts; const cb = rafs.shift(); if (cb) cb(ts); await settle2(); };
-  return { p, puts, rafs, clock, push, frame, ev };
+  const frame = async (ts, rafTs) => { clock.t = ts; const cb = rafs.shift(); if (cb) cb(rafTs === undefined ? ts : rafTs); await settle2(); };
+  // fire the fallback timer at time ts (the browser's timer, which keeps running when animation frames are withheld)
+  const tick = async (ts) => { clock.t = ts; const fn = timers.shift(); if (fn) fn(); await settle2(); };
+  return { p, puts, rafs, timers, clock, push, frame, tick, ev };
 }
 const settle2 = async () => { for (let i = 0; i < 6; i++) await new Promise((r) => setImmediate(r)); };
 // a wire message from a fixture with its seq, base seq and game ms patched (the payload is reused: only the header matters to the clock)
@@ -269,4 +271,89 @@ test('player: the delay does not breathe in steady arrival and relaxes slowly af
   }
   for (let i = 1; i < ds.length; i++) assert.ok(ds[i] <= ds[i - 1] + 0.01, 'delay only relaxes: ' + ds.join(','));
   assert.ok(ds[0] - ds[ds.length - 1] < 60 && ds[ds.length - 1] >= 66, 'relaxes slowly: ' + ds[0] + ' to ' + ds[ds.length - 1]);
+});
+
+// ---- regression: a user's stats overlay showed frames arriving (30 fps) but NOTHING presented for ~12 s with "dropped" spikes ----
+// Scenarios from the brief: animation-frame timestamps that disagree with performance.now, animation frames withheld, a key frame
+// stuck in the decompressor, a game-time jump either way, a 300 ms arrival pause. While frames keep arriving no gap between draws
+// may exceed 250 ms and shown must be at least 90 percent of the delivered frames in steady state.
+function gapsOf(draws, from) { const g = []; for (let i = 1; i < draws.length; i++) if (draws[i] >= from) g.push(draws[i] - draws[i - 1]); return g; }
+async function drive(r, opts) {
+  const step = 1000 / 30, N = opts.n || 300, draws = []; let ai = 0;
+  const arr = [];
+  for (let k = 0; k < N; k++) arr.push({ k, g: opts.game ? opts.game(k, Math.round(k * step)) : Math.round(k * step), at: 2000 + k * step + (opts.delay ? opts.delay(k) : 0) });
+  for (let i = 1; i < arr.length; i++) arr[i].at = Math.max(arr[i].at, arr[i - 1].at);
+  for (let ts = 2000; ts < 2000 + N * step + 600; ts += 1000 / 60) {
+    while (ai < arr.length && arr[ai].at <= ts) { const a = arr[ai++]; r.clock.t = a.at; await r.push(a.k === 0 ? patch(rd('key.pf'), 1, 0, a.g) : patch(rd('delta.pf'), a.k + 1, a.k, a.g)); }
+    const before = r.puts.length;
+    if (opts.noRaf) { await r.tick(ts); } else { await r.frame(ts, ts + (opts.skew || 0)); }
+    if (r.puts.length > before) draws.push(ts);
+  }
+  return draws;
+}
+test('presents when animation-frame timestamps lag performance.now by seconds (clock skew)', async () => {
+  const r = rig(); r.p.start(); await settle2();
+  const draws = await drive(r, { skew: -4000 });
+  const st = r.p.stats(), gaps = gapsOf(draws, 4000);
+  assert.ok(Math.max.apply(null, gaps) <= 250, 'max gap ' + Math.max.apply(null, gaps));
+  assert.ok(st.presented >= st.delivered * 0.9, 'shown ' + st.presented + ' of ' + st.delivered);
+  r.p.stop();
+});
+test('animation frames withheld for 3 s: the timer keeps the picture moving, and says so', async () => {
+  const mon = { ev: [], arrive() {}, shownFrame() {}, dropped() {}, delay() {}, event(k, l) { this.ev.push(k + ' ' + l); } };
+  const r = rig({ mon }); r.p.start(); await settle2();
+  const step = 1000 / 30; let ai = 0; const draws = [];
+  for (let k = 0; k < 240; k++) {
+    const at = 2000 + k * step; r.clock.t = at;
+    await r.push(k === 0 ? patch(rd('key.pf'), 1, 0, 0) : patch(rd('delta.pf'), k + 1, k, Math.round(k * step)));
+    const withheld = at > 3000 && at < 6000;                         // 3 s without animation frames
+    const before = r.puts.length;
+    if (withheld) { await r.tick(at + 20); } else { await r.frame(at + 20); await r.tick(at + 40); }
+    if (r.puts.length > before) draws.push(at);
+  }
+  const gaps = gapsOf(draws, 2500);
+  assert.ok(Math.max.apply(null, gaps) <= 250, 'max gap ' + Math.max.apply(null, gaps));
+  assert.ok(mon.ev.some((e) => /^raf-stall/.test(e)), 'the stall is named: ' + mon.ev.join(' | '));
+  r.p.stop();
+});
+test('a key frame stuck in the decompressor for over 500 ms reconnects (new key frame), named in the events', async () => {
+  const mon = { ev: [], arrive() {}, shownFrame() {}, dropped() {}, delay() {}, event(k, l) { this.ev.push(k + ' ' + l); } };
+  let release; const stuck = new Promise((res) => { release = res; });
+  let n = 0;
+  const r = rig({ mon, inflate: (b) => (++n === 2 ? stuck : new Uint8Array(zlib.inflateRawSync(b))) });
+  r.p.start(); await settle2();
+  r.clock.t = 1000; await r.push(patch(rd('key.pf'), 1, 0, 0)); await r.frame(1100);
+  r.clock.t = 1200; await r.push(patch(rd('delta.pf'), 2, 1, 40));    // its inflate never finishes
+  r.clock.t = 1230; await r.push(patch(rd('delta.pf'), 3, 2, 80));
+  await r.frame(1400); assert.strictEqual(r.ev.end, null, 'not yet');
+  await r.frame(1800); assert.ok(r.ev.end && /inflate stall/.test(r.ev.end.message), 'reconnect after the stall: ' + (r.ev.end && r.ev.end.message));
+  assert.ok(mon.ev.some((e) => /^resync inflate stall/.test(e)), mon.ev.join(' | '));
+  release(new Uint8Array(0)); r.p.stop();
+});
+test('a game-time jump forward by 10 s or back by 400 ms never stops the picture', async () => {
+  for (const game of [(k, g) => (k < 100 ? g : g + 10000), (k, g) => (k < 100 ? g : g - 400), (k, g) => (k < 100 ? g : g - 5000)]) {
+    const r = rig(); r.p.start(); await settle2();
+    const draws = await drive(r, { game });
+    const st = r.p.stats(), gaps = gapsOf(draws, 4000);
+    assert.ok(Math.max.apply(null, gaps) <= 250, 'max gap ' + Math.max.apply(null, gaps) + ' shown ' + st.presented);
+    assert.ok(st.presented >= st.delivered * 0.9, 'shown ' + st.presented + ' of ' + st.delivered);
+    r.p.stop();
+  }
+});
+test('a 300 ms arrival pause and burst: no presented gap beyond the pause itself, nothing lost afterwards', async () => {
+  const r = rig(); r.p.start(); await settle2();
+  const draws = await drive(r, { delay: (k) => (k >= 150 && k < 160 ? 300 : 0) });
+  const gaps = gapsOf(draws, 4000), st = r.p.stats();
+  assert.ok(Math.max.apply(null, gaps) <= 250 + 50, 'max gap ' + Math.max.apply(null, gaps));
+  assert.ok(st.presented >= st.delivered * 0.9, 'shown ' + st.presented + ' of ' + st.delivered);
+  r.p.stop();
+});
+test('an entry with an absurd due time is taken by the age rule, not held', async () => {
+  const r = rig(); r.p.start(); await settle2();
+  r.clock.t = 1000; await r.push(patch(rd('key.pf'), 1, 0, 0)); await r.frame(1100);
+  r.clock.t = 1200; await r.push(patch(rd('delta.pf'), 2, 1, 40));
+  r.p.q[r.p.q.length - 1].due = 1200 + 60000;                          // cannot happen by construction (capped at arrival + 200 ms)
+  await r.frame(1400); assert.strictEqual(r.puts.length, 1, 'held while younger than 260 ms');
+  await r.frame(1500); assert.strictEqual(r.puts.length, 2, 'taken once older than 260 ms');
+  r.p.stop();
 });

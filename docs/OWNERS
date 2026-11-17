@@ -255,6 +255,7 @@ data/questboard  credit-runner  quests1
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 data/vault  credit-runner  vaultv2
+deploy/d2d-container/context.sh  credit-runner  videofeed5
 deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
@@ -497,6 +498,7 @@ docs/vault.md  credit-runner  vaultv3
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
+docs/video-feed.md  credit-runner  videofeed5
 docs/wiring.md  credit-runner  wiring2
 internal/art/skillicons.go  credit-runner  skilltrees
 internal/art/skillicons_test.go  credit-runner  skilltrees
@@ -612,6 +614,7 @@ internal/bot/zoneshadow.go  credit-runner  survB
 internal/bot/zoneshadow.go  credit-runner  survC
 internal/bot/zoneshadow.go  credit-runner  survfix2
 internal/bot/zoneshadow_test.go  credit-runner  survC
+internal/buildinfo  credit-runner  videofeed5
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
 internal/charsel  credit-runner  charselect
@@ -1098,6 +1101,7 @@ internal/watch/web/onboarding.js  credit-runner  onboardtour
 internal/watch/web/palfeed.js  credit-runner  videofeed
 internal/watch/web/palfeed.js  credit-runner  videofeed2
 internal/watch/web/palfeed.js  credit-runner  videofeed4
+internal/watch/web/palfeed.js  credit-runner  videofeed5
 internal/watch/web/panels/activity/panel.js  credit-runner  exploredpct
 internal/watch/web/panels/area-map/  credit-runner  uis6
 internal/watch/web/panels/area-map/panel.json  credit-runner  uifix1
@@ -1178,7 +1182,9 @@ tools/ab/prep  credit-runner  survfix2
 tools/ab/prep  credit-runner  survtune
 tools/bounce3  pro-runner  bounce3
 tools/dev-update-host.sh  credit-runner  buildhosts3
+tools/dev-update-host.sh  credit-runner  videofeed5
 tools/dev-update.sh  credit-runner  buildhosts3
+tools/dev-update.sh  credit-runner  videofeed5
 tools/emu  credit-runner  emurebuild
 tools/emu/am_batch.sh  credit-runner  areamon
 tools/emu/am_env.sh  credit-runner  areamon
@@ -1278,4 +1284,5 @@ tools/uishots/serve.go  credit-runner  uis7
 tools/videofeed  credit-runner  videofeed
 tools/videofeed  credit-runner  videofeed2
 tools/videofeed  credit-runner  videofeed4
+tools/videofeed  credit-runner  videofeed5
 # END GENERATED OWNERS
