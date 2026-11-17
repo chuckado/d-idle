@@ -23,6 +23,16 @@ const (
 	Trimmed   State = "trimmed"   // final, archived
 )
 
+// Stages of a reveal or sale errand (slice V6). Each is logged BEFORE the game step it names, so a restart can tell what
+// may exist in the hero.
+const (
+	StageRevBegin   = "rb" // reveal: the temporary copy is about to be created (it may or may not exist)
+	StageRevMade    = "rc" // reveal: the copy exists in the hero and is not yet identified in the vault
+	StageRevCleanup = "rt" // reveal: the identified bytes are stored; the temporary copy still has to leave the hero
+	StageSellBegin  = "sb" // sale: the copy is about to be created in the pack
+	StageSellMade   = "sc" // sale: the copy exists; the sale is under way
+)
+
 // Keep targets.
 const (
 	WhereStash = "stash"
@@ -67,9 +77,12 @@ type Rec struct {
 	Pin      bool      `json:"pin,omitempty"`
 	InFlight bool      `json:"inflight,omitempty"` // a keep create was started and not confirmed
 	Attempts int       `json:"attempts,omitempty"`
-	Where    string    `json:"where,omitempty"`  // keep target: "" or stash, inv
-	Reason   string    `json:"reason,omitempty"` // last failure or trim/discard reason
-	Gold     int       `json:"gold,omitempty"`   // sale price once sold
+	Where    string    `json:"where,omitempty"`   // keep target: "" or stash, inv
+	Reason   string    `json:"reason,omitempty"`  // last failure or trim/discard reason
+	Gold     int       `json:"gold,omitempty"`    // sale price once sold
+	RevQ     bool      `json:"revq,omitempty"`    // Reveal asked: the item is identified at the next town visit (V6)
+	Stage    string    `json:"stage,omitempty"`   // in-flight step of a reveal or sale (Stage* constants), "" when idle
+	GoldPre  int       `json:"goldpre,omitempty"` // purse before the sale create, for the read-back after a restart
 	Updated  time.Time `json:"updated"`
 	seq      int       // position in insertion order
 }
@@ -94,4 +107,5 @@ var (
 	ErrPinCap       = errors.New("vault: pin limit reached")
 	ErrInvalid      = errors.New("vault: invalid item")
 	ErrTooLarge     = errors.New("vault: import too large")
+	ErrPinned       = errors.New("vault: pinned items are never sold")
 )

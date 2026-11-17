@@ -62,15 +62,24 @@ type Keeper struct {
 	PerVisit func() int    // loot.vaultKeepPerVisit
 	Budget   time.Duration // most wall time of one Run before it yields (default 8 s)
 
-	mu       sync.Mutex
-	backedUp bool
-	tripped  string // a read-back mismatch switches creating off for the process
-	info     Info
-	tripWant bool
-	noticed  map[string]bool
-	caps     d2dctl.VaultCaps // cached for capsTTL: the page polls, the socket is shared
-	capsAt   time.Time
-	capsOK   bool
+	// Reveal and Sell (slice V6); nil Tools or Vendor leaves that errand off.
+	Tools        Identifier
+	Vendor       Seller
+	SellPerVisit func() int                                 // loot.vaultSellPerVisit
+	Namer        func(d2dctl.VaultRecord, vault.Rec) string // display name of an identified record (default: the old name)
+	ShortBy      func() int                                 // gold the town budget is short by (repair, potions, merc); 0 none
+	Prompt       func() bool                                // loot.vaultSellPrompt
+
+	mu         sync.Mutex
+	promptMute time.Time
+	backedUp   bool
+	tripped    string // a read-back mismatch switches creating off for the process
+	info       Info
+	tripWant   bool
+	noticed    map[string]bool
+	caps       d2dctl.VaultCaps // cached for capsTTL: the page polls, the socket is shared
+	capsAt     time.Time
+	capsOK     bool
 }
 
 const capsTTL = 60 * time.Second
@@ -101,6 +110,14 @@ type Info struct {
 	Full     bool   `json:"full,omitempty"`    // the stash (or pack) has no room: a Needs-you row
 	Tripped  string `json:"tripped,omitempty"` // creating is off until restart, and why
 	Done     int    `json:"done"`              // created in this process
+
+	RevQueued   int `json:"revQueued"`  // Reveal waiting
+	RevWorking  int `json:"revWorking"` // Reveal with a step done in the game
+	Revealed    int `json:"revealed"`   // revealed in this process
+	SellQueued  int `json:"sellQueued"` // Sell waiting
+	SellWorking int `json:"sellWorking"`
+	Sold        int `json:"sold"` // sold in this process
+	GoldEarned  int `json:"goldEarned"`
 }
 
 func (k *Keeper) now() time.Time {
@@ -252,10 +269,17 @@ func codeOf(err error) string {
 
 // Pending is the number of records waiting for a create (queued or in flight).
 func (k *Keeper) Pending() int {
-	if st := k.store(); st != nil {
-		return len(st.KeepQueued())
+	st := k.store()
+	if st == nil {
+		return 0
 	}
-	return 0
+	n := len(st.KeepQueued()) + len(st.SellQueued())
+	for _, r := range st.RevealQueued() {
+		if r.State == vault.Recorded { // a keep-combined reveal is counted with its keep
+			n++
+		}
+	}
+	return n
 }
 
 // TripWanted reports whether the player pressed Keep now and the hero is not yet home; Run clears it.
@@ -280,6 +304,20 @@ func (k *Keeper) Info() Info {
 				in.Queued++
 			}
 		}
+		for _, r := range st.RevealQueued() {
+			if r.Stage != "" {
+				in.RevWorking++
+			} else {
+				in.RevQueued++
+			}
+		}
+		for _, r := range st.SellQueued() {
+			if r.Stage != "" {
+				in.SellWorking++
+			} else {
+				in.SellQueued++
+			}
+		}
 	}
 	return in
 }
@@ -289,38 +327,53 @@ type created struct {
 	place string
 }
 
-// Run creates queued items, bounded by PerVisit and Budget, and returns one log line per notable event. It never blocks
-// longer than Budget plus one verb round trip. Call it only at a safe moment in town; it checks Ready itself.
+// Run creates the queued Keep items, then runs the Reveal and Sell errands, each bounded by its per-visit cap and Budget.
+// It returns one log line per notable event. Call it only at a safe moment in town; it checks Ready itself.
 func (k *Keeper) Run(ctx context.Context) []string {
-	st := k.store()
-	if st == nil || len(st.KeepQueued()) == 0 {
-		k.setWaiting("")
-		return nil
-	}
+	lines := k.runKeep(ctx)
+	lines = append(lines, k.runReveal(ctx)...)
+	return append(lines, k.runSell(ctx)...)
+}
+
+// runGate is the shared start of every errand: enabled, hero ready, fork verbs present. It sets Waiting when it says no.
+func (k *Keeper) runGate(ctx context.Context) bool {
 	if !k.enabled() {
 		k.setWaiting(ReasonOff)
-		return nil
+		return false
 	}
 	if k.Ready != nil {
 		if why := k.Ready(); why != "" {
 			k.setWaiting(why)
-			return nil
+			return false
 		}
 	}
-	if caps, _, err := k.vaultCaps(ctx, true); err != nil {
+	caps, _, err := k.vaultCaps(ctx, true)
+	switch {
+	case err != nil:
 		k.setWaiting(ReasonBusy)
-		return nil
-	} else if !caps.ItemCreate || !caps.ItemFull {
+		return false
+	case !caps.ItemCreate || !caps.ItemFull || !caps.ItemVault:
 		k.setWaiting(ReasonVerbs)
-		k.note("verbs", "Keep is waiting: "+ReasonVerbs)
-		return nil
+		k.note("verbs", "Keep, Reveal and Sell are waiting: "+ReasonVerbs)
+		return false
 	}
 	k.clearNote("verbs")
 	k.setWaiting("")
 	k.mu.Lock()
 	k.tripWant = false
 	k.mu.Unlock()
+	return true
+}
 
+func (k *Keeper) runKeep(ctx context.Context) []string {
+	st := k.store()
+	if st == nil || len(st.KeepQueued()) == 0 {
+		k.setWaiting("")
+		return nil
+	}
+	if !k.runGate(ctx) {
+		return nil
+	}
 	var lines []string
 	var confirm []created
 	deadline := k.now().Add(orDur(k.Budget, defaultBudget))
@@ -348,7 +401,17 @@ func (k *Keeper) Run(ctx context.Context) []string {
 			k.setWaiting(ReasonBusy)
 			return append(lines, "keep: cannot read the hero, in-flight items stay as they are: "+err.Error())
 		}
-		if k.presentIn(st, r, have) {
+		if r.RevQ && k.Tools != nil {
+			if c, line := k.resumeKeepReveal(ctx, st, r, have); c != nil {
+				confirm = append(confirm, *c)
+				if line != "" {
+					lines = append(lines, line)
+				}
+			} else if line != "" {
+				lines = append(lines, line)
+			}
+			havePack = false
+		} else if k.presentIn(st, r, have) {
 			confirm = append(confirm, created{r, placeOf(r)})
 		} else if err := st.RetryKeep(r.ID, ""); err != nil {
 			lines = append(lines, "keep: "+r.ID+" requeue: "+err.Error())
@@ -498,7 +561,8 @@ func (k *Keeper) createOne(ctx context.Context, st *vault.Store, r vault.Rec) (*
 	if err := st.BeginKeep(r.ID); err != nil {
 		return nil, "keep: " + r.ID + " begin: " + err.Error(), true
 	}
-	o := d2dctl.CreateOpts{Pack: r.Where == vault.WhereInv, Key: keyPrefix + r.ID}
+	// Identify works on backpack items, so a Keep that also asks for Reveal lands in the backpack (the stash chore files it).
+	o := d2dctl.CreateOpts{Pack: r.Where == vault.WhereInv || r.RevQ && !r.Identified && k.Tools != nil, Key: keyPrefix + r.ID}
 	res, err := k.API.ItemCreate(ctx, r.Raw, o)
 	if err != nil {
 		switch {
@@ -551,14 +615,21 @@ func (k *Keeper) createOne(ctx context.Context, st *vault.Store, r vault.Rec) (*
 		} else {
 			why += "; the new copy was removed again"
 		}
-		k.mu.Lock()
-		k.tripped = "read-back mismatch"
-		k.mu.Unlock()
-		k.note("tripped", "Keep stopped for this run: a created item did not match the recorded one. Nothing else is created until the bot restarts.")
+		k.trip("read-back mismatch")
 		_, line, _ := fail(why)
 		return nil, line, true
 	}
-	place := fmt.Sprintf("%s %d,%d", placeOf(r), res.Col, res.Row)
+	place := fmt.Sprintf("%s %d,%d", map[bool]string{true: "backpack", false: "stash"}[o.Pack], res.Col, res.Row)
+	if r.RevQ && !r.Identified && k.Tools != nil {
+		nr, why, unknown := k.revealInPlace(ctx, st, r, res.ID)
+		switch {
+		case unknown:
+			return nil, fmt.Sprintf("keep: %s created, reveal %s; left in flight", r.Name, why), true
+		case why != "":
+			return &created{nr, place}, fmt.Sprintf("keep: %s kept unidentified, not revealed: %s", r.Name, why), false
+		}
+		return &created{nr, place}, "", false
+	}
 	return &created{r, place}, "", false
 }
 
@@ -604,4 +675,61 @@ func plural(n int) string {
 		return ""
 	}
 	return "s"
+}
+
+// resumeKeepReveal settles an in-flight Keep that also asked for Reveal: it finds the created copy (unidentified, or
+// already identified in the game) and finishes the reveal in place. A record whose copy is nowhere is queued again.
+func (k *Keeper) resumeKeepReveal(ctx context.Context, st *vault.Store, r vault.Rec, have []d2dctl.VaultRecord) (*created, string) {
+	if u := k.presentUnit(st, r.Raw, have); u != 0 {
+		nr, why, unknown := k.revealInPlace(ctx, st, r, u)
+		switch {
+		case unknown:
+			return nil, "keep: " + r.Name + " reveal " + why + "; left in flight"
+		case why != "":
+			return &created{nr, "backpack"}, fmt.Sprintf("keep: %s kept unidentified, not revealed: %s", r.Name, why)
+		}
+		return &created{nr, "backpack"}, ""
+	}
+	if h := k.adoptable(st, r, have); h != nil {
+		if why := k.recordReveal(st, r, *h); why != "" {
+			_ = st.RevealFail(r.ID, revStored(why))
+			return &created{r, "backpack"}, "keep: " + r.Name + " kept, not revealed: " + why
+		}
+		nr, _ := st.Get(r.ID)
+		return &created{nr, "backpack"}, ""
+	}
+	if err := st.RetryKeep(r.ID, ""); err != nil {
+		return nil, "keep: " + r.ID + " requeue: " + err.Error()
+	}
+	return nil, "keep: " + r.ID + " was not created before the restart, queued again"
+}
+
+func (k *Keeper) waitLine(verb string, n int) string {
+	in := k.Info()
+	s := fmt.Sprintf("%s %d item%s", verb, n, plural(n))
+	switch {
+	case in.Tripped != "":
+		return s + ": stopped, " + in.Tripped
+	case in.Waiting != "":
+		return s + ": waiting, " + in.Waiting
+	}
+	return s + ": at your next town visit"
+}
+
+// RevealLine is the progress sentence of Reveal requests, "" when none is queued.
+func (k *Keeper) RevealLine() string {
+	in := k.Info()
+	if n := in.RevQueued + in.RevWorking; n > 0 {
+		return k.waitLine("Revealing", n)
+	}
+	return ""
+}
+
+// SellLine is the progress sentence of the sell errand, "" when none is queued.
+func (k *Keeper) SellLine() string {
+	in := k.Info()
+	if n := in.SellQueued + in.SellWorking; n > 0 {
+		return k.waitLine("Selling", n)
+	}
+	return ""
 }

@@ -22,3 +22,18 @@ var Act2 []byte
 //
 //go:embed readiness.json
 var Readiness []byte
+
+// Act3 is act3.json (quests.def/1).
+//
+//go:embed act3.json
+var Act3 []byte
+
+// Act4 is act4.json (quests.def/1).
+//
+//go:embed act4.json
+var Act4 []byte
+
+// Act5 is act5.json (quests.def/1).
+//
+//go:embed act5.json
+var Act5 []byte

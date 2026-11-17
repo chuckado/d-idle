@@ -223,6 +223,11 @@ func deriveChunk(b *Board, q Quest, c Chunk, fact Fact, in Input) ChunkView {
 		cv.State, cv.Why = Locked, why
 		return cv
 	}
+	// No handler can run it yet: shown with the reason, never startable (slice S7).
+	if c.Unsupported != "" {
+		cv.State, cv.Why = Available, "not supported yet: "+c.Unsupported
+		return cv
+	}
 	// Awaiting hand-in: the pending bit on exact evidence, or the objective met on a chunk the player started.
 	// T3 is enough to STOP and ask for the tap, never to skip work (design 1.4).
 	if c.Ends == "handin" && ((fact.Known && fact.Pending && fact.Tier.Exact()) || (rec && cf.Objective)) {

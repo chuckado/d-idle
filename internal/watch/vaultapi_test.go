@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -502,4 +503,176 @@ func rowOf(t *testing.T, s *vault.Store, id string) VaultItem {
 		t.Fatal("missing")
 	}
 	return vaultRow(&rec)
+}
+
+// stubActor queues Reveal and Sell through the store like internal/vaultkeep does, with switchable gates.
+type stubActor struct {
+	st      *vault.Store
+	revGate string // "" ok, else the refusal code (the reason is the code text)
+	sellGat string
+	charges int
+	free    bool
+	dismiss int
+}
+
+func (a *stubActor) GateReveal(context.Context) (bool, string, string) {
+	if a.revGate != "" {
+		return false, a.revGate, "reveal refused: " + a.revGate
+	}
+	return true, "", ""
+}
+func (a *stubActor) GateSell(context.Context) (bool, string, string) {
+	if a.sellGat != "" {
+		return false, a.sellGat, "sell refused: " + a.sellGat
+	}
+	return true, "", ""
+}
+func (a *stubActor) EnqueueReveal(_ context.Context, ids []string, _ bool) []VaultKeepResult {
+	var out []VaultKeepResult
+	for _, id := range ids {
+		rec, ok := a.st.Get(id)
+		switch {
+		case !ok:
+			out = append(out, VaultKeepResult{ID: id, Code: "missing", Why: "no such item"})
+		case rec.RevQ:
+			out = append(out, VaultKeepResult{ID: id, OK: true, Already: true})
+		case rec.Identified:
+			out = append(out, VaultKeepResult{ID: id, Code: "state", Why: "it is identified already"})
+		case !a.free && a.charges <= 0:
+			out = append(out, VaultKeepResult{ID: id, Code: "noscroll", Why: "no scroll; buy on request"})
+		default:
+			_ = a.st.RevealWant(id)
+			out = append(out, VaultKeepResult{ID: id, OK: true})
+		}
+	}
+	return out
+}
+func (a *stubActor) EnqueueSell(_ context.Context, ids []string, _ bool) []VaultKeepResult {
+	var out []VaultKeepResult
+	for _, id := range ids {
+		if err := a.st.MarkSell(id); err != nil {
+			code := "state"
+			if errors.Is(err, vault.ErrPinned) {
+				code = "pinned"
+			}
+			out = append(out, VaultKeepResult{ID: id, Code: code, Why: err.Error()})
+			continue
+		}
+		out = append(out, VaultKeepResult{ID: id, OK: true})
+	}
+	return out
+}
+func (a *stubActor) Cancel(ids []string) []VaultKeepResult {
+	var out []VaultKeepResult
+	for _, id := range ids {
+		err := a.st.CancelSell(id)
+		out = append(out, VaultKeepResult{ID: id, OK: err == nil, Code: "state"})
+	}
+	return out
+}
+func (a *stubActor) DismissOffer() { a.dismiss++ }
+func (a *stubActor) Act(context.Context) VaultActView {
+	v := VaultActView{Reveal: VaultRevealView{Enabled: a.revGate == "", Charges: a.charges, Free: a.free, PerItem: 1}, Sell: VaultSellView{Enabled: a.sellGat == ""}}
+	for _, r := range a.st.RevealQueued() {
+		v.Reveal.Queued += map[bool]int{true: 1}[r.Stage == ""]
+	}
+	v.Sell.Queued = len(a.st.SellQueued())
+	return v
+}
+
+func actAPI(s *vault.Store, a *stubActor) *VaultAPI {
+	tiers, _ := vault.DefaultTiers()
+	api := NewVaultAPI()
+	api.Bind(VaultDesk{On: func() bool { return true }, Store: func() *vault.Store { return s }, Tiers: tiers, Act: a})
+	return api
+}
+
+func TestVaultRevealAndSellRoutes(t *testing.T) {
+	s := testVault(t, 12, 100)
+	a := &stubActor{st: s, charges: 2}
+	api := actAPI(s, a)
+	_, un := getVault(t, api, "/api/vault?identified=0&limit=10")
+	_, idf := getVault(t, api, "/api/vault?identified=1&pinned=0&limit=10")
+	if len(un.Items) < 2 || len(idf.Items) < 3 {
+		t.Fatalf("fixture: %d unidentified, %d identified", len(un.Items), len(idf.Items))
+	}
+	// reveal: ok, idempotent, identified refused with the real reason, no scroll refused with the buy hint
+	code, rep, _ := postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{un.Items[0].ID}, Now: true})
+	if code != 200 || !rep.OK || len(rep.Done) != 1 {
+		t.Fatalf("reveal %d %+v", code, rep)
+	}
+	if _, rep, _ = postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{un.Items[0].ID}}); len(rep.Already) != 1 {
+		t.Fatalf("second press: %+v", rep)
+	}
+	_, rep, _ = postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{idf.Items[0].ID}})
+	if rep.OK || len(rep.Failed) != 1 || rep.Failed[0].Code != "state" {
+		t.Fatalf("identified: %+v", rep)
+	}
+	a.charges = 0
+	_, rep, _ = postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{un.Items[1].ID}})
+	if len(rep.Failed) != 1 || rep.Failed[0].Code != "noscroll" || !strings.Contains(rep.Failed[0].Error, "buy on request") {
+		t.Fatalf("no scroll: %+v", rep)
+	}
+	a.revGate = "dead"
+	if code, _, pr := postVault(t, api, VaultRevealRoute, vaultBody{IDs: []string{un.Items[1].ID}}); code != 409 || pr.Code != "dead" {
+		t.Fatalf("gate: %d %+v", code, pr)
+	}
+	// sell: needs confirm; pinned refused by code
+	if code, _, pr := postVault(t, api, VaultSellRoute, vaultBody{IDs: []string{idf.Items[0].ID}}); code != 400 || pr.Code != "confirm" {
+		t.Fatalf("confirm: %d %+v", code, pr)
+	}
+	pin := idf.Items[1].ID
+	if err := s.Pin(pin); err != nil {
+		t.Fatal(err)
+	}
+	_, rep, _ = postVault(t, api, VaultSellRoute, vaultBody{IDs: []string{idf.Items[0].ID, pin}, Confirm: true})
+	if len(rep.Done) != 1 || len(rep.Failed) != 1 || rep.Failed[0].Code != "pinned" {
+		t.Fatalf("sell: %+v", rep)
+	}
+	// the page reads the state back from GET: row words, the price and the queue
+	_, v := getVault(t, api, "/api/vault?limit=100&state=recorded,sellq")
+	var sq, rq int
+	for _, it := range v.Items {
+		if it.Sell == "queued" {
+			sq++
+		}
+		if it.Reveal == "queued" {
+			rq++
+		}
+	}
+	if sq != 1 || rq != 1 || v.Act == nil || v.Act.Sell.Queued != 1 || v.Act.Reveal.Queued != 1 || v.Act.Reveal.PerItem != 1 {
+		t.Fatalf("read back: sell %d reveal %d act %+v", sq, rq, v.Act)
+	}
+	// dismiss
+	if code, _, _ := postVault(t, api, VaultPromptRoute, vaultBody{Dismiss: true}); code != 200 || a.dismiss != 1 {
+		t.Fatalf("dismiss %d %d", code, a.dismiss)
+	}
+	// detail actions carry the reasons
+	w := httptest.NewRecorder()
+	api.Handler().ServeHTTP(w, httptest.NewRequest("GET", "/api/vault/item/"+url.PathEscape(pin), nil))
+	var d VaultDetail
+	json.Unmarshal(w.Body.Bytes(), &d)
+	if d.Actions["sell"].OK || !strings.Contains(d.Actions["sell"].Reason, "never sold") {
+		t.Fatalf("pinned card: %+v", d.Actions["sell"])
+	}
+}
+
+func TestVaultActReadOnlyAndAbsent(t *testing.T) {
+	s := testVault(t, 4, 100)
+	ids := []string{"x"}
+	// no actor: routes answer off
+	if code, _, pr := postVault(t, vaultAPI(s, true), VaultRevealRoute, vaultBody{IDs: ids}); code != 409 || pr.Code != "off" {
+		t.Fatalf("no actor: %d %+v", code, pr)
+	}
+	// knob off: read only
+	tiers, _ := vault.DefaultTiers()
+	a := NewVaultAPI()
+	a.Bind(VaultDesk{On: func() bool { return false }, Store: func() *vault.Store { return s }, Tiers: tiers, Act: &stubActor{st: s, charges: 1}})
+	if code, _, pr := postVault(t, a, VaultSellRoute, vaultBody{IDs: ids, Confirm: true}); code != 409 || pr.Code != "off" {
+		t.Fatalf("read only: %d %+v", code, pr)
+	}
+	_, v := getVault(t, a, "/api/vault")
+	if v.Act == nil || v.Act.Reveal.Enabled || v.Act.Sell.Enabled || !strings.Contains(v.Act.Sell.Why, "read only") {
+		t.Fatalf("read only act view: %+v", v.Act)
+	}
 }

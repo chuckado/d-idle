@@ -54,7 +54,7 @@ func TestVaultPageServedAndTexts(t *testing.T) {
 	if err != nil || json.Unmarshal(b, &tx) != nil {
 		t.Fatal("vault.json unreadable")
 	}
-	for _, code := range []string{"off", "state", "missing", "pincap", "confirm", "ids", "internal", "dead", "verbs", "stopped", "target", "insufficient", "in-use", "out-of-order", "maxed", "nothing-to-refund", "wallet", "token", "origin", "content-type", "method", "body"} {
+	for _, code := range []string{"off", "state", "missing", "pincap", "confirm", "ids", "internal", "dead", "verbs", "stopped", "target", "noscroll", "pinned", "insufficient", "in-use", "out-of-order", "maxed", "nothing-to-refund", "wallet", "token", "origin", "content-type", "method", "body"} {
 		if tx.Refusals[code] == "" {
 			t.Errorf("no text for the refusal code %q", code)
 		}

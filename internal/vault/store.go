@@ -33,6 +33,7 @@ type event struct {
 	Reason string    `json:"reason,omitempty"`
 	N      int       `json:"n,omitempty"`     // sold: gold
 	Where  string    `json:"where,omitempty"` // keepq: the target, stash (default) or inv
+	Stage  string    `json:"stage,omitempty"` // reveal and sale steps: the stage entered
 }
 
 // Options configure a Store. Zero values are usable except Capacity.
@@ -358,8 +359,38 @@ func (s *Store) apply(ev *event) error {
 			return fmt.Errorf("%w: %s create in flight", ErrState, r.ID)
 		}
 		r.State, r.Updated = Recorded, ev.T
+	case "revq":
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		r.RevQ, r.Reason, r.Updated = true, "", ev.T
+	case "revcancel":
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		r.RevQ, r.Updated = false, ev.T
+	case "rstage": // reveal or sale step entered
+		r, err := need(Recorded, KeepQ, SellQ)
+		if err != nil {
+			return err
+		}
+		r.Stage, r.Updated = ev.Stage, ev.T
+		if ev.Stage == StageSellBegin {
+			r.GoldPre, r.Attempts = ev.N, r.Attempts+1
+		}
+		if ev.Stage == StageRevBegin {
+			r.Attempts++
+		}
+	case "rfail": // reveal ends without a result; the item stays as recorded
+		r, err := need(Recorded, KeepQ)
+		if err != nil {
+			return err
+		}
+		r.RevQ, r.Stage, r.Reason, r.Updated = false, "", ev.Reason, ev.T
 	case "reveal":
-		r, err := need(Recorded)
+		r, err := need(Recorded, KeepQ)
 		if err != nil {
 			return err
 		}
@@ -370,25 +401,33 @@ func (s *Store) apply(ev *event) error {
 		r.Raw, r.Name, r.Identified, r.Value = ev.Item.Raw, ev.Item.Name, true, ev.Item.Value
 		r.Hash = hashOf(r.Raw)
 		s.liveHash[r.Hash] = r
-		r.Updated = ev.T
+		r.Updated, r.RevQ, r.Reason = ev.T, false, ""
+		if r.Stage == StageRevMade && r.State == Recorded {
+			r.Stage = StageRevCleanup
+		} else {
+			r.Stage = ""
+		}
 	case "sellq":
 		r, err := need(Recorded)
 		if err != nil {
 			return err
 		}
-		r.State, r.Updated = SellQ, ev.T
-	case "sellfail":
+		if r.Pin {
+			return ErrPinned
+		}
+		r.State, r.Reason, r.Updated = SellQ, "", ev.T
+	case "sellfail", "sellcancel":
 		r, err := need(SellQ)
 		if err != nil {
 			return err
 		}
-		r.State, r.Reason, r.Updated = Recorded, ev.Reason, ev.T
+		r.State, r.Stage, r.GoldPre, r.Reason, r.Updated = Recorded, "", 0, ev.Reason, ev.T
 	case "sold":
 		r, err := need(SellQ)
 		if err != nil {
 			return err
 		}
-		r.Gold = ev.N
+		r.Gold, r.Stage, r.Reason = ev.N, "", ev.Reason
 		s.leave(r, Sold, ev.T)
 	case "discard":
 		r, err := need(Recorded)
@@ -558,8 +597,29 @@ func (s *Store) dry(ev *event) error {
 		if !r.Pin && s.pins+1 > s.pinLimit() {
 			return ErrPinCap
 		}
-	case "unpin", "keepq", "reveal", "sellq", "discard":
+	case "unpin":
 		return ok(Recorded)
+	case "keepq", "discard":
+		if err := ok(Recorded); err != nil {
+			return err
+		}
+		if r.Stage != "" { // a reveal has a copy in the hero: let it finish first
+			return fmt.Errorf("%w: %s has a reveal in flight", ErrState, r.ID)
+		}
+	case "sellq":
+		if err := ok(Recorded); err != nil {
+			return err
+		}
+		if r.Pin {
+			return ErrPinned
+		}
+		if r.Stage != "" {
+			return fmt.Errorf("%w: %s has a reveal in flight", ErrState, r.ID)
+		}
+	case "revq", "revcancel", "rfail":
+		return ok(Recorded, KeepQ)
+	case "rstage":
+		return ok(Recorded, KeepQ, SellQ)
 	case "kbegin":
 		if err := ok(KeepQ); err != nil {
 			return err
@@ -576,7 +636,7 @@ func (s *Store) dry(ev *event) error {
 		if r.InFlight {
 			return fmt.Errorf("%w: %s create in flight", ErrState, r.ID)
 		}
-	case "sellfail", "sold":
+	case "sellfail", "sellcancel", "sold":
 		return ok(SellQ)
 	}
 	return nil
@@ -649,7 +709,7 @@ func (s *Store) Reveal(id string, identified Item) error {
 	if r == nil {
 		return ErrNotFound
 	}
-	if r.State != Recorded {
+	if r.State != Recorded && r.State != KeepQ {
 		return fmt.Errorf("%w: %s is %s, event reveal", ErrState, id, r.State)
 	}
 	h := hashOf(identified.Raw)
@@ -662,11 +722,92 @@ func (s *Store) Reveal(id string, identified Item) error {
 	return s.commit(&event{Ev: "reveal", ID: id, Item: &identified})
 }
 
+// MarkSell queues a record for the sell errand; a pinned record is refused (ErrPinned).
 func (s *Store) MarkSell(id string) error { return s.op(id, event{Ev: "sellq"}) }
+
+// FailSell ends a sale with a reason; the record goes back to Recorded.
 func (s *Store) FailSell(id, reason string) error {
 	return s.op(id, event{Ev: "sellfail", Reason: reason})
 }
+
+// CancelSell takes a queued sale back (not while its create is in flight).
+func (s *Store) CancelSell(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if r := s.byID[id]; r != nil && r.State == SellQ && r.Stage != "" {
+		return fmt.Errorf("%w: %s sale in flight", ErrState, id)
+	}
+	return s.opLocked(id, event{Ev: "sellcancel"})
+}
+
+// Sold ends a sale with the gold the read-back saw.
 func (s *Store) Sold(id string, gold int) error { return s.op(id, event{Ev: "sold", N: gold}) }
+
+// SoldNote is Sold with a note (an unconfirmed gold read-back) kept in the record.
+func (s *Store) SoldNote(id string, gold int, note string) error {
+	return s.op(id, event{Ev: "sold", N: gold, Reason: note})
+}
+
+// RevealWant queues a reveal (identify) for an unidentified record in Recorded or KeepQ. Idempotent callers check RevQ.
+func (s *Store) RevealWant(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	r := s.byID[id]
+	if r == nil {
+		return ErrNotFound
+	}
+	if r.Identified {
+		return fmt.Errorf("%w: %s is identified already", ErrState, id)
+	}
+	return s.opLocked(id, event{Ev: "revq"})
+}
+
+// RevealCancel takes a queued reveal back while no step of it ran.
+func (s *Store) RevealCancel(id string) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if r := s.byID[id]; r != nil && r.Stage != "" {
+		return fmt.Errorf("%w: %s reveal in flight", ErrState, id)
+	}
+	return s.opLocked(id, event{Ev: "revcancel"})
+}
+
+// RevealFail ends a reveal with a reason; the item stays as it was recorded.
+func (s *Store) RevealFail(id, reason string) error {
+	return s.op(id, event{Ev: "rfail", Reason: reason})
+}
+
+// SetStage logs the step a reveal or sale is entering (Stage* constants; "" clears it). For StageSellBegin gold is the
+// purse before the create. Log it BEFORE the game step.
+func (s *Store) SetStage(id, stage string, gold int) error {
+	return s.op(id, event{Ev: "rstage", Stage: stage, N: gold})
+}
+
+// RevealQueued lists records with a reveal wanted, oldest first: pure reveals (Recorded) and keep-combined (KeepQ).
+func (s *Store) RevealQueued() []Rec {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var out []Rec
+	for _, r := range s.recs {
+		if (r.RevQ || r.Stage == StageRevCleanup) && (r.State == Recorded || r.State == KeepQ) {
+			out = append(out, *r)
+		}
+	}
+	return out
+}
+
+// SellQueued lists records marked for the sell errand, oldest first.
+func (s *Store) SellQueued() []Rec {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	var out []Rec
+	for _, r := range s.recs {
+		if r.State == SellQ {
+			out = append(out, *r)
+		}
+	}
+	return out
+}
 
 // Discard archives the record, then marks it discarded. It never deletes in the same step: the archive line is
 // durable before the log line, and the archive is purged only by PurgeArchive.

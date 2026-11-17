@@ -101,7 +101,7 @@ func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}}
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}}
 	if eh != nil {
 		desk.Owned = eh.owned
 	}

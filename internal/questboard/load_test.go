@@ -12,12 +12,11 @@ func TestLoadEmbedded(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if n := len(b.Quests()); n != 14 {
-		t.Fatalf("quests = %d, want 14 (7 per act)", n)
-	}
-	a1, err := b.Act(1)
-	if err != nil || len(a1) != 7 {
-		t.Fatalf("act 1: %d %v", len(a1), err)
+	for act, want := range map[int]int{1: 7, 2: 7, 3: 7, 4: 4, 5: 6} {
+		qs, err := b.Act(act)
+		if err != nil || len(qs) != want {
+			t.Fatalf("act %d: %d quests, want %d (%v)", act, len(qs), want, err)
+		}
 	}
 	staff, _ := b.Quest("horadric_staff")
 	if len(staff.Chunks) != 3 {
