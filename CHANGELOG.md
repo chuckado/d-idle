@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- Merge branch 'main' into quests6 <!--sg:agent/quests6-->
 - Merge branch 'main' into survreask <!--sg:agent/survreask-->
 - Merge branch 'main' into TASK-591 <!--sg:agent/vaultv7-->
 - survtune4: badFloor 0.55, holdout and fresh-seed addendum <!--sg:agent/survtune4-->
