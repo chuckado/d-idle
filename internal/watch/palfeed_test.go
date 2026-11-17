@@ -86,7 +86,8 @@ func TestMonitorAssetsServedAndBuildInConfig(t *testing.T) {
 			t.Fatalf("%s: %d, %d bytes", p, resp.StatusCode, len(b))
 		}
 	}
-	if h.Config().Build == "" {
+	h.SetBuild("dev")
+	if h.Config().Build != "dev" {
 		t.Fatal("config has no build id")
 	}
 }

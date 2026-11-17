@@ -1,7 +1,6 @@
 package watch
 
 import (
-	"d2lod-bot/internal/buildinfo"
 	"fmt"
 	"sort"
 	"strings"
@@ -464,5 +463,5 @@ type ConfigView struct {
 
 func (h *Hub) Config() ConfigView {
 	return ConfigView{Schema: configSchema, AnswerBase: strings.TrimRight(h.cfg.AnswerBase, "/"), AnswerPort: h.cfg.AnswerPort,
-		FadeSec: h.cfg.Cat.Config.FadeSec, FrameURL: h.cfg.FrameURL, PalFeedURL: h.palFeedURL(), Build: buildinfo.Current(), Currency: h.cur.Load() != nil}
+		FadeSec: h.cfg.Cat.Config.FadeSec, FrameURL: h.cfg.FrameURL, PalFeedURL: h.palFeedURL(), Build: h.build, Currency: h.cur.Load() != nil}
 }
