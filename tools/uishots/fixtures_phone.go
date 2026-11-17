@@ -21,7 +21,10 @@ import (
 // phoneArt is the size in cells of the art of an item code, so a tall item gets a tall picture.
 var phoneArt = map[string][2]int{"8ss": {1, 3}, "rin": {1, 1}, "tsc": {1, 1}, "isc": {1, 1}, "tbk": {1, 2}, "hla": {2, 3}, "gth": {2, 4}, "tar": {2, 2}, "buc": {2, 2}, "pik": {2, 4},
 	"jew": {1, 1}, "cm1": {1, 1}, "cm2": {1, 2}, "ltp": {2, 3}, "amu": {1, 1}, "hp1": {1, 1}, "mp1": {1, 1}, "hp2": {1, 1}, "sst": {1, 3}, "cap": {2, 2}, "qui": {2, 3}, "lgl": {2, 2},
-	"lbl": {2, 1}, "lbt": {2, 2}}
+	"lbl": {2, 1}, "lbt": {2, 2}, "gsw": {1, 1}}
+
+// fxKind is the kind word the server sends from the tables (itemMeta GoalType).
+var fxKind = map[string]string{"jew": "jewel", "rin": "ring", "amu": "amulet", "cm1": "charm", "cm2": "charm", "gsw": "gem", "hp1": "potion", "mp1": "potion", "hp2": "potion", "zzz": "jewel"}
 
 func init() {
 	fxVariants["phone"] = func(v map[string]any) {
@@ -63,11 +66,22 @@ func init() {
 			item(51, "pik", "Pike", "magic", 0, 3, 2, 4, nil),
 			item(52, "hla", "Hard Leather Armor", "normal", 2, 3, 2, 3, nil),
 			item(53, "tar", "Targe", "normal", 4, 3, 2, 2, nil),
+			item(54, "jew", "Jewel", "magic", 0, 2, 1, 1, map[string]any{"identified": false}),
+			item(55, "jew", "Jewel", "rare", 1, 2, 1, 1, map[string]any{"identified": false}),
+			item(56, "jew", "Rainbow Facet", "unique", 4, 2, 1, 1, nil),
+			item(57, "jew", "Jewel", "normal", 5, 2, 1, 1, nil),
+			item(58, "gsw", "Flawless Skull", "normal", 5, 1, 1, 1, nil),
+			item(59, "amu", "Amulet", "magic", 4, 5, 1, 1, map[string]any{"identified": false}),
+			item(60, "zzz", "Unmapped Thing", "magic", 5, 5, 1, 1, nil), // no icon in the set: the type fallback
 		}
 		for _, l := range []string{"backpack", "belt", "stash"} {
 			for _, x := range v[l].([]any) {
 				m := x.(map[string]any)
 				m["art"] = m["code"]
+				m["kind"] = fxKind[m["code"].(string)]
+				if m["code"] == "zzz" {
+					delete(m, "art")
+				}
 			}
 		}
 	}
@@ -102,6 +116,10 @@ func (fixtureArt) PNG(key string) ([]byte, error) {
 			case strings.HasPrefix(key, "slot-"):
 				if (x+y)%7 == 0 {
 					img.SetNRGBA(x, y, color.NRGBA{90, 90, 90, 80})
+				}
+			case strings.HasSuffix(key, "-jew"): // like the game's untinted jewel: a white diamond
+				if dx, dy := abs(x-w/2), abs(y-h/2); dx+dy < w/2-3 {
+					img.SetNRGBA(x, y, color.NRGBA{235, 235, 235, 255})
 				}
 			case x > 3 && y > 3 && x < w-4 && y < h-4: // a body with a lighter top so the picture has some detail at any size
 				d := uint8(y * 60 / h)

@@ -43,11 +43,22 @@
     return o;
   }
   // artImg adds a game-art <img> to host; when it fails to load the image goes away and the host reverts to its drawn look.
-  function artImg(host, cls, key) {
+  function artImg(host, cls, key, it) {
     var i = el('img', cls); i.setAttribute('alt', ''); i.setAttribute('src', '/watch/art/' + key + '.png');
     host.dataset.shown = '';
-    i.addEventListener('error', function () { host.removeChild(i); delete host.dataset.shown; });
+    i.addEventListener('error', function () { host.removeChild(i); delete host.dataset.shown; if (it) typeFallback(host, it, 'icon not found: ' + key); });
     host.appendChild(i);
+  }
+  // typeFallback: art is on but this item has no icon: a type glyph on a dashed cell, never a picture of another item. The glyph says the kind
+  // (J jewel, R ring, A amulet, C charm, G gem, N rune, P potion, ? other); debug mode (?debug or localStorage d2debug) logs each code once.
+  var FB = { jewel: 'J', ring: 'R', amulet: 'A', charm: 'C', gem: 'G', rune: 'N', potion: 'P', key: 'K', helm: 'H', armor: 'T', shield: 'S', boots: 'B', gloves: 'L', belt: 'E', weapon: 'W' };
+  var fbSeen = {};
+  function debugOn() { try { return /[?&]debug\b/.test(location.search) || !!localStorage.getItem('d2debug'); } catch (e) { return false; } }
+  function typeFallback(host, it, why) {
+    host.dataset.fb = it.kind || 'item';
+    if (!host.querySelector('.fbg')) host.appendChild(el('span', 'fbg', FB[it.kind] || '?'));
+    var k = String(it.code);
+    if (!fbSeen[k] && debugOn()) { fbSeen[k] = 1; console.debug('d2 inventory: type fallback for item code ' + k + ' (' + (it.kind || 'no kind') + '): ' + why); }
   }
   function qual(e, it) { if (it.quality) e.classList.add('q-' + it.quality); }
   function button(text, fn, disabled, opts) {
@@ -109,7 +120,9 @@
       var b = el('button', 'item'); b.type = 'button'; qual(b, it); b.dataset.key = 'item-' + it.id; b.dataset.h = String(h);
       b.style.gridArea = (it.y + 1) + ' / ' + (it.x + 1) + ' / span ' + h + ' / span ' + w;
       b.textContent = name(it); b.title = name(it);
-      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art);
+      if (it.kind) b.dataset.kind = it.kind;
+      if (art.on && it.art && ART_NAME.test(it.art)) artImg(b, 'ico', 'item-' + it.art, it);
+      else if (art.on) typeFallback(b, it, 'no icon name');
       if (it.mark) { b.dataset.mark = it.mark; b.appendChild(el('span', 'mk', it.mark === 'sell' ? 'S' : 'K')); }
       if (sel && sel.id === it.id) b.classList.add('sel');
       b.addEventListener('click', function () { select({ id: it.id }); });

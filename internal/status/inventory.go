@@ -22,6 +22,7 @@ type Item struct {
 	MaxDur     int       `json:"maxDur,omitempty"` // maximum durability, 0 = the item has none or it was not read
 	Props      []string  `json:"props,omitempty"`  // tooltip lines
 	Art        string    `json:"art,omitempty"`    // inventory icon name (lower case, no extension) for /watch/art/item-<art>.png; empty = unknown, draw the cell
+	Kind       string    `json:"kind,omitempty"`   // item kind word from the tables (jewel, charm, ring, amulet, gem, rune, potion, ...): the page's type fallback when the icon is missing, and it tints untinted jewel art
 	Tip        []string  `json:"tip,omitempty"`    // the game's own tooltip lines as d2d prints them, name first (S: d2d "items" verb; U: colour codes, line order)
 	Base       *ItemBase `json:"base,omitempty"`   // base-type facts from the game tables (data.ItemBase), the fallback when Tip is empty
 	Sell       int       `json:"sell,omitempty"`   // vendor sell price in gold (loot.SellValue: a lower bound for magic, rare, set and unique items)
