@@ -171,7 +171,7 @@ export function mount(root, ctx) {
       ov.style.setProperty('--ov-w', w + 'px'); ov.style.setProperty('--ov-h', h + 'px');
     }
     const g = ov.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0);
-    drawStats(g, w, h, mon, { player: mon.player, build: ctx.config && ctx.config.build, view: viewInfo() }, scratch, compact);
+    drawStats(g, w, h, mon, { player: mon.player, build: ctx.config && ctx.config.build, view: viewInfo(), delay: player && player.stats ? player.stats().delayMs : 0 }, scratch, compact);
     ovPoll();
     ctx.later(ovDraw, 200);
   }

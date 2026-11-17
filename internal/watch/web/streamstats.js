@@ -7,7 +7,7 @@ export const HITCH_MS = 52;   // "over 50 ms": two refresh intervals of a 60 Hz 
 export const MAX_GAPS = 1200;
 export const MAX_EVENTS = 64;
 export const HEIGHT_FULL = 266;
-export const HEIGHT_COMPACT = 208;
+export const HEIGHT_COMPACT = 184;
 
 // StreamMonitor keeps one-second buckets for the last WINDOW_S + 1 seconds, the individual presentation gaps (ms between two
 // shown frames) of the window, and the events. clock() is wall ms (Date.now), injected for tests.
@@ -173,12 +173,14 @@ export function draw(ctx, w, h, mon, info, scratch, compact) {
     ctx.fillStyle = P.dim; ctx.fillText('gap ms', 2, y - 1); ctx.fillText('50', 6, y50 - px);
     y += hS + 6;
   }
-  // 4. presentation delay line (ms)
-  const hD = compact ? 18 : 24; let topD = 100; for (let k = 0; k < WINDOW_S; k++) if (ser.delay[k] === ser.delay[k]) topD = Math.max(topD, ser.delay[k]); topD = Math.ceil(topD / 50) * 50;
-  ctx.strokeStyle = P.deliv; ctx.lineWidth = 1.2; ctx.beginPath(); let st = false;
-  for (let k = 0; k < WINDOW_S; k++) { const v = ser.delay[k]; if (v !== v) { st = false; continue; } const yy = y + hD - v / topD * hD; st ? ctx.lineTo(xs(k), yy) : ctx.moveTo(xs(k), yy); st = true; } ctx.stroke();
-  ctx.fillStyle = P.dim; ctx.fillText('delay ms ' + topD, 2, y - 1);
-  y += hD + 4;
+  // 4. presentation delay line (ms); the phone variant leaves it out (the summary line carries the number) to keep the card short
+  if (!compact) {
+    const hD = 24; let topD = 100; for (let k = 0; k < WINDOW_S; k++) if (ser.delay[k] === ser.delay[k]) topD = Math.max(topD, ser.delay[k]); topD = Math.ceil(topD / 50) * 50;
+    ctx.strokeStyle = P.deliv; ctx.lineWidth = 1.2; ctx.beginPath(); let st = false;
+    for (let k = 0; k < WINDOW_S; k++) { const v = ser.delay[k]; if (v !== v) { st = false; continue; } const yy = y + hD - v / topD * hD; st ? ctx.lineTo(xs(k), yy) : ctx.moveTo(xs(k), yy); st = true; } ctx.stroke();
+    ctx.fillStyle = P.dim; ctx.fillText('delay ms ' + topD, 2, y - 1);
+    y += hD + 4;
+  }
   // time axis: ticks every 5 s, labels at both ends, and "now"
   ctx.strokeStyle = P.dim; ctx.lineWidth = 1; ctx.beginPath();
   for (let s = 0; s <= WINDOW_S; s += 5) { const x = L + s / WINDOW_S * W; ctx.moveTo(x, y); ctx.lineTo(x, y + (s % 10 === 0 ? 5 : 3)); }
@@ -190,7 +192,7 @@ export function draw(ctx, w, h, mon, info, scratch, compact) {
   for (let k = k0; k < ev.length; k++) line2 += (line2 ? '  ' : '') + hms(ev[k].t) + ' ' + ev[k].kind + (ev[k].label ? ' ' + ev[k].label : '');
   // summary line
   ctx.fillStyle = sum.hitches ? P.hitch : P.fg;
-  ctx.fillText(sum.fps + ' fps  ' + sum.kBps + ' kB/s  gap p95 ' + Math.round(sum.p95) + ' ms  hitches ' + sum.hitches, pad, y);
+  ctx.fillText(sum.fps + ' fps  ' + sum.kBps + ' kB/s  gap p95 ' + Math.round(sum.p95) + ' ms  hitches ' + sum.hitches + (compact && info.delay ? '  delay ' + Math.round(info.delay) + ' ms' : ''), pad, y);
   y += px + 3; ctx.fillStyle = P.dim; ctx.fillText(line2 || 'no events', pad, y);
   return y + px + pad;   // the height used
 }

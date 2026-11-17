@@ -2,8 +2,8 @@
 const test = require('node:test'), assert = require('node:assert'), fs = require('node:fs'), vm = require('node:vm'), path = require('node:path');
 const src = fs.readFileSync(path.join(__dirname, '../../internal/watch/web/streamstats.js'), 'utf8').replace(/^export /gm, '');
 const ctx = { Date, Math, Float64Array, Float32Array, Int32Array, Array, Object, JSON, Number, String };
-vm.runInNewContext(src + '\n;this.X = { StreamMonitor, SlowGate, draw, PALETTE, WINDOW_S, HITCH_MS };', ctx);
-const { StreamMonitor, SlowGate, draw, WINDOW_S, HITCH_MS } = ctx.X;
+vm.runInNewContext(src + '\n;this.X = { StreamMonitor, SlowGate, draw, PALETTE, WINDOW_S, HITCH_MS, HEIGHT_FULL, HEIGHT_COMPACT };', ctx);
+const { StreamMonitor, SlowGate, draw, WINDOW_S, HITCH_MS, HEIGHT_FULL, HEIGHT_COMPACT } = ctx.X;
 const mk = () => ({ deliv: [], shown: [], drop: [], kB: [], keys: [], delay: [], thr: [], cpu: [], ring: [] });
 function clock(t0) { const c = { t: t0, now: () => c.t }; return c; }
 
@@ -63,7 +63,7 @@ test('draw paints every chart, the time axis and the summary without throwing, i
   for (const compact of [false, true]) {
     texts.length = 0;
     const used = draw(g, compact ? 300 : 360, 220, m, { player: 'palette', build: 'v1', view: '1075x700' }, mk(), compact);
-    assert.ok(used > 80 && used < 400, 'height ' + used);
+    assert.ok(used > 80 && used <= (compact ? HEIGHT_COMPACT : HEIGHT_FULL), 'height ' + used + ' against the canvas ' + (compact ? HEIGHT_COMPACT : HEIGHT_FULL));
     const all = texts.join('|');
     assert.ok(/\d\d:\d\d:\d\d/.test(all), 'timestamps'); assert.ok(/now/.test(all), 'now marker'); assert.ok(/hitches 1/.test(all), 'hitch count: ' + all);
     assert.ok(/palette/.test(all) && /v1/.test(all) && /30 s/.test(all), 'header');
