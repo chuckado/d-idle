@@ -161,11 +161,13 @@ func questGlance(v *watch.GlanceView, variant string, class string) {
 // Defects of the quest board (fit pages questdefect-NAME must FAIL with the verdict mustFail names): the real page with one defect put
 // back. q-clip cuts the reason lines of the sheet; q-small makes the buttons 20 px (a phone's thumb); q-two shows every drawer at once;
 // q-words writes a chapter counter and a margin number into the strip tile.
+var questJS = map[string]string{}
+
 func init() {
 	defectCSS["q-clip"] = `[data-panel="quest-board"] .qb-r { white-space: nowrap !important; overflow: hidden !important; inline-size: 60px !important; }`
 	defectCSS["q-small"] = `[data-panel^="quest-"] :is(.qb-btn, .qb-seg, .qb-sw, .qs-btn, .qs-seg) { min-block-size: 0 !important; block-size: 20px !important; }`
 	defectCSS["q-two"] = `.d-drawer[hidden] { display: flex !important; }`
-	overlayJS["q-words"] = `setInterval(function () {
+	questJS["q-words"] = `setInterval(function () {
   var n = document.querySelector('[data-panel="quest-strip"] .qs-sub');
   if (n && !/chapter/.test(n.textContent)) n.textContent += '  chapter 3 of 9, margin 2.4';
 }, 300);`

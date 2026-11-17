@@ -108,12 +108,12 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Del("X-Frame-Options")
 	body := rec.Body.Bytes()
-	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" || vaultJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" || vaultJS[d] != "" || questJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
 		add := ""
 		if defectCSS[d] != "" {
 			add += `<link rel="stylesheet" href="/__fit/defect-` + d + `.css">`
 		}
-		if overlayJS[d] != "" || vaultJS[d] != "" {
+		if overlayJS[d] != "" || vaultJS[d] != "" || questJS[d] != "" {
 			add += `<script src="/__fit/defect-` + d + `.js"></script>`
 		}
 		body = bytes.Replace(body, []byte("</head>"), []byte(add+"</head>"), 1)

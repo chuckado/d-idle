@@ -32,6 +32,9 @@ func serveDefectJS(w http.ResponseWriter, r *http.Request) bool {
 	if src == "" {
 		src = vaultJS[n]
 	}
+	if src == "" {
+		src = questJS[n]
+	}
 	if !ok || src == "" {
 		return false
 	}
