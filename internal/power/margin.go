@@ -6,6 +6,7 @@ import (
 	"math"
 	"slices"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/danger"
 	"d2lod-bot/internal/resource"
 )
@@ -257,7 +258,7 @@ func (m *Model) margin(h Hero, a *Archetype, pk Pack, low bool, est OffenceDPS) 
 				w = math.Max(w, v)
 			}
 			if i, ok := m.P.ElementIndex[hz]; ok && i < len(h.Resist) {
-				res := math.Min(75, float64(h.Resist[i]))
+				res := math.Min(float64(d2.ResistTable.Cap(h.ResistMax[i])), float64(h.Resist[i]))
 				fr = math.Min(fr, 1-pr.ElemShare+pr.ElemShare*(1-res/100))
 			}
 		}
