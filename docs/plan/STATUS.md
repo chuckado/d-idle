@@ -238,6 +238,7 @@
 | decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -280,6 +281,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- ba3a37a72 11-16 22:47 `Merge agent/palfeedflaky: palfeedflaky: deterministic palfeed guard tests (main CI red)` (palfeedflaky)
+- 31d647688 11-16 22:46 `Merge branch 'main' into palfeedflaky` (-)
 - cdc624907 11-16 22:03 `Merge agent/quests1: Merge branch 'main' into quests1` (quests1)
 - 1cb530a5e 11-16 22:02 `Merge branch 'main' into quests1` (-)
 - f6a131582 11-16 21:52 `Merge agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc)` (survtune2)
@@ -288,6 +291,4 @@
 - bfe89b7e3 11-16 21:45 `Merge agent/questdesign: Merge branch 'main' into questdesign` (questdesign)
 - 3ca847cf2 11-16 21:43 `Merge branch 'main' into vault` (-)
 - 17de4f93e 11-16 21:43 `Merge branch 'main' into questdesign` (-)
-- 8f7f19e4a 11-16 21:24 `Merge agent/videofeed4: videofeed4: stream monitor overlay, stable presentation clock, throttle-aware feed, measured hitch cause` (videofeed4)
-- 56b9b9911 11-16 21:10 `Merge remote-tracking branch 'origin/main' into agent/videofeed4` (-)
 <!-- statusgen:end -->

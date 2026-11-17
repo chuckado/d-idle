@@ -878,6 +878,7 @@ internal/watch/orderloop_test.go  credit-runner  uib7
 internal/watch/orderqueue.json  credit-runner  uib7
 internal/watch/orders.go  credit-runner  uib4
 internal/watch/orders_untillevel_test.go  credit-runner  uib4
+internal/watch/palfeed  credit-runner  palfeedflaky
 internal/watch/palfeed  credit-runner  videofeed
 internal/watch/palfeed  credit-runner  videofeed2
 internal/watch/palfeed  credit-runner  videofeed4
