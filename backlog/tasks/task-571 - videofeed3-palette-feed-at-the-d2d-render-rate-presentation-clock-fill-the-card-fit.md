@@ -1,10 +1,13 @@
 ---
 id: TASK-571
-title: 'videofeed3: palette feed at the d2d render rate, presentation clock, fill-the-card fit'
-status: Proposed
+title: >-
+  videofeed3: palette feed at the d2d render rate, presentation clock,
+  fill-the-card fit
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-16T23:08:00Z'
+updated_date: '2026-11-17T00:08:00Z'
 labels:
   - watch
   - bug
