@@ -252,6 +252,7 @@ cmd/d2bot/survivalwire.go  credit-runner  quests4
 cmd/d2bot/survivalwire.go  credit-runner  survC
 cmd/d2bot/survivalwire.go  credit-runner  survfix
 cmd/d2bot/survivalwire.go  credit-runner  survfix2
+cmd/d2bot/survivalwire.go  credit-runner  survreask
 cmd/d2bot/tidywire_test.go  credit-runner  tidy
 cmd/d2bot/vaultpage.go  credit-runner  vaultv4
 cmd/d2bot/vaultpage_test.go  credit-runner  vaultv4
@@ -380,6 +381,7 @@ docs/probes/ready-audit.md  live-agent  ready-audit
 docs/probes/recoverypace/  live-agent  recoverypace
 docs/probes/survival-ab-8seed-2026-11-16.md  credit-runner  survab8
 docs/probes/survival-ab-8seed-rerun-2026-11-16.md  credit-runner  survtune
+docs/probes/survival-ab-reask-2026-11-17.md  credit-runner  survreask
 docs/probes/test-characters.md  credit-runner  survab8
 docs/probes/test-characters.md  credit-runner  survtune
 docs/probes/test-characters.md  live-agent  fid-fixtures
@@ -576,6 +578,7 @@ internal/bot/loop.go  credit-runner  hourfix
 internal/bot/loop.go  credit-runner  passagebounce
 internal/bot/loop.go  credit-runner  resetinstant
 internal/bot/loop.go  credit-runner  staletarget
+internal/bot/loop.go  credit-runner  survreask
 internal/bot/loop.go  pro-runner  bounce3
 internal/bot/nokill_test.go  credit-runner  freshstart
 internal/bot/observe.go  credit-runner  arrivalsettle
@@ -585,6 +588,7 @@ internal/bot/observe.go  credit-runner  intake
 internal/bot/observe.go  credit-runner  lockscan
 internal/bot/observe.go  credit-runner  passagebounce
 internal/bot/observe.go  credit-runner  staletarget
+internal/bot/observe.go  credit-runner  survreask
 internal/bot/observe.go  pro-runner  bounce3
 internal/bot/ordersguard.go  credit-runner  staletarget
 internal/bot/parkstep_test.go  credit-runner  botstuck
@@ -632,11 +636,14 @@ internal/bot/whyline.go  credit-runner  repairtrip
 internal/bot/whyline.go  credit-runner  staletarget
 internal/bot/whyline_test.go  credit-runner  uifix1
 internal/bot/zonemodel.go  credit-runner  survfix2
+internal/bot/zonemodel.go  credit-runner  survreask
 internal/bot/zonemodel_test.go  credit-runner  survfix2
+internal/bot/zonereask_test.go  credit-runner  survreask
 internal/bot/zoneshadow.go  credit-runner  intake
 internal/bot/zoneshadow.go  credit-runner  survB
 internal/bot/zoneshadow.go  credit-runner  survC
 internal/bot/zoneshadow.go  credit-runner  survfix2
+internal/bot/zoneshadow.go  credit-runner  survreask
 internal/bot/zoneshadow_test.go  credit-runner  survC
 internal/campaign/  credit-runner  campaign1
 internal/campaign/campaign_test.go  pro-runner  levelplan3
@@ -850,6 +857,7 @@ internal/survival  credit-runner  survfix2
 internal/survival  credit-runner  survsd
 internal/survival  credit-runner  survtune
 internal/survival/  credit-runner  survC
+internal/survival/controller.go  credit-runner  survreask
 internal/survival/ledger.go  credit-runner  intake
 internal/survival/survival_test.go  credit-runner  survfix
 internal/task/campaign.go  credit-runner  campaign1

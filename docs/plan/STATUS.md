@@ -250,6 +250,7 @@
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | vaultv7 | proposed | - | `internal/ether`<br>`data/vault/ether.json`<br>`internal/watch/etherapi.go`<br>`internal/watch/etherapi_test.go`<br>`docs/ether.md`<br>`docs/vault.md`<br>`docs/tally-strip.md`<br>`docs/design/loot-vault-2026-11-16.md`<br>`data/vault/vault.go` | - |
 | quests4 | in-progress | - | `internal/questboard`<br>`internal/watch/questsapi.go`<br>`internal/watch/questsapi_test.go`<br>`internal/watch/glance.go`<br>`internal/watch/funwire.go`<br>`internal/watch/testdata/quests`<br>`internal/bot/runner.go`<br>`cmd/d2bot/survivalwire.go`<br>`cmd/d2bot/behaviors.go`<br>`cmd/d2bot/glancewire.go`<br>`cmd/d2bot/ladder.go`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/live.go`<br>`cmd/d2bot/questwire.go`<br>`cmd/d2bot/questwire_test.go`<br>`internal/bot/questboard.go`<br>`internal/bot/questboard_test.go`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
+| survreask | proposed | - | `internal/bot/zonemodel.go`<br>`internal/bot/zonereask_test.go`<br>`internal/bot/loop.go`<br>`internal/bot/observe.go`<br>`internal/bot/zoneshadow.go`<br>`internal/survival/controller.go`<br>`cmd/d2bot/survivalwire.go`<br>`docs/probes/survival-ab-reask-2026-11-17.md` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
 | currency-slice | deferred | - | `internal/currencyflow/`<br>`docs/probes/currency-drill.md` | - |
@@ -291,6 +292,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- c605f1467 11-17 01:52 `Merge agent/survreask: Merge branch 'main' into survreask` (survreask)
+- d49b91236 11-17 01:51 `Merge branch 'main' into survreask` (-)
 - ca6717a59 11-17 01:33 `Merge agent/vaultv7: Merge branch 'main' into TASK-591` (vaultv7)
 - 0dae52824 11-17 01:32 `Merge branch 'main' into TASK-591` (-)
 - b577b5c9c 11-17 01:23 `Merge agent/survtune4: survtune4: badFloor 0.55, holdout and fresh-seed addendum` (survtune4)
@@ -299,6 +302,4 @@
 - 3de5eeed7 11-17 01:14 `Merge agent/quests4: Merge branch 'main' into quests4` (quests4)
 - 08d2a0f92 11-17 01:13 `Merge branch 'main' into quests4` (-)
 - 3b40bbb8c 11-17 01:08 `Merge agent/vaultv4: Ethereal Vault V4: read API and /watch/vault page (filters, grid and list, multi-select, pin/unpin/discard, capacity meter, entry points)` (vaultv4)
-- 194a9f499 11-17 01:07 `Merge branch 'main' into vaultv4` (-)
-- ed9e947f1 11-17 00:56 `Merge remote-tracking branch 'origin/main' into agent/survtune4` (-)
 <!-- statusgen:end -->
