@@ -19,7 +19,8 @@ type Source struct {
 	Hook         bool           `json:"hook,omitempty"`
 	MaxHook      int            `json:"maxHook,omitempty"`
 	ByDifficulty bool           `json:"byDifficulty,omitempty"` // the difficulty is part of the key
-	DailyCap     int            `json:"dailyCap,omitempty"`     // most ETHER this source pays per UTC day; 0 = no cap
+	DailyCap     int            `json:"dailyCap,omitempty"`     // most ETHER this source pays per local day; 0 = no cap
+	Per          int            `json:"per,omitempty"`          // kills source: kills that earn one credit
 }
 
 // Sources is data/vault/ether.json.

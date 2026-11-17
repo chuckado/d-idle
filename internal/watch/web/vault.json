@@ -88,7 +88,7 @@
   "okKeepAlready": "{n} already queued or kept; nothing changed.",
   "upgrade": "Upgrade",
   "upgradeFor": "Upgrade +{add} for {price} {cur}",
-  "upgradeWhy": "Buying capacity arrives with the Ether wallet (V7)",
+  "upgradeWhy": "Capacity upgrades need the vault switched on (loot.vault)",
   "upgradeMax": "Every capacity step is owned",
   "capacity": "Capacity",
   "overBanner": "Over capacity: discard {over} to resume recording ({n} are held). Nothing is deleted.",
@@ -132,7 +132,18 @@
     "noscroll": "No scroll; buy on request.",
     "pinned": "Pinned items are never sold; unpin it first.",
     "sellconfirm": "Confirm the sale first.",
-    "dismiss": "Nothing to dismiss."
+    "dismiss": "Nothing to dismiss.",
+    "insufficient": "Not enough {cur}: {need} more needed.",
+    "in-use": "The vault holds {count} records and the lower tier fits {fits}: discard {over} first.",
+    "out-of-order": "Only the last bought step can be refunded.",
+    "maxed": "Every capacity step is already owned.",
+    "nothing-to-refund": "No capacity step is owned, so there is nothing to refund.",
+    "wallet": "The wallet could not save the change.",
+    "token": "The page is not signed in for changes; open it from the watch screen again.",
+    "origin": "This page may not change the vault from here.",
+    "content-type": "The request was not sent as JSON.",
+    "method": "The request used the wrong method.",
+    "body": "The request was not understood."
   },
   "noAnswer": "The vault did not answer.",
   "kinds": [
@@ -274,5 +285,18 @@
   "sellFailedHint": "Not sold: {why}",
   "promptText": "Short by {short} gold for repairs and supplies: sell {n} vault item(s) (about {gold} gold)?",
   "promptYes": "Sell them",
-  "promptNo": "Not now"
+  "promptNo": "Not now",
+  "upgradeShort": "Need {n} more {cur}",
+  "downgrade": "Refund",
+  "downgradeFor": "Refund last step for {refund} {cur}",
+  "walletLabel": "Wallet: {chip}",
+  "upgradeTitle": "Raise the vault capacity",
+  "upgradeBody": "Adds {add} slots: capacity {from} becomes {to}. It costs {price} {cur}; you have {bal}, {after} after. You can refund the last step later while the vault fits the lower capacity.",
+  "upgradeGo": "Pay {price} {cur}",
+  "downgradeTitle": "Refund the last capacity step",
+  "downgradeBody": "Gives back step {step} for {refund} {cur} ({bal} becomes {after}). Capacity goes from {from} to the lower tier; the vault holds {count} records, which fit. Nothing is deleted.",
+  "downgradeGo": "Refund {refund} {cur}",
+  "okUpgrade": "Capacity is now {capacity}. {balance} {cur} left.",
+  "okDowngrade": "Refunded. Capacity is now {capacity}. {balance} {cur} in the wallet.",
+  "etherAlready": "That step was already bought; nothing was charged."
 }

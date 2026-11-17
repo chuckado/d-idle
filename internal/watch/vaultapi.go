@@ -561,7 +561,7 @@ func (d *VaultDesk) store() *vault.Store {
 // upgradeOf is the placeholder of the capacity meter: the next tier's gain and price from the table, never available until the
 // Ether wallet exists (V7).
 func (d *VaultDesk) upgradeOf() VaultUpgrade {
-	u := VaultUpgrade{Currency: "Ether", Reason: "arrives with the Ether wallet (V7)"}
+	u := VaultUpgrade{Currency: "Ether", Reason: "needs the vault switched on (loot.vault) for the Ether wallet"}
 	if d.Tiers == nil {
 		return u
 	}

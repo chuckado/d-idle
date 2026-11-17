@@ -4,6 +4,7 @@ import (
 	"os"
 	"path/filepath"
 	"sync"
+	"sync/atomic"
 
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
@@ -19,6 +20,7 @@ type vaultHome struct {
 	mu   sync.Mutex
 	hero string
 	st   *vault.Store
+	capf atomic.Value      // func() int: the capacity the stores read at every insert (the ETHER wallet's owned tiers, etherwire.go)
 	keep *vaultkeep.Keeper // the Keep queue (vaultkeep.go); nil until wireVaultKeep
 }
 
@@ -29,6 +31,9 @@ func vaultHomeFor(root string) *vaultHome {
 	return h.(*vaultHome)
 }
 
+// setCapacity late-binds the capacity of every store of this root, those already open included.
+func (h *vaultHome) setCapacity(f func() int) { h.capf.Store(f) }
+
 // Open returns the hero's vault, creating it if needed. A hero switch closes the old Store.
 func (h *vaultHome) Open(hero string) (*vault.Store, error) {
 	h.mu.Lock()
@@ -36,7 +41,7 @@ func (h *vaultHome) Open(hero string) (*vault.Store, error) {
 	if h.st != nil && h.hero == hero {
 		return h.st, nil
 	}
-	st, err := vault.OpenHero(h.root, hero, vault.Options{})
+	st, err := vault.OpenHero(h.root, hero, vault.Options{Capacity: h.storeCapacity})
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +50,20 @@ func (h *vaultHome) Open(hero string) (*vault.Store, error) {
 	}
 	h.hero, h.st = hero, st
 	return st, nil
+}
+
+// storeCapacity is nil-safe for the vault: a bound wallet answers, otherwise the table base.
+func (h *vaultHome) storeCapacity() int {
+	if f, _ := h.capf.Load().(func() int); f != nil {
+		if n := f(); n > 0 {
+			return n
+		}
+	}
+	t, err := vault.DefaultTiers()
+	if err != nil {
+		return 400
+	}
+	return t.Capacity(nil, 0)
 }
 
 // Existing returns the hero's vault when it is open or its log exists on disk; nil while there is none.
@@ -71,13 +90,22 @@ func (h *vaultHome) Existing(hero string) *vault.Store {
 
 // vaultAPI builds the page's routes over <root>/<hero>/vault (root is <data>/vaults, as in wireVault). on reads the knob loot.vault; hero names the active hero.
 func vaultAPI(root string, on func() bool, hero func() string) (*watch.VaultAPI, error) {
+	return vaultAPIWith(root, on, hero, nil)
+}
+
+// vaultAPIWith is vaultAPI with the ETHER wallet of the account: the capacity line and the tiers owned come from it.
+func vaultAPIWith(root string, on func() bool, hero func() string, eh *etherHome) (*watch.VaultAPI, error) {
 	tiers, err := vault.DefaultTiers()
 	if err != nil {
 		return nil, err
 	}
 	home := vaultHomeFor(root)
 	api := watch.NewVaultAPI()
-	api.Bind(watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}})
+	desk := watch.VaultDesk{On: on, Tiers: tiers, Store: func() *vault.Store { return home.Existing(hero()) }, Keep: keepFace{home}, Act: actFace{home}}
+	if eh != nil {
+		desk.Owned = eh.owned
+	}
+	api.Bind(desk)
 	return api, nil
 }
 

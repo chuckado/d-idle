@@ -1,6 +1,6 @@
-# Quest board model (slice S1), executor (S3) and API (S4)
+# Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7)
 
-> status: S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind the knob `quests.board` (default 0; card quests3, TASK-585), NOT verified live (the drill below has not run). Design: [docs/design/quest-board-2026-11-16.md](design/quest-board-2026-11-16.md). Tags: V verified by the named test or file, S secondary, U unverified live, I design choice.
+> status: S7 chunked quests (Acts 1 to 5 data, per-chunk handlers) built and tested offline, NOT verified live (see 'Chunked quests'); S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind the knob `quests.board` (default 0; card quests3, TASK-585), NOT verified live (the drill below has not run). Design: [docs/design/quest-board-2026-11-16.md](design/quest-board-2026-11-16.md). Tags: V verified by the named test or file, S secondary, U unverified live, I design choice.
 
 ## What is here
 
@@ -159,6 +159,28 @@ Replace `$H` with the watch address, `$T` with the answer token (never paste it 
 5. `POST /api/quests/mode {"mode":"farm"}` then restart the bot: GET shows `mode:farm`. Wrong token: 401; foreign `Origin`: 403.
 6. Restart the bot while a chunk runs and while awaiting: `running`/`awaiting` come back from the plan file and the evidence, the chunk is not redone. Writes after start must be 0.
 
+## Watch UI (slice S5)
+
+> Built offline (card quests5), NOT verified live. Tags: node tests and the fit run are V (they ran); the look on a real hero and a real phone is U. Everything below is dormant while `quests.board` = 0: the quest tile hides itself, the Journey tile stays and the sheet says how to turn the board on.
+
+| piece | where |
+|---|---|
+| `quest-strip` tile (strip slot, after `journey-strip`) | `internal/watch/web/panels/quest-strip`: one line of state in words, one primary button, "All quests", the mode switch (Train, Idle, Farm) |
+| `quest-board` sheet | the same-named drawer panel (menu entry "Quests", or "All quests" on the tile); registered with `overlay.js` like the other drawers: one overlay at a time, Escape closes it |
+| `quest-list` | the phone's Quests tab (Orders, Map, Quests, Progress), the same list without a drawer; its CSS is the sheet's with the id swapped (`TestQuestListCSSIsTheBoardCSS`) |
+| shared logic | `quest-board/panel.js`: `stripModel` (state to words and button), `boardModel` (acts, parts, groups), `settle` (the payoff), `act` (the one place a button reaches the API), `captionOf` |
+| video card line | `quest-strip` publishes `questCaption`, `video` shows it top-left of the picture (never over the HUD); it has no endpoint of its own (the v1 manifest stays) |
+| Needs you | quest rows ride the existing glance; `sev: "event"` has an accent (not an alarm) and a refusal shows `reason`, not "could not do that" |
+| Journey | glance gets `questBoard: true` while the board is on (`GlanceSources.QuestOn`, wired in `cmd/d2bot/questwire.go`); `journey-strip` then hides. The old tile, chip and panel stay until S9 |
+
+States of the tile (words, from GET /api/quests only): offer ("Offer: Den of Evil, safe" [Start]), training (no button), running ("Running: Den of Evil", the step in words, [Stop] with a second press to confirm), waiting at the NPC ("Akara is waiting: hand in Den of Evil" [Hand in]), handing in ("Handing in Den of Evil..." as soon as the button is pressed, no button), confirming ("Checking that the game agrees"), failed (the API's reason, [Try again]), stuck ([Try again] [Stop]), idle (the mode line). A Start tap covers the current chunk only. Hand in: the page decides success from the GET (`handIn.state` done, or the chunk `done`), then shows the payoff toast once ("Done: Den of Evil", plus "+N meta" only when the API sends `pays`) and the tile shows the next offer. A refused POST shows the reply's `reason` (or its code when the reason is empty), never a generic line. No margin number and no chapter counter anywhere: the fit run fails a page that has one (`quest words`).
+
+Stubs: the per-quest auto-start cell reads "auto: coming" while `autoStart.available` is false (S8; with `available` true it is a switch posting `{auto}` to `/api/quests/<id>/auto`, route U); the mode switch is stored but acts in S6 (tooltip says so); `pays` is absent until S10.
+
+Gaps (I): the API has no step list, so the tile names the current step only (no "step 2 of 4" dots); no "levels to go" count (the first readiness reason is shown); the offer Needs-you row ("Blood Raven is ready") is not raised (the tile carries the offer); the quest-board sheet is the 440 px drawer, not a rail-width sheet.
+
+Checks: `go test ./internal/watch/ -run Quest` (node: `testdata/questui/quest_ui.mjs`, fake API fed by the S4 goldens, both builds); `go run ./tools/uilint`; fit pages `quest-*` and `quest-sheet-*` in `tools/uishots.sh --fit` (all eight sizes plus 412x780, 360x640 for sheets), must-fail `questdefect-clip|small|words|two` (`tools/uishots/fixtures_quests.go`: the real Desk over the Fake world, variants by the `quests=` query), pictures with `tools/uishots.sh --pics --only 'quest-*'`.
+
 ## Modes (slice S6)
 
 > Built and tested offline (card quests6), behind `quests.board` (default 0: nothing here runs, V `TestBoardModeKnobOffIsTheOldPlanner`). NOT run live; the checklist is at the end of this section. No new knob. Tags: tests V, live behaviour U.
@@ -184,3 +206,78 @@ Live checklist (NOT run; hidden instance, `quests.board` 1, a throwaway hero at 
 3. Farm, 30 min: the log has `goldfarm: farming for the quest board farm mode`; the zone is one rung below the level's pick; gold and drops rise; `farm reset:` lines only if `bot.farmReset` is 1.
 4. Switch train, idle, farm and back while a fight is on; tap Start in idle (the chunk runs, the hero waits at the NPC, Hand in, back to parked).
 5. `d2cheat ledger` shows no writes (the modes only read).
+
+## Chunked quests (slice S7)
+
+Built and tested offline (card quests7), NOT verified live: no chunk of Acts 2 to 5 has run on a hero; every row of act3.json to act5.json is tagged U until a drill. Acts 3 to 5 are new data; the Act 5 rows are stubs over handlers that exist in `internal/task/act5.go` (nothing ran).
+
+How a chunk maps to the task layer (`data/questboard/*.json`, `internal/questboard/def.go`, `internal/bot/questboard.go`):
+
+| field | meaning |
+|---|---|
+| `handler` | the task group the chunk runs; default the quest's `taskId`, else its id. A piece with a group of its own (`horadric_cube`, `khalims_eye`) names it |
+| `nodes` | the step suffixes (the part after `quest.<group>/`) a chunk of a multi-chunk quest runs in the field; a chunk that owns its group runs all steps but the hand-in |
+| `handInStep` | the hand-in step of a chunk that ends in a hand-in (`reward` by default; `read`, `warriv`, `alkor`) |
+| `unsupported` | why no handler can run it; Derive shows `Available` with `not supported yet: <reason>`, never `Ready`, so there is no Start (V `TestStaffPiecesAndUnsupportedAssembly`) |
+
+Rules (V by the named tests):
+- Any order: a chunk with no `after` is offered at once, several in parallel, and the executor accepts whichever the player taps (V `TestKhalimPiecesInEveryOrder`, 6 orders x 2 builds). An assembling chunk lists the pieces in `after`: it needs them all.
+- One Start covers one chunk; the next chunk raises its own offer as soon as the previous one reads Done (V the same test). Hand-in stays the player's tap.
+- Evidence of a part (bot, `nodesDone`): its field steps' own done checks (items in the pack, areas), its hand-in step when it has one, and every chunk it comes after done the same way. A hand-in step reads done before its item exists, so a part never counts before its predecessors (V `TestCainChunkEvidenceFollowsTheChain`). This is T3. A quest prerequisite unlocks only on T1/T2 (`blackened_temple` for the Will: V `TestChunkEvidenceConflictsAndDifficulty`); the quest word on T1 marks every part done; chunk order accepts any tier.
+- Nothing is persisted but the player's records: a restart between or inside pieces re-derives (V `TestKhalimRestartBetweenPieces`). A new difficulty starts the quest again (the same test).
+- Readiness: a boss chunk reads the margin of its `boss` (legacy `legacyFloor` where the survival table has no such boss: `legacy_only`); a fetch piece has no boss and takes the quest's legacy floor only: a per-zone margin word for the fetch areas is not wired yet (U). Floors for Acts 2 to 5 are the task layer's clvl gates (U), caster +2 and summoner +3.
+- Validation (V `TestWholeBoardGraphIsAcyclic`, `TestEveryChunkIsWellFormed`, bot `TestEveryChunkHasAHandlerOrIsUnsupported`): the graph of quests, chunk `requires` and chunk `after` is acyclic; every chunk has steps and a handler whose steps exist, or an unsupported reason; every hand-in NPC is in `talk.ByAct` (the giver table: Cain is `Deckard Cain`, which fixed the old `Cain` of the Act 2 rows); no supported chunk waits behind an unsupported one in its own quest.
+
+### Chunk tables (multi-part and explicit-handler quests; generated from the data files)
+
+| act | quest | chunk | ends | order | handler |
+|---|---|---|---|---|---|
+| 1 | search_for_cain | scroll | item | any | search_for_cain: wp-dark-wood to-wood tree |
+| 1 | search_for_cain | read | handin | after scroll | search_for_cain (hand-in read) |
+| 1 | search_for_cain | free_cain | auto | after read | search_for_cain: to-stony stones to-tristram clear cage home |
+| 1 | search_for_cain | report | handin | after free_cain | UNSUPPORTED |
+| 1 | act1_done | sail_east | handin | any | act1_complete (hand-in warriv) |
+| 2 | tainted_sun | amulet | item | any | viper_amulet |
+| 2 | horadric_staff | cube | item | any | horadric_cube |
+| 2 | horadric_staff | shaft | item | any | staff_of_kings |
+| 2 | horadric_staff | assemble | handin | after cube, shaft; needs quest tainted_sun | UNSUPPORTED |
+| 2 | seven_tombs | duriel | auto | any | duriel |
+| 2 | act2_done | sail_east | handin | any | act2_hop (hand-in meshif) |
+| 3 | golden_bird | bird | handin | any | UNSUPPORTED |
+| 3 | khalims_will | eye | item | any | khalims_eye |
+| 3 | khalims_will | brain | item | any | khalims_brain |
+| 3 | khalims_will | heart | item | any | khalims_heart |
+| 3 | khalims_will | assemble | item | after eye, brain, heart; needs quest blackened_temple | khalims_will: assemble |
+| 3 | khalims_will | orb | auto | after assemble | khalims_will: wp to orb |
+| 3 | act3_done | portal | auto | any | act3_hop |
+| 4 | hellforge | hammer | item | any | hellforge: wp to kill hammer |
+| 4 | hellforge | smash | auto | after hammer | hellforge: place home |
+| 4 | terrors_end | seals | auto | any | UNSUPPORTED |
+| 4 | terrors_end | diablo | handin | any | terrors_end: wp to kill home (hand-in reward) |
+| 4 | act4_done | portal | handin | any | act4_hop (hand-in tyrael) |
+| 5 | prison_of_ice | find | auto | any | prison_of_ice: wp to touch home1 |
+| 5 | prison_of_ice | potion | handin | after find | prison_of_ice (hand-in potion) |
+| 5 | prison_of_ice | thaw | auto | after potion | prison_of_ice: to2 thaw home2 |
+| 5 | prison_of_ice | scroll | handin | after thaw | prison_of_ice (hand-in scroll) |
+| 5 | prison_of_ice | read | auto | after scroll | prison_of_ice: read |
+
+### Gaps (each is `unsupported` or documented, none is a dead button)
+
+| gap | why | what closes it |
+|---|---|---|
+| Cain: report to Akara | `cainNodes` ends at the camp; no step talks to Akara after the cage | a hand-in step in `internal/task/act1.go` |
+| Staff: assemble and give to Cain | `staffNodes` assembles and places the Staff in the Canyon; it never talks to Cain, so the quest word `horadric_staff` is not set by the board and `seven_tombs` (needs it, T1/T2) stays locked until the player talks to Cain by hand | a Cain talk step after `assemble` |
+| Golden Bird | the Jade Figurine dropper is unknown (U) | the dropper |
+| Terror's End: seals | `boss.RunDiablo` opens the seals and kills the seal bosses inside the Diablo kill: no per-seal entry point; leaving the game mid-seals may reset them (U) | a per-seal handler; until then the `diablo` chunk runs the whole thing and the seals chunk stays listed as unsupported |
+| Boss ids | `council`, `mephisto`, `izual`, `hephasto`, `diablo`, `shenk`, `nihlathak`, `ancients`, `baal` go to the survival table's `FindBoss`; an id it does not know gives the legacy word only (U) | table rows |
+
+### Live drill list per chain (checklist, NOT run; every hero below is lab-created, tag CHEATED/IMPOSSIBLE in `docs/probes/test-characters.md` and the cheat ledger, so none of it is evidence about game behaviour, only about the board)
+
+1. Act 1 Cain: hero at Normal clvl 12 in town, `quests.board` 1. Start `scroll` (Dark Wood tree), see it stop, Start `read` (Akara, hand in tap), Start `free_cain` (stones, Tristram, cage; hazard: never auto), see `report` listed as not supported, and check the quest word after the cage by hand. Kill the process after `scroll` and after `read`: the same offer returns, nothing is redone.
+2. Act 2 Staff pieces: lab hero in Act 2 with Radament done. Start `cube` then `shaft`, then the other order on a second hero; check the offers while one runs (not startable) and after (the other offered); `assemble` shows the reason.
+3. Act 2 Tainted Sun, Arcane, Summoner, Duriel: one chunk each, boss margin words checked against the survival log; Duriel never auto.
+4. Act 3 Will: hero with the Council done (Flail in the pack). Start Eye, Brain, Heart in two different orders on two heroes; Start `assemble` (cube in town), then `orb`; check each quest item is kept by the loot rules between pieces.
+5. Act 3 Blackened Temple, Blade, Lam Esen, Mephisto and the portal: one chunk each; the portal chunk fights Mephisto again if the game was restarted (U).
+6. Act 4 Izual, Hellforge (`hammer` then `smash`, Soulstone in the pack), Terror's End (`diablo` runs the seals inside; note whether a half-done seal run resets after a restart: U, record it), hop.
+7. Act 5: one chunk each; Prison of Ice in five parts with a restart after each; Rescue may fail (record the word).
+Every record carries `writes after start: N` (`d2cheat ledger --since-run <run>`); N > 0 is CHEATED and does not count.

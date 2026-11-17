@@ -330,7 +330,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [drillsfix.md](drillsfix.md): drillsfix: stash (DS) and tome (TM) drill repairs
 - [earlygame.md](earlygame.md): Early game: a fresh character, clvl 1 to 12 (agent EARLYGAME, 2026-10-30)
 - [emu-image.md](emu-image.md): The game.exe emulator image (status: current (2026-11-14, TASK-406). Rebuilt after the worker-host cleanup of 2026-11-13 removed the volatile...)
-- [ether.md](ether.md): ETHER: the account meta wallet of the Ethereal Vault (status: built offline 2026-11-17 (agent vaultv7, slice V7 of design/loot-vault-2026-11-16.md section 2.6). NOT...)
+- [ether.md](ether.md): ETHER: the account meta wallet of the Ethereal Vault (status: built offline 2026-11-17 (agents vaultv7 and vaultv7b, slices V7 and V7b of...)
 - [exploredpct.md](exploredpct.md): Explored share: when a zone counts as explored (bot.exploredPct) (status: CURRENT. Tags: V = read from the code in this worktree and covered by a unit test, U = not run in a live game.)
 - [farm.md](farm.md): Farm runs (FARMRUNS, 2026-10-29)
 - [farmfallback.md](farmfallback.md): farmfallback: the gold farm as data, with a fallback
@@ -487,7 +487,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [quest-givers.md](quest-givers.md): Quest givers in town (TASK-243) (status: decision logic, table and fixtures built and tested offline; the live part is U (checklist below). Tags:...)
 - [quest-hints.md](quest-hints.md): Quest hints in town (TASK-197) (status: built and tested offline (fixtures, no game). Tags: V verified by the tests named, SRC read in the repo,...)
 - [quest.md](quest.md): Quest layer: internal/quest (agent QUESTS, offline)
-- [questboard.md](questboard.md): Quest board model (slice S1), executor (S3) and API (S4) (status: S1 model built and tested offline (card quests1, TASK-577); S3 executor built and tested offline behind...)
+- [questboard.md](questboard.md): Quest board model (slice S1), executor (S3), API (S4) and chunked quests (S7) (status: S7 chunked quests (Acts 1 to 5 data, per-chunk handlers) built and tested offline, NOT verified live (see...)
 - [questmem.md](questmem.md): In-memory quest and waypoint data (agent MEMQUEST, V-05)
 - [readiness.md](readiness.md): Readiness model: is this hero ready for that area (status: slice A of the friends beta (cards TASK-217 area table, TASK-218 model, TASK-220 meter feed in part)....)
 - [recovery.md](recovery.md): Recovery phase (broke character)

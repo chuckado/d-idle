@@ -288,9 +288,11 @@ func TestChunkOrderAnyThenAssemble(t *testing.T) {
 		t.Errorf("assemble on a proxy amulet = %s", c.State)
 	}
 	base[0]["tainted_sun"] = done(TierSave)
+	// The order and the prerequisites are met; the Cain hand-in has no handler yet (S7), so the part is shown
+	// with its reason and is never offered.
 	v = view(t, b, in)["horadric_staff"]
-	if !reflect.DeepEqual(v.Offered, []string{"assemble"}) {
-		t.Errorf("assemble offers = %v", v.Offered)
+	if c := chunk(v, "assemble"); len(v.Offered) != 0 || c.State != Available || !strings.Contains(c.Why, "not supported yet") {
+		t.Errorf("assemble = %s %q offers %v", c.State, c.Why, v.Offered)
 	}
 }
 

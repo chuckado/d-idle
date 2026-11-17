@@ -307,40 +307,112 @@ func (f boardFacts) Quest(diff int, id string) questboard.Fact {
 		Pending: st.Stage == task.StageCleared && t.Exact()}
 }
 
-// handlerNodes are the quest's handler nodes without the hand-in. ok is false for a quest the board cannot run in
-// this slice: no handler, or several chunks (the per-chunk handlers are slice S7).
-func handlerNodes(q questboard.Quest) (nodes []task.Node, ok bool) {
-	if len(q.Chunks) != 1 {
+// legacyChunk is the single-chunk quest that runs its own task group as a whole (slice S3): its done and objective
+// facts come from the quest word. Every other chunk (a part of a multi-chunk quest, or a chunk with its own group or
+// node list) reads its facts from the handler steps (slice S7).
+func legacyChunk(q questboard.Quest, c questboard.Chunk) bool {
+	return len(q.Chunks) == 1 && c.Handler == "" && len(c.Nodes) == 0 && c.HandInStep == ""
+}
+
+// stepSuffix is the step id without "quest.<group>/".
+func stepSuffix(group string, s task.Step) string {
+	return strings.TrimPrefix(s.ID, "quest."+group+"/")
+}
+
+// handlerNodes are the field nodes of a chunk: the steps of its task group without the hand-in. ok is false for a
+// chunk no handler can run (unsupported, no group, or none of its steps exist).
+func handlerNodes(q questboard.Quest, c questboard.Chunk) (nodes []task.Node, ok bool) {
+	if c.Unsupported != "" {
 		return nil, false
 	}
-	all := task.Handler(taskID(q))
+	ref := q.HandlerOf(c)
+	all := task.Handler(ref.Group)
 	if len(all) == 0 {
 		return nil, false
 	}
 	for _, n := range all {
-		if !isHandIn(n.Step) {
+		suf := stepSuffix(ref.Group, n.Step)
+		switch {
+		case ref.All:
+			if !isHandIn(n.Step, suf, ref.HandIn) {
+				nodes = append(nodes, n)
+			}
+		case contains(ref.Field, suf):
 			nodes = append(nodes, n)
+		}
+	}
+	if len(nodes) == 0 {
+		if _, has := handInNode(q, c); !has {
+			return nil, false // none of the chunk's steps exist in the group
 		}
 	}
 	return nodes, true
 }
 
-// isHandIn: every quest handler ends with a Talk step whose id ends in "/reward" (V by grep of internal/task/act1.go to
-// act5.go: ten handlers use id(q, "reward"), the other Talk steps greet or accept).
-func isHandIn(s task.Step) bool { return s.Phase == "turn-in" && strings.HasSuffix(s.ID, "/reward") }
+func contains(l []string, s string) bool {
+	for _, x := range l {
+		if x == s {
+			return true
+		}
+	}
+	return false
+}
 
-func handInNode(q questboard.Quest) (task.Node, bool) {
-	for _, n := range task.Handler(taskID(q)) {
-		if isHandIn(n.Step) {
+// isHandIn: the hand-in step is a turn-in whose suffix is the chunk's handInStep ("reward" by default: V by grep of
+// internal/task/act1.go to act5.go, ten handlers use id(q, "reward")).
+func isHandIn(s task.Step, suffix, want string) bool { return s.Phase == "turn-in" && suffix == want }
+
+func handInNode(q questboard.Quest, c questboard.Chunk) (task.Node, bool) {
+	ref := q.HandlerOf(c)
+	for _, n := range task.Handler(ref.Group) {
+		if isHandIn(n.Step, stepSuffix(ref.Group, n.Step), ref.HandIn) {
 			return n, true
 		}
 	}
 	return task.Node{}, false
 }
 
+// nodesDone is the handler's own evidence for a part: every required field step satisfied (T3: items, areas), the
+// hand-in step satisfied when it has one, and every chunk it comes after done in the same way (a hand-in step reads
+// "done" before its item exists, so a part never counts before its predecessors).
+func nodesDone(q questboard.Quest, c questboard.Chunk, w task.World, depth int) bool {
+	if depth > len(q.Chunks) {
+		return false
+	}
+	nodes, ok := handlerNodes(q, c)
+	if !ok {
+		return false
+	}
+	total := 0
+	for _, n := range nodes {
+		if n.Step.Optional {
+			continue
+		}
+		total++
+		if !n.Step.Done(w) {
+			return false
+		}
+	}
+	hand, has := handInNode(q, c)
+	if has && c.Ends == "handin" {
+		if !hand.Step.Done(w) {
+			return false
+		}
+	} else if total == 0 {
+		return false
+	}
+	for _, a := range c.After {
+		pc, err := q.ChunkByID(a)
+		if err != nil || !nodesDone(q, pc, w, depth+1) {
+			return false
+		}
+	}
+	return true
+}
+
 func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.ChunkFact {
 	rt := e.rt
-	nodes, ok := handlerNodes(q)
+	nodes, ok := handlerNodes(q, c)
 	if !ok {
 		return questboard.ChunkFact{}
 	}
@@ -374,23 +446,48 @@ func (e boardEnv) Chunk(q questboard.Quest, c questboard.Chunk) questboard.Chunk
 			cf.Steps[i] = i < len(cf.Steps)*done/total
 		}
 	}
-	st := w.Quest(taskID(q))
-	cf.Objective = need == 0 && st.Stage >= task.StageCleared
-	if cf.Objective {
-		cf.Missing = ""
-	}
 	rt.mu.Lock()
 	handed := rt.handed[questboard.ChunkKey(q.ID, c.ID)]
 	rt.mu.Unlock()
-	if handed {
-		cf.Done, cf.Tier = true, questboard.TierProxy // the dialogue ran; the quest word has the last say
+	if legacyChunk(q, c) {
+		st := w.Quest(taskID(q))
+		cf.Objective = need == 0 && st.Stage >= task.StageCleared
+		if cf.Objective {
+			cf.Missing = ""
+		}
+		if handed {
+			cf.Done, cf.Tier = true, questboard.TierProxy // the dialogue ran; the quest word has the last say
+		}
+		return cf
+	}
+	// A part: the steps are the evidence. The group's own word (T1/T2) raises the tier when it says done.
+	if nodesDone(q, c, w, 0) || handed {
+		cf.Done, cf.Tier = true, questboard.TierProxy
+		if st := w.Quest(q.HandlerOf(c).Group); st.Stage >= task.StageDone && evTier(st.Ev).Exact() {
+			cf.Tier = evTier(st.Ev)
+		}
+		return cf
+	}
+	if _, has := handInNode(q, c); has && c.Ends == "handin" && need == 0 && priorDone(q, c, w) {
+		cf.Objective = true
+		cf.Missing = ""
 	}
 	return cf
 }
 
+func priorDone(q questboard.Quest, c questboard.Chunk, w task.World) bool {
+	for _, a := range c.After {
+		pc, err := q.ChunkByID(a)
+		if err != nil || !nodesDone(q, pc, w, 1) {
+			return false
+		}
+	}
+	return true
+}
+
 func (e boardEnv) Ready(q questboard.Quest, c questboard.Chunk) questboard.Word {
-	if _, ok := handlerNodes(q); !ok {
-		return questboard.ReadyUnknown // no handler for this quest or chunk yet (S7)
+	if _, ok := handlerNodes(q, c); !ok {
+		return questboard.ReadyUnknown // no handler for this chunk (unsupported)
 	}
 	_, _, ready := e.rt.world()
 	return ready[questboard.ChunkKey(q.ID, c.ID)]
@@ -435,6 +532,7 @@ func (a boardActions) Stop(q questboard.Quest, c questboard.Chunk) {
 // boardPlan is the task.Planner of the board: the accepted chunk's handler without its hand-in, or the train slice.
 type boardPlan struct {
 	q     questboard.Quest
+	c     questboard.Chunk
 	train bool
 }
 
@@ -443,13 +541,13 @@ func (p boardPlan) Plan(w task.World, s task.Session) task.Plan {
 		n := w.Level + 1
 		return task.Plan{ID: fmt.Sprintf("level.%d", n), Why: "quest board: training", Nodes: []task.Node{{Step: task.StepLevel(n)}}}
 	}
-	tid := taskID(p.q)
+	tid := p.q.HandlerOf(p.c).Group
 	pl := task.Plan{ID: "quest." + tid, Group: tid, Why: "quest board: accepted chunk"}
 	if why, blocked := s.Blocked(tid); blocked {
 		pl.Stuck, pl.Why = true, why
 		return pl
 	}
-	pl.Nodes, _ = handlerNodes(p.q)
+	pl.Nodes, _ = handlerNodes(p.q, p.c)
 	return pl
 }
 
@@ -512,7 +610,12 @@ func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d q
 		r.boardNote("quest", err.Error())
 		return r.boardBetween(ctx, snap, c)
 	}
-	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q}, "Quest: "+q.Title)
+	ch, err := rt.board.Chunk(d.Quest, d.Chunk)
+	if err != nil {
+		r.boardNote("chunk", err.Error())
+		return r.boardBetween(ctx, snap, c)
+	}
+	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q, c: ch}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
 	switch {
 	case r.deadNow() || res.Outcome == task.OutDeath:
@@ -637,7 +740,7 @@ func (r *Runner) boardServeHandIn(ctx context.Context, snap *d2.Snapshot, c cont
 
 func (r *Runner) boardHandIn(ctx context.Context, snap *d2.Snapshot, c control, req boardHandInReq) error {
 	rt := r.qbRT()
-	n, ok := handInNode(req.q)
+	n, ok := handInNode(req.q, req.c)
 	if !ok {
 		return fmt.Errorf("quest %s has no hand-in step in the task layer", req.q.ID)
 	}

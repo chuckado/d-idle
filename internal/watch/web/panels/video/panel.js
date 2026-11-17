@@ -1,4 +1,5 @@
 import { videoController, openStream, streamingSupported, registerVideo } from '../../mjpeg.js';
+import { questCaption } from '../quest-board/panel.js';
 import { StreamMonitor, SlowGate, draw as drawStats, HEIGHT_FULL, HEIGHT_COMPACT } from '../../streamstats.js';
 
 // Game video (stage band), shown only when the server offers a stream (/api/config frameUrl). The stream is read by
@@ -27,7 +28,10 @@ export function mount(root, ctx) {
   badge.setAttribute('role', 'status');
   const retry = ctx.el('button', 'd-btn', 'Retry');
   retry.type = 'button'; retry.dataset.size = 'sm'; retry.hidden = true;
-  frame.append(shot, cv, wait, badge, retry);
+  const cap = ctx.el('div', 'qcap'); // the quest board's current step as a small caption on the picture's top-left edge (never over the HUD at the bottom)
+  cap.hidden = true;
+  cap.setAttribute('role', 'status');
+  frame.append(shot, cv, wait, badge, retry, cap);
   ctx.body.append(frame);
 
   const full = ctx.el('button', 'd-btn', 'Full screen');
@@ -322,5 +326,13 @@ export function mount(root, ctx) {
   ctl.start();
   tryPal();
   if (pfdebug || statsMem.get() === '1') setStats(true, false);
+  // the quest caption: quest-strip (the quest board's tile) publishes the text, this panel only shows it; without the tile (or in a
+  // page where the import is not there) the caption stays empty
+  if (typeof questCaption !== 'undefined') {
+    const show = (t) => { if (cap.textContent !== t) cap.textContent = t; cap.hidden = !t; };
+    questCaption.subs.add(show);
+    show(questCaption.text);
+  }
   return {};
+
 }

@@ -26,7 +26,7 @@ export function mountVault(d) {
     if (o && o.key) b.dataset.key = o.key;
     return b;
   };
-  const S = { f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
+  const S = { eth: null, f: d.filters || defaultFilters(), items: [], total: 0, view: null, facets: { kinds: T.kinds || [], types: [] }, err: false, loading: true, sel: createSelection(),
     detail: null, detailId: '', mode: 'grid', fopen: false, sheet: null, msg: '', msgLevel: '', sig: '', lastLoaded: 0, tip: null };
   const root = d.root || doc.body;
 
@@ -42,10 +42,14 @@ export function mountVault(d) {
   const fill = el('span', 'vt-fill'); meter.appendChild(fill);
   const meterText = el('span', 'vt-count');
   const pinsText = el('span', 'vt-pins');
+  const wallet = el('span', 'vt-wallet'); wallet.dataset.key = 'wallet'; wallet.hidden = true; // the account's Ether balance (GET /api/ether), absent while loot.vault is 0
   const upgrade = btn(T.upgrade, { size: 'md', key: 'upgrade' });
   upgrade.setAttribute('aria-disabled', 'true'); upgrade.setAttribute('aria-describedby', 'vt-upgrade-why');
   const upgradeWhy = el('span', 'vt-upgrade-why', T.upgradeWhy); upgradeWhy.id = 'vt-upgrade-why';
-  meterBox.append(meterLabel, meter, meterText, pinsText, upgrade, upgradeWhy);
+  const downgrade = btn(T.downgrade, { size: 'md', key: 'downgrade', variant: 'ghost' }); downgrade.hidden = true;
+  downgrade.setAttribute('aria-describedby', 'vt-down-why');
+  const downWhy = el('span', 'vt-down-why'); downWhy.id = 'vt-down-why';
+  meterBox.append(meterLabel, meter, meterText, pinsText, wallet, upgrade, downgrade, upgradeWhy, downWhy);
   head.append(back, h1, heroName, meterBox);
 
   const banner = el('p', 'vt-banner'); banner.hidden = true; banner.setAttribute('role', 'status');
@@ -144,7 +148,7 @@ export function mountVault(d) {
   async function reload(keep) {
     S.loading = !S.view; S.err = false;
     const limit = keep ? Math.min(Math.max(S.items.length, PAGE), MAX_LOADED) : PAGE;
-    const j = await fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length);
+    const [j] = await Promise.all([fetchPage(0, Math.min(limit, 200), !S.view || !S.facets.types.length), refreshEther()]);
     if (!j) { S.err = true; S.loading = false; draw(); return; }
     let items = j.items;
     if (limit > 200) { // a reload that keeps a long list fetches it in pages of 200
@@ -178,6 +182,7 @@ export function mountVault(d) {
     if (!S.sheet) {
       const j = await d.get(ROUTE + toQuery(S.f, { limit: 1 }));
       if (j && j.schema === 'watch.vault/1' && sig(j) !== S.sig) await reload(true);
+      else if (await refreshEther()) drawHead(); // the balance moves with earning, not with the list
     }
     if (d.later) d.later(poll, POLL_MS);
   }
@@ -226,13 +231,48 @@ export function mountVault(d) {
     fill.style.setProperty('--vt-pct', cv.pct + '%');
     meterText.textContent = cv.text;
     pinsText.textContent = c && c.pinLimit ? fmt(T.pinnedOf, { n: c.pins, max: c.pinLimit }) : '';
-    const u = v && v.upgrade;
-    if (u && u.next) upgrade.textContent = fmt(T.upgradeFor, { add: u.next.add, price: u.next.price, cur: u.currency });
-    else upgrade.textContent = u && !u.next && v.capacity.capacity ? T.upgradeMax : T.upgrade;
-    upgradeWhy.textContent = u && u.reason ? u.reason : T.upgradeWhy;
+    drawEther(v);
     let b = cv.banner;
     if (v && v.mode === 'off') b = T.offBanner;
     banner.hidden = !b; banner.textContent = b || ''; banner.dataset.level = v && v.mode === 'off' ? 'info' : cv.level;
+  }
+  // The Upgrade and Refund buttons and the wallet chip. With the wallet (GET /api/ether enabled) the buttons are real: a press opens
+  // the confirm sheet. A short balance or a vault that does not fit the lower tier keeps the button aria-disabled and says why;
+  // without the wallet (loot.vault 0) the old placeholder stands, with the server's reason.
+  function drawEther(v) {
+    const e = S.eth && S.eth.enabled ? S.eth : null, u = v && v.upgrade;
+    wallet.hidden = !e; wallet.textContent = e ? e.chip : '';
+    wallet.setAttribute('aria-label', e ? fmt(T.walletLabel, { chip: e.chip }) : '');
+    if (!e) {
+      if (u && u.next) upgrade.textContent = fmt(T.upgradeFor, { add: u.next.add, price: u.next.price, cur: u.currency });
+      else upgrade.textContent = u && !u.next && v.capacity.capacity ? T.upgradeMax : T.upgrade;
+      upgrade.setAttribute('aria-disabled', 'true');
+      upgradeWhy.textContent = u && u.reason ? u.reason : T.upgradeWhy;
+      downgrade.hidden = true; downWhy.textContent = '';
+      return;
+    }
+    const n = e.next;
+    if (n) {
+      upgrade.textContent = fmt(T.upgradeFor, { add: n.add, price: n.price, cur: e.currency });
+      upgrade.setAttribute('aria-disabled', String(!n.canAfford));
+      upgradeWhy.textContent = n.canAfford ? '' : fmt(T.upgradeShort, { n: n.short, cur: e.currency });
+    } else {
+      upgrade.textContent = T.upgradeMax; upgrade.setAttribute('aria-disabled', 'true'); upgradeWhy.textContent = '';
+    }
+    const dn = e.downgrade, owned = e.owned && e.owned.length > 0;
+    downgrade.hidden = !owned;
+    if (owned) {
+      downgrade.textContent = fmt(T.downgradeFor, { refund: dn.refund, cur: e.currency });
+      downgrade.setAttribute('aria-disabled', String(!dn.available));
+      downWhy.textContent = dn.available ? '' : (dn.reason || '');
+    } else downWhy.textContent = '';
+  }
+  async function refreshEther() {
+    const j = await d.get('/api/ether');
+    const next = j && j.schema === 'watch.ether/1' ? j : null;
+    const changed = JSON.stringify(next) !== JSON.stringify(S.eth);
+    S.eth = next;
+    return changed;
   }
   function drawBar() {
     const n = S.sel.size, ro = !S.view || S.view.mode === 'off';
@@ -614,7 +654,58 @@ export function mountVault(d) {
     }
   });
   // keep the disabled look from the aria-disabled placeholders: a press says why instead of doing nothing
-  for (const [b, why] of [[upgrade, () => upgradeWhy.textContent]]) b.addEventListener('click', () => setMsg('info', why()));
+  upgrade.addEventListener('click', () => {
+    const e = S.eth && S.eth.enabled ? S.eth : null;
+    if (!e || !e.next || !e.next.canAfford) { setMsg('info', upgradeWhy.textContent || T.upgradeMax); return; }
+    openConfirm('upgrade', upgrade);
+  });
+  downgrade.addEventListener('click', () => {
+    const e = S.eth && S.eth.enabled ? S.eth : null;
+    if (!e || !e.downgrade.available) { setMsg('info', downWhy.textContent); return; }
+    openConfirm('downgrade', downgrade);
+  });
+
+  // ---- the Ether sheets: confirm, press, read back ----
+  function openConfirm(kind, opener) {
+    const e = S.eth;
+    if (!e || !e.enabled) return;
+    const up = kind === 'upgrade', n = e.next, dn = e.downgrade;
+    if (up ? !n : !dn.available) return;
+    sheetCard.replaceChildren();
+    const title = up ? T.upgradeTitle : T.downgradeTitle;
+    sheetCard.setAttribute('aria-label', title);
+    sheetCard.appendChild(el('h2', '', title));
+    const cap = S.view && S.view.capacity ? S.view.capacity.capacity : e.capacity;
+    const body = up
+      ? fmt(T.upgradeBody, { add: n.add, from: e.capacity, to: n.capacity, price: n.price, cur: e.currency, bal: e.balance, after: e.balance - n.price })
+      : fmt(T.downgradeBody, { step: dn.step, refund: dn.refund, cur: e.currency, bal: e.balance, after: e.balance + dn.refund, from: e.capacity, count: S.view && S.view.capacity ? S.view.capacity.count : 0, cap });
+    sheetCard.appendChild(el('p', '', body));
+    const go = btn(up ? fmt(T.upgradeGo, { price: n.price, cur: e.currency }) : fmt(T.downgradeGo, { refund: dn.refund, cur: e.currency }), { key: 'sheet-go', variant: up ? undefined : 'danger' });
+    const cancel = btn(T.cancel, { key: 'sheet-cancel', variant: 'ghost' });
+    const row = el('div', 'vt-row'); row.append(cancel, go); sheetCard.appendChild(row);
+    S.sheet = { opener, first: cancel };
+    sheetWrap.hidden = false;
+    cancel.addEventListener('click', closeSheet);
+    go.addEventListener('click', async () => { if (go.disabled) return; go.disabled = true; closeSheet(true); await pressEther(kind, up ? n.id : dn.step); });
+    cancel.focus();
+  }
+  // The text of a refusal, with its numbers: the code decides, the numbers come from the answer.
+  function etherWhy(r) {
+    if (!r) return T.noAnswer;
+    const t = T.refusals[r.code];
+    if (!t) return r.error || T.noAnswer;
+    return fmt(t, { need: r.need, count: r.count, fits: r.fitsTier, over: (r.count || 0) - (r.fitsTier || 0), cur: S.eth && S.eth.currency || '' });
+  }
+  async function pressEther(kind, step) {
+    const r = await d.post(kind === 'upgrade' ? '/api/vault/upgrade' : '/api/vault/downgrade', { step });
+    await reload(true); // the page shows what the wallet and the vault say now, not what the press hoped for
+    if (r && r.ok) {
+      const cur = S.eth && S.eth.currency || '';
+      if (r.already) setMsg('info', T.etherAlready);
+      else setMsg('good', fmt(kind === 'upgrade' ? T.okUpgrade : T.okDowngrade, { capacity: r.capacity, balance: r.balance, price: r.price, cur }));
+    } else setMsg('bad', etherWhy(r));
+    return r;
+  }
 
   async function start() {
     syncFilters(); fillTypes(); draw();
@@ -636,7 +727,8 @@ export function mountVault(d) {
     sc.onload = () => { if (S.tip && typeof CustomEvent !== 'undefined') doc.dispatchEvent(new CustomEvent('d2:inventory', { detail: S.tip.view })); };
     doc.body.appendChild(sc);
   }
-  return { start, reload, draw, state: S, changed, openDiscard, openSell, closeSheet, act, main, grid, loadTip };
+  if (d.overlays) d.overlays.register('vault-sheet', sheetWrap, closeSheet); // the page's one modal: Escape and the one-at-a-time rule are the manager's (docs/ui-overlays.md)
+  return { start, reload, draw, state: S, changed, openDiscard, openSell, openConfirm, pressEther, refreshEther, closeSheet, act, main, grid, loadTip };
 }
 
 // ---- the page in a browser ----
@@ -657,7 +749,9 @@ async function boot() {
   if (!texts || !root) { if (root) root.textContent = 'The Ethereal Vault page could not load its texts.'; return; }
   const f = fromQuery(location.search);
   const back = qs.get('theme') ? '/watch?theme=' + qs.get('theme') : '/watch';
-  const vt = mountVault({ doc, root, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
+  let overlays = null;
+  try { overlays = (await import('/watch/overlay.js')).overlays; } catch (e) { /* the sheet closes itself on Escape */ }
+  const vt = mountVault({ doc, root, overlays, win: window, get, post, texts, now: Date.now, filters: f, backHref: back, IntersectionObserver: window.IntersectionObserver,
     later: (fn, ms) => setTimeout(fn, ms), clear: (t) => clearTimeout(t) });
   vt.loadTip();
   vt.start();

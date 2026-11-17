@@ -1,0 +1,593 @@
+{
+ "schema": "quests.def/1",
+ "act": 3,
+ "source": "docs/goals/execution.md s3 and internal/task/act3.go (handler groups); the hint and giver tables stop at act 1; every row U until a live drill",
+ "quests": [
+  {
+   "id": "lam_esen",
+   "taskId": "",
+   "title": "Lam Esen's Tome",
+   "blurb": "Alkor wants the tome from the altar in the Ruined Temple.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "tome",
+     "title": "Take the Tome from the Ruined Temple altar, give it to Alkor",
+     "ends": "handin",
+     "minutes": [
+      10,
+      25
+     ],
+     "handin": {
+      "npc": "Alkor"
+     },
+     "steps": [
+      "travel_bazaar",
+      "travel_ruined_temple",
+      "take_tome",
+      "talk_alkor"
+     ],
+     "risk": "routine",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handInStep": "alkor"
+    }
+   ],
+   "minutes": [
+    10,
+    25
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3 (act hop)",
+    "steps": "V internal/task/act3.go lamEsenNodes (alkor turn-in is optional there)",
+    "rewards": "S docs/goals/execution.md s3 (+5 stat points)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act2_done"
+   ],
+   "items": [
+    {
+     "name": "Lam Esen's Tome",
+     "from": "Ruined Temple altar"
+    }
+   ],
+   "rewards": [
+    {
+     "kind": "stat_points",
+     "amount": 5
+    }
+   ],
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
+   }
+  },
+  {
+   "id": "blade_old_religion",
+   "taskId": "",
+   "title": "Blade of the Old Religion",
+   "blurb": "Hratli wants Gidbinn from the Flayer Jungle altar.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "gidbinn",
+     "title": "Take Gidbinn from the Flayer altar, give it to Hratli",
+     "ends": "handin",
+     "minutes": [
+      15,
+      30
+     ],
+     "handin": {
+      "npc": "Hratli"
+     },
+     "steps": [
+      "travel_flayer_jungle",
+      "take_gidbinn",
+      "talk_hratli"
+     ],
+     "risk": "routine",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handInStep": "hratli"
+    }
+   ],
+   "minutes": [
+    15,
+    30
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3",
+    "steps": "V internal/task/act3.go bladeNodes; the flow is U there",
+    "rewards": "S docs/goals/execution.md s3 (a rare ring)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act2_done"
+   ],
+   "items": [
+    {
+     "name": "Gidbinn",
+     "from": "Flayer Jungle altar"
+    }
+   ],
+   "rewards": [
+    {
+     "kind": "item",
+     "item": "rare ring"
+    }
+   ],
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
+   }
+  },
+  {
+   "id": "golden_bird",
+   "taskId": "golden_bird",
+   "title": "The Golden Bird",
+   "blurb": "A Jade Figurine, Meshif, then Alkor.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "optional",
+   "chunks": [
+    {
+     "id": "bird",
+     "title": "Give the Jade Figurine to Meshif, the Golden Bird to Alkor",
+     "ends": "handin",
+     "minutes": [
+      5,
+      10
+     ],
+     "handin": {
+      "npc": "Alkor"
+     },
+     "steps": [
+      "talk_meshif",
+      "talk_alkor"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "nodes": [
+      "meshif"
+     ],
+     "handInStep": "alkor",
+     "unsupported": "the Jade Figurine drops from an unknown monster (U in internal/task/act3.go goldenNodes): the handler only turns one in, so nothing can fetch it"
+    }
+   ],
+   "minutes": [
+    5,
+    10
+   ],
+   "risk": "routine",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "S docs/goals/execution.md s3",
+    "steps": "V internal/task/act3.go goldenNodes; dropper U",
+    "rewards": "S docs/goals/execution.md s3 (+20 life)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act2_done"
+   ],
+   "items": [
+    {
+     "name": "Jade Figurine",
+     "from": "unknown (U)"
+    }
+   ],
+   "rewards": [
+    {
+     "kind": "life",
+     "amount": 20
+    }
+   ],
+   "meta": {
+    "normal": 3,
+    "nm": 5,
+    "hell": 8
+   }
+  },
+  {
+   "id": "blackened_temple",
+   "taskId": "",
+   "title": "The Blackened Temple",
+   "blurb": "Ormus wants the High Council dead; one of them drops Khalim's Flail.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "council",
+     "title": "Kill the three Council members in Travincal and take the Flail",
+     "ends": "auto",
+     "minutes": [
+      15,
+      35
+     ],
+     "steps": [
+      "travel_travincal",
+      "kill_council",
+      "take_flail"
+     ],
+     "boss": "council",
+     "risk": "boss",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    35
+   ],
+   "risk": "boss",
+   "autoStart": "allowed",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req for the orb)",
+    "boss": "V docs/goals/execution.md s3 (Council casts Lightning, Cold and Fire; Hell has Mana Burn)",
+    "steps": "V internal/task/act3.go councilNodes; which member drops the Flail is U (all six share the Council TC, V)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act2_done"
+   ],
+   "items": [
+    {
+     "name": "Khalim's Flail",
+     "from": "High Council"
+    }
+   ],
+   "boss": "council",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
+   }
+  },
+  {
+   "id": "khalims_will",
+   "taskId": "",
+   "title": "Khalim's Will",
+   "blurb": "Cain: the Eye, Heart, Brain and Flail make Khalim's Will; smash the Compelling Orb with it.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "eye",
+     "title": "Fetch Khalim's Eye (Spider Cavern)",
+     "ends": "item",
+     "minutes": [
+      10,
+      25
+     ],
+     "steps": [
+      "travel_spider_cavern",
+      "take_eye"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handler": "khalims_eye"
+    },
+    {
+     "id": "brain",
+     "title": "Fetch Khalim's Brain (Flayer Dungeon)",
+     "ends": "item",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "travel_flayer_dungeon",
+      "take_brain"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handler": "khalims_brain"
+    },
+    {
+     "id": "heart",
+     "title": "Fetch Khalim's Heart (Kurast Sewers)",
+     "ends": "item",
+     "minutes": [
+      15,
+      30
+     ],
+     "steps": [
+      "travel_sewers",
+      "take_heart"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handler": "khalims_heart"
+    },
+    {
+     "id": "assemble",
+     "title": "Cube the Flail, Eye, Heart and Brain into Khalim's Will",
+     "ends": "item",
+     "minutes": [
+      3,
+      6
+     ],
+     "after": [
+      "eye",
+      "brain",
+      "heart"
+     ],
+     "requires": [
+      "blackened_temple"
+     ],
+     "steps": [
+      "open_cube",
+      "transmute"
+     ],
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handler": "khalims_will",
+     "nodes": [
+      "assemble"
+     ]
+    },
+    {
+     "id": "orb",
+     "title": "Equip the Will and smash the Compelling Orb in Travincal",
+     "ends": "auto",
+     "minutes": [
+      8,
+      15
+     ],
+     "after": [
+      "assemble"
+     ],
+     "steps": [
+      "travel_travincal",
+      "equip_will",
+      "smash_orb"
+     ],
+     "risk": "hazard",
+     "meta": {
+      "normal": 1,
+      "nm": 2,
+      "hell": 3
+     },
+     "handler": "khalims_will",
+     "nodes": [
+      "wp",
+      "to",
+      "orb"
+     ]
+    }
+   ],
+   "minutes": [
+    51,
+    106
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "chunks": "I design 1.2 (Eye, Brain, Heart in any order; assemble needs all three and the Flail; orb after the Will)",
+    "steps": "V internal/task/act3.go (khalims_eye/brain/heart groups, khalims_will nodes assemble, wp, to, orb)",
+    "items": "V docs/goals/execution.md s3 (quest items cannot be sold or dropped)",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "act2_done"
+   ],
+   "items": [
+    {
+     "name": "Khalim's Eye",
+     "from": "Spider Cavern"
+    },
+    {
+     "name": "Khalim's Brain",
+     "from": "Flayer Dungeon"
+    },
+    {
+     "name": "Khalim's Heart",
+     "from": "Kurast Sewers"
+    },
+    {
+     "name": "Khalim's Flail",
+     "from": "High Council"
+    }
+   ],
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 24,
+    "caster": 26,
+    "summoner": 27
+   }
+  },
+  {
+   "id": "guardian",
+   "taskId": "",
+   "title": "The Guardian",
+   "blurb": "Ormus: the opened stairs lead to Mephisto in Durance of Hate.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "story",
+   "chunks": [
+    {
+     "id": "mephisto",
+     "title": "Walk to Durance of Hate 3 and kill Mephisto",
+     "ends": "auto",
+     "minutes": [
+      15,
+      35
+     ],
+     "steps": [
+      "travel_durance2",
+      "travel_durance3",
+      "kill_mephisto"
+     ],
+     "boss": "mephisto",
+     "risk": "hazard",
+     "meta": {
+      "normal": 2,
+      "nm": 3,
+      "hell": 5
+     }
+    }
+   ],
+   "minutes": [
+    15,
+    35
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "V docs/goals/execution.md s3 (Req)",
+    "boss": "V docs/goals/execution.md s3 (Mephisto summons; the moat trick is optional)",
+    "steps": "V internal/task/act3.go guardianNodes",
+    "floor": "U (the task layer clvl gate; caster +2 and summoner +3 as in act 1)",
+    "minutes": "I",
+    "meta": "U placeholder"
+   },
+   "requires": [
+    "khalims_will"
+   ],
+   "boss": "mephisto",
+   "meta": {
+    "normal": 5,
+    "nm": 8,
+    "hell": 12
+   },
+   "legacyFloor": {
+    "melee": 28,
+    "caster": 30,
+    "summoner": 31
+   }
+  },
+  {
+   "id": "act3_done",
+   "taskId": "act3_complete",
+   "title": "Take the red portal to Act 4",
+   "blurb": "The portal exists only in the game of the kill.",
+   "act": 3,
+   "difficulties": [
+    "normal",
+    "nm",
+    "hell"
+   ],
+   "kind": "unlock",
+   "chunks": [
+    {
+     "id": "portal",
+     "title": "Take the red portal to the Fortress",
+     "ends": "auto",
+     "minutes": [
+      2,
+      5
+     ],
+     "steps": [
+      "travel_durance3",
+      "take_portal"
+     ],
+     "boss": "mephisto",
+     "risk": "hazard",
+     "handler": "act3_hop"
+    }
+   ],
+   "minutes": [
+    2,
+    5
+   ],
+   "risk": "hazard",
+   "autoStart": "never",
+   "tags": {
+    "requires": "S internal/task/act3.go act3HopNodes (the portal exists only in the game of the kill; a restarted bot fights Mephisto again, U)",
+    "minutes": "I"
+   },
+   "requires": [
+    "guardian"
+   ]
+  }
+ ]
+}
