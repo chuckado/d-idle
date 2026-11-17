@@ -106,3 +106,19 @@ func pauseFixture(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
 }
+
+// labelsFixture serves /api/labels for the video card's Labels button (internal/watch/web/panels/video/panel.js): the page's
+// query labels=on|off shows the button in that state; without it the route answers 503 (no button), so the older pages are unchanged.
+func labelsFixture(w http.ResponseWriter, r *http.Request) {
+	ref, err := url.Parse(r.Referer())
+	state := ""
+	if err == nil {
+		state = ref.Query().Get("labels")
+	}
+	if state != "on" && state != "off" {
+		http.Error(w, `{"code":"off","reason":"item labels are not available"}`, http.StatusServiceUnavailable)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprintf(w, `{"ok":true,"on":%t,"available":true}`+"\n", state == "on")
+}
