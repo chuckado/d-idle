@@ -234,6 +234,7 @@
 | flakefix | proposed | - | `internal/bot/failsafe_test.go` | - |
 | survab8 | proposed | - | `docs/probes/survival-ab-8seed-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
 | survtune | proposed | - | `internal/survival`<br>`tools/ab/prep`<br>`tools/survival`<br>`docs/survival/ab-harness.md`<br>`docs/probes/survival-ab-8seed-rerun-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
+| decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
 | currency-rows | deferred | - | `data/overlay/didle-v1/`<br>`internal/overlay/didlev1_test.go`<br>`internal/loot/currencymark_test.go`<br>`internal/loot/pickit_starter.json`<br>`docs/research/currency-rows.md`<br>`docs/probes/currency1.md`<br>`docs/probes/currency1-drill.py`<br>`docs/overlay.md` | - |
@@ -276,14 +277,14 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- 96bc1dd0f 11-16 21:08 `Merge agent/decomp36bodies: decomp36bodies: gamble price and MonUMod PR bodies per verifier` (decomp36bodies)
+- 63ba004f7 11-16 21:06 `Merge branch 'main' into decomp36bodies` (-)
+- 32ab977c2 11-16 21:00 `Merge agent/verifydecomp36: Merge branch 'main' into TASK-569` (verifydecomp36)
+- dda114d4f 11-16 20:59 `Merge branch 'main' into TASK-569` (-)
 - dbec78bb7 11-16 19:23 `Merge agent/survtune: survtune: weapon readback in prep, pay-for-risk dial route, abq driver` (survtune)
 - cec708e7f 11-16 19:22 `Merge branch 'main' into survtune` (-)
 - 75ec8348b 11-16 18:51 `Merge agent/videofeed3: videofeed3: lossless feed at 30 fps (ring divisor), presentation clock, fill-the-card fit` (videofeed3)
 - b0ad05793 11-16 18:48 `Merge remote-tracking branch 'origin/main' into agent/videofeed3` (-)
 - de151d37f 11-16 18:32 `Merge agent/survab8: Merge branch 'main' into survab8` (survab8)
 - 2aa3e5331 11-16 18:31 `Merge branch 'main' into survab8` (-)
-- 81cadbc15 11-16 18:08 `Merge agent/leechbody: leech PR body per verifier L1-L6` (leechbody)
-- 5f4d4a959 11-16 17:45 `Merge agent/verifydecomp35: Merge branch 'main' into TASK-564` (verifydecomp35)
-- 9df96fd85 11-16 17:44 `Merge branch 'main' into TASK-564` (-)
-- f972f9707 11-16 17:05 `Merge agent/flakefix: Merge branch 'main' into flakefix` (flakefix)
 <!-- statusgen:end -->

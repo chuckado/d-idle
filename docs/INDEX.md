@@ -655,7 +655,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 
 - [cold-enchanted-length-body.md](upstream/bodies/cold-enchanted-length-body.md): cold-enchanted-length-body
 - [death-corpse-exp-body.md](upstream/bodies/death-corpse-exp-body.md): death-corpse-exp-body
-- [gamble-price-body.md](upstream/bodies/gamble-price-body.md): gamble-price-body
+- [gamble-price-body.md](upstream/bodies/gamble-price-body.md): the d2d side needs D2_MPQ_DIR (as test_game); gamble_price.py game needs the emulator's game image and a...
 - [hitrec-interrupt-body.md](upstream/bodies/hitrec-interrupt-body.md): hitrec-interrupt-body
 - [hitrec-knock-in-hit-body.md](upstream/bodies/hitrec-knock-in-hit-body.md): hitrec-knock-in-hit-body
 - [hitrec-modes-body.md](upstream/bodies/hitrec-modes-body.md): hitrec-modes-body
@@ -669,7 +669,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [smite-range-body.md](upstream/bodies/smite-range-body.md): smite-range-body
 - [swing-start-body.md](upstream/bodies/swing-start-body.md): swing-start-body
 - [tele-refund-body.md](upstream/bodies/tele-refund-body.md): tele-refund-body
-- [umod-multishot-body.md](upstream/bodies/umod-multishot-body.md): umod-multishot-body
+- [umod-multishot-body.md](upstream/bodies/umod-multishot-body.md): the d2d side needs D2_MPQ_DIR (as test_game); umod_can_take.py game needs the emulator's game image and a...
 - [warp-arrival-body.md](upstream/bodies/warp-arrival-body.md): warp-arrival-body
 - [warp-walk-plan-body.md](upstream/bodies/warp-walk-plan-body.md): warp-walk-plan-body
 
@@ -719,6 +719,7 @@ Research records (about 330 files, by topic): [research/README.md](research/READ
 - [verification-warp-arrival-2026-11-12.md](upstream/verification-warp-arrival-2026-11-12.md): Independent verification of the warp-arrival fork candidate (2026-11-12) (status: current, 2026-11-12 (TASK-366, agent prverify3). Verdict **NEEDS-WORK**: the rule and the code change are...)
 - [verification-warp-arrival-r2-2026-11-12.md](upstream/verification-warp-arrival-r2-2026-11-12.md): Second independent verification of warp arrival r2 (2026-11-12) (status: current, 2026-11-12 (TASK-376, agent prverify4). Verdict **PASS** (two LOW wording edits to the draft, not...)
 - [verifier-decomp35-2026-11-16.md](upstream/verifier-decomp35-2026-11-16.md): Verifier: decomp35, a player's leech and Crushing Blow (2026-11-16) (status: current, 2026-11-16 (card verifydecomp35, TASK-564, Opus, singly; independent verifier before posting)....)
+- [verifier-decomp36-2026-11-16.md](upstream/verifier-decomp36-2026-11-16.md): Verifier: decomp36, the gamble price and MonUMod Multiple Shots (2026-11-16) (status: current, 2026-11-16 (card verifydecomp36, TASK-569, Opus, singly; independent verifier before posting)....)
 - [verifier-p02-2026-11-14.md](upstream/verifier-p02-2026-11-14.md): Verifier: P02 "a clicked warp's walk is planned to its tile unit" (2026-11-14) (status: current, 2026-11-15 (card verifyp02, TASK-476, Opus, independent of the author decomp23). Nothing posted,...)
 - [verifier-p03-p05-2026-11-14.md](upstream/verifier-p03-p05-2026-11-14.md): Verifier: P03 hit-recovery modes and P05 load gold clamp (2026-11-14) (status: current, 2026-11-14 (card verifyp03p05, TASK-444, Opus, independent of the author decomp21). Nothing...)
 - [verifier-p03b-2026-11-14.md](upstream/verifier-p03b-2026-11-14.md): Verifier: P03b "a hit never restarts a get-hit" (2026-11-14) (status: current, 2026-11-14 (card verifyp03c, TASK-468, Opus, independent of the author decomp22 and of the P03...)

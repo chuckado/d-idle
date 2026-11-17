@@ -8,6 +8,8 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- decomp36bodies: gamble price and MonUMod PR bodies per verifier <!--sg:agent/decomp36bodies-->
+- Merge branch 'main' into TASK-569 <!--sg:agent/verifydecomp36-->
 - survtune: weapon readback in prep, pay-for-risk dial route, abq driver <!--sg:agent/survtune-->
 - videofeed3: lossless feed at 30 fps (ring divisor), presentation clock, fill-the-card fit <!--sg:agent/videofeed3-->
 - Merge branch 'main' into survab8 <!--sg:agent/survab8-->
