@@ -31,7 +31,14 @@ Identity and history are already right in r1 (V run): both commits by the user's
 
 ## Differentials (V run)
 
-PLACEHOLDER-DIFF
+Game side `mana_burn.py game` (r2's script) on c1 (`gen`: 8 ranges x seeds 1..250) and c2 (reseed: 10 ranges incl. `(0, 5)`, `(1, 2)`, `(111, 111)`, `(60, 111)` x seeds 5001..5200); both equal the model on 2,000 of 2,000. d2d side `test_mana_burn --mana-burn` (through `Fight::hurt_side`).
+
+| Tree | c1 range | c2 range | roll exact |
+|---|---|---|---|
+| oracle commit `9136b9a0` (parent d2d) | **1,750**, exit 1 | **1,600**, exit 1 | n/a |
+| claim `0243f24f` | 0, exit 0 | 0, exit 0 | c1 0 of 2,000, exit 0 |
+
+Upstream main `ed007569` ctest (D2_MPQ_DIR and D2_PATCH_INSTALLER set): 355 of 355 pass. The claim's `test_mana_burn` with no argument: rc 0.
 
 ## Mutants (V run)
 
@@ -48,12 +55,12 @@ PLACEHOLDER-RNG
 ## Required changes to the body (`mana-burn-amount-body.md`)
 
 - **M1 (high).** Commits and tree: "upstream `ed007569` plus `9136b9a0` (oracle) and `0243f24f` (claim)". "Two commits" paragraph: the oracle's d2d side is `monster_update` then the real `Fight::hurt_side` on a player with 60,000 mana (the mana lost, not the field); the claim also adds the `monsters.md` finding and the no-argument asserts in `test_mana_burn` (game.exe's amounts for eight cases; with the data the player's mana after a burn and a Normal level 9 unique's hit), which ctest runs.
-- **M2 (high).** Re-check block: `mana_burn.py compare` instead of `cmp` (`2000 cases: game.exe off its own rule 0, d2d outside game.exe's range 0`, `ok`; on the oracle commit PLACEHOLDER-PARENT, exit 1); `compare game.tsv roll.tsv exact` for the rule alone; the d2d side needs `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` (the test skips without 1.14d's MonStats); add `ctest --test-dir build -R test_mana_burn`. Say compare exits 1 on an empty or unequal file, a malformed line or cases out of step.
+- **M2 (high).** Re-check block: `mana_burn.py compare` instead of `cmp` (`2000 cases: game.exe off its own rule 0, d2d outside game.exe's range 0`, `ok`; on the oracle commit 1,750 of 2,000, exit 1); `compare game.tsv roll.tsv exact` for the rule alone; the d2d side needs `D2_MPQ_DIR` and `D2_PATCH_INSTALLER` (the test skips without 1.14d's MonStats); add `ctest --test-dir build -R test_mana_burn`. Say compare exits 1 on an empty or unequal file, a malformed line or cases out of step.
 - **M3 (high, claims limited to proven).** Limits: "With Energy Shield, game.exe also takes the shield's calc1 % of the burn and pays `MulDiv(part, calc2, 16)` mana for it (`FUN_005ca6c0`: the table `0x6e30e0` lists the record's `+0x3c` with flag 1, taken only for a plain monster attacker, `0x5ca78d..0x5ca7ca`); d2d's shield works on the five damage fields only. Not changed here."
 - **M4 (medium).** "In play": add "MonUMod row 25 can be picked for a unique in every difficulty (upick 6 in Normal, Nightmare and Hell); its minions' constants are 0 in Normal, so in Normal only the unique burns." Keep the level 9 example (MonLvl L-DM 7 x 66 / 100 and x 100 / 100: 4..7 points).
 - **M5 (medium).** Answer presubmit's WARNs: `siblings` "game.exe's `FUN_0057aa60` takes any defender's stat 8; d2d applies a burn to the player only (`Fight::hurt_side` reads `side[0]`), so a merc's mana is not burned, before or after; pets have no mana; a co-op partner is a player and takes the new amount"; `build` and `gcc` "built and ctest run (Release, GCC): the same failures as upstream main".
 - **M6 (medium, claims limited to proven).** Limits: "`FUN_0057b7d0` has seven callers (the melee gate, `FUN_0056f070` and five skill functions); d2d burns only on a monster's melee swing. Whether a monster's missile or skill hit burns mana in game.exe is not run; nothing there is changed." Keep r1's "own melee caller not run" line.
-- **M7 (low, template).** Claims table with the counts of this file (parent PLACEHOLDER-PARENT through `hurt_side`, claim 0; exact 2,000 of 2,000 twice; mutants abort `test_mana_burn`); tick the template's three checklist items (test `tests/game/test_mana_burn.cpp`; finding `docs/research/re/monsters.md`; `pr_guard` 0 FAIL 0 WARN). Drop "The whole test suite was not run on this branch".
+- **M7 (low, template).** Claims table with the counts of this file (parent 1,750 of 2,000 through `hurt_side`, claim 0; exact 2,000 of 2,000 twice; mutants abort `test_mana_burn`); tick the template's three checklist items (test `tests/game/test_mana_burn.cpp`; finding `docs/research/re/monsters.md`; `pr_guard` 0 FAIL 0 WARN). Drop "The whole test suite was not run on this branch".
 - **M8 (low).** The reseed row: seeds 5001..5200 x 10 ranges (including the power-of-two bounds `(1, 2)` and `(0, 5)`... and `(111, 111)`), PLACEHOLDER-RESEED.
 
 ## For the coordinator (not body changes)
