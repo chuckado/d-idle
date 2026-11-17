@@ -268,6 +268,8 @@ data/questboard  credit-runner  quests1
 data/unlocks/ladder.json  credit-runner  gearsets
 data/unlocks/ladder.json  credit-runner  uib7
 data/vault  credit-runner  vaultv2
+data/vault/ether.json  credit-runner  vaultv7
+data/vault/vault.go  credit-runner  vaultv7
 deploy/d2d-container/entrypoint.sh  credit-runner  charsup
 deploy/d2d-container/tester-report.sh  credit-runner  testerreport
 deploy/d2d-container/tester_image_test.go  credit-runner  charsup
@@ -289,10 +291,12 @@ docs/design/loot-vault-2026-11-16.md  credit-runner  vault
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv2
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv3
 docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv4
+docs/design/loot-vault-2026-11-16.md  credit-runner  vaultv7
 docs/design/quest-board-2026-11-16.md  credit-runner  quests1
 docs/design/quest-board-2026-11-16.md  credit-runner  quests3
 docs/design/quest-board-2026-11-16.md  credit-runner  quests4
 docs/emu-image.md  credit-runner  emurebuild
+docs/ether.md  credit-runner  vaultv7
 docs/exploredpct.md  credit-runner  exploredpct
 docs/farmloop.md  credit-runner  farmloop
 docs/first-hour.md  live-agent  firsthour
@@ -456,6 +460,7 @@ docs/survival/power.md  credit-runner  survB
 docs/survival/units-fit-2026-11-15.md  pro-runner  decomp28
 docs/swingmodel.md  credit-runner  swingmodel
 docs/t0-variants.md  credit-runner  qdensity
+docs/tally-strip.md  credit-runner  vaultv7
 docs/tester-guide.md  credit-runner  testerpack
 docs/tester-licence.md  credit-runner  testerlicence
 docs/tidy.md  credit-runner  tidy
@@ -511,6 +516,7 @@ docs/upstream/verifier2-p06-2026-11-15.md  live-agent  verifyp06b
 docs/vault.md  credit-runner  vaultv2
 docs/vault.md  credit-runner  vaultv3
 docs/vault.md  credit-runner  vaultv4
+docs/vault.md  credit-runner  vaultv7
 docs/video-feed.md  credit-runner  videofeed
 docs/video-feed.md  credit-runner  videofeed2
 docs/video-feed.md  credit-runner  videofeed4
@@ -716,6 +722,7 @@ internal/env/tuning_resource.go  credit-runner  freshstart
 internal/env/tuning_resource.go  live-agent  recoverypace
 internal/env/tuning_town.go  credit-runner  tidy
 internal/env/tuning_watch.go  credit-runner  videofeed2
+internal/ether  credit-runner  vaultv7
 internal/fidvendor  live-agent  fidprobe-vendor
 internal/goals/runner.go  credit-runner  staletarget
 internal/goldfarm  credit-runner  repairtrip
@@ -891,6 +898,8 @@ internal/watch/commands.go  credit-runner  uis4
 internal/watch/commands_test.go  credit-runner  uis4
 internal/watch/dropsfeed.go  credit-runner  friendfb
 internal/watch/dropsfeed_test.go  credit-runner  friendfb
+internal/watch/etherapi.go  credit-runner  vaultv7
+internal/watch/etherapi_test.go  credit-runner  vaultv7
 internal/watch/funwire.go  credit-runner  friendfb
 internal/watch/funwire.go  credit-runner  lootwireL4
 internal/watch/funwire.go  credit-runner  quests4
