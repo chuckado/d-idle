@@ -45,6 +45,7 @@ owns:
   - "tools/uishots/serve.go"
   - "docs/design/loot-vault-2026-11-16.md"
 exclusive: []
+result: "Offline only, not seen live: GET /api/vault (paged, filtered, sorted, capacity meter, placeholder Upgrade), GET /api/vault/item/<id>, POST pin, unpin, discard (archive first) over a 10k-item store in Go tests; the /watch/vault page (grid, list, filters, multi-select, discard confirm, empty, off, error, over-capacity states, tooltip from the inventory script), entry points in the menu, Orders More and the Drops feed; knob loot.vault added (default 0); uishots fit pages and 8 must-fail defects pass on the worker host and the pictures were viewed. No recorder yet (V3), so a real bot shows the empty state."
 contracts: []
 ---
 
@@ -58,9 +59,9 @@ Why: the Ethereal Vault (design docs/design/loot-vault-2026-11-16.md) needs a re
 
 ## Acceptance Criteria
 <!-- AC:BEGIN -->
-- [ ] #1 GET /api/vault, GET /api/vault/item/<id>, POST pin/unpin/discard with 10k-item tests
-- [ ] #2 /watch/vault page with filters, sort, multi-select, capacity meter, placeholder Upgrade, disabled Keep
-- [ ] #3 entry points: menu, Orders More, Drops feed
-- [ ] #4 uishots fit pages and must-fail defect pages, pictures viewed
-- [ ] #5 docs/vault.md UI section, V4 marked done
+- [x] #1 GET /api/vault, GET /api/vault/item/<id>, POST pin/unpin/discard with 10k-item tests
+- [x] #2 /watch/vault page with filters, sort, multi-select, capacity meter, placeholder Upgrade, disabled Keep
+- [x] #3 entry points: menu, Orders More, Drops feed
+- [x] #4 uishots fit pages and must-fail defect pages, pictures viewed
+- [x] #5 docs/vault.md UI section, V4 marked done
 <!-- AC:END -->
