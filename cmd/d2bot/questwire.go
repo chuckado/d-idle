@@ -81,6 +81,10 @@ func init() {
 		if d.Quests == nil {
 			return
 		}
+		src.QuestOn = func() bool {
+			qd := d.Quests()
+			return qd != nil && qd.View().Enabled
+		}
 		src.Quest = func() (watch.GlanceQuest, bool) {
 			qd := d.Quests()
 			if qd == nil {

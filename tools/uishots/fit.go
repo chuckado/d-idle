@@ -108,12 +108,12 @@ func framedPage(h http.Handler, w http.ResponseWriter, r *http.Request) {
 	}
 	w.Header().Del("X-Frame-Options")
 	body := rec.Body.Bytes()
-	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" || vaultJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
+	if d := r.URL.Query().Get("defect"); defectCSS[d] != "" || overlayJS[d] != "" || vaultJS[d] != "" || questJS[d] != "" { // a page that must fail: the same page with one defect put back, from this viewer's own file
 		add := ""
 		if defectCSS[d] != "" {
 			add += `<link rel="stylesheet" href="/__fit/defect-` + d + `.css">`
 		}
-		if overlayJS[d] != "" || vaultJS[d] != "" {
+		if overlayJS[d] != "" || vaultJS[d] != "" || questJS[d] != "" {
 			add += `<script src="/__fit/defect-` + d + `.js"></script>`
 		}
 		body = bytes.Replace(body, []byte("</head>"), []byte(add+"</head>"), 1)
@@ -169,6 +169,8 @@ type fitResult struct {
 		Cut     []string `json:"cut"`
 		Under   []string `json:"under"`
 		Charter []string `json:"charter"`
+		Small   []string `json:"small"`
+		Words   []string `json:"words"`
 	} `json:"ov"`
 	CV *struct {
 		Zero  []string `json:"zero"`
@@ -352,6 +354,12 @@ func (r fitResult) judge() []string {
 		for _, x := range o.Charter {
 			bad = append(bad, "sheet: "+x)
 		}
+		for _, x := range o.Small {
+			bad = append(bad, "target under 44 px: "+x)
+		}
+		for _, x := range o.Words {
+			bad = append(bad, "quest words (no chapter counter, no margin number): "+x)
+		}
 	}
 	if r.Missing != "" {
 		bad = append(bad, "there is nothing to press at "+r.Missing+" (the page lacks it)")
@@ -494,6 +502,11 @@ var mustFail = map[string]string{
 	"fit-overlaydefect-clip-":   "sheet text is cut",
 	"fit-overlaydefect-header-": "leaves the free area",
 	"fit-overlaydefect-two-":    "more than one overlay is open",
+	// the quest board (slice S5): one defect each, put back by defectCSS and overlayJS in fixtures_quests.go
+	"fit-questdefect-clip-":  "sheet text is cut",
+	"fit-questdefect-small-": "target under 44 px",
+	"fit-questdefect-words-": "quest words",
+	"fit-questdefect-two-":   "more than one overlay is open",
 	// the phone's storage tab (card uiphone): the real page with one defect of the 2026-11-15 screenshot put back (defectCSS in fixtures_phone.go)
 	"fit-phonedefect-label-":     "label over art",
 	"fit-phonedefect-acts-":      "action buttons: ",

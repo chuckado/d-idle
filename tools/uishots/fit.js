@@ -136,9 +136,26 @@ export function overlayState(win) {
     const sb = sh.querySelector('.zm-charter .d-btn'), sr = sb && vis(sb);
     if (sb && !(sr && sr.top >= r.top - 1 && sr.bottom <= r.bottom + 1 && sr.left >= r.left - 1 && sr.right <= r.right + 1)) charter.push('Pay and go is outside the sheet');
   }
-  for (const n of d.querySelectorAll('.d-drawer')) if (vis(n)) open.push('drawer:' + (n.dataset.drawer || '?'));
+  for (const n of d.querySelectorAll('.d-drawer')) {
+    if (!vis(n)) continue;
+    open.push('drawer:' + (n.dataset.drawer || '?'));
+    if (n.dataset.drawer !== 'quest-board') continue;
+    for (const x of n.querySelectorAll('*')) { // the quest sheet wraps its text; nothing in it may be wider than its box
+      if (/^(SELECT|INPUT|OPTION)$/.test(x.tagName) || !vis(x)) continue;
+      if (x.scrollWidth - x.clientWidth > 1 && x.clientWidth > 0) cut.push((x.className || x.tagName) + ' "' + (x.textContent || '').trim().slice(0, 24) + '" ' + x.scrollWidth + '/' + x.clientWidth);
+    }
+  }
+  // the quest panels (strip tile, sheet, phone tab): touch targets on a phone and the words the design forbids (a chapter counter, a number for the margin)
+  const small = [], words = [];
+  for (const p of d.querySelectorAll('[data-panel^="quest-"]')) {
+    if (!vis(p)) continue;
+    if (win.innerWidth <= 480) for (const b of p.querySelectorAll('button')) { const r = vis(b); if (r && r.height < 43.5) small.push((b.dataset.key || b.textContent || '?').trim().slice(0, 20) + ' ' + Math.round(r.height) + ' px'); }
+    const t = p.textContent || '';
+    const m = t.match(/chapter\s*\d+\s*of\s*\d+|margin\D{0,8}\d|\d+(\.\d+)?\s*%/i);
+    if (m) words.push(p.dataset.panel + ': "' + m[0] + '"');
+  }
   if (vis(d.getElementById('reset-confirm'))) open.push('reset');
-  return { open, menu, cut, under, charter };
+  return { open, menu, cut, under, charter, small, words };
 }
 
 // An opened sheet must be hittable: the element at the centre of each target is the target or inside it.

@@ -165,6 +165,15 @@ func TestFitPhoneRules(t *testing.T) {
 			}
 			continue
 		}
+		if rest, ok := strings.CutPrefix(name, "q-"); ok { // the quest board: questdefect-NAME (fixtures_quests.go)
+			if !strings.Contains(string(sh), "\nquestdefect-"+rest+" ") {
+				t.Errorf("no fit page questdefect-%s", rest)
+			}
+			if _, ok := mustFail["fit-questdefect-"+rest+"-"]; !ok {
+				t.Errorf("mustFail has no entry for questdefect-%s", rest)
+			}
+			continue
+		}
 		if rest, ok := strings.CutPrefix(name, "vault-"); ok { // the Vault page: vaultdefect-NAME (fixtures_vault.go)
 			if !strings.Contains(string(sh), "\nvaultdefect-"+rest+" ") {
 				t.Errorf("no fit page vaultdefect-%s", rest)

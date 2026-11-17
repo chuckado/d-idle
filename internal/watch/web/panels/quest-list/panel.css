@@ -1,0 +1,45 @@
+@layer panels {
+  /* the Quest board: a drawer on a desktop (the shell gives it the box) and the Quests tab on a phone; the header stays, the list scrolls */
+  [data-panel="quest-list"] .d-slotbody { display: flex; flex-direction: column; min-block-size: 0; }
+  [data-panel="quest-list"] .qb-box { flex: 1 1 0; min-block-size: 0; display: flex; flex-direction: column; gap: var(--d-sp-2); font-size: var(--d-fs-1); overflow-wrap: anywhere; }
+  [data-panel="quest-list"] .qb-head { flex: none; display: flex; align-items: center; justify-content: space-between; gap: var(--d-sp-2); flex-wrap: wrap; }
+  [data-panel="quest-list"] .qb-act { font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); }
+  [data-panel="quest-list"] .qb-mode { display: flex; border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); overflow: hidden; }
+  [data-panel="quest-list"] .qb-seg { min-block-size: var(--q-touch, 32px); padding: 0 var(--d-sp-3); border: 0; background: transparent; color: var(--d-text-2); font: inherit; font-size: var(--d-fs-0); cursor: pointer; }
+  [data-panel="quest-list"] .qb-seg[data-on="1"] { background: var(--d-surface-3); color: var(--d-text); font-weight: 650; }
+  [data-panel="quest-list"] .qb-now { flex: none; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: var(--d-sp-2); align-items: center; padding: var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-state-bg-info); box-shadow: inset 3px 0 0 var(--d-accent); }
+  [data-panel="quest-list"] .qb-now[data-kind="blocked"], [data-panel="quest-list"] .qb-now[data-kind="failed"] { background: var(--d-state-bg-warn); box-shadow: inset 3px 0 0 var(--d-warn); }
+  [data-panel="quest-list"] .qb-now .qb-t { display: flex; flex-direction: column; min-inline-size: 0; }
+  [data-panel="quest-list"] .qb-list { flex: 1 1 0; min-block-size: 0; overflow-y: auto; display: flex; flex-direction: column; gap: var(--d-sp-3); }
+  [data-panel="quest-list"] h3 { margin: 0 0 var(--d-sp-1); font-size: var(--d-fs-0); font-weight: 700; letter-spacing: .11em; text-transform: uppercase; color: var(--d-text-2); }
+  [data-panel="quest-list"] ul { list-style: none; margin: 0; padding: 0; }
+  [data-panel="quest-list"] .qb-rows { display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  [data-panel="quest-list"] .qb-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2px var(--d-sp-2); align-items: baseline; padding: var(--d-sp-1) var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-surface-2); }
+  [data-panel="quest-list"] .qb-row[data-group="done"], [data-panel="quest-list"] .qb-row[data-group="skipped"], [data-panel="quest-list"] .qb-row[data-group="locked"] { background: transparent; color: var(--d-text-2); }
+  [data-panel="quest-list"] .qb-row[data-group="now"] { box-shadow: inset 3px 0 0 var(--d-accent); }
+  [data-panel="quest-list"] .qb-t b { font-weight: 600; }
+  [data-panel="quest-list"] .qb-g { font-size: var(--d-fs-0); color: var(--d-text-2); text-transform: uppercase; letter-spacing: .08em; }
+  [data-panel="quest-list"] .qb-chunks { grid-column: 1 / -1; display: flex; flex-direction: column; gap: var(--d-sp-1); }
+  [data-panel="quest-list"] .qb-chunk { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2px var(--d-sp-2); align-items: center; }
+  [data-panel="quest-list"] .qb-chunk .qb-r, [data-panel="quest-list"] .qb-chunk .qb-m { grid-column: 1 / 2; }
+  [data-panel="quest-list"] .qb-chunk .qb-btn { grid-column: 3; grid-row: 1 / span 2; }
+  [data-panel="quest-list"] .qb-r, [data-panel="quest-list"] .qb-m { font-size: var(--d-fs-0); color: var(--d-text-2); }
+  [data-panel="quest-list"] .qb-w { font-size: var(--d-fs-0); font-weight: 650; padding: 0 var(--d-sp-2); border-radius: var(--d-r-round); background: var(--d-surface-3); color: var(--d-text); white-space: nowrap; }
+  [data-panel="quest-list"] .qb-w[data-w="safe"] { background: var(--d-state-bg-ok); color: var(--d-ok); }
+  [data-panel="quest-list"] .qb-w[data-w="risky"] { background: var(--d-state-bg-warn); color: var(--d-warn); }
+  [data-panel="quest-list"] .qb-w[data-w="too hard"], [data-panel="quest-list"] .qb-w[data-w="blocked"] { background: var(--d-state-bg-danger); color: var(--d-danger); }
+  [data-panel="quest-list"] .qb-auto { justify-self: end; font-size: var(--d-fs-0); color: var(--d-text-2); }
+  [data-panel="quest-list"] .qb-auto[data-off] { opacity: .7; }
+  [data-panel="quest-list"] .qb-btn, [data-panel="quest-list"] .qb-sw { min-block-size: var(--q-touch, 32px); padding: 0 var(--d-sp-3); border: var(--d-bw) solid var(--d-line-strong); border-radius: var(--d-r-1); background: var(--d-surface-2); color: var(--d-text); font: inherit; font-size: var(--d-fs-0); white-space: nowrap; cursor: pointer; }
+  [data-panel="quest-list"] .qb-btn.qb-p { background: var(--d-accent); border-color: var(--d-accent); color: var(--d-on-accent); font-weight: 600; }
+  [data-panel="quest-list"] .qb-btn[data-armed] { background: var(--d-warn); border-color: var(--d-warn); color: var(--d-on-warn); }
+  [data-panel="quest-list"] .qb-sw[data-on="1"] { background: var(--d-surface-3); font-weight: 650; }
+  [data-panel="quest-list"] :is(.qb-btn, .qb-sw):disabled { opacity: .55; cursor: default; }
+  [data-panel="quest-list"] :is(.qb-btn, .qb-sw, .qb-seg):focus-visible { outline: 2px solid var(--d-focus); outline-offset: 1px; }
+  [data-panel="quest-list"] .qb-h { display: flex; justify-content: space-between; gap: var(--d-sp-2); background: transparent; padding-block: 0; }
+  [data-panel="quest-list"] .qb-empty { padding: var(--d-sp-3); display: flex; flex-direction: column; gap: var(--d-sp-2); }
+  [data-panel="quest-list"] .qb-empty p { margin: 0; color: var(--d-text-2); }
+  [data-panel="quest-list"] .qb-empty code { align-self: flex-start; padding: 1px var(--d-sp-2); border-radius: var(--d-r-1); background: var(--d-surface-3); font-family: var(--d-font-num); }
+  /* a phone (the Quests tab; the full-width drawer is sized in shell.css): 44 px targets */
+  [data-panel="quest-list"]:is([data-cmode="phone"] *) :is(.qb-btn, .qb-sw, .qb-seg) { min-block-size: 44px; }
+}

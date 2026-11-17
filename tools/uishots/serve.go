@@ -110,6 +110,7 @@ func serve(addr, class string) error {
 	m.HandleFunc("/api/update/status", updateStatusFixture)
 	m.Handle("/watch/update.js", watch.UpdateHandler(fixtureUpdater{}))
 	m.HandleFunc(watch.GlanceRoute, glanceFixture(sim.Hub))
+	m.HandleFunc(watch.QuestsRoute, questsFixture)
 	m.HandleFunc("/api/repair", func(w http.ResponseWriter, r *http.Request) { js(w, repairFixture) })
 	m.HandleFunc("/api/tally", func(w http.ResponseWriter, r *http.Request) { js(w, tallyFixture) })
 	if b, err := os.ReadFile("internal/watch/testdata/currency-" + class + ".json"); err == nil {
