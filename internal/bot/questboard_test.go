@@ -3,9 +3,12 @@ package bot
 import (
 	"context"
 	"strings"
+	"sync"
+	"sync/atomic"
 	"testing"
 	"time"
 
+	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/env"
 	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/task"
@@ -141,4 +144,88 @@ func TestBoardPlanHidesTheHandIn(t *testing.T) {
 		t.Fatal("a multi-chunk quest must not be runnable in S3")
 	}
 	_ = task.QDen
+}
+
+// The margin query (Deps.QuestMargin, slice S4) replaces the legacy words: a boss the survival model calls too hard is
+// never offered, whatever the old clvl floor says, and the API gets the reasons behind the word.
+func TestQuestBoardAssessReplacesLegacyWords(t *testing.T) {
+	g, x := boardRig(t, true)
+	var calls atomic.Int32
+	g.r.SetQuestMargin(func(s *d2.Snapshot, boss, diff string, potions int) (questboard.Hero, *questboard.Encounter, bool) {
+		calls.Add(1)
+		h := questboard.Hero{Class: "Paladin", Level: s.Player.Level, MercHired: true, MercAlive: true, Potions: 8, LowestResist: 0}
+		if boss == "" {
+			return h, nil, true
+		}
+		return h, &questboard.Encounter{Name: boss, Kind: "boss", Best: 0.2, Low: 0.1, Known: true}, true
+	})
+	g.run()
+	defer g.finish()
+	g.waitFor("snapshot", func() bool { return g.r.QuestClass() != "" })
+	off, err := x.Offers()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if offered(off, "sisters_burial_grounds") {
+		t.Fatalf("Blood Raven offered although the margin says too hard: %+v", off)
+	}
+	b, _ := questboard.Load()
+	q, _ := b.Quest("sisters_burial_grounds")
+	rd, ok := g.r.QuestReadiness(q, q.Chunks[0])
+	if !ok || rd.Word != questboard.ReadyTooHard || rd.Sentence == "" {
+		t.Fatalf("readiness: %+v %v", rd, ok)
+	}
+	n := calls.Load()
+	g.r.QuestReadiness(q, q.Chunks[0])
+	if calls.Load() != n {
+		t.Fatal("the margin query ran again inside the throttle window")
+	}
+}
+
+func offered(off []questboard.Offer, quest string) bool {
+	for _, o := range off {
+		if o.Quest == quest {
+			return true
+		}
+	}
+	return false
+}
+
+// The runner builds the board of the loaded hero through the maker (the name is only known from the first snapshot) and
+// follows the knob.
+func TestQuestBoardMakerBuildsPerHero(t *testing.T) {
+	g, _ := boardRig(t, true)
+	var heroes []string
+	var mu sync.Mutex
+	got := func() []string { mu.Lock(); defer mu.Unlock(); return append([]string(nil), heroes...) }
+	dir := t.TempDir()
+	g.r.SetQuestBoardMaker(func(hero string) (*questboard.Board, *questboard.Store, error) {
+		mu.Lock()
+		heroes = append(heroes, hero)
+		mu.Unlock()
+		b, err := questboard.Load()
+		if err != nil {
+			return nil, nil, err
+		}
+		st, err := questboard.Open(b, dir, hero)
+		return b, st, err
+	})
+	g.run()
+	defer g.finish()
+	var x *questboard.Exec
+	g.waitFor("board for the hero", func() bool {
+		var st *questboard.Store
+		x, st = g.r.QuestBoard()
+		return x != nil && st != nil && len(got()) > 0
+	})
+	if h := got(); len(h) != 1 || h[0] == "" {
+		t.Fatalf("maker calls: %v", h)
+	}
+	if x2, _ := g.r.QuestBoard(); x2 != x || len(got()) != 1 {
+		t.Fatal("the board was rebuilt for the same hero")
+	}
+	g.r.e.Tune.Quests.Board = 0
+	if x3, _ := g.r.QuestBoard(); x3.Enabled() {
+		t.Fatal("the board did not follow the knob off")
+	}
 }

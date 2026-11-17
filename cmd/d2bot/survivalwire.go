@@ -13,6 +13,7 @@ import (
 	"d2lod-bot/internal/danger"
 	"d2lod-bot/internal/data"
 	"d2lod-bot/internal/power"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/survival"
 )
 
@@ -108,6 +109,7 @@ func newSurvivalShadow(db *data.DB, ledgerPath string, now func() time.Time) *su
 	w.led = led
 	f := w.fight
 	survFight.Store(&f)
+	survShadow.Store(w)
 	return w
 }
 
@@ -248,7 +250,7 @@ func (w *survivalShadow) judge(s *d2.Snapshot, area int, diff string, potions in
 		return bot.ZoneVerdict{}, err
 	}
 	lines := d.Line()
-	v := bot.ZoneVerdict{Area: d.Area, Fresh: d.Fresh, Hole: d.Hole, Margin: d.Margin, Why: d.Why.Text}
+	v := bot.ZoneVerdict{Area: d.Area, Fresh: d.Fresh, Hole: d.Hole, Margin: d.Margin, Why: d.Why.Text, K: d.CurK}
 	var merc *survival.ReviveDecision
 	if mercDead {
 		alive := hero
@@ -308,4 +310,34 @@ func (w *survivalShadow) fight(fs combat.FightSummary) {
 	n := float64(fs.Kills)
 	w.led.Observe(survival.ZoneKey{Area: fs.Area, Diff: w.lastDiff}, w.now(), survival.Event{Kind: survival.EvFight, Kills: n, Seconds: fs.Sec,
 		Taken: float64(fs.Damage), PredTaken: pr.takenPerKill * n, PredKillSec: pr.secPerKill * n, Potions: float64(fs.Potions), Starved: float64(fs.Starved)}, w.power)
+}
+
+// questMargin answers the quest board's margin query (slice S4): the hero as readiness sees it and, for a boss key, the
+// margin against it divided by the ledger's hero correction (a boss has no zone key, so the zone part is 1; U: a boss
+// that killed the hero before is not yet remembered per boss). boss "" asks for the hero only. Read only.
+func (w *survivalShadow) questMargin(s *d2.Snapshot, boss, diff string, potions int) (questboard.Hero, *questboard.Encounter, bool) {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	if s == nil || s.Player == nil {
+		return questboard.Hero{}, nil, false
+	}
+	hero, a, err := heroOf(w.m, w.db, s, potions, w.warn)
+	if err != nil {
+		return questboard.Hero{}, nil, false
+	}
+	qh := questboard.HeroFrom(hero)
+	if boss == "" {
+		return qh, nil, true
+	}
+	b, err := w.tab.FindBoss(boss, diff)
+	if err != nil {
+		return qh, nil, true
+	}
+	r, err := w.m.Margin(hero, a, power.BossPack(b))
+	if err != nil {
+		return qh, nil, true
+	}
+	k := w.led.KHeroFor(w.m.OffenceUnread(hero))
+	enc := questboard.EncounterFrom(b.Name, "boss", r, k)
+	return qh, &enc, true
 }

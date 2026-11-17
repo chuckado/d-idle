@@ -16,7 +16,7 @@ import (
 // The quest board executor hand-off (slice S3, docs/questboard.md "Executor"). With knob quests.board = 1 the planner no
 // longer starts quests: an accepted plan record runs the existing chunk handler (internal/task act*.go) up to, but not
 // including, its hand-in step; the hero stops in town next to the giver (Awaiting) and the player's HandIn tap runs the
-// hand-in step. Between chunks the hero trains (the StepLevel slice; the modes are slice S6). Knob 0: none of this runs.
+// hand-in step. Between chunks the hero acts on the player's mode (boardmode.go, slice S6). Knob 0: none of this runs.
 
 // questBoardOn is the knob quests.board.
 func (r *Runner) questBoardOn() bool { return r.e.Tune.Quests.Board != 0 }
@@ -37,6 +37,8 @@ type boardRT struct {
 	r     *Runner
 	board *questboard.Board
 	exec  *questboard.Exec
+	st    *questboard.Store
+	hero  string // the hero the store belongs to ("" when built by NewQuestBoard)
 	reqs  chan boardHandInReq
 
 	mu       sync.Mutex
@@ -44,24 +46,118 @@ type boardRT struct {
 	w        task.World
 	class    string
 	ready    map[string]questboard.Word
+	explain  map[string]questboard.Readiness // the full answers behind ready, when the margin query ran
+	assessed time.Time                       // when ready was last computed (the margin query is throttled)
+	assessOn string                          // the inputs it was computed for (level, difficulty)
+	th       *questboard.Thresholds
 	handed   map[string]bool      // hand-in dialogue ran this process (T3 proxy until the save or memory agrees)
 	near     map[string]bool      // walked to the giver once this process
 	lastFail map[string]time.Time // chunk key: last failure that was counted
 	noted    map[string]string    // visible-reason log lines already written
+	applied  string               // the between-chunks mode the hero acts on (boardmode.go); "" before the first tick
+	farming  bool                 // inside a farm-mode slice: the area choice farms
 }
 
 // NewQuestBoard builds the board executor of this runner and its hero's plan store and keeps it for boardStep. The S4
 // API calls the returned Exec (Offers, Accept, HandIn, State). Safe to call with the knob at 0: the Exec then answers
 // ErrOff and boardStep never runs.
 func (r *Runner) NewQuestBoard(b *questboard.Board, st *questboard.Store) *questboard.Exec {
-	rt := &boardRT{r: r, board: b, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, near: map[string]bool{},
+	return r.newQuestBoard(b, st, "")
+}
+
+func (r *Runner) newQuestBoard(b *questboard.Board, st *questboard.Store, hero string) *questboard.Exec {
+	rt := &boardRT{r: r, board: b, st: st, hero: hero, reqs: make(chan boardHandInReq, 1), handed: map[string]bool{}, near: map[string]bool{},
 		lastFail: map[string]time.Time{}, noted: map[string]string{}}
 	rt.exec = questboard.NewExec(b, st, boardEnv{rt}, boardActions{rt}, questboard.Options{
 		Enabled: r.questBoardOn(),
 		Log:     func(msg string, kv ...any) { r.e.Log.Info(msg, kv...) },
 	})
+	if m, err := st.Mode(); err == nil {
+		rt.exec.SetMode(m)
+	}
+	r.qbMu.Lock()
 	r.qb = rt
+	r.qbMu.Unlock()
 	return rt.exec
+}
+
+// QuestBoardMaker opens the board and the plan store of one hero (cmd/d2bot, per-hero file under the state directory).
+type QuestBoardMaker func(hero string) (*questboard.Board, *questboard.Store, error)
+
+// SetQuestBoardMaker lets the runner build the board of the loaded hero by itself: the hero's name is only known from the
+// first snapshot, and a Character Select switch loads another hero (its plan file is <hero>.quests.json).
+func (r *Runner) SetQuestBoardMaker(f QuestBoardMaker) {
+	r.qbMu.Lock()
+	r.qbMake = f
+	r.qbMu.Unlock()
+}
+
+func (r *Runner) qbRT() *boardRT { r.qbMu.Lock(); defer r.qbMu.Unlock(); return r.qb }
+
+// boardRTFor returns the board of the loaded hero, building (or, after a hero switch, rebuilding) it through the maker.
+// It follows the knob on every call. nil while there is neither a maker nor a board.
+func (r *Runner) boardRTFor() *boardRT {
+	r.qbMu.Lock()
+	rt, mk := r.qb, r.qbMake
+	r.qbMu.Unlock()
+	if mk != nil {
+		name := ""
+		if s := r.latest(); s != nil && s.Player != nil {
+			name = s.Player.Name
+		}
+		if name != "" && (rt == nil || rt.hero != name) {
+			b, st, err := mk(name)
+			if err != nil {
+				r.boardNote("make", "quest board: no plan store for "+name+": "+err.Error())
+			} else {
+				r.newQuestBoard(b, st, name)
+				rt = r.qbRT()
+			}
+		}
+	}
+	if rt != nil {
+		rt.exec.SetEnabled(r.questBoardOn())
+	}
+	return rt
+}
+
+// SetQuestMargin installs the margin query before the loop starts (cmd/d2bot builds the survival model after bot.New).
+func (r *Runner) SetQuestMargin(f func(s *d2.Snapshot, boss, diff string, potions int) (questboard.Hero, *questboard.Encounter, bool)) {
+	r.qbMu.Lock()
+	r.d.QuestMargin = f
+	r.qbMu.Unlock()
+}
+
+// QuestBoard returns the executor and plan store of the loaded hero for the API desk; nil before a hero is loaded.
+func (r *Runner) QuestBoard() (*questboard.Exec, *questboard.Store) {
+	rt := r.boardRTFor()
+	if rt == nil {
+		return nil, nil
+	}
+	return rt.exec, rt.st
+}
+
+// QuestReadiness is the full readiness of a chunk (reasons, legacy floor, sentence) for the API; ok is false when no margin
+// query ran for it.
+func (r *Runner) QuestReadiness(q questboard.Quest, c questboard.Chunk) (questboard.Readiness, bool) {
+	rt := r.qbRT()
+	if rt == nil {
+		return questboard.Readiness{}, false
+	}
+	rt.world()
+	rt.mu.Lock()
+	defer rt.mu.Unlock()
+	rd, ok := rt.explain[questboard.ChunkKey(q.ID, c.ID)]
+	return rd, ok
+}
+
+// QuestClass is the loaded hero's class in lower case ("" before a snapshot).
+func (r *Runner) QuestClass() string {
+	if rt := r.qbRT(); rt != nil {
+		_, class, _ := rt.world()
+		return class
+	}
+	return ""
 }
 
 // ---- Env: evidence ------------------------------------------------------------------------------------
@@ -88,13 +184,86 @@ func (rt *boardRT) world() (task.World, string, map[string]questboard.Word) {
 		}
 		rt.snap, rt.w = s, w
 		rt.class = strings.ToLower(s.Player.Class.String())
-		rt.ready, err = rt.board.LegacyReadiness(rt.class, s.Player.Level)
-		if err != nil {
-			rt.r.e.Log.Warn("quest board: readiness unknown", "err", err)
-			rt.ready = nil
-		}
+		rt.assess(s)
 	}
 	return rt.w, rt.class, rt.ready
+}
+
+// assessEvery spaces the margin queries: the readiness words change with the level, the kit and the merc, not per snapshot.
+// U: judgment.
+const assessEvery = 30 * time.Second
+
+// assess fills ready and explain for the snapshot. Callers hold rt.mu. With the margin query (Deps.QuestMargin, the survival
+// model, read only) each chunk is judged by questboard.Assess against its boss; without it, or where Assess has no data (the
+// word is Unknown), the transitional legacy word stands, as before S4 (a quest without a floor is safe).
+func (rt *boardRT) assess(s *d2.Snapshot) {
+	diff := difficultyName(s.Player.Difficulty)
+	on := fmt.Sprintf("%d/%s/%d", s.Player.Level, diff, int(s.Player.Difficulty))
+	now := rt.r.e.Clock.Now()
+	if rt.ready != nil && on == rt.assessOn && now.Sub(rt.assessed) < assessEvery {
+		return
+	}
+	legacy, err := rt.board.LegacyReadiness(rt.class, s.Player.Level)
+	if err != nil {
+		rt.r.e.Log.Warn("quest board: readiness unknown", "err", err)
+		rt.ready, rt.explain = nil, nil
+		return
+	}
+	rt.ready, rt.explain, rt.assessOn, rt.assessed = legacy, nil, on, now
+	hook := rt.r.d.QuestMargin
+	if hook == nil {
+		return
+	}
+	if rt.th == nil {
+		th, err := questboard.LoadThresholds()
+		if err != nil {
+			rt.r.e.Log.Warn("quest board: thresholds not loaded, legacy readiness stays", "err", err)
+			return
+		}
+		rt.th = th
+	}
+	potions := -1
+	if healing, _, known := rt.r.beltAndInv(s); known {
+		potions = healing
+	}
+	hero, _, ok := hook(s, "", diff, potions)
+	if !ok {
+		return
+	}
+	if potions < 0 {
+		hero.Potions = 1 << 20 // the belt was not read: never claim a shortage
+	}
+	bosses := map[string]*questboard.Encounter{}
+	rt.explain = map[string]questboard.Readiness{}
+	for _, q := range rt.board.Quests() {
+		floor, hasFloor, _ := rt.board.Floor(q, rt.class)
+		for _, c := range q.Chunks {
+			boss := c.Boss
+			if boss == "" {
+				boss = q.Boss
+			}
+			in := questboard.AssessInput{Dial: rt.r.zoneDial(), Diff: int(s.Player.Difficulty), Hero: hero, Floor: floor, HasFloor: hasFloor}
+			if boss != "" {
+				enc, seen := bosses[boss]
+				if !seen {
+					_, enc, _ = hook(s, boss, diff, potions)
+					bosses[boss] = enc
+				}
+				if enc != nil {
+					in.Encounters = []questboard.Encounter{*enc}
+				}
+			}
+			rd, err := rt.th.Assess(in)
+			if err != nil {
+				continue
+			}
+			k := questboard.ChunkKey(q.ID, c.ID)
+			rt.explain[k] = rd
+			if !rd.Unknown {
+				rt.ready[k] = rd.Word
+			}
+		}
+	}
 }
 
 type boardEnv struct{ rt *boardRT }
@@ -286,19 +455,20 @@ func (p boardPlan) Plan(w task.World, s task.Session) task.Plan {
 
 // boardStep is one loop tick of a campaign goal with the board on.
 func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bool {
-	rt := r.qb
+	rt := r.qbRT()
 	if rt == nil {
 		r.boardNote("unwired", "quests.board is on but no board is wired: the hero only trains")
 		return r.boardTrain(ctx, snap, c)
 	}
 	rt.exec.SetEnabled(true)
+	r.parkedBoard.Store(false)
 	if r.boardServeHandIn(ctx, snap, c) {
 		return true
 	}
 	d, err := rt.exec.Next()
 	if err != nil {
 		r.boardNote("next", "quest board: "+err.Error())
-		return r.boardTrain(ctx, snap, c)
+		return r.boardBetween(ctx, snap, c)
 	}
 	switch d.Kind {
 	case questboard.DecRun:
@@ -310,12 +480,12 @@ func (r *Runner) boardStep(ctx context.Context, snap *d2.Snapshot, c control) bo
 	case questboard.DecBlocked:
 		r.boardNote("blocked "+d.Quest, fmt.Sprintf("quest board: %s/%s parked: %s", d.Quest, d.Chunk, d.Why))
 	}
-	return r.boardTrain(ctx, snap, c)
+	return r.boardBetween(ctx, snap, c) // DecIdle, or a parked chunk: the mode decides
 }
 
 // boardNote logs a visible reason once per distinct text.
 func (r *Runner) boardNote(key, line string) {
-	rt := r.qb
+	rt := r.qbRT()
 	if rt == nil {
 		return
 	}
@@ -329,17 +499,18 @@ func (r *Runner) boardNote(key, line string) {
 }
 
 func (r *Runner) boardTrain(ctx context.Context, snap *d2.Snapshot, c control) bool {
+	r.noteTrain(snap)
 	_, ok := r.boardSlice(ctx, snap, c, boardPlan{train: true}, "Quest board: training")
 	return ok
 }
 
 // boardRun runs one slice of the accepted chunk and reports it.
 func (r *Runner) boardRun(ctx context.Context, snap *d2.Snapshot, c control, d questboard.Decision) bool {
-	rt := r.qb
+	rt := r.qbRT()
 	q, err := rt.board.Quest(d.Quest)
 	if err != nil {
 		r.boardNote("quest", err.Error())
-		return r.boardTrain(ctx, snap, c)
+		return r.boardBetween(ctx, snap, c)
 	}
 	res, ok := r.boardSlice(ctx, snap, c, boardPlan{q: q}, "Quest: "+q.Title)
 	out := questboard.StepResult{Outcome: questboard.StepRan}
@@ -431,7 +602,7 @@ func (r *Runner) boardSlice(ctx context.Context, snap *d2.Snapshot, c control, p
 // boardAwait stands the hero in town next to the giver and waits for the player's tap. The walk to the giver is one
 // open-and-close of the dialog (the live path of the hand-in), done once per chunk and process.
 func (r *Runner) boardAwait(ctx context.Context, snap *d2.Snapshot, c control, d questboard.Decision) bool {
-	rt := r.qb
+	rt := r.qbRT()
 	k := questboard.ChunkKey(d.Quest, d.Chunk)
 	rt.mu.Lock()
 	seen := rt.near[k]
@@ -454,7 +625,7 @@ func (r *Runner) boardAwait(ctx context.Context, snap *d2.Snapshot, c control, d
 // boardServeHandIn runs a waiting HandIn tap on the loop's goroutine: the hand-in step of the quest's handler, nothing
 // else. It reports true when it used the tick.
 func (r *Runner) boardServeHandIn(ctx context.Context, snap *d2.Snapshot, c control) bool {
-	rt := r.qb
+	rt := r.qbRT()
 	select {
 	case req := <-rt.reqs:
 		req.done <- r.boardHandIn(ctx, snap, c, req)
@@ -465,7 +636,7 @@ func (r *Runner) boardServeHandIn(ctx context.Context, snap *d2.Snapshot, c cont
 }
 
 func (r *Runner) boardHandIn(ctx context.Context, snap *d2.Snapshot, c control, req boardHandInReq) error {
-	rt := r.qb
+	rt := r.qbRT()
 	n, ok := handInNode(req.q)
 	if !ok {
 		return fmt.Errorf("quest %s has no hand-in step in the task layer", req.q.ID)

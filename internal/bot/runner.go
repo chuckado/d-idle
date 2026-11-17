@@ -21,6 +21,7 @@ import (
 	"d2lod-bot/internal/event"
 	"d2lod-bot/internal/goals"
 	"d2lod-bot/internal/input"
+	"d2lod-bot/internal/questboard"
 	"d2lod-bot/internal/task"
 )
 
@@ -84,6 +85,11 @@ type Deps struct {
 	// BossMargin, if set and bot.zoneModel is 1, says whether the hero's margin against a boss exists and its word; ok is
 	// false without margin data for that boss (the legacy level floor then stays).
 	BossMargin func(s *d2.Snapshot, key, diff, dial string) (word string, ok bool)
+	// QuestMargin, if set, is the quest board's read-only margin query (slice S4, docs/questboard.md "Readiness"): the hero as
+	// readiness sees it and the hero's margin against a boss (nil without data for that boss; boss "" asks for the hero only).
+	// potions is the healing potion count, -1 when the belt was not read. ok is false when the hero is unreadable. It must not
+	// change any decision; bot.zoneModel is not consulted.
+	QuestMargin func(s *d2.Snapshot, boss, diff string, potions int) (hero questboard.Hero, enc *questboard.Encounter, ok bool)
 }
 
 // goalSpec is a goal compiled at Start (names resolved, nothing left to fail later except travel).
@@ -120,6 +126,8 @@ type Runner struct {
 	gf       *goldfarm.Controller // the player's Farm gold order (SetGoldFarm); nil: no order
 	journey  *journey.Controller  // the guided journey (SetJourney, guided.go); nil: the floor planner alone
 	qb       *boardRT             // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
+	qbMu     sync.Mutex           // guards qb and qbMake (the API goroutine builds the board of a hero too)
+	qbMake   QuestBoardMaker      // builds the board of the loaded hero (cmd/d2bot opens the plan store); nil: only NewQuestBoard
 	gfRepair func() int           // gold Repair All would cost now
 	gfArea   int                  // last farm zone logged
 	rep      *repair.Controller   // the player's Repair now request (SetRepairTrip); nil: no repair trips
@@ -182,6 +190,7 @@ type Runner struct {
 	merc           mercState            // sticky merc knowledge and chore backoff (resource.go)
 	drank          atomic.Int64         // potions drunk, counted from every EvPotion event (combat emits them live; the observer's own diff is off there)
 	playerCancelNs atomic.Int64         // clock of the last guard interrupt for a player command (playerDue)
+	parkedBoard    atomic.Bool          // quest board Idle mode: standing in town on purpose, the stall watchdog stays quiet (boardmode.go)
 	noTP           atomic.Bool          // the running task step has Constraints.NoTownPortal: no safety portal, no trip
 	farmMu         sync.Mutex           // guards farm
 	farm           farmProgress         // runs goal progress across farmStep restarts (farm.go)

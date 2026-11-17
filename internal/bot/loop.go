@@ -94,7 +94,7 @@ func (r *Runner) step(ctx context.Context) bool {
 	if isDead(p) {
 		return r.deathWait(c)
 	}
-	if r.campaignStall(ctx, snap, c.goal != nil && !c.paused) {
+	if r.campaignStall(ctx, snap, c.goal != nil && !c.paused && !r.parkedBoard.Load()) {
 		return true
 	}
 	if r.droughtCheck(ctx, snap, c) {
@@ -321,7 +321,11 @@ func (r *Runner) carryOut(ctx context.Context, a SafetyAction) error {
 	if a == SafetyChicken {
 		if s := r.latest(); s != nil && s.Player != nil {
 			r.zoneObserve(ZoneEvent{Kind: ZoneEvChicken, Area: s.Player.Area, Diff: difficultyName(s.Player.Difficulty), At: r.e.Clock.Now()})
+			r.zoneCost("chicken")
 		}
+	}
+	if a == SafetyDrinkRejuv {
+		r.zonePotion()
 	}
 	if a != SafetyDrinkLife && a != SafetyDrinkMana && a != SafetyDrinkRejuv {
 		if s := r.latest(); s != nil && s.Player != nil {

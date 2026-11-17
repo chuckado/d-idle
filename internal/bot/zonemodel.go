@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"fmt"
 	"sync"
 	"time"
 
@@ -29,7 +30,8 @@ type ZoneVerdict struct {
 	MercWhy    string
 	MercGain   float64 // value the revive adds until he dies again (same units as MercCost)
 	MercCost   float64
-	MercZone   string // the zone the gain is measured in
+	MercZone   string  // the zone the gain is measured in
+	K          float64 // the ledger correction (k_zone x k_hero) of the zone the hero is in, for the `zone reask` line; 0 = unknown
 }
 
 // zoneState is the last verdict, for the merc policy and the Status word.
@@ -40,6 +42,79 @@ type zoneState struct {
 	have   bool
 	noted  string // merc note already logged
 	failed string // last error logged
+	reask  zoneReask
+}
+
+// Cost-event re-ask (card survreask). A chicken, a death, a merc death or a potion crisis feeds the ledger at once, but
+// the cached pick used to survive until the dwell ended (seed 149: six chickens in 35 s in one zone). Such an event
+// now makes the next leveling pick ask the model again, at most reaskMax times per reaskWindow and not closer than
+// reaskGap; the model's own hysteresis (switch margin, step-down rows) still decides whether to leave.
+const (
+	reaskGap     = 5 * time.Second
+	reaskWindow  = 10 * time.Minute
+	reaskMax     = 6
+	crisisN      = 2 // emergency (rejuvenation) drinks within crisisWindow count as one cost event
+	crisisWindow = time.Minute
+)
+
+type zoneReask struct {
+	pending string      // the reason of the oldest unanswered cost event
+	stamps  []time.Time // re-asks made, pruned to reaskWindow
+	pots    []time.Time
+}
+
+// allowed prunes the window and says whether a re-ask may run now.
+func (q *zoneReask) allowed(now time.Time) bool {
+	keep := q.stamps[:0]
+	for _, t := range q.stamps {
+		if now.Sub(t) < reaskWindow {
+			keep = append(keep, t)
+		}
+	}
+	q.stamps = keep
+	if n := len(keep); n > 0 && now.Sub(keep[n-1]) < reaskGap {
+		return false
+	}
+	return len(keep) < reaskMax
+}
+
+// zoneCost records a cost event; the next leveling pick re-asks the model. No effect with bot.zoneModel 0.
+func (r *Runner) zoneCost(reason string) {
+	if r.e == nil || !r.zoneModelOn() {
+		return
+	}
+	z := &r.zst
+	z.mu.Lock()
+	defer z.mu.Unlock()
+	if z.reask.pending == "" {
+		z.reask.pending = reason
+	}
+}
+
+// zonePotion counts an emergency potion; crisisN of them within crisisWindow are a cost event.
+func (r *Runner) zonePotion() {
+	if r.e == nil || !r.zoneModelOn() {
+		return
+	}
+	now := r.e.Clock.Now()
+	z := &r.zst
+	z.mu.Lock()
+	keep := z.reask.pots[:0]
+	for _, t := range z.reask.pots {
+		if now.Sub(t) < crisisWindow {
+			keep = append(keep, t)
+		}
+	}
+	keep = append(keep, now)
+	crisis := len(keep) >= crisisN
+	if crisis {
+		keep = keep[:0]
+	}
+	z.reask.pots = keep
+	z.mu.Unlock()
+	if crisis {
+		r.zoneCost("potion_crisis")
+	}
 }
 
 // zoneDial is the dial id of the knob; an out-of-range value is the default (balanced).
@@ -61,7 +136,11 @@ func (r *Runner) zoneRecheckDue() bool {
 	z := &r.zst
 	z.mu.Lock()
 	defer z.mu.Unlock()
-	return z.have && r.e.Clock.Now().Sub(z.at) >= zoneRecheck
+	now := r.e.Clock.Now()
+	if z.reask.pending != "" && z.reask.allowed(now) {
+		return true
+	}
+	return z.have && now.Sub(z.at) >= zoneRecheck
 }
 
 // zoneCands lists the plan's zones of this difficulty: the eligible steps, and the cleared zones as depleted candidates.
@@ -106,9 +185,28 @@ func (r *Runner) zoneModelPick(s *d2.Snapshot, diff string, cleared map[int]bool
 			}
 			return 0, false, false
 		}
+		now := r.e.Clock.Now()
 		z.mu.Lock()
-		z.v, z.at, z.have, z.failed = v, r.e.Clock.Now(), true, ""
+		prev, hadPrev, reason := z.v, z.have, z.reask.pending
+		z.v, z.at, z.have, z.failed = v, now, true, ""
+		if reason != "" {
+			z.reask.pending = ""
+			z.reask.stamps = append(z.reask.stamps, now)
+		}
 		z.mu.Unlock()
+		if reason != "" {
+			kBefore := 0.0
+			if hadPrev {
+				kBefore = prev.K
+			}
+			act := "stay"
+			if v.Fresh {
+				act = "leave (fresh game)"
+			} else if v.Area != s.Player.Area {
+				act = "leave"
+			}
+			r.e.Log.Info(fmt.Sprintf("zone reask: reason=%s k %.2f -> %.2f choice %d (%s)", reason, kBefore, v.K, v.Area, act))
+		}
 		for _, line := range splitLines(v.Line) {
 			r.e.Log.Info(line)
 		}

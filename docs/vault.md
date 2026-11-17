@@ -139,3 +139,6 @@ Live drill checklist (not run; needs the d2d fork with `--vault-verbs`, a throwa
 6. Fill the stash, Keep one more: Needs-you row "Stash full", item stays queued, free a cell, next visit creates it.
 7. Dead hero: press Keep: the toast says the hero is dead; nothing queued.
 Record the `.bak` of the hero before step 3 and restore it if anything differs.
+## Wallet (V7)
+
+The account wallet is ETHER, implemented in `internal/ether` and described in [ether.md](ether.md): it implements `vault.Account` and `vault.Wallet`, derives the owned capacity steps and the balance by ledger replay, and serves `GET /api/ether`, `POST /api/vault/upgrade` and `POST /api/vault/downgrade` (`internal/watch/etherapi.go`). The store's `Options.Capacity` is `wallet.Capacity(override)`; shrinking (refund of the last step) is allowed only while the active hero's count fits the lower tier. Offline only, not yet wired into the bot.

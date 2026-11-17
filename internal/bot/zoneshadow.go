@@ -92,6 +92,7 @@ func (r *Runner) zoneMercEdge(p *d2.Player, alive bool, now time.Time) {
 	diff := difficultyName(p.Difficulty)
 	if m.seen && m.alive && !alive {
 		r.zoneObserve(ZoneEvent{Kind: ZoneEvMercDied, Area: p.Area, Diff: diff, At: now})
+		r.zoneCost("merc_death")
 	}
 	if r.e == nil { // a bare runner (unit tests of the edge): no knobs, no log
 		m.seen, m.alive = true, alive

@@ -68,7 +68,9 @@ type Decision struct {
 	Alts         []Alt
 	Lambda       float64
 	NeedsYou     bool
-	line         string
+	// CurK is k_zone x k_hero of the current zone (the picked zone when the hero is in none), for the bot's re-ask line.
+	CurK float64
+	line string
 }
 
 // Line is the one log line per decision (design 8.1).
@@ -243,6 +245,10 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 	}
 	d.Area, d.Name, d.Diff, d.Margin = pick.c.Key.Area, pick.c.Name, pick.c.Key.Diff, pick.word
 	d.Stay = pick.c.Key == in.Current
+	d.CurK = pick.k
+	if cur != nil {
+		d.CurK = cur.k
+	}
 	if cur != nil && !cur.eligible && !d.Stay {
 		l.MarkLeft(cur.c.Key, in.Now, in.Power)
 	}
