@@ -2,15 +2,21 @@ package main
 
 import (
 	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
 	"log/slog"
 	"os"
 	"path/filepath"
 	"sync/atomic"
+	"time"
 
 	"d2lod-bot/internal/bot"
 	"d2lod-bot/internal/d2"
 	"d2lod-bot/internal/d2dctl"
 	"d2lod-bot/internal/env"
+	"d2lod-bot/internal/invdesk"
+	"d2lod-bot/internal/town"
 	"d2lod-bot/internal/vault"
 	"d2lod-bot/internal/vaultkeep"
 	"d2lod-bot/internal/watch"
@@ -81,6 +87,12 @@ func wireVaultKeep(ref *runnerRef, e *env.Env, c *d2dctl.Client, dataDir string,
 		Notice:   func(text string) { log.Info("vault keep: " + text) },
 		PerVisit: func() int { return e.Tune.Loot.VaultKeepPerVisit },
 	}
+	ha := heroActs{ref: ref, e: e, snap: snap}
+	k.Tools, k.Vendor = ha, ha
+	k.SellPerVisit = func() int { return e.Tune.Loot.VaultSellPerVisit }
+	k.Prompt = func() bool { return e.Tune.Loot.VaultSellPrompt != 0 }
+	k.ShortBy = ha.short
+	k.Namer = ha.name
 	home.mu.Lock()
 	home.keep = k
 	home.mu.Unlock()
@@ -161,8 +173,265 @@ func init() {
 					out = append(out, watch.GlanceNeed{ID: "vault:keep", Kind: "vault_keep", Sev: "warn", Text: text,
 						Sub: "The items stay queued and arrive at the next town visit once there is room.", Actions: []watch.GlanceVerb{}})
 				}
+				if o := k.Offer(); o != nil {
+					body, _ := json.Marshal(map[string]any{"ids": o.IDs, "confirm": true})
+					out = append(out, watch.GlanceNeed{ID: "vault:sellprompt", Kind: "vault_sell", Sev: "info",
+						Text: fmt.Sprintf("Short by %d gold for repairs and supplies: sell %d vault item%s (about %d gold)?", o.Short, len(o.IDs), plural(len(o.IDs)), o.Gold),
+						Sub:  "Only unpinned items below rare are offered. Nothing is sold unless you say yes; the hero sells them at the vendor on the next town visit.",
+						Actions: []watch.GlanceVerb{
+							{Label: "Sell them", Post: watch.VaultSellRoute, Body: body},
+							{Label: "Not now", Post: watch.VaultPromptRoute, Body: json.RawMessage(`{"dismiss":true}`)},
+						}})
+				}
 			}
 			return out
 		}
 	})
+}
+
+// heroActs is the game side of Reveal and Sell for one hero: the town's identify services and sell chore, the inventory desk's
+// marks, and a fresh read of the purse. U live: the whole chain (the created item appearing in the snapshot, the mark, the
+// vendor click path) is checked by the drill in docs/vault.md.
+type heroActs struct {
+	ref  *runnerRef
+	e    *env.Env
+	snap func() *d2.Snapshot
+}
+
+func (h heroActs) town() *town.Town { return h.ref.tw.Load() }
+
+// Charges counts the Tome of Identify's scrolls and the loose scrolls in the pack.
+func (h heroActs) Charges(context.Context) (int, error) {
+	tw := h.town()
+	if tw == nil {
+		return -1, errors.New("no town helper yet")
+	}
+	tome, _, scrolls := tw.IdentifyTools(h.snap())
+	return max(tome, 0) + scrolls, nil
+}
+
+// Free is true while Deckard Cain stands in the town the hero is in: his Identify line costs nothing.
+func (h heroActs) Free() bool {
+	s := h.snap()
+	if s == nil || s.Player == nil || !s.Player.InTown() {
+		return false
+	}
+	for i := range s.Monsters {
+		if m := &s.Monsters[i]; m.Alive() && town.IsCainClass(m.Class) {
+			return true
+		}
+	}
+	return false
+}
+
+// Identify reads the item with Cain (free: he identifies everything carried) or a scroll or tome charge (the server checks).
+func (h heroActs) Identify(ctx context.Context, unit int, free bool) error {
+	tw := h.town()
+	if tw == nil {
+		return errors.New("no town helper yet")
+	}
+	if free {
+		_, err := tw.CainIdentify(ctx)
+		return err
+	}
+	err := tw.PlayerIdentifyBatch(ctx, []uint32{uint32(unit)})[0]
+	if errors.Is(err, town.ErrNoIDTool) {
+		return vaultkeep.ErrNoTool
+	}
+	return err
+}
+
+// Gold is a fresh read of the purse (the last snapshot can be a tick old, which would fail the sale's read-back).
+func (h heroActs) Gold(context.Context) (int, error) {
+	s, err := h.e.Snapshot()
+	if err != nil || s == nil || s.Player == nil {
+		return 0, fmt.Errorf("purse unreadable: %v", err)
+	}
+	return s.Player.Gold, nil
+}
+
+// Sell marks the created pack item sell (the desk finds it once the snapshot lists it) and runs the town's own sell chore: the
+// same marked-items sale the player's "sell now" uses, real vendor, real price. The chore sells every mark of the hero, the
+// player's own included (they asked for those too). A fight or a busy panel postpones.
+func (h heroActs) Sell(ctx context.Context, units []int) error {
+	d, tw := h.ref.inv, h.town()
+	if d == nil || tw == nil {
+		return errors.New("selling is not available on this bot")
+	}
+	marked := units[:0:0]
+	undo := func() {
+		for _, u := range marked {
+			_ = d.SetMark(uint32(u), "")
+		}
+	}
+	for _, u := range units {
+		var err error
+		for try := 0; try < 8; try++ {
+			if err = d.SetMark(uint32(u), invdesk.MarkSell); err == nil {
+				break
+			}
+			var rf *invdesk.Refusal
+			if !errors.As(err, &rf) || rf.Code != "item" {
+				break
+			}
+			select { // the snapshot has not listed the created item yet
+			case <-ctx.Done():
+				undo()
+				return ctx.Err()
+			case <-time.After(400 * time.Millisecond):
+			}
+		}
+		if err != nil {
+			undo()
+			return err
+		}
+		marked = append(marked, u)
+	}
+	_, err := townSeller{tw}.SellMarked(ctx)
+	undo()
+	if err != nil && (err.Error() == "town: a fight is on" || err.Error() == "leveler: a fight is on" || ctx.Err() != nil) {
+		return fmt.Errorf("%v: %w", err, vaultkeep.ErrPostpone)
+	}
+	return err
+}
+
+// short is how much gold the next town visit lacks for the repair and the planned potion and scroll purchases (the merc
+// revive price is not counted here: U, the budget keeps it inside the chores).
+func (h heroActs) short() int {
+	tw, s := h.town(), h.snap()
+	if tw == nil || s == nil || s.Player == nil {
+		return 0
+	}
+	return max(tw.RepairEstimate(s)+tw.PlannedSpend(s)-s.Player.Gold, 0)
+}
+
+// name is the display name of an identified record, from the item the pack now holds.
+func (h heroActs) name(back d2dctl.VaultRecord, _ vault.Rec) string {
+	tw := h.town()
+	s, err := h.e.Snapshot()
+	if tw == nil || err != nil || s == nil || s.Inventory == nil {
+		return ""
+	}
+	for _, u := range s.Inventory.Items {
+		if int(u.ID) == back.UnitID && u.Item != nil {
+			return tw.ItemName(u)
+		}
+	}
+	return ""
+}
+
+// actFace adapts the keeper to watch.VaultActor; late bound like keepFace.
+type actFace struct{ h *vaultHome }
+
+func (f actFace) k() *vaultkeep.Keeper {
+	f.h.mu.Lock()
+	defer f.h.mu.Unlock()
+	return f.h.keep
+}
+
+func gateCode(why string) string {
+	switch why {
+	case vaultkeep.ReasonOff:
+		return "off"
+	case vaultkeep.ReasonDead:
+		return "dead"
+	case vaultkeep.ReasonVerbs:
+		return "verbs"
+	}
+	return "stopped"
+}
+
+func (f actFace) gate(ok bool, why string) (bool, string, string) {
+	if ok {
+		return true, "", ""
+	}
+	return false, gateCode(why), why
+}
+
+func (f actFace) GateReveal(ctx context.Context) (bool, string, string) {
+	k := f.k()
+	if k == nil {
+		return false, "off", "this bot has no Reveal"
+	}
+	ok, why := k.GateReveal(ctx)
+	return f.gate(ok, why)
+}
+
+func (f actFace) GateSell(ctx context.Context) (bool, string, string) {
+	k := f.k()
+	if k == nil {
+		return false, "off", "this bot has no Sell"
+	}
+	ok, why := k.GateSell(ctx)
+	return f.gate(ok, why)
+}
+
+func results(in []vaultkeep.Result) []watch.VaultKeepResult {
+	var out []watch.VaultKeepResult
+	for _, r := range in {
+		out = append(out, watch.VaultKeepResult{ID: r.ID, OK: r.OK, Already: r.Already, Code: r.Code, Why: r.Why})
+	}
+	return out
+}
+
+func (f actFace) EnqueueReveal(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
+	if k := f.k(); k != nil {
+		return results(k.EnqueueReveal(ctx, ids, now))
+	}
+	return nil
+}
+
+func (f actFace) EnqueueSell(ctx context.Context, ids []string, now bool) []watch.VaultKeepResult {
+	if k := f.k(); k != nil {
+		return results(k.EnqueueSell(ctx, ids, now))
+	}
+	return nil
+}
+
+func (f actFace) Cancel(ids []string) []watch.VaultKeepResult {
+	if k := f.k(); k != nil {
+		return results(k.Cancel(ids))
+	}
+	return nil
+}
+
+func (f actFace) DismissOffer() {
+	if k := f.k(); k != nil {
+		k.DismissOffer()
+	}
+}
+
+func (f actFace) Act(ctx context.Context) watch.VaultActView {
+	k := f.k()
+	if k == nil {
+		w := "this bot has no Reveal or Sell"
+		return watch.VaultActView{Reveal: watch.VaultRevealView{Why: w, Code: "off"}, Sell: watch.VaultSellView{Why: w, Code: "off"}}
+	}
+	in, p := k.Info(), k.RevealPrice(ctx)
+	v := watch.VaultActView{
+		Reveal: watch.VaultRevealView{Charges: p.Charges, Free: p.Free, PerItem: p.PerItem, Queued: in.RevQueued, Working: in.RevWorking, Done: in.Revealed, Line: k.RevealLine()},
+		Sell:   watch.VaultSellView{Queued: in.SellQueued, Working: in.SellWorking, Sold: in.Sold, Gold: in.GoldEarned, Line: k.SellLine()},
+	}
+	v.Reveal.Enabled, v.Reveal.Why = k.GateReveal(ctx)
+	if !v.Reveal.Enabled {
+		v.Reveal.Code = gateCode(v.Reveal.Why)
+	}
+	if v.Reveal.Enabled && !p.Free && p.Charges == 0 {
+		v.Reveal.Enabled, v.Reveal.Code, v.Reveal.Why = false, "noscroll", vaultkeep.ReasonNoScroll
+	}
+	v.Sell.Enabled, v.Sell.Why = k.GateSell(ctx)
+	if !v.Sell.Enabled {
+		v.Sell.Code = gateCode(v.Sell.Why)
+	}
+	if o := k.Offer(); o != nil {
+		v.Prompt = &watch.VaultPrompt{Short: o.Short, IDs: o.IDs, Gold: o.Gold, Names: o.Names}
+	}
+	return v
+}
+
+func plural(n int) string {
+	if n == 1 {
+		return ""
+	}
+	return "s"
 }

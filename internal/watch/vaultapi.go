@@ -26,6 +26,10 @@ const (
 	VaultUnpinRoute   = "/api/vault/unpin"
 	VaultDiscardRoute = "/api/vault/discard"
 	VaultKeepRoute    = "/api/vault/keep"
+	VaultRevealRoute  = "/api/vault/reveal"
+	VaultSellRoute    = "/api/vault/sell"
+	VaultCancelRoute  = "/api/vault/cancel"
+	VaultPromptRoute  = "/api/vault/sellprompt" // POST {"dismiss":true}: mute the "short on gold" prompt
 	vaultSchema       = "watch.vault/1"
 
 	vaultPageLimit = 60  // rows per page when the client names none
@@ -36,7 +40,7 @@ const (
 // VaultRoutes are the viewer paths (the page and its files, the two GET routes); VaultPostRoutes the answer ones.
 var (
 	VaultRoutes     = []string{VaultRoute, VaultItemRoute, "/watch/vault", "/watch/vault.js", "/watch/vault-logic.js", "/watch/vault.css", "/watch/vault.json"}
-	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute}
+	VaultPostRoutes = []string{VaultPinRoute, VaultUnpinRoute, VaultDiscardRoute, VaultKeepRoute, VaultRevealRoute, VaultSellRoute, VaultCancelRoute, VaultPromptRoute}
 )
 
 // VaultDesk is what the routes need from the bot side (cmd/d2bot/vaultwire.go). Every field is a func read per request, so a
@@ -47,6 +51,58 @@ type VaultDesk struct {
 	Tiers *vault.Tiers        // the capacity table, for the tier line
 	Owned func() []string     // purchased capacity steps (V7); nil: none
 	Keep  VaultKeeper         // the Keep queue (V5); nil: Keep is not part of this bot
+	Act   VaultActor          // Reveal, Sell and the sell prompt (V6); nil: not part of this bot
+}
+
+// VaultActor is Reveal and Sell as the routes see them (cmd/d2bot/vaultkeep.go adapts internal/vaultkeep).
+type VaultActor interface {
+	GateReveal(ctx context.Context) (ok bool, code, why string)
+	EnqueueReveal(ctx context.Context, ids []string, now bool) []VaultKeepResult
+	GateSell(ctx context.Context) (ok bool, code, why string)
+	EnqueueSell(ctx context.Context, ids []string, now bool) []VaultKeepResult
+	Cancel(ids []string) []VaultKeepResult
+	DismissOffer()
+	Act(ctx context.Context) VaultActView
+}
+
+// VaultActView is the state of Reveal and Sell in GET /api/vault: the price shown before the click, what is queued, the
+// sentences under the toolbar and the opt-in prompt.
+type VaultActView struct {
+	Reveal VaultRevealView `json:"reveal"`
+	Sell   VaultSellView   `json:"sell"`
+	Prompt *VaultPrompt    `json:"prompt,omitempty"`
+}
+
+type VaultRevealView struct {
+	Enabled bool   `json:"enabled"`
+	Why     string `json:"why,omitempty"` // when not enabled: shown on the button (code noscroll offers the Buy action)
+	Code    string `json:"code,omitempty"`
+	Charges int    `json:"charges"` // identify scrolls and tome charges in the pack, -1 unknown
+	Free    bool   `json:"free"`    // Cain stands here: Reveal costs nothing
+	PerItem int    `json:"perItem"`
+	Queued  int    `json:"queued"`
+	Working int    `json:"working"`
+	Done    int    `json:"done"`
+	Line    string `json:"line,omitempty"`
+}
+
+type VaultSellView struct {
+	Enabled bool   `json:"enabled"`
+	Why     string `json:"why,omitempty"`
+	Code    string `json:"code,omitempty"`
+	Queued  int    `json:"queued"`
+	Working int    `json:"working"`
+	Sold    int    `json:"sold"`
+	Gold    int    `json:"gold"` // earned in this process
+	Line    string `json:"line,omitempty"`
+}
+
+// VaultPrompt is the opt-in "short on gold: sell these?" offer; it exists only while loot.vaultSellPrompt is on.
+type VaultPrompt struct {
+	Short int      `json:"short"`
+	IDs   []string `json:"ids"`
+	Gold  int      `json:"gold"`
+	Names []string `json:"names"`
 }
 
 // VaultKeeper is the Keep queue as the routes see it (cmd/d2bot/vaultkeep.go adapts internal/vaultkeep).
@@ -156,9 +212,17 @@ type VaultItem struct {
 	Reason     string `json:"reason,omitempty"`
 	Keep       string `json:"keep,omitempty"` // queued, creating, kept or failed: the Keep queue's word for the row
 	Where      string `json:"where,omitempty"`
+	Reveal     string `json:"reveal,omitempty"`       // queued, working or failed: the Reveal errand's word for the row
+	RevealWhy  string `json:"revealReason,omitempty"` // why a reveal failed
+	Sell       string `json:"sell,omitempty"`         // queued, selling, sold or failed
+	SellWhy    string `json:"sellReason,omitempty"`
 }
 
-const keepReasonPrefix = "keep: " // vaultkeep stores failure reasons with this prefix; the row shows the sentence
+const (
+	keepReasonPrefix   = "keep: " // vaultkeep stores failure reasons with this prefix; the row shows the sentence
+	revealReasonPrefix = "reveal: "
+	sellReasonPrefix   = "sell: "
+)
 
 func vaultRow(r *vault.Rec) VaultItem {
 	name := r.Name
@@ -183,6 +247,36 @@ func vaultRow(r *vault.Rec) VaultItem {
 	}
 	if v.Keep != "" {
 		v.Reason, v.Where = strings.TrimPrefix(r.Reason, keepReasonPrefix), r.Where
+	}
+	switch {
+	case (r.State == vault.Recorded || r.State == vault.KeepQ) && r.RevQ && r.Stage != "":
+		v.Reveal = "working"
+	case (r.State == vault.Recorded || r.State == vault.KeepQ) && r.RevQ:
+		v.Reveal = "queued"
+	case r.State == vault.Recorded && r.Stage == vault.StageRevCleanup:
+		v.Reveal = "working"
+	case r.State == vault.Recorded && strings.HasPrefix(r.Reason, revealReasonPrefix):
+		v.Reveal, v.RevealWhy = "failed", strings.TrimPrefix(r.Reason, revealReasonPrefix)
+		v.Reason = v.RevealWhy
+	case r.State == vault.KeepQ && strings.HasPrefix(r.Reason, revealReasonPrefix):
+		v.Reveal, v.RevealWhy = "failed", strings.TrimPrefix(r.Reason, revealReasonPrefix)
+	}
+	switch {
+	case r.State == vault.SellQ && r.Stage != "":
+		v.Sell = "selling"
+	case r.State == vault.SellQ:
+		v.Sell = "queued"
+	case r.State == vault.Sold:
+		v.Sell = "sold"
+		if strings.HasPrefix(r.Reason, sellReasonPrefix) {
+			v.SellWhy, v.Reason = strings.TrimPrefix(r.Reason, sellReasonPrefix), strings.TrimPrefix(r.Reason, sellReasonPrefix)
+		}
+	case r.State == vault.Recorded && strings.HasPrefix(r.Reason, sellReasonPrefix):
+		v.Sell, v.SellWhy = "failed", strings.TrimPrefix(r.Reason, sellReasonPrefix)
+		v.Reason = v.SellWhy
+	}
+	if r.State == vault.Sold {
+		v.Value = r.Gold // the row of a sold item shows what it fetched
 	}
 	return v
 }
@@ -244,6 +338,7 @@ type VaultView struct {
 	Types     []vaultFacet   `json:"types,omitempty"`
 	Anomalies int            `json:"anomalies,omitempty"`
 	Keep      *VaultKeepView `json:"keep,omitempty"` // schema additive: absent when the bot has no Keep queue
+	Act       *VaultActView  `json:"act,omitempty"`  // Reveal and Sell (V6); absent when the bot has neither
 }
 
 type vaultQuery struct {
@@ -411,6 +506,49 @@ func (d *VaultDesk) keepAction(ctx context.Context, r *vault.Rec) VaultAction {
 	return VaultAction{OK: true}
 }
 
+// revealAction is the card's Reveal button. Cost and the missing-scroll reason come from the gate and the price view.
+func (d *VaultDesk) revealAction(ctx context.Context, r *vault.Rec) VaultAction {
+	switch {
+	case d.Act == nil:
+		return VaultAction{Reason: "this bot has no Reveal"}
+	case !d.on():
+		return VaultAction{Reason: "the vault is read only while loot.vault is 0"}
+	case r.Identified:
+		return VaultAction{Reason: "it is identified already"}
+	case r.RevQ:
+		return VaultAction{Reason: "already queued: arrives at your next town visit"}
+	case r.State != vault.Recorded && r.State != vault.KeepQ:
+		return VaultAction{Reason: "the item is " + string(r.State)}
+	}
+	if ok, _, why := d.Act.GateReveal(ctx); !ok {
+		return VaultAction{Reason: why}
+	}
+	if av := d.Act.Act(ctx); !av.Reveal.Free && av.Reveal.Charges == 0 {
+		return VaultAction{Reason: "no scroll; buy on request"}
+	}
+	return VaultAction{OK: true}
+}
+
+// sellAction is the card's Sell button: a live recorded item that is not pinned.
+func (d *VaultDesk) sellAction(ctx context.Context, r *vault.Rec) VaultAction {
+	switch {
+	case d.Act == nil:
+		return VaultAction{Reason: "this bot has no Sell"}
+	case !d.on():
+		return VaultAction{Reason: "the vault is read only while loot.vault is 0"}
+	case r.State == vault.SellQ:
+		return VaultAction{Reason: "already queued: sold at your next town visit"}
+	case r.Pin:
+		return VaultAction{Reason: "pinned items are never sold: unpin it first"}
+	case r.State != vault.Recorded:
+		return VaultAction{Reason: "the item is " + string(r.State)}
+	}
+	if ok, _, why := d.Act.GateSell(ctx); !ok {
+		return VaultAction{Reason: why}
+	}
+	return VaultAction{OK: true}
+}
+
 func (d *VaultDesk) on() bool { return d.On == nil || d.On() }
 
 func (d *VaultDesk) store() *vault.Store {
@@ -440,7 +578,7 @@ func (d *VaultDesk) upgradeOf() VaultUpgrade {
 	return u
 }
 
-func (d *VaultDesk) view(q vaultQuery, kinds vaultTexts) VaultView {
+func (d *VaultDesk) view(ctx context.Context, q vaultQuery, kinds vaultTexts) VaultView {
 	v := VaultView{Schema: vaultSchema, Mode: "on", Items: []VaultItem{}, Offset: q.f.Offset, Limit: q.f.Limit, Upgrade: d.upgradeOf()}
 	if !d.on() {
 		v.Mode = "off"
@@ -454,6 +592,15 @@ func (d *VaultDesk) view(q vaultQuery, kinds vaultTexts) VaultView {
 			kv.Enabled, kv.Why = false, "the vault is read only while loot.vault is 0"
 		}
 		v.Keep = &kv
+	}
+	if d.Act != nil {
+		av := d.Act.Act(ctx)
+		if !d.on() {
+			av.Reveal.Enabled, av.Reveal.Why = false, "the vault is read only while loot.vault is 0"
+			av.Sell.Enabled, av.Sell.Why = false, "the vault is read only while loot.vault is 0"
+			av.Prompt = nil
+		}
+		v.Act = &av
 	}
 	st := d.store()
 	if st == nil {
@@ -506,7 +653,7 @@ type VaultAction struct {
 	Reason string `json:"reason,omitempty"`
 }
 
-func detailOf(r *vault.Rec, readOnly bool, keep VaultAction) VaultDetail {
+func detailOf(r *vault.Rec, readOnly bool, keep, reveal, sell VaultAction) VaultDetail {
 	it := vaultRow(r)
 	var lines []string
 	if !it.Identified {
@@ -549,7 +696,8 @@ func detailOf(r *vault.Rec, readOnly bool, keep VaultAction) VaultDetail {
 		"unpin":   off(r.Pin, "not pinned"),
 		"discard": off(true, ""),
 		"keep":    keep,
-		"reveal":  {Reason: "arrives with Reveal (V6)"},
+		"reveal":  reveal,
+		"sell":    sell,
 	}}
 }
 
@@ -568,7 +716,7 @@ func (a *VaultAPI) Handler() http.Handler {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "query", Error: err.Error()})
 			return
 		}
-		writeJSON(w, 200, d.view(q, td))
+		writeJSON(w, 200, d.view(r.Context(), q, td))
 	})
 	m.HandleFunc(VaultItemRoute, func(w http.ResponseWriter, r *http.Request) {
 		d := a.desk()
@@ -586,7 +734,7 @@ func (a *VaultAPI) Handler() http.Handler {
 			writeJSON(w, http.StatusNotFound, policyReply{Code: "missing", Error: "no such item"})
 			return
 		}
-		writeJSON(w, 200, detailOf(&rec, !d.on(), d.keepAction(r.Context(), &rec)))
+		writeJSON(w, 200, detailOf(&rec, !d.on(), d.keepAction(r.Context(), &rec), d.revealAction(r.Context(), &rec), d.sellAction(r.Context(), &rec)))
 	})
 	static := func(path, file, ctype string) {
 		m.HandleFunc(path, func(w http.ResponseWriter, r *http.Request) {
@@ -610,8 +758,9 @@ func (a *VaultAPI) Handler() http.Handler {
 type vaultBody struct {
 	IDs     []string `json:"ids"`
 	Confirm bool     `json:"confirm"`
-	Target  string   `json:"target,omitempty"` // keep: stash (default) or inv
-	Now     bool     `json:"now,omitempty"`    // keep: also ask the bot to walk home for it
+	Target  string   `json:"target,omitempty"`  // keep: stash (default) or inv
+	Now     bool     `json:"now,omitempty"`     // keep, reveal, sell: also ask the bot to walk home for it
+	Dismiss bool     `json:"dismiss,omitempty"` // sellprompt: mute the prompt
 }
 
 type vaultFail struct {
@@ -657,6 +806,15 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 			writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "the vault is read only (loot.vault is 0 or there is no vault yet)"})
 			return
 		}
+		if route == VaultPromptRoute {
+			if d.Act == nil || !b.Dismiss {
+				writeJSON(w, http.StatusBadRequest, policyReply{Code: "dismiss", Error: "send dismiss: true"})
+				return
+			}
+			d.Act.DismissOffer()
+			writeJSON(w, 200, vaultReply{OK: true, Done: []string{}})
+			return
+		}
 		if len(b.IDs) == 0 || len(b.IDs) > vaultMaxIDs {
 			writeJSON(w, http.StatusBadRequest, policyReply{Code: "ids", Error: "send 1 to " + strconv.Itoa(vaultMaxIDs) + " ids"})
 			return
@@ -667,6 +825,10 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		if route == VaultKeepRoute {
 			a.keep(w, r, d, &b)
+			return
+		}
+		if route == VaultRevealRoute || route == VaultSellRoute || route == VaultCancelRoute {
+			a.act(w, r, d, route, &b)
 			return
 		}
 		rep := vaultReply{Done: []string{}}
@@ -693,6 +855,54 @@ func (a *VaultAPI) PostHandler(o AnswerOptions, route string) http.Handler {
 		}
 		writeJSON(w, code, rep)
 	})
+}
+
+// act queues Reveal or Sell, or cancels queued requests of any kind. Same shape as keep: the gate first, then the real reason
+// of every refusal; the page reads the state back from GET. Sell needs confirm (it turns an item into gold).
+func (a *VaultAPI) act(w http.ResponseWriter, r *http.Request, d *VaultDesk, route string, b *vaultBody) {
+	if d.Act == nil {
+		writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "this bot has no Reveal or Sell"})
+		return
+	}
+	var res []VaultKeepResult
+	switch route {
+	case VaultRevealRoute:
+		if ok, code, why := d.Act.GateReveal(r.Context()); !ok {
+			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+			return
+		}
+		res = d.Act.EnqueueReveal(r.Context(), b.IDs, b.Now)
+	case VaultSellRoute:
+		if !b.Confirm {
+			writeJSON(w, http.StatusBadRequest, policyReply{Code: "confirm", Error: "sell needs confirm: true"})
+			return
+		}
+		if ok, code, why := d.Act.GateSell(r.Context()); !ok {
+			writeJSON(w, http.StatusConflict, policyReply{Code: code, Error: why})
+			return
+		}
+		res = d.Act.EnqueueSell(r.Context(), b.IDs, b.Now)
+	default:
+		res = d.Act.Cancel(b.IDs)
+	}
+	rep := vaultReply{Done: []string{}}
+	for _, x := range res {
+		switch {
+		case x.OK && x.Already:
+			rep.Already = append(rep.Already, x.ID)
+			rep.Done = append(rep.Done, x.ID)
+		case x.OK:
+			rep.Done = append(rep.Done, x.ID)
+		default:
+			rep.Failed = append(rep.Failed, vaultFail{ID: x.ID, Code: x.Code, Error: x.Why})
+		}
+	}
+	rep.OK = len(rep.Failed) == 0
+	code := 200
+	if len(rep.Done) == 0 {
+		code = http.StatusConflict
+	}
+	writeJSON(w, code, rep)
 }
 
 // keep queues the ids (idempotent: a second press answers "already"), after the gate. The reply names the real reason of every
