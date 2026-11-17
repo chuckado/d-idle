@@ -11,8 +11,10 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"d2lod-bot/internal/vault"
@@ -72,6 +74,7 @@ type Wallet struct {
 	owned   map[string]int // step id to price paid
 	refunds map[string]int // step id to number of refunds so far (part of the next spend key)
 	torn    int
+	cap     atomic.Int64 // capacity from the owned steps, kept for Capacity (see there)
 }
 
 // Open reads or creates <dir>/ether.jsonl. A torn last line (crash mid-write) is dropped and the file cut back to
@@ -104,6 +107,7 @@ func Open(dir string, opt Options) (*Wallet, error) {
 func (w *Wallet) reset() {
 	w.entries, w.keys, w.balance = nil, map[string]int{}, 0
 	w.owned, w.refunds = map[string]int{}, map[string]int{}
+	w.cap.Store(int64(w.opt.Tiers.Capacity(nil, 0)))
 }
 
 func (w *Wallet) load() error {
@@ -173,6 +177,7 @@ func (w *Wallet) apply(e Entry) error {
 	}
 	w.keys[e.Key] = len(w.entries)
 	w.entries = append(w.entries, e)
+	w.cap.Store(int64(w.opt.Tiers.Capacity(w.ownedLocked(), 0)))
 	return nil
 }
 
@@ -180,7 +185,7 @@ func (w *Wallet) apply(e Entry) error {
 // state is untouched.
 func (w *Wallet) append(e Entry) (Entry, error) {
 	e.Seq = len(w.entries) + 1
-	e.TS = w.opt.Now().UTC().Format(time.RFC3339)
+	e.TS = w.opt.Now().Format(time.RFC3339) // local time: the daily cap resets at the player's midnight
 	if err := w.dry(e); err != nil {
 		return Entry{}, err
 	}
@@ -273,11 +278,14 @@ func (p payer) Spend(key string, n int) error { return p.w.SpendKey(key, n) }
 var _ vault.Account = (*Wallet)(nil)
 var _ vault.Wallet = payer{}
 
-// Capacity is the effective vault capacity from the owned steps.
+// Capacity is the effective vault capacity from the owned steps. It takes no lock: the vault store calls it while
+// it holds its own lock, and the wallet reads the store's count (Options.Content) while it holds the wallet's, so a
+// locked read here would be a lock order inversion.
 func (w *Wallet) Capacity(override int) int {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.opt.Tiers.Capacity(w.ownedLocked(), override)
+	if override > 0 {
+		return override
+	}
+	return int(w.cap.Load())
 }
 
 // ---- earning ----
@@ -335,7 +343,7 @@ func (w *Wallet) Earn(source, sub, difficulty string, hookAmount int) (Result, e
 		return Result{Key: key}, nil
 	}
 	if src.DailyCap > 0 {
-		left := src.DailyCap - w.earnedOn(source, w.opt.Now().UTC().Format("2006-01-02"))
+		left := src.DailyCap - w.earnedOn(source, w.opt.Now().Format("2006-01-02"))
 		if left <= 0 {
 			return Result{Key: key, Capped: true}, nil
 		}
@@ -463,6 +471,13 @@ func (w *Wallet) content() int {
 
 // ---- views ----
 
+// Chip is the one line the Hero tile and the Vault header show: "Ether 35".
+func (w *Wallet) Chip() string {
+	w.mu.Lock()
+	defer w.mu.Unlock()
+	return w.opt.Sources.Currency + " " + strconv.Itoa(w.balance)
+}
+
 // Summary is what GET /api/ether and the wallet chips show.
 type Summary struct {
 	Currency  string         `json:"currency"`
@@ -531,17 +546,17 @@ func (w *Wallet) Summary() Summary {
 	}
 	switch {
 	case len(owned) == 0:
-		s.Downgrade.Reason = "no capacity step is owned"
+		s.Downgrade.Reason = "No capacity step is owned."
 	default:
 		last := owned[len(owned)-1]
 		s.Downgrade.Step, s.Downgrade.Refund = last, w.owned[last]
 		if lower, n := t.Capacity(owned[:len(owned)-1], 0), w.content(); n > lower {
-			s.Downgrade.Reason = fmt.Sprintf("the vault holds %d records and the lower tier fits %d: discard %d first", n, lower, n-lower)
+			s.Downgrade.Reason = fmt.Sprintf("The vault holds %d records and the lower tier fits %d: discard %d first.", n, lower, n-lower)
 		} else {
 			s.Downgrade.Available = true
 		}
 	}
-	today := w.opt.Now().UTC().Format("2006-01-02")
+	today := w.opt.Now().Format("2006-01-02")
 	for _, r := range w.opt.Sources.Sources {
 		s.Sources = append(s.Sources, SourceView{ID: r.ID, Label: r.Label, DailyCap: r.DailyCap, EarnedToday: w.earnedOn(r.ID, today)})
 	}

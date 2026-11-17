@@ -418,7 +418,7 @@ export function charsNow(win) {
 //  under:    the list starting under the header, filters or bar
 //  sheet:    an open sheet that scrolls or is cut
 //  unnamed:  a control a screen reader would announce with no name
-//  holes:    the Upgrade placeholder that is not disabled (it does nothing until V7); Keep is real since V5, but must exist
+//  holes:    an Upgrade without a wallet that is not disabled, an Upgrade that is enabled while it says the balance is short, a missing Keep button (Keep is real since V5)
 function vaultPage(win, d, vis, cs) {
   const vw = win.innerWidth, vh = win.innerHeight;
   const o = { clipped: [], small: [], covered: [], outside: [], under: '', sheet: '', unnamed: [], holes: [], cells: 0, state: '', open: false, meter: false, mode: '' };
@@ -476,10 +476,19 @@ function vaultPage(win, d, vis, cs) {
     const name = (n.getAttribute('aria-label') || byId || (/^(button|a)$/i.test(n.tagName) ? text(n) : '') || lab || n.getAttribute('title') || '').trim();
     if (!name) o.unnamed.push(nm(n));
   }
-  const up = root.querySelector('[data-key="upgrade"]');
-  if (!up) o.holes.push('upgrade button is missing');
-  else if (up.getAttribute('aria-disabled') !== 'true') o.holes.push('upgrade is enabled');
+  // Keep is real since V5 and only has to exist; Upgrade is a placeholder until the wallet answers (no visible wallet chip), and with a
+  // wallet it may be enabled only when nothing says the balance is short
+  const chip = root.querySelector('[data-key="wallet"]'), walletOn = !!chip && live(chip);
   if (!root.querySelector('[data-key="keep"]')) o.holes.push('keep button is missing');
+  {
+    const b = root.querySelector('[data-key="upgrade"]');
+    if (!b) o.holes.push('upgrade button is missing');
+    const off = !b || b.getAttribute('aria-disabled') === 'true';
+    if (b && walletOn) {
+      const why = root.querySelector('.vt-upgrade-why');
+      if (!off && why && why.textContent.trim()) o.holes.push('upgrade is enabled while it says "' + why.textContent.trim().slice(0, 30) + '"');
+    } else if (b && !off) o.holes.push('upgrade is enabled');
+  }
   return o;
 }
 

@@ -511,14 +511,15 @@ var mustFail = map[string]string{
 	"fit-charsdefect-sheet-":   "sheet cut",
 	"fit-charsdefect-covered-": "covered control",
 	// the Ethereal Vault page (docs/vault.md): one defect each, put back by defectCSS and vaultJS in fixtures_vault.go
-	"fit-vaultdefect-clip-":    "clipped text",
-	"fit-vaultdefect-wide-":    "ends outside the window",
-	"fit-vaultdefect-under-":   "under the header",
-	"fit-vaultdefect-small-":   "target under 44 px",
-	"fit-vaultdefect-covered-": "covered control",
-	"fit-vaultdefect-sheet-":   "sheet cut",
-	"fit-vaultdefect-noname-":  "control with no name",
-	"fit-vaultdefect-enabled-": "placeholder: ",
+	"fit-vaultdefect-clip-":       "clipped text",
+	"fit-vaultdefect-wide-":       "ends outside the window",
+	"fit-vaultdefect-under-":      "under the header",
+	"fit-vaultdefect-small-":      "target under 44 px",
+	"fit-vaultdefect-covered-":    "covered control",
+	"fit-vaultdefect-sheet-":      "sheet cut",
+	"fit-vaultdefect-noname-":     "control with no name",
+	"fit-vaultdefect-enabled-":    "placeholder: ",
+	"fit-vaultdefect-ethenabled-": "placeholder: ",
 }
 
 var reSize = regexp.MustCompile(`-(\d+)x(\d+)$`)

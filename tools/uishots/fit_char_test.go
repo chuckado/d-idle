@@ -262,8 +262,8 @@ func TestOverlayDefectsHavePages(t *testing.T) {
 // The script defects of the Vault page have a fit page and a verdict too.
 func TestVaultJSDefectsHavePages(t *testing.T) {
 	sh, _ := os.ReadFile("../uishots.sh")
-	if len(vaultJS) != 2 {
-		t.Errorf("want 2 script defects, have %d", len(vaultJS))
+	if len(vaultJS) != 3 {
+		t.Errorf("want 3 script defects, have %d", len(vaultJS))
 	}
 	for n := range vaultJS {
 		rest := strings.TrimPrefix(n, "vault-")

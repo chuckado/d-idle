@@ -1,9 +1,7 @@
 package watch
 
 import (
-	"encoding/json"
 	"errors"
-	"io"
 	"net/http"
 	"strconv"
 
@@ -23,13 +21,27 @@ const (
 // refund rule reads is the wallet's own Content hook (the active hero's vault).
 type EtherAPI struct {
 	W *ether.Wallet
+	// Src is read per request when W is nil: the wallet exists only while loot.vault is on, so a nil answer means off
+	// (GET says enabled false, the POSTs refuse with 409 off).
+	Src func() *ether.Wallet
+}
+
+func (a *EtherAPI) wallet() *ether.Wallet {
+	if a.W != nil {
+		return a.W
+	}
+	if a.Src != nil {
+		return a.Src()
+	}
+	return nil
 }
 
 // EtherView is GET /api/ether: the wallet summary plus the chip line the Hero sheet and the Vault header draw.
 type EtherView struct {
-	Schema string `json:"schema"`
+	Schema  string `json:"schema"`
+	Enabled bool   `json:"enabled"` // false: no wallet (loot.vault is 0); only schema is meaningful
 	ether.Summary
-	Chip string `json:"chip"`
+	Chip string `json:"chip,omitempty"`
 }
 
 type etherReply struct {
@@ -50,13 +62,15 @@ type etherBody struct {
 
 // View builds the GET reply.
 func (a *EtherAPI) View() EtherView {
-	s := a.W.Summary()
-	return EtherView{Schema: etherSchema, Summary: s, Chip: chipOf(s)}
+	w := a.wallet()
+	if w == nil {
+		return EtherView{Schema: etherSchema}
+	}
+	s := w.Summary()
+	return EtherView{Schema: etherSchema, Enabled: true, Summary: s, Chip: chipOf(s)}
 }
 
-func chipOf(s ether.Summary) string {
-	return s.Currency + " " + strconv.Itoa(s.Balance)
-}
+func chipOf(s ether.Summary) string { return s.Currency + " " + strconv.Itoa(s.Balance) }
 
 // Get is the read route (mount GET only).
 func (a *EtherAPI) Get() http.Handler {
@@ -65,37 +79,32 @@ func (a *EtherAPI) Get() http.Handler {
 	}))
 }
 
-// Upgrade is POST /api/vault/upgrade, body {"step":"v1"} (empty or missing step: the next one).
-func (a *EtherAPI) Upgrade() http.Handler { return a.post(false) }
+// Upgrade is POST /api/vault/upgrade, body {"step":"v1"} (an empty object: the next step). It runs behind the answer
+// listener's gate (token, origin, JSON only), like the other routes that change something.
+func (a *EtherAPI) Upgrade(o AnswerOptions) http.Handler { return a.post(o, false) }
 
 // Downgrade is POST /api/vault/downgrade: refunds the last step only while the vault's content fits the lower tier.
-func (a *EtherAPI) Downgrade() http.Handler { return a.post(true) }
+func (a *EtherAPI) Downgrade(o AnswerOptions) http.Handler { return a.post(o, true) }
 
-func (a *EtherAPI) post(down bool) http.Handler {
+func (a *EtherAPI) post(o AnswerOptions, down bool) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != http.MethodPost {
-			w.Header().Set("Allow", "POST")
-			writeJSON(w, http.StatusMethodNotAllowed, policyReply{Code: "method", Error: "POST only"})
+		var body etherBody
+		if !policyGate(o, w, r, &body) {
 			return
 		}
-		var body etherBody
-		if b, err := io.ReadAll(io.LimitReader(r.Body, 4<<10)); err != nil {
-			writeJSON(w, http.StatusBadRequest, policyReply{Code: "bad-body", Error: err.Error()})
+		wal := a.wallet()
+		if wal == nil {
+			writeJSON(w, http.StatusConflict, policyReply{Code: "off", Error: "the wallet is off while loot.vault is 0"})
 			return
-		} else if len(b) > 0 {
-			if err := json.Unmarshal(b, &body); err != nil {
-				writeJSON(w, http.StatusBadRequest, policyReply{Code: "bad-body", Error: err.Error()})
-				return
-			}
 		}
 		var (
 			res ether.UpgradeResult
 			err error
 		)
 		if down {
-			res, err = a.W.Downgrade(body.Step)
+			res, err = wal.Downgrade(body.Step)
 		} else {
-			res, err = a.W.Upgrade(body.Step)
+			res, err = wal.Upgrade(body.Step)
 		}
 		rep := etherReply{}
 		code := 200
@@ -121,7 +130,7 @@ func (a *EtherAPI) post(down bool) http.Handler {
 		}
 		if err != nil {
 			rep.Error = err.Error()
-			s := a.W.Summary()
+			s := wal.Summary()
 			rep.Balance, rep.Capacity = s.Balance, s.Capacity
 		}
 		writeJSON(w, code, rep)
