@@ -238,7 +238,6 @@
 | decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | quests1 | in-progress | - | `internal/questboard`<br>`data/questboard`<br>`docs/questboard.md`<br>`docs/design/quest-board-2026-11-16.md` | - |
-| vaultv0 | proposed | - | `docs/probes/vault-spike-2026-11-16.md` | `fork-branch:didle/vault-spike` |
 | botcpu | proposed | - | `docs/probes/bot-cpu-2026-11-16.md`<br>`internal/senses`<br>`cmd/d2bot/sensesfeed.go`<br>`cmd/d2bot/sensesfeed_test.go`<br>`internal/nav/cpuprobe_test.go`<br>`internal/d2dsrc/cpuprobe_test.go`<br>`internal/d2dsrc/source_test.go`<br>`internal/d2dsrc/srv_test.go` | - |
 | palfeedflaky | proposed | - | `internal/watch/palfeed` | - |
 | botcpulive | proposed | - | `docs/probes/bot-cpu-live-2026-11-16.md` | - |

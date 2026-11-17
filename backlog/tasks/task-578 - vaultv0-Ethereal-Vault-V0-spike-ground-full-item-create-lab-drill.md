@@ -1,10 +1,11 @@
 ---
 id: TASK-578
 title: 'vaultv0: Ethereal Vault V0 spike (ground full + item create, lab drill)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T02:42:00Z'
+updated_date: '2026-11-17T04:06:00Z'
 labels:
   - d2d
   - research
