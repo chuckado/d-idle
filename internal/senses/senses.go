@@ -87,8 +87,11 @@ func build(lm *d2map.LevelMap, area string, version uint64, vis func(x, y int) b
 	cells := make([]int, w*h)
 	for y := 0; y < b.H; y++ {
 		for x := 0; x < b.W; x++ {
+			if vis != nil && !vis(b.X+x, b.Y+y) { // fog first: it hides most cells and is the cheaper test
+				continue
+			}
 			f, ok := lm.Grid.Flags(b.X+x, b.Y+y)
-			if !ok || (vis != nil && !vis(b.X+x, b.Y+y)) {
+			if !ok {
 				continue
 			}
 			v := Blocked
@@ -161,6 +164,31 @@ const RevealRadius = 24
 const fogBlock = 4
 
 type block struct{ x, y int32 }
+
+// fogLookup answers "has the hero been near (x, y)" for the cells of b from a dense array of blocks instead of one map
+// lookup per cell (build asks once per grid cell: the map made every rebuild cost about 20 ns a cell, and a rebuild
+// happens each time the hero reveals a new block). Points outside b fall back to the map. Same answers as the map.
+func fogLookup(sv map[block]struct{}, b d2map.Rect) func(x, y int) bool {
+	if b.W <= 0 || b.H <= 0 {
+		return func(x, y int) bool { _, ok := sv[block{int32(floorDiv(x)), int32(floorDiv(y))}]; return ok }
+	}
+	x0, y0 := floorDiv(b.X), floorDiv(b.Y)
+	w, h := floorDiv(b.X+b.W-1)-x0+1, floorDiv(b.Y+b.H-1)-y0+1
+	dense := make([]bool, w*h)
+	for k := range sv {
+		if bx, by := int(k.x)-x0, int(k.y)-y0; bx >= 0 && bx < w && by >= 0 && by < h {
+			dense[by*w+bx] = true
+		}
+	}
+	return func(x, y int) bool {
+		bx, by := floorDiv(x)-x0, floorDiv(y)-y0
+		if bx >= 0 && bx < w && by >= 0 && by < h {
+			return dense[by*w+bx]
+		}
+		_, ok := sv[block{int32(floorDiv(x)), int32(floorDiv(y))}]
+		return ok
+	}
+}
 
 // Publisher is the bot's side: Observe is called on each area change and at about 2 Hz for the hero. It keeps the
 // last snapshot and the visited blocks of every area of the session (fog of war: the map shows only what the hero has
@@ -245,7 +273,7 @@ func (p *Publisher) Observe(lm *d2map.LevelMap, area string, hero d2map.Point) e
 		return nil
 	}
 	p.seq++
-	m, err := build(lm, area, p.seq, func(x, y int) bool { _, ok := sv[block{int32(floorDiv(x)), int32(floorDiv(y))}]; return ok })
+	m, err := build(lm, area, p.seq, fogLookup(sv, lm.Grid.Bounds()))
 	if err != nil {
 		p.seq--
 		return err
