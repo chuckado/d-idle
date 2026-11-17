@@ -1,10 +1,11 @@
 ---
 id: TASK-603
 title: 'vaultv6verify: verify Vault V6 Reveal and Sell pages (fit, pictures, gate)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T09:28:00Z'
+updated_date: '2026-11-17T10:01:00Z'
 labels:
   - watch
   - feature
