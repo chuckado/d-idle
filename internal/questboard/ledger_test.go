@@ -218,7 +218,9 @@ func TestEtherDeskPaysAndHistory(t *testing.T) {
 		t.Fatalf("%+v", a)
 	}
 	h := waitHand(t, d)
-	if h.State != "done" || len(h.Awarded) != 1 || h.Awarded[0].Amount != 2 {
+	// A concurrent View runs Exec.Settle, which can book the Ether before the hand-in does; then the hand-in
+	// reports nothing new (Already) and the booking shows in the history and quest rows below.
+	if h.State != "done" || len(h.Awarded) > 1 || (len(h.Awarded) == 1 && h.Awarded[0].Amount != 2) {
 		t.Fatalf("hand-in view: %+v", h)
 	}
 	v := d.View()

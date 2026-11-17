@@ -138,6 +138,8 @@ var defectCSS = map[string]string{
 	"lock":     `.cv .cv-side > .cv-lock { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; }`,
 	"hover":    `.cv .cv-storez #stash { inline-size: 130% !important; max-inline-size: none !important; }`,
 	"narrow":   `.cv #pack, .cv #stash { --u: 20px !important; }`,
+	// the video card (card videoctl): the controls laid over the top-left of the picture, where the quest caption is
+	"vid-ctl": `[data-panel="video"] .vtools { position: absolute !important; inset-block-start: 4px !important; inset-inline-start: 4px !important; inline-size: 100% !important; }`,
 	// the Characters page (fixtures_chars.go)
 	"chars-clip":    `.cs-name { overflow: hidden !important; white-space: nowrap !important; max-inline-size: 3ch !important; text-overflow: ellipsis !important; }`,
 	"chars-wide":    `.cs-card { min-inline-size: 130vw !important; }`,

@@ -1,10 +1,13 @@
 ---
 id: TASK-624
-title: 'decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT sub-point death rule'
-status: In Progress
+title: >-
+  decomp39: player melee through walls (FUN_00622c40 reach and line) and the DoT
+  sub-point death rule
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T16:20:00Z'
+updated_date: '2026-11-17T17:02:00Z'
 labels:
   - d2d
   - research

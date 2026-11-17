@@ -63,6 +63,7 @@ func wireQuestBoard(stateDir string, ref *runnerRef, r *bot.Runner, logf func(ms
 		Class:   r.QuestClass,
 		Level:   r.QuestLevel,
 		Meter:   r.QuestMeter,
+		Queued:  r.QuestQueued,
 	})
 	ref.qd = d
 	return d

@@ -346,3 +346,35 @@ Build id: the page header said `a756ec2-dirty`, the commit of the checkout the d
 when TRACKED files differ) and passes it with `--stamp` to `tools/dev-update-host.sh`, which links it as
 `-X d2lod-bot/internal/buildinfo.Version`; `deploy/d2d-container/context.sh` takes `BUILD_STAMP` the same way. Test:
 `internal/buildinfo/stamp_test.go` (a temp git repo: clean, named commit, tracked change, untracked file).
+
+## 14. Item labels toggle (task labels, 2026-11-17; offline tests only, nothing deployed)
+
+How the labels work in d2d (V, read in the fork branch `didle/rebase-20261115`): the names over ground items are D2's "Show Items" (Alt held). `apps/d2d/ingame.cpp` draws them into the world framebuffer when `show_items` is true: each name over its item (`rules::show_items`, at most 0x20, nearest rooms), black at half in the item's colour, the one under the mouse solid blue with white text. `town/draw.cpp` passes `alt_held || pad_show_items || function_held(kShowItems)`: the real Alt key, a skill slot bound to Show Items, or `Town::alt_held`. The labels are IN the framebuffer, so the palette feed and the MJPEG capture both show them (U live: pictures not taken here). The only older switch was `debug alt on|off`, which needs `--lab-verbs` (cheat family) and gives no read-back.
+
+Verb (fork branch `didle/labels-verb`, off `didle/rebase-20261115`, private remote, fork-only, never upstream without the user's go): `labels [on|off|toggle|status]`, refused with `err lab verbs off: labels needs d2d --item-verbs` unless the process runs with `--item-verbs` (or `--lab-verbs`, which implies it). Reply `labels=on|off` then `ok`. `caps` lists `ui.labels` in the same condition. It sets `Town::alt_held`, which stays until set off (a click or a focus change cannot release it, unlike a key press); no game start, Character Select switch or save resets it inside one d2d process, a new process starts off. Fork commit `58f45660` (pushed to the private remote). V: fork headless test `tests/labels_d2d.py` (`ctest -R labels_d2d`; skips without the MPQs) passed on the NAS builder against the built `d2d` (real MPQs, `--item-verbs` and `--lab-verbs` sessions, the refused case and the no-flag caps).
+
+Go side: `d2dctl.Client.Labels(ctx, mode)` (`internal/d2dctl/labels.go`, cap name `d2dctl.CapLabels`); `GET /api/labels` (viewer) and `POST /api/labels {"on":bool}` (answer listener, the same token and origin gate as `/api/pause`), reply `{ok, on, available, code?, reason?}` where `on` is what the game read back; `available:false` / code `unsupported` for a d2d without the verb (the button stays hidden), `game` when the d2d is unreachable, `refused` otherwise. The wish is per hero in `<instance state dir>/labels.json` (default off); the desk applies it when the bot enters a game (the Prepare hook) and on every GET (idempotent: reads `status`, sends `on|off` only when the game differs). Code: `internal/watch/labelsapi.go`, `cmd/d2bot/labelswire.go`.
+
+Watch UI: a `Labels` toggle (`aria-pressed`, `data-key="labels"`) on the video card next to Full screen, Low rate, Stats and Sharp pixels, hidden until GET says available, re-read every 20 s; an `Item labels` entry in the "..." menu clicks it. Size follows the sibling buttons (`data-size="sm"`, 38 px in the phone cockpit).
+
+Does it break the bot (V by code reading)? The bot on d2d reads `ground`, `dump` and memory-like verbs, never the picture: the only `Screenshot` caller is `cmd/d2dview` (the feed). In the fork `alt_held` is read in exactly one place, the draw call; clicks are not label-aware (only the label under the mouse becomes the hovered unit for the name tooltip), so a click lands where it did. U live: a click on a label while it is shown, in game.exe it picks the item up, in d2d no change is expected.
+
+No knob: the feature exists only when the d2d answers `caps` with `ui.labels`, and the default is off. Live checklist (NOT run): start a sandbox d2d with `--item-verbs` from the `didle/labels-verb` build, drop an item (`debug`), open the watch page, tap Labels: names appear in the lossless and the MJPEG picture, the button stays pressed after a reload; restart the d2d: the label is back on when the bot is in game; switch hero: off for a hero that never set it.
+
+## 15. Video controls moved out of the picture (card videoctl, 2026-11-17)
+
+User screenshot (Android Chrome, 412 px): the card's buttons (Full screen, Low rate, Stats, Sharp pixels, ...) lay over the TOP of the
+picture and hid the quest caption (`Running: Dark Wood > Tree of Inifuss...` showed as "The Sea" and "ke" between the buttons).
+Cause: the controls were the card's title-bar actions, which a cockpit slot paints in the top-right corner over the picture and wraps
+leftwards when there are many.
+- The controls are a toolbar BELOW the picture (`.vtools`, a wrapping row; `role="toolbar"`), in flow, never over it. Only Collapse stays
+  in the title bar. The rate line (was the card head's meta text) is the toolbar's last item. The picture takes what the toolbar leaves.
+- The button set is data: `window.d2video.controls.add({key, label, title, onClick, pressed})` adds a button to the toolbar (the Labels
+  toggle of agent/labels uses it); the row wraps, so a new button never overflows.
+- The caption keeps its corner (top-left, one line, ellipsis, at most 58 percent of the width) and a tap or Enter shows the whole line,
+  wrapped, over the picture until the next tap; `title` has the full text.
+- The stats overlay stays bottom-left over the picture: it is a diagnostic the user turns on (off by default) and may cover part of the
+  game's HUD while on.
+- Fit check (`tools/uishots/fit.js` `video`, judged in `fit.go`): FAIL when any button box of the video card touches the caption or any
+  other text element of the card ("video control covers text"); fixture `quests=runlong` carries the long caption; the page
+  `viddefect-ctl` puts the toolbar back over the caption and must fail with that verdict (`defectCSS vid-ctl`).

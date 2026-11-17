@@ -36,4 +36,6 @@ function shellCtx(cfg, store, timers) {
   };
   return { root, c };
 }
-module.exports = { load, shellCtx, mk };
+// the video card's controls: the toolbar below the picture plus the title bar actions
+function controlsOf(c) { const bar = c.body.children.find((e) => e.attrs && e.attrs.role === 'toolbar'); return (bar ? bar.children : []).concat(c.actions.children); }
+module.exports = { load, shellCtx, mk, controlsOf };

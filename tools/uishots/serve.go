@@ -100,6 +100,7 @@ func serve(addr, class string) error {
 	m.HandleFunc(watch.CharactersRoute, charsFixture)
 	m.Handle(watch.CharactersRulesRoute, charsRules)
 	m.HandleFunc(watch.PauseRoute, pauseFixture)
+	m.HandleFunc(watch.LabelsRoute, labelsFixture)
 	m.HandleFunc(watch.SupportRoute, supportFixture)
 	m.HandleFunc(watch.SupportBundleRoute, supportFixture)
 	m.HandleFunc("/api/lootrules", lootRulesFixture)
