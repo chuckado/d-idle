@@ -170,7 +170,7 @@ func TestEmptyExpeditionPaysNothing(t *testing.T) {
 }
 
 func TestTallyViewCacheDroppedByEvents(t *testing.T) {
-	_, s, _ := tallyRig(t, "Sorceress", 10)
+	_, s, _ := tallyRig(t, "sorceress", 10)
 	v1 := s.View()
 	if s.View() != v1 {
 		t.Fatal("a second poll inside the TTL must reuse the view")
