@@ -1,0 +1,73 @@
+## What changes
+
+Open Wounds (item property 135) takes the life game.exe's handler gives it. d2d had the right per-level numbers but two other rules wrong:
+
+1. **A champion, a unique or a superunique takes half.** The item event of stat 135 is function 15 of the event table at `0x7325b0`, `FUN_005bfe60` (Crushing Blow's `FUN_005bffc0` is function 16). It draws `rand % 100` under the stat (`0x5bfe9e..0x5bfec9`), takes `FUN_005bfda0(level, 9, 18, 27, 36, 45)` plus 40 (`0x5bff14..0x5bff20`: 9 a level up to 15, then 18 to 30, 27 to 45, 36 to 60, 45 above), and halves it toward zero when the struck monster's data word `+0x16` has bit 4 or 8 (`FUN_005a0180` with mask 12, `0x5bff3c..0x5bff56`: champion, unique, superunique, not a minion). d2d never halved.
+2. **256ths a frame, 200 frames.** The handler hands `FUN_0056e970` stat `0x4a` (life regeneration, 256ths a frame, negated), state `0x3e` (`openwounds`) and 200 frames (`0x5bff8a..0x5bffa2`). d2d cut the value to whole points a second (`value x 25 / 256`, truncated) for 8 seconds: up to a quarter of the wound lost at level 1 (3 a second against 3.9).
+
+`rules::open_wounds_fine(level, special)` is the value (it replaces `open_wounds_per_sec`); `kOpenWoundsFrames` is 200; `player_blow` puts it in `Blow::bleed_fine` when the roll lands; `Target::special` (champion, unique, superunique, set in `Monster::target`) is the halving; `Fight::land` sets the monster's `bleed_rate` to `bleed_fine / (256 x 40)` a millisecond for 200 frames (`monster_dots` is unchanged: its per-frame life change is the same arithmetic `FUN_005a6920` does with stat `0x4a`).
+
+Two commits: the oracle (`tools/emu/open_wounds.py`, `open_wounds_harness.cpp`, a README row), then the claim (code, `test_combat` pins, a `docs/research/re/combat.md` note).
+
+## Evidence from game.exe 1.14d
+
+| Address | What it shows |
+|---|---|
+| ItemStatCost row 135 | `itemevent1 domeleedamage` func 15, `itemevent2 domissiledamage` func 15 (Crushing Blow row 136 is func 16) |
+| `0x7325ec` (entry 15; `0x7325f0` entry 16 holds `0x5bffc0`) | the handler `FUN_005bfe60` |
+| `FUN_005bfe60` `0x5bfe9e..0x5bfec9` | the draw on the attacker's seed, `% 100`, under the stat |
+| `FUN_005bfe60` `0x5bfed8..0x5bff20` | level (stat 12, at least 1), `FUN_005bfda0` over 9, 18, 27, 36, 45, plus 40 |
+| `FUN_005bfe60` `0x5bff25..0x5bff56` | a player struck divides by 4 (by 2 more for a missile, event 6); a monster with data word `& 12` halves |
+| `FUN_005bfe60` `0x5bff8a..0x5bffa2` | the record: 200 frames, stat `0x4a`, the negated value, state `0x3e`, to `FUN_0056e970` |
+| `FUN_005a6920` `0x5a6926..0x5a69f9` | each frame: stat 6 (life, 256ths) plus stat `0x4a`, clamped to max (read, not run) |
+
+## Counted differentials (V run, tree = upstream `ed007569` plus the branch)
+
+Oracle: `open_wounds.py game` calls `FUN_005bfe60` natively with the chance fixed at 100 (the draw is the same LCG step the crush handler makes), an attacker level, a struck player or monster whose data word is set, and event 5 or 6, and reads the record handed to `FUN_0056e970`. The life the wound takes over its whole length (256ths) is compared: `value x frames` on game.exe, `open_wounds_per_sec x 8 x 256` on the parent, `open_wounds_fine x kOpenWoundsFrames` on the claim (`open_wounds_harness`). Rows that strike a player are printed by game.exe but not compared (d2d has no monster that wounds a player).
+
+| cases | differ before (parent) | differ after |
+|---|---|---|
+| seed 7 (`gen 200 7`): 2,000, 244 player rows left out | **1,748** (plain 859 of 867, special 889 of 889) | **0** |
+| seed 1 (`gen 20000 1`): 21,782 compared, 5,256 player rows left out | **16,463** (plain 7,032 of 7,095, special 9,431 of 9,431) | **0** |
+
+The level grid is 1 to 99 x data words {0, 2, 4, 8, 0xa, 0xc, 0x10, 0x12} x events 5 and 6, then random. Bit 2 and bit 0x10 do not halve; bits 4 and 8 do.
+
+Mutants of the claim, each aborting `test_combat` on its own pin: no halving, slope 36 instead of 45 above level 60, 100 frames, base 31 instead of 40. `test_combat` pins game.exe's values: levels 1, 15, 16, 30, 61, 99 = 40, 166, 184, 436, 1,426, 3,136; halved at 1, 30, 61, 99 = 20, 218, 713, 1,568; level 0 as 1. The pins use no random number.
+
+Build and tests (V run, GCC 14, Release, `-j2`, the builder): `test_combat` ok, `test_game` rc 0. Full ctest: see the card result of the task.
+
+## In play
+
+Life taken from a plain monster over the 8 seconds, game.exe against the parent: level 1 31.3 against 24, level 5 59.4 against 56, level 12 108.6 against 104, level 30 340.6 against 336. A champion or unique takes half in game.exe and all of it on the parent.
+
+## Limits
+
+- A player struck (a monster with the property, divided by 4): game.exe's rule is in the oracle's output, not modelled (no monster of d2d carries it).
+- Which data-word bits the spawners set: bit 4 on a champion, bit 8 (`FUN_005a0320`) on every unique, champion and superunique placed, bit 0x10 on minions (read in the spawners; d2d's `Boss` kinds are mapped as its stun code already does: special is not none and not minion). Not run on a spawned monster.
+- The chance draw's place among the events of one blow (crush, Open Wounds) follows game.exe's property order; d2d draws the crush first, as before.
+- A second Open Wounds on a wounded monster refreshes it in d2d, as before; whether `FUN_0056e970` replaces or adds was not read.
+- The consumer `FUN_005a6920` is read, not run; d2d's `monster_dots` is unchanged.
+
+## Answers to the presubmit WARNs
+
+- Unit kinds: only the player's hit on a monster changes. The merc, the pets and a co-op partner's hero take no part: the merc's and the pets' blows carry no Open Wounds in d2d (`player_blow` is the only reader of the stat), and a partner's hero is a player (the same path).
+- Build: `--quick` skips it; the numbers are above.
+
+## How to re-check
+
+```sh
+python3 tools/pr_guard.py upstream/main HEAD
+cmake --build build --target test_combat test_game
+cd tools/emu && uv sync
+set -o pipefail
+uv run python open_wounds.py gen 20000 1 > /tmp/c.tsv
+uv run python open_wounds.py game /tmp/c.tsv > /tmp/g.tsv
+g++ -O2 -std=c++23 -I../../components/rules -I../../components -I../../components/d2s -I../../components/txt \
+    -o /tmp/open_wounds_harness open_wounds_harness.cpp && /tmp/open_wounds_harness < /tmp/c.tsv > /tmp/d.tsv
+uv run python open_wounds.py compare /tmp/c.tsv /tmp/g.tsv /tmp/d.tsv   # parent: 16463 differ, exit 1; claim: 0, exit 0
+../../build/tests/test_combat
+```
+
+---
+
+Agent: Claude Code
