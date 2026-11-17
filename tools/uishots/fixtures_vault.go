@@ -232,9 +232,9 @@ func mountVault(m *http.ServeMux) {
 	for _, p := range watch.VaultRoutes {
 		m.Handle(p, h)
 	}
-	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Get() }))
-	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Upgrade(watch.AnswerOptions{}) }))
-	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI) http.Handler { return a.Downgrade(watch.AnswerOptions{}) }))
+	m.Handle(watch.EtherRoute, etherFixture(func(a *watch.EtherAPI, _ watch.AnswerOptions) http.Handler { return a.Get() }))
+	m.Handle(watch.UpgradeRoute, etherFixture(func(a *watch.EtherAPI, o watch.AnswerOptions) http.Handler { return a.Upgrade(o) }))
+	m.Handle(watch.DowngradeRoute, etherFixture(func(a *watch.EtherAPI, o watch.AnswerOptions) http.Handler { return a.Downgrade(o) }))
 	// the answer routes too (same origin here), so a press shows the real reply and the page reads the state back
 	for _, p := range watch.VaultPostRoutes {
 		route := p
@@ -252,18 +252,14 @@ func mountVault(m *http.ServeMux) {
 
 // etherFixture routes the wallet calls of the page to the wallet of its state (the Referer's vault=); a state without a wallet answers
 // the way a bot with loot.vault 0 does (enabled false, and 409 off on a press).
-func etherFixture(h func(*watch.EtherAPI) http.Handler) http.Handler {
+func etherFixture(h func(*watch.EtherAPI, watch.AnswerOptions) http.Handler) http.Handler {
 	vaultFixture() // builds the states
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		mode := "pop"
-		if ref, err := url.Parse(r.Referer()); err == nil && ref.Query().Get("vault") != "" {
-			mode = ref.Query().Get("vault")
-		}
-		a := vaultEthers[mode]
+		a := vaultEthers[vaultModeOf(r)]
 		if a == nil {
 			a = &watch.EtherAPI{}
 		}
-		h(a).ServeHTTP(w, r)
+		h(a, watch.AnswerOptions{Origins: []string{"http://" + r.Host}}).ServeHTTP(w, r)
 	})
 }
 
