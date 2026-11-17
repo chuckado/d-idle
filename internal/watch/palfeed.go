@@ -73,3 +73,6 @@ func (h *Hub) streamFormats() []string {
 	}
 	return f
 }
+
+// SetBuild names this viewer's build for the stream monitor's header (/api/config "build"); hosts call it with buildinfo.Current().
+func (h *Hub) SetBuild(b string) { h.build = b }

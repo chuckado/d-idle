@@ -47,6 +47,7 @@ type Frame struct {
 	Pix    []byte
 	Seq    uint32
 	GameMS uint32
+	ref    *frameRef // hub bookkeeping; nil for a frame that is not pooled
 }
 
 // Encoder turns frames into messages. Not safe for concurrent use; one per client (it holds the deflate state).

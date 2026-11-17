@@ -16,9 +16,9 @@ function mk(tag) {
 }
 function load(file, extra) {
   const src = fs.readFileSync(file, 'utf8').replace(/^export /gm, '').replace(/^import .*$/gm, ''); // imports come in through extra
-  const names = [...src.matchAll(/^function (\w+)/gm)].map((m) => m[1]);
+  const names = [...src.matchAll(/^(?:function|class) (\w+)/gm)].map((m) => m[1]).concat([...src.matchAll(/^const (\w+) =/gm)].map((m) => m[1]));
   const document = { fullscreenElement: null, exitFullscreen() {} };
-  const ctx = Object.assign({ document, Math, Object, JSON, Date, Uint8Array, encodeURIComponent, console,
+  const ctx = Object.assign({ document, Math, Object, JSON, Date, Uint8Array, Float64Array, Float32Array, Int32Array, Array, Number, String, Map, encodeURIComponent, console,
     getComputedStyle: () => ({ getPropertyValue: () => '' }) }, extra || {});
   ctx.window = ctx;
   vm.runInNewContext(src + '\n;this.__x = {' + names.join(',') + '};', ctx);
