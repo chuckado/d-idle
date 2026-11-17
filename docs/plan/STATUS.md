@@ -236,7 +236,6 @@
 | survtune | proposed | - | `internal/survival`<br>`tools/ab/prep`<br>`tools/survival`<br>`docs/survival/ab-harness.md`<br>`docs/probes/survival-ab-8seed-rerun-2026-11-16.md`<br>`docs/probes/test-characters.md` | - |
 | videofeed4 | proposed | - | `internal/watch/palfeed.go`<br>`internal/watch/palfeed_test.go`<br>`internal/watch/views.go`<br>`internal/watch/testdata/panel_harness.js`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/web/palfeed.js`<br>`internal/watch/web/streamstats.js`<br>`internal/watch/web/panels/video`<br>`internal/watch/palfeed`<br>`cmd/d2dview`<br>`tools/videofeed`<br>`docs/video-feed.md`<br>`internal/watch/testdata/video_pal_panel.js`<br>`internal/watch/testdata/video_panel.js`<br>`internal/watch/http_view.go`<br>`tools/uishots`<br>`tools/uishots.sh` | - |
 | decomp36bodies | proposed | - | `docs/upstream/bodies/gamble-price-body.md`<br>`docs/upstream/bodies/umod-multishot-body.md` | - |
-| questdesign | proposed | - | `docs/design/quest-board-2026-11-16.md` | - |
 | vault | proposed | - | `docs/design/loot-vault-2026-11-16.md` | - |
 | custom-overlay | deferred | - | `docs/research/custom-overlay-spec.md`<br>`docs/overlay.md`<br>`docs/research/custom-items.md`<br>`internal/overlay/`<br>`internal/data/`<br>`cmd/d2bot/d2dbackend.go`<br>`cmd/d2bot/d2dbackend_test.go` | - |
 | custom-item-1 | deferred | - | `docs/research/custom-item-1.md` | - |
