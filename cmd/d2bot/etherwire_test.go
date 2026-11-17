@@ -211,3 +211,29 @@ func TestEtherDifficulty(t *testing.T) {
 		}
 	}
 }
+
+// The quest board's ledger over the real wallet (slice S10): the key is account-wide per quest, chunk and difficulty,
+// "-" is the whole quest, and the second call for a key pays nothing.
+func TestQuestLedgerOverWallet(t *testing.T) {
+	w, err := ether.Open(t.TempDir(), ether.Options{})
+	if err != nil {
+		t.Fatal(err)
+	}
+	l := walletLedger{w}
+	r, err := l.Earn("den_of_evil", "", "nm", 3)
+	if err != nil || r.Credited != 3 || r.Key != "quest/den_of_evil/-/nm" {
+		t.Fatalf("%+v %v", r, err)
+	}
+	if r, _ := l.Earn("den_of_evil", "", "nm", 3); !r.Already || r.Credited != 0 {
+		t.Fatalf("repeat: %+v", r)
+	}
+	if _, err := l.Earn("den_of_evil", "", "bogus", 3); err == nil {
+		t.Fatal("unknown difficulty accepted")
+	}
+	if n, ok := l.Paid("den_of_evil", "", "nm"); !ok || n != 3 {
+		t.Fatalf("paid %d %v", n, ok)
+	}
+	if _, ok := l.Paid("den_of_evil", "", "normal"); ok {
+		t.Fatal("another difficulty reads paid")
+	}
+}
