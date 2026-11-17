@@ -18,6 +18,7 @@ import (
 //
 //	quests=offer      the board on, Den of Evil and Blood Raven offered (a level 6 Paladin)
 //	quests=running    Den of Evil accepted and on its first step
+//	quests=runlong    running with a long quest line (the video card's caption: "Running: Dark Wood > Tree of Inifuss: step 2 of 4, next Akara")
 //	quests=ether      offers carry `pays` (a wallet with nothing booked); quests=paid a finished hand-in with +2 Ether on the toast, quest row and Recent
 //	quests=awaiting   the hero waits at Akara: Hand in
 //	quests=handing    awaiting, and the hand-in dialogue runs ("Handing in...")
@@ -99,7 +100,7 @@ func questView(variant, class string) questboard.View {
 		}
 	}
 	switch variant {
-	case "running":
+	case "running", "runlong":
 		d.Start("den_of_evil", "")
 		tick(1)
 	case "awaiting", "handing", "confirming", "failed", "done":
@@ -132,6 +133,9 @@ func questView(variant, class string) questboard.View {
 		if a := v.Awaiting; a != nil {
 			v.HandIn = &questboard.HandInView{Quest: a.Quest, Chunk: a.Chunk, State: state, Reason: reason}
 		}
+	}
+	if variant == "runlong" && v.Running != nil { // the long caption of the video card: one line that cannot fit a phone
+		v.Running.QuestTitle, v.Running.Step, v.Running.NPC = "Running: Dark Wood > Tree of Inifuss", "step 2 of 4", "Akara"
 	}
 	switch variant {
 	case "paid": // a finished hand-in: the toast, the quest row and Recent carry the Ether
