@@ -145,8 +145,10 @@ func main() {
 		} else {
 			s.pal = palfeed.NewHub()
 			frames.Pal = s.pal
+			hs := newHostStats(func() int64 { _, _, _, _ = 0, 0, 0, 0; return s.pal.Snapshot().Pubs })
+			frames.Host = hs.Sample
 			s.palOpts = palfeed.Options{Auth: func(*http.Request) bool { return true }, // the token middleware s.auth runs first
-				Touch: frames.TouchPal}
+				Touch: frames.TouchPal, Server: hs.Sample}
 			wo.pal = &watch.PalFeed{Stream: s.pal.Stream(s.palOpts)}
 			log.Printf("d2dview: lossless picture feed on /stream.pfeed (docs/video-feed.md)")
 		}
