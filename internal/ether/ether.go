@@ -180,7 +180,7 @@ func (w *Wallet) apply(e Entry) error {
 // state is untouched.
 func (w *Wallet) append(e Entry) (Entry, error) {
 	e.Seq = len(w.entries) + 1
-	e.TS = w.opt.Now().UTC().Format(time.RFC3339)
+	e.TS = w.opt.Now().Format(time.RFC3339) // local time: the daily cap resets at the player's midnight
 	if err := w.dry(e); err != nil {
 		return Entry{}, err
 	}
@@ -335,7 +335,7 @@ func (w *Wallet) Earn(source, sub, difficulty string, hookAmount int) (Result, e
 		return Result{Key: key}, nil
 	}
 	if src.DailyCap > 0 {
-		left := src.DailyCap - w.earnedOn(source, w.opt.Now().UTC().Format("2006-01-02"))
+		left := src.DailyCap - w.earnedOn(source, w.opt.Now().Format("2006-01-02"))
 		if left <= 0 {
 			return Result{Key: key, Capped: true}, nil
 		}
@@ -541,7 +541,7 @@ func (w *Wallet) Summary() Summary {
 			s.Downgrade.Available = true
 		}
 	}
-	today := w.opt.Now().UTC().Format("2006-01-02")
+	today := w.opt.Now().Format("2006-01-02")
 	for _, r := range w.opt.Sources.Sources {
 		s.Sources = append(s.Sources, SourceView{ID: r.ID, Label: r.Label, DailyCap: r.DailyCap, EarnedToday: w.earnedOn(r.ID, today)})
 	}
