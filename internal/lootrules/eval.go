@@ -55,7 +55,7 @@ func Compile(rs *RuleSet, class, build string) (*Compiled, error) {
 
 func why(a, reason string, it *Item) string {
 	v := map[string]string{Pickup: "Will pick up", Keep: "Kept", KeepMerc: "Kept for your mercenary", Ask: "Asking you", Stash: "Will stash", Sell: "Will sell", Drop: "Will drop",
-		Identify: "Will identify", Ignore: "Left alone"}[a]
+		Identify: "Will identify", Ignore: "Left alone", Vault: "Will record in the vault"}[a]
 	if a == Sell || a == Drop {
 		return fmt.Sprintf("%s: %s, value %d", v, reason, it.Value)
 	}
@@ -116,7 +116,7 @@ func (c *Compiled) Decide(it *Item, cx *Ctx) Decision {
 
 func (c *Compiled) finish(a, reason, id string, prio int, pickup *bool, confirm bool, sc string, it *Item, cx *Ctx) Decision {
 	fateOf := a
-	if sc == PlaceGround && a != Pickup && a != Ignore {
+	if sc == PlaceGround && a != Pickup && a != Ignore && a != Vault {
 		take := pickup != nil && *pickup || pickup == nil && (a == Keep || a == KeepMerc || a == Stash)
 		a = map[bool]string{true: Pickup, false: Ignore}[take]
 	}

@@ -21,7 +21,7 @@ owns:
   - "docs/probes/test-characters.md"
 exclusive: []
 contracts: []
-result: "branch 1 (code): prep reads the SETUP weapon back from dump stats (hax 3-6, bot reads dmg 3-6, zone shadow src=skill dps 19.9, verified on the lab, one 30 minute smoke), d2d must come from fork branch didle/rebase-20261115 (the Nov 6 lab build has no weapons key); pay-for-risk route in the dial (params.json typicalEnter/badFloor/riskValueMul, default zoneModel stays 0, tests on two archetypes); reruns and recommendation come on the docs branch"
+result: "weapon read back (hax 3-6, src=skill dps 19.9, V on the lab) and d2d must be fork branch didle/rebase-20261115; Paladin 8 seeds with the shipped route (badFloor 0.4, freshNeedsMerc false): abreport PASS (XP ratio 1.002, deaths 0/0, chickens 4/1, writes after start 0); first route 0.895 INCONCLUSIVE; 4 fresh holdout seeds FAIL on chickens by one (3 vs 1+1, one death, XP 0.967); Sorceress 3 seeds INCONCLUSIVE 0.836; recommendation: do not flip bot.zoneModel yet, retune badFloor 0.5 to 0.65 on new seeds (docs/probes/survival-ab-8seed-rerun-2026-11-16.md); verified live on the lab, not game.exe"
 ---
 
 ## Description
@@ -36,6 +36,6 @@ Why: the 8-seed Paladin A/B (docs/probes/survival-ab-8seed-2026-11-16.md) failed
 <!-- AC:BEGIN -->
 - [x] #1 harness Paladin weapon read back (dps and src not default), smoke proven on the lab
 - [x] #2 controller retune data-driven, tests on two classes, safety kept
-- [ ] #3 8-seed Paladin rerun, abreport verdict recorded, writes after start 0
-- [ ] #4 rerun doc with a plain recommendation
+- [x] #3 8-seed Paladin rerun, abreport verdict recorded, writes after start 0
+- [x] #4 rerun doc with a plain recommendation
 <!-- AC:END -->

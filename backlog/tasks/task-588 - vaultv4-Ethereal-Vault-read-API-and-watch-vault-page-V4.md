@@ -22,7 +22,6 @@ owns:
   - "internal/watch/web/vault.css"
   - "internal/watch/web/vault.json"
   - "internal/watch/testdata/vault"
-  - "cmd/d2bot/vaultwire.go"
   - "tools/uishots/fixtures_vault.go"
   - "docs/vault.md"
   - "internal/vault/index.go"
@@ -32,10 +31,11 @@ owns:
   - "internal/watch/web/shell.js"
   - "internal/watch/web/panels/orders/panel.js"
   - "internal/watch/web/panels/log"
-  - "internal/env/tuning_loot.go"
-  - "docs/knobs.md"
-  - "cmd/d2bot/vaultwire_test.go"
   - "cmd/d2bot/ladder.go"
+  - "cmd/d2bot/vaultpage.go"
+  - "cmd/d2bot/vaultpage_test.go"
+  - "cmd/d2bot/vaultwire.go"
+  - "cmd/d2bot/d2dbackend.go"
   - "tools/uishots.sh"
   - "tools/uishots/fit.go"
   - "tools/uishots/fit.js"
@@ -45,7 +45,7 @@ owns:
   - "tools/uishots/serve.go"
   - "docs/design/loot-vault-2026-11-16.md"
 exclusive: []
-result: "Offline only, not seen live: GET /api/vault (paged, filtered, sorted, capacity meter, placeholder Upgrade), GET /api/vault/item/<id>, POST pin, unpin, discard (archive first) over a 10k-item store in Go tests; the /watch/vault page (grid, list, filters, multi-select, discard confirm, empty, off, error, over-capacity states, tooltip from the inventory script), entry points in the menu, Orders More and the Drops feed; knob loot.vault added (default 0); uishots fit pages and 8 must-fail defects pass on the worker host and the pictures were viewed. No recorder yet (V3), so a real bot shows the empty state."
+result: "Offline only, not seen live: GET /api/vault (paged, filtered, sorted, capacity meter, placeholder Upgrade), GET /api/vault/item/<id>, POST pin, unpin, discard (archive first) over a 10k-item store in Go tests; the /watch/vault page (grid, list, filters, multi-select, discard confirm, empty, off, error, over-capacity states, tooltip from the inventory script), entry points in the menu, Orders More and the Drops feed; reads V3's knob loot.vault and shares V3's per-hero Store (vaultHome); uishots fit pages and 8 must-fail defects pass on the worker host and the pictures were viewed. Not seen with a real recorded vault (V3 needs the fork vault verbs and loot.vault 1)."
 contracts: []
 ---
 

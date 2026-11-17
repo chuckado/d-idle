@@ -121,6 +121,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 		if r.recoveryActive() && !r.gearVerdict(snap).Gated {
 			return r.recoveryStep(ctx, snap, c) // the quest step waits until the purse is filled again
 		}
+		if r.questBoardOn() {
+			return r.boardStep(ctx, snap, c) // the player drives quests (docs/questboard.md); the planner only trains
+		}
 		return r.taskStep(ctx, snap, c)
 	}
 	target, ok := r.target(snap, c)

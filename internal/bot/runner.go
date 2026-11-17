@@ -117,6 +117,7 @@ type Runner struct {
 
 	gf       *goldfarm.Controller // the player's Farm gold order (SetGoldFarm); nil: no order
 	journey  *journey.Controller  // the guided journey (SetJourney, guided.go); nil: the floor planner alone
+	qb       *boardRT             // the quest board executor (NewQuestBoard, questboard.go); nil: not wired
 	gfRepair func() int           // gold Repair All would cost now
 	gfArea   int                  // last farm zone logged
 	rep      *repair.Controller   // the player's Repair now request (SetRepairTrip); nil: no repair trips

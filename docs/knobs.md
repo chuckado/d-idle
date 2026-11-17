@@ -191,10 +191,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
+| loot.vault | 0 | 0..1 | 0/1 | 1 | 5 | 1: items the Vault preset (docs/vault.md) selects are peeked and recorded in the vault instead of being picked up; the bot walks to them as for a pickup, sends no pickup click and uses no pack space. Gold, potions, scrolls, keys, gems and stacks keep their own rules. Needs d2d started with --vault-verbs; without it the knob does nothing and a Needs-you info line says why. Forced off in measured runs (gates, soaks, baselines: D2BOT_RUN). 0 (default): today's pickit, byte-identical. |
+| loot.vaultAll | 0 | 0..1 | 0/1 | 1 | 1 | 1 (with loot.vault 1): every ground item that is not gold, a gem or a stack and that no other rule takes is recorded too, plain and low items included. 0 (default): the Vault preset only. |
 | loot.pickRadius | 30 | 5..60 | subtiles | 5 | 2 | Ground items within this distance are considered. |
 | loot.pickStrictness | 1 | 0..3 | level | 3 | 4 | 0 loose (also items worth selling), 1 normal, 2 keepers only, 3 gold/runes/gems/uniques only. |
 | loot.pickTries | 3 | 1..6 | count | 1 | 1 | Click attempts per item. |
-| loot.walkDist | 4 | 2..8 | subtiles | 8 | 1 | Walk to within this distance before clicking an item. |
+| loot.walkDist | 4 | 2..8 | subtiles | 8 | 2 | Walk to within this distance before clicking an item. |
 | loot.confirmMs | 1500 | 400..4000 | ms | 400 | 1 | Wait after a click for the item to leave the ground. |
 | loot.gapMs | 150 | 0..1000 | ms | 1000 | 1 | Pause between two pickups. |
 | loot.goldMinStack | 10 | 0..2000 | gold | 2000 | 4 | Ignore gold piles smaller than this (a ceiling: see goldPileShare). |
@@ -221,7 +223,6 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | loot.goldMaxDanger | 0 | 0..3 | level | 0 | 0 | Highest pack danger (0 none, 1 champions or shamans, 2 elite, 3 deadly) at which a mid-fight grab is still made. |
 | loot.goldMinLifePct | 60 | 0..100 | percent | 100 | 0 | Below this life percent gold is ignored (survival comes first). |
 | loot.rulesEngine | 0 | 0..3 | stage | 3 | 1 | 0: today's pickit and tidy table decide (default). 1: the loot rules engine (docs/lootrules.md) decides what to pick up from the ground, with today's strictness, minimum priority, per-cell and small-gold filters still applied on top. 2: ground and the tidy chore's stash and drop decisions. 3: plus the sell chore (the five sell decisions of docs/lootrules.md section 13: marks first, then the sell rules, then the ground rules as the pickit judges today). If the engine errors or panics, that one decision falls back to today's code and is logged once. |
-| loot.vault | 0 | 0..1 | 0/1 | 1 | 0 | 1: worthwhile drops are recorded in the Ethereal Vault (docs/vault.md). 0 (default): nothing new is recorded and the Vault page is read only; what was recorded earlier stays readable. Forced off in measured runs. |
 | loot.goldRetries | 4 | 1..10 | count | 1 | 4 | Failed pickups of one pile, over all calls, before it is given up. |
 | loot.memCap | 64 | 4..512 | count | 4 | 2 | Remembered drops kept at most; the lowest value is evicted. |
 
@@ -485,6 +486,12 @@ Notes on defaults that are switches: `combat.missileDodge` default 0 (U, off unt
 | key | default | range | unit | worst (rookie) | readers | what it changes |
 |---|---|---|---|---|---|---|
 | watch.paletteFeed | 0 | 0..1 | bool | 0 | env.PaletteFeedOn | 1: the viewer (d2dview, and the watch screen through the tap relay) also serves the lossless RGBA tile-delta feed of the game picture (/stream.pfeed; measured 0.4 to 0.7 MB/s against 1.8 MB/s of JPEG q72, docs/probes/video-feed-2026-11-15.md) and the page draws it on a canvas when the glance reply lists it; any decode trouble falls back to MJPEG. Needs the d2d framefeed ring. d2dview and the friends pack read the environment switch D2_PALETTE_FEED=1 (same meaning; the d2dview process has no tuning file). 0 (default): MJPEG only, nothing changes. Off until the live A/B has run (docs/video-feed.md section 9). |
+
+### quests.*
+
+| key | default | range | unit | worst (rookie) | readers | what it changes |
+|---|---|---|---|---|---|---|
+| quests.board | 0 | 0..1 | bool | 0 | 1 | 1: a quest runs only after the player accepts its current chunk (Start); the bot does that chunk, walks to the NPC and stops, and the player taps Hand in. The planner then no longer starts quests by itself: between chunks it levels (Train; the modes are a later slice). 0 (default): today's planner behaviour, nothing changes. Off until the live drill of docs/questboard.md has run. |
 <!-- knobdump:end -->
 
 ### Fields without a Knob entry (V)

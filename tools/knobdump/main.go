@@ -20,7 +20,7 @@ import (
 
 var groupDir = map[string]string{"nav": "internal/nav", "combat": "internal/combat", "town": "internal/town",
 	"loot": "internal/loot", "bot": "internal/bot", "resource": "internal/resource", "boss": "internal/boss", "merc": "internal/merc",
-	"campaign": "internal/task", "route": "internal/task", "ladder": "internal/ladder", "senses": "cmd/d2bot", "watch": "cmd/d2dview"}
+	"campaign": "internal/task", "route": "internal/task", "ladder": "internal/ladder", "senses": "cmd/d2bot", "watch": "cmd/d2dview", "quests": "internal/bot"}
 
 // annotated readers: live knobs the field-reference heuristic cannot count (read through accessor methods or a local copy).
 var annotated = map[string]string{"nav.pollMs": "accessor", "nav.replanMs": "accessor", "nav.stuckMs": "accessor",
@@ -28,7 +28,7 @@ var annotated = map[string]string{"nav.pollMs": "accessor", "nav.replanMs": "acc
 	"nav.panelWaitMs": "accessor", "bot.cubeMaxJobs": "1", "bot.cubeRuneCap": "1", "bot.cubeGemCap": "1", // read as env.BotTuning fields in internal/town
 	"bot.zoneModel": "1", "bot.zoneDial": "1", // read as env.BotTuning fields in internal/bot (zonemodel.go)
 	"bot.portalGuard": "1", "bot.portalCastMs": "1", "bot.portalWalkMs": "1", "bot.portalHitMs": "1", "bot.portalLifePct": "1", // read as env.BotTuning fields in internal/combat (castguard.go)
-	"resource.waitMaxSec": "local var", "watch.paletteFeed": "env.PaletteFeedOn", "campaign.denMinLevelCaster": "1", "campaign.denMinLevelMelee": "1"} // read in bot.denFloor through a local copy
+	"resource.waitMaxSec": "local var", "watch.paletteFeed": "env.PaletteFeedOn", "quests.board": "1", "campaign.denMinLevelCaster": "1", "campaign.denMinLevelMelee": "1"} // read in bot.denFloor through a local copy
 
 func main() {
 	missing := render(os.Stdout)

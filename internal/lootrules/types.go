@@ -20,6 +20,7 @@ const (
 	Identify = "identify" // pack: spend a scroll on it
 	Ignore   = "ignore"   // do nothing
 	Ask      = "ask"      // pack: raise a Needs-you question and leave the item alone until the player answers
+	Vault    = "vault"    // ground only: peek the item and record it in the Ethereal Vault, do not pick it up (loot.vault, docs/vault.md)
 	KeepMerc = "keepmerc" // keep for the mercenary: a keep that the sell chore and the tidy pass leave alone (the player equips him)
 )
 

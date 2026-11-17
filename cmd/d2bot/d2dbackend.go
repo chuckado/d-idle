@@ -353,6 +353,9 @@ func runD2D(ctx context.Context, o options, log *slog.Logger) error {
 	o.ladder.inv = invAPI(ref.inv)
 	o.ladder.skills = skillsAPI(db, ref)
 	o.ladder.art = artSource(o.gameDir, o.data, db)
+	if o.data != "" {
+		o.ladder.vaultRoot = filepath.Join(o.data, "vaults") // the recorder's root (wireVault): the Vault page reads the same stores
+	}
 	o.ladder.repair, o.ladder.farm, o.ladder.journey = ref.rep, ref.gf, ref.jc
 	o.ladder.pause = pauseDesk(runner, ip.State())
 	o.ladder.reset = resetDesk(runner, ip.State())
