@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"os"
+	"strings"
 	"testing"
 	"time"
 )
@@ -198,7 +199,7 @@ func TestCapability(t *testing.T) {
 		t.Fatalf("before a frame: %d", w.Code)
 	}
 	h.Publish(synth(800, 600, 1, 1), 0)
-	if w := get(); w.Code != 200 || w.Body.String() != `{"paletteFeed":true,"version":1,"width":800,"height":600}` {
+	if w := get(); w.Code != 200 || !strings.HasPrefix(w.Body.String(), `{"paletteFeed":true,"version":1,"width":800,"height":600,"stats":{`) {
 		t.Fatalf("%d %s", w.Code, w.Body)
 	}
 	if w := httptest.NewRecorder(); true {

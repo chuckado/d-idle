@@ -273,3 +273,52 @@ frames drawn).
 A/B additions to section 10: with `?debug` the card head must show ~30 fps (not 14 to 15) and `dropped` near 0 while walking;
 `jitter` below 12 ms; the window must be filled (no black bars at 1075 px); the Sharp pixels button must appear only with the feed;
 the d2dview `-fps` flag is no longer the cap while a canvas viewer is connected.
+
+## 12. Hitching on the sandbox: measured cause, the monitor, the fixes (card videofeed4, 2026-11-16 to 17)
+
+Symptom (user, sandbox with the feed on, steady walking, no combat): "smooth, then fps drops, then hitches", the low-fps hint
+up for 2 to 3 s and gone again, "arbitrary". Read-only sampling inside the sandbox container (V; one `docker exec` per
+sample, per-second `/proc/<pid>/stat` ticks of d2dview, d2d and d2bot plus the cgroup counters; nothing was changed there; a
+temporary sampling script I copied into the container was removed again):
+
+- The container has a ONE-core CPU quota (`cpu.max` 100000 100000, `docker inspect` NanoCpus 1e9), enforced in 100 ms periods.
+  Over a 254 s window with the page open: d2d 30 percent of the core on average (11 to 68), d2dview 11 percent (0 to 46), d2bot 33
+  percent (2 to 87). Over a longer history 9 percent of all periods were throttled.
+- The bot is bursty: stretches of 10 to 47 s at 64 to 71 percent of the core (the logs show a repair trip, town walks and
+  `nav.trace` lines every 100 ms at the time) against 15 percent in between. In those stretches the container is throttled in
+  7 to 10 of every 10 periods; 61 of the 254 seconds had 8 or more of 10 periods throttled, and their bot CPU averaged 67 percent
+  against 15 for the calm seconds. Burst starts: 02:01:56, 02:03:23, 02:04:30 (container clock), 67 to 87 s apart.
+- While the quota is saturated the renderer itself is starved: d2d falls from 33 to 18 to 22 ticks per second, in runs of 2 to 7 s
+  (starts 02:03:32, :38, :45, 04:00, :03, :39: 3 to 16 s apart, 9 s typical), and a throttled period freezes d2d, d2dview and the
+  bot together for the rest of that 100 ms. The signal that LEADS each dip is the bot's CPU already at 65 percent or more and
+  7 to 10 of 10 periods throttled in the 3 s before it. That is the smooth -> drop -> hitch cycle: the picture's source (d2d) and
+  its encoder (d2dview) lose the CPU to the bot, the arrivals gap by 100 ms or more, and the old 66 ms buffer could not hide it.
+  It is not content, not the guard (a 2 s bucket never reached 4 MiB/s), not a key frame schedule, and not network: the cause is
+  in the container's CPU budget.
+
+What changed:
+1. Stream monitor (`web/streamstats.js`, the card's Stats button, `?pfdebug`): a 30 s record of both players on one canvas, drawn
+   at 5 Hz: shown/delivered/dropped fps against the target line, kB/s bars with key-frame ticks and the host's throttle share,
+   a frame-time strip (hitches over 50 ms in vermillion and taller), the presentation delay, a time axis (HH:MM:SS at both ends with
+   the zone abbreviation, ticks every 5 s, a "now" mark), a header with the window, build id, player, canvas size and scale,
+   a summary line (fps, kB/s, p95 gap, hitches in 30 s) and the last three events with times (hitch, resync, key, hold, slow-on/off,
+   fallback, reconnecting). "Copy 30 s" puts the same record on the clipboard as JSON (ISO start and end, timezone offset, build, view,
+   per-second series, every gap, events, and the host sample's clock so server and page series align). The host's numbers come
+   from `/api/palfeed` (`stats`: hub counters plus `server`: container throttle share, d2dview CPU, ring fps, measured from cgroup
+   `cpu.stat` by `cmd/d2dview/hoststats.go`), polled once a second only while the overlay is on. The MJPEG player feeds the same
+   record (arrival and image-decode times), without host numbers.
+2. The low-fps hint has hysteresis (`SlowGate`): on after 3 s below 12 fps, off after 3 s above 18; the fps is the monitor's mean
+   of shown frames over 3 whole seconds. The rate line in the card head and the hint no longer flap; every flip is an event with
+   its time and a `console.info` line.
+3. The presentation clock is stable and deeper: base transit follows a lower value at once and creeps up 0.2 percent per message;
+   the lateness estimate follows a later arrival at once and decays with a half-life of about 11 s; delay = two frame intervals +
+   1.1 x lateness, 66 to 200 ms. A synthetic walking trace with a 95 ms freeze every 1.5 s shows no presented gap over 52 ms after
+   the first stall (the old clock shows them; both are asserted, `tools/videofeed/palfeed.test.js`), and the delay only ever relaxes
+   slowly after a stall.
+4. The feed degrades gracefully: while more than 60 percent of the container's CPU periods are throttled the lossless feed asks d2d
+   for every 4th draw (15 fps) instead of every 2nd, which halves d2dview's work when the container is starved (it returns to 30
+   fps when throttling stops; `throttleHigh`).
+5. d2dview feed CPU: published frames come from a pool with reference counts (no 1.9 MB allocation per frame), the guard's key-size
+   hold is 150 ms (was 400), the byte cap 4 MiB/s.
+Not fixed here (not this card's code): the bot's own CPU bursts. They are the root cause; the bot, d2d and d2dview share one
+core. A quota of 2 cores, or lower bot CPU in town (`nav.trace` at 10 Hz), would remove the stalls at the source.

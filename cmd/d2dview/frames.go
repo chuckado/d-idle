@@ -60,6 +60,11 @@ type Frames struct {
 	// Pal, when set, also receives every ring frame (the lossless tile-delta feed, docs/video-feed.md). Its clients keep
 	// the sampler awake through TouchPal; the JPEG is encoded only while an MJPEG viewer is there too.
 	Pal *palfeed.Hub
+	// Host samples the container's CPU throttling (hoststats.go) once per lease renewal; nil: not measured. Above throttleHigh percent
+	// of the CPU periods throttled, the lossless feed asks d2d for half the rate (every 4th draw instead of every 2nd): a starved
+	// container cannot make 30 even frames, and fewer, evenly spaced ones look better than 30 erratic ones and cost d2dview half the CPU.
+	Host func() palfeed.ServerStats
+	thr  float64
 
 	mu      sync.RWMutex
 	palSeen int64     // wall unix nanos of the last TouchPal
@@ -114,6 +119,9 @@ func (f *Frames) watching() bool {
 
 // TouchPal is the lossless feed's Touch: its clients keep the ring lease and the sampler alive.
 func (f *Frames) TouchPal() { f.mu.Lock(); f.palSeen = time.Now().UnixNano(); f.mu.Unlock() }
+
+// throttleHigh is the share of throttled CPU periods (percent, last second) above which the feed halves its rate.
+const throttleHigh = 60
 
 // palPeriod is the ring period asked for while the lossless feed has a viewer (30 fps).
 const palPeriod = time.Second / 30
@@ -236,6 +244,9 @@ func (f *Frames) feedLease(ctx context.Context) error {
 	if !f.feedOn.IsZero() && time.Since(f.feedOn) < time.Second {
 		return nil
 	}
+	if f.Host != nil {
+		f.thr = f.Host().ThrottlePct
+	}
 	every := f.divisor()
 	cctx, cancel := context.WithTimeout(ctx, 3*time.Second)
 	defer cancel()
@@ -265,6 +276,9 @@ func (f *Frames) divisor() int {
 		// old target of 40 ms rounded UP to every 3rd draw = 20 fps, and -fps 15 gave 15). JPEG viewers keep their own
 		// cadence (jpegDue), so a mixed audience costs the JPEG nothing extra.
 		target = palPeriod
+		if f.thr >= throttleHigh {
+			target = 2 * palPeriod
+		}
 	}
 	k := max(1, int(math.Ceil(0.95*float64(target)/float64(f.srcPeriod))))
 	if f.every == 0 {

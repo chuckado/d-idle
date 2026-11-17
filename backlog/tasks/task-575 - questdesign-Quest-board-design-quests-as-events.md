@@ -1,10 +1,11 @@
 ---
 id: TASK-575
 title: 'questdesign: Quest board design (quests as events)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T02:20:00Z'
+updated_date: '2026-11-17T02:49:00Z'
 labels:
   - docs
   - feature

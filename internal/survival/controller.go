@@ -220,8 +220,8 @@ func (l *Ledger) Choose(in Input) (Decision, error) {
 			}
 			fresh := in.FreshAllowed && l.P.FreshRatio > 0 &&
 				(next == nil || next.value < l.P.FreshRatio*pick.value*l.P.StayMinutes/(l.P.StayMinutes+l.P.FreshMinutes))
-			if fresh && in.Active && (in.OffenceUnread || in.MercDead) {
-				fresh = false // a fresh game is a bet on the model's kill speed: not with an unread weapon or no merc
+			if fresh && in.Active && (in.OffenceUnread || in.MercDead && l.P.FreshNeedsMerc) {
+				fresh = false // a fresh game is a bet on the model's kill speed: not with an unread weapon (or without the merc when freshNeedsMerc)
 				d.FreshRefused = "offence unread"
 				if in.MercDead {
 					d.FreshRefused = "merc dead"

@@ -196,6 +196,7 @@ default-empty watch?first=0&theme=dark&needs=0&cmd=empty
 default-live-stream watch?first=0&theme=dark&needs=2&stream=live
 default-live-stream-light watch?first=0&theme=light&needs=2&stream=live
 default-live-pal watch?first=0&theme=dark&needs=2&pal=1
+default-pfdebug watch?first=0&theme=dark&needs=2&pal=1&pfdebug=1
 default-paused watch?first=0&theme=dark&needs=2&cmd=paused&glance=full,paused
 default-phone-progress watch?first=0&theme=dark&needs=2&tab=Progress
 default-phone-map watch?first=0&theme=dark&needs=2&tab=Map
@@ -257,6 +258,7 @@ no-merc-no-potions watch?layout=cockpit&theme=dark&needs=2&glance=full,nopotions
 live-stream watch?layout=cockpit&theme=dark&needs=2&stream=live
 live-stream-light watch?layout=cockpit&theme=light&needs=2&stream=live
 live-pal watch?layout=cockpit&theme=dark&needs=2&pal=1
+live-pfdebug watch?layout=cockpit&theme=dark&needs=2&pal=1&pfdebug=1
 sentence-popover watch?layout=cockpit&theme=dark&needs=2&glance=full,paused [data-key=say] .d-bandpop:not([hidden])
 journey-popover watch?layout=cockpit&theme=dark&needs=2&tab=Progress [data-panel=journey-strip]_.jr-dot[data-cur] [data-panel=journey-strip]_[data-key=pact-0],[data-panel=journey-strip]_[data-key=pact-1]
 needs-popover watch?layout=cockpit&theme=dark&needs=5 [data-panel=needs-you]_.n-dots [data-panel=needs-you]_.n-pop
