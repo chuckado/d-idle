@@ -44,7 +44,7 @@
   @media (min-width: 1100px) and (min-height: 700px) { .vt-fpanel { display: grid; } }
   @media (max-width: 1099px), (max-height: 699px) {
     .vt-ftoggle { display: inline-flex; align-items: center; }
-    .vt-filters[data-open="1"] .vt-fpanel { display: grid; max-block-size: 45dvh; overflow-y: auto; }
+    .vt-filters[data-open="1"] .vt-fpanel { display: grid; max-block-size: max(120px, min(45dvh, calc(100dvh - 430px))); overflow-y: auto; }
   }
 
   .vt-bar { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: var(--d-sp-1) var(--d-sp-2); padding: var(--d-sp-1) var(--d-sp-4); border-block-end: var(--d-bw) solid var(--d-line); }

@@ -59,6 +59,7 @@ func wireQuestBoard(stateDir string, ref *runnerRef, r *bot.Runner, logf func(ms
 		Paused:  func() bool { return r.PlayerPauseView().State != bot.PauseRunning },
 		Explain: r.QuestReadiness,
 		Class:   r.QuestClass,
+		Level:   r.QuestLevel,
 		Meter:   r.QuestMeter,
 	})
 	ref.qd = d
@@ -113,7 +114,7 @@ func init() {
 func questNeeds(rows []questboard.NeedRow) []watch.GlanceNeed {
 	var out []watch.GlanceNeed
 	for _, n := range rows {
-		g := watch.GlanceNeed{ID: n.ID, Kind: n.Kind, Sev: n.Sev, Text: n.Text, Actions: []watch.GlanceVerb{}}
+		g := watch.GlanceNeed{ID: n.ID, Kind: n.Kind, Sev: n.Sev, Text: n.Text, Sub: n.Sub, Actions: []watch.GlanceVerb{}}
 		for _, a := range n.Actions {
 			body, _ := json.Marshal(a.Body)
 			g.Actions = append(g.Actions, watch.GlanceVerb{Label: a.Label, Post: a.Post, Body: body})
