@@ -802,8 +802,9 @@ function setupMenu(sel) {
   overlays.register('menu', pop, () => close(false));
   document.addEventListener('click', (e) => { if (!pop.hidden && !wrap.contains(e.target)) close(false); });
   wrap.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !pop.hidden) { e.preventDefault(); close(true); } });
-  pop.addEventListener('click', (e) => { if (e.target.closest('button')) close(false); });
-  for (const id of ['btn-help', 'btn-layout', 'btn-theme']) { const b = document.getElementById(id); if (b) pop.appendChild(b); }
+  pop.addEventListener('click', (e) => { if (e.target.closest('button:not(.d-menu-gh)')) close(false); }); // a group header folds, it does not close the menu
+  const tools = [], hero = [], presets = []; // the menu's groups (groupMenu): Hero, Tools and the layout presets
+  for (const id of ['btn-layout', 'btn-help', 'btn-theme']) { const b = document.getElementById(id); if (b) tools.push(b); }
   let chip = null, menuReturn = null;
   const retLink = document.getElementById('returnlink');
   for (const [id, text] of [['log', 'Log'], ['quest-board', 'Quests'], ['onboarding', 'Getting started']]) { // the drawers a cockpit has
@@ -811,7 +812,7 @@ function setupMenu(sel) {
     const b = ui.btn(text, { size: 'sm', variant: 'ghost' });
     b.dataset.drawerOpen = id;
     b.addEventListener('click', () => openDrawer(id, more));
-    pop.appendChild(b);
+    (id === 'log' ? tools : hero).push(b);
     if (id === 'onboarding') { chip = b; b.hidden = true; }
   }
   if (chip) onboardingChip(chip);
@@ -825,27 +826,23 @@ function setupMenu(sel) {
   vb.setAttribute('aria-label', 'Ethereal Vault: every drop the bot recorded');
   const cpair = el('div', 'd-menu-pair');
   cpair.append(cb, vb);
-  pop.appendChild(cpair);
+  hero.unshift(cpair);
   // the band drops its Return screen link on a narrow window (components.css): the menu always has it
-  if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; pop.appendChild(menuReturn); }
+  if (retLink) { menuReturn = el('a', 'd-btn', 'Return screen'); menuReturn.href = '/watch/return'; menuReturn.dataset.size = 'sm'; menuReturn.dataset.variant = 'ghost'; menuReturn.dataset.key = 'menu-return'; menuReturn.hidden = retLink.hidden; tools.push(menuReturn); }
   const rb = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
   rb.dataset.key = 'reset-open';
   rb.setAttribute('aria-label', 'Reset bot (leaves the game and rejoins)');
   rb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:reset-ask', { detail: { from: more } })));
-  const pair = el('div', 'd-menu-pair'); // Reset and Loot rules share a row: the menu must fit a 620 px high window (fit check)
-  pair.appendChild(rb);
-  pop.appendChild(pair);
   const sb = ui.btn('Send support bundle...', { size: 'sm', variant: 'ghost' });
   sb.dataset.key = 'support-open';
   sb.setAttribute('aria-label', 'Help: send a support bundle to the owner');
   sb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:support-ask', { detail: { from: more } })));
-  pop.appendChild(sb);
+  tools.push(sb);
   const lb = ui.btn('Loot rules...', { size: 'sm', variant: 'ghost' });
   lb.dataset.key = 'lootrules-open';
   lb.setAttribute('aria-label', 'Loot rules: what the bot picks up, stashes and sells');
   lb.addEventListener('click', () => document.dispatchEvent(new CustomEvent('d2:lootrules-ask', { detail: { from: more } })));
-  pair.appendChild(lb);
-  pop.appendChild(el('div', 'd-menu-label', 'Layout'));
+  hero.push(lb);
   const cur = sel ? sel.preset : '';
   const names = (sel && sel.hasStored ? ['saved'] : []).concat(MENU);
   for (const name of names) {
@@ -854,8 +851,11 @@ function setupMenu(sel) {
     b.setAttribute('aria-checked', String(name === 'saved' ? !!sel && sel.origin === 'stored' : name === cur));
     b.setAttribute('role', 'menuitemradio');
     b.addEventListener('click', () => choosePreset(name));
-    pop.appendChild(b);
+    presets.push(b);
   }
+  const sync = groupMenu(pop, rb, [['Hero', hero, true], ['Tools', tools, true], ['Layout', presets, false]]);
+  more.addEventListener('click', () => { if (!pop.hidden) { sync(); requestAnimationFrame(sync); } });
+  window.addEventListener('resize', () => { if (!pop.hidden) requestAnimationFrame(sync); });
   wrap.append(more, pop);
   // the break-glass Reset: always visible next to the menu, one tap, no confirm (resetui.js wires it)
   const rbtn = ui.btn('Reset', { size: 'sm', variant: 'ghost' });
@@ -864,6 +864,34 @@ function setupMenu(sel) {
   rbtn.dataset.key = 'reset-header';
   nav.append(rbtn, wrap);
 }
+// groupMenu builds the menu's body (docs/ui-overlays.md, card menufit2): the primary actions (Pause, Reset) sit on a row that
+// never scrolls; everything else lives in collapsible groups inside ONE scrolling body, so a new entry makes the menu scroll
+// (with a visible hint) instead of pushing an item out of reach. Returns the function that refreshes the scroll hint.
+function groupMenu(pop, reset, groups) {
+  const primary = el('div', 'd-menu-primary');
+  primary.dataset.slot = 'primary';
+  primary.appendChild(reset);
+  const body = el('div', 'd-menu-body');
+  body.dataset.scroll = '1';
+  const sync = () => { body.dataset.more = body.scrollHeight - body.clientHeight > 1 && body.scrollTop + body.clientHeight < body.scrollHeight - 1 ? '1' : '0'; };
+  for (const [title, nodes, open] of groups) {
+    if (!nodes.length) continue;
+    const g = el('div', 'd-menu-group'), gb = el('div', 'd-menu-gb');
+    const h = el('button', 'd-menu-gh', title);
+    h.type = 'button';
+    h.dataset.group = title.toLowerCase();
+    gb.hidden = !open;
+    h.setAttribute('aria-expanded', String(open));
+    h.addEventListener('click', () => { gb.hidden = !gb.hidden; h.setAttribute('aria-expanded', String(!gb.hidden)); sync(); });
+    gb.append(...nodes);
+    g.append(h, gb);
+    body.appendChild(g);
+  }
+  body.addEventListener('scroll', sync);
+  pop.replaceChildren(primary, body);
+  return sync;
+}
+
 function choosePreset(name) {
   pref(PREF, name); pref(PICK, '1');
   if (qs.has('layout')) { const u = new URL(location.href); u.searchParams.delete('layout'); history.replaceState(null, '', u); }
