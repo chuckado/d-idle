@@ -8,6 +8,7 @@ section 1); **offline** = unit tests, simulation or fake memory only; **research
 else, it is offline-tested. This file was written from merge subjects and `docs/INDEX.md`; it does not claim more than they do.
 
 ## Unreleased / known issues
+- survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc) <!--sg:agent/survtune2-->
 - Merge branch 'main' into vault <!--sg:agent/vaultdesign-->
 - Merge branch 'main' into questdesign <!--sg:agent/questdesign-->
 - videofeed4: stream monitor overlay, stable presentation clock, throttle-aware feed, measured hitch cause <!--sg:agent/videofeed4-->

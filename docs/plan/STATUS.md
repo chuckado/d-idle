@@ -279,6 +279,8 @@
 - contract [upstream-pr](../contracts/upstream-pr.md): 14 requirements
 
 ### Recent merges
+- f6a131582 11-16 21:52 `Merge agent/survtune2: survtune2: pay-for-risk floor 0.4, freshNeedsMerc false (fresh game with a dead merc)` (survtune2)
+- f2c1f6e8f 11-16 21:51 `Merge branch 'main' into survtune` (-)
 - 14c53adfe 11-16 21:45 `Merge agent/vaultdesign: Merge branch 'main' into vault` (vaultdesign)
 - bfe89b7e3 11-16 21:45 `Merge agent/questdesign: Merge branch 'main' into questdesign` (questdesign)
 - 3ca847cf2 11-16 21:43 `Merge branch 'main' into vault` (-)
@@ -287,6 +289,4 @@
 - 56b9b9911 11-16 21:10 `Merge remote-tracking branch 'origin/main' into agent/videofeed4` (-)
 - 96bc1dd0f 11-16 21:08 `Merge agent/decomp36bodies: decomp36bodies: gamble price and MonUMod PR bodies per verifier` (decomp36bodies)
 - 63ba004f7 11-16 21:06 `Merge branch 'main' into decomp36bodies` (-)
-- 32ab977c2 11-16 21:00 `Merge agent/verifydecomp36: Merge branch 'main' into TASK-569` (verifydecomp36)
-- dda114d4f 11-16 20:59 `Merge branch 'main' into TASK-569` (-)
 <!-- statusgen:end -->
