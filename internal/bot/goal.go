@@ -114,6 +114,9 @@ func (r *Runner) runGoal(ctx context.Context, snap *d2.Snapshot, c control) bool
 	if c.spec.kind == goals.Runs {
 		return r.farmStep(ctx, snap, c)
 	}
+	if r.boardPreempts(snap, c) {
+		return r.boardStep(ctx, snap, c) // the player's Start tap beats a farm or level goal (docs/questboard.md, "Which goals"), not a Farm gold order
+	}
 	if c.spec.camp != nil {
 		if r.goldFarmOn() {
 			return r.goldFarmStep(ctx, snap, c) // the player's order: farm gold until told to stop (docs/goldfarm.md)
