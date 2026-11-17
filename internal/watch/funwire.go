@@ -171,6 +171,8 @@ type Fun struct {
 	Merc *MercAPI
 	// Vault mounts the Ethereal Vault page and /api/vault (vaultapi.go, docs/vault.md); nil: no routes.
 	Vault *VaultAPI
+	// Ether mounts GET /api/ether (viewer) and POST /api/vault/upgrade and /downgrade (answer listener); nil: no routes (etherapi.go, docs/ether.md).
+	Ether *EtherAPI
 	// LootShadow mounts GET /api/lootrules/shadow (lootshadowapi.go); nil: no route.
 	LootShadow *LootShadowAPI
 	// LootRules mounts GET (viewer) and PUT (answer listener) /api/lootrules (lootrulesapi.go); nil: no routes.
@@ -755,6 +757,9 @@ func (f *Fun) mountView(m *http.ServeMux, live http.Handler) {
 			m.Handle(p, f.Vault.Handler())
 		}
 	}
+	if f.Ether != nil {
+		m.Handle(EtherRoute, f.Ether.Get())
+	}
 	if f.Characters != nil {
 		m.Handle(CharactersRoute, f.Characters.Handler())
 		m.Handle(CharactersRulesRoute, f.Characters.RulesHandler())
@@ -869,6 +874,10 @@ func (f *Fun) wrapAnswer(base http.Handler, o AnswerOptions) http.Handler {
 		for _, p := range VaultPostRoutes {
 			m.Handle(p, f.Vault.PostHandler(o, p))
 		}
+	}
+	if f.Ether != nil {
+		m.Handle(UpgradeRoute, f.Ether.Upgrade(o))
+		m.Handle(DowngradeRoute, f.Ether.Downgrade(o))
 	}
 	if f.Characters != nil {
 		for _, p := range CharactersPostRoutes {
