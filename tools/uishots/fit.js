@@ -141,6 +141,9 @@ export function overlayState(win) {
   for (const sh of d.querySelectorAll('.d-tilesheet')) {
     const r = vis(sh);
     if (!r) continue;
+    for (const it of sh.querySelectorAll('.o-items')) { // the Orders More sheet: a list taller than its sheet must scroll (card menufit2)
+      if (vis(it) && it.scrollHeight - it.clientHeight > 1 && !/auto|scroll/.test(win.getComputedStyle(it).overflowY)) menuScroll.push('the More list is ' + (it.scrollHeight - it.clientHeight) + ' px taller than its sheet and cannot scroll');
+    }
     open.push('sheet:' + (sh.dataset.panel || '?'));
     if (r.top < bandBottom - 1 || r.bottom > win.innerHeight + 1) under.push((sh.dataset.panel || '?') + ' top ' + Math.round(r.top) + ' bottom ' + Math.round(r.bottom) + ' (header ends ' + Math.round(bandBottom) + ', window ' + win.innerHeight + ')');
     for (const n of sh.querySelectorAll('*')) {
