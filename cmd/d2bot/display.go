@@ -259,6 +259,7 @@ func (i invSource) Inventory() status.InventoryData {
 		if i.d.cat != nil {
 			if m, ok := i.d.cat.Item(u.Class); ok {
 				it.W, it.H = max(m.W, 1), max(m.H, 1)
+				it.Kind = m.GoalType
 			}
 			it.Art = itemArt(i.d.cat, u)
 		}

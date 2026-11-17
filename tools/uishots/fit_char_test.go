@@ -239,7 +239,7 @@ func TestFitPhoneFixture(t *testing.T) {
 		used := map[[2]int]bool{}
 		for _, x := range v[name].([]any) {
 			it := x.(map[string]any)
-			if it["art"] == nil || it["art"] == "" {
+			if (it["art"] == nil || it["art"] == "") && it["code"] != "zzz" { // zzz: the deliberate no-icon case
 				t.Errorf("%s: %v has no art", name, it["name"])
 			}
 			x0, y0, w, h := it["x"].(int), it["y"].(int), it["w"].(int), it["h"].(int)

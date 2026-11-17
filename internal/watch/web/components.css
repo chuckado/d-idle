@@ -219,6 +219,13 @@
   .d-cells .item[data-h="1"] { -webkit-line-clamp: 2; }
   .d-cells .item[data-shown] { font-size: 0; padding: 0; background: var(--d-surface-2); }
   .d-cells .item .ico { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; object-fit: contain; pointer-events: none; }
+  /* Jewel art in the game files is untinted grey-white (the game colours it per item; v1 has no palette shift), so every jewel looked the same.
+     The cell takes the quality colour and the picture multiplies into it: magic blue, rare yellow, unique gold, plain white. */
+  .d-cells .item[data-kind="jewel"][data-shown] { background: var(--q, var(--d-q-normal)); }
+  .d-cells .item[data-kind="jewel"][data-shown] .ico { mix-blend-mode: multiply; }
+  /* no icon for this item although art is on: a dashed cell with the kind letter, so it is never mistaken for a picture */
+  .d-cells .item[data-fb] { border-block-start-style: dashed; outline: 1px dashed var(--d-line-strong); outline-offset: -3px; font-size: 0; padding: 0; }
+  .d-cells .item .fbg { position: absolute; inset: 0; display: grid; place-items: center; font-size: 1rem; font-weight: 700; color: var(--q, var(--d-text-2)); pointer-events: none; }
   .d-cells .item.sel { outline: 2px solid var(--d-focus); outline-offset: -2px; }
   .d-cells .item[data-mark="sell"] { box-shadow: inset 0 0 0 2px var(--d-bad); }
   .d-cells .item[data-mark="keep"] { box-shadow: inset 0 0 0 2px var(--d-good); }

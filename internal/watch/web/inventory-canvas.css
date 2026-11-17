@@ -65,6 +65,7 @@
   .cv .d-cells .item { margin: 2px; border-radius: 2px; display: block; font-size: clamp(8.5px, calc(var(--u) * .19), 12px); line-height: 1.12; padding: 1px 2px; overflow-wrap: break-word; }
   /* game art in the cell: the picture is the label (components.css sets font-size 0 for it, the cell font above must not win); the name is the tooltip */
   .cv .d-cells .item[data-shown] { font-size: 0; padding: 0; }
+  .cv .d-cells .item[data-fb] { font-size: 0; padding: 0; }
   .cv .d-cells .item[data-usable="no"] { background: var(--d-surface-1); border-block-start-style: dotted; color: var(--d-text-3); }
   .cv .d-cells .item[data-who="merc"] { box-shadow: inset 0 0 0 1px var(--d-info); }
   .cv .d-cells .item[data-dim], .cv .d-slot2[data-dim] { opacity: .22; }
