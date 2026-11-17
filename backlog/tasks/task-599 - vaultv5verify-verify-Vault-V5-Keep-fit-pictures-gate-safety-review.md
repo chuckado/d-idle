@@ -1,10 +1,11 @@
 ---
 id: TASK-599
 title: 'vaultv5verify: verify Vault V5 Keep (fit, pictures, gate, safety review)'
-status: Proposed
+status: Done
 assignee:
   - credit-runner
 created_date: '2026-11-17T08:02:00Z'
+updated_date: '2026-11-17T08:48:00Z'
 labels:
   - watch
   - feature

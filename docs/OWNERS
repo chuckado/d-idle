@@ -938,7 +938,6 @@ internal/vault  credit-runner  vaultv5
 internal/vault  credit-runner  vaultv6
 internal/vault/index.go  credit-runner  vaultv4
 internal/vaultkeep  credit-runner  vaultv5
-internal/vaultkeep  credit-runner  vaultv5verify
 internal/vaultkeep  credit-runner  vaultv6
 internal/watch/areamap_test.go  credit-runner  uis6
 internal/watch/cardtext.go  credit-runner  friendfb
@@ -1410,7 +1409,6 @@ tools/uishots/fixtures_skills.go  credit-runner  friendfb
 tools/uishots/fixtures_update.go  credit-runner  uis7
 tools/uishots/fixtures_vault.go  credit-runner  vaultv4
 tools/uishots/fixtures_vault.go  credit-runner  vaultv5
-tools/uishots/fixtures_vault.go  credit-runner  vaultv5verify
 tools/uishots/fixtures_vault.go  credit-runner  vaultv6
 tools/uishots/fixtures_vault.go  credit-runner  vaultv7b
 tools/uishots/fixtures_zoneclear.go  credit-runner  farmloop
